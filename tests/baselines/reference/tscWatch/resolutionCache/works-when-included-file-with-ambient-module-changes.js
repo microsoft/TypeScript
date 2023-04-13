@@ -1,12 +1,12 @@
-currentDirectory:: /a/b useCaseSensitiveFileNames: false
+currentDirectory:: /users/username/projects/project useCaseSensitiveFileNames: false
 Input::
-//// [/a/b/foo.ts]
+//// [/users/username/projects/project/foo.ts]
 
 import * as fs from "fs";
 import * as u from "url";
 
 
-//// [/a/b/bar.d.ts]
+//// [/users/username/projects/project/bar.d.ts]
 
 declare module "url" {
     export interface Url {
@@ -29,55 +29,55 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-/a/lib/tsc.js --w /a/b/foo.ts /a/b/bar.d.ts
+/a/lib/tsc.js --w /users/username/projects/project/foo.ts /users/username/projects/project/bar.d.ts
 Output::
 >> Screen clear
-[[90m12:00:15 AM[0m] Starting compilation in watch mode...
+[[90m12:00:21 AM[0m] Starting compilation in watch mode...
 
 [96mfoo.ts[0m:[93m2[0m:[93m21[0m - [91merror[0m[90m TS2307: [0mCannot find module 'fs' or its corresponding type declarations.
 
 [7m2[0m import * as fs from "fs";
 [7m [0m [91m                    ~~~~[0m
 
-[[90m12:00:18 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:24 AM[0m] Found 1 error. Watching for file changes.
 
 
 
-Program root files: ["/a/b/foo.ts","/a/b/bar.d.ts"]
+Program root files: ["/users/username/projects/project/foo.ts","/users/username/projects/project/bar.d.ts"]
 Program options: {"watch":true}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
-/a/b/foo.ts
-/a/b/bar.d.ts
+/users/username/projects/project/foo.ts
+/users/username/projects/project/bar.d.ts
 
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
-/a/b/foo.ts
-/a/b/bar.d.ts
+/users/username/projects/project/foo.ts
+/users/username/projects/project/bar.d.ts
 
 Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
-/a/b/foo.ts (used version)
-/a/b/bar.d.ts (used version)
+/users/username/projects/project/foo.ts (used version)
+/users/username/projects/project/bar.d.ts (used version)
 
 PolledWatches::
-/a/b/node_modules: *new*
+/users/username/projects/project/node_modules: *new*
   {"pollingInterval":500}
-/a/b/node_modules/@types: *new*
+/users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/foo.ts: *new*
+/users/username/projects/project/foo.ts: *new*
   {}
-/a/b/bar.d.ts: *new*
+/users/username/projects/project/bar.d.ts: *new*
   {}
 /a/lib/lib.d.ts: *new*
   {}
 
 exitCode:: ExitStatus.undefined
 
-//// [/a/b/foo.js]
+//// [/users/username/projects/project/foo.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
@@ -86,7 +86,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 Change:: Add fs definition
 
 Input::
-//// [/a/b/bar.d.ts]
+//// [/users/username/projects/project/bar.d.ts]
 
 declare module "url" {
     export interface Url {
@@ -107,28 +107,28 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:21 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:27 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:25 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:31 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
-Program root files: ["/a/b/foo.ts","/a/b/bar.d.ts"]
+Program root files: ["/users/username/projects/project/foo.ts","/users/username/projects/project/bar.d.ts"]
 Program options: {"watch":true}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
-/a/b/foo.ts
-/a/b/bar.d.ts
+/users/username/projects/project/foo.ts
+/users/username/projects/project/bar.d.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/b/foo.ts
-/a/b/bar.d.ts
+/users/username/projects/project/foo.ts
+/users/username/projects/project/bar.d.ts
 
 Shape signatures in builder refreshed for::
-/a/b/bar.d.ts (used version)
-/a/b/foo.ts (computed .d.ts)
+/users/username/projects/project/bar.d.ts (used version)
+/users/username/projects/project/foo.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
 
-//// [/a/b/foo.js] file written with same contents
+//// [/users/username/projects/project/foo.js] file written with same contents

@@ -304,3 +304,50 @@ const test2 = inners2([1,2,3,4,5]);
 >test2 : Symbol(test2, Decl(typeParameterConstModifiers.ts, 83, 5))
 >inners2 : Symbol(inners2, Decl(typeParameterConstModifiers.ts, 79, 31))
 
+// Repro from #53307
+
+type NotEmpty<T extends Record<string, any>> = keyof T extends never ? never : T;
+>NotEmpty : Symbol(NotEmpty, Decl(typeParameterConstModifiers.ts, 83, 35))
+>T : Symbol(T, Decl(typeParameterConstModifiers.ts, 87, 14))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(typeParameterConstModifiers.ts, 87, 14))
+>T : Symbol(T, Decl(typeParameterConstModifiers.ts, 87, 14))
+
+const thing = <const O extends Record<string, any>>(o: NotEmpty<O>) => o;
+>thing : Symbol(thing, Decl(typeParameterConstModifiers.ts, 89, 5))
+>O : Symbol(O, Decl(typeParameterConstModifiers.ts, 89, 15))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>o : Symbol(o, Decl(typeParameterConstModifiers.ts, 89, 52))
+>NotEmpty : Symbol(NotEmpty, Decl(typeParameterConstModifiers.ts, 83, 35))
+>O : Symbol(O, Decl(typeParameterConstModifiers.ts, 89, 15))
+>o : Symbol(o, Decl(typeParameterConstModifiers.ts, 89, 52))
+
+const t = thing({ foo: '' });  // readonly { foo: "" }
+>t : Symbol(t, Decl(typeParameterConstModifiers.ts, 91, 5))
+>thing : Symbol(thing, Decl(typeParameterConstModifiers.ts, 89, 5))
+>foo : Symbol(foo, Decl(typeParameterConstModifiers.ts, 91, 17))
+
+type NotEmptyMapped<T extends Record<string, any>> = keyof T extends never ? never : { [K in keyof T]: T[K] };
+>NotEmptyMapped : Symbol(NotEmptyMapped, Decl(typeParameterConstModifiers.ts, 91, 29))
+>T : Symbol(T, Decl(typeParameterConstModifiers.ts, 93, 20))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(typeParameterConstModifiers.ts, 93, 20))
+>K : Symbol(K, Decl(typeParameterConstModifiers.ts, 93, 88))
+>T : Symbol(T, Decl(typeParameterConstModifiers.ts, 93, 20))
+>T : Symbol(T, Decl(typeParameterConstModifiers.ts, 93, 20))
+>K : Symbol(K, Decl(typeParameterConstModifiers.ts, 93, 88))
+
+const thingMapped = <const O extends Record<string, any>>(o: NotEmptyMapped<O>) => o;
+>thingMapped : Symbol(thingMapped, Decl(typeParameterConstModifiers.ts, 95, 5))
+>O : Symbol(O, Decl(typeParameterConstModifiers.ts, 95, 21))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>o : Symbol(o, Decl(typeParameterConstModifiers.ts, 95, 58))
+>NotEmptyMapped : Symbol(NotEmptyMapped, Decl(typeParameterConstModifiers.ts, 91, 29))
+>O : Symbol(O, Decl(typeParameterConstModifiers.ts, 95, 21))
+>o : Symbol(o, Decl(typeParameterConstModifiers.ts, 95, 58))
+
+const tMapped = thingMapped({ foo: '' });  // { foo: "" }
+>tMapped : Symbol(tMapped, Decl(typeParameterConstModifiers.ts, 97, 5))
+>thingMapped : Symbol(thingMapped, Decl(typeParameterConstModifiers.ts, 95, 5))
+>foo : Symbol(foo, Decl(typeParameterConstModifiers.ts, 97, 29))
+

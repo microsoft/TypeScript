@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info 0    [00:00:29.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/user/username/projects/myproject/dependency/fns.ts]
 function fn1() { }
@@ -35,7 +35,7 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-Info 1    [00:00:30.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
@@ -44,11 +44,11 @@ Info 1    [00:00:30.000] request:
       "seq": 1,
       "type": "request"
     }
-Info 2    [00:00:31.000] Search path: /user/username/projects/myproject/usage
-Info 3    [00:00:32.000] For info: /user/username/projects/myproject/usage/usage.ts :: Config file name: /user/username/projects/myproject/usage/tsconfig.json
-Info 4    [00:00:33.000] Creating configuration project /user/username/projects/myproject/usage/tsconfig.json
-Info 5    [00:00:34.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/usage/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Config file
-Info 6    [00:00:35.000] Config: /user/username/projects/myproject/usage/tsconfig.json : {
+Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/usage
+Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/usage/usage.ts :: Config file name: /user/username/projects/myproject/usage/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/usage/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/usage/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/usage/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/usage/usage.ts"
  ],
@@ -64,10 +64,10 @@ Info 6    [00:00:35.000] Config: /user/username/projects/myproject/usage/tsconfi
   }
  ]
 }
-Info 7    [00:00:36.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/usage 1 undefined Config: /user/username/projects/myproject/usage/tsconfig.json WatchType: Wild card directory
-Info 8    [00:00:37.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/usage 1 undefined Config: /user/username/projects/myproject/usage/tsconfig.json WatchType: Wild card directory
-Info 9    [00:00:38.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/usage/tsconfig.json
-Info 10   [00:00:39.000] Config: /user/username/projects/myproject/dependency/tsconfig.json : {
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/usage 1 undefined Config: /user/username/projects/myproject/usage/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/usage 1 undefined Config: /user/username/projects/myproject/usage/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/usage/tsconfig.json
+Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/dependency/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/dependency/fns.ts"
  ],
@@ -77,18 +77,18 @@ Info 10   [00:00:39.000] Config: /user/username/projects/myproject/dependency/ts
   "configFilePath": "/user/username/projects/myproject/dependency/tsconfig.json"
  }
 }
-Info 11   [00:00:40.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Config file
-Info 12   [00:00:41.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency 1 undefined Config: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Wild card directory
-Info 13   [00:00:42.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency 1 undefined Config: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Wild card directory
-Info 14   [00:00:43.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency/fns.ts 500 undefined WatchType: Closed Script info
-Info 15   [00:00:44.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 16   [00:00:45.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/usage/node_modules/@types 1 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Type roots
-Info 17   [00:00:46.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/usage/node_modules/@types 1 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Type roots
-Info 18   [00:00:47.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Type roots
-Info 19   [00:00:48.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Type roots
-Info 20   [00:00:49.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/usage/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 21   [00:00:50.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
-Info 22   [00:00:51.000] 	Files (3)
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency 1 undefined Config: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency 1 undefined Config: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency/fns.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/usage/node_modules/@types 1 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/usage/node_modules/@types 1 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/usage/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/user/username/projects/myproject/dependency/fns.ts Text-1 "function fn1() { }\nfunction fn2() { }\n// Introduce error for fnErr import in main\n// function fnErr() { }\n// Error in dependency ts file\nlet x: string = 10;"
 	/user/username/projects/myproject/usage/usage.ts SVC-1-0 "fn1();\nfn2();\nfnErr();\n"
@@ -101,17 +101,17 @@ Info 22   [00:00:51.000] 	Files (3)
 	usage.ts
 	  Matched by default include pattern '**/*'
 
-Info 23   [00:00:52.000] -----------------------------------------------
-Info 24   [00:00:53.000] Search path: /user/username/projects/myproject/usage
-Info 25   [00:00:54.000] For info: /user/username/projects/myproject/usage/tsconfig.json :: No config files found.
-Info 26   [00:00:55.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
-Info 26   [00:00:56.000] 	Files (3)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/usage
+Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/usage/tsconfig.json :: No config files found.
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 
-Info 26   [00:00:57.000] -----------------------------------------------
-Info 26   [00:00:58.000] Open files: 
-Info 26   [00:00:59.000] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
-Info 26   [00:01:00.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
-Info 26   [00:01:01.000] response:
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
@@ -141,7 +141,7 @@ FsWatchesRecursive::
 
 Before request
 
-Info 27   [00:01:02.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
@@ -150,18 +150,18 @@ Info 27   [00:01:02.000] request:
       "seq": 2,
       "type": "request"
     }
-Info 28   [00:01:03.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/dependency/fns.ts 500 undefined WatchType: Closed Script info
-Info 29   [00:01:04.000] Search path: /user/username/projects/myproject/dependency
-Info 30   [00:01:05.000] For info: /user/username/projects/myproject/dependency/fns.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
-Info 31   [00:01:06.000] Creating configuration project /user/username/projects/myproject/dependency/tsconfig.json
-Info 32   [00:01:07.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json
-Info 33   [00:01:08.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency/node_modules/@types 1 undefined Project: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Type roots
-Info 34   [00:01:09.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency/node_modules/@types 1 undefined Project: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Type roots
-Info 35   [00:01:10.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Type roots
-Info 36   [00:01:11.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Type roots
-Info 37   [00:01:12.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 38   [00:01:13.000] Project '/user/username/projects/myproject/dependency/tsconfig.json' (Configured)
-Info 39   [00:01:14.000] 	Files (2)
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/dependency/fns.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/dependency
+Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/dependency/fns.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/dependency/tsconfig.json
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency/node_modules/@types 1 undefined Project: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency/node_modules/@types 1 undefined Project: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/dependency/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/user/username/projects/myproject/dependency/fns.ts Text-1 "function fn1() { }\nfunction fn2() { }\n// Introduce error for fnErr import in main\n// function fnErr() { }\n// Error in dependency ts file\nlet x: string = 10;"
 
@@ -171,23 +171,23 @@ Info 39   [00:01:14.000] 	Files (2)
 	fns.ts
 	  Matched by default include pattern '**/*'
 
-Info 40   [00:01:15.000] -----------------------------------------------
-Info 41   [00:01:16.000] Search path: /user/username/projects/myproject/dependency
-Info 42   [00:01:17.000] For info: /user/username/projects/myproject/dependency/tsconfig.json :: No config files found.
-Info 43   [00:01:18.000] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
-Info 43   [00:01:19.000] 	Files (3)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/dependency
+Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/dependency/tsconfig.json :: No config files found.
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 
-Info 43   [00:01:20.000] -----------------------------------------------
-Info 43   [00:01:21.000] Project '/user/username/projects/myproject/dependency/tsconfig.json' (Configured)
-Info 43   [00:01:22.000] 	Files (2)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/dependency/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 
-Info 43   [00:01:23.000] -----------------------------------------------
-Info 43   [00:01:24.000] Open files: 
-Info 43   [00:01:25.000] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
-Info 43   [00:01:26.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
-Info 43   [00:01:27.000] 	FileName: /user/username/projects/myproject/dependency/fns.ts ProjectRootPath: undefined
-Info 43   [00:01:28.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json,/user/username/projects/myproject/dependency/tsconfig.json
-Info 43   [00:01:29.000] response:
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/dependency/fns.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/usage/tsconfig.json,/user/username/projects/myproject/dependency/tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
@@ -221,7 +221,7 @@ FsWatchesRecursive::
 
 Before request
 
-Info 44   [00:01:30.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "syntacticDiagnosticsSync",
       "arguments": {
@@ -230,7 +230,7 @@ Info 44   [00:01:30.000] request:
       "seq": 3,
       "type": "request"
     }
-Info 45   [00:01:31.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": [],
       "responseRequired": true
@@ -239,7 +239,7 @@ After request
 
 Before request
 
-Info 46   [00:01:32.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "semanticDiagnosticsSync",
       "arguments": {
@@ -248,7 +248,7 @@ Info 46   [00:01:32.000] request:
       "seq": 4,
       "type": "request"
     }
-Info 47   [00:01:33.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": [
         {
@@ -271,7 +271,7 @@ After request
 
 Before request
 
-Info 48   [00:01:34.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "suggestionDiagnosticsSync",
       "arguments": {
@@ -280,7 +280,7 @@ Info 48   [00:01:34.000] request:
       "seq": 5,
       "type": "request"
     }
-Info 49   [00:01:35.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": [],
       "responseRequired": true
@@ -289,7 +289,7 @@ After request
 
 Before request
 
-Info 50   [00:01:36.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "syntacticDiagnosticsSync",
       "arguments": {
@@ -298,7 +298,7 @@ Info 50   [00:01:36.000] request:
       "seq": 6,
       "type": "request"
     }
-Info 51   [00:01:37.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": [],
       "responseRequired": true
@@ -307,7 +307,7 @@ After request
 
 Before request
 
-Info 52   [00:01:38.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "semanticDiagnosticsSync",
       "arguments": {
@@ -316,7 +316,7 @@ Info 52   [00:01:38.000] request:
       "seq": 7,
       "type": "request"
     }
-Info 53   [00:01:39.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": [
         {
@@ -339,7 +339,7 @@ After request
 
 Before request
 
-Info 54   [00:01:40.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "suggestionDiagnosticsSync",
       "arguments": {
@@ -348,7 +348,7 @@ Info 54   [00:01:40.000] request:
       "seq": 8,
       "type": "request"
     }
-Info 55   [00:01:41.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": [],
       "responseRequired": true
@@ -357,7 +357,7 @@ After request
 
 Before request
 
-Info 56   [00:01:42.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "syntacticDiagnosticsSync",
       "arguments": {
@@ -367,7 +367,7 @@ Info 56   [00:01:42.000] request:
       "seq": 9,
       "type": "request"
     }
-Info 57   [00:01:43.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": [],
       "responseRequired": true
@@ -376,7 +376,7 @@ After request
 
 Before request
 
-Info 58   [00:01:44.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "semanticDiagnosticsSync",
       "arguments": {
@@ -386,7 +386,7 @@ Info 58   [00:01:44.000] request:
       "seq": 10,
       "type": "request"
     }
-Info 59   [00:01:45.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": [
         {
@@ -409,7 +409,7 @@ After request
 
 Before request
 
-Info 60   [00:01:46.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "suggestionDiagnosticsSync",
       "arguments": {
@@ -419,7 +419,7 @@ Info 60   [00:01:46.000] request:
       "seq": 11,
       "type": "request"
     }
-Info 61   [00:01:47.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": [],
       "responseRequired": true
@@ -428,7 +428,7 @@ After request
 
 Before request
 
-Info 62   [00:01:48.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "syntacticDiagnosticsSync",
       "arguments": {
@@ -438,7 +438,7 @@ Info 62   [00:01:48.000] request:
       "seq": 12,
       "type": "request"
     }
-Info 63   [00:01:49.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": [],
       "responseRequired": true
@@ -447,7 +447,7 @@ After request
 
 Before request
 
-Info 64   [00:01:50.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "semanticDiagnosticsSync",
       "arguments": {
@@ -457,7 +457,7 @@ Info 64   [00:01:50.000] request:
       "seq": 13,
       "type": "request"
     }
-Info 65   [00:01:51.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": [],
       "responseRequired": true
@@ -466,7 +466,7 @@ After request
 
 Before request
 
-Info 66   [00:01:52.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "suggestionDiagnosticsSync",
       "arguments": {
@@ -476,7 +476,7 @@ Info 66   [00:01:52.000] request:
       "seq": 14,
       "type": "request"
     }
-Info 67   [00:01:53.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": [],
       "responseRequired": true
@@ -485,7 +485,7 @@ After request
 
 Before request
 
-Info 68   [00:01:54.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "syntacticDiagnosticsSync",
       "arguments": {
@@ -495,7 +495,7 @@ Info 68   [00:01:54.000] request:
       "seq": 15,
       "type": "request"
     }
-Info 69   [00:01:55.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": [],
       "responseRequired": true
@@ -504,7 +504,7 @@ After request
 
 Before request
 
-Info 70   [00:01:56.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "semanticDiagnosticsSync",
       "arguments": {
@@ -514,7 +514,7 @@ Info 70   [00:01:56.000] request:
       "seq": 16,
       "type": "request"
     }
-Info 71   [00:01:57.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": [
         {
@@ -537,7 +537,7 @@ After request
 
 Before request
 
-Info 72   [00:01:58.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "suggestionDiagnosticsSync",
       "arguments": {
@@ -547,7 +547,7 @@ Info 72   [00:01:58.000] request:
       "seq": 17,
       "type": "request"
     }
-Info 73   [00:01:59.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": [],
       "responseRequired": true

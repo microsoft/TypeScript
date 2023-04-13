@@ -1,25 +1,25 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info 0    [00:00:09.000] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Creating project service
 //// [/a/b/app.ts]
 
 
 
-Info 1    [00:00:10.000] FileWatcher:: Added:: WatchInfo: /a/b/app.ts 500 undefined WatchType: Closed Script info
-Info 2    [00:00:11.000] Starting updateGraphWorker: Project: /a/app/test.csproj
-Info 3    [00:00:12.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/app/test.csproj WatchType: Missing file
-Info 4    [00:00:13.000] DirectoryWatcher:: Added:: WatchInfo: /a/app/node_modules/@types 1 undefined Project: /a/app/test.csproj WatchType: Type roots
-Info 5    [00:00:14.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/app/node_modules/@types 1 undefined Project: /a/app/test.csproj WatchType: Type roots
-Info 6    [00:00:15.000] Finishing updateGraphWorker: Project: /a/app/test.csproj Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 7    [00:00:16.000] Project '/a/app/test.csproj' (External)
-Info 8    [00:00:17.000] 	Files (1)
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/app.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/app/test.csproj
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/app/test.csproj WatchType: Missing file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/app/node_modules/@types 1 undefined Project: /a/app/test.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/app/node_modules/@types 1 undefined Project: /a/app/test.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/app/test.csproj Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/a/app/test.csproj' (External)
+Info seq  [hh:mm:ss:mss] 	Files (1)
 	/a/b/app.ts Text-1 ""
 
 
 	../b/app.ts
 	  Root file specified for compilation
 
-Info 9    [00:00:18.000] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
 
 PolledWatches::
@@ -32,15 +32,15 @@ FsWatches::
 /a/b/app.ts: *new*
   {}
 
-TI:: [00:00:19.000] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [00:00:20.000] Processing cache location '/a/data'
-TI:: [00:00:21.000] Trying to find '/a/data/package.json'...
-TI:: [00:00:22.000] Finished processing cache location '/a/data'
-TI:: [00:00:23.000] Npm config file: /a/data/package.json
-TI:: [00:00:24.000] Npm config file: '/a/data/package.json' is missing, creating new one...
-TI:: [00:00:29.000] Updating types-registry npm package...
-TI:: [00:00:30.000] npm install --ignore-scripts types-registry@latest
-TI:: [00:00:37.000] TI:: Updated types-registry npm package
+TI:: [hh:mm:ss:mss] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
+TI:: [hh:mm:ss:mss] Trying to find '/a/data/package.json'...
+TI:: [hh:mm:ss:mss] Finished processing cache location '/a/data'
+TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
+TI:: [hh:mm:ss:mss] Npm config file: '/a/data/package.json' is missing, creating new one...
+TI:: [hh:mm:ss:mss] Updating types-registry npm package...
+TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
+TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
 TI:: typing installer creation complete
 //// [/a/data/package.json]
 { "private": true }
@@ -63,27 +63,27 @@ TI:: typing installer creation complete
 }
 
 
-TI:: [00:00:38.000] Got install request {"projectName":"/a/app/test.csproj","fileNames":["/a/b/app.ts"],"compilerOptions":{"allowNonTsExtensions":true,"noEmitForJsFiles":true},"typeAcquisition":{"enable":true,"include":["jquery"],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/a/app","cachePath":"/a/data","kind":"discover"}
-TI:: [00:00:39.000] Request specifies cache path '/a/data', loading cached information...
-TI:: [00:00:40.000] Processing cache location '/a/data'
-TI:: [00:00:41.000] Cache location was already processed...
-TI:: [00:00:42.000] Failed to load safelist from types map file '/typesMap.json'
-TI:: [00:00:43.000] Explicitly included types: ["jquery"]
-TI:: [00:00:44.000] Inferred typings from unresolved imports: []
-TI:: [00:00:45.000] Result: {"cachedTypingPaths":[],"newTypingNames":["jquery"],"filesToWatch":["/a/app/bower_components","/a/app/node_modules"]}
-TI:: [00:00:46.000] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":["jquery"],"filesToWatch":["/a/app/bower_components","/a/app/node_modules"]}
-TI:: [00:00:47.000] DirectoryWatcher:: Added:: WatchInfo: /a/app/bower_components
-TI:: [00:00:48.000] DirectoryWatcher:: Added:: WatchInfo: /a/app/bower_components 1 undefined Project: /a/app/test.csproj watcher already invoked: false
-TI:: [00:00:49.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/app/bower_components 1 undefined Project: /a/app/test.csproj watcher already invoked: false
-TI:: [00:00:50.000] DirectoryWatcher:: Added:: WatchInfo: /a/app/node_modules
-TI:: [00:00:51.000] DirectoryWatcher:: Added:: WatchInfo: /a/app/node_modules 1 undefined Project: /a/app/test.csproj watcher already invoked: false
-TI:: [00:00:52.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/app/node_modules 1 undefined Project: /a/app/test.csproj watcher already invoked: false
-TI:: [00:00:53.000] Installing typings ["jquery"]
-TI:: [00:00:54.000] Npm config file: /a/data/package.json
-TI:: [00:00:55.000] Sending response:
+TI:: [hh:mm:ss:mss] Got install request {"projectName":"/a/app/test.csproj","fileNames":["/a/b/app.ts"],"compilerOptions":{"allowNonTsExtensions":true,"noEmitForJsFiles":true},"typeAcquisition":{"enable":true,"include":["jquery"],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/a/app","cachePath":"/a/data","kind":"discover"}
+TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
+TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
+TI:: [hh:mm:ss:mss] Cache location was already processed...
+TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
+TI:: [hh:mm:ss:mss] Explicitly included types: ["jquery"]
+TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
+TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":["jquery"],"filesToWatch":["/a/app/bower_components","/a/app/node_modules"]}
+TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":["jquery"],"filesToWatch":["/a/app/bower_components","/a/app/node_modules"]}
+TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/app/bower_components
+TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/app/bower_components 1 undefined Project: /a/app/test.csproj watcher already invoked: false
+TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/app/bower_components 1 undefined Project: /a/app/test.csproj watcher already invoked: false
+TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/app/node_modules
+TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/app/node_modules 1 undefined Project: /a/app/test.csproj watcher already invoked: false
+TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/app/node_modules 1 undefined Project: /a/app/test.csproj watcher already invoked: false
+TI:: [hh:mm:ss:mss] Installing typings ["jquery"]
+TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
+TI:: [hh:mm:ss:mss] Sending response:
     {"kind":"event::beginInstallTypes","eventId":1,"typingsInstallerVersion":"FakeVersion","projectName":"/a/app/test.csproj"}
-TI:: [00:00:56.000] #1 with arguments'["@types/jquery@tsFakeMajor.Minor"]'.
-TI:: [00:00:57.000] #1 with arguments'["@types/jquery@tsFakeMajor.Minor"]':: true
+TI:: [hh:mm:ss:mss] #1 with arguments'["@types/jquery@tsFakeMajor.Minor"]'.
+TI:: [hh:mm:ss:mss] #1 with arguments'["@types/jquery@tsFakeMajor.Minor"]':: true
 TI:: Before installWorker
 
 PolledWatches::
@@ -105,10 +105,10 @@ TI:: After installWorker
 declare const $: { x: number }
 
 
-TI:: [00:01:04.000] Installed typings ["@types/jquery@tsFakeMajor.Minor"]
-TI:: [00:01:05.000] Installed typing files ["/a/data/node_modules/@types/jquery/index.d.ts"]
-TI:: [00:01:06.000] Sending response:
+TI:: [hh:mm:ss:mss] Installed typings ["@types/jquery@tsFakeMajor.Minor"]
+TI:: [hh:mm:ss:mss] Installed typing files ["/a/data/node_modules/@types/jquery/index.d.ts"]
+TI:: [hh:mm:ss:mss] Sending response:
     {"projectName":"/a/app/test.csproj","typeAcquisition":{"enable":true,"include":["jquery"],"exclude":[]},"compilerOptions":{"allowNonTsExtensions":true,"noEmitForJsFiles":true},"typings":["/a/data/node_modules/@types/jquery/index.d.ts"],"unresolvedImports":[],"kind":"action::set"}
-Info 10   [00:01:07.000] Scheduled: /a/app/test.csproj
-TI:: [00:01:08.000] Sending response:
+Info seq  [hh:mm:ss:mss] Scheduled: /a/app/test.csproj
+TI:: [hh:mm:ss:mss] Sending response:
     {"kind":"event::endInstallTypes","eventId":1,"projectName":"/a/app/test.csproj","packagesToInstall":["@types/jquery@tsFakeMajor.Minor"],"installSuccess":true,"typingsInstallerVersion":"FakeVersion"}

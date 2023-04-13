@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info 0    [00:00:15.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/a/b/app.ts]
  
@@ -21,7 +21,7 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-Info 1    [00:00:16.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "openExternalProject",
       "arguments": {
@@ -40,14 +40,14 @@ Info 1    [00:00:16.000] request:
       "seq": 1,
       "type": "request"
     }
-Info 2    [00:00:17.000] FileWatcher:: Added:: WatchInfo: /a/b/app.ts 500 undefined WatchType: Closed Script info
-Info 3    [00:00:18.000] Starting updateGraphWorker: Project: /a/b/project
-Info 4    [00:00:19.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 5    [00:00:20.000] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/project WatchType: Type roots
-Info 6    [00:00:21.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/project WatchType: Type roots
-Info 7    [00:00:22.000] Finishing updateGraphWorker: Project: /a/b/project Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 8    [00:00:23.000] Project '/a/b/project' (External)
-Info 9    [00:00:24.000] 	Files (3)
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/app.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/project
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/project WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/project WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/project Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/a/b/project' (External)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/a/b/app.ts Text-1 " "
 	/a/b/lib.html Text-1 ""
@@ -60,8 +60,8 @@ Info 9    [00:00:24.000] 	Files (3)
 	lib.html
 	  Root file specified for compilation
 
-Info 10   [00:00:25.000] -----------------------------------------------
-Info 11   [00:00:26.000] response:
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
       "responseRequired": true
@@ -80,7 +80,7 @@ FsWatches::
 
 Before request
 
-Info 12   [00:00:27.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
@@ -89,15 +89,15 @@ Info 12   [00:00:27.000] request:
       "seq": 2,
       "type": "request"
     }
-Info 13   [00:00:28.000] FileWatcher:: Close:: WatchInfo: /a/b/app.ts 500 undefined WatchType: Closed Script info
-Info 14   [00:00:29.000] Project '/a/b/project' (External)
-Info 14   [00:00:30.000] 	Files (3)
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/b/app.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Project '/a/b/project' (External)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 
-Info 14   [00:00:31.000] -----------------------------------------------
-Info 14   [00:00:32.000] Open files: 
-Info 14   [00:00:33.000] 	FileName: /a/b/app.ts ProjectRootPath: undefined
-Info 14   [00:00:34.000] 		Projects: /a/b/project
-Info 14   [00:00:35.000] response:
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /a/b/app.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /a/b/project
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
@@ -117,7 +117,7 @@ FsWatches *deleted*::
 
 Before request
 
-Info 15   [00:00:36.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
@@ -127,25 +127,25 @@ Info 15   [00:00:36.000] request:
       "seq": 3,
       "type": "request"
     }
-Info 16   [00:00:37.000] Starting updateGraphWorker: Project: /a/b/project
-Info 17   [00:00:38.000] Finishing updateGraphWorker: Project: /a/b/project Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 18   [00:00:39.000] Project '/a/b/project' (External)
-Info 19   [00:00:40.000] 	Files (3)
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/project
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/project Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/a/b/project' (External)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/a/b/app.ts Text-1 " "
 	/a/b/lib.html SVC-2-0 "let somelongname: string"
 
-Info 20   [00:00:41.000] -----------------------------------------------
-Info 21   [00:00:42.000] Project '/a/b/project' (External)
-Info 21   [00:00:43.000] 	Files (3)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/a/b/project' (External)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 
-Info 21   [00:00:44.000] -----------------------------------------------
-Info 21   [00:00:45.000] Open files: 
-Info 21   [00:00:46.000] 	FileName: /a/b/app.ts ProjectRootPath: undefined
-Info 21   [00:00:47.000] 		Projects: /a/b/project
-Info 21   [00:00:48.000] 	FileName: /a/b/lib.html ProjectRootPath: undefined
-Info 21   [00:00:49.000] 		Projects: /a/b/project
-Info 21   [00:00:50.000] response:
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /a/b/app.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /a/b/project
+Info seq  [hh:mm:ss:mss] 	FileName: /a/b/lib.html ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /a/b/project
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
@@ -153,7 +153,7 @@ After request
 
 Before request
 
-Info 22   [00:00:51.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "completionInfo",
       "arguments": {
@@ -164,12 +164,12 @@ Info 22   [00:00:51.000] request:
       "seq": 4,
       "type": "request"
     }
-Info 23   [00:00:52.000] getCompletionData: Get current token: *
-Info 24   [00:00:53.000] getCompletionData: Is inside comment: *
-Info 25   [00:00:54.000] getCompletionData: Get previous token: *
-Info 26   [00:00:55.000] getCompletionData: Semantic work: *
-Info 27   [00:00:56.000] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
-Info 28   [00:00:57.000] response:
+Info seq  [hh:mm:ss:mss] getCompletionData: Get current token: *
+Info seq  [hh:mm:ss:mss] getCompletionData: Is inside comment: *
+Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
+Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
+Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
         "flags": 0,
@@ -587,7 +587,7 @@ After request
 
 Before request
 
-Info 29   [00:00:58.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "close",
       "arguments": {
@@ -596,14 +596,14 @@ Info 29   [00:00:58.000] request:
       "seq": 5,
       "type": "request"
     }
-Info 30   [00:00:59.000] Project '/a/b/project' (External)
-Info 30   [00:01:00.000] 	Files (3)
+Info seq  [hh:mm:ss:mss] Project '/a/b/project' (External)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 
-Info 30   [00:01:01.000] -----------------------------------------------
-Info 30   [00:01:02.000] Open files: 
-Info 30   [00:01:03.000] 	FileName: /a/b/app.ts ProjectRootPath: undefined
-Info 30   [00:01:04.000] 		Projects: /a/b/project
-Info 30   [00:01:05.000] response:
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /a/b/app.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /a/b/project
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
@@ -611,7 +611,7 @@ After request
 
 Before request
 
-Info 31   [00:01:06.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "completionInfo",
       "arguments": {
@@ -622,21 +622,21 @@ Info 31   [00:01:06.000] request:
       "seq": 6,
       "type": "request"
     }
-Info 32   [00:01:07.000] Starting updateGraphWorker: Project: /a/b/project
-Info 33   [00:01:08.000] Finishing updateGraphWorker: Project: /a/b/project Version: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 34   [00:01:09.000] Project '/a/b/project' (External)
-Info 35   [00:01:10.000] 	Files (3)
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/project
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/project Version: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/a/b/project' (External)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/a/b/app.ts Text-1 " "
 	/a/b/lib.html Text-3 ""
 
-Info 36   [00:01:11.000] -----------------------------------------------
-Info 37   [00:01:12.000] getCompletionData: Get current token: *
-Info 38   [00:01:13.000] getCompletionData: Is inside comment: *
-Info 39   [00:01:14.000] getCompletionData: Get previous token: *
-Info 40   [00:01:15.000] getCompletionData: Semantic work: *
-Info 41   [00:01:16.000] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
-Info 42   [00:01:17.000] response:
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] getCompletionData: Get current token: *
+Info seq  [hh:mm:ss:mss] getCompletionData: Is inside comment: *
+Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
+Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
+Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
         "flags": 0,

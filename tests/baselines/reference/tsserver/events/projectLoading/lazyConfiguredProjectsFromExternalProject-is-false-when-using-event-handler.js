@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info 0    [00:00:21.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -21,7 +21,7 @@ export class A { }
 {}
 
 
-Info 1    [00:00:22.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "configure",
       "arguments": {
@@ -32,9 +32,9 @@ Info 1    [00:00:22.000] request:
       "seq": 1,
       "type": "request"
     }
-Info 2    [00:00:23.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {"seq":0,"type":"response","command":"configure","request_seq":1,"success":true}
-Info 3    [00:00:24.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
@@ -42,7 +42,7 @@ After request
 
 Before request
 
-Info 4    [00:00:25.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "openExternalProject",
       "arguments": {
@@ -60,11 +60,11 @@ Info 4    [00:00:25.000] request:
       "seq": 2,
       "type": "request"
     }
-Info 5    [00:00:26.000] Creating configuration project /user/username/projects/a/tsconfig.json
-Info 6    [00:00:27.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/a/tsconfig.json 2000 undefined Project: /user/username/projects/a/tsconfig.json WatchType: Config file
-Info 7    [00:00:28.000] event:
+Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/a/tsconfig.json 2000 undefined Project: /user/username/projects/a/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] event:
     {"seq":0,"type":"event","event":"CustomHandler::projectLoadingStart","body":{"project":"/user/username/projects/a/tsconfig.json","reason":"Creating configured project in external project: /user/username/projects/a/project.csproj"}}
-Info 8    [00:00:29.000] Config: /user/username/projects/a/tsconfig.json : {
+Info seq  [hh:mm:ss:mss] Config: /user/username/projects/a/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/a/a.ts"
  ],
@@ -72,16 +72,16 @@ Info 8    [00:00:29.000] Config: /user/username/projects/a/tsconfig.json : {
   "configFilePath": "/user/username/projects/a/tsconfig.json"
  }
 }
-Info 9    [00:00:30.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a 1 undefined Config: /user/username/projects/a/tsconfig.json WatchType: Wild card directory
-Info 10   [00:00:31.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a 1 undefined Config: /user/username/projects/a/tsconfig.json WatchType: Wild card directory
-Info 11   [00:00:32.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/a/a.ts 500 undefined WatchType: Closed Script info
-Info 12   [00:00:33.000] Starting updateGraphWorker: Project: /user/username/projects/a/tsconfig.json
-Info 13   [00:00:34.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 14   [00:00:35.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/node_modules/@types 1 undefined Project: /user/username/projects/a/tsconfig.json WatchType: Type roots
-Info 15   [00:00:36.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/node_modules/@types 1 undefined Project: /user/username/projects/a/tsconfig.json WatchType: Type roots
-Info 16   [00:00:37.000] Finishing updateGraphWorker: Project: /user/username/projects/a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 17   [00:00:38.000] Project '/user/username/projects/a/tsconfig.json' (Configured)
-Info 18   [00:00:39.000] 	Files (2)
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a 1 undefined Config: /user/username/projects/a/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a 1 undefined Config: /user/username/projects/a/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/a/a.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/node_modules/@types 1 undefined Project: /user/username/projects/a/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/node_modules/@types 1 undefined Project: /user/username/projects/a/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/a/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/user/username/projects/a/a.ts Text-1 "export class A { }"
 
@@ -91,12 +91,12 @@ Info 18   [00:00:39.000] 	Files (2)
 	a.ts
 	  Matched by default include pattern '**/*'
 
-Info 19   [00:00:40.000] -----------------------------------------------
-Info 20   [00:00:41.000] event:
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
     {"seq":0,"type":"event","event":"CustomHandler::projectLoadingFinish","body":{"project":"/user/username/projects/a/tsconfig.json"}}
-Info 21   [00:00:42.000] event:
+Info seq  [hh:mm:ss:mss] event:
     {"seq":0,"type":"event","event":"CustomHandler::projectInfo","body":{"projectId":"20a91f8dffe761e39e0ada0a62a3058faad15d4a8c135539aaccd61bb5497dea","fileStats":{"js":0,"jsSize":0,"jsx":0,"jsxSize":0,"ts":1,"tsSize":18,"tsx":0,"tsxSize":0,"dts":1,"dtsSize":334,"deferred":0,"deferredSize":0},"compilerOptions":{},"typeAcquisition":{"enable":false,"include":false,"exclude":false},"extends":false,"files":false,"include":false,"exclude":false,"compileOnSave":false,"configFileName":"tsconfig.json","projectType":"configured","languageServiceEnabled":true,"version":"FakeVersion"}}
-Info 22   [00:00:43.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
       "responseRequired": true

@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info 0    [00:01:11.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -216,7 +216,7 @@ export {};
 }
 
 
-Info 1    [00:01:12.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
@@ -225,13 +225,13 @@ Info 1    [00:01:12.000] request:
       "seq": 1,
       "type": "request"
     }
-Info 2    [00:01:13.000] Search path: /user/username/projects/myproject/packages/A/src
-Info 3    [00:01:14.000] For info: /user/username/projects/myproject/packages/A/src/index.ts :: Config file name: /user/username/projects/myproject/packages/A/tsconfig.json
-Info 4    [00:01:15.000] Creating configuration project /user/username/projects/myproject/packages/A/tsconfig.json
-Info 5    [00:01:16.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/A/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Config file
-Info 6    [00:01:17.000] event:
+Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/packages/A/src
+Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/packages/A/src/index.ts :: Config file name: /user/username/projects/myproject/packages/A/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/packages/A/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/A/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] event:
     {"seq":0,"type":"event","event":"projectLoadingStart","body":{"projectName":"/user/username/projects/myproject/packages/A/tsconfig.json","reason":"Creating possible configured project for /user/username/projects/myproject/packages/A/src/index.ts to open"}}
-Info 7    [00:01:18.000] Config: /user/username/projects/myproject/packages/A/tsconfig.json : {
+Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/packages/A/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/packages/A/src/index.ts"
  ],
@@ -248,10 +248,10 @@ Info 7    [00:01:18.000] Config: /user/username/projects/myproject/packages/A/ts
   }
  ]
 }
-Info 8    [00:01:19.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/a/src 1 undefined Config: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Wild card directory
-Info 9    [00:01:20.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/a/src 1 undefined Config: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Wild card directory
-Info 10   [00:01:21.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/packages/A/tsconfig.json
-Info 11   [00:01:22.000] Config: /user/username/projects/myproject/packages/B/tsconfig.json : {
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/a/src 1 undefined Config: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/a/src 1 undefined Config: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/packages/A/tsconfig.json
+Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/packages/B/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/packages/B/src/bar.ts",
   "/user/username/projects/myproject/packages/B/src/index.ts"
@@ -263,30 +263,30 @@ Info 11   [00:01:22.000] Config: /user/username/projects/myproject/packages/B/ts
   "configFilePath": "/user/username/projects/myproject/packages/B/tsconfig.json"
  }
 }
-Info 12   [00:01:23.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/B/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Config file
-Info 13   [00:01:24.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/b/src 1 undefined Config: /user/username/projects/myproject/packages/B/tsconfig.json WatchType: Wild card directory
-Info 14   [00:01:25.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/b/src 1 undefined Config: /user/username/projects/myproject/packages/B/tsconfig.json WatchType: Wild card directory
-Info 15   [00:01:26.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/B/src/index.ts 500 undefined WatchType: Closed Script info
-Info 16   [00:01:27.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/B/src/bar.ts 500 undefined WatchType: Closed Script info
-Info 17   [00:01:28.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 18   [00:01:29.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/A/src 1 undefined Project: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Failed Lookup Locations
-Info 19   [00:01:30.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/A/src 1 undefined Project: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Failed Lookup Locations
-Info 20   [00:01:31.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/A/node_modules 1 undefined Project: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Failed Lookup Locations
-Info 21   [00:01:32.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/A/node_modules 1 undefined Project: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Failed Lookup Locations
-Info 22   [00:01:33.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/node_modules 1 undefined Project: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Failed Lookup Locations
-Info 23   [00:01:34.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/node_modules 1 undefined Project: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Failed Lookup Locations
-Info 24   [00:01:35.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Failed Lookup Locations
-Info 25   [00:01:36.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Failed Lookup Locations
-Info 26   [00:01:37.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/B/package.json 2000 undefined Project: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: File location affecting resolution
-Info 27   [00:01:38.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/A/node_modules/@types 1 undefined Project: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Type roots
-Info 28   [00:01:39.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/A/node_modules/@types 1 undefined Project: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Type roots
-Info 29   [00:01:40.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/node_modules/@types 1 undefined Project: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Type roots
-Info 30   [00:01:41.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/node_modules/@types 1 undefined Project: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Type roots
-Info 31   [00:01:42.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Type roots
-Info 32   [00:01:43.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Type roots
-Info 33   [00:01:44.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/packages/A/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 34   [00:01:45.000] Project '/user/username/projects/myproject/packages/A/tsconfig.json' (Configured)
-Info 35   [00:01:46.000] 	Files (4)
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/B/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/b/src 1 undefined Config: /user/username/projects/myproject/packages/B/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/b/src 1 undefined Config: /user/username/projects/myproject/packages/B/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/B/src/index.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/B/src/bar.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/A/src 1 undefined Project: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/A/src 1 undefined Project: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/A/node_modules 1 undefined Project: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/A/node_modules 1 undefined Project: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/node_modules 1 undefined Project: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/node_modules 1 undefined Project: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/B/package.json 2000 undefined Project: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/A/node_modules/@types 1 undefined Project: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/A/node_modules/@types 1 undefined Project: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/node_modules/@types 1 undefined Project: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/node_modules/@types 1 undefined Project: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/packages/A/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/packages/A/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (4)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/user/username/projects/myproject/packages/B/src/index.ts Text-1 "export function foo() { }"
 	/user/username/projects/myproject/packages/B/src/bar.ts Text-1 "export function bar() { }"
@@ -302,23 +302,23 @@ Info 35   [00:01:46.000] 	Files (4)
 	src/index.ts
 	  Matched by include pattern 'src' in 'tsconfig.json'
 
-Info 36   [00:01:47.000] -----------------------------------------------
-Info 37   [00:01:48.000] event:
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
     {"seq":0,"type":"event","event":"projectLoadingFinish","body":{"projectName":"/user/username/projects/myproject/packages/A/tsconfig.json"}}
-Info 38   [00:01:49.000] event:
+Info seq  [hh:mm:ss:mss] event:
     {"seq":0,"type":"event","event":"telemetry","body":{"telemetryEventName":"projectInfo","payload":{"projectId":"8c5cfb88fb6a6125ddaca4c198af63d261c8feb2786e348cbf3223fcf8461e16","fileStats":{"js":0,"jsSize":0,"jsx":0,"jsxSize":0,"ts":3,"tsSize":122,"tsx":0,"tsxSize":0,"dts":1,"dtsSize":334,"deferred":0,"deferredSize":0},"compilerOptions":{"outDir":"","rootDir":"","composite":true},"typeAcquisition":{"enable":false,"include":false,"exclude":false},"extends":false,"files":false,"include":true,"exclude":false,"compileOnSave":false,"configFileName":"tsconfig.json","projectType":"configured","languageServiceEnabled":true,"version":"FakeVersion"}}}
-Info 39   [00:01:50.000] event:
+Info seq  [hh:mm:ss:mss] event:
     {"seq":0,"type":"event","event":"configFileDiag","body":{"triggerFile":"/user/username/projects/myproject/packages/A/src/index.ts","configFile":"/user/username/projects/myproject/packages/A/tsconfig.json","diagnostics":[]}}
-Info 40   [00:01:51.000] Search path: /user/username/projects/myproject/packages/A
-Info 41   [00:01:52.000] For info: /user/username/projects/myproject/packages/A/tsconfig.json :: No config files found.
-Info 42   [00:01:53.000] Project '/user/username/projects/myproject/packages/A/tsconfig.json' (Configured)
-Info 42   [00:01:54.000] 	Files (4)
+Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/packages/A
+Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/packages/A/tsconfig.json :: No config files found.
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/packages/A/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (4)
 
-Info 42   [00:01:55.000] -----------------------------------------------
-Info 42   [00:01:56.000] Open files: 
-Info 42   [00:01:57.000] 	FileName: /user/username/projects/myproject/packages/A/src/index.ts ProjectRootPath: undefined
-Info 42   [00:01:58.000] 		Projects: /user/username/projects/myproject/packages/A/tsconfig.json
-Info 42   [00:01:59.000] response:
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/packages/A/src/index.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/packages/A/tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
@@ -360,7 +360,7 @@ FsWatchesRecursive::
 
 Before request
 
-Info 43   [00:02:00.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "geterr",
       "arguments": {
@@ -372,7 +372,7 @@ Info 43   [00:02:00.000] request:
       "seq": 2,
       "type": "request"
     }
-Info 44   [00:02:01.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
@@ -381,14 +381,14 @@ After request
 Before running Timeout callback:: count: 1
 1: checkOne
 
-Info 45   [00:02:02.000] event:
+Info seq  [hh:mm:ss:mss] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/packages/A/src/index.ts","diagnostics":[]}}
 After running Timeout callback:: count: 0
 
 Before running Immedidate callback:: count: 1
 1: semanticCheck
 
-Info 46   [00:02:03.000] event:
+Info seq  [hh:mm:ss:mss] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/packages/A/src/index.ts","diagnostics":[]}}
 After running Immedidate callback:: count: 1
 2: suggestionCheck
@@ -396,15 +396,15 @@ After running Immedidate callback:: count: 1
 Before running Immedidate callback:: count: 1
 2: suggestionCheck
 
-Info 47   [00:02:04.000] event:
+Info seq  [hh:mm:ss:mss] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/packages/A/src/index.ts","diagnostics":[]}}
-Info 48   [00:02:05.000] event:
+Info seq  [hh:mm:ss:mss] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
 After running Immedidate callback:: count: 0
 
 Before request
 
-Info 49   [00:02:06.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "updateOpen",
       "arguments": {
@@ -430,7 +430,7 @@ Info 49   [00:02:06.000] request:
       "seq": 3,
       "type": "request"
     }
-Info 50   [00:02:07.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
       "responseRequired": true
@@ -439,7 +439,7 @@ After request
 
 Before request
 
-Info 51   [00:02:08.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "geterr",
       "arguments": {
@@ -451,7 +451,7 @@ Info 51   [00:02:08.000] request:
       "seq": 4,
       "type": "request"
     }
-Info 52   [00:02:09.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
@@ -460,24 +460,24 @@ After request
 Before running Timeout callback:: count: 1
 2: checkOne
 
-Info 53   [00:02:10.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/packages/A/tsconfig.json
-Info 54   [00:02:11.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/packages/A/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 55   [00:02:12.000] Project '/user/username/projects/myproject/packages/A/tsconfig.json' (Configured)
-Info 56   [00:02:13.000] 	Files (4)
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/packages/A/tsconfig.json
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/packages/A/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/packages/A/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (4)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/user/username/projects/myproject/packages/B/src/index.ts Text-1 "export function foo() { }"
 	/user/username/projects/myproject/packages/B/src/bar.ts Text-1 "export function bar() { }"
 	/user/username/projects/myproject/packages/A/src/index.ts SVC-1-1 "import { foo } from 'b';\nimport { bar } from 'b/lib/bar';\nfoo();\nbar();\n\n"
 
-Info 57   [00:02:14.000] -----------------------------------------------
-Info 58   [00:02:15.000] event:
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/packages/A/src/index.ts","diagnostics":[]}}
 After running Timeout callback:: count: 0
 
 Before running Immedidate callback:: count: 1
 3: semanticCheck
 
-Info 59   [00:02:16.000] event:
+Info seq  [hh:mm:ss:mss] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/packages/A/src/index.ts","diagnostics":[]}}
 After running Immedidate callback:: count: 1
 4: suggestionCheck
@@ -485,8 +485,8 @@ After running Immedidate callback:: count: 1
 Before running Immedidate callback:: count: 1
 4: suggestionCheck
 
-Info 60   [00:02:17.000] event:
+Info seq  [hh:mm:ss:mss] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/packages/A/src/index.ts","diagnostics":[]}}
-Info 61   [00:02:18.000] event:
+Info seq  [hh:mm:ss:mss] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":4}}
 After running Immedidate callback:: count: 0

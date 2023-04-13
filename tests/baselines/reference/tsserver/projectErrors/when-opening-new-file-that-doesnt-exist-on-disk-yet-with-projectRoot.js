@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info 0    [00:00:25.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -21,7 +21,7 @@ class c { }
 class c { }
 
 
-Info 1    [00:00:26.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
@@ -33,17 +33,17 @@ Info 1    [00:00:26.000] request:
       "seq": 1,
       "type": "request"
     }
-Info 2    [00:00:27.000] Search path: 
-Info 3    [00:00:28.000] For info: untitled:Untitled-1 :: No config files found.
-Info 4    [00:00:29.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info 5    [00:00:30.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 6    [00:00:31.000] FileWatcher:: Added:: WatchInfo: /typings/@epic/core.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-Info 7    [00:00:32.000] FileWatcher:: Added:: WatchInfo: /user/someuser/projects/somefolder/src/somefile.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-Info 8    [00:00:33.000] DirectoryWatcher:: Added:: WatchInfo: /user/someuser/projects/someFolder/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info 9    [00:00:34.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/someuser/projects/someFolder/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info 10   [00:00:35.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 11   [00:00:36.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 12   [00:00:37.000] 	Files (2)
+Info seq  [hh:mm:ss:mss] Search path: 
+Info seq  [hh:mm:ss:mss] For info: untitled:Untitled-1 :: No config files found.
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /typings/@epic/core.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/someuser/projects/somefolder/src/somefile.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/someuser/projects/someFolder/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/someuser/projects/someFolder/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	untitled:Untitled-1 SVC-1-0 "/// <reference path=\"../../../../../../typings/@epic/Core.d.ts\" />\n/// <reference path=\"./src/somefile.d.ts\" />"
 
@@ -53,15 +53,15 @@ Info 12   [00:00:37.000] 	Files (2)
 	untitled:Untitled-1
 	  Root file specified for compilation
 
-Info 13   [00:00:38.000] -----------------------------------------------
-Info 14   [00:00:39.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 14   [00:00:40.000] 	Files (2)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 
-Info 14   [00:00:41.000] -----------------------------------------------
-Info 14   [00:00:42.000] Open files: 
-Info 14   [00:00:43.000] 	FileName: untitled:Untitled-1 ProjectRootPath: /user/someuser/projects/someFolder
-Info 14   [00:00:44.000] 		Projects: /dev/null/inferredProject1*
-Info 14   [00:00:45.000] response:
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: untitled:Untitled-1 ProjectRootPath: /user/someuser/projects/someFolder
+Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
@@ -86,7 +86,7 @@ path: /a/lib/lib.d.ts fileName: /a/lib/lib.d.ts
 
 Before request
 
-Info 15   [00:00:46.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "geterr",
       "arguments": {
@@ -98,7 +98,7 @@ Info 15   [00:00:46.000] request:
       "seq": 2,
       "type": "request"
     }
-Info 16   [00:00:47.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
@@ -107,14 +107,14 @@ After request
 Before running Timeout callback:: count: 1
 1: checkOne
 
-Info 17   [00:00:48.000] event:
+Info seq  [hh:mm:ss:mss] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"untitled:Untitled-1","diagnostics":[]}}
 After running Timeout callback:: count: 0
 
 Before running Immedidate callback:: count: 1
 1: semanticCheck
 
-Info 18   [00:00:49.000] event:
+Info seq  [hh:mm:ss:mss] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"untitled:Untitled-1","diagnostics":[{"start":{"line":1,"offset":22},"end":{"line":1,"offset":63},"text":"File '../../../../../../typings/@epic/Core.d.ts' not found.","code":6053,"category":"error"},{"start":{"line":2,"offset":22},"end":{"line":2,"offset":41},"text":"File 'src/somefile.d.ts' not found.","code":6053,"category":"error"}]}}
 After running Immedidate callback:: count: 1
 2: suggestionCheck
@@ -122,8 +122,8 @@ After running Immedidate callback:: count: 1
 Before running Immedidate callback:: count: 1
 2: suggestionCheck
 
-Info 19   [00:00:50.000] event:
+Info seq  [hh:mm:ss:mss] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"untitled:Untitled-1","diagnostics":[]}}
-Info 20   [00:00:51.000] event:
+Info seq  [hh:mm:ss:mss] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
 After running Immedidate callback:: count: 0
