@@ -2718,6 +2718,7 @@ declare namespace ts {
                 placeOpenBraceOnNewLineForControlBlocks?: boolean;
                 insertSpaceBeforeTypeAnnotation?: boolean;
                 semicolons?: SemicolonPreference;
+                indentSwitchCase?: boolean;
             }
             interface UserPreferences {
                 readonly disableSuggestions?: boolean;
@@ -10524,6 +10525,7 @@ declare namespace ts {
         readonly insertSpaceBeforeTypeAnnotation?: boolean;
         readonly indentMultiLineObjectLiteralBeginningOnBlankLine?: boolean;
         readonly semicolons?: SemicolonPreference;
+        readonly indentSwitchCase?: boolean;
     }
     interface DefinitionInfo extends DocumentSpan {
         kind: ScriptElementKind;
