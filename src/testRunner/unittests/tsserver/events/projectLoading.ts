@@ -10,6 +10,7 @@ import {
     createLoggerWithInMemoryLogs,
     createSession,
     createSessionWithCustomEventHandler,
+    openExternalProjectForSession,
     openFilesForSession,
     protocolLocationFromSubstring,
     TestSession,
@@ -53,7 +54,7 @@ describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoading
                 openFilesForSession([aTs], session);
 
                 host.writeFile(configA.path, configA.content);
-                host.checkTimeoutQueueLengthAndRun(2);
+                host.runQueuedTimeoutCallbacks();
                 baselineTsserverLogs("events/projectLoading", `change is detected in the config file ${sessionType}`, session);
             });
 
@@ -73,7 +74,7 @@ describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoading
                 openFilesForSession([bTs], session);
 
                 host.writeFile(configA.path, configA.content);
-                host.checkTimeoutQueueLengthAndRun(2);
+                host.runQueuedTimeoutCallbacks();
                 baselineTsserverLogs("events/projectLoading", `change is detected in an extended config file ${sessionType}`, session);
             });
 
@@ -141,14 +142,11 @@ describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoading
                             preferences: { lazyConfiguredProjectsFromExternalProject }
                         }
                     });
-                    session.executeCommandSeq<ts.server.protocol.OpenExternalProjectRequest>({
-                        command: ts.server.protocol.CommandTypes.OpenExternalProject,
-                        arguments: {
-                            projectFileName,
-                            rootFiles: toExternalFiles([aTs.path, configA.path]),
-                            options: {}
-                        }
-                    });
+                    openExternalProjectForSession({
+                        projectFileName,
+                        rootFiles: toExternalFiles([aTs.path, configA.path]),
+                        options: {}
+                    }, session);
                     return session;
                 }
 

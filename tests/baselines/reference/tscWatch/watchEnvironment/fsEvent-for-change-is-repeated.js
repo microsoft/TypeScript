@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/project useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/project/main.ts]
 let a: string = "Hello"
@@ -29,6 +30,8 @@ FileWatcher:: Added:: WatchInfo: main.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 undefined Source file
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Type roots
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
 [[90m12:00:22 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -51,6 +54,8 @@ Shape signatures in builder refreshed for::
 PolledWatches::
 /user/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
 /user/username/projects/project/main.ts: *new*
@@ -72,6 +77,9 @@ Input::
 let a: string = "Hello World"
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with main.ts 1:: WatchInfo: main.ts 250 undefined Source file
 Scheduling update
@@ -111,6 +119,9 @@ Change:: receive another change event without modifying the file
 
 Input::
 
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with main.ts 1:: WatchInfo: main.ts 250 undefined Source file
 Scheduling update
@@ -128,6 +139,9 @@ Input::
 
 
 
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with main.ts 1:: WatchInfo: main.ts 250 undefined Source file
 Scheduling update
@@ -165,6 +179,9 @@ Change:: receive another change event without modifying the file
 
 Input::
 
+Before running Timeout callback:: count: 1
+4: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with main.ts 1:: WatchInfo: main.ts 250 undefined Source file
 Scheduling update

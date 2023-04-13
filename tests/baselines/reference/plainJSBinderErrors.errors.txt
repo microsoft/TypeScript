@@ -69,7 +69,7 @@ tests/cases/conformance/salsa/plainJSBinderErrors.js(40,7): error TS1215: Invali
 !!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
         }
         withOctal() {
-            const redundant = 010
+            const redundant = 0o10
             with (redundant) {
             ~~~~
 !!! error TS1101: 'with' statements are not allowed in strict mode.

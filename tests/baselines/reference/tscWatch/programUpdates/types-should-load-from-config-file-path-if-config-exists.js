@@ -1,3 +1,4 @@
+currentDirectory:: /a/c useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/app.ts]
 let x = 1
@@ -60,8 +61,6 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
-/a/b/node_modules: *new*
-  {}
 /a/b: *new*
   {}
 

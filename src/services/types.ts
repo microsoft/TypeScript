@@ -607,6 +607,7 @@ export interface LanguageService {
      * Editors should call this after `>` is typed.
      */
     getJsxClosingTagAtPosition(fileName: string, position: number): JsxClosingTagInfo | undefined;
+    getLinkedEditingRangeAtPosition(fileName: string, position: number): LinkedEditingInfo | undefined;
 
     getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan | undefined;
 
@@ -659,6 +660,11 @@ export interface LanguageService {
 
 export interface JsxClosingTagInfo {
     readonly newText: string;
+}
+
+export interface LinkedEditingInfo {
+    readonly ranges: TextSpan[];
+    wordPattern?: string;
 }
 
 export interface CombinedCodeFixScope { type: "file"; fileName: string; }
@@ -1112,6 +1118,7 @@ export interface FormatCodeSettings extends EditorSettings {
     readonly insertSpaceBeforeTypeAnnotation?: boolean;
     readonly indentMultiLineObjectLiteralBeginningOnBlankLine?: boolean;
     readonly semicolons?: SemicolonPreference;
+    readonly indentSwitchCase?: boolean;
 }
 
 export function getDefaultFormatCodeSettings(newLineCharacter?: string): FormatCodeSettings {
@@ -1136,7 +1143,8 @@ export function getDefaultFormatCodeSettings(newLineCharacter?: string): FormatC
         placeOpenBraceOnNewLineForFunctions: false,
         placeOpenBraceOnNewLineForControlBlocks: false,
         semicolons: SemicolonPreference.Ignore,
-        trimTrailingWhitespace: true
+        trimTrailingWhitespace: true,
+        indentSwitchCase: true
     };
 }
 

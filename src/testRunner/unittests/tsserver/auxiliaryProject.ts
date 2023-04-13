@@ -4,7 +4,8 @@ import {
     File,
 } from "../virtualFileSystemWithWatch";
 import {
-    checkNumberOfInferredProjects,
+    baselineTsserverLogs,
+    createLoggerWithInMemoryLogs,
     createSession,
     openFilesForSession,
 } from "./helpers";
@@ -24,12 +25,11 @@ const bJs: File = {
 describe("unittests:: tsserver:: auxiliaryProject", () => {
     it("AuxiliaryProject does not remove scrips from InferredProject", () => {
         const host = createServerHost([aTs, bDts, bJs]);
-        const session = createSession(host);
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
         const projectService = session.getProjectService();
         openFilesForSession([aTs], session);
 
         // Open file is in inferred project
-        checkNumberOfInferredProjects(projectService, 1);
         const inferredProject = projectService.inferredProjects[0];
 
         // getNoDtsResolutionProject will create an AuxiliaryProject with a.ts and b.js
@@ -52,5 +52,6 @@ describe("unittests:: tsserver:: auxiliaryProject", () => {
         assert(!bJsScriptInfo.isOrphan());
         assert(bJsScriptInfo.isContainedByBackgroundProject());
         assert.equal(bJsScriptInfo.getDefaultProject().projectKind, ts.server.ProjectKind.Inferred);
+        baselineTsserverLogs("auxiliaryProject", "does not remove scrips from InferredProject", session);
     });
 });

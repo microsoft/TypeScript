@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/transitiveReferences useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -296,6 +297,8 @@ Dependencies for::
 
 PolledWatches::
 /user/username/projects/transitivereferences/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::

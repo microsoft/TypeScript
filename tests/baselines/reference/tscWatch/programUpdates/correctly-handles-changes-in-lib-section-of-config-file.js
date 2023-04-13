@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/compiler/lib.es5.d.ts]
 /// <reference no-default-lib="true"/>
@@ -52,10 +53,6 @@ Shape signatures in builder refreshed for::
 /compiler/lib.es5.d.ts (used version)
 /src/app.ts (used version)
 
-PolledWatches::
-/src/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /src/tsconfig.json: *new*
   {}
@@ -82,6 +79,9 @@ Input::
 {"compilerOptions":{"module":"commonjs","target":"es5","noImplicitAny":true,"sourceMap":false,"lib":["es5","es2015.promise"]}}
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:22 AM[0m] File change detected. Starting incremental compilation...
@@ -106,10 +106,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /compiler/lib.es2015.promise.d.ts (used version)
 /src/app.ts (computed .d.ts)
-
-PolledWatches::
-/src/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
 /src/tsconfig.json:

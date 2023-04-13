@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/c/app.ts]
 
@@ -68,7 +69,7 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
-/a: *new*
+/a/b/c: *new*
   {}
 
 exitCode:: ExitStatus.undefined

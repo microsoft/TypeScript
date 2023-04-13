@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -52,6 +53,8 @@ Shape signatures in builder refreshed for::
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
 /user/username/projects/myproject/tsconfig.json: *new*
@@ -88,6 +91,8 @@ Change:: No change
 
 Input::
 
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 Output::
 
 exitCode:: ExitStatus.undefined
@@ -101,6 +106,12 @@ export const x = 10;
 
 //// [/user/username/projects/myproject/src/file2.ts] deleted
 
+Before running Timeout callback:: count: 2
+1: timerToUpdateProgram
+3: timerToUpdateChildWatches
+Invoking Timeout callback:: timeoutId:: 1:: timerToUpdateProgram
+After running Timeout callback:: count: 1
+3: timerToUpdateChildWatches
 Output::
 >> Screen clear
 [[90m12:00:37 AM[0m] File change detected. Starting incremental compilation...
@@ -128,6 +139,8 @@ Shape signatures in builder refreshed for::
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/src/file2.ts: *new*
   {"pollingInterval":500}
@@ -158,6 +171,19 @@ Change:: Pending directory watchers and program update
 
 Input::
 
+Before running Timeout callback:: count: 1
+3: timerToUpdateChildWatches
+After running Timeout callback:: count: 2
+5: timerToUpdateProgram
+7: timerToInvalidateFailedLookupResolutions
+Before running Timeout callback:: count: 2
+5: timerToUpdateProgram
+7: timerToInvalidateFailedLookupResolutions
+After running Timeout callback:: count: 1
+8: timerToUpdateChildWatches
+Before running Timeout callback:: count: 1
+8: timerToUpdateChildWatches
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:42 AM[0m] File change detected. Starting incremental compilation...
@@ -188,6 +214,8 @@ Shape signatures in builder refreshed for::
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 PolledWatches *deleted*::

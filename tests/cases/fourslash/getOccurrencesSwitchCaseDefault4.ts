@@ -10,5 +10,7 @@
 ////        contin/*2*/ue foo;
 ////}
 
-verify.rangesAreOccurrences(false);
-goTo.eachMarker(() => verify.occurrencesAtPositionCount(0));
+verify.baselineCommands(
+    { type: "documentHighlights" },
+    { type: "documentHighlights", markerOrRange: test.markers() },
+);
