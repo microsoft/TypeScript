@@ -1,5 +1,5 @@
-import * as ts from "./_namespaces/ts";
-import {
+import type * as ts from "./_namespaces/ts";
+import type {
     CompilerOptionsValue,
     EndOfLineState,
     FileExtensionInfo,
@@ -23,6 +23,7 @@ import {
 
 export const enum CommandTypes {
     JsxClosingTag = "jsxClosingTag",
+    LinkedEditingRange = "linkedEditingRange",
     Brace = "brace",
     /** @internal */
     BraceFull = "brace-full",
@@ -1101,6 +1102,18 @@ export interface JsxClosingTagResponse extends Response {
     readonly body: TextInsertion;
 }
 
+export interface LinkedEditingRangeRequest extends FileLocationRequest {
+    readonly command: CommandTypes.LinkedEditingRange;
+}
+
+export interface LinkedEditingRangesBody {
+    ranges: TextSpan[];
+    wordPattern?: string;
+}
+
+export interface LinkedEditingRangeResponse extends Response {
+    readonly body: LinkedEditingRangesBody;
+}
 
 /**
  * Get document highlights request; value of command field is
@@ -3405,6 +3418,7 @@ export interface FormatCodeSettings extends EditorSettings {
     placeOpenBraceOnNewLineForControlBlocks?: boolean;
     insertSpaceBeforeTypeAnnotation?: boolean;
     semicolons?: SemicolonPreference;
+    indentSwitchCase?: boolean;
 }
 
 export interface UserPreferences {

@@ -1,6 +1,6 @@
 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractUsingAbstractMethods2.ts(2,5): error TS1244: Abstract methods can only appear within an abstract class.
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractUsingAbstractMethods2.ts(5,7): error TS2515: Non-abstract class 'B' does not implement inherited abstract member 'foo' from class 'A'.
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractUsingAbstractMethods2.ts(21,7): error TS2515: Non-abstract class 'BB' does not implement inherited abstract member 'foo' from class 'AA'.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractUsingAbstractMethods2.ts(5,7): error TS18052: Non-abstract class 'B' does not implement all abstract members of 'A'
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractUsingAbstractMethods2.ts(21,7): error TS18052: Non-abstract class 'BB' does not implement all abstract members of 'AA'
 
 
 ==== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractUsingAbstractMethods2.ts (3 errors) ====
@@ -12,7 +12,8 @@ tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbst
     
     class B extends A  {}
           ~
-!!! error TS2515: Non-abstract class 'B' does not implement inherited abstract member 'foo' from class 'A'.
+!!! error TS18052: Non-abstract class 'B' does not implement all abstract members of 'A'
+!!! related TS2515 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractUsingAbstractMethods2.ts:2:14: Non-abstract class 'B' does not implement inherited abstract member 'foo' from class 'A'.
     
     abstract class C extends A {}
     
@@ -30,7 +31,8 @@ tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbst
     
     class BB extends AA  {}
           ~~
-!!! error TS2515: Non-abstract class 'BB' does not implement inherited abstract member 'foo' from class 'AA'.
+!!! error TS18052: Non-abstract class 'BB' does not implement all abstract members of 'AA'
+!!! related TS2515 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractUsingAbstractMethods2.ts:18:14: Non-abstract class 'BB' does not implement inherited abstract member 'foo' from class 'AA'.
     
     abstract class CC extends AA {}
     

@@ -138,7 +138,7 @@ export function testExtractSymbol(caption: string, text: string, baselineFolder:
 
     function makeProgram(f: {path: string, content: string }, includeLib?: boolean) {
         const host = createServerHost(includeLib ? [f, libFile] : [f]); // libFile is expensive to parse repeatedly - only test when required
-        const projectService = createProjectService(host);
+        const projectService = createProjectService(host, { allowNonBaseliningLogger: true });
         projectService.openClientFile(f.path);
         const program = projectService.inferredProjects[0].getLanguageService().getProgram()!;
         const autoImportProvider = projectService.inferredProjects[0].getLanguageService().getAutoImportProvider();
@@ -163,7 +163,7 @@ export function testExtractSymbolFailed(caption: string, text: string, descripti
             content: t.source
         };
         const host = createServerHost([f, libFile]);
-        const projectService = createProjectService(host);
+        const projectService = createProjectService(host, { allowNonBaseliningLogger: true });
         projectService.openClientFile(f.path);
         const program = projectService.inferredProjects[0].getLanguageService().getProgram()!;
         const sourceFile = program.getSourceFile(f.path)!;

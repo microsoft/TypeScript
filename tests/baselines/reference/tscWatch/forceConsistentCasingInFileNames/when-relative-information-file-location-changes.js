@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/moduleA.ts]
 import a = require("./ModuleC")
@@ -141,6 +142,9 @@ Input::
                     import a = require("./ModuleC")
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:35 AM[0m] File change detected. Starting incremental compilation...

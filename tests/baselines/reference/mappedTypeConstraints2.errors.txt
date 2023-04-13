@@ -1,10 +1,25 @@
 tests/cases/conformance/types/mapped/mappedTypeConstraints2.ts(10,11): error TS2322: Type 'Mapped2<K>[`get${K}`]' is not assignable to type '{ a: K; }'.
-  Type 'Mapped2<K>[`get${string}`]' is not assignable to type '{ a: K; }'.
+  Type '{ a: `get${K}`; }' is not assignable to type '{ a: K; }'.
+    Types of property 'a' are incompatible.
+      Type '`get${K}`' is not assignable to type 'K'.
+        '`get${K}`' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string'.
+          Type '`get${string}`' is not assignable to type 'K'.
+            '`get${string}`' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string'.
 tests/cases/conformance/types/mapped/mappedTypeConstraints2.ts(16,11): error TS2322: Type 'Mapped3<K>[Uppercase<K>]' is not assignable to type '{ a: K; }'.
-  Type 'Mapped3<K>[Uppercase<string>]' is not assignable to type '{ a: K; }'.
-    Type 'Mapped3<K>[string]' is not assignable to type '{ a: K; }'.
+  Type '{ a: Uppercase<K>; }' is not assignable to type '{ a: K; }'.
+    Types of property 'a' are incompatible.
+      Type 'Uppercase<K>' is not assignable to type 'K'.
+        'Uppercase<K>' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string'.
+          Type 'Uppercase<string>' is not assignable to type 'K'.
+            'Uppercase<string>' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string'.
+              Type 'string' is not assignable to type 'K'.
+                'string' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string'.
 tests/cases/conformance/types/mapped/mappedTypeConstraints2.ts(25,57): error TS2322: Type 'Foo<T>[`get${T}`]' is not assignable to type 'T'.
-  'T' could be instantiated with an arbitrary type which could be unrelated to 'Foo<T>[`get${T}`]'.
+  'Foo<T>[`get${T}`]' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string'.
+    Type '`get${T}`' is not assignable to type 'T'.
+      '`get${T}`' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string'.
+        Type '`get${string}`' is not assignable to type 'T'.
+          '`get${string}`' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string'.
 
 
 ==== tests/cases/conformance/types/mapped/mappedTypeConstraints2.ts (3 errors) ====
@@ -20,7 +35,12 @@ tests/cases/conformance/types/mapped/mappedTypeConstraints2.ts(25,57): error TS2
         const x: { a: K } = obj[key];  // Error
               ~
 !!! error TS2322: Type 'Mapped2<K>[`get${K}`]' is not assignable to type '{ a: K; }'.
-!!! error TS2322:   Type 'Mapped2<K>[`get${string}`]' is not assignable to type '{ a: K; }'.
+!!! error TS2322:   Type '{ a: `get${K}`; }' is not assignable to type '{ a: K; }'.
+!!! error TS2322:     Types of property 'a' are incompatible.
+!!! error TS2322:       Type '`get${K}`' is not assignable to type 'K'.
+!!! error TS2322:         '`get${K}`' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string'.
+!!! error TS2322:           Type '`get${string}`' is not assignable to type 'K'.
+!!! error TS2322:             '`get${string}`' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string'.
     }
     
     type Mapped3<K extends string> = { [P in K as Uppercase<P>]: { a: P } };
@@ -29,8 +49,14 @@ tests/cases/conformance/types/mapped/mappedTypeConstraints2.ts(25,57): error TS2
         const x: { a: K } = obj[key];  // Error
               ~
 !!! error TS2322: Type 'Mapped3<K>[Uppercase<K>]' is not assignable to type '{ a: K; }'.
-!!! error TS2322:   Type 'Mapped3<K>[Uppercase<string>]' is not assignable to type '{ a: K; }'.
-!!! error TS2322:     Type 'Mapped3<K>[string]' is not assignable to type '{ a: K; }'.
+!!! error TS2322:   Type '{ a: Uppercase<K>; }' is not assignable to type '{ a: K; }'.
+!!! error TS2322:     Types of property 'a' are incompatible.
+!!! error TS2322:       Type 'Uppercase<K>' is not assignable to type 'K'.
+!!! error TS2322:         'Uppercase<K>' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string'.
+!!! error TS2322:           Type 'Uppercase<string>' is not assignable to type 'K'.
+!!! error TS2322:             'Uppercase<string>' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string'.
+!!! error TS2322:               Type 'string' is not assignable to type 'K'.
+!!! error TS2322:                 'string' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string'.
     }
     
     // Repro from #47794
@@ -42,7 +68,11 @@ tests/cases/conformance/types/mapped/mappedTypeConstraints2.ts(25,57): error TS2
     const get = <T extends string>(t: T, foo: Foo<T>): T => foo[`get${t}`];  // Type 'Foo<T>[`get${T}`]' is not assignable to type 'T'
                                                             ~~~~~~~~~~~~~~
 !!! error TS2322: Type 'Foo<T>[`get${T}`]' is not assignable to type 'T'.
-!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'Foo<T>[`get${T}`]'.
+!!! error TS2322:   'Foo<T>[`get${T}`]' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string'.
+!!! error TS2322:     Type '`get${T}`' is not assignable to type 'T'.
+!!! error TS2322:       '`get${T}`' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string'.
+!!! error TS2322:         Type '`get${string}`' is not assignable to type 'T'.
+!!! error TS2322:           '`get${string}`' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string'.
     
     // Repro from #48626
     
@@ -64,5 +94,15 @@ tests/cases/conformance/types/mapped/mappedTypeConstraints2.ts(25,57): error TS2
             }
         }
         return true;
+    }
+    
+    // repro from #50030
+    
+    type ObjectWithUnderscoredKeys<K extends string> = {
+        [k in K as `_${k}`]: true;
+    };
+    
+    function genericTest<K extends string>(objectWithUnderscoredKeys: ObjectWithUnderscoredKeys<K>, key: K) {
+      const shouldBeTrue: true = objectWithUnderscoredKeys[`_${key}`];
     }
     

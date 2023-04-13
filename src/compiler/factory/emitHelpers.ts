@@ -664,7 +664,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
 
     function createClassPrivateFieldInHelper(state: Identifier, receiver: Expression) {
         context.requestEmitHelper(classPrivateFieldInHelper);
-        return factory.createCallExpression(getUnscopedHelperName("__classPrivateFieldIn"), /* typeArguments*/ undefined, [state, receiver]);
+        return factory.createCallExpression(getUnscopedHelperName("__classPrivateFieldIn"), /*typeArguments*/ undefined, [state, receiver]);
     }
 }
 

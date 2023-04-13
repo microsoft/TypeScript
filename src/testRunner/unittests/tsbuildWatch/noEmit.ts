@@ -24,19 +24,13 @@ describe("unittests:: tsbuildWatch:: watchMode:: with noEmit", () => {
                 caption: "No change",
                 edit: sys => sys.writeFile(`/user/username/projects/myproject/a.js`, sys.readFile(`/user/username/projects/myproject/a.js`)!),
                 // build project
-                timeouts: sys => {
-                    sys.checkTimeoutQueueLengthAndRun(1);
-                    sys.checkTimeoutQueueLength(0);
-                },
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "change",
                 edit: sys => sys.writeFile(`/user/username/projects/myproject/a.js`, "const x = 10;"),
                 // build project
-                timeouts: sys => {
-                    sys.checkTimeoutQueueLengthAndRun(1);
-                    sys.checkTimeoutQueueLength(0);
-                },
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
         baselineIncremental: true

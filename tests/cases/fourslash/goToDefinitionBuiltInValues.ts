@@ -6,6 +6,4 @@
 ////var t = /*true*/true;
 ////var f = /*false*/false;
 
-for (const marker of test.markerNames()) {
-    verify.goToDefinition(marker, []);
-}
+verify.baselineGoToDefinition(...test.markerNames());

@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
 {"compilerOptions":{"composite":true}}

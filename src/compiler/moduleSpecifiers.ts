@@ -147,7 +147,9 @@ function getPreferences(
                 return [ModuleSpecifierEnding.JsExtension];
             }
             if (getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Classic) {
-                return [ModuleSpecifierEnding.Index, ModuleSpecifierEnding.JsExtension];
+                return preferredEnding === ModuleSpecifierEnding.JsExtension
+                    ? [ModuleSpecifierEnding.JsExtension, ModuleSpecifierEnding.Index]
+                    : [ModuleSpecifierEnding.Index, ModuleSpecifierEnding.JsExtension];
             }
             switch (preferredEnding) {
                 case ModuleSpecifierEnding.JsExtension: return [ModuleSpecifierEnding.JsExtension, ModuleSpecifierEnding.Minimal, ModuleSpecifierEnding.Index];

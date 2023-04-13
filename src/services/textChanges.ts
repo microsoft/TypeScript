@@ -1723,7 +1723,7 @@ namespace deleteDeclaration {
             const nextToken = getTokenAtPosition(sourceFile, importClause.name!.end);
             if (nextToken && nextToken.kind === SyntaxKind.CommaToken) {
                 // shift first non-whitespace position after comma to the start position of the node
-                const end = skipTrivia(sourceFile.text, nextToken.end, /*stopAfterLineBreaks*/ false, /*stopAtComments*/ true);
+                const end = skipTrivia(sourceFile.text, nextToken.end, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
                 changes.deleteRange(sourceFile, { pos: start, end });
             }
             else {

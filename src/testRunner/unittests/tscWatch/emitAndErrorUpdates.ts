@@ -350,14 +350,14 @@ export class Data2 {
                 caption,
                 edit: sys => sys.writeFile(`/user/username/projects/noEmitOnError/src/main.ts`, content),
                 // build project
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1)
+                timeouts: sys => sys.runQueuedTimeoutCallbacks()
             };
         }
         const noChange: TscWatchCompileChange = {
             caption: "No change",
             edit: sys => sys.writeFile(`/user/username/projects/noEmitOnError/src/main.ts`, sys.readFile(`/user/username/projects/noEmitOnError/src/main.ts`)!),
             // build project
-            timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+            timeouts: sys => sys.runQueuedTimeoutCallbacks(),
         };
         verifyEmitAndErrorUpdates({
             subScenario: "with noEmitOnError",

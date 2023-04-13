@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject/Project useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/Project/file1.ts]
 export const x = 10;
@@ -78,6 +79,9 @@ Input::
 export const y = 10;
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:29 AM[0m] File change detected. Starting incremental compilation...

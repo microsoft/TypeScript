@@ -267,7 +267,7 @@ export function getFormattingScanner<T>(text: string, languageVariant: LanguageV
             case ScanAction.RescanTemplateToken:
                 if (token === SyntaxKind.CloseBraceToken) {
                     lastScanAction = ScanAction.RescanTemplateToken;
-                    return scanner.reScanTemplateToken(/* isTaggedTemplate */ false);
+                    return scanner.reScanTemplateToken(/*isTaggedTemplate*/ false);
                 }
                 break;
             case ScanAction.RescanJsxIdentifier:
@@ -275,7 +275,7 @@ export function getFormattingScanner<T>(text: string, languageVariant: LanguageV
                 return scanner.scanJsxIdentifier();
             case ScanAction.RescanJsxText:
                 lastScanAction = ScanAction.RescanJsxText;
-                return scanner.reScanJsxToken(/* allowMultilineJsxText */ false);
+                return scanner.reScanJsxToken(/*allowMultilineJsxText*/ false);
             case ScanAction.RescanJsxAttributeValue:
                 lastScanAction = ScanAction.RescanJsxAttributeValue;
                 return scanner.reScanJsxAttributeValue();

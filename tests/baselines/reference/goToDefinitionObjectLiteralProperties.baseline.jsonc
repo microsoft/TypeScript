@@ -1,0 +1,152 @@
+// === getDefinitionAtPosition ===
+// === /tests/cases/fourslash/goToDefinitionObjectLiteralProperties.ts ===
+// var o = {
+//     <|[|value|]: 0|>,
+//     get getter() {return 0 },
+//     set setter(v: number) { },
+//     method: () => { },
+//     es6StyleMethod() { }
+// };
+// 
+// o./*GOTO DEF POS*/value;
+// o.getter;
+// o.setter;
+// o.method;
+// o.es6StyleMethod;
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "value",
+    "containerName": "o",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === getDefinitionAtPosition ===
+// === /tests/cases/fourslash/goToDefinitionObjectLiteralProperties.ts ===
+// var o = {
+//     value: 0,
+//     <|get [|getter|]() {return 0 }|>,
+//     set setter(v: number) { },
+//     method: () => { },
+//     es6StyleMethod() { }
+// };
+// 
+// o.value;
+// o./*GOTO DEF POS*/getter;
+// o.setter;
+// o.method;
+// o.es6StyleMethod;
+
+  // === Details ===
+  [
+   {
+    "kind": "getter",
+    "name": "getter",
+    "containerName": "o",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === getDefinitionAtPosition ===
+// === /tests/cases/fourslash/goToDefinitionObjectLiteralProperties.ts ===
+// var o = {
+//     value: 0,
+//     get getter() {return 0 },
+//     <|set [|setter|](v: number) { }|>,
+//     method: () => { },
+//     es6StyleMethod() { }
+// };
+// 
+// o.value;
+// o.getter;
+// o./*GOTO DEF POS*/setter;
+// o.method;
+// o.es6StyleMethod;
+
+  // === Details ===
+  [
+   {
+    "kind": "setter",
+    "name": "setter",
+    "containerName": "o",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === getDefinitionAtPosition ===
+// === /tests/cases/fourslash/goToDefinitionObjectLiteralProperties.ts ===
+// var o = {
+//     value: 0,
+//     get getter() {return 0 },
+//     set setter(v: number) { },
+//     <|[|method|]: () => { }|>,
+//     es6StyleMethod() { }
+// };
+// 
+// o.value;
+// o.getter;
+// o.setter;
+// o./*GOTO DEF POS*/method;
+// o.es6StyleMethod;
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "method",
+    "containerName": "o",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === getDefinitionAtPosition ===
+// === /tests/cases/fourslash/goToDefinitionObjectLiteralProperties.ts ===
+// var o = {
+//     value: 0,
+//     get getter() {return 0 },
+//     set setter(v: number) { },
+//     method: () => { },
+//     <|[|es6StyleMethod|]() { }|>
+// };
+// 
+// o.value;
+// o.getter;
+// o.setter;
+// o.method;
+// o./*GOTO DEF POS*/es6StyleMethod;
+
+  // === Details ===
+  [
+   {
+    "kind": "method",
+    "name": "es6StyleMethod",
+    "containerName": "o",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
