@@ -54,6 +54,8 @@ Shape signatures in builder refreshed for::
 PolledWatches::
 /user/username/projects/myproject/node_modules: *new*
   {"pollingInterval":500}
+/user/username/projects/node_modules: *new*
+  {"pollingInterval":500}
 
 FsWatches::
 /user/username/projects/myproject/tsconfig.json: *new*
@@ -87,6 +89,10 @@ declare namespace myapp {
 }
 
 
+PolledWatches::
+/user/username/projects/node_modules:
+  {"pollingInterval":500}
+
 PolledWatches *deleted*::
 /user/username/projects/myproject/node_modules:
   {"pollingInterval":500}
@@ -106,12 +112,12 @@ FsWatchesRecursive::
   {}
 
 Before running Timeout callback:: count: 2
-9: timerToInvalidateFailedLookupResolutions
-10: timerToUpdateProgram
+11: timerToInvalidateFailedLookupResolutions
+12: timerToUpdateProgram
 After running Timeout callback:: count: 1
-11: timerToUpdateProgram
+13: timerToUpdateProgram
 Before running Timeout callback:: count: 1
-11: timerToUpdateProgram
+13: timerToUpdateProgram
 After running Timeout callback:: count: 0
 Output::
 sysLog:: /user/username/projects/myproject/node_modules:: Changing watcher to PresentFileSystemEntryWatcher
@@ -139,6 +145,10 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/node_modules/@myapp/ts-types/types/somefile.define.d.ts (used version)
 /user/username/projects/myproject/lib/app.ts (computed .d.ts)
+
+PolledWatches::
+/user/username/projects/node_modules:
+  {"pollingInterval":500}
 
 FsWatches::
 /user/username/projects/myproject/tsconfig.json:

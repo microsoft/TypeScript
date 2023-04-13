@@ -69,6 +69,8 @@ Shape signatures in builder refreshed for::
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
 /user/username/projects/myproject/tsconfig.json: *new*
@@ -201,8 +203,9 @@ export class C
 }
 
 
-Before running Timeout callback:: count: 1
-1: timerToUpdateProgram
+Before running Timeout callback:: count: 2
+2: timerToInvalidateFailedLookupResolutions
+3: timerToUpdateProgram
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -331,7 +334,7 @@ export class C
 
 
 Before running Timeout callback:: count: 1
-2: timerToUpdateProgram
+4: timerToUpdateProgram
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -460,7 +463,7 @@ export class C
 
 
 Before running Timeout callback:: count: 1
-3: timerToUpdateProgram
+5: timerToUpdateProgram
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear

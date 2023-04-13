@@ -125,7 +125,7 @@ FsWatches *deleted*::
   {}
 
 FsWatchesRecursive::
-/users: *new*
+/users/username/projects: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -180,7 +180,7 @@ FsWatches::
   {}
 
 FsWatchesRecursive *deleted*::
-/users:
+/users/username/projects:
   {}
 
 exitCode:: ExitStatus.undefined

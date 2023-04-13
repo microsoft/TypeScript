@@ -66,7 +66,7 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
-/users: *new*
+/users/username/projects: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -178,16 +178,10 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /users/username/projects/project/d/f0.ts (computed .d.ts)
 
-PolledWatches::
-/node_modules: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /users/username/projects/project/d/f0.ts:
   {}
 /a/lib/lib.d.ts:
-  {}
-/: *new*
   {}
 
 FsWatches *deleted*::
@@ -195,7 +189,7 @@ FsWatches *deleted*::
   {}
 
 FsWatchesRecursive::
-/users:
+/users/username/projects:
   {}
 
 exitCode:: ExitStatus.undefined
@@ -253,10 +247,6 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/f1.ts (computed .d.ts)
 /users/username/projects/project/d/f0.ts (computed .d.ts)
 
-PolledWatches *deleted*::
-/node_modules:
-  {"pollingInterval":500}
-
 FsWatches::
 /users/username/projects/project/d/f0.ts:
   {}
@@ -265,12 +255,8 @@ FsWatches::
 /users/username/projects/project/f1.ts: *new*
   {}
 
-FsWatches *deleted*::
-/:
-  {}
-
 FsWatchesRecursive::
-/users:
+/users/username/projects:
   {}
 
 exitCode:: ExitStatus.undefined

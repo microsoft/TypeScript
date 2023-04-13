@@ -40,6 +40,8 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projec
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Missing file
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/@types 1 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/@types 1 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/@types 1 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/@types 1 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/username/projects/project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/users/username/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -76,6 +78,8 @@ PolledWatches::
   {"pollingInterval":500}
 /users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
+/users/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
 /users/username/projects/project/tsconfig.json: *new*
@@ -109,6 +113,8 @@ PolledWatches::
 /users/username/projects/project/modulefile2.ts:
   {"pollingInterval":500}
 /users/username/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
@@ -189,6 +195,8 @@ PolledWatches::
   {"pollingInterval":500}
 /users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
+/users/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
 /users/username/projects/project/tsconfig.json:
@@ -218,6 +226,8 @@ export var Foo4 = 10;
 
 PolledWatches::
 /users/username/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
@@ -277,6 +287,8 @@ After running Timeout callback:: count: 0
 
 PolledWatches::
 /users/username/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::

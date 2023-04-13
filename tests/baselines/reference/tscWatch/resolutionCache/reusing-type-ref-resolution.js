@@ -111,8 +111,12 @@ FileWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/p
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 undefined Source file
 DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/@types 1 undefined Type roots
+DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/@types 1 undefined Type roots
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/@types 1 undefined Type roots
 [96mfileWithImports.ts[0m:[93m2[0m:[93m30[0m - [91merror[0m[90m TS2307: [0mCannot find module 'pkg1' or its corresponding type declarations.
 
 [7m2[0m import type { Import1 } from "pkg1";
@@ -169,7 +173,11 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/filewithtyperefs.ts (computed .d.ts during emit)
 
 PolledWatches::
+/users/username/projects/node_modules: *new*
+  {"pollingInterval":500}
 /users/username/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -434,7 +442,11 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/filewithimports.ts (computed .d.ts)
 
 PolledWatches::
+/users/username/projects/node_modules:
+  {"pollingInterval":500}
 /users/username/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
@@ -677,7 +689,11 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/filewithtyperefs.ts (computed .d.ts)
 
 PolledWatches::
+/users/username/projects/node_modules:
+  {"pollingInterval":500}
 /users/username/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::

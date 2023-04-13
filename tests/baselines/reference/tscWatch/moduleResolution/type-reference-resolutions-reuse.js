@@ -168,6 +168,8 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/node_modules/@types/pkg2/index.d.ts (used version)
 
 PolledWatches::
+/user/username/projects/node_modules: *new*
+  {"pollingInterval":500}
 /user/username/projects/myproject/package.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/package.json: *new*
@@ -178,6 +180,8 @@ PolledWatches::
   {"pollingInterval":2000}
 /user/username/projects/myproject/node_modules/package.json: *new*
   {"pollingInterval":2000}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
 /user/username/projects/myproject/tsconfig.json: *new*

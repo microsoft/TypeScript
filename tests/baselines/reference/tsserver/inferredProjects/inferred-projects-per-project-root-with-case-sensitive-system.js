@@ -73,8 +73,6 @@ Info seq  [hh:mm:ss:mss] Search path: /a
 Info seq  [hh:mm:ss:mss] For info: /a/file1.ts :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.es6.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -89,8 +87,6 @@ TI:: Creating typing installer
 
 PolledWatches::
 /a/lib/lib.es6.d.ts: *new*
-  {"pollingInterval":500}
-/a/node_modules/@types: *new*
   {"pollingInterval":500}
 
 TI:: [hh:mm:ss:mss] Global cache location '/a/data/', safe file path '/safeList.json', types map path /typesMap.json
@@ -145,8 +141,6 @@ After request
 
 PolledWatches::
 /a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
-/a/node_modules/@types:
   {"pollingInterval":500}
 /a/bower_components: *new*
   {"pollingInterval":500}
@@ -227,8 +221,6 @@ Info seq  [hh:mm:ss:mss] Search path: /b
 Info seq  [hh:mm:ss:mss] For info: /b/file2.ts :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.esnext.full.d.ts 500 undefined Project: /dev/null/inferredProject2* WatchType: Missing file
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /b/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -280,15 +272,11 @@ After request
 PolledWatches::
 /a/lib/lib.es6.d.ts:
   {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
 /a/bower_components:
   {"pollingInterval":500}
 /a/node_modules:
   {"pollingInterval":500}
 /a/lib/lib.esnext.full.d.ts: *new*
-  {"pollingInterval":500}
-/b/node_modules/@types: *new*
   {"pollingInterval":500}
 /b/bower_components: *new*
   {"pollingInterval":500}
@@ -369,15 +357,11 @@ After request
 PolledWatches::
 /a/lib/lib.es6.d.ts:
   {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
 /a/bower_components:
   {"pollingInterval":500}
 /a/node_modules:
   {"pollingInterval":500}
 /a/lib/lib.esnext.full.d.ts:
-  {"pollingInterval":500}
-/b/node_modules/@types:
   {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
@@ -428,15 +412,11 @@ After request
 PolledWatches::
 /a/lib/lib.es6.d.ts:
   {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
 /a/bower_components:
   {"pollingInterval":500}
 /a/node_modules:
   {"pollingInterval":500}
 /a/lib/lib.esnext.full.d.ts:
-  {"pollingInterval":500}
-/b/node_modules/@types:
   {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
@@ -462,8 +442,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 8,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /a/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /A/file2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject3*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -497,8 +475,6 @@ PolledWatches::
   {"pollingInterval":500}
 /a/lib/lib.esnext.full.d.ts:
   {"pollingInterval":500}
-/b/node_modules/@types:
-  {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
 /b/node_modules:
@@ -506,10 +482,6 @@ PolledWatches::
 /bower_components:
   {"pollingInterval":500}
 /node_modules:
-  {"pollingInterval":500}
-
-PolledWatches *deleted*::
-/a/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
@@ -529,8 +501,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 9,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /b/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /b/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /b/file2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject3*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -569,10 +539,6 @@ PolledWatches::
 /bower_components:
   {"pollingInterval":500}
 /node_modules:
-  {"pollingInterval":500}
-
-PolledWatches *deleted*::
-/b/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
@@ -660,8 +626,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/file1.ts 500 undefi
 Info seq  [hh:mm:ss:mss] Search path: /a
 Info seq  [hh:mm:ss:mss] For info: /a/file1.ts :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -736,8 +700,6 @@ PolledWatches::
   {"pollingInterval":500}
 /node_modules:
   {"pollingInterval":500}
-/a/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 PolledWatches *deleted*::
 /a/lib/lib.esnext.full.d.ts:
@@ -771,8 +733,6 @@ Info seq  [hh:mm:ss:mss] Search path: /A
 Info seq  [hh:mm:ss:mss] For info: /A/file2.ts :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject4*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.esnext.full.d.ts 500 undefined Project: /dev/null/inferredProject4* WatchType: Missing file
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /A/node_modules/@types 1 undefined Project: /dev/null/inferredProject4* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /A/node_modules/@types 1 undefined Project: /dev/null/inferredProject4* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject4* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject4*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -834,11 +794,7 @@ PolledWatches::
   {"pollingInterval":500}
 /node_modules:
   {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
 /a/lib/lib.esnext.full.d.ts: *new*
-  {"pollingInterval":500}
-/A/node_modules/@types: *new*
   {"pollingInterval":500}
 /A/bower_components: *new*
   {"pollingInterval":500}
@@ -863,8 +819,6 @@ Info seq  [hh:mm:ss:mss] Search path: /b
 Info seq  [hh:mm:ss:mss] For info: /b/file2.ts :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject5*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.esnext.full.d.ts 500 undefined Project: /dev/null/inferredProject5* WatchType: Missing file
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /b/node_modules/@types 1 undefined Project: /dev/null/inferredProject5* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b/node_modules/@types 1 undefined Project: /dev/null/inferredProject5* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject5* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject5*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -916,34 +870,6 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": false
     }
 After request
-
-PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
-/a/bower_components:
-  {"pollingInterval":500}
-/a/node_modules:
-  {"pollingInterval":500}
-/b/bower_components:
-  {"pollingInterval":500}
-/b/node_modules:
-  {"pollingInterval":500}
-/bower_components:
-  {"pollingInterval":500}
-/node_modules:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
-/a/lib/lib.esnext.full.d.ts:
-  {"pollingInterval":500}
-/A/node_modules/@types:
-  {"pollingInterval":500}
-/A/bower_components:
-  {"pollingInterval":500}
-/A/node_modules:
-  {"pollingInterval":500}
-/b/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 Before request
 
@@ -1031,8 +957,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 15,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /a/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/file1.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject6*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -1080,17 +1004,9 @@ PolledWatches::
   {"pollingInterval":500}
 /a/lib/lib.esnext.full.d.ts:
   {"pollingInterval":500}
-/A/node_modules/@types:
-  {"pollingInterval":500}
 /A/bower_components:
   {"pollingInterval":500}
 /A/node_modules:
-  {"pollingInterval":500}
-/b/node_modules/@types:
-  {"pollingInterval":500}
-
-PolledWatches *deleted*::
-/a/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
@@ -1108,8 +1024,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 16,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /A/node_modules/@types 1 undefined Project: /dev/null/inferredProject4* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /A/node_modules/@types 1 undefined Project: /dev/null/inferredProject4* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /A/file2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject6*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -1159,12 +1073,6 @@ PolledWatches::
   {"pollingInterval":500}
 /A/node_modules:
   {"pollingInterval":500}
-/b/node_modules/@types:
-  {"pollingInterval":500}
-
-PolledWatches *deleted*::
-/A/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
 /a/file1.ts:
@@ -1183,8 +1091,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 17,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /b/node_modules/@types 1 undefined Project: /dev/null/inferredProject5* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /b/node_modules/@types 1 undefined Project: /dev/null/inferredProject5* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /b/file2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject6*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -1231,10 +1137,6 @@ PolledWatches::
 /A/bower_components:
   {"pollingInterval":500}
 /A/node_modules:
-  {"pollingInterval":500}
-
-PolledWatches *deleted*::
-/b/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
@@ -1465,8 +1367,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] Search path: /A
 Info seq  [hh:mm:ss:mss] For info: /A/file2.ts :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 5 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -1506,28 +1406,6 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
-PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
-/a/bower_components:
-  {"pollingInterval":500}
-/a/node_modules:
-  {"pollingInterval":500}
-/b/bower_components:
-  {"pollingInterval":500}
-/b/node_modules:
-  {"pollingInterval":500}
-/bower_components:
-  {"pollingInterval":500}
-/node_modules:
-  {"pollingInterval":500}
-/A/bower_components:
-  {"pollingInterval":500}
-/A/node_modules:
-  {"pollingInterval":500}
-/a/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -1546,8 +1424,6 @@ Info seq  [hh:mm:ss:mss] Search path: /b
 Info seq  [hh:mm:ss:mss] For info: /b/file2.ts :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject7*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.esnext.full.d.ts 500 undefined Project: /dev/null/inferredProject7* WatchType: Missing file
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /b/node_modules/@types 1 undefined Project: /dev/null/inferredProject7* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b/node_modules/@types 1 undefined Project: /dev/null/inferredProject7* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject7* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject7*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -1615,11 +1491,7 @@ PolledWatches::
   {"pollingInterval":500}
 /A/node_modules:
   {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
 /a/lib/lib.esnext.full.d.ts: *new*
-  {"pollingInterval":500}
-/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
 Before request
@@ -1749,11 +1621,7 @@ PolledWatches::
   {"pollingInterval":500}
 /A/node_modules:
   {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
 /a/lib/lib.esnext.full.d.ts:
-  {"pollingInterval":500}
-/b/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
@@ -1771,8 +1639,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 25,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /a/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /A/file2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject8*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -1818,12 +1684,6 @@ PolledWatches::
   {"pollingInterval":500}
 /a/lib/lib.esnext.full.d.ts:
   {"pollingInterval":500}
-/b/node_modules/@types:
-  {"pollingInterval":500}
-
-PolledWatches *deleted*::
-/a/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
 /a/file1.ts:
@@ -1842,8 +1702,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 26,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /b/node_modules/@types 1 undefined Project: /dev/null/inferredProject7* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /b/node_modules/@types 1 undefined Project: /dev/null/inferredProject7* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /b/file2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject8*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -1886,10 +1744,6 @@ PolledWatches::
 /A/node_modules:
   {"pollingInterval":500}
 /a/lib/lib.esnext.full.d.ts:
-  {"pollingInterval":500}
-
-PolledWatches *deleted*::
-/b/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
@@ -1981,8 +1835,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/file1.ts 500 undefi
 Info seq  [hh:mm:ss:mss] Search path: /a
 Info seq  [hh:mm:ss:mss] For info: /a/file1.ts :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 6 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -2061,8 +1913,6 @@ PolledWatches::
   {"pollingInterval":500}
 /A/node_modules:
   {"pollingInterval":500}
-/a/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 PolledWatches *deleted*::
 /a/lib/lib.esnext.full.d.ts:
@@ -2096,8 +1946,6 @@ Info seq  [hh:mm:ss:mss] Search path: /A
 Info seq  [hh:mm:ss:mss] For info: /A/file2.ts :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject9*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.es2017.full.d.ts 500 undefined Project: /dev/null/inferredProject9* WatchType: Missing file
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /A/node_modules/@types 1 undefined Project: /dev/null/inferredProject9* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /A/node_modules/@types 1 undefined Project: /dev/null/inferredProject9* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject9* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject9*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -2163,11 +2011,7 @@ PolledWatches::
   {"pollingInterval":500}
 /A/node_modules:
   {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
 /a/lib/lib.es2017.full.d.ts: *new*
-  {"pollingInterval":500}
-/A/node_modules/@types: *new*
   {"pollingInterval":500}
 
 Before request
@@ -2188,8 +2032,6 @@ Info seq  [hh:mm:ss:mss] Search path: /b
 Info seq  [hh:mm:ss:mss] For info: /b/file2.ts :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject10*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.esnext.full.d.ts 500 undefined Project: /dev/null/inferredProject10* WatchType: Missing file
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /b/node_modules/@types 1 undefined Project: /dev/null/inferredProject10* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b/node_modules/@types 1 undefined Project: /dev/null/inferredProject10* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject10* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject10*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -2261,15 +2103,9 @@ PolledWatches::
   {"pollingInterval":500}
 /A/node_modules:
   {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
 /a/lib/lib.es2017.full.d.ts:
   {"pollingInterval":500}
-/A/node_modules/@types:
-  {"pollingInterval":500}
 /a/lib/lib.esnext.full.d.ts: *new*
-  {"pollingInterval":500}
-/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
 Before request
@@ -2358,8 +2194,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 32,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /a/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/file1.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject11*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -2411,15 +2245,7 @@ PolledWatches::
   {"pollingInterval":500}
 /a/lib/lib.es2017.full.d.ts:
   {"pollingInterval":500}
-/A/node_modules/@types:
-  {"pollingInterval":500}
 /a/lib/lib.esnext.full.d.ts:
-  {"pollingInterval":500}
-/b/node_modules/@types:
-  {"pollingInterval":500}
-
-PolledWatches *deleted*::
-/a/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
@@ -2437,8 +2263,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 33,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /A/node_modules/@types 1 undefined Project: /dev/null/inferredProject9* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /A/node_modules/@types 1 undefined Project: /dev/null/inferredProject9* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /A/file2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject11*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -2490,12 +2314,6 @@ PolledWatches::
   {"pollingInterval":500}
 /a/lib/lib.esnext.full.d.ts:
   {"pollingInterval":500}
-/b/node_modules/@types:
-  {"pollingInterval":500}
-
-PolledWatches *deleted*::
-/A/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
 /a/file1.ts:
@@ -2514,8 +2332,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 34,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /b/node_modules/@types 1 undefined Project: /dev/null/inferredProject10* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /b/node_modules/@types 1 undefined Project: /dev/null/inferredProject10* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /b/file2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject11*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -2564,10 +2380,6 @@ PolledWatches::
 /a/lib/lib.es2017.full.d.ts:
   {"pollingInterval":500}
 /a/lib/lib.esnext.full.d.ts:
-  {"pollingInterval":500}
-
-PolledWatches *deleted*::
-/b/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
