@@ -24,7 +24,7 @@ declare global {
   namespace JSX {
     type ElementType = string | NewReactJSXElementConstructor<any>;
     interface IntrinsicElements {
-      ['my-web-component']: React.DOMAttributes<unknown>;
+      ['my-custom-element']: React.DOMAttributes<unknown>;
     }
   }
 }
@@ -75,7 +75,7 @@ Component = RenderStringClass;
 
 // Host element types still work
 <div />;
-<my-web-component />;
+<my-custom-element />;
 
 // Highlighting various ecosystem compat issues
 // react-native-gesture-handler

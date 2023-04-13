@@ -42,9 +42,9 @@ declare global {
 >ElementType : string | NewReactJSXElementConstructor<any>
 
     interface IntrinsicElements {
-      ['my-web-component']: React.DOMAttributes<unknown>;
->['my-web-component'] : React.DOMAttributes<unknown>
->'my-web-component' : "my-web-component"
+      ['my-custom-element']: React.DOMAttributes<unknown>;
+>['my-custom-element'] : React.DOMAttributes<unknown>
+>'my-custom-element' : "my-custom-element"
 >React : any
     }
   }
@@ -234,9 +234,9 @@ Component = RenderStringClass;
 ><div /> : JSX.Element
 >div : any
 
-<my-web-component />;
-><my-web-component /> : JSX.Element
->my-web-component : any
+<my-custom-element />;
+><my-custom-element /> : JSX.Element
+>my-custom-element : any
 
 // Highlighting various ecosystem compat issues
 // react-native-gesture-handler
