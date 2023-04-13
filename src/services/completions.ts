@@ -2137,7 +2137,7 @@ export function getCompletionEntriesFromSymbols(
         has: name => uniques.has(name),
         add: name => uniques.set(name, true),
     };
-    
+
     function shouldIncludeSymbol(symbol: Symbol, symbolToSortTextMap: SymbolSortTextMap): boolean {
         let allFlags = symbol.flags;
         if (!isSourceFile(location)) {
