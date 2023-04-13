@@ -568,12 +568,13 @@ export class SessionClient implements LanguageService {
         return notImplemented();
     }
 
-    findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): RenameLocation[] {
+    findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, preferences: UserPreferences): RenameLocation[] {
         if (!this.lastRenameEntry ||
             this.lastRenameEntry.inputs.fileName !== fileName ||
             this.lastRenameEntry.inputs.position !== position ||
             this.lastRenameEntry.inputs.findInStrings !== findInStrings ||
             this.lastRenameEntry.inputs.findInComments !== findInComments) {
+            const { providePrefixAndSuffixTextForRename } = preferences;
             if (providePrefixAndSuffixTextForRename !== undefined) {
                 // User preferences have to be set through the `Configure` command
                 this.configure({ providePrefixAndSuffixTextForRename });

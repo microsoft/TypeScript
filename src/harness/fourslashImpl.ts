@@ -1775,7 +1775,7 @@ export class TestState {
             position,
             findInStrings,
             findInComments,
-            providePrefixAndSuffixTextForRename,
+            { providePrefixAndSuffixTextForRename },
         );
 
         if (!locations) {

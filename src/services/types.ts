@@ -562,7 +562,7 @@ export interface LanguageService {
     /** @deprecated Use the signature with `UserPreferences` instead. */
     getRenameInfo(fileName: string, position: number, options?: RenameInfoOptions): RenameInfo;
 
-    findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): readonly RenameLocation[] | undefined;
+    findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, preferences: UserPreferences): readonly RenameLocation[] | undefined;
 
     getSmartSelectionRange(fileName: string, position: number): SelectionRange;
 
