@@ -1,6 +1,6 @@
-currentDirectory:: /a/b useCaseSensitiveFileNames: false
+currentDirectory:: /users/username/projects/project useCaseSensitiveFileNames: false
 Input::
-//// [/a/b/foo.ts]
+//// [/users/username/projects/project/foo.ts]
 import * as fs from "fs";
 
 //// [/a/lib/lib.d.ts]
@@ -17,50 +17,50 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-/a/lib/tsc.js -w /a/b/foo.ts
+/a/lib/tsc.js -w /users/username/projects/project/foo.ts
 Output::
 >> Screen clear
-[[90m12:00:13 AM[0m] Starting compilation in watch mode...
+[[90m12:00:19 AM[0m] Starting compilation in watch mode...
 
 [96mfoo.ts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS2307: [0mCannot find module 'fs' or its corresponding type declarations.
 
 [7m1[0m import * as fs from "fs";
 [7m [0m [91m                    ~~~~[0m
 
-[[90m12:00:16 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:22 AM[0m] Found 1 error. Watching for file changes.
 
 
 
-Program root files: ["/a/b/foo.ts"]
+Program root files: ["/users/username/projects/project/foo.ts"]
 Program options: {"watch":true}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
-/a/b/foo.ts
+/users/username/projects/project/foo.ts
 
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
-/a/b/foo.ts
+/users/username/projects/project/foo.ts
 
 Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
-/a/b/foo.ts (used version)
+/users/username/projects/project/foo.ts (used version)
 
 PolledWatches::
-/a/b/node_modules: *new*
+/users/username/projects/project/node_modules: *new*
   {"pollingInterval":500}
-/a/b/node_modules/@types: *new*
+/users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/foo.ts: *new*
+/users/username/projects/project/foo.ts: *new*
   {}
 /a/lib/lib.d.ts: *new*
   {}
 
 exitCode:: ExitStatus.undefined
 
-//// [/a/b/foo.js]
+//// [/users/username/projects/project/foo.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
@@ -69,14 +69,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 Change:: npm install node types
 
 Input::
-//// [/a/b/node_modules/@types/node/package.json]
+//// [/users/username/projects/project/node_modules/@types/node/package.json]
 
 {
   "main": ""
 }
 
 
-//// [/a/b/node_modules/@types/node/index.d.ts]
+//// [/users/username/projects/project/node_modules/@types/node/index.d.ts]
 
 declare module "fs" {
     export interface Stats {
@@ -86,21 +86,21 @@ declare module "fs" {
 
 
 PolledWatches *deleted*::
-/a/b/node_modules:
+/users/username/projects/project/node_modules:
   {"pollingInterval":500}
-/a/b/node_modules/@types:
+/users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/foo.ts:
+/users/username/projects/project/foo.ts:
   {}
 /a/lib/lib.d.ts:
   {}
 
 FsWatchesRecursive::
-/a/b/node_modules: *new*
+/users/username/projects/project/node_modules: *new*
   {}
-/a/b/node_modules/@types: *new*
+/users/username/projects/project/node_modules/@types: *new*
   {}
 
 Before running Timeout callback:: count: 2
@@ -108,50 +108,50 @@ Before running Timeout callback:: count: 2
 16: timerToInvalidateFailedLookupResolutions
 After running Timeout callback:: count: 0
 Output::
-sysLog:: /a/b/node_modules:: Changing watcher to PresentFileSystemEntryWatcher
-sysLog:: /a/b/node_modules/@types:: Changing watcher to PresentFileSystemEntryWatcher
+sysLog:: /users/username/projects/project/node_modules:: Changing watcher to PresentFileSystemEntryWatcher
+sysLog:: /users/username/projects/project/node_modules/@types:: Changing watcher to PresentFileSystemEntryWatcher
 
 >> Screen clear
-[[90m12:00:27 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:31 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:37 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
-Program root files: ["/a/b/foo.ts"]
+Program root files: ["/users/username/projects/project/foo.ts"]
 Program options: {"watch":true}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
-/a/b/foo.ts
-/a/b/node_modules/@types/node/index.d.ts
+/users/username/projects/project/foo.ts
+/users/username/projects/project/node_modules/@types/node/index.d.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/b/foo.ts
-/a/b/node_modules/@types/node/index.d.ts
+/users/username/projects/project/foo.ts
+/users/username/projects/project/node_modules/@types/node/index.d.ts
 
 Shape signatures in builder refreshed for::
-/a/b/foo.ts (computed .d.ts)
-/a/b/node_modules/@types/node/index.d.ts (used version)
+/users/username/projects/project/foo.ts (computed .d.ts)
+/users/username/projects/project/node_modules/@types/node/index.d.ts (used version)
 
 FsWatches::
-/a/b/foo.ts:
+/users/username/projects/project/foo.ts:
   {}
 /a/lib/lib.d.ts:
   {}
-/a/b/node_modules/@types/node/index.d.ts: *new*
+/users/username/projects/project/node_modules/@types/node/index.d.ts: *new*
   {}
-/a/b/node_modules/@types/node/package.json: *new*
+/users/username/projects/project/node_modules/@types/node/package.json: *new*
   {}
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
+/users/username/projects/project/node_modules/@types:
   {}
 
 FsWatchesRecursive *deleted*::
-/a/b/node_modules:
+/users/username/projects/project/node_modules:
   {}
 
 exitCode:: ExitStatus.undefined
 
-//// [/a/b/foo.js] file written with same contents
+//// [/users/username/projects/project/foo.js] file written with same contents

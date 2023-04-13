@@ -2981,11 +2981,11 @@ export function transformClassFields(context: TransformationContext): (x: Source
     }
 
     function visitArrayAssignmentElement(node: Expression): Expression {
-        Debug.assertNode(node, isArrayBindingOrAssignmentElement);
-        if (isSpreadElement(node)) return visitAssignmentRestElement(node);
-        if (!isOmittedExpression(node)) return visitAssignmentElement(node);
+        if (isArrayBindingOrAssignmentElement(node)) {
+            if (isSpreadElement(node)) return visitAssignmentRestElement(node);
+            if (!isOmittedExpression(node)) return visitAssignmentElement(node);
+        }
         return visitEachChild(node, visitor, context);
-
     }
 
     function visitAssignmentProperty(node: PropertyAssignment) {

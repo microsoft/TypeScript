@@ -1,0 +1,8 @@
+=== tests/cases/compiler/dataViewConstructor.ts ===
+new DataView(new Uint8Array(32)); // should error
+>new DataView(new Uint8Array(32)) : DataView
+>DataView : DataViewConstructor
+>new Uint8Array(32) : Uint8Array
+>Uint8Array : Uint8ArrayConstructor
+>32 : 32
+

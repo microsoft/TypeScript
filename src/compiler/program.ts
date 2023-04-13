@@ -779,7 +779,7 @@ export function formatDiagnosticsWithColorAndContext(diagnostics: readonly Diagn
         output += formatColorAndReset(` TS${diagnostic.code}: `, ForegroundColorEscapeSequences.Grey);
         output += flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine());
 
-        if (diagnostic.file) {
+        if (diagnostic.file && diagnostic.code !== Diagnostics.File_appears_to_be_binary.code) {
             output += host.getNewLine();
             output += formatCodeSpan(diagnostic.file, diagnostic.start!, diagnostic.length!, "", getCategoryFormat(diagnostic.category), host); // TODO: GH#18217
         }
@@ -4256,9 +4256,6 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         if (options.verbatimModuleSyntax) {
             if (moduleKind === ModuleKind.AMD || moduleKind === ModuleKind.UMD || moduleKind === ModuleKind.System) {
                 createDiagnosticForOptionName(Diagnostics.Option_verbatimModuleSyntax_cannot_be_used_when_module_is_set_to_UMD_AMD_or_System, "verbatimModuleSyntax");
-            }
-            if (options.isolatedModules) {
-                createRedundantOptionDiagnostic("isolatedModules", "verbatimModuleSyntax");
             }
             if (options.preserveValueImports) {
                 createRedundantOptionDiagnostic("preserveValueImports", "verbatimModuleSyntax");

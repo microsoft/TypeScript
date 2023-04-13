@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info 0    [00:00:11.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/a/b/referenceFile1.ts]
 
@@ -12,7 +12,7 @@ Before request
                     }
 
 
-Info 1    [00:00:12.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
@@ -21,11 +21,11 @@ Info 1    [00:00:12.000] request:
       "seq": 1,
       "type": "request"
     }
-Info 2    [00:00:13.000] Search path: /a/b
-Info 3    [00:00:14.000] For info: /a/b/referenceFile1.ts :: Config file name: /a/b/tsconfig.json
-Info 4    [00:00:15.000] Creating configuration project /a/b/tsconfig.json
-Info 5    [00:00:16.000] FileWatcher:: Added:: WatchInfo: /a/b/tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file
-Info 6    [00:00:17.000] Config: /a/b/tsconfig.json : {
+Info seq  [hh:mm:ss:mss] Search path: /a/b
+Info seq  [hh:mm:ss:mss] For info: /a/b/referenceFile1.ts :: Config file name: /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating configuration project /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Config: /a/b/tsconfig.json : {
  "rootNames": [
   "/a/b/referenceFile1.ts"
  ],
@@ -33,31 +33,31 @@ Info 6    [00:00:17.000] Config: /a/b/tsconfig.json : {
   "configFilePath": "/a/b/tsconfig.json"
  }
 }
-Info 7    [00:00:18.000] DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
-Info 8    [00:00:19.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
-Info 9    [00:00:20.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
-Info 10   [00:00:21.000] FileWatcher:: Added:: WatchInfo: /a/b/modulefile2.ts 500 undefined Project: /a/b/tsconfig.json WatchType: Missing file
-Info 11   [00:00:22.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/tsconfig.json WatchType: Missing file
-Info 12   [00:00:23.000] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/tsconfig.json WatchType: Type roots
-Info 13   [00:00:24.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/tsconfig.json WatchType: Type roots
-Info 14   [00:00:25.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 15   [00:00:26.000] Project '/a/b/tsconfig.json' (Configured)
-Info 16   [00:00:27.000] 	Files (1)
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/modulefile2.ts 500 undefined Project: /a/b/tsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/tsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (1)
 	/a/b/referenceFile1.ts SVC-1-0 "\n                    /// <reference path=\"./moduleFile2.ts\" />\n                    export var x = Foo();"
 
 
 	referenceFile1.ts
 	  Matched by default include pattern '**/*'
 
-Info 17   [00:00:28.000] -----------------------------------------------
-Info 18   [00:00:29.000] Project '/a/b/tsconfig.json' (Configured)
-Info 18   [00:00:30.000] 	Files (1)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (1)
 
-Info 18   [00:00:31.000] -----------------------------------------------
-Info 18   [00:00:32.000] Open files: 
-Info 18   [00:00:33.000] 	FileName: /a/b/referenceFile1.ts ProjectRootPath: undefined
-Info 18   [00:00:34.000] 		Projects: /a/b/tsconfig.json
-Info 18   [00:00:35.000] response:
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /a/b/referenceFile1.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
@@ -81,7 +81,7 @@ FsWatchesRecursive::
 
 Before request
 
-Info 19   [00:00:36.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "compileOnSaveAffectedFileList",
       "arguments": {
@@ -90,23 +90,23 @@ Info 19   [00:00:36.000] request:
       "seq": 2,
       "type": "request"
     }
-Info 20   [00:00:37.000] Before ensureProjectForOpenFiles:
-Info 21   [00:00:38.000] Project '/a/b/tsconfig.json' (Configured)
-Info 21   [00:00:39.000] 	Files (1)
+Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
+Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (1)
 
-Info 21   [00:00:40.000] -----------------------------------------------
-Info 21   [00:00:41.000] Open files: 
-Info 21   [00:00:42.000] 	FileName: /a/b/referenceFile1.ts ProjectRootPath: undefined
-Info 21   [00:00:43.000] 		Projects: /a/b/tsconfig.json
-Info 21   [00:00:44.000] After ensureProjectForOpenFiles:
-Info 22   [00:00:45.000] Project '/a/b/tsconfig.json' (Configured)
-Info 22   [00:00:46.000] 	Files (1)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /a/b/referenceFile1.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
+Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (1)
 
-Info 22   [00:00:47.000] -----------------------------------------------
-Info 22   [00:00:48.000] Open files: 
-Info 22   [00:00:49.000] 	FileName: /a/b/referenceFile1.ts ProjectRootPath: undefined
-Info 22   [00:00:50.000] 		Projects: /a/b/tsconfig.json
-Info 22   [00:00:51.000] response:
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /a/b/referenceFile1.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": [
         {
