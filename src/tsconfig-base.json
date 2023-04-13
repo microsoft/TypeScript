@@ -4,8 +4,8 @@
         "outDir": "../built/local",
 
         "pretty": true,
-        "lib": ["es2020"],
-        "target": "es2020",
+        "lib": ["es2019"],
+        "target": "es2019",
         "module": "CommonJS",
         "moduleResolution": "node",
 
