@@ -16257,19 +16257,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // Add the given types to the given type set. Order is preserved, duplicates are removed,
     // and nested types of the given kind are flattened into the set.
     function addTypesToUnion(typeSet: Type[], includes: TypeFlags, types: readonly Type[]): TypeFlags {
-        let lastUnion: Type | undefined;
+        let lastType: Type | undefined;
         for (const type of types) {
-            if (type.flags & TypeFlags.Union) {
-                // We skip the union type if it is the same as the last union we processed. We could potentially track
-                // all union types that we've processed, but this simple test is fast and covers the scenarios we care
-                // about (in particular, Record<A, B>[A], where A and B are large union types).
-                if (type !== lastUnion) {
-                    includes = addTypesToUnion(typeSet, includes | (isNamedUnionType(type) ? TypeFlags.Union : 0), (type as UnionType).types);
-                    lastUnion = type;
-                }
-            }
-            else {
-                includes = addTypeToUnion(typeSet, includes, type);
+            // We skip the type if it is the same as the last type we processed. This simple test particularly
+            // saves a lot of work for large lists of the same union type, such as when resolving `Record<A, B>[A]`,
+            // where A and B are large union types.
+            if (type !== lastType) {
+                includes = type.flags & TypeFlags.Union ?
+                    addTypesToUnion(typeSet, includes | (isNamedUnionType(type) ? TypeFlags.Union : 0), (type as UnionType).types) :
+                    addTypeToUnion(typeSet, includes, type);
+                lastType = type;
             }
         }
         return includes;
@@ -16425,7 +16422,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // We optimize for the common case of unioning a union type with some other type (such as `undefined`).
         if (types.length === 2 && !origin && (types[0].flags & TypeFlags.Union || types[1].flags & TypeFlags.Union)) {
             const infix = unionReduction === UnionReduction.None ? "N" : unionReduction === UnionReduction.Subtype ? "S" : "L";
-            const id = types[0].id + infix + types[1].id + getAliasId(aliasSymbol, aliasTypeArguments);
+            const index = types[0].id < types[1].id ? 0 : 1;
+            const id = types[index].id + infix + types[1 - index].id + getAliasId(aliasSymbol, aliasTypeArguments);
             let type = unionOfUnionTypes.get(id);
             if (!type) {
                 type = getUnionTypeWorker(types, unionReduction, aliasSymbol, aliasTypeArguments, origin);
