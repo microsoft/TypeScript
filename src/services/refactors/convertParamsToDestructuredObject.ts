@@ -80,6 +80,7 @@ import {
     NewExpression,
     Node,
     NodeArray,
+    NonInteractiveRefactorName,
     ObjectLiteralElementLike,
     ObjectLiteralExpression,
     ParameterDeclaration,
@@ -90,7 +91,6 @@ import {
     rangeContainsRange,
     RefactorContext,
     RefactorEditInfo,
-    RefactorName,
     SemanticMeaning,
     ShorthandPropertyAssignment,
     sortAndDeduplicate,
@@ -107,7 +107,7 @@ import {
 } from "../_namespaces/ts";
 import { registerRefactor } from "../_namespaces/ts.refactor";
 
-const refactorName = RefactorName.ConvertParamsToDestructuredObject;
+const refactorName = NonInteractiveRefactorName.ConvertParamsToDestructuredObject;
 const minimumParameterLength = 1;
 const refactorDescription = getLocaleSpecificMessage(Diagnostics.Convert_parameters_to_destructured_object);
 

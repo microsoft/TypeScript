@@ -18,9 +18,9 @@ import {
     MethodDeclaration,
     Node,
     NodeBuilderFlags,
+    NonInteractiveRefactorName,
     RefactorContext,
     RefactorEditInfo,
-    RefactorName,
     SourceFile,
     SyntaxKind,
     textChanges,
@@ -35,7 +35,7 @@ import {
     registerRefactor,
 } from "../_namespaces/ts.refactor";
 
-const refactorName = RefactorName.InferFunctionReturnType;
+const refactorName = NonInteractiveRefactorName.InferFunctionReturnType;
 const refactorDescription = Diagnostics.Infer_function_return_type.message;
 
 const inferReturnTypeAction = {

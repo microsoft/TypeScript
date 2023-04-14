@@ -7,15 +7,15 @@ import {
     getRenameLocation,
     isIdentifier,
     isParameter,
+    NonInteractiveRefactorName,
     RefactorContext,
-    RefactorName,
 } from "../_namespaces/ts";
 import {
     isRefactorErrorInfo,
     registerRefactor,
 } from "../_namespaces/ts.refactor";
 
-const actionName = RefactorName.GenerateGetAccessorAndSetAccessor;
+const actionName = NonInteractiveRefactorName.GenerateGetAccessorAndSetAccessor;
 const actionDescription = Diagnostics.Generate_get_and_set_accessors.message;
 
 const generateGetSetAction = {

@@ -35,12 +35,12 @@ import {
     length,
     ModifierFlags,
     Node,
+    NonInteractiveRefactorName,
     Program,
     rangeContainsRange,
     RefactorActionInfo,
     RefactorContext,
     RefactorEditInfo,
-    RefactorName,
     ReturnStatement,
     setTextRange,
     SourceFile,
@@ -59,7 +59,7 @@ import {
     registerRefactor,
 } from "../_namespaces/ts.refactor";
 
-const refactorName = RefactorName.ConvertArrowFunctionOrFunctionExpression;
+const refactorName = NonInteractiveRefactorName.ConvertArrowFunctionOrFunctionExpression;
 const refactorDescription = getLocaleSpecificMessage(Diagnostics.Convert_arrow_function_or_function_expression);
 
 const toAnonymousFunctionAction = {

@@ -19,10 +19,10 @@ import {
     isExpression,
     isReturnStatement,
     needsParentheses,
+    NonInteractiveRefactorName,
     rangeContainsRange,
     RefactorContext,
     RefactorEditInfo,
-    RefactorName,
     ReturnStatement,
     SourceFile,
     SyntaxKind,
@@ -35,7 +35,7 @@ import {
     registerRefactor,
 } from "../_namespaces/ts.refactor";
 
-const refactorName = RefactorName.AddOrRemoveBracesToArrowFunction;
+const refactorName = NonInteractiveRefactorName.AddOrRemoveBracesToArrowFunction;
 const refactorDescription = Diagnostics.Add_or_remove_braces_in_an_arrow_function.message;
 
 const addBracesAction = {

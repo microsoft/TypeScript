@@ -30,12 +30,12 @@ import {
     isStringLiteral,
     NamedImports,
     NamespaceImport,
+    NonInteractiveRefactorName,
     Program,
     PropertyAccessExpression,
     QualifiedName,
     RefactorContext,
     RefactorEditInfo,
-    RefactorName,
     ScriptTarget,
     some,
     SourceFile,
@@ -51,7 +51,7 @@ import {
     registerRefactor,
 } from "../_namespaces/ts.refactor";
 
-const refactorName = RefactorName.ConvertImport;
+const refactorName = NonInteractiveRefactorName.ConvertImport;
 
 const actions = {
     [ImportKind.Named]: {

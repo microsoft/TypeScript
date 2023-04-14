@@ -25,12 +25,12 @@ import {
     NamedTupleMember,
     Node,
     NodeArray,
+    NonInteractiveRefactorName,
     ParameterDeclaration,
     Program,
     rangeContainsPosition,
     RefactorContext,
     RefactorEditInfo,
-    RefactorName,
     setEmitFlags,
     setSyntheticLeadingComments,
     setTextRange,
@@ -42,7 +42,7 @@ import {
 } from "../_namespaces/ts";
 import { registerRefactor } from "../_namespaces/ts.refactor";
 
-const refactorName = RefactorName.ConvertOverloadListToSingleSignature;
+const refactorName = NonInteractiveRefactorName.ConvertOverloadListToSingleSignature;
 const refactorDescription = Diagnostics.Convert_overload_list_to_single_signature.message;
 
 const functionOverloadAction = {

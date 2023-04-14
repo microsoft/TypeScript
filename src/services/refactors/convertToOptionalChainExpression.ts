@@ -29,10 +29,10 @@ import {
     isStringOrNumericLiteralLike,
     isVariableStatement,
     Node,
+    NonInteractiveRefactorName,
     PropertyAccessExpression,
     RefactorContext,
     RefactorEditInfo,
-    RefactorName,
     ReturnStatement,
     skipParentheses,
     SourceFile,
@@ -48,7 +48,7 @@ import {
     registerRefactor,
 } from "../_namespaces/ts.refactor";
 
-const refactorName = RefactorName.ConvertToOptionalChainExpression;
+const refactorName = NonInteractiveRefactorName.ConvertToOptionalChainExpression;
 const convertToOptionalChainExpressionMessage = getLocaleSpecificMessage(Diagnostics.Convert_to_optional_chain_expression);
 
 const toOptionalChainAction = {

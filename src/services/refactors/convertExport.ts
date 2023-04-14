@@ -37,13 +37,13 @@ import {
     NamespaceDeclaration,
     Node,
     NodeFlags,
+    NonInteractiveRefactorName,
     Program,
     PropertyAccessExpression,
     QuotePreference,
     quotePreferenceFromString,
     RefactorContext,
     RefactorEditInfo,
-    RefactorName,
     SourceFile,
     Symbol,
     SyntaxKind,
@@ -58,7 +58,7 @@ import {
     registerRefactor,
 } from "../_namespaces/ts.refactor";
 
-const refactorName = RefactorName.ConvertExport;
+const refactorName = NonInteractiveRefactorName.ConvertExport;
 
 const defaultToNamedAction = {
     name: "Convert default export to named export",

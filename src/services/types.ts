@@ -630,12 +630,31 @@ export interface LanguageService {
     /** @deprecated `fileName` will be ignored */
     applyCodeActionCommand(fileName: string, action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
 
-    getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined, triggerReason?: RefactorTriggerReason, kind?: string): ApplicableRefactorInfo[];
-    getEditsForRefactor<Name extends RefactorName>(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: Name, actionName: string, preferences: UserPreferences | undefined, ...args: RefactorHandlerArgs<Name>): RefactorEditInfo | undefined;
+    getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined, triggerReason?: RefactorTriggerReason, kind?: string, includeInteractive?: false): ApplicableNonInteractiveRefactorInfo[];
+    getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined, triggerReason?: RefactorTriggerReason, kind?: string, includeInteractive?: boolean): ApplicableRefactorInfo[];
+
+    getEditsForRefactor<Name extends InteractiveRefactorName>(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: Name, actionName: string, preferences: UserPreferences | undefined, ...args: RefactorArgs<Name>): RefactorEditInfo | undefined;
+    getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: NonInteractiveRefactorName, actionName: string, preferences: UserPreferences | undefined): RefactorEditInfo | undefined;
     /**
      * @deprecated
      * As of TypeScript 5.1, some refactors may require an additional argument.
+     * If the `isInteractive` property of the `ApplicableRefactorInfo` object is `true`,
+     * getting edits for the refactor will require a specific argument linked to its name:
+     *
+     * ```ts
+     * if (refactor.isInteractive) {
+     *   if (refactor.name === ts.InteractiveRefactorName.MoveToFile) {
+     *     const action = getAction(refactor);
+     *     const edits = ls.getEditsForRefactor(fileName, formatOptions, positionOrRange, refactor.name, action.name, preferences, {
+     *       targetFile: await askUserForTargetFileName()
+     *     });
+     *   }
+     * } else {
+     *   const edits = ls.getEditsForRefactor(...)
+     * }
+     * ```
      */
+    // eslint-disable-next-line @typescript-eslint/unified-signatures
     getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string, preferences: UserPreferences | undefined): RefactorEditInfo | undefined;
     organizeImports(args: OrganizeImportsArgs, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
     getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
@@ -916,7 +935,7 @@ export interface InstallPackageAction {
     /** @internal */ readonly packageName: string;
 }
 
-export const enum RefactorName {
+export const enum NonInteractiveRefactorName {
     AddOrRemoveBracesToArrowFunction = "Add or remove braces in an arrow function",
     ConvertArrowFunctionOrFunctionExpression = "Convert arrow function or function expression",
     ConvertExport = "Convert export",
@@ -932,28 +951,20 @@ export const enum RefactorName {
     MoveToNewFile = "Move to a new file",
 }
 
-interface RefactorHandlerMap {
-    [RefactorName.AddOrRemoveBracesToArrowFunction]: () => void;
-    [RefactorName.ConvertArrowFunctionOrFunctionExpression]: () => void;
-    [RefactorName.ConvertExport]: () => void;
-    [RefactorName.ConvertImport]: () => void;
-    [RefactorName.ConvertOverloadListToSingleSignature]: () => void;
-    [RefactorName.ConvertParamsToDestructuredObject]: () => void;
-    [RefactorName.ConvertStringOrTemplateLiteral]: () => void;
-    [RefactorName.ConvertToOptionalChainExpression]: () => void;
-    [RefactorName.ExtractSymbol]: () => void;
-    [RefactorName.ExtractType]: () => void;
-    [RefactorName.GenerateGetAccessorAndSetAccessor]: () => void;
-    [RefactorName.InferFunctionReturnType]: () => void;
-    [RefactorName.MoveToNewFile]: () => void;
+export const enum InteractiveRefactorName {
+    MoveToFile = "Move to file"
 }
 
-type RefactorHandlerArgs<T extends RefactorName> = RefactorHandlerMap[T] extends (...args: infer A) => void ? A : never;
+export type RefactorName = NonInteractiveRefactorName | InteractiveRefactorName;
+
+export type RefactorArgs<T extends InteractiveRefactorName> = {
+    [InteractiveRefactorName.MoveToFile]: (args: { targetFile: string }) => void;
+}[T] extends (...args: infer A) => void ? A : never;
 
 /**
  * A set of one or more available refactoring actions, grouped under a parent refactoring.
  */
-export interface ApplicableRefactorInfo {
+export interface BaseApplicableRefactorInfo {
     /**
      * The programmatic name of the refactoring
      */
@@ -974,6 +985,16 @@ export interface ApplicableRefactorInfo {
 
     actions: RefactorActionInfo[];
 }
+
+export interface ApplicableNonInteractiveRefactorInfo extends BaseApplicableRefactorInfo {
+    name: NonInteractiveRefactorName;
+}
+
+export interface ApplicableInteractiveRefactorInfo extends BaseApplicableRefactorInfo {
+    name: InteractiveRefactorName;
+}
+
+export type ApplicableRefactorInfo = ApplicableNonInteractiveRefactorInfo | ApplicableInteractiveRefactorInfo;
 
 /**
  * Represents a single refactoring action - for example, the "Extract Method..." refactor might
@@ -1791,17 +1812,36 @@ export interface CodeFixContext extends CodeFixContextBase {
 }
 
 /** @internal */
-export interface Refactor {
+export interface RefactorBase {
     /** List of action kinds a refactor can provide.
      * Used to skip unnecessary calculation when specific refactors are requested. */
     kinds?: string[];
 
+    /** Compute (quickly) which actions are available here */
+    getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[];
+
+    isInteractive?: boolean;
+}
+
+/** @internal */
+export interface InteractiveRefactor<Name extends InteractiveRefactorName> extends RefactorBase {
+    /** Compute the associated code actions */
+    getEditsForAction(context: RefactorContext, actionName: string, ...args: RefactorArgs<Name>): RefactorEditInfo | undefined;
+
+    /** Indicates that `getEditsForAction` requires additional arguments */
+    isInteractive: true;
+}
+
+/** @internal */
+export interface NonInteractiveRefactor extends RefactorBase {
     /** Compute the associated code actions */
     getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined;
 
-    /** Compute (quickly) which actions are available here */
-    getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[];
+    isInteractive?: undefined;
 }
+
+/** @internal */
+export type Refactor = InteractiveRefactor<never> | NonInteractiveRefactor;
 
 /** @internal */
 export interface RefactorContext extends textChanges.TextChangesContext {

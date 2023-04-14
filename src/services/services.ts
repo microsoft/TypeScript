@@ -1,5 +1,6 @@
 import {
     __String,
+    ApplicableNonInteractiveRefactorInfo,
     ApplicableRefactorInfo,
     ApplyCodeActionCommandResult,
     AssignmentDeclarationKind,
@@ -243,6 +244,7 @@ import {
     refactor,
     RefactorContext,
     RefactorEditInfo,
+    RefactorName,
     RefactorTriggerReason,
     ReferencedSymbol,
     ReferenceEntry,
@@ -2967,23 +2969,26 @@ export function createLanguageService(
         return SmartSelectionRange.getSmartSelectionRange(position, syntaxTreeCache.getCurrentSourceFile(fileName));
     }
 
-    function getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences = emptyOptions, triggerReason: RefactorTriggerReason, kind: string): ApplicableRefactorInfo[] {
+    function getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined, triggerReason?: RefactorTriggerReason, kind?: string): ApplicableNonInteractiveRefactorInfo[];
+    function getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined, triggerReason?: RefactorTriggerReason, kind?: string, includeInteractive?: boolean): ApplicableRefactorInfo[];
+    function getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined = emptyOptions, triggerReason?: RefactorTriggerReason, kind?: string, includeInteractive?: boolean): ApplicableRefactorInfo[] {
         synchronizeHostData();
         const file = getValidSourceFile(fileName);
-        return refactor.getApplicableRefactors(getRefactorContext(file, positionOrRange, preferences, emptyOptions, triggerReason, kind));
+        return refactor.getApplicableRefactors(getRefactorContext(file, positionOrRange, preferences, emptyOptions, triggerReason, kind), includeInteractive);
     }
 
     function getEditsForRefactor(
         fileName: string,
         formatOptions: FormatCodeSettings,
         positionOrRange: number | TextRange,
-        refactorName: string,
+        refactorName: RefactorName,
         actionName: string,
         preferences: UserPreferences = emptyOptions,
+        ...args: unknown[]
     ): RefactorEditInfo | undefined {
         synchronizeHostData();
         const file = getValidSourceFile(fileName);
-        return refactor.getEditsForRefactor(getRefactorContext(file, positionOrRange, preferences, formatOptions), refactorName, actionName);
+        return refactor.getEditsForRefactor(getRefactorContext(file, positionOrRange, preferences, formatOptions), refactorName, actionName, ...args);
     }
 
     function toLineColumnOffset(fileName: string, position: number): LineAndCharacter {

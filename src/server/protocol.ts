@@ -4,11 +4,14 @@ import type {
     EndOfLineState,
     FileExtensionInfo,
     HighlightSpanKind,
+    InteractiveRefactorName,
     MapLike,
+    NonInteractiveRefactorName,
     OutliningSpanKind,
     OutputFile,
     PluginImport,
     ProjectReference,
+    RefactorName,
     RenameLocation,
     ScriptElementKind,
     ScriptKind,
@@ -586,6 +589,7 @@ export interface GetApplicableRefactorsRequest extends Request {
 export type GetApplicableRefactorsRequestArgs = FileLocationOrRangeRequestArgs & {
     triggerReason?: RefactorTriggerReason;
     kind?: string;
+    includeInteractive?: boolean;
 };
 
 export type RefactorTriggerReason = "implicit" | "invoked";
@@ -594,18 +598,18 @@ export type RefactorTriggerReason = "implicit" | "invoked";
  * Response is a list of available refactorings.
  * Each refactoring exposes one or more "Actions"; a user selects one action to invoke a refactoring
  */
-export interface GetApplicableRefactorsResponse extends Response {
-    body?: ApplicableRefactorInfo[];
+export interface GetApplicableRefactorsResponse<TRefactorInfo extends ApplicableRefactorInfo = ApplicableRefactorInfo> extends Response {
+    body?: TRefactorInfo[];
 }
 
 /**
  * A set of one or more available refactoring actions, grouped under a parent refactoring.
  */
-export interface ApplicableRefactorInfo {
+export interface BaseApplicableRefactorInfo {
     /**
      * The programmatic name of the refactoring
      */
-    name: string;
+    name: RefactorName;
     /**
      * A description of this refactoring category to show to the user.
      * If the refactoring gets inlined (see below), this text will not be visible.
@@ -622,6 +626,17 @@ export interface ApplicableRefactorInfo {
 
     actions: RefactorActionInfo[];
 }
+
+export interface ApplicableNonInteractiveRefactorInfo extends BaseApplicableRefactorInfo {
+    name: NonInteractiveRefactorName;
+}
+
+export interface ApplicableInteractiveRefactorInfo extends BaseApplicableRefactorInfo {
+    name: InteractiveRefactorName;
+}
+
+export type ApplicableRefactorInfo = ApplicableNonInteractiveRefactorInfo | ApplicableInteractiveRefactorInfo;
+
 
 /**
  * Represents a single refactoring action - for example, the "Extract Method..." refactor might

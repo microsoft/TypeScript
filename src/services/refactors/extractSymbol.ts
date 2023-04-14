@@ -120,6 +120,7 @@ import {
     Node,
     NodeBuilderFlags,
     NodeFlags,
+    NonInteractiveRefactorName,
     nullTransformationContext,
     ObjectLiteralElementLike,
     ParameterDeclaration,
@@ -129,7 +130,6 @@ import {
     RefactorActionInfo,
     RefactorContext,
     RefactorEditInfo,
-    RefactorName,
     setEmitFlags,
     ShorthandPropertyAssignment,
     SignatureKind,
@@ -166,7 +166,7 @@ import {
     registerRefactor,
 } from "../_namespaces/ts.refactor";
 
-const refactorName = RefactorName.ExtractSymbol;
+const refactorName = NonInteractiveRefactorName.ExtractSymbol;
 
 const extractConstantAction = {
     name: "Extract Constant",

@@ -48,11 +48,11 @@ import {
     JSDocTemplateTag,
     Node,
     nodeOverlapsWithStartEnd,
+    NonInteractiveRefactorName,
     pushIfUnique,
     rangeContainsStartEnd,
     RefactorContext,
     RefactorEditInfo,
-    RefactorName,
     setEmitFlags,
     setTextRange,
     skipTrivia,
@@ -71,7 +71,7 @@ import {
     registerRefactor,
 } from "../_namespaces/ts.refactor";
 
-const refactorName = RefactorName.ExtractType;
+const refactorName = NonInteractiveRefactorName.ExtractType;
 
 const extractToTypeAliasAction = {
     name: "Extract to type alias",

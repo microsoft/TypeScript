@@ -24,10 +24,10 @@ import {
     isTemplateMiddle,
     map,
     Node,
+    NonInteractiveRefactorName,
     ParenthesizedExpression,
     RefactorContext,
     RefactorEditInfo,
-    RefactorName,
     SourceFile,
     SyntaxKind,
     TemplateHead,
@@ -39,7 +39,7 @@ import {
 } from "../_namespaces/ts";
 import { registerRefactor } from "../_namespaces/ts.refactor";
 
-const refactorName = RefactorName.ConvertStringOrTemplateLiteral;
+const refactorName = NonInteractiveRefactorName.ConvertStringOrTemplateLiteral;
 const refactorDescription = getLocaleSpecificMessage(Diagnostics.Convert_to_template_string);
 
 const convertStringAction = {

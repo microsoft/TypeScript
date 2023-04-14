@@ -6186,7 +6186,29 @@ declare namespace ts {
         applyCodeActionCommand(fileName: string, action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
         /** @deprecated `fileName` will be ignored */
         applyCodeActionCommand(fileName: string, action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
-        getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined, triggerReason?: RefactorTriggerReason, kind?: string): ApplicableRefactorInfo[];
+        getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined, triggerReason?: RefactorTriggerReason, kind?: string, includeInteractive?: false): ApplicableNonInteractiveRefactorInfo[];
+        getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined, triggerReason?: RefactorTriggerReason, kind?: string, includeInteractive?: boolean): ApplicableRefactorInfo[];
+        getEditsForRefactor<Name extends InteractiveRefactorName>(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: Name, actionName: string, preferences: UserPreferences | undefined, ...args: RefactorArgs<Name>): RefactorEditInfo | undefined;
+        getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: NonInteractiveRefactorName, actionName: string, preferences: UserPreferences | undefined): RefactorEditInfo | undefined;
+        /**
+         * @deprecated
+         * As of TypeScript 5.1, some refactors may require an additional argument.
+         * If the `isInteractive` property of the `ApplicableRefactorInfo` object is `true`,
+         * getting edits for the refactor will require a specific argument linked to its name:
+         *
+         * ```ts
+         * if (refactor.isInteractive) {
+         *   if (refactor.name === ts.InteractiveRefactorName.MoveToFile) {
+         *     const action = getAction(refactor);
+         *     const edits = ls.getEditsForRefactor(fileName, formatOptions, positionOrRange, refactor.name, action.name, preferences, {
+         *       targetFile: await askUserForTargetFileName()
+         *     });
+         *   }
+         * } else {
+         *   const edits = ls.getEditsForRefactor(...)
+         * }
+         * ```
+         */
         getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string, preferences: UserPreferences | undefined): RefactorEditInfo | undefined;
         organizeImports(args: OrganizeImportsArgs, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
         getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
@@ -6411,14 +6433,38 @@ declare namespace ts {
     type CodeActionCommand = InstallPackageAction;
     interface InstallPackageAction {
     }
+    enum NonInteractiveRefactorName {
+        AddOrRemoveBracesToArrowFunction = "Add or remove braces in an arrow function",
+        ConvertArrowFunctionOrFunctionExpression = "Convert arrow function or function expression",
+        ConvertExport = "Convert export",
+        ConvertImport = "Convert import",
+        ConvertOverloadListToSingleSignature = "Convert overload list to single signature",
+        ConvertParamsToDestructuredObject = "Convert parameters to destructured object",
+        ConvertStringOrTemplateLiteral = "Convert to template string",
+        ConvertToOptionalChainExpression = "Convert to optional chain expression",
+        ExtractSymbol = "Extract Symbol",
+        ExtractType = "Extract type",
+        GenerateGetAccessorAndSetAccessor = "Generate 'get' and 'set' accessors",
+        InferFunctionReturnType = "Infer function return type",
+        MoveToNewFile = "Move to a new file"
+    }
+    enum InteractiveRefactorName {
+        MoveToFile = "Move to file"
+    }
+    type RefactorName = NonInteractiveRefactorName | InteractiveRefactorName;
+    type RefactorArgs<T extends InteractiveRefactorName> = {
+        [InteractiveRefactorName.MoveToFile]: (args: {
+            targetFile: string;
+        }) => void;
+    }[T] extends (...args: infer A) => void ? A : never;
     /**
      * A set of one or more available refactoring actions, grouped under a parent refactoring.
      */
-    interface ApplicableRefactorInfo {
+    interface BaseApplicableRefactorInfo {
         /**
          * The programmatic name of the refactoring
          */
-        name: string;
+        name: RefactorName;
         /**
          * A description of this refactoring category to show to the user.
          * If the refactoring gets inlined (see below), this text will not be visible.
@@ -6434,6 +6480,13 @@ declare namespace ts {
         inlineable?: boolean;
         actions: RefactorActionInfo[];
     }
+    interface ApplicableNonInteractiveRefactorInfo extends BaseApplicableRefactorInfo {
+        name: NonInteractiveRefactorName;
+    }
+    interface ApplicableInteractiveRefactorInfo extends BaseApplicableRefactorInfo {
+        name: InteractiveRefactorName;
+    }
+    type ApplicableRefactorInfo = ApplicableNonInteractiveRefactorInfo | ApplicableInteractiveRefactorInfo;
     /**
      * Represents a single refactoring action - for example, the "Extract Method..." refactor might
      * offer several actions, each corresponding to a surround class or closure to extract into.

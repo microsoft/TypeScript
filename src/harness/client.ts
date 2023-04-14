@@ -1,4 +1,6 @@
 import {
+    ApplicableInteractiveRefactorInfo,
+    ApplicableNonInteractiveRefactorInfo,
     ApplicableRefactorInfo,
     CallHierarchyIncomingCall,
     CallHierarchyItem,
@@ -52,6 +54,7 @@ import {
     Program,
     QuickInfo,
     RefactorEditInfo,
+    RefactorTriggerReason,
     ReferencedSymbol,
     ReferenceEntry,
     RenameInfo,
@@ -785,10 +788,13 @@ export class SessionClient implements LanguageService {
         return { file, line, offset, endLine, endOffset };
     }
 
-    getApplicableRefactors(fileName: string, positionOrRange: number | TextRange): ApplicableRefactorInfo[] {
+    getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined, triggerReason?: RefactorTriggerReason, kind?: string): ApplicableNonInteractiveRefactorInfo[];
+    getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined, triggerReason: RefactorTriggerReason | undefined, kind: string | undefined, includeInteractive: true): ApplicableInteractiveRefactorInfo[];
+    getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined, triggerReason?: RefactorTriggerReason, kind?: string, includeInteractive?: boolean): ApplicableRefactorInfo[];
+    getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, _preferences: UserPreferences | undefined, _triggerReason?: RefactorTriggerReason, _kind?: string, includeInteractive?: boolean): ApplicableRefactorInfo[] {
         const args = this.createFileLocationOrRangeRequestArgs(positionOrRange, fileName);
 
-        const request = this.processRequest<protocol.GetApplicableRefactorsRequest>(protocol.CommandTypes.GetApplicableRefactors, args);
+        const request = this.processRequest<protocol.GetApplicableRefactorsRequest>(protocol.CommandTypes.GetApplicableRefactors, { ...args, includeInteractive });
         const response = this.processResponse<protocol.GetApplicableRefactorsResponse>(request);
         return response.body!; // TODO: GH#18217
     }
