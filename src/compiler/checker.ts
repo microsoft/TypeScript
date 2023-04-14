@@ -18,6 +18,7 @@ import {
     ArrayBindingPattern,
     arrayFrom,
     arrayIsHomogeneous,
+    arrayIsSorted,
     ArrayLiteralExpression,
     arrayOf,
     arraysEqual,
@@ -16252,7 +16253,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // and nested types of the given kind are flattened into the set.
     function addTypesToUnion(typeSet: Type[], includes: TypeFlags, types: readonly Type[]): TypeFlags {
         // Pre-sort the input by ID so we deduplicate below.
-        types = types.slice().sort((a, b) => a.id - b.id);
+        if (!arrayIsSorted(types, (a, b) => compareValues(a.id, b.id))) {
+            types = types.slice().sort((a, b) => a.id - b.id);
+        }
 
         let lastType: Type | undefined;
         for (const type of types) {
