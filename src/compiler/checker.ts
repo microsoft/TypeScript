@@ -16260,6 +16260,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let lastUnion: Type | undefined;
         for (const type of types) {
             if (type.flags & TypeFlags.Union) {
+                // We skip the union type if it is the same as the last union we processed. We could potentially track
+                // all union types that we've processed, but this simple test is fast and covers the scenarios we care
+                // about (in particular, Record<A, B>[A], where A and B are large union types).
                 if (type !== lastUnion) {
                     includes = addTypesToUnion(typeSet, includes | (isNamedUnionType(type) ? TypeFlags.Union : 0), (type as UnionType).types);
                     lastUnion = type;
@@ -16419,6 +16422,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (types.length === 1) {
             return types[0];
         }
+        // We optimize for the common case of unioning a union type with some other type (such as `undefined`).
         if (types.length === 2 && !origin && (types[0].flags & TypeFlags.Union || types[1].flags & TypeFlags.Union)) {
             const infix = unionReduction === UnionReduction.None ? "N" : unionReduction === UnionReduction.Subtype ? "S" : "L";
             const id = types[0].id + infix + types[1].id + getAliasId(aliasSymbol, aliasTypeArguments);
