@@ -16251,6 +16251,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // Add the given types to the given type set. Order is preserved, duplicates are removed,
     // and nested types of the given kind are flattened into the set.
     function addTypesToUnion(typeSet: Type[], includes: TypeFlags, types: readonly Type[]): TypeFlags {
+        // Pre-sort the input by ID so we deduplicate below.
+        types = types.slice().sort((a, b) => a.id - b.id);
+
         let lastType: Type | undefined;
         for (const type of types) {
             // We skip the type if it is the same as the last type we processed. This simple test particularly
