@@ -196,6 +196,7 @@ declare namespace FourSlashInterface {
         readonly insertSpaceBeforeTypeAnnotation?: boolean;
         readonly indentMultiLineObjectLiteralBeginningOnBlankLine?: boolean;
         readonly semicolons?: ts.SemicolonPreference;
+        readonly indentSwitchCase?: boolean;
     }
     interface Range {
         fileName: string;

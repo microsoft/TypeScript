@@ -11,16 +11,7 @@
 //         if (false)
 //             if (true)
 //                 var x = undefined;
-//     }
-// }
-// else            if (null) {
-// }
-// else /* whar garbl */ if (undefined) {
-// }
-// else
-// if (false) {
-// }
-// else { }
+// --- (line: 12) skipped ---
 
 
 
@@ -37,13 +28,4 @@
 //         if (false)
 //             if (true)
 //                 var x = undefined;
-//     }
-// }
-// else            if (null) {
-// }
-// else /* whar garbl */ if (undefined) {
-// }
-// else
-// if (false) {
-// }
-// else { }
+// --- (line: 12) skipped ---

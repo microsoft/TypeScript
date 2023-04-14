@@ -28,20 +28,7 @@
   // 
   // class foo {
   //     constructor (public global) { }
-  //     public f(global) { }
-  //     public f2(global) { }
-  // }
-  // 
-  // class bar {
-  //     constructor () {
-  //         var n = global;
-  // 
-  //         var f = new foo('');
-  //         f.global = '';
-  //     }
-  // }
-  // 
-  // var k = global;
+  // --- (line: 5) skipped ---
 
   // === Details ===
   [
@@ -111,20 +98,7 @@
   // 
   // class foo {
   //     constructor (public global) { }
-  //     public f(global) { }
-  //     public f2(global) { }
-  // }
-  // 
-  // class bar {
-  //     constructor () {
-  //         var n = global;
-  // 
-  //         var f = new foo('');
-  //         f.global = '';
-  //     }
-  // }
-  // 
-  // var k = global;
+  // --- (line: 5) skipped ---
 
   // === Details ===
   [
@@ -204,10 +178,7 @@
   // 
   //         var f = new foo('');
   //         f.global = '';
-  //     }
-  // }
-  // 
-  // var k = global;
+  // --- (line: 15) skipped ---
 
   // === Details ===
   [
@@ -277,16 +248,9 @@
   // 
   // class foo {
   //     constructor (public global) { }
-  //     public f(global) { }
-  //     public f2(global) { }
-  // }
-  // 
-  // class bar {
-  //     constructor () {
-  //         var n = global;
-  // 
-  //         var f = new foo('');
-  //         f.global = '';
+  // --- (line: 5) skipped ---
+
+  // --- (line: 14) skipped ---
   //     }
   // }
   // 
@@ -360,20 +324,7 @@
   // 
   // class foo {
   //     constructor (public global) { }
-  //     public f(global) { }
-  //     public f2(global) { }
-  // }
-  // 
-  // class bar {
-  //     constructor () {
-  //         var n = global;
-  // 
-  //         var f = new foo('');
-  //         f.global = '';
-  //     }
-  // }
-  // 
-  // var k = global;
+  // --- (line: 5) skipped ---
 
   // === Details ===
   [

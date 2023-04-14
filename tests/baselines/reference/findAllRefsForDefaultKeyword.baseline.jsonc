@@ -4,13 +4,7 @@
 // 
 // const default = 1;
 // 
-// function default() {}
-// 
-// class default {}
-// 
-// const foo = {
-//     default: 1
-// }
+// --- (line: 5) skipped ---
 
 
 
@@ -22,11 +16,7 @@
 // 
 // function default() {}
 // 
-// class default {}
-// 
-// const foo = {
-//     default: 1
-// }
+// --- (line: 7) skipped ---
 
 
 
@@ -40,17 +30,13 @@
 // 
 // class default {}
 // 
-// const foo = {
-//     default: 1
-// }
+// --- (line: 9) skipped ---
 
 
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsForDefaultKeyword.ts ===
-// function f(value: string, default: string) {}
-// 
-// const default = 1;
+// --- (line: 3) skipped ---
 // 
 // function default() {}
 // 
@@ -64,12 +50,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsForDefaultKeyword.ts ===
-// function f(value: string, default: string) {}
-// 
-// const default = 1;
-// 
-// function default() {}
-// 
+// --- (line: 6) skipped ---
 // class default {}
 // 
 // const foo = {
@@ -78,12 +59,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsForDefaultKeyword.ts ===
-  // function f(value: string, default: string) {}
-  // 
-  // const default = 1;
-  // 
-  // function default() {}
-  // 
+  // --- (line: 6) skipped ---
   // class default {}
   // 
   // const foo = {

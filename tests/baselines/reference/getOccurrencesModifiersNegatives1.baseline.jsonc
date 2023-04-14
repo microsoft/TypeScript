@@ -8,31 +8,7 @@
 // 
 //     constructor(export conFoo,
 //                 declare conBar,
-//                 export declare conFooBar,
-//                 declare export conBarFoo,
-//                 static sue,
-//                 static export declare sueFooBar,
-//                 static declare export sueBarFoo,
-//                 declare static export barSueFoo) {
-//     }
-// }
-// 
-// module m {
-//     static a;
-//     public b;
-//     private c;
-//     protected d;
-//     static public private protected e;
-//     public static protected private f;
-//     protected static public g;
-// }
-// static a;
-// public b;
-// private c;
-// protected d;
-// static public private protected e;
-// public static protected private f;
-// protected static public g;
+// --- (line: 9) skipped ---
 
 
 
@@ -46,31 +22,7 @@
 // 
 //     constructor(export conFoo,
 //                 declare conBar,
-//                 export declare conFooBar,
-//                 declare export conBarFoo,
-//                 static sue,
-//                 static export declare sueFooBar,
-//                 static declare export sueBarFoo,
-//                 declare static export barSueFoo) {
-//     }
-// }
-// 
-// module m {
-//     static a;
-//     public b;
-//     private c;
-//     protected d;
-//     static public private protected e;
-//     public static protected private f;
-//     protected static public g;
-// }
-// static a;
-// public b;
-// private c;
-// protected d;
-// static public private protected e;
-// public static protected private f;
-// protected static public g;
+// --- (line: 9) skipped ---
 
 
 
@@ -84,31 +36,7 @@
 // 
 //     constructor(export conFoo,
 //                 declare conBar,
-//                 export declare conFooBar,
-//                 declare export conBarFoo,
-//                 static sue,
-//                 static export declare sueFooBar,
-//                 static declare export sueBarFoo,
-//                 declare static export barSueFoo) {
-//     }
-// }
-// 
-// module m {
-//     static a;
-//     public b;
-//     private c;
-//     protected d;
-//     static public private protected e;
-//     public static protected private f;
-//     protected static public g;
-// }
-// static a;
-// public b;
-// private c;
-// protected d;
-// static public private protected e;
-// public static protected private f;
-// protected static public g;
+// --- (line: 9) skipped ---
 
 
 
@@ -122,31 +50,7 @@
 // 
 //     constructor(export conFoo,
 //                 declare conBar,
-//                 export declare conFooBar,
-//                 declare export conBarFoo,
-//                 static sue,
-//                 static export declare sueFooBar,
-//                 static declare export sueBarFoo,
-//                 declare static export barSueFoo) {
-//     }
-// }
-// 
-// module m {
-//     static a;
-//     public b;
-//     private c;
-//     protected d;
-//     static public private protected e;
-//     public static protected private f;
-//     protected static public g;
-// }
-// static a;
-// public b;
-// private c;
-// protected d;
-// static public private protected e;
-// public static protected private f;
-// protected static public g;
+// --- (line: 9) skipped ---
 
 
 
@@ -160,31 +64,7 @@
 // 
 //     constructor(export conFoo,
 //                 declare conBar,
-//                 export declare conFooBar,
-//                 declare export conBarFoo,
-//                 static sue,
-//                 static export declare sueFooBar,
-//                 static declare export sueBarFoo,
-//                 declare static export barSueFoo) {
-//     }
-// }
-// 
-// module m {
-//     static a;
-//     public b;
-//     private c;
-//     protected d;
-//     static public private protected e;
-//     public static protected private f;
-//     protected static public g;
-// }
-// static a;
-// public b;
-// private c;
-// protected d;
-// static public private protected e;
-// public static protected private f;
-// protected static public g;
+// --- (line: 9) skipped ---
 
 
 
@@ -198,31 +78,7 @@
 // 
 //     constructor(export conFoo,
 //                 declare conBar,
-//                 export declare conFooBar,
-//                 declare export conBarFoo,
-//                 static sue,
-//                 static export declare sueFooBar,
-//                 static declare export sueBarFoo,
-//                 declare static export barSueFoo) {
-//     }
-// }
-// 
-// module m {
-//     static a;
-//     public b;
-//     private c;
-//     protected d;
-//     static public private protected e;
-//     public static protected private f;
-//     protected static public g;
-// }
-// static a;
-// public b;
-// private c;
-// protected d;
-// static public private protected e;
-// public static protected private f;
-// protected static public g;
+// --- (line: 9) skipped ---
 
 
 
@@ -245,22 +101,7 @@
 //     }
 // }
 // 
-// module m {
-//     static a;
-//     public b;
-//     private c;
-//     protected d;
-//     static public private protected e;
-//     public static protected private f;
-//     protected static public g;
-// }
-// static a;
-// public b;
-// private c;
-// protected d;
-// static public private protected e;
-// public static protected private f;
-// protected static public g;
+// --- (line: 18) skipped ---
 
 
 
@@ -283,22 +124,7 @@
 //     }
 // }
 // 
-// module m {
-//     static a;
-//     public b;
-//     private c;
-//     protected d;
-//     static public private protected e;
-//     public static protected private f;
-//     protected static public g;
-// }
-// static a;
-// public b;
-// private c;
-// protected d;
-// static public private protected e;
-// public static protected private f;
-// protected static public g;
+// --- (line: 18) skipped ---
 
 
 
@@ -321,22 +147,7 @@
 //     }
 // }
 // 
-// module m {
-//     static a;
-//     public b;
-//     private c;
-//     protected d;
-//     static public private protected e;
-//     public static protected private f;
-//     protected static public g;
-// }
-// static a;
-// public b;
-// private c;
-// protected d;
-// static public private protected e;
-// public static protected private f;
-// protected static public g;
+// --- (line: 18) skipped ---
 
 
 
@@ -359,22 +170,7 @@
 //     }
 // }
 // 
-// module m {
-//     static a;
-//     public b;
-//     private c;
-//     protected d;
-//     static public private protected e;
-//     public static protected private f;
-//     protected static public g;
-// }
-// static a;
-// public b;
-// private c;
-// protected d;
-// static public private protected e;
-// public static protected private f;
-// protected static public g;
+// --- (line: 18) skipped ---
 
 
 
@@ -397,22 +193,7 @@
 //     }
 // }
 // 
-// module m {
-//     static a;
-//     public b;
-//     private c;
-//     protected d;
-//     static public private protected e;
-//     public static protected private f;
-//     protected static public g;
-// }
-// static a;
-// public b;
-// private c;
-// protected d;
-// static public private protected e;
-// public static protected private f;
-// protected static public g;
+// --- (line: 18) skipped ---
 
 
 
@@ -435,34 +216,13 @@
 //     }
 // }
 // 
-// module m {
-//     static a;
-//     public b;
-//     private c;
-//     protected d;
-//     static public private protected e;
-//     public static protected private f;
-//     protected static public g;
-// }
-// static a;
-// public b;
-// private c;
-// protected d;
-// static public private protected e;
-// public static protected private f;
-// protected static public g;
+// --- (line: 18) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
-// class C {
-//     export foo;
-//     declare bar;
-//     export declare foobar;
-//     declare export barfoo;
-// 
-//     constructor(export conFoo,
+// --- (line: 7) skipped ---
 //                 declare conBar,
 //                 export declare conFooBar,
 //                 declare export conBarFoo,
@@ -473,34 +233,13 @@
 //     }
 // }
 // 
-// module m {
-//     static a;
-//     public b;
-//     private c;
-//     protected d;
-//     static public private protected e;
-//     public static protected private f;
-//     protected static public g;
-// }
-// static a;
-// public b;
-// private c;
-// protected d;
-// static public private protected e;
-// public static protected private f;
-// protected static public g;
+// --- (line: 18) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
-// class C {
-//     export foo;
-//     declare bar;
-//     export declare foobar;
-//     declare export barfoo;
-// 
-//     constructor(export conFoo,
+// --- (line: 7) skipped ---
 //                 declare conBar,
 //                 export declare conFooBar,
 //                 declare export conBarFoo,
@@ -511,22 +250,7 @@
 //     }
 // }
 // 
-// module m {
-//     static a;
-//     public b;
-//     private c;
-//     protected d;
-//     static public private protected e;
-//     public static protected private f;
-//     protected static public g;
-// }
-// static a;
-// public b;
-// private c;
-// protected d;
-// static public private protected e;
-// public static protected private f;
-// protected static public g;
+// --- (line: 18) skipped ---
 
 
 
@@ -549,22 +273,7 @@
 //     }
 // }
 // 
-// module m {
-//     static a;
-//     public b;
-//     private c;
-//     protected d;
-//     static public private protected e;
-//     public static protected private f;
-//     protected static public g;
-// }
-// static a;
-// public b;
-// private c;
-// protected d;
-// static public private protected e;
-// public static protected private f;
-// protected static public g;
+// --- (line: 18) skipped ---
 
 
 
@@ -587,34 +296,13 @@
 //     }
 // }
 // 
-// module m {
-//     static a;
-//     public b;
-//     private c;
-//     protected d;
-//     static public private protected e;
-//     public static protected private f;
-//     protected static public g;
-// }
-// static a;
-// public b;
-// private c;
-// protected d;
-// static public private protected e;
-// public static protected private f;
-// protected static public g;
+// --- (line: 18) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
-// class C {
-//     export foo;
-//     declare bar;
-//     export declare foobar;
-//     declare export barfoo;
-// 
-//     constructor(export conFoo,
+// --- (line: 7) skipped ---
 //                 declare conBar,
 //                 export declare conFooBar,
 //                 declare export conBarFoo,
@@ -625,22 +313,7 @@
 //     }
 // }
 // 
-// module m {
-//     static a;
-//     public b;
-//     private c;
-//     protected d;
-//     static public private protected e;
-//     public static protected private f;
-//     protected static public g;
-// }
-// static a;
-// public b;
-// private c;
-// protected d;
-// static public private protected e;
-// public static protected private f;
-// protected static public g;
+// --- (line: 18) skipped ---
 
 
 
@@ -663,22 +336,7 @@
 //     }
 // }
 // 
-// module m {
-//     static a;
-//     public b;
-//     private c;
-//     protected d;
-//     static public private protected e;
-//     public static protected private f;
-//     protected static public g;
-// }
-// static a;
-// public b;
-// private c;
-// protected d;
-// static public private protected e;
-// public static protected private f;
-// protected static public g;
+// --- (line: 18) skipped ---
 
 
 
@@ -701,22 +359,7 @@
 //     }
 // }
 // 
-// module m {
-//     static a;
-//     public b;
-//     private c;
-//     protected d;
-//     static public private protected e;
-//     public static protected private f;
-//     protected static public g;
-// }
-// static a;
-// public b;
-// private c;
-// protected d;
-// static public private protected e;
-// public static protected private f;
-// protected static public g;
+// --- (line: 18) skipped ---
 
 
 
@@ -739,34 +382,13 @@
 //     }
 // }
 // 
-// module m {
-//     static a;
-//     public b;
-//     private c;
-//     protected d;
-//     static public private protected e;
-//     public static protected private f;
-//     protected static public g;
-// }
-// static a;
-// public b;
-// private c;
-// protected d;
-// static public private protected e;
-// public static protected private f;
-// protected static public g;
+// --- (line: 18) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
-// class C {
-//     export foo;
-//     declare bar;
-//     export declare foobar;
-//     declare export barfoo;
-// 
-//     constructor(export conFoo,
+// --- (line: 7) skipped ---
 //                 declare conBar,
 //                 export declare conFooBar,
 //                 declare export conBarFoo,
@@ -777,22 +399,7 @@
 //     }
 // }
 // 
-// module m {
-//     static a;
-//     public b;
-//     private c;
-//     protected d;
-//     static public private protected e;
-//     public static protected private f;
-//     protected static public g;
-// }
-// static a;
-// public b;
-// private c;
-// protected d;
-// static public private protected e;
-// public static protected private f;
-// protected static public g;
+// --- (line: 18) skipped ---
 
 
 
@@ -815,42 +422,13 @@
 //     }
 // }
 // 
-// module m {
-//     static a;
-//     public b;
-//     private c;
-//     protected d;
-//     static public private protected e;
-//     public static protected private f;
-//     protected static public g;
-// }
-// static a;
-// public b;
-// private c;
-// protected d;
-// static public private protected e;
-// public static protected private f;
-// protected static public g;
+// --- (line: 18) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
-// class C {
-//     export foo;
-//     declare bar;
-//     export declare foobar;
-//     declare export barfoo;
-// 
-//     constructor(export conFoo,
-//                 declare conBar,
-//                 export declare conFooBar,
-//                 declare export conBarFoo,
-//                 static sue,
-//                 static export declare sueFooBar,
-//                 static declare export sueBarFoo,
-//                 declare static export barSueFoo) {
-//     }
+// --- (line: 15) skipped ---
 // }
 // 
 // module m {
@@ -858,38 +436,13 @@
 //     public b;
 //     private c;
 //     protected d;
-//     static public private protected e;
-//     public static protected private f;
-//     protected static public g;
-// }
-// static a;
-// public b;
-// private c;
-// protected d;
-// static public private protected e;
-// public static protected private f;
-// protected static public g;
+// --- (line: 23) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
-// class C {
-//     export foo;
-//     declare bar;
-//     export declare foobar;
-//     declare export barfoo;
-// 
-//     constructor(export conFoo,
-//                 declare conBar,
-//                 export declare conFooBar,
-//                 declare export conBarFoo,
-//                 static sue,
-//                 static export declare sueFooBar,
-//                 static declare export sueBarFoo,
-//                 declare static export barSueFoo) {
-//     }
-// }
+// --- (line: 16) skipped ---
 // 
 // module m {
 //     static a;
@@ -897,38 +450,13 @@
 //     private c;
 //     protected d;
 //     static public private protected e;
-//     public static protected private f;
-//     protected static public g;
-// }
-// static a;
-// public b;
-// private c;
-// protected d;
-// static public private protected e;
-// public static protected private f;
-// protected static public g;
+// --- (line: 24) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
-// class C {
-//     export foo;
-//     declare bar;
-//     export declare foobar;
-//     declare export barfoo;
-// 
-//     constructor(export conFoo,
-//                 declare conBar,
-//                 export declare conFooBar,
-//                 declare export conBarFoo,
-//                 static sue,
-//                 static export declare sueFooBar,
-//                 static declare export sueBarFoo,
-//                 declare static export barSueFoo) {
-//     }
-// }
-// 
+// --- (line: 17) skipped ---
 // module m {
 //     static a;
 //     public b;
@@ -936,38 +464,13 @@
 //     protected d;
 //     static public private protected e;
 //     public static protected private f;
-//     protected static public g;
-// }
-// static a;
-// public b;
-// private c;
-// protected d;
-// static public private protected e;
-// public static protected private f;
-// protected static public g;
+// --- (line: 25) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
-// class C {
-//     export foo;
-//     declare bar;
-//     export declare foobar;
-//     declare export barfoo;
-// 
-//     constructor(export conFoo,
-//                 declare conBar,
-//                 export declare conFooBar,
-//                 declare export conBarFoo,
-//                 static sue,
-//                 static export declare sueFooBar,
-//                 static declare export sueBarFoo,
-//                 declare static export barSueFoo) {
-//     }
-// }
-// 
-// module m {
+// --- (line: 18) skipped ---
 //     static a;
 //     public b;
 //     private c;
@@ -975,38 +478,13 @@
 //     static public private protected e;
 //     public static protected private f;
 //     protected static public g;
-// }
-// static a;
-// public b;
-// private c;
-// protected d;
-// static public private protected e;
-// public static protected private f;
-// protected static public g;
+// --- (line: 26) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
-// class C {
-//     export foo;
-//     declare bar;
-//     export declare foobar;
-//     declare export barfoo;
-// 
-//     constructor(export conFoo,
-//                 declare conBar,
-//                 export declare conFooBar,
-//                 declare export conBarFoo,
-//                 static sue,
-//                 static export declare sueFooBar,
-//                 static declare export sueBarFoo,
-//                 declare static export barSueFoo) {
-//     }
-// }
-// 
-// module m {
-//     static a;
+// --- (line: 19) skipped ---
 //     public b;
 //     private c;
 //     protected d;
@@ -1014,37 +492,13 @@
 //     public static protected private f;
 //     protected static public g;
 // }
-// static a;
-// public b;
-// private c;
-// protected d;
-// static public private protected e;
-// public static protected private f;
-// protected static public g;
+// --- (line: 27) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
-// class C {
-//     export foo;
-//     declare bar;
-//     export declare foobar;
-//     declare export barfoo;
-// 
-//     constructor(export conFoo,
-//                 declare conBar,
-//                 export declare conFooBar,
-//                 declare export conBarFoo,
-//                 static sue,
-//                 static export declare sueFooBar,
-//                 static declare export sueBarFoo,
-//                 declare static export barSueFoo) {
-//     }
-// }
-// 
-// module m {
-//     static a;
+// --- (line: 19) skipped ---
 //     public b;
 //     private c;
 //     protected d;
@@ -1052,37 +506,13 @@
 //     public static protected private f;
 //     protected static public g;
 // }
-// static a;
-// public b;
-// private c;
-// protected d;
-// static public private protected e;
-// public static protected private f;
-// protected static public g;
+// --- (line: 27) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
-// class C {
-//     export foo;
-//     declare bar;
-//     export declare foobar;
-//     declare export barfoo;
-// 
-//     constructor(export conFoo,
-//                 declare conBar,
-//                 export declare conFooBar,
-//                 declare export conBarFoo,
-//                 static sue,
-//                 static export declare sueFooBar,
-//                 static declare export sueBarFoo,
-//                 declare static export barSueFoo) {
-//     }
-// }
-// 
-// module m {
-//     static a;
+// --- (line: 19) skipped ---
 //     public b;
 //     private c;
 //     protected d;
@@ -1090,37 +520,13 @@
 //     public static protected private f;
 //     protected static public g;
 // }
-// static a;
-// public b;
-// private c;
-// protected d;
-// static public private protected e;
-// public static protected private f;
-// protected static public g;
+// --- (line: 27) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
-// class C {
-//     export foo;
-//     declare bar;
-//     export declare foobar;
-//     declare export barfoo;
-// 
-//     constructor(export conFoo,
-//                 declare conBar,
-//                 export declare conFooBar,
-//                 declare export conBarFoo,
-//                 static sue,
-//                 static export declare sueFooBar,
-//                 static declare export sueBarFoo,
-//                 declare static export barSueFoo) {
-//     }
-// }
-// 
-// module m {
-//     static a;
+// --- (line: 19) skipped ---
 //     public b;
 //     private c;
 //     protected d;
@@ -1128,38 +534,13 @@
 //     public static protected private f;
 //     protected static public g;
 // }
-// static a;
-// public b;
-// private c;
-// protected d;
-// static public private protected e;
-// public static protected private f;
-// protected static public g;
+// --- (line: 27) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
-// class C {
-//     export foo;
-//     declare bar;
-//     export declare foobar;
-//     declare export barfoo;
-// 
-//     constructor(export conFoo,
-//                 declare conBar,
-//                 export declare conFooBar,
-//                 declare export conBarFoo,
-//                 static sue,
-//                 static export declare sueFooBar,
-//                 static declare export sueBarFoo,
-//                 declare static export barSueFoo) {
-//     }
-// }
-// 
-// module m {
-//     static a;
-//     public b;
+// --- (line: 20) skipped ---
 //     private c;
 //     protected d;
 //     static public private protected e;
@@ -1167,37 +548,13 @@
 //     protected static public g;
 // }
 // static a;
-// public b;
-// private c;
-// protected d;
-// static public private protected e;
-// public static protected private f;
-// protected static public g;
+// --- (line: 28) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
-// class C {
-//     export foo;
-//     declare bar;
-//     export declare foobar;
-//     declare export barfoo;
-// 
-//     constructor(export conFoo,
-//                 declare conBar,
-//                 export declare conFooBar,
-//                 declare export conBarFoo,
-//                 static sue,
-//                 static export declare sueFooBar,
-//                 static declare export sueBarFoo,
-//                 declare static export barSueFoo) {
-//     }
-// }
-// 
-// module m {
-//     static a;
-//     public b;
+// --- (line: 20) skipped ---
 //     private c;
 //     protected d;
 //     static public private protected e;
@@ -1205,37 +562,13 @@
 //     protected static public g;
 // }
 // static a;
-// public b;
-// private c;
-// protected d;
-// static public private protected e;
-// public static protected private f;
-// protected static public g;
+// --- (line: 28) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
-// class C {
-//     export foo;
-//     declare bar;
-//     export declare foobar;
-//     declare export barfoo;
-// 
-//     constructor(export conFoo,
-//                 declare conBar,
-//                 export declare conFooBar,
-//                 declare export conBarFoo,
-//                 static sue,
-//                 static export declare sueFooBar,
-//                 static declare export sueBarFoo,
-//                 declare static export barSueFoo) {
-//     }
-// }
-// 
-// module m {
-//     static a;
-//     public b;
+// --- (line: 20) skipped ---
 //     private c;
 //     protected d;
 //     static public private protected e;
@@ -1243,37 +576,13 @@
 //     protected static public g;
 // }
 // static a;
-// public b;
-// private c;
-// protected d;
-// static public private protected e;
-// public static protected private f;
-// protected static public g;
+// --- (line: 28) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
-// class C {
-//     export foo;
-//     declare bar;
-//     export declare foobar;
-//     declare export barfoo;
-// 
-//     constructor(export conFoo,
-//                 declare conBar,
-//                 export declare conFooBar,
-//                 declare export conBarFoo,
-//                 static sue,
-//                 static export declare sueFooBar,
-//                 static declare export sueBarFoo,
-//                 declare static export barSueFoo) {
-//     }
-// }
-// 
-// module m {
-//     static a;
-//     public b;
+// --- (line: 20) skipped ---
 //     private c;
 //     protected d;
 //     static public private protected e;
@@ -1281,38 +590,13 @@
 //     protected static public g;
 // }
 // static a;
-// public b;
-// private c;
-// protected d;
-// static public private protected e;
-// public static protected private f;
-// protected static public g;
+// --- (line: 28) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
-// class C {
-//     export foo;
-//     declare bar;
-//     export declare foobar;
-//     declare export barfoo;
-// 
-//     constructor(export conFoo,
-//                 declare conBar,
-//                 export declare conFooBar,
-//                 declare export conBarFoo,
-//                 static sue,
-//                 static export declare sueFooBar,
-//                 static declare export sueBarFoo,
-//                 declare static export barSueFoo) {
-//     }
-// }
-// 
-// module m {
-//     static a;
-//     public b;
-//     private c;
+// --- (line: 21) skipped ---
 //     protected d;
 //     static public private protected e;
 //     public static protected private f;
@@ -1320,37 +604,13 @@
 // }
 // static a;
 // public b;
-// private c;
-// protected d;
-// static public private protected e;
-// public static protected private f;
-// protected static public g;
+// --- (line: 29) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
-// class C {
-//     export foo;
-//     declare bar;
-//     export declare foobar;
-//     declare export barfoo;
-// 
-//     constructor(export conFoo,
-//                 declare conBar,
-//                 export declare conFooBar,
-//                 declare export conBarFoo,
-//                 static sue,
-//                 static export declare sueFooBar,
-//                 static declare export sueBarFoo,
-//                 declare static export barSueFoo) {
-//     }
-// }
-// 
-// module m {
-//     static a;
-//     public b;
-//     private c;
+// --- (line: 21) skipped ---
 //     protected d;
 //     static public private protected e;
 //     public static protected private f;
@@ -1358,37 +618,13 @@
 // }
 // static a;
 // public b;
-// private c;
-// protected d;
-// static public private protected e;
-// public static protected private f;
-// protected static public g;
+// --- (line: 29) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
-// class C {
-//     export foo;
-//     declare bar;
-//     export declare foobar;
-//     declare export barfoo;
-// 
-//     constructor(export conFoo,
-//                 declare conBar,
-//                 export declare conFooBar,
-//                 declare export conBarFoo,
-//                 static sue,
-//                 static export declare sueFooBar,
-//                 static declare export sueBarFoo,
-//                 declare static export barSueFoo) {
-//     }
-// }
-// 
-// module m {
-//     static a;
-//     public b;
-//     private c;
+// --- (line: 21) skipped ---
 //     protected d;
 //     static public private protected e;
 //     public static protected private f;
@@ -1396,39 +632,13 @@
 // }
 // static a;
 // public b;
-// private c;
-// protected d;
-// static public private protected e;
-// public static protected private f;
-// protected static public g;
+// --- (line: 29) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
-// class C {
-//     export foo;
-//     declare bar;
-//     export declare foobar;
-//     declare export barfoo;
-// 
-//     constructor(export conFoo,
-//                 declare conBar,
-//                 export declare conFooBar,
-//                 declare export conBarFoo,
-//                 static sue,
-//                 static export declare sueFooBar,
-//                 static declare export sueBarFoo,
-//                 declare static export barSueFoo) {
-//     }
-// }
-// 
-// module m {
-//     static a;
-//     public b;
-//     private c;
-//     protected d;
-//     static public private protected e;
+// --- (line: 23) skipped ---
 //     public static protected private f;
 //     protected static public g;
 // }
@@ -1436,38 +646,13 @@
 // public b;
 // private c;
 // protected d;
-// static public private protected e;
-// public static protected private f;
-// protected static public g;
+// --- (line: 31) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
-// class C {
-//     export foo;
-//     declare bar;
-//     export declare foobar;
-//     declare export barfoo;
-// 
-//     constructor(export conFoo,
-//                 declare conBar,
-//                 export declare conFooBar,
-//                 declare export conBarFoo,
-//                 static sue,
-//                 static export declare sueFooBar,
-//                 static declare export sueBarFoo,
-//                 declare static export barSueFoo) {
-//     }
-// }
-// 
-// module m {
-//     static a;
-//     public b;
-//     private c;
-//     protected d;
-//     static public private protected e;
-//     public static protected private f;
+// --- (line: 24) skipped ---
 //     protected static public g;
 // }
 // static a;
@@ -1482,31 +667,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
-// class C {
-//     export foo;
-//     declare bar;
-//     export declare foobar;
-//     declare export barfoo;
-// 
-//     constructor(export conFoo,
-//                 declare conBar,
-//                 export declare conFooBar,
-//                 declare export conBarFoo,
-//                 static sue,
-//                 static export declare sueFooBar,
-//                 static declare export sueBarFoo,
-//                 declare static export barSueFoo) {
-//     }
-// }
-// 
-// module m {
-//     static a;
-//     public b;
-//     private c;
-//     protected d;
-//     static public private protected e;
-//     public static protected private f;
-//     protected static public g;
+// --- (line: 25) skipped ---
 // }
 // static a;
 // public b;
@@ -1520,32 +681,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
-// class C {
-//     export foo;
-//     declare bar;
-//     export declare foobar;
-//     declare export barfoo;
-// 
-//     constructor(export conFoo,
-//                 declare conBar,
-//                 export declare conFooBar,
-//                 declare export conBarFoo,
-//                 static sue,
-//                 static export declare sueFooBar,
-//                 static declare export sueBarFoo,
-//                 declare static export barSueFoo) {
-//     }
-// }
-// 
-// module m {
-//     static a;
-//     public b;
-//     private c;
-//     protected d;
-//     static public private protected e;
-//     public static protected private f;
-//     protected static public g;
-// }
+// --- (line: 26) skipped ---
 // static a;
 // public b;
 // private c;
@@ -1558,33 +694,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
-// class C {
-//     export foo;
-//     declare bar;
-//     export declare foobar;
-//     declare export barfoo;
-// 
-//     constructor(export conFoo,
-//                 declare conBar,
-//                 export declare conFooBar,
-//                 declare export conBarFoo,
-//                 static sue,
-//                 static export declare sueFooBar,
-//                 static declare export sueBarFoo,
-//                 declare static export barSueFoo) {
-//     }
-// }
-// 
-// module m {
-//     static a;
-//     public b;
-//     private c;
-//     protected d;
-//     static public private protected e;
-//     public static protected private f;
-//     protected static public g;
-// }
-// static a;
+// --- (line: 27) skipped ---
 // public b;
 // private c;
 // protected d;
@@ -1596,33 +706,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
-// class C {
-//     export foo;
-//     declare bar;
-//     export declare foobar;
-//     declare export barfoo;
-// 
-//     constructor(export conFoo,
-//                 declare conBar,
-//                 export declare conFooBar,
-//                 declare export conBarFoo,
-//                 static sue,
-//                 static export declare sueFooBar,
-//                 static declare export sueBarFoo,
-//                 declare static export barSueFoo) {
-//     }
-// }
-// 
-// module m {
-//     static a;
-//     public b;
-//     private c;
-//     protected d;
-//     static public private protected e;
-//     public static protected private f;
-//     protected static public g;
-// }
-// static a;
+// --- (line: 27) skipped ---
 // public b;
 // private c;
 // protected d;
@@ -1634,33 +718,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
-// class C {
-//     export foo;
-//     declare bar;
-//     export declare foobar;
-//     declare export barfoo;
-// 
-//     constructor(export conFoo,
-//                 declare conBar,
-//                 export declare conFooBar,
-//                 declare export conBarFoo,
-//                 static sue,
-//                 static export declare sueFooBar,
-//                 static declare export sueBarFoo,
-//                 declare static export barSueFoo) {
-//     }
-// }
-// 
-// module m {
-//     static a;
-//     public b;
-//     private c;
-//     protected d;
-//     static public private protected e;
-//     public static protected private f;
-//     protected static public g;
-// }
-// static a;
+// --- (line: 27) skipped ---
 // public b;
 // private c;
 // protected d;
@@ -1672,33 +730,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
-// class C {
-//     export foo;
-//     declare bar;
-//     export declare foobar;
-//     declare export barfoo;
-// 
-//     constructor(export conFoo,
-//                 declare conBar,
-//                 export declare conFooBar,
-//                 declare export conBarFoo,
-//                 static sue,
-//                 static export declare sueFooBar,
-//                 static declare export sueBarFoo,
-//                 declare static export barSueFoo) {
-//     }
-// }
-// 
-// module m {
-//     static a;
-//     public b;
-//     private c;
-//     protected d;
-//     static public private protected e;
-//     public static protected private f;
-//     protected static public g;
-// }
-// static a;
+// --- (line: 27) skipped ---
 // public b;
 // private c;
 // protected d;
@@ -1710,34 +742,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
-// class C {
-//     export foo;
-//     declare bar;
-//     export declare foobar;
-//     declare export barfoo;
-// 
-//     constructor(export conFoo,
-//                 declare conBar,
-//                 export declare conFooBar,
-//                 declare export conBarFoo,
-//                 static sue,
-//                 static export declare sueFooBar,
-//                 static declare export sueBarFoo,
-//                 declare static export barSueFoo) {
-//     }
-// }
-// 
-// module m {
-//     static a;
-//     public b;
-//     private c;
-//     protected d;
-//     static public private protected e;
-//     public static protected private f;
-//     protected static public g;
-// }
-// static a;
-// public b;
+// --- (line: 28) skipped ---
 // private c;
 // protected d;
 // static public private protected e;
@@ -1748,34 +753,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
-// class C {
-//     export foo;
-//     declare bar;
-//     export declare foobar;
-//     declare export barfoo;
-// 
-//     constructor(export conFoo,
-//                 declare conBar,
-//                 export declare conFooBar,
-//                 declare export conBarFoo,
-//                 static sue,
-//                 static export declare sueFooBar,
-//                 static declare export sueBarFoo,
-//                 declare static export barSueFoo) {
-//     }
-// }
-// 
-// module m {
-//     static a;
-//     public b;
-//     private c;
-//     protected d;
-//     static public private protected e;
-//     public static protected private f;
-//     protected static public g;
-// }
-// static a;
-// public b;
+// --- (line: 28) skipped ---
 // private c;
 // protected d;
 // static public private protected e;
@@ -1786,34 +764,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
-// class C {
-//     export foo;
-//     declare bar;
-//     export declare foobar;
-//     declare export barfoo;
-// 
-//     constructor(export conFoo,
-//                 declare conBar,
-//                 export declare conFooBar,
-//                 declare export conBarFoo,
-//                 static sue,
-//                 static export declare sueFooBar,
-//                 static declare export sueBarFoo,
-//                 declare static export barSueFoo) {
-//     }
-// }
-// 
-// module m {
-//     static a;
-//     public b;
-//     private c;
-//     protected d;
-//     static public private protected e;
-//     public static protected private f;
-//     protected static public g;
-// }
-// static a;
-// public b;
+// --- (line: 28) skipped ---
 // private c;
 // protected d;
 // static public private protected e;
@@ -1824,34 +775,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
-// class C {
-//     export foo;
-//     declare bar;
-//     export declare foobar;
-//     declare export barfoo;
-// 
-//     constructor(export conFoo,
-//                 declare conBar,
-//                 export declare conFooBar,
-//                 declare export conBarFoo,
-//                 static sue,
-//                 static export declare sueFooBar,
-//                 static declare export sueBarFoo,
-//                 declare static export barSueFoo) {
-//     }
-// }
-// 
-// module m {
-//     static a;
-//     public b;
-//     private c;
-//     protected d;
-//     static public private protected e;
-//     public static protected private f;
-//     protected static public g;
-// }
-// static a;
-// public b;
+// --- (line: 28) skipped ---
 // private c;
 // protected d;
 // static public private protected e;
@@ -1862,35 +786,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
-// class C {
-//     export foo;
-//     declare bar;
-//     export declare foobar;
-//     declare export barfoo;
-// 
-//     constructor(export conFoo,
-//                 declare conBar,
-//                 export declare conFooBar,
-//                 declare export conBarFoo,
-//                 static sue,
-//                 static export declare sueFooBar,
-//                 static declare export sueBarFoo,
-//                 declare static export barSueFoo) {
-//     }
-// }
-// 
-// module m {
-//     static a;
-//     public b;
-//     private c;
-//     protected d;
-//     static public private protected e;
-//     public static protected private f;
-//     protected static public g;
-// }
-// static a;
-// public b;
-// private c;
+// --- (line: 29) skipped ---
 // protected d;
 // static public private protected e;
 // public static protected private f;
@@ -1900,35 +796,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
-// class C {
-//     export foo;
-//     declare bar;
-//     export declare foobar;
-//     declare export barfoo;
-// 
-//     constructor(export conFoo,
-//                 declare conBar,
-//                 export declare conFooBar,
-//                 declare export conBarFoo,
-//                 static sue,
-//                 static export declare sueFooBar,
-//                 static declare export sueBarFoo,
-//                 declare static export barSueFoo) {
-//     }
-// }
-// 
-// module m {
-//     static a;
-//     public b;
-//     private c;
-//     protected d;
-//     static public private protected e;
-//     public static protected private f;
-//     protected static public g;
-// }
-// static a;
-// public b;
-// private c;
+// --- (line: 29) skipped ---
 // protected d;
 // static public private protected e;
 // public static protected private f;
@@ -1938,35 +806,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
-// class C {
-//     export foo;
-//     declare bar;
-//     export declare foobar;
-//     declare export barfoo;
-// 
-//     constructor(export conFoo,
-//                 declare conBar,
-//                 export declare conFooBar,
-//                 declare export conBarFoo,
-//                 static sue,
-//                 static export declare sueFooBar,
-//                 static declare export sueBarFoo,
-//                 declare static export barSueFoo) {
-//     }
-// }
-// 
-// module m {
-//     static a;
-//     public b;
-//     private c;
-//     protected d;
-//     static public private protected e;
-//     public static protected private f;
-//     protected static public g;
-// }
-// static a;
-// public b;
-// private c;
+// --- (line: 29) skipped ---
 // protected d;
 // static public private protected e;
 // public static protected private f;

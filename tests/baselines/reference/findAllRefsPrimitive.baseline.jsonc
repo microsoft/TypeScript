@@ -6,10 +6,7 @@
 // function f(b: boolean): boolean;
 // type T = never; type U = never;
 // function n(x: number): number;
-// function o(x: object): object;
-// function s(x: string): string;
-// function sy(s: symbol): symbol;
-// function v(v: void): void;
+// --- (line: 7) skipped ---
 
 // === /tests/cases/fourslash/b.ts ===
 // const z: [|any|] = 0;
@@ -20,12 +17,7 @@
   // const any = 2;
   // const y: any = any;
   // function f(b: boolean): boolean;
-  // type T = never; type U = never;
-  // function n(x: number): number;
-  // function o(x: object): object;
-  // function s(x: string): string;
-  // function sy(s: symbol): symbol;
-  // function v(v: void): void;
+  // --- (line: 5) skipped ---
 
   // === Details ===
   [
@@ -53,10 +45,7 @@
 // function f(b: boolean): boolean;
 // type T = never; type U = never;
 // function n(x: number): number;
-// function o(x: object): object;
-// function s(x: string): string;
-// function sy(s: symbol): symbol;
-// function v(v: void): void;
+// --- (line: 7) skipped ---
 
 // === /tests/cases/fourslash/b.ts ===
 // const z: [|any|] = 0;
@@ -69,10 +58,7 @@
   // function f(b: boolean): boolean;
   // type T = never; type U = never;
   // function n(x: number): number;
-  // function o(x: object): object;
-  // function s(x: string): string;
-  // function sy(s: symbol): symbol;
-  // function v(v: void): void;
+  // --- (line: 7) skipped ---
 
   // === Details ===
   [
@@ -101,9 +87,7 @@
 // type T = never; type U = never;
 // function n(x: number): number;
 // function o(x: object): object;
-// function s(x: string): string;
-// function sy(s: symbol): symbol;
-// function v(v: void): void;
+// --- (line: 8) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/a.ts ===
@@ -114,9 +98,7 @@
   // type T = never; type U = never;
   // function n(x: number): number;
   // function o(x: object): object;
-  // function s(x: string): string;
-  // function sy(s: symbol): symbol;
-  // function v(v: void): void;
+  // --- (line: 8) skipped ---
 
   // === Details ===
   [
@@ -145,9 +127,7 @@
 // type T = never; type U = never;
 // function n(x: number): number;
 // function o(x: object): object;
-// function s(x: string): string;
-// function sy(s: symbol): symbol;
-// function v(v: void): void;
+// --- (line: 8) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/a.ts ===
@@ -158,9 +138,7 @@
   // type T = never; type U = never;
   // function n(x: number): number;
   // function o(x: object): object;
-  // function s(x: string): string;
-  // function sy(s: symbol): symbol;
-  // function v(v: void): void;
+  // --- (line: 8) skipped ---
 
   // === Details ===
   [
@@ -358,9 +336,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/a.ts ===
-// const x: any = 0;
-// const any = 2;
-// const y: any = any;
+// --- (line: 3) skipped ---
 // function f(b: boolean): boolean;
 // type T = never; type U = never;
 // function n(x: number): number;
@@ -371,9 +347,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/a.ts ===
-  // const x: any = 0;
-  // const any = 2;
-  // const y: any = any;
+  // --- (line: 3) skipped ---
   // function f(b: boolean): boolean;
   // type T = never; type U = never;
   // function n(x: number): number;
@@ -402,9 +376,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/a.ts ===
-// const x: any = 0;
-// const any = 2;
-// const y: any = any;
+// --- (line: 3) skipped ---
 // function f(b: boolean): boolean;
 // type T = never; type U = never;
 // function n(x: number): number;
@@ -415,9 +387,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/a.ts ===
-  // const x: any = 0;
-  // const any = 2;
-  // const y: any = any;
+  // --- (line: 3) skipped ---
   // function f(b: boolean): boolean;
   // type T = never; type U = never;
   // function n(x: number): number;
@@ -446,10 +416,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/a.ts ===
-// const x: any = 0;
-// const any = 2;
-// const y: any = any;
-// function f(b: boolean): boolean;
+// --- (line: 4) skipped ---
 // type T = never; type U = never;
 // function n(x: number): number;
 // function o(x: object): object;
@@ -459,10 +426,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/a.ts ===
-  // const x: any = 0;
-  // const any = 2;
-  // const y: any = any;
-  // function f(b: boolean): boolean;
+  // --- (line: 4) skipped ---
   // type T = never; type U = never;
   // function n(x: number): number;
   // function o(x: object): object;
@@ -490,10 +454,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/a.ts ===
-// const x: any = 0;
-// const any = 2;
-// const y: any = any;
-// function f(b: boolean): boolean;
+// --- (line: 4) skipped ---
 // type T = never; type U = never;
 // function n(x: number): number;
 // function o(x: object): object;
@@ -503,10 +464,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/a.ts ===
-  // const x: any = 0;
-  // const any = 2;
-  // const y: any = any;
-  // function f(b: boolean): boolean;
+  // --- (line: 4) skipped ---
   // type T = never; type U = never;
   // function n(x: number): number;
   // function o(x: object): object;
@@ -534,11 +492,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/a.ts ===
-// const x: any = 0;
-// const any = 2;
-// const y: any = any;
-// function f(b: boolean): boolean;
-// type T = never; type U = never;
+// --- (line: 5) skipped ---
 // function n(x: number): number;
 // function o(x: object): object;
 // function s(x: string): string;
@@ -547,11 +501,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/a.ts ===
-  // const x: any = 0;
-  // const any = 2;
-  // const y: any = any;
-  // function f(b: boolean): boolean;
-  // type T = never; type U = never;
+  // --- (line: 5) skipped ---
   // function n(x: number): number;
   // function o(x: object): object;
   // function s(x: string): string;
@@ -578,11 +528,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/a.ts ===
-// const x: any = 0;
-// const any = 2;
-// const y: any = any;
-// function f(b: boolean): boolean;
-// type T = never; type U = never;
+// --- (line: 5) skipped ---
 // function n(x: number): number;
 // function o(x: object): object;
 // function s(x: string): string;
@@ -591,11 +537,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/a.ts ===
-  // const x: any = 0;
-  // const any = 2;
-  // const y: any = any;
-  // function f(b: boolean): boolean;
-  // type T = never; type U = never;
+  // --- (line: 5) skipped ---
   // function n(x: number): number;
   // function o(x: object): object;
   // function s(x: string): string;
@@ -622,12 +564,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/a.ts ===
-// const x: any = 0;
-// const any = 2;
-// const y: any = any;
-// function f(b: boolean): boolean;
-// type T = never; type U = never;
-// function n(x: number): number;
+// --- (line: 6) skipped ---
 // function o(x: object): object;
 // function s(x: string): string;
 // function sy(s: symbol): symbol;
@@ -635,12 +572,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/a.ts ===
-  // const x: any = 0;
-  // const any = 2;
-  // const y: any = any;
-  // function f(b: boolean): boolean;
-  // type T = never; type U = never;
-  // function n(x: number): number;
+  // --- (line: 6) skipped ---
   // function o(x: object): object;
   // function s(x: string): string;
   // function sy(s: symbol): symbol;
@@ -666,12 +598,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/a.ts ===
-// const x: any = 0;
-// const any = 2;
-// const y: any = any;
-// function f(b: boolean): boolean;
-// type T = never; type U = never;
-// function n(x: number): number;
+// --- (line: 6) skipped ---
 // function o(x: object): object;
 // function s(x: string): string;
 // function sy(s: symbol): symbol;
@@ -679,12 +606,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/a.ts ===
-  // const x: any = 0;
-  // const any = 2;
-  // const y: any = any;
-  // function f(b: boolean): boolean;
-  // type T = never; type U = never;
-  // function n(x: number): number;
+  // --- (line: 6) skipped ---
   // function o(x: object): object;
   // function s(x: string): string;
   // function sy(s: symbol): symbol;
@@ -716,10 +638,7 @@
 // function f(b: boolean): boolean;
 // type T = never; type U = never;
 // function n(x: number): number;
-// function o(x: object): object;
-// function s(x: string): string;
-// function sy(s: symbol): symbol;
-// function v(v: void): void;
+// --- (line: 7) skipped ---
 
 // === /tests/cases/fourslash/b.ts ===
 // const z: /*FIND ALL REFS*/[|any|] = 0;
@@ -730,12 +649,7 @@
   // const any = 2;
   // const y: any = any;
   // function f(b: boolean): boolean;
-  // type T = never; type U = never;
-  // function n(x: number): number;
-  // function o(x: object): object;
-  // function s(x: string): string;
-  // function sy(s: symbol): symbol;
-  // function v(v: void): void;
+  // --- (line: 5) skipped ---
 
   // === Details ===
   [
@@ -767,10 +681,7 @@
 // function f(b: boolean): boolean;
 // type T = never; type U = never;
 // function n(x: number): number;
-// function o(x: object): object;
-// function s(x: string): string;
-// function sy(s: symbol): symbol;
-// function v(v: void): void;
+// --- (line: 7) skipped ---
 
 // === /tests/cases/fourslash/b.ts ===
 // const z: [|{| kind: "reference" |}any|] = 0;
@@ -789,10 +700,7 @@
 // function f(b: boolean): boolean;
 // type T = never; type U = never;
 // function n(x: number): number;
-// function o(x: object): object;
-// function s(x: string): string;
-// function sy(s: symbol): symbol;
-// function v(v: void): void;
+// --- (line: 7) skipped ---
 
 // === /tests/cases/fourslash/b.ts ===
 // const z: [|{| kind: "reference" |}any|] = 0;
@@ -812,9 +720,7 @@
 // type T = never; type U = never;
 // function n(x: number): number;
 // function o(x: object): object;
-// function s(x: string): string;
-// function sy(s: symbol): symbol;
-// function v(v: void): void;
+// --- (line: 8) skipped ---
 
 
 
@@ -831,9 +737,7 @@
 // type T = never; type U = never;
 // function n(x: number): number;
 // function o(x: object): object;
-// function s(x: string): string;
-// function sy(s: symbol): symbol;
-// function v(v: void): void;
+// --- (line: 8) skipped ---
 
 
 
@@ -919,9 +823,7 @@
 //   b.ts
 
 // === /tests/cases/fourslash/a.ts ===
-// const x: any = 0;
-// const any = 2;
-// const y: any = any;
+// --- (line: 3) skipped ---
 // function f(b: boolean): boolean;
 // type T = never; type U = never;
 // function n(x: number): number;
@@ -938,9 +840,7 @@
 //   b.ts
 
 // === /tests/cases/fourslash/a.ts ===
-// const x: any = 0;
-// const any = 2;
-// const y: any = any;
+// --- (line: 3) skipped ---
 // function f(b: boolean): boolean;
 // type T = never; type U = never;
 // function n(x: number): number;
@@ -957,10 +857,7 @@
 //   b.ts
 
 // === /tests/cases/fourslash/a.ts ===
-// const x: any = 0;
-// const any = 2;
-// const y: any = any;
-// function f(b: boolean): boolean;
+// --- (line: 4) skipped ---
 // type T = never; type U = never;
 // function n(x: number): number;
 // function o(x: object): object;
@@ -976,10 +873,7 @@
 //   b.ts
 
 // === /tests/cases/fourslash/a.ts ===
-// const x: any = 0;
-// const any = 2;
-// const y: any = any;
-// function f(b: boolean): boolean;
+// --- (line: 4) skipped ---
 // type T = never; type U = never;
 // function n(x: number): number;
 // function o(x: object): object;
@@ -995,11 +889,7 @@
 //   b.ts
 
 // === /tests/cases/fourslash/a.ts ===
-// const x: any = 0;
-// const any = 2;
-// const y: any = any;
-// function f(b: boolean): boolean;
-// type T = never; type U = never;
+// --- (line: 5) skipped ---
 // function n(x: number): number;
 // function o(x: object): object;
 // function s(x: string): string;
@@ -1014,11 +904,7 @@
 //   b.ts
 
 // === /tests/cases/fourslash/a.ts ===
-// const x: any = 0;
-// const any = 2;
-// const y: any = any;
-// function f(b: boolean): boolean;
-// type T = never; type U = never;
+// --- (line: 5) skipped ---
 // function n(x: number): number;
 // function o(x: object): object;
 // function s(x: string): string;
@@ -1033,12 +919,7 @@
 //   b.ts
 
 // === /tests/cases/fourslash/a.ts ===
-// const x: any = 0;
-// const any = 2;
-// const y: any = any;
-// function f(b: boolean): boolean;
-// type T = never; type U = never;
-// function n(x: number): number;
+// --- (line: 6) skipped ---
 // function o(x: object): object;
 // function s(x: string): string;
 // function sy(s: symbol): symbol;
@@ -1052,12 +933,7 @@
 //   b.ts
 
 // === /tests/cases/fourslash/a.ts ===
-// const x: any = 0;
-// const any = 2;
-// const y: any = any;
-// function f(b: boolean): boolean;
-// type T = never; type U = never;
-// function n(x: number): number;
+// --- (line: 6) skipped ---
 // function o(x: object): object;
 // function s(x: string): string;
 // function sy(s: symbol): symbol;
@@ -1077,10 +953,7 @@
 // function f(b: boolean): boolean;
 // type T = never; type U = never;
 // function n(x: number): number;
-// function o(x: object): object;
-// function s(x: string): string;
-// function sy(s: symbol): symbol;
-// function v(v: void): void;
+// --- (line: 7) skipped ---
 
 // === /tests/cases/fourslash/b.ts ===
 // const z: /*HIGHLIGHTS*/[|{| kind: "reference" |}any|] = 0;

@@ -16,9 +16,7 @@
   //    propName: string;
   // }
   // 
-  // var v: class1;
-  // v.doStuff();
-  // v.propName;
+  // --- (line: 6) skipped ---
 
   // === Details ===
   [

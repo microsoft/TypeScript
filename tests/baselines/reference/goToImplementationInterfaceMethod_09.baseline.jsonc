@@ -1,14 +1,6 @@
 // === goToImplementation ===
 // === /tests/cases/fourslash/goToImplementationInterfaceMethod_09.ts ===
-// interface Foo {
-//     hello (): void;
-// }
-// 
-// class SubBar extends Bar {
-//     hello() {}
-// }
-// 
-// class Bar extends SuperBar {
+// --- (line: 9) skipped ---
 //     hello() {}
 // 
 //     whatever() {
@@ -86,16 +78,7 @@
 
 // === goToImplementation ===
 // === /tests/cases/fourslash/goToImplementationInterfaceMethod_09.ts ===
-// interface Foo {
-//     hello (): void;
-// }
-// 
-// class SubBar extends Bar {
-//     hello() {}
-// }
-// 
-// class Bar extends SuperBar {
-//     hello() {}
+// --- (line: 10) skipped ---
 // 
 //     whatever() {
 //         super.hello();

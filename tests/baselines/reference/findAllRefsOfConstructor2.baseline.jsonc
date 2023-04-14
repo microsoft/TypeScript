@@ -25,16 +25,7 @@
   // class B extends A {
   //     constructor() { super(""); }
   // }
-  // class C extends B {
-  //     constructor() {
-  //         super();
-  //     }
-  // }
-  // class D extends B { }
-  // const a = new A("a");
-  // const b = new B();
-  // const c = new C();
-  // const d = new D();
+  // --- (line: 7) skipped ---
 
   // === Details ===
   [
@@ -150,10 +141,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsOfConstructor2.ts ===
-// class A {
-//     constructor(s: string) {}
-// }
-// class B extends A {
+// --- (line: 4) skipped ---
 //     constructor() { super(""); }
 // }
 // class C extends B {
@@ -169,9 +157,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsOfConstructor2.ts ===
-  // class A {
-  //     constructor(s: string) {}
-  // }
+  // --- (line: 3) skipped ---
   // class B extends A {
   //     constructor() { super(""); }
   // }

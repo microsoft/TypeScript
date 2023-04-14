@@ -465,11 +465,11 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         public compileOnSaveEnabled: boolean,
         protected watchOptions: WatchOptions | undefined,
         directoryStructureHost: DirectoryStructureHost,
-        currentDirectory: string | undefined,
+        currentDirectory: string,
     ) {
         this.projectName = projectName;
         this.directoryStructureHost = directoryStructureHost;
-        this.currentDirectory = this.projectService.getNormalizedAbsolutePath(currentDirectory || "");
+        this.currentDirectory = this.projectService.getNormalizedAbsolutePath(currentDirectory);
         this.getCanonicalFileName = this.projectService.toCanonicalFileName;
 
         this.cancellationToken = new ThrottledCancellationToken(this.projectService.cancellationToken, this.projectService.throttleWaitMilliseconds);
@@ -514,7 +514,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         // Use the current directory as resolution root only if the project created using current directory string
         this.resolutionCache = createResolutionCache(
             this,
-            currentDirectory && this.currentDirectory,
+            this.currentDirectory,
             /*logChangesWhenResolvingModule*/ true
         );
         this.languageService = createLanguageService(this, this.documentRegistry, this.projectService.serverMode);
@@ -2059,7 +2059,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     getNoDtsResolutionProject(rootFileNames: readonly string[]): Project {
         Debug.assert(this.projectService.serverMode === LanguageServiceMode.Semantic);
         if (!this.noDtsResolutionProject) {
-            this.noDtsResolutionProject = new AuxiliaryProject(this.projectService, this.documentRegistry, this.getCompilerOptionsForNoDtsResolutionProject());
+            this.noDtsResolutionProject = new AuxiliaryProject(this.projectService, this.documentRegistry, this.getCompilerOptionsForNoDtsResolutionProject(), this.currentDirectory);
         }
 
         enumerateInsertsAndDeletes<NormalizedPath, NormalizedPath>(
@@ -2176,7 +2176,7 @@ export class InferredProject extends Project {
         compilerOptions: CompilerOptions,
         watchOptions: WatchOptions | undefined,
         projectRootPath: NormalizedPath | undefined,
-        currentDirectory: string | undefined,
+        currentDirectory: string,
         pluginConfigOverrides: Map<string, any> | undefined,
         typeAcquisition: TypeAcquisition | undefined) {
         super(projectService.newInferredProjectName(),
@@ -2246,7 +2246,7 @@ export class InferredProject extends Project {
 }
 
 class AuxiliaryProject extends Project {
-    constructor(projectService: ProjectService, documentRegistry: DocumentRegistry, compilerOptions: CompilerOptions) {
+    constructor(projectService: ProjectService, documentRegistry: DocumentRegistry, compilerOptions: CompilerOptions, currentDirectory: string) {
         super(projectService.newAuxiliaryProjectName(),
             ProjectKind.Auxiliary,
             projectService,
@@ -2257,7 +2257,7 @@ class AuxiliaryProject extends Project {
             /*compileOnSaveEnabled*/ false,
             /*watchOptions*/ undefined,
             projectService.host,
-            /*currentDirectory*/ undefined);
+            currentDirectory);
     }
 
     override isOrphan(): boolean {
