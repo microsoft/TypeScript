@@ -1883,6 +1883,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     var tupleTypes = new Map<string, GenericType>();
     var unionTypes = new Map<string, UnionType>();
+    var unionOfUnionTypes = new Map<string, Type>();
     var intersectionTypes = new Map<string, Type>();
     var stringLiteralTypes = new Map<string, StringLiteralType>();
     var numberLiteralTypes = new Map<number, NumberLiteralType>();
@@ -16230,9 +16231,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function addTypeToUnion(typeSet: Type[], includes: TypeFlags, type: Type) {
         const flags = type.flags;
-        if (flags & TypeFlags.Union) {
-            return addTypesToUnion(typeSet, includes | (isNamedUnionType(type) ? TypeFlags.Union : 0), (type as UnionType).types);
-        }
         // We ignore 'never' types in unions
         if (!(flags & TypeFlags.Never)) {
             includes |= flags & TypeFlags.IncludesMask;
@@ -16255,8 +16253,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // Add the given types to the given type set. Order is preserved, duplicates are removed,
     // and nested types of the given kind are flattened into the set.
     function addTypesToUnion(typeSet: Type[], includes: TypeFlags, types: readonly Type[]): TypeFlags {
+        let lastType: Type | undefined;
         for (const type of types) {
-            includes = addTypeToUnion(typeSet, includes, type);
+            // We skip the type if it is the same as the last type we processed. This simple test particularly
+            // saves a lot of work for large lists of the same union type, such as when resolving `Record<A, B>[A]`,
+            // where A and B are large union types.
+            if (type !== lastType) {
+                includes = type.flags & TypeFlags.Union ?
+                    addTypesToUnion(typeSet, includes | (isNamedUnionType(type) ? TypeFlags.Union : 0), (type as UnionType).types) :
+                    addTypeToUnion(typeSet, includes, type);
+                lastType = type;
+            }
         }
         return includes;
     }
@@ -16408,6 +16415,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (types.length === 1) {
             return types[0];
         }
+        // We optimize for the common case of unioning a union type with some other type (such as `undefined`).
+        if (types.length === 2 && !origin && (types[0].flags & TypeFlags.Union || types[1].flags & TypeFlags.Union)) {
+            const infix = unionReduction === UnionReduction.None ? "N" : unionReduction === UnionReduction.Subtype ? "S" : "L";
+            const index = types[0].id < types[1].id ? 0 : 1;
+            const id = types[index].id + infix + types[1 - index].id + getAliasId(aliasSymbol, aliasTypeArguments);
+            let type = unionOfUnionTypes.get(id);
+            if (!type) {
+                type = getUnionTypeWorker(types, unionReduction, aliasSymbol, aliasTypeArguments, /*origin*/ undefined);
+                unionOfUnionTypes.set(id, type);
+            }
+            return type;
+        }
+        return getUnionTypeWorker(types, unionReduction, aliasSymbol, aliasTypeArguments, origin);
+    }
+
+    function getUnionTypeWorker(types: readonly Type[], unionReduction: UnionReduction, aliasSymbol: Symbol | undefined, aliasTypeArguments: readonly Type[] | undefined, origin: Type | undefined): Type {
         let typeSet: Type[] | undefined = [];
         const includes = addTypesToUnion(typeSet, 0 as TypeFlags, types);
         if (unionReduction !== UnionReduction.None) {
@@ -30330,7 +30353,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     /**
      * Returns true iff React would emit this tag name as a string rather than an identifier or qualified name
      */
-    function isJsxIntrinsicIdentifier(tagName: JsxTagNameExpression): boolean {
+    function isJsxIntrinsicIdentifier(tagName: JsxTagNameExpression): tagName is Identifier {
         return tagName.kind === SyntaxKind.Identifier && isIntrinsicJsxName(tagName.escapedText);
     }
 
@@ -30795,6 +30818,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
+    function getJsxElementTypeTypeAt(location: Node): Type | undefined {
+        const type = getJsxType(JsxNames.ElementType, location);
+        if (isErrorType(type)) return undefined;
+        return type;
+    }
+
     /**
      * Returns all the properties of the Jsx.IntrinsicElements interface
      */
@@ -30863,7 +30892,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const jsxOpeningLikeNode = node ;
             const sig = getResolvedSignature(jsxOpeningLikeNode);
             checkDeprecatedSignature(sig, node);
-            checkJsxReturnAssignableToAppropriateBound(getJsxReferenceKind(jsxOpeningLikeNode), getReturnTypeOfSignature(sig), jsxOpeningLikeNode);
+
+            const elementTypeConstraint = getJsxElementTypeTypeAt(jsxOpeningLikeNode);
+            if (elementTypeConstraint !== undefined) {
+                const tagName = jsxOpeningLikeNode.tagName;
+                const tagType = isJsxIntrinsicIdentifier(tagName)
+                    ? getStringLiteralType(unescapeLeadingUnderscores(tagName.escapedText))
+                    : checkExpression(tagName);
+                checkTypeRelatedTo(tagType, elementTypeConstraint, assignableRelation, tagName, Diagnostics.Its_type_0_is_not_a_valid_JSX_element_type, () => {
+                    const componentName = getTextOfNode(tagName);
+                    return chainDiagnosticMessages(/*details*/ undefined, Diagnostics._0_cannot_be_used_as_a_JSX_component, componentName);
+                });
+            }
+            else {
+                checkJsxReturnAssignableToAppropriateBound(getJsxReferenceKind(jsxOpeningLikeNode), getReturnTypeOfSignature(sig), jsxOpeningLikeNode);
+            }
         }
     }
 
@@ -48789,6 +48832,7 @@ namespace JsxNames {
     export const ElementAttributesPropertyNameContainer = "ElementAttributesProperty" as __String; // TODO: Deprecate and remove support
     export const ElementChildrenAttributeNameContainer = "ElementChildrenAttribute" as __String;
     export const Element = "Element" as __String;
+    export const ElementType = "ElementType" as __String;
     export const IntrinsicAttributes = "IntrinsicAttributes" as __String;
     export const IntrinsicClassAttributes = "IntrinsicClassAttributes" as __String;
     export const LibraryManagedAttributes = "LibraryManagedAttributes" as __String;

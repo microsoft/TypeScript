@@ -293,6 +293,8 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/transitivereferences/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
 /user/username/projects/transitivereferences/c/tsconfig.json: *new*
@@ -497,8 +499,9 @@ export class A {}
 
 
 
-Before running Timeout callback:: count: 1
-2: timerToUpdateProgram
+Before running Timeout callback:: count: 2
+2: timerToInvalidateFailedLookupResolutions
+3: timerToUpdateProgram
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -587,11 +590,15 @@ PolledWatches::
   {"pollingInterval":500} *new*
 /user/username/projects/transitivereferences/node_modules/@types:
   {"pollingInterval":500} *new*
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500} *new*
 
 PolledWatches *deleted*::
 /user/username/projects/transitivereferences/c/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/transitivereferences/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
@@ -648,7 +655,7 @@ Input::
 
 
 Before running Timeout callback:: count: 1
-3: timerToUpdateProgram
+4: timerToUpdateProgram
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -737,11 +744,15 @@ PolledWatches::
   {"pollingInterval":500} *new*
 /user/username/projects/transitivereferences/node_modules/@types:
   {"pollingInterval":500} *new*
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500} *new*
 
 PolledWatches *deleted*::
 /user/username/projects/transitivereferences/c/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/transitivereferences/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
@@ -798,7 +809,7 @@ Input::
 
 
 Before running Timeout callback:: count: 1
-4: timerToUpdateProgram
+5: timerToUpdateProgram
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -868,6 +879,8 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/transitivereferences/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
 /user/username/projects/transitivereferences/c/tsconfig.json:
@@ -916,7 +929,7 @@ Input::
 
 
 Before running Timeout callback:: count: 1
-5: timerToUpdateProgram
+6: timerToUpdateProgram
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -978,6 +991,8 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/transitivereferences/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
 /user/username/projects/transitivereferences/c/tsconfig.json:
@@ -1020,8 +1035,8 @@ Input::
 //// [/user/username/projects/transitiveReferences/b/tsconfig.json] deleted
 
 Before running Timeout callback:: count: 2
-6: timerToUpdateProgram
-7: timerToInvalidateFailedLookupResolutions
+7: timerToUpdateProgram
+8: timerToInvalidateFailedLookupResolutions
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -1096,6 +1111,8 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/transitivereferences/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
 /user/username/projects/transitivereferences/c/tsconfig.json:
@@ -1138,8 +1155,8 @@ Input::
 
 
 Before running Timeout callback:: count: 2
-8: timerToUpdateProgram
-9: timerToInvalidateFailedLookupResolutions
+9: timerToUpdateProgram
+10: timerToInvalidateFailedLookupResolutions
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -1212,6 +1229,8 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/transitivereferences/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
 /user/username/projects/transitivereferences/c/tsconfig.json:
@@ -1255,8 +1274,8 @@ Input::
 //// [/user/username/projects/transitiveReferences/a/tsconfig.json] deleted
 
 Before running Timeout callback:: count: 2
-10: timerToUpdateProgram
-11: timerToInvalidateFailedLookupResolutions
+11: timerToUpdateProgram
+12: timerToInvalidateFailedLookupResolutions
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -1328,6 +1347,8 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/transitivereferences/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
 /user/username/projects/transitivereferences/c/tsconfig.json:
@@ -1373,8 +1394,8 @@ Input::
 
 
 Before running Timeout callback:: count: 2
-12: timerToUpdateProgram
-13: timerToInvalidateFailedLookupResolutions
+13: timerToUpdateProgram
+14: timerToInvalidateFailedLookupResolutions
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -1443,6 +1464,8 @@ PolledWatches::
 /user/username/projects/transitivereferences/c/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/transitivereferences/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::

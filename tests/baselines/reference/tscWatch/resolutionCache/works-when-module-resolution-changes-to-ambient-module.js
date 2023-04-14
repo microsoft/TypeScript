@@ -49,7 +49,11 @@ Shape signatures in builder refreshed for::
 PolledWatches::
 /users/username/projects/project/node_modules: *new*
   {"pollingInterval":500}
+/users/username/projects/node_modules: *new*
+  {"pollingInterval":500}
 /users/username/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -84,6 +88,12 @@ declare module "fs" {
     }
 }
 
+
+PolledWatches::
+/users/username/projects/node_modules:
+  {"pollingInterval":500}
+/users/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 
 PolledWatches *deleted*::
 /users/username/projects/project/node_modules:
@@ -133,6 +143,14 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /users/username/projects/project/foo.ts (computed .d.ts)
 /users/username/projects/project/node_modules/@types/node/index.d.ts (used version)
+
+PolledWatches::
+/users/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+
+PolledWatches *deleted*::
+/users/username/projects/node_modules:
+  {"pollingInterval":500}
 
 FsWatches::
 /users/username/projects/project/foo.ts:

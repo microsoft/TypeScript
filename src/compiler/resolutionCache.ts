@@ -1,7 +1,6 @@
 import {
     arrayToMap,
     CachedDirectoryStructureHost,
-    CharacterCodes,
     clearMap,
     closeFileWatcher,
     closeFileWatcherOf,
@@ -20,7 +19,6 @@ import {
     Extension,
     extensionIsTS,
     fileExtensionIs,
-    fileExtensionIsOneOf,
     FileReference,
     FileWatcher,
     FileWatcherCallback,
@@ -29,10 +27,13 @@ import {
     getDirectoryPath,
     getEffectiveTypeRoots,
     getNormalizedAbsolutePath,
-    getRootLength,
+    getPathComponents,
+    getPathFromPathComponents,
     HasInvalidatedResolutions,
+    hasTrailingDirectorySeparator,
     ignoredPaths,
     inferredTypesContainingFile,
+    isDiskPathRoot,
     isEmittedFileOfProgram,
     isExternalModuleNameRelative,
     isExternalOrCommonJsModule,
@@ -52,7 +53,7 @@ import {
     packageIdToString,
     parseNodeModuleFromPath,
     Path,
-    pathContainsNodeModules,
+    PathPathComponents,
     Program,
     removeSuffix,
     removeTrailingDirectorySeparator,
@@ -205,6 +206,30 @@ export function removeIgnoredPath(path: Path): Path | undefined {
         path;
 }
 
+function perceivedOsRootLengthForWatching(pathComponents: Readonly<PathPathComponents>, length: number) {
+    // Ignore "/", "c:/"
+    if (length <= 1) return 1;
+    let userCheckIndex = 1;
+    let isDosStyle = pathComponents[0].search(/[a-zA-Z]:/) === 0;
+    if (pathComponents[0] !== directorySeparator &&
+        !isDosStyle && // Non dos style paths
+        pathComponents[1].search(/[a-zA-Z]\$$/) === 0) { // Dos style nextPart
+        // ignore "//vda1cs4850/c$/folderAtRoot"
+        if (length === 2) return 2;
+        userCheckIndex = 2;
+        isDosStyle = true;
+    }
+
+    if (isDosStyle &&
+        !pathComponents[userCheckIndex].match(/^users$/i)) {
+        // Paths like c:/notUsers
+        return userCheckIndex;
+    }
+
+    // Paths like: c:/users/username or /home/username
+    return userCheckIndex + 2;
+}
+
 /**
  * Filter out paths like
  * "/", "/user", "/user/username", "/user/username/folderAtRoot",
@@ -213,167 +238,164 @@ export function removeIgnoredPath(path: Path): Path | undefined {
  *
  * @internal
  */
-export function canWatchDirectoryOrFile(dirPath: Path) {
-    const rootLength = getRootLength(dirPath);
-    if (dirPath.length === rootLength) {
-        // Ignore "/", "c:/"
-        return false;
-    }
+export function canWatchDirectoryOrFile(pathComponents: Readonly<PathPathComponents>, length?: number) {
+    if (length === undefined) length = pathComponents.length;
+    // Ignore "/", "c:/"
+    // ignore "/user", "c:/users" or "c:/folderAtRoot"
+    if (length <= 2) return false;
+    const perceivedOsRootLength = perceivedOsRootLengthForWatching(pathComponents, length);
+    return length > perceivedOsRootLength + 1;
+}
 
-    let nextDirectorySeparator = dirPath.indexOf(directorySeparator, rootLength);
-    if (nextDirectorySeparator === -1) {
-        // ignore "/user", "c:/users" or "c:/folderAtRoot"
-        return false;
-    }
+/** @internal */
+export function canWatchAtTypes(atTypes: Path) {
+    // Otherwise can watch directory only if we can watch the parent directory of node_modules/@types
+    return canWatchAffectedPackageJsonOrNodeModulesOfAtTypes(getDirectoryPath(atTypes));
+}
 
-    let pathPartForUserCheck = dirPath.substring(rootLength, nextDirectorySeparator + 1);
-    const isNonDirectorySeparatorRoot = rootLength > 1 || dirPath.charCodeAt(0) !== CharacterCodes.slash;
-    if (isNonDirectorySeparatorRoot &&
-        dirPath.search(/[a-zA-Z]:/) !== 0 && // Non dos style paths
-        pathPartForUserCheck.search(/[a-zA-Z]\$\//) === 0) { // Dos style nextPart
-        nextDirectorySeparator = dirPath.indexOf(directorySeparator, nextDirectorySeparator + 1);
-        if (nextDirectorySeparator === -1) {
-            // ignore "//vda1cs4850/c$/folderAtRoot"
-            return false;
-        }
-
-        pathPartForUserCheck = dirPath.substring(rootLength + pathPartForUserCheck.length, nextDirectorySeparator + 1);
-    }
-
-    if (isNonDirectorySeparatorRoot &&
-        pathPartForUserCheck.search(/users\//i) !== 0) {
-        // Paths like c:/folderAtRoot/subFolder are allowed
-        return true;
-    }
-
-    for (let searchIndex = nextDirectorySeparator + 1, searchLevels = 2; searchLevels > 0; searchLevels--) {
-        searchIndex = dirPath.indexOf(directorySeparator, searchIndex) + 1;
-        if (searchIndex === 0) {
-            // Folder isnt at expected minimum levels
-            return false;
-        }
+function isInDirectoryPath(dirComponents: Readonly<PathPathComponents>, fileOrDirComponents: Readonly<PathPathComponents>) {
+    if (fileOrDirComponents.length < fileOrDirComponents.length) return false;
+    for (let i = 0; i < dirComponents.length; i++) {
+        if (fileOrDirComponents[i] !== dirComponents[i]) return false;
     }
     return true;
 }
 
-/** @internal */
-export function canWatchAtTypes(atTypes: Path, rootPath: Path | undefined) {
-    // Otherwise can watch directory only if we can watch the parent directory of node_modules/@types
-    const dirPath = getDirectoryPath(getDirectoryPath(atTypes));
-    return dirPath === rootPath || canWatchDirectoryOrFile(dirPath);
-}
-
-function isInDirectoryPath(dir: Path | undefined, file: Path) {
-    if (dir === undefined || file.length <= dir.length) {
-        return false;
-    }
-    return startsWith(file, dir) && file[dir.length] === directorySeparator;
+function canWatchAffectedPackageJsonOrNodeModulesOfAtTypes(fileOrDirPath: Path) {
+    return canWatchDirectoryOrFile(getPathComponents(fileOrDirPath));
 }
 
 /** @internal */
 export function canWatchAffectingLocation(filePath: Path) {
-    return canWatchDirectoryOrFile(filePath);
+    return canWatchAffectedPackageJsonOrNodeModulesOfAtTypes(filePath);
 }
 
 /** @internal */
 export function getDirectoryToWatchFailedLookupLocation(
     failedLookupLocation: string,
     failedLookupLocationPath: Path,
-    rootDir: string | undefined,
-    rootPath: Path | undefined,
-    rootSplitLength: number,
+    rootDir: string,
+    rootPath: Path,
+    rootPathComponents: Readonly<PathPathComponents>,
     getCurrentDirectory: () => string | undefined,
 ): DirectoryOfFailedLookupWatch | undefined {
-    if (isInDirectoryPath(rootPath, failedLookupLocationPath)) {
-        // Ensure failed look up is normalized path
-        failedLookupLocation = isRootedDiskPath(failedLookupLocation) ? normalizePath(failedLookupLocation) : getNormalizedAbsolutePath(failedLookupLocation, getCurrentDirectory());
-        const failedLookupPathSplit = failedLookupLocationPath.split(directorySeparator);
-        const failedLookupSplit = failedLookupLocation.split(directorySeparator);
-        Debug.assert(failedLookupSplit.length === failedLookupPathSplit.length, `FailedLookup: ${failedLookupLocation} failedLookupLocationPath: ${failedLookupLocationPath}`);
-        if (failedLookupPathSplit.length > rootSplitLength + 1) {
+    const failedLookupPathComponents: Readonly<PathPathComponents> = getPathComponents(failedLookupLocationPath);
+    // Ensure failed look up is normalized path
+    failedLookupLocation = isRootedDiskPath(failedLookupLocation) ? normalizePath(failedLookupLocation) : getNormalizedAbsolutePath(failedLookupLocation, getCurrentDirectory());
+    const failedLookupComponents: readonly string[] = getPathComponents(failedLookupLocation);
+    const perceivedOsRootLength = perceivedOsRootLengthForWatching(failedLookupPathComponents, failedLookupPathComponents.length);
+    if (failedLookupPathComponents.length <= perceivedOsRootLength + 1) return undefined;
+    // If directory path contains node module, get the most parent node_modules directory for watching
+    const nodeModulesIndex = failedLookupPathComponents.indexOf("node_modules" as Path);
+    if (nodeModulesIndex !== -1 && nodeModulesIndex + 1 <= perceivedOsRootLength + 1) return undefined; // node_modules not at position where it can be watched
+    if (isInDirectoryPath(rootPathComponents, failedLookupPathComponents)) {
+        if (failedLookupPathComponents.length > rootPathComponents.length + 1) {
             // Instead of watching root, watch directory in root to avoid watching excluded directories not needed for module resolution
-            return {
-                dir: failedLookupSplit.slice(0, rootSplitLength + 1).join(directorySeparator),
-                dirPath: failedLookupPathSplit.slice(0, rootSplitLength + 1).join(directorySeparator) as Path
-            };
+            return getDirectoryOfFailedLookupWatch(failedLookupComponents, failedLookupPathComponents, Math.max(rootPathComponents.length + 1, perceivedOsRootLength + 1));
         }
         else {
             // Always watch root directory non recursively
             return {
-                dir: rootDir!,
-                dirPath: rootPath!,
-                nonRecursive: true
+                dir: rootDir,
+                dirPath: rootPath,
+                nonRecursive: true,
             };
         }
     }
 
     return getDirectoryToWatchFromFailedLookupLocationDirectory(
-        getDirectoryPath(getNormalizedAbsolutePath(failedLookupLocation, getCurrentDirectory())),
-        getDirectoryPath(failedLookupLocationPath),
-        rootPath,
+        failedLookupComponents,
+        failedLookupPathComponents,
+        failedLookupPathComponents.length - 1,
+        perceivedOsRootLength,
+        nodeModulesIndex,
+        rootPathComponents,
     );
 }
 
 function getDirectoryToWatchFromFailedLookupLocationDirectory(
-    dir: string,
-    dirPath: Path,
-    rootPath: Path | undefined
+    dirComponents: readonly string[],
+    dirPathComponents: Readonly<PathPathComponents>,
+    dirPathComponentsLength: number,
+    perceivedOsRootLength: number,
+    nodeModulesIndex: number,
+    rootPathComponents: Readonly<PathPathComponents>,
 ): DirectoryOfFailedLookupWatch | undefined {
     // If directory path contains node module, get the most parent node_modules directory for watching
-    while (pathContainsNodeModules(dirPath)) {
-        dir = getDirectoryPath(dir);
-        dirPath = getDirectoryPath(dirPath);
+    if (nodeModulesIndex !== -1) {
+        // If the directory is node_modules use it to watch, always watch it recursively
+        return getDirectoryOfFailedLookupWatch(dirComponents, dirPathComponents, nodeModulesIndex + 1);
     }
-
-    // If the directory is node_modules use it to watch, always watch it recursively
-    if (isNodeModulesDirectory(dirPath)) {
-        return canWatchDirectoryOrFile(getDirectoryPath(dirPath)) ? { dir, dirPath } : undefined;
-    }
-
-    let nonRecursive = true;
     // Use some ancestor of the root directory
-    let subDirectoryPath: Path | undefined, subDirectory: string | undefined;
-    if (rootPath !== undefined) {
-        while (!isInDirectoryPath(dirPath, rootPath)) {
-            const parentPath = getDirectoryPath(dirPath);
-            if (parentPath === dirPath) {
-                break;
-            }
+    let nonRecursive = true;
+    let length = dirPathComponentsLength;
+    for (let i = 0; i < dirPathComponentsLength; i++) {
+        if (dirPathComponents[i] !== rootPathComponents[i]) {
             nonRecursive = false;
-            subDirectoryPath = dirPath;
-            subDirectory = dir;
-            dirPath = parentPath;
-            dir = getDirectoryPath(dir);
+            length = Math.max(i + 1, perceivedOsRootLength + 1);
+            break;
         }
     }
+    return getDirectoryOfFailedLookupWatch(dirComponents, dirPathComponents, length, nonRecursive);
+}
 
-    return canWatchDirectoryOrFile(dirPath) ? { dir: subDirectory || dir, dirPath: subDirectoryPath || dirPath, nonRecursive } : undefined;
+function getDirectoryOfFailedLookupWatch(
+    dirComponents: readonly string[],
+    dirPathComponents: Readonly<PathPathComponents>,
+    length: number,
+    nonRecursive?: boolean
+): DirectoryOfFailedLookupWatch {
+    return {
+        dir: getPathFromPathComponents(dirComponents, length),
+        dirPath: getPathFromPathComponents(dirPathComponents, length),
+        nonRecursive,
+    };
 }
 
 /** @internal */
 export function getDirectoryToWatchFailedLookupLocationFromTypeRoot(
     typeRoot: string,
     typeRootPath: Path,
-    rootPath: Path | undefined,
+    rootPath: Path,
+    rootPathComponents: Readonly<PathPathComponents>,
+    getCurrentDirectory: () => string | undefined,
     filterCustomPath: (path: Path) => boolean, // Return true if this path can be used
 ): Path | undefined {
-    if (isInDirectoryPath(rootPath, typeRootPath)) {
+    const typeRootPathComponents = getPathComponents(typeRootPath);
+    if (isInDirectoryPath(rootPathComponents, typeRootPathComponents)) {
+        // Because this is called when we are watching typeRoot, we dont need additional check whether typeRoot is not say c:/users/node_modules/@types when root is c:/
         return rootPath;
     }
-    const toWatch = getDirectoryToWatchFromFailedLookupLocationDirectory(typeRoot, typeRootPath, rootPath);
+    typeRoot = isRootedDiskPath(typeRoot) ? normalizePath(typeRoot) : getNormalizedAbsolutePath(typeRoot, getCurrentDirectory());
+    const toWatch = getDirectoryToWatchFromFailedLookupLocationDirectory(
+        getPathComponents(typeRoot),
+        typeRootPathComponents,
+        typeRootPathComponents.length,
+        perceivedOsRootLengthForWatching(typeRootPathComponents, typeRootPathComponents.length),
+        typeRootPathComponents.indexOf("node_modules" as Path),
+        rootPathComponents,
+    );
     return toWatch && filterCustomPath(toWatch.dirPath) ? toWatch.dirPath : undefined;
 }
 
 /** @internal */
-export function getRootDirectoryOfResolutionCache(rootDirForResolution: string | undefined, getCurrentDirectory: () => string | undefined) {
-    return rootDirForResolution && removeTrailingDirectorySeparator(getNormalizedAbsolutePath(rootDirForResolution, getCurrentDirectory()));
+export function getRootDirectoryOfResolutionCache(rootDirForResolution: string, getCurrentDirectory: () => string | undefined) {
+    const normalized = getNormalizedAbsolutePath(rootDirForResolution, getCurrentDirectory());
+    return !isDiskPathRoot(normalized) ?
+        removeTrailingDirectorySeparator(normalized) :
+        normalized;
+}
+
+/** @internal */
+export function getRootPathSplitLength(rootPath: Path) {
+    return rootPath.split(directorySeparator).length - (hasTrailingDirectorySeparator(rootPath) ? 1 : 0);
 }
 
 type GetResolutionWithResolvedFileName<T extends ResolutionWithFailedLookupLocations = ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName = ResolutionWithResolvedFileName> =
     (resolution: T) => R | undefined;
 
 /** @internal */
-export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootDirForResolution: string | undefined, logChangesWhenResolvingModule: boolean): ResolutionCache {
+export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootDirForResolution: string, logChangesWhenResolvingModule: boolean): ResolutionCache {
     let filesWithChangedSetOfUnresolvedImports: Path[] | undefined;
     let filesWithInvalidatedResolutions: Set<Path> | undefined;
     let filesWithInvalidatedNonRelativeUnresolvedImports: ReadonlyMap<Path, readonly string[]> | undefined;
@@ -412,20 +434,11 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         moduleResolutionCache.getPackageJsonInfoCache(),
     );
 
-    /**
-     * These are the extensions that failed lookup files will have by default,
-     * any other extension of failed lookup will be store that path in custom failed lookup path
-     * This helps in not having to comb through all resolutions when files are added/removed
-     * Note that .d.ts file also has .d.ts extension hence will be part of default extensions
-     */
-    const failedLookupDefaultExtensions = [Extension.Ts, Extension.Tsx, Extension.Js, Extension.Jsx, Extension.Json];
-    const customFailedLookupPaths = new Map<string, number>();
-
     const directoryWatchesOfFailedLookups = new Map<string, DirectoryWatchesOfFailedLookup>();
     const fileWatchesOfAffectingLocations = new Map<string, FileWatcherOfAffectingLocation>();
     const rootDir = getRootDirectoryOfResolutionCache(rootDirForResolution, getCurrentDirectory);
-    const rootPath = (rootDir && resolutionHost.toPath(rootDir)) as Path; // TODO: GH#18217
-    const rootSplitLength = rootPath !== undefined ? rootPath.split(directorySeparator).length : 0;
+    const rootPath = resolutionHost.toPath(rootDir);
+    const rootPathComponents = getPathComponents(rootPath);
 
     // TypeRoot watches for the types that get added as part of getAutomaticTypeDirectiveNames
     const typeRootsWatches = new Map<string, FileWatcher>();
@@ -465,7 +478,6 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
     function clear() {
         clearMap(directoryWatchesOfFailedLookups, closeFileWatcherOf);
         clearMap(fileWatchesOfAffectingLocations, closeFileWatcherOf);
-        customFailedLookupPaths.clear();
         nonRelativeExternalModuleResolutions.clear();
         closeTypeRootsWatch();
         resolvedModuleNames.clear();
@@ -808,10 +820,6 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         return endsWith(dirPath, "/node_modules/@types");
     }
 
-    function isPathWithDefaultFailedLookupExtension(path: Path) {
-        return fileExtensionIsOneOf(path, failedLookupDefaultExtensions);
-    }
-
     function watchFailedLookupLocationsOfExternalModuleResolutions<T extends ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName>(
         name: string,
         resolution: T,
@@ -858,17 +866,11 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
                     failedLookupLocationPath,
                     rootDir,
                     rootPath,
-                    rootSplitLength,
+                    rootPathComponents,
                     getCurrentDirectory,
                 );
                 if (toWatch) {
                     const { dir, dirPath, nonRecursive } = toWatch;
-                    // If the failed lookup location path is not one of the supported extensions,
-                    // store it in the custom path
-                    if (!isPathWithDefaultFailedLookupExtension(failedLookupLocationPath)) {
-                        const refCount = customFailedLookupPaths.get(failedLookupLocationPath) || 0;
-                        customFailedLookupPaths.set(failedLookupLocationPath, refCount + 1);
-                    }
                     if (dirPath === rootPath) {
                         Debug.assert(nonRecursive);
                         setAtRoot = true;
@@ -881,7 +883,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
 
             if (setAtRoot) {
                 // This is always non recursive
-                setDirectoryWatcher(rootDir!, rootPath, /*nonRecursive*/ true); // TODO: GH#18217
+                setDirectoryWatcher(rootDir, rootPath, /*nonRecursive*/ true); // TODO: GH#18217
             }
         }
         watchAffectingLocationsOfResolution(resolution, !failedLookupLocations?.length);
@@ -999,22 +1001,11 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
                     failedLookupLocationPath,
                     rootDir,
                     rootPath,
-                    rootSplitLength,
+                    rootPathComponents,
                     getCurrentDirectory,
                 );
                 if (toWatch) {
                     const { dirPath } = toWatch;
-                    const refCount = customFailedLookupPaths.get(failedLookupLocationPath);
-                    if (refCount) {
-                        if (refCount === 1) {
-                            customFailedLookupPaths.delete(failedLookupLocationPath);
-                        }
-                        else {
-                            Debug.assert(refCount > 1);
-                            customFailedLookupPaths.set(failedLookupLocationPath, refCount - 1);
-                        }
-                    }
-
                     if (dirPath === rootPath) {
                         removeAtRoot = true;
                     }
@@ -1147,11 +1138,12 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
                 (startsWithPathChecks ||= new Set()).add(fileOrDirectoryPath);
             }
             else {
-                if (!isPathWithDefaultFailedLookupExtension(fileOrDirectoryPath) && !customFailedLookupPaths.has(fileOrDirectoryPath)) {
-                    return false;
-                }
                 // Ignore emits from the program
                 if (isEmittedFileOfProgram(resolutionHost.getCurrentProgram(), fileOrDirectoryPath)) {
+                    return false;
+                }
+                // Ignore .map files
+                if (fileExtensionIs(fileOrDirectoryPath, ".map")) {
                     return false;
                 }
                 // Resolution need to be invalidated if failed lookup location is same as the file or directory getting created
@@ -1205,7 +1197,8 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
     function isInvalidatedFailedLookup(locationPath: Path) {
         return failedLookupChecks?.has(locationPath) ||
             firstDefinedIterator(startsWithPathChecks?.keys() || [], fileOrDirectoryPath => startsWith(locationPath, fileOrDirectoryPath) ? true : undefined) ||
-            firstDefinedIterator(isInDirectoryChecks?.keys() || [], fileOrDirectoryPath => isInDirectoryPath(fileOrDirectoryPath, locationPath) ? true : undefined);
+            firstDefinedIterator(isInDirectoryChecks?.keys() || [], dirPath => locationPath.length > dirPath.length &&
+                startsWith(locationPath, dirPath) && (isDiskPathRoot(dirPath) || locationPath[dirPath.length] === directorySeparator) ? true : undefined);
     }
 
     function canInvalidatedFailedLookupResolutionWithAffectingLocation(resolution: ResolutionWithFailedLookupLocations) {
@@ -1238,6 +1231,8 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
                     typeRoot,
                     typeRootPath,
                     rootPath,
+                    rootPathComponents,
+                    getCurrentDirectory,
                     dirPath => directoryWatchesOfFailedLookups.has(dirPath)
                 );
                 if (dirPath) {
@@ -1283,7 +1278,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         if (resolutionHost.getCompilationSettings().typeRoots) return true;
 
         // Otherwise can watch directory only if we can watch the parent directory of node_modules/@types
-        return canWatchAtTypes(resolutionHost.toPath(typeRoot), rootPath);
+        return canWatchAtTypes(resolutionHost.toPath(typeRoot));
     }
 }
 

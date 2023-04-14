@@ -40,8 +40,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/app.ts 500 undefi
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/test.csproj
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/applib.ts 500 undefined Project: /a/b/test.csproj WatchType: Missing file
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/test.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/test.csproj WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/test.csproj Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/b/test.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -64,8 +62,6 @@ After request
 
 PolledWatches::
 /a/b/applib.ts: *new*
-  {"pollingInterval":500}
-/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -111,10 +107,6 @@ Before request
 
 
 //// [/a/b/app.ts] deleted
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
 
 PolledWatches *deleted*::
 /a/b/applib.ts:
@@ -167,8 +159,6 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
 /a/b/app.ts: *new*
   {"pollingInterval":500}
 
@@ -186,10 +176,6 @@ Before request
 //// [/a/b/app.ts]
 
 
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
 
 PolledWatches *deleted*::
 /a/b/app.ts:
@@ -234,10 +220,6 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
 /a/lib/lib.d.ts:

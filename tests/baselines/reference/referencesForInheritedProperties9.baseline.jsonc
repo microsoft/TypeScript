@@ -5,11 +5,7 @@
 // }
 // 
 // class C extends D {
-//     prop1: string;
-// }
-// 
-// var c: C;
-// c.prop1;
+// --- (line: 6) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForInheritedProperties9.ts ===
@@ -18,11 +14,7 @@
   // }
   // 
   // class C extends D {
-  //     prop1: string;
-  // }
-  // 
-  // var c: C;
-  // c.prop1;
+  // --- (line: 6) skipped ---
 
   // === Details ===
   [
