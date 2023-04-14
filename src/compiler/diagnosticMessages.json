@@ -7760,5 +7760,9 @@
     "Non-abstract class '{0}' does not implement all abstract members of '{1}'": {
         "category": "Error",
         "code": 18052
+    },
+    "Its type '{0}' is not a valid JSX element type.": {
+        "category": "Error",
+        "code": 18053
     }
 }

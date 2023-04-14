@@ -30351,7 +30351,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     /**
      * Returns true iff React would emit this tag name as a string rather than an identifier or qualified name
      */
-    function isJsxIntrinsicIdentifier(tagName: JsxTagNameExpression): boolean {
+    function isJsxIntrinsicIdentifier(tagName: JsxTagNameExpression): tagName is Identifier {
         return tagName.kind === SyntaxKind.Identifier && isIntrinsicJsxName(tagName.escapedText);
     }
 
@@ -30816,6 +30816,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
+    function getJsxElementTypeTypeAt(location: Node): Type | undefined {
+        const type = getJsxType(JsxNames.ElementType, location);
+        if (isErrorType(type)) return undefined;
+        return type;
+    }
+
     /**
      * Returns all the properties of the Jsx.IntrinsicElements interface
      */
@@ -30884,7 +30890,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const jsxOpeningLikeNode = node ;
             const sig = getResolvedSignature(jsxOpeningLikeNode);
             checkDeprecatedSignature(sig, node);
-            checkJsxReturnAssignableToAppropriateBound(getJsxReferenceKind(jsxOpeningLikeNode), getReturnTypeOfSignature(sig), jsxOpeningLikeNode);
+
+            const elementTypeConstraint = getJsxElementTypeTypeAt(jsxOpeningLikeNode);
+            if (elementTypeConstraint !== undefined) {
+                const tagName = jsxOpeningLikeNode.tagName;
+                const tagType = isJsxIntrinsicIdentifier(tagName)
+                    ? getStringLiteralType(unescapeLeadingUnderscores(tagName.escapedText))
+                    : checkExpression(tagName);
+                checkTypeRelatedTo(tagType, elementTypeConstraint, assignableRelation, tagName, Diagnostics.Its_type_0_is_not_a_valid_JSX_element_type, () => {
+                    const componentName = getTextOfNode(tagName);
+                    return chainDiagnosticMessages(/*details*/ undefined, Diagnostics._0_cannot_be_used_as_a_JSX_component, componentName);
+                });
+            }
+            else {
+                checkJsxReturnAssignableToAppropriateBound(getJsxReferenceKind(jsxOpeningLikeNode), getReturnTypeOfSignature(sig), jsxOpeningLikeNode);
+            }
         }
     }
 
@@ -48823,6 +48843,7 @@ namespace JsxNames {
     export const ElementAttributesPropertyNameContainer = "ElementAttributesProperty" as __String; // TODO: Deprecate and remove support
     export const ElementChildrenAttributeNameContainer = "ElementChildrenAttribute" as __String;
     export const Element = "Element" as __String;
+    export const ElementType = "ElementType" as __String;
     export const IntrinsicAttributes = "IntrinsicAttributes" as __String;
     export const IntrinsicClassAttributes = "IntrinsicClassAttributes" as __String;
     export const LibraryManagedAttributes = "LibraryManagedAttributes" as __String;
