@@ -14541,8 +14541,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
 
-            const constructorDeclaration = tryGetConstructorDeclaration(declaration);
-            const classType = constructorDeclaration ? getDeclaredTypeOfClassOrInterface(getMergedSymbol((constructorDeclaration.parent as ClassDeclaration).symbol)) : undefined;
+            const hostDeclaration = isJSDocSignature(declaration) ? getEffectiveJSDocHost(declaration) : declaration;
+            const classType = hostDeclaration && isConstructorDeclaration(hostDeclaration) ?
+                getDeclaredTypeOfClassOrInterface(getMergedSymbol((hostDeclaration.parent as ClassDeclaration).symbol))
+                : undefined;
             const typeParameters = classType ? classType.localTypeParameters : getTypeParametersFromDeclaration(declaration);
             if (hasRestParameter(declaration) || isInJSFile(declaration) && maybeAddJsSyntheticRestParameter(declaration, parameters)) {
                 flags |= SignatureFlags.HasRestParameter;
@@ -14556,11 +14558,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 minArgumentCount, flags);
         }
         return links.resolvedSignature;
-    }
-
-    function tryGetConstructorDeclaration(declaration: SignatureDeclaration | JSDocSignature) {
-        const node = isJSDocSignature(declaration) ? getEffectiveJSDocHost(declaration) : declaration;
-        return node && isConstructorDeclaration(node) ? node : undefined;
     }
 
     /**
