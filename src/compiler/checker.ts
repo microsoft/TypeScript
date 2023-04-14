@@ -30872,7 +30872,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (elementTypeConstraint !== undefined) {
                 const tagName = jsxOpeningLikeNode.tagName;
                 const tagType = isJsxIntrinsicIdentifier(tagName)
-                    ? getStringLiteralType(tagName.escapedText as string)
+                    ? getStringLiteralType(unescapeLeadingUnderscores(tagName.escapedText))
                     : checkExpression(tagName);
                 checkTypeRelatedTo(tagType, elementTypeConstraint, assignableRelation, tagName, Diagnostics.Its_type_0_is_not_a_valid_JSX_element_type, () => {
                     const componentName = getTextOfNode(tagName);
