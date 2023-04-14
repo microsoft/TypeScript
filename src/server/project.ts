@@ -58,6 +58,7 @@ import {
     getNormalizedAbsolutePath,
     getOrUpdate,
     getStringComparer,
+    HasInvalidatedLibResolutions,
     HasInvalidatedResolutions,
     HostCancellationToken,
     inferredTypesContainingFile,
@@ -325,6 +326,9 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     /** @internal */
     hasInvalidatedResolutions: HasInvalidatedResolutions | undefined;
+
+    /** @internal */
+    hasInvalidatedLibResolutions: HasInvalidatedLibResolutions | undefined;
 
     /** @internal */
     resolutionCache: ResolutionCache;
@@ -682,6 +686,11 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             containingSourceFile,
             reusedNames,
         );
+    }
+
+    /** @internal */
+    resolveLibrary(libraryName: string, resolveFrom: string, options: CompilerOptions, libFileName: string): ResolvedModuleWithFailedLookupLocations {
+        return this.resolutionCache.resolveLibrary(libraryName, resolveFrom, options, libFileName);
     }
 
     directoryExists(path: string): boolean {
@@ -1339,7 +1348,9 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         Debug.assert(!this.isClosed(), "Called update graph worker of closed project");
         this.writeLog(`Starting updateGraphWorker: Project: ${this.getProjectName()}`);
         const start = timestamp();
-        this.hasInvalidatedResolutions = this.resolutionCache.createHasInvalidatedResolutions(returnFalse);
+        const { hasInvalidatedResolutions, hasInvalidatedLibResolutions } = this.resolutionCache.createHasInvalidatedResolutions(returnFalse, returnFalse);
+        this.hasInvalidatedResolutions = hasInvalidatedResolutions;
+        this.hasInvalidatedLibResolutions = hasInvalidatedLibResolutions;
         this.resolutionCache.startCachingPerDirectoryResolution();
         this.program = this.languageService.getProgram(); // TODO: GH#18217
         this.dirty = false;

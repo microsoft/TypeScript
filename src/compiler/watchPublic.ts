@@ -48,6 +48,7 @@ import {
     getParsedCommandLineOfConfigFile,
     getSourceFileVersionAsHashFromText,
     getTsBuildInfoEmitOutputFilePath,
+    HasInvalidatedLibResolutions,
     HasInvalidatedResolutions,
     isArray,
     isIgnoredFileFromWildCardWatching,
@@ -229,6 +230,15 @@ export interface ProgramHost<T extends BuilderProgram> {
         containingSourceFile: SourceFile | undefined,
         reusedNames: readonly T[] | undefined
     ): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[];
+    resolveLibrary?(
+        libraryName: string,
+        resolveFrom: string,
+        options: CompilerOptions,
+        libFileName: string,
+    ): ResolvedModuleWithFailedLookupLocations;
+    /** If provided along with custom resolveLibrary, used to determine if we should redo library resolutions */
+    hasInvalidatedLibResolutions?(libFileName: string): boolean;
+
     /** If provided along with custom resolveModuleNames or resolveTypeReferenceDirectives, used to determine if unchanged file path needs to re-resolve modules/type reference directives */
     hasInvalidatedResolutions?(filePath: Path): boolean;
     /**
@@ -503,6 +513,9 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
     if (!compilerHost.resolveTypeReferenceDirectiveReferences && !compilerHost.resolveTypeReferenceDirectives) {
        compilerHost.resolveTypeReferenceDirectiveReferences = resolutionCache.resolveTypeReferenceDirectiveReferences.bind(resolutionCache);
     }
+    compilerHost.resolveLibrary = !host.resolveLibrary ?
+        resolutionCache.resolveLibrary.bind(resolutionCache) :
+        host.resolveLibrary.bind(host);
     compilerHost.getModuleResolutionCache = host.resolveModuleNameLiterals || host.resolveModuleNames ?
         maybeBind(host, host.getModuleResolutionCache) :
         (() => resolutionCache.getModuleResolutionCache());
@@ -511,6 +524,9 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
     // All resolutions are invalid if user provided resolutions and didnt supply hasInvalidatedResolutions
     const customHasInvalidatedResolutions = userProvidedResolution ?
         maybeBind(host, host.hasInvalidatedResolutions) || returnTrue :
+        returnFalse;
+    const customHasInvalidLibResolutions = host.resolveLibrary ?
+        maybeBind(host, host.hasInvalidatedLibResolutions) || returnTrue :
         returnFalse;
 
     builderProgram = readBuilderProgram(compilerOptions, compilerHost) as any as T;
@@ -589,12 +605,12 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
             }
         }
 
-        const hasInvalidatedResolutions = resolutionCache.createHasInvalidatedResolutions(customHasInvalidatedResolutions);
+        const { hasInvalidatedResolutions, hasInvalidatedLibResolutions } = resolutionCache.createHasInvalidatedResolutions(customHasInvalidatedResolutions, customHasInvalidLibResolutions);
         const {
             originalReadFile, originalFileExists, originalDirectoryExists,
             originalCreateDirectory, originalWriteFile, readFileWithCache
         } = changeCompilerHostLikeToUseCache(compilerHost, toPath);
-        if (isProgramUptoDate(getCurrentProgram(), rootFileNames, compilerOptions, path => getSourceVersion(path, readFileWithCache), fileName => compilerHost.fileExists(fileName), hasInvalidatedResolutions, hasChangedAutomaticTypeDirectiveNames, getParsedCommandLine, projectReferences)) {
+        if (isProgramUptoDate(getCurrentProgram(), rootFileNames, compilerOptions, path => getSourceVersion(path, readFileWithCache), fileName => compilerHost.fileExists(fileName), hasInvalidatedResolutions, hasInvalidatedLibResolutions, hasChangedAutomaticTypeDirectiveNames, getParsedCommandLine, projectReferences)) {
             if (hasChangedConfigFileParsingErrors) {
                 if (reportFileChangeDetectedOnCreateProgram) {
                     reportWatchDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation);
@@ -607,7 +623,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
             if (reportFileChangeDetectedOnCreateProgram) {
                 reportWatchDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation);
             }
-            createNewProgram(hasInvalidatedResolutions);
+            createNewProgram(hasInvalidatedResolutions, hasInvalidatedLibResolutions);
         }
 
         reportFileChangeDetectedOnCreateProgram = false;
@@ -624,7 +640,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
         return builderProgram;
     }
 
-    function createNewProgram(hasInvalidatedResolutions: HasInvalidatedResolutions) {
+    function createNewProgram(hasInvalidatedResolutions: HasInvalidatedResolutions, hasInvalidatedLibResolutions: HasInvalidatedLibResolutions) {
         // Compile the program
         writeLog("CreatingProgramWith::");
         writeLog(`  roots: ${JSON.stringify(rootFileNames)}`);
@@ -636,6 +652,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
         hasChangedConfigFileParsingErrors = false;
         resolutionCache.startCachingPerDirectoryResolution();
         compilerHost.hasInvalidatedResolutions = hasInvalidatedResolutions;
+        compilerHost.hasInvalidatedLibResolutions = hasInvalidatedLibResolutions;
         compilerHost.hasChangedAutomaticTypeDirectiveNames = hasChangedAutomaticTypeDirectiveNames;
         const oldProgram = getCurrentProgram();
         builderProgram = createProgram(rootFileNames, compilerOptions, compilerHost, builderProgram, configFileParsingDiagnostics, projectReferences);

@@ -159,6 +159,8 @@ File '/home/src/projects/node_modules/@typescript/lib-webworker/index.tsx' does 
 File '/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts', result '/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts'.
 ======== Module name '@typescript/lib-webworker' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts'. ========
+DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts 250 undefined Source file
 ======== Resolving module '@typescript/lib-scripthost' from '/home/src/projects/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
@@ -284,6 +286,10 @@ FsWatches::
 /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts: *new*
   {}
 
+FsWatchesRecursive::
+/home/src/projects/node_modules: *new*
+  {}
+
 exitCode:: ExitStatus.undefined
 
 //// [/home/src/projects/project1/file.js]
@@ -312,13 +318,17 @@ Change:: delete redirect file dom
 Input::
 //// [/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts] deleted
 
-Before running Timeout callback:: count: 1
+Before running Timeout callback:: count: 2
 1: timerToUpdateProgram
+2: timerToInvalidateFailedLookupResolutions
 After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts 2:: WatchInfo: /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts 250 undefined Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts 2:: WatchInfo: /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts 250 undefined Source file
+DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
+Scheduling invalidateFailedLookup
+Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 Synchronizing program
 [[90m12:01:42 AM[0m] File change detected. Starting incremental compilation...
 
@@ -326,46 +336,13 @@ CreatingProgramWith::
   roots: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
   options: {"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true}
 FileWatcher:: Close:: WatchInfo: /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts 250 undefined Source file
-======== Resolving module '@typescript/lib-webworker' from '/home/src/projects/__lib_node_modules_lookup_lib.webworker.d.ts__.ts'. ========
-Explicitly specified module resolution kind: 'Node10'.
-Loading module '@typescript/lib-webworker' from 'node_modules' folder, target file types: TypeScript, Declaration.
-File '/home/src/projects/node_modules/@typescript/lib-webworker/package.json' does not exist according to earlier cached lookups.
-File '/home/src/projects/node_modules/@typescript/lib-webworker.ts' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-webworker.tsx' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-webworker.d.ts' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-webworker/index.ts' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-webworker/index.tsx' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts' exists - use it as a name resolution result.
-Resolving real path for '/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts', result '/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts'.
-======== Module name '@typescript/lib-webworker' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts'. ========
-======== Resolving module '@typescript/lib-scripthost' from '/home/src/projects/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts'. ========
-Explicitly specified module resolution kind: 'Node10'.
-Loading module '@typescript/lib-scripthost' from 'node_modules' folder, target file types: TypeScript, Declaration.
-File '/home/src/projects/node_modules/@typescript/lib-scripthost/package.json' does not exist according to earlier cached lookups.
-File '/home/src/projects/node_modules/@typescript/lib-scripthost.ts' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-scripthost.tsx' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-scripthost.d.ts' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-scripthost/index.ts' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-scripthost/index.tsx' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts' exists - use it as a name resolution result.
-Resolving real path for '/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts', result '/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts'.
-======== Module name '@typescript/lib-scripthost' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts'. ========
-======== Resolving module '@typescript/lib-es5' from '/home/src/projects/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
-Explicitly specified module resolution kind: 'Node10'.
-Loading module '@typescript/lib-es5' from 'node_modules' folder, target file types: TypeScript, Declaration.
-File '/home/src/projects/node_modules/@typescript/lib-es5/package.json' does not exist according to earlier cached lookups.
-File '/home/src/projects/node_modules/@typescript/lib-es5.ts' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-es5.tsx' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-es5.d.ts' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-es5/index.ts' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-es5/index.tsx' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts' exists - use it as a name resolution result.
-Resolving real path for '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts', result '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'.
-======== Module name '@typescript/lib-es5' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'. ========
+Reusing resolution of module '@typescript/lib-webworker' from '/home/src/projects/__lib_node_modules_lookup_lib.webworker.d.ts__.ts' of old program, it was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts'.
+Reusing resolution of module '@typescript/lib-scripthost' from '/home/src/projects/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts' of old program, it was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts'.
+Reusing resolution of module '@typescript/lib-es5' from '/home/src/projects/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'.
 ======== Resolving module '@typescript/lib-dom' from '/home/src/projects/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
-File '/home/src/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/node_modules/@typescript/lib-dom/package.json' does not exist.
 File '/home/src/projects/node_modules/@typescript/lib-dom.ts' does not exist.
 File '/home/src/projects/node_modules/@typescript/lib-dom.tsx' does not exist.
 File '/home/src/projects/node_modules/@typescript/lib-dom.d.ts' does not exist.
@@ -477,6 +454,10 @@ FsWatches *deleted*::
 /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts:
   {}
 
+FsWatchesRecursive::
+/home/src/projects/node_modules:
+  {}
+
 exitCode:: ExitStatus.undefined
 
 //// [/home/src/projects/project1/file.js] file written with same contents
@@ -491,7 +472,7 @@ export const x = "type1";export const xyz = 10;
 
 
 Before running Timeout callback:: count: 1
-2: timerToUpdateProgram
+3: timerToUpdateProgram
 After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with project1/index.ts 1:: WatchInfo: project1/index.ts 250 undefined Source file
@@ -503,6 +484,10 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
   options: {"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true}
+Reusing resolution of module '@typescript/lib-webworker' from '/home/src/projects/__lib_node_modules_lookup_lib.webworker.d.ts__.ts' of old program, it was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts'.
+Reusing resolution of module '@typescript/lib-scripthost' from '/home/src/projects/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts' of old program, it was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts'.
+Reusing resolution of module '@typescript/lib-es5' from '/home/src/projects/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'.
+Reusing resolution of module '@typescript/lib-dom' from '/home/src/projects/__lib_node_modules_lookup_lib.dom.d.ts__.ts' of old program, it was not resolved.
 ../lib/lib.dom.d.ts
   Library 'lib.dom.d.ts' specified in compilerOptions
 node_modules/@typescript/lib-webworker/index.d.ts
@@ -563,7 +548,7 @@ Input::
 //// [/home/src/projects/project1/core.d.ts] deleted
 
 Before running Timeout callback:: count: 1
-3: timerToUpdateProgram
+4: timerToUpdateProgram
 After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with project1/core.d.ts 2:: WatchInfo: project1/core.d.ts 250 undefined Source file
@@ -576,70 +561,10 @@ CreatingProgramWith::
   roots: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
   options: {"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true}
 FileWatcher:: Close:: WatchInfo: project1/core.d.ts 250 undefined Source file
-======== Resolving module '@typescript/lib-webworker' from '/home/src/projects/__lib_node_modules_lookup_lib.webworker.d.ts__.ts'. ========
-Explicitly specified module resolution kind: 'Node10'.
-Loading module '@typescript/lib-webworker' from 'node_modules' folder, target file types: TypeScript, Declaration.
-File '/home/src/projects/node_modules/@typescript/lib-webworker/package.json' does not exist according to earlier cached lookups.
-File '/home/src/projects/node_modules/@typescript/lib-webworker.ts' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-webworker.tsx' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-webworker.d.ts' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-webworker/index.ts' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-webworker/index.tsx' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts' exists - use it as a name resolution result.
-Resolving real path for '/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts', result '/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts'.
-======== Module name '@typescript/lib-webworker' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts'. ========
-======== Resolving module '@typescript/lib-scripthost' from '/home/src/projects/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts'. ========
-Explicitly specified module resolution kind: 'Node10'.
-Loading module '@typescript/lib-scripthost' from 'node_modules' folder, target file types: TypeScript, Declaration.
-File '/home/src/projects/node_modules/@typescript/lib-scripthost/package.json' does not exist according to earlier cached lookups.
-File '/home/src/projects/node_modules/@typescript/lib-scripthost.ts' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-scripthost.tsx' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-scripthost.d.ts' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-scripthost/index.ts' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-scripthost/index.tsx' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts' exists - use it as a name resolution result.
-Resolving real path for '/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts', result '/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts'.
-======== Module name '@typescript/lib-scripthost' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts'. ========
-======== Resolving module '@typescript/lib-es5' from '/home/src/projects/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
-Explicitly specified module resolution kind: 'Node10'.
-Loading module '@typescript/lib-es5' from 'node_modules' folder, target file types: TypeScript, Declaration.
-File '/home/src/projects/node_modules/@typescript/lib-es5/package.json' does not exist according to earlier cached lookups.
-File '/home/src/projects/node_modules/@typescript/lib-es5.ts' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-es5.tsx' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-es5.d.ts' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-es5/index.ts' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-es5/index.tsx' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts' exists - use it as a name resolution result.
-Resolving real path for '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts', result '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'.
-======== Module name '@typescript/lib-es5' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'. ========
-======== Resolving module '@typescript/lib-dom' from '/home/src/projects/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
-Explicitly specified module resolution kind: 'Node10'.
-Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
-File '/home/src/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
-File '/home/src/projects/node_modules/@typescript/lib-dom.ts' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-dom.tsx' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-dom.d.ts' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-dom/index.ts' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-dom/index.tsx' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts' does not exist.
-Directory '/home/src/projects/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-dom'
-Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-dom'
-Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-dom'
-Directory '/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-dom'
-Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: JavaScript.
-File '/home/src/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
-File '/home/src/projects/node_modules/@typescript/lib-dom.js' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-dom.jsx' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-dom/index.js' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-dom/index.jsx' does not exist.
-Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules' does not exist, skipping all lookups in it.
-======== Module name '@typescript/lib-dom' was not resolved. ========
+Reusing resolution of module '@typescript/lib-webworker' from '/home/src/projects/__lib_node_modules_lookup_lib.webworker.d.ts__.ts' of old program, it was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts'.
+Reusing resolution of module '@typescript/lib-scripthost' from '/home/src/projects/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts' of old program, it was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts'.
+Reusing resolution of module '@typescript/lib-es5' from '/home/src/projects/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'.
+Reusing resolution of module '@typescript/lib-dom' from '/home/src/projects/__lib_node_modules_lookup_lib.dom.d.ts__.ts' of old program, it was not resolved.
 FileWatcher:: Added:: WatchInfo: /home/src/projects/project1/core.d.ts 500 undefined Missing file
 [91merror[0m[90m TS6053: [0mFile 'project1/core.d.ts' not found.
   The file is in the program because:
@@ -711,6 +636,10 @@ FsWatches *deleted*::
 /home/src/projects/project1/core.d.ts:
   {}
 
+FsWatchesRecursive::
+/home/src/projects/node_modules:
+  {}
+
 exitCode:: ExitStatus.undefined
 
 
@@ -721,29 +650,146 @@ Input::
 interface DOMInterface { }
 
 
-Before running Timeout callback:: count: 0
-After running Timeout callback:: count: 0
-Before running Timeout callback:: count: 0
+Before running Timeout callback:: count: 1
+5: timerToInvalidateFailedLookupResolutions
+After running Timeout callback:: count: 1
+6: timerToUpdateProgram
+Before running Timeout callback:: count: 1
+6: timerToUpdateProgram
 After running Timeout callback:: count: 0
 Output::
+DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
+Scheduling invalidateFailedLookup
+Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
+Scheduling update
+Synchronizing program
+[[90m12:02:06 AM[0m] File change detected. Starting incremental compilation...
+
+CreatingProgramWith::
+  roots: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
+  options: {"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true}
+Reusing resolution of module '@typescript/lib-webworker' from '/home/src/projects/__lib_node_modules_lookup_lib.webworker.d.ts__.ts' of old program, it was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts'.
+Reusing resolution of module '@typescript/lib-scripthost' from '/home/src/projects/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts' of old program, it was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts'.
+Reusing resolution of module '@typescript/lib-es5' from '/home/src/projects/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'.
+======== Resolving module '@typescript/lib-dom' from '/home/src/projects/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
+Explicitly specified module resolution kind: 'Node10'.
+Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
+File '/home/src/projects/node_modules/@typescript/lib-dom/package.json' does not exist.
+File '/home/src/projects/node_modules/@typescript/lib-dom.ts' does not exist.
+File '/home/src/projects/node_modules/@typescript/lib-dom.tsx' does not exist.
+File '/home/src/projects/node_modules/@typescript/lib-dom.d.ts' does not exist.
+File '/home/src/projects/node_modules/@typescript/lib-dom/index.ts' does not exist.
+File '/home/src/projects/node_modules/@typescript/lib-dom/index.tsx' does not exist.
+File '/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts' exists - use it as a name resolution result.
+Resolving real path for '/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts', result '/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts'.
+======== Module name '@typescript/lib-dom' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts'. ========
+FileWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts 250 undefined Source file
+FileWatcher:: Close:: WatchInfo: /home/src/lib/lib.dom.d.ts 250 undefined Source file
+[91merror[0m[90m TS6053: [0mFile 'project1/core.d.ts' not found.
+  The file is in the program because:
+    Root file specified for compilation
+
+node_modules/@typescript/lib-webworker/index.d.ts
+  Library referenced via 'webworker' from file 'project1/file2.ts'
+node_modules/@typescript/lib-scripthost/index.d.ts
+  Library referenced via 'scripthost' from file 'project1/file2.ts'
+node_modules/@typescript/lib-es5/index.d.ts
+  Library referenced via 'es5' from file 'project1/file2.ts'
+  Library 'lib.es5.d.ts' specified in compilerOptions
+node_modules/@typescript/lib-dom/index.d.ts
+  Library 'lib.dom.d.ts' specified in compilerOptions
+project1/utils.d.ts
+  Root file specified for compilation
+project1/file.ts
+  Root file specified for compilation
+project1/index.ts
+  Root file specified for compilation
+project1/file2.ts
+  Root file specified for compilation
+[[90m12:02:16 AM[0m] Found 1 error. Watching for file changes.
+
+
+
+Program root files: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
+Program options: {"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true}
+Program structureReused: SafeModules
+Program files::
+/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts
+/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts
+/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts
+project1/utils.d.ts
+project1/file.ts
+project1/index.ts
+project1/file2.ts
+
+No cached semantic diagnostics in the builder::
+
+Shape signatures in builder refreshed for::
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts (used version)
+/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts (used version)
+/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts (used version)
+/home/src/projects/project1/utils.d.ts (used version)
+/home/src/projects/project1/file.ts (computed .d.ts)
+/home/src/projects/project1/index.ts (computed .d.ts)
+/home/src/projects/project1/file2.ts (computed .d.ts)
+
+PolledWatches::
+/home/src/projects/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project1/core.d.ts:
+  {"pollingInterval":500}
+
+FsWatches::
+/home/src/projects/project1/utils.d.ts:
+  {}
+/home/src/projects/project1/file.ts:
+  {}
+/home/src/projects/project1/index.ts:
+  {}
+/home/src/projects/project1/file2.ts:
+  {}
+/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts:
+  {}
+/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts:
+  {}
+/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts:
+  {}
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts: *new*
+  {}
+
+FsWatches *deleted*::
+/home/src/lib/lib.dom.d.ts:
+  {}
+
+FsWatchesRecursive::
+/home/src/projects/node_modules:
+  {}
 
 exitCode:: ExitStatus.undefined
 
+//// [/home/src/projects/project1/file.js] file written with same contents
+//// [/home/src/projects/project1/index.js] file written with same contents
+//// [/home/src/projects/project1/file2.js] file written with same contents
 
 Change:: delete redirect file webworker
 
 Input::
 //// [/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts] deleted
 
-Before running Timeout callback:: count: 1
-4: timerToUpdateProgram
+Before running Timeout callback:: count: 2
+7: timerToUpdateProgram
+8: timerToInvalidateFailedLookupResolutions
 After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts 2:: WatchInfo: /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts 250 undefined Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts 2:: WatchInfo: /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts 250 undefined Source file
+DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
+Scheduling invalidateFailedLookup
+Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 Synchronizing program
-[[90m12:02:07 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:02:18 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
@@ -752,7 +798,7 @@ FileWatcher:: Close:: WatchInfo: /home/src/projects/node_modules/@typescript/lib
 ======== Resolving module '@typescript/lib-webworker' from '/home/src/projects/__lib_node_modules_lookup_lib.webworker.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-webworker' from 'node_modules' folder, target file types: TypeScript, Declaration.
-File '/home/src/projects/node_modules/@typescript/lib-webworker/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/node_modules/@typescript/lib-webworker/package.json' does not exist.
 File '/home/src/projects/node_modules/@typescript/lib-webworker.ts' does not exist.
 File '/home/src/projects/node_modules/@typescript/lib-webworker.tsx' does not exist.
 File '/home/src/projects/node_modules/@typescript/lib-webworker.d.ts' does not exist.
@@ -778,44 +824,9 @@ Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@typescript/lib-webworker' was not resolved. ========
 FileWatcher:: Added:: WatchInfo: /home/src/lib/lib.webworker.d.ts 250 undefined Source file
-======== Resolving module '@typescript/lib-scripthost' from '/home/src/projects/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts'. ========
-Explicitly specified module resolution kind: 'Node10'.
-Loading module '@typescript/lib-scripthost' from 'node_modules' folder, target file types: TypeScript, Declaration.
-File '/home/src/projects/node_modules/@typescript/lib-scripthost/package.json' does not exist according to earlier cached lookups.
-File '/home/src/projects/node_modules/@typescript/lib-scripthost.ts' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-scripthost.tsx' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-scripthost.d.ts' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-scripthost/index.ts' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-scripthost/index.tsx' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts' exists - use it as a name resolution result.
-Resolving real path for '/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts', result '/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts'.
-======== Module name '@typescript/lib-scripthost' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts'. ========
-======== Resolving module '@typescript/lib-es5' from '/home/src/projects/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
-Explicitly specified module resolution kind: 'Node10'.
-Loading module '@typescript/lib-es5' from 'node_modules' folder, target file types: TypeScript, Declaration.
-File '/home/src/projects/node_modules/@typescript/lib-es5/package.json' does not exist according to earlier cached lookups.
-File '/home/src/projects/node_modules/@typescript/lib-es5.ts' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-es5.tsx' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-es5.d.ts' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-es5/index.ts' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-es5/index.tsx' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts' exists - use it as a name resolution result.
-Resolving real path for '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts', result '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'.
-======== Module name '@typescript/lib-es5' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'. ========
-======== Resolving module '@typescript/lib-dom' from '/home/src/projects/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
-Explicitly specified module resolution kind: 'Node10'.
-Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
-File '/home/src/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
-File '/home/src/projects/node_modules/@typescript/lib-dom.ts' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-dom.tsx' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-dom.d.ts' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-dom/index.ts' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-dom/index.tsx' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts' exists - use it as a name resolution result.
-Resolving real path for '/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts', result '/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts'.
-======== Module name '@typescript/lib-dom' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts'. ========
-FileWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts 250 undefined Source file
-FileWatcher:: Close:: WatchInfo: /home/src/lib/lib.dom.d.ts 250 undefined Source file
+Reusing resolution of module '@typescript/lib-scripthost' from '/home/src/projects/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts' of old program, it was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts'.
+Reusing resolution of module '@typescript/lib-es5' from '/home/src/projects/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'.
+Reusing resolution of module '@typescript/lib-dom' from '/home/src/projects/__lib_node_modules_lookup_lib.dom.d.ts__.ts' of old program, it was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts'.
 [91merror[0m[90m TS6053: [0mFile 'project1/core.d.ts' not found.
   The file is in the program because:
     Root file specified for compilation
@@ -837,7 +848,7 @@ project1/index.ts
   Root file specified for compilation
 project1/file2.ts
   Root file specified for compilation
-[[90m12:02:17 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:02:28 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -884,15 +895,17 @@ FsWatches::
   {}
 /home/src/projects/node_modules/@typescript/lib-es5/index.d.ts:
   {}
-/home/src/lib/lib.webworker.d.ts: *new*
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts:
   {}
-/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts: *new*
+/home/src/lib/lib.webworker.d.ts: *new*
   {}
 
 FsWatches *deleted*::
 /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts:
   {}
-/home/src/lib/lib.dom.d.ts:
+
+FsWatchesRecursive::
+/home/src/projects/node_modules:
   {}
 
 exitCode:: ExitStatus.undefined
@@ -908,11 +921,124 @@ Input::
 interface WebworkerInterface { }
 
 
-Before running Timeout callback:: count: 0
-After running Timeout callback:: count: 0
-Before running Timeout callback:: count: 0
+Before running Timeout callback:: count: 1
+9: timerToInvalidateFailedLookupResolutions
+After running Timeout callback:: count: 1
+10: timerToUpdateProgram
+Before running Timeout callback:: count: 1
+10: timerToUpdateProgram
 After running Timeout callback:: count: 0
 Output::
+DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
+Scheduling invalidateFailedLookup
+Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
+Scheduling update
+Synchronizing program
+[[90m12:02:32 AM[0m] File change detected. Starting incremental compilation...
+
+CreatingProgramWith::
+  roots: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
+  options: {"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true}
+======== Resolving module '@typescript/lib-webworker' from '/home/src/projects/__lib_node_modules_lookup_lib.webworker.d.ts__.ts'. ========
+Explicitly specified module resolution kind: 'Node10'.
+Loading module '@typescript/lib-webworker' from 'node_modules' folder, target file types: TypeScript, Declaration.
+File '/home/src/projects/node_modules/@typescript/lib-webworker/package.json' does not exist.
+File '/home/src/projects/node_modules/@typescript/lib-webworker.ts' does not exist.
+File '/home/src/projects/node_modules/@typescript/lib-webworker.tsx' does not exist.
+File '/home/src/projects/node_modules/@typescript/lib-webworker.d.ts' does not exist.
+File '/home/src/projects/node_modules/@typescript/lib-webworker/index.ts' does not exist.
+File '/home/src/projects/node_modules/@typescript/lib-webworker/index.tsx' does not exist.
+File '/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts' exists - use it as a name resolution result.
+Resolving real path for '/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts', result '/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts'.
+======== Module name '@typescript/lib-webworker' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts'. ========
+FileWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts 250 undefined Source file
+Reusing resolution of module '@typescript/lib-scripthost' from '/home/src/projects/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts' of old program, it was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts'.
+Reusing resolution of module '@typescript/lib-es5' from '/home/src/projects/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'.
+Reusing resolution of module '@typescript/lib-dom' from '/home/src/projects/__lib_node_modules_lookup_lib.dom.d.ts__.ts' of old program, it was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts'.
+FileWatcher:: Close:: WatchInfo: /home/src/lib/lib.webworker.d.ts 250 undefined Source file
+[91merror[0m[90m TS6053: [0mFile 'project1/core.d.ts' not found.
+  The file is in the program because:
+    Root file specified for compilation
+
+node_modules/@typescript/lib-webworker/index.d.ts
+  Library referenced via 'webworker' from file 'project1/file2.ts'
+node_modules/@typescript/lib-scripthost/index.d.ts
+  Library referenced via 'scripthost' from file 'project1/file2.ts'
+node_modules/@typescript/lib-es5/index.d.ts
+  Library referenced via 'es5' from file 'project1/file2.ts'
+  Library 'lib.es5.d.ts' specified in compilerOptions
+node_modules/@typescript/lib-dom/index.d.ts
+  Library 'lib.dom.d.ts' specified in compilerOptions
+project1/utils.d.ts
+  Root file specified for compilation
+project1/file.ts
+  Root file specified for compilation
+project1/index.ts
+  Root file specified for compilation
+project1/file2.ts
+  Root file specified for compilation
+[[90m12:02:42 AM[0m] Found 1 error. Watching for file changes.
+
+
+
+Program root files: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
+Program options: {"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true}
+Program structureReused: SafeModules
+Program files::
+/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts
+/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts
+/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts
+project1/utils.d.ts
+project1/file.ts
+project1/index.ts
+project1/file2.ts
+
+No cached semantic diagnostics in the builder::
+
+Shape signatures in builder refreshed for::
+/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts (used version)
+/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts (used version)
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts (used version)
+/home/src/projects/project1/utils.d.ts (used version)
+/home/src/projects/project1/file.ts (computed .d.ts)
+/home/src/projects/project1/index.ts (computed .d.ts)
+/home/src/projects/project1/file2.ts (computed .d.ts)
+
+PolledWatches::
+/home/src/projects/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project1/core.d.ts:
+  {"pollingInterval":500}
+
+FsWatches::
+/home/src/projects/project1/utils.d.ts:
+  {}
+/home/src/projects/project1/file.ts:
+  {}
+/home/src/projects/project1/index.ts:
+  {}
+/home/src/projects/project1/file2.ts:
+  {}
+/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts:
+  {}
+/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts:
+  {}
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts:
+  {}
+/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts: *new*
+  {}
+
+FsWatches *deleted*::
+/home/src/lib/lib.webworker.d.ts:
+  {}
+
+FsWatchesRecursive::
+/home/src/projects/node_modules:
+  {}
 
 exitCode:: ExitStatus.undefined
 
+//// [/home/src/projects/project1/file.js] file written with same contents
+//// [/home/src/projects/project1/index.js] file written with same contents
+//// [/home/src/projects/project1/file2.js] file written with same contents
