@@ -1762,9 +1762,9 @@ export function transformTypeScript(context: TransformationContext) {
         const containerName = getNamespaceContainerName(node);
 
         // `exportName` is the expression used within this node's container for any exported references.
-        const exportName = hasSyntacticModifier(node, ModifierFlags.Export)
+        const exportName = isExportOfNamespace(node)
             ? factory.getExternalModuleOrNamespaceExportName(currentNamespaceContainerName, node, /*allowComments*/ false, /*allowSourceMaps*/ true)
-            : factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
+            : factory.getDeclarationName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
 
         //  x || (x = {})
         //  exports.x || (exports.x = {})
@@ -1777,7 +1777,7 @@ export function transformTypeScript(context: TransformationContext) {
                 )
             );
 
-        if (hasNamespaceQualifiedExportName(node)) {
+        if (isExportOfNamespace(node)) {
             // `localName` is the expression used within this node's containing scope for any local references.
             const localName = factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
 
@@ -1815,9 +1815,6 @@ export function transformTypeScript(context: TransformationContext) {
         addEmitFlags(enumStatement, emitFlags);
         statements.push(enumStatement);
 
-        // Add a DeclarationMarker for the enum to preserve trailing comments and mark
-        // the end of the declaration.
-        statements.push(factory.createEndOfDeclarationMarker(node));
         return statements;
     }
 
@@ -1917,20 +1914,6 @@ export function transformTypeScript(context: TransformationContext) {
     }
 
     /**
-     * Determines whether an exported declaration will have a qualified export name (e.g. `f.x`
-     * or `exports.x`).
-     */
-    function hasNamespaceQualifiedExportName(node: Node) {
-        return isExportOfNamespace(node)
-            || (isExternalModuleExport(node)
-                && moduleKind !== ModuleKind.ES2015
-                && moduleKind !== ModuleKind.ES2020
-                && moduleKind !== ModuleKind.ES2022
-                && moduleKind !== ModuleKind.ESNext
-                && moduleKind !== ModuleKind.System);
-    }
-
-    /**
      * Records that a declaration was emitted in the current scope, if it was the first
      * declaration for the provided symbol.
      */
@@ -1969,14 +1952,16 @@ export function transformTypeScript(context: TransformationContext) {
         // Emit a variable statement for the module. We emit top-level enums as a `var`
         // declaration to avoid static errors in global scripts scripts due to redeclaration.
         // enums in any other scope are emitted as a `let` declaration.
+        const varDecl = factory.createVariableDeclaration(factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true));
+        const varFlags = currentLexicalScope.kind === SyntaxKind.SourceFile ? NodeFlags.None : NodeFlags.Let;
         const statement = factory.createVariableStatement(
             visitNodes(node.modifiers, modifierVisitor, isModifier),
-            factory.createVariableDeclarationList([
-                factory.createVariableDeclaration(
-                    factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true)
-                )
-            ], currentLexicalScope.kind === SyntaxKind.SourceFile ? NodeFlags.None : NodeFlags.Let)
+            factory.createVariableDeclarationList([varDecl], varFlags)
         );
+
+        setOriginalNode(varDecl, node);
+        setSyntheticLeadingComments(varDecl, undefined);
+        setSyntheticTrailingComments(varDecl, undefined);
 
         setOriginalNode(statement, node);
 
@@ -2009,20 +1994,14 @@ export function transformTypeScript(context: TransformationContext) {
             //     })(m1 || (m1 = {})); // trailing comment module
             //
             setCommentRange(statement, node);
-            addEmitFlags(statement, EmitFlags.NoTrailingComments | EmitFlags.HasEndOfDeclarationMarker);
+            addEmitFlags(statement, EmitFlags.NoTrailingComments);
             statements.push(statement);
             return true;
         }
-        else {
-            // For an EnumDeclaration or ModuleDeclaration that merges with a preceeding
-            // declaration we do not emit a leading variable declaration. To preserve the
-            // begin/end semantics of the declararation and to properly handle exports
-            // we wrap the leading variable declaration in a `MergeDeclarationMarker`.
-            const mergeMarker = factory.createMergeDeclarationMarker(statement);
-            setEmitFlags(mergeMarker, EmitFlags.NoComments | EmitFlags.HasEndOfDeclarationMarker);
-            statements.push(mergeMarker);
-            return false;
-        }
+
+        // For an EnumDeclaration or ModuleDeclaration that merges with a preceeding
+        // declaration we do not emit a leading variable declaration.
+        return false;
     }
 
     /**
@@ -2064,9 +2043,9 @@ export function transformTypeScript(context: TransformationContext) {
         const containerName = getNamespaceContainerName(node);
 
         // `exportName` is the expression used within this node's container for any exported references.
-        const exportName = hasSyntacticModifier(node, ModifierFlags.Export)
+        const exportName = isExportOfNamespace(node)
             ? factory.getExternalModuleOrNamespaceExportName(currentNamespaceContainerName, node, /*allowComments*/ false, /*allowSourceMaps*/ true)
-            : factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
+            : factory.getDeclarationName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
 
         //  x || (x = {})
         //  exports.x || (exports.x = {})
@@ -2079,7 +2058,7 @@ export function transformTypeScript(context: TransformationContext) {
                 )
             );
 
-        if (hasNamespaceQualifiedExportName(node)) {
+        if (isExportOfNamespace(node)) {
             // `localName` is the expression used within this node's containing scope for any local references.
             const localName = factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
 
@@ -2116,9 +2095,6 @@ export function transformTypeScript(context: TransformationContext) {
         addEmitFlags(moduleStatement, emitFlags);
         statements.push(moduleStatement);
 
-        // Add a DeclarationMarker for the namespace to preserve trailing comments and mark
-        // the end of the declaration.
-        statements.push(factory.createEndOfDeclarationMarker(node));
         return statements;
     }
 

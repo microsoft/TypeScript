@@ -4,6 +4,7 @@ import {
     addInternalEmitFlags,
     addRange,
     append,
+    arrayFrom,
     ArrowFunction,
     BinaryExpression,
     BindingElement,
@@ -99,9 +100,9 @@ import {
     isSpreadElement,
     isStatement,
     isStringLiteral,
+    isVariableDeclaration,
     length,
     mapDefined,
-    MergeDeclarationMarker,
     Modifier,
     ModifierFlags,
     ModuleKind,
@@ -668,9 +669,6 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
 
             case SyntaxKind.ClassDeclaration:
                 return visitClassDeclaration(node as ClassDeclaration);
-
-            case SyntaxKind.MergeDeclarationMarker:
-                return visitMergeDeclarationMarker(node as MergeDeclarationMarker);
 
             case SyntaxKind.EndOfDeclarationMarker:
                 return visitEndOfDeclarationMarker(node as EndOfDeclarationMarker);
@@ -1619,28 +1617,6 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
     }
 
     /**
-     * Visits a MergeDeclarationMarker used as a placeholder for the beginning of a merged
-     * and transformed declaration.
-     *
-     * @param node The node to visit.
-     */
-    function visitMergeDeclarationMarker(node: MergeDeclarationMarker): VisitResult<Statement> {
-        // For an EnumDeclaration or ModuleDeclaration that merges with a preceeding
-        // declaration we do not emit a leading variable declaration. To preserve the
-        // begin/end semantics of the declararation and to properly handle exports
-        // we wrapped the leading variable declaration in a `MergeDeclarationMarker`.
-        //
-        // To balance the declaration, add the exports of the elided variable
-        // statement.
-        if (hasAssociatedEndOfDeclarationMarker(node) && node.original!.kind === SyntaxKind.VariableStatement) {
-            const id = getOriginalNodeId(node);
-            deferredExports[id] = appendExportsOfVariableStatement(deferredExports[id], node.original as VariableStatement);
-        }
-
-        return node;
-    }
-
-    /**
      * Determines whether a node has an associated EndOfDeclarationMarker.
      *
      * @param node The node to test.
@@ -1770,7 +1746,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                 }
             }
         }
-        else if (!isGeneratedIdentifier(decl.name)) {
+        else if (!isGeneratedIdentifier(decl.name) && (!isVariableDeclaration(decl) || decl.initializer)) {
             statements = appendExportsOfDeclaration(statements, decl);
         }
 
@@ -2140,14 +2116,11 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         //
         // - We do not substitute generated identifiers for any reason.
         // - We do not substitute identifiers tagged with the LocalName flag.
-        // - We do not substitute identifiers that were originally the name of an enum or
-        //   namespace due to how they are transformed in TypeScript.
         // - We only substitute identifiers that are exported at the top level.
         if (isAssignmentOperator(node.operatorToken.kind)
             && isIdentifier(node.left)
             && !isGeneratedIdentifier(node.left)
-            && !isLocalName(node.left)
-            && !isDeclarationNameOfEnumOrNamespace(node.left)) {
+            && !isLocalName(node.left)) {
             const exportedNames = getExports(node.left);
             if (exportedNames) {
                 // For each additional export of the declaration, apply an export assignment.
@@ -2172,11 +2145,27 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      */
     function getExports(name: Identifier): Identifier[] | undefined {
         if (!isGeneratedIdentifier(name)) {
-            const valueDeclaration = resolver.getReferencedImportDeclaration(name)
-                || resolver.getReferencedValueDeclaration(name);
-            if (valueDeclaration) {
-                return currentModuleInfo
-                    && currentModuleInfo.exportedBindings[getOriginalNodeId(valueDeclaration)];
+            const importDeclaration = resolver.getReferencedImportDeclaration(name);
+            if (importDeclaration) {
+                return currentModuleInfo?.exportedBindings[getOriginalNodeId(importDeclaration)];
+            }
+
+            // An exported namespace or enum may merge with an ambient declaration, which won't show up in .js emit, so
+            // we analyze all value exports of a symbol.
+            const bindingsSet = new Set<Identifier>();
+            const declarations = resolver.getReferencedValueDeclarations(name);
+            if (declarations) {
+                for (const declaration of declarations) {
+                    const bindings = currentModuleInfo?.exportedBindings[getOriginalNodeId(declaration)];
+                    if (bindings) {
+                        for (const binding of bindings) {
+                            bindingsSet.add(binding);
+                        }
+                    }
+                }
+                if (bindingsSet.size) {
+                    return arrayFrom(bindingsSet);
+                }
             }
         }
     }

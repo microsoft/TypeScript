@@ -213,7 +213,7 @@ var m_public;
         }());
         mi_public.c = c;
     })(mi_public = m_public.mi_public || (m_public.mi_public = {}));
-})(m_public = exports.m_public || (exports.m_public = {}));
+})(m_public || (exports.m_public = m_public = {}));
 var import_public;
 (function (import_public) {
     // Privacy errors - importing private elements
@@ -254,7 +254,7 @@ var import_public;
     var privateUse_im_public_mi_public = new import_public.im_public_mi_public.c();
     import_public.publicUse_im_public_mi_public = new import_public.im_public_mi_public.c();
     var privateUse_im_public_mu_public;
-})(import_public = exports.import_public || (exports.import_public = {}));
+})(import_public || (exports.import_public = import_public = {}));
 var import_private;
 (function (import_private) {
     // No Privacy errors - importing private elements

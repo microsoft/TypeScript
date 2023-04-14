@@ -450,7 +450,6 @@ export const enum SyntaxKind {
     NotEmittedStatement,
     PartiallyEmittedExpression,
     CommaListExpression,
-    MergeDeclarationMarker,
     EndOfDeclarationMarker,
     SyntheticReferenceExpression,
 
@@ -3304,14 +3303,6 @@ export interface CommaListExpression extends Expression {
     readonly elements: NodeArray<Expression>;
 }
 
-/**
- * Marks the beginning of a merged transformed declaration.
- *
- * @internal
- */
-export interface MergeDeclarationMarker extends Statement {
-    readonly kind: SyntaxKind.MergeDeclarationMarker;
-}
 
 /** @internal */
 export interface SyntheticReferenceExpression extends LeftHandSideExpression {
@@ -5686,6 +5677,7 @@ export interface EmitResolver {
     // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
     getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): string | number | undefined;
     getReferencedValueDeclaration(reference: Identifier): Declaration | undefined;
+    getReferencedValueDeclarations(reference: Identifier): Declaration[] | undefined;
     getTypeReferenceSerializationKind(typeName: EntityName, location?: Node): TypeReferenceSerializationKind;
     isOptionalParameter(node: ParameterDeclaration): boolean;
     moduleExportsSomeValue(moduleReferenceExpression: Expression): boolean;
@@ -8781,7 +8773,6 @@ export interface NodeFactory {
 
     createNotEmittedStatement(original: Node): NotEmittedStatement;
     /** @internal */ createEndOfDeclarationMarker(original: Node): EndOfDeclarationMarker;
-    /** @internal */ createMergeDeclarationMarker(original: Node): MergeDeclarationMarker;
     createPartiallyEmittedExpression(expression: Expression, original?: Node): PartiallyEmittedExpression;
     updatePartiallyEmittedExpression(node: PartiallyEmittedExpression, expression: Expression): PartiallyEmittedExpression;
     /** @internal */ createSyntheticReferenceExpression(expression: Expression, thisArg: Expression): SyntheticReferenceExpression;
@@ -8901,10 +8892,11 @@ export interface NodeFactory {
      * @param node The declaration.
      * @param allowComments A value indicating whether comments may be emitted for the name.
      * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
+     * @param ignoreAssignedName Indicates that the assigned name of a declaration shouldn't be considered.
      *
      * @internal
      */
-    getLocalName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean): Identifier;
+    getLocalName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean, ignoreAssignedName?: boolean): Identifier;
     /**
      * Gets the export name of a declaration. This is primarily used for declarations that can be
      * referred to by name in the declaration's immediate scope (classes, enums, namespaces). An

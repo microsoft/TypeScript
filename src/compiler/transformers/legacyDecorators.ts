@@ -351,15 +351,18 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
 
         //  let ${name} = ${classExpression} where name is either declaredName if the class doesn't contain self-reference
         //                                         or decoratedClassAlias if the class contain self-reference.
+        const varDecl = factory.createVariableDeclaration(
+            declName,
+            /*exclamationToken*/ undefined,
+            /*type*/ undefined,
+            classAlias ? factory.createAssignment(classAlias, classExpression) : classExpression
+        );
+        setOriginalNode(varDecl, node);
+
         const statement = factory.createVariableStatement(
             /*modifiers*/ undefined,
             factory.createVariableDeclarationList([
-                factory.createVariableDeclaration(
-                    declName,
-                    /*exclamationToken*/ undefined,
-                    /*type*/ undefined,
-                    classAlias ? factory.createAssignment(classAlias, classExpression) : classExpression
-                )
+                varDecl
             ], NodeFlags.Let)
         );
         setOriginalNode(statement, node);
