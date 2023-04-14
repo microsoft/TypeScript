@@ -355,6 +355,7 @@ import {
     JSDocTemplateTag,
     JSDocTypedefTag,
     JsonSourceFile,
+    JsxAttributeName,
     JsxChild,
     JsxElement,
     JsxEmit,
@@ -2062,6 +2063,8 @@ export function entityNameToString(name: EntityNameOrEntityNameExpression | JSDo
             }
         case SyntaxKind.JSDocMemberName:
             return entityNameToString(name.left) + entityNameToString(name.right);
+        case SyntaxKind.JsxNamespacedName:
+            return entityNameToString(name.namespace) + ":" + entityNameToString(name.name);
         default:
             return Debug.assertNever(name);
     }
@@ -10161,4 +10164,21 @@ export function getJSDocSatisfiesExpressionType(node: JSDocSatisfiesExpression) 
 export function tryGetJSDocSatisfiesTypeNode(node: Node) {
     const tag = getJSDocSatisfiesTag(node);
     return tag && tag.typeExpression && tag.typeExpression.type;
+}
+
+/** @internal */
+export function getEscapedTextOfJsxAttributeName(node: JsxAttributeName): __String {
+    return isIdentifier(node) ? node.escapedText : `${node.namespace.escapedText}:${idText(node.name)}` as __String;
+}
+
+/** @internal */
+export function getTextOfJsxAttributeName(node: JsxAttributeName): string {
+    return isIdentifier(node) ? idText(node) : `${idText(node.namespace)}:${idText(node.name)}`;
+}
+
+/** @internal */
+export function isJsxAttributeName(node: Node): node is JsxAttributeName {
+    const kind = node.kind;
+    return kind === SyntaxKind.Identifier
+        || kind === SyntaxKind.JsxNamespacedName;
 }

@@ -275,6 +275,7 @@ import {
     getEntityNameFromTypeNode,
     getErrorSpanForNode,
     getEscapedTextOfIdentifierOrLiteral,
+    getEscapedTextOfJsxAttributeName,
     getESModuleInterop,
     getExpandoInitializer,
     getExportAssignmentExpression,
@@ -350,6 +351,7 @@ import {
     getSymbolNameForPrivateIdentifier,
     getTextOfIdentifierOrLiteral,
     getTextOfJSDocComment,
+    getTextOfJsxAttributeName,
     getTextOfNode,
     getTextOfPropertyName,
     getThisContainer,
@@ -593,6 +595,7 @@ import {
     isJsxAttributeLike,
     isJsxAttributes,
     isJsxElement,
+    isJsxNamespacedName,
     isJsxOpeningElement,
     isJsxOpeningFragment,
     isJsxOpeningLikeElement,
@@ -807,7 +810,6 @@ import {
     MappedTypeNode,
     MatchingKeys,
     maybeBind,
-    MemberName,
     MemberOverrideStatus,
     memoize,
     MetaProperty,
@@ -13517,7 +13519,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function isTypeInvalidDueToUnionDiscriminant(contextualType: Type, obj: ObjectLiteralExpression | JsxAttributes): boolean {
         const list = obj.properties as NodeArray<ObjectLiteralElementLike | JsxAttributeLike>;
         return list.some(property => {
-            const nameType = property.name && getLiteralTypeFromPropertyName(property.name);
+            const nameType = property.name && (isJsxNamespacedName(property.name) ? getStringLiteralType(getTextOfJsxAttributeName(property.name)) : getLiteralTypeFromPropertyName(property.name));
             const name = nameType && isTypeUsableAsPropertyName(nameType) ? getPropertyNameFromType(nameType) : undefined;
             const expected = name === undefined ? undefined : getTypeOfPropertyOfType(contextualType, name);
             return !!expected && isLiteralType(expected) && !isTypeAssignableTo(getTypeOfNode(property), expected);
@@ -19590,8 +19592,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function *generateJsxAttributes(node: JsxAttributes): ElaborationIterator {
         if (!length(node.properties)) return;
         for (const prop of node.properties) {
-            if (isJsxSpreadAttribute(prop) || isHyphenatedJsxName(idText(prop.name))) continue;
-            yield { errorNode: prop.name, innerExpression: prop.initializer, nameType: getStringLiteralType(idText(prop.name)) };
+            if (isJsxSpreadAttribute(prop) || isHyphenatedJsxName(getTextOfJsxAttributeName(prop.name))) continue;
+            yield { errorNode: prop.name, innerExpression: prop.initializer, nameType: getStringLiteralType(getTextOfJsxAttributeName(prop.name)) };
         }
     }
 
@@ -29266,7 +29268,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!attributesType || isTypeAny(attributesType)) {
                 return undefined;
             }
-            return getTypeOfPropertyOfContextualType(attributesType, attribute.name.escapedText);
+            return getTypeOfPropertyOfContextualType(attributesType, getEscapedTextOfJsxAttributeName(attribute.name));
         }
         else {
             return getContextualType(attribute.parent, contextFlags);
@@ -30400,12 +30402,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 attributeSymbol.links.target = member;
                 attributesTable.set(attributeSymbol.escapedName, attributeSymbol);
                 allAttributesTable?.set(attributeSymbol.escapedName, attributeSymbol);
-                if (attributeDecl.name.escapedText === jsxChildrenPropertyName) {
+                if (getEscapedTextOfJsxAttributeName(attributeDecl.name) === jsxChildrenPropertyName) {
                     explicitlySpecifyChildrenAttribute = true;
                 }
                 if (contextualType) {
                     const prop = getPropertyOfType(contextualType, member.escapedName);
-                    if (prop && prop.declarations && isDeprecatedSymbol(prop)) {
+                    if (prop && prop.declarations && isDeprecatedSymbol(prop) && isIdentifier(attributeDecl.name)) {
                         addDeprecatedSuggestion(attributeDecl.name, prop.declarations, attributeDecl.name.escapedText as string);
                     }
                 }
@@ -47852,8 +47854,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             const { name, initializer } = attr;
-            if (!seen.get(name.escapedText)) {
-                seen.set(name.escapedText, true);
+            const escapedText = getEscapedTextOfJsxAttributeName(name);
+            if (!seen.get(escapedText)) {
+                seen.set(escapedText, true);
             }
             else {
                 return grammarErrorOnNode(name, Diagnostics.JSX_elements_cannot_have_multiple_attributes_with_the_same_name);
@@ -47866,25 +47869,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkGrammarJsxName(node: JsxTagNameExpression) {
-        if (isPropertyAccessExpression(node)) {
-            let propName: JsxTagNameExpression = node;
-            do {
-                const check = checkGrammarJsxNestedIdentifier(propName.name);
-                if (check) {
-                    return check;
-                }
-                propName = propName.expression;
-            } while (isPropertyAccessExpression(propName));
-            const check = checkGrammarJsxNestedIdentifier(propName);
-            if (check) {
-                return check;
-            }
+        if (isPropertyAccessExpression(node) && isJsxNamespacedName(node.expression)) {
+            return grammarErrorOnNode(node.expression, Diagnostics.JSX_property_access_expressions_cannot_include_JSX_namespace_names);
         }
-
-        function checkGrammarJsxNestedIdentifier(name: MemberName | ThisExpression) {
-            if (isIdentifier(name) && idText(name).indexOf(":") !== -1) {
-                return grammarErrorOnNode(name, Diagnostics.JSX_property_access_expressions_cannot_include_JSX_namespace_names);
-            }
+        if (isJsxNamespacedName(node) && getJSXTransformEnabled(compilerOptions) && !isIntrinsicJsxName(node.namespace.escapedText)) {
+            return grammarErrorOnNode(node, Diagnostics.React_components_cannot_include_JSX_namespace_names);
         }
     }
 
