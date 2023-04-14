@@ -16426,7 +16426,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const id = types[index].id + infix + types[1 - index].id + getAliasId(aliasSymbol, aliasTypeArguments);
             let type = unionOfUnionTypes.get(id);
             if (!type) {
-                type = getUnionTypeWorker(types, unionReduction, aliasSymbol, aliasTypeArguments, origin);
+                type = getUnionTypeWorker(types, unionReduction, aliasSymbol, aliasTypeArguments, /*origin*/ undefined);
                 unionOfUnionTypes.set(id, type);
             }
             return type;
@@ -16434,7 +16434,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return getUnionTypeWorker(types, unionReduction, aliasSymbol, aliasTypeArguments, origin);
     }
 
-    function getUnionTypeWorker(types: readonly Type[], unionReduction: UnionReduction = UnionReduction.Literal, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[], origin?: Type): Type {
+    function getUnionTypeWorker(types: readonly Type[], unionReduction: UnionReduction, aliasSymbol: Symbol | undefined, aliasTypeArguments: readonly Type[] | undefined, origin: Type | undefined): Type {
         let typeSet: Type[] | undefined = [];
         const includes = addTypesToUnion(typeSet, 0 as TypeFlags, types);
         if (unionReduction !== UnionReduction.None) {
