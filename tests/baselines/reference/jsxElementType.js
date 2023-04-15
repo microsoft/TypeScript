@@ -99,6 +99,17 @@ function f1<T extends (props: {}) => React.ReactElement<any>>(Component: T) {
 <Unresolved />;
 <Unresolved foo="abc" />;
 
+// regression test for intrinsic containing `:`
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      ['fbt:enum']: { knownProp: string };
+    }
+  }
+}
+
+<fbt:enum knownProp="accepted" unknownProp="rejected" />;
+
 
 //// [jsxElementType.js]
 "use strict";
@@ -231,3 +242,4 @@ function f1(Component) {
 }
 React.createElement(Unresolved, null);
 React.createElement(Unresolved, { foo: "abc" });
+React.createElement("fbt:enum", { knownProp: "accepted", unknownProp: "rejected" });
