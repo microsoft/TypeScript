@@ -110,6 +110,7 @@ declare global {
 
 <fbt:enum knownProp="accepted" unknownProp="rejected" />;
 
+
 //// [jsxElementType.js]
 "use strict";
 var __extends = (this && this.__extends) || (function () {
