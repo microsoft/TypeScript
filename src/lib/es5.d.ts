@@ -4365,11 +4365,11 @@ declare var Float64Array: Float64ArrayConstructor;
 
 declare namespace Intl {
     interface CollatorOptions {
-        usage?: string | undefined;
-        localeMatcher?: string | undefined;
+        usage?: "sort" | "search" | undefined;
+        localeMatcher?: "lookup" | "best fit" | undefined;
         numeric?: boolean | undefined;
-        caseFirst?: string | undefined;
-        sensitivity?: string | undefined;
+        caseFirst?: "upper" | "lower" | "false" | undefined;
+        sensitivity?: "base" | "accent" | "case" | "variant" | undefined;
         ignorePunctuation?: boolean | undefined;
     }
 
