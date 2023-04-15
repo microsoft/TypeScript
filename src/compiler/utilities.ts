@@ -2,6 +2,7 @@ import {
     __String,
     AccessExpression,
     AccessorDeclaration,
+    addRange,
     affectsDeclarationPathOptionDeclarations,
     affectsEmitOptionDeclarations,
     AliasDeclarationNode,
@@ -167,6 +168,7 @@ import {
     getJSDocImplementsTags,
     getJSDocOverrideTagNoCache,
     getJSDocParameterTags,
+    getJSDocParameterTagsNoCache,
     getJSDocPrivateTagNoCache,
     getJSDocProtectedTagNoCache,
     getJSDocPublicTagNoCache,
@@ -175,6 +177,8 @@ import {
     getJSDocSatisfiesTag,
     getJSDocTags,
     getJSDocType,
+    getJSDocTypeParameterTags,
+    getJSDocTypeParameterTagsNoCache,
     getJSDocTypeTag,
     getLeadingCommentRanges,
     getLineAndCharacterOfPosition,
@@ -197,6 +201,7 @@ import {
     hasExtension,
     HasFlowNode,
     HasInitializer,
+    hasInitializer,
     HasJSDoc,
     hasJSDocNodes,
     HasModifiers,
@@ -279,11 +284,13 @@ import {
     isJSDocOverloadTag,
     isJSDocParameterTag,
     isJSDocPropertyLikeTag,
+    isJSDocSatisfiesTag,
     isJSDocSignature,
     isJSDocTag,
     isJSDocTemplateTag,
     isJSDocTypeExpression,
     isJSDocTypeLiteral,
+    isJSDocTypeTag,
     isJsxChild,
     isJsxFragment,
     isJsxOpeningLikeElement,
@@ -4172,6 +4179,76 @@ export function canHaveJSDoc(node: Node): node is HasJSDoc {
         default:
             return false;
     }
+}
+
+/**
+ * Gets either the {@link JSDoc} object or {@link JSDocTag} providing documentation for the provided node.
+ * A {@link JSDoc} object will be returned if an entire comment is associated with this node. This is always
+ * the case when requesting a comment for declarations which are not a parameter or type parameter.
+ * A {@link JSDocTag} object will be returned if only part of a comment is associated with this node. This
+ * may happen when requesting comments for a parameter or type parameter, but is not guaranteed since the
+ * a comment may appear directly before the parameter/type parameter, in which case the entire comment is
+ * associated with this node.
+ *
+ * ```ts
+ * /** JSDoc will be returned for `a` *\/
+ * const a = 0
+ * /**
+ *  * Entire JSDoc will be returned for `b`
+ *  * JSDocTag will be returned for `c`
+ *  *\/
+ * function b(/** JSDoc will be returned for `c` *\/ c) {}
+ * ```
+ *
+ * @param hostNode node to get the associated JSDoc comment for.
+ */
+export function getJSDocCommentsAndTags(hostNode: Node): readonly (JSDoc | JSDocTag)[];
+/** @internal */
+export function getJSDocCommentsAndTags(hostNode: Node, noCache?: boolean): readonly (JSDoc | JSDocTag)[];
+export function getJSDocCommentsAndTags(hostNode: Node, noCache?: boolean): readonly (JSDoc | JSDocTag)[] {
+    let result: (JSDoc | JSDocTag)[] | undefined;
+    // Pull parameter comments from declaring function as well
+    if (isVariableLike(hostNode) && hasInitializer(hostNode) && hasJSDocNodes(hostNode.initializer!)) {
+        result = addRange(result, filterOwnedJSDocTags(hostNode, last((hostNode.initializer as HasJSDoc).jsDoc!)));
+    }
+
+    let node: Node | undefined = hostNode;
+    while (node && node.parent) {
+        if (hasJSDocNodes(node)) {
+            result = addRange(result, filterOwnedJSDocTags(hostNode, last(node.jsDoc!)));
+        }
+
+        if (node.kind === SyntaxKind.Parameter) {
+            result = addRange(result, (noCache ? getJSDocParameterTagsNoCache : getJSDocParameterTags)(node as ParameterDeclaration));
+            break;
+        }
+        if (node.kind === SyntaxKind.TypeParameter) {
+            result = addRange(result, (noCache ? getJSDocTypeParameterTagsNoCache : getJSDocTypeParameterTags)(node as TypeParameterDeclaration));
+            break;
+        }
+        node = getNextJSDocCommentLocation(node);
+    }
+    return result || emptyArray;
+}
+
+function filterOwnedJSDocTags(hostNode: Node, jsDoc: JSDoc | JSDocTag) {
+    if (isJSDoc(jsDoc)) {
+        const ownedTags = filter(jsDoc.tags, tag => ownsJSDocTag(hostNode, tag));
+        return jsDoc.tags === ownedTags ? [jsDoc] : ownedTags;
+    }
+    return ownsJSDocTag(hostNode, jsDoc) ? [jsDoc] : undefined;
+}
+
+/**
+ * Determines whether a host node owns a jsDoc tag. A `@type`/`@satisfies` tag attached to a
+ * a ParenthesizedExpression belongs only to the ParenthesizedExpression.
+ */
+function ownsJSDocTag(hostNode: Node, tag: JSDocTag) {
+    return !(isJSDocTypeTag(tag) || isJSDocSatisfiesTag(tag))
+        || !tag.parent
+        || !isJSDoc(tag.parent)
+        || !isParenthesizedExpression(tag.parent.parent)
+        || tag.parent.parent === hostNode;
 }
 
 /** @internal */

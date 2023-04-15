@@ -2,7 +2,6 @@ import {
     __String,
     AccessExpression,
     AccessorDeclaration,
-    addRange,
     ArrayBindingElement,
     ArrayBindingOrAssignmentElement,
     ArrayBindingOrAssignmentPattern,
@@ -77,9 +76,9 @@ import {
     getEffectiveModifierFlagsAlwaysIncludeJSDoc,
     getElementOrPropertyAccessArgumentExpressionOrName,
     getEmitScriptTarget,
+    getJSDocCommentsAndTags,
     getJSDocRoot,
     getJSDocTypeParameterDeclarations,
-    getNextJSDocCommentLocation,
     hasAccessorModifier,
     HasDecorators,
     hasDecorators,
@@ -148,7 +147,6 @@ import {
     isNotEmittedStatement,
     isOmittedExpression,
     isParameter,
-    isParenthesizedExpression,
     isPartiallyEmittedExpression,
     isPrivateIdentifier,
     isPropertyAccessExpression,
@@ -162,11 +160,9 @@ import {
     isTypeReferenceNode,
     isVariableDeclaration,
     isVariableDeclarationList,
-    isVariableLike,
     isVariableStatement,
     isWhiteSpaceLike,
     IterationStatement,
-    JSDoc,
     JSDocAugmentsTag,
     JSDocClassTag,
     JSDocComment,
@@ -200,7 +196,6 @@ import {
     JsxTagNameExpression,
     KeywordSyntaxKind,
     LabeledStatement,
-    last,
     lastOrUndefined,
     LeftHandSideExpression,
     length,
@@ -959,52 +954,6 @@ export function getModifiers(node: HasModifiers): readonly Modifier[] | undefine
     if (hasSyntacticModifier(node, ModifierFlags.Modifier)) {
         return filter(node.modifiers, isModifier);
     }
-}
-
-export function getJSDocCommentsAndTags(hostNode: Node, noCache?: boolean): readonly (JSDoc | JSDocTag)[] {
-    let result: (JSDoc | JSDocTag)[] | undefined;
-    // Pull parameter comments from declaring function as well
-    if (isVariableLike(hostNode) && hasInitializer(hostNode) && hasJSDocNodes(hostNode.initializer!)) {
-        result = addRange(result, filterOwnedJSDocTags(hostNode, last((hostNode.initializer as HasJSDoc).jsDoc!)));
-    }
-
-    let node: Node | undefined = hostNode;
-    while (node && node.parent) {
-        if (hasJSDocNodes(node)) {
-            result = addRange(result, filterOwnedJSDocTags(hostNode, last(node.jsDoc!)));
-        }
-
-        if (node.kind === SyntaxKind.Parameter) {
-            result = addRange(result, (noCache ? getJSDocParameterTagsNoCache : getJSDocParameterTags)(node as ParameterDeclaration));
-            break;
-        }
-        if (node.kind === SyntaxKind.TypeParameter) {
-            result = addRange(result, (noCache ? getJSDocTypeParameterTagsNoCache : getJSDocTypeParameterTags)(node as TypeParameterDeclaration));
-            break;
-        }
-        node = getNextJSDocCommentLocation(node);
-    }
-    return result || emptyArray;
-}
-
-function filterOwnedJSDocTags(hostNode: Node, jsDoc: JSDoc | JSDocTag) {
-    if (isJSDoc(jsDoc)) {
-        const ownedTags = filter(jsDoc.tags, tag => ownsJSDocTag(hostNode, tag));
-        return jsDoc.tags === ownedTags ? [jsDoc] : ownedTags;
-    }
-    return ownsJSDocTag(hostNode, jsDoc) ? [jsDoc] : undefined;
-}
-
-/**
- * Determines whether a host node owns a jsDoc tag. A `@type`/`@satisfies` tag attached to a
- * a ParenthesizedExpression belongs only to the ParenthesizedExpression.
- */
-function ownsJSDocTag(hostNode: Node, tag: JSDocTag) {
-    return !(isJSDocTypeTag(tag) || isJSDocSatisfiesTag(tag))
-        || !tag.parent
-        || !isJSDoc(tag.parent)
-        || !isParenthesizedExpression(tag.parent.parent)
-        || tag.parent.parent === hostNode;
 }
 
 function getJSDocParameterTagsWorker(param: ParameterDeclaration, noCache?: boolean): readonly JSDocParameterTag[] {
