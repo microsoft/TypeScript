@@ -93,6 +93,7 @@ import {
     ConstructSignatureDeclaration,
     contains,
     containsParseError,
+    containsTimes,
     ContextFlags,
     copyEntries,
     countWhere,
@@ -1432,6 +1433,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var totalInstantiationCount = 0;
     var instantiationCount = 0;
     var instantiationDepth = 0;
+    var typeAliasInstantiationStack: string[] = [];
     var inlineLevel = 0;
     var currentNode: Node | undefined;
     var varianceTypeParameter: TypeParameter | undefined;
@@ -15264,9 +15266,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const id = getTypeListId(typeArguments) + getAliasId(aliasSymbol, aliasTypeArguments);
         let instantiation = links.instantiations!.get(id);
         if (!instantiation) {
+            // by continuing *once* when we have circularity
+            // we allow other code (one further down in the call stack) to report a better/more localized error
+            if (containsTimes(typeAliasInstantiationStack, id, 2)) {
+                error(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
+                return errorType;
+            }
+            typeAliasInstantiationStack.push(id);
             links.instantiations!.set(id, instantiation = instantiateTypeWithAlias(type,
                 createTypeMapper(typeParameters, fillMissingTypeArguments(typeArguments, typeParameters, getMinTypeArgumentCount(typeParameters), isInJSFile(symbol.valueDeclaration))),
                 aliasSymbol, aliasTypeArguments));
+            typeAliasInstantiationStack.pop();
         }
         return instantiation;
     }

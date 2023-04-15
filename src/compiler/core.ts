@@ -248,6 +248,20 @@ export function contains<T>(array: readonly T[] | undefined, value: T, equalityC
 }
 
 /** @internal */
+export function containsTimes<T>(array: readonly T[], value: T, max: number): boolean {
+    let seen = 0;
+    for (const v of array) {
+        if (v === value) {
+            seen++;
+            if (seen === max) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+/** @internal */
 export function arraysEqual<T>(a: readonly T[], b: readonly T[], equalityComparer: EqualityComparer<T> = equateValues): boolean {
     return a.length === b.length && a.every((x, i) => equalityComparer(x, b[i]));
 }
