@@ -27001,7 +27001,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function isTypePresencePossible(type: Type, propName: __String, assumeTrue: boolean) {
             const prop = getPropertyOfType(type, propName);
             return prop ?
-                !!(prop.flags & SymbolFlags.Optional) || assumeTrue :
+                !!(prop.flags & SymbolFlags.Optional || getCheckFlags(prop) & CheckFlags.Partial) || assumeTrue :
                 !!getApplicableIndexInfoForName(type, propName) || !assumeTrue;
         }
 
