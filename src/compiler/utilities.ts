@@ -4203,7 +4203,8 @@ export function canHaveJSDoc(node: Node): node is HasJSDoc {
  * @param hostNode node to get the associated JSDoc comment for.
  */
 export function getJSDocCommentsAndTags(hostNode: Node): readonly (JSDoc | JSDocTag)[];
-/** @internal */
+/** @internal separate signature so that stripInternal can remove noCache from the public API */
+// eslint-disable-next-line @typescript-eslint/unified-signatures
 export function getJSDocCommentsAndTags(hostNode: Node, noCache?: boolean): readonly (JSDoc | JSDocTag)[];
 export function getJSDocCommentsAndTags(hostNode: Node, noCache?: boolean): readonly (JSDoc | JSDocTag)[] {
     let result: (JSDoc | JSDocTag)[] | undefined;

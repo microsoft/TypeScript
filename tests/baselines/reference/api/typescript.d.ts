@@ -4564,7 +4564,6 @@ declare namespace ts {
     function getNameOfDeclaration(declaration: Declaration | Expression | undefined): DeclarationName | undefined;
     function getDecorators(node: HasDecorators): readonly Decorator[] | undefined;
     function getModifiers(node: HasModifiers): readonly Modifier[] | undefined;
-    function getJSDocCommentsAndTags(hostNode: Node, noCache?: boolean): readonly (JSDoc | JSDocTag)[];
     /**
      * Gets the JSDoc parameter tags for the node if present.
      *
@@ -4763,6 +4762,28 @@ declare namespace ts {
         parent: ConstructorDeclaration;
         name: Identifier;
     };
+    /**
+     * Gets either the {@link JSDoc} object or {@link JSDocTag} providing documentation for the provided node.
+     * A {@link JSDoc} object will be returned if an entire comment is associated with this node. This is always
+     * the case when requesting a comment for declarations which are not a parameter or type parameter.
+     * A {@link JSDocTag} object will be returned if only part of a comment is associated with this node. This
+     * may happen when requesting comments for a parameter or type parameter, but is not guaranteed since the
+     * a comment may appear directly before the parameter/type parameter, in which case the entire comment is
+     * associated with this node.
+     *
+     * ```ts
+     * /** JSDoc will be returned for `a` *\/
+     * const a = 0
+     * /**
+     *  * Entire JSDoc will be returned for `b`
+     *  * JSDocTag will be returned for `c`
+     *  *\/
+     * function b(/** JSDoc will be returned for `c` *\/ c) {}
+     * ```
+     *
+     * @param hostNode node to get the associated JSDoc comment for.
+     */
+    function getJSDocCommentsAndTags(hostNode: Node): readonly (JSDoc | JSDocTag)[];
     /** @deprecated */
     function createUnparsedSourceFile(text: string): UnparsedSource;
     /** @deprecated */
