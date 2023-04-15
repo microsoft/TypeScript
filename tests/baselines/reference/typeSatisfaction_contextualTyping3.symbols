@@ -1,0 +1,17 @@
+=== tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_contextualTyping3.ts ===
+// repro from https://github.com/microsoft/TypeScript/issues/53780
+
+const obj = {
+>obj : Symbol(obj, Decl(typeSatisfaction_contextualTyping3.ts, 2, 5))
+
+   foo: (param = "default") => param,
+>foo : Symbol(foo, Decl(typeSatisfaction_contextualTyping3.ts, 2, 13))
+>param : Symbol(param, Decl(typeSatisfaction_contextualTyping3.ts, 3, 9))
+>param : Symbol(param, Decl(typeSatisfaction_contextualTyping3.ts, 3, 9))
+
+} satisfies {
+   [key: string]: (...params: any) => any;
+>key : Symbol(key, Decl(typeSatisfaction_contextualTyping3.ts, 5, 4))
+>params : Symbol(params, Decl(typeSatisfaction_contextualTyping3.ts, 5, 19))
+
+};

@@ -1247,12 +1247,13 @@ const enum TypeSystemPropertyName {
 export const enum CheckMode {
     Normal = 0,                                     // Normal type checking
     Contextual = 1 << 0,                            // Explicitly assigned contextual type, therefore not cacheable
-    Inferential = 1 << 1,                           // Inferential typing
-    SkipContextSensitive = 1 << 2,                  // Skip context sensitive function expressions
-    SkipGenericFunctions = 1 << 3,                  // Skip single signature generic functions
-    IsForSignatureHelp = 1 << 4,                    // Call resolution for purposes of signature help
-    IsForStringLiteralArgumentCompletions = 1 << 5, // Do not infer from the argument currently being typed
-    RestBindingElement = 1 << 6,                    // Checking a type that is going to be used to determine the type of a rest binding element
+    Satisfying = 1 << 1,                            // contextual type coming from `satisfies`
+    Inferential = 1 << 2,                           // Inferential typing
+    SkipContextSensitive = 1 << 3,                  // Skip context sensitive function expressions
+    SkipGenericFunctions = 1 << 4,                  // Skip single signature generic functions
+    IsForSignatureHelp = 1 << 5,                    // Call resolution for purposes of signature help
+    IsForStringLiteralArgumentCompletions = 1 << 6, // Do not infer from the argument currently being typed
+    RestBindingElement = 1 << 7,                    // Checking a type that is going to be used to determine the type of a rest binding element
                                                     //   e.g. in `const { a, ...rest } = foo`, when checking the type of `foo` to determine the type of `rest`,
                                                     //   we need to preserve generic types instead of substituting them for constraints
 }
@@ -34565,8 +34566,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return checkSatisfiesExpressionWorker(node.expression, node.type);
     }
 
-    function checkSatisfiesExpressionWorker(expression: Expression, target: TypeNode, checkMode?: CheckMode) {
-        const exprType = checkExpression(expression, checkMode);
+    function checkSatisfiesExpressionWorker(expression: Expression, target: TypeNode, checkMode = CheckMode.Normal) {
+        const exprType = checkExpression(expression, checkMode | CheckMode.Satisfying);
         const targetType = getTypeFromTypeNode(target);
         if (isErrorType(targetType)) {
             return targetType;
@@ -34865,7 +34866,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function assignContextualParameterTypes(signature: Signature, context: Signature) {
+    function assignContextualParameterTypes(signature: Signature, context: Signature, checkMode = CheckMode.Normal) {
         if (context.typeParameters) {
             if (!signature.typeParameters) {
                 signature.typeParameters = context.typeParameters;
@@ -34887,7 +34888,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         for (let i = 0; i < len; i++) {
             const parameter = signature.parameters[i];
             if (!getEffectiveTypeAnnotationNode(parameter.valueDeclaration as ParameterDeclaration)) {
-                const contextualParameterType = tryGetTypeAtPosition(context, i);
+                const declaration = parameter.valueDeclaration as ParameterDeclaration;
+                const contextualParameterType = !(checkMode & CheckMode.Satisfying) || !declaration.initializer ?
+                    tryGetTypeAtPosition(context, i) :
+                    widenTypeInferredFromInitializer(declaration, checkDeclarationInitializer(declaration, checkMode));
                 assignParameterType(parameter, contextualParameterType);
             }
         }
@@ -35787,7 +35791,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                         instantiatedContextualSignature ||= inferenceContext ?
                             instantiateSignature(contextualSignature, inferenceContext.mapper) : contextualSignature;
-                        assignContextualParameterTypes(signature, instantiatedContextualSignature);
+                        assignContextualParameterTypes(signature, instantiatedContextualSignature, checkMode);
                     }
                     else {
                         // Force resolution of all parameter types such that the absence of a contextual type is consistently reflected.
