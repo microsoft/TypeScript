@@ -290,3 +290,24 @@ function f1<T extends (props: {}) => React.ReactElement<any>>(Component: T) {
 >Unresolved : any
 >foo : string
 
+// regression test for intrinsic containing `:`
+declare global {
+>global : any
+
+  namespace JSX {
+    interface IntrinsicElements {
+      ['fbt:enum']: { knownProp: string };
+>['fbt:enum'] : { knownProp: string; }
+>'fbt:enum' : "fbt:enum"
+>knownProp : string
+    }
+  }
+}
+
+<fbt:enum knownProp="accepted" unknownProp="rejected" />;
+><fbt:enum knownProp="accepted" unknownProp="rejected" /> : JSX.Element
+>fbt : any
+>enum : any
+>knownProp : string
+>unknownProp : string
+

@@ -49,17 +49,17 @@ type NewReactJSXElementConstructor<P> =
 >P : Symbol(P, Decl(jsxElementType.tsx, 16, 35))
 
 declare global {
->global : Symbol(global, Decl(jsxElementType.tsx, 18, 48))
+>global : Symbol(global, Decl(jsxElementType.tsx, 18, 48), Decl(jsxElementType.tsx, 98, 25))
 
   namespace JSX {
->JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12), Decl(jsxElementType.tsx, 20, 16))
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12), Decl(jsxElementType.tsx, 20, 16), Decl(jsxElementType.tsx, 101, 16))
 
     type ElementType = string | NewReactJSXElementConstructor<any>;
 >ElementType : Symbol(ElementType, Decl(jsxElementType.tsx, 21, 17))
 >NewReactJSXElementConstructor : Symbol(NewReactJSXElementConstructor, Decl(jsxElementType.tsx, 13, 30))
 
     interface IntrinsicElements {
->IntrinsicElements : Symbol(IntrinsicElements, Decl(react16.d.ts, 2514, 86), Decl(jsxElementType.tsx, 22, 67))
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(react16.d.ts, 2514, 86), Decl(jsxElementType.tsx, 22, 67), Decl(jsxElementType.tsx, 102, 17))
 
       ['my-custom-element']: React.DOMAttributes<unknown>;
 >['my-custom-element'] : Symbol(IntrinsicElements['my-custom-element'], Decl(jsxElementType.tsx, 23, 33))
@@ -271,4 +271,26 @@ function f1<T extends (props: {}) => React.ReactElement<any>>(Component: T) {
 <Unresolved />;
 <Unresolved foo="abc" />;
 >foo : Symbol(foo, Decl(jsxElementType.tsx, 98, 11))
+
+// regression test for intrinsic containing `:`
+declare global {
+>global : Symbol(global, Decl(jsxElementType.tsx, 18, 48), Decl(jsxElementType.tsx, 98, 25))
+
+  namespace JSX {
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12), Decl(jsxElementType.tsx, 20, 16), Decl(jsxElementType.tsx, 101, 16))
+
+    interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(react16.d.ts, 2514, 86), Decl(jsxElementType.tsx, 22, 67), Decl(jsxElementType.tsx, 102, 17))
+
+      ['fbt:enum']: { knownProp: string };
+>['fbt:enum'] : Symbol(IntrinsicElements['fbt:enum'], Decl(jsxElementType.tsx, 103, 33))
+>'fbt:enum' : Symbol(IntrinsicElements['fbt:enum'], Decl(jsxElementType.tsx, 103, 33))
+>knownProp : Symbol(knownProp, Decl(jsxElementType.tsx, 104, 21))
+    }
+  }
+}
+
+<fbt:enum knownProp="accepted" unknownProp="rejected" />;
+>knownProp : Symbol(knownProp, Decl(jsxElementType.tsx, 109, 9))
+>unknownProp : Symbol(unknownProp, Decl(jsxElementType.tsx, 109, 30))
 

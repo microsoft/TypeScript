@@ -198,3 +198,13 @@ tests/cases/compiler/jsxElementType.tsx(99,2): error TS2304: Cannot find name 'U
      ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'Unresolved'.
     
+    // regression test for intrinsic containing `:`
+    declare global {
+      namespace JSX {
+        interface IntrinsicElements {
+          ['fbt:enum']: { knownProp: string };
+        }
+      }
+    }
+    
+    <fbt:enum knownProp="accepted" unknownProp="rejected" />;
