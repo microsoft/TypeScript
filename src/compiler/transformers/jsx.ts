@@ -32,7 +32,6 @@ import {
     isJsxAttribute,
     isJsxElement,
     isJsxFragment,
-    isJsxNamespacedName,
     isJsxSelfClosingElement,
     isJsxSpreadAttribute,
     isLineBreak,
@@ -263,7 +262,7 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
             if (isJsxSpreadAttribute(elem) && (!isObjectLiteralExpression(elem.expression) || elem.expression.properties.some(isSpreadAssignment))) {
                 spread = true;
             }
-            else if (spread && isJsxAttribute(elem) && isIdentifier(elem.name) && elem.name.escapedText === "key") {
+            else if (spread && isJsxAttribute(elem) && elem.name.escapedText === "key") {
                 return true;
             }
         }
@@ -640,15 +639,12 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
             return getTagName(node.openingElement);
         }
         else {
-            const tagName = node.tagName;
-            if (isIdentifier(tagName) && isIntrinsicJsxName(tagName.escapedText)) {
-                return factory.createStringLiteral(idText(tagName));
-            }
-            else if (isJsxNamespacedName(tagName)) {
-                return factory.createStringLiteral(idText(tagName.namespace) + ":" + idText(tagName.name));
+            const name = node.tagName;
+            if (isIdentifier(name) && isIntrinsicJsxName(name.escapedText)) {
+                return factory.createStringLiteral(idText(name));
             }
             else {
-                return createExpressionFromEntityName(factory, tagName);
+                return createExpressionFromEntityName(factory, name);
             }
         }
     }
@@ -660,11 +656,13 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
      */
     function getAttributeName(node: JsxAttribute): StringLiteral | Identifier {
         const name = node.name;
-        if (isIdentifier(name)) {
-            const text = idText(name);
-            return (/^[A-Za-z_]\w*$/.test(text)) ? name : factory.createStringLiteral(text);
+        const text = idText(name);
+        if (/^[A-Za-z_]\w*$/.test(text)) {
+            return name;
         }
-        return factory.createStringLiteral(idText(name.namespace) + ":" + idText(name.name));
+        else {
+            return factory.createStringLiteral(text);
+        }
     }
 
     function visitJsxExpression(node: JsxExpression) {

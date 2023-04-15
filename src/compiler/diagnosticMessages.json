@@ -2893,10 +2893,6 @@
         "category": "Error",
         "code": 2638
     },
-    "React components cannot include JSX namespace names": {
-        "category": "Error",
-        "code": 2639
-    },
 
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
         "category": "Error",

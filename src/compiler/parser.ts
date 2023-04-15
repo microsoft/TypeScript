@@ -221,7 +221,6 @@ import {
     JsxElement,
     JsxExpression,
     JsxFragment,
-    JsxNamespacedName,
     JsxOpeningElement,
     JsxOpeningFragment,
     JsxOpeningLikeElement,
@@ -1030,10 +1029,6 @@ const forEachChildTable: ForEachChildTable = {
     },
     [SyntaxKind.JsxClosingElement]: function forEachChildInJsxClosingElement<T>(node: JsxClosingElement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.tagName);
-    },
-    [SyntaxKind.JsxNamespacedName]: function forEachChildInJsxNamespacedName<T>(node: JsxNamespacedName, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.namespace) ||
-            visitNode(cbNode, node.name);
     },
     [SyntaxKind.OptionalType]: forEachChildInOptionalRestOrJSDocParameterModifier,
     [SyntaxKind.RestType]: forEachChildInOptionalRestOrJSDocParameterModifier,
@@ -6107,29 +6102,18 @@ namespace Parser {
 
     function parseJsxElementName(): JsxTagNameExpression {
         const pos = getNodePos();
+        scanJsxIdentifier();
         // JsxElement can have name in the form of
         //      propertyAccessExpression
         //      primaryExpression in the form of an identifier and "this" keyword
         // We can't just simply use parseLeftHandSideExpressionOrHigher because then we will start consider class,function etc as a keyword
         // We only want to consider "this" as a primaryExpression
-        let expression: JsxTagNameExpression = parseJsxTagName();
+        let expression: JsxTagNameExpression = token() === SyntaxKind.ThisKeyword ?
+            parseTokenNode<ThisExpression>() : parseIdentifierName();
         while (parseOptional(SyntaxKind.DotToken)) {
             expression = finishNode(factoryCreatePropertyAccessExpression(expression, parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateIdentifiers*/ false)), pos) as JsxTagNamePropertyAccess;
         }
         return expression;
-    }
-
-    function parseJsxTagName(): Identifier | JsxNamespacedName | ThisExpression {
-        const pos = getNodePos();
-        scanJsxIdentifier();
-
-        const isThis = token() === SyntaxKind.ThisKeyword;
-        const tagName = parseIdentifierName();
-        if (parseOptional(SyntaxKind.ColonToken)) {
-            scanJsxIdentifier();
-            return finishNode(factory.createJsxNamespacedName(tagName, parseIdentifierName()), pos);
-        }
-        return isThis ? finishNode(factory.createToken(SyntaxKind.ThisKeyword), pos) : tagName;
     }
 
     function parseJsxExpression(inExpressionContext: boolean): JsxExpression | undefined {
@@ -6164,8 +6148,9 @@ namespace Parser {
             return parseJsxSpreadAttribute();
         }
 
+        scanJsxIdentifier();
         const pos = getNodePos();
-        return finishNode(factory.createJsxAttribute(parseJsxAttributeName(), parseJsxAttributeValue()), pos);
+        return finishNode(factory.createJsxAttribute(parseIdentifierName(), parseJsxAttributeValue()), pos);
     }
 
     function parseJsxAttributeValue(): JsxAttributeValue | undefined {
@@ -6182,18 +6167,6 @@ namespace Parser {
             parseErrorAtCurrentToken(Diagnostics.or_JSX_element_expected);
         }
         return undefined;
-    }
-
-    function parseJsxAttributeName() {
-        const pos = getNodePos();
-        scanJsxIdentifier();
-
-        const attrName = parseIdentifierName();
-        if (parseOptional(SyntaxKind.ColonToken)) {
-            scanJsxIdentifier();
-            return finishNode(factory.createJsxNamespacedName(attrName, parseIdentifierName()), pos);
-        }
-        return attrName;
     }
 
     function parseJsxSpreadAttribute(): JsxSpreadAttribute {
@@ -10450,11 +10423,6 @@ export function tagNamesAreEquivalent(lhs: JsxTagNameExpression, rhs: JsxTagName
 
     if (lhs.kind === SyntaxKind.ThisKeyword) {
         return true;
-    }
-
-    if (lhs.kind === SyntaxKind.JsxNamespacedName) {
-        return lhs.namespace.escapedText === (rhs as JsxNamespacedName).namespace.escapedText &&
-            lhs.name.escapedText === (rhs as JsxNamespacedName).name.escapedText;
     }
 
     // If we are at this statement then we must have PropertyAccessExpression and because tag name in Jsx element can only

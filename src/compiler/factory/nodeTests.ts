@@ -128,7 +128,6 @@ import {
     JsxElement,
     JsxExpression,
     JsxFragment,
-    JsxNamespacedName,
     JsxOpeningElement,
     JsxOpeningFragment,
     JsxSelfClosingElement,
@@ -962,10 +961,6 @@ export function isJsxSpreadAttribute(node: Node): node is JsxSpreadAttribute {
 
 export function isJsxExpression(node: Node): node is JsxExpression {
     return node.kind === SyntaxKind.JsxExpression;
-}
-
-export function isJsxNamespacedName(node: Node): node is JsxNamespacedName {
-    return node.kind === SyntaxKind.JsxNamespacedName;
 }
 
 // Clauses

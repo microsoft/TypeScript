@@ -82,7 +82,6 @@ import {
     getEmitModuleResolutionKind,
     getEmitScriptTarget,
     getEscapedTextOfIdentifierOrLiteral,
-    getEscapedTextOfJsxAttributeName,
     getExportInfoMap,
     getFormatCodeSettingsForWriting,
     getJSDocParameterTags,
@@ -4810,7 +4809,7 @@ function getCompletionData(
             }
 
             if (attr.kind === SyntaxKind.JsxAttribute) {
-                seenNames.add(getEscapedTextOfJsxAttributeName(attr.name));
+                seenNames.add(attr.name.escapedText);
             }
             else if (isJsxSpreadAttribute(attr)) {
                 setMembersDeclaredBySpreadAssignment(attr, membersDeclaredBySpreadAssignment);
