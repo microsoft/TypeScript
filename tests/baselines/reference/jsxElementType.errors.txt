@@ -208,3 +208,4 @@ tests/cases/compiler/jsxElementType.tsx(99,2): error TS2304: Cannot find name 'U
     }
     
     <fbt:enum knownProp="accepted" unknownProp="rejected" />;
+    
