@@ -350,6 +350,7 @@ import {
     JSDocParameterTag,
     JSDocPropertyLikeTag,
     JSDocSatisfiesExpression,
+    JSDocSatisfiesTag,
     JSDocSignature,
     JSDocTag,
     JSDocTemplateTag,
@@ -2232,6 +2233,14 @@ export function getErrorSpanForNode(sourceFile: SourceFile, node: Node): TextSpa
         case SyntaxKind.ReturnStatement:
         case SyntaxKind.YieldExpression: {
             const pos = skipTrivia(sourceFile.text, (node as ReturnStatement | YieldExpression).pos);
+            return getSpanOfTokenAtPosition(sourceFile, pos);
+        }
+        case SyntaxKind.SatisfiesExpression: {
+            const pos = skipTrivia(sourceFile.text, (node as SatisfiesExpression).expression.end);
+            return getSpanOfTokenAtPosition(sourceFile, pos);
+        }
+        case SyntaxKind.JSDocSatisfiesTag: {
+            const pos = skipTrivia(sourceFile.text, (node as JSDocSatisfiesTag).tagName.pos);
             return getSpanOfTokenAtPosition(sourceFile, pos);
         }
     }
