@@ -34,9 +34,11 @@ tests/cases/compiler/jsxElementType.tsx(91,2): error TS2786: 'ReactNativeFlatLis
 tests/cases/compiler/jsxElementType.tsx(95,11): error TS2322: Type '{}' is not assignable to type 'LibraryManagedAttributes<T, {}>'.
 tests/cases/compiler/jsxElementType.tsx(98,2): error TS2304: Cannot find name 'Unresolved'.
 tests/cases/compiler/jsxElementType.tsx(99,2): error TS2304: Cannot find name 'Unresolved'.
+tests/cases/compiler/jsxElementType.tsx(109,19): error TS2322: Type '{ a: string; b: string; }' is not assignable to type '{ a: string; }'.
+  Property 'b' does not exist on type '{ a: string; }'.
 
 
-==== tests/cases/compiler/jsxElementType.tsx (18 errors) ====
+==== tests/cases/compiler/jsxElementType.tsx (19 errors) ====
     /// <reference path="/.lib/react16.d.ts" />
     import * as React from "react";
     
@@ -197,4 +199,17 @@ tests/cases/compiler/jsxElementType.tsx(99,2): error TS2304: Cannot find name 'U
     <Unresolved foo="abc" />;
      ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'Unresolved'.
+    
+    declare global {
+        namespace JSX {
+          interface IntrinsicElements {
+              ['a:b']: { a: string };
+          }
+      }
+    }
+    
+    <a:b a="accepted" b="rejected" />;
+                      ~
+!!! error TS2322: Type '{ a: string; b: string; }' is not assignable to type '{ a: string; }'.
+!!! error TS2322:   Property 'b' does not exist on type '{ a: string; }'.
     
