@@ -190,15 +190,15 @@ FsWatches::
   {}
 /user/username/projects/myproject/index.ts: *new*
   {}
+/user/username/projects/myproject/node_modules/pkg/package.json: *new*
+  {}
+/user/username/projects/myproject/node_modules/pkg1/package.json: *new*
+  {}
 /user/username/projects/myproject/node_modules/pkg/import.d.ts: *new*
   {}
 /user/username/projects/myproject/node_modules/@types/pkg2/index.d.ts: *new*
   {}
 /a/lib/lib.d.ts: *new*
-  {}
-/user/username/projects/myproject/node_modules/pkg/package.json: *new*
-  {}
-/user/username/projects/myproject/node_modules/pkg1/package.json: *new*
   {}
 
 FsWatchesRecursive::

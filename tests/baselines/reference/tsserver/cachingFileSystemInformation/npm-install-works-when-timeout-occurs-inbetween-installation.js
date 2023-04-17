@@ -1940,8 +1940,8 @@ Info seq  [hh:mm:ss:mss] Running: /user/username/rootfolder/otherfolder/a/b/tsco
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules/lodash/package.json 2000 undefined Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules/@types/lodash/package.json 2000 undefined Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules/lodash/package.json 2000 undefined Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/rootfolder/otherfolder/a/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/rootfolder/otherfolder/a/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/rootfolder/otherfolder/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Failed Lookup Locations
@@ -2005,9 +2005,9 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/user/username/rootfolder/otherfolder/a/b/node_modules/lodash/package.json: *new*
-  {}
 /user/username/rootfolder/otherfolder/a/b/node_modules/@types/lodash/package.json: *new*
+  {}
+/user/username/rootfolder/otherfolder/a/b/node_modules/lodash/package.json: *new*
   {}
 
 FsWatchesRecursive::

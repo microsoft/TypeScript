@@ -157,9 +157,9 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject/node_modules/@myapp/ts-types/types/somefile.define.d.ts: *new*
-  {}
 /user/username/projects/myproject/node_modules/@myapp/ts-types/package.json: *new*
+  {}
+/user/username/projects/myproject/node_modules/@myapp/ts-types/types/somefile.define.d.ts: *new*
   {}
 
 FsWatchesRecursive::
