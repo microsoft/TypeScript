@@ -414,7 +414,7 @@ function testConvertToAsyncFunction(it: Mocha.PendingTestFunction, caption: stri
             files.push(moduleFile);
         }
         const host = createServerHost(files);
-        const projectService = createProjectService(host);
+        const projectService = createProjectService(host, { allowNonBaseliningLogger: true });
         projectService.openClientFile(file.path);
         return ts.first(projectService.inferredProjects).getLanguageService();
     }

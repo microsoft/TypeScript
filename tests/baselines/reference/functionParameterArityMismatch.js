@@ -13,7 +13,7 @@ f2(1);
 f2(1, 2, 3);
 f2(1, 2, 3, 4, 5);
 f2(1, 2, 3, 4, 5, 6, 7);
-f2(...[1], 2, 3, 4, 5, 6);
+f2(1, 2, 3, 4, 5, ...[6, 7]);
 
 
 //// [functionParameterArityMismatch.js]
@@ -33,4 +33,4 @@ f2(1);
 f2(1, 2, 3);
 f2(1, 2, 3, 4, 5);
 f2(1, 2, 3, 4, 5, 6, 7);
-f2.apply(void 0, __spreadArray(__spreadArray([], [1], false), [2, 3, 4, 5, 6], false));
+f2.apply(void 0, __spreadArray([1, 2, 3, 4, 5], [6, 7], false));

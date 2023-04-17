@@ -1,5 +1,5 @@
-import * as ts from "./_namespaces/ts";
-import {
+import type * as ts from "./_namespaces/ts";
+import type {
     CompilerOptionsValue,
     EndOfLineState,
     FileExtensionInfo,
@@ -23,6 +23,7 @@ import {
 
 export const enum CommandTypes {
     JsxClosingTag = "jsxClosingTag",
+    LinkedEditingRange = "linkedEditingRange",
     Brace = "brace",
     /** @internal */
     BraceFull = "brace-full",
@@ -77,8 +78,6 @@ export const enum CommandTypes {
     NavtoFull = "navto-full",
     NavTree = "navtree",
     NavTreeFull = "navtree-full",
-    /** @deprecated */
-    Occurrences = "occurrences",
     DocumentHighlights = "documentHighlights",
     /** @internal */
     DocumentHighlightsFull = "documentHighlights-full",
@@ -1103,32 +1102,17 @@ export interface JsxClosingTagResponse extends Response {
     readonly body: TextInsertion;
 }
 
-/**
- * @deprecated
- * Get occurrences request; value of command field is
- * "occurrences". Return response giving spans that are relevant
- * in the file at a given line and column.
- */
-export interface OccurrencesRequest extends FileLocationRequest {
-    command: CommandTypes.Occurrences;
+export interface LinkedEditingRangeRequest extends FileLocationRequest {
+    readonly command: CommandTypes.LinkedEditingRange;
 }
 
-/** @deprecated */
-export interface OccurrencesResponseItem extends FileSpanWithContext {
-    /**
-     * True if the occurrence is a write location, false otherwise.
-     */
-    isWriteAccess: boolean;
-
-    /**
-     * True if the occurrence is in a string, undefined otherwise;
-     */
-    isInString?: true;
+export interface LinkedEditingRangesBody {
+    ranges: TextSpan[];
+    wordPattern?: string;
 }
 
-/** @deprecated */
-export interface OccurrencesResponse extends Response {
-    body?: OccurrencesResponseItem[];
+export interface LinkedEditingRangeResponse extends Response {
+    readonly body: LinkedEditingRangesBody;
 }
 
 /**
@@ -3434,6 +3418,7 @@ export interface FormatCodeSettings extends EditorSettings {
     placeOpenBraceOnNewLineForControlBlocks?: boolean;
     insertSpaceBeforeTypeAnnotation?: boolean;
     semicolons?: SemicolonPreference;
+    indentSwitchCase?: boolean;
 }
 
 export interface UserPreferences {

@@ -3,14 +3,9 @@ import { verifyTscWatch } from "../tscWatch/helpers";
 import {
     createWatchedSystem,
     libFile,
-    TestServerHost,
 } from "../virtualFileSystemWithWatch";
 
 describe("unittests:: tsbuildWatch:: watchMode:: configFileErrors:: reports syntax errors in config file", () => {
-    function build(sys: TestServerHost) {
-        sys.checkTimeoutQueueLengthAndRun(1); // build the project
-        sys.checkTimeoutQueueLength(0);
-    }
     verifyTscWatch({
         scenario: "configFileErrors",
         subScenario: "reports syntax errors in config file",
@@ -41,17 +36,17 @@ describe("unittests:: tsbuildWatch:: watchMode:: configFileErrors:: reports synt
                 caption: "reports syntax errors after change to config file",
                 edit: sys => sys.replaceFileText(`/user/username/projects/myproject/tsconfig.json`, ",", `,
         "declaration": true,`),
-                timeouts: build,
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(), // build the project
             },
             {
                 caption: "reports syntax errors after change to ts file",
                 edit: sys => sys.replaceFileText(`/user/username/projects/myproject/a.ts`, "foo", "fooBar"),
-                timeouts: build,
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(), // build the project
             },
             {
                 caption: "reports error when there is no change to tsconfig file",
                 edit: sys => sys.replaceFileText(`/user/username/projects/myproject/tsconfig.json`, "", ""),
-                timeouts: build,
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(), // build the project
             },
             {
                 caption: "builds after fixing config file errors",
@@ -59,7 +54,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: configFileErrors:: reports synt
                     compilerOptions: { composite: true, declaration: true },
                     files: ["a.ts", "b.ts"]
                 })),
-                timeouts: build,
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(), // build the project
             }
         ]
     });

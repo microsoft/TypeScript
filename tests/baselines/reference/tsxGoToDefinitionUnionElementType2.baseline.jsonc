@@ -1,0 +1,21 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/file.tsx ===
+// --- (line: 8) skipped ---
+//     }
+//     private method() { }
+// }
+// <|var [|RCComp|] = RC1 || RC2;|>
+// <RC/*GOTO DEF*/Comp />
+
+  // === Details ===
+  [
+   {
+    "kind": "var",
+    "name": "RCComp",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

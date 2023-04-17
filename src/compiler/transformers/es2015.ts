@@ -2543,7 +2543,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                 visitor,
                 context,
                 FlattenLevel.All,
-                /*value*/ undefined,
+                /*rval*/ undefined,
                 (ancestorFacts & HierarchyFacts.ExportedVariableStatement) !== 0
             );
         }

@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/lib1/tools/toolsinterface.ts]
 export interface ITest {
@@ -98,30 +99,30 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/app.ts (used version)
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/app.ts:
+/user/username/projects/myproject/app.ts: *new*
   {}
-/user/username/projects/myproject/lib2/public.ts:
+/user/username/projects/myproject/lib2/public.ts: *new*
   {}
-/user/username/projects/myproject/lib2/data.ts:
+/user/username/projects/myproject/lib2/data.ts: *new*
   {}
-/user/username/projects/myproject/lib1/public.ts:
+/user/username/projects/myproject/lib1/public.ts: *new*
   {}
-/user/username/projects/myproject/lib1/tools/public.ts:
+/user/username/projects/myproject/lib1/tools/public.ts: *new*
   {}
-/user/username/projects/myproject/lib1/tools/toolsinterface.ts:
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts: *new*
   {}
-/user/username/projects/myproject/lib2/data2.ts:
+/user/username/projects/myproject/lib2/data2.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -244,6 +245,9 @@ export interface ITest {
 }
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:58 AM[0m] File change detected. Starting incremental compilation...
@@ -252,7 +256,7 @@ Output::
   Object literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?
 
 [7m5[0m             title: "title"
-[7m [0m [91m            ~~~~~~~~~~~~~~[0m
+[7m [0m [91m            ~~~~~[0m
 
 [[90m12:01:20 AM[0m] Found 1 error. Watching for file changes.
 
@@ -289,32 +293,6 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/app.ts (computed .d.ts)
 /user/username/projects/myproject/lib2/data2.ts (computed .d.ts)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/app.ts:
-  {}
-/user/username/projects/myproject/lib2/public.ts:
-  {}
-/user/username/projects/myproject/lib2/data.ts:
-  {}
-/user/username/projects/myproject/lib1/public.ts:
-  {}
-/user/username/projects/myproject/lib1/tools/public.ts:
-  {}
-/user/username/projects/myproject/lib1/tools/toolsinterface.ts:
-  {}
-/user/username/projects/myproject/lib2/data2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/lib1/tools/toolsinterface.js] file written with same contents
@@ -334,6 +312,9 @@ export interface ITest {
 }
 
 
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:24 AM[0m] File change detected. Starting incremental compilation...
@@ -373,32 +354,6 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/lib2/public.ts (used version)
 /user/username/projects/myproject/app.ts (used version)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/app.ts:
-  {}
-/user/username/projects/myproject/lib2/public.ts:
-  {}
-/user/username/projects/myproject/lib2/data.ts:
-  {}
-/user/username/projects/myproject/lib1/public.ts:
-  {}
-/user/username/projects/myproject/lib1/tools/public.ts:
-  {}
-/user/username/projects/myproject/lib1/tools/toolsinterface.ts:
-  {}
-/user/username/projects/myproject/lib2/data2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/lib1/tools/toolsinterface.js] file written with same contents
@@ -413,6 +368,9 @@ export interface ITest {
 }
 
 
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:35 AM[0m] File change detected. Starting incremental compilation...
@@ -421,7 +379,7 @@ Output::
   Object literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?
 
 [7m5[0m             title: "title"
-[7m [0m [91m            ~~~~~~~~~~~~~~[0m
+[7m [0m [91m            ~~~~~[0m
 
 [[90m12:01:42 AM[0m] Found 1 error. Watching for file changes.
 
@@ -457,32 +415,6 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/lib2/data2.ts (used version)
 /user/username/projects/myproject/lib2/public.ts (used version)
 /user/username/projects/myproject/app.ts (used version)
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/app.ts:
-  {}
-/user/username/projects/myproject/lib2/public.ts:
-  {}
-/user/username/projects/myproject/lib2/data.ts:
-  {}
-/user/username/projects/myproject/lib1/public.ts:
-  {}
-/user/username/projects/myproject/lib1/tools/public.ts:
-  {}
-/user/username/projects/myproject/lib1/tools/toolsinterface.ts:
-  {}
-/user/username/projects/myproject/lib2/data2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 

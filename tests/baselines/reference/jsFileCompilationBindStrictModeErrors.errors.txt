@@ -10,7 +10,7 @@ tests/cases/compiler/b.js(3,7): error TS1210: Code contained in a class is evalu
 tests/cases/compiler/b.js(6,13): error TS1213: Identifier expected. 'let' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 tests/cases/compiler/c.js(1,12): error TS1214: Identifier expected. 'let' is a reserved word in strict mode. Modules are automatically in strict mode.
 tests/cases/compiler/c.js(2,5): error TS1215: Invalid use of 'eval'. Modules are automatically in strict mode.
-tests/cases/compiler/d.js(2,11): error TS1005: ',' expected.
+tests/cases/compiler/d.js(2,9): error TS1489: Decimals with leading zeros are not allowed.
 
 
 ==== tests/cases/compiler/a.js (8 errors) ====
@@ -74,5 +74,5 @@ tests/cases/compiler/d.js(2,11): error TS1005: ',' expected.
 ==== tests/cases/compiler/d.js (1 errors) ====
     "use strict";
     var x = 009; // error
-              ~
-!!! error TS1005: ',' expected.
+            ~~~
+!!! error TS1489: Decimals with leading zeros are not allowed.

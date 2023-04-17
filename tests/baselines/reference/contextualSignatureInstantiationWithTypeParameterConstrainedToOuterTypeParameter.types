@@ -5,7 +5,6 @@ function f<T>() {
     function g<U extends T>(u: U): U { return null }
 >g : <U extends T>(u: U) => U
 >u : U
->null : null
 
     return g;
 >g : <U extends T>(u: U) => U

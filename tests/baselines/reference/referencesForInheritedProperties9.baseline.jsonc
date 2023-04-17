@@ -1,282 +1,229 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForInheritedProperties9.ts ===
 // class D extends C {
-//     /*FIND ALL REFS*/[|prop1|]: string;
+//     /*FIND ALL REFS*/<|[|{| isDefinition: true |}prop1|]: string;|>
 // }
 // 
 // class C extends D {
-//     prop1: string;
-// }
-// 
-// var c: C;
-// c.prop1;
+// --- (line: 6) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForInheritedProperties9.ts",
-      "kind": "property",
-      "name": "(property) D.prop1: string",
-      "textSpan": {
-        "start": 24,
-        "length": 5
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "D",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "prop1",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 24,
-        "length": 14
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 24,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/referencesForInheritedProperties9.ts",
-        "contextSpan": {
-          "start": 24,
-          "length": 14
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForInheritedProperties9.ts ===
+  // class D extends C {
+  //     /*FIND ALL REFS*/<|[|prop1|]: string;|>
+  // }
+  // 
+  // class C extends D {
+  // --- (line: 6) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) D.prop1: string",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "D",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "prop1",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForInheritedProperties9.ts ===
 // class D extends C {
 //     prop1: string;
 // }
 // 
 // class C extends D {
-//     /*FIND ALL REFS*/[|prop1|]: string;
+//     /*FIND ALL REFS*/<|[|{| isDefinition: true |}prop1|]: string;|>
 // }
 // 
 // var c: C;
 // c.[|prop1|];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForInheritedProperties9.ts",
-      "kind": "property",
-      "name": "(property) C.prop1: string",
-      "textSpan": {
-        "start": 66,
-        "length": 5
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "prop1",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 66,
-        "length": 14
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 66,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/referencesForInheritedProperties9.ts",
-        "contextSpan": {
-          "start": 66,
-          "length": 14
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 96,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/referencesForInheritedProperties9.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForInheritedProperties9.ts ===
+  // class D extends C {
+  //     prop1: string;
+  // }
+  // 
+  // class C extends D {
+  //     /*FIND ALL REFS*/<|[|prop1|]: string;|>
+  // }
+  // 
+  // var c: C;
+  // c.prop1;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) C.prop1: string",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "prop1",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForInheritedProperties9.ts ===
 // class D extends C {
 //     prop1: string;
 // }
 // 
 // class C extends D {
-//     [|prop1|]: string;
+//     <|[|prop1|]: string;|>
 // }
 // 
 // var c: C;
 // c./*FIND ALL REFS*/[|prop1|];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForInheritedProperties9.ts",
-      "kind": "property",
-      "name": "(property) C.prop1: string",
-      "textSpan": {
-        "start": 66,
-        "length": 5
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "prop1",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 66,
-        "length": 14
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 66,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/referencesForInheritedProperties9.ts",
-        "contextSpan": {
-          "start": 66,
-          "length": 14
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 96,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/referencesForInheritedProperties9.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForInheritedProperties9.ts ===
+  // class D extends C {
+  //     prop1: string;
+  // }
+  // 
+  // class C extends D {
+  //     <|[|prop1|]: string;|>
+  // }
+  // 
+  // var c: C;
+  // c./*FIND ALL REFS*/prop1;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) C.prop1: string",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "prop1",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

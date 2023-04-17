@@ -1,0 +1,83 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDestructuringAssignmentNestedInForOf2.ts ===
+// interface MultiRobot {
+//     name: string;
+//     skills: {
+//         /*RENAME*/<|[|primaryRENAME|]: string;|>
+//         secondary: string;
+//     };
+// }
+// let multiRobots: MultiRobot[], primary: string;
+// for (<|{ skills: { [|primaryRENAME|]: primaryA, secondary: secondaryA } } of multiRobots|>) {
+//     console.log(primaryA);
+// }
+// for (<|{ skills: { [|primaryRENAME|]: primary/*END SUFFIX*/, secondary } } of multiRobots|>) {
+//     console.log(primary);
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDestructuringAssignmentNestedInForOf2.ts ===
+// interface MultiRobot {
+//     name: string;
+//     skills: {
+//         <|[|primaryRENAME|]: string;|>
+//         secondary: string;
+//     };
+// }
+// let multiRobots: MultiRobot[], primary: string;
+// for (<|{ skills: { /*RENAME*/[|primaryRENAME|]: primaryA, secondary: secondaryA } } of multiRobots|>) {
+//     console.log(primaryA);
+// }
+// for (<|{ skills: { [|primaryRENAME|]: primary/*END SUFFIX*/, secondary } } of multiRobots|>) {
+//     console.log(primary);
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDestructuringAssignmentNestedInForOf2.ts ===
+// --- (line: 4) skipped ---
+//         secondary: string;
+//     };
+// }
+// let multiRobots: MultiRobot[], /*RENAME*/<|[|primaryRENAME|]: string|>;
+// for ({ skills: { primary: primaryA, secondary: secondaryA } } of multiRobots) {
+//     console.log(primaryA);
+// }
+// for (<|{ skills: { /*START PREFIX*/primary: [|primaryRENAME|], secondary } } of multiRobots|>) {
+//     console.log([|primaryRENAME|]);
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDestructuringAssignmentNestedInForOf2.ts ===
+// --- (line: 4) skipped ---
+//         secondary: string;
+//     };
+// }
+// let multiRobots: MultiRobot[], <|[|primaryRENAME|]: string|>;
+// for ({ skills: { primary: primaryA, secondary: secondaryA } } of multiRobots) {
+//     console.log(primaryA);
+// }
+// for (<|{ skills: { /*START PREFIX*/primary: /*RENAME*/[|primaryRENAME|], secondary } } of multiRobots|>) {
+//     console.log([|primaryRENAME|]);
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDestructuringAssignmentNestedInForOf2.ts ===
+// --- (line: 4) skipped ---
+//         secondary: string;
+//     };
+// }
+// let multiRobots: MultiRobot[], <|[|primaryRENAME|]: string|>;
+// for ({ skills: { primary: primaryA, secondary: secondaryA } } of multiRobots) {
+//     console.log(primaryA);
+// }
+// for (<|{ skills: { /*START PREFIX*/primary: [|primaryRENAME|], secondary } } of multiRobots|>) {
+//     console.log(/*RENAME*/[|primaryRENAME|]);
+// }

@@ -1,17 +1,19 @@
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
-import { commandLineCallbacks } from "../tsc/helpers";
+import { dedent } from "../../_namespaces/Utils";
+import { commandLineCallbacks, libContent } from "../tsc/helpers";
 import {
     createWatchedSystem,
     File,
     libFile,
-    TestServerHostTrackingWrittenFiles,
 } from "../virtualFileSystemWithWatch";
 import {
     applyEdit,
     createBaseline,
     createWatchCompilerHostOfConfigFileForBaseline,
+    createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline,
     runWatchBaseline,
+    TscWatchSystem,
     watchBaseline,
 } from "./helpers";
 
@@ -198,7 +200,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost does not implement s
                 caption: "Write a file",
                 edit: sys => sys.writeFile(`/user/username/projects/myproject/bar.ts`, "const y =10;"),
                 timeouts: sys => {
-                    sys.checkTimeoutQueueLength(0);
+                    sys.logTimeoutQueueLength();
                     watch.getProgram();
                 }
             }],
@@ -243,7 +245,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost can add extraFileExt
             edits: [{
                 caption: "Write a file",
                 edit: sys => sys.writeFile(`/user/username/projects/myproject/other2.vue`, otherFile.content),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }],
             watchOrSolution: watch
         });
@@ -275,7 +277,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost uses createSemanticD
     function createWatch<T extends ts.BuilderProgram>(
         baseline: string[],
         config: File,
-        sys: TestServerHostTrackingWrittenFiles,
+        sys: TscWatchSystem,
         createProgram: ts.CreateProgram<T>,
         optionsToExtend?: ts.CompilerOptions,
     ) {
@@ -317,9 +319,9 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost uses createSemanticD
     function applyChangeForBuilderTest(
         baseline: string[],
         emitBaseline: string[],
-        sys: TestServerHostTrackingWrittenFiles,
-        emitSys: TestServerHostTrackingWrittenFiles,
-        change: (sys: TestServerHostTrackingWrittenFiles) => void,
+        sys: TscWatchSystem,
+        emitSys: TscWatchSystem,
+        change: (sys: TscWatchSystem) => void,
         caption: string
     ) {
         // Change file
@@ -331,8 +333,8 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost uses createSemanticD
         baseline: string[],
         emitBaseline: string[],
         config: File,
-        sys: TestServerHostTrackingWrittenFiles,
-        emitSys: TestServerHostTrackingWrittenFiles,
+        sys: TscWatchSystem,
+        emitSys: TscWatchSystem,
         createProgram: ts.CreateProgram<T>,
         optionsToExtend?: ts.CompilerOptions) {
         createWatch(baseline, config, sys, createProgram, optionsToExtend);
@@ -470,7 +472,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost uses createSemanticD
             const diagnostics = ts.sortAndDeduplicateDiagnostics(program.getSemanticDiagnostics());
             diagnostics.forEach(reportDiagnostic);
             // Buildinfo should still have affectedFilesPendingEmit since we are only emitting dts files
-            program.emit(/*targetSourceFile*/ undefined, /*writeFile*/ undefined, /*cancellationToken*/ undefined, /*emitOnlyDts*/ true);
+            program.emit(/*targetSourceFile*/ undefined, /*writeFile*/ undefined, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ true);
             reportWatchStatus(
                 ts.createCompilerDiagnostic(ts.getWatchErrorSummaryDiagnosticMessage(diagnostics.length), diagnostics.length),
                 sys.newLine,
@@ -567,17 +569,17 @@ describe("unittests:: tsc-watch:: watchAPI:: when getParsedCommandLine is implem
                         calledGetParsedCommandLine.clear();
                         sys.writeFile(`/user/username/projects/myproject/projects/project1/class3.ts`, `class class3 {}`);
                     },
-                    timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
                 {
                     caption: "Add excluded file to project1",
                     edit: sys => sys.ensureFileOrFolder({ path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`, content: `declare class file {}` }),
-                    timeouts: sys => sys.checkTimeoutQueueLength(0),
+                    timeouts: sys => sys.logTimeoutQueueLength(),
                 },
                 {
                     caption: "Add output of class3",
                     edit: sys => sys.writeFile(`/user/username/projects/myproject/projects/project1/class3.d.ts`, `declare class class3 {}`),
-                    timeouts: sys => sys.checkTimeoutQueueLength(0),
+                    timeouts: sys => sys.logTimeoutQueueLength(),
                 },
             ],
             watchOrSolution: watch
@@ -598,27 +600,27 @@ describe("unittests:: tsc-watch:: watchAPI:: when getParsedCommandLine is implem
                         calledGetParsedCommandLine.clear();
                         sys.writeFile(`/user/username/projects/myproject/projects/project1/class3.ts`, `class class3 {}`);
                     },
-                    timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
                 {
                     caption: "Add class3 output to project1",
                     edit: sys => sys.writeFile(`/user/username/projects/myproject/projects/project1/class3.d.ts`, `declare class class3 {}`),
-                    timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
                 {
                     caption: "Add excluded file to project1",
                     edit: sys => sys.ensureFileOrFolder({ path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`, content: `declare class file {}` }),
-                    timeouts: sys => sys.checkTimeoutQueueLength(0),
+                    timeouts: sys => sys.logTimeoutQueueLength(),
                 },
                 {
                     caption: "Delete output of class3",
                     edit: sys => sys.deleteFile(`/user/username/projects/myproject/projects/project1/class3.d.ts`),
-                    timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
                 {
                     caption: "Add output of class3",
                     edit: sys => sys.writeFile(`/user/username/projects/myproject/projects/project1/class3.d.ts`, `declare class class3 {}`),
-                    timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
             ],
             watchOrSolution: watch
@@ -661,7 +663,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when builder emit occurs with emitO
                             sys.writeFile(`/user/username/projects/myproject/b.ts`, `export const y = 10;`);
                             callFullEmit = false;
                         },
-                        timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                        timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                     },
                     {
                         caption: "Emit with emitOnlyDts shouldnt emit anything",
@@ -670,7 +672,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when builder emit occurs with emitO
                             program.emit(/*targetSourceFile*/ undefined, /*writeFile*/ undefined, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ true);
                             baseline.cb(program);
                         },
-                        timeouts: sys => sys.checkTimeoutQueueLength(0),
+                        timeouts: sys => sys.logTimeoutQueueLength(),
                     },
                     {
                         caption: "Emit all files",
@@ -679,7 +681,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when builder emit occurs with emitO
                             program.emit();
                             baseline.cb(program);
                         },
-                        timeouts: sys => sys.checkTimeoutQueueLength(0),
+                        timeouts: sys => sys.logTimeoutQueueLength(),
                     },
                     {
                         caption: "Emit with emitOnlyDts shouldnt emit anything",
@@ -688,7 +690,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when builder emit occurs with emitO
                             program.emit(/*targetSourceFile*/ undefined, /*writeFile*/ undefined, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ true);
                             baseline.cb(program);
                         },
-                        timeouts: sys => sys.checkTimeoutQueueLength(0),
+                        timeouts: sys => sys.logTimeoutQueueLength(),
                     },
                     {
                         caption: "Emit full should not emit anything",
@@ -697,7 +699,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when builder emit occurs with emitO
                             program.emit();
                             baseline.cb(program);
                         },
-                        timeouts: sys => sys.checkTimeoutQueueLength(0),
+                        timeouts: sys => sys.logTimeoutQueueLength(),
                     },
                 ],
                 watchOrSolution: watch
@@ -717,4 +719,104 @@ describe("unittests:: tsc-watch:: watchAPI:: when builder emit occurs with emitO
     }
     verify("when emitting with emitOnlyDtsFiles");
     verify("when emitting with emitOnlyDtsFiles with outFile", "outFile.js");
+});
+
+describe("unittests:: tsc-watch:: watchAPI:: when creating program with project references but not config file", () => {
+    function setup(libExtends: boolean) {
+        const system = createWatchedSystem({
+            "/user/username/projects/project/tsconfig.json": JSON.stringify({
+                compilerOptions: { types: [] },
+                files: ["app.ts"],
+                references: [{ path: "./lib" }]
+            }),
+            "/user/username/projects/project/app.ts": dedent`
+                import { one } from './lib';
+                console.log(one);
+            `,
+            "/user/username/projects/project/lib/tsconfig.json": JSON.stringify({
+                extends: libExtends ? "./tsconfig.base.json" : undefined,
+                compilerOptions: libExtends ? undefined : { composite: true, types: [] },
+                files: ["index.ts"],
+            }),
+            "/user/username/projects/project/lib/tsconfig.base.json": JSON.stringify({
+                compilerOptions: { composite: true, types: [] },
+            }),
+            "/user/username/projects/project/lib/index.ts": "export const one = 1;",
+            "/user/username/projects/project/lib/index.d.ts": "export const one = 1;",
+            [libFile.path]: libContent,
+        });
+        const baseline = createBaseline(system);
+        const commandLine = ts.getParsedCommandLineOfConfigFile(
+            "/user/username/projects/project/tsconfig.json",
+            { extendedDiagnostics: true },
+            {
+                useCaseSensitiveFileNames: true,
+                fileExists: path => system.fileExists(path),
+                readFile: path => system.readFile(path),
+                getCurrentDirectory: () => system.getCurrentDirectory(),
+                readDirectory: (path, extensions, excludes, includes, depth) => system.readDirectory(path, extensions, excludes, includes, depth),
+                onUnRecoverableConfigFileDiagnostic: ts.noop,
+            }
+        )!;
+        const compilerHost = createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
+            cb: baseline.cb,
+            system,
+            rootFiles: commandLine.fileNames,
+            options: commandLine.options,
+            projectReferences: commandLine.projectReferences,
+            watchOptions: commandLine.watchOptions,
+        });
+        const watch = ts.createWatchProgram(compilerHost);
+        return { watch, baseline };
+    }
+
+    it("when watching referenced project when there is no config file name", () => {
+        const { watch, baseline } = setup(/*libExtends*/ false);
+        runWatchBaseline({
+            scenario: "watchApi",
+            subScenario: "when watching referenced project when there is no config file name",
+            commandLineArgs: ["--w", "-p", ".", "--extendedDiagnostics"],
+            ...baseline,
+            edits: [
+                {
+                    caption: "Modify lib tsconfig",
+                    edit: sys => sys.writeFile(`/user/username/projects/project/lib/tsconfig.json`, JSON.stringify({
+                        compilerOptions: { composite: true },
+                        files: ["index.ts"],
+                    })),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                },
+            ],
+            watchOrSolution: watch
+        });
+    });
+
+    it("when watching referenced project with extends when there is no config file name", () => {
+        const { watch, baseline } = setup(/*libExtends*/ true);
+        runWatchBaseline({
+            scenario: "watchApi",
+            subScenario: "when watching referenced project with extends when there is no config file name",
+            commandLineArgs: ["--w", "-p", ".", "--extendedDiagnostics"],
+            ...baseline,
+            edits: [
+                {
+                    caption: "Modify lib tsconfig",
+                    edit: sys => sys.writeFile(`/user/username/projects/project/lib/tsconfig.json`, JSON.stringify({
+                        extends: "./tsconfig.base.json",
+                        compilerOptions: { typeRoots: [] },
+                        files: ["index.ts"],
+                    })),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                },
+                {
+                    caption: "Modify lib extends",
+                    edit: sys => sys.writeFile(`/user/username/projects/project/lib/tsconfig.base.json`, JSON.stringify({
+                        compilerOptions: { composite: true },
+                    })),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                },
+            ],
+            watchOrSolution: watch
+        });
+    });
 });

@@ -97,7 +97,7 @@
             "allowDeclarations": true
         }],
         "local/no-double-space": "error",
-        "local/boolean-trivia": "error",
+        "local/argument-trivia": "error",
         "local/no-in-operator": "error",
         "local/simple-indent": "error",
         "local/debug-assert": "error",

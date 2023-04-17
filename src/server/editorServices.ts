@@ -54,6 +54,7 @@ import {
     getFileNamesFromConfigSpecs,
     getFileWatcherEventKind,
     getNormalizedAbsolutePath,
+    getPathComponents,
     getSnapshotText,
     getWatchFactory,
     hasExtension,
@@ -169,7 +170,6 @@ import {
     ProjectKind,
     ProjectOptions,
     ScriptInfo,
-    ScriptInfoVersion,
     ServerHost,
     Session,
     SetTypings,
@@ -870,7 +870,7 @@ export class ProjectService {
      * it does not reset when creating script info again
      * (and could have potentially collided with version where contents mismatch)
      */
-    private readonly filenameToScriptInfoVersion = new Map<string, ScriptInfoVersion>();
+    private readonly filenameToScriptInfoVersion = new Map<string, number>();
     // Set of all '.js' files ever opened.
     private readonly allJsFilesForOpenFileTelemetry = new Map<string, true>();
 
@@ -1623,7 +1623,7 @@ export class ProjectService {
 
     private removeProject(project: Project) {
         this.logger.info("`remove Project::");
-        project.print(/*writeProjectFileNames*/ true);
+        project.print(/*writeProjectFileNames*/ true, /*writeFileExplaination*/ true, /*writeFileVersionAndText*/ false);
 
         project.close();
         if (Debug.shouldAssert(AssertionLevel.Normal)) {
@@ -1812,7 +1812,7 @@ export class ProjectService {
 
     private deleteScriptInfo(info: ScriptInfo) {
         this.filenameToScriptInfo.delete(info.path);
-        this.filenameToScriptInfoVersion.set(info.path, info.getVersion());
+        this.filenameToScriptInfoVersion.set(info.path, info.textStorage.version);
         const realpath = info.getRealpathIfDifferent();
         if (realpath) {
             this.realpathToScriptInfos!.remove(realpath, info); // TODO: GH#18217
@@ -1893,7 +1893,7 @@ export class ProjectService {
             // created when any of the script infos are added as root of inferred project
             if (this.configFileExistenceImpactsRootOfInferredProject(configFileExistenceInfo)) {
                 // If we cannot watch config file existence without configured project, close the configured file watcher
-                if (!canWatchDirectoryOrFile(getDirectoryPath(canonicalConfigFilePath) as Path)) {
+                if (!canWatchDirectoryOrFile(getPathComponents(getDirectoryPath(canonicalConfigFilePath) as Path))) {
                     configFileExistenceInfo.watcher!.close();
                     configFileExistenceInfo.watcher = noopConfigFileWatcher;
                 }
@@ -1980,7 +1980,7 @@ export class ProjectService {
             (configFileExistenceInfo.openFilesImpactedByConfigFile ||= new Map()).set(info.path, true);
 
             // If there is no configured project for this config file, add the file watcher
-            configFileExistenceInfo.watcher ||= canWatchDirectoryOrFile(getDirectoryPath(canonicalConfigFilePath) as Path) ?
+            configFileExistenceInfo.watcher ||= canWatchDirectoryOrFile(getPathComponents(getDirectoryPath(canonicalConfigFilePath) as Path)) ?
                 this.watchFactory.watchFile(
                     configFileName,
                     (_filename, eventKind) => this.onConfigFileChanged(canonicalConfigFilePath, eventKind),
@@ -2704,12 +2704,12 @@ export class ProjectService {
         }
 
         // Single inferred project does not have a project root and hence no current directory
-        return this.createInferredProject(/*currentDirectory*/ undefined, /*isSingleInferredProject*/ true);
+        return this.createInferredProject("", /*isSingleInferredProject*/ true);
     }
 
-    private getOrCreateSingleInferredWithoutProjectRoot(currentDirectory: string | undefined): InferredProject {
+    private getOrCreateSingleInferredWithoutProjectRoot(currentDirectory: string): InferredProject {
         Debug.assert(!this.useSingleInferredProject);
-        const expectedCurrentDirectory = this.toCanonicalFileName(this.getNormalizedAbsolutePath(currentDirectory || ""));
+        const expectedCurrentDirectory = this.toCanonicalFileName(this.getNormalizedAbsolutePath(currentDirectory));
         // Reuse the project with same current directory but no roots
         for (const inferredProject of this.inferredProjects) {
             if (!inferredProject.projectRootPath &&
@@ -2722,7 +2722,7 @@ export class ProjectService {
         return this.createInferredProject(currentDirectory);
     }
 
-    private createInferredProject(currentDirectory: string | undefined, isSingleInferredProject?: boolean, projectRootPath?: NormalizedPath): InferredProject {
+    private createInferredProject(currentDirectory: string, isSingleInferredProject?: boolean, projectRootPath?: NormalizedPath): InferredProject {
         const compilerOptions = projectRootPath && this.compilerOptionsForInferredProjectsPerProjectRoot.get(projectRootPath) || this.compilerOptionsForInferredProjects!; // TODO: GH#18217
         let watchOptionsAndErrors: WatchOptionsAndErrors | false | undefined;
         let typeAcquisition: TypeAcquisition | undefined;
@@ -3001,7 +3001,7 @@ export class ProjectService {
             // Opening closed script info
             // either it was created just now, or was part of projects but was closed
             this.stopWatchingScriptInfo(info);
-            info.open(fileContent!);
+            info.open(fileContent);
             if (hasMixedContent) {
                 info.registerFileUpdate();
             }
@@ -3075,7 +3075,7 @@ export class ProjectService {
         const documentPositionMapper = getDocumentPositionMapper(
             { getCanonicalFileName: this.toCanonicalFileName, log: s => this.logger.info(s), getSourceFileLike: f => this.getSourceFileLike(f, projectName, declarationInfo) },
             declarationInfo.fileName,
-            declarationInfo.getLineInfo(),
+            declarationInfo.textStorage.getLineInfo(),
             readMapFile
         );
         readMapFile = undefined; // Remove ref to project
@@ -4493,5 +4493,5 @@ export function isConfigFile(config: ScriptInfoOrConfig): config is TsConfigSour
 }
 
 function printProjectWithoutFileNames(project: Project) {
-    project.print(/*writeProjectFileNames*/ false);
+    project.print(/*writeProjectFileNames*/ false, /*writeFileExplaination*/ false, /*writeFileVersionAndText*/ false);
 }

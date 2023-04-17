@@ -1,0 +1,25 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionConstructorOfClassWhenClassIsPrecededByNamespace01.ts ===
+// namespace Foo {
+//     export var x;
+// }
+// 
+// class Foo {
+//     [|constructor() {
+//     }|]
+// }
+// 
+// var x = new /*GOTO DEF*/Foo();
+
+  // === Details ===
+  [
+   {
+    "kind": "constructor",
+    "name": "__constructor",
+    "containerName": "Foo",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

@@ -171,7 +171,7 @@ export function countEachFileTypes(infos: ScriptInfo[], includeSizes = false): F
         deferred: 0, deferredSize: 0,
     };
     for (const info of infos) {
-        const fileSize = includeSizes ? info.getTelemetryFileSize() : 0;
+        const fileSize = includeSizes ? info.textStorage.getTelemetryFileSize() : 0;
         switch (info.scriptKind) {
             case ScriptKind.JS:
                 result.js += 1;
@@ -465,11 +465,11 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         public compileOnSaveEnabled: boolean,
         protected watchOptions: WatchOptions | undefined,
         directoryStructureHost: DirectoryStructureHost,
-        currentDirectory: string | undefined,
+        currentDirectory: string,
     ) {
         this.projectName = projectName;
         this.directoryStructureHost = directoryStructureHost;
-        this.currentDirectory = this.projectService.getNormalizedAbsolutePath(currentDirectory || "");
+        this.currentDirectory = this.projectService.getNormalizedAbsolutePath(currentDirectory);
         this.getCanonicalFileName = this.projectService.toCanonicalFileName;
 
         this.cancellationToken = new ThrottledCancellationToken(this.projectService.cancellationToken, this.projectService.throttleWaitMilliseconds);
@@ -514,7 +514,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         // Use the current directory as resolution root only if the project created using current directory string
         this.resolutionCache = createResolutionCache(
             this,
-            currentDirectory && this.currentDirectory,
+            this.currentDirectory,
             /*logChangesWhenResolvingModule*/ true
         );
         this.languageService = createLanguageService(this, this.documentRegistry, this.projectService.serverMode);
@@ -1259,7 +1259,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
      */
     updateGraph(): boolean {
         tracing?.push(tracing.Phase.Session, "updateGraph", { name: this.projectName, kind: ProjectKind[this.projectKind] });
-        perfLogger.logStartUpdateGraph();
+        perfLogger?.logStartUpdateGraph();
         this.resolutionCache.startRecordingFilesWithChangedResolutions();
 
         const hasNewProgram = this.updateGraphWorker();
@@ -1305,7 +1305,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             // Preload auto import provider so it's not created during completions request
             this.getPackageJsonAutoImportProvider();
         }
-        perfLogger.logStopUpdateGraph();
+        perfLogger?.logStopUpdateGraph();
         tracing?.pop();
         return !hasNewProgram;
     }
@@ -1461,8 +1461,16 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         const elapsed = timestamp() - start;
         this.sendPerformanceEvent("UpdateGraph", elapsed);
         this.writeLog(`Finishing updateGraphWorker: Project: ${this.getProjectName()} Version: ${this.getProjectVersion()} structureChanged: ${hasNewProgram}${this.program ? ` structureIsReused:: ${(ts as any).StructureIsReused[this.program.structureIsReused]}` : ""} Elapsed: ${elapsed}ms`);
-        if (this.hasAddedorRemovedFiles) {
-            this.print(/*writeProjectFileNames*/ true);
+        if (this.projectService.logger.isTestLogger) {
+            if (this.program !== oldProgram) {
+                this.print(/*writeProjectFileNames*/ true, this.hasAddedorRemovedFiles, /*writeFileVersionAndText*/ true);
+            }
+            else {
+                this.writeLog(`Same program as before`);
+            }
+        }
+        else if (this.hasAddedorRemovedFiles) {
+            this.print(/*writeProjectFileNames*/ true, /*writeFileExplaination*/ true, /*writeFileVersionAndText*/ false);
         }
         else if (this.program !== oldProgram) {
             this.writeLog(`Different program with same set of files`);
@@ -1589,27 +1597,38 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     filesToString(writeProjectFileNames: boolean) {
+        return this.filesToStringWorker(writeProjectFileNames, /*writeFileExplaination*/ true, /*writeFileVersionAndText*/ false);
+    }
+
+    /** @internal */
+    private filesToStringWorker(writeProjectFileNames: boolean, writeFileExplaination: boolean, writeFileVersionAndText: boolean) {
         if (this.isInitialLoadPending()) return "\tFiles (0) InitialLoadPending\n";
         if (!this.program) return "\tFiles (0) NoProgram\n";
         const sourceFiles = this.program.getSourceFiles();
         let strBuilder = `\tFiles (${sourceFiles.length})\n`;
         if (writeProjectFileNames) {
             for (const file of sourceFiles) {
-                strBuilder += `\t${file.fileName}\n`;
+                strBuilder += `\t${file.fileName}${writeFileVersionAndText?` ${file.version} ${JSON.stringify(file.text)}` : ""}\n`;
             }
-            strBuilder += "\n\n";
-            explainFiles(this.program, s => strBuilder += `\t${s}\n`);
+            if (writeFileExplaination) {
+                strBuilder += "\n\n";
+                explainFiles(this.program, s => strBuilder += `\t${s}\n`);
+            }
         }
         return strBuilder;
     }
 
     /** @internal */
-    print(writeProjectFileNames: boolean) {
+    print(writeProjectFileNames: boolean, writeFileExplaination: boolean, writeFileVersionAndText: boolean) {
         this.writeLog(`Project '${this.projectName}' (${ProjectKind[this.projectKind]})`);
-        this.writeLog(this.filesToString(writeProjectFileNames && this.projectService.logger.hasLevel(LogLevel.verbose)));
+        this.writeLog(this.filesToStringWorker(
+            writeProjectFileNames && this.projectService.logger.hasLevel(LogLevel.verbose),
+            writeFileExplaination && this.projectService.logger.hasLevel(LogLevel.verbose),
+            writeFileVersionAndText && this.projectService.logger.hasLevel(LogLevel.verbose),
+        ));
         this.writeLog("-----------------------------------------------");
         if (this.autoImportProviderHost) {
-            this.autoImportProviderHost.print(/*writeProjectFileNames*/ false);
+            this.autoImportProviderHost.print(/*writeProjectFileNames*/ false, /*writeFileExplaination*/ false, /*writeFileVersionAndText*/ false);
         }
     }
 
@@ -2040,7 +2059,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     getNoDtsResolutionProject(rootFileNames: readonly string[]): Project {
         Debug.assert(this.projectService.serverMode === LanguageServiceMode.Semantic);
         if (!this.noDtsResolutionProject) {
-            this.noDtsResolutionProject = new AuxiliaryProject(this.projectService, this.documentRegistry, this.getCompilerOptionsForNoDtsResolutionProject());
+            this.noDtsResolutionProject = new AuxiliaryProject(this.projectService, this.documentRegistry, this.getCompilerOptionsForNoDtsResolutionProject(), this.currentDirectory);
         }
 
         enumerateInsertsAndDeletes<NormalizedPath, NormalizedPath>(
@@ -2157,7 +2176,7 @@ export class InferredProject extends Project {
         compilerOptions: CompilerOptions,
         watchOptions: WatchOptions | undefined,
         projectRootPath: NormalizedPath | undefined,
-        currentDirectory: string | undefined,
+        currentDirectory: string,
         pluginConfigOverrides: Map<string, any> | undefined,
         typeAcquisition: TypeAcquisition | undefined) {
         super(projectService.newInferredProjectName(),
@@ -2227,7 +2246,7 @@ export class InferredProject extends Project {
 }
 
 class AuxiliaryProject extends Project {
-    constructor(projectService: ProjectService, documentRegistry: DocumentRegistry, compilerOptions: CompilerOptions) {
+    constructor(projectService: ProjectService, documentRegistry: DocumentRegistry, compilerOptions: CompilerOptions, currentDirectory: string) {
         super(projectService.newAuxiliaryProjectName(),
             ProjectKind.Auxiliary,
             projectService,
@@ -2238,7 +2257,7 @@ class AuxiliaryProject extends Project {
             /*compileOnSaveEnabled*/ false,
             /*watchOptions*/ undefined,
             projectService.host,
-            /*currentDirectory*/ undefined);
+            currentDirectory);
     }
 
     override isOrphan(): boolean {
@@ -2331,7 +2350,7 @@ export class AutoImportProviderProject extends Project {
                 //    allow processing JS from node_modules, go back to the implementation
                 //    package and load the JS.
                 if (packageJson && compilerOptions.allowJs && compilerOptions.maxNodeModuleJsDepth) {
-                    const entrypoints = getRootNamesFromPackageJson(packageJson, program, symlinkCache, /*allowJs*/ true);
+                    const entrypoints = getRootNamesFromPackageJson(packageJson, program, symlinkCache, /*resolveJs*/ true);
                     rootNames = concatenate(rootNames, entrypoints);
                     dependenciesAdded += entrypoints?.length ? 1 : 0;
                 }
@@ -2827,7 +2846,7 @@ export class ConfiguredProject extends Project {
     }
 
     getEffectiveTypeRoots() {
-        return getEffectiveTypeRoots(this.getCompilationSettings(), this.directoryStructureHost) || [];
+        return getEffectiveTypeRoots(this.getCompilationSettings(), this) || [];
     }
 
     /** @internal */

@@ -8,5 +8,4 @@ class C4a extends void {}
 
 class C5a extends null { }
 >C5a : C5a
->null : null
 

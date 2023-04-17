@@ -1,0 +1,17 @@
+// === goToType ===
+// === /tests/cases/fourslash/goToTypeDefinition3.ts ===
+// <|type [|T|] = string;|>
+// const x: /*GOTO TYPE*/T;
+
+  // === Details ===
+  [
+   {
+    "kind": "type",
+    "name": "T",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

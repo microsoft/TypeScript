@@ -1,3 +1,4 @@
+currentDirectory:: /Users/name/projects/web useCaseSensitiveFileNames: false
 Input::
 //// [/Users/name/projects/web/package.json]
 {"name":"@this/package","type":"module","exports":{".":"./dist/index.js"}}
@@ -68,21 +69,23 @@ Shape signatures in builder refreshed for::
 /users/name/projects/web/index.ts (computed .d.ts during emit)
 
 PolledWatches::
-/users/name/projects/web/node_modules/@types:
+/users/name/projects/web/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/name/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/users/name/projects/web/tsconfig.json:
+/users/name/projects/web/tsconfig.json: *new*
   {}
-/users/name/projects/web/index.ts:
+/users/name/projects/web/index.ts: *new*
   {}
-/a/lib/lib.esnext.full.d.ts:
+/a/lib/lib.esnext.full.d.ts: *new*
   {}
-/users/name/projects/web/package.json:
+/users/name/projects/web/package.json: *new*
   {}
 
 FsWatchesRecursive::
-/users/name/projects/web:
+/users/name/projects/web: *new*
   {}
 
 exitCode:: ExitStatus.undefined

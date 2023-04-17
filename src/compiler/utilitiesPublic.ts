@@ -243,7 +243,6 @@ import {
     PropertyAccessExpression,
     PropertyDeclaration,
     PropertyName,
-    Push,
     QualifiedName,
     ScriptTarget,
     SetAccessorDeclaration,
@@ -641,7 +640,7 @@ export function validateLocaleAndSetLanguage(
     // Set the UI locale for string collation
     setUILocale(locale);
 
-    function trySetLanguageAndTerritory(language: string, territory: string | undefined, errors?: Push<Diagnostic>): boolean {
+    function trySetLanguageAndTerritory(language: string, territory: string | undefined, errors?: Diagnostic[]): boolean {
         const compilerFilePath = normalizePath(sys.getExecutingFilePath());
         const containingDirectoryPath = getDirectoryPath(compilerFilePath);
 
@@ -1942,6 +1941,7 @@ function isLeftHandSideExpressionKind(kind: SyntaxKind): boolean {
         case SyntaxKind.JsxElement:
         case SyntaxKind.JsxSelfClosingElement:
         case SyntaxKind.JsxFragment:
+        case SyntaxKind.JsxNamespacedName:
         case SyntaxKind.TaggedTemplateExpression:
         case SyntaxKind.ArrayLiteralExpression:
         case SyntaxKind.ParenthesizedExpression:
@@ -2407,7 +2407,8 @@ export function isJsxTagNameExpression(node: Node): node is JsxTagNameExpression
     const kind = node.kind;
     return kind === SyntaxKind.ThisKeyword
         || kind === SyntaxKind.Identifier
-        || kind === SyntaxKind.PropertyAccessExpression;
+        || kind === SyntaxKind.PropertyAccessExpression
+        || kind === SyntaxKind.JsxNamespacedName;
 }
 
 export function isJsxChild(node: Node): node is JsxChild {
