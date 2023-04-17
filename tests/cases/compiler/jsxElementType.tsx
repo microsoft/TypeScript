@@ -108,4 +108,6 @@ declare global {
   }
 }
 
+<a:b a="accepted" />;
+<a:b b="rejected" />;
 <a:b a="accepted" b="rejected" />;
