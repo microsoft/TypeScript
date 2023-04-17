@@ -92,6 +92,10 @@ File '/users/username/projects/project/node_modules/pkg2.d.ts' does not exist.
 File '/users/username/projects/project/node_modules/pkg2/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/users/username/projects/project/node_modules/pkg2/index.d.ts', result '/users/username/projects/project/node_modules/pkg2/index.d.ts'.
 ======== Type reference directive 'pkg2' was successfully resolved to '/users/username/projects/project/node_modules/pkg2/index.d.ts', primary: false. ========
+DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules 1 undefined Failed Lookup Locations
 ======== Resolving type reference directive 'pkg3', containing file '/users/username/projects/project/fileWithTypeRefs.ts', root directory '/users/username/projects/project/node_modules/@types,/users/username/projects/node_modules/@types,/users/username/node_modules/@types,/users/node_modules/@types,/node_modules/@types'. ========
 Resolving with primary search path '/users/username/projects/project/node_modules/@types, /users/username/projects/node_modules/@types, /users/username/node_modules/@types, /users/node_modules/@types, /node_modules/@types'.
 Directory '/users/username/projects/project/node_modules/@types' does not exist, skipping all lookups in it.
@@ -109,10 +113,6 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Type reference directive 'pkg3' was not resolved. ========
 FileWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/pkg2/index.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 undefined Source file
-DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules 1 undefined Failed Lookup Locations
-DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/@types 1 undefined Type roots

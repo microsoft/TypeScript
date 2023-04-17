@@ -644,11 +644,12 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         getResolutionWithResolvedFileName: GetResolutionWithResolvedFileName<T, R>;
         shouldRetryResolution: (t: T) => boolean;
         logChanges?: boolean;
+        deferWatchingNonRelativeResolution: boolean;
     }
     function resolveNamesWithLocalCache<Entry, SourceFile, T extends ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName>({
         entries, containingFile, containingSourceFile, redirectedReference, options,
         perFileCache, reusedNames,
-        loader, getResolutionWithResolvedFileName,
+        loader, getResolutionWithResolvedFileName, deferWatchingNonRelativeResolution,
         shouldRetryResolution, logChanges,
     }: ResolveNamesWithLocalCacheInput<Entry, SourceFile, T, R>): readonly T[] {
         const path = resolutionHost.toPath(containingFile);
@@ -679,7 +680,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
                     resolutionHost.onDiscoveredSymlink();
                 }
                 resolutionsInFile.set(name, mode, resolution);
-                watchFailedLookupLocationsOfExternalModuleResolutions(name, resolution, path, getResolutionWithResolvedFileName);
+                watchFailedLookupLocationsOfExternalModuleResolutions(name, resolution, path, getResolutionWithResolvedFileName, deferWatchingNonRelativeResolution);
                 if (existingResolution) {
                     stopWatchFailedLookupLocationOfResolution(existingResolution, path, getResolutionWithResolvedFileName);
                 }
@@ -778,6 +779,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
             ),
             getResolutionWithResolvedFileName: getResolvedTypeReferenceDirective,
             shouldRetryResolution: resolution => resolution.resolvedTypeReferenceDirective === undefined,
+            deferWatchingNonRelativeResolution: false,
         });
     }
 
@@ -805,6 +807,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
             getResolutionWithResolvedFileName: getResolvedModule,
             shouldRetryResolution: resolution => !resolution.resolvedModule || !resolutionExtensionIsTSOrJson(resolution.resolvedModule.extension),
             logChanges: logChangesWhenResolvingModule,
+            deferWatchingNonRelativeResolution: true, // Defer non relative resolution watch because we could be using ambient modules
         });
     }
 
@@ -825,6 +828,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         resolution: T,
         filePath: Path,
         getResolutionWithResolvedFileName: GetResolutionWithResolvedFileName<T, R>,
+        deferWatchingNonRelativeResolution: boolean,
     ) {
         if (resolution.refCount) {
             resolution.refCount++;
@@ -833,7 +837,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         else {
             resolution.refCount = 1;
             Debug.assert(!resolution.files?.size); // This resolution shouldnt be referenced by any file yet
-            if (isExternalModuleNameRelative(name)) {
+            if (!deferWatchingNonRelativeResolution || isExternalModuleNameRelative(name)) {
                 watchFailedLookupLocationOfResolution(resolution);
             }
             else {
