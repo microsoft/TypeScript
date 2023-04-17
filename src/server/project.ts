@@ -2205,13 +2205,17 @@ export class InferredProject extends Project {
         if (!this._isJsInferredProject && info.isJavaScript()) {
             this.toggleJsInferredProject(/*isJsInferredProject*/ true);
         }
+        else if (this.isOrphan() && this._isJsInferredProject && !info.isJavaScript()) {
+            this.toggleJsInferredProject(/*isJsInferredProject*/ false);
+        }
         super.addRoot(info);
     }
 
     override removeRoot(info: ScriptInfo) {
         this.projectService.stopWatchingConfigFilesForInferredProjectRoot(info);
         super.removeRoot(info);
-        if (this._isJsInferredProject && info.isJavaScript()) {
+        // Delay toggling to isJsInferredProject = false till we actually need it again
+        if (!this.isOrphan() && this._isJsInferredProject && info.isJavaScript()) {
             if (every(this.getRootScriptInfos(), rootInfo => !rootInfo.isJavaScript())) {
                 this.toggleJsInferredProject(/*isJsInferredProject*/ false);
             }
