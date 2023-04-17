@@ -484,9 +484,4 @@ declare const Vue: new <D, M, P>(options: VueOptions<D, M, P>) => D & M & P;
 declare let vue: {
     x: number;
     y: number;
-} & {
-    f(x: string): number;
-} & {
-    test: number;
-    hello: string;
 };

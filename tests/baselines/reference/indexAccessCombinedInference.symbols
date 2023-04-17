@@ -345,9 +345,12 @@ interface Args4 {
 >Args4 : Symbol(Args4, Decl(indexAccessCombinedInference.ts, 98, 47))
 
     0: object,
+>0 : Symbol(Args4[0], Decl(indexAccessCombinedInference.ts, 101, 17))
+
     1: Record<keyof this["0"], Function>,
->Record : Symbol(Record, Decl(lib.d.ts, --, --))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>1 : Symbol(Args4[1], Decl(indexAccessCombinedInference.ts, 102, 14))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 }
 declare function dualInputs<T extends Args4>(x: T["0"], y: T["0"], toDelay: T["1"]): T["0"] & {transformers: T["1"]};
 >dualInputs : Symbol(dualInputs, Decl(indexAccessCombinedInference.ts, 104, 1))

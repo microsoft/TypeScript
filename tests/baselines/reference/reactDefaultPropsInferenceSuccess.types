@@ -49,12 +49,12 @@ const Test1 = () => <FieldFeedback when={value => !!value} />;
 >() => <FieldFeedback when={value => !!value} /> : () => JSX.Element
 ><FieldFeedback when={value => !!value} /> : JSX.Element
 >FieldFeedback : typeof FieldFeedback
->when : (value: string) => boolean
->value => !!value : (value: string) => boolean
->value : string
+>when : (value: any) => boolean
+>value => !!value : (value: any) => boolean
+>value : any
 >!!value : boolean
 >!value : boolean
->value : string
+>value : any
 
 // Error: Void not assignable to boolean
 const Test2 = () => <FieldFeedback when={value => console.log(value)} />;
@@ -62,14 +62,14 @@ const Test2 = () => <FieldFeedback when={value => console.log(value)} />;
 >() => <FieldFeedback when={value => console.log(value)} /> : () => JSX.Element
 ><FieldFeedback when={value => console.log(value)} /> : JSX.Element
 >FieldFeedback : typeof FieldFeedback
->when : (value: string) => void
->value => console.log(value) : (value: string) => void
->value : string
+>when : (value: any) => void
+>value => console.log(value) : (value: any) => void
+>value : any
 >console.log(value) : void
 >console.log : (...data: any[]) => void
 >console : Console
 >log : (...data: any[]) => void
->value : string
+>value : any
 
 class FieldFeedbackBeta<P extends Props = BaseProps> extends React.Component<P> {
 >FieldFeedbackBeta : FieldFeedbackBeta<P>
@@ -176,12 +176,12 @@ const Test3 = () => <FieldFeedback2 when={value => !!value} />;
 >() => <FieldFeedback2 when={value => !!value} /> : () => JSX.Element
 ><FieldFeedback2 when={value => !!value} /> : JSX.Element
 >FieldFeedback2 : typeof FieldFeedback2
->when : (value: string) => boolean
->value => !!value : (value: string) => boolean
->value : string
+>when : (value: any) => boolean
+>value => !!value : (value: any) => boolean
+>value : any
 >!!value : boolean
 >!value : boolean
->value : string
+>value : any
 
 // Error: Void not assignable to boolean
 const Test4 = () => <FieldFeedback2 when={value => console.log(value)} />;
@@ -189,14 +189,14 @@ const Test4 = () => <FieldFeedback2 when={value => console.log(value)} />;
 >() => <FieldFeedback2 when={value => console.log(value)} /> : () => JSX.Element
 ><FieldFeedback2 when={value => console.log(value)} /> : JSX.Element
 >FieldFeedback2 : typeof FieldFeedback2
->when : (value: string) => void
->value => console.log(value) : (value: string) => void
->value : string
+>when : (value: any) => void
+>value => console.log(value) : (value: any) => void
+>value : any
 >console.log(value) : void
 >console.log : (...data: any[]) => void
 >console : Console
 >log : (...data: any[]) => void
->value : string
+>value : any
 
 // OK
 const Test5 = () => <FieldFeedback2 />;

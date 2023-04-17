@@ -1,8 +1,6 @@
 === tests/cases/compiler/indexAccessCombinedInference.ts ===
 // Simple case
 interface Args {
->Args : Args
-
     TA: object,
 >TA : object
 
@@ -12,18 +10,12 @@ interface Args {
 
 declare function foo<T extends Args>(
 >foo : <T extends Args>(a: T["TA"], b: T["TY"]) => T["TA"] & T["TY"]
->T : T
->Args : Args
 
     a: T["TA"],
 >a : T["TA"]
->T : T
 
     b: T["TY"]): T["TA"] & T["TY"];
 >b : T["TY"]
->T : T
->T : T
->T : T
 
 const x = foo({
 >x : { x: { j: number; i: number; }; } & { y: number; }
@@ -50,25 +42,19 @@ const x = foo({
 
 // Union result type
 interface A {
->A : A
-
     foo: number;
 >foo : number
 }
 interface B {
->B : B
-
     bar: string;
 >bar : string
 }
 declare const something: A | B;
 >something : A | B
->A : A
->B : B
 
 const y = foo(something, { bat: 42 });
 >y : (A & { bat: number; }) | (B & { bat: number; })
->foo(something, { bat: 42 }) : (A & { bat: number; }) | (B & { bat: number; })
+>foo(something, { bat: 42 }) : (A | B) & { bat: number; }
 >foo : <T extends Args>(a: T["TA"], b: T["TY"]) => T["TA"] & T["TY"]
 >something : A | B
 >{ bat: 42 } : { bat: number; }
@@ -77,8 +63,6 @@ const y = foo(something, { bat: 42 });
 
 // Union key type
 interface Args2 {
->Args2 : Args2
-
     TA?: object, // Optional since only one of TA or TB needs to be infered in the below argument list
 >TA : object
 
@@ -89,41 +73,26 @@ interface Args2 {
 >TY : object
 }
 declare function foo2<T extends Args2>(
->foo2 : <T extends Args2>(a: T["TA"] | T["TB"], b: T["TY"]) => { a: T["TA"]; b: T["TB"]; } & T["TY"]
->T : T
->Args2 : Args2
+>foo2 : <T extends Args2>(a: T["TA"] | T["TB"], b: T["TY"]) => {    a: T["TA"];    b: T["TB"];} & T["TY"]
 
     a: T["TA"] | T["TB"],
 >a : T["TA"] | T["TB"]
->T : T
->T : T
 
     b: T["TY"]): {a: T["TA"], b: T["TB"]} & T["TY"];
 >b : T["TY"]
->T : T
 >a : T["TA"]
->T : T
 >b : T["TB"]
->T : T
->T : T
 
 declare function foo3<T extends Args2>( // Morally equivalent to foo2
->foo3 : <T extends Args2>(a: T["TA" | "TB"], b: T["TY"]) => { a: T["TA"]; b: T["TB"]; } & T["TY"]
->T : T
->Args2 : Args2
+>foo3 : <T extends Args2>(a: T["TA" | "TB"], b: T["TY"]) => {    a: T["TA"];    b: T["TB"];} & T["TY"]
 
     a: T["TA" | "TB"],
 >a : T["TA" | "TB"]
->T : T
 
     b: T["TY"]): {a: T["TA"], b: T["TB"]} & T["TY"];
 >b : T["TY"]
->T : T
 >a : T["TA"]
->T : T
 >b : T["TB"]
->T : T
->T : T
 
 let z = foo2({
 >z : { a: { x: { j: number; i: number; }; }; b: { x: { j: number; i: number; }; }; } & { y: number; }
@@ -149,8 +118,8 @@ let z = foo2({
 >42 : 42
 
 let zz = foo3({
->zz : { a: any; b: any; } & { y: number; }
->foo3({    x: {        j: 12,        i: 11    }}, { y: 42 }) : { a: any; b: any; } & { y: number; }
+>zz : { a: { x: { j: number; i: number; }; }; b: { x: { j: number; i: number; }; }; } & { y: number; }
+>foo3({    x: {        j: 12,        i: 11    }}, { y: 42 }) : { a: { x: { j: number; i: number; }; }; b: { x: { j: number; i: number; }; }; } & { y: number; }
 >foo3 : <T extends Args2>(a: T["TA" | "TB"], b: T["TY"]) => { a: T["TA"]; b: T["TB"]; } & T["TY"]
 >{    x: {        j: 12,        i: 11    }} : { x: { j: number; i: number; }; }
 
@@ -172,19 +141,17 @@ let zz = foo3({
 >42 : 42
 
 z = zz;
->z = zz : { a: any; b: any; } & { y: number; }
+>z = zz : { a: { x: { j: number; i: number; }; }; b: { x: { j: number; i: number; }; }; } & { y: number; }
 >z : { a: { x: { j: number; i: number; }; }; b: { x: { j: number; i: number; }; }; } & { y: number; }
->zz : { a: any; b: any; } & { y: number; }
+>zz : { a: { x: { j: number; i: number; }; }; b: { x: { j: number; i: number; }; }; } & { y: number; }
 
 zz = z;
 >zz = z : { a: { x: { j: number; i: number; }; }; b: { x: { j: number; i: number; }; }; } & { y: number; }
->zz : { a: any; b: any; } & { y: number; }
+>zz : { a: { x: { j: number; i: number; }; }; b: { x: { j: number; i: number; }; }; } & { y: number; }
 >z : { a: { x: { j: number; i: number; }; }; b: { x: { j: number; i: number; }; }; } & { y: number; }
 
 // Higher-order
 interface Args3 {
->Args3 : Args3
-
     Key: "A" | "B",
 >Key : "A" | "B"
 
@@ -202,19 +169,10 @@ declare const either: "A" | "B";
 
 declare function pickOne<T extends Args3>(key: T["Key"], left: T["A"], right: T["B"], into: T["Merge"]): T[T["Key"]] & T["Merge"];
 >pickOne : { <T extends Args3>(key: T["Key"], left: T["A"], right: T["B"], into: T["Merge"]): T[T["Key"]] & T["Merge"]; <T extends Args3>(key: T["Key"], left: T["A"], right: T["B"], into: T["Merge"], extra: T["Extra"]): T[T["Key"]] & { into: T["Merge"]; extra: T["Extra"]; }; }
->T : T
->Args3 : Args3
 >key : T["Key"]
->T : T
 >left : T["A"]
->T : T
 >right : T["B"]
->T : T
 >into : T["Merge"]
->T : T
->T : T
->T : T
->T : T
 
 const opt1 = pickOne("A", {x: 12}, {y: ""}, {z: /./});
 >opt1 : { x: number; } & { z: RegExp; }
@@ -248,7 +206,7 @@ const opt2 = pickOne("B", {x: 12}, {y: ""}, {z: /./});
 
 const opt3 = pickOne(either, {x: 12}, {y: ""}, {z: /./});
 >opt3 : ({ x: number; } & { z: RegExp; }) | ({ y: string; } & { z: RegExp; })
->pickOne(either, {x: 12}, {y: ""}, {z: /./}) : ({ x: number; } & { z: RegExp; }) | ({ y: string; } & { z: RegExp; })
+>pickOne(either, {x: 12}, {y: ""}, {z: /./}) : ({ x: number; } | { y: string; }) & { z: RegExp; }
 >pickOne : { <T extends Args3>(key: T["Key"], left: T["A"], right: T["B"], into: T["Merge"]): T[T["Key"]] & T["Merge"]; <T extends Args3>(key: T["Key"], left: T["A"], right: T["B"], into: T["Merge"], extra: T["Extra"]): T[T["Key"]] & { into: T["Merge"]; extra: T["Extra"]; }; }
 >either : "A" | "B"
 >{x: 12} : { x: number; }
@@ -264,10 +222,7 @@ const opt3 = pickOne(either, {x: 12}, {y: ""}, {z: /./});
 const pickDelayed = <TKey extends Args3["Key"]>(x: TKey) => pickOne(x, {j: x}, {i: x}, {chosen: x});
 >pickDelayed : <TKey extends "A" | "B">(x: TKey) => ({ Key: TKey; } & { A: { j: TKey; }; } & { B: { i: TKey; }; } & { Merge: { chosen: TKey; }; })[TKey] & { chosen: TKey; }
 ><TKey extends Args3["Key"]>(x: TKey) => pickOne(x, {j: x}, {i: x}, {chosen: x}) : <TKey extends "A" | "B">(x: TKey) => ({ Key: TKey; } & { A: { j: TKey; }; } & { B: { i: TKey; }; } & { Merge: { chosen: TKey; }; })[TKey] & { chosen: TKey; }
->TKey : TKey
->Args3 : Args3
 >x : TKey
->TKey : TKey
 >pickOne(x, {j: x}, {i: x}, {chosen: x}) : ({ Key: TKey; } & { A: { j: TKey; }; } & { B: { i: TKey; }; } & { Merge: { chosen: TKey; }; })[TKey] & { chosen: TKey; }
 >pickOne : { <T extends Args3>(key: T["Key"], left: T["A"], right: T["B"], into: T["Merge"]): T[T["Key"]] & T["Merge"]; <T extends Args3>(key: T["Key"], left: T["A"], right: T["B"], into: T["Merge"], extra: T["Extra"]): T[T["Key"]] & { into: T["Merge"]; extra: T["Extra"]; }; }
 >x : TKey
@@ -295,14 +250,12 @@ const opt5 = pickDelayed("B");
 
 const opt6 = pickDelayed(either);
 >opt6 : ({ j: "A" | "B"; } & { chosen: "A" | "B"; }) | ({ i: "A" | "B"; } & { chosen: "A" | "B"; })
->pickDelayed(either) : ({ j: "A" | "B"; } & { chosen: "A" | "B"; }) | ({ i: "A" | "B"; } & { chosen: "A" | "B"; })
+>pickDelayed(either) : ({ j: "A" | "B"; } | { i: "A" | "B"; }) & { chosen: "A" | "B"; }
 >pickDelayed : <TKey extends "A" | "B">(x: TKey) => ({ Key: TKey; } & { A: { j: TKey; }; } & { B: { i: TKey; }; } & { Merge: { chosen: TKey; }; })[TKey] & { chosen: TKey; }
 >either : "A" | "B"
 
 // Reopenable
 interface Args3 {
->Args3 : Args3
-
     /**
      * One must make patched parameters optional, otherwise signatures expecting the unpatched
      * interface (ie, pickOne above) will not be able to produce a type satisfying the interface
@@ -312,25 +265,14 @@ interface Args3 {
 >Extra : object
 }
 declare function pickOne<T extends Args3>(key: T["Key"], left: T["A"], right: T["B"], into: T["Merge"], extra: T["Extra"]): T[T["Key"]] & {into: T["Merge"], extra: T["Extra"]};
->pickOne : { <T extends Args3>(key: T["Key"], left: T["A"], right: T["B"], into: T["Merge"]): T[T["Key"]] & T["Merge"]; <T extends Args3>(key: T["Key"], left: T["A"], right: T["B"], into: T["Merge"], extra: T["Extra"]): T[T["Key"]] & { into: T["Merge"]; extra: T["Extra"]; }; }
->T : T
->Args3 : Args3
+>pickOne : { <T extends Args3>(key: T["Key"], left: T["A"], right: T["B"], into: T["Merge"]): T[T["Key"]] & T["Merge"]; <T extends Args3>(key: T["Key"], left: T["A"], right: T["B"], into: T["Merge"], extra: T["Extra"]): T[T["Key"]] & {    into: T["Merge"];    extra: T["Extra"];}; }
 >key : T["Key"]
->T : T
 >left : T["A"]
->T : T
 >right : T["B"]
->T : T
 >into : T["Merge"]
->T : T
 >extra : T["Extra"]
->T : T
->T : T
->T : T
 >into : T["Merge"]
->T : T
 >extra : T["Extra"]
->T : T
 
 const opt7 = pickOne("A", {x: 12}, {y: ""}, {z: /./}, {z: /./});
 >opt7 : { x: number; } & { into: { z: RegExp; }; extra: { z: RegExp; }; }
@@ -370,7 +312,7 @@ const opt8 = pickOne("B", {x: 12}, {y: ""}, {z: /./}, {z: /./});
 
 const opt9 = pickOne(either, {x: 12}, {y: ""}, {z: /./}, {z: /./});
 >opt9 : ({ x: number; } & { into: { z: RegExp; }; extra: { z: RegExp; }; }) | ({ y: string; } & { into: { z: RegExp; }; extra: { z: RegExp; }; })
->pickOne(either, {x: 12}, {y: ""}, {z: /./}, {z: /./}) : ({ x: number; } & { into: { z: RegExp; }; extra: { z: RegExp; }; }) | ({ y: string; } & { into: { z: RegExp; }; extra: { z: RegExp; }; })
+>pickOne(either, {x: 12}, {y: ""}, {z: /./}, {z: /./}) : ({ x: number; } | { y: string; }) & { into: { z: RegExp; }; extra: { z: RegExp; }; }
 >pickOne : { <T extends Args3>(key: T["Key"], left: T["A"], right: T["B"], into: T["Merge"]): T[T["Key"]] & T["Merge"]; <T extends Args3>(key: T["Key"], left: T["A"], right: T["B"], into: T["Merge"], extra: T["Extra"]): T[T["Key"]] & { into: T["Merge"]; extra: T["Extra"]; }; }
 >either : "A" | "B"
 >{x: 12} : { x: number; }
@@ -388,8 +330,6 @@ const opt9 = pickOne(either, {x: 12}, {y: ""}, {z: /./}, {z: /./});
 
 // Interactions with `this` types
 interface TPicker {
->TPicker : TPicker
-
     Key: keyof this,
 >Key : keyof this
 
@@ -401,16 +341,9 @@ interface TPicker {
 }
 declare function chooseLiteral<T extends TPicker>(choice: T["Key"], x: T["X"], y:T["Y"]): T[T["Key"]];
 >chooseLiteral : <T extends TPicker>(choice: T["Key"], x: T["X"], y: T["Y"]) => T[T["Key"]]
->T : T
->TPicker : TPicker
 >choice : T["Key"]
->T : T
 >x : T["X"]
->T : T
 >y : T["Y"]
->T : T
->T : T
->T : T
 
 const cx = chooseLiteral("X", 1, "no");
 >cx : 1
@@ -447,26 +380,18 @@ const cneither = chooseLiteral("Key", 0, "no");
 
 // Multiple inference sites
 interface Args4 {
->Args4 : Args4
-
     0: object,
+>0 : object
+
     1: Record<keyof this["0"], Function>,
->Record : Record<K, T>
->Function : Function
+>1 : Record<keyof this["0"], Function>
 }
 declare function dualInputs<T extends Args4>(x: T["0"], y: T["0"], toDelay: T["1"]): T["0"] & {transformers: T["1"]};
->dualInputs : <T extends Args4>(x: T["0"], y: T["0"], toDelay: T["1"]) => T["0"] & { transformers: T["1"]; }
->T : T
->Args4 : Args4
+>dualInputs : <T extends Args4>(x: T["0"], y: T["0"], toDelay: T["1"]) => T["0"] & {    transformers: T["1"];}
 >x : T["0"]
->T : T
 >y : T["0"]
->T : T
 >toDelay : T["1"]
->T : T
->T : T
 >transformers : T["1"]
->T : T
 
 const result = dualInputs({x: 0}, {x: 1}, {x: () => ""});
 >result : { x: number; } & { x: number; } & { transformers: { x: () => ""; }; }
