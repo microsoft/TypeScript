@@ -352,10 +352,8 @@ export const myappUnrelated2 = 10;
 Before running Timeout callback:: count: 2
 18: timerToInvalidateFailedLookupResolutions
 19: timerToUpdateProgram
-After running Timeout callback:: count: 1
-20: timerToUpdateProgram
-Before running Timeout callback:: count: 1
-20: timerToUpdateProgram
+After running Timeout callback:: count: 0
+Before running Timeout callback:: count: 0
 After running Timeout callback:: count: 0
 Output::
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/@myapp/unrelated2 :: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Failed Lookup Locations
@@ -370,60 +368,9 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myprojec
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/@myapp/unrelated2/index.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
 Scheduling update
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/@myapp/unrelated2/index.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
-Scheduling update
 Reloading new file names and options
 Synchronizing program
-[[90m12:00:48 AM[0m] File change detected. Starting incremental compilation...
 
-CreatingProgramWith::
-  roots: ["/user/username/projects/myproject/lib/app.ts"]
-  options: {"watch":true,"project":"/user/username/projects/myproject","traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-======== Resolving module '@myapp/ts-types' from '/user/username/projects/myproject/lib/app.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module '@myapp/ts-types' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Directory '/user/username/projects/myproject/lib/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'myapp__ts-types'
-File '/user/username/projects/myproject/node_modules/@myapp/ts-types.ts' does not exist.
-File '/user/username/projects/myproject/node_modules/@myapp/ts-types.tsx' does not exist.
-File '/user/username/projects/myproject/node_modules/@myapp/ts-types.d.ts' does not exist.
-Directory '/user/username/projects/myproject/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'myapp__ts-types'
-Directory '/user/username/projects/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'myapp__ts-types'
-Directory '/user/username/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'myapp__ts-types'
-Directory '/user/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'myapp__ts-types'
-Directory '/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'myapp__ts-types'
-Loading module '@myapp/ts-types' from 'node_modules' folder, target file types: JavaScript.
-Directory '/user/username/projects/myproject/lib/node_modules' does not exist, skipping all lookups in it.
-File '/user/username/projects/myproject/node_modules/@myapp/ts-types.js' does not exist.
-File '/user/username/projects/myproject/node_modules/@myapp/ts-types.jsx' does not exist.
-Directory '/user/username/projects/node_modules' does not exist, skipping all lookups in it.
-Directory '/user/username/node_modules' does not exist, skipping all lookups in it.
-Directory '/user/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules' does not exist, skipping all lookups in it.
-======== Module name '@myapp/ts-types' was not resolved. ========
-[96mlib/app.ts[0m:[93m1[0m:[93m23[0m - [91merror[0m[90m TS2307: [0mCannot find module '@myapp/ts-types' or its corresponding type declarations.
-
-[7m1[0m import { myapp } from "@myapp/ts-types";
-[7m [0m [91m                      ~~~~~~~~~~~~~~~~~[0m
-
-[[90m12:00:49 AM[0m] Found 1 error. Watching for file changes.
-
-
-
-Program root files: ["/user/username/projects/myproject/lib/app.ts"]
-Program options: {"watch":true,"project":"/user/username/projects/myproject","traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: SafeModules
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/lib/app.ts
-
-Semantic diagnostics in builder refreshed for::
-
-No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
 
@@ -436,12 +383,12 @@ export const myapp = 10;
 
 
 Before running Timeout callback:: count: 2
-23: timerToInvalidateFailedLookupResolutions
-24: timerToUpdateProgram
+22: timerToInvalidateFailedLookupResolutions
+23: timerToUpdateProgram
 After running Timeout callback:: count: 1
-25: timerToUpdateProgram
+24: timerToUpdateProgram
 Before running Timeout callback:: count: 1
-25: timerToUpdateProgram
+24: timerToUpdateProgram
 After running Timeout callback:: count: 0
 Output::
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/@myapp/ts-types :: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Failed Lookup Locations
@@ -459,7 +406,7 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myprojec
 Scheduling update
 Reloading new file names and options
 Synchronizing program
-[[90m12:00:55 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:52 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/lib/app.ts"]
@@ -481,7 +428,7 @@ Resolving real path for '/user/username/projects/myproject/node_modules/@myapp/t
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@myapp/ts-types/index.d.ts 250 undefined Source file
 DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/node_modules 1 undefined Failed Lookup Locations
-[[90m12:00:59 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:56 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

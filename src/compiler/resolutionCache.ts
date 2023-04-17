@@ -1152,7 +1152,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
                 // If the invalidated file is from a node_modules package, invalidate everything else
                 // in the package since we might not get notifications for other files in the package.
                 // This hardens our logic against unreliable file watchers.
-                const packagePath = parseNodeModuleFromPath(fileOrDirectoryPath);
+                const packagePath = parseNodeModuleFromPath(fileOrDirectoryPath, /*isFolder*/ true);
                 if (packagePath) (startsWithPathChecks ||= new Set()).add(packagePath as Path);
             }
         }
