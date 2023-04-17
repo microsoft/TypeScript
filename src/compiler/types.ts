@@ -6165,6 +6165,8 @@ export const enum TypeFlags {
     IncludesInstantiable = Substitution,
     /** @internal */
     NotPrimitiveUnion = Any | Unknown | Void | Never | Object | Intersection | IncludesInstantiable,
+    /** @internal */
+    CannotContainTypeVariables = (Any | Unknown | Never | Primitive) & ~Instantiable,
 }
 
 export type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;

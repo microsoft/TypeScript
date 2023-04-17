@@ -23977,6 +23977,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // we perform type inference (i.e. a type parameter of a generic function). We cache
     // results for union and intersection types for performance reasons.
     function couldContainTypeVariables(type: Type): boolean {
+        if (type.flags & TypeFlags.CannotContainTypeVariables) {
+            return false;
+        }
+
         const objectFlags = getObjectFlags(type);
         if (objectFlags & ObjectFlags.CouldContainTypeVariablesComputed) {
             return !!(objectFlags & ObjectFlags.CouldContainTypeVariables);
