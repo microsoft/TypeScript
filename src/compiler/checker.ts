@@ -767,7 +767,6 @@ import {
     JSDocSatisfiesTag,
     JSDocSignature,
     JSDocTemplateTag,
-    JSDocTypeAssertion,
     JSDocTypedefTag,
     JSDocTypeExpression,
     JSDocTypeLiteral,
@@ -1045,6 +1044,7 @@ import {
     TypeReferenceSerializationKind,
     TypeReferenceType,
     TypeVariable,
+    UnaryExpression,
     unescapeLeadingUnderscores,
     UnionOrIntersectionType,
     UnionOrIntersectionTypeNode,
@@ -34434,14 +34434,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return getReturnTypeOfSignature(signature);
     }
 
-    function checkAssertion(node: AssertionExpression, checkMode: CheckMode | undefined) {
+    function checkAssertion(node: AssertionExpression) {
         if (node.kind === SyntaxKind.TypeAssertionExpression) {
             const file = getSourceFileOfNode(node);
             if (file && fileExtensionIsOneOf(file.fileName, [Extension.Cts, Extension.Mts])) {
                 grammarErrorOnNode(node, Diagnostics.This_syntax_is_reserved_in_files_with_the_mts_or_cts_extension_Use_an_as_expression_instead);
             }
         }
-        return checkAssertionWorker(node, checkMode);
+        return checkAssertionWorker(node, node.type, node.expression);
     }
 
     function isValidConstAssertionArgument(node: Node): boolean {
@@ -34472,9 +34472,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return false;
     }
 
-    function checkAssertionWorker(node: JSDocTypeAssertion | AssertionExpression, checkMode: CheckMode | undefined) {
-        const { type, expression } = getAssertionTypeAndExpression(node);
-        const exprType = checkExpression(expression, checkMode);
+    function checkAssertionWorker(errNode: Node, type: TypeNode, expression: UnaryExpression | Expression, checkMode?: CheckMode) {
+        let exprType = checkExpression(expression, checkMode);
         if (isConstTypeReference(type)) {
             if (!isValidConstAssertionArgument(expression)) {
                 error(expression, Diagnostics.A_const_assertions_can_only_be_applied_to_references_to_enum_members_or_string_number_boolean_array_or_object_literals);
@@ -34482,32 +34481,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return getRegularTypeOfLiteralType(exprType);
         }
         checkSourceElement(type);
-        checkNodeDeferred(node);
-        return getTypeFromTypeNode(type);
-    }
-
-    function getAssertionTypeAndExpression(node: JSDocTypeAssertion | AssertionExpression) {
-        let type: TypeNode;
-        let expression: Expression;
-        switch (node.kind) {
-            case SyntaxKind.AsExpression:
-            case SyntaxKind.TypeAssertionExpression:
-                type = node.type;
-                expression = node.expression;
-                break;
-            case SyntaxKind.ParenthesizedExpression:
-                type = getJSDocTypeAssertionType(node);
-                expression = node.expression;
-                break;
-        }
-
-        return { type, expression };
-    }
-
-    function checkAssertionDeferred(node: JSDocTypeAssertion | AssertionExpression) {
-        const { type, expression } = getAssertionTypeAndExpression(node);
-        const errNode = isParenthesizedExpression(node) ? type : node;
-        const exprType = getRegularTypeOfObjectLiteral(getBaseTypeOfLiteralType(checkExpression(expression)));
+        exprType = getRegularTypeOfObjectLiteral(getBaseTypeOfLiteralType(exprType));
         const targetType = getTypeFromTypeNode(type);
         if (!isErrorType(targetType)) {
             addLazyDiagnostic(() => {
@@ -34518,6 +34492,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             });
         }
+        return targetType;
     }
 
     function checkNonNullChain(node: NonNullChain) {
@@ -37756,7 +37731,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return checkSatisfiesExpressionWorker(node.expression, getJSDocSatisfiesExpressionType(node), checkMode);
             }
             if (isJSDocTypeAssertion(node)) {
-                return checkAssertionWorker(node, checkMode);
+                const type = getJSDocTypeAssertionType(node);
+                return checkAssertionWorker(type, type, node.expression, checkMode);
             }
         }
         return checkExpression(node.expression, checkMode);
@@ -37837,7 +37813,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return checkTypeOfExpression(node as TypeOfExpression);
             case SyntaxKind.TypeAssertionExpression:
             case SyntaxKind.AsExpression:
-                return checkAssertion(node as AssertionExpression, checkMode);
+                return checkAssertion(node as AssertionExpression);
             case SyntaxKind.NonNullExpression:
                 return checkNonNullAssertion(node as NonNullExpression);
             case SyntaxKind.ExpressionWithTypeArguments:
@@ -44951,10 +44927,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.JsxElement:
                 checkJsxElementDeferred(node as JsxElement);
                 break;
-            case SyntaxKind.TypeAssertionExpression:
-            case SyntaxKind.AsExpression:
-            case SyntaxKind.ParenthesizedExpression:
-                checkAssertionDeferred(node as AssertionExpression | JSDocTypeAssertion);
         }
         currentNode = saveCurrentNode;
         tracing?.pop();
