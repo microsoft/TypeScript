@@ -36,13 +36,7 @@ Info seq  [hh:mm:ss:mss] Config: /Foo/tsconfig.json : {
 }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Foo/b.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /Foo/tsconfig.json
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /Foo/bar 1 undefined Project: /Foo/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /Foo/bar 1 undefined Project: /Foo/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /Foo 0 undefined Project: /Foo/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /Foo 0 undefined Project: /Foo/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /Foo/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /Foo/node_modules/@types 1 undefined Project: /Foo/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /Foo/node_modules/@types 1 undefined Project: /Foo/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /Foo/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/Foo/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -70,19 +64,13 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/foo/bar: *new*
-  {"pollingInterval":500}
 /a/lib/lib.d.ts: *new*
-  {"pollingInterval":500}
-/foo/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
 /foo/tsconfig.json: *new*
   {}
 /foo/b.ts: *new*
-  {}
-/foo: *new*
   {}
 
 Before request
