@@ -24689,7 +24689,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function inferFromProperties(source: Type, target: Type) {
             if (isGenericMappedType(target) && !target.declaration.nameType) {
-                invokeOnce(source, target, inferFromMappedProperties);
+                inferFromMappedProperties(source, target);
                 return;
             }
             const properties = getPropertiesOfObjectType(target);

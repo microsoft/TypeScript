@@ -93,18 +93,8 @@ const out2 = foo(xhr);
 >xhr : Symbol(xhr, Decl(mappedTypeRecursiveInference.ts, 17, 3))
 
 out2.responseXML
->out2.responseXML : Symbol(responseXML, Decl(lib.dom.d.ts, --, --))
 >out2 : Symbol(out2, Decl(mappedTypeRecursiveInference.ts, 18, 5))
->responseXML : Symbol(responseXML, Decl(lib.dom.d.ts, --, --))
 
 out2.responseXML.activeElement.className.length
->out2.responseXML.activeElement.className.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
->out2.responseXML.activeElement.className : Symbol(className, Decl(lib.dom.d.ts, --, --))
->out2.responseXML.activeElement : Symbol(activeElement, Decl(lib.dom.d.ts, --, --))
->out2.responseXML : Symbol(responseXML, Decl(lib.dom.d.ts, --, --))
 >out2 : Symbol(out2, Decl(mappedTypeRecursiveInference.ts, 18, 5))
->responseXML : Symbol(responseXML, Decl(lib.dom.d.ts, --, --))
->activeElement : Symbol(activeElement, Decl(lib.dom.d.ts, --, --))
->className : Symbol(className, Decl(lib.dom.d.ts, --, --))
->length : Symbol(length, Decl(lib.es5.d.ts, --, --))
 
