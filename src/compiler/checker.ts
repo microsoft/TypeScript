@@ -23945,7 +23945,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             priority: undefined,
             topLevel: true,
             isFixed: false,
-            impliedArity: undefined
+            impliedArity: undefined,
+            indexes: undefined
         };
     }
 
@@ -23958,7 +23959,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             priority: inference.priority,
             topLevel: inference.topLevel,
             isFixed: inference.isFixed,
-            impliedArity: inference.impliedArity
+            impliedArity: inference.impliedArity,
+            indexes: inference.indexes && inference.indexes.slice()
         };
     }
 
@@ -24528,6 +24530,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             else if (source.flags & TypeFlags.IndexedAccess && target.flags & TypeFlags.IndexedAccess) {
                 inferFromTypes((source as IndexedAccessType).objectType, (target as IndexedAccessType).objectType);
                 inferFromTypes((source as IndexedAccessType).indexType, (target as IndexedAccessType).indexType);
+            }
+            else if (target.flags & TypeFlags.IndexedAccess) {
+                const targetConstraint = (target as IndexedAccessType).objectType;
+                const inference = getInferenceInfoForType(targetConstraint);
+                if (inference) {
+                    if (!inference.isFixed) {
+                        // Instantiates instance of `type PartialInference<T, Keys extends string> = ({[K in Keys]: {[K1 in K]: T}})[Keys];`
+                        // Where `T` is `source` and `Keys` is `target.indexType`
+                        const inferenceTypeSymbol = getGlobalSymbol("PartialInference" as __String, SymbolFlags.Type, Diagnostics.Cannot_find_global_type_0);
+                        const inferenceType = inferenceTypeSymbol && getDeclaredTypeOfSymbol(inferenceTypeSymbol);
+                        if (inferenceType && inferenceType !== unknownType) {
+                            const mapper = createTypeMapper(getSymbolLinks(inferenceTypeSymbol).typeParameters!, [source, (target as IndexedAccessType).indexType]);
+                            (inference.indexes || (inference.indexes = [])).push(instantiateType(inferenceType, mapper));
+                        }
+                    }
+                    return;
+                }
             }
             else if (source.flags & TypeFlags.StringMapping && target.flags & TypeFlags.StringMapping) {
                 if ((source as StringMappingType).symbol === (target as StringMappingType).symbol) {
@@ -25161,6 +25180,39 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let inferredType: Type | undefined;
             const signature = context.signature;
             if (signature) {
+                if (inference.indexes) {
+                    // Build a candidate from all indexes
+                    let aggregateInference = getIntersectionType(inference.indexes);
+                    const constraint = getConstraintOfTypeParameter(signature.typeParameters![index]);
+                    if (constraint) {
+                        const instantiatedConstraint = instantiateType(constraint, context.nonFixingMapper);
+                        if (instantiatedConstraint.flags & TypeFlags.Union && !context.compareTypes(aggregateInference, getTypeWithThisArgument(instantiatedConstraint, aggregateInference))) {
+                            const discriminantProps = findDiscriminantProperties(getPropertiesOfType(aggregateInference), instantiatedConstraint);
+                            if (discriminantProps) {
+                                let match: Type | undefined;
+                                findDiscriminant: for (const p of discriminantProps) {
+                                    const candidatePropType = getTypeOfPropertyOfType(aggregateInference, p.escapedName);
+                                    for (const type of (instantiatedConstraint as UnionType).types) {
+                                        const propType = getTypeOfPropertyOfType(type, p.escapedName);
+                                        if (propType && candidatePropType && checkTypeAssignableTo(candidatePropType, propType, /*errorNode*/ undefined)) {
+                                            if (match && match !== type) {
+                                                match = undefined;
+                                                break findDiscriminant;
+                                            }
+                                            else {
+                                                match = type;
+                                            }
+                                        }
+                                    }
+                                }
+                                if (match) {
+                                    aggregateInference = getSpreadType(match, aggregateInference, /*symbol*/ undefined, /*propegatedFlags*/ 0, /*readonly*/ false);
+                                }
+                            }
+                        }
+                    }
+                    (inference.candidates || (inference.candidates = [])).push(aggregateInference);
+                }
                 const inferredCovariantType = inference.candidates ? getCovariantInference(inference, signature) : undefined;
                 if (inference.contraCandidates) {
                     // If we have both co- and contra-variant inferences, we use the co-variant inference if it is not 'never',
