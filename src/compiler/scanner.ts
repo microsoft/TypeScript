@@ -1353,7 +1353,8 @@ export function createScanner(languageVersion: ScriptTarget,
                 start = pos;
                 continue;
             }
-            if (isLineBreak(ch) && !jsxAttributeString) {
+
+            if ((isLineBreak(ch) && ch !== CharacterCodes.lineSeparator && ch !== CharacterCodes.paragraphSeparator) && !jsxAttributeString) {
                 result += text.substring(start, pos);
                 tokenFlags |= TokenFlags.Unterminated;
                 error(Diagnostics.Unterminated_string_literal);
