@@ -159,6 +159,7 @@ import {
     isJsxClosingElement,
     isJsxElement,
     isJsxFragment,
+    isJsxNamespacedName,
     isJsxOpeningElement,
     isJsxOpeningFragment,
     isJsxText,
@@ -2067,6 +2068,9 @@ export function createLanguageService(
             return node.parent;
         }
         if (isImportMeta(node.parent) && node.parent.name === node) {
+            return node.parent;
+        }
+        if (isJsxNamespacedName(node.parent)) {
             return node.parent;
         }
         return node;

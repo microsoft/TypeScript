@@ -43,6 +43,8 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/projects/mypr
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/projects/myproject/tsconfig.json WatchType: Missing file
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/myproject/node_modules/@types 1 undefined Project: /a/b/projects/myproject/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/myproject/node_modules/@types 1 undefined Project: /a/b/projects/myproject/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/node_modules/@types 1 undefined Project: /a/b/projects/myproject/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/node_modules/@types 1 undefined Project: /a/b/projects/myproject/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/b/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -79,6 +81,8 @@ PolledWatches::
 /a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
 /a/b/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/a/b/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -169,6 +173,8 @@ PolledWatches::
   {"pollingInterval":500}
 /a/b/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
+/a/b/projects/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
 /a/b/projects/myproject/tsconfig.json:
@@ -225,6 +231,8 @@ PolledWatches::
 /a/lib/lib.d.ts:
   {"pollingInterval":500}
 /a/b/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/a/b/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::

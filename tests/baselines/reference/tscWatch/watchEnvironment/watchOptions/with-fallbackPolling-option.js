@@ -64,8 +64,6 @@ PolledWatches::
   {"pollingInterval":250}
 /a/lib/lib.d.ts: *new*
   {"pollingInterval":250}
-/a/b/node_modules/@types: *new*
-  {"pollingInterval":500}
 /a/b: *new*
   {"pollingInterval":500}
 

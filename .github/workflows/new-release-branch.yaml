@@ -37,7 +37,7 @@ jobs:
         git add src/compiler/corePublic.ts
         git add tests/baselines/reference/api/typescript.d.ts
         git add tests/baselines/reference/api/tsserverlibrary.d.ts
-        git add ./lib
+        git add --force ./lib
         git config user.email "typescriptbot@microsoft.com"
         git config user.name "TypeScript Bot"
         git commit -m 'Bump version to ${{ github.event.client_payload.package_version }} and LKG'

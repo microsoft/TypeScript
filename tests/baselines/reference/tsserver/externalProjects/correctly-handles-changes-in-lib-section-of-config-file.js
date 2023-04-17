@@ -37,8 +37,6 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /src 1 undefined 
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src 1 undefined Config: /src/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /src/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /compiler/lib.es5.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /src/node_modules/@types 1 undefined Project: /src/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src/node_modules/@types 1 undefined Project: /src/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /src/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/src/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -69,10 +67,6 @@ Before running Timeout callback:: count: 2
 //// [/src/tsconfig.json]
 {"compilerOptions":{"module":"commonjs","target":"es5","noImplicitAny":true,"sourceMap":false,"lib":["es5","es2015.promise"]}}
 
-
-PolledWatches::
-/src/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /src/tsconfig.json: *new*
@@ -138,10 +132,6 @@ Info seq  [hh:mm:ss:mss] Open files:
 Info seq  [hh:mm:ss:mss] 	FileName: /src/app.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /src/tsconfig.json
 After running Timeout callback:: count: 0
-
-PolledWatches::
-/src/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
 /src/tsconfig.json:

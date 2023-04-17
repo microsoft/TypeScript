@@ -1120,6 +1120,7 @@ export interface FormatCodeSettings extends EditorSettings {
     readonly insertSpaceBeforeTypeAnnotation?: boolean;
     readonly indentMultiLineObjectLiteralBeginningOnBlankLine?: boolean;
     readonly semicolons?: SemicolonPreference;
+    readonly indentSwitchCase?: boolean;
 }
 
 export function getDefaultFormatCodeSettings(newLineCharacter?: string): FormatCodeSettings {
@@ -1144,7 +1145,8 @@ export function getDefaultFormatCodeSettings(newLineCharacter?: string): FormatC
         placeOpenBraceOnNewLineForFunctions: false,
         placeOpenBraceOnNewLineForControlBlocks: false,
         semicolons: SemicolonPreference.Ignore,
-        trimTrailingWhitespace: true
+        trimTrailingWhitespace: true,
+        indentSwitchCase: true
     };
 }
 

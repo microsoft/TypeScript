@@ -22,9 +22,7 @@
   //             isOpen?: boolean;
   //         };
   //         span: { n: string; };
-  //     }
-  // }
-  // var x = <div name="hello" />;
+  // --- (line: 9) skipped ---
 
   // === Details ===
   [

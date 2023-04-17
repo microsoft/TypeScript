@@ -917,28 +917,28 @@ declare const eval: any`
     const changeModuleFileToModuleFile1: TscWatchCompileChange = {
         caption: "Rename moduleFile to moduleFile1",
         edit: sys => {
-            sys.renameFile("/a/b/moduleFile.ts", "/a/b/moduleFile1.ts");
-            sys.deleteFile("/a/b/moduleFile.js");
+            sys.renameFile("/users/username/projects/project/moduleFile.ts", "/users/username/projects/project/moduleFile1.ts");
+            sys.deleteFile("/users/username/projects/project/moduleFile.js");
         },
         timeouts: runQueuedTimeoutCallbacksTwice
     };
     const changeModuleFile1ToModuleFile: TscWatchCompileChange = {
         caption: "Rename moduleFile1 back to moduleFile",
-        edit: sys => sys.renameFile("/a/b/moduleFile1.ts", "/a/b/moduleFile.ts"),
+        edit: sys => sys.renameFile("/users/username/projects/project/moduleFile1.ts", "/users/username/projects/project/moduleFile.ts"),
         timeouts: runQueuedTimeoutCallbacksTwice,
     };
 
     verifyTscWatch({
         scenario,
         subScenario: "rename a module file and rename back should restore the states for inferred projects",
-        commandLineArgs: ["-w", "/a/b/file1.ts"],
+        commandLineArgs: ["-w", "/users/username/projects/project/file1.ts"],
         sys: () => {
             const moduleFile = {
-                path: "/a/b/moduleFile.ts",
+                path: "/users/username/projects/project/moduleFile.ts",
                 content: "export function bar() { };"
             };
             const file1 = {
-                path: "/a/b/file1.ts",
+                path: "/users/username/projects/project/file1.ts",
                 content: 'import * as T from "./moduleFile"; T.bar();'
             };
             return createWatchedSystem([moduleFile, file1, libFile]);
@@ -952,15 +952,19 @@ declare const eval: any`
     verifyTscWatch({
         scenario,
         subScenario: "rename a module file and rename back should restore the states for configured projects",
-        commandLineArgs: ["-w", "-p", configFilePath],
+        commandLineArgs: ["-w", "-p", "/users/username/projects/project/tsconfig.json"],
         sys: () => {
             const moduleFile = {
-                path: "/a/b/moduleFile.ts",
+                path: "/users/username/projects/project/moduleFile.ts",
                 content: "export function bar() { };"
             };
             const file1 = {
-                path: "/a/b/file1.ts",
+                path: "/users/username/projects/project/file1.ts",
                 content: 'import * as T from "./moduleFile"; T.bar();'
+            };
+            const configFile = {
+                path: "/users/username/projects/project/tsconfig.json",
+                content: `{}`
             };
             return createWatchedSystem([moduleFile, file1, configFile, libFile]);
         },
@@ -1005,10 +1009,10 @@ declare const eval: any`
     verifyTscWatch({
         scenario,
         subScenario: "add the missing module file for inferred project-should remove the module not found error",
-        commandLineArgs: ["-w", "/a/b/file1.ts"],
+        commandLineArgs: ["-w", "/users/username/projects/project/file1.ts"],
         sys: () => {
             const file1 = {
-                path: "/a/b/file1.ts",
+                path: "/users/username/projects/project/file1.ts",
                 content: 'import * as T from "./moduleFile"; T.bar();'
             };
             return createWatchedSystem([file1, libFile]);
@@ -1016,7 +1020,7 @@ declare const eval: any`
         edits: [
             {
                 caption: "Create module file",
-                edit: sys => sys.writeFile("/a/b/moduleFile.ts", "export function bar() { }"),
+                edit: sys => sys.writeFile("/users/username/projects/project/moduleFile.ts", "export function bar() { }"),
                 timeouts: runQueuedTimeoutCallbacksTwice,
             }
         ]

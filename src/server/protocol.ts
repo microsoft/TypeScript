@@ -3459,6 +3459,7 @@ export interface FormatCodeSettings extends EditorSettings {
     placeOpenBraceOnNewLineForControlBlocks?: boolean;
     insertSpaceBeforeTypeAnnotation?: boolean;
     semicolons?: SemicolonPreference;
+    indentSwitchCase?: boolean;
 }
 
 export interface UserPreferences {

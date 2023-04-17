@@ -1,11 +1,6 @@
 // === goToImplementation ===
 // === /tests/cases/fourslash/goToImplementationInterfaceMethod_02.ts ===
-// interface Foo {
-//     hello(): void
-// }
-// 
-// abstract class AbstractBar implements Foo {
-//     abstract hello(): void;
+// --- (line: 6) skipped ---
 // }
 // 
 // class Bar extends AbstractBar {
