@@ -4,6 +4,7 @@ import {
     Debug,
     Diagnostics,
     emptyArray,
+    fileShouldUseJavaScriptRequire,
     getBaseFileName,
     getLocaleSpecificMessage,
     getQuotePreference,
@@ -31,8 +32,8 @@ import {
     addExports,
     addExportToChanges,
     addNewFileToTsconfig,
-    createNewFilename,
-    createOldFileImportsFromNewFile,
+    createNewFileName,
+    createOldFileImportsFromTargetFile,
     deleteMovedStatements,
     deleteUnusedOldImports,
     filterImport,
@@ -85,7 +86,7 @@ function doChange(oldFile: SourceFile, program: Program, toMove: ToMove, changes
     const checker = program.getTypeChecker();
     const usage = getUsageInfo(oldFile, toMove.all, checker);
 
-    const newFilename = createNewFilename(oldFile, program, context, host);
+    const newFilename = createNewFileName(oldFile, program, context, host);
 
     // If previous file was global, this is easy.
     changes.createNewFile(oldFile, newFilename, getNewStatementsAndRemoveFromOldFile(oldFile, usage, changes, toMove, program, host, newFilename, preferences));
@@ -98,14 +99,14 @@ function getNewStatementsAndRemoveFromOldFile(
 ) {
     const checker = program.getTypeChecker();
     const prologueDirectives = takeWhile(oldFile.statements, isPrologueDirective);
-    if (oldFile.externalModuleIndicator === undefined && oldFile.commonJsModuleIndicator === undefined && usage.oldImportsNeededByNewFile.size === 0) {
+    if (oldFile.externalModuleIndicator === undefined && oldFile.commonJsModuleIndicator === undefined && usage.oldImportsNeededByTargetFile.size === 0) {
         deleteMovedStatements(oldFile, toMove.ranges, changes);
         return [...prologueDirectives, ...toMove.all];
     }
 
-    const useEsModuleSyntax = !!oldFile.externalModuleIndicator;
+    const useEsModuleSyntax = !fileShouldUseJavaScriptRequire(newFilename, program, host, !!oldFile.commonJsModuleIndicator);
     const quotePreference = getQuotePreference(oldFile, preferences);
-    const importsFromNewFile = createOldFileImportsFromNewFile(oldFile, usage.oldFileImportsFromNewFile, newFilename, program, host, useEsModuleSyntax, quotePreference);
+    const importsFromNewFile = createOldFileImportsFromTargetFile(oldFile, usage.oldFileImportsFromTargetFile, newFilename, program, host, useEsModuleSyntax, quotePreference);
     if (importsFromNewFile) {
         insertImports(changes, oldFile, importsFromNewFile, /*blankLineBetween*/ true, preferences);
     }
@@ -114,8 +115,8 @@ function getNewStatementsAndRemoveFromOldFile(
     deleteMovedStatements(oldFile, toMove.ranges, changes);
     updateImportsInOtherFiles(changes, program, host, oldFile, usage.movedSymbols, newFilename, quotePreference);
 
-    const imports = getNewFileImportsAndAddExportInOldFile(oldFile, usage.oldImportsNeededByNewFile, usage.newFileImportsFromOldFile, changes, checker, program, host, useEsModuleSyntax, quotePreference);
-    const body = addExports(oldFile, toMove.all, usage.oldFileImportsFromNewFile, useEsModuleSyntax);
+    const imports = getNewFileImportsAndAddExportInOldFile(oldFile, usage.oldImportsNeededByTargetFile, usage.targetFileImportsFromOldFile, changes, checker, program, host, useEsModuleSyntax, quotePreference);
+    const body = addExports(oldFile, toMove.all, usage.oldFileImportsFromTargetFile, useEsModuleSyntax);
     if (imports.length && body.length) {
         return [
             ...prologueDirectives,

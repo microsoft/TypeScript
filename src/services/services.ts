@@ -322,7 +322,7 @@ import {
 } from "./_namespaces/ts";
 import * as NavigateTo from "./_namespaces/ts.NavigateTo";
 import * as NavigationBar from "./_namespaces/ts.NavigationBar";
-import { createNewFilename } from "./_namespaces/ts.refactor";
+import { createNewFileName } from "./_namespaces/ts.refactor";
 import * as classifier from "./classifier";
 import * as classifier2020 from "./classifier2020";
 
@@ -2999,7 +2999,7 @@ export function createLanguageService(
         //creating new filename
         let newFileName;
         if (program) {
-            newFileName = createNewFilename(sourceFile, program, getRefactorContext(sourceFile, positionOrRange, preferences, emptyOptions), host);
+            newFileName = createNewFileName(sourceFile, program, getRefactorContext(sourceFile, positionOrRange, preferences, emptyOptions), host);
         }
         return { newFileName, files };
     }

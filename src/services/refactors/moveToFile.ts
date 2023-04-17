@@ -28,10 +28,10 @@ import {
     escapeLeadingUnderscores,
     Expression,
     ExpressionStatement,
-    Extension,
     extensionFromPath,
     ExternalModuleReference,
     factory,
+    fileShouldUseJavaScriptRequire,
     find,
     FindAllReferences,
     findIndex,
@@ -43,7 +43,6 @@ import {
     GetCanonicalFileName,
     getDecorators,
     getDirectoryPath,
-    getImpliedNodeFormatForFile,
     getLocaleSpecificMessage,
     getModeForUsageLocation,
     getModifiers,
@@ -94,7 +93,6 @@ import {
     ModifierFlags,
     ModifierLike,
     ModuleDeclaration,
-    ModuleKind,
     NamedImportBindings,
     Node,
     NodeFlags,
@@ -157,68 +155,62 @@ registerRefactor(refactorNameForMoveToFile, {
         }
         return emptyArray;
     },
-    getEditsForAction: function getRefactorEditsToMoveToFile(context, actionName, newFile): RefactorEditInfo | undefined {
+    getEditsForAction: function getRefactorEditsToMoveToFile(context, actionName, targetFile): RefactorEditInfo | undefined {
         Debug.assert(actionName === refactorNameForMoveToFile, "Wrong refactor invoked");
         const statements = Debug.checkDefined(getStatementsToMove(context));
-        Debug.assert(newFile, "Target file does not exist");
-        const edits = textChanges.ChangeTracker.with(context, t => doChange(context, context.file, newFile, context.program, statements, t, context.host, context.preferences));
+        Debug.assert(targetFile, "Target file does not exist");
+        const edits = textChanges.ChangeTracker.with(context, t => doChange(context, context.file, targetFile, context.program, statements, t, context.host, context.preferences));
         return { edits, renameFilename: undefined, renameLocation: undefined };
     }
 });
 
-function doChange(context: RefactorContext, oldFile: SourceFile, newFile: string, program: Program, toMove: ToMove, changes: textChanges.ChangeTracker, host: LanguageServiceHost, preferences: UserPreferences): void {
+function doChange(context: RefactorContext, oldFile: SourceFile, targetFile: string, program: Program, toMove: ToMove, changes: textChanges.ChangeTracker, host: LanguageServiceHost, preferences: UserPreferences): void {
     const checker = program.getTypeChecker();
     const usage = getUsageInfo(oldFile, toMove.all, checker);
-    //creating a new file
-    if (!host.fileExists(newFile) || host.fileExists(newFile) && program.getSourceFile(newFile)?.statements.length === 0) {
-        changes.createNewFile(oldFile, newFile, getNewStatementsAndRemoveFromOldFile(oldFile, newFile, usage, changes, toMove, program, host, newFile, preferences, /*newFileExists*/ false));
-        addNewFileToTsconfig(program, changes, oldFile.fileName, newFile, hostGetCanonicalFileName(host));
+    //For a new file or an existing blank target file
+    if (!host.fileExists(targetFile) || host.fileExists(targetFile) && program.getSourceFile(targetFile)?.statements.length === 0) {
+        changes.createNewFile(oldFile, targetFile, getNewStatementsAndRemoveFromOldFile(oldFile, targetFile, usage, changes, toMove, program, host, preferences));
+        addNewFileToTsconfig(program, changes, oldFile.fileName, targetFile, hostGetCanonicalFileName(host));
     }
     else {
-        const sourceFile = program.getSourceFile(newFile);
-        if (sourceFile) {
-            const importAdder = codefix.createImportAdder(sourceFile, context.program, context.preferences, context.host);
-            getNewStatementsAndRemoveFromOldFile(oldFile, newFile, usage, changes, toMove, program, host, newFile, preferences, /*newFileExists*/ true, importAdder);
-        }
+        const targetSourceFile = Debug.checkDefined(program.getSourceFile(targetFile));
+        const importAdder = codefix.createImportAdder(targetSourceFile, context.program, context.preferences, context.host);
+        getNewStatementsAndRemoveFromOldFile(oldFile, targetSourceFile, usage, changes, toMove, program, host, preferences, importAdder);
     }
 }
 
 function getNewStatementsAndRemoveFromOldFile(
-    oldFile: SourceFile, newFile: string, usage: UsageInfo, changes: textChanges.ChangeTracker, toMove: ToMove, program: Program, host: LanguageServiceHost, newFilename: string, preferences: UserPreferences, newFileExists: boolean, importAdder?: codefix.ImportAdder
+    oldFile: SourceFile, targetFile: string | SourceFile, usage: UsageInfo, changes: textChanges.ChangeTracker, toMove: ToMove, program: Program, host: LanguageServiceHost, preferences: UserPreferences, importAdder?: codefix.ImportAdder
 ) {
     const checker = program.getTypeChecker();
     const prologueDirectives = takeWhile(oldFile.statements, isPrologueDirective);
-    if (oldFile.externalModuleIndicator === undefined && oldFile.commonJsModuleIndicator === undefined && usage.oldImportsNeededByNewFile.size === 0 && usage.newFileImportsFromOldFile.size === 0 && !newFileExists) {
+    if (oldFile.externalModuleIndicator === undefined && oldFile.commonJsModuleIndicator === undefined && usage.oldImportsNeededByTargetFile.size === 0 && usage.targetFileImportsFromOldFile.size === 0 && typeof targetFile === "string") {
         deleteMovedStatements(oldFile, toMove.ranges, changes);
         return [...prologueDirectives, ...toMove.all];
     }
 
-    let useEsModuleSyntax = true;
-    if (newFileExists) {
-        const newFilePath = program.getSourceFile(newFile)?.path;
-        if (extensionFromPath(newFile) === Extension.Js && newFilePath && getImpliedNodeFormatForFile(newFilePath, /*packageJsonInfoCache*/ undefined, host, program.getCompilerOptions()) !== ModuleKind.ESNext && (oldFile.commonJsModuleIndicator || program.getCompilerOptions().verbatimModuleSyntax)) {
-            useEsModuleSyntax = false;
-        }
-    }
+    //If the targetFile is a string, it’s the file name for a new file, if it’s a SourceFile, it’s the existing target file.
+    const targetFileName = typeof targetFile === "string" ? targetFile : targetFile.fileName;
+
+    const useEsModuleSyntax = !fileShouldUseJavaScriptRequire(targetFileName, program, host, !!oldFile.commonJsModuleIndicator);
     const quotePreference = getQuotePreference(oldFile, preferences);
-    const importsFromNewFile = createOldFileImportsFromNewFile(oldFile, usage.oldFileImportsFromNewFile, newFilename, program, host, useEsModuleSyntax, quotePreference);
-    if (importsFromNewFile) {
-        insertImports(changes, oldFile, importsFromNewFile, /*blankLineBetween*/ true, preferences);
+    const importsFromTargetFile = createOldFileImportsFromTargetFile(oldFile, usage.oldFileImportsFromTargetFile, targetFileName, program, host, useEsModuleSyntax, quotePreference);
+    if (importsFromTargetFile) {
+        insertImports(changes, oldFile, importsFromTargetFile, /*blankLineBetween*/ true, preferences);
     }
 
     deleteUnusedOldImports(oldFile, toMove.all, changes, usage.unusedImportsFromOldFile, checker);
     deleteMovedStatements(oldFile, toMove.ranges, changes);
-    updateImportsInOtherFiles(changes, program, host, oldFile, usage.movedSymbols, newFilename, quotePreference);
+    updateImportsInOtherFiles(changes, program, host, oldFile, usage.movedSymbols, targetFileName, quotePreference);
 
-    const imports = getNewFileImportsAndAddExportInOldFile(oldFile, newFile, usage.oldImportsNeededByNewFile, usage.newFileImportsFromOldFile, changes, checker, program, host, useEsModuleSyntax, quotePreference, importAdder);
-    const body = addExports(oldFile, toMove.all, usage.oldFileImportsFromNewFile, useEsModuleSyntax);
-    if (newFileExists) {
-        const sourceFile = program.getSourceFile(newFile);
-        if (sourceFile && sourceFile.statements.length > 0) {
-            changes.insertNodesAfter(sourceFile, sourceFile.statements[sourceFile.statements.length - 1], body);
+    const imports = getTargetFileImportsAndAddExportInOldFile(oldFile, targetFileName, usage.oldImportsNeededByTargetFile, usage.targetFileImportsFromOldFile, changes, checker, program, host, useEsModuleSyntax, quotePreference, importAdder);
+    const body = addExports(oldFile, toMove.all, usage.oldFileImportsFromTargetFile, useEsModuleSyntax);
+    if (typeof targetFile !== "string") {
+        if (targetFile.statements.length > 0) {
+            changes.insertNodesAfter(targetFile, targetFile.statements[targetFile.statements.length - 1], body);
         }
-        if (sourceFile && imports.length > 0) {
-            insertImports(changes, sourceFile, imports, /*blankLineBetween*/ true, preferences);
+        if (imports.length > 0) {
+            insertImports(changes, targetFile, imports, /*blankLineBetween*/ true, preferences);
         }
     }
     if (importAdder) {
@@ -240,11 +232,11 @@ function getNewStatementsAndRemoveFromOldFile(
     ];
 }
 
-function getNewFileImportsAndAddExportInOldFile(
+function getTargetFileImportsAndAddExportInOldFile(
     oldFile: SourceFile,
-    newFile: string,
+    targetFile: string,
     importsToCopy: Map<Symbol, boolean>,
-    newFileImportsFromOldFile: Set<Symbol>,
+    targetFileImportsFromOldFile: Set<Symbol>,
     changes: textChanges.ChangeTracker,
     checker: TypeChecker,
     program: Program,
@@ -254,6 +246,11 @@ function getNewFileImportsAndAddExportInOldFile(
     importAdder?: codefix.ImportAdder,
 ): readonly AnyImportOrRequireStatement[] {
     const copiedOldImports: AnyImportOrRequireStatement[] = [];
+    /**
+     * Recomputing the imports is preferred with importAdder because it manages multiple import additions for a file and writes then to a ChangeTracker,
+     * but sometimes it fails because of unresolved imports from files, or when a source file is not available for the target file (in this case when creating a new file).
+     * So in that case, fall back to copying the import verbatim.
+     */
     if (importAdder) {
         importsToCopy.forEach((isValidTypeOnlyUseSite, symbol) => {
             try {
@@ -269,32 +266,30 @@ function getNewFileImportsAndAddExportInOldFile(
         });
     }
     else {
+        const targetSourceFile = program.getSourceFile(targetFile); // Would be undefined for a new file
         for (const oldStatement of oldFile.statements) {
             forEachImportInStatement(oldStatement, i => {
+                // Recomputing module specifier
                 const moduleSpecifier = moduleSpecifierFromImport(i);
                 const resolved = oldFile.resolvedModules?.get(moduleSpecifier.text, getModeForUsageLocation(oldFile, moduleSpecifier));
                 const fileName = resolved?.resolvedModule?.resolvedFileName;
-                if (fileName) {
-                    const sourceFile = program.getSourceFile(newFile);
-                    if (sourceFile) {
-                        const pathToNewFileWithExtension = resolvePath(getDirectoryPath(oldFile.path), fileName);
-                        const newModuleSpecifier = getModuleSpecifier(program.getCompilerOptions(), sourceFile, sourceFile.path, pathToNewFileWithExtension, createModuleSpecifierResolutionHost(program, host));
-                        append(copiedOldImports, filterImport(i, makeStringLiteral(newModuleSpecifier, quotePreference), name => importsToCopy.has(checker.getSymbolAtLocation(name)!)));
-                    }
+                if (fileName && targetSourceFile) {
+                    const newModuleSpecifier = getModuleSpecifier(program.getCompilerOptions(), targetSourceFile, targetSourceFile.path, fileName, createModuleSpecifierResolutionHost(program, host));
+                    append(copiedOldImports, filterImport(i, makeStringLiteral(newModuleSpecifier, quotePreference), name => importsToCopy.has(checker.getSymbolAtLocation(name)!)));
                 }
                 else {
-                    append(copiedOldImports, filterImport(i, moduleSpecifierFromImport(i), name => importsToCopy.has(checker.getSymbolAtLocation(name)!)));
+                    append(copiedOldImports, filterImport(i, factory.createStringLiteral(moduleSpecifierFromImport(i).text), name => importsToCopy.has(checker.getSymbolAtLocation(name)!)));
                 }
             });
         }
     }
 
     //Also, import things used from the old file, and insert 'export' modifiers as necessary in the old file.
-    const newFileSourceFile = program.getSourceFile(newFile);
+    const targetFileSourceFile = program.getSourceFile(targetFile);
     let oldFileDefault: Identifier | undefined;
     const oldFileNamedImports: string[] = [];
     const markSeenTop = nodeSeenTracker(); // Needed because multiple declarations may appear in `const x = 0, y = 1;`.
-    newFileImportsFromOldFile.forEach(symbol => {
+    targetFileImportsFromOldFile.forEach(symbol => {
         if (!symbol.declarations) {
             return;
         }
@@ -320,8 +315,8 @@ function getNewFileImportsAndAddExportInOldFile(
             }
         }
     });
-    return (newFileSourceFile)
-        ? append(copiedOldImports, makeImportOrRequire(newFileSourceFile, oldFileDefault, oldFileNamedImports, oldFile.fileName, program, host, useEsModuleSyntax, quotePreference))
+    return (targetFileSourceFile)
+        ? append(copiedOldImports, makeImportOrRequire(targetFileSourceFile, oldFileDefault, oldFileNamedImports, oldFile.fileName, program, host, useEsModuleSyntax, quotePreference))
         : append(copiedOldImports, makeImportOrRequire(oldFile, oldFileDefault, oldFileNamedImports, oldFile.fileName, program, host, useEsModuleSyntax, quotePreference));
 }
 
@@ -358,7 +353,7 @@ export function deleteUnusedOldImports(oldFile: SourceFile, toMove: readonly Sta
 
 /** @internal */
 export function updateImportsInOtherFiles(
-    changes: textChanges.ChangeTracker, program: Program, host: LanguageServiceHost, oldFile: SourceFile, movedSymbols: Set<Symbol>, newFilename: string, quotePreference: QuotePreference
+    changes: textChanges.ChangeTracker, program: Program, host: LanguageServiceHost, oldFile: SourceFile, movedSymbols: Set<Symbol>, targetFileName: string, quotePreference: QuotePreference
 ): void {
     const checker = program.getTypeChecker();
     for (const sourceFile of program.getSourceFiles()) {
@@ -370,13 +365,13 @@ export function updateImportsInOtherFiles(
                 const shouldMove = (name: Identifier): boolean => {
                     const symbol = isBindingElement(name.parent)
                         ? getPropertySymbolFromBindingElement(checker, name.parent as ObjectBindingElementWithoutPropertyName)
-                        : skipAlias(checker.getSymbolAtLocation(name)!, checker); // TODO: GH#18217
+                        : skipAlias(checker.getSymbolAtLocation(name)!, checker);
                     return !!symbol && movedSymbols.has(symbol);
                 };
                 deleteUnusedImports(sourceFile, importNode, changes, shouldMove); // These will be changed to imports from the new file
 
-                const pathToNewFileWithExtension = resolvePath(getDirectoryPath(oldFile.path), newFilename);
-                const newModuleSpecifier = getModuleSpecifier(program.getCompilerOptions(), sourceFile, sourceFile.path, pathToNewFileWithExtension, createModuleSpecifierResolutionHost(program, host));
+                const pathToTargetFileWithExtension = resolvePath(getDirectoryPath(oldFile.path), targetFileName);
+                const newModuleSpecifier = getModuleSpecifier(program.getCompilerOptions(), sourceFile, sourceFile.path, pathToTargetFileWithExtension, createModuleSpecifierResolutionHost(program, host));
                 const newImportDeclaration = filterImport(importNode, makeStringLiteral(newModuleSpecifier, quotePreference), shouldMove);
                 if (newImportDeclaration) changes.insertNodeAfter(sourceFile, statement, newImportDeclaration);
 
@@ -495,10 +490,10 @@ export type SupportedImportStatement =
     | VariableStatement;
 
 /** @internal */
-export function createOldFileImportsFromNewFile(
+export function createOldFileImportsFromTargetFile(
     sourceFile: SourceFile,
-    newFileNeedExport: Set<Symbol>,
-    newFileNameWithExtension: string,
+    targetFileNeedExport: Set<Symbol>,
+    targetFileNameWithExtension: string,
     program: Program,
     host: LanguageServiceHost,
     useEs6Imports: boolean,
@@ -506,15 +501,15 @@ export function createOldFileImportsFromNewFile(
 ): AnyImportOrRequireStatement | undefined {
     let defaultImport: Identifier | undefined;
     const imports: string[] = [];
-    newFileNeedExport.forEach(symbol => {
+    targetFileNeedExport.forEach(symbol => {
         if (symbol.escapedName === InternalSymbolName.Default) {
-            defaultImport = factory.createIdentifier(symbolNameNoDefault(symbol)!); // TODO: GH#18217
+            defaultImport = factory.createIdentifier(symbolNameNoDefault(symbol)!);
         }
         else {
             imports.push(symbol.name);
         }
     });
-    return makeImportOrRequire(sourceFile, defaultImport, imports, newFileNameWithExtension, program, host, useEs6Imports, quotePreference);
+    return makeImportOrRequire(sourceFile, defaultImport, imports, targetFileNameWithExtension, program, host, useEs6Imports, quotePreference);
 }
 
 /** @internal */
@@ -522,24 +517,24 @@ export function makeImportOrRequire(
     sourceFile: SourceFile,
     defaultImport: Identifier | undefined,
     imports: readonly string[],
-    newFileNameWithExtension: string,
+    targetFileNameWithExtension: string,
     program: Program,
     host: LanguageServiceHost,
     useEs6Imports: boolean,
     quotePreference: QuotePreference
 ): AnyImportOrRequireStatement | undefined {
-    const pathToNewFile = resolvePath(getDirectoryPath(sourceFile.path), newFileNameWithExtension);
-    const pathToNewFileWithCorrectExtension = getModuleSpecifier(program.getCompilerOptions(), sourceFile, sourceFile.path, pathToNewFile, createModuleSpecifierResolutionHost(program, host));
+    const pathToTargetFile = resolvePath(getDirectoryPath(sourceFile.path), targetFileNameWithExtension);
+    const pathToTargetFileWithCorrectExtension = getModuleSpecifier(program.getCompilerOptions(), sourceFile, sourceFile.path, pathToTargetFile, createModuleSpecifierResolutionHost(program, host));
 
     if (useEs6Imports) {
         const specifiers = imports.map(i => factory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, factory.createIdentifier(i)));
-        return makeImportIfNecessary(defaultImport, specifiers, pathToNewFileWithCorrectExtension, quotePreference);
+        return makeImportIfNecessary(defaultImport, specifiers, pathToTargetFileWithCorrectExtension, quotePreference);
     }
     else {
         Debug.assert(!defaultImport, "No default import should exist"); // If there's a default export, it should have been an es6 module.
         const bindingElements = imports.map(i => factory.createBindingElement(/*dotDotDotToken*/ undefined, /*propertyName*/ undefined, i));
         return bindingElements.length
-            ? makeVariableStatement(factory.createObjectBindingPattern(bindingElements), /*type*/ undefined, createRequireCall(makeStringLiteral(pathToNewFileWithCorrectExtension, quotePreference))) as RequireVariableStatement
+            ? makeVariableStatement(factory.createObjectBindingPattern(bindingElements), /*type*/ undefined, createRequireCall(makeStringLiteral(pathToTargetFileWithCorrectExtension, quotePreference))) as RequireVariableStatement
             : undefined;
     }
 }
@@ -819,12 +814,12 @@ export interface UsageInfo {
     readonly movedSymbols: Set<Symbol>;
 
     // Symbols declared in the old file that must be imported by the new file. (May not already be exported.)
-    readonly newFileImportsFromOldFile: Set<Symbol>;
+    readonly targetFileImportsFromOldFile: Set<Symbol>;
     // Subset of movedSymbols that are still used elsewhere in the old file and must be imported back.
-    readonly oldFileImportsFromNewFile: Set<Symbol>;
+    readonly oldFileImportsFromTargetFile: Set<Symbol>;
 
-    readonly oldImportsNeededByNewFile: Map<Symbol, boolean>;
-    // Subset of oldImportsNeededByNewFile that are will no longer be used in the old file.
+    readonly oldImportsNeededByTargetFile: Map<Symbol, boolean>;
+    // Subset of oldImportsNeededByTargetFile that are will no longer be used in the old file.
     readonly unusedImportsFromOldFile: Set<Symbol>;
 }
 /** @internal */
@@ -848,7 +843,7 @@ export interface TopLevelVariableDeclaration extends VariableDeclaration { paren
 export type TopLevelDeclaration = NonVariableTopLevelDeclaration | TopLevelVariableDeclaration | BindingElement;
 
 /** @internal */
-export function createNewFilename(oldFile: SourceFile, program: Program, context: RefactorContext, host: LanguageServiceHost): string {
+export function createNewFileName(oldFile: SourceFile, program: Program, context: RefactorContext, host: LanguageServiceHost): string {
     const checker = program.getTypeChecker();
     const toMove = getStatementsToMove(context);
     let usage;
@@ -856,19 +851,19 @@ export function createNewFilename(oldFile: SourceFile, program: Program, context
         usage = getUsageInfo(oldFile, toMove.all, checker);
         const currentDirectory = getDirectoryPath(oldFile.fileName);
         const extension = extensionFromPath(oldFile.fileName);
-        const newFilename = combinePaths(
+        const newFileName = combinePaths(
         // new file is always placed in the same directory as the old file
         currentDirectory,
         // ensures the filename computed below isn't already taken
         makeUniqueFilename(
             // infers a name for the new file from the symbols being moved
-            inferNewFilename(usage.oldFileImportsFromNewFile, usage.movedSymbols),
+            inferNewFileName(usage.oldFileImportsFromTargetFile, usage.movedSymbols),
             extension,
             currentDirectory,
             host))
         // new file has same extension as old file
         + extension;
-    return newFilename;
+    return newFileName;
     }
     return "";
 }
@@ -939,14 +934,14 @@ function isPureImport(node: Node): boolean {
 /** @internal */
 export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], checker: TypeChecker): UsageInfo {
     const movedSymbols = new Set<Symbol>();
-    const oldImportsNeededByNewFile = new Map<Symbol, /*isValidTypeOnlyUseSite*/ boolean>();
-    const newFileImportsFromOldFile = new Set<Symbol>();
+    const oldImportsNeededByTargetFile = new Map<Symbol, /*isValidTypeOnlyUseSite*/ boolean>();
+    const targetFileImportsFromOldFile = new Set<Symbol>();
 
     const containsJsx = find(toMove, statement => !!(statement.transformFlags & TransformFlags.ContainsJsx));
     const jsxNamespaceSymbol = getJsxNamespaceSymbol(containsJsx);
 
     if (jsxNamespaceSymbol) { // Might not exist (e.g. in non-compiling code)
-        oldImportsNeededByNewFile.set(jsxNamespaceSymbol, false);
+        oldImportsNeededByTargetFile.set(jsxNamespaceSymbol, false);
     }
 
     for (const statement of toMove) {
@@ -959,33 +954,33 @@ export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], 
             if (!symbol.declarations) return;
             for (const decl of symbol.declarations) {
                 if (isInImport(decl)) {
-                    const prevIsTypeOnly = oldImportsNeededByNewFile.get(symbol);
-                    oldImportsNeededByNewFile.set(symbol, prevIsTypeOnly === undefined ? isValidTypeOnlyUseSite : prevIsTypeOnly && isValidTypeOnlyUseSite);
+                    const prevIsTypeOnly = oldImportsNeededByTargetFile.get(symbol);
+                    oldImportsNeededByTargetFile.set(symbol, prevIsTypeOnly === undefined ? isValidTypeOnlyUseSite : prevIsTypeOnly && isValidTypeOnlyUseSite);
                 }
                 else if (isTopLevelDeclaration(decl) && sourceFileOfTopLevelDeclaration(decl) === oldFile && !movedSymbols.has(symbol)) {
-                    newFileImportsFromOldFile.add(symbol);
+                    targetFileImportsFromOldFile.add(symbol);
                 }
             }
         });
     }
-    const unusedImportsFromOldFile = new Set(oldImportsNeededByNewFile.keys());
+    const unusedImportsFromOldFile = new Set(oldImportsNeededByTargetFile.keys());
 
-    const oldFileImportsFromNewFile = new Set<Symbol>();
+    const oldFileImportsFromTargetFile = new Set<Symbol>();
     for (const statement of oldFile.statements) {
         if (contains(toMove, statement)) continue;
 
-        // jsxNamespaceSymbol will only be set iff it is in oldImportsNeededByNewFile.
+        // jsxNamespaceSymbol will only be set iff it is in oldImportsNeededByTargetFile.
         if (jsxNamespaceSymbol && !!(statement.transformFlags & TransformFlags.ContainsJsx)) {
             unusedImportsFromOldFile.delete(jsxNamespaceSymbol);
         }
 
         forEachReference(statement, checker, symbol => {
-            if (movedSymbols.has(symbol)) oldFileImportsFromNewFile.add(symbol);
+            if (movedSymbols.has(symbol)) oldFileImportsFromTargetFile.add(symbol);
             unusedImportsFromOldFile.delete(symbol);
         });
     }
 
-    return { movedSymbols, newFileImportsFromOldFile, oldFileImportsFromNewFile, oldImportsNeededByNewFile, unusedImportsFromOldFile };
+    return { movedSymbols, targetFileImportsFromOldFile, oldFileImportsFromTargetFile, oldImportsNeededByTargetFile, unusedImportsFromOldFile };
 
     function getJsxNamespaceSymbol(containsJsx: Node | undefined) {
         if (containsJsx === undefined) {
@@ -1014,7 +1009,7 @@ function makeUniqueFilename(proposedFilename: string, extension: string, inDirec
     }
 }
 
-function inferNewFilename(importsFromNewFile: Set<Symbol>, movedSymbols: Set<Symbol>): string {
+function inferNewFileName(importsFromNewFile: Set<Symbol>, movedSymbols: Set<Symbol>): string {
     return forEachKey(importsFromNewFile, symbolNameNoDefault) || forEachKey(movedSymbols, symbolNameNoDefault) || "newFile";
 }
 
