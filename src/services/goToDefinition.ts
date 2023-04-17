@@ -347,6 +347,37 @@ export function getReferenceAtPosition(sourceFile: SourceFile, position: number,
     return undefined;
 }
 
+const typesWithUnwrappedTypeArguments = new Set([
+    "Array",
+    "ArrayLike",
+    "ReadonlyArray",
+    "Promise",
+    "PromiseLike",
+    "Iterable",
+    "IterableIterator",
+    "AsyncIterable",
+    "Set",
+    "WeakSet",
+    "ReadonlySet",
+    "Map",
+    "WeakMap",
+    "ReadonlyMap",
+    "Partial",
+    "Required",
+    "Readonly",
+    "Pick",
+    "Omit",
+]);
+
+function shouldUnwrapFirstTypeArgumentTypeDefinition(typeChecker: TypeChecker, type: TypeReference): boolean {
+    const referenceName = type.symbol.name;
+    if (!typesWithUnwrappedTypeArguments.has(referenceName)) {
+        return false;
+    }
+    const globalType = typeChecker.resolveName(referenceName, /*location*/ undefined, SymbolFlags.Type, /*excludeGlobals*/ false);
+    return !!globalType && globalType === type.target.symbol;
+}
+
 /// Goto type
 /** @internal */
 export function getTypeDefinitionAtPosition(typeChecker: TypeChecker, sourceFile: SourceFile, position: number): readonly DefinitionInfo[] | undefined {
@@ -370,12 +401,12 @@ export function getTypeDefinitionAtPosition(typeChecker: TypeChecker, sourceFile
         [returnType, fromReturnType] :
         [typeAtLocation, definitionFromType(typeAtLocation, typeChecker, node, failedAliasResolution)];
 
-    const singleTypeArgumentDefinition = !!(getObjectFlags(resolvedType) & ObjectFlags.Reference) &&
-        (resolvedType as TypeReference).resolvedTypeArguments?.length === 1 ?
+    const firstTypeArgumentDefinition = !!(getObjectFlags(resolvedType) & ObjectFlags.Reference) &&
+        shouldUnwrapFirstTypeArgumentTypeDefinition(typeChecker, resolvedType as TypeReference) ?
         definitionFromType((resolvedType as TypeReference).resolvedTypeArguments![0], typeChecker, node, failedAliasResolution) :
         [];
 
-    return typeDefinitions.length ? [...singleTypeArgumentDefinition, ...typeDefinitions]
+    return typeDefinitions.length ? [...firstTypeArgumentDefinition, ...typeDefinitions]
         : !(symbol.flags & SymbolFlags.Value) && symbol.flags & SymbolFlags.Type ? getDefinitionFromSymbol(typeChecker, skipAlias(symbol, typeChecker), node, failedAliasResolution)
         : undefined;
 }
