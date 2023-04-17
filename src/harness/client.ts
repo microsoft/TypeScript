@@ -851,7 +851,7 @@ export class SessionClient implements LanguageService {
         const renameFilename: string | undefined = response.body.renameFilename;
         let renameLocation: number | undefined;
         if (renameFilename !== undefined) {
-            renameLocation = this.lineOffsetToPosition(renameFilename, response.body.renameLocation!); // TODO: GH#18217
+            renameLocation = this.lineOffsetToPosition(renameFilename, response.body.renameLocation!);
         }
         return {
             edits,
