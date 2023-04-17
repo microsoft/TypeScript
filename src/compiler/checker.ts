@@ -2396,7 +2396,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (parentSymbol && length(symbol.declarations) > 1) {
             return (parentSymbol.flags & SymbolFlags.Interface) ? some(symbol.declarations, isDeprecatedDeclaration) : every(symbol.declarations, isDeprecatedDeclaration);
         }
-        return !!symbol.valueDeclaration && isDeprecatedDeclaration(symbol.valueDeclaration) || every(symbol.declarations, isDeprecatedDeclaration);
+        return !!symbol.valueDeclaration && isDeprecatedDeclaration(symbol.valueDeclaration)
+            || length(symbol.declarations) && every(symbol.declarations, isDeprecatedDeclaration);
     }
 
     function isDeprecatedDeclaration(declaration: Declaration) {
