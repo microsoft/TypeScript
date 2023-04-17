@@ -1,5 +1,6 @@
 import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
+import { libContent } from "../tsc/helpers";
 import {
     createWatchedSystem,
     File,
@@ -618,6 +619,66 @@ declare namespace NodeJS {
                     sys.runQueuedTimeoutCallbacks(); // failed lookup
                     sys.runQueuedTimeoutCallbacks(); // actual update
                 }
+            },
+        ]
+    });
+
+    verifyTscWatch({
+        scenario,
+        subScenario: "scoped package installation",
+        commandLineArgs: ["--w", "-p", `.`, "--traceResolution", "--extendedDiagnostics"],
+        sys: () => createWatchedSystem({
+            "/user/username/projects/myproject/lib/app.ts": Utils.dedent`
+                import { myapp } from "@myapp/ts-types";
+                const x: 10 = myapp;
+            `,
+            "/user/username/projects/myproject/tsconfig.json": "{}",
+            [libFile.path]: libContent,
+        }, { currentDirectory: "/user/username/projects/myproject" }),
+        edits: [
+            {
+                caption: "npm install unrelated non scoped",
+                edit: sys => sys.ensureFileOrFolder({
+                    path: `/user/username/projects/myproject/node_modules/unrelated/index.d.ts`,
+                    content: `export const unrelated = 10;`
+                }),
+                timeouts: sys => {
+                    sys.runQueuedTimeoutCallbacks();
+                    sys.runQueuedTimeoutCallbacks();
+                },
+            },
+            {
+                caption: "npm install unrelated scoped in myapp",
+                edit: sys => sys.ensureFileOrFolder({
+                    path: `/user/username/projects/myproject/node_modules/@myapp/unrelated/index.d.ts`,
+                    content: `export const myappUnrelated = 10;`
+                }),
+                timeouts: sys => {
+                    sys.runQueuedTimeoutCallbacks();
+                    sys.runQueuedTimeoutCallbacks();
+                },
+            },
+            {
+                caption: "npm install unrelated2 scoped in myapp",
+                edit: sys => sys.ensureFileOrFolder({
+                    path: `/user/username/projects/myproject/node_modules/@myapp/unrelated2/index.d.ts`,
+                    content: `export const myappUnrelated2 = 10;`
+                }),
+                timeouts: sys => {
+                    sys.runQueuedTimeoutCallbacks();
+                    sys.runQueuedTimeoutCallbacks();
+                },
+            },
+            {
+                caption: "npm install ts-types",
+                edit: sys => sys.ensureFileOrFolder({
+                    path: `/user/username/projects/myproject/node_modules/@myapp/ts-types/index.d.ts`,
+                    content: `export const myapp = 10;`
+                }),
+                timeouts: sys => {
+                    sys.runQueuedTimeoutCallbacks();
+                    sys.runQueuedTimeoutCallbacks();
+                },
             },
         ]
     });
