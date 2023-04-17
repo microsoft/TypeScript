@@ -24106,21 +24106,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function inferReverseMappedType(sourceType: Type, target: MappedType, constraint: IndexType): Type {
         const typeParameter = getIndexedAccessType(constraint.type, getTypeParameterFromMappedType(target)) as TypeParameter;
         const templateType = getTemplateTypeFromMappedType(target);
-        const inferences = [createInferenceInfo(typeParameter)];
-        inferTypes(inferences, sourceType, templateType);
-        const wholeInferredType = getTypeFromInference(inferences[0]);
-        if (!wholeInferredType && inferences.length > 1) {
-            const members = createSymbolTable();
-            for (let i = 1; i < inferences.length; i++) {
-                const indexType = (inferences[i].typeParameter as IndexedAccessType).indexType as StringLiteralType;
-                const name = escapeLeadingUnderscores(indexType.value);
-                const prop = createSymbol(SymbolFlags.Property, name);
-                prop.links.type = getTypeFromInference(inferences[i]) || unknownType;
-                members.set(name, prop);
-            }
-            return createAnonymousType(undefined, members, emptyArray, emptyArray, emptyArray);
-        }
-        return wholeInferredType || unknownType;
+        const inference = createInferenceInfo(typeParameter);
+        inferTypes([inference], sourceType, templateType);
+        return getTypeFromInference(inference) || (inference.indexes ? getIntersectionType(inference.indexes) : unknownType);
     }
 
     function* getUnmatchedProperties(source: Type, target: Type, requireOptionalProperties: boolean, matchDiscriminantProperties: boolean): IterableIterator<Symbol> {
@@ -24438,15 +24426,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (isFromInferenceBlockedSource(source)) {
                     return;
                 }
-                let inference = getInferenceInfoForType(target);
-                if (
-                    !inference && (target.flags & TypeFlags.IndexedAccess) &&
-                    inferences[0].typeParameter.flags & TypeFlags.IndexedAccess &&
-                    (target as IndexedAccessType).indexType.flags & TypeFlags.StringLiteral &&
-                    ((target as IndexedAccessType).objectType.flags & TypeFlags.IndexedAccess)
-                ) {
-                    inferences.push(inference = createInferenceInfo(target));
-                }
+                const inference = getInferenceInfoForType(target);
                 if (inference) {
                     // If target is a type parameter, make an inference, unless the source type contains
                     // a "non-inferrable" type. Types with this flag set are markers used to prevent inference.
