@@ -361,6 +361,7 @@ import {
     JsxElement,
     JsxEmit,
     JsxFragment,
+    JsxNamespacedName,
     JsxOpeningElement,
     JsxOpeningLikeElement,
     JsxSelfClosingElement,
@@ -5828,7 +5829,7 @@ function isQuoteOrBacktick(charCode: number) {
 /** @internal */
 export function isIntrinsicJsxName(name: __String | string) {
     const ch = (name as string).charCodeAt(0);
-    return (ch >= CharacterCodes.a && ch <= CharacterCodes.z) || stringContains((name as string), "-") || stringContains((name as string), ":");
+    return (ch >= CharacterCodes.a && ch <= CharacterCodes.z) || stringContains((name as string), "-");
 }
 
 const indentStrings: string[] = ["", "    "];
@@ -10177,12 +10178,12 @@ export function tryGetJSDocSatisfiesTypeNode(node: Node) {
 
 /** @internal */
 export function getEscapedTextOfJsxAttributeName(node: JsxAttributeName): __String {
-    return isIdentifier(node) ? node.escapedText : `${node.namespace.escapedText}:${idText(node.name)}` as __String;
+    return isIdentifier(node) ? node.escapedText : getEscapedTextOfJsxNamespacedName(node);
 }
 
 /** @internal */
 export function getTextOfJsxAttributeName(node: JsxAttributeName): string {
-    return isIdentifier(node) ? idText(node) : `${idText(node.namespace)}:${idText(node.name)}`;
+    return isIdentifier(node) ? idText(node) : getTextOfJsxNamespacedName(node);
 }
 
 /** @internal */
@@ -10190,4 +10191,19 @@ export function isJsxAttributeName(node: Node): node is JsxAttributeName {
     const kind = node.kind;
     return kind === SyntaxKind.Identifier
         || kind === SyntaxKind.JsxNamespacedName;
+}
+
+/** @internal */
+export function getEscapedTextOfJsxNamespacedName(node: JsxNamespacedName): __String {
+    return `${node.namespace.escapedText}:${idText(node.name)}` as __String;
+}
+
+/** @internal */
+export function getTextOfJsxNamespacedName(node: JsxNamespacedName) {
+    return `${idText(node.namespace)}:${idText(node.name)}`;
+}
+
+/** @internal */
+export function intrinsicTagNameToString(node: Identifier | JsxNamespacedName) {
+    return isIdentifier(node) ? idText(node) : getTextOfJsxNamespacedName(node);
 }

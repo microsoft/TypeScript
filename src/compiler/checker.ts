@@ -276,6 +276,7 @@ import {
     getErrorSpanForNode,
     getEscapedTextOfIdentifierOrLiteral,
     getEscapedTextOfJsxAttributeName,
+    getEscapedTextOfJsxNamespacedName,
     getESModuleInterop,
     getExpandoInitializer,
     getExportAssignmentExpression,
@@ -429,6 +430,7 @@ import {
     InternalSymbolName,
     IntersectionType,
     IntersectionTypeNode,
+    intrinsicTagNameToString,
     IntrinsicType,
     introducesArgumentsExoticObject,
     isAccessExpression,
@@ -782,6 +784,7 @@ import {
     JsxExpression,
     JsxFlags,
     JsxFragment,
+    JsxNamespacedName,
     JsxOpeningElement,
     JsxOpeningFragment,
     JsxOpeningLikeElement,
@@ -29597,7 +29600,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getStaticTypeOfReferencedJsxConstructor(context: JsxOpeningLikeElement) {
-        if (isJsxIntrinsicIdentifier(context.tagName)) {
+        if (isJsxIntrinsicTagName(context.tagName)) {
             const result = getIntrinsicAttributesTypeFromJsxOpeningLikeElement(context);
             const fakeSignature = createSignatureForJSXIntrinsic(context, result);
             return getOrCreateTypeFromSignature(fakeSignature);
@@ -30317,7 +30320,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         checkJsxOpeningLikeElementOrOpeningFragment(node.openingElement);
 
         // Perform resolution on the closing tag so that rename/go to definition/etc work
-        if (isJsxIntrinsicIdentifier(node.closingElement.tagName)) {
+        if (isJsxIntrinsicTagName(node.closingElement.tagName)) {
             getIntrinsicTagSymbol(node.closingElement);
         }
         else {
@@ -30357,8 +30360,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     /**
      * Returns true iff React would emit this tag name as a string rather than an identifier or qualified name
      */
-    function isJsxIntrinsicIdentifier(tagName: JsxTagNameExpression): tagName is Identifier {
-        return tagName.kind === SyntaxKind.Identifier && isIntrinsicJsxName(tagName.escapedText);
+    function isJsxIntrinsicTagName(tagName: Node): tagName is Identifier | JsxNamespacedName {
+        return isIdentifier(tagName) && isIntrinsicJsxName(tagName.escapedText) || isJsxNamespacedName(tagName);
     }
 
     function checkJsxAttribute(node: JsxAttribute, checkMode?: CheckMode) {
@@ -30563,8 +30566,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const intrinsicElementsType = getJsxType(JsxNames.IntrinsicElements, node);
             if (!isErrorType(intrinsicElementsType)) {
                 // Property case
-                if (!isIdentifier(node.tagName)) return Debug.fail();
-                const intrinsicProp = getPropertyOfType(intrinsicElementsType, node.tagName.escapedText);
+                if (!isIdentifier(node.tagName) && !isJsxNamespacedName(node.tagName)) return Debug.fail();
+                const intrinsicProp = getPropertyOfType(intrinsicElementsType, isJsxNamespacedName(node.tagName) ? getEscapedTextOfJsxNamespacedName(node.tagName) : node.tagName.escapedText);
                 if (intrinsicProp) {
                     links.jsxFlags |= JsxFlags.IntrinsicNamedElement;
                     return links.resolvedSymbol = intrinsicProp;
@@ -30578,7 +30581,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
 
                 // Wasn't found
-                error(node, Diagnostics.Property_0_does_not_exist_on_type_1, idText(node.tagName), "JSX." + JsxNames.IntrinsicElements);
+                error(node, Diagnostics.Property_0_does_not_exist_on_type_1, intrinsicTagNameToString(node.tagName), "JSX." + JsxNames.IntrinsicElements);
                 return links.resolvedSymbol = unknownSymbol;
             }
             else {
@@ -30787,7 +30790,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * @param node an intrinsic JSX opening-like element
      */
     function getIntrinsicAttributesTypeFromJsxOpeningLikeElement(node: JsxOpeningLikeElement): Type {
-        Debug.assert(isJsxIntrinsicIdentifier(node.tagName));
+        Debug.assert(isJsxIntrinsicTagName(node.tagName));
         const links = getNodeLinks(node);
         if (!links.resolvedJsxElementAttributesType) {
             const symbol = getIntrinsicTagSymbol(node);
@@ -30900,8 +30903,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const elementTypeConstraint = getJsxElementTypeTypeAt(jsxOpeningLikeNode);
             if (elementTypeConstraint !== undefined) {
                 const tagName = jsxOpeningLikeNode.tagName;
-                const tagType = isJsxIntrinsicIdentifier(tagName)
-                    ? getStringLiteralType(unescapeLeadingUnderscores(tagName.escapedText))
+                const tagType = isJsxIntrinsicTagName(tagName)
+                    ? getStringLiteralType(intrinsicTagNameToString(tagName))
                     : checkExpression(tagName);
                 checkTypeRelatedTo(tagType, elementTypeConstraint, assignableRelation, tagName, Diagnostics.Its_type_0_is_not_a_valid_JSX_element_type, () => {
                     const componentName = getTextOfNode(tagName);
@@ -32521,7 +32524,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getJsxReferenceKind(node: JsxOpeningLikeElement): JsxReferenceKind {
-        if (isJsxIntrinsicIdentifier(node.tagName)) {
+        if (isJsxIntrinsicTagName(node.tagName)) {
             return JsxReferenceKind.Mixed;
         }
         const tagType = getApparentType(checkExpression(node.tagName));
@@ -32568,7 +32571,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (getJsxNamespaceContainerForImplicitImport(node)) {
                 return true; // factory is implicitly jsx/jsxdev - assume it fits the bill, since we don't strongly look for the jsx/jsxs/jsxDEV factory APIs anywhere else (at least not yet)
             }
-            const tagType = isJsxOpeningElement(node) || isJsxSelfClosingElement(node) && !isJsxIntrinsicIdentifier(node.tagName) ? checkExpression(node.tagName) : undefined;
+            const tagType = isJsxOpeningElement(node) || isJsxSelfClosingElement(node) && !isJsxIntrinsicTagName(node.tagName) ? checkExpression(node.tagName) : undefined;
             if (!tagType) {
                 return true;
             }
@@ -33972,7 +33975,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function resolveJsxOpeningLikeElement(node: JsxOpeningLikeElement, candidatesOutArray: Signature[] | undefined, checkMode: CheckMode): Signature {
-        if (isJsxIntrinsicIdentifier(node.tagName)) {
+        if (isJsxIntrinsicTagName(node.tagName)) {
             const result = getIntrinsicAttributesTypeFromJsxOpeningLikeElement(node);
             const fakeSignature = createSignatureForJSXIntrinsic(node, result);
             checkTypeAssignableToAndOptionallyElaborate(checkExpressionWithContextualType(node.attributes, getEffectiveFirstArgumentForJsxSignature(fakeSignature, node), /*inferenceContext*/ undefined, CheckMode.Normal), result, node.tagName, node.attributes);
@@ -45438,7 +45441,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const isJSDoc = findAncestor(name, or(isJSDocLinkLike, isJSDocNameReference, isJSDocMemberName));
             const meaning = isJSDoc ? SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Value : SymbolFlags.Value;
             if (name.kind === SyntaxKind.Identifier) {
-                if (isJSXTagName(name) && isJsxIntrinsicIdentifier(name)) {
+                if (isJSXTagName(name) && isJsxIntrinsicTagName(name)) {
                     const symbol = getIntrinsicTagSymbol(name.parent as JsxOpeningLikeElement);
                     return symbol === unknownSymbol ? undefined : symbol;
                 }
@@ -45685,6 +45688,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return isMetaProperty(node.parent) ? checkMetaPropertyKeyword(node.parent).symbol : undefined;
             case SyntaxKind.MetaProperty:
                 return checkExpression(node as Expression).symbol;
+            case SyntaxKind.JsxNamespacedName:
+                if (isJSXTagName(node) && isJsxIntrinsicTagName(node)) {
+                    const symbol = getIntrinsicTagSymbol(node.parent as JsxOpeningLikeElement);
+                    return symbol === unknownSymbol ? undefined : symbol;
+                }
+                // falls through
 
             default:
                 return undefined;
