@@ -5,10 +5,7 @@
 // 
 //     // local use
 //     var x = variable;
-// }
-// 
-// // external use
-// M.variable
+// --- (line: 6) skipped ---
 
 
 
@@ -31,10 +28,7 @@
   // 
   //     // local use
   //     var x = variable;
-  // }
-  // 
-  // // external use
-  // M.variable
+  // --- (line: 6) skipped ---
 
   // === Details ===
   [

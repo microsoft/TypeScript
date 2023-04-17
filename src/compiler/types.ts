@@ -367,6 +367,7 @@ export const enum SyntaxKind {
     JsxAttributes,
     JsxSpreadAttribute,
     JsxExpression,
+    JsxNamespacedName,
 
     // Clauses
     CaseClause,
@@ -1153,6 +1154,7 @@ export type HasChildren =
     | JsxAttributes
     | JsxSpreadAttribute
     | JsxExpression
+    | JsxNamespacedName
     | CaseClause
     | DefaultClause
     | HeritageClause
@@ -3177,19 +3179,32 @@ export type JsxAttributeLike =
     | JsxSpreadAttribute
     ;
 
+export type JsxAttributeName =
+    | Identifier
+    | JsxNamespacedName
+    ;
+
 export type JsxTagNameExpression =
     | Identifier
     | ThisExpression
     | JsxTagNamePropertyAccess
+    | JsxNamespacedName
     ;
 
 export interface JsxTagNamePropertyAccess extends PropertyAccessExpression {
     readonly expression: JsxTagNameExpression;
 }
 
-export interface JsxAttributes extends ObjectLiteralExpressionBase<JsxAttributeLike> {
+export interface JsxAttributes extends PrimaryExpression, Declaration {
+    readonly properties: NodeArray<JsxAttributeLike>;
     readonly kind: SyntaxKind.JsxAttributes;
     readonly parent: JsxOpeningLikeElement;
+}
+
+export interface JsxNamespacedName extends PrimaryExpression {
+    readonly kind: SyntaxKind.JsxNamespacedName;
+    readonly name: Identifier;
+    readonly namespace: Identifier;
 }
 
 /// The opening element of a <Tag>...</Tag> JsxElement
@@ -3229,10 +3244,10 @@ export interface JsxClosingFragment extends Expression {
     readonly parent: JsxFragment;
 }
 
-export interface JsxAttribute extends ObjectLiteralElement {
+export interface JsxAttribute extends Declaration {
     readonly kind: SyntaxKind.JsxAttribute;
     readonly parent: JsxAttributes;
-    readonly name: Identifier;
+    readonly name: JsxAttributeName;
     /// JSX attribute initializers are optional; <X y /> is sugar for <X y={true} />
     readonly initializer?: JsxAttributeValue;
 }
@@ -3246,6 +3261,7 @@ export type JsxAttributeValue =
 
 export interface JsxSpreadAttribute extends ObjectLiteralElement {
     readonly kind: SyntaxKind.JsxSpreadAttribute;
+    readonly name: PropertyName;
     readonly parent: JsxAttributes;
     readonly expression: Expression;
 }
@@ -6704,6 +6720,7 @@ export const enum SignatureFlags {
     IsInnerCallChain = 1 << 3,          // Indicates signature comes from a CallChain nested in an outer OptionalChain
     IsOuterCallChain = 1 << 4,          // Indicates signature comes from a CallChain that is the outermost chain of an optional expression
     IsUntypedSignatureInJSFile = 1 << 5, // Indicates signature is from a js file and has no types
+    IsNonInferrable = 1 << 6,           // Indicates signature comes from a non-inferrable type
 
     // We do not propagate `IsInnerCallChain` or `IsOuterCallChain` to instantiated signatures, as that would result in us
     // attempting to add `| undefined` on each recursive call to `getReturnTypeOfSignature` when
@@ -8713,14 +8730,16 @@ export interface NodeFactory {
     createJsxOpeningFragment(): JsxOpeningFragment;
     createJsxJsxClosingFragment(): JsxClosingFragment;
     updateJsxFragment(node: JsxFragment, openingFragment: JsxOpeningFragment, children: readonly JsxChild[], closingFragment: JsxClosingFragment): JsxFragment;
-    createJsxAttribute(name: Identifier, initializer: JsxAttributeValue | undefined): JsxAttribute;
-    updateJsxAttribute(node: JsxAttribute, name: Identifier, initializer: JsxAttributeValue | undefined): JsxAttribute;
+    createJsxAttribute(name: JsxAttributeName, initializer: JsxAttributeValue | undefined): JsxAttribute;
+    updateJsxAttribute(node: JsxAttribute, name: JsxAttributeName, initializer: JsxAttributeValue | undefined): JsxAttribute;
     createJsxAttributes(properties: readonly JsxAttributeLike[]): JsxAttributes;
     updateJsxAttributes(node: JsxAttributes, properties: readonly JsxAttributeLike[]): JsxAttributes;
     createJsxSpreadAttribute(expression: Expression): JsxSpreadAttribute;
     updateJsxSpreadAttribute(node: JsxSpreadAttribute, expression: Expression): JsxSpreadAttribute;
     createJsxExpression(dotDotDotToken: DotDotDotToken | undefined, expression: Expression | undefined): JsxExpression;
     updateJsxExpression(node: JsxExpression, expression: Expression | undefined): JsxExpression;
+    createJsxNamespacedName(namespace: Identifier, name: Identifier): JsxNamespacedName;
+    updateJsxNamespacedName(node: JsxNamespacedName, namespace: Identifier, name: Identifier): JsxNamespacedName;
 
     //
     // Clauses

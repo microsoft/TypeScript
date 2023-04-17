@@ -1,17 +1,6 @@
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesSetAndGet3.ts ===
-// class Foo {
-//     set bar(b: any) {
-//     }
-// 
-//     public get bar(): any {
-//         return undefined;
-//     }
-// 
-//     public set set(s: any) {
-//     }
-// 
-//     public get set(): any {
+// --- (line: 12) skipped ---
 //         return undefined;
 //     }
 // 
@@ -27,18 +16,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesSetAndGet3.ts ===
-// class Foo {
-//     set bar(b: any) {
-//     }
-// 
-//     public get bar(): any {
-//         return undefined;
-//     }
-// 
-//     public set set(s: any) {
-//     }
-// 
-//     public get set(): any {
+// --- (line: 12) skipped ---
 //         return undefined;
 //     }
 // 

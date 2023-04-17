@@ -65,8 +65,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/a/node_modul
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /packages/a/node_modules/b 1 undefined Config: /packages/a/node_modules/b/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /packages/a/node_modules/b 1 undefined Config: /packages/a/node_modules/b/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /packages/a/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /packages/a/node_modules/@types 1 undefined Project: /packages/a/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /packages/a/node_modules/@types 1 undefined Project: /packages/a/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /packages/a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/packages/a/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -113,8 +111,6 @@ After request
 
 PolledWatches::
 /a/lib/lib.d.ts: *new*
-  {"pollingInterval":500}
-/packages/a/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::

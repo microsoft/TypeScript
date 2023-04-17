@@ -1416,6 +1416,8 @@ export class TestState {
         return fileBaselines.join("\n\n");
     }
 
+    private static readonly nLinesContext = 4;
+
     private getBaselineContentForFile<T extends ts.DocumentSpan>(
         fileName: string,
         content: string,
@@ -1433,7 +1435,8 @@ export class TestState {
         }: BaselineDocumentSpansWithFileContentsOptions<T>,
         spanToContextId: Map<T, number>,
     ) {
-        let newContent = `=== ${fileName} ===\n`;
+        let readableContents = `// === ${fileName} ===`;
+        let newContent = "";
         interface Detail {
             location: number;
             locationMarker: string;
@@ -1514,6 +1517,8 @@ export class TestState {
                 }
             });
         }
+        const lineStarts = ts.computeLineStarts(content);
+        let posLineInfo: { pos: number, line: number } | undefined;
         // Our preferred way to write marker is
         // /*MARKER*/[| some text |]
         // [| some /*MARKER*/ text |]
@@ -1537,7 +1542,7 @@ export class TestState {
                 // Defer writing marker position to deffered marker index
                 if (deferredMarkerIndex !== undefined) return;
             }
-            newContent += content.slice(pos, location);
+            textWithContext(location, type);
             pos = location;
             // Prefix
             const prefix = detailPrefixes.get(detail);
@@ -1587,8 +1592,36 @@ export class TestState {
             const suffix = detailSuffixes.get(detail);
             if (suffix) newContent += suffix;
         });
-        newContent += content.slice(pos);
-        return readableJsoncBaseline(newContent);
+        textWithContext(/*location*/ undefined, /*type*/ undefined);
+        return readableContents + (newContent ? "\n" + readableJsoncBaseline(newContent) : "");
+
+        function textWithContext(location: number | undefined, type: Detail["type"]) {
+            if (!newContent && location === undefined) ts.Debug.fail("Unsupported");
+            if (type !== "textEnd" && type !== "contextEnd") {
+                // Calculate pos to location number of lines
+                const posLine = posLineInfo?.pos === pos ? posLineInfo.line : ts.computeLineOfPosition(lineStarts, pos, posLineInfo?.line);
+                const locationLine = location !== undefined ? ts.computeLineOfPosition(lineStarts, location, posLine) : lineStarts.length - 1;
+                if (location !== undefined) posLineInfo = { pos: location, line: locationLine };
+                let nLines = 0;
+                if (newContent) nLines += TestState.nLinesContext + 1;
+                if (location !== undefined) nLines += TestState.nLinesContext + 1;
+                // first nLinesContext and last nLinesContext
+                if (locationLine - posLine > nLines) {
+                    if (newContent) {
+                        readableContents = readableContents + "\n" + readableJsoncBaseline(newContent + content.slice(pos, lineStarts[posLine + TestState.nLinesContext]) +
+                            `--- (line: ${posLine + TestState.nLinesContext + 1}) skipped ---`);
+                        if (location !== undefined) readableContents += "\n";
+                        newContent = "";
+                    }
+                    if (location !== undefined) {
+                        newContent += `--- (line: ${locationLine - TestState.nLinesContext + 1}) skipped ---\n` +
+                            content.slice(lineStarts[locationLine - TestState.nLinesContext + 1], location);
+                    }
+                    return;
+                }
+            }
+            newContent += content.slice(pos, location);
+        }
     }
 
     private assertObjectsEqual<T>(fullActual: T, fullExpected: T, msgPrefix = ""): void {
@@ -4510,16 +4543,16 @@ const enum State {
     inObjectMarker
 }
 
-function reportError(fileName: string, line: number, col: number, message: string) {
+function reportError(fileName: string, line: number, col: number, message: string): never {
     const errorMessage = fileName + "(" + line + "," + col + "): " + message;
     throw new Error(errorMessage);
 }
 
 function recordObjectMarker(fileName: string, location: LocationInformation, text: string, markerMap: Map<string, Marker>, markers: Marker[]): Marker | undefined {
-    let markerValue: any;
+    let markerValue;
     try {
         // Attempt to parse the marker value as JSON
-        markerValue = JSON.parse("{ " + text + " }");
+        markerValue = JSON.parse("{ " + text + " }") as { name?: unknown };
     }
     catch (e) {
         reportError(fileName, location.sourceLine, location.sourceColumn, "Unable to parse marker text " + e.message);
@@ -4527,7 +4560,6 @@ function recordObjectMarker(fileName: string, location: LocationInformation, tex
 
     if (markerValue === undefined) {
         reportError(fileName, location.sourceLine, location.sourceColumn, "Object markers can not be empty");
-        return undefined;
     }
 
     const marker: Marker = {
@@ -4537,7 +4569,7 @@ function recordObjectMarker(fileName: string, location: LocationInformation, tex
     };
 
     // Object markers can be anonymous
-    if (markerValue.name) {
+    if (typeof markerValue.name === "string") {
         markerMap.set(markerValue.name, marker);
     }
 
@@ -4556,7 +4588,6 @@ function recordMarker(fileName: string, location: LocationInformation, name: str
     if (markerMap.has(name)) {
         const message = "Marker '" + name + "' is duplicated in the source file contents.";
         reportError(marker.fileName, location.sourceLine, location.sourceColumn, message);
-        return undefined;
     }
     else {
         markerMap.set(name, marker);
@@ -4623,7 +4654,7 @@ function parseFileContent(content: string, fileName: string, markerMap: Map<stri
                         // found a range end
                         const rangeStart = openRanges.pop();
                         if (!rangeStart) {
-                            throw reportError(fileName, line, column, "Found range end with no matching start.");
+                            reportError(fileName, line, column, "Found range end with no matching start.");
                         }
 
                         const range: Range = {

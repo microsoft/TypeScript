@@ -17,7 +17,8 @@ tests/cases/compiler/jsxComponentTypeErrors.tsx(27,16): error TS2786: 'ClassComp
 tests/cases/compiler/jsxComponentTypeErrors.tsx(28,16): error TS2786: 'MixedComponent' cannot be used as a JSX component.
   Its element type 'ClassComponent | { type: string | undefined; }' is not a valid JSX element.
     Type 'ClassComponent' is not assignable to type 'Element | ElementClass | null'.
-      Type 'ClassComponent' is not assignable to type 'ElementClass'.
+      Type 'ClassComponent' is not assignable to type 'Element | ElementClass'.
+        Type 'ClassComponent' is not assignable to type 'ElementClass'.
 tests/cases/compiler/jsxComponentTypeErrors.tsx(37,16): error TS2786: 'obj.MemberFunctionComponent' cannot be used as a JSX component.
   Its return type '{}' is not a valid JSX element.
     Property 'type' is missing in type '{}' but required in type 'Element'.
@@ -79,7 +80,8 @@ tests/cases/compiler/jsxComponentTypeErrors.tsx(38,16): error TS2786: 'obj. Memb
 !!! error TS2786: 'MixedComponent' cannot be used as a JSX component.
 !!! error TS2786:   Its element type 'ClassComponent | { type: string | undefined; }' is not a valid JSX element.
 !!! error TS2786:     Type 'ClassComponent' is not assignable to type 'Element | ElementClass | null'.
-!!! error TS2786:       Type 'ClassComponent' is not assignable to type 'ElementClass'.
+!!! error TS2786:       Type 'ClassComponent' is not assignable to type 'Element | ElementClass'.
+!!! error TS2786:         Type 'ClassComponent' is not assignable to type 'ElementClass'.
     
     const obj = {
       MemberFunctionComponent() {

@@ -48,6 +48,8 @@ Shape signatures in builder refreshed for::
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
 /user/username/projects/myproject/tsconfig.json: *new*
@@ -100,9 +102,13 @@ No shapes updated in the builder::
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500} *new*
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500} *new*
 
 PolledWatches *deleted*::
 /user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::

@@ -34,10 +34,6 @@ Info seq  [hh:mm:ss:mss] Config: /tsconfig.json : {
  }
 }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /b 1 undefined Project: /tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b 1 undefined Project: /tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo:  0 undefined Project: /tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo:  0 undefined Project: /tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /b.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
@@ -64,8 +60,6 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/b: *new*
-  {"pollingInterval":500}
 /b.ts: *new*
   {"pollingInterval":500}
 /a/lib/lib.d.ts: *new*
@@ -73,8 +67,6 @@ PolledWatches::
 
 FsWatches::
 /tsconfig.json: *new*
-  {}
-/: *new*
   {}
 
 Before request

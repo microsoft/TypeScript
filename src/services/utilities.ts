@@ -1739,7 +1739,14 @@ export function findPrecedingToken(position: number, sourceFile: SourceFileLike,
                 if (lookInPreviousChild) {
                     // actual start of the node is past the position - previous token should be at the end of previous child
                     const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ i, sourceFile, n.kind);
-                    return candidate && findRightmostToken(candidate, sourceFile);
+                    if (candidate) {
+                        // Ensure we recurse into JSDoc nodes with children.
+                        if (!excludeJsdoc && isJSDocCommentContainingNode(candidate) && candidate.getChildren(sourceFile).length) {
+                            return find(candidate);
+                        }
+                        return findRightmostToken(candidate, sourceFile);
+                    }
+                    return undefined;
                 }
                 else {
                     // candidate should be in this node

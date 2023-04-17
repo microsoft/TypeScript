@@ -24,19 +24,7 @@
   // var assignmentRightHandSide = x;
   // var assignmentRightHandSide2 = 1 + x;
   // 
-  // x = 1;
-  // x = x + x;
-  // 
-  // x == 1;
-  // x <= 1;
-  // 
-  // var preIncrement = ++x;
-  // var postIncrement = x++;
-  // var preDecrement = --x;
-  // var postDecrement = x--;
-  // 
-  // x += 1;
-  // x <<= 1;
+  // --- (line: 5) skipped ---
 
   // === Details ===
   [
@@ -102,19 +90,7 @@
   // var assignmentRightHandSide = x;
   // var assignmentRightHandSide2 = 1 + x;
   // 
-  // x = 1;
-  // x = x + x;
-  // 
-  // x == 1;
-  // x <= 1;
-  // 
-  // var preIncrement = ++x;
-  // var postIncrement = x++;
-  // var preDecrement = --x;
-  // var postDecrement = x--;
-  // 
-  // x += 1;
-  // x <<= 1;
+  // --- (line: 5) skipped ---
 
   // === Details ===
   [
@@ -181,18 +157,7 @@
   // var assignmentRightHandSide2 = 1 + x;
   // 
   // x = 1;
-  // x = x + x;
-  // 
-  // x == 1;
-  // x <= 1;
-  // 
-  // var preIncrement = ++x;
-  // var postIncrement = x++;
-  // var preDecrement = --x;
-  // var postDecrement = x--;
-  // 
-  // x += 1;
-  // x <<= 1;
+  // --- (line: 6) skipped ---
 
   // === Details ===
   [
@@ -260,17 +225,7 @@
   // 
   // x = 1;
   // x = x + x;
-  // 
-  // x == 1;
-  // x <= 1;
-  // 
-  // var preIncrement = ++x;
-  // var postIncrement = x++;
-  // var preDecrement = --x;
-  // var postDecrement = x--;
-  // 
-  // x += 1;
-  // x <<= 1;
+  // --- (line: 7) skipped ---
 
   // === Details ===
   [
@@ -340,15 +295,7 @@
   // x = x + x;
   // 
   // x == 1;
-  // x <= 1;
-  // 
-  // var preIncrement = ++x;
-  // var postIncrement = x++;
-  // var preDecrement = --x;
-  // var postDecrement = x--;
-  // 
-  // x += 1;
-  // x <<= 1;
+  // --- (line: 9) skipped ---
 
   // === Details ===
   [
@@ -419,14 +366,7 @@
   // 
   // x == 1;
   // x <= 1;
-  // 
-  // var preIncrement = ++x;
-  // var postIncrement = x++;
-  // var preDecrement = --x;
-  // var postDecrement = x--;
-  // 
-  // x += 1;
-  // x <<= 1;
+  // --- (line: 10) skipped ---
 
   // === Details ===
   [
@@ -497,14 +437,7 @@
   // 
   // x == 1;
   // x <= 1;
-  // 
-  // var preIncrement = ++x;
-  // var postIncrement = x++;
-  // var preDecrement = --x;
-  // var postDecrement = x--;
-  // 
-  // x += 1;
-  // x <<= 1;
+  // --- (line: 10) skipped ---
 
   // === Details ===
   [
@@ -575,14 +508,7 @@
   // 
   // x == 1;
   // x <= 1;
-  // 
-  // var preIncrement = ++x;
-  // var postIncrement = x++;
-  // var preDecrement = --x;
-  // var postDecrement = x--;
-  // 
-  // x += 1;
-  // x <<= 1;
+  // --- (line: 10) skipped ---
 
   // === Details ===
   [
@@ -655,12 +581,7 @@
   // x <= 1;
   // 
   // var preIncrement = ++x;
-  // var postIncrement = x++;
-  // var preDecrement = --x;
-  // var postDecrement = x--;
-  // 
-  // x += 1;
-  // x <<= 1;
+  // --- (line: 12) skipped ---
 
   // === Details ===
   [
@@ -734,11 +655,7 @@
   // 
   // var preIncrement = ++x;
   // var postIncrement = x++;
-  // var preDecrement = --x;
-  // var postDecrement = x--;
-  // 
-  // x += 1;
-  // x <<= 1;
+  // --- (line: 13) skipped ---
 
   // === Details ===
   [
@@ -814,9 +731,7 @@
   // var postIncrement = x++;
   // var preDecrement = --x;
   // var postDecrement = x--;
-  // 
-  // x += 1;
-  // x <<= 1;
+  // --- (line: 15) skipped ---
 
   // === Details ===
   [
@@ -882,10 +797,9 @@
   // var assignmentRightHandSide = x;
   // var assignmentRightHandSide2 = 1 + x;
   // 
-  // x = 1;
-  // x = x + x;
-  // 
-  // x == 1;
+  // --- (line: 5) skipped ---
+
+  // --- (line: 8) skipped ---
   // x <= 1;
   // 
   // var preIncrement = ++x;
@@ -960,11 +874,9 @@
   // var assignmentRightHandSide = x;
   // var assignmentRightHandSide2 = 1 + x;
   // 
-  // x = 1;
-  // x = x + x;
-  // 
-  // x == 1;
-  // x <= 1;
+  // --- (line: 5) skipped ---
+
+  // --- (line: 9) skipped ---
   // 
   // var preIncrement = ++x;
   // var postIncrement = x++;
@@ -1038,12 +950,9 @@
   // var assignmentRightHandSide = x;
   // var assignmentRightHandSide2 = 1 + x;
   // 
-  // x = 1;
-  // x = x + x;
-  // 
-  // x == 1;
-  // x <= 1;
-  // 
+  // --- (line: 5) skipped ---
+
+  // --- (line: 10) skipped ---
   // var preIncrement = ++x;
   // var postIncrement = x++;
   // var preDecrement = --x;
@@ -1116,14 +1025,9 @@
   // var assignmentRightHandSide = x;
   // var assignmentRightHandSide2 = 1 + x;
   // 
-  // x = 1;
-  // x = x + x;
-  // 
-  // x == 1;
-  // x <= 1;
-  // 
-  // var preIncrement = ++x;
-  // var postIncrement = x++;
+  // --- (line: 5) skipped ---
+
+  // --- (line: 12) skipped ---
   // var preDecrement = --x;
   // var postDecrement = x--;
   // 
@@ -1194,15 +1098,9 @@
   // var assignmentRightHandSide = x;
   // var assignmentRightHandSide2 = 1 + x;
   // 
-  // x = 1;
-  // x = x + x;
-  // 
-  // x == 1;
-  // x <= 1;
-  // 
-  // var preIncrement = ++x;
-  // var postIncrement = x++;
-  // var preDecrement = --x;
+  // --- (line: 5) skipped ---
+
+  // --- (line: 13) skipped ---
   // var postDecrement = x--;
   // 
   // x += 1;

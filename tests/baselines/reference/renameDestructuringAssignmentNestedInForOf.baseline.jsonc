@@ -40,11 +40,7 @@
 
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameDestructuringAssignmentNestedInForOf.ts ===
-// interface MultiRobot {
-//     name: string;
-//     skills: {
-//         primary: string;
-//         secondary: string;
+// --- (line: 5) skipped ---
 //     };
 // }
 // let multiRobots: MultiRobot[];
@@ -60,11 +56,7 @@
 
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameDestructuringAssignmentNestedInForOf.ts ===
-// interface MultiRobot {
-//     name: string;
-//     skills: {
-//         primary: string;
-//         secondary: string;
+// --- (line: 5) skipped ---
 //     };
 // }
 // let multiRobots: MultiRobot[];
@@ -80,11 +72,7 @@
 
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameDestructuringAssignmentNestedInForOf.ts ===
-// interface MultiRobot {
-//     name: string;
-//     skills: {
-//         primary: string;
-//         secondary: string;
+// --- (line: 5) skipped ---
 //     };
 // }
 // let multiRobots: MultiRobot[];

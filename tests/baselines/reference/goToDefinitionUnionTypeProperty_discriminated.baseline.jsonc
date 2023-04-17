@@ -17,9 +17,7 @@
 //   prop: 0,
 // };
 // const u2: U = {
-//   kind: "bogus",
-//   prop: 0,
-// };
+// --- (line: 18) skipped ---
 
   // === Details ===
   [

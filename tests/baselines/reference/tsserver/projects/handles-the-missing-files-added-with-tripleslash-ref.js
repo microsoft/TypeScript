@@ -33,8 +33,6 @@ Info seq  [hh:mm:ss:mss] For info: /a/b/commonFile1.ts :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/commonfile2.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -63,8 +61,6 @@ After request
 
 PolledWatches::
 /a/b/commonfile2.ts: *new*
-  {"pollingInterval":500}
-/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -128,10 +124,6 @@ Before running Timeout callback:: count: 2
 let y = 1
 
 
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
 PolledWatches *deleted*::
 /a/b/commonfile2.ts:
   {"pollingInterval":500}
@@ -177,10 +169,6 @@ Info seq  [hh:mm:ss:mss] Open files:
 Info seq  [hh:mm:ss:mss] 	FileName: /a/b/commonFile1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 After running Timeout callback:: count: 0
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
 /a/lib/lib.d.ts:

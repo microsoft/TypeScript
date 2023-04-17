@@ -338,78 +338,79 @@ declare namespace ts {
         JsxAttributes = 291,
         JsxSpreadAttribute = 292,
         JsxExpression = 293,
-        CaseClause = 294,
-        DefaultClause = 295,
-        HeritageClause = 296,
-        CatchClause = 297,
-        AssertClause = 298,
-        AssertEntry = 299,
-        ImportTypeAssertionContainer = 300,
-        PropertyAssignment = 301,
-        ShorthandPropertyAssignment = 302,
-        SpreadAssignment = 303,
-        EnumMember = 304,
-        /** @deprecated */ UnparsedPrologue = 305,
-        /** @deprecated */ UnparsedPrepend = 306,
-        /** @deprecated */ UnparsedText = 307,
-        /** @deprecated */ UnparsedInternalText = 308,
-        /** @deprecated */ UnparsedSyntheticReference = 309,
-        SourceFile = 310,
-        Bundle = 311,
-        /** @deprecated */ UnparsedSource = 312,
-        /** @deprecated */ InputFiles = 313,
-        JSDocTypeExpression = 314,
-        JSDocNameReference = 315,
-        JSDocMemberName = 316,
-        JSDocAllType = 317,
-        JSDocUnknownType = 318,
-        JSDocNullableType = 319,
-        JSDocNonNullableType = 320,
-        JSDocOptionalType = 321,
-        JSDocFunctionType = 322,
-        JSDocVariadicType = 323,
-        JSDocNamepathType = 324,
-        JSDoc = 325,
+        JsxNamespacedName = 294,
+        CaseClause = 295,
+        DefaultClause = 296,
+        HeritageClause = 297,
+        CatchClause = 298,
+        AssertClause = 299,
+        AssertEntry = 300,
+        ImportTypeAssertionContainer = 301,
+        PropertyAssignment = 302,
+        ShorthandPropertyAssignment = 303,
+        SpreadAssignment = 304,
+        EnumMember = 305,
+        /** @deprecated */ UnparsedPrologue = 306,
+        /** @deprecated */ UnparsedPrepend = 307,
+        /** @deprecated */ UnparsedText = 308,
+        /** @deprecated */ UnparsedInternalText = 309,
+        /** @deprecated */ UnparsedSyntheticReference = 310,
+        SourceFile = 311,
+        Bundle = 312,
+        /** @deprecated */ UnparsedSource = 313,
+        /** @deprecated */ InputFiles = 314,
+        JSDocTypeExpression = 315,
+        JSDocNameReference = 316,
+        JSDocMemberName = 317,
+        JSDocAllType = 318,
+        JSDocUnknownType = 319,
+        JSDocNullableType = 320,
+        JSDocNonNullableType = 321,
+        JSDocOptionalType = 322,
+        JSDocFunctionType = 323,
+        JSDocVariadicType = 324,
+        JSDocNamepathType = 325,
+        JSDoc = 326,
         /** @deprecated Use SyntaxKind.JSDoc */
-        JSDocComment = 325,
-        JSDocText = 326,
-        JSDocTypeLiteral = 327,
-        JSDocSignature = 328,
-        JSDocLink = 329,
-        JSDocLinkCode = 330,
-        JSDocLinkPlain = 331,
-        JSDocTag = 332,
-        JSDocAugmentsTag = 333,
-        JSDocImplementsTag = 334,
-        JSDocAuthorTag = 335,
-        JSDocDeprecatedTag = 336,
-        JSDocClassTag = 337,
-        JSDocPublicTag = 338,
-        JSDocPrivateTag = 339,
-        JSDocProtectedTag = 340,
-        JSDocReadonlyTag = 341,
-        JSDocOverrideTag = 342,
-        JSDocCallbackTag = 343,
-        JSDocOverloadTag = 344,
-        JSDocEnumTag = 345,
-        JSDocParameterTag = 346,
-        JSDocReturnTag = 347,
-        JSDocThisTag = 348,
-        JSDocTypeTag = 349,
-        JSDocTemplateTag = 350,
-        JSDocTypedefTag = 351,
-        JSDocSeeTag = 352,
-        JSDocPropertyTag = 353,
-        JSDocThrowsTag = 354,
-        JSDocSatisfiesTag = 355,
-        SyntaxList = 356,
-        NotEmittedStatement = 357,
-        PartiallyEmittedExpression = 358,
-        CommaListExpression = 359,
-        MergeDeclarationMarker = 360,
-        EndOfDeclarationMarker = 361,
-        SyntheticReferenceExpression = 362,
-        Count = 363,
+        JSDocComment = 326,
+        JSDocText = 327,
+        JSDocTypeLiteral = 328,
+        JSDocSignature = 329,
+        JSDocLink = 330,
+        JSDocLinkCode = 331,
+        JSDocLinkPlain = 332,
+        JSDocTag = 333,
+        JSDocAugmentsTag = 334,
+        JSDocImplementsTag = 335,
+        JSDocAuthorTag = 336,
+        JSDocDeprecatedTag = 337,
+        JSDocClassTag = 338,
+        JSDocPublicTag = 339,
+        JSDocPrivateTag = 340,
+        JSDocProtectedTag = 341,
+        JSDocReadonlyTag = 342,
+        JSDocOverrideTag = 343,
+        JSDocCallbackTag = 344,
+        JSDocOverloadTag = 345,
+        JSDocEnumTag = 346,
+        JSDocParameterTag = 347,
+        JSDocReturnTag = 348,
+        JSDocThisTag = 349,
+        JSDocTypeTag = 350,
+        JSDocTemplateTag = 351,
+        JSDocTypedefTag = 352,
+        JSDocSeeTag = 353,
+        JSDocPropertyTag = 354,
+        JSDocThrowsTag = 355,
+        JSDocSatisfiesTag = 356,
+        SyntaxList = 357,
+        NotEmittedStatement = 358,
+        PartiallyEmittedExpression = 359,
+        CommaListExpression = 360,
+        MergeDeclarationMarker = 361,
+        EndOfDeclarationMarker = 362,
+        SyntheticReferenceExpression = 363,
+        Count = 364,
         FirstAssignment = 64,
         LastAssignment = 79,
         FirstCompoundAssignment = 65,
@@ -437,10 +438,10 @@ declare namespace ts {
         FirstStatement = 242,
         LastStatement = 258,
         FirstNode = 165,
-        FirstJSDocNode = 314,
-        LastJSDocNode = 355,
-        FirstJSDocTagNode = 332,
-        LastJSDocTagNode = 355
+        FirstJSDocNode = 315,
+        LastJSDocNode = 356,
+        FirstJSDocTagNode = 333,
+        LastJSDocTagNode = 356
     }
     type TriviaSyntaxKind = SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia | SyntaxKind.NewLineTrivia | SyntaxKind.WhitespaceTrivia | SyntaxKind.ShebangTrivia | SyntaxKind.ConflictMarkerTrivia;
     type LiteralSyntaxKind = SyntaxKind.NumericLiteral | SyntaxKind.BigIntLiteral | SyntaxKind.StringLiteral | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.RegularExpressionLiteral | SyntaxKind.NoSubstitutionTemplateLiteral;
@@ -1348,13 +1349,20 @@ declare namespace ts {
     }
     type JsxOpeningLikeElement = JsxSelfClosingElement | JsxOpeningElement;
     type JsxAttributeLike = JsxAttribute | JsxSpreadAttribute;
-    type JsxTagNameExpression = Identifier | ThisExpression | JsxTagNamePropertyAccess;
+    type JsxAttributeName = Identifier | JsxNamespacedName;
+    type JsxTagNameExpression = Identifier | ThisExpression | JsxTagNamePropertyAccess | JsxNamespacedName;
     interface JsxTagNamePropertyAccess extends PropertyAccessExpression {
         readonly expression: JsxTagNameExpression;
     }
-    interface JsxAttributes extends ObjectLiteralExpressionBase<JsxAttributeLike> {
+    interface JsxAttributes extends PrimaryExpression, Declaration {
+        readonly properties: NodeArray<JsxAttributeLike>;
         readonly kind: SyntaxKind.JsxAttributes;
         readonly parent: JsxOpeningLikeElement;
+    }
+    interface JsxNamespacedName extends PrimaryExpression {
+        readonly kind: SyntaxKind.JsxNamespacedName;
+        readonly name: Identifier;
+        readonly namespace: Identifier;
     }
     interface JsxOpeningElement extends Expression {
         readonly kind: SyntaxKind.JsxOpeningElement;
@@ -1383,15 +1391,16 @@ declare namespace ts {
         readonly kind: SyntaxKind.JsxClosingFragment;
         readonly parent: JsxFragment;
     }
-    interface JsxAttribute extends ObjectLiteralElement {
+    interface JsxAttribute extends Declaration {
         readonly kind: SyntaxKind.JsxAttribute;
         readonly parent: JsxAttributes;
-        readonly name: Identifier;
+        readonly name: JsxAttributeName;
         readonly initializer?: JsxAttributeValue;
     }
     type JsxAttributeValue = StringLiteral | JsxExpression | JsxElement | JsxSelfClosingElement | JsxFragment;
     interface JsxSpreadAttribute extends ObjectLiteralElement {
         readonly kind: SyntaxKind.JsxSpreadAttribute;
+        readonly name: PropertyName;
         readonly parent: JsxAttributes;
         readonly expression: Expression;
     }
@@ -3928,14 +3937,16 @@ declare namespace ts {
         createJsxOpeningFragment(): JsxOpeningFragment;
         createJsxJsxClosingFragment(): JsxClosingFragment;
         updateJsxFragment(node: JsxFragment, openingFragment: JsxOpeningFragment, children: readonly JsxChild[], closingFragment: JsxClosingFragment): JsxFragment;
-        createJsxAttribute(name: Identifier, initializer: JsxAttributeValue | undefined): JsxAttribute;
-        updateJsxAttribute(node: JsxAttribute, name: Identifier, initializer: JsxAttributeValue | undefined): JsxAttribute;
+        createJsxAttribute(name: JsxAttributeName, initializer: JsxAttributeValue | undefined): JsxAttribute;
+        updateJsxAttribute(node: JsxAttribute, name: JsxAttributeName, initializer: JsxAttributeValue | undefined): JsxAttribute;
         createJsxAttributes(properties: readonly JsxAttributeLike[]): JsxAttributes;
         updateJsxAttributes(node: JsxAttributes, properties: readonly JsxAttributeLike[]): JsxAttributes;
         createJsxSpreadAttribute(expression: Expression): JsxSpreadAttribute;
         updateJsxSpreadAttribute(node: JsxSpreadAttribute, expression: Expression): JsxSpreadAttribute;
         createJsxExpression(dotDotDotToken: DotDotDotToken | undefined, expression: Expression | undefined): JsxExpression;
         updateJsxExpression(node: JsxExpression, expression: Expression | undefined): JsxExpression;
+        createJsxNamespacedName(namespace: Identifier, name: Identifier): JsxNamespacedName;
+        updateJsxNamespacedName(node: JsxNamespacedName, namespace: Identifier, name: Identifier): JsxNamespacedName;
         createCaseClause(expression: Expression, statements: readonly Statement[]): CaseClause;
         updateCaseClause(node: CaseClause, expression: Expression, statements: readonly Statement[]): CaseClause;
         createDefaultClause(statements: readonly Statement[]): DefaultClause;
@@ -5006,6 +5017,7 @@ declare namespace ts {
     function isJsxAttributes(node: Node): node is JsxAttributes;
     function isJsxSpreadAttribute(node: Node): node is JsxSpreadAttribute;
     function isJsxExpression(node: Node): node is JsxExpression;
+    function isJsxNamespacedName(node: Node): node is JsxNamespacedName;
     function isCaseClause(node: Node): node is CaseClause;
     function isDefaultClause(node: Node): node is DefaultClause;
     function isHeritageClause(node: Node): node is HeritageClause;
@@ -6594,6 +6606,7 @@ declare namespace ts {
         readonly insertSpaceBeforeTypeAnnotation?: boolean;
         readonly indentMultiLineObjectLiteralBeginningOnBlankLine?: boolean;
         readonly semicolons?: SemicolonPreference;
+        readonly indentSwitchCase?: boolean;
     }
     interface DefinitionInfo extends DocumentSpan {
         kind: ScriptElementKind;

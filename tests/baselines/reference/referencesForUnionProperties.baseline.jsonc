@@ -5,18 +5,9 @@
 // }
 // 
 // interface Base {
-//     a: string;
-//     b: string;
-// }
-// 
-// interface HasAOrB extends Base {
-//     a: string;
-//     b: string;
-// }
-// 
-// interface Two {
-//     common: HasAOrB;
-// }
+// --- (line: 6) skipped ---
+
+// --- (line: 17) skipped ---
 // 
 // var x : One | Two;
 // 
@@ -29,22 +20,7 @@
   // }
   // 
   // interface Base {
-  //     a: string;
-  //     b: string;
-  // }
-  // 
-  // interface HasAOrB extends Base {
-  //     a: string;
-  //     b: string;
-  // }
-  // 
-  // interface Two {
-  //     common: HasAOrB;
-  // }
-  // 
-  // var x : One | Two;
-  // 
-  // x.common.a;
+  // --- (line: 6) skipped ---
 
   // === Details ===
   [
@@ -190,13 +166,7 @@
   //     b: string;
   // }
   // 
-  // interface Two {
-  //     common: HasAOrB;
-  // }
-  // 
-  // var x : One | Two;
-  // 
-  // x.common.a;
+  // --- (line: 15) skipped ---
 
   // === Details ===
   [

@@ -82,6 +82,7 @@ import {
     getEmitModuleResolutionKind,
     getEmitScriptTarget,
     getEscapedTextOfIdentifierOrLiteral,
+    getEscapedTextOfJsxAttributeName,
     getExportInfoMap,
     getFormatCodeSettingsForWriting,
     getJSDocParameterTags,
@@ -167,6 +168,8 @@ import {
     isImportKeyword,
     isImportSpecifier,
     isInComment,
+    isIndexSignatureDeclaration,
+    isInferTypeNode,
     isInitializedProperty,
     isInJSFile,
     isInRightSideOfInternalImportEqualsDeclaration,
@@ -234,6 +237,7 @@ import {
     isTypeOfExpression,
     isTypeOnlyImportDeclaration,
     isTypeOnlyImportOrExportDeclaration,
+    isTypeParameterDeclaration,
     isTypeReferenceType,
     isValidTypeOnlyAliasUseSite,
     isVariableDeclaration,
@@ -291,6 +295,7 @@ import {
     ObjectType,
     ObjectTypeDeclaration,
     or,
+    ParameterDeclaration,
     ParenthesizedTypeNode,
     positionBelongsToNode,
     positionIsASICandidate,
@@ -359,6 +364,7 @@ import {
     TypeLiteralNode,
     TypeNode,
     TypeOnlyImportDeclaration,
+    TypeParameterDeclaration,
     TypeQueryNode,
     TypeReferenceNode,
     unescapeLeadingUnderscores,
@@ -2388,7 +2394,7 @@ export function getCompletionEntriesFromSymbols(
     includeSymbol = false
 ): UniqueNameSet {
     const start = timestamp();
-    const variableDeclaration = getVariableDeclaration(location);
+    const variableOrParameterDeclaration = getVariableOrParameterDeclaration(contextToken);
     const useSemicolons = probablyUsesSemicolons(sourceFile);
     const typeChecker = program.getTypeChecker();
     // Tracks unique names.
@@ -2462,8 +2468,25 @@ export function getCompletionEntriesFromSymbols(
             }
             // Filter out variables from their own initializers
             // `const a = /* no 'a' here */`
-            if (variableDeclaration && symbol.valueDeclaration === variableDeclaration) {
+            if (tryCast(variableOrParameterDeclaration, isVariableDeclaration) && symbol.valueDeclaration === variableOrParameterDeclaration) {
                 return false;
+            }
+
+            // Filter out parameters from their own initializers
+            // `function f(a = /* no 'a' and 'b' here */, b) { }` or
+            // `function f<T = /* no 'T' here */>(a: T) { }`
+            const symbolDeclaration = symbol.valueDeclaration ?? symbol.declarations?.[0];
+            if (variableOrParameterDeclaration && symbolDeclaration && (
+                (isTypeParameterDeclaration(variableOrParameterDeclaration) && isTypeParameterDeclaration(symbolDeclaration)) ||
+                (isParameter(variableOrParameterDeclaration) && isParameter(symbolDeclaration))
+            )) {
+                const symbolDeclarationPos = symbolDeclaration.pos;
+                const parameters = isParameter(variableOrParameterDeclaration) ? variableOrParameterDeclaration.parent.parameters :
+                    isInferTypeNode(variableOrParameterDeclaration.parent) ? undefined :
+                    variableOrParameterDeclaration.parent.typeParameters;
+                if (symbolDeclarationPos >= variableOrParameterDeclaration.pos && parameters && symbolDeclarationPos < parameters.end) {
+                    return false;
+                }
             }
 
             // External modules can have global export declarations that will be
@@ -4787,7 +4810,7 @@ function getCompletionData(
             }
 
             if (attr.kind === SyntaxKind.JsxAttribute) {
-                seenNames.add(attr.name.escapedText);
+                seenNames.add(getEscapedTextOfJsxAttributeName(attr.name));
             }
             else if (isJsxSpreadAttribute(attr)) {
                 setMembersDeclaredBySpreadAssignment(attr, membersDeclaredBySpreadAssignment);
@@ -5441,17 +5464,22 @@ function isModuleSpecifierMissingOrEmpty(specifier: ModuleReference | Expression
     return !tryCast(isExternalModuleReference(specifier) ? specifier.expression : specifier, isStringLiteralLike)?.text;
 }
 
-function getVariableDeclaration(property: Node): VariableDeclaration | undefined {
-    const variableDeclaration = findAncestor(property, node =>
+function getVariableOrParameterDeclaration(contextToken: Node | undefined) {
+    if (!contextToken) return;
+
+    const declaration = findAncestor(contextToken, node =>
         isFunctionBlock(node) || isArrowFunctionBody(node) || isBindingPattern(node)
             ? "quit"
-            : isVariableDeclaration(node));
-
-    return variableDeclaration as VariableDeclaration | undefined;
+            : isVariableDeclaration(node) || ((isParameter(node) || isTypeParameterDeclaration(node)) && !isIndexSignatureDeclaration(node.parent)));
+    return declaration as ParameterDeclaration | TypeParameterDeclaration | VariableDeclaration | undefined;
 }
 
 function isArrowFunctionBody(node: Node) {
-    return node.parent && isArrowFunction(node.parent) && node.parent.body === node;
+    return node.parent && isArrowFunction(node.parent) &&
+        (node.parent.body === node ||
+        // const a = () => /**/;
+        node.kind === SyntaxKind.EqualsGreaterThanToken
+    );
 }
 
 /** True if symbol is a type or a module containing at least one type. */
