@@ -1,0 +1,17 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/server/a.ts ===
+// [||]export class Foo {}
+
+// === /tests/cases/fourslash/server/b.ts ===
+// import n = require([|'./a/*GOTO DEF*/'|]);
+// var x = new n.Foo();
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "",
+    "name": ""
+   }
+  ]

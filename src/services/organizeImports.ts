@@ -202,7 +202,7 @@ function isNewGroup(sourceFile: SourceFile, decl: ImportDeclaration | ExportDecl
     scanner.setText(sourceFile.text, startPos, endPos - startPos);
 
     let numberOfNewLines = 0;
-    while (scanner.getTokenPos() < endPos) {
+    while (scanner.getTokenStart() < endPos) {
         const tokenKind = scanner.scan();
 
         if (tokenKind === SyntaxKind.NewLineTrivia) {
@@ -263,9 +263,9 @@ function removeUnusedImports(oldImports: readonly ImportDeclaration[], sourceFil
         if (name || namedBindings) {
             usedImports.push(updateImportDeclarationAndClause(importDecl, name, namedBindings));
         }
-        // If a module is imported to be augmented, it’s used
+        // If a module is imported to be augmented, it's used
         else if (hasModuleDeclarationMatchingSpecifier(sourceFile, moduleSpecifier)) {
-            // If we’re in a declaration file, it’s safe to remove the import clause from it
+            // If we're in a declaration file, it's safe to remove the import clause from it
             if (sourceFile.isDeclarationFile) {
                 usedImports.push(factory.createImportDeclaration(
                     importDecl.modifiers,
@@ -273,7 +273,7 @@ function removeUnusedImports(oldImports: readonly ImportDeclaration[], sourceFil
                     moduleSpecifier,
                     /*assertClause*/ undefined));
             }
-            // If we’re not in a declaration file, we can’t remove the import clause even though
+            // If we're not in a declaration file, we can't remove the import clause even though
             // the imported symbols are unused, because removing them makes it look like the import
             // declaration has side effects, which will cause it to be preserved in the JS emit.
             else {

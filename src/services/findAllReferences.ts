@@ -29,6 +29,7 @@ import {
     escapeLeadingUnderscores,
     ExportSpecifier,
     Expression,
+    externalHelpersModuleNameText,
     FileIncludeReason,
     FileReference,
     filter,
@@ -41,6 +42,7 @@ import {
     firstOrUndefined,
     flatMap,
     forEachChild,
+    forEachChildRecursively,
     forEachReturnStatement,
     ForInOrOfStatement,
     FunctionDeclaration,
@@ -130,6 +132,8 @@ import {
     isJSDocMemberName,
     isJSDocTag,
     isJsxClosingElement,
+    isJsxElement,
+    isJsxFragment,
     isJsxOpeningElement,
     isJsxSelfClosingElement,
     isJumpStatementTarget,
@@ -231,6 +235,7 @@ import {
     textPart,
     TextSpan,
     tokenToString,
+    TransformFlags,
     tryAddToSet,
     tryCast,
     tryGetClassExtendingExpressionWithTypeArguments,
@@ -1125,6 +1130,14 @@ export namespace Core {
                 // import("foo") with no qualifier will reference the `export =` of the module, which may be referenced anyway.
                 return nodeEntry(reference.literal);
             }
+            else if (reference.kind === "implicit") {
+                // Return either: The first JSX node in the (if not a tslib import), the first statement of the file, or the whole file if neither of those exist
+                const range = reference.literal.text !== externalHelpersModuleNameText && forEachChildRecursively(
+                    reference.referencingFile,
+                    n => !(n.transformFlags & TransformFlags.ContainsJsx) ? "skip" : isJsxElement(n) || isJsxSelfClosingElement(n) || isJsxFragment(n) ? n : undefined
+                ) || reference.referencingFile.statements[0] || reference.referencingFile;
+                return nodeEntry(range);
+            }
             else {
                 return {
                     kind: EntryKind.Span,
@@ -1190,7 +1203,7 @@ export namespace Core {
                 return undefined;
             }
             // Likewise, when we *are* looking for a special keyword, make sure we
-            // *don’t* include readonly member modifiers.
+            // *don't* include readonly member modifiers.
             return getAllReferencesForKeyword(
                 sourceFiles,
                 node.kind,
@@ -1431,7 +1444,7 @@ export namespace Core {
             });
         }
 
-        // Source file ID → symbol ID → Whether the symbol has been searched for in the source file.
+        // Source file ID -> symbol ID -> Whether the symbol has been searched for in the source file.
         private readonly sourceFileToSeenSymbols: Set<number>[] = [];
         /** Returns `true` the first time we search for a symbol in a file and `false` afterwards. */
         markSearchedSymbols(sourceFile: SourceFile, symbols: readonly Symbol[]): boolean {
@@ -2300,7 +2313,7 @@ export namespace Core {
     }
 
     function getReferencesForThisKeyword(thisOrSuperKeyword: Node, sourceFiles: readonly SourceFile[], cancellationToken: CancellationToken): SymbolAndEntries[] | undefined {
-        let searchSpaceNode: Node = getThisContainer(thisOrSuperKeyword, /* includeArrowFunctions */ false, /*includeClassComputedPropertyName*/ false);
+        let searchSpaceNode: Node = getThisContainer(thisOrSuperKeyword, /*includeArrowFunctions*/ false, /*includeClassComputedPropertyName*/ false);
 
         // Whether 'this' occurs in a static context within a class.
         let staticFlag = ModifierFlags.Static;
@@ -2342,7 +2355,7 @@ export namespace Core {
                 if (!isThis(node)) {
                     return false;
                 }
-                const container = getThisContainer(node, /* includeArrowFunctions */ false, /*includeClassComputedPropertyName*/ false);
+                const container = getThisContainer(node, /*includeArrowFunctions*/ false, /*includeClassComputedPropertyName*/ false);
                 if (!canHaveSymbol(container)) return false;
                 switch (searchSpaceNode.kind) {
                     case SyntaxKind.FunctionExpression:

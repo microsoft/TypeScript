@@ -484,6 +484,13 @@ function getOriginalAndResolvedFileName(fileName: string, host: ModuleResolution
     };
 }
 
+function getCandidateFromTypeRoot(typeRoot: string, typeReferenceDirectiveName: string, moduleResolutionState: ModuleResolutionState) {
+    const nameForLookup = endsWith(typeRoot, "/node_modules/@types") || endsWith(typeRoot, "/node_modules/@types/") ?
+        mangleScopedPackageNameWithTrace(typeReferenceDirectiveName, moduleResolutionState) :
+        typeReferenceDirectiveName;
+    return combinePaths(typeRoot, nameForLookup);
+}
+
 /**
  * @param {string | undefined} containingFile - file that contains type reference directive, can be undefined if containing file is unknown.
  * This is possible in case if resolution is performed for directives specified via 'types' parameter. In this case initial path for secondary lookups
@@ -619,7 +626,7 @@ export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string
                 trace(host, Diagnostics.Resolving_with_primary_search_path_0, typeRoots.join(", "));
             }
             return firstDefined(typeRoots, typeRoot => {
-                const candidate = combinePaths(typeRoot, typeReferenceDirectiveName);
+                const candidate = getCandidateFromTypeRoot(typeRoot, typeReferenceDirectiveName, moduleResolutionState);
                 const directoryExists = directoryProbablyExists(typeRoot, host);
                 if (!directoryExists && traceEnabled) {
                     trace(host, Diagnostics.Directory_0_does_not_exist_skipping_all_lookups_in_it, typeRoot);
@@ -1321,7 +1328,7 @@ export function resolveModuleName(moduleName: string, containingFile: string, co
             }
         }
 
-        perfLogger.logStartResolveModule(moduleName /* , containingFile, ModuleResolutionKind[moduleResolution]*/);
+        perfLogger?.logStartResolveModule(moduleName /* , containingFile, ModuleResolutionKind[moduleResolution]*/);
         switch (moduleResolution) {
             case ModuleResolutionKind.Node16:
                 result = node16ModuleNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference, resolutionMode);
@@ -1341,8 +1348,8 @@ export function resolveModuleName(moduleName: string, containingFile: string, co
             default:
                 return Debug.fail(`Unexpected moduleResolution: ${moduleResolution}`);
         }
-        if (result && result.resolvedModule) perfLogger.logInfoEvent(`Module "${moduleName}" resolved to "${result.resolvedModule.resolvedFileName}"`);
-        perfLogger.logStopResolveModule((result && result.resolvedModule) ? "" + result.resolvedModule.resolvedFileName : "null");
+        if (result && result.resolvedModule) perfLogger?.logInfoEvent(`Module "${moduleName}" resolved to "${result.resolvedModule.resolvedFileName}"`);
+        perfLogger?.logStopResolveModule((result && result.resolvedModule) ? "" + result.resolvedModule.resolvedFileName : "null");
 
         cache?.getOrCreateCacheForDirectory(containingDirectory, redirectedReference).set(moduleName, resolutionMode, result);
         if (!isExternalModuleNameRelative(moduleName)) {
@@ -1649,7 +1656,7 @@ function tryResolveJSModuleWorker(moduleName: string, initialDir: string, host: 
         /*cache*/ undefined,
         Extensions.JavaScript,
         /*isConfigLookup*/ false,
-        /*redirectedReferences*/ undefined);
+        /*redirectedReference*/ undefined);
 }
 
 export function bundlerModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations {
@@ -1682,7 +1689,7 @@ export function nodeModuleNameResolver(moduleName: string, containingFile: strin
 
 /** @internal */
 export function nodeNextJsonConfigResolver(moduleName: string, containingFile: string, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
-    return nodeModuleNameResolverWorker(NodeResolutionFeatures.Exports, moduleName, getDirectoryPath(containingFile), { moduleResolution: ModuleResolutionKind.NodeNext }, host, /*cache*/ undefined, Extensions.Json, /*isConfigLookup*/ true, /*redirectedReference*/ undefined);
+    return nodeModuleNameResolverWorker(NodeResolutionFeatures.NodeNextDefault, moduleName, getDirectoryPath(containingFile), { moduleResolution: ModuleResolutionKind.NodeNext }, host, /*cache*/ undefined, Extensions.Json, /*isConfigLookup*/ true, /*redirectedReference*/ undefined);
 }
 
 function nodeModuleNameResolverWorker(features: NodeResolutionFeatures, moduleName: string, containingDirectory: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache: ModuleResolutionCache | undefined, extensions: Extensions, isConfigLookup: boolean, redirectedReference: ResolvedProjectReference | undefined): ResolvedModuleWithFailedLookupLocations {
@@ -1882,7 +1889,7 @@ export function pathContainsNodeModules(path: string): boolean {
  *
  * @internal
  */
-export function parseNodeModuleFromPath(resolved: string): string | undefined {
+export function parseNodeModuleFromPath(resolved: string, isFolder?: boolean): string | undefined {
     const path = normalizePath(resolved);
     const idx = path.lastIndexOf(nodeModulesPathPart);
     if (idx === -1) {
@@ -1890,16 +1897,16 @@ export function parseNodeModuleFromPath(resolved: string): string | undefined {
     }
 
     const indexAfterNodeModules = idx + nodeModulesPathPart.length;
-    let indexAfterPackageName = moveToNextDirectorySeparatorIfAvailable(path, indexAfterNodeModules);
+    let indexAfterPackageName = moveToNextDirectorySeparatorIfAvailable(path, indexAfterNodeModules, isFolder);
     if (path.charCodeAt(indexAfterNodeModules) === CharacterCodes.at) {
-        indexAfterPackageName = moveToNextDirectorySeparatorIfAvailable(path, indexAfterPackageName);
+        indexAfterPackageName = moveToNextDirectorySeparatorIfAvailable(path, indexAfterPackageName, isFolder);
     }
     return path.slice(0, indexAfterPackageName);
 }
 
-function moveToNextDirectorySeparatorIfAvailable(path: string, prevSeparatorIndex: number): number {
+function moveToNextDirectorySeparatorIfAvailable(path: string, prevSeparatorIndex: number, isFolder: boolean | undefined): number {
     const nextSeparatorIndex = path.indexOf(directorySeparator, prevSeparatorIndex + 1);
-    return nextSeparatorIndex === -1 ? prevSeparatorIndex : nextSeparatorIndex;
+    return nextSeparatorIndex === -1 ? isFolder ? path.length : prevSeparatorIndex : nextSeparatorIndex;
 }
 
 function loadModuleFromFileNoPackageId(extensions: Extensions, candidate: string, onlyRecordFailures: boolean, state: ModuleResolutionState): Resolved | undefined {
@@ -2145,7 +2152,7 @@ function loadEntrypointsFromExportMap(
             }
             const resolvedTarget = combinePaths(scope.packageDirectory, target);
             const finalPath = getNormalizedAbsolutePath(resolvedTarget, state.host.getCurrentDirectory?.());
-            const result = loadFileNameFromPackageJsonField(extensions, finalPath, /*recordOnlyFailures*/ false, state);
+            const result = loadFileNameFromPackageJsonField(extensions, finalPath, /*onlyRecordFailures*/ false, state);
             if (result) {
                 entrypoints = appendIfUnique(entrypoints, result, (a, b) => a.path === b.path);
                 return true;
@@ -3084,7 +3091,7 @@ export function classicNameResolver(moduleName: string, containingFile: string, 
 function resolveFromTypeRoot(moduleName: string, state: ModuleResolutionState) {
     if (!state.compilerOptions.typeRoots) return;
     for (const typeRoot of state.compilerOptions.typeRoots) {
-        const candidate = combinePaths(typeRoot, moduleName);
+        const candidate = getCandidateFromTypeRoot(typeRoot, moduleName, state);
         const directoryExists = directoryProbablyExists(typeRoot, state.host);
         if (!directoryExists && state.traceEnabled) {
             trace(state.host, Diagnostics.Directory_0_does_not_exist_skipping_all_lookups_in_it, typeRoot);

@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/f1.ts]
 let x = 1
@@ -46,10 +47,6 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/b/f1.ts (used version)
 
-PolledWatches::
-/a/b/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /a/b/tsconfig.json: *new*
   {}
@@ -72,6 +69,9 @@ Input::
 {"compilerOptions":{},"files":["f1.ts","f2.ts"]}
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:24 AM[0m] File change detected. Starting incremental compilation...
@@ -96,10 +96,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a/b/f2.ts (computed .d.ts)
 /a/b/f1.ts (computed .d.ts)
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
 /a/b/tsconfig.json:

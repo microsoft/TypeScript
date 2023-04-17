@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/src/app.ts]
 let x = 1;
@@ -44,8 +45,6 @@ Shape signatures in builder refreshed for::
 /a/src/app.ts (used version)
 
 PolledWatches::
-/a/node_modules/@types: *new*
-  {"pollingInterval":500}
 /a/notexistingfolder: *new*
   {"pollingInterval":500}
 

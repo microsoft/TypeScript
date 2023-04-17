@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/a.ts]
 export interface Point {
@@ -59,7 +60,7 @@ Output::
   Object literal may only specify known properties, and 'x' does not exist in type 'Coords'.
 
 [7m6[0m             x: 1,
-[7m [0m [91m            ~~~~[0m
+[7m [0m [91m            ~[0m
 
   [96ma.ts[0m:[93m3[0m:[93m5[0m
     [7m3[0m     c: Coords;
@@ -104,6 +105,8 @@ Shape signatures in builder refreshed for::
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -183,6 +186,9 @@ export interface Coords {
 }
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:44 AM[0m] File change detected. Starting incremental compilation...
@@ -238,6 +244,9 @@ export interface Coords {
 }
 
 
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:04 AM[0m] File change detected. Starting incremental compilation...
@@ -246,7 +255,7 @@ Output::
   Object literal may only specify known properties, and 'x' does not exist in type 'Coords'.
 
 [7m6[0m             x: 1,
-[7m [0m [91m            ~~~~[0m
+[7m [0m [91m            ~[0m
 
   [96ma.ts[0m:[93m3[0m:[93m5[0m
     [7m3[0m     c: Coords;
@@ -304,6 +313,9 @@ export interface Coords {
 }
 
 
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:15 AM[0m] File change detected. Starting incremental compilation...

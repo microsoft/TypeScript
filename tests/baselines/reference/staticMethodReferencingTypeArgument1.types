@@ -24,7 +24,6 @@ module Editor {
 >new List<T>(true, null) : List<T>
 >List : typeof List
 >true : true
->null : null
 
             entry.prev = entry;
 >entry.prev = entry : List<T>

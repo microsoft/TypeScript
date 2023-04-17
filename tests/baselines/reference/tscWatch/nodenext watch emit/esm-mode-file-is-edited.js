@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/project/tsconfig.json]
 {"compilerOptions":{"strict":true,"target":"es2020","module":"nodenext","moduleResolution":"nodenext","outDir":"../dist"}}
@@ -54,10 +55,6 @@ Shape signatures in builder refreshed for::
 /project/src/deps.d.ts (used version)
 /project/src/index.ts (used version)
 
-PolledWatches::
-/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /project/tsconfig.json: *new*
   {}
@@ -88,6 +85,9 @@ import * as Thing from "thing";
 Thing.fn();
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:30 AM[0m] File change detected. Starting incremental compilation...

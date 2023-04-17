@@ -19,7 +19,6 @@ class CreateCopyOfWorkItemDialog {
 >getDialogResult : () => any
 
         return null;
->null : null
     }
 }
 function createWorkItemDialog<P0>(dialogType: P0) {

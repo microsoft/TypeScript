@@ -19,7 +19,6 @@ type B = {
 
     data: null
 >data : null
->null : null
 
 };
 
@@ -48,6 +47,5 @@ const foo: Union = {
 
     data: null
 >data : null
->null : null
 
 };

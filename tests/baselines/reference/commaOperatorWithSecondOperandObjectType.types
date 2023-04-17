@@ -86,14 +86,12 @@ var resultIsObject5 = (OBJECT, OBJECT);
 //Literal and expression
 null, OBJECT
 >null, OBJECT : Object
->null : null
 >OBJECT : Object
 
 ANY = null, OBJECT
 >ANY = null, OBJECT : Object
 >ANY = null : null
 >ANY : any
->null : null
 >OBJECT : Object
 
 true, {}
@@ -126,7 +124,6 @@ var resultIsObject6 = (null, OBJECT);
 >resultIsObject6 : Object
 >(null, OBJECT) : Object
 >null, OBJECT : Object
->null : null
 >OBJECT : Object
 
 var resultIsObject7 = (ANY = null, OBJECT);
@@ -135,7 +132,6 @@ var resultIsObject7 = (ANY = null, OBJECT);
 >ANY = null, OBJECT : Object
 >ANY = null : null
 >ANY : any
->null : null
 >OBJECT : Object
 
 var resultIsObject8 = (true, {});

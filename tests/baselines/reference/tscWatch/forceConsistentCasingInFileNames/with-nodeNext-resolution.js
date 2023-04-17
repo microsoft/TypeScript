@@ -1,3 +1,4 @@
+currentDirectory:: /Users/name/projects/web useCaseSensitiveFileNames: false
 Input::
 //// [/Users/name/projects/web/src/bin.ts]
 import { foo } from "yargs";
@@ -119,6 +120,8 @@ PolledWatches::
   {"pollingInterval":2000}
 /users/name/projects/package.json: *new*
   {"pollingInterval":2000}
+/users/name/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
 /users/name/projects/web/tsconfig.json: *new*
@@ -127,11 +130,13 @@ FsWatches::
   {}
 /users/name/projects/web/node_modules/@types/yargs/index.d.ts: *new*
   {}
+/users/name/projects/web/node_modules/@types/yargs/package.json: *new*
+  {}
 /a/lib/lib.d.ts: *new*
   {}
-/users/name/projects/web: *new*
+/users/name/projects: *new*
   {}
-/users/name/projects/web/node_modules/@types/yargs/package.json: *new*
+/users/name/projects/web: *new*
   {}
 
 FsWatchesRecursive::

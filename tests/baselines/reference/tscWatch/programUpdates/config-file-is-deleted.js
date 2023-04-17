@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/f1.ts]
 let x = 1;
@@ -49,10 +50,6 @@ Shape signatures in builder refreshed for::
 /a/b/f1.ts (used version)
 /a/b/f2.ts (used version)
 
-PolledWatches::
-/a/b/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /a/b/tsconfig.json: *new*
   {}
@@ -83,6 +80,10 @@ Change:: Delete config file
 Input::
 //// [/a/b/tsconfig.json] deleted
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 1
+1: timerToUpdateProgram
 Output::
 [91merror[0m[90m TS5083: [0mCannot read file '/a/b/tsconfig.json'.
 

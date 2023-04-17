@@ -255,7 +255,7 @@ export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost): 
                 typeAcquisitionEnabled && consumesNodeCoreModules(oldSourceFile) !== consumesNodeCoreModules(newSourceFile) ||
                 // Module agumentation and ambient module changes can add or remove exports available to be auto-imported.
                 // Changes elsewhere in the file can change the *type* of an export in a module augmentation,
-                // but type info is gathered in getCompletionEntryDetails, which doesn’t use the cache.
+                // but type info is gathered in getCompletionEntryDetails, which doesn't use the cache.
                 !arrayIsEqualTo(oldSourceFile.moduleAugmentations, newSourceFile.moduleAugmentations) ||
                 !ambientModuleDeclarationsAreEqual(oldSourceFile, newSourceFile)
             ) {

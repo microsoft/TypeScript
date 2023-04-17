@@ -286,7 +286,7 @@ function createDynamicPriorityPollingWatchFile(host: {
         return queue;
     }
 
-    function pollPollingIntervalQueue(queue: PollingIntervalQueue) {
+    function pollPollingIntervalQueue(_timeoutType: string, queue: PollingIntervalQueue) {
         queue.pollIndex = pollQueue(queue, queue.pollingInterval, queue.pollIndex, pollingChunkSize[queue.pollingInterval]);
         // Set the next polling index and timeout
         if (queue.length) {
@@ -298,12 +298,12 @@ function createDynamicPriorityPollingWatchFile(host: {
         }
     }
 
-    function pollLowPollingIntervalQueue(queue: PollingIntervalQueue) {
+    function pollLowPollingIntervalQueue(_timeoutType: string, queue: PollingIntervalQueue) {
         // Always poll complete list of changedFilesInLastPoll
         pollQueue(changedFilesInLastPoll, PollingInterval.Low, /*pollIndex*/ 0, changedFilesInLastPoll.length);
 
         // Finally do the actual polling of the queue
-        pollPollingIntervalQueue(queue);
+        pollPollingIntervalQueue(_timeoutType, queue);
         // Schedule poll if there are files in changedFilesInLastPoll but no files in the actual queue
         // as pollPollingIntervalQueue wont schedule for next poll
         if (!queue.pollScheduled && changedFilesInLastPoll.length) {
@@ -374,7 +374,7 @@ function createDynamicPriorityPollingWatchFile(host: {
     }
 
     function scheduleNextPoll(pollingInterval: PollingInterval) {
-        pollingIntervalQueue(pollingInterval).pollScheduled = host.setTimeout(pollingInterval === PollingInterval.Low ? pollLowPollingIntervalQueue : pollPollingIntervalQueue, pollingInterval, pollingIntervalQueue(pollingInterval));
+        pollingIntervalQueue(pollingInterval).pollScheduled = host.setTimeout(pollingInterval === PollingInterval.Low ? pollLowPollingIntervalQueue : pollPollingIntervalQueue, pollingInterval, pollingInterval === PollingInterval.Low ? "pollLowPollingIntervalQueue" : "pollPollingIntervalQueue", pollingIntervalQueue(pollingInterval));
     }
 }
 
@@ -465,7 +465,7 @@ function createFixedChunkSizePollingWatchFile(host: {
 
     function scheduleNextPoll() {
         if (!watchedFiles.length || pollScheduled) return;
-        pollScheduled = host.setTimeout(pollQueue, PollingInterval.High);
+        pollScheduled = host.setTimeout(pollQueue, PollingInterval.High, "pollQueue");
     }
 }
 
@@ -713,7 +713,7 @@ function createDirectoryWatcherSupportingRecursive({
             clearTimeout(timerToUpdateChildWatches);
             timerToUpdateChildWatches = undefined;
         }
-        timerToUpdateChildWatches = setTimeout(onTimerToUpdateChildWatches, 1000);
+        timerToUpdateChildWatches = setTimeout(onTimerToUpdateChildWatches, 1000, "timerToUpdateChildWatches");
     }
 
     function onTimerToUpdateChildWatches() {
@@ -1443,27 +1443,6 @@ interface DirectoryWatcher extends FileWatcher {
     referenceCount: number;
 }
 
-declare const require: any;
-declare const process: any;
-declare const global: any;
-declare const __filename: string;
-declare const __dirname: string;
-
-export function getNodeMajorVersion(): number | undefined {
-    if (typeof process === "undefined") {
-        return undefined;
-    }
-    const version: string = process.version;
-    if (!version) {
-        return undefined;
-    }
-    const dot = version.indexOf(".");
-    if (dot === -1) {
-        return undefined;
-    }
-    return parseInt(version.substring(1, dot));
-}
-
 // TODO: GH#18217 this is used as if it's certainly defined in many places.
 export let sys: System = (() => {
     // NodeJS detects "\uFEFF" at the start of the string and *replaces* it with the actual
@@ -1492,8 +1471,6 @@ export let sys: System = (() => {
             from?(input: string, encoding?: string): any;
         } = require("buffer").Buffer;
 
-        const nodeVersion = getNodeMajorVersion();
-        const isNode4OrLater = nodeVersion! >= 4;
         const isLinuxOrMacOs = process.platform === "linux" || process.platform === "darwin";
 
         const platform: string = _os.platform();
@@ -1507,7 +1484,7 @@ export let sys: System = (() => {
         // Note that if we ever emit as files like cjs/mjs, this check will be wrong.
         const executingFilePath = __filename.endsWith("sys.js") ? _path.join(_path.dirname(__dirname), "__fake__.js") : __filename;
 
-        const fsSupportsRecursiveFsWatch = isNode4OrLater && (process.platform === "win32" || process.platform === "darwin");
+        const fsSupportsRecursiveFsWatch = process.platform === "win32" || process.platform === "darwin";
         const getCurrentDirectory = memoize(() => process.cwd());
         const { watchFile, watchDirectory } = createSystemWatchFunctions({
             pollingWatchFileWorker: fsWatchFileWorker,
@@ -1524,7 +1501,7 @@ export let sys: System = (() => {
             getAccessibleSortedChildDirectories: path => getAccessibleFileSystemEntries(path).directories,
             realpath,
             tscWatchFile: process.env.TSC_WATCHFILE,
-            useNonPollingWatchers: process.env.TSC_NONPOLLING_WATCHER,
+            useNonPollingWatchers: !!process.env.TSC_NONPOLLING_WATCHER,
             tscWatchDirectory: process.env.TSC_WATCHDIRECTORY,
             inodeWatching: isLinuxOrMacOs,
             sysLog,
@@ -1601,7 +1578,7 @@ export let sys: System = (() => {
             disableCPUProfiler,
             cpuProfilingEnabled: () => !!activeSession || contains(process.execArgv, "--cpu-prof") || contains(process.execArgv, "--prof"),
             realpath,
-            debugMode: !!process.env.NODE_INSPECTOR_IPC || !!process.env.VSCODE_INSPECTOR_OPTIONS || some(process.execArgv as string[], arg => /^--(inspect|debug)(-brk)?(=\d+)?$/i.test(arg)),
+            debugMode: !!process.env.NODE_INSPECTOR_IPC || !!process.env.VSCODE_INSPECTOR_OPTIONS || some(process.execArgv, arg => /^--(inspect|debug)(-brk)?(=\d+)?$/i.test(arg)),
             tryEnableSourceMapsForHost() {
                 try {
                     (require("source-map-support") as typeof import("source-map-support")).install();
@@ -1616,8 +1593,9 @@ export let sys: System = (() => {
                 process.stdout.write("\x1Bc");
             },
             setBlocking: () => {
-                if (process.stdout && process.stdout._handle && process.stdout._handle.setBlocking) {
-                    process.stdout._handle.setBlocking(true);
+                const handle = (process.stdout as any)?._handle as { setBlocking?: (value: boolean) => void };
+                if (handle && handle.setBlocking) {
+                    handle.setBlocking(true);
                 }
             },
             bufferFrom,
@@ -1836,14 +1814,14 @@ export let sys: System = (() => {
         }
 
         function readFile(fileName: string, _encoding?: string): string | undefined {
-            perfLogger.logStartReadFile(fileName);
+            perfLogger?.logStartReadFile(fileName);
             const file = readFileWorker(fileName, _encoding);
-            perfLogger.logStopReadFile();
+            perfLogger?.logStopReadFile();
             return file;
         }
 
         function writeFile(fileName: string, data: string, writeByteOrderMark?: boolean): void {
-            perfLogger.logEvent("WriteFile: " + fileName);
+            perfLogger?.logEvent("WriteFile: " + fileName);
             // If a BOM is required, emit one
             if (writeByteOrderMark) {
                 data = byteOrderMarkIndicator + data;
@@ -1863,7 +1841,7 @@ export let sys: System = (() => {
         }
 
         function getAccessibleFileSystemEntries(path: string): FileSystemEntries {
-            perfLogger.logEvent("ReadDir: " + (path || "."));
+            perfLogger?.logEvent("ReadDir: " + (path || "."));
             try {
                 const entries = _fs.readdirSync(path || ".", { withFileTypes: true });
                 const files: string[] = [];

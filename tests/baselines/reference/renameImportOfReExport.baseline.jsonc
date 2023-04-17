@@ -1,677 +1,528 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/renameImportOfReExport.ts ===
 // declare module "a" {
-//     export class /*FIND ALL REFS*/[|C|] {}
+//     <|export class /*FIND ALL REFS*/[|{| defId: 0, isWriteAccess: true, isDefinition: true |}C|] {}|>
 // }
 // declare module "b" {
-//     export { [|C|] } from "a";
+//     <|export { [|{| defId: 1, isWriteAccess: true |}C|] } from "a";|>
 // }
 // declare module "c" {
-//     import { [|C|] } from "b";
-//     export function f(c: [|C|]): void;
+//     <|import { [|{| defId: 2, isWriteAccess: true |}C|] } from "b";|>
+//     export function f(c: [|{| defId: 2 |}C|]): void;
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/renameImportOfReExport.ts",
-      "kind": "class",
-      "name": "class C",
-      "textSpan": {
-        "start": 38,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 25,
-        "length": 17
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 38,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/renameImportOfReExport.ts",
-        "contextSpan": {
-          "start": 25,
-          "length": 17
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/renameImportOfReExport.ts",
-      "kind": "alias",
-      "name": "(alias) class C\nexport C",
-      "textSpan": {
-        "start": 79,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "export",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 70,
-        "length": 22
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 79,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/renameImportOfReExport.ts",
-        "contextSpan": {
-          "start": 70,
-          "length": 22
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/renameImportOfReExport.ts",
-      "kind": "alias",
-      "name": "(alias) class C\nimport C",
-      "textSpan": {
-        "start": 129,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 120,
-        "length": 22
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 129,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/renameImportOfReExport.ts",
-        "contextSpan": {
-          "start": 120,
-          "length": 22
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 168,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/renameImportOfReExport.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/renameImportOfReExport.ts ===
+  // declare module "a" {
+  //     <|export class /*FIND ALL REFS*/[|{| defId: 0 |}C|] {}|>
+  // }
+  // declare module "b" {
+  //     <|export { [|{| defId: 1 |}C|] } from "a";|>
+  // }
+  // declare module "c" {
+  //     <|import { [|{| defId: 2 |}C|] } from "b";|>
+  //     export function f(c: C): void;
+  // }
 
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class C",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) class C\nexport C",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "export",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 2,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) class C\nimport C",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/renameImportOfReExport.ts ===
 // declare module "a" {
-//     export class [|C|] {}
+//     <|export class [|{| defId: 0, isWriteAccess: true |}C|] {}|>
 // }
 // declare module "b" {
-//     export { /*FIND ALL REFS*/[|C|] } from "a";
+//     <|export { /*FIND ALL REFS*/[|{| defId: 1, isWriteAccess: true, isDefinition: true |}C|] } from "a";|>
 // }
 // declare module "c" {
-//     import { [|C|] } from "b";
-//     export function f(c: [|C|]): void;
+//     <|import { [|{| defId: 2, isWriteAccess: true |}C|] } from "b";|>
+//     export function f(c: [|{| defId: 2 |}C|]): void;
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/renameImportOfReExport.ts",
-      "kind": "class",
-      "name": "class C",
-      "textSpan": {
-        "start": 38,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 25,
-        "length": 17
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 38,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/renameImportOfReExport.ts",
-        "contextSpan": {
-          "start": 25,
-          "length": 17
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/renameImportOfReExport.ts",
-      "kind": "alias",
-      "name": "(alias) class C\nexport C",
-      "textSpan": {
-        "start": 79,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "export",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 70,
-        "length": 22
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 79,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/renameImportOfReExport.ts",
-        "contextSpan": {
-          "start": 70,
-          "length": 22
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/renameImportOfReExport.ts",
-      "kind": "alias",
-      "name": "(alias) class C\nimport C",
-      "textSpan": {
-        "start": 129,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 120,
-        "length": 22
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 129,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/renameImportOfReExport.ts",
-        "contextSpan": {
-          "start": 120,
-          "length": 22
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 168,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/renameImportOfReExport.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/renameImportOfReExport.ts ===
+  // declare module "a" {
+  //     <|export class [|{| defId: 0 |}C|] {}|>
+  // }
+  // declare module "b" {
+  //     <|export { /*FIND ALL REFS*/[|{| defId: 1 |}C|] } from "a";|>
+  // }
+  // declare module "c" {
+  //     <|import { [|{| defId: 2 |}C|] } from "b";|>
+  //     export function f(c: C): void;
+  // }
 
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class C",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) class C\nexport C",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "export",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 2,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) class C\nimport C",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/renameImportOfReExport.ts ===
 // declare module "a" {
-//     export class [|C|] {}
+//     <|export class [|{| defId: 2, isWriteAccess: true |}C|] {}|>
 // }
 // declare module "b" {
-//     export { [|C|] } from "a";
+//     <|export { [|{| defId: 1, isWriteAccess: true |}C|] } from "a";|>
 // }
 // declare module "c" {
-//     import { /*FIND ALL REFS*/[|C|] } from "b";
-//     export function f(c: [|C|]): void;
+//     <|import { /*FIND ALL REFS*/[|{| defId: 0, isWriteAccess: true, isDefinition: true |}C|] } from "b";|>
+//     export function f(c: [|{| defId: 0 |}C|]): void;
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/renameImportOfReExport.ts",
-      "kind": "alias",
-      "name": "(alias) class C\nimport C",
-      "textSpan": {
-        "start": 129,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 120,
-        "length": 22
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 129,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/renameImportOfReExport.ts",
-        "contextSpan": {
-          "start": 120,
-          "length": 22
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 168,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/renameImportOfReExport.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/renameImportOfReExport.ts ===
+  // declare module "a" {
+  //     <|export class [|{| defId: 2 |}C|] {}|>
+  // }
+  // declare module "b" {
+  //     <|export { [|{| defId: 1 |}C|] } from "a";|>
+  // }
+  // declare module "c" {
+  //     <|import { /*FIND ALL REFS*/[|{| defId: 0 |}C|] } from "b";|>
+  //     export function f(c: C): void;
+  // }
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) class C\nimport C",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "aliasName"
+     }
     ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/renameImportOfReExport.ts",
-      "kind": "alias",
-      "name": "(alias) class C\nexport C",
-      "textSpan": {
-        "start": 79,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "export",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 70,
-        "length": 22
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 79,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/renameImportOfReExport.ts",
-        "contextSpan": {
-          "start": 70,
-          "length": 22
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) class C\nexport C",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "export",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "aliasName"
+     }
     ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/renameImportOfReExport.ts",
-      "kind": "class",
-      "name": "class C",
-      "textSpan": {
-        "start": 38,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 25,
-        "length": 17
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 38,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/renameImportOfReExport.ts",
-        "contextSpan": {
-          "start": 25,
-          "length": 17
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
+   },
+   {
+    "defId": 2,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class C",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     }
     ]
-  }
-]
+   }
+  ]
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameImportOfReExport.ts ===
+// declare module "a" {
+//     <|export class /*RENAME*/[|CRENAME|] {}|>
+// }
+// declare module "b" {
+//     <|export { [|CRENAME|] as C/*END SUFFIX*/ } from "a";|>
+// }
+// declare module "c" {
+//     import { C } from "b";
+//     export function f(c: C): void;
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameImportOfReExport.ts ===
+// declare module "a" {
+//     export class C {}
+// }
+// declare module "b" {
+//     <|export { /*START PREFIX*/C as /*RENAME*/[|CRENAME|] } from "a";|>
+// }
+// declare module "c" {
+//     <|import { [|CRENAME|] } from "b";|>
+//     export function f(c: [|CRENAME|]): void;
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameImportOfReExport.ts ===
+// --- (line: 4) skipped ---
+//     export { C } from "a";
+// }
+// declare module "c" {
+//     <|import { /*START PREFIX*/C as /*RENAME*/[|CRENAME|] } from "b";|>
+//     export function f(c: [|CRENAME|]): void;
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameImportOfReExport.ts ===
+// --- (line: 4) skipped ---
+//     export { C } from "a";
+// }
+// declare module "c" {
+//     <|import { /*START PREFIX*/C as [|CRENAME|] } from "b";|>
+//     export function f(c: /*RENAME*/[|CRENAME|]): void;
+// }

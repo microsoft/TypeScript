@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/sample1 useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -246,6 +247,8 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/sample1/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
 /user/username/projects/sample1/logic/tsconfig.json: *new*
@@ -480,6 +483,9 @@ export declare function multiply(a: number, b: number): number;
 }
 
 
+Before running Timeout callback:: count: 1
+5: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:18 AM[0m] File change detected. Starting incremental compilation...

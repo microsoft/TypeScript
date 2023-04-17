@@ -1,4 +1,3 @@
-import * as ts from "./_namespaces/ts";
 import {
     __String,
     ApplicableRefactorInfo,
@@ -18,7 +17,6 @@ import {
     Classifications,
     ClassifiedSpan,
     ClassifiedSpan2020,
-    classifier,
     CodeActionCommand,
     codefix,
     CodeFixAction,
@@ -34,6 +32,7 @@ import {
     Completions,
     computePositionOfLineAndCharacter,
     computeSuggestionDiagnostics,
+    containsParseError,
     createDocumentRegistry,
     createGetCanonicalFileName,
     createMultiMap,
@@ -71,6 +70,7 @@ import {
     filter,
     find,
     FindAllReferences,
+    findAncestor,
     findChildOfKind,
     findPrecedingToken,
     first,
@@ -90,6 +90,7 @@ import {
     getContainerNode,
     getDefaultLibFileName,
     getDirectoryPath,
+    getEditsForFileRename as ts_getEditsForFileRename,
     getEmitDeclarations,
     getEscapedTextOfIdentifierOrLiteral,
     getFileEmitOutput,
@@ -155,6 +156,7 @@ import {
     isJsxClosingElement,
     isJsxElement,
     isJsxFragment,
+    isJsxNamespacedName,
     isJsxOpeningElement,
     isJsxOpeningFragment,
     isJsxText,
@@ -197,6 +199,7 @@ import {
     length,
     LineAndCharacter,
     lineBreakPart,
+    LinkedEditingInfo,
     LiteralType,
     map,
     mapDefined,
@@ -285,6 +288,7 @@ import {
     symbolName,
     SyntaxKind,
     SyntaxList,
+    sys,
     tagNamesAreEquivalent,
     TextChange,
     TextChangeRange,
@@ -315,6 +319,8 @@ import {
 } from "./_namespaces/ts";
 import * as NavigateTo from "./_namespaces/ts.NavigateTo";
 import * as NavigationBar from "./_namespaces/ts.NavigationBar";
+import * as classifier from "./classifier";
+import * as classifier2020 from "./classifier2020";
 
 /** The version of the language service API */
 export const servicesVersion = "0.8";
@@ -487,10 +493,10 @@ function createChildren(node: Node, sourceFile: SourceFileLike | undefined): Nod
 }
 
 function addSyntheticNodes(nodes: Node[], pos: number, end: number, parent: Node): void {
-    scanner.setTextPos(pos);
+    scanner.resetTokenState(pos);
     while (pos < end) {
         const token = scanner.scan();
-        const textPos = scanner.getTextPos();
+        const textPos = scanner.getTokenEnd();
         if (textPos <= end) {
             if (token === SyntaxKind.Identifier) {
                 if (hasTabstop(parent)) {
@@ -1755,7 +1761,7 @@ export function createLanguageService(
                 result,
                 parseConfigHost,
                 getNormalizedAbsolutePath(getDirectoryPath(configFileName), currentDirectory),
-                /*optionsToExtend*/ undefined,
+                /*existingOptions*/ undefined,
                 getNormalizedAbsolutePath(configFileName, currentDirectory),
             );
         }
@@ -2059,6 +2065,9 @@ export function createLanguageService(
         if (isImportMeta(node.parent) && node.parent.name === node) {
             return node.parent;
         }
+        if (isJsxNamespacedName(node.parent)) {
+            return node.parent;
+        }
         return node;
     }
 
@@ -2273,10 +2282,10 @@ export function createLanguageService(
 
         const responseFormat = format || SemanticClassificationFormat.Original;
         if (responseFormat === SemanticClassificationFormat.TwentyTwenty) {
-            return classifier.v2020.getSemanticClassifications(program, cancellationToken, getValidSourceFile(fileName), span);
+            return classifier2020.getSemanticClassifications(program, cancellationToken, getValidSourceFile(fileName), span);
         }
         else {
-            return ts.getSemanticClassifications(program.getTypeChecker(), cancellationToken, getValidSourceFile(fileName), program.getClassifiableNames(), span);
+            return classifier.getSemanticClassifications(program.getTypeChecker(), cancellationToken, getValidSourceFile(fileName), program.getClassifiableNames(), span);
         }
     }
 
@@ -2285,21 +2294,21 @@ export function createLanguageService(
 
         const responseFormat = format || SemanticClassificationFormat.Original;
         if (responseFormat === SemanticClassificationFormat.Original) {
-            return ts.getEncodedSemanticClassifications(program.getTypeChecker(), cancellationToken, getValidSourceFile(fileName), program.getClassifiableNames(), span);
+            return classifier.getEncodedSemanticClassifications(program.getTypeChecker(), cancellationToken, getValidSourceFile(fileName), program.getClassifiableNames(), span);
         }
         else {
-            return classifier.v2020.getEncodedSemanticClassifications(program, cancellationToken, getValidSourceFile(fileName), span);
+            return classifier2020.getEncodedSemanticClassifications(program, cancellationToken, getValidSourceFile(fileName), span);
         }
     }
 
     function getSyntacticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {
         // doesn't use compiler - no need to synchronize with host
-        return ts.getSyntacticClassifications(cancellationToken, syntaxTreeCache.getCurrentSourceFile(fileName), span);
+        return classifier.getSyntacticClassifications(cancellationToken, syntaxTreeCache.getCurrentSourceFile(fileName), span);
     }
 
     function getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications {
         // doesn't use compiler - no need to synchronize with host
-        return ts.getEncodedSyntacticClassifications(cancellationToken, syntaxTreeCache.getCurrentSourceFile(fileName), span);
+        return classifier.getEncodedSyntacticClassifications(cancellationToken, syntaxTreeCache.getCurrentSourceFile(fileName), span);
     }
 
     function getOutliningSpans(fileName: string): OutliningSpan[] {
@@ -2400,7 +2409,7 @@ export function createLanguageService(
     }
 
     function getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences = emptyOptions): readonly FileTextChanges[] {
-        return ts.getEditsForFileRename(getProgram()!, oldFilePath, newFilePath, host, formatting.getFormatContext(formatOptions, host), preferences, sourceMapper);
+        return ts_getEditsForFileRename(getProgram()!, oldFilePath, newFilePath, host, formatting.getFormatContext(formatOptions, host), preferences, sourceMapper);
     }
 
     function applyCodeActionCommand(action: CodeActionCommand, formatSettings?: FormatCodeSettings): Promise<ApplyCodeActionCommandResult>;
@@ -2475,6 +2484,57 @@ export function createLanguageService(
             : isJsxText(token) && isJsxFragment(token.parent) ? token.parent : undefined;
         if (fragment && isUnclosedFragment(fragment)) {
             return { newText: "</>" };
+        }
+    }
+
+    function getLinkedEditingRangeAtPosition(fileName: string, position: number): LinkedEditingInfo | undefined {
+        const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+        const token = findPrecedingToken(position, sourceFile);
+        if (!token || token.parent.kind === SyntaxKind.SourceFile) return undefined;
+
+        if (isJsxFragment(token.parent.parent)) {
+            const openFragment = token.parent.parent.openingFragment;
+            const closeFragment = token.parent.parent.closingFragment;
+            if (containsParseError(openFragment) || containsParseError(closeFragment)) return undefined;
+
+            const openPos = openFragment.getStart(sourceFile) + 1; // "<".length
+            const closePos = closeFragment.getStart(sourceFile) + 2; // "</".length
+
+            // only allows linked editing right after opening bracket: <| ></| >
+            if ((position !== openPos) && (position !== closePos)) return undefined;
+
+            return { ranges: [{ start: openPos, length: 0 }, { start: closePos, length: 0 }] };
+        }
+        else {
+            // determines if the cursor is in an element tag
+            const tag = findAncestor(token.parent,
+                n => {
+                    if (isJsxOpeningElement(n) || isJsxClosingElement(n)) {
+                        return true;
+                    }
+                    return false;
+                });
+            if (!tag) return undefined;
+            Debug.assert(isJsxOpeningElement(tag) || isJsxClosingElement(tag), "tag should be opening or closing element");
+
+            const openTag = tag.parent.openingElement;
+            const closeTag = tag.parent.closingElement;
+
+            const openTagStart = openTag.tagName.getStart(sourceFile);
+            const openTagEnd = openTag.tagName.end;
+            const closeTagStart = closeTag.tagName.getStart(sourceFile);
+            const closeTagEnd = closeTag.tagName.end;
+
+            // only return linked cursors if the cursor is within a tag name
+            if (!(openTagStart <= position && position <= openTagEnd || closeTagStart <= position && position <= closeTagEnd)) return undefined;
+
+            // only return linked cursors if text in both tags is identical
+            const openingTagText = openTag.tagName.getText(sourceFile);
+            if (openingTagText !== closeTag.tagName.getText(sourceFile)) return undefined;
+
+            return {
+                ranges: [{ start: openTagStart, length: openTagEnd - openTagStart }, { start: closeTagStart, length: closeTagEnd - closeTagStart }],
+            };
         }
     }
 
@@ -3009,6 +3069,7 @@ export function createLanguageService(
         getDocCommentTemplateAtPosition,
         isValidBraceCompletionAtPosition,
         getJsxClosingTagAtPosition,
+        getLinkedEditingRangeAtPosition,
         getSpanOfEnclosingComment,
         getCodeFixesAtPosition,
         getCombinedCodeFix,
@@ -3187,8 +3248,8 @@ function isArgumentOfElementAccessExpression(node: Node) {
  * The functionality is not supported if the ts module is consumed outside of a node module.
  */
 export function getDefaultLibFilePath(options: CompilerOptions): string {
-    if (ts.sys) {
-        return combinePaths(getDirectoryPath(normalizePath(ts.sys.getExecutingFilePath())), getDefaultLibFileName(options));
+    if (sys) {
+        return combinePaths(getDirectoryPath(normalizePath(sys.getExecutingFilePath())), getDefaultLibFileName(options));
     }
 
     throw new Error("getDefaultLibFilePath is only supported when consumed as a node module. ");

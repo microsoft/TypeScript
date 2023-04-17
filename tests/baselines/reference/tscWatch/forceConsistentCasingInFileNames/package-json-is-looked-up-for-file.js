@@ -1,3 +1,4 @@
+currentDirectory:: /Users/name/projects/lib-boilerplate useCaseSensitiveFileNames: false
 Input::
 //// [/Users/name/projects/lib-boilerplate/package.json]
 {"name":"lib-boilerplate","version":"0.0.2","type":"module","exports":"./src/index.ts"}
@@ -85,6 +86,8 @@ PolledWatches::
 /users/name/projects/lib-boilerplate/test/package.json: *new*
   {"pollingInterval":2000}
 /users/name/projects/lib-boilerplate/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/name/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::

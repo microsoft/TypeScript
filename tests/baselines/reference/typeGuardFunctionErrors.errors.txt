@@ -27,6 +27,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(84,1):
   Type predicate 'p2 is A' is not assignable to 'p1 is A'.
     Parameter 'p2' is not in the same position as parameter 'p1'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(90,1): error TS2322: Type '(p1: any, p2: any, p3: any) => p1 is A' is not assignable to type '(p1: any, p2: any) => p1 is A'.
+  Target signature provides too few arguments. Expected 3 or more, but got 2.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(95,9): error TS2749: 'b' refers to a value, but is being used as a type here. Did you mean 'typeof b'?
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(95,11): error TS1005: ',' expected.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(95,14): error TS1005: ',' expected.
@@ -82,7 +83,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
     
     function hasANonBooleanReturnStatement(x): x is A {
         return '';
-        ~~~~~~~~~~
+        ~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'boolean'.
     }
     
@@ -211,6 +212,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
     assign3 = function(p1, p2, p3): p1 is A {
     ~~~~~~~
 !!! error TS2322: Type '(p1: any, p2: any, p3: any) => p1 is A' is not assignable to type '(p1: any, p2: any) => p1 is A'.
+!!! error TS2322:   Target signature provides too few arguments. Expected 3 or more, but got 2.
         return true;
     };
     
@@ -247,9 +249,9 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
                             ~~~~~~~
 !!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
             return true;
-            ~~~~~~~~~~~~
+            ~~~~~~
 !!! error TS2322: Type 'boolean' is not assignable to type 'D'.
-            ~~~~~~~~~~~~
+            ~~~~~~
 !!! error TS2409: Return type of constructor signature must be assignable to the instance type of the class.
         }
         get m1(p1: A): p1 is C {
@@ -261,7 +263,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
                        ~~~~~~~
 !!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
             return true;
-            ~~~~~~~~~~~~
+            ~~~~~~
 !!! error TS2408: Setters cannot return a value.
         }
     }

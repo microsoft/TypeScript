@@ -7,8 +7,6 @@ import {
 } from "../virtualFileSystemWithWatch";
 import {
     baselineTsserverLogs,
-    checkNumberOfProjects,
-    checkProjectActualFiles,
     createLoggerWithInMemoryLogs,
     createProjectService,
     createSession,
@@ -16,6 +14,7 @@ import {
     customTypesMap,
     Logger,
     TestSessionAndServiceHost,
+    TestSessionRequest,
     TestTypingsInstaller,
     TestTypingsInstallerWorker,
     toExternalFile,
@@ -185,7 +184,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         projectService.openClientFile(file1.path);
 
         typingsInstaller.installer.executePendingCommands();
-        host.checkTimeoutQueueLengthAndRun(2);
+        host.runQueuedTimeoutCallbacks();
         baselineTsserverLogs("typingsInstaller", "configured projects", projectService);
     });
 
@@ -221,7 +220,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         projectService.openClientFile(file1.path);
 
         typingsInstaller.installer.executePendingCommands();
-        host.checkTimeoutQueueLengthAndRun(2);
+        host.runQueuedTimeoutCallbacks();
 
         baselineTsserverLogs("typingsInstaller", "inferred projects", projectService);
     });
@@ -252,7 +251,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         projectService.openClientFile(jqueryJs.path);
 
         typingsInstaller.installer.executePendingCommands();
-        host.checkTimeoutQueueLength(0);
+        projectService.testhost.logTimeoutQueueLength();
         // files should not be removed from project if ATA is skipped
 
         baselineTsserverLogs("typingsInstaller", "inferred projects with disableFilenameBasedTypeAcquisition", projectService);
@@ -426,7 +425,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
 
         typingsInstaller.installer.executePendingCommands();
 
-        host.checkTimeoutQueueLengthAndRun(1);
+        host.runQueuedTimeoutCallbacks();
         baselineTsserverLogs("typingsInstaller", "external projects no type acquisition", projectService);
     });
 
@@ -587,7 +586,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
 
         typingsInstaller.installer.executePendingCommands();
 
-        host.checkTimeoutQueueLengthAndRun(1);
+        host.runQueuedTimeoutCallbacks();
         // Commander: Existed as a JS file
         // JQuery: Specified in 'include'
         // Moment: Specified in 'include'
@@ -660,7 +659,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         });
 
         typingsInstaller.installer.executePendingCommands();
-        host.checkTimeoutQueueLengthAndRun(1);
+        host.runQueuedTimeoutCallbacks();
         baselineTsserverLogs("typingsInstaller", "throttle delayed typings to install", projectService);
     });
 
@@ -755,7 +754,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         assert.equal(typingsInstaller.installer.pendingRunRequests.length, 0, "expected no throttled requests");
 
         typingsInstaller.installer.executePendingCommands();
-        host.checkTimeoutQueueLengthAndRun(2); // for 2 projects
+        host.runQueuedTimeoutCallbacks(); // for 2 projects
         baselineTsserverLogs("typingsInstaller", "throttle delayed run install requests", projectService);
     });
 
@@ -813,7 +812,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
 
         typingsInstaller.installer.executePendingCommands();
 
-        host.checkTimeoutQueueLengthAndRun(2);
+        host.runQueuedTimeoutCallbacks();
         baselineTsserverLogs("typingsInstaller", "scoped name discovery", projectService);
     });
 
@@ -944,7 +943,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
 
         typingsInstaller.installer.executePendingCommands();
 
-        host.checkTimeoutQueueLengthAndRun(2);
+        host.runQueuedTimeoutCallbacks();
         baselineTsserverLogs("typingsInstaller", "configured projects discover from bower_components", projectService);
     });
 
@@ -983,7 +982,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
 
         typingsInstaller.installer.executePendingCommands();
 
-        host.checkTimeoutQueueLengthAndRun(2);
+        host.runQueuedTimeoutCallbacks();
         baselineTsserverLogs("typingsInstaller", "discover from bower", projectService);
     });
 
@@ -1017,10 +1016,10 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         service.openClientFile(f.path);
 
         host.writeFile(fixedPackageJson.path, fixedPackageJson.content);
-        host.checkTimeoutQueueLength(0);
+        service.testhost.logTimeoutQueueLength();
         // expected install request
         typingsInstaller.installer.executePendingCommands();
-        host.checkTimeoutQueueLengthAndRun(2);
+        host.runQueuedTimeoutCallbacks();
         baselineTsserverLogs("typingsInstaller", "malformed packagejson", service);
     });
 
@@ -1059,7 +1058,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
 
         typingsInstaller.installer.executePendingCommands();
 
-        host.checkTimeoutQueueLengthAndRun(2);
+        host.runQueuedTimeoutCallbacks();
         baselineTsserverLogs("typingsInstaller", "install typings for unresolved imports", service);
     });
 
@@ -1092,7 +1091,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         service.openClientFile(file.path);
 
         typingsInstaller.installer.executePendingCommands();
-        host.checkTimeoutQueueLengthAndRun(2);
+        host.runQueuedTimeoutCallbacks();
         baselineTsserverLogs("typingsInstaller", "redo resolutions pointing to js on typing install", service);
     });
 
@@ -1120,7 +1119,6 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         );
         const projectService = createProjectService(host, { typingsInstaller, logger });
         projectService.openClientFile(f1.path);
-        projectService.checkNumberOfProjects({ inferredProjects: 1 });
 
         const proj = projectService.inferredProjects[0];
         proj.updateGraph();
@@ -1136,7 +1134,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
 
     it("cached unresolved typings are not recomputed if program structure did not change", () => {
         const host = createServerHost([]);
-        const session = createSession(host);
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
         const f = {
             path: "/a/app.js",
             content: `
@@ -1144,25 +1142,20 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
                 import * as cmd from "commander
                 `
         };
-        const openRequest: ts.server.protocol.OpenRequest = {
-            seq: 1,
-            type: "request",
+        const openRequest: TestSessionRequest<ts.server.protocol.OpenRequest> = {
             command: ts.server.protocol.CommandTypes.Open,
             arguments: {
                 file: f.path,
                 fileContent: f.content
             }
         };
-        session.executeCommand(openRequest);
+        session.executeCommandSeq(openRequest);
         const projectService = session.getProjectService();
-        checkNumberOfProjects(projectService, { inferredProjects: 1 });
         const proj = projectService.inferredProjects[0];
         const version1 = proj.lastCachedUnresolvedImportsList;
 
         // make a change that should not affect the structure of the program
-        const changeRequest: ts.server.protocol.ChangeRequest = {
-            seq: 2,
-            type: "request",
+        const changeRequest: TestSessionRequest< ts.server.protocol.ChangeRequest> = {
             command: ts.server.protocol.CommandTypes.Change,
             arguments: {
                 file: f.path,
@@ -1173,11 +1166,12 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
                 endOffset: 0
             }
         };
-        session.executeCommand(changeRequest);
-        host.checkTimeoutQueueLength(0);
+        session.executeCommandSeq(changeRequest);
+        session.testhost.logTimeoutQueueLength();
         proj.updateGraph();
         const version2 = proj.lastCachedUnresolvedImportsList;
         assert.strictEqual(version1, version2, "set of unresolved imports should change");
+        baselineTsserverLogs("typingsInstaller", "cached unresolved typings are not recomputed if program structure did not change", session);
     });
 
     it("expired cache entry (inferred project, should install typings)", () => {
@@ -1232,7 +1226,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         projectService.openClientFile(file1.path);
 
         typingsInstaller.installer.executePendingCommands();
-        host.checkTimeoutQueueLengthAndRun(2);
+        host.runQueuedTimeoutCallbacks();
         baselineTsserverLogs("typingsInstaller", "expired cache entry", projectService);
     });
 
@@ -1631,7 +1625,7 @@ describe("unittests:: tsserver:: typingsInstaller:: telemetry events", () => {
         projectService.openClientFile(f1.path);
 
         typingsInstaller.installer.executePendingCommands();
-        host.checkTimeoutQueueLengthAndRun(2);
+        host.runQueuedTimeoutCallbacks();
         baselineTsserverLogs("typingsInstaller", "telemetry events", projectService);
     });
 });
@@ -1673,7 +1667,7 @@ describe("unittests:: tsserver:: typingsInstaller:: progress notifications", () 
         projectService.openClientFile(f1.path);
 
         typingsInstaller.installer.executePendingCommands();
-        host.checkTimeoutQueueLengthAndRun(2);
+        host.runQueuedTimeoutCallbacks();
         baselineTsserverLogs("typingsInstaller", "progress notification", projectService);
     });
 
@@ -1768,7 +1762,7 @@ describe("unittests:: tsserver:: typingsInstaller:: recomputing resolutions of u
         const foooResolution1 = verifyResolvedModuleOfFooo(proj);
 
         typingsInstaller.installer.executePendingCommands();
-        host.checkTimeoutQueueLengthAndRun(2);
+        host.runQueuedTimeoutCallbacks();
         const foooResolution2 = verifyResolvedModuleOfFooo(proj);
         assert.strictEqual(foooResolution1, foooResolution2);
         projectService.applyChangesInOpenFiles(/*openFiles*/ undefined, [{
@@ -1780,7 +1774,7 @@ describe("unittests:: tsserver:: typingsInstaller:: recomputing resolutions of u
         }]);
         host.runQueuedTimeoutCallbacks(); // Update the graph
         // Update the typing
-        host.checkTimeoutQueueLength(0);
+        projectService.testhost.logTimeoutQueueLength();
         assert.isFalse(proj.resolutionCache.isFileWithInvalidatedNonRelativeUnresolvedImports(app.path as ts.Path));
         baselineTsserverLogs("typingsInstaller", scenario, projectService);
     }
@@ -1847,9 +1841,8 @@ declare module "stream" {
         projectService.openClientFile(file.path);
 
         const proj = projectService.inferredProjects[0];
-        checkProjectActualFiles(proj, [file.path, libFile.path]);
         typingsInstaller.installer.executePendingCommands();
-        host.checkTimeoutQueueLengthAndRun(2);
+        host.runQueuedTimeoutCallbacks();
         projectService.applyChangesInOpenFiles(
             /*openFiles*/ undefined,
             [{
@@ -1866,10 +1859,10 @@ declare module "stream" {
         );
         // Below timeout Updates the typings to empty array because of "s tream" as unsresolved import
         // and schedules the update graph because of this.
-        host.checkTimeoutQueueLengthAndRun(2);
+        host.runQueuedTimeoutCallbacks();
 
         // Here, since typings dont change, there is no timeout scheduled
-        host.checkTimeoutQueueLength(0);
+        projectService.testhost.logTimeoutQueueLength();
         projectService.applyChangesInOpenFiles(/*openFiles*/ undefined, [{
             fileName: file.path,
             changes: [{
@@ -1879,7 +1872,7 @@ declare module "stream" {
         }]);
         proj.updateGraph(); // Update the graph
         // Update the typing
-        host.checkTimeoutQueueLength(0);
+        projectService.testhost.logTimeoutQueueLength();
         assert.isFalse(proj.resolutionCache.isFileWithInvalidatedNonRelativeUnresolvedImports(file.path as ts.Path));
         baselineTsserverLogs("typingsInstaller", "should handle node core modules", projectService);
     });

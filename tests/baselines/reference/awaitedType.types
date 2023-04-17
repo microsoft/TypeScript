@@ -43,27 +43,21 @@ type T12 = Awaited<Promise<Promise<number>>>;
 
 type T13 = _Expect<Awaited<Promise<Promise<number>> | string | null>, /*expected*/ string | number | null>; // otherwise just prints T13 in types tests, which isn't very helpful
 >T13 : string | number
->null : null
->null : null
 
 type T14 = _Expect<Awaited<Promise<Promise<number>> | string | undefined>, /*expected*/ string | number | undefined>; // otherwise just prints T14 in types tests, which isn't very helpful
 >T14 : string | number
 
 type T15 = _Expect<Awaited<Promise<Promise<number>> | string | null | undefined>, /*expected*/ string | number | null | undefined>; // otherwise just prints T15 in types tests, which isn't very helpful
 >T15 : string | number
->null : null
->null : null
 
 type TUndefined = Awaited<undefined>;
 >TUndefined : undefined
 
 type TNull = Awaited<null>;
 >TNull : null
->null : null
 
 type TNullOrUndefined = Awaited<null | undefined>;
 >TNullOrUndefined : null
->null : null
 
 interface BadPromise { then(cb: (value: BadPromise) => void): void; }
 >then : (cb: (value: BadPromise) => void) => void
@@ -540,5 +534,83 @@ async function mainFindMany() {
 >{ include: "bar" } : { include: string; }
 >include : string
 >"bar" : "bar"
+}
+
+// repro from #41831
+
+{
+  const promises = [Promise.resolve(0)] as const
+>promises : readonly [Promise<number>]
+>[Promise.resolve(0)] as const : readonly [Promise<number>]
+>[Promise.resolve(0)] : readonly [Promise<number>]
+>Promise.resolve(0) : Promise<number>
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise : PromiseConstructor
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>0 : 0
+
+  Promise.all(promises).then((results) => {
+>Promise.all(promises).then((results) => {    const first = results[0]    const second = results[1] // error  }) : Promise<void>
+>Promise.all(promises).then : <TResult1 = [number], TResult2 = never>(onfulfilled?: (value: [number]) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>Promise.all(promises) : Promise<[number]>
+>Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends [] | readonly unknown[]>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>Promise : PromiseConstructor
+>all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends [] | readonly unknown[]>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>promises : readonly [Promise<number>]
+>then : <TResult1 = [number], TResult2 = never>(onfulfilled?: (value: [number]) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>(results) => {    const first = results[0]    const second = results[1] // error  } : (results: [number]) => void
+>results : [number]
+
+    const first = results[0]
+>first : number
+>results[0] : number
+>results : [number]
+>0 : 0
+
+    const second = results[1] // error
+>second : undefined
+>results[1] : undefined
+>results : [number]
+>1 : 1
+
+  })
+}
+
+// repro from #40330
+
+async function test40330() {
+>test40330 : () => Promise<void>
+
+    const promiseNumber = Promise.resolve(1);
+>promiseNumber : Promise<number>
+>Promise.resolve(1) : Promise<number>
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise : PromiseConstructor
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>1 : 1
+
+    const promiseVoid = async () => {}
+>promiseVoid : () => Promise<void>
+>async () => {} : () => Promise<void>
+
+    const res = await Promise.all([
+>res : [number, ...void[]]
+>await Promise.all([        promiseNumber,        ...[promiseVoid()]    ]) : [number, ...void[]]
+>Promise.all([        promiseNumber,        ...[promiseVoid()]    ]) : Promise<[number, ...void[]]>
+>Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends [] | readonly unknown[]>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>Promise : PromiseConstructor
+>all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends [] | readonly unknown[]>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>[        promiseNumber,        ...[promiseVoid()]    ] : [Promise<number>, ...Promise<void>[]]
+
+        promiseNumber,
+>promiseNumber : Promise<number>
+
+        ...[promiseVoid()]
+>...[promiseVoid()] : Promise<void>
+>[promiseVoid()] : Promise<void>[]
+>promiseVoid() : Promise<void>
+>promiseVoid : () => Promise<void>
+
+    ])
 }
 

@@ -879,3 +879,69 @@ const f = <P extends object>(a: P & {}) => {
 
 };
 
+// Repro from #53773
+
+function test1<T extends any[] | Record<string, any>>(obj: T) {
+>test1 : Symbol(test1, Decl(inKeywordTypeguard.ts, 353, 2))
+>T : Symbol(T, Decl(inKeywordTypeguard.ts, 357, 15))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>obj : Symbol(obj, Decl(inKeywordTypeguard.ts, 357, 54))
+>T : Symbol(T, Decl(inKeywordTypeguard.ts, 357, 15))
+
+    if (Array.isArray(obj) || 'length' in obj) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>obj : Symbol(obj, Decl(inKeywordTypeguard.ts, 357, 54))
+>obj : Symbol(obj, Decl(inKeywordTypeguard.ts, 357, 54))
+
+      obj;  // T
+>obj : Symbol(obj, Decl(inKeywordTypeguard.ts, 357, 54))
+    }
+    else {
+      obj;  // T
+>obj : Symbol(obj, Decl(inKeywordTypeguard.ts, 357, 54))
+    }
+}
+
+function test2<T extends any[] | Record<string, any>>(obj: T) {
+>test2 : Symbol(test2, Decl(inKeywordTypeguard.ts, 364, 1))
+>T : Symbol(T, Decl(inKeywordTypeguard.ts, 366, 15))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>obj : Symbol(obj, Decl(inKeywordTypeguard.ts, 366, 54))
+>T : Symbol(T, Decl(inKeywordTypeguard.ts, 366, 15))
+
+    if (Array.isArray(obj)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>obj : Symbol(obj, Decl(inKeywordTypeguard.ts, 366, 54))
+
+      obj;  // T & any[]
+>obj : Symbol(obj, Decl(inKeywordTypeguard.ts, 366, 54))
+    }
+    else {
+      obj;  // T
+>obj : Symbol(obj, Decl(inKeywordTypeguard.ts, 366, 54))
+    }
+}
+
+function test3<T extends any[] | Record<string, any>>(obj: T) {
+>test3 : Symbol(test3, Decl(inKeywordTypeguard.ts, 373, 1))
+>T : Symbol(T, Decl(inKeywordTypeguard.ts, 375, 15))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>obj : Symbol(obj, Decl(inKeywordTypeguard.ts, 375, 54))
+>T : Symbol(T, Decl(inKeywordTypeguard.ts, 375, 15))
+
+    if ('length' in obj) {
+>obj : Symbol(obj, Decl(inKeywordTypeguard.ts, 375, 54))
+
+      obj;  // T
+>obj : Symbol(obj, Decl(inKeywordTypeguard.ts, 375, 54))
+    }
+    else {
+      obj;  // T
+>obj : Symbol(obj, Decl(inKeywordTypeguard.ts, 375, 54))
+    }
+}
+

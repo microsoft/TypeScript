@@ -5,15 +5,11 @@ var r0 = true ? null : null;
 >r0 : any
 >true ? null : null : null
 >true : true
->null : null
->null : null
 
 var r0 = true ? null : null;
 >r0 : any
 >true ? null : null : null
 >true : true
->null : null
->null : null
 
 var u: typeof undefined;
 >u : any
@@ -24,13 +20,11 @@ var r0b = true ? u : null;
 >true ? u : null : any
 >true : true
 >u : any
->null : null
 
 var r0b = true ? null : u;
 >r0b : any
 >true ? null : u : any
 >true : true
->null : null
 >u : any
 
 var r1 = true ? 1 : null;
@@ -38,13 +32,11 @@ var r1 = true ? 1 : null;
 >true ? 1 : null : 1
 >true : true
 >1 : 1
->null : null
 
 var r1 = true ? null : 1;
 >r1 : number
 >true ? null : 1 : 1
 >true : true
->null : null
 >1 : 1
 
 var r2 = true ? '' : null;
@@ -52,13 +44,11 @@ var r2 = true ? '' : null;
 >true ? '' : null : ""
 >true : true
 >'' : ""
->null : null
 
 var r2 = true ? null : '';
 >r2 : string
 >true ? null : '' : ""
 >true : true
->null : null
 >'' : ""
 
 var r3 = true ? true : null;
@@ -66,13 +56,11 @@ var r3 = true ? true : null;
 >true ? true : null : true
 >true : true
 >true : true
->null : null
 
 var r3 = true ? null : true;
 >r3 : boolean
 >true ? null : true : true
 >true : true
->null : null
 >true : true
 
 var r4 = true ? new Date() : null;
@@ -81,13 +69,11 @@ var r4 = true ? new Date() : null;
 >true : true
 >new Date() : Date
 >Date : DateConstructor
->null : null
 
 var r4 = true ? null : new Date();
 >r4 : Date
 >true ? null : new Date() : Date
 >true : true
->null : null
 >new Date() : Date
 >Date : DateConstructor
 
@@ -96,13 +82,11 @@ var r5 = true ? /1/ : null;
 >true ? /1/ : null : RegExp
 >true : true
 >/1/ : RegExp
->null : null
 
 var r5 = true ? null : /1/;
 >r5 : RegExp
 >true ? null : /1/ : RegExp
 >true : true
->null : null
 >/1/ : RegExp
 
 var r6 = true ? { foo: 1 } : null;
@@ -112,13 +96,11 @@ var r6 = true ? { foo: 1 } : null;
 >{ foo: 1 } : { foo: number; }
 >foo : number
 >1 : 1
->null : null
 
 var r6 = true ? null : { foo: 1 };
 >r6 : { foo: number; }
 >true ? null : { foo: 1 } : { foo: number; }
 >true : true
->null : null
 >{ foo: 1 } : { foo: number; }
 >foo : number
 >1 : 1
@@ -128,13 +110,11 @@ var r7 = true ? () => { } : null;
 >true ? () => { } : null : () => void
 >true : true
 >() => { } : () => void
->null : null
 
 var r7 = true ? null : () => { };
 >r7 : () => void
 >true ? null : () => { } : () => void
 >true : true
->null : null
 >() => { } : () => void
 
 var r8 = true ? <T>(x: T) => { return x } : null;
@@ -144,13 +124,11 @@ var r8 = true ? <T>(x: T) => { return x } : null;
 ><T>(x: T) => { return x } : <T>(x: T) => T
 >x : T
 >x : T
->null : null
 
 var r8b = true ? null : <T>(x: T) => { return x }; // type parameters not identical across declarations
 >r8b : <T>(x: T) => T
 >true ? null : <T>(x: T) => { return x } : <T>(x: T) => T
 >true : true
->null : null
 ><T>(x: T) => { return x } : <T>(x: T) => T
 >x : T
 >x : T
@@ -166,13 +144,11 @@ var r9 = true ? i1 : null;
 >true ? i1 : null : I1
 >true : true
 >i1 : I1
->null : null
 
 var r9 = true ? null : i1;
 >r9 : I1
 >true ? null : i1 : I1
 >true : true
->null : null
 >i1 : I1
 
 class C1 { foo: number; }
@@ -187,13 +163,11 @@ var r10 = true ? c1 : null;
 >true ? c1 : null : C1
 >true : true
 >c1 : C1
->null : null
 
 var r10 = true ? null : c1;
 >r10 : C1
 >true ? null : c1 : C1
 >true : true
->null : null
 >c1 : C1
 
 class C2<T> { foo: T; }
@@ -208,13 +182,11 @@ var r12 = true ? c2 : null;
 >true ? c2 : null : C2<number>
 >true : true
 >c2 : C2<number>
->null : null
 
 var r12 = true ? null : c2;
 >r12 : C2<number>
 >true ? null : c2 : C2<number>
 >true : true
->null : null
 >c2 : C2<number>
 
 enum E { A }
@@ -226,13 +198,11 @@ var r13 = true ? E : null;
 >true ? E : null : typeof E
 >true : true
 >E : typeof E
->null : null
 
 var r13 = true ? null : E;
 >r13 : typeof E
 >true ? null : E : typeof E
 >true : true
->null : null
 >E : typeof E
 
 var r14 = true ? E.A : null;
@@ -242,13 +212,11 @@ var r14 = true ? E.A : null;
 >E.A : E
 >E : typeof E
 >A : E
->null : null
 
 var r14 = true ? null : E.A;
 >r14 : E
 >true ? null : E.A : E
 >true : true
->null : null
 >E.A : E
 >E : typeof E
 >A : E
@@ -272,13 +240,11 @@ var r15 = true ? af : null;
 >true ? af : null : typeof f
 >true : true
 >af : typeof f
->null : null
 
 var r15 = true ? null : af;
 >r15 : typeof f
 >true ? null : af : typeof f
 >true : true
->null : null
 >af : typeof f
 
 class c { baz: string }
@@ -301,13 +267,11 @@ var r16 = true ? ac : null;
 >true ? ac : null : typeof c
 >true : true
 >ac : typeof c
->null : null
 
 var r16 = true ? null : ac;
 >r16 : typeof c
 >true ? null : ac : typeof c
 >true : true
->null : null
 >ac : typeof c
 
 function f17<T>(x: T) {
@@ -319,13 +283,11 @@ function f17<T>(x: T) {
 >true ? x : null : T
 >true : true
 >x : T
->null : null
 
     var r17 = true ? null : x;
 >r17 : T
 >true ? null : x : T
 >true : true
->null : null
 >x : T
 }
 
@@ -338,13 +300,11 @@ function f18<T, U>(x: U) {
 >true ? x : null : U
 >true : true
 >x : U
->null : null
 
     var r18 = true ? null : x;
 >r18 : U
 >true ? null : x : U
 >true : true
->null : null
 >x : U
 }
 //function f18<T, U extends T>(x: U) {
@@ -358,13 +318,11 @@ var r19 = true ? new Object() : null;
 >true : true
 >new Object() : Object
 >Object : ObjectConstructor
->null : null
 
 var r19 = true ? null : new Object();
 >r19 : Object
 >true ? null : new Object() : Object
 >true : true
->null : null
 >new Object() : Object
 >Object : ObjectConstructor
 
@@ -373,12 +331,10 @@ var r20 = true ? {} : null;
 >true ? {} : null : {}
 >true : true
 >{} : {}
->null : null
 
 var r20 = true ? null : {};
 >r20 : {}
 >true ? null : {} : {}
 >true : true
->null : null
 >{} : {}
 
