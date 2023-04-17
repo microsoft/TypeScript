@@ -128,12 +128,22 @@ File '/user/username/projects/myproject/node_modules/pkg/package.json' exists ac
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
+[96mindex.ts[0m:[93m1[0m:[93m44[0m - [91merror[0m[90m TS4125: [0m'resolution-mode' assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
+
+[7m1[0m import type { ImportInterface } from "pkg" assert { "resolution-mode": "import" };
+[7m [0m [91m                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
 [96mindex.ts[0m:[93m2[0m:[93m39[0m - [91merror[0m[90m TS2307: [0mCannot find module 'pkg1' or its corresponding type declarations.
 
 [7m2[0m import type { RequireInterface } from "pkg1" assert { "resolution-mode": "require" };
 [7m [0m [91m                                      ~~~~~~[0m
 
-[[90m12:00:44 AM[0m] Found 1 error. Watching for file changes.
+[96mindex.ts[0m:[93m2[0m:[93m46[0m - [91merror[0m[90m TS4125: [0m'resolution-mode' assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
+
+[7m2[0m import type { RequireInterface } from "pkg1" assert { "resolution-mode": "require" };
+[7m [0m [91m                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[[90m12:00:44 AM[0m] Found 3 errors. Watching for file changes.
 
 
 
@@ -278,12 +288,27 @@ Reusing resolution of module 'pkg1' from '/user/username/projects/myproject/inde
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
+[96ma.ts[0m:[93m2[0m:[93m44[0m - [91merror[0m[90m TS4125: [0m'resolution-mode' assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
+
+[7m2[0m import type { ImportInterface } from "pkg" assert { "resolution-mode": "import" }
+[7m [0m [91m                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[96mindex.ts[0m:[93m1[0m:[93m44[0m - [91merror[0m[90m TS4125: [0m'resolution-mode' assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
+
+[7m1[0m import type { ImportInterface } from "pkg" assert { "resolution-mode": "import" };
+[7m [0m [91m                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
 [96mindex.ts[0m:[93m2[0m:[93m39[0m - [91merror[0m[90m TS2307: [0mCannot find module 'pkg1' or its corresponding type declarations.
 
 [7m2[0m import type { RequireInterface } from "pkg1" assert { "resolution-mode": "require" };
 [7m [0m [91m                                      ~~~~~~[0m
 
-[[90m12:00:54 AM[0m] Found 1 error. Watching for file changes.
+[96mindex.ts[0m:[93m2[0m:[93m46[0m - [91merror[0m[90m TS4125: [0m'resolution-mode' assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
+
+[7m2[0m import type { RequireInterface } from "pkg1" assert { "resolution-mode": "require" };
+[7m [0m [91m                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[[90m12:00:54 AM[0m] Found 4 errors. Watching for file changes.
 
 
 

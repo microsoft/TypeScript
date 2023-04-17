@@ -1,6 +1,8 @@
 error TS2468: Cannot find global value 'Promise'.
 tests/cases/conformance/node/other.cts(2,18): error TS2712: A dynamic import call in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
+tests/cases/conformance/node/other.cts(3,14): error TS2841: The type of this expression cannot be named without a 'resolution-mode' assertion, which is an unstable feature. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
 tests/cases/conformance/node/other.cts(3,18): error TS2712: A dynamic import call in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
+tests/cases/conformance/node/other.cts(4,14): error TS2841: The type of this expression cannot be named without a 'resolution-mode' assertion, which is an unstable feature. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
 tests/cases/conformance/node/other.cts(4,18): error TS2712: A dynamic import call in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
 tests/cases/conformance/node/other.cts(5,18): error TS2712: A dynamic import call in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
 tests/cases/conformance/node/other.mts(2,18): error TS1378: Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', or 'nodenext', and the 'target' option is set to 'es2017' or higher.
@@ -20,6 +22,7 @@ tests/cases/conformance/node/other.ts(4,24): error TS2712: A dynamic import call
 tests/cases/conformance/node/other.ts(5,18): error TS1378: Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', or 'nodenext', and the 'target' option is set to 'es2017' or higher.
 tests/cases/conformance/node/other.ts(5,24): error TS2712: A dynamic import call in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
 tests/cases/conformance/node/other2.cts(2,18): error TS2712: A dynamic import call in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
+tests/cases/conformance/node/other2.cts(3,14): error TS2841: The type of this expression cannot be named without a 'resolution-mode' assertion, which is an unstable feature. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
 tests/cases/conformance/node/other2.cts(3,18): error TS2712: A dynamic import call in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
 tests/cases/conformance/node/other2.mts(2,18): error TS1378: Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', or 'nodenext', and the 'target' option is set to 'es2017' or higher.
 tests/cases/conformance/node/other2.mts(2,24): error TS2712: A dynamic import call in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
@@ -109,26 +112,32 @@ tests/cases/conformance/node/other2.ts(3,24): error TS2712: A dynamic import cal
 !!! error TS1378: Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', or 'nodenext', and the 'target' option is set to 'es2017' or higher.
                            ~~~~~~~~~~~~~~~~~~~
 !!! error TS2712: A dynamic import call in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-==== tests/cases/conformance/node/other.cts (4 errors) ====
+==== tests/cases/conformance/node/other.cts (6 errors) ====
     // cjs format file, no TLA
     export const a = import("package/cjs");
                      ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2712: A dynamic import call in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
     export const b = import("package/mjs");
+                 ~
+!!! error TS2841: The type of this expression cannot be named without a 'resolution-mode' assertion, which is an unstable feature. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
                      ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2712: A dynamic import call in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
     export const c = import("package");
+                 ~
+!!! error TS2841: The type of this expression cannot be named without a 'resolution-mode' assertion, which is an unstable feature. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
                      ~~~~~~~~~~~~~~~~~
 !!! error TS2712: A dynamic import call in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
     export const f = import("inner");
                      ~~~~~~~~~~~~~~~
 !!! error TS2712: A dynamic import call in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-==== tests/cases/conformance/node/other2.cts (2 errors) ====
+==== tests/cases/conformance/node/other2.cts (3 errors) ====
     // cjs format file, no TLA
     export const d = import("inner/cjs");
                      ~~~~~~~~~~~~~~~~~~~
 !!! error TS2712: A dynamic import call in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
     export const e = import("inner/mjs");
+                 ~
+!!! error TS2841: The type of this expression cannot be named without a 'resolution-mode' assertion, which is an unstable feature. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
                      ~~~~~~~~~~~~~~~~~~~
 !!! error TS2712: A dynamic import call in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
 ==== tests/cases/conformance/node/node_modules/inner/index.d.ts (0 errors) ====
