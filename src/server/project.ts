@@ -1643,7 +1643,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
                 // reset cached unresolved imports if changes in compiler options affected module resolution
                 this.cachedUnresolvedImportsPerFile.clear();
                 this.lastCachedUnresolvedImportsList = undefined;
-                this.resolutionCache.clear();
+                this.resolutionCache.onChangesAffectModuleResolution();
                 this.moduleSpecifierCache.clear();
             }
             this.markAsDirty();
