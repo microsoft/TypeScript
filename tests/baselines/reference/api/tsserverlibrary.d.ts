@@ -3826,7 +3826,7 @@ declare namespace ts {
             cancellationToken: ServerCancellationToken;
             useSingleInferredProject: boolean;
             useInferredProjectPerProjectRoot: boolean;
-            typingsInstaller: ITypingsInstaller;
+            typingsInstaller?: ITypingsInstaller;
             byteLength: (buf: string, encoding?: BufferEncoding) => number;
             hrtime: (start?: [
                 number,
