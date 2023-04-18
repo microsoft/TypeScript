@@ -1,10 +1,12 @@
 // @traceResolution: true
 
-// @Filename: /node_modules/@typescript/lib-dom/index.d.ts
+// @Filename: /somepath/node_modules/@typescript/lib-dom/index.d.ts
 // NOOP
-// @Filename: /node_modules/@typescript/lib-dom/iterable.d.ts
+// @Filename: /somepath/node_modules/@typescript/lib-dom/iterable.d.ts
 interface DOMIterable { abc: string }
-// @Filename: index.ts
+// @Filename: /somepath/tsconfig.json
+{ }
+// @Filename: /somepath/index.ts
 /// <reference lib="dom.iterable" />
 const a: DOMIterable = { abc: "Hello" }
 

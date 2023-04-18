@@ -1688,7 +1688,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         if (automaticTypeDirectiveNames.length) {
             tracing?.push(tracing.Phase.Program, "processTypeReferences", { count: automaticTypeDirectiveNames.length });
             // This containingFilename needs to match with the one used in managed-side
-            const containingDirectory = options.configFilePath ? getDirectoryPath(options.configFilePath) : host.getCurrentDirectory();
+            const containingDirectory = options.configFilePath ? getDirectoryPath(options.configFilePath) : currentDirectory;
             const containingFilename = combinePaths(containingDirectory, inferredTypesContainingFile);
             const resolutions = resolveTypeReferenceDirectiveNamesReusingOldState(automaticTypeDirectiveNames, containingFilename);
             for (let i = 0; i < automaticTypeDirectiveNames.length; i++) {
@@ -3820,7 +3820,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             path += (i === 2 ? "/" : "-") + components[i];
             i++;
         }
-        const resolveFrom = combinePaths(currentDirectory, `__lib_node_modules_lookup_${libFileName}__.ts`);
+        const containingDirectory = options.configFilePath ? getDirectoryPath(options.configFilePath) : currentDirectory;
+        const resolveFrom = combinePaths(containingDirectory, `__lib_node_modules_lookup_${libFileName}__.ts`);
         const localOverrideModuleResult = resolveModuleName("@typescript/lib-" + path, resolveFrom, { moduleResolution: ModuleResolutionKind.Node10, traceResolution: options.traceResolution }, host, moduleResolutionCache);
         if (localOverrideModuleResult?.resolvedModule) {
             return localOverrideModuleResult.resolvedModule.resolvedFileName;
@@ -3971,7 +3972,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
         else {
             // An absolute path pointing to the containing directory of the config file
-            const basePath = getNormalizedAbsolutePath(getDirectoryPath(refPath), host.getCurrentDirectory());
+            const basePath = getNormalizedAbsolutePath(getDirectoryPath(refPath), currentDirectory);
             sourceFile = host.getSourceFile(refPath, ScriptTarget.JSON) as JsonSourceFile | undefined;
             addFileToFilesByName(sourceFile, sourceFilePath, /*redirectedPath*/ undefined);
             if (sourceFile === undefined) {
