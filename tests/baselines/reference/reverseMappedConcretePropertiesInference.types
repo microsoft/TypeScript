@@ -134,8 +134,8 @@ declare function useQueries<T extends ReadonlyArray<QueryOptions>>(
 ): T;
 
 const resQueries = useQueries([
->resQueries : [{ key: "users"; }, { key: "posts"; }]
->useQueries([  {    queryKey: "users",    queryFn: (key) => [{ name: "Andarist" }],  },  {    queryKey: "posts",    queryFn: (key) => Promise.resolve([{ title: 'TS 5.1' }]),  }]) : [{ key: "users"; }, { key: "posts"; }]
+>resQueries : [{ key: "users"; } & { fnData: { name: string; }[]; }, { key: "posts"; } & { fnData: { title: string; }[]; }]
+>useQueries([  {    queryKey: "users",    queryFn: (key) => [{ name: "Andarist" }],  },  {    queryKey: "posts",    queryFn: (key) => Promise.resolve([{ title: 'TS 5.1' }]),  }]) : [{ key: "users"; } & { fnData: { name: string; }[]; }, { key: "posts"; } & { fnData: { title: string; }[]; }]
 >useQueries : <T extends readonly QueryOptions[]>(queries: [...UseQueriesOptions<T>]) => T
 >[  {    queryKey: "users",    queryFn: (key) => [{ name: "Andarist" }],  },  {    queryKey: "posts",    queryFn: (key) => Promise.resolve([{ title: 'TS 5.1' }]),  }] : [{ queryKey: "users"; queryFn: (key: QueryFunctionContext<"users">) => { name: string; }[]; }, { queryKey: "posts"; queryFn: (key: QueryFunctionContext<"posts">) => Promise<{ title: string; }[]>; }]
   {

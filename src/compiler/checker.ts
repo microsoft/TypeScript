@@ -24511,7 +24511,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 inferFromTypes((source as IndexedAccessType).objectType, (target as IndexedAccessType).objectType);
                 inferFromTypes((source as IndexedAccessType).indexType, (target as IndexedAccessType).indexType);
             }
-            else if (target.flags & TypeFlags.IndexedAccess) {
+            else if (!(priority & InferencePriority.NakedTypeVariable) && target.flags & TypeFlags.IndexedAccess) {
                 const targetConstraint = (target as IndexedAccessType).objectType;
                 const inference = getInferenceInfoForType(getActualTypeVariable(targetConstraint));
                 if (inference) {
