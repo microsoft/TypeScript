@@ -2405,7 +2405,7 @@ export function getCompletionEntriesFromSymbols(
         }
 
         // When in a value location in a JS file, ignore symbols that definitely seem to be type-only
-        if (!isTypeOnlyLocation && isInJSFile(sourceFile) && !(symbol.flags & SymbolFlags.Value) && !isInJSFile(symbol.declarations?.[0]?.getSourceFile())) {
+        if (!isTypeOnlyLocation && isInJSFile(sourceFile) && symbolAppearsToBeTypeOnly(symbol)) {
             continue;
         }
 
@@ -2502,6 +2502,10 @@ export function getCompletionEntriesFromSymbols(
 
         // expressions are value space (which includes the value namespaces)
         return !!(allFlags & SymbolFlags.Value);
+    }
+
+    function symbolAppearsToBeTypeOnly(symbol: Symbol): boolean {
+        return !(symbol.flags & SymbolFlags.Value) && (!isInJSFile(symbol.declarations?.[0]?.getSourceFile()) || !!(symbol.flags & SymbolFlags.Type));
     }
 }
 
