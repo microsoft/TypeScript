@@ -20,7 +20,6 @@ import {
     EmitHelper,
     EmitHint,
     emptyArray,
-    EndOfDeclarationMarker,
     ExportAssignment,
     ExportDeclaration,
     Expression,
@@ -183,7 +182,6 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
     context.enableEmitNotification(SyntaxKind.SourceFile); // Restore state when substituting nodes in a file.
 
     const moduleInfoMap: ExternalModuleInfo[] = []; // The ExternalModuleInfo for each file.
-    const deferredExports: (Statement[] | undefined)[] = []; // Exports to defer until an EndOfDeclarationMarker is found.
 
     let currentSourceFile: SourceFile; // The current file.
     let currentModuleInfo: ExternalModuleInfo; // The ExternalModuleInfo for the current file.
@@ -670,9 +668,6 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             case SyntaxKind.ClassDeclaration:
                 return visitClassDeclaration(node as ClassDeclaration);
 
-            case SyntaxKind.EndOfDeclarationMarker:
-                return visitEndOfDeclarationMarker(node as EndOfDeclarationMarker);
-
             default:
                 return visitor(node);
         }
@@ -1152,15 +1147,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             );
         }
 
-        if (hasAssociatedEndOfDeclarationMarker(node)) {
-            // Defer exports until we encounter an EndOfDeclarationMarker node
-            const id = getOriginalNodeId(node);
-            deferredExports[id] = appendExportsOfImportDeclaration(deferredExports[id], node);
-        }
-        else {
-            statements = appendExportsOfImportDeclaration(statements, node);
-        }
-
+        statements = appendExportsOfImportDeclaration(statements, node);
         return singleOrMany(statements);
     }
 
@@ -1243,15 +1230,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             }
         }
 
-        if (hasAssociatedEndOfDeclarationMarker(node)) {
-            // Defer exports until we encounter an EndOfDeclarationMarker node
-            const id = getOriginalNodeId(node);
-            deferredExports[id] = appendExportsOfImportEqualsDeclaration(deferredExports[id], node);
-        }
-        else {
-            statements = appendExportsOfImportEqualsDeclaration(statements, node);
-        }
-
+        statements = appendExportsOfImportEqualsDeclaration(statements, node);
         return singleOrMany(statements);
     }
 
@@ -1375,18 +1354,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             return undefined;
         }
 
-        let statements: Statement[] | undefined;
-        const original = node.original;
-        if (original && hasAssociatedEndOfDeclarationMarker(original)) {
-            // Defer exports until we encounter an EndOfDeclarationMarker node
-            const id = getOriginalNodeId(node);
-            deferredExports[id] = appendExportStatement(deferredExports[id], factory.createIdentifier("default"), visitNode(node.expression, visitor, isExpression), /*location*/ node, /*allowComments*/ true);
-        }
-        else {
-            statements = appendExportStatement(statements, factory.createIdentifier("default"), visitNode(node.expression, visitor, isExpression), /*location*/ node, /*allowComments*/ true);
-        }
-
-        return singleOrMany(statements);
+        return createExportStatement(factory.createIdentifier("default"), visitNode(node.expression, visitor, isExpression), /*location*/ node, /*allowComments*/ true);
     }
 
     /**
@@ -1419,15 +1387,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             statements = append(statements, visitEachChild(node, visitor, context));
         }
 
-        if (hasAssociatedEndOfDeclarationMarker(node)) {
-            // Defer exports until we encounter an EndOfDeclarationMarker node
-            const id = getOriginalNodeId(node);
-            deferredExports[id] = appendExportsOfHoistedDeclaration(deferredExports[id], node);
-        }
-        else {
-            statements = appendExportsOfHoistedDeclaration(statements, node);
-        }
-
+        statements = appendExportsOfHoistedDeclaration(statements, node);
         return singleOrMany(statements);
     }
 
@@ -1459,15 +1419,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             statements = append(statements, visitEachChild(node, visitor, context));
         }
 
-        if (hasAssociatedEndOfDeclarationMarker(node)) {
-            // Defer exports until we encounter an EndOfDeclarationMarker node
-            const id = getOriginalNodeId(node);
-            deferredExports[id] = appendExportsOfHoistedDeclaration(deferredExports[id], node);
-        }
-        else {
-            statements = appendExportsOfHoistedDeclaration(statements, node);
-        }
-
+        statements = appendExportsOfHoistedDeclaration(statements, node);
         return singleOrMany(statements);
     }
 
@@ -1558,15 +1510,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             statements = append(statements, visitEachChild(node, visitor, context));
         }
 
-        if (hasAssociatedEndOfDeclarationMarker(node)) {
-            // Defer exports until we encounter an EndOfDeclarationMarker node
-            const id = getOriginalNodeId(node);
-            deferredExports[id] = appendExportsOfVariableStatement(deferredExports[id], node);
-        }
-        else {
-            statements = appendExportsOfVariableStatement(statements, node);
-        }
-
+        statements = appendExportsOfVariableStatement(statements, node);
         return singleOrMany(statements);
     }
 
@@ -1614,35 +1558,6 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                 node.initializer ? visitNode(node.initializer, visitor, isExpression) : factory.createVoidZero()
             );
         }
-    }
-
-    /**
-     * Determines whether a node has an associated EndOfDeclarationMarker.
-     *
-     * @param node The node to test.
-     */
-    function hasAssociatedEndOfDeclarationMarker(node: Node) {
-        return (getEmitFlags(node) & EmitFlags.HasEndOfDeclarationMarker) !== 0;
-    }
-
-    /**
-     * Visits a DeclarationMarker used as a placeholder for the end of a transformed
-     * declaration.
-     *
-     * @param node The node to visit.
-     */
-    function visitEndOfDeclarationMarker(node: EndOfDeclarationMarker): VisitResult<Statement> {
-        // For some transformations we emit an `EndOfDeclarationMarker` to mark the actual
-        // end of the transformed declaration. We use this marker to emit any deferred exports
-        // of the declaration.
-        const id = getOriginalNodeId(node);
-        const statements = deferredExports[id];
-        if (statements) {
-            delete deferredExports[id];
-            return append(statements, node);
-        }
-
-        return node;
     }
 
     /**

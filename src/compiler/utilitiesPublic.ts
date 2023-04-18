@@ -2333,8 +2333,7 @@ function isStatementKindButNotDeclarationKind(kind: SyntaxKind) {
         || kind === SyntaxKind.VariableStatement
         || kind === SyntaxKind.WhileStatement
         || kind === SyntaxKind.WithStatement
-        || kind === SyntaxKind.NotEmittedStatement
-        || kind === SyntaxKind.EndOfDeclarationMarker;
+        || kind === SyntaxKind.NotEmittedStatement;
 }
 
 /** @internal */

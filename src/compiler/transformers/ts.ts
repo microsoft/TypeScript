@@ -846,9 +846,7 @@ export function transformTypeScript(context: TransformationContext) {
 
         const moveModifiers =
             promoteToIIFE ||
-            facts & ClassFacts.IsExportOfNamespace ||
-            facts & ClassFacts.HasClassOrConstructorParameterDecorators && legacyDecorators ||
-            facts & ClassFacts.HasStaticInitializedProperties;
+            facts & ClassFacts.IsExportOfNamespace;
 
         // elide modifiers on the declaration if we are emitting an IIFE or the class is
         // a namespace export
@@ -954,32 +952,26 @@ export function transformTypeScript(context: TransformationContext) {
 
         if (moveModifiers) {
             if (facts & ClassFacts.IsExportOfNamespace) {
-                return demarcateMultiStatementExport(
+                return [
                     statement,
-                    createExportMemberAssignmentStatement(node));
+                    createExportMemberAssignmentStatement(node)
+                ];
             }
             if (facts & ClassFacts.IsDefaultExternalExport) {
-                return demarcateMultiStatementExport(
+                return [
                     statement,
-                    factory.createExportDefault(factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true)));
+                    factory.createExportDefault(factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true))
+                ];
             }
             if (facts & ClassFacts.IsNamedExternalExport && !promoteToIIFE) {
-                return demarcateMultiStatementExport(
+                return [
                     statement,
-                    factory.createExternalModuleExport(factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true)));
+                    factory.createExternalModuleExport(factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true))
+                ];
             }
         }
 
         return statement;
-    }
-
-    function demarcateMultiStatementExport(declarationStatement: Statement, exportStatement: Statement) {
-        addEmitFlags(declarationStatement, EmitFlags.HasEndOfDeclarationMarker);
-        return [
-            declarationStatement,
-            exportStatement,
-            factory.createEndOfDeclarationMarker(declarationStatement)
-        ];
     }
 
     function visitClassExpression(node: ClassExpression): Expression {

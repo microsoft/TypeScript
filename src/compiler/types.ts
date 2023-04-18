@@ -450,7 +450,6 @@ export const enum SyntaxKind {
     NotEmittedStatement,
     PartiallyEmittedExpression,
     CommaListExpression,
-    EndOfDeclarationMarker,
     SyntheticReferenceExpression,
 
     // Enum value count
@@ -3284,15 +3283,6 @@ export interface Statement extends Node, JSDocContainer {
 // not-emitted node.
 export interface NotEmittedStatement extends Statement {
     readonly kind: SyntaxKind.NotEmittedStatement;
-}
-
-/**
- * Marks the end of transformed declaration to properly emit exports.
- *
- * @internal
- */
-export interface EndOfDeclarationMarker extends Statement {
-    readonly kind: SyntaxKind.EndOfDeclarationMarker;
 }
 
 /**
@@ -7970,9 +7960,8 @@ export const enum EmitFlags {
     ReuseTempVariableScope = 1 << 20,       // Reuse the existing temp variable scope during emit.
     CustomPrologue = 1 << 21,               // Treat the statement as if it were a prologue directive (NOTE: Prologue directives are *not* transformed).
     NoHoisting = 1 << 22,                   // Do not hoist this declaration in --module system
-    HasEndOfDeclarationMarker = 1 << 23,    // Declaration has an associated NotEmittedStatement to mark the end of the declaration
-    Iterator = 1 << 24,                     // The expression to a `yield*` should be treated as an Iterator when down-leveling, not an Iterable.
-    NoAsciiEscaping = 1 << 25,              // When synthesizing nodes that lack an original node or textSourceNode, we want to write the text on the node with ASCII escaping substitutions.
+    Iterator = 1 << 23,                     // The expression to a `yield*` should be treated as an Iterator when down-leveling, not an Iterable.
+    NoAsciiEscaping = 1 << 24,              // When synthesizing nodes that lack an original node or textSourceNode, we want to write the text on the node with ASCII escaping substitutions.
 }
 
 /** @internal */
@@ -8772,7 +8761,6 @@ export interface NodeFactory {
     //
 
     createNotEmittedStatement(original: Node): NotEmittedStatement;
-    /** @internal */ createEndOfDeclarationMarker(original: Node): EndOfDeclarationMarker;
     createPartiallyEmittedExpression(expression: Expression, original?: Node): PartiallyEmittedExpression;
     updatePartiallyEmittedExpression(node: PartiallyEmittedExpression, expression: Expression): PartiallyEmittedExpression;
     /** @internal */ createSyntheticReferenceExpression(expression: Expression, thisArg: Expression): SyntheticReferenceExpression;

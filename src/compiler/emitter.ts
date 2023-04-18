@@ -2178,7 +2178,6 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
 
                 // Transformation nodes
                 case SyntaxKind.NotEmittedStatement:
-                case SyntaxKind.EndOfDeclarationMarker:
                     return;
             }
             if (isExpression(node)) {
@@ -2295,8 +2294,6 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                     return emitPartiallyEmittedExpression(node as PartiallyEmittedExpression);
                 case SyntaxKind.CommaListExpression:
                     return emitCommaList(node as CommaListExpression);
-                case SyntaxKind.EndOfDeclarationMarker:
-                    return;
                 case SyntaxKind.SyntheticReferenceExpression:
                     return Debug.fail("SyntheticReferenceExpression should not be printed");
             }

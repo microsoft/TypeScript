@@ -79,7 +79,6 @@ import {
     EmitNode,
     emptyArray,
     EmptyStatement,
-    EndOfDeclarationMarker,
     EndOfFileToken,
     EntityName,
     EnumDeclaration,
@@ -942,7 +941,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         updatePartiallyEmittedExpression,
         createCommaListExpression,
         updateCommaListExpression,
-        createEndOfDeclarationMarker,
         createSyntheticReferenceExpression,
         updateSyntheticReferenceExpression,
         cloneNode,
@@ -6183,18 +6181,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         return node.elements !== elements
             ? update(createCommaListExpression(elements), node)
             : node;
-    }
-
-    /**
-     * Creates a synthetic element to act as a placeholder for the end of an emitted declaration in
-     * order to properly emit exports.
-     */
-    // @api
-    function createEndOfDeclarationMarker(original: Node) {
-        const node = createBaseNode<EndOfDeclarationMarker>(SyntaxKind.EndOfDeclarationMarker);
-        node.emitNode = {} as EmitNode;
-        node.original = original;
-        return node;
     }
 
     // @api
