@@ -2713,10 +2713,10 @@ export class Session<TMessage = string> implements EventSender {
         return result;
     }
 
-    private getMoveToRefactoringFileSuggestions(args: protocol.GetMoveToRefactoringFileSuggestionsRequestArgs): { newFilename: string | undefined, files: string[] | undefined }{
+    private getMoveToRefactoringFileSuggestions(args: protocol.GetMoveToRefactoringFileSuggestionsRequestArgs): { newFilename: string, files: string[] }{
         const { file, project } = this.getFileAndProject(args);
         const allFiles: string[] = [];
-        let fileName: string | undefined;
+        let fileName = "";
         updateProjectIfDirty(project);
         const scriptInfo = project.getScriptInfoForNormalizedPath(file);
         if (scriptInfo) {

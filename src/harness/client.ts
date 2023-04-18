@@ -793,7 +793,7 @@ export class SessionClient implements LanguageService {
         return response.body!; // TODO: GH#18217
     }
 
-    getMoveToRefactoringFileSuggestions(fileName: string, positionOrRange: number | TextRange): { newFileName: string | undefined; files: string[] | undefined; } {
+    getMoveToRefactoringFileSuggestions(fileName: string, positionOrRange: number | TextRange): { newFileName: string; files: string[]; } {
         const args = this.createFileLocationOrRangeRequestArgs(positionOrRange, fileName);
 
         const request = this.processRequest<protocol.GetMoveToRefactoringFileSuggestionsRequest>(protocol.CommandTypes.GetMoveToRefactoringFileSuggestions, args);

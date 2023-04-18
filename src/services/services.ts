@@ -2982,29 +2982,16 @@ export function createLanguageService(
         return refactor.getApplicableRefactors(getRefactorContext(file, positionOrRange, preferences, emptyOptions, triggerReason, kind));
     }
 
-    function getMoveToRefactoringFileSuggestions(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences = emptyOptions): { newFileName: string | undefined, files: string[] | undefined } {
+    function getMoveToRefactoringFileSuggestions(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences = emptyOptions): { newFileName: string, files: string[] } {
         synchronizeHostData();
         const sourceFile = getValidSourceFile(fileName);
-        const program = getProgram();
-        const allFiles = program?.getSourceFiles().filter(sourceFile => !program?.isSourceFileFromExternalLibrary(sourceFile)).map(f => f.fileName);
+        const allFiles = Debug.checkDefined(program.getSourceFiles());
         const extension = extensionFromPath(fileName);
-        const files: string[] = [];
-        if (allFiles) {
-            for (const file of allFiles) {
-                const fileExtension = extensionFromPath(file);
-                if (sourceFile === getValidSourceFile(file) || extension === Extension.Ts && fileExtension === Extension.Dts || extension === Extension.Dts && startsWith(getBaseFileName(file), "lib.") && fileExtension === Extension.Dts) {
-                    continue;
-                }
-                if (extension === fileExtension) {
-                    files.push(file);
-                }
-            }
-        }
-        //creating new filename
-        let newFileName;
-        if (program) {
-            newFileName = createNewFileName(sourceFile, program, getRefactorContext(sourceFile, positionOrRange, preferences, emptyOptions), host);
-        }
+        const files = mapDefined(allFiles, file => !program?.isSourceFileFromExternalLibrary(sourceFile) &&
+                !(sourceFile === getValidSourceFile(file.fileName) || extension === Extension.Ts && extensionFromPath(file.fileName) === Extension.Dts || extension === Extension.Dts && startsWith(getBaseFileName(file.fileName), "lib.") && extensionFromPath(file.fileName) === Extension.Dts)
+                && extension === extensionFromPath(file.fileName) ? file.fileName : undefined);
+
+        const newFileName = createNewFileName(sourceFile, program, getRefactorContext(sourceFile, positionOrRange, preferences, emptyOptions), host);
         return { newFileName, files };
     }
 
