@@ -24513,7 +24513,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             else if (target.flags & TypeFlags.IndexedAccess) {
                 const targetConstraint = (target as IndexedAccessType).objectType;
-                const inference = getInferenceInfoForType(targetConstraint);
+                const inference = getInferenceInfoForType(getActualTypeVariable(targetConstraint));
                 if (inference) {
                     if (!inference.isFixed) {
                         // Instantiates instance of `type PartialInference<T, Keys extends string> = ({[K in Keys]: {[K1 in K]: T}})[Keys];`

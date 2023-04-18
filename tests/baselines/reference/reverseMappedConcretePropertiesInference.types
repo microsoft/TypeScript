@@ -134,21 +134,21 @@ declare function useQueries<T extends ReadonlyArray<QueryOptions>>(
 ): T;
 
 const resQueries = useQueries([
->resQueries : readonly QueryOptions[]
->useQueries([  {    queryKey: "users",    queryFn: (key) => [{ name: "Andarist" }],  },  {    queryKey: "posts",    queryFn: (key) => Promise.resolve([{ title: 'TS 5.1' }]),  }]) : readonly QueryOptions[]
+>resQueries : [{ key: "users"; }, { key: "posts"; }]
+>useQueries([  {    queryKey: "users",    queryFn: (key) => [{ name: "Andarist" }],  },  {    queryKey: "posts",    queryFn: (key) => Promise.resolve([{ title: 'TS 5.1' }]),  }]) : [{ key: "users"; }, { key: "posts"; }]
 >useQueries : <T extends readonly QueryOptions[]>(queries: [...UseQueriesOptions<T>]) => T
->[  {    queryKey: "users",    queryFn: (key) => [{ name: "Andarist" }],  },  {    queryKey: "posts",    queryFn: (key) => Promise.resolve([{ title: 'TS 5.1' }]),  }] : ({ queryKey: string; queryFn: (key: QueryFunctionContext<string>) => { name: string; }[]; } | { queryKey: string; queryFn: (key: QueryFunctionContext<string>) => Promise<{ title: string; }[]>; })[]
+>[  {    queryKey: "users",    queryFn: (key) => [{ name: "Andarist" }],  },  {    queryKey: "posts",    queryFn: (key) => Promise.resolve([{ title: 'TS 5.1' }]),  }] : [{ queryKey: "users"; queryFn: (key: QueryFunctionContext<"users">) => { name: string; }[]; }, { queryKey: "posts"; queryFn: (key: QueryFunctionContext<"posts">) => Promise<{ title: string; }[]>; }]
   {
->{    queryKey: "users",    queryFn: (key) => [{ name: "Andarist" }],  } : { queryKey: string; queryFn: (key: QueryFunctionContext<string>) => { name: string; }[]; }
+>{    queryKey: "users",    queryFn: (key) => [{ name: "Andarist" }],  } : { queryKey: "users"; queryFn: (key: QueryFunctionContext<"users">) => { name: string; }[]; }
 
     queryKey: "users",
->queryKey : string
+>queryKey : "users"
 >"users" : "users"
 
     queryFn: (key) => [{ name: "Andarist" }],
->queryFn : (key: QueryFunctionContext<string>) => { name: string; }[]
->(key) => [{ name: "Andarist" }] : (key: QueryFunctionContext<string>) => { name: string; }[]
->key : QueryFunctionContext<string>
+>queryFn : (key: QueryFunctionContext<"users">) => { name: string; }[]
+>(key) => [{ name: "Andarist" }] : (key: QueryFunctionContext<"users">) => { name: string; }[]
+>key : QueryFunctionContext<"users">
 >[{ name: "Andarist" }] : { name: string; }[]
 >{ name: "Andarist" } : { name: string; }
 >name : string
@@ -156,16 +156,16 @@ const resQueries = useQueries([
 
   },
   {
->{    queryKey: "posts",    queryFn: (key) => Promise.resolve([{ title: 'TS 5.1' }]),  } : { queryKey: string; queryFn: (key: QueryFunctionContext<string>) => Promise<{ title: string; }[]>; }
+>{    queryKey: "posts",    queryFn: (key) => Promise.resolve([{ title: 'TS 5.1' }]),  } : { queryKey: "posts"; queryFn: (key: QueryFunctionContext<"posts">) => Promise<{ title: string; }[]>; }
 
     queryKey: "posts",
->queryKey : string
+>queryKey : "posts"
 >"posts" : "posts"
 
     queryFn: (key) => Promise.resolve([{ title: 'TS 5.1' }]),
->queryFn : (key: QueryFunctionContext<string>) => Promise<{ title: string; }[]>
->(key) => Promise.resolve([{ title: 'TS 5.1' }]) : (key: QueryFunctionContext<string>) => Promise<{ title: string; }[]>
->key : QueryFunctionContext<string>
+>queryFn : (key: QueryFunctionContext<"posts">) => Promise<{ title: string; }[]>
+>(key) => Promise.resolve([{ title: 'TS 5.1' }]) : (key: QueryFunctionContext<"posts">) => Promise<{ title: string; }[]>
+>key : QueryFunctionContext<"posts">
 >Promise.resolve([{ title: 'TS 5.1' }]) : Promise<{ title: string; }[]>
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
