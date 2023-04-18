@@ -3821,7 +3821,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             i++;
         }
         const resolveFrom = combinePaths(currentDirectory, `__lib_node_modules_lookup_${libFileName}__.ts`);
-        const localOverrideModuleResult = resolveModuleName("@typescript/lib-" + path, resolveFrom, { moduleResolution: ModuleResolutionKind.Node10 }, host, moduleResolutionCache);
+        const localOverrideModuleResult = resolveModuleName("@typescript/lib-" + path, resolveFrom, { moduleResolution: ModuleResolutionKind.Node10, traceResolution: options.traceResolution }, host, moduleResolutionCache);
         if (localOverrideModuleResult?.resolvedModule) {
             return localOverrideModuleResult.resolvedModule.resolvedFileName;
         }
