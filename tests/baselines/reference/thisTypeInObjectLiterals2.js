@@ -199,8 +199,6 @@ p12.bar = p12.bar + 1;
 
 type Accessors<T> = { [K in keyof T]: (() => T[K]) | Computed<T[K]> };
 
-type Dictionary<T> = { [x: string]: T }
-
 type Computed<T> = {
     get?(): T;
     set?(value: T): void;
@@ -468,9 +466,6 @@ declare let p12: Point & {
 type Accessors<T> = {
     [K in keyof T]: (() => T[K]) | Computed<T[K]>;
 };
-type Dictionary<T> = {
-    [x: string]: T;
-};
 type Computed<T> = {
     get?(): T;
     set?(value: T): void;
@@ -484,4 +479,9 @@ declare const Vue: new <D, M, P>(options: VueOptions<D, M, P>) => D & M & P;
 declare let vue: {
     x: number;
     y: number;
+} & {
+    f(x: string): number;
+} & {
+    test: number;
+    hello: string;
 };

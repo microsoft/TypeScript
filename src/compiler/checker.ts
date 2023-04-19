@@ -24522,7 +24522,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         const inferenceType = inferenceTypeSymbol && getDeclaredTypeOfSymbol(inferenceTypeSymbol);
                         if (inferenceType && inferenceType !== unknownType) {
                             const mapper = createTypeMapper(getSymbolLinks(inferenceTypeSymbol).typeParameters!, [source, (target as IndexedAccessType).indexType]);
-                            (inference.indexes || (inference.indexes = [])).push(instantiateType(inferenceType, mapper));
+                            inference.indexes = append(inference.indexes, instantiateType(inferenceType, mapper));
                         }
                     }
                     return;
@@ -25160,15 +25160,27 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let inferredType: Type | undefined;
             const signature = context.signature;
             if (signature) {
-                if (inference.indexes) {
-                    // Build a candidate from all indexes
+                const inferredCovariantType = inference.candidates ? getCovariantInference(inference, signature) : undefined;
+                if (inference.contraCandidates) {
+                    // If we have both co- and contra-variant inferences, we use the co-variant inference if it is not 'never',
+                    // it is a subtype of some contra-variant inference, and no other type parameter is constrained to this type
+                    // parameter and has inferences that would conflict. Otherwise, we use the contra-variant inference.
+                    const useCovariantType = inferredCovariantType && !(inferredCovariantType.flags & TypeFlags.Never) &&
+                        some(inference.contraCandidates, t => isTypeSubtypeOf(inferredCovariantType, t)) &&
+                        every(context.inferences, other =>
+                            other !== inference && getConstraintOfTypeParameter(other.typeParameter) !== inference.typeParameter ||
+                            every(other.candidates, t => isTypeSubtypeOf(t, inferredCovariantType)));
+                    inferredType = useCovariantType ? inferredCovariantType : getContravariantInference(inference);
+                }
+                else if (inferredCovariantType) {
+                    inferredType = inferredCovariantType;
+                }
+                else if (inference.indexes) {
                     let aggregateInference = getIntersectionType(inference.indexes);
                     const constraint = getConstraintOfTypeParameter(inference.typeParameter);
                     if (constraint) {
                         const instantiatedConstraint = instantiateType(constraint, context.nonFixingMapper);
-                        const comparableToConstraint = context.compareTypes(aggregateInference, getTypeWithThisArgument(instantiatedConstraint, aggregateInference));
-                        if (instantiatedConstraint.flags & TypeFlags.Union && !comparableToConstraint) {
-                            const originalAggregateInference = aggregateInference;
+                        if (instantiatedConstraint.flags & TypeFlags.Union && !context.compareTypes(aggregateInference, getTypeWithThisArgument(instantiatedConstraint, aggregateInference))) {
                             const discriminantProps = findDiscriminantProperties(getPropertiesOfType(aggregateInference), instantiatedConstraint);
                             if (discriminantProps) {
                                 let match: Type | undefined;
@@ -25191,32 +25203,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                     aggregateInference = getSpreadType(match, aggregateInference, /*symbol*/ undefined, /*propegatedFlags*/ 0, /*readonly*/ false);
                                 }
                             }
-                            if (originalAggregateInference !== aggregateInference) {
-                                inference.candidates = append(inference.candidates, aggregateInference);
-                            }
-                        }
-                        else if (comparableToConstraint) {
-                            inference.candidates = append(inference.candidates, aggregateInference);
                         }
                     }
-                    else {
-                        inference.candidates = append(inference.candidates, aggregateInference);
-                    }
-                }
-                const inferredCovariantType = inference.candidates ? getCovariantInference(inference, signature) : undefined;
-                if (inference.contraCandidates) {
-                    // If we have both co- and contra-variant inferences, we use the co-variant inference if it is not 'never',
-                    // it is a subtype of some contra-variant inference, and no other type parameter is constrained to this type
-                    // parameter and has inferences that would conflict. Otherwise, we use the contra-variant inference.
-                    const useCovariantType = inferredCovariantType && !(inferredCovariantType.flags & TypeFlags.Never) &&
-                        some(inference.contraCandidates, t => isTypeSubtypeOf(inferredCovariantType, t)) &&
-                        every(context.inferences, other =>
-                            other !== inference && getConstraintOfTypeParameter(other.typeParameter) !== inference.typeParameter ||
-                            every(other.candidates, t => isTypeSubtypeOf(t, inferredCovariantType)));
-                    inferredType = useCovariantType ? inferredCovariantType : getContravariantInference(inference);
-                }
-                else if (inferredCovariantType) {
-                    inferredType = inferredCovariantType;
+                    inferredType = aggregateInference;
                 }
                 else if (context.flags & InferenceFlags.NoDefault) {
                     // We use silentNeverType as the wildcard that signals no inferences.
