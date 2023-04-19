@@ -1,9 +1,7 @@
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 import { commandLineCallbacks } from "../helpers/baseline";
-import {
-    compilerOptionsToConfigJson,
-} from "../helpers/tsc";
+import { compilerOptionsToConfigJson } from "../helpers/contents";
 import {
     commonFile1,
     commonFile2,

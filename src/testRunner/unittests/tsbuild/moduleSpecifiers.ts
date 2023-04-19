@@ -1,7 +1,7 @@
 import * as Utils from "../../_namespaces/Utils";
+import { symbolLibContent } from "../helpers/contents";
 import {
     loadProjectFromFiles,
-    symbolLibContent,
     verifyTsc,
 } from "../helpers/tsc";
 import { libFile } from "../helpers/virtualFileSystemWithWatch";

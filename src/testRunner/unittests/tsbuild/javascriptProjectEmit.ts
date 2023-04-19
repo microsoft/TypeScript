@@ -1,8 +1,8 @@
 import * as Utils from "../../_namespaces/Utils";
+import { symbolLibContent } from "../helpers/contents";
 import {
     loadProjectFromFiles,
     replaceText,
-    symbolLibContent,
     verifyTsc,
 } from "../helpers/tsc";
 

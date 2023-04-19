@@ -1,4 +1,4 @@
-import { libContent } from "../helpers/tsc";
+import { libContent } from "../helpers/contents";
 import {
     TscWatchCompileChange,
     verifyTscWatch,

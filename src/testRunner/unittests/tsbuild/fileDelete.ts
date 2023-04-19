@@ -2,8 +2,8 @@ import * as ts from "../../_namespaces/ts";
 import {
     dedent
 } from "../../_namespaces/Utils";
+import { compilerOptionsToConfigJson } from "../helpers/contents";
 import {
-    compilerOptionsToConfigJson,
     loadProjectFromFiles,
     verifyTsc,
 } from "../helpers/tsc";

@@ -1,9 +1,7 @@
 
 import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
-import {
-    compilerOptionsToConfigJson,
-} from "../helpers/tsc";
+import { compilerOptionsToConfigJson } from "../helpers/contents";
 import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,

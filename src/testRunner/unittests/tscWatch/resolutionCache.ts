@@ -1,6 +1,6 @@
 import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
-import { libContent } from "../helpers/tsc";
+import { libContent } from "../helpers/contents";
 import {
     createBaseline,
     createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline,

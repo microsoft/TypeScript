@@ -15,8 +15,8 @@ import {
     ReadableProgramMultiFileEmitBuildInfo,
     toPathWithSystem,
 } from "./baseline";
+import { libContent } from "./contents";
 import {
-    libFile,
     TestServerHost,
 } from "./virtualFileSystemWithWatch";
 
@@ -31,10 +31,6 @@ export type TscCompileSystem = fakes.System & {
     dtsSignaures?: Map<ts.Path, Map<string, DtsSignatureData>>;
     storeFilesChangingSignatureDuringEmit?: boolean;
 };
-
-export function compilerOptionsToConfigJson(options: ts.CompilerOptions) {
-    return ts.optionMapToObject(ts.serializeCompilerOptions(options));
-}
 
 export const noChangeRun: TestTscEdit = {
     caption: "no-change-run",
@@ -282,21 +278,6 @@ export function appendText(fs: vfs.FileSystem, path: string, additionalContent: 
     const old = fs.readFileSync(path, "utf-8");
     fs.writeFileSync(path, `${old}${additionalContent}`);
 }
-
-export const libContent = `${libFile.content}
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };`;
-
-export const symbolLibContent = `
-interface SymbolConstructor {
-    readonly species: symbol;
-    readonly toStringTag: symbol;
-}
-declare var Symbol: SymbolConstructor;
-interface Symbol {
-    readonly [Symbol.toStringTag]: string;
-}
-`;
 
 /**
  * Load project from disk into /src folder

@@ -1,7 +1,7 @@
 import * as ts from "../../_namespaces/ts";
+import { compilerOptionsToConfigJson } from "../helpers/contents";
 import {
     appendText,
-    compilerOptionsToConfigJson,
     loadProjectFromFiles,
     noChangeRun,
     replaceText,
