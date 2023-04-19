@@ -1,5 +1,5 @@
 import * as ts from "../../_namespaces/ts";
-import { solutionBuildWithBaseline } from "../helpers/tscWatch";
+import { solutionBuildWithBaseline } from "../helpers/solutionBuilder";
 import {
     baselineTsserverLogs,
     createHostWithSolutionBuild,

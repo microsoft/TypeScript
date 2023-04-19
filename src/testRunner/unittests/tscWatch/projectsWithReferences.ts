@@ -1,8 +1,8 @@
 import {
     createSolutionBuilder,
     createSystemWithSolutionBuild,
-    verifyTscWatch,
-} from "../helpers/tscWatch";
+} from "../helpers/solutionBuilder";
+import { verifyTscWatch } from "../helpers/tscWatch";
 import {
     getTsBuildProjectFile,
     getTsBuildProjectFilePath,

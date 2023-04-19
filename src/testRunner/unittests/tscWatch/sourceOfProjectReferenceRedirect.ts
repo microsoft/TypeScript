@@ -1,10 +1,10 @@
 import * as ts from "../../_namespaces/ts";
 import { libContent } from "../helpers/contents";
+import { solutionBuildWithBaseline } from "../helpers/solutionBuilder";
 import {
     createBaseline,
     createWatchCompilerHostOfConfigFileForBaseline,
     runWatchBaseline,
-    solutionBuildWithBaseline,
 } from "../helpers/tscWatch";
 import {
     createWatchedSystem,

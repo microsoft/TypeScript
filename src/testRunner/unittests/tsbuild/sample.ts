@@ -3,8 +3,8 @@ import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 import * as vfs from "../../_namespaces/vfs";
 import { libContent } from "../helpers/contents";
+import { createSolutionBuilderHostForBaseline } from "../helpers/solutionBuilder";
 import {
-    createSolutionBuilderHostForBaseline,
     noChangeOnlyRuns,
     noChangeRun,
     testTscCompileLike,

@@ -13,10 +13,8 @@ import {
     ReadableProgramBuildInfoFileInfo,
     ReadableProgramMultiFileEmitBuildInfo,
     toPathWithSystem,
+    tscBaselineName,
 } from "./baseline";
-import {
-    TestServerHost,
-} from "./virtualFileSystemWithWatch";
 
 export interface DtsSignatureData {
     signature: string | undefined;
@@ -85,7 +83,7 @@ export function testTscCompileLike(input: TestTscCompileLike) {
             inputFs.diff(/*base*/ undefined, { baseIsNotShadowRoot: true });
         const patch = fs.diff(inputFs, { includeChangedFileWithSameContent: true });
         return {
-            file: `${ts.isBuild(commandLineArgs) ? "tsbuild" : "tsc"}/${scenario}/${subScenario.split(" ").join("-")}.js`,
+            file: tscBaselineName(scenario, subScenario, commandLineArgs),
             text: `Input::
 ${baseFsPatch ? vfs.formatPatch(baseFsPatch) : ""}
 
@@ -98,7 +96,7 @@ ${patch ? vfs.formatPatch(patch) : ""}`
     return sys;
 }
 
-function makeSystemReadyForBaseline(sys: TscCompileSystem, versionToWrite?: string) {
+export function makeSystemReadyForBaseline(sys: TscCompileSystem, versionToWrite?: string) {
     if (versionToWrite) {
         fakes.patchHostForBuildInfoWrite(sys, versionToWrite);
     }
@@ -116,23 +114,6 @@ function makeSystemReadyForBaseline(sys: TscCompileSystem, versionToWrite?: stri
         writtenFiles.add(path);
         return originalWriteFile.call(sys, fileName, content, writeByteOrderMark);
     };
-}
-
-export function createSolutionBuilderHostForBaseline(
-    sys: TscCompileSystem | TestServerHost,
-    versionToWrite?: string,
-    originalRead?: (TscCompileSystem | TestServerHost)["readFile"]
-) {
-    if (sys instanceof fakes.System) makeSystemReadyForBaseline(sys, versionToWrite);
-    const { cb } = commandLineCallbacks(sys, originalRead);
-    const host = ts.createSolutionBuilderHost(sys,
-        /*createProgram*/ undefined,
-        ts.createDiagnosticReporter(sys, /*pretty*/ true),
-        ts.createBuilderStatusReporter(sys, /*pretty*/ true),
-    );
-    host.afterProgramEmitAndDiagnostics = cb;
-    host.afterEmitBundle = cb;
-    return host;
 }
 
 /**
@@ -554,7 +535,7 @@ export function verifyTsc({
                     });
                 }
                 Harness.Baseline.runBaseline(
-                    `${ts.isBuild(commandLineArgs) ? "tsbuild" : "tsc"}/${scenario}/${subScenario.split(" ").join("-")}-discrepancies.js`,
+                    tscBaselineName(scenario, subScenario, commandLineArgs, /*isWatch*/ undefined, "-discrepancies"),
                     baselines ? baselines.join("\r\n") : null // eslint-disable-line no-null/no-null
                 );
             });

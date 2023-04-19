@@ -364,3 +364,7 @@ export function baselineBuildInfo(
     const text = baselineRecorder.lines.join("\r\n");
     sys.writeFile(`${buildInfoPath}.baseline.txt`, text);
 }
+
+export function tscBaselineName(scenario: string, subScenario: string, commandLineArgs: readonly string[], isWatch?: boolean, suffix?: string) {
+    return `${ts.isBuild(commandLineArgs) ? "tsbuild" : "tsc"}${isWatch ? "Watch" : ""}/${scenario}/${subScenario.split(" ").join("-")}${suffix ? suffix : ""}.js`;
+}

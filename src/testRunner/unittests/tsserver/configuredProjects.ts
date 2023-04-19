@@ -1,8 +1,8 @@
 import * as ts from "../../_namespaces/ts";
+import { ensureErrorFreeBuild } from "../helpers/solutionBuilder";
 import {
     commonFile1,
     commonFile2,
-    ensureErrorFreeBuild,
 } from "../helpers/tscWatch";
 import {
     baselineTsserverLogs,

@@ -1,5 +1,5 @@
 import * as ts from "../../_namespaces/ts";
-import { ensureErrorFreeBuild } from "../helpers/tscWatch";
+import { ensureErrorFreeBuild } from "../helpers/solutionBuilder";
 import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,
