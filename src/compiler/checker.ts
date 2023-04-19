@@ -25163,10 +25163,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (inference.indexes) {
                     // Build a candidate from all indexes
                     let aggregateInference = getIntersectionType(inference.indexes);
-                    const constraint = getConstraintOfTypeParameter(signature.typeParameters![index]);
-                    const instantiatedConstraint = constraint && instantiateType(constraint, context.nonFixingMapper);
-                    if (!instantiatedConstraint || context.compareTypes(aggregateInference, getTypeWithThisArgument(instantiatedConstraint, aggregateInference))) {
-                        if (instantiatedConstraint && instantiatedConstraint.flags & TypeFlags.Union) {
+                    const constraint = getConstraintOfTypeParameter(inference.typeParameter);
+                    if (constraint) {
+                        const instantiatedConstraint = instantiateType(constraint, context.nonFixingMapper);
+                        const comparableToConstraint = context.compareTypes(aggregateInference, getTypeWithThisArgument(instantiatedConstraint, aggregateInference));
+                        if (instantiatedConstraint.flags & TypeFlags.Union && !comparableToConstraint) {
+                            const originalAggregateInference = aggregateInference;
                             const discriminantProps = findDiscriminantProperties(getPropertiesOfType(aggregateInference), instantiatedConstraint);
                             if (discriminantProps) {
                                 let match: Type | undefined;
@@ -25189,10 +25191,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                     aggregateInference = getSpreadType(match, aggregateInference, /*symbol*/ undefined, /*propegatedFlags*/ 0, /*readonly*/ false);
                                 }
                             }
+                            if (originalAggregateInference !== aggregateInference) {
+                                inference.candidates = append(inference.candidates, aggregateInference);
+                            }
                         }
-                        else {
-                            (inference.candidates || (inference.candidates = [])).push(aggregateInference);
+                        else if (comparableToConstraint) {
+                            inference.candidates = append(inference.candidates, aggregateInference);
                         }
+                    }
+                    else {
+                        inference.candidates = append(inference.candidates, aggregateInference);
                     }
                 }
                 const inferredCovariantType = inference.candidates ? getCovariantInference(inference, signature) : undefined;
