@@ -1,7 +1,8 @@
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 import { dedent } from "../../_namespaces/Utils";
-import { commandLineCallbacks, libContent } from "../helpers/tsc";
+import { commandLineCallbacks } from "../helpers/baseline";
+import { libContent } from "../helpers/tsc";
 import {
     applyEdit,
     createBaseline,

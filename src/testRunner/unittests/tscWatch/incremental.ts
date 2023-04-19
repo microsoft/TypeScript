@@ -1,7 +1,7 @@
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
+import { CommandLineProgram } from "../helpers/baseline";
 import {
-    CommandLineProgram,
     libContent,
 } from "../helpers/tsc";
 import {

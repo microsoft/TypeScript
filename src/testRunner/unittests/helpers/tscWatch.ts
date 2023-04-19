@@ -6,9 +6,9 @@ import {
     CommandLineCallbacks,
     commandLineCallbacks,
     CommandLineProgram,
-    createSolutionBuilderHostForBaseline,
     generateSourceMapBaselineFiles,
-} from "./tsc";
+} from "./baseline";
+import { createSolutionBuilderHostForBaseline } from "./tsc";
 import {
     changeToHostTrackingWrittenFiles,
     createWatchedSystem,

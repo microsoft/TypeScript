@@ -4,7 +4,7 @@ import * as Utils from "../../_namespaces/Utils";
 import {
     baselineBuildInfo,
     CommandLineProgram,
-} from "../helpers/tsc";
+} from "../helpers/baseline";
 import {
     applyEdit,
     createBaseline,

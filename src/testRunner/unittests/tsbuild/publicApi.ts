@@ -4,8 +4,10 @@ import * as vfs from "../../_namespaces/vfs";
 import {
     baselinePrograms,
     commandLineCallbacks,
-    loadProjectFromFiles,
     toPathWithSystem,
+} from "../helpers/baseline";
+import {
+    loadProjectFromFiles,
     TscCompileSystem,
     verifyTscBaseline,
 } from "../helpers/tsc";
