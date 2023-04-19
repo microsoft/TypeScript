@@ -1773,7 +1773,7 @@ export interface Refactor {
     getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined;
 
     /** Compute (quickly) which actions are available here */
-    getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[];
+    getAvailableActions(context: RefactorContext, includeInteractive?: boolean): readonly ApplicableRefactorInfo[];
 }
 
 /** @internal */
