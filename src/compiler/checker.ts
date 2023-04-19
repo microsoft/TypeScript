@@ -25164,9 +25164,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // Build a candidate from all indexes
                     let aggregateInference = getIntersectionType(inference.indexes);
                     const constraint = getConstraintOfTypeParameter(signature.typeParameters![index]);
-                    if (constraint) {
-                        const instantiatedConstraint = instantiateType(constraint, context.nonFixingMapper);
-                        if (instantiatedConstraint.flags & TypeFlags.Union && !context.compareTypes(aggregateInference, getTypeWithThisArgument(instantiatedConstraint, aggregateInference))) {
+                    const instantiatedConstraint = constraint && instantiateType(constraint, context.nonFixingMapper);
+                    if (!instantiatedConstraint || context.compareTypes(aggregateInference, getTypeWithThisArgument(instantiatedConstraint, aggregateInference))) {
+                        if (instantiatedConstraint && instantiatedConstraint.flags & TypeFlags.Union) {
                             const discriminantProps = findDiscriminantProperties(getPropertiesOfType(aggregateInference), instantiatedConstraint);
                             if (discriminantProps) {
                                 let match: Type | undefined;
@@ -25190,8 +25190,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 }
                             }
                         }
+                        else {
+                            (inference.candidates || (inference.candidates = [])).push(aggregateInference);
+                        }
                     }
-                    (inference.candidates || (inference.candidates = [])).push(aggregateInference);
                 }
                 const inferredCovariantType = inference.candidates ? getCovariantInference(inference, signature) : undefined;
                 if (inference.contraCandidates) {
