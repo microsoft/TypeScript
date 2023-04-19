@@ -3,8 +3,8 @@ import {
     loadProjectFromFiles,
     symbolLibContent,
     verifyTsc,
-} from "../tsc/helpers";
-import { libFile } from "../virtualFileSystemWithWatch";
+} from "../helpers/tsc";
+import { libFile } from "../helpers/virtualFileSystemWithWatch";
 
 // https://github.com/microsoft/TypeScript/issues/31696
 describe("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers to referenced projects resolve correctly", () => {

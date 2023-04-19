@@ -1,5 +1,5 @@
 import * as ts from "../../_namespaces/ts";
-import { loadProjectFromFiles, verifyTsc } from "./helpers";
+import { loadProjectFromFiles, verifyTsc } from "../helpers/tsc";
 
 function emptyModule() {
     return "export { };";

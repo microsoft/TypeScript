@@ -1,7 +1,7 @@
 import {
     loadProjectFromFiles,
     verifyTsc,
-} from "./helpers";
+} from "../helpers/tsc";
 
 describe("unittests:: tsc:: runWithoutArgs::", () => {
     verifyTsc({

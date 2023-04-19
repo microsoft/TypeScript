@@ -1,7 +1,7 @@
 import {
     loadProjectFromFiles,
     verifyTsc,
-} from "../tsc/helpers";
+} from "../helpers/tsc";
 
 // https://github.com/microsoft/TypeScript/issues/33849
 describe("unittests:: tsbuild:: exitCodeOnBogusFile:: test exit code", () => {

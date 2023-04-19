@@ -3,7 +3,7 @@ import {
     loadProjectFromDisk,
     noChangeRun,
     verifyTsc,
-} from "../tsc/helpers";
+} from "../helpers/tsc";
 
 describe("unittests:: tsbuild - with noEmitOnError", () => {
     let projFs: vfs.FileSystem;

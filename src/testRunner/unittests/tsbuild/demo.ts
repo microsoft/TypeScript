@@ -4,7 +4,7 @@ import {
     prependText,
     replaceText,
     verifyTsc,
-} from "../tsc/helpers";
+} from "../helpers/tsc";
 
 describe("unittests:: tsbuild:: on demo project", () => {
     let projFs: vfs.FileSystem;

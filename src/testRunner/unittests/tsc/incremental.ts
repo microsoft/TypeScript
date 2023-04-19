@@ -13,7 +13,7 @@ import {
     replaceText,
     TestTscEdit,
     verifyTsc,
-} from "./helpers";
+} from "../helpers/tsc";
 
 describe("unittests:: tsc:: incremental::", () => {
     verifyTsc({

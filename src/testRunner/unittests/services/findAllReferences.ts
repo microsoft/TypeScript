@@ -1,6 +1,6 @@
 import { protocol } from "../../_namespaces/ts.server";
-import { baselineTsserverLogs, createLoggerWithInMemoryLogs, createSession } from "../tsserver/helpers";
-import { createServerHost, File } from "../virtualFileSystemWithWatch";
+import { baselineTsserverLogs, createLoggerWithInMemoryLogs, createSession } from "../helpers/tsserver";
+import { createServerHost, File } from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: services:: findAllReferences", () => {
     it("does not try to open a file in a project that was updated and no longer has the file", () => {

@@ -8,7 +8,7 @@ import {
     toPathWithSystem,
     TscCompileSystem,
     verifyTscBaseline,
-} from "../tsc/helpers";
+} from "../helpers/tsc";
 
 describe("unittests:: tsbuild:: Public API with custom transformers when passed to build", () => {
     let sys: TscCompileSystem;

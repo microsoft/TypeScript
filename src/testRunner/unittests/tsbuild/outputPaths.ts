@@ -7,7 +7,7 @@ import {
     TscCompileSystem,
     verifyTsc,
     VerifyTscWithEditsInput,
-} from "../tsc/helpers";
+} from "../helpers/tsc";
 
 describe("unittests:: tsbuild - output file paths", () => {
     const noChangeProject: TestTscEdit = {

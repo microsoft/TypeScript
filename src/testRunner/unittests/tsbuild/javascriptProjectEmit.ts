@@ -4,7 +4,7 @@ import {
     replaceText,
     symbolLibContent,
     verifyTsc,
-} from "../tsc/helpers";
+} from "../helpers/tsc";
 
 describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
     verifyTsc({

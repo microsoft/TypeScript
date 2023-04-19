@@ -3,7 +3,7 @@ import {
     loadProjectFromDisk,
     replaceText,
     verifyTsc,
-} from "../tsc/helpers";
+} from "../helpers/tsc";
 
 describe("unittests:: tsbuild:: on project with emitDeclarationOnly set to true", () => {
     let projFs: vfs.FileSystem;

@@ -3,7 +3,7 @@ import {
     loadProjectFromFiles,
     noChangeRun,
     verifyTsc,
-} from "./helpers";
+} from "../helpers/tsc";
 
 describe("unittests:: tsc:: listFilesOnly::", () => {
     verifyTsc({

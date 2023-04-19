@@ -3,7 +3,7 @@ import {
     loadProjectFromFiles,
     replaceText,
     verifyTsc,
-} from "./helpers";
+} from "../helpers/tsc";
 
 describe("unittests:: tsc:: composite::", () => {
     verifyTsc({

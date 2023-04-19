@@ -7,7 +7,7 @@ import {
     replaceText,
     TestTscEdit,
     verifyTsc,
-} from "../tsc/helpers";
+} from "../helpers/tsc";
 
 describe("unittests:: tsbuild:: commandLine::", () => {
     describe("different options::", () => {

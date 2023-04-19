@@ -3,20 +3,20 @@ import * as ts from "../../_namespaces/ts";
 import {
     CommandLineProgram,
     libContent,
-} from "../tsc/helpers";
-import {
-    createWatchedSystem,
-    File,
-    libFile,
-    TestServerHost,
-} from "../virtualFileSystemWithWatch";
+} from "../helpers/tsc";
 import {
     applyEdit,
     createBaseline,
     SystemSnap,
     verifyTscWatch,
     watchBaseline,
-} from "./helpers";
+} from "../helpers/tscWatch";
+import {
+    createWatchedSystem,
+    File,
+    libFile,
+    TestServerHost,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsc-watch:: emit file --incremental", () => {
     const project = "/users/username/projects/project";

@@ -6,7 +6,7 @@ import {
     compilerOptionsToConfigJson,
     loadProjectFromFiles,
     verifyTsc,
-} from "../tsc/helpers";
+} from "../helpers/tsc";
 
 describe("unittests:: tsbuild:: fileDelete::", () => {
     function fs(childOptions: ts.CompilerOptions, mainOptions?: ts.CompilerOptions) {

@@ -17,7 +17,7 @@ import {
     TscCompileSystem,
     verifyTsc,
     verifyTscCompileLike,
-} from "../tsc/helpers";
+} from "../helpers/tsc";
 import {
     changeToHostTrackingWrittenFiles,
     createWatchedSystem,
@@ -25,7 +25,7 @@ import {
     getTsBuildProjectFilePath,
     libFile,
     TestServerHost,
-} from "../virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsbuild:: on 'sample1' project", () => {
     let projFs: vfs.FileSystem;

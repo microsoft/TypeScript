@@ -3,7 +3,7 @@ import * as vfs from "../../_namespaces/vfs";
 import {
     loadProjectFromFiles,
     verifyTsc,
-} from "../tsc/helpers";
+} from "../helpers/tsc";
 
 describe("unittests:: tsbuild:: declarationEmit", () => {
     function getFiles(): vfs.FileSet {

@@ -4,7 +4,7 @@ import {
     noChangeOnlyRuns,
     replaceText,
     verifyTsc,
-} from "../tsc/helpers";
+} from "../helpers/tsc";
 
 describe("unittests:: tsbuild:: with resolveJsonModule option on project resolveJsonModuleAndComposite", () => {
     let projFs: vfs.FileSystem;

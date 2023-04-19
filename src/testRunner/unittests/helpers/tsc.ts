@@ -6,7 +6,7 @@ import * as vpath from "../../_namespaces/vpath";
 import {
     libFile,
     TestServerHost,
-} from "../virtualFileSystemWithWatch";
+} from "./virtualFileSystemWithWatch";
 
 export interface DtsSignatureData {
     signature: string | undefined;

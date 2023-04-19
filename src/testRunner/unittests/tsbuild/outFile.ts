@@ -22,7 +22,7 @@ import {
     TscCompileSystem,
     verifyTsc,
     verifyTscCompileLike,
-} from "../tsc/helpers";
+} from "../helpers/tsc";
 
 describe("unittests:: tsbuild:: outFile::", () => {
     let outFileFs: vfs.FileSystem;

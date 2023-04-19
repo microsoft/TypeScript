@@ -1,11 +1,5 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    createServerHost,
-    File,
-    libFile,
-    TestServerHost,
-} from "../virtualFileSystemWithWatch";
-import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,
     createProjectService,
@@ -18,7 +12,13 @@ import {
     TestTypingsInstaller,
     TestTypingsInstallerWorker,
     toExternalFile,
-} from "./helpers";
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+    File,
+    libFile,
+    TestServerHost,
+} from "../helpers/virtualFileSystemWithWatch";
 
 import validatePackageName = ts.JsTyping.validatePackageName;
 import NameValidationResult = ts.JsTyping.NameValidationResult;

@@ -8,7 +8,7 @@ import {
     CommandLineProgram,
     createSolutionBuilderHostForBaseline,
     generateSourceMapBaselineFiles,
-} from "../tsc/helpers";
+} from "./tsc";
 import {
     changeToHostTrackingWrittenFiles,
     createWatchedSystem,
@@ -18,7 +18,7 @@ import {
     TestServerHost,
     TestServerHostCreationParameters,
     TestServerHostTrackingWrittenFiles,
-} from "../virtualFileSystemWithWatch";
+} from "./virtualFileSystemWithWatch";
 
 export const commonFile1: File = {
     path: "/a/b/commonFile1.ts",

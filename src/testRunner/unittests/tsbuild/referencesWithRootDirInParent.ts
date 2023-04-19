@@ -3,7 +3,7 @@ import {
     loadProjectFromDisk,
     replaceText,
     verifyTsc,
-} from "../tsc/helpers";
+} from "../helpers/tsc";
 
 describe("unittests:: tsbuild:: with rootDir of project reference in parentDirectory", () => {
     let projFs: vfs.FileSystem;
