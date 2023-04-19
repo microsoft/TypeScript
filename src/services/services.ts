@@ -2492,6 +2492,9 @@ export function createLanguageService(
         const token = findPrecedingToken(position, sourceFile);
         if (!token || token.parent.kind === SyntaxKind.SourceFile) return undefined;
 
+        // matches more than valid tag names to allow linked editing when typing is in progress or tag name is incomplete
+        const jsxTagWordPattern = "[a-zA-Z0-9:\\-\\._$]*";
+
         if (isJsxFragment(token.parent.parent)) {
             const openFragment = token.parent.parent.openingFragment;
             const closeFragment = token.parent.parent.closingFragment;
@@ -2503,7 +2506,10 @@ export function createLanguageService(
             // only allows linked editing right after opening bracket: <| ></| >
             if ((position !== openPos) && (position !== closePos)) return undefined;
 
-            return { ranges: [{ start: openPos, length: 0 }, { start: closePos, length: 0 }] };
+            return {
+                ranges: [{ start: openPos, length: 0 }, { start: closePos, length: 0 }],
+                wordPattern: jsxTagWordPattern,
+            };
         }
         else {
             // determines if the cursor is in an element tag
@@ -2534,6 +2540,7 @@ export function createLanguageService(
 
             return {
                 ranges: [{ start: openTagStart, length: openTagEnd - openTagStart }, { start: closeTagStart, length: closeTagEnd - closeTagStart }],
+                wordPattern: jsxTagWordPattern,
             };
         }
     }
