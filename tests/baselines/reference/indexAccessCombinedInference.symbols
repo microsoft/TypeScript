@@ -347,23 +347,23 @@ interface Args4 {
     0: object,
 >0 : Symbol(Args4[0], Decl(indexAccessCombinedInference.ts, 101, 17))
 
-    1: Record<keyof this["0"], Function>,
+    1: Record<keyof this[0], Function>,
 >1 : Symbol(Args4[1], Decl(indexAccessCombinedInference.ts, 102, 14))
 >Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
 >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 }
-declare function dualInputs<T extends Args4>(x: T["0"], y: T["0"], toDelay: T["1"]): T["0"] & {transformers: T["1"]};
+declare function dualInputs<T extends Args4>(x: T[0], y: T[0], toDelay: T[1]): T[0] & {transformers: T[1]};
 >dualInputs : Symbol(dualInputs, Decl(indexAccessCombinedInference.ts, 104, 1))
 >T : Symbol(T, Decl(indexAccessCombinedInference.ts, 105, 28))
 >Args4 : Symbol(Args4, Decl(indexAccessCombinedInference.ts, 98, 47))
 >x : Symbol(x, Decl(indexAccessCombinedInference.ts, 105, 45))
 >T : Symbol(T, Decl(indexAccessCombinedInference.ts, 105, 28))
->y : Symbol(y, Decl(indexAccessCombinedInference.ts, 105, 55))
+>y : Symbol(y, Decl(indexAccessCombinedInference.ts, 105, 53))
 >T : Symbol(T, Decl(indexAccessCombinedInference.ts, 105, 28))
->toDelay : Symbol(toDelay, Decl(indexAccessCombinedInference.ts, 105, 66))
+>toDelay : Symbol(toDelay, Decl(indexAccessCombinedInference.ts, 105, 62))
 >T : Symbol(T, Decl(indexAccessCombinedInference.ts, 105, 28))
 >T : Symbol(T, Decl(indexAccessCombinedInference.ts, 105, 28))
->transformers : Symbol(transformers, Decl(indexAccessCombinedInference.ts, 105, 95))
+>transformers : Symbol(transformers, Decl(indexAccessCombinedInference.ts, 105, 87))
 >T : Symbol(T, Decl(indexAccessCombinedInference.ts, 105, 28))
 
 const result = dualInputs({x: 0}, {x: 1}, {x: () => ""});

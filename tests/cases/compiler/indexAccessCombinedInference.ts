@@ -101,8 +101,8 @@ const cneither = chooseLiteral("Key", 0, "no");
 // Multiple inference sites
 interface Args4 {
     0: object,
-    1: Record<keyof this["0"], Function>,
+    1: Record<keyof this[0], Function>,
 }
-declare function dualInputs<T extends Args4>(x: T["0"], y: T["0"], toDelay: T["1"]): T["0"] & {transformers: T["1"]};
+declare function dualInputs<T extends Args4>(x: T[0], y: T[0], toDelay: T[1]): T[0] & {transformers: T[1]};
 
 const result = dualInputs({x: 0}, {x: 1}, {x: () => ""});
