@@ -6,19 +6,15 @@ import {
     CommandLineCallbacks,
     commandLineCallbacks,
     CommandLineProgram,
-    createSolutionBuilderHostForBaseline,
     generateSourceMapBaselineFiles,
-} from "../tsc/helpers";
+    tscBaselineName,
+} from "./baseline";
 import {
     changeToHostTrackingWrittenFiles,
-    createWatchedSystem,
     File,
-    FileOrFolderOrSymLink,
-    FileOrFolderOrSymLinkMap,
     TestServerHost,
-    TestServerHostCreationParameters,
     TestServerHostTrackingWrittenFiles,
-} from "../virtualFileSystemWithWatch";
+} from "./virtualFileSystemWithWatch";
 
 export const commonFile1: File = {
     path: "/a/b/commonFile1.ts",
@@ -249,10 +245,10 @@ export function runWatchBaseline<T extends ts.BuilderProgram = ts.EmitAndSemanti
             });
         }
     }
-    Baseline.runBaseline(`${ts.isBuild(commandLineArgs) ? "tsbuild" : "tsc"}${isWatch(commandLineArgs) ? "Watch" : ""}/${scenario}/${subScenario.split(" ").join("-")}.js`, baseline.join("\r\n"));
+    Baseline.runBaseline(tscBaselineName(scenario, subScenario, commandLineArgs, isWatch(commandLineArgs)), baseline.join("\r\n"));
 }
 
-function isWatch(commandLineArgs: readonly string[]) {
+export function isWatch(commandLineArgs: readonly string[]) {
     return ts.forEach(commandLineArgs, arg => {
         if (arg.charCodeAt(0) !== ts.CharacterCodes.minus) return false;
         const option = arg.slice(arg.charCodeAt(1) === ts.CharacterCodes.minus ? 2 : 1).toLowerCase();
@@ -295,35 +291,4 @@ export function verifyTscWatch(input: VerifyTscWatch) {
             });
         }
     });
-}
-
-export function createSolutionBuilder(system: TestServerHost, rootNames: readonly string[], originalRead?: TestServerHost["readFile"]) {
-    const host = createSolutionBuilderHostForBaseline(system, /*versionToWrite*/ undefined, originalRead);
-    return ts.createSolutionBuilder(host, rootNames, {});
-}
-
-export function ensureErrorFreeBuild(host: TestServerHost, rootNames: readonly string[]) {
-    // ts build should succeed
-    solutionBuildWithBaseline(host, rootNames);
-    assert.equal(host.getOutput().length, 0, JSON.stringify(host.getOutput(), /*replacer*/ undefined, " "));
-}
-
-export function solutionBuildWithBaseline(sys: TestServerHost, solutionRoots: readonly string[], originalRead?: TestServerHost["readFile"]) {
-    const originalReadFile = sys.readFile;
-    const originalWrite = sys.write;
-    const originalWriteFile = sys.writeFile;
-    ts.Debug.assert(sys.writtenFiles === undefined);
-    const solutionBuilder = createSolutionBuilder(changeToHostTrackingWrittenFiles(
-        patchHostForBuildInfoReadWrite(sys)
-    ), solutionRoots, originalRead);
-    solutionBuilder.build();
-    sys.readFile = originalReadFile;
-    sys.write = originalWrite;
-    sys.writeFile = originalWriteFile;
-    sys.writtenFiles = undefined;
-    return sys;
-}
-
-export function createSystemWithSolutionBuild(solutionRoots: readonly string[], files: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[], params?: TestServerHostCreationParameters) {
-    return solutionBuildWithBaseline(createWatchedSystem(files, params), solutionRoots);
 }
