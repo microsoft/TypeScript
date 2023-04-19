@@ -6,16 +6,17 @@ import {
     libContent
 } from "../helpers/contents";
 import {
-    appendText,
-    loadProjectFromDisk,
-    loadProjectFromFiles,
     noChangeOnlyRuns,
     noChangeRun,
-    prependText,
-    replaceText,
     TestTscEdit,
     verifyTsc,
 } from "../helpers/tsc";
+import {
+    appendText,
+    loadProjectFromDisk,
+    loadProjectFromFiles, prependText,
+    replaceText
+} from "../helpers/vfs";
 
 describe("unittests:: tsc:: incremental::", () => {
     verifyTsc({

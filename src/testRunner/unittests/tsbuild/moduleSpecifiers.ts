@@ -1,9 +1,9 @@
 import * as Utils from "../../_namespaces/Utils";
 import { symbolLibContent } from "../helpers/contents";
 import {
-    loadProjectFromFiles,
     verifyTsc,
 } from "../helpers/tsc";
+import { loadProjectFromFiles } from "../helpers/vfs";
 import { libFile } from "../helpers/virtualFileSystemWithWatch";
 
 // https://github.com/microsoft/TypeScript/issues/31696

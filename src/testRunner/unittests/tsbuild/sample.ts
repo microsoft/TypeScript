@@ -4,20 +4,20 @@ import * as ts from "../../_namespaces/ts";
 import * as vfs from "../../_namespaces/vfs";
 import { libContent } from "../helpers/contents";
 import {
-    appendText,
     createSolutionBuilderHostForBaseline,
-    loadProjectFromDisk,
-    loadProjectFromFiles,
     noChangeOnlyRuns,
     noChangeRun,
-    prependText,
-    replaceText,
     testTscCompileLike,
     TestTscEdit,
     TscCompileSystem,
     verifyTsc,
     verifyTscCompileLike,
 } from "../helpers/tsc";
+import {
+    appendText, loadProjectFromDisk,
+    loadProjectFromFiles, prependText,
+    replaceText
+} from "../helpers/vfs";
 import {
     changeToHostTrackingWrittenFiles,
     createWatchedSystem,

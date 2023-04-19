@@ -7,10 +7,10 @@ import {
     toPathWithSystem,
 } from "../helpers/baseline";
 import {
-    loadProjectFromFiles,
     TscCompileSystem,
     verifyTscBaseline,
 } from "../helpers/tsc";
+import { loadProjectFromFiles } from "../helpers/vfs";
 
 describe("unittests:: tsbuild:: Public API with custom transformers when passed to build", () => {
     let sys: TscCompileSystem;

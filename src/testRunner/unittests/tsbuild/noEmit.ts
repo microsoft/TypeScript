@@ -1,8 +1,8 @@
 import {
-    loadProjectFromFiles,
     noChangeRun,
     verifyTsc,
 } from "../helpers/tsc";
+import { loadProjectFromFiles } from "../helpers/vfs";
 
 describe("unittests:: tsbuild:: noEmit", () => {
     function verifyNoEmitWorker(subScenario: string, aTsContent: string, commandLineArgs: readonly string[]) {

@@ -4,9 +4,9 @@ import {
 } from "../../_namespaces/Utils";
 import { compilerOptionsToConfigJson } from "../helpers/contents";
 import {
-    loadProjectFromFiles,
     verifyTsc,
 } from "../helpers/tsc";
+import { loadProjectFromFiles } from "../helpers/vfs";
 
 describe("unittests:: tsbuild:: fileDelete::", () => {
     function fs(childOptions: ts.CompilerOptions, mainOptions?: ts.CompilerOptions) {

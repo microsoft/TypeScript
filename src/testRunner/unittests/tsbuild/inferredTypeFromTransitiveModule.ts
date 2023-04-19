@@ -1,10 +1,12 @@
 import * as vfs from "../../_namespaces/vfs";
 import {
-    appendText,
-    loadProjectFromDisk,
-    replaceText,
     verifyTsc,
 } from "../helpers/tsc";
+import {
+    appendText,
+    loadProjectFromDisk,
+    replaceText
+} from "../helpers/vfs";
 
 describe("unittests:: tsbuild:: inferredTypeFromTransitiveModule::", () => {
     let projFs: vfs.FileSystem;
