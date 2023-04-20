@@ -3899,7 +3899,12 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
         const libraryName = getLibraryNameFromLibFileName(libFileName);
         const resolveFrom = getInferredLibraryNameResolveFrom(options, currentDirectory, libFileName);
+        tracing?.push(tracing.Phase.Program, "resolveLibrary", { resolveFrom });
+        performance.mark("beforeResolveLibrary");
         const resolution = actualResolveLibrary(libraryName, resolveFrom, options, libFileName);
+        performance.mark("afterResolveLibrary");
+        performance.measure("ResolveLibrary", "beforeResolveLibrary", "afterResolveLibrary");
+        tracing?.pop();
         const result: LibResolution = {
             resolution,
             actual: resolution.resolvedModule ?
