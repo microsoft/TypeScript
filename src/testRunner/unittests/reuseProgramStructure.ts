@@ -549,6 +549,7 @@ describe("unittests:: Reuse program structure:: isProgramUptoDate", () => {
             program, newRootFileNames, newOptions,
             path => program.getSourceFileByPath(path)!.version, /*fileExists*/ ts.returnFalse,
             /*hasInvalidatedResolutions*/ ts.returnFalse,
+            /*hasInvalidatedLibResolutions*/ ts.returnFalse,
             /*hasChangedAutomaticTypeDirectiveNames*/ undefined,
             /*getParsedCommandLine*/ ts.returnUndefined,
             /*projectReferences*/ undefined
