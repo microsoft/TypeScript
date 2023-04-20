@@ -31,13 +31,13 @@ import {
     isString,
     mapDefined,
     matchFiles,
+    ModuleImportResult,
     ModuleResolutionHost,
     MultiMap,
     noop,
     patchWriteFileEnsuringDirectory,
     Path,
     PollingInterval,
-    RequireResult,
     server,
     SortedArray,
     sys,
@@ -292,7 +292,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
     private readonly environmentVariables?: Map<string, string>;
     private readonly executingFilePath: string;
     private readonly currentDirectory: string;
-    public require: ((initialPath: string, moduleName: string) => RequireResult) | undefined;
+    public require: ((initialPath: string, moduleName: string) => ModuleImportResult) | undefined;
     public storeFilesChangingSignatureDuringEmit = true;
     watchFile: HostWatchFile;
     private inodeWatching: boolean | undefined;
