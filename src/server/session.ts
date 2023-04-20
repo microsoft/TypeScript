@@ -136,7 +136,6 @@ import {
     toFileNameLowerCase,
     tracing,
     unmangleScopedPackageName,
-    UserPreferences,
     version,
     WithMetadata,
 } from "./_namespaces/ts";
@@ -497,14 +496,14 @@ function getRenameLocationsWorker(
     initialLocation: DocumentPosition,
     findInStrings: boolean,
     findInComments: boolean,
-    { providePrefixAndSuffixTextForRename }: UserPreferences
+    preferences: protocol.UserPreferences
 ): readonly RenameLocation[] {
     const perProjectResults = getPerProjectReferences(
         projects,
         defaultProject,
         initialLocation,
         /*isForRename*/ true,
-        (project, position) => project.getLanguageService().findRenameLocations(position.fileName, position.pos, findInStrings, findInComments, providePrefixAndSuffixTextForRename),
+        (project, position) => project.getLanguageService().findRenameLocations(position.fileName, position.pos, findInStrings, findInComments, preferences),
         (renameLocation, cb) => cb(documentSpanLocation(renameLocation)),
     );
 

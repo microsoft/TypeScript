@@ -568,15 +568,17 @@ export class SessionClient implements LanguageService {
         return notImplemented();
     }
 
-    findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): RenameLocation[] {
+    findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, preferences: UserPreferences | boolean | undefined): RenameLocation[] {
         if (!this.lastRenameEntry ||
             this.lastRenameEntry.inputs.fileName !== fileName ||
             this.lastRenameEntry.inputs.position !== position ||
             this.lastRenameEntry.inputs.findInStrings !== findInStrings ||
             this.lastRenameEntry.inputs.findInComments !== findInComments) {
-            if (providePrefixAndSuffixTextForRename !== undefined) {
+            const providePrefixAndSuffixTextForRename = typeof preferences === "boolean" ? preferences : preferences?.providePrefixAndSuffixTextForRename;
+            const quotePreference = typeof preferences === "boolean" ? undefined : preferences?.quotePreference;
+            if (providePrefixAndSuffixTextForRename !== undefined || quotePreference !== undefined) {
                 // User preferences have to be set through the `Configure` command
-                this.configure({ providePrefixAndSuffixTextForRename });
+                this.configure({ providePrefixAndSuffixTextForRename, quotePreference });
                 // Options argument is not used, so don't pass in options
                 this.getRenameInfo(fileName, position, /*preferences*/{}, findInStrings, findInComments);
                 // Restore previous user preferences

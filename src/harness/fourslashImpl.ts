@@ -1802,13 +1802,18 @@ export class TestState {
             isMarker(markerOrRange) ?
                 markerOrRange :
                 { fileName: markerOrRange.fileName, position: markerOrRange.pos };
-        const { findInStrings = false, findInComments = false, providePrefixAndSuffixTextForRename = true } = options || {};
+        const {
+            findInStrings = false,
+            findInComments = false,
+            providePrefixAndSuffixTextForRename = true,
+            quotePreference = "double"
+        } = options || {};
         const locations = this.languageService.findRenameLocations(
             fileName,
             position,
             findInStrings,
             findInComments,
-            providePrefixAndSuffixTextForRename,
+            { providePrefixAndSuffixTextForRename, quotePreference },
         );
 
         if (!locations) {
@@ -1818,7 +1823,8 @@ export class TestState {
         const renameOptions = options ?
             (options.findInStrings !== undefined ? `// @findInStrings: ${findInStrings}\n` : "") +
             (options.findInComments !== undefined ? `// @findInComments: ${findInComments}\n` : "") +
-            (options.providePrefixAndSuffixTextForRename !== undefined ? `// @providePrefixAndSuffixTextForRename: ${providePrefixAndSuffixTextForRename}\n` : "") :
+            (options.providePrefixAndSuffixTextForRename !== undefined ? `// @providePrefixAndSuffixTextForRename: ${providePrefixAndSuffixTextForRename}\n` : "") +
+            (options.quotePreference !== undefined ? `// @quotePreference: ${quotePreference}\n` : "") :
             "";
 
         return renameOptions + (renameOptions ? "\n" : "") + this.getBaselineForDocumentSpansWithFileContents(
