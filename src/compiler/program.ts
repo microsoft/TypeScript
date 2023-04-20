@@ -1231,7 +1231,8 @@ export function isProgramUptoDate(
     // If the compilation settings do no match, then the program is not up-to-date
     if (!compareDataObjects(currentOptions, newOptions)) return false;
 
-    if (some(newOptions.lib, hasInvalidatedLibResolutions)) return false;
+    // If library resolution is invalidated, then the program is not up-to-date
+    if (program.resolvedLibReferences && forEachEntry(program.resolvedLibReferences, (_value, libFileName) => hasInvalidatedLibResolutions(libFileName))) return false;
 
     // If everything matches but the text of config file is changed,
     // error locations can change for program options, so update the program
@@ -1241,11 +1242,7 @@ export function isProgramUptoDate(
 
     function sourceFileNotUptoDate(sourceFile: SourceFile) {
         return !sourceFileVersionUptoDate(sourceFile) ||
-            hasInvalidatedResolutions(sourceFile.path) ||
-            some(sourceFile.libReferenceDirectives, libRef => {
-                const { libFileName } = getLibFileNameFromLibReference(libRef);
-                return !!libFileName && hasInvalidatedLibResolutions(libFileName);
-            });
+            hasInvalidatedResolutions(sourceFile.path);
     }
 
     function sourceFileVersionUptoDate(sourceFile: SourceFile) {
