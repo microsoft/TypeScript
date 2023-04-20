@@ -67,11 +67,11 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /Users/someuser/w
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /Users/someuser/work/applications/frontend/src 1 undefined Config: /Users/someuser/work/applications/frontend/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Users/someuser/work/applications/frontend/src/app/redux/configureStore.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /Users/someuser/work/applications/frontend/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.es2016.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /Users/someuser/work/applications/frontend/types 1 undefined Project: /Users/someuser/work/applications/frontend/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /Users/someuser/work/applications/frontend/types 1 undefined Project: /Users/someuser/work/applications/frontend/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /Users/someuser/work/applications/frontend/node_modules 1 undefined Project: /Users/someuser/work/applications/frontend/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /Users/someuser/work/applications/frontend/node_modules 1 undefined Project: /Users/someuser/work/applications/frontend/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.es2016.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /Users/someuser/work/applications/frontend/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/Users/someuser/work/applications/frontend/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)

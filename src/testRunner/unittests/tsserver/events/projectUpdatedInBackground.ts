@@ -1,18 +1,18 @@
 import * as ts from "../../../_namespaces/ts";
 import {
-    createServerHost,
-    File,
-    libFile,
-    TestServerHost,
-} from "../../virtualFileSystemWithWatch";
-import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,
     createSession,
     createSessionWithCustomEventHandler,
     openFilesForSession,
     TestSession,
-} from "../helpers";
+} from "../../helpers/tsserver";
+import {
+    createServerHost,
+    File,
+    libFile,
+    TestServerHost,
+} from "../../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
     function verifyProjectsUpdatedInBackgroundEvent(scenario: string, createSession: (host: TestServerHost) => TestSession) {

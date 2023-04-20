@@ -161,6 +161,7 @@ import {
     LogLevel,
     Msg,
     NormalizedPath,
+    nullTypingsInstaller,
     Project,
     ProjectInfoTelemetryEvent,
     ProjectKind,
@@ -926,7 +927,7 @@ export interface SessionOptions {
     cancellationToken: ServerCancellationToken;
     useSingleInferredProject: boolean;
     useInferredProjectPerProjectRoot: boolean;
-    typingsInstaller: ITypingsInstaller;
+    typingsInstaller?: ITypingsInstaller;
     byteLength: (buf: string, encoding?: BufferEncoding) => number;
     hrtime: (start?: [number, number]) => [number, number];
     logger: Logger;
@@ -972,7 +973,7 @@ export class Session<TMessage = string> implements EventSender {
     constructor(opts: SessionOptions) {
         this.host = opts.host;
         this.cancellationToken = opts.cancellationToken;
-        this.typingsInstaller = opts.typingsInstaller;
+        this.typingsInstaller = opts.typingsInstaller || nullTypingsInstaller;
         this.byteLength = opts.byteLength;
         this.hrtime = opts.hrtime;
         this.logger = opts.logger;

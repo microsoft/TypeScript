@@ -1,6 +1,6 @@
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
-import { ensureErrorFreeBuild } from "../tscWatch/helpers";
+import { ensureErrorFreeBuild } from "./solutionBuilder";
 import {
     changeToHostTrackingWrittenFiles,
     createServerHost,
@@ -9,7 +9,7 @@ import {
     libFile,
     TestServerHost,
     TestServerHostTrackingWrittenFiles,
-} from "../virtualFileSystemWithWatch";
+} from "./virtualFileSystemWithWatch";
 
 export const customTypesMap = {
     path: "/typesMap.json" as ts.Path,

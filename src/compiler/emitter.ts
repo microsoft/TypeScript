@@ -289,6 +289,7 @@ import {
     JsxEmit,
     JsxExpression,
     JsxFragment,
+    JsxNamespacedName,
     JsxOpeningElement,
     JsxOpeningFragment,
     JsxSelfClosingElement,
@@ -2282,6 +2283,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                     return emitJsxSelfClosingElement(node as JsxSelfClosingElement);
                 case SyntaxKind.JsxFragment:
                     return emitJsxFragment(node as JsxFragment);
+                case SyntaxKind.JsxNamespacedName:
+                    return emitJsxNamespacedName(node as JsxNamespacedName);
 
                 // Synthesized list
                 case SyntaxKind.SyntaxList:
@@ -4221,6 +4224,12 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         }
     }
 
+    function emitJsxNamespacedName(node: JsxNamespacedName) {
+        emitIdentifierName(node.namespace);
+        writePunctuation(":");
+        emitIdentifierName(node.name);
+    }
+
     function emitJsxTagName(node: JsxTagNameExpression) {
         if (node.kind === SyntaxKind.Identifier) {
             emitExpression(node);
@@ -4862,7 +4871,10 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitEmbeddedStatement(parent: Node, node: Statement) {
-        if (isBlock(node) || getEmitFlags(parent) & EmitFlags.SingleLine) {
+        if (isBlock(node) ||
+            getEmitFlags(parent) & EmitFlags.SingleLine ||
+            preserveSourceNewlines && !getLeadingLineTerminatorCount(parent, node, ListFormat.None)
+        ) {
             writeSpace();
             emit(node);
         }

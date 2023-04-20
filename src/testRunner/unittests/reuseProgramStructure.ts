@@ -16,7 +16,7 @@ import {
     createWatchedSystem,
     File,
     libFile,
-} from "./virtualFileSystemWithWatch";
+} from "./helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: Reuse program structure:: General", () => {
     function baselineCache<T>(baselines: string[], cacheType: string, cache: ts.ModeAwareCache<T> | undefined) {

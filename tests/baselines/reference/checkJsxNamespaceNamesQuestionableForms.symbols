@@ -21,11 +21,5 @@ declare namespace JSX {
 }
 
 <a:b></a:b>;
->a:b : Symbol(JSX.IntrinsicElements['a:b'], Decl(checkJsxNamespaceNamesQuestionableForms.tsx, 5, 10))
->a:b : Symbol(JSX.IntrinsicElements['a:b'], Decl(checkJsxNamespaceNamesQuestionableForms.tsx, 5, 10))
-
 <b:c.x></b:c.x>;
 <this:b></this:b>;
->this:b : Symbol(JSX.IntrinsicElements['this:b'], Decl(checkJsxNamespaceNamesQuestionableForms.tsx, 1, 33))
->this:b : Symbol(JSX.IntrinsicElements['this:b'], Decl(checkJsxNamespaceNamesQuestionableForms.tsx, 1, 33))
-

@@ -156,6 +156,7 @@ import {
     isJsxClosingElement,
     isJsxElement,
     isJsxFragment,
+    isJsxNamespacedName,
     isJsxOpeningElement,
     isJsxOpeningFragment,
     isJsxText,
@@ -2064,6 +2065,9 @@ export function createLanguageService(
         if (isImportMeta(node.parent) && node.parent.name === node) {
             return node.parent;
         }
+        if (isJsxNamespacedName(node.parent)) {
+            return node.parent;
+        }
         return node;
     }
 
@@ -2967,10 +2971,10 @@ export function createLanguageService(
         return SmartSelectionRange.getSmartSelectionRange(position, syntaxTreeCache.getCurrentSourceFile(fileName));
     }
 
-    function getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences = emptyOptions, triggerReason: RefactorTriggerReason, kind: string): ApplicableRefactorInfo[] {
+    function getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences = emptyOptions, triggerReason: RefactorTriggerReason, kind: string, includeInteractiveActions?: boolean): ApplicableRefactorInfo[] {
         synchronizeHostData();
         const file = getValidSourceFile(fileName);
-        return refactor.getApplicableRefactors(getRefactorContext(file, positionOrRange, preferences, emptyOptions, triggerReason, kind));
+        return refactor.getApplicableRefactors(getRefactorContext(file, positionOrRange, preferences, emptyOptions, triggerReason, kind), includeInteractiveActions);
     }
 
     function getEditsForRefactor(

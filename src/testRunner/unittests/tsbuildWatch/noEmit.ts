@@ -1,9 +1,9 @@
-import { libContent } from "../tsc/helpers";
-import { verifyTscWatch } from "../tscWatch/helpers";
+import { libContent } from "../helpers/contents";
+import { verifyTscWatch } from "../helpers/tscWatch";
 import {
     createWatchedSystem,
     libFile,
-} from "../virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsbuildWatch:: watchMode:: with noEmit", () => {
     verifyTscWatch({

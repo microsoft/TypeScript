@@ -1,17 +1,17 @@
 import * as ts from "../../_namespaces/ts";
-import { ensureErrorFreeBuild } from "../tscWatch/helpers";
-import {
-    createServerHost,
-    File,
-    libFile,
-} from "../virtualFileSystemWithWatch";
+import { ensureErrorFreeBuild } from "../helpers/solutionBuilder";
 import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,
     createSession,
     openFilesForSession,
     protocolToLocation,
-} from "./helpers";
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+    File,
+    libFile,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: with project references and compile on save", () => {
     const dependecyLocation = `/user/username/projects/myproject/dependency`;

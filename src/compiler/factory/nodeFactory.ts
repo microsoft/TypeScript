@@ -267,6 +267,7 @@ import {
     JSDocVariadicType,
     JsxAttribute,
     JsxAttributeLike,
+    JsxAttributeName,
     JsxAttributes,
     JsxAttributeValue,
     JsxChild,
@@ -275,6 +276,7 @@ import {
     JsxElement,
     JsxExpression,
     JsxFragment,
+    JsxNamespacedName,
     JsxOpeningElement,
     JsxOpeningFragment,
     JsxSelfClosingElement,
@@ -907,6 +909,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         updateJsxSpreadAttribute,
         createJsxExpression,
         updateJsxExpression,
+        createJsxNamespacedName,
+        updateJsxNamespacedName,
         createCaseClause,
         updateCaseClause,
         createDefaultClause,
@@ -5579,7 +5583,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function createJsxAttribute(name: Identifier, initializer: JsxAttributeValue | undefined) {
+    function createJsxAttribute(name: JsxAttributeName, initializer: JsxAttributeValue | undefined) {
         const node = createBaseDeclaration<JsxAttribute>(SyntaxKind.JsxAttribute);
         node.name = name;
         node.initializer = initializer;
@@ -5591,7 +5595,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function updateJsxAttribute(node: JsxAttribute, name: Identifier, initializer: JsxAttributeValue | undefined) {
+    function updateJsxAttribute(node: JsxAttribute, name: JsxAttributeName, initializer: JsxAttributeValue | undefined) {
         return node.name !== name
             || node.initializer !== initializer
             ? update(createJsxAttribute(name, initializer), node)
@@ -5648,6 +5652,26 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     function updateJsxExpression(node: JsxExpression, expression: Expression | undefined) {
         return node.expression !== expression
             ? update(createJsxExpression(node.dotDotDotToken, expression), node)
+            : node;
+    }
+
+    // @api
+    function createJsxNamespacedName(namespace: Identifier, name: Identifier) {
+        const node = createBaseNode<JsxNamespacedName>(SyntaxKind.JsxNamespacedName);
+        node.namespace = namespace;
+        node.name = name;
+        node.transformFlags |=
+            propagateChildFlags(node.namespace) |
+            propagateChildFlags(node.name) |
+            TransformFlags.ContainsJsx;
+        return node;
+    }
+
+    // @api
+    function updateJsxNamespacedName(node: JsxNamespacedName, namespace: Identifier, name: Identifier) {
+        return node.namespace !== namespace
+            || node.name !== name
+            ? update(createJsxNamespacedName(namespace, name), node)
             : node;
     }
 
