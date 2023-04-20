@@ -962,7 +962,7 @@ export class ProjectService {
     public readonly globalPlugins: readonly string[];
     public readonly pluginProbeLocations: readonly string[];
     public readonly allowLocalPluginLoads: boolean;
-    private currentPluginConfigOverrides: Map<string, any> | undefined;
+    /** @internal */ currentPluginConfigOverrides: Map<string, any> | undefined;
 
     public readonly typesMapLocation: string | undefined;
 
@@ -2189,7 +2189,6 @@ export class ProjectService {
             /*lastFileExceededProgramSize*/ this.getFilenameForExceededTotalSizeLimitForNonTsFiles(projectFileName, compilerOptions, files, externalFilePropertyReader),
             options.compileOnSave === undefined ? true : options.compileOnSave,
             /*projectFilePath*/ undefined,
-            this.currentPluginConfigOverrides,
             watchOptionsAndErrors?.watchOptions
         );
         project.setProjectErrors(watchOptionsAndErrors?.errors);
@@ -2354,7 +2353,7 @@ export class ProjectService {
             project.enableLanguageService();
             this.watchWildcards(configFilename, configFileExistenceInfo, project);
         }
-        project.enablePluginsWithOptions(compilerOptions, this.currentPluginConfigOverrides);
+        project.enablePluginsWithOptions(compilerOptions);
         const filesToAdd = parsedCommandLine.fileNames.concat(project.getExternalFiles());
         this.updateRootAndOptionsOfNonInferredProject(project, filesToAdd, fileNamePropertyReader, compilerOptions, parsedCommandLine.typeAcquisition!, parsedCommandLine.compileOnSave, parsedCommandLine.watchOptions);
         tracing?.pop();
@@ -2737,7 +2736,7 @@ export class ProjectService {
             typeAcquisition = this.typeAcquisitionForInferredProjects;
         }
         watchOptionsAndErrors = watchOptionsAndErrors || undefined;
-        const project = new InferredProject(this, this.documentRegistry, compilerOptions, watchOptionsAndErrors?.watchOptions, projectRootPath, currentDirectory, this.currentPluginConfigOverrides, typeAcquisition);
+        const project = new InferredProject(this, this.documentRegistry, compilerOptions, watchOptionsAndErrors?.watchOptions, projectRootPath, currentDirectory, typeAcquisition);
         project.setProjectErrors(watchOptionsAndErrors?.errors);
         if (isSingleInferredProject) {
             this.inferredProjects.unshift(project);
@@ -4243,7 +4242,7 @@ export class ProjectService {
     }
 
     /** @internal */
-    requestEnablePlugin(project: Project, pluginConfigEntry: PluginImport, searchPaths: string[], pluginConfigOverrides: Map<string, any> | undefined) {
+    requestEnablePlugin(project: Project, pluginConfigEntry: PluginImport, searchPaths: string[]) {
         if (!this.host.importPlugin && !this.host.require) {
             this.logger.info("Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded");
             return;
@@ -4257,7 +4256,7 @@ export class ProjectService {
 
         // If the host supports dynamic import, begin enabling the plugin asynchronously.
         if (this.host.importPlugin) {
-            const importPromise = project.beginEnablePluginAsync(pluginConfigEntry, searchPaths, pluginConfigOverrides);
+            const importPromise = project.beginEnablePluginAsync(pluginConfigEntry, searchPaths);
             this.pendingPluginEnablements ??= new Map();
             let promises = this.pendingPluginEnablements.get(project);
             if (!promises) this.pendingPluginEnablements.set(project, promises = []);
@@ -4266,7 +4265,7 @@ export class ProjectService {
         }
 
         // Otherwise, load the plugin using `require`
-        project.endEnablePlugin(project.beginEnablePluginSync(pluginConfigEntry, searchPaths, pluginConfigOverrides));
+        project.endEnablePlugin(project.beginEnablePluginSync(pluginConfigEntry, searchPaths));
     }
 
     /** @internal */
