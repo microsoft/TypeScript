@@ -14543,8 +14543,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
 
-            const classType = declaration.kind === SyntaxKind.Constructor ?
-                getDeclaredTypeOfClassOrInterface(getMergedSymbol((declaration.parent as ClassDeclaration).symbol))
+            const hostDeclaration = isJSDocSignature(declaration) ? getEffectiveJSDocHost(declaration) : declaration;
+            const classType = hostDeclaration && isConstructorDeclaration(hostDeclaration) ?
+                getDeclaredTypeOfClassOrInterface(getMergedSymbol((hostDeclaration.parent as ClassDeclaration).symbol))
                 : undefined;
             const typeParameters = classType ? classType.localTypeParameters : getTypeParametersFromDeclaration(declaration);
             if (hasRestParameter(declaration) || isInJSFile(declaration) && maybeAddJsSyntheticRestParameter(declaration, parameters)) {
