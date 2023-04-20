@@ -1906,6 +1906,7 @@ export interface RenameOptions {
     readonly findInStrings?: boolean;
     readonly findInComments?: boolean;
     readonly providePrefixAndSuffixTextForRename?: boolean;
+    readonly quotePreference?: "auto" | "double" | "single";
 }
 export type BaselineCommandWithMarkerOrRange = {
     type: "findAllReferences" | "goToDefinition" | "getDefinitionAtPosition" | "goToSourceDefinition" | "goToType" | "goToImplementation";
