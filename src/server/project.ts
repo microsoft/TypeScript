@@ -38,7 +38,6 @@ import {
     FileWatcherCallback,
     FileWatcherEventKind,
     filter,
-    firstDefined,
     flatMap,
     forEach,
     forEachEntry,
@@ -253,12 +252,14 @@ export interface PluginModuleWithName {
 export type PluginModuleFactory = (mod: { typescript: typeof ts }) => PluginModule;
 
 /** @internal */
-export interface BeginEnablePluginResult {
+export interface PluginImportResult<T> {
     pluginConfigEntry: PluginImport;
-    pluginConfigOverrides: Map<string, any> | undefined;
-    resolvedModule: PluginModuleFactory | undefined;
+    resolvedModule: T | undefined;
     errorLogs: string[] | undefined;
 }
+
+/** @internal */
+export type BeginEnablePluginResult = PluginImportResult<PluginModuleFactory>;
 
 /**
  * The project root can be script info - if root is present,
@@ -398,36 +399,62 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         return hasOneOrMoreJsAndNoTsFiles(this);
     }
 
-    public static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void, logErrors?: (message: string) => void): {} | undefined {
-        const resolvedPath = normalizeSlashes(host.resolvePath(combinePaths(initialDir, "node_modules")));
-        log(`Loading ${moduleName} from ${initialDir} (resolved to ${resolvedPath})`);
-        const result = host.require!(resolvedPath, moduleName); // TODO: GH#18217
-        if (result.error) {
-            const err = result.error.stack || result.error.message || JSON.stringify(result.error);
-            (logErrors || log)(`Failed to load module '${moduleName}' from ${resolvedPath}: ${err}`);
-            return undefined;
-        }
-        return result.module;
+    public static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void): {} | undefined {
+        return Project.importServicePluginSync({ name: moduleName }, [initialDir], host, log).resolvedModule;
     }
 
     /** @internal */
-    public static async importServicePluginAsync(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void, logErrors?: (message: string) => void): Promise<{} | undefined> {
-        Debug.assertIsDefined(host.importPlugin);
-        const resolvedPath = combinePaths(initialDir, "node_modules");
-        log(`Dynamically importing ${moduleName} from ${initialDir} (resolved to ${resolvedPath})`);
-        let result: ModuleImportResult;
-        try {
-            result = await host.importPlugin(resolvedPath, moduleName);
-        }
-        catch (e) {
-            result = { module: undefined, error: e };
-        }
-        if (result.error) {
+    public static importServicePluginSync<T = {}>(
+        pluginConfigEntry: PluginImport,
+        searchPaths: string[],
+        host: ServerHost,
+        log: (message: string) => void,
+    ): PluginImportResult<T> {
+        Debug.assertIsDefined(host.require);
+        let errorLogs: string[] | undefined;
+        let resolvedModule: T | undefined;
+        for (const initialDir of searchPaths) {
+            const resolvedPath = normalizeSlashes(host.resolvePath(combinePaths(initialDir, "node_modules")));
+            log(`Loading ${pluginConfigEntry.name} from ${initialDir} (resolved to ${resolvedPath})`);
+            const result = host.require(resolvedPath, pluginConfigEntry.name); // TODO: GH#18217
+            if (!result.error) {
+                resolvedModule = result.module as T;
+                break;
+            }
             const err = result.error.stack || result.error.message || JSON.stringify(result.error);
-            (logErrors || log)(`Failed to dynamically import module '${moduleName}' from ${resolvedPath}: ${err}`);
-            return undefined;
+            (errorLogs ??= []).push(`Failed to load module '${pluginConfigEntry.name}' from ${resolvedPath}: ${err}`);
         }
-        return result.module;
+        return { pluginConfigEntry, resolvedModule, errorLogs };
+    }
+
+    /** @internal */
+    public static async importServicePluginAsync<T = {}>(
+        pluginConfigEntry: PluginImport,
+        searchPaths: string[],
+        host: ServerHost,
+        log: (message: string) => void,
+    ): Promise<PluginImportResult<T>> {
+        Debug.assertIsDefined(host.importPlugin);
+        let errorLogs: string[] | undefined;
+        let resolvedModule: T | undefined;
+        for (const initialDir of searchPaths) {
+            const resolvedPath = combinePaths(initialDir, "node_modules");
+            log(`Dynamically importing ${pluginConfigEntry.name} from ${initialDir} (resolved to ${resolvedPath})`);
+            let result: ModuleImportResult;
+            try {
+                result = await host.importPlugin(resolvedPath, pluginConfigEntry.name);
+            }
+            catch (e) {
+                result = { module: undefined, error: e };
+            }
+            if (!result.error) {
+                resolvedModule = result.module as T;
+                break;
+            }
+            const err = result.error.stack || result.error.message || JSON.stringify(result.error);
+            (errorLogs ??= []).push(`Failed to dynamically import module '${pluginConfigEntry.name}' from ${resolvedPath}: ${err}`);
+        }
+        return { pluginConfigEntry, resolvedModule, errorLogs };
     }
 
     /** @internal */
@@ -1807,7 +1834,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         ];
     }
 
-    protected enableGlobalPlugins(options: CompilerOptions, pluginConfigOverrides: Map<string, any> | undefined): void {
+    protected enableGlobalPlugins(options: CompilerOptions): void {
         if (!this.projectService.globalPlugins.length) return;
         const host = this.projectService.host;
 
@@ -1828,80 +1855,16 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             // Provide global: true so plugins can detect why they can't find their config
             this.projectService.logger.info(`Loading global plugin ${globalPluginName}`);
 
-            this.enablePlugin({ name: globalPluginName, global: true } as PluginImport, searchPaths, pluginConfigOverrides);
+            this.enablePlugin({ name: globalPluginName, global: true } as PluginImport, searchPaths);
         }
     }
 
-    /**
-     * Performs the initial steps of enabling a plugin by finding and instantiating the module for a plugin synchronously using 'require'.
-     *
-     * @internal
-     */
-    beginEnablePluginSync(pluginConfigEntry: PluginImport, searchPaths: string[], pluginConfigOverrides: Map<string, any> | undefined): BeginEnablePluginResult {
-        Debug.assertIsDefined(this.projectService.host.require);
-
-        let errorLogs: string[] | undefined;
-        const log = (message: string) => this.projectService.logger.info(message);
-        const logError = (message: string) => {
-            (errorLogs ??= []).push(message);
-        };
-        const resolvedModule = firstDefined(searchPaths, searchPath =>
-            Project.resolveModule(pluginConfigEntry.name, searchPath, this.projectService.host, log, logError) as PluginModuleFactory | undefined);
-        return { pluginConfigEntry, pluginConfigOverrides, resolvedModule, errorLogs };
+    protected enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[]): void {
+        this.projectService.requestEnablePlugin(this, pluginConfigEntry, searchPaths);
     }
 
-    /**
-     * Performs the initial steps of enabling a plugin by finding and instantiating the module for a plugin asynchronously using dynamic `import`.
-     *
-     * @internal
-     */
-    async beginEnablePluginAsync(pluginConfigEntry: PluginImport, searchPaths: string[], pluginConfigOverrides: Map<string, any> | undefined): Promise<BeginEnablePluginResult> {
-        Debug.assertIsDefined(this.projectService.host.importPlugin);
-
-        let errorLogs: string[] | undefined;
-        const log = (message: string) => this.projectService.logger.info(message);
-        const logError = (message: string) => {
-            (errorLogs ??= []).push(message);
-        };
-
-        let resolvedModule: PluginModuleFactory | undefined;
-        for (const searchPath of searchPaths) {
-            resolvedModule = await Project.importServicePluginAsync(pluginConfigEntry.name, searchPath, this.projectService.host, log, logError) as PluginModuleFactory | undefined;
-            if (resolvedModule !== undefined) {
-                break;
-            }
-        }
-        return { pluginConfigEntry, pluginConfigOverrides, resolvedModule, errorLogs };
-    }
-
-    /**
-     * Performs the remaining steps of enabling a plugin after its module has been instantiated.
-     *
-     * @internal
-     */
-    endEnablePlugin({ pluginConfigEntry, pluginConfigOverrides, resolvedModule, errorLogs }: BeginEnablePluginResult) {
-        if (resolvedModule) {
-            const configurationOverride = pluginConfigOverrides && pluginConfigOverrides.get(pluginConfigEntry.name);
-            if (configurationOverride) {
-                // Preserve the name property since it's immutable
-                const pluginName = pluginConfigEntry.name;
-                pluginConfigEntry = configurationOverride;
-                pluginConfigEntry.name = pluginName;
-            }
-
-            this.enableProxy(resolvedModule, pluginConfigEntry);
-        }
-        else {
-            forEach(errorLogs, message => this.projectService.logger.info(message));
-            this.projectService.logger.info(`Couldn't find ${pluginConfigEntry.name}`);
-        }
-    }
-
-    protected enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[], pluginConfigOverrides: Map<string, any> | undefined): void {
-        this.projectService.requestEnablePlugin(this, pluginConfigEntry, searchPaths, pluginConfigOverrides);
-    }
-
-    private enableProxy(pluginModuleFactory: PluginModuleFactory, configEntry: PluginImport) {
+    /** @internal */
+    enableProxy(pluginModuleFactory: PluginModuleFactory, configEntry: PluginImport) {
         try {
             if (typeof pluginModuleFactory !== "function") {
                 this.projectService.logger.info(`Skipped loading plugin ${configEntry.name} because it did not expose a proper factory function`);
@@ -2188,7 +2151,6 @@ export class InferredProject extends Project {
         watchOptions: WatchOptions | undefined,
         projectRootPath: NormalizedPath | undefined,
         currentDirectory: string,
-        pluginConfigOverrides: Map<string, any> | undefined,
         typeAcquisition: TypeAcquisition | undefined) {
         super(projectService.newInferredProjectName(),
             ProjectKind.Inferred,
@@ -2207,7 +2169,7 @@ export class InferredProject extends Project {
         if (!projectRootPath && !projectService.useSingleInferredProject) {
             this.canonicalCurrentDirectory = projectService.toCanonicalFileName(this.currentDirectory);
         }
-        this.enableGlobalPlugins(this.getCompilerOptions(), pluginConfigOverrides);
+        this.enableGlobalPlugins(this.getCompilerOptions());
     }
 
     override addRoot(info: ScriptInfo) {
@@ -2729,7 +2691,7 @@ export class ConfiguredProject extends Project {
     }
 
     /** @internal */
-    enablePluginsWithOptions(options: CompilerOptions, pluginConfigOverrides: Map<string, any> | undefined): void {
+    enablePluginsWithOptions(options: CompilerOptions): void {
         this.plugins.length = 0;
         if (!options.plugins?.length && !this.projectService.globalPlugins.length) return;
         const host = this.projectService.host;
@@ -2748,11 +2710,11 @@ export class ConfiguredProject extends Project {
         // Enable tsconfig-specified plugins
         if (options.plugins) {
             for (const pluginConfigEntry of options.plugins) {
-                this.enablePlugin(pluginConfigEntry, searchPaths, pluginConfigOverrides);
+                this.enablePlugin(pluginConfigEntry, searchPaths);
             }
         }
 
-        return this.enableGlobalPlugins(options, pluginConfigOverrides);
+        return this.enableGlobalPlugins(options);
     }
 
     /**
@@ -2884,7 +2846,6 @@ export class ExternalProject extends Project {
         lastFileExceededProgramSize: string | undefined,
         public override compileOnSaveEnabled: boolean,
         projectFilePath?: string,
-        pluginConfigOverrides?: Map<string, any>,
         watchOptions?: WatchOptions) {
         super(externalProjectName,
             ProjectKind.External,
@@ -2897,7 +2858,7 @@ export class ExternalProject extends Project {
             watchOptions,
             projectService.host,
             getDirectoryPath(projectFilePath || normalizeSlashes(externalProjectName)));
-        this.enableGlobalPlugins(this.getCompilerOptions(), pluginConfigOverrides);
+        this.enableGlobalPlugins(this.getCompilerOptions());
     }
 
     override updateGraph() {

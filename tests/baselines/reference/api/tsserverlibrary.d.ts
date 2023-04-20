@@ -3254,7 +3254,7 @@ declare namespace ts {
             private readonly cancellationToken;
             isNonTsProject(): boolean;
             isJsOnlyProject(): boolean;
-            static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void, logErrors?: (message: string) => void): {} | undefined;
+            static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void): {} | undefined;
             isKnownTypesPackageName(name: string): boolean;
             installPackage(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
             private get typingsCache();
@@ -3341,9 +3341,8 @@ declare namespace ts {
             setTypeAcquisition(newTypeAcquisition: TypeAcquisition | undefined): void;
             getTypeAcquisition(): ts.TypeAcquisition;
             protected removeRoot(info: ScriptInfo): void;
-            protected enableGlobalPlugins(options: CompilerOptions, pluginConfigOverrides: Map<string, any> | undefined): void;
-            protected enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[], pluginConfigOverrides: Map<string, any> | undefined): void;
-            private enableProxy;
+            protected enableGlobalPlugins(options: CompilerOptions): void;
+            protected enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[]): void;
             /** Starts a new check for diagnostics. Call this if some file has updated that would cause diagnostics to be changed. */
             refreshDiagnostics(): void;
         }
@@ -3644,7 +3643,6 @@ declare namespace ts {
             readonly globalPlugins: readonly string[];
             readonly pluginProbeLocations: readonly string[];
             readonly allowLocalPluginLoads: boolean;
-            private currentPluginConfigOverrides;
             readonly typesMapLocation: string | undefined;
             readonly serverMode: LanguageServiceMode;
             /** Tracks projects that we have already sent telemetry for. */
