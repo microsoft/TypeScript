@@ -137,6 +137,7 @@ import {
     InlayHints,
     InlayHintsContext,
     insertSorted,
+    InteractiveRefactorArguments,
     InterfaceType,
     IntersectionType,
     isArray,
@@ -3002,24 +3003,11 @@ export function createLanguageService(
         refactorName: string,
         actionName: string,
         preferences: UserPreferences = emptyOptions,
+        interactiveRefactorArguments?: InteractiveRefactorArguments,
     ): RefactorEditInfo | undefined {
         synchronizeHostData();
         const file = getValidSourceFile(fileName);
-        return refactor.getEditsForRefactor(getRefactorContext(file, positionOrRange, preferences, formatOptions), refactorName, actionName);
-    }
-
-    function getEditsForMoveToFileRefactor(
-        fileName: string,
-        newFile: string,
-        formatOptions: FormatCodeSettings,
-        positionOrRange: number | TextRange,
-        refactorName: string,
-        actionName: string,
-        preferences: UserPreferences = emptyOptions,
-    ): RefactorEditInfo | undefined {
-        synchronizeHostData();
-        const file = getValidSourceFile(fileName);
-        return refactor.getEditsForMoveToFileRefactor(getRefactorContext(file, positionOrRange, preferences, formatOptions), newFile, refactorName, actionName);
+        return refactor.getEditsForRefactor(getRefactorContext(file, positionOrRange, preferences, formatOptions), refactorName, actionName, interactiveRefactorArguments);
     }
 
     function toLineColumnOffset(fileName: string, position: number): LineAndCharacter {
@@ -3115,9 +3103,8 @@ export function createLanguageService(
         getAutoImportProvider,
         updateIsDefinitionOfReferencedSymbols,
         getApplicableRefactors,
-        getMoveToRefactoringFileSuggestions,
         getEditsForRefactor,
-        getEditsForMoveToFileRefactor,
+        getMoveToRefactoringFileSuggestions,
         toLineColumnOffset,
         getSourceMapper: () => sourceMapper,
         clearSourceMapperCache: () => sourceMapper.clearCache(),

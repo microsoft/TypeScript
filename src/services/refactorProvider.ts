@@ -2,6 +2,7 @@ import {
     ApplicableRefactorInfo,
     arrayFrom,
     flatMapIterator,
+    InteractiveRefactorArguments,
     Refactor,
     RefactorContext,
     RefactorEditInfo,
@@ -30,13 +31,7 @@ export function getApplicableRefactors(context: RefactorContext, includeInteract
 }
 
 /** @internal */
-export function getEditsForRefactor(context: RefactorContext, refactorName: string, actionName: string): RefactorEditInfo | undefined {
+export function getEditsForRefactor(context: RefactorContext, refactorName: string, actionName: string, interactiveRefactorArguments?: InteractiveRefactorArguments): RefactorEditInfo | undefined {
     const refactor = refactors.get(refactorName);
-    return refactor && refactor.getEditsForAction(context, actionName);
-}
-
-/** @internal */
-export function getEditsForMoveToFileRefactor(context: RefactorContext, newFile: string, refactorName: string, actionName: string): RefactorEditInfo | undefined {
-    const refactor = refactors.get(refactorName);
-    return refactor && refactor.getEditsForAction(context, actionName, newFile);
+    return refactor && refactor.getEditsForAction(context, actionName, interactiveRefactorArguments);
 }

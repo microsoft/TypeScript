@@ -31,5 +31,5 @@ import {} from "./somefile";
 function f(a: B) { }
 `,
     },
-    newFile: "/bar.ts",
+    interactiveRefactorArguments: { targetFile: "/bar.ts" }
 });

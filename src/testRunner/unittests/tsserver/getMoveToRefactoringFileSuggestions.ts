@@ -1,14 +1,14 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    createServerHost,
-    File,
-} from "../virtualFileSystemWithWatch";
-import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,
     createSession,
-    openFilesForSession,
-} from "./helpers";
+    openFilesForSession
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+    File
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: getMoveToRefactoringFileSuggestions", () => {
     it("works for suggesting a list of files, excluding node_modules within a project", () => {

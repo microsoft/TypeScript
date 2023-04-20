@@ -33,5 +33,5 @@ verify.moveToFile({
 esm.ohno;
 `,
     },
-    newFile: "/bar.cts",
+    interactiveRefactorArguments: { targetFile: "/bar.cts" }
 });

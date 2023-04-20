@@ -29,5 +29,5 @@ import { a } from '../dir1/a';
 export const y = b + a;
 `,
     },
-    newFile: "/src/dir2/bar.ts",
+    interactiveRefactorArguments: { targetFile: "/src/dir2/bar.ts" }
 });

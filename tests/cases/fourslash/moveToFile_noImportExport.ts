@@ -23,5 +23,5 @@ const q = "test";
 export const y = z + 2;
 `,
     },
-    newFile: "/bar.ts",
+    interactiveRefactorArguments: { targetFile: "/bar.ts" }
 });

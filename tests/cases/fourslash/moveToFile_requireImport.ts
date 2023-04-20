@@ -40,5 +40,5 @@ const z = 0;
 exports.z = 0;
 `,
     },
-    newFile: "/bar.js"
+    interactiveRefactorArguments: { targetFile: "/bar.js" }
 });

@@ -19,5 +19,5 @@ const a = 1;
 a();
 `,
     },
-    newFile: "/bar.ts",
+    interactiveRefactorArguments: { targetFile: "/bar.ts" }
 });

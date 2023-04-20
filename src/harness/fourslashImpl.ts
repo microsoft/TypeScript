@@ -3908,12 +3908,12 @@ export class TestState {
     public moveToFile(options: FourSlashInterface.MoveToFileOptions): void {
         assert(this.getRanges().length === 1, "Must have exactly one fourslash range (source enclosed between '[|' and '|]' delimiters) in the source file");
         const range = this.getRanges()[0];
-        const refactor = ts.find(this.getApplicableRefactors(range, { allowTextChangesInNewFiles: true }), r => r.name === "Move to file")!;
+        const refactor = ts.find(this.getApplicableRefactors(range, { allowTextChangesInNewFiles: true }, /*triggerReason*/ undefined, /*kind*/ undefined, /*includeInteractiveActions*/ true), r => r.name === "Move to file")!;
         assert(refactor.actions.length === 1);
         const action = ts.first(refactor.actions);
         assert(action.name === "Move to file" && action.description === "Move to file");
 
-        const editInfo = this.languageService.getEditsForMoveToFileRefactor(range.fileName, options.newFile, this.formatCodeSettings, range, refactor.name, action.name, options.preferences || ts.emptyOptions)!;
+        const editInfo = this.languageService.getEditsForRefactor(range.fileName, this.formatCodeSettings, range, refactor.name, action.name, options.preferences || ts.emptyOptions, options.interactiveRefactorArguments)!;
         this.verifyNewContent({ newFileContent: options.newFileContents }, editInfo.edits);
     }
 
@@ -4222,11 +4222,11 @@ export class TestState {
     private getApplicableRefactorsAtSelection(triggerReason: ts.RefactorTriggerReason = "implicit", kind?: string, preferences = ts.emptyOptions) {
         return this.getApplicableRefactorsWorker(this.getSelection(), this.activeFile.fileName, preferences, triggerReason, kind);
     }
-    private getApplicableRefactors(rangeOrMarker: Range | Marker, preferences = ts.emptyOptions, triggerReason: ts.RefactorTriggerReason = "implicit", kind?: string): readonly ts.ApplicableRefactorInfo[] {
-        return this.getApplicableRefactorsWorker("position" in rangeOrMarker ? rangeOrMarker.position : rangeOrMarker, rangeOrMarker.fileName, preferences, triggerReason, kind); // eslint-disable-line local/no-in-operator
+    private getApplicableRefactors(rangeOrMarker: Range | Marker, preferences = ts.emptyOptions, triggerReason: ts.RefactorTriggerReason = "implicit", kind?: string, includeInteractiveActions?: boolean): readonly ts.ApplicableRefactorInfo[] {
+        return this.getApplicableRefactorsWorker("position" in rangeOrMarker ? rangeOrMarker.position : rangeOrMarker, rangeOrMarker.fileName, preferences, triggerReason, kind, includeInteractiveActions); // eslint-disable-line local/no-in-operator
     }
-    private getApplicableRefactorsWorker(positionOrRange: number | ts.TextRange, fileName: string, preferences = ts.emptyOptions, triggerReason: ts.RefactorTriggerReason, kind?: string): readonly ts.ApplicableRefactorInfo[] {
-        return this.languageService.getApplicableRefactors(fileName, positionOrRange, preferences, triggerReason, kind) || ts.emptyArray;
+    private getApplicableRefactorsWorker(positionOrRange: number | ts.TextRange, fileName: string, preferences = ts.emptyOptions, triggerReason: ts.RefactorTriggerReason, kind?: string, includeInteractiveActions?: boolean): readonly ts.ApplicableRefactorInfo[] {
+        return this.languageService.getApplicableRefactors(fileName, positionOrRange, preferences, triggerReason, kind, includeInteractiveActions) || ts.emptyArray;
     }
 
     public configurePlugin(pluginName: string, configuration: any): void {

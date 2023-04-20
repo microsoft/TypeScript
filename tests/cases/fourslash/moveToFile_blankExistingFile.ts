@@ -24,5 +24,5 @@ import { p } from './a';
 const y: Date = p + b;
 `,
     },
-    newFile: "/bar.ts",
+    interactiveRefactorArguments: {targetFile: "/bar.ts"},
 });

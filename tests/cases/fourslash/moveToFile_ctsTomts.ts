@@ -32,5 +32,5 @@ const a = 2;
 export const y = p + b;
 `,
     },
-    newFile: "/src/dir2/bar.mts",
+    interactiveRefactorArguments: { targetFile: "/src/dir2/bar.mts" },
 });

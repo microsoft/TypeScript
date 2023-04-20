@@ -37,7 +37,7 @@ const q = 0;
 const y = p + b;
 `,
     },
-    newFile: "/bar.ts",
+    interactiveRefactorArguments: { targetFile: "/bar.ts" },
 
     preferences: {
         quotePreference: "single",

@@ -142,7 +142,6 @@ export const enum CommandTypes {
 
     GetApplicableRefactors = "getApplicableRefactors",
     GetEditsForRefactor = "getEditsForRefactor",
-    GetEditsForMoveToFileRefactor = "getEditsForMoveToFileRefactor",
     GetMoveToRefactoringFileSuggestions = "getMoveToRefactoringFileSuggestions",
     /** @internal */
     GetEditsForRefactorFull = "getEditsForRefactor-full",
@@ -709,24 +708,6 @@ export type GetEditsForRefactorRequestArgs = FileLocationOrRangeRequestArgs & {
 export interface GetEditsForRefactorResponse extends Response {
     body?: RefactorEditInfo;
 }
-
-export interface GetEditsForMoveToFileRefactorRequest extends Request {
-    command: CommandTypes.GetEditsForMoveToFileRefactor;
-    arguments: GetEditsForMoveToFileRefactorRequestArgs;
-}
-
-export interface GetEditsForMoveToFileRefactorResponse extends Response {
-    body?: RefactorEditInfo; // TODO: maybe use a new type
-}
-
-export type GetEditsForMoveToFileRefactorRequestArgs = FileLocationOrRangeRequestArgs & {
-    /* The 'name' property from the refactoring that offered this action */
-    refactor: string;
-    /* The 'name' property from the refactoring action */
-    action: string;
-    /* Target file path that the user selected (may also be new file) */
-    targetFile: string;
-};
 
 export interface RefactorEditInfo {
     edits: FileCodeEdits[];

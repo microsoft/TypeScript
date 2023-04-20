@@ -32,5 +32,5 @@ type T = number;
 interface I { }
 `,
     },
-    newFile: "/bar.ts",
+    interactiveRefactorArguments: { targetFile: "/bar.ts" }
 });

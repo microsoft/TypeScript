@@ -1902,7 +1902,7 @@ export interface MoveToNewFileOptions {
 
 export interface MoveToFileOptions {
     readonly newFileContents: { readonly [fileName: string]: string };
-    readonly newFile: string;
+    readonly interactiveRefactorArguments: ts.InteractiveRefactorArguments;
     readonly preferences?: ts.UserPreferences;
 }
 

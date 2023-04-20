@@ -834,32 +834,6 @@ export class SessionClient implements LanguageService {
         };
     }
 
-    getEditsForMoveToFileRefactor(fileName: string, _newFile: string, _formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string, _preferences: UserPreferences | undefined): RefactorEditInfo {
-        const args = this.createFileLocationOrRangeRequestArgs(positionOrRange, fileName) as protocol.GetEditsForRefactorRequestArgs;
-        args.refactor = refactorName;
-        args.action = actionName;
-
-        const request = this.processRequest<protocol.GetEditsForRefactorRequest>(protocol.CommandTypes.GetEditsForRefactor, args);
-        const response = this.processResponse<protocol.GetEditsForRefactorResponse>(request);
-
-        if (!response.body) {
-            return { edits: [], renameFilename: undefined, renameLocation: undefined };
-        }
-
-        const edits: FileTextChanges[] = this.convertCodeEditsToTextChanges(response.body.edits);
-
-        const renameFilename: string | undefined = response.body.renameFilename;
-        let renameLocation: number | undefined;
-        if (renameFilename !== undefined) {
-            renameLocation = this.lineOffsetToPosition(renameFilename, response.body.renameLocation!);
-        }
-        return {
-            edits,
-            renameFilename,
-            renameLocation
-        };
-    }
-
     organizeImports(_args: OrganizeImportsArgs, _formatOptions: FormatCodeSettings): readonly FileTextChanges[] {
         return notImplemented();
     }

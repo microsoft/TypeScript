@@ -28,5 +28,5 @@ const a = 2;
 export const y = b + 10;
 `,
     },
-    newFile: "/src/dir2/bar.ts",
+    interactiveRefactorArguments: { targetFile: "/src/dir2/bar.ts" },
 });

@@ -16,5 +16,5 @@ verify.moveToFile({
 }
 `,
     },
-    newFile: "/bar.ts",
+    interactiveRefactorArguments: { targetFile: "/bar.ts" }
 });

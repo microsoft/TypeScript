@@ -28,5 +28,5 @@ const q = 20;
 const y: Date = p + b;
 `,
     },
-    newFile: "/bar.ts",
+    interactiveRefactorArguments: { targetFile: "/bar.ts" }
 });

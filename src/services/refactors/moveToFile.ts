@@ -143,8 +143,11 @@ const moveToFileAction = {
 };
 registerRefactor(refactorNameForMoveToFile, {
     kinds: [moveToFileAction.kind],
-    getAvailableActions: function getRefactorActionsToMoveToFile(context): readonly ApplicableRefactorInfo[] {
+    getAvailableActions: function getRefactorActionsToMoveToFile(context, interactiveRefactorArguments): readonly ApplicableRefactorInfo[] {
         const statements = getStatementsToMove(context);
+        if (!interactiveRefactorArguments) {
+            return emptyArray;
+        }
         if (context.preferences.allowTextChangesInNewFiles && statements) {
             return [{ name: refactorNameForMoveToFile, description, actions: [moveToFileAction] }];
         }
@@ -155,11 +158,11 @@ registerRefactor(refactorNameForMoveToFile, {
         }
         return emptyArray;
     },
-    getEditsForAction: function getRefactorEditsToMoveToFile(context, actionName, targetFile): RefactorEditInfo | undefined {
+    getEditsForAction: function getRefactorEditsToMoveToFile(context, actionName, interactiveRefactorArguments): RefactorEditInfo | undefined {
         Debug.assert(actionName === refactorNameForMoveToFile, "Wrong refactor invoked");
         const statements = Debug.checkDefined(getStatementsToMove(context));
-        Debug.assert(targetFile, "Target file does not exist");
-        const edits = textChanges.ChangeTracker.with(context, t => doChange(context, context.file, targetFile, context.program, statements, t, context.host, context.preferences));
+        Debug.assert(interactiveRefactorArguments, "No interactive refactor arguments available");
+        const edits = textChanges.ChangeTracker.with(context, t => doChange(context, context.file, interactiveRefactorArguments.targetFile, context.program, statements, t, context.host, context.preferences));
         return { edits, renameFilename: undefined, renameLocation: undefined };
     }
 });

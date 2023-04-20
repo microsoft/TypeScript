@@ -884,7 +884,6 @@ const invalidPartialSemanticModeCommands: readonly protocol.CommandTypes[] = [
     protocol.CommandTypes.GetApplicableRefactors,
     protocol.CommandTypes.GetMoveToRefactoringFileSuggestions,
     protocol.CommandTypes.GetEditsForRefactor,
-    protocol.CommandTypes.GetEditsForMoveToFileRefactor,
     protocol.CommandTypes.GetEditsForRefactorFull,
     protocol.CommandTypes.OrganizeImports,
     protocol.CommandTypes.OrganizeImportsFull,
@@ -2734,40 +2733,6 @@ export class Session<TMessage = string> implements EventSender {
         return { newFilename: fileName, files: allFiles };
     }
 
-    private getEditsForMoveToFileForRefactor(args: protocol.GetEditsForMoveToFileRefactorRequestArgs, simplifiedResult: boolean): RefactorEditInfo | protocol.RefactorEditInfo {
-        const { file, project } = this.getFileAndProject(args);
-        const scriptInfo = project.getScriptInfoForNormalizedPath(file)!;
-        const result = project.getLanguageService().getEditsForMoveToFileRefactor(
-            file,
-            args.targetFile,
-            this.getFormatOptions(file),
-            this.extractPositionOrRange(args, scriptInfo),
-            args.refactor,
-            args.action,
-            this.getPreferences(file),
-        );
-
-        if (result === undefined) {
-            return {
-                edits: []
-            };
-        }
-
-        if (simplifiedResult) {
-            const { renameFilename, renameLocation, edits } = result;
-            let mappedRenameLocation: protocol.Location | undefined;
-            if (renameFilename !== undefined && renameLocation !== undefined) {
-                const renameScriptInfo = project.getScriptInfoForNormalizedPath(toNormalizedPath(renameFilename))!;
-                mappedRenameLocation = getLocationInNewDocument(getSnapshotText(renameScriptInfo.getSnapshot()), renameFilename, renameLocation, edits);
-            }
-            return {
-                renameLocation: mappedRenameLocation,
-                renameFilename,
-                edits: this.mapTextChangesToCodeEdits(edits) };
-        }
-        return result;
-    }
-
     private organizeImports(args: protocol.OrganizeImportsRequestArgs, simplifiedResult: boolean): readonly protocol.FileCodeEdits[] | readonly FileTextChanges[] {
         Debug.assert(args.scope.type === "file");
         const { file, project } = this.getFileAndProject(args.scope.args);
@@ -3487,9 +3452,6 @@ export class Session<TMessage = string> implements EventSender {
         },
         [protocol.CommandTypes.GetEditsForRefactor]: (request: protocol.GetEditsForRefactorRequest) => {
             return this.requiredResponse(this.getEditsForRefactor(request.arguments, /*simplifiedResult*/ true));
-        },
-        [protocol.CommandTypes.GetEditsForMoveToFileRefactor]: (request: protocol.GetEditsForMoveToFileRefactorRequest) => {
-            return this.requiredResponse(this.getEditsForMoveToFileForRefactor(request.arguments, /*simplifiedResult*/ true));
         },
         [protocol.CommandTypes.GetMoveToRefactoringFileSuggestions]: (request: protocol.GetMoveToRefactoringFileSuggestionsRequest) => {
             return this.requiredResponse(this.getMoveToRefactoringFileSuggestions(request.arguments));
