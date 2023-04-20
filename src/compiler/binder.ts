@@ -89,7 +89,7 @@ import {
     getEnclosingBlockScopeContainer,
     getErrorSpanForNode,
     getEscapedTextOfIdentifierOrLiteral,
-    getEscapedTextOfJsxAttributeName,
+    getEscapedTextOfJsxNamespacedName,
     getExpandoInitializer,
     getHostSignatureFromJSDoc,
     getImmediatelyInvokedFunctionExpression,
@@ -682,7 +682,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 return getSymbolNameForPrivateIdentifier(containingClassSymbol, name.escapedText);
             }
             if (isJsxNamespacedName(name)) {
-                return getEscapedTextOfJsxAttributeName(name);
+                return getEscapedTextOfJsxNamespacedName(name);
             }
             return isPropertyNameLiteral(name) ? getEscapedTextOfIdentifierOrLiteral(name) : undefined;
         }

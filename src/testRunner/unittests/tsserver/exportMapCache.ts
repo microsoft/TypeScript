@@ -1,14 +1,14 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    createServerHost,
-    File,
-} from "../virtualFileSystemWithWatch";
-import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,
     createSession,
     openFilesForSession,
-} from "./helpers";
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+    File,
+} from "../helpers/virtualFileSystemWithWatch";
 
 const packageJson: File = {
     path: "/package.json",

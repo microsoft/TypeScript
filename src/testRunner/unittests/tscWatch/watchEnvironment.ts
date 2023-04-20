@@ -1,5 +1,11 @@
 import * as ts from "../../_namespaces/ts";
 import {
+    commonFile1,
+    commonFile2,
+    noopChange,
+    verifyTscWatch,
+} from "../helpers/tscWatch";
+import {
     createWatchedSystem,
     File,
     libFile,
@@ -7,13 +13,7 @@ import {
     TestServerHost,
     Tsc_WatchDirectory,
     Tsc_WatchFile,
-} from "../virtualFileSystemWithWatch";
-import {
-    commonFile1,
-    commonFile2,
-    noopChange,
-    verifyTscWatch,
-} from "./helpers";
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different polling/non polling options", () => {
     const scenario = "watchEnvironment";

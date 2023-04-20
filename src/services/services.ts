@@ -2976,10 +2976,10 @@ export function createLanguageService(
         return SmartSelectionRange.getSmartSelectionRange(position, syntaxTreeCache.getCurrentSourceFile(fileName));
     }
 
-    function getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences = emptyOptions, triggerReason: RefactorTriggerReason, kind: string): ApplicableRefactorInfo[] {
+    function getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences = emptyOptions, triggerReason: RefactorTriggerReason, kind: string, includeInteractiveActions?: boolean): ApplicableRefactorInfo[] {
         synchronizeHostData();
         const file = getValidSourceFile(fileName);
-        return refactor.getApplicableRefactors(getRefactorContext(file, positionOrRange, preferences, emptyOptions, triggerReason, kind));
+        return refactor.getApplicableRefactors(getRefactorContext(file, positionOrRange, preferences, emptyOptions, triggerReason, kind), includeInteractiveActions);
     }
 
     function getMoveToRefactoringFileSuggestions(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences = emptyOptions): { newFileName: string, files: string[] } {

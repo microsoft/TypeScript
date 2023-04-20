@@ -29236,7 +29236,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getContextualTypeForChildJsxExpression(node: JsxElement, child: JsxChild, contextFlags: ContextFlags | undefined) {
-        const attributesType = getApparentTypeOfContextualType(node.openingElement.tagName, contextFlags);
+        const attributesType = getApparentTypeOfContextualType(node.openingElement.attributes, contextFlags);
         // JSX expression is in children of JSX Element, we will look for an "children" attribute (we get the name from JSX.ElementAttributesProperty)
         const jsxChildrenPropertyName = getJsxElementChildrenPropertyName(getJsxNamespaceAt(node));
         if (!(attributesType && !isTypeAny(attributesType) && jsxChildrenPropertyName && jsxChildrenPropertyName !== "")) {

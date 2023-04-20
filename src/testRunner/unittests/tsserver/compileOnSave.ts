@@ -1,10 +1,5 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    createServerHost,
-    File,
-    libFile,
-} from "../virtualFileSystemWithWatch";
-import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,
     createSession,
@@ -14,7 +9,12 @@ import {
     protocolTextSpanFromSubstring,
     TestSession,
     toExternalFiles,
-} from "./helpers";
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+    File,
+    libFile,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
     describe("for configured projects", () => {
