@@ -4241,7 +4241,10 @@ export class ProjectService {
         return false;
     }
 
-    /** @internal */
+    /**
+     * Performs the initial steps of enabling a plugin by finding and instantiating the module for a plugin either asynchronously or synchronously
+     * @internal
+     */
     requestEnablePlugin(project: Project, pluginConfigEntry: PluginImport, searchPaths: string[]) {
         if (!this.host.importPlugin && !this.host.require) {
             this.logger.info("Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded");
@@ -4256,7 +4259,12 @@ export class ProjectService {
 
         // If the host supports dynamic import, begin enabling the plugin asynchronously.
         if (this.host.importPlugin) {
-            const importPromise = project.beginEnablePluginAsync(pluginConfigEntry, searchPaths);
+            const importPromise = Project.importServicePluginAsync(
+                pluginConfigEntry,
+                searchPaths,
+                this.host,
+                s => this.logger.info(s),
+            ) as Promise<BeginEnablePluginResult>;
             this.pendingPluginEnablements ??= new Map();
             let promises = this.pendingPluginEnablements.get(project);
             if (!promises) this.pendingPluginEnablements.set(project, promises = []);
@@ -4265,7 +4273,33 @@ export class ProjectService {
         }
 
         // Otherwise, load the plugin using `require`
-        project.endEnablePlugin(project.beginEnablePluginSync(pluginConfigEntry, searchPaths));
+        this.endEnablePlugin(project, Project.importServicePluginSync(
+            pluginConfigEntry,
+            searchPaths,
+            this.host,
+            s => this.logger.info(s),
+        ));
+    }
+
+    /**
+     * Performs the remaining steps of enabling a plugin after its module has been instantiated.
+     * @internal
+     */
+    private endEnablePlugin(project: Project, { pluginConfigEntry, resolvedModule, errorLogs }: BeginEnablePluginResult) {
+        if (resolvedModule) {
+            const configurationOverride = this.currentPluginConfigOverrides?.get(pluginConfigEntry.name);
+            if (configurationOverride) {
+                // Preserve the name property since it's immutable
+                const pluginName = pluginConfigEntry.name;
+                pluginConfigEntry = configurationOverride;
+                pluginConfigEntry.name = pluginName;
+            }
+            project.enableProxy(resolvedModule, pluginConfigEntry);
+        }
+        else {
+            forEach(errorLogs, message => this.logger.info(message));
+            this.logger.info(`Couldn't find ${pluginConfigEntry.name}`);
+        }
     }
 
     /** @internal */
@@ -4344,7 +4378,7 @@ export class ProjectService {
         }
 
         for (const result of results) {
-            project.endEnablePlugin(result);
+            this.endEnablePlugin(project, result);
         }
 
         // Plugins may have modified external files, so mark the project as dirty.

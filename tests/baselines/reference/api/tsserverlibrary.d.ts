@@ -3254,7 +3254,7 @@ declare namespace ts {
             private readonly cancellationToken;
             isNonTsProject(): boolean;
             isJsOnlyProject(): boolean;
-            static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void, logErrors?: (message: string) => void): {} | undefined;
+            static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void): {} | undefined;
             isKnownTypesPackageName(name: string): boolean;
             installPackage(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
             private get typingsCache();
@@ -3343,7 +3343,6 @@ declare namespace ts {
             protected removeRoot(info: ScriptInfo): void;
             protected enableGlobalPlugins(options: CompilerOptions): void;
             protected enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[]): void;
-            private enableProxy;
             /** Starts a new check for diagnostics. Call this if some file has updated that would cause diagnostics to be changed. */
             refreshDiagnostics(): void;
         }
