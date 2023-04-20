@@ -1,12 +1,10 @@
-tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx(24,42): error TS7006: Parameter 'value' implicitly has an 'any' type.
 tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx(27,36): error TS2769: No overload matches this call.
   Overload 1 of 2, '(props: Readonly<Props>): FieldFeedback<Props>', gave the following error.
-    Type '(value: any) => void' is not assignable to type '"a" | "b" | ((value: string) => boolean) | undefined'.
-      Type '(value: any) => void' is not assignable to type '(value: string) => boolean'.
+    Type '(value: string) => void' is not assignable to type '"a" | "b" | ((value: string) => boolean) | undefined'.
+      Type '(value: string) => void' is not assignable to type '(value: string) => boolean'.
         Type 'void' is not assignable to type 'boolean'.
   Overload 2 of 2, '(props: Props, context?: any): FieldFeedback<Props>', gave the following error.
-    Type '(value: any) => void' is not assignable to type '"a" | "b" | ((value: string) => boolean) | undefined'.
-tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx(27,42): error TS7006: Parameter 'value' implicitly has an 'any' type.
+    Type '(value: string) => void' is not assignable to type '"a" | "b" | ((value: string) => boolean) | undefined'.
 tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx(43,41): error TS2769: No overload matches this call.
   Overload 1 of 2, '(props: Readonly<Props>): FieldFeedbackBeta<Props>', gave the following error.
     Type '(value: string) => void' is not assignable to type '"a" | "b" | ((value: string) => boolean) | undefined'.
@@ -14,17 +12,15 @@ tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx(43,41): error TS2769:
         Type 'void' is not assignable to type 'boolean'.
   Overload 2 of 2, '(props: Props, context?: any): FieldFeedbackBeta<Props>', gave the following error.
     Type '(value: string) => void' is not assignable to type '"a" | "b" | ((value: string) => boolean) | undefined'.
-tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx(61,43): error TS7006: Parameter 'value' implicitly has an 'any' type.
 tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx(64,37): error TS2769: No overload matches this call.
   Overload 1 of 2, '(props: Readonly<MyPropsProps>): FieldFeedback2<MyPropsProps>', gave the following error.
-    Type '(value: any) => void' is not assignable to type '(value: string) => boolean'.
+    Type '(value: string) => void' is not assignable to type '(value: string) => boolean'.
       Type 'void' is not assignable to type 'boolean'.
   Overload 2 of 2, '(props: MyPropsProps, context?: any): FieldFeedback2<MyPropsProps>', gave the following error.
-    Type '(value: any) => void' is not assignable to type '(value: string) => boolean'.
-tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx(64,43): error TS7006: Parameter 'value' implicitly has an 'any' type.
+    Type '(value: string) => void' is not assignable to type '(value: string) => boolean'.
 
 
-==== tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx (7 errors) ====
+==== tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx (3 errors) ====
     /// <reference path="/.lib/react16.d.ts" />
     
     import React from 'react';
@@ -49,23 +45,19 @@ tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx(64,43): error TS7006:
     
     // OK
     const Test1 = () => <FieldFeedback when={value => !!value} />;
-                                             ~~~~~
-!!! error TS7006: Parameter 'value' implicitly has an 'any' type.
     
     // Error: Void not assignable to boolean
     const Test2 = () => <FieldFeedback when={value => console.log(value)} />;
                                        ~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 2, '(props: Readonly<Props>): FieldFeedback<Props>', gave the following error.
-!!! error TS2769:     Type '(value: any) => void' is not assignable to type '"a" | "b" | ((value: string) => boolean) | undefined'.
-!!! error TS2769:       Type '(value: any) => void' is not assignable to type '(value: string) => boolean'.
+!!! error TS2769:     Type '(value: string) => void' is not assignable to type '"a" | "b" | ((value: string) => boolean) | undefined'.
+!!! error TS2769:       Type '(value: string) => void' is not assignable to type '(value: string) => boolean'.
 !!! error TS2769:         Type 'void' is not assignable to type 'boolean'.
 !!! error TS2769:   Overload 2 of 2, '(props: Props, context?: any): FieldFeedback<Props>', gave the following error.
-!!! error TS2769:     Type '(value: any) => void' is not assignable to type '"a" | "b" | ((value: string) => boolean) | undefined'.
+!!! error TS2769:     Type '(value: string) => void' is not assignable to type '"a" | "b" | ((value: string) => boolean) | undefined'.
 !!! related TS6500 tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx:6:3: The expected type comes from property 'when' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<FieldFeedback<Props>> & Pick<Readonly<{ children?: ReactNode; }> & Readonly<Props>, "children" | "error"> & Partial<Pick<Readonly<{ children?: ReactNode; }> & Readonly<Props>, "when">> & Partial<Pick<{ when: () => boolean; }, never>>'
 !!! related TS6500 tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx:6:3: The expected type comes from property 'when' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<FieldFeedback<Props>> & Pick<Readonly<{ children?: ReactNode; }> & Readonly<Props>, "children" | "error"> & Partial<Pick<Readonly<{ children?: ReactNode; }> & Readonly<Props>, "when">> & Partial<Pick<{ when: () => boolean; }, never>>'
-                                             ~~~~~
-!!! error TS7006: Parameter 'value' implicitly has an 'any' type.
     
     class FieldFeedbackBeta<P extends Props = BaseProps> extends React.Component<P> {
       static defaultProps: BaseProps = {
@@ -110,22 +102,18 @@ tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx(64,43): error TS7006:
     
     // OK
     const Test3 = () => <FieldFeedback2 when={value => !!value} />;
-                                              ~~~~~
-!!! error TS7006: Parameter 'value' implicitly has an 'any' type.
     
     // Error: Void not assignable to boolean
     const Test4 = () => <FieldFeedback2 when={value => console.log(value)} />;
                                         ~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 2, '(props: Readonly<MyPropsProps>): FieldFeedback2<MyPropsProps>', gave the following error.
-!!! error TS2769:     Type '(value: any) => void' is not assignable to type '(value: string) => boolean'.
+!!! error TS2769:     Type '(value: string) => void' is not assignable to type '(value: string) => boolean'.
 !!! error TS2769:       Type 'void' is not assignable to type 'boolean'.
 !!! error TS2769:   Overload 2 of 2, '(props: MyPropsProps, context?: any): FieldFeedback2<MyPropsProps>', gave the following error.
-!!! error TS2769:     Type '(value: any) => void' is not assignable to type '(value: string) => boolean'.
+!!! error TS2769:     Type '(value: string) => void' is not assignable to type '(value: string) => boolean'.
 !!! related TS6500 tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx:46:3: The expected type comes from property 'when' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<FieldFeedback2<MyPropsProps>> & Pick<Readonly<{ children?: ReactNode; }> & Readonly<MyPropsProps>, "children" | "error"> & Partial<Pick<Readonly<{ children?: ReactNode; }> & Readonly<MyPropsProps>, "when">> & Partial<Pick<{ when: () => boolean; }, never>>'
 !!! related TS6500 tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx:46:3: The expected type comes from property 'when' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<FieldFeedback2<MyPropsProps>> & Pick<Readonly<{ children?: ReactNode; }> & Readonly<MyPropsProps>, "children" | "error"> & Partial<Pick<Readonly<{ children?: ReactNode; }> & Readonly<MyPropsProps>, "when">> & Partial<Pick<{ when: () => boolean; }, never>>'
-                                              ~~~~~
-!!! error TS7006: Parameter 'value' implicitly has an 'any' type.
     
     // OK
     const Test5 = () => <FieldFeedback2 />;

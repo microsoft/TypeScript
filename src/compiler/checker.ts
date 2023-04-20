@@ -24512,9 +24512,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 inferFromTypes((source as IndexedAccessType).indexType, (target as IndexedAccessType).indexType);
             }
             else if (!(priority & InferencePriority.NakedTypeVariable) && target.flags & TypeFlags.IndexedAccess) {
-                const targetConstraint = (target as IndexedAccessType).objectType;
-                const inference = getInferenceInfoForType(getActualTypeVariable(targetConstraint));
+                if (isFromInferenceBlockedSource(source)) {
+                    return;
+                }
+                const inference = getInferenceInfoForType(getActualTypeVariable((target as IndexedAccessType).objectType));
                 if (inference) {
+                    if (getObjectFlags(source) & ObjectFlags.NonInferrableType || source === nonInferrableAnyType) {
+                        return;
+                    }
                     if (!inference.isFixed) {
                         // Instantiates instance of `type PartialInference<T, Keys extends string> = ({[K in Keys]: {[K1 in K]: T}})[Keys];`
                         // Where `T` is `source` and `Keys` is `target.indexType`
@@ -24525,7 +24530,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             inference.indexes = append(inference.indexes, instantiateType(inferenceType, mapper));
                         }
                     }
-                    return;
                 }
             }
             else if (source.flags & TypeFlags.StringMapping && target.flags & TypeFlags.StringMapping) {
