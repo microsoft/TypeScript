@@ -77,7 +77,7 @@ Before request
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "command": "getEditsForMoveToFileRefactor",
+      "command": "getEditsForRefactor",
       "arguments": {
         "file": "/Foo/a.ts",
         "startLine": 1,
@@ -86,7 +86,9 @@ Info seq  [hh:mm:ss:mss] request:
         "endOffset": 12,
         "refactor": "Move to file",
         "action": "Move to file",
-        "targetFile": "/Foo/b.ts"
+        "interactiveRefactorArguments": {
+          "targetFile": "/Foo/b.ts"
+        }
       },
       "seq": 2,
       "type": "request"

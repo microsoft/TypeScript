@@ -2689,6 +2689,7 @@ export class Session<TMessage = string> implements EventSender {
             args.refactor,
             args.action,
             this.getPreferences(file),
+            args.interactiveRefactorArguments
         );
 
         if (result === undefined) {
