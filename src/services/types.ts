@@ -378,13 +378,17 @@ export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalR
         containingSourceFile: SourceFile | undefined,
         reusedNames: readonly T[] | undefined
     ): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[];
+    /** @internal */
     resolveLibrary?(
         libraryName: string,
         resolveFrom: string,
         options: CompilerOptions,
         libFileName: string,
     ): ResolvedModuleWithFailedLookupLocations;
-    /** If provided along with custom resolveLibrary, used to determine if we should redo library resolutions */
+    /**
+     * If provided along with custom resolveLibrary, used to determine if we should redo library resolutions
+     * @internal
+     */
     hasInvalidatedLibResolutions?(libFileName: string): boolean;
 
     /** @internal */ hasInvalidatedResolutions?: HasInvalidatedResolutions;

@@ -7804,13 +7804,17 @@ export interface CompilerHost extends ModuleResolutionHost {
         containingSourceFile: SourceFile | undefined,
         reusedNames: readonly T[] | undefined
     ): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[];
+    /** @internal */
     resolveLibrary?(
         libraryName: string,
         resolveFrom: string,
         options: CompilerOptions,
         libFileName: string,
     ): ResolvedModuleWithFailedLookupLocations;
-    /** If provided along with custom resolveLibrary, used to determine if we should redo library resolutions */
+    /**
+     * If provided along with custom resolveLibrary, used to determine if we should redo library resolutions
+     * @internal
+     */
     hasInvalidatedLibResolutions?(libFileName: string): boolean;
     getEnvironmentVariable?(name: string): string | undefined;
     /** @internal */ onReleaseOldSourceFile?(oldSourceFile: SourceFile, oldOptions: CompilerOptions, hasSourceFileByPath: boolean): void;

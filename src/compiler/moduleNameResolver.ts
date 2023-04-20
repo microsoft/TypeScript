@@ -1283,6 +1283,7 @@ export function getOptionsForLibraryResolution(options: CompilerOptions) {
     return { moduleResolution: ModuleResolutionKind.Node10, traceResolution: options.traceResolution };
 }
 
+/** @internal */
 export function resolveLibrary(libraryName: string, resolveFrom: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache): ResolvedModuleWithFailedLookupLocations {
     return resolveModuleName(libraryName, resolveFrom, getOptionsForLibraryResolution(compilerOptions), host, cache);
 }
