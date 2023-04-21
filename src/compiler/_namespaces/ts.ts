@@ -1,6 +1,7 @@
 /* Generated file to emulate the ts namespace. */
 
 export * from "../corePublic";
+export * from "../pluginUtilities";
 export * from "../core";
 export * from "../debug";
 export * from "../semver";

@@ -6,3 +6,6 @@ export * from "../../services/_namespaces/ts";
 export * from "../../server/_namespaces/ts";
 import * as server from "./ts.server";
 export { server };
+
+import * as ts from "./ts";
+ts.setTypeScriptNamespace("tsserverlibrary", ts);

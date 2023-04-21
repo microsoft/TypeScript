@@ -61,6 +61,7 @@ import {
     getNormalizedAbsolutePath,
     getOrUpdate,
     getStringComparer,
+    getTypeScriptNamespace,
     HasInvalidatedLibResolutions,
     HasInvalidatedResolutions,
     HostCancellationToken,
@@ -2000,7 +2001,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
                 session: this.projectService.session
             };
 
-            const pluginModule = pluginModuleFactory({ typescript: ts });
+            const pluginModule = pluginModuleFactory({ typescript: getTypeScriptNamespace() });
             const newLS = pluginModule.create(info);
             for (const k of Object.keys(this.languageService)) {
                 // eslint-disable-next-line local/no-in-operator
