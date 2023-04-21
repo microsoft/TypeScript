@@ -470,7 +470,7 @@ import {
     VoidExpression,
     WhileStatement,
     WithStatement,
-    YieldExpression
+    YieldExpression,
 } from "../_namespaces/ts";
 
 let nextAutoGenerateId = 0;
