@@ -34,6 +34,14 @@ Output::
 [[90m12:00:29 AM[0m] Found 0 errors. Watching for file changes.
 
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 {"watchFactory":"myplugin"} Config file /user/username/projects/myproject/tsconfig.json
+Enabling watchFactory 'myplugin' from candidate paths: /user/username/projects/myproject,/a/lib/../..
+Loading myplugin from /user/username/projects/myproject (resolved to /user/username/projects/myproject/node_modules)
+Require:: Resolving myplugin from /user/username/projects/myproject/node_modules
+Loading myplugin from /a/lib/../.. (resolved to /a/lib/../../node_modules)
+Require:: Resolving myplugin from /a/lib/../../node_modules
+Failed to load module 'myplugin' from /user/username/projects/myproject/node_modules: Cannot find module myPlugin at /user/username/projects/myproject/node_modules
+Failed to load module 'myplugin' from /a/lib/../../node_modules: Cannot find module myPlugin at /a/lib/../../node_modules
+Couldn't find 'myplugin'
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"watchFactory":"myplugin"} Wild card directory /user/username/projects/myproject/tsconfig.json
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"watchFactory":"myplugin"} Wild card directory /user/username/projects/myproject/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a.ts 250 {"watchFactory":"myplugin"} Source file /user/username/projects/myproject/tsconfig.json

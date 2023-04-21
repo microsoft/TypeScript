@@ -64,6 +64,7 @@ import {
     HasInvalidatedLibResolutions,
     HasInvalidatedResolutions,
     HostCancellationToken,
+    importPluginSync,
     inferredTypesContainingFile,
     InstallPackageOptions,
     IScriptSnapshot,
@@ -77,7 +78,6 @@ import {
     map,
     mapDefined,
     maybeBind,
-    ModuleImportResult,
     ModuleResolutionCache,
     ModuleResolutionHost,
     noop,
@@ -94,6 +94,7 @@ import {
     perfLogger,
     PerformanceEvent,
     PluginImport,
+    PluginImportResult,
     PollingInterval,
     Program,
     ProjectPackageJsonInfo,
@@ -126,6 +127,7 @@ import {
     TypeAcquisition,
     updateErrorForNoInputFiles,
     updateMissingFilePathsWatch,
+    UserWatchFactoryWithName,
     WatchDirectoryFlags,
     WatchOptions,
     WatchType,
@@ -255,13 +257,6 @@ export interface PluginModuleWithName {
 }
 
 export type PluginModuleFactory = (mod: { typescript: typeof ts }) => PluginModule;
-
-/** @internal */
-export interface PluginImportResult<T> {
-    pluginConfigEntry: PluginImport;
-    resolvedModule: T | undefined;
-    errorLogs: string[] | undefined;
-}
 
 /** @internal */
 export type BeginEnablePluginResult = PluginImportResult<PluginModuleFactory>;
@@ -395,6 +390,8 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     /** @internal */
     private noDtsResolutionProject?: AuxiliaryProject | undefined;
 
+    /** @internal */ userWatchFactory: UserWatchFactoryWithName | false | undefined;
+
     /** @internal */
     getResolvedProjectReferenceToRedirect(_fileName: string): ResolvedProjectReference | undefined {
         return undefined;
@@ -416,61 +413,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     public static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void): {} | undefined {
-        return Project.importServicePluginSync({ name: moduleName }, [initialDir], host, log).resolvedModule;
-    }
-
-    /** @internal */
-    public static importServicePluginSync<T = {}>(
-        pluginConfigEntry: PluginImport,
-        searchPaths: string[],
-        host: ServerHost,
-        log: (message: string) => void,
-    ): PluginImportResult<T> {
-        Debug.assertIsDefined(host.require);
-        let errorLogs: string[] | undefined;
-        let resolvedModule: T | undefined;
-        for (const initialDir of searchPaths) {
-            const resolvedPath = normalizeSlashes(host.resolvePath(combinePaths(initialDir, "node_modules")));
-            log(`Loading ${pluginConfigEntry.name} from ${initialDir} (resolved to ${resolvedPath})`);
-            const result = host.require(resolvedPath, pluginConfigEntry.name); // TODO: GH#18217
-            if (!result.error) {
-                resolvedModule = result.module as T;
-                break;
-            }
-            const err = result.error.stack || result.error.message || JSON.stringify(result.error);
-            (errorLogs ??= []).push(`Failed to load module '${pluginConfigEntry.name}' from ${resolvedPath}: ${err}`);
-        }
-        return { pluginConfigEntry, resolvedModule, errorLogs };
-    }
-
-    /** @internal */
-    public static async importServicePluginAsync<T = {}>(
-        pluginConfigEntry: PluginImport,
-        searchPaths: string[],
-        host: ServerHost,
-        log: (message: string) => void,
-    ): Promise<PluginImportResult<T>> {
-        Debug.assertIsDefined(host.importPlugin);
-        let errorLogs: string[] | undefined;
-        let resolvedModule: T | undefined;
-        for (const initialDir of searchPaths) {
-            const resolvedPath = combinePaths(initialDir, "node_modules");
-            log(`Dynamically importing ${pluginConfigEntry.name} from ${initialDir} (resolved to ${resolvedPath})`);
-            let result: ModuleImportResult;
-            try {
-                result = await host.importPlugin(resolvedPath, pluginConfigEntry.name);
-            }
-            catch (e) {
-                result = { module: undefined, error: e };
-            }
-            if (!result.error) {
-                resolvedModule = result.module as T;
-                break;
-            }
-            const err = result.error.stack || result.error.message || JSON.stringify(result.error);
-            (errorLogs ??= []).push(`Failed to dynamically import module '${pluginConfigEntry.name}' from ${resolvedPath}: ${err}`);
-        }
-        return { pluginConfigEntry, resolvedModule, errorLogs };
+        return importPluginSync({ name: moduleName }, [initialDir], host, log).resolvedModule;
     }
 
     /** @internal */
@@ -1810,7 +1753,9 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     /** @internal */
     setWatchOptions(watchOptions: WatchOptions | undefined) {
+        const oldWatchOptions = this.watchOptions;
         this.watchOptions = watchOptions;
+        this.projectService.releaseUserWatchFactory(oldWatchOptions, watchOptions, this);
     }
 
     /** @internal */
@@ -1946,12 +1891,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     /** @internal */
     protected getGlobalPluginSearchPaths() {
-        // Search any globally-specified probe paths, then our peer node_modules
-        return [
-            ...this.projectService.pluginProbeLocations,
-            // ../../.. to walk from X/node_modules/typescript/lib/tsserver.js to X/node_modules/
-            combinePaths(this.projectService.getExecutingFilePath(), "../../.."),
-        ];
+        return this.projectService.getGlobalPluginSearchPaths();
     }
 
     protected enableGlobalPlugins(options: CompilerOptions): void {
@@ -2020,11 +1960,12 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     /** @internal */
     onPluginConfigurationChanged(pluginName: string, configuration: any) {
-        this.plugins.filter(plugin => plugin.name === pluginName).forEach(plugin => {
-            if (plugin.module.onConfigurationChanged) {
+        this.plugins.forEach(plugin => {
+            if (plugin.name === pluginName && plugin.module.onConfigurationChanged) {
                 plugin.module.onConfigurationChanged(configuration);
             }
         });
+        this.projectService.onUserWatchFactoryConfigurationChanged(this.userWatchFactory, pluginName, configuration);
     }
 
     /** Starts a new check for diagnostics. Call this if some file has updated that would cause diagnostics to be changed. */
@@ -2820,15 +2761,9 @@ export class ConfiguredProject extends Project {
             return;
         }
 
-        const searchPaths = this.getGlobalPluginSearchPaths();
-        if (this.projectService.allowLocalPluginLoads) {
-            const local = getDirectoryPath(this.canonicalConfigFilePath);
-            this.projectService.logger.info(`Local plugin loading enabled; adding ${local} to search paths`);
-            searchPaths.unshift(local);
-        }
-
         // Enable tsconfig-specified plugins
         if (options.plugins) {
+            const searchPaths = this.projectService.getProjectPluginSearchPaths(this.canonicalConfigFilePath);
             for (const pluginConfigEntry of options.plugins) {
                 this.enablePlugin(pluginConfigEntry, searchPaths);
             }

@@ -33,6 +33,11 @@ Output::
 
 Current directory: /user/username/projects/myproject CaseSensitiveFileNames: false
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 {"watchFactory":"myplugin"} Config file
+Enabling watchFactory 'myplugin' from candidate paths: /user/username/projects/myproject,/a/lib/../..
+Loading myplugin from /user/username/projects/myproject (resolved to /user/username/projects/myproject/node_modules)
+Require:: Resolving myplugin from /user/username/projects/myproject/node_modules
+Module myplugin:: create with config: {"name":"myplugin"} and options: {"watchFactory":"myplugin"}
+Plugin validation succeeded
 Synchronizing program
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
@@ -41,12 +46,15 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a.ts 250 {"wa
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b.ts 250 {"watchFactory":"myplugin"} Source file
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 {"watchFactory":"myplugin"} Source file
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"watchFactory":"myplugin"} Type roots
+Custom watchDirectory: /user/username/projects/myproject/node_modules/@types true {"watchFactory":"myplugin"}
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"watchFactory":"myplugin"} Type roots
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 {"watchFactory":"myplugin"} Type roots
+Custom watchDirectory: /user/username/projects/node_modules/@types true {"watchFactory":"myplugin"}
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 {"watchFactory":"myplugin"} Type roots
 [[90m12:00:28 AM[0m] Found 0 errors. Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"watchFactory":"myplugin"} Wild card directory
+Custom watchDirectory: /user/username/projects/myproject true {"watchFactory":"myplugin"}
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"watchFactory":"myplugin"} Wild card directory
 
 
@@ -68,12 +76,6 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.ts (used version)
 /user/username/projects/myproject/b.ts (used version)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /user/username/projects/myproject/tsconfig.json: *new*
   {}
@@ -84,9 +86,13 @@ FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
 
-FsWatchesRecursive::
+Plugin WatchedDirectories:Recursive::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"options":{"watchFactory":"myplugin"}}
+/user/username/projects/node_modules/@types: *new*
+  {"options":{"watchFactory":"myplugin"}}
 /user/username/projects/myproject: *new*
-  {}
+  {"options":{"watchFactory":"myplugin"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -183,6 +189,17 @@ Input::
 export function foo() { }
 
 
+Before running Timeout callback:: count: 0
+After running Timeout callback:: count: 0
+Output::
+
+exitCode:: ExitStatus.undefined
+
+
+Change:: Invoke plugin watches
+
+Input::
+
 Before running Timeout callback:: count: 1
 2: timerToUpdateProgram
 After running Timeout callback:: count: 0
@@ -198,9 +215,6 @@ CreatingProgramWith::
   roots: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts"]
   options: {"watch":true,"extendedDiagnostics":true,"allowPlugins":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/c.ts 250 {"watchFactory":"myplugin"} Source file
-DirectoryWatcher:: Triggered with /user/username/projects/myproject/c.js :: WatchInfo: /user/username/projects/myproject 1 {"watchFactory":"myplugin"} Wild card directory
-Project: /user/username/projects/myproject/tsconfig.json Detected file add/remove of non supported extension: /user/username/projects/myproject/c.js
-Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/c.js :: WatchInfo: /user/username/projects/myproject 1 {"watchFactory":"myplugin"} Wild card directory
 [[90m12:00:41 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -220,12 +234,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/c.ts (computed .d.ts)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches::
 /user/username/projects/myproject/tsconfig.json:
   {}
@@ -238,9 +246,13 @@ FsWatches::
 /user/username/projects/myproject/c.ts: *new*
   {}
 
-FsWatchesRecursive::
+Plugin WatchedDirectories:Recursive::
+/user/username/projects/myproject/node_modules/@types:
+  {"options":{"watchFactory":"myplugin"}}
+/user/username/projects/node_modules/@types:
+  {"options":{"watchFactory":"myplugin"}}
 /user/username/projects/myproject:
-  {}
+  {"options":{"watchFactory":"myplugin"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -251,15 +263,4 @@ exports.foo = void 0;
 function foo() { }
 exports.foo = foo;
 
-
-
-Change:: Invoke plugin watches
-
-Input::
-
-Before running Timeout callback:: count: 0
-After running Timeout callback:: count: 0
-Output::
-
-exitCode:: ExitStatus.undefined
 

@@ -34,10 +34,19 @@ Output::
 [[90m12:00:29 AM[0m] Found 0 errors. Watching for file changes.
 
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 {"watchFactory":"myplugin"} Config file /user/username/projects/myproject/tsconfig.json
+Enabling watchFactory 'myplugin' from candidate paths: /user/username/projects/myproject,/a/lib/../..
+Loading myplugin from /user/username/projects/myproject (resolved to /user/username/projects/myproject/node_modules)
+Require:: Resolving myplugin from /user/username/projects/myproject/node_modules
+Module myplugin:: create with config: {"name":"myplugin"} and options: {"watchFactory":"myplugin"}
+Plugin validation succeeded
+Custom watchFile: /user/username/projects/myproject/tsconfig.json 2000 {"watchFactory":"myplugin"}
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"watchFactory":"myplugin"} Wild card directory /user/username/projects/myproject/tsconfig.json
+Custom watchDirectory: /user/username/projects/myproject true {"watchFactory":"myplugin"}
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"watchFactory":"myplugin"} Wild card directory /user/username/projects/myproject/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a.ts 250 {"watchFactory":"myplugin"} Source file /user/username/projects/myproject/tsconfig.json
+Custom watchFile: /user/username/projects/myproject/a.ts 250 {"watchFactory":"myplugin"}
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b.ts 250 {"watchFactory":"myplugin"} Source file /user/username/projects/myproject/tsconfig.json
+Custom watchFile: /user/username/projects/myproject/b.ts 250 {"watchFactory":"myplugin"}
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
@@ -58,17 +67,17 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.ts (used version)
 /user/username/projects/myproject/b.ts (used version)
 
-FsWatches::
+Plugin WatchedFiles::
 /user/username/projects/myproject/tsconfig.json: *new*
-  {}
+  {"pollingInterval":2000,"options":{"watchFactory":"myplugin"}}
 /user/username/projects/myproject/a.ts: *new*
-  {}
+  {"pollingInterval":250,"options":{"watchFactory":"myplugin"}}
 /user/username/projects/myproject/b.ts: *new*
-  {}
+  {"pollingInterval":250,"options":{"watchFactory":"myplugin"}}
 
-FsWatchesRecursive::
+Plugin WatchedDirectories:Recursive::
 /user/username/projects/myproject: *new*
-  {}
+  {"options":{"watchFactory":"myplugin"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -107,6 +116,17 @@ Input::
 //// [/user/username/projects/myproject/b.ts]
 export class b { prop = "hello"; foo() { return this.prop; } }export function foo() { }
 
+
+Before running Timeout callback:: count: 0
+After running Timeout callback:: count: 0
+Output::
+
+exitCode:: ExitStatus.undefined
+
+
+Change:: Invoke plugin watches
+
+Input::
 
 Before running Timeout callback:: count: 1
 1: timerToBuildInvalidatedProject
@@ -152,15 +172,4 @@ exports.b = b;
 function foo() { }
 exports.foo = foo;
 
-
-
-Change:: Invoke plugin watches
-
-Input::
-
-Before running Timeout callback:: count: 0
-After running Timeout callback:: count: 0
-Output::
-
-exitCode:: ExitStatus.undefined
 

@@ -9747,6 +9747,7 @@ declare namespace ts {
         setTimeout?(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
         /** If provided, will be used to reset existing delayed compilation */
         clearTimeout?(timeoutId: any): void;
+        require?(initialPath: string, moduleName: string): ModuleImportResult;
     }
     interface ProgramHost<T extends BuilderProgram> {
         /**

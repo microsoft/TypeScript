@@ -3,6 +3,7 @@ import {
     binarySearch,
     BuilderProgram,
     closeFileWatcher,
+    combinePaths,
     compareStringsCaseSensitive,
     CompilerOptions,
     createGetCanonicalFileName,
@@ -20,6 +21,7 @@ import {
     FileWatcherCallback,
     FileWatcherEventKind,
     find,
+    forEach,
     getBaseFileName,
     getDirectoryPath,
     getNormalizedAbsolutePath,
@@ -29,15 +31,20 @@ import {
     isArray,
     isDeclarationFileName,
     isExcludedFile,
+    isString,
     isSupportedSourceFileName,
     map,
     matchesExclude,
     matchFiles,
+    ModuleImportResult,
     mutateMap,
     noop,
     normalizePath,
+    normalizeSlashes,
     outFile,
+    parsePackageName,
     Path,
+    PluginImport,
     PollingInterval,
     Program,
     removeFileExtension,
@@ -50,8 +57,11 @@ import {
     supportedJSExtensionsFlat,
     timestamp,
     toPath as ts_toPath,
+    UserWatchFactory,
+    UserWatchFactoryModule,
     WatchDirectoryFlags,
     WatchFileKind,
+    WatchHost,
     WatchOptions,
 } from "./_namespaces/ts";
 
@@ -665,11 +675,17 @@ export interface WatchFactory<X, Y = undefined> {
 /** @internal */
 export type GetDetailWatchInfo<X, Y> = (detailInfo1: X, detailInfo2: Y | undefined) => string;
 /** @internal */
-export function getWatchFactory<X, Y = undefined>(host: WatchFactoryHost, watchLogLevel: WatchLogLevel, log: (s: string) => void, getDetailWatchInfo?: GetDetailWatchInfo<X, Y>): WatchFactory<X, Y> {
+export function getWatchFactory<X, Y = undefined>(
+    host: WatchFactoryHost,
+    getUserWatchFactory: (watchOptions: WatchOptions, detailInfo2: Y | undefined) => UserWatchFactory | undefined,
+    watchLogLevel: WatchLogLevel,
+    log: (s: string) => void,
+    getDetailWatchInfo?: GetDetailWatchInfo<X, Y>,
+): WatchFactory<X, Y> {
     setSysLog(watchLogLevel === WatchLogLevel.Verbose ? log : noop);
     const plainInvokeFactory: WatchFactory<X, Y> = {
-        watchFile: (file, callback, pollingInterval, options) => host.watchFile(file, callback, pollingInterval, options),
-        watchDirectory: (directory, callback, flags, options) => host.watchDirectory(directory, callback, (flags & WatchDirectoryFlags.Recursive) !== 0, options),
+        watchFile: createHandlingUserWatchFactory("watchFile", identity),
+        watchDirectory: createHandlingUserWatchFactory("watchDirectory", flags => (flags & WatchDirectoryFlags.Recursive) !== 0),
     };
     const triggerInvokingFactory: WatchFactory<X, Y> | undefined = watchLogLevel !== WatchLogLevel.None ?
         {
@@ -686,13 +702,28 @@ export function getWatchFactory<X, Y = undefined>(host: WatchFactoryHost, watchL
     const excludeWatcherFactory = watchLogLevel === WatchLogLevel.Verbose ?
         createExcludeWatcherWithLogging :
         returnNoopFileWatcher;
-
     return {
         watchFile: createExcludeHandlingAddWatch("watchFile"),
-        watchDirectory: createExcludeHandlingAddWatch("watchDirectory")
+        watchDirectory: createExcludeHandlingAddWatch("watchDirectory"),
     };
 
-    function createExcludeHandlingAddWatch<T extends keyof WatchFactory<X, Y>>(key: T): WatchFactory<X, Y>[T] {
+    function createHandlingUserWatchFactory<T extends "watchFile" | "watchDirectory">(key: T, convertFlags: (flags: PollingInterval | WatchDirectoryFlags) => number | boolean): WatchFactory<X, Y>[T] {
+        return (
+            file: string,
+            cb: FileWatcherCallback | DirectoryWatcherCallback,
+            flags: PollingInterval | WatchDirectoryFlags,
+            options: WatchOptions | undefined,
+            _detailInfo1: X,
+            detailInfo2?: Y,
+        ) => {
+            const userWatchFactory = options?.watchFactory ? getUserWatchFactory(options, detailInfo2) : undefined;
+            return typeof userWatchFactory?.[key] === "function" ?
+                userWatchFactory[key]!.call(userWatchFactory, file, cb, convertFlags(flags), options) :
+                host[key].call(/*thisArg*/undefined, file, cb, convertFlags(flags), options);
+        };
+    }
+
+    function createExcludeHandlingAddWatch<T extends "watchFile" | "watchDirectory">(key: T): WatchFactory<X, Y>[T] {
         return (
             file: string,
             cb: FileWatcherCallback | DirectoryWatcherCallback,
@@ -768,7 +799,7 @@ export function getWatchFactory<X, Y = undefined>(host: WatchFactoryHost, watchL
         };
     }
 
-    function createTriggerLoggingAddWatch<T extends keyof WatchFactory<X, Y>>(key: T): WatchFactory<X, Y>[T] {
+    function createTriggerLoggingAddWatch<T extends "watchFile" | "watchDirectory">(key: T): WatchFactory<X, Y>[T] {
         return (
             file: string,
             cb: FileWatcherCallback | DirectoryWatcherCallback,
@@ -792,6 +823,14 @@ export function getWatchFactory<X, Y = undefined>(host: WatchFactoryHost, watchL
 }
 
 /** @internal */
+export function getAllowedPluginName(watchFactory: string | PluginImport) {
+    const factoryName = isString(watchFactory) ? watchFactory : watchFactory.name;
+    return factoryName && !parsePackageName(factoryName).rest ?
+        factoryName :
+        undefined;
+}
+
+/** @internal */
 export function getFallbackOptions(options: WatchOptions | undefined): WatchOptions {
     const fallbackPolling = options?.fallbackPolling;
     return {
@@ -804,4 +843,268 @@ export function getFallbackOptions(options: WatchOptions | undefined): WatchOpti
 /** @internal */
 export function closeFileWatcherOf<T extends { watcher: FileWatcher; }>(objWithWatcher: T) {
     objWithWatcher.watcher.close();
+}
+
+/** @internal */
+export interface UserWatchFactoryWithName {
+    name: string;
+    factory: UserWatchFactory;
+}
+
+/** @internal */
+export interface UserWatchFactoryContainer {
+    userWatchFactory?: UserWatchFactoryWithName | false;
+}
+
+/** @internal */
+export interface GetOrLoadUserWatchFactoryDetails {
+    getCurrentUserWatchFactory(): UserWatchFactoryWithName | false | undefined;
+    setUserWatchFactory(userWatchFactory: UserWatchFactoryWithName | false): void;
+    createUserWatchFactory(resolvedModule: UserWatchFactoryModule, pluginConfigEntry: PluginImport, watchOptions: WatchOptions): UserWatchFactory;
+    getSearchPaths(): readonly string[];
+}
+
+/** @internal */
+export function getOrLoadUserWatchFactory(
+    host: WatchHost,
+    watchOptions: WatchOptions,
+    log: (s: string) => void,
+    verboseLog: (s: string) => void,
+    details: GetOrLoadUserWatchFactoryDetails,
+    allowPlugins: boolean,
+): UserWatchFactory | undefined {
+    const existing = details.getCurrentUserWatchFactory();
+    if (existing !== undefined) return existing ? existing.factory : undefined;
+
+    const result = loadUserWatchFactory(
+        host,
+        watchOptions,
+        log,
+        verboseLog,
+        details,
+        allowPlugins,
+    );
+    details.setUserWatchFactory(result || false);
+    return result?.factory || undefined;
+}
+
+function loadUserWatchFactory(
+    host: WatchHost,
+    watchOptions: WatchOptions,
+    log: (s: string) => void,
+    verboseLog: (s: string) => void,
+    details: GetOrLoadUserWatchFactoryDetails,
+    allowPlugins: boolean,
+): UserWatchFactoryWithName | undefined {
+    if (!host.importPlugin && !host.require) {
+        log("Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded");
+        return undefined;
+    }
+
+    if (!allowPlugins) {
+        log(`Skipped loading watchFactory ${JSON.stringify(watchOptions.watchFactory)} because it was invoked without specifying --allowPlugins`);
+        return undefined;
+    }
+
+    const factoryName = getAllowedPluginName(watchOptions.watchFactory!);
+    if (!factoryName) {
+        log(`Skipped loading watchFactory ${JSON.stringify(watchOptions.watchFactory)} because it can be named with only package name`);
+        return undefined;
+    }
+
+    const searchPaths = details.getSearchPaths();
+    verboseLog(`Enabling watchFactory '${factoryName}' from candidate paths: ${searchPaths.join(",")}`);
+
+    // If the host supports dynamic import, begin enabling the plugin asynchronously.
+    if (host.importPlugin) {
+        const importPromise: Promise<PluginImportResult<UserWatchFactoryModule>> = importPluginAsync(
+            isString(watchOptions.watchFactory) ? { name: watchOptions.watchFactory } : watchOptions.watchFactory!,
+            searchPaths,
+            host,
+            log,
+        );
+        return {
+            name: factoryName,
+            factory: createUserWatchFactoryWithPromise(
+                host,
+                watchOptions,
+                log,
+                verboseLog,
+                details,
+                importPromise
+            ),
+        };
+    }
+
+    // Otherwise, load the plugin using `require`
+    const factory = setImportWatchFactoryResult(
+        watchOptions,
+        log,
+        verboseLog,
+        details,
+        importPluginSync(
+            isString(watchOptions.watchFactory) ? { name: watchOptions.watchFactory } : watchOptions.watchFactory!,
+            searchPaths,
+            host,
+            log,
+        )
+    );
+    return factory ? { name: factoryName, factory } : undefined;
+}
+
+/** @internal */
+export interface PluginImportResult<T> {
+    pluginConfigEntry: PluginImport;
+    resolvedModule: T | undefined;
+    errorLogs: string[] | undefined;
+}
+
+/** @internal */
+export function setImportWatchFactoryResult(
+    watchOptions: WatchOptions,
+    log: (s: string) => void,
+    verboseLog: (s: string) => void,
+    details: GetOrLoadUserWatchFactoryDetails,
+    { resolvedModule, errorLogs, pluginConfigEntry }: PluginImportResult<UserWatchFactoryModule>,
+) {
+    if (typeof resolvedModule === "function") {
+        try {
+            const userWatchFactory = details.createUserWatchFactory(resolvedModule, pluginConfigEntry, watchOptions);
+            verboseLog(`Plugin validation succeeded`);
+            return userWatchFactory;
+        }
+        catch (e) {
+            log(`Plugin activation failed: ${e}`);
+        }
+    }
+    else if (resolvedModule) {
+        log(`Skipped loading watchFactory '${pluginConfigEntry.name}' because it did not expose a proper factory function`);
+    }
+    else {
+        forEach(errorLogs, log);
+        log(`Couldn't find '${pluginConfigEntry.name}'`);
+    }
+}
+
+/** @internal */
+export interface UserWatchFactoryWithPromise extends UserWatchFactory {
+    importPromise: Promise<PluginImportResult<UserWatchFactoryModule>>;
+}
+
+/** @internal */
+export function createUserWatchFactoryWithPromise(
+    host: WatchHost,
+    watchOptions: WatchOptions,
+    log: (s: string) => void,
+    verboseLog: (s: string) => void,
+    details: GetOrLoadUserWatchFactoryDetails,
+    importPromise: Promise<PluginImportResult<UserWatchFactoryModule>>,
+): UserWatchFactory {
+    interface PendingFileWatcher extends FileWatcher {
+        hostWatcher: FileWatcher;
+        createFactoryWatcher?: (userWatchFactory: UserWatchFactory) => FileWatcher | undefined;
+    }
+    let pendingWatchers: Set<PendingFileWatcher> | undefined = new Set<PendingFileWatcher>();
+    const factory: UserWatchFactoryWithPromise = {
+        create: noop,
+        watchFile: createHandlingPromise("watchFile", host),
+        watchDirectory: createHandlingPromise("watchDirectory", host),
+        importPromise,
+    };
+    importPromise.then(resolved => {
+        const userWatchFactory = setImportWatchFactoryResult(watchOptions, log, verboseLog, details, resolved);
+        pendingWatchers!.forEach(pending => {
+            const newWatcher = userWatchFactory ? pending.createFactoryWatcher!(userWatchFactory) : undefined;
+            if (newWatcher) {
+                pending.hostWatcher.close();
+                pending.hostWatcher = newWatcher;
+            }
+            pending.createFactoryWatcher = undefined;
+        });
+        pendingWatchers = undefined;
+        const current = details.getCurrentUserWatchFactory();
+        if (current && current.factory === factory) {
+            details.setUserWatchFactory(userWatchFactory ? { name: current.name, factory: userWatchFactory } : false);
+        }
+    });
+    return factory;
+
+    function createHandlingPromise<T extends "watchFile" | "watchDirectory">(
+        key: T,
+        host: WatchHost,
+    ): UserWatchFactory[T] {
+        return (
+            file: string,
+            cb: FileWatcherCallback & DirectoryWatcherCallback,
+            flags: PollingInterval & WatchDirectoryFlags,
+            options: WatchOptions | undefined,
+        ) => {
+            const fileWatcher: PendingFileWatcher = {
+                hostWatcher: host[key](file, cb, flags, options),
+                createFactoryWatcher: userWatchFactory => typeof userWatchFactory[key] === "function" ?
+                    userWatchFactory?.[key]!(file, cb, flags, options) : undefined,
+                close() {
+                    fileWatcher.hostWatcher.close();
+                    pendingWatchers?.delete(fileWatcher);
+                }
+            };
+            pendingWatchers?.add(fileWatcher);
+            return fileWatcher;
+        };
+    }
+}
+
+/** @internal */
+export function importPluginSync<T = {}>(
+    pluginConfigEntry: PluginImport,
+    searchPaths: readonly string[],
+    host: WatchHost,
+    log: (message: string) => void,
+): PluginImportResult<T> {
+    Debug.assertIsDefined(host.require);
+    let errorLogs: string[] | undefined;
+    let resolvedModule: T | undefined;
+    for (const initialDir of searchPaths) {
+        const path = combinePaths(initialDir, "node_modules");
+        const resolvedPath = normalizeSlashes(host.resolvePath ? host.resolvePath(path) : path);
+        log(`Loading ${pluginConfigEntry.name} from ${initialDir} (resolved to ${resolvedPath})`);
+        const result = host.require(resolvedPath, pluginConfigEntry.name); // TODO: GH#18217
+        if (!result.error) {
+            resolvedModule = result.module as T;
+            break;
+        }
+        const err = result.error.stack || result.error.message || JSON.stringify(result.error);
+        (errorLogs ??= []).push(`Failed to load module '${pluginConfigEntry.name}' from ${resolvedPath}: ${err}`);
+    }
+    return { pluginConfigEntry, resolvedModule, errorLogs };
+}
+
+/** @internal */
+export async function importPluginAsync<T = {}>(
+    pluginConfigEntry: PluginImport,
+    searchPaths: readonly string[],
+    host: WatchHost,
+    log: (message: string) => void,
+): Promise<PluginImportResult<T>> {
+    Debug.assertIsDefined(host.importPlugin);
+    let errorLogs: string[] | undefined;
+    let resolvedModule: T | undefined;
+    for (const initialDir of searchPaths) {
+        const resolvedPath = combinePaths(initialDir, "node_modules");
+        log(`Dynamically importing ${pluginConfigEntry.name} from ${initialDir} (resolved to ${resolvedPath})`);
+        let result: ModuleImportResult;
+        try {
+            result = await host.importPlugin(resolvedPath, pluginConfigEntry.name);
+        }
+        catch (e) {
+            result = { module: undefined, error: e };
+        }
+        if (!result.error) {
+            resolvedModule = result.module as T;
+            break;
+        }
+        const err = result.error.stack || result.error.message || JSON.stringify(result.error);
+        (errorLogs ??= []).push(`Failed to dynamically import module '${pluginConfigEntry.name}' from ${resolvedPath}: ${err}`);
+    }
+    return { pluginConfigEntry, resolvedModule, errorLogs };
 }

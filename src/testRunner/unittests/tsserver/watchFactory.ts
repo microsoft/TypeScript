@@ -240,7 +240,7 @@ describe("unittests:: tsserver:: watchEnvironment:: watchFactory", () => {
 
         shouldLoad.resolve();
 
-        // await ((session.getProjectService().userWatchFactory as ts.UserWatchFactoryWithName).factory as ts.UserWatchFactoryWithPromise).importPromise;
+        await ((session.getProjectService().userWatchFactory as ts.UserWatchFactoryWithName).factory as ts.UserWatchFactoryWithPromise).importPromise;
 
         session.testhost.baselineHost("Watches after plugin is resolved");
 
@@ -268,7 +268,7 @@ describe("unittests:: tsserver:: watchEnvironment:: watchFactory", () => {
 
         shouldLoad.resolve();
 
-        // await ((session.getProjectService().userWatchFactory as ts.UserWatchFactoryWithName).factory as ts.UserWatchFactoryWithPromise).importPromise;
+        await ((session.getProjectService().userWatchFactory as ts.UserWatchFactoryWithName).factory as ts.UserWatchFactoryWithPromise).importPromise;
 
         session.testhost.baselineHost("Watches after plugin is resolved");
 
@@ -302,7 +302,7 @@ describe("unittests:: tsserver:: watchEnvironment:: watchFactory", () => {
 
         shouldLoad.resolve();
 
-        // await ((session.getProjectService().userWatchFactory as ts.UserWatchFactoryWithName).factory as ts.UserWatchFactoryWithPromise).importPromise;
+        await ((session.getProjectService().userWatchFactory as ts.UserWatchFactoryWithName).factory as ts.UserWatchFactoryWithPromise).importPromise;
 
         session.testhost.baselineHost("Watches after plugin is resolved");
 
@@ -331,7 +331,7 @@ describe("unittests:: tsserver:: watchEnvironment:: watchFactory", () => {
 
         shouldLoad.resolve();
 
-        // await ((session.getProjectService().userWatchFactory as ts.UserWatchFactoryWithName).factory as ts.UserWatchFactoryWithPromise).importPromise;
+        await ((session.getProjectService().userWatchFactory as ts.UserWatchFactoryWithName).factory as ts.UserWatchFactoryWithPromise).importPromise;
 
         session.testhost.baselineHost("Watches after plugin is resolved");
 

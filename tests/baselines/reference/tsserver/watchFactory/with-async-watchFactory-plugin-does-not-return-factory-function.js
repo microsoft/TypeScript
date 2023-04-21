@@ -65,6 +65,9 @@ Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/a.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 {"watchFactory":"myplugin"} Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Enabling watchFactory 'myplugin' from candidate paths: /a/pluginprobe1,/a/pluginprobe2,/a/lib/tsc.js/../../..
+Info seq  [hh:mm:ss:mss] Dynamically importing myplugin from /a/pluginprobe1 (resolved to /a/pluginprobe1/node_modules)
+CustomRequire:: Resolving myplugin from /a/pluginprobe1/node_modules
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/a.ts",
@@ -203,6 +206,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject:
   {}
 
+Info seq  [hh:mm:ss:mss] Skipped loading watchFactory 'myplugin' because it did not expose a proper factory function
 Watches after plugin is resolved
 
 Add a file after factory is resolved

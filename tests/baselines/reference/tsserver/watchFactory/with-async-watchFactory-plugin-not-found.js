@@ -65,6 +65,9 @@ Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/a.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 {"watchFactory":"myplugin"} Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Enabling watchFactory 'myplugin' from candidate paths: /a/pluginprobe1,/a/pluginprobe2,/a/lib/tsc.js/../../..
+Info seq  [hh:mm:ss:mss] Dynamically importing myplugin from /a/pluginprobe1 (resolved to /a/pluginprobe1/node_modules)
+CustomRequire:: Resolving myplugin from /a/pluginprobe1/node_modules
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/a.ts",
@@ -203,6 +206,14 @@ FsWatchesRecursive::
 /user/username/projects/myproject:
   {}
 
+Info seq  [hh:mm:ss:mss] Dynamically importing myplugin from /a/pluginprobe2 (resolved to /a/pluginprobe2/node_modules)
+CustomRequire:: Resolving myplugin from /a/pluginprobe2/node_modules
+Info seq  [hh:mm:ss:mss] Dynamically importing myplugin from /a/lib/tsc.js/../../.. (resolved to /a/lib/tsc.js/../../../node_modules)
+CustomRequire:: Resolving myplugin from /a/lib/tsc.js/../../../node_modules
+Info seq  [hh:mm:ss:mss] Failed to dynamically import module 'myplugin' from /a/pluginprobe1/node_modules: Cannot find module myPlugin at /a/pluginprobe1/node_modules
+Info seq  [hh:mm:ss:mss] Failed to dynamically import module 'myplugin' from /a/pluginprobe2/node_modules: Cannot find module myPlugin at /a/pluginprobe2/node_modules
+Info seq  [hh:mm:ss:mss] Failed to dynamically import module 'myplugin' from /a/lib/tsc.js/../../../node_modules: Cannot find module myPlugin at /a/lib/tsc.js/../../../node_modules
+Info seq  [hh:mm:ss:mss] Couldn't find 'myplugin'
 Watches after plugin is resolved
 
 Add a file after factory is resolved

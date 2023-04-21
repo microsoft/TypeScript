@@ -10,6 +10,7 @@ import {
     clearSharedExtendedConfigFileWatcher,
     closeFileWatcher,
     closeFileWatcherOf,
+    combinePaths,
     CompilerHost,
     CompilerOptions,
     ConfigFileDiagnosticsReporter,
@@ -34,6 +35,7 @@ import {
     DirectoryStructureHost,
     DirectoryWatcherCallback,
     EmitAndSemanticDiagnosticsBuilderProgram,
+    emptyArray,
     ExtendedConfigCacheEntry,
     FileExtensionInfo,
     FileReference,
@@ -46,6 +48,7 @@ import {
     getFileNamesFromConfigSpecs,
     getNewLineCharacter,
     getNormalizedAbsolutePath,
+    GetOrLoadUserWatchFactoryDetailsForFactory,
     getParsedCommandLineOfConfigFile,
     getSourceFileVersionAsHashFromText,
     getTsBuildInfoEmitOutputFilePath,
@@ -56,6 +59,7 @@ import {
     isProgramUptoDate,
     MapLike,
     maybeBind,
+    ModuleImportResult,
     ModuleResolutionCache,
     noop,
     noopFileWatcher,
@@ -88,6 +92,7 @@ import {
     updateMissingFilePathsWatch,
     updateSharedExtendedConfigFileWatcher,
     updateWatchingWildcardDirectories,
+    UserWatchFactoryWithName,
     version,
     WatchDirectoryFlags,
     WatchOptions,
@@ -165,7 +170,6 @@ export interface UserWatchFactory {
     watchFile?(fileName: string, callback: FileWatcherCallback, pollingInterval: number, options: WatchOptions | undefined): FileWatcher;
     watchDirectory?(fileName: string, callback: DirectoryWatcherCallback, recursive: boolean, options: WatchOptions | undefined): FileWatcher;
 }
-
 /** Host that has watch functionality used in --watch mode */
 export interface WatchHost {
     /** If provided, called with Diagnostic message that informs about change in watch status */
@@ -179,6 +183,11 @@ export interface WatchHost {
     setTimeout?(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
     /** If provided, will be used to reset existing delayed compilation */
     clearTimeout?(timeoutId: any): void;
+    require?(initialPath: string, moduleName: string): ModuleImportResult;
+    /** @internal */
+    importPlugin?(root: string, moduleName: string): Promise<ModuleImportResult>;
+     /** @internal */
+    resolvePath?(path: string): string;
 }
 export interface ProgramHost<T extends BuilderProgram> {
     /**
@@ -459,6 +468,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
     let configFileParsingDiagnostics: Diagnostic[] | undefined;
     let canConfigFileJsonReportNoInputFiles = false;
     let hasChangedConfigFileParsingErrors = false;
+    let userWatchFactory: UserWatchFactoryWithName | false | undefined;
 
     const cachedDirectoryStructureHost = configFileName === undefined ? undefined : createCachedDirectoryStructureHost(host, currentDirectory, useCaseSensitiveFileNames);
     const directoryStructureHost: DirectoryStructureHost = cachedDirectoryStructureHost || host;
@@ -481,8 +491,11 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
     Debug.assert(compilerOptions);
     Debug.assert(rootFileNames);
 
-    const { watchFile, watchDirectory, writeLog } = createWatchFactory(host, compilerOptions);
+    const { watchFile, watchDirectory, writeLog } = createWatchFactory(host, getOrLoadUserWatchFactoryDetails, compilerOptions);
     const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
+    const watch: WatchOfFilesAndCompilerOptions<T> | WatchOfConfigFile<T> = configFileName ?
+        { getCurrentProgram: getCurrentBuilderProgram, getProgram: updateProgram, close } :
+        { getCurrentProgram: getCurrentBuilderProgram, getProgram: updateProgram, updateRootFileNames, close };
 
     writeLog(`Current directory: ${currentDirectory} CaseSensitiveFileNames: ${useCaseSensitiveFileNames}`);
     let configFileWatcher: FileWatcher | undefined;
@@ -558,10 +571,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
 
     // Update extended config file watch
     if (configFileName) updateExtendedConfigFilesWatches(toPath(configFileName), compilerOptions, watchOptions, WatchType.ExtendedConfigFile);
-
-    return configFileName ?
-        { getCurrentProgram: getCurrentBuilderProgram, getProgram: updateProgram, close } :
-        { getCurrentProgram: getCurrentBuilderProgram, getProgram: updateProgram, updateRootFileNames, close };
+    return watch;
 
     function close() {
         clearInvalidateResolutionsOfFailedLookupLocations();
@@ -1233,5 +1243,19 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
             commandLine.parsedCommandLine?.watchOptions || watchOptions,
             WatchType.ExtendedConfigOfReferencedProject
         );
+    }
+
+    function getOrLoadUserWatchFactoryDetails(): GetOrLoadUserWatchFactoryDetailsForFactory {
+        return {
+            getCurrentUserWatchFactory: () => userWatchFactory,
+            setUserWatchFactory: newUserWatchFactory => userWatchFactory = newUserWatchFactory,
+            getSearchList: () => [
+                ...(compilerOptions?.configFilePath ? [getDirectoryPath(compilerOptions.configFilePath)] : emptyArray),
+                currentDirectory,
+                // ../../.. to walk from X/node_modules/typescript/lib/tsserver.js to X/node_modules/
+                ...(host.getDefaultLibLocation ? [combinePaths(host.getDefaultLibLocation(), "../..")] : emptyArray),
+            ],
+            getWatch: () => watch,
+        };
     }
 }

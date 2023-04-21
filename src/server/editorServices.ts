@@ -13,6 +13,7 @@ import {
     closeFileWatcherOf,
     combinePaths,
     CommandLineOption,
+    compareDataObjects,
     CompilerOptions,
     CompletionInfo,
     ConfigFileProgramReloadLevel,
@@ -48,6 +49,7 @@ import {
     forEachResolvedProjectReference,
     FormatCodeSettings,
     formatDiagnostics,
+    getAllowedPluginName,
     getAnyExtensionFromPath,
     getBaseFileName,
     getDefaultFormatCodeSettings,
@@ -56,6 +58,7 @@ import {
     getFileNamesFromConfigSpecs,
     getFileWatcherEventKind,
     getNormalizedAbsolutePath,
+    getOrLoadUserWatchFactory,
     getPathComponents,
     getSnapshotText,
     getWatchFactory,
@@ -64,6 +67,8 @@ import {
     hasTSFileExtension,
     HostCancellationToken,
     identity,
+    importPluginAsync,
+    importPluginSync,
     IncompleteCompletionsCache,
     IndentStyle,
     isArray,
@@ -89,7 +94,6 @@ import {
     ParsedCommandLine,
     parseJsonSourceFileConfigFileContent,
     parseJsonText,
-    parsePackageName,
     Path,
     PerformanceEvent,
     PluginImport,
@@ -125,6 +129,8 @@ import {
     updateSharedExtendedConfigFileWatcher,
     updateWatchingWildcardDirectories,
     UserPreferences,
+    UserWatchFactory,
+    UserWatchFactoryWithName,
     version,
     WatchDirectoryFlags,
     WatchFactory,
@@ -789,8 +795,21 @@ interface NodeModulesWatcher extends FileWatcher {
     affectedModuleSpecifierCacheProjects?: Set<string>;
 }
 
-function getDetailWatchInfo(watchType: WatchType, project: Project | NormalizedPath | undefined) {
-    return `${isString(project) ? `Config: ${project} ` : project ? `Project: ${project.getProjectName()} ` : ""}WatchType: ${watchType}`;
+/** @internal */
+export interface ProjectAndConfigFileName {
+    project: ConfiguredProject;
+    configFileName: NormalizedPath;
+}
+
+/** @internal */
+export type WatchFactoryDetail = Project | NormalizedPath | ProjectAndConfigFileName;
+
+function isProject(projectOrForProjectAndConfigFileExistence: ProjectAndConfigFileName | Project): projectOrForProjectAndConfigFileExistence is Project {
+    return !(projectOrForProjectAndConfigFileExistence as ProjectAndConfigFileName).project;
+}
+
+function getDetailWatchInfo(watchType: WatchType, project: WatchFactoryDetail | undefined) {
+    return `${isString(project) ? `Config: ${project} ` : project ? `Project: ${(isProject(project) ? project : project.project).getProjectName()} ` : ""}WatchType: ${watchType}`;
 }
 
 function isScriptInfoWatchedFromNodeModules(info: ScriptInfo) {
@@ -855,6 +874,10 @@ export interface ParsedConfig{
      */
     watchedDirectoriesStale?: boolean;
     reloadLevel?: ConfigFileProgramReloadLevel.Partial | ConfigFileProgramReloadLevel.Full;
+    /**
+     * Cached resolved watch factory
+     */
+    userWatchFactory?: UserWatchFactoryWithName | false;
 }
 
 function createProjectNameFactoryWithCounter(nameFactory: (counter: number) => string) {
@@ -950,6 +973,7 @@ export class ProjectService {
     /** @internal */ readonly throttledOperations: ThrottledOperations;
 
     private readonly hostConfiguration: HostConfiguration;
+    /** @internal */ userWatchFactory: UserWatchFactoryWithName | false | undefined;
     private safelist: SafeList = defaultTypeSafeList;
     private readonly legacySafelist = new Map<string, string>();
 
@@ -984,7 +1008,7 @@ export class ProjectService {
     private readonly seenProjects = new Map<string, true>();
 
     /** @internal */
-    readonly watchFactory: WatchFactory<WatchType, Project | NormalizedPath>;
+    readonly watchFactory: WatchFactory<WatchType, WatchFactoryDetail>;
 
     /** @internal */
     private readonly sharedExtendedConfigFileWatchers = new Map<Path, SharedExtendedConfigFileWatcher<NormalizedPath>>();
@@ -1067,7 +1091,13 @@ export class ProjectService {
                 watchFile: returnNoopFileWatcher,
                 watchDirectory: returnNoopFileWatcher,
             } :
-            getWatchFactory(this.host, watchLogLevel, log, getDetailWatchInfo);
+            getWatchFactory(
+                this.host,
+                (options, watchFactoryDetail) => this.getUserWatchFactory(options, watchFactoryDetail),
+                watchLogLevel,
+                log,
+                getDetailWatchInfo,
+            );
     }
 
     toPath(fileName: string) {
@@ -1878,7 +1908,7 @@ export class ProjectService {
                 PollingInterval.High,
                 this.getWatchOptionsFromProjectWatchOptions(configFileExistenceInfo?.config?.parsedCommandLine?.watchOptions),
                 WatchType.ConfigFile,
-                forProject
+                { project: forProject, configFileName }
             );
         }
         // Watching config file for project, update the map
@@ -2438,6 +2468,8 @@ export class ProjectService {
             configFileExistenceInfo.watcher?.close();
             configFileExistenceInfo.watcher = undefined;
         }
+
+        this.releaseUserWatchFactory(oldCommandLine?.watchOptions, parsedCommandLine.watchOptions, configFileExistenceInfo.config);
 
         // Ensure there is watcher for this config file
         this.createConfigFileWatcherForParsedConfig(configFilename, canonicalConfigFilePath, forProject);
@@ -3240,6 +3272,7 @@ export class ProjectService {
 
             if (args.watchOptions) {
                 const result = convertWatchOptions(args.watchOptions);
+                const oldWatchOptions = this.hostConfiguration.watchOptions;
                 this.hostConfiguration.watchOptions = result?.watchOptions;
                 this.logger.info(`Host watch options changed to ${JSON.stringify(this.hostConfiguration.watchOptions)}, it will be take effect for next watches.`);
                 if (result?.errors?.length) {
@@ -3250,6 +3283,7 @@ export class ProjectService {
                         getCanonicalFileName: createGetCanonicalFileName(this.host.useCaseSensitiveFileNames),
                     })}`);
                 }
+                this.releaseUserWatchFactory(oldWatchOptions, this.hostConfiguration.watchOptions, this);
             }
         }
     }
@@ -3895,7 +3929,7 @@ export class ProjectService {
         currentProjects: Iterable<Project>,
         includeProjectReferenceRedirectInfo: boolean | undefined,
         result: ProjectFilesWithTSDiagnostics[]
-        ): void {
+    ): void {
         for (const proj of currentProjects) {
             const knownProject = find(lastKnownProjectVersions, p => p.projectName === proj.getProjectName());
             result.push(proj.getChangesSinceVersion(knownProject && knownProject.version, includeProjectReferenceRedirectInfo));
@@ -4267,6 +4301,39 @@ export class ProjectService {
         return false;
     }
 
+    /** @internal */
+    getGlobalPluginSearchPaths() {
+        // Search any globally-specified probe paths, then our peer node_modules
+        return [
+            ...this.pluginProbeLocations,
+            // ../../.. to walk from X/node_modules/typescript/lib/tsserver.js to X/node_modules/
+            combinePaths(this.getExecutingFilePath(), "../../.."),
+        ];
+    }
+
+    /** @internal */
+    getProjectPluginSearchPaths(canonicalConfigFilePath: string | undefined) {
+        const searchPaths = this.getGlobalPluginSearchPaths();
+        if (canonicalConfigFilePath && this.allowLocalPluginLoads) {
+            const local = getDirectoryPath(canonicalConfigFilePath);
+            this.logger.info(`Local plugin loading enabled; adding ${local} to search paths`);
+            searchPaths.unshift(local);
+        }
+        return searchPaths;
+    }
+
+    /** @internal */
+    private getPluginWithConfigOverride(pluginConfigEntry: PluginImport) {
+        const configurationOverride = this.currentPluginConfigOverrides?.get(pluginConfigEntry.name);
+        if (configurationOverride) {
+            // Preserve the name property since it's immutable
+            const pluginName = pluginConfigEntry.name;
+            pluginConfigEntry = configurationOverride;
+            pluginConfigEntry.name = pluginName;
+        }
+        return pluginConfigEntry;
+    }
+
     /**
      * Performs the initial steps of enabling a plugin by finding and instantiating the module for a plugin either asynchronously or synchronously
      * @internal
@@ -4278,14 +4345,14 @@ export class ProjectService {
         }
 
         this.logger.info(`Enabling plugin ${pluginConfigEntry.name} from candidate paths: ${searchPaths.join(",")}`);
-        if (!pluginConfigEntry.name || parsePackageName(pluginConfigEntry.name).rest) {
+        if (!getAllowedPluginName(pluginConfigEntry)) {
             this.logger.info(`Skipped loading plugin ${pluginConfigEntry.name || JSON.stringify(pluginConfigEntry)} because only package name is allowed plugin name`);
             return;
         }
 
         // If the host supports dynamic import, begin enabling the plugin asynchronously.
         if (this.host.importPlugin) {
-            const importPromise = Project.importServicePluginAsync(
+            const importPromise = importPluginAsync(
                 pluginConfigEntry,
                 searchPaths,
                 this.host,
@@ -4299,7 +4366,7 @@ export class ProjectService {
         }
 
         // Otherwise, load the plugin using `require`
-        this.endEnablePlugin(project, Project.importServicePluginSync(
+        this.endEnablePlugin(project, importPluginSync(
             pluginConfigEntry,
             searchPaths,
             this.host,
@@ -4313,14 +4380,7 @@ export class ProjectService {
      */
     private endEnablePlugin(project: Project, { pluginConfigEntry, resolvedModule, errorLogs }: BeginEnablePluginResult) {
         if (resolvedModule) {
-            const configurationOverride = this.currentPluginConfigOverrides?.get(pluginConfigEntry.name);
-            if (configurationOverride) {
-                // Preserve the name property since it's immutable
-                const pluginName = pluginConfigEntry.name;
-                pluginConfigEntry = configurationOverride;
-                pluginConfigEntry.name = pluginName;
-            }
-            project.enableProxy(resolvedModule, pluginConfigEntry);
+            project.enableProxy(resolvedModule, this.getPluginWithConfigOverride(pluginConfigEntry));
         }
         else {
             forEach(errorLogs, message => this.logger.info(message));
@@ -4414,6 +4474,9 @@ export class ProjectService {
     configurePlugin(args: protocol.ConfigurePluginRequestArguments) {
         // For any projects that already have the plugin loaded, configure the plugin
         this.forEachEnabledProject(project => project.onPluginConfigurationChanged(args.pluginName, args.configuration));
+        this.onUserWatchFactoryConfigurationChanged(this.userWatchFactory, args.pluginName, args.configuration);
+        this.configFileExistenceInfoCache.forEach(configFileExistenceInfo =>
+            this.onUserWatchFactoryConfigurationChanged(configFileExistenceInfo.config?.userWatchFactory, args.pluginName, args.configuration));
 
         // Also save the current configuration to pass on to any projects that are yet to be loaded.
         // If a plugin is configured twice, only the latest configuration will be remembered.
@@ -4526,6 +4589,87 @@ export class ProjectService {
     /** @internal */
     getIncompleteCompletionsCache() {
         return this.incompleteCompletionsCache ||= createIncompleteCompletionsCache();
+    }
+
+    /** @internal */
+    onUserWatchFactoryConfigurationChanged(userWatchFactory: UserWatchFactoryWithName | false | undefined, pluginName: string, configuration: any) {
+        if (userWatchFactory && userWatchFactory.name === pluginName) {
+            userWatchFactory.factory.onConfigurationChanged?.(configuration);
+        }
+    }
+
+    /** @internal */
+    releaseUserWatchFactory(
+        oldWatchOptions: WatchOptions | undefined,
+        newWatchOptions: WatchOptions | undefined,
+        container: ProjectService | Project | ParsedConfig
+    ) {
+        if (container.userWatchFactory !== undefined &&
+            !compareDataObjects(oldWatchOptions?.watchFactory, newWatchOptions?.watchFactory)) {
+            container.userWatchFactory = undefined;
+        }
+    }
+
+    /** @internal */
+    private getUserWatchFactory(watchOptions: WatchOptions, watchFactoryDetail: WatchFactoryDetail | undefined): UserWatchFactory | undefined {
+        let container: ProjectService | Project | ParsedConfig;
+        let canonicalConfigFilePath: NormalizedPath | undefined;
+        if (watchOptions === this.hostConfiguration.watchOptions) {
+            container = this; // eslint-disable-line @typescript-eslint/no-this-alias
+        }
+        else {
+            Debug.assertIsDefined(watchFactoryDetail);
+            let project: Project | undefined;
+            let ownWatchOptions: WatchOptions | undefined;
+            if (isString(watchFactoryDetail)) {
+                canonicalConfigFilePath = asNormalizedPath(this.toCanonicalFileName(watchFactoryDetail));
+            }
+            else {
+                if (isProject(watchFactoryDetail)) {
+                    project = watchFactoryDetail;
+                }
+                else {
+                    project = watchFactoryDetail.project;
+                    canonicalConfigFilePath = asNormalizedPath(this.toCanonicalFileName(watchFactoryDetail.configFileName));
+                }
+                if (!canonicalConfigFilePath && isConfiguredProject(project)) {
+                    canonicalConfigFilePath = project.canonicalConfigFilePath;
+                }
+            }
+            container = canonicalConfigFilePath ?
+                this.configFileExistenceInfoCache.get(canonicalConfigFilePath)!.config! :
+                project!;
+            if (canonicalConfigFilePath) ownWatchOptions = (container as ParsedConfig).parsedCommandLine!.watchOptions;
+            else ownWatchOptions = (container as Project).getWatchOptions();
+            // If watchFactory is from hostConfiguration, revert to using container as this
+            if (!compareDataObjects(ownWatchOptions?.watchFactory, watchOptions.watchFactory)) {
+                Debug.assert(compareDataObjects(this.hostConfiguration.watchOptions?.watchFactory, watchOptions.watchFactory), "Expected host configuration watchFactory");
+                container = this;  // eslint-disable-line @typescript-eslint/no-this-alias
+                canonicalConfigFilePath = undefined;
+            }
+        }
+        return getOrLoadUserWatchFactory(
+            this.host,
+            watchOptions,
+            s => this.logger.info(s),
+            this.logger.hasLevel(LogLevel.verbose) ? (s => this.logger.info(s)) : noop,
+            {
+                getCurrentUserWatchFactory: () => container.userWatchFactory,
+                setUserWatchFactory: userWatchFactory => container.userWatchFactory = userWatchFactory,
+                getSearchPaths: () => container === this ? this.getGlobalPluginSearchPaths() : this.getProjectPluginSearchPaths(canonicalConfigFilePath),
+                createUserWatchFactory: (resolvedModule, pluginConfigEntry, watchOptions) => {
+                    const userWatchFactory = resolvedModule({ typescript: ts });
+                    userWatchFactory.create({
+                        options: watchOptions,
+                        config: this.getPluginWithConfigOverride(pluginConfigEntry),
+                        host: this.host,
+                        session: this.session,
+                    });
+                    return userWatchFactory;
+                },
+            },
+            /*allowPlugins*/ true,
+        );
     }
 }
 

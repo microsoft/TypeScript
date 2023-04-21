@@ -10,7 +10,9 @@ import {
     clearMap,
     closeFileWatcher,
     closeFileWatcherOf,
+    combinePaths,
     commonOptionsWithBuild,
+    compareDataObjects,
     CompilerHost,
     CompilerOptions,
     CompilerOptionsValue,
@@ -63,6 +65,7 @@ import {
     getLocaleTimeString,
     getModifiedTime as ts_getModifiedTime,
     getNormalizedAbsolutePath,
+    GetOrLoadUserWatchFactoryDetailsForFactory,
     getParsedCommandLineOfConfigFile,
     getPendingEmitKind,
     getSourceFileVersionAsHashFromText,
@@ -119,6 +122,7 @@ import {
     updateWatchingWildcardDirectories,
     UpToDateStatus,
     UpToDateStatusType,
+    UserWatchFactoryWithName,
     version,
     WatchFactory,
     WatchHost,
@@ -414,6 +418,7 @@ interface SolutionBuilderState<T extends BuilderProgram> extends WatchFactory<Wa
     readonly allWatchedConfigFiles: Map<ResolvedConfigFilePath, FileWatcher>;
     readonly allWatchedExtendedConfigFiles: Map<Path, SharedExtendedConfigFileWatcher<ResolvedConfigFilePath>>;
     readonly allWatchedPackageJsonFiles: Map<ResolvedConfigFilePath, Map<Path, FileWatcher>>;
+    readonly allWatchFactories: Map<ResolvedConfigFilePath, UserWatchFactoryWithName | false>;
     readonly filesWatched: Map<Path, FileWatcherWithModifiedTime | Date>;
     readonly outputTimeStamps: Map<ResolvedConfigFilePath, Map<Path, Date>>;
 
@@ -424,7 +429,7 @@ interface SolutionBuilderState<T extends BuilderProgram> extends WatchFactory<Wa
     writeLog: (s: string) => void;
 }
 
-function createSolutionBuilderState<T extends BuilderProgram>(watch: boolean, hostOrHostWithWatch: SolutionBuilderHost<T> | SolutionBuilderWithWatchHost<T>, rootNames: readonly string[], options: BuildOptions, baseWatchOptions: WatchOptions | undefined): SolutionBuilderState<T> {
+function createSolutionBuilderAndState<T extends BuilderProgram>(watch: boolean, hostOrHostWithWatch: SolutionBuilderHost<T> | SolutionBuilderWithWatchHost<T>, rootNames: readonly string[], options: BuildOptions, baseWatchOptions: WatchOptions | undefined): SolutionBuilder<T> {
     const host = hostOrHostWithWatch as SolutionBuilderHost<T>;
     const hostWithWatch = hostOrHostWithWatch as SolutionBuilderWithWatchHost<T>;
 
@@ -482,7 +487,11 @@ function createSolutionBuilderState<T extends BuilderProgram>(watch: boolean, ho
     }
     compilerHost.getBuildInfo = (fileName, configFilePath) => getBuildInfo(state, fileName, toResolvedConfigFilePath(state, configFilePath as ResolvedConfigFileName), /*modifiedTime*/ undefined);
 
-    const { watchFile, watchDirectory, writeLog } = createWatchFactory<ResolvedConfigFileName>(hostWithWatch, options);
+    const { watchFile, watchDirectory, writeLog } = createWatchFactory<ResolvedConfigFileName>(
+        hostWithWatch,
+        resolved => getOrLoadUserWatchFactoryDetails(state, () => solution, resolved!),
+        options,
+    );
 
     const state: SolutionBuilderState<T> = {
         host,
@@ -529,6 +538,7 @@ function createSolutionBuilderState<T extends BuilderProgram>(watch: boolean, ho
         allWatchedConfigFiles: new Map(),
         allWatchedExtendedConfigFiles: new Map(),
         allWatchedPackageJsonFiles: new Map(),
+        allWatchFactories: new Map(),
         filesWatched: new Map(),
 
         lastCachedPackageJsonLookups: new Map(),
@@ -540,7 +550,25 @@ function createSolutionBuilderState<T extends BuilderProgram>(watch: boolean, ho
         writeLog,
     };
 
-    return state;
+    const solution: SolutionBuilder<T> = {
+        build: (project, cancellationToken, writeFile, getCustomTransformers) => build(state, project, cancellationToken, writeFile, getCustomTransformers),
+        clean: project => clean(state, project),
+        buildReferences: (project, cancellationToken, writeFile, getCustomTransformers) => build(state, project, cancellationToken, writeFile, getCustomTransformers, /*onlyReferences*/ true),
+        cleanReferences: project => clean(state, project, /*onlyReferences*/ true),
+        getNextInvalidatedProject: cancellationToken => {
+            setupInitialBuild(state, cancellationToken);
+            return getNextInvalidatedProject(state, getBuildOrder(state), /*reportQueue*/ false);
+        },
+        getBuildOrder: () => getBuildOrder(state),
+        getUpToDateStatusOfProject: project => {
+            const configFileName = resolveProjectName(state, project);
+            const configFilePath = toResolvedConfigFilePath(state, configFileName);
+            return getUpToDateStatus(state, parseConfigFile(state, configFileName, configFilePath), configFilePath);
+        },
+        invalidateProject: (configFilePath, reloadLevel) => invalidateProject(state, configFilePath, reloadLevel || ConfigFileProgramReloadLevel.None),
+        close: () => stopWatching(state),
+    };
+    return solution;
 }
 
 function toPath<T extends BuilderProgram>(state: SolutionBuilderState<T>, fileName: string) {
@@ -704,6 +732,8 @@ function createStateBuildOrder<T extends BuilderProgram>(state: SolutionBuilderS
             currentProjects,
             { onDeleteValue: existingMap => existingMap.forEach(closeFileWatcher) }
         );
+
+        mutateMapSkippingNewValues(state.allWatchFactories, currentProjects, noopOnDelete);
     }
     return state.buildOrder = buildOrder;
 }
@@ -1397,6 +1427,7 @@ function getNextInvalidatedProjectCreateInfo<T extends BuilderProgram>(
             reportBuildQueue(state, buildOrder);
         }
 
+        const oldConfig = getCachedParsedConfigFile(state, projectPath);
         const config = parseConfigFile(state, project, projectPath);
         if (!config) {
             reportParseConfigFileDiagnostic(state, projectPath);
@@ -1405,8 +1436,9 @@ function getNextInvalidatedProjectCreateInfo<T extends BuilderProgram>(
         }
 
         if (reloadLevel === ConfigFileProgramReloadLevel.Full) {
+            releaseExistingUseWatchFactory(state, projectPath, oldConfig, config);
             watchConfigFile(state, project, projectPath, config);
-            watchExtendedConfigFiles(state, projectPath, config);
+            watchExtendedConfigFiles(state, project, projectPath, config);
             watchWildCardDirectories(state, project, projectPath, config);
             watchInputFiles(state, project, projectPath, config);
             watchPackageJsonFiles(state, project, projectPath, config);
@@ -1593,7 +1625,7 @@ function getModifiedTime<T extends BuilderProgram>(state: SolutionBuilderState<T
     return result;
 }
 
-function watchFile<T extends BuilderProgram>(state: SolutionBuilderState<T>, file: string, callback: FileWatcherCallback, pollingInterval: PollingInterval, options: WatchOptions | undefined, watchType: WatchType, project?: ResolvedConfigFileName): FileWatcher {
+function watchFile<T extends BuilderProgram>(state: SolutionBuilderState<T>, file: string, callback: FileWatcherCallback, pollingInterval: PollingInterval, options: WatchOptions | undefined, watchType: WatchType, project: ResolvedConfigFileName): FileWatcher {
     const path = toPath(state, file);
     const existing = state.filesWatched.get(path);
     if (existing && isFileWatcherWithModifiedTime(existing)) {
@@ -2319,6 +2351,19 @@ function buildNextInvalidatedProjectWorker<T extends BuilderProgram>(state: Solu
     return buildOrder;
 }
 
+function releaseExistingUseWatchFactory<T extends BuilderProgram>(
+    state: SolutionBuilderState<T>,
+    resolvedPath: ResolvedConfigFilePath,
+    oldConfig: ParsedCommandLine | undefined,
+    newConfig: ParsedCommandLine,
+) {
+    const existing = state.allWatchFactories.get(resolvedPath);
+    if (existing !== undefined &&
+        !compareDataObjects(oldConfig?.watchOptions?.watchFactory, newConfig.watchOptions?.watchFactory)) {
+        state.allWatchFactories.delete(resolvedPath);
+    }
+}
+
 function watchConfigFile<T extends BuilderProgram>(state: SolutionBuilderState<T>, resolved: ResolvedConfigFileName, resolvedPath: ResolvedConfigFilePath, parsed: ParsedCommandLine | undefined) {
     if (!state.watch || state.allWatchedConfigFiles.has(resolvedPath)) return;
     state.allWatchedConfigFiles.set(resolvedPath, watchFile(
@@ -2332,7 +2377,7 @@ function watchConfigFile<T extends BuilderProgram>(state: SolutionBuilderState<T
     ));
 }
 
-function watchExtendedConfigFiles<T extends BuilderProgram>(state: SolutionBuilderState<T>, resolvedPath: ResolvedConfigFilePath, parsed: ParsedCommandLine | undefined) {
+function watchExtendedConfigFiles<T extends BuilderProgram>(state: SolutionBuilderState<T>, resolved: ResolvedConfigFileName, resolvedPath: ResolvedConfigFilePath, parsed: ParsedCommandLine | undefined) {
     updateSharedExtendedConfigFileWatcher(
         resolvedPath,
         parsed?.options,
@@ -2345,6 +2390,7 @@ function watchExtendedConfigFiles<T extends BuilderProgram>(state: SolutionBuild
             PollingInterval.High,
             parsed?.watchOptions,
             WatchType.ExtendedConfigFile,
+            resolved,
         ),
         fileName => toPath(state, fileName),
     );
@@ -2430,7 +2476,7 @@ function startWatching<T extends BuilderProgram>(state: SolutionBuilderState<T>,
         const cfg = parseConfigFile(state, resolved, resolvedPath);
         // Watch this file
         watchConfigFile(state, resolved, resolvedPath, cfg);
-        watchExtendedConfigFiles(state, resolvedPath, cfg);
+        watchExtendedConfigFiles(state, resolved, resolvedPath, cfg);
         if (cfg) {
             // Update watchers for wildcard directories
             watchWildCardDirectories(state, resolved, resolvedPath, cfg);
@@ -2452,6 +2498,7 @@ function stopWatching<T extends BuilderProgram>(state: SolutionBuilderState<T>) 
     clearMap(state.allWatchedWildcardDirectories, watchedWildcardDirectories => clearMap(watchedWildcardDirectories, closeFileWatcherOf));
     clearMap(state.allWatchedInputFiles, watchedWildcardDirectories => clearMap(watchedWildcardDirectories, closeFileWatcher));
     clearMap(state.allWatchedPackageJsonFiles, watchedPacageJsonFiles => clearMap(watchedPacageJsonFiles, closeFileWatcher));
+    state.allWatchFactories.clear();
 }
 
 /**
@@ -2461,25 +2508,7 @@ function stopWatching<T extends BuilderProgram>(state: SolutionBuilderState<T>) 
 function createSolutionBuilderWorker<T extends BuilderProgram>(watch: false, host: SolutionBuilderHost<T>, rootNames: readonly string[], defaultOptions: BuildOptions): SolutionBuilder<T>;
 function createSolutionBuilderWorker<T extends BuilderProgram>(watch: true, host: SolutionBuilderWithWatchHost<T>, rootNames: readonly string[], defaultOptions: BuildOptions, baseWatchOptions?: WatchOptions): SolutionBuilder<T>;
 function createSolutionBuilderWorker<T extends BuilderProgram>(watch: boolean, hostOrHostWithWatch: SolutionBuilderHost<T> | SolutionBuilderWithWatchHost<T>, rootNames: readonly string[], options: BuildOptions, baseWatchOptions?: WatchOptions): SolutionBuilder<T> {
-    const state = createSolutionBuilderState(watch, hostOrHostWithWatch, rootNames, options, baseWatchOptions);
-    return {
-        build: (project, cancellationToken, writeFile, getCustomTransformers) => build(state, project, cancellationToken, writeFile, getCustomTransformers),
-        clean: project => clean(state, project),
-        buildReferences: (project, cancellationToken, writeFile, getCustomTransformers) => build(state, project, cancellationToken, writeFile, getCustomTransformers, /*onlyReferences*/ true),
-        cleanReferences: project => clean(state, project, /*onlyReferences*/ true),
-        getNextInvalidatedProject: cancellationToken => {
-            setupInitialBuild(state, cancellationToken);
-            return getNextInvalidatedProject(state, getBuildOrder(state), /*reportQueue*/ false);
-        },
-        getBuildOrder: () => getBuildOrder(state),
-        getUpToDateStatusOfProject: project => {
-            const configFileName = resolveProjectName(state, project);
-            const configFilePath = toResolvedConfigFilePath(state, configFileName);
-            return getUpToDateStatus(state, parseConfigFile(state, configFileName, configFilePath), configFilePath);
-        },
-        invalidateProject: (configFilePath, reloadLevel) => invalidateProject(state, configFilePath, reloadLevel || ConfigFileProgramReloadLevel.None),
-        close: () => stopWatching(state),
-    };
+    return createSolutionBuilderAndState(watch, hostOrHostWithWatch, rootNames, options, baseWatchOptions);
 }
 
 function relName<T extends BuilderProgram>(state: SolutionBuilderState<T>, path: string): string {
@@ -2692,4 +2721,23 @@ function verboseReportProjectStatus<T extends BuilderProgram>(state: SolutionBui
     if (state.options.verbose) {
         reportUpToDateStatus(state, configFileName, status);
     }
+}
+
+function getOrLoadUserWatchFactoryDetails<T extends BuilderProgram>(
+    state: SolutionBuilderState<T>,
+    getSolution: () => SolutionBuilder<T>,
+    resolved: ResolvedConfigFileName,
+): GetOrLoadUserWatchFactoryDetailsForFactory {
+    const resolvedPath = toResolvedConfigFilePath(state, resolved);
+    return {
+        getCurrentUserWatchFactory: () => state.allWatchFactories.get(resolvedPath),
+        setUserWatchFactory: userWatchFactory => state.allWatchFactories.set(resolvedPath, userWatchFactory),
+        getSearchList: () => [
+            getDirectoryPath(resolved),
+            state.host.getCurrentDirectory(),
+            // ../../.. to walk from X/node_modules/typescript/lib/tsserver.js to X/node_modules/
+            ...(state.host.getDefaultLibLocation ? [combinePaths(state.host.getDefaultLibLocation(), "../..")] : emptyArray),
+        ],
+        getSolution,
+    };
 }

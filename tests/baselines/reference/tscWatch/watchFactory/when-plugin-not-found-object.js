@@ -33,6 +33,14 @@ Output::
 
 Current directory: /user/username/projects/myproject CaseSensitiveFileNames: false
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 {"watchFactory":"myplugin"} Config file
+Enabling watchFactory 'myplugin' from candidate paths: /user/username/projects/myproject,/a/lib/../..
+Loading myplugin from /user/username/projects/myproject (resolved to /user/username/projects/myproject/node_modules)
+Require:: Resolving myplugin from /user/username/projects/myproject/node_modules
+Loading myplugin from /a/lib/../.. (resolved to /a/lib/../../node_modules)
+Require:: Resolving myplugin from /a/lib/../../node_modules
+Failed to load module 'myplugin' from /user/username/projects/myproject/node_modules: Cannot find module myPlugin at /user/username/projects/myproject/node_modules
+Failed to load module 'myplugin' from /a/lib/../../node_modules: Cannot find module myPlugin at /a/lib/../../node_modules
+Couldn't find 'myplugin'
 Synchronizing program
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]

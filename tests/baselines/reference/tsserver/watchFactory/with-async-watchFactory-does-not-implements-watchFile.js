@@ -65,6 +65,9 @@ Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/a.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 {"watchFactory":"myplugin"} Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Enabling watchFactory 'myplugin' from candidate paths: /a/pluginprobe1,/a/pluginprobe2,/a/lib/tsc.js/../../..
+Info seq  [hh:mm:ss:mss] Dynamically importing myplugin from /a/pluginprobe1 (resolved to /a/pluginprobe1/node_modules)
+CustomRequire:: Resolving myplugin from /a/pluginprobe1/node_modules
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/a.ts",
@@ -208,7 +211,40 @@ Before running Timeout callback:: count: 0
 
 After running Timeout callback:: count: 0
 
+Module myplugin:: create with config: {"name":"myplugin"} and options: {"watchFactory":"myplugin"}
+Info seq  [hh:mm:ss:mss] Plugin validation succeeded
+Custom watchDirectory: /user/username/projects/myproject true {"watchFactory":"myplugin"}
+Custom watchDirectory: /user/username/projects/myproject/node_modules/@types true {"watchFactory":"myplugin"}
+Custom watchDirectory: /user/username/projects/node_modules/@types true {"watchFactory":"myplugin"}
 Watches after plugin is resolved
+
+PolledWatches *deleted*::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/b.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/c.ts:
+  {}
+
+FsWatchesRecursive *deleted*::
+/user/username/projects/myproject:
+  {}
+
+Plugin WatchedDirectories:Recursive::
+/user/username/projects/myproject: *new*
+  {"options":{"watchFactory":"myplugin"}}
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"options":{"watchFactory":"myplugin"}}
+/user/username/projects/node_modules/@types: *new*
+  {"options":{"watchFactory":"myplugin"}}
 
 Change file
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/b.ts 1:: WatchInfo: /user/username/projects/myproject/b.ts 500 {"watchFactory":"myplugin"} WatchType: Closed Script info
@@ -258,6 +294,14 @@ Before running Timeout callback:: count: 0
 After running Timeout callback:: count: 0
 
 Add a file after factory is resolved
+Before running Timeout callback:: count: 0
+//// [/user/username/projects/myproject/d.ts]
+export class a { prop = "hello"; foo() { return this.prop; } }
+
+
+After running Timeout callback:: count: 0
+
+Invoke plugin watches
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/d.ts :: WatchInfo: /user/username/projects/myproject 1 {"watchFactory":"myplugin"} Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
@@ -265,9 +309,6 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/u
 Before running Timeout callback:: count: 2
 5: /user/username/projects/myproject/tsconfig.json
 6: *ensureProjectForOpenFiles*
-//// [/user/username/projects/myproject/d.ts]
-export class a { prop = "hello"; foo() { return this.prop; } }
-
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/d.ts 500 {"watchFactory":"myplugin"} WatchType: Closed Script info
@@ -313,12 +354,6 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/a.ts Proje
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig.json
 After running Timeout callback:: count: 0
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches::
 /user/username/projects/myproject/tsconfig.json:
   {}
@@ -331,11 +366,10 @@ FsWatches::
 /user/username/projects/myproject/d.ts: *new*
   {}
 
-FsWatchesRecursive::
+Plugin WatchedDirectories:Recursive::
 /user/username/projects/myproject:
-  {}
-
-Invoke plugin watches
-Before running Timeout callback:: count: 0
-
-After running Timeout callback:: count: 0
+  {"options":{"watchFactory":"myplugin"}}
+/user/username/projects/myproject/node_modules/@types:
+  {"options":{"watchFactory":"myplugin"}}
+/user/username/projects/node_modules/@types:
+  {"options":{"watchFactory":"myplugin"}}

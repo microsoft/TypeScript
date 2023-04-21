@@ -1,6 +1,9 @@
+import * as ts from "./_namespaces/ts";
 import {
     addRange,
+    arrayFrom,
     BuilderProgram,
+    BuildOptions,
     CancellationToken,
     chainDiagnosticMessages,
     CharacterCodes,
@@ -59,6 +62,8 @@ import {
     getLineAndCharacterOfPosition,
     getNewLineCharacter,
     getNormalizedAbsolutePath,
+    getOrLoadUserWatchFactory,
+    GetOrLoadUserWatchFactoryDetails,
     getParsedCommandLineOfConfigFile,
     getPatternFromSpec,
     getReferencedFileLocation,
@@ -87,6 +92,7 @@ import {
     ProjectReference,
     ReportEmitErrorSummary,
     ReportFileInError,
+    SolutionBuilder,
     sortAndDeduplicateDiagnostics,
     SortedReadonlyArray,
     SourceFile,
@@ -95,6 +101,8 @@ import {
     sys,
     System,
     targetOptionDeclaration,
+    toPath,
+    UserWatchFactory,
     WatchCompilerHost,
     WatchCompilerHostOfConfigFile,
     WatchCompilerHostOfFilesAndCompilerOptions,
@@ -102,6 +110,8 @@ import {
     WatchFactoryHost,
     WatchHost,
     WatchLogLevel,
+    WatchOfConfigFile,
+    WatchOfFilesAndCompilerOptions,
     WatchOptions,
     WatchStatusReporter,
     whitespaceOrMapCommentRegExp,
@@ -665,7 +675,9 @@ export function createWatchHost(system = sys, reportWatchStatus?: WatchStatusRep
         watchFile: maybeBind(system, system.watchFile) || returnNoopFileWatcher,
         watchDirectory: maybeBind(system, system.watchDirectory) || returnNoopFileWatcher,
         setTimeout: maybeBind(system, system.setTimeout) || noop,
-        clearTimeout: maybeBind(system, system.clearTimeout) || noop
+        clearTimeout: maybeBind(system, system.clearTimeout) || noop,
+        require: maybeBind(system, system.require),
+        resolvePath: maybeBind(system, system.resolvePath),
     };
 }
 
@@ -729,12 +741,55 @@ export interface WatchFactoryWithLog<X, Y = undefined> extends WatchFactory<X, Y
 }
 
 /** @internal */
-export function createWatchFactory<Y = undefined>(host: WatchFactoryHost & { trace?(s: string): void; }, options: { extendedDiagnostics?: boolean; diagnostics?: boolean; }) {
+export type GetOrLoadUserWatchFactoryDetailsForFactory = Omit<GetOrLoadUserWatchFactoryDetails, "createUserWatchFactory" | "getSearchPaths"> & {
+    getSearchList: () => readonly string[];
+    getWatch?: () => WatchOfConfigFile<BuilderProgram> | WatchOfFilesAndCompilerOptions<BuilderProgram>;
+    getSolution?: () => SolutionBuilder<BuilderProgram>;
+};
+/** @internal */
+export function createWatchFactory<Y = undefined>(
+    host: WatchHost & WatchFactoryHost & { trace?(s: string): void; },
+    getOrLoadUserWatchFactoryDetails: (detailsInfo2: Y | undefined) => GetOrLoadUserWatchFactoryDetailsForFactory,
+    options: CompilerOptions | BuildOptions,
+) {
     const watchLogLevel = host.trace ? options.extendedDiagnostics ? WatchLogLevel.Verbose : options.diagnostics ? WatchLogLevel.TriggerOnly : WatchLogLevel.None : WatchLogLevel.None;
     const writeLog: (s: string) => void = watchLogLevel !== WatchLogLevel.None ? (s => host.trace!(s)) : noop;
-    const result = getWatchFactory<WatchType, Y>(host, watchLogLevel, writeLog) as WatchFactoryWithLog<WatchType, Y>;
+    const result = getWatchFactory<WatchType, Y>(host, getUserWatchFactory, watchLogLevel, writeLog) as WatchFactoryWithLog<WatchType, Y>;
     result.writeLog = writeLog;
     return result;
+
+    function getUserWatchFactory(watchOptions: WatchOptions, detailsInfo2: Y | undefined): UserWatchFactory | undefined {
+        const details = getOrLoadUserWatchFactoryDetails(detailsInfo2) as GetOrLoadUserWatchFactoryDetails & GetOrLoadUserWatchFactoryDetailsForFactory;
+        details.createUserWatchFactory = (resolvedModule, pluginConfigEntry, watchOptions) => {
+            const userWatchFactory = resolvedModule({ typescript: ts });
+            userWatchFactory.create({
+                options: watchOptions,
+                config: pluginConfigEntry,
+                host,
+                watch: details.getWatch?.(),
+                solution: details.getSolution?.(),
+            });
+            return userWatchFactory;
+        };
+        details.getSearchPaths = () => {
+            const getCanonicalFileName = createGetCanonicalFileName(
+                typeof host.useCaseSensitiveFileNames === "boolean" ?
+                    host.useCaseSensitiveFileNames :
+                    host.useCaseSensitiveFileNames()
+            );
+            // Deduplicate
+            const map = new Map(details.getSearchList().map(path => [toPath(path, host.getCurrentDirectory?.(), getCanonicalFileName), path]));
+            return arrayFrom(map.values());
+        };
+        return getOrLoadUserWatchFactory(
+            host,
+            watchOptions,
+            s => host.trace?.(s),
+            writeLog,
+            details,
+            !!options.allowPlugins,
+        );
+    }
 }
 
 /** @internal */
