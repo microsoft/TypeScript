@@ -3037,6 +3037,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // (it refers to the constant type of the expression instead)
                 return undefined;
             }
+            if (isModuleDeclaration(location) && lastLocation && location.name === lastLocation) {
+                // If this is the name of a namespace, skip the parent since it will have is own locals that could
+                // conflict.
+                lastLocation = location;
+                location = location.parent;
+            }
             // Locals of a source file are not in scope (because they get merged into the global symbol table)
             if (canHaveLocals(location) && location.locals && !isGlobalSourceFile(location)) {
                 if (result = lookup(location.locals, name, meaning)) {
@@ -3329,6 +3335,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             result = (location as InferTypeNode).typeParameter.symbol;
                             break loop;
                         }
+                    }
+                    break;
+                case SyntaxKind.ExportSpecifier:
+                    // External module export bindings shouldn't be resolved to local symbols.
+                    if (lastLocation &&
+                        lastLocation === (location as ExportSpecifier).propertyName &&
+                        (location as ExportSpecifier).parent.parent.moduleSpecifier) {
+                        location = location.parent.parent.parent;
                     }
                     break;
             }
@@ -46474,6 +46488,43 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return undefined;
     }
 
+    function getReferencedValueDeclarations(referenceIn: Identifier): Declaration[] | undefined {
+        if (!isGeneratedIdentifier(referenceIn)) {
+            const reference = getParseTreeNode(referenceIn, isIdentifier);
+            if (reference) {
+                const symbol = getReferencedValueSymbol(reference);
+                if (symbol) {
+                    return filter(getExportSymbolOfValueSymbolIfExported(symbol).declarations, declaration => {
+                        switch (declaration.kind) {
+                            case SyntaxKind.VariableDeclaration:
+                            case SyntaxKind.Parameter:
+                            case SyntaxKind.BindingElement:
+                            case SyntaxKind.PropertyDeclaration:
+                            case SyntaxKind.PropertyAssignment:
+                            case SyntaxKind.ShorthandPropertyAssignment:
+                            case SyntaxKind.EnumMember:
+                            case SyntaxKind.ObjectLiteralExpression:
+                            case SyntaxKind.FunctionDeclaration:
+                            case SyntaxKind.FunctionExpression:
+                            case SyntaxKind.ArrowFunction:
+                            case SyntaxKind.ClassDeclaration:
+                            case SyntaxKind.ClassExpression:
+                            case SyntaxKind.EnumDeclaration:
+                            case SyntaxKind.MethodDeclaration:
+                            case SyntaxKind.GetAccessor:
+                            case SyntaxKind.SetAccessor:
+                            case SyntaxKind.ModuleDeclaration:
+                                return true;
+                        }
+                        return false;
+                    });
+                }
+            }
+        }
+
+        return undefined;
+    }
+
     function isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean {
         if (isDeclarationReadonly(node) || isVariableDeclaration(node) && isVarConst(node)) {
             return isFreshLiteralType(getTypeOfSymbol(getSymbolOfDeclaration(node)));
@@ -46581,6 +46632,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             },
             collectLinkedAliases,
             getReferencedValueDeclaration,
+            getReferencedValueDeclarations,
             getTypeReferenceSerializationKind,
             isOptionalParameter,
             moduleExportsSomeValue,

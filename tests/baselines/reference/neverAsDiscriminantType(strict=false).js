@@ -128,7 +128,7 @@ var GatewayOpcode;
     GatewayOpcode[GatewayOpcode["INVALID_SESSION"] = 9] = "INVALID_SESSION";
     GatewayOpcode[GatewayOpcode["HELLO"] = 10] = "HELLO";
     GatewayOpcode[GatewayOpcode["HEARTBEAT_ACK"] = 11] = "HEARTBEAT_ACK";
-})(GatewayOpcode = exports.GatewayOpcode || (exports.GatewayOpcode = {}));
+})(GatewayOpcode || (exports.GatewayOpcode = GatewayOpcode = {}));
 function assertMessage(event) { }
 function adaptSession(input) {
     return __awaiter(this, void 0, void 0, function () {

@@ -451,8 +451,6 @@ export const enum SyntaxKind {
     NotEmittedStatement,
     PartiallyEmittedExpression,
     CommaListExpression,
-    MergeDeclarationMarker,
-    EndOfDeclarationMarker,
     SyntheticReferenceExpression,
 
     // Enum value count
@@ -3304,15 +3302,6 @@ export interface NotEmittedStatement extends Statement {
 }
 
 /**
- * Marks the end of transformed declaration to properly emit exports.
- *
- * @internal
- */
-export interface EndOfDeclarationMarker extends Statement {
-    readonly kind: SyntaxKind.EndOfDeclarationMarker;
-}
-
-/**
  * A list of comma-separated expressions. This node is only created by transformations.
  */
 export interface CommaListExpression extends Expression {
@@ -3320,14 +3309,6 @@ export interface CommaListExpression extends Expression {
     readonly elements: NodeArray<Expression>;
 }
 
-/**
- * Marks the beginning of a merged transformed declaration.
- *
- * @internal
- */
-export interface MergeDeclarationMarker extends Statement {
-    readonly kind: SyntaxKind.MergeDeclarationMarker;
-}
 
 /** @internal */
 export interface SyntheticReferenceExpression extends LeftHandSideExpression {
@@ -5712,6 +5693,7 @@ export interface EmitResolver {
     // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
     getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): string | number | undefined;
     getReferencedValueDeclaration(reference: Identifier): Declaration | undefined;
+    getReferencedValueDeclarations(reference: Identifier): Declaration[] | undefined;
     getTypeReferenceSerializationKind(typeName: EntityName, location?: Node): TypeReferenceSerializationKind;
     isOptionalParameter(node: ParameterDeclaration): boolean;
     moduleExportsSomeValue(moduleReferenceExpression: Expression): boolean;
@@ -8019,9 +8001,8 @@ export const enum EmitFlags {
     ReuseTempVariableScope = 1 << 20,       // Reuse the existing temp variable scope during emit.
     CustomPrologue = 1 << 21,               // Treat the statement as if it were a prologue directive (NOTE: Prologue directives are *not* transformed).
     NoHoisting = 1 << 22,                   // Do not hoist this declaration in --module system
-    HasEndOfDeclarationMarker = 1 << 23,    // Declaration has an associated NotEmittedStatement to mark the end of the declaration
-    Iterator = 1 << 24,                     // The expression to a `yield*` should be treated as an Iterator when down-leveling, not an Iterable.
-    NoAsciiEscaping = 1 << 25,              // When synthesizing nodes that lack an original node or textSourceNode, we want to write the text on the node with ASCII escaping substitutions.
+    Iterator = 1 << 23,                     // The expression to a `yield*` should be treated as an Iterator when down-leveling, not an Iterable.
+    NoAsciiEscaping = 1 << 24,              // When synthesizing nodes that lack an original node or textSourceNode, we want to write the text on the node with ASCII escaping substitutions.
 }
 
 /** @internal */
@@ -8823,8 +8804,6 @@ export interface NodeFactory {
     //
 
     createNotEmittedStatement(original: Node): NotEmittedStatement;
-    /** @internal */ createEndOfDeclarationMarker(original: Node): EndOfDeclarationMarker;
-    /** @internal */ createMergeDeclarationMarker(original: Node): MergeDeclarationMarker;
     createPartiallyEmittedExpression(expression: Expression, original?: Node): PartiallyEmittedExpression;
     updatePartiallyEmittedExpression(node: PartiallyEmittedExpression, expression: Expression): PartiallyEmittedExpression;
     /** @internal */ createSyntheticReferenceExpression(expression: Expression, thisArg: Expression): SyntheticReferenceExpression;
@@ -8944,10 +8923,11 @@ export interface NodeFactory {
      * @param node The declaration.
      * @param allowComments A value indicating whether comments may be emitted for the name.
      * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
+     * @param ignoreAssignedName Indicates that the assigned name of a declaration shouldn't be considered.
      *
      * @internal
      */
-    getLocalName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean): Identifier;
+    getLocalName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean, ignoreAssignedName?: boolean): Identifier;
     /**
      * Gets the export name of a declaration. This is primarily used for declarations that can be
      * referred to by name in the declaration's immediate scope (classes, enums, namespaces). An

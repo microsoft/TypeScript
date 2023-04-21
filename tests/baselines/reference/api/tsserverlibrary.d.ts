@@ -4453,10 +4453,8 @@ declare namespace ts {
         NotEmittedStatement = 358,
         PartiallyEmittedExpression = 359,
         CommaListExpression = 360,
-        MergeDeclarationMarker = 361,
-        EndOfDeclarationMarker = 362,
-        SyntheticReferenceExpression = 363,
-        Count = 364,
+        SyntheticReferenceExpression = 361,
+        Count = 362,
         FirstAssignment = 64,
         LastAssignment = 79,
         FirstCompoundAssignment = 65,
@@ -7547,9 +7545,8 @@ declare namespace ts {
         ReuseTempVariableScope = 1048576,
         CustomPrologue = 2097152,
         NoHoisting = 4194304,
-        HasEndOfDeclarationMarker = 8388608,
-        Iterator = 16777216,
-        NoAsciiEscaping = 33554432
+        Iterator = 8388608,
+        NoAsciiEscaping = 16777216
     }
     interface EmitHelperBase {
         readonly name: string;

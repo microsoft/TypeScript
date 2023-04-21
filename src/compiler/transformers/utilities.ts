@@ -52,6 +52,7 @@ import {
     isGeneratedPrivateIdentifier,
     isIdentifier,
     isKeyword,
+    isLocalName,
     isMethodOrAccessor,
     isNamedExports,
     isNamedImports,
@@ -236,7 +237,7 @@ export function collectExternalModuleInfo(context: TransformationContext, source
             case SyntaxKind.VariableStatement:
                 if (hasSyntacticModifier(node, ModifierFlags.Export)) {
                     for (const decl of (node as VariableStatement).declarationList.declarations) {
-                        exportedNames = collectExportedVariableInfo(decl, uniqueExports, exportedNames);
+                        exportedNames = collectExportedVariableInfo(decl, uniqueExports, exportedNames, exportedBindings);
                     }
                 }
                 break;
@@ -314,11 +315,11 @@ export function collectExternalModuleInfo(context: TransformationContext, source
     }
 }
 
-function collectExportedVariableInfo(decl: VariableDeclaration | BindingElement, uniqueExports: Map<string, boolean>, exportedNames: Identifier[] | undefined) {
+function collectExportedVariableInfo(decl: VariableDeclaration | BindingElement, uniqueExports: Map<string, boolean>, exportedNames: Identifier[] | undefined, exportedBindings: Identifier[][]) {
     if (isBindingPattern(decl.name)) {
         for (const element of decl.name.elements) {
             if (!isOmittedExpression(element)) {
-                exportedNames = collectExportedVariableInfo(element, uniqueExports, exportedNames);
+                exportedNames = collectExportedVariableInfo(element, uniqueExports, exportedNames, exportedBindings);
             }
         }
     }
@@ -327,6 +328,9 @@ function collectExportedVariableInfo(decl: VariableDeclaration | BindingElement,
         if (!uniqueExports.get(text)) {
             uniqueExports.set(text, true);
             exportedNames = append(exportedNames, decl.name);
+            if (isLocalName(decl.name)) {
+                multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(decl), decl.name);
+            }
         }
     }
     return exportedNames;

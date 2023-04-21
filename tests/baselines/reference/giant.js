@@ -1106,7 +1106,7 @@ define(["require", "exports"], function (require, exports) {
             ;
         })(eM = eM_1.eM || (eM_1.eM = {}));
         ;
-    })(eM = exports.eM || (exports.eM = {}));
+    })(eM || (exports.eM = eM = {}));
     ;
 });
 
