@@ -141,7 +141,7 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
-        "newFilename": "/ka.ts",
+        "newFileName": "/ka.ts",
         "files": [
           "/file7.ts"
         ]

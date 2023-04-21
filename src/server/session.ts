@@ -2714,24 +2714,11 @@ export class Session<TMessage = string> implements EventSender {
         return result;
     }
 
-    private getMoveToRefactoringFileSuggestions(args: protocol.GetMoveToRefactoringFileSuggestionsRequestArgs): { newFilename: string, files: string[] }{
+    private getMoveToRefactoringFileSuggestions(args: protocol.GetMoveToRefactoringFileSuggestionsRequestArgs): { newFileName: string, files: string[] }{
         const { file, project } = this.getFileAndProject(args);
-        const allFiles: string[] = [];
-        let fileName = "";
-        updateProjectIfDirty(project);
-        const scriptInfo = project.getScriptInfoForNormalizedPath(file);
-        if (scriptInfo) {
-            const { newFileName, files } = project.getLanguageService().getMoveToRefactoringFileSuggestions(file, this.extractPositionOrRange(args, scriptInfo), this.getPreferences(file));
-            if (files) {
-                for (const file of files) {
-                    if (!allFiles.includes(file)) {
-                        allFiles.push(file);
-                    }
-                }
-            }
-            fileName = newFileName;
-        }
-        return { newFilename: fileName, files: allFiles };
+        const scriptInfo = project.getScriptInfoForNormalizedPath(file)!;
+        const { newFileName, files } = project.getLanguageService().getMoveToRefactoringFileSuggestions(file, this.extractPositionOrRange(args, scriptInfo), this.getPreferences(file));
+        return { newFileName, files };
     }
 
     private organizeImports(args: protocol.OrganizeImportsRequestArgs, simplifiedResult: boolean): readonly protocol.FileCodeEdits[] | readonly FileTextChanges[] {

@@ -118,7 +118,7 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
-        "newFilename": "/C.js",
+        "newFileName": "/C.js",
         "files": [
           "/file2.js",
           "/file5.js"
