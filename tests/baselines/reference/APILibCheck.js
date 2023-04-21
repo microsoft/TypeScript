@@ -24,11 +24,25 @@
     "types": "/.ts/tsserverlibrary.internal.d.ts"
 }
 
+//// [package.json]
+{
+    "name": "tsclibrary",
+    "types": "/.ts/tsclibrary.d.ts"
+}
+
+//// [package.json]
+{
+    "name": "tsclibrary-internal",
+    "types": "/.ts/tsclibrary.internal.d.ts"
+}
+
 //// [index.ts]
 import ts = require("typescript");
 import tsInternal = require("typescript-internal");
 import tsserverlibrary = require("tsserverlibrary");
 import tsserverlibraryInternal = require("tsserverlibrary-internal");
+import tsclibrary = require("tsclibrary");
+import tsclibraryInternal = require("tsclibrary-internal");
 
 
 //// [index.js]

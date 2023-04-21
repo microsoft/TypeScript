@@ -54,6 +54,7 @@ async function copyScriptOutputs() {
 async function copyDeclarationOutputs() {
     await copyFromBuiltLocal("tsserverlibrary.d.ts");
     await copyFromBuiltLocal("typescript.d.ts");
+    await copyFromBuiltLocal("tsclibrary.d.ts");
 }
 
 async function writeGitAttributes() {

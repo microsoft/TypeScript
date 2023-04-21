@@ -11,3 +11,9 @@ import tsserverlibrary = require("tsserverlibrary");
 import tsserverlibraryInternal = require("tsserverlibrary-internal");
 >tsserverlibraryInternal : Symbol(tsserverlibraryInternal, Decl(index.ts, 2, 52))
 
+import tsclibrary = require("tsclibrary");
+>tsclibrary : Symbol(tsclibrary, Decl(index.ts, 3, 69))
+
+import tsclibraryInternal = require("tsclibrary-internal");
+>tsclibraryInternal : Symbol(tsclibraryInternal, Decl(index.ts, 4, 42))
+

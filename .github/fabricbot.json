@@ -642,7 +642,8 @@
               "parameters": {
                 "pathFilters": [
                   "tests/baselines/reference/api/typescript.d.ts",
-                  "tests/baselines/reference/api/tsserverlibrary.d.ts"
+                  "tests/baselines/reference/api/tsserverlibrary.d.ts",
+                  "tests/baselines/reference/api/tsclibrary.d.ts"
                 ]
               }
             }

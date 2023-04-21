@@ -43,6 +43,10 @@ describe("unittests:: Public APIs", () => {
     describe("for the language server", () => {
         verifyApi("tsserverlibrary.d.ts");
     });
+
+    describe("for the tsc", () => {
+        verifyApi("tsclibrary.d.ts");
+    });
 });
 
 describe("unittests:: Public APIs:: token to string", () => {
