@@ -54,6 +54,7 @@ import {
     ElementAccessExpression,
     EmitFlags,
     EmitHint,
+    emitModuleKindIsNonNodeESM,
     emptyArray,
     EndOfFileToken,
     endsWith,
@@ -88,8 +89,10 @@ import {
     getAssignmentDeclarationKind,
     getCombinedNodeFlagsAlwaysIncludeJSDoc,
     getDirectoryPath,
+    getEmitModuleKind,
     getEmitScriptTarget,
     getExternalModuleImportEqualsDeclarationExpression,
+    getImpliedNodeFormatForFile,
     getIndentString,
     getJSDocEnumTag,
     getLastChild,
@@ -108,8 +111,10 @@ import {
     getTextOfIdentifierOrLiteral,
     getTextOfNode,
     getTypesPackageName,
+    hasJSFileExtension,
     hasSyntacticModifier,
     HeritageClause,
+    hostGetCanonicalFileName,
     Identifier,
     identifierIsThisKeyword,
     identity,
@@ -267,6 +272,7 @@ import {
     ModifierFlags,
     ModuleDeclaration,
     ModuleInstanceState,
+    ModuleKind,
     ModuleResolutionKind,
     ModuleSpecifierResolutionHost,
     moduleSpecifiers,
@@ -350,6 +356,7 @@ import {
     textSpanEnd,
     Token,
     tokenToString,
+    toPath,
     tryCast,
     Type,
     TypeChecker,
@@ -3137,7 +3144,12 @@ export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T>, in
 export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined, includeTrivia?: boolean): NodeArray<T> | undefined;
 /** @internal */
 export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined, includeTrivia = true): NodeArray<T> | undefined {
-    return nodes && factory.createNodeArray(nodes.map(n => getSynthesizedDeepClone(n, includeTrivia)), nodes.hasTrailingComma);
+    if (nodes) {
+        const cloned = factory.createNodeArray(nodes.map(n => getSynthesizedDeepClone(n, includeTrivia)), nodes.hasTrailingComma);
+        setTextRange(cloned, nodes);
+        return cloned;
+    }
+    return nodes;
 }
 
 /** @internal */
@@ -4164,4 +4176,46 @@ export function newCaseClauseTracker(checker: TypeChecker, clauses: readonly (Ca
                 return existingBigInts.has(pseudoBigIntToString(value));
         }
     }
+}
+
+/** @internal */
+export function fileShouldUseJavaScriptRequire(file: SourceFile | string, program: Program, host: LanguageServiceHost, preferRequire?: boolean) {
+    const fileName = typeof file === "string" ? file : file.fileName;
+    if (!hasJSFileExtension(fileName)) {
+        return false;
+    }
+    const compilerOptions = program.getCompilerOptions();
+    const moduleKind = getEmitModuleKind(compilerOptions);
+    const impliedNodeFormat = typeof file === "string"
+        ? getImpliedNodeFormatForFile(toPath(file, host.getCurrentDirectory(), hostGetCanonicalFileName(host)), program.getPackageJsonInfoCache?.(), host, compilerOptions)
+        : file.impliedNodeFormat;
+
+    if (impliedNodeFormat === ModuleKind.ESNext) {
+        return false;
+    }
+    if (impliedNodeFormat === ModuleKind.CommonJS) {
+        // Since we're in a JS file, assume the user is writing the JS that will run
+        // (i.e., assume `noEmit`), so a CJS-format file should just have require
+        // syntax, rather than imports that will be downleveled to `require`.
+        return true;
+    }
+    if (compilerOptions.verbatimModuleSyntax && moduleKind === ModuleKind.CommonJS) {
+        // Using ESM syntax under these options would result in an error.
+        return true;
+    }
+    if (compilerOptions.verbatimModuleSyntax && emitModuleKindIsNonNodeESM(moduleKind)) {
+        return false;
+    }
+
+    // impliedNodeFormat is undefined and `verbatimModuleSyntax` is off (or in an invalid combo)
+    // Use heuristics from existing code
+    if (typeof file === "object") {
+        if (file.commonJsModuleIndicator) {
+            return true;
+        }
+        if (file.externalModuleIndicator) {
+            return false;
+        }
+    }
+    return preferRequire;
 }

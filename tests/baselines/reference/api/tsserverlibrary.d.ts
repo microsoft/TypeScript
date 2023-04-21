@@ -155,6 +155,7 @@ declare namespace ts {
                 GetSupportedCodeFixes = "getSupportedCodeFixes",
                 GetApplicableRefactors = "getApplicableRefactors",
                 GetEditsForRefactor = "getEditsForRefactor",
+                GetMoveToRefactoringFileSuggestions = "getMoveToRefactoringFileSuggestions",
                 OrganizeImports = "organizeImports",
                 GetEditsForFileRename = "getEditsForFileRename",
                 ConfigurePlugin = "configurePlugin",
@@ -519,6 +520,26 @@ declare namespace ts {
                 body?: ApplicableRefactorInfo[];
             }
             /**
+             * Request refactorings at a given position or selection area to move to an existing file.
+             */
+            interface GetMoveToRefactoringFileSuggestionsRequest extends Request {
+                command: CommandTypes.GetMoveToRefactoringFileSuggestions;
+                arguments: GetMoveToRefactoringFileSuggestionsRequestArgs;
+            }
+            type GetMoveToRefactoringFileSuggestionsRequestArgs = FileLocationOrRangeRequestArgs & {
+                kind?: string;
+            };
+            /**
+             * Response is a list of available files.
+             * Each refactoring exposes one or more "Actions"; a user selects one action to invoke a refactoring
+             */
+            interface GetMoveToRefactoringFileSuggestions extends Response {
+                body: {
+                    newFileName: string;
+                    files: string[];
+                };
+            }
+            /**
              * A set of one or more available refactoring actions, grouped under a parent refactoring.
              */
             interface ApplicableRefactorInfo {
@@ -582,6 +603,7 @@ declare namespace ts {
             type GetEditsForRefactorRequestArgs = FileLocationOrRangeRequestArgs & {
                 refactor: string;
                 action: string;
+                interactiveRefactorArguments?: InteractiveRefactorArguments;
             };
             interface GetEditsForRefactorResponse extends Response {
                 body?: RefactorEditInfo;
@@ -3987,6 +4009,7 @@ declare namespace ts {
             private getRange;
             private getApplicableRefactors;
             private getEditsForRefactor;
+            private getMoveToRefactoringFileSuggestions;
             private organizeImports;
             private getEditsForFileRename;
             private getCodeFixes;
@@ -10149,7 +10172,11 @@ declare namespace ts {
          * arguments for any interactive action before offering it.
          */
         getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined, triggerReason?: RefactorTriggerReason, kind?: string, includeInteractiveActions?: boolean): ApplicableRefactorInfo[];
-        getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string, preferences: UserPreferences | undefined): RefactorEditInfo | undefined;
+        getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string, preferences: UserPreferences | undefined, includeInteractiveActions?: InteractiveRefactorArguments): RefactorEditInfo | undefined;
+        getMoveToRefactoringFileSuggestions(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined, triggerReason?: RefactorTriggerReason, kind?: string): {
+            newFileName: string;
+            files: string[];
+        };
         organizeImports(args: OrganizeImportsArgs, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
         getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean, forceDtsEmit?: boolean): EmitOutput;
@@ -10656,6 +10683,9 @@ declare namespace ts {
     }
     interface DocCommentTemplateOptions {
         readonly generateReturnInDocTemplate?: boolean;
+    }
+    interface InteractiveRefactorArguments {
+        targetFile: string;
     }
     interface SignatureHelpParameter {
         name: string;

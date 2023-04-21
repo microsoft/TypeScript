@@ -881,6 +881,7 @@ const invalidPartialSemanticModeCommands: readonly protocol.CommandTypes[] = [
     protocol.CommandTypes.ApplyCodeActionCommand,
     protocol.CommandTypes.GetSupportedCodeFixes,
     protocol.CommandTypes.GetApplicableRefactors,
+    protocol.CommandTypes.GetMoveToRefactoringFileSuggestions,
     protocol.CommandTypes.GetEditsForRefactor,
     protocol.CommandTypes.GetEditsForRefactorFull,
     protocol.CommandTypes.OrganizeImports,
@@ -2687,6 +2688,7 @@ export class Session<TMessage = string> implements EventSender {
             args.refactor,
             args.action,
             this.getPreferences(file),
+            args.interactiveRefactorArguments
         );
 
         if (result === undefined) {
@@ -2702,11 +2704,19 @@ export class Session<TMessage = string> implements EventSender {
                 const renameScriptInfo = project.getScriptInfoForNormalizedPath(toNormalizedPath(renameFilename))!;
                 mappedRenameLocation = getLocationInNewDocument(getSnapshotText(renameScriptInfo.getSnapshot()), renameFilename, renameLocation, edits);
             }
-            return { renameLocation: mappedRenameLocation, renameFilename, edits: this.mapTextChangesToCodeEdits(edits) };
+            return {
+                renameLocation: mappedRenameLocation,
+                renameFilename,
+                edits: this.mapTextChangesToCodeEdits(edits)
+            };
         }
-        else {
-            return result;
-        }
+        return result;
+    }
+
+    private getMoveToRefactoringFileSuggestions(args: protocol.GetMoveToRefactoringFileSuggestionsRequestArgs): { newFileName: string, files: string[] }{
+        const { file, project } = this.getFileAndProject(args);
+        const scriptInfo = project.getScriptInfoForNormalizedPath(file)!;
+        return project.getLanguageService().getMoveToRefactoringFileSuggestions(file, this.extractPositionOrRange(args, scriptInfo), this.getPreferences(file));
     }
 
     private organizeImports(args: protocol.OrganizeImportsRequestArgs, simplifiedResult: boolean): readonly protocol.FileCodeEdits[] | readonly FileTextChanges[] {
@@ -3428,6 +3438,9 @@ export class Session<TMessage = string> implements EventSender {
         },
         [protocol.CommandTypes.GetEditsForRefactor]: (request: protocol.GetEditsForRefactorRequest) => {
             return this.requiredResponse(this.getEditsForRefactor(request.arguments, /*simplifiedResult*/ true));
+        },
+        [protocol.CommandTypes.GetMoveToRefactoringFileSuggestions]: (request: protocol.GetMoveToRefactoringFileSuggestionsRequest) => {
+            return this.requiredResponse(this.getMoveToRefactoringFileSuggestions(request.arguments));
         },
         [protocol.CommandTypes.GetEditsForRefactorFull]: (request: protocol.GetEditsForRefactorRequest) => {
             return this.requiredResponse(this.getEditsForRefactor(request.arguments, /*simplifiedResult*/ false));

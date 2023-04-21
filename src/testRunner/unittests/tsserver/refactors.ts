@@ -94,4 +94,30 @@ describe("unittests:: tsserver:: refactors", () => {
         });
         baselineTsserverLogs("refactors", "handles canonicalization of tsconfig path", session);
     });
+
+    it("handles moving statement to an existing file", () => {
+    const aTs: File = { path: "/Foo/a.ts", content: "const x = 0;" };
+    const bTs: File = {
+        path: "/Foo/b.ts", content: `import {} from "./bar";
+const a = 1;`};
+    const tsconfig: File = { path: "/Foo/tsconfig.json", content: `{ "files": ["./a.ts", "./b.ts"] }` };
+    const host = createServerHost([aTs, bTs, tsconfig]);
+    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+    openFilesForSession([aTs], session);
+
+    session.executeCommandSeq<ts.server.protocol.GetEditsForRefactorRequest>({
+        command: ts.server.protocol.CommandTypes.GetEditsForRefactor,
+        arguments: {
+            file: aTs.path,
+            startLine: 1,
+            startOffset: 1,
+            endLine: 2,
+            endOffset: aTs.content.length,
+            refactor: "Move to file",
+            action: "Move to file",
+            interactiveRefactorArguments: { targetFile: "/Foo/b.ts" },
+        }
+    });
+    baselineTsserverLogs("refactors", "handles moving statement to an existing file", session);
+    });
 });

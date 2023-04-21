@@ -616,6 +616,9 @@ class LanguageServiceShimProxy implements ts.LanguageService {
     getApplicableRefactors(): ts.ApplicableRefactorInfo[] {
         throw new Error("Not supported on the shim.");
     }
+    getMoveToRefactoringFileSuggestions(): { newFileName: string, files: string[] } {
+        throw new Error("Not supported on the shim.");
+    }
     organizeImports(_args: ts.OrganizeImportsArgs, _formatOptions: ts.FormatCodeSettings): readonly ts.FileTextChanges[] {
         throw new Error("Not supported on the shim.");
     }

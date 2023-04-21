@@ -4239,7 +4239,6 @@ export interface SourceFileLike {
     getPositionOfLineAndCharacter?(line: number, character: number, allowEdits?: true): number;
 }
 
-
 /** @internal */
 export interface RedirectInfo {
     /** Source file this redirects to. */

@@ -795,6 +795,14 @@ export class SessionClient implements LanguageService {
         return response.body!; // TODO: GH#18217
     }
 
+    getMoveToRefactoringFileSuggestions(fileName: string, positionOrRange: number | TextRange): { newFileName: string; files: string[]; } {
+        const args = this.createFileLocationOrRangeRequestArgs(positionOrRange, fileName);
+
+        const request = this.processRequest<protocol.GetMoveToRefactoringFileSuggestionsRequest>(protocol.CommandTypes.GetMoveToRefactoringFileSuggestions, args);
+        const response = this.processResponse<protocol.GetMoveToRefactoringFileSuggestions>(request);
+        return { newFileName: response.body?.newFileName, files:response.body?.files }!;
+    }
+
     getEditsForRefactor(
         fileName: string,
         _formatOptions: FormatCodeSettings,
@@ -818,7 +826,7 @@ export class SessionClient implements LanguageService {
         const renameFilename: string | undefined = response.body.renameFilename;
         let renameLocation: number | undefined;
         if (renameFilename !== undefined) {
-            renameLocation = this.lineOffsetToPosition(renameFilename, response.body.renameLocation!); // TODO: GH#18217
+            renameLocation = this.lineOffsetToPosition(renameFilename, response.body.renameLocation!);
         }
 
         return {

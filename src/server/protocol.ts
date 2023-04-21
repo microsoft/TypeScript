@@ -4,6 +4,7 @@ import type {
     EndOfLineState,
     FileExtensionInfo,
     HighlightSpanKind,
+    InteractiveRefactorArguments,
     MapLike,
     OutliningSpanKind,
     OutputFile,
@@ -142,6 +143,7 @@ export const enum CommandTypes {
 
     GetApplicableRefactors = "getApplicableRefactors",
     GetEditsForRefactor = "getEditsForRefactor",
+    GetMoveToRefactoringFileSuggestions = "getMoveToRefactoringFileSuggestions",
     /** @internal */
     GetEditsForRefactorFull = "getEditsForRefactor-full",
 
@@ -607,6 +609,27 @@ export interface GetApplicableRefactorsResponse extends Response {
 }
 
 /**
+ * Request refactorings at a given position or selection area to move to an existing file.
+ */
+export interface GetMoveToRefactoringFileSuggestionsRequest extends Request {
+    command: CommandTypes.GetMoveToRefactoringFileSuggestions;
+    arguments: GetMoveToRefactoringFileSuggestionsRequestArgs;
+}
+export type GetMoveToRefactoringFileSuggestionsRequestArgs = FileLocationOrRangeRequestArgs & {
+    kind?: string;
+};
+/**
+ * Response is a list of available files.
+ * Each refactoring exposes one or more "Actions"; a user selects one action to invoke a refactoring
+ */
+export interface GetMoveToRefactoringFileSuggestions extends Response {
+    body: {
+        newFileName: string;
+        files: string[];
+    };
+}
+
+/**
  * A set of one or more available refactoring actions, grouped under a parent refactoring.
  */
 export interface ApplicableRefactorInfo {
@@ -680,6 +703,8 @@ export type GetEditsForRefactorRequestArgs = FileLocationOrRangeRequestArgs & {
     refactor: string;
     /* The 'name' property from the refactoring action */
     action: string;
+    /* Arguments for interactive action */
+    interactiveRefactorArguments?: InteractiveRefactorArguments;
 };
 
 

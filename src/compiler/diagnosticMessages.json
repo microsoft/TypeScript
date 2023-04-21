@@ -7600,6 +7600,10 @@
         "category": "Message",
         "code": 95177
     },
+    "Move to file": {
+        "category": "Message",
+        "code": 95178
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",

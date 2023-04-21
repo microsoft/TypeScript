@@ -198,6 +198,9 @@ declare namespace FourSlashInterface {
         readonly semicolons?: ts.SemicolonPreference;
         readonly indentSwitchCase?: boolean;
     }
+    interface InteractiveRefactorArguments {
+        targetFile: string;
+    }
     interface Range {
         fileName: string;
         pos: number;
@@ -431,7 +434,11 @@ declare namespace FourSlashInterface {
             readonly preferences?: UserPreferences;
         }): void;
         noMoveToNewFile(): void;
-
+        moveToFile(options: {
+            readonly newFileContents: { readonly [fileName: string]: string };
+            readonly interactiveRefactorArguments: InteractiveRefactorArguments;
+            readonly preferences?: UserPreferences;
+        }): void;
         generateTypes(...options: GenerateTypesOptions[]): void;
 
         organizeImports(newContent: string, mode?: ts.OrganizeImportsMode, preferences?: UserPreferences): void;
