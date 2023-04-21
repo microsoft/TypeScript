@@ -603,6 +603,7 @@ declare namespace ts {
             type GetEditsForRefactorRequestArgs = FileLocationOrRangeRequestArgs & {
                 refactor: string;
                 action: string;
+                interactiveRefactorArguments?: InteractiveRefactorArguments;
             };
             interface GetEditsForRefactorResponse extends Response {
                 body?: RefactorEditInfo;
