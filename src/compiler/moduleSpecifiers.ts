@@ -452,7 +452,7 @@ function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOpt
     }
 
     const baseDirectory = getNormalizedAbsolutePath(getPathsBasePath(compilerOptions, host) || baseUrl!, host.getCurrentDirectory());
-    const relativeToBaseUrl = getRelativePathIfInDirectory(moduleFileName, baseDirectory, getCanonicalFileName);
+    const relativeToBaseUrl = getRelativePathIfInSameVolume(moduleFileName, baseDirectory, getCanonicalFileName);
     if (!relativeToBaseUrl) {
         return pathsOnly ? undefined : relativePath;
     }
@@ -766,7 +766,7 @@ function tryGetModuleNameFromPaths(relativeToBaseUrl: string, paths: MapLike<rea
                         validateEnding({ ending, value })
                     ) {
                         const matchedStar = value.substring(prefix.length, value.length - suffix.length);
-                        return key.replace("*", matchedStar);
+                        return pathIsRelative(matchedStar) ? undefined : key.replace("*", matchedStar);
                     }
                 }
             }
@@ -1031,7 +1031,7 @@ function tryGetAnyFileFromPath(host: ModuleSpecifierResolutionHost, path: string
 
 function getPathsRelativeToRootDirs(path: string, rootDirs: readonly string[], getCanonicalFileName: GetCanonicalFileName): string[] | undefined {
     return mapDefined(rootDirs, rootDir => {
-        const relativePath = getRelativePathIfInDirectory(path, rootDir, getCanonicalFileName);
+        const relativePath = getRelativePathIfInSameVolume(path, rootDir, getCanonicalFileName);
         return relativePath !== undefined && isPathRelativeToParent(relativePath) ? undefined : relativePath;
     });
 }
@@ -1122,7 +1122,7 @@ export function tryGetJSExtensionForFile(fileName: string, options: CompilerOpti
     }
 }
 
-function getRelativePathIfInDirectory(path: string, directoryPath: string, getCanonicalFileName: GetCanonicalFileName): string | undefined {
+function getRelativePathIfInSameVolume(path: string, directoryPath: string, getCanonicalFileName: GetCanonicalFileName): string | undefined {
     const relativePath = getRelativePathToDirectoryOrUrl(directoryPath, path, directoryPath, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
     return isRootedDiskPath(relativePath) ? undefined : relativePath;
 }
