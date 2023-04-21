@@ -4763,25 +4763,23 @@ declare namespace ts {
         name: Identifier;
     };
     /**
-     * Gets either the {@link JSDoc} object or {@link JSDocTag} providing documentation for the provided node.
-     * A {@link JSDoc} object will be returned if an entire comment is associated with this node. This is always
-     * the case when requesting a comment for declarations which are not a parameter or type parameter.
-     * A {@link JSDocTag} object will be returned if only part of a comment is associated with this node. This
-     * may happen when requesting comments for a parameter or type parameter, but is not guaranteed since the
-     * a comment may appear directly before the parameter/type parameter, in which case the entire comment is
-     * associated with this node.
+     * This function checks multiple locations for JSDoc comments that apply to a host node.
+     * At each location, the whole comment may apply to the node, or only a specific tag in
+     * the comment. In the first case, location adds the entire {@link JSDoc} object. In the
+     * second case, it adds the applicable {@link JSDocTag}.
+     *
+     * For example, a JSDoc comment before a parameter adds the entire {@link JSDoc}. But a
+     * `@param` tag on the parent function only adds the {@link JSDocTag} for the `@param`.
      *
      * ```ts
      * /** JSDoc will be returned for `a` *\/
      * const a = 0
      * /**
      *  * Entire JSDoc will be returned for `b`
-     *  * JSDocTag will be returned for `c`
+     *  * @param c JSDocTag will be returned for `c`
      *  *\/
      * function b(/** JSDoc will be returned for `c` *\/ c) {}
      * ```
-     *
-     * @param hostNode node to get the associated JSDoc comment for.
      */
     function getJSDocCommentsAndTags(hostNode: Node): readonly (JSDoc | JSDocTag)[];
     /** @deprecated */
