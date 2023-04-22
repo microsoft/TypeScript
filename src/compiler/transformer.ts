@@ -4,6 +4,7 @@ import {
     Bundle,
     chainBundle,
     CompilerOptions,
+    concatenate,
     createEmitHelperFactory,
     CustomTransformer,
     CustomTransformerFactory,
@@ -114,6 +115,21 @@ export function getTransformers(compilerOptions: CompilerOptions, customTransfor
         scriptTransformers: getScriptTransformers(compilerOptions, customTransformers, emitOnly),
         declarationTransformers: getDeclarationTransformers(customTransformers),
     };
+}
+
+/** @internal */
+export function mergeCustomTransformers(...customTransformers: (CustomTransformers | undefined)[]): CustomTransformers | undefined {
+    if (!some(customTransformers)) return undefined;
+
+    const result: CustomTransformers = {};
+    for (const transformer of customTransformers) {
+        if (!transformer) continue;
+        result.before = concatenate(result.before, transformer.before);
+        result.after = concatenate(result.after, transformer.after);
+        result.afterDeclarations = concatenate(result.afterDeclarations, transformer.afterDeclarations);
+    }
+
+    return result;
 }
 
 function getScriptTransformers(compilerOptions: CompilerOptions, customTransformers?: CustomTransformers, emitOnly?: boolean | EmitOnly) {

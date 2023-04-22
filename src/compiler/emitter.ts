@@ -1336,6 +1336,7 @@ function emitUsingBuildInfoWorker(
         getFileIncludeReasons: notImplemented,
         createHash: maybeBind(host, host.createHash),
     };
+    // TODO(jakebailey): customTransformers
     emitFiles(
         notImplementedResolver,
         emitHost,
