@@ -79,7 +79,6 @@ import {
     EmitNode,
     emptyArray,
     EmptyStatement,
-    EndOfDeclarationMarker,
     EndOfFileToken,
     EntityName,
     EnumDeclaration,
@@ -121,6 +120,7 @@ import {
     getLineAndCharacterOfPosition,
     getNameOfDeclaration,
     getNodeId,
+    getNonAssignedNameOfDeclaration,
     getSourceMapRange,
     getSyntheticLeadingComments,
     getSyntheticTrailingComments,
@@ -267,6 +267,7 @@ import {
     JSDocVariadicType,
     JsxAttribute,
     JsxAttributeLike,
+    JsxAttributeName,
     JsxAttributes,
     JsxAttributeValue,
     JsxChild,
@@ -275,6 +276,7 @@ import {
     JsxElement,
     JsxExpression,
     JsxFragment,
+    JsxNamespacedName,
     JsxOpeningElement,
     JsxOpeningFragment,
     JsxSelfClosingElement,
@@ -296,7 +298,6 @@ import {
     MemberName,
     memoize,
     memoizeOne,
-    MergeDeclarationMarker,
     MetaProperty,
     MethodDeclaration,
     MethodSignature,
@@ -908,6 +909,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         updateJsxSpreadAttribute,
         createJsxExpression,
         updateJsxExpression,
+        createJsxNamespacedName,
+        updateJsxNamespacedName,
         createCaseClause,
         updateCaseClause,
         createDefaultClause,
@@ -942,8 +945,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         updatePartiallyEmittedExpression,
         createCommaListExpression,
         updateCommaListExpression,
-        createEndOfDeclarationMarker,
-        createMergeDeclarationMarker,
         createSyntheticReferenceExpression,
         updateSyntheticReferenceExpression,
         cloneNode,
@@ -1105,7 +1106,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     function createBigIntLiteral(value: string | PseudoBigInt): BigIntLiteral {
         const node = createBaseToken<BigIntLiteral>(SyntaxKind.BigIntLiteral);
         node.text = typeof value === "string" ? value : pseudoBigIntToString(value) + "n";
-        node.transformFlags |= TransformFlags.ContainsESNext;
+        node.transformFlags |= TransformFlags.ContainsES2020;
         return node;
     }
 
@@ -3675,7 +3676,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
                 node.transformFlags |= TransformFlags.ContainsES2015;
                 break;
             case SyntaxKind.ImportKeyword:
-                node.transformFlags |= TransformFlags.ContainsESNext;
+                node.transformFlags |= TransformFlags.ContainsES2020;
                 break;
             default:
                 return Debug.assertNever(keywordToken);
@@ -4715,7 +4716,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         node.name = name;
         node.transformFlags |=
             propagateChildFlags(node.name) |
-            TransformFlags.ContainsESNext;
+            TransformFlags.ContainsES2020;
         node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
         return node;
     }
@@ -5582,7 +5583,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function createJsxAttribute(name: Identifier, initializer: JsxAttributeValue | undefined) {
+    function createJsxAttribute(name: JsxAttributeName, initializer: JsxAttributeValue | undefined) {
         const node = createBaseDeclaration<JsxAttribute>(SyntaxKind.JsxAttribute);
         node.name = name;
         node.initializer = initializer;
@@ -5594,7 +5595,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function updateJsxAttribute(node: JsxAttribute, name: Identifier, initializer: JsxAttributeValue | undefined) {
+    function updateJsxAttribute(node: JsxAttribute, name: JsxAttributeName, initializer: JsxAttributeValue | undefined) {
         return node.name !== name
             || node.initializer !== initializer
             ? update(createJsxAttribute(name, initializer), node)
@@ -5651,6 +5652,26 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     function updateJsxExpression(node: JsxExpression, expression: Expression | undefined) {
         return node.expression !== expression
             ? update(createJsxExpression(node.dotDotDotToken, expression), node)
+            : node;
+    }
+
+    // @api
+    function createJsxNamespacedName(namespace: Identifier, name: Identifier) {
+        const node = createBaseNode<JsxNamespacedName>(SyntaxKind.JsxNamespacedName);
+        node.namespace = namespace;
+        node.name = name;
+        node.transformFlags |=
+            propagateChildFlags(node.namespace) |
+            propagateChildFlags(node.name) |
+            TransformFlags.ContainsJsx;
+        return node;
+    }
+
+    // @api
+    function updateJsxNamespacedName(node: JsxNamespacedName, namespace: Identifier, name: Identifier) {
+        return node.namespace !== namespace
+            || node.name !== name
+            ? update(createJsxNamespacedName(namespace, name), node)
             : node;
     }
 
@@ -6186,30 +6207,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             : node;
     }
 
-    /**
-     * Creates a synthetic element to act as a placeholder for the end of an emitted declaration in
-     * order to properly emit exports.
-     */
-    // @api
-    function createEndOfDeclarationMarker(original: Node) {
-        const node = createBaseNode<EndOfDeclarationMarker>(SyntaxKind.EndOfDeclarationMarker);
-        node.emitNode = {} as EmitNode;
-        node.original = original;
-        return node;
-    }
-
-    /**
-     * Creates a synthetic element to act as a placeholder for the beginning of a merged declaration in
-     * order to properly emit exports.
-     */
-    // @api
-    function createMergeDeclarationMarker(original: Node) {
-        const node = createBaseNode<MergeDeclarationMarker>(SyntaxKind.MergeDeclarationMarker);
-        node.emitNode = {} as EmitNode;
-        node.original = original;
-        return node;
-    }
-
     // @api
     function createSyntheticReferenceExpression(expression: Expression, thisArg: Expression) {
         const node = createBaseNode<SyntheticReferenceExpression>(SyntaxKind.SyntheticReferenceExpression);
@@ -6648,8 +6645,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             : reduceLeft(expressions, factory.createComma)!;
     }
 
-    function getName(node: Declaration | undefined, allowComments?: boolean, allowSourceMaps?: boolean, emitFlags: EmitFlags = 0) {
-        const nodeName = getNameOfDeclaration(node);
+    function getName(node: Declaration | undefined, allowComments?: boolean, allowSourceMaps?: boolean, emitFlags: EmitFlags = 0, ignoreAssignedName?: boolean) {
+        const nodeName = ignoreAssignedName ? node && getNonAssignedNameOfDeclaration(node) : getNameOfDeclaration(node);
         if (nodeName && isIdentifier(nodeName) && !isGeneratedIdentifier(nodeName)) {
             // TODO(rbuckton): Does this need to be parented?
             const name = setParent(setTextRange(cloneNode(nodeName), nodeName), nodeName.parent);
@@ -6686,9 +6683,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
      * @param node The declaration.
      * @param allowComments A value indicating whether comments may be emitted for the name.
      * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
+     * @param ignoreAssignedName Indicates that the assigned name of a declaration shouldn't be considered.
      */
-    function getLocalName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean) {
-        return getName(node, allowComments, allowSourceMaps, EmitFlags.LocalName);
+    function getLocalName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean, ignoreAssignedName?: boolean) {
+        return getName(node, allowComments, allowSourceMaps, EmitFlags.LocalName, ignoreAssignedName);
     }
 
     /**

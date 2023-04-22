@@ -93,6 +93,7 @@ import {
     isConstructorDeclaration,
     isDestructuringAssignment,
     isElementAccessExpression,
+    isExportOrDefaultModifier,
     isExpression,
     isExpressionStatement,
     isForInitializer,
@@ -1843,25 +1844,13 @@ export function transformClassFields(context: TransformationContext): (x: Source
             }
         }
 
-        const modifiers = visitNodes(node.modifiers, modifierVisitor, isModifier);
+        const isExport = hasSyntacticModifier(node, ModifierFlags.Export);
+        const isDefault = hasSyntacticModifier(node, ModifierFlags.Default);
+        let modifiers = visitNodes(node.modifiers, modifierVisitor, isModifier);
         const heritageClauses = visitNodes(node.heritageClauses, heritageClauseVisitor, isHeritageClause);
         const { members, prologue } = transformClassMembers(node);
-        const classDecl = factory.updateClassDeclaration(
-            node,
-            modifiers,
-            node.name,
-            /*typeParameters*/ undefined,
-            heritageClauses,
-            members
-        );
 
         const statements: Statement[] = [];
-        if (prologue) {
-            statements.push(factory.createExpressionStatement(prologue));
-        }
-
-        statements.push(classDecl);
-
         if (pendingClassReferenceAssignment) {
             getPendingExpressions().unshift(pendingClassReferenceAssignment);
         }
@@ -1882,6 +1871,29 @@ export function transformClassFields(context: TransformationContext): (x: Source
             if (some(staticProperties)) {
                 addPropertyOrClassStaticBlockStatements(statements, staticProperties, factory.getInternalName(node));
             }
+        }
+
+        if (statements.length > 0 && isExport && isDefault) {
+            modifiers = visitNodes(modifiers, node => isExportOrDefaultModifier(node) ? undefined : node, isModifier);
+            statements.push(factory.createExportAssignment(
+                /*modifiers*/ undefined,
+                /*isExportEquals*/ false,
+                factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true)
+            ));
+        }
+
+        const classDecl = factory.updateClassDeclaration(
+            node,
+            modifiers,
+            node.name,
+            /*typeParameters*/ undefined,
+            heritageClauses,
+            members
+        );
+        statements.unshift(classDecl);
+
+        if (prologue) {
+            statements.unshift(factory.createExpressionStatement(prologue));
         }
 
         return statements;

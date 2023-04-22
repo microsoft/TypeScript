@@ -151,11 +151,18 @@ function getPreferences(
                     ? [ModuleSpecifierEnding.JsExtension, ModuleSpecifierEnding.Index]
                     : [ModuleSpecifierEnding.Index, ModuleSpecifierEnding.JsExtension];
             }
+            const allowImportingTsExtension = shouldAllowImportingTsExtension(compilerOptions, importingSourceFile.fileName);
             switch (preferredEnding) {
-                case ModuleSpecifierEnding.JsExtension: return [ModuleSpecifierEnding.JsExtension, ModuleSpecifierEnding.Minimal, ModuleSpecifierEnding.Index];
+                case ModuleSpecifierEnding.JsExtension: return allowImportingTsExtension
+                    ? [ModuleSpecifierEnding.JsExtension, ModuleSpecifierEnding.TsExtension, ModuleSpecifierEnding.Minimal, ModuleSpecifierEnding.Index]
+                    : [ModuleSpecifierEnding.JsExtension, ModuleSpecifierEnding.Minimal, ModuleSpecifierEnding.Index];
                 case ModuleSpecifierEnding.TsExtension: return [ModuleSpecifierEnding.TsExtension, ModuleSpecifierEnding.Minimal, ModuleSpecifierEnding.JsExtension, ModuleSpecifierEnding.Index];
-                case ModuleSpecifierEnding.Index: return [ModuleSpecifierEnding.Index, ModuleSpecifierEnding.Minimal, ModuleSpecifierEnding.JsExtension];
-                case ModuleSpecifierEnding.Minimal: return [ModuleSpecifierEnding.Minimal, ModuleSpecifierEnding.Index, ModuleSpecifierEnding.JsExtension];
+                case ModuleSpecifierEnding.Index: return allowImportingTsExtension
+                    ? [ModuleSpecifierEnding.Index, ModuleSpecifierEnding.Minimal, ModuleSpecifierEnding.TsExtension, ModuleSpecifierEnding.JsExtension]
+                    : [ModuleSpecifierEnding.Index, ModuleSpecifierEnding.Minimal, ModuleSpecifierEnding.JsExtension];
+                case ModuleSpecifierEnding.Minimal: return allowImportingTsExtension
+                    ? [ModuleSpecifierEnding.Minimal, ModuleSpecifierEnding.Index, ModuleSpecifierEnding.TsExtension, ModuleSpecifierEnding.JsExtension]
+                    : [ModuleSpecifierEnding.Minimal, ModuleSpecifierEnding.Index, ModuleSpecifierEnding.JsExtension];
                 default: Debug.assertNever(preferredEnding);
             }
         },
@@ -452,7 +459,7 @@ function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOpt
     }
 
     const baseDirectory = getNormalizedAbsolutePath(getPathsBasePath(compilerOptions, host) || baseUrl!, host.getCurrentDirectory());
-    const relativeToBaseUrl = getRelativePathIfInDirectory(moduleFileName, baseDirectory, getCanonicalFileName);
+    const relativeToBaseUrl = getRelativePathIfInSameVolume(moduleFileName, baseDirectory, getCanonicalFileName);
     if (!relativeToBaseUrl) {
         return pathsOnly ? undefined : relativePath;
     }
@@ -766,7 +773,7 @@ function tryGetModuleNameFromPaths(relativeToBaseUrl: string, paths: MapLike<rea
                         validateEnding({ ending, value })
                     ) {
                         const matchedStar = value.substring(prefix.length, value.length - suffix.length);
-                        return key.replace("*", matchedStar);
+                        return pathIsRelative(matchedStar) ? undefined : key.replace("*", matchedStar);
                     }
                 }
             }
@@ -1031,7 +1038,7 @@ function tryGetAnyFileFromPath(host: ModuleSpecifierResolutionHost, path: string
 
 function getPathsRelativeToRootDirs(path: string, rootDirs: readonly string[], getCanonicalFileName: GetCanonicalFileName): string[] | undefined {
     return mapDefined(rootDirs, rootDir => {
-        const relativePath = getRelativePathIfInDirectory(path, rootDir, getCanonicalFileName);
+        const relativePath = getRelativePathIfInSameVolume(path, rootDir, getCanonicalFileName);
         return relativePath !== undefined && isPathRelativeToParent(relativePath) ? undefined : relativePath;
     });
 }
@@ -1046,7 +1053,12 @@ function processEnding(fileName: string, allowedEndings: readonly ModuleSpecifie
         return fileName;
     }
 
-    if (fileExtensionIsOneOf(fileName, [Extension.Dmts, Extension.Mts, Extension.Dcts, Extension.Cts])) {
+    const jsPriority = allowedEndings.indexOf(ModuleSpecifierEnding.JsExtension);
+    const tsPriority = allowedEndings.indexOf(ModuleSpecifierEnding.TsExtension);
+    if (fileExtensionIsOneOf(fileName, [Extension.Mts, Extension.Cts]) && tsPriority !== -1 && tsPriority < jsPriority) {
+        return fileName;
+    }
+    else if (fileExtensionIsOneOf(fileName, [Extension.Dmts, Extension.Mts, Extension.Dcts, Extension.Cts])) {
         return noExtension + getJSExtensionForFile(fileName, options);
     }
     else if (!fileExtensionIsOneOf(fileName, [Extension.Dts]) && fileExtensionIsOneOf(fileName, [Extension.Ts]) && stringContains(fileName, ".d.")) {
@@ -1072,7 +1084,6 @@ function processEnding(fileName: string, allowedEndings: readonly ModuleSpecifie
             // know if a .d.ts extension is valid, so use no extension or a .js extension
             if (isDeclarationFileName(fileName)) {
                 const extensionlessPriority = allowedEndings.findIndex(e => e === ModuleSpecifierEnding.Minimal || e === ModuleSpecifierEnding.Index);
-                const jsPriority = allowedEndings.indexOf(ModuleSpecifierEnding.JsExtension);
                 return extensionlessPriority !== -1 && extensionlessPriority < jsPriority
                     ? noExtension
                     : noExtension + getJSExtensionForFile(fileName, options);
@@ -1122,7 +1133,7 @@ export function tryGetJSExtensionForFile(fileName: string, options: CompilerOpti
     }
 }
 
-function getRelativePathIfInDirectory(path: string, directoryPath: string, getCanonicalFileName: GetCanonicalFileName): string | undefined {
+function getRelativePathIfInSameVolume(path: string, directoryPath: string, getCanonicalFileName: GetCanonicalFileName): string | undefined {
     const relativePath = getRelativePathToDirectoryOrUrl(directoryPath, path, directoryPath, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
     return isRootedDiskPath(relativePath) ? undefined : relativePath;
 }

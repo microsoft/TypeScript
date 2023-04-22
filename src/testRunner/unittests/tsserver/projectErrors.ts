@@ -1,11 +1,5 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    createServerHost,
-    File,
-    Folder,
-    libFile,
-} from "../virtualFileSystemWithWatch";
-import {
     appendAllScriptInfos,
     baselineTsserverLogs,
     closeFilesForSession,
@@ -19,7 +13,13 @@ import {
     toExternalFiles,
     verifyGetErrRequest,
     verifyGetErrScenario,
-} from "./helpers";
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+    File,
+    Folder,
+    libFile,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: projectErrors::", () => {
     it("external project - diagnostics for missing files", () => {

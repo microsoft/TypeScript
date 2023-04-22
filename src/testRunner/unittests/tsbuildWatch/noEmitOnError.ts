@@ -1,13 +1,13 @@
-import { libContent } from "../tsc/helpers";
+import { libContent } from "../helpers/contents";
 import {
     TscWatchCompileChange,
     verifyTscWatch,
-} from "../tscWatch/helpers";
+} from "../helpers/tscWatch";
 import {
     createWatchedSystem,
     getTsBuildProjectFile,
     libFile,
-} from "../virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsbuildWatch:: watchMode:: with noEmitOnError", () => {
     function change(caption: string, content: string): TscWatchCompileChange {

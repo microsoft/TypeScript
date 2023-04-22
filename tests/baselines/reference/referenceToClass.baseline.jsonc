@@ -26,12 +26,7 @@
   // 
   // class bar {
   //     public n: foo;
-  //     public k = new foo();
-  // }
-  // 
-  // module mod {
-  //     var k: foo = null;
-  // }
+  // --- (line: 8) skipped ---
 
   // === Details ===
   [
@@ -87,12 +82,7 @@
   // 
   // class bar {
   //     public n: foo;
-  //     public k = new foo();
-  // }
-  // 
-  // module mod {
-  //     var k: foo = null;
-  // }
+  // --- (line: 8) skipped ---
 
   // === Details ===
   [
@@ -151,9 +141,7 @@
   //     public k = new foo();
   // }
   // 
-  // module mod {
-  //     var k: foo = null;
-  // }
+  // --- (line: 11) skipped ---
 
   // === Details ===
   [
@@ -331,12 +319,7 @@
   // 
   // class bar {
   //     public n: foo;
-  //     public k = new foo();
-  // }
-  // 
-  // module mod {
-  //     var k: foo = null;
-  // }
+  // --- (line: 8) skipped ---
 
   // === Details ===
   [

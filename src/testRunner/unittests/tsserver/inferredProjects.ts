@@ -1,10 +1,5 @@
 import * as ts from "../../_namespaces/ts";
-import { commonFile1 } from "../tscWatch/helpers";
-import {
-    createServerHost,
-    File,
-    libFile,
-} from "../virtualFileSystemWithWatch";
+import { commonFile1 } from "../helpers/tscWatch";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
@@ -14,7 +9,12 @@ import {
     logInferredProjectsOrphanStatus,
     openFilesForSession,
     setCompilerOptionsForInferredProjectsRequestForSession,
-} from "./helpers";
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+    File,
+    libFile,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: inferredProjects", () => {
     it("create inferred project", () => {
