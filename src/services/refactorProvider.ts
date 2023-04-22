@@ -5,6 +5,7 @@ import {
 import { refactorKindBeginsWith } from "./refactors/helpers";
 import {
     ApplicableRefactorInfo,
+    InteractiveRefactorArguments,
     Refactor,
     RefactorContext,
     RefactorEditInfo,
@@ -24,15 +25,15 @@ export function registerRefactor(name: string, refactor: Refactor) {
 }
 
 /** @internal */
-export function getApplicableRefactors(context: RefactorContext): ApplicableRefactorInfo[] {
+export function getApplicableRefactors(context: RefactorContext, includeInteractiveActions?: boolean): ApplicableRefactorInfo[] {
     return arrayFrom(flatMapIterator(refactors.values(), refactor =>
         context.cancellationToken && context.cancellationToken.isCancellationRequested() ||
         !refactor.kinds?.some(kind => refactorKindBeginsWith(kind, context.kind)) ? undefined :
-        refactor.getAvailableActions(context)));
+        refactor.getAvailableActions(context, includeInteractiveActions)));
 }
 
 /** @internal */
-export function getEditsForRefactor(context: RefactorContext, refactorName: string, actionName: string): RefactorEditInfo | undefined {
+export function getEditsForRefactor(context: RefactorContext, refactorName: string, actionName: string, interactiveRefactorArguments?: InteractiveRefactorArguments): RefactorEditInfo | undefined {
     const refactor = refactors.get(refactorName);
-    return refactor && refactor.getEditsForAction(context, actionName);
+    return refactor && refactor.getEditsForAction(context, actionName, interactiveRefactorArguments);
 }

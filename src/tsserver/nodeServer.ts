@@ -10,7 +10,6 @@ import {
     versionMajorMinor,
 } from "../compiler/corePublic";
 import * as Debug from "../compiler/debug";
-import { resolveJSModule } from "../compiler/moduleNameResolver";
 import {
     combinePaths,
     directorySeparator,
@@ -75,7 +74,6 @@ import {
     toEvent,
 } from "../server/session";
 import {
-    ModuleImportResult,
     ServerHost,
 } from "../server/types";
 import {
@@ -406,15 +404,6 @@ export function initializeNodeSystem(): StartInput {
     if (typeof global !== "undefined" && global.gc) {
         sys.gc = () => global.gc?.();
     }
-
-    sys.require = (initialDir: string, moduleName: string): ModuleImportResult => {
-        try {
-            return { module: require(resolveJSModule(moduleName, initialDir, sys)), error: undefined };
-        }
-        catch (error) {
-            return { module: undefined, error };
-        }
-    };
 
     let cancellationToken: ServerCancellationToken;
     try {

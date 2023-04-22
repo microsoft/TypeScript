@@ -285,6 +285,7 @@ import {
     JsxEmit,
     JsxExpression,
     JsxFragment,
+    JsxNamespacedName,
     JsxOpeningElement,
     JsxOpeningFragment,
     JsxSelfClosingElement,
@@ -1194,6 +1195,7 @@ export const notImplementedResolver: EmitResolver = {
     // Returns the constant value this property access resolves to: notImplemented, or 'undefined' for a non-constant
     getConstantValue: notImplemented,
     getReferencedValueDeclaration: notImplemented,
+    getReferencedValueDeclarations: notImplemented,
     getTypeReferenceSerializationKind: notImplemented,
     isOptionalParameter: notImplemented,
     moduleExportsSomeValue: notImplemented,
@@ -2217,8 +2219,6 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
 
                 // Transformation nodes
                 case SyntaxKind.NotEmittedStatement:
-                case SyntaxKind.EndOfDeclarationMarker:
-                case SyntaxKind.MergeDeclarationMarker:
                     return;
             }
             if (isExpression(node)) {
@@ -2323,6 +2323,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                     return emitJsxSelfClosingElement(node as JsxSelfClosingElement);
                 case SyntaxKind.JsxFragment:
                     return emitJsxFragment(node as JsxFragment);
+                case SyntaxKind.JsxNamespacedName:
+                    return emitJsxNamespacedName(node as JsxNamespacedName);
 
                 // Synthesized list
                 case SyntaxKind.SyntaxList:
@@ -2335,9 +2337,6 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                     return emitPartiallyEmittedExpression(node as PartiallyEmittedExpression);
                 case SyntaxKind.CommaListExpression:
                     return emitCommaList(node as CommaListExpression);
-                case SyntaxKind.MergeDeclarationMarker:
-                case SyntaxKind.EndOfDeclarationMarker:
-                    return;
                 case SyntaxKind.SyntheticReferenceExpression:
                     return Debug.fail("SyntheticReferenceExpression should not be printed");
             }
@@ -4265,6 +4264,12 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         }
     }
 
+    function emitJsxNamespacedName(node: JsxNamespacedName) {
+        emitIdentifierName(node.namespace);
+        writePunctuation(":");
+        emitIdentifierName(node.name);
+    }
+
     function emitJsxTagName(node: JsxTagNameExpression) {
         if (node.kind === SyntaxKind.Identifier) {
             emitExpression(node);
@@ -4906,7 +4911,10 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitEmbeddedStatement(parent: Node, node: Statement) {
-        if (isBlock(node) || getEmitFlags(parent) & EmitFlags.SingleLine) {
+        if (isBlock(node) ||
+            getEmitFlags(parent) & EmitFlags.SingleLine ||
+            preserveSourceNewlines && !getLeadingLineTerminatorCount(parent, node, ListFormat.None)
+        ) {
             writeSpace();
             emit(node);
         }

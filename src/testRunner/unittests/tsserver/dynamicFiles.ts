@@ -1,10 +1,5 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    createServerHost,
-    File,
-    libFile,
-} from "../virtualFileSystemWithWatch";
-import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,
     createProjectService,
@@ -13,7 +8,12 @@ import {
     protocolFileLocationFromSubstring,
     setCompilerOptionsForInferredProjectsRequestForSession,
     verifyDynamic,
-} from "./helpers";
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+    File,
+    libFile,
+} from "../helpers/virtualFileSystemWithWatch";
 
 function verifyPathRecognizedAsDynamic(subscenario: string, path: string) {
     it(subscenario, () => {

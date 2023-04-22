@@ -26,10 +26,10 @@ var a;
         weekend[weekend["Saturday"] = 1] = "Saturday";
         weekend[weekend["Sunday"] = 2] = "Sunday";
     })(weekend = a.weekend || (a.weekend = {}));
-})(a = exports.a || (exports.a = {}));
+})(a || (exports.a = a = {}));
 var c;
 (function (c) {
     var b = a.weekend;
     c.bVal = b.Sunday;
-})(c = exports.c || (exports.c = {}));
+})(c || (exports.c = c = {}));
 var happyFriday = c.b.Friday;

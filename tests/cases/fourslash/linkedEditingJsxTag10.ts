@@ -48,8 +48,10 @@
 // @Filename: /jsx15.tsx
 ////const jsx = </*15*/div> </*15a*/> <//*15b*/div> <//*15c*/>;
 
+const wordPattern =  "[a-zA-Z0-9:\\-\\._$]*";
 const linkedCursors9 = {
     ranges: [{ start: test.markerByName("9").position, length: 3 }, { start:  test.markerByName("9a").position,  length: 3 }],
+    wordPattern,
 };
 
 verify.linkedEditing( {

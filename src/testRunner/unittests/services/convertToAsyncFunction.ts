@@ -2,8 +2,8 @@ import { getFormatContext } from "../../../services/formatting/formatting";
 import { applyChanges } from "../../../services/textChanges";
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
-import { createProjectService } from "../tsserver/helpers";
-import { createServerHost, File } from "../virtualFileSystemWithWatch";
+import { createProjectService } from "../helpers/tsserver";
+import { createServerHost, File } from "../helpers/virtualFileSystemWithWatch";
 import { extractTest, newLineCharacter, notImplementedHost } from "./extract/helpers";
 
 const libFile: File = {

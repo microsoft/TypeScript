@@ -41,6 +41,7 @@ import {
 import { Comparison } from "../compiler/corePublic";
 import * as Debug from "../compiler/debug";
 import { createPrinterWithRemoveCommentsOmitTrailingSemicolon } from "../compiler/emitter";
+import { hasJSFileExtension } from "../compiler/extension";
 import {
     addEmitFlags,
     addSyntheticLeadingComment,
@@ -145,8 +146,9 @@ import {
     isRootedDiskPath,
     normalizePath,
     pathIsRelative,
+    toPath,
 } from "../compiler/path";
-import { findConfigFile } from "../compiler/program";
+import { findConfigFile, getImpliedNodeFormatForFile } from "../compiler/program";
 import {
     createScanner,
     forEachLeadingCommentRange,
@@ -223,6 +225,7 @@ import {
     Modifier,
     ModifierFlags,
     ModuleDeclaration,
+    ModuleKind,
     ModuleResolutionKind,
     ModuleSpecifierResolutionHost,
     Mutable,
@@ -284,10 +287,12 @@ import {
     createRange,
     defaultMaximumTruncationLength,
     directoryProbablyExists,
+    emitModuleKindIsNonNodeESM,
     ensureScriptKind,
     escapeString,
     formatStringFromArgs,
     getAssignmentDeclarationKind,
+    getEmitModuleKind,
     getEmitScriptTarget,
     getExternalModuleImportEqualsDeclarationExpression,
     getIndentString,
@@ -301,6 +306,7 @@ import {
     getTextOfIdentifierOrLiteral,
     getTextOfNode,
     hasSyntacticModifier,
+    hostGetCanonicalFileName,
     identifierIsThisKeyword,
     indexOfNode,
     isAmbientModule,
@@ -1791,7 +1797,14 @@ export function findPrecedingToken(position: number, sourceFile: SourceFileLike,
                 if (lookInPreviousChild) {
                     // actual start of the node is past the position - previous token should be at the end of previous child
                     const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ i, sourceFile, n.kind);
-                    return candidate && findRightmostToken(candidate, sourceFile);
+                    if (candidate) {
+                        // Ensure we recurse into JSDoc nodes with children.
+                        if (!excludeJsdoc && isJSDocCommentContainingNode(candidate) && candidate.getChildren(sourceFile).length) {
+                            return find(candidate);
+                        }
+                        return findRightmostToken(candidate, sourceFile);
+                    }
+                    return undefined;
                 }
                 else {
                     // candidate should be in this node
@@ -3182,7 +3195,12 @@ export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T>, in
 export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined, includeTrivia?: boolean): NodeArray<T> | undefined;
 /** @internal */
 export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined, includeTrivia = true): NodeArray<T> | undefined {
-    return nodes && factory.createNodeArray(nodes.map(n => getSynthesizedDeepClone(n, includeTrivia)), nodes.hasTrailingComma);
+    if (nodes) {
+        const cloned = factory.createNodeArray(nodes.map(n => getSynthesizedDeepClone(n, includeTrivia)), nodes.hasTrailingComma);
+        setTextRange(cloned, nodes);
+        return cloned;
+    }
+    return nodes;
 }
 
 /** @internal */
@@ -4361,6 +4379,48 @@ export function newCaseClauseTracker(checker: TypeChecker, clauses: readonly (Ca
                 return existingBigInts.has(pseudoBigIntToString(value));
         }
     }
+}
+
+/** @internal */
+export function fileShouldUseJavaScriptRequire(file: SourceFile | string, program: Program, host: LanguageServiceHost, preferRequire?: boolean) {
+    const fileName = typeof file === "string" ? file : file.fileName;
+    if (!hasJSFileExtension(fileName)) {
+        return false;
+    }
+    const compilerOptions = program.getCompilerOptions();
+    const moduleKind = getEmitModuleKind(compilerOptions);
+    const impliedNodeFormat = typeof file === "string"
+        ? getImpliedNodeFormatForFile(toPath(file, host.getCurrentDirectory(), hostGetCanonicalFileName(host)), program.getPackageJsonInfoCache?.(), host, compilerOptions)
+        : file.impliedNodeFormat;
+
+    if (impliedNodeFormat === ModuleKind.ESNext) {
+        return false;
+    }
+    if (impliedNodeFormat === ModuleKind.CommonJS) {
+        // Since we're in a JS file, assume the user is writing the JS that will run
+        // (i.e., assume `noEmit`), so a CJS-format file should just have require
+        // syntax, rather than imports that will be downleveled to `require`.
+        return true;
+    }
+    if (compilerOptions.verbatimModuleSyntax && moduleKind === ModuleKind.CommonJS) {
+        // Using ESM syntax under these options would result in an error.
+        return true;
+    }
+    if (compilerOptions.verbatimModuleSyntax && emitModuleKindIsNonNodeESM(moduleKind)) {
+        return false;
+    }
+
+    // impliedNodeFormat is undefined and `verbatimModuleSyntax` is off (or in an invalid combo)
+    // Use heuristics from existing code
+    if (typeof file === "object") {
+        if (file.commonJsModuleIndicator) {
+            return true;
+        }
+        if (file.externalModuleIndicator) {
+            return false;
+        }
+    }
+    return preferRequire;
 }
 
 /** @internal */

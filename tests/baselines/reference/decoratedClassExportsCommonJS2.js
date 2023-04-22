@@ -15,9 +15,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var Testing123_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Testing123 = void 0;
-let Testing123 = Testing123_1 = class Testing123 {
+let Testing123 = exports.Testing123 = Testing123_1 = class Testing123 {
 };
-Testing123 = Testing123_1 = __decorate([
+exports.Testing123 = Testing123 = Testing123_1 = __decorate([
     Something({ v: () => Testing123_1 })
 ], Testing123);
-exports.Testing123 = Testing123;

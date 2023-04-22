@@ -1,11 +1,11 @@
-import { createServerHost } from "../virtualFileSystemWithWatch";
 import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,
     createSession,
     openExternalProjectForSession,
     toExternalFile,
-} from "./helpers";
+} from "../helpers/tsserver";
+import { createServerHost } from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: importHelpers", () => {
     it("should not crash in tsserver", () => {

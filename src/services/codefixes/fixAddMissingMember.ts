@@ -93,6 +93,7 @@ import {
     getCheckFlags,
     getClassLikeDeclarationOfSymbol,
     getEmitScriptTarget,
+    getEscapedTextOfJsxAttributeName,
     getFirstConstructorWithBody,
     getNodeId,
     getObjectFlags,
@@ -762,7 +763,7 @@ function getUnmatchedAttributes(checker: TypeChecker, target: ScriptTarget, sour
     const seenNames = new Set<__String>();
     for (const sourceProp of source.attributes.properties) {
         if (isJsxAttribute(sourceProp)) {
-            seenNames.add(sourceProp.name.escapedText);
+            seenNames.add(getEscapedTextOfJsxAttributeName(sourceProp.name));
         }
         if (isJsxSpreadAttribute(sourceProp)) {
             const type = checker.getTypeAtLocation(sourceProp.expression);

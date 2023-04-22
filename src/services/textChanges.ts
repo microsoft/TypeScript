@@ -1,6 +1,7 @@
 import {
     concatenate,
     contains,
+    createMultiMap,
     endsWith,
     filter,
     find,
@@ -20,6 +21,7 @@ import {
     lastOrUndefined,
     length,
     mapDefined,
+    MultiMap,
     removeSuffix,
     singleOrUndefined,
     stableSort,
@@ -359,6 +361,11 @@ interface ChangeText extends BaseChange {
     readonly text: string;
 }
 
+interface NewFileInsertion {
+    readonly oldFile?: SourceFile;
+    readonly statements: readonly (Statement | SyntaxKind.NewLineTrivia)[];
+}
+
 function getAdjustedRange(sourceFile: SourceFile, startNode: Node, endNode: Node, options: ConfigurableStartEnd): TextRange {
     return { pos: getAdjustedStartPosition(sourceFile, startNode, options), end: getAdjustedEndPosition(sourceFile, endNode, options) };
 }
@@ -495,7 +502,7 @@ export function isThisTypeAnnotatable(containingFunction: SignatureDeclaration):
 /** @internal */
 export class ChangeTracker {
     private readonly changes: Change[] = [];
-    private readonly newFiles: { readonly oldFile: SourceFile | undefined, readonly fileName: string, readonly statements: readonly (Statement | SyntaxKind.NewLineTrivia)[] }[] = [];
+    private newFileChanges?: MultiMap<string, NewFileInsertion> ;
     private readonly classesWithNodesInsertedAtStart = new Map<number, { readonly node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression, readonly sourceFile: SourceFile }>(); // Set<ClassDeclaration> implemented as Map<node id, ClassDeclaration>
     private readonly deletedNodes: { readonly sourceFile: SourceFile, readonly node: Node | NodeArray<TypeParameterDeclaration> }[] = [];
 
@@ -635,6 +642,13 @@ export class ChangeTracker {
         else {
             this.insertNodeAt(sourceFile, pos, insert, options);
         }
+    }
+
+    private insertStatementsInNewFile(fileName: string, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[], oldFile?: SourceFile): void {
+        if (!this.newFileChanges) {
+            this.newFileChanges = createMultiMap<string, NewFileInsertion>();
+        }
+        this.newFileChanges.add(fileName, { oldFile, statements });
     }
 
     public insertFirstParameter(sourceFile: SourceFile, parameters: NodeArray<ParameterDeclaration>, newParam: ParameterDeclaration): void {
@@ -1143,14 +1157,16 @@ export class ChangeTracker {
         this.finishDeleteDeclarations();
         this.finishClassesWithNodesInsertedAtStart();
         const changes = changesToText.getTextChangesFromChanges(this.changes, this.newLineCharacter, this.formatContext, validate);
-        for (const { oldFile, fileName, statements } of this.newFiles) {
-            changes.push(changesToText.newFileChanges(oldFile, fileName, statements, this.newLineCharacter, this.formatContext));
+        if (this.newFileChanges) {
+            this.newFileChanges.forEach((insertions, fileName) => {
+                changes.push(changesToText.newFileChanges(fileName, insertions, this.newLineCharacter, this.formatContext));
+            });
         }
         return changes;
     }
 
     public createNewFile(oldFile: SourceFile | undefined, fileName: string, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[]): void {
-        this.newFiles.push({ oldFile, fileName, statements });
+        this.insertStatementsInNewFile(fileName, statements, oldFile);
     }
 }
 
@@ -1222,11 +1238,6 @@ function getMembersOrProperties(node: ClassLikeDeclaration | InterfaceDeclaratio
 /** @internal */
 export type ValidateNonFormattedText = (node: Node, text: string) => void;
 
-/** @internal */
-export function getNewFileText(statements: readonly Statement[], scriptKind: ScriptKind, newLineCharacter: string, formatContext: FormatContext): string {
-    return changesToText.newFileChangesWorker(/*oldFile*/ undefined, scriptKind, statements, newLineCharacter, formatContext);
-}
-
 namespace changesToText {
     export function getTextChangesFromChanges(changes: readonly Change[], newLineCharacter: string, formatContext: FormatContext, validate: ValidateNonFormattedText | undefined): FileTextChanges[] {
         return mapDefined(group(changes, c => c.sourceFile.path), changesInFile => {
@@ -1243,7 +1254,6 @@ namespace changesToText {
             const textChanges = mapDefined(normalized, c => {
                 const span = createTextSpanFromRange(c.range);
                 const newText = computeNewText(c, sourceFile, newLineCharacter, formatContext, validate);
-
                 // Filter out redundant changes.
                 if (span.length === newText.length && stringContainsAt(sourceFile.text, newText, span.start)) {
                     return undefined;
@@ -1256,14 +1266,14 @@ namespace changesToText {
         });
     }
 
-    export function newFileChanges(oldFile: SourceFile | undefined, fileName: string, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[], newLineCharacter: string, formatContext: FormatContext): FileTextChanges {
-        const text = newFileChangesWorker(oldFile, getScriptKindFromFileName(fileName), statements, newLineCharacter, formatContext);
+    export function newFileChanges(fileName: string, insertions: readonly NewFileInsertion[], newLineCharacter: string, formatContext: FormatContext): FileTextChanges {
+        const text = newFileChangesWorker(getScriptKindFromFileName(fileName), insertions, newLineCharacter, formatContext);
         return { fileName, textChanges: [createTextChange(createTextSpan(0, 0), text)], isNewFile: true };
     }
 
-    export function newFileChangesWorker(oldFile: SourceFile | undefined, scriptKind: ScriptKind, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[], newLineCharacter: string, formatContext: FormatContext): string {
+    export function newFileChangesWorker(scriptKind: ScriptKind, insertions: readonly NewFileInsertion[], newLineCharacter: string, formatContext: FormatContext): string {
         // TODO: this emits the file, parses it back, then formats it that -- may be a less roundabout way to do this
-        const nonFormattedText = statements.map(s => s === SyntaxKind.NewLineTrivia ? "" : getNonformattedText(s, oldFile, newLineCharacter).text).join(newLineCharacter);
+        const nonFormattedText = flatMap(insertions, insertion => insertion.statements.map(s => s === SyntaxKind.NewLineTrivia ? "" : getNonformattedText(s, insertion.oldFile, newLineCharacter).text)).join(newLineCharacter);
         const sourceFile = createSourceFile("any file name", nonFormattedText, ScriptTarget.ESNext, /*setParentNodes*/ true, scriptKind);
         const changes = formatDocument(sourceFile, formatContext);
         return applyChanges(nonFormattedText, changes) + newLineCharacter;

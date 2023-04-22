@@ -11,11 +11,7 @@
 // }
 // 
 // let B = class D {
-//     constructor(private x: number) {
-//     }
-//     private test() {}
-//     public test2() {}
-// }
+// --- (line: 12) skipped ---
 
 
 
@@ -32,11 +28,7 @@
 // }
 // 
 // let B = class D {
-//     constructor(private x: number) {
-//     }
-//     private test() {}
-//     public test2() {}
-// }
+// --- (line: 12) skipped ---
 
 
 
@@ -53,11 +45,7 @@
 // }
 // 
 // let B = class D {
-//     constructor(private x: number) {
-//     }
-//     private test() {}
-//     public test2() {}
-// }
+// --- (line: 12) skipped ---
 
 
 
@@ -74,11 +62,7 @@
 // }
 // 
 // let B = class D {
-//     constructor(private x: number) {
-//     }
-//     private test() {}
-//     public test2() {}
-// }
+// --- (line: 12) skipped ---
 
 
 
@@ -95,8 +79,4 @@
 // }
 // 
 // let B = class D {
-//     constructor(private x: number) {
-//     }
-//     private test() {}
-//     public test2() {}
-// }
+// --- (line: 12) skipped ---

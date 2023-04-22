@@ -1265,13 +1265,14 @@ function createModuleOrTypeReferenceResolutionCache<T>(
 export function createModuleResolutionCache(
     currentDirectory: string,
     getCanonicalFileName: (s: string) => string,
-    options?: CompilerOptions
+    options?: CompilerOptions,
+    packageJsonInfoCache?: PackageJsonInfoCache,
 ): ModuleResolutionCache {
     const result = createModuleOrTypeReferenceResolutionCache(
         currentDirectory,
         getCanonicalFileName,
         options,
-        /*packageJsonInfoCache*/ undefined,
+        packageJsonInfoCache,
         getOriginalOrResolvedModuleFileName,
     ) as ModuleResolutionCache;
     result.getOrCreateCacheForModuleName = (nonRelativeName, mode, redirectedReference) => result.getOrCreateCacheForNonRelativeName(nonRelativeName, mode, redirectedReference);
@@ -1291,6 +1292,16 @@ export function createTypeReferenceDirectiveResolutionCache(
         packageJsonInfoCache,
         getOriginalOrResolvedTypeReferenceFileName
     );
+}
+
+/** @internal */
+export function getOptionsForLibraryResolution(options: CompilerOptions) {
+    return { moduleResolution: ModuleResolutionKind.Node10, traceResolution: options.traceResolution };
+}
+
+/** @internal */
+export function resolveLibrary(libraryName: string, resolveFrom: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache): ResolvedModuleWithFailedLookupLocations {
+    return resolveModuleName(libraryName, resolveFrom, getOptionsForLibraryResolution(compilerOptions), host, cache);
 }
 
 export function resolveModuleNameFromCache(moduleName: string, containingFile: string, cache: ModuleResolutionCache, mode?: ResolutionMode): ResolvedModuleWithFailedLookupLocations | undefined {
@@ -1905,7 +1916,7 @@ export function pathContainsNodeModules(path: string): boolean {
  *
  * @internal
  */
-export function parseNodeModuleFromPath(resolved: string): string | undefined {
+export function parseNodeModuleFromPath(resolved: string, isFolder?: boolean): string | undefined {
     const path = normalizePath(resolved);
     const idx = path.lastIndexOf(nodeModulesPathPart);
     if (idx === -1) {
@@ -1913,16 +1924,16 @@ export function parseNodeModuleFromPath(resolved: string): string | undefined {
     }
 
     const indexAfterNodeModules = idx + nodeModulesPathPart.length;
-    let indexAfterPackageName = moveToNextDirectorySeparatorIfAvailable(path, indexAfterNodeModules);
+    let indexAfterPackageName = moveToNextDirectorySeparatorIfAvailable(path, indexAfterNodeModules, isFolder);
     if (path.charCodeAt(indexAfterNodeModules) === CharacterCodes.at) {
-        indexAfterPackageName = moveToNextDirectorySeparatorIfAvailable(path, indexAfterPackageName);
+        indexAfterPackageName = moveToNextDirectorySeparatorIfAvailable(path, indexAfterPackageName, isFolder);
     }
     return path.slice(0, indexAfterPackageName);
 }
 
-function moveToNextDirectorySeparatorIfAvailable(path: string, prevSeparatorIndex: number): number {
+function moveToNextDirectorySeparatorIfAvailable(path: string, prevSeparatorIndex: number, isFolder: boolean | undefined): number {
     const nextSeparatorIndex = path.indexOf(directorySeparator, prevSeparatorIndex + 1);
-    return nextSeparatorIndex === -1 ? prevSeparatorIndex : nextSeparatorIndex;
+    return nextSeparatorIndex === -1 ? isFolder ? path.length : prevSeparatorIndex : nextSeparatorIndex;
 }
 
 function loadModuleFromFileNoPackageId(extensions: Extensions, candidate: string, onlyRecordFailures: boolean, state: ModuleResolutionState): Resolved | undefined {

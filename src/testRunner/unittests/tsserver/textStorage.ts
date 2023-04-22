@@ -1,6 +1,6 @@
 import * as ts from "../../_namespaces/ts";
-import { createServerHost } from "../virtualFileSystemWithWatch";
-import { baselineTsserverLogs, createLoggerWithInMemoryLogs, createProjectService } from "./helpers";
+import { baselineTsserverLogs, createLoggerWithInMemoryLogs, createProjectService } from "../helpers/tsserver";
+import { createServerHost } from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: Text storage", () => {
     const f = {
