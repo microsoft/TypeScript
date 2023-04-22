@@ -15,6 +15,7 @@ import {
     find,
     first,
     firstDefined,
+    firstOrUndefined,
     forEach,
     GetAccessorDeclaration,
     getCombinedLocalAndExportSymbolFlags,
@@ -836,6 +837,14 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
             tags = allSignatures[0].getJsDocTags().filter(tag => tag.name !== "deprecated"); // should only include @deprecated JSDoc tag on the first overload (#49368)
         }
 
+        if (symbolFlags & SymbolFlags.Alias && documentation.length === 0 && tags.length === 0) {
+            const aliasSymbol = typeChecker.getAliasedSymbol(symbol);
+            const aliasDeclaration = firstOrUndefined(aliasSymbol.declarations);
+            if (aliasSymbol !== symbol && aliasDeclaration) {
+                documentationFromAlias = aliasSymbol.getContextualDocumentationComment(aliasDeclaration, typeChecker);
+                tagsFromAlias = aliasSymbol.getJsDocTags(typeChecker);
+            }
+        }
     }
 
     function writeTypeParametersOfSymbol(symbol: Symbol, enclosingDeclaration: Node | undefined) {
