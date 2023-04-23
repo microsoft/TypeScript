@@ -91,6 +91,7 @@ import {
     removeExtension,
     removeFileExtension,
     removeSuffix,
+    removeTrailingDirectorySeparator,
     ResolutionMode,
     resolvePath,
     ScriptKind,
@@ -1000,8 +1001,18 @@ function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCan
                 // happens very easily in fourslash tests though, since every test file listed gets included. See
                 // importNameCodeFix_typesVersions.ts for an example.)
                 const mainExportFile = toPath(mainFileRelative, packageRootPath, getCanonicalFileName);
-                if (removeFileExtension(mainExportFile) === removeFileExtension(getCanonicalFileName(moduleFileToTry))) {
+                const canonicalModuleFileToTry = getCanonicalFileName(moduleFileToTry);
+                if (removeFileExtension(mainExportFile) === removeFileExtension(canonicalModuleFileToTry)) {
                     // ^ An arbitrary removal of file extension for this comparison is almost certainly wrong
+                    return { packageRootPath, moduleFileToTry };
+                }
+                else if (
+                    startsWith(canonicalModuleFileToTry, mainExportFile) &&
+                    getDirectoryPath(canonicalModuleFileToTry) === removeTrailingDirectorySeparator(mainExportFile) &&
+                    removeFileExtension(getBaseFileName(canonicalModuleFileToTry)) === "index"
+                ) {
+                    // if mainExportFile is a directory, which contains moduleFileToTry, we just try index file
+                    // example mainExportFile: `pkg/lib` and moduleFileToTry: `pkg/lib/index`, we can use packageRootPath
                     return { packageRootPath, moduleFileToTry };
                 }
             }
