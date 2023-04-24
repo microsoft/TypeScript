@@ -29635,18 +29635,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getJsxManagedAttributesFromLocatedAttributes(context: JsxOpeningLikeElement, ns: Symbol, attributesType: Type) {
         const managedSym = getJsxLibraryManagedAttributes(ns);
         if (managedSym) {
-            const declaredManagedType = getDeclaredTypeOfSymbol(managedSym); // fetches interface type, or initializes symbol links type parmaeters
             const ctorType = getStaticTypeOfReferencedJsxConstructor(context);
-            if (managedSym.flags & SymbolFlags.TypeAlias) {
-                const params = getSymbolLinks(managedSym).typeParameters;
-                if (length(params) >= 2) {
-                    const args = fillMissingTypeArguments([ctorType, attributesType], params, 2, isInJSFile(context));
-                    return getTypeAliasInstantiation(managedSym, args);
-                }
-            }
-            if (length((declaredManagedType as GenericType).typeParameters) >= 2) {
-                const args = fillMissingTypeArguments([ctorType, attributesType], (declaredManagedType as GenericType).typeParameters, 2, isInJSFile(context));
-                return createTypeReference((declaredManagedType as GenericType), args);
+            const result = instantiateAliasOrInterfaceWithDefaults(managedSym, isInJSFile(context), ctorType, attributesType);
+            if (result) {
+                return result;
             }
         }
         return attributesType;
@@ -30705,6 +30697,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return jsxNamespace && getSymbol(jsxNamespace.exports!, JsxNames.LibraryManagedAttributes, SymbolFlags.Type);
     }
 
+    function getJsxElementTypeSymbol(jsxNamespace: Symbol) {
+        // JSX.ElementType [symbol]
+        return jsxNamespace && getSymbol(jsxNamespace.exports!, JsxNames.ElementType, SymbolFlags.Type);
+    }
+
     /// e.g. "props" for React.d.ts,
     /// or 'undefined' if ElementAttributesProperty doesn't exist (which means all
     ///     non-intrinsic elements' attributes type is 'any'),
@@ -30841,9 +30838,29 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getJsxElementTypeTypeAt(location: Node): Type | undefined {
-        const type = getJsxType(JsxNames.ElementType, location);
-        if (isErrorType(type)) return undefined;
+        const ns = getJsxNamespaceAt(location);
+        if (!ns) return undefined;
+        const sym = getJsxElementTypeSymbol(ns);
+        if (!sym) return undefined;
+        const type = instantiateAliasOrInterfaceWithDefaults(sym, isInJSFile(location));
+        if (!type || isErrorType(type)) return undefined;
         return type;
+    }
+
+    function instantiateAliasOrInterfaceWithDefaults(managedSym: Symbol, inJs: boolean, ...typeArguments: Type[]) {
+        const declaredManagedType = getDeclaredTypeOfSymbol(managedSym); // fetches interface type, or initializes symbol links type parmaeters
+        if (managedSym.flags & SymbolFlags.TypeAlias) {
+            const params = getSymbolLinks(managedSym).typeParameters;
+            if (length(params) >= typeArguments.length) {
+                const args = fillMissingTypeArguments(typeArguments, params, typeArguments.length, inJs);
+                return length(args) === 0 ? declaredManagedType : getTypeAliasInstantiation(managedSym, args);
+            }
+        }
+        if (length((declaredManagedType as GenericType).typeParameters) >= typeArguments.length) {
+            const args = fillMissingTypeArguments(typeArguments, (declaredManagedType as GenericType).typeParameters, typeArguments.length, inJs);
+            return createTypeReference((declaredManagedType as GenericType), args);
+        }
+        return undefined;
     }
 
     /**
