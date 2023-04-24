@@ -500,6 +500,15 @@ export const commonOptionsWithBuild: CommandLineOption[] = [
         description: Diagnostics.Set_the_language_of_the_messaging_from_TypeScript_This_does_not_affect_emit,
         defaultValueDescription: Diagnostics.Platform_specific
     },
+    {
+        name: "allowPlugins",
+        type: "boolean",
+        affectsSemanticDiagnostics: true,
+        affectsEmit: true,
+        affectsBuildInfo: true,
+        defaultValueDescription: undefined,
+        isCommandLineOnly: true,
+    },
 ];
 
 /** @internal */

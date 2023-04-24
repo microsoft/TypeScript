@@ -1,3 +1,5 @@
+import type { CompilerOptions } from "./types";
+
 /** @internal */
 export type Entrypoint = "tsc" | "typescript" | "tsserver" | "tsserverlibrary" | "testRunner";
 
@@ -15,4 +17,15 @@ export function setTypeScriptNamespace(entrypoint: Entrypoint, ts: any) {
 export function getTypeScriptNamespace(): any {
     if (currentTsNamespace === undefined) throw new Error("ts namespace unset");
     return currentTsNamespace;
+}
+
+/** @internal */
+export function shouldAllowPlugins(options: CompilerOptions): boolean {
+    switch (currentEntrypoint) {
+        case "tsserver":
+        case "tsserverlibrary":
+        case "typescript":
+            return true;
+    }
+    return options.allowPlugins ?? false;
 }

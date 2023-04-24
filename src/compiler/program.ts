@@ -294,6 +294,7 @@ import {
     setParentRecursive,
     setResolvedModule,
     setResolvedTypeReferenceDirective,
+    shouldAllowPlugins,
     shouldResolveJsRequire,
     skipTrivia,
     skipTypeChecking,
@@ -2712,6 +2713,10 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
 
         const compilerOptions = program.getCompilerOptions();
+        if (!shouldAllowPlugins(compilerOptions)) {
+            return emptyArray;
+        }
+
         const customTransformers = mapDefined(compilerOptions.plugins, config => {
             if (config.type !== "transformer") return undefined;
 
@@ -4442,6 +4447,14 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 }
                 verifyEmitFilePath(emitFileNames.declarationFilePath, emitFilesSeen);
             });
+        }
+
+        if (options.plugins && !shouldAllowPlugins(options)) {
+            for (const plugin of options.plugins) {
+                if (plugin.type === undefined) continue; // Language service plugins. TODO(jakebailey): give these a type, require type, deprecate missing type?
+                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_allowPlugins_must_be_specified_when_compiler_plugins_are_present));
+                break;
+            }
         }
 
         // Verify that all the emit files are unique and don't overwrite input files

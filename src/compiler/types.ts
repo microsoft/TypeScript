@@ -7237,6 +7237,7 @@ export interface CompilerOptions {
     /** @internal */ showConfig?: boolean;
     useDefineForClassFields?: boolean;
     customTransformers?: string[];
+    allowPlugins?: boolean;
 
     [option: string]: CompilerOptionsValue | TsConfigSourceFile | undefined;
 }

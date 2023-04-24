@@ -7273,6 +7273,7 @@ declare namespace ts {
         esModuleInterop?: boolean;
         useDefineForClassFields?: boolean;
         customTransformers?: string[];
+        allowPlugins?: boolean;
         [option: string]: CompilerOptionsValue | TsConfigSourceFile | undefined;
     }
     interface WatchOptions {
@@ -9870,6 +9871,7 @@ declare namespace ts {
         sourceMap?: boolean;
         inlineSourceMap?: boolean;
         traceResolution?: boolean;
+        allowPlugins?: boolean;
         [option: string]: CompilerOptionsValue | undefined;
     }
     type ReportEmitErrorSummary = (errorCount: number, filesInError: (ReportFileInError | undefined)[]) => void;

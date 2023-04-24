@@ -6236,6 +6236,10 @@
       "category": "Error",
       "code": 6931
     },
+    "Option '--allowPlugins' must be specified when compiler plugins are present.": {
+        "category": "Error",
+        "code": 6932
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
