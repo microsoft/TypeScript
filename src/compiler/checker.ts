@@ -12537,6 +12537,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return needApparentType ? getApparentType(type) : type;
     }
 
+    function getThisArgument(type: Type) {
+        return getObjectFlags(type) & ObjectFlags.Reference && length(getTypeArguments(type as TypeReference)) > getTypeReferenceArity(type as TypeReference) ? last(getTypeArguments(type as TypeReference)) : type;
+    }
+
     function resolveObjectTypeMembers(type: ObjectType, source: InterfaceTypeWithDeclaredMembers, typeParameters: readonly TypeParameter[], typeArguments: readonly Type[]) {
         let mapper: TypeMapper | undefined;
         let members: SymbolTable;
@@ -12666,7 +12670,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return [sig.parameters];
 
         function expandSignatureParametersWithTupleMembers(restType: TupleTypeReference, restIndex: number) {
-            const elementTypes = getTypeArguments(restType);
+            const elementTypes = getElementTypes(restType);
             const associatedNames = getUniqAssociatedNamesFromTupleType(restType);
             const restParams = map(elementTypes, (t, i) => {
                 // Lookup the label from the individual tuple passed in before falling back to the signature `rest` parameter name
@@ -13564,7 +13568,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             type.flags & TypeFlags.IndexedAccess && isConstTypeVariable((type as IndexedAccessType).objectType) ||
             type.flags & TypeFlags.Conditional && isConstTypeVariable(getConstraintOfConditionalType(type as ConditionalType)) ||
             type.flags & TypeFlags.Substitution && isConstTypeVariable((type as SubstitutionType).baseType) ||
-            isGenericTupleType(type) && findIndex(getTypeArguments(type), (t, i) => !!(type.target.elementFlags[i] & ElementFlags.Variadic) && isConstTypeVariable(t)) >= 0));
+            isGenericTupleType(type) && findIndex(getElementTypes(type), (t, i) => !!(type.target.elementFlags[i] & ElementFlags.Variadic) && isConstTypeVariable(t)) >= 0));
     }
 
     function getConstraintOfIndexedAccess(type: IndexedAccessType) {
@@ -13718,7 +13722,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return type.resolvedBaseConstraint;
         }
         const stack: object[] = [];
-        return type.resolvedBaseConstraint = getTypeWithThisArgument(getImmediateBaseConstraint(type), type);
+        return type.resolvedBaseConstraint = getTypeWithThisArgument(getImmediateBaseConstraint(type), getThisArgument(type));
 
         function getImmediateBaseConstraint(t: Type): Type {
             if (!t.immediateBaseConstraint) {
@@ -13821,12 +13825,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return getBaseConstraint(getSubstitutionIntersection(t as SubstitutionType));
             }
             if (isGenericTupleType(t)) {
-                // We substitute constrains for variadic elements only when the constrains are array or tuple types
-                // as we want to avoid further (possibly unbounded) recursion.
-                const newElements = map(getTypeArguments(t), (v, i) => {
-                    const constraint = t.target.elementFlags[i] & ElementFlags.Variadic ? getBaseConstraint(v) : undefined;
-                    return constraint && everyType(constraint, isArrayOrTupleType) ? constraint : v;
-                });
+                const newElements = map(getElementTypes(t), (v, i) => t.target.elementFlags[i] & ElementFlags.Variadic && getBaseConstraint(v) || v);
                 return createTupleType(newElements, t.target.elementFlags, t.target.readonly, t.target.labeledElementDeclarations);
             }
             return t;
@@ -16136,7 +16135,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     addElement(type, ElementFlags.Variadic, target.labeledElementDeclarations?.[i]);
                 }
                 else if (isTupleType(type)) {
-                    const elements = getTypeArguments(type);
+                    const elements = getElementTypes(type);
                     if (elements.length + expandedTypes.length >= 10_000) {
                         error(currentNode, isPartOfTypeNode(currentNode!)
                             ? Diagnostics.Type_produces_a_tuple_type_that_is_too_large_to_represent
@@ -16216,6 +16215,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // Return count of ending consecutive tuple elements of the given kind(s)
     function getEndElementCount(type: TupleType, flags: ElementFlags) {
         return type.elementFlags.length - findLastIndex(type.elementFlags, f => !(f & flags)) - 1;
+    }
+
+    function getElementTypes(type: TupleTypeReference): readonly Type[] {
+        const typeArguments = getTypeArguments(type);
+        const arity = getTypeReferenceArity(type);
+        return typeArguments.length === arity ? typeArguments : typeArguments.slice(0, arity);
     }
 
     function getTypeFromOptionalTypeNode(node: OptionalTypeNode): Type {
@@ -17746,7 +17751,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isDeferredType(type: Type, checkTuples: boolean) {
-        return isGenericType(type) || checkTuples && isTupleType(type) && some(getTypeArguments(type), isGenericType);
+        return isGenericType(type) || checkTuples && isTupleType(type) && some(getElementTypes(type), isGenericType);
     }
 
     function getConditionalType(root: ConditionalRoot, mapper: TypeMapper | undefined, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type {
@@ -18885,7 +18890,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // M<[A, B?, ...T, ...C[]] into [...M<[A]>, ...M<[B?]>, ...M<T>, ...M<C[]>] and then rely on tuple type
         // normalization to resolve the non-generic parts of the resulting tuple.
         const elementFlags = tupleType.target.elementFlags;
-        const elementTypes = map(getTypeArguments(tupleType), (t, i) => {
+        const elementTypes = map(getElementTypes(tupleType), (t, i) => {
             const singleton = elementFlags[i] & ElementFlags.Variadic ? t :
                 elementFlags[i] & ElementFlags.Rest ? createArrayType(t) :
                 createTupleType([t], [elementFlags[i]]);
@@ -18904,7 +18909,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function instantiateMappedTupleType(tupleType: TupleTypeReference, mappedType: MappedType, mapper: TypeMapper) {
         const elementFlags = tupleType.target.elementFlags;
-        const elementTypes = map(getTypeArguments(tupleType), (_, i) =>
+        const elementTypes = map(getElementTypes(tupleType), (_, i) =>
             instantiateMappedTypeTemplate(mappedType, getStringLiteralType("" + i), !!(elementFlags[i] & ElementFlags.Optional), mapper));
         const modifiers = getMappedTypeModifiers(mappedType);
         const newTupleModifiers = modifiers & MappedTypeModifiers.IncludeOptional ? map(elementFlags, f => f & ElementFlags.Required ? ElementFlags.Optional : f) :
@@ -20209,7 +20214,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getNormalizedTupleType(type: TupleTypeReference, writing: boolean): Type {
-        const elements = getTypeArguments(type);
+        const elements = getElementTypes(type);
         const normalizedElements = sameMap(elements, t => t.flags & TypeFlags.Simplifiable ? getSimplifiedType(t, writing) : t);
         return elements !== normalizedElements ? createNormalizedTupleType(type.target, normalizedElements) : type;
     }
@@ -24043,7 +24048,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function isPartiallyInferableType(type: Type): boolean {
         return !(getObjectFlags(type) & ObjectFlags.NonInferrableType) ||
             isObjectLiteralType(type) && some(getPropertiesOfType(type), prop => isPartiallyInferableType(getTypeOfSymbol(prop))) ||
-            isTupleType(type) && some(getTypeArguments(type), isPartiallyInferableType);
+            isTupleType(type) && some(getElementTypes(type), isPartiallyInferableType);
     }
 
     function createReverseMappedType(source: Type, target: MappedType, constraint: IndexType) {
@@ -24058,7 +24063,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return createArrayType(inferReverseMappedType(getTypeArguments(source)[0], target, constraint), isReadonlyArrayType(source));
         }
         if (isTupleType(source)) {
-            const elementTypes = map(getTypeArguments(source), t => inferReverseMappedType(t, target, constraint));
+            const elementTypes = map(getElementTypes(source), t => inferReverseMappedType(t, target, constraint));
             const elementFlags = getMappedTypeModifiers(target) & MappedTypeModifiers.IncludeOptional ?
                 sameMap(source.target.elementFlags, f => f & ElementFlags.Optional ? ElementFlags.Required : f) :
                 source.target.elementFlags;
@@ -32398,7 +32403,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getMutableArrayOrTupleType(type: Type) {
         return type.flags & TypeFlags.Union ? mapType(type, getMutableArrayOrTupleType) :
             type.flags & TypeFlags.Any || isMutableArrayOrTuple(getBaseConstraintOfType(type) || type) ? type :
-            isTupleType(type) ? createTupleType(getTypeArguments(type), type.target.elementFlags, /*readonly*/ false, type.target.labeledElementDeclarations) :
+            isTupleType(type) ? createTupleType(getElementTypes(type), type.target.elementFlags, /*readonly*/ false, type.target.labeledElementDeclarations) :
             createTupleType([type], [ElementFlags.Variadic]);
     }
 
@@ -32732,7 +32737,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // We can call checkExpressionCached because spread expressions never have a contextual type.
                 const spreadType = arg.kind === SyntaxKind.SpreadElement && (flowLoopCount ? checkExpression((arg as SpreadElement).expression) : checkExpressionCached((arg as SpreadElement).expression));
                 if (spreadType && isTupleType(spreadType)) {
-                    forEach(getTypeArguments(spreadType), (t, i) => {
+                    forEach(getElementTypes(spreadType), (t, i) => {
                         const flags = spreadType.target.elementFlags[i];
                         const syntheticArg = createSyntheticExpression(arg, flags & ElementFlags.Rest ? createArrayType(t) : t,
                             !!(flags & ElementFlags.Variable), spreadType.target.labeledElementDeclarations?.[i]);
@@ -37342,7 +37347,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function padTupleType(type: TupleTypeReference, pattern: ArrayBindingPattern) {
         const patternElements = pattern.elements;
-        const elementTypes = getTypeArguments(type).slice();
+        const elementTypes = getElementTypes(type).slice();
         const elementFlags = type.target.elementFlags.slice();
         for (let i = getTypeReferenceArity(type); i < patternElements.length; i++) {
             const e = patternElements[i];
