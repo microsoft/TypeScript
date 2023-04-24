@@ -1,13 +1,6 @@
 // === goToDefinition ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
-//     interface Element { }
-//     interface IntrinsicElements {
-//     }
-//     interface ElementAttributesProperty { props; }
-// }
-// interface OptionPropBag {
-//     propx: number
+// --- (line: 8) skipped ---
 //     propString: "hell"
 //     optional?: boolean
 // }
@@ -34,14 +27,7 @@
 
 // === goToDefinition ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
-//     interface Element { }
-//     interface IntrinsicElements {
-//     }
-//     interface ElementAttributesProperty { props; }
-// }
-// interface OptionPropBag {
-//     propx: number
+// --- (line: 8) skipped ---
 //     propString: "hell"
 //     optional?: boolean
 // }
@@ -68,14 +54,7 @@
 
 // === goToDefinition ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
-//     interface Element { }
-//     interface IntrinsicElements {
-//     }
-//     interface ElementAttributesProperty { props; }
-// }
-// interface OptionPropBag {
-//     propx: number
+// --- (line: 8) skipped ---
 //     propString: "hell"
 //     optional?: boolean
 // }
@@ -102,14 +81,7 @@
 
 // === goToDefinition ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
-//     interface Element { }
-//     interface IntrinsicElements {
-//     }
-//     interface ElementAttributesProperty { props; }
-// }
-// interface OptionPropBag {
-//     propx: number
+// --- (line: 8) skipped ---
 //     propString: "hell"
 //     optional?: boolean
 // }
@@ -136,10 +108,7 @@
 
 // === goToDefinition ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
-//     interface Element { }
-//     interface IntrinsicElements {
-//     }
+// --- (line: 4) skipped ---
 //     interface ElementAttributesProperty { props; }
 // }
 // interface OptionPropBag {
@@ -169,12 +138,7 @@
 
 // === goToDefinition ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
-//     interface Element { }
-//     interface IntrinsicElements {
-//     }
-//     interface ElementAttributesProperty { props; }
-// }
+// --- (line: 6) skipped ---
 // interface OptionPropBag {
 //     propx: number
 //     propString: "hell"

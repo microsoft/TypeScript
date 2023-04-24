@@ -9,16 +9,7 @@
 // interface I1 extends Base { }
 // type T = { }
 // enum E { }
-// namespace N { }
-// module M { }
-// function fn() {}
-// var x;
-// let y;
-// const z = 1;
-// interface Implemented2 {}
-// interface Implemented3 {}
-// class C2 implements Implemented2, Implemented3 {}
-// interface I2 extends Implemented2, Implemented3 {}
+// --- (line: 10) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
@@ -31,16 +22,7 @@
   // interface I1 extends Base { }
   // type T = { }
   // enum E { }
-  // namespace N { }
-  // module M { }
-  // function fn() {}
-  // var x;
-  // let y;
-  // const z = 1;
-  // interface Implemented2 {}
-  // interface Implemented3 {}
-  // class C2 implements Implemented2, Implemented3 {}
-  // interface I2 extends Implemented2, Implemented3 {}
+  // --- (line: 10) skipped ---
 
   // === Details ===
   [
@@ -80,15 +62,7 @@
 // type T = { }
 // enum E { }
 // namespace N { }
-// module M { }
-// function fn() {}
-// var x;
-// let y;
-// const z = 1;
-// interface Implemented2 {}
-// interface Implemented3 {}
-// class C2 implements Implemented2, Implemented3 {}
-// interface I2 extends Implemented2, Implemented3 {}
+// --- (line: 11) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
@@ -98,19 +72,7 @@
   //     get e() { return 1; }
   //     set e(v) {}
   // }
-  // interface I1 extends Base { }
-  // type T = { }
-  // enum E { }
-  // namespace N { }
-  // module M { }
-  // function fn() {}
-  // var x;
-  // let y;
-  // const z = 1;
-  // interface Implemented2 {}
-  // interface Implemented3 {}
-  // class C2 implements Implemented2, Implemented3 {}
-  // interface I2 extends Implemented2, Implemented3 {}
+  // --- (line: 7) skipped ---
 
   // === Details ===
   [
@@ -146,19 +108,7 @@
 //     get e() { return 1; }
 //     set e(v) {}
 // }
-// interface I1 extends Base { }
-// type T = { }
-// enum E { }
-// namespace N { }
-// module M { }
-// function fn() {}
-// var x;
-// let y;
-// const z = 1;
-// interface Implemented2 {}
-// interface Implemented3 {}
-// class C2 implements Implemented2, Implemented3 {}
-// interface I2 extends Implemented2, Implemented3 {}
+// --- (line: 7) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
@@ -168,19 +118,7 @@
   //     get e() { return 1; }
   //     set e(v) {}
   // }
-  // interface I1 extends Base { }
-  // type T = { }
-  // enum E { }
-  // namespace N { }
-  // module M { }
-  // function fn() {}
-  // var x;
-  // let y;
-  // const z = 1;
-  // interface Implemented2 {}
-  // interface Implemented3 {}
-  // class C2 implements Implemented2, Implemented3 {}
-  // interface I2 extends Implemented2, Implemented3 {}
+  // --- (line: 7) skipped ---
 
   // === Details ===
   [
@@ -210,20 +148,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
-// class Base {}
-// interface Implemented1 {}
-// class C1 extends Base implements Implemented1 {
-//     get e() { return 1; }
-//     set e(v) {}
-// }
-// interface I1 extends Base { }
-// type T = { }
-// enum E { }
-// namespace N { }
-// module M { }
-// function fn() {}
-// var x;
-// let y;
+// --- (line: 14) skipped ---
 // const z = 1;
 // interface Implemented2 {}
 // interface Implemented3 {}
@@ -242,17 +167,7 @@
 // }
 // interface I1 extends Base { }
 // type T = { }
-// enum E { }
-// namespace N { }
-// module M { }
-// function fn() {}
-// var x;
-// let y;
-// const z = 1;
-// interface Implemented2 {}
-// interface Implemented3 {}
-// class C2 implements Implemented2, Implemented3 {}
-// interface I2 extends Implemented2, Implemented3 {}
+// --- (line: 9) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
@@ -263,18 +178,7 @@
   //     set e(v) {}
   // }
   // interface I1 extends Base { }
-  // type T = { }
-  // enum E { }
-  // namespace N { }
-  // module M { }
-  // function fn() {}
-  // var x;
-  // let y;
-  // const z = 1;
-  // interface Implemented2 {}
-  // interface Implemented3 {}
-  // class C2 implements Implemented2, Implemented3 {}
-  // interface I2 extends Implemented2, Implemented3 {}
+  // --- (line: 8) skipped ---
 
   // === Details ===
   [
@@ -340,17 +244,7 @@
 // }
 // interface I1 extends Base { }
 // type T = { }
-// enum E { }
-// namespace N { }
-// module M { }
-// function fn() {}
-// var x;
-// let y;
-// const z = 1;
-// interface Implemented2 {}
-// interface Implemented3 {}
-// class C2 implements Implemented2, Implemented3 {}
-// interface I2 extends Implemented2, Implemented3 {}
+// --- (line: 9) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
@@ -362,17 +256,7 @@
   // }
   // interface I1 extends Base { }
   // type T = { }
-  // enum E { }
-  // namespace N { }
-  // module M { }
-  // function fn() {}
-  // var x;
-  // let y;
-  // const z = 1;
-  // interface Implemented2 {}
-  // interface Implemented3 {}
-  // class C2 implements Implemented2, Implemented3 {}
-  // interface I2 extends Implemented2, Implemented3 {}
+  // --- (line: 9) skipped ---
 
   // === Details ===
   [
@@ -430,9 +314,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
-// class Base {}
-// interface Implemented1 {}
-// class C1 extends Base implements Implemented1 {
+// --- (line: 3) skipped ---
 //     get e() { return 1; }
 //     set e(v) {}
 // }
@@ -440,21 +322,11 @@
 // type T = { }
 // enum E { }
 // namespace N { }
-// module M { }
-// function fn() {}
-// var x;
-// let y;
-// const z = 1;
-// interface Implemented2 {}
-// interface Implemented3 {}
-// class C2 implements Implemented2, Implemented3 {}
-// interface I2 extends Implemented2, Implemented3 {}
+// --- (line: 11) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
-  // class Base {}
-  // interface Implemented1 {}
-  // class C1 extends Base implements Implemented1 {
+  // --- (line: 3) skipped ---
   //     get e() { return 1; }
   //     set e(v) {}
   // }
@@ -462,15 +334,7 @@
   // type T = { }
   // enum E { }
   // namespace N { }
-  // module M { }
-  // function fn() {}
-  // var x;
-  // let y;
-  // const z = 1;
-  // interface Implemented2 {}
-  // interface Implemented3 {}
-  // class C2 implements Implemented2, Implemented3 {}
-  // interface I2 extends Implemented2, Implemented3 {}
+  // --- (line: 11) skipped ---
 
   // === Details ===
   [
@@ -510,15 +374,7 @@
 // type T = { }
 // enum E { }
 // namespace N { }
-// module M { }
-// function fn() {}
-// var x;
-// let y;
-// const z = 1;
-// interface Implemented2 {}
-// interface Implemented3 {}
-// class C2 implements Implemented2, Implemented3 {}
-// interface I2 extends Implemented2, Implemented3 {}
+// --- (line: 11) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
@@ -532,15 +388,7 @@
   // type T = { }
   // enum E { }
   // namespace N { }
-  // module M { }
-  // function fn() {}
-  // var x;
-  // let y;
-  // const z = 1;
-  // interface Implemented2 {}
-  // interface Implemented3 {}
-  // class C2 implements Implemented2, Implemented3 {}
-  // interface I2 extends Implemented2, Implemented3 {}
+  // --- (line: 11) skipped ---
 
   // === Details ===
   [
@@ -570,21 +418,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
-// class Base {}
-// interface Implemented1 {}
-// class C1 extends Base implements Implemented1 {
-//     get e() { return 1; }
-//     set e(v) {}
-// }
-// interface I1 extends Base { }
-// type T = { }
-// enum E { }
-// namespace N { }
-// module M { }
-// function fn() {}
-// var x;
-// let y;
-// const z = 1;
+// --- (line: 15) skipped ---
 // interface Implemented2 {}
 // interface Implemented3 {}
 // class C2 implements Implemented2, Implemented3 {}
@@ -594,10 +428,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
-// class Base {}
-// interface Implemented1 {}
-// class C1 extends Base implements Implemented1 {
-//     get e() { return 1; }
+// --- (line: 4) skipped ---
 //     set e(v) {}
 // }
 // interface I1 extends Base { }
@@ -605,21 +436,11 @@
 // enum E { }
 // namespace N { }
 // module M { }
-// function fn() {}
-// var x;
-// let y;
-// const z = 1;
-// interface Implemented2 {}
-// interface Implemented3 {}
-// class C2 implements Implemented2, Implemented3 {}
-// interface I2 extends Implemented2, Implemented3 {}
+// --- (line: 12) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
-  // class Base {}
-  // interface Implemented1 {}
-  // class C1 extends Base implements Implemented1 {
-  //     get e() { return 1; }
+  // --- (line: 4) skipped ---
   //     set e(v) {}
   // }
   // interface I1 extends Base { }
@@ -627,14 +448,7 @@
   // enum E { }
   // namespace N { }
   // module M { }
-  // function fn() {}
-  // var x;
-  // let y;
-  // const z = 1;
-  // interface Implemented2 {}
-  // interface Implemented3 {}
-  // class C2 implements Implemented2, Implemented3 {}
-  // interface I2 extends Implemented2, Implemented3 {}
+  // --- (line: 12) skipped ---
 
   // === Details ===
   [
@@ -684,11 +498,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
-// class Base {}
-// interface Implemented1 {}
-// class C1 extends Base implements Implemented1 {
-//     get e() { return 1; }
-//     set e(v) {}
+// --- (line: 5) skipped ---
 // }
 // interface I1 extends Base { }
 // type T = { }
@@ -696,21 +506,11 @@
 // namespace N { }
 // module M { }
 // function fn() {}
-// var x;
-// let y;
-// const z = 1;
-// interface Implemented2 {}
-// interface Implemented3 {}
-// class C2 implements Implemented2, Implemented3 {}
-// interface I2 extends Implemented2, Implemented3 {}
+// --- (line: 13) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
-  // class Base {}
-  // interface Implemented1 {}
-  // class C1 extends Base implements Implemented1 {
-  //     get e() { return 1; }
-  //     set e(v) {}
+  // --- (line: 5) skipped ---
   // }
   // interface I1 extends Base { }
   // type T = { }
@@ -718,13 +518,7 @@
   // namespace N { }
   // module M { }
   // function fn() {}
-  // var x;
-  // let y;
-  // const z = 1;
-  // interface Implemented2 {}
-  // interface Implemented3 {}
-  // class C2 implements Implemented2, Implemented3 {}
-  // interface I2 extends Implemented2, Implemented3 {}
+  // --- (line: 13) skipped ---
 
   // === Details ===
   [
@@ -754,12 +548,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
-// class Base {}
-// interface Implemented1 {}
-// class C1 extends Base implements Implemented1 {
-//     get e() { return 1; }
-//     set e(v) {}
-// }
+// --- (line: 6) skipped ---
 // interface I1 extends Base { }
 // type T = { }
 // enum E { }
@@ -767,21 +556,11 @@
 // module M { }
 // function fn() {}
 // var x;
-// let y;
-// const z = 1;
-// interface Implemented2 {}
-// interface Implemented3 {}
-// class C2 implements Implemented2, Implemented3 {}
-// interface I2 extends Implemented2, Implemented3 {}
+// --- (line: 14) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
-  // class Base {}
-  // interface Implemented1 {}
-  // class C1 extends Base implements Implemented1 {
-  //     get e() { return 1; }
-  //     set e(v) {}
-  // }
+  // --- (line: 6) skipped ---
   // interface I1 extends Base { }
   // type T = { }
   // enum E { }
@@ -789,12 +568,7 @@
   // module M { }
   // function fn() {}
   // var x;
-  // let y;
-  // const z = 1;
-  // interface Implemented2 {}
-  // interface Implemented3 {}
-  // class C2 implements Implemented2, Implemented3 {}
-  // interface I2 extends Implemented2, Implemented3 {}
+  // --- (line: 14) skipped ---
 
   // === Details ===
   [
@@ -824,13 +598,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
-// class Base {}
-// interface Implemented1 {}
-// class C1 extends Base implements Implemented1 {
-//     get e() { return 1; }
-//     set e(v) {}
-// }
-// interface I1 extends Base { }
+// --- (line: 7) skipped ---
 // type T = { }
 // enum E { }
 // namespace N { }
@@ -838,21 +606,11 @@
 // function fn() {}
 // var x;
 // let y;
-// const z = 1;
-// interface Implemented2 {}
-// interface Implemented3 {}
-// class C2 implements Implemented2, Implemented3 {}
-// interface I2 extends Implemented2, Implemented3 {}
+// --- (line: 15) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
-  // class Base {}
-  // interface Implemented1 {}
-  // class C1 extends Base implements Implemented1 {
-  //     get e() { return 1; }
-  //     set e(v) {}
-  // }
-  // interface I1 extends Base { }
+  // --- (line: 7) skipped ---
   // type T = { }
   // enum E { }
   // namespace N { }
@@ -860,11 +618,7 @@
   // function fn() {}
   // var x;
   // let y;
-  // const z = 1;
-  // interface Implemented2 {}
-  // interface Implemented3 {}
-  // class C2 implements Implemented2, Implemented3 {}
-  // interface I2 extends Implemented2, Implemented3 {}
+  // --- (line: 15) skipped ---
 
   // === Details ===
   [
@@ -894,14 +648,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
-// class Base {}
-// interface Implemented1 {}
-// class C1 extends Base implements Implemented1 {
-//     get e() { return 1; }
-//     set e(v) {}
-// }
-// interface I1 extends Base { }
-// type T = { }
+// --- (line: 8) skipped ---
 // enum E { }
 // namespace N { }
 // module M { }
@@ -909,21 +656,11 @@
 // var x;
 // let y;
 // const z = 1;
-// interface Implemented2 {}
-// interface Implemented3 {}
-// class C2 implements Implemented2, Implemented3 {}
-// interface I2 extends Implemented2, Implemented3 {}
+// --- (line: 16) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
-  // class Base {}
-  // interface Implemented1 {}
-  // class C1 extends Base implements Implemented1 {
-  //     get e() { return 1; }
-  //     set e(v) {}
-  // }
-  // interface I1 extends Base { }
-  // type T = { }
+  // --- (line: 8) skipped ---
   // enum E { }
   // namespace N { }
   // module M { }
@@ -931,10 +668,7 @@
   // var x;
   // let y;
   // const z = 1;
-  // interface Implemented2 {}
-  // interface Implemented3 {}
-  // class C2 implements Implemented2, Implemented3 {}
-  // interface I2 extends Implemented2, Implemented3 {}
+  // --- (line: 16) skipped ---
 
   // === Details ===
   [
@@ -984,15 +718,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
-// class Base {}
-// interface Implemented1 {}
-// class C1 extends Base implements Implemented1 {
-//     get e() { return 1; }
-//     set e(v) {}
-// }
-// interface I1 extends Base { }
-// type T = { }
-// enum E { }
+// --- (line: 9) skipped ---
 // namespace N { }
 // module M { }
 // function fn() {}
@@ -1000,21 +726,11 @@
 // let y;
 // const z = 1;
 // interface Implemented2 {}
-// interface Implemented3 {}
-// class C2 implements Implemented2, Implemented3 {}
-// interface I2 extends Implemented2, Implemented3 {}
+// --- (line: 17) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
-  // class Base {}
-  // interface Implemented1 {}
-  // class C1 extends Base implements Implemented1 {
-  //     get e() { return 1; }
-  //     set e(v) {}
-  // }
-  // interface I1 extends Base { }
-  // type T = { }
-  // enum E { }
+  // --- (line: 9) skipped ---
   // namespace N { }
   // module M { }
   // function fn() {}
@@ -1022,9 +738,7 @@
   // let y;
   // const z = 1;
   // interface Implemented2 {}
-  // interface Implemented3 {}
-  // class C2 implements Implemented2, Implemented3 {}
-  // interface I2 extends Implemented2, Implemented3 {}
+  // --- (line: 17) skipped ---
 
   // === Details ===
   [
@@ -1066,16 +780,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
-// class Base {}
-// interface Implemented1 {}
-// class C1 extends Base implements Implemented1 {
-//     get e() { return 1; }
-//     set e(v) {}
-// }
-// interface I1 extends Base { }
-// type T = { }
-// enum E { }
-// namespace N { }
+// --- (line: 10) skipped ---
 // module M { }
 // function fn() {}
 // var x;
@@ -1088,16 +793,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
-  // class Base {}
-  // interface Implemented1 {}
-  // class C1 extends Base implements Implemented1 {
-  //     get e() { return 1; }
-  //     set e(v) {}
-  // }
-  // interface I1 extends Base { }
-  // type T = { }
-  // enum E { }
-  // namespace N { }
+  // --- (line: 10) skipped ---
   // module M { }
   // function fn() {}
   // var x;
@@ -1148,17 +844,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
-// class Base {}
-// interface Implemented1 {}
-// class C1 extends Base implements Implemented1 {
-//     get e() { return 1; }
-//     set e(v) {}
-// }
-// interface I1 extends Base { }
-// type T = { }
-// enum E { }
-// namespace N { }
-// module M { }
+// --- (line: 11) skipped ---
 // function fn() {}
 // var x;
 // let y;
@@ -1170,17 +856,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
-  // class Base {}
-  // interface Implemented1 {}
-  // class C1 extends Base implements Implemented1 {
-  //     get e() { return 1; }
-  //     set e(v) {}
-  // }
-  // interface I1 extends Base { }
-  // type T = { }
-  // enum E { }
-  // namespace N { }
-  // module M { }
+  // --- (line: 11) skipped ---
   // function fn() {}
   // var x;
   // let y;

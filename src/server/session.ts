@@ -136,7 +136,6 @@ import {
     toFileNameLowerCase,
     tracing,
     unmangleScopedPackageName,
-    UserPreferences,
     version,
     WithMetadata,
 } from "./_namespaces/ts";
@@ -161,6 +160,7 @@ import {
     LogLevel,
     Msg,
     NormalizedPath,
+    nullTypingsInstaller,
     Project,
     ProjectInfoTelemetryEvent,
     ProjectKind,
@@ -496,14 +496,14 @@ function getRenameLocationsWorker(
     initialLocation: DocumentPosition,
     findInStrings: boolean,
     findInComments: boolean,
-    { providePrefixAndSuffixTextForRename }: UserPreferences
+    preferences: protocol.UserPreferences
 ): readonly RenameLocation[] {
     const perProjectResults = getPerProjectReferences(
         projects,
         defaultProject,
         initialLocation,
         /*isForRename*/ true,
-        (project, position) => project.getLanguageService().findRenameLocations(position.fileName, position.pos, findInStrings, findInComments, providePrefixAndSuffixTextForRename),
+        (project, position) => project.getLanguageService().findRenameLocations(position.fileName, position.pos, findInStrings, findInComments, preferences),
         (renameLocation, cb) => cb(documentSpanLocation(renameLocation)),
     );
 
@@ -881,6 +881,7 @@ const invalidPartialSemanticModeCommands: readonly protocol.CommandTypes[] = [
     protocol.CommandTypes.ApplyCodeActionCommand,
     protocol.CommandTypes.GetSupportedCodeFixes,
     protocol.CommandTypes.GetApplicableRefactors,
+    protocol.CommandTypes.GetMoveToRefactoringFileSuggestions,
     protocol.CommandTypes.GetEditsForRefactor,
     protocol.CommandTypes.GetEditsForRefactorFull,
     protocol.CommandTypes.OrganizeImports,
@@ -926,7 +927,7 @@ export interface SessionOptions {
     cancellationToken: ServerCancellationToken;
     useSingleInferredProject: boolean;
     useInferredProjectPerProjectRoot: boolean;
-    typingsInstaller: ITypingsInstaller;
+    typingsInstaller?: ITypingsInstaller;
     byteLength: (buf: string, encoding?: BufferEncoding) => number;
     hrtime: (start?: [number, number]) => [number, number];
     logger: Logger;
@@ -972,7 +973,7 @@ export class Session<TMessage = string> implements EventSender {
     constructor(opts: SessionOptions) {
         this.host = opts.host;
         this.cancellationToken = opts.cancellationToken;
-        this.typingsInstaller = opts.typingsInstaller;
+        this.typingsInstaller = opts.typingsInstaller || nullTypingsInstaller;
         this.byteLength = opts.byteLength;
         this.hrtime = opts.hrtime;
         this.logger = opts.logger;
@@ -2687,6 +2688,7 @@ export class Session<TMessage = string> implements EventSender {
             args.refactor,
             args.action,
             this.getPreferences(file),
+            args.interactiveRefactorArguments
         );
 
         if (result === undefined) {
@@ -2702,11 +2704,19 @@ export class Session<TMessage = string> implements EventSender {
                 const renameScriptInfo = project.getScriptInfoForNormalizedPath(toNormalizedPath(renameFilename))!;
                 mappedRenameLocation = getLocationInNewDocument(getSnapshotText(renameScriptInfo.getSnapshot()), renameFilename, renameLocation, edits);
             }
-            return { renameLocation: mappedRenameLocation, renameFilename, edits: this.mapTextChangesToCodeEdits(edits) };
+            return {
+                renameLocation: mappedRenameLocation,
+                renameFilename,
+                edits: this.mapTextChangesToCodeEdits(edits)
+            };
         }
-        else {
-            return result;
-        }
+        return result;
+    }
+
+    private getMoveToRefactoringFileSuggestions(args: protocol.GetMoveToRefactoringFileSuggestionsRequestArgs): { newFileName: string, files: string[] }{
+        const { file, project } = this.getFileAndProject(args);
+        const scriptInfo = project.getScriptInfoForNormalizedPath(file)!;
+        return project.getLanguageService().getMoveToRefactoringFileSuggestions(file, this.extractPositionOrRange(args, scriptInfo), this.getPreferences(file));
     }
 
     private organizeImports(args: protocol.OrganizeImportsRequestArgs, simplifiedResult: boolean): readonly protocol.FileCodeEdits[] | readonly FileTextChanges[] {
@@ -3428,6 +3438,9 @@ export class Session<TMessage = string> implements EventSender {
         },
         [protocol.CommandTypes.GetEditsForRefactor]: (request: protocol.GetEditsForRefactorRequest) => {
             return this.requiredResponse(this.getEditsForRefactor(request.arguments, /*simplifiedResult*/ true));
+        },
+        [protocol.CommandTypes.GetMoveToRefactoringFileSuggestions]: (request: protocol.GetMoveToRefactoringFileSuggestionsRequest) => {
+            return this.requiredResponse(this.getMoveToRefactoringFileSuggestions(request.arguments));
         },
         [protocol.CommandTypes.GetEditsForRefactorFull]: (request: protocol.GetEditsForRefactorRequest) => {
             return this.requiredResponse(this.getEditsForRefactor(request.arguments, /*simplifiedResult*/ false));

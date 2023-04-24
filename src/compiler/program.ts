@@ -156,6 +156,7 @@ import {
     HasChangedAutomaticTypeDirectiveNames,
     hasChangesInResolutions,
     hasExtension,
+    HasInvalidatedLibResolutions,
     HasInvalidatedResolutions,
     hasJSDocNodes,
     hasJSFileExtension,
@@ -211,6 +212,7 @@ import {
     JsxEmit,
     length,
     libMap,
+    LibResolution,
     libs,
     mapDefined,
     mapDefinedIterator,
@@ -276,6 +278,7 @@ import {
     ResolvedModuleWithFailedLookupLocations,
     ResolvedProjectReference,
     ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
+    resolveLibrary,
     resolveModuleName,
     resolveTypeReferenceDirective,
     returnFalse,
@@ -1097,6 +1100,32 @@ function forEachProjectReference<T>(
 /** @internal */
 export const inferredTypesContainingFile = "__inferred type names__.ts";
 
+/** @internal */
+export function getInferredLibraryNameResolveFrom(options: CompilerOptions, currentDirectory: string, libFileName: string) {
+    const containingDirectory = options.configFilePath ? getDirectoryPath(options.configFilePath) : currentDirectory;
+    return combinePaths(containingDirectory, `__lib_node_modules_lookup_${libFileName}__.ts`);
+}
+
+function getLibraryNameFromLibFileName(libFileName: string) {
+    // Support resolving to lib.dom.d.ts -> @typescript/lib-dom, and
+    //                      lib.dom.iterable.d.ts -> @typescript/lib-dom/iterable
+    //                      lib.es2015.symbol.wellknown.d.ts -> @typescript/lib-es2015/symbol-wellknown
+    const components = libFileName.split(".");
+    let path = components[1];
+    let i = 2;
+    while (components[i] && components[i] !== "d") {
+        path += (i === 2 ? "/" : "-") + components[i];
+        i++;
+    }
+    return "@typescript/lib-" + path;
+}
+
+function getLibFileNameFromLibReference(libReference: FileReference) {
+    const libName = toFileNameLowerCase(libReference.fileName);
+    const libFileName = libMap.get(libName);
+    return { libName, libFileName };
+}
+
 interface DiagnosticCache<T extends Diagnostic> {
     perFile?: Map<Path, readonly T[]>;
     allDiagnostics?: readonly T[];
@@ -1176,6 +1205,7 @@ export function isProgramUptoDate(
     getSourceVersion: (path: Path, fileName: string) => string | undefined,
     fileExists: (fileName: string) => boolean,
     hasInvalidatedResolutions: HasInvalidatedResolutions,
+    hasInvalidatedLibResolutions: HasInvalidatedLibResolutions,
     hasChangedAutomaticTypeDirectiveNames: HasChangedAutomaticTypeDirectiveNames | undefined,
     getParsedCommandLine: (fileName: string) => ParsedCommandLine | undefined,
     projectReferences: readonly ProjectReference[] | undefined
@@ -1200,6 +1230,9 @@ export function isProgramUptoDate(
     const currentOptions = program.getCompilerOptions();
     // If the compilation settings do no match, then the program is not up-to-date
     if (!compareDataObjects(currentOptions, newOptions)) return false;
+
+    // If library resolution is invalidated, then the program is not up-to-date
+    if (program.resolvedLibReferences && forEachEntry(program.resolvedLibReferences, (_value, libFileName) => hasInvalidatedLibResolutions(libFileName))) return false;
 
     // If everything matches but the text of config file is changed,
     // error locations can change for program options, so update the program
@@ -1469,6 +1502,9 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     let automaticTypeDirectiveNames: string[] | undefined;
     let automaticTypeDirectiveResolutions: ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>;
 
+    let resolvedLibReferences: Map<string, LibResolution> | undefined;
+    let resolvedLibProcessing: Map<string, LibResolution> | undefined;
+
     // The below settings are to track if a .js file should be add to the program if loaded via searching under node_modules.
     // This works as imported modules are discovered recursively in a depth first manner, specifically:
     // - For each root file, findSourceFile is called.
@@ -1592,6 +1628,17 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             );
     }
 
+    const hasInvalidatedLibResolutions = host.hasInvalidatedLibResolutions || returnFalse;
+    let actualResolveLibrary: (libraryName: string, resolveFrom: string, options: CompilerOptions, libFileName: string) => ResolvedModuleWithFailedLookupLocations;
+    if (host.resolveLibrary) {
+        actualResolveLibrary = host.resolveLibrary.bind(host);
+    }
+    else {
+        const libraryResolutionCache = createModuleResolutionCache(currentDirectory, getCanonicalFileName, options, moduleResolutionCache?.getPackageJsonInfoCache());
+        actualResolveLibrary = (libraryName, resolveFrom, options) =>
+            resolveLibrary(libraryName, resolveFrom, options, host, libraryResolutionCache);
+    }
+
     // Map from a stringified PackageId to the source file with that id.
     // Only one source file may have a given packageId. Others become redirects (see createRedirectSourceFile).
     // `packageIdToSourceFile` is only used while building the program, while `sourceFileToPackageName` and `isSourceFileTargetOfRedirect` are kept around.
@@ -1688,7 +1735,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         if (automaticTypeDirectiveNames.length) {
             tracing?.push(tracing.Phase.Program, "processTypeReferences", { count: automaticTypeDirectiveNames.length });
             // This containingFilename needs to match with the one used in managed-side
-            const containingDirectory = options.configFilePath ? getDirectoryPath(options.configFilePath) : host.getCurrentDirectory();
+            const containingDirectory = options.configFilePath ? getDirectoryPath(options.configFilePath) : currentDirectory;
             const containingFilename = combinePaths(containingDirectory, inferredTypesContainingFile);
             const resolutions = resolveTypeReferenceDirectiveNamesReusingOldState(automaticTypeDirectiveNames, containingFilename);
             for (let i = 0; i < automaticTypeDirectiveNames.length; i++) {
@@ -1772,6 +1819,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
     // unconditionally set oldProgram to undefined to prevent it from being captured in closure
     oldProgram = undefined;
+    resolvedLibProcessing = undefined;
 
     const program: Program = {
         getRootFileNames: () => rootNames,
@@ -1813,6 +1861,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         sourceFileToPackageName,
         redirectTargetsMap,
         usesUriStyleNodeCoreModules,
+        resolvedLibReferences,
         isEmittedFile,
         getConfigFileParsingDiagnostics,
         getProjectReferences,
@@ -2441,6 +2490,11 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             return StructureIsReused.SafeModules;
         }
 
+        if (oldProgram.resolvedLibReferences &&
+            forEachEntry(oldProgram.resolvedLibReferences, (resolution, libFileName) => pathForLibFileWorker(libFileName).actual !== resolution.actual)) {
+            return StructureIsReused.SafeModules;
+        }
+
         if (host.hasChangedAutomaticTypeDirectiveNames) {
             if (host.hasChangedAutomaticTypeDirectiveNames()) return StructureIsReused.SafeModules;
         }
@@ -2481,6 +2535,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         sourceFileToPackageName = oldProgram.sourceFileToPackageName;
         redirectTargetsMap = oldProgram.redirectTargetsMap;
         usesUriStyleNodeCoreModules = oldProgram.usesUriStyleNodeCoreModules;
+        resolvedLibReferences = oldProgram.resolvedLibReferences;
 
         return StructureIsReused.Completely;
     }
@@ -2596,7 +2651,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             return equalityComparer(file.fileName, getDefaultLibraryFileName());
         }
         else {
-            return some(options.lib, libFileName => equalityComparer(file.fileName, pathForLibFile(libFileName)));
+            return some(options.lib, libFileName => equalityComparer(file.fileName, resolvedLibReferences!.get(libFileName)!.actual));
         }
     }
 
@@ -3310,11 +3365,9 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
 
     function getLibFileFromReference(ref: FileReference) {
-        const libName = toFileNameLowerCase(ref.fileName);
-        const libFileName = libMap.get(libName);
-        if (libFileName) {
-            return getSourceFile(pathForLibFile(libFileName));
-        }
+        const { libFileName } = getLibFileNameFromLibReference(ref);
+        const actualFileName = libFileName && resolvedLibReferences?.get(libFileName)?.actual;
+        return actualFileName !== undefined ? getSourceFile(actualFileName) : undefined;
     }
 
     /** This should have similar behavior to 'processSourceFile' without diagnostics or mutation. */
@@ -3810,28 +3863,61 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
 
     function pathForLibFile(libFileName: string): string {
-        // Support resolving to lib.dom.d.ts -> @typescript/lib-dom, and
-        //                      lib.dom.iterable.d.ts -> @typescript/lib-dom/iterable
-        //                      lib.es2015.symbol.wellknown.d.ts -> @typescript/lib-es2015/symbol-wellknown
-        const components = libFileName.split(".");
-        let path = components[1];
-        let i = 2;
-        while (components[i] && components[i] !== "d") {
-            path += (i === 2 ? "/" : "-") + components[i];
-            i++;
+        const existing = resolvedLibReferences?.get(libFileName);
+        if (existing) return existing.actual;
+        const result = pathForLibFileWorker(libFileName);
+        (resolvedLibReferences ??= new Map()).set(libFileName, result);
+        return result.actual;
+    }
+
+    function pathForLibFileWorker(libFileName: string): LibResolution {
+        const existing = resolvedLibProcessing?.get(libFileName);
+        if (existing) return existing;
+
+        if (structureIsReused !== StructureIsReused.Not && oldProgram && !hasInvalidatedLibResolutions(libFileName)) {
+            const oldResolution = oldProgram.resolvedLibReferences?.get(libFileName);
+            if (oldResolution) {
+                if (oldResolution.resolution && isTraceEnabled(options, host)) {
+                    const libraryName = getLibraryNameFromLibFileName(libFileName);
+                    const resolveFrom = getInferredLibraryNameResolveFrom(options, currentDirectory, libFileName);
+                    trace(host,
+                        oldResolution.resolution.resolvedModule ?
+                        oldResolution.resolution.resolvedModule.packageId ?
+                                Diagnostics.Reusing_resolution_of_module_0_from_1_of_old_program_it_was_successfully_resolved_to_2_with_Package_ID_3 :
+                                Diagnostics.Reusing_resolution_of_module_0_from_1_of_old_program_it_was_successfully_resolved_to_2 :
+                            Diagnostics.Reusing_resolution_of_module_0_from_1_of_old_program_it_was_not_resolved,
+                        libraryName,
+                        getNormalizedAbsolutePath(resolveFrom, currentDirectory),
+                        oldResolution.resolution.resolvedModule?.resolvedFileName,
+                        oldResolution.resolution.resolvedModule?.packageId && packageIdToString(oldResolution.resolution.resolvedModule.packageId)
+                    );
+                }
+                (resolvedLibProcessing ??= new Map()).set(libFileName, oldResolution);
+                return oldResolution;
+            }
         }
-        const resolveFrom = combinePaths(currentDirectory, `__lib_node_modules_lookup_${libFileName}__.ts`);
-        const localOverrideModuleResult = resolveModuleName("@typescript/lib-" + path, resolveFrom, { moduleResolution: ModuleResolutionKind.Node10 }, host, moduleResolutionCache);
-        if (localOverrideModuleResult?.resolvedModule) {
-            return localOverrideModuleResult.resolvedModule.resolvedFileName;
-        }
-        return combinePaths(defaultLibraryPath, libFileName);
+
+        const libraryName = getLibraryNameFromLibFileName(libFileName);
+        const resolveFrom = getInferredLibraryNameResolveFrom(options, currentDirectory, libFileName);
+        tracing?.push(tracing.Phase.Program, "resolveLibrary", { resolveFrom });
+        performance.mark("beforeResolveLibrary");
+        const resolution = actualResolveLibrary(libraryName, resolveFrom, options, libFileName);
+        performance.mark("afterResolveLibrary");
+        performance.measure("ResolveLibrary", "beforeResolveLibrary", "afterResolveLibrary");
+        tracing?.pop();
+        const result: LibResolution = {
+            resolution,
+            actual: resolution.resolvedModule ?
+                resolution.resolvedModule.resolvedFileName :
+                combinePaths(defaultLibraryPath, libFileName)
+        };
+        (resolvedLibProcessing ??= new Map()).set(libFileName, result);
+        return result;
     }
 
     function processLibReferenceDirectives(file: SourceFile) {
         forEach(file.libReferenceDirectives, (libReference, index) => {
-            const libName = toFileNameLowerCase(libReference.fileName);
-            const libFileName = libMap.get(libName);
+            const { libName, libFileName } = getLibFileNameFromLibReference(libReference);
             if (libFileName) {
                 // we ignore any 'no-default-lib' reference set on this file.
                 processRootFile(pathForLibFile(libFileName), /*isDefaultLib*/ true, /*ignoreNoDefaultLib*/ true, { kind: FileIncludeKind.LibReferenceDirective, file: file.path, index, });
@@ -3971,7 +4057,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
         else {
             // An absolute path pointing to the containing directory of the config file
-            const basePath = getNormalizedAbsolutePath(getDirectoryPath(refPath), host.getCurrentDirectory());
+            const basePath = getNormalizedAbsolutePath(getDirectoryPath(refPath), currentDirectory);
             sourceFile = host.getSourceFile(refPath, ScriptTarget.JSON) as JsonSourceFile | undefined;
             addFileToFilesByName(sourceFile, sourceFilePath, /*redirectedPath*/ undefined);
             if (sourceFile === undefined) {

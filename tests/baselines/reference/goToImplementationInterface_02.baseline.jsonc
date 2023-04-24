@@ -19,9 +19,7 @@
 // 
 // function createFooLike() {
 //     return {
-//         hello() {}
-//     };
-// }
+// --- (line: 20) skipped ---
 
   // === Details ===
   [

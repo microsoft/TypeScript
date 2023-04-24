@@ -28,8 +28,10 @@
 
 const startPos = test.markerByName("0").position;
 const endPos =  test.markerByName("6").position - 2;
+const wordPattern =  "[a-zA-Z0-9:\\-\\._$]*";
 const linkedCursors = {
     ranges: [{ start: startPos, length: 3 }, { start: endPos, length: 3 }],
+    wordPattern,
 };
 
 verify.linkedEditing( {

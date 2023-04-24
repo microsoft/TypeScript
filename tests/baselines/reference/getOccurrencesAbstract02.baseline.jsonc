@@ -1,8 +1,6 @@
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesAbstract02.ts ===
-// // Not valid TS (abstract methods can only appear in abstract classes)
-// class Animal {
-//     abstract walk(): void;
+// --- (line: 3) skipped ---
 //     abstract makeSound(): void;
 // }
 // // abstract cannot appear here, won't get highlighted
@@ -15,10 +13,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesAbstract02.ts ===
-// // Not valid TS (abstract methods can only appear in abstract classes)
-// class Animal {
-//     abstract walk(): void;
-//     abstract makeSound(): void;
+// --- (line: 4) skipped ---
 // }
 // // abstract cannot appear here, won't get highlighted
 // let c = abstract class Foo {
@@ -37,9 +32,7 @@
 // }
 // // abstract cannot appear here, won't get highlighted
 // let c = abstract class Foo {
-//     abstract foo(): void;
-//     abstract bar(): void;
-// }
+// --- (line: 8) skipped ---
 
 
 
@@ -52,6 +45,4 @@
 // }
 // // abstract cannot appear here, won't get highlighted
 // let c = abstract class Foo {
-//     abstract foo(): void;
-//     abstract bar(): void;
-// }
+// --- (line: 8) skipped ---

@@ -1416,6 +1416,8 @@ export class TestState {
         return fileBaselines.join("\n\n");
     }
 
+    private static readonly nLinesContext = 4;
+
     private getBaselineContentForFile<T extends ts.DocumentSpan>(
         fileName: string,
         content: string,
@@ -1433,7 +1435,8 @@ export class TestState {
         }: BaselineDocumentSpansWithFileContentsOptions<T>,
         spanToContextId: Map<T, number>,
     ) {
-        let newContent = `=== ${fileName} ===\n`;
+        let readableContents = `// === ${fileName} ===`;
+        let newContent = "";
         interface Detail {
             location: number;
             locationMarker: string;
@@ -1514,6 +1517,8 @@ export class TestState {
                 }
             });
         }
+        const lineStarts = ts.computeLineStarts(content);
+        let posLineInfo: { pos: number, line: number } | undefined;
         // Our preferred way to write marker is
         // /*MARKER*/[| some text |]
         // [| some /*MARKER*/ text |]
@@ -1537,7 +1542,7 @@ export class TestState {
                 // Defer writing marker position to deffered marker index
                 if (deferredMarkerIndex !== undefined) return;
             }
-            newContent += content.slice(pos, location);
+            textWithContext(location, type);
             pos = location;
             // Prefix
             const prefix = detailPrefixes.get(detail);
@@ -1587,8 +1592,36 @@ export class TestState {
             const suffix = detailSuffixes.get(detail);
             if (suffix) newContent += suffix;
         });
-        newContent += content.slice(pos);
-        return readableJsoncBaseline(newContent);
+        textWithContext(/*location*/ undefined, /*type*/ undefined);
+        return readableContents + (newContent ? "\n" + readableJsoncBaseline(newContent) : "");
+
+        function textWithContext(location: number | undefined, type: Detail["type"]) {
+            if (!newContent && location === undefined) ts.Debug.fail("Unsupported");
+            if (type !== "textEnd" && type !== "contextEnd") {
+                // Calculate pos to location number of lines
+                const posLine = posLineInfo?.pos === pos ? posLineInfo.line : ts.computeLineOfPosition(lineStarts, pos, posLineInfo?.line);
+                const locationLine = location !== undefined ? ts.computeLineOfPosition(lineStarts, location, posLine) : lineStarts.length - 1;
+                if (location !== undefined) posLineInfo = { pos: location, line: locationLine };
+                let nLines = 0;
+                if (newContent) nLines += TestState.nLinesContext + 1;
+                if (location !== undefined) nLines += TestState.nLinesContext + 1;
+                // first nLinesContext and last nLinesContext
+                if (locationLine - posLine > nLines) {
+                    if (newContent) {
+                        readableContents = readableContents + "\n" + readableJsoncBaseline(newContent + content.slice(pos, lineStarts[posLine + TestState.nLinesContext]) +
+                            `--- (line: ${posLine + TestState.nLinesContext + 1}) skipped ---`);
+                        if (location !== undefined) readableContents += "\n";
+                        newContent = "";
+                    }
+                    if (location !== undefined) {
+                        newContent += `--- (line: ${locationLine - TestState.nLinesContext + 1}) skipped ---\n` +
+                            content.slice(lineStarts[locationLine - TestState.nLinesContext + 1], location);
+                    }
+                    return;
+                }
+            }
+            newContent += content.slice(pos, location);
+        }
     }
 
     private assertObjectsEqual<T>(fullActual: T, fullExpected: T, msgPrefix = ""): void {
@@ -1769,13 +1802,18 @@ export class TestState {
             isMarker(markerOrRange) ?
                 markerOrRange :
                 { fileName: markerOrRange.fileName, position: markerOrRange.pos };
-        const { findInStrings = false, findInComments = false, providePrefixAndSuffixTextForRename = true } = options || {};
+        const {
+            findInStrings = false,
+            findInComments = false,
+            providePrefixAndSuffixTextForRename = true,
+            quotePreference = "double"
+        } = options || {};
         const locations = this.languageService.findRenameLocations(
             fileName,
             position,
             findInStrings,
             findInComments,
-            providePrefixAndSuffixTextForRename,
+            { providePrefixAndSuffixTextForRename, quotePreference },
         );
 
         if (!locations) {
@@ -1785,7 +1823,8 @@ export class TestState {
         const renameOptions = options ?
             (options.findInStrings !== undefined ? `// @findInStrings: ${findInStrings}\n` : "") +
             (options.findInComments !== undefined ? `// @findInComments: ${findInComments}\n` : "") +
-            (options.providePrefixAndSuffixTextForRename !== undefined ? `// @providePrefixAndSuffixTextForRename: ${providePrefixAndSuffixTextForRename}\n` : "") :
+            (options.providePrefixAndSuffixTextForRename !== undefined ? `// @providePrefixAndSuffixTextForRename: ${providePrefixAndSuffixTextForRename}\n` : "") +
+            (options.quotePreference !== undefined ? `// @quotePreference: ${quotePreference}\n` : "") :
             "";
 
         return renameOptions + (renameOptions ? "\n" : "") + this.getBaselineForDocumentSpansWithFileContents(
@@ -3260,7 +3299,6 @@ export class TestState {
                     ts.Debug.fail(`Did not expect a change in ${change.fileName}`);
                 }
                 const oldText = this.tryGetFileContent(change.fileName);
-                ts.Debug.assert(!!change.isNewFile === (oldText === undefined));
                 const newContent = change.isNewFile ? ts.first(change.textChanges).newText : ts.textChanges.applyChanges(oldText!, change.textChanges);
                 this.verifyTextMatches(newContent, /*includeWhitespace*/ true, expectedNewContent);
             }
@@ -3873,6 +3911,18 @@ export class TestState {
         this.verifyNewContent({ newFileContent: options.newFileContents }, editInfo.edits);
     }
 
+    public moveToFile(options: FourSlashInterface.MoveToFileOptions): void {
+        assert(this.getRanges().length === 1, "Must have exactly one fourslash range (source enclosed between '[|' and '|]' delimiters) in the source file");
+        const range = this.getRanges()[0];
+        const refactor = ts.find(this.getApplicableRefactors(range, { allowTextChangesInNewFiles: true }, /*triggerReason*/ undefined, /*kind*/ undefined, /*includeInteractiveActions*/ true), r => r.name === "Move to file")!;
+        assert(refactor.actions.length === 1);
+        const action = ts.first(refactor.actions);
+        assert(action.name === "Move to file" && action.description === "Move to file");
+
+        const editInfo = this.languageService.getEditsForRefactor(range.fileName, this.formatCodeSettings, range, refactor.name, action.name, options.preferences || ts.emptyOptions, options.interactiveRefactorArguments)!;
+        this.verifyNewContent({ newFileContent: options.newFileContents }, editInfo.edits);
+    }
+
     private testNewFileContents(edits: readonly ts.FileTextChanges[], newFileContents: { [fileName: string]: string }, description: string): void {
         for (const { fileName, textChanges } of edits) {
             const newContent = newFileContents[fileName];
@@ -4178,11 +4228,11 @@ export class TestState {
     private getApplicableRefactorsAtSelection(triggerReason: ts.RefactorTriggerReason = "implicit", kind?: string, preferences = ts.emptyOptions) {
         return this.getApplicableRefactorsWorker(this.getSelection(), this.activeFile.fileName, preferences, triggerReason, kind);
     }
-    private getApplicableRefactors(rangeOrMarker: Range | Marker, preferences = ts.emptyOptions, triggerReason: ts.RefactorTriggerReason = "implicit", kind?: string): readonly ts.ApplicableRefactorInfo[] {
-        return this.getApplicableRefactorsWorker("position" in rangeOrMarker ? rangeOrMarker.position : rangeOrMarker, rangeOrMarker.fileName, preferences, triggerReason, kind); // eslint-disable-line local/no-in-operator
+    private getApplicableRefactors(rangeOrMarker: Range | Marker, preferences = ts.emptyOptions, triggerReason: ts.RefactorTriggerReason = "implicit", kind?: string, includeInteractiveActions?: boolean): readonly ts.ApplicableRefactorInfo[] {
+        return this.getApplicableRefactorsWorker("position" in rangeOrMarker ? rangeOrMarker.position : rangeOrMarker, rangeOrMarker.fileName, preferences, triggerReason, kind, includeInteractiveActions); // eslint-disable-line local/no-in-operator
     }
-    private getApplicableRefactorsWorker(positionOrRange: number | ts.TextRange, fileName: string, preferences = ts.emptyOptions, triggerReason: ts.RefactorTriggerReason, kind?: string): readonly ts.ApplicableRefactorInfo[] {
-        return this.languageService.getApplicableRefactors(fileName, positionOrRange, preferences, triggerReason, kind) || ts.emptyArray;
+    private getApplicableRefactorsWorker(positionOrRange: number | ts.TextRange, fileName: string, preferences = ts.emptyOptions, triggerReason: ts.RefactorTriggerReason, kind?: string, includeInteractiveActions?: boolean): readonly ts.ApplicableRefactorInfo[] {
+        return this.languageService.getApplicableRefactors(fileName, positionOrRange, preferences, triggerReason, kind, includeInteractiveActions) || ts.emptyArray;
     }
 
     public configurePlugin(pluginName: string, configuration: any): void {
@@ -4510,16 +4560,16 @@ const enum State {
     inObjectMarker
 }
 
-function reportError(fileName: string, line: number, col: number, message: string) {
+function reportError(fileName: string, line: number, col: number, message: string): never {
     const errorMessage = fileName + "(" + line + "," + col + "): " + message;
     throw new Error(errorMessage);
 }
 
 function recordObjectMarker(fileName: string, location: LocationInformation, text: string, markerMap: Map<string, Marker>, markers: Marker[]): Marker | undefined {
-    let markerValue: any;
+    let markerValue;
     try {
         // Attempt to parse the marker value as JSON
-        markerValue = JSON.parse("{ " + text + " }");
+        markerValue = JSON.parse("{ " + text + " }") as { name?: unknown };
     }
     catch (e) {
         reportError(fileName, location.sourceLine, location.sourceColumn, "Unable to parse marker text " + e.message);
@@ -4527,7 +4577,6 @@ function recordObjectMarker(fileName: string, location: LocationInformation, tex
 
     if (markerValue === undefined) {
         reportError(fileName, location.sourceLine, location.sourceColumn, "Object markers can not be empty");
-        return undefined;
     }
 
     const marker: Marker = {
@@ -4537,7 +4586,7 @@ function recordObjectMarker(fileName: string, location: LocationInformation, tex
     };
 
     // Object markers can be anonymous
-    if (markerValue.name) {
+    if (typeof markerValue.name === "string") {
         markerMap.set(markerValue.name, marker);
     }
 
@@ -4556,7 +4605,6 @@ function recordMarker(fileName: string, location: LocationInformation, name: str
     if (markerMap.has(name)) {
         const message = "Marker '" + name + "' is duplicated in the source file contents.";
         reportError(marker.fileName, location.sourceLine, location.sourceColumn, message);
-        return undefined;
     }
     else {
         markerMap.set(name, marker);
@@ -4623,7 +4671,7 @@ function parseFileContent(content: string, fileName: string, markerMap: Map<stri
                         // found a range end
                         const rangeStart = openRanges.pop();
                         if (!rangeStart) {
-                            throw reportError(fileName, line, column, "Found range end with no matching start.");
+                            reportError(fileName, line, column, "Found range end with no matching start.");
                         }
 
                         const range: Range = {

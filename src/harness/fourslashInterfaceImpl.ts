@@ -610,6 +610,10 @@ export class Verify extends VerifyNegatable {
         this.state.moveToNewFile(options);
     }
 
+    public moveToFile(options: MoveToFileOptions): void {
+        this.state.moveToFile(options);
+    }
+
     public noMoveToNewFile(): void {
         this.state.noMoveToNewFile();
     }
@@ -1896,6 +1900,12 @@ export interface MoveToNewFileOptions {
     readonly preferences?: ts.UserPreferences;
 }
 
+export interface MoveToFileOptions {
+    readonly newFileContents: { readonly [fileName: string]: string };
+    readonly interactiveRefactorArguments: ts.InteractiveRefactorArguments;
+    readonly preferences?: ts.UserPreferences;
+}
+
 export type RenameLocationsOptions = readonly RenameLocationOptions[] | {
     readonly findInStrings?: boolean;
     readonly findInComments?: boolean;
@@ -1910,6 +1920,7 @@ export interface RenameOptions {
     readonly findInStrings?: boolean;
     readonly findInComments?: boolean;
     readonly providePrefixAndSuffixTextForRename?: boolean;
+    readonly quotePreference?: "auto" | "double" | "single";
 }
 export type BaselineCommandWithMarkerOrRange = {
     type: "findAllReferences" | "goToDefinition" | "getDefinitionAtPosition" | "goToSourceDefinition" | "goToType" | "goToImplementation";

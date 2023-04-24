@@ -350,15 +350,18 @@ import {
     JSDocParameterTag,
     JSDocPropertyLikeTag,
     JSDocSatisfiesExpression,
+    JSDocSatisfiesTag,
     JSDocSignature,
     JSDocTag,
     JSDocTemplateTag,
     JSDocTypedefTag,
     JsonSourceFile,
+    JsxAttributeName,
     JsxChild,
     JsxElement,
     JsxEmit,
     JsxFragment,
+    JsxNamespacedName,
     JsxOpeningElement,
     JsxOpeningLikeElement,
     JsxSelfClosingElement,
@@ -2062,6 +2065,8 @@ export function entityNameToString(name: EntityNameOrEntityNameExpression | JSDo
             }
         case SyntaxKind.JSDocMemberName:
             return entityNameToString(name.left) + entityNameToString(name.right);
+        case SyntaxKind.JsxNamespacedName:
+            return entityNameToString(name.namespace) + ":" + entityNameToString(name.name);
         default:
             return Debug.assertNever(name);
     }
@@ -2229,6 +2234,14 @@ export function getErrorSpanForNode(sourceFile: SourceFile, node: Node): TextSpa
         case SyntaxKind.ReturnStatement:
         case SyntaxKind.YieldExpression: {
             const pos = skipTrivia(sourceFile.text, (node as ReturnStatement | YieldExpression).pos);
+            return getSpanOfTokenAtPosition(sourceFile, pos);
+        }
+        case SyntaxKind.SatisfiesExpression: {
+            const pos = skipTrivia(sourceFile.text, (node as SatisfiesExpression).expression.end);
+            return getSpanOfTokenAtPosition(sourceFile, pos);
+        }
+        case SyntaxKind.JSDocSatisfiesTag: {
+            const pos = skipTrivia(sourceFile.text, (node as JSDocSatisfiesTag).tagName.pos);
             return getSpanOfTokenAtPosition(sourceFile, pos);
         }
     }
@@ -5816,7 +5829,7 @@ function isQuoteOrBacktick(charCode: number) {
 /** @internal */
 export function isIntrinsicJsxName(name: __String | string) {
     const ch = (name as string).charCodeAt(0);
-    return (ch >= CharacterCodes.a && ch <= CharacterCodes.z) || stringContains((name as string), "-") || stringContains((name as string), ":");
+    return (ch >= CharacterCodes.a && ch <= CharacterCodes.z) || stringContains((name as string), "-");
 }
 
 const indentStrings: string[] = ["", "    "];
@@ -9087,7 +9100,7 @@ export const supportedTSExtensions: readonly Extension[][] = [[Extension.Ts, Ext
 export const supportedTSExtensionsFlat: readonly Extension[] = flatten(supportedTSExtensions);
 const supportedTSExtensionsWithJson: readonly Extension[][] = [...supportedTSExtensions, [Extension.Json]];
 /** Must have ".d.ts" first because if ".ts" goes first, that will be detected as the extension instead of ".d.ts". */
-const supportedTSExtensionsForExtractExtension: readonly Extension[] = [Extension.Dts, Extension.Dcts, Extension.Dmts, Extension.Cts, Extension.Mts, Extension.Ts, Extension.Tsx, Extension.Cts, Extension.Mts];
+const supportedTSExtensionsForExtractExtension: readonly Extension[] = [Extension.Dts, Extension.Dcts, Extension.Dmts, Extension.Cts, Extension.Mts, Extension.Ts, Extension.Tsx];
 /** @internal */
 export const supportedJSExtensions: readonly Extension[][] = [[Extension.Js, Extension.Jsx], [Extension.Mjs], [Extension.Cjs]];
 /** @internal */
@@ -10161,4 +10174,36 @@ export function getJSDocSatisfiesExpressionType(node: JSDocSatisfiesExpression) 
 export function tryGetJSDocSatisfiesTypeNode(node: Node) {
     const tag = getJSDocSatisfiesTag(node);
     return tag && tag.typeExpression && tag.typeExpression.type;
+}
+
+/** @internal */
+export function getEscapedTextOfJsxAttributeName(node: JsxAttributeName): __String {
+    return isIdentifier(node) ? node.escapedText : getEscapedTextOfJsxNamespacedName(node);
+}
+
+/** @internal */
+export function getTextOfJsxAttributeName(node: JsxAttributeName): string {
+    return isIdentifier(node) ? idText(node) : getTextOfJsxNamespacedName(node);
+}
+
+/** @internal */
+export function isJsxAttributeName(node: Node): node is JsxAttributeName {
+    const kind = node.kind;
+    return kind === SyntaxKind.Identifier
+        || kind === SyntaxKind.JsxNamespacedName;
+}
+
+/** @internal */
+export function getEscapedTextOfJsxNamespacedName(node: JsxNamespacedName): __String {
+    return `${node.namespace.escapedText}:${idText(node.name)}` as __String;
+}
+
+/** @internal */
+export function getTextOfJsxNamespacedName(node: JsxNamespacedName) {
+    return `${idText(node.namespace)}:${idText(node.name)}`;
+}
+
+/** @internal */
+export function intrinsicTagNameToString(node: Identifier | JsxNamespacedName) {
+    return isIdentifier(node) ? idText(node) : getTextOfJsxNamespacedName(node);
 }
