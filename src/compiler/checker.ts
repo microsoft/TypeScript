@@ -29344,9 +29344,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     prop => ([!(prop as JsxAttribute).initializer ? (() => trueType) : (() => getContextFreeTypeOfExpression((prop as JsxAttribute).initializer!)), prop.symbol.escapedName] as [() => Type, __String])
                 ),
                 map(
-                    filter(getPropertiesOfType(contextualType), s => !!(s.flags & SymbolFlags.Optional) && !!node?.symbol?.members &&
-                        (s.escapedName === jsxChildrenPropertyName ? !node.symbol.members.has(s.escapedName) && !getSemanticJsxChildren((node.parent.parent as JsxElement).children).length : !node.symbol.members.has(s.escapedName)) &&
-                        isDiscriminantProperty(contextualType, s.escapedName)),
+                    filter(getPropertiesOfType(contextualType), s => {
+                        if (!(s.flags & SymbolFlags.Optional) || !node?.symbol?.members) {
+                            return false;
+                        }
+                        const element = node.parent.parent;
+                        if (s.escapedName === jsxChildrenPropertyName && isJsxElement(element) && getSemanticJsxChildren(element.children).length) {
+                            return false;
+                        }
+                        return !node.symbol.members.has(s.escapedName) && isDiscriminantProperty(contextualType, s.escapedName);
+                    }),
                     s => [() => undefinedType, s.escapedName] as [() => Type, __String]
                 )
             ),
