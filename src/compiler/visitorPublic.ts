@@ -46,6 +46,7 @@ import {
     isImportSpecifier,
     isImportTypeAssertionContainer,
     isJsxAttributeLike,
+    isJsxAttributeName,
     isJsxAttributes,
     isJsxChild,
     isJsxClosingElement,
@@ -1429,6 +1430,12 @@ const visitEachChildTable: VisitEachChildTable = {
             Debug.checkDefined(nodeVisitor(node.tagName, visitor, isJsxTagNameExpression)));
     },
 
+    [SyntaxKind.JsxNamespacedName]: function forEachChildInJsxNamespacedName(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+        return context.factory.updateJsxNamespacedName(node,
+            Debug.checkDefined(nodeVisitor(node.namespace, visitor, isIdentifier)),
+            Debug.checkDefined(nodeVisitor(node.name, visitor, isIdentifier)));
+    },
+
     [SyntaxKind.JsxFragment]: function visitEachChildOfJsxFragment(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
         return context.factory.updateJsxFragment(node,
             Debug.checkDefined(nodeVisitor(node.openingFragment, visitor, isJsxOpeningFragment)),
@@ -1438,7 +1445,7 @@ const visitEachChildTable: VisitEachChildTable = {
 
     [SyntaxKind.JsxAttribute]: function visitEachChildOfJsxAttribute(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
         return context.factory.updateJsxAttribute(node,
-            Debug.checkDefined(nodeVisitor(node.name, visitor, isIdentifier)),
+            Debug.checkDefined(nodeVisitor(node.name, visitor, isJsxAttributeName)),
             nodeVisitor(node.initializer, visitor, isStringLiteralOrJsxExpression));
     },
 

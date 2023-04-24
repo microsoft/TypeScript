@@ -2,13 +2,7 @@ import * as ts from "../../_namespaces/ts";
 import {
     commonFile1,
     commonFile2,
-} from "../tscWatch/helpers";
-import {
-    createServerHost,
-    File,
-    libFile,
-    TestServerHost,
-} from "../virtualFileSystemWithWatch";
+} from "../helpers/tscWatch";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
@@ -25,7 +19,13 @@ import {
     toExternalFile,
     toExternalFiles,
     verifyGetErrRequest,
-} from "./helpers";
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+    File,
+    libFile,
+    TestServerHost,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: projects::", () => {
     it("handles the missing files - that were added to program because they were added with ///<ref", () => {

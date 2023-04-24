@@ -869,6 +869,9 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
             case SyntaxKind.EqualsEqualsEqualsToken:
             case SyntaxKind.ExclamationEqualsEqualsToken:
             case SyntaxKind.ExclamationEqualsToken:
+            case SyntaxKind.AmpersandAmpersandEqualsToken:
+            case SyntaxKind.QuestionQuestionEqualsToken:
+            case SyntaxKind.BarBarEqualsToken:
                 addCandidateType(usage, checker.getTypeAtLocation(parent.left === node ? parent.right : parent.left));
                 break;
 

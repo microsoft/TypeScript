@@ -99,6 +99,7 @@ import {
     ReadBuildProgramHost,
     resolveConfigFileProjectName,
     ResolvedConfigFileName,
+    resolveLibrary,
     resolvePath,
     resolveProjectReferencePath,
     returnUndefined,
@@ -394,6 +395,7 @@ interface SolutionBuilderState<T extends BuilderProgram> extends WatchFactory<Wa
     readonly compilerHost: CompilerHost & ReadBuildProgramHost;
     readonly moduleResolutionCache: ModuleResolutionCache | undefined;
     readonly typeReferenceDirectiveResolutionCache: TypeReferenceDirectiveResolutionCache | undefined;
+    readonly libraryResolutionCache: ModuleResolutionCache | undefined;
 
     // Mutable state
     buildOrder: AnyBuildOrder | undefined;
@@ -432,6 +434,7 @@ function createSolutionBuilderState<T extends BuilderProgram>(watch: boolean, ho
     compilerHost.getParsedCommandLine = fileName => parseConfigFile(state, fileName as ResolvedConfigFileName, toResolvedConfigFilePath(state, fileName as ResolvedConfigFileName));
     compilerHost.resolveModuleNameLiterals = maybeBind(host, host.resolveModuleNameLiterals);
     compilerHost.resolveTypeReferenceDirectiveReferences = maybeBind(host, host.resolveTypeReferenceDirectiveReferences);
+    compilerHost.resolveLibrary = maybeBind(host, host.resolveLibrary);
     compilerHost.resolveModuleNames = maybeBind(host, host.resolveModuleNames);
     compilerHost.resolveTypeReferenceDirectives = maybeBind(host, host.resolveTypeReferenceDirectives);
     compilerHost.getModuleResolutionCache = maybeBind(host, host.getModuleResolutionCache);
@@ -465,6 +468,17 @@ function createSolutionBuilderState<T extends BuilderProgram>(watch: boolean, ho
                 createTypeReferenceResolutionLoader,
             );
     }
+    let libraryResolutionCache: ModuleResolutionCache | undefined;
+    if (!compilerHost.resolveLibrary) {
+        libraryResolutionCache = createModuleResolutionCache(compilerHost.getCurrentDirectory(), compilerHost.getCanonicalFileName, /*options*/ undefined, moduleResolutionCache?.getPackageJsonInfoCache());
+        compilerHost.resolveLibrary = (libraryName, resolveFrom, options) => resolveLibrary(
+            libraryName,
+            resolveFrom,
+            options,
+            host,
+            libraryResolutionCache,
+        );
+    }
     compilerHost.getBuildInfo = (fileName, configFilePath) => getBuildInfo(state, fileName, toResolvedConfigFilePath(state, configFilePath as ResolvedConfigFileName), /*modifiedTime*/ undefined);
 
     const { watchFile, watchDirectory, writeLog } = createWatchFactory<ResolvedConfigFileName>(hostWithWatch, options);
@@ -496,6 +510,7 @@ function createSolutionBuilderState<T extends BuilderProgram>(watch: boolean, ho
         compilerHost,
         moduleResolutionCache,
         typeReferenceDirectiveResolutionCache,
+        libraryResolutionCache,
 
         // Mutable state
         buildOrder: undefined,
@@ -747,7 +762,7 @@ function enableCache<T extends BuilderProgram>(state: SolutionBuilderState<T>) {
 function disableCache<T extends BuilderProgram>(state: SolutionBuilderState<T>) {
     if (!state.cache) return;
 
-    const { cache, host, compilerHost, extendedConfigCache, moduleResolutionCache, typeReferenceDirectiveResolutionCache } = state;
+    const { cache, host, compilerHost, extendedConfigCache, moduleResolutionCache, typeReferenceDirectiveResolutionCache, libraryResolutionCache } = state;
 
     host.readFile = cache.originalReadFile;
     host.fileExists = cache.originalFileExists;
@@ -759,6 +774,7 @@ function disableCache<T extends BuilderProgram>(state: SolutionBuilderState<T>) 
     extendedConfigCache.clear();
     moduleResolutionCache?.clear();
     typeReferenceDirectiveResolutionCache?.clear();
+    libraryResolutionCache?.clear();
     state.cache = undefined;
 }
 

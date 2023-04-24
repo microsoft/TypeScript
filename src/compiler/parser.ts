@@ -221,6 +221,7 @@ import {
     JsxElement,
     JsxExpression,
     JsxFragment,
+    JsxNamespacedName,
     JsxOpeningElement,
     JsxOpeningFragment,
     JsxOpeningLikeElement,
@@ -1029,6 +1030,10 @@ const forEachChildTable: ForEachChildTable = {
     },
     [SyntaxKind.JsxClosingElement]: function forEachChildInJsxClosingElement<T>(node: JsxClosingElement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.tagName);
+    },
+    [SyntaxKind.JsxNamespacedName]: function forEachChildInJsxNamespacedName<T>(node: JsxNamespacedName, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.namespace) ||
+            visitNode(cbNode, node.name);
     },
     [SyntaxKind.OptionalType]: forEachChildInOptionalRestOrJSDocParameterModifier,
     [SyntaxKind.RestType]: forEachChildInOptionalRestOrJSDocParameterModifier,
@@ -5694,7 +5699,7 @@ namespace Parser {
                 // Just like in parseUpdateExpression, we need to avoid parsing type assertions when
                 // in JSX and we see an expression like "+ <foo> bar".
                 if (languageVariant === LanguageVariant.JSX) {
-                    return parseJsxElementOrSelfClosingElementOrFragment(/*inExpressionContext*/ true);
+                    return parseJsxElementOrSelfClosingElementOrFragment(/*inExpressionContext*/ true, /*topInvalidNodePosition*/ undefined, /*openingTag*/ undefined, /*mustBeUnary*/ true);
                 }
                 // This is modified UnaryExpression grammar in TypeScript
                 //  UnaryExpression (modified):
@@ -5921,7 +5926,7 @@ namespace Parser {
         return finishNode(factoryCreatePropertyAccessExpression(expression, parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateIdentifiers*/ true)), pos);
     }
 
-    function parseJsxElementOrSelfClosingElementOrFragment(inExpressionContext: boolean, topInvalidNodePosition?: number, openingTag?: JsxOpeningElement | JsxOpeningFragment): JsxElement | JsxSelfClosingElement | JsxFragment {
+    function parseJsxElementOrSelfClosingElementOrFragment(inExpressionContext: boolean, topInvalidNodePosition?: number, openingTag?: JsxOpeningElement | JsxOpeningFragment, mustBeUnary = false): JsxElement | JsxSelfClosingElement | JsxFragment {
         const pos = getNodePos();
         const opening = parseJsxOpeningOrSelfClosingElementOrOpeningFragment(inExpressionContext);
         let result: JsxElement | JsxSelfClosingElement | JsxFragment;
@@ -5978,7 +5983,9 @@ namespace Parser {
         // does less damage and we can report a better error.
         // Since JSX elements are invalid < operands anyway, this lookahead parse will only occur in error scenarios
         // of one sort or another.
-        if (inExpressionContext && token() === SyntaxKind.LessThanToken) {
+        // If we are in a unary context, we can't do this recovery; the binary expression we return here is not
+        // a valid UnaryExpression and will cause problems later.
+        if (!mustBeUnary && inExpressionContext && token() === SyntaxKind.LessThanToken) {
             const topBadPos = typeof topInvalidNodePosition === "undefined" ? result.pos : topInvalidNodePosition;
             const invalidElement = tryParse(() => parseJsxElementOrSelfClosingElementOrFragment(/*inExpressionContext*/ true, topBadPos));
             if (invalidElement) {
@@ -6011,7 +6018,7 @@ namespace Parser {
                     // We want the error span to cover only 'Foo.Bar' in < Foo.Bar >
                     // or to cover only 'Foo' in < Foo >
                     const tag = openingTag.tagName;
-                    const start = skipTrivia(sourceText, tag.pos);
+                    const start = Math.min(skipTrivia(sourceText, tag.pos), tag.end);
                     parseErrorAt(start, tag.end, Diagnostics.JSX_element_0_has_no_corresponding_closing_tag, getTextOfNodeFromSourceText(sourceText, openingTag.tagName));
                 }
                 return undefined;
@@ -6100,18 +6107,29 @@ namespace Parser {
 
     function parseJsxElementName(): JsxTagNameExpression {
         const pos = getNodePos();
-        scanJsxIdentifier();
         // JsxElement can have name in the form of
         //      propertyAccessExpression
         //      primaryExpression in the form of an identifier and "this" keyword
         // We can't just simply use parseLeftHandSideExpressionOrHigher because then we will start consider class,function etc as a keyword
         // We only want to consider "this" as a primaryExpression
-        let expression: JsxTagNameExpression = token() === SyntaxKind.ThisKeyword ?
-            parseTokenNode<ThisExpression>() : parseIdentifierName();
+        let expression: JsxTagNameExpression = parseJsxTagName();
         while (parseOptional(SyntaxKind.DotToken)) {
             expression = finishNode(factoryCreatePropertyAccessExpression(expression, parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateIdentifiers*/ false)), pos) as JsxTagNamePropertyAccess;
         }
         return expression;
+    }
+
+    function parseJsxTagName(): Identifier | JsxNamespacedName | ThisExpression {
+        const pos = getNodePos();
+        scanJsxIdentifier();
+
+        const isThis = token() === SyntaxKind.ThisKeyword;
+        const tagName = parseIdentifierName();
+        if (parseOptional(SyntaxKind.ColonToken)) {
+            scanJsxIdentifier();
+            return finishNode(factory.createJsxNamespacedName(tagName, parseIdentifierName()), pos);
+        }
+        return isThis ? finishNode(factory.createToken(SyntaxKind.ThisKeyword), pos) : tagName;
     }
 
     function parseJsxExpression(inExpressionContext: boolean): JsxExpression | undefined {
@@ -6146,9 +6164,8 @@ namespace Parser {
             return parseJsxSpreadAttribute();
         }
 
-        scanJsxIdentifier();
         const pos = getNodePos();
-        return finishNode(factory.createJsxAttribute(parseIdentifierName(), parseJsxAttributeValue()), pos);
+        return finishNode(factory.createJsxAttribute(parseJsxAttributeName(), parseJsxAttributeValue()), pos);
     }
 
     function parseJsxAttributeValue(): JsxAttributeValue | undefined {
@@ -6165,6 +6182,18 @@ namespace Parser {
             parseErrorAtCurrentToken(Diagnostics.or_JSX_element_expected);
         }
         return undefined;
+    }
+
+    function parseJsxAttributeName() {
+        const pos = getNodePos();
+        scanJsxIdentifier();
+
+        const attrName = parseIdentifierName();
+        if (parseOptional(SyntaxKind.ColonToken)) {
+            scanJsxIdentifier();
+            return finishNode(factory.createJsxNamespacedName(attrName, parseIdentifierName()), pos);
+        }
+        return attrName;
     }
 
     function parseJsxSpreadAttribute(): JsxSpreadAttribute {
@@ -9215,7 +9244,9 @@ namespace Parser {
                 const usedBrace = parseOptional(SyntaxKind.OpenBraceToken);
                 const pos = getNodePos();
                 const expression = parsePropertyAccessEntityNameExpression();
+                scanner.setInJSDocType(true);
                 const typeArguments = tryParseTypeArguments();
+                scanner.setInJSDocType(false);
                 const node = factory.createExpressionWithTypeArguments(expression, typeArguments) as ExpressionWithTypeArguments & { expression: Identifier | PropertyAccessEntityNameExpression };
                 const res = finishNode(node, pos);
                 if (usedBrace) {
@@ -10421,6 +10452,11 @@ export function tagNamesAreEquivalent(lhs: JsxTagNameExpression, rhs: JsxTagName
 
     if (lhs.kind === SyntaxKind.ThisKeyword) {
         return true;
+    }
+
+    if (lhs.kind === SyntaxKind.JsxNamespacedName) {
+        return lhs.namespace.escapedText === (rhs as JsxNamespacedName).namespace.escapedText &&
+            lhs.name.escapedText === (rhs as JsxNamespacedName).name.escapedText;
     }
 
     // If we are at this statement then we must have PropertyAccessExpression and because tag name in Jsx element can only

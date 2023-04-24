@@ -1,11 +1,11 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info 0    [00:00:05.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/tsconfig.json]
 {}
 
 
-Info 1    [00:00:06.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
@@ -14,36 +14,36 @@ Info 1    [00:00:06.000] request:
       "seq": 1,
       "type": "request"
     }
-Info 2    [00:00:07.000] Search path: /
-Info 3    [00:00:08.000] For info: /tsconfig.json :: Config file name: /tsconfig.json
-Info 4    [00:00:09.000] Creating configuration project /tsconfig.json
-Info 5    [00:00:10.000] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
-Info 6    [00:00:11.000] Config: /tsconfig.json : {
+Info seq  [hh:mm:ss:mss] Search path: /
+Info seq  [hh:mm:ss:mss] For info: /tsconfig.json :: Config file name: /tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating configuration project /tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Config: /tsconfig.json : {
  "rootNames": [],
  "options": {
   "configFilePath": "/tsconfig.json"
  }
 }
-Info 7    [00:00:12.000] DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info 8    [00:00:13.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info 9    [00:00:14.000] Starting updateGraphWorker: Project: /tsconfig.json
-Info 10   [00:00:15.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 11   [00:00:16.000] Project '/tsconfig.json' (Configured)
-Info 12   [00:00:17.000] 	Files (0)
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (0)
 
-Info 13   [00:00:18.000] -----------------------------------------------
-Info 14   [00:00:19.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info 15   [00:00:20.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-Info 16   [00:00:21.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 17   [00:00:22.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 18   [00:00:23.000] 	Files (1)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
+Info seq  [hh:mm:ss:mss] 	Files (1)
 	/tsconfig.json SVC-1-0 "{}"
 
 
 	tsconfig.json
 	  Root file specified for compilation
 
-Info 19   [00:00:24.000] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
 
 PolledWatches::
@@ -58,39 +58,39 @@ FsWatchesRecursive::
 /: *new*
   {}
 
-TI:: [00:00:25.000] Global cache location '/a/data/', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [00:00:26.000] Processing cache location '/a/data/'
-TI:: [00:00:27.000] Trying to find '/a/data/package.json'...
-TI:: [00:00:28.000] Finished processing cache location '/a/data/'
-TI:: [00:00:29.000] Npm config file: /a/data/package.json
-TI:: [00:00:30.000] Npm config file: '/a/data/package.json' is missing, creating new one...
-Info 20   [00:00:33.000] DirectoryWatcher:: Triggered with a :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info 21   [00:00:34.000] Scheduled: /tsconfig.json
-Info 22   [00:00:35.000] Scheduled: *ensureProjectForOpenFiles*
-Info 23   [00:00:36.000] Elapsed:: *ms DirectoryWatcher:: Triggered with a :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info 24   [00:00:39.000] DirectoryWatcher:: Triggered with a/data :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info 25   [00:00:40.000] Scheduled: /tsconfig.json, Cancelled earlier one
-Info 26   [00:00:41.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
-Info 27   [00:00:42.000] Elapsed:: *ms DirectoryWatcher:: Triggered with a/data :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info 28   [00:00:45.000] DirectoryWatcher:: Triggered with a/data/package.json :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info 29   [00:00:46.000] Config: /tsconfig.json Detected new package.json: a/data/package.json
-Info 30   [00:00:47.000] FileWatcher:: Added:: WatchInfo: /a/data/package.json 250 undefined WatchType: package.json file
-Info 31   [00:00:48.000] Project: /tsconfig.json Detected file add/remove of non supported extension: a/data/package.json
-Info 32   [00:00:49.000] Elapsed:: *ms DirectoryWatcher:: Triggered with a/data/package.json :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-TI:: [00:00:50.000] Updating types-registry npm package...
-TI:: [00:00:51.000] npm install --ignore-scripts types-registry@latest
-Info 33   [00:00:56.000] DirectoryWatcher:: Triggered with a/data/node_modules :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info 34   [00:00:57.000] Scheduled: /tsconfig.json, Cancelled earlier one
-Info 35   [00:00:58.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
-Info 36   [00:00:59.000] Elapsed:: *ms DirectoryWatcher:: Triggered with a/data/node_modules :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info 37   [00:01:01.000] DirectoryWatcher:: Triggered with a/data/node_modules/types-registry :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info 38   [00:01:02.000] Scheduled: /tsconfig.json, Cancelled earlier one
-Info 39   [00:01:03.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
-Info 40   [00:01:04.000] Elapsed:: *ms DirectoryWatcher:: Triggered with a/data/node_modules/types-registry :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info 41   [00:01:06.000] DirectoryWatcher:: Triggered with a/data/node_modules/types-registry/index.json :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info 42   [00:01:07.000] Project: /tsconfig.json Detected file add/remove of non supported extension: a/data/node_modules/types-registry/index.json
-Info 43   [00:01:08.000] Elapsed:: *ms DirectoryWatcher:: Triggered with a/data/node_modules/types-registry/index.json :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-TI:: [00:01:09.000] TI:: Updated types-registry npm package
+TI:: [hh:mm:ss:mss] Global cache location '/a/data/', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [hh:mm:ss:mss] Processing cache location '/a/data/'
+TI:: [hh:mm:ss:mss] Trying to find '/a/data/package.json'...
+TI:: [hh:mm:ss:mss] Finished processing cache location '/a/data/'
+TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
+TI:: [hh:mm:ss:mss] Npm config file: '/a/data/package.json' is missing, creating new one...
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with a :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Scheduled: /tsconfig.json
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with a :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with a/data :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Scheduled: /tsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with a/data :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with a/data/package.json :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Config: /tsconfig.json Detected new package.json: a/data/package.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/data/package.json 250 undefined WatchType: package.json file
+Info seq  [hh:mm:ss:mss] Project: /tsconfig.json Detected file add/remove of non supported extension: a/data/package.json
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with a/data/package.json :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
+TI:: [hh:mm:ss:mss] Updating types-registry npm package...
+TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with a/data/node_modules :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Scheduled: /tsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with a/data/node_modules :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with a/data/node_modules/types-registry :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Scheduled: /tsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with a/data/node_modules/types-registry :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with a/data/node_modules/types-registry/index.json :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Project: /tsconfig.json Detected file add/remove of non supported extension: a/data/node_modules/types-registry/index.json
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with a/data/node_modules/types-registry/index.json :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
+TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
 TI:: typing installer creation complete
 //// [/a/data/package.json]
 { "private": true }
@@ -115,36 +115,36 @@ FsWatchesRecursive::
 /:
   {}
 
-TI:: [00:01:10.000] Got install request {"projectName":"/dev/null/inferredProject1*","fileNames":["/tsconfig.json"],"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/","cachePath":"/a/data/","kind":"discover"}
-TI:: [00:01:11.000] Request specifies cache path '/a/data/', loading cached information...
-TI:: [00:01:12.000] Processing cache location '/a/data/'
-TI:: [00:01:13.000] Cache location was already processed...
-TI:: [00:01:14.000] Failed to load safelist from types map file '/typesMap.json'
-TI:: [00:01:15.000] Explicitly included types: []
-TI:: [00:01:16.000] Inferred typings from unresolved imports: []
-TI:: [00:01:17.000] Result: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/bower_components","/node_modules"]}
-TI:: [00:01:18.000] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/bower_components","/node_modules"]}
-TI:: [00:01:19.000] DirectoryWatcher:: Added:: WatchInfo: /bower_components
-TI:: [00:01:20.000] DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject1* watcher already invoked: false
-TI:: [00:01:21.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject1* watcher already invoked: false
-TI:: [00:01:22.000] DirectoryWatcher:: Added:: WatchInfo: /node_modules
-TI:: [00:01:23.000] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject1* watcher already invoked: false
-TI:: [00:01:24.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject1* watcher already invoked: false
-TI:: [00:01:25.000] Sending response:
+TI:: [hh:mm:ss:mss] Got install request {"projectName":"/dev/null/inferredProject1*","fileNames":["/tsconfig.json"],"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/","cachePath":"/a/data/","kind":"discover"}
+TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data/', loading cached information...
+TI:: [hh:mm:ss:mss] Processing cache location '/a/data/'
+TI:: [hh:mm:ss:mss] Cache location was already processed...
+TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
+TI:: [hh:mm:ss:mss] Explicitly included types: []
+TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
+TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/bower_components","/node_modules"]}
+TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/bower_components","/node_modules"]}
+TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /bower_components
+TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject1* watcher already invoked: false
+TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject1* watcher already invoked: false
+TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules
+TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject1* watcher already invoked: false
+TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject1* watcher already invoked: false
+TI:: [hh:mm:ss:mss] Sending response:
     {"projectName":"/dev/null/inferredProject1*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true},"typings":[],"unresolvedImports":[],"kind":"action::set"}
-TI:: [00:01:26.000] No new typings were requested as a result of typings discovery
-Info 44   [00:01:27.000] Project '/tsconfig.json' (Configured)
-Info 44   [00:01:28.000] 	Files (0)
+TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
+Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (0)
 
-Info 44   [00:01:29.000] -----------------------------------------------
-Info 44   [00:01:30.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 44   [00:01:31.000] 	Files (1)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
+Info seq  [hh:mm:ss:mss] 	Files (1)
 
-Info 44   [00:01:32.000] -----------------------------------------------
-Info 44   [00:01:33.000] Open files: 
-Info 44   [00:01:34.000] 	FileName: /tsconfig.json ProjectRootPath: undefined
-Info 44   [00:01:35.000] 		Projects: /dev/null/inferredProject1*
-Info 44   [00:01:36.000] response:
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /tsconfig.json ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
@@ -168,11 +168,11 @@ FsWatchesRecursive::
 /:
   {}
 
-Info 45   [00:01:39.000] DirectoryWatcher:: Triggered with package.json :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info 46   [00:01:40.000] Config: /tsconfig.json Detected new package.json: package.json
-Info 47   [00:01:41.000] FileWatcher:: Added:: WatchInfo: /package.json 250 undefined WatchType: package.json file
-Info 48   [00:01:42.000] Project: /tsconfig.json Detected file add/remove of non supported extension: package.json
-Info 49   [00:01:43.000] Elapsed:: *ms DirectoryWatcher:: Triggered with package.json :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with package.json :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Config: /tsconfig.json Detected new package.json: package.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /package.json 250 undefined WatchType: package.json file
+Info seq  [hh:mm:ss:mss] Project: /tsconfig.json Detected file add/remove of non supported extension: package.json
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with package.json :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
 Add package.json
 //// [/package.json]
 {
@@ -211,8 +211,8 @@ FsWatchesRecursive::
 /:
   {}
 
-Info 50   [00:01:47.000] FileWatcher:: Triggered with /package.json 1:: WatchInfo: /package.json 250 undefined WatchType: package.json file
-Info 51   [00:01:48.000] Elapsed:: *ms FileWatcher:: Triggered with /package.json 1:: WatchInfo: /package.json 250 undefined WatchType: package.json file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /package.json 1:: WatchInfo: /package.json 250 undefined WatchType: package.json file
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /package.json 1:: WatchInfo: /package.json 250 undefined WatchType: package.json file
 Edit package.json
 //// [/package.json]
 {"peerDependencies":{"react":"*"},"optionalDependencies":{"typescript":"*"},"devDependencies":{"webpack":"*"}}

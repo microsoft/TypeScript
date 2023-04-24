@@ -4,31 +4,7 @@
 //     try {
 //     }
 //     ctch (x) {
-//     }
-// 
-//     tr {
-//     }
-//     finally {
-//     }
-// }
-// catch (e) {
-// }
-// finally {
-// }
-// 
-// // Missing catch variable
-// try {
-// }
-// catch {
-// }
-// finally {
-// }
-// 
-// // Missing try entirely
-// catch (x) {
-// }
-// finally {
-// }
+// --- (line: 5) skipped ---
 
 
 
@@ -39,40 +15,13 @@
 //     }
 //     ctch (x) {
 //     }
-// 
-//     tr {
-//     }
-//     finally {
-//     }
-// }
-// catch (e) {
-// }
-// finally {
-// }
-// 
-// // Missing catch variable
-// try {
-// }
-// catch {
-// }
-// finally {
-// }
-// 
-// // Missing try entirely
-// catch (x) {
-// }
-// finally {
-// }
+// --- (line: 6) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesTryCatchFinallyBroken.ts ===
-// t ry {
-//     try {
-//     }
-//     ctch (x) {
-//     }
+// --- (line: 5) skipped ---
 // 
 //     tr {
 //     }
@@ -80,36 +29,13 @@
 //     }
 // }
 // catch (e) {
-// }
-// finally {
-// }
-// 
-// // Missing catch variable
-// try {
-// }
-// catch {
-// }
-// finally {
-// }
-// 
-// // Missing try entirely
-// catch (x) {
-// }
-// finally {
-// }
+// --- (line: 13) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesTryCatchFinallyBroken.ts ===
-// t ry {
-//     try {
-//     }
-//     ctch (x) {
-//     }
-// 
-//     tr {
-//     }
+// --- (line: 8) skipped ---
 //     finally {
 //     }
 // }
@@ -119,31 +45,13 @@
 // }
 // 
 // // Missing catch variable
-// try {
-// }
-// catch {
-// }
-// finally {
-// }
-// 
-// // Missing try entirely
-// catch (x) {
-// }
-// finally {
-// }
+// --- (line: 18) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesTryCatchFinallyBroken.ts ===
-// t ry {
-//     try {
-//     }
-//     ctch (x) {
-//     }
-// 
-//     tr {
-//     }
+// --- (line: 8) skipped ---
 //     finally {
 //     }
 // }
@@ -153,37 +61,13 @@
 // }
 // 
 // // Missing catch variable
-// try {
-// }
-// catch {
-// }
-// finally {
-// }
-// 
-// // Missing try entirely
-// catch (x) {
-// }
-// finally {
-// }
+// --- (line: 18) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesTryCatchFinallyBroken.ts ===
-// t ry {
-//     try {
-//     }
-//     ctch (x) {
-//     }
-// 
-//     tr {
-//     }
-//     finally {
-//     }
-// }
-// catch (e) {
-// }
-// finally {
+// --- (line: 14) skipped ---
 // }
 // 
 // // Missing catch variable
@@ -195,29 +79,13 @@
 // }
 // 
 // // Missing try entirely
-// catch (x) {
-// }
-// finally {
-// }
+// --- (line: 26) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesTryCatchFinallyBroken.ts ===
-// t ry {
-//     try {
-//     }
-//     ctch (x) {
-//     }
-// 
-//     tr {
-//     }
-//     finally {
-//     }
-// }
-// catch (e) {
-// }
-// finally {
+// --- (line: 14) skipped ---
 // }
 // 
 // // Missing catch variable
@@ -229,29 +97,13 @@
 // }
 // 
 // // Missing try entirely
-// catch (x) {
-// }
-// finally {
-// }
+// --- (line: 26) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesTryCatchFinallyBroken.ts ===
-// t ry {
-//     try {
-//     }
-//     ctch (x) {
-//     }
-// 
-//     tr {
-//     }
-//     finally {
-//     }
-// }
-// catch (e) {
-// }
-// finally {
+// --- (line: 14) skipped ---
 // }
 // 
 // // Missing catch variable
@@ -263,37 +115,13 @@
 // }
 // 
 // // Missing try entirely
-// catch (x) {
-// }
-// finally {
-// }
+// --- (line: 26) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesTryCatchFinallyBroken.ts ===
-// t ry {
-//     try {
-//     }
-//     ctch (x) {
-//     }
-// 
-//     tr {
-//     }
-//     finally {
-//     }
-// }
-// catch (e) {
-// }
-// finally {
-// }
-// 
-// // Missing catch variable
-// try {
-// }
-// catch {
-// }
-// finally {
+// --- (line: 22) skipped ---
 // }
 // 
 // // Missing try entirely
@@ -306,28 +134,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesTryCatchFinallyBroken.ts ===
-// t ry {
-//     try {
-//     }
-//     ctch (x) {
-//     }
-// 
-//     tr {
-//     }
-//     finally {
-//     }
-// }
-// catch (e) {
-// }
-// finally {
-// }
-// 
-// // Missing catch variable
-// try {
-// }
-// catch {
-// }
-// finally {
+// --- (line: 22) skipped ---
 // }
 // 
 // // Missing try entirely

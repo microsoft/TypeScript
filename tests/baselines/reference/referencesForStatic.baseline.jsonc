@@ -36,22 +36,7 @@
   // 
   //     public bar() {
   //         foo.n = "'";
-  //         if(foo.n) {
-  //             var x = foo.n;
-  //         }
-  //     }
-  // }
-  // 
-  // class foo2 {
-  //     private x = foo.n;
-  //     constructor() {
-  //         foo.n = x;
-  //     }
-  // 
-  //     function b(n) {
-  //         n = foo.n;
-  //     }
-  // }
+  // --- (line: 8) skipped ---
 
   // === Details ===
   [
@@ -145,22 +130,7 @@
   // 
   //     public bar() {
   //         foo.n = "'";
-  //         if(foo.n) {
-  //             var x = foo.n;
-  //         }
-  //     }
-  // }
-  // 
-  // class foo2 {
-  //     private x = foo.n;
-  //     constructor() {
-  //         foo.n = x;
-  //     }
-  // 
-  //     function b(n) {
-  //         n = foo.n;
-  //     }
-  // }
+  // --- (line: 8) skipped ---
 
   // === Details ===
   [
@@ -257,19 +227,7 @@
   //         if(foo.n) {
   //             var x = foo.n;
   //         }
-  //     }
-  // }
-  // 
-  // class foo2 {
-  //     private x = foo.n;
-  //     constructor() {
-  //         foo.n = x;
-  //     }
-  // 
-  //     function b(n) {
-  //         n = foo.n;
-  //     }
-  // }
+  // --- (line: 11) skipped ---
 
   // === Details ===
   [
@@ -367,18 +325,7 @@
   //             var x = foo.n;
   //         }
   //     }
-  // }
-  // 
-  // class foo2 {
-  //     private x = foo.n;
-  //     constructor() {
-  //         foo.n = x;
-  //     }
-  // 
-  //     function b(n) {
-  //         n = foo.n;
-  //     }
-  // }
+  // --- (line: 12) skipped ---
 
   // === Details ===
   [
@@ -477,17 +424,7 @@
   //         }
   //     }
   // }
-  // 
-  // class foo2 {
-  //     private x = foo.n;
-  //     constructor() {
-  //         foo.n = x;
-  //     }
-  // 
-  //     function b(n) {
-  //         n = foo.n;
-  //     }
-  // }
+  // --- (line: 13) skipped ---
 
   // === Details ===
   [
@@ -581,10 +518,9 @@
   // 
   //     public bar() {
   //         foo.n = "'";
-  //         if(foo.n) {
-  //             var x = foo.n;
-  //         }
-  //     }
+  // --- (line: 8) skipped ---
+
+  // --- (line: 11) skipped ---
   // }
   // 
   // class foo2 {
@@ -592,11 +528,7 @@
   //     constructor() {
   //         foo.n = x;
   //     }
-  // 
-  //     function b(n) {
-  //         n = foo.n;
-  //     }
-  // }
+  // --- (line: 19) skipped ---
 
   // === Details ===
   [
@@ -690,12 +622,9 @@
   // 
   //     public bar() {
   //         foo.n = "'";
-  //         if(foo.n) {
-  //             var x = foo.n;
-  //         }
-  //     }
-  // }
-  // 
+  // --- (line: 8) skipped ---
+
+  // --- (line: 13) skipped ---
   // class foo2 {
   //     private x = foo.n;
   //     constructor() {
@@ -703,9 +632,7 @@
   //     }
   // 
   //     function b(n) {
-  //         n = foo.n;
-  //     }
-  // }
+  // --- (line: 21) skipped ---
 
   // === Details ===
   [
@@ -799,16 +726,9 @@
   // 
   //     public bar() {
   //         foo.n = "'";
-  //         if(foo.n) {
-  //             var x = foo.n;
-  //         }
-  //     }
-  // }
-  // 
-  // class foo2 {
-  //     private x = foo.n;
-  //     constructor() {
-  //         foo.n = x;
+  // --- (line: 8) skipped ---
+
+  // --- (line: 17) skipped ---
   //     }
   // 
   //     function b(n) {
@@ -908,22 +828,7 @@
   // 
   //     public bar() {
   //         foo.n = "'";
-  //         if(foo.n) {
-  //             var x = foo.n;
-  //         }
-  //     }
-  // }
-  // 
-  // class foo2 {
-  //     private x = foo.n;
-  //     constructor() {
-  //         foo.n = x;
-  //     }
-  // 
-  //     function b(n) {
-  //         n = foo.n;
-  //     }
-  // }
+  // --- (line: 8) skipped ---
 
   // === Details ===
   [

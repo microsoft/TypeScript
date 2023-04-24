@@ -69,7 +69,7 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
-/a: *new*
+/a/b/c: *new*
   {}
 
 exitCode:: ExitStatus.undefined

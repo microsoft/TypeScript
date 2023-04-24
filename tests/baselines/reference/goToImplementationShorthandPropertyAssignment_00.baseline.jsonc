@@ -1,14 +1,6 @@
 // === goToImplementation ===
 // === /tests/cases/fourslash/goToImplementationShorthandPropertyAssignment_00.ts ===
-// interface Foo {
-//     someFunction(): void;
-// }
-// 
-// interface FooConstructor {
-//     new (): Foo
-// }
-// 
-// interface Bar {
+// --- (line: 9) skipped ---
 //     Foo: FooConstructor;
 // }
 // 
@@ -24,13 +16,7 @@
 // 
 // class Foo {
 // 
-// }
-// 
-// function createBarUsingClassDeclaration(): Bar {
-//     return {
-//         Foo
-//     };
-// }
+// --- (line: 25) skipped ---
 
   // === Details ===
   [
@@ -65,25 +51,7 @@
 
 // === goToImplementation ===
 // === /tests/cases/fourslash/goToImplementationShorthandPropertyAssignment_00.ts ===
-// interface Foo {
-//     someFunction(): void;
-// }
-// 
-// interface FooConstructor {
-//     new (): Foo
-// }
-// 
-// interface Bar {
-//     Foo: FooConstructor;
-// }
-// 
-// var x = class Foo {
-//     createBarInClassExpression(): Bar {
-//         return {
-//             Foo
-//         };
-//     }
-// 
+// --- (line: 19) skipped ---
 //     someFunction() {}
 // }
 // 

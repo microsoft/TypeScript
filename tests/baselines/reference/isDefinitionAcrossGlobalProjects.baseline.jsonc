@@ -7,14 +7,7 @@
 // }
 // 
 // interface I {
-//     FA();
-// }
-// 
-// const ia: I = {
-//     FA() { },
-//     FB() { },
-//     FC() { },
-//  };
+// --- (line: 8) skipped ---
 
   // === Definitions ===
   // === /a/index.ts ===
@@ -25,14 +18,7 @@
   // }
   // 
   // interface I {
-  //     FA();
-  // }
-  // 
-  // const ia: I = {
-  //     FA() { },
-  //     FB() { },
-  //     FC() { },
-  //  };
+  // --- (line: 8) skipped ---
 
   // === Details ===
   [
@@ -112,9 +98,7 @@
 // const ic: [|I|] = { FC() {} };
 
 // === /a/index.ts ===
-// namespace NS {
-//     export function FA() {
-//         FB();
+// --- (line: 3) skipped ---
 //     }
 // }
 // 
@@ -168,10 +152,7 @@
 
 // === findAllReferences ===
 // === /a/index.ts ===
-// namespace NS {
-//     export function FA() {
-//         FB();
-//     }
+// --- (line: 4) skipped ---
 // }
 // 
 // interface I {
@@ -186,10 +167,7 @@
 
   // === Definitions ===
   // === /a/index.ts ===
-  // namespace NS {
-  //     export function FA() {
-  //         FB();
-  //     }
+  // --- (line: 4) skipped ---
   // }
   // 
   // interface I {
@@ -197,10 +175,7 @@
   // }
   // 
   // const ia: I = {
-  //     FA() { },
-  //     FB() { },
-  //     FC() { },
-  //  };
+  // --- (line: 12) skipped ---
 
   // === Details ===
   [
@@ -271,10 +246,7 @@
 // }
 // 
 // interface I {
-//     FB();
-// }
-// 
-// const ib: I = { FB() {} };
+// --- (line: 6) skipped ---
 
 // === /a/index.ts ===
 // namespace NS {
@@ -283,15 +255,7 @@
 //     }
 // }
 // 
-// interface I {
-//     FA();
-// }
-// 
-// const ia: I = {
-//     FA() { },
-//     FB() { },
-//     FC() { },
-//  };
+// --- (line: 7) skipped ---
 
   // === Definitions ===
   // === /b/index.ts ===
@@ -300,10 +264,7 @@
   // }
   // 
   // interface I {
-  //     FB();
-  // }
-  // 
-  // const ib: I = { FB() {} };
+  // --- (line: 6) skipped ---
 
   // === Details ===
   [
@@ -383,9 +344,7 @@
 // const ic: [|I|] = { FC() {} };
 
 // === /a/index.ts ===
-// namespace NS {
-//     export function FA() {
-//         FB();
+// --- (line: 3) skipped ---
 //     }
 // }
 // 
@@ -450,15 +409,7 @@
 // const ib: I = { <|[|{| isWriteAccess: true |}FB|]() {}|> };
 
 // === /a/index.ts ===
-// namespace NS {
-//     export function FA() {
-//         FB();
-//     }
-// }
-// 
-// interface I {
-//     FA();
-// }
+// --- (line: 9) skipped ---
 // 
 // const ia: I = {
 //     FA() { },
@@ -547,10 +498,7 @@
 // }
 // 
 // interface I {
-//     FC();
-// }
-// 
-// const ic: I = { FC() {} };
+// --- (line: 6) skipped ---
 
   // === Definitions ===
   // === /c/index.ts ===
@@ -559,10 +507,7 @@
   // }
   // 
   // interface I {
-  //     FC();
-  // }
-  // 
-  // const ic: I = { FC() {} };
+  // --- (line: 6) skipped ---
 
   // === Details ===
   [
@@ -642,9 +587,7 @@
 // const ib: [|{| defId: 1 |}I|] = { FB() {} };
 
 // === /a/index.ts ===
-// namespace NS {
-//     export function FA() {
-//         FB();
+// --- (line: 3) skipped ---
 //     }
 // }
 // 
@@ -742,16 +685,7 @@
 // const ic: I = { <|[|{| isWriteAccess: true |}FC|]() {}|> };
 
 // === /a/index.ts ===
-// namespace NS {
-//     export function FA() {
-//         FB();
-//     }
-// }
-// 
-// interface I {
-//     FA();
-// }
-// 
+// --- (line: 10) skipped ---
 // const ia: I = {
 //     FA() { },
 //     FB() { },
