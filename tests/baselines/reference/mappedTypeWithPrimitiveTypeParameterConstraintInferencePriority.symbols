@@ -1,0 +1,71 @@
+=== tests/cases/compiler/mappedTypeWithPrimitiveTypeParameterConstraintInferencePriority.ts ===
+// repro from https://github.com/microsoft/TypeScript/issues/54000
+
+function foo<T>(record: Record<string, T>, entity: T) {}
+>foo : Symbol(foo, Decl(mappedTypeWithPrimitiveTypeParameterConstraintInferencePriority.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypeWithPrimitiveTypeParameterConstraintInferencePriority.ts, 2, 13))
+>record : Symbol(record, Decl(mappedTypeWithPrimitiveTypeParameterConstraintInferencePriority.ts, 2, 16))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeWithPrimitiveTypeParameterConstraintInferencePriority.ts, 2, 13))
+>entity : Symbol(entity, Decl(mappedTypeWithPrimitiveTypeParameterConstraintInferencePriority.ts, 2, 42))
+>T : Symbol(T, Decl(mappedTypeWithPrimitiveTypeParameterConstraintInferencePriority.ts, 2, 13))
+
+type StringArrayRecord = Record<string, string[]>;
+>StringArrayRecord : Symbol(StringArrayRecord, Decl(mappedTypeWithPrimitiveTypeParameterConstraintInferencePriority.ts, 2, 56))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+function test() {
+>test : Symbol(test, Decl(mappedTypeWithPrimitiveTypeParameterConstraintInferencePriority.ts, 4, 50))
+
+  const working: Record<string, string[]> = {};
+>working : Symbol(working, Decl(mappedTypeWithPrimitiveTypeParameterConstraintInferencePriority.ts, 7, 7))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+  foo(working, []);
+>foo : Symbol(foo, Decl(mappedTypeWithPrimitiveTypeParameterConstraintInferencePriority.ts, 0, 0))
+>working : Symbol(working, Decl(mappedTypeWithPrimitiveTypeParameterConstraintInferencePriority.ts, 7, 7))
+
+  const working2: StringArrayRecord = {};
+>working2 : Symbol(working2, Decl(mappedTypeWithPrimitiveTypeParameterConstraintInferencePriority.ts, 10, 7))
+>StringArrayRecord : Symbol(StringArrayRecord, Decl(mappedTypeWithPrimitiveTypeParameterConstraintInferencePriority.ts, 2, 56))
+
+  foo(working2, []);
+>foo : Symbol(foo, Decl(mappedTypeWithPrimitiveTypeParameterConstraintInferencePriority.ts, 0, 0))
+>working2 : Symbol(working2, Decl(mappedTypeWithPrimitiveTypeParameterConstraintInferencePriority.ts, 10, 7))
+}
+
+// showcase the same behavior with index signature
+
+function bar<T>(record: { [k: string]: T }, entity: T) {}
+>bar : Symbol(bar, Decl(mappedTypeWithPrimitiveTypeParameterConstraintInferencePriority.ts, 12, 1))
+>T : Symbol(T, Decl(mappedTypeWithPrimitiveTypeParameterConstraintInferencePriority.ts, 16, 13))
+>record : Symbol(record, Decl(mappedTypeWithPrimitiveTypeParameterConstraintInferencePriority.ts, 16, 16))
+>k : Symbol(k, Decl(mappedTypeWithPrimitiveTypeParameterConstraintInferencePriority.ts, 16, 27))
+>T : Symbol(T, Decl(mappedTypeWithPrimitiveTypeParameterConstraintInferencePriority.ts, 16, 13))
+>entity : Symbol(entity, Decl(mappedTypeWithPrimitiveTypeParameterConstraintInferencePriority.ts, 16, 43))
+>T : Symbol(T, Decl(mappedTypeWithPrimitiveTypeParameterConstraintInferencePriority.ts, 16, 13))
+
+type StringArrayIndexSignature = { [k: string]: string[] };
+>StringArrayIndexSignature : Symbol(StringArrayIndexSignature, Decl(mappedTypeWithPrimitiveTypeParameterConstraintInferencePriority.ts, 16, 57))
+>k : Symbol(k, Decl(mappedTypeWithPrimitiveTypeParameterConstraintInferencePriority.ts, 18, 36))
+
+function test2() {
+>test2 : Symbol(test2, Decl(mappedTypeWithPrimitiveTypeParameterConstraintInferencePriority.ts, 18, 59))
+
+  const working: { [k: string]: string[] } = {};
+>working : Symbol(working, Decl(mappedTypeWithPrimitiveTypeParameterConstraintInferencePriority.ts, 21, 7))
+>k : Symbol(k, Decl(mappedTypeWithPrimitiveTypeParameterConstraintInferencePriority.ts, 21, 20))
+
+  bar(working, []);
+>bar : Symbol(bar, Decl(mappedTypeWithPrimitiveTypeParameterConstraintInferencePriority.ts, 12, 1))
+>working : Symbol(working, Decl(mappedTypeWithPrimitiveTypeParameterConstraintInferencePriority.ts, 21, 7))
+
+  const working2: StringArrayIndexSignature = {};
+>working2 : Symbol(working2, Decl(mappedTypeWithPrimitiveTypeParameterConstraintInferencePriority.ts, 24, 7))
+>StringArrayIndexSignature : Symbol(StringArrayIndexSignature, Decl(mappedTypeWithPrimitiveTypeParameterConstraintInferencePriority.ts, 16, 57))
+
+  bar(working2, []);
+>bar : Symbol(bar, Decl(mappedTypeWithPrimitiveTypeParameterConstraintInferencePriority.ts, 12, 1))
+>working2 : Symbol(working2, Decl(mappedTypeWithPrimitiveTypeParameterConstraintInferencePriority.ts, 24, 7))
+}
+

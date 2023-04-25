@@ -1,0 +1,72 @@
+=== tests/cases/compiler/mappedTypeWithPrimitiveTypeParameterConstraintInferencePriority.ts ===
+// repro from https://github.com/microsoft/TypeScript/issues/54000
+
+function foo<T>(record: Record<string, T>, entity: T) {}
+>foo : <T>(record: Record<string, T>, entity: T) => void
+>record : Record<string, T>
+>entity : T
+
+type StringArrayRecord = Record<string, string[]>;
+>StringArrayRecord : { [x: string]: string[]; }
+
+function test() {
+>test : () => void
+
+  const working: Record<string, string[]> = {};
+>working : Record<string, string[]>
+>{} : {}
+
+  foo(working, []);
+>foo(working, []) : void
+>foo : <T>(record: Record<string, T>, entity: T) => void
+>working : Record<string, string[]>
+>[] : never[]
+
+  const working2: StringArrayRecord = {};
+>working2 : StringArrayRecord
+>{} : {}
+
+  foo(working2, []);
+>foo(working2, []) : void
+>foo : <T>(record: Record<string, T>, entity: T) => void
+>working2 : StringArrayRecord
+>[] : never[]
+}
+
+// showcase the same behavior with index signature
+
+function bar<T>(record: { [k: string]: T }, entity: T) {}
+>bar : <T>(record: { [k: string]: T; }, entity: T) => void
+>record : { [k: string]: T; }
+>k : string
+>entity : T
+
+type StringArrayIndexSignature = { [k: string]: string[] };
+>StringArrayIndexSignature : { [k: string]: string[]; }
+>k : string
+
+function test2() {
+>test2 : () => void
+
+  const working: { [k: string]: string[] } = {};
+>working : { [k: string]: string[]; }
+>k : string
+>{} : {}
+
+  bar(working, []);
+>bar(working, []) : void
+>bar : <T>(record: { [k: string]: T; }, entity: T) => void
+>working : { [k: string]: string[]; }
+>[] : never[]
+
+  const working2: StringArrayIndexSignature = {};
+>working2 : StringArrayIndexSignature
+>{} : {}
+
+  bar(working2, []);
+>bar(working2, []) : void
+>bar : <T>(record: { [k: string]: T; }, entity: T) => void
+>working2 : StringArrayIndexSignature
+>[] : never[]
+}
+

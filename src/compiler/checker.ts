@@ -25059,9 +25059,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             applyToReturnTypes(source, target, inferFromTypes);
         }
 
+        function hasPrimitiveMappedTypeParameterConstaint(mappedType: MappedType): boolean {
+            const constraint = mappedType.typeParameter && getConstraintOfTypeParameter(mappedType.typeParameter);
+            return !!(constraint && constraint.flags & TypeFlags.Primitive);
+        }
+
         function inferFromIndexTypes(source: Type, target: Type) {
             // Inferences across mapped type index signatures are pretty much the same a inferences to homomorphic variables
-            const priority = (getObjectFlags(source) & getObjectFlags(target) & ObjectFlags.Mapped) ? InferencePriority.HomomorphicMappedType : 0;
+            const priority = (getObjectFlags(source) & getObjectFlags(target) & ObjectFlags.Mapped) &&
+                !hasPrimitiveMappedTypeParameterConstaint(source as MappedType) &&
+                !hasPrimitiveMappedTypeParameterConstaint(target as MappedType) ?
+                    InferencePriority.HomomorphicMappedType :
+                    InferencePriority.None;
             const indexInfos = getIndexInfosOfType(target);
             if (isObjectTypeWithInferableIndex(source)) {
                 for (const targetInfo of indexInfos) {
