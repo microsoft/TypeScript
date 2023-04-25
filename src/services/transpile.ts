@@ -118,7 +118,7 @@ export function transpileModule(input: string, transpileOptions: TranspileOption
         input,
         {
             languageVersion: getEmitScriptTarget(options),
-            impliedNodeFormat: getImpliedNodeFormatForFile(toPath(inputFileName, "", compilerHost.getCanonicalFileName), /*cache*/ undefined, compilerHost, options),
+            impliedNodeFormat: getImpliedNodeFormatForFile(toPath(inputFileName, "", compilerHost.getCanonicalFileName), /*packageJsonInfoCache*/ undefined, compilerHost, options),
             setExternalModuleIndicator: getSetExternalModuleIndicator(options)
         }
     );

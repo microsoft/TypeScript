@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/app.ts]
 let x = 1
@@ -42,10 +43,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/b/app.ts (used version)
-
-PolledWatches::
-/a/b/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /a/b/tsconfig.json: *new*

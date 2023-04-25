@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
 {"compilerOptions":{"moduleResolution":"node16"}}
@@ -167,6 +168,8 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/node_modules/@types/pkg2/index.d.ts (used version)
 
 PolledWatches::
+/user/username/projects/node_modules: *new*
+  {"pollingInterval":500}
 /user/username/projects/myproject/package.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/package.json: *new*
@@ -177,6 +180,8 @@ PolledWatches::
   {"pollingInterval":2000}
 /user/username/projects/myproject/node_modules/package.json: *new*
   {"pollingInterval":2000}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
 /user/username/projects/myproject/tsconfig.json: *new*
@@ -185,15 +190,15 @@ FsWatches::
   {}
 /user/username/projects/myproject/index.ts: *new*
   {}
+/user/username/projects/myproject/node_modules/pkg/package.json: *new*
+  {}
+/user/username/projects/myproject/node_modules/pkg1/package.json: *new*
+  {}
 /user/username/projects/myproject/node_modules/pkg/import.d.ts: *new*
   {}
 /user/username/projects/myproject/node_modules/@types/pkg2/index.d.ts: *new*
   {}
 /a/lib/lib.d.ts: *new*
-  {}
-/user/username/projects/myproject/node_modules/pkg/package.json: *new*
-  {}
-/user/username/projects/myproject/node_modules/pkg1/package.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -230,6 +235,9 @@ export const x = 10;
 
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:53 AM[0m] File change detected. Starting incremental compilation...

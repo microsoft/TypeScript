@@ -1,16 +1,16 @@
 import * as Utils from "../../_namespaces/Utils";
 import {
-    createServerHost,
-    File,
-    libFile,
-} from "../virtualFileSystemWithWatch";
-import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,
     createSession,
     openFilesForSession,
     verifyGetErrRequest,
-} from "./helpers";
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+    File,
+    libFile,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: moduleResolution", () => {
     describe("package json file is edited", () => {
@@ -49,7 +49,7 @@ describe("unittests:: tsserver:: moduleResolution", () => {
             openFilesForSession([fileA], session);
             return {
                 host, session, packageFile,
-                verifyErr: () => verifyGetErrRequest({ files: [fileA], session, host }),
+                verifyErr: () => verifyGetErrRequest({ files: [fileA], session }),
             };
         }
         it("package json file is edited", () => {

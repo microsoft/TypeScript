@@ -1,0 +1,53 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionUnionTypeProperty4.ts ===
+// interface SnapCrackle {
+//     <|[|{| defId: 0 |}pop|](): string;|>
+// }
+// 
+// interface Magnitude {
+//     <|[|{| defId: 1 |}pop|](): number;|>
+// }
+// 
+// interface Art {
+//     <|[|{| defId: 2 |}pop|](): boolean;|>
+// }
+// 
+// var art: Art;
+// var magnitude: Magnitude;
+// var snapcrackle: SnapCrackle;
+// 
+// var x = (snapcrackle || magnitude || art)./*GOTO DEF*/pop;
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "method",
+    "name": "pop",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 1,
+    "kind": "method",
+    "name": "pop",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 2,
+    "kind": "method",
+    "name": "pop",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

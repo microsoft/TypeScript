@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -52,6 +53,8 @@ Shape signatures in builder refreshed for::
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
 /user/username/projects/myproject/tsconfig.json: *new*
@@ -83,6 +86,9 @@ Change:: Directory watch updates because of file1.js creation
 
 Input::
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateChildWatches
+After running Timeout callback:: count: 0
 Output::
 
 exitCode:: ExitStatus.undefined
@@ -95,6 +101,8 @@ Input::
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
@@ -117,6 +125,13 @@ FsWatches *deleted*::
 /user/username/projects/myproject/node_modules/file2:
   {}
 
+Before running Timeout callback:: count: 3
+7: timerToInvalidateFailedLookupResolutions
+8: timerToUpdateProgram
+9: timerToUpdateChildWatches
+Invoking Timeout callback:: timeoutId:: 8:: timerToUpdateProgram
+After running Timeout callback:: count: 1
+9: timerToUpdateChildWatches
 Output::
 >> Screen clear
 [[90m12:00:36 AM[0m] File change detected. Starting incremental compilation...
@@ -146,6 +161,10 @@ Shape signatures in builder refreshed for::
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules: *new*
+  {"pollingInterval":500}
 
 FsWatches::
 /user/username/projects/myproject/tsconfig.json:
@@ -173,6 +192,19 @@ Change:: Pending directory watchers and program update
 
 Input::
 
+Before running Timeout callback:: count: 1
+9: timerToUpdateChildWatches
+After running Timeout callback:: count: 2
+11: timerToInvalidateFailedLookupResolutions
+12: timerToUpdateProgram
+Before running Timeout callback:: count: 2
+11: timerToInvalidateFailedLookupResolutions
+12: timerToUpdateProgram
+After running Timeout callback:: count: 1
+13: timerToUpdateProgram
+Before running Timeout callback:: count: 1
+13: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:41 AM[0m] File change detected. Starting incremental compilation...
@@ -204,6 +236,9 @@ Change:: Start npm install
 
 Input::
 
+Timeout callback:: count: 1
+15: timerToUpdateChildWatches
+Immedidate callback:: count: 0
 Output::
 
 exitCode:: ExitStatus.undefined
@@ -213,6 +248,9 @@ Change:: npm install folder creation of file2
 
 Input::
 
+Timeout callback:: count: 1
+16: timerToUpdateChildWatches
+Immedidate callback:: count: 0
 Output::
 
 exitCode:: ExitStatus.undefined
@@ -225,6 +263,9 @@ Input::
 export const x = 10;
 
 
+Timeout callback:: count: 1
+16: timerToUpdateChildWatches
+Immedidate callback:: count: 0
 Output::
 
 exitCode:: ExitStatus.undefined
@@ -234,10 +275,19 @@ Change:: Updates the program
 
 Input::
 
+Before running Timeout callback:: count: 1
+16: timerToUpdateChildWatches
+After running Timeout callback:: count: 2
+17: timerToInvalidateFailedLookupResolutions
+18: timerToUpdateProgram
 Output::
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules:
   {"pollingInterval":500}
 
 FsWatches::
@@ -263,6 +313,11 @@ Change:: Invalidates module resolution cache
 
 Input::
 
+Before running Timeout callback:: count: 2
+17: timerToInvalidateFailedLookupResolutions
+18: timerToUpdateProgram
+After running Timeout callback:: count: 1
+19: timerToUpdateProgram
 Output::
 
 exitCode:: ExitStatus.undefined
@@ -272,6 +327,9 @@ Change:: Pending updates
 
 Input::
 
+Before running Timeout callback:: count: 1
+19: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:50 AM[0m] File change detected. Starting incremental compilation...
@@ -298,6 +356,12 @@ Shape signatures in builder refreshed for::
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+
+PolledWatches *deleted*::
+/user/username/projects/node_modules:
   {"pollingInterval":500}
 
 FsWatches::

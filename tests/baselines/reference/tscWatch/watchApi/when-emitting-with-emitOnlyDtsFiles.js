@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
 {"compilerOptions":{"composite":true,"noEmitOnError":true,"module":"amd"},"files":["a.ts","b.ts"]}
@@ -37,6 +38,8 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b.ts 250 unde
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 undefined Source file
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
 [96mb.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType '20' is not assignable to type '10'.
 
 [7m1[0m export const y: 10 = 20;
@@ -66,6 +69,8 @@ Shape signatures in builder refreshed for::
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -171,6 +176,9 @@ Input::
 export const y = 10;
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /user/username/projects/myproject/b.ts 1:: WatchInfo: /user/username/projects/myproject/b.ts 250 undefined Source file
 Scheduling update
@@ -292,6 +300,8 @@ Change:: Emit with emitOnlyDts shouldnt emit anything
 
 Input::
 
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 Output::
 
 Program: Same as old program
@@ -389,6 +399,8 @@ define(["require", "exports"], function (require, exports) {
 
 
 
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 Output::
 
 Program: Same as old program
@@ -402,6 +414,8 @@ Change:: Emit with emitOnlyDts shouldnt emit anything
 
 Input::
 
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 Output::
 
 Program: Same as old program
@@ -415,6 +429,8 @@ Change:: Emit full should not emit anything
 
 Input::
 
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 Output::
 
 Program: Same as old program

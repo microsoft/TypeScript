@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/moduleFile1.ts]
 export function Foo() { };
@@ -73,10 +74,6 @@ Shape signatures in builder refreshed for::
 /a/b/globalfile3.ts (used version)
 /a/b/modulefile2.ts (used version)
 
-PolledWatches::
-/a/b/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /a/b/tsconfig.json: *new*
   {}
@@ -146,6 +143,9 @@ Input::
 import {Foo} from "./moduleFile1"; export var y = 10;export var T: number;
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:41 AM[0m] File change detected. Starting incremental compilation...
@@ -192,6 +192,9 @@ Input::
 export var T: number;export function Foo() { };
 
 
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:52 AM[0m] File change detected. Starting incremental compilation...
@@ -246,6 +249,9 @@ export var T2: number;export function Foo() { };
 import {Foo} from "./moduleFile1"; export var y = 10;export var T: number;export var T2: number;
 
 
+Before running Timeout callback:: count: 1
+4: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:08 AM[0m] File change detected. Starting incremental compilation...

@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/tsconfig.json]
 
@@ -57,10 +58,6 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/b/c/f1.ts (used version)
 /a/b/d/f2.ts (used version)
-
-PolledWatches::
-/a/b/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /a/b/tsconfig.json: *new*

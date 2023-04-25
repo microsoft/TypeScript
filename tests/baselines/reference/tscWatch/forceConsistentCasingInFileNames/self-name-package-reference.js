@@ -1,3 +1,4 @@
+currentDirectory:: /Users/name/projects/web useCaseSensitiveFileNames: false
 Input::
 //// [/Users/name/projects/web/package.json]
 {"name":"@this/package","type":"module","exports":{".":"./dist/index.js"}}
@@ -69,6 +70,8 @@ Shape signatures in builder refreshed for::
 
 PolledWatches::
 /users/name/projects/web/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/name/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::

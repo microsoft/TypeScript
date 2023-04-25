@@ -1,0 +1,43 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesConst02.ts ===
+// module m {
+//     declare const x;
+//     declare /*HIGHLIGHTS*/[|{| kind: "none" |}const|] enum E {
+//     }
+// }
+// 
+// --- (line: 7) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesConst02.ts ===
+// --- (line: 4) skipped ---
+// }
+// 
+// declare const x;
+// declare /*HIGHLIGHTS*/[|{| kind: "none" |}const|] enum E {
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesConst02.ts ===
+// module m {
+//     declare /*HIGHLIGHTS*/const x;
+//     declare const enum E {
+//     }
+// }
+// --- (line: 6) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesConst02.ts ===
+// --- (line: 3) skipped ---
+//     }
+// }
+// 
+// declare /*HIGHLIGHTS*/const x;
+// declare const enum E {
+// }

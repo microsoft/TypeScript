@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -51,6 +52,8 @@ DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":["/user/username/projects/myproject/**/temp"]} Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"excludeDirectories":["/user/username/projects/myproject/**/temp"]} Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"excludeDirectories":["/user/username/projects/myproject/**/temp"]} Type roots
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 {"excludeDirectories":["/user/username/projects/myproject/**/temp"]} Type roots
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 {"excludeDirectories":["/user/username/projects/myproject/**/temp"]} Type roots
 [[90m12:00:40 AM[0m] Found 0 errors. Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"excludeDirectories":["/user/username/projects/myproject/**/temp"]} Wild card directory
@@ -80,6 +83,8 @@ Shape signatures in builder refreshed for::
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -116,6 +121,9 @@ Change:: Directory watch updates because of main.js creation
 
 Input::
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateChildWatches
+After running Timeout callback:: count: 0
 Output::
 sysLog:: onTimerToUpdateChildWatches:: 1
 sysLog:: invokingWatchers:: Elapsed:: *ms:: 0
@@ -137,6 +145,8 @@ Input::
 export function temp(): string;
 
 
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 Output::
 
 exitCode:: ExitStatus.undefined

@@ -66,13 +66,11 @@ label: {
     })(E || (E = {}));
 }
 label: ;
-label: {
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        return C;
-    }());
-}
+label: var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
 label: var a = 1;
 label: var b = 1;
 label: var c = 1;

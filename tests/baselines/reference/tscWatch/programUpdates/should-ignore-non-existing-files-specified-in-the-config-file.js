@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/commonFile1.ts]
 let x = 1
@@ -61,8 +62,6 @@ Shape signatures in builder refreshed for::
 
 PolledWatches::
 /a/b/commonfile3.ts: *new*
-  {"pollingInterval":500}
-/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::

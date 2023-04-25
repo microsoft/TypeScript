@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -51,10 +52,6 @@ Shape signatures in builder refreshed for::
 /a/b/file2.ts (used version)
 /a/b/file1.ts (used version)
 
-PolledWatches::
-/a/b/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /a/b/tsconfig.json: *new*
   {}
@@ -96,6 +93,9 @@ Input::
 export var t1 = 10;export var t3 = 10;
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:25 AM[0m] File change detected. Starting incremental compilation...

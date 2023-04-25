@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/f1.ts]
 export * from "./f2"
@@ -117,6 +118,9 @@ Change:: Delete f2
 Input::
 //// [/a/b/f2.ts] deleted
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:28 AM[0m] File change detected. Starting incremental compilation...
@@ -143,6 +147,10 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a/b/f1.ts (computed .d.ts)
 
+PolledWatches::
+/a/b/f2: *new*
+  {"pollingInterval":500}
+
 FsWatches::
 /a/b/f1.ts:
   {}
@@ -153,10 +161,6 @@ FsWatches *deleted*::
 /a/b/f2.ts:
   {}
 /a/c/f3.ts:
-  {}
-
-FsWatchesRecursive::
-/a: *new*
   {}
 
 exitCode:: ExitStatus.undefined

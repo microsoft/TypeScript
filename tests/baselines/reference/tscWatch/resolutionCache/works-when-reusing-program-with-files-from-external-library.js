@@ -1,3 +1,4 @@
+currentDirectory:: /a/b/projects/myProject/ useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/projects/myProject/src/file1.ts]
 import module1 = require("module1");
@@ -60,9 +61,13 @@ Shape signatures in builder refreshed for::
 PolledWatches::
 /a/b/projects/myproject/src/node_modules: *new*
   {"pollingInterval":500}
+/a/b/projects/node_modules: *new*
+  {"pollingInterval":500}
 /a/b/projects/myproject/src/node_modules/@types: *new*
   {"pollingInterval":500}
 /a/b/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/a/b/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -109,6 +114,9 @@ module1("hello");
 ;
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:40 AM[0m] File change detected. Starting incremental compilation...

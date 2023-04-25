@@ -1,3 +1,4 @@
+currentDirectory:: /users/username/projects/project useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -51,6 +52,8 @@ Shape signatures in builder refreshed for::
 
 PolledWatches::
 /users/username/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -153,6 +156,8 @@ export const z = 10;
 PolledWatches *deleted*::
 /users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
+/users/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches *deleted*::
 /users/username/projects/project/tsconfig.json:
@@ -192,6 +197,8 @@ Shape signatures in builder refreshed for::
 
 PolledWatches::
 /users/username/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::

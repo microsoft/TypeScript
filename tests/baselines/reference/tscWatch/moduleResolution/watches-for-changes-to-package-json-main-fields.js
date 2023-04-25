@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/packages/pkg1/package.json]
 {"name":"pkg1","version":"1.0.0","main":"build/index.js"}
@@ -106,6 +107,8 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
 /user/username/projects/myproject/packages/pkg1/tsconfig.json: *new*
@@ -146,6 +149,13 @@ Input::
 {"name":"pkg2","version":"1.0.0","main":"build/other.js"}
 
 
+Before running Timeout callback:: count: 1
+1: timerToInvalidateFailedLookupResolutions
+After running Timeout callback:: count: 1
+2: timerToUpdateProgram
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:53 AM[0m] File change detected. Starting incremental compilation...
@@ -207,6 +217,8 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
 /user/username/projects/myproject/packages/pkg1/tsconfig.json:
@@ -247,6 +259,13 @@ Input::
 {"name":"pkg2","version":"1.0.0","main":"build/index.js"}
 
 
+Before running Timeout callback:: count: 1
+3: timerToInvalidateFailedLookupResolutions
+After running Timeout callback:: count: 1
+4: timerToUpdateProgram
+Before running Timeout callback:: count: 1
+4: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:02 AM[0m] File change detected. Starting incremental compilation...
@@ -313,6 +332,8 @@ PolledWatches::
 /user/username/projects/myproject/packages/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::

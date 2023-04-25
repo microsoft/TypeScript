@@ -1,4 +1,4 @@
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractOverrideWithAbstract.ts(19,7): error TS2515: Non-abstract class 'CC' does not implement inherited abstract member 'foo' from class 'BB'.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractOverrideWithAbstract.ts(19,7): error TS18052: Non-abstract class 'CC' does not implement all abstract members of 'BB'
 
 
 ==== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractOverrideWithAbstract.ts (1 errors) ====
@@ -22,7 +22,8 @@ tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbst
     
     class CC extends BB {} // error
           ~~
-!!! error TS2515: Non-abstract class 'CC' does not implement inherited abstract member 'foo' from class 'BB'.
+!!! error TS18052: Non-abstract class 'CC' does not implement all abstract members of 'BB'
+!!! related TS2515 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractOverrideWithAbstract.ts:15:14: Non-abstract class 'CC' does not implement inherited abstract member 'foo' from class 'BB'.
     
     class DD extends BB {
         foo() {}

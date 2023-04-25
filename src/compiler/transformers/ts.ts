@@ -802,7 +802,7 @@ export function transformTypeScript(context: TransformationContext) {
 
     function getClassFacts(node: ClassDeclaration) {
         let facts = ClassFacts.None;
-        if (some(getProperties(node, /*requireInitialized*/ true, /*isStatic*/ true))) facts |= ClassFacts.HasStaticInitializedProperties;
+        if (some(getProperties(node, /*requireInitializer*/ true, /*isStatic*/ true))) facts |= ClassFacts.HasStaticInitializedProperties;
         const extendsClauseElement = getEffectiveBaseTypeNode(node);
         if (extendsClauseElement && skipOuterExpressions(extendsClauseElement.expression).kind !== SyntaxKind.NullKeyword) facts |= ClassFacts.IsDerivedClass;
         if (classOrConstructorParameterIsDecorated(legacyDecorators, node)) facts |= ClassFacts.HasClassOrConstructorParameterDecorators;
@@ -848,9 +848,7 @@ export function transformTypeScript(context: TransformationContext) {
 
         const moveModifiers =
             promoteToIIFE ||
-            facts & ClassFacts.IsExportOfNamespace ||
-            facts & ClassFacts.HasClassOrConstructorParameterDecorators && legacyDecorators ||
-            facts & ClassFacts.HasStaticInitializedProperties;
+            facts & ClassFacts.IsExportOfNamespace;
 
         // elide modifiers on the declaration if we are emitting an IIFE or the class is
         // a namespace export
@@ -956,32 +954,26 @@ export function transformTypeScript(context: TransformationContext) {
 
         if (moveModifiers) {
             if (facts & ClassFacts.IsExportOfNamespace) {
-                return demarcateMultiStatementExport(
+                return [
                     statement,
-                    createExportMemberAssignmentStatement(node));
+                    createExportMemberAssignmentStatement(node)
+                ];
             }
             if (facts & ClassFacts.IsDefaultExternalExport) {
-                return demarcateMultiStatementExport(
+                return [
                     statement,
-                    factory.createExportDefault(factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true)));
+                    factory.createExportDefault(factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true))
+                ];
             }
             if (facts & ClassFacts.IsNamedExternalExport && !promoteToIIFE) {
-                return demarcateMultiStatementExport(
+                return [
                     statement,
-                    factory.createExternalModuleExport(factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true)));
+                    factory.createExternalModuleExport(factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true))
+                ];
             }
         }
 
         return statement;
-    }
-
-    function demarcateMultiStatementExport(declarationStatement: Statement, exportStatement: Statement) {
-        addEmitFlags(declarationStatement, EmitFlags.HasEndOfDeclarationMarker);
-        return [
-            declarationStatement,
-            exportStatement,
-            factory.createEndOfDeclarationMarker(declarationStatement)
-        ];
     }
 
     function visitClassExpression(node: ClassExpression): Expression {
@@ -1835,20 +1827,6 @@ export function transformTypeScript(context: TransformationContext) {
     }
 
     /**
-     * Determines whether an exported declaration will have a qualified export name (e.g. `f.x`
-     * or `exports.x`).
-     */
-    function hasNamespaceQualifiedExportName(node: Node) {
-        return isExportOfNamespace(node)
-            || (isExternalModuleExport(node)
-                && moduleKind !== ModuleKind.ES2015
-                && moduleKind !== ModuleKind.ES2020
-                && moduleKind !== ModuleKind.ES2022
-                && moduleKind !== ModuleKind.ESNext
-                && moduleKind !== ModuleKind.System);
-    }
-
-    /**
      * Records that a declaration was emitted in the current scope, if it was the first
      * declaration for the provided symbol.
      */
@@ -1891,7 +1869,12 @@ export function transformTypeScript(context: TransformationContext) {
             factory.createVariableDeclarationList([variableDeclaration], nodeFlags)
         );
 
+        setOriginalNode(variableDeclaration, node);
+        setSyntheticLeadingComments(variableDeclaration, undefined);
+        setSyntheticTrailingComments(variableDeclaration, undefined);
+
         setOriginalNode(variableStatement, node);
+
         recordEmittedDeclarationInScope(node);
         if (isFirstEmittedDeclarationInScope(node)) {
             // Trailing comments for module declaration should be emitted after the function closure
@@ -1912,7 +1895,7 @@ export function transformTypeScript(context: TransformationContext) {
             //
             setSourceMapRange(isEnumDeclaration(node) ? variableStatement.declarationList : variableStatement, node);
             setCommentRange(variableStatement, node);
-            addEmitFlags(variableStatement, EmitFlags.NoTrailingComments | EmitFlags.HasEndOfDeclarationMarker);
+            addEmitFlags(variableStatement, EmitFlags.NoTrailingComments);
             statements.push(variableStatement);
             if (isDefaultExport) {
                 // export module m {
@@ -1928,16 +1911,9 @@ export function transformTypeScript(context: TransformationContext) {
             }
             return true;
         }
-        else {
-            // For an EnumDeclaration or ModuleDeclaration that merges with a preceeding
-            // declaration we do not emit a leading variable declaration. To preserve the
-            // begin/end semantics of the declararation and to properly handle exports
-            // we wrap the leading variable declaration in a `MergeDeclarationMarker`.
-            const mergeMarker = factory.createMergeDeclarationMarker(variableStatement);
-            setEmitFlags(mergeMarker, EmitFlags.NoComments | EmitFlags.HasEndOfDeclarationMarker);
-            statements.push(mergeMarker);
-            return false;
-        }
+        // For an EnumDeclaration or ModuleDeclaration that merges with a preceeding
+        // declaration we do not emit a leading variable declaration.
+        return false;
     }
 
     function getIIFEModuleArgument(node: ModuleDeclaration | EnumDeclaration, name: Identifier, modifierFlags: ModifierFlags) {
@@ -1946,9 +1922,9 @@ export function transformTypeScript(context: TransformationContext) {
         }
 
         // `exportName` is the expression used within this node's container for any exported references.
-        const exportName = modifierFlags & ModifierFlags.Export
+        const exportName = isExportOfNamespace(node)
             ? factory.getExternalModuleOrNamespaceExportName(currentNamespaceContainerName, node, /*allowComments*/ false, /*allowSourceMaps*/ true)
-            : factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
+            : factory.getDeclarationName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
 
         //  x || (x = {})
         //  exports.x || (exports.x = {})
@@ -1956,7 +1932,7 @@ export function transformTypeScript(context: TransformationContext) {
             factory.createAssignment(exportName, factory.createObjectLiteralExpression()));
 
 
-        return hasNamespaceQualifiedExportName(node)
+        return isExportOfNamespace(node)
             ? factory.createAssignment(factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true), arg)
             : arg;
     }
@@ -2008,8 +1984,6 @@ export function transformTypeScript(context: TransformationContext) {
         addEmitFlags(moduleStatement, emitFlags);
         statements.push(moduleStatement);
 
-        // Add a DeclarationMarker for the namespace to preserve trailing comments and mark the end of the declaration.
-        statements.push(factory.createEndOfDeclarationMarker(node));
         return statements;
     }
 

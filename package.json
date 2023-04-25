@@ -26,7 +26,7 @@
         "tsserver": "./bin/tsserver"
     },
     "engines": {
-        "node": ">=12.20"
+        "node": ">=14.17"
     },
     "files": [
         "bin",
@@ -54,7 +54,7 @@
         "@typescript-eslint/eslint-plugin": "^5.33.1",
         "@typescript-eslint/parser": "^5.33.1",
         "@typescript-eslint/utils": "^5.33.1",
-        "azure-devops-node-api": "^11.2.0",
+        "azure-devops-node-api": "^12.0.0",
         "chai": "^4.3.7",
         "chalk": "^4.1.2",
         "chokidar": "^3.5.3",
@@ -79,11 +79,13 @@
         "node-fetch": "^3.2.10",
         "source-map-support": "^0.5.21",
         "tslib": "^2.5.0",
-        "typescript": "5.0.1-rc",
+        "typescript": "^5.0.2",
         "which": "^2.0.2"
     },
     "overrides": {
-        "typescript@*": "$typescript"
+        "typescript@*": "$typescript",
+        "@octokit/types": "9.0.0",
+        "@octokit/openapi-types": "16.0.0"
     },
     "scripts": {
         "test": "hereby runtests-parallel --light=false",

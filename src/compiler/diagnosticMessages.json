@@ -227,10 +227,6 @@
         "category": "Error",
         "code": 1084
     },
-    "Octal literals are not available when targeting ECMAScript 5 and higher. Use the syntax '{0}'.": {
-        "category": "Error",
-        "code": 1085
-    },
     "'{0}' modifier cannot appear on a constructor declaration.": {
         "category": "Error",
         "code": 1089
@@ -351,7 +347,7 @@
         "category": "Error",
         "code": 1120
     },
-    "Octal literals are not allowed in strict mode.": {
+    "Octal literals are not allowed. Use the syntax '{0}'.": {
         "category": "Error",
         "code": 1121
     },
@@ -1597,6 +1593,22 @@
         "category": "Error",
         "code": 1486
     },
+    "Octal escape sequences are not allowed. Use the syntax '{0}'.": {
+        "category": "Error",
+        "code": 1487
+    },
+    "Escape sequence '{0}' is not allowed.": {
+        "category": "Error",
+        "code": 1488
+    },
+    "Decimals with leading zeros are not allowed.": {
+        "category": "Error",
+        "code": 1489
+    },
+    "File appears to be binary.": {
+        "category": "Error",
+        "code": 1490
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -1872,7 +1884,7 @@
         "category": "Error",
         "code": 2354
     },
-    "A function whose declared type is neither 'void' nor 'any' must return a value.": {
+    "A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.": {
         "category": "Error",
         "code": 2355
     },
@@ -1963,10 +1975,6 @@
     "Argument of type '{0}' is not assignable to parameter of type '{1}' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.": {
         "category": "Error",
         "code": 2379
-    },
-    "The return type of a 'get' accessor must be assignable to its 'set' accessor type": {
-        "category": "Error",
-        "code": 2380
     },
     "Overload signatures must all be exported or non-exported.": {
         "category": "Error",
@@ -2885,6 +2893,10 @@
         "category": "Error",
         "code": 2638
     },
+    "React components cannot include JSX namespace names": {
+        "category": "Error",
+        "code": 2639
+    },
 
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
         "category": "Error",
@@ -3610,6 +3622,14 @@
     "A declaration file cannot be imported without 'import type'. Did you mean to import an implementation file '{0}' instead?": {
         "category": "Error",
         "code": 2846
+    },
+    "The right-hand side of an 'instanceof' expression must not be an instantiation expression.": {
+        "category": "Error",
+        "code": 2848
+    },
+    "Target signature provides too few arguments. Expected {0} or more, but got {1}.": {
+        "category": "Error",
+        "code": 2849
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -5234,7 +5254,7 @@
         "category": "Error",
         "code": 6258
     },
-      "Found 1 error in {1}": {
+      "Found 1 error in {0}": {
         "category": "Message",
         "code": 6259
     },
@@ -5261,6 +5281,10 @@
     "Resolving type reference directive for program that specifies custom typeRoots, skipping lookup in 'node_modules' folder.": {
         "category": "Message",
         "code": 6265
+    },
+    "Option '{0}' can only be specified on command line.": {
+        "category": "Error",
+        "code": 6266
     },
 
     "Directory '{0}' has no containing package.json scope. Imports will not resolve.": {
@@ -6488,14 +6512,6 @@
         "category": "Error",
         "code": 8016
     },
-    "Octal literal types must use ES2015 syntax. Use the syntax '{0}'.": {
-        "category": "Error",
-        "code": 8017
-    },
-    "Octal literals are not allowed in enums members initializer. Use the syntax '{0}'.": {
-        "category": "Error",
-        "code": 8018
-    },
     "Report errors in .js files.": {
         "category": "Message",
         "code": 8019
@@ -6718,7 +6734,7 @@
         "category": "Suggestion",
         "code": 80010
     },
-    
+
     "Add missing 'super()' call": {
         "category": "Message",
         "code": 90001
@@ -7584,6 +7600,10 @@
         "category": "Message",
         "code": 95177
     },
+    "Move to file": {
+        "category": "Message",
+        "code": 95178
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
@@ -7744,5 +7764,13 @@
     "Compiler option '{0}' cannot be given an empty string.": {
         "category": "Error",
         "code": 18051
+    },
+    "Non-abstract class '{0}' does not implement all abstract members of '{1}'": {
+        "category": "Error",
+        "code": 18052
+    },
+    "Its type '{0}' is not a valid JSX element type.": {
+        "category": "Error",
+        "code": 18053
     }
 }

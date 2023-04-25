@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/src/tsconfig.json]
 {"compilerOptions":{"target":"es2016","module":"Node16","outDir":"../out"}}
@@ -64,6 +65,8 @@ DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/node
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
 [96msrc/fileA.ts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS2307: [0mCannot find module './fileB.mjs' or its corresponding type declarations.
 
 [7m1[0m import { foo } from "./fileB.mjs";
@@ -102,6 +105,8 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
 /user/username/projects/myproject/src/tsconfig.json: *new*
@@ -134,6 +139,13 @@ Input::
 {"name":"app","version":"1.0.0"}
 
 
+Before running Timeout callback:: count: 1
+1: timerToInvalidateFailedLookupResolutions
+After running Timeout callback:: count: 1
+2: timerToUpdateProgram
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /user/username/projects/myproject/package.json 1:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined File location affecting resolution
 Scheduling invalidateFailedLookup
@@ -206,6 +218,8 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 /user/username/projects/myproject/src/fileb.mjs: *new*
   {"pollingInterval":500}
 
@@ -242,6 +256,13 @@ Input::
 {"name":"app","version":"1.0.0","type":"module"}
 
 
+Before running Timeout callback:: count: 1
+3: timerToInvalidateFailedLookupResolutions
+After running Timeout callback:: count: 1
+4: timerToUpdateProgram
+Before running Timeout callback:: count: 1
+4: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /user/username/projects/myproject/package.json 1:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined File location affecting resolution
 Scheduling invalidateFailedLookup
@@ -309,6 +330,8 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 
 PolledWatches *deleted*::
 /user/username/projects/myproject/src/fileb.mjs:
@@ -343,6 +366,13 @@ Change:: Delete package.json
 Input::
 //// [/user/username/projects/myproject/package.json] deleted
 
+Before running Timeout callback:: count: 1
+5: timerToInvalidateFailedLookupResolutions
+After running Timeout callback:: count: 1
+6: timerToUpdateProgram
+Before running Timeout callback:: count: 1
+6: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /user/username/projects/myproject/package.json 2:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined File location affecting resolution
 Scheduling invalidateFailedLookup
@@ -424,6 +454,8 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 /user/username/projects/myproject/src/fileb.mjs: *new*
   {"pollingInterval":500}
 /user/username/projects/package.json: *new*
@@ -462,6 +494,13 @@ Input::
 {"name":"app","version":"1.0.0"}
 
 
+Before running Timeout callback:: count: 1
+7: timerToInvalidateFailedLookupResolutions
+After running Timeout callback:: count: 1
+8: timerToUpdateProgram
+Before running Timeout callback:: count: 1
+8: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /user/username/projects/myproject/package.json 0:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined File location affecting resolution
 Scheduling invalidateFailedLookup
@@ -517,6 +556,8 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 /user/username/projects/myproject/src/fileb.mjs:
   {"pollingInterval":500}
 
@@ -548,6 +589,13 @@ Change:: Delete package.json
 Input::
 //// [/user/username/projects/myproject/package.json] deleted
 
+Before running Timeout callback:: count: 1
+9: timerToInvalidateFailedLookupResolutions
+After running Timeout callback:: count: 1
+10: timerToUpdateProgram
+Before running Timeout callback:: count: 1
+10: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /user/username/projects/myproject/package.json 2:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined File location affecting resolution
 Scheduling invalidateFailedLookup
@@ -610,6 +658,8 @@ PolledWatches::
 /user/username/projects/myproject/src/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/src/fileb.mjs:
   {"pollingInterval":500}
