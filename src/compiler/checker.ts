@@ -13841,7 +13841,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return getBaseConstraint(getSubstitutionIntersection(t as SubstitutionType));
             }
             if (isGenericTupleType(t)) {
-                const newElements = map(getElementTypes(t), (v, i) => t.target.elementFlags[i] & ElementFlags.Variadic && getBaseConstraint(v) || v);
+                // We substitute constraints for variadic elements only when the constraints are array types or
+                // non-variadic tuple types as we want to avoid further (possibly unbounded) recursion.
+                const newElements = map(getElementTypes(t), (v, i) => {
+                    const constraint = t.target.elementFlags[i] & ElementFlags.Variadic && getBaseConstraint(v) || v;
+                    return constraint && everyType(constraint, c => isArrayOrTupleType(c) && !isGenericTupleType(c)) ? constraint : v;
+                });
                 return createTupleType(newElements, t.target.elementFlags, t.target.readonly, t.target.labeledElementDeclarations);
             }
             return t;
