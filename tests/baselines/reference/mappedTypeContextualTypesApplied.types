@@ -71,19 +71,19 @@ mapped3({foo: s => 42});
 mapped4({foo: s => 42});
 >mapped4({foo: s => 42}) : void
 >mapped4 : <T>(obj: T & { [P in keyof T]: TakeString; }) => void
->{foo: s => 42} : { foo: (s: string) => number; }
->foo : (s: string) => number
->s => 42 : (s: string) => number
->s : string
+>{foo: s => 42} : { foo: (s: any) => any; }
+>foo : (s: any) => any
+>s => 42 : (s: any) => any
+>s : any
 >42 : 42
 
 mapped5({foo: s => 42});
 >mapped5({foo: s => 42}) : void
 >mapped5 : <T, K extends keyof T>(obj: T & { [P in K]: TakeString; }) => void
->{foo: s => 42} : { foo: (s: string) => number; }
->foo : (s: string) => number
->s => 42 : (s: string) => number
->s : string
+>{foo: s => 42} : { foo: (s: any) => any; }
+>foo : (s: any) => any
+>s => 42 : (s: any) => any
+>s : any
 >42 : 42
 
 mapped6({foo: s => 42});

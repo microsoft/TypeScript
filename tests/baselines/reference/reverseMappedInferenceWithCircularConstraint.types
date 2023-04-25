@@ -1,0 +1,119 @@
+=== tests/cases/compiler/reverseMappedInferenceWithCircularConstraint.ts ===
+// repro from https://github.com/microsoft/TypeScript/issues/48798
+
+type AnyFunction = (...args: any[]) => any;
+>AnyFunction : (...args: any[]) => any
+>args : any[]
+
+type InferNarrowest<T> = T extends any
+>InferNarrowest : InferNarrowest<T>
+
+  ? T extends AnyFunction
+    ? T
+    : T extends object
+    ? InferNarrowestObject<T>
+    : T
+  : never;
+
+type InferNarrowestObject<T> = {
+>InferNarrowestObject : InferNarrowestObject<T>
+
+  readonly [K in keyof T]: InferNarrowest<T[K]>;
+};
+
+type Config<TGlobal, TState = Prop<TGlobal, "states">> = {
+>Config : Config<TGlobal, TState>
+
+  states: {
+>states : { [StateKey in keyof TState]: { on?: {} | undefined; }; }
+
+    [StateKey in keyof TState]: {
+      on?: {};
+>on : {} | undefined
+
+    };
+  };
+} & {
+  initial: keyof TState;
+>initial : keyof TState
+
+};
+
+type Prop<T, K> = K extends keyof T ? T[K] : never;
+>Prop : Prop<T, K>
+
+const createMachine = <TConfig extends Config<TConfig>>(
+>createMachine : <TConfig extends Config<TConfig, Prop<TConfig, "states">>>(_config: InferNarrowestObject<TConfig>) => void
+><TConfig extends Config<TConfig>>(  _config: InferNarrowestObject<TConfig>): void => {} : <TConfig extends Config<TConfig, Prop<TConfig, "states">>>(_config: InferNarrowestObject<TConfig>) => void
+
+  _config: InferNarrowestObject<TConfig>
+>_config : InferNarrowestObject<TConfig>
+
+): void => {};
+
+createMachine({
+>createMachine({  initial: "pending",  states: {    pending: {      on: {        done() {          return "noData";        },      },    },  },}) : void
+>createMachine : <TConfig extends Config<TConfig, Prop<TConfig, "states">>>(_config: InferNarrowestObject<TConfig>) => void
+>{  initial: "pending",  states: {    pending: {      on: {        done() {          return "noData";        },      },    },  },} : { initial: "pending"; states: { pending: { on: { done(): "noData"; }; }; }; }
+
+  initial: "pending",
+>initial : "pending"
+>"pending" : "pending"
+
+  states: {
+>states : { pending: { on: { done(): "noData"; }; }; }
+>{    pending: {      on: {        done() {          return "noData";        },      },    },  } : { pending: { on: { done(): "noData"; }; }; }
+
+    pending: {
+>pending : { on: { done(): "noData"; }; }
+>{      on: {        done() {          return "noData";        },      },    } : { on: { done(): "noData"; }; }
+
+      on: {
+>on : { done(): "noData"; }
+>{        done() {          return "noData";        },      } : { done(): "noData"; }
+
+        done() {
+>done : () => "noData"
+
+          return "noData";
+>"noData" : "noData"
+
+        },
+      },
+    },
+  },
+});
+
+createMachine({
+>createMachine({  initial: "unknown", // error  states: {    pending: {      on: {        done() {          return "noData";        },      },    },  },}) : void
+>createMachine : <TConfig extends Config<TConfig, Prop<TConfig, "states">>>(_config: InferNarrowestObject<TConfig>) => void
+>{  initial: "unknown", // error  states: {    pending: {      on: {        done() {          return "noData";        },      },    },  },} : { initial: "unknown"; states: { pending: { on: { done(): string; }; }; }; }
+
+  initial: "unknown", // error
+>initial : "unknown"
+>"unknown" : "unknown"
+
+  states: {
+>states : { pending: { on: { done(): string; }; }; }
+>{    pending: {      on: {        done() {          return "noData";        },      },    },  } : { pending: { on: { done(): string; }; }; }
+
+    pending: {
+>pending : { on: { done(): string; }; }
+>{      on: {        done() {          return "noData";        },      },    } : { on: { done(): string; }; }
+
+      on: {
+>on : { done(): string; }
+>{        done() {          return "noData";        },      } : { done(): string; }
+
+        done() {
+>done : () => string
+
+          return "noData";
+>"noData" : "noData"
+
+        },
+      },
+    },
+  },
+});
+
