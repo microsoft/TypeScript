@@ -2,6 +2,7 @@ import {
     __String,
     AccessExpression,
     AccessorDeclaration,
+    allLibFiles,
     ArrayBindingElement,
     ArrayBindingOrAssignmentElement,
     ArrayBindingOrAssignmentPattern,
@@ -289,6 +290,15 @@ export function isExternalModuleNameRelative(moduleName: string): boolean {
 
 export function sortAndDeduplicateDiagnostics<T extends Diagnostic>(diagnostics: readonly T[]): SortedReadonlyArray<T> {
     return sortAndDeduplicate<T>(diagnostics, compareDiagnostics);
+}
+
+/**
+ * Gets a full list of all lib files included with this build of TypeScript.
+ * This list includes all files referenced by {@link getLibs} and {@link getLibFileName},
+ * as well as the "default" lib file names returned by {@link getDefaultLibFileName}.
+ */
+export function getAllLibFileNames(): readonly string[] {
+    return allLibFiles.slice();
 }
 
 export function getDefaultLibFileName(options: CompilerOptions): string {

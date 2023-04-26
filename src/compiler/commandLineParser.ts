@@ -233,12 +233,26 @@ const libEntries: [string, string][] = [
 export const libs = libEntries.map(entry => entry[0]);
 
 /**
+ * Gets the list of valid "lib" names, as used in compiler options or reference directives.
+ */
+export function getLibs(): readonly string[] {
+    return libs.slice();
+}
+
+/**
  * A map of lib names to lib files. This map is used both for parsing the "lib" command line
  * option as well as for resolving lib reference directives.
  *
  * @internal
  */
 export const libMap = new Map(libEntries);
+
+/**
+ * Maps a lib name to its filename in the TypeScript package.
+ */
+export function getLibFileName(libName: string): string | undefined {
+    return libMap.get(libName);
+}
 
 // Watch related options
 /** @internal */
