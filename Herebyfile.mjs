@@ -861,7 +861,7 @@ export const produceLKG = task({
             "built/local/typescript.d.ts",
             "built/local/typingsInstaller.js",
             "built/local/watchGuard.js",
-        ].concat(libs().map(lib => lib.target));
+        ].concat(libs().map(lib => path.join("built/local", lib.target)));
         const missingFiles = expectedFiles
             .concat(localizationTargets)
             .filter(f => !fs.existsSync(f));
