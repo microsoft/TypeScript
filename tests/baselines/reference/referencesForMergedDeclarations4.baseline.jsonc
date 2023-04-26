@@ -29,18 +29,7 @@
   // 
   // module testClass {
   //     export interface Bar {
-  // 
-  //     }
-  //     export var s = 0;
-  // }
-  // 
-  // var c1: testClass;
-  // var c2: testClass.Bar;
-  // testClass.staticMethod();
-  // testClass.prototype.method();
-  // testClass.bind(this);
-  // testClass.s;
-  // new testClass();
+  // --- (line: 8) skipped ---
 
   // === Details ===
   [
@@ -115,18 +104,7 @@
   // 
   // module testClass {
   //     export interface Bar {
-  // 
-  //     }
-  //     export var s = 0;
-  // }
-  // 
-  // var c1: testClass;
-  // var c2: testClass.Bar;
-  // testClass.staticMethod();
-  // testClass.prototype.method();
-  // testClass.bind(this);
-  // testClass.s;
-  // new testClass();
+  // --- (line: 8) skipped ---
 
   // === Details ===
   [
@@ -203,16 +181,7 @@
   //     export interface Bar {
   // 
   //     }
-  //     export var s = 0;
-  // }
-  // 
-  // var c1: testClass;
-  // var c2: testClass.Bar;
-  // testClass.staticMethod();
-  // testClass.prototype.method();
-  // testClass.bind(this);
-  // testClass.s;
-  // new testClass();
+  // --- (line: 10) skipped ---
 
   // === Details ===
   [
@@ -289,16 +258,7 @@
   //     export interface Bar {
   // 
   //     }
-  //     export var s = 0;
-  // }
-  // 
-  // var c1: testClass;
-  // var c2: testClass.Bar;
-  // testClass.staticMethod();
-  // testClass.prototype.method();
-  // testClass.bind(this);
-  // testClass.s;
-  // new testClass();
+  // --- (line: 10) skipped ---
 
   // === Details ===
   [
@@ -382,9 +342,7 @@
   // var c2: testClass.Bar;
   // testClass.staticMethod();
   // testClass.prototype.method();
-  // testClass.bind(this);
-  // testClass.s;
-  // new testClass();
+  // --- (line: 17) skipped ---
 
   // === Details ===
   [
@@ -545,10 +503,9 @@
   // 
   // module testClass {
   //     export interface Bar {
-  // 
-  //     }
-  //     export var s = 0;
-  // }
+  // --- (line: 8) skipped ---
+
+  // --- (line: 11) skipped ---
   // 
   // var c1: testClass;
   // var c2: testClass.Bar;
@@ -631,11 +588,9 @@
   // 
   // module testClass {
   //     export interface Bar {
-  // 
-  //     }
-  //     export var s = 0;
-  // }
-  // 
+  // --- (line: 8) skipped ---
+
+  // --- (line: 12) skipped ---
   // var c1: testClass;
   // var c2: testClass.Bar;
   // testClass.staticMethod();
@@ -717,12 +672,9 @@
   // 
   // module testClass {
   //     export interface Bar {
-  // 
-  //     }
-  //     export var s = 0;
-  // }
-  // 
-  // var c1: testClass;
+  // --- (line: 8) skipped ---
+
+  // --- (line: 13) skipped ---
   // var c2: testClass.Bar;
   // testClass.staticMethod();
   // testClass.prototype.method();
@@ -803,13 +755,9 @@
   // 
   // module testClass {
   //     export interface Bar {
-  // 
-  //     }
-  //     export var s = 0;
-  // }
-  // 
-  // var c1: testClass;
-  // var c2: testClass.Bar;
+  // --- (line: 8) skipped ---
+
+  // --- (line: 14) skipped ---
   // testClass.staticMethod();
   // testClass.prototype.method();
   // testClass.bind(this);
@@ -889,14 +837,9 @@
   // 
   // module testClass {
   //     export interface Bar {
-  // 
-  //     }
-  //     export var s = 0;
-  // }
-  // 
-  // var c1: testClass;
-  // var c2: testClass.Bar;
-  // testClass.staticMethod();
+  // --- (line: 8) skipped ---
+
+  // --- (line: 15) skipped ---
   // testClass.prototype.method();
   // testClass.bind(this);
   // testClass.s;

@@ -16,53 +16,7 @@
 //      */
 //     p() { }
 //     /**
-//      * {@link n}
-//      * @see {n}
-//      * {@link C.n}
-//      * @see {C.n}
-//      * {@link C#n}
-//      * @see {C#n}
-//      * {@link C.prototype.n}
-//      * @see {C.prototype.n}
-//      */
-//     q() { }
-//     /**
-//      * {@link s}
-//      * @see {s}
-//      * {@link C.s}
-//      * @see {C.s}
-//      */
-//     r() { }
-// }
-// 
-// interface I {
-//     a()
-//     b: 1
-//     /**
-//      * {@link a}
-//      * @see {a}
-//      * {@link I.a}
-//      * @see {I.a}
-//      * {@link I#a}
-//      * @see {I#a}
-//      */
-//     c()
-//     /**
-//      * {@link b}
-//      * @see {b}
-//      * {@link I.b}
-//      * @see {I.b}
-//      */
-//     d()
-// }
-// 
-// function nestor() {
-//     /** {@link r2} */
-//     function ref() { }
-//     /** @see {r2} */
-//     function d3() { }
-//     function r2() { }
-// }
+// --- (line: 17) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllReferencesLinkTag1.ts ===
@@ -71,64 +25,7 @@
   //     n = 1
   //     static s() { }
   //     /**
-  //      * {@link m}
-  //      * @see {m}
-  //      * {@link C.m}
-  //      * @see {C.m}
-  //      * {@link C#m}
-  //      * @see {C#m}
-  //      * {@link C.prototype.m}
-  //      * @see {C.prototype.m}
-  //      */
-  //     p() { }
-  //     /**
-  //      * {@link n}
-  //      * @see {n}
-  //      * {@link C.n}
-  //      * @see {C.n}
-  //      * {@link C#n}
-  //      * @see {C#n}
-  //      * {@link C.prototype.n}
-  //      * @see {C.prototype.n}
-  //      */
-  //     q() { }
-  //     /**
-  //      * {@link s}
-  //      * @see {s}
-  //      * {@link C.s}
-  //      * @see {C.s}
-  //      */
-  //     r() { }
-  // }
-  // 
-  // interface I {
-  //     a()
-  //     b: 1
-  //     /**
-  //      * {@link a}
-  //      * @see {a}
-  //      * {@link I.a}
-  //      * @see {I.a}
-  //      * {@link I#a}
-  //      * @see {I#a}
-  //      */
-  //     c()
-  //     /**
-  //      * {@link b}
-  //      * @see {b}
-  //      * {@link I.b}
-  //      * @see {I.b}
-  //      */
-  //     d()
-  // }
-  // 
-  // function nestor() {
-  //     /** {@link r2} */
-  //     function ref() { }
-  //     /** @see {r2} */
-  //     function d3() { }
-  //     function r2() { }
-  // }
+  // --- (line: 6) skipped ---
 
   // === Details ===
   [
@@ -200,13 +97,9 @@
 //     static s() { }
 //     /**
 //      * {@link m}
-//      * @see {m}
-//      * {@link C.m}
-//      * @see {C.m}
-//      * {@link C#m}
-//      * @see {C#m}
-//      * {@link C.prototype.m}
-//      * @see {C.prototype.m}
+// --- (line: 7) skipped ---
+
+// --- (line: 13) skipped ---
 //      */
 //     p() { }
 //     /**
@@ -221,42 +114,7 @@
 //      */
 //     q() { }
 //     /**
-//      * {@link s}
-//      * @see {s}
-//      * {@link C.s}
-//      * @see {C.s}
-//      */
-//     r() { }
-// }
-// 
-// interface I {
-//     a()
-//     b: 1
-//     /**
-//      * {@link a}
-//      * @see {a}
-//      * {@link I.a}
-//      * @see {I.a}
-//      * {@link I#a}
-//      * @see {I#a}
-//      */
-//     c()
-//     /**
-//      * {@link b}
-//      * @see {b}
-//      * {@link I.b}
-//      * @see {I.b}
-//      */
-//     d()
-// }
-// 
-// function nestor() {
-//     /** {@link r2} */
-//     function ref() { }
-//     /** @see {r2} */
-//     function d3() { }
-//     function r2() { }
-// }
+// --- (line: 28) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllReferencesLinkTag1.ts ===
@@ -266,63 +124,7 @@
   //     static s() { }
   //     /**
   //      * {@link m}
-  //      * @see {m}
-  //      * {@link C.m}
-  //      * @see {C.m}
-  //      * {@link C#m}
-  //      * @see {C#m}
-  //      * {@link C.prototype.m}
-  //      * @see {C.prototype.m}
-  //      */
-  //     p() { }
-  //     /**
-  //      * {@link n}
-  //      * @see {n}
-  //      * {@link C.n}
-  //      * @see {C.n}
-  //      * {@link C#n}
-  //      * @see {C#n}
-  //      * {@link C.prototype.n}
-  //      * @see {C.prototype.n}
-  //      */
-  //     q() { }
-  //     /**
-  //      * {@link s}
-  //      * @see {s}
-  //      * {@link C.s}
-  //      * @see {C.s}
-  //      */
-  //     r() { }
-  // }
-  // 
-  // interface I {
-  //     a()
-  //     b: 1
-  //     /**
-  //      * {@link a}
-  //      * @see {a}
-  //      * {@link I.a}
-  //      * @see {I.a}
-  //      * {@link I#a}
-  //      * @see {I#a}
-  //      */
-  //     c()
-  //     /**
-  //      * {@link b}
-  //      * @see {b}
-  //      * {@link I.b}
-  //      * @see {I.b}
-  //      */
-  //     d()
-  // }
-  // 
-  // function nestor() {
-  //     /** {@link r2} */
-  //     function ref() { }
-  //     /** @see {r2} */
-  //     function d3() { }
-  //     function r2() { }
-  // }
+  // --- (line: 7) skipped ---
 
   // === Details ===
   [
@@ -387,23 +189,9 @@
 //     /**
 //      * {@link m}
 //      * @see {m}
-//      * {@link C.m}
-//      * @see {C.m}
-//      * {@link C#m}
-//      * @see {C#m}
-//      * {@link C.prototype.m}
-//      * @see {C.prototype.m}
-//      */
-//     p() { }
-//     /**
-//      * {@link n}
-//      * @see {n}
-//      * {@link C.n}
-//      * @see {C.n}
-//      * {@link C#n}
-//      * @see {C#n}
-//      * {@link C.prototype.n}
-//      * @see {C.prototype.n}
+// --- (line: 8) skipped ---
+
+// --- (line: 24) skipped ---
 //      */
 //     q() { }
 //     /**
@@ -414,35 +202,7 @@
 //      */
 //     r() { }
 // }
-// 
-// interface I {
-//     a()
-//     b: 1
-//     /**
-//      * {@link a}
-//      * @see {a}
-//      * {@link I.a}
-//      * @see {I.a}
-//      * {@link I#a}
-//      * @see {I#a}
-//      */
-//     c()
-//     /**
-//      * {@link b}
-//      * @see {b}
-//      * {@link I.b}
-//      * @see {I.b}
-//      */
-//     d()
-// }
-// 
-// function nestor() {
-//     /** {@link r2} */
-//     function ref() { }
-//     /** @see {r2} */
-//     function d3() { }
-//     function r2() { }
-// }
+// --- (line: 35) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllReferencesLinkTag1.ts ===
@@ -453,62 +213,7 @@
   //     /**
   //      * {@link m}
   //      * @see {m}
-  //      * {@link C.m}
-  //      * @see {C.m}
-  //      * {@link C#m}
-  //      * @see {C#m}
-  //      * {@link C.prototype.m}
-  //      * @see {C.prototype.m}
-  //      */
-  //     p() { }
-  //     /**
-  //      * {@link n}
-  //      * @see {n}
-  //      * {@link C.n}
-  //      * @see {C.n}
-  //      * {@link C#n}
-  //      * @see {C#n}
-  //      * {@link C.prototype.n}
-  //      * @see {C.prototype.n}
-  //      */
-  //     q() { }
-  //     /**
-  //      * {@link s}
-  //      * @see {s}
-  //      * {@link C.s}
-  //      * @see {C.s}
-  //      */
-  //     r() { }
-  // }
-  // 
-  // interface I {
-  //     a()
-  //     b: 1
-  //     /**
-  //      * {@link a}
-  //      * @see {a}
-  //      * {@link I.a}
-  //      * @see {I.a}
-  //      * {@link I#a}
-  //      * @see {I#a}
-  //      */
-  //     c()
-  //     /**
-  //      * {@link b}
-  //      * @see {b}
-  //      * {@link I.b}
-  //      * @see {I.b}
-  //      */
-  //     d()
-  // }
-  // 
-  // function nestor() {
-  //     /** {@link r2} */
-  //     function ref() { }
-  //     /** @see {r2} */
-  //     function d3() { }
-  //     function r2() { }
-  // }
+  // --- (line: 8) skipped ---
 
   // === Details ===
   [
@@ -574,39 +279,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllReferencesLinkTag1.ts ===
-// class C {
-//     m() { }
-//     n = 1
-//     static s() { }
-//     /**
-//      * {@link m}
-//      * @see {m}
-//      * {@link C.m}
-//      * @see {C.m}
-//      * {@link C#m}
-//      * @see {C#m}
-//      * {@link C.prototype.m}
-//      * @see {C.prototype.m}
-//      */
-//     p() { }
-//     /**
-//      * {@link n}
-//      * @see {n}
-//      * {@link C.n}
-//      * @see {C.n}
-//      * {@link C#n}
-//      * @see {C#n}
-//      * {@link C.prototype.n}
-//      * @see {C.prototype.n}
-//      */
-//     q() { }
-//     /**
-//      * {@link s}
-//      * @see {s}
-//      * {@link C.s}
-//      * @see {C.s}
-//      */
-//     r() { }
+// --- (line: 33) skipped ---
 // }
 // 
 // interface I {
@@ -622,57 +295,11 @@
 //      */
 //     c()
 //     /**
-//      * {@link b}
-//      * @see {b}
-//      * {@link I.b}
-//      * @see {I.b}
-//      */
-//     d()
-// }
-// 
-// function nestor() {
-//     /** {@link r2} */
-//     function ref() { }
-//     /** @see {r2} */
-//     function d3() { }
-//     function r2() { }
-// }
+// --- (line: 49) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllReferencesLinkTag1.ts ===
-  // class C {
-  //     m() { }
-  //     n = 1
-  //     static s() { }
-  //     /**
-  //      * {@link m}
-  //      * @see {m}
-  //      * {@link C.m}
-  //      * @see {C.m}
-  //      * {@link C#m}
-  //      * @see {C#m}
-  //      * {@link C.prototype.m}
-  //      * @see {C.prototype.m}
-  //      */
-  //     p() { }
-  //     /**
-  //      * {@link n}
-  //      * @see {n}
-  //      * {@link C.n}
-  //      * @see {C.n}
-  //      * {@link C#n}
-  //      * @see {C#n}
-  //      * {@link C.prototype.n}
-  //      * @see {C.prototype.n}
-  //      */
-  //     q() { }
-  //     /**
-  //      * {@link s}
-  //      * @see {s}
-  //      * {@link C.s}
-  //      * @see {C.s}
-  //      */
-  //     r() { }
+  // --- (line: 33) skipped ---
   // }
   // 
   // interface I {
@@ -680,29 +307,7 @@
   //     b: 1
   //     /**
   //      * {@link a}
-  //      * @see {a}
-  //      * {@link I.a}
-  //      * @see {I.a}
-  //      * {@link I#a}
-  //      * @see {I#a}
-  //      */
-  //     c()
-  //     /**
-  //      * {@link b}
-  //      * @see {b}
-  //      * {@link I.b}
-  //      * @see {I.b}
-  //      */
-  //     d()
-  // }
-  // 
-  // function nestor() {
-  //     /** {@link r2} */
-  //     function ref() { }
-  //     /** @see {r2} */
-  //     function d3() { }
-  //     function r2() { }
-  // }
+  // --- (line: 41) skipped ---
 
   // === Details ===
   [
@@ -768,40 +373,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllReferencesLinkTag1.ts ===
-// class C {
-//     m() { }
-//     n = 1
-//     static s() { }
-//     /**
-//      * {@link m}
-//      * @see {m}
-//      * {@link C.m}
-//      * @see {C.m}
-//      * {@link C#m}
-//      * @see {C#m}
-//      * {@link C.prototype.m}
-//      * @see {C.prototype.m}
-//      */
-//     p() { }
-//     /**
-//      * {@link n}
-//      * @see {n}
-//      * {@link C.n}
-//      * @see {C.n}
-//      * {@link C#n}
-//      * @see {C#n}
-//      * {@link C.prototype.n}
-//      * @see {C.prototype.n}
-//      */
-//     q() { }
-//     /**
-//      * {@link s}
-//      * @see {s}
-//      * {@link C.s}
-//      * @see {C.s}
-//      */
-//     r() { }
-// }
+// --- (line: 34) skipped ---
 // 
 // interface I {
 //     a()
@@ -809,10 +381,9 @@
 //     /**
 //      * {@link a}
 //      * @see {a}
-//      * {@link I.a}
-//      * @see {I.a}
-//      * {@link I#a}
-//      * @see {I#a}
+// --- (line: 42) skipped ---
+
+// --- (line: 45) skipped ---
 //      */
 //     c()
 //     /**
@@ -823,51 +394,11 @@
 //      */
 //     d()
 // }
-// 
-// function nestor() {
-//     /** {@link r2} */
-//     function ref() { }
-//     /** @see {r2} */
-//     function d3() { }
-//     function r2() { }
-// }
+// --- (line: 56) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllReferencesLinkTag1.ts ===
-  // class C {
-  //     m() { }
-  //     n = 1
-  //     static s() { }
-  //     /**
-  //      * {@link m}
-  //      * @see {m}
-  //      * {@link C.m}
-  //      * @see {C.m}
-  //      * {@link C#m}
-  //      * @see {C#m}
-  //      * {@link C.prototype.m}
-  //      * @see {C.prototype.m}
-  //      */
-  //     p() { }
-  //     /**
-  //      * {@link n}
-  //      * @see {n}
-  //      * {@link C.n}
-  //      * @see {C.n}
-  //      * {@link C#n}
-  //      * @see {C#n}
-  //      * {@link C.prototype.n}
-  //      * @see {C.prototype.n}
-  //      */
-  //     q() { }
-  //     /**
-  //      * {@link s}
-  //      * @see {s}
-  //      * {@link C.s}
-  //      * @see {C.s}
-  //      */
-  //     r() { }
-  // }
+  // --- (line: 34) skipped ---
   // 
   // interface I {
   //     a()
@@ -875,28 +406,7 @@
   //     /**
   //      * {@link a}
   //      * @see {a}
-  //      * {@link I.a}
-  //      * @see {I.a}
-  //      * {@link I#a}
-  //      * @see {I#a}
-  //      */
-  //     c()
-  //     /**
-  //      * {@link b}
-  //      * @see {b}
-  //      * {@link I.b}
-  //      * @see {I.b}
-  //      */
-  //     d()
-  // }
-  // 
-  // function nestor() {
-  //     /** {@link r2} */
-  //     function ref() { }
-  //     /** @see {r2} */
-  //     function d3() { }
-  //     function r2() { }
-  // }
+  // --- (line: 42) skipped ---
 
   // === Details ===
   [
@@ -954,60 +464,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllReferencesLinkTag1.ts ===
-// class C {
-//     m() { }
-//     n = 1
-//     static s() { }
-//     /**
-//      * {@link m}
-//      * @see {m}
-//      * {@link C.m}
-//      * @see {C.m}
-//      * {@link C#m}
-//      * @see {C#m}
-//      * {@link C.prototype.m}
-//      * @see {C.prototype.m}
-//      */
-//     p() { }
-//     /**
-//      * {@link n}
-//      * @see {n}
-//      * {@link C.n}
-//      * @see {C.n}
-//      * {@link C#n}
-//      * @see {C#n}
-//      * {@link C.prototype.n}
-//      * @see {C.prototype.n}
-//      */
-//     q() { }
-//     /**
-//      * {@link s}
-//      * @see {s}
-//      * {@link C.s}
-//      * @see {C.s}
-//      */
-//     r() { }
-// }
-// 
-// interface I {
-//     a()
-//     b: 1
-//     /**
-//      * {@link a}
-//      * @see {a}
-//      * {@link I.a}
-//      * @see {I.a}
-//      * {@link I#a}
-//      * @see {I#a}
-//      */
-//     c()
-//     /**
-//      * {@link b}
-//      * @see {b}
-//      * {@link I.b}
-//      * @see {I.b}
-//      */
-//     d()
+// --- (line: 54) skipped ---
 // }
 // 
 // function nestor() {
@@ -1020,64 +477,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllReferencesLinkTag1.ts ===
-  // class C {
-  //     m() { }
-  //     n = 1
-  //     static s() { }
-  //     /**
-  //      * {@link m}
-  //      * @see {m}
-  //      * {@link C.m}
-  //      * @see {C.m}
-  //      * {@link C#m}
-  //      * @see {C#m}
-  //      * {@link C.prototype.m}
-  //      * @see {C.prototype.m}
-  //      */
-  //     p() { }
-  //     /**
-  //      * {@link n}
-  //      * @see {n}
-  //      * {@link C.n}
-  //      * @see {C.n}
-  //      * {@link C#n}
-  //      * @see {C#n}
-  //      * {@link C.prototype.n}
-  //      * @see {C.prototype.n}
-  //      */
-  //     q() { }
-  //     /**
-  //      * {@link s}
-  //      * @see {s}
-  //      * {@link C.s}
-  //      * @see {C.s}
-  //      */
-  //     r() { }
-  // }
-  // 
-  // interface I {
-  //     a()
-  //     b: 1
-  //     /**
-  //      * {@link a}
-  //      * @see {a}
-  //      * {@link I.a}
-  //      * @see {I.a}
-  //      * {@link I#a}
-  //      * @see {I#a}
-  //      */
-  //     c()
-  //     /**
-  //      * {@link b}
-  //      * @see {b}
-  //      * {@link I.b}
-  //      * @see {I.b}
-  //      */
-  //     d()
-  // }
-  // 
-  // function nestor() {
-  //     /** {@link r2} */
+  // --- (line: 58) skipped ---
   //     function ref() { }
   //     /** @see {r2} */
   //     function d3() { }
@@ -1177,32 +577,7 @@
 // 
 // interface I {
 //     a()
-//     b: 1
-//     /**
-//      * {@link a}
-//      * @see {a}
-//      * {@link I.a}
-//      * @see {I.a}
-//      * {@link I#a}
-//      * @see {I#a}
-//      */
-//     c()
-//     /**
-//      * {@link b}
-//      * @see {b}
-//      * {@link I.b}
-//      * @see {I.b}
-//      */
-//     d()
-// }
-// 
-// function nestor() {
-//     /** {@link r2} */
-//     function ref() { }
-//     /** @see {r2} */
-//     function d3() { }
-//     function r2() { }
-// }
+// --- (line: 38) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllReferencesLinkTag1.ts ===
@@ -1243,32 +618,7 @@
   // 
   // interface I {
   //     a()
-  //     b: 1
-  //     /**
-  //      * {@link a}
-  //      * @see {a}
-  //      * {@link I.a}
-  //      * @see {I.a}
-  //      * {@link I#a}
-  //      * @see {I#a}
-  //      */
-  //     c()
-  //     /**
-  //      * {@link b}
-  //      * @see {b}
-  //      * {@link I.b}
-  //      * @see {I.b}
-  //      */
-  //     d()
-  // }
-  // 
-  // function nestor() {
-  //     /** {@link r2} */
-  //     function ref() { }
-  //     /** @see {r2} */
-  //     function d3() { }
-  //     function r2() { }
-  // }
+  // --- (line: 38) skipped ---
 
   // === Details ===
   [
@@ -1298,38 +648,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllReferencesLinkTag1.ts ===
-// class C {
-//     m() { }
-//     n = 1
-//     static s() { }
-//     /**
-//      * {@link m}
-//      * @see {m}
-//      * {@link C.m}
-//      * @see {C.m}
-//      * {@link C#m}
-//      * @see {C#m}
-//      * {@link C.prototype.m}
-//      * @see {C.prototype.m}
-//      */
-//     p() { }
-//     /**
-//      * {@link n}
-//      * @see {n}
-//      * {@link C.n}
-//      * @see {C.n}
-//      * {@link C#n}
-//      * @see {C#n}
-//      * {@link C.prototype.n}
-//      * @see {C.prototype.n}
-//      */
-//     q() { }
-//     /**
-//      * {@link s}
-//      * @see {s}
-//      * {@link C.s}
-//      * @see {C.s}
-//      */
+// --- (line: 32) skipped ---
 //     r() { }
 // }
 // 
@@ -1356,46 +675,11 @@
 // 
 // function nestor() {
 //     /** {@link r2} */
-//     function ref() { }
-//     /** @see {r2} */
-//     function d3() { }
-//     function r2() { }
-// }
+// --- (line: 59) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllReferencesLinkTag1.ts ===
-  // class C {
-  //     m() { }
-  //     n = 1
-  //     static s() { }
-  //     /**
-  //      * {@link m}
-  //      * @see {m}
-  //      * {@link C.m}
-  //      * @see {C.m}
-  //      * {@link C#m}
-  //      * @see {C#m}
-  //      * {@link C.prototype.m}
-  //      * @see {C.prototype.m}
-  //      */
-  //     p() { }
-  //     /**
-  //      * {@link n}
-  //      * @see {n}
-  //      * {@link C.n}
-  //      * @see {C.n}
-  //      * {@link C#n}
-  //      * @see {C#n}
-  //      * {@link C.prototype.n}
-  //      * @see {C.prototype.n}
-  //      */
-  //     q() { }
-  //     /**
-  //      * {@link s}
-  //      * @see {s}
-  //      * {@link C.s}
-  //      * @see {C.s}
-  //      */
+  // --- (line: 32) skipped ---
   //     r() { }
   // }
   // 
@@ -1422,11 +706,7 @@
   // 
   // function nestor() {
   //     /** {@link r2} */
-  //     function ref() { }
-  //     /** @see {r2} */
-  //     function d3() { }
-  //     function r2() { }
-  // }
+  // --- (line: 59) skipped ---
 
   // === Details ===
   [

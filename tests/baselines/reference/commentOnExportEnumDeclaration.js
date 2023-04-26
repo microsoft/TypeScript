@@ -18,4 +18,4 @@ var Color;
     Color[Color["r"] = 0] = "r";
     Color[Color["g"] = 1] = "g";
     Color[Color["b"] = 2] = "b";
-})(Color = exports.Color || (exports.Color = {}));
+})(Color || (exports.Color = Color = {}));

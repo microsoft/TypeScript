@@ -1,16 +1,16 @@
 import * as Utils from "../../_namespaces/Utils";
 import {
-    createServerHost,
-    File,
-    libFile,
-} from "../virtualFileSystemWithWatch";
-import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,
     createSession,
     openFilesForSession,
     verifyGetErrRequest,
-} from "./helpers";
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+    File,
+    libFile,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: moduleResolution", () => {
     describe("package json file is edited", () => {

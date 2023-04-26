@@ -58,6 +58,8 @@ Shape signatures in builder refreshed for::
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
 /user/username/projects/myproject/tsconfig.json: *new*
@@ -176,6 +178,8 @@ export const x: string = 10;
 PolledWatches *deleted*::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches *deleted*::
 /user/username/projects/myproject/tsconfig.json:
@@ -221,6 +225,8 @@ Shape signatures in builder refreshed for::
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -343,6 +349,8 @@ export const x = 10;
 PolledWatches *deleted*::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches *deleted*::
 /user/username/projects/myproject/tsconfig.json:
@@ -383,6 +391,8 @@ Shape signatures in builder refreshed for::
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::

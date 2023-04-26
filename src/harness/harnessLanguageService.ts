@@ -527,8 +527,8 @@ class LanguageServiceShimProxy implements ts.LanguageService {
     getSmartSelectionRange(fileName: string, position: number): ts.SelectionRange {
         return unwrapJSONCallResult(this.shim.getSmartSelectionRange(fileName, position));
     }
-    findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): ts.RenameLocation[] {
-        return unwrapJSONCallResult(this.shim.findRenameLocations(fileName, position, findInStrings, findInComments, providePrefixAndSuffixTextForRename));
+    findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, preferences?: ts.UserPreferences | boolean): ts.RenameLocation[] {
+        return unwrapJSONCallResult(this.shim.findRenameLocations(fileName, position, findInStrings, findInComments, preferences));
     }
     getDefinitionAtPosition(fileName: string, position: number): ts.DefinitionInfo[] {
         return unwrapJSONCallResult(this.shim.getDefinitionAtPosition(fileName, position));
@@ -593,6 +593,9 @@ class LanguageServiceShimProxy implements ts.LanguageService {
     getJsxClosingTagAtPosition(): never {
         throw new Error("Not supported on the shim.");
     }
+    getLinkedEditingRangeAtPosition(): never {
+        throw new Error("Not supported on the shim.");
+    }
     getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): ts.TextSpan {
         return unwrapJSONCallResult(this.shim.getSpanOfEnclosingComment(fileName, position, onlyMultiLine));
     }
@@ -611,6 +614,9 @@ class LanguageServiceShimProxy implements ts.LanguageService {
         throw new Error("Not supported on the shim.");
     }
     getApplicableRefactors(): ts.ApplicableRefactorInfo[] {
+        throw new Error("Not supported on the shim.");
+    }
+    getMoveToRefactoringFileSuggestions(): { newFileName: string, files: string[] } {
         throw new Error("Not supported on the shim.");
     }
     organizeImports(_args: ts.OrganizeImportsArgs, _formatOptions: ts.FormatCodeSettings): readonly ts.FileTextChanges[] {
@@ -882,7 +888,7 @@ class SessionServerHost implements ts.server.ServerHost, ts.server.Logger {
         return mockHash(s);
     }
 
-    require(_initialDir: string, _moduleName: string): ts.RequireResult {
+    require(_initialDir: string, _moduleName: string): ts.ModuleImportResult {
         switch (_moduleName) {
             // Adds to the Quick Info a fixed string and a string from the config file
             // and replaces the first display part

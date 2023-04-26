@@ -2,22 +2,22 @@ import * as fakes from "../../_namespaces/fakes";
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 import * as vfs from "../../_namespaces/vfs";
+import { libContent } from "../helpers/contents";
+import { createSolutionBuilderHostForBaseline } from "../helpers/solutionBuilder";
 import {
-    appendText,
-    createSolutionBuilderHostForBaseline,
-    libContent,
-    loadProjectFromDisk,
-    loadProjectFromFiles,
     noChangeOnlyRuns,
     noChangeRun,
-    prependText,
-    replaceText,
     testTscCompileLike,
     TestTscEdit,
     TscCompileSystem,
     verifyTsc,
     verifyTscCompileLike,
-} from "../tsc/helpers";
+} from "../helpers/tsc";
+import {
+    appendText, loadProjectFromDisk,
+    loadProjectFromFiles, prependText,
+    replaceText
+} from "../helpers/vfs";
 import {
     changeToHostTrackingWrittenFiles,
     createWatchedSystem,
@@ -25,7 +25,7 @@ import {
     getTsBuildProjectFilePath,
     libFile,
     TestServerHost,
-} from "../virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsbuild:: on 'sample1' project", () => {
     let projFs: vfs.FileSystem;

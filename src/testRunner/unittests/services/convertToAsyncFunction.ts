@@ -1,10 +1,10 @@
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
-import { createProjectService } from "../tsserver/helpers";
+import { createProjectService } from "../helpers/tsserver";
 import {
     createServerHost,
     File,
-} from "../virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch";
 import {
     extractTest,
     newLineCharacter,

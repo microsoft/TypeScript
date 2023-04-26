@@ -1,15 +1,15 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    createServerHost,
-    File,
-    libFile,
-} from "../virtualFileSystemWithWatch";
-import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,
     createProjectService,
     TestProjectService,
-} from "./helpers";
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+    File,
+    libFile,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: documentRegistry:: document registry in project service", () => {
     const importModuleContent = `import {a} from "./module1"`;

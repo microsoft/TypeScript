@@ -59,6 +59,7 @@ import {
     getResolvePackageJsonExports,
     getSupportedExtensions,
     getSupportedExtensionsWithJsonIfResolveJsonModule,
+    getTextOfJsxAttributeName,
     getTokenAtPosition,
     hasIndexSignature,
     hasProperty,
@@ -487,7 +488,7 @@ function getStringLiteralCompletionsFromSignature(call: CallLikeExpression, arg:
         if (!signatureHasRestParameter(candidate) && argumentInfo.argumentCount > candidate.parameters.length) return;
         let type = candidate.getTypeParameterAtPosition(argumentInfo.argumentIndex);
         if (isJsxOpeningLikeElement(call)) {
-            const propType = checker.getTypeOfPropertyOfType(type, (editingArgument as JsxAttribute).name.text);
+            const propType = checker.getTypeOfPropertyOfType(type, getTextOfJsxAttributeName((editingArgument as JsxAttribute).name));
             if (propType) {
                 type = propType;
             }

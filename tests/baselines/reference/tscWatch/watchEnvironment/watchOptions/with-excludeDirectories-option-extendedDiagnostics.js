@@ -50,6 +50,8 @@ FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 {"excludeDirectories":["/us
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Failed Lookup Locations
 ExcludeWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Type roots
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Type roots
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Type roots
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/main.js :: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/main.js :: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Failed Lookup Locations
 [[90m12:00:40 AM[0m] Found 0 errors. Watching for file changes.
@@ -78,6 +80,10 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/node_modules/bar/foo.d.ts (used version)
 /user/username/projects/myproject/node_modules/bar/index.d.ts (used version)
 /user/username/projects/myproject/src/main.ts (used version)
+
+PolledWatches::
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
 /user/username/projects/myproject/tsconfig.json: *new*

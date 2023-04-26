@@ -31,10 +31,7 @@
 
 // === goToDefinition ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
-//     interface Element { }
-//     interface IntrinsicElements {
-//         div: {
+// --- (line: 4) skipped ---
 //             name?: string;
 //             isOpen?: boolean;
 //         };
