@@ -93,14 +93,13 @@ TI:: [hh:mm:ss:mss] Typing names in '/a/b/package.json' dependencies: ["jquery"]
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":["jquery"],"filesToWatch":["/a/b/bower_components","/a/b/package.json","/a/b/node_modules"]}
 TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":["jquery"],"filesToWatch":["/a/b/bower_components","/a/b/package.json","/a/b/node_modules"]}
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/bower_components
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/bower_components 1 undefined Project: /a/b/tsconfig.json watcher already invoked: false
-TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/bower_components 1 undefined Project: /a/b/tsconfig.json watcher already invoked: false
-TI:: [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/package.json
-TI:: [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/package.json 2000 undefined Project: /a/b/tsconfig.json watcher already invoked: false
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules 1 undefined Project: /a/b/tsconfig.json watcher already invoked: false
-TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules 1 undefined Project: /a/b/tsconfig.json watcher already invoked: false
+TI:: [hh:mm:ss:mss] Sending response:
+    {"kind":"action::watchTypingLocations","projectName":"/a/b/tsconfig.json","files":["/a/b/bower_components","/a/b/package.json","/a/b/node_modules"]}
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/bower_components 1 undefined Project: /a/b/tsconfig.json WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/bower_components 1 undefined Project: /a/b/tsconfig.json WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/package.json 2000 undefined Project: /a/b/tsconfig.json WatchType: File location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules 1 undefined Project: /a/b/tsconfig.json WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules 1 undefined Project: /a/b/tsconfig.json WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Installing typings ["jquery"]
 TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
 TI:: [hh:mm:ss:mss] Sending response:
@@ -175,6 +174,8 @@ TI:: [hh:mm:ss:mss] Typing names in '/a/b/package.json' dependencies: ["jquery"]
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":["/a/data/node_modules/@types/jquery/index.d.ts"],"newTypingNames":[],"filesToWatch":["/a/b/bower_components","/a/b/package.json","/a/b/node_modules"]}
 TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":["/a/data/node_modules/@types/jquery/index.d.ts"],"newTypingNames":[],"filesToWatch":["/a/b/bower_components","/a/b/package.json","/a/b/node_modules"]}
+TI:: [hh:mm:ss:mss] Sending response:
+    {"kind":"action::watchTypingLocations","projectName":"/a/b/tsconfig.json"}
 TI:: [hh:mm:ss:mss] Sending response:
     {"projectName":"/a/b/tsconfig.json","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"allowJs":true,"configFilePath":"/a/b/tsconfig.json","allowNonTsExtensions":true},"typings":["/a/data/node_modules/@types/jquery/index.d.ts"],"unresolvedImports":[],"kind":"action::set"}
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery

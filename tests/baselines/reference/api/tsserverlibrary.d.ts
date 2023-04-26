@@ -22,8 +22,9 @@ declare namespace ts {
         type EventBeginInstallTypes = "event::beginInstallTypes";
         type EventEndInstallTypes = "event::endInstallTypes";
         type EventInitializationFailed = "event::initializationFailed";
+        type ActionWatchTypingLocations = "action::watchTypingLocations";
         interface TypingInstallerResponse {
-            readonly kind: ActionSet | ActionInvalidate | EventTypesRegistry | ActionPackageInstalled | EventBeginInstallTypes | EventEndInstallTypes | EventInitializationFailed;
+            readonly kind: ActionSet | ActionInvalidate | EventTypesRegistry | ActionPackageInstalled | EventBeginInstallTypes | EventEndInstallTypes | EventInitializationFailed | ActionWatchTypingLocations;
         }
         interface TypingInstallerRequestWithProjectName {
             readonly projectName: string;
@@ -32,7 +33,6 @@ declare namespace ts {
             readonly fileNames: string[];
             readonly projectRootPath: Path;
             readonly compilerOptions: CompilerOptions;
-            readonly watchOptions?: WatchOptions;
             readonly typeAcquisition: TypeAcquisition;
             readonly unresolvedImports: SortedReadonlyArray<string>;
             readonly cachePath?: string;
@@ -84,8 +84,6 @@ declare namespace ts {
             writeFile(path: string, content: string): void;
             createDirectory(path: string): void;
             getCurrentDirectory?(): string;
-            watchFile?(path: string, callback: FileWatcherCallback, pollingInterval?: number, options?: WatchOptions): FileWatcher;
-            watchDirectory?(path: string, callback: DirectoryWatcherCallback, recursive?: boolean, options?: WatchOptions): FileWatcher;
         }
         interface SetTypings extends ProjectResponse {
             readonly typeAcquisition: TypeAcquisition;
@@ -93,6 +91,11 @@ declare namespace ts {
             readonly typings: string[];
             readonly unresolvedImports: SortedReadonlyArray<string>;
             readonly kind: ActionSet;
+        }
+        interface WatchTypingLocations extends ProjectResponse {
+            /** if files is undefined, retain same set of watchers */
+            readonly files: readonly string[] | undefined;
+            readonly kind: ActionWatchTypingLocations;
         }
         namespace protocol {
             enum CommandTypes {
@@ -3044,8 +3047,6 @@ declare namespace ts {
                 private readonly knownCachesSet;
                 private readonly projectWatchers;
                 private safeList;
-                private readonly toCanonicalFileName;
-                private readonly globalCachePackageJsonPath;
                 private installRunCount;
                 private inFlightRequestCount;
                 abstract readonly typesRegistry: Map<string, MapLike<string>>;
@@ -3064,7 +3065,7 @@ declare namespace ts {
                 private installTypingsAsync;
                 private executeWithThrottling;
                 protected abstract installWorker(requestId: number, packageNames: string[], cwd: string, onRequestCompleted: RequestCompletedAction): void;
-                protected abstract sendResponse(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes): void;
+                protected abstract sendResponse(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | WatchTypingLocations): void;
                 protected readonly latestDistTag = "latest";
             }
         }
