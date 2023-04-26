@@ -397,6 +397,16 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/project 1 undefined Config: /user/username/projects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/project 1 undefined Config: /user/username/projects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/project/tsconfig.json 2000 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Config file
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/user/username/projects/project/tsconfig.json'
+TI:: [hh:mm:ss:mss] DirectoryWatcher:: Closed:: WatchInfo: /user/username/projects/project/bower_components
+TI:: [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/project/bower_components 1 undefined Project: /user/username/projects/project/tsconfig.json watcher already invoked: false
+TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/project/bower_components 1 undefined Project: /user/username/projects/project/tsconfig.json watcher already invoked: false
+TI:: [hh:mm:ss:mss] FileWatcher:: Closed:: WatchInfo: /user/username/projects/project/package.json
+TI:: [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/project/package.json 2000 undefined Project: /user/username/projects/project/tsconfig.json watcher already invoked: false
+TI:: [hh:mm:ss:mss] DirectoryWatcher:: Closed:: WatchInfo: /user/username/projects/project/node_modules
+TI:: [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/project/node_modules 1 undefined Project: /user/username/projects/project/tsconfig.json watcher already invoked: false
+TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/project/node_modules 1 undefined Project: /user/username/projects/project/tsconfig.json watcher already invoked: false
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/user/username/projects/project/tsconfig.json' - done.
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Type roots
@@ -418,10 +428,6 @@ After request
 PolledWatches::
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/project/bower_components:
-  {"pollingInterval":500}
-/user/username/projects/project/node_modules:
-  {"pollingInterval":500}
 /user/username/projects/project2/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/project2/bower_components: *new*
@@ -431,6 +437,10 @@ PolledWatches::
 
 PolledWatches *deleted*::
 /user/username/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/project/bower_components:
+  {"pollingInterval":500}
+/user/username/projects/project/node_modules:
   {"pollingInterval":500}
 
 FsWatches::

@@ -657,6 +657,14 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject3*'
+TI:: [hh:mm:ss:mss] DirectoryWatcher:: Closed:: WatchInfo: /bower_components
+TI:: [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject3* watcher already invoked: false
+TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject3* watcher already invoked: false
+TI:: [hh:mm:ss:mss] DirectoryWatcher:: Closed:: WatchInfo: /node_modules
+TI:: [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject3* watcher already invoked: false
+TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject3* watcher already invoked: false
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject3*' - done.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/lib/lib.esnext.full.d.ts 500 undefined Project: /dev/null/inferredProject3* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] `remove Project::
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
@@ -668,6 +676,14 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject2*'
+TI:: [hh:mm:ss:mss] DirectoryWatcher:: Closed:: WatchInfo: /b/bower_components
+TI:: [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /b/bower_components 1 undefined Project: /dev/null/inferredProject2* watcher already invoked: false
+TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /b/bower_components 1 undefined Project: /dev/null/inferredProject2* watcher already invoked: false
+TI:: [hh:mm:ss:mss] DirectoryWatcher:: Closed:: WatchInfo: /b/node_modules
+TI:: [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /b/node_modules 1 undefined Project: /dev/null/inferredProject2* watcher already invoked: false
+TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /b/node_modules 1 undefined Project: /dev/null/inferredProject2* watcher already invoked: false
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject2*' - done.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/lib/lib.esnext.full.d.ts 500 undefined Project: /dev/null/inferredProject2* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /A/file2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /b/file2.ts 500 undefined WatchType: Closed Script info
@@ -692,6 +708,10 @@ PolledWatches::
   {"pollingInterval":500}
 /a/node_modules:
   {"pollingInterval":500}
+
+PolledWatches *deleted*::
+/a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
 /b/node_modules:
@@ -699,10 +719,6 @@ PolledWatches::
 /bower_components:
   {"pollingInterval":500}
 /node_modules:
-  {"pollingInterval":500}
-
-PolledWatches *deleted*::
-/a/lib/lib.esnext.full.d.ts:
   {"pollingInterval":500}
 
 FsWatches *deleted*::
@@ -786,14 +802,6 @@ PolledWatches::
   {"pollingInterval":500}
 /a/node_modules:
   {"pollingInterval":500}
-/b/bower_components:
-  {"pollingInterval":500}
-/b/node_modules:
-  {"pollingInterval":500}
-/bower_components:
-  {"pollingInterval":500}
-/node_modules:
-  {"pollingInterval":500}
 /a/lib/lib.esnext.full.d.ts: *new*
   {"pollingInterval":500}
 /A/bower_components: *new*
@@ -871,6 +879,24 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+PolledWatches::
+/a/lib/lib.es6.d.ts:
+  {"pollingInterval":500}
+/a/bower_components:
+  {"pollingInterval":500}
+/a/node_modules:
+  {"pollingInterval":500}
+/a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
+/A/bower_components:
+  {"pollingInterval":500}
+/A/node_modules:
+  {"pollingInterval":500}
+/b/bower_components: *new*
+  {"pollingInterval":500}
+/b/node_modules: *new*
+  {"pollingInterval":500}
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -946,6 +972,28 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+PolledWatches::
+/a/lib/lib.es6.d.ts:
+  {"pollingInterval":500}
+/a/bower_components:
+  {"pollingInterval":500}
+/a/node_modules:
+  {"pollingInterval":500}
+/a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
+/A/bower_components:
+  {"pollingInterval":500}
+/A/node_modules:
+  {"pollingInterval":500}
+/b/bower_components:
+  {"pollingInterval":500}
+/b/node_modules:
+  {"pollingInterval":500}
+/bower_components: *new*
+  {"pollingInterval":500}
+/node_modules: *new*
+  {"pollingInterval":500}
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -994,6 +1042,12 @@ PolledWatches::
   {"pollingInterval":500}
 /a/node_modules:
   {"pollingInterval":500}
+/a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
+/A/bower_components:
+  {"pollingInterval":500}
+/A/node_modules:
+  {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
 /b/node_modules:
@@ -1001,12 +1055,6 @@ PolledWatches::
 /bower_components:
   {"pollingInterval":500}
 /node_modules:
-  {"pollingInterval":500}
-/a/lib/lib.esnext.full.d.ts:
-  {"pollingInterval":500}
-/A/bower_components:
-  {"pollingInterval":500}
-/A/node_modules:
   {"pollingInterval":500}
 
 FsWatches::
@@ -1059,6 +1107,12 @@ PolledWatches::
   {"pollingInterval":500}
 /a/node_modules:
   {"pollingInterval":500}
+/a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
+/A/bower_components:
+  {"pollingInterval":500}
+/A/node_modules:
+  {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
 /b/node_modules:
@@ -1066,12 +1120,6 @@ PolledWatches::
 /bower_components:
   {"pollingInterval":500}
 /node_modules:
-  {"pollingInterval":500}
-/a/lib/lib.esnext.full.d.ts:
-  {"pollingInterval":500}
-/A/bower_components:
-  {"pollingInterval":500}
-/A/node_modules:
   {"pollingInterval":500}
 
 FsWatches::
@@ -1124,6 +1172,12 @@ PolledWatches::
   {"pollingInterval":500}
 /a/node_modules:
   {"pollingInterval":500}
+/a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
+/A/bower_components:
+  {"pollingInterval":500}
+/A/node_modules:
+  {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
 /b/node_modules:
@@ -1131,12 +1185,6 @@ PolledWatches::
 /bower_components:
   {"pollingInterval":500}
 /node_modules:
-  {"pollingInterval":500}
-/a/lib/lib.esnext.full.d.ts:
-  {"pollingInterval":500}
-/A/bower_components:
-  {"pollingInterval":500}
-/A/node_modules:
   {"pollingInterval":500}
 
 FsWatches::
@@ -1189,6 +1237,12 @@ PolledWatches::
   {"pollingInterval":500}
 /a/node_modules:
   {"pollingInterval":500}
+/a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
+/A/bower_components:
+  {"pollingInterval":500}
+/A/node_modules:
+  {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
 /b/node_modules:
@@ -1196,12 +1250,6 @@ PolledWatches::
 /bower_components:
   {"pollingInterval":500}
 /node_modules:
-  {"pollingInterval":500}
-/a/lib/lib.esnext.full.d.ts:
-  {"pollingInterval":500}
-/A/bower_components:
-  {"pollingInterval":500}
-/A/node_modules:
   {"pollingInterval":500}
 
 FsWatches::
@@ -1278,6 +1326,14 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject6*'
+TI:: [hh:mm:ss:mss] DirectoryWatcher:: Closed:: WatchInfo: /bower_components
+TI:: [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject6* watcher already invoked: false
+TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject6* watcher already invoked: false
+TI:: [hh:mm:ss:mss] DirectoryWatcher:: Closed:: WatchInfo: /node_modules
+TI:: [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject6* watcher already invoked: false
+TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject6* watcher already invoked: false
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject6*' - done.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/lib/lib.esnext.full.d.ts 500 undefined Project: /dev/null/inferredProject6* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] `remove Project::
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject4*' (Inferred)
@@ -1289,6 +1345,14 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject4*'
+TI:: [hh:mm:ss:mss] DirectoryWatcher:: Closed:: WatchInfo: /A/bower_components
+TI:: [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /A/bower_components 1 undefined Project: /dev/null/inferredProject4* watcher already invoked: false
+TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /A/bower_components 1 undefined Project: /dev/null/inferredProject4* watcher already invoked: false
+TI:: [hh:mm:ss:mss] DirectoryWatcher:: Closed:: WatchInfo: /A/node_modules
+TI:: [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /A/node_modules 1 undefined Project: /dev/null/inferredProject4* watcher already invoked: false
+TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /A/node_modules 1 undefined Project: /dev/null/inferredProject4* watcher already invoked: false
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject4*' - done.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/lib/lib.esnext.full.d.ts 500 undefined Project: /dev/null/inferredProject4* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] `remove Project::
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject5*' (Inferred)
@@ -1300,6 +1364,14 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject5*'
+TI:: [hh:mm:ss:mss] DirectoryWatcher:: Closed:: WatchInfo: /b/bower_components
+TI:: [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /b/bower_components 1 undefined Project: /dev/null/inferredProject5* watcher already invoked: false
+TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /b/bower_components 1 undefined Project: /dev/null/inferredProject5* watcher already invoked: false
+TI:: [hh:mm:ss:mss] DirectoryWatcher:: Closed:: WatchInfo: /b/node_modules
+TI:: [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /b/node_modules 1 undefined Project: /dev/null/inferredProject5* watcher already invoked: false
+TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /b/node_modules 1 undefined Project: /dev/null/inferredProject5* watcher already invoked: false
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject5*' - done.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/lib/lib.esnext.full.d.ts 500 undefined Project: /dev/null/inferredProject5* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /A/file2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /b/file2.ts 500 undefined WatchType: Closed Script info
@@ -1324,6 +1396,14 @@ PolledWatches::
   {"pollingInterval":500}
 /a/node_modules:
   {"pollingInterval":500}
+
+PolledWatches *deleted*::
+/a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
+/A/bower_components:
+  {"pollingInterval":500}
+/A/node_modules:
+  {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
 /b/node_modules:
@@ -1331,14 +1411,6 @@ PolledWatches::
 /bower_components:
   {"pollingInterval":500}
 /node_modules:
-  {"pollingInterval":500}
-/A/bower_components:
-  {"pollingInterval":500}
-/A/node_modules:
-  {"pollingInterval":500}
-
-PolledWatches *deleted*::
-/a/lib/lib.esnext.full.d.ts:
   {"pollingInterval":500}
 
 FsWatches *deleted*::
@@ -1480,19 +1552,11 @@ PolledWatches::
   {"pollingInterval":500}
 /a/node_modules:
   {"pollingInterval":500}
-/b/bower_components:
-  {"pollingInterval":500}
-/b/node_modules:
-  {"pollingInterval":500}
-/bower_components:
-  {"pollingInterval":500}
-/node_modules:
-  {"pollingInterval":500}
-/A/bower_components:
-  {"pollingInterval":500}
-/A/node_modules:
-  {"pollingInterval":500}
 /a/lib/lib.esnext.full.d.ts: *new*
+  {"pollingInterval":500}
+/b/bower_components: *new*
+  {"pollingInterval":500}
+/b/node_modules: *new*
   {"pollingInterval":500}
 
 Before request
@@ -1566,6 +1630,24 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+PolledWatches::
+/a/lib/lib.es6.d.ts:
+  {"pollingInterval":500}
+/a/bower_components:
+  {"pollingInterval":500}
+/a/node_modules:
+  {"pollingInterval":500}
+/a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
+/b/bower_components:
+  {"pollingInterval":500}
+/b/node_modules:
+  {"pollingInterval":500}
+/bower_components: *new*
+  {"pollingInterval":500}
+/node_modules: *new*
+  {"pollingInterval":500}
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -1610,6 +1692,8 @@ PolledWatches::
   {"pollingInterval":500}
 /a/node_modules:
   {"pollingInterval":500}
+/a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
 /b/node_modules:
@@ -1617,12 +1701,6 @@ PolledWatches::
 /bower_components:
   {"pollingInterval":500}
 /node_modules:
-  {"pollingInterval":500}
-/A/bower_components:
-  {"pollingInterval":500}
-/A/node_modules:
-  {"pollingInterval":500}
-/a/lib/lib.esnext.full.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
@@ -1671,6 +1749,8 @@ PolledWatches::
   {"pollingInterval":500}
 /a/node_modules:
   {"pollingInterval":500}
+/a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
 /b/node_modules:
@@ -1678,12 +1758,6 @@ PolledWatches::
 /bower_components:
   {"pollingInterval":500}
 /node_modules:
-  {"pollingInterval":500}
-/A/bower_components:
-  {"pollingInterval":500}
-/A/node_modules:
-  {"pollingInterval":500}
-/a/lib/lib.esnext.full.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
@@ -1732,6 +1806,8 @@ PolledWatches::
   {"pollingInterval":500}
 /a/node_modules:
   {"pollingInterval":500}
+/a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
 /b/node_modules:
@@ -1739,12 +1815,6 @@ PolledWatches::
 /bower_components:
   {"pollingInterval":500}
 /node_modules:
-  {"pollingInterval":500}
-/A/bower_components:
-  {"pollingInterval":500}
-/A/node_modules:
-  {"pollingInterval":500}
-/a/lib/lib.esnext.full.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
@@ -1793,6 +1863,8 @@ PolledWatches::
   {"pollingInterval":500}
 /a/node_modules:
   {"pollingInterval":500}
+/a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
 /b/node_modules:
@@ -1800,12 +1872,6 @@ PolledWatches::
 /bower_components:
   {"pollingInterval":500}
 /node_modules:
-  {"pollingInterval":500}
-/A/bower_components:
-  {"pollingInterval":500}
-/A/node_modules:
-  {"pollingInterval":500}
-/a/lib/lib.esnext.full.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
@@ -1867,6 +1933,14 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject8*'
+TI:: [hh:mm:ss:mss] DirectoryWatcher:: Closed:: WatchInfo: /bower_components
+TI:: [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject8* watcher already invoked: false
+TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject8* watcher already invoked: false
+TI:: [hh:mm:ss:mss] DirectoryWatcher:: Closed:: WatchInfo: /node_modules
+TI:: [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject8* watcher already invoked: false
+TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject8* watcher already invoked: false
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject8*' - done.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/lib/lib.esnext.full.d.ts 500 undefined Project: /dev/null/inferredProject8* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] `remove Project::
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject7*' (Inferred)
@@ -1878,6 +1952,14 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject7*'
+TI:: [hh:mm:ss:mss] DirectoryWatcher:: Closed:: WatchInfo: /b/bower_components
+TI:: [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /b/bower_components 1 undefined Project: /dev/null/inferredProject7* watcher already invoked: false
+TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /b/bower_components 1 undefined Project: /dev/null/inferredProject7* watcher already invoked: false
+TI:: [hh:mm:ss:mss] DirectoryWatcher:: Closed:: WatchInfo: /b/node_modules
+TI:: [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /b/node_modules 1 undefined Project: /dev/null/inferredProject7* watcher already invoked: false
+TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /b/node_modules 1 undefined Project: /dev/null/inferredProject7* watcher already invoked: false
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject7*' - done.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/lib/lib.esnext.full.d.ts 500 undefined Project: /dev/null/inferredProject7* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /A/file2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /b/file2.ts 500 undefined WatchType: Closed Script info
@@ -1902,6 +1984,10 @@ PolledWatches::
   {"pollingInterval":500}
 /a/node_modules:
   {"pollingInterval":500}
+
+PolledWatches *deleted*::
+/a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
 /b/node_modules:
@@ -1909,14 +1995,6 @@ PolledWatches::
 /bower_components:
   {"pollingInterval":500}
 /node_modules:
-  {"pollingInterval":500}
-/A/bower_components:
-  {"pollingInterval":500}
-/A/node_modules:
-  {"pollingInterval":500}
-
-PolledWatches *deleted*::
-/a/lib/lib.esnext.full.d.ts:
   {"pollingInterval":500}
 
 FsWatches *deleted*::
@@ -2000,19 +2078,11 @@ PolledWatches::
   {"pollingInterval":500}
 /a/node_modules:
   {"pollingInterval":500}
-/b/bower_components:
-  {"pollingInterval":500}
-/b/node_modules:
-  {"pollingInterval":500}
-/bower_components:
-  {"pollingInterval":500}
-/node_modules:
-  {"pollingInterval":500}
-/A/bower_components:
-  {"pollingInterval":500}
-/A/node_modules:
-  {"pollingInterval":500}
 /a/lib/lib.es2017.full.d.ts: *new*
+  {"pollingInterval":500}
+/A/bower_components: *new*
+  {"pollingInterval":500}
+/A/node_modules: *new*
   {"pollingInterval":500}
 
 Before request
@@ -2092,21 +2162,17 @@ PolledWatches::
   {"pollingInterval":500}
 /a/node_modules:
   {"pollingInterval":500}
-/b/bower_components:
-  {"pollingInterval":500}
-/b/node_modules:
-  {"pollingInterval":500}
-/bower_components:
-  {"pollingInterval":500}
-/node_modules:
+/a/lib/lib.es2017.full.d.ts:
   {"pollingInterval":500}
 /A/bower_components:
   {"pollingInterval":500}
 /A/node_modules:
   {"pollingInterval":500}
-/a/lib/lib.es2017.full.d.ts:
-  {"pollingInterval":500}
 /a/lib/lib.esnext.full.d.ts: *new*
+  {"pollingInterval":500}
+/b/bower_components: *new*
+  {"pollingInterval":500}
+/b/node_modules: *new*
   {"pollingInterval":500}
 
 Before request
@@ -2184,6 +2250,30 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+PolledWatches::
+/a/lib/lib.es6.d.ts:
+  {"pollingInterval":500}
+/a/bower_components:
+  {"pollingInterval":500}
+/a/node_modules:
+  {"pollingInterval":500}
+/a/lib/lib.es2017.full.d.ts:
+  {"pollingInterval":500}
+/A/bower_components:
+  {"pollingInterval":500}
+/A/node_modules:
+  {"pollingInterval":500}
+/a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
+/b/bower_components:
+  {"pollingInterval":500}
+/b/node_modules:
+  {"pollingInterval":500}
+/bower_components: *new*
+  {"pollingInterval":500}
+/node_modules: *new*
+  {"pollingInterval":500}
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -2232,6 +2322,14 @@ PolledWatches::
   {"pollingInterval":500}
 /a/node_modules:
   {"pollingInterval":500}
+/a/lib/lib.es2017.full.d.ts:
+  {"pollingInterval":500}
+/A/bower_components:
+  {"pollingInterval":500}
+/A/node_modules:
+  {"pollingInterval":500}
+/a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
 /b/node_modules:
@@ -2239,14 +2337,6 @@ PolledWatches::
 /bower_components:
   {"pollingInterval":500}
 /node_modules:
-  {"pollingInterval":500}
-/A/bower_components:
-  {"pollingInterval":500}
-/A/node_modules:
-  {"pollingInterval":500}
-/a/lib/lib.es2017.full.d.ts:
-  {"pollingInterval":500}
-/a/lib/lib.esnext.full.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
@@ -2299,6 +2389,14 @@ PolledWatches::
   {"pollingInterval":500}
 /a/node_modules:
   {"pollingInterval":500}
+/a/lib/lib.es2017.full.d.ts:
+  {"pollingInterval":500}
+/A/bower_components:
+  {"pollingInterval":500}
+/A/node_modules:
+  {"pollingInterval":500}
+/a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
 /b/node_modules:
@@ -2306,14 +2404,6 @@ PolledWatches::
 /bower_components:
   {"pollingInterval":500}
 /node_modules:
-  {"pollingInterval":500}
-/A/bower_components:
-  {"pollingInterval":500}
-/A/node_modules:
-  {"pollingInterval":500}
-/a/lib/lib.es2017.full.d.ts:
-  {"pollingInterval":500}
-/a/lib/lib.esnext.full.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
@@ -2366,6 +2456,14 @@ PolledWatches::
   {"pollingInterval":500}
 /a/node_modules:
   {"pollingInterval":500}
+/a/lib/lib.es2017.full.d.ts:
+  {"pollingInterval":500}
+/A/bower_components:
+  {"pollingInterval":500}
+/A/node_modules:
+  {"pollingInterval":500}
+/a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
 /b/node_modules:
@@ -2373,14 +2471,6 @@ PolledWatches::
 /bower_components:
   {"pollingInterval":500}
 /node_modules:
-  {"pollingInterval":500}
-/A/bower_components:
-  {"pollingInterval":500}
-/A/node_modules:
-  {"pollingInterval":500}
-/a/lib/lib.es2017.full.d.ts:
-  {"pollingInterval":500}
-/a/lib/lib.esnext.full.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
@@ -2433,6 +2523,14 @@ PolledWatches::
   {"pollingInterval":500}
 /a/node_modules:
   {"pollingInterval":500}
+/a/lib/lib.es2017.full.d.ts:
+  {"pollingInterval":500}
+/A/bower_components:
+  {"pollingInterval":500}
+/A/node_modules:
+  {"pollingInterval":500}
+/a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
 /b/node_modules:
@@ -2440,14 +2538,6 @@ PolledWatches::
 /bower_components:
   {"pollingInterval":500}
 /node_modules:
-  {"pollingInterval":500}
-/A/bower_components:
-  {"pollingInterval":500}
-/A/node_modules:
-  {"pollingInterval":500}
-/a/lib/lib.es2017.full.d.ts:
-  {"pollingInterval":500}
-/a/lib/lib.esnext.full.d.ts:
   {"pollingInterval":500}
 
 FsWatches::

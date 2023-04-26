@@ -1012,6 +1012,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     close() {
+        this.projectService.typingsCache.onProjectClosed(this);
         if (this.program) {
             // if we have a program - release all files that are enlisted in program but arent root
             // The releasing of the roots happens later
