@@ -146,14 +146,13 @@ TI:: [hh:mm:ss:mss] Typing names in '/user/username/projects/project/package.jso
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":["jquery"],"filesToWatch":["/user/username/projects/project/bower_components","/user/username/projects/project/package.json","/user/username/projects/project/node_modules"]}
 TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":["jquery"],"filesToWatch":["/user/username/projects/project/bower_components","/user/username/projects/project/package.json","/user/username/projects/project/node_modules"]}
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/bower_components
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/bower_components 1 undefined Project: /user/username/projects/project/tsconfig.json watcher already invoked: false
-TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/bower_components 1 undefined Project: /user/username/projects/project/tsconfig.json watcher already invoked: false
-TI:: [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/package.json
-TI:: [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/package.json 2000 undefined Project: /user/username/projects/project/tsconfig.json watcher already invoked: false
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules 1 undefined Project: /user/username/projects/project/tsconfig.json watcher already invoked: false
-TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules 1 undefined Project: /user/username/projects/project/tsconfig.json watcher already invoked: false
+TI:: [hh:mm:ss:mss] Sending response:
+    {"kind":"action::watchTypingLocations","projectName":"/user/username/projects/project/tsconfig.json","files":["/user/username/projects/project/bower_components","/user/username/projects/project/package.json","/user/username/projects/project/node_modules"]}
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/bower_components 1 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/bower_components 1 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/package.json 2000 undefined Project: /user/username/projects/project/tsconfig.json WatchType: File location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules 1 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules 1 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Installing typings ["jquery"]
 TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
 TI:: [hh:mm:ss:mss] Sending response:
@@ -242,6 +241,8 @@ TI:: [hh:mm:ss:mss] Typing names in '/user/username/projects/project/package.jso
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":["/a/data/node_modules/@types/jquery/index.d.ts"],"newTypingNames":[],"filesToWatch":["/user/username/projects/project/bower_components","/user/username/projects/project/package.json","/user/username/projects/project/node_modules"]}
 TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":["/a/data/node_modules/@types/jquery/index.d.ts"],"newTypingNames":[],"filesToWatch":["/user/username/projects/project/bower_components","/user/username/projects/project/package.json","/user/username/projects/project/node_modules"]}
+TI:: [hh:mm:ss:mss] Sending response:
+    {"kind":"action::watchTypingLocations","projectName":"/user/username/projects/project/tsconfig.json"}
 TI:: [hh:mm:ss:mss] Sending response:
     {"projectName":"/user/username/projects/project/tsconfig.json","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"allowJs":true,"configFilePath":"/user/username/projects/project/tsconfig.json","allowNonTsExtensions":true},"typings":["/a/data/node_modules/@types/jquery/index.d.ts"],"unresolvedImports":[],"kind":"action::set"}
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
@@ -364,14 +365,13 @@ TI:: [hh:mm:ss:mss] Typing names in '/user/username/projects/project2/package.js
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":["commander"],"filesToWatch":["/user/username/projects/project2/bower_components","/user/username/projects/project2/package.json","/user/username/projects/project2/node_modules"]}
 TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":["commander"],"filesToWatch":["/user/username/projects/project2/bower_components","/user/username/projects/project2/package.json","/user/username/projects/project2/node_modules"]}
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project2/bower_components
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project2/bower_components 1 undefined Project: /user/username/projects/project2/tsconfig.json watcher already invoked: false
-TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project2/bower_components 1 undefined Project: /user/username/projects/project2/tsconfig.json watcher already invoked: false
-TI:: [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project2/package.json
-TI:: [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project2/package.json 2000 undefined Project: /user/username/projects/project2/tsconfig.json watcher already invoked: false
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project2/node_modules
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project2/node_modules 1 undefined Project: /user/username/projects/project2/tsconfig.json watcher already invoked: false
-TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project2/node_modules 1 undefined Project: /user/username/projects/project2/tsconfig.json watcher already invoked: false
+TI:: [hh:mm:ss:mss] Sending response:
+    {"kind":"action::watchTypingLocations","projectName":"/user/username/projects/project2/tsconfig.json","files":["/user/username/projects/project2/bower_components","/user/username/projects/project2/package.json","/user/username/projects/project2/node_modules"]}
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project2/bower_components 1 undefined Project: /user/username/projects/project2/tsconfig.json WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project2/bower_components 1 undefined Project: /user/username/projects/project2/tsconfig.json WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project2/package.json 2000 undefined Project: /user/username/projects/project2/tsconfig.json WatchType: File location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project2/node_modules 1 undefined Project: /user/username/projects/project2/tsconfig.json WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project2/node_modules 1 undefined Project: /user/username/projects/project2/tsconfig.json WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Installing typings ["commander"]
 TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
 TI:: [hh:mm:ss:mss] Sending response:
@@ -398,14 +398,13 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/project 1 undefined Config: /user/username/projects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/project/tsconfig.json 2000 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Config file
 TI:: [hh:mm:ss:mss] Closing file watchers for project '/user/username/projects/project/tsconfig.json'
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Closed:: WatchInfo: /user/username/projects/project/bower_components
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/project/bower_components 1 undefined Project: /user/username/projects/project/tsconfig.json watcher already invoked: false
-TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/project/bower_components 1 undefined Project: /user/username/projects/project/tsconfig.json watcher already invoked: false
-TI:: [hh:mm:ss:mss] FileWatcher:: Closed:: WatchInfo: /user/username/projects/project/package.json
-TI:: [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/project/package.json 2000 undefined Project: /user/username/projects/project/tsconfig.json watcher already invoked: false
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Closed:: WatchInfo: /user/username/projects/project/node_modules
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/project/node_modules 1 undefined Project: /user/username/projects/project/tsconfig.json watcher already invoked: false
-TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/project/node_modules 1 undefined Project: /user/username/projects/project/tsconfig.json watcher already invoked: false
+TI:: [hh:mm:ss:mss] Sending response:
+    {"kind":"action::watchTypingLocations","projectName":"/user/username/projects/project/tsconfig.json","files":[]}
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/project/bower_components 1 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/project/bower_components 1 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/project/package.json 2000 undefined Project: /user/username/projects/project/tsconfig.json WatchType: File location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/project/node_modules 1 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/project/node_modules 1 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Closing file watchers for project '/user/username/projects/project/tsconfig.json' - done.
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Type roots
