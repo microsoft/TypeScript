@@ -1,12 +1,14 @@
 import * as ts from "../../_namespaces/ts";
 import {
     baselineTsserverLogs,
+    closeFilesForSession,
     createLoggerWithInMemoryLogs,
     createProjectService,
     createSession,
     createTypesRegistry,
     customTypesMap,
     Logger,
+    openFilesForSession,
     TestSessionAndServiceHost,
     TestSessionRequest,
     TestTypingsInstaller,
@@ -1172,6 +1174,99 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         const version2 = proj.lastCachedUnresolvedImportsList;
         assert.strictEqual(version1, version2, "set of unresolved imports should change");
         baselineTsserverLogs("typingsInstaller", "cached unresolved typings are not recomputed if program structure did not change", session);
+    });
+
+    it("multiple projects", () => {
+        const file1 = {
+            path: "/user/username/projects/project/app.js",
+            content: ""
+        };
+        const tsconfig = {
+            path: "/user/username/projects/project/tsconfig.json",
+            content: JSON.stringify({
+                compilerOptions: {
+                    allowJs: true
+                },
+                typeAcquisition: {
+                    enable: true
+                }
+            })
+        };
+        const packageJson = {
+            path: "/user/username/projects/project/package.json",
+            content: JSON.stringify({
+                name: "test",
+                dependencies: {
+                    jquery: "^3.1.0"
+                }
+            })
+        };
+        const file2 = {
+            path: "/user/username/projects/project2/app.js",
+            content: ""
+        };
+        const tsconfig2 = {
+            path: "/user/username/projects/project2/tsconfig.json",
+            content: JSON.stringify({
+                compilerOptions: {
+                    allowJs: true
+                },
+                typeAcquisition: {
+                    enable: true
+                }
+            })
+        };
+        const packageJson2 = {
+            path: "/user/username/projects/project2/package.json",
+            content: JSON.stringify({
+                name: "test",
+                dependencies: {
+                    commander: "^3.1.0"
+                }
+            })
+        };
+
+        const jquery = {
+            path: "/a/data/node_modules/@types/jquery/index.d.ts",
+            content: "declare const $: { x: number }",
+            typings: "jquery",
+        };
+        const commander = {
+            path: "/a/data/node_modules/@types/commander/index.d.ts",
+            content: "export let x: number",
+            typings: "commander",
+        };
+        const host = createServerHost([file1, tsconfig, packageJson, file2, tsconfig2, packageJson2, libFile]);
+        const logger = createLoggerWithInMemoryLogs(host);
+        const typingsInstaller = createTestTypingInstallerWithInstallWorker(
+            host,
+            logger,
+            (installer, requestId, packageNames, cb) => {
+                let typingFiles: (File & { typings: string })[] = [];
+                if (packageNames.indexOf(ts.server.typingsInstaller.typingsName("commander")) >= 0) {
+                    typingFiles = [commander];
+                }
+                else {
+                    typingFiles = [jquery];
+                }
+                executeCommand(installer, requestId, packageNames, host, typingFiles.map(f => f.typings), typingFiles, cb);
+            },
+            { typesRegistry: ["jquery", "commander"] }
+        );
+
+        const session = createSession(host, {
+            useSingleInferredProject: true,
+            typingsInstaller,
+            logger,
+        });
+        // projectService.setHostConfiguration({ preferences: { includePackageJsonAutoImports: "off" } });
+        openFilesForSession([file1], session);
+
+        typingsInstaller.installer.executePendingCommands();
+        host.runQueuedTimeoutCallbacks();
+        closeFilesForSession([file1], session);
+        openFilesForSession([file2], session);
+        baselineTsserverLogs("typingsInstaller", "multiple projects", session);
     });
 
     it("expired cache entry (inferred project, should install typings)", () => {
