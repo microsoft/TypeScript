@@ -62,6 +62,7 @@ import {
     SetTypings,
     TypesRegistryResponse,
     TypingInstallerRequestUnion,
+    WatchTypingLocations,
 } from "../jsTyping/types";
 import { ProjectService } from "../server/editorServices";
 import { Project } from "../server/project";
@@ -696,7 +697,7 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
             }
         }
 
-        private handleMessage(response: TypesRegistryResponse | PackageInstalledResponse | SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | InitializationFailedResponse | server.WatchTypingLocations) {
+        private handleMessage(response: TypesRegistryResponse | PackageInstalledResponse | SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | InitializationFailedResponse | WatchTypingLocations) {
             if (this.logger.hasLevel(LogLevel.verbose)) {
                 this.logger.info(`Received response:${stringifyIndented(response)}`);
             }
