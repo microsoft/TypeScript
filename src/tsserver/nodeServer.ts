@@ -34,6 +34,7 @@ import {
     ActionInvalidate,
     ActionPackageInstalled,
     ActionSet,
+    ActionWatchTypingLocations,
     Arguments,
     BeginInstallTypes,
     createInstallTypingsRequest,
@@ -670,7 +671,7 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
             }
         }
 
-        private handleMessage(response: TypesRegistryResponse | PackageInstalledResponse | SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | InitializationFailedResponse) {
+        private handleMessage(response: TypesRegistryResponse | PackageInstalledResponse | SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | InitializationFailedResponse | server.WatchTypingLocations) {
             if (this.logger.hasLevel(LogLevel.verbose)) {
                 this.logger.info(`Received response:${stringifyIndented(response)}`);
             }
@@ -766,6 +767,9 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
 
                     break;
                 }
+                case ActionWatchTypingLocations:
+                    this.projectService.watchTypingLocations(response);
+                    break;
                 default:
                     assertType<never>(response);
             }

@@ -174,6 +174,7 @@ import {
     ThrottledOperations,
     toNormalizedPath,
     TypingsCache,
+    WatchTypingLocations,
 } from "./_namespaces/ts.server";
 
 import * as Debug from "../compiler/debug";
@@ -1151,6 +1152,11 @@ export class ProjectService {
                 this.typingsCache.enqueueInstallTypingsForProject(project, project.lastCachedUnresolvedImportsList, /*forceRefresh*/ true);
                 return;
         }
+    }
+
+    /** @internal */
+    watchTypingLocations(response: WatchTypingLocations) {
+        this.findProject(response.projectName)?.watchTypingLocations(response.files);
     }
 
     /** @internal */

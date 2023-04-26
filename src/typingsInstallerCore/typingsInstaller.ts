@@ -1,21 +1,9 @@
 import {
-    clearMap,
-    closeFileWatcher,
     combinePaths,
-    compareStringsCaseInsensitive,
-    Comparison,
-    containsPath,
-    copyEntries,
-    createGetCanonicalFileName,
-    directorySeparator,
-    Extension,
-    fileExtensionIs,
-    FileWatcher,
+    forEachKey,
     getBaseFileName,
-    GetCanonicalFileName,
     getDirectoryPath,
     getProperty,
-    getWatchFactory,
     hasProperty,
     JsTyping,
     mangleScopedPackageName,
@@ -24,20 +12,14 @@ import {
     ModuleResolutionKind,
     noop,
     Path,
-    PollingInterval,
     resolveModuleName,
     Version,
     version,
     versionMajorMinor,
-    WatchDirectoryFlags,
-    WatchFactory,
-    WatchFactoryHost,
-    WatchLogLevel,
-    WatchOptions,
 } from "./_namespaces/ts";
 import {
-    ActionInvalidate,
     ActionSet,
+    ActionWatchTypingLocations,
     BeginInstallTypes,
     CloseProject,
     DiscoverTypings,
@@ -47,6 +29,7 @@ import {
     InstallTypingHost,
     InvalidateCachedTypings,
     SetTypings,
+    WatchTypingLocations,
 } from "./_namespaces/ts.server";
 
 interface NpmConfig {
@@ -115,49 +98,19 @@ export interface PendingRequest {
     onRequestCompleted: RequestCompletedAction;
 }
 
-function endsWith(str: string, suffix: string, caseSensitive: boolean): boolean {
-    const expectedPos = str.length - suffix.length;
-    return expectedPos >= 0 &&
-        (str.indexOf(suffix, expectedPos) === expectedPos ||
-            (!caseSensitive && compareStringsCaseInsensitive(str.substr(expectedPos), suffix) === Comparison.EqualTo));
-}
-
-function isPackageOrBowerJson(fileName: string, caseSensitive: boolean) {
-    return endsWith(fileName, "/package.json", caseSensitive) || endsWith(fileName, "/bower.json", caseSensitive);
-}
-
-function sameFiles(a: string, b: string, caseSensitive: boolean) {
-    return a === b || (!caseSensitive && compareStringsCaseInsensitive(a, b) === Comparison.EqualTo);
-}
-
-const enum ProjectWatcherType {
-    FileWatcher = "FileWatcher",
-    DirectoryWatcher = "DirectoryWatcher"
-}
-
-type ProjectWatchers = Map<string, FileWatcher> & { isInvoked?: boolean; };
-
-function getDetailWatchInfo(projectName: string, watchers: ProjectWatchers | undefined) {
-    return `Project: ${projectName} watcher already invoked: ${watchers?.isInvoked}`;
-}
-
 export abstract class TypingsInstaller {
     private readonly packageNameToTypingLocation = new Map<string, JsTyping.CachedTyping>();
     private readonly missingTypingsSet = new Set<string>();
     private readonly knownCachesSet = new Set<string>();
-    private readonly projectWatchers = new Map<string, ProjectWatchers>();
+    private readonly projectWatchers = new Map<string, Set<string>>();
     private safeList: JsTyping.SafeList | undefined;
     /** @internal */
     readonly pendingRunRequests: PendingRequest[] = [];
-    private readonly toCanonicalFileName: GetCanonicalFileName;
-    private readonly globalCachePackageJsonPath: string;
 
     private installRunCount = 1;
     private inFlightRequestCount = 0;
 
     abstract readonly typesRegistry: Map<string, MapLike<string>>;
-    /** @internal */
-    private readonly watchFactory: WatchFactory<string, ProjectWatchers>;
 
     constructor(
         protected readonly installTypingHost: InstallTypingHost,
@@ -166,13 +119,10 @@ export abstract class TypingsInstaller {
         private readonly typesMapLocation: Path,
         private readonly throttleLimit: number,
         protected readonly log = nullLog) {
-        this.toCanonicalFileName = createGetCanonicalFileName(installTypingHost.useCaseSensitiveFileNames);
-        this.globalCachePackageJsonPath = combinePaths(globalCachePath, "package.json");
         const isLoggingEnabled = this.log.isEnabled();
         if (isLoggingEnabled) {
             this.log.writeLine(`Global cache location '${globalCachePath}', safe file path '${safeListPath}', types map path ${typesMapLocation}`);
         }
-        this.watchFactory = getWatchFactory(this.installTypingHost as WatchFactoryHost, isLoggingEnabled ? WatchLogLevel.Verbose : WatchLogLevel.None, s => this.log.writeLine(s), getDetailWatchInfo);
         this.processCacheLocation(this.globalCachePath);
     }
 
@@ -191,13 +141,15 @@ export abstract class TypingsInstaller {
             }
             return;
         }
-        clearMap(watchers, closeFileWatcher);
+        // Close all the watchers
         this.projectWatchers.delete(projectName);
+        this.sendResponse({ kind: ActionWatchTypingLocations, projectName, files: [] });
 
         if (this.log.isEnabled()) {
             this.log.writeLine(`Closing file watchers for project '${projectName}' - done.`);
         }
     }
+
 
     install(req: DiscoverTypings) {
         if (this.log.isEnabled()) {
@@ -232,7 +184,7 @@ export abstract class TypingsInstaller {
         }
 
         // start watching files
-        this.watchFiles(req.projectName, discoverTypingsResult.filesToWatch, req.projectRootPath, req.watchOptions);
+        this.watchFiles(req.projectName, discoverTypingsResult.filesToWatch);
 
         // install typings
         if (discoverTypingsResult.newTypingNames.length) {
@@ -456,101 +408,23 @@ export abstract class TypingsInstaller {
         }
     }
 
-    private watchFiles(projectName: string, files: string[], projectRootPath: Path, options: WatchOptions | undefined) {
+    private watchFiles(projectName: string, files: string[]) {
         if (!files.length) {
             // shut down existing watchers
             this.closeWatchers(projectName);
             return;
         }
 
-        let watchers = this.projectWatchers.get(projectName)!;
-        const toRemove = new Map<string, FileWatcher>();
-        if (!watchers) {
-            watchers = new Map();
-            this.projectWatchers.set(projectName, watchers);
+        const existing = this.projectWatchers.get(projectName);
+        const newSet = new Set(files);
+        if (!existing || forEachKey(newSet, s => !existing.has(s)) || forEachKey(existing, s => !newSet.has(s))) {
+            this.projectWatchers.set(projectName, newSet);
+            this.sendResponse({ kind: ActionWatchTypingLocations, projectName, files });
         }
         else {
-            copyEntries(watchers, toRemove);
+            // Keep same list of files
+            this.sendResponse({ kind: ActionWatchTypingLocations, projectName, files: undefined });
         }
-
-        // handler should be invoked once for the entire set of files since it will trigger full rediscovery of typings
-        watchers.isInvoked = false;
-
-        const isLoggingEnabled = this.log.isEnabled();
-        const createProjectWatcher = (path: string, projectWatcherType: ProjectWatcherType) => {
-            const canonicalPath = this.toCanonicalFileName(path);
-            toRemove.delete(canonicalPath);
-            if (watchers.has(canonicalPath)) {
-                return;
-            }
-
-            if (isLoggingEnabled) {
-                this.log.writeLine(`${projectWatcherType}:: Added:: WatchInfo: ${path}`);
-            }
-            const watcher = projectWatcherType === ProjectWatcherType.FileWatcher ?
-                this.watchFactory.watchFile(path, () => {
-                    if (!watchers.isInvoked) {
-                        watchers.isInvoked = true;
-                        this.sendResponse({ projectName, kind: ActionInvalidate });
-                    }
-                }, PollingInterval.High, options, projectName, watchers) :
-                this.watchFactory.watchDirectory(path, f => {
-                    if (watchers.isInvoked || !fileExtensionIs(f, Extension.Json)) {
-                        return;
-                    }
-
-                    if (isPackageOrBowerJson(f, this.installTypingHost.useCaseSensitiveFileNames) &&
-                        !sameFiles(f, this.globalCachePackageJsonPath, this.installTypingHost.useCaseSensitiveFileNames)) {
-                        watchers.isInvoked = true;
-                        this.sendResponse({ projectName, kind: ActionInvalidate });
-                    }
-                }, WatchDirectoryFlags.Recursive, options, projectName, watchers);
-
-            watchers.set(canonicalPath, isLoggingEnabled ? {
-                close: () => {
-                    this.log.writeLine(`${projectWatcherType}:: Closed:: WatchInfo: ${path}`);
-                    watcher.close();
-                }
-            } : watcher);
-        };
-
-        // Create watches from list of files
-        for (const file of files) {
-            if (file.endsWith("/package.json") || file.endsWith("/bower.json")) {
-                // package.json or bower.json exists, watch the file to detect changes and update typings
-                createProjectWatcher(file, ProjectWatcherType.FileWatcher);
-                continue;
-            }
-
-            // path in projectRoot, watch project root
-            if (containsPath(projectRootPath, file, projectRootPath, !this.installTypingHost.useCaseSensitiveFileNames)) {
-                const subDirectory = file.indexOf(directorySeparator, projectRootPath.length + 1);
-                if (subDirectory !== -1) {
-                    // Watch subDirectory
-                    createProjectWatcher(file.substr(0, subDirectory), ProjectWatcherType.DirectoryWatcher);
-                }
-                else {
-                    // Watch the directory itself
-                    createProjectWatcher(file, ProjectWatcherType.DirectoryWatcher);
-                }
-                continue;
-            }
-
-            // path in global cache, watch global cache
-            if (containsPath(this.globalCachePath, file, projectRootPath, !this.installTypingHost.useCaseSensitiveFileNames)) {
-                createProjectWatcher(this.globalCachePath, ProjectWatcherType.DirectoryWatcher);
-                continue;
-            }
-
-            // watch node_modules or bower_components
-            createProjectWatcher(file, ProjectWatcherType.DirectoryWatcher);
-        }
-
-        // Remove unused watches
-        toRemove.forEach((watch, path) => {
-            watch.close();
-            watchers.delete(path);
-        });
     }
 
     private createSetTypings(request: DiscoverTypings, typings: string[]): SetTypings {
@@ -582,7 +456,7 @@ export abstract class TypingsInstaller {
     }
 
     protected abstract installWorker(requestId: number, packageNames: string[], cwd: string, onRequestCompleted: RequestCompletedAction): void;
-    protected abstract sendResponse(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes): void;
+    protected abstract sendResponse(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | WatchTypingLocations): void;
 
     protected readonly latestDistTag = "latest";
 }

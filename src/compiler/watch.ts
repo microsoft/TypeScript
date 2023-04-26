@@ -693,6 +693,8 @@ export const WatchType: WatchTypeRegistry = {
     NoopConfigFileForInferredRoot: "Noop Config file for the inferred project root",
     MissingGeneratedFile: "Missing generated file",
     NodeModulesForModuleSpecifierCache: "node_modules for module specifier cache invalidation",
+    TypingInstallerLocationFile: "File location for typing installer",
+    TypingInstallerLocationDirectory: "Directory location for typing installer",
 };
 
 /** @internal */
@@ -718,6 +720,8 @@ export interface WatchTypeRegistry {
     NoopConfigFileForInferredRoot: "Noop Config file for the inferred project root",
     MissingGeneratedFile: "Missing generated file",
     NodeModulesForModuleSpecifierCache: "node_modules for module specifier cache invalidation",
+    TypingInstallerLocationFile: "File location for typing installer",
+    TypingInstallerLocationDirectory: "Directory location for typing installer",
 }
 
 /** @internal */
