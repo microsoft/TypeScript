@@ -143,6 +143,7 @@ import {
     InvalidateCachedTypings,
     PackageInstalledResponse,
     SetTypings,
+    WatchTypingLocations,
 } from "../jsTyping/types";
 import {
     createDocumentRegistryInternal,
@@ -1194,6 +1195,11 @@ export class ProjectService {
                 this.typingsCache.enqueueInstallTypingsForProject(project, project.lastCachedUnresolvedImportsList, /*forceRefresh*/ true);
                 return;
         }
+    }
+
+    /** @internal */
+    watchTypingLocations(response: WatchTypingLocations) {
+        this.findProject(response.projectName)?.watchTypingLocations(response.files);
     }
 
     /** @internal */

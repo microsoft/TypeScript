@@ -4772,6 +4772,26 @@ declare namespace ts {
         name: Identifier;
     };
     function isExternalModule(file: SourceFile): boolean;
+    /**
+     * This function checks multiple locations for JSDoc comments that apply to a host node.
+     * At each location, the whole comment may apply to the node, or only a specific tag in
+     * the comment. In the first case, location adds the entire {@link JSDoc} object. In the
+     * second case, it adds the applicable {@link JSDocTag}.
+     *
+     * For example, a JSDoc comment before a parameter adds the entire {@link JSDoc}. But a
+     * `@param` tag on the parent function only adds the {@link JSDocTag} for the `@param`.
+     *
+     * ```ts
+     * /** JSDoc will be returned for `a` *\/
+     * const a = 0
+     * /**
+     *  * Entire JSDoc will be returned for `b`
+     *  * @param c JSDocTag will be returned for `c`
+     *  *\/
+     * function b(/** JSDoc will be returned for `c` *\/ c) {}
+     * ```
+     */
+    function getJSDocCommentsAndTags(hostNode: Node): readonly (JSDoc | JSDocTag)[];
     /** @deprecated */
     function createUnparsedSourceFile(text: string): UnparsedSource;
     /** @deprecated */
@@ -5873,8 +5893,9 @@ declare namespace ts {
         type EventBeginInstallTypes = "event::beginInstallTypes";
         type EventEndInstallTypes = "event::endInstallTypes";
         type EventInitializationFailed = "event::initializationFailed";
+        type ActionWatchTypingLocations = "action::watchTypingLocations";
         interface TypingInstallerResponse {
-            readonly kind: ActionSet | ActionInvalidate | EventTypesRegistry | ActionPackageInstalled | EventBeginInstallTypes | EventEndInstallTypes | EventInitializationFailed;
+            readonly kind: ActionSet | ActionInvalidate | EventTypesRegistry | ActionPackageInstalled | EventBeginInstallTypes | EventEndInstallTypes | EventInitializationFailed | ActionWatchTypingLocations;
         }
         interface TypingInstallerRequestWithProjectName {
             readonly projectName: string;
@@ -5883,7 +5904,6 @@ declare namespace ts {
             readonly fileNames: string[];
             readonly projectRootPath: Path;
             readonly compilerOptions: CompilerOptions;
-            readonly watchOptions?: WatchOptions;
             readonly typeAcquisition: TypeAcquisition;
             readonly unresolvedImports: SortedReadonlyArray<string>;
             readonly cachePath?: string;
@@ -5935,8 +5955,6 @@ declare namespace ts {
             writeFile(path: string, content: string): void;
             createDirectory(path: string): void;
             getCurrentDirectory?(): string;
-            watchFile?(path: string, callback: FileWatcherCallback, pollingInterval?: number, options?: WatchOptions): FileWatcher;
-            watchDirectory?(path: string, callback: DirectoryWatcherCallback, recursive?: boolean, options?: WatchOptions): FileWatcher;
         }
         interface SetTypings extends ProjectResponse {
             readonly typeAcquisition: TypeAcquisition;
@@ -5944,6 +5962,11 @@ declare namespace ts {
             readonly typings: string[];
             readonly unresolvedImports: SortedReadonlyArray<string>;
             readonly kind: ActionSet;
+        }
+        interface WatchTypingLocations extends ProjectResponse {
+            /** if files is undefined, retain same set of watchers */
+            readonly files: readonly string[] | undefined;
+            readonly kind: ActionWatchTypingLocations;
         }
     }
     function getDefaultFormatCodeSettings(newLineCharacter?: string): FormatCodeSettings;

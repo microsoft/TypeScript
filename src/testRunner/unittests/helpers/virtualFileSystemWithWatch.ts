@@ -292,7 +292,8 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
     private readonly environmentVariables?: Map<string, string>;
     private readonly executingFilePath: string;
     private readonly currentDirectory: string;
-    public require: ((initialPath: string, moduleName: string) => ModuleImportResult) | undefined;
+    require?: (initialPath: string, moduleName: string) => ModuleImportResult;
+    importPlugin?: (root: string, moduleName: string) => Promise<ModuleImportResult>;
     public storeFilesChangingSignatureDuringEmit = true;
     watchFile: HostWatchFile;
     private inodeWatching: boolean | undefined;

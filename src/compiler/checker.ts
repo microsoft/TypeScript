@@ -8594,7 +8594,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 // Need to skip over export= symbols below - json source files get a single `Property` flagged
                 // symbol of name `export=` which needs to be handled like an alias. It's not great, but it is what it is.
-                if (symbol.flags & (SymbolFlags.BlockScopedVariable | SymbolFlags.FunctionScopedVariable | SymbolFlags.Property)
+                if (symbol.flags & (SymbolFlags.BlockScopedVariable | SymbolFlags.FunctionScopedVariable | SymbolFlags.Property | SymbolFlags.Accessor)
                     && symbol.escapedName !== InternalSymbolName.ExportEquals
                     && !(symbol.flags & SymbolFlags.Prototype)
                     && !(symbol.flags & SymbolFlags.Class)
@@ -14728,16 +14728,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (declaration.kind === SyntaxKind.Constructor) {
             return getDeclaredTypeOfClassOrInterface(getMergedSymbol((declaration.parent as ClassDeclaration).symbol));
         }
+        const typeNode = getEffectiveReturnTypeNode(declaration);
         if (isJSDocSignature(declaration)) {
             const root = getJSDocRoot(declaration);
-            if (root && isConstructorDeclaration(root.parent)) {
+            if (root && isConstructorDeclaration(root.parent) && !typeNode) {
                 return getDeclaredTypeOfClassOrInterface(getMergedSymbol((root.parent.parent as ClassDeclaration).symbol));
             }
         }
         if (isJSDocConstructSignature(declaration)) {
             return getTypeFromTypeNode((declaration.parameters[0] as ParameterDeclaration).type!); // TODO: GH#18217
         }
-        const typeNode = getEffectiveReturnTypeNode(declaration);
         if (typeNode) {
             return getTypeFromTypeNode(typeNode);
         }
@@ -29246,6 +29246,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function discriminateContextualTypeByJSXAttributes(node: JsxAttributes, contextualType: UnionType) {
+        const jsxChildrenPropertyName = getJsxElementChildrenPropertyName(getJsxNamespaceAt(node));
         return discriminateTypeByDiscriminableItems(contextualType,
             concatenate(
                 map(
@@ -29253,7 +29254,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     prop => ([!(prop as JsxAttribute).initializer ? (() => trueType) : (() => getContextFreeTypeOfExpression((prop as JsxAttribute).initializer!)), prop.symbol.escapedName] as [() => Type, __String])
                 ),
                 map(
-                    filter(getPropertiesOfType(contextualType), s => !!(s.flags & SymbolFlags.Optional) && !!node?.symbol?.members && !node.symbol.members.has(s.escapedName) && isDiscriminantProperty(contextualType, s.escapedName)),
+                    filter(getPropertiesOfType(contextualType), s => {
+                        if (!(s.flags & SymbolFlags.Optional) || !node?.symbol?.members) {
+                            return false;
+                        }
+                        const element = node.parent.parent;
+                        if (s.escapedName === jsxChildrenPropertyName && isJsxElement(element) && getSemanticJsxChildren(element.children).length) {
+                            return false;
+                        }
+                        return !node.symbol.members.has(s.escapedName) && isDiscriminantProperty(contextualType, s.escapedName);
+                    }),
                     s => [() => undefinedType, s.escapedName] as [() => Type, __String]
                 )
             ),
@@ -29545,18 +29555,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getJsxManagedAttributesFromLocatedAttributes(context: JsxOpeningLikeElement, ns: Symbol, attributesType: Type) {
         const managedSym = getJsxLibraryManagedAttributes(ns);
         if (managedSym) {
-            const declaredManagedType = getDeclaredTypeOfSymbol(managedSym); // fetches interface type, or initializes symbol links type parmaeters
             const ctorType = getStaticTypeOfReferencedJsxConstructor(context);
-            if (managedSym.flags & SymbolFlags.TypeAlias) {
-                const params = getSymbolLinks(managedSym).typeParameters;
-                if (length(params) >= 2) {
-                    const args = fillMissingTypeArguments([ctorType, attributesType], params, 2, isInJSFile(context));
-                    return getTypeAliasInstantiation(managedSym, args);
-                }
-            }
-            if (length((declaredManagedType as GenericType).typeParameters) >= 2) {
-                const args = fillMissingTypeArguments([ctorType, attributesType], (declaredManagedType as GenericType).typeParameters, 2, isInJSFile(context));
-                return createTypeReference((declaredManagedType as GenericType), args);
+            const result = instantiateAliasOrInterfaceWithDefaults(managedSym, isInJSFile(context), ctorType, attributesType);
+            if (result) {
+                return result;
             }
         }
         return attributesType;
@@ -30615,6 +30617,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return jsxNamespace && getSymbol(jsxNamespace.exports!, JsxNames.LibraryManagedAttributes, SymbolFlags.Type);
     }
 
+    function getJsxElementTypeSymbol(jsxNamespace: Symbol) {
+        // JSX.ElementType [symbol]
+        return jsxNamespace && getSymbol(jsxNamespace.exports!, JsxNames.ElementType, SymbolFlags.Type);
+    }
+
     /// e.g. "props" for React.d.ts,
     /// or 'undefined' if ElementAttributesProperty doesn't exist (which means all
     ///     non-intrinsic elements' attributes type is 'any'),
@@ -30751,9 +30758,29 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getJsxElementTypeTypeAt(location: Node): Type | undefined {
-        const type = getJsxType(JsxNames.ElementType, location);
-        if (isErrorType(type)) return undefined;
+        const ns = getJsxNamespaceAt(location);
+        if (!ns) return undefined;
+        const sym = getJsxElementTypeSymbol(ns);
+        if (!sym) return undefined;
+        const type = instantiateAliasOrInterfaceWithDefaults(sym, isInJSFile(location));
+        if (!type || isErrorType(type)) return undefined;
         return type;
+    }
+
+    function instantiateAliasOrInterfaceWithDefaults(managedSym: Symbol, inJs: boolean, ...typeArguments: Type[]) {
+        const declaredManagedType = getDeclaredTypeOfSymbol(managedSym); // fetches interface type, or initializes symbol links type parmaeters
+        if (managedSym.flags & SymbolFlags.TypeAlias) {
+            const params = getSymbolLinks(managedSym).typeParameters;
+            if (length(params) >= typeArguments.length) {
+                const args = fillMissingTypeArguments(typeArguments, params, typeArguments.length, inJs);
+                return length(args) === 0 ? declaredManagedType : getTypeAliasInstantiation(managedSym, args);
+            }
+        }
+        if (length((declaredManagedType as GenericType).typeParameters) >= typeArguments.length) {
+            const args = fillMissingTypeArguments(typeArguments, (declaredManagedType as GenericType).typeParameters, typeArguments.length, inJs);
+            return createTypeReference((declaredManagedType as GenericType), args);
+        }
+        return undefined;
     }
 
     /**

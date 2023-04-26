@@ -67,6 +67,7 @@ import {
     ForStatement,
     FunctionDeclaration,
     Identifier,
+    IfStatement,
     ImportCall,
     ImportDeclaration,
     ImportEqualsDeclaration,
@@ -1228,6 +1229,9 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
             case SyntaxKind.WithStatement:
                 return visitWithStatement(node as WithStatement);
 
+            case SyntaxKind.IfStatement:
+                return visitIfStatement(node as IfStatement);
+
             case SyntaxKind.SwitchStatement:
                 return visitSwitchStatement(node as SwitchStatement);
 
@@ -1398,6 +1402,20 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
             node,
             visitNode(node.expression, visitor, isExpression),
             Debug.checkDefined(visitNode(node.statement, topLevelNestedVisitor, isStatement, factory.liftToBlock))
+        );
+    }
+
+    /**
+     * Visits the body of a IfStatement to hoist declarations.
+     *
+     * @param node The node to visit.
+     */
+    function visitIfStatement(node: IfStatement): VisitResult<Statement> {
+        return factory.updateIfStatement(
+            node,
+            visitNode(node.expression, visitor, isExpression),
+            Debug.checkDefined(visitNode(node.thenStatement, topLevelNestedVisitor, isStatement, factory.liftToBlock)),
+            visitNode(node.elseStatement, topLevelNestedVisitor, isStatement, factory.liftToBlock)
         );
     }
 
