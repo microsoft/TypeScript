@@ -14818,16 +14818,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (declaration.kind === SyntaxKind.Constructor) {
             return getDeclaredTypeOfClassOrInterface(getMergedSymbol((declaration.parent as ClassDeclaration).symbol));
         }
+        const typeNode = getEffectiveReturnTypeNode(declaration);
         if (isJSDocSignature(declaration)) {
             const root = getJSDocRoot(declaration);
-            if (root && isConstructorDeclaration(root.parent)) {
+            if (root && isConstructorDeclaration(root.parent) && !typeNode) {
                 return getDeclaredTypeOfClassOrInterface(getMergedSymbol((root.parent.parent as ClassDeclaration).symbol));
             }
         }
         if (isJSDocConstructSignature(declaration)) {
             return getTypeFromTypeNode((declaration.parameters[0] as ParameterDeclaration).type!); // TODO: GH#18217
         }
-        const typeNode = getEffectiveReturnTypeNode(declaration);
         if (typeNode) {
             return getTypeFromTypeNode(typeNode);
         }
