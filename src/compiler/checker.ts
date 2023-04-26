@@ -24117,7 +24117,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (intraExpressionInferenceSites?.length) {
                 const templateType = (getApparentTypeOfContextualType(sourceValueDeclaration.parent.parent as Expression, ContextFlags.NoConstraints) as MappedType).templateType;
                 if (templateType) {
-                    Debug.assert(isExpressionNode(sourceValueDeclaration));
+                    Debug.assertNode(sourceValueDeclaration, isExpressionNode);
                     pushContextualType(sourceValueDeclaration as any as Expression, templateType, /*isCache*/ false);
                     inferFromIntraExpressionSites([inference], intraExpressionInferenceSites);
                     popContextualType();
