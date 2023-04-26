@@ -27527,7 +27527,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             if (isExpressionNode(location) && (!isAssignmentTarget(location) || isWriteAccess(location))) {
                 const type = location.flags & NodeFlags.OptionalChain ?
-                    checkPropertyAccessChain(location as PropertyAccessChain, CheckMode.Normal, /*wasOptional*/ false) :
+                    removeOptionalTypeMarker(getTypeOfExpression(location as Expression)) :
                     getTypeOfExpression(location as Expression);
                 if (getExportSymbolOfValueSymbolIfExported(getNodeLinks(location).resolvedSymbol) === symbol) {
                     return type;
@@ -31216,11 +31216,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             checkPropertyAccessExpressionOrQualifiedName(node, node.expression, checkNonNullExpression(node.expression), node.name, checkMode, writeOnly);
     }
 
-    function checkPropertyAccessChain(node: PropertyAccessChain, checkMode: CheckMode | undefined, wasOptional?: boolean) {
+    function checkPropertyAccessChain(node: PropertyAccessChain, checkMode: CheckMode | undefined) {
         const leftType = checkExpression(node.expression);
         const nonOptionalType = getOptionalExpressionType(leftType, node.expression);
-        wasOptional ??= nonOptionalType !== leftType;
-        return propagateOptionalTypeMarker(checkPropertyAccessExpressionOrQualifiedName(node, node.expression, checkNonNullType(nonOptionalType, node.expression), node.name, checkMode), node, wasOptional);
+        return propagateOptionalTypeMarker(checkPropertyAccessExpressionOrQualifiedName(node, node.expression, checkNonNullType(nonOptionalType, node.expression), node.name, checkMode), node, nonOptionalType !== leftType);
     }
 
     function checkQualifiedName(node: QualifiedName, checkMode: CheckMode | undefined) {
