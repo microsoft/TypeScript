@@ -29,13 +29,18 @@ declare var value;
 
 <n:a n:v />;
 ><n:a n:v /> : any
->n:a : any
+>n : any
+>a : any
 >n:v : true
+>n : any
+>v : any
 
 <a n:foo="bar"> {value} <b><c /></b></a>;
 ><a n:foo="bar"> {value} <b><c /></b></a> : any
 >a : any
 >n:foo : string
+>n : any
+>foo : any
 >value : any
 ><b><c /></b> : any
 >b : any

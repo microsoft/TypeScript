@@ -7,17 +7,7 @@
 //     }
 // }
 // class D extends C {
-//     constructor() {
-//         super()
-//         this.#foo = 20;
-//     }
-// }
-// class E {
-//     #foo(){ }
-//     constructor() {
-//         this.#foo();
-//     }
-// }
+// --- (line: 8) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsPrivateNameMethods.ts ===
@@ -26,19 +16,7 @@
   //     constructor() {
   //         this.#foo();
   //     }
-  // }
-  // class D extends C {
-  //     constructor() {
-  //         super()
-  //         this.#foo = 20;
-  //     }
-  // }
-  // class E {
-  //     #foo(){ }
-  //     constructor() {
-  //         this.#foo();
-  //     }
-  // }
+  // --- (line: 6) skipped ---
 
   // === Details ===
   [
@@ -111,17 +89,7 @@
 //     }
 // }
 // class D extends C {
-//     constructor() {
-//         super()
-//         this.#foo = 20;
-//     }
-// }
-// class E {
-//     #foo(){ }
-//     constructor() {
-//         this.#foo();
-//     }
-// }
+// --- (line: 8) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsPrivateNameMethods.ts ===
@@ -132,17 +100,7 @@
   //     }
   // }
   // class D extends C {
-  //     constructor() {
-  //         super()
-  //         this.#foo = 20;
-  //     }
-  // }
-  // class E {
-  //     #foo(){ }
-  //     constructor() {
-  //         this.#foo();
-  //     }
-  // }
+  // --- (line: 8) skipped ---
 
   // === Details ===
   [
@@ -208,16 +166,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsPrivateNameMethods.ts ===
-// class C {
-//     #foo(){ }
-//     constructor() {
-//         this.#foo();
-//     }
-// }
-// class D extends C {
-//     constructor() {
-//         super()
-//         this.#foo = 20;
+// --- (line: 10) skipped ---
 //     }
 // }
 // class E {
@@ -229,16 +178,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsPrivateNameMethods.ts ===
-  // class C {
-  //     #foo(){ }
-  //     constructor() {
-  //         this.#foo();
-  //     }
-  // }
-  // class D extends C {
-  //     constructor() {
-  //         super()
-  //         this.#foo = 20;
+  // --- (line: 10) skipped ---
   //     }
   // }
   // class E {
@@ -312,16 +252,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsPrivateNameMethods.ts ===
-// class C {
-//     #foo(){ }
-//     constructor() {
-//         this.#foo();
-//     }
-// }
-// class D extends C {
-//     constructor() {
-//         super()
-//         this.#foo = 20;
+// --- (line: 10) skipped ---
 //     }
 // }
 // class E {
@@ -333,16 +264,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsPrivateNameMethods.ts ===
-  // class C {
-  //     #foo(){ }
-  //     constructor() {
-  //         this.#foo();
-  //     }
-  // }
-  // class D extends C {
-  //     constructor() {
-  //         super()
-  //         this.#foo = 20;
+  // --- (line: 10) skipped ---
   //     }
   // }
   // class E {

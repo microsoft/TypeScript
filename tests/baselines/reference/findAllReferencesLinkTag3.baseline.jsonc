@@ -13,19 +13,7 @@
 //      * {@linkcode Consider#This#show}
 //      * {@linkplain Consider.This.show}
 //      * {@linkcode NPR.Consider#This#show}
-//      * {@linkplain NPR.Consider.This#show}
-//      * {@linkcode NPR.Consider#This.show} # doesn't parse trailing .
-//      * {@linkcode NPR.Consider.This.show}
-//      */
-//     export function ref() { }
-// }
-// /**
-//  * {@linkplain NPR.Consider#This#show hello hello}
-//  * {@linkplain NPR.Consider.This#show}
-//  * {@linkcode NPR.Consider#This.show} # doesn't parse trailing .
-//  * {@linkcode NPR.Consider.This.show}
-//  */
-// export function outerref() { }
+// --- (line: 14) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllReferencesLinkTag3.ts ===
@@ -38,23 +26,7 @@
   //     }
   //     /**
   //      * {@linkcode Consider.prototype.m}
-  //      * {@linkplain Consider#m}
-  //      * {@linkcode Consider#This#show}
-  //      * {@linkplain Consider.This.show}
-  //      * {@linkcode NPR.Consider#This#show}
-  //      * {@linkplain NPR.Consider.This#show}
-  //      * {@linkcode NPR.Consider#This.show} # doesn't parse trailing .
-  //      * {@linkcode NPR.Consider.This.show}
-  //      */
-  //     export function ref() { }
-  // }
-  // /**
-  //  * {@linkplain NPR.Consider#This#show hello hello}
-  //  * {@linkplain NPR.Consider.This#show}
-  //  * {@linkcode NPR.Consider#This.show} # doesn't parse trailing .
-  //  * {@linkcode NPR.Consider.This.show}
-  //  */
-  // export function outerref() { }
+  // --- (line: 10) skipped ---
 
   // === Details ===
   [
@@ -164,25 +136,7 @@
   //         }
   //         m() { }
   //     }
-  //     /**
-  //      * {@linkcode Consider.prototype.m}
-  //      * {@linkplain Consider#m}
-  //      * {@linkcode Consider#This#show}
-  //      * {@linkplain Consider.This.show}
-  //      * {@linkcode NPR.Consider#This#show}
-  //      * {@linkplain NPR.Consider.This#show}
-  //      * {@linkcode NPR.Consider#This.show} # doesn't parse trailing .
-  //      * {@linkcode NPR.Consider.This.show}
-  //      */
-  //     export function ref() { }
-  // }
-  // /**
-  //  * {@linkplain NPR.Consider#This#show hello hello}
-  //  * {@linkplain NPR.Consider.This#show}
-  //  * {@linkcode NPR.Consider#This.show} # doesn't parse trailing .
-  //  * {@linkcode NPR.Consider.This.show}
-  //  */
-  // export function outerref() { }
+  // --- (line: 8) skipped ---
 
   // === Details ===
   [
@@ -285,24 +239,7 @@
   //         m() { }
   //     }
   //     /**
-  //      * {@linkcode Consider.prototype.m}
-  //      * {@linkplain Consider#m}
-  //      * {@linkcode Consider#This#show}
-  //      * {@linkplain Consider.This.show}
-  //      * {@linkcode NPR.Consider#This#show}
-  //      * {@linkplain NPR.Consider.This#show}
-  //      * {@linkcode NPR.Consider#This.show} # doesn't parse trailing .
-  //      * {@linkcode NPR.Consider.This.show}
-  //      */
-  //     export function ref() { }
-  // }
-  // /**
-  //  * {@linkplain NPR.Consider#This#show hello hello}
-  //  * {@linkplain NPR.Consider.This#show}
-  //  * {@linkcode NPR.Consider#This.show} # doesn't parse trailing .
-  //  * {@linkcode NPR.Consider.This.show}
-  //  */
-  // export function outerref() { }
+  // --- (line: 9) skipped ---
 
   // === Details ===
   [
@@ -415,22 +352,7 @@
   //     /**
   //      * {@linkcode Consider.prototype.m}
   //      * {@linkplain Consider#m}
-  //      * {@linkcode Consider#This#show}
-  //      * {@linkplain Consider.This.show}
-  //      * {@linkcode NPR.Consider#This#show}
-  //      * {@linkplain NPR.Consider.This#show}
-  //      * {@linkcode NPR.Consider#This.show} # doesn't parse trailing .
-  //      * {@linkcode NPR.Consider.This.show}
-  //      */
-  //     export function ref() { }
-  // }
-  // /**
-  //  * {@linkplain NPR.Consider#This#show hello hello}
-  //  * {@linkplain NPR.Consider.This#show}
-  //  * {@linkcode NPR.Consider#This.show} # doesn't parse trailing .
-  //  * {@linkcode NPR.Consider.This.show}
-  //  */
-  // export function outerref() { }
+  // --- (line: 11) skipped ---
 
   // === Details ===
   [
@@ -472,11 +394,9 @@
 //     export class Consider {
 //         This = class {
 //             show() { }
-//         }
-//         m() { }
-//     }
-//     /**
-//      * {@linkcode Consider.prototype.m}
+// --- (line: 5) skipped ---
+
+// --- (line: 9) skipped ---
 //      * {@linkplain Consider#m}
 //      * {@linkcode Consider#This#show}
 //      * {@linkplain Consider.This.show}
@@ -519,10 +439,7 @@
   // /**
   //  * {@linkplain NPR.Consider#This#show hello hello}
   //  * {@linkplain NPR.Consider.This#show}
-  //  * {@linkcode NPR.Consider#This.show} # doesn't parse trailing .
-  //  * {@linkcode NPR.Consider.This.show}
-  //  */
-  // export function outerref() { }
+  // --- (line: 23) skipped ---
 
   // === Details ===
   [

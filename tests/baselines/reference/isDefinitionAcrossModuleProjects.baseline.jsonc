@@ -9,10 +9,9 @@
 //     }
 // }
 // 
-// declare module "../c" {
-//     export interface I {
-//         FA();
-//     }
+// --- (line: 10) skipped ---
+
+// --- (line: 13) skipped ---
 // }
 // 
 // const ia: I = {
@@ -31,16 +30,7 @@
   //     }
   // }
   // 
-  // declare module "../c" {
-  //     export interface I {
-  //         FA();
-  //     }
-  // }
-  // 
-  // const ia: I = {
-  //     FA: NS.FA,
-  //     FC() { },
-  // };
+  // --- (line: 10) skipped ---
 
   // === Details ===
   [
@@ -177,11 +167,7 @@
   //         FA();
   //     }
   // }
-  // 
-  // const ia: I = {
-  //     FA: NS.FA,
-  //     FC() { },
-  // };
+  // --- (line: 15) skipped ---
 
   // === /a2/index.ts ===
   // import { NS } from "../b";
@@ -189,20 +175,7 @@
   // 
   // declare module "../b" {
   //     export namespace NS {
-  //         export function FA();
-  //     }
-  // }
-  // 
-  // declare module "../c" {
-  //     export interface I {
-  //         FA();
-  //     }
-  // }
-  // 
-  // const ia: I = {
-  //     FA: NS.FA,
-  //     FC() { },
-  // };
+  // --- (line: 6) skipped ---
 
   // === Details ===
   [
@@ -339,14 +312,7 @@
 
 // === findAllReferences ===
 // === /a/index.ts ===
-// import { NS } from "../b";
-// import { I } from "../c";
-// 
-// declare module "../b" {
-//     export namespace NS {
-//         export function FA();
-//     }
-// }
+// --- (line: 8) skipped ---
 // 
 // declare module "../c" {
 //     export interface I {
@@ -361,14 +327,7 @@
 
   // === Definitions ===
   // === /a/index.ts ===
-  // import { NS } from "../b";
-  // import { I } from "../c";
-  // 
-  // declare module "../b" {
-  //     export namespace NS {
-  //         export function FA();
-  //     }
-  // }
+  // --- (line: 8) skipped ---
   // 
   // declare module "../c" {
   //     export interface I {
@@ -376,10 +335,7 @@
   //     }
   // }
   // 
-  // const ia: I = {
-  //     FA: NS.FA,
-  //     FC() { },
-  // };
+  // --- (line: 16) skipped ---
 
   // === Details ===
   [
@@ -454,10 +410,9 @@
 //     }
 // }
 // 
-// declare module "../c" {
-//     export interface I {
-//         FA();
-//     }
+// --- (line: 10) skipped ---
+
+// --- (line: 13) skipped ---
 // }
 // 
 // const ia: I = {
@@ -476,16 +431,7 @@
   //     }
   // }
   // 
-  // declare module "../c" {
-  //     export interface I {
-  //         FA();
-  //     }
-  // }
-  // 
-  // const ia: I = {
-  //     FA: NS.FA,
-  //     FC() { },
-  // };
+  // --- (line: 10) skipped ---
 
   // === Details ===
   [
@@ -622,11 +568,7 @@
   //         FA();
   //     }
   // }
-  // 
-  // const ia: I = {
-  //     FA: NS.FA,
-  //     FC() { },
-  // };
+  // --- (line: 15) skipped ---
 
   // === /a/index.ts ===
   // import { NS } from "../b";
@@ -634,20 +576,7 @@
   // 
   // declare module "../b" {
   //     export namespace NS {
-  //         export function FA();
-  //     }
-  // }
-  // 
-  // declare module "../c" {
-  //     export interface I {
-  //         FA();
-  //     }
-  // }
-  // 
-  // const ia: I = {
-  //     FA: NS.FA,
-  //     FC() { },
-  // };
+  // --- (line: 6) skipped ---
 
   // === Details ===
   [
@@ -784,14 +713,7 @@
 
 // === findAllReferences ===
 // === /a2/index.ts ===
-// import { NS } from "../b";
-// import { I } from "../c";
-// 
-// declare module "../b" {
-//     export namespace NS {
-//         export function FA();
-//     }
-// }
+// --- (line: 8) skipped ---
 // 
 // declare module "../c" {
 //     export interface I {
@@ -806,14 +728,7 @@
 
   // === Definitions ===
   // === /a2/index.ts ===
-  // import { NS } from "../b";
-  // import { I } from "../c";
-  // 
-  // declare module "../b" {
-  //     export namespace NS {
-  //         export function FA();
-  //     }
-  // }
+  // --- (line: 8) skipped ---
   // 
   // declare module "../c" {
   //     export interface I {
@@ -821,10 +736,7 @@
   //     }
   // }
   // 
-  // const ia: I = {
-  //     FA: NS.FA,
-  //     FC() { },
-  // };
+  // --- (line: 16) skipped ---
 
   // === Details ===
   [
@@ -895,10 +807,7 @@
 // }
 // 
 // export interface I {
-//     FB();
-// }
-// 
-// const ib: I = { FB() {} };
+// --- (line: 6) skipped ---
 
   // === Definitions ===
   // === /b/index.ts ===
@@ -907,10 +816,7 @@
   // }
   // 
   // export interface I {
-  //     FB();
-  // }
-  // 
-  // const ib: I = { FB() {} };
+  // --- (line: 6) skipped ---
 
   // === Details ===
   [
@@ -1109,10 +1015,7 @@
 // }
 // 
 // export interface I {
-//     FC();
-// }
-// 
-// const ic: I = { FC() {} };
+// --- (line: 6) skipped ---
 
   // === Definitions ===
   // === /c/index.ts ===
@@ -1121,10 +1024,7 @@
   // }
   // 
   // export interface I {
-  //     FC();
-  // }
-  // 
-  // const ic: I = { FC() {} };
+  // --- (line: 6) skipped ---
 
   // === Details ===
   [
@@ -1252,20 +1152,7 @@
   // 
   // declare module "../b" {
   //     export namespace NS {
-  //         export function FA();
-  //     }
-  // }
-  // 
-  // declare module "../c" {
-  //     export interface I {
-  //         FA();
-  //     }
-  // }
-  // 
-  // const ia: I = {
-  //     FA: NS.FA,
-  //     FC() { },
-  // };
+  // --- (line: 6) skipped ---
 
   // === /a2/index.ts ===
   // import { NS } from "../b";
@@ -1273,20 +1160,7 @@
   // 
   // declare module "../b" {
   //     export namespace NS {
-  //         export function FA();
-  //     }
-  // }
-  // 
-  // declare module "../c" {
-  //     export interface I {
-  //         FA();
-  //     }
-  // }
-  // 
-  // const ia: I = {
-  //     FA: NS.FA,
-  //     FC() { },
-  // };
+  // --- (line: 6) skipped ---
 
   // === Details ===
   [
@@ -1434,20 +1308,7 @@
 // const ic: I = { <|[|{| isWriteAccess: true |}FC|]() {}|> };
 
 // === /a/index.ts ===
-// import { NS } from "../b";
-// import { I } from "../c";
-// 
-// declare module "../b" {
-//     export namespace NS {
-//         export function FA();
-//     }
-// }
-// 
-// declare module "../c" {
-//     export interface I {
-//         FA();
-//     }
-// }
+// --- (line: 14) skipped ---
 // 
 // const ia: I = {
 //     FA: NS.FA,
@@ -1455,20 +1316,7 @@
 // };
 
 // === /a2/index.ts ===
-// import { NS } from "../b";
-// import { I } from "../c";
-// 
-// declare module "../b" {
-//     export namespace NS {
-//         export function FA();
-//     }
-// }
-// 
-// declare module "../c" {
-//     export interface I {
-//         FA();
-//     }
-// }
+// --- (line: 14) skipped ---
 // 
 // const ia: I = {
 //     FA: NS.FA,

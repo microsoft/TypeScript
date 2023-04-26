@@ -12,12 +12,7 @@
 //    await 300;
 //  }
 // }
-// async function g() {
-//     await 300;
-//     async function f() {
-//         await 400;
-//     }
-// }
+// --- (line: 13) skipped ---
 
 
 
@@ -35,12 +30,7 @@
 //    await 300;
 //  }
 // }
-// async function g() {
-//     await 300;
-//     async function f() {
-//         await 400;
-//     }
-// }
+// --- (line: 13) skipped ---
 
 
 
@@ -58,12 +48,7 @@
 //    await 300;
 //  }
 // }
-// async function g() {
-//     await 300;
-//     async function f() {
-//         await 400;
-//     }
-// }
+// --- (line: 13) skipped ---
 
 
 
@@ -81,12 +66,7 @@
 //    await 300;
 //  }
 // }
-// async function g() {
-//     await 300;
-//     async function f() {
-//         await 400;
-//     }
-// }
+// --- (line: 13) skipped ---
 
 
 
@@ -104,9 +84,4 @@
 //    await 300;
 //  }
 // }
-// async function g() {
-//     await 300;
-//     async function f() {
-//         await 400;
-//     }
-// }
+// --- (line: 13) skipped ---

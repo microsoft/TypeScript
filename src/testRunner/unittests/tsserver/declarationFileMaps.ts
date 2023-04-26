@@ -1,10 +1,6 @@
 import * as ts from "../../_namespaces/ts";
 
 import {
-    createServerHost,
-    File,
-} from "../virtualFileSystemWithWatch";
-import {
     baselineTsserverLogs,
     closeFilesForSession,
     createLoggerWithInMemoryLogs,
@@ -12,7 +8,11 @@ import {
     openFilesForSession,
     protocolFileLocationFromSubstring,
     TestSession,
-} from "./helpers";
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+    File,
+} from "../helpers/virtualFileSystemWithWatch";
 
 function checkDeclarationFiles(file: File, session: TestSession): void {
     openFilesForSession([file], session);

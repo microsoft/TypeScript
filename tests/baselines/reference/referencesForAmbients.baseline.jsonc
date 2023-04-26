@@ -9,10 +9,7 @@
 //     var f2: typeof foo.f;
 // }
 // 
-// declare module "baz" {
-//     import bar = require("bar");
-//     var f2: typeof bar.foo;
-// }
+// --- (line: 10) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForAmbients.ts ===
@@ -22,13 +19,7 @@
   // 
   // declare module "bar" {
   //     export import foo = require("foo");
-  //     var f2: typeof foo.f;
-  // }
-  // 
-  // declare module "baz" {
-  //     import bar = require("bar");
-  //     var f2: typeof bar.foo;
-  // }
+  // --- (line: 7) skipped ---
 
   // === Details ===
   [
@@ -67,10 +58,7 @@
 //     var f2: typeof foo.f;
 // }
 // 
-// declare module "baz" {
-//     import bar = require("bar");
-//     var f2: typeof bar.foo;
-// }
+// --- (line: 10) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForAmbients.ts ===
@@ -80,13 +68,7 @@
   // 
   // declare module "bar" {
   //     export import foo = require("foo");
-  //     var f2: typeof foo.f;
-  // }
-  // 
-  // declare module "baz" {
-  //     import bar = require("bar");
-  //     var f2: typeof bar.foo;
-  // }
+  // --- (line: 7) skipped ---
 
   // === Details ===
   [
@@ -126,9 +108,7 @@
 // }
 // 
 // declare module "baz" {
-//     import bar = require("bar");
-//     var f2: typeof bar.foo;
-// }
+// --- (line: 11) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForAmbients.ts ===
@@ -137,14 +117,7 @@
   // }
   // 
   // declare module "bar" {
-  //     export import foo = require("foo");
-  //     var f2: typeof foo.f;
-  // }
-  // 
-  // declare module "baz" {
-  //     import bar = require("bar");
-  //     var f2: typeof bar.foo;
-  // }
+  // --- (line: 6) skipped ---
 
   // === Details ===
   [
@@ -196,9 +169,7 @@
 // }
 // 
 // declare module "baz" {
-//     import bar = require("bar");
-//     var f2: typeof bar.foo;
-// }
+// --- (line: 11) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForAmbients.ts ===
@@ -207,14 +178,7 @@
   // }
   // 
   // declare module "bar" {
-  //     export import foo = require("foo");
-  //     var f2: typeof foo.f;
-  // }
-  // 
-  // declare module "baz" {
-  //     import bar = require("bar");
-  //     var f2: typeof bar.foo;
-  // }
+  // --- (line: 6) skipped ---
 
   // === Details ===
   [
@@ -397,10 +361,7 @@
   //     var f2: typeof foo.f;
   // }
   // 
-  // declare module "baz" {
-  //     import bar = require("bar");
-  //     var f2: typeof bar.foo;
-  // }
+  // --- (line: 10) skipped ---
 
   // === Details ===
   [
@@ -515,10 +476,7 @@
   //     var f2: typeof foo.f;
   // }
   // 
-  // declare module "baz" {
-  //     import bar = require("bar");
-  //     var f2: typeof bar.foo;
-  // }
+  // --- (line: 10) skipped ---
 
   // === Details ===
   [
@@ -617,10 +575,7 @@
 //     var f2: typeof foo.f;
 // }
 // 
-// declare module "baz" {
-//     import bar = require("bar");
-//     var f2: typeof bar.foo;
-// }
+// --- (line: 10) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForAmbients.ts ===
@@ -633,10 +588,7 @@
   //     var f2: typeof foo.f;
   // }
   // 
-  // declare module "baz" {
-  //     import bar = require("bar");
-  //     var f2: typeof bar.foo;
-  // }
+  // --- (line: 10) skipped ---
 
   // === Details ===
   [
@@ -692,9 +644,7 @@
   // }
   // 
   // declare module "baz" {
-  //     import bar = require("bar");
-  //     var f2: typeof bar.foo;
-  // }
+  // --- (line: 11) skipped ---
 
   // === Details ===
   [
@@ -794,9 +744,7 @@
 // }
 // 
 // declare module "baz" {
-//     import bar = require("bar");
-//     var f2: typeof bar.foo;
-// }
+// --- (line: 11) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForAmbients.ts ===
@@ -810,9 +758,7 @@
   // }
   // 
   // declare module "baz" {
-  //     import bar = require("bar");
-  //     var f2: typeof bar.foo;
-  // }
+  // --- (line: 11) skipped ---
 
   // === Details ===
   [
@@ -854,13 +800,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForAmbients.ts ===
-// declare module "foo" {
-//     var f: number;
-// }
-// 
-// declare module "bar" {
-//     export import foo = require("foo");
-//     var f2: typeof foo.f;
+// --- (line: 7) skipped ---
 // }
 // 
 // declare module "baz" {
@@ -870,13 +810,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForAmbients.ts ===
-  // declare module "foo" {
-  //     var f: number;
-  // }
-  // 
-  // declare module "bar" {
-  //     export import foo = require("foo");
-  //     var f2: typeof foo.f;
+  // --- (line: 7) skipped ---
   // }
   // 
   // declare module "baz" {

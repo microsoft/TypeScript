@@ -1,12 +1,6 @@
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesSuper.ts ===
-// class SuperType {
-//     superMethod() {
-//     }
-// 
-//     static superStaticMethod() {
-//         return 10;
-//     }
+// --- (line: 7) skipped ---
 // }
 // 
 // class SubType extends SuperType {
@@ -34,33 +28,13 @@
 //         }
 //     }
 // 
-//     // Bad but still gets highlighted.
-//     public static statProp1 = super.superStaticMethod;
-// 
-//     public static staticMethod1() {
-//         return super.superStaticMethod();
-//     }
-// 
-//     private static staticMethod2() {
-//         return super.superStaticMethod();
-//     }
-// 
-//     // Are not actually 'super' keywords.
-//     super = 10;
-//     static super = 20;
-// }
+// --- (line: 35) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesSuper.ts ===
-// class SuperType {
-//     superMethod() {
-//     }
-// 
-//     static superStaticMethod() {
-//         return 10;
-//     }
+// --- (line: 7) skipped ---
 // }
 // 
 // class SubType extends SuperType {
@@ -88,33 +62,13 @@
 //         }
 //     }
 // 
-//     // Bad but still gets highlighted.
-//     public static statProp1 = super.superStaticMethod;
-// 
-//     public static staticMethod1() {
-//         return super.superStaticMethod();
-//     }
-// 
-//     private static staticMethod2() {
-//         return super.superStaticMethod();
-//     }
-// 
-//     // Are not actually 'super' keywords.
-//     super = 10;
-//     static super = 20;
-// }
+// --- (line: 35) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesSuper.ts ===
-// class SuperType {
-//     superMethod() {
-//     }
-// 
-//     static superStaticMethod() {
-//         return 10;
-//     }
+// --- (line: 7) skipped ---
 // }
 // 
 // class SubType extends SuperType {
@@ -142,33 +96,13 @@
 //         }
 //     }
 // 
-//     // Bad but still gets highlighted.
-//     public static statProp1 = super.superStaticMethod;
-// 
-//     public static staticMethod1() {
-//         return super.superStaticMethod();
-//     }
-// 
-//     private static staticMethod2() {
-//         return super.superStaticMethod();
-//     }
-// 
-//     // Are not actually 'super' keywords.
-//     super = 10;
-//     static super = 20;
-// }
+// --- (line: 35) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesSuper.ts ===
-// class SuperType {
-//     superMethod() {
-//     }
-// 
-//     static superStaticMethod() {
-//         return 10;
-//     }
+// --- (line: 7) skipped ---
 // }
 // 
 // class SubType extends SuperType {
@@ -196,33 +130,13 @@
 //         }
 //     }
 // 
-//     // Bad but still gets highlighted.
-//     public static statProp1 = super.superStaticMethod;
-// 
-//     public static staticMethod1() {
-//         return super.superStaticMethod();
-//     }
-// 
-//     private static staticMethod2() {
-//         return super.superStaticMethod();
-//     }
-// 
-//     // Are not actually 'super' keywords.
-//     super = 10;
-//     static super = 20;
-// }
+// --- (line: 35) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesSuper.ts ===
-// class SuperType {
-//     superMethod() {
-//     }
-// 
-//     static superStaticMethod() {
-//         return 10;
-//     }
+// --- (line: 7) skipped ---
 // }
 // 
 // class SubType extends SuperType {
@@ -250,33 +164,13 @@
 //         }
 //     }
 // 
-//     // Bad but still gets highlighted.
-//     public static statProp1 = super.superStaticMethod;
-// 
-//     public static staticMethod1() {
-//         return super.superStaticMethod();
-//     }
-// 
-//     private static staticMethod2() {
-//         return super.superStaticMethod();
-//     }
-// 
-//     // Are not actually 'super' keywords.
-//     super = 10;
-//     static super = 20;
-// }
+// --- (line: 35) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesSuper.ts ===
-// class SuperType {
-//     superMethod() {
-//     }
-// 
-//     static superStaticMethod() {
-//         return 10;
-//     }
+// --- (line: 7) skipped ---
 // }
 // 
 // class SubType extends SuperType {
@@ -304,33 +198,13 @@
 //         }
 //     }
 // 
-//     // Bad but still gets highlighted.
-//     public static statProp1 = super.superStaticMethod;
-// 
-//     public static staticMethod1() {
-//         return super.superStaticMethod();
-//     }
-// 
-//     private static staticMethod2() {
-//         return super.superStaticMethod();
-//     }
-// 
-//     // Are not actually 'super' keywords.
-//     super = 10;
-//     static super = 20;
-// }
+// --- (line: 35) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesSuper.ts ===
-// class SuperType {
-//     superMethod() {
-//     }
-// 
-//     static superStaticMethod() {
-//         return 10;
-//     }
+// --- (line: 7) skipped ---
 // }
 // 
 // class SubType extends SuperType {
@@ -358,18 +232,4 @@
 //         }
 //     }
 // 
-//     // Bad but still gets highlighted.
-//     public static statProp1 = super.superStaticMethod;
-// 
-//     public static staticMethod1() {
-//         return super.superStaticMethod();
-//     }
-// 
-//     private static staticMethod2() {
-//         return super.superStaticMethod();
-//     }
-// 
-//     // Are not actually 'super' keywords.
-//     super = 10;
-//     static super = 20;
-// }
+// --- (line: 35) skipped ---

@@ -6,12 +6,9 @@
 //             return;
 //             return;
 //             return;
-// 
-//             if (false) {
-//                 return true;
-//             }
-//         })() || true;
-//     }
+// --- (line: 7) skipped ---
+
+// --- (line: 12) skipped ---
 // 
 //     var unusued = [1, 2, 3, 4].map(x => { return 4 })
 // 
@@ -29,12 +26,9 @@
 //             return;
 //             return;
 //             return;
-// 
-//             if (false) {
-//                 return true;
-//             }
-//         })() || true;
-//     }
+// --- (line: 7) skipped ---
+
+// --- (line: 12) skipped ---
 // 
 //     var unusued = [1, 2, 3, 4].map(x => { return 4 })
 // 
@@ -52,12 +46,9 @@
 //             return;
 //             return;
 //             return;
-// 
-//             if (false) {
-//                 return true;
-//             }
-//         })() || true;
-//     }
+// --- (line: 7) skipped ---
+
+// --- (line: 12) skipped ---
 // 
 //     var unusued = [1, 2, 3, 4].map(x => { return 4 })
 // 

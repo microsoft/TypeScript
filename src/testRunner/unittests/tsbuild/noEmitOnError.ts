@@ -1,10 +1,10 @@
 import * as vfs from "../../_namespaces/vfs";
 
 import {
-    loadProjectFromDisk,
     noChangeRun,
     verifyTsc,
-} from "../tsc/helpers";
+} from "../helpers/tsc";
+import { loadProjectFromDisk } from "../helpers/vfs";
 
 describe("unittests:: tsbuild - with noEmitOnError", () => {
     let projFs: vfs.FileSystem;

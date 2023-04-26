@@ -1,18 +1,6 @@
 // === goToDefinition ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
-//     interface Element { }
-//     interface IntrinsicElements {
-//     }
-//     interface ElementAttributesProperty { props; }
-// }
-// interface ClickableProps {
-//     children?: string;
-//     className?: string;
-// }
-// interface ButtonProps extends ClickableProps {
-//     onClick(event?: React.MouseEvent<HTMLButtonElement>): void;
-// }
+// --- (line: 13) skipped ---
 // interface LinkProps extends ClickableProps {
 //     goTo: string;
 // }
@@ -43,19 +31,7 @@
 
 // === goToDefinition ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
-//     interface Element { }
-//     interface IntrinsicElements {
-//     }
-//     interface ElementAttributesProperty { props; }
-// }
-// interface ClickableProps {
-//     children?: string;
-//     className?: string;
-// }
-// interface ButtonProps extends ClickableProps {
-//     onClick(event?: React.MouseEvent<HTMLButtonElement>): void;
-// }
+// --- (line: 13) skipped ---
 // interface LinkProps extends ClickableProps {
 //     goTo: string;
 // }
@@ -86,19 +62,7 @@
 
 // === goToDefinition ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
-//     interface Element { }
-//     interface IntrinsicElements {
-//     }
-//     interface ElementAttributesProperty { props; }
-// }
-// interface ClickableProps {
-//     children?: string;
-//     className?: string;
-// }
-// interface ButtonProps extends ClickableProps {
-//     onClick(event?: React.MouseEvent<HTMLButtonElement>): void;
-// }
+// --- (line: 13) skipped ---
 // interface LinkProps extends ClickableProps {
 //     goTo: string;
 // }
@@ -129,19 +93,7 @@
 
 // === goToDefinition ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
-//     interface Element { }
-//     interface IntrinsicElements {
-//     }
-//     interface ElementAttributesProperty { props; }
-// }
-// interface ClickableProps {
-//     children?: string;
-//     className?: string;
-// }
-// interface ButtonProps extends ClickableProps {
-//     onClick(event?: React.MouseEvent<HTMLButtonElement>): void;
-// }
+// --- (line: 13) skipped ---
 // interface LinkProps extends ClickableProps {
 //     goTo: string;
 // }
@@ -172,20 +124,7 @@
 
 // === goToDefinition ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
-//     interface Element { }
-//     interface IntrinsicElements {
-//     }
-//     interface ElementAttributesProperty { props; }
-// }
-// interface ClickableProps {
-//     children?: string;
-//     className?: string;
-// }
-// interface ButtonProps extends ClickableProps {
-//     onClick(event?: React.MouseEvent<HTMLButtonElement>): void;
-// }
-// interface LinkProps extends ClickableProps {
+// --- (line: 14) skipped ---
 //     goTo: string;
 // }
 // declare function MainButton(buttonProps: ButtonProps): JSX.Element;
@@ -215,19 +154,7 @@
 
 // === goToDefinition ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
-//     interface Element { }
-//     interface IntrinsicElements {
-//     }
-//     interface ElementAttributesProperty { props; }
-// }
-// interface ClickableProps {
-//     children?: string;
-//     className?: string;
-// }
-// interface ButtonProps extends ClickableProps {
-//     onClick(event?: React.MouseEvent<HTMLButtonElement>): void;
-// }
+// --- (line: 13) skipped ---
 // interface LinkProps extends ClickableProps {
 //     goTo: string;
 // }

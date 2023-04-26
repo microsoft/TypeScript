@@ -14,17 +14,7 @@
 //             }
 //         })() || true;
 //     }
-// 
-//     var unusued = [1, 2, 3, 4].map(x => { return 4 })
-// 
-//     return;
-//     return true;
-// }
-// 
-// class A {
-//     return;
-//     return 8675309;
-// }
+// --- (line: 15) skipped ---
 
 
 
@@ -44,17 +34,7 @@
 //             }
 //         })() || true;
 //     }
-// 
-//     var unusued = [1, 2, 3, 4].map(x => { return 4 })
-// 
-//     return;
-//     return true;
-// }
-// 
-// class A {
-//     return;
-//     return 8675309;
-// }
+// --- (line: 15) skipped ---
 
 
 
@@ -74,17 +54,7 @@
 //             }
 //         })() || true;
 //     }
-// 
-//     var unusued = [1, 2, 3, 4].map(x => { return 4 })
-// 
-//     return;
-//     return true;
-// }
-// 
-// class A {
-//     return;
-//     return 8675309;
-// }
+// --- (line: 15) skipped ---
 
 
 
@@ -104,17 +74,7 @@
 //             }
 //         })() || true;
 //     }
-// 
-//     var unusued = [1, 2, 3, 4].map(x => { return 4 })
-// 
-//     return;
-//     return true;
-// }
-// 
-// class A {
-//     return;
-//     return 8675309;
-// }
+// --- (line: 15) skipped ---
 
 
 
@@ -124,27 +84,7 @@
 // return;
 // function f(a: number) {
 //     if (a > 0) {
-//         return (function () {
-//             () => return;
-//             return;
-//             return;
-// 
-//             if (false) {
-//                 return true;
-//             }
-//         })() || true;
-//     }
-// 
-//     var unusued = [1, 2, 3, 4].map(x => { return 4 })
-// 
-//     return;
-//     return true;
-// }
-// 
-// class A {
-//     return;
-//     return 8675309;
-// }
+// --- (line: 5) skipped ---
 
 
 
@@ -155,50 +95,13 @@
 // function f(a: number) {
 //     if (a > 0) {
 //         return (function () {
-//             () => return;
-//             return;
-//             return;
-// 
-//             if (false) {
-//                 return true;
-//             }
-//         })() || true;
-//     }
-// 
-//     var unusued = [1, 2, 3, 4].map(x => { return 4 })
-// 
-//     return;
-//     return true;
-// }
-// 
-// class A {
-//     return;
-//     return 8675309;
-// }
+// --- (line: 6) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesReturnBroken.ts ===
-// return;
-// return;
-// function f(a: number) {
-//     if (a > 0) {
-//         return (function () {
-//             () => return;
-//             return;
-//             return;
-// 
-//             if (false) {
-//                 return true;
-//             }
-//         })() || true;
-//     }
-// 
-//     var unusued = [1, 2, 3, 4].map(x => { return 4 })
-// 
-//     return;
-//     return true;
+// --- (line: 19) skipped ---
 // }
 // 
 // class A {
@@ -218,12 +121,9 @@
 //             () => return;
 //             return;
 //             return;
-// 
-//             if (false) {
-//                 return true;
-//             }
-//         })() || true;
-//     }
+// --- (line: 9) skipped ---
+
+// --- (line: 14) skipped ---
 // 
 //     var unusued = [1, 2, 3, 4].map(x => { return 4 })
 // 

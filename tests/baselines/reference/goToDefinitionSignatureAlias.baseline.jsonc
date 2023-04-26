@@ -7,30 +7,7 @@
 // g();
 // h();
 // const i = () => 0;
-// const iFn = function () { return 0; };
-// const j = i;
-// i();
-// iFn();
-// j();
-// const o = { m: () => 0 };
-// o.m();
-// const oFn = { mFn: function () { return 0; } };
-// oFn.mFn();
-// class Component { constructor(props: {}) {} }
-// type ComponentClass = new () => Component;
-// interface ComponentClass2 { new(): Component; }
-// 
-// class MyComponent extends Component {}
-// <MyComponent />;
-// new MyComponent({});
-// 
-// declare const MyComponent2: ComponentClass;
-// <MyComponent2 />;
-// new MyComponent2();
-// 
-// declare const MyComponent3: ComponentClass2;
-// <MyComponent3 />;
-// new MyComponent3();
+// --- (line: 8) skipped ---
 
   // === Details ===
   [
@@ -57,29 +34,7 @@
 // h();
 // const i = () => 0;
 // const iFn = function () { return 0; };
-// const j = i;
-// i();
-// iFn();
-// j();
-// const o = { m: () => 0 };
-// o.m();
-// const oFn = { mFn: function () { return 0; } };
-// oFn.mFn();
-// class Component { constructor(props: {}) {} }
-// type ComponentClass = new () => Component;
-// interface ComponentClass2 { new(): Component; }
-// 
-// class MyComponent extends Component {}
-// <MyComponent />;
-// new MyComponent({});
-// 
-// declare const MyComponent2: ComponentClass;
-// <MyComponent2 />;
-// new MyComponent2();
-// 
-// declare const MyComponent3: ComponentClass2;
-// <MyComponent3 />;
-// new MyComponent3();
+// --- (line: 9) skipped ---
 
   // === Details ===
   [
@@ -118,28 +73,7 @@
 // const i = () => 0;
 // const iFn = function () { return 0; };
 // const j = i;
-// i();
-// iFn();
-// j();
-// const o = { m: () => 0 };
-// o.m();
-// const oFn = { mFn: function () { return 0; } };
-// oFn.mFn();
-// class Component { constructor(props: {}) {} }
-// type ComponentClass = new () => Component;
-// interface ComponentClass2 { new(): Component; }
-// 
-// class MyComponent extends Component {}
-// <MyComponent />;
-// new MyComponent({});
-// 
-// declare const MyComponent2: ComponentClass;
-// <MyComponent2 />;
-// new MyComponent2();
-// 
-// declare const MyComponent3: ComponentClass2;
-// <MyComponent3 />;
-// new MyComponent3();
+// --- (line: 10) skipped ---
 
   // === Details ===
   [
@@ -169,9 +103,7 @@
 
 // === goToDefinition ===
 // === /a.tsx ===
-// function f() {}
-// const g = f;
-// const h = g;
+// --- (line: 3) skipped ---
 // f();
 // g();
 // h();
@@ -182,24 +114,7 @@
 // iFn();
 // j();
 // const o = { m: () => 0 };
-// o.m();
-// const oFn = { mFn: function () { return 0; } };
-// oFn.mFn();
-// class Component { constructor(props: {}) {} }
-// type ComponentClass = new () => Component;
-// interface ComponentClass2 { new(): Component; }
-// 
-// class MyComponent extends Component {}
-// <MyComponent />;
-// new MyComponent({});
-// 
-// declare const MyComponent2: ComponentClass;
-// <MyComponent2 />;
-// new MyComponent2();
-// 
-// declare const MyComponent3: ComponentClass2;
-// <MyComponent3 />;
-// new MyComponent3();
+// --- (line: 14) skipped ---
 
   // === Details ===
   [
@@ -218,10 +133,7 @@
 
 // === goToDefinition ===
 // === /a.tsx ===
-// function f() {}
-// const g = f;
-// const h = g;
-// f();
+// --- (line: 4) skipped ---
 // g();
 // h();
 // const i = () => 0;
@@ -232,23 +144,7 @@
 // j();
 // const o = { m: () => 0 };
 // o.m();
-// const oFn = { mFn: function () { return 0; } };
-// oFn.mFn();
-// class Component { constructor(props: {}) {} }
-// type ComponentClass = new () => Component;
-// interface ComponentClass2 { new(): Component; }
-// 
-// class MyComponent extends Component {}
-// <MyComponent />;
-// new MyComponent({});
-// 
-// declare const MyComponent2: ComponentClass;
-// <MyComponent2 />;
-// new MyComponent2();
-// 
-// declare const MyComponent3: ComponentClass2;
-// <MyComponent3 />;
-// new MyComponent3();
+// --- (line: 15) skipped ---
 
   // === Details ===
   [
@@ -267,9 +163,7 @@
 
 // === goToDefinition ===
 // === /a.tsx ===
-// function f() {}
-// const g = f;
-// const h = g;
+// --- (line: 3) skipped ---
 // f();
 // g();
 // h();
@@ -282,22 +176,7 @@
 // const o = { m: () => 0 };
 // o.m();
 // const oFn = { mFn: function () { return 0; } };
-// oFn.mFn();
-// class Component { constructor(props: {}) {} }
-// type ComponentClass = new () => Component;
-// interface ComponentClass2 { new(): Component; }
-// 
-// class MyComponent extends Component {}
-// <MyComponent />;
-// new MyComponent({});
-// 
-// declare const MyComponent2: ComponentClass;
-// <MyComponent2 />;
-// new MyComponent2();
-// 
-// declare const MyComponent3: ComponentClass2;
-// <MyComponent3 />;
-// new MyComponent3();
+// --- (line: 16) skipped ---
 
   // === Details ===
   [
@@ -327,15 +206,7 @@
 
 // === goToDefinition ===
 // === /a.tsx ===
-// function f() {}
-// const g = f;
-// const h = g;
-// f();
-// g();
-// h();
-// const i = () => 0;
-// const iFn = function () { return 0; };
-// const j = i;
+// --- (line: 9) skipped ---
 // i();
 // iFn();
 // j();
@@ -344,20 +215,7 @@
 // const oFn = { mFn: function () { return 0; } };
 // oFn.mFn();
 // class Component { constructor(props: {}) {} }
-// type ComponentClass = new () => Component;
-// interface ComponentClass2 { new(): Component; }
-// 
-// class MyComponent extends Component {}
-// <MyComponent />;
-// new MyComponent({});
-// 
-// declare const MyComponent2: ComponentClass;
-// <MyComponent2 />;
-// new MyComponent2();
-// 
-// declare const MyComponent3: ComponentClass2;
-// <MyComponent3 />;
-// new MyComponent3();
+// --- (line: 18) skipped ---
 
   // === Details ===
   [
@@ -376,17 +234,7 @@
 
 // === goToDefinition ===
 // === /a.tsx ===
-// function f() {}
-// const g = f;
-// const h = g;
-// f();
-// g();
-// h();
-// const i = () => 0;
-// const iFn = function () { return 0; };
-// const j = i;
-// i();
-// iFn();
+// --- (line: 11) skipped ---
 // j();
 // const o = { m: () => 0 };
 // o.m();
@@ -395,18 +243,7 @@
 // class Component { constructor(props: {}) {} }
 // type ComponentClass = new () => Component;
 // interface ComponentClass2 { new(): Component; }
-// 
-// class MyComponent extends Component {}
-// <MyComponent />;
-// new MyComponent({});
-// 
-// declare const MyComponent2: ComponentClass;
-// <MyComponent2 />;
-// new MyComponent2();
-// 
-// declare const MyComponent3: ComponentClass2;
-// <MyComponent3 />;
-// new MyComponent3();
+// --- (line: 20) skipped ---
 
   // === Details ===
   [
@@ -425,23 +262,7 @@
 
 // === goToDefinition ===
 // === /a.tsx ===
-// function f() {}
-// const g = f;
-// const h = g;
-// f();
-// g();
-// h();
-// const i = () => 0;
-// const iFn = function () { return 0; };
-// const j = i;
-// i();
-// iFn();
-// j();
-// const o = { m: () => 0 };
-// o.m();
-// const oFn = { mFn: function () { return 0; } };
-// oFn.mFn();
-// class Component { constructor(props: {}) {} }
+// --- (line: 17) skipped ---
 // type ComponentClass = new () => Component;
 // interface ComponentClass2 { new(): Component; }
 // 
@@ -450,12 +271,7 @@
 // new MyComponent({});
 // 
 // declare const MyComponent2: ComponentClass;
-// <MyComponent2 />;
-// new MyComponent2();
-// 
-// declare const MyComponent3: ComponentClass2;
-// <MyComponent3 />;
-// new MyComponent3();
+// --- (line: 26) skipped ---
 
   // === Details ===
   [
@@ -474,19 +290,7 @@
 
 // === goToDefinition ===
 // === /a.tsx ===
-// function f() {}
-// const g = f;
-// const h = g;
-// f();
-// g();
-// h();
-// const i = () => 0;
-// const iFn = function () { return 0; };
-// const j = i;
-// i();
-// iFn();
-// j();
-// const o = { m: () => 0 };
+// --- (line: 13) skipped ---
 // o.m();
 // const oFn = { mFn: function () { return 0; } };
 // oFn.mFn();
@@ -500,11 +304,7 @@
 // 
 // declare const MyComponent2: ComponentClass;
 // <MyComponent2 />;
-// new MyComponent2();
-// 
-// declare const MyComponent3: ComponentClass2;
-// <MyComponent3 />;
-// new MyComponent3();
+// --- (line: 27) skipped ---
 
   // === Details ===
   [
@@ -534,27 +334,7 @@
 
 // === goToDefinition ===
 // === /a.tsx ===
-// function f() {}
-// const g = f;
-// const h = g;
-// f();
-// g();
-// h();
-// const i = () => 0;
-// const iFn = function () { return 0; };
-// const j = i;
-// i();
-// iFn();
-// j();
-// const o = { m: () => 0 };
-// o.m();
-// const oFn = { mFn: function () { return 0; } };
-// oFn.mFn();
-// class Component { constructor(props: {}) {} }
-// type ComponentClass = new () => Component;
-// interface ComponentClass2 { new(): Component; }
-// 
-// class MyComponent extends Component {}
+// --- (line: 21) skipped ---
 // <MyComponent />;
 // new MyComponent({});
 // 
@@ -583,20 +363,7 @@
 
 // === goToDefinition ===
 // === /a.tsx ===
-// function f() {}
-// const g = f;
-// const h = g;
-// f();
-// g();
-// h();
-// const i = () => 0;
-// const iFn = function () { return 0; };
-// const j = i;
-// i();
-// iFn();
-// j();
-// const o = { m: () => 0 };
-// o.m();
+// --- (line: 14) skipped ---
 // const oFn = { mFn: function () { return 0; } };
 // oFn.mFn();
 // class Component { constructor(props: {}) {} }
@@ -643,31 +410,7 @@
 
 // === goToDefinition ===
 // === /a.tsx ===
-// function f() {}
-// const g = f;
-// const h = g;
-// f();
-// g();
-// h();
-// const i = () => 0;
-// const iFn = function () { return 0; };
-// const j = i;
-// i();
-// iFn();
-// j();
-// const o = { m: () => 0 };
-// o.m();
-// const oFn = { mFn: function () { return 0; } };
-// oFn.mFn();
-// class Component { constructor(props: {}) {} }
-// type ComponentClass = new () => Component;
-// interface ComponentClass2 { new(): Component; }
-// 
-// class MyComponent extends Component {}
-// <MyComponent />;
-// new MyComponent({});
-// 
-// declare const MyComponent2: ComponentClass;
+// --- (line: 25) skipped ---
 // <MyComponent2 />;
 // new MyComponent2();
 // 
@@ -692,21 +435,7 @@
 
 // === goToDefinition ===
 // === /a.tsx ===
-// function f() {}
-// const g = f;
-// const h = g;
-// f();
-// g();
-// h();
-// const i = () => 0;
-// const iFn = function () { return 0; };
-// const j = i;
-// i();
-// iFn();
-// j();
-// const o = { m: () => 0 };
-// o.m();
-// const oFn = { mFn: function () { return 0; } };
+// --- (line: 15) skipped ---
 // oFn.mFn();
 // class Component { constructor(props: {}) {} }
 // type ComponentClass = new () => Component;

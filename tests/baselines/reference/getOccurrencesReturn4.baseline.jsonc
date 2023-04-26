@@ -12,12 +12,7 @@
 //             }
 //         })() || true;
 //     }
-// 
-//     var unusued = [1, 2, 3, 4].map(x => { return 4 })
-// 
-//     return;
-//     return true;
-// }
+// --- (line: 13) skipped ---
 
 
 
@@ -35,12 +30,7 @@
 //             }
 //         })() || true;
 //     }
-// 
-//     var unusued = [1, 2, 3, 4].map(x => { return 4 })
-// 
-//     return;
-//     return true;
-// }
+// --- (line: 13) skipped ---
 
 
 
@@ -58,12 +48,7 @@
 //             }
 //         })() || true;
 //     }
-// 
-//     var unusued = [1, 2, 3, 4].map(x => { return 4 })
-// 
-//     return;
-//     return true;
-// }
+// --- (line: 13) skipped ---
 
 
 
@@ -81,27 +66,13 @@
 //             }
 //         })() || true;
 //     }
-// 
-//     var unusued = [1, 2, 3, 4].map(x => { return 4 })
-// 
-//     return;
-//     return true;
-// }
+// --- (line: 13) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesReturn4.ts ===
-// function f(a: number) {
-//     if (a > 0) {
-//         return (function () {
-//             return;
-//             return;
-//             return;
-// 
-//             if (false) {
-//                 return true;
-//             }
+// --- (line: 10) skipped ---
 //         })() || true;
 //     }
 // 
@@ -121,12 +92,9 @@
 //             return;
 //             return;
 //             return;
-// 
-//             if (false) {
-//                 return true;
-//             }
-//         })() || true;
-//     }
+// --- (line: 7) skipped ---
+
+// --- (line: 12) skipped ---
 // 
 //     var unusued = [1, 2, 3, 4].map(x => { return 4 })
 // 
@@ -144,12 +112,9 @@
 //             return;
 //             return;
 //             return;
-// 
-//             if (false) {
-//                 return true;
-//             }
-//         })() || true;
-//     }
+// --- (line: 7) skipped ---
+
+// --- (line: 12) skipped ---
 // 
 //     var unusued = [1, 2, 3, 4].map(x => { return 4 })
 // 

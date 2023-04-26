@@ -9,9 +9,7 @@
 // }
 // 
 // let B = class D {
-//     constructor(x: number) {
-//     }
-// }
+// --- (line: 10) skipped ---
 
 
 
@@ -26,9 +24,7 @@
 // }
 // 
 // let B = class D {
-//     constructor(x: number) {
-//     }
-// }
+// --- (line: 10) skipped ---
 
 
 
@@ -43,9 +39,7 @@
 // }
 // 
 // let B = class D {
-//     constructor(x: number) {
-//     }
-// }
+// --- (line: 10) skipped ---
 
 
 
@@ -60,6 +54,4 @@
 // }
 // 
 // let B = class D {
-//     constructor(x: number) {
-//     }
-// }
+// --- (line: 10) skipped ---

@@ -1,11 +1,6 @@
 // === findAllReferences ===
 // === /tests/cases/fourslash/foo.js ===
-// /**
-//  * @overload
-//  * @param {number} x
-//  * @returns {number}
-//  *
-//  * @overload
+// --- (line: 6) skipped ---
 //  * @param {string} x
 //  * @returns {string} 
 //  *
@@ -18,15 +13,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/foo.js ===
-  // /**
-  //  * @overload
-  //  * @param {number} x
-  //  * @returns {number}
-  //  *
-  //  * @overload
-  //  * @param {string} x
-  //  * @returns {string} 
-  //  *
+  // --- (line: 9) skipped ---
   //  * @param {unknown} x
   //  * @returns {unknown} 
   //  */

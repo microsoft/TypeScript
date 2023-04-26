@@ -1,16 +1,16 @@
 import * as ts from "../../_namespaces/ts";
 
 import {
-    createServerHost,
-    File,
-    SymLink,
-} from "../virtualFileSystemWithWatch";
-import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,
     createSession,
     openFilesForSession,
-} from "./helpers";
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+    File,
+    SymLink,
+} from "../helpers/virtualFileSystemWithWatch";
 
 const packageJson: File = {
     path: "/package.json",

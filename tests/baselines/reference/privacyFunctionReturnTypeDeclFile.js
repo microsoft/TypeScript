@@ -1610,7 +1610,7 @@ var publicModule;
     function privateFunctionWithPrivateModuleParameterTypes1() {
         return new privateModule.publicClass();
     }
-})(publicModule = exports.publicModule || (exports.publicModule = {}));
+})(publicModule || (exports.publicModule = publicModule = {}));
 var privateModule;
 (function (privateModule) {
     var privateClass = /** @class */ (function () {

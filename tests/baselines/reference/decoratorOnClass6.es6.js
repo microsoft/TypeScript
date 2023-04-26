@@ -17,12 +17,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 var C_1;
-let C = C_1 = class C {
+export let C = C_1 = class C {
     static x() { return C_1.y; }
 };
 C.y = 1;
 C = C_1 = __decorate([
     dec
 ], C);
-export { C };
 let c = new C();

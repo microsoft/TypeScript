@@ -22,13 +22,7 @@
   // interface Numbers {
   //     m: number;
   // }
-  // class Numbers {
-  //     f(n: number) {
-  //         return this.p + this.m + n;
-  //     }
-  // }
-  // let i: Numbers = new Numbers();
-  // let x = i.f(i.p + i.m);
+  // --- (line: 7) skipped ---
 
   // === Details ===
   [
@@ -96,13 +90,7 @@
   // interface Numbers {
   //     m: number;
   // }
-  // class Numbers {
-  //     f(n: number) {
-  //         return this.p + this.m + n;
-  //     }
-  // }
-  // let i: Numbers = new Numbers();
-  // let x = i.f(i.p + i.m);
+  // --- (line: 7) skipped ---
 
   // === Details ===
   [
@@ -171,12 +159,7 @@
   //     m: number;
   // }
   // class Numbers {
-  //     f(n: number) {
-  //         return this.p + this.m + n;
-  //     }
-  // }
-  // let i: Numbers = new Numbers();
-  // let x = i.f(i.p + i.m);
+  // --- (line: 8) skipped ---
 
   // === Details ===
   [
@@ -245,12 +228,7 @@
   //     m: number;
   // }
   // class Numbers {
-  //     f(n: number) {
-  //         return this.p + this.m + n;
-  //     }
-  // }
-  // let i: Numbers = new Numbers();
-  // let x = i.f(i.p + i.m);
+  // --- (line: 8) skipped ---
 
   // === Details ===
   [
@@ -322,9 +300,7 @@
   //     f(n: number) {
   //         return this.p + this.m + n;
   //     }
-  // }
-  // let i: Numbers = new Numbers();
-  // let x = i.f(i.p + i.m);
+  // --- (line: 11) skipped ---
 
   // === Details ===
   [
@@ -396,9 +372,7 @@
   //     f(n: number) {
   //         return this.p + this.m + n;
   //     }
-  // }
-  // let i: Numbers = new Numbers();
-  // let x = i.f(i.p + i.m);
+  // --- (line: 11) skipped ---
 
   // === Details ===
   [

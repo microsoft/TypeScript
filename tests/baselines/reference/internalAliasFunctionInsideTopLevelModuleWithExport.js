@@ -21,7 +21,7 @@ define(["require", "exports"], function (require, exports) {
             return x;
         }
         a.foo = foo;
-    })(a = exports.a || (exports.a = {}));
+    })(a || (exports.a = a = {}));
     exports.b = a.foo;
     exports.bVal = (0, exports.b)(10);
     exports.bVal2 = exports.b;

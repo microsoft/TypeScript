@@ -8,6 +8,7 @@
     "references": [
         { "path": "../compiler" },
         { "path": "../jsTyping" },
+        { "path": "../typingsInstallerCore" },
         { "path": "../services" },
         { "path": "../deprecatedCompat" }
     ],

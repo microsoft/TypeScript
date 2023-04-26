@@ -9,10 +9,9 @@
 // }
 // 
 // class SuperBar implements Foo {
-//     hello() {} // should not show up
-// }
-// 
-// class OtherBar implements Foo {
+// --- (line: 10) skipped ---
+
+// --- (line: 13) skipped ---
 //     hello() {} // should not show up
 // }
 // 

@@ -14,9 +14,7 @@
   // class C {
   //     constructor() {
   //         /** @type {T} */
-  //         this.x = null;
-  //     }
-  // }
+  // --- (line: 5) skipped ---
 
   // === Details ===
   [

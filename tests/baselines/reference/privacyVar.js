@@ -230,7 +230,7 @@ var m1;
     m1.m1_v22_public = new C1_public();
     var m1_v23_private = new C2_private();
     m1.m1_v24_public = new C2_private(); // error
-})(m1 = exports.m1 || (exports.m1 = {}));
+})(m1 || (exports.m1 = m1 = {}));
 var m2;
 (function (m2) {
     var m2_C1_public = /** @class */ (function () {

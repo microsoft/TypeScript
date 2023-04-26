@@ -13,7 +13,7 @@ define(["require", "exports"], function (require, exports) {
     var M;
     (function (M) {
         M.foo = new C();
-    })(M = exports.M || (exports.M = {}));
+    })(M || (exports.M = M = {}));
 });
 
 FileName : /tests/cases/fourslash/inputFile.d.ts

@@ -1,15 +1,6 @@
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesReturn3.ts ===
-// function f(a: number) {
-//     if (a > 0) {
-//         return (function () {
-//             return;
-//             return;
-//             return;
-// 
-//             if (false) {
-//                 return true;
-//             }
+// --- (line: 10) skipped ---
 //         })() || true;
 //     }
 // 

@@ -24,13 +24,7 @@
   // void C;
   // typeof C;
   // delete C.x;
-  // async function* f() {
-  //     yield C;
-  //     await C;
-  // }
-  // "x" in C;
-  // undefined instanceof C;
-  // undefined as C;
+  // --- (line: 8) skipped ---
 
   // === Details ===
   [
@@ -85,12 +79,7 @@
   // typeof C;
   // delete C.x;
   // async function* f() {
-  //     yield C;
-  //     await C;
-  // }
-  // "x" in C;
-  // undefined instanceof C;
-  // undefined as C;
+  // --- (line: 9) skipped ---
 
   // === Details ===
   [
@@ -146,11 +135,7 @@
   // delete C.x;
   // async function* f() {
   //     yield C;
-  //     await C;
-  // }
-  // "x" in C;
-  // undefined instanceof C;
-  // undefined as C;
+  // --- (line: 10) skipped ---
 
   // === Details ===
   [
@@ -443,10 +428,9 @@
   // new C();
   // void C;
   // typeof C;
-  // delete C.x;
-  // async function* f() {
-  //     yield C;
-  //     await C;
+  // --- (line: 7) skipped ---
+
+  // --- (line: 10) skipped ---
   // }
   // "x" in C;
   // undefined instanceof C;
@@ -490,10 +474,7 @@
 // async function* f() {
 //     yield C;
 //     await C;
-// }
-// "x" in C;
-// undefined instanceof C;
-// undefined as C;
+// --- (line: 11) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForExpressionKeywords.ts ===
@@ -507,10 +488,7 @@
   // async function* f() {
   //     yield C;
   //     await C;
-  // }
-  // "x" in C;
-  // undefined instanceof C;
-  // undefined as C;
+  // --- (line: 11) skipped ---
 
   // === Details ===
   [

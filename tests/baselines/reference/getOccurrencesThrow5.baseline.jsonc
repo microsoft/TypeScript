@@ -1,37 +1,6 @@
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesThrow5.ts ===
-// function f(a: number) {
-//     try {
-//         throw "Hello";
-// 
-//         try {
-//             throw 10;
-//         }
-//         catch (x) {
-//             return 100;
-//         }
-//         finally {
-//             throw 10;
-//         }
-//     }
-//     catch (x) {
-//         throw "Something";
-//     }
-//     finally {
-//         throw "Also something";
-//     }
-//     if (a > 0) {
-//         return (function () {
-//             return;
-//             return;
-//             return;
-// 
-//             if (false) {
-//                 return true;
-//             }
-//             throw "Hello!";
-//         })() || true;
-//     }
+// --- (line: 32) skipped ---
 // 
 //     throw 10;
 // 

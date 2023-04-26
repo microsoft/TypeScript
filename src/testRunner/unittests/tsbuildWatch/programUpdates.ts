@@ -9,14 +9,14 @@ import {
     runWatchBaseline,
     TscWatchCompileChange,
     verifyTscWatch,
-} from "../tscWatch/helpers";
+} from "../helpers/tscWatch";
 import {
     createWatchedSystem,
     File,
     getTsBuildProjectFile,
     getTsBuildProjectFilePath,
     libFile,
-} from "../virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsbuildWatch:: watchMode:: program updates", () => {
     const enum SubProject {

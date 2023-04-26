@@ -123,7 +123,7 @@ exports.c = c;
 //@after/user/username/projects/myproject/shared/tsconfig.json
 var e;
 (function (e) {
-})(e = exports.e || (exports.e = {}));
+})(e || (exports.e = e = {}));
 // leading
 /*@before/user/username/projects/myproject/shared/tsconfig.json*/
 function f2() { } // trailing
@@ -208,7 +208,7 @@ exports.c2 = c2;
 //@after/user/username/projects/myproject/webpack/tsconfig.json
 var e2;
 (function (e2) {
-})(e2 = exports.e2 || (exports.e2 = {}));
+})(e2 || (exports.e2 = e2 = {}));
 // leading
 /*@before/user/username/projects/myproject/webpack/tsconfig.json*/
 function f22() { } // trailing
@@ -359,7 +359,7 @@ exports.c = c;
 //@after/user/username/projects/myproject/shared/tsconfig.json
 var e;
 (function (e) {
-})(e = exports.e || (exports.e = {}));
+})(e || (exports.e = e = {}));
 // leading
 /*@before/user/username/projects/myproject/shared/tsconfig.json*/
 function f2() { } // trailing

@@ -15,32 +15,7 @@
 //         }
 //     }
 //     catch (x) {
-//         throw "Something";
-//     }
-//     finally {
-//         throw "Also something";
-//     }
-//     if (a > 0) {
-//         return (function () {
-//             return;
-//             return;
-//             return;
-// 
-//             if (false) {
-//                 return true;
-//             }
-//             throw "Hello!";
-//         })() || true;
-//     }
-// 
-//     throw 10;
-// 
-//     var unusued = [1, 2, 3, 4].map(x => { throw 4 })
-// 
-//     return;
-//     return true;
-//     throw false;
-// }
+// --- (line: 16) skipped ---
 
 
 
@@ -61,29 +36,4 @@
 //         }
 //     }
 //     catch (x) {
-//         throw "Something";
-//     }
-//     finally {
-//         throw "Also something";
-//     }
-//     if (a > 0) {
-//         return (function () {
-//             return;
-//             return;
-//             return;
-// 
-//             if (false) {
-//                 return true;
-//             }
-//             throw "Hello!";
-//         })() || true;
-//     }
-// 
-//     throw 10;
-// 
-//     var unusued = [1, 2, 3, 4].map(x => { throw 4 })
-// 
-//     return;
-//     return true;
-//     throw false;
-// }
+// --- (line: 16) skipped ---

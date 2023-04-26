@@ -1,8 +1,6 @@
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsOnDefinition-import.ts ===
-// export class Test{
-// 
-//     constructor(){
+// --- (line: 3) skipped ---
 // 
 //     }
 // 
@@ -24,9 +22,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsOnDefinition-import.ts ===
-  // export class Test{
-  // 
-  //     constructor(){
+  // --- (line: 3) skipped ---
   // 
   //     }
   // 
@@ -108,9 +104,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsOnDefinition-import.ts ===
-// export class Test{
-// 
-//     constructor(){
+// --- (line: 3) skipped ---
 // 
 //     }
 // 
@@ -132,9 +126,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsOnDefinition-import.ts ===
-  // export class Test{
-  // 
-  //     constructor(){
+  // --- (line: 3) skipped ---
   // 
   //     }
   // 

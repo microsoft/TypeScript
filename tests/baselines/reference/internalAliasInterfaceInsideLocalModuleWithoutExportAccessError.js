@@ -18,6 +18,6 @@ define(["require", "exports"], function (require, exports) {
     exports.c = void 0;
     var c;
     (function (c) {
-    })(c = exports.c || (exports.c = {}));
+    })(c || (exports.c = c = {}));
     var x;
 });

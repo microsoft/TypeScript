@@ -18,7 +18,6 @@ import {
     normalizePath,
     normalizeSlashes,
     perfLogger,
-    resolveJSModule,
     SortedReadonlyArray,
     startTracing,
     stripQuotes,
@@ -55,7 +54,6 @@ import {
     ITypingsInstaller,
     Logger,
     LogLevel,
-    ModuleImportResult,
     Msg,
     nowString,
     nullCancellationToken,
@@ -381,15 +379,6 @@ export function initializeNodeSystem(): StartInput {
     if (typeof global !== "undefined" && global.gc) {
         sys.gc = () => global.gc?.();
     }
-
-    sys.require = (initialDir: string, moduleName: string): ModuleImportResult => {
-        try {
-            return { module: require(resolveJSModule(moduleName, initialDir, sys)), error: undefined };
-        }
-        catch (error) {
-            return { module: undefined, error };
-        }
-    };
 
     let cancellationToken: ServerCancellationToken;
     try {

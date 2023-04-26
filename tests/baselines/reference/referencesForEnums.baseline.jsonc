@@ -18,11 +18,7 @@
   //     "value2" = value1,
   //     111 = 11
   // }
-  // 
-  // E.value1;
-  // E["value2"];
-  // E.value2;
-  // E[111];
+  // --- (line: 6) skipped ---
 
   // === Details ===
   [
@@ -103,10 +99,7 @@
   //     111 = 11
   // }
   // 
-  // E.value1;
-  // E["value2"];
-  // E.value2;
-  // E[111];
+  // --- (line: 7) skipped ---
 
   // === Details ===
   [
@@ -191,10 +184,7 @@
   //     111 = 11
   // }
   // 
-  // E.value1;
-  // E["value2"];
-  // E.value2;
-  // E[111];
+  // --- (line: 7) skipped ---
 
   // === Details ===
   [
@@ -279,10 +269,7 @@
   //     111 = 11
   // }
   // 
-  // E.value1;
-  // E["value2"];
-  // E.value2;
-  // E[111];
+  // --- (line: 7) skipped ---
 
   // === Details ===
   [
@@ -364,9 +351,7 @@
   // }
   // 
   // E.value1;
-  // E["value2"];
-  // E.value2;
-  // E[111];
+  // --- (line: 8) skipped ---
 
   // === Details ===
   [

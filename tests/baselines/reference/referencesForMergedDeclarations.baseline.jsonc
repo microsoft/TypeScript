@@ -264,10 +264,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForMergedDeclarations.ts ===
-// interface Foo {
-// }
-// 
-// module Foo {
+// --- (line: 4) skipped ---
 //     export interface Bar { }
 // }
 // 
@@ -280,10 +277,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForMergedDeclarations.ts ===
-  // interface Foo {
-  // }
-  // 
-  // module Foo {
+  // --- (line: 4) skipped ---
   //     export interface Bar { }
   // }
   // 
@@ -358,10 +352,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForMergedDeclarations.ts ===
-// interface Foo {
-// }
-// 
-// module Foo {
+// --- (line: 4) skipped ---
 //     export interface Bar { }
 // }
 // 
@@ -374,10 +365,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForMergedDeclarations.ts ===
-  // interface Foo {
-  // }
-  // 
-  // module Foo {
+  // --- (line: 4) skipped ---
   //     export interface Bar { }
   // }
   // 
@@ -468,10 +456,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForMergedDeclarations.ts ===
-  // interface Foo {
-  // }
-  // 
-  // module Foo {
+  // --- (line: 4) skipped ---
   //     export interface Bar { }
   // }
   // 
@@ -526,10 +511,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForMergedDeclarations.ts ===
-  // interface Foo {
-  // }
-  // 
-  // module Foo {
+  // --- (line: 4) skipped ---
   //     export interface Bar { }
   // }
   // 
@@ -584,10 +566,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForMergedDeclarations.ts ===
-// interface Foo {
-// }
-// 
-// module Foo {
+// --- (line: 4) skipped ---
 //     export interface Bar { }
 // }
 // 
@@ -600,10 +579,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForMergedDeclarations.ts ===
-  // interface Foo {
-  // }
-  // 
-  // module Foo {
+  // --- (line: 4) skipped ---
   //     export interface Bar { }
   // }
   // 

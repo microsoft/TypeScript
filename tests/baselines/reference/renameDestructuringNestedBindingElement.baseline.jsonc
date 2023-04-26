@@ -38,14 +38,7 @@
 
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameDestructuringNestedBindingElement.ts ===
-// interface MultiRobot {
-//     name: string;
-//     skills: {
-//         primary: string;
-//         secondary: string;
-//     };
-// }
-// let multiRobots: MultiRobot[];
+// --- (line: 8) skipped ---
 // for (let { skills: {primary: primaryA, secondary: secondaryA } } of multiRobots) {
 //     console.log(primaryA);
 // }
@@ -57,14 +50,7 @@
 
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameDestructuringNestedBindingElement.ts ===
-// interface MultiRobot {
-//     name: string;
-//     skills: {
-//         primary: string;
-//         secondary: string;
-//     };
-// }
-// let multiRobots: MultiRobot[];
+// --- (line: 8) skipped ---
 // for (let { skills: {primary: primaryA, secondary: secondaryA } } of multiRobots) {
 //     console.log(primaryA);
 // }

@@ -25,6 +25,7 @@ define("file1", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.elem = void 0;
+    /// <reference lib="dom" />
     exports.elem = { field: 'a' };
 });
 

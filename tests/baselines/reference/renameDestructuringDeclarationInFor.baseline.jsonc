@@ -34,12 +34,7 @@
 
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameDestructuringDeclarationInFor.ts ===
-// interface I {
-//     property1: number;
-//     property2: string;
-// }
-// var elems: I[];
-// 
+// --- (line: 6) skipped ---
 // var p2: number, property1: number;
 // for (let { property1: p2 } = elems[0]; p2 < 100; p2++) {
 // }
@@ -51,12 +46,7 @@
 
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameDestructuringDeclarationInFor.ts ===
-// interface I {
-//     property1: number;
-//     property2: string;
-// }
-// var elems: I[];
-// 
+// --- (line: 6) skipped ---
 // var p2: number, property1: number;
 // for (let { property1: p2 } = elems[0]; p2 < 100; p2++) {
 // }

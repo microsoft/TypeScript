@@ -80,9 +80,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsClassStaticBlocks.ts ===
-// class ClassStaticBocks {
-//     static x;
-//     static {}
+// --- (line: 3) skipped ---
 //     static y;
 //     static {}
 //     static y;
@@ -91,9 +89,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsClassStaticBlocks.ts ===
-  // class ClassStaticBocks {
-  //     static x;
-  //     static {}
+  // --- (line: 3) skipped ---
   //     static y;
   //     static {}
   //     static y;

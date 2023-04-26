@@ -1,11 +1,6 @@
 // === goToImplementation ===
 // === /tests/cases/fourslash/goToImplementationShorthandPropertyAssignment_02.ts ===
-// interface Foo {
-// 	 hello(): void;
-// }
-// 
-// function createFoo(): Foo {
-//     return {
+// --- (line: 6) skipped ---
 //          hello
 //     };
 // 

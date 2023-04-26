@@ -1,14 +1,14 @@
 import {
+    createSolutionBuilder,
+    createSystemWithSolutionBuild,
+} from "../helpers/solutionBuilder";
+import { verifyTscWatch } from "../helpers/tscWatch";
+import {
     getTsBuildProjectFile,
     getTsBuildProjectFilePath,
     libFile,
     TestServerHost,
-} from "../virtualFileSystemWithWatch";
-import {
-    createSolutionBuilder,
-    createSystemWithSolutionBuild,
-    verifyTscWatch,
-} from "./helpers";
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsc-watch:: projects with references: invoking when references are already built", () => {
     verifyTscWatch({

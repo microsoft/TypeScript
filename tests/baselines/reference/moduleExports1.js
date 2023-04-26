@@ -32,7 +32,7 @@ define(["require", "exports"], function (require, exports) {
                 Street.Rue = Rue;
             })(Street = Strasse.Street || (Strasse.Street = {}));
         })(Strasse = TypeScript.Strasse || (TypeScript.Strasse = {}));
-    })(TypeScript = exports.TypeScript || (exports.TypeScript = {}));
+    })(TypeScript || (exports.TypeScript = TypeScript = {}));
     var rue = new TypeScript.Strasse.Street.Rue();
     rue.address = "1 Main Street";
     void 0;

@@ -22,10 +22,7 @@
 // 
 // o.bool;
 // o['bool'];
-// o["bool"];
-// o[`bool`];
-// 
-// export { o };
+// --- (line: 23) skipped ---
 
 // === /tests/cases/fourslash/b.js ===
 // import { o as obj } from './a';
@@ -62,10 +59,7 @@
 // 
 // o.bool;
 // o['bool'];
-// o["bool"];
-// o[`bool`];
-// 
-// export { o };
+// --- (line: 23) skipped ---
 
 // === /tests/cases/fourslash/b.js ===
 // import { o as obj } from './a';
@@ -102,10 +96,7 @@
 // 
 // o.bool;
 // o['bool'];
-// o["bool"];
-// o[`bool`];
-// 
-// export { o };
+// --- (line: 23) skipped ---
 
 // === /tests/cases/fourslash/b.js ===
 // import { o as obj } from './a';
@@ -142,10 +133,7 @@
 // 
 // o.bool;
 // o['bool'];
-// o["bool"];
-// o[`bool`];
-// 
-// export { o };
+// --- (line: 23) skipped ---
 
 // === /tests/cases/fourslash/b.js ===
 // import { o as obj } from './a';
@@ -182,10 +170,7 @@
 // 
 // o.bool;
 // o['bool'];
-// o["bool"];
-// o[`bool`];
-// 
-// export { o };
+// --- (line: 23) skipped ---
 
 // === /tests/cases/fourslash/b.js ===
 // import { o as obj } from './a';
@@ -222,10 +207,7 @@
 // 
 // o.bool;
 // o['bool'];
-// o["bool"];
-// o[`bool`];
-// 
-// export { o };
+// --- (line: 23) skipped ---
 
 // === /tests/cases/fourslash/b.js ===
 // import { o as obj } from './a';
@@ -262,10 +244,7 @@
 // 
 // o.bool;
 // o['bool'];
-// o["bool"];
-// o[`bool`];
-// 
-// export { o };
+// --- (line: 23) skipped ---
 
 // === /tests/cases/fourslash/b.js ===
 // import { o as obj } from './a';
@@ -302,10 +281,7 @@
 // 
 // o.bool;
 // o['bool'];
-// o["bool"];
-// o[`bool`];
-// 
-// export { o };
+// --- (line: 23) skipped ---
 
 // === /tests/cases/fourslash/b.js ===
 // import { o as obj } from './a';
@@ -342,10 +318,7 @@
 // 
 // o.bool;
 // o['bool'];
-// o["bool"];
-// o[`bool`];
-// 
-// export { o };
+// --- (line: 23) skipped ---
 
 // === /tests/cases/fourslash/b.js ===
 // import { o as obj } from './a';

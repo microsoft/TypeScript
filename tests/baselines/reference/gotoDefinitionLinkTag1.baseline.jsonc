@@ -12,14 +12,7 @@
 // const a = ""
 // /** {@link NS.Bar} ns.bar*/
 // const b = ""
-// /** {@link Foo f1}*/
-// const c = ""
-// /** {@link NS.Bar ns.bar}*/
-// const d = ""
-// /** {@link d }dd*/
-// const e = ""
-// /** @param x {@link Foo} */
-// function foo(x) { }
+// --- (line: 13) skipped ---
 
   // === Details ===
   [
@@ -52,12 +45,7 @@
 // const b = ""
 // /** {@link Foo f1}*/
 // const c = ""
-// /** {@link NS.Bar ns.bar}*/
-// const d = ""
-// /** {@link d }dd*/
-// const e = ""
-// /** @param x {@link Foo} */
-// function foo(x) { }
+// --- (line: 15) skipped ---
 
   // === Details ===
   [
@@ -92,10 +80,7 @@
 // const c = ""
 // /** {@link NS.Bar ns.bar}*/
 // const d = ""
-// /** {@link d }dd*/
-// const e = ""
-// /** @param x {@link Foo} */
-// function foo(x) { }
+// --- (line: 17) skipped ---
 
   // === Details ===
   [
@@ -152,18 +137,7 @@
 
 // === getDefinitionAtPosition ===
 // === /tests/cases/fourslash/foo.ts ===
-// interface Foo {
-//     foo: string
-// }
-// namespace NS {
-//     export interface Bar {
-//         baz: Foo
-//     }
-// }
-// /** {@link Foo} foooo*/
-// const a = ""
-// /** {@link NS.Bar} ns.bar*/
-// const b = ""
+// --- (line: 12) skipped ---
 // /** {@link Foo f1}*/
 // const c = ""
 // /** {@link NS.Bar ns.bar}*/
@@ -196,15 +170,9 @@
 // namespace NS {
 //     export interface Bar {
 //         baz: Foo
-//     }
-// }
-// /** {@link Foo} foooo*/
-// const a = ""
-// /** {@link NS.Bar} ns.bar*/
-// const b = ""
-// /** {@link Foo f1}*/
-// const c = ""
-// /** {@link NS.Bar ns.bar}*/
+// --- (line: 7) skipped ---
+
+// --- (line: 15) skipped ---
 // const d = ""
 // /** {@link d }dd*/
 // const e = ""
@@ -234,20 +202,7 @@
 // namespace NS {
 //     export interface Bar {
 //         baz: Foo
-//     }
-// }
-// /** {@link Foo} foooo*/
-// const a = ""
-// /** {@link NS.Bar} ns.bar*/
-// const b = ""
-// /** {@link Foo f1}*/
-// const c = ""
-// /** {@link NS.Bar ns.bar}*/
-// const d = ""
-// /** {@link d }dd*/
-// const e = ""
-// /** @param x {@link Foo} */
-// function foo(x) { }
+// --- (line: 7) skipped ---
 
 // === /tests/cases/fourslash/bar.ts ===
 // /** {@link /*GOTO DEF POS*/Foo }dd*/

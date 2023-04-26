@@ -12,13 +12,7 @@
 // 
 // var x = new Bar();
 // 
-// x.hello();
-// 
-// class SomeClass {
-//     someMethod() {
-//         this.someMethod();
-//     }
-// }
+// --- (line: 5) skipped ---
 
   // === Details ===
   [
@@ -59,11 +53,7 @@
 // 
 // x.hello();
 // 
-// class SomeClass {
-//     someMethod() {
-//         this.someMethod();
-//     }
-// }
+// --- (line: 7) skipped ---
 
   // === Details ===
   [
@@ -106,9 +96,7 @@
 // 
 // class SomeClass {
 //     someMethod() {
-//         this.someMethod();
-//     }
-// }
+// --- (line: 9) skipped ---
 
   // === Details ===
   [
@@ -171,9 +159,7 @@
 
 // === goToImplementation ===
 // === /tests/cases/fourslash/shims-pp/goToImplementationDifferentFile_Consumption.ts ===
-// interface Foo {}
-// 
-// var x = new Bar();
+// --- (line: 3) skipped ---
 // 
 // x.hello();
 // 

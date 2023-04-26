@@ -1,13 +1,6 @@
 // === findAllReferences ===
 // === /tests/cases/fourslash/file.tsx ===
-// class RC1 extends React.Component<{}, {}> {
-//     render() {
-//         return null;
-//     }
-// }
-// class RC2 extends React.Component<{}, {}> {
-//     render() {
-//         return null;
+// --- (line: 8) skipped ---
 //     }
 //     private method() { }
 // }
@@ -16,14 +9,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/file.tsx ===
-  // class RC1 extends React.Component<{}, {}> {
-  //     render() {
-  //         return null;
-  //     }
-  // }
-  // class RC2 extends React.Component<{}, {}> {
-  //     render() {
-  //         return null;
+  // --- (line: 8) skipped ---
   //     }
   //     private method() { }
   // }
@@ -78,14 +64,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/file.tsx ===
-// class RC1 extends React.Component<{}, {}> {
-//     render() {
-//         return null;
-//     }
-// }
-// class RC2 extends React.Component<{}, {}> {
-//     render() {
-//         return null;
+// --- (line: 8) skipped ---
 //     }
 //     private method() { }
 // }
@@ -94,14 +73,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/file.tsx ===
-  // class RC1 extends React.Component<{}, {}> {
-  //     render() {
-  //         return null;
-  //     }
-  // }
-  // class RC2 extends React.Component<{}, {}> {
-  //     render() {
-  //         return null;
+  // --- (line: 8) skipped ---
   //     }
   //     private method() { }
   // }
@@ -156,15 +128,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/file.tsx ===
-// class RC1 extends React.Component<{}, {}> {
-//     render() {
-//         return null;
-//     }
-// }
-// class RC2 extends React.Component<{}, {}> {
-//     render() {
-//         return null;
-//     }
+// --- (line: 9) skipped ---
 //     private method() { }
 // }
 // var RCComp = RC1 || RC2;
@@ -174,14 +138,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/file.tsx ===
-// class RC1 extends React.Component<{}, {}> {
-//     render() {
-//         return null;
-//     }
-// }
-// class RC2 extends React.Component<{}, {}> {
-//     render() {
-//         return null;
+// --- (line: 8) skipped ---
 //     }
 //     private method() { }
 // }
@@ -190,14 +147,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/file.tsx ===
-  // class RC1 extends React.Component<{}, {}> {
-  //     render() {
-  //         return null;
-  //     }
-  // }
-  // class RC2 extends React.Component<{}, {}> {
-  //     render() {
-  //         return null;
+  // --- (line: 8) skipped ---
   //     }
   //     private method() { }
   // }

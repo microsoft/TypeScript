@@ -408,12 +408,7 @@
 // }
 // 
 // interface D extends C {
-//     prop0: string;
-// }
-// 
-// var d: D;
-// d.prop0;
-// d.prop1;
+// --- (line: 7) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsInheritedProperties4.ts ===
@@ -423,12 +418,7 @@
   // }
   // 
   // interface D extends C {
-  //     prop0: string;
-  // }
-  // 
-  // var d: D;
-  // d.prop0;
-  // d.prop1;
+  // --- (line: 7) skipped ---
 
   // === Details ===
   [
@@ -486,14 +476,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsInheritedProperties4.ts ===
-// interface C extends D {
-//     prop0: string;
-//     prop1: number;
-// }
-// 
-// interface D extends C {
-//     prop0: string;
-// }
+// --- (line: 8) skipped ---
 // 
 // var d: D;
 // d.prop0;

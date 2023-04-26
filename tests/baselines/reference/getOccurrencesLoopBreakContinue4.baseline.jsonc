@@ -1,31 +1,6 @@
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesLoopBreakContinue4.ts ===
-// var arr = [1, 2, 3, 4];
-// label1: for (var n in arr) {
-//     break;
-//     continue;
-//     break label1;
-//     continue label1;
-// 
-//     label2: for (var i = 0; i < arr[n]; i++) {
-//         break label1;
-//         continue label1;
-// 
-//         break;
-//         continue;
-//         break label2;
-//         continue label2;
-// 
-//         function foo() {
-//             label3: while (true) {
-//                 break;
-//                 continue;
-//                 break label3;
-//                 continue label3;
-// 
-//                 // these cross function boundaries
-//                 break label1;
-//                 continue label1;
+// --- (line: 26) skipped ---
 //                 break label2;
 //                 continue label2;
 // 
@@ -57,42 +32,13 @@
 //             }
 //         }
 //     }
-// }
-// 
-// label5: while (true) break label5;
-// 
-// label7: while (true) continue label5;
+// --- (line: 58) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesLoopBreakContinue4.ts ===
-// var arr = [1, 2, 3, 4];
-// label1: for (var n in arr) {
-//     break;
-//     continue;
-//     break label1;
-//     continue label1;
-// 
-//     label2: for (var i = 0; i < arr[n]; i++) {
-//         break label1;
-//         continue label1;
-// 
-//         break;
-//         continue;
-//         break label2;
-//         continue label2;
-// 
-//         function foo() {
-//             label3: while (true) {
-//                 break;
-//                 continue;
-//                 break label3;
-//                 continue label3;
-// 
-//                 // these cross function boundaries
-//                 break label1;
-//                 continue label1;
+// --- (line: 26) skipped ---
 //                 break label2;
 //                 continue label2;
 // 
@@ -124,42 +70,13 @@
 //             }
 //         }
 //     }
-// }
-// 
-// label5: while (true) break label5;
-// 
-// label7: while (true) continue label5;
+// --- (line: 58) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesLoopBreakContinue4.ts ===
-// var arr = [1, 2, 3, 4];
-// label1: for (var n in arr) {
-//     break;
-//     continue;
-//     break label1;
-//     continue label1;
-// 
-//     label2: for (var i = 0; i < arr[n]; i++) {
-//         break label1;
-//         continue label1;
-// 
-//         break;
-//         continue;
-//         break label2;
-//         continue label2;
-// 
-//         function foo() {
-//             label3: while (true) {
-//                 break;
-//                 continue;
-//                 break label3;
-//                 continue label3;
-// 
-//                 // these cross function boundaries
-//                 break label1;
-//                 continue label1;
+// --- (line: 26) skipped ---
 //                 break label2;
 //                 continue label2;
 // 
@@ -191,42 +108,13 @@
 //             }
 //         }
 //     }
-// }
-// 
-// label5: while (true) break label5;
-// 
-// label7: while (true) continue label5;
+// --- (line: 58) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesLoopBreakContinue4.ts ===
-// var arr = [1, 2, 3, 4];
-// label1: for (var n in arr) {
-//     break;
-//     continue;
-//     break label1;
-//     continue label1;
-// 
-//     label2: for (var i = 0; i < arr[n]; i++) {
-//         break label1;
-//         continue label1;
-// 
-//         break;
-//         continue;
-//         break label2;
-//         continue label2;
-// 
-//         function foo() {
-//             label3: while (true) {
-//                 break;
-//                 continue;
-//                 break label3;
-//                 continue label3;
-// 
-//                 // these cross function boundaries
-//                 break label1;
-//                 continue label1;
+// --- (line: 26) skipped ---
 //                 break label2;
 //                 continue label2;
 // 
@@ -258,42 +146,13 @@
 //             }
 //         }
 //     }
-// }
-// 
-// label5: while (true) break label5;
-// 
-// label7: while (true) continue label5;
+// --- (line: 58) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesLoopBreakContinue4.ts ===
-// var arr = [1, 2, 3, 4];
-// label1: for (var n in arr) {
-//     break;
-//     continue;
-//     break label1;
-//     continue label1;
-// 
-//     label2: for (var i = 0; i < arr[n]; i++) {
-//         break label1;
-//         continue label1;
-// 
-//         break;
-//         continue;
-//         break label2;
-//         continue label2;
-// 
-//         function foo() {
-//             label3: while (true) {
-//                 break;
-//                 continue;
-//                 break label3;
-//                 continue label3;
-// 
-//                 // these cross function boundaries
-//                 break label1;
-//                 continue label1;
+// --- (line: 26) skipped ---
 //                 break label2;
 //                 continue label2;
 // 
@@ -325,42 +184,13 @@
 //             }
 //         }
 //     }
-// }
-// 
-// label5: while (true) break label5;
-// 
-// label7: while (true) continue label5;
+// --- (line: 58) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesLoopBreakContinue4.ts ===
-// var arr = [1, 2, 3, 4];
-// label1: for (var n in arr) {
-//     break;
-//     continue;
-//     break label1;
-//     continue label1;
-// 
-//     label2: for (var i = 0; i < arr[n]; i++) {
-//         break label1;
-//         continue label1;
-// 
-//         break;
-//         continue;
-//         break label2;
-//         continue label2;
-// 
-//         function foo() {
-//             label3: while (true) {
-//                 break;
-//                 continue;
-//                 break label3;
-//                 continue label3;
-// 
-//                 // these cross function boundaries
-//                 break label1;
-//                 continue label1;
+// --- (line: 26) skipped ---
 //                 break label2;
 //                 continue label2;
 // 
@@ -392,42 +222,13 @@
 //             }
 //         }
 //     }
-// }
-// 
-// label5: while (true) break label5;
-// 
-// label7: while (true) continue label5;
+// --- (line: 58) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesLoopBreakContinue4.ts ===
-// var arr = [1, 2, 3, 4];
-// label1: for (var n in arr) {
-//     break;
-//     continue;
-//     break label1;
-//     continue label1;
-// 
-//     label2: for (var i = 0; i < arr[n]; i++) {
-//         break label1;
-//         continue label1;
-// 
-//         break;
-//         continue;
-//         break label2;
-//         continue label2;
-// 
-//         function foo() {
-//             label3: while (true) {
-//                 break;
-//                 continue;
-//                 break label3;
-//                 continue label3;
-// 
-//                 // these cross function boundaries
-//                 break label1;
-//                 continue label1;
+// --- (line: 26) skipped ---
 //                 break label2;
 //                 continue label2;
 // 
@@ -459,42 +260,13 @@
 //             }
 //         }
 //     }
-// }
-// 
-// label5: while (true) break label5;
-// 
-// label7: while (true) continue label5;
+// --- (line: 58) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesLoopBreakContinue4.ts ===
-// var arr = [1, 2, 3, 4];
-// label1: for (var n in arr) {
-//     break;
-//     continue;
-//     break label1;
-//     continue label1;
-// 
-//     label2: for (var i = 0; i < arr[n]; i++) {
-//         break label1;
-//         continue label1;
-// 
-//         break;
-//         continue;
-//         break label2;
-//         continue label2;
-// 
-//         function foo() {
-//             label3: while (true) {
-//                 break;
-//                 continue;
-//                 break label3;
-//                 continue label3;
-// 
-//                 // these cross function boundaries
-//                 break label1;
-//                 continue label1;
+// --- (line: 26) skipped ---
 //                 break label2;
 //                 continue label2;
 // 
@@ -526,8 +298,4 @@
 //             }
 //         }
 //     }
-// }
-// 
-// label5: while (true) break label5;
-// 
-// label7: while (true) continue label5;
+// --- (line: 58) skipped ---

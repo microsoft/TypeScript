@@ -32,9 +32,7 @@
   // class E implements A { }
   // const a = new A("a");
   // const b = new B("b");
-  // const c = new C();
-  // const d = new D("d");
-  // const e = new E();
+  // --- (line: 14) skipped ---
 
   // === Details ===
   [
@@ -138,10 +136,7 @@
   // class D extends B { }
   // class E implements A { }
   // const a = new A("a");
-  // const b = new B("b");
-  // const c = new C();
-  // const d = new D("d");
-  // const e = new E();
+  // --- (line: 13) skipped ---
 
   // === Details ===
   [

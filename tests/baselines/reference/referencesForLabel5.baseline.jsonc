@@ -16,11 +16,7 @@
   //             if (false) break label;
   //             function blah() {
   // label:          while (true) {
-  //                     if (false) break label;
-  //                 }
-  //             }
-  //             if (false) break label;
-  //         }
+  // --- (line: 5) skipped ---
 
   // === Details ===
   [
@@ -47,10 +43,7 @@
 //             function blah() {
 // label:          while (true) {
 //                     if (false) break label;
-//                 }
-//             }
-//             if (false) break label;
-//         }
+// --- (line: 6) skipped ---
 
 
 
@@ -73,10 +66,7 @@
   //             function blah() {
   // label:          while (true) {
   //                     if (false) break label;
-  //                 }
-  //             }
-  //             if (false) break label;
-  //         }
+  // --- (line: 6) skipped ---
 
   // === Details ===
   [
@@ -196,10 +186,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForLabel5.ts ===
-// label:  while (true) {
-//             if (false) break label;
-//             function blah() {
-// label:          while (true) {
+// --- (line: 4) skipped ---
 //                     if (false) break label;
 //                 }
 //             }

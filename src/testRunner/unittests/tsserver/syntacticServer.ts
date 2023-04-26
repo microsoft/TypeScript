@@ -1,11 +1,6 @@
 import * as ts from "../../_namespaces/ts";
 
 import {
-    createServerHost,
-    File,
-    libFile,
-} from "../virtualFileSystemWithWatch";
-import {
     baselineTsserverLogs,
     closeFilesForSession,
     createLoggerWithInMemoryLogs,
@@ -14,7 +9,12 @@ import {
     protocolFileLocationFromSubstring,
     TestSession,
     TestSessionRequest,
-} from "./helpers";
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+    File,
+    libFile,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: Semantic operations on Syntax server", () => {
     function setup() {

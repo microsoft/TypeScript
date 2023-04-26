@@ -4,9 +4,7 @@
 //     constructor(){
 //         return;
 //     }
-//     /** this is a super var */
-//     public myVar: boolean | 'yeah' = true;
-// }
+// --- (line: 5) skipped ---
 
 // === /tests/cases/fourslash/server/buttonClass/Source.ts ===
 // // I cannot F12 navigate to Control
@@ -15,13 +13,7 @@
 //     public myFunction() {
 //         // I cannot F12 navigate to myVar
 //         //              vvvvv
-//         if (typeof this.myVar === 'boolean') {
-//             this.myVar;
-//         } else {
-//             this.myVar.toLocaleUpperCase();
-//         }
-//     }
-// }
+// --- (line: 7) skipped ---
 
   // === Details ===
   [
@@ -46,9 +38,7 @@
 // }
 
 // === /tests/cases/fourslash/server/buttonClass/Source.ts ===
-// // I cannot F12 navigate to Control
-// //                   vvvvvvv
-// class Button extends Control {
+// --- (line: 3) skipped ---
 //     public myFunction() {
 //         // I cannot F12 navigate to myVar
 //         //              vvvvv
@@ -56,9 +46,7 @@
 //             this.myVar;
 //         } else {
 //             this.myVar.toLocaleUpperCase();
-//         }
-//     }
-// }
+// --- (line: 11) skipped ---
 
   // === Details ===
   [

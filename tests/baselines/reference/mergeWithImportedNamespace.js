@@ -16,7 +16,7 @@ exports.N = void 0;
 var N;
 (function (N) {
     N.x = 1;
-})(N = exports.N || (exports.N = {}));
+})(N || (exports.N = N = {}));
 //// [f2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

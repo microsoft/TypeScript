@@ -1,15 +1,6 @@
 // === goToImplementation ===
 // === /tests/cases/fourslash/goToImplementationShorthandPropertyAssignment_01.ts ===
-// interface Foo {
-//     someFunction(): void;
-// }
-// 
-// interface FooConstructor {
-//     new (): Foo
-// }
-// 
-// interface Bar {
-//     Foo: FooConstructor;
+// --- (line: 10) skipped ---
 // }
 // 
 // // Class expression that gets used in a bar implementation
@@ -31,12 +22,9 @@
 // 
 // function createBarUsingClassDeclaration(): Bar {
 //     return {
-//         Foo
-//     };
-// }
-// 
-// // Class expression that does not get used in a bar implementation
-// var y = class Foo {
+// --- (line: 32) skipped ---
+
+// --- (line: 37) skipped ---
 //     someFunction() {}
 // };
 // 

@@ -1,21 +1,6 @@
 // === findAllReferences ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
-//     interface Element { }
-//     interface IntrinsicElements {
-//     }
-//     interface ElementAttributesProperty { props; }
-// }
-// interface ClickableProps {
-//     children?: string;
-//     className?: string;
-// }
-// interface ButtonProps extends ClickableProps {
-//     onClick(event?: React.MouseEvent<HTMLButtonElement>): void;
-// }
-// interface LinkProps extends ClickableProps {
-//     goTo: string;
-// }
+// --- (line: 16) skipped ---
 // declare function MainButton(buttonProps: ButtonProps): JSX.Element;
 // declare function MainButton(linkProps: LinkProps): JSX.Element;
 // declare function MainButton(props: ButtonProps | LinkProps): JSX.Element;
@@ -23,22 +8,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/file.tsx ===
-  // declare module JSX {
-  //     interface Element { }
-  //     interface IntrinsicElements {
-  //     }
-  //     interface ElementAttributesProperty { props; }
-  // }
-  // interface ClickableProps {
-  //     children?: string;
-  //     className?: string;
-  // }
-  // interface ButtonProps extends ClickableProps {
-  //     onClick(event?: React.MouseEvent<HTMLButtonElement>): void;
-  // }
-  // interface LinkProps extends ClickableProps {
-  //     goTo: string;
-  // }
+  // --- (line: 16) skipped ---
   // declare function MainButton(buttonProps: ButtonProps): JSX.Element;
   // declare function MainButton(linkProps: LinkProps): JSX.Element;
   // declare function MainButton(props: ButtonProps | LinkProps): JSX.Element;

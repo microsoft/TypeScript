@@ -1,10 +1,10 @@
 import * as Utils from "../../_namespaces/Utils";
 
 import {
-    loadProjectFromFiles,
     noChangeRun,
     verifyTsc,
-} from "./helpers";
+} from "../helpers/tsc";
+import { loadProjectFromFiles } from "../helpers/vfs";
 
 describe("unittests:: tsc:: listFilesOnly::", () => {
     verifyTsc({

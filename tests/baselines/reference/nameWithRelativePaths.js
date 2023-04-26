@@ -43,7 +43,7 @@ exports.M2 = void 0;
 var M2;
 (function (M2) {
     M2.x = true;
-})(M2 = exports.M2 || (exports.M2 = {}));
+})(M2 || (exports.M2 = M2 = {}));
 //// [foo_3.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

@@ -46,7 +46,6 @@ import {
     DotDotDotToken,
     ElementAccessExpression,
     EmptyStatement,
-    EndOfDeclarationMarker,
     EnumDeclaration,
     EnumMember,
     EqualsGreaterThanToken,
@@ -128,6 +127,7 @@ import {
     JsxElement,
     JsxExpression,
     JsxFragment,
+    JsxNamespacedName,
     JsxOpeningElement,
     JsxOpeningFragment,
     JsxSelfClosingElement,
@@ -136,7 +136,6 @@ import {
     LabeledStatement,
     LiteralTypeNode,
     MappedTypeNode,
-    MergeDeclarationMarker,
     MetaProperty,
     MethodDeclaration,
     MethodSignature,
@@ -901,16 +900,6 @@ export function isSyntheticReference(node: Node): node is SyntheticReferenceExpr
     return node.kind === SyntaxKind.SyntheticReferenceExpression;
 }
 
-/** @internal */
-export function isMergeDeclarationMarker(node: Node): node is MergeDeclarationMarker {
-    return node.kind === SyntaxKind.MergeDeclarationMarker;
-}
-
-/** @internal */
-export function isEndOfDeclarationMarker(node: Node): node is EndOfDeclarationMarker {
-    return node.kind === SyntaxKind.EndOfDeclarationMarker;
-}
-
 // Module References
 
 export function isExternalModuleReference(node: Node): node is ExternalModuleReference {
@@ -961,6 +950,10 @@ export function isJsxSpreadAttribute(node: Node): node is JsxSpreadAttribute {
 
 export function isJsxExpression(node: Node): node is JsxExpression {
     return node.kind === SyntaxKind.JsxExpression;
+}
+
+export function isJsxNamespacedName(node: Node): node is JsxNamespacedName {
+    return node.kind === SyntaxKind.JsxNamespacedName;
 }
 
 // Clauses

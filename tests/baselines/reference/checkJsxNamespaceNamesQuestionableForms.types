@@ -18,20 +18,26 @@ declare namespace JSX {
 
 <a:b></a:b>;
 ><a:b></a:b> : any
->a:b : any
->a:b : any
+>a : any
+>b : any
+>a : any
+>b : any
 
 <b:c.x></b:c.x>;
 ><b:c.x></b:c.x> : any
 >b:c.x : any
->b:c : any
+>b : any
+>c : any
 >x : any
 >b:c.x : any
->b:c : any
+>b : any
+>c : any
 >x : any
 
 <this:b></this:b>;
 ><this:b></this:b> : any
->this:b : any
->this:b : any
+>this : any
+>b : any
+>this : any
+>b : any
 

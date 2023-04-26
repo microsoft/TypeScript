@@ -30,10 +30,7 @@
 //         super.method();
 //     }
 //     method() { super(); }
-// }
-// class E implements C {
-//     constructor() { super(); }
-// }
+// --- (line: 8) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/a.ts ===
@@ -59,13 +56,7 @@
   // class D extends C {
   //     constructor() {
   //         super();
-  //         super.method();
-  //     }
-  //     method() { super(); }
-  // }
-  // class E implements C {
-  //     constructor() { super(); }
-  // }
+  // --- (line: 5) skipped ---
 
   // === Details ===
   [
@@ -232,10 +223,7 @@
 //         super.method();
 //     }
 //     method() { super(); }
-// }
-// class E implements C {
-//     constructor() { super(); }
-// }
+// --- (line: 8) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/a.ts ===
@@ -261,13 +249,7 @@
   // class D extends C {
   //     constructor() {
   //         super();
-  //         super.method();
-  //     }
-  //     method() { super(); }
-  // }
-  // class E implements C {
-  //     constructor() { super(); }
-  // }
+  // --- (line: 5) skipped ---
 
   // === Details ===
   [
@@ -434,10 +416,7 @@
 //         super.method();
 //     }
 //     method() { super(); }
-// }
-// class E implements C {
-//     constructor() { super(); }
-// }
+// --- (line: 8) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/a.ts ===
@@ -463,13 +442,7 @@
   // class D extends C {
   //     constructor() {
   //         super();
-  //         super.method();
-  //     }
-  //     method() { super(); }
-  // }
-  // class E implements C {
-  //     constructor() { super(); }
-  // }
+  // --- (line: 5) skipped ---
 
   // === Details ===
   [

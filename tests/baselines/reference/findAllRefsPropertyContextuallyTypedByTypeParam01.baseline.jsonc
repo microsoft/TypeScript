@@ -24,17 +24,7 @@
   // }
   // class C<T extends IFoo> {
   //     method() {
-  //         var x: T = {
-  //             a: ""
-  //         };
-  //         x.a;
-  //     }
-  // }
-  // 
-  // 
-  // var x: IFoo = {
-  //     a: "ss"
-  // };
+  // --- (line: 6) skipped ---
 
   // === Details ===
   [

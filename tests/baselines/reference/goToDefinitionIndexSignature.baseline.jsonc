@@ -15,9 +15,7 @@
 // declare const ij: I | J;
 // ij.foo;
 // declare const k: K;
-// k.a;
-// k.b;
-// k.ab;
+// --- (line: 16) skipped ---
 
   // === Details ===
   [
@@ -81,10 +79,7 @@
 
 // === goToDefinition ===
 // === /tests/cases/fourslash/goToDefinitionIndexSignature.ts ===
-// interface I {
-//     [x: string]: boolean;
-// }
-// interface J {
+// --- (line: 4) skipped ---
 //     [x: string]: number;
 // }
 // interface K {
@@ -117,11 +112,7 @@
 
 // === goToDefinition ===
 // === /tests/cases/fourslash/goToDefinitionIndexSignature.ts ===
-// interface I {
-//     [x: string]: boolean;
-// }
-// interface J {
-//     [x: string]: number;
+// --- (line: 5) skipped ---
 // }
 // interface K {
 //     [x: `a${string}`]: string;
@@ -153,10 +144,7 @@
 
 // === goToDefinition ===
 // === /tests/cases/fourslash/goToDefinitionIndexSignature.ts ===
-// interface I {
-//     [x: string]: boolean;
-// }
-// interface J {
+// --- (line: 4) skipped ---
 //     [x: string]: number;
 // }
 // interface K {

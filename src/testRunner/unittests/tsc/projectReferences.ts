@@ -1,7 +1,7 @@
 import {
-    loadProjectFromFiles,
     verifyTsc,
-} from "./helpers";
+} from "../helpers/tsc";
+import { loadProjectFromFiles } from "../helpers/vfs";
 
 describe("unittests:: tsc:: projectReferences::", () => {
     verifyTsc({

@@ -15,10 +15,7 @@
 // 
 // var y = class {
 //    getSomeName() {
-//       return Foo
-//    }
-// }
-// var z = class Foo {}
+// --- (line: 16) skipped ---
 
 
 
@@ -39,10 +36,7 @@
 // 
 // var y = class {
 //    getSomeName() {
-//       return Foo
-//    }
-// }
-// var z = class Foo {}
+// --- (line: 16) skipped ---
 
 
 
@@ -63,7 +57,4 @@
 // 
 // var y = class {
 //    getSomeName() {
-//       return Foo
-//    }
-// }
-// var z = class Foo {}
+// --- (line: 16) skipped ---

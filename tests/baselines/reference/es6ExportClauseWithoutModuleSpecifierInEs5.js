@@ -32,7 +32,7 @@ exports.c = c;
 var m;
 (function (m) {
     m.x = 10;
-})(m = exports.m || (exports.m = {}));
+})(m || (exports.m = m = {}));
 exports.x = 10;
 //// [client.js]
 "use strict";

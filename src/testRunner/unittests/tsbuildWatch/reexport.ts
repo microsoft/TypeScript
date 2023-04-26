@@ -1,10 +1,10 @@
-import { libContent } from "../tsc/helpers";
-import { verifyTscWatch } from "../tscWatch/helpers";
+import { libContent } from "../helpers/contents";
+import { verifyTscWatch } from "../helpers/tscWatch";
 import {
     createWatchedSystem,
     getTsBuildProjectFile,
     libFile,
-} from "../virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsbuildWatch:: watchMode:: with reexport when referenced project reexports definitions from another file", () => {
     verifyTscWatch({

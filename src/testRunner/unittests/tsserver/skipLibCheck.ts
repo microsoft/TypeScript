@@ -1,6 +1,5 @@
 import * as ts from "../../_namespaces/ts";
 
-import { createServerHost } from "../virtualFileSystemWithWatch";
 import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,
@@ -8,7 +7,8 @@ import {
     openExternalProjectForSession,
     openFilesForSession,
     toExternalFiles,
-} from "./helpers";
+} from "../helpers/tsserver";
+import { createServerHost } from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: with skipLibCheck", () => {
     it("should be turned on for js-only inferred projects", () => {

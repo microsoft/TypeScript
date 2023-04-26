@@ -17,10 +17,7 @@
   // }
   // /**
   //  * @type {{ property: "foo"}}
-  //  */
-  // const obj: Foo = {
-  //     property: "foo",
-  // }
+  // --- (line: 6) skipped ---
 
   // === Details ===
   [

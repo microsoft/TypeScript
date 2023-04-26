@@ -1,87 +1,6 @@
 // === findAllReferences ===
 // === /tests/cases/fourslash/remoteGetReferences_1.ts ===
-// // Comment Refence Test: globalVar
-// var globalVar: number = 2;
-// 
-// class fooCls {
-//     static clsSVar = 1;
-//     //Declare
-//     clsVar = 1;
-// 
-//     constructor (public clsParam: number) {
-//         //Increments
-//         globalVar++;
-//         this.clsVar++;
-//         fooCls.clsSVar++;
-//         this.clsParam++;
-//         modTest.modVar++;
-//     }
-// }
-// 
-// function foo(x: number) {
-//     //Declare
-//     var fnVar = 1;
-// 
-//     //Increments
-//     fooCls.clsSVar++;
-//     globalVar++;
-//     modTest.modVar++;
-//     fnVar++;
-// 
-//     //Return
-//     return x++;
-// }
-// 
-// module modTest {
-//     //Declare
-//     export var modVar:number;
-// 
-//     //Increments
-//     globalVar++;
-//     fooCls.clsSVar++;
-//     modVar++;
-// 
-//     class testCls {
-//         static boo = foo;
-//     }
-// 
-//     function testFn(){
-//         static boo = foo;
-// 
-//         //Increments
-//         globalVar++;
-//         fooCls.clsSVar++;
-//         modVar++;
-//     }
-// 
-//     module testMod {
-//         var boo = foo;
-//     }
-// }
-// 
-// //Type test
-// var clsTest: fooCls;
-// 
-// //Arguments
-// clsTest = new fooCls(globalVar);
-// foo(globalVar);
-// 
-// //Increments
-// fooCls.clsSVar++;
-// modTest.modVar++;
-// globalVar = globalVar + globalVar;
-// 
-// //ETC - Other cases
-// globalVar = 3;
-// foo = foo + 1;
-// err = err++;
-// 
-// //Shadowed fn Parameter
-// function shdw(globalVar: number) {
-//     //Increments
-//     globalVar++;
-//     return globalVar;
-// }
+// --- (line: 82) skipped ---
 // 
 // //Remotes
 // //Type test
@@ -96,26 +15,7 @@
 // remotemodTest.remotemodVar++;
 // remoteglobalVar = remoteglobalVar + remoteglobalVar;
 // 
-// //ETC - Other cases
-// remoteglobalVar = 3;
-// 
-// //Find References misses method param
-// var
-// 
-// 
-// 
-//  array = ["f", "o", "o"];
-// 
-// array.forEach(
-// 
-// 
-// function(str) {
-// 
-// 
-// 
-//    return str + " ";
-// 
-// });
+// --- (line: 97) skipped ---
 
 // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
 // var remoteglobalVar: number = 2;
@@ -144,14 +44,9 @@
 // 	remoteglobalVar++;
 // 	remotemodTest.remotemodVar++;
 // 	remotefnVar++;
-// 
-// 	//Return
-// 	return remotex++;
-// }
-// 
-// module remotemodTest {
-// 	//Declare
-// 	export var remotemodVar: number;
+// --- (line: 27) skipped ---
+
+// --- (line: 34) skipped ---
 // 
 // 	//Increments
 // 	remoteglobalVar++;
@@ -159,11 +54,9 @@
 // 	remotemodVar++;
 // 
 // 	class remotetestCls {
-// 		static remoteboo = remotefoo;
-// 	}
-// 
-// 	function remotetestFn(){
-//         static remoteboo = remotefoo;
+// --- (line: 42) skipped ---
+
+// --- (line: 46) skipped ---
 // 
 // 		//Increments
 // 		remoteglobalVar++;
@@ -171,10 +64,7 @@
 // 		remotemodVar++;
 //     }
 // 
-// 	module remotetestMod {
-// 		var remoteboo = remotefoo;
-// 	}
-// }
+// --- (line: 54) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
@@ -197,44 +87,7 @@
   // 
   // function remotefoo(remotex: number) {
   // 	//Declare
-  // 	var remotefnVar = 1;
-  // 
-  // 	//Increments
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remoteglobalVar++;
-  // 	remotemodTest.remotemodVar++;
-  // 	remotefnVar++;
-  // 
-  // 	//Return
-  // 	return remotex++;
-  // }
-  // 
-  // module remotemodTest {
-  // 	//Declare
-  // 	export var remotemodVar: number;
-  // 
-  // 	//Increments
-  // 	remoteglobalVar++;
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remotemodVar++;
-  // 
-  // 	class remotetestCls {
-  // 		static remoteboo = remotefoo;
-  // 	}
-  // 
-  // 	function remotetestFn(){
-  //         static remoteboo = remotefoo;
-  // 
-  // 		//Increments
-  // 		remoteglobalVar++;
-  // 		remotefooCls.remoteclsSVar++;
-  // 		remotemodVar++;
-  //     }
-  // 
-  // 	module remotetestMod {
-  // 		var remoteboo = remotefoo;
-  // 	}
-  // }
+  // --- (line: 20) skipped ---
 
   // === Details ===
   [
@@ -264,88 +117,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/remoteGetReferences_1.ts ===
-// // Comment Refence Test: globalVar
-// var globalVar: number = 2;
-// 
-// class fooCls {
-//     static clsSVar = 1;
-//     //Declare
-//     clsVar = 1;
-// 
-//     constructor (public clsParam: number) {
-//         //Increments
-//         globalVar++;
-//         this.clsVar++;
-//         fooCls.clsSVar++;
-//         this.clsParam++;
-//         modTest.modVar++;
-//     }
-// }
-// 
-// function foo(x: number) {
-//     //Declare
-//     var fnVar = 1;
-// 
-//     //Increments
-//     fooCls.clsSVar++;
-//     globalVar++;
-//     modTest.modVar++;
-//     fnVar++;
-// 
-//     //Return
-//     return x++;
-// }
-// 
-// module modTest {
-//     //Declare
-//     export var modVar:number;
-// 
-//     //Increments
-//     globalVar++;
-//     fooCls.clsSVar++;
-//     modVar++;
-// 
-//     class testCls {
-//         static boo = foo;
-//     }
-// 
-//     function testFn(){
-//         static boo = foo;
-// 
-//         //Increments
-//         globalVar++;
-//         fooCls.clsSVar++;
-//         modVar++;
-//     }
-// 
-//     module testMod {
-//         var boo = foo;
-//     }
-// }
-// 
-// //Type test
-// var clsTest: fooCls;
-// 
-// //Arguments
-// clsTest = new fooCls(globalVar);
-// foo(globalVar);
-// 
-// //Increments
-// fooCls.clsSVar++;
-// modTest.modVar++;
-// globalVar = globalVar + globalVar;
-// 
-// //ETC - Other cases
-// globalVar = 3;
-// foo = foo + 1;
-// err = err++;
-// 
-// //Shadowed fn Parameter
-// function shdw(globalVar: number) {
-//     //Increments
-//     globalVar++;
-//     return globalVar;
-// }
+// --- (line: 82) skipped ---
 // 
 // //Remotes
 // //Type test
@@ -360,26 +132,7 @@
 // remotemodTest.remotemodVar++;
 // remoteglobalVar = remoteglobalVar + remoteglobalVar;
 // 
-// //ETC - Other cases
-// remoteglobalVar = 3;
-// 
-// //Find References misses method param
-// var
-// 
-// 
-// 
-//  array = ["f", "o", "o"];
-// 
-// array.forEach(
-// 
-// 
-// function(str) {
-// 
-// 
-// 
-//    return str + " ";
-// 
-// });
+// --- (line: 97) skipped ---
 
 // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
 // var remoteglobalVar: number = 2;
@@ -408,14 +161,9 @@
 // 	remoteglobalVar++;
 // 	remotemodTest.remotemodVar++;
 // 	remotefnVar++;
-// 
-// 	//Return
-// 	return remotex++;
-// }
-// 
-// module remotemodTest {
-// 	//Declare
-// 	export var remotemodVar: number;
+// --- (line: 27) skipped ---
+
+// --- (line: 34) skipped ---
 // 
 // 	//Increments
 // 	remoteglobalVar++;
@@ -423,11 +171,9 @@
 // 	remotemodVar++;
 // 
 // 	class remotetestCls {
-// 		static remoteboo = remotefoo;
-// 	}
-// 
-// 	function remotetestFn(){
-//         static remoteboo = remotefoo;
+// --- (line: 42) skipped ---
+
+// --- (line: 46) skipped ---
 // 
 // 		//Increments
 // 		remoteglobalVar++;
@@ -435,10 +181,7 @@
 // 		remotemodVar++;
 //     }
 // 
-// 	module remotetestMod {
-// 		var remoteboo = remotefoo;
-// 	}
-// }
+// --- (line: 54) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
@@ -461,44 +204,7 @@
   // 
   // function remotefoo(remotex: number) {
   // 	//Declare
-  // 	var remotefnVar = 1;
-  // 
-  // 	//Increments
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remoteglobalVar++;
-  // 	remotemodTest.remotemodVar++;
-  // 	remotefnVar++;
-  // 
-  // 	//Return
-  // 	return remotex++;
-  // }
-  // 
-  // module remotemodTest {
-  // 	//Declare
-  // 	export var remotemodVar: number;
-  // 
-  // 	//Increments
-  // 	remoteglobalVar++;
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remotemodVar++;
-  // 
-  // 	class remotetestCls {
-  // 		static remoteboo = remotefoo;
-  // 	}
-  // 
-  // 	function remotetestFn(){
-  //         static remoteboo = remotefoo;
-  // 
-  // 		//Increments
-  // 		remoteglobalVar++;
-  // 		remotefooCls.remoteclsSVar++;
-  // 		remotemodVar++;
-  //     }
-  // 
-  // 	module remotetestMod {
-  // 		var remoteboo = remotefoo;
-  // 	}
-  // }
+  // --- (line: 20) skipped ---
 
   // === Details ===
   [
@@ -528,91 +234,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/remoteGetReferences_1.ts ===
-// // Comment Refence Test: globalVar
-// var globalVar: number = 2;
-// 
-// class fooCls {
-//     static clsSVar = 1;
-//     //Declare
-//     clsVar = 1;
-// 
-//     constructor (public clsParam: number) {
-//         //Increments
-//         globalVar++;
-//         this.clsVar++;
-//         fooCls.clsSVar++;
-//         this.clsParam++;
-//         modTest.modVar++;
-//     }
-// }
-// 
-// function foo(x: number) {
-//     //Declare
-//     var fnVar = 1;
-// 
-//     //Increments
-//     fooCls.clsSVar++;
-//     globalVar++;
-//     modTest.modVar++;
-//     fnVar++;
-// 
-//     //Return
-//     return x++;
-// }
-// 
-// module modTest {
-//     //Declare
-//     export var modVar:number;
-// 
-//     //Increments
-//     globalVar++;
-//     fooCls.clsSVar++;
-//     modVar++;
-// 
-//     class testCls {
-//         static boo = foo;
-//     }
-// 
-//     function testFn(){
-//         static boo = foo;
-// 
-//         //Increments
-//         globalVar++;
-//         fooCls.clsSVar++;
-//         modVar++;
-//     }
-// 
-//     module testMod {
-//         var boo = foo;
-//     }
-// }
-// 
-// //Type test
-// var clsTest: fooCls;
-// 
-// //Arguments
-// clsTest = new fooCls(globalVar);
-// foo(globalVar);
-// 
-// //Increments
-// fooCls.clsSVar++;
-// modTest.modVar++;
-// globalVar = globalVar + globalVar;
-// 
-// //ETC - Other cases
-// globalVar = 3;
-// foo = foo + 1;
-// err = err++;
-// 
-// //Shadowed fn Parameter
-// function shdw(globalVar: number) {
-//     //Increments
-//     globalVar++;
-//     return globalVar;
-// }
-// 
-// //Remotes
-// //Type test
+// --- (line: 85) skipped ---
 // var remoteclsTest: remotefooCls;
 // 
 // //Arguments
@@ -629,21 +251,7 @@
 // 
 // //Find References misses method param
 // var
-// 
-// 
-// 
-//  array = ["f", "o", "o"];
-// 
-// array.forEach(
-// 
-// 
-// function(str) {
-// 
-// 
-// 
-//    return str + " ";
-// 
-// });
+// --- (line: 102) skipped ---
 
 // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
 // <|var [|{| isWriteAccess: true |}remoteglobalVar|]: number = 2;|>
@@ -659,13 +267,9 @@
 // 		this.remoteclsVar++;
 // 		remotefooCls.remoteclsSVar++;
 // 		this.remoteclsParam++;
-// 		remotemodTest.remotemodVar++;
-// 	}
-// }
-// 
-// function remotefoo(remotex: number) {
-// 	//Declare
-// 	var remotefnVar = 1;
+// --- (line: 14) skipped ---
+
+// --- (line: 20) skipped ---
 // 
 // 	//Increments
 // 	remotefooCls.remoteclsSVar++;
@@ -673,12 +277,9 @@
 // 	remotemodTest.remotemodVar++;
 // 	remotefnVar++;
 // 
-// 	//Return
-// 	return remotex++;
-// }
-// 
-// module remotemodTest {
-// 	//Declare
+// --- (line: 28) skipped ---
+
+// --- (line: 33) skipped ---
 // 	export var remotemodVar: number;
 // 
 // 	//Increments
@@ -686,11 +287,9 @@
 // 	remotefooCls.remoteclsSVar++;
 // 	remotemodVar++;
 // 
-// 	class remotetestCls {
-// 		static remoteboo = remotefoo;
-// 	}
-// 
-// 	function remotetestFn(){
+// --- (line: 41) skipped ---
+
+// --- (line: 45) skipped ---
 //         static remoteboo = remotefoo;
 // 
 // 		//Increments
@@ -698,11 +297,7 @@
 // 		remotefooCls.remoteclsSVar++;
 // 		remotemodVar++;
 //     }
-// 
-// 	module remotetestMod {
-// 		var remoteboo = remotefoo;
-// 	}
-// }
+// --- (line: 53) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
@@ -710,59 +305,7 @@
   // 
   // class remotefooCls {
   // 	//Declare
-  // 	remoteclsVar = 1;
-  // 	static remoteclsSVar = 1;
-  // 
-  // 	constructor(public remoteclsParam: number) {
-  // 		//Increments
-  // 		remoteglobalVar++;
-  // 		this.remoteclsVar++;
-  // 		remotefooCls.remoteclsSVar++;
-  // 		this.remoteclsParam++;
-  // 		remotemodTest.remotemodVar++;
-  // 	}
-  // }
-  // 
-  // function remotefoo(remotex: number) {
-  // 	//Declare
-  // 	var remotefnVar = 1;
-  // 
-  // 	//Increments
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remoteglobalVar++;
-  // 	remotemodTest.remotemodVar++;
-  // 	remotefnVar++;
-  // 
-  // 	//Return
-  // 	return remotex++;
-  // }
-  // 
-  // module remotemodTest {
-  // 	//Declare
-  // 	export var remotemodVar: number;
-  // 
-  // 	//Increments
-  // 	remoteglobalVar++;
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remotemodVar++;
-  // 
-  // 	class remotetestCls {
-  // 		static remoteboo = remotefoo;
-  // 	}
-  // 
-  // 	function remotetestFn(){
-  //         static remoteboo = remotefoo;
-  // 
-  // 		//Increments
-  // 		remoteglobalVar++;
-  // 		remotefooCls.remoteclsSVar++;
-  // 		remotemodVar++;
-  //     }
-  // 
-  // 	module remotetestMod {
-  // 		var remoteboo = remotefoo;
-  // 	}
-  // }
+  // --- (line: 5) skipped ---
 
   // === Details ===
   [
@@ -804,91 +347,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/remoteGetReferences_1.ts ===
-// // Comment Refence Test: globalVar
-// var globalVar: number = 2;
-// 
-// class fooCls {
-//     static clsSVar = 1;
-//     //Declare
-//     clsVar = 1;
-// 
-//     constructor (public clsParam: number) {
-//         //Increments
-//         globalVar++;
-//         this.clsVar++;
-//         fooCls.clsSVar++;
-//         this.clsParam++;
-//         modTest.modVar++;
-//     }
-// }
-// 
-// function foo(x: number) {
-//     //Declare
-//     var fnVar = 1;
-// 
-//     //Increments
-//     fooCls.clsSVar++;
-//     globalVar++;
-//     modTest.modVar++;
-//     fnVar++;
-// 
-//     //Return
-//     return x++;
-// }
-// 
-// module modTest {
-//     //Declare
-//     export var modVar:number;
-// 
-//     //Increments
-//     globalVar++;
-//     fooCls.clsSVar++;
-//     modVar++;
-// 
-//     class testCls {
-//         static boo = foo;
-//     }
-// 
-//     function testFn(){
-//         static boo = foo;
-// 
-//         //Increments
-//         globalVar++;
-//         fooCls.clsSVar++;
-//         modVar++;
-//     }
-// 
-//     module testMod {
-//         var boo = foo;
-//     }
-// }
-// 
-// //Type test
-// var clsTest: fooCls;
-// 
-// //Arguments
-// clsTest = new fooCls(globalVar);
-// foo(globalVar);
-// 
-// //Increments
-// fooCls.clsSVar++;
-// modTest.modVar++;
-// globalVar = globalVar + globalVar;
-// 
-// //ETC - Other cases
-// globalVar = 3;
-// foo = foo + 1;
-// err = err++;
-// 
-// //Shadowed fn Parameter
-// function shdw(globalVar: number) {
-//     //Increments
-//     globalVar++;
-//     return globalVar;
-// }
-// 
-// //Remotes
-// //Type test
+// --- (line: 85) skipped ---
 // var remoteclsTest: remotefooCls;
 // 
 // //Arguments
@@ -905,21 +364,7 @@
 // 
 // //Find References misses method param
 // var
-// 
-// 
-// 
-//  array = ["f", "o", "o"];
-// 
-// array.forEach(
-// 
-// 
-// function(str) {
-// 
-// 
-// 
-//    return str + " ";
-// 
-// });
+// --- (line: 102) skipped ---
 
 // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
 // <|var [|{| isWriteAccess: true |}remoteglobalVar|]: number = 2;|>
@@ -935,13 +380,9 @@
 // 		this.remoteclsVar++;
 // 		remotefooCls.remoteclsSVar++;
 // 		this.remoteclsParam++;
-// 		remotemodTest.remotemodVar++;
-// 	}
-// }
-// 
-// function remotefoo(remotex: number) {
-// 	//Declare
-// 	var remotefnVar = 1;
+// --- (line: 14) skipped ---
+
+// --- (line: 20) skipped ---
 // 
 // 	//Increments
 // 	remotefooCls.remoteclsSVar++;
@@ -949,12 +390,9 @@
 // 	remotemodTest.remotemodVar++;
 // 	remotefnVar++;
 // 
-// 	//Return
-// 	return remotex++;
-// }
-// 
-// module remotemodTest {
-// 	//Declare
+// --- (line: 28) skipped ---
+
+// --- (line: 33) skipped ---
 // 	export var remotemodVar: number;
 // 
 // 	//Increments
@@ -962,11 +400,9 @@
 // 	remotefooCls.remoteclsSVar++;
 // 	remotemodVar++;
 // 
-// 	class remotetestCls {
-// 		static remoteboo = remotefoo;
-// 	}
-// 
-// 	function remotetestFn(){
+// --- (line: 41) skipped ---
+
+// --- (line: 45) skipped ---
 //         static remoteboo = remotefoo;
 // 
 // 		//Increments
@@ -974,11 +410,7 @@
 // 		remotefooCls.remoteclsSVar++;
 // 		remotemodVar++;
 //     }
-// 
-// 	module remotetestMod {
-// 		var remoteboo = remotefoo;
-// 	}
-// }
+// --- (line: 53) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
@@ -986,59 +418,7 @@
   // 
   // class remotefooCls {
   // 	//Declare
-  // 	remoteclsVar = 1;
-  // 	static remoteclsSVar = 1;
-  // 
-  // 	constructor(public remoteclsParam: number) {
-  // 		//Increments
-  // 		remoteglobalVar++;
-  // 		this.remoteclsVar++;
-  // 		remotefooCls.remoteclsSVar++;
-  // 		this.remoteclsParam++;
-  // 		remotemodTest.remotemodVar++;
-  // 	}
-  // }
-  // 
-  // function remotefoo(remotex: number) {
-  // 	//Declare
-  // 	var remotefnVar = 1;
-  // 
-  // 	//Increments
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remoteglobalVar++;
-  // 	remotemodTest.remotemodVar++;
-  // 	remotefnVar++;
-  // 
-  // 	//Return
-  // 	return remotex++;
-  // }
-  // 
-  // module remotemodTest {
-  // 	//Declare
-  // 	export var remotemodVar: number;
-  // 
-  // 	//Increments
-  // 	remoteglobalVar++;
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remotemodVar++;
-  // 
-  // 	class remotetestCls {
-  // 		static remoteboo = remotefoo;
-  // 	}
-  // 
-  // 	function remotetestFn(){
-  //         static remoteboo = remotefoo;
-  // 
-  // 		//Increments
-  // 		remoteglobalVar++;
-  // 		remotefooCls.remoteclsSVar++;
-  // 		remotemodVar++;
-  //     }
-  // 
-  // 	module remotetestMod {
-  // 		var remoteboo = remotefoo;
-  // 	}
-  // }
+  // --- (line: 5) skipped ---
 
   // === Details ===
   [
@@ -1080,88 +460,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/remoteGetReferences_1.ts ===
-// // Comment Refence Test: globalVar
-// var globalVar: number = 2;
-// 
-// class fooCls {
-//     static clsSVar = 1;
-//     //Declare
-//     clsVar = 1;
-// 
-//     constructor (public clsParam: number) {
-//         //Increments
-//         globalVar++;
-//         this.clsVar++;
-//         fooCls.clsSVar++;
-//         this.clsParam++;
-//         modTest.modVar++;
-//     }
-// }
-// 
-// function foo(x: number) {
-//     //Declare
-//     var fnVar = 1;
-// 
-//     //Increments
-//     fooCls.clsSVar++;
-//     globalVar++;
-//     modTest.modVar++;
-//     fnVar++;
-// 
-//     //Return
-//     return x++;
-// }
-// 
-// module modTest {
-//     //Declare
-//     export var modVar:number;
-// 
-//     //Increments
-//     globalVar++;
-//     fooCls.clsSVar++;
-//     modVar++;
-// 
-//     class testCls {
-//         static boo = foo;
-//     }
-// 
-//     function testFn(){
-//         static boo = foo;
-// 
-//         //Increments
-//         globalVar++;
-//         fooCls.clsSVar++;
-//         modVar++;
-//     }
-// 
-//     module testMod {
-//         var boo = foo;
-//     }
-// }
-// 
-// //Type test
-// var clsTest: fooCls;
-// 
-// //Arguments
-// clsTest = new fooCls(globalVar);
-// foo(globalVar);
-// 
-// //Increments
-// fooCls.clsSVar++;
-// modTest.modVar++;
-// globalVar = globalVar + globalVar;
-// 
-// //ETC - Other cases
-// globalVar = 3;
-// foo = foo + 1;
-// err = err++;
-// 
-// //Shadowed fn Parameter
-// function shdw(globalVar: number) {
-//     //Increments
-//     globalVar++;
-//     return globalVar;
-// }
+// --- (line: 82) skipped ---
 // 
 // //Remotes
 // //Type test
@@ -1176,26 +475,7 @@
 // remotemodTest.remotemodVar++;
 // remoteglobalVar = remoteglobalVar + remoteglobalVar;
 // 
-// //ETC - Other cases
-// remoteglobalVar = 3;
-// 
-// //Find References misses method param
-// var
-// 
-// 
-// 
-//  array = ["f", "o", "o"];
-// 
-// array.forEach(
-// 
-// 
-// function(str) {
-// 
-// 
-// 
-//    return str + " ";
-// 
-// });
+// --- (line: 97) skipped ---
 
 // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
 // var remoteglobalVar: number = 2;
@@ -1224,14 +504,9 @@
 // 	remoteglobalVar++;
 // 	remotemodTest.remotemodVar++;
 // 	remotefnVar++;
-// 
-// 	//Return
-// 	return remotex++;
-// }
-// 
-// module remotemodTest {
-// 	//Declare
-// 	export var remotemodVar: number;
+// --- (line: 27) skipped ---
+
+// --- (line: 34) skipped ---
 // 
 // 	//Increments
 // 	remoteglobalVar++;
@@ -1239,11 +514,9 @@
 // 	remotemodVar++;
 // 
 // 	class remotetestCls {
-// 		static remoteboo = remotefoo;
-// 	}
-// 
-// 	function remotetestFn(){
-//         static remoteboo = remotefoo;
+// --- (line: 42) skipped ---
+
+// --- (line: 46) skipped ---
 // 
 // 		//Increments
 // 		remoteglobalVar++;
@@ -1251,10 +524,7 @@
 // 		remotemodVar++;
 //     }
 // 
-// 	module remotetestMod {
-// 		var remoteboo = remotefoo;
-// 	}
-// }
+// --- (line: 54) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
@@ -1277,44 +547,7 @@
   // 
   // function remotefoo(remotex: number) {
   // 	//Declare
-  // 	var remotefnVar = 1;
-  // 
-  // 	//Increments
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remoteglobalVar++;
-  // 	remotemodTest.remotemodVar++;
-  // 	remotefnVar++;
-  // 
-  // 	//Return
-  // 	return remotex++;
-  // }
-  // 
-  // module remotemodTest {
-  // 	//Declare
-  // 	export var remotemodVar: number;
-  // 
-  // 	//Increments
-  // 	remoteglobalVar++;
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remotemodVar++;
-  // 
-  // 	class remotetestCls {
-  // 		static remoteboo = remotefoo;
-  // 	}
-  // 
-  // 	function remotetestFn(){
-  //         static remoteboo = remotefoo;
-  // 
-  // 		//Increments
-  // 		remoteglobalVar++;
-  // 		remotefooCls.remoteclsSVar++;
-  // 		remotemodVar++;
-  //     }
-  // 
-  // 	module remotetestMod {
-  // 		var remoteboo = remotefoo;
-  // 	}
-  // }
+  // --- (line: 20) skipped ---
 
   // === Details ===
   [
@@ -1344,95 +577,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/remoteGetReferences_1.ts ===
-// // Comment Refence Test: globalVar
-// var globalVar: number = 2;
-// 
-// class fooCls {
-//     static clsSVar = 1;
-//     //Declare
-//     clsVar = 1;
-// 
-//     constructor (public clsParam: number) {
-//         //Increments
-//         globalVar++;
-//         this.clsVar++;
-//         fooCls.clsSVar++;
-//         this.clsParam++;
-//         modTest.modVar++;
-//     }
-// }
-// 
-// function foo(x: number) {
-//     //Declare
-//     var fnVar = 1;
-// 
-//     //Increments
-//     fooCls.clsSVar++;
-//     globalVar++;
-//     modTest.modVar++;
-//     fnVar++;
-// 
-//     //Return
-//     return x++;
-// }
-// 
-// module modTest {
-//     //Declare
-//     export var modVar:number;
-// 
-//     //Increments
-//     globalVar++;
-//     fooCls.clsSVar++;
-//     modVar++;
-// 
-//     class testCls {
-//         static boo = foo;
-//     }
-// 
-//     function testFn(){
-//         static boo = foo;
-// 
-//         //Increments
-//         globalVar++;
-//         fooCls.clsSVar++;
-//         modVar++;
-//     }
-// 
-//     module testMod {
-//         var boo = foo;
-//     }
-// }
-// 
-// //Type test
-// var clsTest: fooCls;
-// 
-// //Arguments
-// clsTest = new fooCls(globalVar);
-// foo(globalVar);
-// 
-// //Increments
-// fooCls.clsSVar++;
-// modTest.modVar++;
-// globalVar = globalVar + globalVar;
-// 
-// //ETC - Other cases
-// globalVar = 3;
-// foo = foo + 1;
-// err = err++;
-// 
-// //Shadowed fn Parameter
-// function shdw(globalVar: number) {
-//     //Increments
-//     globalVar++;
-//     return globalVar;
-// }
-// 
-// //Remotes
-// //Type test
-// var remoteclsTest: remotefooCls;
-// 
-// //Arguments
-// remoteclsTest = new remotefooCls(remoteglobalVar);
+// --- (line: 89) skipped ---
 // remotefoo(remoteglobalVar);
 // 
 // //Increments
@@ -1440,26 +585,7 @@
 // remotemodTest.remotemodVar++;
 // remoteglobalVar = remoteglobalVar + remoteglobalVar;
 // 
-// //ETC - Other cases
-// remoteglobalVar = 3;
-// 
-// //Find References misses method param
-// var
-// 
-// 
-// 
-//  array = ["f", "o", "o"];
-// 
-// array.forEach(
-// 
-// 
-// function(str) {
-// 
-// 
-// 
-//    return str + " ";
-// 
-// });
+// --- (line: 97) skipped ---
 
 // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
 // var remoteglobalVar: number = 2;
@@ -1477,10 +603,9 @@
 // 		this.remoteclsParam++;
 // 		remotemodTest.remotemodVar++;
 // 	}
-// }
-// 
-// function remotefoo(remotex: number) {
-// 	//Declare
+// --- (line: 16) skipped ---
+
+// --- (line: 19) skipped ---
 // 	var remotefnVar = 1;
 // 
 // 	//Increments
@@ -1488,14 +613,9 @@
 // 	remoteglobalVar++;
 // 	remotemodTest.remotemodVar++;
 // 	remotefnVar++;
-// 
-// 	//Return
-// 	return remotex++;
-// }
-// 
-// module remotemodTest {
-// 	//Declare
-// 	export var remotemodVar: number;
+// --- (line: 27) skipped ---
+
+// --- (line: 34) skipped ---
 // 
 // 	//Increments
 // 	remoteglobalVar++;
@@ -1503,11 +623,9 @@
 // 	remotemodVar++;
 // 
 // 	class remotetestCls {
-// 		static remoteboo = remotefoo;
-// 	}
-// 
-// 	function remotetestFn(){
-//         static remoteboo = remotefoo;
+// --- (line: 42) skipped ---
+
+// --- (line: 46) skipped ---
 // 
 // 		//Increments
 // 		remoteglobalVar++;
@@ -1515,10 +633,7 @@
 // 		remotemodVar++;
 //     }
 // 
-// 	module remotetestMod {
-// 		var remoteboo = remotefoo;
-// 	}
-// }
+// --- (line: 54) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
@@ -1531,54 +646,7 @@
   // 
   // 	constructor(public remoteclsParam: number) {
   // 		//Increments
-  // 		remoteglobalVar++;
-  // 		this.remoteclsVar++;
-  // 		remotefooCls.remoteclsSVar++;
-  // 		this.remoteclsParam++;
-  // 		remotemodTest.remotemodVar++;
-  // 	}
-  // }
-  // 
-  // function remotefoo(remotex: number) {
-  // 	//Declare
-  // 	var remotefnVar = 1;
-  // 
-  // 	//Increments
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remoteglobalVar++;
-  // 	remotemodTest.remotemodVar++;
-  // 	remotefnVar++;
-  // 
-  // 	//Return
-  // 	return remotex++;
-  // }
-  // 
-  // module remotemodTest {
-  // 	//Declare
-  // 	export var remotemodVar: number;
-  // 
-  // 	//Increments
-  // 	remoteglobalVar++;
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remotemodVar++;
-  // 
-  // 	class remotetestCls {
-  // 		static remoteboo = remotefoo;
-  // 	}
-  // 
-  // 	function remotetestFn(){
-  //         static remoteboo = remotefoo;
-  // 
-  // 		//Increments
-  // 		remoteglobalVar++;
-  // 		remotefooCls.remoteclsSVar++;
-  // 		remotemodVar++;
-  //     }
-  // 
-  // 	module remotetestMod {
-  // 		var remoteboo = remotefoo;
-  // 	}
-  // }
+  // --- (line: 10) skipped ---
 
   // === Details ===
   [
@@ -1636,91 +704,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/remoteGetReferences_1.ts ===
-// // Comment Refence Test: globalVar
-// var globalVar: number = 2;
-// 
-// class fooCls {
-//     static clsSVar = 1;
-//     //Declare
-//     clsVar = 1;
-// 
-//     constructor (public clsParam: number) {
-//         //Increments
-//         globalVar++;
-//         this.clsVar++;
-//         fooCls.clsSVar++;
-//         this.clsParam++;
-//         modTest.modVar++;
-//     }
-// }
-// 
-// function foo(x: number) {
-//     //Declare
-//     var fnVar = 1;
-// 
-//     //Increments
-//     fooCls.clsSVar++;
-//     globalVar++;
-//     modTest.modVar++;
-//     fnVar++;
-// 
-//     //Return
-//     return x++;
-// }
-// 
-// module modTest {
-//     //Declare
-//     export var modVar:number;
-// 
-//     //Increments
-//     globalVar++;
-//     fooCls.clsSVar++;
-//     modVar++;
-// 
-//     class testCls {
-//         static boo = foo;
-//     }
-// 
-//     function testFn(){
-//         static boo = foo;
-// 
-//         //Increments
-//         globalVar++;
-//         fooCls.clsSVar++;
-//         modVar++;
-//     }
-// 
-//     module testMod {
-//         var boo = foo;
-//     }
-// }
-// 
-// //Type test
-// var clsTest: fooCls;
-// 
-// //Arguments
-// clsTest = new fooCls(globalVar);
-// foo(globalVar);
-// 
-// //Increments
-// fooCls.clsSVar++;
-// modTest.modVar++;
-// globalVar = globalVar + globalVar;
-// 
-// //ETC - Other cases
-// globalVar = 3;
-// foo = foo + 1;
-// err = err++;
-// 
-// //Shadowed fn Parameter
-// function shdw(globalVar: number) {
-//     //Increments
-//     globalVar++;
-//     return globalVar;
-// }
-// 
-// //Remotes
-// //Type test
+// --- (line: 85) skipped ---
 // var remoteclsTest: remotefooCls;
 // 
 // //Arguments
@@ -1737,21 +721,7 @@
 // 
 // //Find References misses method param
 // var
-// 
-// 
-// 
-//  array = ["f", "o", "o"];
-// 
-// array.forEach(
-// 
-// 
-// function(str) {
-// 
-// 
-// 
-//    return str + " ";
-// 
-// });
+// --- (line: 102) skipped ---
 
 // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
 // <|var [|{| isWriteAccess: true |}remoteglobalVar|]: number = 2;|>
@@ -1767,13 +737,9 @@
 // 		this.remoteclsVar++;
 // 		remotefooCls.remoteclsSVar++;
 // 		this.remoteclsParam++;
-// 		remotemodTest.remotemodVar++;
-// 	}
-// }
-// 
-// function remotefoo(remotex: number) {
-// 	//Declare
-// 	var remotefnVar = 1;
+// --- (line: 14) skipped ---
+
+// --- (line: 20) skipped ---
 // 
 // 	//Increments
 // 	remotefooCls.remoteclsSVar++;
@@ -1781,12 +747,9 @@
 // 	remotemodTest.remotemodVar++;
 // 	remotefnVar++;
 // 
-// 	//Return
-// 	return remotex++;
-// }
-// 
-// module remotemodTest {
-// 	//Declare
+// --- (line: 28) skipped ---
+
+// --- (line: 33) skipped ---
 // 	export var remotemodVar: number;
 // 
 // 	//Increments
@@ -1794,11 +757,9 @@
 // 	remotefooCls.remoteclsSVar++;
 // 	remotemodVar++;
 // 
-// 	class remotetestCls {
-// 		static remoteboo = remotefoo;
-// 	}
-// 
-// 	function remotetestFn(){
+// --- (line: 41) skipped ---
+
+// --- (line: 45) skipped ---
 //         static remoteboo = remotefoo;
 // 
 // 		//Increments
@@ -1806,11 +767,7 @@
 // 		remotefooCls.remoteclsSVar++;
 // 		remotemodVar++;
 //     }
-// 
-// 	module remotetestMod {
-// 		var remoteboo = remotefoo;
-// 	}
-// }
+// --- (line: 53) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
@@ -1818,59 +775,7 @@
   // 
   // class remotefooCls {
   // 	//Declare
-  // 	remoteclsVar = 1;
-  // 	static remoteclsSVar = 1;
-  // 
-  // 	constructor(public remoteclsParam: number) {
-  // 		//Increments
-  // 		remoteglobalVar++;
-  // 		this.remoteclsVar++;
-  // 		remotefooCls.remoteclsSVar++;
-  // 		this.remoteclsParam++;
-  // 		remotemodTest.remotemodVar++;
-  // 	}
-  // }
-  // 
-  // function remotefoo(remotex: number) {
-  // 	//Declare
-  // 	var remotefnVar = 1;
-  // 
-  // 	//Increments
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remoteglobalVar++;
-  // 	remotemodTest.remotemodVar++;
-  // 	remotefnVar++;
-  // 
-  // 	//Return
-  // 	return remotex++;
-  // }
-  // 
-  // module remotemodTest {
-  // 	//Declare
-  // 	export var remotemodVar: number;
-  // 
-  // 	//Increments
-  // 	remoteglobalVar++;
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remotemodVar++;
-  // 
-  // 	class remotetestCls {
-  // 		static remoteboo = remotefoo;
-  // 	}
-  // 
-  // 	function remotetestFn(){
-  //         static remoteboo = remotefoo;
-  // 
-  // 		//Increments
-  // 		remoteglobalVar++;
-  // 		remotefooCls.remoteclsSVar++;
-  // 		remotemodVar++;
-  //     }
-  // 
-  // 	module remotetestMod {
-  // 		var remoteboo = remotefoo;
-  // 	}
-  // }
+  // --- (line: 5) skipped ---
 
   // === Details ===
   [
@@ -1912,91 +817,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/remoteGetReferences_1.ts ===
-// // Comment Refence Test: globalVar
-// var globalVar: number = 2;
-// 
-// class fooCls {
-//     static clsSVar = 1;
-//     //Declare
-//     clsVar = 1;
-// 
-//     constructor (public clsParam: number) {
-//         //Increments
-//         globalVar++;
-//         this.clsVar++;
-//         fooCls.clsSVar++;
-//         this.clsParam++;
-//         modTest.modVar++;
-//     }
-// }
-// 
-// function foo(x: number) {
-//     //Declare
-//     var fnVar = 1;
-// 
-//     //Increments
-//     fooCls.clsSVar++;
-//     globalVar++;
-//     modTest.modVar++;
-//     fnVar++;
-// 
-//     //Return
-//     return x++;
-// }
-// 
-// module modTest {
-//     //Declare
-//     export var modVar:number;
-// 
-//     //Increments
-//     globalVar++;
-//     fooCls.clsSVar++;
-//     modVar++;
-// 
-//     class testCls {
-//         static boo = foo;
-//     }
-// 
-//     function testFn(){
-//         static boo = foo;
-// 
-//         //Increments
-//         globalVar++;
-//         fooCls.clsSVar++;
-//         modVar++;
-//     }
-// 
-//     module testMod {
-//         var boo = foo;
-//     }
-// }
-// 
-// //Type test
-// var clsTest: fooCls;
-// 
-// //Arguments
-// clsTest = new fooCls(globalVar);
-// foo(globalVar);
-// 
-// //Increments
-// fooCls.clsSVar++;
-// modTest.modVar++;
-// globalVar = globalVar + globalVar;
-// 
-// //ETC - Other cases
-// globalVar = 3;
-// foo = foo + 1;
-// err = err++;
-// 
-// //Shadowed fn Parameter
-// function shdw(globalVar: number) {
-//     //Increments
-//     globalVar++;
-//     return globalVar;
-// }
-// 
-// //Remotes
-// //Type test
+// --- (line: 85) skipped ---
 // var remoteclsTest: remotefooCls;
 // 
 // //Arguments
@@ -2013,21 +834,7 @@
 // 
 // //Find References misses method param
 // var
-// 
-// 
-// 
-//  array = ["f", "o", "o"];
-// 
-// array.forEach(
-// 
-// 
-// function(str) {
-// 
-// 
-// 
-//    return str + " ";
-// 
-// });
+// --- (line: 102) skipped ---
 
 // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
 // <|var [|{| isWriteAccess: true |}remoteglobalVar|]: number = 2;|>
@@ -2043,13 +850,9 @@
 // 		this.remoteclsVar++;
 // 		remotefooCls.remoteclsSVar++;
 // 		this.remoteclsParam++;
-// 		remotemodTest.remotemodVar++;
-// 	}
-// }
-// 
-// function remotefoo(remotex: number) {
-// 	//Declare
-// 	var remotefnVar = 1;
+// --- (line: 14) skipped ---
+
+// --- (line: 20) skipped ---
 // 
 // 	//Increments
 // 	remotefooCls.remoteclsSVar++;
@@ -2057,12 +860,9 @@
 // 	remotemodTest.remotemodVar++;
 // 	remotefnVar++;
 // 
-// 	//Return
-// 	return remotex++;
-// }
-// 
-// module remotemodTest {
-// 	//Declare
+// --- (line: 28) skipped ---
+
+// --- (line: 33) skipped ---
 // 	export var remotemodVar: number;
 // 
 // 	//Increments
@@ -2070,11 +870,9 @@
 // 	remotefooCls.remoteclsSVar++;
 // 	remotemodVar++;
 // 
-// 	class remotetestCls {
-// 		static remoteboo = remotefoo;
-// 	}
-// 
-// 	function remotetestFn(){
+// --- (line: 41) skipped ---
+
+// --- (line: 45) skipped ---
 //         static remoteboo = remotefoo;
 // 
 // 		//Increments
@@ -2082,11 +880,7 @@
 // 		remotefooCls.remoteclsSVar++;
 // 		remotemodVar++;
 //     }
-// 
-// 	module remotetestMod {
-// 		var remoteboo = remotefoo;
-// 	}
-// }
+// --- (line: 53) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
@@ -2094,59 +888,7 @@
   // 
   // class remotefooCls {
   // 	//Declare
-  // 	remoteclsVar = 1;
-  // 	static remoteclsSVar = 1;
-  // 
-  // 	constructor(public remoteclsParam: number) {
-  // 		//Increments
-  // 		remoteglobalVar++;
-  // 		this.remoteclsVar++;
-  // 		remotefooCls.remoteclsSVar++;
-  // 		this.remoteclsParam++;
-  // 		remotemodTest.remotemodVar++;
-  // 	}
-  // }
-  // 
-  // function remotefoo(remotex: number) {
-  // 	//Declare
-  // 	var remotefnVar = 1;
-  // 
-  // 	//Increments
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remoteglobalVar++;
-  // 	remotemodTest.remotemodVar++;
-  // 	remotefnVar++;
-  // 
-  // 	//Return
-  // 	return remotex++;
-  // }
-  // 
-  // module remotemodTest {
-  // 	//Declare
-  // 	export var remotemodVar: number;
-  // 
-  // 	//Increments
-  // 	remoteglobalVar++;
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remotemodVar++;
-  // 
-  // 	class remotetestCls {
-  // 		static remoteboo = remotefoo;
-  // 	}
-  // 
-  // 	function remotetestFn(){
-  //         static remoteboo = remotefoo;
-  // 
-  // 		//Increments
-  // 		remoteglobalVar++;
-  // 		remotefooCls.remoteclsSVar++;
-  // 		remotemodVar++;
-  //     }
-  // 
-  // 	module remotetestMod {
-  // 		var remoteboo = remotefoo;
-  // 	}
-  // }
+  // --- (line: 5) skipped ---
 
   // === Details ===
   [
@@ -2188,91 +930,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/remoteGetReferences_1.ts ===
-// // Comment Refence Test: globalVar
-// var globalVar: number = 2;
-// 
-// class fooCls {
-//     static clsSVar = 1;
-//     //Declare
-//     clsVar = 1;
-// 
-//     constructor (public clsParam: number) {
-//         //Increments
-//         globalVar++;
-//         this.clsVar++;
-//         fooCls.clsSVar++;
-//         this.clsParam++;
-//         modTest.modVar++;
-//     }
-// }
-// 
-// function foo(x: number) {
-//     //Declare
-//     var fnVar = 1;
-// 
-//     //Increments
-//     fooCls.clsSVar++;
-//     globalVar++;
-//     modTest.modVar++;
-//     fnVar++;
-// 
-//     //Return
-//     return x++;
-// }
-// 
-// module modTest {
-//     //Declare
-//     export var modVar:number;
-// 
-//     //Increments
-//     globalVar++;
-//     fooCls.clsSVar++;
-//     modVar++;
-// 
-//     class testCls {
-//         static boo = foo;
-//     }
-// 
-//     function testFn(){
-//         static boo = foo;
-// 
-//         //Increments
-//         globalVar++;
-//         fooCls.clsSVar++;
-//         modVar++;
-//     }
-// 
-//     module testMod {
-//         var boo = foo;
-//     }
-// }
-// 
-// //Type test
-// var clsTest: fooCls;
-// 
-// //Arguments
-// clsTest = new fooCls(globalVar);
-// foo(globalVar);
-// 
-// //Increments
-// fooCls.clsSVar++;
-// modTest.modVar++;
-// globalVar = globalVar + globalVar;
-// 
-// //ETC - Other cases
-// globalVar = 3;
-// foo = foo + 1;
-// err = err++;
-// 
-// //Shadowed fn Parameter
-// function shdw(globalVar: number) {
-//     //Increments
-//     globalVar++;
-//     return globalVar;
-// }
-// 
-// //Remotes
-// //Type test
+// --- (line: 85) skipped ---
 // var remoteclsTest: remotefooCls;
 // 
 // //Arguments
@@ -2289,21 +947,7 @@
 // 
 // //Find References misses method param
 // var
-// 
-// 
-// 
-//  array = ["f", "o", "o"];
-// 
-// array.forEach(
-// 
-// 
-// function(str) {
-// 
-// 
-// 
-//    return str + " ";
-// 
-// });
+// --- (line: 102) skipped ---
 
 // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
 // <|var [|{| isWriteAccess: true |}remoteglobalVar|]: number = 2;|>
@@ -2319,13 +963,9 @@
 // 		this.remoteclsVar++;
 // 		remotefooCls.remoteclsSVar++;
 // 		this.remoteclsParam++;
-// 		remotemodTest.remotemodVar++;
-// 	}
-// }
-// 
-// function remotefoo(remotex: number) {
-// 	//Declare
-// 	var remotefnVar = 1;
+// --- (line: 14) skipped ---
+
+// --- (line: 20) skipped ---
 // 
 // 	//Increments
 // 	remotefooCls.remoteclsSVar++;
@@ -2333,12 +973,9 @@
 // 	remotemodTest.remotemodVar++;
 // 	remotefnVar++;
 // 
-// 	//Return
-// 	return remotex++;
-// }
-// 
-// module remotemodTest {
-// 	//Declare
+// --- (line: 28) skipped ---
+
+// --- (line: 33) skipped ---
 // 	export var remotemodVar: number;
 // 
 // 	//Increments
@@ -2346,11 +983,9 @@
 // 	remotefooCls.remoteclsSVar++;
 // 	remotemodVar++;
 // 
-// 	class remotetestCls {
-// 		static remoteboo = remotefoo;
-// 	}
-// 
-// 	function remotetestFn(){
+// --- (line: 41) skipped ---
+
+// --- (line: 45) skipped ---
 //         static remoteboo = remotefoo;
 // 
 // 		//Increments
@@ -2358,11 +993,7 @@
 // 		remotefooCls.remoteclsSVar++;
 // 		remotemodVar++;
 //     }
-// 
-// 	module remotetestMod {
-// 		var remoteboo = remotefoo;
-// 	}
-// }
+// --- (line: 53) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
@@ -2370,59 +1001,7 @@
   // 
   // class remotefooCls {
   // 	//Declare
-  // 	remoteclsVar = 1;
-  // 	static remoteclsSVar = 1;
-  // 
-  // 	constructor(public remoteclsParam: number) {
-  // 		//Increments
-  // 		remoteglobalVar++;
-  // 		this.remoteclsVar++;
-  // 		remotefooCls.remoteclsSVar++;
-  // 		this.remoteclsParam++;
-  // 		remotemodTest.remotemodVar++;
-  // 	}
-  // }
-  // 
-  // function remotefoo(remotex: number) {
-  // 	//Declare
-  // 	var remotefnVar = 1;
-  // 
-  // 	//Increments
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remoteglobalVar++;
-  // 	remotemodTest.remotemodVar++;
-  // 	remotefnVar++;
-  // 
-  // 	//Return
-  // 	return remotex++;
-  // }
-  // 
-  // module remotemodTest {
-  // 	//Declare
-  // 	export var remotemodVar: number;
-  // 
-  // 	//Increments
-  // 	remoteglobalVar++;
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remotemodVar++;
-  // 
-  // 	class remotetestCls {
-  // 		static remoteboo = remotefoo;
-  // 	}
-  // 
-  // 	function remotetestFn(){
-  //         static remoteboo = remotefoo;
-  // 
-  // 		//Increments
-  // 		remoteglobalVar++;
-  // 		remotefooCls.remoteclsSVar++;
-  // 		remotemodVar++;
-  //     }
-  // 
-  // 	module remotetestMod {
-  // 		var remoteboo = remotefoo;
-  // 	}
-  // }
+  // --- (line: 5) skipped ---
 
   // === Details ===
   [
@@ -2464,91 +1043,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/remoteGetReferences_1.ts ===
-// // Comment Refence Test: globalVar
-// var globalVar: number = 2;
-// 
-// class fooCls {
-//     static clsSVar = 1;
-//     //Declare
-//     clsVar = 1;
-// 
-//     constructor (public clsParam: number) {
-//         //Increments
-//         globalVar++;
-//         this.clsVar++;
-//         fooCls.clsSVar++;
-//         this.clsParam++;
-//         modTest.modVar++;
-//     }
-// }
-// 
-// function foo(x: number) {
-//     //Declare
-//     var fnVar = 1;
-// 
-//     //Increments
-//     fooCls.clsSVar++;
-//     globalVar++;
-//     modTest.modVar++;
-//     fnVar++;
-// 
-//     //Return
-//     return x++;
-// }
-// 
-// module modTest {
-//     //Declare
-//     export var modVar:number;
-// 
-//     //Increments
-//     globalVar++;
-//     fooCls.clsSVar++;
-//     modVar++;
-// 
-//     class testCls {
-//         static boo = foo;
-//     }
-// 
-//     function testFn(){
-//         static boo = foo;
-// 
-//         //Increments
-//         globalVar++;
-//         fooCls.clsSVar++;
-//         modVar++;
-//     }
-// 
-//     module testMod {
-//         var boo = foo;
-//     }
-// }
-// 
-// //Type test
-// var clsTest: fooCls;
-// 
-// //Arguments
-// clsTest = new fooCls(globalVar);
-// foo(globalVar);
-// 
-// //Increments
-// fooCls.clsSVar++;
-// modTest.modVar++;
-// globalVar = globalVar + globalVar;
-// 
-// //ETC - Other cases
-// globalVar = 3;
-// foo = foo + 1;
-// err = err++;
-// 
-// //Shadowed fn Parameter
-// function shdw(globalVar: number) {
-//     //Increments
-//     globalVar++;
-//     return globalVar;
-// }
-// 
-// //Remotes
-// //Type test
+// --- (line: 85) skipped ---
 // var remoteclsTest: remotefooCls;
 // 
 // //Arguments
@@ -2565,21 +1060,7 @@
 // 
 // //Find References misses method param
 // var
-// 
-// 
-// 
-//  array = ["f", "o", "o"];
-// 
-// array.forEach(
-// 
-// 
-// function(str) {
-// 
-// 
-// 
-//    return str + " ";
-// 
-// });
+// --- (line: 102) skipped ---
 
 // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
 // <|var [|{| isWriteAccess: true |}remoteglobalVar|]: number = 2;|>
@@ -2595,13 +1076,9 @@
 // 		this.remoteclsVar++;
 // 		remotefooCls.remoteclsSVar++;
 // 		this.remoteclsParam++;
-// 		remotemodTest.remotemodVar++;
-// 	}
-// }
-// 
-// function remotefoo(remotex: number) {
-// 	//Declare
-// 	var remotefnVar = 1;
+// --- (line: 14) skipped ---
+
+// --- (line: 20) skipped ---
 // 
 // 	//Increments
 // 	remotefooCls.remoteclsSVar++;
@@ -2609,12 +1086,9 @@
 // 	remotemodTest.remotemodVar++;
 // 	remotefnVar++;
 // 
-// 	//Return
-// 	return remotex++;
-// }
-// 
-// module remotemodTest {
-// 	//Declare
+// --- (line: 28) skipped ---
+
+// --- (line: 33) skipped ---
 // 	export var remotemodVar: number;
 // 
 // 	//Increments
@@ -2622,11 +1096,9 @@
 // 	remotefooCls.remoteclsSVar++;
 // 	remotemodVar++;
 // 
-// 	class remotetestCls {
-// 		static remoteboo = remotefoo;
-// 	}
-// 
-// 	function remotetestFn(){
+// --- (line: 41) skipped ---
+
+// --- (line: 45) skipped ---
 //         static remoteboo = remotefoo;
 // 
 // 		//Increments
@@ -2634,11 +1106,7 @@
 // 		remotefooCls.remoteclsSVar++;
 // 		remotemodVar++;
 //     }
-// 
-// 	module remotetestMod {
-// 		var remoteboo = remotefoo;
-// 	}
-// }
+// --- (line: 53) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
@@ -2646,59 +1114,7 @@
   // 
   // class remotefooCls {
   // 	//Declare
-  // 	remoteclsVar = 1;
-  // 	static remoteclsSVar = 1;
-  // 
-  // 	constructor(public remoteclsParam: number) {
-  // 		//Increments
-  // 		remoteglobalVar++;
-  // 		this.remoteclsVar++;
-  // 		remotefooCls.remoteclsSVar++;
-  // 		this.remoteclsParam++;
-  // 		remotemodTest.remotemodVar++;
-  // 	}
-  // }
-  // 
-  // function remotefoo(remotex: number) {
-  // 	//Declare
-  // 	var remotefnVar = 1;
-  // 
-  // 	//Increments
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remoteglobalVar++;
-  // 	remotemodTest.remotemodVar++;
-  // 	remotefnVar++;
-  // 
-  // 	//Return
-  // 	return remotex++;
-  // }
-  // 
-  // module remotemodTest {
-  // 	//Declare
-  // 	export var remotemodVar: number;
-  // 
-  // 	//Increments
-  // 	remoteglobalVar++;
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remotemodVar++;
-  // 
-  // 	class remotetestCls {
-  // 		static remoteboo = remotefoo;
-  // 	}
-  // 
-  // 	function remotetestFn(){
-  //         static remoteboo = remotefoo;
-  // 
-  // 		//Increments
-  // 		remoteglobalVar++;
-  // 		remotefooCls.remoteclsSVar++;
-  // 		remotemodVar++;
-  //     }
-  // 
-  // 	module remotetestMod {
-  // 		var remoteboo = remotefoo;
-  // 	}
-  // }
+  // --- (line: 5) skipped ---
 
   // === Details ===
   [
@@ -2740,91 +1156,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/remoteGetReferences_1.ts ===
-// // Comment Refence Test: globalVar
-// var globalVar: number = 2;
-// 
-// class fooCls {
-//     static clsSVar = 1;
-//     //Declare
-//     clsVar = 1;
-// 
-//     constructor (public clsParam: number) {
-//         //Increments
-//         globalVar++;
-//         this.clsVar++;
-//         fooCls.clsSVar++;
-//         this.clsParam++;
-//         modTest.modVar++;
-//     }
-// }
-// 
-// function foo(x: number) {
-//     //Declare
-//     var fnVar = 1;
-// 
-//     //Increments
-//     fooCls.clsSVar++;
-//     globalVar++;
-//     modTest.modVar++;
-//     fnVar++;
-// 
-//     //Return
-//     return x++;
-// }
-// 
-// module modTest {
-//     //Declare
-//     export var modVar:number;
-// 
-//     //Increments
-//     globalVar++;
-//     fooCls.clsSVar++;
-//     modVar++;
-// 
-//     class testCls {
-//         static boo = foo;
-//     }
-// 
-//     function testFn(){
-//         static boo = foo;
-// 
-//         //Increments
-//         globalVar++;
-//         fooCls.clsSVar++;
-//         modVar++;
-//     }
-// 
-//     module testMod {
-//         var boo = foo;
-//     }
-// }
-// 
-// //Type test
-// var clsTest: fooCls;
-// 
-// //Arguments
-// clsTest = new fooCls(globalVar);
-// foo(globalVar);
-// 
-// //Increments
-// fooCls.clsSVar++;
-// modTest.modVar++;
-// globalVar = globalVar + globalVar;
-// 
-// //ETC - Other cases
-// globalVar = 3;
-// foo = foo + 1;
-// err = err++;
-// 
-// //Shadowed fn Parameter
-// function shdw(globalVar: number) {
-//     //Increments
-//     globalVar++;
-//     return globalVar;
-// }
-// 
-// //Remotes
-// //Type test
+// --- (line: 85) skipped ---
 // var remoteclsTest: remotefooCls;
 // 
 // //Arguments
@@ -2841,21 +1173,7 @@
 // 
 // //Find References misses method param
 // var
-// 
-// 
-// 
-//  array = ["f", "o", "o"];
-// 
-// array.forEach(
-// 
-// 
-// function(str) {
-// 
-// 
-// 
-//    return str + " ";
-// 
-// });
+// --- (line: 102) skipped ---
 
 // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
 // /*FIND ALL REFS*/<|var [|{| isWriteAccess: true, isDefinition: true |}remoteglobalVar|]: number = 2;|>
@@ -2871,13 +1189,9 @@
 // 		this.remoteclsVar++;
 // 		remotefooCls.remoteclsSVar++;
 // 		this.remoteclsParam++;
-// 		remotemodTest.remotemodVar++;
-// 	}
-// }
-// 
-// function remotefoo(remotex: number) {
-// 	//Declare
-// 	var remotefnVar = 1;
+// --- (line: 14) skipped ---
+
+// --- (line: 20) skipped ---
 // 
 // 	//Increments
 // 	remotefooCls.remoteclsSVar++;
@@ -2885,12 +1199,9 @@
 // 	remotemodTest.remotemodVar++;
 // 	remotefnVar++;
 // 
-// 	//Return
-// 	return remotex++;
-// }
-// 
-// module remotemodTest {
-// 	//Declare
+// --- (line: 28) skipped ---
+
+// --- (line: 33) skipped ---
 // 	export var remotemodVar: number;
 // 
 // 	//Increments
@@ -2898,11 +1209,9 @@
 // 	remotefooCls.remoteclsSVar++;
 // 	remotemodVar++;
 // 
-// 	class remotetestCls {
-// 		static remoteboo = remotefoo;
-// 	}
-// 
-// 	function remotetestFn(){
+// --- (line: 41) skipped ---
+
+// --- (line: 45) skipped ---
 //         static remoteboo = remotefoo;
 // 
 // 		//Increments
@@ -2910,11 +1219,7 @@
 // 		remotefooCls.remoteclsSVar++;
 // 		remotemodVar++;
 //     }
-// 
-// 	module remotetestMod {
-// 		var remoteboo = remotefoo;
-// 	}
-// }
+// --- (line: 53) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
@@ -2922,59 +1227,7 @@
   // 
   // class remotefooCls {
   // 	//Declare
-  // 	remoteclsVar = 1;
-  // 	static remoteclsSVar = 1;
-  // 
-  // 	constructor(public remoteclsParam: number) {
-  // 		//Increments
-  // 		remoteglobalVar++;
-  // 		this.remoteclsVar++;
-  // 		remotefooCls.remoteclsSVar++;
-  // 		this.remoteclsParam++;
-  // 		remotemodTest.remotemodVar++;
-  // 	}
-  // }
-  // 
-  // function remotefoo(remotex: number) {
-  // 	//Declare
-  // 	var remotefnVar = 1;
-  // 
-  // 	//Increments
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remoteglobalVar++;
-  // 	remotemodTest.remotemodVar++;
-  // 	remotefnVar++;
-  // 
-  // 	//Return
-  // 	return remotex++;
-  // }
-  // 
-  // module remotemodTest {
-  // 	//Declare
-  // 	export var remotemodVar: number;
-  // 
-  // 	//Increments
-  // 	remoteglobalVar++;
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remotemodVar++;
-  // 
-  // 	class remotetestCls {
-  // 		static remoteboo = remotefoo;
-  // 	}
-  // 
-  // 	function remotetestFn(){
-  //         static remoteboo = remotefoo;
-  // 
-  // 		//Increments
-  // 		remoteglobalVar++;
-  // 		remotefooCls.remoteclsSVar++;
-  // 		remotemodVar++;
-  //     }
-  // 
-  // 	module remotetestMod {
-  // 		var remoteboo = remotefoo;
-  // 	}
-  // }
+  // --- (line: 5) skipped ---
 
   // === Details ===
   [
@@ -3016,91 +1269,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/remoteGetReferences_1.ts ===
-// // Comment Refence Test: globalVar
-// var globalVar: number = 2;
-// 
-// class fooCls {
-//     static clsSVar = 1;
-//     //Declare
-//     clsVar = 1;
-// 
-//     constructor (public clsParam: number) {
-//         //Increments
-//         globalVar++;
-//         this.clsVar++;
-//         fooCls.clsSVar++;
-//         this.clsParam++;
-//         modTest.modVar++;
-//     }
-// }
-// 
-// function foo(x: number) {
-//     //Declare
-//     var fnVar = 1;
-// 
-//     //Increments
-//     fooCls.clsSVar++;
-//     globalVar++;
-//     modTest.modVar++;
-//     fnVar++;
-// 
-//     //Return
-//     return x++;
-// }
-// 
-// module modTest {
-//     //Declare
-//     export var modVar:number;
-// 
-//     //Increments
-//     globalVar++;
-//     fooCls.clsSVar++;
-//     modVar++;
-// 
-//     class testCls {
-//         static boo = foo;
-//     }
-// 
-//     function testFn(){
-//         static boo = foo;
-// 
-//         //Increments
-//         globalVar++;
-//         fooCls.clsSVar++;
-//         modVar++;
-//     }
-// 
-//     module testMod {
-//         var boo = foo;
-//     }
-// }
-// 
-// //Type test
-// var clsTest: fooCls;
-// 
-// //Arguments
-// clsTest = new fooCls(globalVar);
-// foo(globalVar);
-// 
-// //Increments
-// fooCls.clsSVar++;
-// modTest.modVar++;
-// globalVar = globalVar + globalVar;
-// 
-// //ETC - Other cases
-// globalVar = 3;
-// foo = foo + 1;
-// err = err++;
-// 
-// //Shadowed fn Parameter
-// function shdw(globalVar: number) {
-//     //Increments
-//     globalVar++;
-//     return globalVar;
-// }
-// 
-// //Remotes
-// //Type test
+// --- (line: 85) skipped ---
 // var remoteclsTest: remotefooCls;
 // 
 // //Arguments
@@ -3117,21 +1286,7 @@
 // 
 // //Find References misses method param
 // var
-// 
-// 
-// 
-//  array = ["f", "o", "o"];
-// 
-// array.forEach(
-// 
-// 
-// function(str) {
-// 
-// 
-// 
-//    return str + " ";
-// 
-// });
+// --- (line: 102) skipped ---
 
 // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
 // <|var /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}remoteglobalVar|]: number = 2;|>
@@ -3147,13 +1302,9 @@
 // 		this.remoteclsVar++;
 // 		remotefooCls.remoteclsSVar++;
 // 		this.remoteclsParam++;
-// 		remotemodTest.remotemodVar++;
-// 	}
-// }
-// 
-// function remotefoo(remotex: number) {
-// 	//Declare
-// 	var remotefnVar = 1;
+// --- (line: 14) skipped ---
+
+// --- (line: 20) skipped ---
 // 
 // 	//Increments
 // 	remotefooCls.remoteclsSVar++;
@@ -3161,12 +1312,9 @@
 // 	remotemodTest.remotemodVar++;
 // 	remotefnVar++;
 // 
-// 	//Return
-// 	return remotex++;
-// }
-// 
-// module remotemodTest {
-// 	//Declare
+// --- (line: 28) skipped ---
+
+// --- (line: 33) skipped ---
 // 	export var remotemodVar: number;
 // 
 // 	//Increments
@@ -3174,11 +1322,9 @@
 // 	remotefooCls.remoteclsSVar++;
 // 	remotemodVar++;
 // 
-// 	class remotetestCls {
-// 		static remoteboo = remotefoo;
-// 	}
-// 
-// 	function remotetestFn(){
+// --- (line: 41) skipped ---
+
+// --- (line: 45) skipped ---
 //         static remoteboo = remotefoo;
 // 
 // 		//Increments
@@ -3186,11 +1332,7 @@
 // 		remotefooCls.remoteclsSVar++;
 // 		remotemodVar++;
 //     }
-// 
-// 	module remotetestMod {
-// 		var remoteboo = remotefoo;
-// 	}
-// }
+// --- (line: 53) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
@@ -3198,59 +1340,7 @@
   // 
   // class remotefooCls {
   // 	//Declare
-  // 	remoteclsVar = 1;
-  // 	static remoteclsSVar = 1;
-  // 
-  // 	constructor(public remoteclsParam: number) {
-  // 		//Increments
-  // 		remoteglobalVar++;
-  // 		this.remoteclsVar++;
-  // 		remotefooCls.remoteclsSVar++;
-  // 		this.remoteclsParam++;
-  // 		remotemodTest.remotemodVar++;
-  // 	}
-  // }
-  // 
-  // function remotefoo(remotex: number) {
-  // 	//Declare
-  // 	var remotefnVar = 1;
-  // 
-  // 	//Increments
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remoteglobalVar++;
-  // 	remotemodTest.remotemodVar++;
-  // 	remotefnVar++;
-  // 
-  // 	//Return
-  // 	return remotex++;
-  // }
-  // 
-  // module remotemodTest {
-  // 	//Declare
-  // 	export var remotemodVar: number;
-  // 
-  // 	//Increments
-  // 	remoteglobalVar++;
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remotemodVar++;
-  // 
-  // 	class remotetestCls {
-  // 		static remoteboo = remotefoo;
-  // 	}
-  // 
-  // 	function remotetestFn(){
-  //         static remoteboo = remotefoo;
-  // 
-  // 		//Increments
-  // 		remoteglobalVar++;
-  // 		remotefooCls.remoteclsSVar++;
-  // 		remotemodVar++;
-  //     }
-  // 
-  // 	module remotetestMod {
-  // 		var remoteboo = remotefoo;
-  // 	}
-  // }
+  // --- (line: 5) skipped ---
 
   // === Details ===
   [
@@ -3292,88 +1382,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/remoteGetReferences_1.ts ===
-// // Comment Refence Test: globalVar
-// var globalVar: number = 2;
-// 
-// class fooCls {
-//     static clsSVar = 1;
-//     //Declare
-//     clsVar = 1;
-// 
-//     constructor (public clsParam: number) {
-//         //Increments
-//         globalVar++;
-//         this.clsVar++;
-//         fooCls.clsSVar++;
-//         this.clsParam++;
-//         modTest.modVar++;
-//     }
-// }
-// 
-// function foo(x: number) {
-//     //Declare
-//     var fnVar = 1;
-// 
-//     //Increments
-//     fooCls.clsSVar++;
-//     globalVar++;
-//     modTest.modVar++;
-//     fnVar++;
-// 
-//     //Return
-//     return x++;
-// }
-// 
-// module modTest {
-//     //Declare
-//     export var modVar:number;
-// 
-//     //Increments
-//     globalVar++;
-//     fooCls.clsSVar++;
-//     modVar++;
-// 
-//     class testCls {
-//         static boo = foo;
-//     }
-// 
-//     function testFn(){
-//         static boo = foo;
-// 
-//         //Increments
-//         globalVar++;
-//         fooCls.clsSVar++;
-//         modVar++;
-//     }
-// 
-//     module testMod {
-//         var boo = foo;
-//     }
-// }
-// 
-// //Type test
-// var clsTest: fooCls;
-// 
-// //Arguments
-// clsTest = new fooCls(globalVar);
-// foo(globalVar);
-// 
-// //Increments
-// fooCls.clsSVar++;
-// modTest.modVar++;
-// globalVar = globalVar + globalVar;
-// 
-// //ETC - Other cases
-// globalVar = 3;
-// foo = foo + 1;
-// err = err++;
-// 
-// //Shadowed fn Parameter
-// function shdw(globalVar: number) {
-//     //Increments
-//     globalVar++;
-//     return globalVar;
-// }
+// --- (line: 82) skipped ---
 // 
 // //Remotes
 // //Type test
@@ -3388,26 +1397,7 @@
 // remotemodTest.remotemodVar++;
 // remoteglobalVar = remoteglobalVar + remoteglobalVar;
 // 
-// //ETC - Other cases
-// remoteglobalVar = 3;
-// 
-// //Find References misses method param
-// var
-// 
-// 
-// 
-//  array = ["f", "o", "o"];
-// 
-// array.forEach(
-// 
-// 
-// function(str) {
-// 
-// 
-// 
-//    return str + " ";
-// 
-// });
+// --- (line: 97) skipped ---
 
 // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
 // var remoteglobalVar: number = 2;
@@ -3436,14 +1426,9 @@
 // 	remoteglobalVar++;
 // 	remotemodTest.remotemodVar++;
 // 	remotefnVar++;
-// 
-// 	//Return
-// 	return remotex++;
-// }
-// 
-// module remotemodTest {
-// 	//Declare
-// 	export var remotemodVar: number;
+// --- (line: 27) skipped ---
+
+// --- (line: 34) skipped ---
 // 
 // 	//Increments
 // 	remoteglobalVar++;
@@ -3451,11 +1436,9 @@
 // 	remotemodVar++;
 // 
 // 	class remotetestCls {
-// 		static remoteboo = remotefoo;
-// 	}
-// 
-// 	function remotetestFn(){
-//         static remoteboo = remotefoo;
+// --- (line: 42) skipped ---
+
+// --- (line: 46) skipped ---
 // 
 // 		//Increments
 // 		remoteglobalVar++;
@@ -3463,10 +1446,7 @@
 // 		remotemodVar++;
 //     }
 // 
-// 	module remotetestMod {
-// 		var remoteboo = remotefoo;
-// 	}
-// }
+// --- (line: 54) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
@@ -3489,44 +1469,7 @@
   // 
   // function remotefoo(remotex: number) {
   // 	//Declare
-  // 	var remotefnVar = 1;
-  // 
-  // 	//Increments
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remoteglobalVar++;
-  // 	remotemodTest.remotemodVar++;
-  // 	remotefnVar++;
-  // 
-  // 	//Return
-  // 	return remotex++;
-  // }
-  // 
-  // module remotemodTest {
-  // 	//Declare
-  // 	export var remotemodVar: number;
-  // 
-  // 	//Increments
-  // 	remoteglobalVar++;
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remotemodVar++;
-  // 
-  // 	class remotetestCls {
-  // 		static remoteboo = remotefoo;
-  // 	}
-  // 
-  // 	function remotetestFn(){
-  //         static remoteboo = remotefoo;
-  // 
-  // 		//Increments
-  // 		remoteglobalVar++;
-  // 		remotefooCls.remoteclsSVar++;
-  // 		remotemodVar++;
-  //     }
-  // 
-  // 	module remotetestMod {
-  // 		var remoteboo = remotefoo;
-  // 	}
-  // }
+  // --- (line: 20) skipped ---
 
   // === Details ===
   [
@@ -3556,88 +1499,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/remoteGetReferences_1.ts ===
-// // Comment Refence Test: globalVar
-// var globalVar: number = 2;
-// 
-// class fooCls {
-//     static clsSVar = 1;
-//     //Declare
-//     clsVar = 1;
-// 
-//     constructor (public clsParam: number) {
-//         //Increments
-//         globalVar++;
-//         this.clsVar++;
-//         fooCls.clsSVar++;
-//         this.clsParam++;
-//         modTest.modVar++;
-//     }
-// }
-// 
-// function foo(x: number) {
-//     //Declare
-//     var fnVar = 1;
-// 
-//     //Increments
-//     fooCls.clsSVar++;
-//     globalVar++;
-//     modTest.modVar++;
-//     fnVar++;
-// 
-//     //Return
-//     return x++;
-// }
-// 
-// module modTest {
-//     //Declare
-//     export var modVar:number;
-// 
-//     //Increments
-//     globalVar++;
-//     fooCls.clsSVar++;
-//     modVar++;
-// 
-//     class testCls {
-//         static boo = foo;
-//     }
-// 
-//     function testFn(){
-//         static boo = foo;
-// 
-//         //Increments
-//         globalVar++;
-//         fooCls.clsSVar++;
-//         modVar++;
-//     }
-// 
-//     module testMod {
-//         var boo = foo;
-//     }
-// }
-// 
-// //Type test
-// var clsTest: fooCls;
-// 
-// //Arguments
-// clsTest = new fooCls(globalVar);
-// foo(globalVar);
-// 
-// //Increments
-// fooCls.clsSVar++;
-// modTest.modVar++;
-// globalVar = globalVar + globalVar;
-// 
-// //ETC - Other cases
-// globalVar = 3;
-// foo = foo + 1;
-// err = err++;
-// 
-// //Shadowed fn Parameter
-// function shdw(globalVar: number) {
-//     //Increments
-//     globalVar++;
-//     return globalVar;
-// }
+// --- (line: 82) skipped ---
 // 
 // //Remotes
 // //Type test
@@ -3652,26 +1514,7 @@
 // remotemodTest.remotemodVar++;
 // remoteglobalVar = remoteglobalVar + remoteglobalVar;
 // 
-// //ETC - Other cases
-// remoteglobalVar = 3;
-// 
-// //Find References misses method param
-// var
-// 
-// 
-// 
-//  array = ["f", "o", "o"];
-// 
-// array.forEach(
-// 
-// 
-// function(str) {
-// 
-// 
-// 
-//    return str + " ";
-// 
-// });
+// --- (line: 97) skipped ---
 
 // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
 // var remoteglobalVar: number = 2;
@@ -3700,14 +1543,9 @@
 // 	remoteglobalVar++;
 // 	remotemodTest.remotemodVar++;
 // 	remotefnVar++;
-// 
-// 	//Return
-// 	return remotex++;
-// }
-// 
-// module remotemodTest {
-// 	//Declare
-// 	export var remotemodVar: number;
+// --- (line: 27) skipped ---
+
+// --- (line: 34) skipped ---
 // 
 // 	//Increments
 // 	remoteglobalVar++;
@@ -3715,11 +1553,9 @@
 // 	remotemodVar++;
 // 
 // 	class remotetestCls {
-// 		static remoteboo = remotefoo;
-// 	}
-// 
-// 	function remotetestFn(){
-//         static remoteboo = remotefoo;
+// --- (line: 42) skipped ---
+
+// --- (line: 46) skipped ---
 // 
 // 		//Increments
 // 		remoteglobalVar++;
@@ -3727,10 +1563,7 @@
 // 		remotemodVar++;
 //     }
 // 
-// 	module remotetestMod {
-// 		var remoteboo = remotefoo;
-// 	}
-// }
+// --- (line: 54) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
@@ -3753,44 +1586,7 @@
   // 
   // function remotefoo(remotex: number) {
   // 	//Declare
-  // 	var remotefnVar = 1;
-  // 
-  // 	//Increments
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remoteglobalVar++;
-  // 	remotemodTest.remotemodVar++;
-  // 	remotefnVar++;
-  // 
-  // 	//Return
-  // 	return remotex++;
-  // }
-  // 
-  // module remotemodTest {
-  // 	//Declare
-  // 	export var remotemodVar: number;
-  // 
-  // 	//Increments
-  // 	remoteglobalVar++;
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remotemodVar++;
-  // 
-  // 	class remotetestCls {
-  // 		static remoteboo = remotefoo;
-  // 	}
-  // 
-  // 	function remotetestFn(){
-  //         static remoteboo = remotefoo;
-  // 
-  // 		//Increments
-  // 		remoteglobalVar++;
-  // 		remotefooCls.remoteclsSVar++;
-  // 		remotemodVar++;
-  //     }
-  // 
-  // 	module remotetestMod {
-  // 		var remoteboo = remotefoo;
-  // 	}
-  // }
+  // --- (line: 20) skipped ---
 
   // === Details ===
   [
@@ -3834,49 +1630,7 @@
 // 		remotefooCls.remoteclsSVar++;
 // 		this.remoteclsParam++;
 // 		remotemodTest.remotemodVar++;
-// 	}
-// }
-// 
-// function remotefoo(remotex: number) {
-// 	//Declare
-// 	var remotefnVar = 1;
-// 
-// 	//Increments
-// 	remotefooCls.remoteclsSVar++;
-// 	remoteglobalVar++;
-// 	remotemodTest.remotemodVar++;
-// 	remotefnVar++;
-// 
-// 	//Return
-// 	return remotex++;
-// }
-// 
-// module remotemodTest {
-// 	//Declare
-// 	export var remotemodVar: number;
-// 
-// 	//Increments
-// 	remoteglobalVar++;
-// 	remotefooCls.remoteclsSVar++;
-// 	remotemodVar++;
-// 
-// 	class remotetestCls {
-// 		static remoteboo = remotefoo;
-// 	}
-// 
-// 	function remotetestFn(){
-//         static remoteboo = remotefoo;
-// 
-// 		//Increments
-// 		remoteglobalVar++;
-// 		remotefooCls.remoteclsSVar++;
-// 		remotemodVar++;
-//     }
-// 
-// 	module remotetestMod {
-// 		var remoteboo = remotefoo;
-// 	}
-// }
+// --- (line: 15) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
@@ -3888,55 +1642,7 @@
   // 	static remoteclsSVar = 1;
   // 
   // 	constructor(public remoteclsParam: number) {
-  // 		//Increments
-  // 		remoteglobalVar++;
-  // 		this.remoteclsVar++;
-  // 		remotefooCls.remoteclsSVar++;
-  // 		this.remoteclsParam++;
-  // 		remotemodTest.remotemodVar++;
-  // 	}
-  // }
-  // 
-  // function remotefoo(remotex: number) {
-  // 	//Declare
-  // 	var remotefnVar = 1;
-  // 
-  // 	//Increments
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remoteglobalVar++;
-  // 	remotemodTest.remotemodVar++;
-  // 	remotefnVar++;
-  // 
-  // 	//Return
-  // 	return remotex++;
-  // }
-  // 
-  // module remotemodTest {
-  // 	//Declare
-  // 	export var remotemodVar: number;
-  // 
-  // 	//Increments
-  // 	remoteglobalVar++;
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remotemodVar++;
-  // 
-  // 	class remotetestCls {
-  // 		static remoteboo = remotefoo;
-  // 	}
-  // 
-  // 	function remotetestFn(){
-  //         static remoteboo = remotefoo;
-  // 
-  // 		//Increments
-  // 		remoteglobalVar++;
-  // 		remotefooCls.remoteclsSVar++;
-  // 		remotemodVar++;
-  //     }
-  // 
-  // 	module remotetestMod {
-  // 		var remoteboo = remotefoo;
-  // 	}
-  // }
+  // --- (line: 9) skipped ---
 
   // === Details ===
   [
@@ -3994,95 +1700,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/remoteGetReferences_1.ts ===
-// // Comment Refence Test: globalVar
-// var globalVar: number = 2;
-// 
-// class fooCls {
-//     static clsSVar = 1;
-//     //Declare
-//     clsVar = 1;
-// 
-//     constructor (public clsParam: number) {
-//         //Increments
-//         globalVar++;
-//         this.clsVar++;
-//         fooCls.clsSVar++;
-//         this.clsParam++;
-//         modTest.modVar++;
-//     }
-// }
-// 
-// function foo(x: number) {
-//     //Declare
-//     var fnVar = 1;
-// 
-//     //Increments
-//     fooCls.clsSVar++;
-//     globalVar++;
-//     modTest.modVar++;
-//     fnVar++;
-// 
-//     //Return
-//     return x++;
-// }
-// 
-// module modTest {
-//     //Declare
-//     export var modVar:number;
-// 
-//     //Increments
-//     globalVar++;
-//     fooCls.clsSVar++;
-//     modVar++;
-// 
-//     class testCls {
-//         static boo = foo;
-//     }
-// 
-//     function testFn(){
-//         static boo = foo;
-// 
-//         //Increments
-//         globalVar++;
-//         fooCls.clsSVar++;
-//         modVar++;
-//     }
-// 
-//     module testMod {
-//         var boo = foo;
-//     }
-// }
-// 
-// //Type test
-// var clsTest: fooCls;
-// 
-// //Arguments
-// clsTest = new fooCls(globalVar);
-// foo(globalVar);
-// 
-// //Increments
-// fooCls.clsSVar++;
-// modTest.modVar++;
-// globalVar = globalVar + globalVar;
-// 
-// //ETC - Other cases
-// globalVar = 3;
-// foo = foo + 1;
-// err = err++;
-// 
-// //Shadowed fn Parameter
-// function shdw(globalVar: number) {
-//     //Increments
-//     globalVar++;
-//     return globalVar;
-// }
-// 
-// //Remotes
-// //Type test
-// var remoteclsTest: remotefooCls;
-// 
-// //Arguments
-// remoteclsTest = new remotefooCls(remoteglobalVar);
+// --- (line: 89) skipped ---
 // remotefoo(remoteglobalVar);
 // 
 // //Increments
@@ -4090,26 +1708,7 @@
 // remotemodTest.remotemodVar++;
 // remoteglobalVar = remoteglobalVar + remoteglobalVar;
 // 
-// //ETC - Other cases
-// remoteglobalVar = 3;
-// 
-// //Find References misses method param
-// var
-// 
-// 
-// 
-//  array = ["f", "o", "o"];
-// 
-// array.forEach(
-// 
-// 
-// function(str) {
-// 
-// 
-// 
-//    return str + " ";
-// 
-// });
+// --- (line: 97) skipped ---
 
 // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
 // var remoteglobalVar: number = 2;
@@ -4127,10 +1726,9 @@
 // 		this.remoteclsParam++;
 // 		remotemodTest.remotemodVar++;
 // 	}
-// }
-// 
-// function remotefoo(remotex: number) {
-// 	//Declare
+// --- (line: 16) skipped ---
+
+// --- (line: 19) skipped ---
 // 	var remotefnVar = 1;
 // 
 // 	//Increments
@@ -4138,14 +1736,9 @@
 // 	remoteglobalVar++;
 // 	remotemodTest.remotemodVar++;
 // 	remotefnVar++;
-// 
-// 	//Return
-// 	return remotex++;
-// }
-// 
-// module remotemodTest {
-// 	//Declare
-// 	export var remotemodVar: number;
+// --- (line: 27) skipped ---
+
+// --- (line: 34) skipped ---
 // 
 // 	//Increments
 // 	remoteglobalVar++;
@@ -4153,11 +1746,9 @@
 // 	remotemodVar++;
 // 
 // 	class remotetestCls {
-// 		static remoteboo = remotefoo;
-// 	}
-// 
-// 	function remotetestFn(){
-//         static remoteboo = remotefoo;
+// --- (line: 42) skipped ---
+
+// --- (line: 46) skipped ---
 // 
 // 		//Increments
 // 		remoteglobalVar++;
@@ -4165,10 +1756,7 @@
 // 		remotemodVar++;
 //     }
 // 
-// 	module remotetestMod {
-// 		var remoteboo = remotefoo;
-// 	}
-// }
+// --- (line: 54) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
@@ -4181,54 +1769,7 @@
   // 
   // 	constructor(public remoteclsParam: number) {
   // 		//Increments
-  // 		remoteglobalVar++;
-  // 		this.remoteclsVar++;
-  // 		remotefooCls.remoteclsSVar++;
-  // 		this.remoteclsParam++;
-  // 		remotemodTest.remotemodVar++;
-  // 	}
-  // }
-  // 
-  // function remotefoo(remotex: number) {
-  // 	//Declare
-  // 	var remotefnVar = 1;
-  // 
-  // 	//Increments
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remoteglobalVar++;
-  // 	remotemodTest.remotemodVar++;
-  // 	remotefnVar++;
-  // 
-  // 	//Return
-  // 	return remotex++;
-  // }
-  // 
-  // module remotemodTest {
-  // 	//Declare
-  // 	export var remotemodVar: number;
-  // 
-  // 	//Increments
-  // 	remoteglobalVar++;
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remotemodVar++;
-  // 
-  // 	class remotetestCls {
-  // 		static remoteboo = remotefoo;
-  // 	}
-  // 
-  // 	function remotetestFn(){
-  //         static remoteboo = remotefoo;
-  // 
-  // 		//Increments
-  // 		remoteglobalVar++;
-  // 		remotefooCls.remoteclsSVar++;
-  // 		remotemodVar++;
-  //     }
-  // 
-  // 	module remotetestMod {
-  // 		var remoteboo = remotefoo;
-  // 	}
-  // }
+  // --- (line: 10) skipped ---
 
   // === Details ===
   [
@@ -4286,95 +1827,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/remoteGetReferences_1.ts ===
-// // Comment Refence Test: globalVar
-// var globalVar: number = 2;
-// 
-// class fooCls {
-//     static clsSVar = 1;
-//     //Declare
-//     clsVar = 1;
-// 
-//     constructor (public clsParam: number) {
-//         //Increments
-//         globalVar++;
-//         this.clsVar++;
-//         fooCls.clsSVar++;
-//         this.clsParam++;
-//         modTest.modVar++;
-//     }
-// }
-// 
-// function foo(x: number) {
-//     //Declare
-//     var fnVar = 1;
-// 
-//     //Increments
-//     fooCls.clsSVar++;
-//     globalVar++;
-//     modTest.modVar++;
-//     fnVar++;
-// 
-//     //Return
-//     return x++;
-// }
-// 
-// module modTest {
-//     //Declare
-//     export var modVar:number;
-// 
-//     //Increments
-//     globalVar++;
-//     fooCls.clsSVar++;
-//     modVar++;
-// 
-//     class testCls {
-//         static boo = foo;
-//     }
-// 
-//     function testFn(){
-//         static boo = foo;
-// 
-//         //Increments
-//         globalVar++;
-//         fooCls.clsSVar++;
-//         modVar++;
-//     }
-// 
-//     module testMod {
-//         var boo = foo;
-//     }
-// }
-// 
-// //Type test
-// var clsTest: fooCls;
-// 
-// //Arguments
-// clsTest = new fooCls(globalVar);
-// foo(globalVar);
-// 
-// //Increments
-// fooCls.clsSVar++;
-// modTest.modVar++;
-// globalVar = globalVar + globalVar;
-// 
-// //ETC - Other cases
-// globalVar = 3;
-// foo = foo + 1;
-// err = err++;
-// 
-// //Shadowed fn Parameter
-// function shdw(globalVar: number) {
-//     //Increments
-//     globalVar++;
-//     return globalVar;
-// }
-// 
-// //Remotes
-// //Type test
-// var remoteclsTest: remotefooCls;
-// 
-// //Arguments
-// remoteclsTest = new remotefooCls(remoteglobalVar);
+// --- (line: 89) skipped ---
 // remotefoo(remoteglobalVar);
 // 
 // //Increments
@@ -4382,26 +1835,7 @@
 // remotemodTest.remotemodVar++;
 // remoteglobalVar = remoteglobalVar + remoteglobalVar;
 // 
-// //ETC - Other cases
-// remoteglobalVar = 3;
-// 
-// //Find References misses method param
-// var
-// 
-// 
-// 
-//  array = ["f", "o", "o"];
-// 
-// array.forEach(
-// 
-// 
-// function(str) {
-// 
-// 
-// 
-//    return str + " ";
-// 
-// });
+// --- (line: 97) skipped ---
 
 // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
 // var remoteglobalVar: number = 2;
@@ -4419,10 +1853,9 @@
 // 		this.remoteclsParam++;
 // 		remotemodTest.remotemodVar++;
 // 	}
-// }
-// 
-// function remotefoo(remotex: number) {
-// 	//Declare
+// --- (line: 16) skipped ---
+
+// --- (line: 19) skipped ---
 // 	var remotefnVar = 1;
 // 
 // 	//Increments
@@ -4430,14 +1863,9 @@
 // 	remoteglobalVar++;
 // 	remotemodTest.remotemodVar++;
 // 	remotefnVar++;
-// 
-// 	//Return
-// 	return remotex++;
-// }
-// 
-// module remotemodTest {
-// 	//Declare
-// 	export var remotemodVar: number;
+// --- (line: 27) skipped ---
+
+// --- (line: 34) skipped ---
 // 
 // 	//Increments
 // 	remoteglobalVar++;
@@ -4445,11 +1873,9 @@
 // 	remotemodVar++;
 // 
 // 	class remotetestCls {
-// 		static remoteboo = remotefoo;
-// 	}
-// 
-// 	function remotetestFn(){
-//         static remoteboo = remotefoo;
+// --- (line: 42) skipped ---
+
+// --- (line: 46) skipped ---
 // 
 // 		//Increments
 // 		remoteglobalVar++;
@@ -4457,10 +1883,7 @@
 // 		remotemodVar++;
 //     }
 // 
-// 	module remotetestMod {
-// 		var remoteboo = remotefoo;
-// 	}
-// }
+// --- (line: 54) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
@@ -4473,54 +1896,7 @@
   // 
   // 	constructor(public remoteclsParam: number) {
   // 		//Increments
-  // 		remoteglobalVar++;
-  // 		this.remoteclsVar++;
-  // 		remotefooCls.remoteclsSVar++;
-  // 		this.remoteclsParam++;
-  // 		remotemodTest.remotemodVar++;
-  // 	}
-  // }
-  // 
-  // function remotefoo(remotex: number) {
-  // 	//Declare
-  // 	var remotefnVar = 1;
-  // 
-  // 	//Increments
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remoteglobalVar++;
-  // 	remotemodTest.remotemodVar++;
-  // 	remotefnVar++;
-  // 
-  // 	//Return
-  // 	return remotex++;
-  // }
-  // 
-  // module remotemodTest {
-  // 	//Declare
-  // 	export var remotemodVar: number;
-  // 
-  // 	//Increments
-  // 	remoteglobalVar++;
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remotemodVar++;
-  // 
-  // 	class remotetestCls {
-  // 		static remoteboo = remotefoo;
-  // 	}
-  // 
-  // 	function remotetestFn(){
-  //         static remoteboo = remotefoo;
-  // 
-  // 		//Increments
-  // 		remoteglobalVar++;
-  // 		remotefooCls.remoteclsSVar++;
-  // 		remotemodVar++;
-  //     }
-  // 
-  // 	module remotetestMod {
-  // 		var remoteboo = remotefoo;
-  // 	}
-  // }
+  // --- (line: 10) skipped ---
 
   // === Details ===
   [
@@ -4578,91 +1954,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/remoteGetReferences_1.ts ===
-// // Comment Refence Test: globalVar
-// var globalVar: number = 2;
-// 
-// class fooCls {
-//     static clsSVar = 1;
-//     //Declare
-//     clsVar = 1;
-// 
-//     constructor (public clsParam: number) {
-//         //Increments
-//         globalVar++;
-//         this.clsVar++;
-//         fooCls.clsSVar++;
-//         this.clsParam++;
-//         modTest.modVar++;
-//     }
-// }
-// 
-// function foo(x: number) {
-//     //Declare
-//     var fnVar = 1;
-// 
-//     //Increments
-//     fooCls.clsSVar++;
-//     globalVar++;
-//     modTest.modVar++;
-//     fnVar++;
-// 
-//     //Return
-//     return x++;
-// }
-// 
-// module modTest {
-//     //Declare
-//     export var modVar:number;
-// 
-//     //Increments
-//     globalVar++;
-//     fooCls.clsSVar++;
-//     modVar++;
-// 
-//     class testCls {
-//         static boo = foo;
-//     }
-// 
-//     function testFn(){
-//         static boo = foo;
-// 
-//         //Increments
-//         globalVar++;
-//         fooCls.clsSVar++;
-//         modVar++;
-//     }
-// 
-//     module testMod {
-//         var boo = foo;
-//     }
-// }
-// 
-// //Type test
-// var clsTest: fooCls;
-// 
-// //Arguments
-// clsTest = new fooCls(globalVar);
-// foo(globalVar);
-// 
-// //Increments
-// fooCls.clsSVar++;
-// modTest.modVar++;
-// globalVar = globalVar + globalVar;
-// 
-// //ETC - Other cases
-// globalVar = 3;
-// foo = foo + 1;
-// err = err++;
-// 
-// //Shadowed fn Parameter
-// function shdw(globalVar: number) {
-//     //Increments
-//     globalVar++;
-//     return globalVar;
-// }
-// 
-// //Remotes
-// //Type test
+// --- (line: 85) skipped ---
 // var remoteclsTest: remotefooCls;
 // 
 // //Arguments
@@ -4679,21 +1971,7 @@
 // 
 // //Find References misses method param
 // var
-// 
-// 
-// 
-//  array = ["f", "o", "o"];
-// 
-// array.forEach(
-// 
-// 
-// function(str) {
-// 
-// 
-// 
-//    return str + " ";
-// 
-// });
+// --- (line: 102) skipped ---
 
 // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
 // <|var [|{| isWriteAccess: true |}remoteglobalVar|]: number = 2;|>
@@ -4709,13 +1987,9 @@
 // 		this.remoteclsVar++;
 // 		remotefooCls.remoteclsSVar++;
 // 		this.remoteclsParam++;
-// 		remotemodTest.remotemodVar++;
-// 	}
-// }
-// 
-// function remotefoo(remotex: number) {
-// 	//Declare
-// 	var remotefnVar = 1;
+// --- (line: 14) skipped ---
+
+// --- (line: 20) skipped ---
 // 
 // 	//Increments
 // 	remotefooCls.remoteclsSVar++;
@@ -4723,12 +1997,9 @@
 // 	remotemodTest.remotemodVar++;
 // 	remotefnVar++;
 // 
-// 	//Return
-// 	return remotex++;
-// }
-// 
-// module remotemodTest {
-// 	//Declare
+// --- (line: 28) skipped ---
+
+// --- (line: 33) skipped ---
 // 	export var remotemodVar: number;
 // 
 // 	//Increments
@@ -4736,11 +2007,9 @@
 // 	remotefooCls.remoteclsSVar++;
 // 	remotemodVar++;
 // 
-// 	class remotetestCls {
-// 		static remoteboo = remotefoo;
-// 	}
-// 
-// 	function remotetestFn(){
+// --- (line: 41) skipped ---
+
+// --- (line: 45) skipped ---
 //         static remoteboo = remotefoo;
 // 
 // 		//Increments
@@ -4748,11 +2017,7 @@
 // 		remotefooCls.remoteclsSVar++;
 // 		remotemodVar++;
 //     }
-// 
-// 	module remotetestMod {
-// 		var remoteboo = remotefoo;
-// 	}
-// }
+// --- (line: 53) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
@@ -4769,50 +2034,7 @@
   // 		this.remoteclsVar++;
   // 		remotefooCls.remoteclsSVar++;
   // 		this.remoteclsParam++;
-  // 		remotemodTest.remotemodVar++;
-  // 	}
-  // }
-  // 
-  // function remotefoo(remotex: number) {
-  // 	//Declare
-  // 	var remotefnVar = 1;
-  // 
-  // 	//Increments
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remoteglobalVar++;
-  // 	remotemodTest.remotemodVar++;
-  // 	remotefnVar++;
-  // 
-  // 	//Return
-  // 	return remotex++;
-  // }
-  // 
-  // module remotemodTest {
-  // 	//Declare
-  // 	export var remotemodVar: number;
-  // 
-  // 	//Increments
-  // 	remoteglobalVar++;
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remotemodVar++;
-  // 
-  // 	class remotetestCls {
-  // 		static remoteboo = remotefoo;
-  // 	}
-  // 
-  // 	function remotetestFn(){
-  //         static remoteboo = remotefoo;
-  // 
-  // 		//Increments
-  // 		remoteglobalVar++;
-  // 		remotefooCls.remoteclsSVar++;
-  // 		remotemodVar++;
-  //     }
-  // 
-  // 	module remotetestMod {
-  // 		var remoteboo = remotefoo;
-  // 	}
-  // }
+  // --- (line: 14) skipped ---
 
   // === Details ===
   [
@@ -4868,49 +2090,7 @@
 // 		remotefooCls.remoteclsSVar++;
 // 		this.remoteclsParam++;
 // 		remotemodTest.remotemodVar++;
-// 	}
-// }
-// 
-// function remotefoo(remotex: number) {
-// 	//Declare
-// 	var remotefnVar = 1;
-// 
-// 	//Increments
-// 	remotefooCls.remoteclsSVar++;
-// 	remoteglobalVar++;
-// 	remotemodTest.remotemodVar++;
-// 	remotefnVar++;
-// 
-// 	//Return
-// 	return remotex++;
-// }
-// 
-// module remotemodTest {
-// 	//Declare
-// 	export var remotemodVar: number;
-// 
-// 	//Increments
-// 	remoteglobalVar++;
-// 	remotefooCls.remoteclsSVar++;
-// 	remotemodVar++;
-// 
-// 	class remotetestCls {
-// 		static remoteboo = remotefoo;
-// 	}
-// 
-// 	function remotetestFn(){
-//         static remoteboo = remotefoo;
-// 
-// 		//Increments
-// 		remoteglobalVar++;
-// 		remotefooCls.remoteclsSVar++;
-// 		remotemodVar++;
-//     }
-// 
-// 	module remotetestMod {
-// 		var remoteboo = remotefoo;
-// 	}
-// }
+// --- (line: 15) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
@@ -4928,49 +2108,7 @@
   // 		remotefooCls.remoteclsSVar++;
   // 		this.remoteclsParam++;
   // 		remotemodTest.remotemodVar++;
-  // 	}
-  // }
-  // 
-  // function remotefoo(remotex: number) {
-  // 	//Declare
-  // 	var remotefnVar = 1;
-  // 
-  // 	//Increments
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remoteglobalVar++;
-  // 	remotemodTest.remotemodVar++;
-  // 	remotefnVar++;
-  // 
-  // 	//Return
-  // 	return remotex++;
-  // }
-  // 
-  // module remotemodTest {
-  // 	//Declare
-  // 	export var remotemodVar: number;
-  // 
-  // 	//Increments
-  // 	remoteglobalVar++;
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remotemodVar++;
-  // 
-  // 	class remotetestCls {
-  // 		static remoteboo = remotefoo;
-  // 	}
-  // 
-  // 	function remotetestFn(){
-  //         static remoteboo = remotefoo;
-  // 
-  // 		//Increments
-  // 		remoteglobalVar++;
-  // 		remotefooCls.remoteclsSVar++;
-  // 		remotemodVar++;
-  //     }
-  // 
-  // 	module remotetestMod {
-  // 		var remoteboo = remotefoo;
-  // 	}
-  // }
+  // --- (line: 15) skipped ---
 
   // === Details ===
   [
@@ -5028,88 +2166,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/remoteGetReferences_1.ts ===
-// // Comment Refence Test: globalVar
-// var globalVar: number = 2;
-// 
-// class fooCls {
-//     static clsSVar = 1;
-//     //Declare
-//     clsVar = 1;
-// 
-//     constructor (public clsParam: number) {
-//         //Increments
-//         globalVar++;
-//         this.clsVar++;
-//         fooCls.clsSVar++;
-//         this.clsParam++;
-//         modTest.modVar++;
-//     }
-// }
-// 
-// function foo(x: number) {
-//     //Declare
-//     var fnVar = 1;
-// 
-//     //Increments
-//     fooCls.clsSVar++;
-//     globalVar++;
-//     modTest.modVar++;
-//     fnVar++;
-// 
-//     //Return
-//     return x++;
-// }
-// 
-// module modTest {
-//     //Declare
-//     export var modVar:number;
-// 
-//     //Increments
-//     globalVar++;
-//     fooCls.clsSVar++;
-//     modVar++;
-// 
-//     class testCls {
-//         static boo = foo;
-//     }
-// 
-//     function testFn(){
-//         static boo = foo;
-// 
-//         //Increments
-//         globalVar++;
-//         fooCls.clsSVar++;
-//         modVar++;
-//     }
-// 
-//     module testMod {
-//         var boo = foo;
-//     }
-// }
-// 
-// //Type test
-// var clsTest: fooCls;
-// 
-// //Arguments
-// clsTest = new fooCls(globalVar);
-// foo(globalVar);
-// 
-// //Increments
-// fooCls.clsSVar++;
-// modTest.modVar++;
-// globalVar = globalVar + globalVar;
-// 
-// //ETC - Other cases
-// globalVar = 3;
-// foo = foo + 1;
-// err = err++;
-// 
-// //Shadowed fn Parameter
-// function shdw(globalVar: number) {
-//     //Increments
-//     globalVar++;
-//     return globalVar;
-// }
+// --- (line: 82) skipped ---
 // 
 // //Remotes
 // //Type test
@@ -5124,26 +2181,7 @@
 // remotemodTest.remotemodVar++;
 // remoteglobalVar = remoteglobalVar + remoteglobalVar;
 // 
-// //ETC - Other cases
-// remoteglobalVar = 3;
-// 
-// //Find References misses method param
-// var
-// 
-// 
-// 
-//  array = ["f", "o", "o"];
-// 
-// array.forEach(
-// 
-// 
-// function(str) {
-// 
-// 
-// 
-//    return str + " ";
-// 
-// });
+// --- (line: 97) skipped ---
 
 // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
 // var remoteglobalVar: number = 2;
@@ -5172,14 +2210,9 @@
 // 	remoteglobalVar++;
 // 	remotemodTest.remotemodVar++;
 // 	remotefnVar++;
-// 
-// 	//Return
-// 	return remotex++;
-// }
-// 
-// module remotemodTest {
-// 	//Declare
-// 	export var remotemodVar: number;
+// --- (line: 27) skipped ---
+
+// --- (line: 34) skipped ---
 // 
 // 	//Increments
 // 	remoteglobalVar++;
@@ -5187,11 +2220,9 @@
 // 	remotemodVar++;
 // 
 // 	class remotetestCls {
-// 		static remoteboo = remotefoo;
-// 	}
-// 
-// 	function remotetestFn(){
-//         static remoteboo = remotefoo;
+// --- (line: 42) skipped ---
+
+// --- (line: 46) skipped ---
 // 
 // 		//Increments
 // 		remoteglobalVar++;
@@ -5199,10 +2230,7 @@
 // 		remotemodVar++;
 //     }
 // 
-// 	module remotetestMod {
-// 		var remoteboo = remotefoo;
-// 	}
-// }
+// --- (line: 54) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
@@ -5225,44 +2253,7 @@
   // 
   // function remotefoo(remotex: number) {
   // 	//Declare
-  // 	var remotefnVar = 1;
-  // 
-  // 	//Increments
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remoteglobalVar++;
-  // 	remotemodTest.remotemodVar++;
-  // 	remotefnVar++;
-  // 
-  // 	//Return
-  // 	return remotex++;
-  // }
-  // 
-  // module remotemodTest {
-  // 	//Declare
-  // 	export var remotemodVar: number;
-  // 
-  // 	//Increments
-  // 	remoteglobalVar++;
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remotemodVar++;
-  // 
-  // 	class remotetestCls {
-  // 		static remoteboo = remotefoo;
-  // 	}
-  // 
-  // 	function remotetestFn(){
-  //         static remoteboo = remotefoo;
-  // 
-  // 		//Increments
-  // 		remoteglobalVar++;
-  // 		remotefooCls.remoteclsSVar++;
-  // 		remotemodVar++;
-  //     }
-  // 
-  // 	module remotetestMod {
-  // 		var remoteboo = remotefoo;
-  // 	}
-  // }
+  // --- (line: 20) skipped ---
 
   // === Details ===
   [
@@ -5292,95 +2283,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/remoteGetReferences_1.ts ===
-// // Comment Refence Test: globalVar
-// var globalVar: number = 2;
-// 
-// class fooCls {
-//     static clsSVar = 1;
-//     //Declare
-//     clsVar = 1;
-// 
-//     constructor (public clsParam: number) {
-//         //Increments
-//         globalVar++;
-//         this.clsVar++;
-//         fooCls.clsSVar++;
-//         this.clsParam++;
-//         modTest.modVar++;
-//     }
-// }
-// 
-// function foo(x: number) {
-//     //Declare
-//     var fnVar = 1;
-// 
-//     //Increments
-//     fooCls.clsSVar++;
-//     globalVar++;
-//     modTest.modVar++;
-//     fnVar++;
-// 
-//     //Return
-//     return x++;
-// }
-// 
-// module modTest {
-//     //Declare
-//     export var modVar:number;
-// 
-//     //Increments
-//     globalVar++;
-//     fooCls.clsSVar++;
-//     modVar++;
-// 
-//     class testCls {
-//         static boo = foo;
-//     }
-// 
-//     function testFn(){
-//         static boo = foo;
-// 
-//         //Increments
-//         globalVar++;
-//         fooCls.clsSVar++;
-//         modVar++;
-//     }
-// 
-//     module testMod {
-//         var boo = foo;
-//     }
-// }
-// 
-// //Type test
-// var clsTest: fooCls;
-// 
-// //Arguments
-// clsTest = new fooCls(globalVar);
-// foo(globalVar);
-// 
-// //Increments
-// fooCls.clsSVar++;
-// modTest.modVar++;
-// globalVar = globalVar + globalVar;
-// 
-// //ETC - Other cases
-// globalVar = 3;
-// foo = foo + 1;
-// err = err++;
-// 
-// //Shadowed fn Parameter
-// function shdw(globalVar: number) {
-//     //Increments
-//     globalVar++;
-//     return globalVar;
-// }
-// 
-// //Remotes
-// //Type test
-// var remoteclsTest: remotefooCls;
-// 
-// //Arguments
-// remoteclsTest = new remotefooCls(remoteglobalVar);
+// --- (line: 89) skipped ---
 // remotefoo(remoteglobalVar);
 // 
 // //Increments
@@ -5388,26 +2291,7 @@
 // remotemodTest.remotemodVar++;
 // remoteglobalVar = remoteglobalVar + remoteglobalVar;
 // 
-// //ETC - Other cases
-// remoteglobalVar = 3;
-// 
-// //Find References misses method param
-// var
-// 
-// 
-// 
-//  array = ["f", "o", "o"];
-// 
-// array.forEach(
-// 
-// 
-// function(str) {
-// 
-// 
-// 
-//    return str + " ";
-// 
-// });
+// --- (line: 97) skipped ---
 
 // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
 // var remoteglobalVar: number = 2;
@@ -5425,10 +2309,9 @@
 // 		this.remoteclsParam++;
 // 		remotemodTest.remotemodVar++;
 // 	}
-// }
-// 
-// function remotefoo(remotex: number) {
-// 	//Declare
+// --- (line: 16) skipped ---
+
+// --- (line: 19) skipped ---
 // 	var remotefnVar = 1;
 // 
 // 	//Increments
@@ -5436,14 +2319,9 @@
 // 	remoteglobalVar++;
 // 	remotemodTest.remotemodVar++;
 // 	remotefnVar++;
-// 
-// 	//Return
-// 	return remotex++;
-// }
-// 
-// module remotemodTest {
-// 	//Declare
-// 	export var remotemodVar: number;
+// --- (line: 27) skipped ---
+
+// --- (line: 34) skipped ---
 // 
 // 	//Increments
 // 	remoteglobalVar++;
@@ -5451,11 +2329,9 @@
 // 	remotemodVar++;
 // 
 // 	class remotetestCls {
-// 		static remoteboo = remotefoo;
-// 	}
-// 
-// 	function remotetestFn(){
-//         static remoteboo = remotefoo;
+// --- (line: 42) skipped ---
+
+// --- (line: 46) skipped ---
 // 
 // 		//Increments
 // 		remoteglobalVar++;
@@ -5463,10 +2339,7 @@
 // 		remotemodVar++;
 //     }
 // 
-// 	module remotetestMod {
-// 		var remoteboo = remotefoo;
-// 	}
-// }
+// --- (line: 54) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
@@ -5485,48 +2358,7 @@
   // 		this.remoteclsParam++;
   // 		remotemodTest.remotemodVar++;
   // 	}
-  // }
-  // 
-  // function remotefoo(remotex: number) {
-  // 	//Declare
-  // 	var remotefnVar = 1;
-  // 
-  // 	//Increments
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remoteglobalVar++;
-  // 	remotemodTest.remotemodVar++;
-  // 	remotefnVar++;
-  // 
-  // 	//Return
-  // 	return remotex++;
-  // }
-  // 
-  // module remotemodTest {
-  // 	//Declare
-  // 	export var remotemodVar: number;
-  // 
-  // 	//Increments
-  // 	remoteglobalVar++;
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remotemodVar++;
-  // 
-  // 	class remotetestCls {
-  // 		static remoteboo = remotefoo;
-  // 	}
-  // 
-  // 	function remotetestFn(){
-  //         static remoteboo = remotefoo;
-  // 
-  // 		//Increments
-  // 		remoteglobalVar++;
-  // 		remotefooCls.remoteclsSVar++;
-  // 		remotemodVar++;
-  //     }
-  // 
-  // 	module remotetestMod {
-  // 		var remoteboo = remotefoo;
-  // 	}
-  // }
+  // --- (line: 16) skipped ---
 
   // === Details ===
   [
@@ -5584,88 +2416,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/remoteGetReferences_1.ts ===
-// // Comment Refence Test: globalVar
-// var globalVar: number = 2;
-// 
-// class fooCls {
-//     static clsSVar = 1;
-//     //Declare
-//     clsVar = 1;
-// 
-//     constructor (public clsParam: number) {
-//         //Increments
-//         globalVar++;
-//         this.clsVar++;
-//         fooCls.clsSVar++;
-//         this.clsParam++;
-//         modTest.modVar++;
-//     }
-// }
-// 
-// function foo(x: number) {
-//     //Declare
-//     var fnVar = 1;
-// 
-//     //Increments
-//     fooCls.clsSVar++;
-//     globalVar++;
-//     modTest.modVar++;
-//     fnVar++;
-// 
-//     //Return
-//     return x++;
-// }
-// 
-// module modTest {
-//     //Declare
-//     export var modVar:number;
-// 
-//     //Increments
-//     globalVar++;
-//     fooCls.clsSVar++;
-//     modVar++;
-// 
-//     class testCls {
-//         static boo = foo;
-//     }
-// 
-//     function testFn(){
-//         static boo = foo;
-// 
-//         //Increments
-//         globalVar++;
-//         fooCls.clsSVar++;
-//         modVar++;
-//     }
-// 
-//     module testMod {
-//         var boo = foo;
-//     }
-// }
-// 
-// //Type test
-// var clsTest: fooCls;
-// 
-// //Arguments
-// clsTest = new fooCls(globalVar);
-// foo(globalVar);
-// 
-// //Increments
-// fooCls.clsSVar++;
-// modTest.modVar++;
-// globalVar = globalVar + globalVar;
-// 
-// //ETC - Other cases
-// globalVar = 3;
-// foo = foo + 1;
-// err = err++;
-// 
-// //Shadowed fn Parameter
-// function shdw(globalVar: number) {
-//     //Increments
-//     globalVar++;
-//     return globalVar;
-// }
+// --- (line: 82) skipped ---
 // 
 // //Remotes
 // //Type test
@@ -5680,26 +2431,7 @@
 // remotemodTest.remotemodVar++;
 // remoteglobalVar = remoteglobalVar + remoteglobalVar;
 // 
-// //ETC - Other cases
-// remoteglobalVar = 3;
-// 
-// //Find References misses method param
-// var
-// 
-// 
-// 
-//  array = ["f", "o", "o"];
-// 
-// array.forEach(
-// 
-// 
-// function(str) {
-// 
-// 
-// 
-//    return str + " ";
-// 
-// });
+// --- (line: 97) skipped ---
 
 // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
 // var remoteglobalVar: number = 2;
@@ -5728,14 +2460,9 @@
 // 	remoteglobalVar++;
 // 	remotemodTest.remotemodVar++;
 // 	remotefnVar++;
-// 
-// 	//Return
-// 	return remotex++;
-// }
-// 
-// module remotemodTest {
-// 	//Declare
-// 	export var remotemodVar: number;
+// --- (line: 27) skipped ---
+
+// --- (line: 34) skipped ---
 // 
 // 	//Increments
 // 	remoteglobalVar++;
@@ -5743,11 +2470,9 @@
 // 	remotemodVar++;
 // 
 // 	class remotetestCls {
-// 		static remoteboo = remotefoo;
-// 	}
-// 
-// 	function remotetestFn(){
-//         static remoteboo = remotefoo;
+// --- (line: 42) skipped ---
+
+// --- (line: 46) skipped ---
 // 
 // 		//Increments
 // 		remoteglobalVar++;
@@ -5755,10 +2480,7 @@
 // 		remotemodVar++;
 //     }
 // 
-// 	module remotetestMod {
-// 		var remoteboo = remotefoo;
-// 	}
-// }
+// --- (line: 54) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
@@ -5788,37 +2510,7 @@
   // 	remoteglobalVar++;
   // 	remotemodTest.remotemodVar++;
   // 	remotefnVar++;
-  // 
-  // 	//Return
-  // 	return remotex++;
-  // }
-  // 
-  // module remotemodTest {
-  // 	//Declare
-  // 	export var remotemodVar: number;
-  // 
-  // 	//Increments
-  // 	remoteglobalVar++;
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remotemodVar++;
-  // 
-  // 	class remotetestCls {
-  // 		static remoteboo = remotefoo;
-  // 	}
-  // 
-  // 	function remotetestFn(){
-  //         static remoteboo = remotefoo;
-  // 
-  // 		//Increments
-  // 		remoteglobalVar++;
-  // 		remotefooCls.remoteclsSVar++;
-  // 		remotemodVar++;
-  //     }
-  // 
-  // 	module remotetestMod {
-  // 		var remoteboo = remotefoo;
-  // 	}
-  // }
+  // --- (line: 27) skipped ---
 
   // === Details ===
   [
@@ -5848,95 +2540,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/remoteGetReferences_1.ts ===
-// // Comment Refence Test: globalVar
-// var globalVar: number = 2;
-// 
-// class fooCls {
-//     static clsSVar = 1;
-//     //Declare
-//     clsVar = 1;
-// 
-//     constructor (public clsParam: number) {
-//         //Increments
-//         globalVar++;
-//         this.clsVar++;
-//         fooCls.clsSVar++;
-//         this.clsParam++;
-//         modTest.modVar++;
-//     }
-// }
-// 
-// function foo(x: number) {
-//     //Declare
-//     var fnVar = 1;
-// 
-//     //Increments
-//     fooCls.clsSVar++;
-//     globalVar++;
-//     modTest.modVar++;
-//     fnVar++;
-// 
-//     //Return
-//     return x++;
-// }
-// 
-// module modTest {
-//     //Declare
-//     export var modVar:number;
-// 
-//     //Increments
-//     globalVar++;
-//     fooCls.clsSVar++;
-//     modVar++;
-// 
-//     class testCls {
-//         static boo = foo;
-//     }
-// 
-//     function testFn(){
-//         static boo = foo;
-// 
-//         //Increments
-//         globalVar++;
-//         fooCls.clsSVar++;
-//         modVar++;
-//     }
-// 
-//     module testMod {
-//         var boo = foo;
-//     }
-// }
-// 
-// //Type test
-// var clsTest: fooCls;
-// 
-// //Arguments
-// clsTest = new fooCls(globalVar);
-// foo(globalVar);
-// 
-// //Increments
-// fooCls.clsSVar++;
-// modTest.modVar++;
-// globalVar = globalVar + globalVar;
-// 
-// //ETC - Other cases
-// globalVar = 3;
-// foo = foo + 1;
-// err = err++;
-// 
-// //Shadowed fn Parameter
-// function shdw(globalVar: number) {
-//     //Increments
-//     globalVar++;
-//     return globalVar;
-// }
-// 
-// //Remotes
-// //Type test
-// var remoteclsTest: remotefooCls;
-// 
-// //Arguments
-// remoteclsTest = new remotefooCls(remoteglobalVar);
+// --- (line: 89) skipped ---
 // remotefoo(remoteglobalVar);
 // 
 // //Increments
@@ -5944,26 +2548,7 @@
 // remotemodTest.remotemodVar++;
 // remoteglobalVar = remoteglobalVar + remoteglobalVar;
 // 
-// //ETC - Other cases
-// remoteglobalVar = 3;
-// 
-// //Find References misses method param
-// var
-// 
-// 
-// 
-//  array = ["f", "o", "o"];
-// 
-// array.forEach(
-// 
-// 
-// function(str) {
-// 
-// 
-// 
-//    return str + " ";
-// 
-// });
+// --- (line: 97) skipped ---
 
 // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
 // var remoteglobalVar: number = 2;
@@ -5981,10 +2566,9 @@
 // 		this.remoteclsParam++;
 // 		remotemodTest.remotemodVar++;
 // 	}
-// }
-// 
-// function remotefoo(remotex: number) {
-// 	//Declare
+// --- (line: 16) skipped ---
+
+// --- (line: 19) skipped ---
 // 	var remotefnVar = 1;
 // 
 // 	//Increments
@@ -5992,14 +2576,9 @@
 // 	remoteglobalVar++;
 // 	remotemodTest.remotemodVar++;
 // 	remotefnVar++;
-// 
-// 	//Return
-// 	return remotex++;
-// }
-// 
-// module remotemodTest {
-// 	//Declare
-// 	export var remotemodVar: number;
+// --- (line: 27) skipped ---
+
+// --- (line: 34) skipped ---
 // 
 // 	//Increments
 // 	remoteglobalVar++;
@@ -6007,11 +2586,9 @@
 // 	remotemodVar++;
 // 
 // 	class remotetestCls {
-// 		static remoteboo = remotefoo;
-// 	}
-// 
-// 	function remotetestFn(){
-//         static remoteboo = remotefoo;
+// --- (line: 42) skipped ---
+
+// --- (line: 46) skipped ---
 // 
 // 		//Increments
 // 		remoteglobalVar++;
@@ -6019,10 +2596,7 @@
 // 		remotemodVar++;
 //     }
 // 
-// 	module remotetestMod {
-// 		var remoteboo = remotefoo;
-// 	}
-// }
+// --- (line: 54) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
@@ -6035,16 +2609,9 @@
   // 
   // 	constructor(public remoteclsParam: number) {
   // 		//Increments
-  // 		remoteglobalVar++;
-  // 		this.remoteclsVar++;
-  // 		remotefooCls.remoteclsSVar++;
-  // 		this.remoteclsParam++;
-  // 		remotemodTest.remotemodVar++;
-  // 	}
-  // }
-  // 
-  // function remotefoo(remotex: number) {
-  // 	//Declare
+  // --- (line: 10) skipped ---
+
+  // --- (line: 19) skipped ---
   // 	var remotefnVar = 1;
   // 
   // 	//Increments
@@ -6052,37 +2619,7 @@
   // 	remoteglobalVar++;
   // 	remotemodTest.remotemodVar++;
   // 	remotefnVar++;
-  // 
-  // 	//Return
-  // 	return remotex++;
-  // }
-  // 
-  // module remotemodTest {
-  // 	//Declare
-  // 	export var remotemodVar: number;
-  // 
-  // 	//Increments
-  // 	remoteglobalVar++;
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remotemodVar++;
-  // 
-  // 	class remotetestCls {
-  // 		static remoteboo = remotefoo;
-  // 	}
-  // 
-  // 	function remotetestFn(){
-  //         static remoteboo = remotefoo;
-  // 
-  // 		//Increments
-  // 		remoteglobalVar++;
-  // 		remotefooCls.remoteclsSVar++;
-  // 		remotemodVar++;
-  //     }
-  // 
-  // 	module remotetestMod {
-  // 		var remoteboo = remotefoo;
-  // 	}
-  // }
+  // --- (line: 27) skipped ---
 
   // === Details ===
   [
@@ -6140,91 +2677,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/remoteGetReferences_1.ts ===
-// // Comment Refence Test: globalVar
-// var globalVar: number = 2;
-// 
-// class fooCls {
-//     static clsSVar = 1;
-//     //Declare
-//     clsVar = 1;
-// 
-//     constructor (public clsParam: number) {
-//         //Increments
-//         globalVar++;
-//         this.clsVar++;
-//         fooCls.clsSVar++;
-//         this.clsParam++;
-//         modTest.modVar++;
-//     }
-// }
-// 
-// function foo(x: number) {
-//     //Declare
-//     var fnVar = 1;
-// 
-//     //Increments
-//     fooCls.clsSVar++;
-//     globalVar++;
-//     modTest.modVar++;
-//     fnVar++;
-// 
-//     //Return
-//     return x++;
-// }
-// 
-// module modTest {
-//     //Declare
-//     export var modVar:number;
-// 
-//     //Increments
-//     globalVar++;
-//     fooCls.clsSVar++;
-//     modVar++;
-// 
-//     class testCls {
-//         static boo = foo;
-//     }
-// 
-//     function testFn(){
-//         static boo = foo;
-// 
-//         //Increments
-//         globalVar++;
-//         fooCls.clsSVar++;
-//         modVar++;
-//     }
-// 
-//     module testMod {
-//         var boo = foo;
-//     }
-// }
-// 
-// //Type test
-// var clsTest: fooCls;
-// 
-// //Arguments
-// clsTest = new fooCls(globalVar);
-// foo(globalVar);
-// 
-// //Increments
-// fooCls.clsSVar++;
-// modTest.modVar++;
-// globalVar = globalVar + globalVar;
-// 
-// //ETC - Other cases
-// globalVar = 3;
-// foo = foo + 1;
-// err = err++;
-// 
-// //Shadowed fn Parameter
-// function shdw(globalVar: number) {
-//     //Increments
-//     globalVar++;
-//     return globalVar;
-// }
-// 
-// //Remotes
-// //Type test
+// --- (line: 85) skipped ---
 // var remoteclsTest: remotefooCls;
 // 
 // //Arguments
@@ -6241,21 +2694,7 @@
 // 
 // //Find References misses method param
 // var
-// 
-// 
-// 
-//  array = ["f", "o", "o"];
-// 
-// array.forEach(
-// 
-// 
-// function(str) {
-// 
-// 
-// 
-//    return str + " ";
-// 
-// });
+// --- (line: 102) skipped ---
 
 // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
 // <|var [|{| isWriteAccess: true |}remoteglobalVar|]: number = 2;|>
@@ -6271,13 +2710,9 @@
 // 		this.remoteclsVar++;
 // 		remotefooCls.remoteclsSVar++;
 // 		this.remoteclsParam++;
-// 		remotemodTest.remotemodVar++;
-// 	}
-// }
-// 
-// function remotefoo(remotex: number) {
-// 	//Declare
-// 	var remotefnVar = 1;
+// --- (line: 14) skipped ---
+
+// --- (line: 20) skipped ---
 // 
 // 	//Increments
 // 	remotefooCls.remoteclsSVar++;
@@ -6285,12 +2720,9 @@
 // 	remotemodTest.remotemodVar++;
 // 	remotefnVar++;
 // 
-// 	//Return
-// 	return remotex++;
-// }
-// 
-// module remotemodTest {
-// 	//Declare
+// --- (line: 28) skipped ---
+
+// --- (line: 33) skipped ---
 // 	export var remotemodVar: number;
 // 
 // 	//Increments
@@ -6298,11 +2730,9 @@
 // 	remotefooCls.remoteclsSVar++;
 // 	remotemodVar++;
 // 
-// 	class remotetestCls {
-// 		static remoteboo = remotefoo;
-// 	}
-// 
-// 	function remotetestFn(){
+// --- (line: 41) skipped ---
+
+// --- (line: 45) skipped ---
 //         static remoteboo = remotefoo;
 // 
 // 		//Increments
@@ -6310,11 +2740,7 @@
 // 		remotefooCls.remoteclsSVar++;
 // 		remotemodVar++;
 //     }
-// 
-// 	module remotetestMod {
-// 		var remoteboo = remotefoo;
-// 	}
-// }
+// --- (line: 53) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
@@ -6322,22 +2748,9 @@
   // 
   // class remotefooCls {
   // 	//Declare
-  // 	remoteclsVar = 1;
-  // 	static remoteclsSVar = 1;
-  // 
-  // 	constructor(public remoteclsParam: number) {
-  // 		//Increments
-  // 		remoteglobalVar++;
-  // 		this.remoteclsVar++;
-  // 		remotefooCls.remoteclsSVar++;
-  // 		this.remoteclsParam++;
-  // 		remotemodTest.remotemodVar++;
-  // 	}
-  // }
-  // 
-  // function remotefoo(remotex: number) {
-  // 	//Declare
-  // 	var remotefnVar = 1;
+  // --- (line: 5) skipped ---
+
+  // --- (line: 20) skipped ---
   // 
   // 	//Increments
   // 	remotefooCls.remoteclsSVar++;
@@ -6345,36 +2758,7 @@
   // 	remotemodTest.remotemodVar++;
   // 	remotefnVar++;
   // 
-  // 	//Return
-  // 	return remotex++;
-  // }
-  // 
-  // module remotemodTest {
-  // 	//Declare
-  // 	export var remotemodVar: number;
-  // 
-  // 	//Increments
-  // 	remoteglobalVar++;
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remotemodVar++;
-  // 
-  // 	class remotetestCls {
-  // 		static remoteboo = remotefoo;
-  // 	}
-  // 
-  // 	function remotetestFn(){
-  //         static remoteboo = remotefoo;
-  // 
-  // 		//Increments
-  // 		remoteglobalVar++;
-  // 		remotefooCls.remoteclsSVar++;
-  // 		remotemodVar++;
-  //     }
-  // 
-  // 	module remotetestMod {
-  // 		var remoteboo = remotefoo;
-  // 	}
-  // }
+  // --- (line: 28) skipped ---
 
   // === Details ===
   [
@@ -6416,91 +2800,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/remoteGetReferences_1.ts ===
-// // Comment Refence Test: globalVar
-// var globalVar: number = 2;
-// 
-// class fooCls {
-//     static clsSVar = 1;
-//     //Declare
-//     clsVar = 1;
-// 
-//     constructor (public clsParam: number) {
-//         //Increments
-//         globalVar++;
-//         this.clsVar++;
-//         fooCls.clsSVar++;
-//         this.clsParam++;
-//         modTest.modVar++;
-//     }
-// }
-// 
-// function foo(x: number) {
-//     //Declare
-//     var fnVar = 1;
-// 
-//     //Increments
-//     fooCls.clsSVar++;
-//     globalVar++;
-//     modTest.modVar++;
-//     fnVar++;
-// 
-//     //Return
-//     return x++;
-// }
-// 
-// module modTest {
-//     //Declare
-//     export var modVar:number;
-// 
-//     //Increments
-//     globalVar++;
-//     fooCls.clsSVar++;
-//     modVar++;
-// 
-//     class testCls {
-//         static boo = foo;
-//     }
-// 
-//     function testFn(){
-//         static boo = foo;
-// 
-//         //Increments
-//         globalVar++;
-//         fooCls.clsSVar++;
-//         modVar++;
-//     }
-// 
-//     module testMod {
-//         var boo = foo;
-//     }
-// }
-// 
-// //Type test
-// var clsTest: fooCls;
-// 
-// //Arguments
-// clsTest = new fooCls(globalVar);
-// foo(globalVar);
-// 
-// //Increments
-// fooCls.clsSVar++;
-// modTest.modVar++;
-// globalVar = globalVar + globalVar;
-// 
-// //ETC - Other cases
-// globalVar = 3;
-// foo = foo + 1;
-// err = err++;
-// 
-// //Shadowed fn Parameter
-// function shdw(globalVar: number) {
-//     //Increments
-//     globalVar++;
-//     return globalVar;
-// }
-// 
-// //Remotes
-// //Type test
+// --- (line: 85) skipped ---
 // var remoteclsTest: remotefooCls;
 // 
 // //Arguments
@@ -6517,21 +2817,7 @@
 // 
 // //Find References misses method param
 // var
-// 
-// 
-// 
-//  array = ["f", "o", "o"];
-// 
-// array.forEach(
-// 
-// 
-// function(str) {
-// 
-// 
-// 
-//    return str + " ";
-// 
-// });
+// --- (line: 102) skipped ---
 
 // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
 // <|var [|{| isWriteAccess: true |}remoteglobalVar|]: number = 2;|>
@@ -6547,13 +2833,9 @@
 // 		this.remoteclsVar++;
 // 		remotefooCls.remoteclsSVar++;
 // 		this.remoteclsParam++;
-// 		remotemodTest.remotemodVar++;
-// 	}
-// }
-// 
-// function remotefoo(remotex: number) {
-// 	//Declare
-// 	var remotefnVar = 1;
+// --- (line: 14) skipped ---
+
+// --- (line: 20) skipped ---
 // 
 // 	//Increments
 // 	remotefooCls.remoteclsSVar++;
@@ -6561,12 +2843,9 @@
 // 	remotemodTest.remotemodVar++;
 // 	remotefnVar++;
 // 
-// 	//Return
-// 	return remotex++;
-// }
-// 
-// module remotemodTest {
-// 	//Declare
+// --- (line: 28) skipped ---
+
+// --- (line: 33) skipped ---
 // 	export var remotemodVar: number;
 // 
 // 	//Increments
@@ -6574,11 +2853,9 @@
 // 	remotefooCls.remoteclsSVar++;
 // 	remotemodVar++;
 // 
-// 	class remotetestCls {
-// 		static remoteboo = remotefoo;
-// 	}
-// 
-// 	function remotetestFn(){
+// --- (line: 41) skipped ---
+
+// --- (line: 45) skipped ---
 //         static remoteboo = remotefoo;
 // 
 // 		//Increments
@@ -6586,11 +2863,7 @@
 // 		remotefooCls.remoteclsSVar++;
 // 		remotemodVar++;
 //     }
-// 
-// 	module remotetestMod {
-// 		var remoteboo = remotefoo;
-// 	}
-// }
+// --- (line: 53) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
@@ -6598,35 +2871,9 @@
   // 
   // class remotefooCls {
   // 	//Declare
-  // 	remoteclsVar = 1;
-  // 	static remoteclsSVar = 1;
-  // 
-  // 	constructor(public remoteclsParam: number) {
-  // 		//Increments
-  // 		remoteglobalVar++;
-  // 		this.remoteclsVar++;
-  // 		remotefooCls.remoteclsSVar++;
-  // 		this.remoteclsParam++;
-  // 		remotemodTest.remotemodVar++;
-  // 	}
-  // }
-  // 
-  // function remotefoo(remotex: number) {
-  // 	//Declare
-  // 	var remotefnVar = 1;
-  // 
-  // 	//Increments
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remoteglobalVar++;
-  // 	remotemodTest.remotemodVar++;
-  // 	remotefnVar++;
-  // 
-  // 	//Return
-  // 	return remotex++;
-  // }
-  // 
-  // module remotemodTest {
-  // 	//Declare
+  // --- (line: 5) skipped ---
+
+  // --- (line: 33) skipped ---
   // 	export var remotemodVar: number;
   // 
   // 	//Increments
@@ -6634,23 +2881,7 @@
   // 	remotefooCls.remoteclsSVar++;
   // 	remotemodVar++;
   // 
-  // 	class remotetestCls {
-  // 		static remoteboo = remotefoo;
-  // 	}
-  // 
-  // 	function remotetestFn(){
-  //         static remoteboo = remotefoo;
-  // 
-  // 		//Increments
-  // 		remoteglobalVar++;
-  // 		remotefooCls.remoteclsSVar++;
-  // 		remotemodVar++;
-  //     }
-  // 
-  // 	module remotetestMod {
-  // 		var remoteboo = remotefoo;
-  // 	}
-  // }
+  // --- (line: 41) skipped ---
 
   // === Details ===
   [
@@ -6692,88 +2923,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/remoteGetReferences_1.ts ===
-// // Comment Refence Test: globalVar
-// var globalVar: number = 2;
-// 
-// class fooCls {
-//     static clsSVar = 1;
-//     //Declare
-//     clsVar = 1;
-// 
-//     constructor (public clsParam: number) {
-//         //Increments
-//         globalVar++;
-//         this.clsVar++;
-//         fooCls.clsSVar++;
-//         this.clsParam++;
-//         modTest.modVar++;
-//     }
-// }
-// 
-// function foo(x: number) {
-//     //Declare
-//     var fnVar = 1;
-// 
-//     //Increments
-//     fooCls.clsSVar++;
-//     globalVar++;
-//     modTest.modVar++;
-//     fnVar++;
-// 
-//     //Return
-//     return x++;
-// }
-// 
-// module modTest {
-//     //Declare
-//     export var modVar:number;
-// 
-//     //Increments
-//     globalVar++;
-//     fooCls.clsSVar++;
-//     modVar++;
-// 
-//     class testCls {
-//         static boo = foo;
-//     }
-// 
-//     function testFn(){
-//         static boo = foo;
-// 
-//         //Increments
-//         globalVar++;
-//         fooCls.clsSVar++;
-//         modVar++;
-//     }
-// 
-//     module testMod {
-//         var boo = foo;
-//     }
-// }
-// 
-// //Type test
-// var clsTest: fooCls;
-// 
-// //Arguments
-// clsTest = new fooCls(globalVar);
-// foo(globalVar);
-// 
-// //Increments
-// fooCls.clsSVar++;
-// modTest.modVar++;
-// globalVar = globalVar + globalVar;
-// 
-// //ETC - Other cases
-// globalVar = 3;
-// foo = foo + 1;
-// err = err++;
-// 
-// //Shadowed fn Parameter
-// function shdw(globalVar: number) {
-//     //Increments
-//     globalVar++;
-//     return globalVar;
-// }
+// --- (line: 82) skipped ---
 // 
 // //Remotes
 // //Type test
@@ -6788,26 +2938,7 @@
 // remotemodTest.remotemodVar++;
 // remoteglobalVar = remoteglobalVar + remoteglobalVar;
 // 
-// //ETC - Other cases
-// remoteglobalVar = 3;
-// 
-// //Find References misses method param
-// var
-// 
-// 
-// 
-//  array = ["f", "o", "o"];
-// 
-// array.forEach(
-// 
-// 
-// function(str) {
-// 
-// 
-// 
-//    return str + " ";
-// 
-// });
+// --- (line: 97) skipped ---
 
 // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
 // var remoteglobalVar: number = 2;
@@ -6836,14 +2967,9 @@
 // 	remoteglobalVar++;
 // 	remotemodTest.remotemodVar++;
 // 	remotefnVar++;
-// 
-// 	//Return
-// 	return remotex++;
-// }
-// 
-// module remotemodTest {
-// 	//Declare
-// 	export var remotemodVar: number;
+// --- (line: 27) skipped ---
+
+// --- (line: 34) skipped ---
 // 
 // 	//Increments
 // 	remoteglobalVar++;
@@ -6851,11 +2977,9 @@
 // 	remotemodVar++;
 // 
 // 	class remotetestCls {
-// 		static remoteboo = remotefoo;
-// 	}
-// 
-// 	function remotetestFn(){
-//         static remoteboo = remotefoo;
+// --- (line: 42) skipped ---
+
+// --- (line: 46) skipped ---
 // 
 // 		//Increments
 // 		remoteglobalVar++;
@@ -6863,10 +2987,7 @@
 // 		remotemodVar++;
 //     }
 // 
-// 	module remotetestMod {
-// 		var remoteboo = remotefoo;
-// 	}
-// }
+// --- (line: 54) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
@@ -6889,21 +3010,9 @@
   // 
   // function remotefoo(remotex: number) {
   // 	//Declare
-  // 	var remotefnVar = 1;
-  // 
-  // 	//Increments
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remoteglobalVar++;
-  // 	remotemodTest.remotemodVar++;
-  // 	remotefnVar++;
-  // 
-  // 	//Return
-  // 	return remotex++;
-  // }
-  // 
-  // module remotemodTest {
-  // 	//Declare
-  // 	export var remotemodVar: number;
+  // --- (line: 20) skipped ---
+
+  // --- (line: 34) skipped ---
   // 
   // 	//Increments
   // 	remoteglobalVar++;
@@ -6911,22 +3020,7 @@
   // 	remotemodVar++;
   // 
   // 	class remotetestCls {
-  // 		static remoteboo = remotefoo;
-  // 	}
-  // 
-  // 	function remotetestFn(){
-  //         static remoteboo = remotefoo;
-  // 
-  // 		//Increments
-  // 		remoteglobalVar++;
-  // 		remotefooCls.remoteclsSVar++;
-  // 		remotemodVar++;
-  //     }
-  // 
-  // 	module remotetestMod {
-  // 		var remoteboo = remotefoo;
-  // 	}
-  // }
+  // --- (line: 42) skipped ---
 
   // === Details ===
   [
@@ -6956,95 +3050,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/remoteGetReferences_1.ts ===
-// // Comment Refence Test: globalVar
-// var globalVar: number = 2;
-// 
-// class fooCls {
-//     static clsSVar = 1;
-//     //Declare
-//     clsVar = 1;
-// 
-//     constructor (public clsParam: number) {
-//         //Increments
-//         globalVar++;
-//         this.clsVar++;
-//         fooCls.clsSVar++;
-//         this.clsParam++;
-//         modTest.modVar++;
-//     }
-// }
-// 
-// function foo(x: number) {
-//     //Declare
-//     var fnVar = 1;
-// 
-//     //Increments
-//     fooCls.clsSVar++;
-//     globalVar++;
-//     modTest.modVar++;
-//     fnVar++;
-// 
-//     //Return
-//     return x++;
-// }
-// 
-// module modTest {
-//     //Declare
-//     export var modVar:number;
-// 
-//     //Increments
-//     globalVar++;
-//     fooCls.clsSVar++;
-//     modVar++;
-// 
-//     class testCls {
-//         static boo = foo;
-//     }
-// 
-//     function testFn(){
-//         static boo = foo;
-// 
-//         //Increments
-//         globalVar++;
-//         fooCls.clsSVar++;
-//         modVar++;
-//     }
-// 
-//     module testMod {
-//         var boo = foo;
-//     }
-// }
-// 
-// //Type test
-// var clsTest: fooCls;
-// 
-// //Arguments
-// clsTest = new fooCls(globalVar);
-// foo(globalVar);
-// 
-// //Increments
-// fooCls.clsSVar++;
-// modTest.modVar++;
-// globalVar = globalVar + globalVar;
-// 
-// //ETC - Other cases
-// globalVar = 3;
-// foo = foo + 1;
-// err = err++;
-// 
-// //Shadowed fn Parameter
-// function shdw(globalVar: number) {
-//     //Increments
-//     globalVar++;
-//     return globalVar;
-// }
-// 
-// //Remotes
-// //Type test
-// var remoteclsTest: remotefooCls;
-// 
-// //Arguments
-// remoteclsTest = new remotefooCls(remoteglobalVar);
+// --- (line: 89) skipped ---
 // remotefoo(remoteglobalVar);
 // 
 // //Increments
@@ -7052,26 +3058,7 @@
 // remotemodTest.remotemodVar++;
 // remoteglobalVar = remoteglobalVar + remoteglobalVar;
 // 
-// //ETC - Other cases
-// remoteglobalVar = 3;
-// 
-// //Find References misses method param
-// var
-// 
-// 
-// 
-//  array = ["f", "o", "o"];
-// 
-// array.forEach(
-// 
-// 
-// function(str) {
-// 
-// 
-// 
-//    return str + " ";
-// 
-// });
+// --- (line: 97) skipped ---
 
 // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
 // var remoteglobalVar: number = 2;
@@ -7089,10 +3076,9 @@
 // 		this.remoteclsParam++;
 // 		remotemodTest.remotemodVar++;
 // 	}
-// }
-// 
-// function remotefoo(remotex: number) {
-// 	//Declare
+// --- (line: 16) skipped ---
+
+// --- (line: 19) skipped ---
 // 	var remotefnVar = 1;
 // 
 // 	//Increments
@@ -7100,14 +3086,9 @@
 // 	remoteglobalVar++;
 // 	remotemodTest.remotemodVar++;
 // 	remotefnVar++;
-// 
-// 	//Return
-// 	return remotex++;
-// }
-// 
-// module remotemodTest {
-// 	//Declare
-// 	export var remotemodVar: number;
+// --- (line: 27) skipped ---
+
+// --- (line: 34) skipped ---
 // 
 // 	//Increments
 // 	remoteglobalVar++;
@@ -7115,11 +3096,9 @@
 // 	remotemodVar++;
 // 
 // 	class remotetestCls {
-// 		static remoteboo = remotefoo;
-// 	}
-// 
-// 	function remotetestFn(){
-//         static remoteboo = remotefoo;
+// --- (line: 42) skipped ---
+
+// --- (line: 46) skipped ---
 // 
 // 		//Increments
 // 		remoteglobalVar++;
@@ -7127,10 +3106,7 @@
 // 		remotemodVar++;
 //     }
 // 
-// 	module remotetestMod {
-// 		var remoteboo = remotefoo;
-// 	}
-// }
+// --- (line: 54) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
@@ -7143,31 +3119,9 @@
   // 
   // 	constructor(public remoteclsParam: number) {
   // 		//Increments
-  // 		remoteglobalVar++;
-  // 		this.remoteclsVar++;
-  // 		remotefooCls.remoteclsSVar++;
-  // 		this.remoteclsParam++;
-  // 		remotemodTest.remotemodVar++;
-  // 	}
-  // }
-  // 
-  // function remotefoo(remotex: number) {
-  // 	//Declare
-  // 	var remotefnVar = 1;
-  // 
-  // 	//Increments
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remoteglobalVar++;
-  // 	remotemodTest.remotemodVar++;
-  // 	remotefnVar++;
-  // 
-  // 	//Return
-  // 	return remotex++;
-  // }
-  // 
-  // module remotemodTest {
-  // 	//Declare
-  // 	export var remotemodVar: number;
+  // --- (line: 10) skipped ---
+
+  // --- (line: 34) skipped ---
   // 
   // 	//Increments
   // 	remoteglobalVar++;
@@ -7175,22 +3129,7 @@
   // 	remotemodVar++;
   // 
   // 	class remotetestCls {
-  // 		static remoteboo = remotefoo;
-  // 	}
-  // 
-  // 	function remotetestFn(){
-  //         static remoteboo = remotefoo;
-  // 
-  // 		//Increments
-  // 		remoteglobalVar++;
-  // 		remotefooCls.remoteclsSVar++;
-  // 		remotemodVar++;
-  //     }
-  // 
-  // 	module remotetestMod {
-  // 		var remoteboo = remotefoo;
-  // 	}
-  // }
+  // --- (line: 42) skipped ---
 
   // === Details ===
   [
@@ -7248,91 +3187,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/remoteGetReferences_1.ts ===
-// // Comment Refence Test: globalVar
-// var globalVar: number = 2;
-// 
-// class fooCls {
-//     static clsSVar = 1;
-//     //Declare
-//     clsVar = 1;
-// 
-//     constructor (public clsParam: number) {
-//         //Increments
-//         globalVar++;
-//         this.clsVar++;
-//         fooCls.clsSVar++;
-//         this.clsParam++;
-//         modTest.modVar++;
-//     }
-// }
-// 
-// function foo(x: number) {
-//     //Declare
-//     var fnVar = 1;
-// 
-//     //Increments
-//     fooCls.clsSVar++;
-//     globalVar++;
-//     modTest.modVar++;
-//     fnVar++;
-// 
-//     //Return
-//     return x++;
-// }
-// 
-// module modTest {
-//     //Declare
-//     export var modVar:number;
-// 
-//     //Increments
-//     globalVar++;
-//     fooCls.clsSVar++;
-//     modVar++;
-// 
-//     class testCls {
-//         static boo = foo;
-//     }
-// 
-//     function testFn(){
-//         static boo = foo;
-// 
-//         //Increments
-//         globalVar++;
-//         fooCls.clsSVar++;
-//         modVar++;
-//     }
-// 
-//     module testMod {
-//         var boo = foo;
-//     }
-// }
-// 
-// //Type test
-// var clsTest: fooCls;
-// 
-// //Arguments
-// clsTest = new fooCls(globalVar);
-// foo(globalVar);
-// 
-// //Increments
-// fooCls.clsSVar++;
-// modTest.modVar++;
-// globalVar = globalVar + globalVar;
-// 
-// //ETC - Other cases
-// globalVar = 3;
-// foo = foo + 1;
-// err = err++;
-// 
-// //Shadowed fn Parameter
-// function shdw(globalVar: number) {
-//     //Increments
-//     globalVar++;
-//     return globalVar;
-// }
-// 
-// //Remotes
-// //Type test
+// --- (line: 85) skipped ---
 // var remoteclsTest: remotefooCls;
 // 
 // //Arguments
@@ -7349,21 +3204,7 @@
 // 
 // //Find References misses method param
 // var
-// 
-// 
-// 
-//  array = ["f", "o", "o"];
-// 
-// array.forEach(
-// 
-// 
-// function(str) {
-// 
-// 
-// 
-//    return str + " ";
-// 
-// });
+// --- (line: 102) skipped ---
 
 // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
 // <|var [|{| isWriteAccess: true |}remoteglobalVar|]: number = 2;|>
@@ -7379,13 +3220,9 @@
 // 		this.remoteclsVar++;
 // 		remotefooCls.remoteclsSVar++;
 // 		this.remoteclsParam++;
-// 		remotemodTest.remotemodVar++;
-// 	}
-// }
-// 
-// function remotefoo(remotex: number) {
-// 	//Declare
-// 	var remotefnVar = 1;
+// --- (line: 14) skipped ---
+
+// --- (line: 20) skipped ---
 // 
 // 	//Increments
 // 	remotefooCls.remoteclsSVar++;
@@ -7393,12 +3230,9 @@
 // 	remotemodTest.remotemodVar++;
 // 	remotefnVar++;
 // 
-// 	//Return
-// 	return remotex++;
-// }
-// 
-// module remotemodTest {
-// 	//Declare
+// --- (line: 28) skipped ---
+
+// --- (line: 33) skipped ---
 // 	export var remotemodVar: number;
 // 
 // 	//Increments
@@ -7406,11 +3240,9 @@
 // 	remotefooCls.remoteclsSVar++;
 // 	remotemodVar++;
 // 
-// 	class remotetestCls {
-// 		static remoteboo = remotefoo;
-// 	}
-// 
-// 	function remotetestFn(){
+// --- (line: 41) skipped ---
+
+// --- (line: 45) skipped ---
 //         static remoteboo = remotefoo;
 // 
 // 		//Increments
@@ -7418,11 +3250,7 @@
 // 		remotefooCls.remoteclsSVar++;
 // 		remotemodVar++;
 //     }
-// 
-// 	module remotetestMod {
-// 		var remoteboo = remotefoo;
-// 	}
-// }
+// --- (line: 53) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
@@ -7430,47 +3258,9 @@
   // 
   // class remotefooCls {
   // 	//Declare
-  // 	remoteclsVar = 1;
-  // 	static remoteclsSVar = 1;
-  // 
-  // 	constructor(public remoteclsParam: number) {
-  // 		//Increments
-  // 		remoteglobalVar++;
-  // 		this.remoteclsVar++;
-  // 		remotefooCls.remoteclsSVar++;
-  // 		this.remoteclsParam++;
-  // 		remotemodTest.remotemodVar++;
-  // 	}
-  // }
-  // 
-  // function remotefoo(remotex: number) {
-  // 	//Declare
-  // 	var remotefnVar = 1;
-  // 
-  // 	//Increments
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remoteglobalVar++;
-  // 	remotemodTest.remotemodVar++;
-  // 	remotefnVar++;
-  // 
-  // 	//Return
-  // 	return remotex++;
-  // }
-  // 
-  // module remotemodTest {
-  // 	//Declare
-  // 	export var remotemodVar: number;
-  // 
-  // 	//Increments
-  // 	remoteglobalVar++;
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remotemodVar++;
-  // 
-  // 	class remotetestCls {
-  // 		static remoteboo = remotefoo;
-  // 	}
-  // 
-  // 	function remotetestFn(){
+  // --- (line: 5) skipped ---
+
+  // --- (line: 45) skipped ---
   //         static remoteboo = remotefoo;
   // 
   // 		//Increments
@@ -7478,11 +3268,7 @@
   // 		remotefooCls.remoteclsSVar++;
   // 		remotemodVar++;
   //     }
-  // 
-  // 	module remotetestMod {
-  // 		var remoteboo = remotefoo;
-  // 	}
-  // }
+  // --- (line: 53) skipped ---
 
   // === Details ===
   [
@@ -7524,88 +3310,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/remoteGetReferences_1.ts ===
-// // Comment Refence Test: globalVar
-// var globalVar: number = 2;
-// 
-// class fooCls {
-//     static clsSVar = 1;
-//     //Declare
-//     clsVar = 1;
-// 
-//     constructor (public clsParam: number) {
-//         //Increments
-//         globalVar++;
-//         this.clsVar++;
-//         fooCls.clsSVar++;
-//         this.clsParam++;
-//         modTest.modVar++;
-//     }
-// }
-// 
-// function foo(x: number) {
-//     //Declare
-//     var fnVar = 1;
-// 
-//     //Increments
-//     fooCls.clsSVar++;
-//     globalVar++;
-//     modTest.modVar++;
-//     fnVar++;
-// 
-//     //Return
-//     return x++;
-// }
-// 
-// module modTest {
-//     //Declare
-//     export var modVar:number;
-// 
-//     //Increments
-//     globalVar++;
-//     fooCls.clsSVar++;
-//     modVar++;
-// 
-//     class testCls {
-//         static boo = foo;
-//     }
-// 
-//     function testFn(){
-//         static boo = foo;
-// 
-//         //Increments
-//         globalVar++;
-//         fooCls.clsSVar++;
-//         modVar++;
-//     }
-// 
-//     module testMod {
-//         var boo = foo;
-//     }
-// }
-// 
-// //Type test
-// var clsTest: fooCls;
-// 
-// //Arguments
-// clsTest = new fooCls(globalVar);
-// foo(globalVar);
-// 
-// //Increments
-// fooCls.clsSVar++;
-// modTest.modVar++;
-// globalVar = globalVar + globalVar;
-// 
-// //ETC - Other cases
-// globalVar = 3;
-// foo = foo + 1;
-// err = err++;
-// 
-// //Shadowed fn Parameter
-// function shdw(globalVar: number) {
-//     //Increments
-//     globalVar++;
-//     return globalVar;
-// }
+// --- (line: 82) skipped ---
 // 
 // //Remotes
 // //Type test
@@ -7620,26 +3325,7 @@
 // remotemodTest.remotemodVar++;
 // remoteglobalVar = remoteglobalVar + remoteglobalVar;
 // 
-// //ETC - Other cases
-// remoteglobalVar = 3;
-// 
-// //Find References misses method param
-// var
-// 
-// 
-// 
-//  array = ["f", "o", "o"];
-// 
-// array.forEach(
-// 
-// 
-// function(str) {
-// 
-// 
-// 
-//    return str + " ";
-// 
-// });
+// --- (line: 97) skipped ---
 
 // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
 // var remoteglobalVar: number = 2;
@@ -7668,14 +3354,9 @@
 // 	remoteglobalVar++;
 // 	remotemodTest.remotemodVar++;
 // 	remotefnVar++;
-// 
-// 	//Return
-// 	return remotex++;
-// }
-// 
-// module remotemodTest {
-// 	//Declare
-// 	export var remotemodVar: number;
+// --- (line: 27) skipped ---
+
+// --- (line: 34) skipped ---
 // 
 // 	//Increments
 // 	remoteglobalVar++;
@@ -7683,11 +3364,9 @@
 // 	remotemodVar++;
 // 
 // 	class remotetestCls {
-// 		static remoteboo = remotefoo;
-// 	}
-// 
-// 	function remotetestFn(){
-//         static remoteboo = remotefoo;
+// --- (line: 42) skipped ---
+
+// --- (line: 46) skipped ---
 // 
 // 		//Increments
 // 		remoteglobalVar++;
@@ -7695,10 +3374,7 @@
 // 		remotemodVar++;
 //     }
 // 
-// 	module remotetestMod {
-// 		var remoteboo = remotefoo;
-// 	}
-// }
+// --- (line: 54) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
@@ -7721,33 +3397,9 @@
   // 
   // function remotefoo(remotex: number) {
   // 	//Declare
-  // 	var remotefnVar = 1;
-  // 
-  // 	//Increments
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remoteglobalVar++;
-  // 	remotemodTest.remotemodVar++;
-  // 	remotefnVar++;
-  // 
-  // 	//Return
-  // 	return remotex++;
-  // }
-  // 
-  // module remotemodTest {
-  // 	//Declare
-  // 	export var remotemodVar: number;
-  // 
-  // 	//Increments
-  // 	remoteglobalVar++;
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remotemodVar++;
-  // 
-  // 	class remotetestCls {
-  // 		static remoteboo = remotefoo;
-  // 	}
-  // 
-  // 	function remotetestFn(){
-  //         static remoteboo = remotefoo;
+  // --- (line: 20) skipped ---
+
+  // --- (line: 46) skipped ---
   // 
   // 		//Increments
   // 		remoteglobalVar++;
@@ -7755,10 +3407,7 @@
   // 		remotemodVar++;
   //     }
   // 
-  // 	module remotetestMod {
-  // 		var remoteboo = remotefoo;
-  // 	}
-  // }
+  // --- (line: 54) skipped ---
 
   // === Details ===
   [
@@ -7788,95 +3437,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/remoteGetReferences_1.ts ===
-// // Comment Refence Test: globalVar
-// var globalVar: number = 2;
-// 
-// class fooCls {
-//     static clsSVar = 1;
-//     //Declare
-//     clsVar = 1;
-// 
-//     constructor (public clsParam: number) {
-//         //Increments
-//         globalVar++;
-//         this.clsVar++;
-//         fooCls.clsSVar++;
-//         this.clsParam++;
-//         modTest.modVar++;
-//     }
-// }
-// 
-// function foo(x: number) {
-//     //Declare
-//     var fnVar = 1;
-// 
-//     //Increments
-//     fooCls.clsSVar++;
-//     globalVar++;
-//     modTest.modVar++;
-//     fnVar++;
-// 
-//     //Return
-//     return x++;
-// }
-// 
-// module modTest {
-//     //Declare
-//     export var modVar:number;
-// 
-//     //Increments
-//     globalVar++;
-//     fooCls.clsSVar++;
-//     modVar++;
-// 
-//     class testCls {
-//         static boo = foo;
-//     }
-// 
-//     function testFn(){
-//         static boo = foo;
-// 
-//         //Increments
-//         globalVar++;
-//         fooCls.clsSVar++;
-//         modVar++;
-//     }
-// 
-//     module testMod {
-//         var boo = foo;
-//     }
-// }
-// 
-// //Type test
-// var clsTest: fooCls;
-// 
-// //Arguments
-// clsTest = new fooCls(globalVar);
-// foo(globalVar);
-// 
-// //Increments
-// fooCls.clsSVar++;
-// modTest.modVar++;
-// globalVar = globalVar + globalVar;
-// 
-// //ETC - Other cases
-// globalVar = 3;
-// foo = foo + 1;
-// err = err++;
-// 
-// //Shadowed fn Parameter
-// function shdw(globalVar: number) {
-//     //Increments
-//     globalVar++;
-//     return globalVar;
-// }
-// 
-// //Remotes
-// //Type test
-// var remoteclsTest: remotefooCls;
-// 
-// //Arguments
-// remoteclsTest = new remotefooCls(remoteglobalVar);
+// --- (line: 89) skipped ---
 // remotefoo(remoteglobalVar);
 // 
 // //Increments
@@ -7884,26 +3445,7 @@
 // remotemodTest.remotemodVar++;
 // remoteglobalVar = remoteglobalVar + remoteglobalVar;
 // 
-// //ETC - Other cases
-// remoteglobalVar = 3;
-// 
-// //Find References misses method param
-// var
-// 
-// 
-// 
-//  array = ["f", "o", "o"];
-// 
-// array.forEach(
-// 
-// 
-// function(str) {
-// 
-// 
-// 
-//    return str + " ";
-// 
-// });
+// --- (line: 97) skipped ---
 
 // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
 // var remoteglobalVar: number = 2;
@@ -7921,10 +3463,9 @@
 // 		this.remoteclsParam++;
 // 		remotemodTest.remotemodVar++;
 // 	}
-// }
-// 
-// function remotefoo(remotex: number) {
-// 	//Declare
+// --- (line: 16) skipped ---
+
+// --- (line: 19) skipped ---
 // 	var remotefnVar = 1;
 // 
 // 	//Increments
@@ -7932,14 +3473,9 @@
 // 	remoteglobalVar++;
 // 	remotemodTest.remotemodVar++;
 // 	remotefnVar++;
-// 
-// 	//Return
-// 	return remotex++;
-// }
-// 
-// module remotemodTest {
-// 	//Declare
-// 	export var remotemodVar: number;
+// --- (line: 27) skipped ---
+
+// --- (line: 34) skipped ---
 // 
 // 	//Increments
 // 	remoteglobalVar++;
@@ -7947,11 +3483,9 @@
 // 	remotemodVar++;
 // 
 // 	class remotetestCls {
-// 		static remoteboo = remotefoo;
-// 	}
-// 
-// 	function remotetestFn(){
-//         static remoteboo = remotefoo;
+// --- (line: 42) skipped ---
+
+// --- (line: 46) skipped ---
 // 
 // 		//Increments
 // 		remoteglobalVar++;
@@ -7959,10 +3493,7 @@
 // 		remotemodVar++;
 //     }
 // 
-// 	module remotetestMod {
-// 		var remoteboo = remotefoo;
-// 	}
-// }
+// --- (line: 54) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/remoteGetReferences_2.ts ===
@@ -7975,43 +3506,9 @@
   // 
   // 	constructor(public remoteclsParam: number) {
   // 		//Increments
-  // 		remoteglobalVar++;
-  // 		this.remoteclsVar++;
-  // 		remotefooCls.remoteclsSVar++;
-  // 		this.remoteclsParam++;
-  // 		remotemodTest.remotemodVar++;
-  // 	}
-  // }
-  // 
-  // function remotefoo(remotex: number) {
-  // 	//Declare
-  // 	var remotefnVar = 1;
-  // 
-  // 	//Increments
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remoteglobalVar++;
-  // 	remotemodTest.remotemodVar++;
-  // 	remotefnVar++;
-  // 
-  // 	//Return
-  // 	return remotex++;
-  // }
-  // 
-  // module remotemodTest {
-  // 	//Declare
-  // 	export var remotemodVar: number;
-  // 
-  // 	//Increments
-  // 	remoteglobalVar++;
-  // 	remotefooCls.remoteclsSVar++;
-  // 	remotemodVar++;
-  // 
-  // 	class remotetestCls {
-  // 		static remoteboo = remotefoo;
-  // 	}
-  // 
-  // 	function remotetestFn(){
-  //         static remoteboo = remotefoo;
+  // --- (line: 10) skipped ---
+
+  // --- (line: 46) skipped ---
   // 
   // 		//Increments
   // 		remoteglobalVar++;
@@ -8019,10 +3516,7 @@
   // 		remotemodVar++;
   //     }
   // 
-  // 	module remotetestMod {
-  // 		var remoteboo = remotefoo;
-  // 	}
-  // }
+  // --- (line: 54) skipped ---
 
   // === Details ===
   [

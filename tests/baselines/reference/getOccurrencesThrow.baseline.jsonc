@@ -1,10 +1,6 @@
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesThrow.ts ===
-// function f(a: number) {
-//     try {
-//         throw "Hello";
-// 
-//         try {
+// --- (line: 5) skipped ---
 //             throw 10;
 //         }
 //         catch (x) {
@@ -25,11 +21,9 @@
 //             return;
 //             return;
 //             return;
-// 
-//             if (false) {
-//                 return true;
-//             }
-//             throw "Hello!";
+// --- (line: 26) skipped ---
+
+// --- (line: 30) skipped ---
 //         })() || true;
 //     }
 // 
@@ -46,11 +40,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesThrow.ts ===
-// function f(a: number) {
-//     try {
-//         throw "Hello";
-// 
-//         try {
+// --- (line: 5) skipped ---
 //             throw 10;
 //         }
 //         catch (x) {
@@ -71,11 +61,9 @@
 //             return;
 //             return;
 //             return;
-// 
-//             if (false) {
-//                 return true;
-//             }
-//             throw "Hello!";
+// --- (line: 26) skipped ---
+
+// --- (line: 30) skipped ---
 //         })() || true;
 //     }
 // 
@@ -92,11 +80,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesThrow.ts ===
-// function f(a: number) {
-//     try {
-//         throw "Hello";
-// 
-//         try {
+// --- (line: 5) skipped ---
 //             throw 10;
 //         }
 //         catch (x) {
@@ -117,11 +101,9 @@
 //             return;
 //             return;
 //             return;
-// 
-//             if (false) {
-//                 return true;
-//             }
-//             throw "Hello!";
+// --- (line: 26) skipped ---
+
+// --- (line: 30) skipped ---
 //         })() || true;
 //     }
 // 
@@ -138,11 +120,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesThrow.ts ===
-// function f(a: number) {
-//     try {
-//         throw "Hello";
-// 
-//         try {
+// --- (line: 5) skipped ---
 //             throw 10;
 //         }
 //         catch (x) {
@@ -163,11 +141,9 @@
 //             return;
 //             return;
 //             return;
-// 
-//             if (false) {
-//                 return true;
-//             }
-//             throw "Hello!";
+// --- (line: 26) skipped ---
+
+// --- (line: 30) skipped ---
 //         })() || true;
 //     }
 // 
@@ -184,11 +160,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesThrow.ts ===
-// function f(a: number) {
-//     try {
-//         throw "Hello";
-// 
-//         try {
+// --- (line: 5) skipped ---
 //             throw 10;
 //         }
 //         catch (x) {
@@ -209,11 +181,9 @@
 //             return;
 //             return;
 //             return;
-// 
-//             if (false) {
-//                 return true;
-//             }
-//             throw "Hello!";
+// --- (line: 26) skipped ---
+
+// --- (line: 30) skipped ---
 //         })() || true;
 //     }
 // 
@@ -230,11 +200,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesThrow.ts ===
-// function f(a: number) {
-//     try {
-//         throw "Hello";
-// 
-//         try {
+// --- (line: 5) skipped ---
 //             throw 10;
 //         }
 //         catch (x) {
@@ -255,11 +221,9 @@
 //             return;
 //             return;
 //             return;
-// 
-//             if (false) {
-//                 return true;
-//             }
-//             throw "Hello!";
+// --- (line: 26) skipped ---
+
+// --- (line: 30) skipped ---
 //         })() || true;
 //     }
 // 
@@ -276,11 +240,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesThrow.ts ===
-// function f(a: number) {
-//     try {
-//         throw "Hello";
-// 
-//         try {
+// --- (line: 5) skipped ---
 //             throw 10;
 //         }
 //         catch (x) {
@@ -301,11 +261,9 @@
 //             return;
 //             return;
 //             return;
-// 
-//             if (false) {
-//                 return true;
-//             }
-//             throw "Hello!";
+// --- (line: 26) skipped ---
+
+// --- (line: 30) skipped ---
 //         })() || true;
 //     }
 // 
@@ -322,11 +280,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesThrow.ts ===
-// function f(a: number) {
-//     try {
-//         throw "Hello";
-// 
-//         try {
+// --- (line: 5) skipped ---
 //             throw 10;
 //         }
 //         catch (x) {
@@ -347,11 +301,9 @@
 //             return;
 //             return;
 //             return;
-// 
-//             if (false) {
-//                 return true;
-//             }
-//             throw "Hello!";
+// --- (line: 26) skipped ---
+
+// --- (line: 30) skipped ---
 //         })() || true;
 //     }
 // 

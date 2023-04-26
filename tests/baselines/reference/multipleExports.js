@@ -18,8 +18,8 @@ exports.M = void 0;
 var M;
 (function (M) {
     M.v = 0;
-})(M = exports.M || (exports.M = {}));
+})(M || (exports.M = M = {}));
 var x = 0;
 (function (M) {
     M.v;
-})(M = exports.M || (exports.M = {}));
+})(M || (exports.M = M = {}));

@@ -25,12 +25,12 @@ var a;
         weekend[weekend["Saturday"] = 1] = "Saturday";
         weekend[weekend["Sunday"] = 2] = "Sunday";
     })(weekend = a.weekend || (a.weekend = {}));
-})(a = exports.a || (exports.a = {}));
+})(a || (exports.a = a = {}));
 var c;
 (function (c) {
     c.b = a.weekend;
     c.bVal = c.b.Sunday;
-})(c = exports.c || (exports.c = {}));
+})(c || (exports.c = c = {}));
 
 
 //// [internalAliasEnumInsideLocalModuleWithExport.d.ts]

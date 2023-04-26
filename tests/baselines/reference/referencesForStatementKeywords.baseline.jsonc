@@ -5,25 +5,7 @@
 // namespace N { }
 // import N2 = N;
 // 
-// // import ... from ...
-// import type B from "./b";
-// import type * as C from "./c";
-// import type { D } from "./d";
-// import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// import "./f";
-// 
-// // export ... from ...
-// export type * from "./g";
-// export type * as H from "./h";
-// export type { I } from "./i";
-// export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
+// --- (line: 6) skipped ---
 
   // === Definitions ===
   // === /main.ts ===
@@ -32,25 +14,7 @@
   // namespace N { }
   // import N2 = N;
   // 
-  // // import ... from ...
-  // import type B from "./b";
-  // import type * as C from "./c";
-  // import type { D } from "./d";
-  // import type { e1, e2 as e3 } from "./e";
-  // 
-  // // import "module"
-  // import "./f";
-  // 
-  // // export ... from ...
-  // export type * from "./g";
-  // export type * as H from "./h";
-  // export type { I } from "./i";
-  // export type { j1, j2 as j3 } from "./j";
-  // type Z1 = 1;
-  // export type { Z1 };
-  // type Z2 = 2;
-  // type Z3 = 3;
-  // export type { z2, z3 as z4 };
+  // --- (line: 6) skipped ---
 
   // === Details ===
   [
@@ -113,25 +77,7 @@
 // namespace N { }
 // import N2 = N;
 // 
-// // import ... from ...
-// import type B from "./b";
-// import type * as C from "./c";
-// import type { D } from "./d";
-// import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// import "./f";
-// 
-// // export ... from ...
-// export type * from "./g";
-// export type * as H from "./h";
-// export type { I } from "./i";
-// export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
+// --- (line: 6) skipped ---
 
   // === Definitions ===
   // === /a.ts ===
@@ -172,23 +118,7 @@
 // 
 // // import ... from ...
 // import type B from "./b";
-// import type * as C from "./c";
-// import type { D } from "./d";
-// import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// import "./f";
-// 
-// // export ... from ...
-// export type * from "./g";
-// export type * as H from "./h";
-// export type { I } from "./i";
-// export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
+// --- (line: 8) skipped ---
 
   // === Definitions ===
   // === /main.ts ===
@@ -199,23 +129,7 @@
   // 
   // // import ... from ...
   // import type B from "./b";
-  // import type * as C from "./c";
-  // import type { D } from "./d";
-  // import type { e1, e2 as e3 } from "./e";
-  // 
-  // // import "module"
-  // import "./f";
-  // 
-  // // export ... from ...
-  // export type * from "./g";
-  // export type * as H from "./h";
-  // export type { I } from "./i";
-  // export type { j1, j2 as j3 } from "./j";
-  // type Z1 = 1;
-  // export type { Z1 };
-  // type Z2 = 2;
-  // type Z3 = 3;
-  // export type { z2, z3 as z4 };
+  // --- (line: 8) skipped ---
 
   // === Details ===
   [
@@ -293,9 +207,7 @@
 
 // === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
+// --- (line: 3) skipped ---
 // import N2 = N;
 // 
 // // import ... from ...
@@ -303,29 +215,14 @@
 // import type * as C from "./c";
 // import type { D } from "./d";
 // import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// import "./f";
-// 
-// // export ... from ...
-// export type * from "./g";
-// export type * as H from "./h";
-// export type { I } from "./i";
-// export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
+// --- (line: 11) skipped ---
 
 // === /b.ts ===
 // <|export default class [|{| defId: 1, isWriteAccess: true |}B|] {}|>
 
   // === Definitions ===
   // === /main.ts ===
-  // // import ... = ...
-  // import A = require("./a");
-  // namespace N { }
+  // --- (line: 3) skipped ---
   // import N2 = N;
   // 
   // // import ... from ...
@@ -333,20 +230,7 @@
   // import type * as C from "./c";
   // import type { D } from "./d";
   // import type { e1, e2 as e3 } from "./e";
-  // 
-  // // import "module"
-  // import "./f";
-  // 
-  // // export ... from ...
-  // export type * from "./g";
-  // export type * as H from "./h";
-  // export type { I } from "./i";
-  // export type { j1, j2 as j3 } from "./j";
-  // type Z1 = 1;
-  // export type { Z1 };
-  // type Z2 = 2;
-  // type Z3 = 3;
-  // export type { z2, z3 as z4 };
+  // --- (line: 11) skipped ---
 
   // === /b.ts ===
   // <|export default class [|{| defId: 1 |}B|] {}|>
@@ -433,9 +317,7 @@
 
 // === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
+// --- (line: 3) skipped ---
 // import N2 = N;
 // 
 // // import ... from ...
@@ -443,29 +325,14 @@
 // import type * as C from "./c";
 // import type { D } from "./d";
 // import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// import "./f";
-// 
-// // export ... from ...
-// export type * from "./g";
-// export type * as H from "./h";
-// export type { I } from "./i";
-// export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
+// --- (line: 11) skipped ---
 
 // === /b.ts ===
 // <|export default class [|{| defId: 1, isWriteAccess: true |}B|] {}|>
 
   // === Definitions ===
   // === /main.ts ===
-  // // import ... = ...
-  // import A = require("./a");
-  // namespace N { }
+  // --- (line: 3) skipped ---
   // import N2 = N;
   // 
   // // import ... from ...
@@ -473,20 +340,7 @@
   // import type * as C from "./c";
   // import type { D } from "./d";
   // import type { e1, e2 as e3 } from "./e";
-  // 
-  // // import "module"
-  // import "./f";
-  // 
-  // // export ... from ...
-  // export type * from "./g";
-  // export type * as H from "./h";
-  // export type { I } from "./i";
-  // export type { j1, j2 as j3 } from "./j";
-  // type Z1 = 1;
-  // export type { Z1 };
-  // type Z2 = 2;
-  // type Z3 = 3;
-  // export type { z2, z3 as z4 };
+  // --- (line: 11) skipped ---
 
   // === /b.ts ===
   // <|export default class [|{| defId: 1 |}B|] {}|>
@@ -573,9 +427,7 @@
 
 // === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
+// --- (line: 3) skipped ---
 // import N2 = N;
 // 
 // // import ... from ...
@@ -583,20 +435,7 @@
 // import type * as C from "./c";
 // import type { D } from "./d";
 // import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// import "./f";
-// 
-// // export ... from ...
-// export type * from "./g";
-// export type * as H from "./h";
-// export type { I } from "./i";
-// export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
+// --- (line: 11) skipped ---
 
   // === Definitions ===
   // === /b.ts ===
@@ -630,10 +469,7 @@
 
 // === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
+// --- (line: 4) skipped ---
 // 
 // // import ... from ...
 // import type B from "./b";
@@ -641,26 +477,11 @@
 // import type { D } from "./d";
 // import type { e1, e2 as e3 } from "./e";
 // 
-// // import "module"
-// import "./f";
-// 
-// // export ... from ...
-// export type * from "./g";
-// export type * as H from "./h";
-// export type { I } from "./i";
-// export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
+// --- (line: 12) skipped ---
 
   // === Definitions ===
   // === /main.ts ===
-  // // import ... = ...
-  // import A = require("./a");
-  // namespace N { }
-  // import N2 = N;
+  // --- (line: 4) skipped ---
   // 
   // // import ... from ...
   // import type B from "./b";
@@ -668,19 +489,7 @@
   // import type { D } from "./d";
   // import type { e1, e2 as e3 } from "./e";
   // 
-  // // import "module"
-  // import "./f";
-  // 
-  // // export ... from ...
-  // export type * from "./g";
-  // export type * as H from "./h";
-  // export type { I } from "./i";
-  // export type { j1, j2 as j3 } from "./j";
-  // type Z1 = 1;
-  // export type { Z1 };
-  // type Z2 = 2;
-  // type Z3 = 3;
-  // export type { z2, z3 as z4 };
+  // --- (line: 12) skipped ---
 
   // === Details ===
   [
@@ -710,10 +519,7 @@
 
 // === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
+// --- (line: 4) skipped ---
 // 
 // // import ... from ...
 // import type B from "./b";
@@ -721,26 +527,11 @@
 // import type { D } from "./d";
 // import type { e1, e2 as e3 } from "./e";
 // 
-// // import "module"
-// import "./f";
-// 
-// // export ... from ...
-// export type * from "./g";
-// export type * as H from "./h";
-// export type { I } from "./i";
-// export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
+// --- (line: 12) skipped ---
 
   // === Definitions ===
   // === /main.ts ===
-  // // import ... = ...
-  // import A = require("./a");
-  // namespace N { }
-  // import N2 = N;
+  // --- (line: 4) skipped ---
   // 
   // // import ... from ...
   // import type B from "./b";
@@ -748,19 +539,7 @@
   // import type { D } from "./d";
   // import type { e1, e2 as e3 } from "./e";
   // 
-  // // import "module"
-  // import "./f";
-  // 
-  // // export ... from ...
-  // export type * from "./g";
-  // export type * as H from "./h";
-  // export type { I } from "./i";
-  // export type { j1, j2 as j3 } from "./j";
-  // type Z1 = 1;
-  // export type { Z1 };
-  // type Z2 = 2;
-  // type Z3 = 3;
-  // export type { z2, z3 as z4 };
+  // --- (line: 12) skipped ---
 
   // === Details ===
   [
@@ -790,10 +569,7 @@
 
 // === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
+// --- (line: 4) skipped ---
 // 
 // // import ... from ...
 // import type B from "./b";
@@ -801,26 +577,11 @@
 // import type { D } from "./d";
 // import type { e1, e2 as e3 } from "./e";
 // 
-// // import "module"
-// import "./f";
-// 
-// // export ... from ...
-// export type * from "./g";
-// export type * as H from "./h";
-// export type { I } from "./i";
-// export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
+// --- (line: 12) skipped ---
 
   // === Definitions ===
   // === /main.ts ===
-  // // import ... = ...
-  // import A = require("./a");
-  // namespace N { }
-  // import N2 = N;
+  // --- (line: 4) skipped ---
   // 
   // // import ... from ...
   // import type B from "./b";
@@ -828,19 +589,7 @@
   // import type { D } from "./d";
   // import type { e1, e2 as e3 } from "./e";
   // 
-  // // import "module"
-  // import "./f";
-  // 
-  // // export ... from ...
-  // export type * from "./g";
-  // export type * as H from "./h";
-  // export type { I } from "./i";
-  // export type { j1, j2 as j3 } from "./j";
-  // type Z1 = 1;
-  // export type { Z1 };
-  // type Z2 = 2;
-  // type Z3 = 3;
-  // export type { z2, z3 as z4 };
+  // --- (line: 12) skipped ---
 
   // === Details ===
   [
@@ -870,10 +619,7 @@
 
 // === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
+// --- (line: 4) skipped ---
 // 
 // // import ... from ...
 // import type B from "./b";
@@ -881,19 +627,7 @@
 // import type { D } from "./d";
 // import type { e1, e2 as e3 } from "./e";
 // 
-// // import "module"
-// import "./f";
-// 
-// // export ... from ...
-// export type * from "./g";
-// export type * as H from "./h";
-// export type { I } from "./i";
-// export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
+// --- (line: 12) skipped ---
 
   // === Definitions ===
   // === /c.ts ===
@@ -927,11 +661,7 @@
 
 // === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
+// --- (line: 5) skipped ---
 // // import ... from ...
 // import type B from "./b";
 // import type * as C from "./c";
@@ -939,29 +669,14 @@
 // import type { e1, e2 as e3 } from "./e";
 // 
 // // import "module"
-// import "./f";
-// 
-// // export ... from ...
-// export type * from "./g";
-// export type * as H from "./h";
-// export type { I } from "./i";
-// export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
+// --- (line: 13) skipped ---
 
 // === /d.ts ===
 // <|export class [|{| defId: 1, isWriteAccess: true |}D|] {}|>
 
   // === Definitions ===
   // === /main.ts ===
-  // // import ... = ...
-  // import A = require("./a");
-  // namespace N { }
-  // import N2 = N;
-  // 
+  // --- (line: 5) skipped ---
   // // import ... from ...
   // import type B from "./b";
   // import type * as C from "./c";
@@ -969,18 +684,7 @@
   // import type { e1, e2 as e3 } from "./e";
   // 
   // // import "module"
-  // import "./f";
-  // 
-  // // export ... from ...
-  // export type * from "./g";
-  // export type * as H from "./h";
-  // export type { I } from "./i";
-  // export type { j1, j2 as j3 } from "./j";
-  // type Z1 = 1;
-  // export type { Z1 };
-  // type Z2 = 2;
-  // type Z3 = 3;
-  // export type { z2, z3 as z4 };
+  // --- (line: 13) skipped ---
 
   // === /d.ts ===
   // <|export class [|{| defId: 1 |}D|] {}|>
@@ -1067,11 +771,7 @@
 
 // === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
+// --- (line: 5) skipped ---
 // // import ... from ...
 // import type B from "./b";
 // import type * as C from "./c";
@@ -1079,29 +779,14 @@
 // import type { e1, e2 as e3 } from "./e";
 // 
 // // import "module"
-// import "./f";
-// 
-// // export ... from ...
-// export type * from "./g";
-// export type * as H from "./h";
-// export type { I } from "./i";
-// export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
+// --- (line: 13) skipped ---
 
 // === /d.ts ===
 // <|export class [|{| defId: 1, isWriteAccess: true |}D|] {}|>
 
   // === Definitions ===
   // === /main.ts ===
-  // // import ... = ...
-  // import A = require("./a");
-  // namespace N { }
-  // import N2 = N;
-  // 
+  // --- (line: 5) skipped ---
   // // import ... from ...
   // import type B from "./b";
   // import type * as C from "./c";
@@ -1109,18 +794,7 @@
   // import type { e1, e2 as e3 } from "./e";
   // 
   // // import "module"
-  // import "./f";
-  // 
-  // // export ... from ...
-  // export type * from "./g";
-  // export type * as H from "./h";
-  // export type { I } from "./i";
-  // export type { j1, j2 as j3 } from "./j";
-  // type Z1 = 1;
-  // export type { Z1 };
-  // type Z2 = 2;
-  // type Z3 = 3;
-  // export type { z2, z3 as z4 };
+  // --- (line: 13) skipped ---
 
   // === /d.ts ===
   // <|export class [|{| defId: 1 |}D|] {}|>
@@ -1207,11 +881,7 @@
 
 // === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
+// --- (line: 5) skipped ---
 // // import ... from ...
 // import type B from "./b";
 // import type * as C from "./c";
@@ -1219,18 +889,7 @@
 // import type { e1, e2 as e3 } from "./e";
 // 
 // // import "module"
-// import "./f";
-// 
-// // export ... from ...
-// export type * from "./g";
-// export type * as H from "./h";
-// export type { I } from "./i";
-// export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
+// --- (line: 13) skipped ---
 
   // === Definitions ===
   // === /d.ts ===
@@ -1264,12 +923,7 @@
 
 // === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
-// // import ... from ...
+// --- (line: 6) skipped ---
 // import type B from "./b";
 // import type * as C from "./c";
 // import type { D } from "./d";
@@ -1277,28 +931,13 @@
 // 
 // // import "module"
 // import "./f";
-// 
-// // export ... from ...
-// export type * from "./g";
-// export type * as H from "./h";
-// export type { I } from "./i";
-// export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
+// --- (line: 14) skipped ---
 
 
 
 // === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
-// // import ... from ...
+// --- (line: 6) skipped ---
 // import type B from "./b";
 // import type * as C from "./c";
 // import type { D } from "./d";
@@ -1306,28 +945,13 @@
 // 
 // // import "module"
 // import "./f";
-// 
-// // export ... from ...
-// export type * from "./g";
-// export type * as H from "./h";
-// export type { I } from "./i";
-// export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
+// --- (line: 14) skipped ---
 
 
 
 // === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
-// // import ... from ...
+// --- (line: 6) skipped ---
 // import type B from "./b";
 // import type * as C from "./c";
 // import type { D } from "./d";
@@ -1335,17 +959,7 @@
 // 
 // // import "module"
 // import "./f";
-// 
-// // export ... from ...
-// export type * from "./g";
-// export type * as H from "./h";
-// export type { I } from "./i";
-// export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
+// --- (line: 14) skipped ---
 
   // === Definitions ===
   // === /e.ts ===
@@ -1380,12 +994,7 @@
 
 // === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
-// // import ... from ...
+// --- (line: 6) skipped ---
 // import type B from "./b";
 // import type * as C from "./c";
 // import type { D } from "./d";
@@ -1393,26 +1002,11 @@
 // 
 // // import "module"
 // import "./f";
-// 
-// // export ... from ...
-// export type * from "./g";
-// export type * as H from "./h";
-// export type { I } from "./i";
-// export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
+// --- (line: 14) skipped ---
 
   // === Definitions ===
   // === /main.ts ===
-  // // import ... = ...
-  // import A = require("./a");
-  // namespace N { }
-  // import N2 = N;
-  // 
-  // // import ... from ...
+  // --- (line: 6) skipped ---
   // import type B from "./b";
   // import type * as C from "./c";
   // import type { D } from "./d";
@@ -1420,17 +1014,7 @@
   // 
   // // import "module"
   // import "./f";
-  // 
-  // // export ... from ...
-  // export type * from "./g";
-  // export type * as H from "./h";
-  // export type { I } from "./i";
-  // export type { j1, j2 as j3 } from "./j";
-  // type Z1 = 1;
-  // export type { Z1 };
-  // type Z2 = 2;
-  // type Z3 = 3;
-  // export type { z2, z3 as z4 };
+  // --- (line: 14) skipped ---
 
   // === Details ===
   [
@@ -1504,15 +1088,7 @@
 
 // === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
-// // import ... from ...
-// import type B from "./b";
-// import type * as C from "./c";
-// import type { D } from "./d";
+// --- (line: 9) skipped ---
 // import type { e1, e2 as e3 } from "./e";
 // 
 // // import "module"
@@ -1520,14 +1096,7 @@
 // 
 // // export ... from ...
 // export type * from "./g";
-// export type * as H from "./h";
-// export type { I } from "./i";
-// export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
+// --- (line: 17) skipped ---
 
   // === Definitions ===
   // === /f.ts ===
@@ -1561,18 +1130,7 @@
 
 // === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
-// // import ... from ...
-// import type B from "./b";
-// import type * as C from "./c";
-// import type { D } from "./d";
-// import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
+// --- (line: 12) skipped ---
 // import "./f";
 // 
 // // export ... from ...
@@ -1580,11 +1138,7 @@
 // export type * as H from "./h";
 // export type { I } from "./i";
 // export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
+// --- (line: 20) skipped ---
 
   // === Definitions ===
   // === /g.ts ===
@@ -1618,18 +1172,7 @@
 
 // === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
-// // import ... from ...
-// import type B from "./b";
-// import type * as C from "./c";
-// import type { D } from "./d";
-// import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
+// --- (line: 12) skipped ---
 // import "./f";
 // 
 // // export ... from ...
@@ -1637,11 +1180,7 @@
 // export type * as H from "./h";
 // export type { I } from "./i";
 // export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
+// --- (line: 20) skipped ---
 
   // === Definitions ===
   // === /g.ts ===
@@ -1675,18 +1214,7 @@
 
 // === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
-// // import ... from ...
-// import type B from "./b";
-// import type * as C from "./c";
-// import type { D } from "./d";
-// import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
+// --- (line: 12) skipped ---
 // import "./f";
 // 
 // // export ... from ...
@@ -1694,11 +1222,7 @@
 // export type * as H from "./h";
 // export type { I } from "./i";
 // export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
+// --- (line: 20) skipped ---
 
   // === Definitions ===
   // === /g.ts ===
@@ -1732,19 +1256,7 @@
 
 // === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
-// // import ... from ...
-// import type B from "./b";
-// import type * as C from "./c";
-// import type { D } from "./d";
-// import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// import "./f";
+// --- (line: 13) skipped ---
 // 
 // // export ... from ...
 // export type * from "./g";
@@ -1752,26 +1264,11 @@
 // export type { I } from "./i";
 // export type { j1, j2 as j3 } from "./j";
 // type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
+// --- (line: 21) skipped ---
 
   // === Definitions ===
   // === /main.ts ===
-  // // import ... = ...
-  // import A = require("./a");
-  // namespace N { }
-  // import N2 = N;
-  // 
-  // // import ... from ...
-  // import type B from "./b";
-  // import type * as C from "./c";
-  // import type { D } from "./d";
-  // import type { e1, e2 as e3 } from "./e";
-  // 
-  // // import "module"
-  // import "./f";
+  // --- (line: 13) skipped ---
   // 
   // // export ... from ...
   // export type * from "./g";
@@ -1779,10 +1276,7 @@
   // export type { I } from "./i";
   // export type { j1, j2 as j3 } from "./j";
   // type Z1 = 1;
-  // export type { Z1 };
-  // type Z2 = 2;
-  // type Z3 = 3;
-  // export type { z2, z3 as z4 };
+  // --- (line: 21) skipped ---
 
   // === Details ===
   [
@@ -1812,19 +1306,7 @@
 
 // === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
-// // import ... from ...
-// import type B from "./b";
-// import type * as C from "./c";
-// import type { D } from "./d";
-// import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// import "./f";
+// --- (line: 13) skipped ---
 // 
 // // export ... from ...
 // export type * from "./g";
@@ -1832,26 +1314,11 @@
 // export type { I } from "./i";
 // export type { j1, j2 as j3 } from "./j";
 // type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
+// --- (line: 21) skipped ---
 
   // === Definitions ===
   // === /main.ts ===
-  // // import ... = ...
-  // import A = require("./a");
-  // namespace N { }
-  // import N2 = N;
-  // 
-  // // import ... from ...
-  // import type B from "./b";
-  // import type * as C from "./c";
-  // import type { D } from "./d";
-  // import type { e1, e2 as e3 } from "./e";
-  // 
-  // // import "module"
-  // import "./f";
+  // --- (line: 13) skipped ---
   // 
   // // export ... from ...
   // export type * from "./g";
@@ -1859,10 +1326,7 @@
   // export type { I } from "./i";
   // export type { j1, j2 as j3 } from "./j";
   // type Z1 = 1;
-  // export type { Z1 };
-  // type Z2 = 2;
-  // type Z3 = 3;
-  // export type { z2, z3 as z4 };
+  // --- (line: 21) skipped ---
 
   // === Details ===
   [
@@ -1892,19 +1356,7 @@
 
 // === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
-// // import ... from ...
-// import type B from "./b";
-// import type * as C from "./c";
-// import type { D } from "./d";
-// import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// import "./f";
+// --- (line: 13) skipped ---
 // 
 // // export ... from ...
 // export type * from "./g";
@@ -1912,26 +1364,11 @@
 // export type { I } from "./i";
 // export type { j1, j2 as j3 } from "./j";
 // type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
+// --- (line: 21) skipped ---
 
   // === Definitions ===
   // === /main.ts ===
-  // // import ... = ...
-  // import A = require("./a");
-  // namespace N { }
-  // import N2 = N;
-  // 
-  // // import ... from ...
-  // import type B from "./b";
-  // import type * as C from "./c";
-  // import type { D } from "./d";
-  // import type { e1, e2 as e3 } from "./e";
-  // 
-  // // import "module"
-  // import "./f";
+  // --- (line: 13) skipped ---
   // 
   // // export ... from ...
   // export type * from "./g";
@@ -1939,10 +1376,7 @@
   // export type { I } from "./i";
   // export type { j1, j2 as j3 } from "./j";
   // type Z1 = 1;
-  // export type { Z1 };
-  // type Z2 = 2;
-  // type Z3 = 3;
-  // export type { z2, z3 as z4 };
+  // --- (line: 21) skipped ---
 
   // === Details ===
   [
@@ -1972,19 +1406,7 @@
 
 // === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
-// // import ... from ...
-// import type B from "./b";
-// import type * as C from "./c";
-// import type { D } from "./d";
-// import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// import "./f";
+// --- (line: 13) skipped ---
 // 
 // // export ... from ...
 // export type * from "./g";
@@ -1992,10 +1414,7 @@
 // export type { I } from "./i";
 // export type { j1, j2 as j3 } from "./j";
 // type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
+// --- (line: 21) skipped ---
 
   // === Definitions ===
   // === /h.ts ===
@@ -2029,20 +1448,7 @@
 
 // === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
-// // import ... from ...
-// import type B from "./b";
-// import type * as C from "./c";
-// import type { D } from "./d";
-// import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// import "./f";
-// 
+// --- (line: 14) skipped ---
 // // export ... from ...
 // export type * from "./g";
 // export type * as H from "./h";
@@ -2050,29 +1456,14 @@
 // export type { j1, j2 as j3 } from "./j";
 // type Z1 = 1;
 // export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
+// --- (line: 22) skipped ---
 
 // === /i.ts ===
 // <|export class [|{| defId: 1, isWriteAccess: true |}I|] {}|>
 
   // === Definitions ===
   // === /main.ts ===
-  // // import ... = ...
-  // import A = require("./a");
-  // namespace N { }
-  // import N2 = N;
-  // 
-  // // import ... from ...
-  // import type B from "./b";
-  // import type * as C from "./c";
-  // import type { D } from "./d";
-  // import type { e1, e2 as e3 } from "./e";
-  // 
-  // // import "module"
-  // import "./f";
-  // 
+  // --- (line: 14) skipped ---
   // // export ... from ...
   // export type * from "./g";
   // export type * as H from "./h";
@@ -2080,9 +1471,7 @@
   // export type { j1, j2 as j3 } from "./j";
   // type Z1 = 1;
   // export type { Z1 };
-  // type Z2 = 2;
-  // type Z3 = 3;
-  // export type { z2, z3 as z4 };
+  // --- (line: 22) skipped ---
 
   // === /i.ts ===
   // <|export class [|{| defId: 1 |}I|] {}|>
@@ -2169,20 +1558,7 @@
 
 // === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
-// // import ... from ...
-// import type B from "./b";
-// import type * as C from "./c";
-// import type { D } from "./d";
-// import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// import "./f";
-// 
+// --- (line: 14) skipped ---
 // // export ... from ...
 // export type * from "./g";
 // export type * as H from "./h";
@@ -2190,29 +1566,14 @@
 // export type { j1, j2 as j3 } from "./j";
 // type Z1 = 1;
 // export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
+// --- (line: 22) skipped ---
 
 // === /i.ts ===
 // <|export class [|{| defId: 1, isWriteAccess: true |}I|] {}|>
 
   // === Definitions ===
   // === /main.ts ===
-  // // import ... = ...
-  // import A = require("./a");
-  // namespace N { }
-  // import N2 = N;
-  // 
-  // // import ... from ...
-  // import type B from "./b";
-  // import type * as C from "./c";
-  // import type { D } from "./d";
-  // import type { e1, e2 as e3 } from "./e";
-  // 
-  // // import "module"
-  // import "./f";
-  // 
+  // --- (line: 14) skipped ---
   // // export ... from ...
   // export type * from "./g";
   // export type * as H from "./h";
@@ -2220,9 +1581,7 @@
   // export type { j1, j2 as j3 } from "./j";
   // type Z1 = 1;
   // export type { Z1 };
-  // type Z2 = 2;
-  // type Z3 = 3;
-  // export type { z2, z3 as z4 };
+  // --- (line: 22) skipped ---
 
   // === /i.ts ===
   // <|export class [|{| defId: 1 |}I|] {}|>
@@ -2309,20 +1668,7 @@
 
 // === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
-// // import ... from ...
-// import type B from "./b";
-// import type * as C from "./c";
-// import type { D } from "./d";
-// import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// import "./f";
-// 
+// --- (line: 14) skipped ---
 // // export ... from ...
 // export type * from "./g";
 // export type * as H from "./h";
@@ -2330,9 +1676,7 @@
 // export type { j1, j2 as j3 } from "./j";
 // type Z1 = 1;
 // export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
+// --- (line: 22) skipped ---
 
   // === Definitions ===
   // === /i.ts ===
@@ -2366,21 +1710,7 @@
 
 // === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
-// // import ... from ...
-// import type B from "./b";
-// import type * as C from "./c";
-// import type { D } from "./d";
-// import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// import "./f";
-// 
-// // export ... from ...
+// --- (line: 15) skipped ---
 // export type * from "./g";
 // export type * as H from "./h";
 // export type { I } from "./i";
@@ -2395,21 +1725,7 @@
 
 // === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
-// // import ... from ...
-// import type B from "./b";
-// import type * as C from "./c";
-// import type { D } from "./d";
-// import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// import "./f";
-// 
-// // export ... from ...
+// --- (line: 15) skipped ---
 // export type * from "./g";
 // export type * as H from "./h";
 // export type { I } from "./i";
@@ -2424,21 +1740,7 @@
 
 // === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
-// // import ... from ...
-// import type B from "./b";
-// import type * as C from "./c";
-// import type { D } from "./d";
-// import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// import "./f";
-// 
-// // export ... from ...
+// --- (line: 15) skipped ---
 // export type * from "./g";
 // export type * as H from "./h";
 // export type { I } from "./i";
@@ -2482,21 +1784,7 @@
 
 // === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
-// // import ... from ...
-// import type B from "./b";
-// import type * as C from "./c";
-// import type { D } from "./d";
-// import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// import "./f";
-// 
-// // export ... from ...
+// --- (line: 15) skipped ---
 // export type * from "./g";
 // export type * as H from "./h";
 // export type { I } from "./i";
@@ -2509,21 +1797,7 @@
 
   // === Definitions ===
   // === /main.ts ===
-  // // import ... = ...
-  // import A = require("./a");
-  // namespace N { }
-  // import N2 = N;
-  // 
-  // // import ... from ...
-  // import type B from "./b";
-  // import type * as C from "./c";
-  // import type { D } from "./d";
-  // import type { e1, e2 as e3 } from "./e";
-  // 
-  // // import "module"
-  // import "./f";
-  // 
-  // // export ... from ...
+  // --- (line: 15) skipped ---
   // export type * from "./g";
   // export type * as H from "./h";
   // export type { I } from "./i";
@@ -2606,22 +1880,7 @@
 
 // === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
-// // import ... from ...
-// import type B from "./b";
-// import type * as C from "./c";
-// import type { D } from "./d";
-// import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// import "./f";
-// 
-// // export ... from ...
-// export type * from "./g";
+// --- (line: 16) skipped ---
 // export type * as H from "./h";
 // export type { I } from "./i";
 // export type { j1, j2 as j3 } from "./j";
@@ -2633,22 +1892,7 @@
 
   // === Definitions ===
   // === /main.ts ===
-  // // import ... = ...
-  // import A = require("./a");
-  // namespace N { }
-  // import N2 = N;
-  // 
-  // // import ... from ...
-  // import type B from "./b";
-  // import type * as C from "./c";
-  // import type { D } from "./d";
-  // import type { e1, e2 as e3 } from "./e";
-  // 
-  // // import "module"
-  // import "./f";
-  // 
-  // // export ... from ...
-  // export type * from "./g";
+  // --- (line: 16) skipped ---
   // export type * as H from "./h";
   // export type { I } from "./i";
   // export type { j1, j2 as j3 } from "./j";
@@ -2702,22 +1946,7 @@
 
 // === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
-// // import ... from ...
-// import type B from "./b";
-// import type * as C from "./c";
-// import type { D } from "./d";
-// import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// import "./f";
-// 
-// // export ... from ...
-// export type * from "./g";
+// --- (line: 16) skipped ---
 // export type * as H from "./h";
 // export type { I } from "./i";
 // export type { j1, j2 as j3 } from "./j";
@@ -2729,22 +1958,7 @@
 
   // === Definitions ===
   // === /main.ts ===
-  // // import ... = ...
-  // import A = require("./a");
-  // namespace N { }
-  // import N2 = N;
-  // 
-  // // import ... from ...
-  // import type B from "./b";
-  // import type * as C from "./c";
-  // import type { D } from "./d";
-  // import type { e1, e2 as e3 } from "./e";
-  // 
-  // // import "module"
-  // import "./f";
-  // 
-  // // export ... from ...
-  // export type * from "./g";
+  // --- (line: 16) skipped ---
   // export type * as H from "./h";
   // export type { I } from "./i";
   // export type { j1, j2 as j3 } from "./j";
@@ -2798,26 +2012,7 @@
 
 // === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
-// // import ... from ...
-// import type B from "./b";
-// import type * as C from "./c";
-// import type { D } from "./d";
-// import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// import "./f";
-// 
-// // export ... from ...
-// export type * from "./g";
-// export type * as H from "./h";
-// export type { I } from "./i";
-// export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
+// --- (line: 20) skipped ---
 // export type { Z1 };
 // type Z2 = 2;
 // type Z3 = 3;
@@ -2827,26 +2022,7 @@
 
 // === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
-// // import ... from ...
-// import type B from "./b";
-// import type * as C from "./c";
-// import type { D } from "./d";
-// import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// import "./f";
-// 
-// // export ... from ...
-// export type * from "./g";
-// export type * as H from "./h";
-// export type { I } from "./i";
-// export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
+// --- (line: 20) skipped ---
 // export type { Z1 };
 // type Z2 = 2;
 // type Z3 = 3;
@@ -2856,26 +2032,7 @@
 
 // === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
-// // import ... from ...
-// import type B from "./b";
-// import type * as C from "./c";
-// import type { D } from "./d";
-// import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// import "./f";
-// 
-// // export ... from ...
-// export type * from "./g";
-// export type * as H from "./h";
-// export type { I } from "./i";
-// export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
+// --- (line: 20) skipped ---
 // export type { Z1 };
 // type Z2 = 2;
 // type Z3 = 3;
@@ -2883,26 +2040,7 @@
 
   // === Definitions ===
   // === /main.ts ===
-  // // import ... = ...
-  // import A = require("./a");
-  // namespace N { }
-  // import N2 = N;
-  // 
-  // // import ... from ...
-  // import type B from "./b";
-  // import type * as C from "./c";
-  // import type { D } from "./d";
-  // import type { e1, e2 as e3 } from "./e";
-  // 
-  // // import "module"
-  // import "./f";
-  // 
-  // // export ... from ...
-  // export type * from "./g";
-  // export type * as H from "./h";
-  // export type { I } from "./i";
-  // export type { j1, j2 as j3 } from "./j";
-  // type Z1 = 1;
+  // --- (line: 20) skipped ---
   // export type { Z1 };
   // type Z2 = 2;
   // type Z3 = 3;

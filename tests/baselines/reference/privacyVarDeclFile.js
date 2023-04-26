@@ -524,7 +524,7 @@ var publicModule;
         return privateClassWithPrivateModulePropertyTypes;
     }());
     var privateVarWithPrivateModulePropertyTypes;
-})(publicModule = exports.publicModule || (exports.publicModule = {}));
+})(publicModule || (exports.publicModule = publicModule = {}));
 var privateModule;
 (function (privateModule) {
     var privateClass = /** @class */ (function () {

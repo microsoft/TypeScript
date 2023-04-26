@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info 0    [00:01:49.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/tsconfig.json]
 { "compilerOptions": { "module": "commonjs" } }
@@ -2608,7 +2608,7 @@ export const aa_49__48 = 48;
 export const aa_49__49 = 49;
 
 
-Info 1    [00:01:50.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "configure",
       "arguments": {
@@ -2623,9 +2623,9 @@ Info 1    [00:01:50.000] request:
       "seq": 1,
       "type": "request"
     }
-Info 2    [00:01:51.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {"seq":0,"type":"response","command":"configure","request_seq":1,"success":true}
-Info 3    [00:01:52.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
@@ -2633,7 +2633,7 @@ After request
 
 Before request
 
-Info 4    [00:01:53.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
@@ -2642,11 +2642,11 @@ Info 4    [00:01:53.000] request:
       "seq": 2,
       "type": "request"
     }
-Info 5    [00:01:54.000] Search path: /
-Info 6    [00:01:55.000] For info: /index.ts :: Config file name: /tsconfig.json
-Info 7    [00:01:56.000] Creating configuration project /tsconfig.json
-Info 8    [00:01:57.000] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
-Info 9    [00:01:58.000] Config: /tsconfig.json : {
+Info seq  [hh:mm:ss:mss] Search path: /
+Info seq  [hh:mm:ss:mss] For info: /index.ts :: Config file name: /tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating configuration project /tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Config: /tsconfig.json : {
  "rootNames": [
   "/index.ts",
   "/lib/a_0.ts",
@@ -2705,63 +2705,63 @@ Info 9    [00:01:58.000] Config: /tsconfig.json : {
   "configFilePath": "/tsconfig.json"
  }
 }
-Info 10   [00:01:59.000] DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info 11   [00:02:00.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info 12   [00:02:01.000] FileWatcher:: Added:: WatchInfo: /lib/a_0.ts 500 undefined WatchType: Closed Script info
-Info 13   [00:02:02.000] FileWatcher:: Added:: WatchInfo: /lib/a_1.ts 500 undefined WatchType: Closed Script info
-Info 14   [00:02:03.000] FileWatcher:: Added:: WatchInfo: /lib/a_10.ts 500 undefined WatchType: Closed Script info
-Info 15   [00:02:04.000] FileWatcher:: Added:: WatchInfo: /lib/a_11.ts 500 undefined WatchType: Closed Script info
-Info 16   [00:02:05.000] FileWatcher:: Added:: WatchInfo: /lib/a_12.ts 500 undefined WatchType: Closed Script info
-Info 17   [00:02:06.000] FileWatcher:: Added:: WatchInfo: /lib/a_13.ts 500 undefined WatchType: Closed Script info
-Info 18   [00:02:07.000] FileWatcher:: Added:: WatchInfo: /lib/a_14.ts 500 undefined WatchType: Closed Script info
-Info 19   [00:02:08.000] FileWatcher:: Added:: WatchInfo: /lib/a_15.ts 500 undefined WatchType: Closed Script info
-Info 20   [00:02:09.000] FileWatcher:: Added:: WatchInfo: /lib/a_16.ts 500 undefined WatchType: Closed Script info
-Info 21   [00:02:10.000] FileWatcher:: Added:: WatchInfo: /lib/a_17.ts 500 undefined WatchType: Closed Script info
-Info 22   [00:02:11.000] FileWatcher:: Added:: WatchInfo: /lib/a_18.ts 500 undefined WatchType: Closed Script info
-Info 23   [00:02:12.000] FileWatcher:: Added:: WatchInfo: /lib/a_19.ts 500 undefined WatchType: Closed Script info
-Info 24   [00:02:13.000] FileWatcher:: Added:: WatchInfo: /lib/a_2.ts 500 undefined WatchType: Closed Script info
-Info 25   [00:02:14.000] FileWatcher:: Added:: WatchInfo: /lib/a_20.ts 500 undefined WatchType: Closed Script info
-Info 26   [00:02:15.000] FileWatcher:: Added:: WatchInfo: /lib/a_21.ts 500 undefined WatchType: Closed Script info
-Info 27   [00:02:16.000] FileWatcher:: Added:: WatchInfo: /lib/a_22.ts 500 undefined WatchType: Closed Script info
-Info 28   [00:02:17.000] FileWatcher:: Added:: WatchInfo: /lib/a_23.ts 500 undefined WatchType: Closed Script info
-Info 29   [00:02:18.000] FileWatcher:: Added:: WatchInfo: /lib/a_24.ts 500 undefined WatchType: Closed Script info
-Info 30   [00:02:19.000] FileWatcher:: Added:: WatchInfo: /lib/a_25.ts 500 undefined WatchType: Closed Script info
-Info 31   [00:02:20.000] FileWatcher:: Added:: WatchInfo: /lib/a_26.ts 500 undefined WatchType: Closed Script info
-Info 32   [00:02:21.000] FileWatcher:: Added:: WatchInfo: /lib/a_27.ts 500 undefined WatchType: Closed Script info
-Info 33   [00:02:22.000] FileWatcher:: Added:: WatchInfo: /lib/a_28.ts 500 undefined WatchType: Closed Script info
-Info 34   [00:02:23.000] FileWatcher:: Added:: WatchInfo: /lib/a_29.ts 500 undefined WatchType: Closed Script info
-Info 35   [00:02:24.000] FileWatcher:: Added:: WatchInfo: /lib/a_3.ts 500 undefined WatchType: Closed Script info
-Info 36   [00:02:25.000] FileWatcher:: Added:: WatchInfo: /lib/a_30.ts 500 undefined WatchType: Closed Script info
-Info 37   [00:02:26.000] FileWatcher:: Added:: WatchInfo: /lib/a_31.ts 500 undefined WatchType: Closed Script info
-Info 38   [00:02:27.000] FileWatcher:: Added:: WatchInfo: /lib/a_32.ts 500 undefined WatchType: Closed Script info
-Info 39   [00:02:28.000] FileWatcher:: Added:: WatchInfo: /lib/a_33.ts 500 undefined WatchType: Closed Script info
-Info 40   [00:02:29.000] FileWatcher:: Added:: WatchInfo: /lib/a_34.ts 500 undefined WatchType: Closed Script info
-Info 41   [00:02:30.000] FileWatcher:: Added:: WatchInfo: /lib/a_35.ts 500 undefined WatchType: Closed Script info
-Info 42   [00:02:31.000] FileWatcher:: Added:: WatchInfo: /lib/a_36.ts 500 undefined WatchType: Closed Script info
-Info 43   [00:02:32.000] FileWatcher:: Added:: WatchInfo: /lib/a_37.ts 500 undefined WatchType: Closed Script info
-Info 44   [00:02:33.000] FileWatcher:: Added:: WatchInfo: /lib/a_38.ts 500 undefined WatchType: Closed Script info
-Info 45   [00:02:34.000] FileWatcher:: Added:: WatchInfo: /lib/a_39.ts 500 undefined WatchType: Closed Script info
-Info 46   [00:02:35.000] FileWatcher:: Added:: WatchInfo: /lib/a_4.ts 500 undefined WatchType: Closed Script info
-Info 47   [00:02:36.000] FileWatcher:: Added:: WatchInfo: /lib/a_40.ts 500 undefined WatchType: Closed Script info
-Info 48   [00:02:37.000] FileWatcher:: Added:: WatchInfo: /lib/a_41.ts 500 undefined WatchType: Closed Script info
-Info 49   [00:02:38.000] FileWatcher:: Added:: WatchInfo: /lib/a_42.ts 500 undefined WatchType: Closed Script info
-Info 50   [00:02:39.000] FileWatcher:: Added:: WatchInfo: /lib/a_43.ts 500 undefined WatchType: Closed Script info
-Info 51   [00:02:40.000] FileWatcher:: Added:: WatchInfo: /lib/a_44.ts 500 undefined WatchType: Closed Script info
-Info 52   [00:02:41.000] FileWatcher:: Added:: WatchInfo: /lib/a_45.ts 500 undefined WatchType: Closed Script info
-Info 53   [00:02:42.000] FileWatcher:: Added:: WatchInfo: /lib/a_46.ts 500 undefined WatchType: Closed Script info
-Info 54   [00:02:43.000] FileWatcher:: Added:: WatchInfo: /lib/a_47.ts 500 undefined WatchType: Closed Script info
-Info 55   [00:02:44.000] FileWatcher:: Added:: WatchInfo: /lib/a_48.ts 500 undefined WatchType: Closed Script info
-Info 56   [00:02:45.000] FileWatcher:: Added:: WatchInfo: /lib/a_49.ts 500 undefined WatchType: Closed Script info
-Info 57   [00:02:46.000] FileWatcher:: Added:: WatchInfo: /lib/a_5.ts 500 undefined WatchType: Closed Script info
-Info 58   [00:02:47.000] FileWatcher:: Added:: WatchInfo: /lib/a_6.ts 500 undefined WatchType: Closed Script info
-Info 59   [00:02:48.000] FileWatcher:: Added:: WatchInfo: /lib/a_7.ts 500 undefined WatchType: Closed Script info
-Info 60   [00:02:49.000] FileWatcher:: Added:: WatchInfo: /lib/a_8.ts 500 undefined WatchType: Closed Script info
-Info 61   [00:02:50.000] FileWatcher:: Added:: WatchInfo: /lib/a_9.ts 500 undefined WatchType: Closed Script info
-Info 62   [00:02:51.000] Starting updateGraphWorker: Project: /tsconfig.json
-Info 63   [00:02:52.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
-Info 64   [00:02:53.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 65   [00:02:54.000] Project '/tsconfig.json' (Configured)
-Info 66   [00:02:55.000] 	Files (51)
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_0.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_1.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_10.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_11.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_12.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_13.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_14.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_15.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_16.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_17.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_18.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_19.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_2.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_20.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_21.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_22.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_23.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_24.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_25.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_26.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_27.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_28.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_29.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_3.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_30.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_31.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_32.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_33.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_34.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_35.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_36.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_37.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_38.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_39.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_4.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_40.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_41.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_42.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_43.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_44.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_45.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_46.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_47.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_48.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_49.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_5.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_6.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_7.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_8.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_9.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (51)
 	/index.ts SVC-1-0 ""
 	/lib/a_0.ts Text-1 "export const aa_0__0 = 0;\nexport const aa_0__1 = 1;\nexport const aa_0__2 = 2;\nexport const aa_0__3 = 3;\nexport const aa_0__4 = 4;\nexport const aa_0__5 = 5;\nexport const aa_0__6 = 6;\nexport const aa_0__7 = 7;\nexport const aa_0__8 = 8;\nexport const aa_0__9 = 9;\nexport const aa_0__10 = 10;\nexport const aa_0__11 = 11;\nexport const aa_0__12 = 12;\nexport const aa_0__13 = 13;\nexport const aa_0__14 = 14;\nexport const aa_0__15 = 15;\nexport const aa_0__16 = 16;\nexport const aa_0__17 = 17;\nexport const aa_0__18 = 18;\nexport const aa_0__19 = 19;\nexport const aa_0__20 = 20;\nexport const aa_0__21 = 21;\nexport const aa_0__22 = 22;\nexport const aa_0__23 = 23;\nexport const aa_0__24 = 24;\nexport const aa_0__25 = 25;\nexport const aa_0__26 = 26;\nexport const aa_0__27 = 27;\nexport const aa_0__28 = 28;\nexport const aa_0__29 = 29;\nexport const aa_0__30 = 30;\nexport const aa_0__31 = 31;\nexport const aa_0__32 = 32;\nexport const aa_0__33 = 33;\nexport const aa_0__34 = 34;\nexport const aa_0__35 = 35;\nexport const aa_0__36 = 36;\nexport const aa_0__37 = 37;\nexport const aa_0__38 = 38;\nexport const aa_0__39 = 39;\nexport const aa_0__40 = 40;\nexport const aa_0__41 = 41;\nexport const aa_0__42 = 42;\nexport const aa_0__43 = 43;\nexport const aa_0__44 = 44;\nexport const aa_0__45 = 45;\nexport const aa_0__46 = 46;\nexport const aa_0__47 = 47;\nexport const aa_0__48 = 48;\nexport const aa_0__49 = 49;"
 	/lib/a_1.ts Text-1 "export const aa_1__0 = 0;\nexport const aa_1__1 = 1;\nexport const aa_1__2 = 2;\nexport const aa_1__3 = 3;\nexport const aa_1__4 = 4;\nexport const aa_1__5 = 5;\nexport const aa_1__6 = 6;\nexport const aa_1__7 = 7;\nexport const aa_1__8 = 8;\nexport const aa_1__9 = 9;\nexport const aa_1__10 = 10;\nexport const aa_1__11 = 11;\nexport const aa_1__12 = 12;\nexport const aa_1__13 = 13;\nexport const aa_1__14 = 14;\nexport const aa_1__15 = 15;\nexport const aa_1__16 = 16;\nexport const aa_1__17 = 17;\nexport const aa_1__18 = 18;\nexport const aa_1__19 = 19;\nexport const aa_1__20 = 20;\nexport const aa_1__21 = 21;\nexport const aa_1__22 = 22;\nexport const aa_1__23 = 23;\nexport const aa_1__24 = 24;\nexport const aa_1__25 = 25;\nexport const aa_1__26 = 26;\nexport const aa_1__27 = 27;\nexport const aa_1__28 = 28;\nexport const aa_1__29 = 29;\nexport const aa_1__30 = 30;\nexport const aa_1__31 = 31;\nexport const aa_1__32 = 32;\nexport const aa_1__33 = 33;\nexport const aa_1__34 = 34;\nexport const aa_1__35 = 35;\nexport const aa_1__36 = 36;\nexport const aa_1__37 = 37;\nexport const aa_1__38 = 38;\nexport const aa_1__39 = 39;\nexport const aa_1__40 = 40;\nexport const aa_1__41 = 41;\nexport const aa_1__42 = 42;\nexport const aa_1__43 = 43;\nexport const aa_1__44 = 44;\nexport const aa_1__45 = 45;\nexport const aa_1__46 = 46;\nexport const aa_1__47 = 47;\nexport const aa_1__48 = 48;\nexport const aa_1__49 = 49;"
@@ -2918,15 +2918,15 @@ Info 66   [00:02:55.000] 	Files (51)
 	lib/a_9.ts
 	  Matched by default include pattern '**/*'
 
-Info 67   [00:02:56.000] -----------------------------------------------
-Info 68   [00:02:57.000] Project '/tsconfig.json' (Configured)
-Info 68   [00:02:58.000] 	Files (51)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (51)
 
-Info 68   [00:02:59.000] -----------------------------------------------
-Info 68   [00:03:00.000] Open files: 
-Info 68   [00:03:01.000] 	FileName: /index.ts ProjectRootPath: undefined
-Info 68   [00:03:02.000] 		Projects: /tsconfig.json
-Info 68   [00:03:03.000] response:
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /index.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
@@ -3046,7 +3046,7 @@ FsWatchesRecursive::
 
 Before request
 
-Info 69   [00:03:04.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "updateOpen",
       "arguments": {
@@ -3072,7 +3072,7 @@ Info 69   [00:03:04.000] request:
       "seq": 3,
       "type": "request"
     }
-Info 70   [00:03:05.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
       "responseRequired": true
@@ -3081,7 +3081,7 @@ After request
 
 Before request
 
-Info 71   [00:03:06.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "completionInfo",
       "arguments": {
@@ -3092,10 +3092,10 @@ Info 71   [00:03:06.000] request:
       "seq": 4,
       "type": "request"
     }
-Info 72   [00:03:07.000] Starting updateGraphWorker: Project: /tsconfig.json
-Info 73   [00:03:08.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 74   [00:03:09.000] Project '/tsconfig.json' (Configured)
-Info 75   [00:03:10.000] 	Files (51)
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (51)
 	/index.ts SVC-1-1 "a"
 	/lib/a_0.ts Text-1 "export const aa_0__0 = 0;\nexport const aa_0__1 = 1;\nexport const aa_0__2 = 2;\nexport const aa_0__3 = 3;\nexport const aa_0__4 = 4;\nexport const aa_0__5 = 5;\nexport const aa_0__6 = 6;\nexport const aa_0__7 = 7;\nexport const aa_0__8 = 8;\nexport const aa_0__9 = 9;\nexport const aa_0__10 = 10;\nexport const aa_0__11 = 11;\nexport const aa_0__12 = 12;\nexport const aa_0__13 = 13;\nexport const aa_0__14 = 14;\nexport const aa_0__15 = 15;\nexport const aa_0__16 = 16;\nexport const aa_0__17 = 17;\nexport const aa_0__18 = 18;\nexport const aa_0__19 = 19;\nexport const aa_0__20 = 20;\nexport const aa_0__21 = 21;\nexport const aa_0__22 = 22;\nexport const aa_0__23 = 23;\nexport const aa_0__24 = 24;\nexport const aa_0__25 = 25;\nexport const aa_0__26 = 26;\nexport const aa_0__27 = 27;\nexport const aa_0__28 = 28;\nexport const aa_0__29 = 29;\nexport const aa_0__30 = 30;\nexport const aa_0__31 = 31;\nexport const aa_0__32 = 32;\nexport const aa_0__33 = 33;\nexport const aa_0__34 = 34;\nexport const aa_0__35 = 35;\nexport const aa_0__36 = 36;\nexport const aa_0__37 = 37;\nexport const aa_0__38 = 38;\nexport const aa_0__39 = 39;\nexport const aa_0__40 = 40;\nexport const aa_0__41 = 41;\nexport const aa_0__42 = 42;\nexport const aa_0__43 = 43;\nexport const aa_0__44 = 44;\nexport const aa_0__45 = 45;\nexport const aa_0__46 = 46;\nexport const aa_0__47 = 47;\nexport const aa_0__48 = 48;\nexport const aa_0__49 = 49;"
 	/lib/a_1.ts Text-1 "export const aa_1__0 = 0;\nexport const aa_1__1 = 1;\nexport const aa_1__2 = 2;\nexport const aa_1__3 = 3;\nexport const aa_1__4 = 4;\nexport const aa_1__5 = 5;\nexport const aa_1__6 = 6;\nexport const aa_1__7 = 7;\nexport const aa_1__8 = 8;\nexport const aa_1__9 = 9;\nexport const aa_1__10 = 10;\nexport const aa_1__11 = 11;\nexport const aa_1__12 = 12;\nexport const aa_1__13 = 13;\nexport const aa_1__14 = 14;\nexport const aa_1__15 = 15;\nexport const aa_1__16 = 16;\nexport const aa_1__17 = 17;\nexport const aa_1__18 = 18;\nexport const aa_1__19 = 19;\nexport const aa_1__20 = 20;\nexport const aa_1__21 = 21;\nexport const aa_1__22 = 22;\nexport const aa_1__23 = 23;\nexport const aa_1__24 = 24;\nexport const aa_1__25 = 25;\nexport const aa_1__26 = 26;\nexport const aa_1__27 = 27;\nexport const aa_1__28 = 28;\nexport const aa_1__29 = 29;\nexport const aa_1__30 = 30;\nexport const aa_1__31 = 31;\nexport const aa_1__32 = 32;\nexport const aa_1__33 = 33;\nexport const aa_1__34 = 34;\nexport const aa_1__35 = 35;\nexport const aa_1__36 = 36;\nexport const aa_1__37 = 37;\nexport const aa_1__38 = 38;\nexport const aa_1__39 = 39;\nexport const aa_1__40 = 40;\nexport const aa_1__41 = 41;\nexport const aa_1__42 = 42;\nexport const aa_1__43 = 43;\nexport const aa_1__44 = 44;\nexport const aa_1__45 = 45;\nexport const aa_1__46 = 46;\nexport const aa_1__47 = 47;\nexport const aa_1__48 = 48;\nexport const aa_1__49 = 49;"
@@ -3148,18 +3148,18 @@ Info 75   [00:03:10.000] 	Files (51)
 	/lib/a_8.ts Text-1 "export const aa_8__0 = 0;\nexport const aa_8__1 = 1;\nexport const aa_8__2 = 2;\nexport const aa_8__3 = 3;\nexport const aa_8__4 = 4;\nexport const aa_8__5 = 5;\nexport const aa_8__6 = 6;\nexport const aa_8__7 = 7;\nexport const aa_8__8 = 8;\nexport const aa_8__9 = 9;\nexport const aa_8__10 = 10;\nexport const aa_8__11 = 11;\nexport const aa_8__12 = 12;\nexport const aa_8__13 = 13;\nexport const aa_8__14 = 14;\nexport const aa_8__15 = 15;\nexport const aa_8__16 = 16;\nexport const aa_8__17 = 17;\nexport const aa_8__18 = 18;\nexport const aa_8__19 = 19;\nexport const aa_8__20 = 20;\nexport const aa_8__21 = 21;\nexport const aa_8__22 = 22;\nexport const aa_8__23 = 23;\nexport const aa_8__24 = 24;\nexport const aa_8__25 = 25;\nexport const aa_8__26 = 26;\nexport const aa_8__27 = 27;\nexport const aa_8__28 = 28;\nexport const aa_8__29 = 29;\nexport const aa_8__30 = 30;\nexport const aa_8__31 = 31;\nexport const aa_8__32 = 32;\nexport const aa_8__33 = 33;\nexport const aa_8__34 = 34;\nexport const aa_8__35 = 35;\nexport const aa_8__36 = 36;\nexport const aa_8__37 = 37;\nexport const aa_8__38 = 38;\nexport const aa_8__39 = 39;\nexport const aa_8__40 = 40;\nexport const aa_8__41 = 41;\nexport const aa_8__42 = 42;\nexport const aa_8__43 = 43;\nexport const aa_8__44 = 44;\nexport const aa_8__45 = 45;\nexport const aa_8__46 = 46;\nexport const aa_8__47 = 47;\nexport const aa_8__48 = 48;\nexport const aa_8__49 = 49;"
 	/lib/a_9.ts Text-1 "export const aa_9__0 = 0;\nexport const aa_9__1 = 1;\nexport const aa_9__2 = 2;\nexport const aa_9__3 = 3;\nexport const aa_9__4 = 4;\nexport const aa_9__5 = 5;\nexport const aa_9__6 = 6;\nexport const aa_9__7 = 7;\nexport const aa_9__8 = 8;\nexport const aa_9__9 = 9;\nexport const aa_9__10 = 10;\nexport const aa_9__11 = 11;\nexport const aa_9__12 = 12;\nexport const aa_9__13 = 13;\nexport const aa_9__14 = 14;\nexport const aa_9__15 = 15;\nexport const aa_9__16 = 16;\nexport const aa_9__17 = 17;\nexport const aa_9__18 = 18;\nexport const aa_9__19 = 19;\nexport const aa_9__20 = 20;\nexport const aa_9__21 = 21;\nexport const aa_9__22 = 22;\nexport const aa_9__23 = 23;\nexport const aa_9__24 = 24;\nexport const aa_9__25 = 25;\nexport const aa_9__26 = 26;\nexport const aa_9__27 = 27;\nexport const aa_9__28 = 28;\nexport const aa_9__29 = 29;\nexport const aa_9__30 = 30;\nexport const aa_9__31 = 31;\nexport const aa_9__32 = 32;\nexport const aa_9__33 = 33;\nexport const aa_9__34 = 34;\nexport const aa_9__35 = 35;\nexport const aa_9__36 = 36;\nexport const aa_9__37 = 37;\nexport const aa_9__38 = 38;\nexport const aa_9__39 = 39;\nexport const aa_9__40 = 40;\nexport const aa_9__41 = 41;\nexport const aa_9__42 = 42;\nexport const aa_9__43 = 43;\nexport const aa_9__44 = 44;\nexport const aa_9__45 = 45;\nexport const aa_9__46 = 46;\nexport const aa_9__47 = 47;\nexport const aa_9__48 = 48;\nexport const aa_9__49 = 49;"
 
-Info 76   [00:03:11.000] -----------------------------------------------
-Info 77   [00:03:12.000] getCompletionData: Get current token: *
-Info 78   [00:03:13.000] getCompletionData: Is inside comment: *
-Info 79   [00:03:14.000] getCompletionData: Get previous token: *
-Info 80   [00:03:15.000] getExportInfoMap: cache miss or empty; calculating new results
-Info 81   [00:03:16.000] getExportInfoMap: done in * ms
-Info 82   [00:03:17.000] collectAutoImports: resolved 50 module specifiers, plus 0 ambient and 2450 from cache
-Info 83   [00:03:18.000] collectAutoImports: response is complete
-Info 84   [00:03:19.000] collectAutoImports: *
-Info 85   [00:03:20.000] getCompletionData: Semantic work: *
-Info 86   [00:03:21.000] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
-Info 87   [00:03:22.000] response:
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] getCompletionData: Get current token: *
+Info seq  [hh:mm:ss:mss] getCompletionData: Is inside comment: *
+Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
+Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
+Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
+Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 50 module specifiers, plus 0 ambient and 2450 from cache
+Info seq  [hh:mm:ss:mss] collectAutoImports: response is complete
+Info seq  [hh:mm:ss:mss] collectAutoImports: *
+Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
+Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
         "flags": 9,

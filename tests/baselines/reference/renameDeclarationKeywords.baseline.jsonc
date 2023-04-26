@@ -9,12 +9,7 @@
 // interface I1 extends Base { }
 // type T = { }
 // enum E { }
-// namespace N { }
-// module M { }
-// function fn() {}
-// var x;
-// let y;
-// const z = 1;
+// --- (line: 10) skipped ---
 
 
 
@@ -30,11 +25,7 @@
 // type T = { }
 // enum E { }
 // namespace N { }
-// module M { }
-// function fn() {}
-// var x;
-// let y;
-// const z = 1;
+// --- (line: 11) skipped ---
 
 
 
@@ -46,15 +37,7 @@
 //     get e() { return 1; }
 //     set e(v) {}
 // }
-// interface I1 extends Base { }
-// type T = { }
-// enum E { }
-// namespace N { }
-// module M { }
-// function fn() {}
-// var x;
-// let y;
-// const z = 1;
+// --- (line: 7) skipped ---
 
 
 
@@ -68,13 +51,7 @@
 // }
 // interface I1 extends Base { }
 // type T = { }
-// enum E { }
-// namespace N { }
-// module M { }
-// function fn() {}
-// var x;
-// let y;
-// const z = 1;
+// --- (line: 9) skipped ---
 
 
 
@@ -88,21 +65,13 @@
 // }
 // interface I1 extends Base { }
 // type T = { }
-// enum E { }
-// namespace N { }
-// module M { }
-// function fn() {}
-// var x;
-// let y;
-// const z = 1;
+// --- (line: 9) skipped ---
 
 
 
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameDeclarationKeywords.ts ===
-// class Base {}
-// interface Implemented1 {}
-// class C1 extends Base implements Implemented1 {
+// --- (line: 3) skipped ---
 //     get e() { return 1; }
 //     set e(v) {}
 // }
@@ -110,11 +79,7 @@
 // type T = { }
 // enum E { }
 // namespace N { }
-// module M { }
-// function fn() {}
-// var x;
-// let y;
-// const z = 1;
+// --- (line: 11) skipped ---
 
 
 
@@ -130,20 +95,13 @@
 // type T = { }
 // enum E { }
 // namespace N { }
-// module M { }
-// function fn() {}
-// var x;
-// let y;
-// const z = 1;
+// --- (line: 11) skipped ---
 
 
 
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameDeclarationKeywords.ts ===
-// class Base {}
-// interface Implemented1 {}
-// class C1 extends Base implements Implemented1 {
-//     get e() { return 1; }
+// --- (line: 4) skipped ---
 //     set e(v) {}
 // }
 // interface I1 extends Base { }
@@ -151,20 +109,13 @@
 // enum E { }
 // namespace N { }
 // module M { }
-// function fn() {}
-// var x;
-// let y;
-// const z = 1;
+// --- (line: 12) skipped ---
 
 
 
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameDeclarationKeywords.ts ===
-// class Base {}
-// interface Implemented1 {}
-// class C1 extends Base implements Implemented1 {
-//     get e() { return 1; }
-//     set e(v) {}
+// --- (line: 5) skipped ---
 // }
 // interface I1 extends Base { }
 // type T = { }
@@ -172,20 +123,13 @@
 // namespace N { }
 // module M { }
 // function fn() {}
-// var x;
-// let y;
-// const z = 1;
+// --- (line: 13) skipped ---
 
 
 
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameDeclarationKeywords.ts ===
-// class Base {}
-// interface Implemented1 {}
-// class C1 extends Base implements Implemented1 {
-//     get e() { return 1; }
-//     set e(v) {}
-// }
+// --- (line: 6) skipped ---
 // interface I1 extends Base { }
 // type T = { }
 // enum E { }
@@ -200,13 +144,7 @@
 
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameDeclarationKeywords.ts ===
-// class Base {}
-// interface Implemented1 {}
-// class C1 extends Base implements Implemented1 {
-//     get e() { return 1; }
-//     set e(v) {}
-// }
-// interface I1 extends Base { }
+// --- (line: 7) skipped ---
 // type T = { }
 // enum E { }
 // namespace N { }
@@ -220,14 +158,7 @@
 
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameDeclarationKeywords.ts ===
-// class Base {}
-// interface Implemented1 {}
-// class C1 extends Base implements Implemented1 {
-//     get e() { return 1; }
-//     set e(v) {}
-// }
-// interface I1 extends Base { }
-// type T = { }
+// --- (line: 8) skipped ---
 // enum E { }
 // namespace N { }
 // module M { }
@@ -240,15 +171,7 @@
 
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameDeclarationKeywords.ts ===
-// class Base {}
-// interface Implemented1 {}
-// class C1 extends Base implements Implemented1 {
-//     get e() { return 1; }
-//     set e(v) {}
-// }
-// interface I1 extends Base { }
-// type T = { }
-// enum E { }
+// --- (line: 9) skipped ---
 // namespace N { }
 // module M { }
 // function fn() {}
@@ -260,16 +183,7 @@
 
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameDeclarationKeywords.ts ===
-// class Base {}
-// interface Implemented1 {}
-// class C1 extends Base implements Implemented1 {
-//     get e() { return 1; }
-//     set e(v) {}
-// }
-// interface I1 extends Base { }
-// type T = { }
-// enum E { }
-// namespace N { }
+// --- (line: 10) skipped ---
 // module M { }
 // function fn() {}
 // var x;
@@ -280,17 +194,7 @@
 
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameDeclarationKeywords.ts ===
-// class Base {}
-// interface Implemented1 {}
-// class C1 extends Base implements Implemented1 {
-//     get e() { return 1; }
-//     set e(v) {}
-// }
-// interface I1 extends Base { }
-// type T = { }
-// enum E { }
-// namespace N { }
-// module M { }
+// --- (line: 11) skipped ---
 // function fn() {}
 // var x;
 // let y;

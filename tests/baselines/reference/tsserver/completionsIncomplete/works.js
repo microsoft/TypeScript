@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info 0    [00:08:29.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/tsconfig.json]
 { "compilerOptions": { "module": "commonjs" } }
@@ -758,7 +758,7 @@ export const aa_248__0 = 0;
 export const aa_249__0 = 0;
 
 
-Info 1    [00:08:30.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "configure",
       "arguments": {
@@ -773,9 +773,9 @@ Info 1    [00:08:30.000] request:
       "seq": 1,
       "type": "request"
     }
-Info 2    [00:08:31.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {"seq":0,"type":"response","command":"configure","request_seq":1,"success":true}
-Info 3    [00:08:32.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
@@ -783,7 +783,7 @@ After request
 
 Before request
 
-Info 4    [00:08:33.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
@@ -792,11 +792,11 @@ Info 4    [00:08:33.000] request:
       "seq": 2,
       "type": "request"
     }
-Info 5    [00:08:34.000] Search path: /
-Info 6    [00:08:35.000] For info: /index.ts :: Config file name: /tsconfig.json
-Info 7    [00:08:36.000] Creating configuration project /tsconfig.json
-Info 8    [00:08:37.000] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
-Info 9    [00:08:38.000] Config: /tsconfig.json : {
+Info seq  [hh:mm:ss:mss] Search path: /
+Info seq  [hh:mm:ss:mss] For info: /index.ts :: Config file name: /tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating configuration project /tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Config: /tsconfig.json : {
  "rootNames": [
   "/index.ts",
   "/lib/a_0.ts",
@@ -1055,263 +1055,263 @@ Info 9    [00:08:38.000] Config: /tsconfig.json : {
   "configFilePath": "/tsconfig.json"
  }
 }
-Info 10   [00:08:39.000] DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info 11   [00:08:40.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info 12   [00:08:41.000] FileWatcher:: Added:: WatchInfo: /lib/a_0.ts 500 undefined WatchType: Closed Script info
-Info 13   [00:08:42.000] FileWatcher:: Added:: WatchInfo: /lib/a_1.ts 500 undefined WatchType: Closed Script info
-Info 14   [00:08:43.000] FileWatcher:: Added:: WatchInfo: /lib/a_10.ts 500 undefined WatchType: Closed Script info
-Info 15   [00:08:44.000] FileWatcher:: Added:: WatchInfo: /lib/a_100.ts 500 undefined WatchType: Closed Script info
-Info 16   [00:08:45.000] FileWatcher:: Added:: WatchInfo: /lib/a_101.ts 500 undefined WatchType: Closed Script info
-Info 17   [00:08:46.000] FileWatcher:: Added:: WatchInfo: /lib/a_102.ts 500 undefined WatchType: Closed Script info
-Info 18   [00:08:47.000] FileWatcher:: Added:: WatchInfo: /lib/a_103.ts 500 undefined WatchType: Closed Script info
-Info 19   [00:08:48.000] FileWatcher:: Added:: WatchInfo: /lib/a_104.ts 500 undefined WatchType: Closed Script info
-Info 20   [00:08:49.000] FileWatcher:: Added:: WatchInfo: /lib/a_105.ts 500 undefined WatchType: Closed Script info
-Info 21   [00:08:50.000] FileWatcher:: Added:: WatchInfo: /lib/a_106.ts 500 undefined WatchType: Closed Script info
-Info 22   [00:08:51.000] FileWatcher:: Added:: WatchInfo: /lib/a_107.ts 500 undefined WatchType: Closed Script info
-Info 23   [00:08:52.000] FileWatcher:: Added:: WatchInfo: /lib/a_108.ts 500 undefined WatchType: Closed Script info
-Info 24   [00:08:53.000] FileWatcher:: Added:: WatchInfo: /lib/a_109.ts 500 undefined WatchType: Closed Script info
-Info 25   [00:08:54.000] FileWatcher:: Added:: WatchInfo: /lib/a_11.ts 500 undefined WatchType: Closed Script info
-Info 26   [00:08:55.000] FileWatcher:: Added:: WatchInfo: /lib/a_110.ts 500 undefined WatchType: Closed Script info
-Info 27   [00:08:56.000] FileWatcher:: Added:: WatchInfo: /lib/a_111.ts 500 undefined WatchType: Closed Script info
-Info 28   [00:08:57.000] FileWatcher:: Added:: WatchInfo: /lib/a_112.ts 500 undefined WatchType: Closed Script info
-Info 29   [00:08:58.000] FileWatcher:: Added:: WatchInfo: /lib/a_113.ts 500 undefined WatchType: Closed Script info
-Info 30   [00:08:59.000] FileWatcher:: Added:: WatchInfo: /lib/a_114.ts 500 undefined WatchType: Closed Script info
-Info 31   [00:09:00.000] FileWatcher:: Added:: WatchInfo: /lib/a_115.ts 500 undefined WatchType: Closed Script info
-Info 32   [00:09:01.000] FileWatcher:: Added:: WatchInfo: /lib/a_116.ts 500 undefined WatchType: Closed Script info
-Info 33   [00:09:02.000] FileWatcher:: Added:: WatchInfo: /lib/a_117.ts 500 undefined WatchType: Closed Script info
-Info 34   [00:09:03.000] FileWatcher:: Added:: WatchInfo: /lib/a_118.ts 500 undefined WatchType: Closed Script info
-Info 35   [00:09:04.000] FileWatcher:: Added:: WatchInfo: /lib/a_119.ts 500 undefined WatchType: Closed Script info
-Info 36   [00:09:05.000] FileWatcher:: Added:: WatchInfo: /lib/a_12.ts 500 undefined WatchType: Closed Script info
-Info 37   [00:09:06.000] FileWatcher:: Added:: WatchInfo: /lib/a_120.ts 500 undefined WatchType: Closed Script info
-Info 38   [00:09:07.000] FileWatcher:: Added:: WatchInfo: /lib/a_121.ts 500 undefined WatchType: Closed Script info
-Info 39   [00:09:08.000] FileWatcher:: Added:: WatchInfo: /lib/a_122.ts 500 undefined WatchType: Closed Script info
-Info 40   [00:09:09.000] FileWatcher:: Added:: WatchInfo: /lib/a_123.ts 500 undefined WatchType: Closed Script info
-Info 41   [00:09:10.000] FileWatcher:: Added:: WatchInfo: /lib/a_124.ts 500 undefined WatchType: Closed Script info
-Info 42   [00:09:11.000] FileWatcher:: Added:: WatchInfo: /lib/a_125.ts 500 undefined WatchType: Closed Script info
-Info 43   [00:09:12.000] FileWatcher:: Added:: WatchInfo: /lib/a_126.ts 500 undefined WatchType: Closed Script info
-Info 44   [00:09:13.000] FileWatcher:: Added:: WatchInfo: /lib/a_127.ts 500 undefined WatchType: Closed Script info
-Info 45   [00:09:14.000] FileWatcher:: Added:: WatchInfo: /lib/a_128.ts 500 undefined WatchType: Closed Script info
-Info 46   [00:09:15.000] FileWatcher:: Added:: WatchInfo: /lib/a_129.ts 500 undefined WatchType: Closed Script info
-Info 47   [00:09:16.000] FileWatcher:: Added:: WatchInfo: /lib/a_13.ts 500 undefined WatchType: Closed Script info
-Info 48   [00:09:17.000] FileWatcher:: Added:: WatchInfo: /lib/a_130.ts 500 undefined WatchType: Closed Script info
-Info 49   [00:09:18.000] FileWatcher:: Added:: WatchInfo: /lib/a_131.ts 500 undefined WatchType: Closed Script info
-Info 50   [00:09:19.000] FileWatcher:: Added:: WatchInfo: /lib/a_132.ts 500 undefined WatchType: Closed Script info
-Info 51   [00:09:20.000] FileWatcher:: Added:: WatchInfo: /lib/a_133.ts 500 undefined WatchType: Closed Script info
-Info 52   [00:09:21.000] FileWatcher:: Added:: WatchInfo: /lib/a_134.ts 500 undefined WatchType: Closed Script info
-Info 53   [00:09:22.000] FileWatcher:: Added:: WatchInfo: /lib/a_135.ts 500 undefined WatchType: Closed Script info
-Info 54   [00:09:23.000] FileWatcher:: Added:: WatchInfo: /lib/a_136.ts 500 undefined WatchType: Closed Script info
-Info 55   [00:09:24.000] FileWatcher:: Added:: WatchInfo: /lib/a_137.ts 500 undefined WatchType: Closed Script info
-Info 56   [00:09:25.000] FileWatcher:: Added:: WatchInfo: /lib/a_138.ts 500 undefined WatchType: Closed Script info
-Info 57   [00:09:26.000] FileWatcher:: Added:: WatchInfo: /lib/a_139.ts 500 undefined WatchType: Closed Script info
-Info 58   [00:09:27.000] FileWatcher:: Added:: WatchInfo: /lib/a_14.ts 500 undefined WatchType: Closed Script info
-Info 59   [00:09:28.000] FileWatcher:: Added:: WatchInfo: /lib/a_140.ts 500 undefined WatchType: Closed Script info
-Info 60   [00:09:29.000] FileWatcher:: Added:: WatchInfo: /lib/a_141.ts 500 undefined WatchType: Closed Script info
-Info 61   [00:09:30.000] FileWatcher:: Added:: WatchInfo: /lib/a_142.ts 500 undefined WatchType: Closed Script info
-Info 62   [00:09:31.000] FileWatcher:: Added:: WatchInfo: /lib/a_143.ts 500 undefined WatchType: Closed Script info
-Info 63   [00:09:32.000] FileWatcher:: Added:: WatchInfo: /lib/a_144.ts 500 undefined WatchType: Closed Script info
-Info 64   [00:09:33.000] FileWatcher:: Added:: WatchInfo: /lib/a_145.ts 500 undefined WatchType: Closed Script info
-Info 65   [00:09:34.000] FileWatcher:: Added:: WatchInfo: /lib/a_146.ts 500 undefined WatchType: Closed Script info
-Info 66   [00:09:35.000] FileWatcher:: Added:: WatchInfo: /lib/a_147.ts 500 undefined WatchType: Closed Script info
-Info 67   [00:09:36.000] FileWatcher:: Added:: WatchInfo: /lib/a_148.ts 500 undefined WatchType: Closed Script info
-Info 68   [00:09:37.000] FileWatcher:: Added:: WatchInfo: /lib/a_149.ts 500 undefined WatchType: Closed Script info
-Info 69   [00:09:38.000] FileWatcher:: Added:: WatchInfo: /lib/a_15.ts 500 undefined WatchType: Closed Script info
-Info 70   [00:09:39.000] FileWatcher:: Added:: WatchInfo: /lib/a_150.ts 500 undefined WatchType: Closed Script info
-Info 71   [00:09:40.000] FileWatcher:: Added:: WatchInfo: /lib/a_151.ts 500 undefined WatchType: Closed Script info
-Info 72   [00:09:41.000] FileWatcher:: Added:: WatchInfo: /lib/a_152.ts 500 undefined WatchType: Closed Script info
-Info 73   [00:09:42.000] FileWatcher:: Added:: WatchInfo: /lib/a_153.ts 500 undefined WatchType: Closed Script info
-Info 74   [00:09:43.000] FileWatcher:: Added:: WatchInfo: /lib/a_154.ts 500 undefined WatchType: Closed Script info
-Info 75   [00:09:44.000] FileWatcher:: Added:: WatchInfo: /lib/a_155.ts 500 undefined WatchType: Closed Script info
-Info 76   [00:09:45.000] FileWatcher:: Added:: WatchInfo: /lib/a_156.ts 500 undefined WatchType: Closed Script info
-Info 77   [00:09:46.000] FileWatcher:: Added:: WatchInfo: /lib/a_157.ts 500 undefined WatchType: Closed Script info
-Info 78   [00:09:47.000] FileWatcher:: Added:: WatchInfo: /lib/a_158.ts 500 undefined WatchType: Closed Script info
-Info 79   [00:09:48.000] FileWatcher:: Added:: WatchInfo: /lib/a_159.ts 500 undefined WatchType: Closed Script info
-Info 80   [00:09:49.000] FileWatcher:: Added:: WatchInfo: /lib/a_16.ts 500 undefined WatchType: Closed Script info
-Info 81   [00:09:50.000] FileWatcher:: Added:: WatchInfo: /lib/a_160.ts 500 undefined WatchType: Closed Script info
-Info 82   [00:09:51.000] FileWatcher:: Added:: WatchInfo: /lib/a_161.ts 500 undefined WatchType: Closed Script info
-Info 83   [00:09:52.000] FileWatcher:: Added:: WatchInfo: /lib/a_162.ts 500 undefined WatchType: Closed Script info
-Info 84   [00:09:53.000] FileWatcher:: Added:: WatchInfo: /lib/a_163.ts 500 undefined WatchType: Closed Script info
-Info 85   [00:09:54.000] FileWatcher:: Added:: WatchInfo: /lib/a_164.ts 500 undefined WatchType: Closed Script info
-Info 86   [00:09:55.000] FileWatcher:: Added:: WatchInfo: /lib/a_165.ts 500 undefined WatchType: Closed Script info
-Info 87   [00:09:56.000] FileWatcher:: Added:: WatchInfo: /lib/a_166.ts 500 undefined WatchType: Closed Script info
-Info 88   [00:09:57.000] FileWatcher:: Added:: WatchInfo: /lib/a_167.ts 500 undefined WatchType: Closed Script info
-Info 89   [00:09:58.000] FileWatcher:: Added:: WatchInfo: /lib/a_168.ts 500 undefined WatchType: Closed Script info
-Info 90   [00:09:59.000] FileWatcher:: Added:: WatchInfo: /lib/a_169.ts 500 undefined WatchType: Closed Script info
-Info 91   [00:10:00.000] FileWatcher:: Added:: WatchInfo: /lib/a_17.ts 500 undefined WatchType: Closed Script info
-Info 92   [00:10:01.000] FileWatcher:: Added:: WatchInfo: /lib/a_170.ts 500 undefined WatchType: Closed Script info
-Info 93   [00:10:02.000] FileWatcher:: Added:: WatchInfo: /lib/a_171.ts 500 undefined WatchType: Closed Script info
-Info 94   [00:10:03.000] FileWatcher:: Added:: WatchInfo: /lib/a_172.ts 500 undefined WatchType: Closed Script info
-Info 95   [00:10:04.000] FileWatcher:: Added:: WatchInfo: /lib/a_173.ts 500 undefined WatchType: Closed Script info
-Info 96   [00:10:05.000] FileWatcher:: Added:: WatchInfo: /lib/a_174.ts 500 undefined WatchType: Closed Script info
-Info 97   [00:10:06.000] FileWatcher:: Added:: WatchInfo: /lib/a_175.ts 500 undefined WatchType: Closed Script info
-Info 98   [00:10:07.000] FileWatcher:: Added:: WatchInfo: /lib/a_176.ts 500 undefined WatchType: Closed Script info
-Info 99   [00:10:08.000] FileWatcher:: Added:: WatchInfo: /lib/a_177.ts 500 undefined WatchType: Closed Script info
-Info 100  [00:10:09.000] FileWatcher:: Added:: WatchInfo: /lib/a_178.ts 500 undefined WatchType: Closed Script info
-Info 101  [00:10:10.000] FileWatcher:: Added:: WatchInfo: /lib/a_179.ts 500 undefined WatchType: Closed Script info
-Info 102  [00:10:11.000] FileWatcher:: Added:: WatchInfo: /lib/a_18.ts 500 undefined WatchType: Closed Script info
-Info 103  [00:10:12.000] FileWatcher:: Added:: WatchInfo: /lib/a_180.ts 500 undefined WatchType: Closed Script info
-Info 104  [00:10:13.000] FileWatcher:: Added:: WatchInfo: /lib/a_181.ts 500 undefined WatchType: Closed Script info
-Info 105  [00:10:14.000] FileWatcher:: Added:: WatchInfo: /lib/a_182.ts 500 undefined WatchType: Closed Script info
-Info 106  [00:10:15.000] FileWatcher:: Added:: WatchInfo: /lib/a_183.ts 500 undefined WatchType: Closed Script info
-Info 107  [00:10:16.000] FileWatcher:: Added:: WatchInfo: /lib/a_184.ts 500 undefined WatchType: Closed Script info
-Info 108  [00:10:17.000] FileWatcher:: Added:: WatchInfo: /lib/a_185.ts 500 undefined WatchType: Closed Script info
-Info 109  [00:10:18.000] FileWatcher:: Added:: WatchInfo: /lib/a_186.ts 500 undefined WatchType: Closed Script info
-Info 110  [00:10:19.000] FileWatcher:: Added:: WatchInfo: /lib/a_187.ts 500 undefined WatchType: Closed Script info
-Info 111  [00:10:20.000] FileWatcher:: Added:: WatchInfo: /lib/a_188.ts 500 undefined WatchType: Closed Script info
-Info 112  [00:10:21.000] FileWatcher:: Added:: WatchInfo: /lib/a_189.ts 500 undefined WatchType: Closed Script info
-Info 113  [00:10:22.000] FileWatcher:: Added:: WatchInfo: /lib/a_19.ts 500 undefined WatchType: Closed Script info
-Info 114  [00:10:23.000] FileWatcher:: Added:: WatchInfo: /lib/a_190.ts 500 undefined WatchType: Closed Script info
-Info 115  [00:10:24.000] FileWatcher:: Added:: WatchInfo: /lib/a_191.ts 500 undefined WatchType: Closed Script info
-Info 116  [00:10:25.000] FileWatcher:: Added:: WatchInfo: /lib/a_192.ts 500 undefined WatchType: Closed Script info
-Info 117  [00:10:26.000] FileWatcher:: Added:: WatchInfo: /lib/a_193.ts 500 undefined WatchType: Closed Script info
-Info 118  [00:10:27.000] FileWatcher:: Added:: WatchInfo: /lib/a_194.ts 500 undefined WatchType: Closed Script info
-Info 119  [00:10:28.000] FileWatcher:: Added:: WatchInfo: /lib/a_195.ts 500 undefined WatchType: Closed Script info
-Info 120  [00:10:29.000] FileWatcher:: Added:: WatchInfo: /lib/a_196.ts 500 undefined WatchType: Closed Script info
-Info 121  [00:10:30.000] FileWatcher:: Added:: WatchInfo: /lib/a_197.ts 500 undefined WatchType: Closed Script info
-Info 122  [00:10:31.000] FileWatcher:: Added:: WatchInfo: /lib/a_198.ts 500 undefined WatchType: Closed Script info
-Info 123  [00:10:32.000] FileWatcher:: Added:: WatchInfo: /lib/a_199.ts 500 undefined WatchType: Closed Script info
-Info 124  [00:10:33.000] FileWatcher:: Added:: WatchInfo: /lib/a_2.ts 500 undefined WatchType: Closed Script info
-Info 125  [00:10:34.000] FileWatcher:: Added:: WatchInfo: /lib/a_20.ts 500 undefined WatchType: Closed Script info
-Info 126  [00:10:35.000] FileWatcher:: Added:: WatchInfo: /lib/a_200.ts 500 undefined WatchType: Closed Script info
-Info 127  [00:10:36.000] FileWatcher:: Added:: WatchInfo: /lib/a_201.ts 500 undefined WatchType: Closed Script info
-Info 128  [00:10:37.000] FileWatcher:: Added:: WatchInfo: /lib/a_202.ts 500 undefined WatchType: Closed Script info
-Info 129  [00:10:38.000] FileWatcher:: Added:: WatchInfo: /lib/a_203.ts 500 undefined WatchType: Closed Script info
-Info 130  [00:10:39.000] FileWatcher:: Added:: WatchInfo: /lib/a_204.ts 500 undefined WatchType: Closed Script info
-Info 131  [00:10:40.000] FileWatcher:: Added:: WatchInfo: /lib/a_205.ts 500 undefined WatchType: Closed Script info
-Info 132  [00:10:41.000] FileWatcher:: Added:: WatchInfo: /lib/a_206.ts 500 undefined WatchType: Closed Script info
-Info 133  [00:10:42.000] FileWatcher:: Added:: WatchInfo: /lib/a_207.ts 500 undefined WatchType: Closed Script info
-Info 134  [00:10:43.000] FileWatcher:: Added:: WatchInfo: /lib/a_208.ts 500 undefined WatchType: Closed Script info
-Info 135  [00:10:44.000] FileWatcher:: Added:: WatchInfo: /lib/a_209.ts 500 undefined WatchType: Closed Script info
-Info 136  [00:10:45.000] FileWatcher:: Added:: WatchInfo: /lib/a_21.ts 500 undefined WatchType: Closed Script info
-Info 137  [00:10:46.000] FileWatcher:: Added:: WatchInfo: /lib/a_210.ts 500 undefined WatchType: Closed Script info
-Info 138  [00:10:47.000] FileWatcher:: Added:: WatchInfo: /lib/a_211.ts 500 undefined WatchType: Closed Script info
-Info 139  [00:10:48.000] FileWatcher:: Added:: WatchInfo: /lib/a_212.ts 500 undefined WatchType: Closed Script info
-Info 140  [00:10:49.000] FileWatcher:: Added:: WatchInfo: /lib/a_213.ts 500 undefined WatchType: Closed Script info
-Info 141  [00:10:50.000] FileWatcher:: Added:: WatchInfo: /lib/a_214.ts 500 undefined WatchType: Closed Script info
-Info 142  [00:10:51.000] FileWatcher:: Added:: WatchInfo: /lib/a_215.ts 500 undefined WatchType: Closed Script info
-Info 143  [00:10:52.000] FileWatcher:: Added:: WatchInfo: /lib/a_216.ts 500 undefined WatchType: Closed Script info
-Info 144  [00:10:53.000] FileWatcher:: Added:: WatchInfo: /lib/a_217.ts 500 undefined WatchType: Closed Script info
-Info 145  [00:10:54.000] FileWatcher:: Added:: WatchInfo: /lib/a_218.ts 500 undefined WatchType: Closed Script info
-Info 146  [00:10:55.000] FileWatcher:: Added:: WatchInfo: /lib/a_219.ts 500 undefined WatchType: Closed Script info
-Info 147  [00:10:56.000] FileWatcher:: Added:: WatchInfo: /lib/a_22.ts 500 undefined WatchType: Closed Script info
-Info 148  [00:10:57.000] FileWatcher:: Added:: WatchInfo: /lib/a_220.ts 500 undefined WatchType: Closed Script info
-Info 149  [00:10:58.000] FileWatcher:: Added:: WatchInfo: /lib/a_221.ts 500 undefined WatchType: Closed Script info
-Info 150  [00:10:59.000] FileWatcher:: Added:: WatchInfo: /lib/a_222.ts 500 undefined WatchType: Closed Script info
-Info 151  [00:11:00.000] FileWatcher:: Added:: WatchInfo: /lib/a_223.ts 500 undefined WatchType: Closed Script info
-Info 152  [00:11:01.000] FileWatcher:: Added:: WatchInfo: /lib/a_224.ts 500 undefined WatchType: Closed Script info
-Info 153  [00:11:02.000] FileWatcher:: Added:: WatchInfo: /lib/a_225.ts 500 undefined WatchType: Closed Script info
-Info 154  [00:11:03.000] FileWatcher:: Added:: WatchInfo: /lib/a_226.ts 500 undefined WatchType: Closed Script info
-Info 155  [00:11:04.000] FileWatcher:: Added:: WatchInfo: /lib/a_227.ts 500 undefined WatchType: Closed Script info
-Info 156  [00:11:05.000] FileWatcher:: Added:: WatchInfo: /lib/a_228.ts 500 undefined WatchType: Closed Script info
-Info 157  [00:11:06.000] FileWatcher:: Added:: WatchInfo: /lib/a_229.ts 500 undefined WatchType: Closed Script info
-Info 158  [00:11:07.000] FileWatcher:: Added:: WatchInfo: /lib/a_23.ts 500 undefined WatchType: Closed Script info
-Info 159  [00:11:08.000] FileWatcher:: Added:: WatchInfo: /lib/a_230.ts 500 undefined WatchType: Closed Script info
-Info 160  [00:11:09.000] FileWatcher:: Added:: WatchInfo: /lib/a_231.ts 500 undefined WatchType: Closed Script info
-Info 161  [00:11:10.000] FileWatcher:: Added:: WatchInfo: /lib/a_232.ts 500 undefined WatchType: Closed Script info
-Info 162  [00:11:11.000] FileWatcher:: Added:: WatchInfo: /lib/a_233.ts 500 undefined WatchType: Closed Script info
-Info 163  [00:11:12.000] FileWatcher:: Added:: WatchInfo: /lib/a_234.ts 500 undefined WatchType: Closed Script info
-Info 164  [00:11:13.000] FileWatcher:: Added:: WatchInfo: /lib/a_235.ts 500 undefined WatchType: Closed Script info
-Info 165  [00:11:14.000] FileWatcher:: Added:: WatchInfo: /lib/a_236.ts 500 undefined WatchType: Closed Script info
-Info 166  [00:11:15.000] FileWatcher:: Added:: WatchInfo: /lib/a_237.ts 500 undefined WatchType: Closed Script info
-Info 167  [00:11:16.000] FileWatcher:: Added:: WatchInfo: /lib/a_238.ts 500 undefined WatchType: Closed Script info
-Info 168  [00:11:17.000] FileWatcher:: Added:: WatchInfo: /lib/a_239.ts 500 undefined WatchType: Closed Script info
-Info 169  [00:11:18.000] FileWatcher:: Added:: WatchInfo: /lib/a_24.ts 500 undefined WatchType: Closed Script info
-Info 170  [00:11:19.000] FileWatcher:: Added:: WatchInfo: /lib/a_240.ts 500 undefined WatchType: Closed Script info
-Info 171  [00:11:20.000] FileWatcher:: Added:: WatchInfo: /lib/a_241.ts 500 undefined WatchType: Closed Script info
-Info 172  [00:11:21.000] FileWatcher:: Added:: WatchInfo: /lib/a_242.ts 500 undefined WatchType: Closed Script info
-Info 173  [00:11:22.000] FileWatcher:: Added:: WatchInfo: /lib/a_243.ts 500 undefined WatchType: Closed Script info
-Info 174  [00:11:23.000] FileWatcher:: Added:: WatchInfo: /lib/a_244.ts 500 undefined WatchType: Closed Script info
-Info 175  [00:11:24.000] FileWatcher:: Added:: WatchInfo: /lib/a_245.ts 500 undefined WatchType: Closed Script info
-Info 176  [00:11:25.000] FileWatcher:: Added:: WatchInfo: /lib/a_246.ts 500 undefined WatchType: Closed Script info
-Info 177  [00:11:26.000] FileWatcher:: Added:: WatchInfo: /lib/a_247.ts 500 undefined WatchType: Closed Script info
-Info 178  [00:11:27.000] FileWatcher:: Added:: WatchInfo: /lib/a_248.ts 500 undefined WatchType: Closed Script info
-Info 179  [00:11:28.000] FileWatcher:: Added:: WatchInfo: /lib/a_249.ts 500 undefined WatchType: Closed Script info
-Info 180  [00:11:29.000] FileWatcher:: Added:: WatchInfo: /lib/a_25.ts 500 undefined WatchType: Closed Script info
-Info 181  [00:11:30.000] FileWatcher:: Added:: WatchInfo: /lib/a_26.ts 500 undefined WatchType: Closed Script info
-Info 182  [00:11:31.000] FileWatcher:: Added:: WatchInfo: /lib/a_27.ts 500 undefined WatchType: Closed Script info
-Info 183  [00:11:32.000] FileWatcher:: Added:: WatchInfo: /lib/a_28.ts 500 undefined WatchType: Closed Script info
-Info 184  [00:11:33.000] FileWatcher:: Added:: WatchInfo: /lib/a_29.ts 500 undefined WatchType: Closed Script info
-Info 185  [00:11:34.000] FileWatcher:: Added:: WatchInfo: /lib/a_3.ts 500 undefined WatchType: Closed Script info
-Info 186  [00:11:35.000] FileWatcher:: Added:: WatchInfo: /lib/a_30.ts 500 undefined WatchType: Closed Script info
-Info 187  [00:11:36.000] FileWatcher:: Added:: WatchInfo: /lib/a_31.ts 500 undefined WatchType: Closed Script info
-Info 188  [00:11:37.000] FileWatcher:: Added:: WatchInfo: /lib/a_32.ts 500 undefined WatchType: Closed Script info
-Info 189  [00:11:38.000] FileWatcher:: Added:: WatchInfo: /lib/a_33.ts 500 undefined WatchType: Closed Script info
-Info 190  [00:11:39.000] FileWatcher:: Added:: WatchInfo: /lib/a_34.ts 500 undefined WatchType: Closed Script info
-Info 191  [00:11:40.000] FileWatcher:: Added:: WatchInfo: /lib/a_35.ts 500 undefined WatchType: Closed Script info
-Info 192  [00:11:41.000] FileWatcher:: Added:: WatchInfo: /lib/a_36.ts 500 undefined WatchType: Closed Script info
-Info 193  [00:11:42.000] FileWatcher:: Added:: WatchInfo: /lib/a_37.ts 500 undefined WatchType: Closed Script info
-Info 194  [00:11:43.000] FileWatcher:: Added:: WatchInfo: /lib/a_38.ts 500 undefined WatchType: Closed Script info
-Info 195  [00:11:44.000] FileWatcher:: Added:: WatchInfo: /lib/a_39.ts 500 undefined WatchType: Closed Script info
-Info 196  [00:11:45.000] FileWatcher:: Added:: WatchInfo: /lib/a_4.ts 500 undefined WatchType: Closed Script info
-Info 197  [00:11:46.000] FileWatcher:: Added:: WatchInfo: /lib/a_40.ts 500 undefined WatchType: Closed Script info
-Info 198  [00:11:47.000] FileWatcher:: Added:: WatchInfo: /lib/a_41.ts 500 undefined WatchType: Closed Script info
-Info 199  [00:11:48.000] FileWatcher:: Added:: WatchInfo: /lib/a_42.ts 500 undefined WatchType: Closed Script info
-Info 200  [00:11:49.000] FileWatcher:: Added:: WatchInfo: /lib/a_43.ts 500 undefined WatchType: Closed Script info
-Info 201  [00:11:50.000] FileWatcher:: Added:: WatchInfo: /lib/a_44.ts 500 undefined WatchType: Closed Script info
-Info 202  [00:11:51.000] FileWatcher:: Added:: WatchInfo: /lib/a_45.ts 500 undefined WatchType: Closed Script info
-Info 203  [00:11:52.000] FileWatcher:: Added:: WatchInfo: /lib/a_46.ts 500 undefined WatchType: Closed Script info
-Info 204  [00:11:53.000] FileWatcher:: Added:: WatchInfo: /lib/a_47.ts 500 undefined WatchType: Closed Script info
-Info 205  [00:11:54.000] FileWatcher:: Added:: WatchInfo: /lib/a_48.ts 500 undefined WatchType: Closed Script info
-Info 206  [00:11:55.000] FileWatcher:: Added:: WatchInfo: /lib/a_49.ts 500 undefined WatchType: Closed Script info
-Info 207  [00:11:56.000] FileWatcher:: Added:: WatchInfo: /lib/a_5.ts 500 undefined WatchType: Closed Script info
-Info 208  [00:11:57.000] FileWatcher:: Added:: WatchInfo: /lib/a_50.ts 500 undefined WatchType: Closed Script info
-Info 209  [00:11:58.000] FileWatcher:: Added:: WatchInfo: /lib/a_51.ts 500 undefined WatchType: Closed Script info
-Info 210  [00:11:59.000] FileWatcher:: Added:: WatchInfo: /lib/a_52.ts 500 undefined WatchType: Closed Script info
-Info 211  [00:12:00.000] FileWatcher:: Added:: WatchInfo: /lib/a_53.ts 500 undefined WatchType: Closed Script info
-Info 212  [00:12:01.000] FileWatcher:: Added:: WatchInfo: /lib/a_54.ts 500 undefined WatchType: Closed Script info
-Info 213  [00:12:02.000] FileWatcher:: Added:: WatchInfo: /lib/a_55.ts 500 undefined WatchType: Closed Script info
-Info 214  [00:12:03.000] FileWatcher:: Added:: WatchInfo: /lib/a_56.ts 500 undefined WatchType: Closed Script info
-Info 215  [00:12:04.000] FileWatcher:: Added:: WatchInfo: /lib/a_57.ts 500 undefined WatchType: Closed Script info
-Info 216  [00:12:05.000] FileWatcher:: Added:: WatchInfo: /lib/a_58.ts 500 undefined WatchType: Closed Script info
-Info 217  [00:12:06.000] FileWatcher:: Added:: WatchInfo: /lib/a_59.ts 500 undefined WatchType: Closed Script info
-Info 218  [00:12:07.000] FileWatcher:: Added:: WatchInfo: /lib/a_6.ts 500 undefined WatchType: Closed Script info
-Info 219  [00:12:08.000] FileWatcher:: Added:: WatchInfo: /lib/a_60.ts 500 undefined WatchType: Closed Script info
-Info 220  [00:12:09.000] FileWatcher:: Added:: WatchInfo: /lib/a_61.ts 500 undefined WatchType: Closed Script info
-Info 221  [00:12:10.000] FileWatcher:: Added:: WatchInfo: /lib/a_62.ts 500 undefined WatchType: Closed Script info
-Info 222  [00:12:11.000] FileWatcher:: Added:: WatchInfo: /lib/a_63.ts 500 undefined WatchType: Closed Script info
-Info 223  [00:12:12.000] FileWatcher:: Added:: WatchInfo: /lib/a_64.ts 500 undefined WatchType: Closed Script info
-Info 224  [00:12:13.000] FileWatcher:: Added:: WatchInfo: /lib/a_65.ts 500 undefined WatchType: Closed Script info
-Info 225  [00:12:14.000] FileWatcher:: Added:: WatchInfo: /lib/a_66.ts 500 undefined WatchType: Closed Script info
-Info 226  [00:12:15.000] FileWatcher:: Added:: WatchInfo: /lib/a_67.ts 500 undefined WatchType: Closed Script info
-Info 227  [00:12:16.000] FileWatcher:: Added:: WatchInfo: /lib/a_68.ts 500 undefined WatchType: Closed Script info
-Info 228  [00:12:17.000] FileWatcher:: Added:: WatchInfo: /lib/a_69.ts 500 undefined WatchType: Closed Script info
-Info 229  [00:12:18.000] FileWatcher:: Added:: WatchInfo: /lib/a_7.ts 500 undefined WatchType: Closed Script info
-Info 230  [00:12:19.000] FileWatcher:: Added:: WatchInfo: /lib/a_70.ts 500 undefined WatchType: Closed Script info
-Info 231  [00:12:20.000] FileWatcher:: Added:: WatchInfo: /lib/a_71.ts 500 undefined WatchType: Closed Script info
-Info 232  [00:12:21.000] FileWatcher:: Added:: WatchInfo: /lib/a_72.ts 500 undefined WatchType: Closed Script info
-Info 233  [00:12:22.000] FileWatcher:: Added:: WatchInfo: /lib/a_73.ts 500 undefined WatchType: Closed Script info
-Info 234  [00:12:23.000] FileWatcher:: Added:: WatchInfo: /lib/a_74.ts 500 undefined WatchType: Closed Script info
-Info 235  [00:12:24.000] FileWatcher:: Added:: WatchInfo: /lib/a_75.ts 500 undefined WatchType: Closed Script info
-Info 236  [00:12:25.000] FileWatcher:: Added:: WatchInfo: /lib/a_76.ts 500 undefined WatchType: Closed Script info
-Info 237  [00:12:26.000] FileWatcher:: Added:: WatchInfo: /lib/a_77.ts 500 undefined WatchType: Closed Script info
-Info 238  [00:12:27.000] FileWatcher:: Added:: WatchInfo: /lib/a_78.ts 500 undefined WatchType: Closed Script info
-Info 239  [00:12:28.000] FileWatcher:: Added:: WatchInfo: /lib/a_79.ts 500 undefined WatchType: Closed Script info
-Info 240  [00:12:29.000] FileWatcher:: Added:: WatchInfo: /lib/a_8.ts 500 undefined WatchType: Closed Script info
-Info 241  [00:12:30.000] FileWatcher:: Added:: WatchInfo: /lib/a_80.ts 500 undefined WatchType: Closed Script info
-Info 242  [00:12:31.000] FileWatcher:: Added:: WatchInfo: /lib/a_81.ts 500 undefined WatchType: Closed Script info
-Info 243  [00:12:32.000] FileWatcher:: Added:: WatchInfo: /lib/a_82.ts 500 undefined WatchType: Closed Script info
-Info 244  [00:12:33.000] FileWatcher:: Added:: WatchInfo: /lib/a_83.ts 500 undefined WatchType: Closed Script info
-Info 245  [00:12:34.000] FileWatcher:: Added:: WatchInfo: /lib/a_84.ts 500 undefined WatchType: Closed Script info
-Info 246  [00:12:35.000] FileWatcher:: Added:: WatchInfo: /lib/a_85.ts 500 undefined WatchType: Closed Script info
-Info 247  [00:12:36.000] FileWatcher:: Added:: WatchInfo: /lib/a_86.ts 500 undefined WatchType: Closed Script info
-Info 248  [00:12:37.000] FileWatcher:: Added:: WatchInfo: /lib/a_87.ts 500 undefined WatchType: Closed Script info
-Info 249  [00:12:38.000] FileWatcher:: Added:: WatchInfo: /lib/a_88.ts 500 undefined WatchType: Closed Script info
-Info 250  [00:12:39.000] FileWatcher:: Added:: WatchInfo: /lib/a_89.ts 500 undefined WatchType: Closed Script info
-Info 251  [00:12:40.000] FileWatcher:: Added:: WatchInfo: /lib/a_9.ts 500 undefined WatchType: Closed Script info
-Info 252  [00:12:41.000] FileWatcher:: Added:: WatchInfo: /lib/a_90.ts 500 undefined WatchType: Closed Script info
-Info 253  [00:12:42.000] FileWatcher:: Added:: WatchInfo: /lib/a_91.ts 500 undefined WatchType: Closed Script info
-Info 254  [00:12:43.000] FileWatcher:: Added:: WatchInfo: /lib/a_92.ts 500 undefined WatchType: Closed Script info
-Info 255  [00:12:44.000] FileWatcher:: Added:: WatchInfo: /lib/a_93.ts 500 undefined WatchType: Closed Script info
-Info 256  [00:12:45.000] FileWatcher:: Added:: WatchInfo: /lib/a_94.ts 500 undefined WatchType: Closed Script info
-Info 257  [00:12:46.000] FileWatcher:: Added:: WatchInfo: /lib/a_95.ts 500 undefined WatchType: Closed Script info
-Info 258  [00:12:47.000] FileWatcher:: Added:: WatchInfo: /lib/a_96.ts 500 undefined WatchType: Closed Script info
-Info 259  [00:12:48.000] FileWatcher:: Added:: WatchInfo: /lib/a_97.ts 500 undefined WatchType: Closed Script info
-Info 260  [00:12:49.000] FileWatcher:: Added:: WatchInfo: /lib/a_98.ts 500 undefined WatchType: Closed Script info
-Info 261  [00:12:50.000] FileWatcher:: Added:: WatchInfo: /lib/a_99.ts 500 undefined WatchType: Closed Script info
-Info 262  [00:12:51.000] Starting updateGraphWorker: Project: /tsconfig.json
-Info 263  [00:12:52.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
-Info 264  [00:12:53.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 265  [00:12:54.000] Project '/tsconfig.json' (Configured)
-Info 266  [00:12:55.000] 	Files (251)
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_0.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_1.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_10.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_100.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_101.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_102.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_103.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_104.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_105.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_106.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_107.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_108.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_109.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_11.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_110.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_111.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_112.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_113.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_114.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_115.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_116.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_117.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_118.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_119.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_12.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_120.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_121.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_122.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_123.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_124.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_125.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_126.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_127.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_128.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_129.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_13.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_130.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_131.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_132.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_133.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_134.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_135.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_136.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_137.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_138.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_139.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_14.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_140.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_141.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_142.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_143.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_144.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_145.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_146.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_147.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_148.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_149.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_15.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_150.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_151.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_152.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_153.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_154.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_155.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_156.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_157.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_158.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_159.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_16.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_160.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_161.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_162.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_163.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_164.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_165.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_166.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_167.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_168.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_169.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_17.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_170.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_171.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_172.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_173.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_174.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_175.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_176.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_177.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_178.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_179.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_18.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_180.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_181.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_182.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_183.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_184.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_185.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_186.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_187.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_188.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_189.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_19.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_190.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_191.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_192.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_193.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_194.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_195.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_196.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_197.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_198.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_199.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_2.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_20.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_200.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_201.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_202.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_203.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_204.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_205.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_206.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_207.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_208.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_209.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_21.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_210.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_211.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_212.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_213.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_214.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_215.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_216.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_217.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_218.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_219.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_22.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_220.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_221.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_222.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_223.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_224.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_225.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_226.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_227.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_228.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_229.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_23.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_230.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_231.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_232.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_233.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_234.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_235.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_236.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_237.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_238.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_239.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_24.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_240.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_241.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_242.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_243.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_244.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_245.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_246.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_247.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_248.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_249.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_25.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_26.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_27.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_28.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_29.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_3.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_30.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_31.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_32.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_33.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_34.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_35.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_36.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_37.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_38.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_39.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_4.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_40.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_41.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_42.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_43.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_44.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_45.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_46.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_47.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_48.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_49.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_5.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_50.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_51.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_52.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_53.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_54.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_55.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_56.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_57.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_58.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_59.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_6.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_60.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_61.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_62.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_63.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_64.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_65.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_66.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_67.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_68.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_69.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_7.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_70.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_71.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_72.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_73.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_74.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_75.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_76.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_77.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_78.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_79.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_8.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_80.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_81.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_82.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_83.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_84.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_85.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_86.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_87.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_88.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_89.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_9.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_90.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_91.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_92.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_93.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_94.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_95.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_96.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_97.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_98.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_99.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (251)
 	/index.ts SVC-1-0 ""
 	/lib/a_0.ts Text-1 "export const aa_0__0 = 0;"
 	/lib/a_1.ts Text-1 "export const aa_1__0 = 0;"
@@ -2068,15 +2068,15 @@ Info 266  [00:12:55.000] 	Files (251)
 	lib/a_99.ts
 	  Matched by default include pattern '**/*'
 
-Info 267  [00:12:56.000] -----------------------------------------------
-Info 268  [00:12:57.000] Project '/tsconfig.json' (Configured)
-Info 268  [00:12:58.000] 	Files (251)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (251)
 
-Info 268  [00:12:59.000] -----------------------------------------------
-Info 268  [00:13:00.000] Open files: 
-Info 268  [00:13:01.000] 	FileName: /index.ts ProjectRootPath: undefined
-Info 268  [00:13:02.000] 		Projects: /tsconfig.json
-Info 268  [00:13:03.000] response:
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /index.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
@@ -2596,7 +2596,7 @@ FsWatchesRecursive::
 
 Before request
 
-Info 269  [00:13:04.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "updateOpen",
       "arguments": {
@@ -2622,7 +2622,7 @@ Info 269  [00:13:04.000] request:
       "seq": 3,
       "type": "request"
     }
-Info 270  [00:13:05.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
       "responseRequired": true
@@ -2631,7 +2631,7 @@ After request
 
 Before request
 
-Info 271  [00:13:06.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "completionInfo",
       "arguments": {
@@ -2642,10 +2642,10 @@ Info 271  [00:13:06.000] request:
       "seq": 4,
       "type": "request"
     }
-Info 272  [00:13:07.000] Starting updateGraphWorker: Project: /tsconfig.json
-Info 273  [00:13:08.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 274  [00:13:09.000] Project '/tsconfig.json' (Configured)
-Info 275  [00:13:10.000] 	Files (251)
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (251)
 	/index.ts SVC-1-1 "a"
 	/lib/a_0.ts Text-1 "export const aa_0__0 = 0;"
 	/lib/a_1.ts Text-1 "export const aa_1__0 = 0;"
@@ -2898,18 +2898,18 @@ Info 275  [00:13:10.000] 	Files (251)
 	/lib/a_98.ts Text-1 "export const aa_98__0 = 0;"
 	/lib/a_99.ts Text-1 "export const aa_99__0 = 0;"
 
-Info 276  [00:13:11.000] -----------------------------------------------
-Info 277  [00:13:12.000] getCompletionData: Get current token: *
-Info 278  [00:13:13.000] getCompletionData: Is inside comment: *
-Info 279  [00:13:14.000] getCompletionData: Get previous token: *
-Info 280  [00:13:15.000] getExportInfoMap: cache miss or empty; calculating new results
-Info 281  [00:13:16.000] getExportInfoMap: done in * ms
-Info 282  [00:13:17.000] collectAutoImports: resolved 100 module specifiers, plus 0 ambient and 150 from cache (100.0% hit rate)
-Info 283  [00:13:18.000] collectAutoImports: response is incomplete
-Info 284  [00:13:19.000] collectAutoImports: *
-Info 285  [00:13:20.000] getCompletionData: Semantic work: *
-Info 286  [00:13:21.000] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
-Info 287  [00:13:22.000] response:
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] getCompletionData: Get current token: *
+Info seq  [hh:mm:ss:mss] getCompletionData: Is inside comment: *
+Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
+Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
+Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
+Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 100 module specifiers, plus 0 ambient and 150 from cache (100.0% hit rate)
+Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
+Info seq  [hh:mm:ss:mss] collectAutoImports: *
+Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
+Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
         "flags": 9,
@@ -7282,7 +7282,7 @@ After request
 
 Before request
 
-Info 288  [00:13:23.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "updateOpen",
       "arguments": {
@@ -7308,7 +7308,7 @@ Info 288  [00:13:23.000] request:
       "seq": 5,
       "type": "request"
     }
-Info 289  [00:13:24.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
       "responseRequired": true
@@ -7317,7 +7317,7 @@ After request
 
 Before request
 
-Info 290  [00:13:25.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "completionInfo",
       "arguments": {
@@ -7329,10 +7329,10 @@ Info 290  [00:13:25.000] request:
       "seq": 6,
       "type": "request"
     }
-Info 291  [00:13:26.000] Starting updateGraphWorker: Project: /tsconfig.json
-Info 292  [00:13:27.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 293  [00:13:28.000] Project '/tsconfig.json' (Configured)
-Info 294  [00:13:29.000] 	Files (251)
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (251)
 	/index.ts SVC-1-2 "aa"
 	/lib/a_0.ts Text-1 "export const aa_0__0 = 0;"
 	/lib/a_1.ts Text-1 "export const aa_1__0 = 0;"
@@ -7585,12 +7585,12 @@ Info 294  [00:13:29.000] 	Files (251)
 	/lib/a_98.ts Text-1 "export const aa_98__0 = 0;"
 	/lib/a_99.ts Text-1 "export const aa_99__0 = 0;"
 
-Info 295  [00:13:30.000] -----------------------------------------------
-Info 296  [00:13:31.000] getExportInfoMap: cache hit
-Info 297  [00:13:32.000] continuePreviousIncompleteResponse: resolved 100 module specifiers, plus 0 ambient and 50 from cache (100.0% hit rate)
-Info 298  [00:13:33.000] continuePreviousIncompleteResponse: response is incomplete
-Info 299  [00:13:34.000] continuePreviousIncompleteResponse: *
-Info 300  [00:13:35.000] response:
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] getExportInfoMap: cache hit
+Info seq  [hh:mm:ss:mss] continuePreviousIncompleteResponse: resolved 100 module specifiers, plus 0 ambient and 50 from cache (100.0% hit rate)
+Info seq  [hh:mm:ss:mss] continuePreviousIncompleteResponse: response is incomplete
+Info seq  [hh:mm:ss:mss] continuePreviousIncompleteResponse: *
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
         "flags": 13,
@@ -12663,7 +12663,7 @@ After request
 
 Before request
 
-Info 301  [00:13:36.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "updateOpen",
       "arguments": {
@@ -12689,7 +12689,7 @@ Info 301  [00:13:36.000] request:
       "seq": 7,
       "type": "request"
     }
-Info 302  [00:13:37.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
       "responseRequired": true
@@ -12698,7 +12698,7 @@ After request
 
 Before request
 
-Info 303  [00:13:38.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "completionInfo",
       "arguments": {
@@ -12710,10 +12710,10 @@ Info 303  [00:13:38.000] request:
       "seq": 8,
       "type": "request"
     }
-Info 304  [00:13:39.000] Starting updateGraphWorker: Project: /tsconfig.json
-Info 305  [00:13:40.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 4 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 306  [00:13:41.000] Project '/tsconfig.json' (Configured)
-Info 307  [00:13:42.000] 	Files (251)
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 4 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (251)
 	/index.ts SVC-1-3 "aa_"
 	/lib/a_0.ts Text-1 "export const aa_0__0 = 0;"
 	/lib/a_1.ts Text-1 "export const aa_1__0 = 0;"
@@ -12966,12 +12966,12 @@ Info 307  [00:13:42.000] 	Files (251)
 	/lib/a_98.ts Text-1 "export const aa_98__0 = 0;"
 	/lib/a_99.ts Text-1 "export const aa_99__0 = 0;"
 
-Info 308  [00:13:43.000] -----------------------------------------------
-Info 309  [00:13:44.000] getExportInfoMap: cache hit
-Info 310  [00:13:45.000] continuePreviousIncompleteResponse: resolved 50 module specifiers, plus 0 ambient and 0 from cache
-Info 311  [00:13:46.000] continuePreviousIncompleteResponse: response is complete
-Info 312  [00:13:47.000] continuePreviousIncompleteResponse: *
-Info 313  [00:13:48.000] response:
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] getExportInfoMap: cache hit
+Info seq  [hh:mm:ss:mss] continuePreviousIncompleteResponse: resolved 50 module specifiers, plus 0 ambient and 0 from cache
+Info seq  [hh:mm:ss:mss] continuePreviousIncompleteResponse: response is complete
+Info seq  [hh:mm:ss:mss] continuePreviousIncompleteResponse: *
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
         "flags": 13,

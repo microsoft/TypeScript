@@ -30,7 +30,7 @@ var x;
         return c;
     }());
     x.c = c;
-})(x = exports.x || (exports.x = {}));
+})(x || (exports.x = x = {}));
 var m2;
 (function (m2) {
     var m3;
@@ -39,7 +39,7 @@ var m2;
         m3.cProp = new c();
         var cReturnVal = m3.cProp.foo(10);
     })(m3 = m2.m3 || (m2.m3 = {}));
-})(m2 = exports.m2 || (exports.m2 = {}));
+})(m2 || (exports.m2 = m2 = {}));
 
 
 //// [internalAliasClassInsideLocalModuleWithoutExport.d.ts]

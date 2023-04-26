@@ -60,4 +60,4 @@ var CompilerDiagnostics;
         }
     }
     CompilerDiagnostics.assert = assert;
-})(CompilerDiagnostics = exports.CompilerDiagnostics || (exports.CompilerDiagnostics = {}));
+})(CompilerDiagnostics || (exports.CompilerDiagnostics = CompilerDiagnostics = {}));

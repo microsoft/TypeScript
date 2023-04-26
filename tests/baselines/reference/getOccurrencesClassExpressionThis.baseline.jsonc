@@ -28,21 +28,7 @@
 //     }
 // 
 //     static bar() {
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// }
+// --- (line: 29) skipped ---
 
 
 
@@ -76,21 +62,7 @@
 //     }
 // 
 //     static bar() {
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// }
+// --- (line: 29) skipped ---
 
 
 
@@ -124,21 +96,7 @@
 //     }
 // 
 //     static bar() {
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// }
+// --- (line: 29) skipped ---
 
 
 
@@ -172,21 +130,7 @@
 //     }
 // 
 //     static bar() {
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// }
+// --- (line: 29) skipped ---
 
 
 
@@ -220,21 +164,7 @@
 //     }
 // 
 //     static bar() {
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// }
+// --- (line: 29) skipped ---
 
 
 
@@ -268,21 +198,7 @@
 //     }
 // 
 //     static bar() {
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// }
+// --- (line: 29) skipped ---
 
 
 
@@ -316,21 +232,7 @@
 //     }
 // 
 //     static bar() {
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// }
+// --- (line: 29) skipped ---
 
 
 
@@ -364,21 +266,7 @@
 //     }
 // 
 //     static bar() {
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// }
+// --- (line: 29) skipped ---
 
 
 
@@ -412,18 +300,4 @@
 //     }
 // 
 //     static bar() {
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// }
+// --- (line: 29) skipped ---

@@ -21,7 +21,7 @@ var Enum;
 (function (Enum) {
     Enum[Enum["A"] = 0] = "A";
     Enum[Enum["B"] = 1] = "B";
-})(Enum = exports.Enum || (exports.Enum = {}));
+})(Enum || (exports.Enum = Enum = {}));
 //// [alias.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

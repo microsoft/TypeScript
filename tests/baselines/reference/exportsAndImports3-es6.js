@@ -51,12 +51,10 @@ var E;
     E[E["A"] = 0] = "A";
     E[E["B"] = 1] = "B";
     E[E["C"] = 2] = "C";
-})(E = exports.E || (exports.E = {}));
-exports.E1 = E;
+})(E || (exports.E1 = exports.E = E = {}));
 var M;
 (function (M) {
-})(M = exports.M || (exports.M = {}));
-exports.M1 = M;
+})(M || (exports.M1 = exports.M = M = {}));
 exports.a = M.x;
 exports.a1 = exports.a;
 //// [t2.js]

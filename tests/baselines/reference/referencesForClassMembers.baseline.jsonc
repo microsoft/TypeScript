@@ -24,9 +24,7 @@
   //     method() { }
   // }
   // 
-  // var c: MyClass;
-  // c.a;
-  // c.method();
+  // --- (line: 10) skipped ---
 
   // === Details ===
   [
@@ -158,9 +156,7 @@
   //     method() { }
   // }
   // 
-  // var c: MyClass;
-  // c.a;
-  // c.method();
+  // --- (line: 10) skipped ---
 
   // === Details ===
   [

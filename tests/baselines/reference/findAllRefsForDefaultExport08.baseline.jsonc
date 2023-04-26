@@ -1,9 +1,6 @@
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsForDefaultExport08.ts ===
-// export default class DefaultExportedClass {
-// }
-// 
-// var x: DefaultExportedClass;
+// --- (line: 4) skipped ---
 // 
 // var y = new DefaultExportedClass;
 // 

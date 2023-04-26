@@ -2,6 +2,9 @@ import * as ts from "../../_namespaces/ts";
 import * as vfs from "../../_namespaces/vfs";
 
 import {
+    verifyTsc,
+} from "../helpers/tsc";
+import {
     addRest,
     addShebang,
     addSpread,
@@ -11,9 +14,8 @@ import {
     enableStrict,
     loadProjectFromDisk,
     removeRest,
-    replaceText,
-    verifyTsc,
-} from "../tsc/helpers";
+    replaceText
+} from "../helpers/vfs";
 
 describe("unittests:: tsbuild:: outFile:: on amd modules with --out", () => {
     let outFileFs: vfs.FileSystem;

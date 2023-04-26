@@ -9,13 +9,7 @@
 //  */
 // const t1 = 1
 // /**
-//  * @see {a.foo()}
-//  */
-// const t2 = 1
-// /**
-//  * @see {@link a.foo()}
-//  */
-// const t3 = 1
+// --- (line: 10) skipped ---
 
   // === Details ===
   [
@@ -47,9 +41,7 @@
 //  */
 // const t2 = 1
 // /**
-//  * @see {@link a.foo()}
-//  */
-// const t3 = 1
+// --- (line: 14) skipped ---
 
   // === Details ===
   [

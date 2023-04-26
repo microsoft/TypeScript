@@ -35,7 +35,7 @@ tests/cases/conformance/jsx/17.tsx(1,2): error TS17008: JSX element 'a' has no c
 tests/cases/conformance/jsx/17.tsx(1,10): error TS1005: '</' expected.
 tests/cases/conformance/jsx/18.tsx(1,30): error TS2657: JSX expressions must have one parent element.
 tests/cases/conformance/jsx/19.tsx(1,9): error TS2657: JSX expressions must have one parent element.
-tests/cases/conformance/jsx/2.tsx(1,3): error TS1003: Identifier expected.
+tests/cases/conformance/jsx/2.tsx(1,5): error TS1003: Identifier expected.
 tests/cases/conformance/jsx/20.tsx(1,10): error TS1005: '}' expected.
 tests/cases/conformance/jsx/20.tsx(1,11): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
 tests/cases/conformance/jsx/21.tsx(1,20): error TS1003: Identifier expected.
@@ -74,9 +74,7 @@ tests/cases/conformance/jsx/5.tsx(1,5): error TS1005: '</' expected.
 tests/cases/conformance/jsx/6.tsx(1,6): error TS17002: Expected corresponding JSX closing tag for 'a'.
 tests/cases/conformance/jsx/7.tsx(1,13): error TS1002: Unterminated string literal.
 tests/cases/conformance/jsx/8.tsx(1,8): error TS17002: Expected corresponding JSX closing tag for 'a:b'.
-tests/cases/conformance/jsx/9.tsx(1,2): error TS2304: Cannot find name 'a:b'.
 tests/cases/conformance/jsx/9.tsx(1,2): error TS2633: JSX property access expressions cannot include JSX namespace names
-tests/cases/conformance/jsx/9.tsx(1,10): error TS2304: Cannot find name 'a:b'.
 
 
 ==== tests/cases/conformance/jsx/1.tsx (3 errors) ====
@@ -91,7 +89,7 @@ tests/cases/conformance/jsx/9.tsx(1,10): error TS2304: Cannot find name 'a:b'.
 !!! error TS1109: Expression expected.
 ==== tests/cases/conformance/jsx/2.tsx (1 errors) ====
     <a: />;
-      ~
+        ~
 !!! error TS1003: Identifier expected.
 ==== tests/cases/conformance/jsx/3.tsx (5 errors) ====
     <:a />;
@@ -127,14 +125,10 @@ tests/cases/conformance/jsx/9.tsx(1,10): error TS2304: Cannot find name 'a:b'.
     <a:b></b>;
            ~
 !!! error TS17002: Expected corresponding JSX closing tag for 'a:b'.
-==== tests/cases/conformance/jsx/9.tsx (3 errors) ====
+==== tests/cases/conformance/jsx/9.tsx (1 errors) ====
     <a:b.c></a:b.c>;
      ~~~
-!!! error TS2304: Cannot find name 'a:b'.
-     ~~~
 !!! error TS2633: JSX property access expressions cannot include JSX namespace names
-             ~~~
-!!! error TS2304: Cannot find name 'a:b'.
 ==== tests/cases/conformance/jsx/10.tsx (6 errors) ====
     <a.b:c></a.b:c>;
      ~

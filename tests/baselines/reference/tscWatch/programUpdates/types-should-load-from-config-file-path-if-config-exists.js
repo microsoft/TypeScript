@@ -61,8 +61,6 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
-/a/b/node_modules: *new*
-  {}
 /a/b: *new*
   {}
 

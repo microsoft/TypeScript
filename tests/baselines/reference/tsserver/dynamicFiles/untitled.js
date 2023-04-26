@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info 0    [00:00:09.000] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Creating project service
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -15,15 +15,15 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-Info 1    [00:00:10.000] Search path: untitled:/Users/matb/projects/san
-Info 2    [00:00:11.000] For info: untitled:/Users/matb/projects/san/^newFile.ts :: No config files found.
-Info 3    [00:00:12.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info 4    [00:00:13.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 5    [00:00:14.000] FileWatcher:: Added:: WatchInfo: /typings/@epic/core.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-Info 6    [00:00:15.000] FileWatcher:: Added:: WatchInfo: /typings/@epic/shell.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-Info 7    [00:00:16.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 8    [00:00:17.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 9    [00:00:18.000] 	Files (2)
+Info seq  [hh:mm:ss:mss] Search path: untitled:/Users/matb/projects/san
+Info seq  [hh:mm:ss:mss] For info: untitled:/Users/matb/projects/san/^newFile.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /typings/@epic/core.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /typings/@epic/shell.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	untitled:/Users/matb/projects/san/^newFile.ts SVC-1-0 "/// <reference path=\"../../../../../../typings/@epic/Core.d.ts\" />\n/// <reference path=\"../../../../../../typings/@epic/Shell.d.ts\" />\nvar x = 10;"
 
@@ -33,12 +33,12 @@ Info 9    [00:00:18.000] 	Files (2)
 	untitled:/Users/matb/projects/san/^newFile.ts
 	  Root file specified for compilation
 
-Info 10   [00:00:19.000] -----------------------------------------------
-Info 11   [00:00:20.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 11   [00:00:21.000] 	Files (2)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 
-Info 11   [00:00:22.000] -----------------------------------------------
-Info 11   [00:00:23.000] Open files: 
-Info 11   [00:00:24.000] 	FileName: untitled:/Users/matb/projects/san/^newFile.ts ProjectRootPath: undefined
-Info 11   [00:00:25.000] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: untitled:/Users/matb/projects/san/^newFile.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 /untitled:/users/matb/projects/san/^newfile.ts isDynamic:: true

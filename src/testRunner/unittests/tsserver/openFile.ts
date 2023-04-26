@@ -1,11 +1,6 @@
 import * as ts from "../../_namespaces/ts";
 
 import {
-    createServerHost,
-    File,
-    libFile,
-} from "../virtualFileSystemWithWatch";
-import {
     baselineTsserverLogs,
     closeFilesForSession,
     createLoggerWithInMemoryLogs,
@@ -16,7 +11,12 @@ import {
     TestSession,
     toExternalFile,
     verifyGetErrRequest,
-} from "./helpers";
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+    File,
+    libFile,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: Open-file", () => {
     it("can be reloaded with empty content", () => {

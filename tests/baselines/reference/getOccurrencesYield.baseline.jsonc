@@ -6,12 +6,7 @@
 //   class Foo {
 //       *memberFunction() {
 //           return yield 1;
-//       }
-//   }
-//   return function* g() {
-//     yield 1;
-//   }
-// }
+// --- (line: 7) skipped ---
 
 
 
@@ -23,12 +18,7 @@
 //   class Foo {
 //       *memberFunction() {
 //           return yield 1;
-//       }
-//   }
-//   return function* g() {
-//     yield 1;
-//   }
-// }
+// --- (line: 7) skipped ---
 
 
 
@@ -40,9 +30,4 @@
 //   class Foo {
 //       *memberFunction() {
 //           return yield 1;
-//       }
-//   }
-//   return function* g() {
-//     yield 1;
-//   }
-// }
+// --- (line: 7) skipped ---

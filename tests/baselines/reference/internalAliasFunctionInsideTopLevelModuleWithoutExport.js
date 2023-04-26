@@ -20,7 +20,7 @@ var a;
         return x;
     }
     a.foo = foo;
-})(a = exports.a || (exports.a = {}));
+})(a || (exports.a = a = {}));
 var b = a.foo;
 exports.bVal = b(10);
 exports.bVal2 = b;

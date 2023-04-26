@@ -1,13 +1,6 @@
 // === findAllReferences ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
-//     interface Element { }
-//     interface IntrinsicElements {
-//     }
-//     interface ElementAttributesProperty { props; }
-// }
-// interface ClickableProps {
-//     children?: string;
+// --- (line: 8) skipped ---
 //     className?: string;
 // }
 // interface ButtonProps extends ClickableProps {
@@ -28,14 +21,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/file.tsx ===
-  // declare module JSX {
-  //     interface Element { }
-  //     interface IntrinsicElements {
-  //     }
-  //     interface ElementAttributesProperty { props; }
-  // }
-  // interface ClickableProps {
-  //     children?: string;
+  // --- (line: 8) skipped ---
   //     className?: string;
   // }
   // interface ButtonProps extends ClickableProps {
@@ -43,16 +29,7 @@
   // }
   // interface LinkProps extends ClickableProps {
   //     goTo: string;
-  // }
-  // declare function MainButton(buttonProps: ButtonProps): JSX.Element;
-  // declare function MainButton(linkProps: LinkProps): JSX.Element;
-  // declare function MainButton(props: ButtonProps | LinkProps): JSX.Element;
-  // let opt = <MainButton />;
-  // let opt = <MainButton children="chidlren" />;
-  // let opt = <MainButton onClick={()=>{}} />;
-  // let opt = <MainButton onClick={()=>{}} ignore-prop />;
-  // let opt = <MainButton goTo="goTo" />;
-  // let opt = <MainButton wrong />;
+  // --- (line: 16) skipped ---
 
   // === Details ===
   [

@@ -4,23 +4,9 @@
 // interface J { y: number; }
 // 
 // function f0(): I { return { x: 0 }; }
-// 
-// type T = (i: I) => I;
-// const f1: T = i => ({ x: i.x + 1 });
-// 
-// const f2 = (i: I): I => ({ x: i.x + 1 });
-// 
-// const f3 = (i: I) => ({ x: i.x + 1 });
-// 
-// const f4 = (i: I) => i;
-// 
-// const f5 = (i: I): I | J => ({ x: i.x + 1 });
-// 
-// const f6 = (i: I, j: J, b: boolean) => b ? i : j;
-// 
-// const f7 = (i: I) => {};
-// 
-// function f8(i: I): I;
+// --- (line: 5) skipped ---
+
+// --- (line: 21) skipped ---
 // function f8(j: J): J;
 // function f8(ij: any): any { return ij; }
 // 
@@ -28,11 +14,7 @@
 // f1();
 // f2();
 // f3();
-// f4();
-// f5();
-// f6();
-// f7();
-// f8();
+// --- (line: 29) skipped ---
 
   // === Details ===
   [
@@ -60,19 +42,9 @@
 // const f1: T = i => ({ x: i.x + 1 });
 // 
 // const f2 = (i: I): I => ({ x: i.x + 1 });
-// 
-// const f3 = (i: I) => ({ x: i.x + 1 });
-// 
-// const f4 = (i: I) => i;
-// 
-// const f5 = (i: I): I | J => ({ x: i.x + 1 });
-// 
-// const f6 = (i: I, j: J, b: boolean) => b ? i : j;
-// 
-// const f7 = (i: I) => {};
-// 
-// function f8(i: I): I;
-// function f8(j: J): J;
+// --- (line: 10) skipped ---
+
+// --- (line: 22) skipped ---
 // function f8(ij: any): any { return ij; }
 // 
 // f0();
@@ -80,10 +52,7 @@
 // f2();
 // f3();
 // f4();
-// f5();
-// f6();
-// f7();
-// f8();
+// --- (line: 30) skipped ---
 
   // === Details ===
   [
@@ -106,25 +75,9 @@
 // interface J { y: number; }
 // 
 // function f0(): I { return { x: 0 }; }
-// 
-// type T = (i: I) => I;
-// const f1: T = i => ({ x: i.x + 1 });
-// 
-// const f2 = (i: I): I => ({ x: i.x + 1 });
-// 
-// const f3 = (i: I) => ({ x: i.x + 1 });
-// 
-// const f4 = (i: I) => i;
-// 
-// const f5 = (i: I): I | J => ({ x: i.x + 1 });
-// 
-// const f6 = (i: I, j: J, b: boolean) => b ? i : j;
-// 
-// const f7 = (i: I) => {};
-// 
-// function f8(i: I): I;
-// function f8(j: J): J;
-// function f8(ij: any): any { return ij; }
+// --- (line: 5) skipped ---
+
+// --- (line: 23) skipped ---
 // 
 // f0();
 // f1();
@@ -132,9 +85,7 @@
 // f3();
 // f4();
 // f5();
-// f6();
-// f7();
-// f8();
+// --- (line: 31) skipped ---
 
   // === Details ===
   [
@@ -153,13 +104,7 @@
 
 // === goToType ===
 // === /tests/cases/fourslash/goToTypeDefinition_returnType.ts ===
-// interface I { x: number; }
-// interface J { y: number; }
-// 
-// function f0(): I { return { x: 0 }; }
-// 
-// type T = (i: I) => I;
-// const f1: T = i => ({ x: i.x + 1 });
+// --- (line: 7) skipped ---
 // 
 // const f2 = (i: I): I => ({ x: i.x + 1 });
 // 
@@ -167,16 +112,9 @@
 // 
 // const f4 = (i: I) => i;
 // 
-// const f5 = (i: I): I | J => ({ x: i.x + 1 });
-// 
-// const f6 = (i: I, j: J, b: boolean) => b ? i : j;
-// 
-// const f7 = (i: I) => {};
-// 
-// function f8(i: I): I;
-// function f8(j: J): J;
-// function f8(ij: any): any { return ij; }
-// 
+// --- (line: 15) skipped ---
+
+// --- (line: 24) skipped ---
 // f0();
 // f1();
 // f2();
@@ -208,27 +146,9 @@
 // interface J { y: number; }
 // 
 // function f0(): I { return { x: 0 }; }
-// 
-// type T = (i: I) => I;
-// const f1: T = i => ({ x: i.x + 1 });
-// 
-// const f2 = (i: I): I => ({ x: i.x + 1 });
-// 
-// const f3 = (i: I) => ({ x: i.x + 1 });
-// 
-// const f4 = (i: I) => i;
-// 
-// const f5 = (i: I): I | J => ({ x: i.x + 1 });
-// 
-// const f6 = (i: I, j: J, b: boolean) => b ? i : j;
-// 
-// const f7 = (i: I) => {};
-// 
-// function f8(i: I): I;
-// function f8(j: J): J;
-// function f8(ij: any): any { return ij; }
-// 
-// f0();
+// --- (line: 5) skipped ---
+
+// --- (line: 25) skipped ---
 // f1();
 // f2();
 // f3();
@@ -260,27 +180,9 @@
 // 
 // function f0(): I { return { x: 0 }; }
 // 
-// type T = (i: I) => I;
-// const f1: T = i => ({ x: i.x + 1 });
-// 
-// const f2 = (i: I): I => ({ x: i.x + 1 });
-// 
-// const f3 = (i: I) => ({ x: i.x + 1 });
-// 
-// const f4 = (i: I) => i;
-// 
-// const f5 = (i: I): I | J => ({ x: i.x + 1 });
-// 
-// const f6 = (i: I, j: J, b: boolean) => b ? i : j;
-// 
-// const f7 = (i: I) => {};
-// 
-// function f8(i: I): I;
-// function f8(j: J): J;
-// function f8(ij: any): any { return ij; }
-// 
-// f0();
-// f1();
+// --- (line: 6) skipped ---
+
+// --- (line: 26) skipped ---
 // f2();
 // f3();
 // f4();
@@ -322,28 +224,9 @@
 // 
 // function f0(): I { return { x: 0 }; }
 // 
-// type T = (i: I) => I;
-// const f1: T = i => ({ x: i.x + 1 });
-// 
-// const f2 = (i: I): I => ({ x: i.x + 1 });
-// 
-// const f3 = (i: I) => ({ x: i.x + 1 });
-// 
-// const f4 = (i: I) => i;
-// 
-// const f5 = (i: I): I | J => ({ x: i.x + 1 });
-// 
-// const f6 = (i: I, j: J, b: boolean) => b ? i : j;
-// 
-// const f7 = (i: I) => {};
-// 
-// function f8(i: I): I;
-// function f8(j: J): J;
-// function f8(ij: any): any { return ij; }
-// 
-// f0();
-// f1();
-// f2();
+// --- (line: 6) skipped ---
+
+// --- (line: 27) skipped ---
 // f3();
 // f4();
 // f5();
@@ -379,21 +262,7 @@
 
 // === goToType ===
 // === /tests/cases/fourslash/goToTypeDefinition_returnType.ts ===
-// interface I { x: number; }
-// interface J { y: number; }
-// 
-// function f0(): I { return { x: 0 }; }
-// 
-// type T = (i: I) => I;
-// const f1: T = i => ({ x: i.x + 1 });
-// 
-// const f2 = (i: I): I => ({ x: i.x + 1 });
-// 
-// const f3 = (i: I) => ({ x: i.x + 1 });
-// 
-// const f4 = (i: I) => i;
-// 
-// const f5 = (i: I): I | J => ({ x: i.x + 1 });
+// --- (line: 15) skipped ---
 // 
 // const f6 = (i: I, j: J, b: boolean) => b ? i : j;
 // 
@@ -401,12 +270,9 @@
 // 
 // function f8(i: I): I;
 // function f8(j: J): J;
-// function f8(ij: any): any { return ij; }
-// 
-// f0();
-// f1();
-// f2();
-// f3();
+// --- (line: 23) skipped ---
+
+// --- (line: 28) skipped ---
 // f4();
 // f5();
 // f6();
@@ -428,25 +294,7 @@
 
 // === goToType ===
 // === /tests/cases/fourslash/goToTypeDefinition_returnType.ts ===
-// interface I { x: number; }
-// interface J { y: number; }
-// 
-// function f0(): I { return { x: 0 }; }
-// 
-// type T = (i: I) => I;
-// const f1: T = i => ({ x: i.x + 1 });
-// 
-// const f2 = (i: I): I => ({ x: i.x + 1 });
-// 
-// const f3 = (i: I) => ({ x: i.x + 1 });
-// 
-// const f4 = (i: I) => i;
-// 
-// const f5 = (i: I): I | J => ({ x: i.x + 1 });
-// 
-// const f6 = (i: I, j: J, b: boolean) => b ? i : j;
-// 
-// const f7 = (i: I) => {};
+// --- (line: 19) skipped ---
 // 
 // function f8(i: I): I;
 // function f8(j: J): J;

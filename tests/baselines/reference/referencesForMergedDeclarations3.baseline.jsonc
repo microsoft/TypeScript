@@ -29,14 +29,7 @@
   //     export interface Bar {
   // 
   //     }
-  // }
-  // 
-  // var c1: testClass;
-  // var c2: testClass.Bar;
-  // testClass.staticMethod();
-  // testClass.prototype.method();
-  // testClass.bind(this);
-  // new testClass();
+  // --- (line: 10) skipped ---
 
   // === Details ===
   [
@@ -109,16 +102,7 @@
   // 
   // module testClass {
   //     export interface Bar {
-  // 
-  //     }
-  // }
-  // 
-  // var c1: testClass;
-  // var c2: testClass.Bar;
-  // testClass.staticMethod();
-  // testClass.prototype.method();
-  // testClass.bind(this);
-  // new testClass();
+  // --- (line: 8) skipped ---
 
   // === Details ===
   [

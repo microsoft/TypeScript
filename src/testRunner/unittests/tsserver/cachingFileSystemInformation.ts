@@ -1,14 +1,6 @@
 import * as ts from "../../_namespaces/ts";
 
 import {
-    createServerHost,
-    File,
-    Folder,
-    libFile,
-    SymLink,
-    TestServerHost,
-} from "../virtualFileSystemWithWatch";
-import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,
     createProjectService,
@@ -17,7 +9,15 @@ import {
     Logger,
     openFilesForSession,
     TestProjectService,
-} from "./helpers";
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+    File,
+    Folder,
+    libFile,
+    SymLink,
+    TestServerHost,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectSystem CachingFileSystemInformation", () => {
     enum CalledMapsWithSingleArg {
@@ -147,12 +147,12 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
 
     it("loads missing files from disk", () => {
         const root: File = {
-            path: "/c/foo.ts",
+            path: "/users/username/projects/project/foo.ts",
             content: `import {y} from "bar"`
         };
 
         const imported: File = {
-            path: "/c/bar.d.ts",
+            path: "/users/username/projects/project/bar.d.ts",
             content: `export var y = 1`
         };
 
@@ -319,7 +319,7 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
 
     describe("Subfolder invalidations correctly include parent folder failed lookup locations", () => {
         function runFailedLookupTest(resolution: "Node" | "Classic") {
-            const projectLocation = "/proj";
+            const projectLocation = "/users/username/projects/proj";
             const file1: File = {
                 path: `${projectLocation}/foo/boo/app.ts`,
                 content: `import * as debug from "debug"`

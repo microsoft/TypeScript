@@ -1,0 +1,4 @@
+//// [corrupted.ts]
+���
+
+//// [corrupted.js]

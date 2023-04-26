@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info 0    [00:00:11.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/a/b/f1.js]
 let x =1;
@@ -8,7 +8,7 @@ let x =1;
 let x =1;
 
 
-Info 1    [00:00:12.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "openExternalProject",
       "arguments": {
@@ -26,18 +26,18 @@ Info 1    [00:00:12.000] request:
       "seq": 1,
       "type": "request"
     }
-Info 2    [00:00:13.000] Non TS file size exceeded limit (52428800). Largest files: /a/b/f1.js:52428800, /a/b/f2.js:100
-Info 3    [00:00:14.000] FileWatcher:: Added:: WatchInfo: /a/b/f1.js 500 undefined WatchType: Closed Script info
-Info 4    [00:00:15.000] FileWatcher:: Added:: WatchInfo: /a/b/f2.js 500 undefined WatchType: Closed Script info
-Info 5    [00:00:16.000] Starting updateGraphWorker: Project: proj1
-Info 6    [00:00:17.000] Finishing updateGraphWorker: Project: proj1 Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 7    [00:00:18.000] Project 'proj1' (External)
-Info 8    [00:00:19.000] 	Files (0)
+Info seq  [hh:mm:ss:mss] Non TS file size exceeded limit (52428800). Largest files: /a/b/f1.js:52428800, /a/b/f2.js:100
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/f1.js 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/f2.js 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: proj1
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: proj1 Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project 'proj1' (External)
+Info seq  [hh:mm:ss:mss] 	Files (0)
 
 
 
-Info 9    [00:00:20.000] -----------------------------------------------
-Info 10   [00:00:21.000] response:
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
       "responseRequired": true
@@ -52,7 +52,7 @@ FsWatches::
 
 Before request
 
-Info 11   [00:00:22.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
@@ -61,15 +61,15 @@ Info 11   [00:00:22.000] request:
       "seq": 2,
       "type": "request"
     }
-Info 12   [00:00:23.000] FileWatcher:: Close:: WatchInfo: /a/b/f2.js 500 undefined WatchType: Closed Script info
-Info 13   [00:00:24.000] Project 'proj1' (External)
-Info 13   [00:00:25.000] 	Files (0)
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/b/f2.js 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Project 'proj1' (External)
+Info seq  [hh:mm:ss:mss] 	Files (0)
 
-Info 13   [00:00:26.000] -----------------------------------------------
-Info 13   [00:00:27.000] Open files: 
-Info 13   [00:00:28.000] 	FileName: /a/b/f2.js ProjectRootPath: undefined
-Info 13   [00:00:29.000] 		Projects: proj1
-Info 13   [00:00:30.000] response:
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /a/b/f2.js ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: proj1
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }

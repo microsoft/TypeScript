@@ -256,7 +256,7 @@ export interface LanguageServiceShim extends Shim {
      * Returns a JSON-encoded value of the type:
      * { fileName: string, textSpan: { start: number, length: number } }[]
      */
-    findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): string;
+    findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, preferences?: UserPreferences | boolean): string;
 
     /**
      * Returns a JSON-encoded value of the type:
@@ -952,10 +952,10 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
         );
     }
 
-    public findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): string {
+    public findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, preferences: UserPreferences): string {
         return this.forwardJSONCall(
-            `findRenameLocations('${fileName}', ${position}, ${findInStrings}, ${findInComments}, ${providePrefixAndSuffixTextForRename})`,
-            () => this.languageService.findRenameLocations(fileName, position, findInStrings, findInComments, providePrefixAndSuffixTextForRename)
+            `findRenameLocations('${fileName}', ${position}, ${findInStrings}, ${findInComments})`,
+            () => this.languageService.findRenameLocations(fileName, position, findInStrings, findInComments, preferences)
         );
     }
 

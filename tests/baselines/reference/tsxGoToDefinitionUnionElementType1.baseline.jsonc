@@ -1,8 +1,6 @@
 // === goToDefinition ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
-//     interface Element { }
-//     interface IntrinsicElements {
+// --- (line: 3) skipped ---
 //     }
 //     interface ElementAttributesProperty { props; }
 // }

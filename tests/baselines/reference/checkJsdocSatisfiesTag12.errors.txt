@@ -2,7 +2,7 @@
   Object literal may only specify known properties, and 'b' does not exist in type 'T1'.
 /a.js(44,25): error TS1360: Type '{ a: string; b: string; }' does not satisfy the expected type 'T2'.
   Object literal may only specify known properties, and 'b' does not exist in type 'T2'.
-/a.js(51,17): error TS1360: Type 'number' does not satisfy the expected type 'string'.
+/a.js(51,6): error TS1360: Type 'number' does not satisfy the expected type 'string'.
 
 
 ==== /a.js (3 errors) ====
@@ -63,6 +63,6 @@
     const t7 = { a: "a" };
     
     /** @satisfies {string} */ const t8 = (1);
-                    ~~~~~~
+         ~~~~~~~~~
 !!! error TS1360: Type 'number' does not satisfy the expected type 'string'.
     

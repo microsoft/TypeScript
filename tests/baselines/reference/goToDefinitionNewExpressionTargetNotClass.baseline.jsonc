@@ -38,9 +38,7 @@
 
 // === goToDefinition ===
 // === /tests/cases/fourslash/goToDefinitionNewExpressionTargetNotClass.ts ===
-// class C2 {
-// }
-// let I: {
+// --- (line: 3) skipped ---
 //     new(): C2;
 // };
 // new I();

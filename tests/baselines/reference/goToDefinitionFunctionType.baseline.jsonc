@@ -5,12 +5,7 @@
 // function test(cb: () => void) {
 //     cb();
 // }
-// class C {
-//     prop: () => void;
-//     m() {
-//         this.prop();
-//     }
-// }
+// --- (line: 6) skipped ---
 
   // === Details ===
   [
@@ -36,10 +31,7 @@
 // }
 // class C {
 //     prop: () => void;
-//     m() {
-//         this.prop();
-//     }
-// }
+// --- (line: 8) skipped ---
 
   // === Details ===
   [
@@ -58,9 +50,7 @@
 
 // === getDefinitionAtPosition ===
 // === /tests/cases/fourslash/goToDefinitionFunctionType.ts ===
-// const c: () => void;
-// c();
-// function test(cb: () => void) {
+// --- (line: 3) skipped ---
 //     cb();
 // }
 // class C {

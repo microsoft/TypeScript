@@ -222,9 +222,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForImports.ts ===
-// declare module "jquery" {
-//     function $(s: string): any;
-//     export = $;
+// --- (line: 3) skipped ---
 // }
 // import $ = require("jquery");
 // $("a");
@@ -232,9 +230,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForImports.ts ===
-  // declare module "jquery" {
-  //     function $(s: string): any;
-  //     export = $;
+  // --- (line: 3) skipped ---
   // }
   // import $ = require("jquery");
   // $("a");
@@ -296,9 +292,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForImports.ts ===
-// declare module "jquery" {
-//     function $(s: string): any;
-//     export = $;
+// --- (line: 3) skipped ---
 // }
 // import $ = require("jquery");
 // $("a");
@@ -306,9 +300,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForImports.ts ===
-  // declare module "jquery" {
-  //     function $(s: string): any;
-  //     export = $;
+  // --- (line: 3) skipped ---
   // }
   // import $ = require("jquery");
   // $("a");

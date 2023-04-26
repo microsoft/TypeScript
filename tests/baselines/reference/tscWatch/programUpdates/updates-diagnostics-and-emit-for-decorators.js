@@ -184,13 +184,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 import './b';
-let A = class A {
+export let A = class A {
     constructor(p) { }
 };
 A = __decorate([
     ((_) => { })
 ], A);
-export { A };
 
 
 
@@ -244,13 +243,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import { B } from './b';
-let A = class A {
+export let A = class A {
     constructor(p) { }
 };
 A = __decorate([
     ((_) => { }),
     __metadata("design:paramtypes", [B])
 ], A);
-export { A };
 
 

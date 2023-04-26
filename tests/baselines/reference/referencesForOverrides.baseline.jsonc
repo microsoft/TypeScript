@@ -12,52 +12,9 @@
 // 		}
 // 	}
 // 
-// 	module SimpleInterfaceTest {
-// 		export interface IFoo {
-// 			ifoo(): void;
-// 		}
-// 		export interface IBar extends IFoo {
-// 			ifoo(): void;
-// 		}
-// 	}
-// 
-// 	module SimpleClassInterfaceTest {
-// 		export interface IFoo {
-// 			icfoo(): void;
-// 		}
-// 		export class Bar implements IFoo {
-// 			public icfoo(): void {
-// 			}
-// 		}
-// 	}
-// 
-// 	module Test {
-// 		export interface IBase {
-// 			field: string;
-// 			method(): void;
-// 		}
-// 
-// 		export interface IBlah extends IBase {
-// 			field: string;
-// 		}
-// 
-// 		export interface IBlah2 extends IBlah {
-// 			field: string;
-// 		}
-// 
-// 		export interface IDerived extends IBlah2 {
-// 			method(): void;
-// 		}
-// 
-// 		export class Bar implements IDerived {
-// 			public field: string;
-// 			public method(): void { }
-// 		}
-// 
-// 		export class BarBlah extends Bar {
-// 			public field: string;
-// 		}
-// 	}
+// --- (line: 13) skipped ---
+
+// --- (line: 58) skipped ---
 // 
 // 	function test() {
 // 		var x = new SimpleClassTest.Bar();
@@ -65,15 +22,7 @@
 // 
 // 		var y: SimpleInterfaceTest.IBar = null;
 // 		y.ifoo();
-// 
-//         var w: SimpleClassInterfaceTest.Bar = null;
-//         w.icfoo();
-// 
-// 		var z = new Test.BarBlah();
-// 		z.field = "";
-//         z.method();
-// 	}
-// }
+// --- (line: 66) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForOverrides.ts ===
@@ -89,68 +38,7 @@
   // 		}
   // 	}
   // 
-  // 	module SimpleInterfaceTest {
-  // 		export interface IFoo {
-  // 			ifoo(): void;
-  // 		}
-  // 		export interface IBar extends IFoo {
-  // 			ifoo(): void;
-  // 		}
-  // 	}
-  // 
-  // 	module SimpleClassInterfaceTest {
-  // 		export interface IFoo {
-  // 			icfoo(): void;
-  // 		}
-  // 		export class Bar implements IFoo {
-  // 			public icfoo(): void {
-  // 			}
-  // 		}
-  // 	}
-  // 
-  // 	module Test {
-  // 		export interface IBase {
-  // 			field: string;
-  // 			method(): void;
-  // 		}
-  // 
-  // 		export interface IBlah extends IBase {
-  // 			field: string;
-  // 		}
-  // 
-  // 		export interface IBlah2 extends IBlah {
-  // 			field: string;
-  // 		}
-  // 
-  // 		export interface IDerived extends IBlah2 {
-  // 			method(): void;
-  // 		}
-  // 
-  // 		export class Bar implements IDerived {
-  // 			public field: string;
-  // 			public method(): void { }
-  // 		}
-  // 
-  // 		export class BarBlah extends Bar {
-  // 			public field: string;
-  // 		}
-  // 	}
-  // 
-  // 	function test() {
-  // 		var x = new SimpleClassTest.Bar();
-  // 		x.foo();
-  // 
-  // 		var y: SimpleInterfaceTest.IBar = null;
-  // 		y.ifoo();
-  // 
-  //         var w: SimpleClassInterfaceTest.Bar = null;
-  //         w.icfoo();
-  // 
-  // 		var z = new Test.BarBlah();
-  // 		z.field = "";
-  //         z.method();
-  // 	}
-  // }
+  // --- (line: 13) skipped ---
 
   // === Details ===
   [
@@ -290,17 +178,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForOverrides.ts ===
-// module FindRef3 {
-// 	module SimpleClassTest {
-// 		export class Foo {
-// 			public foo(): void {
-// 			}
-// 		}
-// 		export class Bar extends Foo {
-// 			public foo(): void {
-// 			}
-// 		}
-// 	}
+// --- (line: 11) skipped ---
 // 
 // 	module SimpleInterfaceTest {
 // 		export interface IFoo {
@@ -311,46 +189,9 @@
 // 		}
 // 	}
 // 
-// 	module SimpleClassInterfaceTest {
-// 		export interface IFoo {
-// 			icfoo(): void;
-// 		}
-// 		export class Bar implements IFoo {
-// 			public icfoo(): void {
-// 			}
-// 		}
-// 	}
-// 
-// 	module Test {
-// 		export interface IBase {
-// 			field: string;
-// 			method(): void;
-// 		}
-// 
-// 		export interface IBlah extends IBase {
-// 			field: string;
-// 		}
-// 
-// 		export interface IBlah2 extends IBlah {
-// 			field: string;
-// 		}
-// 
-// 		export interface IDerived extends IBlah2 {
-// 			method(): void;
-// 		}
-// 
-// 		export class Bar implements IDerived {
-// 			public field: string;
-// 			public method(): void { }
-// 		}
-// 
-// 		export class BarBlah extends Bar {
-// 			public field: string;
-// 		}
-// 	}
-// 
-// 	function test() {
-// 		var x = new SimpleClassTest.Bar();
+// --- (line: 22) skipped ---
+
+// --- (line: 61) skipped ---
 // 		x.foo();
 // 
 // 		var y: SimpleInterfaceTest.IBar = null;
@@ -358,26 +199,11 @@
 // 
 //         var w: SimpleClassInterfaceTest.Bar = null;
 //         w.icfoo();
-// 
-// 		var z = new Test.BarBlah();
-// 		z.field = "";
-//         z.method();
-// 	}
-// }
+// --- (line: 69) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForOverrides.ts ===
-  // module FindRef3 {
-  // 	module SimpleClassTest {
-  // 		export class Foo {
-  // 			public foo(): void {
-  // 			}
-  // 		}
-  // 		export class Bar extends Foo {
-  // 			public foo(): void {
-  // 			}
-  // 		}
-  // 	}
+  // --- (line: 11) skipped ---
   // 
   // 	module SimpleInterfaceTest {
   // 		export interface IFoo {
@@ -388,59 +214,7 @@
   // 		}
   // 	}
   // 
-  // 	module SimpleClassInterfaceTest {
-  // 		export interface IFoo {
-  // 			icfoo(): void;
-  // 		}
-  // 		export class Bar implements IFoo {
-  // 			public icfoo(): void {
-  // 			}
-  // 		}
-  // 	}
-  // 
-  // 	module Test {
-  // 		export interface IBase {
-  // 			field: string;
-  // 			method(): void;
-  // 		}
-  // 
-  // 		export interface IBlah extends IBase {
-  // 			field: string;
-  // 		}
-  // 
-  // 		export interface IBlah2 extends IBlah {
-  // 			field: string;
-  // 		}
-  // 
-  // 		export interface IDerived extends IBlah2 {
-  // 			method(): void;
-  // 		}
-  // 
-  // 		export class Bar implements IDerived {
-  // 			public field: string;
-  // 			public method(): void { }
-  // 		}
-  // 
-  // 		export class BarBlah extends Bar {
-  // 			public field: string;
-  // 		}
-  // 	}
-  // 
-  // 	function test() {
-  // 		var x = new SimpleClassTest.Bar();
-  // 		x.foo();
-  // 
-  // 		var y: SimpleInterfaceTest.IBar = null;
-  // 		y.ifoo();
-  // 
-  //         var w: SimpleClassInterfaceTest.Bar = null;
-  //         w.icfoo();
-  // 
-  // 		var z = new Test.BarBlah();
-  // 		z.field = "";
-  //         z.method();
-  // 	}
-  // }
+  // --- (line: 22) skipped ---
 
   // === Details ===
   [
@@ -580,26 +354,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForOverrides.ts ===
-// module FindRef3 {
-// 	module SimpleClassTest {
-// 		export class Foo {
-// 			public foo(): void {
-// 			}
-// 		}
-// 		export class Bar extends Foo {
-// 			public foo(): void {
-// 			}
-// 		}
-// 	}
-// 
-// 	module SimpleInterfaceTest {
-// 		export interface IFoo {
-// 			ifoo(): void;
-// 		}
-// 		export interface IBar extends IFoo {
-// 			ifoo(): void;
-// 		}
-// 	}
+// --- (line: 20) skipped ---
 // 
 // 	module SimpleClassInterfaceTest {
 // 		export interface IFoo {
@@ -611,39 +366,9 @@
 // 		}
 // 	}
 // 
-// 	module Test {
-// 		export interface IBase {
-// 			field: string;
-// 			method(): void;
-// 		}
-// 
-// 		export interface IBlah extends IBase {
-// 			field: string;
-// 		}
-// 
-// 		export interface IBlah2 extends IBlah {
-// 			field: string;
-// 		}
-// 
-// 		export interface IDerived extends IBlah2 {
-// 			method(): void;
-// 		}
-// 
-// 		export class Bar implements IDerived {
-// 			public field: string;
-// 			public method(): void { }
-// 		}
-// 
-// 		export class BarBlah extends Bar {
-// 			public field: string;
-// 		}
-// 	}
-// 
-// 	function test() {
-// 		var x = new SimpleClassTest.Bar();
-// 		x.foo();
-// 
-// 		var y: SimpleInterfaceTest.IBar = null;
+// --- (line: 32) skipped ---
+
+// --- (line: 64) skipped ---
 // 		y.ifoo();
 // 
 //         var w: SimpleClassInterfaceTest.Bar = null;
@@ -651,32 +376,11 @@
 // 
 // 		var z = new Test.BarBlah();
 // 		z.field = "";
-//         z.method();
-// 	}
-// }
+// --- (line: 72) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForOverrides.ts ===
-  // module FindRef3 {
-  // 	module SimpleClassTest {
-  // 		export class Foo {
-  // 			public foo(): void {
-  // 			}
-  // 		}
-  // 		export class Bar extends Foo {
-  // 			public foo(): void {
-  // 			}
-  // 		}
-  // 	}
-  // 
-  // 	module SimpleInterfaceTest {
-  // 		export interface IFoo {
-  // 			ifoo(): void;
-  // 		}
-  // 		export interface IBar extends IFoo {
-  // 			ifoo(): void;
-  // 		}
-  // 	}
+  // --- (line: 20) skipped ---
   // 
   // 	module SimpleClassInterfaceTest {
   // 		export interface IFoo {
@@ -688,49 +392,7 @@
   // 		}
   // 	}
   // 
-  // 	module Test {
-  // 		export interface IBase {
-  // 			field: string;
-  // 			method(): void;
-  // 		}
-  // 
-  // 		export interface IBlah extends IBase {
-  // 			field: string;
-  // 		}
-  // 
-  // 		export interface IBlah2 extends IBlah {
-  // 			field: string;
-  // 		}
-  // 
-  // 		export interface IDerived extends IBlah2 {
-  // 			method(): void;
-  // 		}
-  // 
-  // 		export class Bar implements IDerived {
-  // 			public field: string;
-  // 			public method(): void { }
-  // 		}
-  // 
-  // 		export class BarBlah extends Bar {
-  // 			public field: string;
-  // 		}
-  // 	}
-  // 
-  // 	function test() {
-  // 		var x = new SimpleClassTest.Bar();
-  // 		x.foo();
-  // 
-  // 		var y: SimpleInterfaceTest.IBar = null;
-  // 		y.ifoo();
-  // 
-  //         var w: SimpleClassInterfaceTest.Bar = null;
-  //         w.icfoo();
-  // 
-  // 		var z = new Test.BarBlah();
-  // 		z.field = "";
-  //         z.method();
-  // 	}
-  // }
+  // --- (line: 32) skipped ---
 
   // === Details ===
   [
@@ -870,36 +532,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForOverrides.ts ===
-// module FindRef3 {
-// 	module SimpleClassTest {
-// 		export class Foo {
-// 			public foo(): void {
-// 			}
-// 		}
-// 		export class Bar extends Foo {
-// 			public foo(): void {
-// 			}
-// 		}
-// 	}
-// 
-// 	module SimpleInterfaceTest {
-// 		export interface IFoo {
-// 			ifoo(): void;
-// 		}
-// 		export interface IBar extends IFoo {
-// 			ifoo(): void;
-// 		}
-// 	}
-// 
-// 	module SimpleClassInterfaceTest {
-// 		export interface IFoo {
-// 			icfoo(): void;
-// 		}
-// 		export class Bar implements IFoo {
-// 			public icfoo(): void {
-// 			}
-// 		}
-// 	}
+// --- (line: 30) skipped ---
 // 
 // 	module Test {
 // 		export interface IBase {
@@ -929,14 +562,9 @@
 // 		}
 // 	}
 // 
-// 	function test() {
-// 		var x = new SimpleClassTest.Bar();
-// 		x.foo();
-// 
-// 		var y: SimpleInterfaceTest.IBar = null;
-// 		y.ifoo();
-// 
-//         var w: SimpleClassInterfaceTest.Bar = null;
+// --- (line: 60) skipped ---
+
+// --- (line: 67) skipped ---
 //         w.icfoo();
 // 
 // 		var z = new Test.BarBlah();
@@ -947,36 +575,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForOverrides.ts ===
-  // module FindRef3 {
-  // 	module SimpleClassTest {
-  // 		export class Foo {
-  // 			public foo(): void {
-  // 			}
-  // 		}
-  // 		export class Bar extends Foo {
-  // 			public foo(): void {
-  // 			}
-  // 		}
-  // 	}
-  // 
-  // 	module SimpleInterfaceTest {
-  // 		export interface IFoo {
-  // 			ifoo(): void;
-  // 		}
-  // 		export interface IBar extends IFoo {
-  // 			ifoo(): void;
-  // 		}
-  // 	}
-  // 
-  // 	module SimpleClassInterfaceTest {
-  // 		export interface IFoo {
-  // 			icfoo(): void;
-  // 		}
-  // 		export class Bar implements IFoo {
-  // 			public icfoo(): void {
-  // 			}
-  // 		}
-  // 	}
+  // --- (line: 30) skipped ---
   // 
   // 	module Test {
   // 		export interface IBase {
@@ -1006,21 +605,7 @@
   // 		}
   // 	}
   // 
-  // 	function test() {
-  // 		var x = new SimpleClassTest.Bar();
-  // 		x.foo();
-  // 
-  // 		var y: SimpleInterfaceTest.IBar = null;
-  // 		y.ifoo();
-  // 
-  //         var w: SimpleClassInterfaceTest.Bar = null;
-  //         w.icfoo();
-  // 
-  // 		var z = new Test.BarBlah();
-  // 		z.field = "";
-  //         z.method();
-  // 	}
-  // }
+  // --- (line: 60) skipped ---
 
   // === Details ===
   [
@@ -1315,37 +900,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForOverrides.ts ===
-// module FindRef3 {
-// 	module SimpleClassTest {
-// 		export class Foo {
-// 			public foo(): void {
-// 			}
-// 		}
-// 		export class Bar extends Foo {
-// 			public foo(): void {
-// 			}
-// 		}
-// 	}
-// 
-// 	module SimpleInterfaceTest {
-// 		export interface IFoo {
-// 			ifoo(): void;
-// 		}
-// 		export interface IBar extends IFoo {
-// 			ifoo(): void;
-// 		}
-// 	}
-// 
-// 	module SimpleClassInterfaceTest {
-// 		export interface IFoo {
-// 			icfoo(): void;
-// 		}
-// 		export class Bar implements IFoo {
-// 			public icfoo(): void {
-// 			}
-// 		}
-// 	}
-// 
+// --- (line: 31) skipped ---
 // 	module Test {
 // 		export interface IBase {
 // 			field: string;
@@ -1353,11 +908,9 @@
 // 		}
 // 
 // 		export interface IBlah extends IBase {
-// 			field: string;
-// 		}
-// 
-// 		export interface IBlah2 extends IBlah {
-// 			field: string;
+// --- (line: 39) skipped ---
+
+// --- (line: 43) skipped ---
 // 		}
 // 
 // 		export interface IDerived extends IBlah2 {
@@ -1370,19 +923,9 @@
 // 		}
 // 
 // 		export class BarBlah extends Bar {
-// 			public field: string;
-// 		}
-// 	}
-// 
-// 	function test() {
-// 		var x = new SimpleClassTest.Bar();
-// 		x.foo();
-// 
-// 		var y: SimpleInterfaceTest.IBar = null;
-// 		y.ifoo();
-// 
-//         var w: SimpleClassInterfaceTest.Bar = null;
-//         w.icfoo();
+// --- (line: 56) skipped ---
+
+// --- (line: 68) skipped ---
 // 
 // 		var z = new Test.BarBlah();
 // 		z.field = "";
@@ -1392,37 +935,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForOverrides.ts ===
-  // module FindRef3 {
-  // 	module SimpleClassTest {
-  // 		export class Foo {
-  // 			public foo(): void {
-  // 			}
-  // 		}
-  // 		export class Bar extends Foo {
-  // 			public foo(): void {
-  // 			}
-  // 		}
-  // 	}
-  // 
-  // 	module SimpleInterfaceTest {
-  // 		export interface IFoo {
-  // 			ifoo(): void;
-  // 		}
-  // 		export interface IBar extends IFoo {
-  // 			ifoo(): void;
-  // 		}
-  // 	}
-  // 
-  // 	module SimpleClassInterfaceTest {
-  // 		export interface IFoo {
-  // 			icfoo(): void;
-  // 		}
-  // 		export class Bar implements IFoo {
-  // 			public icfoo(): void {
-  // 			}
-  // 		}
-  // 	}
-  // 
+  // --- (line: 31) skipped ---
   // 	module Test {
   // 		export interface IBase {
   // 			field: string;
@@ -1430,11 +943,9 @@
   // 		}
   // 
   // 		export interface IBlah extends IBase {
-  // 			field: string;
-  // 		}
-  // 
-  // 		export interface IBlah2 extends IBlah {
-  // 			field: string;
+  // --- (line: 39) skipped ---
+
+  // --- (line: 43) skipped ---
   // 		}
   // 
   // 		export interface IDerived extends IBlah2 {
@@ -1447,25 +958,7 @@
   // 		}
   // 
   // 		export class BarBlah extends Bar {
-  // 			public field: string;
-  // 		}
-  // 	}
-  // 
-  // 	function test() {
-  // 		var x = new SimpleClassTest.Bar();
-  // 		x.foo();
-  // 
-  // 		var y: SimpleInterfaceTest.IBar = null;
-  // 		y.ifoo();
-  // 
-  //         var w: SimpleClassInterfaceTest.Bar = null;
-  //         w.icfoo();
-  // 
-  // 		var z = new Test.BarBlah();
-  // 		z.field = "";
-  //         z.method();
-  // 	}
-  // }
+  // --- (line: 56) skipped ---
 
   // === Details ===
   [

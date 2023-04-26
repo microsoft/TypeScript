@@ -1,11 +1,10 @@
 import * as vfs from "../../_namespaces/vfs";
 
 import {
-    loadProjectFromDisk,
     noChangeOnlyRuns,
-    replaceText,
     verifyTsc,
-} from "../tsc/helpers";
+} from "../helpers/tsc";
+import { loadProjectFromDisk, replaceText } from "../helpers/vfs";
 
 describe("unittests:: tsbuild:: with resolveJsonModule option on project resolveJsonModuleAndComposite", () => {
     let projFs: vfs.FileSystem;

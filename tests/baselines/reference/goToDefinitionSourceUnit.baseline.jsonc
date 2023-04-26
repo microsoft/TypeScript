@@ -6,11 +6,7 @@
 // /// <reference path="b.ts" />
 // 
 // class clsInOverload {
-//     static fnOverload();
-//     static fnOverload(foo: string);
-//     static fnOverload(foo: any) { }
-// }
-// 
+// --- (line: 7) skipped ---
 
 
 
@@ -26,10 +22,7 @@
 // 
 // class clsInOverload {
 //     static fnOverload();
-//     static fnOverload(foo: string);
-//     static fnOverload(foo: any) { }
-// }
-// 
+// --- (line: 8) skipped ---
 
   // === Details ===
   [

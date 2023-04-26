@@ -4,24 +4,7 @@
 // function f(this) {
 //     return this;
 //     function g(this) { return this; }
-// }
-// class C {
-//     static x() {
-//         this;
-//     }
-//     static y() {
-//         () => this;
-//     }
-//     constructor() {
-//         this;
-//     }
-//     method() {
-//         () => this;
-//     }
-// }
-// // These are *not* real uses of the 'this' keyword, they are identifiers.
-// const x = { this: 0 }
-// x.this;
+// --- (line: 5) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
@@ -29,24 +12,7 @@
   // function f(this) {
   //     return this;
   //     function g(this) { return this; }
-  // }
-  // class C {
-  //     static x() {
-  //         this;
-  //     }
-  //     static y() {
-  //         () => this;
-  //     }
-  //     constructor() {
-  //         this;
-  //     }
-  //     method() {
-  //         () => this;
-  //     }
-  // }
-  // // These are *not* real uses of the 'this' keyword, they are identifiers.
-  // const x = { this: 0 }
-  // x.this;
+  // --- (line: 5) skipped ---
 
   // === Details ===
   [
@@ -94,22 +60,7 @@
 //     function g(this) { return this; }
 // }
 // class C {
-//     static x() {
-//         this;
-//     }
-//     static y() {
-//         () => this;
-//     }
-//     constructor() {
-//         this;
-//     }
-//     method() {
-//         () => this;
-//     }
-// }
-// // These are *not* real uses of the 'this' keyword, they are identifiers.
-// const x = { this: 0 }
-// x.this;
+// --- (line: 7) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
@@ -118,23 +69,7 @@
   //     return this;
   //     function g(this) { return this; }
   // }
-  // class C {
-  //     static x() {
-  //         this;
-  //     }
-  //     static y() {
-  //         () => this;
-  //     }
-  //     constructor() {
-  //         this;
-  //     }
-  //     method() {
-  //         () => this;
-  //     }
-  // }
-  // // These are *not* real uses of the 'this' keyword, they are identifiers.
-  // const x = { this: 0 }
-  // x.this;
+  // --- (line: 6) skipped ---
 
   // === Details ===
   [
@@ -190,22 +125,7 @@
 //     function g(this) { return this; }
 // }
 // class C {
-//     static x() {
-//         this;
-//     }
-//     static y() {
-//         () => this;
-//     }
-//     constructor() {
-//         this;
-//     }
-//     method() {
-//         () => this;
-//     }
-// }
-// // These are *not* real uses of the 'this' keyword, they are identifiers.
-// const x = { this: 0 }
-// x.this;
+// --- (line: 7) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
@@ -215,22 +135,7 @@
   //     function g(this) { return this; }
   // }
   // class C {
-  //     static x() {
-  //         this;
-  //     }
-  //     static y() {
-  //         () => this;
-  //     }
-  //     constructor() {
-  //         this;
-  //     }
-  //     method() {
-  //         () => this;
-  //     }
-  // }
-  // // These are *not* real uses of the 'this' keyword, they are identifiers.
-  // const x = { this: 0 }
-  // x.this;
+  // --- (line: 7) skipped ---
 
   // === Details ===
   [
@@ -287,21 +192,7 @@
 // }
 // class C {
 //     static x() {
-//         this;
-//     }
-//     static y() {
-//         () => this;
-//     }
-//     constructor() {
-//         this;
-//     }
-//     method() {
-//         () => this;
-//     }
-// }
-// // These are *not* real uses of the 'this' keyword, they are identifiers.
-// const x = { this: 0 }
-// x.this;
+// --- (line: 8) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
@@ -312,21 +203,7 @@
   // }
   // class C {
   //     static x() {
-  //         this;
-  //     }
-  //     static y() {
-  //         () => this;
-  //     }
-  //     constructor() {
-  //         this;
-  //     }
-  //     method() {
-  //         () => this;
-  //     }
-  // }
-  // // These are *not* real uses of the 'this' keyword, they are identifiers.
-  // const x = { this: 0 }
-  // x.this;
+  // --- (line: 8) skipped ---
 
   // === Details ===
   [
@@ -383,21 +260,7 @@
 // }
 // class C {
 //     static x() {
-//         this;
-//     }
-//     static y() {
-//         () => this;
-//     }
-//     constructor() {
-//         this;
-//     }
-//     method() {
-//         () => this;
-//     }
-// }
-// // These are *not* real uses of the 'this' keyword, they are identifiers.
-// const x = { this: 0 }
-// x.this;
+// --- (line: 8) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
@@ -408,21 +271,7 @@
   // }
   // class C {
   //     static x() {
-  //         this;
-  //     }
-  //     static y() {
-  //         () => this;
-  //     }
-  //     constructor() {
-  //         this;
-  //     }
-  //     method() {
-  //         () => this;
-  //     }
-  // }
-  // // These are *not* real uses of the 'this' keyword, they are identifiers.
-  // const x = { this: 0 }
-  // x.this;
+  // --- (line: 8) skipped ---
 
   // === Details ===
   [
@@ -472,10 +321,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
-// this;
-// function f(this) {
-//     return this;
-//     function g(this) { return this; }
+// --- (line: 4) skipped ---
 // }
 // class C {
 //     static x() {
@@ -486,21 +332,11 @@
 //     }
 //     constructor() {
 //         this;
-//     }
-//     method() {
-//         () => this;
-//     }
-// }
-// // These are *not* real uses of the 'this' keyword, they are identifiers.
-// const x = { this: 0 }
-// x.this;
+// --- (line: 15) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
-  // this;
-  // function f(this) {
-  //     return this;
-  //     function g(this) { return this; }
+  // --- (line: 4) skipped ---
   // }
   // class C {
   //     static x() {
@@ -508,17 +344,7 @@
   //     }
   //     static y() {
   //         () => this;
-  //     }
-  //     constructor() {
-  //         this;
-  //     }
-  //     method() {
-  //         () => this;
-  //     }
-  // }
-  // // These are *not* real uses of the 'this' keyword, they are identifiers.
-  // const x = { this: 0 }
-  // x.this;
+  // --- (line: 12) skipped ---
 
   // === Details ===
   [
@@ -560,10 +386,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
-// this;
-// function f(this) {
-//     return this;
-//     function g(this) { return this; }
+// --- (line: 4) skipped ---
 // }
 // class C {
 //     static x() {
@@ -574,24 +397,11 @@
 //     }
 //     constructor() {
 //         this;
-//     }
-//     method() {
-//         () => this;
-//     }
-// }
-// // These are *not* real uses of the 'this' keyword, they are identifiers.
-// const x = { this: 0 }
-// x.this;
+// --- (line: 15) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
-  // this;
-  // function f(this) {
-  //     return this;
-  //     function g(this) { return this; }
-  // }
-  // class C {
-  //     static x() {
+  // --- (line: 7) skipped ---
   //         this;
   //     }
   //     static y() {
@@ -599,14 +409,7 @@
   //     }
   //     constructor() {
   //         this;
-  //     }
-  //     method() {
-  //         () => this;
-  //     }
-  // }
-  // // These are *not* real uses of the 'this' keyword, they are identifiers.
-  // const x = { this: 0 }
-  // x.this;
+  // --- (line: 15) skipped ---
 
   // === Details ===
   [
@@ -648,16 +451,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
-// this;
-// function f(this) {
-//     return this;
-//     function g(this) { return this; }
-// }
-// class C {
-//     static x() {
-//         this;
-//     }
-//     static y() {
+// --- (line: 10) skipped ---
 //         () => this;
 //     }
 //     constructor() {
@@ -673,16 +467,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
-  // this;
-  // function f(this) {
-  //     return this;
-  //     function g(this) { return this; }
-  // }
-  // class C {
-  //     static x() {
-  //         this;
-  //     }
-  //     static y() {
+  // --- (line: 10) skipped ---
   //         () => this;
   //     }
   //     constructor() {
@@ -690,11 +475,7 @@
   //     }
   //     method() {
   //         () => this;
-  //     }
-  // }
-  // // These are *not* real uses of the 'this' keyword, they are identifiers.
-  // const x = { this: 0 }
-  // x.this;
+  // --- (line: 18) skipped ---
 
   // === Details ===
   [
@@ -728,16 +509,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
-// this;
-// function f(this) {
-//     return this;
-//     function g(this) { return this; }
-// }
-// class C {
-//     static x() {
-//         this;
-//     }
-//     static y() {
+// --- (line: 10) skipped ---
 //         () => this;
 //     }
 //     constructor() {
@@ -753,19 +525,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
-  // this;
-  // function f(this) {
-  //     return this;
-  //     function g(this) { return this; }
-  // }
-  // class C {
-  //     static x() {
-  //         this;
-  //     }
-  //     static y() {
-  //         () => this;
-  //     }
-  //     constructor() {
+  // --- (line: 13) skipped ---
   //         this;
   //     }
   //     method() {
@@ -808,23 +568,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
-// this;
-// function f(this) {
-//     return this;
-//     function g(this) { return this; }
-// }
-// class C {
-//     static x() {
-//         this;
-//     }
-//     static y() {
-//         () => this;
-//     }
-//     constructor() {
-//         this;
-//     }
-//     method() {
-//         () => this;
+// --- (line: 17) skipped ---
 //     }
 // }
 // // These are *not* real uses of the 'this' keyword, they are identifiers.
@@ -833,23 +577,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
-  // this;
-  // function f(this) {
-  //     return this;
-  //     function g(this) { return this; }
-  // }
-  // class C {
-  //     static x() {
-  //         this;
-  //     }
-  //     static y() {
-  //         () => this;
-  //     }
-  //     constructor() {
-  //         this;
-  //     }
-  //     method() {
-  //         () => this;
+  // --- (line: 17) skipped ---
   //     }
   // }
   // // These are *not* real uses of the 'this' keyword, they are identifiers.
@@ -904,23 +632,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
-// this;
-// function f(this) {
-//     return this;
-//     function g(this) { return this; }
-// }
-// class C {
-//     static x() {
-//         this;
-//     }
-//     static y() {
-//         () => this;
-//     }
-//     constructor() {
-//         this;
-//     }
-//     method() {
-//         () => this;
+// --- (line: 17) skipped ---
 //     }
 // }
 // // These are *not* real uses of the 'this' keyword, they are identifiers.
@@ -929,23 +641,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
-  // this;
-  // function f(this) {
-  //     return this;
-  //     function g(this) { return this; }
-  // }
-  // class C {
-  //     static x() {
-  //         this;
-  //     }
-  //     static y() {
-  //         () => this;
-  //     }
-  //     constructor() {
-  //         this;
-  //     }
-  //     method() {
-  //         () => this;
+  // --- (line: 17) skipped ---
   //     }
   // }
   // // These are *not* real uses of the 'this' keyword, they are identifiers.

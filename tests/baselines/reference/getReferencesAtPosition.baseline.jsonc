@@ -1,8 +1,6 @@
 // === findAllReferences ===
 // === /tests/cases/fourslash/shims/findAllRefsOnDefinition-import.ts ===
-// export class Test{
-// 
-//     constructor(){
+// --- (line: 3) skipped ---
 // 
 //     }
 // 
@@ -24,9 +22,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/shims/findAllRefsOnDefinition-import.ts ===
-  // export class Test{
-  // 
-  //     constructor(){
+  // --- (line: 3) skipped ---
   // 
   //     }
   // 
@@ -103,9 +99,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/shims/findAllRefsOnDefinition-import.ts ===
-// export class Test{
-// 
-//     constructor(){
+// --- (line: 3) skipped ---
 // 
 //     }
 // 
@@ -127,9 +121,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/shims/findAllRefsOnDefinition-import.ts ===
-  // export class Test{
-  // 
-  //     constructor(){
+  // --- (line: 3) skipped ---
   // 
   //     }
   // 
@@ -206,9 +198,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/shims/findAllRefsOnDefinition-import.ts ===
-// export class Test{
-// 
-//     constructor(){
+// --- (line: 3) skipped ---
 // 
 //     }
 // 
@@ -230,9 +220,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/shims/findAllRefsOnDefinition-import.ts ===
-  // export class Test{
-  // 
-  //     constructor(){
+  // --- (line: 3) skipped ---
   // 
   //     }
   // 

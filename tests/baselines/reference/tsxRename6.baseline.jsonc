@@ -1,13 +1,6 @@
 // === findRenameLocations ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
-//     interface Element { }
-//     interface IntrinsicElements {
-//     }
-//     interface ElementAttributesProperty { props; }
-// }
-// interface OptionPropBag {
-//     propx: number
+// --- (line: 8) skipped ---
 //     propString: string
 //     optional?: boolean
 // }
@@ -22,14 +15,7 @@
 
 // === findRenameLocations ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
-//     interface Element { }
-//     interface IntrinsicElements {
-//     }
-//     interface ElementAttributesProperty { props; }
-// }
-// interface OptionPropBag {
-//     propx: number
+// --- (line: 8) skipped ---
 //     propString: string
 //     optional?: boolean
 // }
@@ -44,14 +30,7 @@
 
 // === findRenameLocations ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
-//     interface Element { }
-//     interface IntrinsicElements {
-//     }
-//     interface ElementAttributesProperty { props; }
-// }
-// interface OptionPropBag {
-//     propx: number
+// --- (line: 8) skipped ---
 //     propString: string
 //     optional?: boolean
 // }
@@ -66,14 +45,7 @@
 
 // === findRenameLocations ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
-//     interface Element { }
-//     interface IntrinsicElements {
-//     }
-//     interface ElementAttributesProperty { props; }
-// }
-// interface OptionPropBag {
-//     propx: number
+// --- (line: 8) skipped ---
 //     propString: string
 //     optional?: boolean
 // }
@@ -88,14 +60,7 @@
 
 // === findRenameLocations ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
-//     interface Element { }
-//     interface IntrinsicElements {
-//     }
-//     interface ElementAttributesProperty { props; }
-// }
-// interface OptionPropBag {
-//     propx: number
+// --- (line: 8) skipped ---
 //     propString: string
 //     optional?: boolean
 // }
@@ -110,14 +75,7 @@
 
 // === findRenameLocations ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
-//     interface Element { }
-//     interface IntrinsicElements {
-//     }
-//     interface ElementAttributesProperty { props; }
-// }
-// interface OptionPropBag {
-//     propx: number
+// --- (line: 8) skipped ---
 //     propString: string
 //     optional?: boolean
 // }

@@ -4,11 +4,7 @@
 // import aDefault from "./a.js"
 // import * as b from "./b.js"
 // import bDefault from "./b.js"
-// 
-// import * as c from "./c"
-// import cDefault from "./c"
-// import * as d from "./d"
-// import dDefault from "./d"
+// --- (line: 5) skipped ---
 
   // === Definitions ===
   // === /foo.ts ===
@@ -16,11 +12,7 @@
   // import aDefault from "./a.js"
   // import * as b from "./b.js"
   // import bDefault from "./b.js"
-  // 
-  // import * as c from "./c"
-  // import cDefault from "./c"
-  // import * as d from "./d"
-  // import dDefault from "./d"
+  // --- (line: 5) skipped ---
 
   // === Details ===
   [
@@ -55,10 +47,7 @@
 // import * as b from "./b.js"
 // import bDefault from "./b.js"
 // 
-// import * as c from "./c"
-// import cDefault from "./c"
-// import * as d from "./d"
-// import dDefault from "./d"
+// --- (line: 6) skipped ---
 
   // === Definitions ===
   // === /foo.ts ===
@@ -67,10 +56,7 @@
   // import * as b from "./b.js"
   // import bDefault from "./b.js"
   // 
-  // import * as c from "./c"
-  // import cDefault from "./c"
-  // import * as d from "./d"
-  // import dDefault from "./d"
+  // --- (line: 6) skipped ---
 
   // === Details ===
   [
@@ -106,9 +92,7 @@
 // import bDefault from "./b.js"
 // 
 // import * as c from "./c"
-// import cDefault from "./c"
-// import * as d from "./d"
-// import dDefault from "./d"
+// --- (line: 7) skipped ---
 
   // === Definitions ===
   // === /foo.ts ===
@@ -118,9 +102,7 @@
   // import bDefault from "./b.js"
   // 
   // import * as c from "./c"
-  // import cDefault from "./c"
-  // import * as d from "./d"
-  // import dDefault from "./d"
+  // --- (line: 7) skipped ---
 
   // === Details ===
   [
@@ -250,9 +232,7 @@
 
 // === findAllReferences ===
 // === /foo.ts ===
-// import * as a from "./a.js"
-// import aDefault from "./a.js"
-// import * as b from "./b.js"
+// --- (line: 3) skipped ---
 // import bDefault from "./b.js"
 // 
 // import * as c from "./c"
@@ -262,9 +242,7 @@
 
   // === Definitions ===
   // === /foo.ts ===
-  // import * as a from "./a.js"
-  // import aDefault from "./a.js"
-  // import * as b from "./b.js"
+  // --- (line: 3) skipped ---
   // import bDefault from "./b.js"
   // 
   // import * as c from "./c"
@@ -300,10 +278,7 @@
 
 // === findAllReferences ===
 // === /foo.ts ===
-// import * as a from "./a.js"
-// import aDefault from "./a.js"
-// import * as b from "./b.js"
-// import bDefault from "./b.js"
+// --- (line: 4) skipped ---
 // 
 // import * as c from "./c"
 // import cDefault from "./c"
@@ -312,10 +287,7 @@
 
   // === Definitions ===
   // === /foo.ts ===
-  // import * as a from "./a.js"
-  // import aDefault from "./a.js"
-  // import * as b from "./b.js"
-  // import bDefault from "./b.js"
+  // --- (line: 4) skipped ---
   // 
   // import * as c from "./c"
   // import cDefault from "./c"
@@ -350,11 +322,7 @@
 
 // === findAllReferences ===
 // === /foo.ts ===
-// import * as a from "./a.js"
-// import aDefault from "./a.js"
-// import * as b from "./b.js"
-// import bDefault from "./b.js"
-// 
+// --- (line: 5) skipped ---
 // import * as c from "./c"
 // import cDefault from "./c"
 // import * as d from "./d"
@@ -362,11 +330,7 @@
 
   // === Definitions ===
   // === /foo.ts ===
-  // import * as a from "./a.js"
-  // import aDefault from "./a.js"
-  // import * as b from "./b.js"
-  // import bDefault from "./b.js"
-  // 
+  // --- (line: 5) skipped ---
   // import * as c from "./c"
   // import cDefault from "./c"
   // import * as d from "./d"

@@ -214,7 +214,7 @@ define(["require", "exports"], function (require, exports) {
             }());
             mi_public.c = c;
         })(mi_public = m_public.mi_public || (m_public.mi_public = {}));
-    })(m_public = exports.m_public || (exports.m_public = {}));
+    })(m_public || (exports.m_public = m_public = {}));
     var import_public;
     (function (import_public) {
         // No Privacy errors - importing private elements
@@ -255,7 +255,7 @@ define(["require", "exports"], function (require, exports) {
         var privateUse_im_private_mi_public = new im_private_mi_public.c();
         import_public.publicUse_im_private_mi_public = new im_private_mi_public.c();
         var privateUse_im_private_mu_public;
-    })(import_public = exports.import_public || (exports.import_public = {}));
+    })(import_public || (exports.import_public = import_public = {}));
     var import_private;
     (function (import_private) {
         // No Privacy errors - importing private elements

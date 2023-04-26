@@ -1,13 +1,6 @@
 // === goToDefinition ===
 // === /tests/cases/fourslash/file.tsx ===
-// class RC1 extends React.Component<{}, {}> {
-//     render() {
-//         return null;
-//     }
-// }
-// class RC2 extends React.Component<{}, {}> {
-//     render() {
-//         return null;
+// --- (line: 8) skipped ---
 //     }
 //     private method() { }
 // }

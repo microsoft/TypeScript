@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info 0    [00:00:27.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/src/a.ts]
 export const foo = 0;
@@ -27,7 +27,7 @@ declare module 'ambient' {}
 export declare function observable(): unknown;
 
 
-Info 1    [00:00:28.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
@@ -36,11 +36,11 @@ Info 1    [00:00:28.000] request:
       "seq": 1,
       "type": "request"
     }
-Info 2    [00:00:29.000] Search path: /src
-Info 3    [00:00:30.000] For info: /src/a.ts :: Config file name: /tsconfig.json
-Info 4    [00:00:31.000] Creating configuration project /tsconfig.json
-Info 5    [00:00:32.000] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
-Info 6    [00:00:33.000] Config: /tsconfig.json : {
+Info seq  [hh:mm:ss:mss] Search path: /src
+Info seq  [hh:mm:ss:mss] For info: /src/a.ts :: Config file name: /tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating configuration project /tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Config: /tsconfig.json : {
  "rootNames": [
   "/src/a.ts",
   "/src/ambient.d.ts",
@@ -52,17 +52,17 @@ Info 6    [00:00:33.000] Config: /tsconfig.json : {
   "configFilePath": "/tsconfig.json"
  }
 }
-Info 7    [00:00:34.000] DirectoryWatcher:: Added:: WatchInfo: /src 1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info 8    [00:00:35.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src 1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info 9    [00:00:36.000] FileWatcher:: Added:: WatchInfo: /src/ambient.d.ts 500 undefined WatchType: Closed Script info
-Info 10   [00:00:37.000] FileWatcher:: Added:: WatchInfo: /src/b-link.ts 500 undefined WatchType: Closed Script info
-Info 11   [00:00:38.000] FileWatcher:: Added:: WatchInfo: /src/b.ts 500 undefined WatchType: Closed Script info
-Info 12   [00:00:39.000] FileWatcher:: Added:: WatchInfo: /src/c.ts 500 undefined WatchType: Closed Script info
-Info 13   [00:00:40.000] Starting updateGraphWorker: Project: /tsconfig.json
-Info 14   [00:00:41.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
-Info 15   [00:00:42.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 16   [00:00:43.000] Project '/tsconfig.json' (Configured)
-Info 17   [00:00:44.000] 	Files (5)
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /src 1 undefined Config: /tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src 1 undefined Config: /tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /src/ambient.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /src/b-link.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /src/b.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /src/c.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (5)
 	/src/a.ts SVC-1-0 "export const foo = 0;"
 	/src/ambient.d.ts Text-1 "declare module 'ambient' {}"
 	/src/b-link.ts Text-1 "foo"
@@ -81,34 +81,34 @@ Info 17   [00:00:44.000] 	Files (5)
 	src/c.ts
 	  Matched by include pattern 'src' in 'tsconfig.json'
 
-Info 18   [00:00:45.000] -----------------------------------------------
-Info 19   [00:00:46.000] FileWatcher:: Added:: WatchInfo: /package.json 250 undefined WatchType: package.json file
-Info 20   [00:00:47.000] AutoImportProviderProject: found 1 root files in 1 dependencies in * ms
-Info 21   [00:00:48.000] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info 22   [00:00:49.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info 23   [00:00:50.000] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
-Info 24   [00:00:51.000] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 25   [00:00:52.000] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
-Info 26   [00:00:53.000] 	Files (1)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /package.json 250 undefined WatchType: package.json file
+Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies in * ms
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
+Info seq  [hh:mm:ss:mss] 	Files (1)
 	/node_modules/mobx/index.d.ts Text-1 "export declare function observable(): unknown;"
 
 
 	node_modules/mobx/index.d.ts
 	  Root file specified for compilation
 
-Info 27   [00:00:54.000] -----------------------------------------------
-Info 28   [00:00:55.000] Project '/tsconfig.json' (Configured)
-Info 28   [00:00:56.000] 	Files (5)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (5)
 
-Info 28   [00:00:57.000] -----------------------------------------------
-Info 28   [00:00:58.000] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
-Info 28   [00:00:59.000] 	Files (1)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
+Info seq  [hh:mm:ss:mss] 	Files (1)
 
-Info 28   [00:01:00.000] -----------------------------------------------
-Info 28   [00:01:01.000] Open files: 
-Info 28   [00:01:02.000] 	FileName: /src/a.ts ProjectRootPath: undefined
-Info 28   [00:01:03.000] 		Projects: /tsconfig.json
-Info 28   [00:01:04.000] response:
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /src/a.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
@@ -140,7 +140,7 @@ FsWatchesRecursive::
 
 Before request
 
-Info 29   [00:01:05.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
@@ -149,23 +149,23 @@ Info 29   [00:01:05.000] request:
       "seq": 2,
       "type": "request"
     }
-Info 30   [00:01:06.000] FileWatcher:: Close:: WatchInfo: /src/b.ts 500 undefined WatchType: Closed Script info
-Info 31   [00:01:07.000] Search path: /src
-Info 32   [00:01:08.000] For info: /src/b.ts :: Config file name: /tsconfig.json
-Info 33   [00:01:09.000] Project '/tsconfig.json' (Configured)
-Info 33   [00:01:10.000] 	Files (5)
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /src/b.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Search path: /src
+Info seq  [hh:mm:ss:mss] For info: /src/b.ts :: Config file name: /tsconfig.json
+Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (5)
 
-Info 33   [00:01:11.000] -----------------------------------------------
-Info 33   [00:01:12.000] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
-Info 33   [00:01:13.000] 	Files (1)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
+Info seq  [hh:mm:ss:mss] 	Files (1)
 
-Info 33   [00:01:14.000] -----------------------------------------------
-Info 33   [00:01:15.000] Open files: 
-Info 33   [00:01:16.000] 	FileName: /src/a.ts ProjectRootPath: undefined
-Info 33   [00:01:17.000] 		Projects: /tsconfig.json
-Info 33   [00:01:18.000] 	FileName: /src/b.ts ProjectRootPath: undefined
-Info 33   [00:01:19.000] 		Projects: /tsconfig.json
-Info 33   [00:01:20.000] response:
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /src/a.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /src/b.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
@@ -199,7 +199,7 @@ FsWatchesRecursive::
 
 Before request
 
-Info 34   [00:01:21.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
@@ -208,25 +208,25 @@ Info 34   [00:01:21.000] request:
       "seq": 3,
       "type": "request"
     }
-Info 35   [00:01:22.000] FileWatcher:: Close:: WatchInfo: /src/c.ts 500 undefined WatchType: Closed Script info
-Info 36   [00:01:23.000] Search path: /src
-Info 37   [00:01:24.000] For info: /src/c.ts :: Config file name: /tsconfig.json
-Info 38   [00:01:25.000] Project '/tsconfig.json' (Configured)
-Info 38   [00:01:26.000] 	Files (5)
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /src/c.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Search path: /src
+Info seq  [hh:mm:ss:mss] For info: /src/c.ts :: Config file name: /tsconfig.json
+Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (5)
 
-Info 38   [00:01:27.000] -----------------------------------------------
-Info 38   [00:01:28.000] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
-Info 38   [00:01:29.000] 	Files (1)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
+Info seq  [hh:mm:ss:mss] 	Files (1)
 
-Info 38   [00:01:30.000] -----------------------------------------------
-Info 38   [00:01:31.000] Open files: 
-Info 38   [00:01:32.000] 	FileName: /src/a.ts ProjectRootPath: undefined
-Info 38   [00:01:33.000] 		Projects: /tsconfig.json
-Info 38   [00:01:34.000] 	FileName: /src/b.ts ProjectRootPath: undefined
-Info 38   [00:01:35.000] 		Projects: /tsconfig.json
-Info 38   [00:01:36.000] 	FileName: /src/c.ts ProjectRootPath: undefined
-Info 38   [00:01:37.000] 		Projects: /tsconfig.json
-Info 38   [00:01:38.000] response:
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /src/a.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /src/b.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /src/c.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
@@ -258,7 +258,7 @@ FsWatchesRecursive::
 
 Before request
 
-Info 39   [00:01:39.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "configure",
       "arguments": {
@@ -272,9 +272,9 @@ Info 39   [00:01:39.000] request:
       "seq": 4,
       "type": "request"
     }
-Info 40   [00:01:40.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {"seq":0,"type":"response","command":"configure","request_seq":4,"success":true,"performanceData":{"updateGraphDurationMs":*,"createAutoImportProviderProgramDurationMs":*}}
-Info 41   [00:01:41.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
@@ -282,7 +282,7 @@ After request
 
 Before request
 
-Info 42   [00:01:42.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "completionInfo",
       "arguments": {
@@ -293,18 +293,18 @@ Info 42   [00:01:42.000] request:
       "seq": 5,
       "type": "request"
     }
-Info 43   [00:01:43.000] getCompletionData: Get current token: *
-Info 44   [00:01:44.000] getCompletionData: Is inside comment: *
-Info 45   [00:01:45.000] getCompletionData: Get previous token: *
-Info 46   [00:01:46.000] getExportInfoMap: cache miss or empty; calculating new results
-Info 47   [00:01:47.000] forEachExternalModuleToImportFrom autoImportProvider: *
-Info 48   [00:01:48.000] getExportInfoMap: done in * ms
-Info 49   [00:01:49.000] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 1 from cache
-Info 50   [00:01:50.000] collectAutoImports: response is incomplete
-Info 51   [00:01:51.000] collectAutoImports: *
-Info 52   [00:01:52.000] getCompletionData: Semantic work: *
-Info 53   [00:01:53.000] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
-Info 54   [00:01:54.000] response:
+Info seq  [hh:mm:ss:mss] getCompletionData: Get current token: *
+Info seq  [hh:mm:ss:mss] getCompletionData: Is inside comment: *
+Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
+Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
+Info seq  [hh:mm:ss:mss] forEachExternalModuleToImportFrom autoImportProvider: *
+Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
+Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 1 from cache
+Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
+Info seq  [hh:mm:ss:mss] collectAutoImports: *
+Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
+Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
         "flags": 1,
@@ -737,19 +737,19 @@ Info 54   [00:01:54.000] response:
     }
 After request
 
-Info 55   [00:01:56.000] FileWatcher:: Triggered with /src/b-link.ts 2:: WatchInfo: /src/b-link.ts 500 undefined WatchType: Closed Script info
-Info 56   [00:01:57.000] FileWatcher:: Close:: WatchInfo: /src/b-link.ts 500 undefined WatchType: Closed Script info
-Info 57   [00:01:58.000] Scheduled: /tsconfig.json
-Info 58   [00:01:59.000] Scheduled: *ensureProjectForOpenFiles*
-Info 59   [00:02:00.000] Elapsed:: *ms FileWatcher:: Triggered with /src/b-link.ts 2:: WatchInfo: /src/b-link.ts 500 undefined WatchType: Closed Script info
-Info 60   [00:02:01.000] DirectoryWatcher:: Triggered with /src/b-link.ts :: WatchInfo: /src 1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info 61   [00:02:02.000] Scheduled: /tsconfig.json, Cancelled earlier one
-Info 62   [00:02:03.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
-Info 63   [00:02:04.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /src/b-link.ts :: WatchInfo: /src 1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info 64   [00:02:07.000] DirectoryWatcher:: Triggered with /src/b-link2.ts :: WatchInfo: /src 1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info 65   [00:02:08.000] Scheduled: /tsconfig.json, Cancelled earlier one
-Info 66   [00:02:09.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
-Info 67   [00:02:10.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /src/b-link2.ts :: WatchInfo: /src 1 undefined Config: /tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /src/b-link.ts 2:: WatchInfo: /src/b-link.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /src/b-link.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Scheduled: /tsconfig.json
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /src/b-link.ts 2:: WatchInfo: /src/b-link.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /src/b-link.ts :: WatchInfo: /src 1 undefined Config: /tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Scheduled: /tsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /src/b-link.ts :: WatchInfo: /src 1 undefined Config: /tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /src/b-link2.ts :: WatchInfo: /src 1 undefined Config: /tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Scheduled: /tsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /src/b-link2.ts :: WatchInfo: /src 1 undefined Config: /tsconfig.json WatchType: Wild card directory
 Before running Timeout callback:: count: 2
 5: /tsconfig.json
 6: *ensureProjectForOpenFiles*
@@ -777,11 +777,11 @@ FsWatchesRecursive::
 /node_modules:
   {}
 
-Info 68   [00:02:11.000] Running: /tsconfig.json
-Info 69   [00:02:12.000] Starting updateGraphWorker: Project: /tsconfig.json
-Info 70   [00:02:13.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 71   [00:02:14.000] Project '/tsconfig.json' (Configured)
-Info 72   [00:02:15.000] 	Files (4)
+Info seq  [hh:mm:ss:mss] Running: /tsconfig.json
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (4)
 	/src/a.ts SVC-1-0 "export const foo = 0;"
 	/src/ambient.d.ts Text-1 "declare module 'ambient' {}"
 	/src/b.ts Text-1 "foo"
@@ -797,44 +797,44 @@ Info 72   [00:02:15.000] 	Files (4)
 	src/c.ts
 	  Matched by include pattern 'src' in 'tsconfig.json'
 
-Info 73   [00:02:16.000] -----------------------------------------------
-Info 74   [00:02:17.000] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
-Info 75   [00:02:18.000] 	Files (1)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
+Info seq  [hh:mm:ss:mss] 	Files (1)
 
-Info 76   [00:02:19.000] -----------------------------------------------
-Info 77   [00:02:20.000] Running: *ensureProjectForOpenFiles*
-Info 78   [00:02:21.000] Before ensureProjectForOpenFiles:
-Info 79   [00:02:22.000] Project '/tsconfig.json' (Configured)
-Info 79   [00:02:23.000] 	Files (4)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
+Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (4)
 
-Info 79   [00:02:24.000] -----------------------------------------------
-Info 79   [00:02:25.000] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
-Info 79   [00:02:26.000] 	Files (1)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
+Info seq  [hh:mm:ss:mss] 	Files (1)
 
-Info 79   [00:02:27.000] -----------------------------------------------
-Info 79   [00:02:28.000] Open files: 
-Info 79   [00:02:29.000] 	FileName: /src/a.ts ProjectRootPath: undefined
-Info 79   [00:02:30.000] 		Projects: /tsconfig.json
-Info 79   [00:02:31.000] 	FileName: /src/b.ts ProjectRootPath: undefined
-Info 79   [00:02:32.000] 		Projects: /tsconfig.json
-Info 79   [00:02:33.000] 	FileName: /src/c.ts ProjectRootPath: undefined
-Info 79   [00:02:34.000] 		Projects: /tsconfig.json
-Info 79   [00:02:35.000] After ensureProjectForOpenFiles:
-Info 80   [00:02:36.000] Project '/tsconfig.json' (Configured)
-Info 80   [00:02:37.000] 	Files (4)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /src/a.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /src/b.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /src/c.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
+Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (4)
 
-Info 80   [00:02:38.000] -----------------------------------------------
-Info 80   [00:02:39.000] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
-Info 80   [00:02:40.000] 	Files (1)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
+Info seq  [hh:mm:ss:mss] 	Files (1)
 
-Info 80   [00:02:41.000] -----------------------------------------------
-Info 80   [00:02:42.000] Open files: 
-Info 80   [00:02:43.000] 	FileName: /src/a.ts ProjectRootPath: undefined
-Info 80   [00:02:44.000] 		Projects: /tsconfig.json
-Info 80   [00:02:45.000] 	FileName: /src/b.ts ProjectRootPath: undefined
-Info 80   [00:02:46.000] 		Projects: /tsconfig.json
-Info 80   [00:02:47.000] 	FileName: /src/c.ts ProjectRootPath: undefined
-Info 80   [00:02:48.000] 		Projects: /tsconfig.json
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /src/a.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /src/b.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /src/c.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
 After running Timeout callback:: count: 0
 
-Info 80   [00:02:49.000] moduleSpecifierCache count: 0
+Info seq  [hh:mm:ss:mss] moduleSpecifierCache count: 0

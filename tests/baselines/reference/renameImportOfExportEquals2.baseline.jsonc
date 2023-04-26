@@ -220,10 +220,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/renameImportOfExportEquals2.ts ===
-// declare namespace N {
-//     export var x: number;
-// }
-// declare module "mod" {
+// --- (line: 4) skipped ---
 //     export = N;
 // }
 // declare module "a" {
@@ -237,10 +234,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/renameImportOfExportEquals2.ts ===
-  // declare namespace N {
-  //     export var x: number;
-  // }
-  // declare module "mod" {
+  // --- (line: 4) skipped ---
   //     export = N;
   // }
   // declare module "a" {
@@ -419,11 +413,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/renameImportOfExportEquals2.ts ===
-// declare namespace N {
-//     export var x: number;
-// }
-// declare module "mod" {
-//     export = N;
+// --- (line: 5) skipped ---
 // }
 // declare module "a" {
 //     import * as O from "mod";
@@ -436,11 +426,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/renameImportOfExportEquals2.ts ===
-  // declare namespace N {
-  //     export var x: number;
-  // }
-  // declare module "mod" {
-  //     export = N;
+  // --- (line: 5) skipped ---
   // }
   // declare module "a" {
   //     import * as O from "mod";
@@ -565,14 +551,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/renameImportOfExportEquals2.ts ===
-// declare namespace N {
-//     export var x: number;
-// }
-// declare module "mod" {
-//     export = N;
-// }
-// declare module "a" {
-//     import * as O from "mod";
+// --- (line: 8) skipped ---
 //     export { O as P }; // Renaming N here would rename
 // }
 // declare module "b" {
@@ -582,14 +561,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/renameImportOfExportEquals2.ts ===
-  // declare namespace N {
-  //     export var x: number;
-  // }
-  // declare module "mod" {
-  //     export = N;
-  // }
-  // declare module "a" {
-  //     import * as O from "mod";
+  // --- (line: 8) skipped ---
   //     export { O as P }; // Renaming N here would rename
   // }
   // declare module "b" {
@@ -665,12 +637,7 @@
 // }
 // declare module "a" {
 //     import * as O from "mod";
-//     export { O as P }; // Renaming N here would rename
-// }
-// declare module "b" {
-//     import { P as Q } from "a";
-//     export const y: typeof Q.x;
-// }
+// --- (line: 9) skipped ---
 
 
 
@@ -684,21 +651,13 @@
 // }
 // declare module "a" {
 //     import * as O from "mod";
-//     export { O as P }; // Renaming N here would rename
-// }
-// declare module "b" {
-//     import { P as Q } from "a";
-//     export const y: typeof Q.x;
-// }
+// --- (line: 9) skipped ---
 
 
 
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameImportOfExportEquals2.ts ===
-// declare namespace N {
-//     export var x: number;
-// }
-// declare module "mod" {
+// --- (line: 4) skipped ---
 //     export = N;
 // }
 // declare module "a" {
@@ -714,10 +673,7 @@
 
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameImportOfExportEquals2.ts ===
-// declare namespace N {
-//     export var x: number;
-// }
-// declare module "mod" {
+// --- (line: 4) skipped ---
 //     export = N;
 // }
 // declare module "a" {
@@ -733,11 +689,7 @@
 
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameImportOfExportEquals2.ts ===
-// declare namespace N {
-//     export var x: number;
-// }
-// declare module "mod" {
-//     export = N;
+// --- (line: 5) skipped ---
 // }
 // declare module "a" {
 //     import * as O from "mod";
@@ -752,11 +704,7 @@
 
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameImportOfExportEquals2.ts ===
-// declare namespace N {
-//     export var x: number;
-// }
-// declare module "mod" {
-//     export = N;
+// --- (line: 5) skipped ---
 // }
 // declare module "a" {
 //     import * as O from "mod";
@@ -771,14 +719,7 @@
 
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameImportOfExportEquals2.ts ===
-// declare namespace N {
-//     export var x: number;
-// }
-// declare module "mod" {
-//     export = N;
-// }
-// declare module "a" {
-//     import * as O from "mod";
+// --- (line: 8) skipped ---
 //     export { O as P }; // Renaming N here would rename
 // }
 // declare module "b" {
@@ -790,14 +731,7 @@
 
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameImportOfExportEquals2.ts ===
-// declare namespace N {
-//     export var x: number;
-// }
-// declare module "mod" {
-//     export = N;
-// }
-// declare module "a" {
-//     import * as O from "mod";
+// --- (line: 8) skipped ---
 //     export { O as P }; // Renaming N here would rename
 // }
 // declare module "b" {

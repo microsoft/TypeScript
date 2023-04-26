@@ -23,16 +23,7 @@
   //     property2: string;
   // }
   // 
-  // var elems: I[];
-  // for (let { property1: p } of elems) {
-  // }
-  // for (let { property1 } of elems) {
-  // }
-  // for (var { property1: p1 } of elems) {
-  // }
-  // var p2;
-  // for ({ property1 : p2 } of elems) {
-  // }
+  // --- (line: 6) skipped ---
 
   // === Details ===
   [
@@ -118,11 +109,7 @@
   // }
   // for (let { property1 } of elems) {
   // }
-  // for (var { property1: p1 } of elems) {
-  // }
-  // var p2;
-  // for ({ property1 : p2 } of elems) {
-  // }
+  // --- (line: 11) skipped ---
 
   // === Details ===
   [
@@ -293,11 +280,9 @@
   //     property2: string;
   // }
   // 
-  // var elems: I[];
-  // for (let { property1: p } of elems) {
-  // }
-  // for (let { property1 } of elems) {
-  // }
+  // --- (line: 6) skipped ---
+
+  // --- (line: 10) skipped ---
   // for (var { property1: p1 } of elems) {
   // }
   // var p2;
@@ -390,9 +375,7 @@
   // }
   // for (var { property1: p1 } of elems) {
   // }
-  // var p2;
-  // for ({ property1 : p2 } of elems) {
-  // }
+  // --- (line: 13) skipped ---
 
   // === Details ===
   [

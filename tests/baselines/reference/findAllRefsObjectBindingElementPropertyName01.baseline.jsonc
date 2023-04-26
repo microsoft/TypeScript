@@ -74,9 +74,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsObjectBindingElementPropertyName01.ts ===
-// interface I {
-//     property1: number;
-//     property2: string;
+// --- (line: 3) skipped ---
 // }
 // 
 // var foo: I;

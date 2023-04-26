@@ -1085,3 +1085,67 @@ const f = <P extends object>(a: P & {}) => {
 
 };
 
+// Repro from #53773
+
+function test1<T extends any[] | Record<string, any>>(obj: T) {
+>test1 : <T extends any[] | Record<string, any>>(obj: T) => void
+>obj : T
+
+    if (Array.isArray(obj) || 'length' in obj) {
+>Array.isArray(obj) || 'length' in obj : boolean
+>Array.isArray(obj) : boolean
+>Array.isArray : (arg: any) => arg is any[]
+>Array : ArrayConstructor
+>isArray : (arg: any) => arg is any[]
+>obj : any[] | Record<string, any>
+>'length' in obj : boolean
+>'length' : "length"
+>obj : T
+
+      obj;  // T
+>obj : T
+    }
+    else {
+      obj;  // T
+>obj : T
+    }
+}
+
+function test2<T extends any[] | Record<string, any>>(obj: T) {
+>test2 : <T extends any[] | Record<string, any>>(obj: T) => void
+>obj : T
+
+    if (Array.isArray(obj)) {
+>Array.isArray(obj) : boolean
+>Array.isArray : (arg: any) => arg is any[]
+>Array : ArrayConstructor
+>isArray : (arg: any) => arg is any[]
+>obj : any[] | Record<string, any>
+
+      obj;  // T & any[]
+>obj : T & any[]
+    }
+    else {
+      obj;  // T
+>obj : T
+    }
+}
+
+function test3<T extends any[] | Record<string, any>>(obj: T) {
+>test3 : <T extends any[] | Record<string, any>>(obj: T) => void
+>obj : T
+
+    if ('length' in obj) {
+>'length' in obj : boolean
+>'length' : "length"
+>obj : T
+
+      obj;  // T
+>obj : T
+    }
+    else {
+      obj;  // T
+>obj : T
+    }
+}
+

@@ -1,10 +1,10 @@
 import { dedent } from "../../_namespaces/Utils";
 
-import { verifyTscWatch } from "../tscWatch/helpers";
+import { verifyTscWatch } from "../helpers/tscWatch";
 import {
     createWatchedSystem,
     libFile,
-} from "../virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
     verifyTscWatch({

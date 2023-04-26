@@ -139,14 +139,7 @@
 //     public method(): any;
 //     public method(foo: string);
 //     public method(foo?: any) { return "foo" }
-// }
-// // static method
-// MethodOverload.method();
-// MethodOverload.method("123");
-// // instance method
-// var methodOverload = new MethodOverload();
-// methodOverload.method();
-// methodOverload.method("456");
+// --- (line: 8) skipped ---
 
   // === Details ===
   [
@@ -173,11 +166,7 @@
 // }
 // // static method
 // MethodOverload.method();
-// MethodOverload.method("123");
-// // instance method
-// var methodOverload = new MethodOverload();
-// methodOverload.method();
-// methodOverload.method("456");
+// --- (line: 11) skipped ---
 
   // === Details ===
   [

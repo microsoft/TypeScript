@@ -22,13 +22,7 @@
   // 
   // export default f;
   // 
-  // var x: typeof f;
-  // 
-  // var y = f();
-  // 
-  // namespace f {
-  //     var local = 100;
-  // }
+  // --- (line: 7) skipped ---
 
   // === Details ===
   [
@@ -116,13 +110,7 @@
   // 
   // export default f;
   // 
-  // var x: typeof f;
-  // 
-  // var y = f();
-  // 
-  // namespace f {
-  //     var local = 100;
-  // }
+  // --- (line: 7) skipped ---
 
   // === Details ===
   [
@@ -212,11 +200,7 @@
   // 
   // var x: typeof f;
   // 
-  // var y = f();
-  // 
-  // namespace f {
-  //     var local = 100;
-  // }
+  // --- (line: 9) skipped ---
 
   // === Details ===
   [
@@ -306,11 +290,7 @@
   // 
   // var x: typeof f;
   // 
-  // var y = f();
-  // 
-  // namespace f {
-  //     var local = 100;
-  // }
+  // --- (line: 9) skipped ---
 
   // === Details ===
   [
@@ -402,9 +382,7 @@
   // 
   // var y = f();
   // 
-  // namespace f {
-  //     var local = 100;
-  // }
+  // --- (line: 11) skipped ---
 
   // === Details ===
   [

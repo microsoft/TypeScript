@@ -1,14 +1,6 @@
 // === findRenameLocations ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
-//     interface Element { }
-//     interface IntrinsicElements {
-//     }
-//     interface ElementAttributesProperty { props }
-// }
-// class MyClass {
-//   props: {
-//     name?: string;
+// --- (line: 9) skipped ---
 //     size?: number;
 // }
 // 
@@ -19,15 +11,7 @@
 
 // === findRenameLocations ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
-//     interface Element { }
-//     interface IntrinsicElements {
-//     }
-//     interface ElementAttributesProperty { props }
-// }
-// class MyClass {
-//   props: {
-//     name?: string;
+// --- (line: 9) skipped ---
 //     size?: number;
 // }
 // 

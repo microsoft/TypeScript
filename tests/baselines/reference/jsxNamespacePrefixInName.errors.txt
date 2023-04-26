@@ -15,11 +15,10 @@ tests/cases/compiler/jsxNamespacePrefixInName.tsx(11,32): error TS1003: Identifi
 tests/cases/compiler/jsxNamespacePrefixInName.tsx(11,68): error TS1005: '>' expected.
 tests/cases/compiler/jsxNamespacePrefixInName.tsx(11,73): error TS1005: ',' expected.
 tests/cases/compiler/jsxNamespacePrefixInName.tsx(11,74): error TS1109: Expression expected.
-tests/cases/compiler/jsxNamespacePrefixInName.tsx(21,21): error TS1003: Identifier expected.
-tests/cases/compiler/jsxNamespacePrefixInName.tsx(22,26): error TS1003: Identifier expected.
+tests/cases/compiler/jsxNamespacePrefixInName.tsx(21,27): error TS1003: Identifier expected.
+tests/cases/compiler/jsxNamespacePrefixInName.tsx(21,29): error TS1005: '...' expected.
+tests/cases/compiler/jsxNamespacePrefixInName.tsx(21,29): error TS2698: Spread types may only be created from object types.
 tests/cases/compiler/jsxNamespacePrefixInName.tsx(22,27): error TS1003: Identifier expected.
-tests/cases/compiler/jsxNamespacePrefixInName.tsx(22,29): error TS1005: '...' expected.
-tests/cases/compiler/jsxNamespacePrefixInName.tsx(22,29): error TS2698: Spread types may only be created from object types.
 tests/cases/compiler/jsxNamespacePrefixInName.tsx(24,21): error TS1109: Expression expected.
 tests/cases/compiler/jsxNamespacePrefixInName.tsx(24,22): error TS1109: Expression expected.
 tests/cases/compiler/jsxNamespacePrefixInName.tsx(24,25): error TS1005: ',' expected.
@@ -27,10 +26,12 @@ tests/cases/compiler/jsxNamespacePrefixInName.tsx(24,30): error TS2362: The left
 tests/cases/compiler/jsxNamespacePrefixInName.tsx(24,38): error TS1005: ':' expected.
 tests/cases/compiler/jsxNamespacePrefixInName.tsx(24,41): error TS1109: Expression expected.
 tests/cases/compiler/jsxNamespacePrefixInName.tsx(24,42): error TS1109: Expression expected.
-tests/cases/compiler/jsxNamespacePrefixInName.tsx(25,24): error TS1003: Identifier expected.
+tests/cases/compiler/jsxNamespacePrefixInName.tsx(25,29): error TS1003: Identifier expected.
+tests/cases/compiler/jsxNamespacePrefixInName.tsx(25,31): error TS1005: '...' expected.
+tests/cases/compiler/jsxNamespacePrefixInName.tsx(25,31): error TS2698: Spread types may only be created from object types.
 
 
-==== tests/cases/compiler/jsxNamespacePrefixInName.tsx (30 errors) ====
+==== tests/cases/compiler/jsxNamespacePrefixInName.tsx (31 errors) ====
     var justElement1 = <a:element />;
     var justElement2 = <a:element></a:element>;
     var justElement3 = <a:element attr={"value"}></a:element>;
@@ -86,17 +87,15 @@ tests/cases/compiler/jsxNamespacePrefixInName.tsx(25,24): error TS1003: Identifi
     var both3 = <a:element a:attr={"value"}>{"text"}</a:element>;
     
     var endOfIdent1 = <a: attr={"value"} />;
-                        ~
-!!! error TS1003: Identifier expected.
-    var endOfIdent2 = <a attr:={"value"} />;
-                             ~
-!!! error TS1003: Identifier expected.
                               ~
 !!! error TS1003: Identifier expected.
                                 ~~~~~~~
 !!! error TS1005: '...' expected.
                                 ~~~~~~~
 !!! error TS2698: Spread types may only be created from object types.
+    var endOfIdent2 = <a attr:={"value"} />;
+                              ~
+!!! error TS1003: Identifier expected.
     
     var beginOfIdent1 = <:a attr={"value"} />;
                         ~
@@ -114,8 +113,12 @@ tests/cases/compiler/jsxNamespacePrefixInName.tsx(25,24): error TS1003: Identifi
                                              ~
 !!! error TS1109: Expression expected.
     var beginOfIdent2 = <a :attr={"value"} />;
-                           ~
+                                ~
 !!! error TS1003: Identifier expected.
+                                  ~~~~~~~
+!!! error TS1005: '...' expected.
+                                  ~~~~~~~
+!!! error TS2698: Spread types may only be created from object types.
     
     var upcaseComponent1 = <ns:Upcase />;  // Parsed as intrinsic
     var upcaseComponent2 = <Upcase:element />;  // Parsed as instrinsic

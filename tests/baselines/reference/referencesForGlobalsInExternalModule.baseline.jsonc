@@ -5,16 +5,7 @@
 // 
 // class topLevelClass { }
 // var c = new topLevelClass();
-// 
-// interface topLevelInterface { }
-// var i: topLevelInterface;
-// 
-// module topLevelModule {
-//     export var x;
-// }
-// var x = topLevelModule.x;
-// 
-// export = x;
+// --- (line: 6) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForGlobalsInExternalModule.ts ===
@@ -22,17 +13,7 @@
   // var topLevelVar2 = topLevelVar;
   // 
   // class topLevelClass { }
-  // var c = new topLevelClass();
-  // 
-  // interface topLevelInterface { }
-  // var i: topLevelInterface;
-  // 
-  // module topLevelModule {
-  //     export var x;
-  // }
-  // var x = topLevelModule.x;
-  // 
-  // export = x;
+  // --- (line: 5) skipped ---
 
   // === Details ===
   [
@@ -79,16 +60,7 @@
 // 
 // class topLevelClass { }
 // var c = new topLevelClass();
-// 
-// interface topLevelInterface { }
-// var i: topLevelInterface;
-// 
-// module topLevelModule {
-//     export var x;
-// }
-// var x = topLevelModule.x;
-// 
-// export = x;
+// --- (line: 6) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForGlobalsInExternalModule.ts ===
@@ -96,17 +68,7 @@
   // var topLevelVar2 = topLevelVar;
   // 
   // class topLevelClass { }
-  // var c = new topLevelClass();
-  // 
-  // interface topLevelInterface { }
-  // var i: topLevelInterface;
-  // 
-  // module topLevelModule {
-  //     export var x;
-  // }
-  // var x = topLevelModule.x;
-  // 
-  // export = x;
+  // --- (line: 5) skipped ---
 
   // === Details ===
   [
@@ -153,16 +115,7 @@
 // 
 // class topLevelClass { }
 // var c = new topLevelClass();
-// 
-// interface topLevelInterface { }
-// var i: topLevelInterface;
-// 
-// module topLevelModule {
-//     export var x;
-// }
-// var x = topLevelModule.x;
-// 
-// export = x;
+// --- (line: 6) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForGlobalsInExternalModule.ts ===
@@ -171,16 +124,7 @@
   // 
   // class topLevelClass { }
   // var c = new topLevelClass();
-  // 
-  // interface topLevelInterface { }
-  // var i: topLevelInterface;
-  // 
-  // module topLevelModule {
-  //     export var x;
-  // }
-  // var x = topLevelModule.x;
-  // 
-  // export = x;
+  // --- (line: 6) skipped ---
 
   // === Details ===
   [
@@ -230,13 +174,7 @@
 // 
 // interface topLevelInterface { }
 // var i: topLevelInterface;
-// 
-// module topLevelModule {
-//     export var x;
-// }
-// var x = topLevelModule.x;
-// 
-// export = x;
+// --- (line: 9) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForGlobalsInExternalModule.ts ===
@@ -247,14 +185,7 @@
   // var c = new topLevelClass();
   // 
   // interface topLevelInterface { }
-  // var i: topLevelInterface;
-  // 
-  // module topLevelModule {
-  //     export var x;
-  // }
-  // var x = topLevelModule.x;
-  // 
-  // export = x;
+  // --- (line: 8) skipped ---
 
   // === Details ===
   [
@@ -292,13 +223,7 @@
 // 
 // interface topLevelInterface { }
 // var i: topLevelInterface;
-// 
-// module topLevelModule {
-//     export var x;
-// }
-// var x = topLevelModule.x;
-// 
-// export = x;
+// --- (line: 9) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForGlobalsInExternalModule.ts ===
@@ -309,14 +234,7 @@
   // var c = new topLevelClass();
   // 
   // interface topLevelInterface { }
-  // var i: topLevelInterface;
-  // 
-  // module topLevelModule {
-  //     export var x;
-  // }
-  // var x = topLevelModule.x;
-  // 
-  // export = x;
+  // --- (line: 8) skipped ---
 
   // === Details ===
   [
@@ -354,13 +272,7 @@
 // 
 // interface topLevelInterface { }
 // var i: topLevelInterface;
-// 
-// module topLevelModule {
-//     export var x;
-// }
-// var x = topLevelModule.x;
-// 
-// export = x;
+// --- (line: 9) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForGlobalsInExternalModule.ts ===
@@ -372,13 +284,7 @@
   // 
   // interface topLevelInterface { }
   // var i: topLevelInterface;
-  // 
-  // module topLevelModule {
-  //     export var x;
-  // }
-  // var x = topLevelModule.x;
-  // 
-  // export = x;
+  // --- (line: 9) skipped ---
 
   // === Details ===
   [
@@ -408,9 +314,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForGlobalsInExternalModule.ts ===
-// var topLevelVar = 2;
-// var topLevelVar2 = topLevelVar;
-// 
+// --- (line: 3) skipped ---
 // class topLevelClass { }
 // var c = new topLevelClass();
 // 
@@ -419,16 +323,11 @@
 // 
 // module topLevelModule {
 //     export var x;
-// }
-// var x = topLevelModule.x;
-// 
-// export = x;
+// --- (line: 12) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForGlobalsInExternalModule.ts ===
-  // var topLevelVar = 2;
-  // var topLevelVar2 = topLevelVar;
-  // 
+  // --- (line: 3) skipped ---
   // class topLevelClass { }
   // var c = new topLevelClass();
   // 
@@ -436,11 +335,7 @@
   // var i: topLevelInterface;
   // 
   // module topLevelModule {
-  //     export var x;
-  // }
-  // var x = topLevelModule.x;
-  // 
-  // export = x;
+  // --- (line: 11) skipped ---
 
   // === Details ===
   [
@@ -470,9 +365,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForGlobalsInExternalModule.ts ===
-// var topLevelVar = 2;
-// var topLevelVar2 = topLevelVar;
-// 
+// --- (line: 3) skipped ---
 // class topLevelClass { }
 // var c = new topLevelClass();
 // 
@@ -481,16 +374,11 @@
 // 
 // module topLevelModule {
 //     export var x;
-// }
-// var x = topLevelModule.x;
-// 
-// export = x;
+// --- (line: 12) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForGlobalsInExternalModule.ts ===
-  // var topLevelVar = 2;
-  // var topLevelVar2 = topLevelVar;
-  // 
+  // --- (line: 3) skipped ---
   // class topLevelClass { }
   // var c = new topLevelClass();
   // 
@@ -498,11 +386,7 @@
   // var i: topLevelInterface;
   // 
   // module topLevelModule {
-  //     export var x;
-  // }
-  // var x = topLevelModule.x;
-  // 
-  // export = x;
+  // --- (line: 11) skipped ---
 
   // === Details ===
   [
@@ -532,9 +416,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForGlobalsInExternalModule.ts ===
-// var topLevelVar = 2;
-// var topLevelVar2 = topLevelVar;
-// 
+// --- (line: 3) skipped ---
 // class topLevelClass { }
 // var c = new topLevelClass();
 // 
@@ -543,16 +425,11 @@
 // 
 // module topLevelModule {
 //     export var x;
-// }
-// var x = topLevelModule.x;
-// 
-// export = x;
+// --- (line: 12) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForGlobalsInExternalModule.ts ===
-  // var topLevelVar = 2;
-  // var topLevelVar2 = topLevelVar;
-  // 
+  // --- (line: 3) skipped ---
   // class topLevelClass { }
   // var c = new topLevelClass();
   // 
@@ -561,10 +438,7 @@
   // 
   // module topLevelModule {
   //     export var x;
-  // }
-  // var x = topLevelModule.x;
-  // 
-  // export = x;
+  // --- (line: 12) skipped ---
 
   // === Details ===
   [
@@ -594,12 +468,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForGlobalsInExternalModule.ts ===
-// var topLevelVar = 2;
-// var topLevelVar2 = topLevelVar;
-// 
-// class topLevelClass { }
-// var c = new topLevelClass();
-// 
+// --- (line: 6) skipped ---
 // interface topLevelInterface { }
 // var i: topLevelInterface;
 // 
@@ -612,12 +481,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForGlobalsInExternalModule.ts ===
-  // var topLevelVar = 2;
-  // var topLevelVar2 = topLevelVar;
-  // 
-  // class topLevelClass { }
-  // var c = new topLevelClass();
-  // 
+  // --- (line: 6) skipped ---
   // interface topLevelInterface { }
   // var i: topLevelInterface;
   // 
@@ -656,12 +520,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForGlobalsInExternalModule.ts ===
-// var topLevelVar = 2;
-// var topLevelVar2 = topLevelVar;
-// 
-// class topLevelClass { }
-// var c = new topLevelClass();
-// 
+// --- (line: 6) skipped ---
 // interface topLevelInterface { }
 // var i: topLevelInterface;
 // 
@@ -674,12 +533,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForGlobalsInExternalModule.ts ===
-  // var topLevelVar = 2;
-  // var topLevelVar2 = topLevelVar;
-  // 
-  // class topLevelClass { }
-  // var c = new topLevelClass();
-  // 
+  // --- (line: 6) skipped ---
   // interface topLevelInterface { }
   // var i: topLevelInterface;
   // 
@@ -718,12 +572,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForGlobalsInExternalModule.ts ===
-// var topLevelVar = 2;
-// var topLevelVar2 = topLevelVar;
-// 
-// class topLevelClass { }
-// var c = new topLevelClass();
-// 
+// --- (line: 6) skipped ---
 // interface topLevelInterface { }
 // var i: topLevelInterface;
 // 
@@ -736,12 +585,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForGlobalsInExternalModule.ts ===
-  // var topLevelVar = 2;
-  // var topLevelVar2 = topLevelVar;
-  // 
-  // class topLevelClass { }
-  // var c = new topLevelClass();
-  // 
+  // --- (line: 6) skipped ---
   // interface topLevelInterface { }
   // var i: topLevelInterface;
   // 

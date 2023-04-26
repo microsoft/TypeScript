@@ -8,13 +8,4 @@
 //     }
 //     catch (x) {
 //         throw 10;
-//     }
-//     finally {
-//         throw 10;
-//     }
-// }
-// finally {
-//     throw 10;
-// }
-// 
-// throw 10;
+// --- (line: 9) skipped ---

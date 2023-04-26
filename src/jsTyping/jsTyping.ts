@@ -32,7 +32,6 @@ import {
 
 import * as Debug from "../compiler/debug";
 
-/** @internal */
 export interface TypingResolutionHost {
     directoryExists(path: string): boolean;
     fileExists(fileName: string): boolean;

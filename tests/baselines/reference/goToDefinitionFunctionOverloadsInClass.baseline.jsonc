@@ -7,9 +7,7 @@
 //     public fnOverload(): any;
 //     public fnOverload(foo: string);
 //     public fnOverload(foo: any) { return "foo" }
-// 
-//     constructor() { }
-// }
+// --- (line: 8) skipped ---
 
   // === Details ===
   [

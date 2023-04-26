@@ -17,10 +17,7 @@
   // }
   // 
   // var x: IFoo<string>;
-  // x.doSomething("ss");
-  // 
-  // var y: IFoo<number>;
-  // y.doSomething(12);
+  // --- (line: 6) skipped ---
 
   // === Details ===
   [

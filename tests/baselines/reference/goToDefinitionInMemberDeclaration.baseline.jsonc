@@ -13,11 +13,7 @@
 //     public _class: Foo = new Foo();
 //     public _list: IFoo[]=[];
 //     public _enum: Enum = Enum.value1;
-//     public _self: Bar;
-// 
-//     constructor(public _inConstructor: IFoo) {
-//     }
-// }
+// --- (line: 14) skipped ---
 
   // === Details ===
   [
@@ -40,10 +36,9 @@
 // 
 // class Foo implements IFoo {
 //     public method1(): number { return 0; }
-// }
-// 
-// enum Enum { value1, value2 };
-// 
+// --- (line: 5) skipped ---
+
+// --- (line: 8) skipped ---
 // class Bar {
 //     public _interface: IFoo = new Foo();
 //     public _class: Foo = new Foo();
@@ -51,9 +46,7 @@
 //     public _enum: Enum = Enum.value1;
 //     public _self: Bar;
 // 
-//     constructor(public _inConstructor: IFoo) {
-//     }
-// }
+// --- (line: 16) skipped ---
 
   // === Details ===
   [
@@ -76,14 +69,9 @@
 // 
 // class Foo implements IFoo {
 //     public method1(): number { return 0; }
-// }
-// 
-// enum Enum { value1, value2 };
-// 
-// class Bar {
-//     public _interface: IFoo = new Foo();
-//     public _class: Foo = new Foo();
-//     public _list: IFoo[]=[];
+// --- (line: 5) skipped ---
+
+// --- (line: 12) skipped ---
 //     public _enum: Enum = Enum.value1;
 //     public _self: Bar;
 // 
@@ -122,10 +110,7 @@
 //     public _list: IFoo[]=[];
 //     public _enum: Enum = Enum.value1;
 //     public _self: Bar;
-// 
-//     constructor(public _inConstructor: IFoo) {
-//     }
-// }
+// --- (line: 15) skipped ---
 
   // === Details ===
   [
@@ -157,11 +142,7 @@
 //     public _class: Foo = new Foo();
 //     public _list: IFoo[]=[];
 //     public _enum: Enum = Enum.value1;
-//     public _self: Bar;
-// 
-//     constructor(public _inConstructor: IFoo) {
-//     }
-// }
+// --- (line: 14) skipped ---
 
   // === Details ===
   [
@@ -180,9 +161,7 @@
 
 // === goToDefinition ===
 // === /tests/cases/fourslash/goToDefinitionInMemberDeclaration.ts ===
-// interface IFoo { method1(): number; }
-// 
-// class Foo implements IFoo {
+// --- (line: 3) skipped ---
 //     public method1(): number { return 0; }
 // }
 // 
@@ -216,9 +195,7 @@
 
 // === goToDefinition ===
 // === /tests/cases/fourslash/goToDefinitionInMemberDeclaration.ts ===
-// interface IFoo { method1(): number; }
-// 
-// class Foo implements IFoo {
+// --- (line: 3) skipped ---
 //     public method1(): number { return 0; }
 // }
 // 
@@ -252,11 +229,7 @@
 
 // === goToDefinition ===
 // === /tests/cases/fourslash/goToDefinitionInMemberDeclaration.ts ===
-// interface IFoo { method1(): number; }
-// 
-// class Foo implements IFoo {
-//     public method1(): number { return 0; }
-// }
+// --- (line: 5) skipped ---
 // 
 // enum Enum { value1, value2 };
 // 

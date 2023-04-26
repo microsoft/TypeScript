@@ -5,13 +5,7 @@
 //     prop1: string;
 // }
 // 
-// class D extends C {
-//     prop0: string;
-//     prop1: string;
-// }
-// 
-// var d: D;
-// d.prop1;
+// --- (line: 6) skipped ---
 
 
 
@@ -23,20 +17,13 @@
 // }
 // 
 // class D extends C {
-//     prop0: string;
-//     prop1: string;
-// }
-// 
-// var d: D;
-// d.prop1;
+// --- (line: 7) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/file1.ts ===
-// class C extends D {
-//     prop0: string;
-//     prop1: string;
+// --- (line: 3) skipped ---
 // }
 // 
 // class D extends C {
@@ -51,10 +38,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/file1.ts ===
-// class C extends D {
-//     prop0: string;
-//     prop1: string;
-// }
+// --- (line: 4) skipped ---
 // 
 // class D extends C {
 //     prop0: string;
@@ -68,10 +52,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/file1.ts ===
-// class C extends D {
-//     prop0: string;
-//     prop1: string;
-// }
+// --- (line: 4) skipped ---
 // 
 // class D extends C {
 //     prop0: string;

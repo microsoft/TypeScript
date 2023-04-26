@@ -10,11 +10,7 @@
 // 
 //         let localPublic = publicParam;
 //         this.publicParam += " Hello!";
-// 
-//         let localProtected = protectedParam;
-//         this.protectedParam = false;
-//     }
-// }
+// --- (line: 11) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/file1.ts ===
@@ -23,16 +19,7 @@
   //         public publicParam: string,
   //         protected protectedParam: boolean) {
   // 
-  //         let localPrivate = privateParam;
-  //         this.privateParam += 10;
-  // 
-  //         let localPublic = publicParam;
-  //         this.publicParam += " Hello!";
-  // 
-  //         let localProtected = protectedParam;
-  //         this.protectedParam = false;
-  //     }
-  // }
+  // --- (line: 6) skipped ---
 
   // === Details ===
   [
@@ -156,15 +143,7 @@
   //         protected protectedParam: boolean) {
   // 
   //         let localPrivate = privateParam;
-  //         this.privateParam += 10;
-  // 
-  //         let localPublic = publicParam;
-  //         this.publicParam += " Hello!";
-  // 
-  //         let localProtected = protectedParam;
-  //         this.protectedParam = false;
-  //     }
-  // }
+  // --- (line: 7) skipped ---
 
   // === Details ===
   [
@@ -289,14 +268,7 @@
   // 
   //         let localPrivate = privateParam;
   //         this.privateParam += 10;
-  // 
-  //         let localPublic = publicParam;
-  //         this.publicParam += " Hello!";
-  // 
-  //         let localProtected = protectedParam;
-  //         this.protectedParam = false;
-  //     }
-  // }
+  // --- (line: 8) skipped ---
 
   // === Details ===
   [

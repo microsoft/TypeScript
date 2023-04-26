@@ -4,10 +4,9 @@
 //     try {
 //     }
 //     catch (x) {
-//     }
-// 
-//     try {
-//     }
+// --- (line: 5) skipped ---
+
+// --- (line: 8) skipped ---
 //     finally {
 //     }
 // }
@@ -27,14 +26,7 @@
 //     }
 // 
 //     try {
-//     }
-//     finally {
-//     }
-// }
-// catch (e) {
-// }
-// finally {
-// }
+// --- (line: 8) skipped ---
 
 
 
@@ -47,22 +39,13 @@
 //     }
 // 
 //     try {
-//     }
-//     finally {
-//     }
-// }
-// catch (e) {
-// }
-// finally {
-// }
+// --- (line: 8) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesTryCatchFinally4.ts ===
-// try {
-//     try {
-//     }
+// --- (line: 3) skipped ---
 //     catch (x) {
 //     }
 // 
@@ -72,17 +55,13 @@
 //     }
 // }
 // catch (e) {
-// }
-// finally {
-// }
+// --- (line: 13) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesTryCatchFinally4.ts ===
-// try {
-//     try {
-//     }
+// --- (line: 3) skipped ---
 //     catch (x) {
 //     }
 // 
@@ -92,19 +71,13 @@
 //     }
 // }
 // catch (e) {
-// }
-// finally {
-// }
+// --- (line: 13) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesTryCatchFinally4.ts ===
-// try {
-//     try {
-//     }
-//     catch (x) {
-//     }
+// --- (line: 5) skipped ---
 // 
 //     try {
 //     }
@@ -112,9 +85,7 @@
 //     }
 // }
 // catch (e) {
-// }
-// finally {
-// }
+// --- (line: 13) skipped ---
 
 
 
@@ -124,10 +95,9 @@
 //     try {
 //     }
 //     catch (x) {
-//     }
-// 
-//     try {
-//     }
+// --- (line: 5) skipped ---
+
+// --- (line: 8) skipped ---
 //     finally {
 //     }
 // }
@@ -144,10 +114,9 @@
 //     try {
 //     }
 //     catch (x) {
-//     }
-// 
-//     try {
-//     }
+// --- (line: 5) skipped ---
+
+// --- (line: 8) skipped ---
 //     finally {
 //     }
 // }

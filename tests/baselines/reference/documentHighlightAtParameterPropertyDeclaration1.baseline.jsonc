@@ -10,11 +10,7 @@
 // 
 //         let localPublic = publicParam;
 //         this.publicParam += " Hello!";
-// 
-//         let localProtected = protectedParam;
-//         this.protectedParam = false;
-//     }
-// }
+// --- (line: 11) skipped ---
 
 
 
@@ -70,11 +66,7 @@
 // 
 //         let localPublic = publicParam;
 //         this.publicParam += " Hello!";
-// 
-//         let localProtected = protectedParam;
-//         this.protectedParam = false;
-//     }
-// }
+// --- (line: 11) skipped ---
 
 
 
@@ -90,11 +82,7 @@
 // 
 //         let localPublic = publicParam;
 //         this.publicParam += " Hello!";
-// 
-//         let localProtected = protectedParam;
-//         this.protectedParam = false;
-//     }
-// }
+// --- (line: 11) skipped ---
 
 
 

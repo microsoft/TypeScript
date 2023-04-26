@@ -1,14 +1,14 @@
-import { libContent } from "../tsc/helpers";
+import { libContent } from "../helpers/contents";
+import {
+    TscWatchCompileChange,
+    verifyTscWatch,
+} from "../helpers/tscWatch";
 import {
     createWatchedSystem,
     File,
     getTsBuildProjectFile,
     libFile,
-} from "../virtualFileSystemWithWatch";
-import {
-    TscWatchCompileChange,
-    verifyTscWatch,
-} from "./helpers";
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsc-watch:: Emit times and Error updates in builder after program changes", () => {
     const config: File = {

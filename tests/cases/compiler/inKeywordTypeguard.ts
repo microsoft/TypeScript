@@ -355,3 +355,32 @@ function isHTMLTable<T extends object | null>(table: T): boolean {
 const f = <P extends object>(a: P & {}) => {
     "foo" in a;
 };
+
+// Repro from #53773
+
+function test1<T extends any[] | Record<string, any>>(obj: T) {
+    if (Array.isArray(obj) || 'length' in obj) {
+      obj;  // T
+    }
+    else {
+      obj;  // T
+    }
+}
+
+function test2<T extends any[] | Record<string, any>>(obj: T) {
+    if (Array.isArray(obj)) {
+      obj;  // T & any[]
+    }
+    else {
+      obj;  // T
+    }
+}
+
+function test3<T extends any[] | Record<string, any>>(obj: T) {
+    if ('length' in obj) {
+      obj;  // T
+    }
+    else {
+      obj;  // T
+    }
+}

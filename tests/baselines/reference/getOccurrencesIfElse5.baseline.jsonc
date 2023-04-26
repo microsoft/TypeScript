@@ -4,12 +4,9 @@
 //     if (false) {
 //     }
 //     else {
-//     }
-//     if (true) {
-//     }
-//     else {
-//         if (false)
-//             if (true)
+// --- (line: 5) skipped ---
+
+// --- (line: 10) skipped ---
 //                 var x = undefined;
 //     }
 // }
@@ -33,20 +30,7 @@
 //     }
 //     if (true) {
 //     }
-//     else {
-//         if (false)
-//             if (true)
-//                 var x = undefined;
-//     }
-// }
-// else            if (null) {
-// }
-// else /* whar garbl */ if (undefined) {
-// }
-// else
-// if (false) {
-// }
-// else { }
+// --- (line: 8) skipped ---
 
 
 
@@ -59,20 +43,7 @@
 //     }
 //     if (true) {
 //     }
-//     else {
-//         if (false)
-//             if (true)
-//                 var x = undefined;
-//     }
-// }
-// else            if (null) {
-// }
-// else /* whar garbl */ if (undefined) {
-// }
-// else
-// if (false) {
-// }
-// else { }
+// --- (line: 8) skipped ---
 
 
 
@@ -89,16 +60,7 @@
 //         if (false)
 //             if (true)
 //                 var x = undefined;
-//     }
-// }
-// else            if (null) {
-// }
-// else /* whar garbl */ if (undefined) {
-// }
-// else
-// if (false) {
-// }
-// else { }
+// --- (line: 12) skipped ---
 
 
 
@@ -115,26 +77,13 @@
 //         if (false)
 //             if (true)
 //                 var x = undefined;
-//     }
-// }
-// else            if (null) {
-// }
-// else /* whar garbl */ if (undefined) {
-// }
-// else
-// if (false) {
-// }
-// else { }
+// --- (line: 12) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesIfElse5.ts ===
-// if (true) {
-//     if (false) {
-//     }
-//     else {
-//     }
+// --- (line: 5) skipped ---
 //     if (true) {
 //     }
 //     else {
@@ -142,26 +91,13 @@
 //             if (true)
 //                 var x = undefined;
 //     }
-// }
-// else            if (null) {
-// }
-// else /* whar garbl */ if (undefined) {
-// }
-// else
-// if (false) {
-// }
-// else { }
+// --- (line: 13) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesIfElse5.ts ===
-// if (true) {
-//     if (false) {
-//     }
-//     else {
-//     }
-//     if (true) {
+// --- (line: 6) skipped ---
 //     }
 //     else {
 //         if (false)
@@ -169,14 +105,7 @@
 //                 var x = undefined;
 //     }
 // }
-// else            if (null) {
-// }
-// else /* whar garbl */ if (undefined) {
-// }
-// else
-// if (false) {
-// }
-// else { }
+// --- (line: 14) skipped ---
 
 
 
@@ -186,12 +115,9 @@
 //     if (false) {
 //     }
 //     else {
-//     }
-//     if (true) {
-//     }
-//     else {
-//         if (false)
-//             if (true)
+// --- (line: 5) skipped ---
+
+// --- (line: 10) skipped ---
 //                 var x = undefined;
 //     }
 // }
@@ -212,12 +138,9 @@
 //     if (false) {
 //     }
 //     else {
-//     }
-//     if (true) {
-//     }
-//     else {
-//         if (false)
-//             if (true)
+// --- (line: 5) skipped ---
+
+// --- (line: 10) skipped ---
 //                 var x = undefined;
 //     }
 // }
@@ -238,12 +161,9 @@
 //     if (false) {
 //     }
 //     else {
-//     }
-//     if (true) {
-//     }
-//     else {
-//         if (false)
-//             if (true)
+// --- (line: 5) skipped ---
+
+// --- (line: 10) skipped ---
 //                 var x = undefined;
 //     }
 // }
@@ -264,12 +184,9 @@
 //     if (false) {
 //     }
 //     else {
-//     }
-//     if (true) {
-//     }
-//     else {
-//         if (false)
-//             if (true)
+// --- (line: 5) skipped ---
+
+// --- (line: 10) skipped ---
 //                 var x = undefined;
 //     }
 // }
@@ -290,12 +207,9 @@
 //     if (false) {
 //     }
 //     else {
-//     }
-//     if (true) {
-//     }
-//     else {
-//         if (false)
-//             if (true)
+// --- (line: 5) skipped ---
+
+// --- (line: 10) skipped ---
 //                 var x = undefined;
 //     }
 // }
@@ -316,12 +230,9 @@
 //     if (false) {
 //     }
 //     else {
-//     }
-//     if (true) {
-//     }
-//     else {
-//         if (false)
-//             if (true)
+// --- (line: 5) skipped ---
+
+// --- (line: 10) skipped ---
 //                 var x = undefined;
 //     }
 // }

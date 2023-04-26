@@ -113,12 +113,7 @@
 //     readonly b;
 //     public c;
 //     protected d;
-//     private e;
-// }
-// const enum E {
-// }
-// async function fn() {}
-// export default class C2 {}
+// --- (line: 6) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForModifiers.ts ===
@@ -127,12 +122,7 @@
   //     readonly b;
   //     public c;
   //     protected d;
-  //     private e;
-  // }
-  // const enum E {
-  // }
-  // async function fn() {}
-  // export default class C2 {}
+  // --- (line: 6) skipped ---
 
   // === Details ===
   [
@@ -196,11 +186,7 @@
 //     public c;
 //     protected d;
 //     private e;
-// }
-// const enum E {
-// }
-// async function fn() {}
-// export default class C2 {}
+// --- (line: 7) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForModifiers.ts ===
@@ -210,11 +196,7 @@
   //     public c;
   //     protected d;
   //     private e;
-  // }
-  // const enum E {
-  // }
-  // async function fn() {}
-  // export default class C2 {}
+  // --- (line: 7) skipped ---
 
   // === Details ===
   [
@@ -279,10 +261,7 @@
 //     protected d;
 //     private e;
 // }
-// const enum E {
-// }
-// async function fn() {}
-// export default class C2 {}
+// --- (line: 8) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForModifiers.ts ===
@@ -293,10 +272,7 @@
   //     protected d;
   //     private e;
   // }
-  // const enum E {
-  // }
-  // async function fn() {}
-  // export default class C2 {}
+  // --- (line: 8) skipped ---
 
   // === Details ===
   [
@@ -362,9 +338,7 @@
 //     private e;
 // }
 // const enum E {
-// }
-// async function fn() {}
-// export default class C2 {}
+// --- (line: 9) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForModifiers.ts ===
@@ -376,9 +350,7 @@
   //     private e;
   // }
   // const enum E {
-  // }
-  // async function fn() {}
-  // export default class C2 {}
+  // --- (line: 9) skipped ---
 
   // === Details ===
   [
@@ -518,10 +490,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForModifiers.ts ===
-// declare abstract class C1 {
-//     static a;
-//     readonly b;
-//     public c;
+// --- (line: 4) skipped ---
 //     protected d;
 //     private e;
 // }
@@ -532,10 +501,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForModifiers.ts ===
-  // declare abstract class C1 {
-  //     static a;
-  //     readonly b;
-  //     public c;
+  // --- (line: 4) skipped ---
   //     protected d;
   //     private e;
   // }
@@ -580,12 +546,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForModifiers.ts ===
-// declare abstract class C1 {
-//     static a;
-//     readonly b;
-//     public c;
-//     protected d;
-//     private e;
+// --- (line: 6) skipped ---
 // }
 // const enum E {
 // }
@@ -594,12 +555,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForModifiers.ts ===
-  // declare abstract class C1 {
-  //     static a;
-  //     readonly b;
-  //     public c;
-  //     protected d;
-  //     private e;
+  // --- (line: 6) skipped ---
   // }
   // const enum E {
   // }
@@ -666,13 +622,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForModifiers.ts ===
-// declare abstract class C1 {
-//     static a;
-//     readonly b;
-//     public c;
-//     protected d;
-//     private e;
-// }
+// --- (line: 7) skipped ---
 // const enum E {
 // }
 // async function fn() {}
@@ -680,13 +630,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForModifiers.ts ===
-  // declare abstract class C1 {
-  //     static a;
-  //     readonly b;
-  //     public c;
-  //     protected d;
-  //     private e;
-  // }
+  // --- (line: 7) skipped ---
   // const enum E {
   // }
   // async function fn() {}
@@ -720,13 +664,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForModifiers.ts ===
-// declare abstract class C1 {
-//     static a;
-//     readonly b;
-//     public c;
-//     protected d;
-//     private e;
-// }
+// --- (line: 7) skipped ---
 // const enum E {
 // }
 // async function fn() {}
@@ -734,13 +672,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForModifiers.ts ===
-  // declare abstract class C1 {
-  //     static a;
-  //     readonly b;
-  //     public c;
-  //     protected d;
-  //     private e;
-  // }
+  // --- (line: 7) skipped ---
   // const enum E {
   // }
   // async function fn() {}

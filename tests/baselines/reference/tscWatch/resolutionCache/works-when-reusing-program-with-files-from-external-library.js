@@ -61,9 +61,13 @@ Shape signatures in builder refreshed for::
 PolledWatches::
 /a/b/projects/myproject/src/node_modules: *new*
   {"pollingInterval":500}
+/a/b/projects/node_modules: *new*
+  {"pollingInterval":500}
 /a/b/projects/myproject/src/node_modules/@types: *new*
   {"pollingInterval":500}
 /a/b/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/a/b/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::

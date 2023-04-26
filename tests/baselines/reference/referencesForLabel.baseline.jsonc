@@ -14,9 +14,7 @@
   //     if (false) break label;
   //     if (true) continue label;
   // }
-  // 
-  // label: while (false) { }
-  // var label = "label";
+  // --- (line: 5) skipped ---
 
   // === Details ===
   [

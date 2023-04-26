@@ -1,48 +1,6 @@
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesThis4.ts ===
-// this;
-// this;
-// 
-// function f() {
-//     this;
-//     this;
-//     () => this;
-//     () => {
-//         if (this) {
-//             this;
-//         }
-//         else {
-//             this.this;
-//         }
-//     }
-//     function inside() {
-//         this;
-//         (function (_) {
-//             this;
-//         })(this);
-//     }
-// }
-// 
-// module m {
-//     function f() {
-//         this;
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//             else {
-//                 this.this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
+// --- (line: 43) skipped ---
 // }
 // 
 // class A {
@@ -61,11 +19,9 @@
 //             }
 //         }
 //         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
+// --- (line: 62) skipped ---
+
+// --- (line: 66) skipped ---
 //     }
 // 
 //     private method2() {
@@ -81,112 +37,13 @@
 //             }
 //         }
 //         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// 
-//     public static staticB = this.staticMethod1;
-// 
-//     public static staticMethod1() {
-//         this;
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//             else {
-//                 this.this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// 
-//     private static staticMethod2() {
-//         this;
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//             else {
-//                 this.this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// }
-// 
-// var x = {
-//     f() {
-//         this;
-//     },
-//     g() {
-//         this;
-//     }
-// }
+// --- (line: 82) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesThis4.ts ===
-// this;
-// this;
-// 
-// function f() {
-//     this;
-//     this;
-//     () => this;
-//     () => {
-//         if (this) {
-//             this;
-//         }
-//         else {
-//             this.this;
-//         }
-//     }
-//     function inside() {
-//         this;
-//         (function (_) {
-//             this;
-//         })(this);
-//     }
-// }
-// 
-// module m {
-//     function f() {
-//         this;
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//             else {
-//                 this.this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
+// --- (line: 43) skipped ---
 // }
 // 
 // class A {
@@ -205,11 +62,9 @@
 //             }
 //         }
 //         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
+// --- (line: 62) skipped ---
+
+// --- (line: 66) skipped ---
 //     }
 // 
 //     private method2() {
@@ -225,112 +80,13 @@
 //             }
 //         }
 //         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// 
-//     public static staticB = this.staticMethod1;
-// 
-//     public static staticMethod1() {
-//         this;
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//             else {
-//                 this.this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// 
-//     private static staticMethod2() {
-//         this;
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//             else {
-//                 this.this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// }
-// 
-// var x = {
-//     f() {
-//         this;
-//     },
-//     g() {
-//         this;
-//     }
-// }
+// --- (line: 82) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesThis4.ts ===
-// this;
-// this;
-// 
-// function f() {
-//     this;
-//     this;
-//     () => this;
-//     () => {
-//         if (this) {
-//             this;
-//         }
-//         else {
-//             this.this;
-//         }
-//     }
-//     function inside() {
-//         this;
-//         (function (_) {
-//             this;
-//         })(this);
-//     }
-// }
-// 
-// module m {
-//     function f() {
-//         this;
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//             else {
-//                 this.this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
+// --- (line: 43) skipped ---
 // }
 // 
 // class A {
@@ -349,11 +105,9 @@
 //             }
 //         }
 //         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
+// --- (line: 62) skipped ---
+
+// --- (line: 66) skipped ---
 //     }
 // 
 //     private method2() {
@@ -369,112 +123,13 @@
 //             }
 //         }
 //         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// 
-//     public static staticB = this.staticMethod1;
-// 
-//     public static staticMethod1() {
-//         this;
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//             else {
-//                 this.this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// 
-//     private static staticMethod2() {
-//         this;
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//             else {
-//                 this.this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// }
-// 
-// var x = {
-//     f() {
-//         this;
-//     },
-//     g() {
-//         this;
-//     }
-// }
+// --- (line: 82) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesThis4.ts ===
-// this;
-// this;
-// 
-// function f() {
-//     this;
-//     this;
-//     () => this;
-//     () => {
-//         if (this) {
-//             this;
-//         }
-//         else {
-//             this.this;
-//         }
-//     }
-//     function inside() {
-//         this;
-//         (function (_) {
-//             this;
-//         })(this);
-//     }
-// }
-// 
-// module m {
-//     function f() {
-//         this;
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//             else {
-//                 this.this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
+// --- (line: 43) skipped ---
 // }
 // 
 // class A {
@@ -493,11 +148,9 @@
 //             }
 //         }
 //         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
+// --- (line: 62) skipped ---
+
+// --- (line: 66) skipped ---
 //     }
 // 
 //     private method2() {
@@ -513,112 +166,13 @@
 //             }
 //         }
 //         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// 
-//     public static staticB = this.staticMethod1;
-// 
-//     public static staticMethod1() {
-//         this;
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//             else {
-//                 this.this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// 
-//     private static staticMethod2() {
-//         this;
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//             else {
-//                 this.this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// }
-// 
-// var x = {
-//     f() {
-//         this;
-//     },
-//     g() {
-//         this;
-//     }
-// }
+// --- (line: 82) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesThis4.ts ===
-// this;
-// this;
-// 
-// function f() {
-//     this;
-//     this;
-//     () => this;
-//     () => {
-//         if (this) {
-//             this;
-//         }
-//         else {
-//             this.this;
-//         }
-//     }
-//     function inside() {
-//         this;
-//         (function (_) {
-//             this;
-//         })(this);
-//     }
-// }
-// 
-// module m {
-//     function f() {
-//         this;
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//             else {
-//                 this.this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
+// --- (line: 43) skipped ---
 // }
 // 
 // class A {
@@ -637,11 +191,9 @@
 //             }
 //         }
 //         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
+// --- (line: 62) skipped ---
+
+// --- (line: 66) skipped ---
 //     }
 // 
 //     private method2() {
@@ -657,112 +209,13 @@
 //             }
 //         }
 //         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// 
-//     public static staticB = this.staticMethod1;
-// 
-//     public static staticMethod1() {
-//         this;
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//             else {
-//                 this.this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// 
-//     private static staticMethod2() {
-//         this;
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//             else {
-//                 this.this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// }
-// 
-// var x = {
-//     f() {
-//         this;
-//     },
-//     g() {
-//         this;
-//     }
-// }
+// --- (line: 82) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesThis4.ts ===
-// this;
-// this;
-// 
-// function f() {
-//     this;
-//     this;
-//     () => this;
-//     () => {
-//         if (this) {
-//             this;
-//         }
-//         else {
-//             this.this;
-//         }
-//     }
-//     function inside() {
-//         this;
-//         (function (_) {
-//             this;
-//         })(this);
-//     }
-// }
-// 
-// module m {
-//     function f() {
-//         this;
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//             else {
-//                 this.this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
+// --- (line: 43) skipped ---
 // }
 // 
 // class A {
@@ -781,11 +234,9 @@
 //             }
 //         }
 //         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
+// --- (line: 62) skipped ---
+
+// --- (line: 66) skipped ---
 //     }
 // 
 //     private method2() {
@@ -801,112 +252,13 @@
 //             }
 //         }
 //         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// 
-//     public static staticB = this.staticMethod1;
-// 
-//     public static staticMethod1() {
-//         this;
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//             else {
-//                 this.this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// 
-//     private static staticMethod2() {
-//         this;
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//             else {
-//                 this.this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// }
-// 
-// var x = {
-//     f() {
-//         this;
-//     },
-//     g() {
-//         this;
-//     }
-// }
+// --- (line: 82) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesThis4.ts ===
-// this;
-// this;
-// 
-// function f() {
-//     this;
-//     this;
-//     () => this;
-//     () => {
-//         if (this) {
-//             this;
-//         }
-//         else {
-//             this.this;
-//         }
-//     }
-//     function inside() {
-//         this;
-//         (function (_) {
-//             this;
-//         })(this);
-//     }
-// }
-// 
-// module m {
-//     function f() {
-//         this;
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//             else {
-//                 this.this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
+// --- (line: 43) skipped ---
 // }
 // 
 // class A {
@@ -925,11 +277,9 @@
 //             }
 //         }
 //         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
+// --- (line: 62) skipped ---
+
+// --- (line: 66) skipped ---
 //     }
 // 
 //     private method2() {
@@ -945,112 +295,13 @@
 //             }
 //         }
 //         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// 
-//     public static staticB = this.staticMethod1;
-// 
-//     public static staticMethod1() {
-//         this;
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//             else {
-//                 this.this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// 
-//     private static staticMethod2() {
-//         this;
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//             else {
-//                 this.this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// }
-// 
-// var x = {
-//     f() {
-//         this;
-//     },
-//     g() {
-//         this;
-//     }
-// }
+// --- (line: 82) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesThis4.ts ===
-// this;
-// this;
-// 
-// function f() {
-//     this;
-//     this;
-//     () => this;
-//     () => {
-//         if (this) {
-//             this;
-//         }
-//         else {
-//             this.this;
-//         }
-//     }
-//     function inside() {
-//         this;
-//         (function (_) {
-//             this;
-//         })(this);
-//     }
-// }
-// 
-// module m {
-//     function f() {
-//         this;
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//             else {
-//                 this.this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
+// --- (line: 43) skipped ---
 // }
 // 
 // class A {
@@ -1069,11 +320,9 @@
 //             }
 //         }
 //         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
+// --- (line: 62) skipped ---
+
+// --- (line: 66) skipped ---
 //     }
 // 
 //     private method2() {
@@ -1089,112 +338,13 @@
 //             }
 //         }
 //         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// 
-//     public static staticB = this.staticMethod1;
-// 
-//     public static staticMethod1() {
-//         this;
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//             else {
-//                 this.this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// 
-//     private static staticMethod2() {
-//         this;
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//             else {
-//                 this.this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// }
-// 
-// var x = {
-//     f() {
-//         this;
-//     },
-//     g() {
-//         this;
-//     }
-// }
+// --- (line: 82) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesThis4.ts ===
-// this;
-// this;
-// 
-// function f() {
-//     this;
-//     this;
-//     () => this;
-//     () => {
-//         if (this) {
-//             this;
-//         }
-//         else {
-//             this.this;
-//         }
-//     }
-//     function inside() {
-//         this;
-//         (function (_) {
-//             this;
-//         })(this);
-//     }
-// }
-// 
-// module m {
-//     function f() {
-//         this;
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//             else {
-//                 this.this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
+// --- (line: 43) skipped ---
 // }
 // 
 // class A {
@@ -1213,11 +363,9 @@
 //             }
 //         }
 //         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
+// --- (line: 62) skipped ---
+
+// --- (line: 66) skipped ---
 //     }
 // 
 //     private method2() {
@@ -1233,112 +381,13 @@
 //             }
 //         }
 //         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// 
-//     public static staticB = this.staticMethod1;
-// 
-//     public static staticMethod1() {
-//         this;
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//             else {
-//                 this.this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// 
-//     private static staticMethod2() {
-//         this;
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//             else {
-//                 this.this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// }
-// 
-// var x = {
-//     f() {
-//         this;
-//     },
-//     g() {
-//         this;
-//     }
-// }
+// --- (line: 82) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesThis4.ts ===
-// this;
-// this;
-// 
-// function f() {
-//     this;
-//     this;
-//     () => this;
-//     () => {
-//         if (this) {
-//             this;
-//         }
-//         else {
-//             this.this;
-//         }
-//     }
-//     function inside() {
-//         this;
-//         (function (_) {
-//             this;
-//         })(this);
-//     }
-// }
-// 
-// module m {
-//     function f() {
-//         this;
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//             else {
-//                 this.this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
+// --- (line: 43) skipped ---
 // }
 // 
 // class A {
@@ -1357,11 +406,9 @@
 //             }
 //         }
 //         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
+// --- (line: 62) skipped ---
+
+// --- (line: 66) skipped ---
 //     }
 // 
 //     private method2() {
@@ -1377,112 +424,13 @@
 //             }
 //         }
 //         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// 
-//     public static staticB = this.staticMethod1;
-// 
-//     public static staticMethod1() {
-//         this;
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//             else {
-//                 this.this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// 
-//     private static staticMethod2() {
-//         this;
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//             else {
-//                 this.this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// }
-// 
-// var x = {
-//     f() {
-//         this;
-//     },
-//     g() {
-//         this;
-//     }
-// }
+// --- (line: 82) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesThis4.ts ===
-// this;
-// this;
-// 
-// function f() {
-//     this;
-//     this;
-//     () => this;
-//     () => {
-//         if (this) {
-//             this;
-//         }
-//         else {
-//             this.this;
-//         }
-//     }
-//     function inside() {
-//         this;
-//         (function (_) {
-//             this;
-//         })(this);
-//     }
-// }
-// 
-// module m {
-//     function f() {
-//         this;
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//             else {
-//                 this.this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
+// --- (line: 43) skipped ---
 // }
 // 
 // class A {
@@ -1501,11 +449,9 @@
 //             }
 //         }
 //         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
+// --- (line: 62) skipped ---
+
+// --- (line: 66) skipped ---
 //     }
 // 
 //     private method2() {
@@ -1521,112 +467,13 @@
 //             }
 //         }
 //         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// 
-//     public static staticB = this.staticMethod1;
-// 
-//     public static staticMethod1() {
-//         this;
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//             else {
-//                 this.this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// 
-//     private static staticMethod2() {
-//         this;
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//             else {
-//                 this.this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// }
-// 
-// var x = {
-//     f() {
-//         this;
-//     },
-//     g() {
-//         this;
-//     }
-// }
+// --- (line: 82) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesThis4.ts ===
-// this;
-// this;
-// 
-// function f() {
-//     this;
-//     this;
-//     () => this;
-//     () => {
-//         if (this) {
-//             this;
-//         }
-//         else {
-//             this.this;
-//         }
-//     }
-//     function inside() {
-//         this;
-//         (function (_) {
-//             this;
-//         })(this);
-//     }
-// }
-// 
-// module m {
-//     function f() {
-//         this;
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//             else {
-//                 this.this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
+// --- (line: 43) skipped ---
 // }
 // 
 // class A {
@@ -1645,11 +492,9 @@
 //             }
 //         }
 //         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
+// --- (line: 62) skipped ---
+
+// --- (line: 66) skipped ---
 //     }
 // 
 //     private method2() {
@@ -1665,112 +510,13 @@
 //             }
 //         }
 //         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// 
-//     public static staticB = this.staticMethod1;
-// 
-//     public static staticMethod1() {
-//         this;
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//             else {
-//                 this.this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// 
-//     private static staticMethod2() {
-//         this;
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//             else {
-//                 this.this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// }
-// 
-// var x = {
-//     f() {
-//         this;
-//     },
-//     g() {
-//         this;
-//     }
-// }
+// --- (line: 82) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesThis4.ts ===
-// this;
-// this;
-// 
-// function f() {
-//     this;
-//     this;
-//     () => this;
-//     () => {
-//         if (this) {
-//             this;
-//         }
-//         else {
-//             this.this;
-//         }
-//     }
-//     function inside() {
-//         this;
-//         (function (_) {
-//             this;
-//         })(this);
-//     }
-// }
-// 
-// module m {
-//     function f() {
-//         this;
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//             else {
-//                 this.this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
+// --- (line: 43) skipped ---
 // }
 // 
 // class A {
@@ -1789,11 +535,9 @@
 //             }
 //         }
 //         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
+// --- (line: 62) skipped ---
+
+// --- (line: 66) skipped ---
 //     }
 // 
 //     private method2() {
@@ -1809,61 +553,4 @@
 //             }
 //         }
 //         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// 
-//     public static staticB = this.staticMethod1;
-// 
-//     public static staticMethod1() {
-//         this;
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//             else {
-//                 this.this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// 
-//     private static staticMethod2() {
-//         this;
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//             else {
-//                 this.this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// }
-// 
-// var x = {
-//     f() {
-//         this;
-//     },
-//     g() {
-//         this;
-//     }
-// }
+// --- (line: 82) skipped ---

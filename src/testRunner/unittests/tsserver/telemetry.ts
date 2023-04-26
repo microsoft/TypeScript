@@ -1,6 +1,5 @@
 import * as ts from "../../_namespaces/ts";
 
-import { createServerHost, File } from "../virtualFileSystemWithWatch";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
@@ -9,7 +8,8 @@ import {
     openExternalProjectForSession,
     openFilesForSession,
     toExternalFiles,
-} from "./helpers";
+} from "../helpers/tsserver";
+import { createServerHost, File } from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: project telemetry", () => {
     it("does nothing for inferred project", () => {

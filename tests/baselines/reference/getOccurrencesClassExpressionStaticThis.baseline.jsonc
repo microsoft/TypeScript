@@ -1,31 +1,6 @@
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesClassExpressionStaticThis.ts ===
-// var x = class C {
-//     public x;
-//     public y;
-//     public z;
-//     public staticX;
-//     constructor() {
-//         this;
-//         this.x;
-//         this.y;
-//         this.z;
-//     }
-//     foo() {
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//         return this.x;
+// --- (line: 26) skipped ---
 //     }
 // 
 //     static bar() {
@@ -38,44 +13,13 @@
 //             }
 //         }
 //         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// }
+// --- (line: 39) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesClassExpressionStaticThis.ts ===
-// var x = class C {
-//     public x;
-//     public y;
-//     public z;
-//     public staticX;
-//     constructor() {
-//         this;
-//         this.x;
-//         this.y;
-//         this.z;
-//     }
-//     foo() {
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//         return this.x;
+// --- (line: 26) skipped ---
 //     }
 // 
 //     static bar() {
@@ -88,44 +32,13 @@
 //             }
 //         }
 //         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// }
+// --- (line: 39) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesClassExpressionStaticThis.ts ===
-// var x = class C {
-//     public x;
-//     public y;
-//     public z;
-//     public staticX;
-//     constructor() {
-//         this;
-//         this.x;
-//         this.y;
-//         this.z;
-//     }
-//     foo() {
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//         return this.x;
+// --- (line: 26) skipped ---
 //     }
 // 
 //     static bar() {
@@ -138,44 +51,13 @@
 //             }
 //         }
 //         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// }
+// --- (line: 39) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesClassExpressionStaticThis.ts ===
-// var x = class C {
-//     public x;
-//     public y;
-//     public z;
-//     public staticX;
-//     constructor() {
-//         this;
-//         this.x;
-//         this.y;
-//         this.z;
-//     }
-//     foo() {
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//         return this.x;
+// --- (line: 26) skipped ---
 //     }
 // 
 //     static bar() {
@@ -188,44 +70,13 @@
 //             }
 //         }
 //         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// }
+// --- (line: 39) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesClassExpressionStaticThis.ts ===
-// var x = class C {
-//     public x;
-//     public y;
-//     public z;
-//     public staticX;
-//     constructor() {
-//         this;
-//         this.x;
-//         this.y;
-//         this.z;
-//     }
-//     foo() {
-//         this;
-//         () => this;
-//         () => {
-//             if (this) {
-//                 this;
-//             }
-//         }
-//         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//         return this.x;
+// --- (line: 26) skipped ---
 //     }
 // 
 //     static bar() {
@@ -238,10 +89,4 @@
 //             }
 //         }
 //         function inside() {
-//             this;
-//             (function (_) {
-//                 this;
-//             })(this);
-//         }
-//     }
-// }
+// --- (line: 39) skipped ---

@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.M = void 0;
 var M;
 (function (M) {
-})(M = exports.M || (exports.M = {}));
+})(M || (exports.M = M = {}));
 
 
 //// [declarationEmitNameConflictsWithAlias.d.ts]

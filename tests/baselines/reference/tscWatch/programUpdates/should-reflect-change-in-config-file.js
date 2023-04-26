@@ -59,10 +59,6 @@ Shape signatures in builder refreshed for::
 /a/b/commonfile1.ts (used version)
 /a/b/commonfile2.ts (used version)
 
-PolledWatches::
-/a/b/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /a/b/tsconfig.json: *new*
   {}
@@ -171,10 +167,6 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /a/b/commonfile1.ts (computed .d.ts)
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
 /a/b/tsconfig.json:

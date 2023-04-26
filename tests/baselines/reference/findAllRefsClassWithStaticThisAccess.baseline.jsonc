@@ -74,11 +74,7 @@
   //     }
   //     static get f() {
   //         return this;
-  // 
-  //         function inner() { this; }
-  //         class Inner { x = this; }
-  //     }
-  // }
+  // --- (line: 7) skipped ---
 
   // === Details ===
   [

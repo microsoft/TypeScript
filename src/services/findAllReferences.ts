@@ -71,6 +71,7 @@ import {
     getNodeKind,
     getPropertySymbolFromBindingElement,
     getPropertySymbolsFromContextualType,
+    getQuoteFromPreference,
     getReferencedFileLocation,
     getSuperContainer,
     getSymbolId,
@@ -150,6 +151,7 @@ import {
     isNamespaceExportDeclaration,
     isNewExpressionTarget,
     isNoSubstitutionTemplateLiteral,
+    isNumericLiteral,
     isObjectBindingElementWithoutPropertyName,
     isObjectLiteralExpression,
     isObjectLiteralMethod,
@@ -204,6 +206,7 @@ import {
     PropertyAssignment,
     PropertyDeclaration,
     punctuationPart,
+    QuotePreference,
     rangeIsOnSingleLine,
     ReferencedSymbol,
     ReferencedSymbolDefinitionInfo,
@@ -674,8 +677,8 @@ function getDefinitionKindAndDisplayParts(symbol: Symbol, checker: TypeChecker, 
 }
 
 /** @internal */
-export function toRenameLocation(entry: Entry, originalNode: Node, checker: TypeChecker, providePrefixAndSuffixText: boolean): RenameLocation {
-    return { ...entryToDocumentSpan(entry), ...(providePrefixAndSuffixText && getPrefixAndSuffixText(entry, originalNode, checker)) };
+export function toRenameLocation(entry: Entry, originalNode: Node, checker: TypeChecker, providePrefixAndSuffixText: boolean, quotePreference: QuotePreference): RenameLocation {
+    return { ...entryToDocumentSpan(entry), ...(providePrefixAndSuffixText && getPrefixAndSuffixText(entry, originalNode, checker, quotePreference)) };
 }
 
 function toReferencedSymbolEntry(entry: Entry, symbol: Symbol | undefined): ReferencedSymbolEntry {
@@ -717,7 +720,7 @@ function entryToDocumentSpan(entry: Entry): DocumentSpan {
 }
 
 interface PrefixAndSuffix { readonly prefixText?: string; readonly suffixText?: string; }
-function getPrefixAndSuffixText(entry: Entry, originalNode: Node, checker: TypeChecker): PrefixAndSuffix {
+function getPrefixAndSuffixText(entry: Entry, originalNode: Node, checker: TypeChecker, quotePreference: QuotePreference): PrefixAndSuffix {
     if (entry.kind !== EntryKind.Span && isIdentifier(originalNode)) {
         const { node, kind } = entry;
         const parent = node.parent;
@@ -759,6 +762,12 @@ function getPrefixAndSuffixText(entry: Entry, originalNode: Node, checker: TypeC
                 { prefixText: name + " as " } :
                 { suffixText: " as " + name };
         }
+    }
+
+    // If the node is a numerical indexing literal, then add quotes around the property access.
+    if (entry.kind !== EntryKind.Span && isNumericLiteral(entry.node) && isAccessExpression(entry.node.parent)) {
+        const quote = getQuoteFromPreference(quotePreference);
+        return { prefixText: quote, suffixText: quote };
     }
 
     return emptyOptions;

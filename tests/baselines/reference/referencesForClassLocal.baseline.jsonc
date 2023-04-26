@@ -14,9 +14,7 @@
 //     }
 // 
 //     public bar2() {
-//         var n = 12;
-//     }
-// }
+// --- (line: 15) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForClassLocal.ts ===
@@ -27,16 +25,7 @@
   // 
   //     public bar() {
   //         this.n = 9;
-  //     }
-  // 
-  //     constructor() {
-  //         this.n = 4;
-  //     }
-  // 
-  //     public bar2() {
-  //         var n = 12;
-  //     }
-  // }
+  // --- (line: 8) skipped ---
 
   // === Details ===
   [
@@ -108,9 +97,7 @@
 //     }
 // 
 //     public bar2() {
-//         var n = 12;
-//     }
-// }
+// --- (line: 15) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForClassLocal.ts ===
@@ -121,16 +108,7 @@
   // 
   //     public bar() {
   //         this.n = 9;
-  //     }
-  // 
-  //     constructor() {
-  //         this.n = 4;
-  //     }
-  // 
-  //     public bar2() {
-  //         var n = 12;
-  //     }
-  // }
+  // --- (line: 8) skipped ---
 
   // === Details ===
   [
@@ -202,9 +180,7 @@
 //     }
 // 
 //     public bar2() {
-//         var n = 12;
-//     }
-// }
+// --- (line: 15) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForClassLocal.ts ===
@@ -218,13 +194,7 @@
   //     }
   // 
   //     constructor() {
-  //         this.n = 4;
-  //     }
-  // 
-  //     public bar2() {
-  //         var n = 12;
-  //     }
-  // }
+  // --- (line: 11) skipped ---
 
   // === Details ===
   [
@@ -296,9 +266,7 @@
 //     }
 // 
 //     public bar2() {
-//         var n = 12;
-//     }
-// }
+// --- (line: 15) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForClassLocal.ts ===
@@ -316,9 +284,7 @@
   //     }
   // 
   //     public bar2() {
-  //         var n = 12;
-  //     }
-  // }
+  // --- (line: 15) skipped ---
 
   // === Details ===
   [

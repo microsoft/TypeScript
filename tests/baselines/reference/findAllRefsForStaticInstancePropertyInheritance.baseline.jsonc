@@ -38,13 +38,7 @@
   // }
   // 
   // const x = new X();
-  // const y = new Y();
-  // const z = new Z();
-  // x.foo;
-  // y.foo;
-  // z.foo;
-  // Y.foo;
-  // Z.foo;
+  // --- (line: 15) skipped ---
 
   // === Details ===
   [
@@ -161,13 +155,9 @@
 // }
 // 
 // class Z extends Y{
-// 	static foo:any
-// 	foo:any
-// }
-// 
-// const x = new X();
-// const y = new Y();
-// const z = new Z();
+// --- (line: 10) skipped ---
+
+// --- (line: 16) skipped ---
 // x.foo;
 // y.foo;
 // z.foo;
@@ -185,18 +175,7 @@
   // }
   // 
   // class Z extends Y{
-  // 	static foo:any
-  // 	foo:any
-  // }
-  // 
-  // const x = new X();
-  // const y = new Y();
-  // const z = new Z();
-  // x.foo;
-  // y.foo;
-  // z.foo;
-  // Y.foo;
-  // Z.foo;
+  // --- (line: 10) skipped ---
 
   // === Details ===
   [
@@ -254,12 +233,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts ===
-// class X{
-// 	foo:any
-// }
-// 
-// class Y extends X{
-// 	static foo:any
+// --- (line: 6) skipped ---
 // }
 // 
 // class Z extends Y{
@@ -267,10 +241,9 @@
 // 	foo:any
 // }
 // 
-// const x = new X();
-// const y = new Y();
-// const z = new Z();
-// x.foo;
+// --- (line: 14) skipped ---
+
+// --- (line: 17) skipped ---
 // y.foo;
 // z.foo;
 // Y.foo;
@@ -278,12 +251,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts ===
-  // class X{
-  // 	foo:any
-  // }
-  // 
-  // class Y extends X{
-  // 	static foo:any
+  // --- (line: 6) skipped ---
   // }
   // 
   // class Z extends Y{
@@ -291,14 +259,7 @@
   // 	foo:any
   // }
   // 
-  // const x = new X();
-  // const y = new Y();
-  // const z = new Z();
-  // x.foo;
-  // y.foo;
-  // z.foo;
-  // Y.foo;
-  // Z.foo;
+  // --- (line: 14) skipped ---
 
   // === Details ===
   [
@@ -394,13 +355,7 @@
   // }
   // 
   // const x = new X();
-  // const y = new Y();
-  // const z = new Z();
-  // x.foo;
-  // y.foo;
-  // z.foo;
-  // Y.foo;
-  // Z.foo;
+  // --- (line: 15) skipped ---
 
   // === Details ===
   [
@@ -973,13 +928,9 @@
 // }
 // 
 // class Z extends Y{
-// 	static foo:any
-// 	foo:any
-// }
-// 
-// const x = new X();
-// const y = new Y();
-// const z = new Z();
+// --- (line: 10) skipped ---
+
+// --- (line: 16) skipped ---
 // x.foo;
 // y.foo;
 // z.foo;
@@ -997,13 +948,9 @@
   // }
   // 
   // class Z extends Y{
-  // 	static foo:any
-  // 	foo:any
-  // }
-  // 
-  // const x = new X();
-  // const y = new Y();
-  // const z = new Z();
+  // --- (line: 10) skipped ---
+
+  // --- (line: 16) skipped ---
   // x.foo;
   // y.foo;
   // z.foo;
@@ -1066,12 +1013,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts ===
-// class X{
-// 	foo:any
-// }
-// 
-// class Y extends X{
-// 	static foo:any
+// --- (line: 6) skipped ---
 // }
 // 
 // class Z extends Y{
@@ -1079,10 +1021,9 @@
 // 	foo:any
 // }
 // 
-// const x = new X();
-// const y = new Y();
-// const z = new Z();
-// x.foo;
+// --- (line: 14) skipped ---
+
+// --- (line: 17) skipped ---
 // y.foo;
 // z.foo;
 // Y.foo;
@@ -1090,12 +1031,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts ===
-  // class X{
-  // 	foo:any
-  // }
-  // 
-  // class Y extends X{
-  // 	static foo:any
+  // --- (line: 6) skipped ---
   // }
   // 
   // class Z extends Y{
@@ -1103,10 +1039,9 @@
   // 	foo:any
   // }
   // 
-  // const x = new X();
-  // const y = new Y();
-  // const z = new Z();
-  // x.foo;
+  // --- (line: 14) skipped ---
+
+  // --- (line: 17) skipped ---
   // y.foo;
   // z.foo;
   // Y.foo;

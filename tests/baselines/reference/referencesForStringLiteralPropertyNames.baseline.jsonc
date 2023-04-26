@@ -17,10 +17,7 @@
   // }
   // 
   // var x: Foo;
-  // x.ss;
-  // x["ss"];
-  // x = { "ss": 0 };
-  // x = { ss: 0 };
+  // --- (line: 6) skipped ---
 
   // === Details ===
   [

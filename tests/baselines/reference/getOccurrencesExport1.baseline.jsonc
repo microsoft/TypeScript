@@ -5,25 +5,9 @@
 //         public pub1;
 //         public pub2;
 //         private priv1;
-//         private priv2;
-//         protected prot1;
-//         protected prot2;
-// 
-//         public public;
-//         private private;
-//         protected protected;
-// 
-//         public constructor(public a, private b, protected c, public d, private e, protected f) {
-//             this.public = 10;
-//             this.private = 10;
-//             this.protected = 10;
-//         }
-// 
-//         public get x() { return 10; }
-//         public set x(value) { }
-// 
-//         public static statPub;
-//         private static statPriv;
+// --- (line: 6) skipped ---
+
+// --- (line: 24) skipped ---
 //         protected static statProt;
 //     }
 // 
@@ -39,13 +23,9 @@
 //         declare var foo;
 // 
 //         export class C2 {
-//             public pub1;
-//             private priv1;
-//             protected prot1;
-// 
-//             protected constructor(public public, protected protected, private private) {
-//             }
-//         }
+// --- (line: 40) skipped ---
+
+// --- (line: 46) skipped ---
 //     }
 // 
 //     declare var ambientThing: number;
@@ -62,25 +42,9 @@
 //         public pub1;
 //         public pub2;
 //         private priv1;
-//         private priv2;
-//         protected prot1;
-//         protected prot2;
-// 
-//         public public;
-//         private private;
-//         protected protected;
-// 
-//         public constructor(public a, private b, protected c, public d, private e, protected f) {
-//             this.public = 10;
-//             this.private = 10;
-//             this.protected = 10;
-//         }
-// 
-//         public get x() { return 10; }
-//         public set x(value) { }
-// 
-//         public static statPub;
-//         private static statPriv;
+// --- (line: 6) skipped ---
+
+// --- (line: 24) skipped ---
 //         protected static statProt;
 //     }
 // 
@@ -96,13 +60,9 @@
 //         declare var foo;
 // 
 //         export class C2 {
-//             public pub1;
-//             private priv1;
-//             protected prot1;
-// 
-//             protected constructor(public public, protected protected, private private) {
-//             }
-//         }
+// --- (line: 40) skipped ---
+
+// --- (line: 46) skipped ---
 //     }
 // 
 //     declare var ambientThing: number;
@@ -119,25 +79,9 @@
 //         public pub1;
 //         public pub2;
 //         private priv1;
-//         private priv2;
-//         protected prot1;
-//         protected prot2;
-// 
-//         public public;
-//         private private;
-//         protected protected;
-// 
-//         public constructor(public a, private b, protected c, public d, private e, protected f) {
-//             this.public = 10;
-//             this.private = 10;
-//             this.protected = 10;
-//         }
-// 
-//         public get x() { return 10; }
-//         public set x(value) { }
-// 
-//         public static statPub;
-//         private static statPriv;
+// --- (line: 6) skipped ---
+
+// --- (line: 24) skipped ---
 //         protected static statProt;
 //     }
 // 
@@ -153,13 +97,9 @@
 //         declare var foo;
 // 
 //         export class C2 {
-//             public pub1;
-//             private priv1;
-//             protected prot1;
-// 
-//             protected constructor(public public, protected protected, private private) {
-//             }
-//         }
+// --- (line: 40) skipped ---
+
+// --- (line: 46) skipped ---
 //     }
 // 
 //     declare var ambientThing: number;
@@ -176,25 +116,9 @@
 //         public pub1;
 //         public pub2;
 //         private priv1;
-//         private priv2;
-//         protected prot1;
-//         protected prot2;
-// 
-//         public public;
-//         private private;
-//         protected protected;
-// 
-//         public constructor(public a, private b, protected c, public d, private e, protected f) {
-//             this.public = 10;
-//             this.private = 10;
-//             this.protected = 10;
-//         }
-// 
-//         public get x() { return 10; }
-//         public set x(value) { }
-// 
-//         public static statPub;
-//         private static statPriv;
+// --- (line: 6) skipped ---
+
+// --- (line: 24) skipped ---
 //         protected static statProt;
 //     }
 // 
@@ -210,13 +134,9 @@
 //         declare var foo;
 // 
 //         export class C2 {
-//             public pub1;
-//             private priv1;
-//             protected prot1;
-// 
-//             protected constructor(public public, protected protected, private private) {
-//             }
-//         }
+// --- (line: 40) skipped ---
+
+// --- (line: 46) skipped ---
 //     }
 // 
 //     declare var ambientThing: number;
@@ -233,25 +153,9 @@
 //         public pub1;
 //         public pub2;
 //         private priv1;
-//         private priv2;
-//         protected prot1;
-//         protected prot2;
-// 
-//         public public;
-//         private private;
-//         protected protected;
-// 
-//         public constructor(public a, private b, protected c, public d, private e, protected f) {
-//             this.public = 10;
-//             this.private = 10;
-//             this.protected = 10;
-//         }
-// 
-//         public get x() { return 10; }
-//         public set x(value) { }
-// 
-//         public static statPub;
-//         private static statPriv;
+// --- (line: 6) skipped ---
+
+// --- (line: 24) skipped ---
 //         protected static statProt;
 //     }
 // 
@@ -267,13 +171,9 @@
 //         declare var foo;
 // 
 //         export class C2 {
-//             public pub1;
-//             private priv1;
-//             protected prot1;
-// 
-//             protected constructor(public public, protected protected, private private) {
-//             }
-//         }
+// --- (line: 40) skipped ---
+
+// --- (line: 46) skipped ---
 //     }
 // 
 //     declare var ambientThing: number;

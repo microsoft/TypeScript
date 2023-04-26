@@ -6,18 +6,13 @@
 //     }
 // }
 // 
-// export const x;
-// export const enum E {
-// }
+// --- (line: 7) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesConst03.ts ===
-// module m {
-//     export const x;
-//     export const enum E {
-//     }
+// --- (line: 4) skipped ---
 // }
 // 
 // export const x;
@@ -33,18 +28,13 @@
 //     export const enum E {
 //     }
 // }
-// 
-// export const x;
-// export const enum E {
-// }
+// --- (line: 6) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesConst03.ts ===
-// module m {
-//     export const x;
-//     export const enum E {
+// --- (line: 3) skipped ---
 //     }
 // }
 // 

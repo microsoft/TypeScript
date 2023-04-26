@@ -74,12 +74,12 @@ var M;
         return C;
     }());
     M.C = C;
-})(M = exports.M || (exports.M = {}));
+})(M || (exports.M = M = {}));
 exports.Z = M;
 var E;
 (function (E) {
     E[E["A"] = 0] = "A";
-})(E = exports.E || (exports.E = {}));
+})(E || (exports.E = E = {}));
 function foo() { }
 exports.foo = foo;
 (function (foo) {
@@ -90,4 +90,4 @@ exports.foo = foo;
         return C;
     }());
     foo.C = C;
-})(foo = exports.foo || (exports.foo = {}));
+})(foo || (exports.foo = foo = {}));
