@@ -8524,6 +8524,12 @@ declare namespace ts {
     }
     function isExternalModuleNameRelative(moduleName: string): boolean;
     function sortAndDeduplicateDiagnostics<T extends Diagnostic>(diagnostics: readonly T[]): SortedReadonlyArray<T>;
+    /**
+     * Gets a full list of all lib files included with this build of TypeScript.
+     * This list includes all files referenced by {@link getLibs} and {@link getLibFileName},
+     * as well as the "default" lib file names returned by {@link getDefaultLibFileName}.
+     */
+    function getAllLibFileNames(): readonly string[];
     function getDefaultLibFileName(options: CompilerOptions): string;
     function textSpanEnd(span: TextSpan): number;
     function textSpanIsEmpty(span: TextSpan): boolean;
@@ -9185,6 +9191,14 @@ declare namespace ts {
          */
         setExternalModuleIndicator?: (file: SourceFile) => void;
     }
+    /**
+     * Gets the list of valid "lib" names, as used in compiler options or reference directives.
+     */
+    function getLibs(): readonly string[];
+    /**
+     * Maps a lib name to its filename in the TypeScript package.
+     */
+    function getLibFileName(libName: string): string | undefined;
     function parseCommandLine(commandLine: readonly string[], readFile?: (path: string) => string | undefined): ParsedCommandLine;
     /**
      * Reads the config file, reports errors if any and exits if the config file cannot be found
