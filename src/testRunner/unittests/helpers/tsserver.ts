@@ -324,7 +324,9 @@ export class TestTypingsInstaller<T extends TestTypingsInstallerWorker = TestTyp
         this.projectService = projectService;
     }
 
-    onProjectClosed = ts.noop;
+    onProjectClosed(p: ts.server.Project) {
+        this.installer?.closeProject({ projectName: p.getProjectName(), kind: "closeProject" });
+    }
 
     enqueueInstallTypingsRequest(project: ts.server.Project, typeAcquisition: ts.TypeAcquisition, unresolvedImports: ts.SortedReadonlyArray<string>) {
         if (!this.installer) {
