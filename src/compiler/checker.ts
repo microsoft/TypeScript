@@ -27874,7 +27874,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         const localOrExportSymbol = getExportSymbolOfValueSymbolIfExported(symbol);
-        const targetSymbol = checkDeprecatedAliasedSymbol(localOrExportSymbol, node);
+        const targetSymbol = resolveAliasWithDeprecationCheck(localOrExportSymbol, node);
         if (isDeprecatedSymbol(targetSymbol) && isUncalledFunctionReference(node, targetSymbol) && targetSymbol.declarations) {
             addDeprecatedSuggestion(node, targetSymbol.declarations, node.escapedText as string);
         }
@@ -31511,7 +31511,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         else {
-            const targetPropSymbol = checkDeprecatedAliasedSymbol(prop, right);
+            const targetPropSymbol = resolveAliasWithDeprecationCheck(prop, right);
             if (isDeprecatedSymbol(targetPropSymbol) && isUncalledFunctionReference(node, targetPropSymbol) && targetPropSymbol.declarations) {
                 addDeprecatedSuggestion(right, targetPropSymbol.declarations, right.escapedText as string);
             }
@@ -44126,7 +44126,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             if (isImportSpecifier(node)) {
-                const targetSymbol = checkDeprecatedAliasedSymbol(symbol, node);
+                const targetSymbol = resolveAliasWithDeprecationCheck(symbol, node);
                 if (isDeprecatedSymbol(targetSymbol) && targetSymbol.declarations) {
                     addDeprecatedSuggestion(node, targetSymbol.declarations, targetSymbol.escapedName as string);
                 }
@@ -44134,7 +44134,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function checkDeprecatedAliasedSymbol(symbol: Symbol, location: Node) {
+    function resolveAliasWithDeprecationCheck(symbol: Symbol, location: Node) {
         if (!(symbol.flags & SymbolFlags.Alias) || isDeprecatedSymbol(symbol) || !getDeclarationOfAliasSymbol(symbol)) {
             return symbol;
         }
