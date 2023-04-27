@@ -679,9 +679,6 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             case SyntaxKind.ExportAssignment:
                 return visitExportAssignment(node as ExportAssignment);
 
-            case SyntaxKind.VariableStatement:
-                return visitVariableStatement(node as VariableStatement);
-
             case SyntaxKind.FunctionDeclaration:
                 return visitFunctionDeclaration(node as FunctionDeclaration);
 
