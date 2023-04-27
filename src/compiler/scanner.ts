@@ -1354,7 +1354,7 @@ export function createScanner(languageVersion: ScriptTarget,
                 continue;
             }
 
-            if ((isLineBreak(ch) && ch !== CharacterCodes.lineSeparator && ch !== CharacterCodes.paragraphSeparator) && !jsxAttributeString) {
+            if ((ch === CharacterCodes.lineFeed || ch === CharacterCodes.carriageReturn) && !jsxAttributeString) {
                 result += text.substring(start, pos);
                 tokenFlags |= TokenFlags.Unterminated;
                 error(Diagnostics.Unterminated_string_literal);
