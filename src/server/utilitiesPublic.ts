@@ -46,7 +46,6 @@ export function createInstallTypingsRequest(project: Project, typeAcquisition: T
         projectName: project.getProjectName(),
         fileNames: project.getFileNames(/*excludeFilesFromExternalLibraries*/ true, /*excludeConfigFiles*/ true).concat(project.getExcludedFiles() as NormalizedPath[]),
         compilerOptions: project.getCompilationSettings(),
-        watchOptions: project.projectService.getWatchOptions(project),
         typeAcquisition,
         unresolvedImports,
         projectRootPath: project.getCurrentDirectory() as Path,
