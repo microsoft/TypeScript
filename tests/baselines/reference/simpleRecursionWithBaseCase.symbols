@@ -56,3 +56,10 @@ function fn4(n: number) {
     }
 }
 
+function fn5() {
+>fn5 : Symbol(fn5, Decl(simpleRecursionWithBaseCase.ts, 28, 1))
+
+    return [fn5][0]();
+>fn5 : Symbol(fn5, Decl(simpleRecursionWithBaseCase.ts, 28, 1))
+}
+

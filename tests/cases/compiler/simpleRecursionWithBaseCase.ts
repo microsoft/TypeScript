@@ -1,4 +1,5 @@
 // @strict: true
+// @noImplicitAny: true
 
 function fn1(n: number) {
     if (n === 0) {
@@ -28,4 +29,8 @@ function fn4(n: number) {
     } else {
         return notfoundsymbol("hello world");
     }
+}
+
+function fn5() {
+    return [fn5][0]();
 }

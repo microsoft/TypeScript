@@ -29,6 +29,10 @@ function fn4(n: number) {
     }
 }
 
+function fn5() {
+    return [fn5][0]();
+}
+
 
 //// [simpleRecursionWithBaseCase.js]
 "use strict";
@@ -60,4 +64,7 @@ function fn4(n) {
     else {
         return notfoundsymbol("hello world");
     }
+}
+function fn5() {
+    return [fn5][0]();
 }

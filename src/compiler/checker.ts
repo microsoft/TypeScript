@@ -35615,7 +35615,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const expr = returnStatement.expression;
             if (expr) {
                 // Bare calls to this same function don't contribute to inference
-                if (expr.kind === SyntaxKind.CallExpression && checkExpressionCached((expr as CallExpression).expression).symbol === func.symbol) {
+                if (expr.kind === SyntaxKind.CallExpression &&
+                    (expr as CallExpression).expression.kind === SyntaxKind.Identifier &&
+                    checkExpressionCached((expr as CallExpression).expression).symbol === func.symbol) {
                     hasReturnOfTypeNever = true;
                     return;
                 }
