@@ -32409,7 +32409,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const contextualType = getContextualType(node, skipBindingPatterns ? ContextFlags.SkipBindingPatterns : ContextFlags.None);
             if (contextualType) {
                 const inferenceTargetType = getReturnTypeOfSignature(signature);
-                if (couldContainTypeVariables(inferenceTargetType)) {
+                if (signature.typeParameters && couldContainTypeVariables(inferenceTargetType)) {
                     const outerContext = getInferenceContext(node);
                     const isFromBindingPattern = !skipBindingPatterns && getContextualType(node, ContextFlags.SkipBindingPatterns) !== contextualType;
                     // A return type inference from a binding pattern can be used in instantiating the contextual
@@ -32446,7 +32446,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // from the return type. We need a separate inference pass here because (a) instantiation of
                     // the source type uses the outer context's return mapper (which excludes inferences made from
                     // outer arguments), and (b) we don't want any further inferences going into this context.
-                    const returnContext = createInferenceContext(signature.typeParameters!, signature, context.flags);
+                    const returnContext = createInferenceContext(signature.typeParameters, signature, context.flags);
                     const returnSourceType = instantiateType(contextualType, outerContext && outerContext.returnMapper);
                     inferTypes(returnContext.inferences, returnSourceType, inferenceTargetType);
                     context.returnMapper = some(returnContext.inferences, hasInferenceCandidates) ? getMapperFromContext(cloneInferredPartOfContext(returnContext)) : undefined;
