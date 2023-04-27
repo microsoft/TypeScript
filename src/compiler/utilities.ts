@@ -4180,6 +4180,7 @@ export function canHaveJSDoc(node: Node): node is HasJSDoc {
         case SyntaxKind.PropertyDeclaration:
         case SyntaxKind.PropertySignature:
         case SyntaxKind.ReturnStatement:
+        case SyntaxKind.SemicolonClassElement:
         case SyntaxKind.SetAccessor:
         case SyntaxKind.ShorthandPropertyAssignment:
         case SyntaxKind.SpreadAssignment:
