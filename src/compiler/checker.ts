@@ -27526,9 +27526,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 location = location.parent;
             }
             if (isExpressionNode(location) && (!isAssignmentTarget(location) || isWriteAccess(location))) {
-                const type = location.flags & NodeFlags.OptionalChain ?
-                    removeOptionalTypeMarker(getTypeOfExpression(location as Expression)) :
-                    getTypeOfExpression(location as Expression);
+                const type = removeOptionalTypeMarker(getTypeOfExpression(location as Expression));
                 if (getExportSymbolOfValueSymbolIfExported(getNodeLinks(location).resolvedSymbol) === symbol) {
                     return type;
                 }
