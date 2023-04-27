@@ -1,0 +1,94 @@
+=== tests/cases/conformance/types/typeParameters/inferPartialTypeArgumentsErrors1.tsx ===
+declare function testConstraints1<A extends B, B extends string>(arg?: { a?: A[], b?: B[] }): { a: A[], b: B[] }
+>testConstraints1 : Symbol(testConstraints1, Decl(inferPartialTypeArgumentsErrors1.tsx, 0, 0))
+>A : Symbol(A, Decl(inferPartialTypeArgumentsErrors1.tsx, 0, 34))
+>B : Symbol(B, Decl(inferPartialTypeArgumentsErrors1.tsx, 0, 46))
+>B : Symbol(B, Decl(inferPartialTypeArgumentsErrors1.tsx, 0, 46))
+>arg : Symbol(arg, Decl(inferPartialTypeArgumentsErrors1.tsx, 0, 65))
+>a : Symbol(a, Decl(inferPartialTypeArgumentsErrors1.tsx, 0, 72))
+>A : Symbol(A, Decl(inferPartialTypeArgumentsErrors1.tsx, 0, 34))
+>b : Symbol(b, Decl(inferPartialTypeArgumentsErrors1.tsx, 0, 81))
+>B : Symbol(B, Decl(inferPartialTypeArgumentsErrors1.tsx, 0, 46))
+>a : Symbol(a, Decl(inferPartialTypeArgumentsErrors1.tsx, 0, 95))
+>A : Symbol(A, Decl(inferPartialTypeArgumentsErrors1.tsx, 0, 34))
+>b : Symbol(b, Decl(inferPartialTypeArgumentsErrors1.tsx, 0, 103))
+>B : Symbol(B, Decl(inferPartialTypeArgumentsErrors1.tsx, 0, 46))
+
+const expectError1 = testConstraints1<, "z"> ({ a: ["x", "y"] });
+>expectError1 : Symbol(expectError1, Decl(inferPartialTypeArgumentsErrors1.tsx, 1, 5))
+>testConstraints1 : Symbol(testConstraints1, Decl(inferPartialTypeArgumentsErrors1.tsx, 0, 0))
+>a : Symbol(a, Decl(inferPartialTypeArgumentsErrors1.tsx, 1, 47))
+
+declare function testConstraints2<A extends string, B extends A>(arg?: { a?: A[], b?: B[] }): { a: A[], b: B[] }
+>testConstraints2 : Symbol(testConstraints2, Decl(inferPartialTypeArgumentsErrors1.tsx, 1, 65))
+>A : Symbol(A, Decl(inferPartialTypeArgumentsErrors1.tsx, 3, 34))
+>B : Symbol(B, Decl(inferPartialTypeArgumentsErrors1.tsx, 3, 51))
+>A : Symbol(A, Decl(inferPartialTypeArgumentsErrors1.tsx, 3, 34))
+>arg : Symbol(arg, Decl(inferPartialTypeArgumentsErrors1.tsx, 3, 65))
+>a : Symbol(a, Decl(inferPartialTypeArgumentsErrors1.tsx, 3, 72))
+>A : Symbol(A, Decl(inferPartialTypeArgumentsErrors1.tsx, 3, 34))
+>b : Symbol(b, Decl(inferPartialTypeArgumentsErrors1.tsx, 3, 81))
+>B : Symbol(B, Decl(inferPartialTypeArgumentsErrors1.tsx, 3, 51))
+>a : Symbol(a, Decl(inferPartialTypeArgumentsErrors1.tsx, 3, 95))
+>A : Symbol(A, Decl(inferPartialTypeArgumentsErrors1.tsx, 3, 34))
+>b : Symbol(b, Decl(inferPartialTypeArgumentsErrors1.tsx, 3, 103))
+>B : Symbol(B, Decl(inferPartialTypeArgumentsErrors1.tsx, 3, 51))
+
+const expectAllowed1 = testConstraints2<, "x"> ({ a: ["x", "y"] }); // OK { a: string[], b: "x"[] }
+>expectAllowed1 : Symbol(expectAllowed1, Decl(inferPartialTypeArgumentsErrors1.tsx, 4, 5))
+>testConstraints2 : Symbol(testConstraints2, Decl(inferPartialTypeArgumentsErrors1.tsx, 1, 65))
+>a : Symbol(a, Decl(inferPartialTypeArgumentsErrors1.tsx, 4, 49))
+
+const expectAllowed2 = testConstraints2<"x" | "y", > ({ b: ["x"] }); // OK { a: ("x" | "y")[], b: ("x" | "y")[] }
+>expectAllowed2 : Symbol(expectAllowed2, Decl(inferPartialTypeArgumentsErrors1.tsx, 5, 5))
+>testConstraints2 : Symbol(testConstraints2, Decl(inferPartialTypeArgumentsErrors1.tsx, 1, 65))
+>b : Symbol(b, Decl(inferPartialTypeArgumentsErrors1.tsx, 5, 55))
+
+const expectError2 = testConstraints2<, "z"> ({ a: ["x", "y"] }); // error - `A` infers as `"x" | "y"` which `"z"` does not satisfy
+>expectError2 : Symbol(expectError2, Decl(inferPartialTypeArgumentsErrors1.tsx, 6, 5))
+>testConstraints2 : Symbol(testConstraints2, Decl(inferPartialTypeArgumentsErrors1.tsx, 1, 65))
+>a : Symbol(a, Decl(inferPartialTypeArgumentsErrors1.tsx, 6, 47))
+
+const expectError3 = testConstraints2<"x" | "y", > ({ b: ["x", "y", "z"] }); // error "z" not in "x" | "y"
+>expectError3 : Symbol(expectError3, Decl(inferPartialTypeArgumentsErrors1.tsx, 7, 5))
+>testConstraints2 : Symbol(testConstraints2, Decl(inferPartialTypeArgumentsErrors1.tsx, 1, 65))
+>b : Symbol(b, Decl(inferPartialTypeArgumentsErrors1.tsx, 7, 53))
+
+declare function complexConstraints<A extends string, B extends A, C extends B>(arg: { a?: A[], b?: B[], c?: C[] }): { a: A[], b: B[], c: C[] };
+>complexConstraints : Symbol(complexConstraints, Decl(inferPartialTypeArgumentsErrors1.tsx, 7, 76))
+>A : Symbol(A, Decl(inferPartialTypeArgumentsErrors1.tsx, 9, 36))
+>B : Symbol(B, Decl(inferPartialTypeArgumentsErrors1.tsx, 9, 53))
+>A : Symbol(A, Decl(inferPartialTypeArgumentsErrors1.tsx, 9, 36))
+>C : Symbol(C, Decl(inferPartialTypeArgumentsErrors1.tsx, 9, 66))
+>B : Symbol(B, Decl(inferPartialTypeArgumentsErrors1.tsx, 9, 53))
+>arg : Symbol(arg, Decl(inferPartialTypeArgumentsErrors1.tsx, 9, 80))
+>a : Symbol(a, Decl(inferPartialTypeArgumentsErrors1.tsx, 9, 86))
+>A : Symbol(A, Decl(inferPartialTypeArgumentsErrors1.tsx, 9, 36))
+>b : Symbol(b, Decl(inferPartialTypeArgumentsErrors1.tsx, 9, 95))
+>B : Symbol(B, Decl(inferPartialTypeArgumentsErrors1.tsx, 9, 53))
+>c : Symbol(c, Decl(inferPartialTypeArgumentsErrors1.tsx, 9, 104))
+>C : Symbol(C, Decl(inferPartialTypeArgumentsErrors1.tsx, 9, 66))
+>a : Symbol(a, Decl(inferPartialTypeArgumentsErrors1.tsx, 9, 118))
+>A : Symbol(A, Decl(inferPartialTypeArgumentsErrors1.tsx, 9, 36))
+>b : Symbol(b, Decl(inferPartialTypeArgumentsErrors1.tsx, 9, 126))
+>B : Symbol(B, Decl(inferPartialTypeArgumentsErrors1.tsx, 9, 53))
+>c : Symbol(c, Decl(inferPartialTypeArgumentsErrors1.tsx, 9, 134))
+>C : Symbol(C, Decl(inferPartialTypeArgumentsErrors1.tsx, 9, 66))
+
+const expectAllowed4 = complexConstraints<"x" | "y" | "z", , > ({ a: ["x"], c: ["x", "y"] }); // OK { a: ("x" | "y" | "z")[], b: ("x" | "y" | "z")[], c: ("x" | "y")[] }
+>expectAllowed4 : Symbol(expectAllowed4, Decl(inferPartialTypeArgumentsErrors1.tsx, 10, 5))
+>complexConstraints : Symbol(complexConstraints, Decl(inferPartialTypeArgumentsErrors1.tsx, 7, 76))
+>a : Symbol(a, Decl(inferPartialTypeArgumentsErrors1.tsx, 10, 65))
+>c : Symbol(c, Decl(inferPartialTypeArgumentsErrors1.tsx, 10, 75))
+
+// Fails because B inferred to be "x" but that conflicts with C as "x" | "y"
+const expectError4 = complexConstraints<"x" | "y" | "z", , "x" | "y">({b: ["x"]});
+>expectError4 : Symbol(expectError4, Decl(inferPartialTypeArgumentsErrors1.tsx, 12, 5))
+>complexConstraints : Symbol(complexConstraints, Decl(inferPartialTypeArgumentsErrors1.tsx, 7, 76))
+>b : Symbol(b, Decl(inferPartialTypeArgumentsErrors1.tsx, 12, 71))
+
+const expectError5 = complexConstraints<"x", , >({c: ["y"]}); // error "y" does not extend "x"
+>expectError5 : Symbol(expectError5, Decl(inferPartialTypeArgumentsErrors1.tsx, 13, 5))
+>complexConstraints : Symbol(complexConstraints, Decl(inferPartialTypeArgumentsErrors1.tsx, 7, 76))
+>c : Symbol(c, Decl(inferPartialTypeArgumentsErrors1.tsx, 13, 50))
+

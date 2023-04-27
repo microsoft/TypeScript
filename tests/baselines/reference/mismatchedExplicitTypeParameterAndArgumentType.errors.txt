@@ -1,5 +1,5 @@
 tests/cases/compiler/mismatchedExplicitTypeParameterAndArgumentType.ts(10,34): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/mismatchedExplicitTypeParameterAndArgumentType.ts(11,15): error TS2558: Expected 2 type arguments, but got 1.
+tests/cases/compiler/mismatchedExplicitTypeParameterAndArgumentType.ts(11,27): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
 ==== tests/cases/compiler/mismatchedExplicitTypeParameterAndArgumentType.ts (2 errors) ====
@@ -16,6 +16,6 @@ tests/cases/compiler/mismatchedExplicitTypeParameterAndArgumentType.ts(11,15): e
                                      ~~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
     var r7b = map<number>([1, ""], (x) => x.toString()); // error
-                  ~~~~~~
-!!! error TS2558: Expected 2 type arguments, but got 1.
+                              ~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     var r8 = map<any, string>([1, ""], (x) => x.toString());

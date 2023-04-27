@@ -6076,7 +6076,7 @@ namespace Parser {
             return finishNode(factory.createJsxOpeningFragment(), pos);
         }
         const tagName = parseJsxElementName();
-        const typeArguments = (contextFlags & NodeFlags.JavaScriptFile) === 0 ? tryParseTypeArguments() : undefined;
+        const typeArguments = (contextFlags & NodeFlags.JavaScriptFile) === 0 ? tryParseTypeArguments(/*isInferencePosition*/ true) : undefined;
         const attributes = parseJsxAttributes();
 
         let node: JsxOpeningLikeElement;
@@ -6427,6 +6427,10 @@ namespace Parser {
         return result;
     }
 
+    function parseTypeOrOmittedType() {
+        return token() === SyntaxKind.CommaToken ? finishNode(factory.createOmittedType(), getNodePos()) : parseType();
+    }
+
     function parseTypeArgumentsInExpression() {
         if ((contextFlags & NodeFlags.JavaScriptFile) !== 0) {
             // TypeArguments must not be parsed in JavaScript files to avoid ambiguity with binary operators.
@@ -6438,7 +6442,7 @@ namespace Parser {
         }
         nextToken();
 
-        const typeArguments = parseDelimitedList(ParsingContext.TypeArguments, parseType);
+        const typeArguments = parseDelimitedList(ParsingContext.TypeArguments, parseTypeOrOmittedType);
         if (reScanGreaterToken() !== SyntaxKind.GreaterThanToken) {
             // If it doesn't have the closing `>` then it's definitely not an type argument list.
             return undefined;
@@ -7988,9 +7992,9 @@ namespace Parser {
         return finishNode(factory.createExpressionWithTypeArguments(expression, typeArguments), pos);
     }
 
-    function tryParseTypeArguments(): NodeArray<TypeNode> | undefined {
+    function tryParseTypeArguments(isInferencePosition?: boolean): NodeArray<TypeNode> | undefined {
         return token() === SyntaxKind.LessThanToken ?
-            parseBracketedList(ParsingContext.TypeArguments, parseType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken) : undefined;
+            parseBracketedList(ParsingContext.TypeArguments, isInferencePosition ? parseTypeOrOmittedType : parseType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken) : undefined;
     }
 
     function isHeritageClause(): boolean {

@@ -637,6 +637,8 @@ export function transformTypeScript(context: TransformationContext) {
             case SyntaxKind.IndexedAccessType:
             case SyntaxKind.MappedType:
             case SyntaxKind.LiteralType:
+            case SyntaxKind.InferType:
+            case SyntaxKind.OmittedType:
                 // TypeScript type nodes are elided.
                 // falls through
 
