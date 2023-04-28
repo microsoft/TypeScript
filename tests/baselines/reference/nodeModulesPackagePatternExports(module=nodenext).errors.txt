@@ -1,5 +1,7 @@
 tests/cases/conformance/node/index.cts(3,23): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("inner/mjs/index")' call instead.
 tests/cases/conformance/node/node_modules/inner/index.d.cts(3,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("inner/mjs/index")' call instead.
+tests/cases/conformance/node/node_modules/inner/index.d.mts(6,10): error TS2303: Circular definition of import alias 'mjs'.
+tests/cases/conformance/node/node_modules/inner/index.d.mts(7,10): error TS2303: Circular definition of import alias 'type'.
 tests/cases/conformance/node/node_modules/inner/index.d.ts(2,13): error TS2303: Circular definition of import alias 'cjs'.
 tests/cases/conformance/node/node_modules/inner/index.d.ts(3,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("inner/mjs/index")' call instead.
 
@@ -42,14 +44,18 @@ tests/cases/conformance/node/node_modules/inner/index.d.ts(3,22): error TS1479: 
     export { cjs };
     export { mjs };
     export { type };
-==== tests/cases/conformance/node/node_modules/inner/index.d.mts (0 errors) ====
+==== tests/cases/conformance/node/node_modules/inner/index.d.mts (2 errors) ====
     // esm format file
     import * as cjs from "inner/cjs/index";
     import * as mjs from "inner/mjs/index";
     import * as type from "inner/js/index";
     export { cjs };
     export { mjs };
+             ~~~
+!!! error TS2303: Circular definition of import alias 'mjs'.
     export { type };
+             ~~~~
+!!! error TS2303: Circular definition of import alias 'type'.
 ==== tests/cases/conformance/node/node_modules/inner/index.d.cts (1 errors) ====
     // cjs format file
     import * as cjs from "inner/cjs/index";
