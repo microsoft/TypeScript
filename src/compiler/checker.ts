@@ -5174,21 +5174,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                 const targetFile = moduleSymbol?.declarations?.find(isSourceFile);
                 const isEsmCjsRef = targetFile && isESMFormatImportImportingCommonjsFormatFile(getUsageModeForExpression(reference), targetFile.impliedNodeFormat);
-                if (getESModuleInterop(compilerOptions) || isEsmCjsRef) {
-                    let sigs = getSignaturesOfStructuredType(type, SignatureKind.Call);
-                    if (!sigs || !sigs.length) {
-                        sigs = getSignaturesOfStructuredType(type, SignatureKind.Construct);
-                    }
-                    if (
-                        (sigs && sigs.length) ||
-                        getPropertyOfType(type, InternalSymbolName.Default, /*skipObjectFunctionPropertyAugment*/ true) ||
-                        isEsmCjsRef
-                    ) {
-                        const moduleType = type.flags & TypeFlags.StructuredType
-                            ? getTypeWithSyntheticDefaultImportType(type, symbol, moduleSymbol!, reference)
-                            : createDefaultPropertyWrapperForModule(symbol, symbol.parent);
-                        return cloneTypeAsModuleType(symbol, moduleType, referenceParent);
-                    }
+                // Special case for `any` modules to avoid breaking existing code.
+                // For `declare module "path";`, it seems reasonable to say that the
+                // author is intentionally treating the entire module as `any`, and a
+                // namespace import of it should be `any`-typed so the user can access
+                // any properties off of it. It's less clear that this is desirable for
+                // `declare const x: any; export = x;`, as the only way to generate such
+                // a declaration file with tsc is from a TypeScript file that uses
+                // `export = ` and definitely would have a synthetic default. In this
+                // case, it looks like a namespace import would ideally be typed as
+                // `{ default: any }`, but that would be a breaking change.
+                if (getESModuleInterop(compilerOptions) && !(type.flags & TypeFlags.Any) || isEsmCjsRef) {
+                    const moduleType = type.flags & TypeFlags.StructuredType
+                        ? getTypeWithSyntheticDefaultImportType(type, symbol, moduleSymbol!, reference)
+                        : createDefaultPropertyWrapperForModule(symbol, symbol.parent);
+                    return cloneTypeAsModuleType(symbol, moduleType, referenceParent);
                 }
             }
         }

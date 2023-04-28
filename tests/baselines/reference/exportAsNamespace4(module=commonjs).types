@@ -23,7 +23,7 @@ import foo from './1'
 >foo : typeof foo
 
 import foo1 from './11'
->foo1 : typeof foo
+>foo1 : typeof foo1
 
 foo.a;
 >foo.a : 1
@@ -32,7 +32,7 @@ foo.a;
 
 foo1.a;
 >foo1.a : 1
->foo1 : typeof foo
+>foo1 : typeof foo1
 >a : 1
 
 foo.b;
@@ -42,6 +42,6 @@ foo.b;
 
 foo1.b;
 >foo1.b : 2
->foo1 : typeof foo
+>foo1 : typeof foo1
 >b : 2
 

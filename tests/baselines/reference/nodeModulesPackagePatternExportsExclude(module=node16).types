@@ -22,7 +22,7 @@ import * as cjsi2 from "inner/cjs/index";
 >cjsi2 : typeof cjsi2
 
 import * as mjsi2 from "inner/mjs/index";
->mjsi2 : typeof cjsi2.cjs.mjs
+>mjsi2 : typeof mjsi2
 
 import * as typei2 from "inner/js/index";
 >typei2 : typeof typei2
@@ -31,7 +31,7 @@ cjsi2;
 >cjsi2 : typeof cjsi2
 
 mjsi2;
->mjsi2 : typeof cjsi2.cjs.mjs
+>mjsi2 : typeof mjsi2
 
 typei2;
 >typei2 : typeof typei2
@@ -60,7 +60,7 @@ import * as cjsi2 from "inner/cjs/index";
 >cjsi2 : typeof cjsi2
 
 import * as mjsi2 from "inner/mjs/index";
->mjsi2 : typeof cjsi2.cjs.mjs
+>mjsi2 : typeof mjsi2
 
 import * as typei2 from "inner/js/index";
 >typei2 : typeof typei2
@@ -69,7 +69,7 @@ cjsi2;
 >cjsi2 : typeof cjsi2
 
 mjsi2;
->mjsi2 : typeof cjsi2.cjs.mjs
+>mjsi2 : typeof mjsi2
 
 typei2;
 >typei2 : typeof typei2
@@ -98,19 +98,19 @@ import * as cjsi2 from "inner/cjs/index";
 >cjsi2 : typeof cjsi2
 
 import * as mjsi2 from "inner/mjs/index";
->mjsi2 : typeof cjsi2.mjs
+>mjsi2 : typeof mjsi2
 
 import * as typei2 from "inner/js/index";
->typei2 : typeof cjsi2.mjs.cjs.type
+>typei2 : typeof typei2
 
 cjsi2;
 >cjsi2 : typeof cjsi2
 
 mjsi2;
->mjsi2 : typeof cjsi2.mjs
+>mjsi2 : typeof mjsi2
 
 typei2;
->typei2 : typeof cjsi2.mjs.cjs.type
+>typei2 : typeof typei2
 
 === tests/cases/conformance/node/node_modules/inner/exclude/index.d.ts ===
 // cjs format file
@@ -181,7 +181,7 @@ import * as mjs from "inner/mjs/index";
 >mjs : typeof mjs
 
 import * as type from "inner/js/index";
->type : typeof mjs.cjs.cjs.type
+>type : typeof type
 
 export { cjs };
 >cjs : any
@@ -190,7 +190,7 @@ export { mjs };
 >mjs : typeof mjs
 
 export { type };
->type : typeof mjs.cjs.cjs.type
+>type : typeof type
 
 === tests/cases/conformance/node/node_modules/inner/index.d.mts ===
 // esm format file
@@ -198,19 +198,19 @@ import * as cjs from "inner/cjs/index";
 >cjs : typeof cjs
 
 import * as mjs from "inner/mjs/index";
->mjs : typeof cjs.cjs.mjs
+>mjs : typeof mjs
 
 import * as type from "inner/js/index";
->type : typeof cjs.cjs.mjs.type
+>type : typeof type
 
 export { cjs };
 >cjs : typeof cjs
 
 export { mjs };
->mjs : typeof cjs.cjs.mjs
+>mjs : any
 
 export { type };
->type : typeof cjs.cjs.mjs.type
+>type : any
 
 === tests/cases/conformance/node/node_modules/inner/index.d.cts ===
 // cjs format file
@@ -221,7 +221,7 @@ import * as mjs from "inner/mjs/index";
 >mjs : typeof cjs.mjs
 
 import * as type from "inner/js/index";
->type : typeof cjs.mjs.cjs.type
+>type : typeof cjs.type
 
 export { cjs };
 >cjs : typeof cjs
@@ -230,5 +230,5 @@ export { mjs };
 >mjs : typeof cjs.mjs
 
 export { type };
->type : typeof cjs.mjs.cjs.type
+>type : typeof cjs.type
 

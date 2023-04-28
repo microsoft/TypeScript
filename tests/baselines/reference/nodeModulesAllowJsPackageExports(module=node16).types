@@ -22,7 +22,7 @@ import * as cjsi from "inner/cjs";
 >cjsi : typeof cjsi
 
 import * as mjsi from "inner/mjs";
->mjsi : typeof cjsi.cjs.mjs
+>mjsi : typeof mjsi
 
 import * as typei from "inner";
 >typei : typeof typei
@@ -31,7 +31,7 @@ cjsi;
 >cjsi : typeof cjsi
 
 mjsi;
->mjsi : typeof cjsi.cjs.mjs
+>mjsi : typeof mjsi
 
 typei;
 >typei : typeof typei
@@ -60,7 +60,7 @@ import * as cjsi from "inner/cjs";
 >cjsi : typeof cjsi
 
 import * as mjsi from "inner/mjs";
->mjsi : typeof cjsi.cjs.mjs
+>mjsi : typeof mjsi
 
 import * as typei from "inner";
 >typei : typeof typei
@@ -69,7 +69,7 @@ cjsi;
 >cjsi : typeof cjsi
 
 mjsi;
->mjsi : typeof cjsi.cjs.mjs
+>mjsi : typeof mjsi
 
 typei;
 >typei : typeof typei
@@ -98,19 +98,19 @@ import * as cjsi from "inner/cjs";
 >cjsi : typeof cjsi
 
 import * as mjsi from "inner/mjs";
->mjsi : typeof cjsi.mjs
+>mjsi : typeof mjsi
 
 import * as typei from "inner";
->typei : typeof cjsi.mjs.cjs.type
+>typei : typeof typei
 
 cjsi;
 >cjsi : typeof cjsi
 
 mjsi;
->mjsi : typeof cjsi.mjs
+>mjsi : typeof mjsi
 
 typei;
->typei : typeof cjsi.mjs.cjs.type
+>typei : typeof typei
 
 === tests/cases/conformance/node/allowJs/node_modules/inner/index.d.ts ===
 // cjs format file
@@ -121,7 +121,7 @@ import * as mjs from "inner/mjs";
 >mjs : typeof mjs
 
 import * as type from "inner";
->type : typeof mjs.cjs.cjs.type
+>type : typeof type
 
 export { cjs };
 >cjs : any
@@ -130,7 +130,7 @@ export { mjs };
 >mjs : typeof mjs
 
 export { type };
->type : typeof mjs.cjs.cjs.type
+>type : typeof type
 
 === tests/cases/conformance/node/allowJs/node_modules/inner/index.d.mts ===
 // esm format file
@@ -138,19 +138,19 @@ import * as cjs from "inner/cjs";
 >cjs : typeof cjs
 
 import * as mjs from "inner/mjs";
->mjs : typeof cjs.cjs.mjs
+>mjs : typeof mjs
 
 import * as type from "inner";
->type : typeof cjs.cjs.mjs.type
+>type : typeof type
 
 export { cjs };
 >cjs : typeof cjs
 
 export { mjs };
->mjs : typeof cjs.cjs.mjs
+>mjs : any
 
 export { type };
->type : typeof cjs.cjs.mjs.type
+>type : any
 
 === tests/cases/conformance/node/allowJs/node_modules/inner/index.d.cts ===
 // cjs format file
@@ -161,7 +161,7 @@ import * as mjs from "inner/mjs";
 >mjs : typeof cjs.mjs
 
 import * as type from "inner";
->type : typeof cjs.mjs.cjs.type
+>type : typeof cjs.type
 
 export { cjs };
 >cjs : typeof cjs
@@ -170,5 +170,5 @@ export { mjs };
 >mjs : typeof cjs.mjs
 
 export { type };
->type : typeof cjs.mjs.cjs.type
+>type : typeof cjs.type
 

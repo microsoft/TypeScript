@@ -135,24 +135,24 @@ import * as ts from "inner/types";
 >ts : Symbol(ts, Decl(index.cts, 10, 6))
 
 cjsi.cjsSource;
->cjsi.cjsSource : Symbol(cjsi.cjsSource, Decl(index.d.cts, 9, 12))
+>cjsi.cjsSource : Symbol(cjsSource, Decl(index.d.cts, 9, 12))
 >cjsi : Symbol(cjsi, Decl(index.cts, 7, 6))
->cjsSource : Symbol(cjsi.cjsSource, Decl(index.d.cts, 9, 12))
+>cjsSource : Symbol(cjsSource, Decl(index.d.cts, 9, 12))
 
 mjsi.cjsSource;
->mjsi.cjsSource : Symbol(cjsi.cjsSource, Decl(index.d.cts, 9, 12))
+>mjsi.cjsSource : Symbol(cjsSource, Decl(index.d.cts, 9, 12))
 >mjsi : Symbol(mjsi, Decl(index.cts, 8, 6))
->cjsSource : Symbol(cjsi.cjsSource, Decl(index.d.cts, 9, 12))
+>cjsSource : Symbol(cjsSource, Decl(index.d.cts, 9, 12))
 
 typei.implicitCjsSource;
->typei.implicitCjsSource : Symbol(cjsi.type.implicitCjsSource, Decl(index.d.ts, 9, 12))
+>typei.implicitCjsSource : Symbol(implicitCjsSource, Decl(index.d.ts, 9, 12))
 >typei : Symbol(typei, Decl(index.cts, 9, 6))
->implicitCjsSource : Symbol(cjsi.type.implicitCjsSource, Decl(index.d.ts, 9, 12))
+>implicitCjsSource : Symbol(implicitCjsSource, Decl(index.d.ts, 9, 12))
 
 ts.cjsSource;
->ts.cjsSource : Symbol(cjsi.cjsSource, Decl(index.d.cts, 9, 12))
+>ts.cjsSource : Symbol(cjsSource, Decl(index.d.cts, 9, 12))
 >ts : Symbol(ts, Decl(index.cts, 10, 6))
->cjsSource : Symbol(cjsi.cjsSource, Decl(index.d.cts, 9, 12))
+>cjsSource : Symbol(cjsSource, Decl(index.d.cts, 9, 12))
 
 === tests/cases/conformance/node/node_modules/inner/index.d.ts ===
 // cjs format file
@@ -169,19 +169,19 @@ import * as ts from "inner/types";
 >ts : Symbol(ts, Decl(index.d.ts, 4, 6))
 
 export { cjs };
->cjs : Symbol(mjs.type.cjs, Decl(index.d.ts, 5, 8))
+>cjs : Symbol(type.cjs, Decl(index.d.ts, 5, 8))
 
 export { mjs };
->mjs : Symbol(mjs.type.mjs, Decl(index.d.ts, 6, 8))
+>mjs : Symbol(type.mjs, Decl(index.d.ts, 6, 8))
 
 export { type };
->type : Symbol(mjs.type.type, Decl(index.d.ts, 7, 8))
+>type : Symbol(type.type, Decl(index.d.ts, 7, 8))
 
 export { ts };
->ts : Symbol(mjs.type.ts, Decl(index.d.ts, 8, 8))
+>ts : Symbol(type.ts, Decl(index.d.ts, 8, 8))
 
 export const implicitCjsSource = true;
->implicitCjsSource : Symbol(mjs.type.implicitCjsSource, Decl(index.d.ts, 9, 12))
+>implicitCjsSource : Symbol(type.implicitCjsSource, Decl(index.d.ts, 9, 12))
 
 === tests/cases/conformance/node/node_modules/inner/index.d.mts ===
 // esm format file

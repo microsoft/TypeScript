@@ -22,13 +22,13 @@ import * as cjsi from "inner/a";
 >cjsi : typeof cjsi
 
 import * as mjsi from "inner/b";
->mjsi : typeof cjsi
+>mjsi : typeof mjsi
 
 import * as typei from "inner";
->typei : typeof cjsi
+>typei : typeof typei
 
 import * as ts from "inner/types";
->ts : typeof cjsi
+>ts : typeof ts
 
 cjsi.mjsSource;
 >cjsi.mjsSource : true
@@ -37,17 +37,17 @@ cjsi.mjsSource;
 
 mjsi.mjsSource;
 >mjsi.mjsSource : true
->mjsi : typeof cjsi
+>mjsi : typeof mjsi
 >mjsSource : true
 
 typei.mjsSource;
 >typei.mjsSource : true
->typei : typeof cjsi
+>typei : typeof typei
 >mjsSource : true
 
 ts.mjsSource;
 >ts.mjsSource : true
->ts : typeof cjsi
+>ts : typeof ts
 >mjsSource : true
 
 === tests/cases/conformance/node/index.mts ===
@@ -74,13 +74,13 @@ import * as cjsi from "inner/a";
 >cjsi : typeof cjsi
 
 import * as mjsi from "inner/b";
->mjsi : typeof cjsi
+>mjsi : typeof mjsi
 
 import * as typei from "inner";
->typei : typeof cjsi
+>typei : typeof typei
 
 import * as ts from "inner/types";
->ts : typeof cjsi
+>ts : typeof ts
 
 cjsi.mjsSource;
 >cjsi.mjsSource : true
@@ -89,17 +89,17 @@ cjsi.mjsSource;
 
 mjsi.mjsSource;
 >mjsi.mjsSource : true
->mjsi : typeof cjsi
+>mjsi : typeof mjsi
 >mjsSource : true
 
 typei.mjsSource;
 >typei.mjsSource : true
->typei : typeof cjsi
+>typei : typeof typei
 >mjsSource : true
 
 ts.mjsSource;
 >ts.mjsSource : true
->ts : typeof cjsi
+>ts : typeof ts
 >mjsSource : true
 
 === tests/cases/conformance/node/index.cts ===
@@ -126,13 +126,13 @@ import * as cjsi from "inner/a";
 >cjsi : typeof cjsi
 
 import * as mjsi from "inner/b";
->mjsi : typeof cjsi
+>mjsi : typeof mjsi
 
 import * as typei from "inner";
->typei : typeof cjsi.type
+>typei : typeof typei
 
 import * as ts from "inner/types";
->ts : typeof cjsi
+>ts : typeof ts
 
 cjsi.cjsSource;
 >cjsi.cjsSource : true
@@ -141,17 +141,17 @@ cjsi.cjsSource;
 
 mjsi.cjsSource;
 >mjsi.cjsSource : true
->mjsi : typeof cjsi
+>mjsi : typeof mjsi
 >cjsSource : true
 
 typei.implicitCjsSource;
 >typei.implicitCjsSource : true
->typei : typeof cjsi.type
+>typei : typeof typei
 >implicitCjsSource : true
 
 ts.cjsSource;
 >ts.cjsSource : true
->ts : typeof cjsi
+>ts : typeof ts
 >cjsSource : true
 
 === tests/cases/conformance/node/node_modules/inner/index.d.ts ===
@@ -163,10 +163,10 @@ import * as mjs from "inner/b";
 >mjs : typeof mjs
 
 import * as type from "inner";
->type : typeof mjs.type
+>type : typeof type
 
 import * as ts from "inner/types";
->ts : typeof mjs
+>ts : typeof type.ts
 
 export { cjs };
 >cjs : any
@@ -175,10 +175,10 @@ export { mjs };
 >mjs : typeof mjs
 
 export { type };
->type : typeof mjs.type
+>type : typeof type
 
 export { ts };
->ts : typeof mjs
+>ts : typeof type.ts
 
 export const implicitCjsSource = true;
 >implicitCjsSource : true
@@ -193,22 +193,22 @@ import * as mjs from "inner/b";
 >mjs : typeof mjs
 
 import * as type from "inner";
->type : typeof mjs
+>type : typeof type
 
 import * as ts from "inner/types";
->ts : typeof mjs
+>ts : typeof ts
 
 export { cjs };
 >cjs : any
 
 export { mjs };
->mjs : typeof mjs
+>mjs : any
 
 export { type };
->type : typeof mjs
+>type : any
 
 export { ts };
->ts : typeof mjs
+>ts : any
 
 export const mjsSource = true;
 >mjsSource : true
@@ -220,25 +220,25 @@ import * as cjs from "inner/a";
 >cjs : typeof cjs
 
 import * as mjs from "inner/b";
->mjs : typeof cjs
+>mjs : typeof cjs.mjs
 
 import * as type from "inner";
 >type : typeof cjs.type
 
 import * as ts from "inner/types";
->ts : typeof cjs
+>ts : typeof cjs.ts
 
 export { cjs };
 >cjs : typeof cjs
 
 export { mjs };
->mjs : typeof cjs
+>mjs : typeof cjs.mjs
 
 export { type };
 >type : typeof cjs.type
 
 export { ts };
->ts : typeof cjs
+>ts : typeof cjs.ts
 
 export const cjsSource = true;
 >cjsSource : true
