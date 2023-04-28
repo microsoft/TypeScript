@@ -184,13 +184,13 @@ import * as type from "inner/js/index";
 >type : Symbol(type, Decl(index.d.ts, 3, 6))
 
 export { cjs };
->cjs : Symbol(type.cjs, Decl(index.d.ts, 4, 8))
+>cjs : Symbol(mjs.mjs.type.cjs, Decl(index.d.ts, 4, 8))
 
 export { mjs };
->mjs : Symbol(type.mjs, Decl(index.d.ts, 5, 8))
+>mjs : Symbol(mjs.mjs.type.mjs, Decl(index.d.ts, 5, 8))
 
 export { type };
->type : Symbol(type.type, Decl(index.d.ts, 6, 8))
+>type : Symbol(mjs.mjs.type.type, Decl(index.d.ts, 6, 8))
 
 === tests/cases/conformance/node/node_modules/inner/index.d.mts ===
 // esm format file

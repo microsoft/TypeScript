@@ -1,10 +1,6 @@
 error TS2209: The project root is ambiguous, but is required to resolve export map entry '.' in file 'tests/cases/conformance/node/package.json'. Supply the `rootDir` compiler option to disambiguate.
 tests/cases/conformance/node/index.cts(3,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("package/mjs")' call instead.
 tests/cases/conformance/node/index.cts(4,23): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("package")' call instead.
-tests/cases/conformance/node/node_modules/inner/index.d.mts(2,13): error TS2303: Circular definition of import alias 'cjs'.
-tests/cases/conformance/node/node_modules/inner/index.d.mts(7,10): error TS2303: Circular definition of import alias 'mjs'.
-tests/cases/conformance/node/node_modules/inner/index.d.mts(8,10): error TS2303: Circular definition of import alias 'type'.
-tests/cases/conformance/node/node_modules/inner/index.d.mts(9,10): error TS2303: Circular definition of import alias 'ts'.
 tests/cases/conformance/node/node_modules/inner/index.d.ts(2,13): error TS2303: Circular definition of import alias 'cjs'.
 
 
@@ -74,24 +70,16 @@ tests/cases/conformance/node/node_modules/inner/index.d.ts(2,13): error TS2303: 
     export { type };
     export { ts };
     export const implicitCjsSource = true;
-==== tests/cases/conformance/node/node_modules/inner/index.d.mts (4 errors) ====
+==== tests/cases/conformance/node/node_modules/inner/index.d.mts (0 errors) ====
     // esm format file
     import * as cjs from "inner/a";
-                ~~~
-!!! error TS2303: Circular definition of import alias 'cjs'.
     import * as mjs from "inner/b";
     import * as type from "inner";
     import * as ts from "inner/types";
     export { cjs };
     export { mjs };
-             ~~~
-!!! error TS2303: Circular definition of import alias 'mjs'.
     export { type };
-             ~~~~
-!!! error TS2303: Circular definition of import alias 'type'.
     export { ts };
-             ~~
-!!! error TS2303: Circular definition of import alias 'ts'.
     export const mjsSource = true;
 ==== tests/cases/conformance/node/node_modules/inner/index.d.cts (0 errors) ====
     // cjs format file

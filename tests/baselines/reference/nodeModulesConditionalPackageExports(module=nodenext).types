@@ -22,13 +22,13 @@ import * as cjsi from "inner/a";
 >cjsi : typeof cjsi
 
 import * as mjsi from "inner/b";
->mjsi : typeof mjsi
+>mjsi : typeof cjsi
 
 import * as typei from "inner";
->typei : typeof typei
+>typei : typeof cjsi
 
 import * as ts from "inner/types";
->ts : typeof ts
+>ts : typeof cjsi
 
 cjsi.mjsSource;
 >cjsi.mjsSource : true
@@ -37,17 +37,17 @@ cjsi.mjsSource;
 
 mjsi.mjsSource;
 >mjsi.mjsSource : true
->mjsi : typeof mjsi
+>mjsi : typeof cjsi
 >mjsSource : true
 
 typei.mjsSource;
 >typei.mjsSource : true
->typei : typeof typei
+>typei : typeof cjsi
 >mjsSource : true
 
 ts.mjsSource;
 >ts.mjsSource : true
->ts : typeof ts
+>ts : typeof cjsi
 >mjsSource : true
 
 === tests/cases/conformance/node/index.mts ===
@@ -74,13 +74,13 @@ import * as cjsi from "inner/a";
 >cjsi : typeof cjsi
 
 import * as mjsi from "inner/b";
->mjsi : typeof mjsi
+>mjsi : typeof cjsi
 
 import * as typei from "inner";
->typei : typeof typei
+>typei : typeof cjsi
 
 import * as ts from "inner/types";
->ts : typeof ts
+>ts : typeof cjsi
 
 cjsi.mjsSource;
 >cjsi.mjsSource : true
@@ -89,17 +89,17 @@ cjsi.mjsSource;
 
 mjsi.mjsSource;
 >mjsi.mjsSource : true
->mjsi : typeof mjsi
+>mjsi : typeof cjsi
 >mjsSource : true
 
 typei.mjsSource;
 >typei.mjsSource : true
->typei : typeof typei
+>typei : typeof cjsi
 >mjsSource : true
 
 ts.mjsSource;
 >ts.mjsSource : true
->ts : typeof ts
+>ts : typeof cjsi
 >mjsSource : true
 
 === tests/cases/conformance/node/index.cts ===
@@ -187,28 +187,28 @@ export const implicitCjsSource = true;
 === tests/cases/conformance/node/node_modules/inner/index.d.mts ===
 // esm format file
 import * as cjs from "inner/a";
->cjs : any
+>cjs : typeof cjs
 
 import * as mjs from "inner/b";
->mjs : typeof mjs
+>mjs : typeof cjs
 
 import * as type from "inner";
->type : typeof type
+>type : typeof cjs
 
 import * as ts from "inner/types";
->ts : typeof ts
+>ts : typeof cjs
 
 export { cjs };
->cjs : any
+>cjs : typeof cjs
 
 export { mjs };
->mjs : any
+>mjs : typeof cjs
 
 export { type };
->type : any
+>type : typeof cjs
 
 export { ts };
->ts : any
+>ts : typeof cjs
 
 export const mjsSource = true;
 >mjsSource : true

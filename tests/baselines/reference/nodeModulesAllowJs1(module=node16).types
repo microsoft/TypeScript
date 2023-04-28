@@ -244,10 +244,10 @@ void m23;
 
 // These should _mostly_ work - `import = require` always desugars to require calls, which do have extension and index resolution (but can't load anything that resolves to esm!)
 import m24 = require("./");
->m24 : typeof m24
+>m24 : typeof m1
 
 import m25 = require("./index");
->m25 : typeof m24
+>m25 : typeof m1
 
 import m26 = require("./subfolder");
 >m26 : typeof m26
@@ -268,21 +268,21 @@ import m31 = require("./subfolder2/index");
 >m31 : typeof m29
 
 import m32 = require("./subfolder2/another");
->m32 : typeof m32
+>m32 : typeof m10
 
 import m33 = require("./subfolder2/another/");
->m33 : typeof m32
+>m33 : typeof m10
 
 import m34 = require("./subfolder2/another/index");
->m34 : typeof m32
+>m34 : typeof m10
 
 void m24;
 >void m24 : undefined
->m24 : typeof m24
+>m24 : typeof m1
 
 void m25;
 >void m25 : undefined
->m25 : typeof m24
+>m25 : typeof m1
 
 void m26;
 >void m26 : undefined
@@ -310,15 +310,15 @@ void m31;
 
 void m32;
 >void m32 : undefined
->m32 : typeof m32
+>m32 : typeof m10
 
 void m33;
 >void m33 : undefined
->m33 : typeof m32
+>m33 : typeof m10
 
 void m34;
 >void m34 : undefined
->m34 : typeof m32
+>m34 : typeof m10
 
 // These shouldn't work - dynamic `import()` always uses the esm resolver, which does not have extension resolution
 const _m35 = import("./");
@@ -855,10 +855,10 @@ void m23;
 
 // These should _mostly_ work - `import = require` always desugars to require calls, which do have extension and index resolution (but can't load anything that resolves to esm!)
 import m24 = require("./");
->m24 : typeof m24
+>m24 : typeof m1
 
 import m25 = require("./index");
->m25 : typeof m24
+>m25 : typeof m1
 
 import m26 = require("./subfolder");
 >m26 : typeof m26
@@ -879,21 +879,21 @@ import m31 = require("./subfolder2/index");
 >m31 : typeof m29
 
 import m32 = require("./subfolder2/another");
->m32 : typeof m32
+>m32 : typeof m10
 
 import m33 = require("./subfolder2/another/");
->m33 : typeof m32
+>m33 : typeof m10
 
 import m34 = require("./subfolder2/another/index");
->m34 : typeof m32
+>m34 : typeof m10
 
 void m24;
 >void m24 : undefined
->m24 : typeof m24
+>m24 : typeof m1
 
 void m25;
 >void m25 : undefined
->m25 : typeof m24
+>m25 : typeof m1
 
 void m26;
 >void m26 : undefined
@@ -921,15 +921,15 @@ void m31;
 
 void m32;
 >void m32 : undefined
->m32 : typeof m32
+>m32 : typeof m10
 
 void m33;
 >void m33 : undefined
->m33 : typeof m32
+>m33 : typeof m10
 
 void m34;
 >void m34 : undefined
->m34 : typeof m32
+>m34 : typeof m10
 
 // These shouldn't work - dynamic `import()` always uses the esm resolver, which does not have extension resolution
 const _m35 = import("./");

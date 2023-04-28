@@ -121,7 +121,7 @@ import * as mjs from "inner/mjs";
 >mjs : typeof mjs
 
 import * as type from "inner";
->type : typeof type
+>type : typeof mjs.mjs.type.type
 
 export { cjs };
 >cjs : any
@@ -130,7 +130,7 @@ export { mjs };
 >mjs : typeof mjs
 
 export { type };
->type : typeof type
+>type : typeof mjs.mjs.type.type
 
 === tests/cases/conformance/node/node_modules/inner/index.d.mts ===
 // esm format file
@@ -141,16 +141,16 @@ import * as mjs from "inner/mjs";
 >mjs : typeof mjs
 
 import * as type from "inner";
->type : typeof type
+>type : typeof mjs.type
 
 export { cjs };
 >cjs : typeof cjs
 
 export { mjs };
->mjs : any
+>mjs : typeof mjs
 
 export { type };
->type : any
+>type : typeof mjs.type
 
 === tests/cases/conformance/node/node_modules/inner/index.d.cts ===
 // cjs format file

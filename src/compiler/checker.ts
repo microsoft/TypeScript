@@ -5173,7 +5173,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
 
                 const targetFile = moduleSymbol?.declarations?.find(isSourceFile);
-                const isEsmCjsRef = targetFile && isESMFormatImportImportingCommonjsFormatFile(getUsageModeForExpression(reference), targetFile.impliedNodeFormat);
+                const usageMode = getUsageModeForExpression(reference);
+                const isEsmCjsRef = targetFile && isESMFormatImportImportingCommonjsFormatFile(usageMode, targetFile.impliedNodeFormat);
                 // Special case for `any` modules to avoid breaking existing code.
                 // For `declare module "path";`, it seems reasonable to say that the
                 // author is intentionally treating the entire module as `any`, and a
@@ -5184,7 +5185,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // `export = ` and definitely would have a synthetic default. In this
                 // case, it looks like a namespace import would ideally be typed as
                 // `{ default: any }`, but that would be a breaking change.
-                if (getESModuleInterop(compilerOptions) && !(type.flags & TypeFlags.Any) || isEsmCjsRef) {
+                if (getESModuleInterop(compilerOptions) && !(type.flags & TypeFlags.Any) && usageMode !== ModuleKind.ESNext || isEsmCjsRef) {
                     const moduleType = type.flags & TypeFlags.StructuredType
                         ? getTypeWithSyntheticDefaultImportType(type, symbol, moduleSymbol!, reference)
                         : createDefaultPropertyWrapperForModule(symbol, symbol.parent);
