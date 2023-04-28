@@ -49,6 +49,10 @@ declare class C1 {
     value: A;
 }
 declare class C2 extends C1 {
+    /**
+     * @type {A}
+     */
+    value: A;
 }
 declare class C3 extends C1 {
     /**

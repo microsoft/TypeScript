@@ -9550,11 +9550,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         // need to be merged namespace members
                         return [];
                     }
-                    if (p.flags & SymbolFlags.Prototype || p.escapedName === "constructor" ||
-                        (baseType && getPropertyOfType(baseType, p.escapedName)
-                         && isReadonlySymbol(getPropertyOfType(baseType, p.escapedName)!) === isReadonlySymbol(p)
-                         && (p.flags & SymbolFlags.Optional) === (getPropertyOfType(baseType, p.escapedName)!.flags & SymbolFlags.Optional)
-                         && isTypeIdenticalTo(getTypeOfSymbol(p), getTypeOfPropertyOfType(baseType, p.escapedName)!))) {
+                    if (p.flags & SymbolFlags.Prototype ||
+                        p.escapedName === "constructor" ||
+                        baseType && getPropertyOfType(baseType, p.escapedName) === p) {
                         return [];
                     }
                     const flag = (modifierFlags & ~ModifierFlags.Async) | (isStatic ? ModifierFlags.Static : 0);

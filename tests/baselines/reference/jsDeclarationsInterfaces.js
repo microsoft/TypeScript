@@ -164,6 +164,7 @@ export interface M<T_1> {
 }
 export interface N<U_1> extends M<U_1> {
     other: U_1;
+    field: U_1;
 }
 export interface O {
     [idx: string]: string;
