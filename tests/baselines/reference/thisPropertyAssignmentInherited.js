@@ -28,7 +28,7 @@ export class Element {
      * @returns {String}
      */
     get textContent(): string;
-    cloneNode(): Element;
+    cloneNode(): this;
 }
 export class HTMLElement extends Element {
 }

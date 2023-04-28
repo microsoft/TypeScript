@@ -9543,6 +9543,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 initializer: Expression | undefined
             ) => T, methodKind: SignatureDeclaration["kind"], useAccessors: boolean): (p: Symbol, isStatic: boolean, baseType: Type | undefined) => (T | AccessorDeclaration | (T | AccessorDeclaration)[]) {
                 return function serializePropertySymbol(p: Symbol, isStatic: boolean, baseType: Type | undefined): (T | AccessorDeclaration | (T | AccessorDeclaration)[]) {
+                    if (methodKind === SyntaxKind.MethodDeclaration && getCheckFlags(p) & CheckFlags.Instantiated) {
+                        p = getSymbolLinks(p).target!;
+                    }
                     const modifierFlags = getDeclarationModifierFlagsFromSymbol(p);
                     const isPrivate = !!(modifierFlags & ModifierFlags.Private);
                     if (isStatic && (p.flags & (SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias))) {
