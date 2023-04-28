@@ -5185,7 +5185,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // `export = ` and definitely would have a synthetic default. In this
                 // case, it looks like a namespace import would ideally be typed as
                 // `{ default: any }`, but that would be a breaking change.
-                if (getESModuleInterop(compilerOptions) && !(type.flags & TypeFlags.Any) && usageMode !== ModuleKind.ESNext || isEsmCjsRef) {
+                const moduleIsAnyTyped = (type.flags & TypeFlags.Any);
+                if (getESModuleInterop(compilerOptions) && !moduleIsAnyTyped && usageMode !== ModuleKind.ESNext || isEsmCjsRef) {
                     const moduleType = type.flags & TypeFlags.StructuredType
                         ? getTypeWithSyntheticDefaultImportType(type, symbol, moduleSymbol!, reference)
                         : createDefaultPropertyWrapperForModule(symbol, symbol.parent);

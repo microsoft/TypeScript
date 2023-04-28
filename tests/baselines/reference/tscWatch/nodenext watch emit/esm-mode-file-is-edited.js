@@ -33,12 +33,7 @@ Output::
 >> Screen clear
 [[90m12:00:21 AM[0m] Starting compilation in watch mode...
 
-[96mproject/src/index.ts[0m:[93m3[0m:[93m7[0m - [91merror[0m[90m TS2339: [0mProperty 'fn' does not exist on type 'typeof import("thing", { assert: { "resolution-mode": "import" } })'.
-
-[7m3[0m Thing.fn();
-[7m [0m [91m      ~~[0m
-
-[[90m12:00:27 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:27 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -97,12 +92,7 @@ Output::
 >> Screen clear
 [[90m12:00:30 AM[0m] File change detected. Starting incremental compilation...
 
-[96mproject/src/index.ts[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2339: [0mProperty 'fn' does not exist on type 'typeof import("thing", { assert: { "resolution-mode": "import" } })'.
-
-[7m2[0m Thing.fn();
-[7m [0m [91m      ~~[0m
-
-[[90m12:00:34 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:34 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
