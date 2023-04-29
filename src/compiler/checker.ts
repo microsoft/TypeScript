@@ -16436,6 +16436,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (types.length === 1) {
             return types[0];
         }
+        types = [...new Set(types)];
         // We optimize for the common case of unioning a union type with some other type (such as `undefined`).
         if (types.length === 2 && !origin && (types[0].flags & TypeFlags.Union || types[1].flags & TypeFlags.Union)) {
             const infix = unionReduction === UnionReduction.None ? "N" : unionReduction === UnionReduction.Subtype ? "S" : "L";
@@ -16763,6 +16764,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // Also, unlike union types, the order of the constituent types is preserved in order that overload resolution
     // for intersections of types with signatures can be deterministic.
     function getIntersectionType(types: readonly Type[], aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[], noSupertypeReduction?: boolean): Type {
+        types = [...new Set(types.slice().reverse())].reverse();
         const typeMembershipMap: Map<string, Type> = new Map();
         const includes = addTypesToIntersection(typeMembershipMap, 0 as TypeFlags, types);
         const typeSet: Type[] = arrayFrom(typeMembershipMap.values());
