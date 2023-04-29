@@ -109,12 +109,11 @@ function f1() {
                     if (!(y_1_1 = _e.sent(), _a = y_1_1.done, !_a)) return [3 /*break*/, 4];
                     _c = y_1_1.value;
                     _d = false;
-                    {
-                        x = _c;
-                    }
-                    _d = true;
+                    x = _c;
                     _e.label = 3;
-                case 3: return [3 /*break*/, 1];
+                case 3:
+                    _d = true;
+                    return [3 /*break*/, 1];
                 case 4: return [3 /*break*/, 11];
                 case 5:
                     e_1_1 = _e.sent();
@@ -196,12 +195,11 @@ function f2() {
                     if (!(y_1_1 = _e.sent(), _a = y_1_1.done, !_a)) return [3 /*break*/, 4];
                     _c = y_1_1.value;
                     _d = false;
-                    {
-                        x = _c;
-                    }
-                    _d = true;
+                    x = _c;
                     _e.label = 3;
-                case 3: return [3 /*break*/, 1];
+                case 3:
+                    _d = true;
+                    return [3 /*break*/, 1];
                 case 4: return [3 /*break*/, 11];
                 case 5:
                     e_1_1 = _e.sent();
@@ -286,12 +284,11 @@ function f3() {
                     if (!(y_1_1 = _e.sent(), _b = y_1_1.done, !_b)) return [3 /*break*/, 4];
                     _d = y_1_1.value;
                     _a = false;
-                    {
-                        x = _d;
-                    }
-                    _a = true;
+                    x = _d;
                     _e.label = 3;
-                case 3: return [3 /*break*/, 1];
+                case 3:
+                    _a = true;
+                    return [3 /*break*/, 1];
                 case 4: return [3 /*break*/, 11];
                 case 5:
                     e_1_1 = _e.sent();
@@ -376,12 +373,11 @@ function f4() {
                     if (!(y_1_1 = _e.sent(), _b = y_1_1.done, !_b)) return [3 /*break*/, 4];
                     _d = y_1_1.value;
                     _a = false;
-                    {
-                        x = _d;
-                    }
-                    _a = true;
+                    x = _d;
                     _e.label = 3;
-                case 3: return [3 /*break*/, 1];
+                case 3:
+                    _a = true;
+                    return [3 /*break*/, 1];
                 case 4: return [3 /*break*/, 11];
                 case 5:
                     e_1_1 = _e.sent();
@@ -464,13 +460,11 @@ function f5() {
                     if (!(y_1_1 = _e.sent(), _a = y_1_1.done, !_a)) return [3 /*break*/, 4];
                     _c = y_1_1.value;
                     _d = false;
-                    {
-                        x = _c;
-                        return [3 /*break*/, 3];
-                    }
+                    x = _c;
+                    return [3 /*break*/, 3];
+                case 3:
                     _d = true;
-                    _e.label = 3;
-                case 3: return [3 /*break*/, 1];
+                    return [3 /*break*/, 1];
                 case 4: return [3 /*break*/, 11];
                 case 5:
                     e_1_1 = _e.sent();
@@ -556,13 +550,11 @@ function f6() {
                     if (!(y_1_1 = _e.sent(), _b = y_1_1.done, !_b)) return [3 /*break*/, 4];
                     _d = y_1_1.value;
                     _a = false;
-                    {
-                        x = _d;
-                        return [3 /*break*/, 3];
-                    }
+                    x = _d;
+                    return [3 /*break*/, 3];
+                case 3:
                     _a = true;
-                    _e.label = 3;
-                case 3: return [3 /*break*/, 1];
+                    return [3 /*break*/, 1];
                 case 4: return [3 /*break*/, 11];
                 case 5:
                     e_1_1 = _e.sent();
@@ -648,12 +640,11 @@ function f7() {
                     if (!(y_1_1 = _e.sent(), _b = y_1_1.done, !_b)) return [3 /*break*/, 4];
                     _d = y_1_1.value;
                     _a = false;
-                    {
-                        x = _d;
-                    }
-                    _a = true;
+                    x = _d;
                     _e.label = 3;
-                case 3: return [3 /*break*/, 1];
+                case 3:
+                    _a = true;
+                    return [3 /*break*/, 1];
                 case 4: return [3 /*break*/, 11];
                 case 5:
                     e_1_1 = _e.sent();

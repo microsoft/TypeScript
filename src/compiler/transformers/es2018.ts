@@ -765,43 +765,27 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
         const exitNonUserCodeStatement = factory.createExpressionStatement(exitNonUserCodeExpression);
         setSourceMapRange(exitNonUserCodeStatement, node.expression);
 
-        const enterNonUserCodeExpression = factory.createAssignment(nonUserCode, factory.createTrue());
-        const enterNonUserCodeStatement = factory.createExpressionStatement(enterNonUserCodeExpression);
-        setSourceMapRange(enterNonUserCodeStatement, node.expression);
-
-        const statements: Statement[] = [];
+        const statements: Statement[] = [iteratorValueStatement, exitNonUserCodeStatement];
         const binding = createForOfBindingStatement(factory, node.initializer, value);
         statements.push(visitNode(binding, visitor, isStatement));
 
-        let bodyLocation: TextRange | undefined;
         let statementsLocation: TextRange | undefined;
         const statement = visitIterationBody(node.statement, visitor, context);
         if (isBlock(statement)) {
             addRange(statements, statement.statements);
-            bodyLocation = statement;
             statementsLocation = statement.statements;
         }
         else {
             statements.push(statement);
         }
 
-        const body = setEmitFlags(
-            setTextRange(
-                factory.createBlock(
-                    setTextRange(factory.createNodeArray(statements), statementsLocation),
-                    /*multiLine*/ true
-                ),
-                bodyLocation
+        return setEmitFlags(
+            factory.createBlock(
+                setTextRange(factory.createNodeArray(statements), statementsLocation),
+                /*multiLine*/ true
             ),
             EmitFlags.NoSourceMap | EmitFlags.NoTokenSourceMaps
         );
-
-        return factory.createBlock([
-            iteratorValueStatement,
-            exitNonUserCodeStatement,
-            body,
-            enterNonUserCodeStatement
-        ]);
     }
 
     function createDownlevelAwait(expression: Expression) {
@@ -852,7 +836,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                         factory.createAssignment(done, getDone),
                         factory.createLogicalNot(done)
                     ]),
-                    /*incrementor*/ undefined,
+                    /*incrementor*/ factory.createAssignment(nonUserCode, factory.createTrue()),
                     /*statement*/ convertForOfStatementHead(node, getValue, nonUserCode)
                 ),
                 /*location*/ node

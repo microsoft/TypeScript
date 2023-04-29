@@ -62,13 +62,10 @@ async function f1() {
     var _a, e_1, _b, _c;
     let y;
     try {
-        for (var _d = true, y_1 = __asyncValues(y), y_1_1; y_1_1 = await y_1.next(), _a = y_1_1.done, !_a;) {
+        for (var _d = true, y_1 = __asyncValues(y), y_1_1; y_1_1 = await y_1.next(), _a = y_1_1.done, !_a; _d = true) {
             _c = y_1_1.value;
             _d = false;
-            {
-                const x = _c;
-            }
-            _d = true;
+            const x = _c;
         }
     }
     catch (e_1_1) { e_1 = { error: e_1_1 }; }
@@ -91,13 +88,10 @@ async function f2() {
     var _a, e_1, _b, _c;
     let x, y;
     try {
-        for (var _d = true, y_1 = __asyncValues(y), y_1_1; y_1_1 = await y_1.next(), _a = y_1_1.done, !_a;) {
+        for (var _d = true, y_1 = __asyncValues(y), y_1_1; y_1_1 = await y_1.next(), _a = y_1_1.done, !_a; _d = true) {
             _c = y_1_1.value;
             _d = false;
-            {
-                x = _c;
-            }
-            _d = true;
+            x = _c;
         }
     }
     catch (e_1_1) { e_1 = { error: e_1_1 }; }
@@ -133,13 +127,10 @@ function f3() {
         var _a, e_1, _b, _c;
         let y;
         try {
-            for (var _d = true, y_1 = __asyncValues(y), y_1_1; y_1_1 = yield __await(y_1.next()), _a = y_1_1.done, !_a;) {
+            for (var _d = true, y_1 = __asyncValues(y), y_1_1; y_1_1 = yield __await(y_1.next()), _a = y_1_1.done, !_a; _d = true) {
                 _c = y_1_1.value;
                 _d = false;
-                {
-                    const x = _c;
-                }
-                _d = true;
+                const x = _c;
             }
         }
         catch (e_1_1) { e_1 = { error: e_1_1 }; }
@@ -176,13 +167,10 @@ function f4() {
         var _a, e_1, _b, _c;
         let x, y;
         try {
-            for (var _d = true, y_1 = __asyncValues(y), y_1_1; y_1_1 = yield __await(y_1.next()), _a = y_1_1.done, !_a;) {
+            for (var _d = true, y_1 = __asyncValues(y), y_1_1; y_1_1 = yield __await(y_1.next()), _a = y_1_1.done, !_a; _d = true) {
                 _c = y_1_1.value;
                 _d = false;
-                {
-                    x = _c;
-                }
-                _d = true;
+                x = _c;
             }
         }
         catch (e_1_1) { e_1 = { error: e_1_1 }; }
@@ -207,14 +195,11 @@ async function f5() {
     var _a, e_1, _b, _c;
     let y;
     try {
-        outer: for (var _d = true, y_1 = __asyncValues(y), y_1_1; y_1_1 = await y_1.next(), _a = y_1_1.done, !_a;) {
+        outer: for (var _d = true, y_1 = __asyncValues(y), y_1_1; y_1_1 = await y_1.next(), _a = y_1_1.done, !_a; _d = true) {
             _c = y_1_1.value;
             _d = false;
-            {
-                const x = _c;
-                continue outer;
-            }
-            _d = true;
+            const x = _c;
+            continue outer;
         }
     }
     catch (e_1_1) { e_1 = { error: e_1_1 }; }
@@ -251,14 +236,11 @@ function f6() {
         var _a, e_1, _b, _c;
         let y;
         try {
-            outer: for (var _d = true, y_1 = __asyncValues(y), y_1_1; y_1_1 = yield __await(y_1.next()), _a = y_1_1.done, !_a;) {
+            outer: for (var _d = true, y_1 = __asyncValues(y), y_1_1; y_1_1 = yield __await(y_1.next()), _a = y_1_1.done, !_a; _d = true) {
                 _c = y_1_1.value;
                 _d = false;
-                {
-                    const x = _c;
-                    continue outer;
-                }
-                _d = true;
+                const x = _c;
+                continue outer;
             }
         }
         catch (e_1_1) { e_1 = { error: e_1_1 }; }
@@ -297,13 +279,10 @@ function f7() {
         let y;
         for (;;) {
             try {
-                for (var _d = true, y_1 = (e_1 = void 0, __asyncValues(y)), y_1_1; y_1_1 = yield __await(y_1.next()), _a = y_1_1.done, !_a;) {
+                for (var _d = true, y_1 = (e_1 = void 0, __asyncValues(y)), y_1_1; y_1_1 = yield __await(y_1.next()), _a = y_1_1.done, !_a; _d = true) {
                     _c = y_1_1.value;
                     _d = false;
-                    {
-                        const x = _c;
-                    }
-                    _d = true;
+                    const x = _c;
                 }
             }
             catch (e_1_1) { e_1 = { error: e_1_1 }; }
