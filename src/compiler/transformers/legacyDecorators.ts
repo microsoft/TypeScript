@@ -18,6 +18,7 @@ import {
 } from "../factory/emitNode";
 import {
     isBlock,
+    isClassStaticBlockDeclaration,
     isComputedPropertyName,
     isDecorator,
     isHeritageClause,
@@ -354,6 +355,27 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
         let decorationStatements: Statement[] | undefined = [];
         ({ members, decorationStatements } = transformDecoratorsOfClassElements(node, members));
 
+        // If we're emitting to ES2022 or later then we need to reassign the class alias before
+        // static initializers are evaluated.
+        const assignClassAliasInStaticBlock =
+            languageVersion >= ScriptTarget.ES2022 &&
+            !!classAlias &&
+            some(members, member =>
+                isPropertyDeclaration(member) && hasSyntacticModifier(member, ModifierFlags.Static) ||
+                isClassStaticBlockDeclaration(member));
+        if (assignClassAliasInStaticBlock) {
+            members = setTextRange(factory.createNodeArray([
+                factory.createClassStaticBlockDeclaration(
+                    factory.createBlock([
+                        factory.createExpressionStatement(
+                            factory.createAssignment(classAlias, factory.createThis())
+                        )
+                    ])
+                ),
+                ...members
+            ]), members);
+        }
+
         const classExpression = factory.createClassExpression(
             modifiers,
             name && isGeneratedIdentifier(name) ? undefined : name,
@@ -370,7 +392,7 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
             declName,
             /*exclamationToken*/ undefined,
             /*type*/ undefined,
-            classAlias ? factory.createAssignment(classAlias, classExpression) : classExpression
+            classAlias && !assignClassAliasInStaticBlock ? factory.createAssignment(classAlias, classExpression) : classExpression
         );
         setOriginalNode(varDecl, node);
 

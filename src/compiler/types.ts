@@ -1220,6 +1220,7 @@ export type HasJSDoc =
     | PropertyDeclaration
     | PropertySignature
     | ReturnStatement
+    | SemicolonClassElement
     | ShorthandPropertyAssignment
     | SpreadAssignment
     | SwitchStatement
@@ -2102,7 +2103,7 @@ export interface ConstructorDeclaration extends FunctionLikeDeclarationBase, Cla
 }
 
 /** For when we encounter a semicolon in a class declaration. ES6 allows these as class elements. */
-export interface SemicolonClassElement extends ClassElement {
+export interface SemicolonClassElement extends ClassElement, JSDocContainer {
     readonly kind: SyntaxKind.SemicolonClassElement;
     readonly parent: ClassLikeDeclaration;
 }
