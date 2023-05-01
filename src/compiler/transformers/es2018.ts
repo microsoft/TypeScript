@@ -769,22 +769,24 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
         const binding = createForOfBindingStatement(factory, node.initializer, value);
         statements.push(visitNode(binding, visitor, isStatement));
 
+        let bodyLocation: TextRange | undefined;
         let statementsLocation: TextRange | undefined;
         const statement = visitIterationBody(node.statement, visitor, context);
         if (isBlock(statement)) {
             addRange(statements, statement.statements);
+            bodyLocation = statement;
             statementsLocation = statement.statements;
         }
         else {
             statements.push(statement);
         }
 
-        return setEmitFlags(
+        return setTextRange(
             factory.createBlock(
                 setTextRange(factory.createNodeArray(statements), statementsLocation),
                 /*multiLine*/ true
             ),
-            EmitFlags.NoSourceMap | EmitFlags.NoTokenSourceMaps
+            bodyLocation
         );
     }
 
