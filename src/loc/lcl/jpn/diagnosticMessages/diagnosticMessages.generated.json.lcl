@@ -15487,7 +15487,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[分散注釈は、オブジェクト、関数、コンストラクター、およびマップされた型の型エイリアスでのみサポートされています。]]></Val>
+            <Val><![CDATA[変性注釈は、オブジェクト、関数、コンストラクター、およびマップされた型の型エイリアスでのみサポートされています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
