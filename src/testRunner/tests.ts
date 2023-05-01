@@ -170,6 +170,7 @@ import "./unittests/tsserver/openFile";
 import "./unittests/tsserver/packageJsonInfo";
 import "./unittests/tsserver/partialSemanticServer";
 import "./unittests/tsserver/plugins";
+import "./unittests/tsserver/pluginsAsync";
 import "./unittests/tsserver/projectErrors";
 import "./unittests/tsserver/projectReferenceCompileOnSave";
 import "./unittests/tsserver/projectReferenceErrors";

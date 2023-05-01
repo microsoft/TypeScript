@@ -1,5 +1,6 @@
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
+import { ActionWatchTypingLocations } from "../../_namespaces/ts.server";
 import { ensureErrorFreeBuild } from "./solutionBuilder";
 import {
     changeToHostTrackingWrittenFiles,
@@ -280,11 +281,12 @@ export class TestTypingsInstallerWorker extends ts.server.typingsInstaller.Typin
         this.addPostExecAction("success", requestId, packageNames, cb);
     }
 
-    sendResponse(response: ts.server.SetTypings | ts.server.InvalidateCachedTypings) {
+    sendResponse(response: ts.server.SetTypings | ts.server.InvalidateCachedTypings | ts.server.WatchTypingLocations) {
         if (this.log.isEnabled()) {
             this.log.writeLine(`Sending response:\n    ${JSON.stringify(response)}`);
         }
-        this.projectService.updateTypingsForProject(response);
+        if (response.kind !== ActionWatchTypingLocations) this.projectService.updateTypingsForProject(response);
+        else this.projectService.watchTypingLocations(response);
     }
 
     enqueueInstallTypingsRequest(project: ts.server.Project, typeAcquisition: ts.TypeAcquisition, unresolvedImports: ts.SortedReadonlyArray<string>) {
@@ -324,7 +326,9 @@ export class TestTypingsInstaller<T extends TestTypingsInstallerWorker = TestTyp
         this.projectService = projectService;
     }
 
-    onProjectClosed = ts.noop;
+    onProjectClosed(p: ts.server.Project) {
+        this.installer?.closeProject({ projectName: p.getProjectName(), kind: "closeProject" });
+    }
 
     enqueueInstallTypingsRequest(project: ts.server.Project, typeAcquisition: ts.TypeAcquisition, unresolvedImports: ts.SortedReadonlyArray<string>) {
         if (!this.installer) {
