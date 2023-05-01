@@ -1,4 +1,5 @@
 import * as Utils from "../../_namespaces/Utils";
+import { getFsConentsForNode10ResultAtTypesPackageJson, getFsContentsForNode10Result, getFsContentsForNode10ResultDts, getFsContentsForNode10ResultPackageJson } from "../helpers/node10Result";
 import { verifyTscWatch } from "../helpers/tscWatch";
 import {
     createWatchedSystem,
@@ -430,6 +431,111 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 edit: sys => sys.prependFile(`/user/username/projects/myproject/a.ts`, `/// <reference types="pkg" resolution-mode="import"/>\n`),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
+        ]
+    });
+
+    verifyTscWatch({
+        scenario: "moduleResolution",
+        subScenario: "node10Result",
+        sys: () => createWatchedSystem(getFsContentsForNode10Result(), { currentDirectory: "/home/src/projects/project" }),
+        commandLineArgs: ["-w", "--extendedDiagnostics"],
+        edits: [
+            {
+                caption: "delete the node10Result in @types",
+                edit: sys => sys.deleteFile("/home/src/projects/project/node_modules/@types/bar/index.d.ts"),
+                timeouts: sys => {
+                    sys.runQueuedTimeoutCallbacks();
+                    sys.runQueuedTimeoutCallbacks();
+                },
+            },
+            {
+                caption: "delete the ndoe10Result in package/types",
+                edit: sys => sys.deleteFile("/home/src/projects/project/node_modules/foo/index.d.ts"),
+                timeouts: sys => {
+                    sys.runQueuedTimeoutCallbacks();
+                    sys.runQueuedTimeoutCallbacks();
+                },
+            },
+            {
+                caption: "add the node10Result in @types",
+                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/@types/bar/index.d.ts", getFsContentsForNode10ResultDts("bar")),
+                timeouts: sys => {
+                    sys.runQueuedTimeoutCallbacks();
+                    sys.runQueuedTimeoutCallbacks();
+                },
+            },
+            {
+                caption: "add the ndoe10Result in package/types",
+                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/foo/index.d.ts", getFsContentsForNode10ResultDts("foo")),
+                timeouts: sys => {
+                    sys.runQueuedTimeoutCallbacks();
+                    sys.runQueuedTimeoutCallbacks();
+                },
+            },
+            {
+                caption: "update package.json from @types so error is fixed",
+                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/@types/bar/package.json", getFsConentsForNode10ResultAtTypesPackageJson("bar", /*addTypesCondition*/ true)),
+                timeouts: sys => {
+                    sys.runQueuedTimeoutCallbacks();
+                    sys.runQueuedTimeoutCallbacks();
+                },
+            },
+            {
+                caption: "update package.json so error is fixed",
+                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/foo/package.json", getFsContentsForNode10ResultPackageJson("foo", /*addTypes*/ true, /*addTypesCondition*/ true)),
+                timeouts: sys => {
+                    sys.runQueuedTimeoutCallbacks();
+                    sys.runQueuedTimeoutCallbacks();
+                },
+            },
+            {
+                caption: "update package.json from @types so error is introduced",
+                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/@types/bar2/package.json", getFsConentsForNode10ResultAtTypesPackageJson("bar2", /*addTypesCondition*/ false)),
+                timeouts: sys => {
+                    sys.runQueuedTimeoutCallbacks();
+                    sys.runQueuedTimeoutCallbacks();
+                },
+            },
+            {
+                caption: "update package.json so error is introduced",
+                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/foo2/package.json", getFsContentsForNode10ResultPackageJson("foo2", /*addTypes*/ true, /*addTypesCondition*/ false)),
+                timeouts: sys => {
+                    sys.runQueuedTimeoutCallbacks();
+                    sys.runQueuedTimeoutCallbacks();
+                },
+            },
+            {
+                caption: "delete the node10Result in @types",
+                edit: sys => sys.deleteFile("/home/src/projects/project/node_modules/@types/bar2/index.d.ts"),
+                timeouts: sys => {
+                    sys.runQueuedTimeoutCallbacks();
+                    sys.runQueuedTimeoutCallbacks();
+                },
+            },
+            {
+                caption: "delete the ndoe10Result in package/types",
+                edit: sys => sys.deleteFile("/home/src/projects/project/node_modules/foo2/index.d.ts"),
+                timeouts: sys => {
+                    sys.runQueuedTimeoutCallbacks();
+                    sys.runQueuedTimeoutCallbacks();
+                },
+            },
+            {
+                caption: "add the node10Result in @types",
+                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/@types/bar2/index.d.ts", getFsContentsForNode10ResultDts("bar2")),
+                timeouts: sys => {
+                    sys.runQueuedTimeoutCallbacks();
+                    sys.runQueuedTimeoutCallbacks();
+                },
+            },
+            {
+                caption: "add the ndoe10Result in package/types",
+                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/foo2/index.d.ts", getFsContentsForNode10ResultDts("foo2")),
+                timeouts: sys => {
+                    sys.runQueuedTimeoutCallbacks();
+                    sys.runQueuedTimeoutCallbacks();
+                },
+            },
         ]
     });
 });

@@ -109,6 +109,7 @@ import "./unittests/tsc/forceConsistentCasingInFileNames";
 import "./unittests/tsc/incremental";
 import "./unittests/tsc/libraryResolution";
 import "./unittests/tsc/listFilesOnly";
+import "./unittests/tsc/moduleResolution";
 import "./unittests/tsc/projectReferences";
 import "./unittests/tsc/projectReferencesConfig";
 import "./unittests/tsc/redirect";
