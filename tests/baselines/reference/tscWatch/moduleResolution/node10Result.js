@@ -419,7 +419,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-7439170493-export declare const bar2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","impliedFormat":99}],"root":[4],"options":{"strict":true},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"exportedModulesMap":[[4,1]],"semanticDiagnosticsPerFile":[1,[4,[{"file":"./index.mts","start":20,"length":5,"code":7016,"category":1,"messageText":{"messageText":"Could not find a declaration file for module 'foo'. '/home/src/projects/project/node_modules/foo/index.mjs' implicitly has an 'any' type.","category":1,"code":7016,"next":[{"messageText":"There are types at '/home/src/projects/project/node_modules/foo/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The 'foo' library may need to update its package.json or typings.","category":3,"code":6278}]}},{"file":"./index.mts","start":47,"length":5,"code":7016,"category":1,"messageText":{"messageText":"Could not find a declaration file for module 'bar'. '/home/src/projects/project/node_modules/bar/index.mjs' implicitly has an 'any' type.","category":1,"code":7016,"next":[{"messageText":"There are types at '/home/src/projects/project/node_modules/@types/bar/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The '@types/bar' library may need to update its package.json or typings.","category":3,"code":6278}]}}]],3,2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-7439170493-export declare const bar2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","impliedFormat":99}],"root":[4],"options":{"strict":true},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"exportedModulesMap":[[4,1]],"semanticDiagnosticsPerFile":[1,[4,[{"file":"./index.mts","start":20,"length":5,"code":7016,"category":1,"messageText":{"messageText":"Could not find a declaration file for module 'foo'. '/home/src/projects/project/node_modules/foo/index.mjs' implicitly has an 'any' type.","category":1,"code":7016,"next":[{"info":{"moduleReference":"foo","mode":99}}]}},{"file":"./index.mts","start":47,"length":5,"code":7016,"category":1,"messageText":{"messageText":"Could not find a declaration file for module 'bar'. '/home/src/projects/project/node_modules/bar/index.mjs' implicitly has an 'any' type.","category":1,"code":7016,"next":[{"info":{"moduleReference":"bar","mode":99}}]}}]],3,2]},"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -514,9 +514,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
               "code": 7016,
               "next": [
                 {
-                  "messageText": "There are types at '/home/src/projects/project/node_modules/foo/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The 'foo' library may need to update its package.json or typings.",
-                  "category": 3,
-                  "code": 6278
+                  "info": {
+                    "moduleReference": "foo",
+                    "mode": 99
+                  }
                 }
               ]
             }
@@ -533,9 +534,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
               "code": 7016,
               "next": [
                 {
-                  "messageText": "There are types at '/home/src/projects/project/node_modules/@types/bar/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The '@types/bar' library may need to update its package.json or typings.",
-                  "category": 3,
-                  "code": 6278
+                  "info": {
+                    "moduleReference": "bar",
+                    "mode": 99
+                  }
                 }
               ]
             }
@@ -547,7 +549,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
     ]
   },
   "version": "FakeTSVersion",
-  "size": 2177
+  "size": 1721
 }
 
 
@@ -558,14 +560,140 @@ Input::
 
 Before running Timeout callback:: count: 1
 4: timerToInvalidateFailedLookupResolutions
-After running Timeout callback:: count: 0
-Before running Timeout callback:: count: 0
+After running Timeout callback:: count: 1
+5: timerToUpdateProgram
+Before running Timeout callback:: count: 1
+5: timerToUpdateProgram
 After running Timeout callback:: count: 0
 Output::
 DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup, Cancelled earlier one
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Failed Lookup Locations
+Scheduling update
+Synchronizing program
+[[90m12:01:22 AM[0m] File change detected. Starting incremental compilation...
 
+CreatingProgramWith::
+  roots: ["/home/src/projects/project/index.mts"]
+  options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+File '/a/lib/package.json' does not exist according to earlier cached lookups.
+File '/a/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
+Found 'package.json' at '/home/src/projects/project/node_modules/@types/bar2/package.json'.
+Reusing resolution of module 'foo' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/foo/index.mjs' with Package ID 'foo/index.mjs@1.0.0'.
+======== Resolving module 'bar' from '/home/src/projects/project/index.mts'. ========
+Explicitly specified module resolution kind: 'Node16'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
+File '/home/src/projects/project/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Loading module 'bar' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+File '/home/src/projects/project/node_modules/bar/package.json' exists according to earlier cached lookups.
+Entering conditional exports.
+Matched 'exports' condition 'import'.
+Using 'exports' subpath '.' with target './index.mjs'.
+File name '/home/src/projects/project/node_modules/bar/index.mjs' has a '.mjs' extension - stripping it.
+File '/home/src/projects/project/node_modules/bar/index.mts' does not exist.
+File '/home/src/projects/project/node_modules/bar/index.d.mts' does not exist.
+Failed to resolve under condition 'import'.
+Saw non-matching condition 'require'.
+Exiting conditional exports.
+Found 'package.json' at '/home/src/projects/project/node_modules/@types/bar/package.json'.
+Entering conditional exports.
+Saw non-matching condition 'require'.
+Exiting conditional exports.
+Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+File '/home/src/projects/project/node_modules/bar/package.json' exists according to earlier cached lookups.
+Entering conditional exports.
+Matched 'exports' condition 'import'.
+Using 'exports' subpath '.' with target './index.mjs'.
+File name '/home/src/projects/project/node_modules/bar/index.mjs' has a '.mjs' extension - stripping it.
+File '/home/src/projects/project/node_modules/bar/index.mjs' exists - use it as a name resolution result.
+Resolved under condition 'import'.
+Exiting conditional exports.
+Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
+File '/home/src/projects/project/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Loading module 'bar' from 'node_modules' folder, target file types: TypeScript, Declaration.
+File '/home/src/projects/project/node_modules/bar/package.json' exists according to earlier cached lookups.
+'package.json' does not have a 'typings' field.
+'package.json' does not have a 'types' field.
+'package.json' has 'main' field 'index.js' that references '/home/src/projects/project/node_modules/bar/index.js'.
+File '/home/src/projects/project/node_modules/bar/index.js' exists - use it as a name resolution result.
+File '/home/src/projects/project/node_modules/bar/index.js' has an unsupported extension, so skipping it.
+Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/bar/index.js', target file types: TypeScript, Declaration.
+File name '/home/src/projects/project/node_modules/bar/index.js' has a '.js' extension - stripping it.
+File '/home/src/projects/project/node_modules/bar/index.ts' does not exist.
+File '/home/src/projects/project/node_modules/bar/index.tsx' does not exist.
+File '/home/src/projects/project/node_modules/bar/index.d.ts' does not exist.
+File '/home/src/projects/project/node_modules/bar/index.js.ts' does not exist.
+File '/home/src/projects/project/node_modules/bar/index.js.tsx' does not exist.
+File '/home/src/projects/project/node_modules/bar/index.js.d.ts' does not exist.
+Directory '/home/src/projects/project/node_modules/bar/index.js' does not exist, skipping all lookups in it.
+File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
+'package.json' does not have a 'typesVersions' field.
+'package.json' does not have a 'typings' field.
+'package.json' has 'types' field 'index.d.ts' that references '/home/src/projects/project/node_modules/@types/bar/index.d.ts'.
+File '/home/src/projects/project/node_modules/@types/bar/index.d.ts' does not exist.
+Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/@types/bar/index.d.ts', target file types: TypeScript, Declaration.
+File name '/home/src/projects/project/node_modules/@types/bar/index.d.ts' has a '.d.ts' extension - stripping it.
+File '/home/src/projects/project/node_modules/@types/bar/index.ts' does not exist.
+File '/home/src/projects/project/node_modules/@types/bar/index.tsx' does not exist.
+File '/home/src/projects/project/node_modules/@types/bar/index.d.ts' does not exist.
+File '/home/src/projects/project/node_modules/@types/bar/index.d.ts.ts' does not exist.
+File '/home/src/projects/project/node_modules/@types/bar/index.d.ts.tsx' does not exist.
+File '/home/src/projects/project/node_modules/@types/bar/index.d.ts.d.ts' does not exist.
+Directory '/home/src/projects/project/node_modules/@types/bar/index.d.ts' does not exist, skipping all lookups in it.
+Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+Resolving real path for '/home/src/projects/project/node_modules/bar/index.mjs', result '/home/src/projects/project/node_modules/bar/index.mjs'.
+======== Module name 'bar' was successfully resolved to '/home/src/projects/project/node_modules/bar/index.mjs' with Package ID 'bar/index.mjs@1.0.0'. ========
+Reusing resolution of module 'foo2' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/foo2/index.d.ts' with Package ID 'foo2/index.d.ts@1.0.0'.
+Reusing resolution of module 'bar2' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' with Package ID '@types/bar2/index.d.ts@1.0.0'.
+File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
+File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
+File '/a/lib/package.json' does not exist according to earlier cached lookups.
+File '/a/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+[96mindex.mts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module 'foo'. '/home/src/projects/project/node_modules/foo/index.mjs' implicitly has an 'any' type.
+  There are types at '/home/src/projects/project/node_modules/foo/index.d.ts', but this result could not be resolved when respecting package.json "exports". The 'foo' library may need to update its package.json or typings.
+
+[7m1[0m import { foo } from "foo";
+[7m [0m [91m                    ~~~~~[0m
+
+[96mindex.mts[0m:[93m2[0m:[93m21[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module 'bar'. '/home/src/projects/project/node_modules/bar/index.mjs' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/bar` if it exists or add a new declaration (.d.ts) file containing `declare module 'bar';`
+
+[7m2[0m import { bar } from "bar";
+[7m [0m [91m                    ~~~~~[0m
+
+[[90m12:01:23 AM[0m] Found 2 errors. Watching for file changes.
+
+
+
+Program root files: ["/home/src/projects/project/index.mts"]
+Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+Program structureReused: SafeModules
+Program files::
+/a/lib/lib.d.ts
+/home/src/projects/project/node_modules/foo2/index.d.ts
+/home/src/projects/project/node_modules/@types/bar2/index.d.ts
+/home/src/projects/project/index.mts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
 
@@ -576,11 +704,11 @@ Input::
 //// [/home/src/projects/project/node_modules/foo/index.d.ts] deleted
 
 Before running Timeout callback:: count: 1
-5: timerToInvalidateFailedLookupResolutions
+6: timerToInvalidateFailedLookupResolutions
 After running Timeout callback:: count: 1
-6: timerToUpdateProgram
+7: timerToUpdateProgram
 Before running Timeout callback:: count: 1
-6: timerToUpdateProgram
+7: timerToUpdateProgram
 After running Timeout callback:: count: 0
 Output::
 DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/foo/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Failed Lookup Locations
@@ -588,7 +716,7 @@ Scheduling invalidateFailedLookup
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/foo/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Failed Lookup Locations
 Scheduling update
 Synchronizing program
-[[90m12:01:23 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:26 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/home/src/projects/project/index.mts"]
@@ -597,7 +725,7 @@ File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Found 'package.json' at '/home/src/projects/project/node_modules/foo2/package.json'.
-Found 'package.json' at '/home/src/projects/project/node_modules/@types/bar2/package.json'.
+File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
 Resolving in ESM mode with conditions 'import', 'types', 'node'.
@@ -665,18 +793,18 @@ File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 [96mindex.mts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module 'foo'. '/home/src/projects/project/node_modules/foo/index.mjs' implicitly has an 'any' type.
-  There are types at '/home/src/projects/project/node_modules/foo/index.d.ts', but this result could not be resolved when respecting package.json "exports". The 'foo' library may need to update its package.json or typings.
+  Try `npm i --save-dev @types/foo` if it exists or add a new declaration (.d.ts) file containing `declare module 'foo';`
 
 [7m1[0m import { foo } from "foo";
 [7m [0m [91m                    ~~~~~[0m
 
 [96mindex.mts[0m:[93m2[0m:[93m21[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module 'bar'. '/home/src/projects/project/node_modules/bar/index.mjs' implicitly has an 'any' type.
-  There are types at '/home/src/projects/project/node_modules/@types/bar/index.d.ts', but this result could not be resolved when respecting package.json "exports". The '@types/bar' library may need to update its package.json or typings.
+  Try `npm i --save-dev @types/bar` if it exists or add a new declaration (.d.ts) file containing `declare module 'bar';`
 
 [7m2[0m import { bar } from "bar";
 [7m [0m [91m                    ~~~~~[0m
 
-[[90m12:01:24 AM[0m] Found 2 errors. Watching for file changes.
+[[90m12:01:27 AM[0m] Found 2 errors. Watching for file changes.
 
 
 
@@ -704,15 +832,128 @@ export declare const bar: number;
 
 
 Before running Timeout callback:: count: 1
-7: timerToInvalidateFailedLookupResolutions
-After running Timeout callback:: count: 0
-Before running Timeout callback:: count: 0
+8: timerToInvalidateFailedLookupResolutions
+After running Timeout callback:: count: 1
+9: timerToUpdateProgram
+Before running Timeout callback:: count: 1
+9: timerToUpdateProgram
 After running Timeout callback:: count: 0
 Output::
 DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Failed Lookup Locations
+Scheduling update
+Synchronizing program
+[[90m12:01:30 AM[0m] File change detected. Starting incremental compilation...
 
+CreatingProgramWith::
+  roots: ["/home/src/projects/project/index.mts"]
+  options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+File '/a/lib/package.json' does not exist according to earlier cached lookups.
+File '/a/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
+Found 'package.json' at '/home/src/projects/project/node_modules/@types/bar2/package.json'.
+Reusing resolution of module 'foo' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/foo/index.mjs' with Package ID 'foo/index.mjs@1.0.0'.
+======== Resolving module 'bar' from '/home/src/projects/project/index.mts'. ========
+Explicitly specified module resolution kind: 'Node16'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
+File '/home/src/projects/project/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Loading module 'bar' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+File '/home/src/projects/project/node_modules/bar/package.json' exists according to earlier cached lookups.
+Entering conditional exports.
+Matched 'exports' condition 'import'.
+Using 'exports' subpath '.' with target './index.mjs'.
+File name '/home/src/projects/project/node_modules/bar/index.mjs' has a '.mjs' extension - stripping it.
+File '/home/src/projects/project/node_modules/bar/index.mts' does not exist.
+File '/home/src/projects/project/node_modules/bar/index.d.mts' does not exist.
+Failed to resolve under condition 'import'.
+Saw non-matching condition 'require'.
+Exiting conditional exports.
+Found 'package.json' at '/home/src/projects/project/node_modules/@types/bar/package.json'.
+Entering conditional exports.
+Saw non-matching condition 'require'.
+Exiting conditional exports.
+Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+File '/home/src/projects/project/node_modules/bar/package.json' exists according to earlier cached lookups.
+Entering conditional exports.
+Matched 'exports' condition 'import'.
+Using 'exports' subpath '.' with target './index.mjs'.
+File name '/home/src/projects/project/node_modules/bar/index.mjs' has a '.mjs' extension - stripping it.
+File '/home/src/projects/project/node_modules/bar/index.mjs' exists - use it as a name resolution result.
+Resolved under condition 'import'.
+Exiting conditional exports.
+Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
+File '/home/src/projects/project/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Loading module 'bar' from 'node_modules' folder, target file types: TypeScript, Declaration.
+File '/home/src/projects/project/node_modules/bar/package.json' exists according to earlier cached lookups.
+'package.json' does not have a 'typings' field.
+'package.json' does not have a 'types' field.
+'package.json' has 'main' field 'index.js' that references '/home/src/projects/project/node_modules/bar/index.js'.
+File '/home/src/projects/project/node_modules/bar/index.js' exists - use it as a name resolution result.
+File '/home/src/projects/project/node_modules/bar/index.js' has an unsupported extension, so skipping it.
+Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/bar/index.js', target file types: TypeScript, Declaration.
+File name '/home/src/projects/project/node_modules/bar/index.js' has a '.js' extension - stripping it.
+File '/home/src/projects/project/node_modules/bar/index.ts' does not exist.
+File '/home/src/projects/project/node_modules/bar/index.tsx' does not exist.
+File '/home/src/projects/project/node_modules/bar/index.d.ts' does not exist.
+File '/home/src/projects/project/node_modules/bar/index.js.ts' does not exist.
+File '/home/src/projects/project/node_modules/bar/index.js.tsx' does not exist.
+File '/home/src/projects/project/node_modules/bar/index.js.d.ts' does not exist.
+Directory '/home/src/projects/project/node_modules/bar/index.js' does not exist, skipping all lookups in it.
+File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
+'package.json' does not have a 'typesVersions' field.
+'package.json' does not have a 'typings' field.
+'package.json' has 'types' field 'index.d.ts' that references '/home/src/projects/project/node_modules/@types/bar/index.d.ts'.
+File '/home/src/projects/project/node_modules/@types/bar/index.d.ts' exists - use it as a name resolution result.
+Resolving real path for '/home/src/projects/project/node_modules/bar/index.mjs', result '/home/src/projects/project/node_modules/bar/index.mjs'.
+======== Module name 'bar' was successfully resolved to '/home/src/projects/project/node_modules/bar/index.mjs' with Package ID 'bar/index.mjs@1.0.0'. ========
+Reusing resolution of module 'foo2' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/foo2/index.d.ts' with Package ID 'foo2/index.d.ts@1.0.0'.
+Reusing resolution of module 'bar2' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' with Package ID '@types/bar2/index.d.ts@1.0.0'.
+File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
+File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
+File '/a/lib/package.json' does not exist according to earlier cached lookups.
+File '/a/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+[96mindex.mts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module 'foo'. '/home/src/projects/project/node_modules/foo/index.mjs' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/foo` if it exists or add a new declaration (.d.ts) file containing `declare module 'foo';`
+
+[7m1[0m import { foo } from "foo";
+[7m [0m [91m                    ~~~~~[0m
+
+[96mindex.mts[0m:[93m2[0m:[93m21[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module 'bar'. '/home/src/projects/project/node_modules/bar/index.mjs' implicitly has an 'any' type.
+  There are types at '/home/src/projects/project/node_modules/@types/bar/index.d.ts', but this result could not be resolved when respecting package.json "exports". The '@types/bar' library may need to update its package.json or typings.
+
+[7m2[0m import { bar } from "bar";
+[7m [0m [91m                    ~~~~~[0m
+
+[[90m12:01:31 AM[0m] Found 2 errors. Watching for file changes.
+
+
+
+Program root files: ["/home/src/projects/project/index.mts"]
+Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+Program structureReused: SafeModules
+Program files::
+/a/lib/lib.d.ts
+/home/src/projects/project/node_modules/foo2/index.d.ts
+/home/src/projects/project/node_modules/@types/bar2/index.d.ts
+/home/src/projects/project/index.mts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
 
@@ -725,11 +966,11 @@ export declare const foo: number;
 
 
 Before running Timeout callback:: count: 1
-8: timerToInvalidateFailedLookupResolutions
+10: timerToInvalidateFailedLookupResolutions
 After running Timeout callback:: count: 1
-9: timerToUpdateProgram
+11: timerToUpdateProgram
 Before running Timeout callback:: count: 1
-9: timerToUpdateProgram
+11: timerToUpdateProgram
 After running Timeout callback:: count: 0
 Output::
 DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/foo/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Failed Lookup Locations
@@ -737,7 +978,7 @@ Scheduling invalidateFailedLookup
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/foo/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Failed Lookup Locations
 Scheduling update
 Synchronizing program
-[[90m12:01:30 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:35 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/home/src/projects/project/index.mts"]
@@ -746,7 +987,7 @@ File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Found 'package.json' at '/home/src/projects/project/node_modules/foo2/package.json'.
-Found 'package.json' at '/home/src/projects/project/node_modules/@types/bar2/package.json'.
+File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
 Resolving in ESM mode with conditions 'import', 'types', 'node'.
@@ -812,7 +1053,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 [7m2[0m import { bar } from "bar";
 [7m [0m [91m                    ~~~~~[0m
 
-[[90m12:01:31 AM[0m] Found 2 errors. Watching for file changes.
+[[90m12:01:36 AM[0m] Found 2 errors. Watching for file changes.
 
 
 
@@ -850,11 +1091,11 @@ Input::
 
 
 Before running Timeout callback:: count: 1
-10: timerToInvalidateFailedLookupResolutions
+12: timerToInvalidateFailedLookupResolutions
 After running Timeout callback:: count: 1
-11: timerToUpdateProgram
+13: timerToUpdateProgram
 Before running Timeout callback:: count: 1
-11: timerToUpdateProgram
+13: timerToUpdateProgram
 After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar/package.json 1:: WatchInfo: /home/src/projects/project/node_modules/@types/bar/package.json 2000 undefined File location affecting resolution
@@ -862,7 +1103,7 @@ Scheduling invalidateFailedLookup
 Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar/package.json 1:: WatchInfo: /home/src/projects/project/node_modules/@types/bar/package.json 2000 undefined File location affecting resolution
 Scheduling update
 Synchronizing program
-[[90m12:01:36 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:40 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/home/src/projects/project/index.mts"]
@@ -916,7 +1157,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 [7m1[0m import { foo } from "foo";
 [7m [0m [91m                    ~~~~~[0m
 
-[[90m12:01:43 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:01:47 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -980,7 +1221,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/home/src/projects/project/index.mjs] file written with same contents
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-7439170493-export declare const bar2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[5],"options":{"strict":true},"fileIdsList":[[2,3,4]],"referencedMap":[[5,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,[5,[{"file":"./index.mts","start":20,"length":5,"code":7016,"category":1,"messageText":{"messageText":"Could not find a declaration file for module 'foo'. '/home/src/projects/project/node_modules/foo/index.mjs' implicitly has an 'any' type.","category":1,"code":7016,"next":[{"messageText":"There are types at '/home/src/projects/project/node_modules/foo/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The 'foo' library may need to update its package.json or typings.","category":3,"code":6278}]}}]],2,4,3]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-7439170493-export declare const bar2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[5],"options":{"strict":true},"fileIdsList":[[2,3,4]],"referencedMap":[[5,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,[5,[{"file":"./index.mts","start":20,"length":5,"code":7016,"category":1,"messageText":{"messageText":"Could not find a declaration file for module 'foo'. '/home/src/projects/project/node_modules/foo/index.mjs' implicitly has an 'any' type.","category":1,"code":7016,"next":[{"info":{"moduleReference":"foo","mode":99}}]}}]],2,4,3]},"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1083,9 +1324,10 @@ exitCode:: ExitStatus.undefined
               "code": 7016,
               "next": [
                 {
-                  "messageText": "There are types at '/home/src/projects/project/node_modules/foo/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The 'foo' library may need to update its package.json or typings.",
-                  "category": 3,
-                  "code": 6278
+                  "info": {
+                    "moduleReference": "foo",
+                    "mode": 99
+                  }
                 }
               ]
             }
@@ -1098,7 +1340,7 @@ exitCode:: ExitStatus.undefined
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1778
+  "size": 1557
 }
 
 
@@ -1122,11 +1364,11 @@ Input::
 
 
 Before running Timeout callback:: count: 1
-12: timerToInvalidateFailedLookupResolutions
+14: timerToInvalidateFailedLookupResolutions
 After running Timeout callback:: count: 1
-13: timerToUpdateProgram
+15: timerToUpdateProgram
 Before running Timeout callback:: count: 1
-13: timerToUpdateProgram
+15: timerToUpdateProgram
 After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /home/src/projects/project/node_modules/foo/package.json 1:: WatchInfo: /home/src/projects/project/node_modules/foo/package.json 2000 undefined File location affecting resolution
@@ -1134,7 +1376,7 @@ Scheduling invalidateFailedLookup
 Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/node_modules/foo/package.json 1:: WatchInfo: /home/src/projects/project/node_modules/foo/package.json 2000 undefined File location affecting resolution
 Scheduling update
 Synchronizing program
-[[90m12:01:50 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:55 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/home/src/projects/project/index.mts"]
@@ -1176,7 +1418,7 @@ File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
-[[90m12:01:57 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:02 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -1372,11 +1614,11 @@ Input::
 
 
 Before running Timeout callback:: count: 1
-14: timerToInvalidateFailedLookupResolutions
+16: timerToInvalidateFailedLookupResolutions
 After running Timeout callback:: count: 1
-15: timerToUpdateProgram
+17: timerToUpdateProgram
 Before running Timeout callback:: count: 1
-15: timerToUpdateProgram
+17: timerToUpdateProgram
 After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar2/package.json 1:: WatchInfo: /home/src/projects/project/node_modules/@types/bar2/package.json 2000 undefined File location affecting resolution
@@ -1384,7 +1626,7 @@ Scheduling invalidateFailedLookup
 Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar2/package.json 1:: WatchInfo: /home/src/projects/project/node_modules/@types/bar2/package.json 2000 undefined File location affecting resolution
 Scheduling update
 Synchronizing program
-[[90m12:02:05 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:02:09 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/home/src/projects/project/index.mts"]
@@ -1479,7 +1721,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modu
 [7m4[0m import { bar2 } from "bar2";
 [7m [0m [91m                     ~~~~~~[0m
 
-[[90m12:02:12 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:02:16 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -1545,7 +1787,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/home/src/projects/project/index.mjs] file written with same contents
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./index.mts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[5],"options":{"strict":true},"fileIdsList":[[2,3,4]],"referencedMap":[[5,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,[5,[{"file":"./index.mts","start":104,"length":6,"code":7016,"category":1,"messageText":{"messageText":"Could not find a declaration file for module 'bar2'. '/home/src/projects/project/node_modules/bar2/index.mjs' implicitly has an 'any' type.","category":1,"code":7016,"next":[{"messageText":"There are types at '/home/src/projects/project/node_modules/@types/bar2/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The '@types/bar2' library may need to update its package.json or typings.","category":3,"code":6278}]}}]],3,2,4]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./index.mts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[5],"options":{"strict":true},"fileIdsList":[[2,3,4]],"referencedMap":[[5,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,[5,[{"file":"./index.mts","start":104,"length":6,"code":7016,"category":1,"messageText":{"messageText":"Could not find a declaration file for module 'bar2'. '/home/src/projects/project/node_modules/bar2/index.mjs' implicitly has an 'any' type.","category":1,"code":7016,"next":[{"info":{"moduleReference":"bar2","mode":99}}]}}]],3,2,4]},"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1648,9 +1890,10 @@ exitCode:: ExitStatus.undefined
               "code": 7016,
               "next": [
                 {
-                  "messageText": "There are types at '/home/src/projects/project/node_modules/@types/bar2/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The '@types/bar2' library may need to update its package.json or typings.",
-                  "category": 3,
-                  "code": 6278
+                  "info": {
+                    "moduleReference": "bar2",
+                    "mode": 99
+                  }
                 }
               ]
             }
@@ -1663,7 +1906,7 @@ exitCode:: ExitStatus.undefined
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1788
+  "size": 1552
 }
 
 
@@ -1686,11 +1929,11 @@ Input::
 
 
 Before running Timeout callback:: count: 1
-16: timerToInvalidateFailedLookupResolutions
+18: timerToInvalidateFailedLookupResolutions
 After running Timeout callback:: count: 1
-17: timerToUpdateProgram
+19: timerToUpdateProgram
 Before running Timeout callback:: count: 1
-17: timerToUpdateProgram
+19: timerToUpdateProgram
 After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /home/src/projects/project/node_modules/foo2/package.json 1:: WatchInfo: /home/src/projects/project/node_modules/foo2/package.json 2000 undefined File location affecting resolution
@@ -1698,7 +1941,7 @@ Scheduling invalidateFailedLookup
 Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/node_modules/foo2/package.json 1:: WatchInfo: /home/src/projects/project/node_modules/foo2/package.json 2000 undefined File location affecting resolution
 Scheduling update
 Synchronizing program
-[[90m12:02:19 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:02:24 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/home/src/projects/project/index.mts"]
@@ -1775,7 +2018,7 @@ FileWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/foo2/in
 [7m4[0m import { bar2 } from "bar2";
 [7m [0m [91m                     ~~~~~~[0m
 
-[[90m12:02:26 AM[0m] Found 2 errors. Watching for file changes.
+[[90m12:02:31 AM[0m] Found 2 errors. Watching for file changes.
 
 
 
@@ -1838,7 +2081,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/home/src/projects/project/index.mjs] file written with same contents
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./index.mts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[4],"options":{"strict":true},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,[4,[{"file":"./index.mts","start":75,"length":6,"code":7016,"category":1,"messageText":{"messageText":"Could not find a declaration file for module 'foo2'. '/home/src/projects/project/node_modules/foo2/index.mjs' implicitly has an 'any' type.","category":1,"code":7016,"next":[{"messageText":"There are types at '/home/src/projects/project/node_modules/foo2/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The 'foo2' library may need to update its package.json or typings.","category":3,"code":6278}]}},{"file":"./index.mts","start":104,"length":6,"code":7016,"category":1,"messageText":{"messageText":"Could not find a declaration file for module 'bar2'. '/home/src/projects/project/node_modules/bar2/index.mjs' implicitly has an 'any' type.","category":1,"code":7016,"next":[{"messageText":"There are types at '/home/src/projects/project/node_modules/@types/bar2/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The '@types/bar2' library may need to update its package.json or typings.","category":3,"code":6278}]}}]],3,2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./index.mts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[4],"options":{"strict":true},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,[4,[{"file":"./index.mts","start":75,"length":6,"code":7016,"category":1,"messageText":{"messageText":"Could not find a declaration file for module 'foo2'. '/home/src/projects/project/node_modules/foo2/index.mjs' implicitly has an 'any' type.","category":1,"code":7016,"next":[{"info":{"moduleReference":"foo2","mode":99}}]}},{"file":"./index.mts","start":104,"length":6,"code":7016,"category":1,"messageText":{"messageText":"Could not find a declaration file for module 'bar2'. '/home/src/projects/project/node_modules/bar2/index.mjs' implicitly has an 'any' type.","category":1,"code":7016,"next":[{"info":{"moduleReference":"bar2","mode":99}}]}}]],3,2]},"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1929,9 +2172,10 @@ exitCode:: ExitStatus.undefined
               "code": 7016,
               "next": [
                 {
-                  "messageText": "There are types at '/home/src/projects/project/node_modules/foo2/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The 'foo2' library may need to update its package.json or typings.",
-                  "category": 3,
-                  "code": 6278
+                  "info": {
+                    "moduleReference": "foo2",
+                    "mode": 99
+                  }
                 }
               ]
             }
@@ -1948,9 +2192,10 @@ exitCode:: ExitStatus.undefined
               "code": 7016,
               "next": [
                 {
-                  "messageText": "There are types at '/home/src/projects/project/node_modules/@types/bar2/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The '@types/bar2' library may need to update its package.json or typings.",
-                  "category": 3,
-                  "code": 6278
+                  "info": {
+                    "moduleReference": "bar2",
+                    "mode": 99
+                  }
                 }
               ]
             }
@@ -1962,7 +2207,7 @@ exitCode:: ExitStatus.undefined
     ]
   },
   "version": "FakeTSVersion",
-  "size": 2216
+  "size": 1758
 }
 
 
@@ -1972,15 +2217,141 @@ Input::
 //// [/home/src/projects/project/node_modules/@types/bar2/index.d.ts] deleted
 
 Before running Timeout callback:: count: 1
-18: timerToInvalidateFailedLookupResolutions
-After running Timeout callback:: count: 0
-Before running Timeout callback:: count: 0
+20: timerToInvalidateFailedLookupResolutions
+After running Timeout callback:: count: 1
+21: timerToUpdateProgram
+Before running Timeout callback:: count: 1
+21: timerToUpdateProgram
 After running Timeout callback:: count: 0
 Output::
 DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar2/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar2/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Failed Lookup Locations
+Scheduling update
+Synchronizing program
+[[90m12:02:36 AM[0m] File change detected. Starting incremental compilation...
 
+CreatingProgramWith::
+  roots: ["/home/src/projects/project/index.mts"]
+  options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+File '/a/lib/package.json' does not exist according to earlier cached lookups.
+File '/a/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
+File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
+Reusing resolution of module 'foo' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/foo/index.d.ts' with Package ID 'foo/index.d.ts@1.0.0'.
+Reusing resolution of module 'bar' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/@types/bar/index.d.ts' with Package ID '@types/bar/index.d.ts@1.0.0'.
+Reusing resolution of module 'foo2' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/foo2/index.mjs' with Package ID 'foo2/index.mjs@1.0.0'.
+======== Resolving module 'bar2' from '/home/src/projects/project/index.mts'. ========
+Explicitly specified module resolution kind: 'Node16'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
+File '/home/src/projects/project/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Loading module 'bar2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+File '/home/src/projects/project/node_modules/bar2/package.json' exists according to earlier cached lookups.
+Entering conditional exports.
+Matched 'exports' condition 'import'.
+Using 'exports' subpath '.' with target './index.mjs'.
+File name '/home/src/projects/project/node_modules/bar2/index.mjs' has a '.mjs' extension - stripping it.
+File '/home/src/projects/project/node_modules/bar2/index.mts' does not exist.
+File '/home/src/projects/project/node_modules/bar2/index.d.mts' does not exist.
+Failed to resolve under condition 'import'.
+Saw non-matching condition 'require'.
+Exiting conditional exports.
+Found 'package.json' at '/home/src/projects/project/node_modules/@types/bar2/package.json'.
+Entering conditional exports.
+Saw non-matching condition 'require'.
+Exiting conditional exports.
+Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+File '/home/src/projects/project/node_modules/bar2/package.json' exists according to earlier cached lookups.
+Entering conditional exports.
+Matched 'exports' condition 'import'.
+Using 'exports' subpath '.' with target './index.mjs'.
+File name '/home/src/projects/project/node_modules/bar2/index.mjs' has a '.mjs' extension - stripping it.
+File '/home/src/projects/project/node_modules/bar2/index.mjs' exists - use it as a name resolution result.
+Resolved under condition 'import'.
+Exiting conditional exports.
+Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
+File '/home/src/projects/project/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Loading module 'bar2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+File '/home/src/projects/project/node_modules/bar2/package.json' exists according to earlier cached lookups.
+'package.json' does not have a 'typings' field.
+'package.json' does not have a 'types' field.
+'package.json' has 'main' field 'index.js' that references '/home/src/projects/project/node_modules/bar2/index.js'.
+File '/home/src/projects/project/node_modules/bar2/index.js' exists - use it as a name resolution result.
+File '/home/src/projects/project/node_modules/bar2/index.js' has an unsupported extension, so skipping it.
+Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/bar2/index.js', target file types: TypeScript, Declaration.
+File name '/home/src/projects/project/node_modules/bar2/index.js' has a '.js' extension - stripping it.
+File '/home/src/projects/project/node_modules/bar2/index.ts' does not exist.
+File '/home/src/projects/project/node_modules/bar2/index.tsx' does not exist.
+File '/home/src/projects/project/node_modules/bar2/index.d.ts' does not exist.
+File '/home/src/projects/project/node_modules/bar2/index.js.ts' does not exist.
+File '/home/src/projects/project/node_modules/bar2/index.js.tsx' does not exist.
+File '/home/src/projects/project/node_modules/bar2/index.js.d.ts' does not exist.
+Directory '/home/src/projects/project/node_modules/bar2/index.js' does not exist, skipping all lookups in it.
+File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
+'package.json' does not have a 'typesVersions' field.
+'package.json' does not have a 'typings' field.
+'package.json' has 'types' field 'index.d.ts' that references '/home/src/projects/project/node_modules/@types/bar2/index.d.ts'.
+File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' does not exist.
+Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/@types/bar2/index.d.ts', target file types: TypeScript, Declaration.
+File name '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' has a '.d.ts' extension - stripping it.
+File '/home/src/projects/project/node_modules/@types/bar2/index.ts' does not exist.
+File '/home/src/projects/project/node_modules/@types/bar2/index.tsx' does not exist.
+File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' does not exist.
+File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts.ts' does not exist.
+File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts.tsx' does not exist.
+File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts.d.ts' does not exist.
+Directory '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' does not exist, skipping all lookups in it.
+Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+Resolving real path for '/home/src/projects/project/node_modules/bar2/index.mjs', result '/home/src/projects/project/node_modules/bar2/index.mjs'.
+======== Module name 'bar2' was successfully resolved to '/home/src/projects/project/node_modules/bar2/index.mjs' with Package ID 'bar2/index.mjs@1.0.0'. ========
+File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
+File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
+File '/a/lib/package.json' does not exist according to earlier cached lookups.
+File '/a/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+[96mindex.mts[0m:[93m3[0m:[93m22[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module 'foo2'. '/home/src/projects/project/node_modules/foo2/index.mjs' implicitly has an 'any' type.
+  There are types at '/home/src/projects/project/node_modules/foo2/index.d.ts', but this result could not be resolved when respecting package.json "exports". The 'foo2' library may need to update its package.json or typings.
+
+[7m3[0m import { foo2 } from "foo2";
+[7m [0m [91m                     ~~~~~~[0m
+
+[96mindex.mts[0m:[93m4[0m:[93m22[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module 'bar2'. '/home/src/projects/project/node_modules/bar2/index.mjs' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/bar2` if it exists or add a new declaration (.d.ts) file containing `declare module 'bar2';`
+
+[7m4[0m import { bar2 } from "bar2";
+[7m [0m [91m                     ~~~~~~[0m
+
+[[90m12:02:37 AM[0m] Found 2 errors. Watching for file changes.
+
+
+
+Program root files: ["/home/src/projects/project/index.mts"]
+Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+Program structureReused: SafeModules
+Program files::
+/a/lib/lib.d.ts
+/home/src/projects/project/node_modules/foo/index.d.ts
+/home/src/projects/project/node_modules/@types/bar/index.d.ts
+/home/src/projects/project/index.mts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
 
@@ -1991,11 +2362,11 @@ Input::
 //// [/home/src/projects/project/node_modules/foo2/index.d.ts] deleted
 
 Before running Timeout callback:: count: 1
-19: timerToInvalidateFailedLookupResolutions
+22: timerToInvalidateFailedLookupResolutions
 After running Timeout callback:: count: 1
-20: timerToUpdateProgram
+23: timerToUpdateProgram
 Before running Timeout callback:: count: 1
-20: timerToUpdateProgram
+23: timerToUpdateProgram
 After running Timeout callback:: count: 0
 Output::
 DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/foo2/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Failed Lookup Locations
@@ -2003,7 +2374,7 @@ Scheduling invalidateFailedLookup
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/foo2/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Failed Lookup Locations
 Scheduling update
 Synchronizing program
-[[90m12:02:33 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:02:40 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/home/src/projects/project/index.mts"]
@@ -2080,18 +2451,18 @@ File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 [96mindex.mts[0m:[93m3[0m:[93m22[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module 'foo2'. '/home/src/projects/project/node_modules/foo2/index.mjs' implicitly has an 'any' type.
-  There are types at '/home/src/projects/project/node_modules/foo2/index.d.ts', but this result could not be resolved when respecting package.json "exports". The 'foo2' library may need to update its package.json or typings.
+  Try `npm i --save-dev @types/foo2` if it exists or add a new declaration (.d.ts) file containing `declare module 'foo2';`
 
 [7m3[0m import { foo2 } from "foo2";
 [7m [0m [91m                     ~~~~~~[0m
 
 [96mindex.mts[0m:[93m4[0m:[93m22[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module 'bar2'. '/home/src/projects/project/node_modules/bar2/index.mjs' implicitly has an 'any' type.
-  There are types at '/home/src/projects/project/node_modules/@types/bar2/index.d.ts', but this result could not be resolved when respecting package.json "exports". The '@types/bar2' library may need to update its package.json or typings.
+  Try `npm i --save-dev @types/bar2` if it exists or add a new declaration (.d.ts) file containing `declare module 'bar2';`
 
 [7m4[0m import { bar2 } from "bar2";
 [7m [0m [91m                     ~~~~~~[0m
 
-[[90m12:02:34 AM[0m] Found 2 errors. Watching for file changes.
+[[90m12:02:41 AM[0m] Found 2 errors. Watching for file changes.
 
 
 
@@ -2119,15 +2490,128 @@ export declare const bar2: number;
 
 
 Before running Timeout callback:: count: 1
-21: timerToInvalidateFailedLookupResolutions
-After running Timeout callback:: count: 0
-Before running Timeout callback:: count: 0
+24: timerToInvalidateFailedLookupResolutions
+After running Timeout callback:: count: 1
+25: timerToUpdateProgram
+Before running Timeout callback:: count: 1
+25: timerToUpdateProgram
 After running Timeout callback:: count: 0
 Output::
 DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar2/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar2/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Failed Lookup Locations
+Scheduling update
+Synchronizing program
+[[90m12:02:44 AM[0m] File change detected. Starting incremental compilation...
 
+CreatingProgramWith::
+  roots: ["/home/src/projects/project/index.mts"]
+  options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+File '/a/lib/package.json' does not exist according to earlier cached lookups.
+File '/a/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
+File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
+Reusing resolution of module 'foo' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/foo/index.d.ts' with Package ID 'foo/index.d.ts@1.0.0'.
+Reusing resolution of module 'bar' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/@types/bar/index.d.ts' with Package ID '@types/bar/index.d.ts@1.0.0'.
+Reusing resolution of module 'foo2' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/foo2/index.mjs' with Package ID 'foo2/index.mjs@1.0.0'.
+======== Resolving module 'bar2' from '/home/src/projects/project/index.mts'. ========
+Explicitly specified module resolution kind: 'Node16'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
+File '/home/src/projects/project/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Loading module 'bar2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+File '/home/src/projects/project/node_modules/bar2/package.json' exists according to earlier cached lookups.
+Entering conditional exports.
+Matched 'exports' condition 'import'.
+Using 'exports' subpath '.' with target './index.mjs'.
+File name '/home/src/projects/project/node_modules/bar2/index.mjs' has a '.mjs' extension - stripping it.
+File '/home/src/projects/project/node_modules/bar2/index.mts' does not exist.
+File '/home/src/projects/project/node_modules/bar2/index.d.mts' does not exist.
+Failed to resolve under condition 'import'.
+Saw non-matching condition 'require'.
+Exiting conditional exports.
+Found 'package.json' at '/home/src/projects/project/node_modules/@types/bar2/package.json'.
+Entering conditional exports.
+Saw non-matching condition 'require'.
+Exiting conditional exports.
+Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+File '/home/src/projects/project/node_modules/bar2/package.json' exists according to earlier cached lookups.
+Entering conditional exports.
+Matched 'exports' condition 'import'.
+Using 'exports' subpath '.' with target './index.mjs'.
+File name '/home/src/projects/project/node_modules/bar2/index.mjs' has a '.mjs' extension - stripping it.
+File '/home/src/projects/project/node_modules/bar2/index.mjs' exists - use it as a name resolution result.
+Resolved under condition 'import'.
+Exiting conditional exports.
+Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
+File '/home/src/projects/project/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Loading module 'bar2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+File '/home/src/projects/project/node_modules/bar2/package.json' exists according to earlier cached lookups.
+'package.json' does not have a 'typings' field.
+'package.json' does not have a 'types' field.
+'package.json' has 'main' field 'index.js' that references '/home/src/projects/project/node_modules/bar2/index.js'.
+File '/home/src/projects/project/node_modules/bar2/index.js' exists - use it as a name resolution result.
+File '/home/src/projects/project/node_modules/bar2/index.js' has an unsupported extension, so skipping it.
+Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/bar2/index.js', target file types: TypeScript, Declaration.
+File name '/home/src/projects/project/node_modules/bar2/index.js' has a '.js' extension - stripping it.
+File '/home/src/projects/project/node_modules/bar2/index.ts' does not exist.
+File '/home/src/projects/project/node_modules/bar2/index.tsx' does not exist.
+File '/home/src/projects/project/node_modules/bar2/index.d.ts' does not exist.
+File '/home/src/projects/project/node_modules/bar2/index.js.ts' does not exist.
+File '/home/src/projects/project/node_modules/bar2/index.js.tsx' does not exist.
+File '/home/src/projects/project/node_modules/bar2/index.js.d.ts' does not exist.
+Directory '/home/src/projects/project/node_modules/bar2/index.js' does not exist, skipping all lookups in it.
+File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
+'package.json' does not have a 'typesVersions' field.
+'package.json' does not have a 'typings' field.
+'package.json' has 'types' field 'index.d.ts' that references '/home/src/projects/project/node_modules/@types/bar2/index.d.ts'.
+File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' exists - use it as a name resolution result.
+Resolving real path for '/home/src/projects/project/node_modules/bar2/index.mjs', result '/home/src/projects/project/node_modules/bar2/index.mjs'.
+======== Module name 'bar2' was successfully resolved to '/home/src/projects/project/node_modules/bar2/index.mjs' with Package ID 'bar2/index.mjs@1.0.0'. ========
+File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
+File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
+File '/a/lib/package.json' does not exist according to earlier cached lookups.
+File '/a/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+[96mindex.mts[0m:[93m3[0m:[93m22[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module 'foo2'. '/home/src/projects/project/node_modules/foo2/index.mjs' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/foo2` if it exists or add a new declaration (.d.ts) file containing `declare module 'foo2';`
+
+[7m3[0m import { foo2 } from "foo2";
+[7m [0m [91m                     ~~~~~~[0m
+
+[96mindex.mts[0m:[93m4[0m:[93m22[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module 'bar2'. '/home/src/projects/project/node_modules/bar2/index.mjs' implicitly has an 'any' type.
+  There are types at '/home/src/projects/project/node_modules/@types/bar2/index.d.ts', but this result could not be resolved when respecting package.json "exports". The '@types/bar2' library may need to update its package.json or typings.
+
+[7m4[0m import { bar2 } from "bar2";
+[7m [0m [91m                     ~~~~~~[0m
+
+[[90m12:02:45 AM[0m] Found 2 errors. Watching for file changes.
+
+
+
+Program root files: ["/home/src/projects/project/index.mts"]
+Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+Program structureReused: SafeModules
+Program files::
+/a/lib/lib.d.ts
+/home/src/projects/project/node_modules/foo/index.d.ts
+/home/src/projects/project/node_modules/@types/bar/index.d.ts
+/home/src/projects/project/index.mts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
 
@@ -2140,11 +2624,11 @@ export declare const foo2: number;
 
 
 Before running Timeout callback:: count: 1
-22: timerToInvalidateFailedLookupResolutions
+26: timerToInvalidateFailedLookupResolutions
 After running Timeout callback:: count: 1
-23: timerToUpdateProgram
+27: timerToUpdateProgram
 Before running Timeout callback:: count: 1
-23: timerToUpdateProgram
+27: timerToUpdateProgram
 After running Timeout callback:: count: 0
 Output::
 DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/foo2/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Failed Lookup Locations
@@ -2152,7 +2636,7 @@ Scheduling invalidateFailedLookup
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/foo2/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Failed Lookup Locations
 Scheduling update
 Synchronizing program
-[[90m12:02:40 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:02:49 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/home/src/projects/project/index.mts"]
@@ -2227,7 +2711,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 [7m4[0m import { bar2 } from "bar2";
 [7m [0m [91m                     ~~~~~~[0m
 
-[[90m12:02:41 AM[0m] Found 2 errors. Watching for file changes.
+[[90m12:02:50 AM[0m] Found 2 errors. Watching for file changes.
 
 
 

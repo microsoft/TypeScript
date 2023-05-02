@@ -4817,6 +4817,7 @@ export interface Program extends ScriptReferenceHost {
      * @internal
      */
     resolvedLibReferences: Map<string, LibResolution> | undefined;
+    /** @internal */ getCurrentPackagesMap(): Map<string, boolean> | undefined;
     /**
      * Is the file emitted file
      *
@@ -4952,6 +4953,9 @@ export interface TypeCheckerHost extends ModuleSpecifierResolutionHost {
     isSourceOfProjectReferenceRedirect(fileName: string): boolean;
 
     readonly redirectTargetsMap: RedirectTargetsMap;
+
+    typesPackageExists(packageName: string): boolean;
+    packageBundlesTypes(packageName: string): boolean;
 }
 
 export interface TypeChecker {
@@ -6925,6 +6929,16 @@ export interface DiagnosticMessage {
     elidedInCompatabilityPyramid?: boolean;
 }
 
+/** @internal */
+export interface RepopulateModuleNodeFoundDiagnosticChain {
+    moduleReference: string;
+    mode: ResolutionMode;
+    packageName: string | undefined;
+}
+
+/** @internal */
+export type RepopulateDiagnosticChainInfo = RepopulateModuleNodeFoundDiagnosticChain;
+
 /**
  * A linked list of formatted diagnostic messages to be used as part of a multiline message.
  * It is built from the bottom up, leaving the head to be the "main" diagnostic.
@@ -6936,6 +6950,8 @@ export interface DiagnosticMessageChain {
     category: DiagnosticCategory;
     code: number;
     next?: DiagnosticMessageChain[];
+    /** @internal */
+    repopulateInfo?: () => RepopulateDiagnosticChainInfo;
 }
 
 export interface Diagnostic extends DiagnosticRelatedInformation {
