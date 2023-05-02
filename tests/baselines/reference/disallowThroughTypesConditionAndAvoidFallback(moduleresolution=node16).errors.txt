@@ -1,0 +1,28 @@
+error TS6504: File '/node_modules/foo/index.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
+  The file is in the program because:
+    Root file specified for compilation
+
+
+!!! error TS6504: File '/node_modules/foo/index.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
+!!! error TS6504:   The file is in the program because:
+!!! error TS6504:     Root file specified for compilation
+==== /node_modules/foo/package.json (0 errors) ====
+    {   
+        "name": "foo",
+        "version": "1.0.0",
+        "exports": {
+            "types": null,
+            "require": "./index.js"
+        }
+    }
+    
+==== /node_modules/foo/index.js (0 errors) ====
+    module.exports = { a: 'a' };
+    
+==== /node_modules/foo/index.d.ts (0 errors) ====
+    export declare const a: 'a'
+    
+==== /a.ts (0 errors) ====
+    export { a } from "foo";
+    
+    
