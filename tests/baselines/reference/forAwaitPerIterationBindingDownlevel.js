@@ -114,32 +114,27 @@ var log = console.log;
                 _loop_1 = function () {
                     _f = _c.value;
                     _a = false;
-                    try {
-                        var outer = _f;
-                        log("I'm loop ".concat(outer));
-                        (function () { return __awaiter(_this, void 0, void 0, function () {
-                            var inner;
-                            return __generator(this, function (_a) {
-                                switch (_a.label) {
-                                    case 0:
-                                        inner = outer;
-                                        return [4 /*yield*/, sleep(2000)];
-                                    case 1:
-                                        _a.sent();
-                                        if (inner === outer) {
-                                            log("I'm loop ".concat(inner, " and I know I'm loop ").concat(outer));
-                                        }
-                                        else {
-                                            log("I'm loop ".concat(inner, ", but I think I'm loop ").concat(outer));
-                                        }
-                                        return [2 /*return*/];
-                                }
-                            });
-                        }); })();
-                    }
-                    finally {
-                        _a = true;
-                    }
+                    var outer = _f;
+                    log("I'm loop ".concat(outer));
+                    (function () { return __awaiter(_this, void 0, void 0, function () {
+                        var inner;
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0:
+                                    inner = outer;
+                                    return [4 /*yield*/, sleep(2000)];
+                                case 1:
+                                    _a.sent();
+                                    if (inner === outer) {
+                                        log("I'm loop ".concat(inner, " and I know I'm loop ").concat(outer));
+                                    }
+                                    else {
+                                        log("I'm loop ".concat(inner, ", but I think I'm loop ").concat(outer));
+                                    }
+                                    return [2 /*return*/];
+                            }
+                        });
+                    }); })();
                 };
                 _a = true, _b = __asyncValues(gen());
                 _g.label = 1;
@@ -148,7 +143,9 @@ var log = console.log;
                 if (!(_c = _g.sent(), _d = _c.done, !_d)) return [3 /*break*/, 4];
                 _loop_1();
                 _g.label = 3;
-            case 3: return [3 /*break*/, 1];
+            case 3:
+                _a = true;
+                return [3 /*break*/, 1];
             case 4: return [3 /*break*/, 11];
             case 5:
                 e_1_1 = _g.sent();

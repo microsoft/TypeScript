@@ -10409,7 +10409,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // If the parent is a tuple type, the rest element has a tuple type of the
                 // remaining tuple element types. Otherwise, the rest element has an array type with same
                 // element type as the parent type.
-                const baseConstraint = getBaseConstraintOrType(parentType);
+                const baseConstraint = mapType(parentType, t => t.flags & TypeFlags.InstantiableNonPrimitive ? getBaseConstraintOrType(t) : t);
                 type = everyType(baseConstraint, isTupleType) ?
                     mapType(baseConstraint, t => sliceTupleType(t as TupleTypeReference, index)) :
                     createArrayType(elementType);
@@ -12556,6 +12556,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return needApparentType ? getApparentType(type) : type;
     }
 
+    function getThisArgument(type: Type) {
+        return getObjectFlags(type) & ObjectFlags.Reference && length(getTypeArguments(type as TypeReference)) > getTypeReferenceArity(type as TypeReference) ? last(getTypeArguments(type as TypeReference)) : type;
+    }
+
     function resolveObjectTypeMembers(type: ObjectType, source: InterfaceTypeWithDeclaredMembers, typeParameters: readonly TypeParameter[], typeArguments: readonly Type[]) {
         let mapper: TypeMapper | undefined;
         let members: SymbolTable;
@@ -12685,7 +12689,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return [sig.parameters];
 
         function expandSignatureParametersWithTupleMembers(restType: TupleTypeReference, restIndex: number) {
-            const elementTypes = getTypeArguments(restType);
+            const elementTypes = getElementTypes(restType);
             const associatedNames = getUniqAssociatedNamesFromTupleType(restType);
             const restParams = map(elementTypes, (t, i) => {
                 // Lookup the label from the individual tuple passed in before falling back to the signature `rest` parameter name
@@ -13583,7 +13587,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             type.flags & TypeFlags.IndexedAccess && isConstTypeVariable((type as IndexedAccessType).objectType) ||
             type.flags & TypeFlags.Conditional && isConstTypeVariable(getConstraintOfConditionalType(type as ConditionalType)) ||
             type.flags & TypeFlags.Substitution && isConstTypeVariable((type as SubstitutionType).baseType) ||
-            isGenericTupleType(type) && findIndex(getTypeArguments(type), (t, i) => !!(type.target.elementFlags[i] & ElementFlags.Variadic) && isConstTypeVariable(t)) >= 0));
+            isGenericTupleType(type) && findIndex(getElementTypes(type), (t, i) => !!(type.target.elementFlags[i] & ElementFlags.Variadic) && isConstTypeVariable(t)) >= 0));
     }
 
     function getConstraintOfIndexedAccess(type: IndexedAccessType) {
@@ -13708,7 +13712,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getBaseConstraintOfType(type: Type): Type | undefined {
-        if (type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.UnionOrIntersection | TypeFlags.TemplateLiteral | TypeFlags.StringMapping)) {
+        if (type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.UnionOrIntersection | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) || isGenericTupleType(type)) {
             const constraint = getResolvedBaseConstraint(type as InstantiableType | UnionOrIntersectionType);
             return constraint !== noConstraintType && constraint !== circularConstraintType ? constraint : undefined;
         }
@@ -13737,7 +13741,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return type.resolvedBaseConstraint;
         }
         const stack: object[] = [];
-        return type.resolvedBaseConstraint = getTypeWithThisArgument(getImmediateBaseConstraint(type), type);
+        return type.resolvedBaseConstraint = getTypeWithThisArgument(getImmediateBaseConstraint(type), getThisArgument(type));
 
         function getImmediateBaseConstraint(t: Type): Type {
             if (!t.immediateBaseConstraint) {
@@ -13838,6 +13842,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             if (t.flags & TypeFlags.Substitution) {
                 return getBaseConstraint(getSubstitutionIntersection(t as SubstitutionType));
+            }
+            if (isGenericTupleType(t)) {
+                // We substitute constraints for variadic elements only when the constraints are array types or
+                // non-variadic tuple types as we want to avoid further (possibly unbounded) recursion.
+                const newElements = map(getElementTypes(t), (v, i) => {
+                    const constraint = t.target.elementFlags[i] & ElementFlags.Variadic && getBaseConstraint(v) || v;
+                    return constraint && everyType(constraint, c => isArrayOrTupleType(c) && !isGenericTupleType(c)) ? constraint : v;
+                });
+                return createTupleType(newElements, t.target.elementFlags, t.target.readonly, t.target.labeledElementDeclarations);
             }
             return t;
         }
@@ -16147,7 +16160,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     addElement(type, ElementFlags.Variadic, target.labeledElementDeclarations?.[i]);
                 }
                 else if (isTupleType(type)) {
-                    const elements = getTypeArguments(type);
+                    const elements = getElementTypes(type);
                     if (elements.length + expandedTypes.length >= 10_000) {
                         error(currentNode, isPartOfTypeNode(currentNode!)
                             ? Diagnostics.Type_produces_a_tuple_type_that_is_too_large_to_represent
@@ -16227,6 +16240,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // Return count of ending consecutive tuple elements of the given kind(s)
     function getEndElementCount(type: TupleType, flags: ElementFlags) {
         return type.elementFlags.length - findLastIndex(type.elementFlags, f => !(f & flags)) - 1;
+    }
+
+    function getElementTypes(type: TupleTypeReference): readonly Type[] {
+        const typeArguments = getTypeArguments(type);
+        const arity = getTypeReferenceArity(type);
+        return typeArguments.length === arity ? typeArguments : typeArguments.slice(0, arity);
     }
 
     function getTypeFromOptionalTypeNode(node: OptionalTypeNode): Type {
@@ -17779,7 +17798,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isDeferredType(type: Type, checkTuples: boolean) {
-        return isGenericType(type) || checkTuples && isTupleType(type) && some(getTypeArguments(type), isGenericType);
+        return isGenericType(type) || checkTuples && isTupleType(type) && some(getElementTypes(type), isGenericType);
     }
 
     function getConditionalType(root: ConditionalRoot, mapper: TypeMapper | undefined, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type {
@@ -18920,7 +18939,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // M<[A, B?, ...T, ...C[]] into [...M<[A]>, ...M<[B?]>, ...M<T>, ...M<C[]>] and then rely on tuple type
         // normalization to resolve the non-generic parts of the resulting tuple.
         const elementFlags = tupleType.target.elementFlags;
-        const elementTypes = map(getTypeArguments(tupleType), (t, i) => {
+        const elementTypes = map(getElementTypes(tupleType), (t, i) => {
             const singleton = elementFlags[i] & ElementFlags.Variadic ? t :
                 elementFlags[i] & ElementFlags.Rest ? createArrayType(t) :
                 createTupleType([t], [elementFlags[i]]);
@@ -18939,7 +18958,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function instantiateMappedTupleType(tupleType: TupleTypeReference, mappedType: MappedType, mapper: TypeMapper) {
         const elementFlags = tupleType.target.elementFlags;
-        const elementTypes = map(getTypeArguments(tupleType), (_, i) =>
+        const elementTypes = map(getElementTypes(tupleType), (_, i) =>
             instantiateMappedTypeTemplate(mappedType, getStringLiteralType("" + i), !!(elementFlags[i] & ElementFlags.Optional), mapper));
         const modifiers = getMappedTypeModifiers(mappedType);
         const newTupleModifiers = modifiers & MappedTypeModifiers.IncludeOptional ? map(elementFlags, f => f & ElementFlags.Required ? ElementFlags.Optional : f) :
@@ -20244,7 +20263,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getNormalizedTupleType(type: TupleTypeReference, writing: boolean): Type {
-        const elements = getTypeArguments(type);
+        const elements = getElementTypes(type);
         const normalizedElements = sameMap(elements, t => t.flags & TypeFlags.Simplifiable ? getSimplifiedType(t, writing) : t);
         return elements !== normalizedElements ? createNormalizedTupleType(type.target, normalizedElements) : type;
     }
@@ -20612,6 +20631,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
          * * Ternary.False if they are not related.
          */
         function isRelatedTo(originalSource: Type, originalTarget: Type, recursionFlags: RecursionFlags = RecursionFlags.Both, reportErrors = false, headMessage?: DiagnosticMessage, intersectionState = IntersectionState.None): Ternary {
+            if (originalSource === originalTarget) return Ternary.True;
+
             // Before normalization: if `source` is type an object type, and `target` is primitive,
             // skip all the checks we don't need and just return `isSimpleTypeRelatedTo` result
             if (originalSource.flags & TypeFlags.Object && originalTarget.flags & TypeFlags.Primitive) {
@@ -21798,6 +21819,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         // By flags alone, we know that the `target` is a readonly array while the source is a normal array or tuple
                         // or `target` is an array and source is a tuple - in both cases the types cannot be identical, by construction
                         return Ternary.False;
+                    }
+                }
+                else if (isGenericTupleType(source) && isTupleType(target) && !isGenericTupleType(target)) {
+                    const constraint = getBaseConstraintOrType(source);
+                    if (constraint !== source) {
+                        return isRelatedTo(constraint, target, RecursionFlags.Source, reportErrors);
                     }
                 }
                 // A fresh empty object type is never a subtype of a non-empty object type. This ensures fresh({}) <: { [x: string]: xxx }
@@ -24081,7 +24108,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function isPartiallyInferableType(type: Type): boolean {
         return !(getObjectFlags(type) & ObjectFlags.NonInferrableType) ||
             isObjectLiteralType(type) && some(getPropertiesOfType(type), prop => isPartiallyInferableType(getTypeOfSymbol(prop))) ||
-            isTupleType(type) && some(getTypeArguments(type), isPartiallyInferableType);
+            isTupleType(type) && some(getElementTypes(type), isPartiallyInferableType);
     }
 
     function createReverseMappedType(source: Type, target: MappedType, constraint: IndexType) {
@@ -24096,7 +24123,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return createArrayType(inferReverseMappedType(getTypeArguments(source)[0], target, constraint), isReadonlyArrayType(source));
         }
         if (isTupleType(source)) {
-            const elementTypes = map(getTypeArguments(source), t => inferReverseMappedType(t, target, constraint));
+            const elementTypes = map(getElementTypes(source), t => inferReverseMappedType(t, target, constraint));
             const elementFlags = getMappedTypeModifiers(target) & MappedTypeModifiers.IncludeOptional ?
                 sameMap(source.target.elementFlags, f => f & ElementFlags.Optional ? ElementFlags.Required : f) :
                 source.target.elementFlags;
@@ -25157,22 +25184,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const inference = context.inferences[index];
         if (!inference.inferredType) {
             let inferredType: Type | undefined;
-            const signature = context.signature;
-            if (signature) {
-                const inferredCovariantType = inference.candidates ? getCovariantInference(inference, signature) : undefined;
-                if (inference.contraCandidates) {
-                    // If we have both co- and contra-variant inferences, we use the co-variant inference if it is not 'never',
-                    // it is a subtype of some contra-variant inference, and no other type parameter is constrained to this type
-                    // parameter and has inferences that would conflict. Otherwise, we use the contra-variant inference.
-                    const useCovariantType = inferredCovariantType && !(inferredCovariantType.flags & TypeFlags.Never) &&
+            let fallbackType: Type | undefined;
+            if (context.signature) {
+                const inferredCovariantType = inference.candidates ? getCovariantInference(inference, context.signature) : undefined;
+                const inferredContravariantType = inference.contraCandidates ? getContravariantInference(inference) : undefined;
+                if (inferredCovariantType || inferredContravariantType) {
+                    // If we have both co- and contra-variant inferences, we prefer the co-variant inference if it is not 'never',
+                    // all co-variant inferences are subtypes of it (i.e. it isn't one of a conflicting set of candidates), it is
+                    // a subtype of some contra-variant inference, and no other type parameter is constrained to this type parameter
+                    // and has inferences that would conflict. Otherwise, we prefer the contra-variant inference.
+                    const preferCovariantType = inferredCovariantType && (!inferredContravariantType ||
+                        !(inferredCovariantType.flags & TypeFlags.Never) &&
                         some(inference.contraCandidates, t => isTypeSubtypeOf(inferredCovariantType, t)) &&
                         every(context.inferences, other =>
                             other !== inference && getConstraintOfTypeParameter(other.typeParameter) !== inference.typeParameter ||
-                            every(other.candidates, t => isTypeSubtypeOf(t, inferredCovariantType)));
-                    inferredType = useCovariantType ? inferredCovariantType : getContravariantInference(inference);
-                }
-                else if (inferredCovariantType) {
-                    inferredType = inferredCovariantType;
+                            every(other.candidates, t => isTypeSubtypeOf(t, inferredCovariantType))));
+                    inferredType = preferCovariantType ? inferredCovariantType : inferredContravariantType;
+                    fallbackType = preferCovariantType ? inferredContravariantType : inferredCovariantType;
                 }
                 else if (context.flags & InferenceFlags.NoDefault) {
                     // We use silentNeverType as the wildcard that signals no inferences.
@@ -25202,7 +25230,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (constraint) {
                 const instantiatedConstraint = instantiateType(constraint, context.nonFixingMapper);
                 if (!inferredType || !context.compareTypes(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
-                    inference.inferredType = inferredType = instantiatedConstraint;
+                    // If the fallback type satisfies the constraint, we pick it. Otherwise, we pick the constraint.
+                    inference.inferredType = fallbackType && context.compareTypes(fallbackType, getTypeWithThisArgument(instantiatedConstraint, fallbackType)) ? fallbackType : instantiatedConstraint;
                 }
             }
         }
@@ -32487,7 +32516,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getMutableArrayOrTupleType(type: Type) {
         return type.flags & TypeFlags.Union ? mapType(type, getMutableArrayOrTupleType) :
             type.flags & TypeFlags.Any || isMutableArrayOrTuple(getBaseConstraintOfType(type) || type) ? type :
-            isTupleType(type) ? createTupleType(getTypeArguments(type), type.target.elementFlags, /*readonly*/ false, type.target.labeledElementDeclarations) :
+            isTupleType(type) ? createTupleType(getElementTypes(type), type.target.elementFlags, /*readonly*/ false, type.target.labeledElementDeclarations) :
             createTupleType([type], [ElementFlags.Variadic]);
     }
 
@@ -32821,7 +32850,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // We can call checkExpressionCached because spread expressions never have a contextual type.
                 const spreadType = arg.kind === SyntaxKind.SpreadElement && (flowLoopCount ? checkExpression((arg as SpreadElement).expression) : checkExpressionCached((arg as SpreadElement).expression));
                 if (spreadType && isTupleType(spreadType)) {
-                    forEach(getTypeArguments(spreadType), (t, i) => {
+                    forEach(getElementTypes(spreadType), (t, i) => {
                         const flags = spreadType.target.elementFlags[i];
                         const syntheticArg = createSyntheticExpression(arg, flags & ElementFlags.Rest ? createArrayType(t) : t,
                             !!(flags & ElementFlags.Variable), spreadType.target.labeledElementDeclarations?.[i]);
@@ -37432,7 +37461,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function padTupleType(type: TupleTypeReference, pattern: ArrayBindingPattern) {
         const patternElements = pattern.elements;
-        const elementTypes = getTypeArguments(type).slice();
+        const elementTypes = getElementTypes(type).slice();
         const elementFlags = type.target.elementFlags.slice();
         for (let i = getTypeReferenceArity(type); i < patternElements.length; i++) {
             const e = patternElements[i];
