@@ -25157,22 +25157,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const inference = context.inferences[index];
         if (!inference.inferredType) {
             let inferredType: Type | undefined;
-            const signature = context.signature;
-            if (signature) {
-                const inferredCovariantType = inference.candidates ? getCovariantInference(inference, signature) : undefined;
-                if (inference.contraCandidates) {
-                    // If we have both co- and contra-variant inferences, we use the co-variant inference if it is not 'never',
-                    // it is a subtype of some contra-variant inference, and no other type parameter is constrained to this type
-                    // parameter and has inferences that would conflict. Otherwise, we use the contra-variant inference.
-                    const useCovariantType = inferredCovariantType && !(inferredCovariantType.flags & TypeFlags.Never) &&
+            let fallbackType: Type | undefined;
+            if (context.signature) {
+                const inferredCovariantType = inference.candidates ? getCovariantInference(inference, context.signature) : undefined;
+                const inferredContravariantType = inference.contraCandidates ? getContravariantInference(inference) : undefined;
+                if (inferredCovariantType || inferredContravariantType) {
+                    // If we have both co- and contra-variant inferences, we prefer the co-variant inference if it is not 'never',
+                    // all co-variant inferences are subtypes of it (i.e. it isn't one of a conflicting set of candidates), it is
+                    // a subtype of some contra-variant inference, and no other type parameter is constrained to this type parameter
+                    // and has inferences that would conflict. Otherwise, we prefer the contra-variant inference.
+                    const preferCovariantType = inferredCovariantType && (!inferredContravariantType ||
+                        !(inferredCovariantType.flags & TypeFlags.Never) &&
                         some(inference.contraCandidates, t => isTypeSubtypeOf(inferredCovariantType, t)) &&
                         every(context.inferences, other =>
                             other !== inference && getConstraintOfTypeParameter(other.typeParameter) !== inference.typeParameter ||
-                            every(other.candidates, t => isTypeSubtypeOf(t, inferredCovariantType)));
-                    inferredType = useCovariantType ? inferredCovariantType : getContravariantInference(inference);
-                }
-                else if (inferredCovariantType) {
-                    inferredType = inferredCovariantType;
+                            every(other.candidates, t => isTypeSubtypeOf(t, inferredCovariantType))));
+                    inferredType = preferCovariantType ? inferredCovariantType : inferredContravariantType;
+                    fallbackType = preferCovariantType ? inferredContravariantType : inferredCovariantType;
                 }
                 else if (context.flags & InferenceFlags.NoDefault) {
                     // We use silentNeverType as the wildcard that signals no inferences.
@@ -25202,7 +25203,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (constraint) {
                 const instantiatedConstraint = instantiateType(constraint, context.nonFixingMapper);
                 if (!inferredType || !context.compareTypes(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
-                    inference.inferredType = inferredType = instantiatedConstraint;
+                    // If the fallback type satisfies the constraint, we pick it. Otherwise, we pick the constraint.
+                    inference.inferredType = fallbackType && context.compareTypes(fallbackType, getTypeWithThisArgument(instantiatedConstraint, fallbackType)) ? fallbackType : instantiatedConstraint;
                 }
             }
         }
