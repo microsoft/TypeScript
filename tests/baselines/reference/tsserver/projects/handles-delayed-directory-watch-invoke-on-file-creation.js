@@ -39,7 +39,15 @@ Info seq  [hh:mm:ss:mss] For info: /users/username/projects/project/b.ts :: Conf
 Info seq  [hh:mm:ss:mss] Creating configuration project /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/project/tsconfig.json 2000 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"projectLoadingStart","body":{"projectName":"/users/username/projects/project/tsconfig.json","reason":"Creating possible configured project for /users/username/projects/project/b.ts to open"}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "projectLoadingStart",
+     "body": {
+      "projectName": "/users/username/projects/project/tsconfig.json",
+      "reason": "Creating possible configured project for /users/username/projects/project/b.ts to open"
+     }
+    }
 Info seq  [hh:mm:ss:mss] Config: /users/username/projects/project/tsconfig.json : {
  "rootNames": [
   "/users/username/projects/project/b.ts",
@@ -75,11 +83,66 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"projectLoadingFinish","body":{"projectName":"/users/username/projects/project/tsconfig.json"}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "projectLoadingFinish",
+     "body": {
+      "projectName": "/users/username/projects/project/tsconfig.json"
+     }
+    }
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"telemetry","body":{"telemetryEventName":"projectInfo","payload":{"projectId":"5b0be5fc7f7235edf5a31bffe614b4e0819e55ec5f118558864b1f882e283c0d","fileStats":{"js":0,"jsSize":0,"jsx":0,"jsxSize":0,"ts":2,"tsSize":40,"tsx":0,"tsxSize":0,"dts":1,"dtsSize":334,"deferred":0,"deferredSize":0},"compilerOptions":{},"typeAcquisition":{"enable":false,"include":false,"exclude":false},"extends":false,"files":false,"include":false,"exclude":false,"compileOnSave":false,"configFileName":"tsconfig.json","projectType":"configured","languageServiceEnabled":true,"version":"FakeVersion"}}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "telemetry",
+     "body": {
+      "telemetryEventName": "projectInfo",
+      "payload": {
+       "projectId": "5b0be5fc7f7235edf5a31bffe614b4e0819e55ec5f118558864b1f882e283c0d",
+       "fileStats": {
+        "js": 0,
+        "jsSize": 0,
+        "jsx": 0,
+        "jsxSize": 0,
+        "ts": 2,
+        "tsSize": 40,
+        "tsx": 0,
+        "tsxSize": 0,
+        "dts": 1,
+        "dtsSize": 334,
+        "deferred": 0,
+        "deferredSize": 0
+       },
+       "compilerOptions": {},
+       "typeAcquisition": {
+        "enable": false,
+        "include": false,
+        "exclude": false
+       },
+       "extends": false,
+       "files": false,
+       "include": false,
+       "exclude": false,
+       "compileOnSave": false,
+       "configFileName": "tsconfig.json",
+       "projectType": "configured",
+       "languageServiceEnabled": true,
+       "version": "5.1.0-dev"
+      }
+     }
+    }
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"configFileDiag","body":{"triggerFile":"/users/username/projects/project/b.ts","configFile":"/users/username/projects/project/tsconfig.json","diagnostics":[]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "configFileDiag",
+     "body": {
+      "triggerFile": "/users/username/projects/project/b.ts",
+      "configFile": "/users/username/projects/project/tsconfig.json",
+      "diagnostics": []
+     }
+    }
 Info seq  [hh:mm:ss:mss] Project '/users/username/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
@@ -289,7 +352,17 @@ Info seq  [hh:mm:ss:mss] 	FileName: /users/username/projects/project/a.ts Projec
 Info seq  [hh:mm:ss:mss] 		Projects: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /users/username/projects/project/b.ts,/users/username/projects/project/a.ts
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/users/username/projects/project/b.ts","/users/username/projects/project/a.ts"]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "projectsUpdatedInBackground",
+     "body": {
+      "openFiles": [
+       "/users/username/projects/project/b.ts",
+       "/users/username/projects/project/a.ts"
+      ]
+     }
+    }
 After running Timeout callback:: count: 0
 
 Before request
@@ -353,7 +426,22 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"configFileDiag","body":{"triggerFile":"/users/username/projects/project/sub/a.ts","configFile":"/users/username/projects/project/tsconfig.json","diagnostics":[{"text":"File '/users/username/projects/project/a.ts' not found.\n  The file is in the program because:\n    Matched by default include pattern '**/*'","code":6053,"category":"error"}]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "configFileDiag",
+     "body": {
+      "triggerFile": "/users/username/projects/project/sub/a.ts",
+      "configFile": "/users/username/projects/project/tsconfig.json",
+      "diagnostics": [
+       {
+        "text": "File '/users/username/projects/project/a.ts' not found.\n  The file is in the program because:\n    Matched by default include pattern '**/*'",
+        "code": 6053,
+        "category": "error"
+       }
+      ]
+     }
+    }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/project/sub/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/project/sub/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -458,7 +546,17 @@ Info seq  [hh:mm:ss:mss] 	FileName: /users/username/projects/project/sub/a.ts Pr
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /users/username/projects/project/b.ts,/users/username/projects/project/sub/a.ts
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/users/username/projects/project/b.ts","/users/username/projects/project/sub/a.ts"]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "projectsUpdatedInBackground",
+     "body": {
+      "openFiles": [
+       "/users/username/projects/project/b.ts",
+       "/users/username/projects/project/sub/a.ts"
+      ]
+     }
+    }
 After running Timeout callback:: count: 0
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /users/username/projects/project/a.ts :: WatchInfo: /users/username/projects/project 1 undefined Config: /users/username/projects/project/tsconfig.json WatchType: Wild card directory
@@ -531,7 +629,15 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/users/username/projects/project/b.ts","diagnostics":[]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "syntaxDiag",
+     "body": {
+      "file": "/users/username/projects/project/b.ts",
+      "diagnostics": []
+     }
+    }
 After running Timeout callback:: count: 2
 13: /users/username/projects/project/tsconfig.json
 14: *ensureProjectForOpenFiles*
@@ -568,7 +674,15 @@ Before running Immedidate callback:: count: 1
 1: semanticCheck
 
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/users/username/projects/project/b.ts","diagnostics":[]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "semanticDiag",
+     "body": {
+      "file": "/users/username/projects/project/b.ts",
+      "diagnostics": []
+     }
+    }
 After running Immedidate callback:: count: 1
 2: suggestionCheck
 
@@ -576,7 +690,15 @@ Before running Immedidate callback:: count: 1
 2: suggestionCheck
 
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/users/username/projects/project/b.ts","diagnostics":[]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "suggestionDiag",
+     "body": {
+      "file": "/users/username/projects/project/b.ts",
+      "diagnostics": []
+     }
+    }
 After running Immedidate callback:: count: 0
 
 Before running Timeout callback:: count: 3
@@ -586,7 +708,15 @@ Before running Timeout callback:: count: 3
 
 Invoking Timeout callback:: timeoutId:: 16:: checkOne
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/users/username/projects/project/sub/a.ts","diagnostics":[]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "syntaxDiag",
+     "body": {
+      "file": "/users/username/projects/project/sub/a.ts",
+      "diagnostics": []
+     }
+    }
 After running Timeout callback:: count: 2
 13: /users/username/projects/project/tsconfig.json
 14: *ensureProjectForOpenFiles*
@@ -595,7 +725,15 @@ Before running Immedidate callback:: count: 1
 3: semanticCheck
 
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/users/username/projects/project/sub/a.ts","diagnostics":[]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "semanticDiag",
+     "body": {
+      "file": "/users/username/projects/project/sub/a.ts",
+      "diagnostics": []
+     }
+    }
 After running Immedidate callback:: count: 1
 4: suggestionCheck
 
@@ -603,7 +741,22 @@ Before running Immedidate callback:: count: 1
 4: suggestionCheck
 
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/users/username/projects/project/sub/a.ts","diagnostics":[]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "suggestionDiag",
+     "body": {
+      "file": "/users/username/projects/project/sub/a.ts",
+      "diagnostics": []
+     }
+    }
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":7}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "requestCompleted",
+     "body": {
+      "request_seq": 7
+     }
+    }
 After running Immedidate callback:: count: 0

@@ -305,14 +305,30 @@ Before running Timeout callback:: count: 1
 1: checkOne
 
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/test/backend/index.js","diagnostics":[]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "syntaxDiag",
+     "body": {
+      "file": "/user/username/projects/myproject/test/backend/index.js",
+      "diagnostics": []
+     }
+    }
 After running Timeout callback:: count: 0
 
 Before running Immedidate callback:: count: 1
 1: semanticCheck
 
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/test/backend/index.js","diagnostics":[]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "semanticDiag",
+     "body": {
+      "file": "/user/username/projects/myproject/test/backend/index.js",
+      "diagnostics": []
+     }
+    }
 After running Immedidate callback:: count: 1
 2: suggestionCheck
 
@@ -320,21 +336,45 @@ Before running Immedidate callback:: count: 1
 2: suggestionCheck
 
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/test/backend/index.js","diagnostics":[]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "suggestionDiag",
+     "body": {
+      "file": "/user/username/projects/myproject/test/backend/index.js",
+      "diagnostics": []
+     }
+    }
 After running Immedidate callback:: count: 0
 
 Before running Timeout callback:: count: 1
 2: checkOne
 
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/client/app.js","diagnostics":[]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "syntaxDiag",
+     "body": {
+      "file": "/user/username/projects/myproject/src/client/app.js",
+      "diagnostics": []
+     }
+    }
 After running Timeout callback:: count: 0
 
 Before running Immedidate callback:: count: 1
 3: semanticCheck
 
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/src/client/app.js","diagnostics":[]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "semanticDiag",
+     "body": {
+      "file": "/user/username/projects/myproject/src/client/app.js",
+      "diagnostics": []
+     }
+    }
 After running Immedidate callback:: count: 1
 4: suggestionCheck
 
@@ -342,9 +382,24 @@ Before running Immedidate callback:: count: 1
 4: suggestionCheck
 
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/client/app.js","diagnostics":[]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "suggestionDiag",
+     "body": {
+      "file": "/user/username/projects/myproject/src/client/app.js",
+      "diagnostics": []
+     }
+    }
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":3}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "requestCompleted",
+     "body": {
+      "request_seq": 3
+     }
+    }
 After running Immedidate callback:: count: 0
 
 Before request
@@ -585,14 +640,30 @@ Before running Timeout callback:: count: 1
 3: checkOne
 
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/server/utilities.js","diagnostics":[]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "syntaxDiag",
+     "body": {
+      "file": "/user/username/projects/myproject/src/server/utilities.js",
+      "diagnostics": []
+     }
+    }
 After running Timeout callback:: count: 0
 
 Before running Immedidate callback:: count: 1
 5: semanticCheck
 
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/src/server/utilities.js","diagnostics":[]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "semanticDiag",
+     "body": {
+      "file": "/user/username/projects/myproject/src/server/utilities.js",
+      "diagnostics": []
+     }
+    }
 After running Immedidate callback:: count: 1
 6: suggestionCheck
 
@@ -600,21 +671,45 @@ Before running Immedidate callback:: count: 1
 6: suggestionCheck
 
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/server/utilities.js","diagnostics":[]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "suggestionDiag",
+     "body": {
+      "file": "/user/username/projects/myproject/src/server/utilities.js",
+      "diagnostics": []
+     }
+    }
 After running Immedidate callback:: count: 0
 
 Before running Timeout callback:: count: 1
 4: checkOne
 
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/client/app.js","diagnostics":[]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "syntaxDiag",
+     "body": {
+      "file": "/user/username/projects/myproject/src/client/app.js",
+      "diagnostics": []
+     }
+    }
 After running Timeout callback:: count: 0
 
 Before running Immedidate callback:: count: 1
 7: semanticCheck
 
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/src/client/app.js","diagnostics":[]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "semanticDiag",
+     "body": {
+      "file": "/user/username/projects/myproject/src/client/app.js",
+      "diagnostics": []
+     }
+    }
 After running Immedidate callback:: count: 1
 8: suggestionCheck
 
@@ -622,7 +717,22 @@ Before running Immedidate callback:: count: 1
 8: suggestionCheck
 
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/client/app.js","diagnostics":[]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "suggestionDiag",
+     "body": {
+      "file": "/user/username/projects/myproject/src/client/app.js",
+      "diagnostics": []
+     }
+    }
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":6}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "requestCompleted",
+     "body": {
+      "request_seq": 6
+     }
+    }
 After running Immedidate callback:: count: 0
