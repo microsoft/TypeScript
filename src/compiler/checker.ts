@@ -25165,10 +25165,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // and has inferences that would conflict. Otherwise, we prefer the contra-variant inference.
                     const preferCovariantType = inferredCovariantType && (!inferredContravariantType ||
                         !(inferredCovariantType.flags & TypeFlags.Never) &&
-                        every(inference.candidates, t => isTypeSubtypeOf(t, inferredCovariantType)) &&
                         some(inference.contraCandidates, t => isTypeSubtypeOf(inferredCovariantType, t)) &&
-                        every(context.inferences, other => other === inference ||
-                            getConstraintOfTypeParameter(other.typeParameter) !== inference.typeParameter ||
+                        every(context.inferences, other =>
+                            other !== inference && getConstraintOfTypeParameter(other.typeParameter) !== inference.typeParameter ||
                             every(other.candidates, t => isTypeSubtypeOf(t, inferredCovariantType))));
                     inferredType = preferCovariantType ? inferredCovariantType : inferredContravariantType;
                     fallbackType = preferCovariantType ? inferredContravariantType : inferredCovariantType;
