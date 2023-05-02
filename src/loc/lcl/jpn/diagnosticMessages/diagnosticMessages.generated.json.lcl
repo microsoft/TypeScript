@@ -14353,7 +14353,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type '{0}' is not assignable to type '{1}' as implied by variance annotation.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[型 '{0}' は、差異注釈によって暗黙的に示されているように、型 '{1}' に割り当てできません。]]></Val>
+            <Val><![CDATA[型 '{0}' は、変性注釈によって暗黙的に示されているように、型 '{1}' に割り当てできません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
