@@ -15,7 +15,6 @@ import {
     find,
     first,
     firstDefined,
-    firstOrUndefined,
     forEach,
     GetAccessorDeclaration,
     getCombinedLocalAndExportSymbolFlags,
@@ -536,12 +535,12 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
     // don't use symbolFlags since getAliasedSymbol requires the flag on the symbol itself
     if (symbol.flags & SymbolFlags.Alias) {
         prefixNextMeaning();
-        if (!hasAddedSymbolInfo) {
+        if (!hasAddedSymbolInfo || documentation.length === 0 && tags.length === 0) {
             const resolvedSymbol = typeChecker.getAliasedSymbol(symbol);
             if (resolvedSymbol !== symbol && resolvedSymbol.declarations && resolvedSymbol.declarations.length > 0) {
                 const resolvedNode = resolvedSymbol.declarations[0];
                 const declarationName = getNameOfDeclaration(resolvedNode);
-                if (declarationName) {
+                if (declarationName && !hasAddedSymbolInfo) {
                     const isExternalModuleDeclaration =
                         isModuleWithStringLiteralName(resolvedNode) &&
                         hasSyntacticModifier(resolvedNode, ModifierFlags.Ambient);
@@ -835,15 +834,6 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
         if (allSignatures.length > 1 && documentation.length === 0 && tags.length === 0) {
             documentation = allSignatures[0].getDocumentationComment(typeChecker);
             tags = allSignatures[0].getJsDocTags().filter(tag => tag.name !== "deprecated"); // should only include @deprecated JSDoc tag on the first overload (#49368)
-        }
-
-        if (symbolFlags & SymbolFlags.Alias && documentation.length === 0 && tags.length === 0) {
-            const aliasSymbol = typeChecker.getAliasedSymbol(symbol);
-            const aliasDeclaration = firstOrUndefined(aliasSymbol.declarations);
-            if (aliasSymbol !== symbol && aliasDeclaration) {
-                documentationFromAlias = aliasSymbol.getContextualDocumentationComment(aliasDeclaration, typeChecker);
-                tagsFromAlias = aliasSymbol.getJsDocTags(typeChecker);
-            }
         }
     }
 
