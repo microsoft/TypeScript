@@ -1657,8 +1657,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         getFullyQualifiedName,
         getResolvedSignature: (node, candidatesOutArray, argumentCount) =>
             getResolvedSignatureWorker(node, candidatesOutArray, argumentCount, CheckMode.Normal),
-        getResolvedSignatureForStringLiteralCompletions: (call, editingArgument, candidatesOutArray) =>
-            runWithInferenceBlockedFromSourceNode(editingArgument, () => getResolvedSignatureWorker(call, candidatesOutArray, /*argumentCount*/ undefined, CheckMode.IsForStringLiteralArgumentCompletions)),
+        getCandidateSignaturesForStringLiteralCompletions,
         getResolvedSignatureForSignatureHelp: (node, candidatesOutArray, argumentCount) =>
             runWithoutResolvedSignatureCaching(node, () => getResolvedSignatureWorker(node, candidatesOutArray, argumentCount, CheckMode.IsForSignatureHelp)),
         getExpandedParameters,
@@ -1839,17 +1838,41 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         typeHasCallOrConstructSignatures,
     };
 
+    function getCandidateSignaturesForStringLiteralCompletions(call: CallLikeExpression, editingArgument: Node) {
+        const candidatesSet = new Set<Signature>();
+        const candidates: Signature[] = [];
+
+        // first, get candidates when inference is blocked from the source node.
+        runWithInferenceBlockedFromSourceNode(editingArgument, () => getResolvedSignatureWorker(call, candidates, /*argumentCount*/ undefined, CheckMode.IsForStringLiteralArgumentCompletions));
+        for (const candidate of candidates) {
+            candidatesSet.add(candidate);
+        }
+
+        // reset candidates for second pass
+        candidates.length = 0;
+
+        // next, get candidates where the source node is considered for inference.
+        runWithoutResolvedSignatureCaching(editingArgument, () => getResolvedSignatureWorker(call, candidates, /*argumentCount*/ undefined, CheckMode.IsForStringLiteralArgumentCompletions));
+        for (const candidate of candidates) {
+            candidatesSet.add(candidate);
+        }
+
+        return arrayFrom(candidatesSet);
+    }
+
     function runWithoutResolvedSignatureCaching<T>(node: Node | undefined, fn: () => T): T {
         const containingCall = findAncestor(node, isCallLikeExpression);
-        const containingCallResolvedSignature = containingCall && getNodeLinks(containingCall).resolvedSignature;
         if (containingCall) {
-            getNodeLinks(containingCall).resolvedSignature = undefined;
+            const links = getNodeLinks(containingCall);
+            const containingCallResolvedSignature = links.resolvedSignature;
+            links.resolvedSignature = undefined;
+            const result = fn();
+            links.resolvedSignature = containingCallResolvedSignature;
+            return result;
         }
-        const result = fn();
-        if (containingCall) {
-            getNodeLinks(containingCall).resolvedSignature = containingCallResolvedSignature;
+        else {
+            return fn();
         }
-        return result;
     }
 
     function runWithInferenceBlockedFromSourceNode<T>(node: Node | undefined, fn: () => T): T {
