@@ -38,7 +38,15 @@ Info seq  [hh:mm:ss:mss] For info: /a/b/project/file1.ts :: Config file name: /a
 Info seq  [hh:mm:ss:mss] Creating configuration project /a/b/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/project/tsconfig.json 2000 undefined Project: /a/b/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"CustomHandler::projectLoadingStart","body":{"project":"/a/b/project/tsconfig.json","reason":"Creating possible configured project for /a/b/project/file1.ts to open"}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "CustomHandler::projectLoadingStart",
+     "body": {
+      "project": "/a/b/project/tsconfig.json",
+      "reason": "Creating possible configured project for /a/b/project/file1.ts to open"
+     }
+    }
 Info seq  [hh:mm:ss:mss] Config: /a/b/project/tsconfig.json : {
  "rootNames": [
   "/a/b/project/file1.ts",
@@ -73,11 +81,65 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"CustomHandler::projectLoadingFinish","body":{"project":"/a/b/project/tsconfig.json"}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "CustomHandler::projectLoadingFinish",
+     "body": {
+      "project": "/a/b/project/tsconfig.json"
+     }
+    }
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"CustomHandler::projectInfo","body":{"projectId":"1cf2001c133ce00fd258494c136bfa9707203d90270d151ea0f575d93d990f9d","fileStats":{"js":0,"jsSize":0,"jsx":0,"jsxSize":0,"ts":2,"tsSize":39,"tsx":0,"tsxSize":0,"dts":1,"dtsSize":334,"deferred":0,"deferredSize":0},"compilerOptions":{"typeRoots":[]},"typeAcquisition":{"enable":false,"include":false,"exclude":false},"extends":false,"files":false,"include":false,"exclude":false,"compileOnSave":false,"configFileName":"tsconfig.json","projectType":"configured","languageServiceEnabled":true,"version":"FakeVersion"}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "CustomHandler::projectInfo",
+     "body": {
+      "projectId": "1cf2001c133ce00fd258494c136bfa9707203d90270d151ea0f575d93d990f9d",
+      "fileStats": {
+       "js": 0,
+       "jsSize": 0,
+       "jsx": 0,
+       "jsxSize": 0,
+       "ts": 2,
+       "tsSize": 39,
+       "tsx": 0,
+       "tsxSize": 0,
+       "dts": 1,
+       "dtsSize": 334,
+       "deferred": 0,
+       "deferredSize": 0
+      },
+      "compilerOptions": {
+       "typeRoots": []
+      },
+      "typeAcquisition": {
+       "enable": false,
+       "include": false,
+       "exclude": false
+      },
+      "extends": false,
+      "files": false,
+      "include": false,
+      "exclude": false,
+      "compileOnSave": false,
+      "configFileName": "tsconfig.json",
+      "projectType": "configured",
+      "languageServiceEnabled": true,
+      "version": "5.1.0-dev"
+     }
+    }
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"CustomHandler::configFileDiag","body":{"configFileName":"/a/b/project/tsconfig.json","diagnostics":[],"triggerFile":"/a/b/project/file1.ts"}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "CustomHandler::configFileDiag",
+     "body": {
+      "configFileName": "/a/b/project/tsconfig.json",
+      "diagnostics": [],
+      "triggerFile": "/a/b/project/file1.ts"
+     }
+    }
 Info seq  [hh:mm:ss:mss] Project '/a/b/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
@@ -146,7 +208,16 @@ Info seq  [hh:mm:ss:mss] Open files:
 Info seq  [hh:mm:ss:mss] 	FileName: /a/b/project/file1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /a/b/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"CustomHandler::projectsUpdatedInBackground","body":{"openFiles":["/a/b/project/file1.ts"]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "CustomHandler::projectsUpdatedInBackground",
+     "body": {
+      "openFiles": [
+       "/a/b/project/file1.ts"
+      ]
+     }
+    }
 After running Timeout callback:: count: 0
 
 Before running Timeout callback:: count: 0

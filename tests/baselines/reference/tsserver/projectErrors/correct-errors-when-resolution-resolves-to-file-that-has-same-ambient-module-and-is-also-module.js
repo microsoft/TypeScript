@@ -49,7 +49,15 @@ Info seq  [hh:mm:ss:mss] For info: /users/username/projects/myproject/src/a.ts :
 Info seq  [hh:mm:ss:mss] Creating configuration project /users/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/myproject/tsconfig.json 2000 undefined Project: /users/username/projects/myproject/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"projectLoadingStart","body":{"projectName":"/users/username/projects/myproject/tsconfig.json","reason":"Creating possible configured project for /users/username/projects/myproject/src/a.ts to open"}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "projectLoadingStart",
+     "body": {
+      "projectName": "/users/username/projects/myproject/tsconfig.json",
+      "reason": "Creating possible configured project for /users/username/projects/myproject/src/a.ts to open"
+     }
+    }
 Info seq  [hh:mm:ss:mss] Config: /users/username/projects/myproject/tsconfig.json : {
  "rootNames": [
   "/users/username/projects/myproject/src/a.ts"
@@ -90,11 +98,66 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"projectLoadingFinish","body":{"projectName":"/users/username/projects/myproject/tsconfig.json"}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "projectLoadingFinish",
+     "body": {
+      "projectName": "/users/username/projects/myproject/tsconfig.json"
+     }
+    }
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"telemetry","body":{"telemetryEventName":"projectInfo","payload":{"projectId":"49814c247d0e4666719ac54e31c3f19091be4020c5ac046c86474826dc7e4ede","fileStats":{"js":0,"jsSize":0,"jsx":0,"jsxSize":0,"ts":1,"tsSize":73,"tsx":0,"tsxSize":0,"dts":3,"dtsSize":486,"deferred":0,"deferredSize":0},"compilerOptions":{},"typeAcquisition":{"enable":false,"include":false,"exclude":false},"extends":false,"files":false,"include":true,"exclude":false,"compileOnSave":false,"configFileName":"tsconfig.json","projectType":"configured","languageServiceEnabled":true,"version":"FakeVersion"}}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "telemetry",
+     "body": {
+      "telemetryEventName": "projectInfo",
+      "payload": {
+       "projectId": "49814c247d0e4666719ac54e31c3f19091be4020c5ac046c86474826dc7e4ede",
+       "fileStats": {
+        "js": 0,
+        "jsSize": 0,
+        "jsx": 0,
+        "jsxSize": 0,
+        "ts": 1,
+        "tsSize": 73,
+        "tsx": 0,
+        "tsxSize": 0,
+        "dts": 3,
+        "dtsSize": 486,
+        "deferred": 0,
+        "deferredSize": 0
+       },
+       "compilerOptions": {},
+       "typeAcquisition": {
+        "enable": false,
+        "include": false,
+        "exclude": false
+       },
+       "extends": false,
+       "files": false,
+       "include": true,
+       "exclude": false,
+       "compileOnSave": false,
+       "configFileName": "tsconfig.json",
+       "projectType": "configured",
+       "languageServiceEnabled": true,
+       "version": "5.1.0-dev"
+      }
+     }
+    }
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"configFileDiag","body":{"triggerFile":"/users/username/projects/myproject/src/a.ts","configFile":"/users/username/projects/myproject/tsconfig.json","diagnostics":[]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "configFileDiag",
+     "body": {
+      "triggerFile": "/users/username/projects/myproject/src/a.ts",
+      "configFile": "/users/username/projects/myproject/tsconfig.json",
+      "diagnostics": []
+     }
+    }
 Info seq  [hh:mm:ss:mss] Project '/users/username/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 
@@ -150,14 +213,30 @@ Before running Timeout callback:: count: 1
 1: checkOne
 
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/users/username/projects/myproject/src/a.ts","diagnostics":[]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "syntaxDiag",
+     "body": {
+      "file": "/users/username/projects/myproject/src/a.ts",
+      "diagnostics": []
+     }
+    }
 After running Timeout callback:: count: 0
 
 Before running Immedidate callback:: count: 1
 1: semanticCheck
 
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/users/username/projects/myproject/src/a.ts","diagnostics":[]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "semanticDiag",
+     "body": {
+      "file": "/users/username/projects/myproject/src/a.ts",
+      "diagnostics": []
+     }
+    }
 After running Immedidate callback:: count: 1
 2: suggestionCheck
 
@@ -165,9 +244,53 @@ Before running Immedidate callback:: count: 1
 2: suggestionCheck
 
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/users/username/projects/myproject/src/a.ts","diagnostics":[{"start":{"line":1,"offset":1},"end":{"line":1,"offset":44},"text":"'myModule' is declared but its value is never read.","code":6133,"category":"suggestion","reportsUnnecessary":true},{"start":{"line":2,"offset":10},"end":{"line":2,"offset":13},"text":"'foo' is declared but its value is never read.","code":6133,"category":"suggestion","reportsUnnecessary":true}]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "suggestionDiag",
+     "body": {
+      "file": "/users/username/projects/myproject/src/a.ts",
+      "diagnostics": [
+       {
+        "start": {
+         "line": 1,
+         "offset": 1
+        },
+        "end": {
+         "line": 1,
+         "offset": 44
+        },
+        "text": "'myModule' is declared but its value is never read.",
+        "code": 6133,
+        "category": "suggestion",
+        "reportsUnnecessary": true
+       },
+       {
+        "start": {
+         "line": 2,
+         "offset": 10
+        },
+        "end": {
+         "line": 2,
+         "offset": 13
+        },
+        "text": "'foo' is declared but its value is never read.",
+        "code": 6133,
+        "category": "suggestion",
+        "reportsUnnecessary": true
+       }
+      ]
+     }
+    }
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "requestCompleted",
+     "body": {
+      "request_seq": 2
+     }
+    }
 After running Immedidate callback:: count: 0
 
 Before request
@@ -226,14 +349,30 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/users/username/projects/myproject/src/a.ts","diagnostics":[]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "syntaxDiag",
+     "body": {
+      "file": "/users/username/projects/myproject/src/a.ts",
+      "diagnostics": []
+     }
+    }
 After running Timeout callback:: count: 0
 
 Before running Immedidate callback:: count: 1
 3: semanticCheck
 
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/users/username/projects/myproject/src/a.ts","diagnostics":[]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "semanticDiag",
+     "body": {
+      "file": "/users/username/projects/myproject/src/a.ts",
+      "diagnostics": []
+     }
+    }
 After running Immedidate callback:: count: 1
 4: suggestionCheck
 
@@ -241,7 +380,51 @@ Before running Immedidate callback:: count: 1
 4: suggestionCheck
 
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/users/username/projects/myproject/src/a.ts","diagnostics":[{"start":{"line":1,"offset":1},"end":{"line":1,"offset":44},"text":"'myModule' is declared but its value is never read.","code":6133,"category":"suggestion","reportsUnnecessary":true},{"start":{"line":2,"offset":10},"end":{"line":2,"offset":13},"text":"'foo' is declared but its value is never read.","code":6133,"category":"suggestion","reportsUnnecessary":true}]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "suggestionDiag",
+     "body": {
+      "file": "/users/username/projects/myproject/src/a.ts",
+      "diagnostics": [
+       {
+        "start": {
+         "line": 1,
+         "offset": 1
+        },
+        "end": {
+         "line": 1,
+         "offset": 44
+        },
+        "text": "'myModule' is declared but its value is never read.",
+        "code": 6133,
+        "category": "suggestion",
+        "reportsUnnecessary": true
+       },
+       {
+        "start": {
+         "line": 2,
+         "offset": 10
+        },
+        "end": {
+         "line": 2,
+         "offset": 13
+        },
+        "text": "'foo' is declared but its value is never read.",
+        "code": 6133,
+        "category": "suggestion",
+        "reportsUnnecessary": true
+       }
+      ]
+     }
+    }
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":4}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "requestCompleted",
+     "body": {
+      "request_seq": 4
+     }
+    }
 After running Immedidate callback:: count: 0
