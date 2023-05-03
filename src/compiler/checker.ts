@@ -37957,6 +37957,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return Debug.fail("Shouldn't ever directly check a JsxOpeningElement");
             case SyntaxKind.ImportKeyword:
                 return anyType; // LHS of ImportCall
+            case SyntaxKind.JsxNamespacedName:
+                return errorType; // FIXME: Remove when JsxNamespacedName is no longer used as an expression
+            case SyntaxKind.MissingDeclaration:
+                return errorType; // invalid decorated expression
             default:
                 return Debug.failBadSyntaxKind(node, "Unhandled expression node kind in checkExpressionWorker");
         }
