@@ -403,13 +403,12 @@ export const watchMin = task({
 });
 
 
-
 const { main: lssl, build: buildLssl, watch: watchLssl } = entrypointBuildTask({
     name: "lssl",
     description: "Builds language service server library",
     buildDeps: [generateDiagnostics],
-    project: "src/tsserverlibrary",
-    srcEntrypoint: "./src/tsserverlibrary/tsserverlibrary.ts",
+    project: "src/typescript",
+    srcEntrypoint: "./src/typescript/typescript.ts",
     builtEntrypoint: "./built/local/tsserverlibrary/tsserverlibrary.js",
     output: "./built/local/tsserverlibrary.js",
     mainDeps: [generateLibs],
@@ -422,8 +421,8 @@ export const dtsLssl = task({
     description: "Bundles tsserverlibrary.d.ts",
     dependencies: [buildLssl],
     run: async () => {
-        if (needsUpdate("./built/local/tsserverlibrary/tsconfig.tsbuildinfo", ["./built/local/tsserverlibrary.d.ts", "./built/local/tsserverlibrary.internal.d.ts"])) {
-            await runDtsBundler("./built/local/tsserverlibrary/tsserverlibrary.d.ts", "./built/local/tsserverlibrary.d.ts");
+        if (needsUpdate("./built/local/typescript/tsconfig.tsbuildinfo", ["./built/local/tsserverlibrary.d.ts", "./built/local/tsserverlibrary.internal.d.ts"])) {
+            await runDtsBundler("./built/local/typescript/typescript.d.ts", "./built/local/tsserverlibrary.d.ts");
         }
     }
 });

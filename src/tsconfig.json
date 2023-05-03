@@ -14,7 +14,6 @@
         { "path": "./testRunner" },
         { "path": "./tsc" },
         { "path": "./tsserver" },
-        { "path": "./tsserverlibrary" },
         { "path": "./typescript" },
         { "path": "./typingsInstaller" },
         { "path": "./typingsInstallerCore" },
