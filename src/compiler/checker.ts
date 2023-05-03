@@ -546,6 +546,7 @@ import {
     isImportDeclaration,
     isImportEqualsDeclaration,
     isImportKeyword,
+    isImportMeta,
     isImportOrExportSpecifier,
     isImportSpecifier,
     isImportTypeNode,
@@ -37956,7 +37957,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.JsxOpeningElement:
                 return Debug.fail("Shouldn't ever directly check a JsxOpeningElement");
             case SyntaxKind.ImportKeyword:
-                return anyType; // LHS of ImportCall
+                return isImportCall(node.parent) || isImportMeta(node.parent) ? anyType : errorType; // LHS of ImportCall or ImportMeta or invalid expression TODO: Should this have a better type?
             case SyntaxKind.JsxNamespacedName:
                 return errorType; // FIXME: Remove when JsxNamespacedName is no longer used as an expression
             case SyntaxKind.MissingDeclaration:
