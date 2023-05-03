@@ -319,7 +319,7 @@ export function formatMessage<T extends protocol.Message>(msg: T, logger: Logger
 
     const json = JSON.stringify(msg);
     if (verboseLogging) {
-        logger.info(`${msg.type}:${indent(json)}`);
+        logger.info(`${msg.type}:${indent(JSON.stringify(msg, undefined, " "))}`);
     }
 
     const len = byteLength(json, "utf8");
@@ -2675,7 +2675,7 @@ export class Session<TMessage = string> implements EventSender {
     private getApplicableRefactors(args: protocol.GetApplicableRefactorsRequestArgs): protocol.ApplicableRefactorInfo[] {
         const { file, project } = this.getFileAndProject(args);
         const scriptInfo = project.getScriptInfoForNormalizedPath(file)!;
-        return project.getLanguageService().getApplicableRefactors(file, this.extractPositionOrRange(args, scriptInfo), this.getPreferences(file), args.triggerReason, args.kind);
+        return project.getLanguageService().getApplicableRefactors(file, this.extractPositionOrRange(args, scriptInfo), this.getPreferences(file), args.triggerReason, args.kind, args.includeInteractiveActions);
     }
 
     private getEditsForRefactor(args: protocol.GetEditsForRefactorRequestArgs, simplifiedResult: boolean): RefactorEditInfo | protocol.RefactorEditInfo {

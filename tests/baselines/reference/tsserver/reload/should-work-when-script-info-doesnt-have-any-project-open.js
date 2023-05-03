@@ -111,7 +111,16 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] response:
-    {"seq":0,"type":"response","command":"reload","request_seq":3,"success":true,"performanceData":{"updateGraphDurationMs":*}}
+    {
+     "seq": 0,
+     "type": "response",
+     "command": "reload",
+     "request_seq": 3,
+     "success": true,
+     "performanceData": {
+      "updateGraphDurationMs": *
+     }
+    }
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
@@ -136,7 +145,16 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] response:
-    {"seq":0,"type":"response","command":"reload","request_seq":4,"success":true,"performanceData":{"updateGraphDurationMs":*}}
+    {
+     "seq": 0,
+     "type": "response",
+     "command": "reload",
+     "request_seq": 4,
+     "success": true,
+     "performanceData": {
+      "updateGraphDurationMs": *
+     }
+    }
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
@@ -244,7 +262,16 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] response:
-    {"seq":0,"type":"response","command":"reload","request_seq":7,"success":true,"performanceData":{"updateGraphDurationMs":*}}
+    {
+     "seq": 0,
+     "type": "response",
+     "command": "reload",
+     "request_seq": 7,
+     "success": true,
+     "performanceData": {
+      "updateGraphDurationMs": *
+     }
+    }
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
@@ -269,7 +296,16 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] response:
-    {"seq":0,"type":"response","command":"reload","request_seq":8,"success":true,"performanceData":{"updateGraphDurationMs":*}}
+    {
+     "seq": 0,
+     "type": "response",
+     "command": "reload",
+     "request_seq": 8,
+     "success": true,
+     "performanceData": {
+      "updateGraphDurationMs": *
+     }
+    }
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {

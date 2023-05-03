@@ -40,7 +40,15 @@ Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/src/test.ts
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"projectLoadingStart","body":{"projectName":"/user/username/projects/myproject/tsconfig.json","reason":"Creating possible configured project for /user/username/projects/myproject/src/test.ts to open"}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "projectLoadingStart",
+     "body": {
+      "projectName": "/user/username/projects/myproject/tsconfig.json",
+      "reason": "Creating possible configured project for /user/username/projects/myproject/src/test.ts to open"
+     }
+    }
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/src/test.ts",
@@ -81,11 +89,69 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"projectLoadingFinish","body":{"projectName":"/user/username/projects/myproject/tsconfig.json"}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "projectLoadingFinish",
+     "body": {
+      "projectName": "/user/username/projects/myproject/tsconfig.json"
+     }
+    }
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"telemetry","body":{"telemetryEventName":"projectInfo","payload":{"projectId":"4a33d78ee40d836c4f4e64c59aed976628aea0013be9585c5ff171dfc41baf98","fileStats":{"js":0,"jsSize":0,"jsx":0,"jsxSize":0,"ts":1,"tsSize":87,"tsx":0,"tsxSize":0,"dts":1,"dtsSize":334,"deferred":0,"deferredSize":0},"compilerOptions":{"resolveJsonModule":true,"composite":true},"typeAcquisition":{"enable":false,"include":false,"exclude":false},"extends":false,"files":false,"include":true,"exclude":false,"compileOnSave":false,"configFileName":"tsconfig.json","projectType":"configured","languageServiceEnabled":true,"version":"FakeVersion"}}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "telemetry",
+     "body": {
+      "telemetryEventName": "projectInfo",
+      "payload": {
+       "projectId": "4a33d78ee40d836c4f4e64c59aed976628aea0013be9585c5ff171dfc41baf98",
+       "fileStats": {
+        "js": 0,
+        "jsSize": 0,
+        "jsx": 0,
+        "jsxSize": 0,
+        "ts": 1,
+        "tsSize": 87,
+        "tsx": 0,
+        "tsxSize": 0,
+        "dts": 1,
+        "dtsSize": 334,
+        "deferred": 0,
+        "deferredSize": 0
+       },
+       "compilerOptions": {
+        "resolveJsonModule": true,
+        "composite": true
+       },
+       "typeAcquisition": {
+        "enable": false,
+        "include": false,
+        "exclude": false
+       },
+       "extends": false,
+       "files": false,
+       "include": true,
+       "exclude": false,
+       "compileOnSave": false,
+       "configFileName": "tsconfig.json",
+       "projectType": "configured",
+       "languageServiceEnabled": true,
+       "version": "5.1.0-dev"
+      }
+     }
+    }
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"configFileDiag","body":{"triggerFile":"/user/username/projects/myproject/src/test.ts","configFile":"/user/username/projects/myproject/tsconfig.json","diagnostics":[]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "configFileDiag",
+     "body": {
+      "triggerFile": "/user/username/projects/myproject/src/test.ts",
+      "configFile": "/user/username/projects/myproject/tsconfig.json",
+      "diagnostics": []
+     }
+    }
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/tsconfig.json :: No config files found.
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
@@ -145,14 +211,30 @@ Before running Timeout callback:: count: 1
 1: checkOne
 
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/test.ts","diagnostics":[]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "syntaxDiag",
+     "body": {
+      "file": "/user/username/projects/myproject/src/test.ts",
+      "diagnostics": []
+     }
+    }
 After running Timeout callback:: count: 0
 
 Before running Immedidate callback:: count: 1
 1: semanticCheck
 
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/src/test.ts","diagnostics":[]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "semanticDiag",
+     "body": {
+      "file": "/user/username/projects/myproject/src/test.ts",
+      "diagnostics": []
+     }
+    }
 After running Immedidate callback:: count: 1
 2: suggestionCheck
 
@@ -160,7 +242,22 @@ Before running Immedidate callback:: count: 1
 2: suggestionCheck
 
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/test.ts","diagnostics":[]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "suggestionDiag",
+     "body": {
+      "file": "/user/username/projects/myproject/src/test.ts",
+      "diagnostics": []
+     }
+    }
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "requestCompleted",
+     "body": {
+      "request_seq": 2
+     }
+    }
 After running Immedidate callback:: count: 0
