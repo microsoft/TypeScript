@@ -73,6 +73,7 @@ import {
     RepopulateModuleNodeFoundDiagnosticChain,
     returnFalse,
     returnUndefined,
+    sameMap,
     SemanticDiagnosticsBuilderProgram,
     skipTypeChecking,
     some,
@@ -467,24 +468,9 @@ function getEmitSignatureFromOldSignature(options: CompilerOptions, oldOptions: 
         isString(oldEmitSignature) ? [oldEmitSignature] : oldEmitSignature[0];
 }
 
-function mapArrayIfChanged<T, U>(array: T[], map: (element: T) => U): U[];
-function mapArrayIfChanged<T, U>(array: readonly T[], map: (element: T) => U): readonly U[];
-function mapArrayIfChanged<T, U>(array: readonly T[], map: (element: T) => U): U[] {
-    return forEach(array, (element, index) => {
-        const mapped = map(element);
-        if (element as unknown === mapped) return undefined;
-        const result: U[] = index > 0 ? array.slice(0, index - 1) as unknown[] as U[] : [];
-        result.push(mapped);
-        for (let i = index + 1; i < array.length; i++) {
-            result.push(map(array[i]));
-        }
-        return result;
-    }) || (array as unknown[] as U[]);
-}
-
 function repopulateDiagnostics(diagnostics: readonly Diagnostic[], newProgram: Program): readonly Diagnostic[] {
     if (!diagnostics.length) return diagnostics;
-    return mapArrayIfChanged(diagnostics, diag => {
+    return sameMap(diagnostics, diag => {
         if (isString(diag.messageText)) return diag;
         const repopulatedChain = convertOrRepopulateDiagnosticMessageChain(diag.messageText, diag.file, newProgram, chain => chain.repopulateInfo?.());
         return repopulatedChain === diag.messageText ?
@@ -516,9 +502,7 @@ function convertOrRepopulateDiagnosticMessageChainArray<T extends DiagnosticMess
     newProgram: Program,
     repopulateInfo: (chain: T) => RepopulateDiagnosticChainInfo | undefined,
 ): DiagnosticMessageChain[] | undefined {
-    return array ?
-        mapArrayIfChanged(array, chain => convertOrRepopulateDiagnosticMessageChain(chain, sourceFile, newProgram, repopulateInfo)) :
-        array;
+    return sameMap(array, chain => convertOrRepopulateDiagnosticMessageChain(chain, sourceFile, newProgram, repopulateInfo));
 }
 
 function convertToDiagnostics(diagnostics: readonly ReusableDiagnostic[], newProgram: Program): readonly Diagnostic[] {
