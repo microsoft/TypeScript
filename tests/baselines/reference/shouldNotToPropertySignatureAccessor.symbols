@@ -1,0 +1,27 @@
+=== tests/cases/conformance/declarationEmit/shouldNotToPropertySignatureAccessor.ts ===
+export const Foo0 = {
+>Foo0 : Symbol(Foo0, Decl(shouldNotToPropertySignatureAccessor.ts, 0, 12))
+
+    get bar(): number { return 0; },
+>bar : Symbol(bar, Decl(shouldNotToPropertySignatureAccessor.ts, 0, 21), Decl(shouldNotToPropertySignatureAccessor.ts, 1, 36))
+
+    set bar(value: number | string) { }
+>bar : Symbol(bar, Decl(shouldNotToPropertySignatureAccessor.ts, 0, 21), Decl(shouldNotToPropertySignatureAccessor.ts, 1, 36))
+>value : Symbol(value, Decl(shouldNotToPropertySignatureAccessor.ts, 2, 12))
+
+};
+
+export const Foo1: {
+>Foo1 : Symbol(Foo1, Decl(shouldNotToPropertySignatureAccessor.ts, 5, 12))
+
+    get bar(): number
+>bar : Symbol(bar, Decl(shouldNotToPropertySignatureAccessor.ts, 5, 20), Decl(shouldNotToPropertySignatureAccessor.ts, 6, 21))
+
+    set bar(value: number | string)
+>bar : Symbol(bar, Decl(shouldNotToPropertySignatureAccessor.ts, 5, 20), Decl(shouldNotToPropertySignatureAccessor.ts, 6, 21))
+>value : Symbol(value, Decl(shouldNotToPropertySignatureAccessor.ts, 7, 12))
+
+} = Foo0; // Reuse Foo0 for conciseness
+>Foo0 : Symbol(Foo0, Decl(shouldNotToPropertySignatureAccessor.ts, 0, 12))
+
+
