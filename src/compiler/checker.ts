@@ -37954,7 +37954,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.JsxAttributes:
                 return checkJsxAttributes(node as JsxAttributes, checkMode);
             case SyntaxKind.JsxOpeningElement:
-                Debug.fail("Shouldn't ever directly check a JsxOpeningElement");
+                return Debug.fail("Shouldn't ever directly check a JsxOpeningElement");
+            case SyntaxKind.ImportKeyword:
+                return anyType; // LHS of ImportCall
             default:
                 return Debug.failBadSyntaxKind(node, "Unhandled expression node kind in checkExpressionWorker");
         }
