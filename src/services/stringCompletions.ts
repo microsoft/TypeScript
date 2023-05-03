@@ -117,7 +117,6 @@ import {
     ScriptElementKind,
     ScriptElementKindModifier,
     ScriptTarget,
-    Signature,
     signatureHasRestParameter,
     SignatureHelp,
     singleElementArray,
@@ -500,9 +499,8 @@ function getAlreadyUsedTypesInStringLiteralUnion(union: UnionTypeNode, current: 
 function getStringLiteralCompletionsFromSignature(call: CallLikeExpression, arg: StringLiteralLike, argumentInfo: SignatureHelp.ArgumentInfoForCompletions, checker: TypeChecker, checkMode = CheckMode.IsForStringLiteralArgumentCompletions): StringLiteralCompletionsFromTypes | undefined {
     let isNewIdentifier = false;
     const uniques = new Map<string, true>();
-    const candidates: Signature[] = [];
     const editingArgument = isJsxOpeningLikeElement(call) ? Debug.checkDefined(findAncestor(arg.parent, isJsxAttribute)) : arg;
-    checker.getResolvedSignatureForStringLiteralCompletions(call, editingArgument, candidates, checkMode);
+    const candidates = checker.getCandidateSignaturesForStringLiteralCompletions(call, editingArgument, checkMode);
     const types = flatMap(candidates, candidate => {
         if (!signatureHasRestParameter(candidate) && argumentInfo.argumentCount > candidate.parameters.length) return;
         let type = candidate.getTypeParameterAtPosition(argumentInfo.argumentIndex);

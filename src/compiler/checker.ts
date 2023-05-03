@@ -1648,14 +1648,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         isContextSensitive,
         getTypeOfPropertyOfContextualType,
         getFullyQualifiedName,
-        getResolvedSignature: (node, candidatesOutArray, argumentCount) => getResolvedSignatureWorker(node, candidatesOutArray, argumentCount, CheckMode.Normal),
-        getResolvedSignatureForStringLiteralCompletions: (call, editingArgument, candidatesOutArray, checkMode = CheckMode.IsForStringLiteralArgumentCompletions) => {
-            if (checkMode & CheckMode.IsForStringLiteralArgumentCompletions) {
-                return runWithInferenceBlockedFromSourceNode(editingArgument, () => getResolvedSignatureWorker(call, candidatesOutArray, /*argumentCount*/ undefined, checkMode & ~CheckMode.IsForStringLiteralArgumentCompletions));
-            }
-            return runWithoutResolvedSignatureCaching(editingArgument, () => getResolvedSignatureWorker(call, candidatesOutArray, /*argumentCount*/ undefined, checkMode & ~CheckMode.IsForStringLiteralArgumentCompletions));
-        },
-        getResolvedSignatureForSignatureHelp: (node, candidatesOutArray, argumentCount) => runWithoutResolvedSignatureCaching(node, () => getResolvedSignatureWorker(node, candidatesOutArray, argumentCount, CheckMode.IsForSignatureHelp)),
+        getResolvedSignature: (node, candidatesOutArray, argumentCount) =>
+            getResolvedSignatureWorker(node, candidatesOutArray, argumentCount, CheckMode.Normal),
+        getCandidateSignaturesForStringLiteralCompletions,
+        getResolvedSignatureForSignatureHelp: (node, candidatesOutArray, argumentCount) =>
+            runWithoutResolvedSignatureCaching(node, () => getResolvedSignatureWorker(node, candidatesOutArray, argumentCount, CheckMode.IsForSignatureHelp)),
         getExpandedParameters,
         hasEffectiveRestParameter,
         containsArgumentsReference,
@@ -1834,22 +1831,47 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         typeHasCallOrConstructSignatures,
     };
 
-    function runWithoutResolvedSignatureCaching<T>(node: Node | undefined, fn: () => T): T {
-        const cachedSignatures = [];
-        while (node) {
-            if (isCallLikeExpression(node)) {
-                const nodeLinks = getNodeLinks(node);
-                const resolvedSignature = nodeLinks.resolvedSignature;
-                cachedSignatures.push([nodeLinks, resolvedSignature] as const);
-                nodeLinks.resolvedSignature = undefined;
+    function getCandidateSignaturesForStringLiteralCompletions(call: CallLikeExpression, editingArgument: Node, checkMode = CheckMode.IsForStringLiteralArgumentCompletions) {
+        const candidatesSet = new Set<Signature>();
+        const candidates: Signature[] = [];
+
+        if (checkMode & CheckMode.IsForStringLiteralArgumentCompletions) {
+            // first, get candidates when inference is blocked from the source node.
+            runWithInferenceBlockedFromSourceNode(editingArgument, () => getResolvedSignatureWorker(call, candidates, /*argumentCount*/ undefined, checkMode));
+            for (const candidate of candidates) {
+                candidatesSet.add(candidate);
             }
-            node = node.parent;
+
+            // reset candidates for second pass
+            candidates.length = 0;
         }
-        const result = fn();
-        for (const [nodeLinks, resolvedSignature] of cachedSignatures) {
-            nodeLinks.resolvedSignature = resolvedSignature;
+
+        // next, get candidates where the source node is considered for inference.
+        runWithoutResolvedSignatureCaching(editingArgument, () => getResolvedSignatureWorker(call, candidates, /*argumentCount*/ undefined, checkMode & ~CheckMode.IsForStringLiteralArgumentCompletions));
+        for (const candidate of candidates) {
+            candidatesSet.add(candidate);
         }
-        return result;
+
+        return arrayFrom(candidatesSet);
+    }
+
+    function runWithoutResolvedSignatureCaching<T>(node: Node | undefined, fn: () => T): T {
+        node = findAncestor(node, isCallLikeExpression);
+        if (node) {
+            const cachedSignatures = [];
+            while (node) {
+                const links = getNodeLinks(node);
+                cachedSignatures.push([links, links.resolvedSignature] as const);
+                links.resolvedSignature = undefined;
+                node = findAncestor(node.parent, isCallLikeExpression);
+            }
+            const result = fn();
+            for (const [links, resolvedSignature] of cachedSignatures) {
+                links.resolvedSignature = resolvedSignature;
+            }
+            return result;
+        }
+        return fn();
     }
 
     function runWithInferenceBlockedFromSourceNode<T>(node: Node | undefined, fn: () => T): T {
@@ -33103,7 +33125,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         for (let i = 0; i < argCount; i++) {
             const arg = args[i];
-            if (arg.kind !== SyntaxKind.OmittedExpression) {
+            if (arg.kind !== SyntaxKind.OmittedExpression && !(checkMode & CheckMode.IsForStringLiteralArgumentCompletions && hasSkipDirectInferenceFlag(arg))) {
                 const paramType = getTypeAtPosition(signature, i);
                 if (couldContainTypeVariables(paramType)) {
                     const argType = checkExpressionWithContextualType(arg, paramType, context, checkMode);
@@ -33745,6 +33767,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // decorators are applied to a declaration by the emitter, and not to an expression.
         const isSingleNonGenericCandidate = candidates.length === 1 && !candidates[0].typeParameters;
         let argCheckMode = !isDecorator && !isSingleNonGenericCandidate && some(args, isContextSensitive) ? CheckMode.SkipContextSensitive : CheckMode.Normal;
+        argCheckMode |= checkMode & CheckMode.IsForStringLiteralArgumentCompletions;
 
         // The following variables are captured and modified by calls to chooseOverload.
         // If overload resolution or type argument inference fails, we want to report the
@@ -33984,6 +34007,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // them now (and keeping do so for any subsequent candidates) and perform a second
                     // round of type inference and applicability checking for this particular candidate.
                     argCheckMode = CheckMode.Normal;
+                    // argCheckMode = checkMode & CheckMode.IsForStringLiteralArgumentCompletions;
                     if (inferenceContext) {
                         const typeArgumentTypes = inferTypeArguments(node, candidate, args, argCheckMode, inferenceContext);
                         checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJSFile(candidate.declaration), inferenceContext.inferredTypeParameters);
