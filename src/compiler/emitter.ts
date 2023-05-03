@@ -1914,6 +1914,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                     return emitIntersectionType(node as IntersectionTypeNode);
                 case SyntaxKind.ConditionalType:
                     return emitConditionalType(node as ConditionalTypeNode);
+                case SyntaxKind.PlaceholderType:
+                    return emitPlaceholderType();
                 case SyntaxKind.InferType:
                     return emitInferType(node as InferTypeNode);
                 case SyntaxKind.ParenthesizedType:
@@ -2832,6 +2834,10 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         writePunctuation(":");
         writeSpace();
         emit(node.falseType);
+    }
+
+    function emitPlaceholderType() {
+        write("_");
     }
 
     function emitInferType(node: InferTypeNode) {

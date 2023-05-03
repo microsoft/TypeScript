@@ -268,6 +268,7 @@ export const enum SyntaxKind {
     NamedTupleMember,
     TemplateLiteralType,
     TemplateLiteralTypeSpan,
+    PlaceholderType,
     ImportType,
     // Binding patterns
     ObjectBindingPattern,
@@ -741,6 +742,7 @@ export type TypeNodeSyntaxKind =
     | SyntaxKind.JSDocNamepathType
     | SyntaxKind.JSDocSignature
     | SyntaxKind.JSDocTypeLiteral
+    | SyntaxKind.PlaceholderType
     ;
 
 export type TokenSyntaxKind =
@@ -2162,6 +2164,10 @@ export interface TypeNode extends Node {
 /** @internal */
 export interface TypeNode extends Node {
     readonly kind: TypeNodeSyntaxKind;
+}
+
+export interface PlaceholderTypeNode extends TypeNode {
+    readonly kind: SyntaxKind.PlaceholderType;
 }
 
 export interface KeywordTypeNode<TKind extends KeywordTypeSyntaxKind = KeywordTypeSyntaxKind> extends KeywordToken<TKind>, TypeNode {
@@ -8415,6 +8421,7 @@ export interface NodeFactory {
     updateConditionalTypeNode(node: ConditionalTypeNode, checkType: TypeNode, extendsType: TypeNode, trueType: TypeNode, falseType: TypeNode): ConditionalTypeNode;
     createInferTypeNode(typeParameter: TypeParameterDeclaration): InferTypeNode;
     updateInferTypeNode(node: InferTypeNode, typeParameter: TypeParameterDeclaration): InferTypeNode;
+    createPlaceholderTypeNode(): PlaceholderTypeNode;
     createImportTypeNode(argument: TypeNode, assertions?: ImportTypeAssertionContainer, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf?: boolean): ImportTypeNode;
     updateImportTypeNode(node: ImportTypeNode, argument: TypeNode, assertions: ImportTypeAssertionContainer | undefined, qualifier: EntityName | undefined, typeArguments: readonly TypeNode[] | undefined, isTypeOf?: boolean): ImportTypeNode;
     createParenthesizedType(type: TypeNode): ParenthesizedTypeNode;

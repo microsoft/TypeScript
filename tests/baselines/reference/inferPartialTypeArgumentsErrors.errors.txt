@@ -1,0 +1,38 @@
+tests/cases/conformance/types/typeParameters/typeArgumentLists/inferPartialTypeArgumentsErrors.ts(2,54): error TS2322: Type '"x"' is not assignable to type '"z"'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/inferPartialTypeArgumentsErrors.ts(2,59): error TS2322: Type '"y"' is not assignable to type '"z"'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/inferPartialTypeArgumentsErrors.ts(7,42): error TS2344: Type '"z"' does not satisfy the constraint '"x" | "y"'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/inferPartialTypeArgumentsErrors.ts(8,70): error TS2322: Type '"z"' is not assignable to type '"x" | "y"'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/inferPartialTypeArgumentsErrors.ts(13,61): error TS2344: Type '"x" | "y"' does not satisfy the constraint '"x"'.
+  Type '"y"' is not assignable to type '"x"'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/inferPartialTypeArgumentsErrors.ts(14,57): error TS2322: Type '"y"' is not assignable to type '"x"'.
+
+
+==== tests/cases/conformance/types/typeParameters/typeArgumentLists/inferPartialTypeArgumentsErrors.ts (6 errors) ====
+    declare function testConstraints1<A extends B, B extends string>(arg?: { a?: A[], b?: B[] }): { a: A[], b: B[] }
+    const expectError1 = testConstraints1<_, "z"> ({ a: ["x", "y"] });
+                                                         ~~~
+!!! error TS2322: Type '"x"' is not assignable to type '"z"'.
+                                                              ~~~
+!!! error TS2322: Type '"y"' is not assignable to type '"z"'.
+    
+    declare function testConstraints2<A extends string, B extends A>(arg?: { a?: A[], b?: B[] }): { a: A[], b: B[] }
+    const expectAllowed1 = testConstraints2<_, "x"> ({ a: ["x", "y"] }); // OK { a: string[], b: "x"[] }
+    const expectAllowed2 = testConstraints2<"x" | "y", _> ({ b: ["x"] }); // OK { a: ("x" | "y")[], b: ("x" | "y")[] }
+    const expectError2 = testConstraints2<_, "z"> ({ a: ["x", "y"] }); // error - `A` infers as `"x" | "y"` which `"z"` does not satisfy
+                                             ~~~
+!!! error TS2344: Type '"z"' does not satisfy the constraint '"x" | "y"'.
+    const expectError3 = testConstraints2<"x" | "y", _> ({ b: ["x", "y", "z"] }); // error "z" not in "x" | "y"
+                                                                         ~~~
+!!! error TS2322: Type '"z"' is not assignable to type '"x" | "y"'.
+    
+    declare function complexConstraints<A extends string, B extends A, C extends B>(arg: { a?: A[], b?: B[], c?: C[] }): { a: A[], b: B[], c: C[] };
+    const expectAllowed4 = complexConstraints<"x" | "y" | "z", _, _> ({ a: ["x"], c: ["x", "y"] }); // OK { a: ("x" | "y" | "z")[], b: ("x" | "y" | "z")[], c: ("x" | "y")[] }
+    // Fails because B inferred to be "x" but that conflicts with C as "x" | "y"
+    const expectError4 = complexConstraints<"x" | "y" | "z", _, "x" | "y">({b: ["x"]});
+                                                                ~~~~~~~~~
+!!! error TS2344: Type '"x" | "y"' does not satisfy the constraint '"x"'.
+!!! error TS2344:   Type '"y"' is not assignable to type '"x"'.
+    const expectError5 = complexConstraints<"x", _, _>({c: ["y"]}); // error "y" does not extend "x"
+                                                            ~~~
+!!! error TS2322: Type '"y"' is not assignable to type '"x"'.
+    
