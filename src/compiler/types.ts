@@ -6593,15 +6593,16 @@ export interface TypeParameter extends InstantiableType {
 export const enum AccessFlags {
     None = 0,
     IncludeUndefined = 1 << 0,
-    NoIndexSignatures = 1 << 1,
-    Writing = 1 << 2,
-    CacheSymbol = 1 << 3,
-    NoTupleBoundsCheck = 1 << 4,
-    ExpressionPosition = 1 << 5,
-    ReportDeprecated = 1 << 6,
-    SuppressNoImplicitAnyError = 1 << 7,
-    Contextual = 1 << 8,
-    Persistent = IncludeUndefined,
+    ResolveReducibleTypes = 1 << 1,
+    NoIndexSignatures = 1 << 2,
+    Writing = 1 << 3,
+    CacheSymbol = 1 << 4,
+    NoTupleBoundsCheck = 1 << 5,
+    ExpressionPosition = 1 << 6,
+    ReportDeprecated = 1 << 7,
+    SuppressNoImplicitAnyError = 1 << 8,
+    Contextual = 1 << 9,
+    Persistent = IncludeUndefined | ResolveReducibleTypes,
 }
 
 // Indexed access types (TypeFlags.IndexedAccess)
