@@ -14078,7 +14078,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             else if (type !== firstType) {
                 checkFlags |= CheckFlags.HasNonUniformType;
             }
-            if (isLiteralType(type) || isPatternLiteralType(type) || type === uniqueLiteralType) {
+            if (isLiteralType(type) || isPatternLiteralType(type)) {
                 checkFlags |= CheckFlags.HasLiteralType;
             }
             if (type.flags & TypeFlags.Never && type !== uniqueLiteralType) {
@@ -17685,7 +17685,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // eagerly using the constraint type of 'this' at the given location.
         if (isGenericIndexType(indexType) || (accessNode && accessNode.kind !== SyntaxKind.IndexedAccessType ?
             isGenericTupleType(objectType) && !indexTypeLessThan(indexType, objectType.target.fixedLength) :
-            isGenericObjectType(objectType) && !(isTupleType(objectType) && indexTypeLessThan(indexType, objectType.target.fixedLength)) || !(accessFlags & AccessFlags.ResolveReducibleTypes) && isGenericReducibleType(objectType))) {
+            isGenericObjectType(objectType) && !(isTupleType(objectType) && indexTypeLessThan(indexType, objectType.target.fixedLength)) || isGenericReducibleType(objectType))) {
             if (objectType.flags & TypeFlags.AnyOrUnknown) {
                 return objectType;
             }
@@ -24509,15 +24509,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         if (simplified && simplified !== target) {
                             inferFromTypes(source, simplified);
                         }
-                    }
-                }
-                // The following is a targeted fix to allow higher-kinded types to be emulated using the technique in #53970.
-                // Specifically, when an indexed access type was deferred because it has a reducible object type, here we force
-                // resolution of the type and then infer to the result.
-                if (target.flags & TypeFlags.IndexedAccess && isGenericReducibleType((target as IndexedAccessType).objectType)) {
-                    const instantiated = getIndexedAccessType((target as IndexedAccessType).objectType, (target as IndexedAccessType).indexType, AccessFlags.ResolveReducibleTypes);
-                    if (instantiated && instantiated !== target) {
-                        inferFromTypes(source, instantiated);
                     }
                 }
             }
