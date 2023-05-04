@@ -9147,7 +9147,7 @@ namespace Parser {
                             children = append(children, child);
                         }
                         else if (child.kind === SyntaxKind.JSDocTemplateTag) {
-                            parseErrorAtRange(child.tagName, Diagnostics.A_JSDoc_template_tag_may_not_follow_a_typedef_callback_or_overload_tag)
+                            parseErrorAtRange(child.tagName, Diagnostics.A_JSDoc_template_tag_may_not_follow_a_typedef_callback_or_overload_tag);
                         }
                     }
                     if (children) {
@@ -9371,7 +9371,7 @@ namespace Parser {
                 let parameters;
                 while (child = tryParse(() => parseChildParameterOrPropertyTag(PropertyLikeParse.CallbackParameter, indent) as JSDocParameterTag | JSDocTemplateTag)) {
                     if (child.kind === SyntaxKind.JSDocTemplateTag) {
-                        parseErrorAtRange(child.tagName, Diagnostics.A_JSDoc_template_tag_may_not_follow_a_typedef_callback_or_overload_tag)
+                        parseErrorAtRange(child.tagName, Diagnostics.A_JSDoc_template_tag_may_not_follow_a_typedef_callback_or_overload_tag);
                         break;
                     }
                     parameters = append(parameters, child);
