@@ -218,7 +218,7 @@ jobs:
       run: rm -rf tests/baselines/reference
 
     - name: Run tests
-      run: npm test &> /dev/null
+      run: npm test &> /dev/null || exit 0
 
     - name: Accept baselines
       run: npx hereby baseline-accept
