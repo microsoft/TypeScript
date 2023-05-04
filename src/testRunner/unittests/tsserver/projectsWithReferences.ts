@@ -1,14 +1,14 @@
 import {
+    baselineTsserverLogs,
+    createLoggerWithInMemoryLogs,
+    createProjectService,
+} from "../helpers/tsserver";
+import {
     createServerHost,
     File,
     getTsBuildProjectFile,
     libFile,
-} from "../virtualFileSystemWithWatch";
-import {
-    baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
-    createProjectService,
-} from "./helpers";
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: projects with references: invoking when references are already built", () => {
     it("on sample project", () => {

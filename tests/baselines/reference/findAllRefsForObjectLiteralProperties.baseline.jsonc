@@ -140,9 +140,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsForObjectLiteralProperties.ts ===
-// var x = {
-//     property: {}
-// };
+// --- (line: 3) skipped ---
 // 
 // x.property;
 // 

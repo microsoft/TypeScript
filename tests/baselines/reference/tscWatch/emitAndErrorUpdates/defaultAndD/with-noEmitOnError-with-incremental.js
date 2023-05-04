@@ -78,6 +78,8 @@ Shape signatures in builder refreshed for::
 PolledWatches::
 /user/username/projects/noemitonerror/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
 /user/username/projects/noemitonerror/tsconfig.json: *new*

@@ -1,12 +1,12 @@
 import * as ts from "../../_namespaces/ts";
-import { createServerHost } from "../virtualFileSystemWithWatch";
 import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,
     createProjectService,
     TestTypingsInstaller,
     toExternalFile,
-} from "./helpers";
+} from "../helpers/tsserver";
+import { createServerHost } from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: typeAquisition:: autoDiscovery", () => {
     it("does not depend on extension", () => {

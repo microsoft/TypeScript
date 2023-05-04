@@ -22,13 +22,7 @@
   // const tt: T = {
   //     type: "a",
   //     prop: 0,
-  // };
-  // declare const t: T;
-  // if (t.type === "a") {
-  //     t.type;
-  // } else {
-  //     t.type;
-  // }
+  // --- (line: 7) skipped ---
 
   // === Details ===
   [
@@ -199,13 +193,7 @@
   // const tt: T = {
   //     type: "a",
   //     prop: 0,
-  // };
-  // declare const t: T;
-  // if (t.type === "a") {
-  //     t.type;
-  // } else {
-  //     t.type;
-  // }
+  // --- (line: 7) skipped ---
 
   // === Details ===
   [
@@ -909,11 +897,7 @@
   //     prop: 0,
   // };
   // declare const t: T;
-  // if (t.type === "a") {
-  //     t.type;
-  // } else {
-  //     t.type;
-  // }
+  // --- (line: 9) skipped ---
 
   // === Details ===
   [
@@ -1030,10 +1014,7 @@
 // };
 // declare const t: T;
 // if (t.type === "a") {
-//     t.type;
-// } else {
-//     t.type;
-// }
+// --- (line: 10) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsUnionProperty.ts ===
@@ -1043,13 +1024,7 @@
   // const tt: T = {
   //     type: "a",
   //     prop: 0,
-  // };
-  // declare const t: T;
-  // if (t.type === "a") {
-  //     t.type;
-  // } else {
-  //     t.type;
-  // }
+  // --- (line: 7) skipped ---
 
   // === Details ===
   [
@@ -1150,10 +1125,7 @@
 // };
 // declare const t: T;
 // if (t.type === "a") {
-//     t.type;
-// } else {
-//     t.type;
-// }
+// --- (line: 10) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsUnionProperty.ts ===
@@ -1163,13 +1135,7 @@
   // const tt: T = {
   //     type: "a",
   //     prop: 0,
-  // };
-  // declare const t: T;
-  // if (t.type === "a") {
-  //     t.type;
-  // } else {
-  //     t.type;
-  // }
+  // --- (line: 7) skipped ---
 
   // === Details ===
   [
@@ -1270,10 +1236,7 @@
 // };
 // declare const t: T;
 // if (t.type === "a") {
-//     t.type;
-// } else {
-//     t.type;
-// }
+// --- (line: 10) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsUnionProperty.ts ===
@@ -1286,10 +1249,7 @@
   // };
   // declare const t: T;
   // if (t.type === "a") {
-  //     t.type;
-  // } else {
-  //     t.type;
-  // }
+  // --- (line: 10) skipped ---
 
   // === Details ===
   [

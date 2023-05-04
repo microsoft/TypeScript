@@ -1,6 +1,6 @@
 import * as ts from "../../_namespaces/ts";
-import { createServerHost } from "../virtualFileSystemWithWatch";
-import { baselineTsserverLogs, createLoggerWithInMemoryLogs, createSession, openFilesForSession } from "./helpers";
+import { baselineTsserverLogs, createLoggerWithInMemoryLogs, createSession, openFilesForSession } from "../helpers/tsserver";
+import { createServerHost } from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: formatSettings", () => {
     it("can be set globally", () => {

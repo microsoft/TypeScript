@@ -1,16 +1,16 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    createServerHost,
-    libFile,
-} from "../virtualFileSystemWithWatch";
-import {
     baselineTsserverLogs,
     closeFilesForSession,
     createLoggerWithInMemoryLogs,
     createSession,
     logInferredProjectsOrphanStatus,
     openFilesForSession,
-} from "./helpers";
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+    libFile,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: reload", () => {
     it("should work with temp file", () => {

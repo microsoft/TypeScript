@@ -11,6 +11,7 @@ declare var React: any;
 <a: />;
 ><a: /> : any
 >a : any
+> : any
 
 === tests/cases/conformance/jsx/3.tsx ===
 <:a />;
@@ -51,17 +52,20 @@ declare var React: any;
 === tests/cases/conformance/jsx/8.tsx ===
 <a:b></b>;
 ><a:b></b> : any
->a:b : any
+>a : any
+>b : any
 >b : any
 
 === tests/cases/conformance/jsx/9.tsx ===
 <a:b.c></a:b.c>;
 ><a:b.c></a:b.c> : any
 >a:b.c : any
->a:b : any
+>a : any
+>b : any
 >c : any
 >a:b.c : any
->a:b : any
+>a : any
+>b : any
 >c : any
 
 === tests/cases/conformance/jsx/10.tsx ===
