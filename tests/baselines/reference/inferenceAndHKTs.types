@@ -46,15 +46,15 @@ declare const a: T<number>;
 >a : T<number>
 
 const x1 = map(typeClass);
->x1 : <A, B>(a: (TTypeLambda & { readonly A: A; })["type"], f: (a: A) => B) => (TTypeLambda & { readonly A: B; })["type"]
->map(typeClass) : <A, B>(a: (TTypeLambda & { readonly A: A; })["type"], f: (a: A) => B) => (TTypeLambda & { readonly A: B; })["type"]
+>x1 : <A, B>(a: T<A>, f: (a: A) => B) => T<B>
+>map(typeClass) : <A, B>(a: T<A>, f: (a: A) => B) => T<B>
 >map : <F extends TypeLambda>(F: TypeClass<F>) => <A, B>(a: Apply<F, A>, f: (a: A) => B) => Apply<F, B>
 >typeClass : TypeClass<TTypeLambda>
 
 const x2 = map(typeClass)(a, (_) => _);  // T<number>
 >x2 : T<number>
 >map(typeClass)(a, (_) => _) : T<number>
->map(typeClass) : <A, B>(a: (TTypeLambda & { readonly A: A; })["type"], f: (a: A) => B) => (TTypeLambda & { readonly A: B; })["type"]
+>map(typeClass) : <A, B>(a: T<A>, f: (a: A) => B) => T<B>
 >map : <F extends TypeLambda>(F: TypeClass<F>) => <A, B>(a: Apply<F, A>, f: (a: A) => B) => Apply<F, B>
 >typeClass : TypeClass<TTypeLambda>
 >a : T<number>
