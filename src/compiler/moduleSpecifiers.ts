@@ -1014,12 +1014,16 @@ function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCan
                     return { packageRootPath, moduleFileToTry };
                 }
                 else if (
+                    packageJsonContent.type !== "module" &&
+                    !fileExtensionIsOneOf(canonicalModuleFileToTry, [Extension.Mjs, Extension.Cjs, Extension.Dmts, Extension.Dcts]) &&
                     startsWith(canonicalModuleFileToTry, mainExportFile) &&
                     getDirectoryPath(canonicalModuleFileToTry) === removeTrailingDirectorySeparator(mainExportFile) &&
                     removeFileExtension(getBaseFileName(canonicalModuleFileToTry)) === "index"
                 ) {
                     // if mainExportFile is a directory, which contains moduleFileToTry, we just try index file
                     // example mainExportFile: `pkg/lib` and moduleFileToTry: `pkg/lib/index`, we can use packageRootPath
+                    // but this behavior is deprecated for packages with "type": "module", so we only do this for packages without "type": "module"
+                    // and make sure that the extension on index.{???} is something that supports omitting the extension
                     return { packageRootPath, moduleFileToTry };
                 }
             }
