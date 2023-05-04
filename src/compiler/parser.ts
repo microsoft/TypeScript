@@ -1491,6 +1491,8 @@ namespace Parser {
     var identifiers: Map<string, string>;
     var identifierCount: number;
 
+    // TODO(jakebailey): This type is a lie; this value actually contains the result
+    // of ORing a bunch of `1 << ParsingContext.XYZ`.
     var parsingContext: ParsingContext;
 
     var notParenthesizedArrow: Set<number> | undefined;
@@ -2872,9 +2874,13 @@ namespace Parser {
                 return tokenIsIdentifierOrKeyword(token()) || token() === SyntaxKind.OpenBraceToken;
             case ParsingContext.JsxChildren:
                 return true;
+            case ParsingContext.JSDocComment:
+                return true;
+            case ParsingContext.Count:
+                return Debug.fail("ParsingContext.Count used as a context"); // Not a real context, only a marker.
+            default:
+                Debug.assertNever(parsingContext, "Non-exhaustive case in 'isListElement'.");
         }
-
-        return Debug.fail("Non-exhaustive case in 'isListElement'.");
     }
 
     function isValidHeritageClauseObjectLiteral() {
@@ -3010,6 +3016,9 @@ namespace Parser {
 
     // True if positioned at element or terminator of the current list or any enclosing list
     function isInSomeParsingContext(): boolean {
+        // We should be in at least one parsing context, be it SourceElements while parsing
+        // a SourceFile, or JSDocComment when lazily parsing JSDoc.
+        Debug.assert(parsingContext, "Missing parsing context");
         for (let kind = 0; kind < ParsingContext.Count; kind++) {
             if (parsingContext & (1 << kind)) {
                 if (isListElement(kind, /*inErrorRecovery*/ true) || isListTerminator(kind)) {
@@ -3385,6 +3394,7 @@ namespace Parser {
             case ParsingContext.JsxAttributes: return parseErrorAtCurrentToken(Diagnostics.Identifier_expected);
             case ParsingContext.JsxChildren: return parseErrorAtCurrentToken(Diagnostics.Identifier_expected);
             case ParsingContext.AssertEntries: return parseErrorAtCurrentToken(Diagnostics.Identifier_or_string_literal_expected); // AssertionKey.
+            case ParsingContext.JSDocComment: return parseErrorAtCurrentToken(Diagnostics.Identifier_expected);
             case ParsingContext.Count: return Debug.fail("ParsingContext.Count used as a context"); // Not a real context, only a marker.
             default: Debug.assertNever(context);
         }
@@ -7289,6 +7299,8 @@ namespace Parser {
 
     function tryReuseAmbientDeclaration(pos: number): Statement | undefined {
         return doInsideOfContext(NodeFlags.Ambient, () => {
+            // TODO(jakebailey): this is totally wrong; `parsingContext` is the result of ORing a bunch of `1 << ParsingContext.XYZ`.
+            // The enum should really be a bunch of flags.
             const node = currentNode(parsingContext, pos);
             if (node) {
                 return consumeNode(node) as Statement;
@@ -8492,7 +8504,8 @@ namespace Parser {
         TupleElementTypes,         // Element types in tuple element type list
         HeritageClauses,           // Heritage clauses for a class or interface declaration.
         ImportOrExportSpecifiers,  // Named import clause's import specifier list,
-        AssertEntries,               // Import entries list.
+        AssertEntries,             // Import entries list.
+        JSDocComment,              // Parsing via JSDocParser
         Count                      // Number of parsing contexts
     }
 
@@ -8598,6 +8611,9 @@ namespace Parser {
         }
 
         function parseJSDocCommentWorker(start = 0, length: number | undefined): JSDoc | undefined {
+            const saveParsingContext = parsingContext;
+            parsingContext |= 1 << ParsingContext.JSDocComment;
+
             const content = sourceText;
             const end = length === undefined ? content.length : start + length;
             length = end - start;
@@ -8620,7 +8636,11 @@ namespace Parser {
             const parts: JSDocComment[] = [];
 
             // + 3 for leading /**, - 5 in total for /** */
-            return scanner.scanRange(start + 3, length - 5, () => {
+            const result = scanner.scanRange(start + 3, length - 5, doJSDocScan);
+            parsingContext = saveParsingContext;
+            return result;
+
+            function doJSDocScan() {
                 // Initially we can parse out a tag.  We also have seen a starting asterisk.
                 // This is so that /** * @type */ doesn't parse.
                 let state = JSDocState.SawAsterisk;
@@ -8726,7 +8746,7 @@ namespace Parser {
                 if (parts.length && tags) Debug.assertIsDefined(commentsPos, "having parsed tags implies that the end of the comment span should be set");
                 const tagsArray = tags && createNodeArray(tags, tagsPos, tagsEnd);
                 return finishNode(factory.createJSDocComment(parts.length ? createNodeArray(parts, start, commentsPos) : trimmedComments.length ? trimmedComments : undefined, tagsArray), start, end);
-            });
+            }
 
             function removeLeadingNewlines(comments: string[]) {
                 while (comments.length && (comments[0] === "\n" || comments[0] === "\r")) {
