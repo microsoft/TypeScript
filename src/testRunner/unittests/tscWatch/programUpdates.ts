@@ -2047,4 +2047,40 @@ import { x } from "../b";`),
             },
         ]
     });
+
+    verifyTscWatch({
+        scenario,
+        subScenario: "when changing `checkJs` of config file",
+        commandLineArgs: ["-w", "-p", ".", "--extendedDiagnostics"],
+        sys: () => {
+            const module1: File = {
+                path: `/user/username/projects/myproject/a.js`,
+                content: `export const aNumber: number = "string"`
+            };
+            const module2: File = {
+                path: `/user/username/projects/myproject/b.ts`,
+                content: `import { aNumber } from "./a.js";`
+            };
+            const config: File = {
+                path: `/user/username/projects/myproject/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: {
+                        checkJs: false
+                    }
+                }),
+            };
+            return createWatchedSystem([module1, module2, config, libFile], { currentDirectory: "/user/username/projects/myproject" });
+        },
+        edits: [
+            {
+                caption: "Change checkJs to true",
+                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, JSON.stringify({
+                    compilerOptions: {
+                        checkJs: true
+                    }
+                })),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+            },
+        ]
+    });
 });
