@@ -24,14 +24,14 @@ var c;
 
 
 //// [internalAliasUninitializedModuleInsideLocalModuleWithoutExport.d.ts]
-export declare module a {
-    module b {
+export declare namespace a {
+    namespace b {
         interface I {
             foo(): any;
         }
     }
 }
-export declare module c {
+export declare namespace c {
     import b = a.b;
     var x: b.I;
 }

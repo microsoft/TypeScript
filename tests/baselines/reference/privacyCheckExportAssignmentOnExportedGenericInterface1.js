@@ -15,7 +15,7 @@ module.exports = Foo;
 
 
 //// [privacyCheckExportAssignmentOnExportedGenericInterface1.d.ts]
-declare module Foo {
+declare namespace Foo {
     interface A<T> {
     }
 }

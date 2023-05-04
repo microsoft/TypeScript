@@ -53,7 +53,7 @@ var y = x;
 //// [declFileTypeAnnotationTupleType.d.ts]
 declare class c {
 }
-declare module m {
+declare namespace m {
     class c {
     }
     class g<T> {
