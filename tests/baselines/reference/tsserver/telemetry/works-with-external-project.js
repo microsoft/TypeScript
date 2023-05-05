@@ -70,7 +70,7 @@ Info seq  [hh:mm:ss:mss] event:
        "configFileName": "other",
        "projectType": "external",
        "languageServiceEnabled": true,
-       "version": "5.1.0-dev"
+       "version": "FakeVersion"
       }
      }
     }

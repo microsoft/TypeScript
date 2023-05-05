@@ -17,12 +17,12 @@ var a: any = function f() {
 };
 var a: any = function f() {
 >a : any
->function f() {    return f();} : () => any
->f : () => any
+>function f() {    return f();} : () => never
+>f : () => never
 
     return f();
->f() : any
->f : () => any
+>f() : never
+>f : () => never
 
 };
 
@@ -205,17 +205,17 @@ var b = function () {
 // FunctionExpression with no return type annotation with multiple return statements with one a recursive call
 var a = function f() {
 >a : any
->function f() {    return new Base(); return new Derived(); return f(); // ?} () : any
->function f() {    return new Base(); return new Derived(); return f(); // ?} : () => any
->f : () => any
+>function f() {    return new Base(); return new Derived(); return f(); // ?} () : Base
+>function f() {    return new Base(); return new Derived(); return f(); // ?} : () => Base
+>f : () => Base
 
     return new Base(); return new Derived(); return f(); // ?
 >new Base() : Base
 >Base : typeof Base
 >new Derived() : Derived
 >Derived : typeof Derived
->f() : any
->f : () => any
+>f() : Base
+>f : () => Base
 
 } ();
 

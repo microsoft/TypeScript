@@ -40,19 +40,19 @@ class InitClass {
 
 // Return type
 function fnReturn1() {
->fnReturn1 : () => any
+>fnReturn1 : () => never
 
     return fnReturn1();
->fnReturn1() : any
->fnReturn1 : () => any
+>fnReturn1() : never
+>fnReturn1 : () => never
 }
 var a: any;
 >a : any
 
 var a = fnReturn1();
 >a : any
->fnReturn1() : any
->fnReturn1 : () => any
+>fnReturn1() : never
+>fnReturn1 : () => never
 
 function fnReturn2() {
 >fnReturn2 : () => typeof fnReturn2
@@ -207,19 +207,19 @@ var and3: any;
 
 // function call return type
 function fnCall() {
->fnCall : () => any
+>fnCall : () => never
 
     return fnCall();
->fnCall() : any
->fnCall : () => any
+>fnCall() : never
+>fnCall : () => never
 }
 var fnCallResult = fnCall();
->fnCallResult : any
->fnCall() : any
->fnCall : () => any
+>fnCallResult : never
+>fnCall() : never
+>fnCall : () => never
 
 var fnCallResult: any;
->fnCallResult : any
+>fnCallResult : never
 
 // Call argument
 function fnArg1(x: typeof fnArg1, y: number) {
