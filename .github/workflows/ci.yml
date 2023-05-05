@@ -202,3 +202,30 @@ jobs:
 
     - name: Self build
       run: npx hereby build-src --built
+
+  unused-baselines:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: "*"
+        check-latest: true
+    - run:  npm ci
+
+    - name: Remove all baselines
+      run: rm -rf tests/baselines/reference
+
+    - name: Run tests
+      run: npm test &> /dev/null || exit 0
+
+    - name: Accept baselines
+      run: npx hereby baseline-accept
+
+    - name: Check for unused baselines
+      run: |
+        if ! git diff --exit-code --quiet; then
+          echo "Unused baselines:"
+          git diff --exit-code --name-only
+        fi
