@@ -35748,6 +35748,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         forEachReturnStatement(func.body as Block, returnStatement => {
             const expr = returnStatement.expression;
             if (expr) {
+                // Bare calls to this same function don't contribute to inference
+                if (expr.kind === SyntaxKind.CallExpression &&
+                    (expr as CallExpression).expression.kind === SyntaxKind.Identifier &&
+                    checkExpressionCached((expr as CallExpression).expression).symbol === func.symbol) {
+                    hasReturnOfTypeNever = true;
+                    return;
+                }
+
                 let type = checkExpressionCached(expr, checkMode && checkMode & ~CheckMode.SkipGenericFunctions);
                 if (functionFlags & FunctionFlags.Async) {
                     // From within an async function you can return either a non-promise value or a promise. Any
