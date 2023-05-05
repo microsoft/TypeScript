@@ -48,7 +48,7 @@ describe("unittests:: customTransforms", () => {
         function visit(node: ts.Node): ts.VisitResult<ts.Node> {
             switch (node.kind) {
                 case ts.SyntaxKind.FunctionDeclaration:
-                    return visitFunction(node as ts.FunctionDeclaration);
+                    return visitFunction(node);
                 default:
                     return ts.visitEachChild(node, visit, context);
             }
@@ -64,7 +64,7 @@ describe("unittests:: customTransforms", () => {
         function visit(node: ts.Node): ts.VisitResult<ts.Node> {
             switch (node.kind) {
                 case ts.SyntaxKind.VariableStatement:
-                    return visitVariableStatement(node as ts.VariableStatement);
+                    return visitVariableStatement(node);
                 default:
                     return ts.visitEachChild(node, visit, context);
             }

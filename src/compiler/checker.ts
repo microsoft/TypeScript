@@ -756,7 +756,6 @@ import {
     JSDocLinkPlain,
     JSDocMemberName,
     JSDocNullableType,
-    JSDocOptionalType,
     JSDocOverloadTag,
     JSDocParameterTag,
     JSDocPrivateTag,
@@ -2693,7 +2692,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isGlobalSourceFile(node: Node) {
-        return node.kind === SyntaxKind.SourceFile && !isExternalOrCommonJsModule(node as SourceFile);
+        return node.kind === SyntaxKind.SourceFile && !isExternalOrCommonJsModule(node);
     }
 
     function getSymbol(symbols: SymbolTable, name: __String, meaning: SymbolFlags): Symbol | undefined {
@@ -2771,7 +2770,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             else if (declaration.kind === SyntaxKind.VariableDeclaration) {
                 // still might be illegal if usage is in the initializer of the variable declaration (eg var a = a)
-                return !isImmediatelyUsedInInitializerOfBlockScopedVariable(declaration as VariableDeclaration, usage);
+                return !isImmediatelyUsedInInitializerOfBlockScopedVariable(declaration , usage);
             }
             else if (isClassDeclaration(declaration)) {
                 // still might be illegal if the usage is within a computed property name in the class (eg class A { static p = "a"; [A.p]() {} })
@@ -2801,12 +2800,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // or if usage is in a type context:
         // 1. inside a type query (typeof in type position)
         // 2. inside a jsdoc comment
-        if (usage.parent.kind === SyntaxKind.ExportSpecifier || (usage.parent.kind === SyntaxKind.ExportAssignment && (usage.parent as ExportAssignment).isExportEquals)) {
+        if (usage.parent.kind === SyntaxKind.ExportSpecifier || (usage.parent.kind === SyntaxKind.ExportAssignment && (usage.parent).isExportEquals)) {
             // export specifiers do not use the variable, they only make it available for use
             return true;
         }
         // When resolving symbols for exports, the `usage` location passed in can be the export site directly
-        if (usage.kind === SyntaxKind.ExportAssignment && (usage as ExportAssignment).isExportEquals) {
+        if (usage.kind === SyntaxKind.ExportAssignment && (usage).isExportEquals) {
             return true;
         }
 
@@ -2973,7 +2972,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (hasStaticModifier(node)) {
                         return target < ScriptTarget.ESNext || !useDefineForClassFields;
                     }
-                    return requiresScopeChangeWorker((node as PropertyDeclaration).name);
+                    return requiresScopeChangeWorker((node).name);
                 default:
                     // null coalesce and optional chain pre-es2020 produce temporary variables
                     if (isNullishCoalesce(node) || isOptionalChain(node)) {
@@ -3090,7 +3089,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     else if (location.kind === SyntaxKind.ConditionalType) {
                         // A type parameter declared using 'infer T' in a conditional type is visible only in
                         // the true branch of the conditional type.
-                        useResult = lastLocation === (location as ConditionalTypeNode).trueType;
+                        useResult = lastLocation === (location).trueType;
                     }
 
                     if (useResult) {
@@ -3104,11 +3103,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             withinDeferredContext = withinDeferredContext || getIsDeferredContext(location, lastLocation);
             switch (location.kind) {
                 case SyntaxKind.SourceFile:
-                    if (!isExternalOrCommonJsModule(location as SourceFile)) break;
+                    if (!isExternalOrCommonJsModule(location)) break;
                     isInExternalModule = true;
                     // falls through
                 case SyntaxKind.ModuleDeclaration:
-                    const moduleExports = getSymbolOfDeclaration(location as SourceFile | ModuleDeclaration)?.exports || emptySymbols;
+                    const moduleExports = getSymbolOfDeclaration(location)?.exports || emptySymbols;
                     if (location.kind === SyntaxKind.SourceFile || (isModuleDeclaration(location) && location.flags & NodeFlags.Ambient && !isGlobalScopeAugmentation(location))) {
 
                         // It's an external module. First see if the module has an export default and if the local
@@ -3151,7 +3150,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                     break;
                 case SyntaxKind.EnumDeclaration:
-                    if (result = lookup(getSymbolOfDeclaration(location as EnumDeclaration)?.exports || emptySymbols, name, meaning & SymbolFlags.EnumMember)) {
+                    if (result = lookup(getSymbolOfDeclaration(location)?.exports || emptySymbols, name, meaning & SymbolFlags.EnumMember)) {
                         if (nameNotFoundMessage && getIsolatedModules(compilerOptions) && !(location.flags & NodeFlags.Ambient) && getSourceFileOfNode(location) !== getSourceFileOfNode(result.valueDeclaration)) {
                             error(
                                 errorLocation,
@@ -3171,7 +3170,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // by the same name as a constructor parameter or local variable are inaccessible
                     // in initializer expressions for instance member variables.
                     if (!isStatic(location)) {
-                        const ctor = findConstructorDeclaration(location.parent as ClassLikeDeclaration);
+                        const ctor = findConstructorDeclaration(location.parent);
                         if (ctor && ctor.locals) {
                             if (lookup(ctor.locals, name, meaning & SymbolFlags.Value)) {
                                 // Remember the property node, it will be used later to report appropriate error
@@ -3214,7 +3213,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     break;
                 case SyntaxKind.ExpressionWithTypeArguments:
                     // The type parameters of a class are not in scope in the base class expression.
-                    if (lastLocation === (location as ExpressionWithTypeArguments).expression && (location.parent as HeritageClause).token === SyntaxKind.ExtendsKeyword) {
+                    if (lastLocation === (location).expression && (location.parent as HeritageClause).token === SyntaxKind.ExtendsKeyword) {
                         const container = location.parent.parent;
                         if (isClassLike(container) && (result = lookup(getSymbolOfDeclaration(container).members!, name, meaning & SymbolFlags.Type))) {
                             if (nameNotFoundMessage) {
@@ -3236,7 +3235,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     grandparent = location.parent.parent;
                     if (isClassLike(grandparent) || grandparent.kind === SyntaxKind.InterfaceDeclaration) {
                         // A reference to this grandparent's type parameters would be an error
-                        if (result = lookup(getSymbolOfDeclaration(grandparent as ClassLikeDeclaration | InterfaceDeclaration).members!, name, meaning & SymbolFlags.Type)) {
+                        if (result = lookup(getSymbolOfDeclaration(grandparent).members!, name, meaning & SymbolFlags.Type)) {
                             if (nameNotFoundMessage) {
                                 error(errorLocation, Diagnostics.A_computed_property_name_cannot_reference_a_type_parameter_from_its_containing_type);
                             }
@@ -3268,9 +3267,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
 
                     if (meaning & SymbolFlags.Function) {
-                        const functionName = (location as FunctionExpression).name;
+                        const functionName = (location).name;
                         if (functionName && name === functionName.escapedText) {
-                            result = (location as FunctionExpression).symbol;
+                            result = (location).symbol;
                             break loop;
                         }
                     }
@@ -3315,27 +3314,27 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     break;
                 case SyntaxKind.Parameter:
                     if (lastLocation && (
-                        lastLocation === (location as ParameterDeclaration).initializer ||
-                        lastLocation === (location as ParameterDeclaration).name && isBindingPattern(lastLocation))) {
+                        lastLocation === (location).initializer ||
+                        lastLocation === (location).name && isBindingPattern(lastLocation))) {
                         if (!associatedDeclarationForContainingInitializerOrBindingName) {
-                            associatedDeclarationForContainingInitializerOrBindingName = location as ParameterDeclaration;
+                            associatedDeclarationForContainingInitializerOrBindingName = location ;
                         }
                     }
                     break;
                 case SyntaxKind.BindingElement:
                     if (lastLocation && (
-                        lastLocation === (location as BindingElement).initializer ||
-                        lastLocation === (location as BindingElement).name && isBindingPattern(lastLocation))) {
-                        if (isParameterDeclaration(location as BindingElement) && !associatedDeclarationForContainingInitializerOrBindingName) {
-                            associatedDeclarationForContainingInitializerOrBindingName = location as BindingElement;
+                        lastLocation === (location).initializer ||
+                        lastLocation === (location).name && isBindingPattern(lastLocation))) {
+                        if (isParameterDeclaration(location) && !associatedDeclarationForContainingInitializerOrBindingName) {
+                            associatedDeclarationForContainingInitializerOrBindingName = location ;
                         }
                     }
                     break;
                 case SyntaxKind.InferType:
                     if (meaning & SymbolFlags.TypeParameter) {
-                        const parameterName = (location as InferTypeNode).typeParameter.name;
+                        const parameterName = (location).typeParameter.name;
                         if (parameterName && name === parameterName.escapedText) {
-                            result = (location as InferTypeNode).typeParameter.symbol;
+                            result = (location).typeParameter.symbol;
                             break loop;
                         }
                     }
@@ -3343,8 +3342,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 case SyntaxKind.ExportSpecifier:
                     // External module export bindings shouldn't be resolved to local symbols.
                     if (lastLocation &&
-                        lastLocation === (location as ExportSpecifier).propertyName &&
-                        (location as ExportSpecifier).parent.parent.moduleSpecifier) {
+                        lastLocation === (location).propertyName &&
+                        (location).parent.parent.moduleSpecifier) {
                         location = location.parent.parent.parent;
                     }
                     break;
@@ -3543,11 +3542,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 (location.kind === SyntaxKind.PropertyDeclaration && !isStatic(location))
             ) && (!lastLocation || lastLocation !== (location as SignatureDeclaration | PropertyDeclaration).name)); // A name is evaluated within the enclosing scope - so it shouldn't count as deferred
         }
-        if (lastLocation && lastLocation === (location as FunctionExpression | ArrowFunction).name) {
+        if (lastLocation && lastLocation === (location).name) {
             return false;
         }
         // generator functions and async functions are not inlined in control flow when immediately invoked
-        if ((location as FunctionExpression | ArrowFunction).asteriskToken || hasSyntacticModifier(location, ModifierFlags.Async)) {
+        if ((location).asteriskToken || hasSyntacticModifier(location, ModifierFlags.Async)) {
             return true;
         }
         return !getImmediatelyInvokedFunctionExpression(location);
@@ -3651,8 +3650,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.PropertyAccessExpression:
                 return node.parent ? getEntityNameForExtendingInterface(node.parent) : undefined;
             case SyntaxKind.ExpressionWithTypeArguments:
-                if (isEntityNameExpression((node as ExpressionWithTypeArguments).expression)) {
-                    return (node as ExpressionWithTypeArguments).expression as EntityNameExpression;
+                if (isEntityNameExpression((node).expression)) {
+                    return (node).expression ;
                 }
                 // falls through
             default:
@@ -3842,13 +3841,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getAnyImportSyntax(node: Node): AnyImportSyntax | undefined {
         switch (node.kind) {
             case SyntaxKind.ImportEqualsDeclaration:
-                return node as ImportEqualsDeclaration;
+                return node ;
             case SyntaxKind.ImportClause:
-                return (node as ImportClause).parent;
+                return (node).parent;
             case SyntaxKind.NamespaceImport:
-                return (node as NamespaceImport).parent.parent;
+                return (node).parent.parent;
             case SyntaxKind.ImportSpecifier:
-                return (node as ImportSpecifier).parent.parent.parent;
+                return (node).parent.parent.parent;
             default:
                 return undefined;
         }
@@ -3876,12 +3875,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function isAliasSymbolDeclaration(node: Node): boolean {
         return node.kind === SyntaxKind.ImportEqualsDeclaration
             || node.kind === SyntaxKind.NamespaceExportDeclaration
-            || node.kind === SyntaxKind.ImportClause && !!(node as ImportClause).name
+            || node.kind === SyntaxKind.ImportClause && !!(node).name
             || node.kind === SyntaxKind.NamespaceImport
             || node.kind === SyntaxKind.NamespaceExport
             || node.kind === SyntaxKind.ImportSpecifier
             || node.kind === SyntaxKind.ExportSpecifier
-            || node.kind === SyntaxKind.ExportAssignment && exportAssignmentIsAlias(node as ExportAssignment)
+            || node.kind === SyntaxKind.ExportAssignment && exportAssignmentIsAlias(node)
             || isBinaryExpression(node) && getAssignmentDeclarationKind(node) === AssignmentDeclarationKind.ModuleExports && exportAssignmentIsAlias(node)
             || isAccessExpression(node)
                 && isBinaryExpression(node.parent)
@@ -3889,7 +3888,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 && node.parent.operatorToken.kind === SyntaxKind.EqualsToken
                 && isAliasableOrJsExpression(node.parent.right)
             || node.kind === SyntaxKind.ShorthandPropertyAssignment
-            || node.kind === SyntaxKind.PropertyAssignment && isAliasableOrJsExpression((node as PropertyAssignment).initializer)
+            || node.kind === SyntaxKind.PropertyAssignment && isAliasableOrJsExpression((node).initializer)
             || node.kind === SyntaxKind.VariableDeclaration && isVariableDeclarationInitializedToBareOrAccessedRequire(node)
             || node.kind === SyntaxKind.BindingElement && isVariableDeclarationInitializedToBareOrAccessedRequire(node.parent.parent);
     }
@@ -4362,27 +4361,27 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         switch (node.kind) {
             case SyntaxKind.ImportEqualsDeclaration:
             case SyntaxKind.VariableDeclaration:
-                return getTargetOfImportEqualsDeclaration(node as ImportEqualsDeclaration | VariableDeclaration, dontRecursivelyResolve);
+                return getTargetOfImportEqualsDeclaration(node , dontRecursivelyResolve);
             case SyntaxKind.ImportClause:
-                return getTargetOfImportClause(node as ImportClause, dontRecursivelyResolve);
+                return getTargetOfImportClause(node , dontRecursivelyResolve);
             case SyntaxKind.NamespaceImport:
-                return getTargetOfNamespaceImport(node as NamespaceImport, dontRecursivelyResolve);
+                return getTargetOfNamespaceImport(node , dontRecursivelyResolve);
             case SyntaxKind.NamespaceExport:
-                return getTargetOfNamespaceExport(node as NamespaceExport, dontRecursivelyResolve);
+                return getTargetOfNamespaceExport(node , dontRecursivelyResolve);
             case SyntaxKind.ImportSpecifier:
             case SyntaxKind.BindingElement:
-                return getTargetOfImportSpecifier(node as ImportSpecifier | BindingElement, dontRecursivelyResolve);
+                return getTargetOfImportSpecifier(node , dontRecursivelyResolve);
             case SyntaxKind.ExportSpecifier:
-                return getTargetOfExportSpecifier(node as ExportSpecifier, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace, dontRecursivelyResolve);
+                return getTargetOfExportSpecifier(node , SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace, dontRecursivelyResolve);
             case SyntaxKind.ExportAssignment:
             case SyntaxKind.BinaryExpression:
-                return getTargetOfExportAssignment((node as ExportAssignment | BinaryExpression), dontRecursivelyResolve);
+                return getTargetOfExportAssignment((node), dontRecursivelyResolve);
             case SyntaxKind.NamespaceExportDeclaration:
-                return getTargetOfNamespaceExportDeclaration(node as NamespaceExportDeclaration, dontRecursivelyResolve);
+                return getTargetOfNamespaceExportDeclaration(node , dontRecursivelyResolve);
             case SyntaxKind.ShorthandPropertyAssignment:
-                return resolveEntityName((node as ShorthandPropertyAssignment).name, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace, /*ignoreErrors*/ true, dontRecursivelyResolve);
+                return resolveEntityName((node).name, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace, /*ignoreErrors*/ true, dontRecursivelyResolve);
             case SyntaxKind.PropertyAssignment:
-                return getTargetOfAliasLikeExpression((node as PropertyAssignment).initializer, dontRecursivelyResolve);
+                return getTargetOfAliasLikeExpression((node).initializer, dontRecursivelyResolve);
             case SyntaxKind.ElementAccessExpression:
             case SyntaxKind.PropertyAccessExpression:
                 return getTargetOfAccessExpression(node as AccessExpression, dontRecursivelyResolve);
@@ -5600,8 +5599,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function findConstructorDeclaration(node: ClassLikeDeclaration): ConstructorDeclaration | undefined {
         const members = node.members;
         for (const member of members) {
-            if (member.kind === SyntaxKind.Constructor && nodeIsPresent((member as ConstructorDeclaration).body)) {
-                return member as ConstructorDeclaration;
+            if (member.kind === SyntaxKind.Constructor && nodeIsPresent((member).body)) {
+                return member ;
             }
         }
     }
@@ -5726,7 +5725,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             switch (location.kind) {
                 case SyntaxKind.SourceFile:
-                    if (!isExternalOrCommonJsModule(location as SourceFile)) {
+                    if (!isExternalOrCommonJsModule(location)) {
                         break;
                     }
                     // falls through
@@ -6057,11 +6056,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function hasExternalModuleSymbol(declaration: Node) {
-        return isAmbientModule(declaration) || (declaration.kind === SyntaxKind.SourceFile && isExternalOrCommonJsModule(declaration as SourceFile));
+        return isAmbientModule(declaration) || (declaration.kind === SyntaxKind.SourceFile && isExternalOrCommonJsModule(declaration));
     }
 
     function hasNonGlobalAugmentationExternalModuleSymbol(declaration: Node) {
-        return isModuleWithStringLiteralName(declaration) || (declaration.kind === SyntaxKind.SourceFile && isExternalOrCommonJsModule(declaration as SourceFile));
+        return isModuleWithStringLiteralName(declaration) || (declaration.kind === SyntaxKind.SourceFile && isExternalOrCommonJsModule(declaration));
     }
 
     function hasVisibleDeclarations(symbol: Symbol, shouldComputeAliasToMakeVisible: boolean): SymbolVisibilityResult | undefined {
@@ -9235,7 +9234,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         if (node.parent?.parent?.kind === SyntaxKind.VariableDeclaration) {
                             // const { SomeClass } = require('./lib');
                             const specifier = getSpecifierForModuleSymbol(target.parent || target, context); // './lib'
-                            const { propertyName } = node as BindingElement;
+                            const { propertyName } = node ;
                             addResult(factory.createImportDeclaration(
                                 /*modifiers*/ undefined,
                                 factory.createImportClause(/*isTypeOnly*/ false, /*name*/ undefined, factory.createNamedImports([factory.createImportSpecifier(
@@ -9262,9 +9261,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         break;
                     case SyntaxKind.VariableDeclaration:
                         // commonjs require: const x = require('y')
-                        if (isPropertyAccessExpression((node as VariableDeclaration).initializer!)) {
+                        if (isPropertyAccessExpression((node).initializer!)) {
                             // const x = require('y').z
-                            const initializer = (node as VariableDeclaration).initializer! as PropertyAccessExpression; // require('y').z
+                            const initializer = (node).initializer ; // require('y').z
                             const uniqueName = factory.createUniqueName(localName); // _x
                             const specifier = getSpecifierForModuleSymbol(target.parent || target, context); // 'y'
                             // import _x = require('y');
@@ -9307,27 +9306,27 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         // export as namespace foo
                         // TODO: Not part of a file's local or export symbol tables
                         // Is bound into file.symbol.globalExports instead, which we don't currently traverse
-                        addResult(factory.createNamespaceExportDeclaration(idText((node as NamespaceExportDeclaration).name)), ModifierFlags.None);
+                        addResult(factory.createNamespaceExportDeclaration(idText((node).name)), ModifierFlags.None);
                         break;
                     case SyntaxKind.ImportClause: {
                         const generatedSpecifier = getSpecifierForModuleSymbol(target.parent || target, context); // generate specifier (even though we're reusing and existing one) for ambient module reference include side effects
-                        const specifier = bundled ? factory.createStringLiteral(generatedSpecifier) : (node as ImportClause).parent.moduleSpecifier;
+                        const specifier = bundled ? factory.createStringLiteral(generatedSpecifier) : (node).parent.moduleSpecifier;
                         addResult(factory.createImportDeclaration(
                             /*modifiers*/ undefined,
                             factory.createImportClause(/*isTypeOnly*/ false, factory.createIdentifier(localName), /*namedBindings*/ undefined),
                             specifier,
-                            (node as ImportClause).parent.assertClause
+                            (node).parent.assertClause
                         ), ModifierFlags.None);
                         break;
                     }
                     case SyntaxKind.NamespaceImport: {
                         const generatedSpecifier = getSpecifierForModuleSymbol(target.parent || target, context); // generate specifier (even though we're reusing and existing one) for ambient module reference include side effects
-                        const specifier = bundled ? factory.createStringLiteral(generatedSpecifier) : (node as NamespaceImport).parent.parent.moduleSpecifier;
+                        const specifier = bundled ? factory.createStringLiteral(generatedSpecifier) : (node).parent.parent.moduleSpecifier;
                         addResult(factory.createImportDeclaration(
                             /*modifiers*/ undefined,
                             factory.createImportClause(/*isTypeOnly*/ false, /*name*/ undefined, factory.createNamespaceImport(factory.createIdentifier(localName))),
                             specifier,
-                            (node as NamespaceImport).parent.parent.assertClause
+                            (node).parent.parent.assertClause
                         ), ModifierFlags.None);
                         break;
                     }
@@ -9341,7 +9340,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         break;
                     case SyntaxKind.ImportSpecifier: {
                         const generatedSpecifier = getSpecifierForModuleSymbol(target.parent || target, context); // generate specifier (even though we're reusing and existing one) for ambient module reference include side effects
-                        const specifier = bundled ? factory.createStringLiteral(generatedSpecifier) : (node as ImportSpecifier).parent.parent.parent.moduleSpecifier;
+                        const specifier = bundled ? factory.createStringLiteral(generatedSpecifier) : (node).parent.parent.parent.moduleSpecifier;
                         addResult(factory.createImportDeclaration(
                             /*modifiers*/ undefined,
                             factory.createImportClause(
@@ -9355,14 +9354,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                     )
                                 ])),
                             specifier,
-                            (node as ImportSpecifier).parent.parent.parent.assertClause,
+                            (node).parent.parent.parent.assertClause,
                         ), ModifierFlags.None);
                         break;
                     }
                     case SyntaxKind.ExportSpecifier:
                         // does not use localName because the symbol name in this case refers to the name in the exports table,
                         // which we must exactly preserve
-                        const specifier = (node.parent.parent as ExportDeclaration).moduleSpecifier;
+                        const specifier = (node.parent.parent).moduleSpecifier;
                         // targetName is only used when the target is local, as otherwise the target is an alias that points at
                         // another file
                         serializeExportSpecifier(
@@ -9932,7 +9931,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 declaration = symbol.declarations[0]; // Declaration may be nameless, but we'll try anyway
             }
             if (declaration.parent && declaration.parent.kind === SyntaxKind.VariableDeclaration) {
-                return declarationNameToString((declaration.parent as VariableDeclaration).name);
+                return declarationNameToString((declaration.parent).name);
             }
             switch (declaration.kind) {
                 case SyntaxKind.ClassExpression:
@@ -9970,8 +9969,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 case SyntaxKind.BindingElement:
                     return isDeclarationVisible(node.parent.parent);
                 case SyntaxKind.VariableDeclaration:
-                    if (isBindingPattern((node as VariableDeclaration).name) &&
-                        !((node as VariableDeclaration).name as BindingPattern).elements.length) {
+                    if (isBindingPattern((node).name) &&
+                        !((node).name).elements.length) {
                         // If the binding pattern is empty, this variable declaration is not visible
                         return false;
                     }
@@ -10059,7 +10058,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             exportSymbol = resolveName(node, node.escapedText, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias, /*nameNotFoundMessage*/ undefined, node, /*isUse*/ false);
         }
         else if (node.parent.kind === SyntaxKind.ExportSpecifier) {
-            exportSymbol = getTargetOfExportSpecifier(node.parent as ExportSpecifier, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias);
+            exportSymbol = getTargetOfExportSpecifier(node.parent , SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias);
         }
         let result: Node[] | undefined;
         let visited: Set<number> | undefined;
@@ -10327,23 +10326,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         switch (ancestor.kind) {
             case SyntaxKind.BindingElement:
             case SyntaxKind.PropertyAssignment:
-                return getSyntheticElementAccess(ancestor as BindingElement | PropertyAssignment);
+                return getSyntheticElementAccess(ancestor);
             case SyntaxKind.ArrayLiteralExpression:
                 return getSyntheticElementAccess(node.parent as Expression);
             case SyntaxKind.VariableDeclaration:
-                return (ancestor as VariableDeclaration).initializer;
+                return (ancestor).initializer;
             case SyntaxKind.BinaryExpression:
-                return (ancestor as BinaryExpression).right;
+                return (ancestor).right;
         }
     }
 
     function getDestructuringPropertyName(node: BindingElement | PropertyAssignment | ShorthandPropertyAssignment | Expression) {
         const parent = node.parent;
         if (node.kind === SyntaxKind.BindingElement && parent.kind === SyntaxKind.ObjectBindingPattern) {
-            return getLiteralPropertyNameText((node as BindingElement).propertyName || (node as BindingElement).name as Identifier);
+            return getLiteralPropertyNameText((node).propertyName || (node).name as Identifier);
         }
         if (node.kind === SyntaxKind.PropertyAssignment || node.kind === SyntaxKind.ShorthandPropertyAssignment) {
-            return getLiteralPropertyNameText((node as PropertyAssignment | ShorthandPropertyAssignment).name);
+            return getLiteralPropertyNameText((node).name);
         }
         return "" + ((parent as BindingPattern | ArrayLiteralExpression).elements as NodeArray<Node>).indexOf(node);
     }
@@ -10445,12 +10444,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function isNullOrUndefined(node: Expression) {
         const expr = skipParentheses(node, /*excludeJSDocTypeAssertions*/ true);
-        return expr.kind === SyntaxKind.NullKeyword || expr.kind === SyntaxKind.Identifier && getResolvedSymbol(expr as Identifier) === undefinedSymbol;
+        return expr.kind === SyntaxKind.NullKeyword || expr.kind === SyntaxKind.Identifier && getResolvedSymbol(expr) === undefinedSymbol;
     }
 
     function isEmptyArrayLiteral(node: Expression) {
         const expr = skipParentheses(node, /*excludeJSDocTypeAssertions*/ true);
-        return expr.kind === SyntaxKind.ArrayLiteralExpression && (expr as ArrayLiteralExpression).elements.length === 0;
+        return expr.kind === SyntaxKind.ArrayLiteralExpression && (expr).elements.length === 0;
     }
 
     function addOptionality(type: Type, isProperty = false, isOptional = true): Type {
@@ -10601,7 +10600,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 links.isConstructorDeclaredProperty = !!getDeclaringConstructor(symbol) && every(symbol.declarations, declaration =>
                     isBinaryExpression(declaration) &&
                     isPossiblyAliasedThisProperty(declaration) &&
-                    (declaration.left.kind !== SyntaxKind.ElementAccessExpression || isStringOrNumericLiteralLike((declaration.left as ElementAccessExpression).argumentExpression)) &&
+                    (declaration.left.kind !== SyntaxKind.ElementAccessExpression || isStringOrNumericLiteralLike((declaration.left).argumentExpression)) &&
                     !getAnnotatedTypeForAssignmentDeclaration(/*declaredType*/ undefined, declaration, symbol, declaration));
             }
             return links.isConstructorDeclaredProperty;
@@ -11180,7 +11179,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         let type: Type;
         if (declaration.kind === SyntaxKind.ExportAssignment) {
-            type = widenTypeForVariableLikeDeclaration(tryGetTypeFromEffectiveTypeNode(declaration) || checkExpressionCached((declaration as ExportAssignment).expression), declaration);
+            type = widenTypeForVariableLikeDeclaration(tryGetTypeFromEffectiveTypeNode(declaration) || checkExpressionCached((declaration).expression), declaration);
         }
         else if (
             isBinaryExpression(declaration) ||
@@ -11620,10 +11619,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 case SyntaxKind.ConditionalType: {
                     const outerTypeParameters = getOuterTypeParameters(node, includeThisTypes);
                     if (node.kind === SyntaxKind.MappedType) {
-                        return append(outerTypeParameters, getDeclaredTypeOfTypeParameter(getSymbolOfDeclaration((node as MappedTypeNode).typeParameter)));
+                        return append(outerTypeParameters, getDeclaredTypeOfTypeParameter(getSymbolOfDeclaration((node).typeParameter)));
                     }
                     else if (node.kind === SyntaxKind.ConditionalType) {
-                        return concatenate(outerTypeParameters, getInferTypeParameters(node as ConditionalTypeNode));
+                        return concatenate(outerTypeParameters, getInferTypeParameters(node));
                     }
                     const outerAndOwnTypeParameters = appendTypeParameters(outerTypeParameters, getEffectiveTypeParameterDeclarations(node as DeclarationWithTypeParameters));
                     const thisType = includeThisTypes &&
@@ -11632,15 +11631,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return thisType ? append(outerAndOwnTypeParameters, thisType) : outerAndOwnTypeParameters;
                 }
                 case SyntaxKind.JSDocParameterTag:
-                    const paramSymbol = getParameterSymbolFromJSDoc(node as JSDocParameterTag);
+                    const paramSymbol = getParameterSymbolFromJSDoc(node);
                     if (paramSymbol) {
                         node = paramSymbol.valueDeclaration!;
                     }
                     break;
                 case SyntaxKind.JSDoc: {
                     const outerTypeParameters = getOuterTypeParameters(node, includeThisTypes);
-                    return (node as JSDoc).tags
-                        ? appendTypeParameters(outerTypeParameters, flatMap((node as JSDoc).tags, t => isJSDocTemplateTag(t) ? t.typeParameters : undefined))
+                    return (node).tags
+                        ? appendTypeParameters(outerTypeParameters, flatMap((node).tags, t => isJSDocTemplateTag(t) ? t.typeParameters : undefined))
                         : outerTypeParameters;
                 }
             }
@@ -11658,7 +11657,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (decl.kind !== SyntaxKind.VariableDeclaration) {
                     return false;
                 }
-                const initializer = (decl as VariableDeclaration).initializer;
+                const initializer = (decl).initializer;
                 return !!initializer && (initializer.kind === SyntaxKind.FunctionExpression || initializer.kind === SyntaxKind.ArrowFunction);
             })!;
         Debug.assert(!!declaration, "Class was missing valueDeclaration -OR- non-class had no interface declarations");
@@ -11936,8 +11935,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         type.resolvedBaseTypes = type.resolvedBaseTypes || emptyArray;
         if (type.symbol.declarations) {
             for (const declaration of type.symbol.declarations) {
-                if (declaration.kind === SyntaxKind.InterfaceDeclaration && getInterfaceBaseTypeNodes(declaration as InterfaceDeclaration)) {
-                    for (const node of getInterfaceBaseTypeNodes(declaration as InterfaceDeclaration)!) {
+                if (declaration.kind === SyntaxKind.InterfaceDeclaration && getInterfaceBaseTypeNodes(declaration)) {
+                    for (const node of getInterfaceBaseTypeNodes(declaration)!) {
                         const baseType = getReducedType(getTypeFromTypeNode(node));
                         if (!isErrorType(baseType)) {
                             if (isValidBaseType(baseType)) {
@@ -11979,7 +11978,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (declaration.flags & NodeFlags.ContainsThis) {
                     return false;
                 }
-                const baseTypeNodes = getInterfaceBaseTypeNodes(declaration as InterfaceDeclaration);
+                const baseTypeNodes = getInterfaceBaseTypeNodes(declaration);
                 if (baseTypeNodes) {
                     for (const node of baseTypeNodes) {
                         if (isEntityNameExpression(node.expression)) {
@@ -12081,7 +12080,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (symbol.declarations) {
                 for (const declaration of symbol.declarations) {
                     if (declaration.kind === SyntaxKind.EnumDeclaration) {
-                        for (const member of (declaration as EnumDeclaration).members) {
+                        for (const member of (declaration).members) {
                             if (hasBindableName(member)) {
                                 const memberSymbol = getSymbolOfDeclaration(member);
                                 const value = getEnumMemberValue(member);
@@ -12185,9 +12184,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.LiteralType:
                 return true;
             case SyntaxKind.ArrayType:
-                return isThislessType((node as ArrayTypeNode).elementType);
+                return isThislessType((node).elementType);
             case SyntaxKind.TypeReference:
-                return !(node as TypeReferenceNode).typeArguments || (node as TypeReferenceNode).typeArguments!.every(isThislessType);
+                return !(node).typeArguments || (node).typeArguments.every(isThislessType);
         }
         return false;
     }
@@ -13376,7 +13375,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function isMappedTypeWithKeyofConstraintDeclaration(type: MappedType) {
         const constraintDeclaration = getConstraintDeclarationForMappedType(type)!; // TODO: GH#18217
         return constraintDeclaration.kind === SyntaxKind.TypeOperator &&
-            (constraintDeclaration as TypeOperatorNode).operator === SyntaxKind.KeyOfKeyword;
+            (constraintDeclaration).operator === SyntaxKind.KeyOfKeyword;
     }
 
     function getModifiersTypeFromMappedType(type: MappedType) {
@@ -14664,7 +14663,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!node) return false;
             switch (node.kind) {
                 case SyntaxKind.Identifier:
-                    return (node as Identifier).escapedText === argumentsSymbol.escapedName && getReferencedValueSymbol(node as Identifier) === argumentsSymbol;
+                    return (node).escapedText === argumentsSymbol.escapedName && getReferencedValueSymbol(node) === argumentsSymbol;
 
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.MethodDeclaration:
@@ -14675,10 +14674,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.ElementAccessExpression:
-                    return traverse((node as PropertyAccessExpression | ElementAccessExpression).expression);
+                    return traverse((node).expression);
 
                 case SyntaxKind.PropertyAssignment:
-                    return traverse((node as PropertyAssignment).initializer);
+                    return traverse((node).initializer);
 
                 default:
                     return !nodeStartsNewLexicalEnvironment(node) && !isPartOfTypeNode(node) && !!forEachChild(node, traverse);
@@ -15043,7 +15042,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // present, we form an intersection of the inferred constraint types.
                     const [childTypeParameter = declaration.parent, grandParent] = walkUpParenthesizedTypesAndGetParentAndChild(declaration.parent.parent);
                     if (grandParent.kind === SyntaxKind.TypeReference && !omitTypeReferences) {
-                        const typeReference = grandParent as TypeReferenceNode;
+                        const typeReference = grandParent ;
                         const typeParameters = getTypeParametersForTypeReferenceOrImport(typeReference);
                         if (typeParameters) {
                             const index = typeReference.typeArguments!.indexOf(childTypeParameter as TypeNode);
@@ -15069,9 +15068,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                     // When an 'infer T' declaration is immediately contained in a rest parameter declaration, a rest type
                     // or a named rest tuple element, we infer an 'unknown[]' constraint.
-                    else if (grandParent.kind === SyntaxKind.Parameter && (grandParent as ParameterDeclaration).dotDotDotToken ||
+                    else if (grandParent.kind === SyntaxKind.Parameter && (grandParent).dotDotDotToken ||
                         grandParent.kind === SyntaxKind.RestType ||
-                        grandParent.kind === SyntaxKind.NamedTupleMember && (grandParent as NamedTupleMember).dotDotDotToken) {
+                        grandParent.kind === SyntaxKind.NamedTupleMember && (grandParent).dotDotDotToken) {
                         inferences = append(inferences, createArrayType(unknownType));
                     }
                     // When an 'infer T' declaration is immediately contained in a string template type, we infer a 'string'
@@ -15087,11 +15086,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // When an 'infer T' declaration is the template of a mapped type, and that mapped type is the extends
                     // clause of a conditional whose check type is also a mapped type, give it a constraint equal to the template
                     // of the check type's mapped type
-                    else if (grandParent.kind === SyntaxKind.MappedType && (grandParent as MappedTypeNode).type &&
-                        skipParentheses((grandParent as MappedTypeNode).type!) === declaration.parent && grandParent.parent.kind === SyntaxKind.ConditionalType &&
-                        (grandParent.parent as ConditionalTypeNode).extendsType === grandParent && (grandParent.parent as ConditionalTypeNode).checkType.kind === SyntaxKind.MappedType &&
-                        ((grandParent.parent as ConditionalTypeNode).checkType as MappedTypeNode).type) {
-                        const checkMappedType = (grandParent.parent as ConditionalTypeNode).checkType as MappedTypeNode;
+                    else if (grandParent.kind === SyntaxKind.MappedType && (grandParent).type &&
+                        skipParentheses((grandParent).type) === declaration.parent && grandParent.parent.kind === SyntaxKind.ConditionalType &&
+                        (grandParent.parent).extendsType === grandParent && (grandParent.parent).checkType.kind === SyntaxKind.MappedType &&
+                        ((grandParent.parent).checkType).type) {
+                        const checkMappedType = (grandParent.parent).checkType ;
                         const nodeType = getTypeFromTypeNode(checkMappedType.type!);
                         inferences = append(inferences, instantiateType(nodeType,
                             makeUnaryTypeMapper(getDeclaredTypeOfTypeParameter(getSymbolOfDeclaration(checkMappedType.typeParameter)), checkMappedType.typeParameter.constraint ? getTypeFromTypeNode(checkMappedType.typeParameter.constraint) : keyofConstraintType)
@@ -15279,8 +15278,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return errorType;
                 }
             }
-            if (node.kind === SyntaxKind.TypeReference && isDeferredTypeReferenceNode(node as TypeReferenceNode, length(node.typeArguments) !== typeParameters.length)) {
-                return createDeferredTypeReference(type as GenericType, node as TypeReferenceNode, /*mapper*/ undefined);
+            if (node.kind === SyntaxKind.TypeReference && isDeferredTypeReferenceNode(node , length(node.typeArguments) !== typeParameters.length)) {
+                return createDeferredTypeReference(type as GenericType, node , /*mapper*/ undefined);
             }
             // In a type reference, the outer type parameters of the referenced class or interface are automatically
             // supplied as type arguments and the type reference only specifies arguments for the local type parameters
@@ -15465,7 +15464,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const valueType = getTypeOfSymbol(symbol);
             let typeType = valueType;
             if (symbol.valueDeclaration) {
-                const isImportTypeWithQualifier = node.kind === SyntaxKind.ImportType && (node as ImportTypeNode).qualifier;
+                const isImportTypeWithQualifier = node.kind === SyntaxKind.ImportType && (node).qualifier;
                 // valueType might not have a symbol, eg, {import('./b').STRING_LITERAL}
                 if (valueType.symbol && valueType.symbol !== symbol && isImportTypeWithQualifier) {
                     typeType = getTypeReferenceType(node, valueType.symbol);
@@ -15497,7 +15496,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isUnaryTupleTypeNode(node: TypeNode) {
-        return node.kind === SyntaxKind.TupleType && (node as TupleTypeNode).elements.length === 1;
+        return node.kind === SyntaxKind.TupleType && (node).elements.length === 1;
     }
 
     function getImpliedConstraint(type: Type, checkNode: TypeNode, extendsNode: TypeNode): Type | undefined {
@@ -15518,15 +15517,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             // Always substitute on type parameters, regardless of variance, since even
             // in contravariant positions, they may rely on substituted constraints to be valid
-            if ((covariant || type.flags & TypeFlags.TypeVariable) && parent.kind === SyntaxKind.ConditionalType && node === (parent as ConditionalTypeNode).trueType) {
-                const constraint = getImpliedConstraint(type, (parent as ConditionalTypeNode).checkType, (parent as ConditionalTypeNode).extendsType);
+            if ((covariant || type.flags & TypeFlags.TypeVariable) && parent.kind === SyntaxKind.ConditionalType && node === (parent).trueType) {
+                const constraint = getImpliedConstraint(type, (parent).checkType, (parent).extendsType);
                 if (constraint) {
                     constraints = append(constraints, constraint);
                 }
             }
             // Given a homomorphic mapped type { [K in keyof T]: XXX }, where T is constrained to an array or tuple type, in the
             // template type XXX, K has an added constraint of number | `${number}`.
-            else if (type.flags & TypeFlags.TypeParameter && parent.kind === SyntaxKind.MappedType && node === (parent as MappedTypeNode).type) {
+            else if (type.flags & TypeFlags.TypeParameter && parent.kind === SyntaxKind.MappedType && node === (parent).type) {
                 const mappedType = getTypeFromTypeNode(parent as TypeNode) as MappedType;
                 if (getTypeParameterFromMappedType(mappedType) === getActualTypeVariable(type)) {
                     const typeParameter = getHomomorphicTypeVariable(mappedType);
@@ -15924,10 +15923,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.OptionalType:
                 return ElementFlags.Optional;
             case SyntaxKind.RestType:
-                return getRestTypeElementFlags(node as RestTypeNode);
+                return getRestTypeElementFlags(node);
             case SyntaxKind.NamedTupleMember:
-                return (node as NamedTupleMember).questionToken ? ElementFlags.Optional :
-                    (node as NamedTupleMember).dotDotDotToken ? getRestTypeElementFlags(node as NamedTupleMember) :
+                return (node).questionToken ? ElementFlags.Optional :
+                    (node).dotDotDotToken ? getRestTypeElementFlags(node) :
                     ElementFlags.Required;
             default:
                 return ElementFlags.Required;
@@ -15990,7 +15989,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.TypeQuery:
                 return true;
             case SyntaxKind.TypeOperator:
-                return (node as TypeOperatorNode).operator !== SyntaxKind.UniqueKeyword && mayResolveTypeAlias((node as TypeOperatorNode).type);
+                return (node).operator !== SyntaxKind.UniqueKeyword && mayResolveTypeAlias((node).type);
             case SyntaxKind.ParenthesizedType:
             case SyntaxKind.OptionalType:
             case SyntaxKind.NamedTupleMember:
@@ -16000,15 +15999,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.JSDocTypeExpression:
                 return mayResolveTypeAlias((node as ParenthesizedTypeNode | OptionalTypeNode | JSDocTypeReferencingNode | NamedTupleMember).type);
             case SyntaxKind.RestType:
-                return (node as RestTypeNode).type.kind !== SyntaxKind.ArrayType || mayResolveTypeAlias(((node as RestTypeNode).type as ArrayTypeNode).elementType);
+                return (node).type.kind !== SyntaxKind.ArrayType || mayResolveTypeAlias(((node).type).elementType);
             case SyntaxKind.UnionType:
             case SyntaxKind.IntersectionType:
                 return some((node as UnionOrIntersectionTypeNode).types, mayResolveTypeAlias);
             case SyntaxKind.IndexedAccessType:
-                return mayResolveTypeAlias((node as IndexedAccessTypeNode).objectType) || mayResolveTypeAlias((node as IndexedAccessTypeNode).indexType);
+                return mayResolveTypeAlias((node).objectType) || mayResolveTypeAlias((node).indexType);
             case SyntaxKind.ConditionalType:
-                return mayResolveTypeAlias((node as ConditionalTypeNode).checkType) || mayResolveTypeAlias((node as ConditionalTypeNode).extendsType) ||
-                    mayResolveTypeAlias((node as ConditionalTypeNode).trueType) || mayResolveTypeAlias((node as ConditionalTypeNode).falseType);
+                return mayResolveTypeAlias((node).checkType) || mayResolveTypeAlias((node).extendsType) ||
+                    mayResolveTypeAlias((node).trueType) || mayResolveTypeAlias((node).falseType);
         }
         return false;
     }
@@ -18399,7 +18398,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (parent && (isClassLike(parent) || parent.kind === SyntaxKind.InterfaceDeclaration)) {
             if (!isStatic(container) &&
                 (!isConstructorDeclaration(container) || isNodeDescendantOf(node, container.body))) {
-                return getDeclaredTypeOfClassOrInterface(getSymbolOfDeclaration(parent as ClassLikeDeclaration | InterfaceDeclaration)).thisType!;
+                return getDeclaredTypeOfClassOrInterface(getSymbolOfDeclaration(parent)).thisType!;
             }
         }
 
@@ -18436,17 +18435,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getArrayElementTypeNode(node: TypeNode): TypeNode | undefined {
         switch (node.kind) {
             case SyntaxKind.ParenthesizedType:
-                return getArrayElementTypeNode((node as ParenthesizedTypeNode).type);
+                return getArrayElementTypeNode((node).type);
             case SyntaxKind.TupleType:
-                if ((node as TupleTypeNode).elements.length === 1) {
-                    node = (node as TupleTypeNode).elements[0];
-                    if (node.kind === SyntaxKind.RestType || node.kind === SyntaxKind.NamedTupleMember && (node as NamedTupleMember).dotDotDotToken) {
-                        return getArrayElementTypeNode((node as RestTypeNode | NamedTupleMember).type);
+                if ((node).elements.length === 1) {
+                    node = (node).elements[0];
+                    if (node.kind === SyntaxKind.RestType || node.kind === SyntaxKind.NamedTupleMember && (node).dotDotDotToken) {
+                        return getArrayElementTypeNode((node).type);
                     }
                 }
                 break;
             case SyntaxKind.ArrayType:
-                return (node as ArrayTypeNode).elementType;
+                return (node).elementType;
         }
         return undefined;
     }
@@ -18462,7 +18461,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return getConditionalFlowTypeOfType(getTypeFromTypeNodeWorker(node), node);
     }
 
-    function getTypeFromTypeNodeWorker(node: TypeNode): Type {
+    function getTypeFromTypeNodeWorker(node: TypeNode | Identifier | QualifiedName | PropertyAccessExpression): Type {
         switch (node.kind) {
             case SyntaxKind.AnyKeyword:
             case SyntaxKind.JSDocAllType:
@@ -18498,38 +18497,38 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // TODO(rbuckton): `ThisKeyword` is no longer a `TypeNode`, but we defensively allow it here because of incorrect casts in the Language Service and because of `isPartOfTypeNode`.
                 return getTypeFromThisTypeNode(node as ThisExpression | ThisTypeNode);
             case SyntaxKind.LiteralType:
-                return getTypeFromLiteralTypeNode(node as LiteralTypeNode);
+                return getTypeFromLiteralTypeNode(node);
             case SyntaxKind.TypeReference:
-                return getTypeFromTypeReference(node as TypeReferenceNode);
+                return getTypeFromTypeReference(node);
             case SyntaxKind.TypePredicate:
-                return (node as TypePredicateNode).assertsModifier ? voidType : booleanType;
+                return (node).assertsModifier ? voidType : booleanType;
             case SyntaxKind.ExpressionWithTypeArguments:
-                return getTypeFromTypeReference(node as ExpressionWithTypeArguments);
+                return getTypeFromTypeReference(node);
             case SyntaxKind.TypeQuery:
-                return getTypeFromTypeQueryNode(node as TypeQueryNode);
+                return getTypeFromTypeQueryNode(node);
             case SyntaxKind.ArrayType:
             case SyntaxKind.TupleType:
-                return getTypeFromArrayOrTupleTypeNode(node as ArrayTypeNode | TupleTypeNode);
+                return getTypeFromArrayOrTupleTypeNode(node);
             case SyntaxKind.OptionalType:
-                return getTypeFromOptionalTypeNode(node as OptionalTypeNode);
+                return getTypeFromOptionalTypeNode(node);
             case SyntaxKind.UnionType:
-                return getTypeFromUnionTypeNode(node as UnionTypeNode);
+                return getTypeFromUnionTypeNode(node);
             case SyntaxKind.IntersectionType:
-                return getTypeFromIntersectionTypeNode(node as IntersectionTypeNode);
+                return getTypeFromIntersectionTypeNode(node);
             case SyntaxKind.JSDocNullableType:
-                return getTypeFromJSDocNullableTypeNode(node as JSDocNullableType);
+                return getTypeFromJSDocNullableTypeNode(node);
             case SyntaxKind.JSDocOptionalType:
-                return addOptionality(getTypeFromTypeNode((node as JSDocOptionalType).type));
+                return addOptionality(getTypeFromTypeNode(node.type));
             case SyntaxKind.NamedTupleMember:
-                return getTypeFromNamedTupleTypeNode(node as NamedTupleMember);
+                return getTypeFromNamedTupleTypeNode(node);
             case SyntaxKind.ParenthesizedType:
             case SyntaxKind.JSDocNonNullableType:
             case SyntaxKind.JSDocTypeExpression:
                 return getTypeFromTypeNode((node as ParenthesizedTypeNode | JSDocTypeReferencingNode | JSDocTypeExpression | NamedTupleMember).type);
             case SyntaxKind.RestType:
-                return getTypeFromRestTypeNode(node as RestTypeNode);
+                return getTypeFromRestTypeNode(node);
             case SyntaxKind.JSDocVariadicType:
-                return getTypeFromJSDocVariadicType(node as JSDocVariadicType);
+                return getTypeFromJSDocVariadicType(node);
             case SyntaxKind.FunctionType:
             case SyntaxKind.ConstructorType:
             case SyntaxKind.TypeLiteral:
@@ -18538,25 +18537,25 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.JSDocSignature:
                 return getTypeFromTypeLiteralOrFunctionOrConstructorTypeNode(node as TypeLiteralNode | FunctionOrConstructorTypeNode | JSDocTypeLiteral | JSDocFunctionType | JSDocSignature);
             case SyntaxKind.TypeOperator:
-                return getTypeFromTypeOperatorNode(node as TypeOperatorNode);
+                return getTypeFromTypeOperatorNode(node);
             case SyntaxKind.IndexedAccessType:
-                return getTypeFromIndexedAccessTypeNode(node as IndexedAccessTypeNode);
+                return getTypeFromIndexedAccessTypeNode(node);
             case SyntaxKind.MappedType:
-                return getTypeFromMappedTypeNode(node as MappedTypeNode);
+                return getTypeFromMappedTypeNode(node);
             case SyntaxKind.ConditionalType:
-                return getTypeFromConditionalTypeNode(node as ConditionalTypeNode);
+                return getTypeFromConditionalTypeNode(node);
             case SyntaxKind.InferType:
-                return getTypeFromInferTypeNode(node as InferTypeNode);
+                return getTypeFromInferTypeNode(node);
             case SyntaxKind.TemplateLiteralType:
-                return getTypeFromTemplateTypeNode(node as TemplateLiteralTypeNode);
+                return getTypeFromTemplateTypeNode(node);
             case SyntaxKind.ImportType:
-                return getTypeFromImportTypeNode(node as ImportTypeNode);
+                return getTypeFromImportTypeNode(node);
             // This function assumes that an identifier, qualified name, or property access expression is a type expression
             // Callers should first ensure this by calling `isPartOfTypeNode`
             // TODO(rbuckton): These aren't valid TypeNodes, but we treat them as such because of `isPartOfTypeNode`, which returns `true` for things that aren't `TypeNode`s.
-            case SyntaxKind.Identifier as TypeNodeSyntaxKind:
-            case SyntaxKind.QualifiedName as TypeNodeSyntaxKind:
-            case SyntaxKind.PropertyAccessExpression as TypeNodeSyntaxKind:
+            case SyntaxKind.Identifier:
+            case SyntaxKind.QualifiedName:
+            case SyntaxKind.PropertyAccessExpression:
                 const symbol = getSymbolAtLocation(node);
                 return symbol ? getDeclaredTypeOfSymbol(symbol) : errorType;
             default:
@@ -18817,8 +18816,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function maybeTypeParameterReference(node: Node) {
-        return !(node.parent.kind === SyntaxKind.TypeReference && (node.parent as TypeReferenceNode).typeArguments && node === (node.parent as TypeReferenceNode).typeName ||
-            node.parent.kind === SyntaxKind.ImportType && (node.parent as ImportTypeNode).typeArguments && node === (node.parent as ImportTypeNode).qualifier);
+        return !(node.parent.kind === SyntaxKind.TypeReference && (node.parent).typeArguments && node === (node.parent).typeName ||
+            node.parent.kind === SyntaxKind.ImportType && (node.parent).typeArguments && node === (node.parent).qualifier);
     }
 
     function isTypeParameterPossiblyReferenced(tp: TypeParameter, node: Node) {
@@ -18829,7 +18828,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (tp.symbol && tp.symbol.declarations && tp.symbol.declarations.length === 1) {
             const container = tp.symbol.declarations[0].parent;
             for (let n = node; n !== container; n = n.parent) {
-                if (!n || n.kind === SyntaxKind.Block || n.kind === SyntaxKind.ConditionalType && forEachChild((n as ConditionalTypeNode).extendsType, containsReference)) {
+                if (!n || n.kind === SyntaxKind.Block || n.kind === SyntaxKind.ConditionalType && forEachChild((n).extendsType, containsReference)) {
                     return true;
                 }
             }
@@ -18842,9 +18841,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return !!tp.isThisType;
                 case SyntaxKind.Identifier:
                     return !tp.isThisType && isPartOfTypeNode(node) && maybeTypeParameterReference(node) &&
-                        getTypeFromTypeNodeWorker(node as TypeNode) === tp; // use worker because we're looking for === equality
+                        getTypeFromTypeNodeWorker(node) === tp; // use worker because we're looking for === equality
                 case SyntaxKind.TypeQuery:
-                    const entityName = (node as TypeQueryNode).exprName;
+                    const entityName = (node).exprName;
                     const firstIdentifier = getFirstIdentifier(entityName);
                     const firstIdentifierSymbol = getResolvedSymbol(firstIdentifier);
                     const tpDeclaration = tp.symbol.declarations![0]; // There is exactly one declaration, otherwise `containsReference` is not called
@@ -18864,7 +18863,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                     if (firstIdentifierSymbol.declarations) {
                         return some(firstIdentifierSymbol.declarations, idDecl => isNodeDescendantOf(idDecl, tpScope)) ||
-                            some((node as TypeQueryNode).typeArguments, containsReference);
+                            some((node).typeArguments, containsReference);
                     }
                     return true;
                 case SyntaxKind.MethodDeclaration:
@@ -19167,38 +19166,38 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     // Returns true if the given expression contains (at any level of nesting) a function or arrow expression
     // that is subject to contextual typing.
-    function isContextSensitive(node: Expression | MethodDeclaration | ObjectLiteralElementLike | JsxAttributeLike | JsxChild): boolean {
+    function isContextSensitive(node: Expression | MethodDeclaration | ObjectLiteralElementLike | JsxAttributeLike | JsxChild | FunctionDeclaration): boolean {
         Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
         switch (node.kind) {
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.FunctionDeclaration: // Function declarations can have context when annotated with a jsdoc @type
-                return isContextSensitiveFunctionLikeDeclaration(node as FunctionExpression | ArrowFunction | MethodDeclaration);
+                return isContextSensitiveFunctionLikeDeclaration(node);
             case SyntaxKind.ObjectLiteralExpression:
-                return some((node as ObjectLiteralExpression).properties, isContextSensitive);
+                return some((node).properties, isContextSensitive);
             case SyntaxKind.ArrayLiteralExpression:
-                return some((node as ArrayLiteralExpression).elements, isContextSensitive);
+                return some((node).elements, isContextSensitive);
             case SyntaxKind.ConditionalExpression:
-                return isContextSensitive((node as ConditionalExpression).whenTrue) ||
-                    isContextSensitive((node as ConditionalExpression).whenFalse);
+                return isContextSensitive((node).whenTrue) ||
+                    isContextSensitive((node).whenFalse);
             case SyntaxKind.BinaryExpression:
-                return ((node as BinaryExpression).operatorToken.kind === SyntaxKind.BarBarToken || (node as BinaryExpression).operatorToken.kind === SyntaxKind.QuestionQuestionToken) &&
-                    (isContextSensitive((node as BinaryExpression).left) || isContextSensitive((node as BinaryExpression).right));
+                return ((node).operatorToken.kind === SyntaxKind.BarBarToken || (node).operatorToken.kind === SyntaxKind.QuestionQuestionToken) &&
+                    (isContextSensitive((node).left) || isContextSensitive((node).right));
             case SyntaxKind.PropertyAssignment:
-                return isContextSensitive((node as PropertyAssignment).initializer);
+                return isContextSensitive((node).initializer);
             case SyntaxKind.ParenthesizedExpression:
-                return isContextSensitive((node as ParenthesizedExpression).expression);
+                return isContextSensitive((node).expression);
             case SyntaxKind.JsxAttributes:
-                return some((node as JsxAttributes).properties, isContextSensitive) || isJsxOpeningElement(node.parent) && some(node.parent.parent.children, isContextSensitive);
+                return some((node).properties, isContextSensitive) || isJsxOpeningElement(node.parent) && some(node.parent.parent.children, isContextSensitive);
             case SyntaxKind.JsxAttribute: {
                 // If there is no initializer, JSX attribute has a boolean value of true which is not context sensitive.
-                const { initializer } = node as JsxAttribute;
+                const { initializer } = node ;
                 return !!initializer && isContextSensitive(initializer);
             }
             case SyntaxKind.JsxExpression: {
                 // It is possible to that node.expression is undefined (e.g <div x={} />)
-                const { expression } = node as JsxExpression;
+                const { expression } = node ;
                 return !!expression && isContextSensitive(expression);
             }
         }
@@ -19217,7 +19216,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (node.body.kind !== SyntaxKind.Block) {
             return isContextSensitive(node.body);
         }
-        return !!forEachReturnStatement(node.body as Block, (statement) => !!statement.expression && isContextSensitive(statement.expression));
+        return !!forEachReturnStatement(node.body , (statement) => !!statement.expression && isContextSensitive(statement.expression));
     }
 
     function isContextSensitiveFunctionOrObjectLiteralMethod(func: Node): func is FunctionExpression | ArrowFunction | MethodDeclaration {
@@ -19363,22 +19362,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         switch (node.kind) {
             case SyntaxKind.JsxExpression:
             case SyntaxKind.ParenthesizedExpression:
-                return elaborateError((node as ParenthesizedExpression | JsxExpression).expression, source, target, relation, headMessage, containingMessageChain, errorOutputContainer);
+                return elaborateError((node).expression, source, target, relation, headMessage, containingMessageChain, errorOutputContainer);
             case SyntaxKind.BinaryExpression:
-                switch ((node as BinaryExpression).operatorToken.kind) {
+                switch ((node).operatorToken.kind) {
                     case SyntaxKind.EqualsToken:
                     case SyntaxKind.CommaToken:
-                        return elaborateError((node as BinaryExpression).right, source, target, relation, headMessage, containingMessageChain, errorOutputContainer);
+                        return elaborateError((node).right, source, target, relation, headMessage, containingMessageChain, errorOutputContainer);
                 }
                 break;
             case SyntaxKind.ObjectLiteralExpression:
-                return elaborateObjectLiteral(node as ObjectLiteralExpression, source, target, relation, containingMessageChain, errorOutputContainer);
+                return elaborateObjectLiteral(node , source, target, relation, containingMessageChain, errorOutputContainer);
             case SyntaxKind.ArrayLiteralExpression:
-                return elaborateArrayLiteral(node as ArrayLiteralExpression, source, target, relation, containingMessageChain, errorOutputContainer);
+                return elaborateArrayLiteral(node , source, target, relation, containingMessageChain, errorOutputContainer);
             case SyntaxKind.JsxAttributes:
-                return elaborateJsxComponents(node as JsxAttributes, source, target, relation, containingMessageChain, errorOutputContainer);
+                return elaborateJsxComponents(node , source, target, relation, containingMessageChain, errorOutputContainer);
             case SyntaxKind.ArrowFunction:
-                return elaborateArrowFunction(node as ArrowFunction, source, target, relation, containingMessageChain, errorOutputContainer);
+                return elaborateArrowFunction(node , source, target, relation, containingMessageChain, errorOutputContainer);
         }
         return false;
     }
@@ -23794,7 +23793,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 diagnostic = noImplicitAny ? Diagnostics.Member_0_implicitly_has_an_1_type : Diagnostics.Member_0_implicitly_has_an_1_type_but_a_better_type_may_be_inferred_from_usage;
                 break;
             case SyntaxKind.Parameter:
-                const param = declaration as ParameterDeclaration;
+                const param = declaration ;
                 if (isIdentifier(param.name)) {
                     const originalKeywordKind = identifierToKeywordKind(param.name);
                     if ((isCallSignatureDeclaration(param.parent) || isMethodSignature(param.parent) || isFunctionTypeNode(param.parent)) &&
@@ -23807,7 +23806,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         return;
                     }
                 }
-                diagnostic = (declaration as ParameterDeclaration).dotDotDotToken ?
+                diagnostic = (declaration).dotDotDotToken ?
                     noImplicitAny ? Diagnostics.Rest_parameter_0_implicitly_has_an_any_type : Diagnostics.Rest_parameter_0_implicitly_has_an_any_type_but_a_better_type_may_be_inferred_from_usage :
                     noImplicitAny ? Diagnostics.Parameter_0_implicitly_has_an_1_type : Diagnostics.Parameter_0_implicitly_has_an_1_type_but_a_better_type_may_be_inferred_from_usage;
                 break;
@@ -23971,7 +23970,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (context.intraExpressionInferenceSites) {
             for (const { node, type } of context.intraExpressionInferenceSites) {
                 const contextualType = node.kind === SyntaxKind.MethodDeclaration ?
-                    getContextualTypeForObjectLiteralMethod(node as MethodDeclaration, ContextFlags.NoConstraints) :
+                    getContextualTypeForObjectLiteralMethod(node , ContextFlags.NoConstraints) :
                     getContextualType(node, ContextFlags.NoConstraints);
                 if (contextualType) {
                     inferTypes(context.inferences, type, contextualType);
@@ -25347,7 +25346,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         switch (node.kind) {
             case SyntaxKind.Identifier:
                 if (!isThisInTypeQuery(node)) {
-                    const symbol = getResolvedSymbol(node as Identifier);
+                    const symbol = getResolvedSymbol(node);
                     return symbol !== unknownSymbol ? `${flowContainer ? getNodeId(flowContainer) : "-1"}|${getTypeId(declaredType)}|${getTypeId(initialType)}|${getSymbolId(symbol)}` : undefined;
                 }
                 // falls through
@@ -25355,10 +25354,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return `0|${flowContainer ? getNodeId(flowContainer) : "-1"}|${getTypeId(declaredType)}|${getTypeId(initialType)}`;
             case SyntaxKind.NonNullExpression:
             case SyntaxKind.ParenthesizedExpression:
-                return getFlowCacheKey((node as NonNullExpression | ParenthesizedExpression).expression, declaredType, initialType, flowContainer);
+                return getFlowCacheKey((node).expression, declaredType, initialType, flowContainer);
             case SyntaxKind.QualifiedName:
-                const left = getFlowCacheKey((node as QualifiedName).left, declaredType, initialType, flowContainer);
-                return left && left + "." + (node as QualifiedName).right.escapedText;
+                const left = getFlowCacheKey((node).left, declaredType, initialType, flowContainer);
+                return left && left + "." + (node).right.escapedText;
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.ElementAccessExpression:
                 const propName = getAccessedPropertyName(node as AccessExpression);
@@ -25383,7 +25382,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         switch (target.kind) {
             case SyntaxKind.ParenthesizedExpression:
             case SyntaxKind.NonNullExpression:
-                return isMatchingReference(source, (target as NonNullExpression | ParenthesizedExpression).expression);
+                return isMatchingReference(source, (target).expression);
             case SyntaxKind.BinaryExpression:
                 return (isAssignmentExpression(target) && isMatchingReference(source, target.left)) ||
                     (isBinaryExpression(target) && target.operatorToken.kind === SyntaxKind.CommaToken && isMatchingReference(source, target.right));
@@ -25391,13 +25390,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         switch (source.kind) {
             case SyntaxKind.MetaProperty:
                 return target.kind === SyntaxKind.MetaProperty
-                    && (source as MetaProperty).keywordToken === (target as MetaProperty).keywordToken
-                    && (source as MetaProperty).name.escapedText === (target as MetaProperty).name.escapedText;
+                    && (source).keywordToken === (target).keywordToken
+                    && (source).name.escapedText === (target).name.escapedText;
             case SyntaxKind.Identifier:
             case SyntaxKind.PrivateIdentifier:
                 return isThisInTypeQuery(source) ?
                     target.kind === SyntaxKind.ThisKeyword :
-                    target.kind === SyntaxKind.Identifier && getResolvedSymbol(source as Identifier) === getResolvedSymbol(target as Identifier) ||
+                    target.kind === SyntaxKind.Identifier && getResolvedSymbol(source as Identifier) === getResolvedSymbol(target) ||
                         (isVariableDeclaration(target) || isBindingElement(target)) &&
                         getExportSymbolOfValueSymbolIfExported(getResolvedSymbol(source as Identifier)) === getSymbolOfDeclaration(target);
             case SyntaxKind.ThisKeyword:
@@ -25406,7 +25405,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return target.kind === SyntaxKind.SuperKeyword;
             case SyntaxKind.NonNullExpression:
             case SyntaxKind.ParenthesizedExpression:
-                return isMatchingReference((source as NonNullExpression | ParenthesizedExpression).expression, target);
+                return isMatchingReference((source).expression, target);
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.ElementAccessExpression:
                 const sourcePropertyName = getAccessedPropertyName(source as AccessExpression);
@@ -25415,8 +25414,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     isMatchingReference((source as AccessExpression).expression, (target as AccessExpression).expression);
             case SyntaxKind.QualifiedName:
                 return isAccessExpression(target) &&
-                    (source as QualifiedName).right.escapedText === getAccessedPropertyName(target) &&
-                    isMatchingReference((source as QualifiedName).left, target.expression);
+                    (source).right.escapedText === getAccessedPropertyName(target) &&
+                    isMatchingReference((source).left, target.expression);
             case SyntaxKind.BinaryExpression:
                 return (isBinaryExpression(source) && source.operatorToken.kind === SyntaxKind.CommaToken && isMatchingReference(source.right, target));
         }
@@ -25616,7 +25615,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         if (expression.expression.kind === SyntaxKind.PropertyAccessExpression &&
-            isOrContainsMatchingReference(reference, (expression.expression as PropertyAccessExpression).expression)) {
+            isOrContainsMatchingReference(reference, (expression.expression).expression)) {
             return true;
         }
         return false;
@@ -25834,8 +25833,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isDestructuringAssignmentTarget(parent: Node) {
-        return parent.parent.kind === SyntaxKind.BinaryExpression && (parent.parent as BinaryExpression).left === parent ||
-            parent.parent.kind === SyntaxKind.ForOfStatement && (parent.parent as ForOfStatement).initializer === parent;
+        return parent.parent.kind === SyntaxKind.BinaryExpression && (parent.parent).left === parent ||
+            parent.parent.kind === SyntaxKind.ForOfStatement && (parent.parent).initializer === parent;
     }
 
     function getAssignedTypeOfArrayLiteralElement(node: ArrayLiteralExpression, element: Expression): Type {
@@ -25860,19 +25859,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.ForInStatement:
                 return stringType;
             case SyntaxKind.ForOfStatement:
-                return checkRightHandSideOfForOf(parent as ForOfStatement) || errorType;
+                return checkRightHandSideOfForOf(parent) || errorType;
             case SyntaxKind.BinaryExpression:
-                return getAssignedTypeOfBinaryExpression(parent as BinaryExpression);
+                return getAssignedTypeOfBinaryExpression(parent);
             case SyntaxKind.DeleteExpression:
                 return undefinedType;
             case SyntaxKind.ArrayLiteralExpression:
-                return getAssignedTypeOfArrayLiteralElement(parent as ArrayLiteralExpression, node);
+                return getAssignedTypeOfArrayLiteralElement(parent , node);
             case SyntaxKind.SpreadElement:
-                return getAssignedTypeOfSpreadExpression(parent as SpreadElement);
+                return getAssignedTypeOfSpreadExpression(parent);
             case SyntaxKind.PropertyAssignment:
-                return getAssignedTypeOfPropertyAssignment(parent as PropertyAssignment);
+                return getAssignedTypeOfPropertyAssignment(parent);
             case SyntaxKind.ShorthandPropertyAssignment:
-                return getAssignedTypeOfShorthandPropertyAssignment(parent as ShorthandPropertyAssignment);
+                return getAssignedTypeOfShorthandPropertyAssignment(parent);
         }
         return errorType;
     }
@@ -25916,25 +25915,25 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isEmptyArrayAssignment(node: VariableDeclaration | BindingElement | Expression) {
-        return node.kind === SyntaxKind.VariableDeclaration && (node as VariableDeclaration).initializer &&
-            isEmptyArrayLiteral((node as VariableDeclaration).initializer!) ||
+        return node.kind === SyntaxKind.VariableDeclaration && (node).initializer &&
+            isEmptyArrayLiteral((node).initializer) ||
             node.kind !== SyntaxKind.BindingElement && node.parent.kind === SyntaxKind.BinaryExpression &&
-            isEmptyArrayLiteral((node.parent as BinaryExpression).right);
+            isEmptyArrayLiteral((node.parent).right);
     }
 
     function getReferenceCandidate(node: Expression): Expression {
         switch (node.kind) {
             case SyntaxKind.ParenthesizedExpression:
-                return getReferenceCandidate((node as ParenthesizedExpression).expression);
+                return getReferenceCandidate((node).expression);
             case SyntaxKind.BinaryExpression:
-                switch ((node as BinaryExpression).operatorToken.kind) {
+                switch ((node).operatorToken.kind) {
                     case SyntaxKind.EqualsToken:
                     case SyntaxKind.BarBarEqualsToken:
                     case SyntaxKind.AmpersandAmpersandEqualsToken:
                     case SyntaxKind.QuestionQuestionEqualsToken:
-                        return getReferenceCandidate((node as BinaryExpression).left);
+                        return getReferenceCandidate((node).left);
                     case SyntaxKind.CommaToken:
-                        return getReferenceCandidate((node as BinaryExpression).right);
+                        return getReferenceCandidate((node).right);
                 }
         }
         return node;
@@ -25943,8 +25942,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getReferenceRoot(node: Node): Node {
         const { parent } = node;
         return parent.kind === SyntaxKind.ParenthesizedExpression ||
-            parent.kind === SyntaxKind.BinaryExpression && (parent as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken && (parent as BinaryExpression).left === node ||
-            parent.kind === SyntaxKind.BinaryExpression && (parent as BinaryExpression).operatorToken.kind === SyntaxKind.CommaToken && (parent as BinaryExpression).right === node ?
+            parent.kind === SyntaxKind.BinaryExpression && (parent).operatorToken.kind === SyntaxKind.EqualsToken && (parent).left === node ||
+            parent.kind === SyntaxKind.BinaryExpression && (parent).operatorToken.kind === SyntaxKind.CommaToken && (parent).right === node ?
             getReferenceRoot(parent) : node;
     }
 
@@ -26195,12 +26194,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             && isIdentifier(parent.name)
             && isPushOrUnshiftIdentifier(parent.name));
         const isElementAssignment = parent.kind === SyntaxKind.ElementAccessExpression &&
-            (parent as ElementAccessExpression).expression === root &&
+            (parent).expression === root &&
             parent.parent.kind === SyntaxKind.BinaryExpression &&
-            (parent.parent as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken &&
-            (parent.parent as BinaryExpression).left === parent &&
+            (parent.parent).operatorToken.kind === SyntaxKind.EqualsToken &&
+            (parent.parent).left === parent &&
             !isAssignmentTarget(parent.parent) &&
-            isTypeAssignableToKind(getTypeOfExpression((parent as ElementAccessExpression).argumentExpression), TypeFlags.NumberLike);
+            isTypeAssignableToKind(getTypeOfExpression((parent).argumentExpression), TypeFlags.NumberLike);
         return isLengthPushOrUnshift || isElementAssignment;
     }
 
@@ -26250,16 +26249,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!(node.flags & NodeFlags.InWithStatement)) {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
-                    const symbol = getExportSymbolOfValueSymbolIfExported(getResolvedSymbol(node as Identifier));
+                    const symbol = getExportSymbolOfValueSymbolIfExported(getResolvedSymbol(node));
                     return getExplicitTypeOfSymbol(symbol, diagnostic);
                 case SyntaxKind.ThisKeyword:
                     return getExplicitThisType(node);
                 case SyntaxKind.SuperKeyword:
                     return checkSuperExpression(node);
                 case SyntaxKind.PropertyAccessExpression: {
-                    const type = getTypeOfDottedName((node as PropertyAccessExpression).expression, diagnostic);
+                    const type = getTypeOfDottedName((node).expression, diagnostic);
                     if (type) {
-                        const name = (node as PropertyAccessExpression).name;
+                        const name = (node).name;
                         let prop: Symbol | undefined;
                         if (isPrivateIdentifier(name)) {
                             if (!type.symbol) {
@@ -26275,7 +26274,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return undefined;
                 }
                 case SyntaxKind.ParenthesizedExpression:
-                    return getTypeOfDottedName((node as ParenthesizedExpression).expression, diagnostic);
+                    return getTypeOfDottedName((node).expression, diagnostic);
             }
         }
     }
@@ -26342,8 +26341,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function isFalseExpression(expr: Expression): boolean {
         const node = skipParentheses(expr, /*excludeJSDocTypeAssertions*/ true);
         return node.kind === SyntaxKind.FalseKeyword || node.kind === SyntaxKind.BinaryExpression && (
-            (node as BinaryExpression).operatorToken.kind === SyntaxKind.AmpersandAmpersandToken && (isFalseExpression((node as BinaryExpression).left) || isFalseExpression((node as BinaryExpression).right)) ||
-            (node as BinaryExpression).operatorToken.kind === SyntaxKind.BarBarToken && isFalseExpression((node as BinaryExpression).left) && isFalseExpression((node as BinaryExpression).right));
+            (node).operatorToken.kind === SyntaxKind.AmpersandAmpersandToken && (isFalseExpression((node).left) || isFalseExpression((node).right)) ||
+            (node).operatorToken.kind === SyntaxKind.BarBarToken && isFalseExpression((node).left) && isFalseExpression((node).right));
     }
 
     function isReachableFlowNodeWorker(flow: FlowNode, noCacheCheck: boolean): boolean {
@@ -26464,7 +26463,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         switch (node.kind) {
             case SyntaxKind.Identifier:
                 if (!isThisInTypeQuery(node)) {
-                    const symbol = getResolvedSymbol(node as Identifier);
+                    const symbol = getResolvedSymbol(node);
                     return isConstVariable(symbol) || isParameterOrCatchClauseVariable(symbol) && !isSymbolAssigned(symbol);
                 }
                 break;
@@ -26610,7 +26609,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function getInitialOrAssignedType(flow: FlowAssignment) {
             const node = flow.node;
             return getNarrowableTypeForReference(node.kind === SyntaxKind.VariableDeclaration || node.kind === SyntaxKind.BindingElement ?
-                getInitialType(node as VariableDeclaration | BindingElement) :
+                getInitialType(node) :
                 getAssignedType(node), reference);
         }
 
@@ -26674,11 +26673,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return unreachableNeverType;
             }
             if (node.kind === SyntaxKind.BinaryExpression) {
-                if ((node as BinaryExpression).operatorToken.kind === SyntaxKind.AmpersandAmpersandToken) {
-                    return narrowTypeByAssertion(narrowTypeByAssertion(type, (node as BinaryExpression).left), (node as BinaryExpression).right);
+                if ((node).operatorToken.kind === SyntaxKind.AmpersandAmpersandToken) {
+                    return narrowTypeByAssertion(narrowTypeByAssertion(type, (node).left), (node).right);
                 }
-                if ((node as BinaryExpression).operatorToken.kind === SyntaxKind.BarBarToken) {
-                    return getUnionType([narrowTypeByAssertion(type, (node as BinaryExpression).left), narrowTypeByAssertion(type, (node as BinaryExpression).right)]);
+                if ((node).operatorToken.kind === SyntaxKind.BarBarToken) {
+                    return getUnionType([narrowTypeByAssertion(type, (node).left), narrowTypeByAssertion(type, (node).right)]);
                 }
             }
             return narrowType(type, node, /*assumeTrue*/ true);
@@ -26763,7 +26762,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (isMatchingReference(reference, expr)) {
                 type = narrowTypeBySwitchOnDiscriminant(type, flow.switchStatement, flow.clauseStart, flow.clauseEnd);
             }
-            else if (expr.kind === SyntaxKind.TypeOfExpression && isMatchingReference(reference, (expr as TypeOfExpression).expression)) {
+            else if (expr.kind === SyntaxKind.TypeOfExpression && isMatchingReference(reference, (expr).expression)) {
                 type = narrowTypeBySwitchOnTypeOf(type, flow.switchStatement, flow.clauseStart, flow.clauseEnd);
             }
             else {
@@ -26772,7 +26771,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         type = narrowTypeBySwitchOptionalChainContainment(type, flow.switchStatement, flow.clauseStart, flow.clauseEnd,
                             t => !(t.flags & (TypeFlags.Undefined | TypeFlags.Never)));
                     }
-                    else if (expr.kind === SyntaxKind.TypeOfExpression && optionalChainContainsReference((expr as TypeOfExpression).expression, reference)) {
+                    else if (expr.kind === SyntaxKind.TypeOfExpression && optionalChainContainsReference((expr).expression, reference)) {
                         type = narrowTypeBySwitchOptionalChainContainment(type, flow.switchStatement, flow.clauseStart, flow.clauseEnd,
                             t => !(t.flags & TypeFlags.Never || t.flags & TypeFlags.StringLiteral && (t as StringLiteralType).value === "undefined"));
                     }
@@ -27091,10 +27090,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const left = getReferenceCandidate(expr.left);
                     const right = getReferenceCandidate(expr.right);
                     if (left.kind === SyntaxKind.TypeOfExpression && isStringLiteralLike(right)) {
-                        return narrowTypeByTypeof(type, left as TypeOfExpression, operator, right, assumeTrue);
+                        return narrowTypeByTypeof(type, left , operator, right, assumeTrue);
                     }
                     if (right.kind === SyntaxKind.TypeOfExpression && isStringLiteralLike(left)) {
-                        return narrowTypeByTypeof(type, right as TypeOfExpression, operator, left, assumeTrue);
+                        return narrowTypeByTypeof(type, right , operator, left, assumeTrue);
                     }
                     if (isMatchingReference(reference, left)) {
                         return narrowTypeByEquality(type, operator, right, assumeTrue);
@@ -27548,7 +27547,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // When narrowing a reference to a const variable, non-assigned parameter, or readonly property, we inline
                     // up to five levels of aliased conditional expressions that are themselves declared as const variables.
                     if (!isMatchingReference(reference, expr) && inlineLevel < 5) {
-                        const symbol = getResolvedSymbol(expr as Identifier);
+                        const symbol = getResolvedSymbol(expr);
                         if (isConstVariable(symbol)) {
                             const declaration = symbol.valueDeclaration;
                             if (declaration && isVariableDeclaration(declaration) && !declaration.type && declaration.initializer && isConstantReference(reference)) {
@@ -27566,15 +27565,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 case SyntaxKind.ElementAccessExpression:
                     return narrowTypeByTruthiness(type, expr, assumeTrue);
                 case SyntaxKind.CallExpression:
-                    return narrowTypeByCallExpression(type, expr as CallExpression, assumeTrue);
+                    return narrowTypeByCallExpression(type, expr , assumeTrue);
                 case SyntaxKind.ParenthesizedExpression:
                 case SyntaxKind.NonNullExpression:
-                    return narrowType(type, (expr as ParenthesizedExpression | NonNullExpression).expression, assumeTrue);
+                    return narrowType(type, (expr).expression, assumeTrue);
                 case SyntaxKind.BinaryExpression:
-                    return narrowTypeByBinaryExpression(type, expr as BinaryExpression, assumeTrue);
+                    return narrowTypeByBinaryExpression(type, expr , assumeTrue);
                 case SyntaxKind.PrefixUnaryExpression:
-                    if ((expr as PrefixUnaryExpression).operator === SyntaxKind.ExclamationToken) {
-                        return narrowType(type, (expr as PrefixUnaryExpression).operand, !assumeTrue);
+                    if ((expr).operator === SyntaxKind.ExclamationToken) {
+                        return narrowType(type, (expr).operand, !assumeTrue);
                     }
                     break;
             }
@@ -27654,7 +27653,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function markNodeAssignments(node: Node) {
         if (node.kind === SyntaxKind.Identifier) {
             if (isAssignmentTarget(node)) {
-                const symbol = getResolvedSymbol(node as Identifier);
+                const symbol = getResolvedSymbol(node);
                 if (isParameterOrCatchClauseVariable(symbol)) {
                     symbol.isAssigned = true;
                 }
@@ -27709,9 +27708,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // and x are of generic types T and K, we want the resulting type to be T[K].
         return parent.kind === SyntaxKind.PropertyAccessExpression ||
             parent.kind === SyntaxKind.QualifiedName ||
-            parent.kind === SyntaxKind.CallExpression && (parent as CallExpression).expression === node ||
-            parent.kind === SyntaxKind.ElementAccessExpression && (parent as ElementAccessExpression).expression === node &&
-                !(someType(type, isGenericTypeWithoutNullableConstraint) && isGenericIndexType(getTypeOfExpression((parent as ElementAccessExpression).argumentExpression)));
+            parent.kind === SyntaxKind.CallExpression && (parent).expression === node ||
+            parent.kind === SyntaxKind.ElementAccessExpression && (parent).expression === node &&
+                !(someType(type, isGenericTypeWithoutNullableConstraint) && isGenericIndexType(getTypeOfExpression((parent).argumentExpression)));
     }
 
     function isGenericTypeWithUnionConstraint(type: Type): boolean {
@@ -27929,7 +27928,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // must instead be rewritten to point to a temporary variable to avoid issues with the double-bind
             // behavior of class names in ES6.
             if (declaration.kind === SyntaxKind.ClassDeclaration
-                && nodeIsDecorated(legacyDecorators, declaration as ClassDeclaration)) {
+                && nodeIsDecorated(legacyDecorators, declaration)) {
                 let container = getContainingClass(node);
                 while (container !== undefined) {
                     if (container === declaration && container.name !== node) {
@@ -28037,7 +28036,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             type !== autoType && type !== autoArrayType && (!strictNullChecks || (type.flags & (TypeFlags.AnyOrUnknown | TypeFlags.Void)) !== 0 ||
             isInTypeQuery(node) || isInAmbientOrTypeNode(node) || node.parent.kind === SyntaxKind.ExportSpecifier) ||
             node.parent.kind === SyntaxKind.NonNullExpression ||
-            declaration.kind === SyntaxKind.VariableDeclaration && (declaration as VariableDeclaration).exclamationToken ||
+            declaration.kind === SyntaxKind.VariableDeclaration && (declaration).exclamationToken ||
             declaration.flags & NodeFlags.Ambient;
         const initialType = isAutomaticTypeInNonNull ? undefinedType :
             assumeInitialized ? (isParameter ? removeOptionalityFromDeclaredType(type, declaration as VariableLikeDeclaration) : type) :
@@ -28184,7 +28183,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             isAssigned = true;
         }
         else if ((current.parent.kind === SyntaxKind.PrefixUnaryExpression || current.parent.kind === SyntaxKind.PostfixUnaryExpression)) {
-            const expr = current.parent as PrefixUnaryExpression | PostfixUnaryExpression;
+            const expr = current.parent ;
             isAssigned = expr.operator === SyntaxKind.PlusPlusToken || expr.operator === SyntaxKind.MinusMinusToken;
         }
 
@@ -28441,7 +28440,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getTypeForThisExpressionFromJSDoc(node: Node) {
         const jsdocType = getJSDocType(node);
         if (jsdocType && jsdocType.kind === SyntaxKind.JSDocFunctionType) {
-            const jsDocFunctionType = jsdocType as JSDocFunctionType;
+            const jsDocFunctionType = jsdocType ;
             if (jsDocFunctionType.parameters.length > 0 &&
                 jsDocFunctionType.parameters[0].name &&
                 (jsDocFunctionType.parameters[0].name as Identifier).escapedText === InternalSymbolName.This) {
@@ -28459,7 +28458,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkSuperExpression(node: Node): Type {
-        const isCallExpression = node.parent.kind === SyntaxKind.CallExpression && (node.parent as CallExpression).expression === node;
+        const isCallExpression = node.parent.kind === SyntaxKind.CallExpression && (node.parent).expression === node;
 
         const immediateContainer = getSuperContainer(node, /*stopOnFunctions*/ true);
         let container = immediateContainer;
@@ -28676,7 +28675,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return (func.kind === SyntaxKind.MethodDeclaration ||
             func.kind === SyntaxKind.GetAccessor ||
             func.kind === SyntaxKind.SetAccessor) && func.parent.kind === SyntaxKind.ObjectLiteralExpression ? func.parent :
-            func.kind === SyntaxKind.FunctionExpression && func.parent.kind === SyntaxKind.PropertyAssignment ? func.parent.parent as ObjectLiteralExpression :
+            func.kind === SyntaxKind.FunctionExpression && func.parent.kind === SyntaxKind.PropertyAssignment ? func.parent.parent :
             undefined;
     }
 
@@ -28721,7 +28720,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (literal.parent.kind !== SyntaxKind.PropertyAssignment) {
                         break;
                     }
-                    literal = literal.parent.parent as ObjectLiteralExpression;
+                    literal = literal.parent.parent ;
                     type = getApparentTypeOfContextualType(literal, /*contextFlags*/ undefined);
                 }
                 // There was no contextual ThisType<T> for the containing object literal, so the contextual type
@@ -28732,8 +28731,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // In an assignment of the form 'obj.xxx = function(...)' or 'obj[xxx] = function(...)', the
             // contextual type for 'this' is 'obj'.
             const parent = walkUpParenthesizedExpressions(func.parent);
-            if (parent.kind === SyntaxKind.BinaryExpression && (parent as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken) {
-                const target = (parent as BinaryExpression).left;
+            if (parent.kind === SyntaxKind.BinaryExpression && (parent).operatorToken.kind === SyntaxKind.EqualsToken) {
+                const target = (parent).left;
                 if (isAccessExpression(target)) {
                     const { expression } = target;
                     // Don't contextually type `this` as `exports` in `exports.Point = function(x, y) { this.x = x; this.y = y; }`
@@ -28986,7 +28985,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getContextualTypeForSubstitutionExpression(template: TemplateExpression, substitutionExpression: Expression) {
         if (template.parent.kind === SyntaxKind.TaggedTemplateExpression) {
-            return getContextualTypeForArgument(template.parent as TaggedTemplateExpression, substitutionExpression);
+            return getContextualTypeForArgument(template.parent , substitutionExpression);
         }
 
         return undefined;
@@ -29340,13 +29339,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.FalseKeyword:
             case SyntaxKind.NullKeyword:
             case SyntaxKind.Identifier:
-            case SyntaxKind.UndefinedKeyword:
                 return true;
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.ParenthesizedExpression:
-                return isPossiblyDiscriminantValue((node as PropertyAccessExpression | ParenthesizedExpression).expression);
+                return isPossiblyDiscriminantValue((node).expression);
             case SyntaxKind.JsxExpression:
-                return !(node as JsxExpression).expression || isPossiblyDiscriminantValue((node as JsxExpression).expression!);
+                return !(node).expression || isPossiblyDiscriminantValue((node).expression);
         }
         return false;
     }
@@ -29499,14 +29497,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.ReturnStatement:
                 return getContextualTypeForReturnExpression(node, contextFlags);
             case SyntaxKind.YieldExpression:
-                return getContextualTypeForYieldOperand(parent as YieldExpression, contextFlags);
+                return getContextualTypeForYieldOperand(parent , contextFlags);
             case SyntaxKind.AwaitExpression:
-                return getContextualTypeForAwaitOperand(parent as AwaitExpression, contextFlags);
+                return getContextualTypeForAwaitOperand(parent , contextFlags);
             case SyntaxKind.CallExpression:
             case SyntaxKind.NewExpression:
                 return getContextualTypeForArgument(parent as CallExpression | NewExpression | Decorator, node);
             case SyntaxKind.Decorator:
-                return getContextualTypeForDecorator(parent as Decorator);
+                return getContextualTypeForDecorator(parent);
             case SyntaxKind.TypeAssertionExpression:
             case SyntaxKind.AsExpression:
                 return isConstTypeReference((parent as AssertionExpression).type) ? getContextualType(parent as AssertionExpression, contextFlags) : getTypeFromTypeNode((parent as AssertionExpression).type);
@@ -29514,11 +29512,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return getContextualTypeForBinaryOperand(node, contextFlags);
             case SyntaxKind.PropertyAssignment:
             case SyntaxKind.ShorthandPropertyAssignment:
-                return getContextualTypeForObjectLiteralElement(parent as PropertyAssignment | ShorthandPropertyAssignment, contextFlags);
+                return getContextualTypeForObjectLiteralElement(parent , contextFlags);
             case SyntaxKind.SpreadAssignment:
-                return getContextualType(parent.parent as ObjectLiteralExpression, contextFlags);
+                return getContextualType(parent.parent , contextFlags);
             case SyntaxKind.ArrayLiteralExpression: {
-                const arrayLiteral = parent as ArrayLiteralExpression;
+                const arrayLiteral = parent ;
                 const type = getApparentTypeOfContextualType(arrayLiteral, contextFlags);
                 const elementIndex = indexOfNode(arrayLiteral.elements, node);
                 const spreadIndices = getNodeLinks(arrayLiteral).spreadIndices ??= getSpreadIndices(arrayLiteral.elements);
@@ -29528,7 +29526,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return getContextualTypeForConditionalOperand(node, contextFlags);
             case SyntaxKind.TemplateSpan:
                 Debug.assert(parent.parent.kind === SyntaxKind.TemplateExpression);
-                return getContextualTypeForSubstitutionExpression(parent.parent as TemplateExpression, node);
+                return getContextualTypeForSubstitutionExpression(parent.parent , node);
             case SyntaxKind.ParenthesizedExpression: {
                 if (isInJSFile(parent)) {
                     if (isJSDocSatisfiesExpression(parent)) {
@@ -29540,19 +29538,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         return getTypeFromTypeNode(typeTag.typeExpression.type);
                     }
                 }
-                return getContextualType(parent as ParenthesizedExpression, contextFlags);
+                return getContextualType(parent , contextFlags);
             }
             case SyntaxKind.NonNullExpression:
-                return getContextualType(parent as NonNullExpression, contextFlags);
+                return getContextualType(parent , contextFlags);
             case SyntaxKind.SatisfiesExpression:
-                return getTypeFromTypeNode((parent as SatisfiesExpression).type);
+                return getTypeFromTypeNode((parent).type);
             case SyntaxKind.ExportAssignment:
-                return tryGetTypeFromEffectiveTypeNode(parent as ExportAssignment);
+                return tryGetTypeFromEffectiveTypeNode(parent);
             case SyntaxKind.JsxExpression:
-                return getContextualTypeForJsxExpression(parent as JsxExpression, contextFlags);
+                return getContextualTypeForJsxExpression(parent , contextFlags);
             case SyntaxKind.JsxAttribute:
             case SyntaxKind.JsxSpreadAttribute:
-                return getContextualTypeForJsxAttribute(parent as JsxAttribute | JsxSpreadAttribute, contextFlags);
+                return getContextualTypeForJsxAttribute(parent , contextFlags);
             case SyntaxKind.JsxOpeningElement:
             case SyntaxKind.JsxSelfClosingElement:
                 return getContextualJsxElementAttributesType(parent as JsxOpeningLikeElement, contextFlags);
@@ -29923,8 +29921,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function hasDefaultValue(node: BindingElement | Expression): boolean {
-        return (node.kind === SyntaxKind.BindingElement && !!(node as BindingElement).initializer) ||
-            (node.kind === SyntaxKind.BinaryExpression && (node as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken);
+        return (node.kind === SyntaxKind.BindingElement && !!(node).initializer) ||
+            (node.kind === SyntaxKind.BinaryExpression && (node).operatorToken.kind === SyntaxKind.EqualsToken);
     }
 
     function checkArrayLiteral(node: ArrayLiteralExpression, checkMode: CheckMode | undefined, forceTuple: boolean | undefined): Type {
@@ -29945,7 +29943,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (languageVersion < ScriptTarget.ES2015) {
                     checkExternalEmitHelpers(e, compilerOptions.downlevelIteration ? ExternalEmitHelpers.SpreadIncludes : ExternalEmitHelpers.SpreadArray);
                 }
-                const spreadType = checkExpression((e as SpreadElement).expression, checkMode, forceTuple);
+                const spreadType = checkExpression((e).expression, checkMode, forceTuple);
                 if (isArrayLikeType(spreadType)) {
                     elementTypes.push(spreadType);
                     elementFlags.push(ElementFlags.Variadic);
@@ -29970,7 +29968,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     elementFlags.push(ElementFlags.Rest);
                 }
                 else {
-                    elementTypes.push(checkIteratedTypeOrElementType(IterationUse.Spread, spreadType, undefinedType, (e as SpreadElement).expression));
+                    elementTypes.push(checkIteratedTypeOrElementType(IterationUse.Spread, spreadType, undefinedType, (e).expression));
                     elementFlags.push(ElementFlags.Rest);
                 }
             }
@@ -30502,7 +30500,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         // Handle children attribute
-        const parent = openingLikeElement.parent.kind === SyntaxKind.JsxElement ? openingLikeElement.parent as JsxElement : undefined;
+        const parent = openingLikeElement.parent.kind === SyntaxKind.JsxElement ? openingLikeElement.parent : undefined;
         // We have to check that openingElement of the parent is the one we are visiting as this may not be true for selfClosingElement
         if (parent && parent.openingElement === openingLikeElement && parent.children.length > 0) {
             const childrenTypes: Type[] = checkJsxChildren(parent, checkMode);
@@ -30523,7 +30521,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     childrenContextualType && someType(childrenContextualType, isTupleLikeType) ? createTupleType(childrenTypes) :
                     createArrayType(getUnionType(childrenTypes));
                 // Fake up a property declaration for the children
-                childrenPropSymbol.valueDeclaration = factory.createPropertySignature(/*modifiers*/ undefined, unescapeLeadingUnderscores(jsxChildrenPropertyName), /*questionToken*/ undefined, /*type*/ undefined);
+                childrenPropSymbol.valueDeclaration = factory.createJsxAttribute(factory.createIdentifier(unescapeLeadingUnderscores(jsxChildrenPropertyName)), factory.createJsxExpression(/*dotDotDotToken*/ undefined, /*expression*/ undefined));
                 setParent(childrenPropSymbol.valueDeclaration, attributes);
                 childrenPropSymbol.valueDeclaration.symbol = childrenPropSymbol;
                 const childPropMap = createSymbolTable();
@@ -32099,13 +32097,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getForInVariableSymbol(node: ForInStatement): Symbol | undefined {
         const initializer = node.initializer;
         if (initializer.kind === SyntaxKind.VariableDeclarationList) {
-            const variable = (initializer as VariableDeclarationList).declarations[0];
+            const variable = (initializer).declarations[0];
             if (variable && !isBindingPattern(variable.name)) {
                 return getSymbolOfDeclaration(variable);
             }
         }
         else if (initializer.kind === SyntaxKind.Identifier) {
-            return getResolvedSymbol(initializer as Identifier);
+            return getResolvedSymbol(initializer);
         }
         return undefined;
     }
@@ -32124,15 +32122,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function isForInVariableForNumericPropertyNames(expr: Expression) {
         const e = skipParentheses(expr);
         if (e.kind === SyntaxKind.Identifier) {
-            const symbol = getResolvedSymbol(e as Identifier);
+            const symbol = getResolvedSymbol(e);
             if (symbol.flags & SymbolFlags.Variable) {
                 let child: Node = expr;
                 let node = expr.parent;
                 while (node) {
                     if (node.kind === SyntaxKind.ForInStatement &&
-                        child === (node as ForInStatement).statement &&
-                        getForInVariableSymbol(node as ForInStatement) === symbol &&
-                        hasNumericPropertyNames(getTypeOfExpression((node as ForInStatement).expression))) {
+                        child === (node).statement &&
+                        getForInVariableSymbol(node) === symbol &&
+                        hasNumericPropertyNames(getTypeOfExpression((node).expression))) {
                         return true;
                     }
                     child = node;
@@ -32261,7 +32259,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isSpreadArgument(arg: Expression | undefined): arg is Expression {
-        return !!arg && (arg.kind === SyntaxKind.SpreadElement || arg.kind === SyntaxKind.SyntheticExpression && (arg as SyntheticExpression).isSpread);
+        return !!arg && (arg.kind === SyntaxKind.SpreadElement || arg.kind === SyntaxKind.SyntheticExpression && (arg).isSpread);
     }
 
     function getSpreadArgumentIndex(args: readonly Expression[]): number {
@@ -32528,14 +32526,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (isSpreadArgument(arg)) {
                 // We are inferring from a spread expression in the last argument position, i.e. both the parameter
                 // and the argument are ...x forms.
-                const spreadType = arg.kind === SyntaxKind.SyntheticExpression ? (arg as SyntheticExpression).type :
+                const spreadType = arg.kind === SyntaxKind.SyntheticExpression ? (arg).type :
                     checkExpressionWithContextualType((arg as SpreadElement).expression, restType, context, checkMode);
 
                 if (isArrayLikeType(spreadType)) {
                     return getMutableArrayOrTupleType(spreadType);
                 }
 
-                return createArrayType(checkIteratedTypeOrElementType(IterationUse.Spread, spreadType, undefinedType, arg.kind === SyntaxKind.SpreadElement ? (arg as SpreadElement).expression : arg), inConstContext);
+                return createArrayType(checkIteratedTypeOrElementType(IterationUse.Spread, spreadType, undefinedType, arg.kind === SyntaxKind.SpreadElement ? (arg).expression : arg), inConstContext);
             }
         }
         const types = [];
@@ -32544,13 +32542,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         for (let i = index; i < argCount; i++) {
             const arg = args[i];
             if (isSpreadArgument(arg)) {
-                const spreadType = arg.kind === SyntaxKind.SyntheticExpression ? (arg as SyntheticExpression).type : checkExpression((arg as SpreadElement).expression);
+                const spreadType = arg.kind === SyntaxKind.SyntheticExpression ? (arg).type : checkExpression((arg as SpreadElement).expression);
                 if (isArrayLikeType(spreadType)) {
                     types.push(spreadType);
                     flags.push(ElementFlags.Variadic);
                 }
                 else {
-                    types.push(checkIteratedTypeOrElementType(IterationUse.Spread, spreadType, undefinedType, arg.kind === SyntaxKind.SpreadElement ? (arg as SpreadElement).expression : arg));
+                    types.push(checkIteratedTypeOrElementType(IterationUse.Spread, spreadType, undefinedType, arg.kind === SyntaxKind.SpreadElement ? (arg).expression : arg));
                     flags.push(ElementFlags.Rest);
                 }
             }
@@ -32563,8 +32561,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 types.push(hasPrimitiveContextualType ? getRegularTypeOfLiteralType(argType) : getWidenedLiteralType(argType));
                 flags.push(ElementFlags.Required);
             }
-            if (arg.kind === SyntaxKind.SyntheticExpression && (arg as SyntheticExpression).tupleNameSource) {
-                names.push((arg as SyntheticExpression).tupleNameSource!);
+            if (arg.kind === SyntaxKind.SyntheticExpression && (arg).tupleNameSource) {
+                names.push((arg).tupleNameSource);
             }
         }
         return createTupleType(types, flags, inConstContext, length(names) === length(types) ? names : undefined);
@@ -32848,7 +32846,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             for (let i = spreadIndex; i < args.length; i++) {
                 const arg = args[i];
                 // We can call checkExpressionCached because spread expressions never have a contextual type.
-                const spreadType = arg.kind === SyntaxKind.SpreadElement && (flowLoopCount ? checkExpression((arg as SpreadElement).expression) : checkExpressionCached((arg as SpreadElement).expression));
+                const spreadType = arg.kind === SyntaxKind.SpreadElement && (flowLoopCount ? checkExpression((arg).expression) : checkExpressionCached((arg).expression));
                 if (spreadType && isTupleType(spreadType)) {
                     forEach(getElementTypes(spreadType), (t, i) => {
                         const flags = spreadType.target.elementFlags[i];
@@ -34348,18 +34346,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.CallExpression:
             case SyntaxKind.Decorator:
             case SyntaxKind.NewExpression:
-                return getDeprecatedSuggestionNode((node as Decorator | CallExpression | NewExpression).expression);
+                return getDeprecatedSuggestionNode((node).expression);
             case SyntaxKind.TaggedTemplateExpression:
-                return getDeprecatedSuggestionNode((node as TaggedTemplateExpression).tag);
+                return getDeprecatedSuggestionNode((node).tag);
             case SyntaxKind.JsxOpeningElement:
             case SyntaxKind.JsxSelfClosingElement:
                 return getDeprecatedSuggestionNode((node as JsxOpeningLikeElement).tagName);
             case SyntaxKind.ElementAccessExpression:
-                return (node as ElementAccessExpression).argumentExpression;
+                return (node).argumentExpression;
             case SyntaxKind.PropertyAccessExpression:
-                return (node as PropertyAccessExpression).name;
+                return (node).name;
             case SyntaxKind.TypeReference:
-                const typeReference = node as TypeReferenceNode;
+                const typeReference = node ;
                 return isQualifiedName(typeReference.typeName) ? typeReference.typeName.right : typeReference;
             default:
                 return node;
@@ -34532,15 +34530,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.TemplateExpression:
                 return true;
             case SyntaxKind.ParenthesizedExpression:
-                return isValidConstAssertionArgument((node as ParenthesizedExpression).expression);
+                return isValidConstAssertionArgument((node).expression);
             case SyntaxKind.PrefixUnaryExpression:
-                const op = (node as PrefixUnaryExpression).operator;
-                const arg = (node as PrefixUnaryExpression).operand;
+                const op = (node).operator;
+                const arg = (node).operand;
                 return op === SyntaxKind.MinusToken && (arg.kind === SyntaxKind.NumericLiteral || arg.kind === SyntaxKind.BigIntLiteral) ||
                     op === SyntaxKind.PlusToken && arg.kind === SyntaxKind.NumericLiteral;
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.ElementAccessExpression:
-                const expr = skipParentheses((node as PropertyAccessExpression | ElementAccessExpression).expression);
+                const expr = skipParentheses((node).expression);
                 const symbol = isEntityNameExpression(expr) ? resolveEntityName(expr, SymbolFlags.Value, /*ignoreErrors*/ true) : undefined;
                 return !!(symbol && symbol.flags & SymbolFlags.Enum);
         }
@@ -34611,7 +34609,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         forEach(node.typeArguments, checkSourceElement);
         if (node.kind === SyntaxKind.ExpressionWithTypeArguments) {
             const parent = walkUpParenthesizedExpressions(node.parent);
-            if (parent.kind === SyntaxKind.BinaryExpression && (parent as BinaryExpression).operatorToken.kind === SyntaxKind.InstanceOfKeyword && isNodeDescendantOf(node, (parent as BinaryExpression).right)) {
+            if (parent.kind === SyntaxKind.BinaryExpression && (parent).operatorToken.kind === SyntaxKind.InstanceOfKeyword && isNodeDescendantOf(node, (parent).right)) {
                 error(node, Diagnostics.The_right_hand_side_of_an_instanceof_expression_must_not_be_an_instantiation_expression);
             }
         }
@@ -35258,7 +35256,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // Class decorators have a `context` of `ClassDecoratorContext<Class>`, where the `Class` type
                     // argument will be the "final type" of the class after all decorators are applied.
 
-                    const node = parent as ClassDeclaration | ClassExpression;
+                    const node = parent ;
                     const targetType = getTypeOfSymbol(getSymbolOfDeclaration(node));
                     const contextType = createClassDecoratorContextType(targetType);
                     links.decoratorSignature = createESDecoratorCallSignature(targetType, contextType, targetType);
@@ -35268,7 +35266,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor: {
-                    const node = parent as MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration;
+                    const node = parent ;
                     if (!isClassLike(node.parent)) break;
 
                     // Method decorators have a `context` of `ClassMethodDecoratorContext<This, Value>`, where the
@@ -35312,7 +35310,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
 
                 case SyntaxKind.PropertyDeclaration: {
-                    const node = parent as PropertyDeclaration;
+                    const node = parent ;
                     if (!isClassLike(node.parent)) break;
 
                     // Field decorators have a `context` of `ClassFieldDecoratorContext<This, Value>` and
@@ -35359,7 +35357,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             switch (parent.kind) {
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ClassExpression: {
-                    const node = parent as ClassDeclaration | ClassExpression;
+                    const node = parent ;
                     // For a class decorator, the `target` is the type of the class (e.g. the
                     // "static" or "constructor" side of the class).
                     const targetType = getTypeOfSymbol(getSymbolOfDeclaration(node));
@@ -35373,7 +35371,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     break;
                 }
                 case SyntaxKind.Parameter: {
-                    const node = parent as ParameterDeclaration;
+                    const node = parent ;
                     if (!isConstructorDeclaration(node.parent) &&
                         !((isMethodDeclaration(node.parent) || isSetAccessorDeclaration(node.parent) && isClassLike(node.parent.parent)))) {
                         break;
@@ -35714,7 +35712,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!witnesses) {
                 return false;
             }
-            const operandConstraint = getBaseConstraintOrType(checkExpressionCached((node.expression as TypeOfExpression).expression));
+            const operandConstraint = getBaseConstraintOrType(checkExpressionCached((node.expression).expression));
             // Get the not-equal flags for all handled cases.
             const notEqualFacts = getNotEqualFactsFromTypeofSwitch(0, 0, witnesses);
             if (operandConstraint.flags & TypeFlags.AnyOrUnknown) {
@@ -36225,16 +36223,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.NumericLiteral:
                 switch (node.operator) {
                     case SyntaxKind.MinusToken:
-                        return getFreshTypeOfLiteralType(getNumberLiteralType(-(node.operand as NumericLiteral).text));
+                        return getFreshTypeOfLiteralType(getNumberLiteralType(-(node.operand).text));
                     case SyntaxKind.PlusToken:
-                        return getFreshTypeOfLiteralType(getNumberLiteralType(+(node.operand as NumericLiteral).text));
+                        return getFreshTypeOfLiteralType(getNumberLiteralType(+(node.operand).text));
                 }
                 break;
             case SyntaxKind.BigIntLiteral:
                 if (node.operator === SyntaxKind.MinusToken) {
                     return getFreshTypeOfLiteralType(getBigIntLiteralType({
                         negative: true,
-                        base10Value: parsePseudoBigInt((node.operand as BigIntLiteral).text)
+                        base10Value: parsePseudoBigInt((node.operand).text)
                     }));
                 }
         }
@@ -36518,9 +36516,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 error(element, Diagnostics.A_rest_element_must_be_last_in_a_destructuring_pattern);
             }
             else {
-                const restExpression = (element as SpreadElement).expression;
-                if (restExpression.kind === SyntaxKind.BinaryExpression && (restExpression as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken) {
-                    error((restExpression as BinaryExpression).operatorToken, Diagnostics.A_rest_element_cannot_have_an_initializer);
+                const restExpression = (element).expression;
+                if (restExpression.kind === SyntaxKind.BinaryExpression && (restExpression).operatorToken.kind === SyntaxKind.EqualsToken) {
+                    error((restExpression).operatorToken, Diagnostics.A_rest_element_cannot_have_an_initializer);
                 }
                 else {
                     checkGrammarForDisallowedTrailingComma(node.elements, Diagnostics.A_rest_parameter_or_binding_pattern_may_not_have_a_trailing_comma);
@@ -36537,7 +36535,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function checkDestructuringAssignment(exprOrAssignment: Expression | ShorthandPropertyAssignment, sourceType: Type, checkMode?: CheckMode, rightIsThis?: boolean): Type {
         let target: Expression;
         if (exprOrAssignment.kind === SyntaxKind.ShorthandPropertyAssignment) {
-            const prop = exprOrAssignment as ShorthandPropertyAssignment;
+            const prop = exprOrAssignment ;
             if (prop.objectAssignmentInitializer) {
                 // In strict null checking mode, if a default value of a non-undefined type is specified, remove
                 // undefined from the final type.
@@ -36547,25 +36545,25 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 checkBinaryLikeExpression(prop.name, prop.equalsToken!, prop.objectAssignmentInitializer, checkMode);
             }
-            target = (exprOrAssignment as ShorthandPropertyAssignment).name;
+            target = (exprOrAssignment).name;
         }
         else {
             target = exprOrAssignment;
         }
 
-        if (target.kind === SyntaxKind.BinaryExpression && (target as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken) {
-            checkBinaryExpression(target as BinaryExpression, checkMode);
-            target = (target as BinaryExpression).left;
+        if (target.kind === SyntaxKind.BinaryExpression && (target).operatorToken.kind === SyntaxKind.EqualsToken) {
+            checkBinaryExpression(target , checkMode);
+            target = (target).left;
             // A default value is specified, so remove undefined from the final type.
             if (strictNullChecks) {
                 sourceType = getTypeWithFacts(sourceType, TypeFacts.NEUndefined);
             }
         }
         if (target.kind === SyntaxKind.ObjectLiteralExpression) {
-            return checkObjectLiteralAssignment(target as ObjectLiteralExpression, sourceType, rightIsThis);
+            return checkObjectLiteralAssignment(target , sourceType, rightIsThis);
         }
         if (target.kind === SyntaxKind.ArrayLiteralExpression) {
-            return checkArrayLiteralAssignment(target as ArrayLiteralExpression, sourceType, checkMode);
+            return checkArrayLiteralAssignment(target , sourceType, checkMode);
         }
         return checkReferenceAssignment(target, sourceType, checkMode);
     }
@@ -36622,15 +36620,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return true;
 
             case SyntaxKind.ConditionalExpression:
-                return isSideEffectFree((node as ConditionalExpression).whenTrue) &&
-                    isSideEffectFree((node as ConditionalExpression).whenFalse);
+                return isSideEffectFree((node).whenTrue) &&
+                    isSideEffectFree((node).whenFalse);
 
             case SyntaxKind.BinaryExpression:
-                if (isAssignmentOperator((node as BinaryExpression).operatorToken.kind)) {
+                if (isAssignmentOperator((node).operatorToken.kind)) {
                     return false;
                 }
-                return isSideEffectFree((node as BinaryExpression).left) &&
-                        isSideEffectFree((node as BinaryExpression).right);
+                return isSideEffectFree((node).left) &&
+                        isSideEffectFree((node).right);
 
             case SyntaxKind.PrefixUnaryExpression:
             case SyntaxKind.PostfixUnaryExpression:
@@ -37139,7 +37137,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                 // getters can be a subtype of setters, so to check for assignability we use the setter's type instead
                 if (isCompoundAssignment(operatorToken.kind) && left.kind === SyntaxKind.PropertyAccessExpression) {
-                    assigneeType = checkPropertyAccessExpression(left as PropertyAccessExpression, /*checkMode*/ undefined, /*writeOnly*/ true);
+                    assigneeType = checkPropertyAccessExpression(left , /*checkMode*/ undefined, /*writeOnly*/ true);
                 }
 
                 // TypeScript 1.0 spec (April 2014): 4.17
@@ -37806,10 +37804,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // - 'object' in indexed access
         // - target in rhs of import statement
         const ok =
-            (node.parent.kind === SyntaxKind.PropertyAccessExpression && (node.parent as PropertyAccessExpression).expression === node) ||
-            (node.parent.kind === SyntaxKind.ElementAccessExpression && (node.parent as ElementAccessExpression).expression === node) ||
+            (node.parent.kind === SyntaxKind.PropertyAccessExpression && (node.parent).expression === node) ||
+            (node.parent.kind === SyntaxKind.ElementAccessExpression && (node.parent).expression === node) ||
             ((node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName) && isInRightSideOfImportOrExportAssignment(node as Identifier) ||
-                (node.parent.kind === SyntaxKind.TypeQuery && (node.parent as TypeQueryNode).exprName === node)) ||
+                (node.parent.kind === SyntaxKind.TypeQuery && (node.parent).exprName === node)) ||
             (node.parent.kind === SyntaxKind.ExportSpecifier); // We allow reexporting const enums
 
         if (!ok) {
@@ -37851,9 +37849,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         switch (kind) {
             case SyntaxKind.Identifier:
-                return checkIdentifier(node as Identifier, checkMode);
+                return checkIdentifier(node , checkMode);
             case SyntaxKind.PrivateIdentifier:
-                return checkPrivateIdentifierExpression(node as PrivateIdentifier);
+                return checkPrivateIdentifierExpression(node);
             case SyntaxKind.ThisKeyword:
                 return checkThisExpression(node);
             case SyntaxKind.SuperKeyword:
@@ -37866,93 +37864,93 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     anyType :
                     getFreshTypeOfLiteralType(getStringLiteralType((node as StringLiteralLike).text));
             case SyntaxKind.NumericLiteral:
-                checkGrammarNumericLiteral(node as NumericLiteral);
-                return getFreshTypeOfLiteralType(getNumberLiteralType(+(node as NumericLiteral).text));
+                checkGrammarNumericLiteral(node);
+                return getFreshTypeOfLiteralType(getNumberLiteralType(+(node).text));
             case SyntaxKind.BigIntLiteral:
-                checkGrammarBigIntLiteral(node as BigIntLiteral);
+                checkGrammarBigIntLiteral(node);
                 return getFreshTypeOfLiteralType(getBigIntLiteralType({
                     negative: false,
-                    base10Value: parsePseudoBigInt((node as BigIntLiteral).text)
+                    base10Value: parsePseudoBigInt((node).text)
                 }));
             case SyntaxKind.TrueKeyword:
                 return trueType;
             case SyntaxKind.FalseKeyword:
                 return falseType;
             case SyntaxKind.TemplateExpression:
-                return checkTemplateExpression(node as TemplateExpression);
+                return checkTemplateExpression(node);
             case SyntaxKind.RegularExpressionLiteral:
                 return globalRegExpType;
             case SyntaxKind.ArrayLiteralExpression:
-                return checkArrayLiteral(node as ArrayLiteralExpression, checkMode, forceTuple);
+                return checkArrayLiteral(node , checkMode, forceTuple);
             case SyntaxKind.ObjectLiteralExpression:
-                return checkObjectLiteral(node as ObjectLiteralExpression, checkMode);
+                return checkObjectLiteral(node , checkMode);
             case SyntaxKind.PropertyAccessExpression:
-                return checkPropertyAccessExpression(node as PropertyAccessExpression, checkMode);
+                return checkPropertyAccessExpression(node , checkMode);
             case SyntaxKind.QualifiedName:
-                return checkQualifiedName(node as QualifiedName, checkMode);
+                return checkQualifiedName(node , checkMode);
             case SyntaxKind.ElementAccessExpression:
-                return checkIndexedAccess(node as ElementAccessExpression, checkMode);
+                return checkIndexedAccess(node , checkMode);
             case SyntaxKind.CallExpression:
-                if ((node as CallExpression).expression.kind === SyntaxKind.ImportKeyword) {
+                if ((node).expression.kind === SyntaxKind.ImportKeyword) {
                     return checkImportCallExpression(node as ImportCall);
                 }
                 // falls through
             case SyntaxKind.NewExpression:
                 return checkCallExpression(node as CallExpression, checkMode);
             case SyntaxKind.TaggedTemplateExpression:
-                return checkTaggedTemplateExpression(node as TaggedTemplateExpression);
+                return checkTaggedTemplateExpression(node);
             case SyntaxKind.ParenthesizedExpression:
-                return checkParenthesizedExpression(node as ParenthesizedExpression, checkMode);
+                return checkParenthesizedExpression(node , checkMode);
             case SyntaxKind.ClassExpression:
-                return checkClassExpression(node as ClassExpression);
+                return checkClassExpression(node);
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
-                return checkFunctionExpressionOrObjectLiteralMethod(node as FunctionExpression | ArrowFunction, checkMode);
+                return checkFunctionExpressionOrObjectLiteralMethod(node , checkMode);
             case SyntaxKind.TypeOfExpression:
-                return checkTypeOfExpression(node as TypeOfExpression);
+                return checkTypeOfExpression(node);
             case SyntaxKind.TypeAssertionExpression:
             case SyntaxKind.AsExpression:
                 return checkAssertion(node as AssertionExpression, checkMode);
             case SyntaxKind.NonNullExpression:
-                return checkNonNullAssertion(node as NonNullExpression);
+                return checkNonNullAssertion(node);
             case SyntaxKind.ExpressionWithTypeArguments:
-                return checkExpressionWithTypeArguments(node as ExpressionWithTypeArguments);
+                return checkExpressionWithTypeArguments(node);
             case SyntaxKind.SatisfiesExpression:
-                return checkSatisfiesExpression(node as SatisfiesExpression);
+                return checkSatisfiesExpression(node);
             case SyntaxKind.MetaProperty:
-                return checkMetaProperty(node as MetaProperty);
+                return checkMetaProperty(node);
             case SyntaxKind.DeleteExpression:
-                return checkDeleteExpression(node as DeleteExpression);
+                return checkDeleteExpression(node);
             case SyntaxKind.VoidExpression:
-                return checkVoidExpression(node as VoidExpression);
+                return checkVoidExpression(node);
             case SyntaxKind.AwaitExpression:
-                return checkAwaitExpression(node as AwaitExpression);
+                return checkAwaitExpression(node);
             case SyntaxKind.PrefixUnaryExpression:
-                return checkPrefixUnaryExpression(node as PrefixUnaryExpression);
+                return checkPrefixUnaryExpression(node);
             case SyntaxKind.PostfixUnaryExpression:
-                return checkPostfixUnaryExpression(node as PostfixUnaryExpression);
+                return checkPostfixUnaryExpression(node);
             case SyntaxKind.BinaryExpression:
-                return checkBinaryExpression(node as BinaryExpression, checkMode);
+                return checkBinaryExpression(node , checkMode);
             case SyntaxKind.ConditionalExpression:
-                return checkConditionalExpression(node as ConditionalExpression, checkMode);
+                return checkConditionalExpression(node , checkMode);
             case SyntaxKind.SpreadElement:
-                return checkSpreadExpression(node as SpreadElement, checkMode);
+                return checkSpreadExpression(node , checkMode);
             case SyntaxKind.OmittedExpression:
                 return undefinedWideningType;
             case SyntaxKind.YieldExpression:
-                return checkYieldExpression(node as YieldExpression);
+                return checkYieldExpression(node);
             case SyntaxKind.SyntheticExpression:
-                return checkSyntheticExpression(node as SyntheticExpression);
+                return checkSyntheticExpression(node);
             case SyntaxKind.JsxExpression:
-                return checkJsxExpression(node as JsxExpression, checkMode);
+                return checkJsxExpression(node , checkMode);
             case SyntaxKind.JsxElement:
-                return checkJsxElement(node as JsxElement, checkMode);
+                return checkJsxElement(node , checkMode);
             case SyntaxKind.JsxSelfClosingElement:
-                return checkJsxSelfClosingElement(node as JsxSelfClosingElement, checkMode);
+                return checkJsxSelfClosingElement(node , checkMode);
             case SyntaxKind.JsxFragment:
-                return checkJsxFragment(node as JsxFragment);
+                return checkJsxFragment(node);
             case SyntaxKind.JsxAttributes:
-                return checkJsxAttributes(node as JsxAttributes, checkMode);
+                return checkJsxAttributes(node , checkMode);
             case SyntaxKind.JsxOpeningElement:
                 Debug.fail("Shouldn't ever directly check a JsxOpeningElement");
         }
@@ -38240,7 +38238,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const privateIdentifiers = new Map<__String, DeclarationMeaning>();
         for (const member of node.members) {
             if (member.kind === SyntaxKind.Constructor) {
-                for (const param of (member as ConstructorDeclaration).parameters) {
+                for (const param of (member).parameters) {
                     if (isParameterPropertyDeclaration(param, member) && !isBindingPattern(param.name)) {
                         addName(instanceNames, param.name, param.name.escapedText, DeclarationMeaning.GetOrSetAccessor);
                     }
@@ -38349,7 +38347,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         for (const member of node.members) {
             if (member.kind === SyntaxKind.PropertySignature) {
                 let memberName: string;
-                const name = member.name!;
+                const name = member.name;
                 switch (name.kind) {
                     case SyntaxKind.StringLiteral:
                     case SyntaxKind.NumericLiteral:
@@ -38512,7 +38510,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             return n.kind === SyntaxKind.PropertyDeclaration &&
                 !isStatic(n) &&
-                !!(n as PropertyDeclaration).initializer;
+                !!(n).initializer;
         }
 
         function checkConstructorDeclarationDiagnostics() {
@@ -38899,7 +38897,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkInferType(node: InferTypeNode) {
-        if (!findAncestor(node, n => n.parent && n.parent.kind === SyntaxKind.ConditionalType && (n.parent as ConditionalTypeNode).extendsType === n)) {
+        if (!findAncestor(node, n => n.parent && n.parent.kind === SyntaxKind.ConditionalType && (n.parent).extendsType === n)) {
             grammarErrorOnNode(node, Diagnostics.infer_declarations_are_only_permitted_in_the_extends_clause_of_a_conditional_type);
         }
         checkSourceElement(node.typeParameter);
@@ -39327,7 +39325,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 case SyntaxKind.JSDocEnumTag:
                     return DeclarationSpaces.ExportType;
                 case SyntaxKind.ModuleDeclaration:
-                    return isAmbientModule(d as ModuleDeclaration) || getModuleInstanceState(d as ModuleDeclaration) !== ModuleInstanceState.NonInstantiated
+                    return isAmbientModule(d) || getModuleInstanceState(d) !== ModuleInstanceState.NonInstantiated
                         ? DeclarationSpaces.ExportNamespace | DeclarationSpaces.ExportValue
                         : DeclarationSpaces.ExportNamespace;
                 case SyntaxKind.ClassDeclaration:
@@ -39338,7 +39336,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return DeclarationSpaces.ExportType | DeclarationSpaces.ExportValue | DeclarationSpaces.ExportNamespace;
                 case SyntaxKind.ExportAssignment:
                 case SyntaxKind.BinaryExpression:
-                    const node = d as ExportAssignment | BinaryExpression;
+                    const node = d ;
                     const expression = isExportAssignment(node) ? node.expression : node.right;
                     // Export assigned entity name expressions act as aliases and should fall through, otherwise they export values
                     if (!isEntityNameExpression(expression)) {
@@ -39965,14 +39963,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return getEntityNameForDecoratorMetadataFromTypeList((node as UnionOrIntersectionTypeNode).types);
 
                 case SyntaxKind.ConditionalType:
-                    return getEntityNameForDecoratorMetadataFromTypeList([(node as ConditionalTypeNode).trueType, (node as ConditionalTypeNode).falseType]);
+                    return getEntityNameForDecoratorMetadataFromTypeList([(node).trueType, (node).falseType]);
 
                 case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.NamedTupleMember:
                     return getEntityNameForDecoratorMetadata((node as ParenthesizedTypeNode).type);
 
                 case SyntaxKind.TypeReference:
-                    return (node as TypeReferenceNode).typeName;
+                    return (node).typeName;
             }
         }
     }
@@ -39981,12 +39979,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let commonEntityName: EntityName | undefined;
         for (let typeNode of types) {
             while (typeNode.kind === SyntaxKind.ParenthesizedType || typeNode.kind === SyntaxKind.NamedTupleMember) {
-                typeNode = (typeNode as ParenthesizedTypeNode | NamedTupleMember).type; // Skip parens if need be
+                typeNode = (typeNode).type; // Skip parens if need be
             }
             if (typeNode.kind === SyntaxKind.NeverKeyword) {
                 continue; // Always elide `never` from the union/intersection if possible
             }
-            if (!strictNullChecks && (typeNode.kind === SyntaxKind.LiteralType && (typeNode as LiteralTypeNode).literal.kind === SyntaxKind.NullKeyword || typeNode.kind === SyntaxKind.UndefinedKeyword)) {
+            if (!strictNullChecks && (typeNode.kind === SyntaxKind.LiteralType && (typeNode).literal.kind === SyntaxKind.NullKeyword || typeNode.kind === SyntaxKind.UndefinedKeyword)) {
                 continue; // Elide null and undefined from unions for metadata, just like what we did prior to the implementation of strict null checks
             }
             const individualEntityName = getEntityNameForDecoratorMetadata(typeNode);
@@ -40225,9 +40223,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getIdentifierFromEntityNameExpression(node: Expression): Identifier | PrivateIdentifier | undefined {
         switch (node.kind) {
             case SyntaxKind.Identifier:
-                return node as Identifier;
+                return node ;
             case SyntaxKind.PropertyAccessExpression:
-                return (node as PropertyAccessExpression).name;
+                return (node).name;
             default:
                 return undefined;
         }
@@ -40399,11 +40397,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (!symbol.isReferenced
                         && (hasEffectiveModifier(member, ModifierFlags.Private) || isNamedDeclaration(member) && isPrivateIdentifier(member.name))
                         && !(member.flags & NodeFlags.Ambient)) {
-                        addDiagnostic(member, UnusedKind.Local, createDiagnosticForNode(member.name!, Diagnostics._0_is_declared_but_its_value_is_never_read, symbolToString(symbol)));
+                        addDiagnostic(member, UnusedKind.Local, createDiagnosticForNode(member.name, Diagnostics._0_is_declared_but_its_value_is_never_read, symbolToString(symbol)));
                     }
                     break;
                 case SyntaxKind.Constructor:
-                    for (const parameter of (member as ConstructorDeclaration).parameters) {
+                    for (const parameter of (member).parameters) {
                         if (!parameter.symbol.isReferenced && hasSyntacticModifier(parameter, ModifierFlags.Private)) {
                             addDiagnostic(parameter, UnusedKind.Local, createDiagnosticForNode(parameter.name, Diagnostics.Property_0_is_declared_but_its_value_is_never_read, symbolName(parameter.symbol)));
                         }
@@ -40441,7 +40439,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             const name = idText(typeParameter.name);
             const { parent } = typeParameter;
-            if (parent.kind !== SyntaxKind.InferType && parent.typeParameters!.every(isTypeParameterUnused)) {
+            if (parent.kind !== SyntaxKind.InferType && parent.kind !== SyntaxKind.MappedType && parent.typeParameters!.every(isTypeParameterUnused)) {
                 if (tryAddToSet(seenParentsWithEveryUnused, parent)) {
                     const sourceFile = getSourceFileOfNode(parent);
                     const range = isJSDocTemplateTag(parent)
@@ -40756,7 +40754,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         // In case of variable declaration, node.parent is variable statement so look at the variable statement's parent
         const parent = getDeclarationContainer(node);
-        if (parent.kind === SyntaxKind.SourceFile && isExternalOrCommonJsModule(parent as SourceFile)) {
+        if (parent.kind === SyntaxKind.SourceFile && isExternalOrCommonJsModule(parent)) {
             // If the declaration happens to be in external module, report error that require and exports are reserved keywords
             errorSkippedOn("noEmit", name, Diagnostics.Duplicate_identifier_0_Compiler_reserves_name_1_in_top_level_scope_of_a_module,
                 declarationNameToString(name), declarationNameToString(name));
@@ -40775,7 +40773,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         // In case of variable declaration, node.parent is variable statement so look at the variable statement's parent
         const parent = getDeclarationContainer(node);
-        if (parent.kind === SyntaxKind.SourceFile && isExternalOrCommonJsModule(parent as SourceFile) && parent.flags & NodeFlags.HasAsyncFunctions) {
+        if (parent.kind === SyntaxKind.SourceFile && isExternalOrCommonJsModule(parent) && parent.flags & NodeFlags.HasAsyncFunctions) {
             // If the declaration happens to be in external module, report error that Promise is a reserved identifier.
             errorSkippedOn("noEmit", name, Diagnostics.Duplicate_identifier_0_Compiler_reserves_name_1_in_top_level_scope_of_a_module_containing_async_functions,
                 declarationNameToString(name), declarationNameToString(name));
@@ -41323,13 +41321,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // Grammar checking
         if (!checkGrammarStatementInAmbientContext(node)) {
             if (node.initializer && node.initializer.kind === SyntaxKind.VariableDeclarationList) {
-                checkGrammarVariableDeclarationList(node.initializer as VariableDeclarationList);
+                checkGrammarVariableDeclarationList(node.initializer);
             }
         }
 
         if (node.initializer) {
             if (node.initializer.kind === SyntaxKind.VariableDeclarationList) {
-                forEach((node.initializer as VariableDeclarationList).declarations, checkVariableDeclaration);
+                forEach((node.initializer).declarations, checkVariableDeclaration);
             }
             else {
                 checkExpression(node.initializer);
@@ -41418,7 +41416,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         //   VarDecl must be a variable declaration without a type annotation that declares a variable of type Any,
         //   and Expr must be an expression of type Any, an object type, or a type parameter type.
         if (node.initializer.kind === SyntaxKind.VariableDeclarationList) {
-            const variable = (node.initializer as VariableDeclarationList).declarations[0];
+            const variable = (node.initializer).declarations[0];
             if (variable && isBindingPattern(variable.name)) {
                 error(variable.name, Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_be_a_destructuring_pattern);
             }
@@ -42441,7 +42439,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (isFunctionLike(current)) {
                     return "quit";
                 }
-                if (current.kind === SyntaxKind.LabeledStatement && (current as LabeledStatement).label.escapedText === node.label.escapedText) {
+                if (current.kind === SyntaxKind.LabeledStatement && (current).label.escapedText === node.label.escapedText) {
                     grammarErrorOnNode(node.label, Diagnostics.Duplicate_label_0, getTextOfNode(node.label));
                     return true;
                 }
@@ -42694,7 +42692,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         visit(root);
         function visit(node: Node) {
             if (node.kind === SyntaxKind.TypeReference) {
-                const type = getTypeFromTypeReference(node as TypeReferenceNode);
+                const type = getTypeFromTypeReference(node);
                 if (type.flags & TypeFlags.TypeParameter) {
                     for (let i = index; i < typeParameters.length; i++) {
                         if (type.symbol === getSymbolOfDeclaration(typeParameters[i])) {
@@ -43360,7 +43358,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         error(getNameOfDeclaration(derived.valueDeclaration) || derived.valueDeclaration, errorMessage, symbolToString(base), typeToString(baseType), typeToString(type));
                     }
                     else if (useDefineForClassFields) {
-                        const uninitialized = derived.declarations?.find(d => d.kind === SyntaxKind.PropertyDeclaration && !(d as PropertyDeclaration).initializer);
+                        const uninitialized = derived.declarations?.find(d => d.kind === SyntaxKind.PropertyDeclaration && !(d).initializer);
                         if (uninitialized
                             && !(derived.flags & SymbolFlags.Transient)
                             && !(baseDeclarationFlags & ModifierFlags.Abstract)
@@ -43496,8 +43494,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function isPropertyWithoutInitializer(node: Node) {
         return node.kind === SyntaxKind.PropertyDeclaration &&
             !hasAbstractModifier(node) &&
-            !(node as PropertyDeclaration).exclamationToken &&
-            !(node as PropertyDeclaration).initializer;
+            !(node).exclamationToken &&
+            !(node).initializer;
     }
 
     function isPropertyInitializedInStaticBlocks(propName: Identifier | PrivateIdentifier, propType: Type, staticBlocks: readonly ClassStaticBlockDeclaration[], startPos: number, endPos: number) {
@@ -43656,9 +43654,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function evaluate(expr: Expression, location: Declaration): string | number | undefined {
         switch (expr.kind) {
             case SyntaxKind.PrefixUnaryExpression:
-                const value = evaluate((expr as PrefixUnaryExpression).operand, location);
+                const value = evaluate((expr).operand, location);
                 if (typeof value === "number") {
-                    switch ((expr as PrefixUnaryExpression).operator) {
+                    switch ((expr).operator) {
                         case SyntaxKind.PlusToken: return value;
                         case SyntaxKind.MinusToken: return -value;
                         case SyntaxKind.TildeToken: return ~value;
@@ -43666,10 +43664,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 break;
             case SyntaxKind.BinaryExpression:
-                const left = evaluate((expr as BinaryExpression).left, location);
-                const right = evaluate((expr as BinaryExpression).right, location);
+                const left = evaluate((expr).left, location);
+                const right = evaluate((expr).right, location);
                 if (typeof left === "number" && typeof right === "number") {
-                    switch ((expr as BinaryExpression).operatorToken.kind) {
+                    switch ((expr).operatorToken.kind) {
                         case SyntaxKind.BarToken: return left | right;
                         case SyntaxKind.AmpersandToken: return left & right;
                         case SyntaxKind.GreaterThanGreaterThanToken: return left >> right;
@@ -43686,7 +43684,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 else if ((typeof left === "string" || typeof left === "number") &&
                     (typeof right === "string" || typeof right === "number") &&
-                    (expr as BinaryExpression).operatorToken.kind === SyntaxKind.PlusToken) {
+                    (expr).operatorToken.kind === SyntaxKind.PlusToken) {
                     return "" + left + right;
                 }
                 break;
@@ -43694,15 +43692,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.NoSubstitutionTemplateLiteral:
                 return (expr as StringLiteralLike).text;
             case SyntaxKind.TemplateExpression:
-                return evaluateTemplateExpression(expr as TemplateExpression, location);
+                return evaluateTemplateExpression(expr , location);
             case SyntaxKind.NumericLiteral:
-                checkGrammarNumericLiteral(expr as NumericLiteral);
-                return +(expr as NumericLiteral).text;
+                checkGrammarNumericLiteral(expr);
+                return +(expr).text;
             case SyntaxKind.ParenthesizedExpression:
-                return evaluate((expr as ParenthesizedExpression).expression, location);
+                return evaluate((expr).expression, location);
             case SyntaxKind.Identifier:
-                if (isInfinityOrNaNString((expr as Identifier).escapedText)) {
-                    return +((expr as Identifier).escapedText);
+                if (isInfinityOrNaNString((expr).escapedText)) {
+                    return +((expr).escapedText);
                 }
                 // falls through
             case SyntaxKind.PropertyAccessExpression:
@@ -43722,11 +43720,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 break;
             case SyntaxKind.ElementAccessExpression:
-                const root = (expr as ElementAccessExpression).expression;
-                if (isEntityNameExpression(root) && isStringLiteralLike((expr as ElementAccessExpression).argumentExpression)) {
+                const root = (expr).expression;
+                if (isEntityNameExpression(root) && isStringLiteralLike((expr).argumentExpression)) {
                     const rootSymbol = resolveEntityName(root, SymbolFlags.Value, /*ignoreErrors*/ true);
                     if (rootSymbol && rootSymbol.flags & SymbolFlags.Enum) {
-                        const name = escapeLeadingUnderscores(((expr as ElementAccessExpression).argumentExpression as StringLiteralLike).text);
+                        const name = escapeLeadingUnderscores(((expr).argumentExpression).text);
                         const member = rootSymbol.exports!.get(name);
                         if (member) {
                             return evaluateEnumMember(expr, member, location);
@@ -43804,7 +43802,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return false;
                 }
 
-                const enumDeclaration = declaration as EnumDeclaration;
+                const enumDeclaration = declaration ;
                 if (!enumDeclaration.members.length) {
                     return false;
                 }
@@ -43980,7 +43978,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         switch (node.kind) {
             case SyntaxKind.VariableStatement:
                 // error each individual name in variable statement instead of marking the entire variable statement
-                for (const decl of (node as VariableStatement).declarationList.declarations) {
+                for (const decl of (node).declarationList.declarations) {
                     checkModuleAugmentationElement(decl, isGlobalAugmentation);
                 }
                 break;
@@ -43994,7 +43992,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 break;
             case SyntaxKind.BindingElement:
             case SyntaxKind.VariableDeclaration:
-                const name = (node as VariableDeclaration | BindingElement).name;
+                const name = (node).name;
                 if (isBindingPattern(name)) {
                     for (const el of name.elements) {
                         // mark individual names in binding pattern
@@ -44536,7 +44534,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             (moduleKind === ModuleKind.CommonJS || getSourceFileOfNode(node).impliedNodeFormat === ModuleKind.CommonJS);
 
         if (node.expression.kind === SyntaxKind.Identifier) {
-            const id = node.expression as Identifier;
+            const id = node.expression ;
             const sym = getExportSymbolOfValueSymbolIfExported(resolveEntityName(id, SymbolFlags.All, /*ignoreErrors*/ true, /*dontResolveAlias*/ true, node));
             if (sym) {
                 markAliasReferenced(sym, id);
@@ -44692,13 +44690,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         switch (kind) {
             case SyntaxKind.TypeParameter:
-                return checkTypeParameter(node as TypeParameterDeclaration);
+                return checkTypeParameter(node);
             case SyntaxKind.Parameter:
-                return checkParameter(node as ParameterDeclaration);
+                return checkParameter(node);
             case SyntaxKind.PropertyDeclaration:
-                return checkPropertyDeclaration(node as PropertyDeclaration);
+                return checkPropertyDeclaration(node);
             case SyntaxKind.PropertySignature:
-                return checkPropertySignature(node as PropertySignature);
+                return checkPropertySignature(node);
             case SyntaxKind.ConstructorType:
             case SyntaxKind.FunctionType:
             case SyntaxKind.CallSignature:
@@ -44707,69 +44705,69 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return checkSignatureDeclaration(node as SignatureDeclaration);
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.MethodSignature:
-                return checkMethodDeclaration(node as MethodDeclaration | MethodSignature);
+                return checkMethodDeclaration(node);
             case SyntaxKind.ClassStaticBlockDeclaration:
-                return checkClassStaticBlockDeclaration(node as ClassStaticBlockDeclaration);
+                return checkClassStaticBlockDeclaration(node);
             case SyntaxKind.Constructor:
-                return checkConstructorDeclaration(node as ConstructorDeclaration);
+                return checkConstructorDeclaration(node);
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
                 return checkAccessorDeclaration(node as AccessorDeclaration);
             case SyntaxKind.TypeReference:
-                return checkTypeReferenceNode(node as TypeReferenceNode);
+                return checkTypeReferenceNode(node);
             case SyntaxKind.TypePredicate:
-                return checkTypePredicate(node as TypePredicateNode);
+                return checkTypePredicate(node);
             case SyntaxKind.TypeQuery:
-                return checkTypeQuery(node as TypeQueryNode);
+                return checkTypeQuery(node);
             case SyntaxKind.TypeLiteral:
-                return checkTypeLiteral(node as TypeLiteralNode);
+                return checkTypeLiteral(node);
             case SyntaxKind.ArrayType:
-                return checkArrayType(node as ArrayTypeNode);
+                return checkArrayType(node);
             case SyntaxKind.TupleType:
-                return checkTupleType(node as TupleTypeNode);
+                return checkTupleType(node);
             case SyntaxKind.UnionType:
             case SyntaxKind.IntersectionType:
                 return checkUnionOrIntersectionType(node as UnionOrIntersectionTypeNode);
             case SyntaxKind.ParenthesizedType:
             case SyntaxKind.OptionalType:
             case SyntaxKind.RestType:
-                return checkSourceElement((node as ParenthesizedTypeNode | OptionalTypeNode | RestTypeNode).type);
+                return checkSourceElement((node).type);
             case SyntaxKind.ThisType:
-                return checkThisType(node as ThisTypeNode);
+                return checkThisType(node);
             case SyntaxKind.TypeOperator:
-                return checkTypeOperator(node as TypeOperatorNode);
+                return checkTypeOperator(node);
             case SyntaxKind.ConditionalType:
-                return checkConditionalType(node as ConditionalTypeNode);
+                return checkConditionalType(node);
             case SyntaxKind.InferType:
-                return checkInferType(node as InferTypeNode);
+                return checkInferType(node);
             case SyntaxKind.TemplateLiteralType:
-                return checkTemplateLiteralType(node as TemplateLiteralTypeNode);
+                return checkTemplateLiteralType(node);
             case SyntaxKind.ImportType:
-                return checkImportType(node as ImportTypeNode);
+                return checkImportType(node);
             case SyntaxKind.NamedTupleMember:
-                return checkNamedTupleMember(node as NamedTupleMember);
+                return checkNamedTupleMember(node);
             case SyntaxKind.JSDocAugmentsTag:
-                return checkJSDocAugmentsTag(node as JSDocAugmentsTag);
+                return checkJSDocAugmentsTag(node);
             case SyntaxKind.JSDocImplementsTag:
-                return checkJSDocImplementsTag(node as JSDocImplementsTag);
+                return checkJSDocImplementsTag(node);
             case SyntaxKind.JSDocTypedefTag:
             case SyntaxKind.JSDocCallbackTag:
             case SyntaxKind.JSDocEnumTag:
                 return checkJSDocTypeAliasTag(node as JSDocTypedefTag);
             case SyntaxKind.JSDocTemplateTag:
-                return checkJSDocTemplateTag(node as JSDocTemplateTag);
+                return checkJSDocTemplateTag(node);
             case SyntaxKind.JSDocTypeTag:
-                return checkJSDocTypeTag(node as JSDocTypeTag);
+                return checkJSDocTypeTag(node);
             case SyntaxKind.JSDocLink:
             case SyntaxKind.JSDocLinkCode:
             case SyntaxKind.JSDocLinkPlain:
-                return checkJSDocLinkLikeTag(node as JSDocLink | JSDocLinkCode | JSDocLinkPlain);
+                return checkJSDocLinkLikeTag(node);
             case SyntaxKind.JSDocParameterTag:
-                return checkJSDocParameterTag(node as JSDocParameterTag);
+                return checkJSDocParameterTag(node);
             case SyntaxKind.JSDocPropertyTag:
-                return checkJSDocPropertyTag(node as JSDocPropertyTag);
+                return checkJSDocPropertyTag(node);
             case SyntaxKind.JSDocFunctionType:
-                checkJSDocFunctionType(node as JSDocFunctionType);
+                checkJSDocFunctionType(node);
                 // falls through
             case SyntaxKind.JSDocNonNullableType:
             case SyntaxKind.JSDocNullableType:
@@ -44780,78 +44778,78 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 forEachChild(node, checkSourceElement);
                 return;
             case SyntaxKind.JSDocVariadicType:
-                checkJSDocVariadicType(node as JSDocVariadicType);
+                checkJSDocVariadicType(node);
                 return;
             case SyntaxKind.JSDocTypeExpression:
-                return checkSourceElement((node as JSDocTypeExpression).type);
+                return checkSourceElement((node).type);
             case SyntaxKind.JSDocPublicTag:
             case SyntaxKind.JSDocProtectedTag:
             case SyntaxKind.JSDocPrivateTag:
-                return checkJSDocAccessibilityModifiers(node as JSDocPublicTag | JSDocProtectedTag | JSDocPrivateTag);
+                return checkJSDocAccessibilityModifiers(node);
             case SyntaxKind.JSDocSatisfiesTag:
-                return checkJSDocSatisfiesTag(node as JSDocSatisfiesTag);
+                return checkJSDocSatisfiesTag(node);
             case SyntaxKind.IndexedAccessType:
-                return checkIndexedAccessType(node as IndexedAccessTypeNode);
+                return checkIndexedAccessType(node);
             case SyntaxKind.MappedType:
-                return checkMappedType(node as MappedTypeNode);
+                return checkMappedType(node);
             case SyntaxKind.FunctionDeclaration:
-                return checkFunctionDeclaration(node as FunctionDeclaration);
+                return checkFunctionDeclaration(node);
             case SyntaxKind.Block:
             case SyntaxKind.ModuleBlock:
                 return checkBlock(node as Block);
             case SyntaxKind.VariableStatement:
-                return checkVariableStatement(node as VariableStatement);
+                return checkVariableStatement(node);
             case SyntaxKind.ExpressionStatement:
-                return checkExpressionStatement(node as ExpressionStatement);
+                return checkExpressionStatement(node);
             case SyntaxKind.IfStatement:
-                return checkIfStatement(node as IfStatement);
+                return checkIfStatement(node);
             case SyntaxKind.DoStatement:
-                return checkDoStatement(node as DoStatement);
+                return checkDoStatement(node);
             case SyntaxKind.WhileStatement:
-                return checkWhileStatement(node as WhileStatement);
+                return checkWhileStatement(node);
             case SyntaxKind.ForStatement:
-                return checkForStatement(node as ForStatement);
+                return checkForStatement(node);
             case SyntaxKind.ForInStatement:
-                return checkForInStatement(node as ForInStatement);
+                return checkForInStatement(node);
             case SyntaxKind.ForOfStatement:
-                return checkForOfStatement(node as ForOfStatement);
+                return checkForOfStatement(node);
             case SyntaxKind.ContinueStatement:
             case SyntaxKind.BreakStatement:
                 return checkBreakOrContinueStatement(node as BreakOrContinueStatement);
             case SyntaxKind.ReturnStatement:
-                return checkReturnStatement(node as ReturnStatement);
+                return checkReturnStatement(node);
             case SyntaxKind.WithStatement:
-                return checkWithStatement(node as WithStatement);
+                return checkWithStatement(node);
             case SyntaxKind.SwitchStatement:
-                return checkSwitchStatement(node as SwitchStatement);
+                return checkSwitchStatement(node);
             case SyntaxKind.LabeledStatement:
-                return checkLabeledStatement(node as LabeledStatement);
+                return checkLabeledStatement(node);
             case SyntaxKind.ThrowStatement:
-                return checkThrowStatement(node as ThrowStatement);
+                return checkThrowStatement(node);
             case SyntaxKind.TryStatement:
-                return checkTryStatement(node as TryStatement);
+                return checkTryStatement(node);
             case SyntaxKind.VariableDeclaration:
-                return checkVariableDeclaration(node as VariableDeclaration);
+                return checkVariableDeclaration(node);
             case SyntaxKind.BindingElement:
-                return checkBindingElement(node as BindingElement);
+                return checkBindingElement(node);
             case SyntaxKind.ClassDeclaration:
-                return checkClassDeclaration(node as ClassDeclaration);
+                return checkClassDeclaration(node);
             case SyntaxKind.InterfaceDeclaration:
-                return checkInterfaceDeclaration(node as InterfaceDeclaration);
+                return checkInterfaceDeclaration(node);
             case SyntaxKind.TypeAliasDeclaration:
-                return checkTypeAliasDeclaration(node as TypeAliasDeclaration);
+                return checkTypeAliasDeclaration(node);
             case SyntaxKind.EnumDeclaration:
-                return checkEnumDeclaration(node as EnumDeclaration);
+                return checkEnumDeclaration(node);
             case SyntaxKind.ModuleDeclaration:
-                return checkModuleDeclaration(node as ModuleDeclaration);
+                return checkModuleDeclaration(node);
             case SyntaxKind.ImportDeclaration:
-                return checkImportDeclaration(node as ImportDeclaration);
+                return checkImportDeclaration(node);
             case SyntaxKind.ImportEqualsDeclaration:
-                return checkImportEqualsDeclaration(node as ImportEqualsDeclaration);
+                return checkImportEqualsDeclaration(node);
             case SyntaxKind.ExportDeclaration:
-                return checkExportDeclaration(node as ExportDeclaration);
+                return checkExportDeclaration(node);
             case SyntaxKind.ExportAssignment:
-                return checkExportAssignment(node as ExportAssignment);
+                return checkExportAssignment(node);
             case SyntaxKind.EmptyStatement:
             case SyntaxKind.DebuggerStatement:
                 checkGrammarStatementInAmbientContext(node);
@@ -45013,16 +45011,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 checkAccessorDeclaration(node as AccessorDeclaration);
                 break;
             case SyntaxKind.ClassExpression:
-                checkClassExpressionDeferred(node as ClassExpression);
+                checkClassExpressionDeferred(node);
                 break;
             case SyntaxKind.TypeParameter:
-                checkTypeParameterDeferred(node as TypeParameterDeclaration);
+                checkTypeParameterDeferred(node);
                 break;
             case SyntaxKind.JsxSelfClosingElement:
-                checkJsxSelfClosingElementDeferred(node as JsxSelfClosingElement);
+                checkJsxSelfClosingElementDeferred(node);
                 break;
             case SyntaxKind.JsxElement:
-                checkJsxElementDeferred(node as JsxElement);
+                checkJsxElementDeferred(node);
                 break;
             case SyntaxKind.TypeAssertionExpression:
             case SyntaxKind.AsExpression:
@@ -45232,18 +45230,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                 switch (location.kind) {
                     case SyntaxKind.SourceFile:
-                        if (!isExternalModule(location as SourceFile)) break;
+                        if (!isExternalModule(location)) break;
                         // falls through
                     case SyntaxKind.ModuleDeclaration:
-                        copyLocallyVisibleExportSymbols(getSymbolOfDeclaration(location as ModuleDeclaration | SourceFile).exports!, meaning & SymbolFlags.ModuleMember);
+                        copyLocallyVisibleExportSymbols(getSymbolOfDeclaration(location).exports!, meaning & SymbolFlags.ModuleMember);
                         break;
                     case SyntaxKind.EnumDeclaration:
-                        copySymbols(getSymbolOfDeclaration(location as EnumDeclaration).exports!, meaning & SymbolFlags.EnumMember);
+                        copySymbols(getSymbolOfDeclaration(location).exports!, meaning & SymbolFlags.EnumMember);
                         break;
                     case SyntaxKind.ClassExpression:
-                        const className = (location as ClassExpression).name;
+                        const className = (location).name;
                         if (className) {
-                            copySymbol((location as ClassExpression).symbol, meaning);
+                            copySymbol((location).symbol, meaning);
                         }
 
                     // this fall-through is necessary because we would like to handle
@@ -45260,9 +45258,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                         break;
                     case SyntaxKind.FunctionExpression:
-                        const funcName = (location as FunctionExpression).name;
+                        const funcName = (location).name;
                         if (funcName) {
-                            copySymbol((location as FunctionExpression).symbol, meaning);
+                            copySymbol((location).symbol, meaning);
                         }
                         break;
                 }
@@ -45326,7 +45324,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // True if the given identifier is part of a type reference
     function isTypeReferenceIdentifier(node: EntityName): boolean {
         while (node.parent.kind === SyntaxKind.QualifiedName) {
-            node = node.parent as QualifiedName;
+            node = node.parent ;
         }
 
         return node.parent.kind === SyntaxKind.TypeReference;
@@ -45370,15 +45368,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getLeftSideOfImportEqualsOrExportAssignment(nodeOnRightSide: EntityName): ImportEqualsDeclaration | ExportAssignment | undefined {
         while (nodeOnRightSide.parent.kind === SyntaxKind.QualifiedName) {
-            nodeOnRightSide = nodeOnRightSide.parent as QualifiedName;
+            nodeOnRightSide = nodeOnRightSide.parent ;
         }
 
         if (nodeOnRightSide.parent.kind === SyntaxKind.ImportEqualsDeclaration) {
-            return (nodeOnRightSide.parent as ImportEqualsDeclaration).moduleReference === nodeOnRightSide ? nodeOnRightSide.parent as ImportEqualsDeclaration : undefined;
+            return (nodeOnRightSide.parent).moduleReference === nodeOnRightSide ? nodeOnRightSide.parent : undefined;
         }
 
         if (nodeOnRightSide.parent.kind === SyntaxKind.ExportAssignment) {
-            return (nodeOnRightSide.parent as ExportAssignment).expression === nodeOnRightSide as Node ? nodeOnRightSide.parent as ExportAssignment : undefined;
+            return (nodeOnRightSide.parent).expression === nodeOnRightSide as Node ? nodeOnRightSide.parent : undefined;
         }
 
         return undefined;
@@ -45407,8 +45405,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             node = parent;
             parent = parent.parent;
         }
-        if (parent && parent.kind === SyntaxKind.ImportType && (parent as ImportTypeNode).qualifier === node) {
-            return parent as ImportTypeNode;
+        if (parent && parent.kind === SyntaxKind.ImportType && (parent).qualifier === node) {
+            return parent ;
         }
         return undefined;
     }
@@ -45436,7 +45434,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             name.parent.kind === SyntaxKind.PropertyAccessExpression &&
             name.parent === (name.parent.parent as BinaryExpression).left) {
             // Check if this is a special property assignment
-            if (!isPrivateIdentifier(name) && !isJSDocMemberName(name) && !isThisPropertyAndThisTyped(name.parent as PropertyAccessExpression)) {
+            if (!isPrivateIdentifier(name) && !isJSDocMemberName(name) && !isThisPropertyAndThisTyped(name.parent)) {
                 const specialPropertyAssignmentSymbol = getSpecialPropertyAssignmentSymbolFromEntityName(name);
                 if (specialPropertyAssignmentSymbol) {
                     return specialPropertyAssignmentSymbol;
@@ -45496,7 +45494,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         if (name.parent.kind === SyntaxKind.JSDocParameterTag) {
-            return getParameterSymbolFromJSDoc(name.parent as JSDocParameterTag);
+            return getParameterSymbolFromJSDoc(name.parent);
         }
 
         if (name.parent.kind === SyntaxKind.TypeParameter && name.parent.parent.kind === SyntaxKind.JSDocTemplateTag) {
@@ -45651,21 +45649,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         if (node.kind === SyntaxKind.Identifier) {
-            if (isInRightSideOfImportOrExportAssignment(node as Identifier)) {
-                return getSymbolOfNameOrPropertyAccessExpression(node as Identifier);
+            if (isInRightSideOfImportOrExportAssignment(node)) {
+                return getSymbolOfNameOrPropertyAccessExpression(node);
             }
             else if (parent.kind === SyntaxKind.BindingElement &&
                 grandParent.kind === SyntaxKind.ObjectBindingPattern &&
-                node === (parent as BindingElement).propertyName) {
+                node === (parent).propertyName) {
                 const typeOfPattern = getTypeOfNode(grandParent);
-                const propertyDeclaration = getPropertyOfType(typeOfPattern, (node as Identifier).escapedText);
+                const propertyDeclaration = getPropertyOfType(typeOfPattern, (node).escapedText);
 
                 if (propertyDeclaration) {
                     return propertyDeclaration;
                 }
             }
             else if (isMetaProperty(parent) && parent.name === node) {
-                if (parent.keywordToken === SyntaxKind.NewKeyword && idText(node as Identifier) === "target") {
+                if (parent.keywordToken === SyntaxKind.NewKeyword && idText(node) === "target") {
                     // `target` in `new.target`
                     return checkNewTargetMetaProperty(parent).symbol;
                 }
@@ -45673,7 +45671,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // we have a fake expression type made for other reasons already, whose transient `meta`
                 // member should more exactly be the kind of (declarationless) symbol we want.
                 // (See #44364 and #45031 for relevant implementation PRs)
-                if (parent.keywordToken === SyntaxKind.ImportKeyword && idText(node as Identifier) === "meta") {
+                if (parent.keywordToken === SyntaxKind.ImportKeyword && idText(node) === "meta") {
                     return getGlobalImportMetaExpressionType().members!.get("meta" as __String);
                 }
                 // no other meta properties are valid syntax, thus no others should have symbols
@@ -45785,7 +45783,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getShorthandAssignmentValueSymbol(location: Node | undefined): Symbol | undefined {
         if (location && location.kind === SyntaxKind.ShorthandPropertyAssignment) {
-            return resolveEntityName((location as ShorthandPropertyAssignment).name, SymbolFlags.Value | SymbolFlags.Alias);
+            return resolveEntityName((location).name, SymbolFlags.Value | SymbolFlags.Alias);
         }
         return undefined;
     }
@@ -45890,13 +45888,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         //     for ( { a } of elems) {
         //     }
         if (expr.parent.kind === SyntaxKind.ForOfStatement) {
-            const iteratedType = checkRightHandSideOfForOf(expr.parent as ForOfStatement);
+            const iteratedType = checkRightHandSideOfForOf(expr.parent);
             return checkDestructuringAssignment(expr, iteratedType || errorType);
         }
         // If this is from "for" initializer
         //     for ({a } = elems[0];.....) { }
         if (expr.parent.kind === SyntaxKind.BinaryExpression) {
-            const iteratedType = getTypeOfExpression((expr.parent as BinaryExpression).right);
+            const iteratedType = getTypeOfExpression((expr.parent).right);
             return checkDestructuringAssignment(expr, iteratedType || errorType);
         }
         // If this is from nested object binding pattern
@@ -46080,7 +46078,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const parentSymbol = getParentOfSymbol(symbol);
                 if (parentSymbol) {
                     if (parentSymbol.flags & SymbolFlags.ValueModule && parentSymbol.valueDeclaration?.kind === SyntaxKind.SourceFile) {
-                        const symbolFile = parentSymbol.valueDeclaration as SourceFile;
+                        const symbolFile = parentSymbol.valueDeclaration ;
                         const referenceFile = getSourceFileOfNode(node);
                         // If `node` accesses an export and that export isn't in the same file, then symbol is a namespace export, so return undefined.
                         const symbolIsUmdExport = symbolFile !== referenceFile;
@@ -46197,22 +46195,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         Debug.assert(canCollectSymbolAliasAccessabilityData);
         switch (node.kind) {
             case SyntaxKind.ImportEqualsDeclaration:
-                return isAliasResolvedToValue(getSymbolOfDeclaration(node as ImportEqualsDeclaration));
+                return isAliasResolvedToValue(getSymbolOfDeclaration(node));
             case SyntaxKind.ImportClause:
             case SyntaxKind.NamespaceImport:
             case SyntaxKind.ImportSpecifier:
             case SyntaxKind.ExportSpecifier:
-                const symbol = getSymbolOfDeclaration(node as ImportClause | NamespaceImport | ImportSpecifier | ExportSpecifier);
+                const symbol = getSymbolOfDeclaration(node);
                 return !!symbol && isAliasResolvedToValue(symbol) && !getTypeOnlyAliasDeclaration(symbol, SymbolFlags.Value);
             case SyntaxKind.ExportDeclaration:
-                const exportClause = (node as ExportDeclaration).exportClause;
+                const exportClause = (node).exportClause;
                 return !!exportClause && (
                     isNamespaceExport(exportClause) ||
                     some(exportClause.elements, isValueAliasDeclaration)
                 );
             case SyntaxKind.ExportAssignment:
-                return (node as ExportAssignment).expression && (node as ExportAssignment).expression.kind === SyntaxKind.Identifier ?
-                    isAliasResolvedToValue(getSymbolOfDeclaration(node as ExportAssignment)) :
+                return (node).expression && (node).expression.kind === SyntaxKind.Identifier ?
+                    isAliasResolvedToValue(getSymbolOfDeclaration(node)) :
                     true;
         }
         return false;
@@ -47824,8 +47822,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return false;
         }
 
-        const computedPropertyName = node as ComputedPropertyName;
-        if (computedPropertyName.expression.kind === SyntaxKind.BinaryExpression && (computedPropertyName.expression as BinaryExpression).operatorToken.kind === SyntaxKind.CommaToken) {
+        const computedPropertyName = node ;
+        if (computedPropertyName.expression.kind === SyntaxKind.BinaryExpression && (computedPropertyName.expression).operatorToken.kind === SyntaxKind.CommaToken) {
             return grammarErrorOnNode(computedPropertyName.expression, Diagnostics.A_comma_expression_is_not_allowed_in_a_computed_property_name);
         }
         return false;
@@ -48072,7 +48070,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         if (forInOrOfStatement.initializer.kind === SyntaxKind.VariableDeclarationList) {
-            const variableList = forInOrOfStatement.initializer as VariableDeclarationList;
+            const variableList = forInOrOfStatement.initializer ;
             if (!checkGrammarVariableDeclarationList(variableList)) {
                 const declarations = variableList.declarations;
 
@@ -48188,7 +48186,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             switch (parent.kind) {
                 case SyntaxKind.VariableDeclaration:
-                    const decl = parent as VariableDeclaration;
+                    const decl = parent ;
                     if (decl.name.kind !== SyntaxKind.Identifier) {
                         return grammarErrorOnNode(node, Diagnostics.unique_symbol_types_may_not_be_used_on_a_variable_declaration_with_a_binding_name);
                     }
@@ -48196,20 +48194,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         return grammarErrorOnNode(node, Diagnostics.unique_symbol_types_are_only_allowed_on_variables_in_a_variable_statement);
                     }
                     if (!(decl.parent.flags & NodeFlags.Const)) {
-                        return grammarErrorOnNode((parent as VariableDeclaration).name, Diagnostics.A_variable_whose_type_is_a_unique_symbol_type_must_be_const);
+                        return grammarErrorOnNode((parent).name, Diagnostics.A_variable_whose_type_is_a_unique_symbol_type_must_be_const);
                     }
                     break;
 
                 case SyntaxKind.PropertyDeclaration:
                     if (!isStatic(parent) ||
                         !hasEffectiveReadonlyModifier(parent)) {
-                        return grammarErrorOnNode((parent as PropertyDeclaration).name, Diagnostics.A_property_of_a_class_whose_type_is_a_unique_symbol_type_must_be_both_static_and_readonly);
+                        return grammarErrorOnNode((parent).name, Diagnostics.A_property_of_a_class_whose_type_is_a_unique_symbol_type_must_be_both_static_and_readonly);
                     }
                     break;
 
                 case SyntaxKind.PropertySignature:
                     if (!hasSyntacticModifier(parent, ModifierFlags.Readonly)) {
-                        return grammarErrorOnNode((parent as PropertySignature).name, Diagnostics.A_property_of_an_interface_or_type_literal_whose_type_is_a_unique_symbol_type_must_be_readonly);
+                        return grammarErrorOnNode((parent).name, Diagnostics.A_property_of_an_interface_or_type_literal_whose_type_is_a_unique_symbol_type_must_be_readonly);
                     }
                     break;
 
@@ -48289,11 +48287,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             switch (current.kind) {
                 case SyntaxKind.LabeledStatement:
-                    if (node.label && (current as LabeledStatement).label.escapedText === node.label.escapedText) {
+                    if (node.label && (current).label.escapedText === node.label.escapedText) {
                         // found matching label - verify that label usage is correct
                         // continue can only target labels that are on iteration statements
                         const isMisplacedContinueLabel = node.kind === SyntaxKind.ContinueStatement
-                            && !isIterationStatement((current as LabeledStatement).statement, /*lookInLabeledStatements*/ true);
+                            && !isIterationStatement((current).statement, /*lookInLabeledStatements*/ true);
 
                         if (isMisplacedContinueLabel) {
                             return grammarErrorOnNode(node, Diagnostics.A_continue_statement_can_only_jump_to_a_label_of_an_enclosing_iteration_statement);
@@ -48355,14 +48353,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function isStringOrNumberLiteralExpression(expr: Expression) {
         return isStringOrNumericLiteralLike(expr) ||
-            expr.kind === SyntaxKind.PrefixUnaryExpression && (expr as PrefixUnaryExpression).operator === SyntaxKind.MinusToken &&
-            (expr as PrefixUnaryExpression).operand.kind === SyntaxKind.NumericLiteral;
+            expr.kind === SyntaxKind.PrefixUnaryExpression && (expr).operator === SyntaxKind.MinusToken &&
+            (expr).operand.kind === SyntaxKind.NumericLiteral;
     }
 
     function isBigIntLiteralExpression(expr: Expression) {
         return expr.kind === SyntaxKind.BigIntLiteral ||
-            expr.kind === SyntaxKind.PrefixUnaryExpression && (expr as PrefixUnaryExpression).operator === SyntaxKind.MinusToken &&
-            (expr as PrefixUnaryExpression).operand.kind === SyntaxKind.BigIntLiteral;
+            expr.kind === SyntaxKind.PrefixUnaryExpression && (expr).operator === SyntaxKind.MinusToken &&
+            (expr).operand.kind === SyntaxKind.BigIntLiteral;
     }
 
     function isSimpleLiteralEnumReference(expr: Expression) {

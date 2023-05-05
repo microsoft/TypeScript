@@ -410,52 +410,52 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
             case SyntaxKind.Decorator: // elided, will be emitted as part of `visitClassDeclaration`
                 return Debug.fail("Use `modifierVisitor` instead.");
             case SyntaxKind.ClassDeclaration:
-                return visitClassDeclaration(node as ClassDeclaration);
+                return visitClassDeclaration(node);
             case SyntaxKind.ClassExpression:
-                return visitClassExpression(node as ClassExpression, /*referencedName*/ undefined);
+                return visitClassExpression(node , /*referencedName*/ undefined);
             case SyntaxKind.Constructor:
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.ClassStaticBlockDeclaration:
                 return Debug.fail("Not supported outside of a class. Use 'classElementVisitor' instead.");
             case SyntaxKind.Parameter:
-                return visitParameterDeclaration(node as ParameterDeclaration);
+                return visitParameterDeclaration(node);
 
             // Support NamedEvaluation to ensure the correct class name for class expressions.
             case SyntaxKind.BinaryExpression:
-                return visitBinaryExpression(node as BinaryExpression, /*discarded*/ false);
+                return visitBinaryExpression(node , /*discarded*/ false);
             case SyntaxKind.PropertyAssignment:
-                return visitPropertyAssignment(node as PropertyAssignment);
+                return visitPropertyAssignment(node);
             case SyntaxKind.VariableDeclaration:
-                return visitVariableDeclaration(node as VariableDeclaration);
+                return visitVariableDeclaration(node);
             case SyntaxKind.BindingElement:
-                return visitBindingElement(node as BindingElement);
+                return visitBindingElement(node);
             case SyntaxKind.ExportAssignment:
-                return visitExportAssignment(node as ExportAssignment);
+                return visitExportAssignment(node);
             case SyntaxKind.ThisKeyword:
                 return visitThisExpression(node as ThisExpression);
             case SyntaxKind.ForStatement:
-                return visitForStatement(node as ForStatement);
+                return visitForStatement(node);
             case SyntaxKind.ExpressionStatement:
-                return visitExpressionStatement(node as ExpressionStatement);
+                return visitExpressionStatement(node);
             case SyntaxKind.CommaListExpression:
-                return visitCommaListExpression(node as CommaListExpression, /*discarded*/ false);
+                return visitCommaListExpression(node , /*discarded*/ false);
             case SyntaxKind.ParenthesizedExpression:
-                return visitParenthesizedExpression(node as ParenthesizedExpression, /*discarded*/ false, /*referencedName*/ undefined);
+                return visitParenthesizedExpression(node , /*discarded*/ false, /*referencedName*/ undefined);
             case SyntaxKind.PartiallyEmittedExpression:
-                return visitPartiallyEmittedExpression(node as PartiallyEmittedExpression, /*discarded*/ false, /*referencedName*/ undefined);
+                return visitPartiallyEmittedExpression(node , /*discarded*/ false, /*referencedName*/ undefined);
             case SyntaxKind.CallExpression:
-                return visitCallExpression(node as CallExpression);
+                return visitCallExpression(node);
             case SyntaxKind.TaggedTemplateExpression:
-                return visitTaggedTemplateExpression(node as TaggedTemplateExpression);
+                return visitTaggedTemplateExpression(node);
             case SyntaxKind.PrefixUnaryExpression:
             case SyntaxKind.PostfixUnaryExpression:
-                return visitPreOrPostfixUnaryExpression(node as PrefixUnaryExpression | PostfixUnaryExpression, /*discarded*/ false);
+                return visitPreOrPostfixUnaryExpression(node , /*discarded*/ false);
             case SyntaxKind.PropertyAccessExpression:
-                return visitPropertyAccessExpression(node as PropertyAccessExpression);
+                return visitPropertyAccessExpression(node);
             case SyntaxKind.ElementAccessExpression:
-                return visitElementAccessExpression(node as ElementAccessExpression);
+                return visitElementAccessExpression(node);
             case SyntaxKind.ComputedPropertyName:
-                return visitComputedPropertyName(node as ComputedPropertyName);
+                return visitComputedPropertyName(node);
 
             case SyntaxKind.MethodDeclaration: // object literal methods and accessors
             case SyntaxKind.SetAccessor:
@@ -494,17 +494,17 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
     function classElementVisitor(node: Node) {
         switch (node.kind) {
             case SyntaxKind.Constructor:
-                return visitConstructorDeclaration(node as ConstructorDeclaration);
+                return visitConstructorDeclaration(node);
             case SyntaxKind.MethodDeclaration:
-                return visitMethodDeclaration(node as MethodDeclaration);
+                return visitMethodDeclaration(node);
             case SyntaxKind.GetAccessor:
-                return visitGetAccessorDeclaration(node as GetAccessorDeclaration);
+                return visitGetAccessorDeclaration(node);
             case SyntaxKind.SetAccessor:
-                return visitSetAccessorDeclaration(node as SetAccessorDeclaration);
+                return visitSetAccessorDeclaration(node);
             case SyntaxKind.PropertyDeclaration:
-                return visitPropertyDeclaration(node as PropertyDeclaration);
+                return visitPropertyDeclaration(node);
             case SyntaxKind.ClassStaticBlockDeclaration:
-                return visitClassStaticBlockDeclaration(node as ClassStaticBlockDeclaration);
+                return visitClassStaticBlockDeclaration(node);
             default:
                 return visitor(node);
         }
@@ -513,11 +513,11 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
     function namedEvaluationVisitor(node: Node, referencedName: Expression): VisitResult<Node> {
         switch (node.kind) {
             case SyntaxKind.PartiallyEmittedExpression:
-                return visitPartiallyEmittedExpression(node as PartiallyEmittedExpression, /*discarded*/ false, referencedName);
+                return visitPartiallyEmittedExpression(node , /*discarded*/ false, referencedName);
             case SyntaxKind.ParenthesizedExpression:
-                return visitParenthesizedExpression(node as ParenthesizedExpression, /*discarded*/ false, referencedName);
+                return visitParenthesizedExpression(node , /*discarded*/ false, referencedName);
             case SyntaxKind.ClassExpression:
-                return visitClassExpression(node as ClassExpression, referencedName);
+                return visitClassExpression(node , referencedName);
             default:
                 return visitor(node);
         }
@@ -527,13 +527,13 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         switch (node.kind) {
             case SyntaxKind.PrefixUnaryExpression:
             case SyntaxKind.PostfixUnaryExpression:
-                return visitPreOrPostfixUnaryExpression(node as PrefixUnaryExpression | PostfixUnaryExpression, /*discarded*/ true);
+                return visitPreOrPostfixUnaryExpression(node , /*discarded*/ true);
             case SyntaxKind.BinaryExpression:
-                return visitBinaryExpression(node as BinaryExpression, /*discarded*/ true);
+                return visitBinaryExpression(node , /*discarded*/ true);
             case SyntaxKind.CommaListExpression:
-                return visitCommaListExpression(node as CommaListExpression, /*discarded*/ true);
+                return visitCommaListExpression(node , /*discarded*/ true);
             case SyntaxKind.ParenthesizedExpression:
-                return visitParenthesizedExpression(node as ParenthesizedExpression, /*discarded*/ true, /*referencedName*/ undefined);
+                return visitParenthesizedExpression(node , /*discarded*/ true, /*referencedName*/ undefined);
             default:
                 return visitor(node);
         }

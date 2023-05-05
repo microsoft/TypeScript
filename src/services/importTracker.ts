@@ -11,7 +11,6 @@ import {
     cast,
     Debug,
     ExportAssignment,
-    ExportDeclaration,
     FileReference,
     findAncestor,
     forEach,
@@ -23,11 +22,9 @@ import {
     hasSyntacticModifier,
     Identifier,
     ImportCall,
-    ImportClause,
     ImportDeclaration,
     ImportEqualsDeclaration,
     importFromModuleSpecifier,
-    ImportSpecifier,
     InternalSymbolName,
     isAccessExpression,
     isBinaryExpression,
@@ -61,7 +58,6 @@ import {
     ModuleBlock,
     ModuleDeclaration,
     NamedImportsOrExports,
-    NamespaceImport,
     Node,
     nodeIsSynthesized,
     nodeSeenTracker,
@@ -189,7 +185,7 @@ function getImportersForExport(
                         if (!isAvailableThroughGlobal) {
                             const parent = direct.parent;
                             if (exportKind === ExportKind.ExportEquals && parent.kind === SyntaxKind.VariableDeclaration) {
-                                const { name } = parent as VariableDeclaration;
+                                const { name } = parent ;
                                 if (name.kind === SyntaxKind.Identifier) {
                                     directImports.push(name);
                                     break;
@@ -469,7 +465,7 @@ export function findModuleReferences(program: Program, sourceFiles: readonly Sou
             }
             for (const ref of referencingFile.typeReferenceDirectives) {
                 const referenced = program.getResolvedTypeReferenceDirectives().get(ref.fileName, ref.resolutionMode || referencingFile.impliedNodeFormat)?.resolvedTypeReferenceDirective;
-                if (referenced !== undefined && referenced.resolvedFileName === (searchSourceFile as SourceFile).fileName) {
+                if (referenced !== undefined && referenced.resolvedFileName === (searchSourceFile).fileName) {
                     refs.push({ kind: "reference", referencingFile, ref });
                 }
             }
@@ -525,7 +521,7 @@ function forEachImport(sourceFile: SourceFile, action: (importStatement: Importe
             switch (statement.kind) {
                 case SyntaxKind.ExportDeclaration:
                 case SyntaxKind.ImportDeclaration: {
-                    const decl = statement as ImportDeclaration | ExportDeclaration;
+                    const decl = statement ;
                     if (decl.moduleSpecifier && isStringLiteral(decl.moduleSpecifier)) {
                         action(decl, decl.moduleSpecifier);
                     }
@@ -533,7 +529,7 @@ function forEachImport(sourceFile: SourceFile, action: (importStatement: Importe
                 }
 
                 case SyntaxKind.ImportEqualsDeclaration: {
-                    const decl = statement as ImportEqualsDeclaration;
+                    const decl = statement ;
                     if (isExternalModuleImportEquals(decl)) {
                         action(decl, decl.moduleReference.expression);
                     }
@@ -719,13 +715,13 @@ function isNodeImport(node: Node): boolean {
     const { parent } = node;
     switch (parent.kind) {
         case SyntaxKind.ImportEqualsDeclaration:
-            return (parent as ImportEqualsDeclaration).name === node && isExternalModuleImportEquals(parent as ImportEqualsDeclaration);
+            return (parent).name === node && isExternalModuleImportEquals(parent);
         case SyntaxKind.ImportSpecifier:
             // For a rename import `{ foo as bar }`, don't search for the imported symbol. Just find local uses of `bar`.
-            return !(parent as ImportSpecifier).propertyName;
+            return !(parent).propertyName;
         case SyntaxKind.ImportClause:
         case SyntaxKind.NamespaceImport:
-            Debug.assert((parent as ImportClause | NamespaceImport).name === node);
+            Debug.assert((parent).name === node);
             return true;
         case SyntaxKind.BindingElement:
             return isInJSFile(node) && isVariableDeclarationInitializedToBareOrAccessedRequire(parent.parent.parent);
@@ -776,14 +772,14 @@ function getSourceFileLikeForImportDeclaration(node: ImporterOrCallExpression): 
 
     const { parent } = node;
     if (parent.kind === SyntaxKind.SourceFile) {
-        return parent as SourceFile;
+        return parent ;
     }
     Debug.assert(parent.kind === SyntaxKind.ModuleBlock);
     return cast(parent.parent, isAmbientModuleDeclaration);
 }
 
 function isAmbientModuleDeclaration(node: Node): node is AmbientModuleDeclaration {
-    return node.kind === SyntaxKind.ModuleDeclaration && (node as ModuleDeclaration).name.kind === SyntaxKind.StringLiteral;
+    return node.kind === SyntaxKind.ModuleDeclaration && (node).name.kind === SyntaxKind.StringLiteral;
 }
 
 function isExternalModuleImportEquals(eq: ImportEqualsDeclaration): eq is ImportEqualsDeclaration & { moduleReference: { expression: StringLiteral } } {

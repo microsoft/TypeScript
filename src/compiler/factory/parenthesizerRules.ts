@@ -35,7 +35,6 @@ import {
     last,
     LeftHandSideExpression,
     NamedTupleMember,
-    NewExpression,
     NodeArray,
     NodeFactory,
     OperatorPrecedence,
@@ -252,14 +251,14 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
             return node.kind;
         }
 
-        if (node.kind === SyntaxKind.BinaryExpression && (node as BinaryExpression).operatorToken.kind === SyntaxKind.PlusToken) {
+        if (node.kind === SyntaxKind.BinaryExpression && (node).operatorToken.kind === SyntaxKind.PlusToken) {
             if ((node as BinaryPlusExpression).cachedLiteralKind !== undefined) {
                 return (node as BinaryPlusExpression).cachedLiteralKind;
             }
 
-            const leftKind = getLiteralKindOfBinaryPlusOperand((node as BinaryExpression).left);
+            const leftKind = getLiteralKindOfBinaryPlusOperand((node).left);
             const literalKind = isLiteralKind(leftKind)
-                && leftKind === getLiteralKindOfBinaryPlusOperand((node as BinaryExpression).right)
+                && leftKind === getLiteralKindOfBinaryPlusOperand((node).right)
                     ? leftKind
                     : SyntaxKind.Unknown;
 
@@ -360,7 +359,7 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
                 return factory.createParenthesizedExpression(expression);
 
             case SyntaxKind.NewExpression:
-                return !(leftmostExpr as NewExpression).arguments
+                return !(leftmostExpr).arguments
                     ? factory.createParenthesizedExpression(expression)
                     : expression as LeftHandSideExpression; // TODO(rbuckton): Verify this assertion holds
         }
@@ -381,7 +380,7 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
         //
         const emittedExpression = skipPartiallyEmittedExpressions(expression);
         if (isLeftHandSideExpression(emittedExpression)
-            && (emittedExpression.kind !== SyntaxKind.NewExpression || (emittedExpression as NewExpression).arguments)
+            && (emittedExpression.kind !== SyntaxKind.NewExpression || (emittedExpression).arguments)
             && (optionalChain || !isOptionalChain(emittedExpression))) {
             // TODO(rbuckton): Verify whether this assertion holds.
             return expression as LeftHandSideExpression;

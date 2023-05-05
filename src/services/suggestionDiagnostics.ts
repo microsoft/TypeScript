@@ -12,7 +12,6 @@ import {
     Diagnostics,
     DiagnosticWithLocation,
     Expression,
-    ExpressionStatement,
     Extension,
     fileExtensionIsOneOf,
     forEachReturnStatement,
@@ -58,7 +57,6 @@ import {
     SourceFile,
     SyntaxKind,
     TypeChecker,
-    VariableStatement,
 } from "./_namespaces/ts";
 
 const visitedNestedConvertibleFunctions = new Map<string, true>();
@@ -138,10 +136,10 @@ function containsTopLevelCommonjs(sourceFile: SourceFile): boolean {
     return sourceFile.statements.some(statement => {
         switch (statement.kind) {
             case SyntaxKind.VariableStatement:
-                return (statement as VariableStatement).declarationList.declarations.some(decl =>
+                return (statement).declarationList.declarations.some(decl =>
                     !!decl.initializer && isRequireCall(propertyAccessLeftHandSide(decl.initializer), /*requireStringLiteralLikeArgument*/ true));
             case SyntaxKind.ExpressionStatement: {
-                const { expression } = statement as ExpressionStatement;
+                const { expression } = statement ;
                 if (!isBinaryExpression(expression)) return isRequireCall(expression, /*requireStringLiteralLikeArgument*/ true);
                 const kind = getAssignmentDeclarationKind(expression);
                 return kind === AssignmentDeclarationKind.ExportsProperty || kind === AssignmentDeclarationKind.ModuleExports;
@@ -249,17 +247,17 @@ function hasSupportedNumberOfArguments(node: CallExpression & { readonly express
 }
 
 // should be kept up to date with getTransformationBody in convertToAsyncFunction.ts
-function isFixablePromiseArgument(arg: Expression, checker: TypeChecker): boolean {
+function isFixablePromiseArgument(arg: Expression | FunctionDeclaration, checker: TypeChecker): boolean {
     switch (arg.kind) {
         case SyntaxKind.FunctionDeclaration:
         case SyntaxKind.FunctionExpression:
-            const functionFlags = getFunctionFlags(arg as FunctionDeclaration | FunctionExpression);
+            const functionFlags = getFunctionFlags(arg);
             if (functionFlags & FunctionFlags.Generator) {
                 return false;
             }
             // falls through
         case SyntaxKind.ArrowFunction:
-            visitedNestedConvertibleFunctions.set(getKeyFromNode(arg as FunctionLikeDeclaration), true);
+            visitedNestedConvertibleFunctions.set(getKeyFromNode(arg), true);
             // falls through
         case SyntaxKind.NullKeyword:
             return true;

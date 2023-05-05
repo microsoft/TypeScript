@@ -32,7 +32,7 @@ export function transformES2019(context: TransformationContext): (x: SourceFile 
         }
         switch (node.kind) {
             case SyntaxKind.CatchClause:
-                return visitCatchClause(node as CatchClause);
+                return visitCatchClause(node);
             default:
                 return visitEachChild(node, visitor, context);
         }

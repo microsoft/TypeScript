@@ -4,9 +4,6 @@ import {
     findAncestor,
     getTokenAtPosition,
     NamedTupleMember,
-    OptionalTypeNode,
-    ParenthesizedTypeNode,
-    RestTypeNode,
     SourceFile,
     SyntaxKind,
     textChanges,
@@ -51,7 +48,7 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, na
         else if (unwrappedType.kind === SyntaxKind.RestType) {
             sawRest = true;
         }
-        unwrappedType = (unwrappedType as OptionalTypeNode | RestTypeNode | ParenthesizedTypeNode).type;
+        unwrappedType = (unwrappedType).type;
     }
     const updated = factory.updateNamedTupleMember(
         namedTupleMember,

@@ -3,7 +3,6 @@ import {
     arrayFrom,
     ArrowFunction,
     BinaryExpression,
-    BindingElement,
     BindingName,
     ClassDeclaration,
     ClassExpression,
@@ -17,7 +16,6 @@ import {
     ExportDeclaration,
     ExportSpecifier,
     Expression,
-    ExpressionStatement,
     factory,
     filter,
     findChildOfKind,
@@ -207,10 +205,10 @@ function convertStatement(
 ): ModuleExportsChanged {
     switch (statement.kind) {
         case SyntaxKind.VariableStatement:
-            convertVariableStatement(sourceFile, statement as VariableStatement, changes, checker, identifiers, target, quotePreference);
+            convertVariableStatement(sourceFile, statement , changes, checker, identifiers, target, quotePreference);
             return false;
         case SyntaxKind.ExpressionStatement: {
-            const { expression } = statement as ExpressionStatement;
+            const { expression } = statement ;
             switch (expression.kind) {
                 case SyntaxKind.CallExpression: {
                     if (isRequireCall(expression, /*requireStringLiteralLikeArgument*/ true)) {
@@ -220,8 +218,8 @@ function convertStatement(
                     return false;
                 }
                 case SyntaxKind.BinaryExpression: {
-                    const { operatorToken } = expression as BinaryExpression;
-                    return operatorToken.kind === SyntaxKind.EqualsToken && convertAssignment(sourceFile, checker, expression as BinaryExpression, changes, exports, useSitesToUnqualify);
+                    const { operatorToken } = expression ;
+                    return operatorToken.kind === SyntaxKind.EqualsToken && convertAssignment(sourceFile, checker, expression , changes, exports, useSitesToUnqualify);
                 }
             }
         }
@@ -426,7 +424,7 @@ function convertExportsDotXEquals_replaceNode(name: string | undefined, exported
     const modifiers = [factory.createToken(SyntaxKind.ExportKeyword)];
     switch (exported.kind) {
         case SyntaxKind.FunctionExpression: {
-            const { name: expressionName } = exported as FunctionExpression;
+            const { name: expressionName } = exported ;
             if (expressionName && expressionName.text !== name) {
                 // `exports.f = function g() {}` -> `export const f = function g() {}`
                 return exportConst();
@@ -436,10 +434,10 @@ function convertExportsDotXEquals_replaceNode(name: string | undefined, exported
         // falls through
         case SyntaxKind.ArrowFunction:
             // `exports.f = function() {}` --> `export function f() {}`
-            return functionExpressionToDeclaration(name, modifiers, exported as FunctionExpression | ArrowFunction, useSitesToUnqualify);
+            return functionExpressionToDeclaration(name, modifiers, exported , useSitesToUnqualify);
         case SyntaxKind.ClassExpression:
             // `exports.C = class {}` --> `export class C {}`
-            return classExpressionToDeclaration(name, modifiers, exported as ClassExpression, useSitesToUnqualify);
+            return classExpressionToDeclaration(name, modifiers, exported , useSitesToUnqualify);
         default:
             return exportConst();
     }
@@ -612,11 +610,11 @@ function isFreeIdentifier(node: Identifier): boolean {
     const { parent } = node;
     switch (parent.kind) {
         case SyntaxKind.PropertyAccessExpression:
-            return (parent as PropertyAccessExpression).name !== node;
+            return (parent).name !== node;
         case SyntaxKind.BindingElement:
-            return (parent as BindingElement).propertyName !== node;
+            return (parent).propertyName !== node;
         case SyntaxKind.ImportSpecifier:
-            return (parent as ImportSpecifier).propertyName !== node;
+            return (parent).propertyName !== node;
         default:
             return true;
     }

@@ -4,7 +4,6 @@ import {
     arrayFrom,
     CallLikeExpression,
     CancellationToken,
-    CaseClause,
     changeExtension,
     CharacterCodes,
     combinePaths,
@@ -26,7 +25,6 @@ import {
     Debug,
     deduplicate,
     directorySeparator,
-    ElementAccessExpression,
     emptyArray,
     endsWith,
     ensureTrailingDirectorySeparator,
@@ -65,7 +63,6 @@ import {
     hasProperty,
     hasTrailingDirectorySeparator,
     hostGetCanonicalFileName,
-    IndexedAccessTypeNode,
     isApplicableVersionedTypesKey,
     isArray,
     isCallExpression,
@@ -103,7 +100,6 @@ import {
     ObjectLiteralExpression,
     Path,
     Program,
-    PropertyAssignment,
     rangeContainsPosition,
     readJson,
     removeFileExtension,
@@ -348,7 +344,7 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
             return fromUnionableLiteralType(grandParent);
         }
         case SyntaxKind.PropertyAssignment:
-            if (isObjectLiteralExpression(parent.parent) && (parent as PropertyAssignment).name === node) {
+            if (isObjectLiteralExpression(parent.parent) && (parent).name === node) {
                 // Get quoted name of properties of the object literal expression
                 // i.e. interface ConfigFiles {
                 //          'jspm:dev': string
@@ -366,7 +362,7 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
             return fromContextualType() || fromContextualType(ContextFlags.None);
 
         case SyntaxKind.ElementAccessExpression: {
-            const { expression, argumentExpression } = parent as ElementAccessExpression;
+            const { expression, argumentExpression } = parent ;
             if (node === skipParentheses(argumentExpression)) {
                 // Get all names of properties on the expression
                 // i.e. interface A {
@@ -402,7 +398,7 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
             //      export * from "/*completion position*/";
             return { kind: StringLiteralCompletionKind.Paths, paths: getStringLiteralCompletionsFromModuleNames(sourceFile, node, compilerOptions, host, typeChecker, preferences) };
         case SyntaxKind.CaseClause:
-            const tracker = newCaseClauseTracker(typeChecker, (parent as CaseClause).parent.clauses);
+            const tracker = newCaseClauseTracker(typeChecker, (parent).parent.clauses);
             const contextualTypes = fromContextualType();
             if (!contextualTypes) {
                 return;
@@ -430,7 +426,7 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
                 //          bar: string;
                 //      }
                 //      let x: Foo["/*completion position*/"]
-                const { indexType, objectType } = grandParent as IndexedAccessTypeNode;
+                const { indexType, objectType } = grandParent ;
                 if (!rangeContainsPosition(indexType, position)) {
                     return undefined;
                 }
@@ -440,7 +436,7 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
                 if (!result) {
                     return undefined;
                 }
-                const alreadyUsedTypes = getAlreadyUsedTypesInStringLiteralUnion(grandParent as UnionTypeNode, parent as LiteralTypeNode);
+                const alreadyUsedTypes = getAlreadyUsedTypesInStringLiteralUnion(grandParent , parent as LiteralTypeNode);
                 if (result.kind === StringLiteralCompletionKind.Properties) {
                     return { kind: StringLiteralCompletionKind.Properties, symbols: result.symbols.filter(sym => !contains(alreadyUsedTypes, sym.name)), hasIndexSignature: result.hasIndexSignature };
                 }

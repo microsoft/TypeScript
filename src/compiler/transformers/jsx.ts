@@ -211,16 +211,16 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
     function visitorWorker(node: Node): VisitResult<Node | undefined> {
         switch (node.kind) {
             case SyntaxKind.JsxElement:
-                return visitJsxElement(node as JsxElement, /*isChild*/ false);
+                return visitJsxElement(node , /*isChild*/ false);
 
             case SyntaxKind.JsxSelfClosingElement:
-                return visitJsxSelfClosingElement(node as JsxSelfClosingElement, /*isChild*/ false);
+                return visitJsxSelfClosingElement(node , /*isChild*/ false);
 
             case SyntaxKind.JsxFragment:
-                return visitJsxFragment(node as JsxFragment, /*isChild*/ false);
+                return visitJsxFragment(node , /*isChild*/ false);
 
             case SyntaxKind.JsxExpression:
-                return visitJsxExpression(node as JsxExpression);
+                return visitJsxExpression(node);
 
             default:
                 return visitEachChild(node, visitor, context);

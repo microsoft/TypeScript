@@ -456,45 +456,45 @@ export function transformClassFields(context: TransformationContext): (x: Source
             case SyntaxKind.AccessorKeyword:
                 return Debug.fail("Use `modifierVisitor` instead.");
             case SyntaxKind.ClassDeclaration:
-                return visitClassDeclaration(node as ClassDeclaration);
+                return visitClassDeclaration(node);
             case SyntaxKind.ClassExpression:
-                return visitClassExpression(node as ClassExpression, /*referencedName*/ undefined);
+                return visitClassExpression(node , /*referencedName*/ undefined);
             case SyntaxKind.ClassStaticBlockDeclaration:
             case SyntaxKind.PropertyDeclaration:
                 return Debug.fail("Use `classElementVisitor` instead.");
             case SyntaxKind.PropertyAssignment:
-                return visitPropertyAssignment(node as PropertyAssignment);
+                return visitPropertyAssignment(node);
             case SyntaxKind.VariableStatement:
-                return visitVariableStatement(node as VariableStatement);
+                return visitVariableStatement(node);
             case SyntaxKind.VariableDeclaration:
-                return visitVariableDeclaration(node as VariableDeclaration);
+                return visitVariableDeclaration(node);
             case SyntaxKind.Parameter:
-                return visitParameterDeclaration(node as ParameterDeclaration);
+                return visitParameterDeclaration(node);
             case SyntaxKind.BindingElement:
-                return visitBindingElement(node as BindingElement);
+                return visitBindingElement(node);
             case SyntaxKind.ExportAssignment:
-                return visitExportAssignment(node as ExportAssignment);
+                return visitExportAssignment(node);
             case SyntaxKind.PrivateIdentifier:
-                return visitPrivateIdentifier(node as PrivateIdentifier);
+                return visitPrivateIdentifier(node);
             case SyntaxKind.PropertyAccessExpression:
-                return visitPropertyAccessExpression(node as PropertyAccessExpression);
+                return visitPropertyAccessExpression(node);
             case SyntaxKind.ElementAccessExpression:
-                return visitElementAccessExpression(node as ElementAccessExpression);
+                return visitElementAccessExpression(node);
             case SyntaxKind.PrefixUnaryExpression:
             case SyntaxKind.PostfixUnaryExpression:
-                return visitPreOrPostfixUnaryExpression(node as PrefixUnaryExpression | PostfixUnaryExpression, /*discarded*/ false);
+                return visitPreOrPostfixUnaryExpression(node , /*discarded*/ false);
             case SyntaxKind.BinaryExpression:
-                return visitBinaryExpression(node as BinaryExpression, /*discarded*/ false);
+                return visitBinaryExpression(node , /*discarded*/ false);
             case SyntaxKind.ParenthesizedExpression:
-                return visitParenthesizedExpression(node as ParenthesizedExpression, /*discarded*/ false, /*referencedName*/ undefined);
+                return visitParenthesizedExpression(node , /*discarded*/ false, /*referencedName*/ undefined);
             case SyntaxKind.CallExpression:
-                return visitCallExpression(node as CallExpression);
+                return visitCallExpression(node);
             case SyntaxKind.ExpressionStatement:
-                return visitExpressionStatement(node as ExpressionStatement);
+                return visitExpressionStatement(node);
             case SyntaxKind.TaggedTemplateExpression:
-                return visitTaggedTemplateExpression(node as TaggedTemplateExpression);
+                return visitTaggedTemplateExpression(node);
             case SyntaxKind.ForStatement:
-                return visitForStatement(node as ForStatement);
+                return visitForStatement(node);
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.Constructor:
@@ -520,11 +520,11 @@ export function transformClassFields(context: TransformationContext): (x: Source
     function namedEvaluationVisitor(node: Node, referencedName: Expression): VisitResult<Node> {
         switch (node.kind) {
             case SyntaxKind.PartiallyEmittedExpression:
-                return visitPartiallyEmittedExpression(node as PartiallyEmittedExpression, /*discarded*/ false, referencedName);
+                return visitPartiallyEmittedExpression(node , /*discarded*/ false, referencedName);
             case SyntaxKind.ParenthesizedExpression:
-                return visitParenthesizedExpression(node as ParenthesizedExpression, /*discarded*/ false, referencedName);
+                return visitParenthesizedExpression(node , /*discarded*/ false, referencedName);
             case SyntaxKind.ClassExpression:
-                return visitClassExpression(node as ClassExpression, referencedName);
+                return visitClassExpression(node , referencedName);
             default:
                 return visitor(node);
         }
@@ -537,13 +537,13 @@ export function transformClassFields(context: TransformationContext): (x: Source
         switch (node.kind) {
             case SyntaxKind.PrefixUnaryExpression:
             case SyntaxKind.PostfixUnaryExpression:
-                return visitPreOrPostfixUnaryExpression(node as PrefixUnaryExpression | PostfixUnaryExpression, /*discarded*/ true);
+                return visitPreOrPostfixUnaryExpression(node , /*discarded*/ true);
             case SyntaxKind.BinaryExpression:
-                return visitBinaryExpression(node as BinaryExpression, /*discarded*/ true);
+                return visitBinaryExpression(node , /*discarded*/ true);
             case SyntaxKind.CommaListExpression:
-                return visitCommaListExpression(node as CommaListExpression, /*discarded*/ true);
+                return visitCommaListExpression(node , /*discarded*/ true);
             case SyntaxKind.ParenthesizedExpression:
-                return visitParenthesizedExpression(node as ParenthesizedExpression, /*discarded*/ true, /*referencedName*/ undefined);
+                return visitParenthesizedExpression(node , /*discarded*/ true, /*referencedName*/ undefined);
             default:
                 return visitor(node);
         }
@@ -557,7 +557,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
             case SyntaxKind.HeritageClause:
                 return visitEachChild(node, heritageClauseVisitor, context);
             case SyntaxKind.ExpressionWithTypeArguments:
-                return visitExpressionWithTypeArgumentsInHeritageClause(node as ExpressionWithTypeArguments);
+                return visitExpressionWithTypeArgumentsInHeritageClause(node);
             default:
                 return visitor(node);
         }
@@ -582,7 +582,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
     function classElementVisitor(node: Node): VisitResult<Node | undefined> {
         switch (node.kind) {
             case SyntaxKind.Constructor:
-                return visitConstructorDeclaration(node as ConstructorDeclaration);
+                return visitConstructorDeclaration(node);
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
             case SyntaxKind.MethodDeclaration:
@@ -594,11 +594,11 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 return setCurrentStaticPropertyDeclarationOrStaticBlockAnd(
                     /*current*/ undefined,
                     visitPropertyDeclaration,
-                    node as PropertyDeclaration);
+                    node);
             case SyntaxKind.ClassStaticBlockDeclaration:
-                return visitClassStaticBlockDeclaration(node as ClassStaticBlockDeclaration);
+                return visitClassStaticBlockDeclaration(node);
             case SyntaxKind.ComputedPropertyName:
-                return visitComputedPropertyName(node as ComputedPropertyName);
+                return visitComputedPropertyName(node);
             case SyntaxKind.SemicolonClassElement:
                 return node;
             default:
@@ -612,7 +612,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
     function propertyNameVisitor(node: Node): VisitResult<Node> {
         switch (node.kind) {
             case SyntaxKind.ComputedPropertyName:
-                return visitComputedPropertyName(node as ComputedPropertyName);
+                return visitComputedPropertyName(node);
             default:
                 return visitor(node);
         }
@@ -624,7 +624,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
     function accessorFieldResultVisitor(node: Node) {
         switch (node.kind) {
             case SyntaxKind.PropertyDeclaration:
-                return transformFieldInitializer(node as PropertyDeclaration);
+                return transformFieldInitializer(node);
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
                 return classElementVisitor(node);
@@ -3173,9 +3173,9 @@ export function transformClassFields(context: TransformationContext): (x: Source
     function substituteExpression(node: Expression) {
         switch (node.kind) {
             case SyntaxKind.Identifier:
-                return substituteExpressionIdentifier(node as Identifier);
+                return substituteExpressionIdentifier(node);
             case SyntaxKind.ThisKeyword:
-                return substituteThisExpression(node as ThisExpression);
+                return substituteThisExpression(node);
         }
         return node;
     }

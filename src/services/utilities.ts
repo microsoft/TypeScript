@@ -6,7 +6,6 @@ import {
     AnyImportOrRequireStatement,
     assertType,
     AssignmentDeclarationKind,
-    BinaryExpression,
     binarySearchKey,
     BindingElement,
     BreakOrContinueStatement,
@@ -14,7 +13,6 @@ import {
     canHaveModifiers,
     CaseClause,
     cast,
-    CatchClause,
     CharacterCodes,
     ClassDeclaration,
     ClassExpression,
@@ -27,7 +25,6 @@ import {
     compareValues,
     Comparison,
     CompilerOptions,
-    ConditionalExpression,
     contains,
     ContextFlags,
     createPrinterWithRemoveCommentsOmitTrailingSemicolon,
@@ -40,7 +37,6 @@ import {
     Decorator,
     DefaultClause,
     defaultMaximumTruncationLength,
-    DeleteExpression,
     Diagnostic,
     DiagnosticAndArguments,
     DiagnosticArguments,
@@ -50,21 +46,16 @@ import {
     DisplayPartsSymbolWriter,
     DocumentPosition,
     DocumentSpan,
-    DoStatement,
-    ElementAccessExpression,
     EmitFlags,
     EmitHint,
     emitModuleKindIsNonNodeESM,
     emptyArray,
-    EndOfFileToken,
     endsWith,
     ensureScriptKind,
     EqualityOperator,
     escapeString,
-    ExportAssignment,
     ExportDeclaration,
     Expression,
-    ExpressionStatement,
     factory,
     FileTextChanges,
     filter,
@@ -82,7 +73,6 @@ import {
     formatStringFromArgs,
     formatting,
     FormattingHost,
-    ForOfStatement,
     FunctionDeclaration,
     FunctionExpression,
     FunctionLikeDeclaration,
@@ -119,13 +109,10 @@ import {
     identifierIsThisKeyword,
     identity,
     idText,
-    IfStatement,
     ImportClause,
     ImportDeclaration,
     ImportSpecifier,
-    ImportTypeNode,
     indexOfNode,
-    IndexSignatureDeclaration,
     InternalSymbolName,
     isAmbientModule,
     isAnyImportSyntax,
@@ -257,11 +244,9 @@ import {
     JSDocLinkCode,
     JSDocLinkDisplayPart,
     JSDocLinkPlain,
-    JSDocTypedefTag,
     JsTyping,
     JsxEmit,
     JsxOpeningLikeElement,
-    LabeledStatement,
     LanguageServiceHost,
     last,
     lastOrUndefined,
@@ -270,7 +255,6 @@ import {
     maybeBind,
     Modifier,
     ModifierFlags,
-    ModuleDeclaration,
     ModuleInstanceState,
     ModuleKind,
     ModuleResolutionKind,
@@ -296,11 +280,9 @@ import {
     PackageJsonDependencyGroup,
     parseBigInt,
     pathIsRelative,
-    PrefixUnaryExpression,
     Program,
     ProjectPackageJsonInfo,
     PropertyAccessExpression,
-    PropertyAssignment,
     PropertyName,
     PseudoBigInt,
     pseudoBigIntToString,
@@ -326,7 +308,6 @@ import {
     SourceFile,
     SourceFileLike,
     SourceMapper,
-    SpreadElement,
     stableSort,
     startsWith,
     stringContains,
@@ -346,7 +327,6 @@ import {
     TaggedTemplateExpression,
     TemplateExpression,
     TemplateLiteralToken,
-    TemplateSpan,
     TextChange,
     textChanges,
     TextRange,
@@ -363,15 +343,11 @@ import {
     TypeFlags,
     TypeFormatFlags,
     TypeNode,
-    TypeOfExpression,
-    TypeQueryNode,
     unescapeLeadingUnderscores,
     UserPreferences,
     VariableDeclaration,
     visitEachChild,
-    VoidExpression,
     walkUpParenthesizedExpressions,
-    YieldExpression,
 } from "./_namespaces/ts";
 
 // These utilities are common to multiple language service features.
@@ -420,17 +396,17 @@ export function getMeaningFromDeclaration(node: Node): SemanticMeaning {
 
         case SyntaxKind.JSDocTypedefTag:
             // If it has no name node, it shares the name with the value declaration below it.
-            return (node as JSDocTypedefTag).name === undefined ? SemanticMeaning.Value | SemanticMeaning.Type : SemanticMeaning.Type;
+            return (node).name === undefined ? SemanticMeaning.Value | SemanticMeaning.Type : SemanticMeaning.Type;
 
         case SyntaxKind.EnumMember:
         case SyntaxKind.ClassDeclaration:
             return SemanticMeaning.Value | SemanticMeaning.Type;
 
         case SyntaxKind.ModuleDeclaration:
-            if (isAmbientModule(node as ModuleDeclaration)) {
+            if (isAmbientModule(node)) {
                 return SemanticMeaning.Namespace | SemanticMeaning.Value;
             }
-            else if (getModuleInstanceState(node as ModuleDeclaration) === ModuleInstanceState.Instantiated) {
+            else if (getModuleInstanceState(node) === ModuleInstanceState.Instantiated) {
                 return SemanticMeaning.Namespace | SemanticMeaning.Value;
             }
             else {
@@ -544,8 +520,8 @@ function isPropertyAccessNamespaceReference(node: Node): boolean {
 
     if (!isLastClause && root.parent.kind === SyntaxKind.ExpressionWithTypeArguments && root.parent.parent.kind === SyntaxKind.HeritageClause) {
         const decl = root.parent.parent.parent;
-        return (decl.kind === SyntaxKind.ClassDeclaration && (root.parent.parent as HeritageClause).token === SyntaxKind.ImplementsKeyword) ||
-            (decl.kind === SyntaxKind.InterfaceDeclaration && (root.parent.parent as HeritageClause).token === SyntaxKind.ExtendsKeyword);
+        return (decl.kind === SyntaxKind.ClassDeclaration && (root.parent.parent).token === SyntaxKind.ImplementsKeyword) ||
+            (decl.kind === SyntaxKind.InterfaceDeclaration && (root.parent.parent).token === SyntaxKind.ExtendsKeyword);
     }
 
     return false;
@@ -567,7 +543,7 @@ function isTypeReference(node: Node): boolean {
         case SyntaxKind.TypeReference:
             return true;
         case SyntaxKind.ImportType:
-            return !(node.parent as ImportTypeNode).isTypeOf;
+            return !(node.parent).isTypeOf;
         case SyntaxKind.ExpressionWithTypeArguments:
             return isPartOfTypeNode(node.parent);
     }
@@ -638,8 +614,8 @@ export function climbPastPropertyOrElementAccess(node: Node) {
 /** @internal */
 export function getTargetLabel(referenceNode: Node, labelName: string): Identifier | undefined {
     while (referenceNode) {
-        if (referenceNode.kind === SyntaxKind.LabeledStatement && (referenceNode as LabeledStatement).label.escapedText === labelName) {
-            return (referenceNode as LabeledStatement).label;
+        if (referenceNode.kind === SyntaxKind.LabeledStatement && (referenceNode).label.escapedText === labelName) {
+            return (referenceNode).label;
         }
         referenceNode = referenceNode.parent;
     }
@@ -714,7 +690,7 @@ export function isLiteralNameOfPropertyDeclarationOrIndexAccess(node: StringLite
         case SyntaxKind.ModuleDeclaration:
             return getNameOfDeclaration(node.parent as Declaration) === node;
         case SyntaxKind.ElementAccessExpression:
-            return (node.parent as ElementAccessExpression).argumentExpression === node;
+            return (node.parent).argumentExpression === node;
         case SyntaxKind.ComputedPropertyName:
             return true;
         case SyntaxKind.LiteralType:
@@ -765,7 +741,7 @@ export function getContainerNode(node: Node): Declaration | undefined {
 export function getNodeKind(node: Node): ScriptElementKind {
     switch (node.kind) {
         case SyntaxKind.SourceFile:
-            return isExternalModule(node as SourceFile) ? ScriptElementKind.moduleElement : ScriptElementKind.scriptElement;
+            return isExternalModule(node) ? ScriptElementKind.moduleElement : ScriptElementKind.scriptElement;
         case SyntaxKind.ModuleDeclaration:
             return ScriptElementKind.moduleElement;
         case SyntaxKind.ClassDeclaration:
@@ -778,7 +754,7 @@ export function getNodeKind(node: Node): ScriptElementKind {
             return ScriptElementKind.typeElement;
         case SyntaxKind.EnumDeclaration: return ScriptElementKind.enumElement;
         case SyntaxKind.VariableDeclaration:
-            return getKindOfVariableDeclaration(node as VariableDeclaration);
+            return getKindOfVariableDeclaration(node);
         case SyntaxKind.BindingElement:
             return getKindOfVariableDeclaration(getRootDeclaration(node) as VariableDeclaration);
         case SyntaxKind.ArrowFunction:
@@ -791,7 +767,7 @@ export function getNodeKind(node: Node): ScriptElementKind {
         case SyntaxKind.MethodSignature:
             return ScriptElementKind.memberFunctionElement;
         case SyntaxKind.PropertyAssignment:
-            const { initializer } = node as PropertyAssignment;
+            const { initializer } = node ;
             return isFunctionLike(initializer) ? ScriptElementKind.memberFunctionElement : ScriptElementKind.memberVariableElement;
         case SyntaxKind.PropertyDeclaration:
         case SyntaxKind.PropertySignature:
@@ -814,8 +790,8 @@ export function getNodeKind(node: Node): ScriptElementKind {
         case SyntaxKind.NamespaceExport:
             return ScriptElementKind.alias;
         case SyntaxKind.BinaryExpression:
-            const kind = getAssignmentDeclarationKind(node as BinaryExpression);
-            const { right } = node as BinaryExpression;
+            const kind = getAssignmentDeclarationKind(node);
+            const { right } = node ;
             switch (kind) {
                 case AssignmentDeclarationKind.ObjectDefinePropertyValue:
                 case AssignmentDeclarationKind.ObjectDefinePropertyExports:
@@ -843,7 +819,7 @@ export function getNodeKind(node: Node): ScriptElementKind {
         case SyntaxKind.Identifier:
             return isImportClause(node.parent) ? ScriptElementKind.alias : ScriptElementKind.unknown;
         case SyntaxKind.ExportAssignment:
-            const scriptKind = getNodeKind((node as ExportAssignment).expression);
+            const scriptKind = getNodeKind((node).expression);
             // If the expression didn't come back with something (like it does for an identifiers)
             return scriptKind === ScriptElementKind.unknown ? ScriptElementKind.constElement : scriptKind;
         default:
@@ -867,7 +843,7 @@ export function isThis(node: Node): boolean {
             return true;
         case SyntaxKind.Identifier:
             // 'this' as a parameter
-            return identifierIsThisKeyword(node as Identifier) && node.parent.kind === SyntaxKind.Parameter;
+            return identifierIsThisKeyword(node) && node.parent.kind === SyntaxKind.Parameter;
         default:
             return false;
     }
@@ -965,9 +941,9 @@ function isCompletedNode(n: Node | undefined, sourceFile: SourceFile): boolean {
         case SyntaxKind.NamedExports:
             return nodeEndsWith(n, SyntaxKind.CloseBraceToken, sourceFile);
         case SyntaxKind.CatchClause:
-            return isCompletedNode((n as CatchClause).block, sourceFile);
+            return isCompletedNode((n).block, sourceFile);
         case SyntaxKind.NewExpression:
-            if (!(n as NewExpression).arguments) {
+            if (!(n).arguments) {
                 return true;
             }
         // falls through
@@ -1004,16 +980,16 @@ function isCompletedNode(n: Node | undefined, sourceFile: SourceFile): boolean {
             return hasChildOfKind(n, SyntaxKind.CloseParenToken, sourceFile);
 
         case SyntaxKind.ModuleDeclaration:
-            return !!(n as ModuleDeclaration).body && isCompletedNode((n as ModuleDeclaration).body, sourceFile);
+            return !!(n).body && isCompletedNode((n).body, sourceFile);
 
         case SyntaxKind.IfStatement:
-            if ((n as IfStatement).elseStatement) {
-                return isCompletedNode((n as IfStatement).elseStatement, sourceFile);
+            if ((n).elseStatement) {
+                return isCompletedNode((n).elseStatement, sourceFile);
             }
-            return isCompletedNode((n as IfStatement).thenStatement, sourceFile);
+            return isCompletedNode((n).thenStatement, sourceFile);
 
         case SyntaxKind.ExpressionStatement:
-            return isCompletedNode((n as ExpressionStatement).expression, sourceFile) ||
+            return isCompletedNode((n).expression, sourceFile) ||
                 hasChildOfKind(n, SyntaxKind.SemicolonToken, sourceFile);
 
         case SyntaxKind.ArrayLiteralExpression:
@@ -1024,8 +1000,8 @@ function isCompletedNode(n: Node | undefined, sourceFile: SourceFile): boolean {
             return nodeEndsWith(n, SyntaxKind.CloseBracketToken, sourceFile);
 
         case SyntaxKind.IndexSignature:
-            if ((n as IndexSignatureDeclaration).type) {
-                return isCompletedNode((n as IndexSignatureDeclaration).type, sourceFile);
+            if ((n).type) {
+                return isCompletedNode((n).type, sourceFile);
             }
 
             return hasChildOfKind(n, SyntaxKind.CloseBracketToken, sourceFile);
@@ -1044,37 +1020,37 @@ function isCompletedNode(n: Node | undefined, sourceFile: SourceFile): boolean {
             // rough approximation: if DoStatement has While keyword - then if node is completed is checking the presence of ')';
             return hasChildOfKind(n, SyntaxKind.WhileKeyword, sourceFile)
                 ? nodeEndsWith(n, SyntaxKind.CloseParenToken, sourceFile)
-                : isCompletedNode((n as DoStatement).statement, sourceFile);
+                : isCompletedNode((n).statement, sourceFile);
 
         case SyntaxKind.TypeQuery:
-            return isCompletedNode((n as TypeQueryNode).exprName, sourceFile);
+            return isCompletedNode((n).exprName, sourceFile);
 
         case SyntaxKind.TypeOfExpression:
         case SyntaxKind.DeleteExpression:
         case SyntaxKind.VoidExpression:
         case SyntaxKind.YieldExpression:
         case SyntaxKind.SpreadElement:
-            const unaryWordExpression = n as (TypeOfExpression | DeleteExpression | VoidExpression | YieldExpression | SpreadElement);
+            const unaryWordExpression = n ;
             return isCompletedNode(unaryWordExpression.expression, sourceFile);
 
         case SyntaxKind.TaggedTemplateExpression:
-            return isCompletedNode((n as TaggedTemplateExpression).template, sourceFile);
+            return isCompletedNode((n).template, sourceFile);
         case SyntaxKind.TemplateExpression:
-            const lastSpan = lastOrUndefined((n as TemplateExpression).templateSpans);
+            const lastSpan = lastOrUndefined((n).templateSpans);
             return isCompletedNode(lastSpan, sourceFile);
         case SyntaxKind.TemplateSpan:
-            return nodeIsPresent((n as TemplateSpan).literal);
+            return nodeIsPresent((n).literal);
 
         case SyntaxKind.ExportDeclaration:
         case SyntaxKind.ImportDeclaration:
-            return nodeIsPresent((n as ExportDeclaration | ImportDeclaration).moduleSpecifier);
+            return nodeIsPresent((n).moduleSpecifier);
 
         case SyntaxKind.PrefixUnaryExpression:
-            return isCompletedNode((n as PrefixUnaryExpression).operand, sourceFile);
+            return isCompletedNode((n).operand, sourceFile);
         case SyntaxKind.BinaryExpression:
-            return isCompletedNode((n as BinaryExpression).right, sourceFile);
+            return isCompletedNode((n).right, sourceFile);
         case SyntaxKind.ConditionalExpression:
-            return isCompletedNode((n as ConditionalExpression).whenFalse, sourceFile);
+            return isCompletedNode((n).whenFalse, sourceFile);
 
         default:
             return true;
@@ -1126,7 +1102,7 @@ export function hasChildOfKind(n: Node, kind: SyntaxKind, sourceFile: SourceFile
 }
 
 /** @internal */
-export function findChildOfKind<T extends Node>(n: Node, kind: T["kind"], sourceFile: SourceFileLike): T | undefined {
+export function findChildOfKind<T extends Node>(n: Node, kind: T["kind"] | SyntaxKind.Count, sourceFile: SourceFileLike): T | undefined {
     return find(n.getChildren(sourceFile), (c): c is T => c.kind === kind);
 }
 
@@ -1215,10 +1191,10 @@ function getAdjustedLocationForDeclaration(node: Node, forRename: boolean) {
         switch (node.kind) {
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.ClassExpression:
-                return getAdjustedLocationForClass(node as ClassDeclaration | ClassExpression);
+                return getAdjustedLocationForClass(node);
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
-                return getAdjustedLocationForFunction(node as FunctionDeclaration | FunctionExpression);
+                return getAdjustedLocationForFunction(node);
             case SyntaxKind.Constructor:
                 return node;
         }
@@ -1548,7 +1524,7 @@ function getTokenAtPositionWorker(sourceFile: SourceFile, position: number, allo
     outer: while (true) {
         // find the child that contains 'position'
 
-        const children = current.getChildren(sourceFile);
+        const children: Node[] = current.getChildren(sourceFile);
         const i = binarySearchKey(children, position, (_, i) => i, (middle, _) => {
             // This last callback is more of a selector than a comparator -
             // `EqualTo` causes the `middle` result to be returned
@@ -2130,7 +2106,7 @@ export function hasDocComment(sourceFile: SourceFile, position: number): boolean
 function nodeHasTokens(n: Node, sourceFile: SourceFileLike): boolean {
     // If we have a token or node that has a non-zero width, it must have tokens.
     // Note: getWidth() does not take trivia into account.
-    return n.kind === SyntaxKind.EndOfFileToken ? !!(n as EndOfFileToken).jsDoc : n.getWidth(sourceFile) !== 0;
+    return n.kind === SyntaxKind.EndOfFileToken ? !!(n).jsDoc : n.getWidth(sourceFile) !== 0;
 }
 
 /** @internal */
@@ -2228,15 +2204,15 @@ export function isArrayLiteralOrObjectLiteralDestructuringPattern(node: Node) {
         // [a,b,c] from:
         // [a, b, c] = someExpression;
         if (node.parent.kind === SyntaxKind.BinaryExpression &&
-            (node.parent as BinaryExpression).left === node &&
-            (node.parent as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken) {
+            (node.parent).left === node &&
+            (node.parent).operatorToken.kind === SyntaxKind.EqualsToken) {
             return true;
         }
 
         // [a, b, c] from:
         // for([a, b, c] of expression)
         if (node.parent.kind === SyntaxKind.ForOfStatement &&
-            (node.parent as ForOfStatement).initializer === node) {
+            (node.parent).initializer === node) {
             return true;
         }
 
@@ -3105,7 +3081,7 @@ export function getSynthesizedDeepCloneWithReplacements<T extends Node>(
         setOriginalNode(clone, node);
     }
     else {
-        clone = getSynthesizedDeepCloneWorker(node as NonNullable<T>, replaceNode);
+        clone = getSynthesizedDeepCloneWorker(node, replaceNode);
     }
 
     if (clone && !includeTrivia) suppressLeadingAndTrailingTrivia(clone);
@@ -3324,15 +3300,15 @@ export function getContextualTypeFromParent(node: Expression, checker: TypeCheck
     const parent = walkUpParenthesizedExpressions(node.parent);
     switch (parent.kind) {
         case SyntaxKind.NewExpression:
-            return checker.getContextualType(parent as NewExpression, contextFlags);
+            return checker.getContextualType(parent , contextFlags);
         case SyntaxKind.BinaryExpression: {
-            const { left, operatorToken, right } = parent as BinaryExpression;
+            const { left, operatorToken, right } = parent ;
             return isEqualityOperatorKind(operatorToken.kind)
                 ? checker.getTypeAtLocation(node === right ? left : right)
                 : checker.getContextualType(node, contextFlags);
         }
         case SyntaxKind.CaseClause:
-            return getSwitchedType(parent as CaseClause, checker);
+            return getSwitchedType(parent , checker);
         default:
             return checker.getContextualType(node, contextFlags);
     }

@@ -10,10 +10,7 @@ import {
     isPrivateIdentifier,
     isPropertyAccessExpression,
     isPropertyAssignment,
-    JsxClosingElement,
     JsxEmit,
-    JsxOpeningElement,
-    JsxSelfClosingElement,
     Node,
     PropertyAccessExpression,
     PropertyAssignment,
@@ -73,7 +70,7 @@ export function transformES5(context: TransformationContext): (x: SourceFile | B
             case SyntaxKind.JsxOpeningElement:
             case SyntaxKind.JsxClosingElement:
             case SyntaxKind.JsxSelfClosingElement:
-                const tagName = (node as JsxOpeningElement | JsxClosingElement | JsxSelfClosingElement).tagName;
+                const tagName = (node).tagName;
                 noSubstitution[getOriginalNodeId(tagName)] = true;
                 break;
         }

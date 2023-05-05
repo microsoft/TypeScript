@@ -123,11 +123,11 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
                 // Though an error in es2020 modules, in node-flavor es2020 modules, we can helpfully transform this to a synthetic `require` call
                 // To give easy access to a synchronous `require` in node-flavor esm. We do the transform even in scenarios where we error, but `import.meta.url`
                 // is available, just because the output is reasonable for a node-like runtime.
-                return getEmitModuleKind(compilerOptions) >= ModuleKind.Node16 ? visitImportEqualsDeclaration(node as ImportEqualsDeclaration) : undefined;
+                return getEmitModuleKind(compilerOptions) >= ModuleKind.Node16 ? visitImportEqualsDeclaration(node) : undefined;
             case SyntaxKind.ExportAssignment:
-                return visitExportAssignment(node as ExportAssignment);
+                return visitExportAssignment(node);
             case SyntaxKind.ExportDeclaration:
-                const exportDecl = (node as ExportDeclaration);
+                const exportDecl = (node);
                 return visitExportDeclaration(exportDecl);
         }
 

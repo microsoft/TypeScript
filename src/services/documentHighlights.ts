@@ -185,7 +185,7 @@ export namespace DocumentHighlights {
                     : undefined;
         }
 
-        function getFromAllDeclarations<T extends Node>(nodeTest: (node: Node) => node is T, keywords: readonly SyntaxKind[]): HighlightSpan[] | undefined {
+        function getFromAllDeclarations(nodeTest: (node: Node) => node is Node, keywords: readonly SyntaxKind[]): HighlightSpan[] | undefined {
             return useParent(node.parent, nodeTest, decl => mapDefined(tryCast(decl, canHaveSymbol)?.symbol.declarations, d =>
                 nodeTest(d) ? find(d.getChildren(sourceFile), c => contains(keywords, c.kind)) : undefined));
         }
@@ -226,7 +226,7 @@ export namespace DocumentHighlights {
         let child: Node = throwStatement;
 
         while (child.parent) {
-            const parent = child.parent;
+            const parent: Node = child.parent;
 
             if (isFunctionBlock(parent) || parent.kind === SyntaxKind.SourceFile) {
                 return parent;
@@ -385,7 +385,7 @@ export namespace DocumentHighlights {
                 case SyntaxKind.WhileStatement:
                     return getLoopBreakContinueOccurrences(owner as IterationStatement);
                 case SyntaxKind.SwitchStatement:
-                    return getSwitchCaseDefaultOccurrences(owner as SwitchStatement);
+                    return getSwitchCaseDefaultOccurrences(owner);
 
             }
         }

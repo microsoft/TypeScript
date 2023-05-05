@@ -1071,52 +1071,52 @@ export * from "lib";
 
         switch (node1.kind) {
             case ts.SyntaxKind.ImportDeclaration:
-                const decl1 = node1 as ts.ImportDeclaration;
+                const decl1 = node1 ;
                 const decl2 = node2 as ts.ImportDeclaration;
                 assertEqual(decl1.importClause, decl2.importClause);
                 assertEqual(decl1.moduleSpecifier, decl2.moduleSpecifier);
                 break;
             case ts.SyntaxKind.ImportClause:
-                const clause1 = node1 as ts.ImportClause;
+                const clause1 = node1 ;
                 const clause2 = node2 as ts.ImportClause;
                 assertEqual(clause1.name, clause2.name);
                 assertEqual(clause1.namedBindings, clause2.namedBindings);
                 break;
             case ts.SyntaxKind.NamespaceImport:
-                const nsi1 = node1 as ts.NamespaceImport;
+                const nsi1 = node1 ;
                 const nsi2 = node2 as ts.NamespaceImport;
                 assertEqual(nsi1.name, nsi2.name);
                 break;
             case ts.SyntaxKind.NamedImports:
-                const ni1 = node1 as ts.NamedImports;
+                const ni1 = node1 ;
                 const ni2 = node2 as ts.NamedImports;
                 assertListEqual(ni1.elements, ni2.elements);
                 break;
             case ts.SyntaxKind.ImportSpecifier:
-                const is1 = node1 as ts.ImportSpecifier;
+                const is1 = node1 ;
                 const is2 = node2 as ts.ImportSpecifier;
                 assertEqual(is1.name, is2.name);
                 assertEqual(is1.propertyName, is2.propertyName);
                 break;
             case ts.SyntaxKind.ExportDeclaration:
-                const ed1 = node1 as ts.ExportDeclaration;
+                const ed1 = node1 ;
                 const ed2 = node2 as ts.ExportDeclaration;
                 assertEqual(ed1.exportClause, ed2.exportClause);
                 assertEqual(ed1.moduleSpecifier, ed2.moduleSpecifier);
                 break;
             case ts.SyntaxKind.NamedExports:
-                const ne1 = node1 as ts.NamedExports;
+                const ne1 = node1 ;
                 const ne2 = node2 as ts.NamedExports;
                 assertListEqual(ne1.elements, ne2.elements);
                 break;
             case ts.SyntaxKind.ExportSpecifier:
-                const es1 = node1 as ts.ExportSpecifier;
+                const es1 = node1 ;
                 const es2 = node2 as ts.ExportSpecifier;
                 assertEqual(es1.name, es2.name);
                 assertEqual(es1.propertyName, es2.propertyName);
                 break;
             case ts.SyntaxKind.Identifier:
-                const id1 = node1 as ts.Identifier;
+                const id1 = node1 ;
                 const id2 = node2 as ts.Identifier;
                 assert.equal(id1.text, id2.text);
                 break;

@@ -7,7 +7,6 @@ import {
     BindingElement,
     Block,
     BlockLike,
-    BreakStatement,
     CancellationToken,
     canHaveModifiers,
     CharacterCodes,
@@ -18,7 +17,6 @@ import {
     compareStringsCaseSensitive,
     compareValues,
     contains,
-    ContinueStatement,
     createDiagnosticForNode,
     createFileDiagnostic,
     Debug,
@@ -108,7 +106,6 @@ import {
     isVariableDeclaration,
     isVariableDeclarationList,
     isVariableStatement,
-    LabeledStatement,
     last,
     map,
     mapDefined,
@@ -145,7 +142,6 @@ import {
     TextRange,
     TextSpan,
     textSpanEnd,
-    TryStatement,
     Type,
     TypeChecker,
     TypeElement,
@@ -729,7 +725,7 @@ export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan, invoke
                     permittedJumps = PermittedJumps.None;
                     break;
                 case SyntaxKind.Block:
-                    if (node.parent && node.parent.kind === SyntaxKind.TryStatement && (node.parent as TryStatement).finallyBlock === node) {
+                    if (node.parent && node.parent.kind === SyntaxKind.TryStatement && (node.parent).finallyBlock === node) {
                         // allow unconditional returns from finally blocks
                         permittedJumps = PermittedJumps.Return;
                     }
@@ -754,7 +750,7 @@ export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan, invoke
                     thisNode = node;
                     break;
                 case SyntaxKind.LabeledStatement: {
-                    const label = (node as LabeledStatement).label;
+                    const label = (node).label;
                     (seenLabels || (seenLabels = [])).push(label.escapedText);
                     forEachChild(node, visit);
                     seenLabels.pop();
@@ -762,7 +758,7 @@ export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan, invoke
                 }
                 case SyntaxKind.BreakStatement:
                 case SyntaxKind.ContinueStatement: {
-                    const label = (node as BreakStatement | ContinueStatement).label;
+                    const label = (node).label;
                     if (label) {
                         if (!contains(seenLabels, label.escapedText)) {
                             // attempts to jump to label that is not in range to be extracted

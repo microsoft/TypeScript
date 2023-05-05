@@ -19,7 +19,6 @@ import {
     isParameter,
     isTypeNode,
     JSDocFunctionType,
-    JSDocNonNullableType,
     JSDocNullableType,
     JSDocOptionalType,
     JSDocTypeLiteral,
@@ -129,19 +128,19 @@ function transformJSDocType(node: Node): Node {
         case SyntaxKind.JSDocUnknownType:
             return factory.createTypeReferenceNode("any", emptyArray);
         case SyntaxKind.JSDocOptionalType:
-            return transformJSDocOptionalType(node as JSDocOptionalType);
+            return transformJSDocOptionalType(node);
         case SyntaxKind.JSDocNonNullableType:
-            return transformJSDocType((node as JSDocNonNullableType).type);
+            return transformJSDocType((node).type);
         case SyntaxKind.JSDocNullableType:
-            return transformJSDocNullableType(node as JSDocNullableType);
+            return transformJSDocNullableType(node);
         case SyntaxKind.JSDocVariadicType:
-            return transformJSDocVariadicType(node as JSDocVariadicType);
+            return transformJSDocVariadicType(node);
         case SyntaxKind.JSDocFunctionType:
-            return transformJSDocFunctionType(node as JSDocFunctionType);
+            return transformJSDocFunctionType(node);
         case SyntaxKind.TypeReference:
-            return transformJSDocTypeReference(node as TypeReferenceNode);
+            return transformJSDocTypeReference(node);
         case SyntaxKind.JSDocTypeLiteral:
-            return transformJSDocTypeLiteral(node as JSDocTypeLiteral);
+            return transformJSDocTypeLiteral(node);
         default:
             const visited = visitEachChild(node, transformJSDocType, nullTransformationContext);
             setEmitFlags(visited, EmitFlags.SingleLine);

@@ -4,7 +4,6 @@ import {
     ApplyCodeActionCommandResult,
     AssignmentDeclarationKind,
     BaseType,
-    BinaryExpression,
     BreakpointResolver,
     CallHierarchy,
     CallHierarchyIncomingCall,
@@ -57,14 +56,12 @@ import {
     DocumentSpan,
     EditorOptions,
     EditorSettings,
-    ElementAccessExpression,
     EmitTextWriter,
     emptyArray,
     emptyOptions,
     EndOfFileToken,
     EntityName,
     equateValues,
-    ExportDeclaration,
     Extension,
     extensionFromPath,
     FileReference,
@@ -131,7 +128,6 @@ import {
     identity,
     idText,
     ImplementationLocation,
-    ImportDeclaration,
     IndexKind,
     IndexType,
     InlayHint,
@@ -220,6 +216,7 @@ import {
     NavigationTree,
     Node,
     NodeArray,
+    NodeBase,
     NodeFlags,
     noop,
     normalizePath,
@@ -293,6 +290,7 @@ import {
     SymbolFlags,
     symbolName,
     SyntaxKind,
+    SyntaxKindToNode,
     SyntaxList,
     sys,
     tagNamesAreEquivalent,
@@ -332,17 +330,18 @@ import * as classifier2020 from "./classifier2020";
 /** The version of the language service API */
 export const servicesVersion = "0.8";
 
-function createNode<TKind extends SyntaxKind>(kind: TKind, pos: number, end: number, parent: Node): NodeObject | TokenObject<TKind> | IdentifierObject | PrivateIdentifierObject {
+function createNode<TKind extends SyntaxKind>(kind: TKind, pos: number, end: number, parent: Node): SyntaxKindToNode[Extract<TKind, keyof SyntaxKindToNode>];
+function createNode<TKind extends SyntaxKind>(kind: TKind, pos: number, end: number, parent: Node): Node {
     const node = isNodeKind(kind) ? new NodeObject(kind, pos, end) :
         kind === SyntaxKind.Identifier ? new IdentifierObject(SyntaxKind.Identifier, pos, end) :
             kind === SyntaxKind.PrivateIdentifier ? new PrivateIdentifierObject(SyntaxKind.PrivateIdentifier, pos, end) :
                 new TokenObject(kind, pos, end);
     node.parent = parent;
     node.flags = parent.flags & NodeFlags.ContextFlags;
-    return node;
+    return node as Node;
 }
 
-class NodeObject implements Node {
+class NodeObject implements NodeBase {
     public kind: SyntaxKind;
     public pos: number;
     public end: number;
@@ -371,12 +370,12 @@ class NodeObject implements Node {
     }
 
     public getSourceFile(): SourceFile {
-        return getSourceFileOfNode(this);
+        return getSourceFileOfNode(this as Node);
     }
 
     public getStart(sourceFile?: SourceFileLike, includeJsDocComment?: boolean): number {
         this.assertHasRealPosition();
-        return getTokenPosOfNode(this, sourceFile, includeJsDocComment);
+        return getTokenPosOfNode(this as Node, sourceFile, includeJsDocComment);
     }
 
     public getFullStart(): number {
@@ -427,7 +426,7 @@ class NodeObject implements Node {
 
     public getChildren(sourceFile?: SourceFileLike): Node[] {
         this.assertHasRealPosition("Node without a real position cannot be scanned and thus has no token nodes - use forEachChild and collect the result if that's fine");
-        return this._children || (this._children = createChildren(this, sourceFile));
+        return this._children || (this._children = createChildren(this as Node, sourceFile));
     }
 
     public getFirstToken(sourceFile?: SourceFileLike): Node | undefined {
@@ -456,7 +455,7 @@ class NodeObject implements Node {
     }
 
     public forEachChild<T>(cbNode: (node: Node) => T, cbNodeArray?: (nodes: NodeArray<Node>) => T): T | undefined {
-        return forEachChild(this, cbNode, cbNodeArray);
+        return forEachChild(this as Node, cbNode, cbNodeArray);
     }
 }
 
@@ -533,7 +532,7 @@ function createSyntaxList(nodes: NodeArray<Node>, parent: Node): Node {
     return list;
 }
 
-class TokenOrIdentifierObject implements Node {
+class TokenOrIdentifierObject implements NodeBase {
     public kind!: SyntaxKind;
     public pos: number;
     public end: number;
@@ -555,11 +554,11 @@ class TokenOrIdentifierObject implements Node {
     }
 
     public getSourceFile(): SourceFile {
-        return getSourceFileOfNode(this);
+        return getSourceFileOfNode(this as Node);
     }
 
     public getStart(sourceFile?: SourceFileLike, includeJsDocComment?: boolean): number {
-        return getTokenPosOfNode(this, sourceFile, includeJsDocComment);
+        return getTokenPosOfNode(this as Node, sourceFile, includeJsDocComment);
     }
 
     public getFullStart(): number {
@@ -1014,7 +1013,7 @@ class SourceFileObject extends NodeObject implements SourceFile {
     public lineMap!: readonly number[];
 
     public statements!: NodeArray<Statement>;
-    public endOfFileToken!: Token<SyntaxKind.EndOfFileToken>;
+    public endOfFileToken!: EndOfFileToken;
 
     public amdDependencies!: { name: string; path: string }[];
     public moduleName!: string;
@@ -1201,7 +1200,7 @@ class SourceFileObject extends NodeObject implements SourceFile {
                 case SyntaxKind.ExportDeclaration:
                     // Handle named exports case e.g.:
                     //    export {a, b as B} from "mod";
-                    const exportDeclaration = node as ExportDeclaration;
+                    const exportDeclaration = node ;
                     if (exportDeclaration.exportClause) {
                         if (isNamedExports(exportDeclaration.exportClause)) {
                             forEach(exportDeclaration.exportClause.elements, visit);
@@ -1213,7 +1212,7 @@ class SourceFileObject extends NodeObject implements SourceFile {
                     break;
 
                 case SyntaxKind.ImportDeclaration:
-                    const importClause = (node as ImportDeclaration).importClause;
+                    const importClause = (node).importClause;
                     if (importClause) {
                         // Handle default import case e.g.:
                         //    import d from "mod";
@@ -1236,8 +1235,8 @@ class SourceFileObject extends NodeObject implements SourceFile {
                     break;
 
                 case SyntaxKind.BinaryExpression:
-                    if (getAssignmentDeclarationKind(node as BinaryExpression) !== AssignmentDeclarationKind.None) {
-                        addDeclaration(node as BinaryExpression);
+                    if (getAssignmentDeclarationKind(node) !== AssignmentDeclarationKind.None) {
+                        addDeclaration(node);
                     }
                 // falls through
 
@@ -1259,8 +1258,8 @@ class SourceMapSourceObject implements SourceMapSource {
 
 function getServicesObjectAllocator(): ObjectAllocator {
     return {
-        getNodeConstructor: () => NodeObject,
-        getTokenConstructor: () => TokenObject,
+        getNodeConstructor: () => NodeObject as ReturnType<ObjectAllocator["getNodeConstructor"]>, // `Node` being a union makes the unrefined `NodeConstructor` type not acceptable enough, so we cast
+        getTokenConstructor: () => TokenObject as ReturnType<ObjectAllocator["getTokenConstructor"]>,
 
         getIdentifierConstructor: () => IdentifierObject,
         getPrivateIdentifierConstructor: () => PrivateIdentifierObject,
@@ -2244,7 +2243,7 @@ export function createLanguageService(
                 return undefined;
         }
 
-        let nodeForStartPos = node;
+        let nodeForStartPos: Node = node;
         while (true) {
             if (isRightSideOfPropertyAccess(nodeForStartPos) || isRightSideOfQualifiedName(nodeForStartPos)) {
                 // If on the span is in right side of the the property or qualified name, return the span from the qualified name pos to end of this node
@@ -3273,7 +3272,7 @@ function isArgumentOfElementAccessExpression(node: Node) {
     return node &&
         node.parent &&
         node.parent.kind === SyntaxKind.ElementAccessExpression &&
-        (node.parent as ElementAccessExpression).argumentExpression === node;
+        (node.parent).argumentExpression === node;
 }
 
 /**

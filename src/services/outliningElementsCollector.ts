@@ -4,12 +4,10 @@ import {
     Block,
     CallExpression,
     CancellationToken,
-    CaseClause,
     createTextSpanFromBounds,
     createTextSpanFromNode,
     createTextSpanFromRange,
     Debug,
-    DefaultClause,
     findChildOfKind,
     getLeadingCommentRanges,
     isAnyImportSyntax,
@@ -54,7 +52,6 @@ import {
     TextSpan,
     trimString,
     trimStringStart,
-    TryStatement,
 } from "./_namespaces/ts";
 
 /** @internal */
@@ -232,7 +229,7 @@ function getOutliningSpanForNode(n: Node, sourceFile: SourceFile): OutliningSpan
     switch (n.kind) {
         case SyntaxKind.Block:
             if (isFunctionLike(n.parent)) {
-                return functionSpan(n.parent, n as Block, sourceFile);
+                return functionSpan(n.parent, n , sourceFile);
             }
             // Check if the block is standalone, or 'attached' to some parent statement.
             // If the latter, we want to collapse the block, but consider its hint span
@@ -249,7 +246,7 @@ function getOutliningSpanForNode(n: Node, sourceFile: SourceFile): OutliningSpan
                     return spanForNode(n.parent);
                 case SyntaxKind.TryStatement:
                     // Could be the try-block, or the finally-block.
-                    const tryStatement = n.parent as TryStatement;
+                    const tryStatement = n.parent ;
                     if (tryStatement.tryBlock === n) {
                         return spanForNode(n.parent);
                     }
@@ -277,33 +274,33 @@ function getOutliningSpanForNode(n: Node, sourceFile: SourceFile): OutliningSpan
             return spanForNode(n, /*autoCollapse*/ false, /*useFullStart*/ !isTupleTypeNode(n.parent), SyntaxKind.OpenBracketToken);
         case SyntaxKind.CaseClause:
         case SyntaxKind.DefaultClause:
-            return spanForNodeArray((n as CaseClause | DefaultClause).statements);
+            return spanForNodeArray((n).statements);
         case SyntaxKind.ObjectLiteralExpression:
             return spanForObjectOrArrayLiteral(n);
         case SyntaxKind.ArrayLiteralExpression:
             return spanForObjectOrArrayLiteral(n, SyntaxKind.OpenBracketToken);
         case SyntaxKind.JsxElement:
-            return spanForJSXElement(n as JsxElement);
+            return spanForJSXElement(n);
         case SyntaxKind.JsxFragment:
-            return spanForJSXFragment(n as JsxFragment);
+            return spanForJSXFragment(n);
         case SyntaxKind.JsxSelfClosingElement:
         case SyntaxKind.JsxOpeningElement:
             return spanForJSXAttributes((n as JsxOpeningLikeElement).attributes);
         case SyntaxKind.TemplateExpression:
         case SyntaxKind.NoSubstitutionTemplateLiteral:
-            return spanForTemplateLiteral(n as TemplateExpression | NoSubstitutionTemplateLiteral);
+            return spanForTemplateLiteral(n);
         case SyntaxKind.ArrayBindingPattern:
             return spanForNode(n, /*autoCollapse*/ false, /*useFullStart*/ !isBindingElement(n.parent), SyntaxKind.OpenBracketToken);
         case SyntaxKind.ArrowFunction:
-            return spanForArrowFunction(n as ArrowFunction);
+            return spanForArrowFunction(n);
         case SyntaxKind.CallExpression:
-            return spanForCallExpression(n as CallExpression);
+            return spanForCallExpression(n);
         case SyntaxKind.ParenthesizedExpression:
-            return spanForParenthesizedExpression(n as ParenthesizedExpression);
+            return spanForParenthesizedExpression(n);
         case SyntaxKind.NamedImports:
         case SyntaxKind.NamedExports:
         case SyntaxKind.AssertClause:
-            return spanForNamedImportsOrExportsOrAssertClause(n as NamedImports | NamedExports | AssertClause);
+            return spanForNamedImportsOrExportsOrAssertClause(n);
     }
 
     function spanForNamedImportsOrExportsOrAssertClause(node: NamedImports | NamedExports | AssertClause) {

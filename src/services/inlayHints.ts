@@ -19,7 +19,6 @@ import {
     getLanguageVariant,
     getLeadingCommentRanges,
     hasContextSensitiveParameters,
-    Identifier,
     InlayHint,
     InlayHintKind,
     InlayHintsContext,
@@ -52,7 +51,6 @@ import {
     Node,
     NodeBuilderFlags,
     ParameterDeclaration,
-    PrefixUnaryExpression,
     PropertyDeclaration,
     Signature,
     skipParentheses,
@@ -278,7 +276,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
     function isHintableLiteral(node: Node) {
         switch (node.kind) {
             case SyntaxKind.PrefixUnaryExpression: {
-                const operand = (node as PrefixUnaryExpression).operand;
+                const operand = (node).operand;
                 return isLiteralExpression(operand) || isIdentifier(operand) && isInfinityOrNaNString(operand.escapedText);
             }
             case SyntaxKind.TrueKeyword:
@@ -288,7 +286,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
             case SyntaxKind.TemplateExpression:
                 return true;
             case SyntaxKind.Identifier: {
-                const name = (node as Identifier).escapedText;
+                const name = (node).escapedText;
                 return isUndefined(name) || isInfinityOrNaNString(name);
             }
         }

@@ -1,7 +1,6 @@
 import {
     addToSeen,
     ArrowFunction,
-    BindingElement,
     CharacterCodes,
     ClassElement,
     ClassExpression,
@@ -120,7 +119,6 @@ import {
     MultiMap,
     NamedImportBindings,
     NamedImports,
-    NamespaceImport,
     Node,
     NodeArray,
     NodeFactoryFlags,
@@ -1172,7 +1170,7 @@ function tryMergeJsdocTags(oldTag: JSDocTag, newTag: JSDocTag): JSDocTag | undef
     }
     switch (oldTag.kind) {
         case SyntaxKind.JSDocParameterTag: {
-            const oldParam = oldTag as JSDocParameterTag;
+            const oldParam = oldTag ;
             const newParam = newTag as JSDocParameterTag;
             return isIdentifier(oldParam.name) && isIdentifier(newParam.name) && oldParam.name.escapedText === newParam.name.escapedText
                 ? factory.createJSDocParameterTag(/*tagName*/ undefined, newParam.name, /*isBracketed*/ false, newParam.typeExpression, newParam.isNameFirst, oldParam.comment)
@@ -1660,7 +1658,7 @@ namespace deleteDeclaration {
                 break;
 
             case SyntaxKind.BindingElement:
-                const pattern = (node as BindingElement).parent;
+                const pattern = (node).parent;
                 const preserveComma = pattern.kind === SyntaxKind.ArrayBindingPattern && node !== last(pattern.elements);
                 if (preserveComma) {
                     deleteNode(changes, sourceFile, node);
@@ -1671,7 +1669,7 @@ namespace deleteDeclaration {
                 break;
 
             case SyntaxKind.VariableDeclaration:
-                deleteVariableDeclaration(changes, deletedNodesInLists, sourceFile, node as VariableDeclaration);
+                deleteVariableDeclaration(changes, deletedNodesInLists, sourceFile, node);
                 break;
 
             case SyntaxKind.TypeParameter:
@@ -1679,7 +1677,7 @@ namespace deleteDeclaration {
                 break;
 
             case SyntaxKind.ImportSpecifier:
-                const namedImports = (node as ImportSpecifier).parent;
+                const namedImports = (node).parent;
                 if (namedImports.elements.length === 1) {
                     deleteImportBinding(changes, sourceFile, namedImports);
                 }
@@ -1689,7 +1687,7 @@ namespace deleteDeclaration {
                 break;
 
             case SyntaxKind.NamespaceImport:
-                deleteImportBinding(changes, sourceFile, node as NamespaceImport);
+                deleteImportBinding(changes, sourceFile, node);
                 break;
 
             case SyntaxKind.SemicolonToken:

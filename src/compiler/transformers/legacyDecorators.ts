@@ -131,21 +131,21 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
                 // Decorators are elided. They will be emitted as part of `visitClassDeclaration`.
                 return undefined;
             case SyntaxKind.ClassDeclaration:
-                return visitClassDeclaration(node as ClassDeclaration);
+                return visitClassDeclaration(node);
             case SyntaxKind.ClassExpression:
-                return visitClassExpression(node as ClassExpression);
+                return visitClassExpression(node);
             case SyntaxKind.Constructor:
-                return visitConstructorDeclaration(node as ConstructorDeclaration);
+                return visitConstructorDeclaration(node);
             case SyntaxKind.MethodDeclaration:
-                return visitMethodDeclaration(node as MethodDeclaration);
+                return visitMethodDeclaration(node);
             case SyntaxKind.SetAccessor:
-                return visitSetAccessorDeclaration(node as SetAccessorDeclaration);
+                return visitSetAccessorDeclaration(node);
             case SyntaxKind.GetAccessor:
-                return visitGetAccessorDeclaration(node as GetAccessorDeclaration);
+                return visitGetAccessorDeclaration(node);
             case SyntaxKind.PropertyDeclaration:
-                return visitPropertyDeclaration(node as PropertyDeclaration);
+                return visitPropertyDeclaration(node);
             case SyntaxKind.Parameter:
-                return visitParameterDeclaration(node as ParameterDeclaration);
+                return visitParameterDeclaration(node);
             default:
                 return visitEachChild(node, visitor, context);
         }
@@ -803,7 +803,7 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
     function substituteExpression(node: Expression) {
         switch (node.kind) {
             case SyntaxKind.Identifier:
-                return substituteExpressionIdentifier(node as Identifier);
+                return substituteExpressionIdentifier(node);
         }
 
         return node;

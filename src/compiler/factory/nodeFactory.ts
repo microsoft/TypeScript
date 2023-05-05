@@ -243,7 +243,6 @@ import {
     JSDocOverrideTag,
     JSDocParameterTag,
     JSDocPrivateTag,
-    JSDocPropertyLikeTag,
     JSDocPropertyTag,
     JSDocProtectedTag,
     JSDocPublicTag,
@@ -397,7 +396,7 @@ import {
     setTextRange,
     setTextRangePosWidth,
     ShorthandPropertyAssignment,
-    SignatureDeclarationBase,
+    SignatureDeclaration,
     singleOrUndefined,
     skipOuterExpressions,
     skipParentheses,
@@ -414,6 +413,7 @@ import {
     SuperExpression,
     SwitchStatement,
     SyntaxKind,
+    SyntaxKindToNode,
     SyntaxList,
     SyntheticExpression,
     SyntheticReferenceExpression,
@@ -1081,7 +1081,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         return node;
     }
 
-    function finishUpdateBaseSignatureDeclaration<T extends SignatureDeclarationBase>(updated: Mutable<T>, original: T) {
+    function finishUpdateBaseSignatureDeclaration<T extends SignatureDeclaration>(updated: Mutable<T>, original: T): T {
         if (updated !== original) {
             // copy children used for quick info
             updated.typeArguments = original.typeArguments;
@@ -1304,13 +1304,14 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     function createToken<TKind extends KeywordTypeSyntaxKind>(token: TKind): KeywordTypeNode<TKind>;
     function createToken<TKind extends ModifierSyntaxKind>(token: TKind): ModifierToken<TKind>;
     function createToken<TKind extends KeywordSyntaxKind>(token: TKind): KeywordToken<TKind>;
-    function createToken<TKind extends SyntaxKind>(token: TKind): Token<TKind>;
+    function createToken<TKind extends SyntaxKind>(token: TKind): SyntaxKindToNode[TKind & keyof SyntaxKindToNode];
     function createToken<TKind extends SyntaxKind>(token: TKind) {
         Debug.assert(token >= SyntaxKind.FirstToken && token <= SyntaxKind.LastToken, "Invalid token");
         Debug.assert(token <= SyntaxKind.FirstTemplateToken || token >= SyntaxKind.LastTemplateToken, "Invalid token. Use 'createTemplateLiteralLikeNode' to create template literals.");
         Debug.assert(token <= SyntaxKind.FirstLiteralToken || token >= SyntaxKind.LastLiteralToken, "Invalid token. Use 'createLiteralLikeNode' to create literals.");
         Debug.assert(token !== SyntaxKind.Identifier, "Invalid token. Use 'createIdentifier' to create identifiers");
-        const node = createBaseToken<Token<TKind>>(token);
+        Debug.assert(token !== SyntaxKind.Count, "Invalid token. `Count` is not a valid node or token syntax kind.");
+        const node = createBaseToken<SyntaxKindToNode[TKind & keyof SyntaxKindToNode]>(token as SyntaxKindToNode[TKind & keyof SyntaxKindToNode]["kind"]);
         let transformFlags = TransformFlags.None;
         switch (token) {
             case SyntaxKind.AsyncKeyword:
@@ -3282,7 +3283,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createBinaryExpression(left: Expression, operator: BinaryOperator | BinaryOperatorToken, right: Expression) {
         const node = createBaseDeclaration<BinaryExpression>(SyntaxKind.BinaryExpression);
-        const operatorToken = asToken(operator);
+        const operatorToken = asToken<BinaryOperator>(operator);
         const operatorKind = operatorToken.kind;
         node.left = parenthesizerRules().parenthesizeLeftSideOfBinary(operatorKind, left);
         node.operatorToken = operatorToken;
@@ -4994,7 +4995,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function createJSDocTypeLiteral(propertyTags?: readonly JSDocPropertyLikeTag[], isArrayType = false): JSDocTypeLiteral {
+    function createJSDocTypeLiteral(propertyTags?: readonly JSDocPropertyTag[], isArrayType = false): JSDocTypeLiteral {
         const node = createBaseDeclaration<JSDocTypeLiteral>(SyntaxKind.JSDocTypeLiteral);
         node.jsDocPropertyTags = asNodeArray(propertyTags);
         node.isArrayType = isArrayType;
@@ -5002,7 +5003,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function updateJSDocTypeLiteral(node: JSDocTypeLiteral, propertyTags: readonly JSDocPropertyLikeTag[] | undefined, isArrayType: boolean): JSDocTypeLiteral {
+    function updateJSDocTypeLiteral(node: JSDocTypeLiteral, propertyTags: readonly JSDocPropertyTag[] | undefined, isArrayType: boolean): JSDocTypeLiteral {
         return node.jsDocPropertyTags !== propertyTags
             || node.isArrayType !== isArrayType
             ? update(createJSDocTypeLiteral(propertyTags, isArrayType), node)
@@ -6277,19 +6278,29 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             return node;
         }
         if (isSourceFile(node)) {
-            return cloneSourceFile(node) as T & SourceFile;
+            // TODO: GH#54146
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+            return cloneSourceFile(node) as T;
         }
         if (isGeneratedIdentifier(node)) {
-            return cloneGeneratedIdentifier(node) as T & GeneratedIdentifier;
+            // TODO: GH#54146
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+            return cloneGeneratedIdentifier(node) as T;
         }
         if (isIdentifier(node)) {
-            return cloneIdentifier(node) as T & Identifier;
+            // TODO: GH#54146
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+            return cloneIdentifier(node) as T;
         }
         if (isGeneratedPrivateIdentifier(node)) {
-            return cloneGeneratedPrivateIdentifier(node) as T & GeneratedPrivateIdentifier;
+            // TODO: GH#54146
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+            return cloneGeneratedPrivateIdentifier(node) as T;
         }
         if (isPrivateIdentifier(node)) {
-            return clonePrivateIdentifier(node) as T & PrivateIdentifier;
+            // TODO: GH#54146
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+            return clonePrivateIdentifier(node) as T;
         }
 
         const clone =
@@ -6308,7 +6319,9 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             clone[key] = node[key];
         }
 
-        return clone;
+        // TODO: GH#54146
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+        return clone as T;
     }
 
     // compound nodes
@@ -6530,13 +6543,13 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             case SyntaxKind.StringLiteral:
                 return false;
             case SyntaxKind.ArrayLiteralExpression:
-                const elements = (target as ArrayLiteralExpression).elements;
+                const elements = (target).elements;
                 if (elements.length === 0) {
                     return false;
                 }
                 return true;
             case SyntaxKind.ObjectLiteralExpression:
-                return (target as ObjectLiteralExpression).properties.length > 0;
+                return (target).properties.length > 0;
             default:
                 return true;
         }
@@ -6847,7 +6860,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
      */
     function liftToBlock(nodes: readonly Node[]): Statement {
         Debug.assert(every(nodes, isStatementOrBlock), "Cannot lift nodes to a Block.");
-        return singleOrUndefined(nodes) as Statement || createBlock(nodes as readonly Statement[]);
+        return singleOrUndefined(nodes) as Statement || createBlock(nodes);
     }
 
     function findSpanEnd<T>(array: readonly T[], test: (value: T) => boolean, start: number) {
@@ -7011,14 +7024,14 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         return node && parenthesizerRules().parenthesizeExpressionForDisallowedComma(node);
     }
 
-    function asToken<TKind extends SyntaxKind>(value: TKind | Token<TKind>): Token<TKind> {
+    function asToken<TKind extends SyntaxKind>(value: TKind | SyntaxKindToNode[TKind & keyof SyntaxKindToNode]): SyntaxKindToNode[TKind & keyof SyntaxKindToNode] {
         return typeof value === "number" ? createToken(value) : value;
     }
 
     function asEmbeddedStatement<T extends Node>(statement: T): T | EmptyStatement;
     function asEmbeddedStatement<T extends Node>(statement: T | undefined): T | EmptyStatement | undefined;
     function asEmbeddedStatement<T extends Node>(statement: T | undefined): T | EmptyStatement | undefined {
-        return statement && isNotEmittedStatement(statement) ? setTextRange(setOriginalNode(createEmptyStatement(), statement), statement) : statement;
+        return statement && isNotEmittedStatement(statement) ? setTextRange(setOriginalNode(createEmptyStatement(), statement), statement) : statement as T; // TODO: GH#54146
     }
 
     function asVariableDeclaration(variableDeclaration: string | BindingName | VariableDeclaration | undefined) {
@@ -7570,6 +7583,9 @@ export function createSourceMapSource(fileName: string, text: string, skipTrivia
 
 // Utilities
 
+/** @internal */ export function setOriginalNode<T extends Node>(node: Mutable<T>, original: Node | undefined): T; // TODO: This should probably always require a Mutable<T>, since it mutates `original`
+// eslint-disable-next-line @typescript-eslint/unified-signatures
+export function setOriginalNode<T extends Node>(node: T, original: Node | undefined): T; // inference is worse if the signatures are combined
 export function setOriginalNode<T extends Node>(node: T, original: Node | undefined): T {
     node.original = original;
     if (original) {

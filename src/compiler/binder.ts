@@ -5,7 +5,6 @@ import {
     append,
     appendIfUnique,
     ArrayBindingElement,
-    ArrayLiteralExpression,
     ArrowFunction,
     AssignmentDeclarationKind,
     BinaryExpression,
@@ -17,7 +16,6 @@ import {
     BindableStaticNameExpression,
     BindableStaticPropertyAssignmentExpression,
     BindingElement,
-    Block,
     BreakOrContinueStatement,
     CallChain,
     CallExpression,
@@ -53,7 +51,6 @@ import {
     DoStatement,
     DynamicNamedDeclaration,
     ElementAccessChain,
-    ElementAccessExpression,
     EntityNameExpression,
     EnumDeclaration,
     escapeLeadingUnderscores,
@@ -225,8 +222,6 @@ import {
     JSDocCallbackTag,
     JSDocClassTag,
     JSDocEnumTag,
-    JSDocFunctionType,
-    JSDocOverloadTag,
     JSDocParameterTag,
     JSDocPropertyLikeTag,
     JSDocSignature,
@@ -241,7 +236,6 @@ import {
     MetaProperty,
     MethodDeclaration,
     ModifierFlags,
-    ModuleBlock,
     ModuleDeclaration,
     Mutable,
     NamespaceExportDeclaration,
@@ -257,7 +251,6 @@ import {
     ObjectLiteralExpression,
     OptionalChain,
     ParameterDeclaration,
-    ParenthesizedExpression,
     Pattern,
     PatternAmbientModule,
     perfLogger,
@@ -269,7 +262,6 @@ import {
     PropertyAccessExpression,
     PropertyDeclaration,
     PropertySignature,
-    QualifiedName,
     removeFileExtension,
     ReturnStatement,
     ScriptTarget,
@@ -285,7 +277,6 @@ import {
     sliceAfter,
     some,
     SourceFile,
-    SpreadElement,
     Statement,
     StringLiteral,
     SuperExpression,
@@ -305,7 +296,6 @@ import {
     tryParsePattern,
     TryStatement,
     TypeLiteralNode,
-    TypeOfExpression,
     TypeParameterDeclaration,
     unescapeLeadingUnderscores,
     unreachableCodeIsError,
@@ -361,7 +351,7 @@ function getModuleInstanceStateWorker(node: Node, visited: Map<number, ModuleIns
             return ModuleInstanceState.NonInstantiated;
         // 2. const enum declarations
         case SyntaxKind.EnumDeclaration:
-            if (isEnumConst(node as EnumDeclaration)) {
+            if (isEnumConst(node)) {
                 return ModuleInstanceState.ConstEnumOnly;
             }
             break;
@@ -374,7 +364,7 @@ function getModuleInstanceStateWorker(node: Node, visited: Map<number, ModuleIns
             break;
         // 4. Export alias declarations pointing at only uninstantiated modules or things uninstantiated modules contain
         case SyntaxKind.ExportDeclaration:
-            const exportDeclaration = node as ExportDeclaration;
+            const exportDeclaration = node ;
             if (!exportDeclaration.moduleSpecifier && exportDeclaration.exportClause && exportDeclaration.exportClause.kind === SyntaxKind.NamedExports) {
                 let state = ModuleInstanceState.NonInstantiated;
                 for (const specifier of exportDeclaration.exportClause.elements) {
@@ -413,7 +403,7 @@ function getModuleInstanceStateWorker(node: Node, visited: Map<number, ModuleIns
             return state;
         }
         case SyntaxKind.ModuleDeclaration:
-            return getModuleInstanceState(node as ModuleDeclaration, visited);
+            return getModuleInstanceState(node , visited);
         case SyntaxKind.Identifier:
             // Only jsdoc typedef definition can exist in jsdoc namespace, and it should
             // be considered the same as type alias
@@ -426,7 +416,7 @@ function getModuleInstanceStateWorker(node: Node, visited: Map<number, ModuleIns
 
 function getModuleInstanceStateForAliasTarget(specifier: ExportSpecifier, visited: Map<number, ModuleInstanceState | undefined>) {
     const name = specifier.propertyName || specifier.name;
-    let p: Node | undefined = specifier.parent;
+    let p: Node | undefined = specifier.parent.parent;
     while (p) {
         if (isBlock(p) || isModuleBlock(p) || isSourceFile(p)) {
             const statements = p.statements;
@@ -649,7 +639,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     // unless it is a well known Symbol.
     function getDeclarationName(node: Declaration): __String | undefined {
         if (node.kind === SyntaxKind.ExportAssignment) {
-            return (node as ExportAssignment).isExportEquals ? InternalSymbolName.ExportEquals : InternalSymbolName.Default;
+            return (node).isExportEquals ? InternalSymbolName.ExportEquals : InternalSymbolName.Default;
         }
 
         const name = getNameOfDeclaration(node);
@@ -705,7 +695,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 // module.exports = ...
                 return InternalSymbolName.ExportEquals;
             case SyntaxKind.BinaryExpression:
-                if (getAssignmentDeclarationKind(node as BinaryExpression) === AssignmentDeclarationKind.ModuleExports) {
+                if (getAssignmentDeclarationKind(node) === AssignmentDeclarationKind.ModuleExports) {
                     // module.exports = ...
                     return InternalSymbolName.ExportEquals;
                 }
@@ -717,8 +707,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 // Parameters with names are handled at the top of this function.  Parameters
                 // without names can only come from JSDocFunctionTypes.
                 Debug.assert(node.parent.kind === SyntaxKind.JSDocFunctionType, "Impossible parameter parent kind", () => `parent is: ${Debug.formatSyntaxKind(node.parent.kind)}, expected JSDocFunctionType`);
-                const functionType = node.parent as JSDocFunctionType;
-                const index = functionType.parameters.indexOf(node as ParameterDeclaration);
+                const functionType = node.parent ;
+                const index = functionType.parameters.indexOf(node);
                 return "arg" + index as __String;
         }
     }
@@ -826,7 +816,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                             // 1. multiple export default of class declaration or function declaration by checking NodeFlags.Default
                             // 2. multiple export default of export assignment. This one doesn't have NodeFlags.Default on (as export default doesn't considered as modifiers)
                             if (symbol.declarations && symbol.declarations.length &&
-                                (node.kind === SyntaxKind.ExportAssignment && !(node as ExportAssignment).isExportEquals)) {
+                                (node.kind === SyntaxKind.ExportAssignment && !(node).isExportEquals)) {
                                 message = Diagnostics.A_module_cannot_have_multiple_default_exports;
                                 messageNeedsName = false;
                                 multipleDefaultExports = true;
@@ -1086,52 +1076,52 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         }
         switch (node.kind) {
             case SyntaxKind.WhileStatement:
-                bindWhileStatement(node as WhileStatement);
+                bindWhileStatement(node);
                 break;
             case SyntaxKind.DoStatement:
-                bindDoStatement(node as DoStatement);
+                bindDoStatement(node);
                 break;
             case SyntaxKind.ForStatement:
-                bindForStatement(node as ForStatement);
+                bindForStatement(node);
                 break;
             case SyntaxKind.ForInStatement:
             case SyntaxKind.ForOfStatement:
                 bindForInOrForOfStatement(node as ForInOrOfStatement);
                 break;
             case SyntaxKind.IfStatement:
-                bindIfStatement(node as IfStatement);
+                bindIfStatement(node);
                 break;
             case SyntaxKind.ReturnStatement:
             case SyntaxKind.ThrowStatement:
-                bindReturnOrThrow(node as ReturnStatement | ThrowStatement);
+                bindReturnOrThrow(node);
                 break;
             case SyntaxKind.BreakStatement:
             case SyntaxKind.ContinueStatement:
                 bindBreakOrContinueStatement(node as BreakOrContinueStatement);
                 break;
             case SyntaxKind.TryStatement:
-                bindTryStatement(node as TryStatement);
+                bindTryStatement(node);
                 break;
             case SyntaxKind.SwitchStatement:
-                bindSwitchStatement(node as SwitchStatement);
+                bindSwitchStatement(node);
                 break;
             case SyntaxKind.CaseBlock:
-                bindCaseBlock(node as CaseBlock);
+                bindCaseBlock(node);
                 break;
             case SyntaxKind.CaseClause:
-                bindCaseClause(node as CaseClause);
+                bindCaseClause(node);
                 break;
             case SyntaxKind.ExpressionStatement:
-                bindExpressionStatement(node as ExpressionStatement);
+                bindExpressionStatement(node);
                 break;
             case SyntaxKind.LabeledStatement:
-                bindLabeledStatement(node as LabeledStatement);
+                bindLabeledStatement(node);
                 break;
             case SyntaxKind.PrefixUnaryExpression:
-                bindPrefixUnaryExpressionFlow(node as PrefixUnaryExpression);
+                bindPrefixUnaryExpressionFlow(node);
                 break;
             case SyntaxKind.PostfixUnaryExpression:
-                bindPostfixUnaryExpressionFlow(node as PostfixUnaryExpression);
+                bindPostfixUnaryExpressionFlow(node);
                 break;
             case SyntaxKind.BinaryExpression:
                 if (isDestructuringAssignment(node)) {
@@ -1141,47 +1131,47 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                     bindDestructuringAssignmentFlow(node);
                     return;
                 }
-                bindBinaryExpressionFlow(node as BinaryExpression);
+                bindBinaryExpressionFlow(node);
                 break;
             case SyntaxKind.DeleteExpression:
-                bindDeleteExpressionFlow(node as DeleteExpression);
+                bindDeleteExpressionFlow(node);
                 break;
             case SyntaxKind.ConditionalExpression:
-                bindConditionalExpressionFlow(node as ConditionalExpression);
+                bindConditionalExpressionFlow(node);
                 break;
             case SyntaxKind.VariableDeclaration:
-                bindVariableDeclarationFlow(node as VariableDeclaration);
+                bindVariableDeclarationFlow(node);
                 break;
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.ElementAccessExpression:
                 bindAccessExpressionFlow(node as AccessExpression);
                 break;
             case SyntaxKind.CallExpression:
-                bindCallExpressionFlow(node as CallExpression);
+                bindCallExpressionFlow(node);
                 break;
             case SyntaxKind.NonNullExpression:
-                bindNonNullExpressionFlow(node as NonNullExpression);
+                bindNonNullExpressionFlow(node);
                 break;
             case SyntaxKind.JSDocTypedefTag:
             case SyntaxKind.JSDocCallbackTag:
             case SyntaxKind.JSDocEnumTag:
-                bindJSDocTypeAlias(node as JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag);
+                bindJSDocTypeAlias(node);
                 break;
             // In source files and blocks, bind functions first to match hoisting that occurs at runtime
             case SyntaxKind.SourceFile: {
-                bindEachFunctionsFirst((node as SourceFile).statements);
-                bind((node as SourceFile).endOfFileToken);
+                bindEachFunctionsFirst(node.statements);
+                bind(node.endOfFileToken);
                 break;
             }
             case SyntaxKind.Block:
             case SyntaxKind.ModuleBlock:
-                bindEachFunctionsFirst((node as Block).statements);
+                bindEachFunctionsFirst(node.statements);
                 break;
             case SyntaxKind.BindingElement:
-                bindBindingElementFlow(node as BindingElement);
+                bindBindingElementFlow(node);
                 break;
             case SyntaxKind.Parameter:
-                bindParameterFlow(node as ParameterDeclaration);
+                bindParameterFlow(node);
                 break;
             case SyntaxKind.ObjectLiteralExpression:
             case SyntaxKind.ArrayLiteralExpression:
@@ -1208,16 +1198,16 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             case SyntaxKind.ElementAccessExpression:
                 return containsNarrowableReference(expr);
             case SyntaxKind.CallExpression:
-                return hasNarrowableArgument(expr as CallExpression);
+                return hasNarrowableArgument(expr);
             case SyntaxKind.ParenthesizedExpression:
             case SyntaxKind.NonNullExpression:
-                return isNarrowingExpression((expr as ParenthesizedExpression | NonNullExpression).expression);
+                return isNarrowingExpression((expr).expression);
             case SyntaxKind.BinaryExpression:
-                return isNarrowingBinaryExpression(expr as BinaryExpression);
+                return isNarrowingBinaryExpression(expr);
             case SyntaxKind.PrefixUnaryExpression:
-                return (expr as PrefixUnaryExpression).operator === SyntaxKind.ExclamationToken && isNarrowingExpression((expr as PrefixUnaryExpression).operand);
+                return (expr).operator === SyntaxKind.ExclamationToken && isNarrowingExpression((expr).operand);
             case SyntaxKind.TypeOfExpression:
-                return isNarrowingExpression((expr as TypeOfExpression).expression);
+                return isNarrowingExpression((expr).expression);
         }
         return false;
     }
@@ -1243,7 +1233,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             }
         }
         if (expr.expression.kind === SyntaxKind.PropertyAccessExpression &&
-            containsNarrowableReference((expr.expression as PropertyAccessExpression).expression)) {
+            containsNarrowableReference((expr.expression).expression)) {
             return true;
         }
         return false;
@@ -1279,13 +1269,13 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     function isNarrowableOperand(expr: Expression): boolean {
         switch (expr.kind) {
             case SyntaxKind.ParenthesizedExpression:
-                return isNarrowableOperand((expr as ParenthesizedExpression).expression);
+                return isNarrowableOperand((expr).expression);
             case SyntaxKind.BinaryExpression:
-                switch ((expr as BinaryExpression).operatorToken.kind) {
+                switch ((expr).operatorToken.kind) {
                     case SyntaxKind.EqualsToken:
-                        return isNarrowableOperand((expr as BinaryExpression).left);
+                        return isNarrowableOperand((expr).left);
                     case SyntaxKind.CommaToken:
-                        return isNarrowableOperand((expr as BinaryExpression).right);
+                        return isNarrowableOperand((expr).right);
                 }
         }
         return containsNarrowableReference(expr);
@@ -1370,10 +1360,10 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             case SyntaxKind.IfStatement:
             case SyntaxKind.WhileStatement:
             case SyntaxKind.DoStatement:
-                return (parent as IfStatement | WhileStatement | DoStatement).expression === node;
+                return (parent).expression === node;
             case SyntaxKind.ForStatement:
             case SyntaxKind.ConditionalExpression:
-                return (parent as ForStatement | ConditionalExpression).condition === node;
+                return (parent).condition === node;
         }
         return false;
     }
@@ -1381,10 +1371,10 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     function isLogicalExpression(node: Node) {
         while (true) {
             if (node.kind === SyntaxKind.ParenthesizedExpression) {
-                node = (node as ParenthesizedExpression).expression;
+                node = (node).expression;
             }
-            else if (node.kind === SyntaxKind.PrefixUnaryExpression && (node as PrefixUnaryExpression).operator === SyntaxKind.ExclamationToken) {
-                node = (node as PrefixUnaryExpression).operand;
+            else if (node.kind === SyntaxKind.PrefixUnaryExpression && (node).operator === SyntaxKind.ExclamationToken) {
+                node = (node).operand;
             }
             else {
                 return isLogicalOrCoalescingBinaryExpression(node);
@@ -1700,7 +1690,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         // A top level or comma expression call expression with a dotted function name and at least one argument
         // is potentially an assertion and is therefore included in the control flow.
         if (node.kind === SyntaxKind.CallExpression) {
-            const call = node as CallExpression;
+            const call = node ;
             if (call.expression.kind !== SyntaxKind.SuperKeyword && isDottedName(call.expression)) {
                 currentFlow = createFlowCall(currentFlow, call);
             }
@@ -1727,8 +1717,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     }
 
     function bindDestructuringTargetFlow(node: Expression) {
-        if (node.kind === SyntaxKind.BinaryExpression && (node as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken) {
-            bindAssignmentTargetFlow((node as BinaryExpression).left);
+        if (node.kind === SyntaxKind.BinaryExpression && (node).operatorToken.kind === SyntaxKind.EqualsToken) {
+            bindAssignmentTargetFlow((node).left);
         }
         else {
             bindAssignmentTargetFlow(node);
@@ -1740,9 +1730,9 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             currentFlow = createFlowMutation(FlowFlags.Assignment, currentFlow, node);
         }
         else if (node.kind === SyntaxKind.ArrayLiteralExpression) {
-            for (const e of (node as ArrayLiteralExpression).elements) {
+            for (const e of (node).elements) {
                 if (e.kind === SyntaxKind.SpreadElement) {
-                    bindAssignmentTargetFlow((e as SpreadElement).expression);
+                    bindAssignmentTargetFlow((e).expression);
                 }
                 else {
                     bindDestructuringTargetFlow(e);
@@ -1750,7 +1740,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             }
         }
         else if (node.kind === SyntaxKind.ObjectLiteralExpression) {
-            for (const p of (node as ObjectLiteralExpression).properties) {
+            for (const p of (node).properties) {
                 if (p.kind === SyntaxKind.PropertyAssignment) {
                     bindDestructuringTargetFlow(p.initializer);
                 }
@@ -1911,7 +1901,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 if (isAssignmentOperator(operator) && !isAssignmentTarget(node)) {
                     bindAssignmentTargetFlow(node.left);
                     if (operator === SyntaxKind.EqualsToken && node.left.kind === SyntaxKind.ElementAccessExpression) {
-                        const elementAccess = node.left as ElementAccessExpression;
+                        const elementAccess = node.left ;
                         if (isNarrowableOperand(elementAccess.expression)) {
                             currentFlow = createFlowMutation(FlowFlags.ArrayMutation, currentFlow, node);
                         }
@@ -2138,7 +2128,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             }
         }
         if (node.expression.kind === SyntaxKind.PropertyAccessExpression) {
-            const propertyAccess = node.expression as PropertyAccessExpression;
+            const propertyAccess = node.expression ;
             if (isIdentifier(propertyAccess.name) && isNarrowableOperand(propertyAccess.expression) && isPushOrUnshiftIdentifier(propertyAccess.name)) {
                 currentFlow = createFlowMutation(FlowFlags.ArrayMutation, currentFlow, node);
             }
@@ -2514,7 +2504,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
 
     function checkStrictModeEvalOrArguments(contextNode: Node, name: Node | undefined) {
         if (name && name.kind === SyntaxKind.Identifier) {
-            const identifier = name as Identifier;
+            const identifier = name ;
             if (isEvalOrArgumentsIdentifier(identifier)) {
                 // We check first if the name is inside class declaration or class expression; if so give explicit message
                 // otherwise report generic error message.
@@ -2753,7 +2743,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 return checkContextualIdentifier(node as Identifier);
             case SyntaxKind.QualifiedName:
                 if (currentFlow && isPartOfTypeQuery(node)) {
-                    (node as QualifiedName).flowNode = currentFlow;
+                    (node).flowNode = currentFlow;
                 }
                 break;
             case SyntaxKind.MetaProperty:
@@ -2761,10 +2751,10 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 (node as MetaProperty | SuperExpression).flowNode = currentFlow;
                 break;
             case SyntaxKind.PrivateIdentifier:
-                return checkPrivateIdentifier(node as PrivateIdentifier);
+                return checkPrivateIdentifier(node);
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.ElementAccessExpression:
-                const expr = node as PropertyAccessExpression | ElementAccessExpression;
+                const expr = node ;
                 if (currentFlow && isNarrowableReference(expr)) {
                     expr.flowNode = currentFlow;
                 }
@@ -2780,7 +2770,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 }
                 break;
             case SyntaxKind.BinaryExpression:
-                const specialKind = getAssignmentDeclarationKind(node as BinaryExpression);
+                const specialKind = getAssignmentDeclarationKind(node);
                 switch (specialKind) {
                     case AssignmentDeclarationKind.ExportsProperty:
                         bindExportsPropertyAssignment(node as BindableStaticPropertyAssignmentExpression);
@@ -2798,7 +2788,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                         bindThisPropertyAssignment(node as BindablePropertyAssignmentExpression);
                         break;
                     case AssignmentDeclarationKind.Property:
-                        const expression = ((node as BinaryExpression).left as AccessExpression).expression;
+                        const expression = ((node).left as AccessExpression).expression;
                         if (isInJSFile(node) && isIdentifier(expression)) {
                             const symbol = lookupSymbolForName(blockScopeContainer, expression.escapedText);
                             if (isThisInitializedDeclaration(symbol?.valueDeclaration)) {
@@ -2814,36 +2804,36 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                     default:
                         Debug.fail("Unknown binary expression special property assignment kind");
                 }
-                return checkStrictModeBinaryExpression(node as BinaryExpression);
+                return checkStrictModeBinaryExpression(node);
             case SyntaxKind.CatchClause:
-                return checkStrictModeCatchClause(node as CatchClause);
+                return checkStrictModeCatchClause(node);
             case SyntaxKind.DeleteExpression:
-                return checkStrictModeDeleteExpression(node as DeleteExpression);
+                return checkStrictModeDeleteExpression(node);
             case SyntaxKind.PostfixUnaryExpression:
-                return checkStrictModePostfixUnaryExpression(node as PostfixUnaryExpression);
+                return checkStrictModePostfixUnaryExpression(node);
             case SyntaxKind.PrefixUnaryExpression:
-                return checkStrictModePrefixUnaryExpression(node as PrefixUnaryExpression);
+                return checkStrictModePrefixUnaryExpression(node);
             case SyntaxKind.WithStatement:
-                return checkStrictModeWithStatement(node as WithStatement);
+                return checkStrictModeWithStatement(node);
             case SyntaxKind.LabeledStatement:
-                return checkStrictModeLabeledStatement(node as LabeledStatement);
+                return checkStrictModeLabeledStatement(node);
             case SyntaxKind.ThisType:
                 seenThisKeyword = true;
                 return;
             case SyntaxKind.TypePredicate:
                 break; // Binding the children will handle everything
             case SyntaxKind.TypeParameter:
-                return bindTypeParameter(node as TypeParameterDeclaration);
+                return bindTypeParameter(node);
             case SyntaxKind.Parameter:
-                return bindParameter(node as ParameterDeclaration);
+                return bindParameter(node);
             case SyntaxKind.VariableDeclaration:
-                return bindVariableDeclarationOrBindingElement(node as VariableDeclaration);
+                return bindVariableDeclarationOrBindingElement(node);
             case SyntaxKind.BindingElement:
-                (node as BindingElement).flowNode = currentFlow;
-                return bindVariableDeclarationOrBindingElement(node as BindingElement);
+                (node).flowNode = currentFlow;
+                return bindVariableDeclarationOrBindingElement(node);
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.PropertySignature:
-                return bindPropertyWorker(node as PropertyDeclaration | PropertySignature);
+                return bindPropertyWorker(node);
             case SyntaxKind.PropertyAssignment:
             case SyntaxKind.ShorthandPropertyAssignment:
                 return bindPropertyOrMethodOrAccessor(node as Declaration, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
@@ -2863,7 +2853,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 return bindPropertyOrMethodOrAccessor(node as Declaration, SymbolFlags.Method | ((node as MethodDeclaration).questionToken ? SymbolFlags.Optional : SymbolFlags.None),
                     isObjectLiteralMethod(node) ? SymbolFlags.PropertyExcludes : SymbolFlags.MethodExcludes);
             case SyntaxKind.FunctionDeclaration:
-                return bindFunctionDeclaration(node as FunctionDeclaration);
+                return bindFunctionDeclaration(node);
             case SyntaxKind.Constructor:
                 return declareSymbolAndAddToSymbolTable(node as Declaration, SymbolFlags.Constructor, /*symbolExcludes:*/ SymbolFlags.None);
             case SyntaxKind.GetAccessor:
@@ -2878,17 +2868,17 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             case SyntaxKind.TypeLiteral:
             case SyntaxKind.JSDocTypeLiteral:
             case SyntaxKind.MappedType:
-                return bindAnonymousTypeWorker(node as TypeLiteralNode | MappedTypeNode | JSDocTypeLiteral);
+                return bindAnonymousTypeWorker(node);
             case SyntaxKind.JSDocClassTag:
-                return bindJSDocClassTag(node as JSDocClassTag);
+                return bindJSDocClassTag(node);
             case SyntaxKind.ObjectLiteralExpression:
-                return bindObjectLiteralExpression(node as ObjectLiteralExpression);
+                return bindObjectLiteralExpression(node);
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
-                return bindFunctionExpression(node as FunctionExpression | ArrowFunction);
+                return bindFunctionExpression(node);
 
             case SyntaxKind.CallExpression:
-                const assignmentKind = getAssignmentDeclarationKind(node as CallExpression);
+                const assignmentKind = getAssignmentDeclarationKind(node);
                 switch (assignmentKind) {
                     case AssignmentDeclarationKind.ObjectDefinePropertyValue:
                         return bindObjectDefinePropertyAssignment(node as BindableObjectDefinePropertyCall);
@@ -2902,7 +2892,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                         return Debug.fail("Unknown call expression assignment declaration kind");
                 }
                 if (isInJSFile(node)) {
-                    bindCallExpression(node as CallExpression);
+                    bindCallExpression(node);
                 }
                 break;
 
@@ -2917,14 +2907,14 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             case SyntaxKind.TypeAliasDeclaration:
                 return bindBlockScopedDeclaration(node as Declaration, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
             case SyntaxKind.EnumDeclaration:
-                return bindEnumDeclaration(node as EnumDeclaration);
+                return bindEnumDeclaration(node);
             case SyntaxKind.ModuleDeclaration:
-                return bindModuleDeclaration(node as ModuleDeclaration);
+                return bindModuleDeclaration(node);
             // Jsx-attributes
             case SyntaxKind.JsxAttributes:
-                return bindJsxAttributes(node as JsxAttributes);
+                return bindJsxAttributes(node);
             case SyntaxKind.JsxAttribute:
-                return bindJsxAttribute(node as JsxAttribute, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
+                return bindJsxAttribute(node, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
 
             // Imports and exports
             case SyntaxKind.ImportEqualsDeclaration:
@@ -2933,15 +2923,15 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             case SyntaxKind.ExportSpecifier:
                 return declareSymbolAndAddToSymbolTable(node as Declaration, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
             case SyntaxKind.NamespaceExportDeclaration:
-                return bindNamespaceExportDeclaration(node as NamespaceExportDeclaration);
+                return bindNamespaceExportDeclaration(node);
             case SyntaxKind.ImportClause:
-                return bindImportClause(node as ImportClause);
+                return bindImportClause(node);
             case SyntaxKind.ExportDeclaration:
-                return bindExportDeclaration(node as ExportDeclaration);
+                return bindExportDeclaration(node);
             case SyntaxKind.ExportAssignment:
-                return bindExportAssignment(node as ExportAssignment);
+                return bindExportAssignment(node);
             case SyntaxKind.SourceFile:
-                updateStrictModeStatementList((node as SourceFile).statements);
+                updateStrictModeStatementList((node).statements);
                 return bindSourceFileIfExternalModule();
             case SyntaxKind.Block:
                 if (!isFunctionLikeOrClassStaticBlockDeclaration(node.parent)) {
@@ -2949,11 +2939,11 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 }
                 // falls through
             case SyntaxKind.ModuleBlock:
-                return updateStrictModeStatementList((node as Block | ModuleBlock).statements);
+                return updateStrictModeStatementList((node).statements);
 
             case SyntaxKind.JSDocParameterTag:
                 if (node.parent.kind === SyntaxKind.JSDocSignature) {
-                    return bindParameter(node as JSDocParameterTag);
+                    return bindParameter(node);
                 }
                 if (node.parent.kind !== SyntaxKind.JSDocTypeLiteral) {
                     break;
@@ -2968,9 +2958,9 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             case SyntaxKind.JSDocTypedefTag:
             case SyntaxKind.JSDocCallbackTag:
             case SyntaxKind.JSDocEnumTag:
-                return (delayedTypeAliases || (delayedTypeAliases = [])).push(node as JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag);
+                return (delayedTypeAliases || (delayedTypeAliases = [])).push(node);
             case SyntaxKind.JSDocOverloadTag:
-                return bind((node as JSDocOverloadTag).typeExpression);
+                return bind(node.typeExpression);
         }
     }
 
@@ -3678,7 +3668,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 // report error on class declarations
                 node.kind === SyntaxKind.ClassDeclaration ||
                 // report error on instantiated modules or const-enums only modules if preserveConstEnums is set
-                (node.kind === SyntaxKind.ModuleDeclaration && shouldReportErrorOnModuleDeclaration(node as ModuleDeclaration));
+                (node.kind === SyntaxKind.ModuleDeclaration && shouldReportErrorOnModuleDeclaration(node));
 
             if (reportError) {
                 currentFlow = reportedUnreachableFlow;
@@ -3734,7 +3724,7 @@ function isPurelyTypeDeclaration(s: Statement): boolean {
         case SyntaxKind.TypeAliasDeclaration:
             return true;
         case SyntaxKind.ModuleDeclaration:
-            return getModuleInstanceState(s as ModuleDeclaration) !== ModuleInstanceState.Instantiated;
+            return getModuleInstanceState(s) !== ModuleInstanceState.Instantiated;
         case SyntaxKind.EnumDeclaration:
             return hasSyntacticModifier(s, ModifierFlags.Const);
         default:
@@ -3817,7 +3807,7 @@ function getContainerFlags(node: Node): ContainerFlags {
         case SyntaxKind.ModuleBlock:
             return ContainerFlags.IsControlFlowContainer;
         case SyntaxKind.PropertyDeclaration:
-            return (node as PropertyDeclaration).initializer ? ContainerFlags.IsControlFlowContainer : 0;
+            return (node).initializer ? ContainerFlags.IsControlFlowContainer : 0;
 
         case SyntaxKind.CatchClause:
         case SyntaxKind.ForStatement:

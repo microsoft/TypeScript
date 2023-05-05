@@ -1,10 +1,6 @@
 import {
-    ArrayBindingPattern,
-    ArrayLiteralExpression,
     CallExpression,
     CharacterCodes,
-    ClassDeclaration,
-    ClassExpression,
     CommentRange,
     contains,
     Debug,
@@ -15,15 +11,12 @@ import {
     findNextToken,
     findPrecedingToken,
     FormatCodeSettings,
-    GetAccessorDeclaration,
     getLineAndCharacterOfPosition,
     getLineStartPositionForPosition,
     getStartPositionOfLine,
     getTokenAtPosition,
-    IfStatement,
     ImportClause,
     IndentStyle,
-    InterfaceDeclaration,
     isCallExpression,
     isCallOrNewExpression,
     isConditionalExpression,
@@ -32,13 +25,10 @@ import {
     isStringOrRegularExpressionOrTemplateLiteral,
     isWhiteSpaceLike,
     isWhiteSpaceSingleLine,
-    JSDocTemplateTag,
     LineAndCharacter,
     NamedImportsOrExports,
     Node,
     NodeArray,
-    ObjectBindingPattern,
-    ObjectLiteralExpression,
     positionBelongsToNode,
     rangeContainsRange,
     rangeContainsStartEnd,
@@ -48,10 +38,6 @@ import {
     SourceFileLike,
     SyntaxKind,
     TextRange,
-    TypeAliasDeclaration,
-    TypeLiteralNode,
-    TypeReferenceNode,
-    VariableDeclarationList,
 } from "../_namespaces/ts";
 import {
     getRangeOfEnclosingComment,
@@ -413,7 +399,7 @@ export namespace SmartIndenter {
     }
 
     export function childStartsOnTheSameLineWithElseInIfStatement(parent: Node, child: TextRangeWithKind, childStartLine: number, sourceFile: SourceFileLike): boolean {
-        if (parent.kind === SyntaxKind.IfStatement && (parent as IfStatement).elseStatement === child) {
+        if (parent.kind === SyntaxKind.IfStatement && (parent).elseStatement === child) {
             const elseKeyword = findChildOfKind(parent, SyntaxKind.ElseKeyword, sourceFile)!;
             Debug.assert(elseKeyword !== undefined);
 
@@ -498,13 +484,13 @@ export namespace SmartIndenter {
     function getListByRange(start: number, end: number, node: Node, sourceFile: SourceFile): NodeArray<Node> | undefined {
         switch (node.kind) {
             case SyntaxKind.TypeReference:
-                return getList((node as TypeReferenceNode).typeArguments);
+                return getList((node).typeArguments);
             case SyntaxKind.ObjectLiteralExpression:
-                return getList((node as ObjectLiteralExpression).properties);
+                return getList((node).properties);
             case SyntaxKind.ArrayLiteralExpression:
-                return getList((node as ArrayLiteralExpression).elements);
+                return getList((node).elements);
             case SyntaxKind.TypeLiteral:
-                return getList((node as TypeLiteralNode).members);
+                return getList((node).members);
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
@@ -516,24 +502,24 @@ export namespace SmartIndenter {
             case SyntaxKind.ConstructSignature:
                 return getList((node as SignatureDeclaration).typeParameters) || getList((node as SignatureDeclaration).parameters);
             case SyntaxKind.GetAccessor:
-                return getList((node as GetAccessorDeclaration).parameters);
+                return getList((node).parameters);
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.ClassExpression:
             case SyntaxKind.InterfaceDeclaration:
             case SyntaxKind.TypeAliasDeclaration:
             case SyntaxKind.JSDocTemplateTag:
-                return getList((node as ClassDeclaration | ClassExpression | InterfaceDeclaration | TypeAliasDeclaration | JSDocTemplateTag).typeParameters);
+                return getList((node).typeParameters);
             case SyntaxKind.NewExpression:
             case SyntaxKind.CallExpression:
                 return getList((node as CallExpression).typeArguments) || getList((node as CallExpression).arguments);
             case SyntaxKind.VariableDeclarationList:
-                return getList((node as VariableDeclarationList).declarations);
+                return getList((node).declarations);
             case SyntaxKind.NamedImports:
             case SyntaxKind.NamedExports:
                 return getList((node as NamedImportsOrExports).elements);
             case SyntaxKind.ObjectBindingPattern:
             case SyntaxKind.ArrayBindingPattern:
-                return getList((node as ObjectBindingPattern | ArrayBindingPattern).elements);
+                return getList((node).elements);
         }
 
         function getList(list: NodeArray<Node> | undefined): NodeArray<Node> | undefined {

@@ -271,25 +271,25 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
         }
         switch (node.kind) {
             case SyntaxKind.AwaitExpression:
-                return visitAwaitExpression(node as AwaitExpression);
+                return visitAwaitExpression(node);
             case SyntaxKind.YieldExpression:
-                return visitYieldExpression(node as YieldExpression);
+                return visitYieldExpression(node);
             case SyntaxKind.ReturnStatement:
-                return visitReturnStatement(node as ReturnStatement);
+                return visitReturnStatement(node);
             case SyntaxKind.LabeledStatement:
-                return visitLabeledStatement(node as LabeledStatement);
+                return visitLabeledStatement(node);
             case SyntaxKind.ObjectLiteralExpression:
-                return visitObjectLiteralExpression(node as ObjectLiteralExpression);
+                return visitObjectLiteralExpression(node);
             case SyntaxKind.BinaryExpression:
-                return visitBinaryExpression(node as BinaryExpression, expressionResultIsUnused);
+                return visitBinaryExpression(node , expressionResultIsUnused);
             case SyntaxKind.CommaListExpression:
-                return visitCommaListExpression(node as CommaListExpression, expressionResultIsUnused);
+                return visitCommaListExpression(node , expressionResultIsUnused);
             case SyntaxKind.CatchClause:
-                return visitCatchClause(node as CatchClause);
+                return visitCatchClause(node);
             case SyntaxKind.VariableStatement:
-                return visitVariableStatement(node as VariableStatement);
+                return visitVariableStatement(node);
             case SyntaxKind.VariableDeclaration:
-                return visitVariableDeclaration(node as VariableDeclaration);
+                return visitVariableDeclaration(node);
             case SyntaxKind.DoStatement:
             case SyntaxKind.WhileStatement:
             case SyntaxKind.ForInStatement:
@@ -299,72 +299,72 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                     HierarchyFacts.IterationStatementExcludes,
                     HierarchyFacts.IterationStatementIncludes);
             case SyntaxKind.ForOfStatement:
-                return visitForOfStatement(node as ForOfStatement, /*outermostLabeledStatement*/ undefined);
+                return visitForOfStatement(node , /*outermostLabeledStatement*/ undefined);
             case SyntaxKind.ForStatement:
                 return doWithHierarchyFacts(
                     visitForStatement,
-                    node as ForStatement,
+                    node ,
                     HierarchyFacts.IterationStatementExcludes,
                     HierarchyFacts.IterationStatementIncludes);
             case SyntaxKind.VoidExpression:
-                return visitVoidExpression(node as VoidExpression);
+                return visitVoidExpression(node);
             case SyntaxKind.Constructor:
                 return doWithHierarchyFacts(
                     visitConstructorDeclaration,
-                    node as ConstructorDeclaration,
+                    node ,
                     HierarchyFacts.ClassOrFunctionExcludes,
                     HierarchyFacts.ClassOrFunctionIncludes);
             case SyntaxKind.MethodDeclaration:
                 return doWithHierarchyFacts(
                     visitMethodDeclaration,
-                    node as MethodDeclaration,
+                    node ,
                     HierarchyFacts.ClassOrFunctionExcludes,
                     HierarchyFacts.ClassOrFunctionIncludes);
             case SyntaxKind.GetAccessor:
                 return doWithHierarchyFacts(
                     visitGetAccessorDeclaration,
-                    node as GetAccessorDeclaration,
+                    node ,
                     HierarchyFacts.ClassOrFunctionExcludes,
                     HierarchyFacts.ClassOrFunctionIncludes);
             case SyntaxKind.SetAccessor:
                 return doWithHierarchyFacts(
                     visitSetAccessorDeclaration,
-                    node as SetAccessorDeclaration,
+                    node ,
                     HierarchyFacts.ClassOrFunctionExcludes,
                     HierarchyFacts.ClassOrFunctionIncludes);
             case SyntaxKind.FunctionDeclaration:
                 return doWithHierarchyFacts(
                     visitFunctionDeclaration,
-                    node as FunctionDeclaration,
+                    node ,
                     HierarchyFacts.ClassOrFunctionExcludes,
                     HierarchyFacts.ClassOrFunctionIncludes);
             case SyntaxKind.FunctionExpression:
                 return doWithHierarchyFacts(
                     visitFunctionExpression,
-                    node as FunctionExpression,
+                    node ,
                     HierarchyFacts.ClassOrFunctionExcludes,
                     HierarchyFacts.ClassOrFunctionIncludes);
             case SyntaxKind.ArrowFunction:
                 return doWithHierarchyFacts(
                     visitArrowFunction,
-                    node as ArrowFunction,
+                    node ,
                     HierarchyFacts.ArrowFunctionExcludes,
                     HierarchyFacts.ArrowFunctionIncludes);
             case SyntaxKind.Parameter:
-                return visitParameter(node as ParameterDeclaration);
+                return visitParameter(node);
             case SyntaxKind.ExpressionStatement:
-                return visitExpressionStatement(node as ExpressionStatement);
+                return visitExpressionStatement(node);
             case SyntaxKind.ParenthesizedExpression:
-                return visitParenthesizedExpression(node as ParenthesizedExpression, expressionResultIsUnused);
+                return visitParenthesizedExpression(node , expressionResultIsUnused);
             case SyntaxKind.TaggedTemplateExpression:
-                return visitTaggedTemplateExpression(node as TaggedTemplateExpression);
+                return visitTaggedTemplateExpression(node);
             case SyntaxKind.PropertyAccessExpression:
                 if (capturedSuperProperties && isPropertyAccessExpression(node) && node.expression.kind === SyntaxKind.SuperKeyword) {
                     capturedSuperProperties.add(node.name.escapedText);
                 }
                 return visitEachChild(node, visitor, context);
             case SyntaxKind.ElementAccessExpression:
-                if (capturedSuperProperties && (node as ElementAccessExpression).expression.kind === SyntaxKind.SuperKeyword) {
+                if (capturedSuperProperties && (node).expression.kind === SyntaxKind.SuperKeyword) {
                     hasSuperElementAccess = true;
                 }
                 return visitEachChild(node, visitor, context);
@@ -456,8 +456,8 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
     function visitLabeledStatement(node: LabeledStatement) {
         if (enclosingFunctionFlags & FunctionFlags.Async) {
             const statement = unwrapInnermostStatementOfLabel(node);
-            if (statement.kind === SyntaxKind.ForOfStatement && (statement as ForOfStatement).awaitModifier) {
-                return visitForOfStatement(statement as ForOfStatement, node);
+            if (statement.kind === SyntaxKind.ForOfStatement && (statement).awaitModifier) {
+                return visitForOfStatement(statement , node);
             }
             return factory.restoreEnclosingLabel(visitNode(statement, visitor, isStatement, factory.liftToBlock), node);
         }
@@ -1348,11 +1348,11 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
     function substituteExpression(node: Expression) {
         switch (node.kind) {
             case SyntaxKind.PropertyAccessExpression:
-                return substitutePropertyAccessExpression(node as PropertyAccessExpression);
+                return substitutePropertyAccessExpression(node);
             case SyntaxKind.ElementAccessExpression:
-                return substituteElementAccessExpression(node as ElementAccessExpression);
+                return substituteElementAccessExpression(node);
             case SyntaxKind.CallExpression:
-                return substituteCallExpression(node as CallExpression);
+                return substituteCallExpression(node);
         }
         return node;
     }

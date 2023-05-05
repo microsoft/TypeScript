@@ -76,7 +76,6 @@ import {
     hasSyntacticModifier,
     Identifier,
     idText,
-    IfStatement,
     insertStatementAfterCustomPrologue,
     insertStatementsAfterCustomPrologue,
     insertStatementsAfterStandardPrologue,
@@ -557,7 +556,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
     function isReturnVoidStatementInConstructorWithCapturedSuper(node: Node): boolean {
         return (hierarchyFacts & HierarchyFacts.ConstructorWithCapturedSuper) !== 0
             && node.kind === SyntaxKind.ReturnStatement
-            && !(node as ReturnStatement).expression;
+            && !(node).expression;
     }
 
     function isOrMayContainReturnCompletion(node: Node) {
@@ -622,93 +621,93 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                 return undefined; // elide static keyword
 
             case SyntaxKind.ClassDeclaration:
-                return visitClassDeclaration(node as ClassDeclaration);
+                return visitClassDeclaration(node);
 
             case SyntaxKind.ClassExpression:
-                return visitClassExpression(node as ClassExpression);
+                return visitClassExpression(node);
 
             case SyntaxKind.Parameter:
-                return visitParameter(node as ParameterDeclaration);
+                return visitParameter(node);
 
             case SyntaxKind.FunctionDeclaration:
-                return visitFunctionDeclaration(node as FunctionDeclaration);
+                return visitFunctionDeclaration(node);
 
             case SyntaxKind.ArrowFunction:
-                return visitArrowFunction(node as ArrowFunction);
+                return visitArrowFunction(node);
 
             case SyntaxKind.FunctionExpression:
-                return visitFunctionExpression(node as FunctionExpression);
+                return visitFunctionExpression(node);
 
             case SyntaxKind.VariableDeclaration:
-                return visitVariableDeclaration(node as VariableDeclaration);
+                return visitVariableDeclaration(node);
 
             case SyntaxKind.Identifier:
-                return visitIdentifier(node as Identifier);
+                return visitIdentifier(node);
 
             case SyntaxKind.VariableDeclarationList:
-                return visitVariableDeclarationList(node as VariableDeclarationList);
+                return visitVariableDeclarationList(node);
 
             case SyntaxKind.SwitchStatement:
-                return visitSwitchStatement(node as SwitchStatement);
+                return visitSwitchStatement(node);
 
             case SyntaxKind.CaseBlock:
-                return visitCaseBlock(node as CaseBlock);
+                return visitCaseBlock(node);
 
             case SyntaxKind.Block:
-                return visitBlock(node as Block, /*isFunctionBody*/ false);
+                return visitBlock(node , /*isFunctionBody*/ false);
 
             case SyntaxKind.BreakStatement:
             case SyntaxKind.ContinueStatement:
                 return visitBreakOrContinueStatement(node as BreakOrContinueStatement);
 
             case SyntaxKind.LabeledStatement:
-                return visitLabeledStatement(node as LabeledStatement);
+                return visitLabeledStatement(node);
 
             case SyntaxKind.DoStatement:
             case SyntaxKind.WhileStatement:
-                return visitDoOrWhileStatement(node as DoStatement | WhileStatement, /*outermostLabeledStatement*/ undefined);
+                return visitDoOrWhileStatement(node , /*outermostLabeledStatement*/ undefined);
 
             case SyntaxKind.ForStatement:
-                return visitForStatement(node as ForStatement, /*outermostLabeledStatement*/ undefined);
+                return visitForStatement(node , /*outermostLabeledStatement*/ undefined);
 
             case SyntaxKind.ForInStatement:
-                return visitForInStatement(node as ForInStatement, /*outermostLabeledStatement*/ undefined);
+                return visitForInStatement(node , /*outermostLabeledStatement*/ undefined);
 
             case SyntaxKind.ForOfStatement:
-                return visitForOfStatement(node as ForOfStatement, /*outermostLabeledStatement*/ undefined);
+                return visitForOfStatement(node , /*outermostLabeledStatement*/ undefined);
 
             case SyntaxKind.ExpressionStatement:
-                return visitExpressionStatement(node as ExpressionStatement);
+                return visitExpressionStatement(node);
 
             case SyntaxKind.ObjectLiteralExpression:
-                return visitObjectLiteralExpression(node as ObjectLiteralExpression);
+                return visitObjectLiteralExpression(node);
 
             case SyntaxKind.CatchClause:
-                return visitCatchClause(node as CatchClause);
+                return visitCatchClause(node);
 
             case SyntaxKind.ShorthandPropertyAssignment:
-                return visitShorthandPropertyAssignment(node as ShorthandPropertyAssignment);
+                return visitShorthandPropertyAssignment(node);
 
             case SyntaxKind.ComputedPropertyName:
-                return visitComputedPropertyName(node as ComputedPropertyName);
+                return visitComputedPropertyName(node);
 
             case SyntaxKind.ArrayLiteralExpression:
-                return visitArrayLiteralExpression(node as ArrayLiteralExpression);
+                return visitArrayLiteralExpression(node);
 
             case SyntaxKind.CallExpression:
-                return visitCallExpression(node as CallExpression);
+                return visitCallExpression(node);
 
             case SyntaxKind.NewExpression:
-                return visitNewExpression(node as NewExpression);
+                return visitNewExpression(node);
 
             case SyntaxKind.ParenthesizedExpression:
-                return visitParenthesizedExpression(node as ParenthesizedExpression, expressionResultIsUnused);
+                return visitParenthesizedExpression(node , expressionResultIsUnused);
 
             case SyntaxKind.BinaryExpression:
-                return visitBinaryExpression(node as BinaryExpression, expressionResultIsUnused);
+                return visitBinaryExpression(node , expressionResultIsUnused);
 
             case SyntaxKind.CommaListExpression:
-                return visitCommaListExpression(node as CommaListExpression, expressionResultIsUnused);
+                return visitCommaListExpression(node , expressionResultIsUnused);
 
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.TemplateHead:
@@ -717,22 +716,22 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                 return visitTemplateLiteral(node as LiteralExpression);
 
             case SyntaxKind.StringLiteral:
-                return visitStringLiteral(node as StringLiteral);
+                return visitStringLiteral(node);
 
             case SyntaxKind.NumericLiteral:
-                return visitNumericLiteral(node as NumericLiteral);
+                return visitNumericLiteral(node);
 
             case SyntaxKind.TaggedTemplateExpression:
-                return visitTaggedTemplateExpression(node as TaggedTemplateExpression);
+                return visitTaggedTemplateExpression(node);
 
             case SyntaxKind.TemplateExpression:
-                return visitTemplateExpression(node as TemplateExpression);
+                return visitTemplateExpression(node);
 
             case SyntaxKind.YieldExpression:
-                return visitYieldExpression(node as YieldExpression);
+                return visitYieldExpression(node);
 
             case SyntaxKind.SpreadElement:
-                return visitSpreadElement(node as SpreadElement);
+                return visitSpreadElement(node);
 
             case SyntaxKind.SuperKeyword:
                 return visitSuperKeyword(/*isExpressionOfCall*/ false);
@@ -741,23 +740,23 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                 return visitThisKeyword(node);
 
             case SyntaxKind.MetaProperty:
-                return visitMetaProperty(node as MetaProperty);
+                return visitMetaProperty(node);
 
             case SyntaxKind.MethodDeclaration:
-                return visitMethodDeclaration(node as MethodDeclaration);
+                return visitMethodDeclaration(node);
 
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
                 return visitAccessorDeclaration(node as AccessorDeclaration);
 
             case SyntaxKind.VariableStatement:
-                return visitVariableStatement(node as VariableStatement);
+                return visitVariableStatement(node);
 
             case SyntaxKind.ReturnStatement:
-                return visitReturnStatement(node as ReturnStatement);
+                return visitReturnStatement(node);
 
             case SyntaxKind.VoidExpression:
-                return visitVoidExpression(node as VoidExpression);
+                return visitVoidExpression(node);
 
             default:
                 return visitEachChild(node, visitor, context);
@@ -1396,7 +1395,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         }
         // An if-statement with two covered branches is covered.
         else if (statement.kind === SyntaxKind.IfStatement) {
-            const ifStatement = statement as IfStatement;
+            const ifStatement = statement ;
             if (ifStatement.elseStatement) {
                 return isSufficientlyCoveredByReturnStatements(ifStatement.thenStatement) &&
                     isSufficientlyCoveredByReturnStatements(ifStatement.elseStatement);
@@ -1404,7 +1403,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         }
         // A block is covered if it has a last statement which is covered.
         else if (statement.kind === SyntaxKind.Block) {
-            const lastStatement = lastOrUndefined((statement as Block).statements);
+            const lastStatement = lastOrUndefined((statement).statements);
             if (lastStatement && isSufficientlyCoveredByReturnStatements(lastStatement)) {
                 return true;
             }
@@ -1875,11 +1874,11 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         for (const member of node.members) {
             switch (member.kind) {
                 case SyntaxKind.SemicolonClassElement:
-                    statements.push(transformSemicolonClassElementToStatement(member as SemicolonClassElement));
+                    statements.push(transformSemicolonClassElementToStatement(member));
                     break;
 
                 case SyntaxKind.MethodDeclaration:
-                    statements.push(transformClassMethodDeclarationToStatement(getClassMemberPrefix(node, member), member as MethodDeclaration, node));
+                    statements.push(transformClassMethodDeclarationToStatement(getClassMemberPrefix(node, member), member , node));
                     break;
 
                 case SyntaxKind.GetAccessor:
@@ -2570,13 +2569,13 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         switch (node.kind) {
             case SyntaxKind.DoStatement:
             case SyntaxKind.WhileStatement:
-                return visitDoOrWhileStatement(node as DoStatement | WhileStatement, outermostLabeledStatement);
+                return visitDoOrWhileStatement(node , outermostLabeledStatement);
             case SyntaxKind.ForStatement:
-                return visitForStatement(node as ForStatement, outermostLabeledStatement);
+                return visitForStatement(node , outermostLabeledStatement);
             case SyntaxKind.ForInStatement:
-                return visitForInStatement(node as ForInStatement, outermostLabeledStatement);
+                return visitForInStatement(node , outermostLabeledStatement);
             case SyntaxKind.ForOfStatement:
-                return visitForOfStatement(node as ForOfStatement, outermostLabeledStatement);
+                return visitForOfStatement(node , outermostLabeledStatement);
         }
     }
 
@@ -3094,11 +3093,11 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
 
     function convertIterationStatementCore(node: IterationStatement, initializerFunction: IterationStatementPartFunction<VariableDeclarationList> | undefined, convertedLoopBody: Statement) {
         switch (node.kind) {
-            case SyntaxKind.ForStatement: return convertForStatement(node as ForStatement, initializerFunction, convertedLoopBody);
-            case SyntaxKind.ForInStatement: return convertForInStatement(node as ForInStatement, convertedLoopBody);
-            case SyntaxKind.ForOfStatement: return convertForOfStatement(node as ForOfStatement, convertedLoopBody);
-            case SyntaxKind.DoStatement: return convertDoStatement(node as DoStatement, convertedLoopBody);
-            case SyntaxKind.WhileStatement: return convertWhileStatement(node as WhileStatement, convertedLoopBody);
+            case SyntaxKind.ForStatement: return convertForStatement(node , initializerFunction, convertedLoopBody);
+            case SyntaxKind.ForInStatement: return convertForInStatement(node , convertedLoopBody);
+            case SyntaxKind.ForOfStatement: return convertForOfStatement(node , convertedLoopBody);
+            case SyntaxKind.DoStatement: return convertDoStatement(node , convertedLoopBody);
+            case SyntaxKind.WhileStatement: return convertWhileStatement(node , convertedLoopBody);
             default: return Debug.failBadSyntaxKind(node, "IterationStatement expected");
         }
     }
@@ -3152,9 +3151,9 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             case SyntaxKind.ForStatement:
             case SyntaxKind.ForInStatement:
             case SyntaxKind.ForOfStatement:
-                const initializer = (node as ForStatement | ForInStatement | ForOfStatement).initializer;
+                const initializer = (node).initializer;
                 if (initializer && initializer.kind === SyntaxKind.VariableDeclarationList) {
-                    loopInitializer = initializer as VariableDeclarationList;
+                    loopInitializer = initializer ;
                 }
                 break;
         }
@@ -4541,7 +4540,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
     function substituteExpression(node: Node) {
         switch (node.kind) {
             case SyntaxKind.Identifier:
-                return substituteExpressionIdentifier(node as Identifier);
+                return substituteExpressionIdentifier(node);
 
             case SyntaxKind.ThisKeyword:
                 return substituteThisKeyword(node as PrimaryExpression);
@@ -4623,22 +4622,22 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             return false;
         }
 
-        const statementExpression = (statement as ExpressionStatement).expression;
+        const statementExpression = (statement).expression;
         if (!nodeIsSynthesized(statementExpression) || statementExpression.kind !== SyntaxKind.CallExpression) {
             return false;
         }
 
-        const callTarget = (statementExpression as CallExpression).expression;
+        const callTarget = (statementExpression).expression;
         if (!nodeIsSynthesized(callTarget) || callTarget.kind !== SyntaxKind.SuperKeyword) {
             return false;
         }
 
-        const callArgument = singleOrUndefined((statementExpression as CallExpression).arguments);
+        const callArgument = singleOrUndefined((statementExpression).arguments);
         if (!callArgument || !nodeIsSynthesized(callArgument) || callArgument.kind !== SyntaxKind.SpreadElement) {
             return false;
         }
 
-        const expression = (callArgument as SpreadElement).expression;
+        const expression = (callArgument).expression;
         return isIdentifier(expression) && expression.escapedText === "arguments";
     }
 }

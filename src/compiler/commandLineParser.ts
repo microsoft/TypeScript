@@ -88,14 +88,12 @@ import {
     nodeNextJsonConfigResolver,
     normalizePath,
     normalizeSlashes,
-    NumericLiteral,
     ObjectLiteralExpression,
     ParseConfigHost,
     ParsedCommandLine,
     parseJsonText,
     Path,
     PollingWatchKind,
-    PrefixUnaryExpression,
     ProjectReference,
     PropertyAssignment,
     PropertyName,
@@ -104,7 +102,6 @@ import {
     ScriptTarget,
     startsWith,
     stringContains,
-    StringLiteral,
     SyntaxKind,
     sys,
     toFileNameLowerCase,
@@ -2360,19 +2357,19 @@ export function convertToJson(
                 if (!isDoubleQuotedString(valueExpression)) {
                     errors.push(createDiagnosticForNodeInSourceFile(sourceFile, valueExpression, Diagnostics.String_literal_with_double_quotes_expected));
                 }
-                return (valueExpression as StringLiteral).text;
+                return (valueExpression).text;
 
             case SyntaxKind.NumericLiteral:
-                return Number((valueExpression as NumericLiteral).text);
+                return Number((valueExpression).text);
 
             case SyntaxKind.PrefixUnaryExpression:
-                if ((valueExpression as PrefixUnaryExpression).operator !== SyntaxKind.MinusToken || (valueExpression as PrefixUnaryExpression).operand.kind !== SyntaxKind.NumericLiteral) {
+                if ((valueExpression).operator !== SyntaxKind.MinusToken || (valueExpression).operand.kind !== SyntaxKind.NumericLiteral) {
                     break; // not valid JSON syntax
                 }
-                return -Number(((valueExpression as PrefixUnaryExpression).operand as NumericLiteral).text);
+                return -Number(((valueExpression).operand).text);
 
             case SyntaxKind.ObjectLiteralExpression:
-                const objectLiteralExpression = valueExpression as ObjectLiteralExpression;
+                const objectLiteralExpression = valueExpression ;
 
                 // Currently having element option declaration in the tsconfig with type "object"
                 // determines if it needs onSetValidOptionKeyValueInParent callback or not
@@ -2384,7 +2381,7 @@ export function convertToJson(
 
             case SyntaxKind.ArrayLiteralExpression:
                 return convertArrayLiteralExpressionToJson(
-                    (valueExpression as ArrayLiteralExpression).elements,
+                    (valueExpression).elements,
                     option && (option as CommandLineOptionOfListType).element);
         }
 

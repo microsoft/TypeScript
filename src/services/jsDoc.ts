@@ -2,9 +2,7 @@ import {
     arraysEqual,
     ArrowFunction,
     AssignmentDeclarationKind,
-    BinaryExpression,
     buildLinkParts,
-    ClassExpression,
     CompletionEntry,
     CompletionEntryDetails,
     Completions,
@@ -14,7 +12,6 @@ import {
     DocCommentTemplateOptions,
     emptyArray,
     Expression,
-    ExpressionStatement,
     find,
     findAncestor,
     flatMap,
@@ -46,20 +43,12 @@ import {
     isJSDocParameterTag,
     isWhiteSpaceSingleLine,
     JSDoc,
-    JSDocAugmentsTag,
-    JSDocCallbackTag,
     JSDocComment,
-    JSDocImplementsTag,
     JSDocParameterTag,
     JSDocPropertyTag,
-    JSDocSatisfiesTag,
-    JSDocSeeTag,
     JSDocTag,
     JSDocTagInfo,
-    JSDocTemplateTag,
-    JSDocThrowsTag,
     JSDocTypedefTag,
-    JSDocTypeTag,
     lastOrUndefined,
     length,
     lineBreakPart,
@@ -70,11 +59,7 @@ import {
     Node,
     ParameterDeclaration,
     parameterNamePart,
-    ParenthesizedExpression,
-    PropertyAssignment,
-    PropertyDeclaration,
     propertyNamePart,
-    PropertySignature,
     punctuationPart,
     ScriptElementKind,
     SourceFile,
@@ -87,7 +72,6 @@ import {
     typeAliasNamePart,
     TypeChecker,
     typeParameterNamePart,
-    VariableStatement,
 } from "./_namespaces/ts";
 
 const jsDocTagNames = [
@@ -266,15 +250,15 @@ function getCommentDisplayParts(tag: JSDocTag, checker?: TypeChecker): SymbolDis
     const namePart = getTagNameDisplayPart(kind);
     switch (kind) {
         case SyntaxKind.JSDocThrowsTag:
-            const typeExpression = (tag as JSDocThrowsTag).typeExpression;
+            const typeExpression = (tag).typeExpression;
             return typeExpression ? withNode(typeExpression) :
                 comment === undefined ? undefined : getDisplayPartsFromComment(comment, checker);
         case SyntaxKind.JSDocImplementsTag:
-            return withNode((tag as JSDocImplementsTag).class);
+            return withNode((tag).class);
         case SyntaxKind.JSDocAugmentsTag:
-            return withNode((tag as JSDocAugmentsTag).class);
+            return withNode((tag).class);
         case SyntaxKind.JSDocTemplateTag:
-            const templateTag = tag as JSDocTemplateTag;
+            const templateTag = tag ;
             const displayParts: SymbolDisplayPart[] = [];
             if (templateTag.constraint) {
                 displayParts.push(textPart(templateTag.constraint.getText()));
@@ -297,13 +281,13 @@ function getCommentDisplayParts(tag: JSDocTag, checker?: TypeChecker): SymbolDis
             return displayParts;
         case SyntaxKind.JSDocTypeTag:
         case SyntaxKind.JSDocSatisfiesTag:
-            return withNode((tag as JSDocTypeTag | JSDocSatisfiesTag).typeExpression);
+            return withNode((tag).typeExpression);
         case SyntaxKind.JSDocTypedefTag:
         case SyntaxKind.JSDocCallbackTag:
         case SyntaxKind.JSDocPropertyTag:
         case SyntaxKind.JSDocParameterTag:
         case SyntaxKind.JSDocSeeTag:
-            const { name } = tag as JSDocTypedefTag | JSDocCallbackTag | JSDocPropertyTag | JSDocParameterTag | JSDocSeeTag;
+            const { name } = tag ;
             return name ? withNode(name)
                 : comment === undefined ? undefined
                 : getDisplayPartsFromComment(comment, checker);
@@ -400,7 +384,7 @@ export function getJSDocParameterNameCompletions(tag: JSDocParameterTag): Comple
         if (!isIdentifier(param.name)) return undefined;
 
         const name = param.name.text;
-        if (jsdoc.tags!.some(t => t !== tag && isJSDocParameterTag(t) && isIdentifier(t.name) && t.name.escapedText === name) // TODO: GH#18217
+        if (jsdoc.kind === SyntaxKind.JSDoc && jsdoc.tags!.some(t => t !== tag && isJSDocParameterTag(t) && isIdentifier(t.name) && t.name.escapedText === name) // TODO: GH#18217
             || nameThusFar !== undefined && !startsWith(name, nameThusFar)) {
             return undefined;
         }
@@ -545,7 +529,7 @@ function getCommentOwnerInfoWorker(commentOwner: Node, options: DocCommentTempla
             return { commentOwner, parameters: host.parameters, hasReturn: hasReturn(host, options) };
 
         case SyntaxKind.PropertyAssignment:
-            return getCommentOwnerInfoWorker((commentOwner as PropertyAssignment).initializer, options);
+            return getCommentOwnerInfoWorker((commentOwner).initializer, options);
 
         case SyntaxKind.ClassDeclaration:
         case SyntaxKind.InterfaceDeclaration:
@@ -555,14 +539,14 @@ function getCommentOwnerInfoWorker(commentOwner: Node, options: DocCommentTempla
             return { commentOwner };
 
         case SyntaxKind.PropertySignature: {
-            const host = commentOwner as PropertySignature;
+            const host = commentOwner ;
             return host.type && isFunctionTypeNode(host.type)
                 ? { commentOwner, parameters: host.type.parameters, hasReturn: hasReturn(host.type, options) }
                 : { commentOwner };
         }
 
         case SyntaxKind.VariableStatement: {
-            const varStatement = commentOwner as VariableStatement;
+            const varStatement = commentOwner ;
             const varDeclarations = varStatement.declarationList.declarations;
             const host = varDeclarations.length === 1 && varDeclarations[0].initializer
                 ? getRightHandSideOfAssignment(varDeclarations[0].initializer)
@@ -582,9 +566,9 @@ function getCommentOwnerInfoWorker(commentOwner: Node, options: DocCommentTempla
             return commentOwner.parent.kind === SyntaxKind.ModuleDeclaration ? undefined : { commentOwner };
 
         case SyntaxKind.ExpressionStatement:
-            return getCommentOwnerInfoWorker((commentOwner as ExpressionStatement).expression, options);
+            return getCommentOwnerInfoWorker((commentOwner).expression, options);
         case SyntaxKind.BinaryExpression: {
-            const be = commentOwner as BinaryExpression;
+            const be = commentOwner ;
             if (getAssignmentDeclarationKind(be) === AssignmentDeclarationKind.None) {
                 return "quit";
             }
@@ -593,7 +577,7 @@ function getCommentOwnerInfoWorker(commentOwner: Node, options: DocCommentTempla
                 : { commentOwner };
         }
         case SyntaxKind.PropertyDeclaration:
-            const init = (commentOwner as PropertyDeclaration).initializer;
+            const init = (commentOwner).initializer;
             if (init && (isFunctionExpression(init) || isArrowFunction(init))) {
                 return { commentOwner, parameters: init.parameters, hasReturn: hasReturn(init, options) };
             }
@@ -608,7 +592,7 @@ function hasReturn(node: Node, options: DocCommentTemplateOptions | undefined) {
 
 function getRightHandSideOfAssignment(rightHandSide: Expression): FunctionExpression | ArrowFunction | ConstructorDeclaration | undefined {
     while (rightHandSide.kind === SyntaxKind.ParenthesizedExpression) {
-        rightHandSide = (rightHandSide as ParenthesizedExpression).expression;
+        rightHandSide = (rightHandSide).expression;
     }
 
     switch (rightHandSide.kind) {
@@ -616,6 +600,6 @@ function getRightHandSideOfAssignment(rightHandSide: Expression): FunctionExpres
         case SyntaxKind.ArrowFunction:
             return (rightHandSide as FunctionExpression);
         case SyntaxKind.ClassExpression:
-            return find((rightHandSide as ClassExpression).members, isConstructorDeclaration);
+            return find((rightHandSide).members, isConstructorDeclaration);
     }
 }

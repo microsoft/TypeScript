@@ -13,9 +13,6 @@ import {
     getNodeModifiers,
     getTextOfIdentifierOrLiteral,
     Identifier,
-    ImportClause,
-    ImportEqualsDeclaration,
-    ImportSpecifier,
     isPropertyAccessExpression,
     isPropertyNameLiteral,
     NavigateToItem,
@@ -88,7 +85,7 @@ function shouldKeepItem(declaration: Declaration, checker: TypeChecker): boolean
         case SyntaxKind.ImportClause:
         case SyntaxKind.ImportSpecifier:
         case SyntaxKind.ImportEqualsDeclaration:
-            const importer = checker.getSymbolAtLocation((declaration as ImportClause | ImportSpecifier | ImportEqualsDeclaration).name!)!; // TODO: GH#18217
+            const importer = checker.getSymbolAtLocation((declaration).name!)!; // TODO: GH#18217
             const imported = checker.getAliasedSymbol(importer);
             return importer.escapedName !== imported.escapedName;
         default:

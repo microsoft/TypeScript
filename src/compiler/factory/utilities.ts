@@ -612,7 +612,7 @@ export function startsWithUseStrict(statements: readonly Statement[]) {
 
 /** @internal */
 export function isCommaExpression(node: Expression): node is BinaryExpression & { operatorToken: Token<SyntaxKind.CommaToken> } {
-    return node.kind === SyntaxKind.BinaryExpression && (node as BinaryExpression).operatorToken.kind === SyntaxKind.CommaToken;
+    return node.kind === SyntaxKind.BinaryExpression && (node).operatorToken.kind === SyntaxKind.CommaToken;
 }
 
 /** @internal */
@@ -660,7 +660,7 @@ export function skipOuterExpressions(node: Expression, kinds?: OuterExpressionKi
 /** @internal */
 export function skipOuterExpressions(node: Node, kinds?: OuterExpressionKinds): Node;
 /** @internal */
-export function skipOuterExpressions(node: Node, kinds = OuterExpressionKinds.All) {
+export function skipOuterExpressions(node: Node, kinds = OuterExpressionKinds.All): Node {
     while (isOuterExpression(node, kinds)) {
         node = node.expression;
     }

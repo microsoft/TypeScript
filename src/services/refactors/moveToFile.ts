@@ -924,7 +924,7 @@ function isPureImport(node: Node): boolean {
         case SyntaxKind.ImportEqualsDeclaration:
             return !hasSyntacticModifier(node, ModifierFlags.Export);
         case SyntaxKind.VariableStatement:
-            return (node as VariableStatement).declarationList.declarations.every(d => !!d.initializer && isRequireCall(d.initializer, /*requireStringLiteralLikeArgument*/ true));
+            return (node).declarationList.declarations.every(d => !!d.initializer && isRequireCall(d.initializer, /*requireStringLiteralLikeArgument*/ true));
         default:
             return false;
     }
@@ -1033,13 +1033,13 @@ function forEachTopLevelDeclaration<T>(statement: Statement, cb: (node: TopLevel
         case SyntaxKind.TypeAliasDeclaration:
         case SyntaxKind.InterfaceDeclaration:
         case SyntaxKind.ImportEqualsDeclaration:
-            return cb(statement as FunctionDeclaration | ClassDeclaration | EnumDeclaration | ModuleDeclaration | TypeAliasDeclaration | InterfaceDeclaration | ImportEqualsDeclaration);
+            return cb(statement);
 
         case SyntaxKind.VariableStatement:
-            return firstDefined((statement as VariableStatement).declarationList.declarations, decl => forEachTopLevelDeclarationInBindingName(decl.name, cb));
+            return firstDefined((statement).declarationList.declarations, decl => forEachTopLevelDeclarationInBindingName(decl.name, cb));
 
         case SyntaxKind.ExpressionStatement: {
-            const { expression } = statement as ExpressionStatement;
+            const { expression } = statement ;
             return isBinaryExpression(expression) && getAssignmentDeclarationKind(expression) === AssignmentDeclarationKind.ExportsProperty
                 ? cb(statement as TopLevelExpressionStatement)
                 : undefined;
@@ -1055,7 +1055,7 @@ function isInImport(decl: Declaration) {
         case SyntaxKind.NamespaceImport:
             return true;
         case SyntaxKind.VariableDeclaration:
-            return isVariableDeclarationInImport(decl as VariableDeclaration);
+            return isVariableDeclarationInImport(decl);
         case SyntaxKind.BindingElement:
             return isVariableDeclaration(decl.parent.parent) && isVariableDeclarationInImport(decl.parent.parent);
         default:

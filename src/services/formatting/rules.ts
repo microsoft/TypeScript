@@ -1,5 +1,4 @@
 import {
-    BinaryExpression,
     contains,
     findAncestor,
     findNextToken,
@@ -19,7 +18,6 @@ import {
     SemicolonPreference,
     SyntaxKind,
     typeKeywords,
-    YieldExpression,
 } from "../_namespaces/ts";
 import {
     anyContext,
@@ -481,7 +479,7 @@ function isNotForContext(context: FormattingContext): boolean {
 function isBinaryOpContext(context: FormattingContext): boolean {
     switch (context.contextNode.kind) {
         case SyntaxKind.BinaryExpression:
-            return (context.contextNode as BinaryExpression).operatorToken.kind !== SyntaxKind.CommaToken;
+            return (context.contextNode).operatorToken.kind !== SyntaxKind.CommaToken;
         case SyntaxKind.ConditionalExpression:
         case SyntaxKind.ConditionalType:
         case SyntaxKind.AsExpression:
@@ -845,7 +843,7 @@ function isVoidOpContext(context: FormattingContext): boolean {
 }
 
 function isYieldOrYieldStarWithOperand(context: FormattingContext): boolean {
-    return context.contextNode.kind === SyntaxKind.YieldExpression && (context.contextNode as YieldExpression).expression !== undefined;
+    return context.contextNode.kind === SyntaxKind.YieldExpression && (context.contextNode).expression !== undefined;
 }
 
 function isNonNullAssertionContext(context: FormattingContext): boolean {

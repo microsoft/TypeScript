@@ -1,5 +1,4 @@
 import {
-    ArrowFunction,
     AwaitExpression,
     BindingName,
     BindingPattern,
@@ -22,7 +21,6 @@ import {
     forEach,
     forEachChild,
     forEachReturnStatement,
-    FunctionExpression,
     FunctionLikeDeclaration,
     GeneratedIdentifierFlags,
     getContainingFunction,
@@ -630,7 +628,7 @@ function transformCallbackArgument(func: Expression, hasContinuation: boolean, c
                 break;
             }
 
-            const synthCall = factory.createCallExpression(getSynthesizedDeepClone(func as Identifier | PropertyAccessExpression), /*typeArguments*/ undefined, isSynthIdentifier(inputArgName) ? [referenceSynthIdentifier(inputArgName)] : []);
+            const synthCall = factory.createCallExpression(getSynthesizedDeepClone(func), /*typeArguments*/ undefined, isSynthIdentifier(inputArgName) ? [referenceSynthIdentifier(inputArgName)] : []);
 
             if (shouldReturn(parent, transformer)) {
                 return maybeAnnotateAndReturn(synthCall, getExplicitPromisedTypeOfPromiseReturningCallExpression(parent, func, transformer.checker));
@@ -651,7 +649,7 @@ function transformCallbackArgument(func: Expression, hasContinuation: boolean, c
 
         case SyntaxKind.FunctionExpression:
         case SyntaxKind.ArrowFunction: {
-            const funcBody = (func as FunctionExpression | ArrowFunction).body;
+            const funcBody = (func).body;
             const returnType = getLastCallSignature(transformer.checker.getTypeAtLocation(func), transformer.checker)?.getReturnType();
 
             // Arrow functions with block bodies { } will enter this control flow

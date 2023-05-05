@@ -5,19 +5,11 @@ import {
     Block,
     BreakOrContinueStatement,
     canHaveDecorators,
-    CaseBlock,
     CaseOrDefaultClause,
-    CatchClause,
-    ClassDeclaration,
     createTextSpanFromBounds,
     Debug,
     DestructuringPattern,
-    DoStatement,
-    EnumDeclaration,
-    ExportAssignment,
-    ExportDeclaration,
     Expression,
-    ExpressionStatement,
     findLast,
     findNextToken,
     findPrecedingToken,
@@ -31,9 +23,6 @@ import {
     HasDecorators,
     hasOnlyExpressionInitializer,
     hasSyntacticModifier,
-    IfStatement,
-    ImportDeclaration,
-    ImportEqualsDeclaration,
     isArrayLiteralOrObjectLiteralDestructuringPattern,
     isAssignmentOperator,
     isBindingPattern,
@@ -42,10 +31,8 @@ import {
     isFunctionBlock,
     isFunctionLike,
     isVariableDeclarationList,
-    LabeledStatement,
     lastOrUndefined,
     ModifierFlags,
-    ModuleDeclaration,
     ModuleInstanceState,
     Node,
     NodeArray,
@@ -53,23 +40,13 @@ import {
     ObjectLiteralElement,
     ObjectLiteralExpression,
     ParameterDeclaration,
-    PropertyAssignment,
     PropertyDeclaration,
     PropertySignature,
-    ReturnStatement,
     skipTrivia,
     SourceFile,
-    SwitchStatement,
     SyntaxKind,
     TextSpan,
-    ThrowStatement,
-    TryStatement,
-    TypeAssertion,
     VariableDeclaration,
-    VariableDeclarationList,
-    VariableStatement,
-    WhileStatement,
-    WithStatement,
 } from "./_namespaces/ts";
 
 /**
@@ -155,15 +132,15 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
             switch (node.kind) {
                 case SyntaxKind.VariableStatement:
                     // Span on first variable declaration
-                    return spanInVariableDeclaration((node as VariableStatement).declarationList.declarations[0]);
+                    return spanInVariableDeclaration((node).declarationList.declarations[0]);
 
                 case SyntaxKind.VariableDeclaration:
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
-                    return spanInVariableDeclaration(node as VariableDeclaration | PropertyDeclaration | PropertySignature);
+                    return spanInVariableDeclaration(node);
 
                 case SyntaxKind.Parameter:
-                    return spanInParameterDeclaration(node as ParameterDeclaration);
+                    return spanInParameterDeclaration(node);
 
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.MethodDeclaration:
@@ -177,30 +154,30 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
 
                 case SyntaxKind.Block:
                     if (isFunctionBlock(node)) {
-                        return spanInFunctionBlock(node as Block);
+                        return spanInFunctionBlock(node);
                     }
                     // falls through
                 case SyntaxKind.ModuleBlock:
                     return spanInBlock(node as Block);
 
                 case SyntaxKind.CatchClause:
-                    return spanInBlock((node as CatchClause).block);
+                    return spanInBlock((node).block);
 
                 case SyntaxKind.ExpressionStatement:
                     // span on the expression
-                    return textSpan((node as ExpressionStatement).expression);
+                    return textSpan((node).expression);
 
                 case SyntaxKind.ReturnStatement:
                     // span on return keyword and expression if present
-                    return textSpan(node.getChildAt(0), (node as ReturnStatement).expression);
+                    return textSpan(node.getChildAt(0), (node).expression);
 
                 case SyntaxKind.WhileStatement:
                     // Span on while(...)
-                    return textSpanEndingAtNextToken(node, (node as WhileStatement).expression);
+                    return textSpanEndingAtNextToken(node, (node).expression);
 
                 case SyntaxKind.DoStatement:
                     // span in statement of the do statement
-                    return spanInNode((node as DoStatement).statement);
+                    return spanInNode((node).statement);
 
                 case SyntaxKind.DebuggerStatement:
                     // span on debugger keyword
@@ -208,11 +185,11 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
 
                 case SyntaxKind.IfStatement:
                     // set on if(..) span
-                    return textSpanEndingAtNextToken(node, (node as IfStatement).expression);
+                    return textSpanEndingAtNextToken(node, (node).expression);
 
                 case SyntaxKind.LabeledStatement:
                     // span in statement
-                    return spanInNode((node as LabeledStatement).statement);
+                    return spanInNode((node).statement);
 
                 case SyntaxKind.BreakStatement:
                 case SyntaxKind.ContinueStatement:
@@ -220,19 +197,19 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
                     return textSpan(node.getChildAt(0), (node as BreakOrContinueStatement).label);
 
                 case SyntaxKind.ForStatement:
-                    return spanInForStatement(node as ForStatement);
+                    return spanInForStatement(node);
 
                 case SyntaxKind.ForInStatement:
                     // span of for (a in ...)
-                    return textSpanEndingAtNextToken(node, (node as ForInStatement).expression);
+                    return textSpanEndingAtNextToken(node, (node).expression);
 
                 case SyntaxKind.ForOfStatement:
                     // span in initializer
-                    return spanInInitializerOfForLike(node as ForOfStatement);
+                    return spanInInitializerOfForLike(node);
 
                 case SyntaxKind.SwitchStatement:
                     // span on switch(...)
-                    return textSpanEndingAtNextToken(node, (node as SwitchStatement).expression);
+                    return textSpanEndingAtNextToken(node, (node).expression);
 
                 case SyntaxKind.CaseClause:
                 case SyntaxKind.DefaultClause:
@@ -241,31 +218,31 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
 
                 case SyntaxKind.TryStatement:
                     // span in try block
-                    return spanInBlock((node as TryStatement).tryBlock);
+                    return spanInBlock((node).tryBlock);
 
                 case SyntaxKind.ThrowStatement:
                     // span in throw ...
-                    return textSpan(node, (node as ThrowStatement).expression);
+                    return textSpan(node, (node).expression);
 
                 case SyntaxKind.ExportAssignment:
                     // span on export = id
-                    return textSpan(node, (node as ExportAssignment).expression);
+                    return textSpan(node, (node).expression);
 
                 case SyntaxKind.ImportEqualsDeclaration:
                     // import statement without including semicolon
-                    return textSpan(node, (node as ImportEqualsDeclaration).moduleReference);
+                    return textSpan(node, (node).moduleReference);
 
                 case SyntaxKind.ImportDeclaration:
                     // import statement without including semicolon
-                    return textSpan(node, (node as ImportDeclaration).moduleSpecifier);
+                    return textSpan(node, (node).moduleSpecifier);
 
                 case SyntaxKind.ExportDeclaration:
                     // import statement without including semicolon
-                    return textSpan(node, (node as ExportDeclaration).moduleSpecifier);
+                    return textSpan(node, (node).moduleSpecifier);
 
                 case SyntaxKind.ModuleDeclaration:
                     // span on complete module if it is instantiated
-                    if (getModuleInstanceState(node as ModuleDeclaration) !== ModuleInstanceState.Instantiated) {
+                    if (getModuleInstanceState(node) !== ModuleInstanceState.Instantiated) {
                         return undefined;
                     }
                     // falls through
@@ -279,7 +256,7 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
 
                 case SyntaxKind.WithStatement:
                     // span in statement
-                    return spanInNode((node as WithStatement).statement);
+                    return spanInNode((node).statement);
 
                 case SyntaxKind.Decorator:
                     return spanInNodeArray((parent as HasDecorators).modifiers, node, isDecorator);
@@ -355,7 +332,7 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
                     }
 
                     if (node.kind === SyntaxKind.BinaryExpression) {
-                        const { left, operatorToken } = node as BinaryExpression;
+                        const { left, operatorToken } = node ;
                         // Set breakpoint in destructuring pattern if its destructuring assignment
                         // [a, b, c] or {a, b, c} of
                         // [a, b, c] = expression or
@@ -411,28 +388,28 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
                     switch (node.parent.kind) {
                         case SyntaxKind.PropertyAssignment:
                             // If this is name of property assignment, set breakpoint in the initializer
-                            if ((node.parent as PropertyAssignment).name === node &&
+                            if ((node.parent).name === node &&
                                 !isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent.parent)) {
-                                return spanInNode((node.parent as PropertyAssignment).initializer);
+                                return spanInNode((node.parent).initializer);
                             }
                             break;
                         case SyntaxKind.TypeAssertionExpression:
                             // Breakpoint in type assertion goes to its operand
-                            if ((node.parent as TypeAssertion).type === node) {
-                                return spanInNextNode((node.parent as TypeAssertion).type);
+                            if ((node.parent).type === node) {
+                                return spanInNextNode((node.parent).type);
                             }
                             break;
                         case SyntaxKind.VariableDeclaration:
                         case SyntaxKind.Parameter: {
                             // initializer of variable/parameter declaration go to previous node
-                            const { initializer, type } = node.parent as VariableDeclaration | ParameterDeclaration;
+                            const { initializer, type } = node.parent ;
                             if (initializer === node || type === node || isAssignmentOperator(node.kind)) {
                                 return spanInPreviousNode(node);
                             }
                             break;
                         }
                         case SyntaxKind.BinaryExpression: {
-                            const { left } = node.parent as BinaryExpression;
+                            const { left } = node.parent ;
                             if (isArrayLiteralOrObjectLiteralDestructuringPattern(left) && node !== left) {
                                 // If initializer of destructuring assignment move to previous token
                                 return spanInPreviousNode(node);
@@ -553,7 +530,7 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
         function spanInBlock(block: Block): TextSpan | undefined {
             switch (block.parent.kind) {
                 case SyntaxKind.ModuleDeclaration:
-                    if (getModuleInstanceState(block.parent as ModuleDeclaration) !== ModuleInstanceState.Instantiated) {
+                    if (getModuleInstanceState(block.parent) !== ModuleInstanceState.Instantiated) {
                         return undefined;
                     }
 
@@ -577,7 +554,7 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
         function spanInInitializerOfForLike(forLikeStatement: ForStatement | ForOfStatement | ForInStatement): TextSpan | undefined {
             if (forLikeStatement.initializer!.kind === SyntaxKind.VariableDeclarationList) {
                 // Declaration list - set breakpoint in first declaration
-                const variableDeclarationList = forLikeStatement.initializer as VariableDeclarationList;
+                const variableDeclarationList = forLikeStatement.initializer ;
                 if (variableDeclarationList.declarations.length > 0) {
                     return spanInNode(variableDeclarationList.declarations[0]);
                 }
@@ -641,15 +618,15 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
         function spanInOpenBraceToken(node: Node): TextSpan | undefined {
             switch (node.parent.kind) {
                 case SyntaxKind.EnumDeclaration:
-                    const enumDeclaration = node.parent as EnumDeclaration;
+                    const enumDeclaration = node.parent ;
                     return spanInNodeIfStartsOnSameLine(findPrecedingToken(node.pos, sourceFile, node.parent), enumDeclaration.members.length ? enumDeclaration.members[0] : enumDeclaration.getLastToken(sourceFile));
 
                 case SyntaxKind.ClassDeclaration:
-                    const classDeclaration = node.parent as ClassDeclaration;
+                    const classDeclaration = node.parent ;
                     return spanInNodeIfStartsOnSameLine(findPrecedingToken(node.pos, sourceFile, node.parent), classDeclaration.members.length ? classDeclaration.members[0] : classDeclaration.getLastToken(sourceFile));
 
                 case SyntaxKind.CaseBlock:
-                    return spanInNodeIfStartsOnSameLine(node.parent.parent, (node.parent as CaseBlock).clauses[0]);
+                    return spanInNodeIfStartsOnSameLine(node.parent.parent, (node.parent).clauses[0]);
             }
 
             // Default to parent node
@@ -660,7 +637,7 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
             switch (node.parent.kind) {
                 case SyntaxKind.ModuleBlock:
                     // If this is not an instantiated module block, no bp span
-                    if (getModuleInstanceState(node.parent.parent as ModuleDeclaration) !== ModuleInstanceState.Instantiated) {
+                    if (getModuleInstanceState(node.parent.parent) !== ModuleInstanceState.Instantiated) {
                         return undefined;
                     }
                     // falls through
@@ -682,7 +659,7 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
 
                 case SyntaxKind.CaseBlock:
                     // breakpoint in last statement of the last clause
-                    const caseBlock = node.parent as CaseBlock;
+                    const caseBlock = node.parent ;
                     const lastClause = lastOrUndefined(caseBlock.clauses);
                     if (lastClause) {
                         return spanInNode(lastOrUndefined(lastClause.statements));
@@ -787,7 +764,7 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
         function spanInWhileKeyword(node: Node): TextSpan | undefined {
             if (node.parent.kind === SyntaxKind.DoStatement) {
                 // Set span on while expression
-                return textSpanEndingAtNextToken(node, (node.parent as DoStatement).expression);
+                return textSpanEndingAtNextToken(node, (node.parent).expression);
             }
 
             // Default to parent node

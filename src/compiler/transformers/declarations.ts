@@ -191,7 +191,6 @@ import {
     setOriginalNode,
     setParent,
     setTextRange,
-    SignatureDeclaration,
     skipTrivia,
     some,
     SourceFile,
@@ -199,6 +198,7 @@ import {
     Statement,
     stringContains,
     StringLiteral,
+    StringLiteralLike,
     Symbol,
     SymbolAccessibility,
     SymbolAccessibilityResult,
@@ -242,8 +242,8 @@ function hasInternalAnnotation(range: CommentRange, currentSourceFile: SourceFil
 export function isInternalDeclaration(node: Node, currentSourceFile: SourceFile) {
     const parseTreeNode = getParseTreeNode(node);
     if (parseTreeNode && parseTreeNode.kind === SyntaxKind.Parameter) {
-        const paramIdx = (parseTreeNode.parent as SignatureDeclaration).parameters.indexOf(parseTreeNode as ParameterDeclaration);
-        const previousSibling = paramIdx > 0 ? (parseTreeNode.parent as SignatureDeclaration).parameters[paramIdx - 1] : undefined;
+        const paramIdx = (parseTreeNode.parent).parameters.indexOf(parseTreeNode);
+        const previousSibling = paramIdx > 0 ? (parseTreeNode.parent).parameters[paramIdx - 1] : undefined;
         const text = currentSourceFile.text;
         const commentRanges = previousSibling
             ? concatenate(
@@ -816,8 +816,8 @@ export function transformDeclarations(context: TransformationContext) {
         }
     }
 
-    function isDeclarationAndNotVisible(node: NamedDeclaration) {
-        node = getParseTreeNode(node) as NamedDeclaration;
+    function isDeclarationAndNotVisible(node: Declaration) {
+        node = getParseTreeNode(node) as Declaration;
         switch (node.kind) {
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.ModuleDeclaration:
@@ -828,9 +828,8 @@ export function transformDeclarations(context: TransformationContext) {
                 return !resolver.isDeclarationVisible(node);
             // The following should be doing their own visibility checks based on filtering their members
             case SyntaxKind.VariableDeclaration:
-                return !getBindingNameVisible(node as VariableDeclaration);
+                return !getBindingNameVisible(node);
             case SyntaxKind.ImportEqualsDeclaration:
-            case SyntaxKind.ImportDeclaration:
             case SyntaxKind.ExportDeclaration:
             case SyntaxKind.ExportAssignment:
                 return false;
@@ -934,7 +933,8 @@ export function transformDeclarations(context: TransformationContext) {
     function rewriteModuleSpecifier<T extends Node>(parent: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode, input: T | undefined): T | StringLiteral {
         if (!input) return undefined!; // TODO: GH#18217
         resultHasExternalModuleIndicator = resultHasExternalModuleIndicator || (parent.kind !== SyntaxKind.ModuleDeclaration && parent.kind !== SyntaxKind.ImportType);
-        if (isStringLiteralLike(input)) {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+        if (isStringLiteralLike(input as Node)) { // TODO: GH#54146
             if (isBundledEmit) {
                 const newName = getExternalModuleNameFromDeclaration(context.getEmitHost(), resolver, parent);
                 if (newName) {
@@ -942,7 +942,7 @@ export function transformDeclarations(context: TransformationContext) {
                 }
             }
             else {
-                const symbol = resolver.getSymbolOfExternalModuleSpecifier(input);
+                const symbol = resolver.getSymbolOfExternalModuleSpecifier(input as StringLiteralLike);
                 if (symbol) {
                     (exportedModulesFromDeclarationEmit || (exportedModulesFromDeclarationEmit = [])).push(symbol);
                 }
@@ -1827,7 +1827,7 @@ export function transformDeclarations(context: TransformationContext) {
         let mask = ModifierFlags.All ^ (ModifierFlags.Public | ModifierFlags.Async | ModifierFlags.Override); // No async and override modifiers in declaration files
         let additions = (needsDeclare && !isAlwaysType(node)) ? ModifierFlags.Ambient : ModifierFlags.None;
         const parentIsFile = node.parent.kind === SyntaxKind.SourceFile;
-        if (!parentIsFile || (isBundledEmit && parentIsFile && isExternalModule(node.parent as SourceFile))) {
+        if (!parentIsFile || (isBundledEmit && parentIsFile && isExternalModule(node.parent))) {
             mask ^= ModifierFlags.Ambient;
             additions = ModifierFlags.None;
         }

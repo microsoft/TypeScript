@@ -267,6 +267,7 @@ import {
     NewExpression,
     Node,
     NodeArray,
+    NodeBase,
     NodeFactory,
     NodeFactoryFlags,
     NodeFlags,
@@ -343,6 +344,7 @@ import {
     supportedDeclarationExtensions,
     SwitchStatement,
     SyntaxKind,
+    SyntaxKindToNode,
     TaggedTemplateExpression,
     TemplateExpression,
     TemplateHead,
@@ -1678,7 +1680,7 @@ namespace Parser {
             const statement = factoryCreateExpressionStatement(expression) as JsonObjectExpressionStatement;
             finishNode(statement, pos);
             statements = createNodeArray([statement], pos);
-            endOfFileToken = parseExpectedToken(SyntaxKind.EndOfFileToken, Diagnostics.Unexpected_token) as EndOfFileToken;
+            endOfFileToken = parseExpectedToken(SyntaxKind.EndOfFileToken, Diagnostics.Unexpected_token);
         }
 
         // Set source file so that errors will be reported with this file name
@@ -2482,7 +2484,7 @@ namespace Parser {
         return false;
     }
 
-    function parseOptionalToken<TKind extends SyntaxKind>(t: TKind): Token<TKind>;
+    function parseOptionalToken<TKind extends SyntaxKind>(t: TKind): SyntaxKindToNode[TKind & keyof SyntaxKindToNode];
     function parseOptionalToken(t: SyntaxKind): Node | undefined {
         if (token() === t) {
             return parseTokenNode();
@@ -2490,7 +2492,7 @@ namespace Parser {
         return undefined;
     }
 
-    function parseOptionalTokenJSDoc<TKind extends JSDocSyntaxKind>(t: TKind): Token<TKind>;
+    function parseOptionalTokenJSDoc<TKind extends JSDocSyntaxKind>(t: TKind): SyntaxKindToNode[TKind & keyof SyntaxKindToNode];
     function parseOptionalTokenJSDoc(t: JSDocSyntaxKind): Node | undefined {
         if (token() === t) {
             return parseTokenNodeJSDoc();
@@ -2498,13 +2500,13 @@ namespace Parser {
         return undefined;
     }
 
-    function parseExpectedToken<TKind extends SyntaxKind>(t: TKind, diagnosticMessage?: DiagnosticMessage, arg0?: string): Token<TKind>;
-    function parseExpectedToken(t: SyntaxKind, diagnosticMessage?: DiagnosticMessage, arg0?: string): Node {
+    function parseExpectedToken<TKind extends Node["kind"]>(t: TKind, diagnosticMessage?: DiagnosticMessage, arg0?: string): SyntaxKindToNode[TKind & keyof SyntaxKindToNode];
+    function parseExpectedToken(t: Node["kind"], diagnosticMessage?: DiagnosticMessage, arg0?: string): Node {
         return parseOptionalToken(t) ||
             createMissingNode(t, /*reportAtCurrentPosition*/ false, diagnosticMessage || Diagnostics._0_expected, arg0 || tokenToString(t)!);
     }
 
-    function parseExpectedTokenJSDoc<TKind extends JSDocSyntaxKind>(t: TKind): Token<TKind>;
+    function parseExpectedTokenJSDoc<TKind extends JSDocSyntaxKind>(t: TKind): SyntaxKindToNode[TKind & keyof SyntaxKindToNode];
     function parseExpectedTokenJSDoc(t: JSDocSyntaxKind): Node {
         const optional = parseOptionalTokenJSDoc(t);
         if (optional) return optional;
@@ -3233,7 +3235,7 @@ namespace Parser {
                     // Method declarations are not necessarily reusable.  An object-literal
                     // may have a method calls "constructor(...)" and we must reparse that
                     // into an actual .ConstructorDeclaration.
-                    const methodDeclaration = node as MethodDeclaration;
+                    const methodDeclaration = node ;
                     const nameIsConstructor = methodDeclaration.name.kind === SyntaxKind.Identifier &&
                         methodDeclaration.name.escapedText === "constructor";
 
@@ -3333,7 +3335,7 @@ namespace Parser {
         //
         // In order to prevent this, we do not allow a variable declarator to be reused if it
         // has an initializer.
-        const variableDeclarator = node as VariableDeclaration;
+        const variableDeclarator = node ;
         return variableDeclarator.initializer === undefined;
     }
 
@@ -3343,7 +3345,7 @@ namespace Parser {
         }
 
         // See the comment in isReusableVariableDeclaration for why we do this.
-        const parameter = node as ParameterDeclaration;
+        const parameter = node ;
         return parameter.initializer === undefined;
     }
 
@@ -3627,7 +3629,7 @@ namespace Parser {
         }
         else {
             // TODO(rbuckton): Do we need to call `parseExpectedToken` or can we just call `createMissingNode` directly?
-            return parseExpectedToken(SyntaxKind.TemplateTail, Diagnostics._0_expected, tokenToString(SyntaxKind.CloseBraceToken)) as TemplateTail;
+            return parseExpectedToken(SyntaxKind.TemplateTail, Diagnostics._0_expected, tokenToString(SyntaxKind.CloseBraceToken));
         }
     }
 
@@ -3652,13 +3654,13 @@ namespace Parser {
         }
         const fragment = parseLiteralLikeNode(token());
         Debug.assert(fragment.kind === SyntaxKind.TemplateHead, "Template head has wrong token kind");
-        return fragment as TemplateHead;
+        return fragment ;
     }
 
     function parseTemplateMiddleOrTemplateTail(): TemplateMiddle | TemplateTail {
         const fragment = parseLiteralLikeNode(token());
         Debug.assert(fragment.kind === SyntaxKind.TemplateMiddle || fragment.kind === SyntaxKind.TemplateTail, "Template fragment has wrong token kind");
-        return fragment as TemplateMiddle | TemplateTail;
+        return fragment ;
     }
 
     function getTemplateLiteralRawText(kind: TemplateLiteralToken["kind"]) {
@@ -3720,14 +3722,14 @@ namespace Parser {
     function typeHasArrowFunctionBlockingParseError(node: TypeNode): boolean {
         switch (node.kind) {
             case SyntaxKind.TypeReference:
-                return nodeIsMissing((node as TypeReferenceNode).typeName);
+                return nodeIsMissing((node).typeName);
             case SyntaxKind.FunctionType:
             case SyntaxKind.ConstructorType: {
                 const { parameters, type } = node as FunctionOrConstructorTypeNode;
                 return isMissingList(parameters) || typeHasArrowFunctionBlockingParseError(type);
             }
             case SyntaxKind.ParenthesizedType:
-                return typeHasArrowFunctionBlockingParseError((node as ParenthesizedTypeNode).type);
+                return typeHasArrowFunctionBlockingParseError((node).type);
             default:
                 return false;
         }
@@ -5022,7 +5024,7 @@ namespace Parser {
         // parameter ('x => ...') above. We handle it here by checking if the parsed expression was a single
         // identifier and the current token is an arrow.
         if (expr.kind === SyntaxKind.Identifier && token() === SyntaxKind.EqualsGreaterThanToken) {
-            return parseSimpleArrowFunctionExpression(pos, expr as Identifier, allowReturnTypeInArrowFunction, /*asyncModifier*/ undefined);
+            return parseSimpleArrowFunctionExpression(pos, expr , allowReturnTypeInArrowFunction, /*asyncModifier*/ undefined);
         }
 
         // Now see if we might be in cases '2' or '3'.
@@ -5386,7 +5388,7 @@ namespace Parser {
 
         let unwrappedType = type;
         while (unwrappedType?.kind === SyntaxKind.ParenthesizedType) {
-            unwrappedType = (unwrappedType as ParenthesizedTypeNode).type;  // Skip parens if need be
+            unwrappedType = (unwrappedType).type;  // Skip parens if need be
         }
 
         const hasJSDocFunctionType = unwrappedType && isJSDocFunctionType(unwrappedType);
@@ -6354,7 +6356,7 @@ namespace Parser {
             if (isTemplateStartOfTaggedTemplate()) {
                 // Absorb type arguments into TemplateExpression when preceding expression is ExpressionWithTypeArguments
                 expression = !questionDotToken && expression.kind === SyntaxKind.ExpressionWithTypeArguments ?
-                    parseTaggedTemplateRest(pos, (expression as ExpressionWithTypeArguments).expression, questionDotToken, (expression as ExpressionWithTypeArguments).typeArguments) :
+                    parseTaggedTemplateRest(pos, (expression).expression, questionDotToken, (expression).typeArguments) :
                     parseTaggedTemplateRest(pos, expression, questionDotToken, /*typeArguments*/ undefined);
                 continue;
             }
@@ -6410,8 +6412,8 @@ namespace Parser {
             if (typeArguments || token() === SyntaxKind.OpenParenToken) {
                 // Absorb type arguments into CallExpression when preceding expression is ExpressionWithTypeArguments
                 if (!questionDotToken && expression.kind === SyntaxKind.ExpressionWithTypeArguments) {
-                    typeArguments = (expression as ExpressionWithTypeArguments).typeArguments;
-                    expression = (expression as ExpressionWithTypeArguments).expression;
+                    typeArguments = (expression).typeArguments;
+                    expression = (expression).expression;
                 }
                 const argumentList = parseArgumentList();
                 const callExpr = questionDotToken || tryReparseOptionalChain(expression) ?
@@ -6688,8 +6690,8 @@ namespace Parser {
         let typeArguments: NodeArray<TypeNode> | undefined;
         // Absorb type arguments into NewExpression when preceding expression is ExpressionWithTypeArguments
         if (expression.kind === SyntaxKind.ExpressionWithTypeArguments) {
-            typeArguments = (expression as ExpressionWithTypeArguments).typeArguments;
-            expression = (expression as ExpressionWithTypeArguments).expression;
+            typeArguments = (expression).typeArguments;
+            expression = (expression).expression;
         }
         if (token() === SyntaxKind.QuestionDotToken) {
             parseErrorAtCurrentToken(Diagnostics.Invalid_optional_chain_from_new_expression_Did_you_mean_to_call_0, getTextOfNodeFromSourceText(sourceText, expression));
@@ -7994,7 +7996,7 @@ namespace Parser {
         const pos = getNodePos();
         const expression = parseLeftHandSideExpressionOrHigher();
         if (expression.kind === SyntaxKind.ExpressionWithTypeArguments) {
-            return expression as ExpressionWithTypeArguments;
+            return expression ;
         }
         const typeArguments = tryParseTypeArguments();
         return finishNode(factory.createExpressionWithTypeArguments(expression, typeArguments), pos);
@@ -9126,7 +9128,7 @@ namespace Parser {
                     case SyntaxKind.ObjectKeyword:
                         return true;
                     case SyntaxKind.ArrayType:
-                        return isObjectOrObjectArrayTypeReference((node as ArrayTypeNode).elementType);
+                        return isObjectOrObjectArrayTypeReference((node).elementType);
                     default:
                         return isTypeReferenceNode(node) && isIdentifierNode(node.typeName) && node.typeName.escapedText === "Object" && !node.typeArguments;
                 }
@@ -9405,7 +9407,7 @@ namespace Parser {
                     if (parseOptionalJsdoc(SyntaxKind.AtToken)) {
                         const tag = parseTag(indent);
                         if (tag && tag.kind === SyntaxKind.JSDocReturnTag) {
-                            return tag as JSDocReturnTag;
+                            return tag ;
                         }
                     }
                 });
@@ -10124,7 +10126,8 @@ namespace IncrementalParser {
         _children: Node[] | undefined;
     }
 
-    export interface IncrementalNode extends Node, IncrementalElement {
+    export type IncrementalNode = Node & IncrementalNodeBase;
+    export interface IncrementalNodeBase extends NodeBase, IncrementalElement {
         hasBeenIncrementallyParsed: boolean;
     }
 

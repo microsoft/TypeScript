@@ -6,7 +6,6 @@ import {
     append,
     arrayFrom,
     arrayIsEqualTo,
-    AsExpression,
     AssertClause,
     BuilderProgram,
     CancellationToken,
@@ -76,7 +75,6 @@ import {
     equateStringsCaseInsensitive,
     equateStringsCaseSensitive,
     explainIfFileIsRedirectAndImpliedFormat,
-    ExportAssignment,
     ExportDeclaration,
     Extension,
     extensionFromPath,
@@ -164,10 +162,8 @@ import {
     hasProperty,
     hasSyntacticModifier,
     hasZeroOrOneAsteriskCharacter,
-    HeritageClause,
     Identifier,
     identity,
-    ImportClause,
     ImportDeclaration,
     ImportOrExportSpecifier,
     InputFiles,
@@ -218,7 +214,6 @@ import {
     mapDefinedIterator,
     maybeBind,
     memoize,
-    MethodDeclaration,
     ModeAwareCache,
     ModeAwareCacheKey,
     ModifierFlags,
@@ -283,7 +278,6 @@ import {
     resolveTypeReferenceDirective,
     returnFalse,
     returnUndefined,
-    SatisfiesExpression,
     ScriptKind,
     ScriptTarget,
     setParent,
@@ -2918,7 +2912,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                     case SyntaxKind.Parameter:
                     case SyntaxKind.PropertyDeclaration:
                     case SyntaxKind.MethodDeclaration:
-                        if ((parent as ParameterDeclaration | PropertyDeclaration | MethodDeclaration).questionToken === node) {
+                        if ((parent).questionToken === node) {
                             diagnostics.push(createDiagnosticForNode(node, Diagnostics.The_0_modifier_can_only_be_used_in_TypeScript_files, "?"));
                             return "skip";
                         }
@@ -2940,13 +2934,13 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
                 switch (node.kind) {
                     case SyntaxKind.ImportClause:
-                        if ((node as ImportClause).isTypeOnly) {
+                        if ((node).isTypeOnly) {
                             diagnostics.push(createDiagnosticForNode(parent, Diagnostics._0_declarations_can_only_be_used_in_TypeScript_files, "import type"));
                             return "skip";
                         }
                         break;
                     case SyntaxKind.ExportDeclaration:
-                        if ((node as ExportDeclaration).isTypeOnly) {
+                        if ((node).isTypeOnly) {
                             diagnostics.push(createDiagnosticForNode(node, Diagnostics._0_declarations_can_only_be_used_in_TypeScript_files, "export type"));
                             return "skip";
                         }
@@ -2962,13 +2956,13 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                         diagnostics.push(createDiagnosticForNode(node, Diagnostics.import_can_only_be_used_in_TypeScript_files));
                         return "skip";
                     case SyntaxKind.ExportAssignment:
-                        if ((node as ExportAssignment).isExportEquals) {
+                        if ((node).isExportEquals) {
                             diagnostics.push(createDiagnosticForNode(node, Diagnostics.export_can_only_be_used_in_TypeScript_files));
                             return "skip";
                         }
                         break;
                     case SyntaxKind.HeritageClause:
-                        const heritageClause = node as HeritageClause;
+                        const heritageClause = node ;
                         if (heritageClause.token === SyntaxKind.ImplementsKeyword) {
                             diagnostics.push(createDiagnosticForNode(node, Diagnostics.implements_clauses_can_only_be_used_in_TypeScript_files));
                             return "skip";
@@ -2995,10 +2989,10 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                         diagnostics.push(createDiagnosticForNode(node, Diagnostics.Non_null_assertions_can_only_be_used_in_TypeScript_files));
                         return "skip";
                     case SyntaxKind.AsExpression:
-                        diagnostics.push(createDiagnosticForNode((node as AsExpression).type, Diagnostics.Type_assertion_expressions_can_only_be_used_in_TypeScript_files));
+                        diagnostics.push(createDiagnosticForNode((node).type, Diagnostics.Type_assertion_expressions_can_only_be_used_in_TypeScript_files));
                         return "skip";
                     case SyntaxKind.SatisfiesExpression:
-                        diagnostics.push(createDiagnosticForNode((node as SatisfiesExpression).type, Diagnostics.Type_satisfaction_expressions_can_only_be_used_in_TypeScript_files));
+                        diagnostics.push(createDiagnosticForNode((node).type, Diagnostics.Type_satisfaction_expressions_can_only_be_used_in_TypeScript_files));
                         return "skip";
                     case SyntaxKind.TypeAssertionExpression:
                         Debug.fail(); // Won't parse these in a JS file anyway, as they are interpreted as JSX.
@@ -3068,7 +3062,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                         break;
                     case SyntaxKind.PropertyDeclaration:
                         // Check modifiers of property declaration
-                        if (nodes === (parent as PropertyDeclaration).modifiers) {
+                        if (nodes === (parent).modifiers) {
                             for (const modifier of nodes as NodeArray<ModifierLike>) {
                                 if (isModifier(modifier)
                                     && modifier.kind !== SyntaxKind.StaticKeyword
@@ -3081,7 +3075,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                         break;
                     case SyntaxKind.Parameter:
                         // Check modifiers of parameter declaration
-                        if (nodes === (parent as ParameterDeclaration).modifiers && some(nodes, isModifier)) {
+                        if (nodes === (parent).modifiers && some(nodes, isModifier)) {
                             diagnostics.push(createDiagnosticForNodeArray(nodes, Diagnostics.Parameter_modifiers_can_only_be_used_in_TypeScript_files));
                             return "skip";
                         }
@@ -3348,14 +3342,14 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
         /** Returns a token if position is in [start-of-leading-trivia, end), includes JSDoc only in JS files */
         function getNodeAtPosition(sourceFile: SourceFile, position: number): Node {
-            let current: Node = sourceFile;
+            let current: Node = sourceFile as Node; // TODO: Incorrect control flow makes `current` never in the loop below without this cast
             const getContainingChild = (child: Node) => {
                 if (child.pos <= position && (position < child.end || (position === child.end && (child.kind === SyntaxKind.EndOfFileToken)))) {
                     return child;
                 }
             };
             while (true) {
-                const child = isJavaScriptFile && hasJSDocNodes(current) && forEach(current.jsDoc, getContainingChild) || forEachChild(current, getContainingChild);
+                const child: Node | undefined = isJavaScriptFile && hasJSDocNodes(current) && forEach(current.jsDoc, getContainingChild) || forEachChild(current, getContainingChild);
                 if (!child) {
                     return current;
                 }
