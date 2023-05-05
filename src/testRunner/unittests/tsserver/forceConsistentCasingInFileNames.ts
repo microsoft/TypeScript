@@ -1,10 +1,5 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    createServerHost,
-    File,
-    libFile,
-} from "../virtualFileSystemWithWatch";
-import {
     baselineTsserverLogs,
     closeFilesForSession,
     createLoggerWithInMemoryLogs,
@@ -12,7 +7,12 @@ import {
     openFilesForSession,
     protocolTextSpanFromSubstring,
     verifyGetErrRequest,
-} from "./helpers";
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+    File,
+    libFile,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: forceConsistentCasingInFileNames", () => {
     it("works when extends is specified with a case insensitive file system", () => {

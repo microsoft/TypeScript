@@ -85,11 +85,11 @@ import {
     getContainingClass,
     getEffectiveContainerForJSDocTemplateTag,
     getElementOrPropertyAccessName,
-    getEmitModuleResolutionKind,
     getEmitScriptTarget,
     getEnclosingBlockScopeContainer,
     getErrorSpanForNode,
     getEscapedTextOfIdentifierOrLiteral,
+    getEscapedTextOfJsxNamespacedName,
     getExpandoInitializer,
     getHostSignatureFromJSDoc,
     getImmediatelyInvokedFunctionExpression,
@@ -172,6 +172,7 @@ import {
     isJSDocTemplateTag,
     isJSDocTypeAlias,
     isJsonSourceFile,
+    isJsxNamespacedName,
     isLeftHandSideExpression,
     isLogicalOrCoalescingAssignmentExpression,
     isLogicalOrCoalescingAssignmentOperator,
@@ -242,7 +243,6 @@ import {
     ModifierFlags,
     ModuleBlock,
     ModuleDeclaration,
-    ModuleResolutionKind,
     Mutable,
     NamespaceExportDeclaration,
     Node,
@@ -279,6 +279,7 @@ import {
     setValueDeclaration,
     ShorthandPropertyAssignment,
     shouldPreserveConstEnums,
+    shouldResolveJsRequire,
     SignatureDeclaration,
     skipParentheses,
     sliceAfter,
@@ -679,6 +680,9 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 }
                 const containingClassSymbol = containingClass.symbol;
                 return getSymbolNameForPrivateIdentifier(containingClassSymbol, name.escapedText);
+            }
+            if (isJsxNamespacedName(name)) {
+                return getEscapedTextOfJsxNamespacedName(name);
             }
             return isPropertyNameLiteral(name) ? getEscapedTextOfIdentifierOrLiteral(name) : undefined;
         }
@@ -3525,7 +3529,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         if (!isBindingPattern(node.name)) {
             const possibleVariableDecl = node.kind === SyntaxKind.VariableDeclaration ? node : node.parent.parent;
             if (isInJSFile(node) &&
-                getEmitModuleResolutionKind(options) !== ModuleResolutionKind.Bundler &&
+                shouldResolveJsRequire(options) &&
                 isVariableDeclarationInitializedToBareOrAccessedRequire(possibleVariableDecl) &&
                 !getJSDocTypeTag(node) &&
                 !(getCombinedModifierFlags(node) & ModifierFlags.Export)

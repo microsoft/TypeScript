@@ -1605,6 +1605,10 @@
         "category": "Error",
         "code": 1489
     },
+    "File appears to be binary.": {
+        "category": "Error",
+        "code": 1490
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -1880,7 +1884,7 @@
         "category": "Error",
         "code": 2354
     },
-    "A function whose declared type is neither 'void' nor 'any' must return a value.": {
+    "A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.": {
         "category": "Error",
         "code": 2355
     },
@@ -2889,6 +2893,10 @@
         "category": "Error",
         "code": 2638
     },
+    "React components cannot include JSX namespace names": {
+        "category": "Error",
+        "code": 2639
+    },
 
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
         "category": "Error",
@@ -3614,10 +3622,6 @@
     "A declaration file cannot be imported without 'import type'. Did you mean to import an implementation file '{0}' instead?": {
         "category": "Error",
         "code": 2846
-    },
-    "A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.": {
-        "category": "Error",
-        "code": 2847
     },
     "The right-hand side of an 'instanceof' expression must not be an instantiation expression.": {
         "category": "Error",
@@ -6588,6 +6592,10 @@
         "category": "Error",
         "code": 8038
     },
+    "A JSDoc '@template' tag may not follow a '@typedef', '@callback', or '@overload' tag": {
+        "category": "Error",
+        "code": 8039
+    },
 
     "Declaration emit for this file requires using private name '{0}'. An explicit type annotation may unblock declaration emit.": {
         "category": "Error",
@@ -7596,6 +7604,10 @@
         "category": "Message",
         "code": 95177
     },
+    "Move to file": {
+        "category": "Message",
+        "code": 95178
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
@@ -7760,5 +7772,9 @@
     "Non-abstract class '{0}' does not implement all abstract members of '{1}'": {
         "category": "Error",
         "code": 18052
+    },
+    "Its type '{0}' is not a valid JSX element type.": {
+        "category": "Error",
+        "code": 18053
     }
 }

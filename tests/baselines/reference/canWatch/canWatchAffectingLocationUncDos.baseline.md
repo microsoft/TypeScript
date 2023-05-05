@@ -29,4 +29,20 @@ Determines if package.json that was found during module resolution and change in
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
 | //vda1cs4850/c$/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+| //vda1cs4850/c$/usr/package.json                                                                 | true                      |
+| //vda1cs4850/c$/usr/username/package.json                                                        | true                      |
+| //vda1cs4850/c$/usr/username/folderAtRoot/package.json                                           | true                      |
+| //vda1cs4850/c$/usr/username/folderAtRoot/folder1/package.json                                   | true                      |
+| //vda1cs4850/c$/usr/username/folderAtRoot/folder1/folder2/package.json                           | true                      |
+| //vda1cs4850/c$/usr/username/folderAtRoot/folder1/folder2/folder3/package.json                   | true                      |
+| //vda1cs4850/c$/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json           | true                      |
+| //vda1cs4850/c$/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json   | true                      |
+| //vda1cs4850/c$/home/package.json                                                                | true                      |
+| //vda1cs4850/c$/home/username/package.json                                                       | true                      |
+| //vda1cs4850/c$/home/username/folderAtRoot/package.json                                          | true                      |
+| //vda1cs4850/c$/home/username/folderAtRoot/folder1/package.json                                  | true                      |
+| //vda1cs4850/c$/home/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| //vda1cs4850/c$/home/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| //vda1cs4850/c$/home/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| //vda1cs4850/c$/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 

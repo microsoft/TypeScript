@@ -29,12 +29,11 @@ System.register(["tslib"], function (exports_1, context_1) {
             }
         ],
         execute: function () {
-            A = class A {
-            };
-            A = tslib_1.__decorate([
+            exports_1("A", A = class A {
+            });
+            exports_1("A", A = tslib_1.__decorate([
                 dec
-            ], A);
-            exports_1("A", A);
+            ], A));
             o = { a: 1 };
             y = Object.assign({}, o);
         }

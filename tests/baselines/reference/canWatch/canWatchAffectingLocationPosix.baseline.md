@@ -29,4 +29,20 @@ Determines if package.json that was found during module resolution and change in
 | /user/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
 | /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+| /usr/package.json                                                                 | false                     |
+| /usr/username/package.json                                                        | false                     |
+| /usr/username/folderAtRoot/package.json                                           | true                      |
+| /usr/username/folderAtRoot/folder1/package.json                                   | true                      |
+| /usr/username/folderAtRoot/folder1/folder2/package.json                           | true                      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/package.json                   | true                      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json           | true                      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json   | true                      |
+| /home/package.json                                                                | false                     |
+| /home/username/package.json                                                       | false                     |
+| /home/username/folderAtRoot/package.json                                          | true                      |
+| /home/username/folderAtRoot/folder1/package.json                                  | true                      |
+| /home/username/folderAtRoot/folder1/folder2/package.json                          | true                      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
 

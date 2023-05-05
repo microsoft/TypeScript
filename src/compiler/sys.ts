@@ -28,6 +28,7 @@ import {
     matchesExclude,
     matchFiles,
     memoize,
+    ModuleImportResult,
     noop,
     normalizePath,
     normalizeSlashes,
@@ -35,7 +36,6 @@ import {
     Path,
     perfLogger,
     PollingWatchKind,
-    RequireResult,
     resolveJSModule,
     some,
     startsWith,
@@ -1428,7 +1428,7 @@ export interface System {
     base64decode?(input: string): string;
     base64encode?(input: string): string;
     /** @internal */ bufferFrom?(input: string, encoding?: string): Buffer;
-    /** @internal */ require?(baseDir: string, moduleName: string): RequireResult;
+    /** @internal */ require?(baseDir: string, moduleName: string): ModuleImportResult;
 
     // For testing
     /** @internal */ now?(): Date;

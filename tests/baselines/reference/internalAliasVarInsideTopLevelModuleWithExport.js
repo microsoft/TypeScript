@@ -16,7 +16,7 @@ define(["require", "exports"], function (require, exports) {
     var a;
     (function (a) {
         a.x = 10;
-    })(a = exports.a || (exports.a = {}));
+    })(a || (exports.a = a = {}));
     exports.b = a.x;
     exports.bVal = exports.b;
 });

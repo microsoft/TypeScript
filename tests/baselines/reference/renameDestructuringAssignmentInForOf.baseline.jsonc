@@ -34,9 +34,7 @@
 
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameDestructuringAssignmentInForOf.ts ===
-// interface I {
-//     property1: number;
-//     property2: string;
+// --- (line: 3) skipped ---
 // }
 // var elems: I[];
 // 
@@ -51,9 +49,7 @@
 
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameDestructuringAssignmentInForOf.ts ===
-// interface I {
-//     property1: number;
-//     property2: string;
+// --- (line: 3) skipped ---
 // }
 // var elems: I[];
 // 
@@ -68,9 +64,7 @@
 
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameDestructuringAssignmentInForOf.ts ===
-// interface I {
-//     property1: number;
-//     property2: string;
+// --- (line: 3) skipped ---
 // }
 // var elems: I[];
 // 

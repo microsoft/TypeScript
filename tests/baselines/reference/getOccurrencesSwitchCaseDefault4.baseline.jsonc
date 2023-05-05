@@ -84,9 +84,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesSwitchCaseDefault4.ts ===
-// foo: switch (10) {
-//     case 1:
-//     case 2:
+// --- (line: 3) skipped ---
 //     case 3:
 //         break;
 //         break foo;
@@ -98,10 +96,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesSwitchCaseDefault4.ts ===
-// foo: switch (10) {
-//     case 1:
-//     case 2:
-//     case 3:
+// --- (line: 4) skipped ---
 //         break;
 //         break foo;
 //         continue;

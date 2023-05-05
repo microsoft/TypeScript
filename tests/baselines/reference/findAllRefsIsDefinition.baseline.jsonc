@@ -14,17 +14,7 @@
 // 
 // export const bar = 123;
 // console.log({ bar });
-// 
-// interface IFoo {
-//     foo(): void;
-// }
-// class Foo implements IFoo {
-//     constructor(n: number)
-//     constructor()
-//     constructor(n: number?) { }
-//     foo(): void { }
-//     static init() { return new this() }
-// }
+// --- (line: 15) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsIsDefinition.ts ===
@@ -34,25 +24,7 @@
   // 
   // function foon(a: number): number;
   // function foon(a: string): string;
-  // function foon(a: string | number): string | number {
-  //     return a
-  // }
-  // 
-  // foo; foon;
-  // 
-  // export const bar = 123;
-  // console.log({ bar });
-  // 
-  // interface IFoo {
-  //     foo(): void;
-  // }
-  // class Foo implements IFoo {
-  //     constructor(n: number)
-  //     constructor()
-  //     constructor(n: number?) { }
-  //     foo(): void { }
-  //     static init() { return new this() }
-  // }
+  // --- (line: 7) skipped ---
 
   // === Details ===
   [
@@ -160,17 +132,7 @@
 // 
 // export const bar = 123;
 // console.log({ bar });
-// 
-// interface IFoo {
-//     foo(): void;
-// }
-// class Foo implements IFoo {
-//     constructor(n: number)
-//     constructor()
-//     constructor(n: number?) { }
-//     foo(): void { }
-//     static init() { return new this() }
-// }
+// --- (line: 15) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsIsDefinition.ts ===
@@ -184,21 +146,7 @@
   //     return a
   // }
   // 
-  // foo; foon;
-  // 
-  // export const bar = 123;
-  // console.log({ bar });
-  // 
-  // interface IFoo {
-  //     foo(): void;
-  // }
-  // class Foo implements IFoo {
-  //     constructor(n: number)
-  //     constructor()
-  //     constructor(n: number?) { }
-  //     foo(): void { }
-  //     static init() { return new this() }
-  // }
+  // --- (line: 11) skipped ---
 
   // === Details ===
   [
@@ -292,15 +240,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsIsDefinition.ts ===
-// declare function foo(a: number): number;
-// declare function foo(a: string): string;
-// declare function foo(a: string | number): string | number;
-// 
-// function foon(a: number): number;
-// function foon(a: string): string;
-// function foon(a: string | number): string | number {
-//     return a
-// }
+// --- (line: 9) skipped ---
 // 
 // foo; foon;
 // 
@@ -309,26 +249,11 @@
 // 
 // interface IFoo {
 //     foo(): void;
-// }
-// class Foo implements IFoo {
-//     constructor(n: number)
-//     constructor()
-//     constructor(n: number?) { }
-//     foo(): void { }
-//     static init() { return new this() }
-// }
+// --- (line: 18) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsIsDefinition.ts ===
-  // declare function foo(a: number): number;
-  // declare function foo(a: string): string;
-  // declare function foo(a: string | number): string | number;
-  // 
-  // function foon(a: number): number;
-  // function foon(a: string): string;
-  // function foon(a: string | number): string | number {
-  //     return a
-  // }
+  // --- (line: 9) skipped ---
   // 
   // foo; foon;
   // 
@@ -336,15 +261,7 @@
   // console.log({ bar });
   // 
   // interface IFoo {
-  //     foo(): void;
-  // }
-  // class Foo implements IFoo {
-  //     constructor(n: number)
-  //     constructor()
-  //     constructor(n: number?) { }
-  //     foo(): void { }
-  //     static init() { return new this() }
-  // }
+  // --- (line: 17) skipped ---
 
   // === Details ===
   [
@@ -386,19 +303,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsIsDefinition.ts ===
-// declare function foo(a: number): number;
-// declare function foo(a: string): string;
-// declare function foo(a: string | number): string | number;
-// 
-// function foon(a: number): number;
-// function foon(a: string): string;
-// function foon(a: string | number): string | number {
-//     return a
-// }
-// 
-// foo; foon;
-// 
-// export const bar = 123;
+// --- (line: 13) skipped ---
 // console.log({ bar });
 // 
 // interface IFoo {
@@ -414,19 +319,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsIsDefinition.ts ===
-  // declare function foo(a: number): number;
-  // declare function foo(a: string): string;
-  // declare function foo(a: string | number): string | number;
-  // 
-  // function foon(a: number): number;
-  // function foon(a: string): string;
-  // function foon(a: string | number): string | number {
-  //     return a
-  // }
-  // 
-  // foo; foon;
-  // 
-  // export const bar = 123;
+  // --- (line: 13) skipped ---
   // console.log({ bar });
   // 
   // interface IFoo {
@@ -562,22 +455,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsIsDefinition.ts ===
-// declare function foo(a: number): number;
-// declare function foo(a: string): string;
-// declare function foo(a: string | number): string | number;
-// 
-// function foon(a: number): number;
-// function foon(a: string): string;
-// function foon(a: string | number): string | number {
-//     return a
-// }
-// 
-// foo; foon;
-// 
-// export const bar = 123;
-// console.log({ bar });
-// 
-// interface IFoo {
+// --- (line: 16) skipped ---
 //     foo(): void;
 // }
 // class Foo implements IFoo {
@@ -590,21 +468,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsIsDefinition.ts ===
-  // declare function foo(a: number): number;
-  // declare function foo(a: string): string;
-  // declare function foo(a: string | number): string | number;
-  // 
-  // function foon(a: number): number;
-  // function foon(a: string): string;
-  // function foon(a: string | number): string | number {
-  //     return a
-  // }
-  // 
-  // foo; foon;
-  // 
-  // export const bar = 123;
-  // console.log({ bar });
-  // 
+  // --- (line: 15) skipped ---
   // interface IFoo {
   //     foo(): void;
   // }
@@ -644,19 +508,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsIsDefinition.ts ===
-// declare function foo(a: number): number;
-// declare function foo(a: string): string;
-// declare function foo(a: string | number): string | number;
-// 
-// function foon(a: number): number;
-// function foon(a: string): string;
-// function foon(a: string | number): string | number {
-//     return a
-// }
-// 
-// foo; foon;
-// 
-// export const bar = 123;
+// --- (line: 13) skipped ---
 // console.log({ bar });
 // 
 // interface IFoo {
@@ -672,19 +524,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsIsDefinition.ts ===
-  // declare function foo(a: number): number;
-  // declare function foo(a: string): string;
-  // declare function foo(a: string | number): string | number;
-  // 
-  // function foon(a: number): number;
-  // function foon(a: string): string;
-  // function foon(a: string | number): string | number {
-  //     return a
-  // }
-  // 
-  // foo; foon;
-  // 
-  // export const bar = 123;
+  // --- (line: 13) skipped ---
   // console.log({ bar });
   // 
   // interface IFoo {
