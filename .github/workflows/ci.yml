@@ -223,7 +223,7 @@ jobs:
     - name: Accept baselines
       run: npx hereby baseline-accept
 
-    - name: Run tests again and print unused baselines
+    - name: Check for unused baselines
       run: |
         if ! git diff --exit-code --quiet; then
           echo "Unused baselines:"
