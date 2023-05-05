@@ -226,9 +226,6 @@ jobs:
     - name: Run tests again and print unused baselines
       run: |
         if ! git diff --exit-code --quiet; then
-          echo "::group::npm test"
-          npm test
-          echo "::endgroup::"
           echo "Unused baselines:"
           git diff --exit-code --name-only
         fi
