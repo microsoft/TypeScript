@@ -117,9 +117,9 @@ export function createLoggerWritingToConsole(host: TestServerHost): Logger {
 
 function sanitizeLog(s: string) {
     return s.replace(/Elapsed::?\s*\d+(?:\.\d+)?ms/g, "Elapsed:: *ms")
-        .replace(/\"updateGraphDurationMs\"\:\d+(?:\.\d+)?/g, `"updateGraphDurationMs":*`)
-        .replace(/\"createAutoImportProviderProgramDurationMs\"\:\d+(?:\.\d+)?/g, `"createAutoImportProviderProgramDurationMs":*`)
-        .replace(`"version":"${ts.version}"`, `"version":"FakeVersion"`)
+        .replace(/\"updateGraphDurationMs\"\:\s*\d+(?:\.\d+)?/g, `"updateGraphDurationMs": *`)
+        .replace(/\"createAutoImportProviderProgramDurationMs\"\:\s*\d+(?:\.\d+)?/g, `"createAutoImportProviderProgramDurationMs": *`)
+        .replace(versionRegExp, `FakeVersion`)
         .replace(/getCompletionData: Get current token: \d+(?:\.\d+)?/g, `getCompletionData: Get current token: *`)
         .replace(/getCompletionData: Is inside comment: \d+(?:\.\d+)?/g, `getCompletionData: Is inside comment: *`)
         .replace(/getCompletionData: Get previous token: \d+(?:\.\d+)?/g, `getCompletionData: Get previous token: *`)
