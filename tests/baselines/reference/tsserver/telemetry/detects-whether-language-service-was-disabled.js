@@ -131,7 +131,7 @@ Info seq  [hh:mm:ss:mss] event:
        "configFileName": "jsconfig.json",
        "projectType": "configured",
        "languageServiceEnabled": false,
-       "version": "5.1.0-dev"
+       "version": "FakeVersion"
       }
      }
     }
