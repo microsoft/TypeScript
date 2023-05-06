@@ -35,6 +35,7 @@ import {
     find,
     FindAllReferences,
     findIndex,
+    findLastIndex,
     firstDefined,
     flatMap,
     forEachKey,
@@ -51,6 +52,7 @@ import {
     getRangesWhere,
     getRefactorContextSpan,
     getRelativePathFromFile,
+    getSourceFileOfNode,
     getSynthesizedDeepClone,
     getUniqueName,
     hasSyntacticModifier,
@@ -67,6 +69,7 @@ import {
     isDeclarationName,
     isExpressionStatement,
     isExternalModuleReference,
+    isFunctionLikeDeclaration,
     isIdentifier,
     isImportDeclaration,
     isImportEqualsDeclaration,
@@ -78,6 +81,7 @@ import {
     isPropertyAssignment,
     isRequireCall,
     isSourceFile,
+    isStatement,
     isStringLiteral,
     isStringLiteralLike,
     isValidTypeOnlyAliasUseSite,
@@ -884,6 +888,11 @@ function getRangeToMove(context: RefactorContext): RangeToMove | undefined {
         return { toMove: [statements[startNodeIndex]], afterLast: statements[startNodeIndex + 1] };
     }
 
+    const overloadRangeToMove = getOverloadRangeToMove(file, startStatement);
+    if (overloadRangeToMove) {
+        return overloadRangeToMove;
+    }
+
     // Can't only partially include the start node or be partially into the next node
     if (range.pos > startStatement.getStart(file)) return undefined;
     const afterEndNodeIndex = findIndex(statements, s => s.end > range.end, startNodeIndex);
@@ -1103,4 +1112,16 @@ function isNonVariableTopLevelDeclaration(node: Node): node is NonVariableTopLev
     }
 }
 
-
+function getOverloadRangeToMove(sourceFile: SourceFile, statement: Statement) {
+    if (isFunctionLikeDeclaration(statement)) {
+        const declarations = statement.symbol.declarations;
+        if (declarations === undefined || length(declarations) <= 1 || !contains(declarations, statement)) {
+            return undefined;
+        }
+        const lastDecl = declarations[length(declarations) - 1];
+        const statementsToMove = mapDefined(declarations, d => getSourceFileOfNode(d) === sourceFile && isStatement(d) ? d : undefined);
+        const end = findLastIndex(sourceFile.statements, s => s.end > lastDecl.end);
+        return { toMove: statementsToMove, afterLast: end >= 0 ? sourceFile.statements[end] : undefined };
+    }
+    return undefined;
+}
