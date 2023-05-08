@@ -272,3 +272,48 @@ function Foo<T>(props: Props<T>) {
 
 }} />;
 
+type ErrorFn = (error: unknown) => void;
+>ErrorFn : Symbol(ErrorFn, Decl(intraExpressionInferencesJsx.tsx, 107, 6))
+>error : Symbol(error, Decl(intraExpressionInferencesJsx.tsx, 109, 16))
+
+function GenericComp<T>(props: {
+>GenericComp : Symbol(GenericComp, Decl(intraExpressionInferencesJsx.tsx, 109, 40))
+>T : Symbol(T, Decl(intraExpressionInferencesJsx.tsx, 111, 21))
+>props : Symbol(props, Decl(intraExpressionInferencesJsx.tsx, 111, 24))
+
+  parser: (p: unknown, errorFn: ErrorFn) => T;
+>parser : Symbol(parser, Decl(intraExpressionInferencesJsx.tsx, 111, 32))
+>p : Symbol(p, Decl(intraExpressionInferencesJsx.tsx, 112, 11))
+>errorFn : Symbol(errorFn, Decl(intraExpressionInferencesJsx.tsx, 112, 22))
+>ErrorFn : Symbol(ErrorFn, Decl(intraExpressionInferencesJsx.tsx, 107, 6))
+>T : Symbol(T, Decl(intraExpressionInferencesJsx.tsx, 111, 21))
+
+  handler: (data: { body: T }) => unknown;
+>handler : Symbol(handler, Decl(intraExpressionInferencesJsx.tsx, 112, 46))
+>data : Symbol(data, Decl(intraExpressionInferencesJsx.tsx, 113, 12))
+>body : Symbol(body, Decl(intraExpressionInferencesJsx.tsx, 113, 19))
+>T : Symbol(T, Decl(intraExpressionInferencesJsx.tsx, 111, 21))
+
+}) {
+  return null;
+}
+
+declare const createParser: <T>(arg: T) => (p: unknown, errorFn: ErrorFn) => T;
+>createParser : Symbol(createParser, Decl(intraExpressionInferencesJsx.tsx, 118, 13))
+>T : Symbol(T, Decl(intraExpressionInferencesJsx.tsx, 118, 29))
+>arg : Symbol(arg, Decl(intraExpressionInferencesJsx.tsx, 118, 32))
+>T : Symbol(T, Decl(intraExpressionInferencesJsx.tsx, 118, 29))
+>p : Symbol(p, Decl(intraExpressionInferencesJsx.tsx, 118, 44))
+>errorFn : Symbol(errorFn, Decl(intraExpressionInferencesJsx.tsx, 118, 55))
+>ErrorFn : Symbol(ErrorFn, Decl(intraExpressionInferencesJsx.tsx, 107, 6))
+>T : Symbol(T, Decl(intraExpressionInferencesJsx.tsx, 118, 29))
+
+<GenericComp parser={createParser(1 as const)} handler={({ body: _ }) => {}} />;
+>GenericComp : Symbol(GenericComp, Decl(intraExpressionInferencesJsx.tsx, 109, 40))
+>parser : Symbol(parser, Decl(intraExpressionInferencesJsx.tsx, 120, 12))
+>createParser : Symbol(createParser, Decl(intraExpressionInferencesJsx.tsx, 118, 13))
+>const : Symbol(const)
+>handler : Symbol(handler, Decl(intraExpressionInferencesJsx.tsx, 120, 46))
+>body : Symbol(body, Decl(intraExpressionInferencesJsx.tsx, 113, 19))
+>_ : Symbol(_, Decl(intraExpressionInferencesJsx.tsx, 120, 58))
+

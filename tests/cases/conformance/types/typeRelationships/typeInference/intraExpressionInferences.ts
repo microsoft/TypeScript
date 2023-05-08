@@ -199,3 +199,26 @@ branch({
     let test1: "a" = u
   }
 })
+
+type ErrorFn = (error: unknown) => void;
+
+declare const genericFn: <T>(args: {
+  parser: (p: unknown, errorFn: ErrorFn) => T;
+  handler: (data: { body: T }) => unknown;
+}) => T;
+
+declare const createParser: <T>(arg: T) => (p: unknown, errorFn: ErrorFn) => T;
+
+genericFn({
+  parser: createParser(1 as const),
+  handler: ({ body: _ }) => {},
+});
+
+declare const genericFnTuple: <T>(
+  args: [
+    parser: (p: unknown, errorFn: ErrorFn) => T,
+    handler: (data: { body: T }) => unknown
+  ]
+) => T;
+
+genericFnTuple([createParser(1 as const), ({ body: _ }) => {}]);

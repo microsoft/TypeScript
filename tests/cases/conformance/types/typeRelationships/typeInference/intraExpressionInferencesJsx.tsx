@@ -110,3 +110,16 @@ function Foo<T>(props: Props<T>) {
   a: (x) => 10,
   b: (arg) => { arg.toString(); },
 }} />;
+
+type ErrorFn = (error: unknown) => void;
+
+function GenericComp<T>(props: {
+  parser: (p: unknown, errorFn: ErrorFn) => T;
+  handler: (data: { body: T }) => unknown;
+}) {
+  return null;
+}
+
+declare const createParser: <T>(arg: T) => (p: unknown, errorFn: ErrorFn) => T;
+
+<GenericComp parser={createParser(1 as const)} handler={({ body: _ }) => {}} />;

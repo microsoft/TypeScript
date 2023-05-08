@@ -1357,7 +1357,7 @@ function extractConstantInScope(
         : getUniqueName(isClassLike(scope) ? "newProperty" : "newLocal", file);
     const isJS = isInJSFile(scope);
 
-    let variableType = isJS || !checker.isContextSensitive(node)
+    let variableType = isJS || !checker.containsContextSensitive(node)
         ? undefined
         : checker.typeToTypeNode(checker.getContextualType(node)!, scope, NodeBuilderFlags.NoTruncation); // TODO: GH#18217
 

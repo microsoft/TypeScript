@@ -198,6 +198,28 @@ branch({
   }
 })
 
+type ErrorFn = (error: unknown) => void;
+
+declare const genericFn: <T>(args: {
+  parser: (p: unknown, errorFn: ErrorFn) => T;
+  handler: (data: { body: T }) => unknown;
+}) => T;
+
+declare const createParser: <T>(arg: T) => (p: unknown, errorFn: ErrorFn) => T;
+
+genericFn({
+  parser: createParser(1 as const),
+  handler: ({ body: _ }) => {},
+});
+
+declare const genericFnTuple: <T>(
+  args: [
+    parser: (p: unknown, errorFn: ErrorFn) => T,
+    handler: (data: { body: T }) => unknown
+  ]
+) => T;
+
+genericFnTuple([createParser(1 as const), ({ body: _ }) => {}]);
 
 //// [intraExpressionInferences.js]
 "use strict";
@@ -316,6 +338,15 @@ branch({
         var test1 = u;
     }
 });
+genericFn({
+    parser: createParser(1),
+    handler: function (_b) {
+        var _ = _b.body;
+    },
+});
+genericFnTuple([createParser(1), function (_b) {
+        var _ = _b.body;
+    }]);
 
 
 //// [intraExpressionInferences.d.ts]
@@ -383,3 +414,17 @@ declare const branch: <T, U extends T>(_: {
     then: (u: U) => void;
 }) => void;
 declare const x: "a" | "b";
+type ErrorFn = (error: unknown) => void;
+declare const genericFn: <T>(args: {
+    parser: (p: unknown, errorFn: ErrorFn) => T;
+    handler: (data: {
+        body: T;
+    }) => unknown;
+}) => T;
+declare const createParser: <T>(arg: T) => (p: unknown, errorFn: ErrorFn) => T;
+declare const genericFnTuple: <T>(args: [
+    parser: (p: unknown, errorFn: ErrorFn) => T,
+    handler: (data: {
+        body: T;
+    }) => unknown
+]) => T;

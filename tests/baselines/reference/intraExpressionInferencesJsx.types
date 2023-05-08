@@ -295,3 +295,44 @@ function Foo<T>(props: Props<T>) {
 
 }} />;
 
+type ErrorFn = (error: unknown) => void;
+>ErrorFn : (error: unknown) => void
+>error : unknown
+
+function GenericComp<T>(props: {
+>GenericComp : <T>(props: { parser: (p: unknown, errorFn: ErrorFn) => T; handler: (data: {    body: T;}) => unknown; }) => null
+>props : { parser: (p: unknown, errorFn: ErrorFn) => T; handler: (data: {    body: T;}) => unknown; }
+
+  parser: (p: unknown, errorFn: ErrorFn) => T;
+>parser : (p: unknown, errorFn: ErrorFn) => T
+>p : unknown
+>errorFn : ErrorFn
+
+  handler: (data: { body: T }) => unknown;
+>handler : (data: {    body: T;}) => unknown
+>data : { body: T; }
+>body : T
+
+}) {
+  return null;
+}
+
+declare const createParser: <T>(arg: T) => (p: unknown, errorFn: ErrorFn) => T;
+>createParser : <T>(arg: T) => (p: unknown, errorFn: ErrorFn) => T
+>arg : T
+>p : unknown
+>errorFn : ErrorFn
+
+<GenericComp parser={createParser(1 as const)} handler={({ body: _ }) => {}} />;
+><GenericComp parser={createParser(1 as const)} handler={({ body: _ }) => {}} /> : JSX.Element
+>GenericComp : <T>(props: { parser: (p: unknown, errorFn: ErrorFn) => T; handler: (data: { body: T; }) => unknown; }) => null
+>parser : (p: unknown, errorFn: ErrorFn) => 1
+>createParser(1 as const) : (p: unknown, errorFn: ErrorFn) => 1
+>createParser : <T>(arg: T) => (p: unknown, errorFn: ErrorFn) => T
+>1 as const : 1
+>1 : 1
+>handler : ({ body: _ }: { body: 1; }) => void
+>({ body: _ }) => {} : ({ body: _ }: { body: 1; }) => void
+>body : any
+>_ : 1
+

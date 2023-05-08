@@ -659,3 +659,78 @@ branch({
   }
 })
 
+type ErrorFn = (error: unknown) => void;
+>ErrorFn : (error: unknown) => void
+>error : unknown
+
+declare const genericFn: <T>(args: {
+>genericFn : <T>(args: { parser: (p: unknown, errorFn: ErrorFn) => T; handler: (data: { body: T; }) => unknown; }) => T
+>args : { parser: (p: unknown, errorFn: ErrorFn) => T; handler: (data: {    body: T;}) => unknown; }
+
+  parser: (p: unknown, errorFn: ErrorFn) => T;
+>parser : (p: unknown, errorFn: ErrorFn) => T
+>p : unknown
+>errorFn : ErrorFn
+
+  handler: (data: { body: T }) => unknown;
+>handler : (data: {    body: T;}) => unknown
+>data : { body: T; }
+>body : T
+
+}) => T;
+
+declare const createParser: <T>(arg: T) => (p: unknown, errorFn: ErrorFn) => T;
+>createParser : <T>(arg: T) => (p: unknown, errorFn: ErrorFn) => T
+>arg : T
+>p : unknown
+>errorFn : ErrorFn
+
+genericFn({
+>genericFn({  parser: createParser(1 as const),  handler: ({ body: _ }) => {},}) : 1
+>genericFn : <T>(args: { parser: (p: unknown, errorFn: ErrorFn) => T; handler: (data: { body: T; }) => unknown; }) => T
+>{  parser: createParser(1 as const),  handler: ({ body: _ }) => {},} : { parser: (p: unknown, errorFn: ErrorFn) => 1; handler: ({ body: _ }: { body: 1; }) => void; }
+
+  parser: createParser(1 as const),
+>parser : (p: unknown, errorFn: ErrorFn) => 1
+>createParser(1 as const) : (p: unknown, errorFn: ErrorFn) => 1
+>createParser : <T>(arg: T) => (p: unknown, errorFn: ErrorFn) => T
+>1 as const : 1
+>1 : 1
+
+  handler: ({ body: _ }) => {},
+>handler : ({ body: _ }: { body: 1; }) => void
+>({ body: _ }) => {} : ({ body: _ }: { body: 1; }) => void
+>body : any
+>_ : 1
+
+});
+
+declare const genericFnTuple: <T>(
+>genericFnTuple : <T>(args: [parser: (p: unknown, errorFn: ErrorFn) => T, handler: (data: { body: T; }) => unknown]) => T
+
+  args: [
+>args : [parser: (p: unknown, errorFn: ErrorFn) => T, handler: (data: {    body: T;}) => unknown]
+
+    parser: (p: unknown, errorFn: ErrorFn) => T,
+>p : unknown
+>errorFn : ErrorFn
+
+    handler: (data: { body: T }) => unknown
+>data : { body: T; }
+>body : T
+
+  ]
+) => T;
+
+genericFnTuple([createParser(1 as const), ({ body: _ }) => {}]);
+>genericFnTuple([createParser(1 as const), ({ body: _ }) => {}]) : 1
+>genericFnTuple : <T>(args: [parser: (p: unknown, errorFn: ErrorFn) => T, handler: (data: { body: T; }) => unknown]) => T
+>[createParser(1 as const), ({ body: _ }) => {}] : [(p: unknown, errorFn: ErrorFn) => 1, ({ body: _ }: { body: 1; }) => void]
+>createParser(1 as const) : (p: unknown, errorFn: ErrorFn) => 1
+>createParser : <T>(arg: T) => (p: unknown, errorFn: ErrorFn) => T
+>1 as const : 1
+>1 : 1
+>({ body: _ }) => {} : ({ body: _ }: { body: 1; }) => void
+>body : any
+>_ : 1
+
