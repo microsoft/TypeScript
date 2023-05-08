@@ -28,36 +28,33 @@ function sortDiagnostics(a: ts.Diagnostic, b: ts.Diagnostic) {
     return 1;
 }
 
+function isVarConst(node: ts.VariableDeclaration | ts.VariableDeclarationList): boolean {
+    return !!(ts.getCombinedNodeFlags(node) & ts.NodeFlags.Const);
+}
+
+function isDeclarationReadonly(declaration: ts.Declaration): boolean {
+    return !!(ts.getCombinedModifierFlags(declaration) & ts.ModifierFlags.Readonly && !ts.isParameterPropertyDeclaration(declaration, declaration.parent));
+}
+
+function isLiteralConstDeclaration(node: ts.VariableDeclaration | ts.PropertyDeclaration | ts.PropertySignature | ts.ParameterDeclaration): boolean {
+    if (isDeclarationReadonly(node) || ts.isVariableDeclaration(node) && isVarConst(node)) {
+        // TODO: Make sure this is a valid approximation for literal types
+        return !node.type && "initializer" in node && !!node.initializer && ts.isLiteralExpression(node.initializer);
+        // Original TS version
+        // return isFreshLiteralType(getTypeOfSymbol(getSymbolOfNode(node)));
+    }
+    return false;
+}
+
+function tryGetReturnType(typeChecker: ts.TypeChecker, node: ts.SignatureDeclaration): ts.Type | undefined {
+    const signature = typeChecker.getSignatureFromDeclaration(node);
+    if (signature) {
+        return typeChecker.getReturnTypeOfSignature(signature);
+    }
+}
+
 // Define a transformer function
 export function addTypeAnnotationTransformer(sourceFile: ts.SourceFile, program: ts.Program, moduleResolutionHost?: ts.ModuleResolutionHost) {
-    function tryGetReturnType(
-        typeChecker: ts.TypeChecker,
-        node: ts.SignatureDeclaration
-    ): ts.Type | undefined {
-        const signature = typeChecker.getSignatureFromDeclaration(node);
-        if (signature) {
-            return typeChecker.getReturnTypeOfSignature(signature);
-        }
-    }
-
-    function isVarConst(node: ts.VariableDeclaration | ts.VariableDeclarationList): boolean {
-        return !!(ts.getCombinedNodeFlags(node) & ts.NodeFlags.Const);
-    }
-
-    function isDeclarationReadonly(declaration: ts.Declaration): boolean {
-        return !!(ts.getCombinedModifierFlags(declaration) & ts.ModifierFlags.Readonly && !ts.isParameterPropertyDeclaration(declaration, declaration.parent));
-    }
-
-    function isLiteralConstDeclaration(node: ts.VariableDeclaration | ts.PropertyDeclaration | ts.PropertySignature | ts.ParameterDeclaration): boolean {
-        if (isDeclarationReadonly(node) || ts.isVariableDeclaration(node) && isVarConst(node)) {
-            // TODO: Make sure this is a valid approximation for literal types
-            return !node.type && "initializer" in node && !!node.initializer && ts.isLiteralExpression(node.initializer);
-            // Original TS version
-            // return isFreshLiteralType(getTypeOfSymbol(getSymbolOfNode(node)));
-        }
-        return false;
-    }
-
     const typeChecker = program.getTypeChecker();
     const sortedDiags = program.getDeclarationDiagnostics(sourceFile)
                                .filter((diag) => diag.code === 9007)
@@ -98,7 +95,6 @@ export function addTypeAnnotationTransformer(sourceFile: ts.SourceFile, program:
                 hasError = false;
                 return undefined;
             }
-
             return typeNode;
         }
         let diagIndex = 0;
@@ -130,7 +126,7 @@ export function addTypeAnnotationTransformer(sourceFile: ts.SourceFile, program:
                 }
                 if (ts.isParameter(node) && !node.type) {
                     const type = typeChecker.getTypeAtLocation(node);
-                    if(type) {
+                    if (type) {
                         const typeNode = typeToTypeNode(type, node);
                         return ts.factory.updateParameterDeclaration(
                             node,
@@ -159,7 +155,6 @@ export function addTypeAnnotationTransformer(sourceFile: ts.SourceFile, program:
                 if (ts.isFunctionDeclaration(node) && !node.type) {
                     const type = tryGetReturnType(typeChecker, node);
                     if(type) {
-
                         const typeNode = typeToTypeNode(type, node);
                         return ts.factory.updateFunctionDeclaration(
                             node,
@@ -199,7 +194,6 @@ export function addTypeAnnotationTransformer(sourceFile: ts.SourceFile, program:
                 if(ts.isMethodSignature(node) && !node.type) {
                     const type = tryGetReturnType(typeChecker, node);
                     if(type) {
-
                         const typeNode = typeToTypeNode(type, node);
                         return ts.factory.updateMethodSignature(
                             node,
