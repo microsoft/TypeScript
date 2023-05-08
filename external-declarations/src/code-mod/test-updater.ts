@@ -130,7 +130,7 @@ ${result.stack}
                     }]
                 });
                 const transformedFile = ts.transform(sourceFile, [
-                    addTypeAnnotationTransformer(program, moduleResolutionHost),
+                    addTypeAnnotationTransformer(sourceFile, program, moduleResolutionHost),
                 ]);
 
                 const printer = ts.createPrinter({

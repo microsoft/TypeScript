@@ -12,9 +12,24 @@ const declarationEmitNodeBuilderFlags =
     NodeBuilderFlags.GenerateNamesForShadowedTypeParams |
     NodeBuilderFlags.NoTruncation;
 
+function sortDiagnostics(a: ts.Diagnostic, b: ts.Diagnostic) {
+    if (a.start! < b.start!) {
+        return -1;
+    }
+    if (a.start! === b.start!) {
+        if (a.length === b.length) {
+            return 0;
+        }
+        if (a.length! < b.length!){
+            return -1;
+        }
+        return 1;
+    }
+    return 1;
+}
 
 // Define a transformer function
-export function addTypeAnnotationTransformer(program: ts.Program, moduleResolutionHost?: ts.ModuleResolutionHost) {
+export function addTypeAnnotationTransformer(sourceFile: ts.SourceFile, program: ts.Program, moduleResolutionHost?: ts.ModuleResolutionHost) {
     function tryGetReturnType(
         typeChecker: ts.TypeChecker,
         node: ts.SignatureDeclaration
@@ -44,8 +59,13 @@ export function addTypeAnnotationTransformer(program: ts.Program, moduleResoluti
     }
 
     const typeChecker = program.getTypeChecker();
+    const sortedDiags = program.getDeclarationDiagnostics(sourceFile)
+                               .filter((diag) => diag.code === 9007)
+                               .sort(sortDiagnostics).
+                                map((diag) => { return { start: diag.start!, end: diag.start! + diag.length! };});
 
     return (context: ts.TransformationContext) => {
+        if (!sortedDiags) return (node: ts.Node) => node;
         let hasError = false;
         const reportError = () => {
             hasError = true;
@@ -81,6 +101,7 @@ export function addTypeAnnotationTransformer(program: ts.Program, moduleResoluti
 
             return typeNode;
         }
+        let diagIndex = 0;
         // Return a visitor function
         return (rootNode: ts.Node) => {
             function updateTypesInNodeArray<T extends ts.Node>(nodeArray: ts.NodeArray<T>): ts.NodeArray<T>;
@@ -96,7 +117,18 @@ export function addTypeAnnotationTransformer(program: ts.Program, moduleResoluti
 
             // Define a visitor function
             function visit(node: ts.Node): ts.Node | ts.Node[] {
-                if(ts.isParameter(node) && !node.type) {
+                // Only visit descendants when there's diagnostics on this location.
+                while (diagIndex < sortedDiags.length && sortedDiags[diagIndex].start < node.getStart()) {
+                    ++diagIndex;
+                }
+                if (diagIndex >= sortedDiags.length) {
+                    return node;
+                }
+                if ((node.getStart() !== sortedDiags[diagIndex].start || node.getEnd() !== sortedDiags[diagIndex].end) &&
+                    sortedDiags[diagIndex].end > node.getEnd()) {
+                    return node;
+                }
+                if (ts.isParameter(node) && !node.type) {
                     const type = typeChecker.getTypeAtLocation(node);
                     if(type) {
                         const typeNode = typeToTypeNode(type, node);
