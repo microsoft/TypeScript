@@ -201,6 +201,15 @@ export abstract class BB {
     }
 }
 
+// repro from https://github.com/microsoft/TypeScript/issues/54177#issuecomment-1538436654
+function conversionTest(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | `${string & {}}Downcast`) {}
+conversionTest("testDowncast");
+function conversionTest2(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | `${{} & string}Downcast`) {}
+conversionTest2("testDowncast");
+
+function foo(str: `${`a${string}` & `${string}a`}Test`) {}
+foo("abaTest"); // ok
+foo("abcTest"); // error
 
 //// [templateLiteralTypesPatterns.js]
 "use strict";
@@ -351,3 +360,11 @@ var BB = /** @class */ (function () {
     return BB;
 }());
 exports.BB = BB;
+// repro from https://github.com/microsoft/TypeScript/issues/54177#issuecomment-1538436654
+function conversionTest(groupName) { }
+conversionTest("testDowncast");
+function conversionTest2(groupName) { }
+conversionTest2("testDowncast");
+function foo(str) { }
+foo("abaTest"); // ok
+foo("abcTest"); // error
