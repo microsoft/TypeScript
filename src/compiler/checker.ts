@@ -30107,7 +30107,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return links.immediateTarget;
     }
 
-    function checkObjectLiteral(node: ObjectLiteralExpression, checkMode?: CheckMode): Type {
+    function checkObjectLiteral(node: ObjectLiteralExpression, checkMode: CheckMode = CheckMode.Normal): Type {
         const inDestructuringPattern = isAssignmentTarget(node);
         // Grammar checking
         checkGrammarObjectLiteralExpression(node, inDestructuringPattern);
@@ -30209,7 +30209,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 member = prop;
                 allPropertiesTable?.set(prop.escapedName, prop);
 
-                if (contextualType && checkMode && checkMode & CheckMode.Inferential && !(checkMode & CheckMode.SkipContextSensitive) &&
+                if (contextualType && checkMode & CheckMode.Inferential && !(checkMode & CheckMode.SkipContextSensitive) &&
                     (memberDecl.kind === SyntaxKind.PropertyAssignment || memberDecl.kind === SyntaxKind.MethodDeclaration) && isContextSensitive(memberDecl)) {
                     const inferenceContext = getInferenceContext(node);
                     Debug.assert(inferenceContext);  // In CheckMode.Inferential we should always have an inference context
@@ -30229,7 +30229,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     hasComputedNumberProperty = false;
                     hasComputedSymbolProperty = false;
                 }
-                const type = getReducedType(checkExpression(memberDecl.expression));
+                const type = getReducedType(checkExpression(memberDecl.expression, checkMode & CheckMode.Inferential));
                 if (isValidSpreadType(type)) {
                     const mergedType = tryMergeUnionOfObjectTypeAndEmptyObject(type, inConstContext);
                     if (allPropertiesTable) {
@@ -30429,7 +30429,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * @remarks Because this function calls getSpreadType, it needs to use the same checks as checkObjectLiteral,
      * which also calls getSpreadType.
      */
-    function createJsxAttributesTypeFromAttributesProperty(openingLikeElement: JsxOpeningLikeElement, checkMode: CheckMode | undefined) {
+    function createJsxAttributesTypeFromAttributesProperty(openingLikeElement: JsxOpeningLikeElement, checkMode: CheckMode = CheckMode.Normal) {
         const attributes = openingLikeElement.attributes;
         const contextualType = getContextualType(attributes, ContextFlags.None);
         const allAttributesTable = strictNullChecks ? createSymbolTable() : undefined;
@@ -30466,7 +30466,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         addDeprecatedSuggestion(attributeDecl.name, prop.declarations, attributeDecl.name.escapedText as string);
                     }
                 }
-                if (contextualType && checkMode && checkMode & CheckMode.Inferential && !(checkMode & CheckMode.SkipContextSensitive) && isContextSensitive(attributeDecl)) {
+                if (contextualType && checkMode & CheckMode.Inferential && !(checkMode & CheckMode.SkipContextSensitive) && isContextSensitive(attributeDecl)) {
                     const inferenceContext = getInferenceContext(attributes);
                     Debug.assert(inferenceContext);  // In CheckMode.Inferential we should always have an inference context
                     const inferenceNode = (attributeDecl.initializer as JsxExpression).expression!;
@@ -30479,7 +30479,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     spread = getSpreadType(spread, createJsxAttributesType(), attributes.symbol, objectFlags, /*readonly*/ false);
                     attributesTable = createSymbolTable();
                 }
-                const exprType = getReducedType(checkExpressionCached(attributeDecl.expression, checkMode));
+                const exprType = getReducedType(checkExpression(attributeDecl.expression, checkMode & CheckMode.Inferential));
                 if (isTypeAny(exprType)) {
                     hasSpreadAnyType = true;
                 }
