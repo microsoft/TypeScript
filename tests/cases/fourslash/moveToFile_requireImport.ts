@@ -35,9 +35,9 @@ a; y; z;`,
 
 const x = 0;
 const y = p;
-    exports.y = y;
-    const z = 0;
-    exports.z = 0;
+exports.y = y;
+const z = 0;
+exports.z = 0;
 `,
     },
     interactiveRefactorArguments: { targetFile: "/bar.js" }
