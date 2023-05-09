@@ -3,7 +3,7 @@
 class StaticName {
 >StaticName : StaticName
 
-    static name: number; // error
+    static name: number; // error without useDefineForClassFields
 >name : number
 
     name: string; // ok
@@ -13,7 +13,7 @@ class StaticName {
 class StaticNameFn {
 >StaticNameFn : StaticNameFn
 
-    static name() {} // error
+    static name() {} // error without useDefineForClassFields
 >name : () => void
 
     name() {} // ok
@@ -24,7 +24,7 @@ class StaticNameFn {
 class StaticLength {
 >StaticLength : StaticLength
 
-    static length: number; // error
+    static length: number; // error without useDefineForClassFields
 >length : number
 
     length: string; // ok
@@ -34,7 +34,7 @@ class StaticLength {
 class StaticLengthFn {
 >StaticLengthFn : StaticLengthFn
 
-    static length() {} // error
+    static length() {} // error without useDefineForClassFields
 >length : () => void
 
     length() {} // ok
@@ -45,7 +45,7 @@ class StaticLengthFn {
 class StaticPrototype {
 >StaticPrototype : StaticPrototype
 
-    static prototype: number; // error
+    static prototype: number; // always an error
 >prototype : StaticPrototype
 
     prototype: string; // ok
@@ -55,7 +55,7 @@ class StaticPrototype {
 class StaticPrototypeFn {
 >StaticPrototypeFn : StaticPrototypeFn
 
-    static prototype() {} // error
+    static prototype() {} // always an error
 >prototype : () => void
 
     prototype() {} // ok
@@ -66,7 +66,7 @@ class StaticPrototypeFn {
 class StaticCaller {
 >StaticCaller : StaticCaller
 
-    static caller: number; // error
+    static caller: number; // error without useDefineForClassFields
 >caller : number
 
     caller: string; // ok
@@ -76,7 +76,7 @@ class StaticCaller {
 class StaticCallerFn {
 >StaticCallerFn : StaticCallerFn
 
-    static caller() {} // error
+    static caller() {} // error without useDefineForClassFields
 >caller : () => void
 
     caller() {} // ok
@@ -87,7 +87,7 @@ class StaticCallerFn {
 class StaticArguments {
 >StaticArguments : StaticArguments
 
-    static arguments: number; // error
+    static arguments: number; // error without useDefineForClassFields
 >arguments : number
 
     arguments: string; // ok
@@ -97,7 +97,7 @@ class StaticArguments {
 class StaticArgumentsFn {
 >StaticArgumentsFn : StaticArgumentsFn
 
-    static arguments() {} // error
+    static arguments() {} // error without useDefineForClassFields
 >arguments : () => void
 
     arguments() {} // ok
@@ -111,9 +111,9 @@ class StaticArgumentsFn {
 // name
 var StaticName_Anonymous = class {
 >StaticName_Anonymous : typeof StaticName_Anonymous
->class {    static name: number; // error    name: string; // ok} : typeof StaticName_Anonymous
+>class {    static name: number; // error without useDefineForClassFields    name: string; // ok} : typeof StaticName_Anonymous
 
-    static name: number; // error
+    static name: number; // error without useDefineForClassFields
 >name : number
 
     name: string; // ok
@@ -122,9 +122,9 @@ var StaticName_Anonymous = class {
 
 var StaticNameFn_Anonymous = class {
 >StaticNameFn_Anonymous : typeof StaticNameFn_Anonymous
->class {    static name() {} // error    name() {} // ok} : typeof StaticNameFn_Anonymous
+>class {    static name() {} // error without useDefineForClassFields    name() {} // ok} : typeof StaticNameFn_Anonymous
 
-    static name() {} // error
+    static name() {} // error without useDefineForClassFields
 >name : () => void
 
     name() {} // ok
@@ -134,9 +134,9 @@ var StaticNameFn_Anonymous = class {
 // length
 var StaticLength_Anonymous = class {
 >StaticLength_Anonymous : typeof StaticLength_Anonymous
->class {    static length: number; // error    length: string; // ok} : typeof StaticLength_Anonymous
+>class {    static length: number; // error without useDefineForClassFields    length: string; // ok} : typeof StaticLength_Anonymous
 
-    static length: number; // error
+    static length: number; // error without useDefineForClassFields
 >length : number
 
     length: string; // ok
@@ -145,9 +145,9 @@ var StaticLength_Anonymous = class {
 
 var StaticLengthFn_Anonymous = class {
 >StaticLengthFn_Anonymous : typeof StaticLengthFn_Anonymous
->class {    static length() {} // error    length() {} // ok} : typeof StaticLengthFn_Anonymous
+>class {    static length() {} // error without useDefineForClassFields    length() {} // ok} : typeof StaticLengthFn_Anonymous
 
-    static length() {} // error
+    static length() {} // error without useDefineForClassFields
 >length : () => void
 
     length() {} // ok
@@ -157,9 +157,9 @@ var StaticLengthFn_Anonymous = class {
 // prototype
 var StaticPrototype_Anonymous = class {
 >StaticPrototype_Anonymous : typeof StaticPrototype_Anonymous
->class {    static prototype: number; // error    prototype: string; // ok} : typeof StaticPrototype_Anonymous
+>class {    static prototype: number; // always an error    prototype: string; // ok} : typeof StaticPrototype_Anonymous
 
-    static prototype: number; // error
+    static prototype: number; // always an error
 >prototype : StaticPrototype_Anonymous
 
     prototype: string; // ok
@@ -168,9 +168,9 @@ var StaticPrototype_Anonymous = class {
 
 var StaticPrototypeFn_Anonymous = class {
 >StaticPrototypeFn_Anonymous : typeof StaticPrototypeFn_Anonymous
->class {    static prototype() {} // error    prototype() {} // ok} : typeof StaticPrototypeFn_Anonymous
+>class {    static prototype() {} // always an error    prototype() {} // ok} : typeof StaticPrototypeFn_Anonymous
 
-    static prototype() {} // error
+    static prototype() {} // always an error
 >prototype : () => void
 
     prototype() {} // ok
@@ -180,9 +180,9 @@ var StaticPrototypeFn_Anonymous = class {
 // caller
 var StaticCaller_Anonymous = class {
 >StaticCaller_Anonymous : typeof StaticCaller_Anonymous
->class {    static caller: number; // error    caller: string; // ok} : typeof StaticCaller_Anonymous
+>class {    static caller: number; // error without useDefineForClassFields    caller: string; // ok} : typeof StaticCaller_Anonymous
 
-    static caller: number; // error
+    static caller: number; // error without useDefineForClassFields
 >caller : number
 
     caller: string; // ok
@@ -191,9 +191,9 @@ var StaticCaller_Anonymous = class {
 
 var StaticCallerFn_Anonymous = class {
 >StaticCallerFn_Anonymous : typeof StaticCallerFn_Anonymous
->class {    static caller() {} // error    caller() {} // ok} : typeof StaticCallerFn_Anonymous
+>class {    static caller() {} // error without useDefineForClassFields    caller() {} // ok} : typeof StaticCallerFn_Anonymous
 
-    static caller() {} // error
+    static caller() {} // error without useDefineForClassFields
 >caller : () => void
 
     caller() {} // ok
@@ -203,9 +203,9 @@ var StaticCallerFn_Anonymous = class {
 // arguments
 var StaticArguments_Anonymous = class {
 >StaticArguments_Anonymous : typeof StaticArguments_Anonymous
->class {    static arguments: number; // error    arguments: string; // ok} : typeof StaticArguments_Anonymous
+>class {    static arguments: number; // error without useDefineForClassFields    arguments: string; // ok} : typeof StaticArguments_Anonymous
 
-    static arguments: number; // error
+    static arguments: number; // error without useDefineForClassFields
 >arguments : number
 
     arguments: string; // ok
@@ -214,9 +214,9 @@ var StaticArguments_Anonymous = class {
 
 var StaticArgumentsFn_Anonymous = class {
 >StaticArgumentsFn_Anonymous : typeof StaticArgumentsFn_Anonymous
->class {    static arguments() {} // error    arguments() {} // ok} : typeof StaticArgumentsFn_Anonymous
+>class {    static arguments() {} // error without useDefineForClassFields    arguments() {} // ok} : typeof StaticArgumentsFn_Anonymous
 
-    static arguments() {} // error
+    static arguments() {} // error without useDefineForClassFields
 >arguments : () => void
 
     arguments() {} // ok
@@ -233,7 +233,7 @@ module TestOnDefaultExportedClass_1 {
     class StaticName {
 >StaticName : StaticName
 
-        static name: number; // error
+        static name: number; // error without useDefineForClassFields
 >name : number
 
         name: string; // ok
@@ -247,7 +247,7 @@ module TestOnDefaultExportedClass_2 {
     class StaticNameFn {
 >StaticNameFn : StaticNameFn
 
-        static name() {} // error
+        static name() {} // error without useDefineForClassFields
 >name : () => void
 
         name() {} // ok
@@ -262,7 +262,7 @@ module TestOnDefaultExportedClass_3 {
     export default class StaticLength {
 >StaticLength : StaticLength
 
-        static length: number; // error
+        static length: number; // error without useDefineForClassFields
 >length : number
 
         length: string; // ok
@@ -276,7 +276,7 @@ module TestOnDefaultExportedClass_4 {
     export default class StaticLengthFn {
 >StaticLengthFn : StaticLengthFn
 
-        static length() {} // error
+        static length() {} // error without useDefineForClassFields
 >length : () => void
 
         length() {} // ok
@@ -285,13 +285,13 @@ module TestOnDefaultExportedClass_4 {
 }
 
 // prototype
-module TestOnDefaultExportedClass_5 {    
+module TestOnDefaultExportedClass_5 {
 >TestOnDefaultExportedClass_5 : typeof TestOnDefaultExportedClass_5
 
     export default class StaticPrototype {
 >StaticPrototype : StaticPrototype
 
-        static prototype: number; // error
+        static prototype: number; // always an error
 >prototype : StaticPrototype
 
         prototype: string; // ok
@@ -305,7 +305,7 @@ module TestOnDefaultExportedClass_6 {
     export default class StaticPrototypeFn {
 >StaticPrototypeFn : StaticPrototypeFn
 
-        static prototype() {} // error
+        static prototype() {} // always an error
 >prototype : () => void
 
         prototype() {} // ok
@@ -320,7 +320,7 @@ module TestOnDefaultExportedClass_7 {
     export default class StaticCaller {
 >StaticCaller : StaticCaller
 
-        static caller: number; // error
+        static caller: number; // error without useDefineForClassFields
 >caller : number
 
         caller: string; // ok
@@ -334,7 +334,7 @@ module TestOnDefaultExportedClass_8 {
     export default class StaticCallerFn {
 >StaticCallerFn : StaticCallerFn
 
-        static caller() {} // error
+        static caller() {} // error without useDefineForClassFields
 >caller : () => void
 
         caller() {} // ok
@@ -349,7 +349,7 @@ module TestOnDefaultExportedClass_9 {
     export default class StaticArguments {
 >StaticArguments : StaticArguments
 
-        static arguments: number; // error
+        static arguments: number; // error without useDefineForClassFields
 >arguments : number
 
         arguments: string; // ok
@@ -363,10 +363,11 @@ module TestOnDefaultExportedClass_10 {
     export default class StaticArgumentsFn {
 >StaticArgumentsFn : StaticArgumentsFn
 
-        static arguments() {} // error
+        static arguments() {} // error without useDefineForClassFields
 >arguments : () => void
 
         arguments() {} // ok
 >arguments : () => void
     }
 }
+
