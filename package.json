@@ -110,9 +110,9 @@
         "source-map-support": false,
         "inspector": false
     },
-    "packageManager": "npm@8.19.3",
+    "packageManager": "npm@8.19.4",
     "volta": {
-        "node": "14.21.1",
-        "npm": "8.19.3"
+        "node": "20.1.0",
+        "npm": "8.19.4"
     }
 }
