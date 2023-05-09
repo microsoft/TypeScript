@@ -293,6 +293,7 @@ import {
     isJSDocTypeTag,
     isJsxChild,
     isJsxFragment,
+    isJsxNamespacedName,
     isJsxOpeningLikeElement,
     isJsxText,
     isLeftHandSideExpression,
@@ -2024,7 +2025,7 @@ export function isComputedNonLiteralName(name: PropertyName): boolean {
 }
 
 /** @internal */
-export function tryGetTextOfPropertyName(name: PropertyName | NoSubstitutionTemplateLiteral): __String | undefined {
+export function tryGetTextOfPropertyName(name: PropertyName | NoSubstitutionTemplateLiteral | JsxAttributeName): __String | undefined {
     switch (name.kind) {
         case SyntaxKind.Identifier:
         case SyntaxKind.PrivateIdentifier:
@@ -2036,13 +2037,15 @@ export function tryGetTextOfPropertyName(name: PropertyName | NoSubstitutionTemp
         case SyntaxKind.ComputedPropertyName:
             if (isStringOrNumericLiteralLike(name.expression)) return escapeLeadingUnderscores(name.expression.text);
             return undefined;
+        case SyntaxKind.JsxNamespacedName:
+            return getEscapedTextOfJsxNamespacedName(name);
         default:
             return Debug.assertNever(name);
     }
 }
 
 /** @internal */
-export function getTextOfPropertyName(name: PropertyName | NoSubstitutionTemplateLiteral): __String {
+export function getTextOfPropertyName(name: PropertyName | NoSubstitutionTemplateLiteral | JsxAttributeName): __String {
     return Debug.checkDefined(tryGetTextOfPropertyName(name));
 }
 
@@ -3074,7 +3077,7 @@ export function getEntityNameFromTypeNode(node: TypeNode): EntityNameOrEntityNam
 }
 
 /** @internal */
-export function getInvokedExpression(node: CallLikeExpression): Expression {
+export function getInvokedExpression(node: CallLikeExpression): Expression | JsxTagNameExpression {
     switch (node.kind) {
         case SyntaxKind.TaggedTemplateExpression:
             return node.tag;
@@ -4954,7 +4957,7 @@ export function isDynamicName(name: DeclarationName): boolean {
 }
 
 /** @internal */
-export function getPropertyNameForPropertyNameNode(name: PropertyName): __String | undefined {
+export function getPropertyNameForPropertyNameNode(name: PropertyName | JsxAttributeName): __String | undefined {
     switch (name.kind) {
         case SyntaxKind.Identifier:
         case SyntaxKind.PrivateIdentifier:
@@ -4974,6 +4977,8 @@ export function getPropertyNameForPropertyNameNode(name: PropertyName): __String
                 return nameExpression.operand.text as __String;
             }
             return undefined;
+        case SyntaxKind.JsxNamespacedName:
+            return getEscapedTextOfJsxNamespacedName(name);
         default:
             return Debug.assertNever(name);
     }
@@ -4993,12 +4998,12 @@ export function isPropertyNameLiteral(node: Node): node is PropertyNameLiteral {
 }
 /** @internal */
 export function getTextOfIdentifierOrLiteral(node: PropertyNameLiteral | PrivateIdentifier): string {
-    return isMemberName(node) ? idText(node) : node.text;
+    return isMemberName(node) ? idText(node) : isJsxNamespacedName(node) ? getTextOfJsxNamespacedName(node) : node.text;
 }
 
 /** @internal */
 export function getEscapedTextOfIdentifierOrLiteral(node: PropertyNameLiteral): __String {
-    return isMemberName(node) ? node.escapedText : escapeLeadingUnderscores(node.text);
+    return isMemberName(node) ? node.escapedText : isJsxNamespacedName(node) ? getEscapedTextOfJsxNamespacedName(node) : escapeLeadingUnderscores(node.text);
 }
 
 /** @internal */
@@ -7025,7 +7030,7 @@ export function isPropertyAccessEntityNameExpression(node: Node): node is Proper
 }
 
 /** @internal */
-export function tryGetPropertyAccessOrIdentifierToString(expr: Expression): string | undefined {
+export function tryGetPropertyAccessOrIdentifierToString(expr: Expression | JsxTagNameExpression): string | undefined {
     if (isPropertyAccessExpression(expr)) {
         const baseStr = tryGetPropertyAccessOrIdentifierToString(expr.expression);
         if (baseStr !== undefined) {
@@ -7040,6 +7045,9 @@ export function tryGetPropertyAccessOrIdentifierToString(expr: Expression): stri
     }
     else if (isIdentifier(expr)) {
         return unescapeLeadingUnderscores(expr.escapedText);
+    }
+    else if (isJsxNamespacedName(expr)) {
+        return getTextOfJsxNamespacedName(expr);
     }
     return undefined;
 }

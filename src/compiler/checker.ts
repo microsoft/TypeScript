@@ -776,6 +776,7 @@ import {
     JSDocVariadicType,
     JsxAttribute,
     JsxAttributeLike,
+    JsxAttributeName,
     JsxAttributes,
     JsxChild,
     JsxClosingElement,
@@ -17026,19 +17027,31 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function getLiteralTypeFromPropertyName(name: PropertyName) {
+    function getLiteralTypeFromPropertyName(name: PropertyName | JsxAttributeName) {
         if (isPrivateIdentifier(name)) {
             return neverType;
         }
-        return isIdentifier(name) ? getStringLiteralType(unescapeLeadingUnderscores(name.escapedText)) :
-            getRegularTypeOfLiteralType(isComputedPropertyName(name) ? checkComputedPropertyName(name) : checkExpression(name));
+        if (isNumericLiteral(name)) {
+            return getRegularTypeOfLiteralType(checkExpression(name));
+        }
+        if (isComputedPropertyName(name)) {
+            return getRegularTypeOfLiteralType(checkComputedPropertyName(name));
+        }
+        const propertyName = getPropertyNameForPropertyNameNode(name);
+        if (propertyName !== undefined) {
+            return getStringLiteralType(unescapeLeadingUnderscores(propertyName));
+        }
+        if (isExpression(name)) {
+            return getRegularTypeOfLiteralType(checkExpression(name));
+        }
+        return neverType;
     }
 
     function getLiteralTypeFromProperty(prop: Symbol, include: TypeFlags, includeNonPublic?: boolean) {
         if (includeNonPublic || !(getDeclarationModifierFlagsFromSymbol(prop) & ModifierFlags.NonPublicAccessibilityModifier)) {
             let type = getSymbolLinks(getLateBoundSymbol(prop)).nameType;
             if (!type) {
-                const name = getNameOfDeclaration(prop.valueDeclaration) as PropertyName;
+                const name = getNameOfDeclaration(prop.valueDeclaration) as PropertyName | JsxAttributeName;
                 type = prop.escapedName === InternalSymbolName.Default ? getStringLiteralType("default") :
                     name && getLiteralTypeFromPropertyName(name) || (!isKnownSymbol(prop) ? getStringLiteralType(symbolName(prop)) : undefined);
             }
@@ -32647,7 +32660,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (getJsxNamespaceContainerForImplicitImport(node)) {
                 return true; // factory is implicitly jsx/jsxdev - assume it fits the bill, since we don't strongly look for the jsx/jsxs/jsxDEV factory APIs anywhere else (at least not yet)
             }
-            const tagType = isJsxOpeningElement(node) || isJsxSelfClosingElement(node) && !isJsxIntrinsicTagName(node.tagName) ? checkExpression(node.tagName) : undefined;
+            const tagType = (isJsxOpeningElement(node) || isJsxSelfClosingElement(node)) && !(isJsxIntrinsicTagName(node.tagName) || isJsxNamespacedName(node.tagName)) ? checkExpression(node.tagName) : undefined;
             if (!tagType) {
                 return true;
             }
