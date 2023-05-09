@@ -3871,7 +3871,6 @@ namespace Parser {
             if (token() === SyntaxKind.ColonToken) {
                 parseErrorAtCurrentToken(Diagnostics.Invalid_character);
                 nextToken();
-                constraint = parseType();
             }
             // It's not uncommon for people to write improper constraints to a generic.  If the
             // user writes a constraint that is an expression and not an actual type, then parse
