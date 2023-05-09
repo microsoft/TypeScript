@@ -1,3 +1,26 @@
+=== /decl.d.ts ===
+declare class CJSy {}
+>CJSy : CJSy
+
+export = CJSy;
+>CJSy : CJSy
+
+=== /ambient.d.ts ===
+declare module "ambient" {
+>"ambient" : typeof import("ambient")
+
+    const _export: number;
+>_export : number
+
+    export = _export;
+>_export : number
+}
+
+=== /types.ts ===
+interface Typey {}
+export type { Typey };
+>Typey : Typey
+
 === /main.ts ===
 import CJSy = require("./decl"); // error
 >CJSy : typeof CJSy
@@ -14,15 +37,11 @@ import * as types from "./types"; // ok
 CJSy;
 >CJSy : typeof CJSy
 
-=== /decl.d.ts ===
-declare class CJSy {}
->CJSy : CJSy
+=== /ns.ts ===
+export namespace ns {
+>ns : typeof ns
 
-export = CJSy;
->CJSy : CJSy
-
-=== /types.ts ===
-interface Typey {}
-export type { Typey };
->Typey : Typey
+    export enum A {}
+>A : A
+}
 

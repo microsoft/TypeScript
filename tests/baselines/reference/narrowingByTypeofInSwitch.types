@@ -58,7 +58,6 @@ function assertObject(x: object) {
 function assertObjectOrNull(x: object | null) {
 >assertObjectOrNull : (x: object | null) => object | null
 >x : object | null
->null : null
 
     return x;
 >x : object | null
@@ -552,7 +551,7 @@ function multipleGenericFuse<X extends L | number, Y extends R | number>(xy: X |
 
         case 'function': return [xy, 1];
 >'function' : "function"
->[xy, 1] : [X & Function, 1]
+>[xy, 1] : [X & Function, number]
 >xy : X & Function
 >1 : 1
 
@@ -1092,7 +1091,7 @@ function multipleGenericFuseWithBoth<X extends L | number, Y extends R | number>
 
         case `function`: return [xy, 1];
 >`function` : "function"
->[xy, 1] : [X & Function, 1]
+>[xy, 1] : [X & Function, number]
 >xy : X & Function
 >1 : 1
 

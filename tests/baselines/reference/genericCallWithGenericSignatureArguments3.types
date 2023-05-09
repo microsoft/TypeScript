@@ -28,7 +28,6 @@ var r1 = foo('', (x: string) => '', (x: Object) => null); // any => any
 >'' : ""
 >(x: Object) => null : (x: Object) => any
 >x : Object
->null : null
 
 var r1ii = foo('', (x) => '', (x) => null); // string => string
 >r1ii : (x: string) => string
@@ -40,7 +39,6 @@ var r1ii = foo('', (x) => '', (x) => null); // string => string
 >'' : ""
 >(x) => null : (x: string) => any
 >x : string
->null : null
 
 var r2 = foo('', (x: string) => '', (x: Object) => ''); // string => string
 >r2 : (x: Object) => Object
@@ -58,7 +56,6 @@ var r3 = foo(null, (x: Object) => '', (x: string) => ''); // Object => Object
 >r3 : (x: Object) => Object
 >foo(null, (x: Object) => '', (x: string) => '') : (x: Object) => Object
 >foo : <T>(x: T, a: (x: T) => T, b: (x: T) => T) => (x: T) => T
->null : null
 >(x: Object) => '' : (x: Object) => string
 >x : Object
 >'' : ""
@@ -70,7 +67,6 @@ var r4 = foo(null, (x) => '', (x) => ''); // any => any
 >r4 : (x: any) => any
 >foo(null, (x) => '', (x) => '') : (x: any) => any
 >foo : <T>(x: T, a: (x: T) => T, b: (x: T) => T) => (x: T) => T
->null : null
 >(x) => '' : (x: any) => string
 >x : any
 >'' : ""
@@ -144,13 +140,11 @@ var r8 = foo2('', (x) => '', (x) => null); // string => string
 >'' : ""
 >(x) => null : (x: string) => any
 >x : string
->null : null
 
 var r9 = foo2(null, (x) => '', (x) => ''); // any => any
 >r9 : (x: any) => string
 >foo2(null, (x) => '', (x) => '') : (x: any) => string
 >foo2 : <T, U>(x: T, a: (x: T) => U, b: (x: T) => U) => (x: T) => U
->null : null
 >(x) => '' : (x: any) => string
 >x : any
 >'' : ""
@@ -162,7 +156,6 @@ var r10 = foo2(null, (x: Object) => '', (x: string) => ''); // Object => Object
 >r10 : (x: Object) => string
 >foo2(null, (x: Object) => '', (x: string) => '') : (x: Object) => string
 >foo2 : <T, U>(x: T, a: (x: T) => U, b: (x: T) => U) => (x: T) => U
->null : null
 >(x: Object) => '' : (x: Object) => string
 >x : Object
 >'' : ""

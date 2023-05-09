@@ -1,0 +1,49 @@
+// === goToType ===
+// === /tests/cases/fourslash/module1.ts ===
+// <|module [|M|] {
+//     export var p;
+// }|>
+// var m: typeof M;
+
+// === /tests/cases/fourslash/module3.ts ===
+// /*GOTO TYPE*/M;
+// m;
+
+  // === Details ===
+  [
+   {
+    "kind": "module",
+    "name": "M",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToType ===
+// === /tests/cases/fourslash/module1.ts ===
+// <|module [|M|] {
+//     export var p;
+// }|>
+// var m: typeof M;
+
+// === /tests/cases/fourslash/module3.ts ===
+// M;
+// /*GOTO TYPE*/m;
+
+  // === Details ===
+  [
+   {
+    "kind": "module",
+    "name": "M",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

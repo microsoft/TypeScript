@@ -6,7 +6,6 @@ class Foo<T> {
 >clone : <U>() => any
 
    return null;
->null : null
    }
 }
 var f = new Foo<number>();

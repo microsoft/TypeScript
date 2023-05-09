@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/user/someone/projects/myproject/file1.ts]
 export const enum E1 { V = 1 }
@@ -52,19 +53,15 @@ Shape signatures in builder refreshed for::
 /user/someone/projects/myproject/file2.ts (used version)
 /user/someone/projects/myproject/file3.ts (used version)
 
-PolledWatches::
-
 FsWatches::
-/user/someone/projects/myproject/file3.ts:
+/user/someone/projects/myproject/file3.ts: *new*
   {}
-/user/someone/projects/myproject/file2.ts:
+/user/someone/projects/myproject/file2.ts: *new*
   {}
-/user/someone/projects/myproject/file1.ts:
+/user/someone/projects/myproject/file1.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -92,6 +89,9 @@ Input::
 import { E2 } from "./file2"; const v: E2 = E2.V;function foo2() { return 2; }
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...
@@ -114,20 +114,6 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /user/someone/projects/myproject/file3.ts (computed .d.ts)
-
-PolledWatches::
-
-FsWatches::
-/user/someone/projects/myproject/file3.ts:
-  {}
-/user/someone/projects/myproject/file2.ts:
-  {}
-/user/someone/projects/myproject/file1.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 

@@ -57,3 +57,50 @@ export const schemaObj4: Schema4<Request> = {
     },
   },
 }
+
+// repro from #40405
+
+type Length<T extends any[]> = T["length"];
+type Prepend<V, T extends any[]> = ((head: V, ...args: T) => void) extends (
+  ...args: infer R
+) => void
+  ? R
+  : any;
+
+type BuildTree<T, N extends number = -1, I extends any[] = []> = {
+  1: T;
+  0: T & { children: BuildTree<T, N, Prepend<any, I>>[] };
+}[Length<I> extends N ? 1 : 0];
+
+interface User {
+  name: string;
+}
+
+type GrandUser = BuildTree<User, 2>;
+
+const grandUser: GrandUser = {
+  name: "Grand User",
+  children: [
+    {
+      name: "Son",
+      children: [
+        {
+          name: "Grand son",
+          children: [
+            {
+              name: "123",
+              children: [
+                {
+                  name: "Some other name",
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};
+
+grandUser.children[0].children[0].children[0];
+

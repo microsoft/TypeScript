@@ -1,3 +1,28 @@
+=== /decl.d.ts ===
+declare class CJSy {}
+>CJSy : Symbol(CJSy, Decl(decl.d.ts, 0, 0))
+
+export = CJSy;
+>CJSy : Symbol(CJSy, Decl(decl.d.ts, 0, 0))
+
+=== /ambient.d.ts ===
+declare module "ambient" {
+>"ambient" : Symbol("ambient", Decl(ambient.d.ts, 0, 0))
+
+    const _export: number;
+>_export : Symbol(_export, Decl(ambient.d.ts, 1, 9))
+
+    export = _export;
+>_export : Symbol(_export, Decl(ambient.d.ts, 1, 9))
+}
+
+=== /types.ts ===
+interface Typey {}
+>Typey : Symbol(Typey, Decl(types.ts, 0, 0))
+
+export type { Typey };
+>Typey : Symbol(Typey, Decl(types.ts, 1, 13))
+
 === /main.ts ===
 import CJSy = require("./decl"); // error
 >CJSy : Symbol(CJSy, Decl(main.ts, 0, 0))
@@ -14,17 +39,11 @@ import * as types from "./types"; // ok
 CJSy;
 >CJSy : Symbol(CJSy, Decl(main.ts, 0, 0))
 
-=== /decl.d.ts ===
-declare class CJSy {}
->CJSy : Symbol(CJSy, Decl(decl.d.ts, 0, 0))
+=== /ns.ts ===
+export namespace ns {
+>ns : Symbol(ns, Decl(ns.ts, 0, 0))
 
-export = CJSy;
->CJSy : Symbol(CJSy, Decl(decl.d.ts, 0, 0))
-
-=== /types.ts ===
-interface Typey {}
->Typey : Symbol(Typey, Decl(types.ts, 0, 0))
-
-export type { Typey };
->Typey : Symbol(Typey, Decl(types.ts, 1, 13))
+    export enum A {}
+>A : Symbol(A, Decl(ns.ts, 0, 21))
+}
 

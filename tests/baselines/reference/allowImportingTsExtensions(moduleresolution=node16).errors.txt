@@ -1,0 +1,32 @@
+/c.ts(1,16): error TS2307: Cannot find module './thisfiledoesnotexist.ts' or its corresponding type declarations.
+
+
+==== /ts.ts (0 errors) ====
+    export {};
+    
+==== /tsx.tsx (0 errors) ====
+    export {};
+    
+==== /dts.d.ts (0 errors) ====
+    export {};
+    
+==== /b.ts (0 errors) ====
+    import {} from "./ts.js";
+    import {} from "./ts.ts";
+    import type {} from "./ts.d.ts";
+    
+    import {} from "./tsx.js";
+    import {} from "./tsx.jsx";
+    import {} from "./tsx.ts";
+    import {} from "./tsx.tsx";
+    import type {} from "./tsx.d.ts";
+    
+    import {} from "./dts.js";
+    import {} from "./dts.ts";
+    import type {} from "./dts.d.ts";
+    
+==== /c.ts (1 errors) ====
+    import {} from "./thisfiledoesnotexist.ts";
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module './thisfiledoesnotexist.ts' or its corresponding type declarations.
+    

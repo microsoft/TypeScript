@@ -1,0 +1,13 @@
+=== tests/cases/compiler/index.js ===
+const x = "oops";
+>x : "oops"
+>"oops" : "oops"
+
+const y = + <number> x;
+>y : number
+>+ <number> x; : number
+><number> x; : any
+>number : any
+
+> : any
+

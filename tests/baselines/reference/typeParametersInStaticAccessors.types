@@ -4,7 +4,6 @@ class foo<T> {
 
     static get Foo(): () => T { return null; }
 >Foo : () => T
->null : null
 
     static set Bar(v: { v: T }) { }
 >Bar : { v: T; }

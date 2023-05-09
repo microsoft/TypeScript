@@ -4,15 +4,24 @@ on:
   repository_dispatch:
     types: set-version
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
 
     steps:
     - uses: actions/setup-node@v3
     - uses: actions/checkout@v3
       with:
         ref: ${{ github.event.client_payload.branch_name }}
+    - run: |
+        corepack enable npm
+        npm --version
     # notably, this is essentially the same script as `new-release-branch.yaml` (with fewer inputs), but it assumes the branch already exists
     # do note that executing the transform below will prevent the `configurePrerelease` script from running on the source, as it makes the
     # `version` identifier no longer match the regex it uses
@@ -34,7 +43,7 @@ jobs:
         git add src/compiler/corePublic.ts
         git add tests/baselines/reference/api/typescript.d.ts
         git add tests/baselines/reference/api/tsserverlibrary.d.ts
-        git add ./lib
+        git add --force ./lib
         git config user.email "typescriptbot@microsoft.com"
         git config user.name "TypeScript Bot"
         git commit -m 'Bump version to ${{ github.event.client_payload.package_version }} and LKG'

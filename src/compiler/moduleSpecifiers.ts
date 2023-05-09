@@ -24,6 +24,7 @@ import {
     ExportAssignment,
     Extension,
     extensionFromPath,
+    extensionsNotSupportingExtensionlessResolution,
     fileExtensionIsOneOf,
     FileIncludeKind,
     firstDefined,
@@ -33,6 +34,7 @@ import {
     forEachAncestorDirectory,
     getBaseFileName,
     GetCanonicalFileName,
+    getConditions,
     getDirectoryPath,
     getEmitModuleResolutionKind,
     getModeForResolutionAtIndex,
@@ -46,6 +48,7 @@ import {
     getPathsBasePath,
     getRelativePathFromDirectory,
     getRelativePathToDirectoryOrUrl,
+    getResolvePackageJsonExports,
     getSourceFileOfModule,
     getSupportedExtensions,
     getTextOfIdentifierOrLiteral,
@@ -89,6 +92,7 @@ import {
     removeExtension,
     removeFileExtension,
     removeSuffix,
+    removeTrailingDirectorySeparator,
     ResolutionMode,
     resolvePath,
     ScriptKind,
@@ -145,13 +149,22 @@ function getPreferences(
                 return [ModuleSpecifierEnding.JsExtension];
             }
             if (getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Classic) {
-                return [ModuleSpecifierEnding.Index, ModuleSpecifierEnding.JsExtension];
+                return preferredEnding === ModuleSpecifierEnding.JsExtension
+                    ? [ModuleSpecifierEnding.JsExtension, ModuleSpecifierEnding.Index]
+                    : [ModuleSpecifierEnding.Index, ModuleSpecifierEnding.JsExtension];
             }
+            const allowImportingTsExtension = shouldAllowImportingTsExtension(compilerOptions, importingSourceFile.fileName);
             switch (preferredEnding) {
-                case ModuleSpecifierEnding.JsExtension: return [ModuleSpecifierEnding.JsExtension, ModuleSpecifierEnding.Minimal, ModuleSpecifierEnding.Index];
+                case ModuleSpecifierEnding.JsExtension: return allowImportingTsExtension
+                    ? [ModuleSpecifierEnding.JsExtension, ModuleSpecifierEnding.TsExtension, ModuleSpecifierEnding.Minimal, ModuleSpecifierEnding.Index]
+                    : [ModuleSpecifierEnding.JsExtension, ModuleSpecifierEnding.Minimal, ModuleSpecifierEnding.Index];
                 case ModuleSpecifierEnding.TsExtension: return [ModuleSpecifierEnding.TsExtension, ModuleSpecifierEnding.Minimal, ModuleSpecifierEnding.JsExtension, ModuleSpecifierEnding.Index];
-                case ModuleSpecifierEnding.Index: return [ModuleSpecifierEnding.Index, ModuleSpecifierEnding.Minimal, ModuleSpecifierEnding.JsExtension];
-                case ModuleSpecifierEnding.Minimal: return [ModuleSpecifierEnding.Minimal, ModuleSpecifierEnding.Index, ModuleSpecifierEnding.JsExtension];
+                case ModuleSpecifierEnding.Index: return allowImportingTsExtension
+                    ? [ModuleSpecifierEnding.Index, ModuleSpecifierEnding.Minimal, ModuleSpecifierEnding.TsExtension, ModuleSpecifierEnding.JsExtension]
+                    : [ModuleSpecifierEnding.Index, ModuleSpecifierEnding.Minimal, ModuleSpecifierEnding.JsExtension];
+                case ModuleSpecifierEnding.Minimal: return allowImportingTsExtension
+                    ? [ModuleSpecifierEnding.Minimal, ModuleSpecifierEnding.Index, ModuleSpecifierEnding.TsExtension, ModuleSpecifierEnding.JsExtension]
+                    : [ModuleSpecifierEnding.Minimal, ModuleSpecifierEnding.Index, ModuleSpecifierEnding.JsExtension];
                 default: Debug.assertNever(preferredEnding);
             }
         },
@@ -369,7 +382,9 @@ function computeModuleSpecifiers(
     let redirectPathsSpecifiers: string[] | undefined;
     let relativeSpecifiers: string[] | undefined;
     for (const modulePath of modulePaths) {
-        const specifier = tryGetModuleNameAsNodeModule(modulePath, info, importingSourceFile, host, compilerOptions, userPreferences, /*packageNameOnly*/ undefined, options.overrideImportMode);
+        const specifier = modulePath.isInNodeModules
+            ? tryGetModuleNameAsNodeModule(modulePath, info, importingSourceFile, host, compilerOptions, userPreferences, /*packageNameOnly*/ undefined, options.overrideImportMode)
+            : undefined;
         nodeModulesSpecifiers = append(nodeModulesSpecifiers, specifier);
         if (specifier && modulePath.isRedirect) {
             // If we got a specifier for a redirect, it was a bare package specifier (e.g. "@foo/bar",
@@ -446,7 +461,7 @@ function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOpt
     }
 
     const baseDirectory = getNormalizedAbsolutePath(getPathsBasePath(compilerOptions, host) || baseUrl!, host.getCurrentDirectory());
-    const relativeToBaseUrl = getRelativePathIfInDirectory(moduleFileName, baseDirectory, getCanonicalFileName);
+    const relativeToBaseUrl = getRelativePathIfInSameVolume(moduleFileName, baseDirectory, getCanonicalFileName);
     if (!relativeToBaseUrl) {
         return pathsOnly ? undefined : relativePath;
     }
@@ -760,7 +775,7 @@ function tryGetModuleNameFromPaths(relativeToBaseUrl: string, paths: MapLike<rea
                         validateEnding({ ending, value })
                     ) {
                         const matchedStar = value.substring(prefix.length, value.length - suffix.length);
-                        return key.replace("*", matchedStar);
+                        return pathIsRelative(matchedStar) ? undefined : key.replace("*", matchedStar);
                     }
                 }
             }
@@ -945,10 +960,15 @@ function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCan
         if (typeof cachedPackageJson === "object" || cachedPackageJson === undefined && host.fileExists(packageJsonPath)) {
             const packageJsonContent = cachedPackageJson?.contents.packageJsonContent || JSON.parse(host.readFile!(packageJsonPath)!);
             const importMode = overrideMode || importingSourceFile.impliedNodeFormat;
-            if (getEmitModuleResolutionKind(options) === ModuleResolutionKind.Node16 || getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeNext) {
-                const conditions = ["node", importMode === ModuleKind.ESNext ? "import" : "require", "types"];
-                const fromExports = packageJsonContent.exports && typeof packageJsonContent.name === "string"
-                    ? tryGetModuleNameFromExports(options, path, packageRootPath, getPackageNameFromTypesPackageName(packageJsonContent.name), packageJsonContent.exports, conditions)
+            if (getResolvePackageJsonExports(options)) {
+                // The package name that we found in node_modules could be different from the package
+                // name in the package.json content via url/filepath dependency specifiers. We need to
+                // use the actual directory name, so don't look at `packageJsonContent.name` here.
+                const nodeModulesDirectoryName = packageRootPath.substring(parts.topLevelPackageNameIndex + 1);
+                const packageName = getPackageNameFromTypesPackageName(nodeModulesDirectoryName);
+                const conditions = getConditions(options, importMode === ModuleKind.ESNext);
+                const fromExports = packageJsonContent.exports
+                    ? tryGetModuleNameFromExports(options, path, packageRootPath, packageName, packageJsonContent.exports, conditions)
                     : undefined;
                 if (fromExports) {
                     const withJsExtension = !hasTSFileExtension(fromExports.moduleFileToTry)
@@ -989,8 +1009,22 @@ function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCan
                 // happens very easily in fourslash tests though, since every test file listed gets included. See
                 // importNameCodeFix_typesVersions.ts for an example.)
                 const mainExportFile = toPath(mainFileRelative, packageRootPath, getCanonicalFileName);
-                if (removeFileExtension(mainExportFile) === removeFileExtension(getCanonicalFileName(moduleFileToTry))) {
+                const canonicalModuleFileToTry = getCanonicalFileName(moduleFileToTry);
+                if (removeFileExtension(mainExportFile) === removeFileExtension(canonicalModuleFileToTry)) {
                     // ^ An arbitrary removal of file extension for this comparison is almost certainly wrong
+                    return { packageRootPath, moduleFileToTry };
+                }
+                else if (
+                    packageJsonContent.type !== "module" &&
+                    !fileExtensionIsOneOf(canonicalModuleFileToTry, extensionsNotSupportingExtensionlessResolution) &&
+                    startsWith(canonicalModuleFileToTry, mainExportFile) &&
+                    getDirectoryPath(canonicalModuleFileToTry) === removeTrailingDirectorySeparator(mainExportFile) &&
+                    removeFileExtension(getBaseFileName(canonicalModuleFileToTry)) === "index"
+                ) {
+                    // if mainExportFile is a directory, which contains moduleFileToTry, we just try index file
+                    // example mainExportFile: `pkg/lib` and moduleFileToTry: `pkg/lib/index`, we can use packageRootPath
+                    // but this behavior is deprecated for packages with "type": "module", so we only do this for packages without "type": "module"
+                    // and make sure that the extension on index.{???} is something that supports omitting the extension
                     return { packageRootPath, moduleFileToTry };
                 }
             }
@@ -1020,7 +1054,7 @@ function tryGetAnyFileFromPath(host: ModuleSpecifierResolutionHost, path: string
 
 function getPathsRelativeToRootDirs(path: string, rootDirs: readonly string[], getCanonicalFileName: GetCanonicalFileName): string[] | undefined {
     return mapDefined(rootDirs, rootDir => {
-        const relativePath = getRelativePathIfInDirectory(path, rootDir, getCanonicalFileName);
+        const relativePath = getRelativePathIfInSameVolume(path, rootDir, getCanonicalFileName);
         return relativePath !== undefined && isPathRelativeToParent(relativePath) ? undefined : relativePath;
     });
 }
@@ -1035,7 +1069,12 @@ function processEnding(fileName: string, allowedEndings: readonly ModuleSpecifie
         return fileName;
     }
 
-    if (fileExtensionIsOneOf(fileName, [Extension.Dmts, Extension.Mts, Extension.Dcts, Extension.Cts])) {
+    const jsPriority = allowedEndings.indexOf(ModuleSpecifierEnding.JsExtension);
+    const tsPriority = allowedEndings.indexOf(ModuleSpecifierEnding.TsExtension);
+    if (fileExtensionIsOneOf(fileName, [Extension.Mts, Extension.Cts]) && tsPriority !== -1 && tsPriority < jsPriority) {
+        return fileName;
+    }
+    else if (fileExtensionIsOneOf(fileName, [Extension.Dmts, Extension.Mts, Extension.Dcts, Extension.Cts])) {
         return noExtension + getJSExtensionForFile(fileName, options);
     }
     else if (!fileExtensionIsOneOf(fileName, [Extension.Dts]) && fileExtensionIsOneOf(fileName, [Extension.Ts]) && stringContains(fileName, ".d.")) {
@@ -1061,7 +1100,6 @@ function processEnding(fileName: string, allowedEndings: readonly ModuleSpecifie
             // know if a .d.ts extension is valid, so use no extension or a .js extension
             if (isDeclarationFileName(fileName)) {
                 const extensionlessPriority = allowedEndings.findIndex(e => e === ModuleSpecifierEnding.Minimal || e === ModuleSpecifierEnding.Index);
-                const jsPriority = allowedEndings.indexOf(ModuleSpecifierEnding.JsExtension);
                 return extensionlessPriority !== -1 && extensionlessPriority < jsPriority
                     ? noExtension
                     : noExtension + getJSExtensionForFile(fileName, options);
@@ -1111,7 +1149,7 @@ export function tryGetJSExtensionForFile(fileName: string, options: CompilerOpti
     }
 }
 
-function getRelativePathIfInDirectory(path: string, directoryPath: string, getCanonicalFileName: GetCanonicalFileName): string | undefined {
+function getRelativePathIfInSameVolume(path: string, directoryPath: string, getCanonicalFileName: GetCanonicalFileName): string | undefined {
     const relativePath = getRelativePathToDirectoryOrUrl(directoryPath, path, directoryPath, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
     return isRootedDiskPath(relativePath) ? undefined : relativePath;
 }

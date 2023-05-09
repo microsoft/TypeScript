@@ -1,8 +1,8 @@
 import fs from "fs-extra";
-import path from "path";
 import glob from "glob";
+import path from "path";
 import url from "url";
-import del from "del";
+
 import { localizationDirectories } from "./build/localization.mjs";
 
 const __filename = url.fileURLToPath(new URL(import.meta.url));
@@ -14,7 +14,7 @@ const dest = path.join(root, "lib");
 
 async function produceLKG() {
     console.log(`Building LKG from ${source} to ${dest}`);
-    await del(`${dest.replace(/\\/g, "/")}/**`, { ignore: ["**/README.md"] });
+    await (fs.rm || fs.rmdir)(dest, { recursive: true, force: true });
     await fs.mkdirp(dest);
     await copyLibFiles();
     await copyLocalizedDiagnostics();

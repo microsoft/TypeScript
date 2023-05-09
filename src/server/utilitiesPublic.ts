@@ -31,6 +31,7 @@ export interface Logger {
     endGroup(): void;
     msg(s: string, type?: Msg): void;
     getLogFileName(): string | undefined;
+    /** @internal*/ isTestLogger?: boolean;
 }
 
 // TODO: Use a const enum (https://github.com/Microsoft/TypeScript/issues/16804)
@@ -45,7 +46,6 @@ export function createInstallTypingsRequest(project: Project, typeAcquisition: T
         projectName: project.getProjectName(),
         fileNames: project.getFileNames(/*excludeFilesFromExternalLibraries*/ true, /*excludeConfigFiles*/ true).concat(project.getExcludedFiles() as NormalizedPath[]),
         compilerOptions: project.getCompilationSettings(),
-        watchOptions: project.projectService.getWatchOptions(project),
         typeAcquisition,
         unresolvedImports,
         projectRootPath: project.getCurrentDirectory() as Path,
