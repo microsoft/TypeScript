@@ -70,7 +70,7 @@ import {
     ReadBuildProgramHost,
     ReadonlyCollection,
     RepopulateDiagnosticChainInfo,
-    RepopulateModuleNodeFoundDiagnosticChain,
+    RepopulateModuleNotFoundDiagnosticChain,
     returnFalse,
     returnUndefined,
     sameMap,
@@ -107,8 +107,8 @@ export interface ReusableDiagnosticRelatedInformation {
 }
 
 /** @internal */
-export interface ReusableRepopulateModuleNodeFoundChain {
-    info: RepopulateModuleNodeFoundDiagnosticChain;
+export interface ReusableRepopulateModuleNotFoundChain {
+    info: RepopulateModuleNotFoundDiagnosticChain;
     next?: ReusableDiagnosticMessageChain[];
 }
 
@@ -118,7 +118,7 @@ export type SerializedDiagnosticMessageChain = Omit<DiagnosticMessageChain, "nex
 };
 
 /** @internal */
-export type ReusableDiagnosticMessageChain = SerializedDiagnosticMessageChain | ReusableRepopulateModuleNodeFoundChain;
+export type ReusableDiagnosticMessageChain = SerializedDiagnosticMessageChain | ReusableRepopulateModuleNotFoundChain;
 
 /**
  * Signature (Hash of d.ts emitted), is string if it was emitted using same d.ts.map option as what compilerOptions indicate, otherwise tuple of string
@@ -537,7 +537,7 @@ function convertToDiagnosticRelatedInformation(diagnostic: ReusableDiagnosticRel
         file: sourceFile,
         messageText: isString(diagnostic.messageText) ?
             diagnostic.messageText :
-            convertOrRepopulateDiagnosticMessageChain(diagnostic.messageText, sourceFile, newProgram, chain => (chain as ReusableRepopulateModuleNodeFoundChain).info),
+            convertOrRepopulateDiagnosticMessageChain(diagnostic.messageText, sourceFile, newProgram, chain => (chain as ReusableRepopulateModuleNotFoundChain).info),
     };
 }
 

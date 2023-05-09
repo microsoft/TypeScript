@@ -6930,14 +6930,14 @@ export interface DiagnosticMessage {
 }
 
 /** @internal */
-export interface RepopulateModuleNodeFoundDiagnosticChain {
+export interface RepopulateModuleNotFoundDiagnosticChain {
     moduleReference: string;
     mode: ResolutionMode;
     packageName: string | undefined;
 }
 
 /** @internal */
-export type RepopulateDiagnosticChainInfo = RepopulateModuleNodeFoundDiagnosticChain;
+export type RepopulateDiagnosticChainInfo = RepopulateModuleNotFoundDiagnosticChain;
 
 /**
  * A linked list of formatted diagnostic messages to be used as part of a multiline message.
