@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myProject/plugin-two/index.d.ts]
 declare const _default: {
@@ -147,12 +148,6 @@ Program files::
 /user/username/projects/myProject/plugin-two/node_modules/typescript-fsa/index.d.ts
 /user/username/projects/myProject/plugin-two/index.d.ts
 /user/username/projects/myproject/plugin-one/index.ts
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.Success
 

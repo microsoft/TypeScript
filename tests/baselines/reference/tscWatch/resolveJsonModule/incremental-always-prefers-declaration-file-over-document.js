@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/src/project/main.ts]
 import data from "./data.json"; let x: string = data;
@@ -61,22 +62,18 @@ Shape signatures in builder refreshed for::
 /src/project/data.d.json.ts (used version)
 /src/project/main.ts (used version)
 
-PolledWatches::
-/src/project/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches::
-/src/project/tsconfig.json:
+/src/project/tsconfig.json: *new*
   {}
-/src/project/data.d.json.ts:
+/src/project/data.d.json.ts: *new*
   {}
-/src/project/main.ts:
+/src/project/main.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/src/project:
+/src/project: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -164,6 +161,9 @@ Input::
 }
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:32 AM[0m] File change detected. Starting incremental compilation...
@@ -188,24 +188,6 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
-
-PolledWatches::
-/src/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/src/project/tsconfig.json:
-  {}
-/src/project/data.d.json.ts:
-  {}
-/src/project/main.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/src/project:
-  {}
 
 exitCode:: ExitStatus.undefined
 

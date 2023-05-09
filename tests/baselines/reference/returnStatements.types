@@ -27,7 +27,6 @@ function fn6(): Date { return new Date(12); }
 
 function fn7(): any { return null; }
 >fn7 : () => any
->null : null
 
 function fn8(): any { return; } // OK, eq. to 'return undefined'
 >fn8 : () => any
@@ -69,5 +68,4 @@ function fn12(): C { return new D(); }
 
 function fn13(): C { return null; }
 >fn13 : () => C
->null : null
 

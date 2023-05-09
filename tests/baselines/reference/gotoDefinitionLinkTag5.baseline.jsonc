@@ -1,0 +1,20 @@
+// === getDefinitionAtPosition ===
+// === /tests/cases/fourslash/gotoDefinitionLinkTag5.ts ===
+// enum E {
+//     /** {@link /*GOTO DEF POS*/B} */
+//     A,
+//     [|B|]
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "enum member",
+    "name": "B",
+    "containerName": "E",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

@@ -568,15 +568,17 @@ export class SessionClient implements LanguageService {
         return notImplemented();
     }
 
-    findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): RenameLocation[] {
+    findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, preferences: UserPreferences | boolean | undefined): RenameLocation[] {
         if (!this.lastRenameEntry ||
             this.lastRenameEntry.inputs.fileName !== fileName ||
             this.lastRenameEntry.inputs.position !== position ||
             this.lastRenameEntry.inputs.findInStrings !== findInStrings ||
             this.lastRenameEntry.inputs.findInComments !== findInComments) {
-            if (providePrefixAndSuffixTextForRename !== undefined) {
+            const providePrefixAndSuffixTextForRename = typeof preferences === "boolean" ? preferences : preferences?.providePrefixAndSuffixTextForRename;
+            const quotePreference = typeof preferences === "boolean" ? undefined : preferences?.quotePreference;
+            if (providePrefixAndSuffixTextForRename !== undefined || quotePreference !== undefined) {
                 // User preferences have to be set through the `Configure` command
-                this.configure({ providePrefixAndSuffixTextForRename });
+                this.configure({ providePrefixAndSuffixTextForRename, quotePreference });
                 // Options argument is not used, so don't pass in options
                 this.getRenameInfo(fileName, position, /*preferences*/{}, findInStrings, findInComments);
                 // Restore previous user preferences
@@ -682,19 +684,6 @@ export class SessionClient implements LanguageService {
         return { items, applicableSpan, selectedItemIndex, argumentIndex, argumentCount };
     }
 
-    getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
-        const args = this.createFileLocationRequestArgs(fileName, position);
-
-        const request = this.processRequest<protocol.OccurrencesRequest>(protocol.CommandTypes.Occurrences, args);
-        const response = this.processResponse<protocol.OccurrencesResponse>(request);
-
-        return response.body!.map(entry => ({ // TODO: GH#18217
-            fileName: entry.file,
-            textSpan: this.decodeSpan(entry),
-            isWriteAccess: entry.isWriteAccess,
-        }));
-    }
-
     getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[] {
         const args: protocol.DocumentHighlightsRequestArgs = { ...this.createFileLocationRequestArgs(fileName, position), filesToSearch };
 
@@ -736,6 +725,10 @@ export class SessionClient implements LanguageService {
     }
 
     getJsxClosingTagAtPosition(_fileName: string, _position: number): never {
+        return notImplemented();
+    }
+
+    getLinkedEditingRangeAtPosition(_fileName: string, _position: number): never {
         return notImplemented();
     }
 
@@ -802,6 +795,14 @@ export class SessionClient implements LanguageService {
         return response.body!; // TODO: GH#18217
     }
 
+    getMoveToRefactoringFileSuggestions(fileName: string, positionOrRange: number | TextRange): { newFileName: string; files: string[]; } {
+        const args = this.createFileLocationOrRangeRequestArgs(positionOrRange, fileName);
+
+        const request = this.processRequest<protocol.GetMoveToRefactoringFileSuggestionsRequest>(protocol.CommandTypes.GetMoveToRefactoringFileSuggestions, args);
+        const response = this.processResponse<protocol.GetMoveToRefactoringFileSuggestions>(request);
+        return { newFileName: response.body?.newFileName, files:response.body?.files }!;
+    }
+
     getEditsForRefactor(
         fileName: string,
         _formatOptions: FormatCodeSettings,
@@ -825,7 +826,7 @@ export class SessionClient implements LanguageService {
         const renameFilename: string | undefined = response.body.renameFilename;
         let renameLocation: number | undefined;
         if (renameFilename !== undefined) {
-            renameLocation = this.lineOffsetToPosition(renameFilename, response.body.renameLocation!); // TODO: GH#18217
+            renameLocation = this.lineOffsetToPosition(renameFilename, response.body.renameLocation!);
         }
 
         return {

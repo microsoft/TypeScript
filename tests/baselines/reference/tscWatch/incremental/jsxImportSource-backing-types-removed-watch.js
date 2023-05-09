@@ -1,3 +1,4 @@
+currentDirectory:: /users/username/projects/project useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -66,25 +67,27 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/index.tsx (used version)
 
 PolledWatches::
-/users/username/projects/project/node_modules/@types:
+/users/username/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/project/tsconfig.json:
+/users/username/projects/project/tsconfig.json: *new*
   {}
-/users/username/projects/project/index.tsx:
+/users/username/projects/project/index.tsx: *new*
   {}
-/users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts:
+/users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-/users/username/projects/project/node_modules/react/package.json:
+/users/username/projects/project/node_modules/react/package.json: *new*
   {}
 
 FsWatchesRecursive::
-/users/username/projects/project/node_modules:
+/users/username/projects/project/node_modules: *new*
   {}
-/users/username/projects/project:
+/users/username/projects/project: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -171,6 +174,30 @@ Input::
 //// [/users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts] deleted
 //// [/users/username/projects/project/node_modules/react/package.json] deleted
 
+PolledWatches *deleted*::
+/users/username/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches *deleted*::
+/users/username/projects/project/tsconfig.json:
+  {}
+/users/username/projects/project/index.tsx:
+  {}
+/users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/project/node_modules/react/package.json:
+  {}
+
+FsWatchesRecursive *deleted*::
+/users/username/projects/project/node_modules:
+  {}
+/users/username/projects/project:
+  {}
+
 Output::
 >> Screen clear
 [[90m12:00:41 AM[0m] Starting compilation in watch mode...
@@ -198,21 +225,25 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/index.tsx (computed .d.ts)
 
 PolledWatches::
-/users/username/projects/project/node_modules/@types:
+/users/username/projects/node_modules: *new*
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/project/tsconfig.json:
+/users/username/projects/project/tsconfig.json: *new*
   {}
-/users/username/projects/project/index.tsx:
+/users/username/projects/project/index.tsx: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/users/username/projects/project/node_modules:
+/users/username/projects/project/node_modules: *new*
   {}
-/users/username/projects/project:
+/users/username/projects/project: *new*
   {}
 
 exitCode:: ExitStatus.undefined

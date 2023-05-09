@@ -25,7 +25,7 @@ export declare function __classPrivateFieldIn(a: any, b: any): boolean;
 //// [a.js]
 var _A_x;
 import { __awaiter, __classPrivateFieldGet, __classPrivateFieldIn, __classPrivateFieldSet, __decorate } from "tslib";
-let A = class A {
+export let A = class A {
     constructor() {
         _A_x.set(this, 1);
     }
@@ -38,6 +38,5 @@ _A_x = new WeakMap();
 A = __decorate([
     dec
 ], A);
-export { A };
 const o = { a: 1 };
 const y = Object.assign({}, o);

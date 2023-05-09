@@ -41,7 +41,6 @@ import {
     Expression,
     ExpressionStatement,
     ExpressionWithTypeArguments,
-    factory,
     filter,
     find,
     findComputedPropertyNameCacheAssignment,
@@ -94,6 +93,7 @@ import {
     isConstructorDeclaration,
     isDestructuringAssignment,
     isElementAccessExpression,
+    isExportOrDefaultModifier,
     isExpression,
     isExpressionStatement,
     isForInitializer,
@@ -153,9 +153,11 @@ import {
     newPrivateEnvironment,
     Node,
     NodeCheckFlags,
+    NodeFactory,
     nodeIsSynthesized,
     ObjectLiteralElement,
     OmittedExpression,
+    OuterExpressionKinds,
     ParameterDeclaration,
     ParenthesizedExpression,
     PartiallyEmittedExpression,
@@ -866,9 +868,9 @@ export function transformClassFields(context: TransformationContext): (x: Source
                         filter(node.modifiers, (m): m is Modifier => isModifier(m) && !isStaticModifier(m) && !isAccessorModifier(m)),
                         node.asteriskToken,
                         functionName,
-                        /* typeParameters */ undefined,
+                        /*typeParameters*/ undefined,
                         visitParameterList(node.parameters, visitor, context),
-                        /* type */ undefined,
+                        /*type*/ undefined,
                         visitFunctionBody(node.body!, visitor, context)
                     )
                 )
@@ -1489,13 +1491,14 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 return factory.updateBinaryExpression(node, left, node.operatorToken, right);
             }
 
-            if (isPrivateIdentifierPropertyAccessExpression(node.left)) {
+            const left = skipOuterExpressions(node.left, OuterExpressionKinds.PartiallyEmittedExpressions | OuterExpressionKinds.Parentheses);
+            if (isPrivateIdentifierPropertyAccessExpression(left)) {
                 // obj.#x = ...
-                const info = accessPrivateIdentifier(node.left.name);
+                const info = accessPrivateIdentifier(left.name);
                 if (info) {
                     return setTextRange(
                         setOriginalNode(
-                            createPrivateIdentifierAssignment(info, node.left.expression, node.right, node.operatorToken.kind),
+                            createPrivateIdentifierAssignment(info, left.expression, node.right, node.operatorToken.kind),
                             node
                         ),
                         node
@@ -1666,7 +1669,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
                     info.brandCheckIdentifier,
                     right,
                     info.kind,
-                    /* f */ undefined
+                    /*f*/ undefined
                 );
             case PrivateIdentifierKind.Field:
                 return emitHelpers().createClassPrivateFieldSetHelper(
@@ -1750,7 +1753,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
     function visitExpressionWithTypeArgumentsInHeritageClause(node: ExpressionWithTypeArguments) {
         const facts = lexicalEnvironment?.data?.facts || ClassFacts.None;
         if (facts & ClassFacts.NeedsClassSuperReference) {
-            const temp = factory.createTempVariable(hoistVariableDeclaration, /*reserveInNestedScopes*/ true);
+            const temp = factory.createTempVariable(hoistVariableDeclaration, /*reservedInNestedScopes*/ true);
             getClassLexicalEnvironment().superClassReference = temp;
             return factory.updateExpressionWithTypeArguments(
                 node,
@@ -1841,25 +1844,13 @@ export function transformClassFields(context: TransformationContext): (x: Source
             }
         }
 
-        const modifiers = visitNodes(node.modifiers, modifierVisitor, isModifier);
+        const isExport = hasSyntacticModifier(node, ModifierFlags.Export);
+        const isDefault = hasSyntacticModifier(node, ModifierFlags.Default);
+        let modifiers = visitNodes(node.modifiers, modifierVisitor, isModifier);
         const heritageClauses = visitNodes(node.heritageClauses, heritageClauseVisitor, isHeritageClause);
         const { members, prologue } = transformClassMembers(node);
-        const classDecl = factory.updateClassDeclaration(
-            node,
-            modifiers,
-            node.name,
-            /*typeParameters*/ undefined,
-            heritageClauses,
-            members
-        );
 
         const statements: Statement[] = [];
-        if (prologue) {
-            statements.push(factory.createExpressionStatement(prologue));
-        }
-
-        statements.push(classDecl);
-
         if (pendingClassReferenceAssignment) {
             getPendingExpressions().unshift(pendingClassReferenceAssignment);
         }
@@ -1880,6 +1871,29 @@ export function transformClassFields(context: TransformationContext): (x: Source
             if (some(staticProperties)) {
                 addPropertyOrClassStaticBlockStatements(statements, staticProperties, factory.getInternalName(node));
             }
+        }
+
+        if (statements.length > 0 && isExport && isDefault) {
+            modifiers = visitNodes(modifiers, node => isExportOrDefaultModifier(node) ? undefined : node, isModifier);
+            statements.push(factory.createExportAssignment(
+                /*modifiers*/ undefined,
+                /*isExportEquals*/ false,
+                factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true)
+            ));
+        }
+
+        const classDecl = factory.updateClassDeclaration(
+            node,
+            modifiers,
+            node.name,
+            /*typeParameters*/ undefined,
+            heritageClauses,
+            members
+        );
+        statements.unshift(classDecl);
+
+        if (prologue) {
+            statements.unshift(factory.createExpressionStatement(prologue));
         }
 
         return statements;
@@ -2457,6 +2471,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 if (privateIdentifierInfo.kind === PrivateIdentifierKind.Field) {
                     if (!privateIdentifierInfo.isStatic) {
                         return createPrivateInstanceFieldInitializer(
+                            factory,
                             receiver,
                             visitNode(property.initializer, initializerVisitor, isExpression),
                             privateIdentifierInfo.brandCheckIdentifier
@@ -2464,6 +2479,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
                     }
                     else {
                         return createPrivateStaticFieldInitializer(
+                            factory,
                             privateIdentifierInfo.variableName,
                             visitNode(property.initializer, initializerVisitor, isExpression)
                         );
@@ -2575,7 +2591,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
         Debug.assert(weakSetName, "weakSetName should be set in private identifier environment");
         statements.push(
             factory.createExpressionStatement(
-                createPrivateInstanceMethodInitializer(receiver, weakSetName)
+                createPrivateInstanceMethodInitializer(factory, receiver, weakSetName)
             )
         );
     }
@@ -2855,7 +2871,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
         const identifier =
             typeof name === "object" ? factory.getGeneratedNameForNode(name, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.ReservedInNestedScopes, prefix, suffix) :
             typeof name === "string" ? factory.createUniqueName(name, GeneratedIdentifierFlags.Optimistic, prefix, suffix) :
-            factory.createTempVariable(/*recordTempVariable*/ undefined, /*reserveInNestedScopes*/ true, prefix, suffix);
+            factory.createTempVariable(/*recordTempVariable*/ undefined, /*reservedInNestedScopes*/ true, prefix, suffix);
 
         if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.BlockScopedBindingInLoop) {
             addBlockScopedVariable(identifier);
@@ -2977,11 +2993,11 @@ export function transformClassFields(context: TransformationContext): (x: Source
     }
 
     function visitArrayAssignmentElement(node: Expression): Expression {
-        Debug.assertNode(node, isArrayBindingOrAssignmentElement);
-        if (isSpreadElement(node)) return visitAssignmentRestElement(node);
-        if (!isOmittedExpression(node)) return visitAssignmentElement(node);
+        if (isArrayBindingOrAssignmentElement(node)) {
+            if (isSpreadElement(node)) return visitAssignmentRestElement(node);
+            if (!isOmittedExpression(node)) return visitAssignmentElement(node);
+        }
         return visitEachChild(node, visitor, context);
-
     }
 
     function visitAssignmentProperty(node: PropertyAssignment) {
@@ -3213,7 +3229,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
     }
 }
 
-function createPrivateStaticFieldInitializer(variableName: Identifier, initializer: Expression | undefined) {
+function createPrivateStaticFieldInitializer(factory: NodeFactory, variableName: Identifier, initializer: Expression | undefined) {
     return factory.createAssignment(
         variableName,
         factory.createObjectLiteralExpression([
@@ -3222,7 +3238,7 @@ function createPrivateStaticFieldInitializer(variableName: Identifier, initializ
     );
 }
 
-function createPrivateInstanceFieldInitializer(receiver: LeftHandSideExpression, initializer: Expression | undefined, weakMapName: Identifier) {
+function createPrivateInstanceFieldInitializer(factory: NodeFactory, receiver: LeftHandSideExpression, initializer: Expression | undefined, weakMapName: Identifier) {
     return factory.createCallExpression(
         factory.createPropertyAccessExpression(weakMapName, "set"),
         /*typeArguments*/ undefined,
@@ -3230,7 +3246,7 @@ function createPrivateInstanceFieldInitializer(receiver: LeftHandSideExpression,
     );
 }
 
-function createPrivateInstanceMethodInitializer(receiver: LeftHandSideExpression, weakSetName: Identifier) {
+function createPrivateInstanceMethodInitializer(factory: NodeFactory, receiver: LeftHandSideExpression, weakSetName: Identifier) {
     return factory.createCallExpression(
         factory.createPropertyAccessExpression(weakSetName, "add"),
         /*typeArguments*/ undefined,

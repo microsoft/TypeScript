@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/packages/pkg1/package.json]
 {"name":"pkg1","version":"1.0.0","main":"build/index.js"}
@@ -93,37 +94,39 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/packages/pkg1/index.ts (used version)
 
 PolledWatches::
-/user/username/projects/myproject/packages/pkg1/node_modules:
+/user/username/projects/myproject/packages/pkg1/node_modules: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules:
+/user/username/projects/myproject/packages/node_modules: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/pkg1/node_modules/@types:
+/user/username/projects/myproject/packages/pkg1/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules/@types:
+/user/username/projects/myproject/packages/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/packages/pkg1/tsconfig.json:
+/user/username/projects/myproject/packages/pkg1/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/packages/pkg1/index.ts:
+/user/username/projects/myproject/packages/pkg1/index.ts: *new*
   {}
-/user/username/projects/myproject/packages/pkg2/build/index.d.ts:
+/user/username/projects/myproject/packages/pkg2/build/index.d.ts: *new*
   {}
-/user/username/projects/myproject/packages/pkg2/build/const.d.ts:
+/user/username/projects/myproject/packages/pkg2/build/const.d.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/myproject/packages/pkg2/package.json:
+/user/username/projects/myproject/packages/pkg2/package.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/packages/pkg2:
+/user/username/projects/myproject/packages/pkg2: *new*
   {}
-/user/username/projects/myproject/node_modules:
+/user/username/projects/myproject/node_modules: *new*
   {}
-/user/username/projects/myproject/packages/pkg1:
+/user/username/projects/myproject/packages/pkg1: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -143,6 +146,13 @@ Input::
 {"name":"pkg2","version":"1.0.0","main":"build/other.js"}
 
 
+Before running Timeout callback:: count: 1
+1: timerToInvalidateFailedLookupResolutions
+After running Timeout callback:: count: 1
+2: timerToUpdateProgram
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:53 AM[0m] File change detected. Starting incremental compilation...
@@ -201,6 +211,8 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
 /user/username/projects/myproject/packages/pkg1/tsconfig.json:
@@ -211,13 +223,23 @@ FsWatches::
   {}
 /user/username/projects/myproject/packages/pkg2/package.json:
   {}
-/user/username/projects/myproject/packages/pkg2/build/other.d.ts:
+/user/username/projects/myproject/packages/pkg2/build/other.d.ts: *new*
+  {}
+
+FsWatches *deleted*::
+/user/username/projects/myproject/packages/pkg2/build/index.d.ts:
+  {}
+/user/username/projects/myproject/packages/pkg2/build/const.d.ts:
   {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/node_modules:
   {}
 /user/username/projects/myproject/packages/pkg1:
+  {}
+
+FsWatchesRecursive *deleted*::
+/user/username/projects/myproject/packages/pkg2:
   {}
 
 exitCode:: ExitStatus.undefined
@@ -231,6 +253,13 @@ Input::
 {"name":"pkg2","version":"1.0.0","main":"build/index.js"}
 
 
+Before running Timeout callback:: count: 1
+3: timerToInvalidateFailedLookupResolutions
+After running Timeout callback:: count: 1
+4: timerToUpdateProgram
+Before running Timeout callback:: count: 1
+4: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:02 AM[0m] File change detected. Starting incremental compilation...
@@ -295,6 +324,8 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
 /user/username/projects/myproject/packages/pkg1/tsconfig.json:
@@ -305,9 +336,13 @@ FsWatches::
   {}
 /user/username/projects/myproject/packages/pkg2/package.json:
   {}
-/user/username/projects/myproject/packages/pkg2/build/index.d.ts:
+/user/username/projects/myproject/packages/pkg2/build/index.d.ts: *new*
   {}
-/user/username/projects/myproject/packages/pkg2/build/const.d.ts:
+/user/username/projects/myproject/packages/pkg2/build/const.d.ts: *new*
+  {}
+
+FsWatches *deleted*::
+/user/username/projects/myproject/packages/pkg2/build/other.d.ts:
   {}
 
 FsWatchesRecursive::
@@ -315,7 +350,7 @@ FsWatchesRecursive::
   {}
 /user/username/projects/myproject/packages/pkg1:
   {}
-/user/username/projects/myproject/packages/pkg2:
+/user/username/projects/myproject/packages/pkg2: *new*
   {}
 
 exitCode:: ExitStatus.undefined

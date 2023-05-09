@@ -27,11 +27,9 @@ module M {
 
         public m232(): E { return null;}
 >m232 : () => E
->null : null
 
         public m242(): I1 { return null; }
 >m242 : () => I1
->null : null
 
         public m26(i:I1) {}
 >m26 : (i: I1) => void

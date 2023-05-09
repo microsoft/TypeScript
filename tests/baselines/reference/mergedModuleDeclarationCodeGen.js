@@ -30,7 +30,7 @@ var X;
             return A;
         }());
     })(Y = X.Y || (X.Y = {}));
-})(X = exports.X || (exports.X = {}));
+})(X || (exports.X = X = {}));
 (function (X) {
     var Y;
     (function (Y) {
@@ -41,4 +41,4 @@ var X;
         }());
         Y.B = B;
     })(Y = X.Y || (X.Y = {}));
-})(X = exports.X || (exports.X = {}));
+})(X || (exports.X = X = {}));

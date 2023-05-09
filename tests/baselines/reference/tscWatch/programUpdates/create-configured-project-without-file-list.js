@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/tsconfig.json]
 
@@ -58,22 +59,18 @@ Shape signatures in builder refreshed for::
 /a/b/c/f1.ts (used version)
 /a/b/d/f2.ts (used version)
 
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches::
-/a/b/tsconfig.json:
+/a/b/tsconfig.json: *new*
   {}
-/a/b/c/f1.ts:
+/a/b/c/f1.ts: *new*
   {}
-/a/b/d/f2.ts:
+/a/b/d/f2.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a/b:
+/a/b: *new*
   {}
 
 exitCode:: ExitStatus.undefined

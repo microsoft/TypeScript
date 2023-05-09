@@ -180,7 +180,6 @@ module Harness {
 >Function : FunctionConstructor
 >"return this" : "return this"
 >call : (this: Function, thisArg: any, ...argArray: any[]) => any
->null : null
 
     export var usePull = false;
 >usePull : boolean
@@ -428,7 +427,6 @@ module Harness {
             if (result === null) {
 >result === null : boolean
 >result : any
->null : null
 
                 throwAssertError(new Error("Expected " + result + " to *not* be null"));
 >throwAssertError(new Error("Expected " + result + " to *not* be null")) : never
@@ -835,7 +833,6 @@ module Harness {
         if (content == null) {
 >content == null : boolean
 >content : any
->null : null
 
             throw new Error("failed to read file at: '" + Harness.userSpecifiedroot + path + "'");
 >new Error("failed to read file at: '" + Harness.userSpecifiedroot + path + "'") : Error
@@ -1043,12 +1040,10 @@ module Harness {
         // The error, if any, that occurred when running 'block'
         public error: Error = null;
 >error : Error
->null : null
 
         // Whether or not this object has any failures (including in its descendants)
         public passed = null;
 >passed : any
->null : null
 
         // A list of bugs impacting this object
         public bugs: string[] = [];
@@ -1720,7 +1715,6 @@ module Harness {
 >super('Test Run', null) : void
 >super : typeof Runnable
 >'Test Run' : "Test Run"
->null : null
         }
 
         public run() {
@@ -3094,7 +3088,6 @@ module Harness {
 
                 var errors = null;
 >errors : any
->null : null
 
                 compileString(testCode, 'test.ts', function (compilerResult) {
 >compileString(testCode, 'test.ts', function (compilerResult) {                    errors = compilerResult.errors;                }) : void
@@ -3712,7 +3705,6 @@ module Harness {
 
                 var errors = null;
 >errors : any
->null : null
 
                 compileString(code, 'test.ts', function (compilerResult) {
 >compileString(code, 'test.ts', function (compilerResult) {                    errors = compilerResult.errors;                }) : void
@@ -4611,7 +4603,6 @@ module Harness {
 
                 var results: string = null;
 >results : string
->null : null
 
                 for (var fn in outputs) {
 >fn : string
@@ -5125,7 +5116,6 @@ module Harness {
             var script: TypeScript.Script = null;
 >script : TypeScript.Script
 >TypeScript : any
->null : null
 
             var uName = unitName || '0' + (isDeclareFile ? '.d.ts' : '.ts');
 >uName : string
@@ -5687,8 +5677,6 @@ module Harness {
 >0 : 0
 
                 return null;
->null : null
-
             } else {
                 var addedFiles = [];
 >addedFiles : any[]
@@ -5853,7 +5841,6 @@ module Harness {
 >optionRegex : any
 >exec : any
 >content : string
->null : null
 
                 opts.push({ flag: match[1], value: match[2] });
 >opts.push({ flag: match[1], value: match[2] }) : number
@@ -5903,7 +5890,6 @@ module Harness {
             // Stuff related to the subfile we're parsing
             var currentFileContent: string = null;
 >currentFileContent : string
->null : null
 
             var currentFileOptions = {};
 >currentFileOptions : {}
@@ -5911,7 +5897,6 @@ module Harness {
 
             var currentFileName = null;
 >currentFileName : any
->null : null
 
             var refs: TypeScript.IFileReference[] = [];
 >refs : TypeScript.IFileReference[]
@@ -6114,7 +6099,6 @@ module Harness {
                         currentFileContent = null;
 >currentFileContent = null : null
 >currentFileContent : string
->null : null
 
                         currentFileOptions = {};
 >currentFileOptions = {} : {}
@@ -6148,7 +6132,6 @@ module Harness {
                     if (currentFileContent === null) {
 >currentFileContent === null : boolean
 >currentFileContent : string
->null : null
 
                         currentFileContent = '';
 >currentFileContent = '' : ""
@@ -6422,7 +6405,6 @@ module Harness {
 
                 // No edits!
                 return null;
->null : null
             }
 
             var initialEditRangeIndex = this.editRanges.length - (this.version - version);
@@ -6576,7 +6558,6 @@ module Harness {
         private ls: Services.ILanguageServiceShim = null;
 >ls : Services.ILanguageServiceShim
 >Services : any
->null : null
 
         public scripts: ScriptInfo[] = [];
 >scripts : ScriptInfo[]
@@ -7010,7 +6991,6 @@ module Harness {
 >parser.setErrorRecovery : any
 >parser : any
 >setErrorRecovery : any
->null : null
 
             parser.errorCallback = (a, b, c, d) => { };
 >parser.errorCallback = (a, b, c, d) => { } : (a: any, b: any, c: any, d: any) => void
@@ -7723,7 +7703,6 @@ module Harness {
 
             var n: string = null;
 >n : string
->null : null
 
             for (n in dangerNames) {
 >n : string
@@ -7771,7 +7750,6 @@ module Harness {
                 callback(null, res);
 >callback(null, res) : void
 >callback : (error: Error, result: any) => void
->null : null
 >res : any
 
             } catch (e) {
@@ -7799,7 +7777,6 @@ module Harness {
 >callback(e, null) : void
 >callback : (error: Error, result: any) => void
 >e : any
->null : null
             }
         }
 
@@ -8140,7 +8117,6 @@ module Harness {
             if (actual !== null) {
 >actual !== null : boolean
 >actual : string
->null : null
 
                 IO.writeFile(actualFilename, actual);
 >IO.writeFile(actualFilename, actual) : any
@@ -8181,7 +8157,6 @@ module Harness {
             if (actual === null) {
 >actual === null : boolean
 >actual : string
->null : null
 
                 actual = '<no content>';
 >actual = '<no content>' : "<no content>"
