@@ -153,6 +153,7 @@ import {
     getTsBuildInfoEmitOutputFilePath,
     getTsConfigObjectLiteralExpression,
     getTsConfigPropArrayElementValue,
+    hasArbitraryExtension,
     HasChangedAutomaticTypeDirectiveNames,
     hasChangesInResolutions,
     hasExtension,
@@ -270,7 +271,7 @@ import {
     removeFileExtension,
     removePrefix,
     removeSuffix,
-    resolutionExtensionIsTSOrJson,
+    resolutionExtensionIsTSOrJsonOrArbitrary,
     ResolutionMode,
     resolveConfigFileProjectName,
     ResolvedConfigFileName,
@@ -1527,6 +1528,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
     const host = createProgramOptions.host || createCompilerHost(options);
     const configParsingHost = parseConfigHostFromCompilerHostLike(host);
+    const createArbitrarySourceFile: CompilerHost["getSourceFile"] = host.getDeclarationFileForArbitraryExtension?.bind(host) ||
+        ((fileName, languageVersionOrOptions) => createSourceFile(fileName + ".d.ts", "export {}", languageVersionOrOptions, /*setParentNodes*/ true));
 
     let skipDefaultLib = options.noLib;
     const getDefaultLibraryFileName = memoize(() => host.getDefaultLibFileName(options));
@@ -3432,7 +3435,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     function processSourceFile(fileName: string, isDefaultLib: boolean, ignoreNoDefaultLib: boolean, packageId: PackageId | undefined, reason: FileIncludeReason): void {
         getSourceFileFromReferenceWorker(
             fileName,
-            fileName => findSourceFile(fileName, isDefaultLib, ignoreNoDefaultLib, reason, packageId), // TODO: GH#18217
+            fileName => findSourceFile(fileName, isDefaultLib, ignoreNoDefaultLib, reason, packageId, /*isArbitraryExtensionFile*/ false), // TODO: GH#18217
             (diagnostic, ...args) => addFilePreprocessingFileExplainingDiagnostic(/*file*/ undefined, reason, diagnostic, args),
             reason
         );
@@ -3465,13 +3468,13 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
 
     // Get source file from normalized fileName
-    function findSourceFile(fileName: string, isDefaultLib: boolean, ignoreNoDefaultLib: boolean, reason: FileIncludeReason, packageId: PackageId | undefined): SourceFile | undefined {
+    function findSourceFile(fileName: string, isDefaultLib: boolean, ignoreNoDefaultLib: boolean, reason: FileIncludeReason, packageId: PackageId | undefined, isArbitraryExtensionFile: boolean): SourceFile | undefined {
         tracing?.push(tracing.Phase.Program, "findSourceFile", {
             fileName,
             isDefaultLib: isDefaultLib || undefined,
             fileIncludeKind: (FileIncludeKind as any)[reason.kind],
         });
-        const result = findSourceFileWorker(fileName, isDefaultLib, ignoreNoDefaultLib, reason, packageId);
+        const result = findSourceFileWorker(fileName, isDefaultLib, ignoreNoDefaultLib, reason, packageId, isArbitraryExtensionFile);
         tracing?.pop();
         return result;
     }
@@ -3488,9 +3491,9 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             { languageVersion, impliedNodeFormat: result, setExternalModuleIndicator };
     }
 
-    function findSourceFileWorker(fileName: string, isDefaultLib: boolean, ignoreNoDefaultLib: boolean, reason: FileIncludeReason, packageId: PackageId | undefined): SourceFile | undefined {
+    function findSourceFileWorker(fileName: string, isDefaultLib: boolean, ignoreNoDefaultLib: boolean, reason: FileIncludeReason, packageId: PackageId | undefined, isArbitraryExtensionFile: boolean): SourceFile | undefined {
         const path = toPath(fileName);
-        if (useSourceOfProjectReferenceRedirect) {
+        if (useSourceOfProjectReferenceRedirect && !isArbitraryExtensionFile) {
             let source = getSourceOfProjectReferenceRedirect(path);
             // If preserveSymlinks is true, module resolution wont jump the symlink
             // but the resolved real path may be the .d.ts from project reference
@@ -3506,7 +3509,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             }
             if (source) {
                 const file = isString(source) ?
-                    findSourceFile(source, isDefaultLib, ignoreNoDefaultLib, reason, packageId) :
+                    findSourceFile(source, isDefaultLib, ignoreNoDefaultLib, reason, packageId, /*isArbitraryExtensionFile*/ false) :
                     undefined;
                 if (file) addFileToFilesByName(file, path, /*redirectedPath*/ undefined);
                 return file;
@@ -3579,12 +3582,14 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
         // We haven't looked for this file, do so now and cache result
         const sourceFileOptions = getCreateSourceFileOptions(fileName, moduleResolutionCache, host, options);
-        const file = host.getSourceFile(
+        debugger;
+        const file = (!isArbitraryExtensionFile ? host.getSourceFile : createArbitrarySourceFile)(
             fileName,
             sourceFileOptions,
             hostErrorMessage => addFilePreprocessingFileExplainingDiagnostic(/*file*/ undefined, reason, Diagnostics.Cannot_read_file_0_Colon_1, [fileName, hostErrorMessage]),
             shouldCreateNewSourceFile || (oldProgram?.getSourceFileByPath(toPath(fileName))?.impliedNodeFormat !== sourceFileOptions.impliedNodeFormat)
         );
+        if (isArbitraryExtensionFile && file) file.isDeclarationFile = true;
 
         if (packageId) {
             const packageIdKey = packageIdToString(packageId);
@@ -3961,9 +3966,10 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 }
 
                 const isFromNodeModulesSearch = resolution.isExternalLibraryImport;
-                const isJsFile = !resolutionExtensionIsTSOrJson(resolution.extension);
+                const isJsFile = !resolutionExtensionIsTSOrJsonOrArbitrary(resolution.extension, options);
                 const isJsFileFromNodeModules = isFromNodeModulesSearch && isJsFile;
                 const resolvedFileName = resolution.resolvedFileName;
+                const isArbitraryExtensionFile = hasArbitraryExtension(resolution.extension);
 
                 if (isFromNodeModulesSearch) {
                     currentNodeModulesDepth++;
@@ -3995,6 +4001,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                         /*ignoreNoDefaultLib*/ false,
                         { kind: FileIncludeKind.Import, file: file.path, index, },
                         resolution.packageId,
+                        isArbitraryExtensionFile,
                     );
                 }
 
