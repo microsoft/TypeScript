@@ -24,6 +24,7 @@ import {
     ExportAssignment,
     Extension,
     extensionFromPath,
+    extensionsNotSupportingExtensionlessResolution,
     fileExtensionIsOneOf,
     FileIncludeKind,
     firstDefined,
@@ -1015,7 +1016,7 @@ function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCan
                 }
                 else if (
                     packageJsonContent.type !== "module" &&
-                    !fileExtensionIsOneOf(canonicalModuleFileToTry, [Extension.Mjs, Extension.Cjs, Extension.Dmts, Extension.Dcts]) &&
+                    !fileExtensionIsOneOf(canonicalModuleFileToTry, extensionsNotSupportingExtensionlessResolution) &&
                     startsWith(canonicalModuleFileToTry, mainExportFile) &&
                     getDirectoryPath(canonicalModuleFileToTry) === removeTrailingDirectorySeparator(mainExportFile) &&
                     removeFileExtension(getBaseFileName(canonicalModuleFileToTry)) === "index"
