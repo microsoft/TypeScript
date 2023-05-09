@@ -52,9 +52,11 @@ import {
     getNewLineKind,
     getNewLineOrDefaultFromHost,
     getNodeId,
+    getOriginalNode,
     getPrecedingNonSpaceCharacterPosition,
     getScriptKindFromFileName,
     getShebang,
+    getSourceFileOfNode,
     getStartPositionOfLine,
     getTokenAtPosition,
     getTouchingToken,
@@ -1238,6 +1240,9 @@ namespace changesToText {
 
             const textChanges = mapDefined(normalized, c => {
                 const span = createTextSpanFromRange(c.range);
+                const sourceFile = c.kind === ChangeKind.ReplaceWithSingleNode ? getSourceFileOfNode(getOriginalNode(c.node)) ?? c.sourceFile :
+                    c.kind === ChangeKind.ReplaceWithMultipleNodes ? getSourceFileOfNode(getOriginalNode(c.nodes[0])) ?? c.sourceFile :
+                    c.sourceFile;
                 const newText = computeNewText(c, sourceFile, newLineCharacter, formatContext, validate);
                 // Filter out redundant changes.
                 if (span.length === newText.length && stringContainsAt(sourceFile.text, newText, span.start)) {
