@@ -1075,10 +1075,19 @@ export function isSourceMapFile(f: string) {
 export function isJSONFile(f: string) {
     return f.endsWith(Extension.Json);
 }
+export function isTypeScriptFile(f: string) {
+    return f.endsWith(Extension.Ts)
+        || f.endsWith(Extension.Mts)
+        || f.endsWith(Extension.Cts);
+}
+
 export function isDeclarationFile(f: string) {
     return f.endsWith(Extension.Dts)
         || f.endsWith(Extension.Dmts)
-        || f.endsWith(Extension.Dcts);
+        || f.endsWith(Extension.Dcts)
+        || /\.d\.[A-z]{1,5}\.mts$/.exec(f)
+        || /\.d\.[A-z]{1,5}\.cts$/.exec(f)
+        || /\.d\.[A-z]{1,5}\.ts$/.exec(f);
 }
 export function isJavaScriptFile(f: string) {
     return f.endsWith(Extension.Js) 

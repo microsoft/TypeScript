@@ -228,6 +228,20 @@ import {
 } from "../_namespaces/ts";
 import * as moduleSpecifiers from "../_namespaces/ts.moduleSpecifiers";
 
+ 
+enum NarrowBehavior {
+    None = 0,
+    AsConst = 1,
+    KeepLiterals = 2,
+    NotKeepLiterals = ~KeepLiterals,
+}
+
+enum LocalTypeInfoFlags {
+    None = 0,
+    Fresh = 1 << 0,
+    Implicit = 1<< 1
+}
+
 /** @internal */
 export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, file: SourceFile | undefined): DiagnosticWithLocation[] | undefined {
     const compilerOptions = host.getCompilerOptions();
@@ -324,6 +338,7 @@ export function transformDeclarations(context: TransformationContext) {
     const options = context.getCompilerOptions();
     const { noResolve, stripInternal } = options;
     const isolatedDeclarations = options.isolatedDeclarations;
+    const strictNullChecks = !!options.strict || !!options.strictNullChecks;
     return transformRoot;
 
     function reportIsolatedDeclarationError(node: Node) {
@@ -713,7 +728,7 @@ export function transformDeclarations(context: TransformationContext) {
             }
             if (elem.propertyName && isIdentifier(elem.propertyName) && isIdentifier(elem.name)
                 // TODO: isolated declarations: find a better way for this since we don't actually do signature usage analysis
-                && !isolatedDeclarations&& !elem.symbol.isReferenced && !isIdentifierANonContextualKeyword(elem.propertyName)) {
+                && !isolatedDeclarations && !elem.symbol.isReferenced && !isIdentifierANonContextualKeyword(elem.propertyName)) {
                 // Unnecessary property renaming is forbidden in types, so remove renaming
                 return factory.updateBindingElement(
                     elem,
@@ -781,7 +796,678 @@ export function transformDeclarations(context: TransformationContext) {
         | ParameterDeclaration
         | PropertyDeclaration
         | PropertySignature;
+    function makeInvalidType() {
+        return factory.createTypeReferenceNode("invalid");
+    }
 
+    type LocalTypeInfo = { typeNode: TypeNode, flags: LocalTypeInfoFlags };
+   
+    function localInference(node: Node, isConstContext: NarrowBehavior = NarrowBehavior.None): LocalTypeInfo {
+        const nextIsConst = isConstContext & NarrowBehavior.NotKeepLiterals;
+        switch(node.kind) {
+            case SyntaxKind.ParenthesizedExpression:
+                return regular(getWidenedType(localInference((node as ParenthesizedExpression).expression, isConstContext)));
+            case SyntaxKind.Identifier:
+                if((node as Identifier).escapedText === "undefined") {
+                    if(strictNullChecks) {
+                        return regular(factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword));
+                    } else {
+                        return regular(factory.createKeywordTypeNode(SyntaxKind.AnyKeyword), LocalTypeInfoFlags.Implicit);
+                    }
+                }
+            case SyntaxKind.NullKeyword:
+                if(strictNullChecks) {
+                    return regular(factory.createLiteralTypeNode(factory.createNull()));
+                } else {
+                    return regular(factory.createKeywordTypeNode(SyntaxKind.AnyKeyword), LocalTypeInfoFlags.Implicit);
+                }
+            case SyntaxKind.NewExpression:
+                const newExpr = node as NewExpression;
+                if(isIdentifier(newExpr.expression)) {
+                    // to do: isolated declarations : Add check for type arguments.
+                    const typeNode = factory.createTypeReferenceNode(
+                        visitNode(newExpr.expression, visitDeclarationSubtree, isIdentifier)!,
+                        visitNodes(newExpr.typeArguments, visitDeclarationSubtree, isTypeNode)
+                    );
+                    return regular(visitNode(typeNode, visitDeclarationSubtree, isTypeNode) ??
+                        makeInvalidTypeAndReport(node));
+                }
+                return regular(makeInvalidTypeAndReport(node));
+            case SyntaxKind.ArrowFunction:
+            case SyntaxKind.FunctionExpression:
+                const fnNode = node as FunctionExpression | ArrowFunction;
+                return regular(factory.createFunctionTypeNode(
+                    visitNodes(fnNode.typeParameters, visitDeclarationSubtree, isTypeParameterDeclaration),
+                    fnNode.parameters.map(p => ensureParameter(p)),
+                    inferReturnType(fnNode).typeNode,
+                ))
+            case SyntaxKind.TypeAssertionExpression:
+            case SyntaxKind.AsExpression:
+                const asExpression = node as AsExpression | TypeAssertion;
+                if(isTypeReferenceNode(asExpression.type) && isConst(asExpression.type)) {
+                    return localInference(asExpression.expression, NarrowBehavior.AsConst);
+                } else {
+                    const type = visitType(asExpression.type, asExpression);
+                    if(isLiteralTypeNode(type) && 
+                        (isNoSubstitutionTemplateLiteral(type.literal) || isStringLiteral(type.literal))) {
+                        return regular(factory.createLiteralTypeNode(
+                            normalizeLiteralValue(type.literal)
+                        ));
+                    }
+                    return regular(type);
+                }
+            case SyntaxKind.PrefixUnaryExpression:
+                const prefixOp = node as PrefixUnaryExpression;
+                if(prefixOp.operator === SyntaxKind.MinusToken) {
+                    const {typeNode: targetExpressionType, flags } = localInference(prefixOp.operand, isConstContext);
+                    if(isLiteralTypeNode(targetExpressionType) && isNumericLiteral(targetExpressionType.literal)) {
+                        return {
+                            flags,
+                            typeNode: factory.createLiteralTypeNode(factory.createPrefixMinus(targetExpressionType.literal))
+                        }
+                    } else if(targetExpressionType.kind === SyntaxKind.NumberKeyword) {
+                        return { typeNode: targetExpressionType, flags };
+                    }
+                }
+                break;
+            case SyntaxKind.NumericLiteral: 
+                return literal(node, SyntaxKind.NumberKeyword, isConstContext);
+            case SyntaxKind.TemplateExpression:
+                    if(!isConstContext) {
+                        return literal(node, SyntaxKind.StringKeyword, isConstContext)
+                    }
+                    const templateExpression = node as TemplateExpression;
+                    const templateSpans: TemplateLiteralTypeSpan[] = []
+                    let head = factory.createTemplateHead(templateExpression.head.text);
+                    let prevSpan: TemplateHead | TemplateLiteralTypeSpan = head;
+                    for(const span of templateExpression.templateSpans) {
+                        const {typeNode} = localInference(span.expression, nextIsConst);
+                        if(isLiteralTypeNode(typeNode)) {
+                            let oldText = prevSpan.kind === SyntaxKind.TemplateHead ? prevSpan.text : prevSpan.literal.text;
+                            let newText= oldText;
+                        } else {
+                            const literalSpan = factory.createTemplateLiteralTypeSpan(
+                                typeNode,
+                                span.literal
+                            );
+                            prevSpan = literalSpan;
+                            templateSpans.push(literalSpan);
+                        }
+
+                    }
+                    return regular(factory.createTemplateLiteralType(templateExpression.head, templateSpans));
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
+            case SyntaxKind.StringLiteral: 
+                return literal(node, SyntaxKind.StringKeyword, isConstContext);
+            case SyntaxKind.BigIntLiteral: 
+                return literal(node, SyntaxKind.BigIntKeyword, isConstContext);
+            case SyntaxKind.RegularExpressionLiteral: 
+                return literal(node, "RegExp", isConstContext);
+            case SyntaxKind.TrueKeyword: 
+            case SyntaxKind.FalseKeyword: 
+                return literal(node, SyntaxKind.BooleanKeyword, isConstContext);
+            case SyntaxKind.ArrayLiteralExpression:
+                const arrayLiteral = node as ArrayLiteralExpression
+                const elementTypesInfo: LocalTypeInfo[] = []
+                for(const element of arrayLiteral.elements) {
+                    elementTypesInfo.push(
+                        localInference(element, nextIsConst)
+                    )     
+                }
+                if(isConstContext & NarrowBehavior.AsConst) {
+                    const tupleType = factory.createTupleTypeNode(
+                        elementTypesInfo.map(lti => lti.typeNode)
+                    );
+                    tupleType.emitNode = { flags: 1 };
+                    return regular(factory.createTypeOperatorNode(SyntaxKind.ReadonlyKeyword, tupleType));
+                } else {
+                    let elementTypes = deduplicateUnion(elementTypesInfo);
+                    let simplifiedUnion = collapseLiteralTypesIntoBaseTypes(elementTypes);
+                    normalizeObjectUnion(simplifiedUnion);
+                    let itemType;
+                    if(simplifiedUnion.length === 0) {
+                        itemType = (strictNullChecks ? factory.createKeywordTypeNode(SyntaxKind.NeverKeyword) : factory.createKeywordTypeNode(SyntaxKind.AnyKeyword));
+                    } else {
+                        itemType = simplifiedUnion.length === 1? simplifiedUnion[0]: factory.createUnionTypeNode(simplifiedUnion);
+                    }
+
+                    return regular(factory.createArrayTypeNode(itemType));
+                }       
+            case SyntaxKind.ObjectLiteralExpression:
+                const objectLiteral = node as ObjectLiteralExpression
+                const properties: TypeElement[] = []
+                for(const prop of objectLiteral.properties) {
+                    if(isMethodDeclaration(prop)) {
+                        if (isConstContext & NarrowBehavior.AsConst) {
+                            properties.push(factory.createPropertySignature(
+                                [factory.createModifier(SyntaxKind.ReadonlyKeyword)],
+                                visitNode(prop.name, visitDeclarationSubtree, isPropertyName)!,
+                                undefined,
+                                factory.createFunctionTypeNode(
+                                    visitNodes(prop.typeParameters,  visitDeclarationSubtree, isTypeParameterDeclaration),
+                                    prop.parameters.map(p => ensureParameter(p)),
+                                    visitType(prop.type, prop),
+                                )
+                            ));
+                        }
+                        else {
+                            properties.push(factory.createMethodSignature(
+                                [],
+                                visitNode(prop.name, visitDeclarationSubtree, isPropertyName)!,
+                                prop.questionToken,
+                                visitNodes(prop.typeParameters,  visitDeclarationSubtree, isTypeParameterDeclaration),
+                                prop.parameters.map(p => ensureParameter(p)),
+                                visitType(prop.type, prop),
+                            ))
+                        }
+                    }
+                    else if(isPropertyAssignment(prop)) {
+                        const modifiers = isConstContext & NarrowBehavior.AsConst ? 
+                            [factory.createModifier(SyntaxKind.ReadonlyKeyword)]:
+                            [];
+                        properties.push(factory.createPropertySignature(
+                            modifiers,
+                            visitNode(prop.name, visitDeclarationSubtree, isPropertyName)!,
+                            undefined,
+                            localInference(prop.initializer, nextIsConst).typeNode
+                        ))
+                    } else {
+                        return regular(makeInvalidTypeAndReport(prop));
+                    }                    
+                }
+                return regular(factory.createTypeLiteralNode(
+                    properties
+                ))
+        }
+        
+        return regular(makeInvalidTypeAndReport(node));
+    }
+    function fresh(typeNode: TypeNode, flags = LocalTypeInfoFlags.None) {
+        return { typeNode, flags: flags | LocalTypeInfoFlags.Fresh }
+    }
+    function regular(typeNode: TypeNode, flags = LocalTypeInfoFlags.None) {
+        return { typeNode, flags }
+    }
+    function normalizeLiteralValue(literal: LiteralExpression) {
+        switch(literal.kind) {
+            case SyntaxKind.BigIntLiteral:
+            case SyntaxKind.TrueKeyword:
+            case SyntaxKind.FalseKeyword:
+                return literal;
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
+            case SyntaxKind.StringLiteral:
+                return factory.createStringLiteral(literal.text);
+            case SyntaxKind.NumericLiteral:
+                return factory.createNumericLiteral(+literal.text);
+        }
+        throw new Error("Not supported");
+    }
+    function literal(node: Node, baseType: string | KeywordTypeSyntaxKind, narrowBehavior: NarrowBehavior) {
+        if(narrowBehavior) {
+            return fresh(factory.createLiteralTypeNode(
+                normalizeLiteralValue(node as LiteralExpression)
+            ))
+        } else {
+            return fresh(typeof baseType === "number" ? 
+                factory.createKeywordTypeNode(baseType) : factory.createTypeReferenceNode(baseType));
+        }
+    }
+    function isConst(typeReference: TypeReferenceNode) {
+        return isIdentifier(typeReference.typeName) && typeReference.typeName.escapedText === "const";
+    }
+    function makeInvalidTypeAndReport(node: Node) {
+        reportIsolatedDeclarationError(node);
+        return makeInvalidType();
+    }
+    function visitType(type: TypeNode | undefined, owner: Node) {
+        const visitedType = visitNode(type, visitDeclarationSubtree, isTypeNode);
+        return visitedType ?? makeInvalidTypeAndReport(owner);
+    }
+
+    function getMemberKey(member:MethodSignature | PropertySignature ) {
+        if(!isIdentifier(member.name)) {
+            makeInvalidTypeAndReport(member);
+            return undefined;
+        }
+        return member.name.escapedText;
+    }
+
+    function collapseLiteralTypesIntoBaseTypes(nodes: LocalTypeInfo[]) {
+        enum CollapsibleTypes {
+            None = 0,
+            String = 1 << 1,
+            Number = 1 << 2,
+            True = 1 << 3,
+            False = 1 << 4,
+            Boolean = True | False,
+            BigInt = 1 << 5,
+            Any = 1 << 7,
+            ImplicitAny = 1 << 8
+        }
+        let baseTypes = CollapsibleTypes.None;
+        let literalTypes = CollapsibleTypes.None;
+        for(const type of nodes) {
+            switch(type.typeNode.kind) {
+                case SyntaxKind.TemplateLiteralType:
+                    literalTypes |= CollapsibleTypes.String;
+                    break;
+                case SyntaxKind.AnyKeyword:
+                    if(type.flags & LocalTypeInfoFlags.Implicit) {
+                        literalTypes |= CollapsibleTypes.ImplicitAny
+                    } else {
+                        baseTypes |= CollapsibleTypes.Any
+                    }
+                    break
+                case SyntaxKind.BooleanKeyword:
+                    baseTypes |= CollapsibleTypes.Boolean
+                    break;
+                case SyntaxKind.StringKeyword: 
+                    baseTypes |= CollapsibleTypes.String
+                    break;
+                case SyntaxKind.NumberKeyword: 
+                    baseTypes |= CollapsibleTypes.Number;
+                    break;
+                case SyntaxKind.BigIntKeyword: 
+                    baseTypes |= CollapsibleTypes.BigInt;
+                    break;
+                case SyntaxKind.LiteralType:
+                    const literalType = type.typeNode as LiteralTypeNode;
+                    switch(literalType.literal.kind) {
+                        case SyntaxKind.TrueKeyword: 
+                            literalTypes |= CollapsibleTypes.True;
+                            break;
+                        case SyntaxKind.FalseKeyword: 
+                            literalTypes |= CollapsibleTypes.False;
+                            break;
+                        case SyntaxKind.NumericLiteral:
+                            literalTypes |= CollapsibleTypes.Number;
+                            break;
+                        case SyntaxKind.PrefixUnaryExpression:
+                            if((literalType.literal as PrefixUnaryExpression).operand.kind === SyntaxKind.NumericLiteral) {
+                                literalTypes |= CollapsibleTypes.Number;
+                            }
+                            break;
+                        case SyntaxKind.StringLiteral:
+                        case SyntaxKind.NoSubstitutionTemplateLiteral:
+                        case SyntaxKind.TemplateExpression:
+                            literalTypes |= CollapsibleTypes.String;
+                            break;
+                        case SyntaxKind.BigIntLiteral:
+                            literalTypes |= CollapsibleTypes.BigInt;
+                            break;
+                    }
+            }
+        }
+        // If true and false are both present, act as if we found boolean itself
+        if((literalTypes & CollapsibleTypes.Boolean) === CollapsibleTypes.Boolean) {
+            baseTypes |= CollapsibleTypes.Boolean;
+        }
+        const typesToCollapse = baseTypes & literalTypes;
+
+        if(baseTypes & CollapsibleTypes.Any) {
+            return [factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)]
+        }
+        // Nothing to collapse or reorder
+        if(baseTypes === CollapsibleTypes.None) return nodes.map(n => n.typeNode);
+        const result: TypeNode[] = [];
+        
+        // We do a best effort to preserve TS union order for primitives
+        if(baseTypes & CollapsibleTypes.String) {
+            result.push(factory.createKeywordTypeNode(SyntaxKind.StringKeyword))
+        }
+        if(baseTypes & CollapsibleTypes.Number) {
+            result.push(factory.createKeywordTypeNode(SyntaxKind.NumberKeyword))
+        }
+        if(baseTypes & CollapsibleTypes.Boolean) {
+            result.push(factory.createKeywordTypeNode(SyntaxKind.BooleanKeyword))
+        }
+        if(baseTypes & CollapsibleTypes.BigInt) {
+            result.push(factory.createKeywordTypeNode(SyntaxKind.BigIntKeyword))
+        }
+        if(!(baseTypes & CollapsibleTypes.Boolean) && literalTypes & CollapsibleTypes.True) {
+            result.push(factory.createLiteralTypeNode(factory.createTrue()))
+        }
+        if(!(baseTypes & CollapsibleTypes.Boolean) && literalTypes & CollapsibleTypes.False) {
+            result.push(factory.createLiteralTypeNode(factory.createFalse()))
+        }
+
+        for(const type of nodes) {
+            let typeofNode = CollapsibleTypes.None
+            
+            switch(type.typeNode.kind) {
+                case SyntaxKind.BooleanKeyword:
+                case SyntaxKind.StringKeyword: 
+                case SyntaxKind.NumberKeyword:
+                case SyntaxKind.BigIntKeyword:
+                case SyntaxKind.AnyKeyword:
+                    // They were already added
+                    continue;
+                case SyntaxKind.TemplateLiteralType:
+                    typeofNode = CollapsibleTypes.String;
+                    break;
+                case SyntaxKind.LiteralType:
+                    const literalType = type.typeNode as LiteralTypeNode;
+                    switch(literalType.literal.kind) {
+                        case SyntaxKind.TrueKeyword: 
+                            continue;
+                        case SyntaxKind.FalseKeyword: 
+                            continue;
+                        case SyntaxKind.NumericLiteral:
+                            typeofNode = CollapsibleTypes.Number;
+                            break;
+                        case SyntaxKind.PrefixUnaryExpression:
+                            if((literalType.literal as PrefixUnaryExpression).operand.kind === SyntaxKind.NumericLiteral) {
+                                typeofNode = CollapsibleTypes.Number;
+                            }
+                            break;
+                        case SyntaxKind.StringLiteral:
+                        case SyntaxKind.NoSubstitutionTemplateLiteral:
+                        case SyntaxKind.TemplateExpression:
+                            typeofNode = CollapsibleTypes.String;
+                            break;
+                        case SyntaxKind.BigIntLiteral:
+                            typeofNode = CollapsibleTypes.BigInt;
+                            break;
+                    }
+            }
+            // Not a node of interest, do not change
+            if((typeofNode & typesToCollapse) === 0) {
+                result.push(type.typeNode);
+            }
+        }
+        return result;
+    }
+    function deduplicateUnion(nodes: LocalTypeInfo[]) {
+        const typeInfoCache = new Map<number, {
+            node: TypeLiteralNode,
+            members: Map<__String, TypeElement>
+        }>
+        let union: LocalTypeInfo[] = [];
+        for(const node of nodes) {
+            const existing = union.find(u => typesEqual(node.typeNode, u.typeNode));
+            if(existing === undefined) {
+                union.push(node);
+            } else {
+                existing.flags &= node.flags;
+            }
+        }
+        return union
+
+        function getTypeInfo(type:TypeLiteralNode) {
+            const typeNodeId = getNodeId(type);
+            let typeInfo = typeInfoCache.get(typeNodeId);
+            if(typeInfo) return typeInfo;
+
+            typeInfo = {
+                node: type,
+                members: new Map()
+            }
+            for(const member of type.members) {
+                const isMethod = isMethodSignature(member);
+                const isProp = isPropertySignature(member);
+                if(isMethod || isProp) {
+                    const memberKey = getMemberKey(member)
+                    if (memberKey === undefined) {
+                        makeInvalidTypeAndReport(member);
+                        break;  
+                    }
+                    typeInfo.members.set(memberKey, member);
+                } else {
+                    makeInvalidTypeAndReport(member);
+                }
+            }
+            typeInfoCache.set(typeNodeId, typeInfo);
+            return typeInfo;
+        }
+        function typesEqual(a?: TypeNode, b?: TypeNode) {
+            if (a === undefined || b === undefined) return a === b;
+            if (a.kind !== b.kind) return false;
+            switch(a.kind) {
+                case SyntaxKind.AnyKeyword:
+                case SyntaxKind.UnknownKeyword:
+                case SyntaxKind.NumberKeyword:
+                case SyntaxKind.BigIntKeyword:
+                case SyntaxKind.ObjectKeyword:
+                case SyntaxKind.BooleanKeyword:
+                case SyntaxKind.StringKeyword:
+                case SyntaxKind.SymbolKeyword:
+                case SyntaxKind.VoidKeyword:
+                case SyntaxKind.UndefinedKeyword:
+                case SyntaxKind.NeverKeyword:
+                    return true;
+            }
+            if(isLiteralTypeNode(a) && isLiteralTypeNode(b)) {
+                let aLiteral = a.literal;
+                let bLiteral = b.literal;
+                while(true) { 
+                    switch(aLiteral.kind) {
+                        case SyntaxKind.NullKeyword:
+                        case SyntaxKind.TrueKeyword:
+                        case SyntaxKind.FalseKeyword:
+                            return aLiteral.kind === bLiteral.kind;
+                        case SyntaxKind.NumericLiteral:
+                            return aLiteral.kind === bLiteral.kind && +aLiteral.text === +(bLiteral as LiteralExpression).text;
+                        case SyntaxKind.StringLiteral:
+                        case SyntaxKind.NoSubstitutionTemplateLiteral:
+                            return (bLiteral.kind === SyntaxKind.StringLiteral || bLiteral.kind === SyntaxKind.NoSubstitutionTemplateLiteral)
+                                && aLiteral.text === (bLiteral as LiteralExpression).text;
+                        case SyntaxKind.PrefixUnaryExpression:
+                            const aUnary = (aLiteral as PrefixUnaryExpression);
+                            const bUnary = (bLiteral as PrefixUnaryExpression);
+                            if(aUnary.operator !== bUnary.operator) return false;
+
+                            aLiteral = aUnary.operand as LiteralExpression;
+                            bLiteral = bUnary.operand as LiteralExpression;
+                            return +aLiteral.text === +bLiteral.text;
+                        default: 
+                            return false;
+                    }
+                }
+            }
+            if(isIdentifier(a) && isIdentifier(b)) {
+                return a.escapedText === b.escapedText;
+            }
+            if(isTypeLiteralNode(a) && isTypeLiteralNode(b)) {
+                if(a.members.length !== b.members.length) return false;
+                let aTypeInfo = getTypeInfo(a)
+                if(!aTypeInfo) return false;
+
+                for(const bMember of b.members) {
+                    const bIsMethod = isMethodSignature(bMember);
+                    const bIsProp = isPropertySignature(bMember);
+                    if(bIsMethod || bIsProp) {
+                        const memberKey = getMemberKey(bMember);
+                        if (memberKey === undefined) {
+                            makeInvalidTypeAndReport(bMember);
+                            break;  
+                        }
+                        const aMember = aTypeInfo.members.get(memberKey);
+                        if(!aMember) return false;
+                        if((aMember.questionToken !== undefined) !== (bMember.questionToken !== undefined)) return false;
+                        if (getSyntacticModifierFlags(aMember) != getSyntacticModifierFlags(bMember)) return false;
+                        if(bIsProp && isPropertySignature(aMember)) {
+                            if(!typesEqual(aMember.type, bMember.type)) {
+                                return false;
+                            }
+                        } else  if(bIsMethod && isMethodSignature(aMember)) {
+                            if(!typesEqual(aMember.type,bMember.type)) {
+                                return false;
+                            }
+                            if(aMember.parameters.length !== b.members.length) {
+                                return false
+                            }
+                        }
+                    } else {
+                        makeInvalidTypeAndReport(bMember);
+                    }
+                }
+                return true;
+            }else {
+                reportIsolatedDeclarationError(a);
+                reportIsolatedDeclarationError(b);
+            }                
+        }
+    }
+    function normalizeObjectUnion(nodes: Array<TypeNode | undefined>) {
+        const allProps = new Map<__String, Array<TypeNode | undefined>>();
+        const allTypeLookup  = new Array<Map<__String, TypeNode> | undefined>();
+        let hasChanged = false;
+        for (let i = 0; i< nodes.length; i++) {
+            const type = nodes[i];
+            const typeLookup = new Map<__String, TypeNode>();
+            allTypeLookup.push(typeLookup)
+
+            if(!type || !isTypeLiteralNode(type)) continue;
+            for(const member of type.members){
+                const isMethod = isMethodSignature(member);
+                const isProp = isPropertySignature(member);
+                if(isMethod || isProp) {
+                    const memberKey = getMemberKey(member);
+                    if(memberKey === undefined) {
+                        nodes[i] = makeInvalidTypeAndReport(member.name)
+                        allTypeLookup[i] = undefined;
+                        hasChanged = true;
+                        break;
+                    }
+                    let type;
+                    if(isProp) {
+                        type = member.type ?? makeInvalidTypeAndReport(member);
+                    } else {
+                        type = factory.createFunctionTypeNode(
+                            member.typeParameters,
+                            member.parameters,
+                            member.type!,
+                        )
+                    }
+                    let propTypes = allProps.get(memberKey);
+                    if(!propTypes) {
+                        propTypes = new Array(nodes.length);
+                        allProps.set(memberKey, propTypes);
+                    }
+                    propTypes[i] = type;
+                    typeLookup.set(memberKey, type);
+                } else {
+                    nodes[i] = makeInvalidTypeAndReport(member);
+                    allTypeLookup[i] = undefined;
+                    hasChanged = true;
+                    break;
+                }
+            }
+        }
+        for(const [, propTypes] of allProps) {
+            normalizeObjectUnion(propTypes)
+        }
+        for(let typeIndex = 0; typeIndex< nodes.length; typeIndex++) {
+            const type = nodes[typeIndex];
+            const props = allTypeLookup[typeIndex];
+            if(!type || !isTypeLiteralNode(type) || !props) continue;
+
+            let newMembers: TypeElement[] | undefined = undefined;
+            for(const [commonProp, propTypes] of allProps) {
+                const propType = props.get(commonProp);
+                if(propType) {
+                    if(propType != propTypes[typeIndex]) {
+                        let indexOfProp = findIndex(type.members, e => isPropertySignature(e) && isIdentifier(e.name) && e.name.escapedText === commonProp);
+                        if(indexOfProp !== -1) {
+                            if(newMembers === undefined) {
+                                newMembers = [...type.members];
+                            }
+                            const existingMember = type.members[indexOfProp] as PropertySignature;
+                            newMembers[indexOfProp] = factory.createPropertySignature(
+                                existingMember.modifiers,
+                                existingMember.name,
+                                existingMember.questionToken,
+                                propTypes[typeIndex]
+                            );
+                        }
+                    }
+                } else {
+                    if(newMembers === undefined) {
+                        newMembers = [...type.members];
+                    }
+                    newMembers.push(factory.createPropertySignature(
+                        /* modifiers */ undefined,
+                        factory.createIdentifier(unescapeLeadingUnderscores(commonProp)),
+                        factory.createToken(SyntaxKind.QuestionToken),
+                        factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword),
+                    ))
+                }
+            }
+            if (newMembers) {
+                hasChanged = true;
+                nodes[typeIndex] = factory.createTypeLiteralNode(newMembers);
+            }
+        }
+        return hasChanged;
+    }
+    function getWidenedType(localTypeInfo: LocalTypeInfo) {
+        if((localTypeInfo.flags & LocalTypeInfoFlags.Fresh) && isLiteralTypeNode(localTypeInfo.typeNode)) {
+            const literal = localTypeInfo.typeNode.literal;
+            return literal.kind === SyntaxKind.StringLiteral ? factory.createKeywordTypeNode(SyntaxKind.StringKeyword) :
+                literal.kind === SyntaxKind.NumericLiteral ? factory.createKeywordTypeNode(SyntaxKind.NumberKeyword) :
+                literal.kind === SyntaxKind.PrefixUnaryExpression && (literal as PrefixUnaryExpression).operand.kind === SyntaxKind.NumericLiteral ? factory.createKeywordTypeNode(SyntaxKind.NumberKeyword) :
+                literal.kind === SyntaxKind.BigIntLiteral ? factory.createKeywordTypeNode(SyntaxKind.BigIntKeyword) :
+                literal.kind === SyntaxKind.TrueKeyword || literal.kind === SyntaxKind.FalseKeyword ? factory.createKeywordTypeNode(SyntaxKind.BooleanKeyword) :
+                localTypeInfo.typeNode;
+        }
+
+        return localTypeInfo.typeNode;
+    }
+    
+    function inferReturnType(node: FunctionLikeDeclaration) {
+        const returnStatements: ReturnStatement[] = [];
+        if(node.type) {
+            return regular(visitType(node.type, node));
+        }
+        if(!node.body) {
+            return regular(makeInvalidTypeAndReport(node));
+        }
+        collectReturnExpressions(node.body, returnStatements);
+        if(returnStatements.length === 0) {
+            return regular(factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword));
+        }
+
+        let returnStatementInference = returnStatements.map((r) => r.expression? localInference(r.expression, NarrowBehavior.KeepLiterals): regular(factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword)));
+        returnStatementInference = deduplicateUnion(returnStatementInference)
+        const unionConstituents = returnStatementInference.length === 1 ? 
+            [getWidenedType(returnStatementInference[0])] :
+            collapseLiteralTypesIntoBaseTypes(returnStatementInference);
+        normalizeObjectUnion(unionConstituents);
+
+        return regular(unionConstituents.length === 1? unionConstituents[0]: factory.createUnionTypeNode(unionConstituents));
+
+        function collectReturnExpressions(node: Node, result: ReturnStatement[]) {
+            forEachChild(node, child => {
+                if(isReturnStatement(child)) {
+                    result.push(child)
+                }
+                if(isClassLike(child) || isFunctionLike(child)) {
+                    return; 
+                }
+                collectReturnExpressions(child, result);
+            })
+        }
+    }
+    
+    function localInferenceFromInitializer(node: HasInferredType): TypeNode | undefined {
+        let typeNode;
+        if(isParameter(node) && node.initializer) {
+            typeNode = localInference(node.initializer);
+        }
+        if(isVariableDeclaration(node) && node.initializer) {
+            typeNode = localInference(node.initializer);
+        }
+        if(isPropertyDeclaration(node) && node.initializer)  {
+            typeNode = localInference(node.initializer);
+        }
+        if(isFunctionDeclaration(node)) {
+            typeNode = inferReturnType(node);
+        }
+        if(isMethodDeclaration(node)) {
+            typeNode = inferReturnType(node);
+        }
+        return typeNode?.typeNode;
+    }
     function ensureType(node: HasInferredType, type: TypeNode | undefined, ignorePrivate?: boolean): TypeNode | undefined {
         if (!ignorePrivate && hasEffectiveModifier(node, ModifierFlags.Private)) {
             // Private nodes emit no types (except private parameter properties, whose parameter types are actually visible)
@@ -793,8 +1479,12 @@ export function transformDeclarations(context: TransformationContext) {
         }
         if (isolatedDeclarations) {
             if (type === undefined) {
+                const localType = localInferenceFromInitializer(node);
+                if (localType !== undefined) {
+                    return localType;
+                }
                 reportIsolatedDeclarationError(node);
-                return factory.createTypeReferenceNode("invalid");
+                return makeInvalidType();
             }
             return visitNode(type, visitDeclarationSubtree, isTypeNode);
         }
@@ -1433,8 +2123,8 @@ export function transformDeclarations(context: TransformationContext) {
                     if (isolatedDeclarations) {
                         reportIsolatedDeclarationError(input);
                     }
-                    const type = isolatedDeclarations ?
-                        factory.createTypeReferenceNode("invalid") :
+                    const type = isolatedDeclarations ? 
+                        makeInvalidType() :
                         resolver.createTypeOfExpression(input.expression, input, declarationEmitNodeBuilderFlags, symbolTracker);
                     const varDecl = factory.createVariableDeclaration(newId, /*exclamationToken*/ undefined, type, /*initializer*/ undefined);
                     errorFallbackNode = undefined;
@@ -1812,7 +2502,7 @@ export function transformDeclarations(context: TransformationContext) {
                         return m;
                     }
                     // Rewrite enum values to their constants, if available
-                    const constValue = resolver.getConstantValue(m);
+                    const constValue = isolatedDeclarations? undefined : resolver.getConstantValue(m);
                     return preserveJsDoc(factory.updateEnumMember(m, m.name, constValue !== undefined ? typeof constValue === "string" ? factory.createStringLiteral(constValue) : factory.createNumericLiteral(constValue) : undefined), m);
                 }))));
             }

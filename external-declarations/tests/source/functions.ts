@@ -1,4 +1,6 @@
-
+export function testDefaultNoType(a: string, b = ""): number {
+    return 0;
+}
 
 function test(a: string): number {
     return 0;

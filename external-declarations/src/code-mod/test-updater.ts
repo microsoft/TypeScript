@@ -2,7 +2,7 @@ import 'source-map-support/register';
 import * as fsPath from 'path'
 import * as fs from 'fs/promises'
 import { parserConfiguration, ArgType, parseArgs } from "../utils/cli-parser";
-import { isDeclarationFile, isJavaScriptFile, isJSONFile, isSourceMapFile, normalizePath } from '../compiler/path-utils';
+import { normalizePath } from '../compiler/path-utils';
 import { isRelevantTestFile, loadTestCase } from '../test-runner/utils';
 import ts = require('typescript');
 import { compileFiles, setCompilerOptionsFromHarnessSetting, TestFile } from '../test-runner/tsc-infrastructure/compiler-run';

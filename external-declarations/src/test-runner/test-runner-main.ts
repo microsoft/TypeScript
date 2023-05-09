@@ -33,7 +33,7 @@ if(prefixed) {
     testVersionFilter = prefixed.groups?.options;
 }
 
-const rootCasePaths = parsedArgs.rootPaths ?? [ './tests/sources' ]
+const rootCasePaths = parsedArgs.rootPaths ?? [ './tests/source' ]
 const libFolder = parsedArgs.libPath ?? path.join(rootCasePaths[0], "../lib")
 
 const filter = parsedArgs.default ? new RegExp(parsedArgs.default) : /.*\.ts/
@@ -101,7 +101,11 @@ async function main() {
                     "// " + r.fileName,
                     r.content
                 ])
-                .join(IO.newLine());
+                .join(IO.newLine()) + `
+// ==================
+// Original test file: ${testFile}
+// ` + data.code.split("\n").join(`
+// `);
 
             if (allTests.length > 5) {
                 writeResults(normalizePath(file).replace("/$now/", historical), resultText);

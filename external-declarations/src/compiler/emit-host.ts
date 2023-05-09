@@ -20,7 +20,6 @@ export function createEmitHost(allProjectFiles: string[], tsLibFiles: string[], 
     return {
         getSourceFiles() {
             throw new Error("Not needed");
-            // return [sourceFile]
         },
         getCompilerOptions,
         getCurrentDirectory,
@@ -54,7 +53,7 @@ export function createEmitHost(allProjectFiles: string[], tsLibFiles: string[], 
 
                 if(!resolvedFile) return undefined;
             }
-            if(!projectFileMap.has(resolvedFile)) {                        
+            if(!projectFileMap.has(resolvedFile)) {
                 return undefined;
             }
             const resolvedDeclarationFile = 

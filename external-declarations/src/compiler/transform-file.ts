@@ -31,7 +31,6 @@ export function transformFile(fileName: string, source: string, allProjectFiles:
 
     let result = x(sourceFile);
 
-
     const printer = ts.createPrinter({
         onlyPrintJsDocStyle: true,
         newLine: options.newLine ?? ts.NewLineKind.CarriageReturnLineFeed,
