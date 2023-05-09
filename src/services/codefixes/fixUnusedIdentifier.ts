@@ -56,7 +56,6 @@ import {
     textChanges,
     tryCast,
     TypeChecker,
-    VariableDeclaration,
     VariableDeclarationList,
 } from "../_namespaces/ts";
 import {
@@ -295,7 +294,7 @@ function canPrefix(token: Identifier): boolean {
         case SyntaxKind.TypeParameter:
             return true;
         case SyntaxKind.VariableDeclaration: {
-            const varDecl = token.parent as VariableDeclaration;
+            const varDecl = token.parent ;
             switch (varDecl.parent.parent.kind) {
                 case SyntaxKind.ForOfStatement:
                 case SyntaxKind.ForInStatement:

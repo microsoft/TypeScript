@@ -708,16 +708,16 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
     function topLevelVisitor(node: Node): VisitResult<Node | undefined> {
         switch (node.kind) {
             case SyntaxKind.ImportDeclaration:
-                return visitImportDeclaration(node as ImportDeclaration);
+                return visitImportDeclaration(node);
 
             case SyntaxKind.ImportEqualsDeclaration:
-                return visitImportEqualsDeclaration(node as ImportEqualsDeclaration);
+                return visitImportEqualsDeclaration(node);
 
             case SyntaxKind.ExportDeclaration:
-                return visitExportDeclaration(node as ExportDeclaration);
+                return visitExportDeclaration(node);
 
             case SyntaxKind.ExportAssignment:
-                return visitExportAssignment(node as ExportAssignment);
+                return visitExportAssignment(node);
 
             default:
                 return topLevelNestedVisitor(node);
@@ -1182,58 +1182,58 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
     function topLevelNestedVisitor(node: Node): VisitResult<Node | undefined> {
         switch (node.kind) {
             case SyntaxKind.VariableStatement:
-                return visitVariableStatement(node as VariableStatement);
+                return visitVariableStatement(node);
 
             case SyntaxKind.FunctionDeclaration:
-                return visitFunctionDeclaration(node as FunctionDeclaration);
+                return visitFunctionDeclaration(node);
 
             case SyntaxKind.ClassDeclaration:
-                return visitClassDeclaration(node as ClassDeclaration);
+                return visitClassDeclaration(node);
 
             case SyntaxKind.ForStatement:
-                return visitForStatement(node as ForStatement, /*isTopLevel*/ true);
+                return visitForStatement(node , /*isTopLevel*/ true);
 
             case SyntaxKind.ForInStatement:
-                return visitForInStatement(node as ForInStatement);
+                return visitForInStatement(node);
 
             case SyntaxKind.ForOfStatement:
-                return visitForOfStatement(node as ForOfStatement);
+                return visitForOfStatement(node);
 
             case SyntaxKind.DoStatement:
-                return visitDoStatement(node as DoStatement);
+                return visitDoStatement(node);
 
             case SyntaxKind.WhileStatement:
-                return visitWhileStatement(node as WhileStatement);
+                return visitWhileStatement(node);
 
             case SyntaxKind.LabeledStatement:
-                return visitLabeledStatement(node as LabeledStatement);
+                return visitLabeledStatement(node);
 
             case SyntaxKind.WithStatement:
-                return visitWithStatement(node as WithStatement);
+                return visitWithStatement(node);
 
             case SyntaxKind.IfStatement:
-                return visitIfStatement(node as IfStatement);
+                return visitIfStatement(node);
 
             case SyntaxKind.SwitchStatement:
-                return visitSwitchStatement(node as SwitchStatement);
+                return visitSwitchStatement(node);
 
             case SyntaxKind.CaseBlock:
-                return visitCaseBlock(node as CaseBlock);
+                return visitCaseBlock(node);
 
             case SyntaxKind.CaseClause:
-                return visitCaseClause(node as CaseClause);
+                return visitCaseClause(node);
 
             case SyntaxKind.DefaultClause:
-                return visitDefaultClause(node as DefaultClause);
+                return visitDefaultClause(node);
 
             case SyntaxKind.TryStatement:
-                return visitTryStatement(node as TryStatement);
+                return visitTryStatement(node);
 
             case SyntaxKind.CatchClause:
-                return visitCatchClause(node as CatchClause);
+                return visitCatchClause(node);
 
             case SyntaxKind.Block:
-                return visitBlock(node as Block);
+                return visitBlock(node);
 
             default:
                 return visitor(node);
@@ -1512,13 +1512,13 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
         }
         switch (node.kind) {
             case SyntaxKind.ForStatement:
-                return visitForStatement(node as ForStatement, /*isTopLevel*/ false);
+                return visitForStatement(node , /*isTopLevel*/ false);
             case SyntaxKind.ExpressionStatement:
-                return visitExpressionStatement(node as ExpressionStatement);
+                return visitExpressionStatement(node);
             case SyntaxKind.ParenthesizedExpression:
-                return visitParenthesizedExpression(node as ParenthesizedExpression, valueIsDiscarded);
+                return visitParenthesizedExpression(node , valueIsDiscarded);
             case SyntaxKind.PartiallyEmittedExpression:
-                return visitPartiallyEmittedExpression(node as PartiallyEmittedExpression, valueIsDiscarded);
+                return visitPartiallyEmittedExpression(node , valueIsDiscarded);
             case SyntaxKind.BinaryExpression:
                 if (isDestructuringAssignment(node)) {
                     return visitDestructuringAssignment(node, valueIsDiscarded);
@@ -1531,7 +1531,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                 break;
             case SyntaxKind.PrefixUnaryExpression:
             case SyntaxKind.PostfixUnaryExpression:
-                return visitPrefixOrPostfixUnaryExpression(node as PrefixUnaryExpression | PostfixUnaryExpression, valueIsDiscarded);
+                return visitPrefixOrPostfixUnaryExpression(node , valueIsDiscarded);
         }
         return visitEachChild(node, visitor, context);
     }
@@ -1718,7 +1718,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
     function onEmitNode(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void {
         if (node.kind === SyntaxKind.SourceFile) {
             const id = getOriginalNodeId(node);
-            currentSourceFile = node as SourceFile;
+            currentSourceFile = node ;
             moduleInfo = moduleInfoMap[id];
             exportFunction = exportFunctionsMap[id];
             noSubstitution = noSubstitutionMap[id];
@@ -1775,7 +1775,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
     function substituteUnspecified(node: Node) {
         switch (node.kind) {
             case SyntaxKind.ShorthandPropertyAssignment:
-                return substituteShorthandPropertyAssignment(node as ShorthandPropertyAssignment);
+                return substituteShorthandPropertyAssignment(node);
         }
         return node;
     }
@@ -1827,11 +1827,11 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
     function substituteExpression(node: Expression) {
         switch (node.kind) {
             case SyntaxKind.Identifier:
-                return substituteExpressionIdentifier(node as Identifier);
+                return substituteExpressionIdentifier(node);
             case SyntaxKind.BinaryExpression:
-                return substituteBinaryExpression(node as BinaryExpression);
+                return substituteBinaryExpression(node);
             case SyntaxKind.MetaProperty:
-                return substituteMetaProperty(node as MetaProperty);
+                return substituteMetaProperty(node);
         }
 
         return node;

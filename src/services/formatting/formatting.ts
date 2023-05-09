@@ -2,7 +2,6 @@ import {
     Block,
     CallExpression,
     canHaveModifiers,
-    CatchClause,
     CharacterCodes,
     ClassDeclaration,
     CommentRange,
@@ -45,8 +44,6 @@ import {
     LanguageVariant,
     last,
     LineAndCharacter,
-    MethodDeclaration,
-    ModuleDeclaration,
     Node,
     NodeArray,
     nodeIsMissing,
@@ -292,14 +289,14 @@ function isListElement(parent: Node, node: Node): boolean {
         case SyntaxKind.InterfaceDeclaration:
             return rangeContainsRange((parent as InterfaceDeclaration).members, node);
         case SyntaxKind.ModuleDeclaration:
-            const body = (parent as ModuleDeclaration).body;
+            const body = (parent).body;
             return !!body && body.kind === SyntaxKind.ModuleBlock && rangeContainsRange(body.statements, node);
         case SyntaxKind.SourceFile:
         case SyntaxKind.Block:
         case SyntaxKind.ModuleBlock:
             return rangeContainsRange((parent as Block).statements, node);
         case SyntaxKind.CatchClause:
-            return rangeContainsRange((parent as CatchClause).block.statements, node);
+            return rangeContainsRange((parent).block.statements, node);
     }
 
     return false;
@@ -663,7 +660,7 @@ function formatSpanWorker(
             case SyntaxKind.GetAccessor: return SyntaxKind.GetKeyword;
             case SyntaxKind.SetAccessor: return SyntaxKind.SetKeyword;
             case SyntaxKind.MethodDeclaration:
-                if ((node as MethodDeclaration).asteriskToken) {
+                if ((node).asteriskToken) {
                     return SyntaxKind.AsteriskToken;
                 }
                 // falls through

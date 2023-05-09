@@ -213,19 +213,19 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
                 return undefined;
 
             case SyntaxKind.AwaitExpression:
-                return visitAwaitExpression(node as AwaitExpression);
+                return visitAwaitExpression(node);
 
             case SyntaxKind.MethodDeclaration:
-                return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitMethodDeclaration, node as MethodDeclaration);
+                return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitMethodDeclaration, node);
 
             case SyntaxKind.FunctionDeclaration:
-                return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitFunctionDeclaration, node as FunctionDeclaration);
+                return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitFunctionDeclaration, node);
 
             case SyntaxKind.FunctionExpression:
-                return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitFunctionExpression, node as FunctionExpression);
+                return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitFunctionExpression, node);
 
             case SyntaxKind.ArrowFunction:
-                return doWithContext(ContextFlags.NonTopLevel, visitArrowFunction, node as ArrowFunction);
+                return doWithContext(ContextFlags.NonTopLevel, visitArrowFunction, node);
 
             case SyntaxKind.PropertyAccessExpression:
                 if (capturedSuperProperties && isPropertyAccessExpression(node) && node.expression.kind === SyntaxKind.SuperKeyword) {
@@ -234,17 +234,17 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
                 return visitEachChild(node, visitor, context);
 
             case SyntaxKind.ElementAccessExpression:
-                if (capturedSuperProperties && (node as ElementAccessExpression).expression.kind === SyntaxKind.SuperKeyword) {
+                if (capturedSuperProperties && (node).expression.kind === SyntaxKind.SuperKeyword) {
                     hasSuperElementAccess = true;
                 }
                 return visitEachChild(node, visitor, context);
 
             case SyntaxKind.GetAccessor:
-                return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitGetAccessorDeclaration, node as GetAccessorDeclaration);
+                return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitGetAccessorDeclaration, node);
             case SyntaxKind.SetAccessor:
-                return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitSetAccessorDeclaration, node as SetAccessorDeclaration);
+                return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitSetAccessorDeclaration, node);
             case SyntaxKind.Constructor:
-                return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitConstructorDeclaration, node as ConstructorDeclaration);
+                return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitConstructorDeclaration, node);
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.ClassExpression:
                 return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitDefault, node);
@@ -816,11 +816,11 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
     function substituteExpression(node: Expression) {
         switch (node.kind) {
             case SyntaxKind.PropertyAccessExpression:
-                return substitutePropertyAccessExpression(node as PropertyAccessExpression);
+                return substitutePropertyAccessExpression(node);
             case SyntaxKind.ElementAccessExpression:
-                return substituteElementAccessExpression(node as ElementAccessExpression);
+                return substituteElementAccessExpression(node);
             case SyntaxKind.CallExpression:
-                return substituteCallExpression(node as CallExpression);
+                return substituteCallExpression(node);
         }
         return node;
     }

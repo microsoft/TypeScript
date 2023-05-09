@@ -28,7 +28,6 @@ import {
     isStringLiteralLike,
     isStringOrNumericLiteralLike,
     Node,
-    NumericLiteral,
     Path,
     Program,
     removeFileExtension,
@@ -235,7 +234,7 @@ export function nodeIsEligibleForRename(node: Node): boolean {
         case SyntaxKind.ThisKeyword:
             return true;
         case SyntaxKind.NumericLiteral:
-            return isLiteralNameOfPropertyDeclarationOrIndexAccess(node as NumericLiteral);
+            return isLiteralNameOfPropertyDeclarationOrIndexAccess(node);
         default:
             return false;
     }

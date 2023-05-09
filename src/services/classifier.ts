@@ -3,7 +3,6 @@ import {
     arrayToNumericMap,
     CancellationToken,
     CharacterCodes,
-    ClassDeclaration,
     ClassificationInfo,
     ClassificationResult,
     Classifications,
@@ -18,12 +17,10 @@ import {
     Debug,
     decodedTextSpanIntersectsWith,
     EndOfLineState,
-    EnumDeclaration,
     getMeaningFromLocation,
     getModuleInstanceState,
     getTypeArgumentOrTypeParameterList,
     HasJSDoc,
-    InterfaceDeclaration,
     isAccessibilityModifier,
     isConstTypeReference,
     isIdentifier,
@@ -37,19 +34,8 @@ import {
     isToken,
     isTrivia,
     JSDoc,
-    JSDocAugmentsTag,
-    JSDocCallbackTag,
-    JSDocEnumTag,
-    JSDocImplementsTag,
     JSDocParameterTag,
-    JSDocPropertyTag,
-    JSDocReturnTag,
-    JSDocSeeTag,
     JSDocTemplateTag,
-    JSDocThisTag,
-    JSDocThrowsTag,
-    JSDocTypedefTag,
-    JSDocTypeTag,
     JsxAttribute,
     JsxClosingElement,
     JsxOpeningElement,
@@ -59,7 +45,6 @@ import {
     ModuleInstanceState,
     Node,
     nodeIsMissing,
-    ParameterDeclaration,
     parseIsolatedJSDocComment,
     Scanner,
     ScriptTarget,
@@ -74,7 +59,6 @@ import {
     textSpanIntersectsWith,
     TokenClass,
     TypeChecker,
-    TypeParameterDeclaration,
 } from "./_namespaces/ts";
 
 /** The classifier is used for syntactic highlighting in editors via the TSServer */
@@ -806,51 +790,51 @@ export function getEncodedSyntacticClassifications(cancellationToken: Cancellati
 
                 switch (tag.kind) {
                     case SyntaxKind.JSDocParameterTag:
-                        const param = tag as JSDocParameterTag;
+                        const param = tag ;
                         processJSDocParameterTag(param);
                         commentStart = param.isNameFirst && param.typeExpression?.end || param.name.end;
                         break;
                     case SyntaxKind.JSDocPropertyTag:
-                        const prop = tag as JSDocPropertyTag;
+                        const prop = tag ;
                         commentStart = prop.isNameFirst && prop.typeExpression?.end || prop.name.end;
                         break;
                     case SyntaxKind.JSDocTemplateTag:
-                        processJSDocTemplateTag(tag as JSDocTemplateTag);
+                        processJSDocTemplateTag(tag);
                         pos = tag.end;
-                        commentStart = (tag as JSDocTemplateTag).typeParameters.end;
+                        commentStart = (tag).typeParameters.end;
                         break;
                     case SyntaxKind.JSDocTypedefTag:
-                        const type = tag as JSDocTypedefTag;
+                        const type = tag ;
                         commentStart = type.typeExpression?.kind === SyntaxKind.JSDocTypeExpression && type.fullName?.end || type.typeExpression?.end || commentStart;
                         break;
                     case SyntaxKind.JSDocCallbackTag:
-                        commentStart = (tag as JSDocCallbackTag).typeExpression.end;
+                        commentStart = (tag).typeExpression.end;
                         break;
                     case SyntaxKind.JSDocTypeTag:
-                        processElement((tag as JSDocTypeTag).typeExpression);
+                        processElement((tag).typeExpression);
                         pos = tag.end;
-                        commentStart = (tag as JSDocTypeTag).typeExpression.end;
+                        commentStart = (tag).typeExpression.end;
                         break;
                     case SyntaxKind.JSDocThisTag:
                     case SyntaxKind.JSDocEnumTag:
-                        commentStart = (tag as JSDocThisTag | JSDocEnumTag).typeExpression.end;
+                        commentStart = (tag).typeExpression.end;
                         break;
                     case SyntaxKind.JSDocReturnTag:
-                        processElement((tag as JSDocReturnTag).typeExpression);
+                        processElement((tag).typeExpression);
                         pos = tag.end;
-                        commentStart = (tag as JSDocReturnTag).typeExpression?.end || commentStart;
+                        commentStart = (tag).typeExpression?.end || commentStart;
                         break;
                     case SyntaxKind.JSDocSeeTag:
-                        commentStart = (tag as JSDocSeeTag).name?.end || commentStart;
+                        commentStart = (tag).name?.end || commentStart;
                         break;
                     case SyntaxKind.JSDocAugmentsTag:
                     case SyntaxKind.JSDocImplementsTag:
-                        commentStart = (tag as JSDocImplementsTag | JSDocAugmentsTag).class.end;
+                        commentStart = (tag).class.end;
                         break;
                     case SyntaxKind.JSDocThrowsTag:
-                        processElement((tag as JSDocThrowsTag).typeExpression);
+                        processElement((tag).typeExpression);
                         pos = tag.end;
-                        commentStart = (tag as JSDocThrowsTag).typeExpression?.end || commentStart;
+                        commentStart = (tag).typeExpression?.end || commentStart;
                         break;
                 }
                 if (typeof tag.comment === "object") {
@@ -1130,22 +1114,22 @@ export function getEncodedSyntacticClassifications(cancellationToken: Cancellati
             if (token) {
                 switch (token.parent.kind) {
                     case SyntaxKind.ClassDeclaration:
-                        if ((token.parent as ClassDeclaration).name === token) {
+                        if ((token.parent).name === token) {
                             return ClassificationType.className;
                         }
                         return;
                     case SyntaxKind.TypeParameter:
-                        if ((token.parent as TypeParameterDeclaration).name === token) {
+                        if ((token.parent).name === token) {
                             return ClassificationType.typeParameterName;
                         }
                         return;
                     case SyntaxKind.InterfaceDeclaration:
-                        if ((token.parent as InterfaceDeclaration).name === token) {
+                        if ((token.parent).name === token) {
                             return ClassificationType.interfaceName;
                         }
                         return;
                     case SyntaxKind.EnumDeclaration:
-                        if ((token.parent as EnumDeclaration).name === token) {
+                        if ((token.parent).name === token) {
                             return ClassificationType.enumName;
                         }
                         return;
@@ -1155,7 +1139,7 @@ export function getEncodedSyntacticClassifications(cancellationToken: Cancellati
                         }
                         return;
                     case SyntaxKind.Parameter:
-                        if ((token.parent as ParameterDeclaration).name === token) {
+                        if ((token.parent).name === token) {
                             return isThisIdentifier(token) ? ClassificationType.keyword : ClassificationType.parameterName;
                         }
                         return;

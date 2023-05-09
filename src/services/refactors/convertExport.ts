@@ -19,9 +19,7 @@ import {
     getSyntacticModifierFlags,
     getTokenAtPosition,
     Identifier,
-    ImportClause,
     ImportSpecifier,
-    ImportTypeNode,
     InterfaceDeclaration,
     InternalSymbolName,
     isAmbientModule,
@@ -149,7 +147,7 @@ function getInfo(context: RefactorContext, considerPartialSpans = true): ExportI
                 || { exportNode: node, exportName: node.name, wasDefault, exportingModuleSymbol };
         }
         case SyntaxKind.VariableStatement: {
-            const vs = exportNode as VariableStatement;
+            const vs = exportNode ;
             // Must be `export const x = something;`.
             if (!(vs.declarationList.flags & NodeFlags.Const) || vs.declarationList.declarations.length !== 1) {
                 return undefined;
@@ -161,7 +159,7 @@ function getInfo(context: RefactorContext, considerPartialSpans = true): ExportI
                 || { exportNode: vs, exportName: decl.name as Identifier, wasDefault, exportingModuleSymbol };
         }
         case SyntaxKind.ExportAssignment: {
-            const node = exportNode as ExportAssignment;
+            const node = exportNode ;
             if (node.isExportEquals) return undefined;
             return noSymbolError(node.expression)
                 || { exportNode: node, exportName: node.expression as Identifier, wasDefault, exportingModuleSymbol };
@@ -241,13 +239,13 @@ function changeDefaultToNamedImport(importingSourceFile: SourceFile, ref: Identi
             break;
         case SyntaxKind.ImportSpecifier:
         case SyntaxKind.ExportSpecifier: {
-            const spec = parent as ImportSpecifier | ExportSpecifier;
+            const spec = parent ;
             // `default as foo` --> `foo`, `default as bar` --> `foo as bar`
             changes.replaceNode(importingSourceFile, spec, makeImportSpecifier(exportName, spec.name.text));
             break;
         }
         case SyntaxKind.ImportClause: {
-            const clause = parent as ImportClause;
+            const clause = parent ;
             Debug.assert(clause.name === ref, "Import clause name should match provided ref");
             const spec = makeImportSpecifier(exportName, ref.text);
             const { namedBindings } = clause;
@@ -270,7 +268,7 @@ function changeDefaultToNamedImport(importingSourceFile: SourceFile, ref: Identi
             break;
         }
         case SyntaxKind.ImportType:
-            const importTypeNode = parent as ImportTypeNode;
+            const importTypeNode = parent ;
             changes.replaceNode(importingSourceFile, parent, factory.createImportTypeNode(importTypeNode.argument, importTypeNode.assertions, factory.createIdentifier(exportName), importTypeNode.typeArguments, importTypeNode.isTypeOf));
             break;
         default:

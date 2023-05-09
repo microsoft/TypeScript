@@ -1,0 +1,4 @@
+=== tests/cases/compiler/index.ts ===
+import tsInternal = require("typescript-internal");
+>tsInternal : Symbol(tsInternal, Decl(index.ts, 0, 0))
+

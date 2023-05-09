@@ -6,7 +6,6 @@ import {
     findAncestor,
     first,
     getTokenAtPosition,
-    IfStatement,
     isBlock,
     isStatement,
     sliceAfter,
@@ -52,7 +51,7 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, st
     if (!isBlock(statement.parent) || statement === first(statement.parent.statements)) {
         switch (container.kind) {
             case SyntaxKind.IfStatement:
-                if ((container as IfStatement).elseStatement) {
+                if ((container).elseStatement) {
                     if (isBlock(statement.parent)) {
                         break;
                     }

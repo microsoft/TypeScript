@@ -1,5 +1,4 @@
 import {
-    ArrowFunction,
     BinaryExpression,
     CallLikeExpression,
     CancellationToken,
@@ -24,7 +23,6 @@ import {
     first,
     firstDefined,
     flatMapToMutable,
-    FunctionExpression,
     getInvokedExpression,
     getPossibleGenericSignatures,
     getPossibleTypeArgumentsInfo,
@@ -63,7 +61,6 @@ import {
     Node,
     NodeBuilderFlags,
     ParameterDeclaration,
-    ParenthesizedExpression,
     Printer,
     Program,
     punctuationPart,
@@ -434,12 +431,12 @@ function getContextualSignatureLocationInfo(node: Node, sourceFile: SourceFile, 
             const info = getArgumentOrParameterListInfo(node, position, sourceFile);
             if (!info) return undefined;
             const { argumentIndex, argumentCount, argumentsSpan } = info;
-            const contextualType = isMethodDeclaration(parent) ? checker.getContextualTypeForObjectLiteralElement(parent) : checker.getContextualType(parent as ParenthesizedExpression | FunctionExpression | ArrowFunction);
+            const contextualType = isMethodDeclaration(parent) ? checker.getContextualTypeForObjectLiteralElement(parent) : checker.getContextualType(parent);
             return contextualType && { contextualType, argumentIndex, argumentCount, argumentsSpan };
         case SyntaxKind.BinaryExpression: {
-            const highestBinary = getHighestBinary(parent as BinaryExpression);
+            const highestBinary = getHighestBinary(parent);
             const contextualType = checker.getContextualType(highestBinary);
-            const argumentIndex = node.kind === SyntaxKind.OpenParenToken ? 0 : countBinaryExpressionParameters(parent as BinaryExpression) - 1;
+            const argumentIndex = node.kind === SyntaxKind.OpenParenToken ? 0 : countBinaryExpressionParameters(parent) - 1;
             const argumentCount = countBinaryExpressionParameters(highestBinary);
             return contextualType && { contextualType, argumentIndex, argumentCount, argumentsSpan: createTextSpanFromNode(parent) };
         }

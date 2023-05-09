@@ -348,7 +348,7 @@ export function transformTypeScript(context: TransformationContext) {
             case SyntaxKind.CaseBlock:
             case SyntaxKind.ModuleBlock:
             case SyntaxKind.Block:
-                currentLexicalScope = node as SourceFile | CaseBlock | ModuleBlock | Block;
+                currentLexicalScope = node ;
                 currentScopeFirstDeclarationsOfName = undefined;
                 break;
 
@@ -359,8 +359,8 @@ export function transformTypeScript(context: TransformationContext) {
                 }
 
                 // Record these declarations provided that they have a name.
-                if ((node as ClassDeclaration | FunctionDeclaration).name) {
-                    recordEmittedDeclarationInScope(node as ClassDeclaration | FunctionDeclaration);
+                if ((node).name) {
+                    recordEmittedDeclarationInScope(node);
                 }
                 else {
                     // These nodes should always have names unless they are default-exports;
@@ -414,7 +414,7 @@ export function transformTypeScript(context: TransformationContext) {
             case SyntaxKind.ImportEqualsDeclaration:
             case SyntaxKind.ExportAssignment:
             case SyntaxKind.ExportDeclaration:
-                return visitElidableStatement(node as ImportDeclaration | ImportEqualsDeclaration | ExportAssignment | ExportDeclaration);
+                return visitElidableStatement(node);
             default:
                 return visitorWorker(node);
         }
@@ -467,7 +467,7 @@ export function transformTypeScript(context: TransformationContext) {
             node.kind === SyntaxKind.ImportDeclaration ||
             node.kind === SyntaxKind.ImportClause ||
             (node.kind === SyntaxKind.ImportEqualsDeclaration &&
-             (node as ImportEqualsDeclaration).moduleReference.kind === SyntaxKind.ExternalModuleReference)) {
+             (node).moduleReference.kind === SyntaxKind.ExternalModuleReference)) {
             // do not emit ES6 imports and exports since they are illegal inside a namespace
             return undefined;
         }
@@ -495,25 +495,25 @@ export function transformTypeScript(context: TransformationContext) {
     function classElementVisitorWorker(node: Node, parent: ClassLikeDeclaration): VisitResult<Node | undefined> {
         switch (node.kind) {
             case SyntaxKind.Constructor:
-                return visitConstructor(node as ConstructorDeclaration);
+                return visitConstructor(node);
 
             case SyntaxKind.PropertyDeclaration:
                 // Property declarations are not TypeScript syntax, but they must be visited
                 // for the decorator transformation.
-                return visitPropertyDeclaration(node as PropertyDeclaration, parent);
+                return visitPropertyDeclaration(node , parent);
 
             case SyntaxKind.GetAccessor:
                 // Get Accessors can have TypeScript modifiers, decorators, and type annotations.
-                return visitGetAccessor(node as GetAccessorDeclaration, parent);
+                return visitGetAccessor(node , parent);
 
             case SyntaxKind.SetAccessor:
                 // Set Accessors can have TypeScript modifiers and type annotations.
-                return visitSetAccessor(node as SetAccessorDeclaration, parent);
+                return visitSetAccessor(node , parent);
 
             case SyntaxKind.MethodDeclaration:
                 // TypeScript method declarations may have decorators, modifiers
                 // or type annotations.
-                return visitMethodDeclaration(node as MethodDeclaration, parent);
+                return visitMethodDeclaration(node , parent);
 
             case SyntaxKind.ClassStaticBlockDeclaration:
                 return visitEachChild(node, visitor, context);
@@ -543,16 +543,16 @@ export function transformTypeScript(context: TransformationContext) {
 
             case SyntaxKind.GetAccessor:
                 // Get Accessors can have TypeScript modifiers, decorators, and type annotations.
-                return visitGetAccessor(node as GetAccessorDeclaration, parent);
+                return visitGetAccessor(node , parent);
 
             case SyntaxKind.SetAccessor:
                 // Set Accessors can have TypeScript modifiers and type annotations.
-                return visitSetAccessor(node as SetAccessorDeclaration, parent);
+                return visitSetAccessor(node , parent);
 
             case SyntaxKind.MethodDeclaration:
                 // TypeScript method declarations may have decorators, modifiers
                 // or type annotations.
-                return visitMethodDeclaration(node as MethodDeclaration, parent);
+                return visitMethodDeclaration(node , parent);
 
             default:
                 return Debug.failBadSyntaxKind(node);
@@ -666,7 +666,7 @@ export function transformTypeScript(context: TransformationContext) {
                 // - parameter property assignments in the constructor
                 // - index signatures
                 // - method overload signatures
-                return visitClassDeclaration(node as ClassDeclaration);
+                return visitClassDeclaration(node);
 
             case SyntaxKind.ClassExpression:
                 // This may be a class expression with TypeScript syntax extensions.
@@ -677,21 +677,21 @@ export function transformTypeScript(context: TransformationContext) {
                 // - parameter property assignments in the constructor
                 // - index signatures
                 // - method overload signatures
-                return visitClassExpression(node as ClassExpression);
+                return visitClassExpression(node);
 
             case SyntaxKind.HeritageClause:
                 // This may be a heritage clause with TypeScript syntax extensions.
                 //
                 // TypeScript heritage clause extensions include:
                 // - `implements` clause
-                return visitHeritageClause(node as HeritageClause);
+                return visitHeritageClause(node);
 
             case SyntaxKind.ExpressionWithTypeArguments:
                 // TypeScript supports type arguments on an expression in an `extends` heritage clause.
-                return visitExpressionWithTypeArguments(node as ExpressionWithTypeArguments);
+                return visitExpressionWithTypeArguments(node);
 
             case SyntaxKind.ObjectLiteralExpression:
-                return visitObjectLiteralExpression(node as ObjectLiteralExpression);
+                return visitObjectLiteralExpression(node);
 
             case SyntaxKind.Constructor:
             case SyntaxKind.PropertyDeclaration:
@@ -703,15 +703,15 @@ export function transformTypeScript(context: TransformationContext) {
 
             case SyntaxKind.FunctionDeclaration:
                 // Typescript function declarations can have modifiers, decorators, and type annotations.
-                return visitFunctionDeclaration(node as FunctionDeclaration);
+                return visitFunctionDeclaration(node);
 
             case SyntaxKind.FunctionExpression:
                 // TypeScript function expressions can have modifiers and type annotations.
-                return visitFunctionExpression(node as FunctionExpression);
+                return visitFunctionExpression(node);
 
             case SyntaxKind.ArrowFunction:
                 // TypeScript arrow functions can have modifiers and type annotations.
-                return visitArrowFunction(node as ArrowFunction);
+                return visitArrowFunction(node);
 
             case SyntaxKind.Parameter:
                 // This may be a parameter declaration with TypeScript syntax extensions.
@@ -722,12 +722,12 @@ export function transformTypeScript(context: TransformationContext) {
                 // - the question mark (?) token for optional parameters
                 // - type annotations
                 // - this parameters
-                return visitParameter(node as ParameterDeclaration);
+                return visitParameter(node);
 
             case SyntaxKind.ParenthesizedExpression:
                 // ParenthesizedExpressions are TypeScript if their expression is a
                 // TypeAssertion or AsExpression
-                return visitParenthesizedExpression(node as ParenthesizedExpression);
+                return visitParenthesizedExpression(node);
 
             case SyntaxKind.TypeAssertionExpression:
             case SyntaxKind.AsExpression:
@@ -735,45 +735,45 @@ export function transformTypeScript(context: TransformationContext) {
                 return visitAssertionExpression(node as AssertionExpression);
 
             case SyntaxKind.SatisfiesExpression:
-                return visitSatisfiesExpression(node as SatisfiesExpression);
+                return visitSatisfiesExpression(node);
 
             case SyntaxKind.CallExpression:
-                return visitCallExpression(node as CallExpression);
+                return visitCallExpression(node);
 
             case SyntaxKind.NewExpression:
-                return visitNewExpression(node as NewExpression);
+                return visitNewExpression(node);
 
             case SyntaxKind.TaggedTemplateExpression:
-                return visitTaggedTemplateExpression(node as TaggedTemplateExpression);
+                return visitTaggedTemplateExpression(node);
 
             case SyntaxKind.NonNullExpression:
                 // TypeScript non-null expressions are removed, but their subtrees are preserved.
-                return visitNonNullExpression(node as NonNullExpression);
+                return visitNonNullExpression(node);
 
             case SyntaxKind.EnumDeclaration:
                 // TypeScript enum declarations do not exist in ES6 and must be rewritten.
-                return visitEnumDeclaration(node as EnumDeclaration);
+                return visitEnumDeclaration(node);
 
             case SyntaxKind.VariableStatement:
                 // TypeScript namespace exports for variable statements must be transformed.
-                return visitVariableStatement(node as VariableStatement);
+                return visitVariableStatement(node);
 
             case SyntaxKind.VariableDeclaration:
-                return visitVariableDeclaration(node as VariableDeclaration);
+                return visitVariableDeclaration(node);
 
             case SyntaxKind.ModuleDeclaration:
                 // TypeScript namespace declarations must be transformed.
-                return visitModuleDeclaration(node as ModuleDeclaration);
+                return visitModuleDeclaration(node);
 
             case SyntaxKind.ImportEqualsDeclaration:
                 // TypeScript namespace or external module import.
-                return visitImportEqualsDeclaration(node as ImportEqualsDeclaration);
+                return visitImportEqualsDeclaration(node);
 
             case SyntaxKind.JsxSelfClosingElement:
-                return visitJsxSelfClosingElement(node as JsxSelfClosingElement);
+                return visitJsxSelfClosingElement(node);
 
             case SyntaxKind.JsxOpeningElement:
-                return visitJsxJsxOpeningElement(node as JsxOpeningElement);
+                return visitJsxJsxOpeningElement(node);
 
             default:
                 // node contains some other TypeScript syntax
@@ -2606,11 +2606,11 @@ export function transformTypeScript(context: TransformationContext) {
     function substituteExpression(node: Expression) {
         switch (node.kind) {
             case SyntaxKind.Identifier:
-                return substituteExpressionIdentifier(node as Identifier);
+                return substituteExpressionIdentifier(node);
             case SyntaxKind.PropertyAccessExpression:
-                return substitutePropertyAccessExpression(node as PropertyAccessExpression);
+                return substitutePropertyAccessExpression(node);
             case SyntaxKind.ElementAccessExpression:
-                return substituteElementAccessExpression(node as ElementAccessExpression);
+                return substituteElementAccessExpression(node);
         }
 
         return node;

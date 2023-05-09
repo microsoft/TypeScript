@@ -48,14 +48,11 @@ import {
     Diagnostic,
     Diagnostics,
     ElementAccessChain,
-    ElementAccessExpression,
     emptyArray,
     EntityName,
     entityNameToString,
     EnumDeclaration,
     every,
-    ExportAssignment,
-    ExportDeclaration,
     ExportSpecifier,
     Expression,
     FileReference,
@@ -91,8 +88,6 @@ import {
     hasSyntacticModifier,
     HasType,
     Identifier,
-    ImportClause,
-    ImportEqualsDeclaration,
     ImportSpecifier,
     ImportTypeNode,
     isAccessExpression,
@@ -214,8 +209,6 @@ import {
     NamedExportBindings,
     NamedImportBindings,
     NamespaceBody,
-    NamespaceExport,
-    NamespaceImport,
     NewExpression,
     Node,
     NodeArray,
@@ -820,14 +813,14 @@ function nameForNamelessJSDocTypedef(declaration: JSDocTypedefTag | JSDocEnumTag
             break;
         case SyntaxKind.ExpressionStatement:
             let expr = hostNode.expression;
-            if (expr.kind === SyntaxKind.BinaryExpression && (expr as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken) {
-                expr = (expr as BinaryExpression).left;
+            if (expr.kind === SyntaxKind.BinaryExpression && (expr).operatorToken.kind === SyntaxKind.EqualsToken) {
+                expr = (expr).left;
             }
             switch (expr.kind) {
                 case SyntaxKind.PropertyAccessExpression:
-                    return (expr as PropertyAccessExpression).name;
+                    return (expr).name;
                 case SyntaxKind.ElementAccessExpression:
-                    const arg = (expr as ElementAccessExpression).argumentExpression;
+                    const arg = (expr).argumentExpression;
                     if (isIdentifier(arg)) {
                         return arg;
                     }
@@ -874,7 +867,7 @@ export function isNamedDeclaration(node: Node): node is NamedDeclaration & { nam
 export function getNonAssignedNameOfDeclaration(declaration: Declaration | Expression): DeclarationName | undefined {
     switch (declaration.kind) {
         case SyntaxKind.Identifier:
-            return declaration as Identifier;
+            return declaration ;
         case SyntaxKind.JSDocPropertyTag:
         case SyntaxKind.JSDocParameterTag: {
             const { name } = declaration as JSDocPropertyLikeTag;
@@ -885,7 +878,7 @@ export function getNonAssignedNameOfDeclaration(declaration: Declaration | Expre
         }
         case SyntaxKind.CallExpression:
         case SyntaxKind.BinaryExpression: {
-            const expr = declaration as BinaryExpression | CallExpression;
+            const expr = declaration ;
             switch (getAssignmentDeclarationKind(expr)) {
                 case AssignmentDeclarationKind.ExportsProperty:
                 case AssignmentDeclarationKind.ThisProperty:
@@ -901,15 +894,15 @@ export function getNonAssignedNameOfDeclaration(declaration: Declaration | Expre
             }
         }
         case SyntaxKind.JSDocTypedefTag:
-            return getNameOfJSDocTypedef(declaration as JSDocTypedefTag);
+            return getNameOfJSDocTypedef(declaration);
         case SyntaxKind.JSDocEnumTag:
-            return nameForNamelessJSDocTypedef(declaration as JSDocEnumTag);
+            return nameForNamelessJSDocTypedef(declaration);
         case SyntaxKind.ExportAssignment: {
-            const { expression } = declaration as ExportAssignment;
+            const { expression } = declaration ;
             return isIdentifier(expression) ? expression : undefined;
         }
         case SyntaxKind.ElementAccessExpression:
-            const expr = declaration as ElementAccessExpression;
+            const expr = declaration ;
             if (isBindableStaticElementAccessExpression(expr)) {
                 return expr.argumentExpression;
             }
@@ -1349,7 +1342,7 @@ export function isOutermostOptionalChain(node: OptionalChain) {
 }
 
 export function isNullishCoalesce(node: Node) {
-    return node.kind === SyntaxKind.BinaryExpression && (node as BinaryExpression).operatorToken.kind === SyntaxKind.QuestionQuestionToken;
+    return node.kind === SyntaxKind.BinaryExpression && (node).operatorToken.kind === SyntaxKind.QuestionQuestionToken;
 }
 
 export function isConstTypeReference(node: Node) {
@@ -1487,12 +1480,12 @@ export function isImportOrExportSpecifier(node: Node): node is ImportSpecifier |
 export function isTypeOnlyImportDeclaration(node: Node): node is TypeOnlyImportDeclaration {
     switch (node.kind) {
         case SyntaxKind.ImportSpecifier:
-            return (node as ImportSpecifier).isTypeOnly || (node as ImportSpecifier).parent.parent.isTypeOnly;
+            return (node).isTypeOnly || (node).parent.parent.isTypeOnly;
         case SyntaxKind.NamespaceImport:
-            return (node as NamespaceImport).parent.isTypeOnly;
+            return (node).parent.isTypeOnly;
         case SyntaxKind.ImportClause:
         case SyntaxKind.ImportEqualsDeclaration:
-            return (node as ImportClause | ImportEqualsDeclaration).isTypeOnly;
+            return (node).isTypeOnly;
     }
     return false;
 }
@@ -1500,11 +1493,11 @@ export function isTypeOnlyImportDeclaration(node: Node): node is TypeOnlyImportD
 export function isTypeOnlyExportDeclaration(node: Node): node is TypeOnlyExportDeclaration {
     switch (node.kind) {
         case SyntaxKind.ExportSpecifier:
-            return (node as ExportSpecifier).isTypeOnly || (node as ExportSpecifier).parent.parent.isTypeOnly;
+            return (node).isTypeOnly || (node).parent.parent.isTypeOnly;
         case SyntaxKind.ExportDeclaration:
-            return (node as ExportDeclaration).isTypeOnly && !!(node as ExportDeclaration).moduleSpecifier && !(node as ExportDeclaration).exportClause;
+            return (node).isTypeOnly && !!(node).moduleSpecifier && !(node).exportClause;
         case SyntaxKind.NamespaceExport:
-            return (node as NamespaceExport).parent.isTypeOnly;
+            return (node).parent.isTypeOnly;
     }
     return false;
 }
@@ -1998,8 +1991,8 @@ export function isUnaryExpressionWithWrite(expr: Node): expr is PrefixUnaryExpre
         case SyntaxKind.PostfixUnaryExpression:
             return true;
         case SyntaxKind.PrefixUnaryExpression:
-            return (expr as PrefixUnaryExpression).operator === SyntaxKind.PlusPlusToken ||
-                (expr as PrefixUnaryExpression).operator === SyntaxKind.MinusMinusToken;
+            return (expr).operator === SyntaxKind.PlusPlusToken ||
+                (expr).operator === SyntaxKind.MinusMinusToken;
         default:
             return false;
     }
@@ -2067,7 +2060,7 @@ export function isIterationStatement(node: Node, lookInLabeledStatements: boolea
         case SyntaxKind.WhileStatement:
             return true;
         case SyntaxKind.LabeledStatement:
-            return lookInLabeledStatements && isIterationStatement((node as LabeledStatement).statement, lookInLabeledStatements);
+            return lookInLabeledStatements && isIterationStatement((node).statement, lookInLabeledStatements);
     }
 
     return false;
@@ -2356,7 +2349,7 @@ export function isDeclarationStatement(node: Node): node is DeclarationStatement
  *
  * @internal
  */
-export function isStatementButNotDeclaration(node: Node): node is Statement {
+export function isStatementButNotDeclaration(node: Node): boolean {
     return isStatementKindButNotDeclarationKind(node.kind);
 }
 

@@ -64,7 +64,6 @@ import {
     NumericLiteral,
     ObjectLiteralElementLike,
     ObjectLiteralExpression,
-    PropertyAccessExpression,
     reduceLeft,
     ReturnStatement,
     setCommentRange,
@@ -435,13 +434,13 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
     function visitJavaScriptInStatementContainingYield(node: Node): VisitResult<Node | undefined> {
         switch (node.kind) {
             case SyntaxKind.DoStatement:
-                return visitDoStatement(node as DoStatement);
+                return visitDoStatement(node);
             case SyntaxKind.WhileStatement:
-                return visitWhileStatement(node as WhileStatement);
+                return visitWhileStatement(node);
             case SyntaxKind.SwitchStatement:
-                return visitSwitchStatement(node as SwitchStatement);
+                return visitSwitchStatement(node);
             case SyntaxKind.LabeledStatement:
-                return visitLabeledStatement(node as LabeledStatement);
+                return visitLabeledStatement(node);
             default:
                 return visitJavaScriptInGeneratorFunctionBody(node);
         }
@@ -455,24 +454,24 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
     function visitJavaScriptInGeneratorFunctionBody(node: Node): VisitResult<Node | undefined> {
         switch (node.kind) {
             case SyntaxKind.FunctionDeclaration:
-                return visitFunctionDeclaration(node as FunctionDeclaration);
+                return visitFunctionDeclaration(node);
             case SyntaxKind.FunctionExpression:
-                return visitFunctionExpression(node as FunctionExpression);
+                return visitFunctionExpression(node);
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
                 return visitAccessorDeclaration(node as AccessorDeclaration);
             case SyntaxKind.VariableStatement:
-                return visitVariableStatement(node as VariableStatement);
+                return visitVariableStatement(node);
             case SyntaxKind.ForStatement:
-                return visitForStatement(node as ForStatement);
+                return visitForStatement(node);
             case SyntaxKind.ForInStatement:
-                return visitForInStatement(node as ForInStatement);
+                return visitForInStatement(node);
             case SyntaxKind.BreakStatement:
-                return visitBreakStatement(node as BreakStatement);
+                return visitBreakStatement(node);
             case SyntaxKind.ContinueStatement:
-                return visitContinueStatement(node as ContinueStatement);
+                return visitContinueStatement(node);
             case SyntaxKind.ReturnStatement:
-                return visitReturnStatement(node as ReturnStatement);
+                return visitReturnStatement(node);
             default:
                 if (node.transformFlags & TransformFlags.ContainsYield) {
                     return visitJavaScriptContainingYield(node);
@@ -494,23 +493,23 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
     function visitJavaScriptContainingYield(node: Node): VisitResult<Node> {
         switch (node.kind) {
             case SyntaxKind.BinaryExpression:
-                return visitBinaryExpression(node as BinaryExpression);
+                return visitBinaryExpression(node);
             case SyntaxKind.CommaListExpression:
-                return visitCommaListExpression(node as CommaListExpression);
+                return visitCommaListExpression(node);
             case SyntaxKind.ConditionalExpression:
-                return visitConditionalExpression(node as ConditionalExpression);
+                return visitConditionalExpression(node);
             case SyntaxKind.YieldExpression:
-                return visitYieldExpression(node as YieldExpression);
+                return visitYieldExpression(node);
             case SyntaxKind.ArrayLiteralExpression:
-                return visitArrayLiteralExpression(node as ArrayLiteralExpression);
+                return visitArrayLiteralExpression(node);
             case SyntaxKind.ObjectLiteralExpression:
-                return visitObjectLiteralExpression(node as ObjectLiteralExpression);
+                return visitObjectLiteralExpression(node);
             case SyntaxKind.ElementAccessExpression:
-                return visitElementAccessExpression(node as ElementAccessExpression);
+                return visitElementAccessExpression(node);
             case SyntaxKind.CallExpression:
-                return visitCallExpression(node as CallExpression);
+                return visitCallExpression(node);
             case SyntaxKind.NewExpression:
-                return visitNewExpression(node as NewExpression);
+                return visitNewExpression(node);
             default:
                 return visitEachChild(node, visitor, context);
         }
@@ -524,10 +523,10 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
     function visitGenerator(node: Node): VisitResult<Node | undefined> {
         switch (node.kind) {
             case SyntaxKind.FunctionDeclaration:
-                return visitFunctionDeclaration(node as FunctionDeclaration);
+                return visitFunctionDeclaration(node);
 
             case SyntaxKind.FunctionExpression:
-                return visitFunctionExpression(node as FunctionExpression);
+                return visitFunctionExpression(node);
 
             default:
                 return Debug.failBadSyntaxKind(node);
@@ -790,9 +789,9 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
                     //      _a.b = %sent%;
 
                     target = factory.updatePropertyAccessExpression(
-                        left as PropertyAccessExpression,
-                        cacheExpression(Debug.checkDefined(visitNode((left as PropertyAccessExpression).expression, visitor, isLeftHandSideExpression))),
-                        (left as PropertyAccessExpression).name
+                        left ,
+                        cacheExpression(Debug.checkDefined(visitNode((left).expression, visitor, isLeftHandSideExpression))),
+                        (left).name
                     );
                     break;
 
@@ -808,9 +807,9 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
                     //  .mark resumeLabel
                     //      _a[_b] = %sent%;
 
-                    target = factory.updateElementAccessExpression(left as ElementAccessExpression,
-                        cacheExpression(Debug.checkDefined(visitNode((left as ElementAccessExpression).expression, visitor, isLeftHandSideExpression))),
-                        cacheExpression(Debug.checkDefined(visitNode((left as ElementAccessExpression).argumentExpression, visitor, isExpression)))
+                    target = factory.updateElementAccessExpression(left ,
+                        cacheExpression(Debug.checkDefined(visitNode((left).expression, visitor, isLeftHandSideExpression))),
+                        cacheExpression(Debug.checkDefined(visitNode((left).argumentExpression, visitor, isExpression)))
                     );
                     break;
 
@@ -1306,35 +1305,35 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
     function transformAndEmitStatementWorker(node: Statement): void {
         switch (node.kind) {
             case SyntaxKind.Block:
-                return transformAndEmitBlock(node as Block);
+                return transformAndEmitBlock(node);
             case SyntaxKind.ExpressionStatement:
-                return transformAndEmitExpressionStatement(node as ExpressionStatement);
+                return transformAndEmitExpressionStatement(node);
             case SyntaxKind.IfStatement:
-                return transformAndEmitIfStatement(node as IfStatement);
+                return transformAndEmitIfStatement(node);
             case SyntaxKind.DoStatement:
-                return transformAndEmitDoStatement(node as DoStatement);
+                return transformAndEmitDoStatement(node);
             case SyntaxKind.WhileStatement:
-                return transformAndEmitWhileStatement(node as WhileStatement);
+                return transformAndEmitWhileStatement(node);
             case SyntaxKind.ForStatement:
-                return transformAndEmitForStatement(node as ForStatement);
+                return transformAndEmitForStatement(node);
             case SyntaxKind.ForInStatement:
-                return transformAndEmitForInStatement(node as ForInStatement);
+                return transformAndEmitForInStatement(node);
             case SyntaxKind.ContinueStatement:
-                return transformAndEmitContinueStatement(node as ContinueStatement);
+                return transformAndEmitContinueStatement(node);
             case SyntaxKind.BreakStatement:
-                return transformAndEmitBreakStatement(node as BreakStatement);
+                return transformAndEmitBreakStatement(node);
             case SyntaxKind.ReturnStatement:
-                return transformAndEmitReturnStatement(node as ReturnStatement);
+                return transformAndEmitReturnStatement(node);
             case SyntaxKind.WithStatement:
-                return transformAndEmitWithStatement(node as WithStatement);
+                return transformAndEmitWithStatement(node);
             case SyntaxKind.SwitchStatement:
-                return transformAndEmitSwitchStatement(node as SwitchStatement);
+                return transformAndEmitSwitchStatement(node);
             case SyntaxKind.LabeledStatement:
-                return transformAndEmitLabeledStatement(node as LabeledStatement);
+                return transformAndEmitLabeledStatement(node);
             case SyntaxKind.ThrowStatement:
-                return transformAndEmitThrowStatement(node as ThrowStatement);
+                return transformAndEmitThrowStatement(node);
             case SyntaxKind.TryStatement:
-                return transformAndEmitTryStatement(node as TryStatement);
+                return transformAndEmitTryStatement(node);
             default:
                 return emitStatement(visitNode(node, visitor, isStatement));
         }

@@ -267,7 +267,7 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, po
 
                 // case 1: () => { return [1,2,3] }
                 if (arrowFunctionBody.kind === SyntaxKind.Block) {
-                    bodyBlock = arrowFunctionBody as Block;
+                    bodyBlock = arrowFunctionBody ;
                 }
                 // case 2: () => [1,2,3]
                 else {

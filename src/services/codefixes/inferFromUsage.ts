@@ -713,10 +713,10 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
                 usage.isNumber = true;
                 break;
             case SyntaxKind.PrefixUnaryExpression:
-                inferTypeFromPrefixUnaryExpression(node.parent as PrefixUnaryExpression, usage);
+                inferTypeFromPrefixUnaryExpression(node.parent , usage);
                 break;
             case SyntaxKind.BinaryExpression:
-                inferTypeFromBinaryExpression(node, node.parent as BinaryExpression, usage);
+                inferTypeFromBinaryExpression(node, node.parent , usage);
                 break;
             case SyntaxKind.CaseClause:
             case SyntaxKind.DefaultClause:
@@ -724,28 +724,28 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
                 break;
             case SyntaxKind.CallExpression:
             case SyntaxKind.NewExpression:
-                if ((node.parent as CallExpression | NewExpression).expression === node) {
-                    inferTypeFromCallExpression(node.parent as CallExpression | NewExpression, usage);
+                if ((node.parent).expression === node) {
+                    inferTypeFromCallExpression(node.parent , usage);
                 }
                 else {
                     inferTypeFromContextualType(node, usage);
                 }
                 break;
             case SyntaxKind.PropertyAccessExpression:
-                inferTypeFromPropertyAccessExpression(node.parent as PropertyAccessExpression, usage);
+                inferTypeFromPropertyAccessExpression(node.parent , usage);
                 break;
             case SyntaxKind.ElementAccessExpression:
-                inferTypeFromPropertyElementExpression(node.parent as ElementAccessExpression, node, usage);
+                inferTypeFromPropertyElementExpression(node.parent , node, usage);
                 break;
             case SyntaxKind.PropertyAssignment:
             case SyntaxKind.ShorthandPropertyAssignment:
-                inferTypeFromPropertyAssignment(node.parent as PropertyAssignment | ShorthandPropertyAssignment, usage);
+                inferTypeFromPropertyAssignment(node.parent , usage);
                 break;
             case SyntaxKind.PropertyDeclaration:
-                inferTypeFromPropertyDeclaration(node.parent as PropertyDeclaration, usage);
+                inferTypeFromPropertyDeclaration(node.parent , usage);
                 break;
             case SyntaxKind.VariableDeclaration: {
-                const { name, initializer } = node.parent as VariableDeclaration;
+                const { name, initializer } = node.parent ;
                 if (node === name) {
                     if (initializer) { // This can happen for `let x = null;` which still has an implicit-any error.
                         addCandidateType(usage, checker.getTypeAtLocation(initializer));

@@ -24,7 +24,6 @@ import {
     ExportSpecifier,
     Expression,
     filter,
-    FunctionDeclaration,
     FunctionLikeDeclaration,
     getAllAccessorDeclarations,
     getDecorators,
@@ -67,7 +66,6 @@ import {
     MethodDeclaration,
     ModifierFlags,
     NamedImportBindings,
-    NamespaceExport,
     Node,
     NodeArray,
     parameterIsThisKeyword,
@@ -84,7 +82,6 @@ import {
     SyntaxKind,
     TransformationContext,
     VariableDeclaration,
-    VariableStatement,
 } from "../_namespaces/ts";
 
 /** @internal */
@@ -178,39 +175,39 @@ export function collectExternalModuleInfo(context: TransformationContext, source
                 // import x from "mod"
                 // import * as x from "mod"
                 // import { x, y } from "mod"
-                externalImports.push(node as ImportDeclaration);
-                if (!hasImportStar && getImportNeedsImportStarHelper(node as ImportDeclaration)) {
+                externalImports.push(node);
+                if (!hasImportStar && getImportNeedsImportStarHelper(node)) {
                     hasImportStar = true;
                 }
-                if (!hasImportDefault && getImportNeedsImportDefaultHelper(node as ImportDeclaration)) {
+                if (!hasImportDefault && getImportNeedsImportDefaultHelper(node)) {
                     hasImportDefault = true;
                 }
                 break;
 
             case SyntaxKind.ImportEqualsDeclaration:
-                if ((node as ImportEqualsDeclaration).moduleReference.kind === SyntaxKind.ExternalModuleReference) {
+                if ((node).moduleReference.kind === SyntaxKind.ExternalModuleReference) {
                     // import x = require("mod")
-                    externalImports.push(node as ImportEqualsDeclaration);
+                    externalImports.push(node);
                 }
 
                 break;
 
             case SyntaxKind.ExportDeclaration:
-                if ((node as ExportDeclaration).moduleSpecifier) {
-                    if (!(node as ExportDeclaration).exportClause) {
+                if ((node).moduleSpecifier) {
+                    if (!(node).exportClause) {
                         // export * from "mod"
-                        externalImports.push(node as ExportDeclaration);
+                        externalImports.push(node);
                         hasExportStarsToExportValues = true;
                     }
                     else {
                         // export * as ns from "mod"
                         // export { x, y } from "mod"
-                        externalImports.push(node as ExportDeclaration);
-                        if (isNamedExports((node as ExportDeclaration).exportClause!)) {
-                            addExportedNamesForExportDeclaration(node as ExportDeclaration);
+                        externalImports.push(node);
+                        if (isNamedExports((node).exportClause)) {
+                            addExportedNamesForExportDeclaration(node);
                         }
                         else {
-                            const name = ((node as ExportDeclaration).exportClause as NamespaceExport).name;
+                            const name = ((node).exportClause).name;
                             if (!uniqueExports.get(idText(name))) {
                                 multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), name);
                                 uniqueExports.set(idText(name), true);
@@ -223,20 +220,20 @@ export function collectExternalModuleInfo(context: TransformationContext, source
                 }
                 else {
                     // export { x, y }
-                    addExportedNamesForExportDeclaration(node as ExportDeclaration);
+                    addExportedNamesForExportDeclaration(node);
                 }
                 break;
 
             case SyntaxKind.ExportAssignment:
-                if ((node as ExportAssignment).isExportEquals && !exportEquals) {
+                if ((node).isExportEquals && !exportEquals) {
                     // export = x
-                    exportEquals = node as ExportAssignment;
+                    exportEquals = node ;
                 }
                 break;
 
             case SyntaxKind.VariableStatement:
                 if (hasSyntacticModifier(node, ModifierFlags.Export)) {
-                    for (const decl of (node as VariableStatement).declarationList.declarations) {
+                    for (const decl of (node).declarationList.declarations) {
                         exportedNames = collectExportedVariableInfo(decl, uniqueExports, exportedNames, exportedBindings);
                     }
                 }
@@ -247,13 +244,13 @@ export function collectExternalModuleInfo(context: TransformationContext, source
                     if (hasSyntacticModifier(node, ModifierFlags.Default)) {
                         // export default function() { }
                         if (!hasExportDefault) {
-                            multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), context.factory.getDeclarationName(node as FunctionDeclaration));
+                            multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), context.factory.getDeclarationName(node));
                             hasExportDefault = true;
                         }
                     }
                     else {
                         // export function x() { }
-                        const name = (node as FunctionDeclaration).name!;
+                        const name = (node).name!;
                         if (!uniqueExports.get(idText(name))) {
                             multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), name);
                             uniqueExports.set(idText(name), true);
@@ -268,13 +265,13 @@ export function collectExternalModuleInfo(context: TransformationContext, source
                     if (hasSyntacticModifier(node, ModifierFlags.Default)) {
                         // export default class { }
                         if (!hasExportDefault) {
-                            multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), context.factory.getDeclarationName(node as ClassDeclaration));
+                            multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), context.factory.getDeclarationName(node));
                             hasExportDefault = true;
                         }
                     }
                     else {
                         // export class x { }
-                        const name = (node as ClassDeclaration).name;
+                        const name = (node).name;
                         if (name && !uniqueExports.get(idText(name))) {
                             multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), name);
                             uniqueExports.set(idText(name), true);
@@ -489,7 +486,7 @@ function isStaticPropertyDeclaration(member: ClassElement) {
  */
 export function isInitializedProperty(member: ClassElement): member is PropertyDeclaration & { initializer: Expression; } {
     return member.kind === SyntaxKind.PropertyDeclaration
-        && (member as PropertyDeclaration).initializer !== undefined;
+        && (member).initializer !== undefined;
 }
 
 /**
@@ -570,10 +567,10 @@ export function getAllDecoratorsOfClassElement(member: ClassElement, parent: Cla
             return getAllDecoratorsOfAccessors(member as AccessorDeclaration, parent);
 
         case SyntaxKind.MethodDeclaration:
-            return getAllDecoratorsOfMethod(member as MethodDeclaration);
+            return getAllDecoratorsOfMethod(member);
 
         case SyntaxKind.PropertyDeclaration:
-            return getAllDecoratorsOfProperty(member as PropertyDeclaration);
+            return getAllDecoratorsOfProperty(member);
 
         default:
             return undefined;

@@ -1,13 +1,11 @@
 import {
     AccessorDeclaration,
     ArrayLiteralExpression,
-    BigIntLiteral,
     BinaryExpression,
     Block,
     CaseBlock,
     ClassLikeDeclaration,
     ConditionalExpression,
-    ConditionalTypeNode,
     Debug,
     EntityName,
     Expression,
@@ -37,18 +35,13 @@ import {
     isStringLiteral,
     isTypeOfExpression,
     isVoidExpression,
-    JSDocNonNullableType,
-    JSDocNullableType,
-    JSDocOptionalType,
     LiteralTypeNode,
     MethodDeclaration,
     ModuleBlock,
     Node,
     nodeIsPresent,
-    NumericLiteral,
     ParameterDeclaration,
     parseNodeFactory,
-    PrefixUnaryExpression,
     PropertyAccessEntityNameExpression,
     PropertyDeclaration,
     QualifiedName,
@@ -61,8 +54,6 @@ import {
     SyntaxKind,
     TransformationContext,
     TypeNode,
-    TypeOperatorNode,
-    TypePredicateNode,
     TypeReferenceNode,
     TypeReferenceSerializationKind,
     UnionOrIntersectionTypeNode,
@@ -296,7 +287,7 @@ export function createRuntimeTypeSerializer(context: TransformationContext): Run
                 return factory.createIdentifier("Array");
 
             case SyntaxKind.TypePredicate:
-                return (node as TypePredicateNode).assertsModifier ?
+                return (node).assertsModifier ?
                     factory.createVoidZero() :
                     factory.createIdentifier("Boolean");
 
@@ -311,7 +302,7 @@ export function createRuntimeTypeSerializer(context: TransformationContext): Run
                 return factory.createIdentifier("Object");
 
             case SyntaxKind.LiteralType:
-                return serializeLiteralOfLiteralTypeNode((node as LiteralTypeNode).literal);
+                return serializeLiteralOfLiteralTypeNode((node).literal);
 
             case SyntaxKind.NumberKeyword:
                 return factory.createIdentifier("Number");
@@ -323,7 +314,7 @@ export function createRuntimeTypeSerializer(context: TransformationContext): Run
                 return getGlobalConstructor("Symbol", ScriptTarget.ES2015);
 
             case SyntaxKind.TypeReference:
-                return serializeTypeReferenceNode(node as TypeReferenceNode);
+                return serializeTypeReferenceNode(node);
 
             case SyntaxKind.IntersectionType:
                 return serializeUnionOrIntersectionConstituents((node as UnionOrIntersectionTypeNode).types, /*isIntersection*/ true);
@@ -332,11 +323,11 @@ export function createRuntimeTypeSerializer(context: TransformationContext): Run
                 return serializeUnionOrIntersectionConstituents((node as UnionOrIntersectionTypeNode).types, /*isIntersection*/ false);
 
             case SyntaxKind.ConditionalType:
-                return serializeUnionOrIntersectionConstituents([(node as ConditionalTypeNode).trueType, (node as ConditionalTypeNode).falseType], /*isIntersection*/ false);
+                return serializeUnionOrIntersectionConstituents([(node).trueType, (node).falseType], /*isIntersection*/ false);
 
             case SyntaxKind.TypeOperator:
-                if ((node as TypeOperatorNode).operator === SyntaxKind.ReadonlyKeyword) {
-                    return serializeTypeNode((node as TypeOperatorNode).type);
+                if ((node).operator === SyntaxKind.ReadonlyKeyword) {
+                    return serializeTypeNode((node).type);
                 }
                 break;
 
@@ -361,7 +352,7 @@ export function createRuntimeTypeSerializer(context: TransformationContext): Run
             case SyntaxKind.JSDocNullableType:
             case SyntaxKind.JSDocNonNullableType:
             case SyntaxKind.JSDocOptionalType:
-                return serializeTypeNode((node as JSDocNullableType | JSDocNonNullableType | JSDocOptionalType).type);
+                return serializeTypeNode((node).type);
 
             default:
                 return Debug.failBadSyntaxKind(node);
@@ -377,11 +368,11 @@ export function createRuntimeTypeSerializer(context: TransformationContext): Run
                 return factory.createIdentifier("String");
 
             case SyntaxKind.PrefixUnaryExpression: {
-                const operand = (node as PrefixUnaryExpression).operand;
+                const operand = (node).operand;
                 switch (operand.kind) {
                     case SyntaxKind.NumericLiteral:
                     case SyntaxKind.BigIntLiteral:
-                        return serializeLiteralOfLiteralTypeNode(operand as NumericLiteral | BigIntLiteral);
+                        return serializeLiteralOfLiteralTypeNode(operand);
                     default:
                         return Debug.failBadSyntaxKind(operand);
                 }

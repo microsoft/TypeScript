@@ -5,7 +5,6 @@ import {
     AssignmentDeclarationKind,
     BinaryExpression,
     BindingElement,
-    Block,
     CallExpression,
     CancellationToken,
     canHaveSymbol,
@@ -14,7 +13,6 @@ import {
     ClassLikeDeclaration,
     climbPastPropertyAccess,
     compareValues,
-    ConstructorDeclaration,
     contains,
     createQueue,
     createTextSpan,
@@ -45,10 +43,7 @@ import {
     forEachChildRecursively,
     forEachReturnStatement,
     ForInOrOfStatement,
-    FunctionDeclaration,
-    FunctionExpression,
     FunctionLikeDeclaration,
-    GetAccessorDeclaration,
     getAdjustedReferenceLocation,
     getAdjustedRenameLocation,
     getAllSuperTypeNodes,
@@ -188,24 +183,16 @@ import {
     JSDocTag,
     map,
     mapDefined,
-    MethodDeclaration,
     ModifierFlags,
-    ModuleDeclaration,
     MultiMap,
     NamedDeclaration,
     Node,
     NodeFlags,
     nodeSeenTracker,
-    NumericLiteral,
     ObjectLiteralExpression,
-    ParameterDeclaration,
-    ParenthesizedExpression,
     Path,
-    PrivateIdentifier,
     Program,
     PropertyAccessExpression,
-    PropertyAssignment,
-    PropertyDeclaration,
     punctuationPart,
     QuotePreference,
     rangeIsOnSingleLine,
@@ -217,7 +204,6 @@ import {
     ScriptElementKind,
     ScriptTarget,
     SemanticMeaning,
-    SetAccessorDeclaration,
     SignatureDeclaration,
     skipAlias,
     some,
@@ -245,7 +231,6 @@ import {
     tryGetImportFromModuleSpecifier,
     TypeChecker,
     TypeLiteralNode,
-    VariableDeclaration,
 } from "./_namespaces/ts";
 import {
     createImportTracker,
@@ -383,7 +368,7 @@ function getContextNodeForNodeEntry(node: Node): ContextNode | undefined {
 }
 
 /** @internal */
-export function getContextNode(node: NamedDeclaration | BinaryExpression | ForInOrOfStatement | undefined): ContextNode | undefined {
+export function getContextNode(node: Declaration | BinaryExpression | ForInOrOfStatement | undefined): ContextNode | undefined {
     if (!node) return undefined;
     switch (node.kind) {
         case SyntaxKind.VariableDeclaration:
@@ -396,7 +381,7 @@ export function getContextNode(node: NamedDeclaration | BinaryExpression | ForIn
                         node.parent;
 
         case SyntaxKind.BindingElement:
-            return getContextNode(node.parent.parent as NamedDeclaration);
+            return getContextNode(node.parent.parent);
 
         case SyntaxKind.ImportSpecifier:
             return node.parent.parent.parent;
@@ -417,8 +402,8 @@ export function getContextNode(node: NamedDeclaration | BinaryExpression | ForIn
         case SyntaxKind.ForOfStatement:
         case SyntaxKind.ForInStatement:
             return {
-                start: (node as ForInOrOfStatement).initializer,
-                end: (node as ForInOrOfStatement).expression
+                start: node.initializer,
+                end: node.expression
             };
 
         case SyntaxKind.PropertyAssignment:
@@ -883,7 +868,6 @@ function declarationIsWriteAccess(decl: Declaration): boolean {
         case SyntaxKind.BindingElement:
         case SyntaxKind.ClassDeclaration:
         case SyntaxKind.ClassExpression:
-        case SyntaxKind.DefaultKeyword:
         case SyntaxKind.EnumDeclaration:
         case SyntaxKind.EnumMember:
         case SyntaxKind.ExportSpecifier:
@@ -906,7 +890,7 @@ function declarationIsWriteAccess(decl: Declaration): boolean {
 
         case SyntaxKind.PropertyAssignment:
             // In `({ x: y } = 0);`, `x` is not a write access. (Won't call this function for `y`.)
-            return !isArrayLiteralOrObjectLiteralDestructuringPattern((decl as PropertyAssignment).parent);
+            return !isArrayLiteralOrObjectLiteralDestructuringPattern((decl).parent);
 
         case SyntaxKind.FunctionDeclaration:
         case SyntaxKind.FunctionExpression:
@@ -914,11 +898,11 @@ function declarationIsWriteAccess(decl: Declaration): boolean {
         case SyntaxKind.MethodDeclaration:
         case SyntaxKind.GetAccessor:
         case SyntaxKind.SetAccessor:
-            return !!(decl as FunctionDeclaration | FunctionExpression | ConstructorDeclaration | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration).body;
+            return !!(decl).body;
 
         case SyntaxKind.VariableDeclaration:
         case SyntaxKind.PropertyDeclaration:
-            return !!(decl as VariableDeclaration | PropertyDeclaration).initializer || isCatchClause(decl.parent);
+            return !!(decl).initializer || isCatchClause(decl.parent);
 
         case SyntaxKind.MethodSignature:
         case SyntaxKind.PropertySignature:
@@ -1164,7 +1148,7 @@ export namespace Core {
                         break;
                     case SyntaxKind.ModuleDeclaration:
                         if (sourceFilesSet.has(decl.getSourceFile().fileName)) {
-                            references.push(nodeEntry((decl as ModuleDeclaration).name));
+                            references.push(nodeEntry((decl).name));
                         }
                         break;
                     default:
@@ -1627,7 +1611,7 @@ export namespace Core {
                 return undefined;
             }
 
-            if (!container || container.kind === SyntaxKind.SourceFile && !isExternalOrCommonJsModule(container as SourceFile)) {
+            if (!container || container.kind === SyntaxKind.SourceFile && !isExternalOrCommonJsModule(container)) {
                 // This is a global variable and not an external module, any declaration defined
                 // within this scope is visible outside the file
                 return undefined;
@@ -1780,7 +1764,7 @@ export namespace Core {
                 }
                 // falls through I guess
             case SyntaxKind.Identifier:
-                return (node as PrivateIdentifier | Identifier).text.length === searchSymbolName.length;
+                return (node).text.length === searchSymbolName.length;
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.StringLiteral: {
                 const str = node as StringLiteralLike;
@@ -1789,7 +1773,7 @@ export namespace Core {
             }
 
             case SyntaxKind.NumericLiteral:
-                return isLiteralNameOfPropertyDeclarationOrIndexAccess(node as NumericLiteral) && (node as NumericLiteral).text.length === searchSymbolName.length;
+                return isLiteralNameOfPropertyDeclarationOrIndexAccess(node) && (node).text.length === searchSymbolName.length;
 
             case SyntaxKind.DefaultKeyword:
                 return "default".length === searchSymbolName.length;
@@ -1881,7 +1865,7 @@ export namespace Core {
 
         if (isExportSpecifier(parent)) {
             Debug.assert(referenceLocation.kind === SyntaxKind.Identifier);
-            getReferencesAtExportSpecifier(referenceLocation as Identifier, referenceSymbol, parent, search, state, addReferencesHere);
+            getReferencesAtExportSpecifier(referenceLocation , referenceSymbol, parent, search, state, addReferencesHere);
             return;
         }
 
@@ -2112,7 +2096,7 @@ export namespace Core {
             classSymbol.exports.forEach(member => {
                 const decl = member.valueDeclaration;
                 if (decl && decl.kind === SyntaxKind.MethodDeclaration) {
-                    const body = (decl as MethodDeclaration).body;
+                    const body = (decl).body;
                     if (body) {
                         forEachDescendantOfKind(body, SyntaxKind.ThisKeyword, thisKeyword => {
                             if (isNewExpressionTarget(thisKeyword)) {
@@ -2138,7 +2122,7 @@ export namespace Core {
 
         for (const decl of constructor.declarations) {
             Debug.assert(decl.kind === SyntaxKind.Constructor);
-            const body = (decl as ConstructorDeclaration).body;
+            const body = (decl).body;
             if (body) {
                 forEachDescendantOfKind(body, SyntaxKind.SuperKeyword, node => {
                     if (isCallExpressionTarget(node)) {
@@ -2194,7 +2178,7 @@ export namespace Core {
             else if (isFunctionLike(typeHavingNode) && (typeHavingNode as FunctionLikeDeclaration).body) {
                 const body = (typeHavingNode as FunctionLikeDeclaration).body!;
                 if (body.kind === SyntaxKind.Block) {
-                    forEachReturnStatement(body as Block, returnStatement => {
+                    forEachReturnStatement(body , returnStatement => {
                         if (returnStatement.expression) addIfImplementation(returnStatement.expression);
                     });
                 }
@@ -2223,7 +2207,7 @@ export namespace Core {
     function isImplementationExpression(node: Expression): boolean {
         switch (node.kind) {
             case SyntaxKind.ParenthesizedExpression:
-                return isImplementationExpression((node as ParenthesizedExpression).expression);
+                return isImplementationExpression((node).expression);
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ObjectLiteralExpression:
@@ -2318,7 +2302,7 @@ export namespace Core {
     }
 
     function isParameterName(node: Node) {
-        return node.kind === SyntaxKind.Identifier && node.parent.kind === SyntaxKind.Parameter && (node.parent as ParameterDeclaration).name === node;
+        return node.kind === SyntaxKind.Identifier && node.parent.kind === SyntaxKind.Parameter && (node.parent).name === node;
     }
 
     function getReferencesForThisKeyword(thisOrSuperKeyword: Node, sourceFiles: readonly SourceFile[], cancellationToken: CancellationToken): SymbolAndEntries[] | undefined {
@@ -2345,7 +2329,7 @@ export namespace Core {
                 searchSpaceNode = searchSpaceNode.parent; // re-assign to be the owning class
                 break;
             case SyntaxKind.SourceFile:
-                if (isExternalModule(searchSpaceNode as SourceFile) || isParameterName(thisOrSuperKeyword)) {
+                if (isExternalModule(searchSpaceNode) || isParameterName(thisOrSuperKeyword)) {
                     return undefined;
                 }
                 // falls through
@@ -2369,7 +2353,7 @@ export namespace Core {
                 switch (searchSpaceNode.kind) {
                     case SyntaxKind.FunctionExpression:
                     case SyntaxKind.FunctionDeclaration:
-                        return (searchSpaceNode as FunctionExpression | FunctionDeclaration).symbol === container.symbol;
+                        return (searchSpaceNode).symbol === container.symbol;
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.MethodSignature:
                         return isObjectLiteralMethod(searchSpaceNode) && searchSpaceNode.symbol === container.symbol;

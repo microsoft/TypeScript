@@ -3,7 +3,6 @@ import {
     addToSeen,
     arrayFrom,
     BigIntLiteralType,
-    BinaryExpression,
     CallExpression,
     CheckFlags,
     ClassLikeDeclaration,
@@ -474,7 +473,7 @@ function createActionsForAddMissingMemberInTypeScriptFile(context: CodeFixContex
 function getTypeNode(checker: TypeChecker, node: ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode, token: Node) {
     let typeNode: TypeNode | undefined;
     if (token.parent.parent.kind === SyntaxKind.BinaryExpression) {
-        const binaryExpression = token.parent.parent as BinaryExpression;
+        const binaryExpression = token.parent.parent ;
         const otherExpression = token.parent === binaryExpression.left ? binaryExpression.right : binaryExpression.left;
         const widenedType = checker.getWidenedType(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(otherExpression)));
         typeNode = checker.typeToTypeNode(widenedType, node, NodeBuilderFlags.NoTruncation);

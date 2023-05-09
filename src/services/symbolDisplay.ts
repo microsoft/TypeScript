@@ -1,7 +1,6 @@
 import {
     addRange,
     arrayFrom,
-    BinaryExpression,
     CallExpression,
     CheckFlags,
     contains,
@@ -10,8 +9,6 @@ import {
     displayPart,
     EmitHint,
     emptyArray,
-    EnumMember,
-    ExportAssignment,
     find,
     first,
     firstDefined,
@@ -31,7 +28,6 @@ import {
     getTextOfNode,
     hasSyntacticModifier,
     idText,
-    ImportEqualsDeclaration,
     isArrowFunction,
     isBindingElement,
     isCallExpression,
@@ -75,7 +71,6 @@ import {
     NodeBuilderFlags,
     ObjectFlags,
     operatorPart,
-    PropertyAccessExpression,
     PropertyDeclaration,
     punctuationPart,
     ScriptElementKind,
@@ -295,7 +290,7 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
         type = isThisExpression ? typeChecker.getTypeAtLocation(location) : typeChecker.getTypeOfSymbolAtLocation(symbol, location);
 
         if (location.parent && location.parent.kind === SyntaxKind.PropertyAccessExpression) {
-            const right = (location.parent as PropertyAccessExpression).name;
+            const right = (location.parent).name;
             // Either the location is on the right of a property access, or on the left and the right is missing
             if (right === location || (right && right.getFullWidth() === 0)) {
                 location = location.parent;
@@ -522,7 +517,7 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
         addPrefixForAnyFunctionOrVar(symbol, "enum member");
         const declaration = symbol.declarations?.[0];
         if (declaration?.kind === SyntaxKind.EnumMember) {
-            const constantValue = typeChecker.getConstantValue(declaration as EnumMember);
+            const constantValue = typeChecker.getConstantValue(declaration);
             if (constantValue !== undefined) {
                 displayParts.push(spacePart());
                 displayParts.push(operatorPart(SyntaxKind.EqualsToken));
@@ -575,7 +570,7 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
                 case SyntaxKind.ExportAssignment:
                     displayParts.push(keywordPart(SyntaxKind.ExportKeyword));
                     displayParts.push(spacePart());
-                    displayParts.push(keywordPart((symbol.declarations[0] as ExportAssignment).isExportEquals ? SyntaxKind.EqualsToken : SyntaxKind.DefaultKeyword));
+                    displayParts.push(keywordPart((symbol.declarations[0]).isExportEquals ? SyntaxKind.EqualsToken : SyntaxKind.DefaultKeyword));
                     break;
                 case SyntaxKind.ExportSpecifier:
                     displayParts.push(keywordPart(SyntaxKind.ExportKeyword));
@@ -588,7 +583,7 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
         addFullSymbolName(symbol);
         forEach(symbol.declarations, declaration => {
             if (declaration.kind === SyntaxKind.ImportEqualsDeclaration) {
-                const importEqualsDeclaration = declaration as ImportEqualsDeclaration;
+                const importEqualsDeclaration = declaration ;
                 if (isExternalModuleImportEqualsDeclaration(importEqualsDeclaration)) {
                     displayParts.push(spacePart());
                     displayParts.push(operatorPart(SyntaxKind.EqualsToken));
@@ -686,7 +681,7 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
                     continue;
                 }
 
-                const rhsSymbol = typeChecker.getSymbolAtLocation((declaration.parent as BinaryExpression).right);
+                const rhsSymbol = typeChecker.getSymbolAtLocation((declaration.parent).right);
                 if (!rhsSymbol) {
                     continue;
                 }

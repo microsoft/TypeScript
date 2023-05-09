@@ -2,7 +2,6 @@ import {
     AccessExpression,
     append,
     ArrowFunction,
-    AsExpression,
     CallExpression,
     CallHierarchyIncomingCall,
     CallHierarchyItem,
@@ -88,10 +87,8 @@ import {
     NewExpression,
     Node,
     NodeFlags,
-    ParameterDeclaration,
     Program,
     PropertyAccessExpression,
-    SatisfiesExpression,
     SetAccessorDeclaration,
     skipTrivia,
     SourceFile,
@@ -100,7 +97,6 @@ import {
     TaggedTemplateExpression,
     TextRange,
     TextSpan,
-    TypeAssertion,
     TypeChecker,
     usingSingleLineStringWriter,
     VariableDeclaration,
@@ -522,37 +518,34 @@ function createCallSiteCollector(program: Program, callSites: CallSite[]): (node
             case SyntaxKind.TypeAliasDeclaration:
                 // do not descend into nodes that cannot contain callable nodes
                 return;
-            case SyntaxKind.ClassStaticBlockDeclaration:
-                recordCallSite(node as ClassStaticBlockDeclaration);
-                return;
             case SyntaxKind.TypeAssertionExpression:
             case SyntaxKind.AsExpression:
                 // do not descend into the type side of an assertion
-                collect((node as TypeAssertion | AsExpression).expression);
+                collect((node).expression);
                 return;
             case SyntaxKind.VariableDeclaration:
             case SyntaxKind.Parameter:
                 // do not descend into the type of a variable or parameter declaration
-                collect((node as VariableDeclaration | ParameterDeclaration).name);
-                collect((node as VariableDeclaration | ParameterDeclaration).initializer);
+                collect((node).name);
+                collect((node).initializer);
                 return;
             case SyntaxKind.CallExpression:
                 // do not descend into the type arguments of a call expression
-                recordCallSite(node as CallExpression);
-                collect((node as CallExpression).expression);
-                forEach((node as CallExpression).arguments, collect);
+                recordCallSite(node);
+                collect((node).expression);
+                forEach((node).arguments, collect);
                 return;
             case SyntaxKind.NewExpression:
                 // do not descend into the type arguments of a new expression
-                recordCallSite(node as NewExpression);
-                collect((node as NewExpression).expression);
-                forEach((node as NewExpression).arguments, collect);
+                recordCallSite(node);
+                collect((node).expression);
+                forEach((node).arguments, collect);
                 return;
             case SyntaxKind.TaggedTemplateExpression:
                 // do not descend into the type arguments of a tagged template expression
-                recordCallSite(node as TaggedTemplateExpression);
-                collect((node as TaggedTemplateExpression).tag);
-                collect((node as TaggedTemplateExpression).template);
+                recordCallSite(node);
+                collect((node).tag);
+                collect((node).template);
                 return;
             case SyntaxKind.JsxOpeningElement:
             case SyntaxKind.JsxSelfClosingElement:
@@ -562,8 +555,8 @@ function createCallSiteCollector(program: Program, callSites: CallSite[]): (node
                 collect((node as JsxOpeningLikeElement).attributes);
                 return;
             case SyntaxKind.Decorator:
-                recordCallSite(node as Decorator);
-                collect((node as Decorator).expression);
+                recordCallSite(node);
+                collect((node).expression);
                 return;
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.ElementAccessExpression:
@@ -572,7 +565,7 @@ function createCallSiteCollector(program: Program, callSites: CallSite[]): (node
                 break;
             case SyntaxKind.SatisfiesExpression:
                 // do not descend into the type side of an assertion
-                collect((node as SatisfiesExpression).expression);
+                collect((node).expression);
                 return;
         }
 

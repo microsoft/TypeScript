@@ -61,7 +61,7 @@ export function transformES2020(context: TransformationContext): (x: SourceFile 
         }
         switch (node.kind) {
             case SyntaxKind.CallExpression: {
-                const updated = visitNonOptionalCallExpression(node as CallExpression, /*captureThisArg*/ false);
+                const updated = visitNonOptionalCallExpression(node , /*captureThisArg*/ false);
                 Debug.assertNotNode(updated, isSyntheticReference);
                 return updated;
             }
@@ -74,12 +74,12 @@ export function transformES2020(context: TransformationContext): (x: SourceFile 
                 }
                 return visitEachChild(node, visitor, context);
             case SyntaxKind.BinaryExpression:
-                if ((node as BinaryExpression).operatorToken.kind === SyntaxKind.QuestionQuestionToken) {
-                    return transformNullishCoalescingExpression(node as BinaryExpression);
+                if ((node).operatorToken.kind === SyntaxKind.QuestionQuestionToken) {
+                    return transformNullishCoalescingExpression(node);
                 }
                 return visitEachChild(node, visitor, context);
             case SyntaxKind.DeleteExpression:
-                return visitDeleteExpression(node as DeleteExpression);
+                return visitDeleteExpression(node);
             default:
                 return visitEachChild(node, visitor, context);
         }
@@ -151,10 +151,10 @@ export function transformES2020(context: TransformationContext): (x: SourceFile 
 
     function visitNonOptionalExpression(node: Expression, captureThisArg: boolean, isDelete: boolean): Expression {
         switch (node.kind) {
-            case SyntaxKind.ParenthesizedExpression: return visitNonOptionalParenthesizedExpression(node as ParenthesizedExpression, captureThisArg, isDelete);
+            case SyntaxKind.ParenthesizedExpression: return visitNonOptionalParenthesizedExpression(node , captureThisArg, isDelete);
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.ElementAccessExpression: return visitNonOptionalPropertyOrElementAccessExpression(node as AccessExpression, captureThisArg, isDelete);
-            case SyntaxKind.CallExpression: return visitNonOptionalCallExpression(node as CallExpression, captureThisArg);
+            case SyntaxKind.CallExpression: return visitNonOptionalCallExpression(node , captureThisArg);
             default: return visitNode(node, visitor, isExpression);
         }
     }

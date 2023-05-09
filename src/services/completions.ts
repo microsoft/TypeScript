@@ -119,7 +119,6 @@ import {
     ImportSpecifier,
     ImportTypeNode,
     IncompleteCompletionsCache,
-    IndexedAccessTypeNode,
     insertSorted,
     InternalSymbolName,
     isAbstractConstructorSymbol,
@@ -268,7 +267,6 @@ import {
     length,
     ListFormat,
     LiteralType,
-    LiteralTypeNode,
     map,
     mapDefined,
     MemberOverrideStatus,
@@ -289,14 +287,12 @@ import {
     NodeBuilderFlags,
     NodeFlags,
     nodeIsMissing,
-    NumericLiteral,
     ObjectBindingPattern,
     ObjectLiteralExpression,
     ObjectType,
     ObjectTypeDeclaration,
     or,
     ParameterDeclaration,
-    ParenthesizedTypeNode,
     positionBelongsToNode,
     positionIsASICandidate,
     positionsAreOnSameLine,
@@ -307,7 +303,6 @@ import {
     PropertyAccessExpression,
     PropertyDeclaration,
     PropertyName,
-    PropertySignature,
     PseudoBigInt,
     pseudoBigIntToString,
     QualifiedName,
@@ -365,8 +360,6 @@ import {
     TypeNode,
     TypeOnlyImportDeclaration,
     TypeParameterDeclaration,
-    TypeQueryNode,
-    TypeReferenceNode,
     unescapeLeadingUnderscores,
     UnionReduction,
     UnionType,
@@ -1443,30 +1436,30 @@ function getExhaustiveCaseSnippets(
 function typeNodeToExpression(typeNode: TypeNode, languageVersion: ScriptTarget, quotePreference: QuotePreference): Expression | undefined {
     switch (typeNode.kind) {
         case SyntaxKind.TypeReference:
-            const typeName = (typeNode as TypeReferenceNode).typeName;
+            const typeName = (typeNode).typeName;
             return entityNameToExpression(typeName, languageVersion, quotePreference);
         case SyntaxKind.IndexedAccessType:
             const objectExpression =
-                typeNodeToExpression((typeNode as IndexedAccessTypeNode).objectType, languageVersion, quotePreference);
+                typeNodeToExpression((typeNode).objectType, languageVersion, quotePreference);
             const indexExpression =
-                typeNodeToExpression((typeNode as IndexedAccessTypeNode).indexType, languageVersion, quotePreference);
+                typeNodeToExpression((typeNode).indexType, languageVersion, quotePreference);
             return objectExpression
                 && indexExpression
                 && factory.createElementAccessExpression(objectExpression, indexExpression);
         case SyntaxKind.LiteralType:
-            const literal = (typeNode as LiteralTypeNode).literal;
+            const literal = (typeNode).literal;
             switch (literal.kind) {
                 case SyntaxKind.StringLiteral:
                     return factory.createStringLiteral(literal.text, quotePreference === QuotePreference.Single);
                 case SyntaxKind.NumericLiteral:
-                    return factory.createNumericLiteral(literal.text, (literal as NumericLiteral).numericLiteralFlags);
+                    return factory.createNumericLiteral(literal.text, (literal).numericLiteralFlags);
             }
             return undefined;
         case SyntaxKind.ParenthesizedType:
-            const exp = typeNodeToExpression((typeNode as ParenthesizedTypeNode).type, languageVersion, quotePreference);
+            const exp = typeNodeToExpression((typeNode).type, languageVersion, quotePreference);
             return exp && (isIdentifier(exp) ? exp : factory.createParenthesizedExpression(exp));
         case SyntaxKind.TypeQuery:
-            return entityNameToExpression((typeNode as TypeQueryNode).exprName, languageVersion, quotePreference);
+            return entityNameToExpression((typeNode).exprName, languageVersion, quotePreference);
         case SyntaxKind.ImportType:
             Debug.fail(`We should not get an import type after calling 'codefix.typeToAutoImportableTypeNode'.`);
     }
@@ -2483,7 +2476,7 @@ export function getCompletionEntriesFromSymbols(
                 const symbolDeclarationPos = symbolDeclaration.pos;
                 const parameters = isParameter(variableOrParameterDeclaration) ? variableOrParameterDeclaration.parent.parameters :
                     isInferTypeNode(variableOrParameterDeclaration.parent) ? undefined :
-                    variableOrParameterDeclaration.parent.typeParameters;
+                    variableOrParameterDeclaration.parent.kind !== SyntaxKind.MappedType ? variableOrParameterDeclaration.parent.typeParameters : undefined;
                 if (symbolDeclarationPos >= variableOrParameterDeclaration.pos && parameters && symbolDeclarationPos < parameters.end) {
                     return false;
                 }
@@ -2911,15 +2904,15 @@ function getContextualType(previousToken: Node, position: number, sourceFile: So
     const { parent } = previousToken;
     switch (previousToken.kind) {
         case SyntaxKind.Identifier:
-            return getContextualTypeFromParent(previousToken as Identifier, checker);
+            return getContextualTypeFromParent(previousToken , checker);
         case SyntaxKind.EqualsToken:
             switch (parent.kind) {
                 case SyntaxKind.VariableDeclaration:
-                    return checker.getContextualType((parent as VariableDeclaration).initializer!); // TODO: GH#18217
+                    return checker.getContextualType((parent).initializer!); // TODO: GH#18217
                 case SyntaxKind.BinaryExpression:
-                    return checker.getTypeAtLocation((parent as BinaryExpression).left);
+                    return checker.getTypeAtLocation((parent).left);
                 case SyntaxKind.JsxAttribute:
-                    return checker.getContextualTypeForJsxAttribute(parent as JsxAttribute);
+                    return checker.getContextualTypeForJsxAttribute(parent);
                 default:
                     return undefined;
             }
@@ -3023,7 +3016,7 @@ function getCompletionData(
                 if (!currentToken ||
                     (!isDeclarationName(currentToken) &&
                         (currentToken.parent.kind !== SyntaxKind.JSDocPropertyTag ||
-                            (currentToken.parent as JSDocPropertyTag).name !== currentToken))) {
+                            (currentToken.parent).name !== currentToken))) {
                     // Use as type location if inside tag's type expression
                     insideJsDocTagTypeExpression = isCurrentlyEditingNode(typeExpression);
                 }
@@ -3102,7 +3095,7 @@ function getCompletionData(
             isRightOfQuestionDot = contextToken.kind === SyntaxKind.QuestionDotToken;
             switch (parent.kind) {
                 case SyntaxKind.PropertyAccessExpression:
-                    propertyAccessToConvert = parent as PropertyAccessExpression;
+                    propertyAccessToConvert = parent ;
                     node = propertyAccessToConvert.expression;
                     const leftmostAccessExpression = getLeftmostAccessExpression(propertyAccessToConvert);
                     if (nodeIsMissing(leftmostAccessExpression) ||
@@ -3118,7 +3111,7 @@ function getCompletionData(
                     }
                     break;
                 case SyntaxKind.QualifiedName:
-                    node = (parent as QualifiedName).left;
+                    node = (parent).left;
                     break;
                 case SyntaxKind.ModuleDeclaration:
                     node = (parent as ModuleDeclaration).name;
@@ -3171,7 +3164,7 @@ function getCompletionData(
                     break;
 
                 case SyntaxKind.BinaryExpression:
-                    if (!binaryExpressionMayBeOpenTag(parent as BinaryExpression)) {
+                    if (!binaryExpressionMayBeOpenTag(parent)) {
                         break;
                     }
                 // falls through
@@ -3199,7 +3192,7 @@ function getCompletionData(
 
                 case SyntaxKind.JsxAttribute:
                     // For `<div className="x" [||] ></div>`, `parent` will be JsxAttribute and `previousToken` will be its initializer
-                    if ((parent as JsxAttribute).initializer === previousToken &&
+                    if ((parent).initializer === previousToken &&
                         previousToken.end < position) {
                         isJsxIdentifierExpected = true;
                         break;
@@ -3213,9 +3206,9 @@ function getCompletionData(
                             // For `<div x=[|f/**/|]`, `parent` will be `x` and `previousToken.parent` will be `f` (which is its own JsxAttribute)
                             // Note for `<div someBool f>` we don't want to treat this as a jsx inializer, instead it's the attribute name.
                             if (parent !== previousToken.parent &&
-                                !(parent as JsxAttribute).initializer &&
+                                !(parent).initializer &&
                                 findChildOfKind(parent, SyntaxKind.EqualsToken, sourceFile)) {
-                                isJsxInitializer = previousToken as Identifier;
+                                isJsxInitializer = previousToken ;
                             }
                     }
                     break;
@@ -3326,7 +3319,7 @@ function getCompletionData(
             case SyntaxKind.JSDocSatisfiesTag:
                 return true;
             case SyntaxKind.JSDocTemplateTag:
-                return !!(tag as JSDocTemplateTag).constraint;
+                return !!(tag).constraint;
             default:
                 return false;
         }
@@ -3438,7 +3431,7 @@ function getCompletionData(
             isNewIdentifierLocation = true;
         }
 
-        const propertyAccess = node.kind === SyntaxKind.ImportType ? node as ImportTypeNode : node.parent as PropertyAccessExpression | QualifiedName;
+        const propertyAccess = node.kind === SyntaxKind.ImportType ? node : node.parent as PropertyAccessExpression | QualifiedName;
         if (inCheckedFile) {
             for (const symbol of type.getApparentProperties()) {
                 if (typeChecker.isValidPropertyAccessForCompletions(propertyAccess, type, symbol)) {
@@ -4400,7 +4393,7 @@ function getCompletionData(
                         //      JsxOpeningLikeElement
                         //          attributes: JsxAttributes
                         //             properties: NodeArray<JsxAttributeLike>
-                        return parent.parent.parent as JsxOpeningLikeElement;
+                        return parent.parent.parent ;
                     }
                     break;
 
@@ -4413,7 +4406,7 @@ function getCompletionData(
                         //      JsxOpeningLikeElement
                         //          attributes: JsxAttributes
                         //             properties: NodeArray<JsxAttributeLike>
-                        return parent.parent.parent as JsxOpeningLikeElement;
+                        return parent.parent.parent ;
                     }
 
                     break;
@@ -4427,7 +4420,7 @@ function getCompletionData(
                         //          attributes: JsxAttributes
                         //             properties: NodeArray<JsxAttributeLike>
                         //                  each JsxAttribute can have initializer as JsxExpression
-                        return parent.parent.parent.parent as JsxOpeningLikeElement;
+                        return parent.parent.parent.parent ;
                     }
 
                     if (parent && parent.kind === SyntaxKind.JsxSpreadAttribute) {
@@ -4435,7 +4428,7 @@ function getCompletionData(
                         //      JsxOpeningLikeElement
                         //          attributes: JsxAttributes
                         //             properties: NodeArray<JsxAttributeLike>
-                        return parent.parent.parent as JsxOpeningLikeElement;
+                        return parent.parent.parent ;
                     }
 
                     break;
@@ -4512,8 +4505,8 @@ function getCompletionData(
 
             case SyntaxKind.Identifier:
                 if (containingNodeKind === SyntaxKind.ImportSpecifier &&
-                    contextToken === (parent as ImportSpecifier).name &&
-                    (contextToken as Identifier).text === "type"
+                    contextToken === (parent).name &&
+                    (contextToken).text === "type"
                 ) {
                     // import { type | }
                     return false;
@@ -4781,7 +4774,7 @@ function getCompletionData(
                 continue;
             }
 
-            const existingName = getPropertyNameForPropertyNameNode(m.name!);
+            const existingName = getPropertyNameForPropertyNameNode(m.name);
             if (existingName) {
                 existingMemberNames.add(existingName);
             }
@@ -4847,7 +4840,7 @@ function tryGetObjectLikeCompletionContainer(contextToken: Node | undefined): Ob
             case SyntaxKind.AsyncKeyword:
                 return tryCast(parent.parent, isObjectLiteralExpression);
             case SyntaxKind.Identifier:
-                return (contextToken as Identifier).text === "async" && isShorthandPropertyAssignment(contextToken.parent)
+                return (contextToken).text === "async" && isShorthandPropertyAssignment(contextToken.parent)
                     ? contextToken.parent.parent : undefined;
         }
     }
@@ -5156,7 +5149,7 @@ function tryGetObjectTypeDeclarationCompletionContainer(sourceFile: SourceFile, 
             }
             break;
         case SyntaxKind.Identifier: {
-            const originalKeywordKind = identifierToKeywordKind(location as Identifier);
+            const originalKeywordKind = identifierToKeywordKind(location);
             if (originalKeywordKind) {
                 return undefined;
             }
@@ -5243,7 +5236,7 @@ function getConstraintOfTypeArgumentProperty(node: Node, checker: TypeChecker): 
 
     switch (node.kind) {
         case SyntaxKind.PropertySignature:
-            return checker.getTypeOfPropertyOfContextualType(t, (node as PropertySignature).symbol.escapedName);
+            return checker.getTypeOfPropertyOfContextualType(t, (node).symbol.escapedName);
         case SyntaxKind.IntersectionType:
         case SyntaxKind.TypeLiteral:
         case SyntaxKind.UnionType:

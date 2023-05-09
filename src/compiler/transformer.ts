@@ -348,8 +348,9 @@ export function transformNodes<T extends Node>(resolver: EmitResolver | undefine
         diagnostics
     };
 
-    function transformRoot(node: T) {
-        return node && (!isSourceFile(node) || !node.isDeclarationFile) ? transformation(node) : node;
+    function transformRoot(node: T): T {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+        return node && (!isSourceFile(node) || !node.isDeclarationFile) ? transformation(node) : node as SourceFile as T; // TODO: GH#54146
     }
 
     /**

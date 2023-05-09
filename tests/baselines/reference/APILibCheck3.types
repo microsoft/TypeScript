@@ -1,0 +1,4 @@
+=== tests/cases/compiler/index.ts ===
+import tsserverlibrary = require("tsserverlibrary");
+>tsserverlibrary : typeof tsserverlibrary
+

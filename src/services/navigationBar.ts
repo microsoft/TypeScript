@@ -14,7 +14,6 @@ import {
     compareStringsCaseSensitiveUI,
     compareValues,
     concatenate,
-    ConstructorDeclaration,
     contains,
     createTextSpanFromNode,
     createTextSpanFromRange,
@@ -23,10 +22,8 @@ import {
     DeclarationName,
     declarationNameToString,
     EntityNameExpression,
-    EnumDeclaration,
     EnumMember,
     escapeString,
-    ExportAssignment,
     Expression,
     factory,
     filterMutate,
@@ -51,7 +48,6 @@ import {
     hasJSDocNodes,
     Identifier,
     idText,
-    ImportClause,
     InterfaceDeclaration,
     InternalSymbolName,
     isAmbientModule,
@@ -100,9 +96,7 @@ import {
     PropertyNameLiteral,
     removeFileExtension,
     setTextRange,
-    ShorthandPropertyAssignment,
     SourceFile,
-    SpreadAssignment,
     SyntaxKind,
     TextSpan,
     TypeElement,
@@ -332,7 +326,7 @@ function addChildrenRecursively(node: Node | undefined): void {
     switch (node.kind) {
         case SyntaxKind.Constructor:
             // Get parameter properties, and treat them as being on the *same* level as the constructor, not under it.
-            const ctr = node as ConstructorDeclaration;
+            const ctr = node ;
             addNodeWithRecursiveChild(ctr, ctr.body);
 
             // Parameter properties are children of the class, not the constructor.
@@ -354,7 +348,7 @@ function addChildrenRecursively(node: Node | undefined): void {
 
         case SyntaxKind.PropertyDeclaration:
             if (hasNavigationBarName(node as ClassElement)) {
-                addNodeWithRecursiveInitializer(node as PropertyDeclaration);
+                addNodeWithRecursiveInitializer(node);
             }
             break;
         case SyntaxKind.PropertySignature:
@@ -364,7 +358,7 @@ function addChildrenRecursively(node: Node | undefined): void {
             break;
 
         case SyntaxKind.ImportClause:
-            const importClause = node as ImportClause;
+            const importClause = node ;
             // Handle default import case e.g.:
             //    import d from "mod";
             if (importClause.name) {
@@ -388,17 +382,17 @@ function addChildrenRecursively(node: Node | undefined): void {
             break;
 
         case SyntaxKind.ShorthandPropertyAssignment:
-            addNodeWithRecursiveChild(node, (node as ShorthandPropertyAssignment).name);
+            addNodeWithRecursiveChild(node, (node).name);
             break;
         case SyntaxKind.SpreadAssignment:
-            const { expression } = node as SpreadAssignment;
+            const { expression } = node ;
             // Use the expression as the name of the SpreadAssignment, otherwise show as <unknown>.
             isIdentifier(expression) ? addLeafNode(node, expression) : addLeafNode(node);
             break;
         case SyntaxKind.BindingElement:
         case SyntaxKind.PropertyAssignment:
         case SyntaxKind.VariableDeclaration: {
-            const child = node as VariableDeclaration | PropertyAssignment | BindingElement;
+            const child = node ;
             if (isBindingPattern(child.name)) {
                 addChildrenRecursively(child.name);
             }
@@ -422,7 +416,7 @@ function addChildrenRecursively(node: Node | undefined): void {
 
         case SyntaxKind.EnumDeclaration:
             startNode(node);
-            for (const member of (node as EnumDeclaration).members) {
+            for (const member of (node).members) {
                 if (!isComputedProperty(member)) {
                     addLeafNode(member);
                 }
@@ -441,11 +435,11 @@ function addChildrenRecursively(node: Node | undefined): void {
             break;
 
         case SyntaxKind.ModuleDeclaration:
-            addNodeWithRecursiveChild(node, getInteriorModule(node as ModuleDeclaration).body);
+            addNodeWithRecursiveChild(node, getInteriorModule(node).body);
             break;
 
         case SyntaxKind.ExportAssignment: {
-            const expression = (node as ExportAssignment).expression;
+            const expression = (node).expression;
             const child = isObjectLiteralExpression(expression) || isCallExpression(expression) ? expression :
                 isArrowFunction(expression) || isFunctionExpression(expression) ? expression.body : undefined;
             if (child) {
@@ -739,8 +733,8 @@ function shouldReallyMerge(a: Node, b: Node, parent: NavigationBarNode): boolean
         case SyntaxKind.SetAccessor:
             return isStatic(a) === isStatic(b);
         case SyntaxKind.ModuleDeclaration:
-            return areSameModule(a as ModuleDeclaration, b as ModuleDeclaration)
-                && getFullyQualifiedModuleName(a as ModuleDeclaration) === getFullyQualifiedModuleName(b as ModuleDeclaration);
+            return areSameModule(a , b as ModuleDeclaration)
+                && getFullyQualifiedModuleName(a) === getFullyQualifiedModuleName(b as ModuleDeclaration);
         default:
             return true;
     }
@@ -798,7 +792,7 @@ function compareChildren(child1: NavigationBarNode, child2: NavigationBarNode) {
  */
 function tryGetName(node: Node): string | undefined {
     if (node.kind === SyntaxKind.ModuleDeclaration) {
-        return getModuleName(node as ModuleDeclaration);
+        return getModuleName(node);
     }
 
     const declName = getNameOfDeclaration(node as Declaration);
@@ -810,7 +804,7 @@ function tryGetName(node: Node): string | undefined {
         case SyntaxKind.FunctionExpression:
         case SyntaxKind.ArrowFunction:
         case SyntaxKind.ClassExpression:
-            return getFunctionOrClassName(node as FunctionExpression | ArrowFunction | ClassExpression);
+            return getFunctionOrClassName(node);
         default:
             return undefined;
     }
@@ -818,7 +812,7 @@ function tryGetName(node: Node): string | undefined {
 
 function getItemName(node: Node, name: Node | undefined): string {
     if (node.kind === SyntaxKind.ModuleDeclaration) {
-        return cleanText(getModuleName(node as ModuleDeclaration));
+        return cleanText(getModuleName(node));
     }
 
     if (name) {
@@ -832,7 +826,7 @@ function getItemName(node: Node, name: Node | undefined): string {
 
     switch (node.kind) {
         case SyntaxKind.SourceFile:
-            const sourceFile = node as SourceFile;
+            const sourceFile = node ;
             return isExternalModule(sourceFile)
                 ? `"${escapeString(getBaseFileName(removeFileExtension(normalizePath(sourceFile.fileName))))}"`
                 : "<global>";

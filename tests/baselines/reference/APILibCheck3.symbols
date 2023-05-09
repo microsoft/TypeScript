@@ -1,0 +1,4 @@
+=== tests/cases/compiler/index.ts ===
+import tsserverlibrary = require("tsserverlibrary");
+>tsserverlibrary : Symbol(tsserverlibrary, Decl(index.ts, 0, 0))
+

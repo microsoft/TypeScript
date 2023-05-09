@@ -43,7 +43,7 @@ import {
 
 declare module "../compiler/types" {
     // Module transform: converted from interface augmentation
-    export interface Node {
+    export interface NodeBase {
         getSourceFile(): SourceFile;
         getChildCount(sourceFile?: SourceFile): number;
         getChildAt(index: number, sourceFile?: SourceFile): Node;

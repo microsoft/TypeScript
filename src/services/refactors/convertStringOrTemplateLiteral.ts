@@ -1,7 +1,7 @@
 import {
     ApplicableRefactorInfo,
     BinaryExpression,
-    BinaryOperator,
+    BinaryOperatorToken,
     copyTrailingAsLeadingComments,
     copyTrailingComments,
     Debug,
@@ -34,7 +34,6 @@ import {
     TemplateSpan,
     TemplateTail,
     textChanges,
-    Token,
 } from "../_namespaces/ts";
 import { registerRefactor } from "../_namespaces/ts.refactor";
 
@@ -143,7 +142,7 @@ function getParentBinaryExpression(expr: Node) {
 }
 
 function treeToArray(current: Expression) {
-    const loop = (current: Node): { nodes: Expression[], operators: Token<BinaryOperator>[], hasString: boolean, validOperators: boolean} => {
+    const loop = (current: Node): { nodes: Expression[], operators: BinaryOperatorToken[], hasString: boolean, validOperators: boolean} => {
         if (!isBinaryExpression(current)) {
             return { nodes: [current as Expression], operators: [], validOperators: true,
                      hasString: isStringLiteral(current) || isNoSubstitutionTemplateLiteral(current) };
@@ -168,7 +167,7 @@ function treeToArray(current: Expression) {
 
 // to copy comments following the operator
 // "foo" + /* comment */ "bar"
-const copyTrailingOperatorComments = (operators: Token<BinaryOperator>[], file: SourceFile) => (index: number, targetNode: Node) => {
+const copyTrailingOperatorComments = (operators: BinaryOperatorToken[], file: SourceFile) => (index: number, targetNode: Node) => {
     if (index < operators.length) {
          copyTrailingComments(operators[index], targetNode, file, SyntaxKind.MultiLineCommentTrivia, /*hasTrailingNewLine*/ false);
     }
@@ -224,7 +223,7 @@ function concatConsecutiveString(index: number, nodes: readonly Expression[]): [
     return [index, text, rawText, indexes];
 }
 
-function nodesToTemplate({ nodes, operators }: { nodes: readonly Expression[], operators: Token<BinaryOperator>[] }, file: SourceFile) {
+function nodesToTemplate({ nodes, operators }: { nodes: readonly Expression[], operators: BinaryOperatorToken[] }, file: SourceFile) {
     const copyOperatorComments = copyTrailingOperatorComments(operators, file);
     const copyCommentFromStringLiterals = copyCommentFromMultiNode(nodes, file, copyOperatorComments);
     const [begin, headText, rawHeadText, headIndexes] = concatConsecutiveString(0, nodes);

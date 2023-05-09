@@ -40,7 +40,7 @@ export function transformES2016(context: TransformationContext): (x: SourceFile 
         }
         switch (node.kind) {
             case SyntaxKind.BinaryExpression:
-                return visitBinaryExpression(node as BinaryExpression);
+                return visitBinaryExpression(node);
             default:
                 return visitEachChild(node, visitor, context);
         }

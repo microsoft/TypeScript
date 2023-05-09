@@ -25,7 +25,6 @@ import {
     textChanges,
     TextSpan,
     TypeChecker,
-    UnionTypeNode,
 } from "../_namespaces/ts";
 import {
     createCodeFixActionWithoutFixAll,
@@ -118,7 +117,7 @@ function addUndefinedToOptionalProperty(changes: textChanges.ChangeTracker, toAd
         const d = add.valueDeclaration;
         if (d && (isPropertySignature(d) || isPropertyDeclaration(d)) && d.type) {
             const t = factory.createUnionTypeNode([
-                ...d.type.kind === SyntaxKind.UnionType ? (d.type as UnionTypeNode).types : [d.type],
+                ...d.type.kind === SyntaxKind.UnionType ? (d.type).types : [d.type],
                 factory.createTypeReferenceNode("undefined")
             ]);
             changes.replaceNode(d.getSourceFile(), d.type, t);
