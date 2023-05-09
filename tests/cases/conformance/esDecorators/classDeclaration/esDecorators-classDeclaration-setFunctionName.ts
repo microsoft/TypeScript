@@ -19,7 +19,7 @@ declare let dec: any;
 
 @dec export default class C {}
 
-// @filename: c.ts
+// @filename: d.ts
 declare let dec: any;
 
 @dec export default class {}
