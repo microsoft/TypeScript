@@ -1758,8 +1758,6 @@ function nodeModuleNameResolverWorker(features: NodeResolutionFeatures, moduleNa
         const diagnosticState = {
             ...state,
             features: state.features & ~NodeResolutionFeatures.Exports,
-            failedLookupLocations: [],
-            affectingLocations: [],
             reportDiagnostic: noop,
         };
         const diagnosticResult = tryResolve(extensions & (Extensions.TypeScript | Extensions.Declaration), diagnosticState);

@@ -153,6 +153,7 @@ import {
     getTsBuildInfoEmitOutputFilePath,
     getTsConfigObjectLiteralExpression,
     getTsConfigPropArrayElementValue,
+    getTypesPackageName,
     HasChangedAutomaticTypeDirectiveNames,
     hasChangesInResolutions,
     hasExtension,
@@ -1505,6 +1506,9 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     let resolvedLibReferences: Map<string, LibResolution> | undefined;
     let resolvedLibProcessing: Map<string, LibResolution> | undefined;
 
+    let packageMap: Map<string, boolean> | undefined;
+
+
     // The below settings are to track if a .js file should be add to the program if loaded via searching under node_modules.
     // This works as imported modules are discovered recursively in a depth first manner, specifically:
     // - For each root file, findSourceFile is called.
@@ -1862,6 +1866,9 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         redirectTargetsMap,
         usesUriStyleNodeCoreModules,
         resolvedLibReferences,
+        getCurrentPackagesMap: () => packageMap,
+        typesPackageExists,
+        packageBundlesTypes,
         isEmittedFile,
         getConfigFileParsingDiagnostics,
         getProjectReferences,
@@ -1907,6 +1914,30 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     tracing?.pop();
 
     return program;
+
+    function getPackagesMap() {
+        if (packageMap) return packageMap;
+        packageMap = new Map();
+        // A package name maps to true when we detect it has .d.ts files.
+        // This is useful as an approximation of whether a package bundles its own types.
+        // Note: we only look at files already found by module resolution,
+        // so there may be files we did not consider.
+        files.forEach(sf => {
+            if (!sf.resolvedModules) return;
+
+            sf.resolvedModules.forEach(({ resolvedModule }) => {
+                if (resolvedModule?.packageId) packageMap!.set(resolvedModule.packageId.name, resolvedModule.extension === Extension.Dts || !!packageMap!.get(resolvedModule.packageId.name));
+            });
+        });
+        return packageMap;
+    }
+
+    function typesPackageExists(packageName: string): boolean {
+        return getPackagesMap().has(getTypesPackageName(packageName));
+    }
+    function packageBundlesTypes(packageName: string): boolean {
+        return !!getPackagesMap().get(packageName);
+    }
 
     function addResolutionDiagnostics(resolution: ResolvedModuleWithFailedLookupLocations | ResolvedTypeReferenceDirectiveWithFailedLookupLocations) {
         if (!resolution.resolutionDiagnostics?.length) return;
@@ -2536,6 +2567,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         redirectTargetsMap = oldProgram.redirectTargetsMap;
         usesUriStyleNodeCoreModules = oldProgram.usesUriStyleNodeCoreModules;
         resolvedLibReferences = oldProgram.resolvedLibReferences;
+        packageMap = oldProgram.getCurrentPackagesMap();
 
         return StructureIsReused.Completely;
     }
