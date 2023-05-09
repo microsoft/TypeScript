@@ -3407,6 +3407,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (nameNotFoundMessage) {
                 addLazyDiagnostic(() => {
                     if (!errorLocation ||
+                        errorLocation.parent.kind !== SyntaxKind.JSDocLink &&
                         !checkAndReportErrorForMissingPrefix(errorLocation, name, nameArg!) && // TODO: GH#18217
                         !checkAndReportErrorForInvalidInitializer() &&
                         !checkAndReportErrorForExtendingInterface(errorLocation) &&
@@ -45526,11 +45527,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const symbol = getIntrinsicTagSymbol(name.parent as JsxOpeningLikeElement);
                     return symbol === unknownSymbol ? undefined : symbol;
                 }
-                const result = resolveEntityName(name, meaning, /*ignoreErrors*/ false, /*dontResolveAlias*/ true, getHostSignatureFromJSDoc(name));
+                const result = resolveEntityName(name, meaning, /*ignoreErrors*/ true, /*dontResolveAlias*/ true, getHostSignatureFromJSDoc(name));
                 if (!result && isJSDoc) {
                     const container = findAncestor(name, or(isClassLike, isInterfaceDeclaration));
                     if (container) {
-                        return resolveJSDocMemberName(name, /*ignoreErrors*/ false, getSymbolOfDeclaration(container));
+                        return resolveJSDocMemberName(name, /*ignoreErrors*/ true, getSymbolOfDeclaration(container));
                     }
                 }
                 if (result && isJSDoc) {
