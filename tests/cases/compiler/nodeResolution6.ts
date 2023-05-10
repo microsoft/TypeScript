@@ -1,10 +1,10 @@
 // @module: commonjs
 // @moduleResolution: node
 
-// @filename: node_modules/a/ref.ts
+// @filename: node_modules/ref.ts
 var x = 1;
 
-// @filename: node_modules/a/index.d.ts
+// @filename: node_modules/a.d.ts
 /// <reference path="ref.ts"/>
 export declare var y;
 

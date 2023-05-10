@@ -1,6 +1,6 @@
 //// [tests/cases/compiler/nodeResolution5.ts] ////
 
-//// [index.d.ts]
+//// [a.d.ts]
 declare module "a" {
     var x: number;
 }

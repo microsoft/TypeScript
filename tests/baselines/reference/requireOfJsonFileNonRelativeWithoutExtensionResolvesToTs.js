@@ -4,17 +4,17 @@
 import f = require("f"); // should work to f.ts
 let fnumber: number = f;
 
-//// [index.json]
+//// [f.json]
 {
     "a": true,
     "b": "hello"
 }
 
-//// [index.ts]
+//// [f.ts]
 export = 10;
 
 
-//// [out/node_modules/f/index.js]
+//// [out/node_modules/f.js]
 "use strict";
 module.exports = 10;
 //// [out/projects/file1.js]

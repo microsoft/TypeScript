@@ -1,6 +1,6 @@
 //// [tests/cases/compiler/nodeResolution2.ts] ////
 
-//// [index.d.ts]
+//// [a.d.ts]
 export var x: number;
 
 //// [b.ts]

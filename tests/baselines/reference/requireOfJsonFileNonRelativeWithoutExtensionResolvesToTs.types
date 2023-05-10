@@ -6,7 +6,7 @@ let fnumber: number = f;
 >fnumber : number
 >f : 10
 
-=== /src/node_modules/f/index.ts ===
+=== /src/node_modules/f.ts ===
 
 export = 10;
 

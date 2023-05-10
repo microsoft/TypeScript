@@ -1,6 +1,6 @@
 //// [tests/cases/compiler/importShouldNotBeElidedInDeclarationEmit.ts] ////
 
-//// [index.d.ts]
+//// [umd.d.ts]
 export as namespace UMD;
 
 export type Thing = {

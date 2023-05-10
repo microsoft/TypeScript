@@ -22,7 +22,7 @@ export var y = 1;
 //// [index.d.ts]
 export var z: number;
 
-//// [index.ts]
+//// [file4.ts]
 export var z1 = 1;
 
 
@@ -36,7 +36,7 @@ exports.x = 1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = void 0;
 exports.y = 1;
-//// [index.js]
+//// [file4.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.z1 = void 0;

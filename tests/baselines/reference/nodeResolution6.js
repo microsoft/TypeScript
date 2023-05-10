@@ -3,7 +3,7 @@
 //// [ref.ts]
 var x = 1;
 
-//// [index.d.ts]
+//// [a.d.ts]
 /// <reference path="ref.ts"/>
 export declare var y;
 

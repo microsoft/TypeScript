@@ -1,6 +1,6 @@
 //// [tests/cases/compiler/cachedModuleResolution5.ts] ////
 
-//// [index.d.ts]
+//// [foo.d.ts]
 export declare let x: number
 
 //// [app.ts]
