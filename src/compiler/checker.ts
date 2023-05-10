@@ -17789,7 +17789,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function maybeCloneTypeParameter(p: TypeParameter) {
         const constraint = getConstraintOfTypeParameter(p);
-        return constraint && (isGenericObjectType(constraint) || isGenericIndexType(constraint)) ? cloneTypeParameter(p) : p;
+        return constraint && couldContainTypeVariables(constraint) ? cloneTypeParameter(p) : p;
     }
 
     function isSimpleTupleType(node: TypeNode) {
