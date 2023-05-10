@@ -3,6 +3,10 @@
 // type User = [|{| defId: 0 |}{ name: string }|];
 // declare const users: User[]
 // /*GOTO TYPE*/users
+// 
+// class CustomArray<T> extends Array<T> { immutableReverse() { return [...this].reverse() } }
+// declare const users2: CustomArray<User>
+// users2
 
 // === lib.d.ts ===
 // --- (line: 1310) skipped ---
@@ -236,6 +240,31 @@
     "containerName": "",
     "isLocal": false,
     "isAmbient": true,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToType ===
+// === /tests/cases/fourslash/goToTypeDefinition_arrayType.ts ===
+// type User = { name: string };
+// declare const users: User[]
+// users
+// 
+// <|class [|CustomArray|]<T> extends Array<T> { immutableReverse() { return [...this].reverse() } }|>
+// declare const users2: CustomArray<User>
+// /*GOTO TYPE*/users2
+
+  // === Details ===
+  [
+   {
+    "kind": "class",
+    "name": "CustomArray",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
     "unverified": false,
     "failedAliasResolution": false
    }
