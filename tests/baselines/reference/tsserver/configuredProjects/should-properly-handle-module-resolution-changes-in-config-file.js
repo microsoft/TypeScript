@@ -4,7 +4,7 @@ Creating project service
 //// [/a/b/file1.ts]
 import { T } from "module1";
 
-//// [/a/b/node_modules/module1/index.ts]
+//// [/a/b/node_modules/module1.ts]
 export interface T {}
 
 //// [/a/module1.ts]
@@ -42,11 +42,11 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 un
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	/a/b/node_modules/module1/index.ts Text-1 "export interface T {}"
+	/a/b/node_modules/module1.ts Text-1 "export interface T {}"
 	/a/b/file1.ts SVC-1-0 "import { T } from \"module1\";"
 
 
-	node_modules/module1/index.ts
+	node_modules/module1.ts
 	  Imported via "module1" from file 'file1.ts'
 	file1.ts
 	  Part of 'files' list in tsconfig.json
@@ -61,8 +61,8 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/b/file1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /a/b/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/b/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info seq  [hh:mm:ss:mss] Search path: /a/b/node_modules/module1
-Info seq  [hh:mm:ss:mss] For info: /a/b/node_modules/module1/index.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] Search path: /a/b/node_modules
+Info seq  [hh:mm:ss:mss] For info: /a/b/node_modules/module1.ts :: No config files found.
 Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 
@@ -70,7 +70,7 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /a/b/file1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] 	FileName: /a/b/node_modules/module1/index.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 	FileName: /a/b/node_modules/module1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Search path: /a
 Info seq  [hh:mm:ss:mss] For info: /a/module1.ts :: No config files found.
@@ -97,7 +97,7 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /a/b/file1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] 	FileName: /a/b/node_modules/module1/index.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 	FileName: /a/b/node_modules/module1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] 	FileName: /a/module1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
@@ -163,25 +163,21 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /a/b/file1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] 	FileName: /a/b/node_modules/module1/index.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 	FileName: /a/b/node_modules/module1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: 
 Info seq  [hh:mm:ss:mss] 	FileName: /a/module1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*,/a/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/node_modules/module1/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/node_modules/module1/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject2* WatchType: Missing file
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/module1/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/module1/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
-	/a/b/node_modules/module1/index.ts Text-1 "export interface T {}"
+	/a/b/node_modules/module1.ts Text-1 "export interface T {}"
 
 
-	index.ts
+	module1.ts
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -210,7 +206,7 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /a/b/file1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] 	FileName: /a/b/node_modules/module1/index.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 	FileName: /a/b/node_modules/module1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject2*
 Info seq  [hh:mm:ss:mss] 	FileName: /a/module1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json
@@ -218,12 +214,6 @@ After running Timeout callback:: count: 0
 
 PolledWatches::
 /a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/module1/tsconfig.json: *new*
-  {"pollingInterval":2000}
-/a/b/node_modules/module1/jsconfig.json: *new*
-  {"pollingInterval":2000}
-/a/b/node_modules/module1/node_modules/@types: *new*
   {"pollingInterval":500}
 /a/b/node_modules/node_modules/@types: *new*
   {"pollingInterval":500}
@@ -263,7 +253,7 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /a/b/file1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] 	FileName: /a/b/node_modules/module1/index.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 	FileName: /a/b/node_modules/module1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject2*
 Info seq  [hh:mm:ss:mss] 	FileName: /a/module1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json

@@ -361,7 +361,7 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                         content: 'import a from "file2"'
                     };
                     const file2: File = {
-                        path: rootFolder + "a/b/node_modules/file2/index.d.ts",
+                        path: rootFolder + "a/b/node_modules/file2.d.ts",
                         content: "export class a { }"
                     };
                     const file3: File = {

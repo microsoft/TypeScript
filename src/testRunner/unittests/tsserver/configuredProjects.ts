@@ -200,7 +200,7 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
             content: `import { T } from "module1";`
         };
         const nodeModuleFile: File = {
-            path: "/a/b/node_modules/module1/index.ts",
+            path: "/a/b/node_modules/module1.ts",
             content: `export interface T {}`
         };
         const classicModuleFile: File = {

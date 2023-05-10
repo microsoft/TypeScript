@@ -227,7 +227,7 @@ After running Timeout callback:: count: 1
 
 Before running Timeout callback:: count: 1
 3: checkOne
-//// [/a/b/node_modules/file2/index.d.ts]
+//// [/a/b/node_modules/file2.d.ts]
 export class a { }
 
 

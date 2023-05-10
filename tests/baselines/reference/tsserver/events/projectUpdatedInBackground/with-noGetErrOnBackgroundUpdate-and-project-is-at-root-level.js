@@ -225,7 +225,7 @@ Info seq  [hh:mm:ss:mss] event:
 After running Timeout callback:: count: 0
 
 Before running Timeout callback:: count: 0
-//// [/a/b/node_modules/file2/index.d.ts]
+//// [/a/b/node_modules/file2.d.ts]
 export class a { }
 
 

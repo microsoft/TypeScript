@@ -16,7 +16,7 @@ interface Array<T> { length: number; [n: number]: T; }
 //// [/a/b/file1.ts]
 import { T } from "module1";
 
-//// [/a/b/node_modules/module1/index.ts]
+//// [/a/b/node_modules/module1.ts]
 export interface T {}
 
 //// [/a/module1.ts]
@@ -34,9 +34,9 @@ export interface T {}
 /a/lib/tsc.js -w -p /a/b/tsconfig.json
 Output::
 >> Screen clear
-[[90m12:00:23 AM[0m] Starting compilation in watch mode...
+[[90m12:00:21 AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:26 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:24 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -45,17 +45,17 @@ Program options: {"moduleResolution":2,"watch":true,"project":"/a/b/tsconfig.jso
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
-/a/b/node_modules/module1/index.ts
+/a/b/node_modules/module1.ts
 /a/b/file1.ts
 
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
-/a/b/node_modules/module1/index.ts
+/a/b/node_modules/module1.ts
 /a/b/file1.ts
 
 Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
-/a/b/node_modules/module1/index.ts (used version)
+/a/b/node_modules/module1.ts (used version)
 /a/b/file1.ts (used version)
 
 FsWatches::
@@ -63,7 +63,7 @@ FsWatches::
   {}
 /a/b/file1.ts: *new*
   {}
-/a/b/node_modules/module1/index.ts: *new*
+/a/b/node_modules/module1.ts: *new*
   {}
 /a/lib/lib.d.ts: *new*
   {}
@@ -93,9 +93,9 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:30 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:28 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:36 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:34 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -126,7 +126,7 @@ FsWatches::
   {}
 
 FsWatches *deleted*::
-/a/b/node_modules/module1/index.ts:
+/a/b/node_modules/module1.ts:
   {}
 
 exitCode:: ExitStatus.undefined

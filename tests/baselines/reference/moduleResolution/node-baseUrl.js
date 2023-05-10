@@ -13,7 +13,7 @@
 //// [/root/m3/dist/typings.d.ts]
 
 
-//// [/root/node_modules/m4/index.ts]
+//// [/root/node_modules/m4.ts]
 
 
 Resolving "m1" from /root/a/b/main.ts
@@ -65,7 +65,7 @@ Resolution:: {
 Resolving "m4" from /root/a/b/main.ts
 Resolution:: {
   "resolvedModule": {
-    "resolvedFileName": "/root/node_modules/m4/index.ts",
+    "resolvedFileName": "/root/node_modules/m4.ts",
     "extension": ".ts",
     "isExternalLibraryImport": true,
     "resolvedUsingTsExtension": false
@@ -98,10 +98,7 @@ Resolution:: {
     "/root/a/node_modules/@types/m4/package.json",
     "/root/a/node_modules/@types/m4.d.ts",
     "/root/a/node_modules/@types/m4/index.d.ts",
-    "/root/node_modules/m4/package.json",
-    "/root/node_modules/m4.ts",
-    "/root/node_modules/m4.tsx",
-    "/root/node_modules/m4.d.ts"
+    "/root/node_modules/m4/package.json"
   ]
 }
 
@@ -120,7 +117,7 @@ Resolution:: {
 //// [/root/m3/dist/typings.d.ts]
 
 
-//// [/root/node_modules/m4/index.ts]
+//// [/root/node_modules/m4.ts]
 
 
 Resolving "m1" from /root/a/b/main.ts with host that doesnt have directoryExists
@@ -172,7 +169,7 @@ Resolution:: {
 Resolving "m4" from /root/a/b/main.ts with host that doesnt have directoryExists
 Resolution:: {
   "resolvedModule": {
-    "resolvedFileName": "/root/node_modules/m4/index.ts",
+    "resolvedFileName": "/root/node_modules/m4.ts",
     "extension": ".ts",
     "isExternalLibraryImport": true,
     "resolvedUsingTsExtension": false
@@ -205,9 +202,6 @@ Resolution:: {
     "/root/a/node_modules/@types/m4/package.json",
     "/root/a/node_modules/@types/m4.d.ts",
     "/root/a/node_modules/@types/m4/index.d.ts",
-    "/root/node_modules/m4/package.json",
-    "/root/node_modules/m4.ts",
-    "/root/node_modules/m4.tsx",
-    "/root/node_modules/m4.d.ts"
+    "/root/node_modules/m4/package.json"
   ]
 }
