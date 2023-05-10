@@ -143,6 +143,9 @@ Info seq  [hh:mm:ss:mss] Explicitly specified module resolution kind: 'Node10'.
 Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-webworker' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-webworker'
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-webworker.ts' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-webworker.tsx' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-webworker.d.ts' does not exist.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/node_modules/@types' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-webworker'
 Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
@@ -153,6 +156,8 @@ Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all 
 Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-webworker'
 Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-webworker' from 'node_modules' folder, target file types: JavaScript.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-webworker.js' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-webworker.jsx' does not exist.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -167,6 +172,9 @@ Info seq  [hh:mm:ss:mss] Explicitly specified module resolution kind: 'Node10'.
 Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-scripthost' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-scripthost'
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-scripthost.ts' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-scripthost.tsx' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-scripthost.d.ts' does not exist.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/node_modules/@types' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-scripthost'
 Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
@@ -177,6 +185,8 @@ Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all 
 Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-scripthost'
 Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-scripthost' from 'node_modules' folder, target file types: JavaScript.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-scripthost.js' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-scripthost.jsx' does not exist.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -187,6 +197,9 @@ Info seq  [hh:mm:ss:mss] Explicitly specified module resolution kind: 'Node10'.
 Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-es5' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-es5'
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-es5.ts' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-es5.tsx' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-es5.d.ts' does not exist.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/node_modules/@types' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-es5'
 Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
@@ -197,6 +210,8 @@ Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all 
 Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-es5'
 Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-es5' from 'node_modules' folder, target file types: JavaScript.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-es5.js' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-es5.jsx' does not exist.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -216,6 +231,9 @@ Info seq  [hh:mm:ss:mss] Explicitly specified module resolution kind: 'Node10'.
 Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom'
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-dom.ts' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-dom.tsx' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-dom.d.ts' does not exist.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/node_modules/@types' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom'
 Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
@@ -226,6 +244,8 @@ Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all 
 Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom'
 Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: JavaScript.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-dom.js' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-dom.jsx' does not exist.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -355,6 +375,9 @@ Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-dom' from 'node_modules
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom'
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-dom/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-dom.ts' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-dom.tsx' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-dom.d.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-dom/index.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-dom/index.tsx' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts' exists - use it as a name resolution result.
@@ -612,6 +635,9 @@ Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-dom' from 'node_modules
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom'
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-dom/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-dom.ts' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-dom.tsx' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-dom.d.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-dom/index.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-dom/index.tsx' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts' does not exist.
@@ -626,6 +652,8 @@ Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-do
 Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: JavaScript.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-dom.js' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-dom.jsx' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-dom/index.js' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-dom/index.jsx' does not exist.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
@@ -862,6 +890,9 @@ Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-dom' from 'node_modules
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom'
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-dom/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-dom.ts' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-dom.tsx' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-dom.d.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-dom/index.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-dom/index.tsx' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts' exists - use it as a name resolution result.
@@ -999,6 +1030,9 @@ Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-webworker' from 'node_m
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-webworker'
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-webworker/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-webworker.ts' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-webworker.tsx' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-webworker.d.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-webworker/index.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-webworker/index.tsx' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts' exists - use it as a name resolution result.
@@ -1085,6 +1119,9 @@ Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-webworker' from 'node_m
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-webworker'
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-webworker/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-webworker.ts' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-webworker.tsx' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-webworker.d.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-webworker/index.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-webworker/index.tsx' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts' does not exist.
@@ -1099,6 +1136,8 @@ Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-we
 Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-webworker' from 'node_modules' folder, target file types: JavaScript.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-webworker/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-webworker.js' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-webworker.jsx' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-webworker/index.js' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-webworker/index.jsx' does not exist.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.

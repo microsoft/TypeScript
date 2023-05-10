@@ -28,8 +28,10 @@ typerefs: {
     "node_modules/@types/typerefs/package.json",
     "node_modules/@types/typerefs/index.d.ts",
     "node_modules/typerefs/package.json",
+    "node_modules/typerefs.d.ts",
     "node_modules/typerefs/index.d.ts",
     "node_modules/@types/typerefs/package.json",
+    "node_modules/@types/typerefs.d.ts",
     "node_modules/@types/typerefs/index.d.ts"
   ]
 }
@@ -79,8 +81,10 @@ typerefs: {
     "node_modules/@types/typerefs/package.json",
     "node_modules/@types/typerefs/index.d.ts",
     "node_modules/typerefs/package.json",
+    "node_modules/typerefs.d.ts",
     "node_modules/typerefs/index.d.ts",
     "node_modules/@types/typerefs/package.json",
+    "node_modules/@types/typerefs.d.ts",
     "node_modules/@types/typerefs/index.d.ts"
   ]
 }

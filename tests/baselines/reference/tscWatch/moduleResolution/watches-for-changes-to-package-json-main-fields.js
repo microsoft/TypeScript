@@ -48,6 +48,9 @@ Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript,
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/myproject/packages/node_modules' does not exist, skipping all lookups in it.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg2/package.json'.
+File '/user/username/projects/myproject/node_modules/pkg2.ts' does not exist.
+File '/user/username/projects/myproject/node_modules/pkg2.tsx' does not exist.
+File '/user/username/projects/myproject/node_modules/pkg2.d.ts' does not exist.
 'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
@@ -163,6 +166,9 @@ Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript,
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/myproject/packages/node_modules' does not exist, skipping all lookups in it.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg2/package.json'.
+File '/user/username/projects/myproject/node_modules/pkg2.ts' does not exist.
+File '/user/username/projects/myproject/node_modules/pkg2.tsx' does not exist.
+File '/user/username/projects/myproject/node_modules/pkg2.d.ts' does not exist.
 'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
@@ -270,6 +276,9 @@ Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript,
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/myproject/packages/node_modules' does not exist, skipping all lookups in it.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg2/package.json'.
+File '/user/username/projects/myproject/node_modules/pkg2.ts' does not exist.
+File '/user/username/projects/myproject/node_modules/pkg2.tsx' does not exist.
+File '/user/username/projects/myproject/node_modules/pkg2.d.ts' does not exist.
 'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.

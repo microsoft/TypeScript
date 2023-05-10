@@ -127,6 +127,9 @@ Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-webworker' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-webworker'
+File '/home/src/projects/node_modules/@typescript/lib-webworker.ts' does not exist.
+File '/home/src/projects/node_modules/@typescript/lib-webworker.tsx' does not exist.
+File '/home/src/projects/node_modules/@typescript/lib-webworker.d.ts' does not exist.
 Directory '/home/src/projects/node_modules/@types' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-webworker'
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
@@ -137,6 +140,8 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-webworker'
 Loading module '@typescript/lib-webworker' from 'node_modules' folder, target file types: JavaScript.
 Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
+File '/home/src/projects/node_modules/@typescript/lib-webworker.js' does not exist.
+File '/home/src/projects/node_modules/@typescript/lib-webworker.jsx' does not exist.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -146,6 +151,9 @@ Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-scripthost' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-scripthost'
+File '/home/src/projects/node_modules/@typescript/lib-scripthost.ts' does not exist.
+File '/home/src/projects/node_modules/@typescript/lib-scripthost.tsx' does not exist.
+File '/home/src/projects/node_modules/@typescript/lib-scripthost.d.ts' does not exist.
 Directory '/home/src/projects/node_modules/@types' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-scripthost'
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
@@ -156,6 +164,8 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-scripthost'
 Loading module '@typescript/lib-scripthost' from 'node_modules' folder, target file types: JavaScript.
 Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
+File '/home/src/projects/node_modules/@typescript/lib-scripthost.js' does not exist.
+File '/home/src/projects/node_modules/@typescript/lib-scripthost.jsx' does not exist.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -165,6 +175,9 @@ Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-es5' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-es5'
+File '/home/src/projects/node_modules/@typescript/lib-es5.ts' does not exist.
+File '/home/src/projects/node_modules/@typescript/lib-es5.tsx' does not exist.
+File '/home/src/projects/node_modules/@typescript/lib-es5.d.ts' does not exist.
 Directory '/home/src/projects/node_modules/@types' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-es5'
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
@@ -175,6 +188,8 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-es5'
 Loading module '@typescript/lib-es5' from 'node_modules' folder, target file types: JavaScript.
 Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
+File '/home/src/projects/node_modules/@typescript/lib-es5.js' does not exist.
+File '/home/src/projects/node_modules/@typescript/lib-es5.jsx' does not exist.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -191,6 +206,9 @@ Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-dom'
+File '/home/src/projects/node_modules/@typescript/lib-dom.ts' does not exist.
+File '/home/src/projects/node_modules/@typescript/lib-dom.tsx' does not exist.
+File '/home/src/projects/node_modules/@typescript/lib-dom.d.ts' does not exist.
 Directory '/home/src/projects/node_modules/@types' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-dom'
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
@@ -201,6 +219,8 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-dom'
 Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: JavaScript.
 Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
+File '/home/src/projects/node_modules/@typescript/lib-dom.js' does not exist.
+File '/home/src/projects/node_modules/@typescript/lib-dom.jsx' does not exist.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -288,6 +308,9 @@ Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-esnext' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Directory '/home/src/projects/project4/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-esnext'
+File '/home/src/projects/node_modules/@typescript/lib-esnext.ts' does not exist.
+File '/home/src/projects/node_modules/@typescript/lib-esnext.tsx' does not exist.
+File '/home/src/projects/node_modules/@typescript/lib-esnext.d.ts' does not exist.
 Directory '/home/src/projects/node_modules/@types' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-esnext'
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
@@ -298,6 +321,8 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-esnext'
 Loading module '@typescript/lib-esnext' from 'node_modules' folder, target file types: JavaScript.
 Directory '/home/src/projects/project4/node_modules' does not exist, skipping all lookups in it.
+File '/home/src/projects/node_modules/@typescript/lib-esnext.js' does not exist.
+File '/home/src/projects/node_modules/@typescript/lib-esnext.jsx' does not exist.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.

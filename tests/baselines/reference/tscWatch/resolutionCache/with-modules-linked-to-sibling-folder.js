@@ -87,6 +87,8 @@ FsWatches::
 FsWatchesRecursive::
 /user/username/projects/myproject/linked-package: *new*
   {}
+/user/username/projects/myproject/main/node_modules: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 

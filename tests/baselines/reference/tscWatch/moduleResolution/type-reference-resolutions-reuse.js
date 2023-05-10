@@ -105,6 +105,7 @@ File name '/user/username/projects/myproject/node_modules/pkg1/require.js' has a
 File '/user/username/projects/myproject/node_modules/pkg1/require.d.ts' does not exist.
 Failed to resolve under condition 'require'.
 Exiting conditional exports.
+File '/user/username/projects/myproject/node_modules/@types/pkg1.d.ts' does not exist.
 Directory '/user/username/projects/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/node_modules' does not exist, skipping all lookups in it.

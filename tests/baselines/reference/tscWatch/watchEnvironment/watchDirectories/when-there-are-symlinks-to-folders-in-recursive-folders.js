@@ -46,6 +46,9 @@ Module resolution kind is not specified, using 'Node10'.
 Loading module 'a' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Directory '/home/user/projects/myproject/src/node_modules' does not exist, skipping all lookups in it.
 File '/home/user/projects/myproject/node_modules/a/package.json' does not exist.
+File '/home/user/projects/myproject/node_modules/a.ts' does not exist.
+File '/home/user/projects/myproject/node_modules/a.tsx' does not exist.
+File '/home/user/projects/myproject/node_modules/a.d.ts' does not exist.
 File '/home/user/projects/myproject/node_modules/a/index.ts' does not exist.
 File '/home/user/projects/myproject/node_modules/a/index.tsx' does not exist.
 File '/home/user/projects/myproject/node_modules/a/index.d.ts' exists - use it as a name resolution result.

@@ -23,7 +23,9 @@ Info seq  [hh:mm:ss:mss] Directory '/a/node_modules' does not exist, skipping al
 Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] ======== Module name 'lib' was not resolved. ========
 Info seq  [hh:mm:ss:mss] Auto discovery for typings is enabled in project '/dev/null/inferredProject1*'. Running extra resolution pass for module 'lib' using cache location '/a/cache'.
+Info seq  [hh:mm:ss:mss] File '/a/cache/node_modules/lib.d.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/a/cache/node_modules/@types/lib/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/a/cache/node_modules/@types/lib.d.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/a/cache/node_modules/@types/lib/index.d.ts' exists - use it as a name resolution result.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms

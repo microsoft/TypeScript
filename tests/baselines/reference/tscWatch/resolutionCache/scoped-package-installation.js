@@ -297,6 +297,9 @@ Module resolution kind is not specified, using 'Node10'.
 Loading module '@myapp/ts-types' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Directory '/user/username/projects/myproject/lib/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'myapp__ts-types'
+File '/user/username/projects/myproject/node_modules/@myapp/ts-types.ts' does not exist.
+File '/user/username/projects/myproject/node_modules/@myapp/ts-types.tsx' does not exist.
+File '/user/username/projects/myproject/node_modules/@myapp/ts-types.d.ts' does not exist.
 Directory '/user/username/projects/myproject/node_modules/@types' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'myapp__ts-types'
 Directory '/user/username/projects/node_modules' does not exist, skipping all lookups in it.
@@ -309,6 +312,8 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'myapp__ts-types'
 Loading module '@myapp/ts-types' from 'node_modules' folder, target file types: JavaScript.
 Directory '/user/username/projects/myproject/lib/node_modules' does not exist, skipping all lookups in it.
+File '/user/username/projects/myproject/node_modules/@myapp/ts-types.js' does not exist.
+File '/user/username/projects/myproject/node_modules/@myapp/ts-types.jsx' does not exist.
 Directory '/user/username/projects/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/node_modules' does not exist, skipping all lookups in it.
@@ -412,6 +417,9 @@ Loading module '@myapp/ts-types' from 'node_modules' folder, target file types: 
 Directory '/user/username/projects/myproject/lib/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'myapp__ts-types'
 File '/user/username/projects/myproject/node_modules/@myapp/ts-types/package.json' does not exist.
+File '/user/username/projects/myproject/node_modules/@myapp/ts-types.ts' does not exist.
+File '/user/username/projects/myproject/node_modules/@myapp/ts-types.tsx' does not exist.
+File '/user/username/projects/myproject/node_modules/@myapp/ts-types.d.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/@myapp/ts-types/index.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/@myapp/ts-types/index.tsx' does not exist.
 File '/user/username/projects/myproject/node_modules/@myapp/ts-types/index.d.ts' exists - use it as a name resolution result.

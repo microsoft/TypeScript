@@ -16,10 +16,13 @@ Resolution:: {
     "/root/src/types/lib/package.json",
     "/root/src/types/lib/index.d.ts",
     "/root/src/node_modules/lib/package.json",
+    "/root/src/node_modules/lib.d.ts",
     "/root/src/node_modules/lib/index.d.ts",
     "/root/src/node_modules/@types/lib/package.json",
+    "/root/src/node_modules/@types/lib.d.ts",
     "/root/src/node_modules/@types/lib/index.d.ts",
-    "/root/node_modules/lib/package.json"
+    "/root/node_modules/lib/package.json",
+    "/root/node_modules/lib.d.ts"
   ]
 }
 
@@ -44,9 +47,12 @@ Resolution:: {
     "/root/src/types/lib/package.json",
     "/root/src/types/lib/index.d.ts",
     "/root/src/node_modules/lib/package.json",
+    "/root/src/node_modules/lib.d.ts",
     "/root/src/node_modules/lib/index.d.ts",
     "/root/src/node_modules/@types/lib/package.json",
-    "/root/src/node_modules/@types/lib/index.d.ts"
+    "/root/src/node_modules/@types/lib.d.ts",
+    "/root/src/node_modules/@types/lib/index.d.ts",
+    "/root/node_modules/lib.d.ts"
   ],
   "affectingLocations": [
     "/root/node_modules/lib/package.json"
@@ -71,12 +77,16 @@ Resolution:: {
     "/root/src/types/lib/package.json",
     "/root/src/types/lib/index.d.ts",
     "/root/src/node_modules/lib/package.json",
+    "/root/src/node_modules/lib.d.ts",
     "/root/src/node_modules/lib/index.d.ts",
     "/root/src/node_modules/@types/lib/package.json",
+    "/root/src/node_modules/@types/lib.d.ts",
     "/root/src/node_modules/@types/lib/index.d.ts",
     "/root/node_modules/lib/package.json",
+    "/root/node_modules/lib.d.ts",
     "/root/node_modules/lib/index.d.ts",
-    "/root/node_modules/@types/lib/package.json"
+    "/root/node_modules/@types/lib/package.json",
+    "/root/node_modules/@types/lib.d.ts"
   ]
 }
 
@@ -101,11 +111,15 @@ Resolution:: {
     "/root/src/types/lib/package.json",
     "/root/src/types/lib/index.d.ts",
     "/root/src/node_modules/lib/package.json",
+    "/root/src/node_modules/lib.d.ts",
     "/root/src/node_modules/lib/index.d.ts",
     "/root/src/node_modules/@types/lib/package.json",
+    "/root/src/node_modules/@types/lib.d.ts",
     "/root/src/node_modules/@types/lib/index.d.ts",
     "/root/node_modules/lib/package.json",
-    "/root/node_modules/lib/index.d.ts"
+    "/root/node_modules/lib.d.ts",
+    "/root/node_modules/lib/index.d.ts",
+    "/root/node_modules/@types/lib.d.ts"
   ],
   "affectingLocations": [
     "/root/node_modules/@types/lib/package.json"

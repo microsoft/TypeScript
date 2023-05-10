@@ -52,14 +52,23 @@ Info seq  [hh:mm:ss:mss] ======== Resolving module 'module1' from '/user/usernam
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
 Info seq  [hh:mm:ss:mss] Loading module 'module1' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/src/node_modules/module1/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/src/node_modules/module1.ts' does not exist.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/src/node_modules/module1.tsx' does not exist.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/src/node_modules/module1.d.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/src/node_modules/module1/index.ts' exists - use it as a name resolution result.
 Info seq  [hh:mm:ss:mss] Resolving real path for '/user/username/projects/myproject/src/node_modules/module1/index.ts', result '/user/username/projects/myproject/src/node_modules/module1/index.ts'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'module1' was successfully resolved to '/user/username/projects/myproject/src/node_modules/module1/index.ts'. ========
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'module2' from '/user/username/projects/myproject/src/file1.ts'. ========
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
 Info seq  [hh:mm:ss:mss] Loading module 'module2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/src/node_modules/module2.ts' does not exist.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/src/node_modules/module2.tsx' does not exist.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/src/node_modules/module2.d.ts' does not exist.
 Info seq  [hh:mm:ss:mss] Directory '/user/username/projects/myproject/src/node_modules/@types' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/node_modules/module2/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/node_modules/module2.ts' does not exist.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/node_modules/module2.tsx' does not exist.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/node_modules/module2.d.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/node_modules/module2/index.ts' exists - use it as a name resolution result.
 Info seq  [hh:mm:ss:mss] Resolving real path for '/user/username/projects/myproject/node_modules/module2/index.ts', result '/user/username/projects/myproject/node_modules/module2/index.ts'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'module2' was successfully resolved to '/user/username/projects/myproject/node_modules/module2/index.ts'. ========

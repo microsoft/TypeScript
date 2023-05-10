@@ -155,6 +155,9 @@ Output::
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-webworker' from 'node_modules' folder, target file types: TypeScript, Declaration.
 File '/home/src/projects/node_modules/@typescript/lib-webworker/package.json' does not exist.
+File '/home/src/projects/node_modules/@typescript/lib-webworker.ts' does not exist.
+File '/home/src/projects/node_modules/@typescript/lib-webworker.tsx' does not exist.
+File '/home/src/projects/node_modules/@typescript/lib-webworker.d.ts' does not exist.
 File '/home/src/projects/node_modules/@typescript/lib-webworker/index.ts' does not exist.
 File '/home/src/projects/node_modules/@typescript/lib-webworker/index.tsx' does not exist.
 File '/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts' exists - use it as a name resolution result.
@@ -164,6 +167,9 @@ Resolving real path for '/home/src/projects/node_modules/@typescript/lib-webwork
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-scripthost' from 'node_modules' folder, target file types: TypeScript, Declaration.
 File '/home/src/projects/node_modules/@typescript/lib-scripthost/package.json' does not exist.
+File '/home/src/projects/node_modules/@typescript/lib-scripthost.ts' does not exist.
+File '/home/src/projects/node_modules/@typescript/lib-scripthost.tsx' does not exist.
+File '/home/src/projects/node_modules/@typescript/lib-scripthost.d.ts' does not exist.
 File '/home/src/projects/node_modules/@typescript/lib-scripthost/index.ts' does not exist.
 File '/home/src/projects/node_modules/@typescript/lib-scripthost/index.tsx' does not exist.
 File '/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts' exists - use it as a name resolution result.
@@ -173,6 +179,9 @@ Resolving real path for '/home/src/projects/node_modules/@typescript/lib-scripth
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-es5' from 'node_modules' folder, target file types: TypeScript, Declaration.
 File '/home/src/projects/node_modules/@typescript/lib-es5/package.json' does not exist.
+File '/home/src/projects/node_modules/@typescript/lib-es5.ts' does not exist.
+File '/home/src/projects/node_modules/@typescript/lib-es5.tsx' does not exist.
+File '/home/src/projects/node_modules/@typescript/lib-es5.d.ts' does not exist.
 File '/home/src/projects/node_modules/@typescript/lib-es5/index.ts' does not exist.
 File '/home/src/projects/node_modules/@typescript/lib-es5/index.tsx' does not exist.
 File '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts' exists - use it as a name resolution result.
@@ -182,6 +191,9 @@ Resolving real path for '/home/src/projects/node_modules/@typescript/lib-es5/ind
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
 File '/home/src/projects/node_modules/@typescript/lib-dom/package.json' does not exist.
+File '/home/src/projects/node_modules/@typescript/lib-dom.ts' does not exist.
+File '/home/src/projects/node_modules/@typescript/lib-dom.tsx' does not exist.
+File '/home/src/projects/node_modules/@typescript/lib-dom.d.ts' does not exist.
 File '/home/src/projects/node_modules/@typescript/lib-dom/index.ts' does not exist.
 File '/home/src/projects/node_modules/@typescript/lib-dom/index.tsx' does not exist.
 File '/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts' exists - use it as a name resolution result.

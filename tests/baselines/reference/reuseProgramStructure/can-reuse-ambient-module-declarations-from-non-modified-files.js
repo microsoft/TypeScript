@@ -16,10 +16,13 @@ fs: {
     "/fs.tsx",
     "/fs.d.ts",
     "/a/b/node_modules/@types/fs/package.json",
+    "/a/b/node_modules/@types/fs.d.ts",
     "/a/b/node_modules/@types/fs/index.d.ts",
     "/a/node_modules/@types/fs/package.json",
+    "/a/node_modules/@types/fs.d.ts",
     "/a/node_modules/@types/fs/index.d.ts",
     "/node_modules/@types/fs/package.json",
+    "/node_modules/@types/fs.d.ts",
     "/node_modules/@types/fs/index.d.ts",
     "/a/b/fs.js",
     "/a/b/fs.jsx",
@@ -50,10 +53,13 @@ File '/fs.ts' does not exist.
 File '/fs.tsx' does not exist.
 File '/fs.d.ts' does not exist.
 File '/a/b/node_modules/@types/fs/package.json' does not exist.
+File '/a/b/node_modules/@types/fs.d.ts' does not exist.
 File '/a/b/node_modules/@types/fs/index.d.ts' does not exist.
 File '/a/node_modules/@types/fs/package.json' does not exist.
+File '/a/node_modules/@types/fs.d.ts' does not exist.
 File '/a/node_modules/@types/fs/index.d.ts' does not exist.
 File '/node_modules/@types/fs/package.json' does not exist.
+File '/node_modules/@types/fs.d.ts' does not exist.
 File '/node_modules/@types/fs/index.d.ts' does not exist.
 File '/a/b/fs.js' does not exist.
 File '/a/b/fs.jsx' does not exist.
@@ -86,10 +92,13 @@ fs: {
     "/fs.tsx",
     "/fs.d.ts",
     "/a/b/node_modules/@types/fs/package.json",
+    "/a/b/node_modules/@types/fs.d.ts",
     "/a/b/node_modules/@types/fs/index.d.ts",
     "/a/node_modules/@types/fs/package.json",
+    "/a/node_modules/@types/fs.d.ts",
     "/a/node_modules/@types/fs/index.d.ts",
     "/node_modules/@types/fs/package.json",
+    "/node_modules/@types/fs.d.ts",
     "/node_modules/@types/fs/index.d.ts",
     "/a/b/fs.js",
     "/a/b/fs.jsx",
@@ -133,10 +142,13 @@ fs: {
     "/fs.tsx",
     "/fs.d.ts",
     "/a/b/node_modules/@types/fs/package.json",
+    "/a/b/node_modules/@types/fs.d.ts",
     "/a/b/node_modules/@types/fs/index.d.ts",
     "/a/node_modules/@types/fs/package.json",
+    "/a/node_modules/@types/fs.d.ts",
     "/a/node_modules/@types/fs/index.d.ts",
     "/node_modules/@types/fs/package.json",
+    "/node_modules/@types/fs.d.ts",
     "/node_modules/@types/fs/index.d.ts",
     "/a/b/fs.js",
     "/a/b/fs.jsx",
@@ -167,10 +179,13 @@ File '/fs.ts' does not exist.
 File '/fs.tsx' does not exist.
 File '/fs.d.ts' does not exist.
 File '/a/b/node_modules/@types/fs/package.json' does not exist.
+File '/a/b/node_modules/@types/fs.d.ts' does not exist.
 File '/a/b/node_modules/@types/fs/index.d.ts' does not exist.
 File '/a/node_modules/@types/fs/package.json' does not exist.
+File '/a/node_modules/@types/fs.d.ts' does not exist.
 File '/a/node_modules/@types/fs/index.d.ts' does not exist.
 File '/node_modules/@types/fs/package.json' does not exist.
+File '/node_modules/@types/fs.d.ts' does not exist.
 File '/node_modules/@types/fs/index.d.ts' does not exist.
 File '/a/b/fs.js' does not exist.
 File '/a/b/fs.jsx' does not exist.

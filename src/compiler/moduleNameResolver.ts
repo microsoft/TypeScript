@@ -2902,7 +2902,7 @@ function loadModuleFromSpecificNodeModulesDirectory(extensions: Extensions, modu
 
     const loader: ResolutionKindSpecificLoader = (extensions, candidate, onlyRecordFailures, state) => {
         let pathAndExtension =
-            rest && loadModuleFromFile(extensions, candidate, onlyRecordFailures, state) ||
+            (rest || !(state.features & NodeResolutionFeatures.EsmMode)) && loadModuleFromFile(extensions, candidate, onlyRecordFailures, state) ||
             loadNodeModuleFromDirectoryWorker(
                 extensions,
                 candidate,

@@ -109,8 +109,10 @@ typedefs2: {
     "/types/typedefs2/package.json",
     "/types/typedefs2/index.d.ts",
     "/node_modules/typedefs2/package.json",
+    "/node_modules/typedefs2.d.ts",
     "/node_modules/typedefs2/index.d.ts",
     "/node_modules/@types/typedefs2/package.json",
+    "/node_modules/@types/typedefs2.d.ts",
     "/node_modules/@types/typedefs2/index.d.ts"
   ]
 }

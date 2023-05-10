@@ -150,12 +150,19 @@ Resolution:: {
     "/root/generated/file6/index.tsx",
     "/root/generated/file6/index.d.ts",
     "/root/folder1/node_modules/file6/package.json",
+    "/root/folder1/node_modules/file6.ts",
+    "/root/folder1/node_modules/file6.tsx",
+    "/root/folder1/node_modules/file6.d.ts",
     "/root/folder1/node_modules/file6/index.ts",
     "/root/folder1/node_modules/file6/index.tsx",
     "/root/folder1/node_modules/file6/index.d.ts",
     "/root/folder1/node_modules/@types/file6/package.json",
+    "/root/folder1/node_modules/@types/file6.d.ts",
     "/root/folder1/node_modules/@types/file6/index.d.ts",
-    "/root/node_modules/file6/package.json"
+    "/root/node_modules/file6/package.json",
+    "/root/node_modules/file6.ts",
+    "/root/node_modules/file6.tsx",
+    "/root/node_modules/file6.d.ts"
   ]
 }
 
@@ -311,11 +318,18 @@ Resolution:: {
     "/root/generated/file6/index.tsx",
     "/root/generated/file6/index.d.ts",
     "/root/folder1/node_modules/file6/package.json",
+    "/root/folder1/node_modules/file6.ts",
+    "/root/folder1/node_modules/file6.tsx",
+    "/root/folder1/node_modules/file6.d.ts",
     "/root/folder1/node_modules/file6/index.ts",
     "/root/folder1/node_modules/file6/index.tsx",
     "/root/folder1/node_modules/file6/index.d.ts",
     "/root/folder1/node_modules/@types/file6/package.json",
+    "/root/folder1/node_modules/@types/file6.d.ts",
     "/root/folder1/node_modules/@types/file6/index.d.ts",
-    "/root/node_modules/file6/package.json"
+    "/root/node_modules/file6/package.json",
+    "/root/node_modules/file6.ts",
+    "/root/node_modules/file6.tsx",
+    "/root/node_modules/file6.d.ts"
   ]
 }

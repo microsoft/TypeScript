@@ -14,18 +14,29 @@ Resolution:: {
   },
   "failedLookupLocations": [
     "/a/b/c/d/node_modules/foo/package.json",
+    "/a/b/c/d/node_modules/foo.ts",
+    "/a/b/c/d/node_modules/foo.tsx",
+    "/a/b/c/d/node_modules/foo.d.ts",
     "/a/b/c/d/node_modules/foo/index.ts",
     "/a/b/c/d/node_modules/foo/index.tsx",
     "/a/b/c/d/node_modules/foo/index.d.ts",
     "/a/b/c/d/node_modules/@types/foo/package.json",
+    "/a/b/c/d/node_modules/@types/foo.d.ts",
     "/a/b/c/d/node_modules/@types/foo/index.d.ts",
     "/a/b/c/node_modules/foo/package.json",
+    "/a/b/c/node_modules/foo.ts",
+    "/a/b/c/node_modules/foo.tsx",
+    "/a/b/c/node_modules/foo.d.ts",
     "/a/b/c/node_modules/foo/index.ts",
     "/a/b/c/node_modules/foo/index.tsx",
     "/a/b/c/node_modules/foo/index.d.ts",
     "/a/b/c/node_modules/@types/foo/package.json",
+    "/a/b/c/node_modules/@types/foo.d.ts",
     "/a/b/c/node_modules/@types/foo/index.d.ts",
-    "/a/b/node_modules/foo/package.json"
+    "/a/b/node_modules/foo/package.json",
+    "/a/b/node_modules/foo.ts",
+    "/a/b/node_modules/foo.tsx",
+    "/a/b/node_modules/foo.d.ts"
   ]
 }
 
@@ -45,17 +56,28 @@ Resolution:: {
   },
   "failedLookupLocations": [
     "/a/b/c/d/node_modules/foo/package.json",
+    "/a/b/c/d/node_modules/foo.ts",
+    "/a/b/c/d/node_modules/foo.tsx",
+    "/a/b/c/d/node_modules/foo.d.ts",
     "/a/b/c/d/node_modules/foo/index.ts",
     "/a/b/c/d/node_modules/foo/index.tsx",
     "/a/b/c/d/node_modules/foo/index.d.ts",
     "/a/b/c/d/node_modules/@types/foo/package.json",
+    "/a/b/c/d/node_modules/@types/foo.d.ts",
     "/a/b/c/d/node_modules/@types/foo/index.d.ts",
     "/a/b/c/node_modules/foo/package.json",
+    "/a/b/c/node_modules/foo.ts",
+    "/a/b/c/node_modules/foo.tsx",
+    "/a/b/c/node_modules/foo.d.ts",
     "/a/b/c/node_modules/foo/index.ts",
     "/a/b/c/node_modules/foo/index.tsx",
     "/a/b/c/node_modules/foo/index.d.ts",
     "/a/b/c/node_modules/@types/foo/package.json",
+    "/a/b/c/node_modules/@types/foo.d.ts",
     "/a/b/c/node_modules/@types/foo/index.d.ts",
-    "/a/b/node_modules/foo/package.json"
+    "/a/b/node_modules/foo/package.json",
+    "/a/b/node_modules/foo.ts",
+    "/a/b/node_modules/foo.tsx",
+    "/a/b/node_modules/foo.d.ts"
   ]
 }
