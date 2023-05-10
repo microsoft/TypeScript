@@ -86,17 +86,31 @@ async function main() {
         });
         
         await writeTestCase(caseData, testFile.replace(rootPath, "./tsc-tests/original-tests"))
-
-        const result = compileFiles(toBeCompiled, [], {
-            declaration: "true",
-            isolatedDeclarations: "true",
-            removeComments: "false",
-        }, settings, undefined);
+        const updatedTestFileName = testFile.replace(rootPath, "./tsc-tests/updated-tests");
+        const result = (() => {
+            try {
+                return  compileFiles(toBeCompiled, [], {
+                    declaration: "true",
+                    isolatedDeclarations: "true",
+                    removeComments: "false",
+                }, settings, undefined);
+            } catch(e) {
+                return e as Error;
+            }
+        })();
+        if(result instanceof Error) {
+            fs.writeFile(updatedTestFileName, `
+================= CODE MOD ERROR ==============
+${result.message}
+${result.stack}
+`);
+            continue;
+        }
         const program = result.program!;   
         
 
 
-        for(const testFileContent of  caseData.testUnitData) {
+        for(const testFileContent of caseData.testUnitData) {
             if(!isRelevantTestFile(testFileContent)) continue;
             try {
                 const sourceFile = program.getSourceFile(testFileContent.name)!;
@@ -130,10 +144,15 @@ async function main() {
                 testFileContent.content = resultStr;
             }catch(e) {
                 console.log(`Test ${testFile} failed to transform`)
-                process.exit();
+                testFileContent.content = `
+================= CODE MOD ERROR ==============
+${e.message}
+${e.stack}
+`;
+                debugger;
             }
         }
-        await writeTestCase(caseData, testFile.replace(rootPath, "./tsc-tests/updated-tests"))
+        await writeTestCase(caseData, updatedTestFileName)
         console.log(`Ran: ${count}`);
     }
 }

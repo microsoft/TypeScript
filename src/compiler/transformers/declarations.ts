@@ -1,4 +1,5 @@
 import {
+    __String,
     AccessorDeclaration,
     addRelatedInfo,
     AllAccessorDeclarations,
@@ -6,6 +7,9 @@ import {
     append,
     ArrayBindingElement,
     arrayFrom,
+    ArrayLiteralExpression,
+    ArrowFunction,
+    AsExpression,
     AssertClause,
     BindingElement,
     BindingName,
@@ -48,10 +52,14 @@ import {
     factory,
     FileReference,
     filter,
+    findIndex,
     flatMap,
     flatten,
     forEach,
+    forEachChild,
     FunctionDeclaration,
+    FunctionExpression,
+    FunctionLikeDeclaration,
     FunctionTypeNode,
     GeneratedIdentifierFlags,
     GetAccessorDeclaration,
@@ -66,6 +74,7 @@ import {
     getLeadingCommentRangesOfNode,
     getLineAndCharacterOfPosition,
     getNameOfDeclaration,
+    getNodeId,
     getOriginalNodeId,
     getOutputPathsFor,
     getParseTreeNode,
@@ -75,6 +84,7 @@ import {
     getSetAccessorValueParameter,
     getSourceFileOfNode,
     GetSymbolAccessibilityDiagnostic,
+    getSyntacticModifierFlags,
     getTextOfNode,
     getThisParameter,
     getTrailingCommentRanges,
@@ -100,6 +110,7 @@ import {
     isBindingPattern,
     isClassDeclaration,
     isClassElement,
+    isClassLike,
     isDeclaration,
     isElementAccessExpression,
     isEntityName,
@@ -126,16 +137,24 @@ import {
     isLateVisibilityPaintedStatement,
     isLiteralExpression,
     isLiteralImportTypeNode,
+    isLiteralTypeNode,
     isMappedTypeNode,
     isMethodDeclaration,
     isMethodSignature,
     isModifier,
     isModuleDeclaration,
     isNightly,
+    isNoSubstitutionTemplateLiteral,
+    isNumericLiteral,
     isOmittedExpression,
+    isParameter,
     isPrivateIdentifier,
     isPropertyAccessExpression,
+    isPropertyAssignment,
+    isPropertyDeclaration,
+    isPropertyName,
     isPropertySignature,
+    isReturnStatement,
     isSemicolonClassElement,
     isSetAccessorDeclaration,
     isSourceFile,
@@ -148,15 +167,20 @@ import {
     isTupleTypeNode,
     isTypeAliasDeclaration,
     isTypeElement,
+    isTypeLiteralNode,
     isTypeNode,
     isTypeParameterDeclaration,
     isTypeQueryNode,
+    isTypeReferenceNode,
     isUnparsedSource,
     isVariableDeclaration,
+    KeywordTypeSyntaxKind,
     last,
     LateBoundDeclaration,
     LateVisibilityPaintedStatement,
     length,
+    LiteralExpression,
+    LiteralTypeNode,
     map,
     mapDefined,
     MethodDeclaration,
@@ -168,6 +192,7 @@ import {
     NamedDeclaration,
     NamespaceDeclaration,
     needsScopeMarker,
+    NewExpression,
     Node,
     NodeArray,
     NodeBuilderFlags,
@@ -175,17 +200,21 @@ import {
     NodeFlags,
     NodeId,
     normalizeSlashes,
+    ObjectLiteralExpression,
     OmittedExpression,
     orderedRemoveItem,
     ParameterDeclaration,
+    ParenthesizedExpression,
     parseNodeFactory,
     pathContainsNodeModules,
     pathIsRelative,
+    PrefixUnaryExpression,
     PropertyDeclaration,
     PropertySignature,
     pushIfUnique,
     removeAllComments,
     ResolutionMode,
+    ReturnStatement,
     ScriptTarget,
     SetAccessorDeclaration,
     setCommentRange,
@@ -207,12 +236,18 @@ import {
     SymbolFlags,
     SymbolTracker,
     SyntaxKind,
+    TemplateExpression,
+    TemplateHead,
+    TemplateLiteralTypeSpan,
     toFileNameLowerCase,
     toPath,
     TransformationContext,
     transformNodes,
     tryCast,
     TypeAliasDeclaration,
+    TypeAssertion,
+    TypeElement,
+    TypeLiteralNode,
     TypeNode,
     TypeParameterDeclaration,
     TypeReferenceNode,
@@ -239,7 +274,8 @@ enum NarrowBehavior {
 enum LocalTypeInfoFlags {
     None = 0,
     Fresh = 1 << 0,
-    Implicit = 1<< 1
+    Implicit = 1<< 1,
+    Invalid = 1<<2,
 }
 
 /** @internal */
@@ -359,6 +395,7 @@ export function transformDeclarations(context: TransformationContext) {
 
     function trackReferencedAmbientModule(node: ModuleDeclaration, symbol: Symbol) {
         // If it is visible via `// <reference types="..."/>`, then we should just use that
+        // TODO: isolatedDeclarations: see about .All flag
         const directives = resolver.getTypeReferenceDirectivesForSymbol(symbol, SymbolFlags.All);
         if (length(directives)) {
             return recordTypeReferenceDirectivesIfNecessary(directives);
@@ -800,26 +837,26 @@ export function transformDeclarations(context: TransformationContext) {
         return factory.createTypeReferenceNode("invalid");
     }
 
-    type LocalTypeInfo = { typeNode: TypeNode, flags: LocalTypeInfoFlags };
+    type LocalTypeInfo = { typeNode: TypeNode, sourceNode?: Node, flags: LocalTypeInfoFlags };
    
     function localInference(node: Node, isConstContext: NarrowBehavior = NarrowBehavior.None): LocalTypeInfo {
         const nextIsConst = isConstContext & NarrowBehavior.NotKeepLiterals;
         switch(node.kind) {
             case SyntaxKind.ParenthesizedExpression:
-                return regular(getWidenedType(localInference((node as ParenthesizedExpression).expression, isConstContext)));
+                return regular(getWidenedType(localInference((node as ParenthesizedExpression).expression, isConstContext)), node);
             case SyntaxKind.Identifier:
                 if((node as Identifier).escapedText === "undefined") {
                     if(strictNullChecks) {
-                        return regular(factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword));
+                        return regular(factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword), node);
                     } else {
-                        return regular(factory.createKeywordTypeNode(SyntaxKind.AnyKeyword), LocalTypeInfoFlags.Implicit);
+                        return regular(factory.createKeywordTypeNode(SyntaxKind.AnyKeyword), node, LocalTypeInfoFlags.Implicit);
                     }
                 }
             case SyntaxKind.NullKeyword:
                 if(strictNullChecks) {
-                    return regular(factory.createLiteralTypeNode(factory.createNull()));
+                    return regular(factory.createLiteralTypeNode(factory.createNull()), node);
                 } else {
-                    return regular(factory.createKeywordTypeNode(SyntaxKind.AnyKeyword), LocalTypeInfoFlags.Implicit);
+                    return regular(factory.createKeywordTypeNode(SyntaxKind.AnyKeyword), node, LocalTypeInfoFlags.Implicit);
                 }
             case SyntaxKind.NewExpression:
                 const newExpr = node as NewExpression;
@@ -829,18 +866,22 @@ export function transformDeclarations(context: TransformationContext) {
                         visitNode(newExpr.expression, visitDeclarationSubtree, isIdentifier)!,
                         visitNodes(newExpr.typeArguments, visitDeclarationSubtree, isTypeNode)
                     );
-                    return regular(visitNode(typeNode, visitDeclarationSubtree, isTypeNode) ??
-                        makeInvalidTypeAndReport(node));
+                    const visitedTypeNode = visitNode(typeNode, visitDeclarationSubtree, isTypeNode)
+                    if(visitedTypeNode) {
+                        return regular(visitedTypeNode, node);
+                    }
+                    return invalid(node);
                 }
-                return regular(makeInvalidTypeAndReport(node));
+                return invalid(node);
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.FunctionExpression:
                 const fnNode = node as FunctionExpression | ArrowFunction;
-                return regular(factory.createFunctionTypeNode(
+                const fnTypeNode = factory.createFunctionTypeNode(
                     visitNodes(fnNode.typeParameters, visitDeclarationSubtree, isTypeParameterDeclaration),
                     fnNode.parameters.map(p => ensureParameter(p)),
                     inferReturnType(fnNode).typeNode,
-                ))
+                );
+                return regular(fnTypeNode, node)
             case SyntaxKind.TypeAssertionExpression:
             case SyntaxKind.AsExpression:
                 const asExpression = node as AsExpression | TypeAssertion;
@@ -852,9 +893,9 @@ export function transformDeclarations(context: TransformationContext) {
                         (isNoSubstitutionTemplateLiteral(type.literal) || isStringLiteral(type.literal))) {
                         return regular(factory.createLiteralTypeNode(
                             normalizeLiteralValue(type.literal)
-                        ));
+                        ), node);
                     }
-                    return regular(type);
+                    return regular(type, node);
                 }
             case SyntaxKind.PrefixUnaryExpression:
                 const prefixOp = node as PrefixUnaryExpression;
@@ -885,6 +926,7 @@ export function transformDeclarations(context: TransformationContext) {
                         if(isLiteralTypeNode(typeNode)) {
                             let oldText = prevSpan.kind === SyntaxKind.TemplateHead ? prevSpan.text : prevSpan.literal.text;
                             let newText= oldText;
+                            console.log(newText);//wip
                         } else {
                             const literalSpan = factory.createTemplateLiteralTypeSpan(
                                 typeNode,
@@ -895,7 +937,7 @@ export function transformDeclarations(context: TransformationContext) {
                         }
 
                     }
-                    return regular(factory.createTemplateLiteralType(templateExpression.head, templateSpans));
+                    return regular(factory.createTemplateLiteralType(templateExpression.head, templateSpans), node);
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.StringLiteral: 
                 return literal(node, SyntaxKind.StringKeyword, isConstContext);
@@ -918,8 +960,8 @@ export function transformDeclarations(context: TransformationContext) {
                     const tupleType = factory.createTupleTypeNode(
                         elementTypesInfo.map(lti => lti.typeNode)
                     );
-                    tupleType.emitNode = { flags: 1 };
-                    return regular(factory.createTypeOperatorNode(SyntaxKind.ReadonlyKeyword, tupleType));
+                    tupleType.emitNode = { flags: 1, autoGenerate: undefined, internalFlags: 0 };
+                    return regular(factory.createTypeOperatorNode(SyntaxKind.ReadonlyKeyword, tupleType), node);
                 } else {
                     let elementTypes = deduplicateUnion(elementTypesInfo);
                     let simplifiedUnion = collapseLiteralTypesIntoBaseTypes(elementTypes);
@@ -931,7 +973,7 @@ export function transformDeclarations(context: TransformationContext) {
                         itemType = simplifiedUnion.length === 1? simplifiedUnion[0]: factory.createUnionTypeNode(simplifiedUnion);
                     }
 
-                    return regular(factory.createArrayTypeNode(itemType));
+                    return regular(factory.createArrayTypeNode(itemType), node);
                 }       
             case SyntaxKind.ObjectLiteralExpression:
                 const objectLiteral = node as ObjectLiteralExpression
@@ -972,21 +1014,24 @@ export function transformDeclarations(context: TransformationContext) {
                             localInference(prop.initializer, nextIsConst).typeNode
                         ))
                     } else {
-                        return regular(makeInvalidTypeAndReport(prop));
+                        return invalid(prop);
                     }                    
                 }
                 return regular(factory.createTypeLiteralNode(
                     properties
-                ))
+                ), objectLiteral)
         }
         
-        return regular(makeInvalidTypeAndReport(node));
+        return regular(makeInvalidTypeAndReport(node), node);
     }
-    function fresh(typeNode: TypeNode, flags = LocalTypeInfoFlags.None) {
-        return { typeNode, flags: flags | LocalTypeInfoFlags.Fresh }
+    function invalid(node: Node): LocalTypeInfo {
+        return { typeNode: makeInvalidTypeAndReport(node), flags: LocalTypeInfoFlags.Invalid, sourceNode: node }
     }
-    function regular(typeNode: TypeNode, flags = LocalTypeInfoFlags.None) {
-        return { typeNode, flags }
+    function fresh(typeNode: TypeNode, sourceNode: Node, flags = LocalTypeInfoFlags.None): LocalTypeInfo {
+        return { typeNode, flags: flags | LocalTypeInfoFlags.Fresh, sourceNode }
+    }
+    function regular(typeNode: TypeNode, sourceNode: Node, flags = LocalTypeInfoFlags.None): LocalTypeInfo {
+        return { typeNode, flags, sourceNode }
     }
     function normalizeLiteralValue(literal: LiteralExpression) {
         switch(literal.kind) {
@@ -1006,10 +1051,12 @@ export function transformDeclarations(context: TransformationContext) {
         if(narrowBehavior) {
             return fresh(factory.createLiteralTypeNode(
                 normalizeLiteralValue(node as LiteralExpression)
-            ))
+            ), node)
         } else {
-            return fresh(typeof baseType === "number" ? 
-                factory.createKeywordTypeNode(baseType) : factory.createTypeReferenceNode(baseType));
+            return fresh(
+                typeof baseType === "number" ? factory.createKeywordTypeNode(baseType) : factory.createTypeReferenceNode(baseType), 
+                node
+            );
         }
     }
     function isConst(typeReference: TypeReferenceNode) {
@@ -1026,7 +1073,7 @@ export function transformDeclarations(context: TransformationContext) {
 
     function getMemberKey(member:MethodSignature | PropertySignature ) {
         if(!isIdentifier(member.name)) {
-            makeInvalidTypeAndReport(member);
+            makeInvalidTypeAndReport(member.name);
             return undefined;
         }
         return member.name.escapedText;
@@ -1184,7 +1231,7 @@ export function transformDeclarations(context: TransformationContext) {
         }>
         let union: LocalTypeInfo[] = [];
         for(const node of nodes) {
-            const existing = union.find(u => typesEqual(node.typeNode, u.typeNode));
+            const existing = union.find(u => typesEqual(node.typeNode, node.sourceNode, u.typeNode, u.sourceNode));
             if(existing === undefined) {
                 union.push(node);
             } else {
@@ -1193,7 +1240,7 @@ export function transformDeclarations(context: TransformationContext) {
         }
         return union
 
-        function getTypeInfo(type:TypeLiteralNode) {
+        function getTypeInfo(type:TypeLiteralNode, errorTarget: Node | undefined) {
             const typeNodeId = getNodeId(type);
             let typeInfo = typeInfoCache.get(typeNodeId);
             if(typeInfo) return typeInfo;
@@ -1208,18 +1255,18 @@ export function transformDeclarations(context: TransformationContext) {
                 if(isMethod || isProp) {
                     const memberKey = getMemberKey(member)
                     if (memberKey === undefined) {
-                        makeInvalidTypeAndReport(member);
+                        makeInvalidTypeAndReport(errorTarget ?? member);
                         break;  
                     }
                     typeInfo.members.set(memberKey, member);
                 } else {
-                    makeInvalidTypeAndReport(member);
+                    makeInvalidTypeAndReport(errorTarget ?? member);
                 }
             }
             typeInfoCache.set(typeNodeId, typeInfo);
             return typeInfo;
         }
-        function typesEqual(a?: TypeNode, b?: TypeNode) {
+        function typesEqual(a: TypeNode | undefined, aErrorTarget:Node | undefined, b: TypeNode | undefined, bErrorTarget:Node | undefined) {
             if (a === undefined || b === undefined) return a === b;
             if (a.kind !== b.kind) return false;
             switch(a.kind) {
@@ -1264,12 +1311,24 @@ export function transformDeclarations(context: TransformationContext) {
                     }
                 }
             }
-            if(isIdentifier(a) && isIdentifier(b)) {
-                return a.escapedText === b.escapedText;
+            if(isTypeReferenceNode(a) && isTypeReferenceNode(b)) {
+                let aTypeName = a.typeName;
+                let bTypeName = b.typeName;
+                while(true) {
+                    if(aTypeName.kind === SyntaxKind.QualifiedName && bTypeName.kind === SyntaxKind.QualifiedName) {
+                        if(aTypeName.right.escapedText !== bTypeName.right.escapedText) return false;
+                        aTypeName = aTypeName.left;
+                        bTypeName = bTypeName.left;
+                    } else if(aTypeName.kind === SyntaxKind.Identifier && bTypeName.kind === SyntaxKind.Identifier) {
+                        return aTypeName.escapedText === bTypeName.escapedText;
+                    } else {
+                        return false;
+                    }
+                }
             }
             if(isTypeLiteralNode(a) && isTypeLiteralNode(b)) {
                 if(a.members.length !== b.members.length) return false;
-                let aTypeInfo = getTypeInfo(a)
+                let aTypeInfo = getTypeInfo(a, aErrorTarget);
                 if(!aTypeInfo) return false;
 
                 for(const bMember of b.members) {
@@ -1278,7 +1337,7 @@ export function transformDeclarations(context: TransformationContext) {
                     if(bIsMethod || bIsProp) {
                         const memberKey = getMemberKey(bMember);
                         if (memberKey === undefined) {
-                            makeInvalidTypeAndReport(bMember);
+                            makeInvalidTypeAndReport(bErrorTarget ?? bMember);
                             break;  
                         }
                         const aMember = aTypeInfo.members.get(memberKey);
@@ -1286,11 +1345,11 @@ export function transformDeclarations(context: TransformationContext) {
                         if((aMember.questionToken !== undefined) !== (bMember.questionToken !== undefined)) return false;
                         if (getSyntacticModifierFlags(aMember) != getSyntacticModifierFlags(bMember)) return false;
                         if(bIsProp && isPropertySignature(aMember)) {
-                            if(!typesEqual(aMember.type, bMember.type)) {
+                            if(!typesEqual(aMember.type, aErrorTarget, bMember.type, bErrorTarget)) {
                                 return false;
                             }
                         } else  if(bIsMethod && isMethodSignature(aMember)) {
-                            if(!typesEqual(aMember.type,bMember.type)) {
+                            if(!typesEqual(aMember.type, aErrorTarget,bMember.type, bErrorTarget)) {
                                 return false;
                             }
                             if(aMember.parameters.length !== b.members.length) {
@@ -1298,13 +1357,17 @@ export function transformDeclarations(context: TransformationContext) {
                             }
                         }
                     } else {
-                        makeInvalidTypeAndReport(bMember);
+                        makeInvalidTypeAndReport(bErrorTarget ?? bMember);
                     }
                 }
                 return true;
             }else {
-                reportIsolatedDeclarationError(a);
-                reportIsolatedDeclarationError(b);
+                if(aErrorTarget) {
+                    reportIsolatedDeclarationError(aErrorTarget);
+                }
+                if(bErrorTarget) {
+                    reportIsolatedDeclarationError(bErrorTarget);
+                }
             }                
         }
     }
@@ -1417,24 +1480,28 @@ export function transformDeclarations(context: TransformationContext) {
     function inferReturnType(node: FunctionLikeDeclaration) {
         const returnStatements: ReturnStatement[] = [];
         if(node.type) {
-            return regular(visitType(node.type, node));
+            return regular(visitType(node.type, node), node);
         }
         if(!node.body) {
-            return regular(makeInvalidTypeAndReport(node));
+            return regular(makeInvalidTypeAndReport(node), node);
         }
         collectReturnExpressions(node.body, returnStatements);
         if(returnStatements.length === 0) {
-            return regular(factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword));
+            return regular(factory.createKeywordTypeNode(SyntaxKind.VoidKeyword), node);
         }
 
-        let returnStatementInference = returnStatements.map((r) => r.expression? localInference(r.expression, NarrowBehavior.KeepLiterals): regular(factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword)));
+        let returnStatementInference = returnStatements.map((r) => {
+            return r.expression? 
+                localInference(r.expression, NarrowBehavior.KeepLiterals): 
+                regular(factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword), r)
+        });
         returnStatementInference = deduplicateUnion(returnStatementInference)
         const unionConstituents = returnStatementInference.length === 1 ? 
             [getWidenedType(returnStatementInference[0])] :
             collapseLiteralTypesIntoBaseTypes(returnStatementInference);
         normalizeObjectUnion(unionConstituents);
 
-        return regular(unionConstituents.length === 1? unionConstituents[0]: factory.createUnionTypeNode(unionConstituents));
+        return regular(unionConstituents.length === 1? unionConstituents[0]: factory.createUnionTypeNode(unionConstituents), node);
 
         function collectReturnExpressions(node: Node, result: ReturnStatement[]) {
             forEachChild(node, child => {
