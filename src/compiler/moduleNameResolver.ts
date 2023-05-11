@@ -1793,6 +1793,12 @@ function nodeModuleNameResolverWorker(features: NodeResolutionFeatures, moduleNa
                 resolved = loadModuleFromSelfNameReference(extensions, moduleName, containingDirectory, state, cache, redirectedReference);
             }
             if (!resolved) {
+                if (moduleName.indexOf(":") > -1) {
+                    if (traceEnabled) {
+                        trace(host, Diagnostics.Skipping_module_0_that_looks_like_an_absolute_URI_target_file_types_Colon_1, moduleName, formatExtensions(extensions));
+                    }
+                    return undefined;
+                }
                 if (traceEnabled) {
                     trace(host, Diagnostics.Loading_module_0_from_node_modules_folder_target_file_types_Colon_1, moduleName, formatExtensions(extensions));
                 }
@@ -2894,7 +2900,7 @@ function loadModuleFromSpecificNodeModulesDirectory(extensions: Extensions, modu
 
     const loader: ResolutionKindSpecificLoader = (extensions, candidate, onlyRecordFailures, state) => {
         let pathAndExtension =
-            loadModuleFromFile(extensions, candidate, onlyRecordFailures, state) ||
+            (rest || !(state.features & NodeResolutionFeatures.EsmMode)) && loadModuleFromFile(extensions, candidate, onlyRecordFailures, state) ||
             loadNodeModuleFromDirectoryWorker(
                 extensions,
                 candidate,
@@ -2935,7 +2941,6 @@ function loadModuleFromSpecificNodeModulesDirectory(extensions: Extensions, modu
             return fromPaths.value;
         }
     }
-
     return loader(extensions, candidate, !nodeModulesDirectoryExists, state);
 }
 

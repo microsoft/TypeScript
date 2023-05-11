@@ -45,3 +45,4 @@ if (x) {
     "b": "hello"
 >"b" : Symbol("b", Decl(c.json, 1, 14))
 }
+
