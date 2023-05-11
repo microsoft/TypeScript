@@ -371,13 +371,25 @@ const typesWithUnwrappedTypeArguments = new Set([
     "Omit",
 ]);
 
-function shouldUnwrapFirstTypeArgumentTypeDefinition(typeChecker: TypeChecker, type: TypeReference): boolean {
+function shouldUnwrapFirstTypeArgumentTypeDefinitionFromTypeReference(typeChecker: TypeChecker, type: TypeReference): boolean {
     const referenceName = type.symbol.name;
     if (!typesWithUnwrappedTypeArguments.has(referenceName)) {
         return false;
     }
     const globalType = typeChecker.resolveName(referenceName, /*location*/ undefined, SymbolFlags.Type, /*excludeGlobals*/ false);
     return !!globalType && globalType === type.target.symbol;
+}
+
+function shouldUnwrapFirstTypeArgumentTypeDefinitionFromAlias(typeChecker: TypeChecker, type: Type): boolean {
+    if (!type.aliasSymbol) {
+        return false;
+    }
+    const referenceName = type.aliasSymbol.name;
+    if (!typesWithUnwrappedTypeArguments.has(referenceName)) {
+        return false;
+    }
+    const globalType = typeChecker.resolveName(referenceName, /*location*/ undefined, SymbolFlags.Type, /*excludeGlobals*/ false);
+    return !!globalType && globalType === type.aliasSymbol;
 }
 
 /// Goto type
@@ -404,8 +416,11 @@ export function getTypeDefinitionAtPosition(typeChecker: TypeChecker, sourceFile
         [typeAtLocation, definitionFromType(typeAtLocation, typeChecker, node, failedAliasResolution)];
 
     const firstTypeArgumentDefinition = !!(getObjectFlags(resolvedType) & ObjectFlags.Reference) &&
-        shouldUnwrapFirstTypeArgumentTypeDefinition(typeChecker, resolvedType as TypeReference) ?
+        shouldUnwrapFirstTypeArgumentTypeDefinitionFromTypeReference(typeChecker, resolvedType as TypeReference) &&
+        (resolvedType as TypeReference).resolvedTypeArguments ?
         definitionFromType((resolvedType as TypeReference).resolvedTypeArguments![0], typeChecker, node, failedAliasResolution) :
+        shouldUnwrapFirstTypeArgumentTypeDefinitionFromAlias(typeChecker, resolvedType) && resolvedType.aliasTypeArguments ?
+        definitionFromType(resolvedType.aliasTypeArguments[0], typeChecker, node, failedAliasResolution) :
         [];
 
     return typeDefinitions.length ? [...firstTypeArgumentDefinition, ...typeDefinitions]

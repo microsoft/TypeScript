@@ -1,10 +1,15 @@
 // === goToType ===
+// === /tests/cases/fourslash/goToTypeDefinition_Pick.ts ===
+// type User = [|{| defId: 0 |}{ id: number; name: string; }|];
+// declare const user: Pick<User, "name">
+// /*GOTO TYPE*/user
+
 // === lib.d.ts ===
 // --- (line: 1588) skipped ---
 // /**
 //  * From T, pick a set of properties whose keys are in the union K
 //  */
-// type Pick<T, K extends keyof T> = [|{
+// type Pick<T, K extends keyof T> = [|{| defId: 1 |}{
 //     [P in K]: T[P];
 // }|];
 // 
@@ -12,14 +17,20 @@
 //  * Construct a type with a set of properties K of type T
 // --- (line: 1598) skipped ---
 
-// === /tests/cases/fourslash/goToTypeDefinition_Pick.ts ===
-// type User = { id: number; name: string; };
-// declare const user: Pick<User, "name">
-// /*GOTO TYPE*/user
-
   // === Details ===
   [
    {
+    "defId": 0,
+    "kind": "",
+    "name": "__type",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 1,
     "kind": "",
     "name": "__type",
     "containerName": "",
