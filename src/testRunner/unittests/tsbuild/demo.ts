@@ -42,6 +42,26 @@ describe("unittests:: tsbuild:: on demo project", () => {
   ]`
         )
     });
+
+    verifyTsc({
+        scenario: "demo",
+        subScenario: "in explicit circular branch reports no error",
+        fs: () => projFs,
+        commandLineArgs: ["--b", "/src/tsconfig.json", "--verbose"],
+        modifyFs: fs => replaceText(
+            fs,
+            "/src/core/tsconfig.json",
+            "}",
+            `},
+  "references": [
+    {
+      "path": "../zoo",
+      "circular": true
+    }
+  ]`
+        )
+    });
+
     verifyTsc({
         scenario: "demo",
         subScenario: "in bad-ref branch reports the error about files not in rootDir at the import location",

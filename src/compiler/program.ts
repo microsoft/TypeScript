@@ -500,7 +500,8 @@ export function createCompilerHostWorker(options: CompilerOptions, setParentNode
         realpath,
         readDirectory: (path, extensions, include, exclude, depth) => system.readDirectory(path, extensions, include, exclude, depth),
         createDirectory: d => system.createDirectory(d),
-        createHash: maybeBind(system, system.createHash)
+        createHash: maybeBind(system, system.createHash),
+        useSourceOfProjectReferenceRedirect: (projectReferences) => projectReferences?.some(x => x.circular) || false,
     };
     return compilerHost;
 }
@@ -1671,7 +1672,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     let mapFromFileToProjectReferenceRedirects: Map<Path, Path> | undefined;
     let mapFromToProjectReferenceRedirectSource: Map<Path, SourceOfProjectReferenceRedirect> | undefined;
 
-    const useSourceOfProjectReferenceRedirect = !!host.useSourceOfProjectReferenceRedirect?.() &&
+    const useSourceOfProjectReferenceRedirect = !!host.useSourceOfProjectReferenceRedirect?.(projectReferences) &&
         !options.disableSourceOfProjectReferenceRedirect;
     const { onProgramCreateComplete, fileExists, directoryExists } = updateHostForUseSourceOfProjectReferenceRedirect({
         compilerHost: host,

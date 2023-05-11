@@ -767,6 +767,7 @@ export function createCompilerHostFromProgramHost(host: ProgramHost<any>, getCom
         createHash: maybeBind(host, host.createHash),
         readDirectory: maybeBind(host, host.readDirectory),
         storeFilesChangingSignatureDuringEmit: host.storeFilesChangingSignatureDuringEmit,
+        useSourceOfProjectReferenceRedirect: (projectReferences) => projectReferences?.some(x => x.circular) || false,
     };
     return compilerHost;
 }

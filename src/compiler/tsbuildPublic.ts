@@ -631,6 +631,9 @@ function createBuildOrder<T extends BuilderProgram>(state: SolutionBuilderState<
         const parsed = parseConfigFile(state, configFileName, projPath);
         if (parsed && parsed.projectReferences) {
             for (const ref of parsed.projectReferences) {
+                if (ref.circular) {
+                    continue;
+                }
                 const resolvedRefPath = resolveProjectName(state, ref.path);
                 visit(resolvedRefPath, inCircularContext || ref.circular);
             }

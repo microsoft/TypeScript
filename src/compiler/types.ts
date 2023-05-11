@@ -7820,7 +7820,7 @@ export interface CompilerHost extends ModuleResolutionHost {
     /** @internal */ hasChangedAutomaticTypeDirectiveNames?: HasChangedAutomaticTypeDirectiveNames;
     createHash?(data: string): string;
     getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
-    /** @internal */ useSourceOfProjectReferenceRedirect?(): boolean;
+    /** @internal */ useSourceOfProjectReferenceRedirect?(projectReferences: readonly ProjectReference[] | undefined): boolean;
 
     // TODO: later handle this in better way in builder host instead once the api for tsbuild finalizes and doesn't use compilerHost as base
     /** @internal */createDirectory?(directory: string): void;
