@@ -68,10 +68,13 @@ import {
     isPropertyName,
     isRightSideOfPropertyAccess,
     isStaticModifier,
+    isTypeAliasDeclaration,
+    isTypeReferenceNode,
     isVariableDeclaration,
     last,
     map,
     mapDefined,
+    MappedType,
     ModifierFlags,
     moveRangePastModifiers,
     Node,
@@ -392,6 +395,29 @@ function shouldUnwrapFirstTypeArgumentTypeDefinitionFromAlias(typeChecker: TypeC
     return !!globalType && globalType === type.aliasSymbol;
 }
 
+function getFirstTypeArgumentDefinitions(typeChecker: TypeChecker, type: Type, node: Node, failedAliasResolution: boolean | undefined): readonly DefinitionInfo[] {
+    if (!!(getObjectFlags(type) & ObjectFlags.Reference) && shouldUnwrapFirstTypeArgumentTypeDefinitionFromTypeReference(typeChecker, type as TypeReference)) {
+        return definitionFromType(typeChecker.getTypeArguments(type as TypeReference)[0], typeChecker, node, failedAliasResolution);
+    }
+    if (shouldUnwrapFirstTypeArgumentTypeDefinitionFromAlias(typeChecker, type) && type.aliasTypeArguments) {
+        return definitionFromType(type.aliasTypeArguments[0], typeChecker, node, failedAliasResolution);
+    }
+
+    if (
+        (getObjectFlags(type) & ObjectFlags.Mapped) &&
+        (type as MappedType).target &&
+        shouldUnwrapFirstTypeArgumentTypeDefinitionFromAlias(typeChecker, (type as MappedType).target!)
+    ) {
+        const declaration = type.aliasSymbol?.declarations?.[0];
+
+        if (declaration && isTypeAliasDeclaration(declaration) && isTypeReferenceNode(declaration.type) && declaration.type.typeArguments) {
+            return definitionFromType(typeChecker.getTypeAtLocation(declaration.type.typeArguments[0]), typeChecker, node, failedAliasResolution);
+        }
+    }
+
+    return [];
+}
+
 /// Goto type
 /** @internal */
 export function getTypeDefinitionAtPosition(typeChecker: TypeChecker, sourceFile: SourceFile, position: number): readonly DefinitionInfo[] | undefined {
@@ -415,14 +441,7 @@ export function getTypeDefinitionAtPosition(typeChecker: TypeChecker, sourceFile
         [returnType, fromReturnType] :
         [typeAtLocation, definitionFromType(typeAtLocation, typeChecker, node, failedAliasResolution)];
 
-    const firstTypeArgumentDefinition = !!(getObjectFlags(resolvedType) & ObjectFlags.Reference) &&
-        shouldUnwrapFirstTypeArgumentTypeDefinitionFromTypeReference(typeChecker, resolvedType as TypeReference) ?
-        definitionFromType(typeChecker.getTypeArguments(resolvedType as TypeReference)[0], typeChecker, node, failedAliasResolution) :
-        shouldUnwrapFirstTypeArgumentTypeDefinitionFromAlias(typeChecker, resolvedType) && resolvedType.aliasTypeArguments ?
-        definitionFromType(resolvedType.aliasTypeArguments[0], typeChecker, node, failedAliasResolution) :
-        [];
-
-    return typeDefinitions.length ? [...firstTypeArgumentDefinition, ...typeDefinitions]
+    return typeDefinitions.length ? [...getFirstTypeArgumentDefinitions(typeChecker, resolvedType, node, failedAliasResolution), ...typeDefinitions]
         : !(symbol.flags & SymbolFlags.Value) && symbol.flags & SymbolFlags.Type ? getDefinitionFromSymbol(typeChecker, skipAlias(symbol, typeChecker), node, failedAliasResolution)
             : undefined;
 }
