@@ -4,8 +4,12 @@
 //// declare const users: User[]
 //// /*reference*/users
 ////
-//// class CustomArray<T> extends Array<T> { immutableReverse() { return [...this].reverse() } }
-//// declare const users2: CustomArray<User>
+//// type UsersArr = Array<User>
+//// declare const users2: UsersArr
 //// /*reference2*/users2
+////
+//// class CustomArray<T> extends Array<T> { immutableReverse() { return [...this].reverse() } }
+//// declare const users3: CustomArray<User>
+//// /*reference3*/users3
 
-verify.baselineGoToType("reference", "reference2");
+verify.baselineGoToType("reference", "reference2", "reference3");

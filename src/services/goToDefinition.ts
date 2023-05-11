@@ -416,9 +416,8 @@ export function getTypeDefinitionAtPosition(typeChecker: TypeChecker, sourceFile
         [typeAtLocation, definitionFromType(typeAtLocation, typeChecker, node, failedAliasResolution)];
 
     const firstTypeArgumentDefinition = !!(getObjectFlags(resolvedType) & ObjectFlags.Reference) &&
-        shouldUnwrapFirstTypeArgumentTypeDefinitionFromTypeReference(typeChecker, resolvedType as TypeReference) &&
-        (resolvedType as TypeReference).resolvedTypeArguments ?
-        definitionFromType((resolvedType as TypeReference).resolvedTypeArguments![0], typeChecker, node, failedAliasResolution) :
+        shouldUnwrapFirstTypeArgumentTypeDefinitionFromTypeReference(typeChecker, resolvedType as TypeReference) ?
+        definitionFromType(typeChecker.getTypeArguments(resolvedType as TypeReference)[0], typeChecker, node, failedAliasResolution) :
         shouldUnwrapFirstTypeArgumentTypeDefinitionFromAlias(typeChecker, resolvedType) && resolvedType.aliasTypeArguments ?
         definitionFromType(resolvedType.aliasTypeArguments[0], typeChecker, node, failedAliasResolution) :
         [];
