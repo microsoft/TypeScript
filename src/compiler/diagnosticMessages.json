@@ -4917,6 +4917,10 @@
         "category": "Message",
         "code": 6163
     },
+    "Skipping module '{0}' that looks like an absolute URI, target file types: {1}.": {
+        "category": "Message",
+        "code": 6164
+    },
     "Do not truncate error messages.": {
         "category": "Message",
         "code": 6165
