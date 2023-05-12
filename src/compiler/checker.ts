@@ -34515,31 +34515,35 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkAssertionWorker(node: JSDocTypeAssertion | AssertionExpression, checkMode: CheckMode | undefined) {
-        let type: TypeNode;
+        let typeNode: TypeNode;
         let expression: Expression;
         switch (node.kind) {
             case SyntaxKind.AsExpression:
             case SyntaxKind.TypeAssertionExpression:
-                type = node.type;
+                typeNode = node.type;
                 expression = node.expression;
                 break;
             case SyntaxKind.ParenthesizedExpression:
-                type = getJSDocTypeAssertionType(node);
+                typeNode = getJSDocTypeAssertionType(node);
                 expression = node.expression;
                 break;
         }
         const exprType = checkExpression(expression, checkMode);
-        if (isConstTypeReference(type)) {
+        if (isConstTypeReference(typeNode)) {
             if (!isValidConstAssertionArgument(expression)) {
                 error(expression, Diagnostics.A_const_assertions_can_only_be_applied_to_references_to_enum_members_or_string_number_boolean_array_or_object_literals);
             }
             return getRegularTypeOfLiteralType(exprType);
         }
-        const links = getNodeLinks(node);
-        links.assertionExpressionType = exprType;
-        checkSourceElement(type);
-        checkNodeDeferred(node);
-        return getTypeFromTypeNode(type);
+        checkSourceElement(typeNode);
+        const type = getTypeFromTypeNode(typeNode);
+        // See if we need to check whether the expression and asserted types are comparable.
+        if (!isErrorType(type) && !((exprType.flags | type.flags) & (TypeFlags.AnyOrUnknown | TypeFlags.Never))) {
+            const links = getNodeLinks(node);
+            links.assertionExpressionType = exprType;
+            checkNodeDeferred(node);
+        }
+        return type;
     }
 
     function checkAssertionDeferred(node: JSDocTypeAssertion | AssertionExpression) {
@@ -34551,15 +34555,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         Debug.assertIsDefined(links.assertionExpressionType);
         const exprType = getRegularTypeOfObjectLiteral(getBaseTypeOfLiteralType(links.assertionExpressionType));
         const targetType = getTypeFromTypeNode(type);
-        if (!isErrorType(targetType)) {
-            addLazyDiagnostic(() => {
-                const widenedType = getWidenedType(exprType);
-                if (!isTypeComparableTo(targetType, widenedType)) {
-                    checkTypeComparableTo(exprType, targetType, errNode,
-                        Diagnostics.Conversion_of_type_0_to_type_1_may_be_a_mistake_because_neither_type_sufficiently_overlaps_with_the_other_If_this_was_intentional_convert_the_expression_to_unknown_first);
-                }
-            });
-        }
+        addLazyDiagnostic(() => {
+            const widenedType = getWidenedType(exprType);
+            if (!isTypeComparableTo(targetType, widenedType)) {
+                checkTypeComparableTo(exprType, targetType, errNode,
+                    Diagnostics.Conversion_of_type_0_to_type_1_may_be_a_mistake_because_neither_type_sufficiently_overlaps_with_the_other_If_this_was_intentional_convert_the_expression_to_unknown_first);
+            }
+        });
     }
 
     function checkNonNullChain(node: NonNullChain) {
