@@ -34515,21 +34515,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkAssertionWorker(node: JSDocTypeAssertion | AssertionExpression, checkMode: CheckMode | undefined) {
-        const { type, expression } = getAssertionTypeAndExpression(node);
-        if (isConstTypeReference(type)) {
-            if (!isValidConstAssertionArgument(expression)) {
-                error(expression, Diagnostics.A_const_assertions_can_only_be_applied_to_references_to_enum_members_or_string_number_boolean_array_or_object_literals);
-            }
-            return getRegularTypeOfLiteralType(checkExpression(expression, checkMode));
-        }
-        const links = getNodeLinks(node);
-        links.assertionExpressionType = checkExpression(expression, checkMode);
-        checkSourceElement(type);
-        checkNodeDeferred(node);
-        return getTypeFromTypeNode(type);
-    }
-
-    function getAssertionTypeAndExpression(node: JSDocTypeAssertion | AssertionExpression) {
         let type: TypeNode;
         let expression: Expression;
         switch (node.kind) {
@@ -34543,12 +34528,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 expression = node.expression;
                 break;
         }
-
-        return { type, expression };
+        if (isConstTypeReference(type)) {
+            if (!isValidConstAssertionArgument(expression)) {
+                error(expression, Diagnostics.A_const_assertions_can_only_be_applied_to_references_to_enum_members_or_string_number_boolean_array_or_object_literals);
+            }
+            return getRegularTypeOfLiteralType(checkExpression(expression, checkMode));
+        }
+        const links = getNodeLinks(node);
+        links.assertionExpressionType = checkExpression(expression, checkMode);
+        checkSourceElement(type);
+        checkNodeDeferred(node);
+        return getTypeFromTypeNode(type);
     }
 
     function checkAssertionDeferred(node: JSDocTypeAssertion | AssertionExpression) {
-        const { type } = getAssertionTypeAndExpression(node);
+        const type = node.kind === SyntaxKind.ParenthesizedExpression
+            ? getJSDocTypeAssertionType(node)
+            : node.type;
         const errNode = isParenthesizedExpression(node) ? type : node;
         const links = getNodeLinks(node);
         Debug.assertIsDefined(links.assertionExpressionType);
