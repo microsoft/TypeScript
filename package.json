@@ -83,9 +83,7 @@
         "which": "^2.0.2"
     },
     "overrides": {
-        "typescript@*": "$typescript",
-        "@octokit/types": "9.0.0",
-        "@octokit/openapi-types": "16.0.0"
+        "typescript@*": "$typescript"
     },
     "scripts": {
         "test": "hereby runtests-parallel --light=false",
