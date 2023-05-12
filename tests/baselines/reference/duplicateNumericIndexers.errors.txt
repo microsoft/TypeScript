@@ -10,8 +10,8 @@ tests/cases/conformance/types/members/duplicateNumericIndexers.ts(24,5): error T
 tests/cases/conformance/types/members/duplicateNumericIndexers.ts(25,5): error TS2374: Duplicate index signature for type 'number'.
 tests/cases/conformance/types/members/duplicateNumericIndexers.ts(29,5): error TS2374: Duplicate index signature for type 'number'.
 tests/cases/conformance/types/members/duplicateNumericIndexers.ts(30,5): error TS2374: Duplicate index signature for type 'number'.
-lib.es5.d.ts(520,5): error TS2374: Duplicate index signature for type 'number'.
-lib.es5.d.ts(1484,5): error TS2374: Duplicate index signature for type 'number'.
+lib.es5.d.ts(--,--): error TS2374: Duplicate index signature for type 'number'.
+lib.es5.d.ts(--,--): error TS2374: Duplicate index signature for type 'number'.
 
 
 ==== tests/cases/conformance/types/members/duplicateNumericIndexers.ts (12 errors) ====

@@ -1,15 +1,12 @@
 === tests/cases/compiler/transformsElideNullUndefinedType.ts ===
 var v0: null;
 >v0 : null
->null : null
 
 var v1: undefined;
 >v1 : undefined
 
 function f0(): null { return null; }
 >f0 : () => null
->null : null
->null : null
 
 function f1(): undefined { return undefined; }
 >f1 : () => undefined
@@ -18,8 +15,6 @@ function f1(): undefined { return undefined; }
 var f2 = function (): null { return null; }
 >f2 : () => null
 >function (): null { return null; } : () => null
->null : null
->null : null
 
 var f3 = function (): undefined { return undefined; }
 >f3 : () => undefined
@@ -29,8 +24,6 @@ var f3 = function (): undefined { return undefined; }
 var f4 = (): null => null;
 >f4 : () => null
 >(): null => null : () => null
->null : null
->null : null
 
 var f5 = (): undefined => undefined;
 >f5 : () => undefined
@@ -40,7 +33,6 @@ var f5 = (): undefined => undefined;
 function f6(p0: null) { }
 >f6 : (p0: null) => void
 >p0 : null
->null : null
 
 function f7(p1: undefined) { }
 >f7 : (p1: undefined) => void
@@ -50,7 +42,6 @@ var f8 = function (p2: null) { }
 >f8 : (p2: null) => void
 >function (p2: null) { } : (p2: null) => void
 >p2 : null
->null : null
 
 var f9 = function (p3: undefined) { }
 >f9 : (p3: undefined) => void
@@ -61,7 +52,6 @@ var f10 = (p4: null) => { }
 >f10 : (p4: null) => void
 >(p4: null) => { } : (p4: null) => void
 >p4 : null
->null : null
 
 var f11 = (p5: undefined) => { }
 >f11 : (p5: undefined) => void
@@ -73,8 +63,6 @@ class C1 {
 
     m0(): null { return null; }
 >m0 : () => null
->null : null
->null : null
 
     m1(): undefined { return undefined; }
 >m1 : () => undefined
@@ -83,7 +71,6 @@ class C1 {
     m3(p6: null) { }
 >m3 : (p6: null) => void
 >p6 : null
->null : null
 
     m4(p7: undefined) { }
 >m4 : (p7: undefined) => void
@@ -91,8 +78,6 @@ class C1 {
 
     get a0(): null { return null; }
 >a0 : null
->null : null
->null : null
 
     get a1(): undefined { return undefined; }
 >a1 : undefined
@@ -101,7 +86,6 @@ class C1 {
     set a2(p8: null) { }
 >a2 : null
 >p8 : null
->null : null
 
     set a3(p9: undefined) { }
 >a3 : undefined
@@ -111,7 +95,6 @@ class C1 {
 class C2 { constructor(p10: null) { } }
 >C2 : C2
 >p10 : null
->null : null
 
 class C3 { constructor(p11: undefined) { } }
 >C3 : C3
@@ -125,7 +108,6 @@ class C4 {
 
     constructor(p12: null) { }
 >p12 : null
->null : null
 }
 
 class C5 {
@@ -142,7 +124,6 @@ var C6 = class { constructor(p12: null) { } }
 >C6 : typeof C6
 >class { constructor(p12: null) { } } : typeof C6
 >p12 : null
->null : null
 
 var C7 = class { constructor(p13: undefined) { } }
 >C7 : typeof C7
@@ -155,7 +136,6 @@ declare function fn<T>();
 fn<null>();
 >fn<null>() : any
 >fn : <T>() => any
->null : null
 
 fn<undefined>();
 >fn<undefined>() : any
@@ -167,7 +147,6 @@ declare class D<T> {}
 new D<null>();
 >new D<null>() : D<null>
 >D : typeof D
->null : null
 
 new D<undefined>();
 >new D<undefined>() : D<undefined>

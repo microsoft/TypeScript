@@ -52,7 +52,6 @@ import {
     Program,
     programContainsEsModules,
     PropertyAccessExpression,
-    Push,
     ReturnStatement,
     skipAlias,
     some,
@@ -112,9 +111,14 @@ export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Pr
                 node.declarationList.flags & NodeFlags.Const &&
                 node.declarationList.declarations.length === 1) {
                 const init = node.declarationList.declarations[0].initializer;
-                if (init && isRequireCall(init, /*checkArgumentIsStringLiteralLike*/ true)) {
+                if (init && isRequireCall(init, /*requireStringLiteralLikeArgument*/ true)) {
                     diags.push(createDiagnosticForNode(init, Diagnostics.require_call_may_be_converted_to_an_import));
                 }
+            }
+
+            const jsdocTypedefNode = codefix.getJSDocTypedefNode(node);
+            if (jsdocTypedefNode) {
+                diags.push(createDiagnosticForNode(jsdocTypedefNode, Diagnostics.JSDoc_typedef_may_be_converted_to_TypeScript_type));
             }
 
             if (codefix.parameterShouldGetTypeFromJSDoc(node)) {
@@ -135,10 +139,10 @@ function containsTopLevelCommonjs(sourceFile: SourceFile): boolean {
         switch (statement.kind) {
             case SyntaxKind.VariableStatement:
                 return (statement as VariableStatement).declarationList.declarations.some(decl =>
-                    !!decl.initializer && isRequireCall(propertyAccessLeftHandSide(decl.initializer), /*checkArgumentIsStringLiteralLike*/ true));
+                    !!decl.initializer && isRequireCall(propertyAccessLeftHandSide(decl.initializer), /*requireStringLiteralLikeArgument*/ true));
             case SyntaxKind.ExpressionStatement: {
                 const { expression } = statement as ExpressionStatement;
-                if (!isBinaryExpression(expression)) return isRequireCall(expression, /*checkArgumentIsStringLiteralLike*/ true);
+                if (!isBinaryExpression(expression)) return isRequireCall(expression, /*requireStringLiteralLikeArgument*/ true);
                 const kind = getAssignmentDeclarationKind(expression);
                 return kind === AssignmentDeclarationKind.ExportsProperty || kind === AssignmentDeclarationKind.ModuleExports;
             }
@@ -166,7 +170,7 @@ function importNameForConvertToDefaultImport(node: AnyValidImportOrReExport): Id
     }
 }
 
-function addConvertToAsyncFunctionDiagnostics(node: FunctionLikeDeclaration, checker: TypeChecker, diags: Push<DiagnosticWithLocation>): void {
+function addConvertToAsyncFunctionDiagnostics(node: FunctionLikeDeclaration, checker: TypeChecker, diags: DiagnosticWithLocation[]): void {
     // need to check function before checking map so that deeper levels of nested callbacks are checked
     if (isConvertibleFunction(node, checker) && !visitedNestedConvertibleFunctions.has(getKeyFromNode(node))) {
         diags.push(createDiagnosticForNode(

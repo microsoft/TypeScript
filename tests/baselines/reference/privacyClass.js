@@ -243,7 +243,7 @@ var m1;
         return m1_C12_public;
     }(m1_c_private));
     m1.m1_C12_public = m1_C12_public;
-})(m1 = exports.m1 || (exports.m1 = {}));
+})(m1 || (exports.m1 = m1 = {}));
 var m2;
 (function (m2) {
     var m2_c_public = /** @class */ (function () {

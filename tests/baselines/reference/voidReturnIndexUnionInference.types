@@ -6,7 +6,6 @@ export function safeInvoke<A1, R>(
     func: ((arg1: A1) => R) | null | undefined,
 >func : ((arg1: A1) => R) | null | undefined
 >arg1 : A1
->null : null
 
     arg1: A1
 >arg1 : A1

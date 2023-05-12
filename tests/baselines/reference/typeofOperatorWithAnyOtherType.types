@@ -100,7 +100,6 @@ var ResultIsString7 = typeof undefined;
 var ResultIsString8 = typeof null;
 >ResultIsString8 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >typeof null : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->null : null
 
 var ResultIsString9 = typeof {};
 >ResultIsString9 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -163,7 +162,6 @@ var ResultIsString17 = typeof (null + undefined);
 >typeof (null + undefined) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >(null + undefined) : any
 >null + undefined : any
->null : null
 >undefined : undefined
 
 var ResultIsString18 = typeof (null + null);
@@ -171,8 +169,6 @@ var ResultIsString18 = typeof (null + null);
 >typeof (null + null) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >(null + null) : any
 >null + null : any
->null : null
->null : null
 
 var ResultIsString19 = typeof (undefined + undefined);
 >ResultIsString19 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"

@@ -8,7 +8,6 @@ class B<T extends Array<number>> {
 
     constructor(x: T) { return null; }
 >x : T
->null : null
 }
 
 class C<T extends String> {
@@ -16,7 +15,6 @@ class C<T extends String> {
 
     constructor(x: T) { return null; }
 >x : T
->null : null
 }
 
 interface I<T extends Number> {

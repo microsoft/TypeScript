@@ -58,13 +58,11 @@ const resizeObserver = new ResizeObserver(([entry]) => {
 interface Callback<T> {
     (error: null, result: T): unknown
 >error : null
->null : null
 >result : T
 
     (error: Error, result: null): unknown
 >error : Error
 >result : null
->null : null
 }
 
 interface Task<T> {
@@ -101,7 +99,6 @@ export function series<T>(tasks: Task<T>[], callback: Callback<T[]>): void {
             callback(null, results)
 >callback(null, results) : unknown
 >callback : Callback<T[]>
->null : null
 >results : T[]
 
         } else {
@@ -119,7 +116,6 @@ export function series<T>(tasks: Task<T>[], callback: Callback<T[]>): void {
 >callback(error, null) : unknown
 >callback : Callback<T[]>
 >error : Error
->null : null
 
                 } else {
                     // must use postfix-!, since `error` and `result` don't have a
@@ -157,7 +153,6 @@ series([
 >() => cb(null, 1) : () => unknown
 >cb(null, 1) : unknown
 >cb : Callback<unknown>
->null : null
 >1 : 1
 >300 : 300
 
@@ -169,7 +164,6 @@ series([
 >() => cb(null, 2) : () => unknown
 >cb(null, 2) : unknown
 >cb : Callback<unknown>
->null : null
 >2 : 2
 >200 : 200
 
@@ -181,7 +175,6 @@ series([
 >() => cb(null, 3) : () => unknown
 >cb(null, 3) : unknown
 >cb : Callback<unknown>
->null : null
 >3 : 3
 >100 : 100
 

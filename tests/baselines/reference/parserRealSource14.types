@@ -17,13 +17,11 @@ module TypeScript {
 >items === null || items.length === 0 : boolean
 >items === null : boolean
 >items : any[]
->null : null
 >items.length === 0 : boolean
 >items.length : number
 >items : any[]
 >length : number
 >0 : 0
->null : null
 >items[items.length - 1] : any
 >items : any[]
 >items.length - 1 : number
@@ -89,13 +87,11 @@ module TypeScript {
 >items === null || items.length <= index : boolean
 >items === null : boolean
 >items : any[]
->null : null
 >items.length <= index : boolean
 >items.length : number
 >items : any[]
 >length : number
 >index : number
->null : null
 >items[items.length - index - 1] : any
 >items : any[]
 >items.length - index - 1 : number
@@ -291,7 +287,6 @@ module TypeScript {
 >this.ast : () => TypeScript.AST
 >this : this
 >ast : () => TypeScript.AST
->null : null
 
                 return TypeScript.NodeType.None;
 >TypeScript.NodeType.None : any
@@ -394,13 +389,11 @@ module TypeScript {
 >this.ast : () => TypeScript.AST
 >this : this
 >ast : () => TypeScript.AST
->null : null
 >this.parent() === null : boolean
 >this.parent() : TypeScript.AST
 >this.parent : () => TypeScript.AST
 >this : this
 >parent : () => TypeScript.AST
->null : null
 
                 return false;
 >false : false
@@ -465,13 +458,11 @@ module TypeScript {
 >this.ast : () => TypeScript.AST
 >this : this
 >ast : () => TypeScript.AST
->null : null
 >this.parent() === null : boolean
 >this.parent() : TypeScript.AST
 >this.parent : () => TypeScript.AST
 >this : this
 >parent : () => TypeScript.AST
->null : null
 
                 return false;
 >false : false
@@ -536,13 +527,11 @@ module TypeScript {
 >this.ast : () => TypeScript.AST
 >this : this
 >ast : () => TypeScript.AST
->null : null
 >this.parent() === null : boolean
 >this.parent() : TypeScript.AST
 >this.parent : () => TypeScript.AST
 >this : this
 >parent : () => TypeScript.AST
->null : null
 
                 return false;
 >false : false
@@ -607,13 +596,11 @@ module TypeScript {
 >this.ast : () => TypeScript.AST
 >this : this
 >ast : () => TypeScript.AST
->null : null
 >this.parent() === null : boolean
 >this.parent() : TypeScript.AST
 >this.parent : () => TypeScript.AST
 >this : this
 >parent : () => TypeScript.AST
->null : null
 
                 return false;
 >false : false
@@ -678,13 +665,11 @@ module TypeScript {
 >this.ast : () => TypeScript.AST
 >this : this
 >ast : () => TypeScript.AST
->null : null
 >this.parent() === null : boolean
 >this.parent() : TypeScript.AST
 >this.parent : () => TypeScript.AST
 >this : this
 >parent : () => TypeScript.AST
->null : null
 
                 return false;
 >false : false
@@ -749,13 +734,11 @@ module TypeScript {
 >this.ast : () => TypeScript.AST
 >this : this
 >ast : () => TypeScript.AST
->null : null
 >this.parent() === null : boolean
 >this.parent() : TypeScript.AST
 >this.parent : () => TypeScript.AST
 >this : this
 >parent : () => TypeScript.AST
->null : null
 
                 return false;
 >false : false
@@ -3763,7 +3746,6 @@ module TypeScript {
         if (ast === null)
 >ast === null : boolean
 >ast : TypeScript.ASTSpan
->null : null
 
             return false;
 >false : false
@@ -4012,7 +3994,6 @@ module TypeScript {
 >previous == null || (cur.minChar >= previous.minChar && cur.limChar <= previous.limChar) : boolean
 >previous == null : boolean
 >previous : TypeScript.AST
->null : null
 >(cur.minChar >= previous.minChar && cur.limChar <= previous.limChar) : boolean
 >cur.minChar >= previous.minChar && cur.limChar <= previous.limChar : boolean
 >cur.minChar >= previous.minChar : boolean
@@ -4116,8 +4097,6 @@ module TypeScript {
 >walk : any
 >script : TypeScript.AST
 >pre : (cur: TypeScript.AST, parent: TypeScript.AST, walker: IAstWalker) => TypeScript.AST
->null : null
->null : null
 >ctx : AstPathContext
 
         return ctx.path;
@@ -4309,7 +4288,6 @@ module TypeScript {
 >ast : TypeScript.AST
 >pre : (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) => TypeScript.AST
 >post : (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) => TypeScript.AST
->null : null
 >path : AstPath
     }
 }

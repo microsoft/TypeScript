@@ -7,7 +7,6 @@ function equal<T>(a: T, b: T) { }
 let v = null!;
 >v : never
 >null! : never
->null : null
 
 // Object types with common base types
 
@@ -123,14 +122,12 @@ equal(v as 'a' | undefined, v as 'b' | null);
 >v : never
 >v as 'b' | null : "b" | null
 >v : never
->null : null
 
 equal(v as 'a' | null, v as 'b' | undefined);
 >equal(v as 'a' | null, v as 'b' | undefined) : void
 >equal : <T>(a: T, b: T) => void
 >v as 'a' | null : "a" | null
 >v : never
->null : null
 >v as 'b' | undefined : "b" | undefined
 >v : never
 

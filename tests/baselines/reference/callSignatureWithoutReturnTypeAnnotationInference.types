@@ -31,16 +31,16 @@ var r2 = foo2(1);
 >1 : 1
 
 function foo3() {
->foo3 : () => any
+>foo3 : () => never
 
     return foo3();
->foo3() : any
->foo3 : () => any
+>foo3() : never
+>foo3 : () => never
 }
 var r3 = foo3();
->r3 : any
->foo3() : any
->foo3 : () => any
+>r3 : never
+>foo3() : never
+>foo3 : () => never
 
 function foo4<T>(x: T) {
 >foo4 : <T>(x: T) => T

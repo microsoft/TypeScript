@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts] Inode:: 3
 /// <reference no-default-lib="true"/>
@@ -37,6 +38,8 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main.ts 250 {
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 {"watchFile":4} Source file
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"watchFile":4} Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"watchFile":4} Type roots
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 {"watchFile":4} Type roots
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 {"watchFile":4} Type roots
 [[90m12:00:28 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -60,20 +63,20 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/main.ts (used version)
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/user/username/projects/myproject/tsconfig.json: *new*
   {"inode":10}
-/user/username/projects/myproject/foo.ts:
+/user/username/projects/myproject/foo.ts: *new*
   {"inode":9}
-/user/username/projects/myproject/main.ts:
+/user/username/projects/myproject/main.ts: *new*
   {"inode":8}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {"inode":3}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -97,6 +100,29 @@ Input::
 export declare function foo2(): string;
 
 
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {"inode":10}
+/user/username/projects/myproject/main.ts:
+  {"inode":8}
+/a/lib/lib.d.ts:
+  {"inode":3}
+/user/username/projects/myproject/foo.ts:
+  {"inode":13} *new*
+
+FsWatches *deleted*::
+/user/username/projects/myproject/foo.ts:
+  {"inode":9}
+
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /user/username/projects/myproject/foo.ts 0:: WatchInfo: /user/username/projects/myproject/foo.ts 250 {"watchFile":4} Source file
 Scheduling update
@@ -138,22 +164,6 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/foo.ts (computed .d.ts)
 /user/username/projects/myproject/main.ts (computed .d.ts)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"inode":10}
-/user/username/projects/myproject/main.ts:
-  {"inode":8}
-/a/lib/lib.d.ts:
-  {"inode":3}
-/user/username/projects/myproject/foo.ts:
-  {"inode":13}
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/foo.js] file written with same contents Inode:: 11
@@ -166,6 +176,29 @@ Input::
 export declare function foo(): string;
 
 
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {"inode":10}
+/user/username/projects/myproject/main.ts:
+  {"inode":8}
+/a/lib/lib.d.ts:
+  {"inode":3}
+/user/username/projects/myproject/foo.ts:
+  {"inode":14} *new*
+
+FsWatches *deleted*::
+/user/username/projects/myproject/foo.ts:
+  {"inode":13}
+
+Before running Timeout callback:: count: 1
+4: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /user/username/projects/myproject/foo.ts 2:: WatchInfo: /user/username/projects/myproject/foo.ts 250 {"watchFile":4} Source file
 Scheduling update
@@ -204,22 +237,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/foo.ts (computed .d.ts)
 /user/username/projects/myproject/main.ts (computed .d.ts)
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"inode":10}
-/user/username/projects/myproject/main.ts:
-  {"inode":8}
-/a/lib/lib.d.ts:
-  {"inode":3}
-/user/username/projects/myproject/foo.ts:
-  {"inode":14}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 

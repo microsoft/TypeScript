@@ -1,3 +1,4 @@
+currentDirectory:: /users/username/projects/project useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -58,27 +59,29 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/src/types/classnames.d.ts (used version)
 
 PolledWatches::
-/users/username/projects/project/node_modules/@types:
+/users/username/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/project/tsconfig.json:
+/users/username/projects/project/tsconfig.json: *new*
   {}
-/users/username/projects/project/src/index.ts:
+/users/username/projects/project/src/index.ts: *new*
   {}
-/users/username/projects/project/node_modules/classnames/index.d.ts:
+/users/username/projects/project/node_modules/classnames/index.d.ts: *new*
   {}
-/users/username/projects/project/src/types/classnames.d.ts:
+/users/username/projects/project/src/types/classnames.d.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/users/username/projects/project/src:
+/users/username/projects/project/src: *new*
   {}
-/users/username/projects/project/node_modules:
+/users/username/projects/project/node_modules: *new*
   {}
-/users/username/projects/project:
+/users/username/projects/project: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -91,7 +94,7 @@ var classnames_1 = require("classnames");
 
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./node_modules/classnames/index.d.ts","./src/index.ts","./src/types/classnames.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"1239706283-export interface Result {} export default function classNames(): Result;","-5756287633-import classNames from \"classnames\"; classNames().foo;","-16510108606-export {}; declare module \"classnames\" { interface Result { foo } }"],"options":{"module":1},"fileIdsList":[[2,4],[2]],"referencedMap":[[3,1],[4,2]],"exportedModulesMap":[[3,1],[4,2]],"semanticDiagnosticsPerFile":[1,2,3,4]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./node_modules/classnames/index.d.ts","./src/index.ts","./src/types/classnames.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"1239706283-export interface Result {} export default function classNames(): Result;","-5756287633-import classNames from \"classnames\"; classNames().foo;","-16510108606-export {}; declare module \"classnames\" { interface Result { foo } }"],"root":[3,4],"options":{"module":1},"fileIdsList":[[2,4],[2]],"referencedMap":[[3,1],[4,2]],"exportedModulesMap":[[3,1],[4,2]],"semanticDiagnosticsPerFile":[1,2,3,4]},"version":"FakeTSVersion"}
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -134,6 +137,16 @@ var classnames_1 = require("classnames");
         "signature": "-16510108606-export {}; declare module \"classnames\" { interface Result { foo } }"
       }
     },
+    "root": [
+      [
+        3,
+        "./src/index.ts"
+      ],
+      [
+        4,
+        "./src/types/classnames.d.ts"
+      ]
+    ],
     "options": {
       "module": 1
     },
@@ -163,7 +176,7 @@ var classnames_1 = require("classnames");
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1056
+  "size": 1069
 }
 
 
@@ -173,6 +186,32 @@ Input::
 //// [/users/username/projects/project/src/types/classnames.d.ts]
 export {}; declare module "classnames" { interface Result {} }
 
+
+PolledWatches *deleted*::
+/users/username/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches *deleted*::
+/users/username/projects/project/tsconfig.json:
+  {}
+/users/username/projects/project/src/index.ts:
+  {}
+/users/username/projects/project/node_modules/classnames/index.d.ts:
+  {}
+/users/username/projects/project/src/types/classnames.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive *deleted*::
+/users/username/projects/project/src:
+  {}
+/users/username/projects/project/node_modules:
+  {}
+/users/username/projects/project:
+  {}
 
 Output::
 >> Screen clear
@@ -205,34 +244,36 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/src/index.ts (computed .d.ts)
 
 PolledWatches::
-/users/username/projects/project/node_modules/@types:
+/users/username/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/project/tsconfig.json:
+/users/username/projects/project/tsconfig.json: *new*
   {}
-/users/username/projects/project/src/index.ts:
+/users/username/projects/project/src/index.ts: *new*
   {}
-/users/username/projects/project/node_modules/classnames/index.d.ts:
+/users/username/projects/project/node_modules/classnames/index.d.ts: *new*
   {}
-/users/username/projects/project/src/types/classnames.d.ts:
+/users/username/projects/project/src/types/classnames.d.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/users/username/projects/project/src:
+/users/username/projects/project/src: *new*
   {}
-/users/username/projects/project/node_modules:
+/users/username/projects/project/node_modules: *new*
   {}
-/users/username/projects/project:
+/users/username/projects/project: *new*
   {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/users/username/projects/project/src/index.js] file written with same contents
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./node_modules/classnames/index.d.ts","./src/index.ts","./src/types/classnames.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"1239706283-export interface Result {} export default function classNames(): Result;",{"version":"-5756287633-import classNames from \"classnames\"; classNames().foo;","signature":"-3531856636-export {};\n"},"-14890340642-export {}; declare module \"classnames\" { interface Result {} }"],"options":{"module":1},"fileIdsList":[[2,4],[2]],"referencedMap":[[3,1],[4,2]],"exportedModulesMap":[[4,2]],"semanticDiagnosticsPerFile":[1,2,[3,[{"file":"./src/index.ts","start":50,"length":3,"code":2339,"category":1,"messageText":"Property 'foo' does not exist on type 'Result'."}]],4]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./node_modules/classnames/index.d.ts","./src/index.ts","./src/types/classnames.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"1239706283-export interface Result {} export default function classNames(): Result;",{"version":"-5756287633-import classNames from \"classnames\"; classNames().foo;","signature":"-3531856636-export {};\n"},"-14890340642-export {}; declare module \"classnames\" { interface Result {} }"],"root":[3,4],"options":{"module":1},"fileIdsList":[[2,4],[2]],"referencedMap":[[3,1],[4,2]],"exportedModulesMap":[[4,2]],"semanticDiagnosticsPerFile":[1,2,[3,[{"file":"./src/index.ts","start":50,"length":3,"code":2339,"category":1,"messageText":"Property 'foo' does not exist on type 'Result'."}]],4]},"version":"FakeTSVersion"}
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -279,6 +320,16 @@ exitCode:: ExitStatus.undefined
         "signature": "-14890340642-export {}; declare module \"classnames\" { interface Result {} }"
       }
     },
+    "root": [
+      [
+        3,
+        "./src/index.ts"
+      ],
+      [
+        4,
+        "./src/types/classnames.d.ts"
+      ]
+    ],
     "options": {
       "module": 1
     },
@@ -316,6 +367,6 @@ exitCode:: ExitStatus.undefined
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1237
+  "size": 1250
 }
 

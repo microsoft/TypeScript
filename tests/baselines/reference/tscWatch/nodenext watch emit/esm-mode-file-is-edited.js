@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/project/tsconfig.json]
 {"compilerOptions":{"strict":true,"target":"es2020","module":"nodenext","moduleResolution":"nodenext","outDir":"../dist"}}
@@ -54,22 +55,18 @@ Shape signatures in builder refreshed for::
 /project/src/deps.d.ts (used version)
 /project/src/index.ts (used version)
 
-PolledWatches::
-/project/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches::
-/project/tsconfig.json:
+/project/tsconfig.json: *new*
   {}
-/project/src/deps.d.ts:
+/project/src/deps.d.ts: *new*
   {}
-/project/src/index.ts:
+/project/src/index.ts: *new*
   {}
-/a/lib/lib.es2020.full.d.ts:
+/a/lib/lib.es2020.full.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/project:
+/project: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -88,6 +85,9 @@ import * as Thing from "thing";
 Thing.fn();
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:30 AM[0m] File change detected. Starting incremental compilation...
@@ -109,24 +109,6 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /project/src/index.ts (computed .d.ts)
-
-PolledWatches::
-/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/project/tsconfig.json:
-  {}
-/project/src/deps.d.ts:
-  {}
-/project/src/index.ts:
-  {}
-/a/lib/lib.es2020.full.d.ts:
-  {}
-
-FsWatchesRecursive::
-/project:
-  {}
 
 exitCode:: ExitStatus.undefined
 

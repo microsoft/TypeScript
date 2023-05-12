@@ -1,3 +1,4 @@
+currentDirectory:: /a/b useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -123,35 +124,31 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/b/other2.ts (used version)
 
-PolledWatches::
-
 FsWatches::
-/a/b/project1.tsconfig.json:
+/a/b/project1.tsconfig.json: *new*
   {}
-/a/b/alpha.tsconfig.json:
+/a/b/alpha.tsconfig.json: *new*
   {}
-/a/b/commonfile1.ts:
+/a/b/commonfile1.ts: *new*
   {}
-/a/b/commonfile2.ts:
+/a/b/commonfile2.ts: *new*
   {}
-/a/b/project2.tsconfig.json:
+/a/b/project2.tsconfig.json: *new*
   {}
-/a/b/bravo.tsconfig.json:
+/a/b/bravo.tsconfig.json: *new*
   {}
-/a/b/other.ts:
+/a/b/other.ts: *new*
   {}
-/a/b/project3.tsconfig.json:
+/a/b/project3.tsconfig.json: *new*
   {}
-/a/b/extendsconfig1.tsconfig.json:
+/a/b/extendsconfig1.tsconfig.json: *new*
   {}
-/a/b/extendsconfig2.tsconfig.json:
+/a/b/extendsconfig2.tsconfig.json: *new*
   {}
-/a/b/extendsconfig3.tsconfig.json:
+/a/b/extendsconfig3.tsconfig.json: *new*
   {}
-/a/b/other2.ts:
+/a/b/other2.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -172,7 +169,7 @@ declare let y: number;
 
 
 //// [/a/b/project1.tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./commonfile1.ts","./commonfile2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2167136208-let x = 1","signature":"2842409786-declare let x: number;\n","affectsGlobalScope":true},{"version":"2168322129-let y = 1","signature":"784887931-declare let y: number;\n","affectsGlobalScope":true}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,3,1],"latestChangedDtsFile":"./commonFile2.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./commonfile1.ts","./commonfile2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2167136208-let x = 1","signature":"2842409786-declare let x: number;\n","affectsGlobalScope":true},{"version":"2168322129-let y = 1","signature":"784887931-declare let y: number;\n","affectsGlobalScope":true}],"root":[2,3],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,3,1],"latestChangedDtsFile":"./commonFile2.d.ts"},"version":"FakeTSVersion"}
 
 //// [/a/b/project1.tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -213,6 +210,16 @@ declare let y: number;
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        2,
+        "./commonfile1.ts"
+      ],
+      [
+        3,
+        "./commonfile2.ts"
+      ]
+    ],
     "options": {
       "composite": true
     },
@@ -226,7 +233,7 @@ declare let y: number;
     "latestChangedDtsFile": "./commonFile2.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 896
+  "size": 909
 }
 
 //// [/a/b/other.js]
@@ -238,7 +245,7 @@ declare let z: number;
 
 
 //// [/a/b/project2.tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2874288940-let z = 0;","signature":"-1272633924-declare let z: number;\n","affectsGlobalScope":true}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,1],"latestChangedDtsFile":"./other.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2874288940-let z = 0;","signature":"-1272633924-declare let z: number;\n","affectsGlobalScope":true}],"root":[2],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,1],"latestChangedDtsFile":"./other.d.ts"},"version":"FakeTSVersion"}
 
 //// [/a/b/project2.tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -268,6 +275,12 @@ declare let z: number;
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        2,
+        "./other.ts"
+      ]
+    ],
     "options": {
       "composite": true
     },
@@ -280,7 +293,7 @@ declare let z: number;
     "latestChangedDtsFile": "./other.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 755
+  "size": 766
 }
 
 //// [/a/b/other2.js]
@@ -295,6 +308,10 @@ Input::
 {"compilerOptions":{"strict":true}}
 
 
+Before running Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+3: timerToBuildInvalidatedProject
 Output::
 >> Screen clear
 [[90m12:01:12 AM[0m] File change detected. Starting incremental compilation...
@@ -320,36 +337,6 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-PolledWatches::
-
-FsWatches::
-/a/b/project1.tsconfig.json:
-  {}
-/a/b/alpha.tsconfig.json:
-  {}
-/a/b/commonfile1.ts:
-  {}
-/a/b/commonfile2.ts:
-  {}
-/a/b/project2.tsconfig.json:
-  {}
-/a/b/bravo.tsconfig.json:
-  {}
-/a/b/other.ts:
-  {}
-/a/b/project3.tsconfig.json:
-  {}
-/a/b/extendsconfig1.tsconfig.json:
-  {}
-/a/b/extendsconfig2.tsconfig.json:
-  {}
-/a/b/extendsconfig3.tsconfig.json:
-  {}
-/a/b/other2.ts:
-  {}
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/commonFile1.js]
@@ -363,7 +350,7 @@ var y = 1;
 
 
 //// [/a/b/project1.tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./commonfile1.ts","./commonfile2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2167136208-let x = 1","signature":"2842409786-declare let x: number;\n","affectsGlobalScope":true},{"version":"2168322129-let y = 1","signature":"784887931-declare let y: number;\n","affectsGlobalScope":true}],"options":{"composite":true,"strict":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,3,1],"latestChangedDtsFile":"./commonFile2.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./commonfile1.ts","./commonfile2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2167136208-let x = 1","signature":"2842409786-declare let x: number;\n","affectsGlobalScope":true},{"version":"2168322129-let y = 1","signature":"784887931-declare let y: number;\n","affectsGlobalScope":true}],"root":[2,3],"options":{"composite":true,"strict":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,3,1],"latestChangedDtsFile":"./commonFile2.d.ts"},"version":"FakeTSVersion"}
 
 //// [/a/b/project1.tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -404,6 +391,16 @@ var y = 1;
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        2,
+        "./commonfile1.ts"
+      ],
+      [
+        3,
+        "./commonfile2.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "strict": true
@@ -418,7 +415,7 @@ var y = 1;
     "latestChangedDtsFile": "./commonFile2.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 910
+  "size": 923
 }
 
 
@@ -426,6 +423,9 @@ Change:: Build project 2
 
 Input::
 
+Before running Timeout callback:: count: 1
+3: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 [[90m12:01:28 AM[0m] Project 'project2.tsconfig.json' is out of date because output 'project2.tsconfig.tsbuildinfo' is older than input 'alpha.tsconfig.json'
 
@@ -448,36 +448,6 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-PolledWatches::
-
-FsWatches::
-/a/b/project1.tsconfig.json:
-  {}
-/a/b/alpha.tsconfig.json:
-  {}
-/a/b/commonfile1.ts:
-  {}
-/a/b/commonfile2.ts:
-  {}
-/a/b/project2.tsconfig.json:
-  {}
-/a/b/bravo.tsconfig.json:
-  {}
-/a/b/other.ts:
-  {}
-/a/b/project3.tsconfig.json:
-  {}
-/a/b/extendsconfig1.tsconfig.json:
-  {}
-/a/b/extendsconfig2.tsconfig.json:
-  {}
-/a/b/extendsconfig3.tsconfig.json:
-  {}
-/a/b/other2.ts:
-  {}
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/other.js]
@@ -486,7 +456,7 @@ var z = 0;
 
 
 //// [/a/b/project2.tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2874288940-let z = 0;","signature":"-1272633924-declare let z: number;\n","affectsGlobalScope":true}],"options":{"composite":true,"strict":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,1],"latestChangedDtsFile":"./other.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2874288940-let z = 0;","signature":"-1272633924-declare let z: number;\n","affectsGlobalScope":true}],"root":[2],"options":{"composite":true,"strict":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,1],"latestChangedDtsFile":"./other.d.ts"},"version":"FakeTSVersion"}
 
 //// [/a/b/project2.tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -516,6 +486,12 @@ var z = 0;
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        2,
+        "./other.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "strict": true
@@ -529,7 +505,7 @@ var z = 0;
     "latestChangedDtsFile": "./other.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 769
+  "size": 780
 }
 
 
@@ -540,6 +516,9 @@ Input::
 {"extends":"./alpha.tsconfig.json","compilerOptions":{"strict":false}}
 
 
+Before running Timeout callback:: count: 1
+4: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:44 AM[0m] File change detected. Starting incremental compilation...
@@ -565,36 +544,6 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-PolledWatches::
-
-FsWatches::
-/a/b/project1.tsconfig.json:
-  {}
-/a/b/alpha.tsconfig.json:
-  {}
-/a/b/commonfile1.ts:
-  {}
-/a/b/commonfile2.ts:
-  {}
-/a/b/project2.tsconfig.json:
-  {}
-/a/b/bravo.tsconfig.json:
-  {}
-/a/b/other.ts:
-  {}
-/a/b/project3.tsconfig.json:
-  {}
-/a/b/extendsconfig1.tsconfig.json:
-  {}
-/a/b/extendsconfig2.tsconfig.json:
-  {}
-/a/b/extendsconfig3.tsconfig.json:
-  {}
-/a/b/other2.ts:
-  {}
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/other.js]
@@ -602,7 +551,7 @@ var z = 0;
 
 
 //// [/a/b/project2.tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2874288940-let z = 0;","signature":"-1272633924-declare let z: number;\n","affectsGlobalScope":true}],"options":{"composite":true,"strict":false},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,1],"latestChangedDtsFile":"./other.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2874288940-let z = 0;","signature":"-1272633924-declare let z: number;\n","affectsGlobalScope":true}],"root":[2],"options":{"composite":true,"strict":false},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,1],"latestChangedDtsFile":"./other.d.ts"},"version":"FakeTSVersion"}
 
 //// [/a/b/project2.tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -632,6 +581,12 @@ var z = 0;
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        2,
+        "./other.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "strict": false
@@ -645,7 +600,7 @@ var z = 0;
     "latestChangedDtsFile": "./other.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 770
+  "size": 781
 }
 
 
@@ -656,6 +611,9 @@ Input::
 {"extends":"./alpha.tsconfig.json"}
 
 
+Before running Timeout callback:: count: 1
+5: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:02:01 AM[0m] File change detected. Starting incremental compilation...
@@ -691,8 +649,6 @@ Shape signatures in builder refreshed for::
 /a/b/other.ts (computed .d.ts)
 /a/b/other2.ts (computed .d.ts)
 
-PolledWatches::
-
 FsWatches::
 /a/b/project1.tsconfig.json:
   {}
@@ -717,8 +673,12 @@ FsWatches::
 /a/b/other2.ts:
   {}
 
+FsWatches *deleted*::
+/a/b/bravo.tsconfig.json:
+  {}
+
 FsWatchesRecursive::
-/a/b:
+/a/b: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -743,6 +703,10 @@ Input::
 {}
 
 
+Before running Timeout callback:: count: 1
+7: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+8: timerToBuildInvalidatedProject
 Output::
 >> Screen clear
 [[90m12:02:22 AM[0m] File change detected. Starting incremental compilation...
@@ -768,36 +732,6 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-PolledWatches::
-
-FsWatches::
-/a/b/project1.tsconfig.json:
-  {}
-/a/b/alpha.tsconfig.json:
-  {}
-/a/b/commonfile1.ts:
-  {}
-/a/b/commonfile2.ts:
-  {}
-/a/b/project2.tsconfig.json:
-  {}
-/a/b/other.ts:
-  {}
-/a/b/project3.tsconfig.json:
-  {}
-/a/b/extendsconfig1.tsconfig.json:
-  {}
-/a/b/extendsconfig2.tsconfig.json:
-  {}
-/a/b/extendsconfig3.tsconfig.json:
-  {}
-/a/b/other2.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/commonFile1.js]
@@ -809,7 +743,7 @@ var y = 1;
 
 
 //// [/a/b/project1.tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./commonfile1.ts","./commonfile2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2167136208-let x = 1","signature":"2842409786-declare let x: number;\n","affectsGlobalScope":true},{"version":"2168322129-let y = 1","signature":"784887931-declare let y: number;\n","affectsGlobalScope":true}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,3,1],"latestChangedDtsFile":"./commonFile2.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./commonfile1.ts","./commonfile2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2167136208-let x = 1","signature":"2842409786-declare let x: number;\n","affectsGlobalScope":true},{"version":"2168322129-let y = 1","signature":"784887931-declare let y: number;\n","affectsGlobalScope":true}],"root":[2,3],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,3,1],"latestChangedDtsFile":"./commonFile2.d.ts"},"version":"FakeTSVersion"}
 
 //// [/a/b/project1.tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -850,6 +784,16 @@ var y = 1;
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        2,
+        "./commonfile1.ts"
+      ],
+      [
+        3,
+        "./commonfile2.ts"
+      ]
+    ],
     "options": {
       "composite": true
     },
@@ -863,7 +807,7 @@ var y = 1;
     "latestChangedDtsFile": "./commonFile2.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 896
+  "size": 909
 }
 
 
@@ -871,6 +815,9 @@ Change:: Build project 2
 
 Input::
 
+Before running Timeout callback:: count: 1
+8: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 [[90m12:02:38 AM[0m] Project 'project2.tsconfig.json' is out of date because output 'commonFile1.js' is older than input 'alpha.tsconfig.json'
 
@@ -899,36 +846,6 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-PolledWatches::
-
-FsWatches::
-/a/b/project1.tsconfig.json:
-  {}
-/a/b/alpha.tsconfig.json:
-  {}
-/a/b/commonfile1.ts:
-  {}
-/a/b/commonfile2.ts:
-  {}
-/a/b/project2.tsconfig.json:
-  {}
-/a/b/other.ts:
-  {}
-/a/b/project3.tsconfig.json:
-  {}
-/a/b/extendsconfig1.tsconfig.json:
-  {}
-/a/b/extendsconfig2.tsconfig.json:
-  {}
-/a/b/extendsconfig3.tsconfig.json:
-  {}
-/a/b/other2.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/commonFile1.js] file written with same contents
@@ -949,6 +866,9 @@ Input::
 {"compilerOptions":{"strictNullChecks":true}}
 
 
+Before running Timeout callback:: count: 1
+9: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:02:57 AM[0m] File change detected. Starting incremental compilation...
@@ -976,36 +896,6 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-PolledWatches::
-
-FsWatches::
-/a/b/project1.tsconfig.json:
-  {}
-/a/b/alpha.tsconfig.json:
-  {}
-/a/b/commonfile1.ts:
-  {}
-/a/b/commonfile2.ts:
-  {}
-/a/b/project2.tsconfig.json:
-  {}
-/a/b/other.ts:
-  {}
-/a/b/project3.tsconfig.json:
-  {}
-/a/b/extendsconfig1.tsconfig.json:
-  {}
-/a/b/extendsconfig2.tsconfig.json:
-  {}
-/a/b/extendsconfig3.tsconfig.json:
-  {}
-/a/b/other2.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/other2.js] file changed its modified time
@@ -1017,6 +907,9 @@ Input::
 {"extends":["./extendsConfig1.tsconfig.json","./extendsConfig2.tsconfig.json"],"compilerOptions":{"composite":false},"files":["/a/b/other2.ts"]}
 
 
+Before running Timeout callback:: count: 1
+10: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:03:06 AM[0m] File change detected. Starting incremental compilation...
@@ -1044,8 +937,6 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-PolledWatches::
-
 FsWatches::
 /a/b/project1.tsconfig.json:
   {}
@@ -1066,6 +957,10 @@ FsWatches::
 /a/b/extendsconfig2.tsconfig.json:
   {}
 /a/b/other2.ts:
+  {}
+
+FsWatches *deleted*::
+/a/b/extendsconfig3.tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -1081,6 +976,9 @@ Change:: Delete extendedConfigFile2 and report error
 Input::
 //// [/a/b/extendsConfig2.tsconfig.json] deleted
 
+Before running Timeout callback:: count: 1
+11: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:03:13 AM[0m] File change detected. Starting incremental compilation...
@@ -1092,34 +990,6 @@ Output::
 [[90m12:03:15 AM[0m] Found 1 error. Watching for file changes.
 
 
-
-PolledWatches::
-
-FsWatches::
-/a/b/project1.tsconfig.json:
-  {}
-/a/b/alpha.tsconfig.json:
-  {}
-/a/b/commonfile1.ts:
-  {}
-/a/b/commonfile2.ts:
-  {}
-/a/b/project2.tsconfig.json:
-  {}
-/a/b/other.ts:
-  {}
-/a/b/project3.tsconfig.json:
-  {}
-/a/b/extendsconfig1.tsconfig.json:
-  {}
-/a/b/extendsconfig2.tsconfig.json:
-  {}
-/a/b/other2.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
 
 exitCode:: ExitStatus.undefined
 

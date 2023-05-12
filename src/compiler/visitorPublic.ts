@@ -46,6 +46,7 @@ import {
     isImportSpecifier,
     isImportTypeAssertionContainer,
     isJsxAttributeLike,
+    isJsxAttributeName,
     isJsxAttributes,
     isJsxChild,
     isJsxClosingElement,
@@ -601,7 +602,7 @@ export function visitEachChild<T extends Node>(node: T, visitor: Visitor, contex
  */
 export function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor?: typeof visitNodes, tokenVisitor?: Visitor): T | undefined;
 /** @internal */
-export function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor?: NodesVisitor, tokenVisitor?: Visitor, nodeVisitor?: NodeVisitor): T | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
+export function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor?: NodesVisitor, tokenVisitor?: Visitor, nodeVisitor?: NodeVisitor): T | undefined;
 export function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor = visitNodes, tokenVisitor?: Visitor, nodeVisitor: NodeVisitor = visitNode): T | undefined {
     if (node === undefined) {
         return undefined;
@@ -1429,6 +1430,12 @@ const visitEachChildTable: VisitEachChildTable = {
             Debug.checkDefined(nodeVisitor(node.tagName, visitor, isJsxTagNameExpression)));
     },
 
+    [SyntaxKind.JsxNamespacedName]: function forEachChildInJsxNamespacedName(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+        return context.factory.updateJsxNamespacedName(node,
+            Debug.checkDefined(nodeVisitor(node.namespace, visitor, isIdentifier)),
+            Debug.checkDefined(nodeVisitor(node.name, visitor, isIdentifier)));
+    },
+
     [SyntaxKind.JsxFragment]: function visitEachChildOfJsxFragment(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
         return context.factory.updateJsxFragment(node,
             Debug.checkDefined(nodeVisitor(node.openingFragment, visitor, isJsxOpeningFragment)),
@@ -1438,7 +1445,7 @@ const visitEachChildTable: VisitEachChildTable = {
 
     [SyntaxKind.JsxAttribute]: function visitEachChildOfJsxAttribute(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
         return context.factory.updateJsxAttribute(node,
-            Debug.checkDefined(nodeVisitor(node.name, visitor, isIdentifier)),
+            Debug.checkDefined(nodeVisitor(node.name, visitor, isJsxAttributeName)),
             nodeVisitor(node.initializer, visitor, isStringLiteralOrJsxExpression));
     },
 
@@ -1454,7 +1461,7 @@ const visitEachChildTable: VisitEachChildTable = {
 
     [SyntaxKind.JsxExpression]: function visitEachChildOfJsxExpression(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
         return context.factory.updateJsxExpression(node,
-            Debug.checkDefined(nodeVisitor(node.expression, visitor, isExpression)));
+            nodeVisitor(node.expression, visitor, isExpression));
     },
 
     // Clauses
