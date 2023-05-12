@@ -74,7 +74,12 @@ export function generateDjb2Hash(data: string): string {
  */
 export function setStackTraceLimit() {
     if ((Error as any).stackTraceLimit < 100) { // Also tests that we won't set the property if it doesn't exist.
-        (Error as any).stackTraceLimit = 100;
+        try {
+            (Error as any).stackTraceLimit = 100;
+        }
+        catch {
+            // node --frozen-intrinsics
+        }
     }
 }
 
@@ -1898,7 +1903,12 @@ export let sys: System = (() => {
             // Since the error thrown by fs.statSync isn't used, we can avoid collecting a stack trace to improve
             // the CPU time performance.
             const originalStackTraceLimit = Error.stackTraceLimit;
-            Error.stackTraceLimit = 0;
+            try {
+                Error.stackTraceLimit = 0;
+            }
+            catch {
+                // node --frozen-intrinsics
+            }
 
             try {
                 const stat = statSync(path);
@@ -1915,7 +1925,12 @@ export let sys: System = (() => {
                 return false;
             }
             finally {
-                Error.stackTraceLimit = originalStackTraceLimit;
+                try {
+                    Error.stackTraceLimit = originalStackTraceLimit;
+                }
+                catch {
+                    // node --frozen-intrinsics
+                }
             }
         }
 
@@ -1948,7 +1963,12 @@ export let sys: System = (() => {
             // Since the error thrown by fs.statSync isn't used, we can avoid collecting a stack trace to improve
             // the CPU time performance.
             const originalStackTraceLimit = Error.stackTraceLimit;
-            Error.stackTraceLimit = 0;
+            try {
+                Error.stackTraceLimit = 0;
+            }
+            catch {
+                // node --frozen-intrinsics
+            }
             try {
                 return statSync(path)?.mtime;
             }
@@ -1956,7 +1976,12 @@ export let sys: System = (() => {
                 return undefined;
             }
             finally {
-                Error.stackTraceLimit = originalStackTraceLimit;
+                try {
+                    Error.stackTraceLimit = originalStackTraceLimit;
+                }
+                catch {
+                    // node --frozen-intrinsics
+                }
             }
         }
 
