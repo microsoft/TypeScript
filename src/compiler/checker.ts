@@ -34516,13 +34516,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkAssertionWorker(node: JSDocTypeAssertion | AssertionExpression, checkMode: CheckMode | undefined) {
         const { type, expression } = getAssertionTypeAndExpression(node);
-        const exprType = checkExpression(expression, checkMode);
         if (isConstTypeReference(type)) {
             if (!isValidConstAssertionArgument(expression)) {
                 error(expression, Diagnostics.A_const_assertions_can_only_be_applied_to_references_to_enum_members_or_string_number_boolean_array_or_object_literals);
             }
-            return getRegularTypeOfLiteralType(exprType);
+            return getRegularTypeOfLiteralType(checkExpression(expression, checkMode));
         }
+        const links = getNodeLinks(node);
+        links.assertionExpressionType = checkExpression(expression, checkMode);
         checkSourceElement(type);
         checkNodeDeferred(node);
         return getTypeFromTypeNode(type);
@@ -34547,9 +34548,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkAssertionDeferred(node: JSDocTypeAssertion | AssertionExpression) {
-        const { type, expression } = getAssertionTypeAndExpression(node);
+        const { type } = getAssertionTypeAndExpression(node);
         const errNode = isParenthesizedExpression(node) ? type : node;
-        const exprType = getRegularTypeOfObjectLiteral(getBaseTypeOfLiteralType(checkExpression(expression)));
+        const exprType = getRegularTypeOfObjectLiteral(getBaseTypeOfLiteralType(getNodeLinks(node).assertionExpressionType!));
         const targetType = getTypeFromTypeNode(type);
         if (!isErrorType(targetType)) {
             addLazyDiagnostic(() => {
