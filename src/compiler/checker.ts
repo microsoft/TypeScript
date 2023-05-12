@@ -34528,14 +34528,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 expression = node.expression;
                 break;
         }
+        const exprType = checkExpression(expression, checkMode);
         if (isConstTypeReference(type)) {
             if (!isValidConstAssertionArgument(expression)) {
                 error(expression, Diagnostics.A_const_assertions_can_only_be_applied_to_references_to_enum_members_or_string_number_boolean_array_or_object_literals);
             }
-            return getRegularTypeOfLiteralType(checkExpression(expression, checkMode));
+            return getRegularTypeOfLiteralType(exprType);
         }
         const links = getNodeLinks(node);
-        links.assertionExpressionType = checkExpression(expression, checkMode);
+        links.assertionExpressionType = exprType;
         checkSourceElement(type);
         checkNodeDeferred(node);
         return getTypeFromTypeNode(type);
