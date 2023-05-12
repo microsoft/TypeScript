@@ -21,7 +21,6 @@ import {
     hasProperty,
     isString,
     MapLike,
-    ModuleDetectionKind,
     normalizePath,
     optionDeclarations,
     parseCustomTypeOption,
@@ -55,7 +54,6 @@ const optionsRedundantWithVerbatimModuleSyntax = new Set([
  * If not options are provided - it will use a set of default compiler options.
  * Extra compiler options that will unconditionally be used by this function are:
  * - isolatedModules = true
- * - moduleDetection = force
  * - allowNonTsExtensions = true
  * - noLib = true
  * - noResolve = true
@@ -87,10 +85,6 @@ export function transpileModule(input: string, transpileOptions: TranspileOption
 
     // Filename can be non-ts file.
     options.allowNonTsExtensions = true;
-
-    // Inputs are always assumed to be modules. This used to be implied by `isolatedModules` for emit purposes,
-    // but that changed in 5.0, so we set `moduleDetection` now.
-    // options.moduleDetection = ModuleDetectionKind.Force;
 
     const newLine = getNewLineCharacter(options);
     // Create a compilerHost object to allow the compiler to read and write files
