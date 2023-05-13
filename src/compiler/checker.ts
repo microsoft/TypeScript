@@ -34523,6 +34523,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             return getRegularTypeOfLiteralType(exprType);
         }
+        const links = getNodeLinks(node);
+        links.assertionExpressionType = exprType;
         checkSourceElement(type);
         checkNodeDeferred(node);
         return getTypeFromTypeNode(type);
@@ -34547,9 +34549,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkAssertionDeferred(node: JSDocTypeAssertion | AssertionExpression) {
-        const { type, expression } = getAssertionTypeAndExpression(node);
+        const { type } = getAssertionTypeAndExpression(node);
         const errNode = isParenthesizedExpression(node) ? type : node;
-        const exprType = getRegularTypeOfObjectLiteral(getBaseTypeOfLiteralType(checkExpression(expression)));
+        const links = getNodeLinks(node);
+        Debug.assertIsDefined(links.assertionExpressionType);
+        const exprType = getRegularTypeOfObjectLiteral(getBaseTypeOfLiteralType(links.assertionExpressionType));
         const targetType = getTypeFromTypeNode(type);
         if (!isErrorType(targetType)) {
             addLazyDiagnostic(() => {
