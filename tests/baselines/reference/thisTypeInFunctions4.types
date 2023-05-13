@@ -28,9 +28,9 @@ function problemFunction(this: CorrectObject | WrongObject): void {
 >this : WrongObject | CorrectObject
 
     callsCallback((name)=>{
->callsCallback((name)=>{        this.name = name; //should not error    }) : any
+>callsCallback((name)=>{        this.name = name; //should not error        type T = typeof this;    }) : any
 >callsCallback : (cb: (name: string) => void) => any
->(name)=>{        this.name = name; //should not error    } : (name: string) => void
+>(name)=>{        this.name = name; //should not error        type T = typeof this;    } : (name: string) => void
 >name : string
 
         this.name = name; //should not error
@@ -39,6 +39,10 @@ function problemFunction(this: CorrectObject | WrongObject): void {
 >this : CorrectObject
 >name : string
 >name : string
+
+        type T = typeof this;
+>T : CorrectObject
+>this : CorrectObject
 
     });
 }

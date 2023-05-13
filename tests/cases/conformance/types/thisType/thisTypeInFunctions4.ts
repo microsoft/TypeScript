@@ -11,5 +11,6 @@ function problemFunction(this: CorrectObject | WrongObject): void {
 
     callsCallback((name)=>{
         this.name = name; //should not error
+        type T = typeof this;
     });
 }

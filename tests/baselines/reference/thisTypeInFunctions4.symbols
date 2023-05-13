@@ -39,5 +39,9 @@ function problemFunction(this: CorrectObject | WrongObject): void {
 >name : Symbol(name, Decl(thisTypeInFunctions4.ts, 1, 22))
 >name : Symbol(name, Decl(thisTypeInFunctions4.ts, 11, 19))
 
+        type T = typeof this;
+>T : Symbol(T, Decl(thisTypeInFunctions4.ts, 12, 25))
+>this : Symbol(this, Decl(thisTypeInFunctions4.ts, 7, 25))
+
     });
 }
