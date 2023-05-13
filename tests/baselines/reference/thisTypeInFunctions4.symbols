@@ -33,7 +33,7 @@ function problemFunction(this: CorrectObject | WrongObject): void {
 >callsCallback : Symbol(callsCallback, Decl(thisTypeInFunctions4.ts, 3, 58))
 >name : Symbol(name, Decl(thisTypeInFunctions4.ts, 11, 19))
 
-        this.name = name; //This throws error, even though "this" should be bound by the arrow function, where it's specified to be the correct type
+        this.name = name; //should not error
 >this.name : Symbol(name, Decl(thisTypeInFunctions4.ts, 1, 22))
 >this : Symbol(this, Decl(thisTypeInFunctions4.ts, 7, 25))
 >name : Symbol(name, Decl(thisTypeInFunctions4.ts, 1, 22))

@@ -28,12 +28,12 @@ function problemFunction(this: CorrectObject | WrongObject): void {
 >this : WrongObject | CorrectObject
 
     callsCallback((name)=>{
->callsCallback((name)=>{        this.name = name; //This throws error, even though "this" should be bound by the arrow function, where it's specified to be the correct type    }) : any
+>callsCallback((name)=>{        this.name = name; //should not error    }) : any
 >callsCallback : (cb: (name: string) => void) => any
->(name)=>{        this.name = name; //This throws error, even though "this" should be bound by the arrow function, where it's specified to be the correct type    } : (name: string) => void
+>(name)=>{        this.name = name; //should not error    } : (name: string) => void
 >name : string
 
-        this.name = name; //This throws error, even though "this" should be bound by the arrow function, where it's specified to be the correct type
+        this.name = name; //should not error
 >this.name = name : string
 >this.name : string
 >this : CorrectObject

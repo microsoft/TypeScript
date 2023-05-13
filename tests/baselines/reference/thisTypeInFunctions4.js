@@ -11,7 +11,7 @@ function problemFunction(this: CorrectObject | WrongObject): void {
     if (!isCorrect(this)) return;
 
     callsCallback((name)=>{
-        this.name = name; //This throws error, even though "this" should be bound by the arrow function, where it's specified to be the correct type
+        this.name = name; //should not error
     });
 }
 
@@ -22,6 +22,6 @@ function problemFunction() {
     if (!isCorrect(this))
         return;
     callsCallback(function (name) {
-        _this.name = name; //This throws error, even though "this" should be bound by the arrow function, where it's specified to be the correct type
+        _this.name = name; //should not error
     });
 }
