@@ -67,5 +67,5 @@ let Example = exports.Example = (() => {
 })();
 (function (Example) {
     Example.x = 1;
-})(Example = exports.Example || (exports.Example = {}));
+})(Example || (exports.Example = Example = {}));
 Example.foo();

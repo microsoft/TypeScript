@@ -140,7 +140,7 @@ var Choice;
 (function (Choice) {
     Choice[Choice["One"] = 0] = "One";
     Choice[Choice["Two"] = 1] = "Two";
-})(Choice = exports.Choice || (exports.Choice = {}));
+})(Choice || (exports.Choice = Choice = {}));
 var choice = Choice.One;
 var choiceOne = Choice.One;
 if (choice === choiceOne) { }

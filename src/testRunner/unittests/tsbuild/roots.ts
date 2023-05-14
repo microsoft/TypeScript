@@ -1,8 +1,8 @@
 import { dedent } from "../../_namespaces/Utils";
 import {
-    loadProjectFromFiles,
     verifyTsc,
-} from "../tsc/helpers";
+} from "../helpers/tsc";
+import { loadProjectFromFiles } from "../helpers/vfs";
 
 describe("unittests:: tsbuild:: roots::", () => {
     verifyTsc({

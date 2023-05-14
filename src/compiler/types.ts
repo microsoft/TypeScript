@@ -451,8 +451,6 @@ export const enum SyntaxKind {
     NotEmittedStatement,
     PartiallyEmittedExpression,
     CommaListExpression,
-    MergeDeclarationMarker,
-    EndOfDeclarationMarker,
     SyntheticReferenceExpression,
 
     // Enum value count
@@ -1221,6 +1219,7 @@ export type HasJSDoc =
     | PropertyDeclaration
     | PropertySignature
     | ReturnStatement
+    | SemicolonClassElement
     | ShorthandPropertyAssignment
     | SpreadAssignment
     | SwitchStatement
@@ -1723,11 +1722,9 @@ export type PropertyName = Identifier | StringLiteral | NumericLiteral | Compute
 export type MemberName = Identifier | PrivateIdentifier;
 
 export type DeclarationName =
-    | Identifier
-    | PrivateIdentifier
+    | PropertyName
+    | JsxAttributeName
     | StringLiteralLike
-    | NumericLiteral
-    | ComputedPropertyName
     | ElementAccessExpression
     | BindingPattern
     | EntityNameExpression;
@@ -2103,7 +2100,7 @@ export interface ConstructorDeclaration extends FunctionLikeDeclarationBase, Cla
 }
 
 /** For when we encounter a semicolon in a class declaration. ES6 allows these as class elements. */
-export interface SemicolonClassElement extends ClassElement {
+export interface SemicolonClassElement extends ClassElement, JSDocContainer {
     readonly kind: SyntaxKind.SemicolonClassElement;
     readonly parent: ClassLikeDeclaration;
 }
@@ -2333,7 +2330,7 @@ export interface LiteralTypeNode extends TypeNode {
 
 export interface StringLiteral extends LiteralExpression, Declaration {
     readonly kind: SyntaxKind.StringLiteral;
-    /** @internal */ readonly textSourceNode?: Identifier | StringLiteralLike | NumericLiteral | PrivateIdentifier; // Allows a StringLiteral to get its text from another node (used by transforms).
+    /** @internal */ readonly textSourceNode?: Identifier | StringLiteralLike | NumericLiteral | PrivateIdentifier | JsxNamespacedName; // Allows a StringLiteral to get its text from another node (used by transforms).
     /**
      * Note: this is only set when synthesizing a node, not during parsing.
      *
@@ -2343,7 +2340,7 @@ export interface StringLiteral extends LiteralExpression, Declaration {
 }
 
 export type StringLiteralLike = StringLiteral | NoSubstitutionTemplateLiteral;
-export type PropertyNameLiteral = Identifier | StringLiteralLike | NumericLiteral;
+export type PropertyNameLiteral = Identifier | StringLiteralLike | NumericLiteral | JsxNamespacedName;
 
 export interface TemplateLiteralTypeNode extends TypeNode {
     kind: SyntaxKind.TemplateLiteralType,
@@ -3192,7 +3189,7 @@ export type JsxTagNameExpression =
     ;
 
 export interface JsxTagNamePropertyAccess extends PropertyAccessExpression {
-    readonly expression: JsxTagNameExpression;
+    readonly expression: Identifier | ThisExpression | JsxTagNamePropertyAccess;
 }
 
 export interface JsxAttributes extends PrimaryExpression, Declaration {
@@ -3201,7 +3198,7 @@ export interface JsxAttributes extends PrimaryExpression, Declaration {
     readonly parent: JsxOpeningLikeElement;
 }
 
-export interface JsxNamespacedName extends PrimaryExpression {
+export interface JsxNamespacedName extends Node {
     readonly kind: SyntaxKind.JsxNamespacedName;
     readonly name: Identifier;
     readonly namespace: Identifier;
@@ -3304,15 +3301,6 @@ export interface NotEmittedStatement extends Statement {
 }
 
 /**
- * Marks the end of transformed declaration to properly emit exports.
- *
- * @internal
- */
-export interface EndOfDeclarationMarker extends Statement {
-    readonly kind: SyntaxKind.EndOfDeclarationMarker;
-}
-
-/**
  * A list of comma-separated expressions. This node is only created by transformations.
  */
 export interface CommaListExpression extends Expression {
@@ -3320,14 +3308,6 @@ export interface CommaListExpression extends Expression {
     readonly elements: NodeArray<Expression>;
 }
 
-/**
- * Marks the beginning of a merged transformed declaration.
- *
- * @internal
- */
-export interface MergeDeclarationMarker extends Statement {
-    readonly kind: SyntaxKind.MergeDeclarationMarker;
-}
 
 /** @internal */
 export interface SyntheticReferenceExpression extends LeftHandSideExpression {
@@ -4239,7 +4219,6 @@ export interface SourceFileLike {
     getPositionOfLineAndCharacter?(line: number, character: number, allowEdits?: true): number;
 }
 
-
 /** @internal */
 export interface RedirectInfo {
     /** Source file this redirects to. */
@@ -4725,6 +4704,12 @@ export const enum EmitOnly{
     Js,
     Dts,
 }
+
+/** @internal */
+export interface LibResolution<T extends ResolvedModuleWithFailedLookupLocations = ResolvedModuleWithFailedLookupLocations> {
+    resolution: T;
+    actual: string;
+}
 export interface Program extends ScriptReferenceHost {
     getCurrentDirectory(): string;
     /**
@@ -4825,6 +4810,12 @@ export interface Program extends ScriptReferenceHost {
      * @internal
      */
     readonly usesUriStyleNodeCoreModules: boolean;
+    /**
+     * Map from libFileName to actual resolved location of the lib
+     * @internal
+     */
+    resolvedLibReferences: Map<string, LibResolution> | undefined;
+    /** @internal */ getCurrentPackagesMap(): Map<string, boolean> | undefined;
     /**
      * Is the file emitted file
      *
@@ -4960,6 +4951,9 @@ export interface TypeCheckerHost extends ModuleSpecifierResolutionHost {
     isSourceOfProjectReferenceRedirect(fileName: string): boolean;
 
     readonly redirectTargetsMap: RedirectTargetsMap;
+
+    typesPackageExists(packageName: string): boolean;
+    packageBundlesTypes(packageName: string): boolean;
 }
 
 export interface TypeChecker {
@@ -5702,6 +5696,7 @@ export interface EmitResolver {
     // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
     getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): string | number | undefined;
     getReferencedValueDeclaration(reference: Identifier): Declaration | undefined;
+    getReferencedValueDeclarations(reference: Identifier): Declaration[] | undefined;
     getTypeReferenceSerializationKind(typeName: EntityName, location?: Node): TypeReferenceSerializationKind;
     isOptionalParameter(node: ParameterDeclaration): boolean;
     moduleExportsSomeValue(moduleReferenceExpression: Expression): boolean;
@@ -6065,6 +6060,7 @@ export interface NodeLinks {
     spreadIndices?: { first: number | undefined, last: number | undefined }; // Indices of first and last spread elements in array literal
     parameterInitializerContainsUndefined?: boolean; // True if this is a parameter declaration whose type annotation contains "undefined".
     fakeScopeForSignatureDeclaration?: boolean; // True if this is a fake scope injected into an enclosing declaration chain.
+    assertionExpressionType?: Type;     // Cached type of the expression of a type assertion
 }
 
 /** @internal */
@@ -6932,6 +6928,16 @@ export interface DiagnosticMessage {
     elidedInCompatabilityPyramid?: boolean;
 }
 
+/** @internal */
+export interface RepopulateModuleNotFoundDiagnosticChain {
+    moduleReference: string;
+    mode: ResolutionMode;
+    packageName: string | undefined;
+}
+
+/** @internal */
+export type RepopulateDiagnosticChainInfo = RepopulateModuleNotFoundDiagnosticChain;
+
 /**
  * A linked list of formatted diagnostic messages to be used as part of a multiline message.
  * It is built from the bottom up, leaving the head to be the "main" diagnostic.
@@ -6943,6 +6949,8 @@ export interface DiagnosticMessageChain {
     category: DiagnosticCategory;
     code: number;
     next?: DiagnosticMessageChain[];
+    /** @internal */
+    repopulateInfo?: () => RepopulateDiagnosticChainInfo;
 }
 
 export interface Diagnostic extends DiagnosticRelatedInformation {
@@ -7360,7 +7368,7 @@ export interface ConfigFileSpecs {
 }
 
 /** @internal */
-export type RequireResult<T = {}> =
+export type ModuleImportResult<T = {}> =
     | { module: T, modulePath?: string, error: undefined }
     | { module: undefined, modulePath?: undefined, error: { stack?: string, message?: string } };
 
@@ -7741,6 +7749,8 @@ export interface ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
 /** @internal */
 export type HasInvalidatedResolutions = (sourceFile: Path) => boolean;
 /** @internal */
+export type HasInvalidatedLibResolutions = (libFileName: string) => boolean;
+/** @internal */
 export type HasChangedAutomaticTypeDirectiveNames = () => boolean;
 
 export interface CompilerHost extends ModuleResolutionHost {
@@ -7791,6 +7801,18 @@ export interface CompilerHost extends ModuleResolutionHost {
         containingSourceFile: SourceFile | undefined,
         reusedNames: readonly T[] | undefined
     ): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[];
+    /** @internal */
+    resolveLibrary?(
+        libraryName: string,
+        resolveFrom: string,
+        options: CompilerOptions,
+        libFileName: string,
+    ): ResolvedModuleWithFailedLookupLocations;
+    /**
+     * If provided along with custom resolveLibrary, used to determine if we should redo library resolutions
+     * @internal
+     */
+    hasInvalidatedLibResolutions?(libFileName: string): boolean;
     getEnvironmentVariable?(name: string): string | undefined;
     /** @internal */ onReleaseOldSourceFile?(oldSourceFile: SourceFile, oldOptions: CompilerOptions, hasSourceFileByPath: boolean): void;
     /** @internal */ onReleaseParsedCommandLine?(configFileName: string, oldResolvedRef: ResolvedProjectReference | undefined, optionOptions: CompilerOptions): void;
@@ -7995,9 +8017,8 @@ export const enum EmitFlags {
     ReuseTempVariableScope = 1 << 20,       // Reuse the existing temp variable scope during emit.
     CustomPrologue = 1 << 21,               // Treat the statement as if it were a prologue directive (NOTE: Prologue directives are *not* transformed).
     NoHoisting = 1 << 22,                   // Do not hoist this declaration in --module system
-    HasEndOfDeclarationMarker = 1 << 23,    // Declaration has an associated NotEmittedStatement to mark the end of the declaration
-    Iterator = 1 << 24,                     // The expression to a `yield*` should be treated as an Iterator when down-leveling, not an Iterable.
-    NoAsciiEscaping = 1 << 25,              // When synthesizing nodes that lack an original node or textSourceNode, we want to write the text on the node with ASCII escaping substitutions.
+    Iterator = 1 << 23,                     // The expression to a `yield*` should be treated as an Iterator when down-leveling, not an Iterable.
+    NoAsciiEscaping = 1 << 24,              // When synthesizing nodes that lack an original node or textSourceNode, we want to write the text on the node with ASCII escaping substitutions.
 }
 
 /** @internal */
@@ -8799,8 +8820,6 @@ export interface NodeFactory {
     //
 
     createNotEmittedStatement(original: Node): NotEmittedStatement;
-    /** @internal */ createEndOfDeclarationMarker(original: Node): EndOfDeclarationMarker;
-    /** @internal */ createMergeDeclarationMarker(original: Node): MergeDeclarationMarker;
     createPartiallyEmittedExpression(expression: Expression, original?: Node): PartiallyEmittedExpression;
     updatePartiallyEmittedExpression(node: PartiallyEmittedExpression, expression: Expression): PartiallyEmittedExpression;
     /** @internal */ createSyntheticReferenceExpression(expression: Expression, thisArg: Expression): SyntheticReferenceExpression;
@@ -8920,10 +8939,11 @@ export interface NodeFactory {
      * @param node The declaration.
      * @param allowComments A value indicating whether comments may be emitted for the name.
      * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
+     * @param ignoreAssignedName Indicates that the assigned name of a declaration shouldn't be considered.
      *
      * @internal
      */
-    getLocalName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean): Identifier;
+    getLocalName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean, ignoreAssignedName?: boolean): Identifier;
     /**
      * Gets the export name of a declaration. This is primarily used for declarations that can be
      * referred to by name in the declaration's immediate scope (classes, enums, namespaces). An

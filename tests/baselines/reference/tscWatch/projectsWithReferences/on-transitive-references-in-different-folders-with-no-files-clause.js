@@ -515,7 +515,7 @@ Loading module as file / folder, candidate module location '/user/username/proje
 File '/user/username/projects/transitiveReferences/b.ts' does not exist.
 File '/user/username/projects/transitiveReferences/b.tsx' does not exist.
 File '/user/username/projects/transitiveReferences/b.d.ts' does not exist.
-File '/user/username/projects/transitiveReferences/b/package.json' does not exist.
+File '/user/username/projects/transitiveReferences/b/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/transitiveReferences/b/index.ts' exists - use it as a name resolution result.
 ======== Module name '../b' was successfully resolved to '/user/username/projects/transitiveReferences/b/index.ts'. ========
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/c/index.ts'. ========
@@ -589,14 +589,6 @@ Dependencies for::
 
 PolledWatches::
 /user/username/projects/transitivereferences/c/node_modules/@types:
-  {"pollingInterval":500} *new*
-/user/username/projects/transitivereferences/node_modules/@types:
-  {"pollingInterval":500} *new*
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500} *new*
-
-PolledWatches *deleted*::
-/user/username/projects/transitivereferences/c/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/transitivereferences/node_modules/@types:
   {"pollingInterval":500}
@@ -612,20 +604,18 @@ FsWatches::
   {}
 /user/username/projects/transitivereferences/c/index.ts:
   {}
+/user/username/projects/transitivereferences:
+  {}
 /user/username/projects/transitivereferences/b/index.d.ts:
   {}
 /user/username/projects/transitivereferences/a/index.d.ts:
   {}
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/transitivereferences:
-  {} *new*
 /user/username/projects/transitivereferences/nrefs/a.d.ts: *new*
   {}
 
 FsWatches *deleted*::
-/user/username/projects/transitivereferences:
-  {}
 /user/username/projects/transitivereferences/refs/a.d.ts:
   {}
 
@@ -667,7 +657,7 @@ Loading module as file / folder, candidate module location '/user/username/proje
 File '/user/username/projects/transitiveReferences/b.ts' does not exist.
 File '/user/username/projects/transitiveReferences/b.tsx' does not exist.
 File '/user/username/projects/transitiveReferences/b.d.ts' does not exist.
-File '/user/username/projects/transitiveReferences/b/package.json' does not exist.
+File '/user/username/projects/transitiveReferences/b/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/transitiveReferences/b/index.ts' exists - use it as a name resolution result.
 ======== Module name '../b' was successfully resolved to '/user/username/projects/transitiveReferences/b/index.ts'. ========
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/c/index.ts'. ========
@@ -741,14 +731,6 @@ Dependencies for::
 
 PolledWatches::
 /user/username/projects/transitivereferences/c/node_modules/@types:
-  {"pollingInterval":500} *new*
-/user/username/projects/transitivereferences/node_modules/@types:
-  {"pollingInterval":500} *new*
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500} *new*
-
-PolledWatches *deleted*::
-/user/username/projects/transitivereferences/c/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/transitivereferences/node_modules/@types:
   {"pollingInterval":500}
@@ -764,20 +746,18 @@ FsWatches::
   {}
 /user/username/projects/transitivereferences/c/index.ts:
   {}
+/user/username/projects/transitivereferences:
+  {}
 /user/username/projects/transitivereferences/b/index.d.ts:
   {}
 /user/username/projects/transitivereferences/a/index.d.ts:
   {}
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/transitivereferences:
-  {} *new*
 /user/username/projects/transitivereferences/refs/a.d.ts: *new*
   {}
 
 FsWatches *deleted*::
-/user/username/projects/transitivereferences:
-  {}
 /user/username/projects/transitivereferences/nrefs/a.d.ts:
   {}
 
@@ -889,11 +869,11 @@ FsWatches::
   {}
 /user/username/projects/transitivereferences/c/index.ts:
   {}
+/user/username/projects/transitivereferences:
+  {}
 /user/username/projects/transitivereferences/b/index.d.ts:
   {}
 /a/lib/lib.d.ts:
-  {}
-/user/username/projects/transitivereferences:
   {}
 /user/username/projects/transitivereferences/refs/a.d.ts:
   {}
@@ -1001,11 +981,11 @@ FsWatches::
   {}
 /user/username/projects/transitivereferences/c/index.ts:
   {}
+/user/username/projects/transitivereferences:
+  {}
 /user/username/projects/transitivereferences/b/index.d.ts:
   {}
 /a/lib/lib.d.ts:
-  {}
-/user/username/projects/transitivereferences:
   {}
 /user/username/projects/transitivereferences/refs/a.d.ts:
   {}
@@ -1123,9 +1103,9 @@ FsWatches::
   {}
 /user/username/projects/transitivereferences/c/index.ts:
   {}
-/a/lib/lib.d.ts:
-  {}
 /user/username/projects/transitivereferences:
+  {}
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/transitivereferences/refs/a.d.ts:
   {}
@@ -1247,9 +1227,9 @@ FsWatches::
   {}
 /user/username/projects/transitivereferences/c/index.ts:
   {}
-/a/lib/lib.d.ts:
-  {}
 /user/username/projects/transitivereferences:
+  {}
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/transitivereferences/refs/a.d.ts:
   {}
@@ -1367,9 +1347,9 @@ FsWatches::
   {}
 /user/username/projects/transitivereferences/c/index.ts:
   {}
-/a/lib/lib.d.ts:
-  {}
 /user/username/projects/transitivereferences:
+  {}
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/transitivereferences/refs/a.d.ts:
   {}
@@ -1487,9 +1467,9 @@ FsWatches::
   {}
 /user/username/projects/transitivereferences/c/index.ts:
   {}
-/a/lib/lib.d.ts:
-  {}
 /user/username/projects/transitivereferences:
+  {}
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/transitivereferences/refs/a.d.ts:
   {}

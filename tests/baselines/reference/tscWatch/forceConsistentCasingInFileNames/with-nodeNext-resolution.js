@@ -130,13 +130,13 @@ FsWatches::
   {}
 /users/name/projects/web/node_modules/@types/yargs/index.d.ts: *new*
   {}
+/users/name/projects/web/node_modules/@types/yargs/package.json: *new*
+  {}
 /a/lib/lib.d.ts: *new*
   {}
 /users/name/projects: *new*
   {}
 /users/name/projects/web: *new*
-  {}
-/users/name/projects/web/node_modules/@types/yargs/package.json: *new*
   {}
 
 FsWatchesRecursive::

@@ -1941,7 +1941,6 @@ function isLeftHandSideExpressionKind(kind: SyntaxKind): boolean {
         case SyntaxKind.JsxElement:
         case SyntaxKind.JsxSelfClosingElement:
         case SyntaxKind.JsxFragment:
-        case SyntaxKind.JsxNamespacedName:
         case SyntaxKind.TaggedTemplateExpression:
         case SyntaxKind.ArrayLiteralExpression:
         case SyntaxKind.ParenthesizedExpression:
@@ -2334,9 +2333,7 @@ function isStatementKindButNotDeclarationKind(kind: SyntaxKind) {
         || kind === SyntaxKind.VariableStatement
         || kind === SyntaxKind.WhileStatement
         || kind === SyntaxKind.WithStatement
-        || kind === SyntaxKind.NotEmittedStatement
-        || kind === SyntaxKind.EndOfDeclarationMarker
-        || kind === SyntaxKind.MergeDeclarationMarker;
+        || kind === SyntaxKind.NotEmittedStatement;
 }
 
 /** @internal */

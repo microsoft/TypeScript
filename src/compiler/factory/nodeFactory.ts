@@ -79,7 +79,6 @@ import {
     EmitNode,
     emptyArray,
     EmptyStatement,
-    EndOfDeclarationMarker,
     EndOfFileToken,
     EntityName,
     EnumDeclaration,
@@ -121,6 +120,7 @@ import {
     getLineAndCharacterOfPosition,
     getNameOfDeclaration,
     getNodeId,
+    getNonAssignedNameOfDeclaration,
     getSourceMapRange,
     getSyntheticLeadingComments,
     getSyntheticTrailingComments,
@@ -298,7 +298,6 @@ import {
     MemberName,
     memoize,
     memoizeOne,
-    MergeDeclarationMarker,
     MetaProperty,
     MethodDeclaration,
     MethodSignature,
@@ -946,8 +945,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         updatePartiallyEmittedExpression,
         createCommaListExpression,
         updateCommaListExpression,
-        createEndOfDeclarationMarker,
-        createMergeDeclarationMarker,
         createSyntheticReferenceExpression,
         updateSyntheticReferenceExpression,
         cloneNode,
@@ -6210,30 +6207,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             : node;
     }
 
-    /**
-     * Creates a synthetic element to act as a placeholder for the end of an emitted declaration in
-     * order to properly emit exports.
-     */
-    // @api
-    function createEndOfDeclarationMarker(original: Node) {
-        const node = createBaseNode<EndOfDeclarationMarker>(SyntaxKind.EndOfDeclarationMarker);
-        node.emitNode = {} as EmitNode;
-        node.original = original;
-        return node;
-    }
-
-    /**
-     * Creates a synthetic element to act as a placeholder for the beginning of a merged declaration in
-     * order to properly emit exports.
-     */
-    // @api
-    function createMergeDeclarationMarker(original: Node) {
-        const node = createBaseNode<MergeDeclarationMarker>(SyntaxKind.MergeDeclarationMarker);
-        node.emitNode = {} as EmitNode;
-        node.original = original;
-        return node;
-    }
-
     // @api
     function createSyntheticReferenceExpression(expression: Expression, thisArg: Expression) {
         const node = createBaseNode<SyntheticReferenceExpression>(SyntaxKind.SyntheticReferenceExpression);
@@ -6672,8 +6645,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             : reduceLeft(expressions, factory.createComma)!;
     }
 
-    function getName(node: Declaration | undefined, allowComments?: boolean, allowSourceMaps?: boolean, emitFlags: EmitFlags = 0) {
-        const nodeName = getNameOfDeclaration(node);
+    function getName(node: Declaration | undefined, allowComments?: boolean, allowSourceMaps?: boolean, emitFlags: EmitFlags = 0, ignoreAssignedName?: boolean) {
+        const nodeName = ignoreAssignedName ? node && getNonAssignedNameOfDeclaration(node) : getNameOfDeclaration(node);
         if (nodeName && isIdentifier(nodeName) && !isGeneratedIdentifier(nodeName)) {
             // TODO(rbuckton): Does this need to be parented?
             const name = setParent(setTextRange(cloneNode(nodeName), nodeName), nodeName.parent);
@@ -6710,9 +6683,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
      * @param node The declaration.
      * @param allowComments A value indicating whether comments may be emitted for the name.
      * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
+     * @param ignoreAssignedName Indicates that the assigned name of a declaration shouldn't be considered.
      */
-    function getLocalName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean) {
-        return getName(node, allowComments, allowSourceMaps, EmitFlags.LocalName);
+    function getLocalName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean, ignoreAssignedName?: boolean) {
+        return getName(node, allowComments, allowSourceMaps, EmitFlags.LocalName, ignoreAssignedName);
     }
 
     /**

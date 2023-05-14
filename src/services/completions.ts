@@ -2938,7 +2938,7 @@ function getContextualType(previousToken: Node, position: number, sourceFile: So
                 isEqualityOperatorKind(previousToken.kind) && isBinaryExpression(parent) && isEqualityOperatorKind(parent.operatorToken.kind) ?
                     // completion at `x ===/**/` should be for the right side
                     checker.getTypeAtLocation(parent.left) :
-                    checker.getContextualType(previousToken as Expression);
+                    checker.getContextualType(previousToken as Expression, ContextFlags.Completions) || checker.getContextualType(previousToken as Expression);
     }
 }
 
@@ -4607,9 +4607,9 @@ function getCompletionData(
         return isDeclarationName(contextToken)
             && !isShorthandPropertyAssignment(contextToken.parent)
             && !isJsxAttribute(contextToken.parent)
-            // Don't block completions if we're in `class C /**/` or `interface I /**/`, because we're *past* the end of the identifier and might want to complete `extends`.
-            // If `contextToken !== previousToken`, this is `class C ex/**/ or `interface I ex/**/``.
-            && !((isClassLike(contextToken.parent) || isInterfaceDeclaration(contextToken.parent)) && (contextToken !== previousToken || position > previousToken.end));
+            // Don't block completions if we're in `class C /**/`, `interface I /**/` or `<T /**/>` , because we're *past* the end of the identifier and might want to complete `extends`.
+            // If `contextToken !== previousToken`, this is `class C ex/**/`, `interface I ex/**/` or `<T ex/**/>`.
+            && !((isClassLike(contextToken.parent) || isInterfaceDeclaration(contextToken.parent) || isTypeParameterDeclaration(contextToken.parent)) && (contextToken !== previousToken || position > previousToken.end));
     }
 
     function isPreviousPropertyDeclarationTerminated(contextToken: Node, position: number) {

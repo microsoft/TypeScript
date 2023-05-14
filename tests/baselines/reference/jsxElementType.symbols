@@ -289,7 +289,13 @@ declare global {
   }
 }
 
-<a:b a="accepted" b="rejected" />;
+<a:b a="accepted" />;
 >a : Symbol(a, Decl(jsxElementType.tsx, 108, 4))
->b : Symbol(b, Decl(jsxElementType.tsx, 108, 17))
+
+<a:b b="rejected" />;
+>b : Symbol(b, Decl(jsxElementType.tsx, 109, 4))
+
+<a:b a="accepted" b="rejected" />;
+>a : Symbol(a, Decl(jsxElementType.tsx, 110, 4))
+>b : Symbol(b, Decl(jsxElementType.tsx, 110, 17))
 

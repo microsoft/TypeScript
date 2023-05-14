@@ -204,6 +204,20 @@ function f15<T extends string[], U extends T>(k0: keyof T, k1: keyof [...T], k2:
     k3 = '2';  // Error
 }
 
+// Constraints of variadic tuple types
+
+function ft16<T extends [unknown]>(x: [unknown, unknown], y: [...T, ...T]) {
+    x = y;
+}
+
+function ft17<T extends [] | [unknown]>(x: [unknown, unknown], y: [...T, ...T]) {
+    x = y;
+}
+
+function ft18<T extends unknown[]>(x: [unknown, unknown], y: [...T, ...T]) {
+    x = y;
+}
+
 // Inference between variadic tuple types
 
 type First<T extends readonly unknown[]> =
@@ -401,6 +415,11 @@ type U1 = [string, ...Numbers, boolean];
 type U2 = [...[string, ...Numbers], boolean];
 type U3 = [...[string, number], boolean];
 
+// Repro from #53563
+
+type ToStringLength1<T extends any[]> = `${T['length']}`;
+type ToStringLength2<T extends any[]> = `${[...T]['length']}`;
+
 
 //// [variadicTuples1.js]
 "use strict";
@@ -541,6 +560,16 @@ function f15(k0, k1, k2, k3) {
     k3 = '1';
     k3 = '2'; // Error
 }
+// Constraints of variadic tuple types
+function ft16(x, y) {
+    x = y;
+}
+function ft17(x, y) {
+    x = y;
+}
+function ft18(x, y) {
+    x = y;
+}
 // Inference to [...T, ...U] with implied arity for T
 function curry(f) {
     var a = [];
@@ -677,6 +706,9 @@ declare function f12<T extends readonly unknown[]>(t: T, m: [...T], r: readonly 
 declare function f13<T extends string[], U extends T>(t0: T, t1: [...T], t2: [...U]): void;
 declare function f14<T extends readonly string[], U extends T>(t0: T, t1: [...T], t2: [...U]): void;
 declare function f15<T extends string[], U extends T>(k0: keyof T, k1: keyof [...T], k2: keyof [...U], k3: keyof [1, 2, ...T]): void;
+declare function ft16<T extends [unknown]>(x: [unknown, unknown], y: [...T, ...T]): void;
+declare function ft17<T extends [] | [unknown]>(x: [unknown, unknown], y: [...T, ...T]): void;
+declare function ft18<T extends unknown[]>(x: [unknown, unknown], y: [...T, ...T]): void;
 type First<T extends readonly unknown[]> = T extends readonly [unknown, ...unknown[]] ? T[0] : T[0] | undefined;
 type DropFirst<T extends readonly unknown[]> = T extends readonly [unknown?, ...infer U] ? U : [...T];
 type Last<T extends readonly unknown[]> = T extends readonly [...unknown[], infer U] ? U : T extends readonly [unknown, ...unknown[]] ? T[number] : T[number] | undefined;
@@ -794,3 +826,5 @@ declare const data: Unbounded;
 type U1 = [string, ...Numbers, boolean];
 type U2 = [...[string, ...Numbers], boolean];
 type U3 = [...[string, number], boolean];
+type ToStringLength1<T extends any[]> = `${T['length']}`;
+type ToStringLength2<T extends any[]> = `${[...T]['length']}`;

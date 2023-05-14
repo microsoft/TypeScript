@@ -22,7 +22,15 @@ Info seq  [hh:mm:ss:mss] For info: /a.js :: Config file name: /jsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /jsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /jsconfig.json 2000 undefined Project: /jsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"projectLoadingStart","body":{"projectName":"/jsconfig.json","reason":"Creating possible configured project for /a.js to open"}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "projectLoadingStart",
+     "body": {
+      "projectName": "/jsconfig.json",
+      "reason": "Creating possible configured project for /a.js to open"
+     }
+    }
 Info seq  [hh:mm:ss:mss] Config: /jsconfig.json : {
  "rootNames": [
   "/a.js"
@@ -130,12 +138,12 @@ TI:: [hh:mm:ss:mss] Explicitly included types: ["hunter2","hunter3"]
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":["hunter2","hunter3"],"filesToWatch":["/bower_components","/node_modules"]}
 TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":["hunter2","hunter3"],"filesToWatch":["/bower_components","/node_modules"]}
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /bower_components
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: /jsconfig.json watcher already invoked: false
-TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: /jsconfig.json watcher already invoked: false
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: /jsconfig.json watcher already invoked: false
-TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: /jsconfig.json watcher already invoked: false
+TI:: [hh:mm:ss:mss] Sending response:
+    {"kind":"action::watchTypingLocations","projectName":"/jsconfig.json","files":["/bower_components","/node_modules"]}
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: /jsconfig.json WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: /jsconfig.json WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: /jsconfig.json WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: /jsconfig.json WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Installing typings ["hunter2","hunter3"]
 TI:: [hh:mm:ss:mss] 'hunter2':: Entry for package 'hunter2' does not exist in local types registry - skipping...
 TI:: [hh:mm:ss:mss] 'hunter3':: Entry for package 'hunter3' does not exist in local types registry - skipping...
@@ -143,14 +151,121 @@ TI:: [hh:mm:ss:mss] All typings are known to be missing or invalid - no need to 
 TI:: [hh:mm:ss:mss] Sending response:
     {"projectName":"/jsconfig.json","typeAcquisition":{"enable":true,"include":["hunter2","hunter3"],"exclude":[]},"compilerOptions":{"allowJs":true,"maxNodeModuleJsDepth":2,"allowSyntheticDefaultImports":true,"skipLibCheck":true,"noEmit":true,"configFilePath":"/jsconfig.json","allowNonTsExtensions":true},"typings":[],"unresolvedImports":[],"kind":"action::set"}
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"projectLoadingFinish","body":{"projectName":"/jsconfig.json"}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "projectLoadingFinish",
+     "body": {
+      "projectName": "/jsconfig.json"
+     }
+    }
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"telemetry","body":{"telemetryEventName":"projectInfo","payload":{"projectId":"d3f7418c3d4888d0a51e42716b5a330dab4da64c452eebe918c1e0e634d8ede1","fileStats":{"js":1,"jsSize":0,"jsx":0,"jsxSize":0,"ts":0,"tsSize":0,"tsx":0,"tsxSize":0,"dts":0,"dtsSize":0,"deferred":0,"deferredSize":0},"compilerOptions":{"allowJs":true,"maxNodeModuleJsDepth":2,"allowSyntheticDefaultImports":true,"skipLibCheck":true,"noEmit":true},"typeAcquisition":{"enable":true,"include":true,"exclude":false},"extends":false,"files":false,"include":false,"exclude":false,"compileOnSave":false,"configFileName":"jsconfig.json","projectType":"configured","languageServiceEnabled":true,"version":"FakeVersion"}}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "telemetry",
+     "body": {
+      "telemetryEventName": "projectInfo",
+      "payload": {
+       "projectId": "d3f7418c3d4888d0a51e42716b5a330dab4da64c452eebe918c1e0e634d8ede1",
+       "fileStats": {
+        "js": 1,
+        "jsSize": 0,
+        "jsx": 0,
+        "jsxSize": 0,
+        "ts": 0,
+        "tsSize": 0,
+        "tsx": 0,
+        "tsxSize": 0,
+        "dts": 0,
+        "dtsSize": 0,
+        "deferred": 0,
+        "deferredSize": 0
+       },
+       "compilerOptions": {
+        "allowJs": true,
+        "maxNodeModuleJsDepth": 2,
+        "allowSyntheticDefaultImports": true,
+        "skipLibCheck": true,
+        "noEmit": true
+       },
+       "typeAcquisition": {
+        "enable": true,
+        "include": true,
+        "exclude": false
+       },
+       "extends": false,
+       "files": false,
+       "include": false,
+       "exclude": false,
+       "compileOnSave": false,
+       "configFileName": "jsconfig.json",
+       "projectType": "configured",
+       "languageServiceEnabled": true,
+       "version": "FakeVersion"
+      }
+     }
+    }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /jsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /jsconfig.json Version: 2 structureChanged: false structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Same program as before
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"configFileDiag","body":{"triggerFile":"/a.js","configFile":"/jsconfig.json","diagnostics":[{"text":"File '/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'","code":6053,"category":"error"},{"text":"Cannot find global type 'Array'.","code":2318,"category":"error"},{"text":"Cannot find global type 'Boolean'.","code":2318,"category":"error"},{"text":"Cannot find global type 'Function'.","code":2318,"category":"error"},{"text":"Cannot find global type 'IArguments'.","code":2318,"category":"error"},{"text":"Cannot find global type 'Number'.","code":2318,"category":"error"},{"text":"Cannot find global type 'Object'.","code":2318,"category":"error"},{"text":"Cannot find global type 'RegExp'.","code":2318,"category":"error"},{"text":"Cannot find global type 'String'.","code":2318,"category":"error"}]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "configFileDiag",
+     "body": {
+      "triggerFile": "/a.js",
+      "configFile": "/jsconfig.json",
+      "diagnostics": [
+       {
+        "text": "File '/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
+        "code": 6053,
+        "category": "error"
+       },
+       {
+        "text": "Cannot find global type 'Array'.",
+        "code": 2318,
+        "category": "error"
+       },
+       {
+        "text": "Cannot find global type 'Boolean'.",
+        "code": 2318,
+        "category": "error"
+       },
+       {
+        "text": "Cannot find global type 'Function'.",
+        "code": 2318,
+        "category": "error"
+       },
+       {
+        "text": "Cannot find global type 'IArguments'.",
+        "code": 2318,
+        "category": "error"
+       },
+       {
+        "text": "Cannot find global type 'Number'.",
+        "code": 2318,
+        "category": "error"
+       },
+       {
+        "text": "Cannot find global type 'Object'.",
+        "code": 2318,
+        "category": "error"
+       },
+       {
+        "text": "Cannot find global type 'RegExp'.",
+        "code": 2318,
+        "category": "error"
+       },
+       {
+        "text": "Cannot find global type 'String'.",
+        "code": 2318,
+        "category": "error"
+       }
+      ]
+     }
+    }
 Info seq  [hh:mm:ss:mss] Project '/jsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 

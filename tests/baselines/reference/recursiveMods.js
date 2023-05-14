@@ -35,7 +35,7 @@ var Foo;
         return C;
     }());
     Foo.C = C;
-})(Foo = exports.Foo || (exports.Foo = {}));
+})(Foo || (exports.Foo = Foo = {}));
 (function (Foo) {
     function Bar() {
         if (true) {
@@ -51,4 +51,4 @@ var Foo;
         var c = Baz();
         return;
     }
-})(Foo = exports.Foo || (exports.Foo = {}));
+})(Foo || (exports.Foo = Foo = {}));

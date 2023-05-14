@@ -595,12 +595,6 @@ Dependencies for::
 
 PolledWatches::
 /user/username/projects/transitivereferences/node_modules/@types:
-  {"pollingInterval":500} *new*
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500} *new*
-
-PolledWatches *deleted*::
-/user/username/projects/transitivereferences/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
@@ -728,12 +722,6 @@ Dependencies for::
   /user/username/projects/transitiveReferences/a.d.ts
 
 PolledWatches::
-/user/username/projects/transitivereferences/node_modules/@types:
-  {"pollingInterval":500} *new*
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500} *new*
-
-PolledWatches *deleted*::
 /user/username/projects/transitivereferences/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:

@@ -770,6 +770,41 @@ function f15<T extends string[], U extends T>(k0: keyof T, k1: keyof [...T], k2:
 >'2' : "2"
 }
 
+// Constraints of variadic tuple types
+
+function ft16<T extends [unknown]>(x: [unknown, unknown], y: [...T, ...T]) {
+>ft16 : <T extends [unknown]>(x: [unknown, unknown], y: [...T, ...T]) => void
+>x : [unknown, unknown]
+>y : [...T, ...T]
+
+    x = y;
+>x = y : [...T, ...T]
+>x : [unknown, unknown]
+>y : [...T, ...T]
+}
+
+function ft17<T extends [] | [unknown]>(x: [unknown, unknown], y: [...T, ...T]) {
+>ft17 : <T extends [] | [unknown]>(x: [unknown, unknown], y: [...T, ...T]) => void
+>x : [unknown, unknown]
+>y : [...T, ...T]
+
+    x = y;
+>x = y : [...T, ...T]
+>x : [unknown, unknown]
+>y : [...T, ...T]
+}
+
+function ft18<T extends unknown[]>(x: [unknown, unknown], y: [...T, ...T]) {
+>ft18 : <T extends unknown[]>(x: [unknown, unknown], y: [...T, ...T]) => void
+>x : [unknown, unknown]
+>y : [...T, ...T]
+
+    x = y;
+>x = y : [...T, ...T]
+>x : [unknown, unknown]
+>y : [...T, ...T]
+}
+
 // Inference between variadic tuple types
 
 type First<T extends readonly unknown[]> =
@@ -1409,4 +1444,12 @@ type U2 = [...[string, ...Numbers], boolean];
 
 type U3 = [...[string, number], boolean];
 >U3 : [string, number, boolean]
+
+// Repro from #53563
+
+type ToStringLength1<T extends any[]> = `${T['length']}`;
+>ToStringLength1 : `${T["length"]}`
+
+type ToStringLength2<T extends any[]> = `${[...T]['length']}`;
+>ToStringLength2 : `${[...T]["length"]}`
 
