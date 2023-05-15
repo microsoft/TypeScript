@@ -1,6 +1,5 @@
 import {
     Diagnostics,
-    emptyArray,
     factory,
     FindAllReferences,
     getSynthesizedDeepClone,
