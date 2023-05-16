@@ -7632,6 +7632,14 @@
         "category": "Message",
         "code": 95183
     },
+    "Inline variable": {
+        "category": "Message",
+        "code": 95184
+    },
+    "Could not find variable to inline.": {
+        "category": "Message",
+        "code": 95185
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",

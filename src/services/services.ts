@@ -1452,7 +1452,7 @@ export function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSn
     return createLanguageServiceSourceFile(sourceFile.fileName, scriptSnapshot, options, version, /*setNodeParents*/ true, sourceFile.scriptKind);
 }
 
-const NoopCancellationToken: CancellationToken = {
+export const NoopCancellationToken: CancellationToken = {
     isCancellationRequested: returnFalse,
     throwIfCancellationRequested: noop,
 };
