@@ -1,6 +1,6 @@
 import * as ts from "typescript";
 import { NodeBuilderFlags } from "typescript";
-import { map } from "../compiler/lang-utils";
+
 import { SymbolTracker } from "../compiler/types";
 
 const declarationEmitNodeBuilderFlags =
@@ -28,7 +28,7 @@ export function addTypeAnnotationTransformer(program: ts.Program, moduleResoluti
     function isVarConst(node: ts.VariableDeclaration | ts.VariableDeclarationList): boolean {
         return !!(ts.getCombinedNodeFlags(node) & ts.NodeFlags.Const);
     }
-    
+
     function isDeclarationReadonly(declaration: ts.Declaration): boolean {
         return !!(ts.getCombinedModifierFlags(declaration) & ts.ModifierFlags.Readonly && !ts.isParameterPropertyDeclaration(declaration, declaration.parent));
     }
@@ -36,20 +36,20 @@ export function addTypeAnnotationTransformer(program: ts.Program, moduleResoluti
     function isLiteralConstDeclaration(node: ts.VariableDeclaration | ts.PropertyDeclaration | ts.PropertySignature | ts.ParameterDeclaration): boolean {
         if (isDeclarationReadonly(node) || ts.isVariableDeclaration(node) && isVarConst(node)) {
             // TODO: Make sure this is a valid approximation for literal types
-            return !node.type && 'initializer' in node && !!node.initializer && ts.isLiteralExpression(node.initializer);
-            // Original TS version 
+            return !node.type && "initializer" in node && !!node.initializer && ts.isLiteralExpression(node.initializer);
+            // Original TS version
             // return isFreshLiteralType(getTypeOfSymbol(getSymbolOfNode(node)));
         }
         return false;
     }
-    
+
     const typeChecker = program.getTypeChecker();
-    
+
     return (context: ts.TransformationContext) => {
         let hasError = false;
-        let reportError = () => {
+        const reportError = () => {
             hasError = true;
-        }
+        };
         const symbolTracker: SymbolTracker | undefined = !moduleResolutionHost? undefined : {
             trackSymbol(){ return false; },
             reportInaccessibleThisError: reportError,
@@ -73,7 +73,7 @@ export function addTypeAnnotationTransformer(program: ts.Program, moduleResoluti
                 declarationEmitNodeBuilderFlags,
                 // @ts-expect-error Use undocumented parameters
                 symbolTracker,
-            )
+            );
             if (hasError) {
                 hasError = false;
                 return undefined;
@@ -83,15 +83,15 @@ export function addTypeAnnotationTransformer(program: ts.Program, moduleResoluti
         }
         // Return a visitor function
         return (rootNode: ts.Node) => {
-            function updateTypesInNodeArray<T extends ts.Node>(nodeArray: ts.NodeArray<T>): ts.NodeArray<T>
-            function updateTypesInNodeArray<T extends ts.Node>(nodeArray: ts.NodeArray<T> | undefined): ts.NodeArray<T> | undefined
+            function updateTypesInNodeArray<T extends ts.Node>(nodeArray: ts.NodeArray<T>): ts.NodeArray<T>;
+            function updateTypesInNodeArray<T extends ts.Node>(nodeArray: ts.NodeArray<T> | undefined): ts.NodeArray<T> | undefined;
             function updateTypesInNodeArray<T extends ts.Node>(nodeArray: ts.NodeArray<T> | undefined) {
                 if(nodeArray === undefined) return undefined;
                 return ts.factory.createNodeArray(
                     nodeArray.map(param => {
                         return visit(param) as ts.ParameterDeclaration;
                     })
-                )
+                );
             }
 
             // Define a visitor function
@@ -108,17 +108,17 @@ export function addTypeAnnotationTransformer(program: ts.Program, moduleResoluti
                             node.questionToken,
                             typeNode,
                             node.initializer
-                        )
+                        );
                     }
                 }
                 // Check if node is a variable declaration
                 if (ts.isVariableDeclaration(node) && !node.type && !isLiteralConstDeclaration(node)) {
                     const type = typeChecker.getTypeAtLocation(node);
-                    const typeNode = typeToTypeNode(type, node)
+                    const typeNode = typeToTypeNode(type, node);
                     return ts.factory.updateVariableDeclaration(
                         node,
                         node.name,
-                        undefined,
+                        /**exclamationToken=*/undefined,
                         typeNode,
                         node.initializer
                     );
@@ -127,10 +127,10 @@ export function addTypeAnnotationTransformer(program: ts.Program, moduleResoluti
                 if (ts.isFunctionDeclaration(node) && !node.type) {
                     const type = tryGetReturnType(typeChecker, node);
                     if(type) {
-                        
+
                         const typeNode = typeToTypeNode(type, node);
                         return ts.factory.updateFunctionDeclaration(
-                            node, 
+                            node,
                             node.modifiers,
                             node.asteriskToken,
                             node.name,
@@ -138,7 +138,7 @@ export function addTypeAnnotationTransformer(program: ts.Program, moduleResoluti
                             updateTypesInNodeArray(node.parameters),
                             typeNode,
                             node.body
-                        )
+                        );
                     }
                 }
                 if(ts.isPropertySignature(node) && !node.type && !isLiteralConstDeclaration(node)) {
@@ -167,7 +167,7 @@ export function addTypeAnnotationTransformer(program: ts.Program, moduleResoluti
                 if(ts.isMethodSignature(node) && !node.type) {
                     const type = tryGetReturnType(typeChecker, node);
                     if(type) {
-                        
+
                         const typeNode = typeToTypeNode(type, node);
                         return ts.factory.updateMethodSignature(
                             node,
@@ -176,7 +176,7 @@ export function addTypeAnnotationTransformer(program: ts.Program, moduleResoluti
                             node.questionToken,
                             updateTypesInNodeArray(node.typeParameters),
                             updateTypesInNodeArray(node.parameters),
-                            typeNode,                       
+                            typeNode,
                         );
                     }
                 }
@@ -189,13 +189,13 @@ export function addTypeAnnotationTransformer(program: ts.Program, moduleResoluti
                             updateTypesInNodeArray(node.typeParameters),
                             updateTypesInNodeArray(node.parameters),
                             typeNode,
-                        )
+                        );
                     }
                 }
                 if(ts.isMethodDeclaration(node) && !node.type) {
                     const type = tryGetReturnType(typeChecker, node);
                     if(type) {
-                        
+
                         const typeNode = typeToTypeNode(type, node);
                         return ts.factory.updateMethodDeclaration(
                             node,
@@ -206,7 +206,7 @@ export function addTypeAnnotationTransformer(program: ts.Program, moduleResoluti
                             updateTypesInNodeArray(node.typeParameters),
                             updateTypesInNodeArray(node.parameters),
                             typeNode,
-                            node.body,                            
+                            node.body,
                         );
                     }
                 }
@@ -220,7 +220,7 @@ export function addTypeAnnotationTransformer(program: ts.Program, moduleResoluti
                             node.name,
                             updateTypesInNodeArray(node.parameters),
                             typeNode,
-                            node.body,                            
+                            node.body,
                         );
                     }
                 }
@@ -230,16 +230,16 @@ export function addTypeAnnotationTransformer(program: ts.Program, moduleResoluti
                         node.modifiers,
                         node.name,
                         updateTypesInNodeArray(node.parameters),
-                        node.body,                            
+                        node.body,
                     );
                 }
-                if ( ts.isConstructorDeclaration(node)) {
+                if (ts.isConstructorDeclaration(node)) {
                     return ts.factory.updateConstructorDeclaration(
                         node,
                         node.modifiers,
                         updateTypesInNodeArray(node.parameters),
                         node.body,
-                    )
+                    );
                 }
                 if(ts.isConstructSignatureDeclaration(node)) {
                     const type = tryGetReturnType(typeChecker, node);
@@ -250,7 +250,7 @@ export function addTypeAnnotationTransformer(program: ts.Program, moduleResoluti
                             updateTypesInNodeArray(node.typeParameters),
                             updateTypesInNodeArray(node.parameters),
                             typeNode,
-                        )
+                        );
                     }
                 }
                 if(ts.isExportAssignment(node) && node.expression.kind !== ts.SyntaxKind.Identifier) {
@@ -260,7 +260,7 @@ export function addTypeAnnotationTransformer(program: ts.Program, moduleResoluti
                         const newId = ts.factory.createIdentifier("_default");
                         const varDecl = ts.factory.createVariableDeclaration(newId, /*exclamationToken*/ undefined, typeNode, /*initializer*/ undefined);
                         const statement = ts.factory.createVariableStatement(
-                            [], 
+                            [],
                             ts.factory.createVariableDeclarationList([varDecl], ts.NodeFlags.Const)
                         );
                         return [statement, ts.factory.updateExportAssignment(node, node.modifiers, newId)];
