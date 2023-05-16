@@ -1980,7 +1980,7 @@ function getPresentModifiers(
     let modifiers = ModifierFlags.None;
     let decorators: Decorator[] | undefined;
     let contextMod;
-    let range: TextRange = { pos: position, end: position };
+    const range: TextRange = { pos: position, end: position };
     /*
     Cases supported:
     In
@@ -2012,7 +2012,7 @@ function getPresentModifiers(
             range.pos = Math.min(range.pos, contextToken.pos);
         }
     }
-    return { modifiers, decorators, range: range.pos !== position ? range : undefined  };
+    return { modifiers, decorators, range: range.pos !== position ? range : undefined };
 }
 
 function isModifierLike(node: Node): ModifierSyntaxKind | undefined {
