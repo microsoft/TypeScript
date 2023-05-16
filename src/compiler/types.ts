@@ -6465,6 +6465,8 @@ export interface UnionType extends UnionOrIntersectionType {
     keyPropertyName?: __String;  // Property with unique unit type that exists in every object/intersection in union type
     /** @internal */
     constituentMap?: Map<TypeId, Type>;  // Constituents keyed by unit type discriminants
+    /** @internal */
+    arrayFallbackSignatures?: readonly Signature[]; // Special remapped signature list for unions of arrays
 }
 
 export interface IntersectionType extends UnionOrIntersectionType {
