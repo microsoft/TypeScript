@@ -47,7 +47,6 @@ import {
     getSyntacticModifierFlags,
     getTextOfIdentifierOrLiteral,
     getTextOfNode,
-    hasDynamicName,
     hasJSDocNodes,
     Identifier,
     idText,
@@ -62,8 +61,10 @@ import {
     isCallExpression,
     isClassDeclaration,
     isClassLike,
+    isComputedPropertyName,
     isDeclaration,
     isElementAccessExpression,
+    isEntityNameExpression,
     isExportAssignment,
     isExpression,
     isExternalModule,
@@ -73,6 +74,7 @@ import {
     isJSDocTypeAlias,
     isModuleBlock,
     isModuleDeclaration,
+    isNumericLiteral,
     isObjectLiteralExpression,
     isParameterPropertyDeclaration,
     isPrivateIdentifier,
@@ -82,6 +84,7 @@ import {
     isPropertyNameLiteral,
     isStatic,
     isStringLiteralLike,
+    isStringOrNumericLiteralLike,
     isToken,
     isVariableDeclaration,
     lastOrUndefined,
@@ -306,19 +309,16 @@ function addNodeWithRecursiveInitializer(node: VariableDeclaration | PropertyAss
     }
 }
 
-/**
- * Historically, we've elided dynamic names from the nav tree (including late bound names),
- * but included certain "well known" symbol names. While we no longer distinguish those well-known
- * symbols from other unique symbols, we do the below to retain those members in the nav tree.
- */
 function hasNavigationBarName(node: Declaration) {
-    return !hasDynamicName(node) ||
-        (
-            node.kind !== SyntaxKind.BinaryExpression &&
-            isPropertyAccessExpression(node.name.expression) &&
-            isIdentifier(node.name.expression.expression) &&
-            idText(node.name.expression.expression) === "Symbol"
-        );
+    const name = getNameOfDeclaration(node);
+    if (name === undefined) return false;
+
+    if (isComputedPropertyName(name)) {
+        const expression = name.expression;
+        return (isPropertyAccessExpression(expression) && isIdentifier(expression.expression) && idText(expression.expression) === "Symbol")
+            || isEntityNameExpression(expression) || isNumericLiteral(expression) || isStringOrNumericLiteralLike(expression);
+    }
+    return !!name;
 }
 
 /** Look for navigation bar items in node's subtree, adding them to the current `parent`. */
