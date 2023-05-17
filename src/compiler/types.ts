@@ -1335,7 +1335,7 @@ export type HasIllegalDecorators =
     ;
 
 // NOTE: Changing the following list requires changes to:
-// - `canHaveModifiers` in factory/utilities.ts
+// - `canHaveModifiers` in factory/utilitiesPublic.ts
 // - `updateModifiers` in factory/nodeFactory.ts
 export type HasModifiers =
     | TypeParameterDeclaration
@@ -9057,6 +9057,7 @@ export interface NodeFactory {
      */
     cloneNode<T extends Node | undefined>(node: T): T;
     /** @internal */ updateModifiers<T extends HasModifiers>(node: T, modifiers: readonly Modifier[] | ModifierFlags | undefined): T;
+    /** @internal */ updateModifierLike<T extends HasModifiers & HasDecorators>(node: T, modifierLike: readonly ModifierLike[] | undefined): T;
 }
 
 /** @internal */

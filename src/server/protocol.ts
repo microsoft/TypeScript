@@ -2336,6 +2336,11 @@ export interface CompletionEntry {
      */
     insertText?: string;
     /**
+     * A string that should be used when filtering a set of
+     * completion items.
+     */
+    filterText?: string;
+    /**
      * `insertText` should be interpreted as a snippet if true.
      */
     isSnippet?: true;

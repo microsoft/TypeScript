@@ -1830,6 +1830,11 @@ declare namespace ts {
                  */
                 insertText?: string;
                 /**
+                 * A string that should be used when filtering a set of
+                 * completion items.
+                 */
+                filterText?: string;
+                /**
                  * `insertText` should be interpreted as a snippet if true.
                  */
                 isSnippet?: true;
@@ -10801,6 +10806,7 @@ declare namespace ts {
         kindModifiers?: string;
         sortText: string;
         insertText?: string;
+        filterText?: string;
         isSnippet?: true;
         /**
          * An optional span that indicates the text to be replaced by this completion item.
