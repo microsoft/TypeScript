@@ -38,13 +38,13 @@ import {
     firstOrUndefined,
     flatMap,
     flatMapToMutable,
+    forEachJSDocCommentRangeOfNode,
     formatting,
     FunctionDeclaration,
     FunctionExpression,
     getAncestor,
     getFirstNonSpaceCharacterPosition,
     getFormatCodeSettingsForWriting,
-    getJSDocCommentRanges,
     getLeadingCommentRanges,
     getLineAndCharacterOfPosition,
     getLineOfLocalPosition,
@@ -361,9 +361,13 @@ function getAdjustedStartPosition(sourceFile: SourceFile, node: Node, options: C
         return rangeContainsPosition(node, pos) ? pos : startPos;
     }
     if (leadingTriviaOption === LeadingTriviaOption.JSDoc) {
-        const JSDocComments = getJSDocCommentRanges(node, sourceFile.text);
-        if (JSDocComments?.length) {
-            return getLineStartPositionForPosition(JSDocComments[0].pos, sourceFile);
+        let commentLineStart = -1;
+        forEachJSDocCommentRangeOfNode(node, sourceFile.text, pos => {
+            commentLineStart = getLineStartPositionForPosition(pos, sourceFile);
+            return true;
+        });
+        if (commentLineStart >= 0) {
+            return commentLineStart;
         }
     }
     const fullStart = node.getFullStart();

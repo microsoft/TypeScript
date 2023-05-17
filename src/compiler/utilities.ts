@@ -60,6 +60,7 @@ import {
     CommentDirective,
     CommentDirectivesMap,
     CommentDirectiveType,
+    CommentKind,
     CommentRange,
     compareStringsCaseSensitive,
     compareValues,
@@ -149,6 +150,8 @@ import {
     forEachAncestorDirectory,
     forEachChild,
     forEachChildRecursively,
+    forEachLeadingCommentRange,
+    forEachTrailingCommentRange,
     ForInOrOfStatement,
     ForInStatement,
     ForOfStatement,
@@ -196,7 +199,6 @@ import {
     getSnippetElement,
     getStringComparer,
     getSymbolId,
-    getTrailingCommentRanges,
     HasExpressionInitializer,
     hasExtension,
     HasFlowNode,
@@ -2395,21 +2397,34 @@ export function getLeadingCommentRangesOfNode(node: Node, sourceFileOfNode: Sour
 }
 
 /** @internal */
-export function getJSDocCommentRanges(node: Node, text: string) {
-    const commentRanges = (node.kind === SyntaxKind.Parameter ||
-        node.kind === SyntaxKind.TypeParameter ||
-        node.kind === SyntaxKind.FunctionExpression ||
-        node.kind === SyntaxKind.ArrowFunction ||
-        node.kind === SyntaxKind.ParenthesizedExpression ||
-        node.kind === SyntaxKind.VariableDeclaration ||
-        node.kind === SyntaxKind.ExportSpecifier) ?
-        concatenate(getTrailingCommentRanges(text, node.pos), getLeadingCommentRanges(text, node.pos)) :
-        getLeadingCommentRanges(text, node.pos);
-    // True if the comment starts with '/**' but not if it is '/**/'
-    return filter(commentRanges, comment =>
-        text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk &&
-        text.charCodeAt(comment.pos + 2) === CharacterCodes.asterisk &&
-        text.charCodeAt(comment.pos + 3) !== CharacterCodes.slash);
+export function forEachJSDocCommentRangeOfNode<T, U>({ kind, pos }: Node, text: string, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T) => U, state?: T): U | undefined {
+    let result: U | undefined;
+    switch (kind) {
+        case SyntaxKind.Parameter:
+        case SyntaxKind.TypeParameter:
+        case SyntaxKind.FunctionExpression:
+        case SyntaxKind.ArrowFunction:
+        case SyntaxKind.ParenthesizedExpression:
+        case SyntaxKind.VariableDeclaration:
+        case SyntaxKind.ExportSpecifier:
+            result = forEachTrailingCommentRange(text, pos, runCallback, state!);
+            if (result) {
+                return result;
+            }
+    }
+    result = forEachLeadingCommentRange(text, pos, runCallback, state!);
+    if (result) {
+        return result;
+    }
+
+    function runCallback(pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T) {
+        // Only passes through comments that start with '/**', but not '/**/'
+        if (kind === SyntaxKind.MultiLineCommentTrivia &&
+            text.charCodeAt(pos + 2) === CharacterCodes.asterisk &&
+            text.charCodeAt(pos + 3) !== CharacterCodes.slash) {
+            return cb(pos, end, kind, hasTrailingNewLine, state);
+        }
+    }
 }
 
 /** @internal */

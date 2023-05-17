@@ -92,6 +92,7 @@ import {
     firstOrUndefined,
     forEach,
     ForEachChildNodes,
+    forEachJSDocCommentRangeOfNode,
     ForInOrOfStatement,
     ForInStatement,
     ForOfStatement,
@@ -104,7 +105,6 @@ import {
     getBaseFileName,
     getBinaryOperatorPrecedence,
     getFullWidth,
-    getJSDocCommentRanges,
     getLanguageVariant,
     getLastChild,
     getLeadingCommentRanges,
@@ -166,6 +166,7 @@ import {
     IterationStatement,
     JSDoc,
     JSDocAllType,
+    JSDocArray,
     JSDocAugmentsTag,
     JSDocAuthorTag,
     JSDocCallbackTag,
@@ -239,7 +240,6 @@ import {
     LiteralLikeNode,
     LiteralTypeNode,
     map,
-    mapDefined,
     MappedTypeNode,
     MemberExpression,
     MetaProperty,
@@ -1813,7 +1813,13 @@ namespace Parser {
     let hasDeprecatedTag = false;
     function addJSDocComment<T extends HasJSDoc>(node: T): T {
         Debug.assert(!node.jsDoc); // Should only be called once per node
-        const jsDoc = mapDefined(getJSDocCommentRanges(node, sourceText), comment => JSDocParser.parseJSDocComment(node, comment.pos, comment.end - comment.pos));
+        const jsDoc: JSDocArray = [];
+        forEachJSDocCommentRangeOfNode(node, sourceText, (pos, end, _kind, _hasTrailingNewline, jsDoc) => {
+            const comment = JSDocParser.parseJSDocComment(node, pos, end - pos);
+            if (comment) {
+                jsDoc.push(comment);
+            }
+        }, jsDoc);
         if (jsDoc.length) node.jsDoc = jsDoc;
         if (hasDeprecatedTag) {
             hasDeprecatedTag = false;
