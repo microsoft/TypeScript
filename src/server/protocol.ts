@@ -3461,6 +3461,7 @@ export interface FormatCodeSettings extends EditorSettings {
 }
 
 export interface UserPreferences {
+    readonly enableFlowJSDiagnostic?: boolean;
     readonly disableSuggestions?: boolean;
     readonly quotePreference?: "auto" | "double" | "single";
     /**

@@ -33,6 +33,7 @@ import {
     computePositionOfLineAndCharacter,
     computeSuggestionDiagnostics,
     containsParseError,
+    createDiagnosticForRange,
     createDocumentRegistry,
     createGetCanonicalFileName,
     createMultiMap,
@@ -49,6 +50,8 @@ import {
     DefinitionInfo,
     DefinitionInfoAndBoundSpan,
     Diagnostic,
+    DiagnosticCategory,
+    Diagnostics,
     DiagnosticWithLocation,
     directoryProbablyExists,
     DocCommentTemplateOptions,
@@ -97,6 +100,7 @@ import {
     getEmitDeclarations,
     getEscapedTextOfIdentifierOrLiteral,
     getFileEmitOutput,
+    getFlowDirectiveRange,
     getImpliedNodeFormatForFile,
     getJSDocTags,
     getLineAndCharacterOfPosition,
@@ -151,6 +155,7 @@ import {
     isIdentifier,
     isImportMeta,
     isInComment,
+    isInJSFile,
     isInsideJsxElement,
     isInsideJsxElementOrAttribute,
     isInString,
@@ -1946,17 +1951,32 @@ export function createLanguageService(
     }
 
     /// Diagnostics
-    function getSyntacticDiagnostics(fileName: string): DiagnosticWithLocation[] {
+    function wrapFlowDiagnostics(checkFlow: boolean, appendFlowError: boolean, file: SourceFile, diag: DiagnosticWithLocation[]): DiagnosticWithLocation[];
+    function wrapFlowDiagnostics(checkFlow: boolean, appendFlowError: boolean, file: SourceFile, diag: Diagnostic[]): Diagnostic[];
+    function wrapFlowDiagnostics(checkFlow: boolean, appendFlowError: boolean, file: SourceFile, diag: DiagnosticWithLocation[] | Diagnostic[]): DiagnosticWithLocation[] | Diagnostic[] {
+        if (checkFlow || !isInJSFile(file)) return diag;
+        const comment = getFlowDirectiveRange(file);
+        if (!comment) return diag;
+        const nextDiag = diag
+            .filter(diag => typeof diag.messageText === "string" ? !diag.messageText.includes("in TypeScript files") : true)
+            .map(diag => ({ ...diag, category: DiagnosticCategory.Suggestion }));
+        if (appendFlowError) {
+            nextDiag.unshift(createDiagnosticForRange(file, comment, Diagnostics.It_seems_like_you_have_misconfigured_your_editor_to_analyze_Flow_js_with_TypeScript_language_service_TypeScript_cannot_recognize_Flow_js_syntax_and_may_give_inaccurate_results));
+        }
+        return nextDiag;
+    }
+    function getSyntacticDiagnostics(fileName: string, checkFlow = false): DiagnosticWithLocation[] {
         synchronizeHostData();
 
-        return program.getSyntacticDiagnostics(getValidSourceFile(fileName), cancellationToken).slice();
+        const file = getValidSourceFile(fileName);
+        return wrapFlowDiagnostics(checkFlow, /*appendFlowError*/ true, file, program.getSyntacticDiagnostics(file, cancellationToken).slice());
     }
 
     /**
      * getSemanticDiagnostics return array of Diagnostics. If '-d' is not enabled, only report semantic errors
      * If '-d' enabled, report both semantic and emitter errors
      */
-    function getSemanticDiagnostics(fileName: string): Diagnostic[] {
+    function getSemanticDiagnostics(fileName: string, checkFlow = false): Diagnostic[] {
         synchronizeHostData();
 
         const targetSourceFile = getValidSourceFile(fileName);
@@ -1966,12 +1986,12 @@ export function createLanguageService(
 
         const semanticDiagnostics = program.getSemanticDiagnostics(targetSourceFile, cancellationToken);
         if (!getEmitDeclarations(program.getCompilerOptions())) {
-            return semanticDiagnostics.slice();
+            return wrapFlowDiagnostics(checkFlow, /*appendFlowError*/ false, targetSourceFile, semanticDiagnostics.slice());
         }
 
         // If '-d' is enabled, check for emitter error. One example of emitter error is export class implements non-export interface
         const declarationDiagnostics = program.getDeclarationDiagnostics(targetSourceFile, cancellationToken);
-        return [...semanticDiagnostics, ...declarationDiagnostics];
+        return wrapFlowDiagnostics(checkFlow, /*appendFlowError*/ false, targetSourceFile, [...semanticDiagnostics, ...declarationDiagnostics]);
     }
 
     function getSuggestionDiagnostics(fileName: string): DiagnosticWithLocation[] {

@@ -4310,6 +4310,7 @@ declare namespace ts {
         JSDocComment = 33
     }
     interface UserPreferences {
+        readonly enableFlowJSDiagnostic?: boolean;
         readonly disableSuggestions?: boolean;
         readonly quotePreference?: "auto" | "double" | "single";
         readonly includeCompletionsForModuleExports?: boolean;

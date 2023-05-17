@@ -6600,6 +6600,10 @@
         "category": "Error",
         "code": 8039
     },
+    "It seems like you have misconfigured your editor to analyze Flow.js with TypeScript language service. TypeScript cannot recognize Flow.js syntax and may give inaccurate results.": {
+        "category": "Error",
+        "code": 8040
+    },
 
     "Declaration emit for this file requires using private name '{0}'. An explicit type annotation may unblock declaration emit.": {
         "category": "Error",

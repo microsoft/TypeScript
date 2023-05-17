@@ -1236,14 +1236,14 @@ export class Session<TMessage = string> implements EventSender {
         tracing?.push(tracing.Phase.Session, "semanticCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
         const diags = isDeclarationFileInJSOnlyNonConfiguredProject(project, file)
             ? emptyArray
-            : project.getLanguageService().getSemanticDiagnostics(file).filter(d => !!d.file);
+            : project.getLanguageService().getSemanticDiagnostics(file, this.getPreferences(file).enableFlowJSDiagnostic).filter(d => !!d.file);
         this.sendDiagnosticsEvent(file, project, diags, "semanticDiag");
         tracing?.pop();
     }
 
     private syntacticCheck(file: NormalizedPath, project: Project) {
         tracing?.push(tracing.Phase.Session, "syntacticCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
-        this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSyntacticDiagnostics(file), "syntaxDiag");
+        this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSyntacticDiagnostics(file, this.getPreferences(file).enableFlowJSDiagnostic), "syntaxDiag");
         tracing?.pop();
     }
 

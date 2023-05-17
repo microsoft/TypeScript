@@ -2759,6 +2759,7 @@ declare namespace ts {
                 indentSwitchCase?: boolean;
             }
             interface UserPreferences {
+                readonly enableFlowJSDiagnostic?: boolean;
                 readonly disableSuggestions?: boolean;
                 readonly quotePreference?: "auto" | "double" | "single";
                 /**
@@ -3930,6 +3931,7 @@ declare namespace ts {
             private getCompilerOptionsDiagnostics;
             private convertToDiagnosticsWithLinePosition;
             private getDiagnosticsWorker;
+            private silenceDiagnosticsIfFlow;
             private getDefinition;
             private mapDefinitionInfoLocations;
             private getDefinitionAndBoundSpan;
@@ -8357,6 +8359,7 @@ declare namespace ts {
         JSDocComment = 33
     }
     interface UserPreferences {
+        readonly enableFlowJSDiagnostic?: boolean;
         readonly disableSuggestions?: boolean;
         readonly quotePreference?: "auto" | "double" | "single";
         readonly includeCompletionsForModuleExports?: boolean;

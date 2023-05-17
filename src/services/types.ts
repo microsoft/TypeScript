@@ -465,6 +465,9 @@ export interface LanguageService {
      * @param fileName A path to the file you want syntactic diagnostics for
      */
     getSyntacticDiagnostics(fileName: string): DiagnosticWithLocation[];
+    /** @internal */
+    // eslint-disable-next-line @typescript-eslint/unified-signatures
+    getSyntacticDiagnostics(fileName: string, checkFlow?: boolean): DiagnosticWithLocation[];
 
     /**
      * Gets warnings or errors indicating type system issues in a given file.
@@ -482,6 +485,9 @@ export interface LanguageService {
      * @param fileName A path to the file you want semantic diagnostics for
      */
     getSemanticDiagnostics(fileName: string): Diagnostic[];
+    /** @internal */
+    // eslint-disable-next-line @typescript-eslint/unified-signatures
+    getSemanticDiagnostics(fileName: string, checkFlow?: boolean): Diagnostic[];
 
     /**
      * Gets suggestion diagnostics for a specific file. These diagnostics tend to

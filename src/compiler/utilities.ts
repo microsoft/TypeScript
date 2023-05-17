@@ -3456,6 +3456,17 @@ export function isInJSFile(node: Node | undefined): boolean {
 }
 
 /** @internal */
+export function getFlowDirectiveRange(sourceFile: SourceFile) {
+    const leading = getLeadingCommentRangesOfNode(sourceFile, sourceFile);
+    if (!leading) return false;
+    for (const range of leading) {
+        const comment = sourceFile.text.slice(range.pos, range.end);
+        if (comment.includes("@flow")) return range;
+    }
+    return false;
+}
+
+/** @internal */
 export function isInJsonFile(node: Node | undefined): boolean {
     return !!node && !!(node.flags & NodeFlags.JsonFile);
 }

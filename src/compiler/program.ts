@@ -2943,7 +2943,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             return diagnostics;
 
             function walk(node: Node, parent: Node) {
-                // Return directly from the case if the given node doesnt want to visit each child
+                // Return directly from the case if the given node doesn't want to visit each child
                 // Otherwise break to visit each child
 
                 switch (parent.kind) {
