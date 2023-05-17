@@ -7,7 +7,8 @@ import {
     FindAllReferences,
     getLocaleSpecificMessage,
     getTokenAtPosition,
-    isVariableDeclaration,
+    isIdentifier,
+    isInitializedVariable,
     isVariableDeclarationInVariableStatement,
     mapDefined,
     Node,
@@ -44,10 +45,17 @@ registerRefactor(refactorName, {
             file,
             program,
             preferences,
-            startPosition
+            startPosition,
+            triggerReason
         } = context;
 
-        const info = getInliningInfo(file, startPosition, program, cancellationToken);
+        // tryWithReferenceToken is true below when triggerReason === "invoked", since we want to
+        // always provide the refactor in the declaration site but only show it in references when
+        // the refactor is explicitly invoked.
+        const info = getInliningInfo(file, startPosition, triggerReason === "invoked", program, cancellationToken);
+        if (!info) {
+            return emptyArray;
+        }
 
         if (refactor.isRefactorErrorInfo(info) && preferences.provideRefactorNotApplicableReason) {
             return [{
@@ -60,7 +68,7 @@ registerRefactor(refactorName, {
             }];
         }
 
-        if (info) {
+        if (!refactor.isRefactorErrorInfo(info)) {
             return [{
                 name: refactorName,
                 description: refactorDescription,
@@ -78,10 +86,10 @@ registerRefactor(refactorName, {
             cancellationToken,
             file,
             program,
-            startPosition
+            startPosition,
         } = context;
 
-        const info = getInliningInfo(file, startPosition, program, cancellationToken);
+        const info = getInliningInfo(file, startPosition, /*tryWithReferenceToken*/ true, program, cancellationToken);
 
         if (!info || refactor.isRefactorErrorInfo(info)) {
             return undefined;
@@ -99,18 +107,13 @@ registerRefactor(refactorName, {
     }
 });
 
-function getInliningInfo(file: SourceFile, startPosition: number, program: Program, cancellationToken: CancellationToken = NoopCancellationToken): InliningInfo | RefactorErrorInfo | undefined {
+function getInliningInfo(file: SourceFile, startPosition: number, tryWithReferenceToken: boolean, program: Program, cancellationToken: CancellationToken = NoopCancellationToken): InliningInfo | RefactorErrorInfo | undefined {
     const token = getTokenAtPosition(file, startPosition);
     const parent = token.parent;
 
-    // Make sure the token is inside a variable declaration and the declaration
-    // is not in a catch clause or for-loop.
-    if (isVariableDeclaration(parent) && isVariableDeclarationInVariableStatement(parent)) {
-        // We only care if the declaration has a value (since that's the thing we're inlining).
-        if (!parent.initializer) {
-            return undefined;
-        }
-
+    // If the node is a variable declaration, make sure it's not in a catch clause or for-loop
+    // and that it has a value.
+    if (isInitializedVariable(parent) && isVariableDeclarationInVariableStatement(parent)) {
         // Find all references to the variable.
         const name = parent.name;
         const referencedSymbols = FindAllReferences.Core.getReferencedSymbolsForNode(name.pos, name, program, program.getSourceFiles(), cancellationToken);
@@ -124,6 +127,28 @@ function getInliningInfo(file: SourceFile, startPosition: number, program: Progr
         );
 
         return references.length === 0 ? undefined : { references, declaration: parent, replacement: parent.initializer };
+    }
+
+    if (tryWithReferenceToken && isIdentifier(token)) {
+        // Try finding the declaration and nodes to replace via the reference token.
+        const referencedSymbols = FindAllReferences.Core.getReferencedSymbolsForNode(token.pos, token, program, program.getSourceFiles(), cancellationToken);
+        if (!referencedSymbols || referencedSymbols.length !== 1) {
+            return undefined;
+        }
+
+        const { definition } = referencedSymbols[0];
+        if (definition?.type !== FindAllReferences.DefinitionKind.Symbol) {
+            return undefined;
+        }
+
+        const { valueDeclaration } = definition.symbol;
+        if (valueDeclaration && isInitializedVariable(valueDeclaration) && isVariableDeclarationInVariableStatement(valueDeclaration)) {
+            const references = mapDefined(referencedSymbols[0].references, entry =>
+                entry.kind === FindAllReferences.EntryKind.Node ? entry.node === valueDeclaration.name ? undefined : entry.node : undefined
+            );
+
+            return references.length === 0 ? undefined : { references, declaration: valueDeclaration, replacement: valueDeclaration.initializer };
+        }
     }
 
     // TODO: Do we want to have other errors too?
