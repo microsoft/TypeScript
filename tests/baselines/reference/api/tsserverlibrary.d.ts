@@ -3931,7 +3931,6 @@ declare namespace ts {
             private getCompilerOptionsDiagnostics;
             private convertToDiagnosticsWithLinePosition;
             private getDiagnosticsWorker;
-            private silenceDiagnosticsIfFlow;
             private getDefinition;
             private mapDefinitionInfoLocations;
             private getDefinitionAndBoundSpan;
