@@ -40,7 +40,6 @@ export interface TscWatchCompileChange<T extends ts.BuilderProgram = ts.EmitAndS
     ) => void;
     // TODO:: sheetal: Needing these fields are technically issues that need to be fixed later
     symlinksNotReflected?: readonly string[];
-    skipStructureCheck?: true;
 }
 export interface TscWatchCheckOptions {
     baselineSourceMap?: boolean;
@@ -239,7 +238,7 @@ export function runWatchBaseline<T extends ts.BuilderProgram = ts.EmitAndSemanti
     });
 
     if (edits) {
-        for (const { caption, edit, timeouts, symlinksNotReflected, skipStructureCheck } of edits) {
+        for (const { caption, edit, timeouts, symlinksNotReflected } of edits) {
             oldSnap = applyEdit(sys, baseline, edit, caption);
             timeouts(sys, programs, watchOrSolution);
             programs = watchBaseline({
@@ -251,7 +250,7 @@ export function runWatchBaseline<T extends ts.BuilderProgram = ts.EmitAndSemanti
                 baselineSourceMap,
                 baselineDependencies,
                 caption,
-                resolutionCache: !skipStructureCheck ? (watchOrSolution as ts.WatchOfConfigFile<T> | undefined)?.getResolutionCache?.() : undefined,
+                resolutionCache: (watchOrSolution as ts.WatchOfConfigFile<T> | undefined)?.getResolutionCache?.(),
                 useSourceOfProjectReferenceRedirect,
                 symlinksNotReflected,
             });

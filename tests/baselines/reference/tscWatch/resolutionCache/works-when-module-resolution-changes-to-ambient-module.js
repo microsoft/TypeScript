@@ -145,11 +145,9 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/node_modules/@types/node/index.d.ts (used version)
 
 PolledWatches::
-/users/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-
-PolledWatches *deleted*::
 /users/username/projects/node_modules:
+  {"pollingInterval":500}
+/users/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
@@ -163,11 +161,9 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
-/users/username/projects/project/node_modules/@types:
-  {}
-
-FsWatchesRecursive *deleted*::
 /users/username/projects/project/node_modules:
+  {}
+/users/username/projects/project/node_modules/@types:
   {}
 
 exitCode:: ExitStatus.undefined
