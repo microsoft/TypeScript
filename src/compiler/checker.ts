@@ -22981,7 +22981,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getRecursionIdentity(type: Type): object {
         // Object and array literals are known not to contain recursive references and don't need a recursion identity.
         if (type.flags & TypeFlags.Object && !isObjectOrArrayLiteralType(type)) {
-            if (getObjectFlags(type) && ObjectFlags.Reference && (type as TypeReference).node) {
+            if (getObjectFlags(type) & ObjectFlags.Reference && (type as TypeReference).node) {
                 // Deferred type references are tracked through their associated AST node. This gives us finer
                 // granularity than using their associated target because each manifest type reference has a
                 // unique AST node.
