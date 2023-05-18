@@ -6517,6 +6517,7 @@ declare namespace ts {
         renameFilename?: string;
         renameLocation?: number;
         commands?: CodeActionCommand[];
+        notApplicableReason?: string;
     }
     type RefactorTriggerReason = "implicit" | "invoked";
     interface TextInsertion {

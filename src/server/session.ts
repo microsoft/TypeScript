@@ -2707,7 +2707,8 @@ export class Session<TMessage = string> implements EventSender {
             return {
                 renameLocation: mappedRenameLocation,
                 renameFilename,
-                edits: this.mapTextChangesToCodeEdits(edits)
+                edits: this.mapTextChangesToCodeEdits(edits),
+                notApplicableReason: result.notApplicableReason,
             };
         }
         return result;

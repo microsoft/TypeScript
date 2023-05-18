@@ -1002,6 +1002,7 @@ export interface RefactorEditInfo {
     renameFilename?: string;
     renameLocation?: number;
     commands?: CodeActionCommand[];
+    notApplicableReason?: string;
 }
 
 export type RefactorTriggerReason = "implicit" | "invoked";

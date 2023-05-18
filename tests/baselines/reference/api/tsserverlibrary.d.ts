@@ -619,6 +619,7 @@ declare namespace ts {
                  */
                 renameLocation?: Location;
                 renameFilename?: string;
+                notApplicableReason?: string;
             }
             /**
              * Organize imports by:
@@ -10480,6 +10481,7 @@ declare namespace ts {
         renameFilename?: string;
         renameLocation?: number;
         commands?: CodeActionCommand[];
+        notApplicableReason?: string;
     }
     type RefactorTriggerReason = "implicit" | "invoked";
     interface TextInsertion {

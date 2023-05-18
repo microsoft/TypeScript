@@ -721,6 +721,7 @@ export interface RefactorEditInfo {
      */
     renameLocation?: Location;
     renameFilename?: string;
+    notApplicableReason?: string;
 }
 
 /**
