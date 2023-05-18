@@ -110,11 +110,11 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/b/tsconfig.json: *new*
-  {"pollingInterval":2000}
 /a/b: *new*
   {"pollingInterval":500}
 /a/b/commonfile2.ts: *new*
   {"pollingInterval":500}
+/a/b/tsconfig.json: *new*
+  {"pollingInterval":2000}
 /a/lib/lib.d.ts: *new*
   {"pollingInterval":500}

@@ -157,9 +157,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/a/tsconfig.json: *new*
-  {}
 /a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/a/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -299,15 +299,15 @@ After request
 PolledWatches::
 /user/username/projects/a/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/b/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/a/tsconfig.json:
-  {}
 /a/lib/lib.d.ts:
+  {}
+/user/username/projects/a/tsconfig.json:
   {}
 /user/username/projects/b/tsconfig.json: *new*
   {}

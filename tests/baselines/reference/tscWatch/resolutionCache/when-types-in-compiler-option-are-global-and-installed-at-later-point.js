@@ -58,11 +58,11 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/lib/app.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -98,11 +98,11 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/lib/app.ts:
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/myproject/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -151,15 +151,15 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/lib/app.ts:
-  {}
-/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/node_modules/@myapp/ts-types/package.json: *new*
   {}
 /user/username/projects/myproject/node_modules/@myapp/ts-types/types/somefile.define.d.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json:
   {}
 
 FsWatchesRecursive::

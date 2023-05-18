@@ -219,39 +219,39 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/myproject/packages/a/node_modules: *new*
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules: *new*
+/user/username/projects/myproject/packages/a/node_modules: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/packages/a/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules/@types: *new*
+/user/username/projects/myproject/packages/node_modules: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types: *new*
+/user/username/projects/myproject/packages/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/packages/a/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/packages/b/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/packages/b/src/foo.ts: *new*
-  {}
-/user/username/projects/myproject/packages/b/src/bar/foo.ts: *new*
-  {}
 /a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/packages/a/tsconfig.json: *new*
   {}
 /user/username/projects/myproject/packages/b/package.json: *new*
   {}
+/user/username/projects/myproject/packages/b/src/bar/foo.ts: *new*
+  {}
+/user/username/projects/myproject/packages/b/src/foo.ts: *new*
+  {}
+/user/username/projects/myproject/packages/b/tsconfig.json: *new*
+  {}
 
 FsWatchesRecursive::
+/user/username/projects/myproject/node_modules: *new*
+  {}
 /user/username/projects/myproject/packages/a/src: *new*
   {}
 /user/username/projects/myproject/packages/b/src: *new*
-  {}
-/user/username/projects/myproject/node_modules: *new*
   {}
 
 Before request

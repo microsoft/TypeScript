@@ -162,23 +162,23 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/rootfolder/otherfolder/a/b/project/node_modules: *new*
+/user/username/rootfolder/node_modules: *new*
   {"pollingInterval":500}
 /user/username/rootfolder/otherfolder/a/b/node_modules: *new*
+  {"pollingInterval":500}
+/user/username/rootfolder/otherfolder/a/b/project/node_modules: *new*
   {"pollingInterval":500}
 /user/username/rootfolder/otherfolder/a/node_modules: *new*
   {"pollingInterval":500}
 /user/username/rootfolder/otherfolder/node_modules: *new*
   {"pollingInterval":500}
-/user/username/rootfolder/node_modules: *new*
-  {"pollingInterval":500}
 
 FsWatches::
-/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/rootfolder/otherfolder/a/b/project/file3.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -252,13 +252,13 @@ export class a { }
 
 
 PolledWatches::
+/user/username/rootfolder/node_modules:
+  {"pollingInterval":500}
 /user/username/rootfolder/otherfolder/a/b/project/node_modules:
   {"pollingInterval":500}
 /user/username/rootfolder/otherfolder/a/node_modules:
   {"pollingInterval":500}
 /user/username/rootfolder/otherfolder/node_modules:
-  {"pollingInterval":500}
-/user/username/rootfolder/node_modules:
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
@@ -266,17 +266,17 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/rootfolder/otherfolder/a/b/project/file3.ts:
   {}
-/a/lib/lib.d.ts:
+/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json:
   {}
 
 FsWatchesRecursive::
-/user/username/rootfolder/otherfolder/a/b/project:
-  {}
 /user/username/rootfolder/otherfolder/a/b/node_modules: *new*
+  {}
+/user/username/rootfolder/otherfolder/a/b/project:
   {}
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.jsonFailedLookupInvalidation
@@ -354,23 +354,23 @@ PolledWatches::
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
+/user/username/rootfolder/node_modules:
+  {"pollingInterval":500}
 /user/username/rootfolder/otherfolder/a/node_modules:
   {"pollingInterval":500}
 /user/username/rootfolder/otherfolder/node_modules:
   {"pollingInterval":500}
-/user/username/rootfolder/node_modules:
-  {"pollingInterval":500}
 
 FsWatches::
-/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/rootfolder/otherfolder/a/b/project/file3.ts:
   {}
-/a/lib/lib.d.ts:
+/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json:
   {}
 
 FsWatchesRecursive::
-/user/username/rootfolder/otherfolder/a/b/project:
-  {}
 /user/username/rootfolder/otherfolder/a/b/node_modules:
+  {}
+/user/username/rootfolder/otherfolder/a/b/project:
   {}

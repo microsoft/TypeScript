@@ -480,9 +480,9 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es2015.d.ts: *new*
-  {"pollingInterval":500}
 /a/lib/lib.dom.d.ts: *new*
+  {"pollingInterval":500}
+/a/lib/lib.es2015.d.ts: *new*
   {"pollingInterval":500}
 
 FsWatches::

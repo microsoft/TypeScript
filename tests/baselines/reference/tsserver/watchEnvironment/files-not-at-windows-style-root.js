@@ -87,19 +87,19 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-c:/myfolder/allproject/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 c:/myfolder/allproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+c:/myfolder/allproject/project/node_modules/@types: *new*
   {"pollingInterval":500}
 c:/myfolder/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-c:/myfolder/allproject/project/tsconfig.json: *new*
+c:/a/lib/lib.d.ts: *new*
   {}
 c:/myfolder/allproject/project/file2.ts: *new*
   {}
-c:/a/lib/lib.d.ts: *new*
+c:/myfolder/allproject/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::

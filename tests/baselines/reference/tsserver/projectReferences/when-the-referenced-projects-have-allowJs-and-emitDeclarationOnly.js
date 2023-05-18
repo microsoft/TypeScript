@@ -219,41 +219,41 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/myproject/packages/consumer/node_modules: *new*
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules: *new*
+/user/username/projects/myproject/packages/consumer/node_modules: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/packages/consumer/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules/@types: *new*
+/user/username/projects/myproject/packages/node_modules: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types: *new*
+/user/username/projects/myproject/packages/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
 /user/username/projects/myproject/packages/consumer/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/packages/emit-composite/tsconfig.json: *new*
+/user/username/projects/myproject/packages/emit-composite/package.json: *new*
   {}
 /user/username/projects/myproject/packages/emit-composite/src/index.js: *new*
   {}
 /user/username/projects/myproject/packages/emit-composite/src/testModule.js: *new*
   {}
-/a/lib/lib.d.ts: *new*
-  {}
-/user/username/projects/myproject/packages/emit-composite/package.json: *new*
+/user/username/projects/myproject/packages/emit-composite/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/packages/consumer/src: *new*
+/user/username/projects/myproject/node_modules: *new*
   {}
-/user/username/projects/myproject/packages/emit-composite/src: *new*
+/user/username/projects/myproject/packages/consumer/src: *new*
   {}
 /user/username/projects/myproject/packages/emit-composite: *new*
   {}
-/user/username/projects/myproject/node_modules: *new*
+/user/username/projects/myproject/packages/emit-composite/src: *new*
   {}
 
 Before request
