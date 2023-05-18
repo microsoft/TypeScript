@@ -3576,6 +3576,72 @@ export class TestState {
         }
     }
 
+    public baselineLinkedEditing(): void {
+        const baselineFile = this.getBaselineFileNameForContainingTestFile(".linkedEditing.txt");
+        const files = this.testData.files;
+
+        let baselineContent = "";
+        let offset = 0;
+        files.forEach(f => {
+            const result = getLinkedEditingBaselineWorker(f, offset, this.languageService);
+            baselineContent += result.baselineContent + `\n\n\n`;
+            offset = result.offset;
+        });
+
+        Harness.Baseline.runBaseline(baselineFile, baselineContent);
+
+        function getLinkedEditingBaselineWorker(activeFile: FourSlashFile, offset: number, languageService: ts.LanguageService) {
+            const fileName = activeFile.fileName;
+            let baselineContent = `=== ${fileName} ===\n`;
+
+            // get linkedEdit at every position in the file, then group positions by their linkedEdit
+            const linkedEditsInFile = new Map<string, number[]>();
+            for(let pos = 0; pos < activeFile.content.length; pos++) {
+                const linkedEditAtPosition = languageService.getLinkedEditingRangeAtPosition(fileName, pos);
+                if (!linkedEditAtPosition) continue;
+
+                const linkedEditString = JSON.stringify(linkedEditAtPosition);
+                const existingPositions = linkedEditsInFile.get(linkedEditString) ?? [];
+                linkedEditsInFile.set(linkedEditString, [...existingPositions, pos]);
+            }
+
+            const linkedEditsByRange = [...linkedEditsInFile.entries()].sort((a, b) => a[1][0] - b[1][0]);
+            if (linkedEditsByRange.length === 0) {
+                return { baselineContent: baselineContent + activeFile.content + `\n\n--No linked edits found--`, offset };
+            }
+
+            let inlineLinkedEditBaseline: { start: number, end: number, index: number }[] = [];
+            let linkedEditInfoBaseline = "";
+            linkedEditsByRange.forEach(([linkedEdit, positions]) => {
+                let rangeStart = 0;
+                for (let j = 0; j < positions.length - 1; j++) {
+                    // for each distinct range in the list of positions, add an entry to the list of places that need to be annotated in the baseline
+                    if (positions[j] + 1 !== positions[j + 1]) {
+                        inlineLinkedEditBaseline.push({ start: positions[rangeStart], end: positions[j], index: offset });
+                        rangeStart = j + 1;
+                    }
+                }
+                inlineLinkedEditBaseline.push({ start: positions[rangeStart], end: positions[positions.length - 1], index: offset });
+
+                // add the LinkedEditInfo with its index to the baseline
+                linkedEditInfoBaseline += `\n\n=== ${offset} ===\n` + linkedEdit;
+                offset++;
+            });
+
+            inlineLinkedEditBaseline = inlineLinkedEditBaseline.sort((a, b) => a.start - b.start);
+            const fileText = activeFile.content;
+            baselineContent += fileText.slice(0, inlineLinkedEditBaseline[0].start);
+            for (let i = 0 ; i < inlineLinkedEditBaseline.length - 1; i++) {
+                const e = inlineLinkedEditBaseline[i];
+                baselineContent += `[|/*${e.index}*/` + fileText.slice(e.start, e.end) + `|]` + fileText.slice(e.end, inlineLinkedEditBaseline[i + 1].start);
+            }
+            const n = inlineLinkedEditBaseline[inlineLinkedEditBaseline.length - 1];
+            baselineContent += `[|/*${n.index}*/` + fileText.slice(n.start, n.end) + `|]` + fileText.slice(inlineLinkedEditBaseline[inlineLinkedEditBaseline.length - 1].end) + linkedEditInfoBaseline;
+
+            return { baselineContent, offset };
+        }
+    }
+
     public verifyMatchingBracePosition(bracePosition: number, expectedMatchPosition: number) {
         const actual = this.languageService.getBraceMatchingAtPosition(this.activeFile.fileName, bracePosition);
 

@@ -48,43 +48,46 @@
 // @Filename: /jsx15.tsx
 ////const jsx = </*15*/div> </*15a*/> <//*15b*/div> <//*15c*/>;
 
-const wordPattern =  "[a-zA-Z0-9:\\-\\._$]*";
-const linkedCursors9 = {
-    ranges: [{ start: test.markerByName("9").position, length: 3 }, { start:  test.markerByName("9a").position,  length: 3 }],
-    wordPattern,
-};
+verify.baselineLinkedEditing();
 
-verify.linkedEditing( {
-    "0": undefined,
-    "1": undefined,
-    "2": undefined, 
-    "3": undefined,
-    "4": undefined,
-    "4a": undefined,
-    "5": undefined,
-    "5a": undefined,
-    "6": undefined, 
-    "6a": undefined,
-    "7": undefined,
-    "7a": undefined,
-    "8": undefined, 
-    "8a": undefined,
-    "9": linkedCursors9,
-    "9a": linkedCursors9,
-    "10": undefined, 
-    "10a": undefined,
-    "11": undefined, 
-    "11a": undefined,
-    "12": undefined, 
-    "12a": undefined,
-    "13": undefined, 
-    "13a": undefined,
-    "14": undefined, 
-    "14a": undefined,
-    "14b": undefined, 
-    "14c": undefined,
-    "15": undefined, 
-    "15a": undefined,
-    "15b": undefined, 
-    "15c": undefined,
-});
+// below is the expected result
+
+// const wordPattern =  "[a-zA-Z0-9:\\-\\._$]*";
+// const linkedCursors9 = {
+//     ranges: [{ start: test.markerByName("9").position, length: 3 }, { start:  test.markerByName("9a").position,  length: 3 }],
+//     wordPattern,
+// };
+// verify.linkedEditing( {
+//     "0": undefined,
+//     "1": undefined,
+//     "2": undefined, 
+//     "3": undefined,
+//     "4": undefined,
+//     "4a": undefined,
+//     "5": undefined,
+//     "5a": undefined,
+//     "6": undefined, 
+//     "6a": undefined,
+//     "7": undefined,
+//     "7a": undefined,
+//     "8": undefined, 
+//     "8a": undefined,
+//     "9": linkedCursors9,
+//     "9a": linkedCursors9,
+//     "10": undefined, 
+//     "10a": undefined,
+//     "11": undefined, 
+//     "11a": undefined,
+//     "12": undefined, 
+//     "12a": undefined,
+//     "13": undefined, 
+//     "13a": undefined,
+//     "14": undefined, 
+//     "14a": undefined,
+//     "14b": undefined, 
+//     "14c": undefined,
+//     "15": undefined, 
+//     "15a": undefined,
+//     "15b": undefined, 
+//     "15c": undefined,
+// });

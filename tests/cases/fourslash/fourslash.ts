@@ -263,6 +263,7 @@ declare namespace FourSlashInterface {
         isValidBraceCompletionAtPosition(openingBrace?: string): void;
         jsxClosingTag(map: { [markerName: string]: { readonly newText: string } | undefined }): void;
         linkedEditing(map: { [markerName: string]: LinkedEditingInfo | undefined }): void;
+        baselineLinkedEditing(): void;
         isInCommentAtPosition(onlyMultiLineDiverges?: boolean): void;
         codeFix(options: {
             description: string | [string, ...(string | number)[]] | DiagnosticIgnoredInterpolations,
