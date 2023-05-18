@@ -45,13 +45,13 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 FsWatches::
-/a/tsconfig.json: *new*
-  {}
 /a/a.ts: *new*
   {}
 /a/b.ts: *new*
   {}
 /a/lib/lib.d.ts: *new*
+  {}
+/a/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::

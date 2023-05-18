@@ -206,37 +206,37 @@ export const x = 10;export const y = 30;
 PolledWatches::
 /user/username/projects/myproject/compositea/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/myproject/compositec/node_modules/@types: *new*
+  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/compositec/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/compositea/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/compositea/a2.ts: *new*
   {}
-/user/username/projects/myproject/dist/compositeb/b.d.ts: *new*
+/user/username/projects/myproject/compositea/tsconfig.json: *new*
   {}
-/a/lib/lib.d.ts: *new*
-  {}
-/user/username/projects/myproject/compositec/tsconfig.json: *new*
+/user/username/projects/myproject/compositeb/b.ts: *new*
   {}
 /user/username/projects/myproject/compositeb/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/compositeb/b.ts: *new*
+/user/username/projects/myproject/compositec/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/dist/compositeb/b.d.ts: *new*
   {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/compositea: *new*
   {}
-/user/username/projects/myproject/dist: *new*
+/user/username/projects/myproject/compositeb: *new*
   {}
 /user/username/projects/myproject/compositec: *new*
   {}
-/user/username/projects/myproject/compositeb: *new*
+/user/username/projects/myproject/dist: *new*
   {}
 
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/compositea/tsconfig.json

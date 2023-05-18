@@ -112,9 +112,9 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/packages/app/dep: *new*
-  {"pollingInterval":500}
 /a/lib/lib.d.ts: *new*
+  {"pollingInterval":500}
+/packages/app/dep: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -126,7 +126,7 @@ FsWatches::
 FsWatchesRecursive::
 /packages/app: *new*
   {}
-/packages/dep: *new*
-  {}
 /packages/app/src: *new*
+  {}
+/packages/dep: *new*
   {}

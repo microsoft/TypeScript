@@ -60,9 +60,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json: *new*
-  {}
 /a/b/referencefile1.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
   {}
 /a/lib/lib.d.ts: *new*
   {}
@@ -153,9 +153,9 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json:
-  {}
 /a/b/referencefile1.ts:
+  {}
+/a/b/tsconfig.json:
   {}
 /a/lib/lib.d.ts:
   {}
@@ -202,13 +202,13 @@ Shape signatures in builder refreshed for::
 /a/b/referencefile1.ts (computed .d.ts)
 
 FsWatches::
-/a/b/tsconfig.json:
+/a/b/modulefile2.ts: *new*
   {}
 /a/b/referencefile1.ts:
   {}
-/a/lib/lib.d.ts:
+/a/b/tsconfig.json:
   {}
-/a/b/modulefile2.ts: *new*
+/a/lib/lib.d.ts:
   {}
 
 FsWatchesRecursive::

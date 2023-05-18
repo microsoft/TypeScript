@@ -95,19 +95,15 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/user/projects/myproject/tsconfig.json: *new*
-  {}
-/home/user/projects/myproject/src/file.ts: *new*
-  {}
-/home/user/projects/myproject/node_modules/reala/index.d.ts: *new*
-  {}
 /a/lib/lib.d.ts: *new*
   {}
-/home/user/projects/myproject/src: *new*
+/home/user/projects/myproject: *new*
   {}
 /home/user/projects/myproject/node_modules: *new*
   {}
 /home/user/projects/myproject/node_modules/reala: *new*
+  {}
+/home/user/projects/myproject/node_modules/reala/index.d.ts: *new*
   {}
 /home/user/projects/myproject/node_modules/reala/node_modules: *new*
   {}
@@ -115,7 +111,11 @@ FsWatches::
   {}
 /home/user/projects/myproject/node_modules/realb/node_modules: *new*
   {}
-/home/user/projects/myproject: *new*
+/home/user/projects/myproject/src: *new*
+  {}
+/home/user/projects/myproject/src/file.ts: *new*
+  {}
+/home/user/projects/myproject/tsconfig.json: *new*
   {}
 
 exitCode:: ExitStatus.undefined

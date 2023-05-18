@@ -71,17 +71,17 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/main/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/main/index.ts: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/linked-package/dist/index.d.ts: *new*
   {}
 /user/username/projects/myproject/linked-package/dist/other.d.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
-  {}
 /user/username/projects/myproject/linked-package/package.json: *new*
+  {}
+/user/username/projects/myproject/main/index.ts: *new*
+  {}
+/user/username/projects/myproject/main/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::

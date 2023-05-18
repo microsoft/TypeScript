@@ -58,9 +58,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/jsconfig.json: *new*
-  {}
 /a/config.js: *new*
+  {}
+/a/jsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
