@@ -4,9 +4,12 @@ import {
     Diagnostics,
     emptyArray,
     Expression,
+    factory,
     FindAllReferences,
+    getExpressionPrecedence,
     getLocaleSpecificMessage,
     getTokenAtPosition,
+    isExpression,
     isIdentifier,
     isInitializedVariable,
     isVariableDeclarationInVariableStatement,
@@ -98,7 +101,7 @@ registerRefactor(refactorName, {
         const { references, declaration, replacement } = info;
         const edits = textChanges.ChangeTracker.with(context, tracker => {
             for (const node of references) {
-                tracker.replaceNode(file, node, replacement);
+                tracker.replaceNode(file, node, getReplacementExpression(node, replacement));
             }
             tracker.delete(file, declaration);
         });
@@ -149,7 +152,7 @@ function getInliningInfo(file: SourceFile, startPosition: number, tryWithReferen
     return { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_variable_to_inline) };
 }
 
-function getReferenceNodes(entries: readonly FindAllReferences.Entry[], declaration: Node) {
+function getReferenceNodes(entries: readonly FindAllReferences.Entry[], declaration: Node): Node[] | undefined {
     const referenceNodes = mapDefined(entries, entry => {
         // Only replace node references, and exclude the original variable too.
         if (entry.kind !== FindAllReferences.EntryKind.Node || entry.node === declaration) {
@@ -168,4 +171,22 @@ function getReferenceNodes(entries: readonly FindAllReferences.Entry[], declarat
     // Return undefined if the only reference is the declaration itself, or if a reference
     // isn't applicable for inlining.
     return referenceNodes.length > 0 && referenceNodes.length === entries.length - 1 ? referenceNodes : undefined;
+}
+
+function getReplacementExpression(reference: Node, replacement: Expression): Expression {
+    // Logic from binaryOperandNeedsParentheses: "If the operand has lower precedence,
+    // then it needs to be parenthesized to preserve the intent of the expression.
+    // If the operand has higher precedence, then it does not need to be parenthesized."
+    //
+    // Note that binaryOperandNeedsParentheses has further logic when the precedences
+    // are equal, but for the purposes of this refactor we keep things simple and always
+    // parenthesize.
+    const { parent } = reference;
+    if (isExpression(parent)) {
+        if (getExpressionPrecedence(replacement) <= getExpressionPrecedence(parent)) {
+            return factory.createParenthesizedExpression(replacement);
+        }
+    }
+
+    return replacement;
 }
