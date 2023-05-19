@@ -120,13 +120,9 @@ function getInliningInfo(file: SourceFile, startPosition: number, tryWithReferen
         if (!referencedSymbols || referencedSymbols.length !== 1) {
             return undefined;
         }
+        const referenceNodes = getReferenceNodes(referencedSymbols[0].references, name);
 
-        // Only replace node references, and exclude the original variable too.
-        const references = mapDefined(referencedSymbols[0].references, entry =>
-            entry.kind === FindAllReferences.EntryKind.Node ? entry.node === name ? undefined : entry.node : undefined
-        );
-
-        return references.length === 0 ? undefined : { references, declaration: parent, replacement: parent.initializer };
+        return referenceNodes && { references: referenceNodes, declaration: parent, replacement: parent.initializer };
     }
 
     if (tryWithReferenceToken && isIdentifier(token)) {
@@ -136,21 +132,40 @@ function getInliningInfo(file: SourceFile, startPosition: number, tryWithReferen
             return undefined;
         }
 
-        const { definition } = referencedSymbols[0];
+        const { definition, references } = referencedSymbols[0];
         if (definition?.type !== FindAllReferences.DefinitionKind.Symbol) {
             return undefined;
         }
 
         const { valueDeclaration } = definition.symbol;
         if (valueDeclaration && isInitializedVariable(valueDeclaration) && isVariableDeclarationInVariableStatement(valueDeclaration)) {
-            const references = mapDefined(referencedSymbols[0].references, entry =>
-                entry.kind === FindAllReferences.EntryKind.Node ? entry.node === valueDeclaration.name ? undefined : entry.node : undefined
-            );
+            const referenceNodes = getReferenceNodes(references, valueDeclaration.name);
 
-            return references.length === 0 ? undefined : { references, declaration: valueDeclaration, replacement: valueDeclaration.initializer };
+            return referenceNodes && { references: referenceNodes, declaration: valueDeclaration, replacement: valueDeclaration.initializer };
         }
     }
 
     // TODO: Do we want to have other errors too?
     return { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_variable_to_inline) };
+}
+
+function getReferenceNodes(entries: readonly FindAllReferences.Entry[], declaration: Node) {
+    const referenceNodes = mapDefined(entries, entry => {
+        // Only replace node references, and exclude the original variable too.
+        if (entry.kind !== FindAllReferences.EntryKind.Node || entry.node === declaration) {
+            return undefined;
+        }
+
+        // Only inline if all references are reads. Else we might end up with an invalid scenario like:
+        // const y = x++ + 1 -> const y = 2++ + 1
+        if (FindAllReferences.isWriteAccessForReference(entry.node)) {
+            return undefined;
+        }
+
+        return entry.node;
+    });
+
+    // Return undefined if the only reference is the declaration itself, or if a reference
+    // isn't applicable for inlining.
+    return referenceNodes.length > 0 && referenceNodes.length === entries.length - 1 ? referenceNodes : undefined;
 }
