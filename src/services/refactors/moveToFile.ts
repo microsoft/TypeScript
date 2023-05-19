@@ -26,12 +26,14 @@ import {
     emptyArray,
     EnumDeclaration,
     escapeLeadingUnderscores,
+    ExportDeclaration,
     Expression,
     ExpressionStatement,
     extensionFromPath,
     ExternalModuleReference,
     factory,
     fileShouldUseJavaScriptRequire,
+    filter,
     find,
     FindAllReferences,
     findIndex,
@@ -51,6 +53,7 @@ import {
     getRangesWhere,
     getRefactorContextSpan,
     getRelativePathFromFile,
+    getResolvedModule,
     getSynthesizedDeepClone,
     getUniqueName,
     hasJSFileExtension,
@@ -67,12 +70,14 @@ import {
     isBinaryExpression,
     isBindingElement,
     isDeclarationName,
+    isExportDeclaration,
     isExpressionStatement,
     isExternalModuleReference,
     isIdentifier,
     isImportDeclaration,
     isImportEqualsDeclaration,
     isNamedDeclaration,
+    isNamedExports,
     isObjectLiteralExpression,
     isOmittedExpression,
     isPrologueDirective,
@@ -216,7 +221,7 @@ function getNewStatementsAndRemoveFromOldFile(
     const body = addExports(oldFile, toMove.all, usage.oldFileImportsFromTargetFile, useEsModuleSyntax);
     if (typeof targetFile !== "string") {
         if (targetFile.statements.length > 0) {
-            changes.insertNodesAfter(targetFile, targetFile.statements[targetFile.statements.length - 1], body);
+            moveStatementsToTargetFile(changes, program, body, targetFile, toMove);
         }
         if (imports.length > 0) {
             insertImports(changes, targetFile, imports, /*blankLineBetween*/ true, preferences);
@@ -1109,4 +1114,45 @@ function isNonVariableTopLevelDeclaration(node: Node): node is NonVariableTopLev
     }
 }
 
+function moveStatementsToTargetFile(changes: textChanges.ChangeTracker, program: Program, statements: readonly Statement[], targetFile: SourceFile, toMove: ToMove) {
+    const checker = program.getTypeChecker();
+    const sourceExports = new Set<TopLevelDeclarationStatement>();
+    for (const node of toMove.all) {
+        if (isTopLevelDeclarationStatement(node) && hasSyntacticModifier(node, ModifierFlags.Export)) {
+            sourceExports.add(node);
+        }
+    }
 
+    let lastReExport: ExportDeclaration | undefined;
+    for (const node of targetFile.statements) {
+        if (isExportDeclaration(node) && node.moduleSpecifier && isStringLiteralLike(node.moduleSpecifier)) {
+            if (getResolvedModule(targetFile, node.moduleSpecifier.text, getModeForUsageLocation(targetFile, node.moduleSpecifier))
+                && node.exportClause && isNamedExports(node.exportClause) && length(node.exportClause.elements)) {
+                const elements = node.exportClause.elements;
+                const updatedElements = filter(elements, elem => {
+                    const symbol = checker.getSymbolAtLocation(elem.name);
+                    return !!symbol && find(skipAlias(symbol, checker).declarations, d => isTopLevelDeclarationStatement(d) && sourceExports.has(d)) === undefined;
+                });
+
+                if (length(updatedElements) === 0) {
+                    changes.deleteNode(targetFile, node);
+                    continue;
+                }
+
+                if (length(updatedElements) < length(elements)) {
+                    changes.replaceNode(targetFile, node,
+                        factory.updateExportDeclaration(node, node.modifiers, node.isTypeOnly,
+                            factory.updateNamedExports(node.exportClause , factory.createNodeArray(updatedElements, elements.hasTrailingComma)), node.moduleSpecifier, node.assertClause));
+                }
+            }
+            lastReExport = node;
+        }
+    }
+
+    if (lastReExport) {
+        changes.insertNodesBefore(targetFile, lastReExport, statements, /*blankLineBetween*/ true);
+    }
+    else {
+        changes.insertNodesAfter(targetFile, targetFile.statements[targetFile.statements.length - 1], statements);
+    }
+}
