@@ -6,6 +6,7 @@ import {
     Expression,
     factory,
     FindAllReferences,
+    flatMap,
     getExpressionPrecedence,
     getLocaleSpecificMessage,
     getTokenAtPosition,
@@ -23,6 +24,7 @@ import {
     VariableDeclaration,
 } from "../_namespaces/ts";
 import { RefactorErrorInfo, registerRefactor } from "../_namespaces/ts.refactor";
+import { getReferenceEntriesForNode } from "../findAllReferences";
 
 const refactorName = "Inline variable";
 const refactorDescription = getLocaleSpecificMessage(Diagnostics.Inline_variable);
@@ -119,11 +121,11 @@ function getInliningInfo(file: SourceFile, startPosition: number, tryWithReferen
     if (isInitializedVariable(parent) && isVariableDeclarationInVariableStatement(parent)) {
         // Find all references to the variable.
         const name = parent.name;
-        const referencedSymbols = FindAllReferences.Core.getReferencedSymbolsForNode(name.pos, name, program, program.getSourceFiles(), cancellationToken);
-        if (!referencedSymbols || referencedSymbols.length !== 1) {
+        const referenceEntries = getReferenceEntriesForNode(name.pos, name, program, program.getSourceFiles(), cancellationToken);
+        if (!referenceEntries) {
             return undefined;
         }
-        const referenceNodes = getReferenceNodes(referencedSymbols[0].references, name);
+        const referenceNodes = getReferenceNodes(referenceEntries, name);
 
         return referenceNodes && { references: referenceNodes, declaration: parent, replacement: parent.initializer };
     }
@@ -131,18 +133,18 @@ function getInliningInfo(file: SourceFile, startPosition: number, tryWithReferen
     if (tryWithReferenceToken && isIdentifier(token)) {
         // Try finding the declaration and nodes to replace via the reference token.
         const referencedSymbols = FindAllReferences.Core.getReferencedSymbolsForNode(token.pos, token, program, program.getSourceFiles(), cancellationToken);
-        if (!referencedSymbols || referencedSymbols.length !== 1) {
+        if (!referencedSymbols) {
             return undefined;
         }
 
-        const { definition, references } = referencedSymbols[0];
+        const { definition } = referencedSymbols[0];
         if (definition?.type !== FindAllReferences.DefinitionKind.Symbol) {
             return undefined;
         }
 
         const { valueDeclaration } = definition.symbol;
         if (valueDeclaration && isInitializedVariable(valueDeclaration) && isVariableDeclarationInVariableStatement(valueDeclaration)) {
-            const referenceNodes = getReferenceNodes(references, valueDeclaration.name);
+            const referenceNodes = getReferenceNodes(flatMap(referencedSymbols, ({ references }) => references), valueDeclaration.name);
 
             return referenceNodes && { references: referenceNodes, declaration: valueDeclaration, replacement: valueDeclaration.initializer };
         }
