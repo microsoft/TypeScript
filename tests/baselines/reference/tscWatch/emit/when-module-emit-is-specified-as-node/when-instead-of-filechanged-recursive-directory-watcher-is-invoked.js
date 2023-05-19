@@ -55,13 +55,13 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/rootfolder/project/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /a/rootfolder/project/scripts/javascript.js: *new*
   {}
 /a/rootfolder/project/scripts/typescript.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/a/rootfolder/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::

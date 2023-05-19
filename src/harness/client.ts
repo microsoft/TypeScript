@@ -818,7 +818,7 @@ export class SessionClient implements LanguageService {
         const response = this.processResponse<protocol.GetEditsForRefactorResponse>(request);
 
         if (!response.body) {
-            return { edits: [], renameFilename: undefined, renameLocation: undefined };
+            return { edits: [], renameFilename: undefined, renameLocation: undefined, notApplicableReason: undefined };
         }
 
         const edits: FileTextChanges[] = this.convertCodeEditsToTextChanges(response.body.edits);
@@ -832,7 +832,8 @@ export class SessionClient implements LanguageService {
         return {
             edits,
             renameFilename,
-            renameLocation
+            renameLocation,
+            notApplicableReason: response.body.notApplicableReason,
         };
     }
 

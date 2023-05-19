@@ -14262,7 +14262,36 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * maps primitive types and type parameters are to their apparent types.
      */
     function getSignaturesOfType(type: Type, kind: SignatureKind): readonly Signature[] {
-        return getSignaturesOfStructuredType(getReducedApparentType(type), kind);
+        const result = getSignaturesOfStructuredType(getReducedApparentType(type), kind);
+        if (kind === SignatureKind.Call && !length(result) && type.flags & TypeFlags.Union) {
+            if ((type as UnionType).arrayFallbackSignatures) {
+                return (type as UnionType).arrayFallbackSignatures!;
+            }
+            // If the union is all different instantiations of a member of the global array type...
+            let memberName: __String;
+            if (everyType(type, t => !!t.symbol?.parent && isArrayOrTupleSymbol(t.symbol.parent) && (!memberName ? (memberName = t.symbol.escapedName, true) : memberName === t.symbol.escapedName))) {
+                // Transform the type from `(A[] | B[])["member"]` to `(A | B)[]["member"]` (since we pretend array is covariant anyway)
+                const arrayArg = mapType(type, t => getMappedType((isReadonlyArraySymbol(t.symbol.parent) ? globalReadonlyArrayType : globalArrayType).typeParameters![0], (t as AnonymousType).mapper!));
+                const arrayType = createArrayType(arrayArg, someType(type, t => isReadonlyArraySymbol(t.symbol.parent)));
+                return (type as UnionType).arrayFallbackSignatures = getSignaturesOfType(getTypeOfPropertyOfType(arrayType, memberName!)!, kind);
+            }
+            (type as UnionType).arrayFallbackSignatures = result;
+        }
+        return result;
+    }
+
+    function isArrayOrTupleSymbol(symbol: Symbol | undefined) {
+        if (!symbol || !globalArrayType.symbol || !globalReadonlyArrayType.symbol) {
+            return false;
+        }
+        return !!getSymbolIfSameReference(symbol, globalArrayType.symbol) || !!getSymbolIfSameReference(symbol, globalReadonlyArrayType.symbol);
+    }
+
+    function isReadonlyArraySymbol(symbol: Symbol | undefined) {
+        if (!symbol || !globalReadonlyArrayType.symbol) {
+            return false;
+        }
+        return !!getSymbolIfSameReference(symbol, globalReadonlyArrayType.symbol);
     }
 
     function findIndexInfo(indexInfos: readonly IndexInfo[], keyType: Type) {
@@ -16486,36 +16515,31 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getUnionOrIntersectionTypePredicate(signatures: readonly Signature[], kind: TypeFlags | undefined): TypePredicate | undefined {
-        let first: TypePredicate | undefined;
+        let last: TypePredicate | undefined;
         const types: Type[] = [];
         for (const sig of signatures) {
             const pred = getTypePredicateOfSignature(sig);
-            if (!pred || pred.kind === TypePredicateKind.AssertsThis || pred.kind === TypePredicateKind.AssertsIdentifier) {
-                if (kind !== TypeFlags.Intersection) {
-                    continue;
+            if (pred) {
+                // Constituent type predicates must all have matching kinds. We don't create composite type predicates for assertions.
+                if (pred.kind !== TypePredicateKind.This && pred.kind !== TypePredicateKind.Identifier || last && !typePredicateKindsMatch(last, pred)) {
+                    return undefined;
                 }
-                else {
-                    return; // intersections demand all members be type predicates for the result to have a predicate
-                }
+                last = pred;
+                types.push(pred.type);
             }
-
-            if (first) {
-                if (!typePredicateKindsMatch(first, pred)) {
-                    // No common type predicate.
+            else {
+                // In composite union signatures we permit and ignore signatures with a return type `false`.
+                const returnType = kind !== TypeFlags.Intersection ? getReturnTypeOfSignature(sig) : undefined;
+                if (returnType !== falseType && returnType !== regularFalseType) {
                     return undefined;
                 }
             }
-            else {
-                first = pred;
-            }
-            types.push(pred.type);
         }
-        if (!first) {
-            // No signatures had a type predicate.
+        if (!last) {
             return undefined;
         }
         const compositeType = getUnionOrIntersectionType(types, kind);
-        return createTypePredicate(first.kind, first.parameterName, first.parameterIndex, compositeType);
+        return createTypePredicate(last.kind, last.parameterName, last.parameterIndex, compositeType);
     }
 
     function typePredicateKindsMatch(a: TypePredicate, b: TypePredicate): boolean {
@@ -29294,6 +29318,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.NumericLiteral:
             case SyntaxKind.BigIntLiteral:
             case SyntaxKind.NoSubstitutionTemplateLiteral:
+            case SyntaxKind.TemplateExpression:
             case SyntaxKind.TrueKeyword:
             case SyntaxKind.FalseKeyword:
             case SyntaxKind.NullKeyword:
@@ -32590,8 +32615,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // can be specified by users through attributes property.
         const paramType = getEffectiveFirstArgumentForJsxSignature(signature, node);
         const attributesType = checkExpressionWithContextualType(node.attributes, paramType, /*inferenceContext*/ undefined, checkMode);
+        const checkAttributesType = checkMode & CheckMode.SkipContextSensitive ? getRegularTypeOfObjectLiteral(attributesType) : attributesType;
         return checkTagNameDoesNotExpectTooManyArguments() && checkTypeRelatedToAndOptionallyElaborate(
-            attributesType,
+            checkAttributesType,
             paramType,
             relation,
             reportErrors ? node.tagName : undefined,
@@ -34514,6 +34540,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             return getRegularTypeOfLiteralType(exprType);
         }
+        const links = getNodeLinks(node);
+        links.assertionExpressionType = exprType;
         checkSourceElement(type);
         checkNodeDeferred(node);
         return getTypeFromTypeNode(type);
@@ -34538,9 +34566,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkAssertionDeferred(node: JSDocTypeAssertion | AssertionExpression) {
-        const { type, expression } = getAssertionTypeAndExpression(node);
+        const { type } = getAssertionTypeAndExpression(node);
         const errNode = isParenthesizedExpression(node) ? type : node;
-        const exprType = getRegularTypeOfObjectLiteral(getBaseTypeOfLiteralType(checkExpression(expression)));
+        const links = getNodeLinks(node);
+        Debug.assertIsDefined(links.assertionExpressionType);
+        const exprType = getRegularTypeOfObjectLiteral(getBaseTypeOfLiteralType(links.assertionExpressionType));
         const targetType = getTypeFromTypeNode(type);
         if (!isErrorType(targetType)) {
             addLazyDiagnostic(() => {
@@ -37342,7 +37372,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             texts.push(span.literal.text);
             types.push(isTypeAssignableTo(type, templateConstraintType) ? type : stringType);
         }
-        return isConstContext(node) || isTemplateLiteralContext(node) || someType(getContextualType(node, /*contextFlags*/ undefined) || unknownType, isTemplateLiteralContextualType) ? getTemplateLiteralType(texts, types) : stringType;
+        if (isConstContext(node) || isTemplateLiteralContext(node) || someType(getContextualType(node, /*contextFlags*/ undefined) || unknownType, isTemplateLiteralContextualType)) {
+            return getTemplateLiteralType(texts, types);
+        }
+        const evaluated = node.parent.kind !== SyntaxKind.TaggedTemplateExpression && evaluateTemplateExpression(node);
+        return evaluated ? getFreshTypeOfLiteralType(getStringLiteralType(evaluated)) : stringType;
     }
 
     function isTemplateLiteralContextualType(type: Type): boolean {
@@ -43619,7 +43653,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return value;
     }
 
-    function evaluate(expr: Expression, location: Declaration): string | number | undefined {
+    function evaluate(expr: Expression, location?: Declaration): string | number | undefined {
         switch (expr.kind) {
             case SyntaxKind.PrefixUnaryExpression:
                 const value = evaluate((expr as PrefixUnaryExpression).operand, location);
@@ -43676,11 +43710,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const symbol = resolveEntityName(expr, SymbolFlags.Value, /*ignoreErrors*/ true);
                     if (symbol) {
                         if (symbol.flags & SymbolFlags.EnumMember) {
-                            return evaluateEnumMember(expr, symbol, location);
+                            return location ? evaluateEnumMember(expr, symbol, location) : getEnumMemberValue(symbol.valueDeclaration as EnumMember);
                         }
                         if (isConstVariable(symbol)) {
                             const declaration = symbol.valueDeclaration as VariableDeclaration | undefined;
-                            if (declaration && !declaration.type && declaration.initializer && declaration !== location && isBlockScopedNameDeclaredBeforeUse(declaration, location)) {
+                            if (declaration && !declaration.type && declaration.initializer && (!location || declaration !== location && isBlockScopedNameDeclaredBeforeUse(declaration, location))) {
                                 return evaluate(declaration.initializer, declaration);
                             }
                         }
@@ -43695,7 +43729,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         const name = escapeLeadingUnderscores(((expr as ElementAccessExpression).argumentExpression as StringLiteralLike).text);
                         const member = rootSymbol.exports!.get(name);
                         if (member) {
-                            return evaluateEnumMember(expr, member, location);
+                            return location ? evaluateEnumMember(expr, member, location) : getEnumMemberValue(member.valueDeclaration as EnumMember);
                         }
                     }
                 }
@@ -43717,7 +43751,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return getEnumMemberValue(declaration as EnumMember);
     }
 
-    function evaluateTemplateExpression(expr: TemplateExpression, location: Declaration) {
+    function evaluateTemplateExpression(expr: TemplateExpression, location?: Declaration) {
         let result = expr.head.text;
         for (const span of expr.templateSpans) {
             const value = evaluate(span.expression, location);
@@ -46985,7 +47019,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 if (requestedExternalEmitHelperNames.has(name)) continue;
                                 requestedExternalEmitHelperNames.add(name);
 
-                                const symbol = getSymbol(helpersModule.exports!, escapeLeadingUnderscores(name), SymbolFlags.Value);
+                                const symbol = getSymbol(getExportsOfModule(helpersModule), escapeLeadingUnderscores(name), SymbolFlags.Value);
                                 if (!symbol) {
                                     error(location, Diagnostics.This_syntax_requires_an_imported_helper_named_1_which_does_not_exist_in_0_Consider_upgrading_your_version_of_0, externalHelpersModuleNameText, name);
                                 }

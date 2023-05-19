@@ -216,9 +216,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/tsconfig.json:
-  {}
 /a/a.ts: *new*
+  {}
+/a/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -283,9 +283,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches *deleted*::
-/a/tsconfig.json:
-  {}
 /a/a.ts:
+  {}
+/a/tsconfig.json:
   {}
 
 FsWatchesRecursive *deleted*::

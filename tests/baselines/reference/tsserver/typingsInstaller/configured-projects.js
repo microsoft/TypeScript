@@ -116,17 +116,17 @@ TI:: [hh:mm:ss:mss] #1 with arguments'["@types/jquery@tsFakeMajor.Minor"]':: tru
 TI:: Before installWorker
 
 PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
 /a/b/bower_components: *new*
   {"pollingInterval":500}
 /a/b/node_modules: *new*
   {"pollingInterval":500}
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json:
-  {}
 /a/b/package.json: *new*
+  {}
+/a/b/tsconfig.json:
   {}
 
 FsWatchesRecursive::

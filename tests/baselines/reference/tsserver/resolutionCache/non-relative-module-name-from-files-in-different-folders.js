@@ -209,7 +209,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/product/src/feature/file2.ts: *new*
   {}
@@ -217,17 +217,17 @@ FsWatches::
   {}
 /user/username/projects/myproject/product/test/src/file3.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject: *new*
   {}
-/user/username/projects/myproject/product/node_modules: *new*
-  {}
 /user/username/projects/myproject/node_modules: *new*
   {}
 /user/username/projects/myproject/product: *new*
+  {}
+/user/username/projects/myproject/product/node_modules: *new*
   {}
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/tsconfig.json

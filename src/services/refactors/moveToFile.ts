@@ -53,7 +53,9 @@ import {
     getRelativePathFromFile,
     getSynthesizedDeepClone,
     getUniqueName,
+    hasJSFileExtension,
     hasSyntacticModifier,
+    hasTSFileExtension,
     hostGetCanonicalFileName,
     Identifier,
     ImportDeclaration,
@@ -162,8 +164,12 @@ registerRefactor(refactorNameForMoveToFile, {
         Debug.assert(actionName === refactorNameForMoveToFile, "Wrong refactor invoked");
         const statements = Debug.checkDefined(getStatementsToMove(context));
         Debug.assert(interactiveRefactorArguments, "No interactive refactor arguments available");
-        const edits = textChanges.ChangeTracker.with(context, t => doChange(context, context.file, interactiveRefactorArguments.targetFile, context.program, statements, t, context.host, context.preferences));
-        return { edits, renameFilename: undefined, renameLocation: undefined };
+        const targetFile = interactiveRefactorArguments.targetFile;
+        if (hasJSFileExtension(targetFile) || hasTSFileExtension(targetFile)) {
+            const edits = textChanges.ChangeTracker.with(context, t => doChange(context, context.file, interactiveRefactorArguments.targetFile, context.program, statements, t, context.host, context.preferences));
+            return { edits, renameFilename: undefined, renameLocation: undefined };
+        }
+        return { edits: [], renameFilename: undefined, renameLocation: undefined, notApplicableReason: getLocaleSpecificMessage(Diagnostics.Cannot_move_to_file_selected_file_is_invalid) };
     }
 });
 

@@ -14,7 +14,7 @@ and limitations under the License.
 ***************************************************************************** */
 
 declare namespace ts {
-    const versionMajorMinor = "5.1";
+    const versionMajorMinor = "5.2";
     /** The version of the TypeScript compiler release */
     const version: string;
     /**
@@ -6517,6 +6517,7 @@ declare namespace ts {
         renameFilename?: string;
         renameLocation?: number;
         commands?: CodeActionCommand[];
+        notApplicableReason?: string;
     }
     type RefactorTriggerReason = "implicit" | "invoked";
     interface TextInsertion {
@@ -6838,6 +6839,7 @@ declare namespace ts {
         kindModifiers?: string;
         sortText: string;
         insertText?: string;
+        filterText?: string;
         isSnippet?: true;
         /**
          * An optional span that indicates the text to be replaced by this completion item.

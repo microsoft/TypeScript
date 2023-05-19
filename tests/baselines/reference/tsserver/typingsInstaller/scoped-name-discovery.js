@@ -220,9 +220,9 @@ PolledWatches::
 FsWatches::
 /jsconfig.json:
   {}
-/tmp/package.json:
-  {}
 /package.json: *new*
+  {}
+/tmp/package.json:
   {}
 
 FsWatchesRecursive::

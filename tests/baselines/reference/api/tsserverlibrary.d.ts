@@ -619,6 +619,7 @@ declare namespace ts {
                  */
                 renameLocation?: Location;
                 renameFilename?: string;
+                notApplicableReason?: string;
             }
             /**
              * Organize imports by:
@@ -1829,6 +1830,11 @@ declare namespace ts {
                  * coupled with `replacementSpan` to replace a dotted access with a bracket access.
                  */
                 insertText?: string;
+                /**
+                 * A string that should be used when filtering a set of
+                 * completion items.
+                 */
+                filterText?: string;
                 /**
                  * `insertText` should be interpreted as a snippet if true.
                  */
@@ -4061,7 +4067,7 @@ declare namespace ts {
             responseRequired?: boolean;
         }
     }
-    const versionMajorMinor = "5.1";
+    const versionMajorMinor = "5.2";
     /** The version of the TypeScript compiler release */
     const version: string;
     /**
@@ -10480,6 +10486,7 @@ declare namespace ts {
         renameFilename?: string;
         renameLocation?: number;
         commands?: CodeActionCommand[];
+        notApplicableReason?: string;
     }
     type RefactorTriggerReason = "implicit" | "invoked";
     interface TextInsertion {
@@ -10801,6 +10808,7 @@ declare namespace ts {
         kindModifiers?: string;
         sortText: string;
         insertText?: string;
+        filterText?: string;
         isSnippet?: true;
         /**
          * An optional span that indicates the text to be replaced by this completion item.

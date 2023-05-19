@@ -2,7 +2,7 @@
     "name": "typescript",
     "author": "Microsoft Corp.",
     "homepage": "https://www.typescriptlang.org/",
-    "version": "5.1.0",
+    "version": "5.2.0",
     "license": "Apache-2.0",
     "description": "TypeScript is a language for application scale JavaScript development",
     "keywords": [
@@ -83,9 +83,7 @@
         "which": "^2.0.2"
     },
     "overrides": {
-        "typescript@*": "$typescript",
-        "@octokit/types": "9.0.0",
-        "@octokit/openapi-types": "16.0.0"
+        "typescript@*": "$typescript"
     },
     "scripts": {
         "test": "hereby runtests-parallel --light=false",

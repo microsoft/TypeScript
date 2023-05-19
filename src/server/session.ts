@@ -2267,6 +2267,7 @@ export class Session<TMessage = string> implements EventSender {
                     kindModifiers,
                     sortText,
                     insertText,
+                    filterText,
                     replacementSpan,
                     hasAction,
                     source,
@@ -2285,6 +2286,7 @@ export class Session<TMessage = string> implements EventSender {
                     kindModifiers,
                     sortText,
                     insertText,
+                    filterText,
                     replacementSpan: convertedSpan,
                     isSnippet,
                     hasAction: hasAction || undefined,
@@ -2707,7 +2709,8 @@ export class Session<TMessage = string> implements EventSender {
             return {
                 renameLocation: mappedRenameLocation,
                 renameFilename,
-                edits: this.mapTextChangesToCodeEdits(edits)
+                edits: this.mapTextChangesToCodeEdits(edits),
+                notApplicableReason: result.notApplicableReason,
             };
         }
         return result;

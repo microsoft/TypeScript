@@ -1335,7 +1335,7 @@ export type HasIllegalDecorators =
     ;
 
 // NOTE: Changing the following list requires changes to:
-// - `canHaveModifiers` in factory/utilities.ts
+// - `canHaveModifiers` in factory/utilitiesPublic.ts
 // - `updateModifiers` in factory/nodeFactory.ts
 export type HasModifiers =
     | TypeParameterDeclaration
@@ -6060,6 +6060,7 @@ export interface NodeLinks {
     spreadIndices?: { first: number | undefined, last: number | undefined }; // Indices of first and last spread elements in array literal
     parameterInitializerContainsUndefined?: boolean; // True if this is a parameter declaration whose type annotation contains "undefined".
     fakeScopeForSignatureDeclaration?: boolean; // True if this is a fake scope injected into an enclosing declaration chain.
+    assertionExpressionType?: Type;     // Cached type of the expression of a type assertion
 }
 
 /** @internal */
@@ -6464,6 +6465,8 @@ export interface UnionType extends UnionOrIntersectionType {
     keyPropertyName?: __String;  // Property with unique unit type that exists in every object/intersection in union type
     /** @internal */
     constituentMap?: Map<TypeId, Type>;  // Constituents keyed by unit type discriminants
+    /** @internal */
+    arrayFallbackSignatures?: readonly Signature[]; // Special remapped signature list for unions of arrays
 }
 
 export interface IntersectionType extends UnionOrIntersectionType {
@@ -9054,6 +9057,7 @@ export interface NodeFactory {
      */
     cloneNode<T extends Node | undefined>(node: T): T;
     /** @internal */ updateModifiers<T extends HasModifiers>(node: T, modifiers: readonly Modifier[] | ModifierFlags | undefined): T;
+    /** @internal */ updateModifierLike<T extends HasModifiers & HasDecorators>(node: T, modifierLike: readonly ModifierLike[] | undefined): T;
 }
 
 /** @internal */

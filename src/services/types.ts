@@ -1002,6 +1002,7 @@ export interface RefactorEditInfo {
     renameFilename?: string;
     renameLocation?: number;
     commands?: CodeActionCommand[];
+    notApplicableReason?: string;
 }
 
 export type RefactorTriggerReason = "implicit" | "invoked";
@@ -1406,6 +1407,7 @@ export interface CompletionEntry {
     kindModifiers?: string; // see ScriptElementKindModifier, comma separated
     sortText: string;
     insertText?: string;
+    filterText?: string;
     isSnippet?: true;
     /**
      * An optional span that indicates the text to be replaced by this completion item.

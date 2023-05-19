@@ -104,13 +104,13 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 FsWatches::
-/users/username/dev/project/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /users/username/dev/project/tsconfig.all.json: *new*
   {}
-/users/username/dev/project/types/file2/index.d.ts: *new*
+/users/username/dev/project/tsconfig.json: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/users/username/dev/project/types/file2/index.d.ts: *new*
   {}
 
 FsWatchesRecursive::

@@ -4917,6 +4917,10 @@
         "category": "Message",
         "code": 6163
     },
+    "Skipping module '{0}' that looks like an absolute URI, target file types: {1}.": {
+        "category": "Message",
+        "code": 6164
+    },
     "Do not truncate error messages.": {
         "category": "Message",
         "code": 6165
@@ -7607,6 +7611,10 @@
     "Move to file": {
         "category": "Message",
         "code": 95178
+    },
+    "Cannot move to file, selected file is invalid": {
+        "category": "Message",
+        "code": 95179
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
