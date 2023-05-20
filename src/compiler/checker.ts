@@ -18837,25 +18837,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 case SyntaxKind.TypeQuery:
                     const entityName = (node as TypeQueryNode).exprName;
                     const firstIdentifier = getFirstIdentifier(entityName);
-                    const firstIdentifierSymbol = getResolvedSymbol(firstIdentifier);
-                    const tpDeclaration = tp.symbol.declarations![0]; // There is exactly one declaration, otherwise `containsReference` is not called
-                    let tpScope: Node;
-                    if (tpDeclaration.kind === SyntaxKind.TypeParameter) { // Type parameter is a regular type parameter, e.g. foo<T>
-                        tpScope = tpDeclaration.parent;
-                    }
-                    else if (tp.isThisType) {
-                         // Type parameter is the this type, and its declaration is the class declaration.
-                        tpScope = tpDeclaration;
-                    }
-                    else {
-                        // Type parameter's declaration was unrecognized.
-                        // This could happen if the type parameter comes from e.g. a JSDoc annotation, so we default to returning true.
-                        return true;
-                    }
-
-                    if (firstIdentifierSymbol.declarations) {
-                        return some(firstIdentifierSymbol.declarations, idDecl => isNodeDescendantOf(idDecl, tpScope)) ||
-                            some((node as TypeQueryNode).typeArguments, containsReference);
+                    if (!isThisIdentifier(firstIdentifier)) { // Don't attempt to analyze typeof this.xxx
+                        const firstIdentifierSymbol = getResolvedSymbol(firstIdentifier);
+                        const tpDeclaration = tp.symbol.declarations![0]; // There is exactly one declaration, otherwise `containsReference` is not called
+                        const tpScope = tpDeclaration.kind === SyntaxKind.TypeParameter ? tpDeclaration.parent : // Type parameter is a regular type parameter, e.g. foo<T>
+                            tp.isThisType ? tpDeclaration : // Type parameter is the this type, and its declaration is the class declaration.
+                            undefined; // Type parameter's declaration was unrecognized, e.g. comes from JSDoc annotation.
+                        if (firstIdentifierSymbol.declarations && tpScope) {
+                            return some(firstIdentifierSymbol.declarations, idDecl => isNodeDescendantOf(idDecl, tpScope)) ||
+                                some((node as TypeQueryNode).typeArguments, containsReference);
+                        }
                     }
                     return true;
                 case SyntaxKind.MethodDeclaration:
