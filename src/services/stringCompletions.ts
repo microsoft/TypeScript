@@ -44,6 +44,7 @@ import {
     flatten,
     forEachAncestorDirectory,
     getBaseFileName,
+    getConditions,
     getContextualTypeFromParent,
     getDirectoryPath,
     getEffectiveTypeRoots,
@@ -924,7 +925,7 @@ function getCompletionEntriesForNonRelativeModules(
                             }
                             const keys = getOwnKeys(exports);
                             const fragmentSubpath = components.join("/") + (components.length && hasTrailingDirectorySeparator(fragment) ? "/" : "");
-                            const conditions = mode === ModuleKind.ESNext ? ["node", "import", "types"] : ["node", "require", "types"];
+                            const conditions = getConditions(compilerOptions, mode === ModuleKind.ESNext);
                             addCompletionEntriesFromPathsOrExports(
                                 result,
                                 fragmentSubpath,
