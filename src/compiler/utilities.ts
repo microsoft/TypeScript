@@ -293,6 +293,7 @@ import {
     isJSDocTypeTag,
     isJsxChild,
     isJsxFragment,
+    isJsxNamespacedName,
     isJsxOpeningLikeElement,
     isJsxText,
     isLeftHandSideExpression,
@@ -350,15 +351,18 @@ import {
     JSDocParameterTag,
     JSDocPropertyLikeTag,
     JSDocSatisfiesExpression,
+    JSDocSatisfiesTag,
     JSDocSignature,
     JSDocTag,
     JSDocTemplateTag,
     JSDocTypedefTag,
     JsonSourceFile,
+    JsxAttributeName,
     JsxChild,
     JsxElement,
     JsxEmit,
     JsxFragment,
+    JsxNamespacedName,
     JsxOpeningElement,
     JsxOpeningLikeElement,
     JsxSelfClosingElement,
@@ -375,6 +379,7 @@ import {
     LiteralLikeNode,
     LogicalOperator,
     LogicalOrCoalescingAssignmentOperator,
+    mangleScopedPackageName,
     map,
     mapDefined,
     MapLike,
@@ -522,6 +527,7 @@ import {
     TypeAliasDeclaration,
     TypeAssertion,
     TypeChecker,
+    TypeCheckerHost,
     TypeElement,
     TypeFlags,
     TypeLiteralNode,
@@ -777,7 +783,37 @@ export function moduleResolutionIsEqualTo(oldResolution: ResolvedModuleWithFaile
         oldResolution.resolvedModule.extension === newResolution.resolvedModule.extension &&
         oldResolution.resolvedModule.resolvedFileName === newResolution.resolvedModule.resolvedFileName &&
         oldResolution.resolvedModule.originalPath === newResolution.resolvedModule.originalPath &&
-        packageIdIsEqual(oldResolution.resolvedModule.packageId, newResolution.resolvedModule.packageId);
+        packageIdIsEqual(oldResolution.resolvedModule.packageId, newResolution.resolvedModule.packageId) &&
+        oldResolution.node10Result === newResolution.node10Result;
+}
+
+/** @internal */
+export function createModuleNotFoundChain(sourceFile: SourceFile, host: TypeCheckerHost, moduleReference: string, mode: ResolutionMode, packageName: string) {
+    const node10Result = sourceFile.resolvedModules?.get(moduleReference, mode)?.node10Result;
+    const result = node10Result
+        ? chainDiagnosticMessages(
+            /*details*/ undefined,
+            Diagnostics.There_are_types_at_0_but_this_result_could_not_be_resolved_when_respecting_package_json_exports_The_1_library_may_need_to_update_its_package_json_or_typings,
+            node10Result,
+            node10Result.indexOf(nodeModulesPathPart + "@types/") > -1 ? `@types/${mangleScopedPackageName(packageName)}` : packageName)
+        : host.typesPackageExists(packageName)
+            ? chainDiagnosticMessages(
+                /*details*/ undefined,
+                Diagnostics.If_the_0_package_actually_exposes_this_module_consider_sending_a_pull_request_to_amend_https_Colon_Slash_Slashgithub_com_SlashDefinitelyTyped_SlashDefinitelyTyped_Slashtree_Slashmaster_Slashtypes_Slash_1,
+                packageName, mangleScopedPackageName(packageName))
+            : host.packageBundlesTypes(packageName)
+                ? chainDiagnosticMessages(
+                    /*details*/ undefined,
+                    Diagnostics.If_the_0_package_actually_exposes_this_module_try_adding_a_new_declaration_d_ts_file_containing_declare_module_1,
+                    packageName,
+                    moduleReference)
+                : chainDiagnosticMessages(
+                    /*details*/ undefined,
+                    Diagnostics.Try_npm_i_save_dev_types_Slash_1_if_it_exists_or_add_a_new_declaration_d_ts_file_containing_declare_module_0,
+                    moduleReference,
+                    mangleScopedPackageName(packageName));
+    if (result) result.repopulateInfo = () => ({ moduleReference, mode, packageName: packageName === moduleReference ? undefined : packageName });
+    return result;
 }
 
 function packageIdIsEqual(a: PackageId | undefined, b: PackageId | undefined): boolean {
@@ -1072,7 +1108,9 @@ export function isRecognizedTripleSlashComment(text: string, commentPos: number,
         const textSubStr = text.substring(commentPos, commentEnd);
         return fullTripleSlashReferencePathRegEx.test(textSubStr) ||
             fullTripleSlashAMDReferencePathRegEx.test(textSubStr) ||
+            fullTripleSlashAMDModuleRegEx.test(textSubStr) ||
             fullTripleSlashReferenceTypeReferenceDirectiveRegEx.test(textSubStr) ||
+            fullTripleSlashLibReferenceRegEx.test(textSubStr) ||
             defaultLibReferenceRegEx.test(textSubStr) ?
             true : false;
     }
@@ -1700,8 +1738,13 @@ function canUseOriginalText(node: LiteralLikeNode, flags: GetLiteralTextFlags): 
         return false;
     }
 
-    if (isNumericLiteral(node) && node.numericLiteralFlags & TokenFlags.ContainsSeparator) {
-        return !!(flags & GetLiteralTextFlags.AllowNumericSeparator);
+    if (isNumericLiteral(node)) {
+        if (node.numericLiteralFlags & TokenFlags.IsInvalid) {
+            return false;
+        }
+        if (node.numericLiteralFlags & TokenFlags.ContainsSeparator) {
+            return !!(flags & GetLiteralTextFlags.AllowNumericSeparator);
+        }
     }
 
     return !isBigIntLiteral(node);
@@ -1814,7 +1857,7 @@ function isCommonJSContainingModuleKind(kind: ModuleKind) {
 
 /** @internal */
 export function isEffectiveExternalModule(node: SourceFile, compilerOptions: CompilerOptions) {
-    return isExternalModule(node) || getIsolatedModules(compilerOptions) || (isCommonJSContainingModuleKind(getEmitModuleKind(compilerOptions)) && !!node.commonJsModuleIndicator);
+    return isExternalModule(node) || (isCommonJSContainingModuleKind(getEmitModuleKind(compilerOptions)) && !!node.commonJsModuleIndicator);
 }
 
 /**
@@ -2014,7 +2057,7 @@ export function isComputedNonLiteralName(name: PropertyName): boolean {
 }
 
 /** @internal */
-export function tryGetTextOfPropertyName(name: PropertyName | NoSubstitutionTemplateLiteral): __String | undefined {
+export function tryGetTextOfPropertyName(name: PropertyName | NoSubstitutionTemplateLiteral | JsxAttributeName): __String | undefined {
     switch (name.kind) {
         case SyntaxKind.Identifier:
         case SyntaxKind.PrivateIdentifier:
@@ -2026,13 +2069,15 @@ export function tryGetTextOfPropertyName(name: PropertyName | NoSubstitutionTemp
         case SyntaxKind.ComputedPropertyName:
             if (isStringOrNumericLiteralLike(name.expression)) return escapeLeadingUnderscores(name.expression.text);
             return undefined;
+        case SyntaxKind.JsxNamespacedName:
+            return getEscapedTextOfJsxNamespacedName(name);
         default:
             return Debug.assertNever(name);
     }
 }
 
 /** @internal */
-export function getTextOfPropertyName(name: PropertyName | NoSubstitutionTemplateLiteral): __String {
+export function getTextOfPropertyName(name: PropertyName | NoSubstitutionTemplateLiteral | JsxAttributeName): __String {
     return Debug.checkDefined(tryGetTextOfPropertyName(name));
 }
 
@@ -2055,6 +2100,8 @@ export function entityNameToString(name: EntityNameOrEntityNameExpression | JSDo
             }
         case SyntaxKind.JSDocMemberName:
             return entityNameToString(name.left) + entityNameToString(name.right);
+        case SyntaxKind.JsxNamespacedName:
+            return entityNameToString(name.namespace) + ":" + entityNameToString(name.name);
         default:
             return Debug.assertNever(name);
     }
@@ -2151,7 +2198,7 @@ export function createDiagnosticForRange(sourceFile: SourceFile, range: TextRang
 
 /** @internal */
 export function getSpanOfTokenAtPosition(sourceFile: SourceFile, pos: number): TextSpan {
-    const scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ true, sourceFile.languageVariant, sourceFile.text, /*onError:*/ undefined, pos);
+    const scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ true, sourceFile.languageVariant, sourceFile.text, /*onError*/ undefined, pos);
     scanner.scan();
     const start = scanner.getTokenStart();
     return createTextSpanFromBounds(start, scanner.getTokenEnd());
@@ -2159,7 +2206,7 @@ export function getSpanOfTokenAtPosition(sourceFile: SourceFile, pos: number): T
 
 /** @internal */
 export function scanTokenAtPosition(sourceFile: SourceFile, pos: number) {
-    const scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ true, sourceFile.languageVariant, sourceFile.text, /*onError:*/ undefined, pos);
+    const scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ true, sourceFile.languageVariant, sourceFile.text, /*onError*/ undefined, pos);
     scanner.scan();
     return scanner.getToken();
 }
@@ -2222,6 +2269,14 @@ export function getErrorSpanForNode(sourceFile: SourceFile, node: Node): TextSpa
         case SyntaxKind.ReturnStatement:
         case SyntaxKind.YieldExpression: {
             const pos = skipTrivia(sourceFile.text, (node as ReturnStatement | YieldExpression).pos);
+            return getSpanOfTokenAtPosition(sourceFile, pos);
+        }
+        case SyntaxKind.SatisfiesExpression: {
+            const pos = skipTrivia(sourceFile.text, (node as SatisfiesExpression).expression.end);
+            return getSpanOfTokenAtPosition(sourceFile, pos);
+        }
+        case SyntaxKind.JSDocSatisfiesTag: {
+            const pos = skipTrivia(sourceFile.text, (node as JSDocSatisfiesTag).tagName.pos);
             return getSpanOfTokenAtPosition(sourceFile, pos);
         }
     }
@@ -2360,8 +2415,10 @@ export function getJSDocCommentRanges(node: Node, text: string) {
 /** @internal */
 export const fullTripleSlashReferencePathRegEx = /^(\/\/\/\s*<reference\s+path\s*=\s*)(('[^']*')|("[^"]*")).*?\/>/;
 const fullTripleSlashReferenceTypeReferenceDirectiveRegEx = /^(\/\/\/\s*<reference\s+types\s*=\s*)(('[^']*')|("[^"]*")).*?\/>/;
+const fullTripleSlashLibReferenceRegEx = /^(\/\/\/\s*<reference\s+lib\s*=\s*)(('[^']*')|("[^"]*")).*?\/>/;
 /** @internal */
 export const fullTripleSlashAMDReferencePathRegEx = /^(\/\/\/\s*<amd-dependency\s+path\s*=\s*)(('[^']*')|("[^"]*")).*?\/>/;
+const fullTripleSlashAMDModuleRegEx = /^\/\/\/\s*<amd-module\s+.*?\/>/;
 const defaultLibReferenceRegEx = /^(\/\/\/\s*<reference\s+no-default-lib\s*=\s*)(('[^']*')|("[^"]*"))\s*\/>/;
 
 /** @internal */
@@ -2453,10 +2510,8 @@ export function isPartOfTypeNode(node: Node): boolean {
                     return node === (parent as TypeAssertion).type;
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
-                    return contains((parent as CallExpression).typeArguments, node);
                 case SyntaxKind.TaggedTemplateExpression:
-                    // TODO (drosen): TaggedTemplateExpressions may eventually support type arguments.
-                    return false;
+                    return contains((parent as CallExpression | TaggedTemplateExpression).typeArguments, node);
             }
         }
     }
@@ -3054,7 +3109,7 @@ export function getEntityNameFromTypeNode(node: TypeNode): EntityNameOrEntityNam
 }
 
 /** @internal */
-export function getInvokedExpression(node: CallLikeExpression): Expression {
+export function getInvokedExpression(node: CallLikeExpression): Expression | JsxTagNameExpression {
     switch (node.kind) {
         case SyntaxKind.TaggedTemplateExpression:
             return node.tag;
@@ -3659,7 +3714,7 @@ export function isSameEntityName(name: Expression, initializer: Expression): boo
 
 /** @internal */
 export function getRightMostAssignedExpression(node: Expression): Expression {
-    while (isAssignmentExpression(node, /*excludeCompoundAssignments*/ true)) {
+    while (isAssignmentExpression(node, /*excludeCompoundAssignment*/ true)) {
         node = node.right;
     }
     return node;
@@ -3938,7 +3993,7 @@ export function tryGetImportFromModuleSpecifier(node: StringLiteralLike): AnyVal
         case SyntaxKind.ExternalModuleReference:
             return (node.parent as ExternalModuleReference).parent as AnyValidImportOrReExport;
         case SyntaxKind.CallExpression:
-            return isImportCall(node.parent) || isRequireCall(node.parent, /*checkArg*/ false) ? node.parent as RequireOrImportCall : undefined;
+            return isImportCall(node.parent) || isRequireCall(node.parent, /*requireStringLiteralLikeArgument*/ false) ? node.parent as RequireOrImportCall : undefined;
         case SyntaxKind.LiteralType:
             Debug.assert(isStringLiteral(node));
             return tryCast(node.parent.parent, isImportTypeNode) as ValidImportTypeNode | undefined;
@@ -4160,6 +4215,7 @@ export function canHaveJSDoc(node: Node): node is HasJSDoc {
         case SyntaxKind.PropertyDeclaration:
         case SyntaxKind.PropertySignature:
         case SyntaxKind.ReturnStatement:
+        case SyntaxKind.SemicolonClassElement:
         case SyntaxKind.SetAccessor:
         case SyntaxKind.ShorthandPropertyAssignment:
         case SyntaxKind.SpreadAssignment:
@@ -4178,7 +4234,29 @@ export function canHaveJSDoc(node: Node): node is HasJSDoc {
     }
 }
 
-/** @internal */
+/**
+ * This function checks multiple locations for JSDoc comments that apply to a host node.
+ * At each location, the whole comment may apply to the node, or only a specific tag in
+ * the comment. In the first case, location adds the entire {@link JSDoc} object. In the
+ * second case, it adds the applicable {@link JSDocTag}.
+ *
+ * For example, a JSDoc comment before a parameter adds the entire {@link JSDoc}. But a
+ * `@param` tag on the parent function only adds the {@link JSDocTag} for the `@param`.
+ *
+ * ```ts
+ * /** JSDoc will be returned for `a` *\/
+ * const a = 0
+ * /**
+ *  * Entire JSDoc will be returned for `b`
+ *  * @param c JSDocTag will be returned for `c`
+ *  *\/
+ * function b(/** JSDoc will be returned for `c` *\/ c) {}
+ * ```
+ */
+export function getJSDocCommentsAndTags(hostNode: Node): readonly (JSDoc | JSDocTag)[];
+/** @internal separate signature so that stripInternal can remove noCache from the public API */
+// eslint-disable-next-line @typescript-eslint/unified-signatures
+export function getJSDocCommentsAndTags(hostNode: Node, noCache?: boolean): readonly (JSDoc | JSDocTag)[];
 export function getJSDocCommentsAndTags(hostNode: Node, noCache?: boolean): readonly (JSDoc | JSDocTag)[] {
     let result: (JSDoc | JSDocTag)[] | undefined;
     // Pull parameter comments from declaring function as well
@@ -4911,7 +4989,7 @@ export function isDynamicName(name: DeclarationName): boolean {
 }
 
 /** @internal */
-export function getPropertyNameForPropertyNameNode(name: PropertyName): __String | undefined {
+export function getPropertyNameForPropertyNameNode(name: PropertyName | JsxAttributeName): __String | undefined {
     switch (name.kind) {
         case SyntaxKind.Identifier:
         case SyntaxKind.PrivateIdentifier:
@@ -4931,6 +5009,8 @@ export function getPropertyNameForPropertyNameNode(name: PropertyName): __String
                 return nameExpression.operand.text as __String;
             }
             return undefined;
+        case SyntaxKind.JsxNamespacedName:
+            return getEscapedTextOfJsxNamespacedName(name);
         default:
             return Debug.assertNever(name);
     }
@@ -4950,12 +5030,12 @@ export function isPropertyNameLiteral(node: Node): node is PropertyNameLiteral {
 }
 /** @internal */
 export function getTextOfIdentifierOrLiteral(node: PropertyNameLiteral | PrivateIdentifier): string {
-    return isMemberName(node) ? idText(node) : node.text;
+    return isMemberName(node) ? idText(node) : isJsxNamespacedName(node) ? getTextOfJsxNamespacedName(node) : node.text;
 }
 
 /** @internal */
 export function getEscapedTextOfIdentifierOrLiteral(node: PropertyNameLiteral): __String {
-    return isMemberName(node) ? node.escapedText : escapeLeadingUnderscores(node.text);
+    return isMemberName(node) ? node.escapedText : isJsxNamespacedName(node) ? getEscapedTextOfJsxNamespacedName(node) : escapeLeadingUnderscores(node.text);
 }
 
 /** @internal */
@@ -5809,7 +5889,7 @@ function isQuoteOrBacktick(charCode: number) {
 /** @internal */
 export function isIntrinsicJsxName(name: __String | string) {
     const ch = (name as string).charCodeAt(0);
-    return (ch >= CharacterCodes.a && ch <= CharacterCodes.z) || stringContains((name as string), "-") || stringContains((name as string), ":");
+    return (ch >= CharacterCodes.a && ch <= CharacterCodes.z) || stringContains((name as string), "-");
 }
 
 const indentStrings: string[] = ["", "    "];
@@ -6753,7 +6833,7 @@ export function getEffectiveModifierFlags(node: Node): ModifierFlags {
 
 /** @internal */
 export function getEffectiveModifierFlagsAlwaysIncludeJSDoc(node: Node): ModifierFlags {
-    return getModifierFlagsWorker(node, /*includeJSDOc*/ true, /*alwaysIncludeJSDOc*/ true);
+    return getModifierFlagsWorker(node, /*includeJSDoc*/ true, /*alwaysIncludeJSDoc*/ true);
 }
 
 /**
@@ -6982,7 +7062,7 @@ export function isPropertyAccessEntityNameExpression(node: Node): node is Proper
 }
 
 /** @internal */
-export function tryGetPropertyAccessOrIdentifierToString(expr: Expression): string | undefined {
+export function tryGetPropertyAccessOrIdentifierToString(expr: Expression | JsxTagNameExpression): string | undefined {
     if (isPropertyAccessExpression(expr)) {
         const baseStr = tryGetPropertyAccessOrIdentifierToString(expr.expression);
         if (baseStr !== undefined) {
@@ -6997,6 +7077,9 @@ export function tryGetPropertyAccessOrIdentifierToString(expr: Expression): stri
     }
     else if (isIdentifier(expr)) {
         return unescapeLeadingUnderscores(expr.escapedText);
+    }
+    else if (isJsxNamespacedName(expr)) {
+        return getTextOfJsxNamespacedName(expr);
     }
     return undefined;
 }
@@ -8436,6 +8519,12 @@ export function moduleResolutionSupportsPackageJsonExportsAndImports(moduleResol
 }
 
 /** @internal */
+export function shouldResolveJsRequire(compilerOptions: CompilerOptions): boolean {
+    // `bundler` doesn't support resolving `require`, but needs to in `noDtsResolution` to support Find Source Definition
+    return !!compilerOptions.noDtsResolution || getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.Bundler;
+}
+
+/** @internal */
 export function getResolvePackageJsonExports(compilerOptions: CompilerOptions) {
     const moduleResolution = getEmitModuleResolutionKind(compilerOptions);
     if (!moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {
@@ -9074,7 +9163,7 @@ export const supportedTSExtensions: readonly Extension[][] = [[Extension.Ts, Ext
 export const supportedTSExtensionsFlat: readonly Extension[] = flatten(supportedTSExtensions);
 const supportedTSExtensionsWithJson: readonly Extension[][] = [...supportedTSExtensions, [Extension.Json]];
 /** Must have ".d.ts" first because if ".ts" goes first, that will be detected as the extension instead of ".d.ts". */
-const supportedTSExtensionsForExtractExtension: readonly Extension[] = [Extension.Dts, Extension.Dcts, Extension.Dmts, Extension.Cts, Extension.Mts, Extension.Ts, Extension.Tsx, Extension.Cts, Extension.Mts];
+const supportedTSExtensionsForExtractExtension: readonly Extension[] = [Extension.Dts, Extension.Dcts, Extension.Dmts, Extension.Cts, Extension.Mts, Extension.Ts, Extension.Tsx];
 /** @internal */
 export const supportedJSExtensions: readonly Extension[][] = [[Extension.Js, Extension.Jsx], [Extension.Mjs], [Extension.Cjs]];
 /** @internal */
@@ -9085,6 +9174,8 @@ const allSupportedExtensionsWithJson: readonly Extension[][] = [...allSupportedE
 export const supportedDeclarationExtensions: readonly Extension[] = [Extension.Dts, Extension.Dcts, Extension.Dmts];
 /** @internal */
 export const supportedTSImplementationExtensions: readonly Extension[] = [Extension.Ts, Extension.Cts, Extension.Mts, Extension.Tsx];
+/** @internal */
+export const extensionsNotSupportingExtensionlessResolution: readonly Extension[] = [Extension.Mts, Extension.Dmts, Extension.Mjs, Extension.Cts, Extension.Dcts, Extension.Cjs];
 
 /** @internal */
 export function getSupportedExtensions(options?: CompilerOptions): readonly Extension[][];
@@ -9147,7 +9238,9 @@ export const enum ModuleSpecifierEnding {
 
 /** @internal */
 export function usesExtensionsOnImports({ imports }: SourceFile, hasExtension: (text: string) => boolean = or(hasJSFileExtension, hasTSFileExtension)): boolean {
-    return firstDefined(imports, ({ text }) => pathIsRelative(text) ? hasExtension(text) : undefined) || false;
+    return firstDefined(imports, ({ text }) => pathIsRelative(text) && !fileExtensionIsOneOf(text, extensionsNotSupportingExtensionlessResolution)
+        ? hasExtension(text)
+        : undefined) || false;
 }
 
 /** @internal */
@@ -9188,6 +9281,10 @@ export function getModuleSpecifierEndingPreference(preference: UserPreferences["
             emptyArray;
         for (const specifier of specifiers) {
             if (pathIsRelative(specifier)) {
+                if (fileExtensionIsOneOf(specifier, extensionsNotSupportingExtensionlessResolution)) {
+                    // These extensions are not optional, so do not indicate a preference.
+                    continue;
+                }
                 if (hasTSFileExtension(specifier)) {
                     return ModuleSpecifierEnding.TsExtension;
                 }
@@ -10140,4 +10237,36 @@ export function getJSDocSatisfiesExpressionType(node: JSDocSatisfiesExpression) 
 export function tryGetJSDocSatisfiesTypeNode(node: Node) {
     const tag = getJSDocSatisfiesTag(node);
     return tag && tag.typeExpression && tag.typeExpression.type;
+}
+
+/** @internal */
+export function getEscapedTextOfJsxAttributeName(node: JsxAttributeName): __String {
+    return isIdentifier(node) ? node.escapedText : getEscapedTextOfJsxNamespacedName(node);
+}
+
+/** @internal */
+export function getTextOfJsxAttributeName(node: JsxAttributeName): string {
+    return isIdentifier(node) ? idText(node) : getTextOfJsxNamespacedName(node);
+}
+
+/** @internal */
+export function isJsxAttributeName(node: Node): node is JsxAttributeName {
+    const kind = node.kind;
+    return kind === SyntaxKind.Identifier
+        || kind === SyntaxKind.JsxNamespacedName;
+}
+
+/** @internal */
+export function getEscapedTextOfJsxNamespacedName(node: JsxNamespacedName): __String {
+    return `${node.namespace.escapedText}:${idText(node.name)}` as __String;
+}
+
+/** @internal */
+export function getTextOfJsxNamespacedName(node: JsxNamespacedName) {
+    return `${idText(node.namespace)}:${idText(node.name)}`;
+}
+
+/** @internal */
+export function intrinsicTagNameToString(node: Identifier | JsxNamespacedName) {
+    return isIdentifier(node) ? idText(node) : getTextOfJsxNamespacedName(node);
 }

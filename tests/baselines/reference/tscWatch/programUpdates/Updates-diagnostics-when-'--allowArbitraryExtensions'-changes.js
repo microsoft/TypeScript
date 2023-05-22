@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -55,13 +56,13 @@ Shape signatures in builder refreshed for::
 /a.ts (used version)
 
 FsWatches::
-/tsconfig.json: *new*
-  {}
 /a.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
   {}
 /b.d.css.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/tsconfig.json: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -79,6 +80,9 @@ Input::
 {"compilerOptions":{"allowArbitraryExtensions":false},"files":["/a.ts"]}
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:21 AM[0m] File change detected. Starting incremental compilation...
@@ -106,11 +110,11 @@ Shape signatures in builder refreshed for::
 /a.ts (computed .d.ts)
 
 FsWatches::
-/tsconfig.json:
-  {}
 /a.ts:
   {}
 /a/lib/lib.d.ts:
+  {}
+/tsconfig.json:
   {}
 
 FsWatches *deleted*::
@@ -128,6 +132,9 @@ Input::
 {"compilerOptions":{"allowArbitraryExtensions":true},"files":["/a.ts"]}
 
 
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:28 AM[0m] File change detected. Starting incremental compilation...
@@ -159,13 +166,13 @@ Shape signatures in builder refreshed for::
 /a.ts (computed .d.ts)
 
 FsWatches::
-/tsconfig.json:
-  {}
 /a.ts:
   {}
 /a/lib/lib.d.ts:
   {}
 /b.d.css.ts: *new*
+  {}
+/tsconfig.json:
   {}
 
 exitCode:: ExitStatus.undefined

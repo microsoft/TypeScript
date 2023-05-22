@@ -1,0 +1,57 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/file.tsx ===
+// --- (line: 3) skipped ---
+//         div: {};
+//     }
+// }
+// <|class /*RENAME*/[|MyClassRENAME|] {}|>
+// 
+// <|<|<[|{| contextId: 1 |}MyClassRENAME|]></[|{| contextId: 2 |}MyClassRENAME|]>|>|>;
+// <|<[|MyClassRENAME|]/>|>;
+// 
+// <div> </div>
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/file.tsx ===
+// --- (line: 3) skipped ---
+//         div: {};
+//     }
+// }
+// <|class [|MyClassRENAME|] {}|>
+// 
+// <|<|</*RENAME*/[|{| contextId: 1 |}MyClassRENAME|]></[|{| contextId: 2 |}MyClassRENAME|]>|>|>;
+// <|<[|MyClassRENAME|]/>|>;
+// 
+// <div> </div>
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/file.tsx ===
+// --- (line: 3) skipped ---
+//         div: {};
+//     }
+// }
+// <|class [|MyClassRENAME|] {}|>
+// 
+// <|<|<[|{| contextId: 1 |}MyClassRENAME|]><//*RENAME*/[|{| contextId: 2 |}MyClassRENAME|]>|>|>;
+// <|<[|MyClassRENAME|]/>|>;
+// 
+// <div> </div>
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/file.tsx ===
+// --- (line: 3) skipped ---
+//         div: {};
+//     }
+// }
+// <|class [|MyClassRENAME|] {}|>
+// 
+// <|<|<[|{| contextId: 1 |}MyClassRENAME|]></[|{| contextId: 2 |}MyClassRENAME|]>|>|>;
+// <|</*RENAME*/[|MyClassRENAME|]/>|>;
+// 
+// <div> </div>

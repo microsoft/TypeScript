@@ -3,8 +3,11 @@ import {
     addToSeen,
     append,
     BinaryExpression,
+    BindingElement,
+    BindingPattern,
     BreakOrContinueStatement,
     CancellationToken,
+    canHaveDecorators,
     canUsePropertyAccess,
     CaseBlock,
     cast,
@@ -32,6 +35,7 @@ import {
     concatenate,
     ConstructorDeclaration,
     ContextFlags,
+    countWhere,
     createModuleSpecifierResolutionHost,
     createPackageJsonImportFilter,
     createPrinter,
@@ -41,9 +45,12 @@ import {
     createTextSpanFromRange,
     Debug,
     Declaration,
+    Decorator,
     Diagnostics,
     diagnosticToString,
     displayPart,
+    DotDotDotToken,
+    EmitFlags,
     EmitHint,
     EmitTextWriter,
     EntityName,
@@ -77,13 +84,16 @@ import {
     getEmitModuleResolutionKind,
     getEmitScriptTarget,
     getEscapedTextOfIdentifierOrLiteral,
+    getEscapedTextOfJsxAttributeName,
     getExportInfoMap,
     getFormatCodeSettingsForWriting,
+    getJSDocParameterTags,
     getLanguageVariant,
     getLeftmostAccessExpression,
     getLineAndCharacterOfPosition,
     getLineStartPositionForPosition,
     getLocalSymbolForExportDefault,
+    getModifiers,
     getNameOfDeclaration,
     getNameTable,
     getNewLineCharacter,
@@ -138,6 +148,7 @@ import {
     isConstructorDeclaration,
     isContextualKeyword,
     isDeclarationName,
+    isDecorator,
     isDeprecatedDeclaration,
     isEntityName,
     isEnumMember,
@@ -161,6 +172,8 @@ import {
     isImportKeyword,
     isImportSpecifier,
     isInComment,
+    isIndexSignatureDeclaration,
+    isInferTypeNode,
     isInitializedProperty,
     isInJSFile,
     isInRightSideOfInternalImportEqualsDeclaration,
@@ -228,6 +241,7 @@ import {
     isTypeOfExpression,
     isTypeOnlyImportDeclaration,
     isTypeOnlyImportOrExportDeclaration,
+    isTypeParameterDeclaration,
     isTypeReferenceType,
     isValidTypeOnlyAliasUseSite,
     isVariableDeclaration,
@@ -266,6 +280,7 @@ import {
     memoizeOne,
     MethodDeclaration,
     ModifierFlags,
+    ModifierLike,
     modifiersToFlags,
     ModifierSyntaxKind,
     modifierToFlag,
@@ -285,6 +300,7 @@ import {
     ObjectType,
     ObjectTypeDeclaration,
     or,
+    ParameterDeclaration,
     ParenthesizedTypeNode,
     positionBelongsToNode,
     positionIsASICandidate,
@@ -309,6 +325,7 @@ import {
     ScriptElementKindModifier,
     ScriptTarget,
     SemanticMeaning,
+    setEmitFlags,
     setSnippetElement,
     shouldUseUriStyleNodeCoreModules,
     SignatureHelp,
@@ -344,6 +361,7 @@ import {
     tokenToString,
     tryCast,
     tryGetImportFromModuleSpecifier,
+    tryGetTextOfPropertyName,
     Type,
     TypeChecker,
     TypeElement,
@@ -351,6 +369,7 @@ import {
     TypeLiteralNode,
     TypeNode,
     TypeOnlyImportDeclaration,
+    TypeParameterDeclaration,
     TypeQueryNode,
     TypeReferenceNode,
     unescapeLeadingUnderscores,
@@ -669,9 +688,10 @@ export function getCompletionsAtPosition(
 
     }
 
+    const compilerOptions = program.getCompilerOptions();
+    const checker = program.getTypeChecker();
     // If the request is a continuation of an earlier `isIncomplete` response,
     // we can continue it from the cached previous response.
-    const compilerOptions = program.getCompilerOptions();
     const incompleteCompletionsCache = preferences.allowIncompleteCompletions ? host.getIncompleteCompletionsCache?.() : undefined;
     if (incompleteCompletionsCache && completionKind === CompletionTriggerKind.TriggerForIncompleteCompletions && previousToken && isIdentifier(previousToken)) {
         const incompleteContinuation = continuePreviousIncompleteResponse(incompleteCompletionsCache, sourceFile, previousToken, program, host, preferences, cancellationToken, position);
@@ -707,10 +727,26 @@ export function getCompletionsAtPosition(
             return response;
         case CompletionDataKind.JsDocTagName:
             // If the current position is a jsDoc tag name, only tag names should be provided for completion
-            return jsdocCompletionInfo(JsDoc.getJSDocTagNameCompletions());
+            return jsdocCompletionInfo([
+                ...JsDoc.getJSDocTagNameCompletions(),
+                ...getJSDocParameterCompletions(
+                    sourceFile,
+                    position,
+                    checker,
+                    compilerOptions,
+                    preferences,
+                    /*tagNameOnly*/ true)]);
         case CompletionDataKind.JsDocTag:
             // If the current position is a jsDoc tag, only tags should be provided for completion
-            return jsdocCompletionInfo(JsDoc.getJSDocTagCompletions());
+            return jsdocCompletionInfo([
+                ...JsDoc.getJSDocTagCompletions(),
+                ...getJSDocParameterCompletions(
+                    sourceFile,
+                    position,
+                    checker,
+                    compilerOptions,
+                    preferences,
+                    /*tagNameOnly*/ false)]);
         case CompletionDataKind.JsDocParameterName:
             return jsdocCompletionInfo(JsDoc.getJSDocParameterNameCompletions(completionData.tag));
         case CompletionDataKind.Keywords:
@@ -825,6 +861,301 @@ function continuePreviousIncompleteResponse(
 
 function jsdocCompletionInfo(entries: CompletionEntry[]): CompletionInfo {
     return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, entries };
+}
+
+function getJSDocParameterCompletions(
+    sourceFile: SourceFile,
+    position: number,
+    checker: TypeChecker,
+    options: CompilerOptions,
+    preferences: UserPreferences,
+    tagNameOnly: boolean): CompletionEntry[] {
+    const currentToken = getTokenAtPosition(sourceFile, position);
+    if (!isJSDocTag(currentToken) && !isJSDoc(currentToken)) {
+        return [];
+    }
+    const jsDoc = isJSDoc(currentToken) ? currentToken : currentToken.parent;
+    if (!isJSDoc(jsDoc)) {
+        return [];
+    }
+    const func = jsDoc.parent;
+    if (!isFunctionLike(func)) {
+        return [];
+    }
+
+    const isJs = isSourceFileJS(sourceFile);
+    const isSnippet = preferences.includeCompletionsWithSnippetText || undefined;
+    const paramTagCount = countWhere(jsDoc.tags, tag => isJSDocParameterTag(tag) && tag.getEnd() <= position);
+    return mapDefined(func.parameters, param => {
+        if (getJSDocParameterTags(param).length) {
+            return undefined; // Parameter is already annotated.
+        }
+        if (isIdentifier(param.name)) { // Named parameter
+            const tabstopCounter = { tabstop: 1 };
+            const paramName = param.name.text;
+            let displayText =
+                getJSDocParamAnnotation(
+                    paramName,
+                    param.initializer,
+                    param.dotDotDotToken,
+                    isJs,
+                    /*isObject*/ false,
+                    /*isSnippet*/ false,
+                    checker,
+                    options,
+                    preferences);
+            let snippetText = isSnippet
+                ? getJSDocParamAnnotation(
+                    paramName,
+                    param.initializer,
+                    param.dotDotDotToken,
+                    isJs,
+                    /*isObject*/ false,
+                    /*isSnippet*/ true,
+                    checker,
+                    options,
+                    preferences,
+                    tabstopCounter)
+                : undefined;
+            if (tagNameOnly) { // Remove `@`
+                displayText = displayText.slice(1);
+                if (snippetText) snippetText = snippetText.slice(1);
+            }
+            return {
+                name: displayText,
+                kind: ScriptElementKind.parameterElement,
+                sortText: SortText.LocationPriority,
+                insertText: isSnippet ? snippetText : undefined,
+                isSnippet,
+            };
+        }
+        else if (param.parent.parameters.indexOf(param) === paramTagCount) { // Destructuring parameter; do it positionally
+            const paramPath = `param${paramTagCount}`;
+            const displayTextResult =
+                generateJSDocParamTagsForDestructuring(
+                    paramPath,
+                    param.name,
+                    param.initializer,
+                    param.dotDotDotToken,
+                    isJs,
+                    /*isSnippet*/ false,
+                    checker,
+                    options,
+                    preferences,);
+            const snippetTextResult = isSnippet
+                ? generateJSDocParamTagsForDestructuring(
+                    paramPath,
+                    param.name,
+                    param.initializer,
+                    param.dotDotDotToken,
+                    isJs,
+                    /*isSnippet*/ true,
+                    checker,
+                    options,
+                    preferences,)
+                : undefined;
+            let displayText = displayTextResult.join(getNewLineCharacter(options) + "* ");
+            let snippetText = snippetTextResult?.join(getNewLineCharacter(options) + "* ");
+            if (tagNameOnly) { // Remove `@`
+                displayText = displayText.slice(1);
+                if (snippetText) snippetText = snippetText.slice(1);
+            }
+            return {
+                name: displayText,
+                kind: ScriptElementKind.parameterElement,
+                sortText: SortText.LocationPriority,
+                insertText: isSnippet ? snippetText : undefined,
+                isSnippet,
+            };
+        }
+    });
+}
+
+function generateJSDocParamTagsForDestructuring(
+    path: string,
+    pattern: BindingPattern,
+    initializer: Expression | undefined,
+    dotDotDotToken: DotDotDotToken | undefined,
+    isJs: boolean,
+    isSnippet: boolean,
+    checker: TypeChecker,
+    options: CompilerOptions,
+    preferences: UserPreferences): string[] {
+    if (!isJs) {
+        return [
+            getJSDocParamAnnotation(
+                path,
+                initializer,
+                dotDotDotToken,
+                isJs,
+                /*isObject*/ false,
+                isSnippet,
+                checker,
+                options,
+                preferences,
+                { tabstop: 1 })
+        ];
+    }
+    return patternWorker(path, pattern, initializer, dotDotDotToken, { tabstop: 1 });
+
+    function patternWorker(
+        path: string,
+        pattern: BindingPattern,
+        initializer: Expression | undefined,
+        dotDotDotToken: DotDotDotToken | undefined,
+        counter: TabStopCounter): string[] {
+        if (isObjectBindingPattern(pattern) && !dotDotDotToken) {
+            const oldTabstop = counter.tabstop;
+            const childCounter = { tabstop: oldTabstop };
+            const rootParam =
+                getJSDocParamAnnotation(
+                    path,
+                    initializer,
+                    dotDotDotToken,
+                    isJs,
+                    /*isObject*/ true,
+                    isSnippet,
+                    checker,
+                    options,
+                    preferences,
+                    childCounter);
+            let childTags: string[] | undefined = [];
+            for (const element of pattern.elements) {
+                const elementTags = elementWorker(path, element, childCounter);
+                if (!elementTags) {
+                    childTags = undefined;
+                    break;
+                }
+                else {
+                    childTags.push(...elementTags);
+                }
+            }
+            if (childTags) {
+                counter.tabstop = childCounter.tabstop;
+                return [rootParam, ...childTags];
+            }
+        }
+        return [
+            getJSDocParamAnnotation(
+                path,
+                initializer,
+                dotDotDotToken,
+                isJs,
+                /*isObject*/ false,
+                isSnippet,
+                checker,
+                options,
+                preferences,
+                counter)
+            ];
+    }
+
+    // Assumes binding element is inside object binding pattern.
+    // We can't really deeply annotate an array binding pattern.
+    function elementWorker(path: string, element: BindingElement, counter: TabStopCounter): string[] | undefined {
+        if ((!element.propertyName && isIdentifier(element.name)) || isIdentifier(element.name)) { // `{ b }` or `{ b: newB }`
+            const propertyName = element.propertyName ? tryGetTextOfPropertyName(element.propertyName) : element.name.text;
+            if (!propertyName) {
+                return undefined;
+            }
+            const paramName = `${path}.${propertyName}`;
+            return [
+                getJSDocParamAnnotation(
+                    paramName,
+                    element.initializer,
+                    element.dotDotDotToken,
+                    isJs,
+                    /*isObject*/ false,
+                    isSnippet,
+                    checker,
+                    options,
+                    preferences,
+                    counter)];
+        }
+        else if (element.propertyName) { // `{ b: {...} }` or `{ b: [...] }`
+            const propertyName = tryGetTextOfPropertyName(element.propertyName);
+            return propertyName
+                && patternWorker(`${path}.${propertyName}`, element.name, element.initializer, element.dotDotDotToken, counter);
+        }
+        return undefined;
+    }
+}
+
+interface TabStopCounter {
+    tabstop: number;
+}
+
+function getJSDocParamAnnotation(
+    paramName: string,
+    initializer: Expression | undefined,
+    dotDotDotToken: DotDotDotToken | undefined,
+    isJs: boolean,
+    isObject: boolean,
+    isSnippet: boolean,
+    checker: TypeChecker,
+    options: CompilerOptions,
+    preferences: UserPreferences,
+    tabstopCounter?: TabStopCounter) {
+    if (isSnippet) {
+        Debug.assertIsDefined(tabstopCounter);
+    }
+    if (initializer) {
+        paramName = getJSDocParamNameWithInitializer(paramName, initializer);
+    }
+    if (isSnippet) {
+        paramName = escapeSnippetText(paramName);
+    }
+    if (isJs) {
+        let type = "*";
+        if (isObject) {
+            Debug.assert(!dotDotDotToken, `Cannot annotate a rest parameter with type 'Object'.`);
+            type = "Object";
+        }
+        else {
+            if (initializer) {
+                const inferredType = checker.getTypeAtLocation(initializer.parent);
+                if (!(inferredType.flags & (TypeFlags.Any | TypeFlags.Void))) {
+                    const sourceFile = initializer.getSourceFile();
+                    const quotePreference = getQuotePreference(sourceFile, preferences);
+                    const builderFlags = (quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : NodeBuilderFlags.None);
+                    const typeNode = checker.typeToTypeNode(inferredType, findAncestor(initializer, isFunctionLike), builderFlags);
+                    if (typeNode) {
+                        const printer = isSnippet
+                            ? createSnippetPrinter({
+                                removeComments: true,
+                                module: options.module,
+                                target: options.target,
+                            })
+                            : createPrinter({
+                                removeComments: true,
+                                module: options.module,
+                                target: options.target
+                            });
+                        setEmitFlags(typeNode, EmitFlags.SingleLine);
+                        type = printer.printNode(EmitHint.Unspecified, typeNode, sourceFile);
+                    }
+                }
+            }
+            if (isSnippet && type === "*") {
+                type = `\${${tabstopCounter!.tabstop++}:${type}}`;
+            }
+        }
+        const dotDotDot = !isObject && dotDotDotToken ? "..." : "";
+        const description = isSnippet ? `\${${tabstopCounter!.tabstop++}}` : "";
+        return `@param {${dotDotDot}${type}} ${paramName} ${description}`;
+    }
+    else {
+        const description = isSnippet ? `\${${tabstopCounter!.tabstop++}}` : "";
+        return `@param ${paramName} ${description}`;
+    }
+}
+
+function getJSDocParamNameWithInitializer(paramName: string, initializer: Expression): string {
+    const initializerText = initializer.getText().trim();
+    if (initializerText.includes("\n") || initializerText.length > 80) {
+        return `[${paramName}]`;
+    }
+    return `[${paramName}=${initializerText}]`;
 }
 
 function keywordToCompletionEntry(keyword: TokenSyntaxKind) {
@@ -1283,6 +1614,7 @@ function createCompletionEntry(
     includeSymbol: boolean
 ): CompletionEntry | undefined {
     let insertText: string | undefined;
+    let filterText: string | undefined;
     let replacementSpan = getReplacementSpanForContextToken(replacementToken);
     let data: CompletionEntryData | undefined;
     let isSnippet: true | undefined;
@@ -1356,12 +1688,16 @@ function createCompletionEntry(
         completionKind === CompletionKind.MemberLike &&
         isClassLikeMemberCompletion(symbol, location, sourceFile)) {
         let importAdder;
-        ({ insertText, isSnippet, importAdder, replacementSpan } =
-            getEntryForMemberCompletion(host, program, options, preferences, name, symbol, location, position, contextToken, formatContext));
-        sortText = SortText.ClassMemberSnippets; // sortText has to be lower priority than the sortText for keywords. See #47852.
-        if (importAdder?.hasFixes()) {
-            hasAction = true;
-            source = CompletionSource.ClassMemberSnippet;
+        const memberCompletionEntry = getEntryForMemberCompletion(host, program, options, preferences, name, symbol, location, position, contextToken, formatContext);
+        if (memberCompletionEntry) {
+            ({ insertText, filterText, isSnippet, importAdder } = memberCompletionEntry);
+            if (importAdder?.hasFixes()) {
+                hasAction = true;
+                source = CompletionSource.ClassMemberSnippet;
+            }
+        }
+        else {
+            return undefined; // Skip this entry
         }
     }
 
@@ -1429,6 +1765,7 @@ function createCompletionEntry(
         hasAction: hasAction ? true : undefined,
         isRecommended: isRecommendedCompletionMatch(symbol, recommendedCompletion, typeChecker) || undefined,
         insertText,
+        filterText,
         replacementSpan,
         sourceDisplay,
         labelDetails,
@@ -1500,15 +1837,15 @@ function getEntryForMemberCompletion(
     position: number,
     contextToken: Node | undefined,
     formatContext: formatting.FormatContext | undefined,
-): { insertText: string, isSnippet?: true, importAdder?: codefix.ImportAdder, replacementSpan?: TextSpan } {
+): { insertText: string, filterText?: string, isSnippet?: true, importAdder?: codefix.ImportAdder, eraseRange?: TextRange } | undefined {
     const classLikeDeclaration = findAncestor(location, isClassLike);
     if (!classLikeDeclaration) {
-        return { insertText: name };
+        return undefined; // This should never happen.
     }
 
     let isSnippet: true | undefined;
-    let replacementSpan: TextSpan | undefined;
     let insertText: string = name;
+    const filterText: string = name;
 
     const checker = program.getTypeChecker();
     const sourceFile = location.getSourceFile();
@@ -1529,19 +1866,19 @@ function getEntryForMemberCompletion(
         // if it has one, so that the cursor ends up in the body once the completion is inserted.
         // Note: this assumes we won't have more than one body in the completion nodes, which should be the case.
         const emptyStmt = factory.createEmptyStatement();
-        body = factory.createBlock([emptyStmt], /* multiline */ true);
+        body = factory.createBlock([emptyStmt], /*multiLine*/ true);
         setSnippetElement(emptyStmt, { kind: SnippetKind.TabStop, order: 0 });
     }
     else {
-        body = factory.createBlock([], /* multiline */ true);
+        body = factory.createBlock([], /*multiLine*/ true);
     }
 
     let modifiers = ModifierFlags.None;
+    const { modifiers: presentModifiers, range: eraseRange, decorators: presentDecorators } = getPresentModifiers(contextToken, sourceFile, position);
     // Whether the suggested member should be abstract.
     // e.g. in `abstract class C { abstract | }`, we should offer abstract method signatures at position `|`.
-    const { modifiers: presentModifiers, span: modifiersSpan } = getPresentModifiers(contextToken, sourceFile, position);
-    const isAbstract = !!(presentModifiers & ModifierFlags.Abstract);
-    const completionNodes: Node[] = [];
+    const isAbstract = presentModifiers & ModifierFlags.Abstract && classLikeDeclaration.modifierFlagsCache & ModifierFlags.Abstract;
+    let completionNodes: codefix.AddNode[] = [];
     codefix.addNewNodeForMemberSymbol(
         symbol,
         classLikeDeclaration,
@@ -1570,20 +1907,49 @@ function getEntryForMemberCompletion(
                 // This is needed when we have overloaded signatures,
                 // so this callback will be called for multiple nodes/signatures,
                 // and we need to make sure the modifiers are uniform for all nodes/signatures.
-                modifiers = node.modifierFlagsCache | requiredModifiers | presentModifiers;
+                modifiers = node.modifierFlagsCache | requiredModifiers;
             }
             node = factory.updateModifiers(node, modifiers);
             completionNodes.push(node);
         },
         body,
         codefix.PreserveOptionalFlags.Property,
-        isAbstract);
+        !!isAbstract);
 
     if (completionNodes.length) {
+        const isMethod = symbol.flags & SymbolFlags.Method;
+        let allowedModifiers = modifiers | ModifierFlags.Override | ModifierFlags.Public;
+        if (!isMethod) {
+            allowedModifiers |= ModifierFlags.Ambient | ModifierFlags.Readonly;
+        }
+        else {
+            allowedModifiers |= ModifierFlags.Async;
+        }
+        const allowedAndPresent = presentModifiers & allowedModifiers;
+        if (presentModifiers & (~allowedModifiers)) {
+            return undefined; // This completion entry will be filtered out.
+        }
+        // If the original member is protected, we allow it to change to public.
+        if (modifiers & ModifierFlags.Protected && allowedAndPresent & ModifierFlags.Public) {
+            modifiers &= ~ModifierFlags.Protected;
+        }
+        // `public` modifier is optional and can be dropped.
+        if (allowedAndPresent !== ModifierFlags.None && !(allowedAndPresent & ModifierFlags.Public)) {
+            modifiers &= ~ModifierFlags.Public;
+        }
+        modifiers |= allowedAndPresent;
+        completionNodes = completionNodes.map(node => factory.updateModifiers(node, modifiers));
+        // Add back the decorators that were already present.
+        if (presentDecorators?.length) {
+            const lastNode = completionNodes[completionNodes.length - 1];
+            if (canHaveDecorators(lastNode)) {
+                completionNodes[completionNodes.length - 1] = factory.updateModifierLike(lastNode, (presentDecorators as ModifierLike[]).concat(getModifiers(lastNode) || []));
+            }
+        }
+
         const format = ListFormat.MultiLine | ListFormat.NoTrailingNewLine;
-        replacementSpan = modifiersSpan;
-         // If we have access to formatting settings, we print the nodes using the emitter,
-         // and then format the printed text.
+        // If we have access to formatting settings, we print the nodes using the emitter,
+        // and then format the printed text.
         if (formatContext) {
             insertText = printer.printAndFormatSnippetList(
                 format,
@@ -1599,21 +1965,22 @@ function getEntryForMemberCompletion(
         }
     }
 
-    return { insertText, isSnippet, importAdder, replacementSpan };
+    return { insertText, filterText, isSnippet, importAdder, eraseRange };
 }
 
 function getPresentModifiers(
     contextToken: Node | undefined,
     sourceFile: SourceFile,
-    position: number): { modifiers: ModifierFlags, span?: TextSpan } {
+    position: number): { modifiers: ModifierFlags, decorators?: Decorator[], range?: TextRange } {
     if (!contextToken ||
         getLineAndCharacterOfPosition(sourceFile, position).line
             > getLineAndCharacterOfPosition(sourceFile, contextToken.getEnd()).line) {
         return { modifiers: ModifierFlags.None };
     }
     let modifiers = ModifierFlags.None;
-    let span;
+    let decorators: Decorator[] | undefined;
     let contextMod;
+    const range: TextRange = { pos: position, end: position };
     /*
     Cases supported:
     In
@@ -1633,15 +2000,19 @@ function getPresentModifiers(
     `location.parent` is property declaration ``protected override m``,
     `location.parent.parent` is class declaration ``class C { ... }``.
     */
-    if (contextMod = isModifierLike(contextToken)) {
-        modifiers |= modifierToFlag(contextMod);
-        span = createTextSpanFromNode(contextToken);
-    }
-    if (isPropertyDeclaration(contextToken.parent)) {
+    if (isPropertyDeclaration(contextToken.parent) && contextToken.parent.modifiers) {
         modifiers |= modifiersToFlags(contextToken.parent.modifiers) & ModifierFlags.Modifier;
-        span = createTextSpanFromNode(contextToken.parent);
+        decorators = contextToken.parent.modifiers.filter(isDecorator) || [];
+        range.pos = Math.min(range.pos, contextToken.parent.modifiers.pos);
     }
-    return { modifiers, span };
+    if (contextMod = isModifierLike(contextToken)) {
+        const contextModifierFlag = modifierToFlag(contextMod);
+        if (!(modifiers & contextModifierFlag)) {
+            modifiers |= contextModifierFlag;
+            range.pos = Math.min(range.pos, contextToken.pos);
+        }
+    }
+    return { modifiers, decorators, range: range.pos !== position ? range : undefined };
 }
 
 function isModifierLike(node: Node): ModifierSyntaxKind | undefined {
@@ -1762,11 +2133,11 @@ function createObjectLiteralMethod(
             let body;
             if (preferences.includeCompletionsWithSnippetText) {
                 const emptyStmt = factory.createEmptyStatement();
-                body = factory.createBlock([emptyStmt], /* multiline */ true);
+                body = factory.createBlock([emptyStmt], /*multiLine*/ true);
                 setSnippetElement(emptyStmt, { kind: SnippetKind.TabStop, order: 0 });
             }
             else {
-                body = factory.createBlock([], /* multiline */ true);
+                body = factory.createBlock([], /*multiLine*/ true);
             }
 
             const parameters = typeNode.parameters.map(typedParam =>
@@ -1991,7 +2362,7 @@ function completionEntryDataToSymbolOriginInfo(data: CompletionEntryData, comple
 
 function getInsertTextAndReplacementSpanForImportCompletion(name: string, importStatementCompletion: ImportStatementCompletionInfo, origin: SymbolOriginInfoResolvedExport, useSemicolons: boolean, sourceFile: SourceFile, options: CompilerOptions, preferences: UserPreferences) {
     const replacementSpan = importStatementCompletion.replacementSpan;
-    const quotedModuleSpecifier = quote(sourceFile, preferences, escapeSnippetText(origin.moduleSpecifier));
+    const quotedModuleSpecifier = escapeSnippetText(quote(sourceFile, preferences, origin.moduleSpecifier));
     const exportKind =
         origin.isDefaultExport ? ExportKind.Default :
         origin.exportName === InternalSymbolName.ExportEquals ? ExportKind.ExportEquals :
@@ -2068,7 +2439,7 @@ export function getCompletionEntriesFromSymbols(
     includeSymbol = false
 ): UniqueNameSet {
     const start = timestamp();
-    const variableDeclaration = getVariableDeclaration(location);
+    const variableOrParameterDeclaration = getVariableOrParameterDeclaration(contextToken);
     const useSemicolons = probablyUsesSemicolons(sourceFile);
     const typeChecker = program.getTypeChecker();
     // Tracks unique names.
@@ -2142,8 +2513,25 @@ export function getCompletionEntriesFromSymbols(
             }
             // Filter out variables from their own initializers
             // `const a = /* no 'a' here */`
-            if (variableDeclaration && symbol.valueDeclaration === variableDeclaration) {
+            if (tryCast(variableOrParameterDeclaration, isVariableDeclaration) && symbol.valueDeclaration === variableOrParameterDeclaration) {
                 return false;
+            }
+
+            // Filter out parameters from their own initializers
+            // `function f(a = /* no 'a' and 'b' here */, b) { }` or
+            // `function f<T = /* no 'T' here */>(a: T) { }`
+            const symbolDeclaration = symbol.valueDeclaration ?? symbol.declarations?.[0];
+            if (variableOrParameterDeclaration && symbolDeclaration && (
+                (isTypeParameterDeclaration(variableOrParameterDeclaration) && isTypeParameterDeclaration(symbolDeclaration)) ||
+                (isParameter(variableOrParameterDeclaration) && isParameter(symbolDeclaration))
+            )) {
+                const symbolDeclarationPos = symbolDeclaration.pos;
+                const parameters = isParameter(variableOrParameterDeclaration) ? variableOrParameterDeclaration.parent.parameters :
+                    isInferTypeNode(variableOrParameterDeclaration.parent) ? undefined :
+                    variableOrParameterDeclaration.parent.typeParameters;
+                if (symbolDeclarationPos >= variableOrParameterDeclaration.pos && parameters && symbolDeclarationPos < parameters.end) {
+                    return false;
+                }
             }
 
             // External modules can have global export declarations that will be
@@ -2427,7 +2815,7 @@ function getCompletionEntryCodeActionsAndSourceDisplay(
     }
 
     if (source === CompletionSource.ClassMemberSnippet) {
-        const { importAdder } = getEntryForMemberCompletion(
+        const { importAdder, eraseRange } = getEntryForMemberCompletion(
             host,
             program,
             compilerOptions,
@@ -2437,11 +2825,18 @@ function getCompletionEntryCodeActionsAndSourceDisplay(
             location,
             position,
             contextToken,
-            formatContext);
-        if (importAdder) {
+            formatContext)!;
+        if (importAdder || eraseRange) {
             const changes = textChanges.ChangeTracker.with(
                 { host, formatContext, preferences },
-                importAdder.writeFixes);
+                tracker => {
+                    if (importAdder) {
+                        importAdder.writeFixes(tracker);
+                    }
+                    if (eraseRange) {
+                        tracker.deleteRange(sourceFile, eraseRange);
+                    }
+                });
             return {
                 sourceDisplay: undefined,
                 codeActions: [{
@@ -2595,7 +2990,7 @@ function getContextualType(previousToken: Node, position: number, sourceFile: So
                 isEqualityOperatorKind(previousToken.kind) && isBinaryExpression(parent) && isEqualityOperatorKind(parent.operatorToken.kind) ?
                     // completion at `x ===/**/` should be for the right side
                     checker.getTypeAtLocation(parent.left) :
-                    checker.getContextualType(previousToken as Expression);
+                    checker.getContextualType(previousToken as Expression, ContextFlags.Completions) || checker.getContextualType(previousToken as Expression);
     }
 }
 
@@ -3099,7 +3494,7 @@ function getCompletionData(
         if (inCheckedFile) {
             for (const symbol of type.getApparentProperties()) {
                 if (typeChecker.isValidPropertyAccessForCompletions(propertyAccess, type, symbol)) {
-                    addPropertySymbol(symbol, /* insertAwait */ false, insertQuestionDot);
+                    addPropertySymbol(symbol, /*insertAwait*/ false, insertQuestionDot);
                 }
             }
         }
@@ -3117,7 +3512,7 @@ function getCompletionData(
             if (promiseType) {
                 for (const symbol of promiseType.getApparentProperties()) {
                     if (typeChecker.isValidPropertyAccessForCompletions(propertyAccess, promiseType, symbol)) {
-                        addPropertySymbol(symbol, /* insertAwait */ true, insertQuestionDot);
+                        addPropertySymbol(symbol, /*insertAwait*/ true, insertQuestionDot);
                     }
                 }
             }
@@ -3822,7 +4217,7 @@ function getCompletionData(
                 const typeForObject = typeChecker.getTypeAtLocation(objectLikeContainer);
                 if (!typeForObject) return GlobalsSearch.Fail;
                 typeMembers = typeChecker.getPropertiesOfType(typeForObject).filter(propertySymbol => {
-                    return typeChecker.isPropertyAccessible(objectLikeContainer, /*isSuper*/ false, /*writing*/ false, typeForObject, propertySymbol);
+                    return typeChecker.isPropertyAccessible(objectLikeContainer, /*isSuper*/ false, /*isWrite*/ false, typeForObject, propertySymbol);
                 });
                 existingMembers = objectLikeContainer.elements;
             }
@@ -4264,9 +4659,9 @@ function getCompletionData(
         return isDeclarationName(contextToken)
             && !isShorthandPropertyAssignment(contextToken.parent)
             && !isJsxAttribute(contextToken.parent)
-            // Don't block completions if we're in `class C /**/` or `interface I /**/`, because we're *past* the end of the identifier and might want to complete `extends`.
-            // If `contextToken !== previousToken`, this is `class C ex/**/ or `interface I ex/**/``.
-            && !((isClassLike(contextToken.parent) || isInterfaceDeclaration(contextToken.parent)) && (contextToken !== previousToken || position > previousToken.end));
+            // Don't block completions if we're in `class C /**/`, `interface I /**/` or `<T /**/>` , because we're *past* the end of the identifier and might want to complete `extends`.
+            // If `contextToken !== previousToken`, this is `class C ex/**/`, `interface I ex/**/` or `<T ex/**/>`.
+            && !((isClassLike(contextToken.parent) || isInterfaceDeclaration(contextToken.parent) || isTypeParameterDeclaration(contextToken.parent)) && (contextToken !== previousToken || position > previousToken.end));
     }
 
     function isPreviousPropertyDeclarationTerminated(contextToken: Node, position: number) {
@@ -4467,7 +4862,7 @@ function getCompletionData(
             }
 
             if (attr.kind === SyntaxKind.JsxAttribute) {
-                seenNames.add(attr.name.escapedText);
+                seenNames.add(getEscapedTextOfJsxAttributeName(attr.name));
             }
             else if (isJsxSpreadAttribute(attr)) {
                 setMembersDeclaredBySpreadAssignment(attr, membersDeclaredBySpreadAssignment);
@@ -5121,17 +5516,22 @@ function isModuleSpecifierMissingOrEmpty(specifier: ModuleReference | Expression
     return !tryCast(isExternalModuleReference(specifier) ? specifier.expression : specifier, isStringLiteralLike)?.text;
 }
 
-function getVariableDeclaration(property: Node): VariableDeclaration | undefined {
-    const variableDeclaration = findAncestor(property, node =>
+function getVariableOrParameterDeclaration(contextToken: Node | undefined) {
+    if (!contextToken) return;
+
+    const declaration = findAncestor(contextToken, node =>
         isFunctionBlock(node) || isArrowFunctionBody(node) || isBindingPattern(node)
             ? "quit"
-            : isVariableDeclaration(node));
-
-    return variableDeclaration as VariableDeclaration | undefined;
+            : isVariableDeclaration(node) || ((isParameter(node) || isTypeParameterDeclaration(node)) && !isIndexSignatureDeclaration(node.parent)));
+    return declaration as ParameterDeclaration | TypeParameterDeclaration | VariableDeclaration | undefined;
 }
 
 function isArrowFunctionBody(node: Node) {
-    return node.parent && isArrowFunction(node.parent) && node.parent.body === node;
+    return node.parent && isArrowFunction(node.parent) &&
+        (node.parent.body === node ||
+        // const a = () => /**/;
+        node.kind === SyntaxKind.EqualsGreaterThanToken
+    );
 }
 
 /** True if symbol is a type or a module containing at least one type. */

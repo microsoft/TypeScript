@@ -66,7 +66,7 @@ interface Info {
 
 function getInfo(sourceFile: SourceFile, program: Program, pos: number): Info | undefined {
     const { parent } = getTokenAtPosition(sourceFile, pos);
-    if (!isRequireCall(parent, /*checkArgumentIsStringLiteralLike*/ true)) {
+    if (!isRequireCall(parent, /*requireStringLiteralLikeArgument*/ true)) {
         Debug.failBadSyntaxKind(parent);
     }
 

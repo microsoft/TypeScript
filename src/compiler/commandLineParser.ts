@@ -1101,9 +1101,11 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         name: "allowImportingTsExtensions",
         type: "boolean",
         affectsSemanticDiagnostics: true,
+        affectsBuildInfo: true,
         category: Diagnostics.Modules,
         description: Diagnostics.Allow_imports_to_include_TypeScript_file_extensions_Requires_moduleResolution_bundler_and_either_noEmit_or_emitDeclarationOnly_to_be_set,
         defaultValueDescription: false,
+        transpileOptionValue: undefined,
     },
     {
         name: "resolvePackageJsonExports",

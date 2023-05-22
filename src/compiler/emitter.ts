@@ -179,6 +179,7 @@ import {
     getSyntheticLeadingComments,
     getSyntheticTrailingComments,
     getTextOfJSDocComment,
+    getTextOfJsxNamespacedName,
     getTrailingCommentRanges,
     getTrailingSemicolonDeferringWriter,
     getTransformers,
@@ -228,6 +229,7 @@ import {
     isJSDocLikeText,
     isJsonSourceFile,
     isJsxClosingElement,
+    isJsxNamespacedName,
     isJsxOpeningElement,
     isKeyword,
     isLet,
@@ -289,6 +291,7 @@ import {
     JsxEmit,
     JsxExpression,
     JsxFragment,
+    JsxNamespacedName,
     JsxOpeningElement,
     JsxOpeningFragment,
     JsxSelfClosingElement,
@@ -419,6 +422,7 @@ import {
     TemplateSpan,
     TextRange,
     ThrowStatement,
+    TokenFlags,
     tokenToString,
     tracing,
     TransformationResult,
@@ -1153,6 +1157,7 @@ export const notImplementedResolver: EmitResolver = {
     // Returns the constant value this property access resolves to: notImplemented, or 'undefined' for a non-constant
     getConstantValue: notImplemented,
     getReferencedValueDeclaration: notImplemented,
+    getReferencedValueDeclarations: notImplemented,
     getTypeReferenceSerializationKind: notImplemented,
     isOptionalParameter: notImplemented,
     moduleExportsSomeValue: notImplemented,
@@ -1263,7 +1268,7 @@ function emitUsingBuildInfoWorker(
         declarationMapText,
         buildInfoPath,
         buildInfo,
-        /*onlyOwnText*/ true
+        /*oldFileOfCurrentEmit*/ true
     );
     const outputFiles: OutputFile[] = [];
     const prependNodes = createPrependNodes(config.projectReferences, getCommandLine, f => host.readFile(f), host);
@@ -1479,12 +1484,12 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function printBundle(bundle: Bundle): string {
-        writeBundle(bundle, beginPrint(), /*sourceMapEmitter*/ undefined);
+        writeBundle(bundle, beginPrint(), /*sourceMapGenerator*/ undefined);
         return endPrint();
     }
 
     function printFile(sourceFile: SourceFile): string {
-        writeFile(sourceFile, beginPrint(), /*sourceMapEmitter*/ undefined);
+        writeFile(sourceFile, beginPrint(), /*sourceMapGenerator*/ undefined);
         return endPrint();
     }
 
@@ -2063,6 +2068,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                     return emitJsxSpreadAttribute(node as JsxSpreadAttribute);
                 case SyntaxKind.JsxExpression:
                     return emitJsxExpression(node as JsxExpression);
+                case SyntaxKind.JsxNamespacedName:
+                    return emitJsxNamespacedName(node as JsxNamespacedName);
 
                 // Clauses
                 case SyntaxKind.CaseClause:
@@ -2176,8 +2183,6 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
 
                 // Transformation nodes
                 case SyntaxKind.NotEmittedStatement:
-                case SyntaxKind.EndOfDeclarationMarker:
-                case SyntaxKind.MergeDeclarationMarker:
                     return;
             }
             if (isExpression(node)) {
@@ -2294,9 +2299,6 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                     return emitPartiallyEmittedExpression(node as PartiallyEmittedExpression);
                 case SyntaxKind.CommaListExpression:
                     return emitCommaList(node as CommaListExpression);
-                case SyntaxKind.MergeDeclarationMarker:
-                case SyntaxKind.EndOfDeclarationMarker:
-                    return;
                 case SyntaxKind.SyntheticReferenceExpression:
                     return Debug.fail("SyntheticReferenceExpression should not be printed");
             }
@@ -3049,9 +3051,12 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         if (isNumericLiteral(expression)) {
             // check if numeric literal is a decimal literal that was originally written with a dot
             const text = getLiteralTextOfNode(expression as LiteralExpression, /*neverAsciiEscape*/ true, /*jsxAttributeEscape*/ false);
-            // If he number will be printed verbatim and it doesn't already contain a dot, add one
+            // If the number will be printed verbatim and it doesn't already contain a dot or an exponent indicator, add one
             // if the expression doesn't have any comments that will be emitted.
-            return !expression.numericLiteralFlags && !stringContains(text, tokenToString(SyntaxKind.DotToken)!);
+            return !(expression.numericLiteralFlags & TokenFlags.WithSpecifier)
+                && !stringContains(text, tokenToString(SyntaxKind.DotToken)!)
+                && !stringContains(text, String.fromCharCode(CharacterCodes.E))
+                && !stringContains(text, String.fromCharCode(CharacterCodes.e));
         }
         else if (isAccessExpression(expression)) {
             // check if constant enum value is integer
@@ -3122,7 +3127,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     function emitParenthesizedExpression(node: ParenthesizedExpression) {
         const openParenPos = emitTokenWithComment(SyntaxKind.OpenParenToken, node.pos, writePunctuation, node);
         const indented = writeLineSeparatorsAndIndentBefore(node.expression, node);
-        emitExpression(node.expression, /*parenthesizerRules*/ undefined);
+        emitExpression(node.expression, /*parenthesizerRule*/ undefined);
         writeLineSeparatorsAfter(node.expression, node);
         decreaseIndentIf(indented);
         emitTokenWithComment(SyntaxKind.CloseParenToken, node.expression ? node.expression.end : openParenPos, writePunctuation, node);
@@ -3354,7 +3359,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitAsExpression(node: AsExpression) {
-        emitExpression(node.expression, /*parenthesizerRules*/ undefined);
+        emitExpression(node.expression, /*parenthesizerRule*/ undefined);
         if (node.type) {
             writeSpace();
             writeKeyword("as");
@@ -3369,7 +3374,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitSatisfiesExpression(node: SatisfiesExpression) {
-        emitExpression(node.expression, /*parenthesizerRules*/ undefined);
+        emitExpression(node.expression, /*parenthesizerRule*/ undefined);
         if (node.type) {
             writeSpace();
             writeKeyword("satisfies");
@@ -4221,6 +4226,12 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         }
     }
 
+    function emitJsxNamespacedName(node: JsxNamespacedName) {
+        emitIdentifierName(node.namespace);
+        writePunctuation(":");
+        emitIdentifierName(node.name);
+    }
+
     function emitJsxTagName(node: JsxTagNameExpression) {
         if (node.kind === SyntaxKind.Identifier) {
             emitExpression(node);
@@ -4862,7 +4873,10 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitEmbeddedStatement(parent: Node, node: Statement) {
-        if (isBlock(node) || getEmitFlags(parent) & EmitFlags.SingleLine) {
+        if (isBlock(node) ||
+            getEmitFlags(parent) & EmitFlags.SingleLine ||
+            preserveSourceNewlines && !getLeadingLineTerminatorCount(parent, node, ListFormat.None)
+        ) {
             writeSpace();
             emit(node);
         }
@@ -5516,7 +5530,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         return node;
     }
 
-    function getTextOfNode(node: Identifier | PrivateIdentifier | LiteralExpression, includeTrivia?: boolean): string {
+    function getTextOfNode(node: Identifier | PrivateIdentifier | LiteralExpression | JsxNamespacedName, includeTrivia?: boolean): string {
         if (isGeneratedIdentifier(node) || isGeneratedPrivateIdentifier(node)) {
             return generateName(node);
         }
@@ -5528,6 +5542,11 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         if (isMemberName(node)) {
             if (!canUseSourceFile || getSourceFileOfNode(node) !== getOriginalNode(sourceFile)) {
                 return idText(node);
+            }
+        }
+        else if (isJsxNamespacedName(node)) {
+            if (!canUseSourceFile || getSourceFileOfNode(node) !== getOriginalNode(sourceFile)) {
+                return getTextOfJsxNamespacedName(node);
             }
         }
         else {
@@ -5542,7 +5561,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     function getLiteralTextOfNode(node: LiteralLikeNode, neverAsciiEscape: boolean | undefined, jsxAttributeEscape: boolean): string {
         if (node.kind === SyntaxKind.StringLiteral && (node as StringLiteral).textSourceNode) {
             const textSourceNode = (node as StringLiteral).textSourceNode!;
-            if (isIdentifier(textSourceNode) || isPrivateIdentifier(textSourceNode) || isNumericLiteral(textSourceNode)) {
+            if (isIdentifier(textSourceNode) || isPrivateIdentifier(textSourceNode) || isNumericLiteral(textSourceNode) || isJsxNamespacedName(textSourceNode)) {
                 const text = isNumericLiteral(textSourceNode) ? textSourceNode.text : getTextOfNode(textSourceNode);
                 return jsxAttributeEscape ? `"${escapeJsxAttributeString(text)}"` :
                     neverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? `"${escapeString(text)}"` :
@@ -6013,9 +6032,9 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             case SyntaxKind.SetAccessor:
                 return generateNameForMethodOrAccessor(node as MethodDeclaration | AccessorDeclaration, privateName, prefix, suffix);
             case SyntaxKind.ComputedPropertyName:
-                return makeTempVariableName(TempFlags.Auto, /*reserveInNestedScopes*/ true, privateName, prefix, suffix);
+                return makeTempVariableName(TempFlags.Auto, /*reservedInNestedScopes*/ true, privateName, prefix, suffix);
             default:
-                return makeTempVariableName(TempFlags.Auto, /*reserveInNestedScopes*/ false, privateName, prefix, suffix);
+                return makeTempVariableName(TempFlags.Auto, /*reservedInNestedScopes*/ false, privateName, prefix, suffix);
         }
     }
 

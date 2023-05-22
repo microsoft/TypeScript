@@ -16,4 +16,4 @@ var TypeGuards;
         return typeof (value) === 'object';
     }
     TypeGuards.IsObject = IsObject;
-})(TypeGuards = exports.TypeGuards || (exports.TypeGuards = {}));
+})(TypeGuards || (exports.TypeGuards = TypeGuards = {}));

@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -68,11 +69,11 @@ Shape signatures in builder refreshed for::
 /user/username/projects/sample1/core/index.ts (computed .d.ts during emit)
 
 FsWatches::
-/user/username/projects/sample1/core/tsconfig.json: *new*
-  {}
 /user/username/projects/sample1/core/anothermodule.ts: *new*
   {}
 /user/username/projects/sample1/core/index.ts: *new*
+  {}
+/user/username/projects/sample1/core/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -187,6 +188,8 @@ Change:: No change
 
 Input::
 
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 Output::
 
 exitCode:: ExitStatus.undefined
@@ -199,6 +202,9 @@ Input::
 export const y = 10;
 
 
+Before running Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:51 AM[0m] File change detected. Starting incremental compilation...
@@ -227,13 +233,13 @@ Shape signatures in builder refreshed for::
 /user/username/projects/sample1/core/file3.ts (computed .d.ts)
 
 FsWatches::
-/user/username/projects/sample1/core/tsconfig.json:
-  {}
 /user/username/projects/sample1/core/anothermodule.ts:
+  {}
+/user/username/projects/sample1/core/file3.ts: *new*
   {}
 /user/username/projects/sample1/core/index.ts:
   {}
-/user/username/projects/sample1/core/file3.ts: *new*
+/user/username/projects/sample1/core/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -341,6 +347,8 @@ Change:: No change
 
 Input::
 
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 Output::
 
 exitCode:: ExitStatus.undefined

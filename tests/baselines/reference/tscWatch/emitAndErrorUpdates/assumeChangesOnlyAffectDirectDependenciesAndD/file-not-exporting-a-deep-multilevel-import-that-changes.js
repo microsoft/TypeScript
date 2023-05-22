@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/a.ts]
 export interface Point {
@@ -105,9 +106,11 @@ Shape signatures in builder refreshed for::
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/a.ts: *new*
   {}
@@ -119,7 +122,7 @@ FsWatches::
   {}
 /user/username/projects/myproject/e.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -213,6 +216,9 @@ export interface Coords {
 }
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:54 AM[0m] File change detected. Starting incremental compilation...
@@ -287,6 +293,9 @@ export interface Coords {
 }
 
 
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:11 AM[0m] File change detected. Starting incremental compilation...
@@ -361,6 +370,9 @@ export interface Coords {
 }
 
 
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:28 AM[0m] File change detected. Starting incremental compilation...

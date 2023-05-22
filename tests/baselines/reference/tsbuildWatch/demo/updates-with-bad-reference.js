@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/demo useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/demo/core/tsconfig.json]
 {
@@ -250,31 +251,31 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
-/user/username/projects/demo/core/tsconfig.json: *new*
-  {}
-/user/username/projects/demo/tsconfig-base.json: *new*
-  {}
-/user/username/projects/demo/core/utilities.ts: *new*
-  {}
-/user/username/projects/demo/animals/tsconfig.json: *new*
-  {}
 /user/username/projects/demo/animals/animal.ts: *new*
   {}
 /user/username/projects/demo/animals/dog.ts: *new*
   {}
 /user/username/projects/demo/animals/index.ts: *new*
   {}
+/user/username/projects/demo/animals/tsconfig.json: *new*
+  {}
+/user/username/projects/demo/core/tsconfig.json: *new*
+  {}
+/user/username/projects/demo/core/utilities.ts: *new*
+  {}
+/user/username/projects/demo/tsconfig-base.json: *new*
+  {}
+/user/username/projects/demo/tsconfig.json: *new*
+  {}
 /user/username/projects/demo/zoo/tsconfig.json: *new*
   {}
 /user/username/projects/demo/zoo/zoo.ts: *new*
   {}
-/user/username/projects/demo/tsconfig.json: *new*
-  {}
 
 FsWatchesRecursive::
-/user/username/projects/demo/core: *new*
-  {}
 /user/username/projects/demo/animals: *new*
+  {}
+/user/username/projects/demo/core: *new*
   {}
 /user/username/projects/demo/zoo: *new*
   {}
@@ -448,6 +449,9 @@ export function lastElementOf<T>(arr: T[]): T | undefined {
 
 
 
+Before running Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:08 AM[0m] File change detected. Starting incremental compilation...

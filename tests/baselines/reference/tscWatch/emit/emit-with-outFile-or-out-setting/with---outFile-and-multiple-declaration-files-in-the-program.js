@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/output/AnotherDependency/file1.d.ts]
 declare namespace Common.SomeComponent.DynamicMenu { enum Z { Full = 0,  Min = 1, Average = 2, } }
@@ -61,15 +62,15 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/project/tsconfig.json: *new*
+/a/b/dependencies/file2.d.ts: *new*
   {}
 /a/b/output/anotherdependency/file1.d.ts: *new*
-  {}
-/a/b/dependencies/file2.d.ts: *new*
   {}
 /a/b/project/src/main.ts: *new*
   {}
 /a/b/project/src/main2.ts: *new*
+  {}
+/a/b/project/tsconfig.json: *new*
   {}
 /a/lib/lib.d.ts: *new*
   {}

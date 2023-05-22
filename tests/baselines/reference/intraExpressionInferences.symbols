@@ -626,3 +626,45 @@ branch({
   }
 })
 
+interface Props<T> {
+>Props : Symbol(Props, Decl(intraExpressionInferences.ts, 197, 2))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 199, 16))
+
+  a: (x: string) => T;
+>a : Symbol(Props.a, Decl(intraExpressionInferences.ts, 199, 20))
+>x : Symbol(x, Decl(intraExpressionInferences.ts, 200, 6))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 199, 16))
+
+  b: (arg: T) => void;
+>b : Symbol(Props.b, Decl(intraExpressionInferences.ts, 200, 22))
+>arg : Symbol(arg, Decl(intraExpressionInferences.ts, 201, 6))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 199, 16))
+}
+
+declare function Foo<T>(props: Props<T>): null;
+>Foo : Symbol(Foo, Decl(intraExpressionInferences.ts, 202, 1))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 204, 21))
+>props : Symbol(props, Decl(intraExpressionInferences.ts, 204, 24))
+>Props : Symbol(Props, Decl(intraExpressionInferences.ts, 197, 2))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 204, 21))
+
+Foo({
+>Foo : Symbol(Foo, Decl(intraExpressionInferences.ts, 202, 1))
+
+  ...{
+    a: (x) => 10,
+>a : Symbol(a, Decl(intraExpressionInferences.ts, 207, 6))
+>x : Symbol(x, Decl(intraExpressionInferences.ts, 208, 8))
+
+    b: (arg) => {
+>b : Symbol(b, Decl(intraExpressionInferences.ts, 208, 17))
+>arg : Symbol(arg, Decl(intraExpressionInferences.ts, 209, 8))
+
+      arg.toString();
+>arg.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>arg : Symbol(arg, Decl(intraExpressionInferences.ts, 209, 8))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+    },
+  },
+});

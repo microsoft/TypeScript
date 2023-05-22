@@ -35,13 +35,20 @@ tests/cases/conformance/types/tuple/variadicTuples1.ts(191,5): error TS2322: Typ
     'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'readonly string[]'.
 tests/cases/conformance/types/tuple/variadicTuples1.ts(203,5): error TS2322: Type 'string' is not assignable to type 'keyof [1, 2, ...T]'.
   Type '"2"' is not assignable to type '"0" | "1" | keyof T[]'.
-tests/cases/conformance/types/tuple/variadicTuples1.ts(357,26): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/tuple/variadicTuples1.ts(397,7): error TS2322: Type '[boolean, false]' is not assignable to type '[...number[], boolean]'.
+tests/cases/conformance/types/tuple/variadicTuples1.ts(213,5): error TS2322: Type '[...T, ...T]' is not assignable to type '[unknown, unknown]'.
+  Type '[] | [unknown] | [unknown, unknown]' is not assignable to type '[unknown, unknown]'.
+    Type '[]' is not assignable to type '[unknown, unknown]'.
+      Source has 0 element(s) but target requires 2.
+tests/cases/conformance/types/tuple/variadicTuples1.ts(217,5): error TS2322: Type '[...T, ...T]' is not assignable to type '[unknown, unknown]'.
+  Type 'unknown[]' is not assignable to type '[unknown, unknown]'.
+    Target requires 2 element(s) but source may have fewer.
+tests/cases/conformance/types/tuple/variadicTuples1.ts(371,26): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/types/tuple/variadicTuples1.ts(411,7): error TS2322: Type '[boolean, false]' is not assignable to type '[...number[], boolean]'.
   Type at position 0 in source is not compatible with type at position 0 in target.
     Type 'boolean' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/types/tuple/variadicTuples1.ts (20 errors) ====
+==== tests/cases/conformance/types/tuple/variadicTuples1.ts (22 errors) ====
     // Variadics in tuple types
     
     type TV0<T extends unknown[]> = [string, ...T];
@@ -303,6 +310,29 @@ tests/cases/conformance/types/tuple/variadicTuples1.ts(397,7): error TS2322: Typ
 !!! error TS2322:   Type '"2"' is not assignable to type '"0" | "1" | keyof T[]'.
     }
     
+    // Constraints of variadic tuple types
+    
+    function ft16<T extends [unknown]>(x: [unknown, unknown], y: [...T, ...T]) {
+        x = y;
+    }
+    
+    function ft17<T extends [] | [unknown]>(x: [unknown, unknown], y: [...T, ...T]) {
+        x = y;
+        ~
+!!! error TS2322: Type '[...T, ...T]' is not assignable to type '[unknown, unknown]'.
+!!! error TS2322:   Type '[] | [unknown] | [unknown, unknown]' is not assignable to type '[unknown, unknown]'.
+!!! error TS2322:     Type '[]' is not assignable to type '[unknown, unknown]'.
+!!! error TS2322:       Source has 0 element(s) but target requires 2.
+    }
+    
+    function ft18<T extends unknown[]>(x: [unknown, unknown], y: [...T, ...T]) {
+        x = y;
+        ~
+!!! error TS2322: Type '[...T, ...T]' is not assignable to type '[unknown, unknown]'.
+!!! error TS2322:   Type 'unknown[]' is not assignable to type '[unknown, unknown]'.
+!!! error TS2322:     Target requires 2 element(s) but source may have fewer.
+    }
+    
     // Inference between variadic tuple types
     
     type First<T extends readonly unknown[]> =
@@ -505,4 +535,9 @@ tests/cases/conformance/types/tuple/variadicTuples1.ts(397,7): error TS2322: Typ
     type U1 = [string, ...Numbers, boolean];
     type U2 = [...[string, ...Numbers], boolean];
     type U3 = [...[string, number], boolean];
+    
+    // Repro from #53563
+    
+    type ToStringLength1<T extends any[]> = `${T['length']}`;
+    type ToStringLength2<T extends any[]> = `${[...T]['length']}`;
     

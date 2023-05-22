@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/alpha/src/a.ts]
 import * as b from '../../beta/b'
