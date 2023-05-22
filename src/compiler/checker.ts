@@ -14046,7 +14046,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             else if (type !== firstType) {
                 checkFlags |= CheckFlags.HasNonUniformType;
             }
-            if (isLiteralType(type) || isPatternLiteralType(type) || type === uniqueLiteralType) {
+            if (isLiteralType(type) || isPatternLiteralType(type)) {
                 checkFlags |= CheckFlags.HasLiteralType;
             }
             if (type.flags & TypeFlags.Never && type !== uniqueLiteralType) {
