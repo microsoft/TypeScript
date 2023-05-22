@@ -7263,6 +7263,7 @@ declare namespace ts {
     function getDefaultLibFilePath(options: CompilerOptions): string;
     /** The version of the language service API */
     const servicesVersion = "0.8";
+    const NoopCancellationToken: CancellationToken;
     /**
      * Transform one or more nodes using the supplied transformers.
      * @param source A single `Node` or an array of `Node` objects.
