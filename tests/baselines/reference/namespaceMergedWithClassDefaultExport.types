@@ -1,0 +1,29 @@
+=== /node_modules/some-lib/types/index.d.ts ===
+declare module 'some-lib' {
+>'some-lib' : typeof import("some-lib")
+
+  export class Cls { constructor(arg: number); }
+>Cls : Cls
+>arg : number
+
+  export default Cls;
+>Cls : typeof Cls
+
+  namespace Cls {
+>Cls : typeof Cls
+
+    export function defaults(arg: number): void;
+>defaults : (arg: number) => void
+>arg : number
+  }
+}
+
+=== /main.ts ===
+import Cls from "some-lib";
+>Cls : typeof Cls
+
+new Cls(10);
+>new Cls(10) : import("some-lib").Cls
+>Cls : typeof Cls
+>10 : 10
+

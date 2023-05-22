@@ -13082,18 +13082,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         setStructuredTypeMembers(type, members, emptyArray, emptyArray, indexInfos || emptyArray);
+
+        const exportSymbol = symbol.exportSymbol || symbol;
+
         // We resolve the members before computing the signatures because a signature may use
         // typeof with a qualified name expression that circularly references the type we are
         // in the process of resolving (see issue #6072). The temporarily empty signature list
         // will never be observed because a qualified name can't reference signatures.
-        if (symbol.flags & (SymbolFlags.Function | SymbolFlags.Method)) {
-            type.callSignatures = getSignaturesOfSymbol(symbol);
+        if (exportSymbol.flags & (SymbolFlags.Function | SymbolFlags.Method)) {
+            type.callSignatures = getSignaturesOfSymbol(exportSymbol);
         }
         // And likewise for construct signatures for classes
-        if (symbol.flags & SymbolFlags.Class) {
-            const classType = getDeclaredTypeOfClassOrInterface(symbol);
-            let constructSignatures = symbol.members ? getSignaturesOfSymbol(symbol.members.get(InternalSymbolName.Constructor)) : emptyArray;
-            if (symbol.flags & SymbolFlags.Function) {
+        if (exportSymbol.flags & SymbolFlags.Class) {
+            const classType = getDeclaredTypeOfClassOrInterface(exportSymbol);
+            let constructSignatures = exportSymbol.members ? getSignaturesOfSymbol(exportSymbol.members.get(InternalSymbolName.Constructor)) : emptyArray;
+            if (exportSymbol.flags & SymbolFlags.Function) {
                 constructSignatures = addRange(constructSignatures.slice(), mapDefined(
                     type.callSignatures,
                     sig => isJSConstructor(sig.declaration) ?

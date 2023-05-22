@@ -1,0 +1,27 @@
+=== /node_modules/some-lib/types/index.d.ts ===
+declare module 'some-lib' {
+>'some-lib' : Symbol("some-lib", Decl(index.d.ts, 0, 0))
+
+  export class Cls { constructor(arg: number); }
+>Cls : Symbol(Cls, Decl(index.d.ts, 0, 27))
+>arg : Symbol(arg, Decl(index.d.ts, 1, 33))
+
+  export default Cls;
+>Cls : Symbol(Cls, Decl(index.d.ts, 0, 27), Decl(index.d.ts, 2, 21))
+
+  namespace Cls {
+>Cls : Symbol(Cls, Decl(index.d.ts, 0, 27), Decl(index.d.ts, 2, 21))
+
+    export function defaults(arg: number): void;
+>defaults : Symbol(defaults, Decl(index.d.ts, 4, 17))
+>arg : Symbol(arg, Decl(index.d.ts, 5, 29))
+  }
+}
+
+=== /main.ts ===
+import Cls from "some-lib";
+>Cls : Symbol(Cls, Decl(main.ts, 0, 6))
+
+new Cls(10);
+>Cls : Symbol(Cls, Decl(main.ts, 0, 6))
+
