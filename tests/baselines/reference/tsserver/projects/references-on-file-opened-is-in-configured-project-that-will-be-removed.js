@@ -98,21 +98,21 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/myproject/playground/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/playground/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/playground/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/playground/tsconfig-json/src/src.ts: *new*
   {}
 /user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/myproject/playground/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -143,23 +143,23 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/myproject/playground/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/playground/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/playground/tsconfig.json:
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/playground/tests.ts: *new*
   {}
 /user/username/projects/myproject/playground/tsconfig-json/src/src.ts:
   {}
 /user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts:
   {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/playground/tests.ts: *new*
+/user/username/projects/myproject/playground/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -257,29 +257,29 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/myproject/playground/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
+/user/username/projects/myproject/playground/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/playground/tsconfig-json/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/playground/tsconfig-json/src/src.ts:
-  {}
 /a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/playground/tsconfig-json/src/src.ts:
   {}
 /user/username/projects/myproject/playground/tsconfig-json/tsconfig.json: *new*
   {}
 
 FsWatches *deleted*::
-/user/username/projects/myproject/playground/tsconfig.json:
+/user/username/projects/myproject/playground/tests.ts:
   {}
 /user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts:
   {}
-/user/username/projects/myproject/playground/tests.ts:
+/user/username/projects/myproject/playground/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -392,35 +392,35 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/myproject/playground/node_modules/@types:
-  {"pollingInterval":500}
+/user/username/projects/myproject/jsconfig.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/playground/tsconfig-json/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/playground/tsconfig-json/tests/tsconfig.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/playground/tsconfig-json/tests/jsconfig.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/playground/tsconfig-json/jsconfig.json: *new*
-  {"pollingInterval":2000}
 /user/username/projects/myproject/playground/jsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/tsconfig.json: *new*
+/user/username/projects/myproject/playground/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/playground/tsconfig-json/jsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/jsconfig.json: *new*
+/user/username/projects/myproject/playground/tsconfig-json/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/playground/tsconfig-json/tests/jsconfig.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/myproject/playground/tsconfig-json/tests/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/playground/tsconfig-json/tests/spec.d.ts: *new*
   {"pollingInterval":2000}
+/user/username/projects/myproject/playground/tsconfig-json/tests/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/playground/tsconfig-json/src/src.ts:
-  {}
 /a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/playground/tsconfig-json/src/src.ts:
   {}
 /user/username/projects/myproject/playground/tsconfig-json/tsconfig.json:
   {}

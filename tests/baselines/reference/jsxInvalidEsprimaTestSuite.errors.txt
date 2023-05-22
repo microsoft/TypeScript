@@ -74,7 +74,10 @@ tests/cases/conformance/jsx/5.tsx(1,5): error TS1005: '</' expected.
 tests/cases/conformance/jsx/6.tsx(1,6): error TS17002: Expected corresponding JSX closing tag for 'a'.
 tests/cases/conformance/jsx/7.tsx(1,13): error TS1002: Unterminated string literal.
 tests/cases/conformance/jsx/8.tsx(1,8): error TS17002: Expected corresponding JSX closing tag for 'a:b'.
-tests/cases/conformance/jsx/9.tsx(1,2): error TS2633: JSX property access expressions cannot include JSX namespace names
+tests/cases/conformance/jsx/9.tsx(1,5): error TS1003: Identifier expected.
+tests/cases/conformance/jsx/9.tsx(1,13): error TS1005: '>' expected.
+tests/cases/conformance/jsx/9.tsx(1,14): error TS2304: Cannot find name 'c'.
+tests/cases/conformance/jsx/9.tsx(1,16): error TS1109: Expression expected.
 
 
 ==== tests/cases/conformance/jsx/1.tsx (3 errors) ====
@@ -125,10 +128,16 @@ tests/cases/conformance/jsx/9.tsx(1,2): error TS2633: JSX property access expres
     <a:b></b>;
            ~
 !!! error TS17002: Expected corresponding JSX closing tag for 'a:b'.
-==== tests/cases/conformance/jsx/9.tsx (1 errors) ====
+==== tests/cases/conformance/jsx/9.tsx (4 errors) ====
     <a:b.c></a:b.c>;
-     ~~~
-!!! error TS2633: JSX property access expressions cannot include JSX namespace names
+        ~
+!!! error TS1003: Identifier expected.
+                ~
+!!! error TS1005: '>' expected.
+                 ~
+!!! error TS2304: Cannot find name 'c'.
+                   ~
+!!! error TS1109: Expression expected.
 ==== tests/cases/conformance/jsx/10.tsx (6 errors) ====
     <a.b:c></a.b:c>;
      ~

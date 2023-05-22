@@ -4,6 +4,7 @@ import type {
     EndOfLineState,
     FileExtensionInfo,
     HighlightSpanKind,
+    InteractiveRefactorArguments,
     MapLike,
     OutliningSpanKind,
     OutputFile,
@@ -142,6 +143,7 @@ export const enum CommandTypes {
 
     GetApplicableRefactors = "getApplicableRefactors",
     GetEditsForRefactor = "getEditsForRefactor",
+    GetMoveToRefactoringFileSuggestions = "getMoveToRefactoringFileSuggestions",
     /** @internal */
     GetEditsForRefactorFull = "getEditsForRefactor-full",
 
@@ -586,6 +588,14 @@ export interface GetApplicableRefactorsRequest extends Request {
 export type GetApplicableRefactorsRequestArgs = FileLocationOrRangeRequestArgs & {
     triggerReason?: RefactorTriggerReason;
     kind?: string;
+    /**
+     * Include refactor actions that require additional arguments to be passed when
+     * calling 'GetEditsForRefactor'. When true, clients should inspect the
+     * `isInteractive` property of each returned `RefactorActionInfo`
+     * and ensure they are able to collect the appropriate arguments for any
+     * interactive refactor before offering it.
+     */
+    includeInteractiveActions?: boolean;
 };
 
 export type RefactorTriggerReason = "implicit" | "invoked";
@@ -596,6 +606,27 @@ export type RefactorTriggerReason = "implicit" | "invoked";
  */
 export interface GetApplicableRefactorsResponse extends Response {
     body?: ApplicableRefactorInfo[];
+}
+
+/**
+ * Request refactorings at a given position or selection area to move to an existing file.
+ */
+export interface GetMoveToRefactoringFileSuggestionsRequest extends Request {
+    command: CommandTypes.GetMoveToRefactoringFileSuggestions;
+    arguments: GetMoveToRefactoringFileSuggestionsRequestArgs;
+}
+export type GetMoveToRefactoringFileSuggestionsRequestArgs = FileLocationOrRangeRequestArgs & {
+    kind?: string;
+};
+/**
+ * Response is a list of available files.
+ * Each refactoring exposes one or more "Actions"; a user selects one action to invoke a refactoring
+ */
+export interface GetMoveToRefactoringFileSuggestions extends Response {
+    body: {
+        newFileName: string;
+        files: string[];
+    };
 }
 
 /**
@@ -650,6 +681,12 @@ export interface RefactorActionInfo {
      * The hierarchical dotted name of the refactor action.
      */
     kind?: string;
+
+    /**
+     * Indicates that the action requires additional arguments to be passed
+     * when calling 'GetEditsForRefactor'.
+     */
+    isInteractive?: boolean;
 }
 
 export interface GetEditsForRefactorRequest extends Request {
@@ -666,6 +703,8 @@ export type GetEditsForRefactorRequestArgs = FileLocationOrRangeRequestArgs & {
     refactor: string;
     /* The 'name' property from the refactoring action */
     action: string;
+    /* Arguments for interactive action */
+    interactiveRefactorArguments?: InteractiveRefactorArguments;
 };
 
 
@@ -682,6 +721,7 @@ export interface RefactorEditInfo {
      */
     renameLocation?: Location;
     renameFilename?: string;
+    notApplicableReason?: string;
 }
 
 /**
@@ -2296,6 +2336,11 @@ export interface CompletionEntry {
      * coupled with `replacementSpan` to replace a dotted access with a bracket access.
      */
     insertText?: string;
+    /**
+     * A string that should be used when filtering a set of
+     * completion items.
+     */
+    filterText?: string;
     /**
      * `insertText` should be interpreted as a snippet if true.
      */

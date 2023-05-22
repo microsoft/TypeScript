@@ -169,33 +169,33 @@ Output::
 
 
 FsWatches::
-/user/username/projects/demo/animals/tsconfig.json: *new*
-  {}
-/user/username/projects/demo/tsconfig-base.json: *new*
-  {}
 /user/username/projects/demo/animals/animal.ts: *new*
   {}
 /user/username/projects/demo/animals/dog.ts: *new*
   {}
 /user/username/projects/demo/animals/index.ts: *new*
   {}
-/user/username/projects/demo/zoo/tsconfig.json: *new*
-  {}
-/user/username/projects/demo/zoo/zoo.ts: *new*
+/user/username/projects/demo/animals/tsconfig.json: *new*
   {}
 /user/username/projects/demo/core/tsconfig.json: *new*
   {}
 /user/username/projects/demo/core/utilities.ts: *new*
   {}
+/user/username/projects/demo/tsconfig-base.json: *new*
+  {}
 /user/username/projects/demo/tsconfig.json: *new*
+  {}
+/user/username/projects/demo/zoo/tsconfig.json: *new*
+  {}
+/user/username/projects/demo/zoo/zoo.ts: *new*
   {}
 
 FsWatchesRecursive::
 /user/username/projects/demo/animals: *new*
   {}
-/user/username/projects/demo/zoo: *new*
-  {}
 /user/username/projects/demo/core: *new*
+  {}
+/user/username/projects/demo/zoo: *new*
   {}
 
 exitCode:: ExitStatus.undefined

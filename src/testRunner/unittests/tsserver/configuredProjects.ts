@@ -1,15 +1,9 @@
 import * as ts from "../../_namespaces/ts";
+import { ensureErrorFreeBuild } from "../helpers/solutionBuilder";
 import {
     commonFile1,
     commonFile2,
-    ensureErrorFreeBuild,
-} from "../tscWatch/helpers";
-import {
-    createServerHost,
-    File,
-    libFile,
-    SymLink,
-} from "../virtualFileSystemWithWatch";
+} from "../helpers/tscWatch";
 import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,
@@ -19,7 +13,13 @@ import {
     logInferredProjectsOrphanStatus,
     openFilesForSession,
     verifyGetErrRequest,
-} from "./helpers";
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+    File,
+    libFile,
+    SymLink,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: ConfiguredProjects", () => {
     it("create configured project without file list", () => {
