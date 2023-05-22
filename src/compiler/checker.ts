@@ -13090,13 +13090,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // in the process of resolving (see issue #6072). The temporarily empty signature list
         // will never be observed because a qualified name can't reference signatures.
         if (exportSymbol.flags & (SymbolFlags.Function | SymbolFlags.Method)) {
-            type.callSignatures = getSignaturesOfSymbol(exportSymbol);
+            type.callSignatures = getSignaturesOfSymbol(symbol);
         }
         // And likewise for construct signatures for classes
         if (exportSymbol.flags & SymbolFlags.Class) {
-            const classType = getDeclaredTypeOfClassOrInterface(exportSymbol);
-            let constructSignatures = exportSymbol.members ? getSignaturesOfSymbol(exportSymbol.members.get(InternalSymbolName.Constructor)) : emptyArray;
-            if (exportSymbol.flags & SymbolFlags.Function) {
+            const classType = getDeclaredTypeOfClassOrInterface(symbol);
+            let constructSignatures = symbol.members ? getSignaturesOfSymbol(symbol.members.get(InternalSymbolName.Constructor)) : emptyArray;
+            if (symbol.flags & SymbolFlags.Function) {
                 constructSignatures = addRange(constructSignatures.slice(), mapDefined(
                     type.callSignatures,
                     sig => isJSConstructor(sig.declaration) ?
