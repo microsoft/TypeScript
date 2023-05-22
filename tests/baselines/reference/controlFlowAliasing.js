@@ -282,6 +282,24 @@ if (a) { }
 
 const a = obj.fn();
 
+// repro from https://github.com/microsoft/TypeScript/issues/53267
+class Utils {
+  static isDefined<T>(value: T): value is NonNullable<T> {
+    return value != null;
+  }
+}
+
+class A53267 {
+  public readonly testNumber: number | undefined;
+
+  foo() {
+    const isNumber = Utils.isDefined(this.testNumber);
+
+    if (isNumber) {
+      const x: number = this.testNumber;
+    }
+  }
+}
 
 //// [controlFlowAliasing.js]
 "use strict";
@@ -538,6 +556,26 @@ var obj = {
 };
 if (a) { }
 var a = obj.fn();
+// repro from https://github.com/microsoft/TypeScript/issues/53267
+var Utils = /** @class */ (function () {
+    function Utils() {
+    }
+    Utils.isDefined = function (value) {
+        return value != null;
+    };
+    return Utils;
+}());
+var A53267 = /** @class */ (function () {
+    function A53267() {
+    }
+    A53267.prototype.foo = function () {
+        var isNumber = Utils.isDefined(this.testNumber);
+        if (isNumber) {
+            var x = this.testNumber;
+        }
+    };
+    return A53267;
+}());
 
 
 //// [controlFlowAliasing.d.ts]
@@ -677,3 +715,10 @@ declare const obj: {
     fn: () => boolean;
 };
 declare const a: boolean;
+declare class Utils {
+    static isDefined<T>(value: T): value is NonNullable<T>;
+}
+declare class A53267 {
+    readonly testNumber: number | undefined;
+    foo(): void;
+}
