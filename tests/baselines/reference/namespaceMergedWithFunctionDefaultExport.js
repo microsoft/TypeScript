@@ -1,6 +1,8 @@
 //// [tests/cases/compiler/namespaceMergedWithFunctionDefaultExport.ts] ////
 
 //// [package.json]
+// repro from https://github.com/microsoft/TypeScript/issues/54342
+
 {
   "name": "replace-in-file",
   "version": "6.3.5",

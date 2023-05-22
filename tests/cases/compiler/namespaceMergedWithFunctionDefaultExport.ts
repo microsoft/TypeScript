@@ -1,6 +1,8 @@
 // @moduleResolution: node10
 // @module: commonjs
 
+// repro from https://github.com/microsoft/TypeScript/issues/54342
+
 // @Filename: /node_modules/replace-in-file/package.json
 {
   "name": "replace-in-file",
