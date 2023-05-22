@@ -29152,7 +29152,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (t.flags & TypeFlags.Intersection) {
                 const intersection = t as IntersectionType;
                 let applicableIndexedMappedTypeSubstitions: Type[] | undefined;
-                let concreteProperties: Type[] | undefined;
+                let concretePropertyTypes: Type[] | undefined;
                 let applicableIndexInfoCandidates: Type[] | undefined;
                 for (const t of intersection.types) {
                     if (isGenericMappedType(t) && !t.declaration.nameType) {
@@ -29161,13 +29161,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                     const typeOfConcreteProperty = getTypeOfConcretePropertyOfContextualType(t);
                     if (typeOfConcreteProperty) {
-                        concreteProperties = append(concreteProperties, typeOfConcreteProperty);
+                        concretePropertyTypes = append(concretePropertyTypes, typeOfConcreteProperty);
                         continue;
                     }
                     applicableIndexInfoCandidates = append(applicableIndexInfoCandidates, t);
                 }
-                if (concreteProperties) {
-                    return getIntersectionType(concatenate(concreteProperties, applicableIndexedMappedTypeSubstitions));
+                if (concretePropertyTypes) {
+                    return getIntersectionType(concatenate(concretePropertyTypes, applicableIndexedMappedTypeSubstitions));
                 }
                 const types = concatenate(mapDefined(applicableIndexInfoCandidates, getTypeOfApplicableIndexInfoOfContextualType), applicableIndexedMappedTypeSubstitions);
                 if (types.length > 0) {
