@@ -4,8 +4,4 @@
 /////*/**/
 ////function foo(p) {}
 
-verify.docCommentTemplateAt("", 7,
-`/**
- * 
- * @param p
- */`);
+verify.docCommentTemplateAt("", 3, `/** */`);

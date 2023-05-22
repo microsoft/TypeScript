@@ -492,7 +492,9 @@ export function getDocCommentTemplateAtPosition(newLine: string, sourceFile: Sou
     // * if the caret was directly in front of the object, then we add an extra line and indentation.
     const openComment = "/**";
     const closeComment = " */";
-    if (tags) {
+    const hasTag = length(getJSDocTags(commentOwner)) > 0;
+
+    if (tags && !hasTag) {
         const preamble = openComment + newLine + indentationStr + " * ";
         const endLine = tokenStart === position ? newLine + indentationStr : "";
         const result = preamble + newLine + tags + indentationStr + closeComment + endLine;
