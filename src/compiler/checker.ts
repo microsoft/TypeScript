@@ -29146,6 +29146,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getTypeOfPropertyOfContextualType(type: Type, name: __String, nameType?: Type) {
         return mapType(type, t => {
+            if (!(t.flags & TypeFlags.StructuredType)) {
+                return undefined;
+            }
             if (t.flags & TypeFlags.Intersection) {
                 const intersection = t as IntersectionType;
                 let applicableIndexedMappedTypeSubstitions: Type[] | undefined;
@@ -29156,12 +29159,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         applicableIndexedMappedTypeSubstitions = append(applicableIndexedMappedTypeSubstitions, getTypeOfApplicableIndexedMappedTypeSubstitutionOfContextualType(t));
                         continue;
                     }
-                    if (!(t.flags & TypeFlags.StructuredType)) {
-                        continue;
-                    }
-                    let type: Type | undefined;
-                    if (type = getTypeOfConcretePropertyOfContextualType(t)) {
-                        concreteProperties = append(concreteProperties, type);
+                    const typeOfConcreteProperty = getTypeOfConcretePropertyOfContextualType(t);
+                    if (typeOfConcreteProperty) {
+                        concreteProperties = append(concreteProperties, typeOfConcreteProperty);
                         continue;
                     }
                     applicableIndexInfoCandidates = append(applicableIndexInfoCandidates, t);
@@ -29175,13 +29175,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 return undefined;
             }
-            if (isGenericMappedType(t) && !t.declaration.nameType) {
-                return getTypeOfApplicableIndexedMappedTypeSubstitutionOfContextualType(t);
-            }
-            if (!(t.flags & TypeFlags.StructuredType)) {
-                return undefined;
-            }
-            return getTypeOfConcretePropertyOfContextualType(t) || getTypeOfApplicableIndexInfoOfContextualType(t);
+            return isGenericMappedType(t) && !t.declaration.nameType
+                ? getTypeOfApplicableIndexedMappedTypeSubstitutionOfContextualType(t)
+                : getTypeOfConcretePropertyOfContextualType(t) || getTypeOfApplicableIndexInfoOfContextualType(t);
         }, /*noReductions*/ true);
 
         function getTypeOfApplicableIndexedMappedTypeSubstitutionOfContextualType(t: MappedType) {
