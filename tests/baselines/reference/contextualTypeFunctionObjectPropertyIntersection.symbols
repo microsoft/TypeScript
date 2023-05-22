@@ -102,7 +102,7 @@ declare function createSlice<T>(
 createSlice({
 >createSlice : Symbol(createSlice, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 28, 3), Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 63, 2))
 
-  f(a) {}, // implicit any, index signature should not be used here
+  f(a) {},
 >f : Symbol(f, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 38, 13))
 >a : Symbol(a, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 39, 4))
 

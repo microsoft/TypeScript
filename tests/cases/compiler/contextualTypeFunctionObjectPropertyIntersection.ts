@@ -40,7 +40,7 @@ declare function createSlice<T>(
 ): void;
 
 createSlice({
-  f(a) {}, // implicit any, index signature should not be used here
+  f(a) {},
 });
 
 // repro from #49307#issuecomment-1196014488
