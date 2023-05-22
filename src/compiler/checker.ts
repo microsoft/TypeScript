@@ -13086,7 +13086,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // typeof with a qualified name expression that circularly references the type we are
         // in the process of resolving (see issue #6072). The temporarily empty signature list
         // will never be observed because a qualified name can't reference signatures.
-        if (symbol.flags & (SymbolFlags.Function | SymbolFlags.Method)) {
+        if ((symbol.flags | (symbol.exportSymbol?.flags || 0)) & (SymbolFlags.Function | SymbolFlags.Method)) {
             type.callSignatures = getSignaturesOfSymbol(symbol);
         }
         // And likewise for construct signatures for classes

@@ -1,0 +1,156 @@
+=== /node_modules/replace-in-file/types/index.d.ts ===
+declare module 'replace-in-file' {
+>'replace-in-file' : Symbol("replace-in-file", Decl(index.d.ts, 0, 0))
+
+  export function replaceInFile(config: ReplaceInFileConfig): Promise<ReplaceResult[]>;
+>replaceInFile : Symbol(replaceInFile, Decl(index.d.ts, 0, 34), Decl(index.d.ts, 1, 87))
+>config : Symbol(config, Decl(index.d.ts, 1, 32))
+>ReplaceInFileConfig : Symbol(ReplaceInFileConfig, Decl(index.d.ts, 16, 39))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>ReplaceResult : Symbol(ReplaceResult, Decl(index.d.ts, 29, 3))
+
+  export function replaceInFile(config: ReplaceInFileConfig, cb: (error: Error, results: ReplaceResult[]) => void): void;
+>replaceInFile : Symbol(replaceInFile, Decl(index.d.ts, 0, 34), Decl(index.d.ts, 1, 87))
+>config : Symbol(config, Decl(index.d.ts, 2, 32))
+>ReplaceInFileConfig : Symbol(ReplaceInFileConfig, Decl(index.d.ts, 16, 39))
+>cb : Symbol(cb, Decl(index.d.ts, 2, 60))
+>error : Symbol(error, Decl(index.d.ts, 2, 66))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>results : Symbol(results, Decl(index.d.ts, 2, 79))
+>ReplaceResult : Symbol(ReplaceResult, Decl(index.d.ts, 29, 3))
+
+  export default replaceInFile;
+>replaceInFile : Symbol(replaceInFile, Decl(index.d.ts, 0, 34), Decl(index.d.ts, 1, 87), Decl(index.d.ts, 3, 31))
+
+  namespace replaceInFile {
+>replaceInFile : Symbol(replaceInFile, Decl(index.d.ts, 0, 34), Decl(index.d.ts, 1, 87), Decl(index.d.ts, 3, 31))
+
+    export function sync(config: ReplaceInFileConfig): ReplaceResult[];
+>sync : Symbol(sync, Decl(index.d.ts, 5, 27))
+>config : Symbol(config, Decl(index.d.ts, 6, 25))
+>ReplaceInFileConfig : Symbol(ReplaceInFileConfig, Decl(index.d.ts, 16, 39))
+>ReplaceResult : Symbol(ReplaceResult, Decl(index.d.ts, 29, 3))
+
+    export function replaceInFileSync(config: ReplaceInFileConfig): ReplaceResult[];
+>replaceInFileSync : Symbol(replaceInFileSync, Decl(index.d.ts, 6, 71))
+>config : Symbol(config, Decl(index.d.ts, 7, 38))
+>ReplaceInFileConfig : Symbol(ReplaceInFileConfig, Decl(index.d.ts, 16, 39))
+>ReplaceResult : Symbol(ReplaceResult, Decl(index.d.ts, 29, 3))
+
+    export function replaceInFile(config: ReplaceInFileConfig): Promise<ReplaceResult[]>;
+>replaceInFile : Symbol(replaceInFile, Decl(index.d.ts, 7, 84), Decl(index.d.ts, 8, 89))
+>config : Symbol(config, Decl(index.d.ts, 8, 34))
+>ReplaceInFileConfig : Symbol(ReplaceInFileConfig, Decl(index.d.ts, 16, 39))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>ReplaceResult : Symbol(ReplaceResult, Decl(index.d.ts, 29, 3))
+
+    export function replaceInFile(config: ReplaceInFileConfig, cb: (error: Error, results: ReplaceResult[]) => void): void;
+>replaceInFile : Symbol(replaceInFile, Decl(index.d.ts, 7, 84), Decl(index.d.ts, 8, 89))
+>config : Symbol(config, Decl(index.d.ts, 9, 34))
+>ReplaceInFileConfig : Symbol(ReplaceInFileConfig, Decl(index.d.ts, 16, 39))
+>cb : Symbol(cb, Decl(index.d.ts, 9, 62))
+>error : Symbol(error, Decl(index.d.ts, 9, 68))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>results : Symbol(results, Decl(index.d.ts, 9, 81))
+>ReplaceResult : Symbol(ReplaceResult, Decl(index.d.ts, 29, 3))
+  }
+
+  export function sync(config: ReplaceInFileConfig): ReplaceResult[];
+>sync : Symbol(sync, Decl(index.d.ts, 10, 3))
+>config : Symbol(config, Decl(index.d.ts, 12, 23))
+>ReplaceInFileConfig : Symbol(ReplaceInFileConfig, Decl(index.d.ts, 16, 39))
+>ReplaceResult : Symbol(ReplaceResult, Decl(index.d.ts, 29, 3))
+
+  export function replaceInFileSync(config: ReplaceInFileConfig): ReplaceResult[];
+>replaceInFileSync : Symbol(replaceInFileSync, Decl(index.d.ts, 12, 69))
+>config : Symbol(config, Decl(index.d.ts, 13, 36))
+>ReplaceInFileConfig : Symbol(ReplaceInFileConfig, Decl(index.d.ts, 16, 39))
+>ReplaceResult : Symbol(ReplaceResult, Decl(index.d.ts, 29, 3))
+
+  export type From = string | RegExp | FromCallback;
+>From : Symbol(From, Decl(index.d.ts, 13, 82))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>FromCallback : Symbol(FromCallback, Decl(index.d.ts, 37, 1))
+
+  export type To = string | ToCallback;
+>To : Symbol(To, Decl(index.d.ts, 15, 52))
+>ToCallback : Symbol(ToCallback, Decl(index.d.ts, 39, 76))
+
+  export interface ReplaceInFileConfig {
+>ReplaceInFileConfig : Symbol(ReplaceInFileConfig, Decl(index.d.ts, 16, 39))
+
+    files: string | string[];
+>files : Symbol(ReplaceInFileConfig.files, Decl(index.d.ts, 18, 40))
+
+    ignore?: string | string[];
+>ignore : Symbol(ReplaceInFileConfig.ignore, Decl(index.d.ts, 19, 29))
+
+    from: From | Array<From>;
+>from : Symbol(ReplaceInFileConfig.from, Decl(index.d.ts, 20, 31))
+>From : Symbol(From, Decl(index.d.ts, 13, 82))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>From : Symbol(From, Decl(index.d.ts, 13, 82))
+
+    to: To | Array<To>;
+>to : Symbol(ReplaceInFileConfig.to, Decl(index.d.ts, 21, 29))
+>To : Symbol(To, Decl(index.d.ts, 15, 52))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>To : Symbol(To, Decl(index.d.ts, 15, 52))
+
+    countMatches?: boolean;
+>countMatches : Symbol(ReplaceInFileConfig.countMatches, Decl(index.d.ts, 22, 23))
+
+    allowEmptyPaths?: boolean,
+>allowEmptyPaths : Symbol(ReplaceInFileConfig.allowEmptyPaths, Decl(index.d.ts, 23, 27))
+
+    disableGlobs?: boolean,
+>disableGlobs : Symbol(ReplaceInFileConfig.disableGlobs, Decl(index.d.ts, 24, 30))
+
+    encoding?: string,
+>encoding : Symbol(ReplaceInFileConfig.encoding, Decl(index.d.ts, 25, 27))
+
+    dry?:boolean
+>dry : Symbol(ReplaceInFileConfig.dry, Decl(index.d.ts, 26, 22))
+
+    glob?:object
+>glob : Symbol(ReplaceInFileConfig.glob, Decl(index.d.ts, 27, 16))
+  }
+
+  export interface ReplaceResult {
+>ReplaceResult : Symbol(ReplaceResult, Decl(index.d.ts, 29, 3))
+
+    file: string;
+>file : Symbol(ReplaceResult.file, Decl(index.d.ts, 31, 34))
+
+    hasChanged: boolean;
+>hasChanged : Symbol(ReplaceResult.hasChanged, Decl(index.d.ts, 32, 17))
+
+    numMatches?: number,
+>numMatches : Symbol(ReplaceResult.numMatches, Decl(index.d.ts, 33, 24))
+
+    numReplacements?: number,
+>numReplacements : Symbol(ReplaceResult.numReplacements, Decl(index.d.ts, 34, 24))
+  }
+}
+
+type FromCallback = (file: string) => string | RegExp | string[] | RegExp[];
+>FromCallback : Symbol(FromCallback, Decl(index.d.ts, 37, 1))
+>file : Symbol(file, Decl(index.d.ts, 39, 21))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+type ToCallback = (match: string, file: string) => string | string[];
+>ToCallback : Symbol(ToCallback, Decl(index.d.ts, 39, 76))
+>match : Symbol(match, Decl(index.d.ts, 40, 19))
+>file : Symbol(file, Decl(index.d.ts, 40, 33))
+
+=== /main.ts ===
+import replaceInFile from "replace-in-file";
+>replaceInFile : Symbol(replaceInFile, Decl(main.ts, 0, 6))
+
+replaceInFile({ files: "*.md", from: "a", to: "b" });
+>replaceInFile : Symbol(replaceInFile, Decl(main.ts, 0, 6))
+>files : Symbol(files, Decl(main.ts, 2, 15))
+>from : Symbol(from, Decl(main.ts, 2, 30))
+>to : Symbol(to, Decl(main.ts, 2, 41))
+

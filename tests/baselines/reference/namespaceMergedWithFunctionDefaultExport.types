@@ -1,0 +1,126 @@
+=== /node_modules/replace-in-file/types/index.d.ts ===
+declare module 'replace-in-file' {
+>'replace-in-file' : typeof import("replace-in-file")
+
+  export function replaceInFile(config: ReplaceInFileConfig): Promise<ReplaceResult[]>;
+>replaceInFile : { (config: ReplaceInFileConfig): Promise<ReplaceResult[]>; (config: ReplaceInFileConfig, cb: (error: Error, results: ReplaceResult[]) => void): void; }
+>config : ReplaceInFileConfig
+
+  export function replaceInFile(config: ReplaceInFileConfig, cb: (error: Error, results: ReplaceResult[]) => void): void;
+>replaceInFile : { (config: ReplaceInFileConfig): Promise<ReplaceResult[]>; (config: ReplaceInFileConfig, cb: (error: Error, results: ReplaceResult[]) => void): void; }
+>config : ReplaceInFileConfig
+>cb : (error: Error, results: ReplaceResult[]) => void
+>error : Error
+>results : ReplaceResult[]
+
+  export default replaceInFile;
+>replaceInFile : typeof replaceInFile
+
+  namespace replaceInFile {
+>replaceInFile : typeof replaceInFile
+
+    export function sync(config: ReplaceInFileConfig): ReplaceResult[];
+>sync : (config: ReplaceInFileConfig) => ReplaceResult[]
+>config : ReplaceInFileConfig
+
+    export function replaceInFileSync(config: ReplaceInFileConfig): ReplaceResult[];
+>replaceInFileSync : (config: ReplaceInFileConfig) => ReplaceResult[]
+>config : ReplaceInFileConfig
+
+    export function replaceInFile(config: ReplaceInFileConfig): Promise<ReplaceResult[]>;
+>replaceInFile : { (config: ReplaceInFileConfig): Promise<ReplaceResult[]>; (config: ReplaceInFileConfig, cb: (error: Error, results: ReplaceResult[]) => void): void; }
+>config : ReplaceInFileConfig
+
+    export function replaceInFile(config: ReplaceInFileConfig, cb: (error: Error, results: ReplaceResult[]) => void): void;
+>replaceInFile : { (config: ReplaceInFileConfig): Promise<ReplaceResult[]>; (config: ReplaceInFileConfig, cb: (error: Error, results: ReplaceResult[]) => void): void; }
+>config : ReplaceInFileConfig
+>cb : (error: Error, results: ReplaceResult[]) => void
+>error : Error
+>results : ReplaceResult[]
+  }
+
+  export function sync(config: ReplaceInFileConfig): ReplaceResult[];
+>sync : (config: ReplaceInFileConfig) => ReplaceResult[]
+>config : ReplaceInFileConfig
+
+  export function replaceInFileSync(config: ReplaceInFileConfig): ReplaceResult[];
+>replaceInFileSync : (config: ReplaceInFileConfig) => ReplaceResult[]
+>config : ReplaceInFileConfig
+
+  export type From = string | RegExp | FromCallback;
+>From : string | RegExp | FromCallback
+
+  export type To = string | ToCallback;
+>To : string | ToCallback
+
+  export interface ReplaceInFileConfig {
+    files: string | string[];
+>files : string | string[]
+
+    ignore?: string | string[];
+>ignore : string | string[]
+
+    from: From | Array<From>;
+>from : From | From[]
+
+    to: To | Array<To>;
+>to : To | To[]
+
+    countMatches?: boolean;
+>countMatches : boolean
+
+    allowEmptyPaths?: boolean,
+>allowEmptyPaths : boolean
+
+    disableGlobs?: boolean,
+>disableGlobs : boolean
+
+    encoding?: string,
+>encoding : string
+
+    dry?:boolean
+>dry : boolean
+
+    glob?:object
+>glob : object
+  }
+
+  export interface ReplaceResult {
+    file: string;
+>file : string
+
+    hasChanged: boolean;
+>hasChanged : boolean
+
+    numMatches?: number,
+>numMatches : number
+
+    numReplacements?: number,
+>numReplacements : number
+  }
+}
+
+type FromCallback = (file: string) => string | RegExp | string[] | RegExp[];
+>FromCallback : (file: string) => string | RegExp | string[] | RegExp[]
+>file : string
+
+type ToCallback = (match: string, file: string) => string | string[];
+>ToCallback : (match: string, file: string) => string | string[]
+>match : string
+>file : string
+
+=== /main.ts ===
+import replaceInFile from "replace-in-file";
+>replaceInFile : typeof replaceInFile
+
+replaceInFile({ files: "*.md", from: "a", to: "b" });
+>replaceInFile({ files: "*.md", from: "a", to: "b" }) : Promise<import("replace-in-file").ReplaceResult[]>
+>replaceInFile : typeof replaceInFile
+>{ files: "*.md", from: "a", to: "b" } : { files: string; from: string; to: string; }
+>files : string
+>"*.md" : "*.md"
+>from : string
+>"a" : "a"
+>to : string
+>"b" : "b"
+
