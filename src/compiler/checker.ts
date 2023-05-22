@@ -13083,7 +13083,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         setStructuredTypeMembers(type, members, emptyArray, emptyArray, indexInfos || emptyArray);
 
-        const exportSymbol = symbol.exportSymbol || symbol;
+        const exportSymbol = getExportSymbolOfValueSymbolIfExported(symbol);
 
         // We resolve the members before computing the signatures because a signature may use
         // typeof with a qualified name expression that circularly references the type we are
