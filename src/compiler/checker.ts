@@ -13094,9 +13094,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         // And likewise for construct signatures for classes
         if (exportSymbol.flags & SymbolFlags.Class) {
-            const classType = getDeclaredTypeOfClassOrInterface(symbol);
-            let constructSignatures = symbol.members ? getSignaturesOfSymbol(symbol.members.get(InternalSymbolName.Constructor)) : emptyArray;
-            if (symbol.flags & SymbolFlags.Function) {
+            const classType = getDeclaredTypeOfClassOrInterface(exportSymbol);
+            let constructSignatures = exportSymbol.members ? getSignaturesOfSymbol(exportSymbol.members.get(InternalSymbolName.Constructor)) : emptyArray;
+            if (exportSymbol.flags & SymbolFlags.Function) {
                 constructSignatures = addRange(constructSignatures.slice(), mapDefined(
                     type.callSignatures,
                     sig => isJSConstructor(sig.declaration) ?
