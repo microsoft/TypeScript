@@ -14,7 +14,7 @@ import { LiteralTypeNode } from "typescript";
 import { NoSubstitutionTemplateLiteral } from "typescript";
 import { ParenthesizedExpression } from "typescript";
 
- 
+
 const NO_LOCAL_INFERENCE = !!process.env.NO_LOCAL_INFERENCE;
 enum NarrowBehavior {
     None = 0,
@@ -549,7 +549,7 @@ export function transformDeclarations(context: TransformationContext) {
         return factory.createTypeReferenceNode("invalid");
     }
 
-    type LocalTypeInfo = { typeNode: TypeNode, sourceNode?: Node, flags: LocalTypeInfoFlags };
+    interface LocalTypeInfo { typeNode: TypeNode, sourceNode?: Node, flags: LocalTypeInfoFlags }
     // We need to see about getting the JSX element type.
     function getJSXElementType(_node: Node): EntityName {
         return factory.createQualifiedName(
@@ -558,7 +558,7 @@ export function transformDeclarations(context: TransformationContext) {
                 factory.createIdentifier("JSX"),
             ),
             factory.createIdentifier("Element"),
-        )
+        );
     }
     function localInference(node: Node, isConstContext: NarrowBehavior = NarrowBehavior.None): LocalTypeInfo {
         const nextIsConst = isConstContext & NarrowBehavior.NotKeepLiterals;
@@ -569,7 +569,8 @@ export function transformDeclarations(context: TransformationContext) {
                 if((node as Identifier).escapedText === "undefined") {
                     if(strictNullChecks) {
                         return regular(factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword), node);
-                    } else {
+                    }
+                    else {
                         return regular(factory.createKeywordTypeNode(SyntaxKind.AnyKeyword), node, LocalTypeInfoFlags.Implicit);
                     }
                 }
@@ -577,7 +578,8 @@ export function transformDeclarations(context: TransformationContext) {
             case SyntaxKind.NullKeyword:
                 if(strictNullChecks) {
                     return regular(factory.createLiteralTypeNode(factory.createNull()), node);
-                } else {
+                }
+                else {
                     return regular(factory.createKeywordTypeNode(SyntaxKind.AnyKeyword), node, LocalTypeInfoFlags.Implicit);
                 }
             case SyntaxKind.NewExpression:
@@ -588,7 +590,7 @@ export function transformDeclarations(context: TransformationContext) {
                         visitNode(newExpr.expression, visitDeclarationSubtree, isIdentifier)!,
                         visitNodes(newExpr.typeArguments, visitDeclarationSubtree, isTypeNode)
                     );
-                    const visitedTypeNode = visitNode(typeNode, visitDeclarationSubtree, isTypeNode)
+                    const visitedTypeNode = visitNode(typeNode, visitDeclarationSubtree, isTypeNode);
                     if(visitedTypeNode) {
                         return regular(visitedTypeNode, node);
                     }
@@ -607,8 +609,9 @@ export function transformDeclarations(context: TransformationContext) {
                         fnNode.parameters.map(p => ensureParameter(p)),
                         inferReturnType(fnNode).typeNode,
                     );
-                    return regular(fnTypeNode, node)
-                }finally {
+                    return regular(fnTypeNode, node);
+                }
+                finally {
                     enclosingDeclaration = oldEnclosingDeclaration;
                 }
             case SyntaxKind.TypeAssertionExpression:
@@ -616,9 +619,10 @@ export function transformDeclarations(context: TransformationContext) {
                 const asExpression = node as AsExpression | TypeAssertion;
                 if(isTypeReferenceNode(asExpression.type) && isConst(asExpression.type)) {
                     return localInference(asExpression.expression, NarrowBehavior.AsConst);
-                } else {
+                }
+                else {
                     const type = visitType(asExpression.type, asExpression);
-                    if(isLiteralTypeNode(type) && 
+                    if(isLiteralTypeNode(type) &&
                         (isNoSubstitutionTemplateLiteral(type.literal) || isStringLiteral(type.literal))) {
                         return regular(factory.createLiteralTypeNode(
                             normalizeLiteralValue(type.literal)
@@ -634,29 +638,31 @@ export function transformDeclarations(context: TransformationContext) {
                         return {
                             flags,
                             typeNode: factory.createLiteralTypeNode(factory.createPrefixMinus(targetExpressionType.literal))
-                        }
-                    } else if(targetExpressionType.kind === SyntaxKind.NumberKeyword) {
+                        };
+                    }
+                    else if(targetExpressionType.kind === SyntaxKind.NumberKeyword) {
                         return { typeNode: targetExpressionType, flags };
                     }
                 }
                 break;
-            case SyntaxKind.NumericLiteral: 
+            case SyntaxKind.NumericLiteral:
                 return literal(node, SyntaxKind.NumberKeyword, isConstContext);
             case SyntaxKind.TemplateExpression:
                     if(!isConstContext) {
-                        return literal(node, SyntaxKind.StringKeyword, isConstContext)
+                        return literal(node, SyntaxKind.StringKeyword, isConstContext);
                     }
                     const templateExpression = node as TemplateExpression;
-                    const templateSpans: TemplateLiteralTypeSpan[] = []
-                    let head = factory.createTemplateHead(templateExpression.head.text);
+                    const templateSpans: TemplateLiteralTypeSpan[] = [];
+                    const head = factory.createTemplateHead(templateExpression.head.text);
                     let prevSpan: TemplateHead | TemplateLiteralTypeSpan = head;
                     for(const span of templateExpression.templateSpans) {
                         const {typeNode} = localInference(span.expression, nextIsConst);
                         if(isLiteralTypeNode(typeNode)) {
-                            let oldText = prevSpan.kind === SyntaxKind.TemplateHead ? prevSpan.text : prevSpan.literal.text;
-                            let newText= oldText;
+                            const oldText = prevSpan.kind === SyntaxKind.TemplateHead ? prevSpan.text : prevSpan.literal.text;
+                            const newText= oldText;
                             console.log(newText);//wip
-                        } else {
+                        }
+                        else {
                             const literalSpan = factory.createTemplateLiteralTypeSpan(
                                 typeNode,
                                 span.literal
@@ -668,11 +674,11 @@ export function transformDeclarations(context: TransformationContext) {
                     }
                     return regular(factory.createTemplateLiteralType(templateExpression.head, templateSpans), node);
             case SyntaxKind.NoSubstitutionTemplateLiteral:
-            case SyntaxKind.StringLiteral: 
+            case SyntaxKind.StringLiteral:
                 return literal(node, SyntaxKind.StringKeyword, isConstContext);
-            case SyntaxKind.BigIntLiteral: 
+            case SyntaxKind.BigIntLiteral:
                 return literal(node, SyntaxKind.BigIntKeyword, isConstContext);
-            case SyntaxKind.RegularExpressionLiteral: 
+            case SyntaxKind.RegularExpressionLiteral:
                 return literal(node, "RegExp", isConstContext);
             case SyntaxKind.JsxSelfClosingElement:
             case SyntaxKind.JsxElement:
@@ -680,16 +686,16 @@ export function transformDeclarations(context: TransformationContext) {
                 setParent(typeReference.typeName, typeReference);
                 checkEntityNameVisibility(typeReference.typeName, enclosingDeclaration);
                 return fresh(typeReference, node);
-            case SyntaxKind.TrueKeyword: 
-            case SyntaxKind.FalseKeyword: 
+            case SyntaxKind.TrueKeyword:
+            case SyntaxKind.FalseKeyword:
                 return literal(node, SyntaxKind.BooleanKeyword, isConstContext);
             case SyntaxKind.ArrayLiteralExpression:
-                const arrayLiteral = node as ArrayLiteralExpression
-                const elementTypesInfo: LocalTypeInfo[] = []
+                const arrayLiteral = node as ArrayLiteralExpression;
+                const elementTypesInfo: LocalTypeInfo[] = [];
                 for(const element of arrayLiteral.elements) {
                     elementTypesInfo.push(
                         localInference(element, nextIsConst)
-                    )     
+                    );
                 }
                 if(isConstContext & NarrowBehavior.AsConst) {
                     const tupleType = factory.createTupleTypeNode(
@@ -697,19 +703,21 @@ export function transformDeclarations(context: TransformationContext) {
                     );
                     tupleType.emitNode = { flags: 1 };
                     return regular(factory.createTypeOperatorNode(SyntaxKind.ReadonlyKeyword, tupleType), node);
-                } else {
+                }
+                else {
                     let itemType;
                     if(elementTypesInfo.length === 0) {
                         itemType = (strictNullChecks ? factory.createKeywordTypeNode(SyntaxKind.NeverKeyword) : factory.createKeywordTypeNode(SyntaxKind.AnyKeyword));
-                    } else {
-                        itemType = makeUnionFromTypes(node, elementTypesInfo, false).typeNode;
+                    }
+                    else {
+                        itemType = makeUnionFromTypes(node, elementTypesInfo, /*widenSingle*/ false).typeNode;
                     }
 
                     return regular(factory.createArrayTypeNode(itemType), node);
-                }       
+                }
             case SyntaxKind.ObjectLiteralExpression:
-                const objectLiteral = node as ObjectLiteralExpression
-                const properties: TypeElement[] = []
+                const objectLiteral = node as ObjectLiteralExpression;
+                const properties: TypeElement[] = [];
                 for(const prop of objectLiteral.properties) {
                     if(isMethodDeclaration(prop)) {
                         const oldEnclosingDeclaration = enclosingDeclaration;
@@ -718,9 +726,9 @@ export function transformDeclarations(context: TransformationContext) {
                             properties.push(factory.createPropertySignature(
                                 [factory.createModifier(SyntaxKind.ReadonlyKeyword)],
                                 visitNode(prop.name, visitDeclarationSubtree, isPropertyName)!,
-                                undefined,
+                                /*questionToken*/ undefined,
                                 factory.createFunctionTypeNode(
-                                    visitNodes(prop.typeParameters,  visitDeclarationSubtree, isTypeParameterDeclaration),
+                                    visitNodes(prop.typeParameters, visitDeclarationSubtree, isTypeParameterDeclaration),
                                     prop.parameters.map(p => ensureParameter(p)),
                                     localInferenceFromInitializer(prop)!,
                                 )
@@ -731,10 +739,10 @@ export function transformDeclarations(context: TransformationContext) {
                                 [],
                                 visitNode(prop.name, visitDeclarationSubtree, isPropertyName)!,
                                 prop.questionToken,
-                                visitNodes(prop.typeParameters,  visitDeclarationSubtree, isTypeParameterDeclaration),
+                                visitNodes(prop.typeParameters, visitDeclarationSubtree, isTypeParameterDeclaration),
                                 prop.parameters.map(p => ensureParameter(p)),
                                 localInferenceFromInitializer(prop),
-                            ))
+                            ));
                         }
                         enclosingDeclaration = oldEnclosingDeclaration;
                     }
@@ -745,28 +753,29 @@ export function transformDeclarations(context: TransformationContext) {
                         properties.push(factory.createPropertySignature(
                             modifiers,
                             visitNode(prop.name, visitDeclarationSubtree, isPropertyName)!,
-                            undefined,
+                            /*questionToken*/ undefined,
                             localInference(prop.initializer, nextIsConst).typeNode
-                        ))
-                    } else {
+                        ));
+                    }
+                    else {
                         return invalid(prop);
-                    }                    
+                    }
                 }
                 return regular(factory.createTypeLiteralNode(
                     properties
-                ), objectLiteral)
+                ), objectLiteral);
         }
-        
+
         return regular(makeInvalidTypeAndReport(node), node);
     }
     function invalid(node: Node): LocalTypeInfo {
         return { typeNode: makeInvalidTypeAndReport(node), flags: LocalTypeInfoFlags.Invalid, sourceNode: node }
     }
     function fresh(typeNode: TypeNode, sourceNode?: Node, flags = LocalTypeInfoFlags.None): LocalTypeInfo {
-        return { typeNode, flags: flags | LocalTypeInfoFlags.Fresh, sourceNode }
+        return { typeNode, flags: flags | LocalTypeInfoFlags.Fresh, sourceNode };
     }
     function regular(typeNode: TypeNode, sourceNode?: Node, flags = LocalTypeInfoFlags.None): LocalTypeInfo {
-        return { typeNode, flags, sourceNode }
+        return { typeNode, flags, sourceNode };
     }
     function normalizeLiteralValue(literal: LiteralExpression) {
         switch(literal.kind) {
@@ -786,10 +795,11 @@ export function transformDeclarations(context: TransformationContext) {
         if(narrowBehavior) {
             return fresh(factory.createLiteralTypeNode(
                 normalizeLiteralValue(node as LiteralExpression)
-            ), node)
-        } else {
+            ), node);
+        }
+        else {
             return fresh(
-                typeof baseType === "number" ? factory.createKeywordTypeNode(baseType) : factory.createTypeReferenceNode(baseType), 
+                typeof baseType === "number" ? factory.createKeywordTypeNode(baseType) : factory.createTypeReferenceNode(baseType),
                 node
             );
         }
@@ -806,7 +816,7 @@ export function transformDeclarations(context: TransformationContext) {
         return visitedType ?? makeInvalidTypeAndReport(owner);
     }
 
-    function getMemberKey(member:MethodSignature | PropertySignature ) {
+    function getMemberKey(member: MethodSignature | PropertySignature) {
         if(!isIdentifier(member.name)) {
             makeInvalidTypeAndReport(member.name);
             return undefined;
@@ -835,30 +845,31 @@ export function transformDeclarations(context: TransformationContext) {
                     break;
                 case SyntaxKind.AnyKeyword:
                     if(type.flags & LocalTypeInfoFlags.Implicit) {
-                        literalTypes |= CollapsibleTypes.ImplicitAny
-                    } else {
-                        baseTypes |= CollapsibleTypes.Any
+                        literalTypes |= CollapsibleTypes.ImplicitAny;
                     }
-                    break
+                    else {
+                        baseTypes |= CollapsibleTypes.Any;
+                    }
+                    break;
                 case SyntaxKind.BooleanKeyword:
-                    baseTypes |= CollapsibleTypes.Boolean
+                    baseTypes |= CollapsibleTypes.Boolean;
                     break;
-                case SyntaxKind.StringKeyword: 
-                    baseTypes |= CollapsibleTypes.String
+                case SyntaxKind.StringKeyword:
+                    baseTypes |= CollapsibleTypes.String;
                     break;
-                case SyntaxKind.NumberKeyword: 
+                case SyntaxKind.NumberKeyword:
                     baseTypes |= CollapsibleTypes.Number;
                     break;
-                case SyntaxKind.BigIntKeyword: 
+                case SyntaxKind.BigIntKeyword:
                     baseTypes |= CollapsibleTypes.BigInt;
                     break;
                 case SyntaxKind.LiteralType:
                     const literalType = type.typeNode as LiteralTypeNode;
                     switch(literalType.literal.kind) {
-                        case SyntaxKind.TrueKeyword: 
+                        case SyntaxKind.TrueKeyword:
                             literalTypes |= CollapsibleTypes.True;
                             break;
-                        case SyntaxKind.FalseKeyword: 
+                        case SyntaxKind.FalseKeyword:
                             literalTypes |= CollapsibleTypes.False;
                             break;
                         case SyntaxKind.NumericLiteral:
@@ -887,38 +898,38 @@ export function transformDeclarations(context: TransformationContext) {
         const typesToCollapse = baseTypes & literalTypes;
 
         if(baseTypes & CollapsibleTypes.Any) {
-            return [factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)]
+            return [factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)];
         }
         // Nothing to collapse or reorder
         if(baseTypes === CollapsibleTypes.None) return nodes.map(n => n.typeNode);
         const result: TypeNode[] = [];
-        
+
         // We do a best effort to preserve TS union order for primitives
         if(baseTypes & CollapsibleTypes.String) {
-            result.push(factory.createKeywordTypeNode(SyntaxKind.StringKeyword))
+            result.push(factory.createKeywordTypeNode(SyntaxKind.StringKeyword));
         }
         if(baseTypes & CollapsibleTypes.Number) {
-            result.push(factory.createKeywordTypeNode(SyntaxKind.NumberKeyword))
+            result.push(factory.createKeywordTypeNode(SyntaxKind.NumberKeyword));
         }
         if(baseTypes & CollapsibleTypes.Boolean) {
-            result.push(factory.createKeywordTypeNode(SyntaxKind.BooleanKeyword))
+            result.push(factory.createKeywordTypeNode(SyntaxKind.BooleanKeyword));
         }
         if(baseTypes & CollapsibleTypes.BigInt) {
-            result.push(factory.createKeywordTypeNode(SyntaxKind.BigIntKeyword))
+            result.push(factory.createKeywordTypeNode(SyntaxKind.BigIntKeyword));
         }
         if(!(baseTypes & CollapsibleTypes.Boolean) && literalTypes & CollapsibleTypes.True) {
-            result.push(factory.createLiteralTypeNode(factory.createTrue()))
+            result.push(factory.createLiteralTypeNode(factory.createTrue()));
         }
         if(!(baseTypes & CollapsibleTypes.Boolean) && literalTypes & CollapsibleTypes.False) {
-            result.push(factory.createLiteralTypeNode(factory.createFalse()))
+            result.push(factory.createLiteralTypeNode(factory.createFalse()));
         }
 
         for(const type of nodes) {
-            let typeofNode = CollapsibleTypes.None
-            
+            let typeofNode = CollapsibleTypes.None;
+
             switch(type.typeNode.kind) {
                 case SyntaxKind.BooleanKeyword:
-                case SyntaxKind.StringKeyword: 
+                case SyntaxKind.StringKeyword:
                 case SyntaxKind.NumberKeyword:
                 case SyntaxKind.BigIntKeyword:
                 case SyntaxKind.AnyKeyword:
@@ -930,9 +941,9 @@ export function transformDeclarations(context: TransformationContext) {
                 case SyntaxKind.LiteralType:
                     const literalType = type.typeNode as LiteralTypeNode;
                     switch(literalType.literal.kind) {
-                        case SyntaxKind.TrueKeyword: 
+                        case SyntaxKind.TrueKeyword:
                             continue;
-                        case SyntaxKind.FalseKeyword: 
+                        case SyntaxKind.FalseKeyword:
                             continue;
                         case SyntaxKind.NumericLiteral:
                             typeofNode = CollapsibleTypes.Number;
@@ -963,19 +974,20 @@ export function transformDeclarations(context: TransformationContext) {
         const typeInfoCache = new Map<number, {
             node: TypeLiteralNode,
             members: Map<__String, TypeElement>
-        }>
-        let union: LocalTypeInfo[] = [];
+        }>();
+        const union: LocalTypeInfo[] = [];
         for(const node of nodes) {
             const existing = union.find(u => typesEqual(node.typeNode, node.sourceNode, u.typeNode, u.sourceNode));
             if(existing === undefined) {
                 union.push(node);
-            } else {
+            }
+            else {
                 existing.flags &= node.flags;
             }
         }
-        return union
+        return union;
 
-        function getTypeInfo(type:TypeLiteralNode, errorTarget: Node | undefined) {
+        function getTypeInfo(type: TypeLiteralNode, errorTarget: Node | undefined) {
             const typeNodeId = getNodeId(type);
             let typeInfo = typeInfoCache.get(typeNodeId);
             if(typeInfo) return typeInfo;
@@ -983,25 +995,26 @@ export function transformDeclarations(context: TransformationContext) {
             typeInfo = {
                 node: type,
                 members: new Map()
-            }
+            };
             for(const member of type.members) {
                 const isMethod = isMethodSignature(member);
                 const isProp = isPropertySignature(member);
                 if(isMethod || isProp) {
-                    const memberKey = getMemberKey(member)
+                    const memberKey = getMemberKey(member);
                     if (memberKey === undefined) {
                         makeInvalidTypeAndReport(errorTarget ?? member);
-                        break;  
+                        break;
                     }
                     typeInfo.members.set(memberKey, member);
-                } else {
+                }
+                else {
                     makeInvalidTypeAndReport(errorTarget ?? member);
                 }
             }
             typeInfoCache.set(typeNodeId, typeInfo);
             return typeInfo;
         }
-        function typesEqual(a: TypeNode | undefined, aErrorTarget:Node | undefined, b: TypeNode | undefined, bErrorTarget:Node | undefined) {
+        function typesEqual(a: TypeNode | undefined, aErrorTarget: Node | undefined, b: TypeNode | undefined, bErrorTarget: Node | undefined) {
             if (a === undefined || b === undefined) return a === b;
             if (a.kind !== b.kind) return false;
             switch(a.kind) {
@@ -1021,18 +1034,18 @@ export function transformDeclarations(context: TransformationContext) {
             if(isLiteralTypeNode(a) && isLiteralTypeNode(b)) {
                 let aLiteral = a.literal;
                 let bLiteral = b.literal;
-                while(true) { 
+                while(true) {
                     switch(aLiteral.kind) {
                         case SyntaxKind.NullKeyword:
                         case SyntaxKind.TrueKeyword:
                         case SyntaxKind.FalseKeyword:
                             return aLiteral.kind === bLiteral.kind;
                         case SyntaxKind.NumericLiteral:
-                            return aLiteral.kind === bLiteral.kind && +aLiteral.text === +(bLiteral as LiteralExpression).text;
+                            return aLiteral.kind === bLiteral.kind && +aLiteral.text === +(bLiteral).text;
                         case SyntaxKind.StringLiteral:
                         case SyntaxKind.NoSubstitutionTemplateLiteral:
                             return (bLiteral.kind === SyntaxKind.StringLiteral || bLiteral.kind === SyntaxKind.NoSubstitutionTemplateLiteral)
-                                && aLiteral.text === (bLiteral as LiteralExpression).text;
+                                && aLiteral.text === (bLiteral).text;
                         case SyntaxKind.PrefixUnaryExpression:
                             const aUnary = (aLiteral as PrefixUnaryExpression);
                             const bUnary = (bLiteral as PrefixUnaryExpression);
@@ -1041,7 +1054,7 @@ export function transformDeclarations(context: TransformationContext) {
                             aLiteral = aUnary.operand as LiteralExpression;
                             bLiteral = bUnary.operand as LiteralExpression;
                             return +aLiteral.text === +bLiteral.text;
-                        default: 
+                        default:
                             return false;
                     }
                 }
@@ -1054,16 +1067,18 @@ export function transformDeclarations(context: TransformationContext) {
                         if(aTypeName.right.escapedText !== bTypeName.right.escapedText) return false;
                         aTypeName = aTypeName.left;
                         bTypeName = bTypeName.left;
-                    } else if(aTypeName.kind === SyntaxKind.Identifier && bTypeName.kind === SyntaxKind.Identifier) {
+                    }
+                    else if(aTypeName.kind === SyntaxKind.Identifier && bTypeName.kind === SyntaxKind.Identifier) {
                         return aTypeName.escapedText === bTypeName.escapedText;
-                    } else {
+                    }
+                    else {
                         return false;
                     }
                 }
             }
             if(isTypeLiteralNode(a) && isTypeLiteralNode(b)) {
                 if(a.members.length !== b.members.length) return false;
-                let aTypeInfo = getTypeInfo(a, aErrorTarget);
+                const aTypeInfo = getTypeInfo(a, aErrorTarget);
                 if(!aTypeInfo) return false;
 
                 for(const bMember of b.members) {
@@ -1073,47 +1088,50 @@ export function transformDeclarations(context: TransformationContext) {
                         const memberKey = getMemberKey(bMember);
                         if (memberKey === undefined) {
                             makeInvalidTypeAndReport(bErrorTarget ?? bMember);
-                            break;  
+                            break;
                         }
                         const aMember = aTypeInfo.members.get(memberKey);
                         if(!aMember) return false;
                         if((aMember.questionToken !== undefined) !== (bMember.questionToken !== undefined)) return false;
-                        if (getSyntacticModifierFlags(aMember) != getSyntacticModifierFlags(bMember)) return false;
+                        if (getSyntacticModifierFlags(aMember) !== getSyntacticModifierFlags(bMember)) return false;
                         if(bIsProp && isPropertySignature(aMember)) {
                             if(!typesEqual(aMember.type, aErrorTarget, bMember.type, bErrorTarget)) {
                                 return false;
                             }
-                        } else  if(bIsMethod && isMethodSignature(aMember)) {
+                        }
+                        else if(bIsMethod && isMethodSignature(aMember)) {
                             if(!typesEqual(aMember.type, aErrorTarget,bMember.type, bErrorTarget)) {
                                 return false;
                             }
                             if(aMember.parameters.length !== b.members.length) {
-                                return false
+                                return false;
                             }
                         }
-                    } else {
+                    }
+                    else {
                         makeInvalidTypeAndReport(bErrorTarget ?? bMember);
                     }
                 }
                 return true;
-            }else {
+            }
+            else {
                 if(aErrorTarget) {
                     reportIsolatedDeclarationError(aErrorTarget);
                 }
                 if(bErrorTarget) {
                     reportIsolatedDeclarationError(bErrorTarget);
                 }
-            }                
+            }
         }
     }
-    function normalizeObjectUnion(nodes: Array<TypeNode | undefined>) {
-        const allProps = new Map<__String, Array<TypeNode | undefined>>();
+    function normalizeObjectUnion(nodes: (TypeNode | undefined)[]) {
+        const allProps = new Map<__String, (TypeNode | undefined)[]>();
         const allTypeLookup  = new Array<Map<__String, TypeNode> | undefined>();
         let hasChanged = false;
         for (let i = 0; i< nodes.length; i++) {
             const type = nodes[i];
             const typeLookup = new Map<__String, TypeNode>();
-            allTypeLookup.push(typeLookup)
+            allTypeLookup.push(typeLookup);
 
             if(!type || !isTypeLiteralNode(type)) continue;
             for(const member of type.members){
@@ -1122,7 +1140,7 @@ export function transformDeclarations(context: TransformationContext) {
                 if(isMethod || isProp) {
                     const memberKey = getMemberKey(member);
                     if(memberKey === undefined) {
-                        nodes[i] = makeInvalidTypeAndReport(member.name)
+                        nodes[i] = makeInvalidTypeAndReport(member.name);
                         allTypeLookup[i] = undefined;
                         hasChanged = true;
                         break;
@@ -1130,12 +1148,13 @@ export function transformDeclarations(context: TransformationContext) {
                     let type;
                     if(isProp) {
                         type = member.type ?? makeInvalidTypeAndReport(member);
-                    } else {
+                    }
+                    else {
                         type = factory.createFunctionTypeNode(
                             member.typeParameters,
                             member.parameters,
                             member.type!,
-                        )
+                        );
                     }
                     let propTypes = allProps.get(memberKey);
                     if(!propTypes) {
@@ -1144,7 +1163,8 @@ export function transformDeclarations(context: TransformationContext) {
                     }
                     propTypes[i] = type;
                     typeLookup.set(memberKey, type);
-                } else {
+                }
+                else {
                     nodes[i] = makeInvalidTypeAndReport(member);
                     allTypeLookup[i] = undefined;
                     hasChanged = true;
@@ -1153,19 +1173,19 @@ export function transformDeclarations(context: TransformationContext) {
             }
         }
         for(const [, propTypes] of allProps) {
-            normalizeObjectUnion(propTypes)
+            normalizeObjectUnion(propTypes);
         }
         for(let typeIndex = 0; typeIndex< nodes.length; typeIndex++) {
             const type = nodes[typeIndex];
             const props = allTypeLookup[typeIndex];
             if(!type || !isTypeLiteralNode(type) || !props) continue;
 
-            let newMembers: TypeElement[] | undefined = undefined;
+            let newMembers: TypeElement[] | undefined;
             for(const [commonProp, propTypes] of allProps) {
                 const propType = props.get(commonProp);
                 if(propType) {
-                    if(propType != propTypes[typeIndex]) {
-                        let indexOfProp = findIndex(type.members, e => isPropertySignature(e) && isIdentifier(e.name) && e.name.escapedText === commonProp);
+                    if(propType !== propTypes[typeIndex]) {
+                        const indexOfProp = findIndex(type.members, e => isPropertySignature(e) && isIdentifier(e.name) && e.name.escapedText === commonProp);
                         if(indexOfProp !== -1) {
                             if(newMembers === undefined) {
                                 newMembers = [...type.members];
@@ -1179,16 +1199,17 @@ export function transformDeclarations(context: TransformationContext) {
                             );
                         }
                     }
-                } else {
+                }
+                else {
                     if(newMembers === undefined) {
                         newMembers = [...type.members];
                     }
                     newMembers.push(factory.createPropertySignature(
-                        /* modifiers */ undefined,
+                        /*modifiers*/ undefined,
                         factory.createIdentifier(unescapeLeadingUnderscores(commonProp)),
                         factory.createToken(SyntaxKind.QuestionToken),
                         factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword),
-                    ))
+                    ));
                 }
             }
             if (newMembers) {
@@ -1211,16 +1232,16 @@ export function transformDeclarations(context: TransformationContext) {
 
         return localTypeInfo.typeNode;
     }
-    function makeUnionFromTypes(sourceNode: Node, types: LocalTypeInfo[], widenSingle: boolean)  {
-        types = deduplicateUnion(types)
+    function makeUnionFromTypes(sourceNode: Node, types: LocalTypeInfo[], widenSingle: boolean) {
+        types = deduplicateUnion(types);
         if(types.length === 1) {
-            const localType = types[0]
-            return widenSingle ? { ... localType, type: getWidenedType(localType) }: localType
+            const localType = types[0];
+            return widenSingle ? { ... localType, type: getWidenedType(localType) }: localType;
         }
         const unionConstituents = collapseLiteralTypesIntoBaseTypes(types);
 
         normalizeObjectUnion(unionConstituents);
-        return regular(unionConstituents.length === 1? unionConstituents[0]: factory.createUnionTypeNode(unionConstituents), sourceNode)
+        return regular(unionConstituents.length === 1? unionConstituents[0]: factory.createUnionTypeNode(unionConstituents), sourceNode);
     }
     function inferReturnType(node: FunctionLikeDeclaration) {
         if(node.type) {
@@ -1229,46 +1250,48 @@ export function transformDeclarations(context: TransformationContext) {
         if(!node.body) {
             return regular(makeInvalidTypeAndReport(node), node);
         }
-        
+
         const returnStatements: ReturnStatement[] = [];
         const yieldExpressions: YieldExpression[] = [];
-        
+
         let returnType;
         if(!isBlock(node.body)) {
-            returnType = localInference(node.body)
+            returnType = localInference(node.body);
         }
         else {
             collectReturnAndYield(node.body, returnStatements, yieldExpressions);
             if(returnStatements.length === 0) {
                 returnType = regular(factory.createKeywordTypeNode(SyntaxKind.VoidKeyword), node);
-            } else {
-                let returnStatementInference = returnStatements.map((r) => {
-                    return r.expression? 
-                        localInference(r.expression, NarrowBehavior.KeepLiterals): 
-                        fresh(factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword), r)
+            }
+            else {
+                const returnStatementInference = returnStatements.map((r) => {
+                    return r.expression?
+                        localInference(r.expression, NarrowBehavior.KeepLiterals):
+                        fresh(factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword), r);
                 });
-                
-                returnType = makeUnionFromTypes(node, returnStatementInference, true);
+
+                returnType = makeUnionFromTypes(node, returnStatementInference, /*widenSingle*/ true);
                 if(returnType.flags & LocalTypeInfoFlags.Fresh && returnType.typeNode.kind === SyntaxKind.UndefinedKeyword) {
                     returnType = fresh(factory.createKeywordTypeNode(SyntaxKind.VoidKeyword), returnType.typeNode);
                 }
             }
         }
-        let yieldType: LocalTypeInfo | undefined = undefined;
+        let yieldType: LocalTypeInfo | undefined;
         if(node.asteriskToken) {
             if(yieldExpressions.length === 0) {
                 returnType = regular(
-                    factory.createKeywordTypeNode(SyntaxKind.NeverKeyword), 
+                    factory.createKeywordTypeNode(SyntaxKind.NeverKeyword),
                     node
                 );
-            } else {
-                let yieldExpressionsInference = yieldExpressions.map((r) => {
-                    return r.expression? 
-                        localInference(r.expression, NarrowBehavior.KeepLiterals): 
-                        regular(factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword), r)
+            }
+            else {
+                const yieldExpressionsInference = yieldExpressions.map((r) => {
+                    return r.expression?
+                        localInference(r.expression, NarrowBehavior.KeepLiterals):
+                        regular(factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword), r);
                 });
-                
-                yieldType = makeUnionFromTypes(node, yieldExpressionsInference, true);
+
+                yieldType = makeUnionFromTypes(node, yieldExpressionsInference, /*widenSingle*/ true);
             }
         }
         return makeFinalReturnType(node, returnType, yieldType);
@@ -1283,7 +1306,7 @@ export function transformDeclarations(context: TransformationContext) {
                     ),
                     returnType.sourceNode,
                     returnType.flags
-                )
+                );
             }
             else if(modifiers & ModifierFlags.Async) {
                 return regular(
@@ -1293,27 +1316,27 @@ export function transformDeclarations(context: TransformationContext) {
                     ),
                     returnType.sourceNode,
                     returnType.flags
-                )
+                );
             }
             return returnType;
         }
         function collectReturnAndYield(node: Node, result: ReturnStatement[], yieldExpressions: YieldExpression[]) {
             forEachChild(node, child => {
                 if(isReturnStatement(child)) {
-                    result.push(child)
+                    result.push(child);
                 }
                 if(isYieldExpression(child)) {
                     yieldExpressions.push(child);
                 }
                 if(isClassLike(child) || isFunctionLike(child)) {
-                    return; 
+                    return;
                 }
                 // TODO: Do not walk all children if not generator function
                 collectReturnAndYield(child, result, yieldExpressions);
-            })
+            });
         }
     }
-    
+
     function localInferenceFromInitializer(node: HasInferredType | ExportAssignment): TypeNode | undefined {
         if(NO_LOCAL_INFERENCE) {
             return undefined;
@@ -1328,7 +1351,7 @@ export function transformDeclarations(context: TransformationContext) {
         else if(isVariableDeclaration(node) && node.initializer) {
             typeNode = localInference(node.initializer);
         }
-        else if(isPropertyDeclaration(node) && node.initializer)  {
+        else if(isPropertyDeclaration(node) && node.initializer) {
             typeNode = localInference(node.initializer);
         }
         else if(isFunctionDeclaration(node)) {
@@ -1991,8 +2014,8 @@ export function transformDeclarations(context: TransformationContext) {
                         errorNode: input
                     });
                     errorFallbackNode = input;
-                    const type = isolatedDeclarations ? 
-                        localInferenceFromInitializer(input) ??  makeInvalidTypeAndReport(input) :
+                    const type = isolatedDeclarations ?
+                        localInferenceFromInitializer(input) ?? makeInvalidTypeAndReport(input) :
                         resolver.createTypeOfExpression(input.expression, input, declarationEmitNodeBuilderFlags, symbolTracker);
                     const varDecl = factory.createVariableDeclaration(newId, /*exclamationToken*/ undefined, type, /*initializer*/ undefined);
                     errorFallbackNode = undefined;
@@ -2233,7 +2256,7 @@ export function transformDeclarations(context: TransformationContext) {
                                 [
                                     factory.createExpressionWithTypeArguments(
                                         factory.createIdentifier("invalid"),
-                                        /* typeArguments */ undefined,
+                                        /*typeArguments*/ undefined,
                                     )
                                 ])]),
                             members

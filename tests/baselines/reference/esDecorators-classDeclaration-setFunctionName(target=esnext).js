@@ -17,7 +17,7 @@ declare let dec: any;
 
 @dec export default class C {}
 
-//// [c.ts]
+//// [d.ts]
 declare let dec: any;
 
 @dec export default class {}
@@ -33,6 +33,10 @@ export {};
 export class C {
 }
 //// [c.js]
+@dec
+export default class C {
+}
+//// [d.js]
 @dec
 export default class {
 }

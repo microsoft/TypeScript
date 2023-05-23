@@ -15,7 +15,7 @@ export async function ensureDir(dirName: string) {
         cache[dirName] = true;
     }
 }
-let writeQueue = [0, 0, 0, 0, 0].map(() => Promise.resolve());
+const writeQueue = [0, 0, 0, 0, 0].map(() => Promise.resolve());
 let writeQueueIndex = 0;
 
 export function addToQueue(fn: () => Promise<void>) {

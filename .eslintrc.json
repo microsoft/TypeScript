@@ -17,6 +17,8 @@
         "**/node_modules/**",
         "/built/**",
         "/tests/**",
+        "/external-declarations/tests/**",
+        "/external-declarations/build/**",
         "/lib/**",
         "/src/lib/*.generated.d.ts",
         "/scripts/**/*.js",
