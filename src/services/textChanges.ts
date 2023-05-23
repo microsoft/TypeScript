@@ -645,7 +645,7 @@ export class ChangeTracker {
         const pos = sourceFile.end + 1;
         const options = {
             prefix: this.newLineCharacter,
-            suffix: blankLineBetween ? this.newLineCharacter : "",
+            suffix: this.newLineCharacter + (blankLineBetween ? this.newLineCharacter : ""),
         };
         this.insertNodesAt(sourceFile, pos, insert, options);
     }
