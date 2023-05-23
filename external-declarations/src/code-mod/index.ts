@@ -1,5 +1,6 @@
 // Import TypeScript module
 import * as ts from "typescript";
+
 import { isDeclarationFileName } from "../compiler/utils";
 import { addTypeAnnotationTransformer } from "./code-transform";
 
