@@ -827,7 +827,7 @@ export class SessionClient implements LanguageService {
         refactorName: string,
         actionName: string,
         preferences: UserPreferences | undefined,
-        interactiveRefactorArguments?: InteractiveRefactorArguments): RefactorEditInfo { // >> Update here
+        interactiveRefactorArguments?: InteractiveRefactorArguments): RefactorEditInfo {
         if (preferences) { // Temporarily set preferences
             this.configure(preferences);
         }
