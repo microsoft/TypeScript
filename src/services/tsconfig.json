@@ -6,5 +6,5 @@
         { "path": "../compiler" },
         { "path": "../jsTyping" }
     ],
-    "include": ["**/*"]
+    "include": ["**/*", "refactors/moveToFile.ts"]
 }

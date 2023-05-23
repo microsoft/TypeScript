@@ -23,11 +23,12 @@ export const a = 10;
 y;`,
 
         "/src/dir2/bar.ts":
-`import { b } from '../dir1/other';
-import { a } from '../dir1/a';
+`import { a } from '../dir1/a';
 
-export const y = b + a;
-`,
+import { b } from "../dir1/other";
+
+
+export const y = b + a;`,
     },
     interactiveRefactorArguments: { targetFile: "/src/dir2/bar.ts" }
 });

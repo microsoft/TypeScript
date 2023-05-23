@@ -18,11 +18,14 @@ verify.moveToFile({
 `,
 
         "/bar.ts":
-`import { b } from './other';
+`//
 import { p } from './a';
 
-const y: Date = p + b;
-`,
+
+import { b } from "./other";
+
+
+const y: Date = p + b;`,
     },
     interactiveRefactorArguments: {targetFile: "/bar.ts"},
 });
