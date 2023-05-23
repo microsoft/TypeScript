@@ -32,7 +32,7 @@ const refactorDescription = getLocaleSpecificMessage(Diagnostics.Inline_variable
 const inlineVariableAction = {
     name: refactorName,
     description: refactorDescription,
-    kind: "refactor" // TODO: Not sure what the logic for defining these is.
+    kind: "refactor.inline.variable"
 };
 
 interface InliningInfo {
