@@ -4,7 +4,7 @@ import * as ts from 'typescript'
 import { compileFiles, TestFile, Utils } from "./tsc-infrastructure/compiler-run";
 import * as TestCaseParser from "./tsc-infrastructure/test-file-parser";
 import * as fsp from 'fs/promises'
-import { getDeclarationExtension, isDeclarationFile, isJavaScriptFile, isJSONFile, isSourceMapFile } from '../compiler/path-utils';
+import { getDeclarationExtension, isDeclarationFile, isJavaScriptFile, isJSONFile, isSourceMapFile, isTypeScriptFile } from '../compiler/path-utils';
 import { changeExtension } from './tsc-infrastructure/vpath';
 import * as vpath from "./tsc-infrastructure/vpath";
 import { libs } from './tsc-infrastructure/options';
@@ -47,24 +47,33 @@ export function runTypeScript(caseData: TestCaseParser.TestCaseContent, settings
 
     const result = compileFiles(toBeCompiled, [], {
         declaration: "true",
+        // declarationMap: "true",
         isolatedDeclarations: "true",
         removeComments: "false",
     }, settings, undefined);
 
     return caseData.testUnitData
         .filter(isRelevantTestFile)
-        .map(file => {
+        .flatMap(file => {
             const declarationFile = changeExtension(file.name, getDeclarationExtension(file.name));
+            const declarationMapFile = declarationFile + ".map";
             const resolvedDeclarationFile = vpath.resolve(result.vfs.cwd(), declarationFile);
+            const resolvedDeclarationMapFile = vpath.resolve(result.vfs.cwd(), declarationMapFile);
             const declaration = result.dts.get(resolvedDeclarationFile)
-            return {
+            const declarationMap = result.maps.get(resolvedDeclarationMapFile)
+            return [{
                 content: declaration?.text ?? "",
                 fileName: declarationFile,
-            };
+            }
+            // , {
+            //     content: declarationMap?.text ?? "",
+            //     fileName: declarationMapFile,
+            // }
+            ];
         })
 }
 export function isRelevantTestFile(f: TestCaseParser.TestUnitData) {
-    return !isDeclarationFile(f.name) && !isJavaScriptFile(f.name) && !isJSONFile(f.name) && !isSourceMapFile(f.name) && f.content !== undefined
+    return isTypeScriptFile(f.name) && !isDeclarationFile(f.name) && f.content !== undefined
 }
 
 

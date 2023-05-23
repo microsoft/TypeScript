@@ -260,7 +260,8 @@ export function compileFiles(host: fakes.CompilerHost, rootFiles: string[] | und
         }
         if(host.outputs.some(d => d.file === fileName)) return;
         host.writeFile(fileName, text, writeByteOrderMark);
-    }, undefined, undefined,undefined);
+    // @ts-expect-error We use forceDts emit documented flag 
+    }, undefined, undefined,undefined, true);
     const postErrors = ts.getPreEmitDiagnostics(program);
     const longerErrors = lang.length(preErrors) > postErrors.length ? preErrors : postErrors;
     const shorterErrors = longerErrors === preErrors ? postErrors : preErrors;

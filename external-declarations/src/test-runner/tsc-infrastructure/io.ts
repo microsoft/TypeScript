@@ -45,7 +45,7 @@ export const harnessNewLine = "\r\n";
 export const virtualFileSystemRoot = "/";
 
 function createNodeIO(): IO {
-    let workspaceRoot = "../";
+    let workspaceRoot = "./node_modules/typescript/";
     let fs: any, pathModule: any;
     if (require) {
         fs = require("fs");

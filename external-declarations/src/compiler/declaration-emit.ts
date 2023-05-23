@@ -1,4 +1,4 @@
-import { Symbol, SourceFile, DiagnosticWithLocation, factory, CommentRange, Node, getParseTreeNode, SyntaxKind, SignatureDeclaration, ParameterDeclaration, getTrailingCommentRanges, getLeadingCommentRanges, NodeBuilderFlags, VisitResult, ExportAssignment, DeclarationName, Declaration, ModuleDeclaration, SymbolFlags, getNameOfDeclaration, isExportAssignment, Bundle, visitNodes, setTextRange, createUnparsedSourceFile, FileReference, NodeArray, Statement, isExternalModule, isImportEqualsDeclaration, isExternalModuleReference, isStringLiteralLike, isImportDeclaration, isStringLiteral, UnparsedSource, isUnparsedSource, BindingName, ArrayBindingElement, isIdentifier, ModifierFlags, TypeNode, FunctionDeclaration, MethodDeclaration, GetAccessorDeclaration, SetAccessorDeclaration, BindingElement, ConstructSignatureDeclaration, VariableDeclaration, MethodSignature, CallSignatureDeclaration, PropertyDeclaration, PropertySignature, visitNode, isPropertySignature, NamedDeclaration, isFunctionDeclaration, OmittedExpression, isOmittedExpression, AccessorDeclaration, isSetAccessorDeclaration, TypeParameterDeclaration, isSourceFile, isTypeAliasDeclaration, isModuleDeclaration, isClassDeclaration, isInterfaceDeclaration, isFunctionLike, isIndexSignatureDeclaration, isMappedTypeNode, EntityNameOrEntityNameExpression, setCommentRange, getCommentRange, ImportEqualsDeclaration, ImportDeclaration, ExportDeclaration, ImportTypeNode, StringLiteral, AssertClause, isSemicolonClassElement, isMethodDeclaration, isMethodSignature, isTypeQueryNode, isEntityName, visitEachChild, isPrivateIdentifier, isTypeNode, isTupleTypeNode, getLineAndCharacterOfPosition, setEmitFlags, EmitFlags, setOriginalNode, GeneratedIdentifierFlags, NodeFlags, canHaveModifiers, isTypeParameterDeclaration, NamespaceDeclaration, Identifier, VariableStatement, isPropertyAccessExpression, unescapeLeadingUnderscores, ModuleBody, BindingPattern, isExportDeclaration, HasModifiers, Modifier, isModifier, HeritageClause, InterfaceDeclaration, ClassDeclaration, TypeAliasDeclaration, EnumDeclaration, ConstructorDeclaration, IndexSignatureDeclaration, ExpressionWithTypeArguments, TypeReferenceNode, ConditionalTypeNode, FunctionTypeNode, ConstructorTypeNode, isStatement, isArrayBindingElement, isBindingElement, isClassElement, isExpressionWithTypeArguments, isLiteralExpression, isTypeElement, isVariableDeclaration, NodeFactory, isTypeAssertionExpression, isNumericLiteral, isTemplateLiteral, BooleanLiteral, TypeAssertion, LiteralExpression, AsExpression, isTypeReferenceNode, ObjectLiteralExpression, TypeElement, isPropertyAssignment, ArrayLiteralExpression, isSpreadElement, FunctionExpression, ArrowFunction, isParameter, isPropertyName, NewExpression, KeywordTypeSyntaxKind, isPropertyDeclaration, isReturnStatement, isClassLike, ReturnStatement, forEachChild, TypeLiteralNode, __String, isTypeLiteralNode, isLiteralTypeNode, TemplateExpression, TemplateLiteralTypeSpan, TemplateHead, isNoSubstitutionTemplateLiteral, isTypeOfExpression, PrefixUnaryOperator } from "typescript";
+import { Symbol, SourceFile, DiagnosticWithLocation, factory, CommentRange, Node, getParseTreeNode, SyntaxKind, SignatureDeclaration, ParameterDeclaration, getTrailingCommentRanges, getLeadingCommentRanges, NodeBuilderFlags, VisitResult, ExportAssignment, DeclarationName, Declaration, ModuleDeclaration, SymbolFlags, getNameOfDeclaration, isExportAssignment, Bundle, visitNodes, setTextRange, createUnparsedSourceFile, FileReference, NodeArray, Statement, isExternalModule, isImportEqualsDeclaration, isExternalModuleReference, isStringLiteralLike, isImportDeclaration, isStringLiteral, UnparsedSource, isUnparsedSource, BindingName, ArrayBindingElement, isIdentifier, ModifierFlags, TypeNode, FunctionDeclaration, MethodDeclaration, GetAccessorDeclaration, SetAccessorDeclaration, BindingElement, ConstructSignatureDeclaration, VariableDeclaration, MethodSignature, CallSignatureDeclaration, PropertyDeclaration, PropertySignature, visitNode, isPropertySignature, NamedDeclaration, isFunctionDeclaration, OmittedExpression, isOmittedExpression, AccessorDeclaration, isSetAccessorDeclaration, TypeParameterDeclaration, isSourceFile, isTypeAliasDeclaration, isModuleDeclaration, isClassDeclaration, isInterfaceDeclaration, isFunctionLike, isIndexSignatureDeclaration, isMappedTypeNode, EntityNameOrEntityNameExpression, setCommentRange, getCommentRange, ImportEqualsDeclaration, ImportDeclaration, ExportDeclaration, ImportTypeNode, StringLiteral, AssertClause, isSemicolonClassElement, isMethodDeclaration, isMethodSignature, isTypeQueryNode, isEntityName, visitEachChild, isPrivateIdentifier, isTypeNode, isTupleTypeNode, getLineAndCharacterOfPosition, setEmitFlags, EmitFlags, setOriginalNode, GeneratedIdentifierFlags, NodeFlags, canHaveModifiers, isTypeParameterDeclaration, NamespaceDeclaration, Identifier, VariableStatement, isPropertyAccessExpression, unescapeLeadingUnderscores, ModuleBody, BindingPattern, isExportDeclaration, HasModifiers, Modifier, isModifier, HeritageClause, InterfaceDeclaration, ClassDeclaration, TypeAliasDeclaration, EnumDeclaration, ConstructorDeclaration, IndexSignatureDeclaration, ExpressionWithTypeArguments, TypeReferenceNode, ConditionalTypeNode, FunctionTypeNode, ConstructorTypeNode, isStatement, isArrayBindingElement, isBindingElement, isClassElement, isExpressionWithTypeArguments, isLiteralExpression, isTypeElement, isVariableDeclaration, NodeFactory, isTypeAssertionExpression, isNumericLiteral, isTemplateLiteral, BooleanLiteral, TypeAssertion, LiteralExpression, AsExpression, isTypeReferenceNode, ObjectLiteralExpression, TypeElement, isPropertyAssignment, ArrayLiteralExpression, isSpreadElement, FunctionExpression, ArrowFunction, isParameter, isPropertyName, NewExpression, KeywordTypeSyntaxKind, isPropertyDeclaration, isReturnStatement, isClassLike, ReturnStatement, forEachChild, TypeLiteralNode, __String, isTypeLiteralNode, isLiteralTypeNode, TemplateExpression, TemplateLiteralTypeSpan, TemplateHead, isNoSubstitutionTemplateLiteral, isTypeOfExpression, PrefixUnaryOperator, isYieldExpression, YieldExpression, isBlock, EntityName } from "typescript";
 import { Debug } from "./debug";
 import { Diagnostics } from "./diagnosticInformationMap.generated";
 import { filter, stringContains, concatenate, last, forEach, length, pushIfUnique, map, mapDefined, arrayFrom, contains, startsWith, some, append, emptyArray, isArray, compact, flatMap, flatten, orderedRemoveItem, tryCast, findIndex } from "./lang-utils";
@@ -15,6 +15,7 @@ import { NoSubstitutionTemplateLiteral } from "typescript";
 import { ParenthesizedExpression } from "typescript";
 
  
+const NO_LOCAL_INFERENCE = !!process.env.NO_LOCAL_INFERENCE;
 enum NarrowBehavior {
     None = 0,
     AsConst = 1,
@@ -523,6 +524,9 @@ export function transformDeclarations(context: TransformationContext) {
 
     function ensureNoInitializer(node: CanHaveLiteralInitializer) {
         if (shouldPrintWithInitializer(node)) {
+            if(isolatedDeclarations && 'initializer' in node && node.initializer && isLiteralExpression(node.initializer)) {
+                return node.initializer;
+            }
             return resolver.createLiteralConstValue(getParseTreeNode(node) as CanHaveLiteralInitializer, symbolTracker); // TODO: Make safe
         }
         return undefined;
@@ -546,7 +550,16 @@ export function transformDeclarations(context: TransformationContext) {
     }
 
     type LocalTypeInfo = { typeNode: TypeNode, sourceNode?: Node, flags: LocalTypeInfoFlags };
-   
+    // We need to see about getting the JSX element type.
+    function getJSXElementType(_node: Node): EntityName {
+        return factory.createQualifiedName(
+            factory.createQualifiedName(
+                factory.createIdentifier("React"),
+                factory.createIdentifier("JSX"),
+            ),
+            factory.createIdentifier("Element"),
+        )
+    }
     function localInference(node: Node, isConstContext: NarrowBehavior = NarrowBehavior.None): LocalTypeInfo {
         const nextIsConst = isConstContext & NarrowBehavior.NotKeepLiterals;
         switch(node.kind) {
@@ -560,6 +573,7 @@ export function transformDeclarations(context: TransformationContext) {
                         return regular(factory.createKeywordTypeNode(SyntaxKind.AnyKeyword), node, LocalTypeInfoFlags.Implicit);
                     }
                 }
+                break;
             case SyntaxKind.NullKeyword:
                 if(strictNullChecks) {
                     return regular(factory.createLiteralTypeNode(factory.createNull()), node);
@@ -584,12 +598,19 @@ export function transformDeclarations(context: TransformationContext) {
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.FunctionExpression:
                 const fnNode = node as FunctionExpression | ArrowFunction;
-                const fnTypeNode = factory.createFunctionTypeNode(
-                    visitNodes(fnNode.typeParameters, visitDeclarationSubtree, isTypeParameterDeclaration),
-                    fnNode.parameters.map(p => ensureParameter(p)),
-                    inferReturnType(fnNode).typeNode,
-                );
-                return regular(fnTypeNode, node)
+                const oldEnclosingDeclaration = enclosingDeclaration;
+                try {
+                    enclosingDeclaration = node;
+
+                    const fnTypeNode = factory.createFunctionTypeNode(
+                        visitNodes(fnNode.typeParameters, visitDeclarationSubtree, isTypeParameterDeclaration),
+                        fnNode.parameters.map(p => ensureParameter(p)),
+                        inferReturnType(fnNode).typeNode,
+                    );
+                    return regular(fnTypeNode, node)
+                }finally {
+                    enclosingDeclaration = oldEnclosingDeclaration;
+                }
             case SyntaxKind.TypeAssertionExpression:
             case SyntaxKind.AsExpression:
                 const asExpression = node as AsExpression | TypeAssertion;
@@ -634,6 +655,7 @@ export function transformDeclarations(context: TransformationContext) {
                         if(isLiteralTypeNode(typeNode)) {
                             let oldText = prevSpan.kind === SyntaxKind.TemplateHead ? prevSpan.text : prevSpan.literal.text;
                             let newText= oldText;
+                            console.log(newText);//wip
                         } else {
                             const literalSpan = factory.createTemplateLiteralTypeSpan(
                                 typeNode,
@@ -652,6 +674,12 @@ export function transformDeclarations(context: TransformationContext) {
                 return literal(node, SyntaxKind.BigIntKeyword, isConstContext);
             case SyntaxKind.RegularExpressionLiteral: 
                 return literal(node, "RegExp", isConstContext);
+            case SyntaxKind.JsxSelfClosingElement:
+            case SyntaxKind.JsxElement:
+                const typeReference = factory.createTypeReferenceNode(getJSXElementType(node));
+                setParent(typeReference.typeName, typeReference);
+                checkEntityNameVisibility(typeReference.typeName, enclosingDeclaration);
+                return fresh(typeReference, node);
             case SyntaxKind.TrueKeyword: 
             case SyntaxKind.FalseKeyword: 
                 return literal(node, SyntaxKind.BooleanKeyword, isConstContext);
@@ -670,14 +698,11 @@ export function transformDeclarations(context: TransformationContext) {
                     tupleType.emitNode = { flags: 1 };
                     return regular(factory.createTypeOperatorNode(SyntaxKind.ReadonlyKeyword, tupleType), node);
                 } else {
-                    let elementTypes = deduplicateUnion(elementTypesInfo);
-                    let simplifiedUnion = collapseLiteralTypesIntoBaseTypes(elementTypes);
-                    normalizeObjectUnion(simplifiedUnion);
                     let itemType;
-                    if(simplifiedUnion.length === 0) {
+                    if(elementTypesInfo.length === 0) {
                         itemType = (strictNullChecks ? factory.createKeywordTypeNode(SyntaxKind.NeverKeyword) : factory.createKeywordTypeNode(SyntaxKind.AnyKeyword));
                     } else {
-                        itemType = simplifiedUnion.length === 1? simplifiedUnion[0]: factory.createUnionTypeNode(simplifiedUnion);
+                        itemType = makeUnionFromTypes(node, elementTypesInfo, false).typeNode;
                     }
 
                     return regular(factory.createArrayTypeNode(itemType), node);
@@ -687,6 +712,8 @@ export function transformDeclarations(context: TransformationContext) {
                 const properties: TypeElement[] = []
                 for(const prop of objectLiteral.properties) {
                     if(isMethodDeclaration(prop)) {
+                        const oldEnclosingDeclaration = enclosingDeclaration;
+                        enclosingDeclaration = prop;
                         if (isConstContext & NarrowBehavior.AsConst) {
                             properties.push(factory.createPropertySignature(
                                 [factory.createModifier(SyntaxKind.ReadonlyKeyword)],
@@ -695,7 +722,7 @@ export function transformDeclarations(context: TransformationContext) {
                                 factory.createFunctionTypeNode(
                                     visitNodes(prop.typeParameters,  visitDeclarationSubtree, isTypeParameterDeclaration),
                                     prop.parameters.map(p => ensureParameter(p)),
-                                    visitType(prop.type, prop),
+                                    localInferenceFromInitializer(prop)!,
                                 )
                             ));
                         }
@@ -706,9 +733,10 @@ export function transformDeclarations(context: TransformationContext) {
                                 prop.questionToken,
                                 visitNodes(prop.typeParameters,  visitDeclarationSubtree, isTypeParameterDeclaration),
                                 prop.parameters.map(p => ensureParameter(p)),
-                                visitType(prop.type, prop),
+                                localInferenceFromInitializer(prop),
                             ))
                         }
+                        enclosingDeclaration = oldEnclosingDeclaration;
                     }
                     else if(isPropertyAssignment(prop)) {
                         const modifiers = isConstContext & NarrowBehavior.AsConst ? 
@@ -734,10 +762,10 @@ export function transformDeclarations(context: TransformationContext) {
     function invalid(node: Node): LocalTypeInfo {
         return { typeNode: makeInvalidTypeAndReport(node), flags: LocalTypeInfoFlags.Invalid, sourceNode: node }
     }
-    function fresh(typeNode: TypeNode, sourceNode: Node, flags = LocalTypeInfoFlags.None): LocalTypeInfo {
+    function fresh(typeNode: TypeNode, sourceNode?: Node, flags = LocalTypeInfoFlags.None): LocalTypeInfo {
         return { typeNode, flags: flags | LocalTypeInfoFlags.Fresh, sourceNode }
     }
-    function regular(typeNode: TypeNode, sourceNode: Node, flags = LocalTypeInfoFlags.None): LocalTypeInfo {
+    function regular(typeNode: TypeNode, sourceNode?: Node, flags = LocalTypeInfoFlags.None): LocalTypeInfo {
         return { typeNode, flags, sourceNode }
     }
     function normalizeLiteralValue(literal: LiteralExpression) {
@@ -1183,61 +1211,130 @@ export function transformDeclarations(context: TransformationContext) {
 
         return localTypeInfo.typeNode;
     }
-    
+    function makeUnionFromTypes(sourceNode: Node, types: LocalTypeInfo[], widenSingle: boolean)  {
+        types = deduplicateUnion(types)
+        if(types.length === 1) {
+            const localType = types[0]
+            return widenSingle ? { ... localType, type: getWidenedType(localType) }: localType
+        }
+        const unionConstituents = collapseLiteralTypesIntoBaseTypes(types);
+
+        normalizeObjectUnion(unionConstituents);
+        return regular(unionConstituents.length === 1? unionConstituents[0]: factory.createUnionTypeNode(unionConstituents), sourceNode)
+    }
     function inferReturnType(node: FunctionLikeDeclaration) {
-        const returnStatements: ReturnStatement[] = [];
         if(node.type) {
             return regular(visitType(node.type, node), node);
         }
         if(!node.body) {
             return regular(makeInvalidTypeAndReport(node), node);
         }
-        collectReturnExpressions(node.body, returnStatements);
-        if(returnStatements.length === 0) {
-            return regular(factory.createKeywordTypeNode(SyntaxKind.VoidKeyword), node);
+        
+        const returnStatements: ReturnStatement[] = [];
+        const yieldExpressions: YieldExpression[] = [];
+        
+        let returnType;
+        if(!isBlock(node.body)) {
+            returnType = localInference(node.body)
         }
+        else {
+            collectReturnAndYield(node.body, returnStatements, yieldExpressions);
+            if(returnStatements.length === 0) {
+                returnType = regular(factory.createKeywordTypeNode(SyntaxKind.VoidKeyword), node);
+            } else {
+                let returnStatementInference = returnStatements.map((r) => {
+                    return r.expression? 
+                        localInference(r.expression, NarrowBehavior.KeepLiterals): 
+                        fresh(factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword), r)
+                });
+                
+                returnType = makeUnionFromTypes(node, returnStatementInference, true);
+                if(returnType.flags & LocalTypeInfoFlags.Fresh && returnType.typeNode.kind === SyntaxKind.UndefinedKeyword) {
+                    returnType = fresh(factory.createKeywordTypeNode(SyntaxKind.VoidKeyword), returnType.typeNode);
+                }
+            }
+        }
+        let yieldType: LocalTypeInfo | undefined = undefined;
+        if(node.asteriskToken) {
+            if(yieldExpressions.length === 0) {
+                returnType = regular(
+                    factory.createKeywordTypeNode(SyntaxKind.NeverKeyword), 
+                    node
+                );
+            } else {
+                let yieldExpressionsInference = yieldExpressions.map((r) => {
+                    return r.expression? 
+                        localInference(r.expression, NarrowBehavior.KeepLiterals): 
+                        regular(factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword), r)
+                });
+                
+                yieldType = makeUnionFromTypes(node, yieldExpressionsInference, true);
+            }
+        }
+        return makeFinalReturnType(node, returnType, yieldType);
 
-        let returnStatementInference = returnStatements.map((r) => {
-            return r.expression? 
-                localInference(r.expression, NarrowBehavior.KeepLiterals): 
-                regular(factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword), r)
-        });
-        returnStatementInference = deduplicateUnion(returnStatementInference)
-        const unionConstituents = returnStatementInference.length === 1 ? 
-            [getWidenedType(returnStatementInference[0])] :
-            collapseLiteralTypesIntoBaseTypes(returnStatementInference);
-        normalizeObjectUnion(unionConstituents);
-
-        return regular(unionConstituents.length === 1? unionConstituents[0]: factory.createUnionTypeNode(unionConstituents), node);
-
-        function collectReturnExpressions(node: Node, result: ReturnStatement[]) {
+        function makeFinalReturnType(node: FunctionLikeDeclaration, returnType: LocalTypeInfo, yieldType: LocalTypeInfo | undefined) {
+            const modifiers = getEffectiveModifierFlags(node);
+            if(node.asteriskToken) {
+                return regular(
+                    factory.createTypeReferenceNode(
+                        factory.createIdentifier(modifiers & ModifierFlags.Async ? "Generator": "AsyncGenerator"),
+                        [returnType.typeNode, yieldType?.typeNode!],
+                    ),
+                    returnType.sourceNode,
+                    returnType.flags
+                )
+            }
+            else if(modifiers & ModifierFlags.Async) {
+                return regular(
+                    factory.createTypeReferenceNode(
+                        factory.createIdentifier("Promise"),
+                        [returnType.typeNode],
+                    ),
+                    returnType.sourceNode,
+                    returnType.flags
+                )
+            }
+            return returnType;
+        }
+        function collectReturnAndYield(node: Node, result: ReturnStatement[], yieldExpressions: YieldExpression[]) {
             forEachChild(node, child => {
                 if(isReturnStatement(child)) {
                     result.push(child)
                 }
+                if(isYieldExpression(child)) {
+                    yieldExpressions.push(child);
+                }
                 if(isClassLike(child) || isFunctionLike(child)) {
                     return; 
                 }
-                collectReturnExpressions(child, result);
+                // TODO: Do not walk all children if not generator function
+                collectReturnAndYield(child, result, yieldExpressions);
             })
         }
     }
     
-    function localInferenceFromInitializer(node: HasInferredType): TypeNode | undefined {
+    function localInferenceFromInitializer(node: HasInferredType | ExportAssignment): TypeNode | undefined {
+        if(NO_LOCAL_INFERENCE) {
+            return undefined;
+        }
         let typeNode;
-        if(isParameter(node) && node.initializer) {
+        if(isExportAssignment(node) && node.expression) {
+            typeNode = localInference(node.expression);
+        }
+        else if(isParameter(node) && node.initializer) {
             typeNode = localInference(node.initializer);
         }
-        if(isVariableDeclaration(node) && node.initializer) {
+        else if(isVariableDeclaration(node) && node.initializer) {
             typeNode = localInference(node.initializer);
         }
-        if(isPropertyDeclaration(node) && node.initializer)  {
+        else if(isPropertyDeclaration(node) && node.initializer)  {
             typeNode = localInference(node.initializer);
         }
-        if(isFunctionDeclaration(node)) {
+        else if(isFunctionDeclaration(node)) {
             typeNode = inferReturnType(node);
         }
-        if(isMethodDeclaration(node)) {
+        else if(isMethodDeclaration(node)) {
             typeNode = inferReturnType(node);
         }
         return typeNode?.typeNode;
@@ -1894,11 +1991,8 @@ export function transformDeclarations(context: TransformationContext) {
                         errorNode: input
                     });
                     errorFallbackNode = input;
-                    if (isolatedDeclarations) {
-                        reportIsolatedDeclarationError(input);
-                    }
                     const type = isolatedDeclarations ? 
-                        makeInvalidType() :
+                        localInferenceFromInitializer(input) ??  makeInvalidTypeAndReport(input) :
                         resolver.createTypeOfExpression(input.expression, input, declarationEmitNodeBuilderFlags, symbolTracker);
                     const varDecl = factory.createVariableDeclaration(newId, /*exclamationToken*/ undefined, type, /*initializer*/ undefined);
                     errorFallbackNode = undefined;
