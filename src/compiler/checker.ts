@@ -7128,6 +7128,25 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
             else {
+                if(propertySymbol.flags & SymbolFlags.Accessor && propertySymbol.declarations && propertySymbol.declarations.length === 2) {
+                    const getter = isGetAccessor(propertySymbol.declarations[0]) ? propertySymbol.declarations[0] : isGetAccessor(propertySymbol.declarations[1]) ? propertySymbol.declarations[1] : undefined;
+                    const setter = isSetAccessor(propertySymbol.declarations[0]) ? propertySymbol.declarations[0] : isSetAccessor(propertySymbol.declarations[1]) ? propertySymbol.declarations[1] : undefined;
+                    if(getter && setter) {
+                        const getterReturnType = getter.type && getTypeFromTypeNode(getter.type);
+                        let setterParameterType: Type | undefined;
+                        if(setter.parameters.length === 1) {
+                            setterParameterType = setter.parameters[0].type && getTypeFromTypeNode(setter.parameters[0].type);
+                        }
+                        else if (setter.parameters.length === 2 && isThisIdentifier(setter.parameters[0].name)) {
+                            setterParameterType = setter.parameters[1].type && getTypeFromTypeNode(setter.parameters[1].type);
+                        }
+                        if(setter.parameters.length > 2 || (setterParameterType && getterReturnType && !isTypeIdenticalTo(setterParameterType, getterReturnType))) {
+                            typeElements.push(factory.createGetAccessorDeclaration(/*modifiers*/ undefined, getter.name, getter.parameters, /*type*/ getter.type, /*body*/ undefined));
+                            typeElements.push(factory.createSetAccessorDeclaration(/*modifiers*/ undefined, setter.name, setter.parameters, /*body*/ undefined));
+                            return;
+                        }
+                    }
+                }
                 let propertyTypeNode: TypeNode;
                 if (shouldUsePlaceholderForProperty(propertySymbol, context)) {
                     propertyTypeNode = createElidedInformationPlaceholder(context);

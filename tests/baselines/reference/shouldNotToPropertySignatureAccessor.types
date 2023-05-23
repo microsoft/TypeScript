@@ -1,0 +1,29 @@
+=== tests/cases/conformance/declarationEmit/shouldNotToPropertySignatureAccessor.ts ===
+export const Foo0 = {
+>Foo0 : { get bar(): number; set bar(value: number | string); }
+>{    get bar(): number { return 0; },    set bar(value: number | string) { }} : { get bar(): number; set bar(value: number | string); }
+
+    get bar(): number { return 0; },
+>bar : number
+>0 : 0
+
+    set bar(value: number | string) { }
+>bar : number
+>value : string | number
+
+};
+
+export const Foo1: {
+>Foo1 : { get bar(): number; set bar(value: number | string); }
+
+    get bar(): number
+>bar : number
+
+    set bar(value: number | string)
+>bar : number
+>value : string | number
+
+} = Foo0; // Reuse Foo0 for conciseness
+>Foo0 : { get bar(): number; set bar(value: number | string); }
+
+
