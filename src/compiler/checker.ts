@@ -24129,8 +24129,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const templateType = getTemplateTypeFromMappedType(target);
         const inference = createInferenceInfo(typeParameter);
         inferTypes([inference], sourceType, templateType);
-        const sourceValueDeclaration = sourceType.symbol?.valueDeclaration;
-        if (sourceValueDeclaration) {
+        if (getObjectFlags(sourceType) & (ObjectFlags.FreshLiteral | ObjectFlags.ArrayLiteral)) {
+            const sourceValueDeclaration = sourceType.symbol.valueDeclaration!;
             const intraExpressionInferenceSites = getInferenceContext(sourceValueDeclaration)?.intraExpressionInferenceSites?.filter(site => isNodeDescendantOf(site.node, sourceValueDeclaration));
             if (intraExpressionInferenceSites?.length) {
                 const templateType = (getApparentTypeOfContextualType(sourceValueDeclaration.parent.parent as Expression, ContextFlags.NoConstraints) as MappedType).templateType;
