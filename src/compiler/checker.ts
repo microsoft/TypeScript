@@ -1258,6 +1258,7 @@ export const enum CheckMode {
     RestBindingElement = 1 << 6,                    // Checking a type that is going to be used to determine the type of a rest binding element
                                                     //   e.g. in `const { a, ...rest } = foo`, when checking the type of `foo` to determine the type of `rest`,
                                                     //   we need to preserve generic types instead of substituting them for constraints
+    TypeOnly = 1 << 7,                              // Called from getTypeOfExpression, diagnostics may be omitted
 }
 
 /** @internal */
@@ -36753,7 +36754,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const rightType = getLastResult(state);
                 Debug.assertIsDefined(rightType);
 
-                result = checkBinaryLikeExpressionWorker(node.left, node.operatorToken, node.right, leftType, rightType, node);
+                result = checkBinaryLikeExpressionWorker(node.left, node.operatorToken, node.right, leftType, rightType, state.checkMode, node);
             }
 
             state.skip = false;
@@ -36824,7 +36825,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         const rightType = checkExpression(right, checkMode);
-        return checkBinaryLikeExpressionWorker(left, operatorToken, right, leftType, rightType, errorNode);
+        return checkBinaryLikeExpressionWorker(left, operatorToken, right, leftType, rightType, checkMode, errorNode);
     }
 
     function checkBinaryLikeExpressionWorker(
@@ -36833,6 +36834,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         right: Expression,
         leftType: Type,
         rightType: Type,
+        checkMode?: CheckMode,
         errorNode?: Node
     ): Type {
         const operator = operatorToken.kind;
@@ -36986,14 +36988,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.ExclamationEqualsToken:
             case SyntaxKind.EqualsEqualsEqualsToken:
             case SyntaxKind.ExclamationEqualsEqualsToken:
-                if (isLiteralExpressionOfObject(left) || isLiteralExpressionOfObject(right)) {
-                    const eqType = operator === SyntaxKind.EqualsEqualsToken || operator === SyntaxKind.EqualsEqualsEqualsToken;
-                    error(errorNode, Diagnostics.This_condition_will_always_return_0_since_JavaScript_compares_objects_by_reference_not_value, eqType ? "false" : "true");
+                if (!(checkMode && checkMode & CheckMode.TypeOnly)) {
+                    if (isLiteralExpressionOfObject(left) || isLiteralExpressionOfObject(right)) {
+                        const eqType = operator === SyntaxKind.EqualsEqualsToken || operator === SyntaxKind.EqualsEqualsEqualsToken;
+                        error(errorNode, Diagnostics.This_condition_will_always_return_0_since_JavaScript_compares_objects_by_reference_not_value, eqType ? "false" : "true");
+                    }
+                    checkNaNEquality(errorNode, operator, left, right);
+                    reportOperatorErrorUnless((left, right) => isTypeEqualityComparableTo(left, right) || isTypeEqualityComparableTo(right, left));
                 }
-                checkNaNEquality(errorNode, operator, left, right);
-                reportOperatorErrorUnless((left, right) => isTypeEqualityComparableTo(left, right) || isTypeEqualityComparableTo(right, left));
                 return booleanType;
-
             case SyntaxKind.InstanceOfKeyword:
                 return checkInstanceOfExpression(left, right, leftType, rightType);
             case SyntaxKind.InKeyword:
@@ -37348,7 +37351,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkConditionalExpression(node: ConditionalExpression, checkMode?: CheckMode): Type {
-        const type = checkTruthinessExpression(node.condition);
+        const type = checkTruthinessExpression(node.condition, checkMode);
         checkTestingKnownTruthyCallableOrAwaitableType(node.condition, type, node.whenTrue);
         const type1 = checkExpression(node.whenTrue, checkMode);
         const type2 = checkExpression(node.whenFalse, checkMode);
@@ -37729,7 +37732,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         const startInvocationCount = flowInvocationCount;
-        const type = checkExpression(node);
+        const type = checkExpression(node, CheckMode.TypeOnly);
         // If control flow analysis was required to determine the type, it is worth caching.
         if (flowInvocationCount !== startInvocationCount) {
             const cache = flowTypeCache || (flowTypeCache = []);
