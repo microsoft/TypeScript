@@ -28672,6 +28672,25 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         });
     }
 
+    function getThisTypeOfObjectLiteralFromContextualType(
+        containingLiteral: ObjectLiteralExpression,
+        contextualType = getApparentTypeOfContextualType(containingLiteral, /*contextFlags*/ undefined),
+    ) {
+        let literal = containingLiteral;
+        let type = contextualType;
+        while (type) {
+            const thisType = getThisTypeFromContextualType(type);
+            if (thisType) {
+                return thisType;
+            }
+            if (literal.parent.kind !== SyntaxKind.PropertyAssignment) {
+                break;
+            }
+            literal = literal.parent.parent as ObjectLiteralExpression;
+            type = getApparentTypeOfContextualType(literal, /*contextFlags*/ undefined);
+        }
+    }
+
     function getContextualThisParameterType(func: SignatureDeclaration): Type | undefined {
         if (func.kind === SyntaxKind.ArrowFunction) {
             return undefined;
@@ -28693,18 +28712,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // that includes a ThisType<T>. If so, T is the contextual type for 'this'. We continue looking in
                 // any directly enclosing object literals.
                 const contextualType = getApparentTypeOfContextualType(containingLiteral, /*contextFlags*/ undefined);
-                let literal = containingLiteral;
-                let type = contextualType;
-                while (type) {
-                    const thisType = getThisTypeFromContextualType(type);
-                    if (thisType) {
-                        return instantiateType(thisType, getMapperFromContext(getInferenceContext(containingLiteral)));
-                    }
-                    if (literal.parent.kind !== SyntaxKind.PropertyAssignment) {
-                        break;
-                    }
-                    literal = literal.parent.parent as ObjectLiteralExpression;
-                    type = getApparentTypeOfContextualType(literal, /*contextFlags*/ undefined);
+                const thisType = getThisTypeOfObjectLiteralFromContextualType(containingLiteral, contextualType);
+                if (thisType) {
+                    return instantiateType(thisType, getMapperFromContext(getInferenceContext(containingLiteral)));
                 }
                 // There was no contextual ThisType<T> for the containing object literal, so the contextual type
                 // for 'this' is the non-null form of the contextual type for the containing object literal or
@@ -45423,8 +45433,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (isFunctionLike(container)) {
                 const containingLiteral = getContainingObjectLiteral(container);
                 if (containingLiteral) {
-                    const contextualType = getApparentTypeOfContextualType(containingLiteral, /*contextFlags*/ undefined);
-                    const type = contextualType && getThisTypeFromContextualType(contextualType);
+                    const type = getThisTypeOfObjectLiteralFromContextualType(containingLiteral);
                     return type && !isTypeAny(type);
                 }
             }
