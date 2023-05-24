@@ -122,7 +122,7 @@ function getEditsForToTemplateLiteral(context: RefactorContext, node: Node) {
 }
 
 function isNotEqualsOperator(node: BinaryExpression) {
-    return node.operatorToken.kind !== SyntaxKind.EqualsToken;
+    return !(node.operatorToken.kind === SyntaxKind.EqualsToken || node.operatorToken.kind === SyntaxKind.PlusEqualsToken);
 }
 
 function getParentBinaryExpression(expr: Node) {
