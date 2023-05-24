@@ -26572,7 +26572,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (container && container !== flowContainer &&
                         reference.kind !== SyntaxKind.PropertyAccessExpression &&
                         reference.kind !== SyntaxKind.ElementAccessExpression &&
-                        reference.kind !== SyntaxKind.ThisKeyword) {
+                        !(reference.kind === SyntaxKind.ThisKeyword && container.kind !== SyntaxKind.ArrowFunction)
+                    ) {
                         flow = container.flowNode!;
                         continue;
                     }
