@@ -199,3 +199,19 @@ branch({
     let test1: "a" = u
   }
 })
+
+interface Props<T> {
+  a: (x: string) => T;
+  b: (arg: T) => void;
+}
+
+declare function Foo<T>(props: Props<T>): null;
+
+Foo({
+  ...{
+    a: (x) => 10,
+    b: (arg) => {
+      arg.toString();
+    },
+  },
+});

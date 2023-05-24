@@ -58,15 +58,15 @@ declare var React: any;
 
 === tests/cases/conformance/jsx/9.tsx ===
 <a:b.c></a:b.c>;
-><a:b.c></a:b.c> : any
->a:b.c : any
+><a:b.c></a:b : any
 >a : any
 >b : any
->c : any
->a:b.c : any
+>c : true
 >a : any
 >b : any
+>c> : boolean
 >c : any
+> : any
 
 === tests/cases/conformance/jsx/10.tsx ===
 <a.b:c></a.b:c>;

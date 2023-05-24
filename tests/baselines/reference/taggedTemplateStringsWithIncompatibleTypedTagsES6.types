@@ -123,7 +123,7 @@ f.thisIsNotATag(`abc${1}def${2}ghi`);
 >f.thisIsNotATag : (x: string) => void
 >f : I
 >thisIsNotATag : (x: string) => void
->`abc${1}def${2}ghi` : string
+>`abc${1}def${2}ghi` : "abc1def2ghi"
 >1 : 1
 >2 : 2
 

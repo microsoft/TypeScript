@@ -47,24 +47,24 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
 
 PolledWatches::
-/user/username/projects/a/b/tsconfig.json: *new*
-  {"pollingInterval":2000}
+/a/lib/lib.d.ts: *new*
+  {"pollingInterval":500}
 /user/username/projects/a/b/jsconfig.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/a/tsconfig.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/a/jsconfig.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/a/b/node_modules: *new*
   {"pollingInterval":500}
-/user/username/projects/a/node_modules: *new*
-  {"pollingInterval":500}
-/a/lib/lib.d.ts: *new*
-  {"pollingInterval":500}
 /user/username/projects/a/b/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/a/b/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/a/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/a/node_modules: *new*
   {"pollingInterval":500}
 /user/username/projects/a/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/a/tsconfig.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
@@ -134,27 +134,27 @@ TI:: [hh:mm:ss:mss] #1 with arguments'["@types/commander@tsFakeMajor.Minor"]':: 
 TI:: Before installWorker
 
 PolledWatches::
-/user/username/projects/a/b/tsconfig.json:
-  {"pollingInterval":2000}
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/user/username/projects/a/b/bower_components: *new*
+  {"pollingInterval":500}
 /user/username/projects/a/b/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/a/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/a/jsconfig.json:
   {"pollingInterval":2000}
 /user/username/projects/a/b/node_modules:
   {"pollingInterval":500}
-/user/username/projects/a/node_modules:
-  {"pollingInterval":500}
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
 /user/username/projects/a/b/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/a/b/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/a/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/a/node_modules:
   {"pollingInterval":500}
 /user/username/projects/a/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/a/tsconfig.json:
+  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/a/b/bower_components: *new*
   {"pollingInterval":500}
 
 FsWatchesRecursive::
@@ -216,31 +216,31 @@ After running Timeout callback:: count: 2
 4: *ensureProjectForOpenFiles*
 
 PolledWatches::
-/user/username/projects/a/b/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/a/b/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/a/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/a/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/a/b/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/a/node_modules:
-  {"pollingInterval":500}
 /a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/user/username/projects/a/b/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/a/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/a/b/bower_components:
   {"pollingInterval":500}
+/user/username/projects/a/b/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/a/b/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/a/b/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/a/b/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/a/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/a/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/a/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/a/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatchesRecursive::
-/user/username/projects/node_modules:
-  {}
 /user/username/projects/a/cache/node_modules: *new*
+  {}
+/user/username/projects/node_modules:
   {}

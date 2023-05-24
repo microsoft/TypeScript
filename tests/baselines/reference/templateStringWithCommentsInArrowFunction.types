@@ -8,7 +8,7 @@ const f1 = () =>
 >() =>    `${      // a      a    }a` : () => string
 
     `${
->`${      // a      a    }a` : string
+>`${      // a      a    }a` : "1a"
 
       // a
       a
@@ -21,7 +21,7 @@ const f2 = () =>
 >() =>    `${      // a      a    }` : () => string
 
     `${
->`${      // a      a    }` : string
+>`${      // a      a    }` : "1"
 
       // a
       a

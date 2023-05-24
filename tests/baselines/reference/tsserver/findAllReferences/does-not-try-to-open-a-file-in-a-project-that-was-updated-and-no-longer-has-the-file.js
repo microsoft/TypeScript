@@ -162,11 +162,11 @@ PolledWatches::
 FsWatches::
 /packages/babel-loader/tsconfig.json: *new*
   {}
-/packages/core/tsconfig.json: *new*
-  {}
 /packages/core/src/index.ts: *new*
   {}
 /packages/core/src/loading-indicator.ts: *new*
+  {}
+/packages/core/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -240,9 +240,9 @@ PolledWatches::
 FsWatches::
 /packages/babel-loader/tsconfig.json:
   {}
-/packages/core/tsconfig.json:
-  {}
 /packages/core/src/loading-indicator.ts:
+  {}
+/packages/core/tsconfig.json:
   {}
 
 FsWatches *deleted*::
@@ -404,9 +404,9 @@ PolledWatches::
 FsWatches::
 /packages/babel-loader/tsconfig.json:
   {}
-/packages/core/tsconfig.json:
-  {}
 /packages/core/src/loading-indicator.ts:
+  {}
+/packages/core/tsconfig.json:
   {}
 
 FsWatchesRecursive::

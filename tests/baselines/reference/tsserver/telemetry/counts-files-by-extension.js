@@ -148,7 +148,7 @@ Info seq  [hh:mm:ss:mss] event:
        "configFileName": "tsconfig.json",
        "projectType": "configured",
        "languageServiceEnabled": true,
-       "version": "5.1.0-dev"
+       "version": "FakeVersion"
       }
      }
     }
@@ -232,8 +232,6 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/tsconfig.json: *new*
-  {}
 /src/dts.d.ts: *new*
   {}
 /src/js.js: *new*
@@ -243,6 +241,8 @@ FsWatches::
 /src/moo.ts: *new*
   {}
 /src/tsx.tsx: *new*
+  {}
+/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::

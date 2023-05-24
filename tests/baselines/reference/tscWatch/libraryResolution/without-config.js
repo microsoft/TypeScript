@@ -264,23 +264,23 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/projects/project1/core.d.ts: *new*
-  {}
-/home/src/projects/project1/utils.d.ts: *new*
-  {}
-/home/src/projects/project1/file.ts: *new*
-  {}
-/home/src/projects/project1/index.ts: *new*
-  {}
-/home/src/projects/project1/file2.ts: *new*
-  {}
-/home/src/lib/lib.webworker.d.ts: *new*
-  {}
-/home/src/lib/lib.scripthost.d.ts: *new*
+/home/src/lib/lib.dom.d.ts: *new*
   {}
 /home/src/lib/lib.es5.d.ts: *new*
   {}
-/home/src/lib/lib.dom.d.ts: *new*
+/home/src/lib/lib.scripthost.d.ts: *new*
+  {}
+/home/src/lib/lib.webworker.d.ts: *new*
+  {}
+/home/src/projects/project1/core.d.ts: *new*
+  {}
+/home/src/projects/project1/file.ts: *new*
+  {}
+/home/src/projects/project1/file2.ts: *new*
+  {}
+/home/src/projects/project1/index.ts: *new*
+  {}
+/home/src/projects/project1/utils.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -418,23 +418,23 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/projects/project1/core.d.ts:
-  {}
-/home/src/projects/project1/utils.d.ts:
-  {}
-/home/src/projects/project1/file.ts:
-  {}
-/home/src/projects/project1/index.ts:
-  {}
-/home/src/projects/project1/file2.ts:
-  {}
-/home/src/lib/lib.webworker.d.ts:
+/home/src/lib/lib.es5.d.ts:
   {}
 /home/src/lib/lib.scripthost.d.ts:
   {}
-/home/src/lib/lib.es5.d.ts:
+/home/src/lib/lib.webworker.d.ts:
   {}
 /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts: *new*
+  {}
+/home/src/projects/project1/core.d.ts:
+  {}
+/home/src/projects/project1/file.ts:
+  {}
+/home/src/projects/project1/file2.ts:
+  {}
+/home/src/projects/project1/index.ts:
+  {}
+/home/src/projects/project1/utils.d.ts:
   {}
 
 FsWatches *deleted*::
@@ -602,21 +602,21 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/projects/project1/utils.d.ts:
-  {}
-/home/src/projects/project1/file.ts:
-  {}
-/home/src/projects/project1/index.ts:
-  {}
-/home/src/projects/project1/file2.ts:
-  {}
-/home/src/lib/lib.webworker.d.ts:
+/home/src/lib/lib.es5.d.ts:
   {}
 /home/src/lib/lib.scripthost.d.ts:
   {}
-/home/src/lib/lib.es5.d.ts:
+/home/src/lib/lib.webworker.d.ts:
   {}
 /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts:
+  {}
+/home/src/projects/project1/file.ts:
+  {}
+/home/src/projects/project1/file2.ts:
+  {}
+/home/src/projects/project1/index.ts:
+  {}
+/home/src/projects/project1/utils.d.ts:
   {}
 
 FsWatches *deleted*::
@@ -741,21 +741,21 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/projects/project1/utils.d.ts:
-  {}
-/home/src/projects/project1/file.ts:
-  {}
-/home/src/projects/project1/index.ts:
-  {}
-/home/src/projects/project1/file2.ts:
-  {}
-/home/src/lib/lib.webworker.d.ts:
-  {}
-/home/src/lib/lib.scripthost.d.ts:
+/home/src/lib/lib.dom.d.ts: *new*
   {}
 /home/src/lib/lib.es5.d.ts:
   {}
-/home/src/lib/lib.dom.d.ts: *new*
+/home/src/lib/lib.scripthost.d.ts:
+  {}
+/home/src/lib/lib.webworker.d.ts:
+  {}
+/home/src/projects/project1/file.ts:
+  {}
+/home/src/projects/project1/file2.ts:
+  {}
+/home/src/projects/project1/index.ts:
+  {}
+/home/src/projects/project1/utils.d.ts:
   {}
 
 FsWatches *deleted*::
@@ -873,21 +873,21 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/projects/project1/utils.d.ts:
-  {}
-/home/src/projects/project1/file.ts:
-  {}
-/home/src/projects/project1/index.ts:
-  {}
-/home/src/projects/project1/file2.ts:
-  {}
-/home/src/lib/lib.scripthost.d.ts:
+/home/src/lib/lib.dom.d.ts:
   {}
 /home/src/lib/lib.es5.d.ts:
   {}
-/home/src/lib/lib.dom.d.ts:
+/home/src/lib/lib.scripthost.d.ts:
   {}
 /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts: *new*
+  {}
+/home/src/projects/project1/file.ts:
+  {}
+/home/src/projects/project1/file2.ts:
+  {}
+/home/src/projects/project1/index.ts:
+  {}
+/home/src/projects/project1/utils.d.ts:
   {}
 
 FsWatches *deleted*::
@@ -1015,21 +1015,21 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/projects/project1/utils.d.ts:
-  {}
-/home/src/projects/project1/file.ts:
-  {}
-/home/src/projects/project1/index.ts:
-  {}
-/home/src/projects/project1/file2.ts:
-  {}
-/home/src/lib/lib.scripthost.d.ts:
+/home/src/lib/lib.dom.d.ts:
   {}
 /home/src/lib/lib.es5.d.ts:
   {}
-/home/src/lib/lib.dom.d.ts:
+/home/src/lib/lib.scripthost.d.ts:
   {}
 /home/src/lib/lib.webworker.d.ts: *new*
+  {}
+/home/src/projects/project1/file.ts:
+  {}
+/home/src/projects/project1/file2.ts:
+  {}
+/home/src/projects/project1/index.ts:
+  {}
+/home/src/projects/project1/utils.d.ts:
   {}
 
 FsWatches *deleted*::

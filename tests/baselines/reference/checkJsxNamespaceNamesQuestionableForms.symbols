@@ -22,4 +22,6 @@ declare namespace JSX {
 
 <a:b></a:b>;
 <b:c.x></b:c.x>;
+>x : Symbol(x, Decl(checkJsxNamespaceNamesQuestionableForms.tsx, 11, 5))
+
 <this:b></this:b>;
