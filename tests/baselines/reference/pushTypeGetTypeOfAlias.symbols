@@ -1,19 +1,10 @@
-=== tests/cases/compiler/foo.js ===
-var bar = require("./bar");
->bar : Symbol(bar, Decl(foo.js, 0, 3))
->require : Symbol(require)
->"./bar" : Symbol("tests/cases/compiler/bar", Decl(bar.js, 0, 0))
-
-bar.nonexistentProperty;
->bar : Symbol(bar, Decl(foo.js, 0, 3))
-
 === tests/cases/compiler/bar.js ===
 module.exports = function () {};
 >module.exports : Symbol(module.exports, Decl(bar.js, 0, 0))
 >module : Symbol(export=, Decl(bar.js, 0, 0))
 >exports : Symbol(export=, Decl(bar.js, 0, 0))
 
- exports.blah = exports.unknown;
+ exports.blah = exports.someProp;
 >exports.blah : Symbol(blah, Decl(bar.js, 0, 32))
 >exports : Symbol(blah, Decl(bar.js, 0, 32))
 >blah : Symbol(blah, Decl(bar.js, 0, 32))

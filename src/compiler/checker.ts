@@ -11440,14 +11440,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             if (!popTypeResolution()) {
                 if (exportSymbol) {
-                    // reportCircularityError(exportSymbol.declarations?.[0]);
-                    // error(exportSymbol.declarations?.[0], Diagnostics.Circular_definition_of_import_alias_0, symbolToString(exportSymbol));
+                    reportCircularityError(exportSymbol);
                 }
                 else {
-                    // getExportSymbolOfValueSymbolIfExported(resolveEntityName(id, SymbolFlags.All, /*ignoreErrors*/ true, /*dontResolveAlias*/ true, node));
-
                     reportCircularityError(symbol);
-                    // error(symbol.declarations?.[0], Diagnostics.Circular_definition_of_import_alias_0, symbolToString(symbol));
                 }
                 return links.type = errorType;
             }
@@ -11468,14 +11464,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function reportCircularityError(symbol: Symbol) {
         const declaration = symbol.valueDeclaration as VariableLikeDeclaration;
         // Check if variable has type annotation that circularly references the variable itself
-        if (getEffectiveTypeAnnotationNode(declaration)) {
-            error(symbol.valueDeclaration, Diagnostics._0_is_referenced_directly_or_indirectly_in_its_own_type_annotation,
-                symbolToString(symbol));
-            return errorType;
+        if (declaration) {
+            if (getEffectiveTypeAnnotationNode(declaration)) {
+                error(symbol.valueDeclaration, Diagnostics._0_is_referenced_directly_or_indirectly_in_its_own_type_annotation,
+                    symbolToString(symbol));
+                return errorType;
+            }
+            // Check if variable has initializer that circularly references the variable itself
+            if (noImplicitAny && (declaration.kind !== SyntaxKind.Parameter || (declaration as HasInitializer).initializer)) {
+                error(symbol.valueDeclaration, Diagnostics._0_implicitly_has_type_any_because_it_does_not_have_a_type_annotation_and_is_referenced_directly_or_indirectly_in_its_own_initializer,
+                    symbolToString(symbol));
+            }
         }
-        // Check if variable has initializer that circularly references the variable itself
-        if (noImplicitAny && (declaration.kind !== SyntaxKind.Parameter || (declaration as HasInitializer).initializer)) {
-            error(symbol.valueDeclaration, Diagnostics._0_implicitly_has_type_any_because_it_does_not_have_a_type_annotation_and_is_referenced_directly_or_indirectly_in_its_own_initializer,
+        else if (symbol.declarations) {
+            error(symbol.declarations[0], Diagnostics.Circular_definition_of_import_alias_0,
                 symbolToString(symbol));
         }
         // Circularities could also result from parameters in function expressions that end up

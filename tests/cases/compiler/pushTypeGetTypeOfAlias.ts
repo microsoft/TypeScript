@@ -1,9 +1,8 @@
 // @checkJs: true
+// @allowJs: true
+// @noEmit: true
 
 // @Filename: bar.js
 module.exports = function () {};
- exports.blah = exports.unknown;
-
-// @Filename: foo.js
 var bar = require("./bar");
-bar.nonexistentProperty;
+bar.nonexistentProperty; exports.blah = exports.someProp;

@@ -1,15 +1,3 @@
-=== tests/cases/compiler/foo.js ===
-var bar = require("./bar");
->bar : { (): void; blah: any; }
->require("./bar") : { (): void; blah: any; }
->require : any
->"./bar" : "./bar"
-
-bar.nonexistentProperty;
->bar.nonexistentProperty : any
->bar : { (): void; blah: any; }
->nonexistentProperty : any
-
 === tests/cases/compiler/bar.js ===
 module.exports = function () {};
 >module.exports = function () {} : { (): void; blah: any; }
@@ -18,12 +6,12 @@ module.exports = function () {};
 >exports : { (): void; blah: any; }
 >function () {} : () => void
 
- exports.blah = exports.unknown;
->exports.blah = exports.unknown : any
+ exports.blah = exports.someProp;
+>exports.blah = exports.someProp : any
 >exports.blah : any
 >exports : { (): void; blah: any; }
 >blah : any
->exports.unknown : any
+>exports.someProp : any
 >exports : { (): void; blah: any; }
->unknown : any
+>someProp : any
 
