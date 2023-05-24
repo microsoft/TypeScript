@@ -1,4 +1,3 @@
-import { GetApplicableRefactorsRequestArgs, GetEditsForRefactorRequestArgs } from "../server/protocol.js";
 import {
     ApplicableRefactorInfo,
     CallHierarchyIncomingCall,
@@ -800,7 +799,7 @@ export class SessionClient implements LanguageService {
         if (preferences) { // Temporarily set preferences
             this.configure(preferences);
         }
-        const args: GetApplicableRefactorsRequestArgs = this.createFileLocationOrRangeRequestArgs(positionOrRange, fileName);
+        const args: protocol.GetApplicableRefactorsRequestArgs = this.createFileLocationOrRangeRequestArgs(positionOrRange, fileName);
         args.triggerReason = triggerReason;
         args.kind = kind;
         args.includeInteractiveActions = includeInteractiveActions;
@@ -831,7 +830,8 @@ export class SessionClient implements LanguageService {
         if (preferences) { // Temporarily set preferences
             this.configure(preferences);
         }
-        const args: GetEditsForRefactorRequestArgs = this.createFileLocationOrRangeRequestArgs(positionOrRange, fileName) as protocol.GetEditsForRefactorRequestArgs;
+        const args =
+            this.createFileLocationOrRangeRequestArgs(positionOrRange, fileName) as protocol.GetEditsForRefactorRequestArgs;
         args.refactor = refactorName;
         args.action = actionName;
         args.interactiveRefactorArguments = interactiveRefactorArguments;
