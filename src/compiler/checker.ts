@@ -17845,9 +17845,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const context = createInferenceContext(freshParams, /*signature*/ undefined, InferenceFlags.None);
                 if (freshMapper) {
                     const freshCombinedMapper = combineTypeMappers(mapper, freshMapper);
-                    for (const p of freshParams) {
-                        if (root.inferTypeParameters.indexOf(p) === -1) {
-                            p.mapper = freshCombinedMapper;
+                    for (let i = 0; i < freshParams.length; i++) {
+                        if (freshParams[i] !== root.inferTypeParameters[i]) {
+                            freshParams[i].mapper = freshCombinedMapper;
                         }
                     }
                 }
