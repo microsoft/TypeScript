@@ -37825,7 +37825,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (getIsolatedModules(compilerOptions)) {
             Debug.assert(!!(type.symbol.flags & SymbolFlags.ConstEnum));
             const constEnumDeclaration = type.symbol.valueDeclaration as EnumDeclaration;
-            if (constEnumDeclaration.flags & NodeFlags.Ambient) {
+            if (constEnumDeclaration.flags & NodeFlags.Ambient && !isValidTypeOnlyAliasUseSite(node)) {
                 error(node, Diagnostics.Cannot_access_ambient_const_enums_when_0_is_enabled, isolatedModulesLikeFlagName);
             }
         }
