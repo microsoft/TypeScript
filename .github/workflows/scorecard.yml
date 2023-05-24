@@ -17,6 +17,12 @@ on:
 # Declare default permissions as read only.
 permissions: read-all
 
+# Ensure scripts are run with pipefail. See:
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#exit-codes-and-error-action-preference
+defaults:
+  run:
+    shell: bash
+
 jobs:
   analysis:
     name: Scorecard analysis

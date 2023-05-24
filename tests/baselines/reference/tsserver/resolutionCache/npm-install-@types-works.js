@@ -71,18 +71,18 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/b/projects/temp/tsconfig.json: *new*
-  {"pollingInterval":2000}
+/a/b/projects/node_modules: *new*
+  {"pollingInterval":500}
+/a/b/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 /a/b/projects/temp/jsconfig.json: *new*
   {"pollingInterval":2000}
 /a/b/projects/temp/node_modules: *new*
   {"pollingInterval":500}
-/a/b/projects/node_modules: *new*
-  {"pollingInterval":500}
 /a/b/projects/temp/node_modules/@types: *new*
   {"pollingInterval":500}
-/a/b/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
+/a/b/projects/temp/tsconfig.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts: *new*
@@ -213,14 +213,14 @@ export = pad;declare function pad(length: number, text: string, char ?: string):
 
 
 PolledWatches::
-/a/b/projects/temp/tsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/jsconfig.json:
-  {"pollingInterval":2000}
 /a/b/projects/node_modules:
   {"pollingInterval":500}
 /a/b/projects/node_modules/@types:
   {"pollingInterval":500}
+/a/b/projects/temp/jsconfig.json:
+  {"pollingInterval":2000}
+/a/b/projects/temp/tsconfig.json:
+  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /a/b/projects/temp/node_modules:
@@ -266,12 +266,12 @@ After running Timeout callback:: count: 1
 15: *ensureProjectForOpenFiles*
 
 PolledWatches::
-/a/b/projects/temp/tsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/jsconfig.json:
-  {"pollingInterval":2000}
 /a/b/projects/node_modules/@types:
   {"pollingInterval":500}
+/a/b/projects/temp/jsconfig.json:
+  {"pollingInterval":2000}
+/a/b/projects/temp/tsconfig.json:
+  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /a/b/projects/node_modules:

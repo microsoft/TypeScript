@@ -120,9 +120,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/jsconfig.json:
-  {}
 /a/data/package.json: *new*
+  {}
+/jsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -288,9 +288,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/jsconfig.json:
-  {}
 /a/data/package.json:
+  {}
+/jsconfig.json:
   {}
 
 FsWatchesRecursive::

@@ -626,82 +626,125 @@ branch({
   }
 })
 
+interface Props<T> {
+>Props : Symbol(Props, Decl(intraExpressionInferences.ts, 197, 2))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 199, 16))
+
+  a: (x: string) => T;
+>a : Symbol(Props.a, Decl(intraExpressionInferences.ts, 199, 20))
+>x : Symbol(x, Decl(intraExpressionInferences.ts, 200, 6))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 199, 16))
+
+  b: (arg: T) => void;
+>b : Symbol(Props.b, Decl(intraExpressionInferences.ts, 200, 22))
+>arg : Symbol(arg, Decl(intraExpressionInferences.ts, 201, 6))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 199, 16))
+}
+
+declare function Foo<T>(props: Props<T>): null;
+>Foo : Symbol(Foo, Decl(intraExpressionInferences.ts, 202, 1))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 204, 21))
+>props : Symbol(props, Decl(intraExpressionInferences.ts, 204, 24))
+>Props : Symbol(Props, Decl(intraExpressionInferences.ts, 197, 2))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 204, 21))
+
+Foo({
+>Foo : Symbol(Foo, Decl(intraExpressionInferences.ts, 202, 1))
+
+  ...{
+    a: (x) => 10,
+>a : Symbol(a, Decl(intraExpressionInferences.ts, 207, 6))
+>x : Symbol(x, Decl(intraExpressionInferences.ts, 208, 8))
+
+    b: (arg) => {
+>b : Symbol(b, Decl(intraExpressionInferences.ts, 208, 17))
+>arg : Symbol(arg, Decl(intraExpressionInferences.ts, 209, 8))
+
+      arg.toString();
+>arg.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>arg : Symbol(arg, Decl(intraExpressionInferences.ts, 209, 8))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+    },
+  },
+});
+
 type ErrorFn = (error: unknown) => void;
->ErrorFn : Symbol(ErrorFn, Decl(intraExpressionInferences.ts, 197, 2))
->error : Symbol(error, Decl(intraExpressionInferences.ts, 199, 16))
+>ErrorFn : Symbol(ErrorFn, Decl(intraExpressionInferences.ts, 213, 3))
+>error : Symbol(error, Decl(intraExpressionInferences.ts, 215, 16))
 
 declare const genericFn: <T>(args: {
->genericFn : Symbol(genericFn, Decl(intraExpressionInferences.ts, 201, 13))
->T : Symbol(T, Decl(intraExpressionInferences.ts, 201, 26))
->args : Symbol(args, Decl(intraExpressionInferences.ts, 201, 29))
+>genericFn : Symbol(genericFn, Decl(intraExpressionInferences.ts, 217, 13))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 217, 26))
+>args : Symbol(args, Decl(intraExpressionInferences.ts, 217, 29))
 
   parser: (p: unknown, errorFn: ErrorFn) => T;
->parser : Symbol(parser, Decl(intraExpressionInferences.ts, 201, 36))
->p : Symbol(p, Decl(intraExpressionInferences.ts, 202, 11))
->errorFn : Symbol(errorFn, Decl(intraExpressionInferences.ts, 202, 22))
->ErrorFn : Symbol(ErrorFn, Decl(intraExpressionInferences.ts, 197, 2))
->T : Symbol(T, Decl(intraExpressionInferences.ts, 201, 26))
+>parser : Symbol(parser, Decl(intraExpressionInferences.ts, 217, 36))
+>p : Symbol(p, Decl(intraExpressionInferences.ts, 218, 11))
+>errorFn : Symbol(errorFn, Decl(intraExpressionInferences.ts, 218, 22))
+>ErrorFn : Symbol(ErrorFn, Decl(intraExpressionInferences.ts, 213, 3))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 217, 26))
 
   handler: (data: { body: T }) => unknown;
->handler : Symbol(handler, Decl(intraExpressionInferences.ts, 202, 46))
->data : Symbol(data, Decl(intraExpressionInferences.ts, 203, 12))
->body : Symbol(body, Decl(intraExpressionInferences.ts, 203, 19))
->T : Symbol(T, Decl(intraExpressionInferences.ts, 201, 26))
+>handler : Symbol(handler, Decl(intraExpressionInferences.ts, 218, 46))
+>data : Symbol(data, Decl(intraExpressionInferences.ts, 219, 12))
+>body : Symbol(body, Decl(intraExpressionInferences.ts, 219, 19))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 217, 26))
 
 }) => T;
->T : Symbol(T, Decl(intraExpressionInferences.ts, 201, 26))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 217, 26))
 
 declare const createParser: <T>(arg: T) => (p: unknown, errorFn: ErrorFn) => T;
->createParser : Symbol(createParser, Decl(intraExpressionInferences.ts, 206, 13))
->T : Symbol(T, Decl(intraExpressionInferences.ts, 206, 29))
->arg : Symbol(arg, Decl(intraExpressionInferences.ts, 206, 32))
->T : Symbol(T, Decl(intraExpressionInferences.ts, 206, 29))
->p : Symbol(p, Decl(intraExpressionInferences.ts, 206, 44))
->errorFn : Symbol(errorFn, Decl(intraExpressionInferences.ts, 206, 55))
->ErrorFn : Symbol(ErrorFn, Decl(intraExpressionInferences.ts, 197, 2))
->T : Symbol(T, Decl(intraExpressionInferences.ts, 206, 29))
+>createParser : Symbol(createParser, Decl(intraExpressionInferences.ts, 222, 13))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 222, 29))
+>arg : Symbol(arg, Decl(intraExpressionInferences.ts, 222, 32))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 222, 29))
+>p : Symbol(p, Decl(intraExpressionInferences.ts, 222, 44))
+>errorFn : Symbol(errorFn, Decl(intraExpressionInferences.ts, 222, 55))
+>ErrorFn : Symbol(ErrorFn, Decl(intraExpressionInferences.ts, 213, 3))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 222, 29))
 
 genericFn({
->genericFn : Symbol(genericFn, Decl(intraExpressionInferences.ts, 201, 13))
+>genericFn : Symbol(genericFn, Decl(intraExpressionInferences.ts, 217, 13))
 
   parser: createParser(1 as const),
->parser : Symbol(parser, Decl(intraExpressionInferences.ts, 208, 11))
->createParser : Symbol(createParser, Decl(intraExpressionInferences.ts, 206, 13))
+>parser : Symbol(parser, Decl(intraExpressionInferences.ts, 224, 11))
+>createParser : Symbol(createParser, Decl(intraExpressionInferences.ts, 222, 13))
 >const : Symbol(const)
 
   handler: ({ body: _ }) => {},
->handler : Symbol(handler, Decl(intraExpressionInferences.ts, 209, 35))
->body : Symbol(body, Decl(intraExpressionInferences.ts, 203, 19))
->_ : Symbol(_, Decl(intraExpressionInferences.ts, 210, 13))
+>handler : Symbol(handler, Decl(intraExpressionInferences.ts, 225, 35))
+>body : Symbol(body, Decl(intraExpressionInferences.ts, 219, 19))
+>_ : Symbol(_, Decl(intraExpressionInferences.ts, 226, 13))
 
 });
 
 declare const genericFnTuple: <T>(
->genericFnTuple : Symbol(genericFnTuple, Decl(intraExpressionInferences.ts, 213, 13))
->T : Symbol(T, Decl(intraExpressionInferences.ts, 213, 31))
+>genericFnTuple : Symbol(genericFnTuple, Decl(intraExpressionInferences.ts, 229, 13))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 229, 31))
 
   args: [
->args : Symbol(args, Decl(intraExpressionInferences.ts, 213, 34))
+>args : Symbol(args, Decl(intraExpressionInferences.ts, 229, 34))
 
     parser: (p: unknown, errorFn: ErrorFn) => T,
->p : Symbol(p, Decl(intraExpressionInferences.ts, 215, 13))
->errorFn : Symbol(errorFn, Decl(intraExpressionInferences.ts, 215, 24))
->ErrorFn : Symbol(ErrorFn, Decl(intraExpressionInferences.ts, 197, 2))
->T : Symbol(T, Decl(intraExpressionInferences.ts, 213, 31))
+>p : Symbol(p, Decl(intraExpressionInferences.ts, 231, 13))
+>errorFn : Symbol(errorFn, Decl(intraExpressionInferences.ts, 231, 24))
+>ErrorFn : Symbol(ErrorFn, Decl(intraExpressionInferences.ts, 213, 3))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 229, 31))
 
     handler: (data: { body: T }) => unknown
->data : Symbol(data, Decl(intraExpressionInferences.ts, 216, 14))
->body : Symbol(body, Decl(intraExpressionInferences.ts, 216, 21))
->T : Symbol(T, Decl(intraExpressionInferences.ts, 213, 31))
+>data : Symbol(data, Decl(intraExpressionInferences.ts, 232, 14))
+>body : Symbol(body, Decl(intraExpressionInferences.ts, 232, 21))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 229, 31))
 
   ]
 ) => T;
->T : Symbol(T, Decl(intraExpressionInferences.ts, 213, 31))
+>T : Symbol(T, Decl(intraExpressionInferences.ts, 229, 31))
 
 genericFnTuple([createParser(1 as const), ({ body: _ }) => {}]);
->genericFnTuple : Symbol(genericFnTuple, Decl(intraExpressionInferences.ts, 213, 13))
->createParser : Symbol(createParser, Decl(intraExpressionInferences.ts, 206, 13))
+>genericFnTuple : Symbol(genericFnTuple, Decl(intraExpressionInferences.ts, 229, 13))
+>createParser : Symbol(createParser, Decl(intraExpressionInferences.ts, 222, 13))
 >const : Symbol(const)
->body : Symbol(body, Decl(intraExpressionInferences.ts, 216, 21))
->_ : Symbol(_, Decl(intraExpressionInferences.ts, 220, 44))
+>body : Symbol(body, Decl(intraExpressionInferences.ts, 232, 21))
+>_ : Symbol(_, Decl(intraExpressionInferences.ts, 236, 44))
 

@@ -309,23 +309,23 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/projects/project1/tsconfig.json: *new*
-  {}
 /home/src/projects/project1/core.d.ts: *new*
   {}
 /home/src/projects/project1/file.ts: *new*
   {}
 /home/src/projects/project1/file2.ts: *new*
   {}
-/home/src/projects/project1/utils.d.ts: *new*
+/home/src/projects/project1/tsconfig.json: *new*
   {}
 /home/src/projects/project1/typeroot1/sometype/index.d.ts: *new*
   {}
+/home/src/projects/project1/utils.d.ts: *new*
+  {}
 
 FsWatchesRecursive::
-/home/src/projects/project1: *new*
-  {}
 /home/src/projects/node_modules: *new*
+  {}
+/home/src/projects/project1: *new*
   {}
 /home/src/projects/project1/typeroot1: *new*
   {}
@@ -445,7 +445,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/projects/project1/tsconfig.json:
+/home/src/lib/lib.dom.d.ts: *new*
   {}
 /home/src/projects/project1/core.d.ts:
   {}
@@ -453,17 +453,17 @@ FsWatches::
   {}
 /home/src/projects/project1/file2.ts:
   {}
-/home/src/projects/project1/utils.d.ts:
+/home/src/projects/project1/tsconfig.json:
   {}
 /home/src/projects/project1/typeroot1/sometype/index.d.ts:
   {}
-/home/src/lib/lib.dom.d.ts: *new*
+/home/src/projects/project1/utils.d.ts:
   {}
 
 FsWatchesRecursive::
-/home/src/projects/project1:
-  {}
 /home/src/projects/node_modules:
+  {}
+/home/src/projects/project1:
   {}
 /home/src/projects/project1/typeroot1:
   {}
@@ -538,17 +538,17 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/projects/project1/tsconfig.json:
+/home/src/lib/lib.dom.d.ts:
   {}
 /home/src/projects/project1/file.ts:
   {}
 /home/src/projects/project1/file2.ts:
   {}
-/home/src/projects/project1/utils.d.ts:
+/home/src/projects/project1/tsconfig.json:
   {}
 /home/src/projects/project1/typeroot1/sometype/index.d.ts:
   {}
-/home/src/lib/lib.dom.d.ts:
+/home/src/projects/project1/utils.d.ts:
   {}
 
 FsWatches *deleted*::
@@ -556,9 +556,9 @@ FsWatches *deleted*::
   {}
 
 FsWatchesRecursive::
-/home/src/projects/project1:
-  {}
 /home/src/projects/node_modules:
+  {}
+/home/src/projects/project1:
   {}
 /home/src/projects/project1/typeroot1:
   {}
@@ -811,23 +811,23 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/projects/project1/tsconfig.json:
+/home/src/lib/lib.dom.d.ts:
   {}
 /home/src/projects/project1/file.ts:
   {}
 /home/src/projects/project1/file2.ts:
   {}
-/home/src/projects/project1/utils.d.ts:
+/home/src/projects/project1/tsconfig.json:
   {}
 /home/src/projects/project1/typeroot1/sometype/index.d.ts:
   {}
-/home/src/lib/lib.dom.d.ts:
+/home/src/projects/project1/utils.d.ts:
   {}
 
 FsWatchesRecursive::
-/home/src/projects/project1:
-  {}
 /home/src/projects/node_modules:
+  {}
+/home/src/projects/project1:
   {}
 /home/src/projects/project1/typeroot1:
   {}
@@ -984,23 +984,23 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/projects/project1/tsconfig.json:
+/home/src/lib/lib.dom.d.ts:
   {}
 /home/src/projects/project1/file.ts:
   {}
 /home/src/projects/project1/file2.ts:
   {}
-/home/src/projects/project1/utils.d.ts:
+/home/src/projects/project1/tsconfig.json:
   {}
 /home/src/projects/project1/typeroot1/sometype/index.d.ts:
   {}
-/home/src/lib/lib.dom.d.ts:
+/home/src/projects/project1/utils.d.ts:
   {}
 
 FsWatchesRecursive::
-/home/src/projects/project1:
-  {}
 /home/src/projects/node_modules:
+  {}
+/home/src/projects/project1:
   {}
 /home/src/projects/project1/typeroot1:
   {}
@@ -1117,25 +1117,25 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/projects/project1/tsconfig.json:
+/home/src/lib/lib.dom.d.ts:
+  {}
+/home/src/lib/lib.webworker.d.ts: *new*
   {}
 /home/src/projects/project1/file.ts:
   {}
 /home/src/projects/project1/file2.ts:
   {}
-/home/src/projects/project1/utils.d.ts:
+/home/src/projects/project1/tsconfig.json:
   {}
 /home/src/projects/project1/typeroot1/sometype/index.d.ts:
   {}
-/home/src/lib/lib.dom.d.ts:
-  {}
-/home/src/lib/lib.webworker.d.ts: *new*
+/home/src/projects/project1/utils.d.ts:
   {}
 
 FsWatchesRecursive::
-/home/src/projects/project1:
-  {}
 /home/src/projects/node_modules:
+  {}
+/home/src/projects/project1:
   {}
 /home/src/projects/project1/typeroot1:
   {}

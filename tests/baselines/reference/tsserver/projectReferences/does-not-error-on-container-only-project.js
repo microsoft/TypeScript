@@ -508,29 +508,29 @@ declare namespace container {
 PolledWatches::
 /user/username/projects/container/compositeexec/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/projects/container/exec/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/container/lib/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/container/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/container/compositeexec/index.ts: *new*
   {}
-/user/username/projects/container/lib/tsconfig.json: *new*
+/user/username/projects/container/compositeexec/tsconfig.json: *new*
   {}
-/user/username/projects/container/lib/index.ts: *new*
-  {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/container/exec/index.ts: *new*
   {}
 /user/username/projects/container/exec/tsconfig.json: *new*
   {}
-/user/username/projects/container/exec/index.ts: *new*
+/user/username/projects/container/lib/index.ts: *new*
+  {}
+/user/username/projects/container/lib/tsconfig.json: *new*
   {}
 /user/username/projects/container/tsconfig.json: *new*
   {}

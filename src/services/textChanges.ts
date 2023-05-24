@@ -52,9 +52,11 @@ import {
     getNewLineKind,
     getNewLineOrDefaultFromHost,
     getNodeId,
+    getOriginalNode,
     getPrecedingNonSpaceCharacterPosition,
     getScriptKindFromFileName,
     getShebang,
+    getSourceFileOfNode,
     getStartPositionOfLine,
     getTokenAtPosition,
     getTouchingToken,
@@ -1238,9 +1240,12 @@ namespace changesToText {
 
             const textChanges = mapDefined(normalized, c => {
                 const span = createTextSpanFromRange(c.range);
-                const newText = computeNewText(c, sourceFile, newLineCharacter, formatContext, validate);
+                const targetSourceFile = c.kind === ChangeKind.ReplaceWithSingleNode ? getSourceFileOfNode(getOriginalNode(c.node)) ?? c.sourceFile :
+                    c.kind === ChangeKind.ReplaceWithMultipleNodes ? getSourceFileOfNode(getOriginalNode(c.nodes[0])) ?? c.sourceFile :
+                    c.sourceFile;
+                const newText = computeNewText(c, targetSourceFile, sourceFile, newLineCharacter, formatContext, validate);
                 // Filter out redundant changes.
-                if (span.length === newText.length && stringContainsAt(sourceFile.text, newText, span.start)) {
+                if (span.length === newText.length && stringContainsAt(targetSourceFile.text, newText, span.start)) {
                     return undefined;
                 }
 
@@ -1264,7 +1269,7 @@ namespace changesToText {
         return applyChanges(nonFormattedText, changes) + newLineCharacter;
     }
 
-    function computeNewText(change: Change, sourceFile: SourceFile, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): string {
+    function computeNewText(change: Change, targetSourceFile: SourceFile, sourceFile: SourceFile, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): string {
         if (change.kind === ChangeKind.Remove) {
             return "";
         }
@@ -1273,26 +1278,26 @@ namespace changesToText {
         }
 
         const { options = {}, range: { pos } } = change;
-        const format = (n: Node) => getFormattedTextOfNode(n, sourceFile, pos, options, newLineCharacter, formatContext, validate);
+        const format = (n: Node) => getFormattedTextOfNode(n, targetSourceFile, sourceFile, pos, options, newLineCharacter, formatContext, validate);
         const text = change.kind === ChangeKind.ReplaceWithMultipleNodes
             ? change.nodes.map(n => removeSuffix(format(n), newLineCharacter)).join(change.options?.joiner || newLineCharacter)
             : format(change.node);
         // strip initial indentation (spaces or tabs) if text will be inserted in the middle of the line
-        const noIndent = (options.indentation !== undefined || getLineStartPositionForPosition(pos, sourceFile) === pos) ? text : text.replace(/^\s+/, "");
+        const noIndent = (options.indentation !== undefined || getLineStartPositionForPosition(pos, targetSourceFile) === pos) ? text : text.replace(/^\s+/, "");
         return (options.prefix || "") + noIndent
              + ((!options.suffix || endsWith(noIndent, options.suffix))
                 ? "" : options.suffix);
     }
 
     /** Note: this may mutate `nodeIn`. */
-    function getFormattedTextOfNode(nodeIn: Node, sourceFile: SourceFile, pos: number, { indentation, prefix, delta }: InsertNodeOptions, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): string {
-        const { node, text } = getNonformattedText(nodeIn, sourceFile, newLineCharacter);
+    function getFormattedTextOfNode(nodeIn: Node, targetSourceFile: SourceFile, sourceFile: SourceFile, pos: number, { indentation, prefix, delta }: InsertNodeOptions, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): string {
+        const { node, text } = getNonformattedText(nodeIn, targetSourceFile, newLineCharacter);
         if (validate) validate(node, text);
-        const formatOptions = getFormatCodeSettingsForWriting(formatContext, sourceFile);
+        const formatOptions = getFormatCodeSettingsForWriting(formatContext, targetSourceFile);
         const initialIndentation =
             indentation !== undefined
                 ? indentation
-                : formatting.SmartIndenter.getIndentation(pos, sourceFile, formatOptions, prefix === newLineCharacter || getLineStartPositionForPosition(pos, sourceFile) === pos);
+                : formatting.SmartIndenter.getIndentation(pos, sourceFile, formatOptions, prefix === newLineCharacter || getLineStartPositionForPosition(pos, targetSourceFile) === pos);
         if (delta === undefined) {
             delta = formatting.SmartIndenter.shouldIndentChildNode(formatOptions, nodeIn) ? (formatOptions.indentSize || 0) : 0;
         }
@@ -1303,7 +1308,7 @@ namespace changesToText {
                 return getLineAndCharacterOfPosition(this, pos);
             }
         };
-        const changes = formatting.formatNodeGivenIndentation(node, file, sourceFile.languageVariant, initialIndentation, delta, { ...formatContext, options: formatOptions });
+        const changes = formatting.formatNodeGivenIndentation(node, file, targetSourceFile.languageVariant, initialIndentation, delta, { ...formatContext, options: formatOptions });
         return applyChanges(text, changes);
     }
 

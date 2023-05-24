@@ -198,6 +198,22 @@ branch({
   }
 })
 
+interface Props<T> {
+  a: (x: string) => T;
+  b: (arg: T) => void;
+}
+
+declare function Foo<T>(props: Props<T>): null;
+
+Foo({
+  ...{
+    a: (x) => 10,
+    b: (arg) => {
+      arg.toString();
+    },
+  },
+});
+
 type ErrorFn = (error: unknown) => void;
 
 declare const genericFn: <T>(args: {
@@ -221,9 +237,21 @@ declare const genericFnTuple: <T>(
 
 genericFnTuple([createParser(1 as const), ({ body: _ }) => {}]);
 
+
 //// [intraExpressionInferences.js]
 "use strict";
 // Repros from #47599
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 callIt({
     produce: function () { return 0; },
     consume: function (n) { return n.toFixed(); }
@@ -338,6 +366,12 @@ branch({
         var test1 = u;
     }
 });
+Foo(__assign({
+    a: function (x) { return 10; },
+    b: function (arg) {
+        arg.toString();
+    },
+}));
 genericFn({
     parser: createParser(1),
     handler: function (_b) {
@@ -414,6 +448,11 @@ declare const branch: <T, U extends T>(_: {
     then: (u: U) => void;
 }) => void;
 declare const x: "a" | "b";
+interface Props<T> {
+    a: (x: string) => T;
+    b: (arg: T) => void;
+}
+declare function Foo<T>(props: Props<T>): null;
 type ErrorFn = (error: unknown) => void;
 declare const genericFn: <T>(args: {
     parser: (p: unknown, errorFn: ErrorFn) => T;

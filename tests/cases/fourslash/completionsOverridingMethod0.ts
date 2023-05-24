@@ -93,7 +93,7 @@
 ////
 ////class HSub extends HBase {
 ////    /*h1*/
-////    [|static|] /*h2*/
+////    static /*h2*/
 ////}
 
 // @Filename: i.ts
@@ -123,8 +123,9 @@ verify.completions({
     includes: [
         {
             name: "foo",
-            sortText: completion.SortText.ClassMemberSnippets,
+            sortText: completion.SortText.LocationPriority,
             insertText: "foo(param1: string, param2: boolean): Promise<void> {\n}",
+            filterText: "foo",
         }
     ],
 });
@@ -140,8 +141,9 @@ verify.completions({
     includes: [
         {
             name: "foo",
-            sortText: completion.SortText.ClassMemberSnippets,
+            sortText: completion.SortText.LocationPriority,
             insertText: "foo(a: string, b: string): string {\n}",
+            filterText: "foo",
         }
     ],
 });
@@ -157,8 +159,9 @@ verify.completions({
     includes: [
         {
             name: "foo",
-            sortText: completion.SortText.ClassMemberSnippets,
+            sortText: completion.SortText.LocationPriority,
             insertText: "foo(a: string): string {\n}",
+            filterText: "foo",
         }
     ],
 });
@@ -174,8 +177,9 @@ verify.completions({
     includes: [
         {
             name: "foo",
-            sortText: completion.SortText.ClassMemberSnippets,
+            sortText: completion.SortText.LocationPriority,
             insertText: "foo(a: string): string {\n}",
+            filterText: "foo",
         }
     ],
 });
@@ -191,8 +195,9 @@ verify.completions({
     includes: [
         {
             name: "foo",
-            sortText: completion.SortText.ClassMemberSnippets,
+            sortText: completion.SortText.LocationPriority,
             insertText: "foo(a: string): string {\n}",
+            filterText: "foo",
         }
     ],
 });
@@ -208,8 +213,9 @@ verify.completions({
     includes: [
         {
             name: "foo",
-            sortText: completion.SortText.ClassMemberSnippets,
+            sortText: completion.SortText.LocationPriority,
             insertText: "foo(a: string): string {\n}",
+            filterText: "foo",
         }
     ],
 });
@@ -225,12 +231,13 @@ verify.completions({
     includes: [
         {
             name: "foo",
-            sortText: completion.SortText.ClassMemberSnippets,
+            sortText: completion.SortText.LocationPriority,
             insertText:
 `foo(a: string): string;
 foo(a: undefined, b: number): string;
 foo(a: unknown, b?: unknown): string {
 }`,
+            filterText: "foo",
         }
     ],
 });
@@ -245,6 +252,7 @@ verify.completions({
     },
     excludes: "met",
 });
+
 verify.completions({
     marker: "h2",
     isNewIdentifierLocation: true,
@@ -256,9 +264,9 @@ verify.completions({
     includes: [
         {
             name: "met",
-            sortText: completion.SortText.ClassMemberSnippets,
-            replacementSpan: test.ranges()[0],
+            sortText: completion.SortText.LocationPriority,
             insertText: "static met(n: number): number {\n}",
+            filterText: "met",
         }
     ],
 });
@@ -274,13 +282,15 @@ verify.completions({
     includes: [
         {
             name: "met",
-            sortText: completion.SortText.ClassMemberSnippets,
+            sortText: completion.SortText.LocationPriority,
             insertText: "met<T>(t: T): T {\n}",
+            filterText: "met"
         },
         {
             name: "metcons",
-            sortText: completion.SortText.ClassMemberSnippets,
+            sortText: completion.SortText.LocationPriority,
             insertText: "metcons<T extends string | number>(t: T): T {\n}",
+            filterText: "metcons"
         }
     ],
 });
