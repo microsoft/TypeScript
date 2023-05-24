@@ -11,8 +11,26 @@ declare const enum EventName {
 >2 : 2
 }
 
-type EventMap = {
->EventMap : { 1: number; 2: string; }
+type E1 = {
+>E1 : { 1: number; 2: string; }
+
+    [EventName.FOO]: number;
+>[EventName.FOO] : number
+>EventName.FOO : EventName.FOO
+>EventName : typeof EventName
+>FOO : EventName.FOO
+
+    [EventName.BAR]: string;
+>[EventName.BAR] : string
+>EventName.BAR : EventName.BAR
+>EventName : typeof EventName
+>BAR : EventName.BAR
+
+};
+
+=== /bar.ts ===
+type E2 = {
+>E2 : { 1: number; 2: string; }
 
     [EventName.FOO]: number;
 >[EventName.FOO] : number

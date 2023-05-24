@@ -5,7 +5,13 @@ declare const enum EventName {
     BAR = 2
 }
 
-type EventMap = {
+type E1 = {
+    [EventName.FOO]: number;
+    [EventName.BAR]: string;
+};
+
+// @filename: /bar.ts
+type E2 = {
     [EventName.FOO]: number;
     [EventName.BAR]: string;
 };
