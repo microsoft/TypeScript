@@ -4,5 +4,4 @@
 
 // @Filename: bar.js
 module.exports = function () {};
-var bar = require("./bar");
-bar.nonexistentProperty; exports.blah = exports.someProp;
+ exports.blah = exports.someProp;
