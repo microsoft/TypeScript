@@ -3725,7 +3725,7 @@ function isExecutableStatement(s: Statement): boolean {
     // Don't remove statements that can validly be used before they appear.
     return !isFunctionDeclaration(s) && !isPurelyTypeDeclaration(s) && !isEnumDeclaration(s) &&
         // `var x;` may declare a variable used above
-        !(isVariableStatement(s) && !(getCombinedNodeFlags(s) & (NodeFlags.Let | NodeFlags.Const)) && s.declarationList.declarations.some(d => !d.initializer));
+        !(isVariableStatement(s) && !(getCombinedNodeFlags(s) & (NodeFlags.BlockScoped)) && s.declarationList.declarations.some(d => !d.initializer));
 }
 
 function isPurelyTypeDeclaration(s: Statement): boolean {

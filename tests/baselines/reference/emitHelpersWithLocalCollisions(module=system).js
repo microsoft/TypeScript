@@ -21,8 +21,9 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
-            exports_1("A", A = class A {
-            });
+            A = class A {
+            };
+            exports_1("A", A);
             exports_1("A", A = __decorate([
                 dec
             ], A));

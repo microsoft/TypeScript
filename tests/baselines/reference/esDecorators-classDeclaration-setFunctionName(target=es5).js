@@ -50,7 +50,7 @@ var C = function () {
 var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
-var C = exports.C = function () {
+var C = function () {
     var _classDecorators = [dec];
     var _classDescriptor;
     var _classExtraInitializers = [];
@@ -68,6 +68,7 @@ var C = exports.C = function () {
     })();
     return C = _classThis;
 }();
+exports.C = C;
 //// [c.js]
 "use strict";
 var _this = this;
@@ -83,7 +84,7 @@ var default_1 = function () {
         return default_1;
     }());
     (function () {
-        __setFunctionName(_classThis, "default_1");
+        __setFunctionName(_classThis, "default");
         __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name }, null, _classExtraInitializers);
         default_1 = _classThis = _classDescriptor.value;
         __runInitializers(_classThis, _classExtraInitializers);

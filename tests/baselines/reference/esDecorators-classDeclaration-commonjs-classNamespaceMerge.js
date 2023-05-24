@@ -50,7 +50,7 @@ var __runInitializers = (this && this.__runInitializers) || function (thisArg, i
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Example = void 0;
-let Example = exports.Example = (() => {
+let Example = (() => {
     let _classDecorators = [deco];
     let _classDescriptor;
     let _classExtraInitializers = [];
@@ -65,6 +65,7 @@ let Example = exports.Example = (() => {
     };
     return Example = _classThis;
 })();
+exports.Example = Example;
 (function (Example) {
     Example.x = 1;
 })(Example || (exports.Example = Example = {}));

@@ -1,0 +1,15 @@
+tests/cases/conformance/statements/VariableStatements/usingDeclarations/usingDeclarationsInForOf.2.ts(1,6): error TS2304: Cannot find name 'using'.
+tests/cases/conformance/statements/VariableStatements/usingDeclarations/usingDeclarationsInForOf.2.ts(1,15): error TS2304: Cannot find name 'of'.
+tests/cases/conformance/statements/VariableStatements/usingDeclarations/usingDeclarationsInForOf.2.ts(1,19): error TS1011: An element access expression should take an argument.
+
+
+==== tests/cases/conformance/statements/VariableStatements/usingDeclarations/usingDeclarationsInForOf.2.ts (3 errors) ====
+    for (using of of []) {
+         ~~~~~
+!!! error TS2304: Cannot find name 'using'.
+                  ~~
+!!! error TS2304: Cannot find name 'of'.
+                      
+!!! error TS1011: An element access expression should take an argument.
+    }
+    

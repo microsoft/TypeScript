@@ -205,8 +205,7 @@ let C = (() => {
 })();
 //// [file2.js]
 /*34*/
-/*36*/
-export let D = (() => {
+let D = (() => {
     let _classDecorators = [dec, dec];
     let _classDescriptor;
     let _classExtraInitializers = [];
@@ -221,8 +220,8 @@ export let D = (() => {
     })();
     return D = _classThis;
 })();
-/*37*/
-export default (() => {
+export { D };
+let E = (() => {
     let _classDecorators_1 = [dec, dec];
     let _classDescriptor_1;
     let _classExtraInitializers_1 = [];
@@ -237,9 +236,11 @@ export default (() => {
     })();
     return E = _classThis_1;
 })();
+/*37*/
+export default E;
 //// [file3.js]
 /*40*/
-export let F = (() => {
+let F = (() => {
     let _classDecorators = [dec, dec];
     let _classDescriptor;
     let _classExtraInitializers = [];
@@ -254,8 +255,8 @@ export let F = (() => {
     })();
     return F = _classThis;
 })();
-/*44*/
-export default (() => {
+export { F };
+let G = (() => {
     let _classDecorators_1 = [dec, dec];
     let _classDescriptor_1;
     let _classExtraInitializers_1 = [];
@@ -270,3 +271,5 @@ export default (() => {
     })();
     return G = _classThis_1;
 })();
+/*44*/
+export default G;

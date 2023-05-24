@@ -205,7 +205,7 @@ let C = (() => {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.D = void 0;
 /*34*/
-let D = exports.D = (() => {
+let D = (() => {
     let _classDecorators = [dec, dec];
     let _classDescriptor;
     let _classExtraInitializers = [];
@@ -219,7 +219,8 @@ let D = exports.D = (() => {
     };
     return D = _classThis;
 })();
-exports.default = (() => {
+exports.D = D;
+let E = (() => {
     let _classDecorators_1 = [dec, dec];
     let _classDescriptor_1;
     let _classExtraInitializers_1 = [];
@@ -233,12 +234,13 @@ exports.default = (() => {
     };
     return E = _classThis_1;
 })();
+exports.default = E;
 //// [file3.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.F = void 0;
 /*40*/
-let F = exports.F = (() => {
+let F = (() => {
     let _classDecorators = [dec, dec];
     let _classDescriptor;
     let _classExtraInitializers = [];
@@ -252,7 +254,8 @@ let F = exports.F = (() => {
     };
     return F = _classThis;
 })();
-exports.default = (() => {
+exports.F = F;
+let G = (() => {
     let _classDecorators_1 = [dec, dec];
     let _classDescriptor_1;
     let _classExtraInitializers_1 = [];
@@ -266,3 +269,4 @@ exports.default = (() => {
     };
     return G = _classThis_1;
 })();
+exports.default = G;

@@ -68,6 +68,7 @@ import {
     FunctionLikeDeclaration,
     FunctionTypeNode,
     GeneratedIdentifier,
+    GeneratedIdentifierFlags,
     GeneratedPrivateIdentifier,
     GetAccessorDeclaration,
     getAssignmentDeclarationKind,
@@ -1531,6 +1532,14 @@ export function isGeneratedIdentifier(node: Node): node is GeneratedIdentifier {
 /** @internal */
 export function isGeneratedPrivateIdentifier(node: Node): node is GeneratedPrivateIdentifier {
     return isPrivateIdentifier(node) && node.emitNode?.autoGenerate !== undefined;
+}
+
+/** @internal */
+export function isFileLevelReservedGeneratedIdentifier(node: GeneratedIdentifier) {
+    const flags = node.emitNode.autoGenerate.flags;
+    return !!(flags & GeneratedIdentifierFlags.FileLevel)
+        && !!(flags & GeneratedIdentifierFlags.Optimistic)
+        && !!(flags & GeneratedIdentifierFlags.ReservedInNestedScopes);
 }
 
 // Private Identifiers

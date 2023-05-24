@@ -391,6 +391,42 @@ export function sameMap<T>(array: readonly T[] | undefined, f: (x: T, i: number)
 }
 
 /**
+ * Maps from T to T, removing `undefined` values and avoids allocation if all elements map to themselves.
+ *
+ * @internal */
+export function sameMapDefined<T>(array: (T | undefined)[], f: (x: T, i: number) => T | undefined): T[];
+/** @internal */
+export function sameMapDefined<T>(array: readonly (T | undefined)[], f: (x: T, i: number) => T | undefined): readonly T[];
+/** @internal */
+export function sameMapDefined<T>(array: (T | undefined)[] | undefined, f: (x: T, i: number) => T | undefined): T[] | undefined;
+/** @internal */
+export function sameMapDefined<T>(array: readonly (T | undefined)[] | undefined, f: (x: T, i: number) => T | undefined): readonly T[] | undefined;
+/** @internal */
+export function sameMapDefined<T>(array: readonly (T | undefined)[] | undefined, f: (x: T, i: number) => T | undefined): readonly T[] | undefined {
+    if (array) {
+        for (let i = 0; i < array.length; i++) {
+            const item = array[i];
+            const mapped = item !== undefined ? f(item, i) : undefined;
+            if (item !== mapped || mapped === undefined) {
+                const result = array.slice(0, i) as T[];
+                if (mapped !== undefined) {
+                    result.push(mapped);
+                }
+                for (i++; i < array.length; i++) {
+                    const item = array[i];
+                    const mapped = item !== undefined ? f(item, i) : undefined;
+                    if (mapped !== undefined) {
+                        result.push(mapped);
+                    }
+                }
+                return result;
+            }
+        }
+    }
+    return undefined;
+}
+
+/**
  * Flattens an array containing a mix of array or non-array elements.
  *
  * @param array The array to flatten.

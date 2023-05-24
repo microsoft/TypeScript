@@ -44,9 +44,9 @@ import {
     GetAccessorDeclaration,
     getAllDecoratorsOfClass,
     getAllDecoratorsOfClassElement,
+    getAssignedNameOfIdentifier,
     getCommentRange,
     getEffectiveBaseTypeNode,
-    getEmitScriptTarget,
     getFirstConstructorWithBody,
     getHeritageClause,
     getNonAssignmentOperatorForCompoundAssignment,
@@ -79,6 +79,7 @@ import {
     isDestructuringAssignment,
     isElementAccessExpression,
     isEmptyStringLiteral,
+    isExportModifier,
     isExpression,
     isForInitializer,
     isFunctionExpression,
@@ -156,6 +157,7 @@ import {
     setSourceMapRange,
     setTextRange,
     ShorthandPropertyAssignment,
+    singleOrMany,
     skipOuterExpressions,
     skipParentheses,
     some,
@@ -279,9 +281,6 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         endLexicalEnvironment,
         hoistVariableDeclaration,
     } = context;
-
-    const compilerOptions = context.getCompilerOptions();
-    const languageVersion = getEmitScriptTarget(compilerOptions);
 
     let top: LexicalEnvironmentStackEntry | undefined;
     let classInfo: ClassInfo | undefined;
@@ -990,37 +989,61 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
 
     function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
         if (isDecoratedClassLike(node)) {
-            if (hasSyntacticModifier(node, ModifierFlags.Export) &&
-                hasSyntacticModifier(node, ModifierFlags.Default)) {
-                //  export default (() => { ... })();
-                const originalClass = getOriginalNode(node, isClassLike) ?? node;
-                const className = originalClass.name ? factory.createStringLiteralFromNode(originalClass.name) : factory.createStringLiteral("default");
+            const statements: Statement[] = [];
+            const originalClass = getOriginalNode(node, isClassLike) ?? node;
+            const className = originalClass.name ? factory.createStringLiteralFromNode(originalClass.name) : factory.createStringLiteral("default");
+            const isExport = hasSyntacticModifier(node, ModifierFlags.Export);
+            const isDefault = hasSyntacticModifier(node, ModifierFlags.Default);
+            if (isExport && isDefault) {
                 const iife = transformClassLike(node, className);
-                const statement = factory.createExportDefault(iife);
-                setOriginalNode(statement, node);
-                setCommentRange(statement, getCommentRange(node));
-                setSourceMapRange(statement, moveRangePastDecorators(node));
-                return statement;
+                if (node.name) {
+                    //  let C = (() => { ... })();
+                    //  export default C;
+                    const varDecl = factory.createVariableDeclaration(factory.getLocalName(node), /*exclamationToken*/ undefined, /*type*/ undefined, iife);
+                    setOriginalNode(varDecl, node);
+
+                    const varDecls = factory.createVariableDeclarationList([varDecl], NodeFlags.Let);
+                    const varStatement = factory.createVariableStatement(/*modifiers*/ undefined, varDecls);
+                    statements.push(varStatement);
+
+                    const exportStatement = factory.createExportDefault(factory.getDeclarationName(node));
+                    setOriginalNode(exportStatement, node);
+                    setCommentRange(exportStatement, getCommentRange(node));
+                    setSourceMapRange(exportStatement, moveRangePastDecorators(node));
+                    statements.push(exportStatement);
+                }
+                else {
+                    //  export default (() => { ... })();
+                    const exportStatement = factory.createExportDefault(iife);
+                    setOriginalNode(exportStatement, node);
+                    setCommentRange(exportStatement, getCommentRange(node));
+                    setSourceMapRange(exportStatement, moveRangePastDecorators(node));
+                    statements.push(exportStatement);
+                }
             }
             else {
                 //  let C = (() => { ... })();
                 Debug.assertIsDefined(node.name, "A class declaration that is not a default export must have a name.");
-                const iife = transformClassLike(node, factory.createStringLiteralFromNode(node.name));
-                const modifiers = visitNodes(node.modifiers, modifierVisitor, isModifier);
-                // When we transform to ES5/3 this will be moved inside an IIFE and should reference the name
-                // without any block-scoped variable collision handling
-                const declName = languageVersion <= ScriptTarget.ES2015 ?
-                    factory.getInternalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true) :
-                    factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
+                const iife = transformClassLike(node, className);
+                const modifierVisitorNoExport = isExport ? ((node: ModifierLike) => isExportModifier(node) ? undefined : modifierVisitor(node)) : modifierVisitor;
+                const modifiers = visitNodes(node.modifiers, modifierVisitorNoExport, isModifier);
+                const declName = factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
                 const varDecl = factory.createVariableDeclaration(declName, /*exclamationToken*/ undefined, /*type*/ undefined, iife);
                 setOriginalNode(varDecl, node);
 
                 const varDecls = factory.createVariableDeclarationList([varDecl], NodeFlags.Let);
-                const statement = factory.createVariableStatement(modifiers, varDecls);
-                setOriginalNode(statement, node);
-                setCommentRange(statement, getCommentRange(node));
-                return statement;
+                const varStatement = factory.createVariableStatement(modifiers, varDecls);
+                setOriginalNode(varStatement, node);
+                setCommentRange(varStatement, getCommentRange(node));
+                statements.push(varStatement);
+                if (isExport) {
+                    //  export { C };
+                    const exportStatement = factory.createExternalModuleExport(declName);
+                    setOriginalNode(exportStatement, node);
+                    statements.push(exportStatement);
+                }
             }
+            return singleOrMany(statements);
         }
         else {
             const modifiers = visitNodes(node.modifiers, modifierVisitor, isModifier);
@@ -1544,7 +1567,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
 
         let updated: ParameterDeclaration;
         if (isNamedEvaluation(node, isAnonymousClassNeedingAssignedName)) {
-            const assignedName = getAssignedNameOfIdentifier(node.name, node.initializer);
+            const assignedName = getAssignedNameOfIdentifier(factory, node.name, node.initializer);
             const name = visitNode(node.name, visitor, isBindingName);
             const initializer = visitNode(node.initializer, node => namedEvaluationVisitor(node, assignedName), isExpression);
             updated = factory.updateParameterDeclaration(
@@ -1632,7 +1655,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
             //     ...
 
             if (isNamedEvaluation(node, isAnonymousClassNeedingAssignedName)) {
-                const assignedName = getAssignedNameOfIdentifier(node.left, node.right);
+                const assignedName = getAssignedNameOfIdentifier(factory, node.left, node.right);
                 const left = visitNode(node.left, visitor, isExpression);
                 const right = visitNode(node.right, node => namedEvaluationVisitor(node, assignedName), isExpression);
                 return factory.updateBinaryExpression(node, left, node.operatorToken, right);
@@ -1842,7 +1865,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         //     ...
 
         if (isNamedEvaluation(node, isAnonymousClassNeedingAssignedName)) {
-            const assignedName = getAssignedNameOfIdentifier(node.name, node.initializer);
+            const assignedName = getAssignedNameOfIdentifier(factory, node.name, node.initializer);
             const name = visitNode(node.name, visitor, isBindingName);
             const initializer = visitNode(node.initializer, node => namedEvaluationVisitor(node, assignedName), isExpression);
             return factory.updateVariableDeclaration(node, name, /*exclamationToken*/ undefined, /*type*/ undefined, initializer);
@@ -1869,7 +1892,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         //     ...
 
         if (isNamedEvaluation(node, isAnonymousClassNeedingAssignedName)) {
-            const assignedName = getAssignedNameOfIdentifier(node.name, node.initializer);
+            const assignedName = getAssignedNameOfIdentifier(factory, node.name, node.initializer);
             const propertyName = visitNode(node.propertyName, visitor, isPropertyName);
             const name = visitNode(node.name, visitor, isBindingName);
             const initializer = visitNode(node.initializer, node => namedEvaluationVisitor(node, assignedName), isExpression);
@@ -1922,7 +1945,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
             const assignmentTarget = visitDestructuringAssignmentTarget(node.left);
             let initializer: Expression;
             if (isNamedEvaluation(node, isAnonymousClassNeedingAssignedName)) {
-                const assignedName = getAssignedNameOfIdentifier(node.left, node.right);
+                const assignedName = getAssignedNameOfIdentifier(factory, node.left, node.right);
                 initializer = visitNode(node.right, node => namedEvaluationVisitor(node, assignedName), isExpression);
             }
             else {
@@ -1989,7 +2012,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         //     ...
 
         if (isNamedEvaluation(node, isAnonymousClassNeedingAssignedName)) {
-            const assignedName = getAssignedNameOfIdentifier(node.name, node.objectAssignmentInitializer);
+            const assignedName = getAssignedNameOfIdentifier(factory, node.name, node.objectAssignmentInitializer);
             const name = visitNode(node.name, visitor, isIdentifier);
             const objectAssignmentInitializer = visitNode(node.objectAssignmentInitializer, node => namedEvaluationVisitor(node, assignedName), isExpression);
             return factory.updateShorthandPropertyAssignment(node, name, objectAssignmentInitializer);
@@ -2324,12 +2347,5 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
                 )
             ])
         );
-    }
-
-    function getAssignedNameOfIdentifier(name: Identifier, initializer: Expression) {
-        const originalClass = getOriginalNode(initializer, isClassLike);
-        return originalClass && !originalClass.name && hasSyntacticModifier(originalClass, ModifierFlags.Default) ?
-            factory.createStringLiteral("default") :
-            factory.createStringLiteralFromNode(name);
     }
 }

@@ -922,24 +922,19 @@ export function transformTypeScript(context: TransformationContext) {
             const iife = factory.createImmediatelyInvokedArrowFunction(statements);
             setInternalEmitFlags(iife, InternalEmitFlags.TypeScriptClassWrapper);
 
-            //  export let C = (() => { ... })();
-            const modifiers = facts & ClassFacts.IsNamedExternalExport ?
-                factory.createModifiersFromModifierFlags(ModifierFlags.Export) :
-                undefined;
-
             //  let C = (() => { ... })();
-            const varStatement = factory.createVariableStatement(
-                modifiers,
-                factory.createVariableDeclarationList([
-                    factory.createVariableDeclaration(
-                        factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ false),
-                        /*exclamationToken*/ undefined,
-                        /*type*/ undefined,
-                        iife
-                    )
-                ], NodeFlags.Let)
+            const varDecl = factory.createVariableDeclaration(
+                factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ false),
+                /*exclamationToken*/ undefined,
+                /*type*/ undefined,
+                iife
             );
+            setOriginalNode(varDecl, node);
 
+            const varStatement = factory.createVariableStatement(
+                /*modifiers*/ undefined,
+                factory.createVariableDeclarationList([varDecl], NodeFlags.Let)
+            );
             setOriginalNode(varStatement, node);
             setCommentRange(varStatement, node);
             setSourceMapRange(varStatement, moveRangePastDecorators(node));
@@ -963,10 +958,10 @@ export function transformTypeScript(context: TransformationContext) {
                     factory.createExportDefault(factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true))
                 ];
             }
-            if (facts & ClassFacts.IsNamedExternalExport && !promoteToIIFE) {
+            if (facts & ClassFacts.IsNamedExternalExport) {
                 return [
                     statement,
-                    factory.createExternalModuleExport(factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true))
+                    factory.createExternalModuleExport(factory.getDeclarationName(node, /*allowComments*/ false, /*allowSourceMaps*/ true))
                 ];
             }
         }

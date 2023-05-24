@@ -41,7 +41,7 @@ let C = (() => {
 })();
 export {};
 //// [b.js]
-export let C = (() => {
+let C = (() => {
     let _classDecorators = [dec];
     let _classDescriptor;
     let _classExtraInitializers = [];
@@ -56,6 +56,7 @@ export let C = (() => {
     })();
     return C = _classThis;
 })();
+export { C };
 //// [c.js]
 export default (() => {
     let _classDecorators = [dec];

@@ -990,6 +990,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         createExportDefault,
         createExternalModuleExport,
         createTypeCheck,
+        createIsNotTypeCheck,
         createMethodCall,
         createGlobalMethodCall,
         createFunctionBindCall,
@@ -1318,6 +1319,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
                 transformFlags =
                     TransformFlags.ContainsES2017 |
                     TransformFlags.ContainsES2018;
+                break;
+
+            case SyntaxKind.UsingKeyword:
+                transformFlags = TransformFlags.ContainsESNext;
                 break;
 
             case SyntaxKind.PublicKeyword:
@@ -4176,6 +4181,9 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
                 TransformFlags.ContainsES2015 |
                 TransformFlags.ContainsBlockScopedBinding;
         }
+        if (flags & NodeFlags.Using) {
+            node.transformFlags |= TransformFlags.ContainsESNext;
+        }
         return node;
     }
 
@@ -6373,9 +6381,15 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     //
 
     function createTypeCheck(value: Expression, tag: TypeOfTag) {
-        return tag === "undefined"
-            ? factory.createStrictEquality(value, createVoidZero())
-            : factory.createStrictEquality(createTypeOfExpression(value), createStringLiteral(tag));
+        return tag === "null" ? factory.createStrictEquality(value, createNull()) :
+            tag === "undefined" ? factory.createStrictEquality(value, createVoidZero()) :
+            factory.createStrictEquality(createTypeOfExpression(value), createStringLiteral(tag));
+    }
+
+    function createIsNotTypeCheck(value: Expression, tag: TypeOfTag) {
+        return tag === "null" ? factory.createStrictInequality(value, createNull()) :
+            tag === "undefined" ? factory.createStrictInequality(value, createVoidZero()) :
+            factory.createStrictInequality(createTypeOfExpression(value), createStringLiteral(tag));
     }
 
     function createMethodCall(object: Expression, methodName: string | Identifier, argumentsList: readonly Expression[]) {

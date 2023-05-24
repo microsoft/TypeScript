@@ -215,6 +215,7 @@ const libEntries: [string, string][] = [
     ["esnext.symbol", "lib.es2019.symbol.d.ts"],
     ["esnext.asynciterable", "lib.es2018.asynciterable.d.ts"],
     ["esnext.intl", "lib.esnext.intl.d.ts"],
+    ["esnext.disposable", "lib.esnext.disposable.d.ts"],
     ["esnext.bigint", "lib.es2020.bigint.d.ts"],
     ["esnext.string", "lib.es2022.string.d.ts"],
     ["esnext.promise", "lib.es2021.promise.d.ts"],
