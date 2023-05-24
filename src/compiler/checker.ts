@@ -7126,35 +7126,36 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const methodDeclaration = signatureToSignatureDeclarationHelper(signature, SyntaxKind.MethodSignature, context, { name: propertyName, questionToken: optionalToken }) as MethodSignature;
                     typeElements.push(preserveCommentsOn(methodDeclaration));
                 }
+                if (signatures.length || !optionalToken) {
+                    return;
+                }
+            }
+            let propertyTypeNode: TypeNode;
+            if (shouldUsePlaceholderForProperty(propertySymbol, context)) {
+                propertyTypeNode = createElidedInformationPlaceholder(context);
             }
             else {
-                let propertyTypeNode: TypeNode;
-                if (shouldUsePlaceholderForProperty(propertySymbol, context)) {
-                    propertyTypeNode = createElidedInformationPlaceholder(context);
+                if (propertyIsReverseMapped) {
+                    context.reverseMappedStack ||= [];
+                    context.reverseMappedStack.push(propertySymbol as ReverseMappedSymbol);
                 }
-                else {
-                    if (propertyIsReverseMapped) {
-                        context.reverseMappedStack ||= [];
-                        context.reverseMappedStack.push(propertySymbol as ReverseMappedSymbol);
-                    }
-                    propertyTypeNode = propertyType ? serializeTypeForDeclaration(context, propertyType, propertySymbol, saveEnclosingDeclaration) : factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
-                    if (propertyIsReverseMapped) {
-                        context.reverseMappedStack!.pop();
-                    }
+                propertyTypeNode = propertyType ? serializeTypeForDeclaration(context, propertyType, propertySymbol, saveEnclosingDeclaration) : factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
+                if (propertyIsReverseMapped) {
+                    context.reverseMappedStack!.pop();
                 }
-
-                const modifiers = isReadonlySymbol(propertySymbol) ? [factory.createToken(SyntaxKind.ReadonlyKeyword)] : undefined;
-                if (modifiers) {
-                    context.approximateLength += 9;
-                }
-                const propertySignature = factory.createPropertySignature(
-                    modifiers,
-                    propertyName,
-                    optionalToken,
-                    propertyTypeNode);
-
-                typeElements.push(preserveCommentsOn(propertySignature));
             }
+
+            const modifiers = isReadonlySymbol(propertySymbol) ? [factory.createToken(SyntaxKind.ReadonlyKeyword)] : undefined;
+            if (modifiers) {
+                context.approximateLength += 9;
+            }
+            const propertySignature = factory.createPropertySignature(
+                modifiers,
+                propertyName,
+                optionalToken,
+                propertyTypeNode);
+
+            typeElements.push(preserveCommentsOn(propertySignature));
 
             function preserveCommentsOn<T extends Node>(node: T) {
                 if (some(propertySymbol.declarations, d => d.kind === SyntaxKind.JSDocPropertyTag)) {
