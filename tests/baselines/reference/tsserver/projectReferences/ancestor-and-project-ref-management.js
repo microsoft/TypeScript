@@ -458,13 +458,13 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/container/lib/tsconfig.json: *new*
+/user/username/projects/container/compositeexec/tsconfig.json: *new*
   {}
 /user/username/projects/container/lib/index.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/container/lib/tsconfig.json: *new*
   {}
 /user/username/projects/container/tsconfig.json: *new*
   {}
@@ -532,21 +532,21 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/temp/tsconfig.json: *new*
-  {"pollingInterval":2000}
 /user/username/projects/temp/jsconfig.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/temp/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/temp/tsconfig.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
-/user/username/projects/container/lib/tsconfig.json:
+/user/username/projects/container/compositeexec/tsconfig.json:
   {}
 /user/username/projects/container/lib/index.ts:
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/container/lib/tsconfig.json:
   {}
 /user/username/projects/container/tsconfig.json:
   {}
@@ -742,35 +742,35 @@ After request
 PolledWatches::
 /user/username/projects/container/compositeexec/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/container/exec/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/container/lib/node_modules/@types: *new*
+  {"pollingInterval":500}
 /user/username/projects/container/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/temp/tsconfig.json:
-  {"pollingInterval":2000}
 /user/username/projects/temp/jsconfig.json:
   {"pollingInterval":2000}
 /user/username/projects/temp/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types: *new*
-  {"pollingInterval":500}
+/user/username/projects/temp/tsconfig.json:
+  {"pollingInterval":2000}
 
 FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/container/tsconfig.json:
+/user/username/projects/container/compositeexec/tsconfig.json:
+  {}
+/user/username/projects/container/exec/index.ts: *new*
   {}
 /user/username/projects/container/exec/tsconfig.json: *new*
   {}
-/user/username/projects/container/exec/index.ts: *new*
+/user/username/projects/container/lib/index.ts:
+  {}
+/user/username/projects/container/lib/tsconfig.json:
+  {}
+/user/username/projects/container/tsconfig.json:
   {}
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/temp/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -804,37 +804,37 @@ Before request
 PolledWatches::
 /user/username/projects/container/compositeexec/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/container/exec/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/container/lib/node_modules/@types:
+  {"pollingInterval":500}
 /user/username/projects/container/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/temp/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
 
 PolledWatches *deleted*::
-/user/username/projects/temp/tsconfig.json:
-  {"pollingInterval":2000}
 /user/username/projects/temp/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/temp/tsconfig.json:
   {"pollingInterval":2000}
 
 FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/container/tsconfig.json:
+/user/username/projects/container/compositeexec/tsconfig.json:
+  {}
+/user/username/projects/container/exec/index.ts:
   {}
 /user/username/projects/container/exec/tsconfig.json:
   {}
-/user/username/projects/container/exec/index.ts:
+/user/username/projects/container/lib/index.ts:
+  {}
+/user/username/projects/container/lib/tsconfig.json:
+  {}
+/user/username/projects/container/tsconfig.json:
   {}
 /user/username/projects/temp/temp.ts: *new*
   {}
@@ -890,35 +890,35 @@ After request
 PolledWatches::
 /user/username/projects/container/compositeexec/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/container/exec/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/container/lib/node_modules/@types:
+  {"pollingInterval":500}
 /user/username/projects/container/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/temp/jsconfig.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/temp/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/temp/tsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/temp/jsconfig.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/container/tsconfig.json:
+/user/username/projects/container/compositeexec/tsconfig.json:
+  {}
+/user/username/projects/container/exec/index.ts:
   {}
 /user/username/projects/container/exec/tsconfig.json:
   {}
-/user/username/projects/container/exec/index.ts:
+/user/username/projects/container/lib/index.ts:
+  {}
+/user/username/projects/container/lib/tsconfig.json:
+  {}
+/user/username/projects/container/tsconfig.json:
   {}
 
 FsWatches *deleted*::
@@ -978,39 +978,39 @@ Before request
 PolledWatches::
 /user/username/projects/container/compositeexec/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/container/exec/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/container/lib/node_modules/@types:
+  {"pollingInterval":500}
 /user/username/projects/container/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/temp/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/container/lib/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
-  {"pollingInterval":500}
 
 PolledWatches *deleted*::
-/user/username/projects/temp/tsconfig.json:
-  {"pollingInterval":2000}
 /user/username/projects/temp/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/temp/tsconfig.json:
   {"pollingInterval":2000}
 
 FsWatches::
-/user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/container/tsconfig.json:
+/user/username/projects/container/compositeexec/index.ts: *new*
   {}
-/user/username/projects/container/exec/tsconfig.json:
+/user/username/projects/container/compositeexec/tsconfig.json:
   {}
 /user/username/projects/container/exec/index.ts:
   {}
-/user/username/projects/container/compositeexec/index.ts: *new*
+/user/username/projects/container/exec/tsconfig.json:
+  {}
+/user/username/projects/container/lib/index.ts:
+  {}
+/user/username/projects/container/lib/tsconfig.json:
+  {}
+/user/username/projects/container/tsconfig.json:
   {}
 /user/username/projects/temp/temp.ts: *new*
   {}
@@ -1129,21 +1129,21 @@ After request
 PolledWatches::
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/temp/jsconfig.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/temp/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/temp/tsconfig.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/temp/jsconfig.json: *new*
   {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /user/username/projects/container/compositeexec/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/container/node_modules/@types:
+/user/username/projects/container/exec/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/container/lib/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/container/exec/node_modules/@types:
+/user/username/projects/container/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
@@ -1151,19 +1151,19 @@ FsWatches::
   {}
 
 FsWatches *deleted*::
+/user/username/projects/container/compositeexec/index.ts:
+  {}
 /user/username/projects/container/compositeexec/tsconfig.json:
-  {}
-/user/username/projects/container/lib/tsconfig.json:
-  {}
-/user/username/projects/container/lib/index.ts:
-  {}
-/user/username/projects/container/tsconfig.json:
-  {}
-/user/username/projects/container/exec/tsconfig.json:
   {}
 /user/username/projects/container/exec/index.ts:
   {}
-/user/username/projects/container/compositeexec/index.ts:
+/user/username/projects/container/exec/tsconfig.json:
+  {}
+/user/username/projects/container/lib/index.ts:
+  {}
+/user/username/projects/container/lib/tsconfig.json:
+  {}
+/user/username/projects/container/tsconfig.json:
   {}
 /user/username/projects/temp/temp.ts:
   {}

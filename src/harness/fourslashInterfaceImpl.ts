@@ -1738,6 +1738,7 @@ export interface ExpectedCompletionEntryObject {
     readonly name: string;
     readonly source?: string;
     readonly insertText?: string;
+    readonly filterText?: string;
     readonly replacementSpan?: FourSlash.Range;
     readonly hasAction?: boolean; // If not specified, will assert that this is false.
     readonly isRecommended?: boolean; // If not specified, will assert that this is false.

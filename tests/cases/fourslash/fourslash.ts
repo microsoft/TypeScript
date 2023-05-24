@@ -702,6 +702,7 @@ declare namespace FourSlashInterface {
         readonly name: string;
         readonly source?: string;
         readonly insertText?: string;
+        readonly filterText?: string;
         readonly replacementSpan?: Range;
         readonly hasAction?: boolean;
         readonly isRecommended?: boolean;

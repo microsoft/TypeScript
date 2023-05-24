@@ -130,7 +130,7 @@ var x = 0;`, {
         testVerbatimModuleSyntax: true
     });
 
-    transpilesCorrectly("Generates module output", `var x = 0;`, {
+    transpilesCorrectly("Generates module output", `var x = 0; export {};`, {
         options: { compilerOptions: { module: ts.ModuleKind.AMD } }
     });
 
@@ -139,7 +139,7 @@ var x = 0;`, {
         testVerbatimModuleSyntax: true
     });
 
-    transpilesCorrectly("Sets module name", "var x = 1;", {
+    transpilesCorrectly("Sets module name", "var x = 1; export {};", {
         options: { compilerOptions: { module: ts.ModuleKind.System, newLine: ts.NewLineKind.LineFeed }, moduleName: "NamedModule" }
     });
 

@@ -1941,7 +1941,6 @@ function isLeftHandSideExpressionKind(kind: SyntaxKind): boolean {
         case SyntaxKind.JsxElement:
         case SyntaxKind.JsxSelfClosingElement:
         case SyntaxKind.JsxFragment:
-        case SyntaxKind.JsxNamespacedName:
         case SyntaxKind.TaggedTemplateExpression:
         case SyntaxKind.ArrayLiteralExpression:
         case SyntaxKind.ParenthesizedExpression:

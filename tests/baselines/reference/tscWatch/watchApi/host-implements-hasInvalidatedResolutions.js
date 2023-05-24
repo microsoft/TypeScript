@@ -77,13 +77,13 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/main.ts: *new*
   {}
 /user/username/projects/myproject/other.d.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -210,15 +210,15 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/main.ts:
   {}
 /user/username/projects/myproject/other.d.ts:
   {}
-/a/lib/lib.d.ts:
-  {}
 /user/username/projects/myproject/other.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json:
   {}
 
 exitCode:: ExitStatus.undefined

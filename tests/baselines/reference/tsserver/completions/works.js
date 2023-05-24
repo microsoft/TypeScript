@@ -69,9 +69,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/tsconfig.json: *new*
-  {}
 /b.ts: *new*
+  {}
+/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
