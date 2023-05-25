@@ -1,31 +1,29 @@
 import {
-    CancellationToken,
     Debug,
     Diagnostics,
     emptyArray,
     Expression,
     factory,
     FindAllReferences,
-    flatMap,
     getExpressionPrecedence,
     getLocaleSpecificMessage,
     getTokenAtPosition,
+    Identifier,
     isExpression,
     isIdentifier,
     isInitializedVariable,
     isTypeQueryNode,
     isVariableDeclarationInVariableStatement,
-    mapDefined,
     Node,
-    NoopCancellationToken,
     Program,
     refactor,
     SourceFile,
+    SymbolFlags,
     textChanges,
+    TypeChecker,
     VariableDeclaration,
 } from "../_namespaces/ts";
 import { RefactorErrorInfo, registerRefactor } from "../_namespaces/ts.refactor";
-import { getReferenceEntriesForNode } from "../findAllReferences";
 
 const refactorName = "Inline variable";
 const refactorDescription = getLocaleSpecificMessage(Diagnostics.Inline_variable);
@@ -47,7 +45,6 @@ registerRefactor(refactorName, {
 
     getAvailableActions(context) {
         const {
-            cancellationToken,
             file,
             program,
             preferences,
@@ -58,7 +55,7 @@ registerRefactor(refactorName, {
         // tryWithReferenceToken is true below when triggerReason === "invoked", since we want to
         // always provide the refactor in the declaration site but only show it in references when
         // the refactor is explicitly invoked.
-        const info = getInliningInfo(file, startPosition, triggerReason === "invoked", program, cancellationToken);
+        const info = getInliningInfo(file, startPosition, triggerReason === "invoked", program);
         if (!info) {
             return emptyArray;
         }
@@ -88,15 +85,9 @@ registerRefactor(refactorName, {
     getEditsForAction(context, actionName) {
         Debug.assert(actionName === refactorName, "Unexpected refactor invoked");
 
-        const {
-            cancellationToken,
-            file,
-            program,
-            startPosition,
-        } = context;
+        const { file, program, startPosition } = context;
 
-        const info = getInliningInfo(file, startPosition, /*tryWithReferenceToken*/ true, program, cancellationToken);
-
+        const info = getInliningInfo(file, startPosition, /*tryWithReferenceToken*/ true, program);
         if (!info || refactor.isRefactorErrorInfo(info)) {
             return undefined;
         }
@@ -113,82 +104,62 @@ registerRefactor(refactorName, {
     }
 });
 
-function getInliningInfo(file: SourceFile, startPosition: number, tryWithReferenceToken: boolean, program: Program, cancellationToken: CancellationToken = NoopCancellationToken): InliningInfo | RefactorErrorInfo | undefined {
+function getInliningInfo(file: SourceFile, startPosition: number, tryWithReferenceToken: boolean, program: Program): InliningInfo | RefactorErrorInfo | undefined {
+    const checker = program.getTypeChecker();
     const token = getTokenAtPosition(file, startPosition);
     const parent = token.parent;
 
     // If the node is a variable declaration, make sure it's not in a catch clause or for-loop
     // and that it has a value.
-    if (isInitializedVariable(parent) && isVariableDeclarationInVariableStatement(parent)) {
+    if (isInitializedVariable(parent) && isVariableDeclarationInVariableStatement(parent) && isIdentifier(parent.name)) {
         // Don't inline the variable if it isn't declared exactly once.
         if (parent.symbol.declarations?.length !== 1) {
             return undefined;
         }
 
         // Find all references to the variable in the current file.
-        const name = parent.name;
-        const referenceEntries = getReferenceEntriesForNode(name.pos, name, program, [file], cancellationToken);
-        if (!referenceEntries) {
-            return undefined;
-        }
-        const referenceNodes = getReferenceNodes(referenceEntries, name);
-
-        return referenceNodes && { references: referenceNodes, declaration: parent, replacement: parent.initializer };
+        const references = getReferenceNodes(parent.name, checker, file);
+        return references && { references, declaration: parent, replacement: parent.initializer };
     }
 
     if (tryWithReferenceToken && isIdentifier(token)) {
         // Try finding the declaration and nodes to replace via the reference token.
-        const referencedSymbols = FindAllReferences.Core.getReferencedSymbolsForNode(token.pos, token, program, [file], cancellationToken);
-        if (!referencedSymbols) {
+        const definition = checker.resolveName(token.text, token, SymbolFlags.Value, /*excludeGlobals*/ false);
+        if (definition?.declarations?.length !== 1) {
             return undefined;
         }
 
-        const { definition } = referencedSymbols[0];
-        if (definition?.type !== FindAllReferences.DefinitionKind.Symbol) {
+        const declaration = definition.declarations[0];
+        if (!isInitializedVariable(declaration) || !isVariableDeclarationInVariableStatement(declaration) || !isIdentifier(declaration.name)) {
             return undefined;
         }
 
-        // Don't inline the variable if it isn't declared exactly once.
-        if (definition.symbol.declarations?.length !== 1) {
-            return undefined;
-        }
-
-        const { valueDeclaration } = definition.symbol;
-        if (valueDeclaration && isInitializedVariable(valueDeclaration) && isVariableDeclarationInVariableStatement(valueDeclaration)) {
-            const referenceNodes = getReferenceNodes(flatMap(referencedSymbols, ({ references }) => references), valueDeclaration.name);
-
-            return referenceNodes && { references: referenceNodes, declaration: valueDeclaration, replacement: valueDeclaration.initializer };
-        }
+        const references = getReferenceNodes(declaration.name, checker, file);
+        return references && { references, declaration, replacement: declaration.initializer };
     }
 
     // TODO: Do we want to have other errors too?
     return { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_variable_to_inline) };
 }
 
-function getReferenceNodes(entries: readonly FindAllReferences.Entry[], declaration: Node): Node[] | undefined {
-    const referenceNodes = mapDefined(entries, entry => {
-        // Only replace node references, and exclude the original variable too.
-        if (entry.kind !== FindAllReferences.EntryKind.Node || entry.node === declaration) {
-            return undefined;
-        }
-
+function getReferenceNodes(declaration: Identifier, checker: TypeChecker, file: SourceFile): Identifier[] | undefined {
+    const references: Identifier[] = [];
+    const cannotInline = FindAllReferences.Core.eachSymbolReferenceInFile(declaration, checker, file, ref => {
         // Only inline if all references are reads. Else we might end up with an invalid scenario like:
         // const y = x++ + 1 -> const y = 2++ + 1
-        if (FindAllReferences.isWriteAccessForReference(entry.node)) {
-            return undefined;
+        if (FindAllReferences.isWriteAccessForReference(ref)) {
+            return true;
         }
 
         // typeof needs an identifier, so we can't inline a value in there.
-        if (isTypeQueryNode(entry.node.parent)) {
-            return undefined;
+        if (isTypeQueryNode(ref.parent)) {
+            return true;
         }
 
-        return entry.node;
+        references.push(ref);
     });
 
-    // Return undefined if the only reference is the declaration itself, or if a reference
-    // isn't applicable for inlining.
-    return referenceNodes.length > 0 && referenceNodes.length === entries.length - 1 ? referenceNodes : undefined;
+    return references.length === 0 || cannotInline ? undefined : references;
 }
 
 function getReplacementExpression(reference: Node, replacement: Expression): Expression {
