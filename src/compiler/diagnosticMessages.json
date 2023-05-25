@@ -7640,7 +7640,7 @@
         "category": "Message",
         "code": 95185
     },
-    "Only variables declared exactly once can be inlined.": {
+    "Variables that share a name with a type or namespace in the same scope cannot be inlined.": {
         "category": "Message",
         "code": 95186
     },
