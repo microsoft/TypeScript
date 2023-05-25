@@ -146,3 +146,23 @@ tests/cases/conformance/types/typeRelationships/typeInference/intraExpressionInf
       },
     });
     
+    declare function f4<T>(
+      arg: {
+        [K in keyof T]: [
+          (n: string) => T[K],
+          (x: T[K]) => void
+        ];
+      }
+    ): T;
+    
+    const res8 = f4({
+      a: [
+        (n) => n,
+        (x) => x.toLowerCase(),
+      ],
+      b: [
+        (n) => ({ v: n }),
+        (x) => x.v.toLowerCase(),
+      ],
+    });
+    

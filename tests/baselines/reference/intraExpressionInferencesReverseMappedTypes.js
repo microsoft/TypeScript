@@ -126,6 +126,26 @@ const res7 = f3({
   },
 });
 
+declare function f4<T>(
+  arg: {
+    [K in keyof T]: [
+      (n: string) => T[K],
+      (x: T[K]) => void
+    ];
+  }
+): T;
+
+const res8 = f4({
+  a: [
+    (n) => n,
+    (x) => x.toLowerCase(),
+  ],
+  b: [
+    (n) => ({ v: n }),
+    (x) => x.v.toLowerCase(),
+  ],
+});
+
 
 //// [intraExpressionInferencesReverseMappedTypes.js]
 "use strict";
@@ -218,6 +238,16 @@ var res7 = f3({
         consume: function (x) { return x.v.toLowerCase(); },
     },
 });
+var res8 = f4({
+    a: [
+        function (n) { return n; },
+        function (x) { return x.toLowerCase(); },
+    ],
+    b: [
+        function (n) { return ({ v: n }); },
+        function (x) { return x.v.toLowerCase(); },
+    ],
+});
 
 
 //// [intraExpressionInferencesReverseMappedTypes.d.ts]
@@ -270,6 +300,18 @@ declare function f3<T>(arg: {
     };
 }): T;
 declare const res7: {
+    a: string;
+    b: {
+        v: string;
+    };
+};
+declare function f4<T>(arg: {
+    [K in keyof T]: [
+        (n: string) => T[K],
+        (x: T[K]) => void
+    ];
+}): T;
+declare const res8: {
     a: string;
     b: {
         v: string;

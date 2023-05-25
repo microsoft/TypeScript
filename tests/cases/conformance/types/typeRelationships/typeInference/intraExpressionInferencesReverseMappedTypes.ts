@@ -127,3 +127,23 @@ const res7 = f3({
     consume: (x) => x.v.toLowerCase(),
   },
 });
+
+declare function f4<T>(
+  arg: {
+    [K in keyof T]: [
+      (n: string) => T[K],
+      (x: T[K]) => void
+    ];
+  }
+): T;
+
+const res8 = f4({
+  a: [
+    (n) => n,
+    (x) => x.toLowerCase(),
+  ],
+  b: [
+    (n) => ({ v: n }),
+    (x) => x.v.toLowerCase(),
+  ],
+});

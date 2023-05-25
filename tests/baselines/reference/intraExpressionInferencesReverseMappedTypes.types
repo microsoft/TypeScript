@@ -441,3 +441,69 @@ const res7 = f3({
   },
 });
 
+declare function f4<T>(
+>f4 : <T>(arg: { [K in keyof T]: [(n: string) => T[K], (x: T[K]) => void]; }) => T
+
+  arg: {
+>arg : { [K in keyof T]: [(n: string) => T[K], (x: T[K]) => void]; }
+
+    [K in keyof T]: [
+      (n: string) => T[K],
+>n : string
+
+      (x: T[K]) => void
+>x : T[K]
+
+    ];
+  }
+): T;
+
+const res8 = f4({
+>res8 : { a: string; b: { v: string; }; }
+>f4({  a: [    (n) => n,    (x) => x.toLowerCase(),  ],  b: [    (n) => ({ v: n }),    (x) => x.v.toLowerCase(),  ],}) : { a: string; b: { v: string; }; }
+>f4 : <T>(arg: { [K in keyof T]: [(n: string) => T[K], (x: T[K]) => void]; }) => T
+>{  a: [    (n) => n,    (x) => x.toLowerCase(),  ],  b: [    (n) => ({ v: n }),    (x) => x.v.toLowerCase(),  ],} : { a: [(n: string) => string, (x: string) => string]; b: [(n: string) => { v: string; }, (x: { v: string; }) => string]; }
+
+  a: [
+>a : [(n: string) => string, (x: string) => string]
+>[    (n) => n,    (x) => x.toLowerCase(),  ] : [(n: string) => string, (x: string) => string]
+
+    (n) => n,
+>(n) => n : (n: string) => string
+>n : string
+>n : string
+
+    (x) => x.toLowerCase(),
+>(x) => x.toLowerCase() : (x: string) => string
+>x : string
+>x.toLowerCase() : string
+>x.toLowerCase : () => string
+>x : string
+>toLowerCase : () => string
+
+  ],
+  b: [
+>b : [(n: string) => { v: string; }, (x: { v: string; }) => string]
+>[    (n) => ({ v: n }),    (x) => x.v.toLowerCase(),  ] : [(n: string) => { v: string; }, (x: { v: string; }) => string]
+
+    (n) => ({ v: n }),
+>(n) => ({ v: n }) : (n: string) => { v: string; }
+>n : string
+>({ v: n }) : { v: string; }
+>{ v: n } : { v: string; }
+>v : string
+>n : string
+
+    (x) => x.v.toLowerCase(),
+>(x) => x.v.toLowerCase() : (x: { v: string; }) => string
+>x : { v: string; }
+>x.v.toLowerCase() : string
+>x.v.toLowerCase : () => string
+>x.v : string
+>x : { v: string; }
+>v : string
+>toLowerCase : () => string
+
+  ],
+});
+
