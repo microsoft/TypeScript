@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts' />
 
+// @newline: LF
 // @Filename: /add.ts
 ////
 
@@ -18,7 +19,8 @@ verify.moveToFile({
 
 export const a = add();`,
         "/add.ts":
-`export function add(x: number, y: number): number;
+`
+export function add(x: number, y: number): number;
 export function add(x: string, y: string): string;
 export function add(x: any, y: any) {
     return x + y;
