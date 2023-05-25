@@ -13,6 +13,7 @@ import {
     isExpression,
     isIdentifier,
     isInitializedVariable,
+    isTypeQueryNode,
     isVariableDeclarationInVariableStatement,
     mapDefined,
     Node,
@@ -119,6 +120,11 @@ function getInliningInfo(file: SourceFile, startPosition: number, tryWithReferen
     // If the node is a variable declaration, make sure it's not in a catch clause or for-loop
     // and that it has a value.
     if (isInitializedVariable(parent) && isVariableDeclarationInVariableStatement(parent)) {
+        // Don't inline the variable if it isn't declared exactly once.
+        if (parent.symbol.declarations?.length !== 1) {
+            return undefined;
+        }
+
         // Find all references to the variable in the current file.
         const name = parent.name;
         const referenceEntries = getReferenceEntriesForNode(name.pos, name, program, [file], cancellationToken);
@@ -139,6 +145,11 @@ function getInliningInfo(file: SourceFile, startPosition: number, tryWithReferen
 
         const { definition } = referencedSymbols[0];
         if (definition?.type !== FindAllReferences.DefinitionKind.Symbol) {
+            return undefined;
+        }
+
+        // Don't inline the variable if it isn't declared exactly once.
+        if (definition.symbol.declarations?.length !== 1) {
             return undefined;
         }
 
@@ -164,6 +175,11 @@ function getReferenceNodes(entries: readonly FindAllReferences.Entry[], declarat
         // Only inline if all references are reads. Else we might end up with an invalid scenario like:
         // const y = x++ + 1 -> const y = 2++ + 1
         if (FindAllReferences.isWriteAccessForReference(entry.node)) {
+            return undefined;
+        }
+
+        // typeof needs an identifier, so we can't inline a value in there.
+        if (isTypeQueryNode(entry.node.parent)) {
             return undefined;
         }
 
