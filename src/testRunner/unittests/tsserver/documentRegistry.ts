@@ -1,3 +1,4 @@
+import { reportDocumentRegistryStats } from "../../../harness/incrementalUtils";
 import * as ts from "../../_namespaces/ts";
 import {
     baselineTsserverLogs,
@@ -40,8 +41,8 @@ describe("unittests:: tsserver:: documentRegistry:: document registry in project
         const moduleInfo = service.getScriptInfo(moduleFile.path)!;
         assert.isDefined(moduleInfo);
         assert.equal(moduleInfo.isOrphan(), moduleIsOrphan);
-        const key = service.documentRegistry.getKeyForCompilationSettings(project.getCompilationSettings());
-        assert.deepEqual(service.documentRegistry.getLanguageServiceRefCounts(moduleInfo.path, moduleInfo.scriptKind), [[key, moduleIsOrphan ? undefined : 1]]);
+        service.logger.log("DocumentRegistry::");
+        service.logger.log(reportDocumentRegistryStats(service.documentRegistry).join("\n"));
     }
 
     function createServiceAndHost() {

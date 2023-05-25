@@ -393,7 +393,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     private packageJsonsForAutoImport: Set<string> | undefined;
 
     /** @internal */
-    private noDtsResolutionProject?: AuxiliaryProject | undefined;
+    noDtsResolutionProject?: AuxiliaryProject | undefined;
 
     /** @internal */
     getResolvedProjectReferenceToRedirect(_fileName: string): ResolvedProjectReference | undefined {
@@ -984,6 +984,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         this.autoImportProviderHost = undefined;
         this.resolutionCache.closeTypeRootsWatch();
         this.clearGeneratedFileWatch();
+        this.projectService.verifyDocumentRegistry();
         this.projectService.onUpdateLanguageServiceStateForProject(this, /*languageServiceEnabled*/ false);
     }
 
@@ -1485,6 +1486,13 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         return this.program;
     }
 
+    /** @internal */
+    getCurrentLSProgram(): Program | undefined {
+        // TODO:: we dont have same program as LS in some scenarios, can that cause issues?
+        // Eg when we clear semantic cache of the LS during disabling LS or reloading projects
+        return this.languageService.getCurrentProgram();
+    }
+
     protected removeExistingTypings(include: string[]): string[] {
         const existing = getAutomaticTypeDirectiveNames(this.getCompilerOptions(), this.directoryStructureHost);
         return include.filter(i => existing.indexOf(i) < 0);
@@ -1633,6 +1641,8 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         else if (this.program !== oldProgram) {
             this.writeLog(`Different program with same set of files`);
         }
+        // Verify the document registry count
+        this.projectService.verifyDocumentRegistry();
         return hasNewProgram;
     }
 
@@ -2342,7 +2352,8 @@ export class InferredProject extends Project {
     }
 }
 
-class AuxiliaryProject extends Project {
+/** @internal */
+export class AuxiliaryProject extends Project {
     constructor(projectService: ProjectService, documentRegistry: DocumentRegistry, compilerOptions: CompilerOptions, currentDirectory: string) {
         super(projectService.newAuxiliaryProjectName(),
             ProjectKind.Auxiliary,
@@ -2361,7 +2372,6 @@ class AuxiliaryProject extends Project {
         return true;
     }
 
-    /** @internal */
     override scheduleInvalidateResolutionsOfFailedLookupLocations(): void {
         // Invalidation will happen on-demand as part of updateGraph
         return;
