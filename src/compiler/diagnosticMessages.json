@@ -7640,6 +7640,10 @@
         "category": "Message",
         "code": 95185
     },
+    "Only variables declared exactly once can be inlined.": {
+        "category": "Message",
+        "code": 95186
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",

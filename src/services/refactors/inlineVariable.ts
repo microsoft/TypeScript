@@ -114,7 +114,7 @@ function getInliningInfo(file: SourceFile, startPosition: number, tryWithReferen
     if (isInitializedVariable(parent) && isVariableDeclarationInVariableStatement(parent) && isIdentifier(parent.name)) {
         // Don't inline the variable if it isn't declared exactly once.
         if (parent.symbol.declarations?.length !== 1) {
-            return undefined;
+            return { error: getLocaleSpecificMessage(Diagnostics.Only_variables_declared_exactly_once_can_be_inlined) };
         }
 
         // Find all references to the variable in the current file.
@@ -126,7 +126,7 @@ function getInliningInfo(file: SourceFile, startPosition: number, tryWithReferen
         // Try finding the declaration and nodes to replace via the reference token.
         const definition = checker.resolveName(token.text, token, SymbolFlags.Value, /*excludeGlobals*/ false);
         if (definition?.declarations?.length !== 1) {
-            return undefined;
+            return { error: getLocaleSpecificMessage(Diagnostics.Only_variables_declared_exactly_once_can_be_inlined) };
         }
 
         const declaration = definition.declarations[0];
@@ -138,7 +138,6 @@ function getInliningInfo(file: SourceFile, startPosition: number, tryWithReferen
         return references && { references, declaration, replacement: declaration.initializer };
     }
 
-    // TODO: Do we want to have other errors too?
     return { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_variable_to_inline) };
 }
 
