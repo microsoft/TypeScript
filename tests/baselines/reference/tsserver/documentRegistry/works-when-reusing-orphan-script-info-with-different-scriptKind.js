@@ -52,17 +52,17 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts: *new*
-  {"pollingInterval":500}
-/users/user/projects/node_modules: *new*
-  {"pollingInterval":500}
-/users/user/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 /users/user/projects/san/^: *new*
   {"pollingInterval":500}
 /users/user/projects/san/node_modules: *new*
   {"pollingInterval":500}
+/users/user/projects/node_modules: *new*
+  {"pollingInterval":500}
+/a/lib/lib.d.ts: *new*
+  {"pollingInterval":500}
 /users/user/projects/san/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/user/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 Before request
