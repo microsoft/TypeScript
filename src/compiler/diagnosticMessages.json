@@ -1667,6 +1667,10 @@
         "category": "Message",
         "code": 2212
     },
+    "`_` in an expression type argument list is a placeholder type. If you meant to refer to the type named `_`, write `[_][0]` instead.": {
+        "category": "Message",
+        "code": 2213
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",

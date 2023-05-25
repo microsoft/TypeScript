@@ -1,0 +1,15 @@
+tests/cases/conformance/types/typeParameters/typeArgumentLists/inferPartialTypeArgumentsFailureSuggestion.ts(5,6): error TS2345: Argument of type 'number' is not assignable to parameter of type 'never'.
+
+
+==== tests/cases/conformance/types/typeParameters/typeArgumentLists/inferPartialTypeArgumentsFailureSuggestion.ts (1 errors) ====
+    type _ = number;
+    
+    function f<T>(x: T extends number ? number : never) {}
+    
+    f<_>(42);
+         ~~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'never'.
+!!! related TS2213 tests/cases/conformance/types/typeParameters/typeArgumentLists/inferPartialTypeArgumentsFailureSuggestion.ts:5:3: `_` in an expression type argument list is a placeholder type. If you meant to refer to the type named `_`, write `[_][0]` instead.
+    
+    f<[_][0]>(42);
+    

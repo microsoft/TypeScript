@@ -33229,6 +33229,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 addRelatedInfo(d, createDiagnosticForNode(last.declaration, Diagnostics.The_last_overload_is_declared_here));
                             }
                             addImplementationSuccessElaboration(last, d);
+                            if (typeArguments && some(typeArguments, n => n.kind === SyntaxKind.PlaceholderType)) {
+                                const underscoreType = resolveName(node, "_" as __String, SymbolFlags.Type, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ false);
+                                if (underscoreType && underscoreType !== unknownSymbol) {
+                                    addRelatedInfo(d, createDiagnosticForNode(find(typeArguments, n => n.kind === SyntaxKind.PlaceholderType)!, Diagnostics.in_an_expression_type_argument_list_is_a_placeholder_type_If_you_meant_to_refer_to_the_type_named_write_0_instead));
+                                }
+                            }
                             diagnostics.add(d);
                         }
                     }
