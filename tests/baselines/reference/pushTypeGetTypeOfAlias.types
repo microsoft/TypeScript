@@ -6,7 +6,7 @@ module.exports = function () {};
 >exports : { (): void; blah: any; }
 >function () {} : () => void
 
- exports.blah = exports.someProp;
+exports.blah = exports.someProp;
 >exports.blah = exports.someProp : any
 >exports.blah : any
 >exports : { (): void; blah: any; }
