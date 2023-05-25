@@ -7539,13 +7539,14 @@ export function getCheckFlags(symbol: Symbol): CheckFlags {
 
 /** @internal */
 export function getDeclarationModifierFlagsFromSymbol(s: Symbol, isWrite = false): ModifierFlags {
-    if (s.valueDeclaration) {
+    const checkFlags = getCheckFlags(s);
+    if (!(checkFlags & CheckFlags.ReverseMapped) && s.valueDeclaration) {
         const declaration = (isWrite && s.declarations && find(s.declarations, isSetAccessorDeclaration))
             || (s.flags & SymbolFlags.GetAccessor && find(s.declarations, isGetAccessorDeclaration)) || s.valueDeclaration;
         const flags = getCombinedModifierFlags(declaration);
         return s.parent && s.parent.flags & SymbolFlags.Class ? flags : flags & ~ModifierFlags.AccessibilityModifier;
     }
-    if (getCheckFlags(s) & CheckFlags.Synthetic) {
+    if (checkFlags & CheckFlags.Synthetic) {
         // NOTE: potentially unchecked cast to TransientSymbol
         const checkFlags = (s as TransientSymbol).links.checkFlags;
         const accessModifier = checkFlags & CheckFlags.ContainsPrivate ? ModifierFlags.Private :
