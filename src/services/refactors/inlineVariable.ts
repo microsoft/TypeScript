@@ -119,9 +119,9 @@ function getInliningInfo(file: SourceFile, startPosition: number, tryWithReferen
     // If the node is a variable declaration, make sure it's not in a catch clause or for-loop
     // and that it has a value.
     if (isInitializedVariable(parent) && isVariableDeclarationInVariableStatement(parent)) {
-        // Find all references to the variable.
+        // Find all references to the variable in the current file.
         const name = parent.name;
-        const referenceEntries = getReferenceEntriesForNode(name.pos, name, program, program.getSourceFiles(), cancellationToken);
+        const referenceEntries = getReferenceEntriesForNode(name.pos, name, program, [file], cancellationToken);
         if (!referenceEntries) {
             return undefined;
         }
@@ -132,7 +132,7 @@ function getInliningInfo(file: SourceFile, startPosition: number, tryWithReferen
 
     if (tryWithReferenceToken && isIdentifier(token)) {
         // Try finding the declaration and nodes to replace via the reference token.
-        const referencedSymbols = FindAllReferences.Core.getReferencedSymbolsForNode(token.pos, token, program, program.getSourceFiles(), cancellationToken);
+        const referencedSymbols = FindAllReferences.Core.getReferencedSymbolsForNode(token.pos, token, program, [file], cancellationToken);
         if (!referencedSymbols) {
             return undefined;
         }
@@ -184,10 +184,8 @@ function getReplacementExpression(reference: Node, replacement: Expression): Exp
     // are equal, but for the purposes of this refactor we keep things simple and always
     // parenthesize.
     const { parent } = reference;
-    if (isExpression(parent)) {
-        if (getExpressionPrecedence(replacement) <= getExpressionPrecedence(parent)) {
-            return factory.createParenthesizedExpression(replacement);
-        }
+    if (isExpression(parent) && (getExpressionPrecedence(replacement) <= getExpressionPrecedence(parent))) {
+        return factory.createParenthesizedExpression(replacement);
     }
 
     return replacement;
