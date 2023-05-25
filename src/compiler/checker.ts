@@ -28933,16 +28933,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const signature = getContextualSignatureForFunctionLikeDeclaration(functionDecl as FunctionExpression);
         if (signature && !isResolvingReturnTypeOfSignature(signature)) {
             const functionFlags = getFunctionFlags(functionDecl);
-
-            return filterType(getReturnTypeOfSignature(signature), returnType => {
-                if (functionFlags & FunctionFlags.Generator) {
-                    return checkGeneratorInstantiationAssignabilityToReturnType(returnType, functionFlags, /*errorNode*/ undefined);
-                }
-                if (functionFlags & FunctionFlags.Async) {
-                    return !!getAwaitedTypeOfPromise(returnType);
-                }
-                return true;
-            });
+            const returnType = getReturnTypeOfSignature(signature);
+            if (functionFlags & FunctionFlags.Generator) {
+                return filterType(returnType, t => checkGeneratorInstantiationAssignabilityToReturnType(t, functionFlags, /*errorNode*/ undefined));
+            }
+            if (functionFlags & FunctionFlags.Async) {
+                return filterType(returnType, t => !!getAwaitedTypeOfPromise(t));
+            }
+            return returnType;
         }
         const iife = getImmediatelyInvokedFunctionExpression(functionDecl);
         if (iife) {
