@@ -45,18 +45,17 @@ function f7(): void {
 
     // Fine since we are typed void and return null
     return null;
->null : null
 }
 
-function f8(): void {
->f8 : () => void
+function f8(): any {
+>f8 : () => any
 
     // Fine since are typed any.
     return;
 }
 
-function f9(): void {
->f9 : () => void
+function f9(): any {
+>f9 : () => any
 
     // Fine since we are typed any and return undefined
     return undefined;
@@ -68,7 +67,6 @@ function f10(): void {
 
     // Fine since we are typed any and return null
     return null;
->null : null
 }
 
 function f11(): string {
@@ -104,7 +102,6 @@ function f14(): number {
 >undefined : undefined
 
     throw null;
->null : null
 }
 
 function f15(): number {
@@ -115,8 +112,6 @@ function f15(): number {
 >undefined : undefined
 
     throw null;
->null : null
-
     return;
 }
 
@@ -159,6 +154,48 @@ function f21(): number | string {
     // Not okay; union does not contain void or any
 }
 
+function f22(): undefined {
+>f22 : () => undefined
+
+    // Okay; return type allows implicit return of undefined
+}
+
+function f23(): undefined | number {
+>f23 : () => undefined | number
+
+    // Error; because `undefined | number` becomes `number` without strictNullChecks.
+}
+
+const f30: () => undefined = () => {
+>f30 : () => undefined
+>() => {    // Ok, contextual type for implicit return is `undefined`} : () => undefined
+
+    // Ok, contextual type for implicit return is `undefined`
+}
+
+const f31: () => undefined = () => {
+>f31 : () => undefined
+>() => {    // Ok, contextual type for expression-less return is `undefined`    return;} : () => undefined
+
+    // Ok, contextual type for expression-less return is `undefined`
+    return;
+}
+
+const f32: () => undefined | number = () => {
+>f32 : () => undefined | number
+>() => {    // Error, contextual type for implicit return isn't just `undefined`} : () => void
+
+    // Error, contextual type for implicit return isn't just `undefined`
+}
+
+const f33: () => undefined | number = () => {
+>f33 : () => undefined | number
+>() => {    // Error, contextual type for expression-less return isn't just `undefined`    return;} : () => void
+
+    // Error, contextual type for expression-less return isn't just `undefined`
+    return;
+}
+
 class C {
 >C : C
 
@@ -187,7 +224,6 @@ class C {
 
         // Fine since this consists of a single throw statement.
         throw null;
->null : null
     }
 
     public get m5() {
@@ -196,11 +232,10 @@ class C {
         // Not fine, since we can *only* consist of a single throw statement
         // if no return statements are present but we are a get accessor.
         throw null;
->null : null
-
         throw undefined.
 >undefined. : any
 >undefined : undefined
     }
 > : any
 }
+

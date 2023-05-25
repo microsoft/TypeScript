@@ -1,0 +1,52 @@
+error TS2688: Cannot find type definition file for '@mangled/nodemodulescache'.
+  The file is in the program because:
+    Entry point of type library '@mangled/nodemodulescache' specified in compilerOptions
+error TS2688: Cannot find type definition file for '@mangled/typescache'.
+  The file is in the program because:
+    Entry point of type library '@mangled/typescache' specified in compilerOptions
+error TS2688: Cannot find type definition file for '@scoped/attypescache'.
+  The file is in the program because:
+    Entry point of type library '@scoped/attypescache' specified in compilerOptions
+/a.ts(4,1): error TS2304: Cannot find name 'mangledNodeModules'.
+/a.ts(5,1): error TS2552: Cannot find name 'atTypesCache'. Did you mean 'typesCache'?
+
+
+!!! error TS2688: Cannot find type definition file for '@mangled/nodemodulescache'.
+!!! error TS2688:   The file is in the program because:
+!!! error TS2688:     Entry point of type library '@mangled/nodemodulescache' specified in compilerOptions
+!!! error TS2688: Cannot find type definition file for '@mangled/typescache'.
+!!! error TS2688:   The file is in the program because:
+!!! error TS2688:     Entry point of type library '@mangled/typescache' specified in compilerOptions
+!!! error TS2688: Cannot find type definition file for '@scoped/attypescache'.
+!!! error TS2688:   The file is in the program because:
+!!! error TS2688:     Entry point of type library '@scoped/attypescache' specified in compilerOptions
+==== /a.ts (2 errors) ====
+    typesCache;
+    mangledAtTypesCache;
+    nodeModulesCache;
+    mangledNodeModules;
+    ~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'mangledNodeModules'.
+    atTypesCache;
+    ~~~~~~~~~~~~
+!!! error TS2552: Cannot find name 'atTypesCache'. Did you mean 'typesCache'?
+!!! related TS2728 /types/@scoped/typescache/index.d.ts:1:15: 'typesCache' is declared here.
+    mangledAtTypesCache;
+==== /types/@scoped/typescache/index.d.ts (0 errors) ====
+    declare const typesCache: number;
+    
+==== /types/mangled__typescache/index.d.ts (0 errors) ====
+    declare const mangledTypes: number;
+    
+==== /node_modules/@scoped/nodemodulescache/index.d.ts (0 errors) ====
+    declare const nodeModulesCache: number;
+    
+==== /node_modules/mangled__nodemodulescache/index.d.ts (0 errors) ====
+    declare const mangledNodeModules: number;
+    
+==== /node_modules/@types/@scoped/attypescache/index.d.ts (0 errors) ====
+    declare const atTypesCache: number;
+    
+==== /node_modules/@types/mangled__attypescache/index.d.ts (0 errors) ====
+    declare const mangledAtTypesCache: number;
+    

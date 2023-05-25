@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/packages/pkg1/package.json]
 {"name":"pkg1","version":"1.0.0","main":"build/index.js"}
@@ -140,7 +141,9 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/packages/pkg1/index.ts (used version)
 
 FsWatches::
-/user/username/projects/myproject/packages/pkg2/tsconfig.json: *new*
+/user/username/projects/myproject/packages/pkg1/index.ts: *new*
+  {}
+/user/username/projects/myproject/packages/pkg1/tsconfig.json: *new*
   {}
 /user/username/projects/myproject/packages/pkg2/const.ts: *new*
   {}
@@ -148,17 +151,15 @@ FsWatches::
   {}
 /user/username/projects/myproject/packages/pkg2/other.ts: *new*
   {}
-/user/username/projects/myproject/packages/pkg1/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/packages/pkg1/index.ts: *new*
-  {}
 /user/username/projects/myproject/packages/pkg2/package.json: *new*
+  {}
+/user/username/projects/myproject/packages/pkg2/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/packages/pkg2: *new*
-  {}
 /user/username/projects/myproject/packages/pkg1: *new*
+  {}
+/user/username/projects/myproject/packages/pkg2: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -296,6 +297,9 @@ Input::
 {"name":"pkg2","version":"1.0.0","main":"build/other.js"}
 
 
+Before running Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:19 AM[0m] File change detected. Starting incremental compilation...
@@ -361,6 +365,9 @@ Input::
 {"name":"pkg2","version":"1.0.0","main":"build/index.js"}
 
 
+Before running Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:26 AM[0m] File change detected. Starting incremental compilation...

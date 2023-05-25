@@ -24,18 +24,18 @@ function f() { return f; }
 
 // Error expected
 function g() { return g(); }
->g : () => any
->g() : any
->g : () => any
+>g : () => never
+>g() : never
+>g : () => never
 
 // Error expected
 var f1 = function () {
->f1 : () => any
->function () {    return f1();} : () => any
+>f1 : () => never
+>function () {    return f1();} : () => never
 
     return f1();
->f1() : any
->f1 : () => any
+>f1() : never
+>f1 : () => never
 
 };
 

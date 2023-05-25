@@ -97,7 +97,7 @@ define(["require", "exports"], function (require, exports) {
             return m1.foo();
         }
         m3.foo = foo;
-    })(m3 = exports.m3 || (exports.m3 = {}));
+    })(m3 || (exports.m3 = m3 = {}));
     exports.eVar2 = 10;
     var eVar22;
     exports.eVar3 = 10;

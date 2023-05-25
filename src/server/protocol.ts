@@ -1,9 +1,10 @@
-import * as ts from "./_namespaces/ts";
-import {
+import type * as ts from "./_namespaces/ts";
+import type {
     CompilerOptionsValue,
     EndOfLineState,
     FileExtensionInfo,
     HighlightSpanKind,
+    InteractiveRefactorArguments,
     MapLike,
     OutliningSpanKind,
     OutputFile,
@@ -23,6 +24,7 @@ import {
 
 export const enum CommandTypes {
     JsxClosingTag = "jsxClosingTag",
+    LinkedEditingRange = "linkedEditingRange",
     Brace = "brace",
     /** @internal */
     BraceFull = "brace-full",
@@ -141,6 +143,7 @@ export const enum CommandTypes {
 
     GetApplicableRefactors = "getApplicableRefactors",
     GetEditsForRefactor = "getEditsForRefactor",
+    GetMoveToRefactoringFileSuggestions = "getMoveToRefactoringFileSuggestions",
     /** @internal */
     GetEditsForRefactorFull = "getEditsForRefactor-full",
 
@@ -585,6 +588,14 @@ export interface GetApplicableRefactorsRequest extends Request {
 export type GetApplicableRefactorsRequestArgs = FileLocationOrRangeRequestArgs & {
     triggerReason?: RefactorTriggerReason;
     kind?: string;
+    /**
+     * Include refactor actions that require additional arguments to be passed when
+     * calling 'GetEditsForRefactor'. When true, clients should inspect the
+     * `isInteractive` property of each returned `RefactorActionInfo`
+     * and ensure they are able to collect the appropriate arguments for any
+     * interactive refactor before offering it.
+     */
+    includeInteractiveActions?: boolean;
 };
 
 export type RefactorTriggerReason = "implicit" | "invoked";
@@ -595,6 +606,27 @@ export type RefactorTriggerReason = "implicit" | "invoked";
  */
 export interface GetApplicableRefactorsResponse extends Response {
     body?: ApplicableRefactorInfo[];
+}
+
+/**
+ * Request refactorings at a given position or selection area to move to an existing file.
+ */
+export interface GetMoveToRefactoringFileSuggestionsRequest extends Request {
+    command: CommandTypes.GetMoveToRefactoringFileSuggestions;
+    arguments: GetMoveToRefactoringFileSuggestionsRequestArgs;
+}
+export type GetMoveToRefactoringFileSuggestionsRequestArgs = FileLocationOrRangeRequestArgs & {
+    kind?: string;
+};
+/**
+ * Response is a list of available files.
+ * Each refactoring exposes one or more "Actions"; a user selects one action to invoke a refactoring
+ */
+export interface GetMoveToRefactoringFileSuggestions extends Response {
+    body: {
+        newFileName: string;
+        files: string[];
+    };
 }
 
 /**
@@ -649,6 +681,12 @@ export interface RefactorActionInfo {
      * The hierarchical dotted name of the refactor action.
      */
     kind?: string;
+
+    /**
+     * Indicates that the action requires additional arguments to be passed
+     * when calling 'GetEditsForRefactor'.
+     */
+    isInteractive?: boolean;
 }
 
 export interface GetEditsForRefactorRequest extends Request {
@@ -665,6 +703,8 @@ export type GetEditsForRefactorRequestArgs = FileLocationOrRangeRequestArgs & {
     refactor: string;
     /* The 'name' property from the refactoring action */
     action: string;
+    /* Arguments for interactive action */
+    interactiveRefactorArguments?: InteractiveRefactorArguments;
 };
 
 
@@ -681,6 +721,7 @@ export interface RefactorEditInfo {
      */
     renameLocation?: Location;
     renameFilename?: string;
+    notApplicableReason?: string;
 }
 
 /**
@@ -1101,6 +1142,18 @@ export interface JsxClosingTagResponse extends Response {
     readonly body: TextInsertion;
 }
 
+export interface LinkedEditingRangeRequest extends FileLocationRequest {
+    readonly command: CommandTypes.LinkedEditingRange;
+}
+
+export interface LinkedEditingRangesBody {
+    ranges: TextSpan[];
+    wordPattern?: string;
+}
+
+export interface LinkedEditingRangeResponse extends Response {
+    readonly body: LinkedEditingRangesBody;
+}
 
 /**
  * Get document highlights request; value of command field is
@@ -2284,6 +2337,11 @@ export interface CompletionEntry {
      */
     insertText?: string;
     /**
+     * A string that should be used when filtering a set of
+     * completion items.
+     */
+    filterText?: string;
+    /**
      * `insertText` should be interpreted as a snippet if true.
      */
     isSnippet?: true;
@@ -3405,6 +3463,7 @@ export interface FormatCodeSettings extends EditorSettings {
     placeOpenBraceOnNewLineForControlBlocks?: boolean;
     insertSpaceBeforeTypeAnnotation?: boolean;
     semicolons?: SemicolonPreference;
+    indentSwitchCase?: boolean;
 }
 
 export interface UserPreferences {

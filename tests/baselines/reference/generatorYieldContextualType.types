@@ -71,7 +71,6 @@ namespace Directive {
 >Directive[value] : (typeof Directive)[Directive | (T & number)]
 >Directive : typeof Directive
 >value : Directive | (T & number)
->null : null
   }
 }
 

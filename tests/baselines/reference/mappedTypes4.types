@@ -75,18 +75,15 @@ type T00 = Partial<A | B | C>;
 
 type T01 = Readonly<A | B | C | null | undefined>;
 >T01 : Readonly<A> | Readonly<B> | Readonly<C> | null | undefined
->null : null
 
 type T02 = Boxified<A | B[] | C | string>
 >T02 : string | Boxified<A> | Boxified<C> | Box<B>[]
 
 type T03 = Readonly<string | number | boolean | null | undefined | void>;
 >T03 : string | number | boolean | void | null | undefined
->null : null
 
 type T04 = Boxified<string | number | boolean | null | undefined | void>;
 >T04 : string | number | boolean | void | null | undefined
->null : null
 
 type T05 = Partial<"hello" | "world" | 42>;
 >T05 : "hello" | "world" | 42
@@ -99,7 +96,6 @@ type BoxifiedWithSentinel<T, U> = {
 
 type T10 = BoxifiedWithSentinel<A | B | C, null>;
 >T10 : BoxifiedWithSentinel<A, null> | BoxifiedWithSentinel<B, null> | BoxifiedWithSentinel<C, null>
->null : null
 
 type T11 = BoxifiedWithSentinel<A | B | C, undefined>;
 >T11 : BoxifiedWithSentinel<A, undefined> | BoxifiedWithSentinel<B, undefined> | BoxifiedWithSentinel<C, undefined>

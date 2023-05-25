@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -44,11 +45,11 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 
 FsWatches::
-/tsconfig.json: *new*
-  {}
 /a.ts: *new*
   {}
 /a/lib/lib.d.ts: *new*
+  {}
+/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -69,6 +70,9 @@ Input::
 {"compilerOptions":{"allowUnusedLabels":false}}
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:19 AM[0m] File change detected. Starting incremental compilation...
@@ -105,6 +109,9 @@ Input::
 {"compilerOptions":{"allowUnusedLabels":true}}
 
 
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:23 AM[0m] File change detected. Starting incremental compilation...
