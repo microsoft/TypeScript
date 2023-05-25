@@ -4,4 +4,4 @@
 
 // @Filename: bar.js
 module.exports = function () {};
- exports.blah = exports.someProp;
+exports.blah = exports.someProp;
