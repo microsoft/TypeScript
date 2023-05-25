@@ -3,7 +3,7 @@
 // for readability 
 
 // @Filename: /customElements.tsx
-//// /**/const jsx = <fbt:enum knownProp="accepted"
+//// const jsx = <fbt:enum knownProp="accepted"
 ////     unknownProp="rejected">
 //// </fbt:enum>;
 ////
