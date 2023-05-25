@@ -13122,12 +13122,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const modifiers = getMappedTypeModifiers(type.mappedType);
         const readonlyMask = modifiers & MappedTypeModifiers.IncludeReadonly ? false : true;
         const optionalMask = modifiers & MappedTypeModifiers.IncludeOptional ? 0 : SymbolFlags.Optional;
-        const indexInfos = indexInfo ? [createIndexInfo(stringType, inferReverseMappedType(indexInfo.type, type.mappedType, type.constraintType), readonlyMask && indexInfo.isReadonly)] : emptyArray;
+        const indexInfos = indexInfo ? [createIndexInfo(stringType, inferReverseMappedType(indexInfo.type, type.mappedType, type.constraintType, /*sourceValueDeclaration*/ undefined), readonlyMask && indexInfo.isReadonly)] : emptyArray;
         const members = createSymbolTable();
         for (const prop of getPropertiesOfType(type.source)) {
             const checkFlags = CheckFlags.ReverseMapped | (readonlyMask && isReadonlySymbol(prop) ? CheckFlags.Readonly : 0);
             const inferredProp = createSymbol(SymbolFlags.Property | prop.flags & optionalMask, prop.escapedName, checkFlags) as ReverseMappedSymbol;
             inferredProp.declarations = prop.declarations;
+            inferredProp.valueDeclaration = prop.valueDeclaration;
             inferredProp.links.nameType = getSymbolLinks(prop).nameType;
             inferredProp.links.propertyType = getTypeOfSymbol(prop);
             if (type.constraintType.type.flags & TypeFlags.IndexedAccess
@@ -24098,10 +24099,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // For arrays and tuples we infer new arrays and tuples where the reverse mapping has been
         // applied to the element type(s).
         if (isArrayType(source)) {
-            return createArrayType(inferReverseMappedType(getTypeArguments(source)[0], target, constraint), isReadonlyArrayType(source));
+            return createArrayType(inferReverseMappedType(getTypeArguments(source)[0], target, constraint, /*sourceValueDeclaration*/ undefined), isReadonlyArrayType(source));
         }
         if (isTupleType(source)) {
-            const elementTypes = map(getElementTypes(source), t => inferReverseMappedType(t, target, constraint));
+            const elementTypes = map(getElementTypes(source), t => inferReverseMappedType(t, target, constraint, /*sourceValueDeclaration*/ undefined));
             const elementFlags = getMappedTypeModifiers(target) & MappedTypeModifiers.IncludeOptional ?
                 sameMap(source.target.elementFlags, f => f & ElementFlags.Optional ? ElementFlags.Required : f) :
                 source.target.elementFlags;
@@ -24119,24 +24120,26 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getTypeOfReverseMappedSymbol(symbol: ReverseMappedSymbol) {
         const links = getSymbolLinks(symbol);
         if (!links.type) {
-            links.type = inferReverseMappedType(symbol.links.propertyType, symbol.links.mappedType, symbol.links.constraintType);
+            links.type = inferReverseMappedType(symbol.links.propertyType, symbol.links.mappedType, symbol.links.constraintType, symbol.valueDeclaration);
         }
         return links.type;
     }
 
-    function inferReverseMappedType(sourceType: Type, target: MappedType, constraint: IndexType): Type {
+    function inferReverseMappedType(sourceType: Type, target: MappedType, constraint: IndexType, sourceValueDeclaration: Declaration | undefined): Type {
         const typeParameter = getIndexedAccessType(constraint.type, getTypeParameterFromMappedType(target)) as TypeParameter;
         const templateType = getTemplateTypeFromMappedType(target);
         const inference = createInferenceInfo(typeParameter);
         inferTypes([inference], sourceType, templateType);
-        if (getObjectFlags(sourceType) & (ObjectFlags.FreshLiteral | ObjectFlags.ArrayLiteral)) {
-            const sourceValueDeclaration = sourceType.symbol.valueDeclaration!;
-            const intraExpressionInferenceSites = getInferenceContext(sourceValueDeclaration)?.intraExpressionInferenceSites?.filter(site => isNodeDescendantOf(site.node, sourceValueDeclaration));
+        if (sourceValueDeclaration && getObjectFlags(sourceType) & (ObjectFlags.FreshLiteral | ObjectFlags.ArrayLiteral)) {
+            const initializerDeclaration = sourceValueDeclaration.kind === SyntaxKind.PropertyAssignment ?
+                (sourceValueDeclaration as PropertyAssignment).initializer :
+                sourceValueDeclaration;
+            const intraExpressionInferenceSites = getInferenceContext(initializerDeclaration)?.intraExpressionInferenceSites?.filter(site => isNodeDescendantOf(site.node, initializerDeclaration));
             if (intraExpressionInferenceSites?.length) {
-                const templateType = (getApparentTypeOfContextualType(sourceValueDeclaration.parent.parent as Expression, ContextFlags.NoConstraints) as MappedType).templateType;
+                const templateType = (getApparentTypeOfContextualType(initializerDeclaration.parent.parent as Expression, ContextFlags.NoConstraints) as MappedType).templateType;
                 if (templateType) {
-                    Debug.assertNode(sourceValueDeclaration, isExpressionNode);
-                    pushContextualType(sourceValueDeclaration as any as Expression, templateType, /*isCache*/ false);
+                    Debug.assertNode(initializerDeclaration, isExpressionNode);
+                    pushContextualType(initializerDeclaration as any as Expression, templateType, /*isCache*/ false);
                     inferFromIntraExpressionSites([inference], intraExpressionInferenceSites);
                     popContextualType();
                 }
