@@ -1,6 +1,5 @@
 /// <reference path='fourslash.ts' />
 
-// @newline: LF
 // @Filename: /add.ts
 ////
 
