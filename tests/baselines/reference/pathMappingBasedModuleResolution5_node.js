@@ -25,6 +25,7 @@ export var z: number;
 //// [file4.ts]
 export var z1 = 1;
 
+
 //// [file1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

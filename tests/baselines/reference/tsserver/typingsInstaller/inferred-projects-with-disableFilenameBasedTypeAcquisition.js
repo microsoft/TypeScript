@@ -84,9 +84,9 @@ Timeout callback:: count: 0
 Immedidate callback:: count: 0
 
 PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
 /a/b/bower_components: *new*
   {"pollingInterval":500}
 /a/b/node_modules: *new*
+  {"pollingInterval":500}
+/a/lib/lib.d.ts:
   {"pollingInterval":500}

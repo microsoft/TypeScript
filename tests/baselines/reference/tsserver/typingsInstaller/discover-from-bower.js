@@ -165,11 +165,11 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/bower.json: *new*
+  {}
 /jsconfig.json:
   {}
 /tmp/package.json:
-  {}
-/bower.json: *new*
   {}
 
 FsWatchesRecursive::

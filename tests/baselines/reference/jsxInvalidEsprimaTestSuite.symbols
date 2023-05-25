@@ -28,8 +28,9 @@ declare var React: any;
 
 <a:b></b>;
 === tests/cases/conformance/jsx/9.tsx ===
-
 <a:b.c></a:b.c>;
+>c : Symbol(c, Decl(9.tsx, 0, 5))
+
 === tests/cases/conformance/jsx/10.tsx ===
 <a.b:c></a.b:c>;
 >c : Symbol(c, Decl(10.tsx, 0, 5))

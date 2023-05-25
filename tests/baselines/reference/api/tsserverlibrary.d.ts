@@ -619,6 +619,7 @@ declare namespace ts {
                  */
                 renameLocation?: Location;
                 renameFilename?: string;
+                notApplicableReason?: string;
             }
             /**
              * Organize imports by:
@@ -1829,6 +1830,11 @@ declare namespace ts {
                  * coupled with `replacementSpan` to replace a dotted access with a bracket access.
                  */
                 insertText?: string;
+                /**
+                 * A string that should be used when filtering a set of
+                 * completion items.
+                 */
+                filterText?: string;
                 /**
                  * `insertText` should be interpreted as a snippet if true.
                  */
@@ -4061,7 +4067,7 @@ declare namespace ts {
             responseRequired?: boolean;
         }
     }
-    const versionMajorMinor = "5.1";
+    const versionMajorMinor = "5.2";
     /** The version of the TypeScript compiler release */
     const version: string;
     /**
@@ -4692,7 +4698,7 @@ declare namespace ts {
     type EntityName = Identifier | QualifiedName;
     type PropertyName = Identifier | StringLiteral | NumericLiteral | ComputedPropertyName | PrivateIdentifier;
     type MemberName = Identifier | PrivateIdentifier;
-    type DeclarationName = Identifier | PrivateIdentifier | StringLiteralLike | NumericLiteral | ComputedPropertyName | ElementAccessExpression | BindingPattern | EntityNameExpression;
+    type DeclarationName = PropertyName | JsxAttributeName | StringLiteralLike | ElementAccessExpression | BindingPattern | EntityNameExpression;
     interface Declaration extends Node {
         _declarationBrand: any;
     }
@@ -5042,7 +5048,7 @@ declare namespace ts {
         readonly kind: SyntaxKind.StringLiteral;
     }
     type StringLiteralLike = StringLiteral | NoSubstitutionTemplateLiteral;
-    type PropertyNameLiteral = Identifier | StringLiteralLike | NumericLiteral;
+    type PropertyNameLiteral = Identifier | StringLiteralLike | NumericLiteral | JsxNamespacedName;
     interface TemplateLiteralTypeNode extends TypeNode {
         kind: SyntaxKind.TemplateLiteralType;
         readonly head: TemplateHead;
@@ -5401,14 +5407,14 @@ declare namespace ts {
     type JsxAttributeName = Identifier | JsxNamespacedName;
     type JsxTagNameExpression = Identifier | ThisExpression | JsxTagNamePropertyAccess | JsxNamespacedName;
     interface JsxTagNamePropertyAccess extends PropertyAccessExpression {
-        readonly expression: JsxTagNameExpression;
+        readonly expression: Identifier | ThisExpression | JsxTagNamePropertyAccess;
     }
     interface JsxAttributes extends PrimaryExpression, Declaration {
         readonly properties: NodeArray<JsxAttributeLike>;
         readonly kind: SyntaxKind.JsxAttributes;
         readonly parent: JsxOpeningLikeElement;
     }
-    interface JsxNamespacedName extends PrimaryExpression {
+    interface JsxNamespacedName extends Node {
         readonly kind: SyntaxKind.JsxNamespacedName;
         readonly name: Identifier;
         readonly namespace: Identifier;
@@ -10195,7 +10201,7 @@ declare namespace ts {
          * arguments for any interactive action before offering it.
          */
         getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined, triggerReason?: RefactorTriggerReason, kind?: string, includeInteractiveActions?: boolean): ApplicableRefactorInfo[];
-        getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string, preferences: UserPreferences | undefined, includeInteractiveActions?: InteractiveRefactorArguments): RefactorEditInfo | undefined;
+        getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string, preferences: UserPreferences | undefined, interactiveRefactorArguments?: InteractiveRefactorArguments): RefactorEditInfo | undefined;
         getMoveToRefactoringFileSuggestions(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined, triggerReason?: RefactorTriggerReason, kind?: string): {
             newFileName: string;
             files: string[];
@@ -10485,6 +10491,7 @@ declare namespace ts {
         renameFilename?: string;
         renameLocation?: number;
         commands?: CodeActionCommand[];
+        notApplicableReason?: string;
     }
     type RefactorTriggerReason = "implicit" | "invoked";
     interface TextInsertion {
@@ -10806,6 +10813,7 @@ declare namespace ts {
         kindModifiers?: string;
         sortText: string;
         insertText?: string;
+        filterText?: string;
         isSnippet?: true;
         /**
          * An optional span that indicates the text to be replaced by this completion item.

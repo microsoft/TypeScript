@@ -120,9 +120,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/jsconfig.json:
-  {}
 /a/data/package.json: *new*
+  {}
+/jsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -202,7 +202,7 @@ Info seq  [hh:mm:ss:mss] event:
        "configFileName": "jsconfig.json",
        "projectType": "configured",
        "languageServiceEnabled": true,
-       "version": "5.1.0-dev"
+       "version": "FakeVersion"
       }
      }
     }
@@ -288,9 +288,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/jsconfig.json:
-  {}
 /a/data/package.json:
+  {}
+/jsconfig.json:
   {}
 
 FsWatchesRecursive::

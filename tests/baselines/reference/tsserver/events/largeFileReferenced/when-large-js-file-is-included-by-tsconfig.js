@@ -140,7 +140,7 @@ Info seq  [hh:mm:ss:mss] event:
        "configFileName": "tsconfig.json",
        "projectType": "configured",
        "languageServiceEnabled": true,
-       "version": "5.1.0-dev"
+       "version": "FakeVersion"
       }
      }
     }
@@ -195,9 +195,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/src/large.js: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/myproject/tsconfig.json: *new*
   {}

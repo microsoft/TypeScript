@@ -152,25 +152,25 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/users/username/projects/app/node_modules: *new*
-  {"pollingInterval":500}
-/users/username/projects/common/node_modules: *new*
-  {"pollingInterval":500}
 /a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
+/users/username/projects/app/node_modules: *new*
+  {"pollingInterval":500}
 /users/username/projects/app/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/common/node_modules: *new*
   {"pollingInterval":500}
 /users/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/app/tsconfig.json: *new*
-  {}
 /users/username/projects/app/appa.ts: *new*
   {}
-/users/username/projects/common/tsconfig.json: *new*
+/users/username/projects/app/tsconfig.json: *new*
   {}
 /users/username/projects/common/moduleb.ts: *new*
+  {}
+/users/username/projects/common/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
