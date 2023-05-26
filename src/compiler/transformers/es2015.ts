@@ -1227,15 +1227,13 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         // In derived classes, there may be code before the necessary super() call
         // We'll remove pre-super statements to be tacked on after the rest of the body
         const existingPrologue = takeWhile(constructor.body.statements, isPrologueDirective);
-        const { superCall, superStatementIndex } = findSuperCallAndStatementIndex(constructor.body.statements, existingPrologue);
+        const { superCall, superStatementIndex } = findSuperCallAndStatementIndex(constructor.body.statements, existingPrologue.length);
         const postSuperStatementsStart = superStatementIndex === -1 ? existingPrologue.length : superStatementIndex + 1;
 
         // If a super call has already been synthesized,
         // we're going to assume that we should just transform everything after that.
         // The assumption is that no prior step in the pipeline has added any prologue directives.
         let statementOffset = postSuperStatementsStart;
-        if (!hasSynthesizedSuper) statementOffset = factory.copyStandardPrologue(constructor.body.statements, prologue, statementOffset, /*ensureUseStrict*/ false);
-        if (!hasSynthesizedSuper) statementOffset = factory.copyCustomPrologue(constructor.body.statements, statements, statementOffset, visitor, /*filter*/ undefined);
 
         // If there already exists a call to `super()`, visit the statement directly
         let superCallExpression: Expression | undefined;
@@ -1253,6 +1251,8 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         // Add parameter defaults at the beginning of the output, with prologue statements
         addDefaultValueAssignmentsIfNeeded(prologue, constructor);
         addRestParameterIfNeeded(prologue, constructor, hasSynthesizedSuper);
+
+        if (!hasSynthesizedSuper) statementOffset = factory.copyCustomPrologue(constructor.body.statements, statements, statementOffset, visitor, /*filter*/ undefined);
 
         // visit the remaining statements
         addRange(statements, visitNodes(constructor.body.statements, visitor, isStatement, /*start*/ statementOffset));
@@ -1366,8 +1366,8 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         return body;
     }
 
-    function findSuperCallAndStatementIndex(originalBodyStatements: NodeArray<Statement>, existingPrologue: Statement[]) {
-        for (let i = existingPrologue.length; i < originalBodyStatements.length; i += 1) {
+    function findSuperCallAndStatementIndex(originalBodyStatements: NodeArray<Statement>, statementOffset: number) {
+        for (let i = statementOffset; i < originalBodyStatements.length; i += 1) {
             const superCall = getSuperCallFromStatement(originalBodyStatements[i]);
             if (superCall) {
                 // With a super() call, split the statements into pre-super() and 'body' (post-super())
