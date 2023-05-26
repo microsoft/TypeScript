@@ -1,8 +1,10 @@
 import { getModuleSpecifier } from "../../compiler/moduleSpecifiers";
 import {
+    __String,
     AnyImportOrRequireStatement,
     append,
     ApplicableRefactorInfo,
+    arrayFrom,
     AssignmentDeclarationKind,
     BinaryExpression,
     BindingElement,
@@ -38,6 +40,7 @@ import {
     FindAllReferences,
     findIndex,
     firstDefined,
+    firstOrUndefined,
     flatMap,
     forEachKey,
     FunctionDeclaration,
@@ -53,7 +56,6 @@ import {
     getRangesWhere,
     getRefactorContextSpan,
     getRelativePathFromFile,
-    getResolvedModule,
     getSynthesizedDeepClone,
     getUniqueName,
     hasJSFileExtension,
@@ -71,6 +73,7 @@ import {
     isBindingElement,
     isDeclarationName,
     isExportDeclaration,
+    isExportSpecifier,
     isExpressionStatement,
     isExternalModuleReference,
     isIdentifier,
@@ -1115,37 +1118,48 @@ function isNonVariableTopLevelDeclaration(node: Node): node is NonVariableTopLev
 }
 
 function moveStatementsToTargetFile(changes: textChanges.ChangeTracker, program: Program, statements: readonly Statement[], targetFile: SourceFile, toMove: ToMove) {
-    const checker = program.getTypeChecker();
-    const sourceExports = new Set<TopLevelDeclarationStatement>();
-    for (const node of toMove.all) {
-        if (isTopLevelDeclarationStatement(node) && hasSyntacticModifier(node, ModifierFlags.Export)) {
-            sourceExports.add(node);
-        }
-    }
-
     let lastReExport: ExportDeclaration | undefined;
-    for (const node of targetFile.statements) {
-        if (isExportDeclaration(node) && node.moduleSpecifier && isStringLiteralLike(node.moduleSpecifier)) {
-            if (getResolvedModule(targetFile, node.moduleSpecifier.text, getModeForUsageLocation(targetFile, node.moduleSpecifier))
-                && node.exportClause && isNamedExports(node.exportClause) && length(node.exportClause.elements)) {
-                const elements = node.exportClause.elements;
-                const updatedElements = filter(elements, elem => {
-                    const symbol = checker.getSymbolAtLocation(elem.name);
-                    return !!symbol && find(skipAlias(symbol, checker).declarations, d => isTopLevelDeclarationStatement(d) && sourceExports.has(d)) === undefined;
-                });
+    if (targetFile.symbol && targetFile.symbol.exports) {
+        const checker = program.getTypeChecker();
+        const sourceExports = new Set<TopLevelDeclarationStatement>();
+        for (const node of toMove.all) {
+            if (isTopLevelDeclarationStatement(node) && hasSyntacticModifier(node, ModifierFlags.Export)) {
+                sourceExports.add(node);
+            }
+        }
+
+        const seenExports = new Set<ExportDeclaration>();
+        for (const [_, exportSymbol] of arrayFrom(targetFile.symbol.exports)) {
+            const declaration = firstOrUndefined(exportSymbol.declarations);
+            if (declaration === undefined) {
+                continue;
+            }
+
+            const exportDeclaration = isExportDeclaration(declaration) ? declaration :
+                isExportSpecifier(declaration) ? tryCast(declaration.parent.parent, isExportDeclaration) : undefined;
+            if (exportDeclaration === undefined || exportDeclaration.moduleSpecifier === undefined || seenExports.has(exportDeclaration)) {
+                continue;
+            }
+            seenExports.add(exportDeclaration);
+
+            if (exportDeclaration.exportClause && isNamedExports(exportDeclaration.exportClause) && length(exportDeclaration.exportClause.elements)) {
+                const elements = exportDeclaration.exportClause.elements;
+                const updatedElements = filter(elements, elem =>
+                    find(skipAlias(elem.symbol, checker).declarations, d => isTopLevelDeclarationStatement(d) && sourceExports.has(d)) === undefined);
 
                 if (length(updatedElements) === 0) {
-                    changes.deleteNode(targetFile, node);
+                    changes.deleteNode(targetFile, exportDeclaration);
                     continue;
                 }
 
                 if (length(updatedElements) < length(elements)) {
-                    changes.replaceNode(targetFile, node,
-                        factory.updateExportDeclaration(node, node.modifiers, node.isTypeOnly,
-                            factory.updateNamedExports(node.exportClause , factory.createNodeArray(updatedElements, elements.hasTrailingComma)), node.moduleSpecifier, node.assertClause));
+                    changes.replaceNode(targetFile, exportDeclaration,
+                       factory.updateExportDeclaration(exportDeclaration, exportDeclaration.modifiers, exportDeclaration.isTypeOnly,
+                           factory.updateNamedExports(exportDeclaration.exportClause , factory.createNodeArray(updatedElements, elements.hasTrailingComma)), exportDeclaration.moduleSpecifier, exportDeclaration.assertClause));
                 }
             }
-            lastReExport = node;
+
+            lastReExport = exportDeclaration;
         }
     }
 
