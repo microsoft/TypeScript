@@ -3024,12 +3024,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // (it refers to the constant type of the expression instead)
                 return undefined;
             }
-            if (isModuleDeclaration(location) && lastLocation && location.name === lastLocation) {
-                // If this is the name of a namespace, skip the parent since it will have is own locals that could
-                // conflict.
-                lastLocation = location;
-                location = location.parent;
-            }
             // Locals of a source file are not in scope (because they get merged into the global symbol table)
             if (canHaveLocals(location) && location.locals && !isGlobalSourceFile(location)) {
                 if (result = lookup(location.locals, name, meaning)) {
@@ -3071,6 +3065,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             }
                         }
                     }
+                    else if (location.kind === SyntaxKind.ModuleDeclaration) {
+                        // If this is the name of a namespace, skip the parent since it will have is own locals that could
+                        // conflict.
+                        useResult = lastLocation === (location as ModuleDeclaration).body;
+                    }
                     else if (location.kind === SyntaxKind.ConditionalType) {
                         // A type parameter declared using 'infer T' in a conditional type is visible only in
                         // the true branch of the conditional type.
@@ -3092,6 +3091,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     isInExternalModule = true;
                     // falls through
                 case SyntaxKind.ModuleDeclaration:
+                    if (isModuleDeclaration(location) && lastLocation === location.name) break;
                     const moduleExports = getSymbolOfDeclaration(location as SourceFile | ModuleDeclaration)?.exports || emptySymbols;
                     if (location.kind === SyntaxKind.SourceFile || (isModuleDeclaration(location) && location.flags & NodeFlags.Ambient && !isGlobalScopeAugmentation(location))) {
 
