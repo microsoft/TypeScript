@@ -57,13 +57,13 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/main.ts: *new*
   {}
 /user/username/projects/myproject/other.vue: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -120,15 +120,15 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/main.ts:
   {}
 /user/username/projects/myproject/other.vue:
   {}
-/a/lib/lib.d.ts:
-  {}
 /user/username/projects/myproject/other2.vue: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json:
   {}
 
 FsWatchesRecursive::

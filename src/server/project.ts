@@ -13,16 +13,19 @@ import {
     closeFileWatcher,
     closeFileWatcherOf,
     combinePaths,
+    comparePaths,
     CompilerHost,
     CompilerOptions,
     concatenate,
     ConfigFileProgramReloadLevel,
+    containsPath,
     createCacheableExportInfoMap,
     createLanguageService,
     createResolutionCache,
     createSymlinkCache,
     Debug,
     Diagnostic,
+    directorySeparator,
     DirectoryStructureHost,
     DirectoryWatcherCallback,
     DocumentPositionMapper,
@@ -45,6 +48,7 @@ import {
     generateDjb2Hash,
     getAllowJSCompilerOption,
     getAutomaticTypeDirectiveNames,
+    getBaseFileName,
     GetCanonicalFileName,
     getDeclarationEmitOutputFilePathWorker,
     getDefaultCompilerOptions,
@@ -126,6 +130,7 @@ import {
     WatchType,
 } from "./_namespaces/ts";
 import {
+    ActionInvalidate,
     asNormalizedPath,
     createModuleSpecifierCache,
     emptyArray,
@@ -287,6 +292,14 @@ export interface EmitResult {
     diagnostics: readonly Diagnostic[];
 }
 
+const enum TypingWatcherType {
+    FileWatcher = "FileWatcher",
+    DirectoryWatcher = "DirectoryWatcher"
+}
+
+type TypingWatchers = Map<Path, FileWatcher> & { isInvoked?: boolean; };
+
+
 export abstract class Project implements LanguageServiceHost, ModuleResolutionHost {
     private rootFiles: ScriptInfo[] = [];
     private rootFilesMap = new Map<string, ProjectRootFile>();
@@ -369,6 +382,9 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     /** @internal */
     typingFiles: SortedReadonlyArray<string> = emptyArray;
+
+    /** @internal */
+    private typingWatchers: TypingWatchers | undefined;
 
     /** @internal */
     originalConfiguredProjects: Set<NormalizedPath> | undefined;
@@ -1012,6 +1028,8 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     close() {
+        this.projectService.typingsCache.onProjectClosed(this);
+        this.closeWatchingTypingLocations();
         if (this.program) {
             // if we have a program - release all files that are enlisted in program but arent root
             // The releasing of the roots happens later
@@ -1358,6 +1376,108 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             this.resolutionCache.setFilesWithInvalidatedNonRelativeUnresolvedImports(this.cachedUnresolvedImportsPerFile);
             this.projectService.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(this);
         }
+    }
+
+    /** @internal */
+    private closeWatchingTypingLocations() {
+        if (this.typingWatchers) clearMap(this.typingWatchers, closeFileWatcher);
+        this.typingWatchers = undefined;
+    }
+
+    /** @internal */
+    private onTypingInstallerWatchInvoke() {
+        this.typingWatchers!.isInvoked = true;
+        this.projectService.updateTypingsForProject({ projectName: this.getProjectName(), kind: ActionInvalidate });
+    }
+
+    /** @internal */
+    watchTypingLocations(files: readonly string[] | undefined) {
+        if (!files) {
+            this.typingWatchers!.isInvoked = false;
+            return;
+        }
+
+        if (!files.length) {
+            // shut down existing watchers
+            this.closeWatchingTypingLocations();
+            return;
+        }
+
+        const toRemove = new Map(this.typingWatchers);
+        if (!this.typingWatchers) this.typingWatchers = new Map();
+
+        // handler should be invoked once for the entire set of files since it will trigger full rediscovery of typings
+        this.typingWatchers.isInvoked = false;
+        const createProjectWatcher = (path: string, typingsWatcherType: TypingWatcherType) => {
+            const canonicalPath = this.toPath(path);
+            toRemove.delete(canonicalPath);
+            if (!this.typingWatchers!.has(canonicalPath)) {
+                this.typingWatchers!.set(canonicalPath, typingsWatcherType === TypingWatcherType.FileWatcher ?
+                    this.projectService.watchFactory.watchFile(
+                        path,
+                        () => !this.typingWatchers!.isInvoked ?
+                            this.onTypingInstallerWatchInvoke() :
+                            this.writeLog(`TypingWatchers already invoked`),
+                        PollingInterval.High,
+                        this.projectService.getWatchOptions(this),
+                        WatchType.TypingInstallerLocationFile,
+                        this,
+                    ) :
+                    this.projectService.watchFactory.watchDirectory(
+                        path,
+                        f => {
+                            if (this.typingWatchers!.isInvoked) return this.writeLog(`TypingWatchers already invoked`);
+                            if (!fileExtensionIs(f, Extension.Json)) return this.writeLog(`Ignoring files that are not *.json`);
+                            if (comparePaths(f, combinePaths(this.projectService.typingsInstaller.globalTypingsCacheLocation!, "package.json"), !this.useCaseSensitiveFileNames())) return this.writeLog(`Ignoring package.json change at global typings location`);
+                            this.onTypingInstallerWatchInvoke();
+                        },
+                        WatchDirectoryFlags.Recursive,
+                        this.projectService.getWatchOptions(this),
+                        WatchType.TypingInstallerLocationDirectory,
+                        this,
+                    )
+                );
+            }
+        };
+
+        // Create watches from list of files
+        for (const file of files) {
+            const basename = getBaseFileName(file);
+            if (basename === "package.json" || basename === "bower.json") {
+                // package.json or bower.json exists, watch the file to detect changes and update typings
+                createProjectWatcher(file, TypingWatcherType.FileWatcher);
+                continue;
+            }
+
+            // path in projectRoot, watch project root
+            if (containsPath(this.currentDirectory, file, this.currentDirectory, !this.useCaseSensitiveFileNames())) {
+                const subDirectory = file.indexOf(directorySeparator, this.currentDirectory.length + 1);
+                if (subDirectory !== -1) {
+                    // Watch subDirectory
+                    createProjectWatcher(file.substr(0, subDirectory), TypingWatcherType.DirectoryWatcher);
+                }
+                else {
+                    // Watch the directory itself
+                    createProjectWatcher(file, TypingWatcherType.DirectoryWatcher);
+                }
+                continue;
+            }
+
+            // path in global cache, watch global cache
+            if (containsPath(this.projectService.typingsInstaller.globalTypingsCacheLocation!, file, this.currentDirectory, !this.useCaseSensitiveFileNames())) {
+                createProjectWatcher(this.projectService.typingsInstaller.globalTypingsCacheLocation!, TypingWatcherType.DirectoryWatcher);
+                continue;
+            }
+
+            // watch node_modules or bower_components
+            createProjectWatcher(file, TypingWatcherType.DirectoryWatcher);
+        }
+
+        // Remove unused watches
+        toRemove.forEach((watch, path) => {
+            watch.close();
+            this.typingWatchers!.delete(path);
+        });
     }
 
     /** @internal */

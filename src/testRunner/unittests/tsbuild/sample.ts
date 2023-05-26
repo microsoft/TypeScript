@@ -161,7 +161,10 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
                 },
                 {
                     caption: "rebuilds when tsconfig changes",
-                    edit: fs => replaceText(fs, "/src/tests/tsconfig.json", `"composite": true`, `"composite": true, "target": "es3"`),
+                    edit: fs => {
+                        replaceText(fs, "/src/tests/tsconfig.json", `"composite": true`, `"composite": true, "target": "es2020"`);
+                        fs.writeFileSync("/lib/lib.es2020.full.d.ts", libContent);
+                    },
                 },
             ]
         });

@@ -616,7 +616,6 @@ export const runTestsAndWatch = task({
         });
 
         process.on("SIGINT", endWatchMode);
-        process.on("SIGKILL", endWatchMode);
         process.on("beforeExit", endWatchMode);
         watchTestsEmitter.on("rebuild", onRebuild);
         testCaseWatcher.on("all", onChange);

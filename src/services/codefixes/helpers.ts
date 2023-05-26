@@ -69,6 +69,7 @@ import {
     ObjectLiteralExpression,
     ObjectType,
     ParameterDeclaration,
+    PrivateIdentifier,
     Program,
     PropertyAssignment,
     PropertyDeclaration,
@@ -194,7 +195,8 @@ export function addNewNodeForMemberSymbol(
     const kind = declaration?.kind ?? SyntaxKind.PropertySignature;
     const declarationName = getSynthesizedDeepClone(getNameOfDeclaration(declaration), /*includeTrivia*/ false) as PropertyName;
     const effectiveModifierFlags = declaration ? getEffectiveModifierFlags(declaration) : ModifierFlags.None;
-    let modifierFlags =
+    let modifierFlags = effectiveModifierFlags & ModifierFlags.Static;
+    modifierFlags |=
         effectiveModifierFlags & ModifierFlags.Public ? ModifierFlags.Public :
         effectiveModifierFlags & ModifierFlags.Protected ? ModifierFlags.Protected :
         ModifierFlags.None;
@@ -463,7 +465,7 @@ export function createSignatureDeclarationFromCallExpression(
     context: CodeFixContextBase,
     importAdder: ImportAdder,
     call: CallExpression,
-    name: Identifier | string,
+    name: Identifier | PrivateIdentifier | string,
     modifierFlags: ModifierFlags,
     contextNode: Node
 ): MethodDeclaration | FunctionDeclaration | MethodSignature {
@@ -516,6 +518,7 @@ export function createSignatureDeclarationFromCallExpression(
                 type === undefined ? factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword) : type
             );
         case SyntaxKind.FunctionDeclaration:
+            Debug.assert(typeof name === "string" || isIdentifier(name), "Unexpected name");
             return factory.createFunctionDeclaration(
                 modifiers,
                 asteriskToken,

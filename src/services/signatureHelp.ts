@@ -55,6 +55,7 @@ import {
     isTemplateSpan,
     isTemplateTail,
     isTransientSymbol,
+    JsxTagNameExpression,
     last,
     lastOrUndefined,
     ListFormat,
@@ -599,7 +600,7 @@ function getChildListThatStartsWithOpenerToken(parent: Node, openerToken: Node, 
     return children[indexOfOpenerToken + 1];
 }
 
-function getExpressionFromInvocation(invocation: CallInvocation | TypeArgsInvocation): Expression {
+function getExpressionFromInvocation(invocation: CallInvocation | TypeArgsInvocation): Expression | JsxTagNameExpression {
     return invocation.kind === InvocationKind.Call ? getInvokedExpression(invocation.node) : invocation.called;
 }
 

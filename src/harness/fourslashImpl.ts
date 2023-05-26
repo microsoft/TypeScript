@@ -1009,8 +1009,18 @@ export class TestState {
             assert.equal<boolean | undefined>(actual.isPackageJsonImport, expected.isPackageJsonImport, `At entry ${actual.name}: Expected 'isPackageJsonImport' properties to match`);
         }
 
-        assert.equal(actual.labelDetails?.description, expected.labelDetails?.description, `At entry ${actual.name}: Expected 'labelDetails.description' properties to match`);
-        assert.equal(actual.labelDetails?.detail, expected.labelDetails?.detail, `At entry ${actual.name}: Expected 'labelDetails.detail' properties to match`);
+        assert.equal(
+            actual.filterText,
+            expected.filterText,
+            `At entry ${actual.name}: Completion 'filterText' not match: ${showTextDiff(expected.filterText || "", actual.filterText || "")}`);
+        assert.equal(
+            actual.labelDetails?.description,
+            expected.labelDetails?.description,
+            `At entry ${actual.name}: Completion 'labelDetails.description' did not match: ${showTextDiff(expected.labelDetails?.description || "", actual.labelDetails?.description || "")}`);
+        assert.equal(
+            actual.labelDetails?.detail,
+            expected.labelDetails?.detail,
+            `At entry ${actual.name}: Completion 'labelDetails.detail' did not match: ${showTextDiff(expected.labelDetails?.detail || "", actual.labelDetails?.detail || "")}`);
         assert.equal(actual.hasAction, expected.hasAction, `At entry ${actual.name}: Expected 'hasAction' properties to match`);
         assert.equal(actual.isRecommended, expected.isRecommended, `At entry ${actual.name}: Expected 'isRecommended' properties to match'`);
         assert.equal(actual.isSnippet, expected.isSnippet, `At entry ${actual.name}: Expected 'isSnippet' properties to match`);
