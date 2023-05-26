@@ -36988,6 +36988,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.ExclamationEqualsToken:
             case SyntaxKind.EqualsEqualsEqualsToken:
             case SyntaxKind.ExclamationEqualsEqualsToken:
+                // We suppress errors in CheckMode.TypeOnly (meaning the invocation came from getTypeOfExpression). During
+                // control flow analysis it is possible for operands to temporarily have narrower types, and those narrower
+                // types may cause the operands to not be comparable. We don't want such errors reported (see #46475).
                 if (!(checkMode && checkMode & CheckMode.TypeOnly)) {
                     if (isLiteralExpressionOfObject(left) || isLiteralExpressionOfObject(right)) {
                         const eqType = operator === SyntaxKind.EqualsEqualsToken || operator === SyntaxKind.EqualsEqualsEqualsToken;
