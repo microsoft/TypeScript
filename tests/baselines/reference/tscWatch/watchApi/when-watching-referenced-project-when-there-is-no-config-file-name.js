@@ -78,13 +78,13 @@ Shape signatures in builder refreshed for::
 /user/username/projects/project/app.ts (used version)
 
 FsWatches::
-/user/username/projects/project/lib/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/project/app.ts: *new*
   {}
 /user/username/projects/project/lib/index.d.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/project/lib/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::

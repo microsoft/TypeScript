@@ -39,6 +39,7 @@ import {
     find,
     FindAllReferences,
     findIndex,
+    findLastIndex,
     firstDefined,
     firstOrUndefined,
     flatMap,
@@ -56,6 +57,7 @@ import {
     getRangesWhere,
     getRefactorContextSpan,
     getRelativePathFromFile,
+    getSourceFileOfNode,
     getSynthesizedDeepClone,
     getUniqueName,
     hasJSFileExtension,
@@ -76,6 +78,7 @@ import {
     isExportSpecifier,
     isExpressionStatement,
     isExternalModuleReference,
+    isFunctionLikeDeclaration,
     isIdentifier,
     isImportDeclaration,
     isImportEqualsDeclaration,
@@ -88,6 +91,7 @@ import {
     isPropertyAssignment,
     isRequireCall,
     isSourceFile,
+    isStatement,
     isStringLiteral,
     isStringLiteralLike,
     isValidTypeOnlyAliasUseSite,
@@ -184,8 +188,8 @@ registerRefactor(refactorNameForMoveToFile, {
 function doChange(context: RefactorContext, oldFile: SourceFile, targetFile: string, program: Program, toMove: ToMove, changes: textChanges.ChangeTracker, host: LanguageServiceHost, preferences: UserPreferences): void {
     const checker = program.getTypeChecker();
     const usage = getUsageInfo(oldFile, toMove.all, checker);
-    //For a new file or an existing blank target file
-    if (!host.fileExists(targetFile) || host.fileExists(targetFile) && program.getSourceFile(targetFile)?.statements.length === 0) {
+    //For a new file
+    if (!host.fileExists(targetFile)) {
         changes.createNewFile(oldFile, targetFile, getNewStatementsAndRemoveFromOldFile(oldFile, targetFile, usage, changes, toMove, program, host, preferences));
         addNewFileToTsconfig(program, changes, oldFile.fileName, targetFile, hostGetCanonicalFileName(host));
     }
@@ -197,7 +201,15 @@ function doChange(context: RefactorContext, oldFile: SourceFile, targetFile: str
 }
 
 function getNewStatementsAndRemoveFromOldFile(
-    oldFile: SourceFile, targetFile: string | SourceFile, usage: UsageInfo, changes: textChanges.ChangeTracker, toMove: ToMove, program: Program, host: LanguageServiceHost, preferences: UserPreferences, importAdder?: codefix.ImportAdder
+    oldFile: SourceFile,
+    targetFile: string | SourceFile,
+    usage: UsageInfo,
+    changes: textChanges.ChangeTracker,
+    toMove: ToMove,
+    program: Program,
+    host: LanguageServiceHost,
+    preferences: UserPreferences,
+    importAdder?: codefix.ImportAdder
 ) {
     const checker = program.getTypeChecker();
     const prologueDirectives = takeWhile(oldFile.statements, isPrologueDirective);
@@ -225,6 +237,9 @@ function getNewStatementsAndRemoveFromOldFile(
     if (typeof targetFile !== "string") {
         if (targetFile.statements.length > 0) {
             moveStatementsToTargetFile(changes, program, body, targetFile, toMove);
+        }
+        else {
+            changes.insertNodesAtEndOfFile(targetFile, body, /*blankLineBetween*/ false);
         }
         if (imports.length > 0) {
             insertImports(changes, targetFile, imports, /*blankLineBetween*/ true, preferences);
@@ -898,6 +913,11 @@ function getRangeToMove(context: RefactorContext): RangeToMove | undefined {
         return { toMove: [statements[startNodeIndex]], afterLast: statements[startNodeIndex + 1] };
     }
 
+    const overloadRangeToMove = getOverloadRangeToMove(file, startStatement);
+    if (overloadRangeToMove) {
+        return overloadRangeToMove;
+    }
+
     // Can't only partially include the start node or be partially into the next node
     if (range.pos > startStatement.getStart(file)) return undefined;
     const afterEndNodeIndex = findIndex(statements, s => s.end > range.end, startNodeIndex);
@@ -1169,4 +1189,18 @@ function moveStatementsToTargetFile(changes: textChanges.ChangeTracker, program:
     else {
         changes.insertNodesAfter(targetFile, targetFile.statements[targetFile.statements.length - 1], statements);
     }
+}
+
+function getOverloadRangeToMove(sourceFile: SourceFile, statement: Statement) {
+    if (isFunctionLikeDeclaration(statement)) {
+        const declarations = statement.symbol.declarations;
+        if (declarations === undefined || length(declarations) <= 1 || !contains(declarations, statement)) {
+            return undefined;
+        }
+        const lastDecl = declarations[length(declarations) - 1];
+        const statementsToMove = mapDefined(declarations, d => getSourceFileOfNode(d) === sourceFile && isStatement(d) ? d : undefined);
+        const end = findLastIndex(sourceFile.statements, s => s.end > lastDecl.end);
+        return { toMove: statementsToMove, afterLast: end >= 0 ? sourceFile.statements[end] : undefined };
+    }
+    return undefined;
 }

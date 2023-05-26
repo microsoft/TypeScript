@@ -904,8 +904,6 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/tsconfig.json: *new*
-  {}
 /lib/a_0.ts: *new*
   {}
 /lib/a_1.ts: *new*
@@ -1107,6 +1105,8 @@ FsWatches::
 /lib/a_99.ts: *new*
   {}
 /lib/foo/constants.d.ts: *new*
+  {}
+/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::

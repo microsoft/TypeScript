@@ -296,7 +296,13 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/projects/project1/tsconfig.json: *new*
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts: *new*
+  {}
+/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts: *new*
+  {}
+/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts: *new*
+  {}
+/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts: *new*
   {}
 /home/src/projects/project1/core.d.ts: *new*
   {}
@@ -304,27 +310,21 @@ FsWatches::
   {}
 /home/src/projects/project1/file2.ts: *new*
   {}
-/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts: *new*
-  {}
-/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts: *new*
-  {}
-/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts: *new*
-  {}
 /home/src/projects/project1/index.ts: *new*
   {}
-/home/src/projects/project1/utils.d.ts: *new*
+/home/src/projects/project1/tsconfig.json: *new*
   {}
 /home/src/projects/project1/typeroot1/sometype/index.d.ts: *new*
   {}
-/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts: *new*
+/home/src/projects/project1/utils.d.ts: *new*
   {}
 
 FsWatchesRecursive::
 /home/src/projects/node_modules: *new*
   {}
-/home/src/projects/project1/typeroot1: *new*
-  {}
 /home/src/projects/project1: *new*
+  {}
+/home/src/projects/project1/typeroot1: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -623,7 +623,13 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/projects/project1/tsconfig.json:
+/home/src/lib/lib.dom.d.ts: *new*
+  {}
+/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts:
+  {}
+/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts:
+  {}
+/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts:
   {}
 /home/src/projects/project1/core.d.ts:
   {}
@@ -631,19 +637,13 @@ FsWatches::
   {}
 /home/src/projects/project1/file2.ts:
   {}
-/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts:
-  {}
-/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts:
-  {}
-/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts:
-  {}
 /home/src/projects/project1/index.ts:
   {}
-/home/src/projects/project1/utils.d.ts:
+/home/src/projects/project1/tsconfig.json:
   {}
 /home/src/projects/project1/typeroot1/sometype/index.d.ts:
   {}
-/home/src/lib/lib.dom.d.ts: *new*
+/home/src/projects/project1/utils.d.ts:
   {}
 
 FsWatches *deleted*::
@@ -653,9 +653,9 @@ FsWatches *deleted*::
 FsWatchesRecursive::
 /home/src/projects/node_modules:
   {}
-/home/src/projects/project1/typeroot1:
-  {}
 /home/src/projects/project1:
+  {}
+/home/src/projects/project1/typeroot1:
   {}
 
 exitCode:: ExitStatus.undefined
@@ -1088,25 +1088,25 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/projects/project1/tsconfig.json:
+/home/src/lib/lib.dom.d.ts:
+  {}
+/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts:
+  {}
+/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts:
+  {}
+/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts:
   {}
 /home/src/projects/project1/file.ts:
   {}
 /home/src/projects/project1/file2.ts:
   {}
-/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts:
-  {}
-/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts:
-  {}
-/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts:
-  {}
 /home/src/projects/project1/index.ts:
   {}
-/home/src/projects/project1/utils.d.ts:
+/home/src/projects/project1/tsconfig.json:
   {}
 /home/src/projects/project1/typeroot1/sometype/index.d.ts:
   {}
-/home/src/lib/lib.dom.d.ts:
+/home/src/projects/project1/utils.d.ts:
   {}
 
 FsWatches *deleted*::
@@ -1116,9 +1116,9 @@ FsWatches *deleted*::
 FsWatchesRecursive::
 /home/src/projects/node_modules:
   {}
-/home/src/projects/project1/typeroot1:
-  {}
 /home/src/projects/project1:
+  {}
+/home/src/projects/project1/typeroot1:
   {}
 
 exitCode:: ExitStatus.undefined
@@ -1357,25 +1357,25 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/projects/project1/tsconfig.json:
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts: *new*
+  {}
+/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts:
+  {}
+/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts:
+  {}
+/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts:
   {}
 /home/src/projects/project1/file.ts:
   {}
 /home/src/projects/project1/file2.ts:
   {}
-/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts:
-  {}
-/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts:
-  {}
-/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts:
-  {}
 /home/src/projects/project1/index.ts:
   {}
-/home/src/projects/project1/utils.d.ts:
+/home/src/projects/project1/tsconfig.json:
   {}
 /home/src/projects/project1/typeroot1/sometype/index.d.ts:
   {}
-/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts: *new*
+/home/src/projects/project1/utils.d.ts:
   {}
 
 FsWatches *deleted*::
@@ -1385,9 +1385,9 @@ FsWatches *deleted*::
 FsWatchesRecursive::
 /home/src/projects/node_modules:
   {}
-/home/src/projects/project1/typeroot1:
-  {}
 /home/src/projects/project1:
+  {}
+/home/src/projects/project1/typeroot1:
   {}
 
 exitCode:: ExitStatus.undefined
@@ -1603,33 +1603,33 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/projects/project1/tsconfig.json:
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts:
+  {}
+/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts:
+  {}
+/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts:
+  {}
+/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts:
   {}
 /home/src/projects/project1/file.ts:
   {}
 /home/src/projects/project1/file2.ts:
   {}
-/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts:
-  {}
-/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts:
-  {}
-/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts:
-  {}
 /home/src/projects/project1/index.ts:
   {}
-/home/src/projects/project1/utils.d.ts:
+/home/src/projects/project1/tsconfig.json:
   {}
 /home/src/projects/project1/typeroot1/sometype/index.d.ts:
   {}
-/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts:
+/home/src/projects/project1/utils.d.ts:
   {}
 
 FsWatchesRecursive::
 /home/src/projects/node_modules:
   {}
-/home/src/projects/project1/typeroot1:
-  {}
 /home/src/projects/project1:
+  {}
+/home/src/projects/project1/typeroot1:
   {}
 
 exitCode:: ExitStatus.undefined
@@ -1777,25 +1777,25 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/projects/project1/tsconfig.json:
+/home/src/lib/lib.dom.d.ts: *new*
+  {}
+/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts:
+  {}
+/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts:
+  {}
+/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts:
   {}
 /home/src/projects/project1/file.ts:
   {}
 /home/src/projects/project1/file2.ts:
   {}
-/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts:
-  {}
-/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts:
-  {}
-/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts:
-  {}
 /home/src/projects/project1/index.ts:
   {}
-/home/src/projects/project1/utils.d.ts:
+/home/src/projects/project1/tsconfig.json:
   {}
 /home/src/projects/project1/typeroot1/sometype/index.d.ts:
   {}
-/home/src/lib/lib.dom.d.ts: *new*
+/home/src/projects/project1/utils.d.ts:
   {}
 
 FsWatches *deleted*::
@@ -1805,9 +1805,9 @@ FsWatches *deleted*::
 FsWatchesRecursive::
 /home/src/projects/node_modules:
   {}
-/home/src/projects/project1/typeroot1:
-  {}
 /home/src/projects/project1:
+  {}
+/home/src/projects/project1/typeroot1:
   {}
 
 exitCode:: ExitStatus.undefined
@@ -2063,25 +2063,25 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/projects/project1/tsconfig.json:
+/home/src/lib/lib.dom.d.ts:
+  {}
+/home/src/lib/lib.webworker.d.ts: *new*
+  {}
+/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts:
+  {}
+/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts:
   {}
 /home/src/projects/project1/file.ts:
   {}
 /home/src/projects/project1/file2.ts:
   {}
-/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts:
-  {}
-/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts:
-  {}
 /home/src/projects/project1/index.ts:
   {}
-/home/src/projects/project1/utils.d.ts:
+/home/src/projects/project1/tsconfig.json:
   {}
 /home/src/projects/project1/typeroot1/sometype/index.d.ts:
   {}
-/home/src/lib/lib.dom.d.ts:
-  {}
-/home/src/lib/lib.webworker.d.ts: *new*
+/home/src/projects/project1/utils.d.ts:
   {}
 
 FsWatches *deleted*::
@@ -2091,9 +2091,9 @@ FsWatches *deleted*::
 FsWatchesRecursive::
 /home/src/projects/node_modules:
   {}
-/home/src/projects/project1/typeroot1:
-  {}
 /home/src/projects/project1:
+  {}
+/home/src/projects/project1/typeroot1:
   {}
 
 exitCode:: ExitStatus.undefined
@@ -2335,25 +2335,25 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/projects/project1/tsconfig.json:
+/home/src/lib/lib.dom.d.ts:
+  {}
+/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts:
+  {}
+/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts:
+  {}
+/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts: *new*
   {}
 /home/src/projects/project1/file.ts:
   {}
 /home/src/projects/project1/file2.ts:
   {}
-/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts:
-  {}
-/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts:
-  {}
 /home/src/projects/project1/index.ts:
   {}
-/home/src/projects/project1/utils.d.ts:
+/home/src/projects/project1/tsconfig.json:
   {}
 /home/src/projects/project1/typeroot1/sometype/index.d.ts:
   {}
-/home/src/lib/lib.dom.d.ts:
-  {}
-/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts: *new*
+/home/src/projects/project1/utils.d.ts:
   {}
 
 FsWatches *deleted*::
@@ -2363,9 +2363,9 @@ FsWatches *deleted*::
 FsWatchesRecursive::
 /home/src/projects/node_modules:
   {}
-/home/src/projects/project1/typeroot1:
-  {}
 /home/src/projects/project1:
+  {}
+/home/src/projects/project1/typeroot1:
   {}
 
 exitCode:: ExitStatus.undefined

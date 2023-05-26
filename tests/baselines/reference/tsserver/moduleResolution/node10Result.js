@@ -462,25 +462,25 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/projects/project/tsconfig.json: *new*
-  {}
 /a/lib/lib.d.ts: *new*
   {}
 /home/src/projects: *new*
   {}
 /home/src/projects/project: *new*
   {}
-/home/src/projects/project/node_modules/foo/package.json: *new*
+/home/src/projects/project/node_modules/@types/bar/package.json: *new*
+  {}
+/home/src/projects/project/node_modules/@types/bar2/package.json: *new*
   {}
 /home/src/projects/project/node_modules/bar/package.json: *new*
   {}
-/home/src/projects/project/node_modules/@types/bar/package.json: *new*
+/home/src/projects/project/node_modules/bar2/package.json: *new*
+  {}
+/home/src/projects/project/node_modules/foo/package.json: *new*
   {}
 /home/src/projects/project/node_modules/foo2/package.json: *new*
   {}
-/home/src/projects/project/node_modules/bar2/package.json: *new*
-  {}
-/home/src/projects/project/node_modules/@types/bar2/package.json: *new*
+/home/src/projects/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -1813,25 +1813,25 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/projects/project/tsconfig.json:
-  {}
 /a/lib/lib.d.ts:
   {}
 /home/src/projects:
   {}
 /home/src/projects/project:
   {}
-/home/src/projects/project/node_modules/foo/package.json:
+/home/src/projects/project/node_modules/@types/bar/package.json:
+  {}
+/home/src/projects/project/node_modules/@types/bar2/package.json:
   {}
 /home/src/projects/project/node_modules/bar/package.json:
   {}
-/home/src/projects/project/node_modules/@types/bar/package.json:
+/home/src/projects/project/node_modules/bar2/package.json:
+  {}
+/home/src/projects/project/node_modules/foo/package.json:
   {}
 /home/src/projects/project/node_modules/foo2/package.json:
   {}
-/home/src/projects/project/node_modules/bar2/package.json:
-  {}
-/home/src/projects/project/node_modules/@types/bar2/package.json:
+/home/src/projects/project/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -2074,25 +2074,25 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/projects/project/tsconfig.json:
-  {}
 /a/lib/lib.d.ts:
   {}
 /home/src/projects:
   {}
 /home/src/projects/project:
   {}
-/home/src/projects/project/node_modules/foo/package.json:
+/home/src/projects/project/node_modules/@types/bar/package.json:
+  {}
+/home/src/projects/project/node_modules/@types/bar2/package.json:
   {}
 /home/src/projects/project/node_modules/bar/package.json:
   {}
-/home/src/projects/project/node_modules/@types/bar/package.json:
+/home/src/projects/project/node_modules/bar2/package.json:
+  {}
+/home/src/projects/project/node_modules/foo/package.json:
   {}
 /home/src/projects/project/node_modules/foo2/package.json:
   {}
-/home/src/projects/project/node_modules/bar2/package.json:
-  {}
-/home/src/projects/project/node_modules/@types/bar2/package.json:
+/home/src/projects/project/tsconfig.json:
   {}
 
 FsWatchesRecursive::

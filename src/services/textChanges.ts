@@ -631,6 +631,25 @@ export class ChangeTracker {
         }
     }
 
+    public insertNodesAtEndOfFile(
+        sourceFile: SourceFile,
+        newNodes: readonly Statement[],
+        blankLineBetween: boolean): void {
+        this.insertAtEndOfFile(sourceFile, newNodes, blankLineBetween);
+    }
+
+    private insertAtEndOfFile(
+        sourceFile: SourceFile,
+        insert: readonly Statement[],
+        blankLineBetween: boolean): void {
+        const pos = sourceFile.end + 1;
+        const options = {
+            prefix: this.newLineCharacter,
+            suffix: this.newLineCharacter + (blankLineBetween ? this.newLineCharacter : ""),
+        };
+        this.insertNodesAt(sourceFile, pos, insert, options);
+    }
+
     private insertStatementsInNewFile(fileName: string, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[], oldFile?: SourceFile): void {
         if (!this.newFileChanges) {
             this.newFileChanges = createMultiMap<string, NewFileInsertion>();

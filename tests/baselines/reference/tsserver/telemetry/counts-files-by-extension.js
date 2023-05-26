@@ -232,8 +232,6 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/tsconfig.json: *new*
-  {}
 /src/dts.d.ts: *new*
   {}
 /src/js.js: *new*
@@ -243,6 +241,8 @@ FsWatches::
 /src/moo.ts: *new*
   {}
 /src/tsx.tsx: *new*
+  {}
+/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::

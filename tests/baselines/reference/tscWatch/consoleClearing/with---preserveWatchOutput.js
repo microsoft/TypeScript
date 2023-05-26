@@ -41,9 +41,9 @@ Shape signatures in builder refreshed for::
 /f.ts (used version)
 
 FsWatches::
-/f.ts: *new*
-  {}
 /a/lib/lib.d.ts: *new*
+  {}
+/f.ts: *new*
   {}
 
 exitCode:: ExitStatus.undefined

@@ -180,19 +180,19 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/users/username/projects/project/modulefile1: *new*
-  {"pollingInterval":500}
 /a/lib/lib.d.ts: *new*
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 /users/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/users/username/projects/project/modulefile1: *new*
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/project/tsconfig.json: *new*
-  {}
 /users/username/projects/project: *new*
+  {}
+/users/username/projects/project/tsconfig.json: *new*
   {}
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /users/username/projects/project/moduleFile1.ts :: WatchInfo: /users/username/projects/project 0 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Failed Lookup Locations
@@ -243,11 +243,11 @@ interface Array<T> { length: number; [n: number]: T; }
 
 
 PolledWatches::
+/users/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 /users/username/projects/project/modulefile1:
   {"pollingInterval":500}
 /users/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
-/users/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
@@ -255,9 +255,9 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/project/tsconfig.json:
-  {}
 /users/username/projects/project:
+  {}
+/users/username/projects/project/tsconfig.json:
   {}
 
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/project/tsconfig.jsonFailedLookupInvalidation
@@ -331,9 +331,9 @@ After running Timeout callback:: count: 1
 9: checkOne
 
 PolledWatches::
-/users/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 /users/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
@@ -341,11 +341,11 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/project/tsconfig.json:
+/a/lib/lib.d.ts: *new*
   {}
 /users/username/projects/project/modulefile1.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/users/username/projects/project/tsconfig.json:
   {}
 
 FsWatches *deleted*::
