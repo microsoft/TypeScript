@@ -62,8 +62,8 @@ export default (() => {
     let _classExtraInitializers = [];
     let _classThis;
     var default_1 = class {
+        static { __setFunctionName(this, "default"); }
         static {
-            __setFunctionName(this, "default");
             __esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name }, null, _classExtraInitializers);
             default_1 = _classThis = _classDescriptor.value;
             __runInitializers(_classThis, _classExtraInitializers);

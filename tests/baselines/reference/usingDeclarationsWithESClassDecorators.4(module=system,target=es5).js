@@ -34,6 +34,8 @@ System.register([], function (exports_1, context_1) {
                     }());
                     (function () {
                         __setFunctionName(_classThis, "default");
+                    })();
+                    (function () {
                         __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name }, null, _classExtraInitializers);
                         default_1 = _classThis = _classDescriptor.value;
                         __runInitializers(_classThis, _classExtraInitializers);

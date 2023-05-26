@@ -28,8 +28,8 @@ declare let dec: any, obj: any;
         let _classExtraInitializers = [];
         let _classThis;
         var class_1 = class {
+            static { __setFunctionName(this, "x"); }
             static {
-                __setFunctionName(this, "x");
                 __esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name }, null, _classExtraInitializers);
                 class_1 = _classThis = _classDescriptor.value;
                 __runInitializers(_classThis, _classExtraInitializers);
@@ -44,8 +44,8 @@ declare let dec: any, obj: any;
         let _y_decorators;
         let _y_initializers = [];
         return class {
+            static { __setFunctionName(this, "x"); }
             static {
-                __setFunctionName(this, "x");
                 _y_decorators = [dec];
                 __esDecorate(null, null, _y_decorators, { kind: "field", name: "y", static: false, private: false, access: { has: obj => "y" in obj, get: obj => obj.y, set: (obj, value) => { obj.y = value; } } }, _y_initializers, _instanceExtraInitializers);
             }
@@ -62,8 +62,8 @@ declare let dec: any, obj: any;
         let _classExtraInitializers_1 = [];
         let _classThis_1;
         var class_2 = class {
+            static { __setFunctionName(this, "x"); }
             static {
-                __setFunctionName(this, "x");
                 __esDecorate(null, _classDescriptor_1 = { value: this }, _classDecorators_1, { kind: "class", name: this.name }, null, _classExtraInitializers_1);
                 class_2 = _classThis_1 = _classDescriptor_1.value;
                 __runInitializers(_classThis_1, _classExtraInitializers_1);
@@ -78,8 +78,8 @@ declare let dec: any, obj: any;
         let _y_decorators;
         let _y_initializers = [];
         return class {
+            static { __setFunctionName(this, "x"); }
             static {
-                __setFunctionName(this, "x");
                 _y_decorators = [dec];
                 __esDecorate(null, null, _y_decorators, { kind: "field", name: "y", static: false, private: false, access: { has: obj => "y" in obj, get: obj => obj.y, set: (obj, value) => { obj.y = value; } } }, _y_initializers, _instanceExtraInitializers_1);
             }
@@ -94,8 +94,8 @@ declare let dec: any, obj: any;
         let _classExtraInitializers_2 = [];
         let _classThis_2;
         var class_3 = class {
+            static { __setFunctionName(this, "x"); }
             static {
-                __setFunctionName(this, "x");
                 __esDecorate(null, _classDescriptor_2 = { value: this }, _classDecorators_2, { kind: "class", name: this.name }, null, _classExtraInitializers_2);
                 class_3 = _classThis_2 = _classDescriptor_2.value;
                 __runInitializers(_classThis_2, _classExtraInitializers_2);
@@ -110,8 +110,8 @@ declare let dec: any, obj: any;
         let _y_decorators;
         let _y_initializers = [];
         return class {
+            static { __setFunctionName(this, "x"); }
             static {
-                __setFunctionName(this, "x");
                 _y_decorators = [dec];
                 __esDecorate(null, null, _y_decorators, { kind: "field", name: "y", static: false, private: false, access: { has: obj => "y" in obj, get: obj => obj.y, set: (obj, value) => { obj.y = value; } } }, _y_initializers, _instanceExtraInitializers_2);
             }

@@ -25,8 +25,8 @@ export default ((() => {
     let _classExtraInitializers = [];
     let _classThis;
     var class_1 = class {
+        static { __setFunctionName(this, "default"); }
         static {
-            __setFunctionName(this, "default");
             __esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name }, null, _classExtraInitializers);
             class_1 = _classThis = _classDescriptor.value;
             __runInitializers(_classThis, _classExtraInitializers);
@@ -42,8 +42,8 @@ export default ((() => {
     let _y_decorators;
     let _y_initializers = [];
     return class {
+        static { __setFunctionName(this, "default"); }
         static {
-            __setFunctionName(this, "default");
             _y_decorators = [dec];
             __esDecorate(null, null, _y_decorators, { kind: "field", name: "y", static: false, private: false, access: { has: obj => "y" in obj, get: obj => obj.y, set: (obj, value) => { obj.y = value; } } }, _y_initializers, _instanceExtraInitializers);
         }

@@ -5131,7 +5131,8 @@ export type NamedEvaluation =
     | ParameterDeclaration & { readonly name: Identifier, readonly dotDotDotToken: undefined, readonly initializer: WrappedExpression<AnonymousFunctionDefinition> }
     | BindingElement & { readonly name: Identifier, readonly dotDotDotToken: undefined, readonly initializer: WrappedExpression<AnonymousFunctionDefinition> }
     | PropertyDeclaration & { readonly initializer: WrappedExpression<AnonymousFunctionDefinition> }
-    | AssignmentExpression<EqualsToken | AmpersandAmpersandEqualsToken | BarBarEqualsToken | QuestionQuestionEqualsToken> & { readonly left: Identifier, readonly right: WrappedExpression<AnonymousFunctionDefinition> }
+    | AssignmentExpression<EqualsToken> & { readonly left: Identifier, readonly right: WrappedExpression<AnonymousFunctionDefinition> }
+    | AssignmentExpression<AmpersandAmpersandEqualsToken | BarBarEqualsToken | QuestionQuestionEqualsToken> & { readonly left: Identifier, readonly right: WrappedExpression<AnonymousFunctionDefinition> }
     | ExportAssignment & { readonly expression: WrappedExpression<AnonymousFunctionDefinition> }
     ;
 
