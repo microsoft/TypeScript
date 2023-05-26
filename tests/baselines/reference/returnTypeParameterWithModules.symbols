@@ -42,30 +42,30 @@ module M2 {
 >A : Symbol(A, Decl(returnTypeParameterWithModules.ts, 5, 11))
 >reduce : Symbol(A.reduce, Decl(returnTypeParameterWithModules.ts, 0, 11))
 >arguments : Symbol(arguments)
->compose2 : Symbol(compose2, Decl(returnTypeParameterWithModules.ts, 9, 6))
+>compose2 : Symbol(compose2, Decl(returnTypeParameterWithModules.ts, 9, 4))
 
-    };
-    export function compose2<B, C, D>(g: (x: B) => C, f: (x: D) => B): (x: D) => C {
->compose2 : Symbol(compose2, Decl(returnTypeParameterWithModules.ts, 9, 6))
->B : Symbol(B, Decl(returnTypeParameterWithModules.ts, 10, 29))
->C : Symbol(C, Decl(returnTypeParameterWithModules.ts, 10, 31))
->D : Symbol(D, Decl(returnTypeParameterWithModules.ts, 10, 34))
->g : Symbol(g, Decl(returnTypeParameterWithModules.ts, 10, 38))
->x : Symbol(x, Decl(returnTypeParameterWithModules.ts, 10, 42))
->B : Symbol(B, Decl(returnTypeParameterWithModules.ts, 10, 29))
->C : Symbol(C, Decl(returnTypeParameterWithModules.ts, 10, 31))
->f : Symbol(f, Decl(returnTypeParameterWithModules.ts, 10, 53))
->x : Symbol(x, Decl(returnTypeParameterWithModules.ts, 10, 58))
->D : Symbol(D, Decl(returnTypeParameterWithModules.ts, 10, 34))
->B : Symbol(B, Decl(returnTypeParameterWithModules.ts, 10, 29))
->x : Symbol(x, Decl(returnTypeParameterWithModules.ts, 10, 72))
->D : Symbol(D, Decl(returnTypeParameterWithModules.ts, 10, 34))
->C : Symbol(C, Decl(returnTypeParameterWithModules.ts, 10, 31))
+  };
+  export function compose2<B, C, D>(g: (x: B) => C, f: (x: D) => B): (x: D) => C {
+>compose2 : Symbol(compose2, Decl(returnTypeParameterWithModules.ts, 9, 4))
+>B : Symbol(B, Decl(returnTypeParameterWithModules.ts, 10, 27))
+>C : Symbol(C, Decl(returnTypeParameterWithModules.ts, 10, 29))
+>D : Symbol(D, Decl(returnTypeParameterWithModules.ts, 10, 32))
+>g : Symbol(g, Decl(returnTypeParameterWithModules.ts, 10, 36))
+>x : Symbol(x, Decl(returnTypeParameterWithModules.ts, 10, 40))
+>B : Symbol(B, Decl(returnTypeParameterWithModules.ts, 10, 27))
+>C : Symbol(C, Decl(returnTypeParameterWithModules.ts, 10, 29))
+>f : Symbol(f, Decl(returnTypeParameterWithModules.ts, 10, 51))
+>x : Symbol(x, Decl(returnTypeParameterWithModules.ts, 10, 56))
+>D : Symbol(D, Decl(returnTypeParameterWithModules.ts, 10, 32))
+>B : Symbol(B, Decl(returnTypeParameterWithModules.ts, 10, 27))
+>x : Symbol(x, Decl(returnTypeParameterWithModules.ts, 10, 70))
+>D : Symbol(D, Decl(returnTypeParameterWithModules.ts, 10, 32))
+>C : Symbol(C, Decl(returnTypeParameterWithModules.ts, 10, 29))
 
     return function (x) { return g(f(x)); }
 >x : Symbol(x, Decl(returnTypeParameterWithModules.ts, 11, 21))
->g : Symbol(g, Decl(returnTypeParameterWithModules.ts, 10, 38))
->f : Symbol(f, Decl(returnTypeParameterWithModules.ts, 10, 53))
+>g : Symbol(g, Decl(returnTypeParameterWithModules.ts, 10, 36))
+>f : Symbol(f, Decl(returnTypeParameterWithModules.ts, 10, 51))
 >x : Symbol(x, Decl(returnTypeParameterWithModules.ts, 11, 21))
 
   };

@@ -46,8 +46,8 @@ module M2 {
 >arguments : IArguments
 >compose2 : <B, C, D>(g: (x: B) => C, f: (x: D) => B) => (x: D) => C
 
-    };
-    export function compose2<B, C, D>(g: (x: B) => C, f: (x: D) => B): (x: D) => C {
+  };
+  export function compose2<B, C, D>(g: (x: B) => C, f: (x: D) => B): (x: D) => C {
 >compose2 : <B, C, D>(g: (x: B) => C, f: (x: D) => B) => (x: D) => C
 >g : (x: B) => C
 >x : B

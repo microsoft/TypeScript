@@ -19307,11 +19307,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         instantiationDepth--;
         return result;
     }
-
     function instantiateNarrowTypeWorker(
+
         type: Type,
         narrowMapper: TypeMapper,
-        mapper: TypeMapper | undefined, aliasSymbol: Symbol | undefined, aliasTypeArguments: readonly Type[] | undefined): Type {
+        mapper: TypeMapper | undefined,
+        aliasSymbol: Symbol | undefined,
+        aliasTypeArguments: readonly Type[] | undefined): Type {
         const flags = type.flags;
         if (flags & TypeFlags.TypeParameter) {
             return getMappedType(type, combineTypeMappers(mapper, narrowMapper));
@@ -29159,9 +29161,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getContextualTypeForReturnExpression(node: Expression, contextFlags: ContextFlags | undefined): Type | undefined {
         const func = getContainingFunction(node);
         if (func) {
+            const functionFlags = getFunctionFlags(func);
+            const links = getNodeLinks(node);
+            if (links.contextualReturnType) {
+                if (functionFlags & FunctionFlags.Async) {
+                    return getUnionType([links.contextualReturnType, createPromiseLikeType(links.contextualReturnType)]);
+                }
+                return links.contextualReturnType;
+            }
             let contextualReturnType = getContextualReturnType(func, contextFlags);
             if (contextualReturnType) {
-                const functionFlags = getFunctionFlags(func);
                 if (functionFlags & FunctionFlags.Generator) { // Generator or AsyncGenerator function
                     const isAsyncGenerator = (functionFlags & FunctionFlags.Async) !== 0;
                     if (contextualReturnType.flags & TypeFlags.Union) {
@@ -29177,8 +29186,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                 if (functionFlags & FunctionFlags.Async) { // Async function or AsyncGenerator function
                     // Get the awaited type without the `Awaited<T>` alias
-                    const contextualAwaitedType = mapType(contextualReturnType, getAwaitedTypeNoAlias);
-                    return contextualAwaitedType && getUnionType([contextualAwaitedType, createPromiseLikeType(contextualAwaitedType)]);
+                    // const contextualAwaitedType = mapType(contextualReturnType, getAwaitedTypeNoAlias);
+                    const contextualAwaitedType = getAwaitedTypeNoAlias(contextualReturnType); // >> TODO: test this change separately
+                    return contextualAwaitedType &&
+                        getUnionType([contextualAwaitedType, createPromiseLikeType(contextualAwaitedType)]);
                 }
 
                 return contextualReturnType; // Regular function or Generator function
@@ -42656,44 +42667,65 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const returnType = getReturnTypeOfSignature(signature);
         const functionFlags = getFunctionFlags(container);
         if (strictNullChecks || node.expression || returnType.flags & TypeFlags.Never) {
-            const exprType = node.expression ? checkExpressionCached(node.expression) : undefinedType;
+            // const exprType = node.expression ? checkExpressionCached(node.expression) : undefinedType;
             if (container.kind === SyntaxKind.SetAccessor) {
                 if (node.expression) {
                     error(node, Diagnostics.Setters_cannot_return_a_value);
                 }
             }
             else if (container.kind === SyntaxKind.Constructor) {
+                const exprType = node.expression ? checkExpressionCached(node.expression) : undefinedType;
                 if (node.expression && !checkTypeAssignableToAndOptionallyElaborate(exprType, returnType, node, node.expression)) {
                     error(node, Diagnostics.Return_type_of_constructor_signature_must_be_assignable_to_the_instance_type_of_the_class);
                 }
             }
             else if (getReturnTypeFromAnnotation(container)) {
                 const unwrappedReturnType = unwrapReturnType(returnType, functionFlags) ?? returnType;
+                let actualReturnType = unwrappedReturnType;
+                /* Begin weird stuff */
+                const links = node.expression && getNodeLinks(node.expression);
+                if (links && !links.contextualReturnType) {
+                    const outerTypeParameters = getOuterTypeParameters(container, /*includeThisTypes*/ false);
+                    const typeParameters = appendTypeParameters(outerTypeParameters, getEffectiveTypeParameterDeclarations(container as DeclarationWithTypeParameters));
+                    const queryTypeParameters = typeParameters?.filter(isQueryTypeParameter);
+                    if (queryTypeParameters) {
+                        const narrowMapper = createTypeMapper(queryTypeParameters, queryTypeParameters.map(tp => {
+                            const originalName = tp.exprName;
+                            const fakeName = factory.cloneNode(originalName); // Fake a narrowable node.
+                            setParent(fakeName, node.parent);
+                            setNodeFlags(fakeName, fakeName.flags | NodeFlags.Synthesized);
+                            fakeName.flowNode = node.flowNode;
+                            // >> TODO: this call to checkExpression might report errors,
+                            // >> and so might throw when trying to get span for fakeName.
+                            // >> TODO: also, it shouldn't throw errors.
+                            const exprType = checkExpression(fakeName);
+                            // >> TODO: is there a better way of detecting that narrowing will be useless?
+                            // >> https://github.com/microsoft/TypeScript/issues/51525 might help
+                            if (getConstraintOfTypeParameter(tp)) {
+                                const narrowableConstraintType = mapType(tp.constraint!, getBaseConstraintOrType);
+                                if (narrowableConstraintType === exprType) {
+                                    return tp; // Don't narrow if narrowing didn't do anything but obtain constraints
+                                    // >> TODO: exclude such type parameters from the mapper
+                                }
+                            }
+                            return exprType;
+                        }));
+                        // >> TODO: don't instantiate at the top level?
+                        actualReturnType = instantiateNarrowTypeWorker(
+                            unwrappedReturnType,
+                            narrowMapper,
+                            /*mapper*/ undefined,
+                            /*aliasSymbol*/ undefined,
+                            /*aliasTypeArguments*/ undefined,
+                        );
+                    }
+                    links.contextualReturnType = actualReturnType; // >> maybe don't store this if we don't need to?
+                }
+                /* End weird stuff */
+                const exprType = node.expression ? checkExpressionCached(node.expression) : undefinedType;
                 const unwrappedExprType = functionFlags & FunctionFlags.Async
                     ? checkAwaitedType(exprType, /*withAlias*/ false, node, Diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member)
                     : exprType;
-                const outerTypeParameters = getOuterTypeParameters(container, /*includeThisTypes*/ false);
-                const typeParameters = appendTypeParameters(outerTypeParameters, getEffectiveTypeParameterDeclarations(container as DeclarationWithTypeParameters));
-                const queryTypeParameters = typeParameters?.filter(isQueryTypeParameter);
-                let actualReturnType = unwrappedReturnType;
-                if (queryTypeParameters) {
-                    const narrowMapper = createTypeMapper(queryTypeParameters, queryTypeParameters.map(tp => {
-                        const originalName = tp.exprName;
-                        const fakeName = factory.cloneNode(originalName); // Fake a narrowable node.
-                        setParent(fakeName, node.parent);
-                        setNodeFlags(fakeName, fakeName.flags | NodeFlags.Synthesized);
-                        fakeName.flowNode = node.flowNode;
-                        return checkExpression(fakeName);
-                    }));
-                    actualReturnType = instantiateNarrowTypeWorker(
-                        unwrappedReturnType,
-                        narrowMapper,
-                        /* mapper*/ undefined,
-                        /*aliasSymbol*/ undefined,
-                        /*aliasTypeArguments*/ undefined,
-                    );
-                        // /*writing*/ true);
-                }
                 // if (unwrappedReturnType) {
                 if (actualReturnType) {
                     // If the function has a return type, but promisedType is
@@ -42721,19 +42753,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return false;
             // >> TODO: deal with synthetic tps?
         }
-        // getTypeParameterOwner
-        typeParameter.symbol
         const declaration = getDeclarationOfKind(typeParameter.symbol, SyntaxKind.TypeParameter)!;
         const owner = getTypeParameterOwner(declaration)!;
-        if (!isFunctionLike(owner)) {
-            return false; // Owner is class or interface
+        if (!isFunctionLikeDeclaration(owner)) {
+            return false; // Owner is class or interface, or a signature without an implementation
         }
         const references: Node[] = [];
         forEachChild(owner, doSomething);
         if (references.length === 1) {
             const reference = references[0];
             let exprName;
-            if (isParameter(reference.parent) && (exprName = getNameOfDeclaration(reference.parent))) {
+            if (isParameter(reference.parent) && reference.parent.parent === owner && (exprName = getNameOfDeclaration(reference.parent))) {
                 typeParameter.exprName = exprName as Identifier;
                 return true;
             }
@@ -42741,6 +42771,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return false;
 
         function doSomething(node: Node) {
+            if (isFunctionLikeDeclaration(node.parent) && node === node.parent.body) {
+                return;
+            }
             if (isNodeDescendantOf(node, (owner as SignatureDeclarationBase).type)) {
                 return;
             }

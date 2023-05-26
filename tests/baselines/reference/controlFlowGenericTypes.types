@@ -184,11 +184,11 @@ export function bounceAndTakeIfA<AB extends 'A' | 'B'>(value: AB): AB {
 >value : "A"
 
         return value;
->value : AB
+>value : "A"
     }
     else {
         return value;
->value : AB
+>value : "B"
     }
 }
 
