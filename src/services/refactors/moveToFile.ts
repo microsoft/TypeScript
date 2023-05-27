@@ -39,9 +39,9 @@ import {
     find,
     FindAllReferences,
     findIndex,
+    findLast,
     findLastIndex,
     firstDefined,
-    firstOrUndefined,
     flatMap,
     forEachKey,
     FunctionDeclaration,
@@ -1138,51 +1138,50 @@ function isNonVariableTopLevelDeclaration(node: Node): node is NonVariableTopLev
 }
 
 function moveStatementsToTargetFile(changes: textChanges.ChangeTracker, program: Program, statements: readonly Statement[], targetFile: SourceFile, toMove: ToMove) {
-    let lastReExport: ExportDeclaration | undefined;
-    if (targetFile.symbol && targetFile.symbol.exports) {
+    const removedExports = new Set<ExportDeclaration>();
+    const targetExports = targetFile.symbol?.exports;
+    if (targetExports) {
         const checker = program.getTypeChecker();
-        const sourceExports = new Set<TopLevelDeclarationStatement>();
+        const targetToSourceExports = new Map<ExportDeclaration, Set<TopLevelDeclaration>>();
+
         for (const node of toMove.all) {
             if (isTopLevelDeclarationStatement(node) && hasSyntacticModifier(node, ModifierFlags.Export)) {
-                sourceExports.add(node);
+                forEachTopLevelDeclaration(node, declaration => {
+                    const targetDeclarations = canHaveSymbol(declaration) ? targetExports.get(declaration.symbol.escapedName)?.declarations : undefined;
+                    const exportDeclaration = firstDefined(targetDeclarations, d =>
+                        isExportDeclaration(d) ? d :
+                            isExportSpecifier(d) ? tryCast(d.parent.parent, isExportDeclaration) : undefined);
+                    if (exportDeclaration && exportDeclaration.moduleSpecifier) {
+                        targetToSourceExports.set(exportDeclaration,
+                            (targetToSourceExports.get(exportDeclaration) || new Set()).add(declaration));
+                    }
+                });
             }
         }
 
-        const seenExports = new Set<ExportDeclaration>();
-        for (const [_, exportSymbol] of arrayFrom(targetFile.symbol.exports)) {
-            const declaration = firstOrUndefined(exportSymbol.declarations);
-            if (declaration === undefined) {
-                continue;
-            }
-
-            const exportDeclaration = isExportDeclaration(declaration) ? declaration :
-                isExportSpecifier(declaration) ? tryCast(declaration.parent.parent, isExportDeclaration) : undefined;
-            if (exportDeclaration === undefined || exportDeclaration.moduleSpecifier === undefined || seenExports.has(exportDeclaration)) {
-                continue;
-            }
-            seenExports.add(exportDeclaration);
-
+        for (const [exportDeclaration, topLevelDeclarations] of arrayFrom(targetToSourceExports)) {
             if (exportDeclaration.exportClause && isNamedExports(exportDeclaration.exportClause) && length(exportDeclaration.exportClause.elements)) {
                 const elements = exportDeclaration.exportClause.elements;
                 const updatedElements = filter(elements, elem =>
-                    find(skipAlias(elem.symbol, checker).declarations, d => isTopLevelDeclarationStatement(d) && sourceExports.has(d)) === undefined);
+                    find(skipAlias(elem.symbol, checker).declarations, d => isTopLevelDeclaration(d) && topLevelDeclarations.has(d)) === undefined);
 
                 if (length(updatedElements) === 0) {
                     changes.deleteNode(targetFile, exportDeclaration);
+                    removedExports.add(exportDeclaration);
                     continue;
                 }
 
                 if (length(updatedElements) < length(elements)) {
                     changes.replaceNode(targetFile, exportDeclaration,
-                       factory.updateExportDeclaration(exportDeclaration, exportDeclaration.modifiers, exportDeclaration.isTypeOnly,
-                           factory.updateNamedExports(exportDeclaration.exportClause , factory.createNodeArray(updatedElements, elements.hasTrailingComma)), exportDeclaration.moduleSpecifier, exportDeclaration.assertClause));
+                        factory.updateExportDeclaration(exportDeclaration, exportDeclaration.modifiers, exportDeclaration.isTypeOnly,
+                            factory.updateNamedExports(exportDeclaration.exportClause , factory.createNodeArray(updatedElements, elements.hasTrailingComma)), exportDeclaration.moduleSpecifier, exportDeclaration.assertClause));
                 }
             }
-
-            lastReExport = exportDeclaration;
         }
     }
 
+    const lastReExport = findLast(targetFile.statements, n =>
+        isExportDeclaration(n) && !!n.moduleSpecifier && !removedExports.has(n));
     if (lastReExport) {
         changes.insertNodesBefore(targetFile, lastReExport, statements, /*blankLineBetween*/ true);
     }
