@@ -28932,8 +28932,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // and that call signature is non-generic, return statements are contextually typed by the return type of the signature
         const signature = getContextualSignatureForFunctionLikeDeclaration(functionDecl as FunctionExpression);
         if (signature && !isResolvingReturnTypeOfSignature(signature)) {
-            const functionFlags = getFunctionFlags(functionDecl);
             const returnType = getReturnTypeOfSignature(signature);
+            if (returnType.flags & (TypeFlags.Any | TypeFlags.Void)) {
+                return returnType;
+            }
+            const functionFlags = getFunctionFlags(functionDecl);
             if (functionFlags & FunctionFlags.Generator) {
                 return filterType(returnType, t => checkGeneratorInstantiationAssignabilityToReturnType(t, functionFlags, /*errorNode*/ undefined));
             }
