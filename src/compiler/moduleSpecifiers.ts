@@ -49,6 +49,7 @@ import {
     getRelativePathFromDirectory,
     getRelativePathToDirectoryOrUrl,
     getResolvePackageJsonExports,
+    getResolvePackageJsonImports,
     getSourceFileOfModule,
     getSupportedExtensions,
     getTextOfIdentifierOrLiteral,
@@ -89,6 +90,7 @@ import {
     pathIsBareSpecifier,
     pathIsRelative,
     PropertyAccessExpression,
+    readJson,
     removeExtension,
     removeFileExtension,
     removeSuffix,
@@ -456,7 +458,7 @@ function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOpt
     const allowedEndings = getAllowedEndingsInPrefererredOrder(importMode);
     const relativePath = rootDirs && tryGetModuleNameFromRootDirs(rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName, allowedEndings, compilerOptions) ||
         processEnding(ensurePathIsNonModuleName(getRelativePathFromDirectory(sourceDirectory, moduleFileName, getCanonicalFileName)), allowedEndings, compilerOptions);
-    if (!baseUrl && !paths || relativePreference === RelativePreference.Relative) {
+    if (!baseUrl && !paths && !getResolvePackageJsonImports(compilerOptions) || relativePreference === RelativePreference.Relative) {
         return pathsOnly ? undefined : relativePath;
     }
 
@@ -466,12 +468,14 @@ function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOpt
         return pathsOnly ? undefined : relativePath;
     }
 
-    const fromPaths = paths && tryGetModuleNameFromPaths(relativeToBaseUrl, paths, allowedEndings, host, compilerOptions);
+    const fromPackageJsonImports = pathsOnly ? undefined : tryGetModuleNameFromPackageJsonImports(moduleFileName, sourceDirectory, compilerOptions, host, importMode);
+
+    const fromPaths = pathsOnly || fromPackageJsonImports === undefined ? paths && tryGetModuleNameFromPaths(relativeToBaseUrl, paths, allowedEndings, host, compilerOptions) : undefined;
     if (pathsOnly) {
         return fromPaths;
     }
 
-    const maybeNonRelative = fromPaths === undefined && baseUrl !== undefined ? processEnding(relativeToBaseUrl, allowedEndings, compilerOptions) : fromPaths;
+    const maybeNonRelative = fromPackageJsonImports ?? (fromPaths === undefined && baseUrl !== undefined ? processEnding(relativeToBaseUrl, allowedEndings, compilerOptions) : fromPaths);
     if (!maybeNonRelative) {
         return relativePath;
     }
@@ -538,8 +542,8 @@ function getNearestAncestorDirectoryWithPackageJson(host: ModuleSpecifierResolut
     if (host.getNearestAncestorDirectoryWithPackageJson) {
         return host.getNearestAncestorDirectoryWithPackageJson(fileName);
     }
-    return !!forEachAncestorDirectory(fileName, directory => {
-        return host.fileExists(combinePaths(directory, "package.json")) ? true : undefined;
+    return forEachAncestorDirectory(fileName, directory => {
+        return host.fileExists(combinePaths(directory, "package.json")) ? directory : undefined;
     });
 }
 
@@ -808,7 +812,7 @@ const enum MatchingMode {
     Pattern
 }
 
-function tryGetModuleNameFromExports(options: CompilerOptions, targetFilePath: string, packageDirectory: string, packageName: string, exports: unknown, conditions: string[], mode = MatchingMode.Exact): { moduleFileToTry: string } | undefined {
+function tryGetModuleNameFromExportsOrImports(options: CompilerOptions, targetFilePath: string, packageDirectory: string, packageName: string, exports: unknown, conditions: string[], mode: MatchingMode): { moduleFileToTry: string } | undefined {
     if (typeof exports === "string") {
         const pathOrPattern = getNormalizedAbsolutePath(combinePaths(packageDirectory, exports), /*currentDirectory*/ undefined);
         const extensionSwappedTarget = hasTSFileExtension(targetFilePath) ? removeFileExtension(targetFilePath) + tryGetJSExtensionForFile(targetFilePath, options) : undefined;
@@ -844,37 +848,68 @@ function tryGetModuleNameFromExports(options: CompilerOptions, targetFilePath: s
         }
     }
     else if (Array.isArray(exports)) {
-        return forEach(exports, e => tryGetModuleNameFromExports(options, targetFilePath, packageDirectory, packageName, e, conditions));
+        return forEach(exports, e => tryGetModuleNameFromExportsOrImports(options, targetFilePath, packageDirectory, packageName, e, conditions, mode));
     }
     else if (typeof exports === "object" && exports !== null) { // eslint-disable-line no-null/no-null
-        if (allKeysStartWithDot(exports as MapLike<unknown>)) {
-            // sub-mappings
-            // 3 cases:
-            // * directory mappings (legacyish, key ends with / (technically allows index/extension resolution under cjs mode))
-            // * pattern mappings (contains a *)
-            // * exact mappings (no *, does not end with /)
-            return forEach(getOwnKeys(exports as MapLike<unknown>), k => {
-                const subPackageName = getNormalizedAbsolutePath(combinePaths(packageName, k), /*currentDirectory*/ undefined);
-                const mode = endsWith(k, "/") ? MatchingMode.Directory
-                    : stringContains(k, "*") ? MatchingMode.Pattern
-                    : MatchingMode.Exact;
-                return tryGetModuleNameFromExports(options, targetFilePath, packageDirectory, subPackageName, (exports as MapLike<unknown>)[k], conditions, mode);
-            });
-        }
-        else {
-            // conditional mapping
-            for (const key of getOwnKeys(exports as MapLike<unknown>)) {
-                if (key === "default" || conditions.indexOf(key) >= 0 || isApplicableVersionedTypesKey(conditions, key)) {
-                    const subTarget = (exports as MapLike<unknown>)[key];
-                    const result = tryGetModuleNameFromExports(options, targetFilePath, packageDirectory, packageName, subTarget, conditions, mode);
-                    if (result) {
-                        return result;
-                    }
+        // conditional mapping
+        for (const key of getOwnKeys(exports as MapLike<unknown>)) {
+            if (key === "default" || conditions.indexOf(key) >= 0 || isApplicableVersionedTypesKey(conditions, key)) {
+                const subTarget = (exports as MapLike<unknown>)[key];
+                const result = tryGetModuleNameFromExportsOrImports(options, targetFilePath, packageDirectory, packageName, subTarget, conditions, mode);
+                if (result) {
+                    return result;
                 }
             }
         }
     }
     return undefined;
+}
+
+function tryGetModuleNameFromExports(options: CompilerOptions, targetFilePath: string, packageDirectory: string, packageName: string, exports: unknown, conditions: string[]): { moduleFileToTry: string } | undefined {
+    if (typeof exports === "object" && exports !== null && !Array.isArray(exports) && allKeysStartWithDot(exports as MapLike<unknown>)) { // eslint-disable-line no-null/no-null
+        // sub-mappings
+        // 3 cases:
+        // * directory mappings (legacyish, key ends with / (technically allows index/extension resolution under cjs mode))
+        // * pattern mappings (contains a *)
+        // * exact mappings (no *, does not end with /)
+        return forEach(getOwnKeys(exports as MapLike<unknown>), k => {
+            const subPackageName = getNormalizedAbsolutePath(combinePaths(packageName, k), /*currentDirectory*/ undefined);
+            const mode = endsWith(k, "/") ? MatchingMode.Directory
+                : stringContains(k, "*") ? MatchingMode.Pattern
+                : MatchingMode.Exact;
+            return tryGetModuleNameFromExportsOrImports(options, targetFilePath, packageDirectory, subPackageName, (exports as MapLike<unknown>)[k], conditions, mode);
+        });
+    }
+    return tryGetModuleNameFromExportsOrImports(options, targetFilePath, packageDirectory, packageName, exports, conditions, MatchingMode.Exact);
+}
+
+function tryGetModuleNameFromPackageJsonImports(moduleFileName: string, sourceDirectory: Path, options: CompilerOptions, host: ModuleSpecifierResolutionHost, importMode: ResolutionMode) {
+    if (!host.readFile || !getResolvePackageJsonImports(options)) {
+        return undefined;
+    }
+
+    const ancestorDirectoryWithPackageJson = getNearestAncestorDirectoryWithPackageJson(host, sourceDirectory);
+    if (!ancestorDirectoryWithPackageJson) {
+        return undefined;
+    }
+    const packageJsonPath = combinePaths(ancestorDirectoryWithPackageJson, "package.json");
+    const cachedPackageJson = host.getPackageJsonInfoCache?.()?.getPackageJsonInfo(packageJsonPath);
+    if (typeof cachedPackageJson !== "object" && cachedPackageJson !== undefined) {
+        return undefined;
+    }
+    const packageJsonContent = cachedPackageJson?.contents.packageJsonContent || readJson(packageJsonPath, host as { readFile(fileName: string): string | undefined });
+    const imports = (packageJsonContent as any).imports;
+    if (!imports) {
+        return undefined;
+    }
+    const conditions = getConditions(options, importMode === ModuleKind.ESNext);
+    return forEach(getOwnKeys(imports as MapLike<unknown>), k => {
+        if (!startsWith(k, "#") || k === "#" || startsWith(k, "#/")) return undefined;
+        const mode = endsWith(k, "/") ? MatchingMode.Directory
+            : stringContains(k, "*") ? MatchingMode.Pattern
+            : MatchingMode.Exact;
+        return tryGetModuleNameFromExportsOrImports(options, moduleFileName, sourceDirectory, k, (imports as MapLike<unknown>)[k], conditions, mode);
+    })?.moduleFileToTry;
 }
 
 function tryGetModuleNameFromRootDirs(rootDirs: readonly string[], moduleFileName: string, sourceDirectory: string, getCanonicalFileName: (file: string) => string, allowedEndings: readonly ModuleSpecifierEnding[], compilerOptions: CompilerOptions): string | undefined {
