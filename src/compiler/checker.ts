@@ -19912,7 +19912,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (reportErrors && !(checkMode & SignatureCheckMode.StrictArity)) {
                     // the second condition should be redundant, because there is no error reporting when comparing signatures by strict arity
                     // since it is only done for subtype reduction
-                    errorReporter!(Diagnostics.Target_signature_provides_too_many_arguments_Expected_0_or_more_but_got_1, getParameterCount(source),getMinArgumentCount(target) );
+                    errorReporter!(Diagnostics.Target_signature_provides_too_many_arguments_Expected_0_or_more_but_got_1, getParameterCount(source),getMinArgumentCount(target));
                 }
                 return Ternary.False;
             }
