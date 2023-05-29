@@ -171,7 +171,7 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             bundle: true,
             outfile,
             platform: "node",
-            target: "es2018",
+            target: ["es2020", "node14.17"],
             format: "cjs",
             sourcemap: "linked",
             sourcesContent: false,
@@ -616,7 +616,6 @@ export const runTestsAndWatch = task({
         });
 
         process.on("SIGINT", endWatchMode);
-        process.on("SIGKILL", endWatchMode);
         process.on("beforeExit", endWatchMode);
         watchTestsEmitter.on("rebuild", onRebuild);
         testCaseWatcher.on("all", onChange);

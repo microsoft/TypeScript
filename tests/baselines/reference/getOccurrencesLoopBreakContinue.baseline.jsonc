@@ -1,0 +1,130 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesLoopBreakContinue.ts ===
+// var arr = [1, 2, 3, 4];
+// label1: /*HIGHLIGHTS*/[|{| kind: "none" |}for|] (var n in arr) {
+//     [|{| kind: "none" |}break|];
+//     [|{| kind: "none" |}continue|];
+//     [|{| kind: "none" |}break|] label1;
+//     [|{| kind: "none" |}continue|] label1;
+// 
+//     label2: for (var i = 0; i < arr[n]; i++) {
+//         [|{| kind: "none" |}break|] label1;
+//         [|{| kind: "none" |}continue|] label1;
+// 
+//         break;
+//         continue;
+// --- (line: 14) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesLoopBreakContinue.ts ===
+// var arr = [1, 2, 3, 4];
+// label1: [|{| kind: "none" |}for|] (var n in arr) {
+//     /*HIGHLIGHTS*/[|{| kind: "none" |}break|];
+//     [|{| kind: "none" |}continue|];
+//     [|{| kind: "none" |}break|] label1;
+//     [|{| kind: "none" |}continue|] label1;
+// 
+//     label2: for (var i = 0; i < arr[n]; i++) {
+//         [|{| kind: "none" |}break|] label1;
+//         [|{| kind: "none" |}continue|] label1;
+// 
+//         break;
+//         continue;
+// --- (line: 14) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesLoopBreakContinue.ts ===
+// var arr = [1, 2, 3, 4];
+// label1: [|{| kind: "none" |}for|] (var n in arr) {
+//     [|{| kind: "none" |}break|];
+//     /*HIGHLIGHTS*/[|{| kind: "none" |}continue|];
+//     [|{| kind: "none" |}break|] label1;
+//     [|{| kind: "none" |}continue|] label1;
+// 
+//     label2: for (var i = 0; i < arr[n]; i++) {
+//         [|{| kind: "none" |}break|] label1;
+//         [|{| kind: "none" |}continue|] label1;
+// 
+//         break;
+//         continue;
+// --- (line: 14) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesLoopBreakContinue.ts ===
+// var arr = [1, 2, 3, 4];
+// label1: [|{| kind: "none" |}for|] (var n in arr) {
+//     [|{| kind: "none" |}break|];
+//     [|{| kind: "none" |}continue|];
+//     /*HIGHLIGHTS*/[|{| kind: "none" |}break|] label1;
+//     [|{| kind: "none" |}continue|] label1;
+// 
+//     label2: for (var i = 0; i < arr[n]; i++) {
+//         [|{| kind: "none" |}break|] label1;
+//         [|{| kind: "none" |}continue|] label1;
+// 
+//         break;
+//         continue;
+// --- (line: 14) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesLoopBreakContinue.ts ===
+// var arr = [1, 2, 3, 4];
+// label1: [|{| kind: "none" |}for|] (var n in arr) {
+//     [|{| kind: "none" |}break|];
+//     [|{| kind: "none" |}continue|];
+//     [|{| kind: "none" |}break|] label1;
+//     /*HIGHLIGHTS*/[|{| kind: "none" |}continue|] label1;
+// 
+//     label2: for (var i = 0; i < arr[n]; i++) {
+//         [|{| kind: "none" |}break|] label1;
+//         [|{| kind: "none" |}continue|] label1;
+// 
+//         break;
+//         continue;
+// --- (line: 14) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesLoopBreakContinue.ts ===
+// var arr = [1, 2, 3, 4];
+// label1: [|{| kind: "none" |}for|] (var n in arr) {
+//     [|{| kind: "none" |}break|];
+//     [|{| kind: "none" |}continue|];
+//     [|{| kind: "none" |}break|] label1;
+//     [|{| kind: "none" |}continue|] label1;
+// 
+//     label2: for (var i = 0; i < arr[n]; i++) {
+//         /*HIGHLIGHTS*/[|{| kind: "none" |}break|] label1;
+//         [|{| kind: "none" |}continue|] label1;
+// 
+//         break;
+//         continue;
+// --- (line: 14) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesLoopBreakContinue.ts ===
+// var arr = [1, 2, 3, 4];
+// label1: [|{| kind: "none" |}for|] (var n in arr) {
+//     [|{| kind: "none" |}break|];
+//     [|{| kind: "none" |}continue|];
+//     [|{| kind: "none" |}break|] label1;
+//     [|{| kind: "none" |}continue|] label1;
+// 
+//     label2: for (var i = 0; i < arr[n]; i++) {
+//         [|{| kind: "none" |}break|] label1;
+//         /*HIGHLIGHTS*/[|{| kind: "none" |}continue|] label1;
+// 
+//         break;
+//         continue;
+// --- (line: 14) skipped ---

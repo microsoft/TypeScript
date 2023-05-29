@@ -13,6 +13,7 @@ let fnumber: number = f;
 //// [f.ts]
 export = 10;
 
+
 //// [out/node_modules/f.js]
 "use strict";
 module.exports = 10;

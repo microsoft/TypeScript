@@ -5,6 +5,7 @@ tests/cases/conformance/jsx/file.tsx(8,15): error TS2322: Type 'T & { "ignore-pr
 tests/cases/conformance/jsx/file.tsx(13,15): error TS2322: Type 'T' is not assignable to type 'IntrinsicAttributes & { prop: unknown; "ignore-prop": string; }'.
   Type 'T' is not assignable to type '{ prop: unknown; "ignore-prop": string; }'.
 tests/cases/conformance/jsx/file.tsx(20,19): error TS2322: Type '(a: number, b: string) => void' is not assignable to type '(arg: number) => void'.
+  Target signature provides too few arguments. Expected 2 or more, but got 1.
 tests/cases/conformance/jsx/file.tsx(31,52): error TS2322: Type '(val: string) => void' is not assignable to type '(selectedVal: number) => void'.
   Types of parameters 'val' and 'selectedVal' are incompatible.
     Type 'number' is not assignable to type 'string'.
@@ -43,6 +44,7 @@ tests/cases/conformance/jsx/file.tsx(31,52): error TS2322: Type '(val: string) =
         let o = <Link func={func} />
                       ~~~~
 !!! error TS2322: Type '(a: number, b: string) => void' is not assignable to type '(arg: number) => void'.
+!!! error TS2322:   Target signature provides too few arguments. Expected 2 or more, but got 1.
 !!! related TS6500 tests/cases/conformance/jsx/file.tsx:16:30: The expected type comes from property 'func' which is declared here on type 'IntrinsicAttributes & { func: (arg: number) => void; }'
     }
     

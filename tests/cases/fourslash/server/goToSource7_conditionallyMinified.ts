@@ -30,4 +30,4 @@
 // @Filename: /index.ts
 //// import { [|/*start*/useState|] } from 'react';
 
-verify.goToSourceDefinition("start", ["production", "development"]);
+verify.baselineGoToSourceDefinition("start");

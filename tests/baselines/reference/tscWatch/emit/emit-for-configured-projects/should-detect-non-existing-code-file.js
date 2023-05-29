@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -57,13 +58,11 @@ Shape signatures in builder refreshed for::
 PolledWatches::
 /a/b/modulefile2.ts: *new*
   {"pollingInterval":500}
-/a/b/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json: *new*
-  {}
 /a/b/referencefile1.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
   {}
 /a/lib/lib.d.ts: *new*
   {}
@@ -91,6 +90,9 @@ Input::
 export var x = Foo();export var yy = Foo();
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:21 AM[0m] File change detected. Starting incremental compilation...
@@ -146,18 +148,14 @@ Input::
 export var Foo4 = 10;
 
 
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
 PolledWatches *deleted*::
 /a/b/modulefile2.ts:
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json:
-  {}
 /a/b/referencefile1.ts:
+  {}
+/a/b/tsconfig.json:
   {}
 /a/lib/lib.d.ts:
   {}
@@ -166,6 +164,9 @@ FsWatchesRecursive::
 /a/b:
   {}
 
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:28 AM[0m] File change detected. Starting incremental compilation...
@@ -200,18 +201,14 @@ Shape signatures in builder refreshed for::
 /a/b/modulefile2.ts (computed .d.ts)
 /a/b/referencefile1.ts (computed .d.ts)
 
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches::
-/a/b/tsconfig.json:
+/a/b/modulefile2.ts: *new*
   {}
 /a/b/referencefile1.ts:
   {}
-/a/lib/lib.d.ts:
+/a/b/tsconfig.json:
   {}
-/a/b/modulefile2.ts: *new*
+/a/lib/lib.d.ts:
   {}
 
 FsWatchesRecursive::

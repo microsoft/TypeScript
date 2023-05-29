@@ -35,3 +35,27 @@ for (const zoneName of timezoneNames) {
   });
 }
 
+const enumerationKeys = ['calendar', 'collation', 'currency', 'numberingSystem', 'timeZone', 'unit'] as const;
+>enumerationKeys : readonly ["calendar", "collation", "currency", "numberingSystem", "timeZone", "unit"]
+>['calendar', 'collation', 'currency', 'numberingSystem', 'timeZone', 'unit'] as const : readonly ["calendar", "collation", "currency", "numberingSystem", "timeZone", "unit"]
+>['calendar', 'collation', 'currency', 'numberingSystem', 'timeZone', 'unit'] : readonly ["calendar", "collation", "currency", "numberingSystem", "timeZone", "unit"]
+>'calendar' : "calendar"
+>'collation' : "collation"
+>'currency' : "currency"
+>'numberingSystem' : "numberingSystem"
+>'timeZone' : "timeZone"
+>'unit' : "unit"
+
+for (const key of enumerationKeys) {
+>key : "calendar" | "collation" | "currency" | "numberingSystem" | "timeZone" | "unit"
+>enumerationKeys : readonly ["calendar", "collation", "currency", "numberingSystem", "timeZone", "unit"]
+
+  var supported = Intl.supportedValuesOf(key);
+>supported : string[]
+>Intl.supportedValuesOf(key) : string[]
+>Intl.supportedValuesOf : (key: "calendar" | "collation" | "currency" | "numberingSystem" | "timeZone" | "unit") => string[]
+>Intl : typeof Intl
+>supportedValuesOf : (key: "calendar" | "collation" | "currency" | "numberingSystem" | "timeZone" | "unit") => string[]
+>key : "calendar" | "collation" | "currency" | "numberingSystem" | "timeZone" | "unit"
+}
+

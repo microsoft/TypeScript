@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/f.ts]
 
@@ -40,9 +41,9 @@ Shape signatures in builder refreshed for::
 /f.ts (used version)
 
 FsWatches::
-/f.ts: *new*
-  {}
 /a/lib/lib.d.ts: *new*
+  {}
+/f.ts: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -58,6 +59,9 @@ Input::
 //
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 [[90m12:00:17 AM[0m] File change detected. Starting incremental compilation...
 
