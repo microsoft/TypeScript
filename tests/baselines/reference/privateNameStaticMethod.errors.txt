@@ -13,7 +13,7 @@ tests/cases/conformance/classes/members/privateNames/privateNameStaticMethod.ts(
                        ~
 !!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
             A1.#method()  // Error 
-               ~~~~~~~~~
+               ~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
 !!! related TS6210 tests/cases/conformance/classes/members/privateNames/privateNameStaticMethod.ts:2:20: An argument for 'param' was not provided.
     

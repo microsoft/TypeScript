@@ -32912,22 +32912,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function getDiagnosticSpanForCallNode(node: CallExpression, doNotIncludeArguments?: boolean) {
-        let start: number;
-        let length: number;
+    function getDiagnosticSpanForCallNode(node: CallExpression) {
         const sourceFile = getSourceFileOfNode(node);
-
-        if (isPropertyAccessExpression(node.expression)) {
-            const nameSpan = getErrorSpanForNode(sourceFile, node.expression.name);
-            start = nameSpan.start;
-            length = doNotIncludeArguments ? nameSpan.length : node.end - start;
-        }
-        else {
-            const expressionSpan = getErrorSpanForNode(sourceFile, node.expression);
-            start = expressionSpan.start;
-            length = doNotIncludeArguments ? expressionSpan.length : node.end - start;
-        }
-        return { start, length, sourceFile };
+        const errorSpan = getErrorSpanForNode(sourceFile, isPropertyAccessExpression(node.expression) ? node.expression.name : node.expression);
+        return { start: errorSpan.start, length: errorSpan.length, sourceFile };
     }
 
     function getDiagnosticForCallNode(node: CallLikeExpression, message: DiagnosticMessage | DiagnosticMessageChain, ...args: DiagnosticArguments): DiagnosticWithLocation {
@@ -33904,7 +33892,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             addRelatedInfo(diagnostic, createDiagnosticForNode(errorTarget, relatedInfo));
         }
         if (isCallExpression(errorTarget.parent)) {
-            const { start, length } = getDiagnosticSpanForCallNode(errorTarget.parent, /*doNotIncludeArguments*/ true);
+            const { start, length } = getDiagnosticSpanForCallNode(errorTarget.parent);
             diagnostic.start = start;
             diagnostic.length = length;
         }
