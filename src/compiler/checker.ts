@@ -19789,11 +19789,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function *generateLimitedTupleElements(node: ArrayLiteralExpression, target: Type): ElaborationIterator {
         const len = length(node.elements);
         if (!len) return;
+        const isTupleLikeTarget = isTupleLikeType(target);
         for (let i = 0; i < len; i++) {
             // Skip elements which do not exist in the target - a length error on the tuple overall is likely better than an error on a mismatched index signature
-            if (isTupleLikeType(target) && !getPropertyOfType(target, ("" + i) as __String)) continue;
+            if (isTupleLikeTarget && !getPropertyOfType(target, ("" + i) as __String)) continue;
             const elem = node.elements[i];
             if (isOmittedExpression(elem)) continue;
+            // Spread elements might "target" multiple tuple elements - that results in union types on specific positions
+            // in such situations prop-based elaborations are more confusing than helpful, full tuple-oriented elaborations are likely better here
+            if (isTupleLikeTarget && isSpreadElement(elem)) return;
             const nameType = getNumberLiteralType(i);
             yield { errorNode: elem, innerExpression: elem, nameType };
         }
