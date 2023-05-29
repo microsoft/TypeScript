@@ -158,6 +158,7 @@ class CompilerTest {
         "useDefineForClassFields",
         "useUnknownInCatchVariables",
         "noUncheckedIndexedAccess",
+        "veryStrictArity",
         "noPropertyAccessFromIndexSignature",
         "resolvePackageJsonExports",
         "resolvePackageJsonImports",
