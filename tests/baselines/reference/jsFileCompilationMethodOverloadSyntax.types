@@ -1,0 +1,8 @@
+=== tests/cases/compiler/a.js ===
+class A {
+>A : A
+
+  foo();
+>foo : () => any
+}
+
