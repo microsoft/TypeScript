@@ -33114,12 +33114,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const candidates = candidatesOutArray || [];
         // reorderCandidates fills up the candidates array directly
         reorderCandidates(signatures, candidates, callChainFlags);
-        if (!candidates.length) {
-            if (reportErrors) {
-                diagnostics.add(getDiagnosticForCallNode(node, Diagnostics.Call_target_does_not_contain_any_signatures));
-            }
-            return resolveErrorCall(node);
-        }
 
         const args = getEffectiveCallArguments(node);
 
