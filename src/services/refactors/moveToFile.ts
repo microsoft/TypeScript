@@ -176,8 +176,8 @@ registerRefactor(refactorNameForMoveToFile, {
 function doChange(context: RefactorContext, oldFile: SourceFile, targetFile: string, program: Program, toMove: ToMove, changes: textChanges.ChangeTracker, host: LanguageServiceHost, preferences: UserPreferences): void {
     const checker = program.getTypeChecker();
     const usage = getUsageInfo(oldFile, toMove.all, checker);
-    //For a new file or an existing blank target file
-    if (!host.fileExists(targetFile) || host.fileExists(targetFile) && program.getSourceFile(targetFile)?.statements.length === 0) {
+    //For a new file
+    if (!host.fileExists(targetFile)) {
         changes.createNewFile(oldFile, targetFile, getNewStatementsAndRemoveFromOldFile(oldFile, targetFile, usage, changes, toMove, program, host, preferences));
         addNewFileToTsconfig(program, changes, oldFile.fileName, targetFile, hostGetCanonicalFileName(host));
     }
@@ -189,7 +189,15 @@ function doChange(context: RefactorContext, oldFile: SourceFile, targetFile: str
 }
 
 function getNewStatementsAndRemoveFromOldFile(
-    oldFile: SourceFile, targetFile: string | SourceFile, usage: UsageInfo, changes: textChanges.ChangeTracker, toMove: ToMove, program: Program, host: LanguageServiceHost, preferences: UserPreferences, importAdder?: codefix.ImportAdder
+    oldFile: SourceFile,
+    targetFile: string | SourceFile,
+    usage: UsageInfo,
+    changes: textChanges.ChangeTracker,
+    toMove: ToMove,
+    program: Program,
+    host: LanguageServiceHost,
+    preferences: UserPreferences,
+    importAdder?: codefix.ImportAdder
 ) {
     const checker = program.getTypeChecker();
     const prologueDirectives = takeWhile(oldFile.statements, isPrologueDirective);
@@ -217,6 +225,9 @@ function getNewStatementsAndRemoveFromOldFile(
     if (typeof targetFile !== "string") {
         if (targetFile.statements.length > 0) {
             changes.insertNodesAfter(targetFile, targetFile.statements[targetFile.statements.length - 1], body);
+        }
+        else {
+            changes.insertNodesAtEndOfFile(targetFile, body, /*blankLineBetween*/ false);
         }
         if (imports.length > 0) {
             insertImports(changes, targetFile, imports, /*blankLineBetween*/ true, preferences);
