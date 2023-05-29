@@ -17,6 +17,7 @@ import {
     isInitializedVariable,
     isTypeQueryNode,
     isVariableDeclarationInVariableStatement,
+    needsParentheses,
     Node,
     Program,
     refactor,
@@ -176,10 +177,10 @@ function getReplacementExpression(reference: Node, replacement: Expression): Exp
     // If the operand has higher precedence, then it does not need to be parenthesized."
     //
     // Note that binaryOperandNeedsParentheses has further logic when the precedences
-    // are equal, but for the purposes of this refactor we keep things simple and always
-    // parenthesize.
+    // are equal, but for the purposes of this refactor we keep things simple and
+    // instead just check for special cases with needsParentheses.
     const { parent } = reference;
-    if (isExpression(parent) && (getExpressionPrecedence(replacement) <= getExpressionPrecedence(parent))) {
+    if (isExpression(parent) && (getExpressionPrecedence(replacement) < getExpressionPrecedence(parent) || needsParentheses(parent))) {
         return factory.createParenthesizedExpression(replacement);
     }
 
