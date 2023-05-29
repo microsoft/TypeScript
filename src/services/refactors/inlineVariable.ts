@@ -1,14 +1,17 @@
 import {
+    canHaveModifiers,
     Debug,
     Diagnostics,
     emptyArray,
     Expression,
     factory,
     FindAllReferences,
+    findAncestor,
     getExpressionPrecedence,
     getLocaleSpecificMessage,
     getTokenAtPosition,
     Identifier,
+    isExportModifier,
     isExpression,
     isIdentifier,
     isInitializedVariable,
@@ -17,6 +20,7 @@ import {
     Node,
     Program,
     refactor,
+    some,
     SourceFile,
     SymbolFlags,
     textChanges,
@@ -115,6 +119,11 @@ function getInliningInfo(file: SourceFile, startPosition: number, tryWithReferen
         // Don't inline the variable if it isn't declared exactly once.
         if (parent.symbol.declarations?.length !== 1) {
             return { error: getLocaleSpecificMessage(Diagnostics.Variables_that_share_a_name_with_a_type_or_namespace_in_the_same_scope_cannot_be_inlined) };
+        }
+
+        // Do not inline if the variable is exported.
+        if (findAncestor(parent, node => canHaveModifiers(node) && some(node.modifiers, isExportModifier))) {
+            return undefined;
         }
 
         // Find all references to the variable in the current file.
