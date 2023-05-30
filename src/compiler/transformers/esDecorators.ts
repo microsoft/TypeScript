@@ -37,7 +37,7 @@ import {
     Expression,
     ExpressionStatement,
     findComputedPropertyNameCacheAssignment,
-    findSuperStatementIndex,
+    findSuperStatementIndexPath,
     firstOrUndefined,
     forEachEntry,
     ForStatement,
@@ -70,6 +70,7 @@ import {
     isAutoAccessorPropertyDeclaration,
     isBindingName,
     isBlock,
+    isCatchClause,
     isClassElement,
     isClassExpression,
     isClassLike,
@@ -120,6 +121,7 @@ import {
     isStringLiteral,
     isSuperProperty,
     isTemplateLiteral,
+    isTryStatement,
     LeftHandSideExpression,
     map,
     MethodDeclaration,
@@ -703,6 +705,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         // class decorators)
         const needsSetNameHelper = !getOriginalNode(node, isClassLike)?.name && (classDecorators || !isStringLiteral(className) || !isEmptyStringLiteral(className));
 
+        // TODO: replace this with transformNamedEvaluation?
         let namedEvaluationHelperBlock: ClassStaticBlockDeclaration | undefined;
         if (needsSetNameHelper && !classHasExplicitlyAssignedName(node)) {
             const setNameExpression = emitHelpers().createSetFunctionNameHelper(factory.createThis(), className);
@@ -1118,6 +1121,37 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         }
     }
 
+    function transformConstructorBodyWorker(statementsOut: Statement[], statementsIn: NodeArray<Statement>, statementOffset: number, superPath: readonly number[], superPathDepth: number, initializerStatements: readonly Statement[]) {
+        const superStatementIndex = superPath[superPathDepth];
+        const superStatement = statementsIn[superStatementIndex];
+        addRange(statementsOut, visitNodes(statementsIn, visitor, isStatement, statementOffset, superStatementIndex - statementOffset));
+        if (isTryStatement(superStatement)) {
+            const tryBlockStatements: Statement[] = [];
+
+            transformConstructorBodyWorker(
+                tryBlockStatements,
+                superStatement.tryBlock.statements,
+                /*statementOffset*/ 0,
+                superPath,
+                superPathDepth + 1,
+                initializerStatements);
+
+            const tryBlockStatementsArray = factory.createNodeArray(tryBlockStatements);
+            setTextRange(tryBlockStatementsArray, superStatement.tryBlock.statements);
+
+            statementsOut.push(factory.updateTryStatement(
+                superStatement,
+                factory.updateBlock(superStatement.tryBlock, tryBlockStatements),
+                visitNode(superStatement.catchClause, visitor, isCatchClause),
+                visitNode(superStatement.finallyBlock, visitor, isBlock)));
+        }
+        else {
+            addRange(statementsOut, visitNodes(statementsIn, visitor, isStatement, superStatementIndex, 1));
+            addRange(statementsOut, initializerStatements);
+        }
+        addRange(statementsOut, visitNodes(statementsIn, visitor, isStatement, superStatementIndex + 1));
+    }
+
     function visitConstructorDeclaration(node: ConstructorDeclaration) {
         enterClassElement(node);
         const modifiers = visitNodes(node.modifiers, modifierVisitor, isModifier);
@@ -1130,11 +1164,9 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
             if (initializerStatements) {
                 const statements: Statement[] = [];
                 const nonPrologueStart = factory.copyPrologue(node.body.statements, statements, /*ensureUseStrict*/ false, visitor);
-                const superStatementIndex = findSuperStatementIndex(node.body.statements, nonPrologueStart);
-                if (superStatementIndex >= 0) {
-                    addRange(statements, visitNodes(node.body.statements, visitor, isStatement, nonPrologueStart, superStatementIndex + 1 - nonPrologueStart));
-                    addRange(statements, initializerStatements);
-                    addRange(statements, visitNodes(node.body.statements, visitor, isStatement, superStatementIndex + 1));
+                const superStatementIndices = findSuperStatementIndexPath(node.body.statements, nonPrologueStart);
+                if (superStatementIndices.length > 0) {
+                    transformConstructorBodyWorker(statements, node.body.statements, nonPrologueStart, superStatementIndices, 0, initializerStatements);
                 }
                 else {
                     addRange(statements, initializerStatements);
@@ -2149,7 +2181,6 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         const prefix = kind === "get" || kind === "set" ? kind : undefined;
         const functionName = factory.createStringLiteralFromNode(name, /*isSingleQuote*/ undefined);
         const namedFunction = emitHelpers().createSetFunctionNameHelper(func, functionName, prefix);
-
         const method = factory.createPropertyAssignment(factory.createIdentifier(kind), namedFunction);
         setOriginalNode(method, original);
         setSourceMapRange(method, moveRangePastDecorators(original));

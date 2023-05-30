@@ -101,20 +101,25 @@ var __disposeResources = (this && this.__disposeResources) || function (env) {
     }
     return next();
 };
-var _a;
+var _a, _b;
 var C1, C2, C3, C4;
 const env_1 = { stack: [], error: void 0, hasError: false };
 try {
-    C1 = __addDisposableResource(env_1, class {
-        static { __setFunctionName(this, "C1"); }
-        static [Symbol.dispose]() { }
-    }, false);
-    C2 = __addDisposableResource(env_1, (_a = class {
+    C1 = __addDisposableResource(env_1, (_a = class {
             static [Symbol.dispose]() { }
         },
-        __setFunctionName(_a, "C2"),
-        _a.x = 1,
+        (() => {
+            __setFunctionName(_a, "C1");
+        })(),
         _a), false);
+    C2 = __addDisposableResource(env_1, (_b = class {
+            static [Symbol.dispose]() { }
+        },
+        (() => {
+            __setFunctionName(_b, "C2");
+        })(),
+        _b.x = 1,
+        _b), false);
     C3 = __addDisposableResource(env_1, (() => {
         let _classDecorators = [dec];
         let _classDescriptor;

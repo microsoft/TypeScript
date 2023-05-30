@@ -17,7 +17,7 @@ var before, C, _default;
 const env_1 = { stack: [], error: void 0, hasError: false };
 try {
     before = __addDisposableResource(env_1, null, false);
-    C = (() => {
+    _default = C = (() => {
         let _classDecorators = [dec];
         let _classDescriptor;
         let _classExtraInitializers = [];
@@ -32,7 +32,6 @@ try {
         })();
         return C = _classThis;
     })();
-    _default = C;
     void C;
 }
 catch (e_1) {

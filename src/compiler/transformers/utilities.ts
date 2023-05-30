@@ -62,6 +62,7 @@ import {
     isStatic,
     isStringLiteralLike,
     isSuperCall,
+    isTryStatement,
     LogicalOperatorOrHigher,
     map,
     MethodDeclaration,
@@ -497,21 +498,34 @@ export function getSuperCallFromStatement(statement: Statement): SuperCall | und
         : undefined;
 }
 
-/**
- * @returns The index (after prologue statements) of a super call, or -1 if not found.
- *
- * @internal
- */
-export function findSuperStatementIndex(statements: NodeArray<Statement>, indexAfterLastPrologueStatement: number) {
-    for (let i = indexAfterLastPrologueStatement; i < statements.length; i += 1) {
+function findSuperStatementIndexPathWorker(statements: NodeArray<Statement>, start: number, indices: number[]) {
+    for (let i = start; i < statements.length; i += 1) {
         const statement = statements[i];
-
         if (getSuperCallFromStatement(statement)) {
-            return i;
+            indices.unshift(i);
+            return true;
+        }
+        else if (isTryStatement(statement) && findSuperStatementIndexPathWorker(statement.tryBlock.statements, 0, indices)) {
+            indices.unshift(i);
+            return true;
         }
     }
 
-    return -1;
+    return false;
+}
+
+/**
+ * Finds a path of indices to navigate to a `super()` call, descending only through `try` statements.
+ *
+ * @returns An array of indicies to walk down through `try` statements, with the last element being the index of
+ * the statement containing `super()`. Otherwise, an empty array if `super()` was not found.
+ *
+ * @internal
+ */
+export function findSuperStatementIndexPath(statements: NodeArray<Statement>, start: number) {
+    const indices: number[] = [];
+    findSuperStatementIndexPathWorker(statements, start, indices);
+    return indices;
 }
 
 /**

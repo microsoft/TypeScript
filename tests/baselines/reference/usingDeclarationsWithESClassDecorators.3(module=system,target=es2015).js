@@ -22,7 +22,7 @@ System.register([], function (exports_1, context_1) {
             env_1 = { stack: [], error: void 0, hasError: false };
             try {
                 before = __addDisposableResource(env_1, null, false);
-                C = (() => {
+                exports_1("default", _default = C = (() => {
                     let _classDecorators = [dec];
                     let _classDescriptor;
                     let _classExtraInitializers = [];
@@ -36,8 +36,7 @@ System.register([], function (exports_1, context_1) {
                         __runInitializers(_classThis, _classExtraInitializers);
                     })();
                     return C = _classThis;
-                })();
-                exports_1("default", _default = C);
+                })());
                 void C;
             }
             catch (e_1) {

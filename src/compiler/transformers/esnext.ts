@@ -25,12 +25,11 @@ import {
     isBindingPattern,
     isBlock,
     isCaseClause,
-    isClassExpression,
     isCustomPrologue,
     isExpression,
-    isFunctionExpression,
     isGeneratedIdentifier,
     isIdentifier,
+    isLocalName,
     isNamedEvaluation,
     isOmittedExpression,
     isPrologueDirective,
@@ -435,9 +434,10 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
 
         // give a class or function expression an assigned name, if needed.
         let expression = node.expression;
-        const innerExpression = skipOuterExpressions(expression);
-        if ((isFunctionExpression(innerExpression) || isClassExpression(innerExpression)) && !innerExpression.name) {
-            expression = emitHelpers().createSetFunctionNameHelper(expression, factory.createStringLiteral("default"));
+        let innerExpression = skipOuterExpressions(expression);
+        if (isNamedEvaluation(innerExpression)) {
+            innerExpression = transformNamedEvaluation(context, innerExpression, /*ignoreEmptyStringLiteral*/ false, "default");
+            expression = factory.restoreOuterExpressions(expression, innerExpression);
         }
 
         const assignment = factory.createAssignment(defaultExportBinding, expression);
@@ -485,23 +485,27 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
 
         const isExported = hasSyntacticModifier(node, ModifierFlags.Export);
         const isDefault = hasSyntacticModifier(node, ModifierFlags.Default);
-        let expression: Expression = factory.converters.convertToClassExpression(node);
-        if (isDefault && !defaultExportBinding) {
-            defaultExportBinding = factory.createUniqueName("default");
-            hoistBindingIdentifier(defaultExportBinding, /*isExport*/ true, "default", node);
-            if (isClassExpression(expression) && !expression.name) {
-                expression = emitHelpers().createSetFunctionNameHelper(expression, factory.createStringLiteral("default"));
-            }
-            expression = factory.createAssignment(defaultExportBinding, expression);
-            setOriginalNode(expression, node);
-        }
 
+        let expression: Expression = factory.converters.convertToClassExpression(node);
         if (node.name) {
             hoistBindingIdentifier(factory.getLocalName(node), isExported && !isDefault, /*exportAlias*/ undefined, node);
             expression = factory.createAssignment(factory.getDeclarationName(node), expression);
+            if (isNamedEvaluation(expression)) {
+                expression = transformNamedEvaluation(context, expression, /*ignoreEmptyStringLiteral*/ false);
+            }
             setOriginalNode(expression, node);
             setSourceMapRange(expression, node);
             setCommentRange(expression, node);
+        }
+
+        if (isDefault && !defaultExportBinding) {
+            defaultExportBinding = factory.createUniqueName("_default", GeneratedIdentifierFlags.ReservedInNestedScopes | GeneratedIdentifierFlags.FileLevel | GeneratedIdentifierFlags.Optimistic);
+            hoistBindingIdentifier(defaultExportBinding, /*isExport*/ true, "default", node);
+            expression = factory.createAssignment(defaultExportBinding, expression);
+            if (isNamedEvaluation(expression)) {
+                expression = transformNamedEvaluation(context, expression, /*ignoreEmptyStringLiteral*/ false, "default");
+            }
+            setOriginalNode(expression, node);
         }
 
         return factory.createExpressionStatement(expression);
@@ -564,7 +568,7 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
         // NOTE: `node` has already been visited
         const name = isGeneratedIdentifier(node) ? node : factory.cloneNode(node);
         if (isExport) {
-            if (exportAlias === undefined) {
+            if (exportAlias === undefined && !isLocalName(name)) {
                 const varDecl = factory.createVariableDeclaration(name);
                 if (original) {
                     setOriginalNode(varDecl, original);
@@ -573,7 +577,9 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
                 return;
             }
 
-            const specifier = factory.createExportSpecifier(/*isTypeOnly*/ false, name, exportAlias);
+            const localName = exportAlias !== undefined ? name : undefined;
+            const exportName = exportAlias !== undefined ? exportAlias : name;
+            const specifier = factory.createExportSpecifier(/*isTypeOnly*/ false, localName, exportName);
             if (original) {
                 setOriginalNode(specifier, original);
             }

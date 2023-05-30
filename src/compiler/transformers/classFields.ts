@@ -44,7 +44,7 @@ import {
     filter,
     find,
     findComputedPropertyNameCacheAssignment,
-    findSuperStatementIndex,
+    findSuperStatementIndexPath,
     flattenCommaList,
     ForStatement,
     GeneratedIdentifier,
@@ -80,8 +80,10 @@ import {
     isAssignmentExpression,
     isAutoAccessorPropertyDeclaration,
     isBindingName,
+    isBlock,
     isCallChain,
     isCallToHelper,
+    isCatchClause,
     isClassDeclaration,
     isClassElement,
     isClassExpression,
@@ -140,6 +142,7 @@ import {
     isSuperProperty,
     isTemplateLiteral,
     isThisProperty,
+    isTryStatement,
     isVoidExpression,
     LeftHandSideExpression,
     LexicalEnvironment,
@@ -152,6 +155,7 @@ import {
     moveRangePos,
     newPrivateEnvironment,
     Node,
+    NodeArray,
     NodeCheckFlags,
     NodeFactory,
     nodeIsSynthesized,
@@ -216,7 +220,7 @@ import {
     visitNodes,
     Visitor,
     visitParameterList,
-    VisitResult,
+    VisitResult
 } from "../_namespaces/ts";
 
 const enum ClassPropertySubstitutionFlags {
@@ -2203,6 +2207,66 @@ export function transformClassFields(context: TransformationContext): (x: Source
         );
     }
 
+    function transformConstructorBodyWorker(statementsOut: Statement[], statementsIn: NodeArray<Statement>, statementOffset: number, superPath: readonly number[], superPathDepth: number, initializerStatements: readonly Statement[], constructor: ConstructorDeclaration) {
+        const superStatementIndex = superPath[superPathDepth];
+        const superStatement = statementsIn[superStatementIndex];
+        addRange(statementsOut, visitNodes(statementsIn, visitor, isStatement, statementOffset, superStatementIndex - statementOffset));
+        statementOffset = superStatementIndex + 1;
+        if (isTryStatement(superStatement)) {
+            const tryBlockStatements: Statement[] = [];
+
+            transformConstructorBodyWorker(
+                tryBlockStatements,
+                superStatement.tryBlock.statements,
+                /*statementOffset*/ 0,
+                superPath,
+                superPathDepth + 1,
+                initializerStatements,
+                constructor);
+
+            const tryBlockStatementsArray = factory.createNodeArray(tryBlockStatements);
+            setTextRange(tryBlockStatementsArray, superStatement.tryBlock.statements);
+
+            statementsOut.push(factory.updateTryStatement(
+                superStatement,
+                factory.updateBlock(superStatement.tryBlock, tryBlockStatements),
+                visitNode(superStatement.catchClause, visitor, isCatchClause),
+                visitNode(superStatement.finallyBlock, visitor, isBlock)));
+        }
+        else {
+            addRange(statementsOut, visitNodes(statementsIn, visitor, isStatement, superStatementIndex, 1));
+
+            // Add the property initializers. Transforms this:
+            //
+            //  public x = 1;
+            //
+            // Into this:
+            //
+            //  constructor() {
+            //      this.x = 1;
+            //  }
+            //
+            // If we do useDefineForClassFields, they'll be converted elsewhere.
+            // We instead *remove* them from the transformed output at this stage.
+
+            // parameter-property assignments should occur immediately after the prologue and `super()`,
+            // so only count the statements that immediately follow.
+            while (statementOffset < statementsIn.length) {
+                const statement = statementsIn[statementOffset];
+                if (isParameterPropertyDeclaration(getOriginalNode(statement), constructor)) {
+                    statementOffset++;
+                }
+                else {
+                    break;
+                }
+            }
+
+            addRange(statementsOut, initializerStatements);
+        }
+
+        addRange(statementsOut, visitNodes(statementsIn, visitor, isStatement, statementOffset));
+    }
+
     function transformConstructorBody(node: ClassDeclaration | ClassExpression, constructor: ConstructorDeclaration | undefined, isDerivedClass: boolean) {
         const instanceProperties = getProperties(node, /*requireInitializer*/ false, /*isStatic*/ false);
         let properties = instanceProperties;
@@ -2221,44 +2285,9 @@ export function transformClassFields(context: TransformationContext): (x: Source
         resumeLexicalEnvironment();
 
         const needsSyntheticConstructor = !constructor && isDerivedClass;
-        let indexOfFirstStatementAfterSuperAndPrologue = 0;
-        let prologueStatementCount = 0;
-        let superStatementIndex = -1;
+        // let indexOfFirstStatementAfterSuperAndPrologue = 0;
+        let statementOffset = 0;
         let statements: Statement[] = [];
-
-        if (constructor?.body?.statements) {
-            prologueStatementCount = factory.copyPrologue(constructor.body.statements, statements, /*ensureUseStrict*/ false, visitor);
-            superStatementIndex = findSuperStatementIndex(constructor.body.statements, prologueStatementCount);
-
-            // If there was a super call, visit existing statements up to and including it
-            if (superStatementIndex >= 0) {
-                indexOfFirstStatementAfterSuperAndPrologue = superStatementIndex + 1;
-                statements = [
-                    ...statements.slice(0, prologueStatementCount),
-                    ...visitNodes(constructor.body.statements, visitor, isStatement, prologueStatementCount, indexOfFirstStatementAfterSuperAndPrologue - prologueStatementCount),
-                    ...statements.slice(prologueStatementCount),
-                ];
-            }
-            else if (prologueStatementCount >= 0) {
-                indexOfFirstStatementAfterSuperAndPrologue = prologueStatementCount;
-            }
-        }
-
-        if (needsSyntheticConstructor) {
-            // Add a synthetic `super` call:
-            //
-            //  super(...arguments);
-            //
-            statements.push(
-                factory.createExpressionStatement(
-                    factory.createCallExpression(
-                        factory.createSuper(),
-                        /*typeArguments*/ undefined,
-                        [factory.createSpreadElement(factory.createIdentifier("arguments"))]
-                    )
-                )
-            );
-        }
 
         // Add the property initializers. Transforms this:
         //
@@ -2270,43 +2299,135 @@ export function transformClassFields(context: TransformationContext): (x: Source
         //      this.x = 1;
         //  }
         //
-        // If we do useDefineForClassFields, they'll be converted elsewhere.
-        // We instead *remove* them from the transformed output at this stage.
-        let parameterPropertyDeclarationCount = 0;
-        if (constructor?.body) {
-            // parameter-property assignments should occur immediately after the prologue and `super()`,
-            // so only count the statements that immediately follow.
-            for (let i = indexOfFirstStatementAfterSuperAndPrologue; i < constructor.body.statements.length; i++) {
-                const statement = constructor.body.statements[i];
-                if (isParameterPropertyDeclaration(getOriginalNode(statement), constructor)) {
-                    parameterPropertyDeclarationCount++;
-                }
-                else {
-                    break;
-                }
-            }
-            if (parameterPropertyDeclarationCount > 0) {
-                indexOfFirstStatementAfterSuperAndPrologue += parameterPropertyDeclarationCount;
-            }
-        }
-
+        const initializerStatements: Statement[] = [];
         const receiver = factory.createThis();
+
         // private methods can be called in property initializers, they should execute first.
-        addInstanceMethodStatements(statements, privateMethodsAndAccessors, receiver);
+        addInstanceMethodStatements(initializerStatements, privateMethodsAndAccessors, receiver);
         if (constructor) {
             const parameterProperties = filter(instanceProperties, prop => isParameterPropertyDeclaration(getOriginalNode(prop), constructor));
             const nonParameterProperties = filter(properties, prop => !isParameterPropertyDeclaration(getOriginalNode(prop), constructor));
-            addPropertyOrClassStaticBlockStatements(statements, parameterProperties, receiver);
-            addPropertyOrClassStaticBlockStatements(statements, nonParameterProperties, receiver);
+            addPropertyOrClassStaticBlockStatements(initializerStatements, parameterProperties, receiver);
+            addPropertyOrClassStaticBlockStatements(initializerStatements, nonParameterProperties, receiver);
         }
         else {
-            addPropertyOrClassStaticBlockStatements(statements, properties, receiver);
+            addPropertyOrClassStaticBlockStatements(initializerStatements, properties, receiver);
         }
 
-        // Add existing statements after the initial prologues and super call
-        if (constructor) {
-            addRange(statements, visitNodes(constructor.body!.statements, visitor, isStatement, indexOfFirstStatementAfterSuperAndPrologue));
+        if (constructor?.body) {
+            statementOffset = factory.copyPrologue(constructor.body.statements, statements, /*ensureUseStrict*/ false, visitor);
+            const superStatementIndices = findSuperStatementIndexPath(constructor.body.statements, statementOffset);
+            if (superStatementIndices.length) {
+                transformConstructorBodyWorker(
+                    statements,
+                    constructor.body.statements,
+                    statementOffset,
+                    superStatementIndices,
+                    /*superPathDepth*/ 0,
+                    initializerStatements,
+                    constructor
+                );
+            }
+            else {
+                // parameter-property assignments should occur immediately after the prologue and `super()`,
+                // so only count the statements that immediately follow.
+                while (statementOffset < constructor.body.statements.length) {
+                    const statement = constructor.body.statements[statementOffset];
+                    if (isParameterPropertyDeclaration(getOriginalNode(statement), constructor)) {
+                        statementOffset++;
+                    }
+                    else {
+                        break;
+                    }
+                }
+                addRange(statements, initializerStatements);
+                addRange(statements, visitNodes(constructor.body.statements, visitor, isStatement, statementOffset));
+            }
         }
+        else {
+            if (needsSyntheticConstructor) {
+                // Add a synthetic `super` call:
+                //
+                //  super(...arguments);
+                //
+                statements.push(
+                    factory.createExpressionStatement(
+                        factory.createCallExpression(
+                            factory.createSuper(),
+                            /*typeArguments*/ undefined,
+                            [factory.createSpreadElement(factory.createIdentifier("arguments"))]
+                        )
+                    )
+                );
+            }
+            addRange(statements, initializerStatements);
+        }
+
+        // if (constructor?.body?.statements) {
+        //     prologueStatementCount = factory.copyPrologue(constructor.body.statements, statements, /*ensureUseStrict*/ false, visitor);
+        //     superStatementIndex = findSuperStatementIndex(constructor.body.statements, prologueStatementCount);
+
+        //     // If there was a super call, visit existing statements up to and including it
+        //     if (superStatementIndex >= 0) {
+        //         indexOfFirstStatementAfterSuperAndPrologue = superStatementIndex + 1;
+        //         statements = [
+        //             ...statements.slice(0, prologueStatementCount),
+        //             ...visitNodes(constructor.body.statements, visitor, isStatement, prologueStatementCount, indexOfFirstStatementAfterSuperAndPrologue - prologueStatementCount),
+        //             ...statements.slice(prologueStatementCount),
+        //         ];
+        //     }
+        //     else if (prologueStatementCount >= 0) {
+        //         indexOfFirstStatementAfterSuperAndPrologue = prologueStatementCount;
+        //     }
+        // }
+
+        // // Add the property initializers. Transforms this:
+        // //
+        // //  public x = 1;
+        // //
+        // // Into this:
+        // //
+        // //  constructor() {
+        // //      this.x = 1;
+        // //  }
+        // //
+        // // If we do useDefineForClassFields, they'll be converted elsewhere.
+        // // We instead *remove* them from the transformed output at this stage.
+        // let parameterPropertyDeclarationCount = 0;
+        // if (constructor?.body) {
+        //     // parameter-property assignments should occur immediately after the prologue and `super()`,
+        //     // so only count the statements that immediately follow.
+        //     for (let i = indexOfFirstStatementAfterSuperAndPrologue; i < constructor.body.statements.length; i++) {
+        //         const statement = constructor.body.statements[i];
+        //         if (isParameterPropertyDeclaration(getOriginalNode(statement), constructor)) {
+        //             parameterPropertyDeclarationCount++;
+        //         }
+        //         else {
+        //             break;
+        //         }
+        //     }
+        //     if (parameterPropertyDeclarationCount > 0) {
+        //         indexOfFirstStatementAfterSuperAndPrologue += parameterPropertyDeclarationCount;
+        //     }
+        // }
+
+        // const receiver = factory.createThis();
+        // // private methods can be called in property initializers, they should execute first.
+        // addInstanceMethodStatements(statements, privateMethodsAndAccessors, receiver);
+        // if (constructor) {
+        //     const parameterProperties = filter(instanceProperties, prop => isParameterPropertyDeclaration(getOriginalNode(prop), constructor));
+        //     const nonParameterProperties = filter(properties, prop => !isParameterPropertyDeclaration(getOriginalNode(prop), constructor));
+        //     addPropertyOrClassStaticBlockStatements(statements, parameterProperties, receiver);
+        //     addPropertyOrClassStaticBlockStatements(statements, nonParameterProperties, receiver);
+        // }
+        // else {
+        //     addPropertyOrClassStaticBlockStatements(statements, properties, receiver);
+        // }
+
+        // // Add existing statements after the initial prologues and super call
+        // if (constructor) {
+        //     addRange(statements, visitNodes(constructor.body!.statements, visitor, isStatement, indexOfFirstStatementAfterSuperAndPrologue));
+        // }
 
         statements = factory.mergeLexicalEnvironment(statements, endLexicalEnvironment());
 

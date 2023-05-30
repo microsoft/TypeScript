@@ -256,6 +256,7 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
     function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
 };
 var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q;
+var _r;
 function f() {
     var _a;
     var env_15 = { stack: [], error: void 0, hasError: false };
@@ -377,11 +378,9 @@ try {
             __disposeResources(env_19);
         }
     };
-    C1 = /** @class */ (function () {
-        function C1() {
-            var _a;
-            var env_20 = { stack: [], error: void 0, hasError: false };
-            try {
+    C1 = (_r = /** @class */ (function () {
+            function C1() {
+                var _a;
                 this.a = function () {
                     var _a;
                     var env_21 = { stack: [], error: void 0, hasError: false };
@@ -396,177 +395,179 @@ try {
                         __disposeResources(env_21);
                     }
                 };
-                var d8 = __addDisposableResource(env_20, (_a = {}, _a[Symbol.dispose] = function () { }, _a), false);
-            }
-            catch (e_20) {
-                env_20.error = e_20;
-                env_20.hasError = true;
-            }
-            finally {
-                __disposeResources(env_20);
-            }
-        }
-        C1.prototype.m = function () {
-            var _a;
-            var env_22 = { stack: [], error: void 0, hasError: false };
-            try {
-                var d10 = __addDisposableResource(env_22, (_a = {}, _a[Symbol.dispose] = function () { }, _a), false);
-            }
-            catch (e_22) {
-                env_22.error = e_22;
-                env_22.hasError = true;
-            }
-            finally {
-                __disposeResources(env_22);
-            }
-        };
-        Object.defineProperty(C1.prototype, "x", {
-            get: function () {
-                var _a;
-                var env_23 = { stack: [], error: void 0, hasError: false };
+                var env_20 = { stack: [], error: void 0, hasError: false };
                 try {
-                    var d11 = __addDisposableResource(env_23, (_a = {}, _a[Symbol.dispose] = function () { }, _a), false);
-                    return 0;
+                    var d8 = __addDisposableResource(env_20, (_a = {}, _a[Symbol.dispose] = function () { }, _a), false);
                 }
-                catch (e_23) {
-                    env_23.error = e_23;
-                    env_23.hasError = true;
+                catch (e_20) {
+                    env_20.error = e_20;
+                    env_20.hasError = true;
                 }
                 finally {
-                    __disposeResources(env_23);
+                    __disposeResources(env_20);
                 }
-            },
-            set: function (v) {
+            }
+            C1.prototype.m = function () {
                 var _a;
-                var env_24 = { stack: [], error: void 0, hasError: false };
+                var env_22 = { stack: [], error: void 0, hasError: false };
                 try {
-                    var d12 = __addDisposableResource(env_24, (_a = {}, _a[Symbol.dispose] = function () { }, _a), false);
+                    var d10 = __addDisposableResource(env_22, (_a = {}, _a[Symbol.dispose] = function () { }, _a), false);
                 }
-                catch (e_24) {
-                    env_24.error = e_24;
-                    env_24.hasError = true;
+                catch (e_22) {
+                    env_22.error = e_22;
+                    env_22.hasError = true;
                 }
                 finally {
-                    __disposeResources(env_24);
+                    __disposeResources(env_22);
                 }
-            },
-            enumerable: false,
-            configurable: true
-        });
-        C1.prototype.am = function () {
-            return __awaiter(this, void 0, void 0, function () {
-                var env_25, d13, e_25;
+            };
+            Object.defineProperty(C1.prototype, "x", {
+                get: function () {
+                    var _a;
+                    var env_23 = { stack: [], error: void 0, hasError: false };
+                    try {
+                        var d11 = __addDisposableResource(env_23, (_a = {}, _a[Symbol.dispose] = function () { }, _a), false);
+                        return 0;
+                    }
+                    catch (e_23) {
+                        env_23.error = e_23;
+                        env_23.hasError = true;
+                    }
+                    finally {
+                        __disposeResources(env_23);
+                    }
+                },
+                set: function (v) {
+                    var _a;
+                    var env_24 = { stack: [], error: void 0, hasError: false };
+                    try {
+                        var d12 = __addDisposableResource(env_24, (_a = {}, _a[Symbol.dispose] = function () { }, _a), false);
+                    }
+                    catch (e_24) {
+                        env_24.error = e_24;
+                        env_24.hasError = true;
+                    }
+                    finally {
+                        __disposeResources(env_24);
+                    }
+                },
+                enumerable: false,
+                configurable: true
+            });
+            C1.prototype.am = function () {
+                return __awaiter(this, void 0, void 0, function () {
+                    var env_25, d13, e_25;
+                    var _a;
+                    return __generator(this, function (_b) {
+                        switch (_b.label) {
+                            case 0:
+                                env_25 = { stack: [], error: void 0, hasError: false };
+                                _b.label = 1;
+                            case 1:
+                                _b.trys.push([1, 3, 4, 5]);
+                                d13 = __addDisposableResource(env_25, (_a = {}, _a[Symbol.dispose] = function () { }, _a), false);
+                                return [4 /*yield*/, null];
+                            case 2:
+                                _b.sent();
+                                return [3 /*break*/, 5];
+                            case 3:
+                                e_25 = _b.sent();
+                                env_25.error = e_25;
+                                env_25.hasError = true;
+                                return [3 /*break*/, 5];
+                            case 4:
+                                __disposeResources(env_25);
+                                return [7 /*endfinally*/];
+                            case 5: return [2 /*return*/];
+                        }
+                    });
+                });
+            };
+            C1.prototype.g = function () {
+                var env_26, d14, e_26;
                 var _a;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
                         case 0:
-                            env_25 = { stack: [], error: void 0, hasError: false };
+                            env_26 = { stack: [], error: void 0, hasError: false };
                             _b.label = 1;
                         case 1:
                             _b.trys.push([1, 3, 4, 5]);
-                            d13 = __addDisposableResource(env_25, (_a = {}, _a[Symbol.dispose] = function () { }, _a), false);
-                            return [4 /*yield*/, null];
+                            d14 = __addDisposableResource(env_26, (_a = {}, _a[Symbol.dispose] = function () { }, _a), false);
+                            return [4 /*yield*/];
                         case 2:
                             _b.sent();
                             return [3 /*break*/, 5];
                         case 3:
-                            e_25 = _b.sent();
-                            env_25.error = e_25;
-                            env_25.hasError = true;
+                            e_26 = _b.sent();
+                            env_26.error = e_26;
+                            env_26.hasError = true;
                             return [3 /*break*/, 5];
                         case 4:
-                            __disposeResources(env_25);
+                            __disposeResources(env_26);
                             return [7 /*endfinally*/];
                         case 5: return [2 /*return*/];
                     }
                 });
-            });
-        };
-        C1.prototype.g = function () {
-            var env_26, d14, e_26;
-            var _a;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        env_26 = { stack: [], error: void 0, hasError: false };
-                        _b.label = 1;
-                    case 1:
-                        _b.trys.push([1, 3, 4, 5]);
-                        d14 = __addDisposableResource(env_26, (_a = {}, _a[Symbol.dispose] = function () { }, _a), false);
-                        return [4 /*yield*/];
-                    case 2:
-                        _b.sent();
-                        return [3 /*break*/, 5];
-                    case 3:
-                        e_26 = _b.sent();
-                        env_26.error = e_26;
-                        env_26.hasError = true;
-                        return [3 /*break*/, 5];
-                    case 4:
-                        __disposeResources(env_26);
-                        return [7 /*endfinally*/];
-                    case 5: return [2 /*return*/];
-                }
-            });
-        };
-        C1.prototype.ag = function () {
-            return __asyncGenerator(this, arguments, function ag_2() {
-                var env_27, d15, e_27;
-                var _a;
-                return __generator(this, function (_b) {
-                    switch (_b.label) {
-                        case 0:
-                            env_27 = { stack: [], error: void 0, hasError: false };
-                            _b.label = 1;
-                        case 1:
-                            _b.trys.push([1, 5, 6, 7]);
-                            d15 = __addDisposableResource(env_27, (_a = {}, _a[Symbol.dispose] = function () { }, _a), false);
-                            return [4 /*yield*/, __await(void 0)];
-                        case 2: return [4 /*yield*/, _b.sent()];
-                        case 3:
-                            _b.sent();
-                            return [4 /*yield*/, __await(null)];
-                        case 4:
-                            _b.sent();
-                            return [3 /*break*/, 7];
-                        case 5:
-                            e_27 = _b.sent();
-                            env_27.error = e_27;
-                            env_27.hasError = true;
-                            return [3 /*break*/, 7];
-                        case 6:
-                            __disposeResources(env_27);
-                            return [7 /*endfinally*/];
-                        case 7: return [2 /*return*/];
-                    }
+            };
+            C1.prototype.ag = function () {
+                return __asyncGenerator(this, arguments, function ag_2() {
+                    var env_27, d15, e_27;
+                    var _a;
+                    return __generator(this, function (_b) {
+                        switch (_b.label) {
+                            case 0:
+                                env_27 = { stack: [], error: void 0, hasError: false };
+                                _b.label = 1;
+                            case 1:
+                                _b.trys.push([1, 5, 6, 7]);
+                                d15 = __addDisposableResource(env_27, (_a = {}, _a[Symbol.dispose] = function () { }, _a), false);
+                                return [4 /*yield*/, __await(void 0)];
+                            case 2: return [4 /*yield*/, _b.sent()];
+                            case 3:
+                                _b.sent();
+                                return [4 /*yield*/, __await(null)];
+                            case 4:
+                                _b.sent();
+                                return [3 /*break*/, 7];
+                            case 5:
+                                e_27 = _b.sent();
+                                env_27.error = e_27;
+                                env_27.hasError = true;
+                                return [3 /*break*/, 7];
+                            case 6:
+                                __disposeResources(env_27);
+                                return [7 /*endfinally*/];
+                            case 7: return [2 /*return*/];
+                        }
+                    });
                 });
-            });
-        };
-        return C1;
-    }());
-    (function () {
-        var _a;
-        var env_28 = { stack: [], error: void 0, hasError: false };
-        try {
-            var d9 = __addDisposableResource(env_28, (_a = {}, _a[Symbol.dispose] = function () { }, _a), false);
-        }
-        catch (e_28) {
-            env_28.error = e_28;
-            env_28.hasError = true;
-        }
-        finally {
-            __disposeResources(env_28);
-        }
-    })();
+            };
+            return C1;
+        }()),
+        (function () {
+            var _a;
+            var env_28 = { stack: [], error: void 0, hasError: false };
+            try {
+                var d9 = __addDisposableResource(env_28, (_a = {}, _a[Symbol.dispose] = function () { }, _a), false);
+            }
+            catch (e_28) {
+                env_28.error = e_28;
+                env_28.hasError = true;
+            }
+            finally {
+                __disposeResources(env_28);
+            }
+        })(),
+        _r);
     C2 = /** @class */ (function (_super) {
         __extends(C2, _super);
         function C2() {
             var _a;
-            var _this = this;
             var env_29 = { stack: [], error: void 0, hasError: false };
             try {
                 var d16 = __addDisposableResource(env_29, (_a = {}, _a[Symbol.dispose] = function () { }, _a), false);
-                _this = _super.call(this) || this;
+                return _super.call(this) || this;
             }
             catch (e_29) {
                 env_29.error = e_29;
@@ -575,7 +576,6 @@ try {
             finally {
                 __disposeResources(env_29);
             }
-            return _this;
         }
         return C2;
     }(C1));
@@ -583,11 +583,10 @@ try {
         __extends(C3, _super);
         function C3() {
             var _a;
-            var _this = this;
             var env_30 = { stack: [], error: void 0, hasError: false };
             try {
+                var _this = _super.call(this) || this;
                 var d17 = __addDisposableResource(env_30, (_a = {}, _a[Symbol.dispose] = function () { }, _a), false);
-                _this = _super.call(this) || this;
                 _this.y = 1;
             }
             catch (e_30) {
@@ -676,7 +675,7 @@ try {
             __disposeResources(env_5);
         }
     }
-    catch (_r) {
+    catch (_s) {
         var env_6 = { stack: [], error: void 0, hasError: false };
         try {
             var d24 = __addDisposableResource(env_6, (_g = {}, _g[Symbol.dispose] = function () { }, _g), false);
@@ -783,8 +782,8 @@ try {
             __disposeResources(env_13);
         }
     }
-    for (var _i = 0, _s = []; _i < _s.length; _i++) {
-        var x = _s[_i];
+    for (var _i = 0, _t = []; _i < _t.length; _i++) {
+        var x = _t[_i];
         var env_14 = { stack: [], error: void 0, hasError: false };
         try {
             var d32 = __addDisposableResource(env_14, (_q = {}, _q[Symbol.dispose] = function () { }, _q), false);
