@@ -73,6 +73,10 @@ registerCodeFix({
                 && canConvertImportDeclarationForSpecifier(errorDeclaration, diag.file, context.program)
             ) {
                 doChange(changes, diag.file, errorDeclaration.parent.parent.parent);
+                fixedImportDeclarations.add(errorDeclaration.parent.parent.parent);
+            }
+            else if (errorDeclaration?.kind === SyntaxKind.ImportSpecifier) {
+                doChange(changes, diag.file, errorDeclaration);
             }
         });
     }
