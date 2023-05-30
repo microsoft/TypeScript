@@ -73,16 +73,16 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json: *new*
-  {"inode":10}
+/a/lib/lib.d.ts: *new*
+  {"inode":3}
+/user/username/projects/myproject: *new*
+  {"inode":7}
 /user/username/projects/myproject/foo.d.ts: *new*
   {"inode":9}
 /user/username/projects/myproject/main.ts: *new*
   {"inode":8}
-/user/username/projects/myproject: *new*
-  {"inode":7}
-/a/lib/lib.d.ts: *new*
-  {"inode":3}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {"inode":10}
 
 exitCode:: ExitStatus.undefined
 
@@ -108,16 +108,16 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"inode":10}
-/user/username/projects/myproject/main.ts:
-  {"inode":8}
-/user/username/projects/myproject:
-  {"inode":7}
 /a/lib/lib.d.ts:
   {"inode":3}
+/user/username/projects/myproject:
+  {"inode":7}
 /user/username/projects/myproject/foo.d.ts:
   {"inode":12} *new*
+/user/username/projects/myproject/main.ts:
+  {"inode":8}
+/user/username/projects/myproject/tsconfig.json:
+  {"inode":10}
 
 FsWatches *deleted*::
 /user/username/projects/myproject/foo.d.ts:
@@ -200,16 +200,16 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"inode":10}
-/user/username/projects/myproject/main.ts:
-  {"inode":8}
-/user/username/projects/myproject:
-  {"inode":7}
 /a/lib/lib.d.ts:
   {"inode":3}
+/user/username/projects/myproject:
+  {"inode":7}
 /user/username/projects/myproject/foo.d.ts:
   {"inode":13} *new*
+/user/username/projects/myproject/main.ts:
+  {"inode":8}
+/user/username/projects/myproject/tsconfig.json:
+  {"inode":10}
 
 FsWatches *deleted*::
 /user/username/projects/myproject/foo.d.ts:

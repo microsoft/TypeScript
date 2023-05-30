@@ -387,3 +387,27 @@ const ns1 = accessorNames('foo');
 >ns1 : Symbol(ns1, Decl(constAssertions.ts, 107, 5))
 >accessorNames : Symbol(accessorNames, Decl(constAssertions.ts, 101, 1))
 
+// repro from https://github.com/microsoft/TypeScript/issues/54374
+interface Foo54374 {
+>Foo54374 : Symbol(Foo54374, Decl(constAssertions.ts, 107, 33))
+
+  a: 1;
+>a : Symbol(Foo54374.a, Decl(constAssertions.ts, 110, 20))
+
+  b: 2;
+>b : Symbol(Foo54374.b, Decl(constAssertions.ts, 111, 7))
+}
+
+const fooConst54374: Foo54374 = {
+>fooConst54374 : Symbol(fooConst54374, Decl(constAssertions.ts, 115, 5))
+>Foo54374 : Symbol(Foo54374, Decl(constAssertions.ts, 107, 33))
+
+  a: 1,
+>a : Symbol(a, Decl(constAssertions.ts, 115, 33))
+
+  b: 3
+>b : Symbol(b, Decl(constAssertions.ts, 116, 7))
+
+} as const
+>const : Symbol(const)
+

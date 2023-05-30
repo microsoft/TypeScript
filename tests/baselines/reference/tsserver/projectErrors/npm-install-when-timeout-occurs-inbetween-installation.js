@@ -157,17 +157,17 @@ After request
 PolledWatches::
 /user/username/projects/myproject/node_modules: *new*
   {"pollingInterval":500}
-/user/username/projects/node_modules: *new*
-  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules: *new*
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json: *new*
-  {}
 /a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -303,9 +303,9 @@ Before running Timeout callback:: count: 3
 8: *ensureProjectForOpenFiles*
 
 PolledWatches::
-/user/username/projects/node_modules:
-  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
@@ -315,17 +315,17 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
 /a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/tsconfig.json:
   {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject:
   {}
-/user/username/projects/myproject/src:
-  {}
 /user/username/projects/myproject/node_modules: *new*
+  {}
+/user/username/projects/myproject/src:
   {}
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/tsconfig.jsonFailedLookupInvalidation
@@ -847,17 +847,17 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
 /a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/tsconfig.json:
   {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject:
   {}
-/user/username/projects/myproject/src:
-  {}
 /user/username/projects/myproject/node_modules:
+  {}
+/user/username/projects/myproject/src:
   {}
 
 Before request

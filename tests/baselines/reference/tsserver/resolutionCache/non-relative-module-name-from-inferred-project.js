@@ -217,47 +217,47 @@ import { module1 } from "module1";import { module2 } from "module2";import { mod
 
 
 PolledWatches::
-/user/username/projects/myproject/product/src/tsconfig.json: *new*
+/user/username/projects/myproject/jsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/product/src/jsconfig.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/product/tsconfig.json: *new*
-  {"pollingInterval":2000}
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
 /user/username/projects/myproject/product/jsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/tsconfig.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/jsconfig.json: *new*
+/user/username/projects/myproject/product/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/product/src/jsconfig.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/myproject/product/src/node_modules: *new*
   {"pollingInterval":500}
+/user/username/projects/myproject/product/src/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/product/src/tsconfig.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/myproject/product/test/node_modules: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/product/test/src/node_modules: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/product/src/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/myproject/product/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
+/user/username/projects/myproject/product/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
 /user/username/projects/myproject/product/src/feature/file2.ts: *new*
   {}
 /user/username/projects/myproject/product/test/file4.ts: *new*
   {}
 /user/username/projects/myproject/product/test/src/file3.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
-  {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/product/node_modules: *new*
-  {}
 /user/username/projects/myproject/node_modules: *new*
+  {}
+/user/username/projects/myproject/product/node_modules: *new*
   {}
 /user/username/projects/myproject/product/src/feature: *new*
   {}

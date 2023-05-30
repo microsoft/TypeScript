@@ -2,7 +2,7 @@
 `I AM THE ${ `${ `TAG` } ` } PORTION`    `I ${ "AM" } THE TEMPLATE PORTION`
 >`I AM THE ${ `${ `TAG` } ` } PORTION`    `I ${ "AM" } THE TEMPLATE PORTION` : any
 >`I AM THE ${ `${ `TAG` } ` } PORTION` : string
->`${ `TAG` } ` : string
+>`${ `TAG` } ` : "TAG "
 >`TAG` : "TAG"
 >`I ${ "AM" } THE TEMPLATE PORTION` : string
 >"AM" : "AM"

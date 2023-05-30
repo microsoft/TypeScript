@@ -7604,17 +7604,21 @@
         "category": "Message",
         "code": 95178
     },
-    "Use 'import type'": {
+    "Cannot move to file, selected file is invalid": {
         "category": "Message",
         "code": 95179
     },
-    "Use 'type {0}'": {
+    "Use 'import type'": {
         "category": "Message",
         "code": 95180
     },
-    "Fix all with type-only imports": {
+    "Use 'type {0}'": {
         "category": "Message",
         "code": 95181
+    },
+    "Fix all with type-only imports": {
+        "category": "Message",
+        "code": 95182
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

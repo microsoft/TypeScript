@@ -57,11 +57,11 @@ Shape signatures in builder refreshed for::
 /a/b/commonfile2.ts (used version)
 
 FsWatches::
-/a/b/tsconfig.json: *new*
-  {}
 /a/b/commonfile1.ts: *new*
   {}
 /a/b/commonfile2.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
   {}
 /a/lib/lib.d.ts: *new*
   {}
@@ -111,17 +111,17 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 FsWatches::
-/a/b/tsconfig.json:
-  {}
 /a/b/commonfile1.ts:
   {}
 /a/b/commonfile2.ts:
   {}
-/a/lib/lib.d.ts:
+/a/b/first.tsconfig.json: *new*
   {}
 /a/b/second.tsconfig.json: *new*
   {}
-/a/b/first.tsconfig.json: *new*
+/a/b/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
   {}
 
 exitCode:: ExitStatus.undefined
@@ -251,19 +251,19 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 FsWatches::
-/a/b/tsconfig.json:
-  {}
 /a/b/commonfile1.ts:
   {}
 /a/b/commonfile2.ts:
+  {}
+/a/b/tsconfig.json:
   {}
 /a/lib/lib.d.ts:
   {}
 
 FsWatches *deleted*::
-/a/b/second.tsconfig.json:
-  {}
 /a/b/first.tsconfig.json:
+  {}
+/a/b/second.tsconfig.json:
   {}
 
 exitCode:: ExitStatus.undefined

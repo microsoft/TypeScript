@@ -141,7 +141,9 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/packages/pkg1/index.ts (used version)
 
 FsWatches::
-/user/username/projects/myproject/packages/pkg2/tsconfig.json: *new*
+/user/username/projects/myproject/packages/pkg1/index.ts: *new*
+  {}
+/user/username/projects/myproject/packages/pkg1/tsconfig.json: *new*
   {}
 /user/username/projects/myproject/packages/pkg2/const.ts: *new*
   {}
@@ -149,17 +151,15 @@ FsWatches::
   {}
 /user/username/projects/myproject/packages/pkg2/other.ts: *new*
   {}
-/user/username/projects/myproject/packages/pkg1/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/packages/pkg1/index.ts: *new*
-  {}
 /user/username/projects/myproject/packages/pkg2/package.json: *new*
+  {}
+/user/username/projects/myproject/packages/pkg2/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/packages/pkg2: *new*
-  {}
 /user/username/projects/myproject/packages/pkg1: *new*
+  {}
+/user/username/projects/myproject/packages/pkg2: *new*
   {}
 
 exitCode:: ExitStatus.undefined
