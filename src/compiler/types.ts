@@ -4152,6 +4152,7 @@ export interface FlowStart extends FlowNodeBase {
 // FlowLabel represents a junction with multiple possible preceding control flows.
 export interface FlowLabel extends FlowNodeBase {
     antecedents: FlowNode[] | undefined;
+    node?: ForInOrOfStatement | ForStatement | WhileStatement | DoStatement;
 }
 
 // FlowAssignment represents a node that assigns a value to a narrowable reference,
@@ -6061,6 +6062,8 @@ export interface NodeLinks {
     parameterInitializerContainsUndefined?: boolean; // True if this is a parameter declaration whose type annotation contains "undefined".
     fakeScopeForSignatureDeclaration?: boolean; // True if this is a fake scope injected into an enclosing declaration chain.
     assertionExpressionType?: Type;     // Cached type of the expression of a type assertion
+    referenceCacheKey?: string;         // Cached reference equivalence cache key
+    containedReferences?: ReadonlySet<string>;  // Set of references contained within the node, including itself
 }
 
 /** @internal */

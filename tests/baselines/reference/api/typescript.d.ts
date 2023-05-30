@@ -2035,6 +2035,7 @@ declare namespace ts {
     }
     interface FlowLabel extends FlowNodeBase {
         antecedents: FlowNode[] | undefined;
+        node?: ForInOrOfStatement | ForStatement | WhileStatement | DoStatement;
     }
     interface FlowAssignment extends FlowNodeBase {
         node: Expression | VariableDeclaration | BindingElement;

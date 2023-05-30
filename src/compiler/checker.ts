@@ -153,6 +153,7 @@ import {
     EmitResolver,
     EmitTextWriter,
     emptyArray,
+    emptySet,
     endsWith,
     EntityName,
     EntityNameExpression,
@@ -25375,47 +25376,101 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isMatchingReference(source: Node, target: Node): boolean {
-        switch (target.kind) {
-            case SyntaxKind.ParenthesizedExpression:
-            case SyntaxKind.NonNullExpression:
-                return isMatchingReference(source, (target as NonNullExpression | ParenthesizedExpression).expression);
-            case SyntaxKind.BinaryExpression:
-                return (isAssignmentExpression(target) && isMatchingReference(source, target.left)) ||
-                    (isBinaryExpression(target) && target.operatorToken.kind === SyntaxKind.CommaToken && isMatchingReference(source, target.right));
-        }
-        switch (source.kind) {
+        const keySource = getReferenceCacheKey(source);
+        const keyTarget = getReferenceCacheKey(target);
+        return keySource !== undefined && keyTarget !== undefined && keySource === keyTarget;
+    }
+
+    /**
+     * @returns A cache key that looks like `1234."field"."\"prop\".\"name\""` or `undefined` if the node can't be a reference
+     * `1234` can be any of `new`, `import`, `super`, or `this` if one of those special expressions is the root of the reference, rather than an identifier with a known symbol
+     */
+    function getReferenceCacheKeyWorker(reference: Node): string | undefined {
+        switch (reference.kind) {
             case SyntaxKind.MetaProperty:
-                return target.kind === SyntaxKind.MetaProperty
-                    && (source as MetaProperty).keywordToken === (target as MetaProperty).keywordToken
-                    && (source as MetaProperty).name.escapedText === (target as MetaProperty).name.escapedText;
+                return `${(reference as MetaProperty).keywordToken === SyntaxKind.NewKeyword ? "new" : "import"}."${escapeString(idText((reference as MetaProperty).name))}"`;
             case SyntaxKind.Identifier:
-            case SyntaxKind.PrivateIdentifier:
-                return isThisInTypeQuery(source) ?
-                    target.kind === SyntaxKind.ThisKeyword :
-                    target.kind === SyntaxKind.Identifier && getResolvedSymbol(source as Identifier) === getResolvedSymbol(target as Identifier) ||
-                        (isVariableDeclaration(target) || isBindingElement(target)) &&
-                        getExportSymbolOfValueSymbolIfExported(getResolvedSymbol(source as Identifier)) === getSymbolOfDeclaration(target);
+            case SyntaxKind.PrivateIdentifier: {
+                if (isThisInTypeQuery(reference)) {
+                    return "this";
+                }
+                // Sometimes this identifier is the RHS of a property name expression - in those cases, the symbol is only known if expression checking on the property access expression is already
+                // complete (or complete enough to have assigned the resolved symbol)
+                // (it will also trigger undesirable behavior to call `getResolvedSymbol` on such an identifier, since it'll try to lookup a nonsense name!)
+                const sym = getNodeLinks(reference as Identifier).resolvedSymbol || isIdentifier(reference) && !(isPropertyAccessExpression(reference.parent) && reference.parent.name === reference) && getResolvedSymbol(reference);
+                const exportSymbol = sym && getExportSymbolOfValueSymbolIfExported(sym);
+                return exportSymbol ? `${getSymbolId(exportSymbol)}` : undefined;
+            }
+            case SyntaxKind.VariableDeclaration:
+            case SyntaxKind.BindingElement: {
+                const declSymbol = getSymbolOfDeclaration(reference as VariableDeclaration | BindingElement);
+                const exportSymbol = declSymbol && getExportSymbolOfValueSymbolIfExported(declSymbol);
+                return `${getSymbolId(exportSymbol)}`;
+            }
             case SyntaxKind.ThisKeyword:
-                return target.kind === SyntaxKind.ThisKeyword;
+                return "this";
             case SyntaxKind.SuperKeyword:
-                return target.kind === SyntaxKind.SuperKeyword;
+                return "super";
             case SyntaxKind.NonNullExpression:
             case SyntaxKind.ParenthesizedExpression:
-                return isMatchingReference((source as NonNullExpression | ParenthesizedExpression).expression, target);
+                return getReferenceCacheKey((reference as NonNullExpression | ParenthesizedExpression).expression);
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.ElementAccessExpression:
-                const sourcePropertyName = getAccessedPropertyName(source as AccessExpression);
-                const targetPropertyName = isAccessExpression(target) ? getAccessedPropertyName(target) : undefined;
-                return sourcePropertyName !== undefined && targetPropertyName !== undefined && targetPropertyName === sourcePropertyName &&
-                    isMatchingReference((source as AccessExpression).expression, (target as AccessExpression).expression);
+                const propertyName = getAccessedPropertyName(reference as AccessExpression);
+                const lhsName = getReferenceCacheKey((reference as AccessExpression).expression);
+                return propertyName !== undefined && lhsName !== undefined ? `${lhsName}."${escapeString(unescapeLeadingUnderscores(propertyName))}"` : undefined;
             case SyntaxKind.QualifiedName:
-                return isAccessExpression(target) &&
-                    (source as QualifiedName).right.escapedText === getAccessedPropertyName(target) &&
-                    isMatchingReference((source as QualifiedName).left, target.expression);
-            case SyntaxKind.BinaryExpression:
-                return (isBinaryExpression(source) && source.operatorToken.kind === SyntaxKind.CommaToken && isMatchingReference(source.right, target));
+                return `${getReferenceCacheKey((reference as QualifiedName).left)!}."${escapeString(idText((reference as QualifiedName).right))}"`;
+            case SyntaxKind.BinaryExpression: {
+                Debug.assert(isBinaryExpression(reference));
+                return reference.operatorToken.kind === SyntaxKind.CommaToken ? getReferenceCacheKey(reference.right) :
+                    isAssignmentExpression(reference) ? getReferenceCacheKey(reference.left) :
+                    undefined;
+            }
         }
-        return false;
+        return undefined;
+    }
+
+    function getReferenceCacheKey(node: Node) {
+        const links = getNodeLinks(node);
+        if (!links.referenceCacheKey) {
+            const result = getReferenceCacheKeyWorker(node);
+            links.referenceCacheKey = result !== undefined ? result : "<none>";
+        }
+        return links.referenceCacheKey === "<none>" ? undefined : links.referenceCacheKey;
+    }
+
+    function getContainedReferences(node: Node): ReadonlySet<string> {
+        const links = getNodeLinks(node);
+        if (!links.containedReferences) {
+            links.containedReferences = getContainedReferencesWorker(node);
+        }
+        return links.containedReferences;
+    }
+
+    function getContainedReferencesWorker(node: Node): ReadonlySet<string> {
+        let references: ReadonlySet<never> | Set<string> = emptySet;
+        if (isStatement(node) || isExpressionNode(node)) {
+            // don't descend into variable declarations or binding elements, since those contain identifiers we don't want to collect
+            forEachChild(node, visitor);
+            const key = getReferenceCacheKey(node);
+            if (key !== undefined) {
+                addReference(key);
+            }
+        }
+        return references;
+
+        function visitor(n: Node) {
+            const refs = getContainedReferences(n);
+            refs.forEach(r => addReference(r));
+        }
+
+        function addReference(ref: string) {
+            if (references === emptySet) {
+                references = new Set<string>();
+            }
+            (references as Set<String>).add(ref);
+        }
     }
 
     function getAccessedPropertyName(access: AccessExpression | BindingElement | ParameterDeclaration): __String | undefined {
@@ -26866,6 +26921,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const antecedentTypes: Type[] = [];
             let subtypeReduction = false;
             let firstAntecedentType: FlowType | undefined;
+            let possiblyNarrowsRef: boolean | undefined;
             for (const antecedent of flow.antecedents!) {
                 let flowType;
                 if (!firstAntecedentType) {
@@ -26874,6 +26930,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     flowType = firstAntecedentType = getTypeAtFlowNode(antecedent);
                 }
                 else {
+                    if (possiblyNarrowsRef === undefined) {
+                        const key = getReferenceCacheKey(reference);
+                        if (key !== undefined) {
+                            possiblyNarrowsRef = getContainedReferences(flow.node!).has(key);
+                        }
+                    }
+                    if (!possiblyNarrowsRef) {
+                        break;
+                    }
                     // All but the first antecedent are the looping control flow paths that lead
                     // back to the loop junction. We track these on the flow loop stack.
                     flowLoopNodes[flowLoopCount] = flow;

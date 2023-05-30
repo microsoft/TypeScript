@@ -1295,8 +1295,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         return initFlowNode({ flags: FlowFlags.BranchLabel, antecedents: undefined });
     }
 
-    function createLoopLabel(): FlowLabel {
-        return initFlowNode({ flags: FlowFlags.LoopLabel, antecedents: undefined });
+    function createLoopLabel(node: NonNullable<FlowLabel["node"]>): FlowLabel {
+        return initFlowNode({ flags: FlowFlags.LoopLabel, antecedents: undefined, node });
     }
 
     function createReduceLabel(target: FlowLabel, antecedents: FlowNode[], antecedent: FlowNode): FlowReduceLabel {
@@ -1445,7 +1445,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     }
 
     function bindWhileStatement(node: WhileStatement): void {
-        const preWhileLabel = setContinueTarget(node, createLoopLabel());
+        const preWhileLabel = setContinueTarget(node, createLoopLabel(node));
         const preBodyLabel = createBranchLabel();
         const postWhileLabel = createBranchLabel();
         addAntecedent(preWhileLabel, currentFlow);
@@ -1458,7 +1458,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     }
 
     function bindDoStatement(node: DoStatement): void {
-        const preDoLabel = createLoopLabel();
+        const preDoLabel = createLoopLabel(node);
         const preConditionLabel = setContinueTarget(node, createBranchLabel());
         const postDoLabel = createBranchLabel();
         addAntecedent(preDoLabel, currentFlow);
@@ -1471,7 +1471,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     }
 
     function bindForStatement(node: ForStatement): void {
-        const preLoopLabel = setContinueTarget(node, createLoopLabel());
+        const preLoopLabel = setContinueTarget(node, createLoopLabel(node));
         const preBodyLabel = createBranchLabel();
         const postLoopLabel = createBranchLabel();
         bind(node.initializer);
@@ -1486,7 +1486,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     }
 
     function bindForInOrForOfStatement(node: ForInOrOfStatement): void {
-        const preLoopLabel = setContinueTarget(node, createLoopLabel());
+        const preLoopLabel = setContinueTarget(node, createLoopLabel(node));
         const postLoopLabel = createBranchLabel();
         bind(node.expression);
         addAntecedent(preLoopLabel, currentFlow);
