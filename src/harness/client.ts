@@ -36,6 +36,7 @@ import {
     ImplementationLocation,
     InlayHint,
     InlayHintKind,
+    InteractiveRefactorArguments,
     isString,
     JSDocTagInfo,
     LanguageService,
@@ -52,6 +53,7 @@ import {
     Program,
     QuickInfo,
     RefactorEditInfo,
+    RefactorTriggerReason,
     ReferencedSymbol,
     ReferenceEntry,
     RenameInfo,
@@ -787,11 +789,25 @@ export class SessionClient implements LanguageService {
         return { file, line, offset, endLine, endOffset };
     }
 
-    getApplicableRefactors(fileName: string, positionOrRange: number | TextRange): ApplicableRefactorInfo[] {
-        const args = this.createFileLocationOrRangeRequestArgs(positionOrRange, fileName);
-
+    getApplicableRefactors(
+        fileName: string,
+        positionOrRange: number | TextRange,
+        preferences: UserPreferences | undefined,
+        triggerReason?: RefactorTriggerReason,
+        kind?: string,
+        includeInteractiveActions?: boolean): ApplicableRefactorInfo[] {
+        if (preferences) { // Temporarily set preferences
+            this.configure(preferences);
+        }
+        const args: protocol.GetApplicableRefactorsRequestArgs = this.createFileLocationOrRangeRequestArgs(positionOrRange, fileName);
+        args.triggerReason = triggerReason;
+        args.kind = kind;
+        args.includeInteractiveActions = includeInteractiveActions;
         const request = this.processRequest<protocol.GetApplicableRefactorsRequest>(protocol.CommandTypes.GetApplicableRefactors, args);
         const response = this.processResponse<protocol.GetApplicableRefactorsResponse>(request);
+        if (preferences) { // Restore preferences
+            this.configure(this.preferences || {});
+        }
         return response.body!; // TODO: GH#18217
     }
 
@@ -808,11 +824,17 @@ export class SessionClient implements LanguageService {
         _formatOptions: FormatCodeSettings,
         positionOrRange: number | TextRange,
         refactorName: string,
-        actionName: string): RefactorEditInfo {
-
-        const args = this.createFileLocationOrRangeRequestArgs(positionOrRange, fileName) as protocol.GetEditsForRefactorRequestArgs;
+        actionName: string,
+        preferences: UserPreferences | undefined,
+        interactiveRefactorArguments?: InteractiveRefactorArguments): RefactorEditInfo {
+        if (preferences) { // Temporarily set preferences
+            this.configure(preferences);
+        }
+        const args =
+            this.createFileLocationOrRangeRequestArgs(positionOrRange, fileName) as protocol.GetEditsForRefactorRequestArgs;
         args.refactor = refactorName;
         args.action = actionName;
+        args.interactiveRefactorArguments = interactiveRefactorArguments;
 
         const request = this.processRequest<protocol.GetEditsForRefactorRequest>(protocol.CommandTypes.GetEditsForRefactor, args);
         const response = this.processResponse<protocol.GetEditsForRefactorResponse>(request);
@@ -827,6 +849,10 @@ export class SessionClient implements LanguageService {
         let renameLocation: number | undefined;
         if (renameFilename !== undefined) {
             renameLocation = this.lineOffsetToPosition(renameFilename, response.body.renameLocation!);
+        }
+
+        if (preferences) { // Restore preferences
+            this.configure(this.preferences || {});
         }
 
         return {
