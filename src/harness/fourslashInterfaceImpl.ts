@@ -181,6 +181,10 @@ export class VerifyNegatable {
         this.state.verifyLinkedEditingRange(map);
     }
 
+    public baselineLinkedEditing(): void {
+        this.state.baselineLinkedEditing();
+    }
+
     public isInCommentAtPosition(onlyMultiLineDiverges?: boolean) {
         this.state.verifySpanOfEnclosingComment(this.negative, onlyMultiLineDiverges);
     }
