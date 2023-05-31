@@ -1,0 +1,15 @@
+=== tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterSuperNotStatement.ts ===
+class A extends class {} {
+>A : Symbol(A, Decl(constructorParameterSuperNotStatement.ts, 0, 0))
+
+  constructor(public a: number) {
+>a : Symbol(A.a, Decl(constructorParameterSuperNotStatement.ts, 1, 14))
+
+    console.log(super());
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>super : Symbol((Anonymous class), Decl(constructorParameterSuperNotStatement.ts, 0, 15))
+  }
+}
+

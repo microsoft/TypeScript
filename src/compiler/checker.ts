@@ -38529,13 +38529,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         return;
 
-        function isInstancePropertyWithInitializerOrPrivateIdentifierProperty(n: Node): boolean {
-            if (isPrivateIdentifierClassElementDeclaration(n)) {
-                return true;
-            }
-            return n.kind === SyntaxKind.PropertyDeclaration &&
+        function isInstanceFieldWithInitializer(n: Node): boolean {
+            return (
+                (n.kind === SyntaxKind.PropertyDeclaration ||
+                    n.kind === SyntaxKind.PrivateIdentifier) &&
                 !isStatic(n) &&
-                !!(n as PropertyDeclaration).initializer;
+                !!(n as PropertyDeclaration).initializer
+            );
         }
 
         function checkConstructorDeclarationDiagnostics() {
@@ -38552,15 +38552,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         error(superCall, Diagnostics.A_constructor_cannot_contain_a_super_call_when_its_class_extends_null);
                     }
 
-                    // A super call must be root-level in a constructor if both of the following are true:
-                    // - The containing class is a derived class.
+                    // A super call must be root-level in a constructor if the containing class is a derived
+                    // class and one of the following is true:
+                    // - Fields will be transpiled and the class has fields with initializers
+                    // - Private members will be transpiled and the class has private members
                     // - The constructor declares parameter properties
-                    //   or the containing class declares instance member variables with initializers.
+
+                    const emittingNativeClassFields =
+                        getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2022 && useDefineForClassFields;
+                    const hasFieldWithInitializer =
+                        some((node.parent as ClassDeclaration).members, isInstanceFieldWithInitializer);
+                    const hasPrivateMember =
+                        some((node.parent as ClassDeclaration).members,isPrivateIdentifierClassElementDeclaration);
 
                     const superCallShouldBeRootLevel =
-                        (getEmitScriptTarget(compilerOptions) !== ScriptTarget.ESNext || !useDefineForClassFields) &&
-                        (some((node.parent as ClassDeclaration).members, isInstancePropertyWithInitializerOrPrivateIdentifierProperty) ||
-                        some(node.parameters, p => hasSyntacticModifier(p, ModifierFlags.ParameterPropertyModifier)));
+                        !emittingNativeClassFields && hasFieldWithInitializer ||
+                        getEmitScriptTarget(compilerOptions) < ScriptTarget.ES2022 && hasPrivateMember ||
+                        some(node.parameters, p => hasSyntacticModifier(p, ModifierFlags.ParameterPropertyModifier));
 
                     if (superCallShouldBeRootLevel) {
                         // Until we have better flow analysis, it is an error to place the super call within any kind of block or conditional

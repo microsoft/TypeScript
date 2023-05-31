@@ -1,0 +1,15 @@
+=== tests/cases/conformance/classes/constructorDeclarations/superCalls/privateMethodSuperNotStatement.ts ===
+class A extends class {} {
+>A : Symbol(A, Decl(privateMethodSuperNotStatement.ts, 0, 0))
+
+  constructor() {
+    console.log(super());
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>super : Symbol((Anonymous class), Decl(privateMethodSuperNotStatement.ts, 0, 15))
+  }
+  #foo() {}
+>#foo : Symbol(A.#foo, Decl(privateMethodSuperNotStatement.ts, 3, 3))
+}
+

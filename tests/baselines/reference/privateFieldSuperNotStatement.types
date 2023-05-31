@@ -1,0 +1,22 @@
+=== tests/cases/conformance/classes/constructorDeclarations/superCalls/privateFieldSuperNotStatement.ts ===
+class B {}
+>B : B
+
+class A extends B {
+>A : A
+>B : B
+
+  #x;
+>#x : any
+
+  constructor() {
+    console.log(super());
+>console.log(super()) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>super() : void
+>super : typeof B
+  }
+}
+
