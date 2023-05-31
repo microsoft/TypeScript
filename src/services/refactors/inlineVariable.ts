@@ -11,6 +11,7 @@ import {
     getLocaleSpecificMessage,
     getTokenAtPosition,
     Identifier,
+    InitializedVariableDeclaration,
     isExportModifier,
     isExpression,
     isIdentifier,
@@ -128,7 +129,7 @@ function getInliningInfo(file: SourceFile, startPosition: number, tryWithReferen
         }
 
         // Find all references to the variable in the current file.
-        const references = getReferenceNodes(parent.name, checker, file);
+        const references = getReferenceNodes(parent, checker, file);
         return references && { references, declaration: parent, replacement: parent.initializer };
     }
 
@@ -144,16 +145,16 @@ function getInliningInfo(file: SourceFile, startPosition: number, tryWithReferen
             return undefined;
         }
 
-        const references = getReferenceNodes(declaration.name, checker, file);
+        const references = getReferenceNodes(declaration, checker, file);
         return references && { references, declaration, replacement: declaration.initializer };
     }
 
     return { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_variable_to_inline) };
 }
 
-function getReferenceNodes(declaration: Identifier, checker: TypeChecker, file: SourceFile): Identifier[] | undefined {
+function getReferenceNodes(declaration: InitializedVariableDeclaration, checker: TypeChecker, file: SourceFile): Identifier[] | undefined {
     const references: Identifier[] = [];
-    const cannotInline = FindAllReferences.Core.eachSymbolReferenceInFile(declaration, checker, file, ref => {
+    const cannotInline = FindAllReferences.Core.eachSymbolReferenceInFile(declaration.name as Identifier, checker, file, ref => {
         // Only inline if all references are reads. Else we might end up with an invalid scenario like:
         // const y = x++ + 1 -> const y = 2++ + 1
         if (FindAllReferences.isWriteAccessForReference(ref)) {
@@ -162,6 +163,11 @@ function getReferenceNodes(declaration: Identifier, checker: TypeChecker, file: 
 
         // typeof needs an identifier, so we can't inline a value in there.
         if (isTypeQueryNode(ref.parent)) {
+            return true;
+        }
+
+        // Cannot inline recursive declarations (e.g. const foo = () => foo();)
+        if (findAncestor(ref, node => node === declaration.initializer)) {
             return true;
         }
 
