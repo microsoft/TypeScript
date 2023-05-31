@@ -1,8 +1,7 @@
 /// <reference path="fourslash.ts" />
 
-// NOTE: Test pulled from https://github.com/microsoft/TypeScript/pull/52997
+// repro from https://github.com/microsoft/TypeScript/issues/49680
 
-// @Filename: /a.tsx
 //// type PathOf<T, K extends string, P extends string = ""> =
 ////   K extends `${infer U}.${infer V}`
 ////     ? U extends keyof T ? PathOf<T[U], V, `${P}${U}.`> : `${P}${keyof T & (string | number)}`
