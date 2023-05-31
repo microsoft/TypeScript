@@ -6516,7 +6516,7 @@
         "category": "Error",
         "code": 8016
     },
-    "Bodiless declarations can only be used in TypeScript files.": {
+    "Signature declarations can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8017
     },
