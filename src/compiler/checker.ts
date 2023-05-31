@@ -19273,13 +19273,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return type;
     }
 
-    function instantiateNarrowType(type: Type, narrowMapper: TypeMapper, mapper: TypeMapper | undefined): Type;
-    function instantiateNarrowType(type: Type | undefined, narrowMapper: TypeMapper, mapper: TypeMapper | undefined): Type | undefined;
-    function instantiateNarrowType(type: Type | undefined, narrowMapper: TypeMapper, mapper: TypeMapper | undefined): Type | undefined {
-        return type ? instantiateNarrowTypeWithAlias(type, narrowMapper, mapper, /*aliasSymbol*/ undefined, /*aliasTypeArguments*/ undefined) : type;
+    function instantiateNarrowType(type: Type, narrowMapper: TypeMapper, mapper: TypeMapper | undefined, noTopLevel?: boolean): Type;
+    function instantiateNarrowType(type: Type | undefined, narrowMapper: TypeMapper, mapper: TypeMapper | undefined, noTopLevel?: boolean): Type | undefined;
+    function instantiateNarrowType(type: Type | undefined, narrowMapper: TypeMapper, mapper: TypeMapper | undefined, noTopLevel = false): Type | undefined {
+        return type ? instantiateNarrowTypeWithAlias(type, narrowMapper, mapper, /*aliasSymbol*/ undefined, /*aliasTypeArguments*/ undefined, noTopLevel) : type;
     }
 
-    function instantiateNarrowTypeWithAlias(type: Type, narrowMapper: TypeMapper, mapper: TypeMapper | undefined, aliasSymbol: Symbol | undefined, aliasTypeArguments: readonly Type[] | undefined): Type {
+    function instantiateNarrowTypeWithAlias(
+        type: Type,
+        narrowMapper: TypeMapper,
+        mapper: TypeMapper | undefined,
+        aliasSymbol: Symbol | undefined,
+        aliasTypeArguments: readonly Type[] | undefined,
+        noTopLevel: boolean): Type {
         if (!couldContainTypeVariables(type)) {
             return type;
         }
@@ -19294,19 +19300,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         totalInstantiationCount++;
         instantiationCount++;
         instantiationDepth++;
-        const result = instantiateNarrowTypeWorker(type, narrowMapper, mapper, aliasSymbol, aliasTypeArguments);
+        const result = instantiateNarrowTypeWorker(type, narrowMapper, mapper, aliasSymbol, aliasTypeArguments, noTopLevel);
         instantiationDepth--;
         return result;
     }
     function instantiateNarrowTypeWorker(
-
         type: Type,
         narrowMapper: TypeMapper,
         mapper: TypeMapper | undefined,
         aliasSymbol: Symbol | undefined,
-        aliasTypeArguments: readonly Type[] | undefined): Type {
+        aliasTypeArguments: readonly Type[] | undefined,
+        noTopLevel: boolean): Type {
         const flags = type.flags;
         if (flags & TypeFlags.TypeParameter) {
+            if (noTopLevel) {
+                return type;
+            }
             return getMappedType(type, combineTypeMappers(mapper, narrowMapper));
         }
         // if (flags & TypeFlags.Object) {
@@ -42726,13 +42735,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             }
                             return exprType;
                         }));
-                        // >> TODO: don't instantiate at the top level?
-                        actualReturnType = instantiateNarrowTypeWorker(
+                        // >> TODO: don't instantiate at the top level
+                        actualReturnType = instantiateNarrowType(
                             unwrappedReturnType,
                             narrowMapper,
                             /*mapper*/ undefined,
-                            /*aliasSymbol*/ undefined,
-                            /*aliasTypeArguments*/ undefined,
+                            /*noTopLevel*/ true,
                         );
                     }
                     links.contextualReturnType = actualReturnType; // >> maybe don't store this if we don't need to?
