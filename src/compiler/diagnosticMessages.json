@@ -5614,6 +5614,14 @@
         "category": "Message",
         "code": 6416
     },
+    "Searching all ancestor node_modules directories for preferred extensions: {0}.": {
+        "category": "Message",
+        "code": 6417
+    },
+    "Searching all ancestor node_modules directories for fallback extensions: {0}.": {
+        "category": "Message",
+        "code": 6418
+    },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
         "category": "Message",
