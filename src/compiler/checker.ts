@@ -18044,8 +18044,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // When the check and extends types are simple tuple types of the same arity, we defer resolution of the
             // conditional type when any tuple elements are generic. This is such that non-distributable conditional
             // types can be written `[X] extends [Y] ? ...` and be deferred similarly to `X extends Y ? ...`.
-            const checkTuples = isSimpleTupleType(root.node.checkType) && isSimpleTupleType(root.node.extendsType) &&
-                length((root.node.checkType as TupleTypeNode).elements) === length((root.node.extendsType as TupleTypeNode).elements);
+            // const checkTuples = isSimpleTupleType(root.node.checkType) && isSimpleTupleType(root.node.extendsType) &&
+                // length((root.node.checkType as TupleTypeNode).elements) === length((root.node.extendsType as TupleTypeNode).elements);
             // const checkTypeDeferred = isDeferredType(checkType, checkTuples); // >> TODO: what do we do about this?
             const checkTypeDeferred = false;
             let combinedMapper: TypeMapper | undefined;
@@ -18093,7 +18093,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // Instantiate the extends type including inferences for 'infer T' type parameters
             const inferredExtendsType = combinedMapper ? instantiateType(root.extendsType, combinedMapper) : extendsType;
             // We attempt to resolve the conditional type only when the check and extends types are non-generic
-            if (!checkTypeDeferred && !isDeferredType(inferredExtendsType, checkTuples)) {
+            // if (!checkTypeDeferred && !isDeferredType(inferredExtendsType, checkTuples)) {
+            if (true) {
                 // Return falseType for a definitely false extends check. We check an instantiations of the two
                 // types with type parameters mapped to the wildcard type, the most permissive instantiations
                 // possible (the wildcard type is assignable to and from all types). If those are not related,
@@ -19422,7 +19423,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
             else {
-                result =getNarrowConditionalType(root, narrowMapper, newMapper, aliasSymbol, aliasTypeArguments);
+                result = getNarrowConditionalType(root, narrowMapper, newMapper, aliasSymbol, aliasTypeArguments);
             }
             // root.instantiations!.set(id, result);
             // }
@@ -42754,12 +42755,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // >> TODO: deal with synthetic tps?
         }
         const declaration = getDeclarationOfKind(typeParameter.symbol, SyntaxKind.TypeParameter)!;
-        const owner = getTypeParameterOwner(declaration)!;
-        if (!isFunctionLikeDeclaration(owner)) {
+        const owner = getTypeParameterOwner(declaration);
+        if (!owner || !isFunctionLikeDeclaration(owner)) {
             return false; // Owner is class or interface, or a signature without an implementation
         }
-        const references: Node[] = [];
-        forEachChild(owner, doSomething);
+        const references: Node[] = []; // All nodes of kind `T` that resolve to the type parameter
+        owner.parameters.forEach(parameter => forEachChild(parameter, collectReferences));
         if (references.length === 1) {
             const reference = references[0];
             let exprName;
@@ -42770,7 +42771,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         return false;
 
-        function doSomething(node: Node) {
+        function collectReferences(node: Node) {
             if (isFunctionLikeDeclaration(node.parent) && node === node.parent.body) {
                 return;
             }
@@ -42784,8 +42785,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 return;
             }
-            forEachChild(node, doSomething);
+            forEachChild(node, collectReferences);
         }
+
+        // function collectPath(node: TypeNode) {
+        //     // Assumptions: start from a type parameter/reference node, go up to parents,
+
+        // }
     }
 
     function checkWithStatement(node: WithStatement) {
