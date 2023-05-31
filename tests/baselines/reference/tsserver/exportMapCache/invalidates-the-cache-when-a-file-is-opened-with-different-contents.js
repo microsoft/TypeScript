@@ -281,6 +281,16 @@ Info seq  [hh:mm:ss:mss] response:
         },
         "entries": [
           {
+            "name": "render",
+            "kind": "method",
+            "kindModifiers": "abstract",
+            "sortText": "11",
+            "insertText": "render(): Element {\n}",
+            "filterText": "render",
+            "hasAction": true,
+            "source": "ClassMemberSnippet/"
+          },
+          {
             "name": "abstract",
             "kind": "keyword",
             "kindModifiers": "",
@@ -357,15 +367,6 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "keyword",
             "kindModifiers": "",
             "sortText": "15"
-          },
-          {
-            "name": "render",
-            "kind": "method",
-            "kindModifiers": "abstract",
-            "sortText": "17",
-            "insertText": "render(): Element {\n}",
-            "hasAction": true,
-            "source": "ClassMemberSnippet/"
           }
         ]
       },
@@ -517,6 +518,16 @@ Info seq  [hh:mm:ss:mss] response:
         },
         "entries": [
           {
+            "name": "render2",
+            "kind": "method",
+            "kindModifiers": "abstract",
+            "sortText": "11",
+            "insertText": "render2(): Element {\n}",
+            "filterText": "render2",
+            "hasAction": true,
+            "source": "ClassMemberSnippet/"
+          },
+          {
             "name": "abstract",
             "kind": "keyword",
             "kindModifiers": "",
@@ -593,15 +604,6 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "keyword",
             "kindModifiers": "",
             "sortText": "15"
-          },
-          {
-            "name": "render2",
-            "kind": "method",
-            "kindModifiers": "abstract",
-            "sortText": "17",
-            "insertText": "render2(): Element {\n}",
-            "hasAction": true,
-            "source": "ClassMemberSnippet/"
           }
         ]
       },

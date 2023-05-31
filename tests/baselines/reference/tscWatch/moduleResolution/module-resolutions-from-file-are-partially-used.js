@@ -159,19 +159,23 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/index.ts (used version)
 
 PolledWatches::
-/user/username/projects/node_modules: *new*
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/package.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/node_modules/@types: *new*
+/user/username/projects/node_modules: *new*
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects: *new*
+  {}
+/user/username/projects/myproject: *new*
   {}
 /user/username/projects/myproject/a.ts: *new*
   {}
@@ -179,21 +183,17 @@ FsWatches::
   {}
 /user/username/projects/myproject/node_modules/pkg/import.d.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
-  {}
-/user/username/projects: *new*
-  {}
-/user/username/projects/myproject: *new*
-  {}
 /user/username/projects/myproject/node_modules/pkg/package.json: *new*
   {}
 /user/username/projects/myproject/node_modules/pkg1/package.json: *new*
   {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules: *new*
-  {}
 /user/username/projects/myproject: *new*
+  {}
+/user/username/projects/myproject/node_modules: *new*
   {}
 
 exitCode:: ExitStatus.undefined

@@ -466,22 +466,20 @@ Shape signatures in builder refreshed for::
 /home/src/projects/project4/utils.d.ts (used version)
 
 PolledWatches::
-/home/src/projects/node_modules/@typescript/lib-webworker/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/projects/node_modules/@typescript/lib-scripthost/package.json: *new*
+/home/src/projects/node_modules/@typescript/lib-dom/package.json: *new*
   {"pollingInterval":2000}
 /home/src/projects/node_modules/@typescript/lib-es5/package.json: *new*
   {"pollingInterval":2000}
-/home/src/projects/project1/typeroot1/sometype/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/projects/node_modules/@typescript/lib-dom/package.json: *new*
-  {"pollingInterval":2000}
 /home/src/projects/node_modules/@typescript/lib-esnext/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/projects/node_modules/@typescript/lib-scripthost/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/projects/node_modules/@typescript/lib-webworker/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/projects/project1/typeroot1/sometype/package.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/projects/project1/tsconfig.json: *new*
-  {}
 /home/src/projects/project1/core.d.ts: *new*
   {}
 /home/src/projects/project1/file.ts: *new*
@@ -490,25 +488,27 @@ FsWatches::
   {}
 /home/src/projects/project1/index.ts: *new*
   {}
-/home/src/projects/project1/utils.d.ts: *new*
+/home/src/projects/project1/tsconfig.json: *new*
   {}
 /home/src/projects/project1/typeroot1/sometype/index.d.ts: *new*
   {}
-/home/src/projects/project2/tsconfig.json: *new*
+/home/src/projects/project1/utils.d.ts: *new*
   {}
 /home/src/projects/project2/index.ts: *new*
   {}
-/home/src/projects/project2/utils.d.ts: *new*
+/home/src/projects/project2/tsconfig.json: *new*
   {}
-/home/src/projects/project3/tsconfig.json: *new*
+/home/src/projects/project2/utils.d.ts: *new*
   {}
 /home/src/projects/project3/index.ts: *new*
   {}
+/home/src/projects/project3/tsconfig.json: *new*
+  {}
 /home/src/projects/project3/utils.d.ts: *new*
   {}
-/home/src/projects/project4/tsconfig.json: *new*
-  {}
 /home/src/projects/project4/index.ts: *new*
+  {}
+/home/src/projects/project4/tsconfig.json: *new*
   {}
 /home/src/projects/project4/utils.d.ts: *new*
   {}

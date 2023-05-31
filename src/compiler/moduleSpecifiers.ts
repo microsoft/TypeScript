@@ -24,6 +24,7 @@ import {
     ExportAssignment,
     Extension,
     extensionFromPath,
+    extensionsNotSupportingExtensionlessResolution,
     fileExtensionIsOneOf,
     FileIncludeKind,
     firstDefined,
@@ -91,6 +92,7 @@ import {
     removeExtension,
     removeFileExtension,
     removeSuffix,
+    removeTrailingDirectorySeparator,
     ResolutionMode,
     resolvePath,
     ScriptKind,
@@ -1007,8 +1009,22 @@ function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCan
                 // happens very easily in fourslash tests though, since every test file listed gets included. See
                 // importNameCodeFix_typesVersions.ts for an example.)
                 const mainExportFile = toPath(mainFileRelative, packageRootPath, getCanonicalFileName);
-                if (removeFileExtension(mainExportFile) === removeFileExtension(getCanonicalFileName(moduleFileToTry))) {
+                const canonicalModuleFileToTry = getCanonicalFileName(moduleFileToTry);
+                if (removeFileExtension(mainExportFile) === removeFileExtension(canonicalModuleFileToTry)) {
                     // ^ An arbitrary removal of file extension for this comparison is almost certainly wrong
+                    return { packageRootPath, moduleFileToTry };
+                }
+                else if (
+                    packageJsonContent.type !== "module" &&
+                    !fileExtensionIsOneOf(canonicalModuleFileToTry, extensionsNotSupportingExtensionlessResolution) &&
+                    startsWith(canonicalModuleFileToTry, mainExportFile) &&
+                    getDirectoryPath(canonicalModuleFileToTry) === removeTrailingDirectorySeparator(mainExportFile) &&
+                    removeFileExtension(getBaseFileName(canonicalModuleFileToTry)) === "index"
+                ) {
+                    // if mainExportFile is a directory, which contains moduleFileToTry, we just try index file
+                    // example mainExportFile: `pkg/lib` and moduleFileToTry: `pkg/lib/index`, we can use packageRootPath
+                    // but this behavior is deprecated for packages with "type": "module", so we only do this for packages without "type": "module"
+                    // and make sure that the extension on index.{???} is something that supports omitting the extension
                     return { packageRootPath, moduleFileToTry };
                 }
             }

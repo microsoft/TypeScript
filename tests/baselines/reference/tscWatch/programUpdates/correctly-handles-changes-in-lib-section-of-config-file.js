@@ -54,11 +54,11 @@ Shape signatures in builder refreshed for::
 /src/app.ts (used version)
 
 FsWatches::
-/src/tsconfig.json: *new*
+/compiler/lib.es5.d.ts: *new*
   {}
 /src/app.ts: *new*
   {}
-/compiler/lib.es5.d.ts: *new*
+/src/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -108,13 +108,13 @@ Shape signatures in builder refreshed for::
 /src/app.ts (computed .d.ts)
 
 FsWatches::
-/src/tsconfig.json:
-  {}
-/src/app.ts:
+/compiler/lib.es2015.promise.d.ts: *new*
   {}
 /compiler/lib.es5.d.ts:
   {}
-/compiler/lib.es2015.promise.d.ts: *new*
+/src/app.ts:
+  {}
+/src/tsconfig.json:
   {}
 
 FsWatchesRecursive::

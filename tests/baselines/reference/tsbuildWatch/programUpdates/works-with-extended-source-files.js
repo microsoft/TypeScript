@@ -125,21 +125,13 @@ Shape signatures in builder refreshed for::
 /a/b/other2.ts (used version)
 
 FsWatches::
-/a/b/project1.tsconfig.json: *new*
-  {}
 /a/b/alpha.tsconfig.json: *new*
+  {}
+/a/b/bravo.tsconfig.json: *new*
   {}
 /a/b/commonfile1.ts: *new*
   {}
 /a/b/commonfile2.ts: *new*
-  {}
-/a/b/project2.tsconfig.json: *new*
-  {}
-/a/b/bravo.tsconfig.json: *new*
-  {}
-/a/b/other.ts: *new*
-  {}
-/a/b/project3.tsconfig.json: *new*
   {}
 /a/b/extendsconfig1.tsconfig.json: *new*
   {}
@@ -147,7 +139,15 @@ FsWatches::
   {}
 /a/b/extendsconfig3.tsconfig.json: *new*
   {}
+/a/b/other.ts: *new*
+  {}
 /a/b/other2.ts: *new*
+  {}
+/a/b/project1.tsconfig.json: *new*
+  {}
+/a/b/project2.tsconfig.json: *new*
+  {}
+/a/b/project3.tsconfig.json: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -650,19 +650,11 @@ Shape signatures in builder refreshed for::
 /a/b/other2.ts (computed .d.ts)
 
 FsWatches::
-/a/b/project1.tsconfig.json:
-  {}
 /a/b/alpha.tsconfig.json:
   {}
 /a/b/commonfile1.ts:
   {}
 /a/b/commonfile2.ts:
-  {}
-/a/b/project2.tsconfig.json:
-  {}
-/a/b/other.ts:
-  {}
-/a/b/project3.tsconfig.json:
   {}
 /a/b/extendsconfig1.tsconfig.json:
   {}
@@ -670,7 +662,15 @@ FsWatches::
   {}
 /a/b/extendsconfig3.tsconfig.json:
   {}
+/a/b/other.ts:
+  {}
 /a/b/other2.ts:
+  {}
+/a/b/project1.tsconfig.json:
+  {}
+/a/b/project2.tsconfig.json:
+  {}
+/a/b/project3.tsconfig.json:
   {}
 
 FsWatches *deleted*::
@@ -938,25 +938,25 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 FsWatches::
-/a/b/project1.tsconfig.json:
-  {}
 /a/b/alpha.tsconfig.json:
   {}
 /a/b/commonfile1.ts:
   {}
 /a/b/commonfile2.ts:
   {}
-/a/b/project2.tsconfig.json:
-  {}
-/a/b/other.ts:
-  {}
-/a/b/project3.tsconfig.json:
-  {}
 /a/b/extendsconfig1.tsconfig.json:
   {}
 /a/b/extendsconfig2.tsconfig.json:
   {}
+/a/b/other.ts:
+  {}
 /a/b/other2.ts:
+  {}
+/a/b/project1.tsconfig.json:
+  {}
+/a/b/project2.tsconfig.json:
+  {}
+/a/b/project3.tsconfig.json:
   {}
 
 FsWatches *deleted*::

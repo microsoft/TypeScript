@@ -1,0 +1,64 @@
+=== /node_modules/tslib/index.d.ts ===
+export declare function __classPrivateFieldGet<T extends object, V>(
+>__classPrivateFieldGet : { <T extends object, V>(receiver: T, state: { has(o: T): boolean; get(o: T): V | undefined; }, kind?: "f"): V; <T extends new (...args: any[]) => unknown, V>(receiver: T, state: T, kind: "f", f: { value: V; }): V; }
+
+  receiver: T,
+>receiver : T
+
+  state: { has(o: T): boolean, get(o: T): V | undefined },
+>state : { has(o: T): boolean; get(o: T): V | undefined; }
+>has : (o: T) => boolean
+>o : T
+>get : (o: T) => V | undefined
+>o : T
+
+  kind?: "f"
+>kind : "f"
+
+): V;
+export declare function __classPrivateFieldGet<T extends new (...args: any[]) => unknown, V>(
+>__classPrivateFieldGet : { <T extends object, V>(receiver: T, state: { has(o: T): boolean; get(o: T): V; }, kind?: "f"): V; <T extends new (...args: any[]) => unknown, V>(receiver: T, state: T, kind: "f", f: {    value: V;}): V; }
+>args : any[]
+
+  receiver: T,
+>receiver : T
+
+  state: T,
+>state : T
+
+  kind: "f",
+>kind : "f"
+
+  f: { value: V }
+>f : { value: V; }
+>value : V
+
+): V;
+
+=== /node_modules/tslib/index.d.mts ===
+export { __classPrivateFieldGet } from "./index.js";
+>__classPrivateFieldGet : { <T extends object, V>(receiver: T, state: { has(o: T): boolean; get(o: T): V; }, kind?: "f"): V; <T extends new (...args: any[]) => unknown, V>(receiver: T, state: T, kind: "f", f: { value: V; }): V; }
+
+=== /index.mts ===
+export class Foo {
+>Foo : Foo
+
+  constructor() {
+    console.log(Foo.#test());
+>console.log(Foo.#test()) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>Foo.#test() : string
+>Foo.#test : () => string
+>Foo : typeof Foo
+  }
+
+  static #test() {
+>#test : () => string
+
+    return 'success';
+>'success' : "success"
+  }
+}
+

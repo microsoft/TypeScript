@@ -52,21 +52,21 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/index.tsx (used version)
 
 PolledWatches::
-/users/username/projects/project/node_modules: *new*
-  {"pollingInterval":500}
 /users/username/projects/node_modules: *new*
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 /users/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/users/username/projects/project/node_modules: *new*
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/project/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /users/username/projects/project/index.tsx: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/users/username/projects/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -166,21 +166,21 @@ export const Fragment: unique symbol;
 
 
 PolledWatches *deleted*::
-/users/username/projects/project/node_modules:
-  {"pollingInterval":500}
 /users/username/projects/node_modules:
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
 /users/username/projects/node_modules/@types:
   {"pollingInterval":500}
+/users/username/projects/project/node_modules:
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches *deleted*::
-/users/username/projects/project/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /users/username/projects/project/index.tsx:
   {}
-/a/lib/lib.d.ts:
+/users/username/projects/project/tsconfig.json:
   {}
 
 FsWatchesRecursive *deleted*::
@@ -212,27 +212,27 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/index.tsx (computed .d.ts)
 
 PolledWatches::
-/users/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 /users/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/project/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /users/username/projects/project/index.tsx: *new*
   {}
 /users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
-  {}
 /users/username/projects/project/node_modules/react/package.json: *new*
+  {}
+/users/username/projects/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/users/username/projects/project/node_modules: *new*
-  {}
 /users/username/projects/project: *new*
+  {}
+/users/username/projects/project/node_modules: *new*
   {}
 
 exitCode:: ExitStatus.undefined

@@ -155,7 +155,11 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
-/user/username/projects/myproject/packages/pkg2/tsconfig.json: *new*
+/user/username/projects/myproject/packages/pkg1/index.ts: *new*
+  {}
+/user/username/projects/myproject/packages/pkg1/package.json: *new*
+  {}
+/user/username/projects/myproject/packages/pkg1/tsconfig.json: *new*
   {}
 /user/username/projects/myproject/packages/pkg2/const.cts: *new*
   {}
@@ -163,17 +167,13 @@ FsWatches::
   {}
 /user/username/projects/myproject/packages/pkg2/package.json: *new*
   {}
-/user/username/projects/myproject/packages/pkg1/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/packages/pkg1/index.ts: *new*
-  {}
-/user/username/projects/myproject/packages/pkg1/package.json: *new*
+/user/username/projects/myproject/packages/pkg2/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/packages/pkg2: *new*
-  {}
 /user/username/projects/myproject/packages/pkg1: *new*
+  {}
+/user/username/projects/myproject/packages/pkg2: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -654,19 +654,19 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
-/user/username/projects/myproject/packages/pkg2/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/pkg2/const.cts:
-  {}
-/user/username/projects/myproject/packages/pkg2/package.json:
-  {}
-/user/username/projects/myproject/packages/pkg1/tsconfig.json:
-  {}
 /user/username/projects/myproject/packages/pkg1/index.ts:
   {}
 /user/username/projects/myproject/packages/pkg1/package.json:
   {}
+/user/username/projects/myproject/packages/pkg1/tsconfig.json:
+  {}
+/user/username/projects/myproject/packages/pkg2/const.cts:
+  {}
 /user/username/projects/myproject/packages/pkg2/index.cts: *new*
+  {}
+/user/username/projects/myproject/packages/pkg2/package.json:
+  {}
+/user/username/projects/myproject/packages/pkg2/tsconfig.json:
   {}
 
 FsWatches *deleted*::
@@ -674,9 +674,9 @@ FsWatches *deleted*::
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/packages/pkg2:
-  {}
 /user/username/projects/myproject/packages/pkg1:
+  {}
+/user/username/projects/myproject/packages/pkg2:
   {}
 
 exitCode:: ExitStatus.undefined

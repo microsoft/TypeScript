@@ -361,21 +361,21 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/own/main.ts: *new*
-  {}
-/user/username/projects/myproject/tsconfig-indirect1.json: *new*
-  {}
-/user/username/projects/myproject/tsconfig-src.json: *new*
-  {}
-/user/username/projects/myproject/tsconfig-indirect2.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/indirect1/main.ts: *new*
   {}
+/user/username/projects/myproject/own/main.ts: *new*
+  {}
 /user/username/projects/myproject/src/helpers/functions.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/myproject/tsconfig-indirect1.json: *new*
+  {}
+/user/username/projects/myproject/tsconfig-indirect2.json: *new*
+  {}
+/user/username/projects/myproject/tsconfig-src.json: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -1062,35 +1062,35 @@ PolledWatches *deleted*::
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject/tsconfig.json:
+/user/username/projects/myproject/indirect1/main.ts:
   {} *new*
 /user/username/projects/myproject/own/main.ts:
   {} *new*
-/user/username/projects/myproject/tsconfig-indirect1.json:
+/user/username/projects/myproject/src/helpers/functions.ts:
   {} *new*
-/user/username/projects/myproject/tsconfig-src.json:
+/user/username/projects/myproject/tsconfig-indirect1.json:
   {} *new*
 /user/username/projects/myproject/tsconfig-indirect2.json:
   {} *new*
-/user/username/projects/myproject/indirect1/main.ts:
+/user/username/projects/myproject/tsconfig-src.json:
   {} *new*
-/user/username/projects/myproject/src/helpers/functions.ts:
+/user/username/projects/myproject/tsconfig.json:
   {} *new*
 
 FsWatches *deleted*::
-/user/username/projects/myproject/tsconfig.json:
+/user/username/projects/myproject/indirect1/main.ts:
   {}
 /user/username/projects/myproject/own/main.ts:
   {}
-/user/username/projects/myproject/tsconfig-indirect1.json:
+/user/username/projects/myproject/src/helpers/functions.ts:
   {}
-/user/username/projects/myproject/tsconfig-src.json:
+/user/username/projects/myproject/tsconfig-indirect1.json:
   {}
 /user/username/projects/myproject/tsconfig-indirect2.json:
   {}
-/user/username/projects/myproject/indirect1/main.ts:
+/user/username/projects/myproject/tsconfig-src.json:
   {}
-/user/username/projects/myproject/src/helpers/functions.ts:
+/user/username/projects/myproject/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -1493,25 +1493,25 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject/tsconfig.json:
+/user/username/projects/myproject/indirect1/main.ts:
+  {}
+/user/username/projects/myproject/indirect2/main.ts: *new*
   {}
 /user/username/projects/myproject/own/main.ts:
   {}
-/user/username/projects/myproject/tsconfig-indirect1.json:
-  {}
-/user/username/projects/myproject/tsconfig-src.json:
-  {}
-/user/username/projects/myproject/tsconfig-indirect2.json:
-  {}
-/user/username/projects/myproject/indirect1/main.ts:
-  {}
 /user/username/projects/myproject/src/helpers/functions.ts:
-  {}
-/user/username/projects/myproject/indirect2/main.ts: *new*
   {}
 /user/username/projects/myproject/target/src/helpers/functions.d.ts: *new*
   {}
 /user/username/projects/myproject/target/src/helpers/functions.d.ts.map: *new*
+  {}
+/user/username/projects/myproject/tsconfig-indirect1.json:
+  {}
+/user/username/projects/myproject/tsconfig-indirect2.json:
+  {}
+/user/username/projects/myproject/tsconfig-src.json:
+  {}
+/user/username/projects/myproject/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -1808,15 +1808,17 @@ Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/indirect3
 Before request
 
 PolledWatches::
+/user/username/projects/myproject/indirect3/node_modules/@types: *new*
+  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/indirect3/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/indirect3/tsconfig.json: *new*
   {}
 /user/username/projects/myproject/src/helpers/functions.ts:
   {}
@@ -1824,25 +1826,23 @@ FsWatches::
   {}
 /user/username/projects/myproject/target/src/helpers/functions.d.ts.map:
   {}
-/user/username/projects/myproject/indirect3/tsconfig.json: *new*
-  {}
 /user/username/projects/myproject/target/src/main.d.ts: *new*
   {}
 
 FsWatches *deleted*::
-/user/username/projects/myproject/tsconfig.json:
+/user/username/projects/myproject/indirect1/main.ts:
+  {}
+/user/username/projects/myproject/indirect2/main.ts:
   {}
 /user/username/projects/myproject/own/main.ts:
   {}
 /user/username/projects/myproject/tsconfig-indirect1.json:
   {}
-/user/username/projects/myproject/tsconfig-src.json:
-  {}
 /user/username/projects/myproject/tsconfig-indirect2.json:
   {}
-/user/username/projects/myproject/indirect1/main.ts:
+/user/username/projects/myproject/tsconfig-src.json:
   {}
-/user/username/projects/myproject/indirect2/main.ts:
+/user/username/projects/myproject/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -2359,49 +2359,49 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/user/username/projects/myproject/indirect3/node_modules/@types:
+  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/indirect3/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
 /a/lib/lib.d.ts:
   {}
+/user/username/projects/myproject/indirect1/main.ts: *new*
+  {}
+/user/username/projects/myproject/indirect2/main.ts: *new*
+  {}
+/user/username/projects/myproject/indirect3/tsconfig.json:
+  {}
+/user/username/projects/myproject/own/main.ts: *new*
+  {}
 /user/username/projects/myproject/src/helpers/functions.ts:
+  {}
+/user/username/projects/myproject/src/main.ts: *new*
   {}
 /user/username/projects/myproject/target/src/helpers/functions.d.ts:
   {}
 /user/username/projects/myproject/target/src/helpers/functions.d.ts.map:
   {}
-/user/username/projects/myproject/indirect3/tsconfig.json:
-  {}
 /user/username/projects/myproject/target/src/main.d.ts:
   {}
 /user/username/projects/myproject/target/src/main.d.ts.map: *new*
   {}
-/user/username/projects/myproject/src/main.ts: *new*
-  {}
-/user/username/projects/myproject/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/own/main.ts: *new*
-  {}
 /user/username/projects/myproject/tsconfig-indirect1.json: *new*
-  {}
-/user/username/projects/myproject/tsconfig-src.json: *new*
   {}
 /user/username/projects/myproject/tsconfig-indirect2.json: *new*
   {}
-/user/username/projects/myproject/indirect1/main.ts: *new*
+/user/username/projects/myproject/tsconfig-src.json: *new*
   {}
-/user/username/projects/myproject/indirect2/main.ts: *new*
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/indirect3:
   {}
-/user/username/projects/myproject/target:
-  {}
 /user/username/projects/myproject/src: *new*
+  {}
+/user/username/projects/myproject/target:
   {}
