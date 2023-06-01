@@ -1,0 +1,19 @@
+=== /a.tsx ===
+declare const React: any;
+>React : any
+
+const t1 = <div {...<span />} />;
+>t1 : error
+><div {...<span />} /> : error
+>div : any
+><span /> : error
+>span : any
+
+const t2 = <div {...<span className="foo" />} />;
+>t2 : error
+><div {...<span className="foo" />} /> : error
+>div : any
+><span className="foo" /> : error
+>span : any
+>className : string
+

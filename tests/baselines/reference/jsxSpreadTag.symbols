@@ -1,0 +1,11 @@
+=== /a.tsx ===
+declare const React: any;
+>React : Symbol(React, Decl(a.tsx, 0, 13))
+
+const t1 = <div {...<span />} />;
+>t1 : Symbol(t1, Decl(a.tsx, 2, 5))
+
+const t2 = <div {...<span className="foo" />} />;
+>t2 : Symbol(t2, Decl(a.tsx, 3, 5))
+>className : Symbol(className, Decl(a.tsx, 3, 25))
+
