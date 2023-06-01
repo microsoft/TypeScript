@@ -26,6 +26,7 @@ import {
     ComputedPropertyName,
     ConstructorDeclaration,
     createAccessorPropertyBackingField,
+    createClassNamedEvaluationHelperBlock,
     Debug,
     Decorator,
     ElementAccessExpression,
@@ -50,7 +51,6 @@ import {
     getFirstConstructorWithBody,
     getHeritageClause,
     getNonAssignmentOperatorForCompoundAssignment,
-    getOrCreateEmitNode,
     getOriginalNode,
     getSourceMapRange,
     hasAccessorModifier,
@@ -60,6 +60,7 @@ import {
     HeritageClause,
     Identifier,
     idText,
+    injectClassThisAssignmentIfMissing,
     InternalEmitFlags,
     isAmbientPropertyDeclaration,
     isArrayBindingOrAssignmentElement,
@@ -74,8 +75,9 @@ import {
     isClassElement,
     isClassExpression,
     isClassLike,
-    isClassNamedEvaluationHelperElement,
+    isClassNamedEvaluationHelperBlock,
     isClassStaticBlockDeclaration,
+    isClassThisAssignmentBlock,
     isCompoundAssignment,
     isComputedPropertyName,
     isDestructuringAssignment,
@@ -573,14 +575,14 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         for (const member of node.members) {
             if (isNamedClassElement(member) && nodeOrChildIsDecorated(/*useLegacyDecorators*/ false, member, node)) {
                 if (hasStaticModifier(member)) {
-                    staticExtraInitializersName ??= factory.createUniqueName("_staticExtraInitializers", GeneratedIdentifierFlags.Optimistic);
+                    staticExtraInitializersName ??= factory.createUniqueName("_staticExtraInitializers", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel);
                 }
                 else {
-                    instanceExtraInitializersName ??= factory.createUniqueName("_instanceExtraInitializers", GeneratedIdentifierFlags.Optimistic);
+                    instanceExtraInitializersName ??= factory.createUniqueName("_instanceExtraInitializers", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel);
                 }
             }
             if (isClassStaticBlockDeclaration(member)) {
-                if (!isClassNamedEvaluationHelperElement(member)) {
+                if (!isClassNamedEvaluationHelperBlock(member)) {
                     hasStaticInitializers = true;
                 }
             }
@@ -650,10 +652,15 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
             //   of the mutated class.
             // - Since a class decorator can add extra initializers, we must define a variable to keep track of
             //   extra initializers.
-            classInfo.classDecoratorsName = factory.createUniqueName("_classDecorators", GeneratedIdentifierFlags.Optimistic);
-            classInfo.classDescriptorName = factory.createUniqueName("_classDescriptor", GeneratedIdentifierFlags.Optimistic);
-            classInfo.classExtraInitializersName = factory.createUniqueName("_classExtraInitializers", GeneratedIdentifierFlags.Optimistic);
-            classInfo.classThis = factory.createUniqueName("_classThis", GeneratedIdentifierFlags.Optimistic);
+            classInfo.classDecoratorsName = factory.createUniqueName("_classDecorators", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel);
+            classInfo.classDescriptorName = factory.createUniqueName("_classDescriptor", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel);
+            classInfo.classExtraInitializersName = factory.createUniqueName("_classExtraInitializers", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel);
+            // We do not mark _classThis as FileLevel if it may be reused by class private fields, which requires the
+            // ability access the captured `_classThis` of outer scopes.
+            const needsUniqueClassThis = some(node.members, member => (isPrivateIdentifierClassElementDeclaration(member) || isAutoAccessorPropertyDeclaration(member)) && hasStaticModifier(member));
+            classInfo.classThis = factory.createUniqueName("_classThis", needsUniqueClassThis ?
+                GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.ReservedInNestedScopes :
+                GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel);
             classDefinitionStatements.push(
                 createLet(classInfo.classDecoratorsName, factory.createArrayLiteralExpression(classDecorators)),
                 createLet(classInfo.classDescriptorName),
@@ -673,7 +680,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
             const extendsElement = extendsClause && firstOrUndefined(extendsClause.types);
             const extendsExpression = extendsElement && visitNode(extendsElement.expression, visitor, isExpression);
             if (extendsExpression) {
-                classInfo.classSuper = factory.createUniqueName("_classSuper", GeneratedIdentifierFlags.Optimistic);
+                classInfo.classSuper = factory.createUniqueName("_classSuper", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel);
 
                 // Ensure we do not give the class or function an assigned name due to the variable by prefixing it
                 // with `0, `.
@@ -705,14 +712,10 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         // class decorators)
         const needsSetNameHelper = !getOriginalNode(node, isClassLike)?.name && (classDecorators || !isStringLiteral(className) || !isEmptyStringLiteral(className));
 
-        // TODO: replace this with transformNamedEvaluation?
+        // TODO(rbuckton): replace this with transformNamedEvaluation? Is it still needed?
         let namedEvaluationHelperBlock: ClassStaticBlockDeclaration | undefined;
         if (needsSetNameHelper && !classHasExplicitlyAssignedName(node)) {
-            const setNameExpression = emitHelpers().createSetFunctionNameHelper(factory.createThis(), className);
-            const setNameStatement = factory.createExpressionStatement(setNameExpression);
-            const setNameBody = factory.createBlock([setNameStatement]);
-            namedEvaluationHelperBlock = factory.createClassStaticBlockDeclaration(setNameBody);
-
+            namedEvaluationHelperBlock = createClassNamedEvaluationHelperBlock(context, className, renamedClassThis);
             if (shouldTransformPrivateStaticElementsInClass) {
                 // We use `InternalEmitFlags.TransformPrivateStaticElements` as a marker on a class static block
                 // to inform the classFields transform that it shouldn't rename `this` to `_classThis` in the
@@ -845,11 +848,12 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         if (classInfo.classDescriptorName && classInfo.classDecoratorsName && classInfo.classExtraInitializersName && classInfo.classThis) {
             leadingBlockStatements ??= [];
 
+            // produces:
             //  __esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name }, _classExtraInitializers);
-            const valueProperty = factory.createPropertyAssignment("value", factory.createThis());
+            const valueProperty = factory.createPropertyAssignment("value", renamedClassThis);
             const classDescriptor = factory.createObjectLiteralExpression([valueProperty]);
             const classDescriptorAssignment = factory.createAssignment(classInfo.classDescriptorName, classDescriptor);
-            const classNameReference = factory.createPropertyAccessExpression(factory.createThis(), "name");
+            const classNameReference = factory.createPropertyAccessExpression(renamedClassThis, "name");
             const esDecorateHelper = emitHelpers().createESDecorateHelper(
                 factory.createNull(),
                 classDescriptorAssignment,
@@ -862,6 +866,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
             setSourceMapRange(esDecorateStatement, moveRangePastDecorators(node));
             leadingBlockStatements.push(esDecorateStatement);
 
+            // produces:
             //  C = _classThis = _classDescriptor.value;
             const classDescriptorValueReference = factory.createPropertyAccessExpression(classInfo.classDescriptorName, "value");
             const classThisAssignment = factory.createAssignment(classInfo.classThis, classDescriptorValueReference);
@@ -896,6 +901,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         // prepare a leading `static {}` block, if necessary
         let leadingStaticBlock: ClassStaticBlockDeclaration | undefined;
         if (leadingBlockStatements) {
+            // produces:
             //  class C {
             //      static { ... }
             //      ...
@@ -913,6 +919,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         // prepare a trailing `static {}` block, if necessary
         let trailingStaticBlock: ClassStaticBlockDeclaration | undefined;
         if (trailingBlockStatements) {
+            // produces:
             //  class C {
             //      ...
             //      static { ... }
@@ -923,8 +930,9 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
 
         if (namedEvaluationHelperBlock || leadingStaticBlock || syntheticConstructor || trailingStaticBlock) {
             const newMembers: ClassElement[] = [];
+
             // add the NamedEvaluation helper block, if needed
-            const existingNamedEvaluationHelperBlockIndex = members.findIndex(isClassNamedEvaluationHelperElement);
+            const existingNamedEvaluationHelperBlockIndex = members.findIndex(isClassNamedEvaluationHelperBlock);
             if (namedEvaluationHelperBlock) {
                 Debug.assert(existingNamedEvaluationHelperBlockIndex === -1);
                 newMembers.push(namedEvaluationHelperBlock);
@@ -960,6 +968,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
             // We use `var` instead of `let` so we can leverage NamedEvaluation to define the class name
             // and still be able to ensure it is initialized prior to any use in `static {}`.
 
+            // produces:
             //  (() => {
             //      let _classDecorators = [...];
             //      let _classDescriptor;
@@ -980,6 +989,10 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
             //  })();
 
             classExpression = factory.createClassExpression(/*modifiers*/ undefined, /*name*/ undefined, /*typeParameters*/ undefined, heritageClauses, members);
+            if (classInfo.classThis) {
+                classExpression = injectClassThisAssignmentIfMissing(factory, classExpression, classInfo.classThis);
+            }
+
             const classReferenceDeclaration = factory.createVariableDeclaration(classReference, /*exclamationToken*/ undefined, /*type*/ undefined, classExpression);
             const classReferenceVarDeclList = factory.createVariableDeclarationList([classReferenceDeclaration]);
             const returnExpr = classInfo.classThis ? factory.createAssignment(classReference, classInfo.classThis) : classReference;
@@ -989,6 +1002,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
             );
         }
         else {
+            // produces:
             //  return <classExpression>;
             classExpression = factory.createClassExpression(/*modifiers*/ undefined, node.name, /*typeParameters*/ undefined, heritageClauses, members);
             classDefinitionStatements.push(factory.createReturnStatement(classExpression));
@@ -1004,7 +1018,6 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         }
 
         setOriginalNode(classExpression, node);
-        getOrCreateEmitNode(classExpression).classThis = classInfo.classThis;
         return factory.createImmediatelyInvokedArrowFunction(factory.mergeLexicalEnvironment(classDefinitionStatements, lexicalEnvironment));
     }
 
@@ -1293,8 +1306,8 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
             };
 
             const extraInitializers = isStatic(member) ?
-                classInfo.staticExtraInitializersName ??= factory.createUniqueName("_staticExtraInitializers", GeneratedIdentifierFlags.Optimistic) :
-                classInfo.instanceExtraInitializersName ??= factory.createUniqueName("_instanceExtraInitializers", GeneratedIdentifierFlags.Optimistic);
+                classInfo.staticExtraInitializersName ??= factory.createUniqueName("_staticExtraInitializers", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel) :
+                classInfo.instanceExtraInitializersName ??= factory.createUniqueName("_instanceExtraInitializers", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel);
 
             if (isMethodOrAccessor(member)) {
                 // __esDecorate(this, null, _static_member_decorators, { kind: "method", name: "...", static: true, private: false, access: { ... } }, _staticExtraInitializers);
@@ -1423,7 +1436,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         enterClassElement(node);
 
         let result: ClassStaticBlockDeclaration;
-        if (isClassNamedEvaluationHelperElement(node)) {
+        if (isClassNamedEvaluationHelperBlock(node) || isClassThisAssignmentBlock(node)) {
             const savedClassThis = classThis;
             classThis = undefined;
             result = visitEachChild(node, visitor, context);

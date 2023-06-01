@@ -14,8 +14,7 @@ void C;
 //// [usingDeclarationsWithESClassDecorators.3.js]
 System.register([], function (exports_1, context_1) {
     "use strict";
-    var _this, before, C, _default, env_1;
-    _this = this;
+    var before, C, _default, env_1;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],

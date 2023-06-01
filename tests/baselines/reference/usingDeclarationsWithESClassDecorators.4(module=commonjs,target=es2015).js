@@ -25,9 +25,7 @@ try {
         let _classThis;
         var default_1 = _classThis = class {
         };
-        (() => {
-            __setFunctionName(_classThis, "default");
-        })();
+        __setFunctionName(_classThis, "default");
         (() => {
             __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name }, null, _classExtraInitializers);
             default_1 = _classThis = _classDescriptor.value;

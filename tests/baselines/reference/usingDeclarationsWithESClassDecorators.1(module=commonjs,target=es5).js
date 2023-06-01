@@ -12,7 +12,6 @@ class C {
 
 //// [usingDeclarationsWithESClassDecorators.1.js]
 "use strict";
-var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 var before, C;
 var env_1 = { stack: [], error: void 0, hasError: false };

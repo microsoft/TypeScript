@@ -11,7 +11,6 @@ class C {
 
 
 //// [usingDeclarationsWithESClassDecorators.1.js]
-var _this = this;
 var before, C;
 var env_1 = { stack: [], error: void 0, hasError: false };
 try {

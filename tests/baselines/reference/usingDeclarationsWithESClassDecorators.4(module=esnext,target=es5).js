@@ -11,7 +11,6 @@ export default class {
 
 
 //// [usingDeclarationsWithESClassDecorators.4.js]
-var _this = this;
 export { _default as default };
 var before, default_1, _default;
 var env_1 = { stack: [], error: void 0, hasError: false };
@@ -27,9 +26,7 @@ try {
             }
             return default_1;
         }());
-        (function () {
-            __setFunctionName(_classThis, "default");
-        })();
+        __setFunctionName(_classThis, "default");
         (function () {
             __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name }, null, _classExtraInitializers);
             default_1 = _classThis = _classDescriptor.value;

@@ -25,7 +25,6 @@ declare let dec: any;
 
 //// [a.js]
 "use strict";
-var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 var C = function () {
     var _classDecorators = [dec];
@@ -47,7 +46,6 @@ var C = function () {
 }();
 //// [b.js]
 "use strict";
-var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
 var C = function () {
@@ -71,7 +69,6 @@ var C = function () {
 exports.C = C;
 //// [c.js]
 "use strict";
-var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 var default_1 = function () {
     var _classDecorators = [dec];
@@ -83,9 +80,7 @@ var default_1 = function () {
         }
         return default_1;
     }());
-    (function () {
-        __setFunctionName(_classThis, "default");
-    })();
+    __setFunctionName(_classThis, "default");
     (function () {
         __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name }, null, _classExtraInitializers);
         default_1 = _classThis = _classDescriptor.value;

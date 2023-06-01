@@ -90,7 +90,7 @@ import {
     TypeMapper,
     unescapeLeadingUnderscores,
     VarianceFlags,
-    zipWith,
+    zipWith
 } from "./_namespaces/ts";
 
 /** @internal */
@@ -191,12 +191,53 @@ export namespace Debug {
         return true;
     }
 
+    export function tryGetStackTrace(stackCrawlMark?: AnyFunction, stackTraceLimit?: number) {
+        const e = new Error();
+        tryCaptureStackTrace(e, stackCrawlMark ?? tryGetStackTrace, stackTraceLimit);
+        return e.stack;
+    }
+
+    function tryCaptureStackTraceWorker(error: object, stackCrawlMark: AnyFunction) {
+        if (typeof Error.captureStackTrace === "function") {
+            Error.captureStackTrace(error, stackCrawlMark);
+        }
+        else {
+            try {
+                throw error;
+            }
+            catch {
+                // do nothing
+            }
+        }
+    }
+
+    function trySetStackTraceLimit(stackTraceLimit: number) {
+        if (typeof Error.captureStackTrace === "function") {
+            try {
+                Error.stackTraceLimit = stackTraceLimit;
+            }
+            catch {
+                // do nothing
+            }
+        }
+    }
+
+    function tryCaptureStackTrace(error: object, stackCrawlMark: AnyFunction = tryCaptureStackTrace, stackTraceLimit?: number) {
+        if (stackTraceLimit !== undefined) {
+            const savedStackTraceLimit = Error.stackTraceLimit;
+            trySetStackTraceLimit(stackTraceLimit);
+            tryCaptureStackTraceWorker(error, stackCrawlMark);
+            trySetStackTraceLimit(savedStackTraceLimit);
+        }
+        else {
+            tryCaptureStackTraceWorker(error, stackCrawlMark);
+        }
+    }
+
     export function fail(message?: string, stackCrawlMark?: AnyFunction): never {
         debugger;
         const e = new Error(message ? `Debug Failure. ${message}` : "Debug Failure.");
-        if ((Error as any).captureStackTrace) {
-            (Error as any).captureStackTrace(e, stackCrawlMark || fail);
-        }
+        tryCaptureStackTrace(e, stackCrawlMark ?? fail, /*stackTraceLimit*/ undefined);
         throw e;
     }
 
@@ -1166,5 +1207,68 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             }
             return s;
         }
+    }
+
+    export interface TagOptions {
+        trace?: boolean;
+        message?: string;
+        placement?: "leading" | "trailing";
+        stackTraceLimit?: number;
+        counter?: string;
+    }
+
+    /**
+     * Tag a `Node` with a synthetic leading or trailing multiline comment.
+     */
+    export function tag<T extends Node>(node: T, factory: ts.NodeFactory, { trace, message, placement, stackTraceLimit, counter }: TagOptions = {}) {
+        const parts: string[] = [];
+        if (message) {
+            parts.push(message);
+        }
+
+        const source =
+            typeof factory.source === "function" ? factory.source.name :
+            typeof factory.source === "symbol" ? factory.source.toString() :
+            factory.source !== undefined ? `${factory.source}` :
+            undefined;
+
+        if (source) {
+            if (parts.length) {
+                parts.push(` (source: ${source})`);
+            }
+            else {
+                parts.push(`source: ${source}`);
+            }
+        }
+
+        if (counter && ts.performance.isEnabled()) {
+            ts.performance.mark(counter);
+            if (parts.length) {
+                parts.push(` (count: ${ts.performance.getCount(counter)})`);
+            }
+            else {
+                parts.push(`count: ${ts.performance.getCount(counter)}`);
+            }
+        }
+
+        const stack = trace && tryGetStackTrace(tag, stackTraceLimit ?? 5);
+        if (stack) {
+            if (parts.length) {
+                parts.push("\n");
+            }
+            parts.push(stack);
+        }
+
+        const formattedMessage = parts.join("").trim();
+        if (formattedMessage) {
+            if (placement === "leading") {
+                ts.addSyntheticLeadingComment(node, SyntaxKind.MultiLineCommentTrivia, formattedMessage);
+            }
+            else {
+                ts.addSyntheticTrailingComment(node, SyntaxKind.MultiLineCommentTrivia, formattedMessage);
+            }
+        }
+
+        return node;
     }
 }

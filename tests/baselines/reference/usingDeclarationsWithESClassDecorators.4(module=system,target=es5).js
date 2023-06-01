@@ -13,8 +13,7 @@ export default class {
 //// [usingDeclarationsWithESClassDecorators.4.js]
 System.register([], function (exports_1, context_1) {
     "use strict";
-    var _this, before, default_1, _default, env_1;
-    _this = this;
+    var before, default_1, _default, env_1;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
@@ -32,9 +31,7 @@ System.register([], function (exports_1, context_1) {
                         }
                         return default_1;
                     }());
-                    (function () {
-                        __setFunctionName(_classThis, "default");
-                    })();
+                    __setFunctionName(_classThis, "default");
                     (function () {
                         __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name }, null, _classExtraInitializers);
                         default_1 = _classThis = _classDescriptor.value;

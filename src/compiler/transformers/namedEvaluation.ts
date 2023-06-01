@@ -3,10 +3,16 @@ import {
     AnonymousFunctionDefinition,
     BinaryExpression,
     BindingElement,
-    ClassElement,
+    Block,
+    CallExpression,
+    cast,
     ClassLikeDeclaration,
+    ClassStaticBlockDeclaration,
     ExportAssignment,
     Expression,
+    ExpressionStatement,
+    findIndex,
+    getOrCreateEmitNode,
     getOriginalNode,
     hasSyntacticModifier,
     Identifier,
@@ -14,6 +20,7 @@ import {
     isClassDeclaration,
     isClassExpression,
     isClassStaticBlockDeclaration,
+    isClassThisAssignmentBlock,
     isEmptyStringLiteral,
     isExpressionStatement,
     isFunctionDeclaration,
@@ -23,14 +30,19 @@ import {
     isStringLiteral,
     ModifierFlags,
     NamedEvaluation,
+    Node,
+    NodeArray,
     NodeFactory,
     ParameterDeclaration,
     PropertyAssignment,
     PropertyDeclaration,
     PropertyName,
+    setSourceMapRange,
     setTextRange,
     ShorthandPropertyAssignment,
     skipOuterExpressions,
+    some,
+    Statement,
     StringLiteral,
     SyntaxKind,
     TransformationContext,
@@ -78,16 +90,64 @@ function getAssignedNameOfPropertyName(context: TransformationContext, name: Pro
 }
 
 /**
- * Gets whether a ClassElement is a `static {}` block containing only a single call to the `__setFunctionName` helper.
+ * Creates a class `static {}` block used to dynamically set the name of a class.
+ *
+ * @param assignedName The expression used to resolve the assigned name at runtime. This expression should not produce
+ * side effects.
+ * @param thisExpression Overrides the expression to use for the actual `this` reference. This can be used to provide an
+ * expression that has already had its `EmitFlags` set or may have been tracked to prevent substitution.
  * @internal
  */
-export function isClassNamedEvaluationHelperElement(node: ClassElement): boolean {
+export function createClassNamedEvaluationHelperBlock(context: TransformationContext, assignedName: Expression, thisExpression: Expression = context.factory.createThis()): ClassNamedEvaluationHelperBlock {
+    // produces:
+    //
+    //  static { __setFunctionName(this, "C"); }
+    //
+
+    const { factory } = context;
+    const expression = context.getEmitHelperFactory().createSetFunctionNameHelper(thisExpression, assignedName);
+    const statement = factory.createExpressionStatement(expression);
+    const body = factory.createBlock([statement], /*multiLine*/ false);
+    const block = factory.createClassStaticBlockDeclaration(body);
+
+    // We use `emitNode.assignedName` to indicate this is a NamedEvaluation helper block
+    // and to stash the expression used to resolve the assigned name.
+    getOrCreateEmitNode(block).assignedName = assignedName;
+
+    // TODO(rbuckton): For debugging, remove before commit.
+    // Debug.tag(block, factory, { trace: true, stackTraceLimit: 10, counter: "namedEvaluation" });
+    return block as ClassNamedEvaluationHelperBlock;
+}
+
+/** @internal */
+export type ClassNamedEvaluationHelperBlock = ClassStaticBlockDeclaration & {
+    readonly body: Block & {
+        readonly statements: NodeArray<Statement> & readonly [
+            ExpressionStatement & {
+                readonly expression: CallExpression & {
+                    readonly expression: Identifier;
+                };
+            }
+        ];
+    };
+};
+
+
+/**
+ * Gets whether a node is a `static {}` block containing only a single call to the `__setFunctionName` helper where that
+ * call's second argument is the value stored in the `assignedName` property of the block's `EmitNode`.
+ * @internal
+ */
+export function isClassNamedEvaluationHelperBlock(node: Node): node is ClassNamedEvaluationHelperBlock {
     if (!isClassStaticBlockDeclaration(node) || node.body.statements.length !== 1) {
         return false;
     }
 
     const statement = node.body.statements[0];
-    return isExpressionStatement(statement) && isCallToHelper(statement.expression, "___setFunctionName" as __String);
+    return isExpressionStatement(statement) &&
+        isCallToHelper(statement.expression, "___setFunctionName" as __String) &&
+        (statement.expression as CallExpression).arguments.length >= 2 &&
+        (statement.expression as CallExpression).arguments[1] === node.emitNode?.assignedName;
 }
 
 /**
@@ -96,10 +156,7 @@ export function isClassNamedEvaluationHelperElement(node: ClassElement): boolean
  * @internal
  */
 export function classHasExplicitlyAssignedName(node: ClassLikeDeclaration): boolean {
-    for (const member of node.members) {
-        if (isClassStaticBlockDeclaration(member) && isClassNamedEvaluationHelperElement(member)) return true;
-    }
-    return false;
+    return !!node.emitNode?.assignedName && some(node.members, isClassNamedEvaluationHelperBlock);
 }
 
 /**
@@ -109,6 +166,60 @@ export function classHasExplicitlyAssignedName(node: ClassLikeDeclaration): bool
  */
 export function classHasDeclaredOrExplicitlyAssignedName(node: ClassLikeDeclaration): boolean {
     return !!node.name || classHasExplicitlyAssignedName(node);
+}
+
+/**
+ * Injects a class `static {}` block used to dynamically set the name of a class, if one does not already exist.
+ * @internal
+ */
+export function injectClassNamedEvaluationHelperBlockIfMissing(context: TransformationContext, node: ClassLikeDeclaration, assignedName: Expression, thisExpression?: Expression) {
+    // given:
+    //
+    //  let C = class {
+    //  };
+    //
+    // produces:
+    //
+    //  let C = class {
+    //      static { __setFunctionName(this, "C"); }
+    //  };
+
+    // NOTE: If the class has a `_classThis` assignment block, this helper will be injected after that block.
+
+    if (classHasExplicitlyAssignedName(node)) {
+        return node;
+    }
+
+    const { factory } = context;
+    const namedEvaluationBlock = createClassNamedEvaluationHelperBlock(context, assignedName, thisExpression);
+    if (node.name) {
+        setSourceMapRange(namedEvaluationBlock.body.statements[0], node.name);
+    }
+
+    const insertionIndex = findIndex(node.members, isClassThisAssignmentBlock) + 1;
+    const leading = node.members.slice(0, insertionIndex);
+    const trailing = node.members.slice(insertionIndex);
+    const members = factory.createNodeArray([...leading, namedEvaluationBlock, ...trailing]);
+    setTextRange(members, node.members);
+
+    node = isClassDeclaration(node) ?
+        factory.updateClassDeclaration(
+            node,
+            node.modifiers,
+            node.name,
+            node.typeParameters,
+            node.heritageClauses,
+            members) :
+        factory.updateClassExpression(
+            node,
+            node.modifiers,
+            node.name,
+            node.typeParameters,
+            node.heritageClauses,
+            members);
+
+    getOrCreateEmitNode(node).assignedName = assignedName;
+    return node;
 }
 
 function finishTransformNamedEvaluation(
@@ -124,26 +235,9 @@ function finishTransformNamedEvaluation(
     const { factory } = context;
     const innerExpression = skipOuterExpressions(expression);
 
-    let updatedExpression: Expression;
-    if (isClassExpression(innerExpression)) {
-        const setNameExpression = context.getEmitHelperFactory().createSetFunctionNameHelper(factory.createThis(), assignedName);
-        const setNameStatement = factory.createExpressionStatement(setNameExpression);
-        const setNameBody = factory.createBlock([setNameStatement], /*multiLine*/ false);
-        const setNameBlock = factory.createClassStaticBlockDeclaration(setNameBody);
-        const members = factory.createNodeArray([setNameBlock, ...innerExpression.members]);
-        setTextRange(members, innerExpression.members);
-        updatedExpression = factory.updateClassExpression(
-            innerExpression,
-            innerExpression.modifiers,
-            innerExpression.name,
-            innerExpression.typeParameters,
-            innerExpression.heritageClauses,
-            members
-        );
-    }
-    else {
-        updatedExpression = context.getEmitHelperFactory().createSetFunctionNameHelper(innerExpression, assignedName);
-    }
+    const updatedExpression = isClassExpression(innerExpression) ?
+        cast(injectClassNamedEvaluationHelperBlockIfMissing(context, innerExpression, assignedName), isClassExpression) :
+        context.getEmitHelperFactory().createSetFunctionNameHelper(innerExpression, assignedName);
 
     return factory.restoreOuterExpressions(expression, updatedExpression);
 }
@@ -353,7 +447,7 @@ function transformNamedEvaluationOfExportAssignment(context: TransformationConte
  * Performs a shallow transformation of a `NamedEvaluation` node, such that a valid name will be assigned.
  * @internal
  */
-export function transformNamedEvaluation<T extends NamedEvaluation>(context: TransformationContext, node: T, ignoreEmptyStringLiteral?: boolean, assignedName?: string): Extract<NamedEvaluation, Pick<T, "kind" | keyof T & "operatorToken">>;
+export function transformNamedEvaluation<T extends NamedEvaluation>(context: TransformationContext, node: T, ignoreEmptyStringLiteral?: boolean, assignedName?: string): Extract<NamedEvaluation, Pick<T, "kind" | keyof T & "operatorToken" | keyof T & "name">>;
 export function transformNamedEvaluation(context: TransformationContext, node: NamedEvaluation, ignoreEmptyStringLiteral?: boolean, assignedName?: string) {
     switch (node.kind) {
         case SyntaxKind.PropertyAssignment:

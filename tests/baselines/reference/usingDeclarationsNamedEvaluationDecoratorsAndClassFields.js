@@ -108,16 +108,12 @@ try {
     C1 = __addDisposableResource(env_1, (_a = class {
             static [Symbol.dispose]() { }
         },
-        (() => {
-            __setFunctionName(_a, "C1");
-        })(),
+        __setFunctionName(_a, "C1"),
         _a), false);
     C2 = __addDisposableResource(env_1, (_b = class {
             static [Symbol.dispose]() { }
         },
-        (() => {
-            __setFunctionName(_b, "C2");
-        })(),
+        __setFunctionName(_b, "C2"),
         _b.x = 1,
         _b), false);
     C3 = __addDisposableResource(env_1, (() => {
@@ -128,9 +124,7 @@ try {
         var class_1 = (_classThis = class {
                 static [Symbol.dispose]() { }
             },
-            (() => {
-                __setFunctionName(_classThis, "C3");
-            })(),
+            __setFunctionName(_classThis, "C3"),
             (() => {
                 __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name }, null, _classExtraInitializers);
                 class_1 = _classThis = _classDescriptor.value;
@@ -140,26 +134,24 @@ try {
         return class_1 = _classThis;
     })(), false);
     C4 = __addDisposableResource(env_1, (() => {
-        let _classDecorators_1 = [dec];
-        let _classDescriptor_1;
-        let _classExtraInitializers_1 = [];
-        let _classThis_1;
-        var class_2 = (_classThis_1 = class {
+        let _classDecorators = [dec];
+        let _classDescriptor;
+        let _classExtraInitializers = [];
+        let _classThis;
+        var class_2 = (_classThis = class {
                 static [Symbol.dispose]() { }
             },
+            __setFunctionName(_classThis, "C4"),
             (() => {
-                __setFunctionName(_classThis_1, "C4");
+                __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name }, null, _classExtraInitializers);
+                class_2 = _classThis = _classDescriptor.value;
             })(),
+            _classThis.x = 1,
             (() => {
-                __esDecorate(null, _classDescriptor_1 = { value: _classThis_1 }, _classDecorators_1, { kind: "class", name: _classThis_1.name }, null, _classExtraInitializers_1);
-                class_2 = _classThis_1 = _classDescriptor_1.value;
+                __runInitializers(_classThis, _classExtraInitializers);
             })(),
-            _classThis_1.x = 1,
-            (() => {
-                __runInitializers(_classThis_1, _classExtraInitializers_1);
-            })(),
-            _classThis_1);
-        return class_2 = _classThis_1;
+            _classThis);
+        return class_2 = _classThis;
     })(), false);
 }
 catch (e_1) {

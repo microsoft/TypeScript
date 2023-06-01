@@ -12,7 +12,6 @@ using after = null;
 
 
 //// [usingDeclarationsWithESClassDecorators.7.js]
-var _this = this;
 var C = function () {
     var _classDecorators = [dec];
     var _classDescriptor;

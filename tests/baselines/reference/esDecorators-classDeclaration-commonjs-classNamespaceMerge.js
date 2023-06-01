@@ -56,8 +56,9 @@ let Example = (() => {
     let _classExtraInitializers = [];
     let _classThis;
     var Example = class {
+        static { _classThis = this; }
         static {
-            __esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name }, null, _classExtraInitializers);
+            __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name }, null, _classExtraInitializers);
             Example = _classThis = _classDescriptor.value;
             __runInitializers(_classThis, _classExtraInitializers);
         }

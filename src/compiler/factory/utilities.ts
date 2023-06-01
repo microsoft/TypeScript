@@ -178,7 +178,7 @@ import {
     Token,
     TransformFlags,
     TypeNode,
-    WrappedExpression,
+    WrappedExpression
 } from "../_namespaces/ts";
 
 // Compound nodes

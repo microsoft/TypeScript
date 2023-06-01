@@ -13,7 +13,6 @@ export { C };
 
 //// [usingDeclarationsWithESClassDecorators.5.js]
 "use strict";
-var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
 var before, C;

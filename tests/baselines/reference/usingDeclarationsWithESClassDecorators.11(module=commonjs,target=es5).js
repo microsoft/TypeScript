@@ -14,7 +14,6 @@ using after = null;
 
 //// [usingDeclarationsWithESClassDecorators.11.js]
 "use strict";
-var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
 var C = function () {

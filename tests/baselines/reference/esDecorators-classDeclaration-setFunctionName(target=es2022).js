@@ -30,8 +30,9 @@ let C = (() => {
     let _classExtraInitializers = [];
     let _classThis;
     var C = class {
+        static { _classThis = this; }
         static {
-            __esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name }, null, _classExtraInitializers);
+            __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name }, null, _classExtraInitializers);
             C = _classThis = _classDescriptor.value;
             __runInitializers(_classThis, _classExtraInitializers);
         }
@@ -46,8 +47,9 @@ let C = (() => {
     let _classExtraInitializers = [];
     let _classThis;
     var C = class {
+        static { _classThis = this; }
         static {
-            __esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name }, null, _classExtraInitializers);
+            __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name }, null, _classExtraInitializers);
             C = _classThis = _classDescriptor.value;
             __runInitializers(_classThis, _classExtraInitializers);
         }
@@ -62,9 +64,10 @@ export default (() => {
     let _classExtraInitializers = [];
     let _classThis;
     var default_1 = class {
-        static { __setFunctionName(this, "default"); }
+        static { _classThis = this; }
+        static { __setFunctionName(_classThis, "default"); }
         static {
-            __esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name }, null, _classExtraInitializers);
+            __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name }, null, _classExtraInitializers);
             default_1 = _classThis = _classDescriptor.value;
             __runInitializers(_classThis, _classExtraInitializers);
         }

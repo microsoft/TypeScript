@@ -43,15 +43,15 @@ var c = (_a = /** @class */ (function () {
     _a);
 c.x = { a: "a" };
 var ex = "x";
-var c2 = (_c = /** @class */ (function () {
+var c2 = (_b = /** @class */ (function () {
         function class_2() {
         }
         return class_2;
     }()),
-    _b = ex,
-    __setFunctionName(_c, "c2"),
-    _c[_b] = { a: "a" },
-    _c);
+    _c = ex,
+    __setFunctionName(_b, "c2"),
+    _b[_c] = { a: "a" },
+    _b);
 c[ex] = { a: "a" };
 function f(c) {
     var _a;

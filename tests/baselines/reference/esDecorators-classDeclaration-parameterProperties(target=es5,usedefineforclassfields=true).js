@@ -10,7 +10,6 @@ class C {
 
 
 //// [esDecorators-classDeclaration-parameterProperties.js]
-var _this = this;
 var C = function () {
     var _a;
     var _instanceExtraInitializers = [];

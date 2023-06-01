@@ -13,7 +13,6 @@ using after = null;
 
 //// [usingDeclarationsWithESClassDecorators.7.js]
 "use strict";
-var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 var C = function () {
     var _classDecorators = [dec];

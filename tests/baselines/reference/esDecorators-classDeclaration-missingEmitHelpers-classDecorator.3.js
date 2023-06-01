@@ -20,16 +20,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = require("tslib");
 // needs: __esDecorate, __runInitializers, __setFunctionName
 let C = (() => {
-    var _foo;
+    var _C_foo;
     let _classDecorators = [dec];
     let _classDescriptor;
     let _classExtraInitializers = [];
     let _classThis;
     var C = class {
+        static { _classThis = this; }
         static { tslib_1.__setFunctionName(this, "C"); }
-        static { _foo = function _foo() { }; }
+        static { _C_foo = function _C_foo() { }; }
         static {
-            tslib_1.__esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name }, null, _classExtraInitializers);
+            tslib_1.__esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name }, null, _classExtraInitializers);
             C = _classThis = _classDescriptor.value;
             tslib_1.__runInitializers(_classThis, _classExtraInitializers);
         }

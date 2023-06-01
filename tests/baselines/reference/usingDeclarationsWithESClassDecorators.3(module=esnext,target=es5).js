@@ -12,7 +12,6 @@ export default class C {
 void C;
 
 //// [usingDeclarationsWithESClassDecorators.3.js]
-var _this = this;
 export { _default as default };
 var before, C, _default;
 var env_1 = { stack: [], error: void 0, hasError: false };

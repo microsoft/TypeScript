@@ -17,9 +17,10 @@ declare let dec: any, obj: any, x: any;
         let _classExtraInitializers = [];
         let _classThis;
         var class_1 = class {
+            static { _classThis = this; }
             static { __setFunctionName(this, "x"); }
             static {
-                __esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name }, null, _classExtraInitializers);
+                __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name }, null, _classExtraInitializers);
                 class_1 = _classThis = _classDescriptor.value;
                 __runInitializers(_classThis, _classExtraInitializers);
             }

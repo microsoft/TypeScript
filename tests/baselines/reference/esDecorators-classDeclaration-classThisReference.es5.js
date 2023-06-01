@@ -11,7 +11,6 @@ class C {
 
 
 //// [esDecorators-classDeclaration-classThisReference.es5.js]
-var _this = this;
 var C = function () {
     var _classDecorators = [dec];
     var _classDescriptor;

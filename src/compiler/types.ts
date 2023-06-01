@@ -7950,10 +7950,11 @@ export interface SourceMapSource {
 }
 
 /** @internal */
+// NOTE: Any new properties should be accounted for in `mergeEmitNode` in factory/nodeFactory.ts
 export interface EmitNode {
-    annotatedNodes?: Node[];                 // Tracks Parse-tree nodes with EmitNodes for eventual cleanup.
     flags: EmitFlags;                        // Flags that customize emit
     internalFlags: InternalEmitFlags;        // Internal flags that customize emit
+    annotatedNodes?: Node[];                 // Tracks Parse-tree nodes with EmitNodes for eventual cleanup.
     leadingComments?: SynthesizedComment[];  // Synthesized leading comments
     trailingComments?: SynthesizedComment[]; // Synthesized trailing comments
     commentRange?: TextRange;                // The text range to use when emitting leading or trailing comments
@@ -7966,7 +7967,8 @@ export interface EmitNode {
     startsOnNewLine?: boolean;               // If the node should begin on a new line
     snippetElement?: SnippetElement;         // Snippet element of the node
     typeNode?: TypeNode;                     // VariableDeclaration type
-    classThis?: Identifier;                  // Identifier that points to the final class constructor after decorators are applied
+    classThis?: Identifier;                  // Identifier that points to a captured static `this` for a class which may be updated after decorators are applied
+    assignedName?: Expression;               // Expression used as the assigned name of a class or function
     identifierTypeArguments?: NodeArray<TypeNode | TypeParameterDeclaration>; // Only defined on synthesized identifiers. Though not syntactically valid, used in emitting diagnostics, quickinfo, and signature help.
     autoGenerate: AutoGenerateInfo | undefined; // Used for auto-generated identifiers and private identifiers.
     generatedImportReference?: ImportSpecifier; // Reference to the generated import specifier this identifier refers to
@@ -8262,11 +8264,21 @@ export interface GeneratedNamePart {
     suffix?: string;
 }
 
+export type ImmediatelyInvokedFunctionExpression = CallExpression & { readonly expression: FunctionExpression; };
+export type ImmediatelyInvokedArrowFunction = CallExpression & { readonly expression: ParenthesizedExpression & { readonly expression: ArrowFunction; }; };
+
 export interface NodeFactory {
     /** @internal */ readonly parenthesizer: ParenthesizerRules;
     /** @internal */ readonly converters: NodeConverters;
     /** @internal */ readonly baseFactory: BaseNodeFactory;
     /** @internal */ readonly flags: NodeFactoryFlags;
+
+    /**
+     * The source of the factory, for debugging purposes. Usually a transformer function, but can be any value.
+     * @internal
+     */
+    source: unknown;
+
     createNodeArray<T extends Node>(elements?: readonly T[], hasTrailingComma?: boolean): NodeArray<T>;
 
     //
@@ -8885,8 +8897,8 @@ export interface NodeFactory {
 
     createImmediatelyInvokedFunctionExpression(statements: readonly Statement[]): CallExpression;
     createImmediatelyInvokedFunctionExpression(statements: readonly Statement[], param: ParameterDeclaration, paramValue: Expression): CallExpression;
-    createImmediatelyInvokedArrowFunction(statements: readonly Statement[]): CallExpression;
-    createImmediatelyInvokedArrowFunction(statements: readonly Statement[], param: ParameterDeclaration, paramValue: Expression): CallExpression;
+    createImmediatelyInvokedArrowFunction(statements: readonly Statement[]): ImmediatelyInvokedArrowFunction;
+    createImmediatelyInvokedArrowFunction(statements: readonly Statement[], param: ParameterDeclaration, paramValue: Expression): ImmediatelyInvokedArrowFunction;
 
 
     createVoidZero(): VoidExpression;

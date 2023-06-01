@@ -11,7 +11,6 @@ using after = null;
 
 
 //// [usingDeclarationsWithESClassDecorators.10.js]
-var _this = this;
 var default_1 = function () {
     var _classDecorators = [dec];
     var _classDescriptor;
@@ -22,9 +21,7 @@ var default_1 = function () {
         }
         return default_1;
     }());
-    (function () {
-        __setFunctionName(_classThis, "default");
-    })();
+    __setFunctionName(_classThis, "default");
     (function () {
         __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name }, null, _classExtraInitializers);
         default_1 = _classThis = _classDescriptor.value;

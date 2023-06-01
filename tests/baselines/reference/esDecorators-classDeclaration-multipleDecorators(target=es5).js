@@ -8,7 +8,6 @@ class C {
 
 
 //// [esDecorators-classDeclaration-multipleDecorators.js]
-var _this = this;
 var C = function () {
     var _classDecorators = [dec1, dec2];
     var _classDescriptor;

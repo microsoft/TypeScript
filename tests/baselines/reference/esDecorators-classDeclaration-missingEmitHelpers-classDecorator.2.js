@@ -22,9 +22,10 @@ exports.default = (() => {
     let _classExtraInitializers = [];
     let _classThis;
     var default_1 = class {
-        static { tslib_1.__setFunctionName(this, "default"); }
+        static { _classThis = this; }
+        static { tslib_1.__setFunctionName(_classThis, "default"); }
         static {
-            tslib_1.__esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name }, null, _classExtraInitializers);
+            tslib_1.__esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name }, null, _classExtraInitializers);
             default_1 = _classThis = _classDescriptor.value;
             tslib_1.__runInitializers(_classThis, _classExtraInitializers);
         }

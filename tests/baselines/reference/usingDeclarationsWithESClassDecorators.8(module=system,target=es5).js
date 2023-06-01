@@ -13,8 +13,7 @@ using after = null;
 //// [usingDeclarationsWithESClassDecorators.8.js]
 System.register([], function (exports_1, context_1) {
     "use strict";
-    var _this, C, after, env_1;
-    _this = this;
+    var C, after, env_1;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],

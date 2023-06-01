@@ -12,7 +12,6 @@ class C {
 export { C as D };
 
 //// [usingDeclarationsWithESClassDecorators.6.js]
-var _this = this;
 export { C as D };
 var before, C;
 var env_1 = { stack: [], error: void 0, hasError: false };

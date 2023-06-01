@@ -18,9 +18,10 @@ module.exports = (() => {
     let _classExtraInitializers = [];
     let _classThis;
     var class_1 = class {
-        static { __setFunctionName(this, ""); }
+        static { _classThis = this; }
+        static { __setFunctionName(_classThis, ""); }
         static {
-            __esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name }, null, _classExtraInitializers);
+            __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name }, null, _classExtraInitializers);
             class_1 = _classThis = _classDescriptor.value;
             __runInitializers(_classThis, _classExtraInitializers);
         }
