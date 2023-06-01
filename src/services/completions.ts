@@ -3483,8 +3483,8 @@ function getCompletionData(
             }
             addTypeProperties(type, !!(node.flags & NodeFlags.AwaitContext), insertQuestionDot);
         }
-        else if (isInTypeQuery(node) && !type.isNullableType()) {
-            addTypeProperties(type, /*insertAwait*/ false, /*insertQuestionDot*/ false);
+        else if (isInTypeQuery(node)) {
+            addTypeProperties(type.getNonNullableType(), /*insertAwait*/ false, /*insertQuestionDot*/ false);
         }
     }
 
