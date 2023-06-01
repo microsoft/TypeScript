@@ -3459,13 +3459,13 @@ function getCompletionData(
             }
         }
 
-        if (!isTypeLocation) {
-            // GH#39946. Pulling on the type of a node inside of a function with a contextual `this` parameter can result in a circularity
-            // if the `node` is part of the exprssion of a `yield` or `return`. This circularity doesn't exist at compile time because
-            // we will check (and cache) the type of `this` *before* checking the type of the node.
-            typeChecker.tryGetThisTypeAt(node, /*includeGlobalThis*/ false);
+        // GH#39946. Pulling on the type of a node inside of a function with a contextual `this` parameter can result in a circularity
+        // if the `node` is part of the exprssion of a `yield` or `return`. This circularity doesn't exist at compile time because
+        // we will check (and cache) the type of `this` *before* checking the type of the node.
+        typeChecker.tryGetThisTypeAt(node, /*includeGlobalThis*/ false);
+        let type = typeChecker.getTypeAtLocation(node).getNonOptionalType();
 
-            let type = typeChecker.getTypeAtLocation(node).getNonOptionalType();
+        if (!isTypeLocation) {
             let insertQuestionDot = false;
             if (type.isNullableType()) {
                 const canCorrectToQuestionDot =
@@ -3481,6 +3481,9 @@ function getCompletionData(
                 }
             }
             addTypeProperties(type, !!(node.flags & NodeFlags.AwaitContext), insertQuestionDot);
+        }
+        else if (!type.isNullableType()) {
+            addTypeProperties(type, /*insertAwait*/ false, /*insertQuestionDot*/ false);
         }
     }
 
