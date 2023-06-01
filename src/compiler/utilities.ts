@@ -6384,6 +6384,16 @@ export function isThisIdentifier(node: Node | undefined): boolean {
 }
 
 /** @internal */
+export function isInTypeQuery(node: Node): boolean {
+    // TypeScript 1.0 spec (April 2014): 3.6.3
+    // A type query consists of the keyword typeof followed by an expression.
+    // The expression is restricted to a single identifier or a sequence of identifiers separated by periods
+    return !!findAncestor(
+        node,
+        n => n.kind === SyntaxKind.TypeQuery ? true : n.kind === SyntaxKind.Identifier || n.kind === SyntaxKind.QualifiedName ? false : "quit");
+}
+
+/** @internal */
 export function isThisInTypeQuery(node: Node): boolean {
     if (!isThisIdentifier(node)) {
         return false;

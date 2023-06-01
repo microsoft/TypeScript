@@ -180,6 +180,7 @@ import {
     isInString,
     isInterfaceDeclaration,
     isIntersectionTypeNode,
+    isInTypeQuery,
     isJSDoc,
     isJSDocAugmentsTag,
     isJSDocImplementsTag,
@@ -3482,7 +3483,7 @@ function getCompletionData(
             }
             addTypeProperties(type, !!(node.flags & NodeFlags.AwaitContext), insertQuestionDot);
         }
-        else if (!type.isNullableType()) {
+        else if (isInTypeQuery(node) && !type.isNullableType()) {
             addTypeProperties(type, /*insertAwait*/ false, /*insertQuestionDot*/ false);
         }
     }
