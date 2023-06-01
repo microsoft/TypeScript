@@ -39,7 +39,13 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] Host watch options changed to {"excludeFiles":["/user/username/projects/myproject/file2.ts"]}, it will be take effect for next watches.
 Info seq  [hh:mm:ss:mss] response:
-    {"seq":0,"type":"response","command":"configure","request_seq":1,"success":true}
+    {
+     "seq": 0,
+     "type": "response",
+     "command": "configure",
+     "request_seq": 1,
+     "success": true
+    }
 Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
@@ -124,9 +130,9 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/myproject/tsconfig.json: *new*
-  {"pollingInterval":2000}
 /user/username/projects/myproject/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/tsconfig.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/node_modules: *new*
   {"pollingInterval":500}
@@ -213,9 +219,9 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":2000}
 /user/username/projects/myproject/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500} *new*
@@ -299,9 +305,9 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":2000}
 /user/username/projects/myproject/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500} *new*
@@ -392,12 +398,12 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/jsconfig.json:
-  {"pollingInterval":2000}
 /user/username/projects/myproject/file2: *new*
   {"pollingInterval":500}
+/user/username/projects/myproject/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/tsconfig.json:
+  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500} *new*
 

@@ -4949,6 +4949,10 @@
         "category": "Message",
         "code": 6163
     },
+    "Skipping module '{0}' that looks like an absolute URI, target file types: {1}.": {
+        "category": "Message",
+        "code": 6164
+    },
     "Do not truncate error messages.": {
         "category": "Message",
         "code": 6165
@@ -6624,6 +6628,10 @@
         "category": "Error",
         "code": 8038
     },
+    "A JSDoc '@template' tag may not follow a '@typedef', '@callback', or '@overload' tag": {
+        "category": "Error",
+        "code": 8039
+    },
 
     "Declaration emit for this file requires using private name '{0}'. An explicit type annotation may unblock declaration emit.": {
         "category": "Error",
@@ -7635,6 +7643,10 @@
     "Move to file": {
         "category": "Message",
         "code": 95178
+    },
+    "Cannot move to file, selected file is invalid": {
+        "category": "Message",
+        "code": 95179
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

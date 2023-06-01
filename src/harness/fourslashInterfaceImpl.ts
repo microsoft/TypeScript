@@ -181,6 +181,10 @@ export class VerifyNegatable {
         this.state.verifyLinkedEditingRange(map);
     }
 
+    public baselineLinkedEditing(): void {
+        this.state.baselineLinkedEditing();
+    }
+
     public isInCommentAtPosition(onlyMultiLineDiverges?: boolean) {
         this.state.verifySpanOfEnclosingComment(this.negative, onlyMultiLineDiverges);
     }
@@ -1738,6 +1742,7 @@ export interface ExpectedCompletionEntryObject {
     readonly name: string;
     readonly source?: string;
     readonly insertText?: string;
+    readonly filterText?: string;
     readonly replacementSpan?: FourSlash.Range;
     readonly hasAction?: boolean; // If not specified, will assert that this is false.
     readonly isRecommended?: boolean; // If not specified, will assert that this is false.

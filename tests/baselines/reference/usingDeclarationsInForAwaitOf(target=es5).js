@@ -105,25 +105,22 @@ function main() {
                     if (!(_f = _h.sent(), _a = _f.done, !_a)) return [3 /*break*/, 4];
                     _c = _f.value;
                     _d = false;
+                    d1_1 = _c;
+                    env_1 = { stack: [], error: void 0, hasError: false };
                     try {
-                        d1_1 = _c;
-                        env_1 = { stack: [], error: void 0, hasError: false };
-                        try {
-                            d1 = __addDisposableResource(env_1, d1_1, false);
-                        }
-                        catch (e_2) {
-                            env_1.error = e_2;
-                            env_1.hasError = true;
-                        }
-                        finally {
-                            __disposeResources(env_1);
-                        }
+                        d1 = __addDisposableResource(env_1, d1_1, false);
+                    }
+                    catch (e_2) {
+                        env_1.error = e_2;
+                        env_1.hasError = true;
                     }
                     finally {
-                        _d = true;
+                        __disposeResources(env_1);
                     }
                     _h.label = 3;
-                case 3: return [3 /*break*/, 1];
+                case 3:
+                    _d = true;
+                    return [3 /*break*/, 1];
                 case 4: return [3 /*break*/, 11];
                 case 5:
                     e_1_1 = _h.sent();

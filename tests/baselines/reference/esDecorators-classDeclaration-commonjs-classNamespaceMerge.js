@@ -31,10 +31,10 @@ var __esDecorate = (this && this.__esDecorate) || function (ctor, descriptorIn, 
             if (result === null || typeof result !== "object") throw new TypeError("Object expected");
             if (_ = accept(result.get)) descriptor.get = _;
             if (_ = accept(result.set)) descriptor.set = _;
-            if (_ = accept(result.init)) initializers.push(_);
+            if (_ = accept(result.init)) initializers.unshift(_);
         }
         else if (_ = accept(result)) {
-            if (kind === "field") initializers.push(_);
+            if (kind === "field") initializers.unshift(_);
             else descriptor[key] = _;
         }
     }

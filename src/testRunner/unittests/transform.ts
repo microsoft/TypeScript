@@ -304,6 +304,7 @@ describe("unittests:: TransformAPI", () => {
                 target: ts.ScriptTarget.ES5,
                 module: ts.ModuleKind.System,
                 newLine: ts.NewLineKind.CarriageReturnLineFeed,
+                moduleDetection: ts.ModuleDetectionKind.Force,
             }
         }).outputText;
 

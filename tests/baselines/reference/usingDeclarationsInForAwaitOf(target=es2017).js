@@ -56,25 +56,20 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
 async function main() {
     var _a, e_1, _b, _c;
     try {
-        for (var _d = true, _e = __asyncValues([{ [Symbol.dispose]() { } }, null, undefined]), _f; _f = await _e.next(), _a = _f.done, !_a;) {
+        for (var _d = true, _e = __asyncValues([{ [Symbol.dispose]() { } }, null, undefined]), _f; _f = await _e.next(), _a = _f.done, !_a; _d = true) {
             _c = _f.value;
             _d = false;
+            const d1_1 = _c;
+            const env_1 = { stack: [], error: void 0, hasError: false };
             try {
-                const d1_1 = _c;
-                const env_1 = { stack: [], error: void 0, hasError: false };
-                try {
-                    const d1 = __addDisposableResource(env_1, d1_1, false);
-                }
-                catch (e_2) {
-                    env_1.error = e_2;
-                    env_1.hasError = true;
-                }
-                finally {
-                    __disposeResources(env_1);
-                }
+                const d1 = __addDisposableResource(env_1, d1_1, false);
+            }
+            catch (e_2) {
+                env_1.error = e_2;
+                env_1.hasError = true;
             }
             finally {
-                _d = true;
+                __disposeResources(env_1);
             }
         }
     }

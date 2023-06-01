@@ -9,3 +9,4 @@ let fnumber: number = f;
 === /src/node_modules/f.ts ===
 
 export = 10;
+

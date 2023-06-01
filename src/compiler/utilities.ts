@@ -294,6 +294,7 @@ import {
     isJSDocTypeTag,
     isJsxChild,
     isJsxFragment,
+    isJsxNamespacedName,
     isJsxOpeningLikeElement,
     isJsxText,
     isLeftHandSideExpression,
@@ -379,6 +380,7 @@ import {
     LiteralLikeNode,
     LogicalOperator,
     LogicalOrCoalescingAssignmentOperator,
+    mangleScopedPackageName,
     map,
     mapDefined,
     MapLike,
@@ -526,6 +528,7 @@ import {
     TypeAliasDeclaration,
     TypeAssertion,
     TypeChecker,
+    TypeCheckerHost,
     TypeElement,
     TypeFlags,
     TypeLiteralNode,
@@ -781,7 +784,37 @@ export function moduleResolutionIsEqualTo(oldResolution: ResolvedModuleWithFaile
         oldResolution.resolvedModule.extension === newResolution.resolvedModule.extension &&
         oldResolution.resolvedModule.resolvedFileName === newResolution.resolvedModule.resolvedFileName &&
         oldResolution.resolvedModule.originalPath === newResolution.resolvedModule.originalPath &&
-        packageIdIsEqual(oldResolution.resolvedModule.packageId, newResolution.resolvedModule.packageId);
+        packageIdIsEqual(oldResolution.resolvedModule.packageId, newResolution.resolvedModule.packageId) &&
+        oldResolution.node10Result === newResolution.node10Result;
+}
+
+/** @internal */
+export function createModuleNotFoundChain(sourceFile: SourceFile, host: TypeCheckerHost, moduleReference: string, mode: ResolutionMode, packageName: string) {
+    const node10Result = sourceFile.resolvedModules?.get(moduleReference, mode)?.node10Result;
+    const result = node10Result
+        ? chainDiagnosticMessages(
+            /*details*/ undefined,
+            Diagnostics.There_are_types_at_0_but_this_result_could_not_be_resolved_when_respecting_package_json_exports_The_1_library_may_need_to_update_its_package_json_or_typings,
+            node10Result,
+            node10Result.indexOf(nodeModulesPathPart + "@types/") > -1 ? `@types/${mangleScopedPackageName(packageName)}` : packageName)
+        : host.typesPackageExists(packageName)
+            ? chainDiagnosticMessages(
+                /*details*/ undefined,
+                Diagnostics.If_the_0_package_actually_exposes_this_module_consider_sending_a_pull_request_to_amend_https_Colon_Slash_Slashgithub_com_SlashDefinitelyTyped_SlashDefinitelyTyped_Slashtree_Slashmaster_Slashtypes_Slash_1,
+                packageName, mangleScopedPackageName(packageName))
+            : host.packageBundlesTypes(packageName)
+                ? chainDiagnosticMessages(
+                    /*details*/ undefined,
+                    Diagnostics.If_the_0_package_actually_exposes_this_module_try_adding_a_new_declaration_d_ts_file_containing_declare_module_1,
+                    packageName,
+                    moduleReference)
+                : chainDiagnosticMessages(
+                    /*details*/ undefined,
+                    Diagnostics.Try_npm_i_save_dev_types_Slash_1_if_it_exists_or_add_a_new_declaration_d_ts_file_containing_declare_module_0,
+                    moduleReference,
+                    mangleScopedPackageName(packageName));
+    if (result) result.repopulateInfo = () => ({ moduleReference, mode, packageName: packageName === moduleReference ? undefined : packageName });
+    return result;
 }
 
 function packageIdIsEqual(a: PackageId | undefined, b: PackageId | undefined): boolean {
@@ -1825,7 +1858,7 @@ function isCommonJSContainingModuleKind(kind: ModuleKind) {
 
 /** @internal */
 export function isEffectiveExternalModule(node: SourceFile, compilerOptions: CompilerOptions) {
-    return isExternalModule(node) || getIsolatedModules(compilerOptions) || (isCommonJSContainingModuleKind(getEmitModuleKind(compilerOptions)) && !!node.commonJsModuleIndicator);
+    return isExternalModule(node) || (isCommonJSContainingModuleKind(getEmitModuleKind(compilerOptions)) && !!node.commonJsModuleIndicator);
 }
 
 /**
@@ -2025,7 +2058,7 @@ export function isComputedNonLiteralName(name: PropertyName): boolean {
 }
 
 /** @internal */
-export function tryGetTextOfPropertyName(name: PropertyName | NoSubstitutionTemplateLiteral): __String | undefined {
+export function tryGetTextOfPropertyName(name: PropertyName | NoSubstitutionTemplateLiteral | JsxAttributeName): __String | undefined {
     switch (name.kind) {
         case SyntaxKind.Identifier:
         case SyntaxKind.PrivateIdentifier:
@@ -2037,13 +2070,15 @@ export function tryGetTextOfPropertyName(name: PropertyName | NoSubstitutionTemp
         case SyntaxKind.ComputedPropertyName:
             if (isStringOrNumericLiteralLike(name.expression)) return escapeLeadingUnderscores(name.expression.text);
             return undefined;
+        case SyntaxKind.JsxNamespacedName:
+            return getEscapedTextOfJsxNamespacedName(name);
         default:
             return Debug.assertNever(name);
     }
 }
 
 /** @internal */
-export function getTextOfPropertyName(name: PropertyName | NoSubstitutionTemplateLiteral): __String {
+export function getTextOfPropertyName(name: PropertyName | NoSubstitutionTemplateLiteral | JsxAttributeName): __String {
     return Debug.checkDefined(tryGetTextOfPropertyName(name));
 }
 
@@ -3097,7 +3132,7 @@ export function getEntityNameFromTypeNode(node: TypeNode): EntityNameOrEntityNam
 }
 
 /** @internal */
-export function getInvokedExpression(node: CallLikeExpression): Expression {
+export function getInvokedExpression(node: CallLikeExpression): Expression | JsxTagNameExpression {
     switch (node.kind) {
         case SyntaxKind.TaggedTemplateExpression:
             return node.tag;
@@ -4203,6 +4238,7 @@ export function canHaveJSDoc(node: Node): node is HasJSDoc {
         case SyntaxKind.PropertyDeclaration:
         case SyntaxKind.PropertySignature:
         case SyntaxKind.ReturnStatement:
+        case SyntaxKind.SemicolonClassElement:
         case SyntaxKind.SetAccessor:
         case SyntaxKind.ShorthandPropertyAssignment:
         case SyntaxKind.SpreadAssignment:
@@ -4221,7 +4257,29 @@ export function canHaveJSDoc(node: Node): node is HasJSDoc {
     }
 }
 
-/** @internal */
+/**
+ * This function checks multiple locations for JSDoc comments that apply to a host node.
+ * At each location, the whole comment may apply to the node, or only a specific tag in
+ * the comment. In the first case, location adds the entire {@link JSDoc} object. In the
+ * second case, it adds the applicable {@link JSDocTag}.
+ *
+ * For example, a JSDoc comment before a parameter adds the entire {@link JSDoc}. But a
+ * `@param` tag on the parent function only adds the {@link JSDocTag} for the `@param`.
+ *
+ * ```ts
+ * /** JSDoc will be returned for `a` *\/
+ * const a = 0
+ * /**
+ *  * Entire JSDoc will be returned for `b`
+ *  * @param c JSDocTag will be returned for `c`
+ *  *\/
+ * function b(/** JSDoc will be returned for `c` *\/ c) {}
+ * ```
+ */
+export function getJSDocCommentsAndTags(hostNode: Node): readonly (JSDoc | JSDocTag)[];
+/** @internal separate signature so that stripInternal can remove noCache from the public API */
+// eslint-disable-next-line @typescript-eslint/unified-signatures
+export function getJSDocCommentsAndTags(hostNode: Node, noCache?: boolean): readonly (JSDoc | JSDocTag)[];
 export function getJSDocCommentsAndTags(hostNode: Node, noCache?: boolean): readonly (JSDoc | JSDocTag)[] {
     let result: (JSDoc | JSDocTag)[] | undefined;
     // Pull parameter comments from declaring function as well
@@ -4954,7 +5012,7 @@ export function isDynamicName(name: DeclarationName): boolean {
 }
 
 /** @internal */
-export function getPropertyNameForPropertyNameNode(name: PropertyName): __String | undefined {
+export function getPropertyNameForPropertyNameNode(name: PropertyName | JsxAttributeName): __String | undefined {
     switch (name.kind) {
         case SyntaxKind.Identifier:
         case SyntaxKind.PrivateIdentifier:
@@ -4974,6 +5032,8 @@ export function getPropertyNameForPropertyNameNode(name: PropertyName): __String
                 return nameExpression.operand.text as __String;
             }
             return undefined;
+        case SyntaxKind.JsxNamespacedName:
+            return getEscapedTextOfJsxNamespacedName(name);
         default:
             return Debug.assertNever(name);
     }
@@ -4993,12 +5053,12 @@ export function isPropertyNameLiteral(node: Node): node is PropertyNameLiteral {
 }
 /** @internal */
 export function getTextOfIdentifierOrLiteral(node: PropertyNameLiteral | PrivateIdentifier): string {
-    return isMemberName(node) ? idText(node) : node.text;
+    return isMemberName(node) ? idText(node) : isJsxNamespacedName(node) ? getTextOfJsxNamespacedName(node) : node.text;
 }
 
 /** @internal */
 export function getEscapedTextOfIdentifierOrLiteral(node: PropertyNameLiteral): __String {
-    return isMemberName(node) ? node.escapedText : escapeLeadingUnderscores(node.text);
+    return isMemberName(node) ? node.escapedText : isJsxNamespacedName(node) ? getEscapedTextOfJsxNamespacedName(node) : escapeLeadingUnderscores(node.text);
 }
 
 /** @internal */
@@ -7030,7 +7090,7 @@ export function isPropertyAccessEntityNameExpression(node: Node): node is Proper
 }
 
 /** @internal */
-export function tryGetPropertyAccessOrIdentifierToString(expr: Expression): string | undefined {
+export function tryGetPropertyAccessOrIdentifierToString(expr: Expression | JsxTagNameExpression): string | undefined {
     if (isPropertyAccessExpression(expr)) {
         const baseStr = tryGetPropertyAccessOrIdentifierToString(expr.expression);
         if (baseStr !== undefined) {
@@ -7045,6 +7105,9 @@ export function tryGetPropertyAccessOrIdentifierToString(expr: Expression): stri
     }
     else if (isIdentifier(expr)) {
         return unescapeLeadingUnderscores(expr.escapedText);
+    }
+    else if (isJsxNamespacedName(expr)) {
+        return getTextOfJsxNamespacedName(expr);
     }
     return undefined;
 }

@@ -67,27 +67,22 @@ function main() {
         try {
             for (var _d = true, _e = __asyncValues([{ [Symbol.asyncDispose]() {
                         return __awaiter(this, void 0, void 0, function* () { });
-                    } }, { [Symbol.dispose]() { } }, null, undefined]), _f; _f = yield _e.next(), _a = _f.done, !_a;) {
+                    } }, { [Symbol.dispose]() { } }, null, undefined]), _f; _f = yield _e.next(), _a = _f.done, !_a; _d = true) {
                 _c = _f.value;
                 _d = false;
+                const d1_1 = _c;
+                const env_1 = { stack: [], error: void 0, hasError: false };
                 try {
-                    const d1_1 = _c;
-                    const env_1 = { stack: [], error: void 0, hasError: false };
-                    try {
-                        const d1 = __addDisposableResource(env_1, d1_1, true);
-                    }
-                    catch (e_2) {
-                        env_1.error = e_2;
-                        env_1.hasError = true;
-                    }
-                    finally {
-                        const result_1 = __disposeResources(env_1);
-                        if (result_1)
-                            yield result_1;
-                    }
+                    const d1 = __addDisposableResource(env_1, d1_1, true);
+                }
+                catch (e_2) {
+                    env_1.error = e_2;
+                    env_1.hasError = true;
                 }
                 finally {
-                    _d = true;
+                    const result_1 = __disposeResources(env_1);
+                    if (result_1)
+                        yield result_1;
                 }
             }
         }

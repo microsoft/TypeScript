@@ -26,6 +26,7 @@ try {
     z = __addDisposableResource(env_1, { [Symbol.dispose]() { } }, false);
     if (false) {
         var y = 1;
+        exports.y = y;
     }
 }
 catch (e_1) {

@@ -96,7 +96,7 @@ function main() {
         return __generator(this, function (_j) {
             switch (_j.label) {
                 case 0:
-                    _j.trys.push([0, 13, 14, 19]);
+                    _j.trys.push([0, 10, 11, 16]);
                     _d = true, _e = __asyncValues([(_g = {}, _g[Symbol.asyncDispose] = function () {
                             return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
                                 return [2 /*return*/];
@@ -105,55 +105,50 @@ function main() {
                     _j.label = 1;
                 case 1: return [4 /*yield*/, _e.next()];
                 case 2:
-                    if (!(_f = _j.sent(), _a = _f.done, !_a)) return [3 /*break*/, 12];
+                    if (!(_f = _j.sent(), _a = _f.done, !_a)) return [3 /*break*/, 9];
                     _c = _f.value;
                     _d = false;
-                    _j.label = 3;
-                case 3:
-                    _j.trys.push([3, , 10, 11]);
                     d1_1 = _c;
                     env_1 = { stack: [], error: void 0, hasError: false };
-                    _j.label = 4;
-                case 4:
-                    _j.trys.push([4, 5, 6, 9]);
+                    _j.label = 3;
+                case 3:
+                    _j.trys.push([3, 4, 5, 8]);
                     d1 = __addDisposableResource(env_1, d1_1, true);
-                    return [3 /*break*/, 9];
-                case 5:
+                    return [3 /*break*/, 8];
+                case 4:
                     e_2 = _j.sent();
                     env_1.error = e_2;
                     env_1.hasError = true;
-                    return [3 /*break*/, 9];
-                case 6:
+                    return [3 /*break*/, 8];
+                case 5:
                     result_1 = __disposeResources(env_1);
-                    if (!result_1) return [3 /*break*/, 8];
+                    if (!result_1) return [3 /*break*/, 7];
                     return [4 /*yield*/, result_1];
-                case 7:
+                case 6:
                     _j.sent();
-                    _j.label = 8;
-                case 8: return [7 /*endfinally*/];
-                case 9: return [3 /*break*/, 11];
-                case 10:
+                    _j.label = 7;
+                case 7: return [7 /*endfinally*/];
+                case 8:
                     _d = true;
-                    return [7 /*endfinally*/];
-                case 11: return [3 /*break*/, 1];
-                case 12: return [3 /*break*/, 19];
-                case 13:
+                    return [3 /*break*/, 1];
+                case 9: return [3 /*break*/, 16];
+                case 10:
                     e_1_1 = _j.sent();
                     e_1 = { error: e_1_1 };
-                    return [3 /*break*/, 19];
-                case 14:
-                    _j.trys.push([14, , 17, 18]);
-                    if (!(!_d && !_a && (_b = _e.return))) return [3 /*break*/, 16];
+                    return [3 /*break*/, 16];
+                case 11:
+                    _j.trys.push([11, , 14, 15]);
+                    if (!(!_d && !_a && (_b = _e.return))) return [3 /*break*/, 13];
                     return [4 /*yield*/, _b.call(_e)];
-                case 15:
+                case 12:
                     _j.sent();
-                    _j.label = 16;
-                case 16: return [3 /*break*/, 18];
-                case 17:
+                    _j.label = 13;
+                case 13: return [3 /*break*/, 15];
+                case 14:
                     if (e_1) throw e_1.error;
                     return [7 /*endfinally*/];
-                case 18: return [7 /*endfinally*/];
-                case 19: return [2 /*return*/];
+                case 15: return [7 /*endfinally*/];
+                case 16: return [2 /*return*/];
             }
         });
     });
