@@ -1,0 +1,22 @@
+=== tests/cases/compiler/monorepo/core/src/application.ts ===
+import { Constructor } from "@loopback/context";
+>Constructor : any
+
+export type ControllerClass = Constructor<any>;
+>ControllerClass : Constructor<any>
+
+=== tests/cases/compiler/monorepo/core/src/usage.ts ===
+import { ControllerClass } from './application';
+>ControllerClass : any
+
+import { BindingKey } from '@loopback/context';
+>BindingKey : any
+
+export const CONTROLLER_CLASS = BindingKey.create<ControllerClass>(null as any); // line in question
+>CONTROLLER_CLASS : any
+>BindingKey.create<ControllerClass>(null as any) : any
+>BindingKey.create : any
+>BindingKey : any
+>create : any
+>null as any : any
+
