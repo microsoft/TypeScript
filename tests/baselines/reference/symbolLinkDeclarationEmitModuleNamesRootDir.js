@@ -39,4 +39,6 @@ exports.CONTROLLER_CLASS = context_1.BindingKey.create(null); // line in questio
 import { Constructor } from "@loopback/context";
 export type ControllerClass = Constructor<any>;
 //// [usage.d.ts]
-export declare const CONTROLLER_CLASS: any;
+import { ControllerClass } from './application';
+import { BindingKey } from '@loopback/context';
+export declare const CONTROLLER_CLASS: BindingKey<ControllerClass>;
