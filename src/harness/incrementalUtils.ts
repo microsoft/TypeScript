@@ -73,7 +73,7 @@ function verifyDocumentRegistry(service: ts.server.ProjectService) {
     const collectStats = (project: ts.server.Project) => {
         if (project.autoImportProviderHost) collectStats(project.autoImportProviderHost);
         if (project.noDtsResolutionProject) collectStats(project.noDtsResolutionProject);
-        const program = project.getCurrentLSProgram();
+        const program = project.getCurrentProgram();
         if (!program) return;
         const key = service.documentRegistry.getKeyForCompilationSettings(program.getCompilerOptions());
         program.getSourceFiles().forEach(f => {

@@ -1341,6 +1341,7 @@ export class Session<TMessage = string> implements EventSender {
         this.logger.info(`cleaning ${caption}`);
         for (const p of projects) {
             p.getLanguageService(/*ensureSynchronized*/ false).cleanupSemanticCache();
+            p.cleanupProgram();
         }
     }
 

@@ -2643,6 +2643,7 @@ export class ProjectService {
     private clearSemanticCache(project: Project) {
         project.resolutionCache.clear();
         project.getLanguageService(/*ensureSynchronized*/ false).cleanupSemanticCache();
+        project.cleanupProgram();
         project.markAsDirty();
     }
 
