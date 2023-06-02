@@ -5,7 +5,6 @@ import {
     chainBundle,
     CompilerOptions,
     createEmitHelperFactory,
-    createNodeFactory,
     CustomTransformer,
     CustomTransformerFactory,
     CustomTransformers,
@@ -73,7 +72,7 @@ import {
     transformNodeModule,
     transformSystemModule,
     transformTypeScript,
-    VariableDeclaration,
+    VariableDeclaration
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
 
@@ -244,7 +243,7 @@ export function noEmitNotification(hint: EmitHint, node: Node, callback: (hint: 
  *
  * @internal
  */
-export function transformNodes<T extends Node>(resolver: EmitResolver | undefined, host: EmitHost | undefined, factoryIn: NodeFactory | undefined, options: CompilerOptions, nodes: readonly T[], transformers: readonly TransformerFactory<T>[], allowDtsFiles: boolean): TransformationResult<T> {
+export function transformNodes<T extends Node>(resolver: EmitResolver | undefined, host: EmitHost | undefined, factory: NodeFactory, options: CompilerOptions, nodes: readonly T[], transformers: readonly TransformerFactory<T>[], allowDtsFiles: boolean): TransformationResult<T> {
     const enabledSyntaxKindFeatures = new Array<SyntaxKindFeatureFlags>(SyntaxKind.Count);
     let lexicalEnvironmentVariableDeclarations: VariableDeclaration[];
     let lexicalEnvironmentFunctionDeclarations: FunctionDeclaration[];
@@ -268,7 +267,7 @@ export function transformNodes<T extends Node>(resolver: EmitResolver | undefine
     // The transformation context is provided to each transformer as part of transformer
     // initialization.
     const context: TransformationContext = {
-        factory: factoryIn ?? factory,
+        factory,
         getCompilerOptions: () => options,
         getEmitResolver: () => resolver!, // TODO: GH#18217
         getEmitHost: () => host!, // TODO: GH#18217
@@ -316,7 +315,7 @@ export function transformNodes<T extends Node>(resolver: EmitResolver | undefine
     performance.mark("beforeTransform");
 
     // Chain together and initialize each transformer.
-    const transformersWithContext = transformers.map(t => t(factoryIn ? context : createPerTransformerContext(t)));
+    const transformersWithContext = transformers.map(t => t(context));
     const transformation = (node: T): T => {
         for (const transform of transformersWithContext) {
             node = transform(node);
@@ -352,14 +351,6 @@ export function transformNodes<T extends Node>(resolver: EmitResolver | undefine
 
     function transformRoot(node: T) {
         return node && (!isSourceFile(node) || !node.isDeclarationFile) ? transformation(node) : node;
-    }
-
-    function createPerTransformerContext(t: TransformerFactory<T>) {
-        const perTransformerContext: TransformationContext = Object.create(context, {
-            factory: { value: createNodeFactory(context.factory.flags, context.factory.baseFactory, /*source*/ t) },
-            getEmitHelperFactory: { value: memoize(() => createEmitHelperFactory(perTransformerContext)) },
-        });
-        return perTransformerContext;
     }
 
     /**

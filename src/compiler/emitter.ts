@@ -854,7 +854,7 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
             return;
         }
         // Transform the source files
-        const transform = transformNodes(resolver, host, /*factoryIn*/ undefined, compilerOptions, [sourceFileOrBundle], scriptTransformers, /*allowDtsFiles*/ false);
+        const transform = transformNodes(resolver, host, factory, compilerOptions, [sourceFileOrBundle], scriptTransformers, /*allowDtsFiles*/ false);
 
         const printerOptions: PrinterOptions = {
             removeComments: compilerOptions.removeComments,

@@ -8273,12 +8273,6 @@ export interface NodeFactory {
     /** @internal */ readonly baseFactory: BaseNodeFactory;
     /** @internal */ readonly flags: NodeFactoryFlags;
 
-    /**
-     * The source of the factory, for debugging purposes. Usually a transformer function, but can be any value.
-     * @internal
-     */
-    source: unknown;
-
     createNodeArray<T extends Node>(elements?: readonly T[], hasTrailingComma?: boolean): NodeArray<T>;
 
     //

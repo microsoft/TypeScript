@@ -501,10 +501,10 @@ export function addNodeFactoryPatcher(fn: (factory: NodeFactory) => void) {
  * Creates a `NodeFactory` that can be used to create and update a syntax tree.
  * @param flags Flags that control factory behavior.
  * @param baseFactory A `BaseNodeFactory` used to create the base `Node` objects.
- * @param source The source of the factory, for debugging purposes. Usually a transformer function, but can be any value.
+ *
  * @internal
  */
-export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNodeFactory, source?: unknown): NodeFactory {
+export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNodeFactory): NodeFactory {
     const update = flags & NodeFactoryFlags.NoOriginalNode ? updateWithoutOriginal : updateWithOriginal;
 
     // Lazily load the parenthesizer, node converters, and some factory methods until they are used.
@@ -530,7 +530,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         get converters() { return converters(); },
         baseFactory,
         flags,
-        source,
         createNodeArray,
         createNumericLiteral,
         createBigIntLiteral,
