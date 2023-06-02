@@ -38531,8 +38531,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function isInstanceFieldWithInitializer(n: Node): boolean {
             return (
-                (n.kind === SyntaxKind.PropertyDeclaration ||
-                    n.kind === SyntaxKind.PrivateIdentifier) &&
+                n.kind === SyntaxKind.PropertyDeclaration &&
                 !isStatic(n) &&
                 !!(n as PropertyDeclaration).initializer
             );
