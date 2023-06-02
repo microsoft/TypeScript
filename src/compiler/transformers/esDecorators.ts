@@ -1210,7 +1210,6 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         TNode extends MethodDeclaration | PropertyDeclaration | GetAccessorDeclaration | SetAccessorDeclaration,
     >(
         member: TNode,
-        useNamedEvaluation: boolean,
         classInfo: ClassInfo | undefined,
         createDescriptor?: (node: TNode & { readonly name: PrivateIdentifier }, modifiers: ModifiersArray | undefined) => Expression
     ) {
@@ -1222,12 +1221,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         if (!classInfo) {
             const modifiers = visitNodes(member.modifiers, modifierVisitor, isModifier);
             enterName();
-            if (useNamedEvaluation) {
-                ({ referencedName, name } = visitReferencedPropertyName(member.name));
-            }
-            else {
-                name = visitPropertyName(member.name);
-            }
+            name = visitPropertyName(member.name);
             exitName();
             return { modifiers, referencedName, name, initializersName, descriptorName, thisArg };
         }
@@ -1369,12 +1363,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
 
         if (name === undefined) {
             enterName();
-            if (useNamedEvaluation) {
-                ({ referencedName, name } = visitReferencedPropertyName(member.name));
-            }
-            else {
-                name = visitPropertyName(member.name);
-            }
+            name = visitPropertyName(member.name);
             exitName();
         }
 
@@ -1389,7 +1378,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
 
     function visitMethodDeclaration(node: MethodDeclaration) {
         enterClassElement(node);
-        const { modifiers, name, descriptorName } = partialTransformClassElement(node, /*useNamedEvaluation*/ false, classInfo, createMethodDescriptorObject);
+        const { modifiers, name, descriptorName } = partialTransformClassElement(node, classInfo, createMethodDescriptorObject);
         if (descriptorName) {
             exitClassElement();
             return finishClassElement(createMethodDescriptorForwarder(modifiers, name, descriptorName), node);
@@ -1404,7 +1393,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
 
     function visitGetAccessorDeclaration(node: GetAccessorDeclaration) {
         enterClassElement(node);
-        const { modifiers, name, descriptorName } = partialTransformClassElement(node, /*useNamedEvaluation*/ false, classInfo, createGetAccessorDescriptorObject);
+        const { modifiers, name, descriptorName } = partialTransformClassElement(node, classInfo, createGetAccessorDescriptorObject);
         if (descriptorName) {
             exitClassElement();
             return finishClassElement(createGetAccessorDescriptorForwarder(modifiers, name, descriptorName), node);
@@ -1419,7 +1408,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
 
     function visitSetAccessorDeclaration(node: SetAccessorDeclaration) {
         enterClassElement(node);
-        const { modifiers, name, descriptorName } = partialTransformClassElement(node, /*useNamedEvaluation*/ false, classInfo, createSetAccessorDescriptorObject);
+        const { modifiers, name, descriptorName } = partialTransformClassElement(node, classInfo, createSetAccessorDescriptorObject);
         if (descriptorName) {
             exitClassElement();
             return finishClassElement(createSetAccessorDescriptorForwarder(modifiers, name, descriptorName), node);
@@ -1470,7 +1459,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         //        a. Let _value_ be ? NamedEvaluation of |Initializer| with argument _functionObject_.[[ClassFieldInitializerName]].
         //     ...
 
-        const { modifiers, name, initializersName, descriptorName, thisArg } = partialTransformClassElement(node, /*useNamedEvaluation*/ false, classInfo, hasAccessorModifier(node) ? createAccessorPropertyDescriptorObject : undefined);
+        const { modifiers, name, initializersName, descriptorName, thisArg } = partialTransformClassElement(node, classInfo, hasAccessorModifier(node) ? createAccessorPropertyDescriptorObject : undefined);
 
         startLexicalEnvironment();
 

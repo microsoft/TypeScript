@@ -577,6 +577,7 @@ export const runTests = task({
 // task("runtests").flags = {
 //     "-t --tests=<regex>": "Pattern for tests to run.",
 //     "   --failed": "Runs tests listed in '.failed-tests'.",
+//     "   --coverage": "Generate test coverage using c8",
 //     "-r --reporter=<reporter>": "The mocha reporter to use.",
 //     "-i --break": "Runs tests in inspector mode (NodeJS 8 and later)",
 //     "   --keepFailed": "Keep tests in .failed-tests even if they pass",

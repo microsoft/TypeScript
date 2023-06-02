@@ -63,6 +63,12 @@ import {
     VisitResult
 } from "../_namespaces/ts";
 
+const enum UsingKind {
+    None,
+    Sync,
+    Async,
+}
+
 /** @internal */
 export function transformESNext(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {
     const {
@@ -682,7 +688,7 @@ function getUsingKind(statement: Statement): UsingKind {
     return isVariableStatement(statement) ? getUsingKindOfVariableStatement(statement) : UsingKind.None;
 }
 
-function getUsingKindOfStatements(statements: readonly Statement[]/*, inAwaitContext: boolean*/): UsingKind {
+function getUsingKindOfStatements(statements: readonly Statement[]): UsingKind {
     let result = UsingKind.None;
     for (const statement of statements) {
         const usingKind = getUsingKind(statement);
@@ -692,7 +698,7 @@ function getUsingKindOfStatements(statements: readonly Statement[]/*, inAwaitCon
     return result;
 }
 
-function getUsingKindOfCaseOrDefaultClauses(clauses: readonly CaseOrDefaultClause[]/*, inAwaitContext: boolean*/): UsingKind {
+function getUsingKindOfCaseOrDefaultClauses(clauses: readonly CaseOrDefaultClause[]): UsingKind {
     let result = UsingKind.None;
     for (const clause of clauses) {
         const usingKind = getUsingKindOfStatements(clause.statements);
@@ -701,10 +707,3 @@ function getUsingKindOfCaseOrDefaultClauses(clauses: readonly CaseOrDefaultClaus
     }
     return result;
 }
-
-const enum UsingKind {
-    None,
-    Sync,
-    Async,
-}
-
