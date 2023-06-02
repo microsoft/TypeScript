@@ -134,6 +134,8 @@ import {
     getNormalizedAbsolutePathWithoutRoot,
     getNormalizedPathComponents,
     getOutputDeclarationFileName,
+    getOutputJSFileName,
+    getOutputJSFileNameWithoutConfigFile,
     getOutputPathsForBundle,
     getPackageScopeForPath,
     getPathFromPathComponents,
@@ -1336,6 +1338,16 @@ export function getImpliedNodeFormatForFileWorker(
     }
 }
 
+function moduleFormatNeedsPackageJsonLookup(fileName: string, options: CompilerOptions) {
+    switch (getEmitModuleResolutionKind(options)) {
+        case ModuleResolutionKind.Node16:
+        case ModuleResolutionKind.NodeNext:
+            return fileExtensionIsOneOf(fileName, [Extension.Dts, Extension.Ts, Extension.Tsx, Extension.Js, Extension.Jsx]);
+        default:
+            return false;
+    }
+}
+
 /** @internal */
 export const plainJSErrors: Set<number> = new Set([
     // binder errors
@@ -1491,6 +1503,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     let files: SourceFile[];
     let symlinks: SymlinkCache | undefined;
     let commonSourceDirectory: string;
+    let assumedCommonSourceDirectory: string | undefined;
     let typeChecker: TypeChecker;
     let classifiableNames: Set<__String>;
     const ambientModuleNameToUnmodifiedFileName = new Map<string, string>();
@@ -2053,6 +2066,10 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         return commonSourceDirectory;
     }
 
+    function getAssumedCommonSourceDirectory() {
+        return commonSourceDirectory ?? (assumedCommonSourceDirectory ??= ts_getCommonSourceDirectory(options, () => rootNames, host.getCurrentDirectory(), getCanonicalFileName));
+    }
+
     function getClassifiableNames() {
         if (!classifiableNames) {
             // Initialize a checker so that all our files are bound.
@@ -2367,7 +2384,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         const seenPackageNames = new Map<string, SeenPackageName>();
 
         for (const oldSourceFile of oldSourceFiles) {
-            const sourceFileOptions = getCreateSourceFileOptions(oldSourceFile.fileName, moduleResolutionCache, host, options);
+            const sourceFileOptions = getCreateSourceFileOptions(oldSourceFile.fileName);
             let newSourceFile = host.getSourceFileByPath
                 ? host.getSourceFileByPath(oldSourceFile.fileName, oldSourceFile.resolvedPath, sourceFileOptions, /*onError*/ undefined, shouldCreateNewSourceFile || sourceFileOptions.impliedNodeFormat !== oldSourceFile.impliedNodeFormat)
                 : host.getSourceFile(oldSourceFile.fileName, sourceFileOptions, /*onError*/ undefined, shouldCreateNewSourceFile || sourceFileOptions.impliedNodeFormat !== oldSourceFile.impliedNodeFormat); // TODO: GH#18217
@@ -3508,11 +3525,39 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         return result;
     }
 
-    function getCreateSourceFileOptions(fileName: string, moduleResolutionCache: ModuleResolutionCache | undefined, host: CompilerHost, options: CompilerOptions): CreateSourceFileOptions {
+    function getImpliedNodeFormatForFile(fileName: string) {
+        let fileNameForModuleFormatDetection = getNormalizedAbsolutePath(fileName, currentDirectory);
+        if (moduleFormatNeedsPackageJsonLookup(fileName, options)) {
+            const projectReference = getResolvedProjectReferenceToRedirect(fileName);
+            if (projectReference) {
+                const outputFile = getOutputJSFileName(
+                    fileNameForModuleFormatDetection,
+                    projectReference.commandLine,
+                    !host.useCaseSensitiveFileNames());
+                if (outputFile) {
+                    fileNameForModuleFormatDetection = outputFile;
+                }
+            }
+            else if (options.outDir) {
+                const outputFile = getOutputJSFileNameWithoutConfigFile(
+                    fileNameForModuleFormatDetection,
+                    options,
+                    !host.useCaseSensitiveFileNames(),
+                    currentDirectory,
+                    getAssumedCommonSourceDirectory);
+                if (outputFile) {
+                    fileNameForModuleFormatDetection = outputFile;
+                }
+            }
+        }
+        return getImpliedNodeFormatForFileWorker(fileNameForModuleFormatDetection, moduleResolutionCache?.getPackageJsonInfoCache(), host, options);
+    }
+
+    function getCreateSourceFileOptions(fileName: string): CreateSourceFileOptions {
         // It's a _little odd_ that we can't set `impliedNodeFormat` until the program step - but it's the first and only time we have a resolution cache
         // and a freshly made source file node on hand at the same time, and we need both to set the field. Persisting the resolution cache all the way
         // to the check and emit steps would be bad - so we much prefer detecting and storing the format information on the source file node upfront.
-        const result = getImpliedNodeFormatForFileWorker(getNormalizedAbsolutePath(fileName, currentDirectory), moduleResolutionCache?.getPackageJsonInfoCache(), host, options);
+        const result = getImpliedNodeFormatForFile(fileName);
         const languageVersion = getEmitScriptTarget(options);
         const setExternalModuleIndicator = getSetExternalModuleIndicator(options);
         return typeof result === "object" ?
@@ -3610,7 +3655,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
 
         // We haven't looked for this file, do so now and cache result
-        const sourceFileOptions = getCreateSourceFileOptions(fileName, moduleResolutionCache, host, options);
+        const sourceFileOptions = getCreateSourceFileOptions(fileName);
         const file = host.getSourceFile(
             fileName,
             sourceFileOptions,
@@ -4302,6 +4347,10 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             if (options.outDir && dir === "" && files.some(file => getRootLength(file.fileName) > 1)) {
                 createDiagnosticForOptionName(Diagnostics.Cannot_find_the_common_subdirectory_path_for_the_input_files, "outDir");
             }
+        }
+
+        if (assumedCommonSourceDirectory && assumedCommonSourceDirectory !== getCommonSourceDirectory()) {
+            programDiagnostics.add(createCompilerDiagnostic(Diagnostics.The_project_root_is_ambiguous_but_is_required_to_determine_the_module_format_of_output_js_files_Supply_the_rootDir_compiler_option_to_disambiguate));
         }
 
         if (options.useDefineForClassFields && languageVersion === ScriptTarget.ES3) {

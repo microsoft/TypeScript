@@ -1659,6 +1659,10 @@
         "category": "Message",
         "code": 2212
     },
+    "The project root is ambiguous, but is required to determine the module format of output '.js' files. Supply the `rootDir` compiler option to disambiguate.": {
+        "category": "Error",
+        "code": 2213
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",

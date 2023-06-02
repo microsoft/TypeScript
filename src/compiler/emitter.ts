@@ -596,7 +596,8 @@ export function getOutputDeclarationFileName(inputFileName: string, configFile: 
     );
 }
 
-function getOutputJSFileName(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean, getCommonSourceDirectory?: () => string) {
+/** @internal */
+export function getOutputJSFileName(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean, getCommonSourceDirectory?: () => string) {
     if (configFile.options.emitDeclarationOnly) return undefined;
     const isJsonFile = fileExtensionIs(inputFileName, Extension.Json);
     const outputFileName = changeExtension(
@@ -604,6 +605,23 @@ function getOutputJSFileName(inputFileName: string, configFile: ParsedCommandLin
         getOutputExtension(inputFileName, configFile.options)
     );
     return !isJsonFile || comparePaths(inputFileName, outputFileName, Debug.checkDefined(configFile.options.configFilePath), ignoreCase) !== Comparison.EqualTo ?
+        outputFileName :
+        undefined;
+}
+
+/** @internal */
+export function getOutputJSFileNameWithoutConfigFile(inputFileName: string, options: CompilerOptions, ignoreCase: boolean, currentDirectory: string, getCommonSourceDirectory: () => string) {
+    if (options.emitDeclarationOnly) return undefined;
+    const isJsonFile = fileExtensionIs(inputFileName, Extension.Json);
+    const outDir = options.outDir ? getNormalizedAbsolutePath(options.outDir, currentDirectory) : undefined;
+    const outputPathWithoutChangedExtension = outDir
+        ? resolvePath(outDir, getRelativePathFromDirectory(getCommonSourceDirectory(), inputFileName, ignoreCase))
+        : inputFileName;
+    const outputFileName = changeExtension(
+        outputPathWithoutChangedExtension,
+        getOutputExtension(inputFileName, options)
+    );
+    return !isJsonFile || !options.configFilePath || comparePaths(inputFileName, outputFileName, options.configFilePath, ignoreCase) !== Comparison.EqualTo ?
         outputFileName :
         undefined;
 }
