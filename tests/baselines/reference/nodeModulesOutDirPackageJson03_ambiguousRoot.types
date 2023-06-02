@@ -1,0 +1,15 @@
+=== /src/a.ts ===
+import { b } from "./b.js";
+>b : 0
+
+=== /src/b.ts ===
+export const b = 0;
+>b : 0
+>0 : 0
+
+export * from "../c.js";
+
+=== /c.ts ===
+
+export {};
+

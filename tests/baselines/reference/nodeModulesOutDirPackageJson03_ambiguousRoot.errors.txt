@@ -1,0 +1,26 @@
+error TS2213: The project root is ambiguous, but is required to determine the module format of output '.js' files. Supply the `rootDir` compiler option to disambiguate.
+
+
+!!! error TS2213: The project root is ambiguous, but is required to determine the module format of output '.js' files. Supply the `rootDir` compiler option to disambiguate.
+==== /tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "module": "nodenext",
+        "outDir": "out"
+      },
+      "include": ["src"]
+    }
+    
+==== /src/a.ts (0 errors) ====
+    import { b } from "./b.js";
+    
+==== /src/b.ts (0 errors) ====
+    export const b = 0;
+    export * from "../c.js";
+    
+==== /out/package.json (0 errors) ====
+    { "type": "module" }
+    
+==== /c.ts (0 errors) ====
+    export {};
+    

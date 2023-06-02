@@ -1,0 +1,9 @@
+=== /src/a.ts ===
+import { b } from "./b";
+>b : any
+
+=== /src/b.ts ===
+export const b = 0;
+>b : 0
+>0 : 0
+
