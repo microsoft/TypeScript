@@ -35,7 +35,6 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
     const keepFailed = cmdLineOptions.keepFailed;
     const shards = +cmdLineOptions.shards || undefined;
     const shardId = +cmdLineOptions.shardId || undefined;
-    const coverage = cmdLineOptions.coverage;
     if (!cmdLineOptions.dirty) {
         if (options.watching) {
             console.log(chalk.yellowBright(`[watch] cleaning test directories...`));
@@ -82,13 +81,6 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
 
     /** @type {string[]} */
     const args = [];
-
-    let execPath = process.execPath;
-    if (coverage) {
-        args.push("exec", "c8");
-        args.push(execPath);
-        execPath = "npm";
-    }
 
     // timeout normally isn't necessary but Travis-CI has been timing out on compiler baselines occasionally
     // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
@@ -139,7 +131,7 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
     try {
         setNodeEnvToDevelopment();
 
-        const { exitCode } = await exec(execPath, args, { token: options.token });
+        const { exitCode } = await exec(process.execPath, args, { token: options.token });
         if (exitCode !== 0) {
             errorStatus = exitCode;
             error = new Error(`Process exited with status code ${errorStatus}.`);
