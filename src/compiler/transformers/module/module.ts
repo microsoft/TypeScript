@@ -694,13 +694,13 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
     function topLevelNestedVisitor(node: Node): VisitResult<Node | undefined> {
         switch (node.kind) {
             case SyntaxKind.VariableStatement:
-                return visitTopLevelVariableStatement(node as VariableStatement);
+                return visitVariableStatement(node as VariableStatement);
 
             case SyntaxKind.FunctionDeclaration:
-                return visitTopLevelFunctionDeclaration(node as FunctionDeclaration);
+                return visitFunctionDeclaration(node as FunctionDeclaration);
 
             case SyntaxKind.ClassDeclaration:
-                return visitTopLevelClassDeclaration(node as ClassDeclaration);
+                return visitClassDeclaration(node as ClassDeclaration);
 
             case SyntaxKind.ForStatement:
                 return visitForStatement(node as ForStatement, /*isTopLevel*/ true);
@@ -1657,7 +1657,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      *
      * @param node The node to visit.
      */
-    function visitTopLevelFunctionDeclaration(node: FunctionDeclaration): VisitResult<Statement | undefined> {
+    function visitFunctionDeclaration(node: FunctionDeclaration): VisitResult<Statement | undefined> {
         let statements: Statement[] | undefined;
         if (hasSyntacticModifier(node, ModifierFlags.Export)) {
             statements = append(statements,
@@ -1691,7 +1691,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      *
      * @param node The node to visit.
      */
-    function visitTopLevelClassDeclaration(node: ClassDeclaration): VisitResult<Statement | undefined> {
+    function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement | undefined> {
         let statements: Statement[] | undefined;
         if (hasSyntacticModifier(node, ModifierFlags.Export)) {
             statements = append(statements,
@@ -1723,7 +1723,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      *
      * @param node The node to visit.
      */
-    function visitTopLevelVariableStatement(node: VariableStatement): VisitResult<Statement | undefined> {
+    function visitVariableStatement(node: VariableStatement): VisitResult<Statement | undefined> {
         let statements: Statement[] | undefined;
         let variables: VariableDeclaration[] | undefined;
         let expressions: Expression[] | undefined;
