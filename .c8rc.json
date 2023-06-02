@@ -2,5 +2,6 @@
     "reporter": ["lcovonly"],
     "src": "src",
     "include": ["src/**", "built/local/**"],
-    "exclude": ["**/node_modules/**"]
+    "exclude": ["**/node_modules/**"],
+    "mergeAsync": true
 }

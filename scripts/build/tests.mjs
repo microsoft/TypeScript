@@ -7,13 +7,14 @@ import path from "path";
 
 import { findUpFile, findUpRoot } from "./findUpDir.mjs";
 import cmdLineOptions from "./options.mjs";
-import { exec } from "./utils.mjs";
+import { exec, ExecError } from "./utils.mjs";
 
 const mochaJs = path.resolve(findUpRoot(), "node_modules", "mocha", "bin", "_mocha");
 export const localBaseline = "tests/baselines/local/";
 export const refBaseline = "tests/baselines/reference/";
 export const localRwcBaseline = "internal/baselines/rwc/local";
 export const refRwcBaseline = "internal/baselines/rwc/reference";
+export const coverageDir = "coverage";
 
 /**
  * @param {string} runJs
@@ -41,6 +42,7 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
             console.log(chalk.yellowBright(`[watch] cleaning test directories...`));
         }
         await cleanTestDirs();
+        await cleanCoverageDir();
 
         if (options.token?.signaled) {
             return;
@@ -82,13 +84,6 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
 
     /** @type {string[]} */
     const args = [];
-
-    // enable code coverage using 'c8'
-    let execPath = process.execPath;
-    if (coverage) {
-        args.push("exec", "c8", "--clean", execPath);
-        execPath = "npm";
-    }
 
     // timeout normally isn't necessary but Travis-CI has been timing out on compiler baselines occasionally
     // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
@@ -136,21 +131,29 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
     /** @type {Error | undefined} */
     let error;
 
+    const savedNodeEnv = process.env.NODE_ENV;
+    const savedNodeV8Coverage = process.env.NODE_V8_COVERAGE;
     try {
-        setNodeEnvToDevelopment();
+        process.env.NODE_ENV = "development";
+        if (coverage) {
+            await ensureCoverageDir();
+            process.env.NODE_V8_COVERAGE = path.resolve(coverageDir, "tmp");
+        }
 
-        const { exitCode } = await exec(execPath, args, { token: options.token });
-        if (exitCode !== 0) {
-            errorStatus = exitCode;
-            error = new Error(`Process exited with status code ${errorStatus}.`);
+        await exec(process.execPath, args, { token: options.token });
+        if (coverage) {
+            await exec("npm", ["exec", "c8", "report"], { token: options.token });
         }
     }
     catch (e) {
-        errorStatus = undefined;
+        errorStatus = e instanceof ExecError ? e.exitCode ?? undefined : undefined;
         error = /** @type {Error} */ (e);
     }
     finally {
-        restoreSavedNodeEnv();
+        if (coverage) {
+            process.env.NODE_V8_COVERAGE = savedNodeV8Coverage;
+        }
+        process.env.NODE_ENV = savedNodeEnv;
     }
 
     await del("test.config");
@@ -175,6 +178,14 @@ export async function cleanTestDirs() {
     await del([localBaseline, localRwcBaseline]);
     await fs.promises.mkdir(localRwcBaseline, { recursive: true });
     await fs.promises.mkdir(localBaseline, { recursive: true });
+}
+
+async function ensureCoverageDir() {
+    await fs.promises.mkdir(path.resolve(coverageDir, "tmp"), { recursive: true });
+}
+
+async function cleanCoverageDir() {
+    await del([coverageDir]);
 }
 
 /**
@@ -206,17 +217,6 @@ export function writeTestConfigFile(tests, runners, light, taskConfigsFolder, wo
     });
     console.info("Running tests with config: " + testConfigContents);
     fs.writeFileSync("test.config", testConfigContents);
-}
-
-/** @type {string | undefined} */
-let savedNodeEnv;
-function setNodeEnvToDevelopment() {
-    savedNodeEnv = process.env.NODE_ENV;
-    process.env.NODE_ENV = "development";
-}
-
-function restoreSavedNodeEnv() {
-    process.env.NODE_ENV = savedNodeEnv;
 }
 
 function deleteTemporaryProjectOutput() {
