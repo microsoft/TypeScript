@@ -1282,8 +1282,30 @@ export namespace TestCaseParser {
         // unit tests always list files explicitly
         const parseConfigHost: ts.ParseConfigHost = {
             useCaseSensitiveFileNames: false,
-            readDirectory: () => [],
-            fileExists: () => true,
+            readDirectory: (directory, extensions, excludes, includes, depth) => {
+                return ts.matchFiles(directory, extensions, excludes, includes, /*useCaseSensitiveFileNames*/ false, rootDir ?? "", depth, dir => {
+                    const files: string[] = [];
+                    const directories = new Set<string>();
+                    for (const unit of testUnitData) {
+                        if (unit.name.toLowerCase().startsWith(dir.toLowerCase())) {
+                            let path = unit.name.substring(dir.length);
+                            if (path.startsWith("/")) {
+                                path = path.substring(1);
+                            }
+                            if (path.includes("/")) {
+                                const directoryName = path.substring(0, path.indexOf("/"));
+                                directories.add(directoryName);
+                            }
+                            else {
+                                files.push(path);
+                            }
+                        }
+                    }
+                    return { files, directories: ts.arrayFrom(directories) };
+
+                }, ts.identity);
+            },
+            fileExists: fileName => testUnitData.some(data => data.name.toLowerCase() === fileName.toLowerCase()),
             readFile: (name) => ts.forEach(testUnitData, data => data.name.toLowerCase() === name.toLowerCase() ? data.content : undefined)
         };
 
