@@ -1,3 +1,8 @@
+=== tests/cases/compiler/index.ts ===
+export {srcthing as thing} from "./src/thing.js";
+>srcthing : () => void
+>thing : () => void
+
 === tests/cases/compiler/src/thing.ts ===
 // The following import should cause `index.ts`
 // to be included in the build, which will,
@@ -18,9 +23,4 @@ me.thing();
 export function srcthing(): void {}
 >srcthing : () => void
 
-
-=== tests/cases/compiler/index.ts ===
-export {srcthing as thing} from "./src/thing.js";
->srcthing : () => void
->thing : () => void
 
