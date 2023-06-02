@@ -129,7 +129,43 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
         const usingKind = getUsingKindOfStatements(node.statements);
         if (usingKind) {
             // Imports and exports must stay at the top level. This means we must hoist all imports, exports, and
-            // top-level function declarations and bindings out of the `try` statements we generate.
+            // top-level function declarations and bindings out of the `try` statements we generate. For example:
+            //
+            // given:
+            //
+            //  import { w } from "mod";
+            //  const x = expr1;
+            //  using y = expr2;
+            //  const z = expr3;
+            //  export function f() {
+            //    console.log(z);
+            //  }
+            //
+            // produces:
+            //
+            //  import { x } from "mod";        // <-- preserved
+            //  const x = expr1;                // <-- preserved
+            //  var y, z;                       // <-- hoisted
+            //  export function f() {           // <-- hoisted
+            //    console.log(z);
+            //  }
+            //  const env_1 = { stack: [], error: void 0, hasError: false };
+            //  try {
+            //    y = __addDisposableResource(env_1, expr2, false);
+            //    z = expr3;
+            //  }
+            //  catch (e_1) {
+            //    env_1.error = e_1;
+            //    env_1.hasError = true;
+            //  }
+            //  finally {
+            //    __disposeResource(env_1);
+            //  }
+            //
+            // In this transformation, we hoist `y`, `z`, and `f` to a new outer statement list while moving all other
+            // statements in the source file into the `try` block, which is the same approach we use for System module
+            // emit. Unlike System module emit, we attempt to preserve all statements prior to the first top-level
+            // `using` to isolate the complexity of the transformed output to only where it is necessary.
             startLexicalEnvironment();
 
             exportBindings = new IdentifierNameMap();
@@ -216,6 +252,18 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
 
     function visitForStatement(node: ForStatement): VisitResult<Statement> {
         if (node.initializer && isUsingVariableDeclarationList(node.initializer)) {
+            // given:
+            //
+            //  for (using x = expr; cond; incr) { ... }
+            //
+            // produces a shallow transformation to:
+            //
+            //  {
+            //    using x = expr;
+            //    for (; cond; incr) { ... }
+            //  }
+            //
+            // before handing the shallow transformation back to the visitor for an in-depth transformation.
             return visitNode(
                 factory.createBlock([
                     factory.createVariableStatement(/*modifiers*/ undefined, node.initializer),
@@ -237,6 +285,18 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
 
     function visitForOfStatement(node: ForOfStatement) {
         if (isUsingVariableDeclarationList(node.initializer)) {
+            // given:
+            //
+            //  for (using x of y) { ... }
+            //
+            // produces a shallow transformation to:
+            //
+            //  for (const x_1 of y) {
+            //    using x = x;
+            //    ...
+            //  }
+            //
+            // before handing the shallow transformation back to the visitor for an in-depth transformation.
             const forInitializer = node.initializer;
             Debug.assertNode(forInitializer, isUsingVariableDeclarationList);
             Debug.assert(forInitializer.declarations.length === 1, "ForInitializer may only have one declaration");
@@ -294,6 +354,30 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
     }
 
     function visitSwitchStatement(node: SwitchStatement) {
+        // given:
+        //
+        //  switch (expr) {
+        //    case expr:
+        //      using res = expr;
+        //  }
+        //
+        // produces:
+        //
+        //  const env_1 = { stack: [], error: void 0, hasError: false };
+        //  try {
+        //    switch(expr) {
+        //      case expr:
+        //        const res = __addDisposableResource(env_1, expr, false);
+        //    }
+        //  }
+        //  catch (e_1) {
+        //    env_1.error = e_1;
+        //    env_1.hasError = true;
+        //  }
+        //  finally {
+        //     __disposeResources(env_1);
+        //  }
+        //
         const usingKind = getUsingKindOfCaseOrDefaultClauses(node.caseBlock.clauses);
         if (usingKind) {
             const envBinding = createEnvBinding();
@@ -418,11 +502,11 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
             return node;
         }
 
-        // converts
+        // given:
         //
         //   export default expr;
         //
-        // to
+        // produces:
         //
         //   // top level
         //   var default_1;
@@ -453,11 +537,11 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
             return node;
         }
 
-        // converts
+        // given:
         //
         //   export = expr;
         //
-        // to
+        // produces:
         //
         //   // top level
         //   var default_1;
@@ -488,8 +572,32 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
         const isExported = hasSyntacticModifier(node, ModifierFlags.Export);
         const isDefault = hasSyntacticModifier(node, ModifierFlags.Default);
 
+        // When hoisting a class declaration at the top level of a file containing a top-level `using` statement, we
+        // must first convert it to a class expression so that we can hoist the binding outside of the `try`.
         let expression: Expression = factory.converters.convertToClassExpression(node);
         if (node.name) {
+            // given:
+            //
+            //  using x = expr;
+            //  class C {}
+            //
+            // produces:
+            //
+            //  var x, C;
+            //  const env_1 = { ... };
+            //  try {
+            //    x = __addDisposableResource(env_1, expr, false);
+            //    C = class {};
+            //  }
+            //  catch (e_1) {
+            //    env_1.error = e_1;
+            //    env_1.hasError = true;
+            //  }
+            //  finally {
+            //    __disposeResources(env_1);
+            //  }
+            //
+            // If the class is exported, we also produce an `export { C };`
             hoistBindingIdentifier(factory.getLocalName(node), isExported && !isDefault, /*exportAlias*/ undefined, node);
             expression = factory.createAssignment(factory.getDeclarationName(node), expression);
             if (isNamedEvaluation(expression)) {
@@ -501,6 +609,32 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
         }
 
         if (isDefault && !defaultExportBinding) {
+            // In the case of a default export, we create a temporary variable that we export as the default and then
+            // assign to that variable.
+            //
+            // given:
+            //
+            //  using x = expr;
+            //  export default class C {}
+            //
+            // produces:
+            //
+            //  export { default_1 as default };
+            //  var x, C, default_1;
+            //  const env_1 = { ... };
+            //  try {
+            //    x = __addDisposableResource(env_1, expr, false);
+            //    default_1 = C = class {};
+            //  }
+            //  catch (e_1) {
+            //    env_1.error = e_1;
+            //    env_1.hasError = true;
+            //  }
+            //  finally {
+            //    __disposeResources(env_1);
+            //  }
+            //
+            // Though we will never reassign `default_1`, this most closely matches the specified runtime semantics.
             defaultExportBinding = factory.createUniqueName("_default", GeneratedIdentifierFlags.ReservedInNestedScopes | GeneratedIdentifierFlags.FileLevel | GeneratedIdentifierFlags.Optimistic);
             hoistBindingIdentifier(defaultExportBinding, /*isExport*/ true, "default", node);
             expression = factory.createAssignment(defaultExportBinding, expression);
@@ -596,6 +730,11 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
 
     function createDownlevelUsingStatements(bodyStatements: readonly Statement[], envBinding: Identifier, async: boolean) {
         const statements: Statement[] = [];
+        
+        // produces:
+        //
+        //  const env_1 = { stack: [], error: void 0, hasError: false };
+        //
         const envObject = factory.createObjectLiteralExpression([
             factory.createPropertyAssignment("stack", factory.createArrayLiteralExpression()),
             factory.createPropertyAssignment("error", factory.createVoidZero()),
@@ -606,6 +745,37 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
         const envVarStatement = factory.createVariableStatement(/*modifiers*/ undefined, envVarList);
         statements.push(envVarStatement);
 
+        // when `async` is `false`, produces:
+        //
+        //  try {
+        //    <bodyStatements>
+        //  }
+        //  catch (e_1) {
+        //      env_1.error = e_1;
+        //      env_1.hasError = true;
+        //  }
+        //  finally {
+        //    __disposeResources(env_1);
+        //  }
+
+        // when `async` is `true`, produces:
+        //
+        //  try {
+        //    <bodyStatements>
+        //  }
+        //  catch (e_1) {
+        //      env_1.error = e_1;
+        //      env_1.hasError = true;
+        //  }
+        //  finally {
+        //    const result_1 = __disposeResources(env_1);
+        //    if (result_1) {
+        //      await result_1;
+        //    }
+        //  }
+
+        // Unfortunately, it is necessary to use two properties to indicate an error because `throw undefined` is legal
+        // JavaScript.
         const tryBlock = factory.createBlock(bodyStatements, /*multiLine*/ true);
         const bodyCatchBinding = factory.createUniqueName("e");
         const catchClause = factory.createCatchClause(
