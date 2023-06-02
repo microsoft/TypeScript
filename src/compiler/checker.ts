@@ -18800,8 +18800,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // If none of the type arguments for the outer type parameters contain type variables, it follows
                 // that the instantiated type doesn't reference type variables.
                 if (result.flags & TypeFlags.ObjectFlagsType && !((result as ObjectFlagsType).objectFlags & ObjectFlags.CouldContainTypeVariablesComputed)) {
-                    (result as ObjectFlagsType).objectFlags |= ObjectFlags.CouldContainTypeVariablesComputed |
-                        (some(typeArguments, couldContainTypeVariables) ? ObjectFlags.CouldContainTypeVariables : 0);
+                    const resultCouldContainTypeVariables = some(typeArguments, couldContainTypeVariables);
+                    // The above check may have caused the result's objectFlags to update if the result is referenced via typeArguments.
+                    if (!((result as ObjectFlagsType).objectFlags & ObjectFlags.CouldContainTypeVariablesComputed)) {
+                        (result as ObjectFlagsType).objectFlags |= ObjectFlags.CouldContainTypeVariablesComputed |
+                            (resultCouldContainTypeVariables ? ObjectFlags.CouldContainTypeVariables : 0);
+                    }
                 }
                 target.instantiations.set(id, result);
             }
