@@ -597,6 +597,7 @@ export namespace Compiler {
             if (error.relatedInformation) {
                 for (const info of error.relatedInformation) {
                     let location = info.file ? " " + ts.formatLocation(info.file, info.start!, formatDiagnsoticHost, ts.identity) : "";
+                    location = Utils.removeTestPathPrefixes(location);
                     if (location && isDefaultLibraryFile(info.file!.fileName)) {
                         location = location.replace(/(lib(?:.*)\.d\.ts):\d+:\d+/i, "$1:--:--");
                     }
@@ -641,7 +642,7 @@ export namespace Compiler {
 
 
             // Header
-            outputLines += (newLine() + "==== " + inputFile.unitName + " (" + fileErrors.length + " errors) ====");
+            outputLines += (newLine() + "==== " + Utils.removeTestPathPrefixes(inputFile.unitName) + " (" + fileErrors.length + " errors) ====");
 
             // Make sure we emit something for every error
             let markedErrorCount = 0;
@@ -1322,7 +1323,7 @@ export namespace TestCaseParser {
                 if (rootDir) {
                     baseDir = ts.getNormalizedAbsolutePath(baseDir, rootDir);
                 }
-                tsConfig = ts.parseJsonSourceFileConfigFileContent(configJson, parseConfigHost, baseDir, /*existingOptions*/ undefined, ts.getNormalizedAbsolutePath(data.name, baseDir));
+                tsConfig = ts.parseJsonSourceFileConfigFileContent(configJson, parseConfigHost, baseDir, /*existingOptions*/ undefined, ts.getNormalizedAbsolutePath(data.name, rootDir));
                 tsConfigFileUnitData = data;
 
                 // delete entry from the list
