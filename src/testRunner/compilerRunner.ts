@@ -13,6 +13,7 @@ import {
 } from "./_namespaces/Harness";
 import * as ts from "./_namespaces/ts";
 import * as Utils from "./_namespaces/Utils";
+import * as vfs from "./_namespaces/vfs";
 import * as vpath from "./_namespaces/vpath";
 
 export const enum CompilerTestType {
@@ -91,11 +92,12 @@ export class CompilerBaselineRunner extends RunnerBase {
         let compilerTest!: CompilerTest;
         before(() => {
             let payload;
+            let rootDir = ts.combinePaths(vfs.srcFolder, fileName.indexOf("conformance") === -1 ? "tests/cases/compiler/" : ts.getDirectoryPath(fileName) + "/");
             if (test && test.content) {
-                const rootDir = test.file.indexOf("conformance") === -1 ? "tests/cases/compiler/" : ts.getDirectoryPath(test.file) + "/";
+                rootDir = ts.combinePaths(vfs.srcFolder, test.file.indexOf("conformance") === -1 ? "tests/cases/compiler/" : ts.getDirectoryPath(test.file) + "/");
                 payload = TestCaseParser.makeUnitsFromTest(test.content, test.file, rootDir);
             }
-            compilerTest = new CompilerTest(fileName, payload, configuration);
+            compilerTest = new CompilerTest(fileName, rootDir, payload, configuration);
         });
         it(`Correct errors for ${fileName}`, () => compilerTest.verifyDiagnostics());
         it(`Correct module resolution tracing for ${fileName}`, () => compilerTest.verifyModuleResolution());
@@ -177,7 +179,7 @@ class CompilerTest {
     // equivalent to other files on the file system not directly passed to the compiler (ie things that are referenced by other files)
     private otherFiles: Compiler.TestFile[];
 
-    constructor(fileName: string, testCaseContent?: TestCaseParser.TestCaseContent, configurationOverrides?: TestCaseParser.CompilerSettings) {
+    constructor(fileName: string, rootDir: string, testCaseContent?: TestCaseParser.TestCaseContent, configurationOverrides?: TestCaseParser.CompilerSettings) {
         this.fileName = fileName;
         this.justName = vpath.basename(fileName);
         this.configuredName = this.justName;
@@ -199,8 +201,6 @@ class CompilerTest {
             }
         }
 
-        const rootDir = fileName.indexOf("conformance") === -1 ? "tests/cases/compiler/" : ts.getDirectoryPath(fileName) + "/";
-
         if (testCaseContent === undefined) {
             testCaseContent = TestCaseParser.makeUnitsFromTest(IO.readFile(fileName)!, fileName, rootDir);
         }
@@ -218,9 +218,9 @@ class CompilerTest {
         this.tsConfigFiles = [];
         if (testCaseContent.tsConfig) {
             tsConfigOptions = ts.cloneCompilerOptions(testCaseContent.tsConfig.options);
-            this.tsConfigFiles.push(this.createHarnessTestFile(testCaseContent.tsConfigFileUnitData!, rootDir, ts.combinePaths(rootDir, tsConfigOptions.configFilePath)));
+            this.tsConfigFiles.push(this.createHarnessTestFile(testCaseContent.tsConfigFileUnitData!, rootDir, tsConfigOptions.configFilePath));
             for (const unit of units) {
-                if (testCaseContent.tsConfig.fileNames.includes(unit.name)) {
+                if (testCaseContent.tsConfig.fileNames.includes(ts.getNormalizedAbsolutePath(unit.name, rootDir))) {
                     this.toBeCompiled.push(this.createHarnessTestFile(unit, rootDir));
                 }
                 else {

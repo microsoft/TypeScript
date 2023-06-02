@@ -1283,12 +1283,13 @@ export namespace TestCaseParser {
         const parseConfigHost: ts.ParseConfigHost = {
             useCaseSensitiveFileNames: false,
             readDirectory: (directory, extensions, excludes, includes, depth) => {
-                return ts.matchFiles(directory, extensions, excludes, includes, /*useCaseSensitiveFileNames*/ false, rootDir ?? "", depth, dir => {
+                return ts.matchFiles(directory, extensions, excludes, includes, /*useCaseSensitiveFileNames*/ false, "", depth, dir => {
                     const files: string[] = [];
                     const directories = new Set<string>();
                     for (const unit of testUnitData) {
-                        if (unit.name.toLowerCase().startsWith(dir.toLowerCase())) {
-                            let path = unit.name.substring(dir.length);
+                        const unitName = ts.getNormalizedAbsolutePath(unit.name, rootDir);
+                        if (unitName.toLowerCase().startsWith(dir.toLowerCase())) {
+                            let path = unitName.substring(dir.length);
                             if (path.startsWith("/")) {
                                 path = path.substring(1);
                             }
@@ -1321,8 +1322,7 @@ export namespace TestCaseParser {
                 if (rootDir) {
                     baseDir = ts.getNormalizedAbsolutePath(baseDir, rootDir);
                 }
-                tsConfig = ts.parseJsonSourceFileConfigFileContent(configJson, parseConfigHost, baseDir);
-                tsConfig.options.configFilePath = data.name;
+                tsConfig = ts.parseJsonSourceFileConfigFileContent(configJson, parseConfigHost, baseDir, /*existingOptions*/ undefined, ts.getNormalizedAbsolutePath(data.name, baseDir));
                 tsConfigFileUnitData = data;
 
                 // delete entry from the list
