@@ -142,7 +142,7 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
 
         await exec(process.execPath, args, { token: options.token });
         if (coverage) {
-            await exec("npm", ["exec", "c8", "report"], { token: options.token });
+            await exec("npm", ["--prefer-offline", "exec", "--", "c8", "report"], { token: options.token });
         }
     }
     catch (e) {
