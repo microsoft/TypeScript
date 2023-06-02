@@ -57,7 +57,7 @@ interface Array<T> {
 
     /**
      * Copies an array, then overwrites the value at the provided index with the
-     * given value. If the index is negative, then it replaces from the start
+     * given value. If the index is negative, then it replaces from the end
      * of the array.
      * @param index The index of the value to overwrite. If the index is
      * negative, then it replaces from the end of the array.
