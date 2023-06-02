@@ -8,7 +8,7 @@ tests/cases/conformance/jsdoc/declarations/index.js(4,1): error TS6232: Declarat
     module.exports.memberName = "thing";
     ~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS6232: Declaration augments declaration in another file. This cannot be serialized.
-!!! related TS6233 /.src/tests/cases/conformance/jsdoc/declarations/exporter.js:1:10: This is the declaration being augmented. Consider moving the augmenting declaration into the same file.
+!!! related TS6233 tests/cases/conformance/jsdoc/declarations/exporter.js:1:10: This is the declaration being augmented. Consider moving the augmenting declaration into the same file.
     
 ==== tests/cases/conformance/jsdoc/declarations/exporter.js (0 errors) ====
     function validate() {}

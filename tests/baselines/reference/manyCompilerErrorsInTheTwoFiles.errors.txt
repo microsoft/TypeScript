@@ -128,5 +128,5 @@
 Found 19 errors in 2 files.
 
 Errors  Files
-    16  /.src/tests/cases/compiler/a.ts[90m:1[0m
-     3  /.src/tests/cases/compiler/b.ts[90m:1[0m
+    16  tests/cases/compiler/a.ts[90m:1[0m
+     3  tests/cases/compiler/b.ts[90m:1[0m

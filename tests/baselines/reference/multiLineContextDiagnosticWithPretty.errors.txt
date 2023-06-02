@@ -15,5 +15,5 @@
         }
     };
     
-Found 1 error in /.src/tests/cases/compiler/multiLineContextDiagnosticWithPretty.ts[90m:2[0m
+Found 1 error in tests/cases/compiler/multiLineContextDiagnosticWithPretty.ts[90m:2[0m
 
