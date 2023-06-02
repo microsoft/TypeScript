@@ -4,6 +4,7 @@ import {
     CallExpression,
     createPrinterWithRemoveComments,
     Debug,
+    ElementFlags,
     EmitHint,
     EnumMember,
     equateStringsCaseInsensitive,
@@ -44,6 +45,7 @@ import {
     isParameterDeclaration,
     isPropertyAccessExpression,
     isPropertyDeclaration,
+    isSpreadElement,
     isTypeNode,
     isVarConst,
     isVariableDeclaration,
@@ -61,6 +63,7 @@ import {
     SymbolFlags,
     SyntaxKind,
     textSpanIntersectsWith,
+    TupleTypeReference,
     Type,
     TypeFormatFlags,
     unescapeLeadingUnderscores,
@@ -226,14 +229,14 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
             return;
         }
 
-        for (let i = 0; i < args.length; ++i) {
-            const originalArg = args[i];
+        let pos = 0;
+        for (const originalArg of args) {
             const arg = skipParentheses(originalArg);
             if (shouldShowLiteralParameterNameHintsOnly(preferences) && !isHintableLiteral(arg)) {
                 continue;
             }
 
-            const identifierNameInfo = checker.getParameterIdentifierNameAtPosition(signature, i);
+            const identifierNameInfo = checker.getParameterIdentifierNameAtPosition(signature, pos++);
             if (identifierNameInfo) {
                 const [parameterName, isFirstVariadicArgument] = identifierNameInfo;
                 const isParameterNameNotSameAsArgument = preferences.includeInlayParameterNameHintsWhenArgumentMatchesName || !identifierOrAccessExpressionPostfixMatchesParameterName(arg, parameterName);
@@ -244,6 +247,18 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                 const name = unescapeLeadingUnderscores(parameterName);
                 if (leadingCommentsContainsParameterName(arg, name)) {
                     continue;
+                }
+
+                if (isSpreadElement(arg)) {
+                    const spreadType = checker.getTypeAtLocation(arg.expression);
+                    if (checker.isTupleType(spreadType)) {
+                        const { fixedLength, elementFlags } = (spreadType as TupleTypeReference).target;
+                        for (let i = pos; i < fixedLength; i++) {
+                            if (elementFlags[i] & ElementFlags.Required) {
+                                pos++;
+                            }
+                        }
+                    }
                 }
 
                 addParameterHints(name, originalArg.getStart(), isFirstVariadicArgument);
