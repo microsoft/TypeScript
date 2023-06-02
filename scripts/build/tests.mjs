@@ -136,7 +136,6 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
     try {
         process.env.NODE_ENV = "development";
         if (coverage) {
-            await ensureCoverageDir();
             process.env.NODE_V8_COVERAGE = path.resolve(coverageDir, "tmp");
         }
 
@@ -178,10 +177,6 @@ export async function cleanTestDirs() {
     await del([localBaseline, localRwcBaseline]);
     await fs.promises.mkdir(localRwcBaseline, { recursive: true });
     await fs.promises.mkdir(localBaseline, { recursive: true });
-}
-
-async function ensureCoverageDir() {
-    await fs.promises.mkdir(path.resolve(coverageDir, "tmp"), { recursive: true });
 }
 
 async function cleanCoverageDir() {
