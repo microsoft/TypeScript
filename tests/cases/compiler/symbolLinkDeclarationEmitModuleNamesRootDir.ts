@@ -30,4 +30,4 @@ import { BindingKey } from '@loopback/context';
 
 export const CONTROLLER_CLASS = BindingKey.create<ControllerClass>(null as any); // line in question
 
-// @link: tests/cases/compiler/monorepo/context -> tests/cases/compiler/monorepo/core/node_modules/@loopback/context
+// @link: monorepo/context -> monorepo/core/node_modules/@loopback/context
