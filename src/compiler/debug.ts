@@ -90,7 +90,7 @@ import {
     TypeMapper,
     unescapeLeadingUnderscores,
     VarianceFlags,
-    zipWith
+    zipWith,
 } from "./_namespaces/ts";
 
 /** @internal */
