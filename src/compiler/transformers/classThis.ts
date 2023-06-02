@@ -46,8 +46,6 @@ export function createClassThisAssignmentBlock(factory: NodeFactory, classThis: 
     // and to stash the variable used for `_classThis`.
     getOrCreateEmitNode(block).classThis = classThis;
 
-    // TODO(rbuckton): For debugging, remove before commit.
-    // Debug.tag(block, factory, { trace: true, stackTraceLimit: 10, counter: "classThis" });
     return block as ClassThisAssignmentBlock;
 }
 

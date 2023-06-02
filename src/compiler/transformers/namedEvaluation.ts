@@ -113,9 +113,6 @@ export function createClassNamedEvaluationHelperBlock(context: TransformationCon
     // We use `emitNode.assignedName` to indicate this is a NamedEvaluation helper block
     // and to stash the expression used to resolve the assigned name.
     getOrCreateEmitNode(block).assignedName = assignedName;
-
-    // TODO(rbuckton): For debugging, remove before commit.
-    // Debug.tag(block, factory, { trace: true, stackTraceLimit: 10, counter: "namedEvaluation" });
     return block as ClassNamedEvaluationHelperBlock;
 }
 
