@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -54,19 +55,15 @@ Shape signatures in builder refreshed for::
 /b.d.css.ts (used version)
 /a.ts (used version)
 
-PolledWatches::
-
 FsWatches::
-/tsconfig.json:
+/a.ts: *new*
   {}
-/a.ts:
+/a/lib/lib.d.ts: *new*
   {}
-/b.d.css.ts:
+/b.d.css.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/tsconfig.json: *new*
   {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -83,6 +80,9 @@ Input::
 {"compilerOptions":{"allowArbitraryExtensions":false},"files":["/a.ts"]}
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:21 AM[0m] File change detected. Starting incremental compilation...
@@ -109,17 +109,17 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a.ts (computed .d.ts)
 
-PolledWatches::
-
 FsWatches::
-/tsconfig.json:
-  {}
 /a.ts:
   {}
 /a/lib/lib.d.ts:
   {}
+/tsconfig.json:
+  {}
 
-FsWatchesRecursive::
+FsWatches *deleted*::
+/b.d.css.ts:
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -132,6 +132,9 @@ Input::
 {"compilerOptions":{"allowArbitraryExtensions":true},"files":["/a.ts"]}
 
 
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:28 AM[0m] File change detected. Starting incremental compilation...
@@ -162,19 +165,15 @@ Shape signatures in builder refreshed for::
 /b.d.css.ts (used version)
 /a.ts (computed .d.ts)
 
-PolledWatches::
-
 FsWatches::
-/tsconfig.json:
-  {}
 /a.ts:
   {}
 /a/lib/lib.d.ts:
   {}
-/b.d.css.ts:
+/b.d.css.ts: *new*
   {}
-
-FsWatchesRecursive::
+/tsconfig.json:
+  {}
 
 exitCode:: ExitStatus.undefined
 

@@ -238,7 +238,6 @@ _.all([true, 1, null, 'yes'], _.identity);
 >[true, 1, null, 'yes'] : (string | number | true)[]
 >true : true
 >1 : 1
->null : null
 >'yes' : "yes"
 >_.identity : <T>(value: T) => T
 >_ : Underscore.Static
@@ -250,7 +249,6 @@ _.any([null, 0, 'yes', false]);
 >_ : Underscore.Static
 >any : { <T>(list: T[], iterator?: Iterator_<T, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator_<T, boolean>, context?: any): boolean; }
 >[null, 0, 'yes', false] : (string | number | false)[]
->null : null
 >0 : 0
 >'yes' : "yes"
 >false : false
@@ -942,7 +940,6 @@ $(null).scroll(throttled);
 >$(null).scroll : any
 >$(null) : any
 >$ : any
->null : null
 >scroll : any
 >throttled : () => void
 
@@ -967,7 +964,6 @@ $(null).resize(lazyLayout);
 >$(null).resize : any
 >$(null) : any
 >$ : any
->null : null
 >resize : any
 >lazyLayout : () => void
 
@@ -1434,7 +1430,6 @@ _.isBoolean(null);
 >_.isBoolean : (object: any) => boolean
 >_ : Underscore.Static
 >isBoolean : (object: any) => boolean
->null : null
 
 _.isDate(new Date());
 >_.isDate(new Date()) : boolean
@@ -1475,7 +1470,6 @@ _.isNull(null);
 >_.isNull : (object: any) => boolean
 >_ : Underscore.Static
 >isNull : (object: any) => boolean
->null : null
 
 _.isNull(undefined);
 >_.isNull(undefined) : boolean
@@ -1492,7 +1486,6 @@ _.isUndefined((<any>null).missingVariable);
 >(<any>null).missingVariable : any
 >(<any>null) : any
 ><any>null : any
->null : null
 >missingVariable : any
 
 ///////////////////////////////////////////////////////////////////////////////////////

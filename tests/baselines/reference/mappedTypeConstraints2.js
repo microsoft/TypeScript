@@ -47,6 +47,16 @@ function validate<T extends object>(obj: T, bounds: NumericBoundsOf<T>) {
     return true;
 }
 
+// repro from #50030
+
+type ObjectWithUnderscoredKeys<K extends string> = {
+    [k in K as `_${k}`]: true;
+};
+
+function genericTest<K extends string>(objectWithUnderscoredKeys: ObjectWithUnderscoredKeys<K>, key: K) {
+  const shouldBeTrue: true = objectWithUnderscoredKeys[`_${key}`];
+}
+
 
 //// [mappedTypeConstraints2.js]
 "use strict";
@@ -70,6 +80,9 @@ function validate(obj, bounds) {
         }
     }
     return true;
+}
+function genericTest(objectWithUnderscoredKeys, key) {
+    const shouldBeTrue = objectWithUnderscoredKeys[`_${key}`];
 }
 
 
@@ -104,3 +117,7 @@ type NumericBoundsOf<T> = {
     [K in keyof T as T[K] extends number | undefined ? K : never]: Bounds;
 };
 declare function validate<T extends object>(obj: T, bounds: NumericBoundsOf<T>): boolean;
+type ObjectWithUnderscoredKeys<K extends string> = {
+    [k in K as `_${k}`]: true;
+};
+declare function genericTest<K extends string>(objectWithUnderscoredKeys: ObjectWithUnderscoredKeys<K>, key: K): void;

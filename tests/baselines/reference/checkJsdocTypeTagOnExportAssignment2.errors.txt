@@ -13,7 +13,7 @@ tests/cases/compiler/b.js(2,18): error TS2322: Type '{ c: boolean; }' is not ass
 ==== tests/cases/compiler/b.js (1 errors) ====
     /** @type {import("./a").Foo} */
     export default { c: false };
-                     ~~~~~~~~
+                     ~
 !!! error TS2322: Type '{ c: boolean; }' is not assignable to type 'Foo'.
 !!! error TS2322:   Object literal may only specify known properties, and 'c' does not exist in type 'Foo'.
     

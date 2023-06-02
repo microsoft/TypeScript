@@ -1,14 +1,14 @@
-import { libContent } from "../tsc/helpers";
+import { libContent } from "../helpers/contents";
+import {
+    TscWatchCompileChange,
+    verifyTscWatch,
+} from "../helpers/tscWatch";
 import {
     createWatchedSystem,
     File,
     getTsBuildProjectFile,
     libFile,
-} from "../virtualFileSystemWithWatch";
-import {
-    TscWatchCompileChange,
-    verifyTscWatch,
-} from "./helpers";
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsc-watch:: Emit times and Error updates in builder after program changes", () => {
     const config: File = {
@@ -350,14 +350,14 @@ export class Data2 {
                 caption,
                 edit: sys => sys.writeFile(`/user/username/projects/noEmitOnError/src/main.ts`, content),
                 // build project
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1)
+                timeouts: sys => sys.runQueuedTimeoutCallbacks()
             };
         }
         const noChange: TscWatchCompileChange = {
             caption: "No change",
             edit: sys => sys.writeFile(`/user/username/projects/noEmitOnError/src/main.ts`, sys.readFile(`/user/username/projects/noEmitOnError/src/main.ts`)!),
             // build project
-            timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+            timeouts: sys => sys.runQueuedTimeoutCallbacks(),
         };
         verifyEmitAndErrorUpdates({
             subScenario: "with noEmitOnError",

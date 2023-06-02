@@ -113,7 +113,7 @@ module m2 {
 }
 
 //// [es6ModuleClassDeclaration.js]
-class c {
+export class c {
     constructor() {
         this.x = 10;
         this.y = 30;
@@ -129,7 +129,6 @@ class c {
 }
 c.k = 20;
 c.l = 30;
-export { c };
 class c2 {
     constructor() {
         this.x = 10;

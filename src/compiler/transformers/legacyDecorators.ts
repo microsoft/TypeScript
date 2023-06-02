@@ -26,7 +26,6 @@ import {
     GetAccessorDeclaration,
     getAllDecoratorsOfClass,
     getAllDecoratorsOfClassElement,
-    getEmitFlags,
     getEmitScriptTarget,
     getOriginalNodeId,
     groupBy,
@@ -38,13 +37,16 @@ import {
     isBlock,
     isCallToHelper,
     isClassElement,
+    isClassStaticBlockDeclaration,
     isComputedPropertyName,
     isDecorator,
+    isExportOrDefaultModifier,
     isExpression,
     isGeneratedIdentifier,
     isHeritageClause,
     isIdentifier,
     isModifier,
+    isModifierLike,
     isParameter,
     isPrivateIdentifier,
     isPropertyDeclaration,
@@ -53,6 +55,7 @@ import {
     isStatic,
     map,
     MethodDeclaration,
+    Modifier,
     ModifierFlags,
     moveRangePastModifiers,
     Node,
@@ -149,19 +152,13 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
     }
 
     function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
-        if (!(classOrConstructorParameterIsDecorated(/*legacyDecorators*/ true, node) || childIsDecorated(/*legacyDecorators*/ true, node))) {
+        if (!(classOrConstructorParameterIsDecorated(/*useLegacyDecorators*/ true, node) || childIsDecorated(/*useLegacyDecorators*/ true, node))) {
             return visitEachChild(node, visitor, context);
         }
 
         const statements = classOrConstructorParameterIsDecorated(/*useLegacyDecorators*/ true, node) ?
             transformClassDeclarationWithClassDecorators(node, node.name) :
             transformClassDeclarationWithoutClassDecorators(node, node.name);
-
-        if (statements.length > 1) {
-            // Add a DeclarationMarker as a marker for the end of the declaration
-            statements.push(factory.createEndOfDeclarationMarker(node));
-            setEmitFlags(statements[0], getEmitFlags(statements[0]) | EmitFlags.HasEndOfDeclarationMarker);
-        }
 
         return singleOrMany(statements);
     }
@@ -321,12 +318,16 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
         //  ---------------------------------------------------------------------
         //
 
+        const isExport = hasSyntacticModifier(node, ModifierFlags.Export);
+        const isDefault = hasSyntacticModifier(node, ModifierFlags.Default);
+        const modifiers = visitNodes(node.modifiers, node => isExportOrDefaultModifier(node) || isDecorator(node) ? undefined : node, isModifierLike);
+
         const location = moveRangePastModifiers(node);
         const classAlias = getClassAliasIfNeeded(node);
 
         // When we transform to ES5/3 this will be moved inside an IIFE and should reference the name
         // without any block-scoped variable collision handling
-        const declName = languageVersion <= ScriptTarget.ES2015 ?
+        const declName = languageVersion < ScriptTarget.ES2015 ?
             factory.getInternalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true) :
             factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
 
@@ -339,8 +340,29 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
         let decorationStatements: Statement[] | undefined = [];
         ({ members, decorationStatements } = transformDecoratorsOfClassElements(node, members));
 
+        // If we're emitting to ES2022 or later then we need to reassign the class alias before
+        // static initializers are evaluated.
+        const assignClassAliasInStaticBlock =
+            languageVersion >= ScriptTarget.ES2022 &&
+            !!classAlias &&
+            some(members, member =>
+                isPropertyDeclaration(member) && hasSyntacticModifier(member, ModifierFlags.Static) ||
+                isClassStaticBlockDeclaration(member));
+        if (assignClassAliasInStaticBlock) {
+            members = setTextRange(factory.createNodeArray([
+                factory.createClassStaticBlockDeclaration(
+                    factory.createBlock([
+                        factory.createExpressionStatement(
+                            factory.createAssignment(classAlias, factory.createThis())
+                        )
+                    ])
+                ),
+                ...members
+            ]), members);
+        }
+
         const classExpression = factory.createClassExpression(
-            /*modifiers*/ undefined,
+            modifiers,
             name && isGeneratedIdentifier(name) ? undefined : name,
             /*typeParameters*/ undefined,
             heritageClauses,
@@ -351,15 +373,23 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
 
         //  let ${name} = ${classExpression} where name is either declaredName if the class doesn't contain self-reference
         //                                         or decoratedClassAlias if the class contain self-reference.
+        const varDecl = factory.createVariableDeclaration(
+            declName,
+            /*exclamationToken*/ undefined,
+            /*type*/ undefined,
+            classAlias && !assignClassAliasInStaticBlock ? factory.createAssignment(classAlias, classExpression) : classExpression
+        );
+        setOriginalNode(varDecl, node);
+
+        let varModifiers: Modifier[] | undefined;
+        if (isExport && !isDefault) {
+            varModifiers = factory.createModifiersFromModifierFlags(ModifierFlags.Export);
+        }
+
         const statement = factory.createVariableStatement(
-            /*modifiers*/ undefined,
+            varModifiers,
             factory.createVariableDeclarationList([
-                factory.createVariableDeclaration(
-                    declName,
-                    /*exclamationToken*/ undefined,
-                    /*type*/ undefined,
-                    classAlias ? factory.createAssignment(classAlias, classExpression) : classExpression
-                )
+                varDecl
             ], NodeFlags.Let)
         );
         setOriginalNode(statement, node);
@@ -369,6 +399,15 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
         const statements: Statement[] = [statement];
         addRange(statements, decorationStatements);
         addConstructorDecorationStatement(statements, node);
+
+        if (isExport && isDefault) {
+            statements.push(factory.createExportAssignment(
+                /*modifiers*/ undefined,
+                /*isExportEquals*/ false,
+                declName
+            ));
+        }
+
         return statements;
     }
 
@@ -515,7 +554,7 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
      * @param member The class member.
      */
     function isDecoratedClassElement(member: ClassElement, isStaticElement: boolean, parent: ClassLikeDeclaration) {
-        return nodeOrChildIsDecorated(/*legacyDecorators*/ true, member, parent)
+        return nodeOrChildIsDecorated(/*useLegacyDecorators*/ true, member, parent)
             && isStaticElement === isStatic(member);
     }
 
@@ -645,9 +684,9 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
 
         // When we transform to ES5/3 this will be moved inside an IIFE and should reference the name
         // without any block-scoped variable collision handling
-        const localName = languageVersion <= ScriptTarget.ES2015 ?
+        const localName = languageVersion < ScriptTarget.ES2015 ?
             factory.getInternalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true) :
-            factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
+            factory.getDeclarationName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
         const decorate = emitHelpers().createDecorateHelper(decoratorExpressions, localName);
         const expression = factory.createAssignment(localName, classAlias ? factory.createAssignment(classAlias, decorate) : decorate);
         setEmitFlags(expression, EmitFlags.NoComments);

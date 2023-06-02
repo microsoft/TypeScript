@@ -20,7 +20,6 @@ import g = require('./g.json');
 let booleanLiteral: boolean, nullLiteral: null;
 >booleanLiteral : boolean
 >nullLiteral : null
->null : null
 
 let stringLiteral: string;
 >stringLiteral : string
@@ -58,7 +57,6 @@ booleanLiteral = b.d;
 
 const stringOrNumberOrNull: string | number | null = c[0];
 >stringOrNumberOrNull : string | number | null
->null : null
 >c[0] : string | null
 >c : (string | null)[]
 >0 : 0
@@ -101,7 +99,6 @@ booleanLiteral = g[0];
 
     "c": null,
 >"c" : null
->null : null
 
     "d": false
 >"d" : boolean
@@ -112,7 +109,6 @@ booleanLiteral = g[0];
 ["a", null, "string"]
 >["a", null, "string"] : (string | null)[]
 >"a" : "a"
->null : null
 >"string" : "string"
 
 === tests/cases/compiler/d.json ===

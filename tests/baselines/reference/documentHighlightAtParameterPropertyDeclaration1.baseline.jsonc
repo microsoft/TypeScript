@@ -1,0 +1,165 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/file1.ts ===
+// class Foo {
+//     constructor(<|private /*HIGHLIGHTS*/[|{| kind: "writtenReference" |}privateParam|]: number|>,
+//         public publicParam: string,
+//         protected protectedParam: boolean) {
+// 
+//         let localPrivate = [|{| kind: "reference" |}privateParam|];
+//         this.[|{| kind: "writtenReference" |}privateParam|] += 10;
+// 
+//         let localPublic = publicParam;
+//         this.publicParam += " Hello!";
+// --- (line: 11) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/file1.ts ===
+// class Foo {
+//     constructor(private privateParam: number,
+//         <|public /*HIGHLIGHTS*/[|{| kind: "writtenReference" |}publicParam|]: string|>,
+//         protected protectedParam: boolean) {
+// 
+//         let localPrivate = privateParam;
+//         this.privateParam += 10;
+// 
+//         let localPublic = [|{| kind: "reference" |}publicParam|];
+//         this.[|{| kind: "writtenReference" |}publicParam|] += " Hello!";
+// 
+//         let localProtected = protectedParam;
+//         this.protectedParam = false;
+//     }
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/file1.ts ===
+// class Foo {
+//     constructor(private privateParam: number,
+//         public publicParam: string,
+//         <|protected /*HIGHLIGHTS*/[|{| kind: "writtenReference" |}protectedParam|]: boolean|>) {
+// 
+//         let localPrivate = privateParam;
+//         this.privateParam += 10;
+// 
+//         let localPublic = publicParam;
+//         this.publicParam += " Hello!";
+// 
+//         let localProtected = [|{| kind: "reference" |}protectedParam|];
+//         this.[|{| kind: "writtenReference" |}protectedParam|] = false;
+//     }
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/file1.ts ===
+// class Foo {
+//     constructor(<|private [|{| kind: "writtenReference" |}privateParam|]: number|>,
+//         public publicParam: string,
+//         protected protectedParam: boolean) {
+// 
+//         let localPrivate = /*HIGHLIGHTS*/[|{| kind: "reference" |}privateParam|];
+//         this.[|{| kind: "writtenReference" |}privateParam|] += 10;
+// 
+//         let localPublic = publicParam;
+//         this.publicParam += " Hello!";
+// --- (line: 11) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/file1.ts ===
+// class Foo {
+//     constructor(<|private [|{| kind: "writtenReference" |}privateParam|]: number|>,
+//         public publicParam: string,
+//         protected protectedParam: boolean) {
+// 
+//         let localPrivate = [|{| kind: "reference" |}privateParam|];
+//         this./*HIGHLIGHTS*/[|{| kind: "writtenReference" |}privateParam|] += 10;
+// 
+//         let localPublic = publicParam;
+//         this.publicParam += " Hello!";
+// --- (line: 11) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/file1.ts ===
+// class Foo {
+//     constructor(private privateParam: number,
+//         <|public [|{| kind: "writtenReference" |}publicParam|]: string|>,
+//         protected protectedParam: boolean) {
+// 
+//         let localPrivate = privateParam;
+//         this.privateParam += 10;
+// 
+//         let localPublic = /*HIGHLIGHTS*/[|{| kind: "reference" |}publicParam|];
+//         this.[|{| kind: "writtenReference" |}publicParam|] += " Hello!";
+// 
+//         let localProtected = protectedParam;
+//         this.protectedParam = false;
+//     }
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/file1.ts ===
+// class Foo {
+//     constructor(private privateParam: number,
+//         <|public [|{| kind: "writtenReference" |}publicParam|]: string|>,
+//         protected protectedParam: boolean) {
+// 
+//         let localPrivate = privateParam;
+//         this.privateParam += 10;
+// 
+//         let localPublic = [|{| kind: "reference" |}publicParam|];
+//         this./*HIGHLIGHTS*/[|{| kind: "writtenReference" |}publicParam|] += " Hello!";
+// 
+//         let localProtected = protectedParam;
+//         this.protectedParam = false;
+//     }
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/file1.ts ===
+// class Foo {
+//     constructor(private privateParam: number,
+//         public publicParam: string,
+//         <|protected [|{| kind: "writtenReference" |}protectedParam|]: boolean|>) {
+// 
+//         let localPrivate = privateParam;
+//         this.privateParam += 10;
+// 
+//         let localPublic = publicParam;
+//         this.publicParam += " Hello!";
+// 
+//         let localProtected = /*HIGHLIGHTS*/[|{| kind: "reference" |}protectedParam|];
+//         this.[|{| kind: "writtenReference" |}protectedParam|] = false;
+//     }
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/file1.ts ===
+// class Foo {
+//     constructor(private privateParam: number,
+//         public publicParam: string,
+//         <|protected [|{| kind: "writtenReference" |}protectedParam|]: boolean|>) {
+// 
+//         let localPrivate = privateParam;
+//         this.privateParam += 10;
+// 
+//         let localPublic = publicParam;
+//         this.publicParam += " Hello!";
+// 
+//         let localProtected = [|{| kind: "reference" |}protectedParam|];
+//         this./*HIGHLIGHTS*/[|{| kind: "writtenReference" |}protectedParam|] = false;
+//     }
+// }

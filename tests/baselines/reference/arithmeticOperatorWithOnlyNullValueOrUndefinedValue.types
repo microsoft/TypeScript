@@ -3,20 +3,16 @@
 var ra1 = null * null;
 >ra1 : number
 >null * null : number
->null : null
->null : null
 
 var ra2 = null * undefined;
 >ra2 : number
 >null * undefined : number
->null : null
 >undefined : undefined
 
 var ra3 = undefined * null;
 >ra3 : number
 >undefined * null : number
 >undefined : undefined
->null : null
 
 var ra4 = undefined * undefined;
 >ra4 : number
@@ -28,20 +24,16 @@ var ra4 = undefined * undefined;
 var rb1 = null / null;
 >rb1 : number
 >null / null : number
->null : null
->null : null
 
 var rb2 = null / undefined;
 >rb2 : number
 >null / undefined : number
->null : null
 >undefined : undefined
 
 var rb3 = undefined / null;
 >rb3 : number
 >undefined / null : number
 >undefined : undefined
->null : null
 
 var rb4 = undefined / undefined;
 >rb4 : number
@@ -53,20 +45,16 @@ var rb4 = undefined / undefined;
 var rc1 = null % null;
 >rc1 : number
 >null % null : number
->null : null
->null : null
 
 var rc2 = null % undefined;
 >rc2 : number
 >null % undefined : number
->null : null
 >undefined : undefined
 
 var rc3 = undefined % null;
 >rc3 : number
 >undefined % null : number
 >undefined : undefined
->null : null
 
 var rc4 = undefined % undefined;
 >rc4 : number
@@ -78,20 +66,16 @@ var rc4 = undefined % undefined;
 var rd1 = null - null;
 >rd1 : number
 >null - null : number
->null : null
->null : null
 
 var rd2 = null - undefined;
 >rd2 : number
 >null - undefined : number
->null : null
 >undefined : undefined
 
 var rd3 = undefined - null;
 >rd3 : number
 >undefined - null : number
 >undefined : undefined
->null : null
 
 var rd4 = undefined - undefined;
 >rd4 : number
@@ -103,20 +87,16 @@ var rd4 = undefined - undefined;
 var re1 = null << null;
 >re1 : number
 >null << null : number
->null : null
->null : null
 
 var re2 = null << undefined;
 >re2 : number
 >null << undefined : number
->null : null
 >undefined : undefined
 
 var re3 = undefined << null;
 >re3 : number
 >undefined << null : number
 >undefined : undefined
->null : null
 
 var re4 = undefined << undefined;
 >re4 : number
@@ -128,20 +108,16 @@ var re4 = undefined << undefined;
 var rf1 = null >> null;
 >rf1 : number
 >null >> null : number
->null : null
->null : null
 
 var rf2 = null >> undefined;
 >rf2 : number
 >null >> undefined : number
->null : null
 >undefined : undefined
 
 var rf3 = undefined >> null;
 >rf3 : number
 >undefined >> null : number
 >undefined : undefined
->null : null
 
 var rf4 = undefined >> undefined;
 >rf4 : number
@@ -153,20 +129,16 @@ var rf4 = undefined >> undefined;
 var rg1 = null >>> null;
 >rg1 : number
 >null >>> null : number
->null : null
->null : null
 
 var rg2 = null >>> undefined;
 >rg2 : number
 >null >>> undefined : number
->null : null
 >undefined : undefined
 
 var rg3 = undefined >>> null;
 >rg3 : number
 >undefined >>> null : number
 >undefined : undefined
->null : null
 
 var rg4 = undefined >>> undefined;
 >rg4 : number
@@ -178,20 +150,16 @@ var rg4 = undefined >>> undefined;
 var rh1 = null & null;
 >rh1 : number
 >null & null : number
->null : null
->null : null
 
 var rh2 = null & undefined;
 >rh2 : number
 >null & undefined : number
->null : null
 >undefined : undefined
 
 var rh3 = undefined & null;
 >rh3 : number
 >undefined & null : number
 >undefined : undefined
->null : null
 
 var rh4 = undefined & undefined;
 >rh4 : number
@@ -203,20 +171,16 @@ var rh4 = undefined & undefined;
 var ri1 = null ^ null;
 >ri1 : number
 >null ^ null : number
->null : null
->null : null
 
 var ri2 = null ^ undefined;
 >ri2 : number
 >null ^ undefined : number
->null : null
 >undefined : undefined
 
 var ri3 = undefined ^ null;
 >ri3 : number
 >undefined ^ null : number
 >undefined : undefined
->null : null
 
 var ri4 = undefined ^ undefined;
 >ri4 : number
@@ -228,20 +192,16 @@ var ri4 = undefined ^ undefined;
 var rj1 = null | null;
 >rj1 : number
 >null | null : number
->null : null
->null : null
 
 var rj2 = null | undefined;
 >rj2 : number
 >null | undefined : number
->null : null
 >undefined : undefined
 
 var rj3 = undefined | null;
 >rj3 : number
 >undefined | null : number
 >undefined : undefined
->null : null
 
 var rj4 = undefined | undefined;
 >rj4 : number

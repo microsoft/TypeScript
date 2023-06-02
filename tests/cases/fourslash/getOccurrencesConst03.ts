@@ -10,5 +10,7 @@
 ////export [|const|] enum E {
 ////}
 
-goTo.eachRange(() => verify.occurrencesAtPositionCount(1)); // They are in different scopes, so not counted together.
-goTo.eachMarker(() => verify.occurrencesAtPositionCount(0));
+verify.baselineCommands(
+    { type: "documentHighlights" }, // They are in different scopes, so not counted together.
+    { type: "documentHighlights", markerOrRange: test.markers() },
+);

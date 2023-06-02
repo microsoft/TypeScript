@@ -30,7 +30,7 @@ var c = `${123 + 456 as number} trailing`;
 var d = `Hello ${123} World` as string;
 >d : string
 >`Hello ${123} World` as string : string
->`Hello ${123} World` : string
+>`Hello ${123} World` : "Hello 123 World"
 >123 : 123
 
 var e = `Hello` as string;
@@ -43,7 +43,7 @@ var f = 1 + `${1} end of string` as string;
 >1 + `${1} end of string` as string : string
 >1 + `${1} end of string` : string
 >1 : 1
->`${1} end of string` : string
+>`${1} end of string` : "1 end of string"
 >1 : 1
 
 var g = tag `Hello ${123} World` as string;

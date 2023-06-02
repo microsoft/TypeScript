@@ -1,0 +1,21 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/0.d.ts ===
+// export function doThing(): string;
+// export function doTheOtherThing(): void;
+// <|export as namespace /*RENAME*/[|myLibRENAME|];|>
+
+// === /tests/cases/fourslash/1.ts ===
+// /// <reference path="0.d.ts" />
+// [|myLibRENAME|].doThing();
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/0.d.ts ===
+// export function doThing(): string;
+// export function doTheOtherThing(): void;
+// <|export as namespace [|myLibRENAME|];|>
+
+// === /tests/cases/fourslash/1.ts ===
+// /// <reference path="0.d.ts" />
+// /*RENAME*/[|myLibRENAME|].doThing();

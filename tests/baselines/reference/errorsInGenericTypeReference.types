@@ -43,12 +43,10 @@ class testClass3 {
     testMethod1(): Foo<{ x: V }> { return null; } // error: could not find symbol V
 >testMethod1 : () => Foo<{    x: V;}>
 >x : V
->null : null
 
     static testMethod2(): Foo<{ x: V }> { return null } // error: could not find symbol V
 >testMethod2 : () => Foo<{    x: V;}>
 >x : V
->null : null
 
     set a(value: Foo<{ x: V }>) { } // error: could not find symbol V
 >a : Foo<{ x: V; }>
@@ -65,7 +63,6 @@ class testClass3 {
 function testFunction1(): Foo<{ x: V }> { return null; } // error: could not find symbol V
 >testFunction1 : () => Foo<{    x: V;}>
 >x : V
->null : null
 
 
 // in paramter types
