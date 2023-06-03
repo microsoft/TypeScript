@@ -1,5 +1,6 @@
 import * as Harness from "../../_namespaces/Harness";
 import {
+    arrayFrom,
     clear,
     clone,
     combinePaths,
@@ -292,7 +293,8 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
     private readonly environmentVariables?: Map<string, string>;
     private readonly executingFilePath: string;
     private readonly currentDirectory: string;
-    public require: ((initialPath: string, moduleName: string) => ModuleImportResult) | undefined;
+    require?: (initialPath: string, moduleName: string) => ModuleImportResult;
+    importPlugin?: (root: string, moduleName: string) => Promise<ModuleImportResult>;
     public storeFilesChangingSignatureDuringEmit = true;
     watchFile: HostWatchFile;
     private inodeWatching: boolean | undefined;
@@ -1122,20 +1124,23 @@ function diffMap<T>(
     let captionAdded = false;
     let baselineChanged = false;
     let hasChange = false;
-    map?.forEach((values, key) => {
-        const existing = old?.get(key);
-        let addedKey = false;
-        for (const value of values) {
-            const hasExisting = contains(existing, value);
-            if (deleted && hasExisting) continue;
-            if (!hasExisting) hasChange = true;
-            if (!addedKey) {
-                addBaseline(`${key}:${deleted || existing ? "" : " *new*"}`);
-                addedKey = true;
+    if (map) {
+        for (const key of arrayFrom(map.keys()).sort(compareStringsCaseSensitive)) {
+            const existing = old?.get(key);
+            let addedKey = false;
+            const values = map.get(key)!;
+            for (const value of values) {
+                const hasExisting = contains(existing, value);
+                if (deleted && hasExisting) continue;
+                if (!hasExisting) hasChange = true;
+                if (!addedKey) {
+                    addBaseline(`${key}:${deleted || existing ? "" : " *new*"}`);
+                    addedKey = true;
+                }
+                addBaseline(`  ${JSON.stringify(value)}${deleted || hasExisting || !existing ? "" : " *new*"}`);
             }
-            addBaseline(`  ${JSON.stringify(value)}${deleted || hasExisting || !existing ? "" : " *new*"}`);
         }
-    });
+    }
     if (baselineChanged) baseline.push("");
     return hasChange;
 

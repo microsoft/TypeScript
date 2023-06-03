@@ -56,9 +56,9 @@ Immedidate callback:: count: 0
 PolledWatches::
 /a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 /users/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::

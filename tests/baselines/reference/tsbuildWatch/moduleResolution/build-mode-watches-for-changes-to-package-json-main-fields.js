@@ -66,6 +66,7 @@ File '/user/username/projects/myproject/packages/pkg2/const.ts' exists - use it 
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/myproject/packages/node_modules' does not exist, skipping all lookups in it.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg2/package.json'.
@@ -141,7 +142,9 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/packages/pkg1/index.ts (used version)
 
 FsWatches::
-/user/username/projects/myproject/packages/pkg2/tsconfig.json: *new*
+/user/username/projects/myproject/packages/pkg1/index.ts: *new*
+  {}
+/user/username/projects/myproject/packages/pkg1/tsconfig.json: *new*
   {}
 /user/username/projects/myproject/packages/pkg2/const.ts: *new*
   {}
@@ -149,17 +152,15 @@ FsWatches::
   {}
 /user/username/projects/myproject/packages/pkg2/other.ts: *new*
   {}
-/user/username/projects/myproject/packages/pkg1/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/packages/pkg1/index.ts: *new*
-  {}
 /user/username/projects/myproject/packages/pkg2/package.json: *new*
+  {}
+/user/username/projects/myproject/packages/pkg2/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/packages/pkg2: *new*
-  {}
 /user/username/projects/myproject/packages/pkg1: *new*
+  {}
+/user/username/projects/myproject/packages/pkg2: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -311,6 +312,7 @@ Output::
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/myproject/packages/node_modules' does not exist, skipping all lookups in it.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg2/package.json'.
@@ -379,6 +381,7 @@ Output::
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/myproject/packages/node_modules' does not exist, skipping all lookups in it.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg2/package.json'.

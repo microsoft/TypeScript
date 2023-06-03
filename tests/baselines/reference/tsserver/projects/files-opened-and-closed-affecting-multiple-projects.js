@@ -185,11 +185,11 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/a/b/projects/config/file.ts: *new*
+  {}
 /a/b/projects/config/tsconfig.json:
   {}
 /a/lib/lib.d.ts:
-  {}
-/a/b/projects/config/file.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -269,13 +269,13 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/b/projects/node_modules/@types:
-  {"pollingInterval":500}
-/a/b/projects/files/tsconfig.json: *new*
-  {"pollingInterval":2000}
 /a/b/projects/files/jsconfig.json: *new*
   {"pollingInterval":2000}
 /a/b/projects/files/node_modules/@types: *new*
+  {"pollingInterval":500}
+/a/b/projects/files/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/a/b/projects/node_modules/@types:
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
@@ -287,9 +287,9 @@ FsWatches::
   {}
 
 FsWatches *deleted*::
-/a/b/projects/config/tsconfig.json:
-  {}
 /a/b/projects/config/file.ts:
+  {}
+/a/b/projects/config/tsconfig.json:
   {}
 
 FsWatchesRecursive *deleted*::

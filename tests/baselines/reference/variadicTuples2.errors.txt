@@ -36,12 +36,12 @@ tests/cases/conformance/types/tuple/variadicTuples2.ts(71,5): error TS2322: Type
 tests/cases/conformance/types/tuple/variadicTuples2.ts(72,5): error TS2322: Type '[number, ...number[]]' is not assignable to type '[number, ...T]'.
   Target requires 2 element(s) but source may have fewer.
 tests/cases/conformance/types/tuple/variadicTuples2.ts(73,5): error TS2322: Type '[number, ...T]' is not assignable to type '[number, number]'.
-  Variadic element at position 1 in source does not match element at position 1 in target.
+  Type '[number, ...unknown[]]' is not assignable to type '[number, number]'.
+    Target requires 2 element(s) but source may have fewer.
 tests/cases/conformance/types/tuple/variadicTuples2.ts(74,5): error TS2322: Type '[number, ...T]' is not assignable to type '[number, ...number[]]'.
-  Type at position 1 in source is not compatible with type at position 1 in target.
-    Type 'T' is not assignable to type 'number[]'.
-      Type 'unknown[]' is not assignable to type 'number[]'.
-        Type 'unknown' is not assignable to type 'number'.
+  Type '[number, ...unknown[]]' is not assignable to type '[number, ...number[]]'.
+    Type at position 1 in source is not compatible with type at position 1 in target.
+      Type 'unknown' is not assignable to type 'number'.
 tests/cases/conformance/types/tuple/variadicTuples2.ts(79,5): error TS2322: Type '[number, string, ...any[]]' is not assignable to type '[number, ...number[]]'.
   Type at positions 1 through 2 in source is not compatible with type at position 1 in target.
     Type 'string' is not assignable to type 'number'.
@@ -195,14 +195,14 @@ tests/cases/conformance/types/tuple/variadicTuples2.ts(134,25): error TS2345: Ar
         y = x;  // Error
         ~
 !!! error TS2322: Type '[number, ...T]' is not assignable to type '[number, number]'.
-!!! error TS2322:   Variadic element at position 1 in source does not match element at position 1 in target.
+!!! error TS2322:   Type '[number, ...unknown[]]' is not assignable to type '[number, number]'.
+!!! error TS2322:     Target requires 2 element(s) but source may have fewer.
         z = x;  // Error
         ~
 !!! error TS2322: Type '[number, ...T]' is not assignable to type '[number, ...number[]]'.
-!!! error TS2322:   Type at position 1 in source is not compatible with type at position 1 in target.
-!!! error TS2322:     Type 'T' is not assignable to type 'number[]'.
-!!! error TS2322:       Type 'unknown[]' is not assignable to type 'number[]'.
-!!! error TS2322:         Type 'unknown' is not assignable to type 'number'.
+!!! error TS2322:   Type '[number, ...unknown[]]' is not assignable to type '[number, ...number[]]'.
+!!! error TS2322:     Type at position 1 in source is not compatible with type at position 1 in target.
+!!! error TS2322:       Type 'unknown' is not assignable to type 'number'.
     }
     
     // repro #50216
