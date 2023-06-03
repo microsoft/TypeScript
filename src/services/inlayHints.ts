@@ -231,8 +231,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
         }
 
         let signatureParamPos = 0;
-        for (let i = 0; i < args.length; i++) {
-            const originalArg = args[i];
+        for (const originalArg of args) {
             const arg = skipParentheses(originalArg);
             if (shouldShowLiteralParameterNameHintsOnly(preferences) && !isHintableLiteral(arg)) {
                 continue;
