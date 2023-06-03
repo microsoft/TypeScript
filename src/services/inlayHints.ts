@@ -10,6 +10,7 @@ import {
     equateStringsCaseInsensitive,
     Expression,
     findChildOfKind,
+    findIndex,
     forEachChild,
     FunctionDeclaration,
     FunctionExpression,
@@ -229,14 +230,32 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
             return;
         }
 
-        let pos = 0;
-        for (const originalArg of args) {
+        let signatureParamPos = 0;
+        for (let i = 0; i < args.length; i++) {
+            const originalArg = args[i];
             const arg = skipParentheses(originalArg);
             if (shouldShowLiteralParameterNameHintsOnly(preferences) && !isHintableLiteral(arg)) {
                 continue;
             }
 
-            const identifierNameInfo = checker.getParameterIdentifierNameAtPosition(signature, pos++);
+            let spreadArgs = 0;
+            if (isSpreadElement(arg)) {
+                const spreadType = checker.getTypeAtLocation(arg.expression);
+                if (checker.isTupleType(spreadType)) {
+                    const { elementFlags, fixedLength } = (spreadType as TupleTypeReference).target;
+                    if (fixedLength === 0) {
+                        continue;
+                    }
+                    const firstOptionalIndex = findIndex(elementFlags, f => !(f & ElementFlags.Required));
+                    const requiredArgs = firstOptionalIndex < 0 ? fixedLength : firstOptionalIndex;
+                    if (requiredArgs > 0) {
+                        spreadArgs = firstOptionalIndex < 0 ? fixedLength : firstOptionalIndex;
+                    }
+                }
+            }
+
+            const identifierNameInfo = checker.getParameterIdentifierNameAtPosition(signature, signatureParamPos);
+            signatureParamPos = signatureParamPos + (spreadArgs || 1);
             if (identifierNameInfo) {
                 const [parameterName, isFirstVariadicArgument] = identifierNameInfo;
                 const isParameterNameNotSameAsArgument = preferences.includeInlayParameterNameHintsWhenArgumentMatchesName || !identifierOrAccessExpressionPostfixMatchesParameterName(arg, parameterName);
@@ -247,18 +266,6 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                 const name = unescapeLeadingUnderscores(parameterName);
                 if (leadingCommentsContainsParameterName(arg, name)) {
                     continue;
-                }
-
-                if (isSpreadElement(arg)) {
-                    const spreadType = checker.getTypeAtLocation(arg.expression);
-                    if (checker.isTupleType(spreadType)) {
-                        const { fixedLength, elementFlags } = (spreadType as TupleTypeReference).target;
-                        for (let i = pos; i < fixedLength; i++) {
-                            if (elementFlags[i] & ElementFlags.Required) {
-                                pos++;
-                            }
-                        }
-                    }
                 }
 
                 addParameterHints(name, originalArg.getStart(), isFirstVariadicArgument);
