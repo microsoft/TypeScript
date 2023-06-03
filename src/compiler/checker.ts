@@ -26457,6 +26457,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function isConstantReference(node: Node): boolean {
         switch (node.kind) {
+            case SyntaxKind.ThisKeyword:
+                return true;
             case SyntaxKind.Identifier:
                 if (!isThisInTypeQuery(node)) {
                     const symbol = getResolvedSymbol(node as Identifier);
@@ -47042,7 +47044,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 if (requestedExternalEmitHelperNames.has(name)) continue;
                                 requestedExternalEmitHelperNames.add(name);
 
-                                const symbol = getSymbol(getExportsOfModule(helpersModule), escapeLeadingUnderscores(name), SymbolFlags.Value);
+                                const symbol = resolveSymbol(getSymbol(getExportsOfModule(helpersModule), escapeLeadingUnderscores(name), SymbolFlags.Value));
                                 if (!symbol) {
                                     error(location, Diagnostics.This_syntax_requires_an_imported_helper_named_1_which_does_not_exist_in_0_Consider_upgrading_your_version_of_0, externalHelpersModuleNameText, name);
                                 }

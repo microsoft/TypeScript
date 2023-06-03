@@ -731,11 +731,11 @@ class C10 {
 >s : string
 
             s = this.x;
->s = this.x : string | number
+>s = this.x : string
 >s : string
->this.x : string | number
+>this.x : string
 >this : this
->x : string | number
+>x : string
 
             s = x;
 >s = x : string
@@ -777,11 +777,11 @@ class C11 {
 >s : string
 
             s = this.x;
->s = this.x : string | number
+>s = this.x : string
 >s : string
->this.x : string | number
+>this.x : string
 >this : this
->x : string | number
+>x : string
 
             s = x;
 >s = x : string | number
@@ -918,3 +918,47 @@ const a = obj.fn();
 >obj : { fn: () => boolean; }
 >fn : () => boolean
 
+// repro from https://github.com/microsoft/TypeScript/issues/53267
+class Utils {
+>Utils : Utils
+
+  static isDefined<T>(value: T): value is NonNullable<T> {
+>isDefined : <T>(value: T) => value is NonNullable<T>
+>value : T
+
+    return value != null;
+>value != null : boolean
+>value : T
+  }
+}
+
+class A53267 {
+>A53267 : A53267
+
+  public readonly testNumber: number | undefined;
+>testNumber : number | undefined
+
+  foo() {
+>foo : () => void
+
+    const isNumber = Utils.isDefined(this.testNumber);
+>isNumber : boolean
+>Utils.isDefined(this.testNumber) : boolean
+>Utils.isDefined : <T>(value: T) => value is NonNullable<T>
+>Utils : typeof Utils
+>isDefined : <T>(value: T) => value is NonNullable<T>
+>this.testNumber : number | undefined
+>this : this
+>testNumber : number | undefined
+
+    if (isNumber) {
+>isNumber : boolean
+
+      const x: number = this.testNumber;
+>x : number
+>this.testNumber : number
+>this : this
+>testNumber : number
+    }
+  }
+}

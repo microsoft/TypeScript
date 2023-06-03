@@ -2821,11 +2821,13 @@ function loadModuleFromNearestNodeModulesDirectoryWorker(extensions: Extensions,
     const secondaryExtensions = extensions & ~(Extensions.TypeScript | Extensions.Declaration);
     // (1)
     if (priorityExtensions) {
+        traceIfEnabled(state, Diagnostics.Searching_all_ancestor_node_modules_directories_for_preferred_extensions_Colon_0, formatExtensions(priorityExtensions));
         const result = lookup(priorityExtensions);
         if (result) return result;
     }
     // (2)
     if (secondaryExtensions && !typesScopeOnly) {
+        traceIfEnabled(state, Diagnostics.Searching_all_ancestor_node_modules_directories_for_fallback_extensions_Colon_0, formatExtensions(secondaryExtensions));
         return lookup(secondaryExtensions);
     }
 
