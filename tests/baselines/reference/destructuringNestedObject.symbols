@@ -1,0 +1,134 @@
+=== tests/cases/compiler/destructuringNestedObject.ts ===
+interface Props {
+>Props : Symbol(Props, Decl(destructuringNestedObject.ts, 0, 0))
+
+    innerObject?: {
+>innerObject : Symbol(Props.innerObject, Decl(destructuringNestedObject.ts, 0, 17))
+
+        innerObject2?: {
+>innerObject2 : Symbol(innerObject2, Decl(destructuringNestedObject.ts, 1, 19))
+
+            name?: string;
+>name : Symbol(name, Decl(destructuringNestedObject.ts, 2, 24))
+
+            email?: string;
+>email : Symbol(email, Decl(destructuringNestedObject.ts, 3, 26))
+        }
+    };
+}
+
+export const nestedDestructure1 = (props: Props) => {
+>nestedDestructure1 : Symbol(nestedDestructure1, Decl(destructuringNestedObject.ts, 9, 12))
+>props : Symbol(props, Decl(destructuringNestedObject.ts, 9, 35))
+>Props : Symbol(Props, Decl(destructuringNestedObject.ts, 0, 0))
+
+    const {
+        innerObject: {
+>innerObject : Symbol(Props.innerObject, Decl(destructuringNestedObject.ts, 0, 17))
+
+            innerObject2: { name, email } = {}  // should ok
+>innerObject2 : Symbol(innerObject2, Decl(destructuringNestedObject.ts, 1, 19))
+>name : Symbol(name, Decl(destructuringNestedObject.ts, 12, 27))
+>email : Symbol(email, Decl(destructuringNestedObject.ts, 12, 33))
+
+        } = {}
+    } = props;
+>props : Symbol(props, Decl(destructuringNestedObject.ts, 9, 35))
+
+    console.log(name, email);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>name : Symbol(name, Decl(destructuringNestedObject.ts, 12, 27))
+>email : Symbol(email, Decl(destructuringNestedObject.ts, 12, 33))
+
+};
+
+export const nestedDestructure2 = (props: Props) => {
+>nestedDestructure2 : Symbol(nestedDestructure2, Decl(destructuringNestedObject.ts, 18, 12))
+>props : Symbol(props, Decl(destructuringNestedObject.ts, 18, 35))
+>Props : Symbol(Props, Decl(destructuringNestedObject.ts, 0, 0))
+
+    const {
+        innerObject: {
+>innerObject : Symbol(Props.innerObject, Decl(destructuringNestedObject.ts, 0, 17))
+
+            innerObject2: { name, email }   // should error
+>innerObject2 : Symbol(innerObject2, Decl(destructuringNestedObject.ts, 1, 19))
+>name : Symbol(name, Decl(destructuringNestedObject.ts, 21, 27))
+>email : Symbol(email, Decl(destructuringNestedObject.ts, 21, 33))
+
+        } = {}
+    } = props;
+>props : Symbol(props, Decl(destructuringNestedObject.ts, 18, 35))
+
+    console.log(name, email);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>name : Symbol(name, Decl(destructuringNestedObject.ts, 21, 27))
+>email : Symbol(email, Decl(destructuringNestedObject.ts, 21, 33))
+
+};
+
+export const nestedDestructure3 = (props: Props) => {
+>nestedDestructure3 : Symbol(nestedDestructure3, Decl(destructuringNestedObject.ts, 27, 12))
+>props : Symbol(props, Decl(destructuringNestedObject.ts, 27, 35))
+>Props : Symbol(Props, Decl(destructuringNestedObject.ts, 0, 0))
+
+    const {
+        innerObject: {
+>innerObject : Symbol(Props.innerObject, Decl(destructuringNestedObject.ts, 0, 17))
+
+            innerObject2: { name, email } = {}
+>name : Symbol(name, Decl(destructuringNestedObject.ts, 30, 27))
+>email : Symbol(email, Decl(destructuringNestedObject.ts, 30, 33))
+
+        }      // should error
+    } = props;
+>props : Symbol(props, Decl(destructuringNestedObject.ts, 27, 35))
+
+    console.log(name, email);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>name : Symbol(name, Decl(destructuringNestedObject.ts, 30, 27))
+>email : Symbol(email, Decl(destructuringNestedObject.ts, 30, 33))
+
+};
+
+type NestedTuple = [[[string | undefined] | undefined] | undefined]
+>NestedTuple : Symbol(NestedTuple, Decl(destructuringNestedObject.ts, 34, 2))
+
+
+export const nestedTupleDestructure1 = (props: NestedTuple) => {
+>nestedTupleDestructure1 : Symbol(nestedTupleDestructure1, Decl(destructuringNestedObject.ts, 39, 12))
+>props : Symbol(props, Decl(destructuringNestedObject.ts, 39, 40))
+>NestedTuple : Symbol(NestedTuple, Decl(destructuringNestedObject.ts, 34, 2))
+
+    const [[[s] = []] = []] = props;  // should ok
+>s : Symbol(s, Decl(destructuringNestedObject.ts, 40, 13))
+>props : Symbol(props, Decl(destructuringNestedObject.ts, 39, 40))
+}
+
+export const nestedTupleDestructure2 = (props: NestedTuple) => {
+>nestedTupleDestructure2 : Symbol(nestedTupleDestructure2, Decl(destructuringNestedObject.ts, 43, 12))
+>props : Symbol(props, Decl(destructuringNestedObject.ts, 43, 40))
+>NestedTuple : Symbol(NestedTuple, Decl(destructuringNestedObject.ts, 34, 2))
+
+    const [[[s]] = []] = props; // should error
+>s : Symbol(s, Decl(destructuringNestedObject.ts, 44, 13))
+>props : Symbol(props, Decl(destructuringNestedObject.ts, 43, 40))
+}
+
+export const nestedTupleDestructure3 = (props: NestedTuple) => {
+>nestedTupleDestructure3 : Symbol(nestedTupleDestructure3, Decl(destructuringNestedObject.ts, 47, 12))
+>props : Symbol(props, Decl(destructuringNestedObject.ts, 47, 40))
+>NestedTuple : Symbol(NestedTuple, Decl(destructuringNestedObject.ts, 34, 2))
+
+    const [[[s]]] = props; // should error
+>s : Symbol(s, Decl(destructuringNestedObject.ts, 48, 13))
+>props : Symbol(props, Decl(destructuringNestedObject.ts, 47, 40))
+}
+
+
