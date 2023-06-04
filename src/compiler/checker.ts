@@ -28436,19 +28436,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function getTypeForThisExpressionFromJSDoc(node: Node) {
-        const jsdocType = getJSDocType(node);
-        if (jsdocType && jsdocType.kind === SyntaxKind.JSDocFunctionType) {
-            const jsDocFunctionType = jsdocType as JSDocFunctionType;
-            if (jsDocFunctionType.parameters.length > 0 &&
-                jsDocFunctionType.parameters[0].name &&
-                (jsDocFunctionType.parameters[0].name as Identifier).escapedText === InternalSymbolName.This) {
-                return getTypeFromTypeNode(jsDocFunctionType.parameters[0].type!);
-            }
-        }
+    function getTypeForThisExpressionFromJSDoc(node: SignatureDeclaration) {
         const thisTag = getJSDocThisTag(node);
         if (thisTag && thisTag.typeExpression) {
             return getTypeFromTypeNode(thisTag.typeExpression);
+        }
+        const signature = getSignatureOfTypeTag(node);
+        if (signature) {
+            return getThisTypeOfSignature(signature);
         }
     }
 
