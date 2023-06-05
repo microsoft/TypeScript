@@ -14,6 +14,14 @@ tests/cases/compiler/monorepo/pkg3/src/keys.ts(3,14): error TS2742: The inferred
         }
     }
     
+==== tests/cases/compiler/monorepo/pkg3/src/index.ts (0 errors) ====
+    export * from './keys';
+==== tests/cases/compiler/monorepo/pkg3/src/keys.ts (1 errors) ====
+    import {MetadataAccessor} from "@raymondfeng/pkg2";
+    
+    export const ADMIN = MetadataAccessor.create<boolean>('1');
+                 ~~~~~
+!!! error TS2742: The inferred type of 'ADMIN' cannot be named without a reference to '../../pkg2/node_modules/@raymondfeng/pkg1/dist'. This is likely not portable. A type annotation is necessary.
 ==== tests/cases/compiler/monorepo/pkg1/dist/index.d.ts (0 errors) ====
     export * from './types';
 ==== tests/cases/compiler/monorepo/pkg1/dist/types.d.ts (0 errors) ====
@@ -50,11 +58,3 @@ tests/cases/compiler/monorepo/pkg3/src/keys.ts(3,14): error TS2742: The inferred
         "main": "dist/index.js",
         "typings": "dist/index.d.ts"
     }
-==== tests/cases/compiler/monorepo/pkg3/src/index.ts (0 errors) ====
-    export * from './keys';
-==== tests/cases/compiler/monorepo/pkg3/src/keys.ts (1 errors) ====
-    import {MetadataAccessor} from "@raymondfeng/pkg2";
-    
-    export const ADMIN = MetadataAccessor.create<boolean>('1');
-                 ~~~~~
-!!! error TS2742: The inferred type of 'ADMIN' cannot be named without a reference to '../../pkg2/node_modules/@raymondfeng/pkg1/dist'. This is likely not portable. A type annotation is necessary.

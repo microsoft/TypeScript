@@ -5,4 +5,4 @@ tests/cases/conformance/es5/es5DateAPIs.ts(1,6): error TS2554: Expected 2-7 argu
     Date.UTC(2017); // should error
          ~~~~~~~~~
 !!! error TS2554: Expected 2-7 arguments, but got 1.
-!!! related TS6210 /.ts/lib.es5.d.ts:--:--: An argument for 'monthIndex' was not provided.
+!!! related TS6210 lib.es5.d.ts:--:--: An argument for 'monthIndex' was not provided.

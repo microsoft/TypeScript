@@ -28,12 +28,12 @@ tests/cases/conformance/jsdoc/mod1.js(11,5): error TS2300: Duplicate identifier 
     /** @typedef {number} Baz */
                           ~~~
 !!! error TS2300: Duplicate identifier 'Baz'.
-!!! related TS6203 /.src/tests/cases/conformance/jsdoc/mod1.js:11:5: 'Baz' was also declared here.
+!!! related TS6203 tests/cases/conformance/jsdoc/mod1.js:11:5: 'Baz' was also declared here.
     module.exports = {
         Baz: class { }
         ~~~
 !!! error TS2300: Duplicate identifier 'Baz'.
-!!! related TS6203 /.src/tests/cases/conformance/jsdoc/mod1.js:9:23: 'Baz' was also declared here.
+!!! related TS6203 tests/cases/conformance/jsdoc/mod1.js:9:23: 'Baz' was also declared here.
     }
     
     // ok

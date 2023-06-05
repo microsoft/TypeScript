@@ -36,7 +36,7 @@ tests/cases/conformance/jsx/file.tsx(35,26): error TS2339: Property 'propertyNot
     let e = <BigGreeter ref={x => x.greeting.subtr(10)} />;
                                              ~~~~~
 !!! error TS2551: Property 'subtr' does not exist on type 'string'. Did you mean 'substr'?
-!!! related TS2728 /.lib/lib.d.ts:--:--: 'substr' is declared here.
+!!! related TS2728 lib.d.ts:--:--: 'substr' is declared here.
     // Error (ref callback is contextually typed)
     let f = <BigGreeter ref={x => x.notARealProperty} />;
                                     ~~~~~~~~~~~~~~~~
