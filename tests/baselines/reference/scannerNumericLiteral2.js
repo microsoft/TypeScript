@@ -2,4 +2,4 @@
 01
 
 //// [scannerNumericLiteral2.js]
-01;
+1;

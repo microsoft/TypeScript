@@ -262,7 +262,7 @@ define(["require", "exports"], function (require, exports) {
             }());
             NotExportedModule.ClassA = ClassA;
         })(NotExportedModule || (NotExportedModule = {}));
-    })(TopLevelModule1 = exports.TopLevelModule1 || (exports.TopLevelModule1 = {}));
+    })(TopLevelModule1 || (exports.TopLevelModule1 = TopLevelModule1 = {}));
     var TopLevelModule2;
     (function (TopLevelModule2) {
         var SubModule3;

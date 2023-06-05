@@ -8,4 +8,4 @@
 ////[|import [|{| "contextRangeIndex": 0 |}M|] = require("./a");|]
 ////import C = [|M|].SomeClass;
 
-verify.rangesWithSameTextAreRenameLocations("M");
+verify.baselineRenameAtRangesWithText("M");

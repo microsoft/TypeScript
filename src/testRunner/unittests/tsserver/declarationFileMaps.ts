@@ -1,9 +1,5 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    createServerHost,
-    File,
-} from "../virtualFileSystemWithWatch";
-import {
     baselineTsserverLogs,
     closeFilesForSession,
     createLoggerWithInMemoryLogs,
@@ -11,14 +7,18 @@ import {
     openFilesForSession,
     protocolFileLocationFromSubstring,
     TestSession,
-} from "./helpers";
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+    File,
+} from "../helpers/virtualFileSystemWithWatch";
 
 function checkDeclarationFiles(file: File, session: TestSession): void {
     openFilesForSession([file], session);
     const project = ts.Debug.checkDefined(session.getProjectService().getDefaultProjectForFile(file.path as ts.server.NormalizedPath, /*ensureProject*/ false));
     const program = project.getCurrentProgram()!;
     const output = ts.getFileEmitOutput(program, ts.Debug.checkDefined(program.getSourceFile(file.path)), /*emitOnlyDtsFiles*/ true);
-    session.logger.logs.push(`ts.getFileEmitOutput: ${file.path}: ${JSON.stringify(output, undefined, " ")}`);
+    session.logger.log(`ts.getFileEmitOutput: ${file.path}: ${JSON.stringify(output, undefined, " ")}`);
     closeFilesForSession([file], session);
 }
 

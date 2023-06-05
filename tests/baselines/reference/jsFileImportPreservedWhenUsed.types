@@ -9,7 +9,6 @@ interface LoDashStatic {
     mapValues<T extends object, TResult>(obj: T | null | undefined, callback: ObjectIterator<T, TResult>): { [P in keyof T]: TResult };
 >mapValues : <T extends object, TResult>(obj: T | null | undefined, callback: ObjectIterator<T, TResult>) => { [P in keyof T]: TResult; }
 >obj : T | null | undefined
->null : null
 >callback : ObjectIterator<T, TResult>
 }
 declare const _: LoDashStatic;

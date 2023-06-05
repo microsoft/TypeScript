@@ -157,7 +157,7 @@ var m1;
     var x3 = m4.x;
     var d3 = m4.d;
     var f3 = m4.foo();
-})(m1 = exports.m1 || (exports.m1 = {}));
+})(m1 || (exports.m1 = m1 = {}));
 //Emit global only usage
 var glo_m4 = require("./importDecl_require1");
 exports.useGlo_m4_d4 = glo_m4.d;
@@ -172,7 +172,7 @@ var usePrivate_m4_m1;
     var x3 = private_m4.x;
     var d3 = private_m4.d;
     var f3 = private_m4.foo();
-})(usePrivate_m4_m1 = exports.usePrivate_m4_m1 || (exports.usePrivate_m4_m1 = {}));
+})(usePrivate_m4_m1 || (exports.usePrivate_m4_m1 = usePrivate_m4_m1 = {}));
 // Do not emit unused import
 var m5 = require("./importDecl_require4");
 exports.d = m5.foo2();

@@ -31,8 +31,8 @@ const x = tag`\u{hello} ${ 100 } \xtraordinary ${ 200 } wonderful ${ 300 } \uwor
 >300 : 300
 
 const y = `\u{hello} ${ 100 } \xtraordinary ${ 200 } wonderful ${ 300 } \uworld`; // should error with NoSubstitutionTemplate
->y : string
->`\u{hello} ${ 100 } \xtraordinary ${ 200 } wonderful ${ 300 } \uworld` : string
+>y : "\\u{hello} 100 \\xtraordinary 200 wonderful 300 \\uworld"
+>`\u{hello} ${ 100 } \xtraordinary ${ 200 } wonderful ${ 300 } \uworld` : "\\u{hello} 100 \\xtraordinary 200 wonderful 300 \\uworld"
 >100 : 100
 >200 : 200
 >300 : 300

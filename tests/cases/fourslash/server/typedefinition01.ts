@@ -7,4 +7,4 @@
 // @Filename: a.ts
 ////export class /*2*/Foo {}
 
-verify.goToType("1", "2");
+verify.baselineGoToType("1");

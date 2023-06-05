@@ -108,6 +108,18 @@ function accessorNames<S extends string>(propName: S) {
 
 const ns1 = accessorNames('foo');
 
+// repro from https://github.com/microsoft/TypeScript/issues/54374
+interface Foo54374 {
+  a: 1;
+  b: 2;
+}
+
+const fooConst54374: Foo54374 = {
+  a: 1,
+  b: 3
+} as const
+
+
 //// [constAssertions.js]
 "use strict";
 let v1 = 'abc';
@@ -193,6 +205,10 @@ function accessorNames(propName) {
     return [`get-${propName}`, `set-${propName}`];
 }
 const ns1 = accessorNames('foo');
+const fooConst54374 = {
+    a: 1,
+    b: 3
+};
 
 
 //// [constAssertions.d.ts]
@@ -311,3 +327,8 @@ declare function ff4(verify: boolean, contentMatches: boolean): "verify_match" |
 declare function ff5(verify: boolean, contentMatches: boolean): "verify_match" | "verify_nonMatch" | "write_match" | "write_nonMatch";
 declare function accessorNames<S extends string>(propName: S): readonly [`get-${S}`, `set-${S}`];
 declare const ns1: readonly ["get-foo", "set-foo"];
+interface Foo54374 {
+    a: 1;
+    b: 2;
+}
+declare const fooConst54374: Foo54374;

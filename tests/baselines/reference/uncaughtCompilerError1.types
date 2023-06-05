@@ -84,7 +84,6 @@ function f() {
 >1 : 1
         }
         return null;
->null : null
     }
 }
 

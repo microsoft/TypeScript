@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/packages/pkg1/package.json]
 {"name":"pkg1","version":"1.0.0","main":"build/index.js"}
@@ -65,6 +66,7 @@ File '/user/username/projects/myproject/packages/pkg2/const.ts' exists - use it 
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/myproject/packages/node_modules' does not exist, skipping all lookups in it.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg2/package.json'.
@@ -139,28 +141,26 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/packages/pkg2/build/index.d.ts (used version)
 /user/username/projects/myproject/packages/pkg1/index.ts (used version)
 
-PolledWatches::
-
 FsWatches::
-/user/username/projects/myproject/packages/pkg2/tsconfig.json:
+/user/username/projects/myproject/packages/pkg1/index.ts: *new*
   {}
-/user/username/projects/myproject/packages/pkg2/const.ts:
+/user/username/projects/myproject/packages/pkg1/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/packages/pkg2/index.ts:
+/user/username/projects/myproject/packages/pkg2/const.ts: *new*
   {}
-/user/username/projects/myproject/packages/pkg2/other.ts:
+/user/username/projects/myproject/packages/pkg2/index.ts: *new*
   {}
-/user/username/projects/myproject/packages/pkg1/tsconfig.json:
+/user/username/projects/myproject/packages/pkg2/other.ts: *new*
   {}
-/user/username/projects/myproject/packages/pkg1/index.ts:
+/user/username/projects/myproject/packages/pkg2/package.json: *new*
   {}
-/user/username/projects/myproject/packages/pkg2/package.json:
+/user/username/projects/myproject/packages/pkg2/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/packages/pkg2:
+/user/username/projects/myproject/packages/pkg1: *new*
   {}
-/user/username/projects/myproject/packages/pkg1:
+/user/username/projects/myproject/packages/pkg2: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -298,6 +298,9 @@ Input::
 {"name":"pkg2","version":"1.0.0","main":"build/other.js"}
 
 
+Before running Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:19 AM[0m] File change detected. Starting incremental compilation...
@@ -309,6 +312,7 @@ Output::
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/myproject/packages/node_modules' does not exist, skipping all lookups in it.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg2/package.json'.
@@ -353,30 +357,6 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/packages/pkg2/build/other.d.ts (used version)
 /user/username/projects/myproject/packages/pkg1/index.ts (computed .d.ts)
 
-PolledWatches::
-
-FsWatches::
-/user/username/projects/myproject/packages/pkg2/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/pkg2/const.ts:
-  {}
-/user/username/projects/myproject/packages/pkg2/index.ts:
-  {}
-/user/username/projects/myproject/packages/pkg2/other.ts:
-  {}
-/user/username/projects/myproject/packages/pkg1/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/pkg1/index.ts:
-  {}
-/user/username/projects/myproject/packages/pkg2/package.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/packages/pkg2:
-  {}
-/user/username/projects/myproject/packages/pkg1:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 
@@ -387,6 +367,9 @@ Input::
 {"name":"pkg2","version":"1.0.0","main":"build/index.js"}
 
 
+Before running Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:26 AM[0m] File change detected. Starting incremental compilation...
@@ -398,6 +381,7 @@ Output::
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/myproject/packages/node_modules' does not exist, skipping all lookups in it.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg2/package.json'.
@@ -448,30 +432,6 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/packages/pkg2/build/const.d.ts (used version)
 /user/username/projects/myproject/packages/pkg2/build/index.d.ts (used version)
 /user/username/projects/myproject/packages/pkg1/index.ts (computed .d.ts)
-
-PolledWatches::
-
-FsWatches::
-/user/username/projects/myproject/packages/pkg2/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/pkg2/const.ts:
-  {}
-/user/username/projects/myproject/packages/pkg2/index.ts:
-  {}
-/user/username/projects/myproject/packages/pkg2/other.ts:
-  {}
-/user/username/projects/myproject/packages/pkg1/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/pkg1/index.ts:
-  {}
-/user/username/projects/myproject/packages/pkg2/package.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/packages/pkg2:
-  {}
-/user/username/projects/myproject/packages/pkg1:
-  {}
 
 exitCode:: ExitStatus.undefined
 

@@ -100,7 +100,6 @@ var ResultIsNumber6 = ~undefined;
 var ResultIsNumber7 = ~null;
 >ResultIsNumber7 : number
 >~null : number
->null : null
 
 // any type expressions
 var ResultIsNumber8 = ~ANY2[0]
@@ -165,7 +164,6 @@ var ResultIsNumber16 = ~(null + undefined);
 >~(null + undefined) : number
 >(null + undefined) : any
 >null + undefined : any
->null : null
 >undefined : undefined
 
 var ResultIsNumber17 = ~(null + null);
@@ -173,8 +171,6 @@ var ResultIsNumber17 = ~(null + null);
 >~(null + null) : number
 >(null + null) : any
 >null + null : any
->null : null
->null : null
 
 var ResultIsNumber18 = ~(undefined + undefined);
 >ResultIsNumber18 : number

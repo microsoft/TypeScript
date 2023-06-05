@@ -94,7 +94,6 @@ function isB(toTest: any): toTest is B {
 function union(a: A): A & B | null {
 >union : (a: A) => (A & B) | null
 >a : A
->null : null
 
   if (isB(a)) {
 >isB(a) : boolean
@@ -106,7 +105,6 @@ function union(a: A): A & B | null {
 
   } else {
     return null;
->null : null
   }
 }
 
