@@ -11,6 +11,8 @@ error TS2209: The project root is ambiguous, but is required to resolve export m
         "declaration": true
       }
     }
+==== tests/cases/compiler/index.ts (0 errors) ====
+    export {srcthing as thing} from "./src/thing.js";
 ==== tests/cases/compiler/src/thing.ts (0 errors) ====
     // The following import should cause `index.ts`
     // to be included in the build, which will,
@@ -37,5 +39,3 @@ error TS2209: The project root is ambiguous, but is required to resolve export m
         }
       }
     }
-==== tests/cases/compiler/index.ts (0 errors) ====
-    export {srcthing as thing} from "./src/thing.js";

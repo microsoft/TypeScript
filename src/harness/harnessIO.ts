@@ -556,7 +556,7 @@ export namespace Compiler {
             outputLines += content;
         }
         if (pretty) {
-            outputLines += ts.getErrorSummaryText(ts.getErrorCountForSummary(diagnostics), ts.getFilesInErrorForSummary(diagnostics), IO.newLine(), { getCurrentDirectory: () => "" });
+            outputLines += Utils.removeTestPathPrefixes(ts.getErrorSummaryText(ts.getErrorCountForSummary(diagnostics), ts.getFilesInErrorForSummary(diagnostics), IO.newLine(), { getCurrentDirectory: () => "" }));
         }
         return outputLines;
     }
@@ -597,6 +597,7 @@ export namespace Compiler {
             if (error.relatedInformation) {
                 for (const info of error.relatedInformation) {
                     let location = info.file ? " " + ts.formatLocation(info.file, info.start!, formatDiagnsoticHost, ts.identity) : "";
+                    location = Utils.removeTestPathPrefixes(location);
                     if (location && isDefaultLibraryFile(info.file!.fileName)) {
                         location = location.replace(/(lib(?:.*)\.d\.ts):\d+:\d+/i, "$1:--:--");
                     }
@@ -641,7 +642,7 @@ export namespace Compiler {
 
 
             // Header
-            outputLines += (newLine() + "==== " + inputFile.unitName + " (" + fileErrors.length + " errors) ====");
+            outputLines += (newLine() + "==== " + Utils.removeTestPathPrefixes(inputFile.unitName) + " (" + fileErrors.length + " errors) ====");
 
             // Make sure we emit something for every error
             let markedErrorCount = 0;
@@ -1282,8 +1283,31 @@ export namespace TestCaseParser {
         // unit tests always list files explicitly
         const parseConfigHost: ts.ParseConfigHost = {
             useCaseSensitiveFileNames: false,
-            readDirectory: () => [],
-            fileExists: () => true,
+            readDirectory: (directory, extensions, excludes, includes, depth) => {
+                return ts.matchFiles(directory, extensions, excludes, includes, /*useCaseSensitiveFileNames*/ false, "", depth, dir => {
+                    const files: string[] = [];
+                    const directories = new Set<string>();
+                    for (const unit of testUnitData) {
+                        const unitName = ts.getNormalizedAbsolutePath(unit.name, rootDir);
+                        if (unitName.toLowerCase().startsWith(dir.toLowerCase())) {
+                            let path = unitName.substring(dir.length);
+                            if (path.startsWith("/")) {
+                                path = path.substring(1);
+                            }
+                            if (path.includes("/")) {
+                                const directoryName = path.substring(0, path.indexOf("/"));
+                                directories.add(directoryName);
+                            }
+                            else {
+                                files.push(path);
+                            }
+                        }
+                    }
+                    return { files, directories: ts.arrayFrom(directories) };
+
+                }, ts.identity);
+            },
+            fileExists: fileName => testUnitData.some(data => data.name.toLowerCase() === fileName.toLowerCase()),
             readFile: (name) => ts.forEach(testUnitData, data => data.name.toLowerCase() === name.toLowerCase() ? data.content : undefined)
         };
 
@@ -1299,8 +1323,7 @@ export namespace TestCaseParser {
                 if (rootDir) {
                     baseDir = ts.getNormalizedAbsolutePath(baseDir, rootDir);
                 }
-                tsConfig = ts.parseJsonSourceFileConfigFileContent(configJson, parseConfigHost, baseDir);
-                tsConfig.options.configFilePath = data.name;
+                tsConfig = ts.parseJsonSourceFileConfigFileContent(configJson, parseConfigHost, baseDir, /*existingOptions*/ undefined, ts.getNormalizedAbsolutePath(data.name, rootDir));
                 tsConfigFileUnitData = data;
 
                 // delete entry from the list
