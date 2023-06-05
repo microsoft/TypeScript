@@ -21,7 +21,6 @@ class C {
 
     bar = null;  // this should be an error
 >bar : any
->null : null
 
     foo = undefined;  // this should be an error
 >foo : any
@@ -61,7 +60,6 @@ class C1 {
 
     getValue = null;  // this should be an error
 >getValue : any
->null : null
 
     public get castedGet() {
 >castedGet : any
@@ -88,21 +86,18 @@ function castedNull() {
 
     return <any>null;  // this should not be an error
 ><any>null : any
->null : null
 }
 
 function notCastedNull() {
 >notCastedNull : () => any
 
     return null;  // this should be an error
->null : null
 }
 
 function returnTypeBar(): any {
 >returnTypeBar : () => any
 
     return null;  // this should not be an error
->null : null
 }
 
 function undefinedBar() {
@@ -126,7 +121,6 @@ function multipleRets1(x) {    // this should not be an error
     }
     else {
         return null;
->null : null
     }
 }
 
@@ -138,7 +132,6 @@ function multipleRets2(x) {    // this should not be an error
 >x : any
 
         return null;
->null : null
     }
     else if (x == 1) {
 >x == 1 : boolean
@@ -159,7 +152,6 @@ function multipleRets2(x) {    // this should not be an error
 var bar1 = <any>null;
 >bar1 : any
 ><any>null : any
->null : null
 
 var bar2 = <any>undefined;
 >bar2 : any
@@ -175,6 +167,5 @@ var array = <any>[null, undefined];
 >array : any
 ><any>[null, undefined] : any
 >[null, undefined] : null[]
->null : null
 >undefined : undefined
 

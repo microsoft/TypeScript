@@ -17,13 +17,12 @@ assert(Foo.CONSTANT === "Foo");
 "use strict";
 exports.__esModule = true;
 exports.Foo = void 0;
-var Foo = /** @class */ (function () {
+var Foo = exports.Foo = /** @class */ (function () {
     function Foo() {
     }
     Foo.CONSTANT = "Foo";
     return Foo;
 }());
-exports.Foo = Foo;
 function assert(value) {
     if (!value)
         throw new Error("Assertion failed!");

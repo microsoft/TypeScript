@@ -21,9 +21,9 @@ const desc = `type Product = {
 const [r0Def, ...ranges] = test.ranges();
 verify.quickInfoAt("use", desc, "Doc comment");
 
-verify.goToDefinition("use", "def");
-
-verify.rangesAreOccurrences(/*isWriteAccesss*/ undefined, ranges);
-verify.rangesAreDocumentHighlights(ranges);
-verify.baselineFindAllReferences("use", "def");
-verify.rangesAreRenameLocations(ranges);
+verify.baselineCommands(
+    { type: "findAllReferences", markerOrRange: ["use", "def"] },
+    { type: "findRenameLocations", markerOrRange: ranges },
+    { type: "documentHighlights", markerOrRange: ranges },
+    { type: "goToDefinition", markerOrRange: "use" },
+);

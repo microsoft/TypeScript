@@ -280,7 +280,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 function fail(message) {
     throw new Error(message);
 }
@@ -439,7 +439,7 @@ function f43() {
 var Component = registerComponent('test-component', {
     schema: {
         myProperty: {
-            "default": [],
+            default: [],
             parse: function () {
                 return [true];
             }
@@ -465,7 +465,7 @@ var Component = registerComponent('test-component', {
 var MyThrowable = /** @class */ (function () {
     function MyThrowable() {
     }
-    MyThrowable.prototype["throw"] = function () {
+    MyThrowable.prototype.throw = function () {
         throw new Error();
     };
     return MyThrowable;
@@ -476,10 +476,10 @@ var SuperThrowable = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     SuperThrowable.prototype.err = function (msg) {
-        _super.prototype["throw"].call(this);
+        _super.prototype.throw.call(this);
     };
     SuperThrowable.prototype.ok = function () {
-        this["throw"]();
+        this.throw();
     };
     return SuperThrowable;
 }(MyThrowable));

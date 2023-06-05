@@ -1,0 +1,77 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesDeclare3.ts ===
+// 
+// /*HIGHLIGHTS*/[|{| kind: "none" |}declare|] var x;
+// export [|{| kind: "none" |}declare|] var y, z;
+// 
+// module m {
+//     export class C1 {
+// --- (line: 7) skipped ---
+
+// --- (line: 54) skipped ---
+//     declare function foo(): string;
+// }
+// 
+// [|{| kind: "none" |}declare|] export var v1, v2;
+// [|{| kind: "none" |}declare|] module dm { }
+// export class EC { }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesDeclare3.ts ===
+// 
+// [|{| kind: "none" |}declare|] var x;
+// export /*HIGHLIGHTS*/[|{| kind: "none" |}declare|] var y, z;
+// 
+// module m {
+//     export class C1 {
+// --- (line: 7) skipped ---
+
+// --- (line: 54) skipped ---
+//     declare function foo(): string;
+// }
+// 
+// [|{| kind: "none" |}declare|] export var v1, v2;
+// [|{| kind: "none" |}declare|] module dm { }
+// export class EC { }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesDeclare3.ts ===
+// 
+// [|{| kind: "none" |}declare|] var x;
+// export [|{| kind: "none" |}declare|] var y, z;
+// 
+// module m {
+//     export class C1 {
+// --- (line: 7) skipped ---
+
+// --- (line: 54) skipped ---
+//     declare function foo(): string;
+// }
+// 
+// /*HIGHLIGHTS*/[|{| kind: "none" |}declare|] export var v1, v2;
+// [|{| kind: "none" |}declare|] module dm { }
+// export class EC { }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesDeclare3.ts ===
+// 
+// [|{| kind: "none" |}declare|] var x;
+// export [|{| kind: "none" |}declare|] var y, z;
+// 
+// module m {
+//     export class C1 {
+// --- (line: 7) skipped ---
+
+// --- (line: 54) skipped ---
+//     declare function foo(): string;
+// }
+// 
+// [|{| kind: "none" |}declare|] export var v1, v2;
+// /*HIGHLIGHTS*/[|{| kind: "none" |}declare|] module dm { }
+// export class EC { }

@@ -8,6 +8,15 @@ on:
   repository_dispatch:
     types: publish-nightly
 
+permissions:
+  contents: read
+
+# Ensure scripts are run with pipefail. See:
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#exit-codes-and-error-action-preference
+defaults:
+  run:
+    shell: bash
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,14 +28,17 @@ jobs:
       with:
         # Use NODE_AUTH_TOKEN environment variable to authenticate to this registry.
         registry-url: https://registry.npmjs.org/
+    - run: |
+        corepack enable npm
+        npm --version
     - name: Setup and publish nightly
       run: |
         npm whoami
         npm ci
-        gulp configure-nightly
-        gulp LKG
-        gulp runtests-parallel
-        gulp clean
+        npx hereby configure-nightly
+        npx hereby LKG
+        npx hereby runtests-parallel
+        npx hereby clean
         npm publish --tag next
       env:
         NODE_AUTH_TOKEN: ${{secrets.npm_token}}

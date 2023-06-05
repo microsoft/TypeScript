@@ -1,11 +1,12 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
-//// [/user/username/projects/myproject/lib1/tools/tools.interface.ts]
+//// [/user/username/projects/myproject/lib1/tools/toolsinterface.ts]
 export interface ITest {
     title: string;
 }
 
 //// [/user/username/projects/myproject/lib1/tools/public.ts]
-export * from "./tools.interface";
+export * from "./toolsinterface";
 
 //// [/user/username/projects/myproject/app.ts]
 import { Data } from "lib2/public";
@@ -69,7 +70,7 @@ Program options: {"baseUrl":"/user/username/projects/myproject","watch":true,"as
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
-/user/username/projects/myproject/lib1/tools/tools.interface.ts
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts
 /user/username/projects/myproject/lib1/tools/public.ts
 /user/username/projects/myproject/lib1/public.ts
 /user/username/projects/myproject/lib2/data2.ts
@@ -79,7 +80,7 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
-/user/username/projects/myproject/lib1/tools/tools.interface.ts
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts
 /user/username/projects/myproject/lib1/tools/public.ts
 /user/username/projects/myproject/lib1/public.ts
 /user/username/projects/myproject/lib2/data2.ts
@@ -89,7 +90,7 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/lib1/tools/tools.interface.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts (computed .d.ts during emit)
 /user/username/projects/myproject/lib1/tools/public.ts (computed .d.ts during emit)
 /user/username/projects/myproject/lib1/public.ts (computed .d.ts during emit)
 /user/username/projects/myproject/lib2/data2.ts (computed .d.ts during emit)
@@ -98,39 +99,39 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/app.ts (computed .d.ts during emit)
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/myproject/app.ts:
+/user/username/projects/myproject/app.ts: *new*
   {}
-/user/username/projects/myproject/lib2/public.ts:
+/user/username/projects/myproject/lib1/public.ts: *new*
   {}
-/user/username/projects/myproject/lib2/data.ts:
+/user/username/projects/myproject/lib1/tools/public.ts: *new*
   {}
-/user/username/projects/myproject/lib1/public.ts:
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts: *new*
   {}
-/user/username/projects/myproject/lib1/tools/public.ts:
+/user/username/projects/myproject/lib2/data.ts: *new*
   {}
-/user/username/projects/myproject/lib1/tools/tools.interface.ts:
+/user/username/projects/myproject/lib2/data2.ts: *new*
   {}
-/user/username/projects/myproject/lib2/data2.ts:
+/user/username/projects/myproject/lib2/public.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/myproject/lib1/tools/tools.interface.js]
+//// [/user/username/projects/myproject/lib1/tools/toolsinterface.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
-//// [/user/username/projects/myproject/lib1/tools/tools.interface.d.ts]
+//// [/user/username/projects/myproject/lib1/tools/toolsinterface.d.ts]
 export interface ITest {
     title: string;
 }
@@ -152,12 +153,12 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
-exports.__esModule = true;
-__exportStar(require("./tools.interface"), exports);
+Object.defineProperty(exports, "__esModule", { value: true });
+__exportStar(require("./toolsinterface"), exports);
 
 
 //// [/user/username/projects/myproject/lib1/tools/public.d.ts]
-export * from "./tools.interface";
+export * from "./toolsinterface";
 
 
 //// [/user/username/projects/myproject/lib1/public.js]
@@ -176,7 +177,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./tools/public"), exports);
 
 
@@ -186,7 +187,7 @@ export * from "./tools/public";
 
 //// [/user/username/projects/myproject/lib2/data2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Data2 = void 0;
 var Data2 = /** @class */ (function () {
     function Data2() {
@@ -205,7 +206,7 @@ export declare class Data2 {
 
 //// [/user/username/projects/myproject/lib2/data.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Data = void 0;
 var Data = /** @class */ (function () {
     function Data() {
@@ -246,7 +247,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./data"), exports);
 
 
@@ -256,7 +257,7 @@ export * from "./data";
 
 //// [/user/username/projects/myproject/app.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.App = void 0;
 var public_1 = require("lib2/public");
 var App = /** @class */ (function () {
@@ -278,12 +279,15 @@ export declare class App {
 Change:: Rename property title to title2 of interface ITest to initialize signatures
 
 Input::
-//// [/user/username/projects/myproject/lib1/tools/tools.interface.ts]
+//// [/user/username/projects/myproject/lib1/tools/toolsinterface.ts]
 export interface ITest {
     title2: string;
 }
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:12 AM[0m] File change detected. Starting incremental compilation...
@@ -297,7 +301,7 @@ Program options: {"baseUrl":"/user/username/projects/myproject","watch":true,"as
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
-/user/username/projects/myproject/lib1/tools/tools.interface.ts
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts
 /user/username/projects/myproject/lib1/tools/public.ts
 /user/username/projects/myproject/lib1/public.ts
 /user/username/projects/myproject/lib2/data2.ts
@@ -306,43 +310,17 @@ Program files::
 /user/username/projects/myproject/app.ts
 
 Semantic diagnostics in builder refreshed for::
-/user/username/projects/myproject/lib1/tools/tools.interface.ts
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts
 /user/username/projects/myproject/lib1/tools/public.ts
 
 Shape signatures in builder refreshed for::
-/user/username/projects/myproject/lib1/tools/tools.interface.ts (computed .d.ts)
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts (computed .d.ts)
 /user/username/projects/myproject/lib1/tools/public.ts (computed .d.ts)
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/app.ts:
-  {}
-/user/username/projects/myproject/lib2/public.ts:
-  {}
-/user/username/projects/myproject/lib2/data.ts:
-  {}
-/user/username/projects/myproject/lib1/public.ts:
-  {}
-/user/username/projects/myproject/lib1/tools/public.ts:
-  {}
-/user/username/projects/myproject/lib1/tools/tools.interface.ts:
-  {}
-/user/username/projects/myproject/lib2/data2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/myproject/lib1/tools/tools.interface.js] file written with same contents
-//// [/user/username/projects/myproject/lib1/tools/tools.interface.d.ts]
+//// [/user/username/projects/myproject/lib1/tools/toolsinterface.js] file written with same contents
+//// [/user/username/projects/myproject/lib1/tools/toolsinterface.d.ts]
 export interface ITest {
     title2: string;
 }
@@ -354,12 +332,15 @@ export interface ITest {
 Change:: Rename property title2 to title of interface ITest to revert back to original text
 
 Input::
-//// [/user/username/projects/myproject/lib1/tools/tools.interface.ts]
+//// [/user/username/projects/myproject/lib1/tools/toolsinterface.ts]
 export interface ITest {
     title: string;
 }
 
 
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:29 AM[0m] File change detected. Starting incremental compilation...
@@ -373,7 +354,7 @@ Program options: {"baseUrl":"/user/username/projects/myproject","watch":true,"as
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
-/user/username/projects/myproject/lib1/tools/tools.interface.ts
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts
 /user/username/projects/myproject/lib1/tools/public.ts
 /user/username/projects/myproject/lib1/public.ts
 /user/username/projects/myproject/lib2/data2.ts
@@ -382,43 +363,17 @@ Program files::
 /user/username/projects/myproject/app.ts
 
 Semantic diagnostics in builder refreshed for::
-/user/username/projects/myproject/lib1/tools/tools.interface.ts
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts
 /user/username/projects/myproject/lib1/tools/public.ts
 
 Shape signatures in builder refreshed for::
-/user/username/projects/myproject/lib1/tools/tools.interface.ts (computed .d.ts)
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts (computed .d.ts)
 /user/username/projects/myproject/lib1/tools/public.ts (computed .d.ts)
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/app.ts:
-  {}
-/user/username/projects/myproject/lib2/public.ts:
-  {}
-/user/username/projects/myproject/lib2/data.ts:
-  {}
-/user/username/projects/myproject/lib1/public.ts:
-  {}
-/user/username/projects/myproject/lib1/tools/public.ts:
-  {}
-/user/username/projects/myproject/lib1/tools/tools.interface.ts:
-  {}
-/user/username/projects/myproject/lib2/data2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/myproject/lib1/tools/tools.interface.js] file written with same contents
-//// [/user/username/projects/myproject/lib1/tools/tools.interface.d.ts]
+//// [/user/username/projects/myproject/lib1/tools/toolsinterface.js] file written with same contents
+//// [/user/username/projects/myproject/lib1/tools/toolsinterface.d.ts]
 export interface ITest {
     title: string;
 }
@@ -430,12 +385,15 @@ export interface ITest {
 Change:: Rename property title to title2 of interface ITest
 
 Input::
-//// [/user/username/projects/myproject/lib1/tools/tools.interface.ts]
+//// [/user/username/projects/myproject/lib1/tools/toolsinterface.ts]
 export interface ITest {
     title2: string;
 }
 
 
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:46 AM[0m] File change detected. Starting incremental compilation...
@@ -449,7 +407,7 @@ Program options: {"baseUrl":"/user/username/projects/myproject","watch":true,"as
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
-/user/username/projects/myproject/lib1/tools/tools.interface.ts
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts
 /user/username/projects/myproject/lib1/tools/public.ts
 /user/username/projects/myproject/lib1/public.ts
 /user/username/projects/myproject/lib2/data2.ts
@@ -458,43 +416,17 @@ Program files::
 /user/username/projects/myproject/app.ts
 
 Semantic diagnostics in builder refreshed for::
-/user/username/projects/myproject/lib1/tools/tools.interface.ts
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts
 /user/username/projects/myproject/lib1/tools/public.ts
 
 Shape signatures in builder refreshed for::
-/user/username/projects/myproject/lib1/tools/tools.interface.ts (computed .d.ts)
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts (computed .d.ts)
 /user/username/projects/myproject/lib1/tools/public.ts (computed .d.ts)
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/app.ts:
-  {}
-/user/username/projects/myproject/lib2/public.ts:
-  {}
-/user/username/projects/myproject/lib2/data.ts:
-  {}
-/user/username/projects/myproject/lib1/public.ts:
-  {}
-/user/username/projects/myproject/lib1/tools/public.ts:
-  {}
-/user/username/projects/myproject/lib1/tools/tools.interface.ts:
-  {}
-/user/username/projects/myproject/lib2/data2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/myproject/lib1/tools/tools.interface.js] file written with same contents
-//// [/user/username/projects/myproject/lib1/tools/tools.interface.d.ts]
+//// [/user/username/projects/myproject/lib1/tools/toolsinterface.js] file written with same contents
+//// [/user/username/projects/myproject/lib1/tools/toolsinterface.d.ts]
 export interface ITest {
     title2: string;
 }

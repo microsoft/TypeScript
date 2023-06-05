@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/XY/a.ts]
 
@@ -45,7 +46,7 @@ Output::
 [7m [0m [91m                  ~~~~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 Xy/a.ts
   Imported via "./Xy/a" from file 'b.ts'
   Matched by default include pattern '**/*'
@@ -71,23 +72,25 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/myproject/b.ts:
+/user/username/projects/myproject/b.ts: *new*
   {}
-/user/username/projects/myproject/xy/a.ts:
+/user/username/projects/myproject/link/a.ts: *new*
   {}
-/user/username/projects/myproject/link/a.ts:
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/myproject/xy/a.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject:
+/user/username/projects/myproject: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -150,6 +153,9 @@ export const b = 2;
 
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...
@@ -163,7 +169,7 @@ Output::
 [7m [0m [91m                  ~~~~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 Xy/a.ts
   Imported via "./Xy/a" from file 'b.ts'
   Matched by default include pattern '**/*'
@@ -187,26 +193,6 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/b.ts:
-  {}
-/user/username/projects/myproject/xy/a.ts:
-  {}
-/user/username/projects/myproject/link/a.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
 
 exitCode:: ExitStatus.undefined
 

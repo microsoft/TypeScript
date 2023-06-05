@@ -1,3 +1,10 @@
+import * as compiler from "../_namespaces/compiler";
+import * as documents from "../_namespaces/documents";
+import * as fakes from "../_namespaces/fakes";
+import * as Harness from "../_namespaces/Harness";
+import * as ts from "../_namespaces/ts";
+import * as vfs from "../_namespaces/vfs";
+
 describe("unittests:: Public APIs", () => {
     function verifyApi(fileName: string) {
         const builtFile = `built/local/${fileName}`;
@@ -21,6 +28,7 @@ describe("unittests:: Public APIs", () => {
                 ...ts.getDefaultCompilerOptions(),
                 strict: true,
                 exactOptionalPropertyTypes: true,
+                lib: ["lib.es2018.d.ts"],
             };
             const host = new fakes.CompilerHost(sys, options);
             const result = compiler.compileFiles(host, [`${vfs.srcFolder}/${fileName}`], options);

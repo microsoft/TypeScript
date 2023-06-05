@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -51,30 +52,26 @@ Shape signatures in builder refreshed for::
 /a/c/f2.ts (used version)
 /a/d/f3.ts (used version)
 
-PolledWatches::
-
 FsWatches::
-/a/c/f2.ts:
+/a/c/f2.ts: *new*
   {}
-/a/d/f3.ts:
+/a/d/f3.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
 //// [/a/c/f2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 1;
 
 
 //// [/a/d/f3.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = void 0;
 exports.y = 1;
 
@@ -110,19 +107,15 @@ Shape signatures in builder refreshed for::
 /a/d/f3.ts (used version)
 /a/b/f1.ts (used version)
 
-PolledWatches::
-
 FsWatches::
+/a/b/f1.ts: *new*
+  {}
 /a/c/f2.ts:
   {}
 /a/d/f3.ts:
   {}
 /a/lib/lib.d.ts:
   {}
-/a/b/f1.ts:
-  {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -144,11 +137,13 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("../c/f2"), exports);
 __exportStar(require("../d/f3"), exports);
 
 
 
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 First program is not updated:: true
 Second program is not updated:: true

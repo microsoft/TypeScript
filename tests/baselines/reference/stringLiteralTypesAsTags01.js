@@ -47,7 +47,7 @@ function hasKind(entity, kind) {
 }
 var x = {
     kind: "A",
-    a: 100
+    a: 100,
 };
 if (hasKind(x, "A")) {
     var a = x;

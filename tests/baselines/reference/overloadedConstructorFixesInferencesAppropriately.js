@@ -44,5 +44,5 @@ function load() {
 }
 new AsyncLoader({
     asyncLoad: load,
-    children: function (result) { return result.success; }
+    children: function (result) { return result.success; },
 }); // should work fine

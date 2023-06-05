@@ -31,9 +31,7 @@ verify.completions({
         },
     ], { noLib: true }),
     preferences: { includeCompletionsForModuleExports: true },
-});
-
-verify.applyCodeActionFromCompletion("", {
+}).andApplyCodeAction({
     name: "Test1",
     source: "/a",
     description: `Update import from "./a"`,

@@ -1,3 +1,29 @@
+=== /tests/cases/fourslash/completionsOverridingMethod15.ts ===
+// declare class B {
+//     get foo(): any;
+//     set foo(value: any);
+// }
+// class A extends B {
+//     
+//     ^
+// | ----------------------------------------------------------------------
+// | (property) B.foo: any
+// | abstract
+// | accessor
+// | async
+// | constructor
+// | declare
+// | get
+// | override
+// | private
+// | protected
+// | public
+// | readonly
+// | set
+// | static
+// | ----------------------------------------------------------------------
+// }
+
 [
   {
     "marker": {
@@ -5,12 +31,63 @@
       "position": 89,
       "name": ""
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,
       "isNewIdentifierLocation": true,
       "entries": [
+        {
+          "name": "foo",
+          "kind": "property",
+          "kindModifiers": "declare",
+          "sortText": "11",
+          "insertText": "get foo(): any {\n}\nset foo(value: any) {\n}",
+          "filterText": "foo",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "property",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "B",
+              "kind": "className"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "foo",
+              "kind": "propertyName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "any",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": []
+        },
         {
           "name": "abstract",
           "kind": "keyword",
@@ -166,56 +243,6 @@
               "kind": "keyword"
             }
           ]
-        },
-        {
-          "name": "foo",
-          "kind": "property",
-          "kindModifiers": "declare",
-          "sortText": "17",
-          "insertText": "get foo(): any {\n}\nset foo(value: any) {\n}",
-          "displayParts": [
-            {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": "property",
-              "kind": "text"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "B",
-              "kind": "className"
-            },
-            {
-              "text": ".",
-              "kind": "punctuation"
-            },
-            {
-              "text": "foo",
-              "kind": "propertyName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "any",
-              "kind": "keyword"
-            }
-          ],
-          "documentation": []
         }
       ]
     }

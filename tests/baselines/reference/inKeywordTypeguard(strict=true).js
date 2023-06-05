@@ -342,6 +342,47 @@ function foo<A>(value: A) {
 const checkIsTouchDevice = () =>
     "ontouchstart" in window || "msMaxTouchPoints" in window.navigator;
 
+// Repro from #51501
+
+function isHTMLTable<T extends object | null>(table: T): boolean {
+    return !!table && 'html' in table;
+}
+
+// Repro from #51549
+
+const f = <P extends object>(a: P & {}) => {
+    "foo" in a;
+};
+
+// Repro from #53773
+
+function test1<T extends any[] | Record<string, any>>(obj: T) {
+    if (Array.isArray(obj) || 'length' in obj) {
+      obj;  // T
+    }
+    else {
+      obj;  // T
+    }
+}
+
+function test2<T extends any[] | Record<string, any>>(obj: T) {
+    if (Array.isArray(obj)) {
+      obj;  // T & any[]
+    }
+    else {
+      obj;  // T
+    }
+}
+
+function test3<T extends any[] | Record<string, any>>(obj: T) {
+    if ('length' in obj) {
+      obj;  // T
+    }
+    else {
+      obj;  // T
+    }
+}
+
 
 //// [inKeywordTypeguard.js]
 "use strict";
@@ -656,3 +697,36 @@ function foo(value) {
 }
 // Repro from #50954
 const checkIsTouchDevice = () => "ontouchstart" in window || "msMaxTouchPoints" in window.navigator;
+// Repro from #51501
+function isHTMLTable(table) {
+    return !!table && 'html' in table;
+}
+// Repro from #51549
+const f = (a) => {
+    "foo" in a;
+};
+// Repro from #53773
+function test1(obj) {
+    if (Array.isArray(obj) || 'length' in obj) {
+        obj; // T
+    }
+    else {
+        obj; // T
+    }
+}
+function test2(obj) {
+    if (Array.isArray(obj)) {
+        obj; // T & any[]
+    }
+    else {
+        obj; // T
+    }
+}
+function test3(obj) {
+    if ('length' in obj) {
+        obj; // T
+    }
+    else {
+        obj; // T
+    }
+}

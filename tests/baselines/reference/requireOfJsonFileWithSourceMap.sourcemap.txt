@@ -9,7 +9,7 @@ emittedFile:out/file1.js
 sourceFile:../tests/cases/compiler/file1.ts
 -------------------------------------------------------------------
 >>>"use strict";
->>>exports.__esModule = true;
+>>>Object.defineProperty(exports, "__esModule", { value: true });
 >>>var b1 = require("./b.json");
 1 >
 2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

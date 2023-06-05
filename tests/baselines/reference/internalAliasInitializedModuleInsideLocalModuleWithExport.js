@@ -14,7 +14,7 @@ export module c {
 //// [internalAliasInitializedModuleInsideLocalModuleWithExport.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.c = exports.a = void 0;
     var a;
     (function (a) {
@@ -27,12 +27,12 @@ define(["require", "exports"], function (require, exports) {
             }());
             b.c = c;
         })(b = a.b || (a.b = {}));
-    })(a = exports.a || (exports.a = {}));
+    })(a || (exports.a = a = {}));
     var c;
     (function (c) {
         c.b = a.b;
         c.x = new c.b.c();
-    })(c = exports.c || (exports.c = {}));
+    })(c || (exports.c = c = {}));
 });
 
 

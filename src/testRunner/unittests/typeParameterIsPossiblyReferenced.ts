@@ -1,3 +1,9 @@
+import * as documents from "../_namespaces/documents";
+import * as fakes from "../_namespaces/fakes";
+import * as Harness from "../_namespaces/Harness";
+import * as ts from "../_namespaces/ts";
+import * as vfs from "../_namespaces/vfs";
+
 describe("unittests :: internalApi :: typeParameterIsPossiblyReferenced", () => {
         it("with type parameter aliasing", () => {
             const content = `
@@ -5,7 +11,7 @@ describe("unittests :: internalApi :: typeParameterIsPossiblyReferenced", () => 
             `;
             const host = new fakes.CompilerHost(vfs.createFromFileSystem(
                 Harness.IO,
-                /*ignoreCases*/ true,
+                /*ignoreCase*/ true,
                 {
                     documents: [
                         new documents.TextDocument("/file.ts", content)

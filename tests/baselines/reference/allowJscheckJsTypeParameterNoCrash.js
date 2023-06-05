@@ -21,12 +21,12 @@ export var a = vextend({
 
 //// [func.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.vextend = void 0;
 exports.vextend = extend;
 //// [app.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
 var func_1 = require("./func");
 // hover on vextend
@@ -35,6 +35,6 @@ exports.a = (0, func_1.vextend)({
         data1: function (val) {
             this.data2 = 1;
         },
-        data2: function (val) { }
+        data2: function (val) { },
     }
 });

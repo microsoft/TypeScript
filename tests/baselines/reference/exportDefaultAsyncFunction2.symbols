@@ -21,9 +21,10 @@ export default async(() => await(Promise.resolve(1)));
 >resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 === tests/cases/compiler/b.ts ===
+
 export default async () => { return 0; };
-No type information for this code.
-No type information for this code.=== tests/cases/compiler/c.ts ===
+
+=== tests/cases/compiler/c.ts ===
 import { async, await } from 'asyncawait';
 >async : Symbol(async, Decl(c.ts, 0, 8))
 >await : Symbol(await, Decl(c.ts, 0, 15))

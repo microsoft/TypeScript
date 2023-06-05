@@ -80,6 +80,6 @@ export default {
 };
 
 === tests/cases/compiler/functionexpression.ts ===
+
 export default () => 42;
-No type information for this code.
-No type information for this code.
+

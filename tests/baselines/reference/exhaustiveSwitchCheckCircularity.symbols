@@ -32,3 +32,35 @@ function f() {
     }
 }
 
+// Repro from #51688
+
+declare function functionB(key: string): string;
+>functionB : Symbol(functionB, Decl(exhaustiveSwitchCheckCircularity.ts, 17, 1))
+>key : Symbol(key, Decl(exhaustiveSwitchCheckCircularity.ts, 21, 27))
+
+function functionC(): void {
+>functionC : Symbol(functionC, Decl(exhaustiveSwitchCheckCircularity.ts, 21, 48))
+
+    let unionVal: "A" | "B" = "A";
+>unionVal : Symbol(unionVal, Decl(exhaustiveSwitchCheckCircularity.ts, 24, 7))
+
+    while (true) {
+        let key: string;
+>key : Symbol(key, Decl(exhaustiveSwitchCheckCircularity.ts, 26, 11))
+
+        switch (unionVal) {
+>unionVal : Symbol(unionVal, Decl(exhaustiveSwitchCheckCircularity.ts, 24, 7))
+
+            case "A": {
+                key = "AA";
+>key : Symbol(key, Decl(exhaustiveSwitchCheckCircularity.ts, 26, 11))
+
+                break;
+            }
+        }
+        functionB(key);
+>functionB : Symbol(functionB, Decl(exhaustiveSwitchCheckCircularity.ts, 17, 1))
+>key : Symbol(key, Decl(exhaustiveSwitchCheckCircularity.ts, 26, 11))
+    }
+}
+

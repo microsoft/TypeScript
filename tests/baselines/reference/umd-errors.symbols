@@ -1,8 +1,9 @@
 === tests/cases/conformance/externalModules/err1.d.ts ===
+
 // Illegal, can't be in script file
-No type information for this code.export as namespace Foo;
-No type information for this code.
-No type information for this code.=== tests/cases/conformance/externalModules/err2.d.ts ===
+export as namespace Foo;
+
+=== tests/cases/conformance/externalModules/err2.d.ts ===
 // Illegal, can't be in external ambient module
 declare module "Foo" {
 >"Foo" : Symbol("Foo", Decl(err2.d.ts, 0, 0))

@@ -1,0 +1,13 @@
+=== /a.js ===
+/** 
+* @param {{ cause?: string }} [options] 
+*/ 
+function foo({ cause } = {}) {
+>foo : ({ cause }?: {    cause?: string;}) => string
+>cause : string
+>{} : {}
+
+    return cause;
+>cause : string
+}
+

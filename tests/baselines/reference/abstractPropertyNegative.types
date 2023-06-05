@@ -24,7 +24,7 @@ abstract class B implements A {
     abstract get mismatch(): string;
 >mismatch : string
 
-    abstract set mismatch(val: number); // error, not same type
+    abstract set mismatch(val: number);
 >mismatch : string
 >val : number
 }

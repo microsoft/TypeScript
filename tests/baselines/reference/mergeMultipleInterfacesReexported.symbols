@@ -1,7 +1,8 @@
 === tests/cases/compiler/index.ts ===
+
 export * from './eventList';
-No type information for this code.
-No type information for this code.=== tests/cases/compiler/test.ts ===
+
+=== tests/cases/compiler/test.ts ===
 import { EventList } from "./eventList";
 >EventList : Symbol(EventList, Decl(test.ts, 0, 8))
 

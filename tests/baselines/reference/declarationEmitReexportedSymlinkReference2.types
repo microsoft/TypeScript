@@ -1,6 +1,7 @@
 === tests/cases/compiler/monorepo/pkg1/dist/index.d.ts ===
+
 export * from './types';
-No type information for this code.=== tests/cases/compiler/monorepo/pkg1/dist/types.d.ts ===
+=== tests/cases/compiler/monorepo/pkg1/dist/types.d.ts ===
 export declare type A = {
 >A : { id: string; }
 
@@ -33,9 +34,10 @@ export declare class MetadataAccessor<T, D extends IdType = IdType> {
 >key : string
 }
 === tests/cases/compiler/monorepo/pkg2/dist/index.d.ts ===
+
 import "./secondary";
-No type information for this code.export * from './types';
-No type information for this code.=== tests/cases/compiler/monorepo/pkg2/dist/types.d.ts ===
+export * from './types';
+=== tests/cases/compiler/monorepo/pkg2/dist/types.d.ts ===
 export {MetadataAccessor} from '@raymondfeng/pkg1';
 >MetadataAccessor : typeof import("tests/cases/compiler/monorepo/pkg1/dist/index").MetadataAccessor
 
@@ -44,8 +46,9 @@ export {IdType} from '@raymondfeng/pkg1';
 >IdType : any
 
 === tests/cases/compiler/monorepo/pkg3/src/index.ts ===
+
 export * from './keys';
-No type information for this code.=== tests/cases/compiler/monorepo/pkg3/src/keys.ts ===
+=== tests/cases/compiler/monorepo/pkg3/src/keys.ts ===
 import {MetadataAccessor} from "@raymondfeng/pkg2";
 >MetadataAccessor : typeof MetadataAccessor
 

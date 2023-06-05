@@ -9,11 +9,10 @@ module B {
 	export function f(): A.I { return null; }
 >f : () => A.I
 >A : any
->null : null
 }
 
 
 === tests/cases/compiler/A.ts ===
+
 module A { export interface I {} }
-No type information for this code.
-No type information for this code.
+

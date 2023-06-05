@@ -19,7 +19,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var default_1 = /** @class */ (function (_super) {
     __extends(default_1, _super);
     function default_1() {
@@ -27,4 +27,4 @@ var default_1 = /** @class */ (function (_super) {
     }
     return default_1;
 }(SomeUndefinedFunction));
-exports["default"] = default_1;
+exports.default = default_1;

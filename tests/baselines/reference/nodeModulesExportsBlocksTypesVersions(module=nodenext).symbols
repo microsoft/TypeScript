@@ -1,23 +1,26 @@
 === /node_modules/exports-and-types-versions/types/foo.d.ts ===
+
 export {};
-No type information for this code.
-No type information for this code.=== /node_modules/just-types-versions/types/foo.d.ts ===
+
+=== /node_modules/just-types-versions/types/foo.d.ts ===
+
 export {};
-No type information for this code.
-No type information for this code.=== /main.cts ===
+
+=== /main.cts ===
+
 import {} from "exports-and-types-versions/foo";
-No type information for this code.import {} from "exports-and-types-versions/nope";
-No type information for this code.import {} from "exports-and-types-versions/yep";
-No type information for this code.import {} from "exports-and-types-versions/versioned-yep";
-No type information for this code.import {} from "exports-and-types-versions/versioned-nah";
-No type information for this code.import {} from "just-types-versions/foo";
-No type information for this code.
-No type information for this code.=== /main.mts ===
+import {} from "exports-and-types-versions/nope";
+import {} from "exports-and-types-versions/yep";
+import {} from "exports-and-types-versions/versioned-yep";
+import {} from "exports-and-types-versions/versioned-nah";
+import {} from "just-types-versions/foo";
+
+=== /main.mts ===
+
 import {} from "exports-and-types-versions/foo";
-No type information for this code.import {} from "exports-and-types-versions/nope";
-No type information for this code.import {} from "exports-and-types-versions/yep";
-No type information for this code.import {} from "exports-and-types-versions/versioned-yep";
-No type information for this code.import {} from "exports-and-types-versions/versioned-nah";
-No type information for this code.import {} from "just-types-versions/foo";
-No type information for this code.
-No type information for this code.
+import {} from "exports-and-types-versions/nope";
+import {} from "exports-and-types-versions/yep";
+import {} from "exports-and-types-versions/versioned-yep";
+import {} from "exports-and-types-versions/versioned-nah";
+import {} from "just-types-versions/foo";
+

@@ -1,6 +1,6 @@
-tests/cases/conformance/jsdoc/0.js(61,19): error TS2339: Property 'a' does not exist on type 'String'.
-tests/cases/conformance/jsdoc/0.js(61,22): error TS2339: Property 'b' does not exist on type 'String'.
-tests/cases/conformance/jsdoc/0.js(63,20): error TS8024: JSDoc '@param' tag has name 'y', but there is no parameter with that name.
+tests/cases/conformance/jsdoc/0.js(68,19): error TS2339: Property 'a' does not exist on type 'String'.
+tests/cases/conformance/jsdoc/0.js(68,22): error TS2339: Property 'b' does not exist on type 'String'.
+tests/cases/conformance/jsdoc/0.js(70,20): error TS8024: JSDoc '@param' tag has name 'y', but there is no parameter with that name.
 
 
 ==== tests/cases/conformance/jsdoc/0.js (3 errors) ====
@@ -57,6 +57,13 @@ tests/cases/conformance/jsdoc/0.js(63,20): error TS8024: JSDoc '@param' tag has 
      * @param {string} obj.b
      */
     function good8({a, b}) {}
+    
+    /**
+     * @param {{ a: string }} argument
+     */
+    function good9({ a }) {
+        console.log(arguments, a);
+    }
     
     /**
      * @param {object} obj - this type gets ignored

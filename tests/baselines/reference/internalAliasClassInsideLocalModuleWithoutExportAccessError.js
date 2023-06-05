@@ -19,7 +19,7 @@ export var d = new m2.m3.c();
 
 //// [internalAliasClassInsideLocalModuleWithoutExportAccessError.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.d = exports.m2 = exports.x = void 0;
 var x;
 (function (x) {
@@ -32,7 +32,7 @@ var x;
         return c;
     }());
     x.c = c;
-})(x = exports.x || (exports.x = {}));
+})(x || (exports.x = x = {}));
 var m2;
 (function (m2) {
     var m3;
@@ -41,5 +41,5 @@ var m2;
         m3.cProp = new c();
         var cReturnVal = m3.cProp.foo(10);
     })(m3 = m2.m3 || (m2.m3 = {}));
-})(m2 = exports.m2 || (exports.m2 = {}));
+})(m2 || (exports.m2 = m2 = {}));
 exports.d = new m2.m3.c();

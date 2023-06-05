@@ -1,5 +1,5 @@
 //// [unknownControlFlow.ts]
-type T01 = {} & string;  // string
+type T01 = {} & string;  // {} & string
 type T02 = {} & 'a';  // 'a'
 type T03 = {} & object;  // object
 type T04 = {} & { x: number };  // { x: number }
@@ -401,6 +401,55 @@ function doSomething2(value: unknown): void {
     }
 }
 
+// Repro from #51009
+
+type TypeA = {
+    A: 'A',
+    B: 'B',
+}
+
+type TypeB = {
+    A: 'A',
+    B: 'B',
+    C: 'C',
+}
+
+type R<T extends keyof TypeA> =
+    T extends keyof TypeB ? [TypeA[T], TypeB[T]] : never;
+
+type R2<T extends PropertyKey> =
+    T extends keyof TypeA ? T extends keyof TypeB ? [TypeA[T], TypeB[T]] : never : never;
+
+// Repro from #51041
+
+type AB = "A" | "B";
+
+function x<T_AB extends AB>(x: T_AB & undefined, y: any) {
+    let r2: never = y as T_AB & undefined;
+} 
+
+// Repro from #51538
+
+type Left = 'left';
+type Right = 'right' & { right: 'right' };
+type Either = Left | Right;
+
+function assertNever(v: never): never {
+    throw new Error('never');
+}
+
+function fx20(value: Either) {
+    if (value === 'left') {
+        const foo: 'left' = value;
+    }
+    else if (value === 'right') {
+        const bar: 'right' = value;
+    }
+    else {
+        assertNever(value);
+    }
+}
+
 
 //// [unknownControlFlow.js]
 "use strict";
@@ -742,6 +791,23 @@ function doSomething2(value) {
         value;
     }
 }
+function x(x, y) {
+    var r2 = y;
+}
+function assertNever(v) {
+    throw new Error('never');
+}
+function fx20(value) {
+    if (value === 'left') {
+        var foo_1 = value;
+    }
+    else if (value === 'right') {
+        var bar = value;
+    }
+    else {
+        assertNever(value);
+    }
+}
 
 
 //// [unknownControlFlow.d.ts]
@@ -801,3 +867,23 @@ declare function fx10(x: string | number, y: number): void;
 declare function SendBlob(encoding: unknown): void;
 declare function doSomething1<T extends unknown>(value: T): T;
 declare function doSomething2(value: unknown): void;
+type TypeA = {
+    A: 'A';
+    B: 'B';
+};
+type TypeB = {
+    A: 'A';
+    B: 'B';
+    C: 'C';
+};
+type R<T extends keyof TypeA> = T extends keyof TypeB ? [TypeA[T], TypeB[T]] : never;
+type R2<T extends PropertyKey> = T extends keyof TypeA ? T extends keyof TypeB ? [TypeA[T], TypeB[T]] : never : never;
+type AB = "A" | "B";
+declare function x<T_AB extends AB>(x: T_AB & undefined, y: any): void;
+type Left = 'left';
+type Right = 'right' & {
+    right: 'right';
+};
+type Either = Left | Right;
+declare function assertNever(v: never): never;
+declare function fx20(value: Either): void;

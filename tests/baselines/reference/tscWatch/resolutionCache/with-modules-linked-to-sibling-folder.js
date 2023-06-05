@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject/main useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -60,37 +61,39 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/main/index.ts (used version)
 
 PolledWatches::
-/user/username/projects/myproject/main/@scoped:
+/user/username/projects/myproject/main/@scoped: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/main/node_modules/@types:
+/user/username/projects/myproject/main/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/main/tsconfig.json:
+/a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/myproject/main/index.ts:
+/user/username/projects/myproject/linked-package/dist/index.d.ts: *new*
   {}
-/user/username/projects/myproject/linked-package/dist/index.d.ts:
+/user/username/projects/myproject/linked-package/dist/other.d.ts: *new*
   {}
-/user/username/projects/myproject/linked-package/dist/other.d.ts:
+/user/username/projects/myproject/linked-package/package.json: *new*
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/myproject/main/index.ts: *new*
   {}
-/user/username/projects/myproject/linked-package/package.json:
+/user/username/projects/myproject/main/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/linked-package:
+/user/username/projects/myproject/linked-package: *new*
   {}
-/user/username/projects/myproject/main/node_modules:
+/user/username/projects/myproject/main/node_modules: *new*
   {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/main/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 

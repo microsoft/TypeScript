@@ -14,7 +14,7 @@ export module c {
 
 //// [internalAliasFunctionInsideLocalModuleWithExport.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.c = exports.a = void 0;
 var a;
 (function (a) {
@@ -22,13 +22,13 @@ var a;
         return x;
     }
     a.foo = foo;
-})(a = exports.a || (exports.a = {}));
+})(a || (exports.a = a = {}));
 var c;
 (function (c) {
     c.b = a.foo;
     c.bVal = c.b(10);
     c.bVal2 = c.b;
-})(c = exports.c || (exports.c = {}));
+})(c || (exports.c = c = {}));
 
 
 //// [internalAliasFunctionInsideLocalModuleWithExport.d.ts]

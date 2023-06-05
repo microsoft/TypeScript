@@ -20,5 +20,5 @@ export interface LocalInterface extends RequireInterface, ImportInterface {}
 
 
 === /node_modules/pkg/require.d.ts ===
+
 export interface RequireInterface {}
-No type information for this code.

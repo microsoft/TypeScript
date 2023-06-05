@@ -9,9 +9,6 @@ class Foo {
 
 //// [classIndexer5.js]
 class Foo {
-    constructor() {
-        this.#b = false;
-    }
     #a;
-    #b;
+    #b = false;
 }

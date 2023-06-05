@@ -6,7 +6,6 @@ a ? () => a() : (): any => null; // Not legal JS; "Unexpected token ')'" at last
 >a() : any
 >a : any
 >(): any => null : () => any
->null : null
 
 === tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/fileTs.ts ===
 a ? () => a() : (): any => null;
@@ -16,5 +15,4 @@ a ? () => a() : (): any => null;
 >a() : any
 >a : any
 >(): any => null : () => any
->null : null
 

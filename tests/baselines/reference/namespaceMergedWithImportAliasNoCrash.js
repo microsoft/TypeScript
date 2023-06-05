@@ -17,17 +17,16 @@ export { Lib }
 
 //// [file1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var x; // should work
 Library.foo; // should be an error
 //// [file2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Lib = void 0;
 var Lib;
 (function (Lib) {
     Lib.foo = "";
-})(Lib || (Lib = {}));
-exports.Lib = Lib;
+})(Lib || (exports.Lib = Lib = {}));
 Lib.foo; // should work
 var x; // should be an error

@@ -25,7 +25,7 @@ enum MyEnum {
 >MyEnum : MyEnum
 
   a = MyEnumFromModule.a
->a : MyEnum
+>a : MyEnum.a
 >MyEnumFromModule.a : MyEnumFromModule.a
 >MyEnumFromModule : typeof MyEnumFromModule
 >a : MyEnumFromModule.a

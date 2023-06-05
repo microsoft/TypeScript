@@ -102,8 +102,8 @@ type T1 = {
     [K in N1 | N2]: K;
 };
 declare enum E {
-    ONE = 0,
-    TWO = 1,
+    ONE,
+    TWO,
     THREE = "x"
 }
 declare const e: E;

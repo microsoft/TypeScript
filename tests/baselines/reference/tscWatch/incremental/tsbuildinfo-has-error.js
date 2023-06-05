@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/src/project/main.ts]
 export const x = 10;
@@ -46,30 +47,26 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /src/project/main.ts (used version)
 
-PolledWatches::
-/src/project/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches::
-/src/project/tsconfig.json:
+/a/lib/lib.d.ts: *new*
   {}
-/src/project/main.ts:
+/src/project/main.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/src/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/src/project:
+/src/project: *new*
   {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../a/lib/lib.d.ts","./main.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-10726455937-export const x = 10;"],"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../a/lib/lib.d.ts","./main.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-10726455937-export const x = 10;"],"root":[2],"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2]},"version":"FakeTSVersion"}
 
 //// [/src/project/main.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 10;
 
@@ -83,6 +80,10 @@ exports.x = 10;
     ],
     "fileInfos": {
       "../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "affectsGlobalScope": true
+        },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
@@ -92,6 +93,12 @@ exports.x = 10;
         "signature": "-10726455937-export const x = 10;"
       }
     },
+    "root": [
+      [
+        2,
+        "./main.ts"
+      ]
+    ],
     "referencedMap": {},
     "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
@@ -100,6 +107,6 @@ exports.x = 10;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 615
+  "size": 626
 }
 

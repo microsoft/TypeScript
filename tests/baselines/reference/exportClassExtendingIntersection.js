@@ -37,7 +37,7 @@ const AnotherMixedClass = MyMixin(MyExtendedClass);
 
 //// [BaseClass.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyBaseClass = void 0;
 var MyBaseClass = /** @class */ (function () {
     function MyBaseClass(value) {
@@ -62,7 +62,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyMixin = void 0;
 function MyMixin(base) {
     return /** @class */ (function (_super) {
@@ -91,7 +91,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyExtendedClass = void 0;
 var BaseClass_1 = require("./BaseClass");
 var MixinClass_1 = require("./MixinClass");
@@ -105,7 +105,7 @@ var MyExtendedClass = /** @class */ (function (_super) {
 exports.MyExtendedClass = MyExtendedClass;
 //// [Main.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var FinalClass_1 = require("./FinalClass");
 var MixinClass_1 = require("./MixinClass");
 var myExtendedClass = new FinalClass_1.MyExtendedClass('string');

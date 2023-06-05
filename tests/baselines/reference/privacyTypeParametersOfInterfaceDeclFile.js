@@ -192,7 +192,7 @@ module privateModule {
 
 //// [privacyTypeParametersOfInterfaceDeclFile.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.publicModule = exports.publicClassT = exports.publicClass = void 0;
 var privateClass = /** @class */ (function () {
     function privateClass() {
@@ -240,7 +240,7 @@ var publicModule;
         return publicClassInPublicModuleT;
     }());
     publicModule.publicClassInPublicModuleT = publicClassInPublicModuleT;
-})(publicModule = exports.publicModule || (exports.publicModule = {}));
+})(publicModule || (exports.publicModule = publicModule = {}));
 var privateModule;
 (function (privateModule) {
     var privateClassInPrivateModule = /** @class */ (function () {

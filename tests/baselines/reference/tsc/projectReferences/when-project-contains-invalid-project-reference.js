@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -38,7 +39,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 //// [/src/project/theApp.js]
 define("main", ["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.x = void 0;
     exports.x = 10;
 });

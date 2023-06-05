@@ -3,7 +3,7 @@ export = FailedTestsReporter;
     file?: string;
     keepFailed?: boolean;
     reporter?: Mocha.ReporterConstructor | keyof Mocha.reporters;
-    reporterOptions?: any; // TODO(jakebailey): what?
+    reporterOptions?: any;
 }} ReporterOptions */
 /**
  * .failed-tests reporter

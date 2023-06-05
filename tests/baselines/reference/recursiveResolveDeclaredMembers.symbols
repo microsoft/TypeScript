@@ -13,6 +13,6 @@ export interface D<T extends F = F> {}
 >F : Symbol(F, Decl(types.ts, 0, 0))
 
 === tests/cases/compiler/other.js ===
+
 /** @typedef {import("./types").D} E */
-No type information for this code.
-No type information for this code.
+

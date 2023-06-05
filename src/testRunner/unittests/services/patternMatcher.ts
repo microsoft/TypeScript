@@ -1,3 +1,5 @@
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: services:: PatternMatcher", () => {
     describe("BreakIntoCharacterSpans", () => {
         it("EmptyIdentifier", () => {

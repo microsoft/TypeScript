@@ -1,6 +1,7 @@
 /// <reference path="fourslash.ts" />
 
 // @declaration: true
+// @newLine: lf
 // @out: out.js
 // @allowJs: true
 // @Filename: b.js
@@ -19,8 +20,8 @@ verify.getSemanticDiagnostics([{
     code: 2393
 }]);
 verify.verifyGetEmitOutputContentsForCurrentFile([
-    { name: "out.js", text: "function foo() { return 10; }\r\nfunction foo() { return 30; }\r\n", writeByteOrderMark: false },
-    { name: "out.d.ts", text: "declare function foo(): number;\r\ndeclare function foo(): number;\r\n", writeByteOrderMark: false }]);
+    { name: "out.js", text: "function foo() { return 10; }\nfunction foo() { return 30; }\n", writeByteOrderMark: false },
+    { name: "out.d.ts", text: "declare function foo(): number;\ndeclare function foo(): number;\n", writeByteOrderMark: false }]);
 goTo.marker("2");
 verify.getSemanticDiagnostics([{
     message: "Duplicate function implementation.",

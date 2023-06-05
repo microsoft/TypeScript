@@ -2,7 +2,7 @@
 //@Filename: file.tsx
 ////interface NestedInterface {
 ////    Foo: NestedInterface;
-////    (props: {className?: string}): any;
+////    (props: {className?: string, onClick?: () => void}): any;
 ////}
 ////
 ////declare const Foo: NestedInterface;
@@ -52,12 +52,27 @@
 ////function fn11() {
 ////    return <Foo something cla/*11*/ />
 ////}
+////function fn12() {
+////    return <Foo something={false} cla/*12*/ />
+////}
+////function fn13() {
+////    return <Foo something={false} /*13*/ foo />
+////}
+////function fn14() {
+////    return <Foo something={false} cla/*14*/ foo />
+////}
+////function fn15() {
+////    return <Foo onC/*15*/="" />
+////}
+////function fn16() {
+////    return <Foo something={false} onC/*16*/="" foo />
+////}
 
 var preferences: FourSlashInterface.UserPreferences = {
     jsxAttributeCompletionStyle: "braces",
     includeCompletionsWithSnippetText: true,
     includeCompletionsWithInsertText: true,
-}; 
+};
 
 verify.completions(
     { marker: "1", preferences, includes: { name: "className", insertText: "className={$1}", text: "(property) className?: string", isSnippet: true, sortText: completion.SortText.OptionalMember } },
@@ -71,4 +86,9 @@ verify.completions(
     { marker: "9", preferences, includes: { name: "className", insertText: "className={$1}", text: "(property) className?: string", isSnippet: true, sortText: completion.SortText.OptionalMember } },
     { marker: "10", preferences, includes: { name: "className", insertText: "className={$1}", text: "(property) className?: string", isSnippet: true, sortText: completion.SortText.OptionalMember } },
     { marker: "11", preferences, includes: { name: "className", insertText: "className={$1}", text: "(property) className?: string", isSnippet: true, sortText: completion.SortText.OptionalMember } },
+    { marker: "12", preferences, includes: { name: "className", insertText: "className={$1}", text: "(property) className?: string", isSnippet: true, sortText: completion.SortText.OptionalMember } },
+    { marker: "13", preferences, includes: { name: "className", insertText: "className={$1}", text: "(property) className?: string", isSnippet: true, sortText: completion.SortText.OptionalMember } },
+    { marker: "14", preferences, includes: { name: "className", insertText: "className={$1}", text: "(property) className?: string", isSnippet: true, sortText: completion.SortText.OptionalMember } },
+    { marker: "15", preferences, includes: { name: "onClick", insertText: undefined, text: "(property) onClick?: () => void", isSnippet: undefined, sortText: completion.SortText.OptionalMember } },
+    { marker: "16", preferences, includes: { name: "onClick", insertText: undefined, text: "(property) onClick?: () => void", isSnippet: undefined, sortText: completion.SortText.OptionalMember } },
 )

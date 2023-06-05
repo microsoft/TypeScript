@@ -14,6 +14,6 @@ export const result = id `hello world`;
 >`hello world` : "hello world"
 
 === tests/cases/compiler/node_modules/tslib/index.d.ts ===
+
 export { };
-No type information for this code.
-No type information for this code.
+

@@ -26,10 +26,10 @@ export * from "./src/bindingkey";
 
 //// [value-promise.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [bindingkey.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.BindingKey = void 0;
 var BindingKey = /** @class */ (function () {
     function BindingKey() {
@@ -56,15 +56,15 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./src/value-promise"), exports);
 __exportStar(require("./src/bindingkey"), exports);
 //// [application.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [usage.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.CONTROLLER_CLASS = void 0;
 var context_1 = require("@loopback/context");
 exports.CONTROLLER_CLASS = context_1.BindingKey.create(null); // line in question

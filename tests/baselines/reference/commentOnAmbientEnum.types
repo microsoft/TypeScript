@@ -14,13 +14,13 @@ declare enum C {
 >C : C
 
     a,
->a : C
+>a : C.a
 
     b,
->b : C
+>b : C.b
 
     c
->c : C
+>c : C.c
 }
 
 // Don't keep this comment.

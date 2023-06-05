@@ -79,7 +79,7 @@ fileNames.forEach(fileName => {
  *       at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#traversing-the-ast-with-a-little-linter
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.delint = void 0;
 var ts = require("typescript");
 function delint(sourceFile) {

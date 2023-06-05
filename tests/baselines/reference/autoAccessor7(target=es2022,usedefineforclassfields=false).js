@@ -16,11 +16,7 @@ class C3 extends C1 {
 class C1 {
 }
 class C2 extends C1 {
-    constructor() {
-        super(...arguments);
-        this.#a_accessor_storage = 1;
-    }
-    #a_accessor_storage;
+    #a_accessor_storage = 1;
     get a() { return this.#a_accessor_storage; }
     set a(value) { this.#a_accessor_storage = value; }
 }

@@ -38,11 +38,11 @@ var A = /** @class */ (function () {
     __decorate([
         someDec,
         __metadata("design:type", Array)
-    ], A.prototype, "j");
+    ], A.prototype, "j", void 0);
     __decorate([
         someDec,
         __metadata("design:type", Array)
-    ], A.prototype, "k");
+    ], A.prototype, "k", void 0);
     return A;
 }());
 

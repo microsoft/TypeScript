@@ -15,6 +15,6 @@ module bar {
 }
 
 === tests/cases/compiler/reuseInnerModuleMember_0.ts ===
+
 export module M { }
-No type information for this code.
-No type information for this code.
+

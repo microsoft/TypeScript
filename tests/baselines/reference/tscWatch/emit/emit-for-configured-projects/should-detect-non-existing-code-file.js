@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -55,28 +56,26 @@ Shape signatures in builder refreshed for::
 /a/b/referencefile1.ts (used version)
 
 PolledWatches::
-/a/b/modulefile2.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
+/a/b/modulefile2.ts: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json:
+/a/b/referencefile1.ts: *new*
   {}
-/a/b/referencefile1.ts:
+/a/b/tsconfig.json: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a/b:
+/a/b: *new*
   {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/referenceFile1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 /// <reference path="./moduleFile2.ts" />
 exports.x = Foo();
@@ -91,6 +90,9 @@ Input::
 export var x = Foo();export var yy = Foo();
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:21 AM[0m] File change detected. Starting incremental compilation...
@@ -127,29 +129,11 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a/b/referencefile1.ts (computed .d.ts)
 
-PolledWatches::
-/a/b/modulefile2.ts:
-  {"pollingInterval":500}
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/referencefile1.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/referenceFile1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.yy = exports.x = void 0;
 /// <reference path="./moduleFile2.ts" />
 exports.x = Foo();
@@ -164,6 +148,25 @@ Input::
 export var Foo4 = 10;
 
 
+PolledWatches *deleted*::
+/a/b/modulefile2.ts:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/referencefile1.ts:
+  {}
+/a/b/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/a/b:
+  {}
+
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:28 AM[0m] File change detected. Starting incremental compilation...
@@ -198,18 +201,14 @@ Shape signatures in builder refreshed for::
 /a/b/modulefile2.ts (computed .d.ts)
 /a/b/referencefile1.ts (computed .d.ts)
 
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches::
-/a/b/tsconfig.json:
+/a/b/modulefile2.ts: *new*
   {}
 /a/b/referencefile1.ts:
   {}
-/a/lib/lib.d.ts:
+/a/b/tsconfig.json:
   {}
-/a/b/modulefile2.ts:
+/a/lib/lib.d.ts:
   {}
 
 FsWatchesRecursive::
@@ -221,7 +220,7 @@ exitCode:: ExitStatus.undefined
 //// [/a/b/referenceFile1.js] file written with same contents
 //// [/a/b/moduleFile2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo4 = void 0;
 exports.Foo4 = 10;
 

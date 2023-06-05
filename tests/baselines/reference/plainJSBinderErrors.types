@@ -67,12 +67,12 @@ class C {
     withOctal() {
 >withOctal : () => any
 
-        const redundant = 010
->redundant : 10
->010 : 10
+        const redundant = 0o10
+>redundant : 8
+>0o10 : 8
 
         with (redundant) {
->redundant : 10
+>redundant : 8
 
             return toFixed()
 >toFixed() : any

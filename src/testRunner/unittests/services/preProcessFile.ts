@@ -1,3 +1,5 @@
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: services:: PreProcessFile:", () => {
     function test(sourceText: string, readImportFile: boolean, detectJavaScriptImports: boolean, expectedPreProcess: ts.PreProcessedFileInfo): void {
         const resultPreProcess = ts.preProcessFile(sourceText, readImportFile, detectJavaScriptImports);
@@ -348,7 +350,6 @@ describe("unittests:: services:: PreProcessFile:", () => {
         });
 
         it("Correctly returns empty importedFiles with incorrect template expression", () => {
-            /* eslint-disable no-template-curly-in-string */
             test("const foo = `${",
             /*readImportFile*/ true,
             /*detectJavaScriptImports*/ true,
@@ -360,7 +361,6 @@ describe("unittests:: services:: PreProcessFile:", () => {
                 ambientExternalModules: undefined,
                 isLibFile: false
             });
-            /* eslint-enable no-template-curly-in-string */
         });
 
         it("Correctly return ES6 exports", () => {
