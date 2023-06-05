@@ -134,6 +134,7 @@ import {
     getNormalizedAbsolutePathWithoutRoot,
     getNormalizedPathComponents,
     getOutputDeclarationFileName,
+    getOutputDeclarationFileNameWithoutConfigFile,
     getOutputJSFileName,
     getOutputJSFileNameWithoutConfigFile,
     getOutputPathsForBundle,
@@ -336,7 +337,6 @@ import {
     WriteFileCallbackData,
     writeFileEnsuringDirectories,
     zipToModeAwareCache,
-    getOutputDeclarationFileNameWithoutConfigFile,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
 
