@@ -3530,6 +3530,9 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         if (moduleFormatNeedsPackageJsonLookup(fileName, options)) {
             const projectReference = getResolvedProjectReferenceToRedirect(fileName);
             if (projectReference) {
+                // We have a source file that is an input to a referenced project.
+                // This should only happen with `useSourceOfProjectReferenceRedirect` enabled.
+                Debug.assert(useSourceOfProjectReferenceRedirect);
                 const outputFile = getOutputJSFileName(
                     fileNameForModuleFormatDetection,
                     projectReference.commandLine,

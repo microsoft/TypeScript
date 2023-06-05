@@ -1,0 +1,20 @@
+Syntactic Diagnostics for file '/tests/cases/fourslash/server/nodeModulesOutDirPackageJson_useSourceOfProjectReferenceRedirect.ts':
+
+
+==== /shared/red.ts (0 errors) ====
+    export const red = 'fish';
+==== /src/index.ts (0 errors) ====
+    import { red } from '../shared/red';
+
+Semantic Diagnostics for file '/tests/cases/fourslash/server/nodeModulesOutDirPackageJson_useSourceOfProjectReferenceRedirect.ts':
+/src/index.ts(1,21): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("../shared/red")' call instead.
+  To convert this file to an ECMAScript module, change its file extension to '.mts' or create a local package.json file with `{ "type": "module" }`.
+
+
+==== /shared/red.ts (0 errors) ====
+    export const red = 'fish';
+==== /src/index.ts (1 errors) ====
+    import { red } from '../shared/red';
+                        ~~~~~~~~~~~~~~~
+!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("../shared/red")' call instead.
+!!! error TS1479:   To convert this file to an ECMAScript module, change its file extension to '.mts' or create a local package.json file with `{ "type": "module" }`.

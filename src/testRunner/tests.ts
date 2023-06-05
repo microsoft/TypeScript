@@ -80,6 +80,7 @@ import "./unittests/tsbuild/lateBoundSymbol";
 import "./unittests/tsbuild/libraryResolution";
 import "./unittests/tsbuild/moduleResolution";
 import "./unittests/tsbuild/moduleSpecifiers";
+import "./unittests/tsbuild/nodeModulesOutDirPackageJson";
 import "./unittests/tsbuild/noEmit";
 import "./unittests/tsbuild/noEmitOnError";
 import "./unittests/tsbuild/outFile";
