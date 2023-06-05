@@ -3527,56 +3527,50 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
 
     function getImpliedNodeFormatForFile(fileName: string) {
+        // Map to an output file before looking up a package.json that might
+        // contain `"type": "module"`. This allows the same input `.ts` file to be
+        // compiled as both CommonJS and ESM depending on the tsconfig's `outDir`.
         let fileNameForModuleFormatDetection = getNormalizedAbsolutePath(fileName, currentDirectory);
         if (moduleFormatNeedsPackageJsonLookup(fileName, options)) {
             const projectReference = getResolvedProjectReferenceToRedirect(fileName);
             if (projectReference) {
                 // We have a source file that is an input to a referenced project.
-                // This should only happen with `useSourceOfProjectReferenceRedirect` enabled.
+                // This should only happen with `useSourceOfProjectReferenceRedirect`
+                // enabled (i.e. TS Server scenarios).
                 Debug.assert(useSourceOfProjectReferenceRedirect);
-                if (projectReference.commandLine.options.outDir) {
-                    const outputFile = getOutputJSFileName(
+                fileNameForModuleFormatDetection =
+                    getOutputDeclarationFileName(
                         fileNameForModuleFormatDetection,
                         projectReference.commandLine,
-                        !host.useCaseSensitiveFileNames());
-                    if (outputFile) {
-                        fileNameForModuleFormatDetection = outputFile;
-                    }
-                }
-                else if (projectReference.commandLine.options.declaration && projectReference.commandLine.options.declarationDir) {
-                    const outputFile = getOutputDeclarationFileName(
+                        !host.useCaseSensitiveFileNames()) ||
+                    getOutputJSFileName(
                         fileNameForModuleFormatDetection,
                         projectReference.commandLine,
-                        !host.useCaseSensitiveFileNames());
-                    if (outputFile) {
-                        fileNameForModuleFormatDetection = outputFile;
-                    }
-                }
+                        !host.useCaseSensitiveFileNames()) ||
+                    fileNameForModuleFormatDetection;
             }
-            else if (options.outDir) {
-                const outputFile = getOutputJSFileNameWithoutConfigFile(
-                    fileNameForModuleFormatDetection,
-                    options,
-                    !host.useCaseSensitiveFileNames(),
-                    currentDirectory,
-                    getAssumedCommonSourceDirectory);
-                if (outputFile) {
-                    fileNameForModuleFormatDetection = outputFile;
-                }
-            }
-            else if (options.declaration && options.declarationDir) {
-                const outputFile = getOutputDeclarationFileNameWithoutConfigFile(
-                    fileNameForModuleFormatDetection,
-                    options,
-                    !host.useCaseSensitiveFileNames(),
-                    currentDirectory,
-                    getAssumedCommonSourceDirectory);
-                if (outputFile) {
-                    fileNameForModuleFormatDetection = outputFile;
-                }
+            else {
+                fileNameForModuleFormatDetection =
+                    getOutputDeclarationFileNameWithoutConfigFile(
+                        fileNameForModuleFormatDetection,
+                        options,
+                        !host.useCaseSensitiveFileNames(),
+                        currentDirectory,
+                        getAssumedCommonSourceDirectory) ||
+                    getOutputJSFileNameWithoutConfigFile(
+                        fileNameForModuleFormatDetection,
+                        options,
+                        !host.useCaseSensitiveFileNames(),
+                        currentDirectory,
+                        getAssumedCommonSourceDirectory) ||
+                    fileNameForModuleFormatDetection;
             }
         }
-        return getImpliedNodeFormatForFileWorker(fileNameForModuleFormatDetection, moduleResolutionCache?.getPackageJsonInfoCache(), host, options);
+        return getImpliedNodeFormatForFileWorker(
+            fileNameForModuleFormatDetection,
+            moduleResolutionCache?.getPackageJsonInfoCache(),
+            host,
+            options);
     }
 
     function getCreateSourceFileOptions(fileName: string): CreateSourceFileOptions {

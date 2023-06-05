@@ -598,7 +598,7 @@ export function getOutputDeclarationFileName(inputFileName: string, configFile: 
 
 /** @internal */
 export function getOutputDeclarationFileNameWithoutConfigFile(inputFileName: string, options: CompilerOptions, ignoreCase: boolean, currentDirectory: string, getCommonSourceDirectory: () => string) {
-    const directory = (options.outDir || options.declarationDir) ? getNormalizedAbsolutePath(options.outDir || options.declarationDir!, currentDirectory) : undefined;
+    const directory = (options.declarationDir || options.outDir) ? getNormalizedAbsolutePath(options.declarationDir || options.outDir!, currentDirectory) : undefined;
     const outputPathWithoutChangedExtension = directory
         ? resolvePath(directory, getRelativePathFromDirectory(getCommonSourceDirectory(), inputFileName, ignoreCase))
         : inputFileName;

@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/node/nodeMOdulesOutDirPackageJson05_declarationDir.ts] ////
+//// [tests/cases/conformance/node/nodeModulesOutDirPackageJson05_declarationDir.ts] ////
 
 //// [package.json]
 { "type": "module" }
