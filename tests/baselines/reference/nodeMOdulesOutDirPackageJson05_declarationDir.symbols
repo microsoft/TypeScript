@@ -1,0 +1,8 @@
+=== /src/a.ts ===
+import { b } from "./b";
+>b : Symbol(b, Decl(a.ts, 0, 8))
+
+=== /src/b.ts ===
+export const b = 0;
+>b : Symbol(b, Decl(b.ts, 0, 12))
+

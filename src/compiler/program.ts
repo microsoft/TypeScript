@@ -336,6 +336,7 @@ import {
     WriteFileCallbackData,
     writeFileEnsuringDirectories,
     zipToModeAwareCache,
+    getOutputDeclarationFileNameWithoutConfigFile,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
 
@@ -3533,16 +3534,38 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 // We have a source file that is an input to a referenced project.
                 // This should only happen with `useSourceOfProjectReferenceRedirect` enabled.
                 Debug.assert(useSourceOfProjectReferenceRedirect);
-                const outputFile = getOutputJSFileName(
-                    fileNameForModuleFormatDetection,
-                    projectReference.commandLine,
-                    !host.useCaseSensitiveFileNames());
-                if (outputFile) {
-                    fileNameForModuleFormatDetection = outputFile;
+                if (projectReference.commandLine.options.outDir) {
+                    const outputFile = getOutputJSFileName(
+                        fileNameForModuleFormatDetection,
+                        projectReference.commandLine,
+                        !host.useCaseSensitiveFileNames());
+                    if (outputFile) {
+                        fileNameForModuleFormatDetection = outputFile;
+                    }
+                }
+                else if (projectReference.commandLine.options.declaration && projectReference.commandLine.options.declarationDir) {
+                    const outputFile = getOutputDeclarationFileName(
+                        fileNameForModuleFormatDetection,
+                        projectReference.commandLine,
+                        !host.useCaseSensitiveFileNames());
+                    if (outputFile) {
+                        fileNameForModuleFormatDetection = outputFile;
+                    }
                 }
             }
             else if (options.outDir) {
                 const outputFile = getOutputJSFileNameWithoutConfigFile(
+                    fileNameForModuleFormatDetection,
+                    options,
+                    !host.useCaseSensitiveFileNames(),
+                    currentDirectory,
+                    getAssumedCommonSourceDirectory);
+                if (outputFile) {
+                    fileNameForModuleFormatDetection = outputFile;
+                }
+            }
+            else if (options.declaration && options.declarationDir) {
+                const outputFile = getOutputDeclarationFileNameWithoutConfigFile(
                     fileNameForModuleFormatDetection,
                     options,
                     !host.useCaseSensitiveFileNames(),

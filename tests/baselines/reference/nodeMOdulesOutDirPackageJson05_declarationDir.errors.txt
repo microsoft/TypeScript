@@ -1,0 +1,26 @@
+/src/a.ts(1,19): error TS2835: Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './b.js'?
+
+
+==== /tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "module": "nodenext",
+        "declaration": true,
+        "declarationDir": "out",
+        "emitDeclarationOnly": true,
+        "rootDir": "."
+      },
+      "include": ["src"]
+    }
+    
+==== /src/a.ts (1 errors) ====
+    import { b } from "./b";
+                      ~~~~~
+!!! error TS2835: Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './b.js'?
+    
+==== /src/b.ts (0 errors) ====
+    export const b = 0;
+    
+==== /out/package.json (0 errors) ====
+    { "type": "module" }
+    
