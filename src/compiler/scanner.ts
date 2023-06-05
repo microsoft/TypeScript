@@ -1935,7 +1935,7 @@ export function createScanner(languageVersion: ScriptTarget,
                     return token = SyntaxKind.MinusToken;
                 case CharacterCodes.dot:
                     if (isDigit(text.charCodeAt(pos + 1))) {
-                        scanNumber()
+                        scanNumber();
                         return token = SyntaxKind.NumericLiteral;
                     }
                     if (text.charCodeAt(pos + 1) === CharacterCodes.dot && text.charCodeAt(pos + 2) === CharacterCodes.dot) {
