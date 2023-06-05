@@ -29,7 +29,7 @@ declare let dec: any, obj: any;
         let _classThis;
         var class_1 = class {
             static { _classThis = this; }
-            static { __setFunctionName(this, "x"); }
+            static { __setFunctionName(_classThis, "x"); }
             static {
                 __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name }, null, _classExtraInitializers);
                 class_1 = _classThis = _classDescriptor.value;
@@ -64,7 +64,7 @@ declare let dec: any, obj: any;
         let _classThis;
         var class_2 = class {
             static { _classThis = this; }
-            static { __setFunctionName(this, "x"); }
+            static { __setFunctionName(_classThis, "x"); }
             static {
                 __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name }, null, _classExtraInitializers);
                 class_2 = _classThis = _classDescriptor.value;
@@ -97,7 +97,7 @@ declare let dec: any, obj: any;
         let _classThis;
         var class_3 = class {
             static { _classThis = this; }
-            static { __setFunctionName(this, "x"); }
+            static { __setFunctionName(_classThis, "x"); }
             static {
                 __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name }, null, _classExtraInitializers);
                 class_3 = _classThis = _classDescriptor.value;

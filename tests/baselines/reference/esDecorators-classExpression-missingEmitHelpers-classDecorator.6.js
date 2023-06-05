@@ -23,7 +23,7 @@ const tslib_1 = require("tslib");
         let _classThis;
         var class_1 = class {
             static { _classThis = this; }
-            static { tslib_1.__setFunctionName(this, "C"); }
+            static { tslib_1.__setFunctionName(_classThis, "C"); }
             static {
                 tslib_1.__esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name }, null, _classExtraInitializers);
                 class_1 = _classThis = _classDescriptor.value;

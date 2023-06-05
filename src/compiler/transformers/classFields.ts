@@ -1954,7 +1954,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
         const modifiers = visitNodes(node.modifiers, modifierVisitor, isModifier);
         const heritageClauses = visitNodes(node.heritageClauses, heritageClauseVisitor, isHeritageClause);
         const { members, prologue } = transformClassMembers(node);
-        let classExpression = factory.updateClassExpression(
+        const classExpression = factory.updateClassExpression(
             node,
             modifiers,
             node.name,
@@ -2652,7 +2652,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
     function getPropertyNameExpressionIfNeeded(name: PropertyName, shouldHoist: boolean): Expression | undefined {
         if (isComputedPropertyName(name)) {
             const cacheAssignment = findComputedPropertyNameCacheAssignment(name);
-            let expression = visitNode(name.expression, visitor, isExpression);
+            const expression = visitNode(name.expression, visitor, isExpression);
             const innerExpression = skipPartiallyEmittedExpressions(expression);
             const inlinable = isSimpleInlineableExpression(innerExpression);
             const alreadyTransformed = !!cacheAssignment || isAssignmentExpression(innerExpression) && isGeneratedIdentifier(innerExpression.left);

@@ -169,7 +169,18 @@ export function classHasDeclaredOrExplicitlyAssignedName(node: ClassLikeDeclarat
  * Injects a class `static {}` block used to dynamically set the name of a class, if one does not already exist.
  * @internal
  */
-export function injectClassNamedEvaluationHelperBlockIfMissing(context: TransformationContext, node: ClassLikeDeclaration, assignedName: Expression, thisExpression?: Expression) {
+export function injectClassNamedEvaluationHelperBlockIfMissing<T extends ClassLikeDeclaration>(
+    context: TransformationContext,
+    node: T,
+    assignedName: Expression,
+    thisExpression?: Expression
+): Extract<ClassLikeDeclaration, Pick<T, "kind">>;
+export function injectClassNamedEvaluationHelperBlockIfMissing(
+    context: TransformationContext,
+    node: ClassLikeDeclaration,
+    assignedName: Expression,
+    thisExpression?: Expression
+) {
     // given:
     //
     //  let C = class {

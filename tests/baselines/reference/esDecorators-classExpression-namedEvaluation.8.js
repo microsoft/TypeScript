@@ -26,7 +26,7 @@ export default ((() => {
     let _classThis;
     var class_1 = class {
         static { _classThis = this; }
-        static { __setFunctionName(this, "default"); }
+        static { __setFunctionName(_classThis, "default"); }
         static {
             __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name }, null, _classExtraInitializers);
             class_1 = _classThis = _classDescriptor.value;

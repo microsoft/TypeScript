@@ -730,7 +730,7 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
 
     function createDownlevelUsingStatements(bodyStatements: readonly Statement[], envBinding: Identifier, async: boolean) {
         const statements: Statement[] = [];
-        
+
         // produces:
         //
         //  const env_1 = { stack: [], error: void 0, hasError: false };

@@ -18,7 +18,7 @@ import {
     ClassDeclaration,
     ClassElement,
     ClassExpression,
-    classHasExplicitlyAssignedName,
+    classHasDeclaredOrExplicitlyAssignedName,
     ClassLikeDeclaration,
     classOrConstructorParameterIsDecorated,
     ClassStaticBlockDeclaration,
@@ -26,7 +26,6 @@ import {
     ComputedPropertyName,
     ConstructorDeclaration,
     createAccessorPropertyBackingField,
-    createClassNamedEvaluationHelperBlock,
     Debug,
     Decorator,
     ElementAccessExpression,
@@ -60,6 +59,7 @@ import {
     HeritageClause,
     Identifier,
     idText,
+    injectClassNamedEvaluationHelperBlockIfMissing,
     injectClassThisAssignmentIfMissing,
     InternalEmitFlags,
     isAmbientPropertyDeclaration,
@@ -82,7 +82,6 @@ import {
     isComputedPropertyName,
     isDestructuringAssignment,
     isElementAccessExpression,
-    isEmptyStringLiteral,
     isExportModifier,
     isExpression,
     isForInitializer,
@@ -184,7 +183,8 @@ import {
     visitNode,
     visitNodes,
     Visitor,
-    VisitResult
+    VisitResult,
+    WrappedExpression
 } from "../_namespaces/ts";
 
 // Class/Decorator evaluation order, as it pertains to this transformer:
@@ -417,7 +417,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
             case SyntaxKind.ClassDeclaration:
                 return visitClassDeclaration(node as ClassDeclaration);
             case SyntaxKind.ClassExpression:
-                return visitClassExpression(node as ClassExpression, /*referencedName*/ undefined);
+                return visitClassExpression(node as ClassExpression);
             case SyntaxKind.Constructor:
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.ClassStaticBlockDeclaration:
@@ -631,8 +631,14 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         return false;
     }
 
-    function transformClassLike(node: ClassLikeDeclaration, className: Expression) {
+    function transformClassLike(node: ClassLikeDeclaration) {
         startLexicalEnvironment();
+
+        // When a class has class decorators we end up transforming it into a statement that would otherwise give it an
+        // assigned name. If the class doesn't have an assigned name, we'll give it an assigned name of `""`)
+        if (!classHasDeclaredOrExplicitlyAssignedName(node) && classOrConstructorParameterIsDecorated(/*useLegacyDecorators*/ false, node)) {
+            node = injectClassNamedEvaluationHelperBlockIfMissing(context, node, factory.createStringLiteral(""));
+        }
 
         const classReference = factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ false, /*ignoreAssignedName*/ true);
         const classInfo = createClassInfo(node);
@@ -706,23 +712,8 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
 
         // 3. The name of the class is assigned.
         //
-        // If the class did not have a name, set the assigned name as if from NamedEvaluation.
-        // We don't need to use the assigned name if it consists of the empty string and the transformed class
-        // expression won't get its name from any other source (such as the variable we create to handle
-        // class decorators)
-        const needsSetNameHelper = !getOriginalNode(node, isClassLike)?.name && (classDecorators || !isStringLiteral(className) || !isEmptyStringLiteral(className));
-
-        // TODO(rbuckton): replace this with transformNamedEvaluation? Is it still needed?
-        let namedEvaluationHelperBlock: ClassStaticBlockDeclaration | undefined;
-        if (needsSetNameHelper && !classHasExplicitlyAssignedName(node)) {
-            namedEvaluationHelperBlock = createClassNamedEvaluationHelperBlock(context, className, renamedClassThis);
-            if (shouldTransformPrivateStaticElementsInClass) {
-                // We use `InternalEmitFlags.TransformPrivateStaticElements` as a marker on a class static block
-                // to inform the classFields transform that it shouldn't rename `this` to `_classThis` in the
-                // transformed class static block.
-                setInternalEmitFlags(namedEvaluationHelperBlock, InternalEmitFlags.TransformPrivateStaticElements);
-            }
-        }
+        // If the class did not have a name, the caller should have performed injectClassNamedEvaluationHelperBlockIfMissing
+        // prior to calling this function if a name was needed.
 
         // 4. For each member:
         //    a. Member Decorators are evaluated
@@ -928,15 +919,11 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
             trailingStaticBlock = factory.createClassStaticBlockDeclaration(trailingStaticBlockBody);
         }
 
-        if (namedEvaluationHelperBlock || leadingStaticBlock || syntheticConstructor || trailingStaticBlock) {
+        if (leadingStaticBlock || syntheticConstructor || trailingStaticBlock) {
             const newMembers: ClassElement[] = [];
 
             // add the NamedEvaluation helper block, if needed
             const existingNamedEvaluationHelperBlockIndex = members.findIndex(isClassNamedEvaluationHelperBlock);
-            if (namedEvaluationHelperBlock) {
-                Debug.assert(existingNamedEvaluationHelperBlockIndex === -1);
-                newMembers.push(namedEvaluationHelperBlock);
-            }
 
             // add the leading `static {}` block
             if (leadingStaticBlock) {
@@ -1033,8 +1020,11 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
             const className = originalClass.name ? factory.createStringLiteralFromNode(originalClass.name) : factory.createStringLiteral("default");
             const isExport = hasSyntacticModifier(node, ModifierFlags.Export);
             const isDefault = hasSyntacticModifier(node, ModifierFlags.Default);
+            if (!node.name) {
+                node = injectClassNamedEvaluationHelperBlockIfMissing(context, node, className);
+            }
             if (isExport && isDefault) {
-                const iife = transformClassLike(node, className);
+                const iife = transformClassLike(node);
                 if (node.name) {
                     //  let C = (() => { ... })();
                     //  export default C;
@@ -1063,7 +1053,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
             else {
                 //  let C = (() => { ... })();
                 Debug.assertIsDefined(node.name, "A class declaration that is not a default export must have a name.");
-                const iife = transformClassLike(node, className);
+                const iife = transformClassLike(node);
                 const modifierVisitorNoExport = isExport ? ((node: ModifierLike) => isExportModifier(node) ? undefined : modifierVisitor(node)) : modifierVisitor;
                 const modifiers = visitNodes(node.modifiers, modifierVisitorNoExport, isModifier);
                 const declName = factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
@@ -1094,10 +1084,9 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         }
     }
 
-    function visitClassExpression(node: ClassExpression, referencedName: Expression | undefined) {
+    function visitClassExpression(node: ClassExpression) {
         if (isDecoratedClassLike(node)) {
-            const className = node.name ? factory.createStringLiteralFromNode(node.name) : referencedName ?? factory.createStringLiteral("");
-            const iife = transformClassLike(node, className);
+            const iife = transformClassLike(node);
             setOriginalNode(iife, node);
             return iife;
         }
@@ -1425,7 +1414,10 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         enterClassElement(node);
 
         let result: ClassStaticBlockDeclaration;
-        if (isClassNamedEvaluationHelperBlock(node) || isClassThisAssignmentBlock(node)) {
+        if (isClassNamedEvaluationHelperBlock(node)) {
+            result = visitEachChild(node, visitor, context);
+        }
+        else if (isClassThisAssignmentBlock(node)) {
             const savedClassThis = classThis;
             classThis = undefined;
             result = visitEachChild(node, visitor, context);
@@ -1442,7 +1434,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
 
     function visitPropertyDeclaration(node: PropertyDeclaration) {
         if (isNamedEvaluation(node, isAnonymousClassNeedingAssignedName)) {
-            node = transformNamedEvaluation(context, node);
+            node = transformNamedEvaluation(context, node, canIgnoreEmptyStringLiteralInAssignedName(node.initializer));
         }
 
         enterClassElement(node);
@@ -1632,7 +1624,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         //     ...
 
         if (isNamedEvaluation(node, isAnonymousClassNeedingAssignedName)) {
-            node = transformNamedEvaluation(context, node);
+            node = transformNamedEvaluation(context, node, canIgnoreEmptyStringLiteralInAssignedName(node.initializer));
         }
 
         const updated = factory.updateParameterDeclaration(
@@ -1658,6 +1650,16 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
 
     function isAnonymousClassNeedingAssignedName(node: AnonymousFunctionDefinition) {
         return isClassExpression(node) && !node.name && isDecoratedClassLike(node);
+    }
+
+    function canIgnoreEmptyStringLiteralInAssignedName(node: WrappedExpression<AnonymousFunctionDefinition>) {
+        // The IIFE produced for `(@dec class {})` will result in an assigned name of the form
+        // `var class_1 = class { };`, and thus the empty string cannot be ignored. However, The IIFE
+        // produced for `(class { @dec x; })` will not result in an assigned name since it
+        // transforms to `return class { };`, and thus the empty string *can* be ignored.
+
+        const innerExpression = skipOuterExpressions(node);
+        return isClassExpression(innerExpression) && !innerExpression.name && !classOrConstructorParameterIsDecorated(/*useLegacyDecorators*/ false, innerExpression);
     }
 
     function visitForStatement(node: ForStatement) {
@@ -1709,7 +1711,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
             //     ...
 
             if (isNamedEvaluation(node, isAnonymousClassNeedingAssignedName)) {
-                node = transformNamedEvaluation(context, node);
+                node = transformNamedEvaluation(context, node, canIgnoreEmptyStringLiteralInAssignedName(node.right));
                 return visitEachChild(node, visitor, context);
             }
 
@@ -1893,7 +1895,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         //     ...
 
         if (isNamedEvaluation(node, isAnonymousClassNeedingAssignedName)) {
-            node = transformNamedEvaluation(context, node);
+            node = transformNamedEvaluation(context, node, canIgnoreEmptyStringLiteralInAssignedName(node.initializer));
         }
 
         return visitEachChild(node, visitor, context);
@@ -1915,7 +1917,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         //     ...
 
         if (isNamedEvaluation(node, isAnonymousClassNeedingAssignedName)) {
-            node = transformNamedEvaluation(context, node);
+            node = transformNamedEvaluation(context, node, canIgnoreEmptyStringLiteralInAssignedName(node.initializer));
         }
 
         return visitEachChild(node, visitor, context);
@@ -1939,7 +1941,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         //     ...
 
         if (isNamedEvaluation(node, isAnonymousClassNeedingAssignedName)) {
-            node = transformNamedEvaluation(context, node);
+            node = transformNamedEvaluation(context, node, canIgnoreEmptyStringLiteralInAssignedName(node.initializer));
         }
 
         return visitEachChild(node, visitor, context);
@@ -1986,7 +1988,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
 
         if (isAssignmentExpression(node, /*excludeCompoundAssignment*/ true)) {
             if (isNamedEvaluation(node, isAnonymousClassNeedingAssignedName)) {
-                node = transformNamedEvaluation(context, node);
+                node = transformNamedEvaluation(context, node, canIgnoreEmptyStringLiteralInAssignedName(node.right));
             }
 
             const assignmentTarget = visitDestructuringAssignmentTarget(node.left);
@@ -2052,7 +2054,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         //     ...
 
         if (isNamedEvaluation(node, isAnonymousClassNeedingAssignedName)) {
-            node = transformNamedEvaluation(context, node);
+            node = transformNamedEvaluation(context, node, canIgnoreEmptyStringLiteralInAssignedName(node.objectAssignmentInitializer));
         }
 
         return visitEachChild(node, visitor, context);
@@ -2093,11 +2095,8 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         //        a. Let _value_ be ? NamedEvaluation of |AssignmentExpression| with argument `"default"`.
         //     ...
 
-        // NOTE: Since emit for `export =` translates to `module.exports = ...`, the assigned nameof the class
-        // is `""`.
-
         if (isNamedEvaluation(node, isAnonymousClassNeedingAssignedName)) {
-            node = transformNamedEvaluation(context, node, /*ignoreEmptyStringLiteral*/ true);
+            node = transformNamedEvaluation(context, node, canIgnoreEmptyStringLiteralInAssignedName(node.expression));
         }
 
         return visitEachChild(node, visitor, context);
