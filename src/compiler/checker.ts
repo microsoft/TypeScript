@@ -1260,7 +1260,7 @@ export const enum CheckMode {
     RestBindingElement = 1 << 7,                    // Checking a type that is going to be used to determine the type of a rest binding element
                                                     //   e.g. in `const { a, ...rest } = foo`, when checking the type of `foo` to determine the type of `rest`,
                                                     //   we need to preserve generic types instead of substituting them for constraints
-    TypeOnly = 1 << 7,                              // Called from getTypeOfExpression, diagnostics may be omitted
+    TypeOnly = 1 << 8,                              // Called from getTypeOfExpression, diagnostics may be omitted
 }
 
 /** @internal */
