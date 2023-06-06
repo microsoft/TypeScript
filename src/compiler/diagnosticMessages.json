@@ -7628,6 +7628,10 @@
         "category": "Message",
         "code": 95182
     },
+    "Cannot move statements to the selected file": {
+        "category": "Message",
+        "code": 95183
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
