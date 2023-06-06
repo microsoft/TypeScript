@@ -41215,16 +41215,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             checkExternalEmitHelpers(node, ExternalEmitHelpers.AddDisposableResourceAndDisposeResources);
         }
 
-        if (isForInOrOfStatement(node.parent)) {
-            // checkGrammarForInOrForOfStatement will check that there is exactly one declaration.
-            if (node.declarations.length >= 1) {
-                const decl = node.declarations[0];
-                checkVariableDeclaration(decl);
-            }
-        }
-        else {
-            forEach(node.declarations, checkSourceElement);
-        }
+        forEach(node.declarations, checkSourceElement);
     }
 
     function checkVariableStatement(node: VariableStatement) {
