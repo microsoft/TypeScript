@@ -1,5 +1,5 @@
 // @declaration: true
-// @out: tests/cases/compiler/b.js
+// @out: b.js
 // @filename: a.ts
 class c {
 }
