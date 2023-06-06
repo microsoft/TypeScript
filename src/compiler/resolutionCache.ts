@@ -410,6 +410,63 @@ export function getRootPathSplitLength(rootPath: Path) {
     return rootPath.split(directorySeparator).length - (hasTrailingDirectorySeparator(rootPath) ? 1 : 0);
 }
 
+/** @internal */
+export function createModuleResolutionLoaderUsingGlobalCache(
+    containingFile: string,
+    redirectedReference: ResolvedProjectReference | undefined,
+    options: CompilerOptions,
+    resolutionHost: ResolutionCacheHost,
+    moduleResolutionCache: ModuleResolutionCache,
+): ResolutionLoader<StringLiteralLike, ResolvedModuleWithFailedLookupLocations, SourceFile> {
+    return {
+        nameAndMode: moduleResolutionNameAndModeGetter,
+        resolve: (moduleName, resoluionMode) => resolveModuleNameUsingGlobalCache(
+            resolutionHost,
+            moduleResolutionCache,
+            moduleName,
+            containingFile,
+            options,
+            redirectedReference,
+            resoluionMode,
+        ),
+    };
+}
+
+function resolveModuleNameUsingGlobalCache(
+    resolutionHost: ResolutionCacheHost,
+    moduleResolutionCache: ModuleResolutionCache,
+    moduleName: string,
+    containingFile: string,
+    compilerOptions: CompilerOptions,
+    redirectedReference?: ResolvedProjectReference,
+    mode?: ResolutionMode,
+): ResolvedModuleWithFailedLookupLocations {
+    const host = resolutionHost.getCompilerHost?.() || resolutionHost;
+    const result = ts_resolveModuleName(moduleName, containingFile, compilerOptions, host, moduleResolutionCache, redirectedReference, mode);
+    // try to load typings from @types
+    const globalCache = resolutionHost.getGlobalCache?.();
+    if (globalCache !== undefined && !isExternalModuleNameRelative(moduleName) && !(result.resolvedModule && extensionIsTS(result.resolvedModule.extension))) {
+        // create different collection of failed lookup locations for second pass
+        // if it will fail and we've already found something during the first pass - we don't want to pollute its results
+        const { resolvedModule, failedLookupLocations, affectingLocations, resolutionDiagnostics } = loadModuleFromGlobalCache(
+            Debug.checkDefined(resolutionHost.globalCacheResolutionModuleName)(moduleName),
+            resolutionHost.projectName,
+            compilerOptions,
+            host,
+            globalCache,
+            moduleResolutionCache,
+        );
+        if (resolvedModule) {
+            // Modify existing resolution so its saved in the directory cache as well
+            (result.resolvedModule as any) = resolvedModule;
+            result.failedLookupLocations = updateResolutionField(result.failedLookupLocations, failedLookupLocations);
+            result.affectingLocations = updateResolutionField(result.affectingLocations, affectingLocations);
+            result.resolutionDiagnostics = updateResolutionField(result.resolutionDiagnostics, resolutionDiagnostics);
+        }
+    }
+    return result;
+}
+
 type GetResolutionWithResolvedFileName<T extends ResolutionWithFailedLookupLocations = ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName = ResolutionWithResolvedFileName> =
     (resolution: T) => R | undefined;
 
@@ -645,58 +702,6 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         hasChangedAutomaticTypeDirectiveNames = false;
     }
 
-    function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, redirectedReference?: ResolvedProjectReference, mode?: ResolutionMode): CachedResolvedModuleWithFailedLookupLocations {
-        const host = resolutionHost.getCompilerHost?.() || resolutionHost;
-        const primaryResult = ts_resolveModuleName(moduleName, containingFile, compilerOptions, host, moduleResolutionCache, redirectedReference, mode);
-        // return result immediately only if global cache support is not enabled or if it is .ts, .tsx or .d.ts
-        if (!resolutionHost.getGlobalCache) {
-            return primaryResult;
-        }
-
-        // otherwise try to load typings from @types
-        const globalCache = resolutionHost.getGlobalCache();
-        if (globalCache !== undefined && !isExternalModuleNameRelative(moduleName) && !(primaryResult.resolvedModule && extensionIsTS(primaryResult.resolvedModule.extension))) {
-            // create different collection of failed lookup locations for second pass
-            // if it will fail and we've already found something during the first pass - we don't want to pollute its results
-            const { resolvedModule, failedLookupLocations, affectingLocations, resolutionDiagnostics } = loadModuleFromGlobalCache(
-                Debug.checkDefined(resolutionHost.globalCacheResolutionModuleName)(moduleName),
-                resolutionHost.projectName,
-                compilerOptions,
-                host,
-                globalCache,
-                moduleResolutionCache,
-            );
-            if (resolvedModule) {
-                // Modify existing resolution so its saved in the directory cache as well
-                (primaryResult.resolvedModule as any) = resolvedModule;
-                primaryResult.failedLookupLocations = updateResolutionField(primaryResult.failedLookupLocations, failedLookupLocations);
-                primaryResult.affectingLocations = updateResolutionField(primaryResult.affectingLocations, affectingLocations);
-                primaryResult.resolutionDiagnostics = updateResolutionField(primaryResult.resolutionDiagnostics, resolutionDiagnostics);
-                return primaryResult;
-            }
-        }
-
-        // Default return the result from the first pass
-        return primaryResult;
-    }
-
-    function createModuleResolutionLoader(
-        containingFile: string,
-        redirectedReference: ResolvedProjectReference | undefined,
-        options: CompilerOptions,
-    ): ResolutionLoader<StringLiteralLike, ResolvedModuleWithFailedLookupLocations, SourceFile> {
-        return {
-            nameAndMode: moduleResolutionNameAndModeGetter,
-            resolve: (moduleName, resoluionMode) => resolveModuleName(
-                moduleName,
-                containingFile,
-                options,
-                redirectedReference,
-                resoluionMode,
-            ),
-        };
-    }
-
     interface ResolveNamesWithLocalCacheInput<Entry, SourceFile, T extends ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName> {
         entries: readonly Entry[];
         containingFile: string;
@@ -864,10 +869,12 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
             options,
             reusedNames,
             perFileCache: resolvedModuleNames,
-            loader: createModuleResolutionLoader(
+            loader: createModuleResolutionLoaderUsingGlobalCache(
                 containingFile,
                 redirectedReference,
                 options,
+                resolutionHost,
+                moduleResolutionCache,
             ),
             getResolutionWithResolvedFileName: getResolvedModule,
             shouldRetryResolution: resolution => !resolution.resolvedModule || !resolutionExtensionIsTSOrJson(resolution.resolvedModule.extension),
@@ -919,7 +926,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         const resolutionsInFile = resolvedModuleNames.get(path);
         const resolution = resolutionsInFile?.get(moduleName, /*mode*/ undefined);
         if (resolution && !resolution.isInvalidated) return resolution;
-        return resolveModuleName(moduleName, containingFile, resolutionHost.getCompilationSettings());
+        return resolveModuleNameUsingGlobalCache(resolutionHost, moduleResolutionCache, moduleName, containingFile, resolutionHost.getCompilationSettings());
     }
 
     function isNodeModulesAtTypesDirectory(dirPath: Path) {

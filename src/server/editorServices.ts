@@ -996,6 +996,7 @@ export class ProjectService {
     private currentPluginEnablementPromise?: Promise<void>;
 
     /** @internal */ verifyDocumentRegistry = noop;
+    /** @internal */ verifyProgram: (project: Project) => void = noop;
 
     constructor(opts: ProjectServiceOptions) {
         this.host = opts.host;
