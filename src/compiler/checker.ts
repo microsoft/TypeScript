@@ -29013,7 +29013,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // `namespace.prop = namespace.prop || {}`.
                 const type = getContextualType(binaryExpression, contextFlags);
                 return node === right && (type && type.pattern || !type && !isDefaultedExpandoInitializer(binaryExpression)) ?
-                    getTypeOfExpression(left) : type;
+                    getNonNullableTypeIfNeeded(getTypeOfExpression(left)) : type;
             case SyntaxKind.AmpersandAmpersandToken:
             case SyntaxKind.CommaToken:
                 return node === right ? getContextualType(binaryExpression, contextFlags) : undefined;
