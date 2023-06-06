@@ -185,10 +185,10 @@ FsWatchesRecursive::
 /Users/someuser/work/applications/frontend/src:
   {}
 
-Info seq  [hh:mm:ss:mss] fileExists:: [{"key":"/Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts","count":2}]
-Info seq  [hh:mm:ss:mss] directoryExists:: [{"key":"/Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts","count":1}]
+Info seq  [hh:mm:ss:mss] fileExists:: [{"key":"/Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts","count":3},{"key":"/Users/someuser/work/applications/frontend/src/app/redux/configureStore.ts","count":1},{"key":"/a/lib/lib.es2016.full.d.ts","count":1}]
+Info seq  [hh:mm:ss:mss] directoryExists:: [{"key":"/Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts","count":1},{"key":"/Users/someuser/work/applications/frontend/types","count":2},{"key":"/Users/someuser/work/applications/frontend/node_modules/@types","count":2}]
 Info seq  [hh:mm:ss:mss] getDirectories:: []
-Info seq  [hh:mm:ss:mss] readFile:: [{"key":"/Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts","count":1}]
+Info seq  [hh:mm:ss:mss] readFile:: [{"key":"/Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts","count":2},{"key":"/Users/someuser/work/applications/frontend/src/app/redux/configureStore.ts","count":1},{"key":"/a/lib/lib.es2016.full.d.ts","count":1}]
 Info seq  [hh:mm:ss:mss] readDirectory:: []
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Search path: /Users/someuser/work/applications/frontend/src/app/utils
