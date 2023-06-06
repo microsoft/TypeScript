@@ -33,6 +33,7 @@ export class TextDocument {
     public asTestFile() {
         return this._testFile || (this._testFile = {
             unitName: this.file,
+            fileName: this.file,
             content: this.text,
             fileOptions: ts.arrayFrom(this.meta)
                 .reduce((obj, [key, value]) => (obj[key] = value, obj), {} as Record<string, string>)

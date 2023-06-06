@@ -391,7 +391,16 @@ export namespace Compiler {
     }
 
     export interface TestFile {
+        /**
+         * Exact contents of '@Filename' if provided. Usually either absolute ('/index.ts')
+         * or non-relative ('index.ts'). This value is passed as `rootNames` to `createProgram`
+         * when no tsconfig file is present to simulate the behavior of `tsc` on the command line.
+         */
         unitName: string;
+        /**
+         * Absolute path to the virtual file, i.e. `unitName` resolved relative to the VFS cwd.
+         */
+        fileName: string;
         content: string;
         fileOptions?: any;
     }
@@ -405,7 +414,7 @@ export namespace Compiler {
         currentDirectory: string | undefined,
         symlinks?: vfs.FileSet
     ): compiler.CompilationResult {
-        const options: ts.CompilerOptions & HarnessOptions = compilerOptions ? ts.cloneCompilerOptions(compilerOptions) : { noResolve: false };
+        let options: ts.CompilerOptions & HarnessOptions = compilerOptions ? ts.cloneCompilerOptions(compilerOptions) : { noResolve: false };
         options.target = ts.getEmitScriptTarget(options);
         options.newLine = options.newLine || ts.NewLineKind.CarriageReturnLineFeed;
         options.noErrorTruncation = true;
@@ -423,9 +432,6 @@ export namespace Compiler {
             if (ts.isString(harnessSettings.typeScriptVersion) && harnessSettings.typeScriptVersion) {
                 typeScriptVersion = harnessSettings.typeScriptVersion;
             }
-        }
-        if (options.rootDirs) {
-            options.rootDirs = ts.map(options.rootDirs, d => ts.getNormalizedAbsolutePath(d, currentDirectory));
         }
 
         const useCaseSensitiveFileNames = options.useCaseSensitiveFileNames !== undefined ? options.useCaseSensitiveFileNames : true;
@@ -449,6 +455,8 @@ export namespace Compiler {
         if (symlinks) {
             fs.apply(symlinks);
         }
+
+        options = ts.convertToOptionsWithAbsolutePaths(options, path => ts.getNormalizedAbsolutePath(path, currentDirectory));
         const host = new fakes.CompilerHost(fs, options);
         const result = compiler.compileFiles(host, programFileNames, options, typeScriptVersion);
         result.symlinks = symlinks;
@@ -499,7 +507,11 @@ export namespace Compiler {
             else if (vpath.isTypeScript(file.unitName) || (vpath.isJavaScript(file.unitName) && ts.getAllowJSCompilerOption(options))) {
                 const declFile = findResultCodeFile(file.unitName);
                 if (declFile && !findUnit(declFile.file, declInputFiles) && !findUnit(declFile.file, declOtherFiles)) {
-                    dtsFiles.push({ unitName: declFile.file, content: Utils.removeByteOrderMark(declFile.text) });
+                    dtsFiles.push({
+                        unitName: declFile.file,
+                        fileName: ts.getNormalizedAbsolutePath(declFile.file, result.vfs.cwd()),
+                        content: Utils.removeByteOrderMark(declFile.text)
+                    });
                 }
             }
         }
@@ -1202,7 +1214,7 @@ export namespace TestCaseParser {
     }
 
     /** Given a test file containing // @FileName directives, return an array of named units of code to be added to an existing compiler instance */
-    export function makeUnitsFromTest(code: string, fileName: string, rootDir?: string, settings = extractCompilerSettings(code)): TestCaseContent {
+    export function makeUnitsFromTest(code: string, fileName: string, settings = extractCompilerSettings(code)): TestCaseContent {
         // List of all the subfiles we've parsed out
         const testUnitData: TestUnitData[] = [];
 
@@ -1288,9 +1300,9 @@ export namespace TestCaseParser {
                     const files: string[] = [];
                     const directories = new Set<string>();
                     for (const unit of testUnitData) {
-                        const unitName = ts.getNormalizedAbsolutePath(unit.name, rootDir);
-                        if (unitName.toLowerCase().startsWith(dir.toLowerCase())) {
-                            let path = unitName.substring(dir.length);
+                        const fileName = ts.getNormalizedAbsolutePath(unit.name, vfs.srcFolder);
+                        if (fileName.toLowerCase().startsWith(dir.toLowerCase())) {
+                            let path = fileName.substring(dir.length);
                             if (path.startsWith("/")) {
                                 path = path.substring(1);
                             }
@@ -1319,11 +1331,9 @@ export namespace TestCaseParser {
             if (getConfigNameFromFileName(data.name)) {
                 const configJson = ts.parseJsonText(data.name, data.content);
                 assert.isTrue(configJson.endOfFileToken !== undefined);
-                let baseDir = ts.normalizePath(ts.getDirectoryPath(data.name));
-                if (rootDir) {
-                    baseDir = ts.getNormalizedAbsolutePath(baseDir, rootDir);
-                }
-                tsConfig = ts.parseJsonSourceFileConfigFileContent(configJson, parseConfigHost, baseDir, /*existingOptions*/ undefined, ts.getNormalizedAbsolutePath(data.name, rootDir));
+                const configFileName = ts.getNormalizedAbsolutePath(data.name, vfs.srcFolder);
+                const configDir = ts.getDirectoryPath(configFileName);
+                tsConfig = ts.parseJsonSourceFileConfigFileContent(configJson, parseConfigHost, configDir, /*existingOptions*/ undefined, configFileName);
                 tsConfigFileUnitData = data;
 
                 // delete entry from the list
@@ -1534,7 +1544,7 @@ export function isBuiltFile(filePath: string): boolean {
 
 export function getDefaultLibraryFile(filePath: string, io: IO): Compiler.TestFile {
     const libFile = userSpecifiedRoot + libFolder + ts.getBaseFileName(ts.normalizeSlashes(filePath));
-    return { unitName: libFile, content: io.readFile(libFile)! };
+    return { unitName: libFile, fileName: libFile, content: io.readFile(libFile)! };
 }
 
 export function getConfigNameFromFileName(filename: string): "tsconfig.json" | "jsconfig.json" | undefined {
