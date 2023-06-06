@@ -535,7 +535,6 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             // If files are listed explicitly or allowJs is specified, allow all extensions
             this.compilerOptions.allowNonTsExtensions = true;
         }
-
         switch (projectService.serverMode) {
             case LanguageServiceMode.Semantic:
                 this.languageServiceEnabled = true;
@@ -1524,6 +1523,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         tracing?.pop();
 
         Debug.assert(oldProgram === undefined || this.program !== undefined);
+        this.projectService.verifyProgram(this);
 
         // bump up the version if
         // - oldProgram is not set - this is a first time updateGraph is called
