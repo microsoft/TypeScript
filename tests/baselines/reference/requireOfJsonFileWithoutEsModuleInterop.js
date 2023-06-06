@@ -9,11 +9,11 @@ import * as test from "./test.json"
     "b": "hello"
 }
 
-//// [out/test.json]
+//// [tests/cases/compiler/out/test.json]
 {
     "a": true,
     "b": "hello"
 }
-//// [out/file1.js]
+//// [tests/cases/compiler/out/file1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

@@ -54,10 +54,10 @@ declare module "index" {
 //// [DtsFileErrors]
 
 
-dist/out.d.ts(10,33): error TS2307: Cannot find module 'nested' or its corresponding type declarations.
+tests/cases/compiler/dist/out.d.ts(10,33): error TS2307: Cannot find module 'nested' or its corresponding type declarations.
 
 
-==== ./dist/out.d.ts (1 errors) ====
+==== tests/cases/compiler/dist/out.d.ts (1 errors) ====
     declare module "nested/shared" {
         export class B {
         }
