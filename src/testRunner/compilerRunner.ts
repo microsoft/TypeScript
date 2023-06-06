@@ -92,10 +92,12 @@ export class CompilerBaselineRunner extends RunnerBase {
         let compilerTest!: CompilerTest;
         before(() => {
             let payload;
+            let rootDir = fileName.indexOf("conformance") === -1 ? "tests/cases/compiler/" : ts.getDirectoryPath(fileName) + "/";
             if (test && test.content) {
-                payload = TestCaseParser.makeUnitsFromTest(test.content, test.file);
+                rootDir = test.file.indexOf("conformance") === -1 ? "tests/cases/compiler/" : ts.getDirectoryPath(test.file) + "/";
+                payload = TestCaseParser.makeUnitsFromTest(test.content, test.file, rootDir);
             }
-            compilerTest = new CompilerTest(fileName, payload, configuration);
+            compilerTest = new CompilerTest(fileName, rootDir, payload, configuration);
         });
         it(`Correct errors for ${fileName}`, () => compilerTest.verifyDiagnostics());
         it(`Correct module resolution tracing for ${fileName}`, () => compilerTest.verifyModuleResolution());
@@ -177,8 +179,8 @@ class CompilerTest {
     // equivalent to other files on the file system not directly passed to the compiler (ie things that are referenced by other files)
     private otherFiles: Compiler.TestFile[];
 
-    constructor(fileName: string, testCaseContent?: TestCaseParser.TestCaseContent, configurationOverrides?: TestCaseParser.CompilerSettings) {
-        const rootDir = vfs.srcFolder;
+    constructor(fileName: string, private rootDir: string, testCaseContent?: TestCaseParser.TestCaseContent, configurationOverrides?: TestCaseParser.CompilerSettings) {
+        const absoluteRootDir = ts.getNormalizedAbsolutePath(rootDir, vfs.srcFolder);
         this.fileName = fileName;
         this.justName = vpath.basename(fileName);
         this.configuredName = this.justName;
@@ -201,7 +203,7 @@ class CompilerTest {
         }
 
         if (testCaseContent === undefined) {
-            testCaseContent = TestCaseParser.makeUnitsFromTest(IO.readFile(fileName)!, fileName);
+            testCaseContent = TestCaseParser.makeUnitsFromTest(IO.readFile(fileName)!, fileName, rootDir);
         }
 
         if (configurationOverrides) {
@@ -219,7 +221,7 @@ class CompilerTest {
             tsConfigOptions = ts.cloneCompilerOptions(testCaseContent.tsConfig.options);
             this.tsConfigFiles.push(this.createHarnessTestFile(testCaseContent.tsConfigFileUnitData!));
             for (const unit of units) {
-                if (testCaseContent.tsConfig.fileNames.includes(ts.getNormalizedAbsolutePath(unit.name, rootDir))) {
+                if (testCaseContent.tsConfig.fileNames.includes(ts.getNormalizedAbsolutePath(unit.name, absoluteRootDir))) {
                     this.toBeCompiled.push(this.createHarnessTestFile(unit));
                 }
                 else {
@@ -230,7 +232,7 @@ class CompilerTest {
         else {
             const baseUrl = this.harnessSettings.baseUrl;
             if (baseUrl !== undefined && !ts.isRootedDiskPath(baseUrl)) {
-                this.harnessSettings.baseUrl = ts.getNormalizedAbsolutePath(baseUrl, rootDir);
+                this.harnessSettings.baseUrl = ts.getNormalizedAbsolutePath(baseUrl, absoluteRootDir);
             }
 
             const lastUnit = units[units.length - 1];
@@ -254,7 +256,6 @@ class CompilerTest {
         }
 
         if (tsConfigOptions && tsConfigOptions.configFilePath !== undefined) {
-            tsConfigOptions.configFilePath = ts.combinePaths(rootDir, tsConfigOptions.configFilePath);
             tsConfigOptions.configFile!.fileName = tsConfigOptions.configFilePath;
         }
 
@@ -264,6 +265,7 @@ class CompilerTest {
             this.harnessSettings,
             /*options*/ tsConfigOptions,
             /*currentDirectory*/ this.harnessSettings.currentDirectory,
+            this.rootDir,
             testCaseContent.symlinks
         );
 
@@ -353,8 +355,7 @@ class CompilerTest {
 
     private createHarnessTestFile(unit: TestCaseParser.TestUnitData): Compiler.TestFile {
         return {
-            unitName: unit.name,
-            fileName: ts.getNormalizedAbsolutePath(unit.name, vfs.srcFolder),
+            unitName: ts.getNormalizedAbsolutePath(unit.name, this.rootDir),
             content: unit.content,
             fileOptions: unit.fileOptions
         };
