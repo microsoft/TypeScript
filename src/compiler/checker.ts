@@ -16593,7 +16593,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function addTypeToIntersection(typeSet: Map<string, Type>, includes: TypeFlags, type: Type) {
         const flags = type.flags;
         if (flags & TypeFlags.Intersection) {
-            return addTypesToIntersection(typeSet, includes, (type as IntersectionType).types);
+            const list = `&${getTypeListId((type as IntersectionType).types)}`;
+            if (!typeSet.has(list)) {
+                typeSet.set(list, unknownType); // set the set as containing this intersection, so later copies aren't iterated over - `unknown` should be a noop set member
+                return addTypesToIntersection(typeSet, includes, (type as IntersectionType).types);
+            }
+            return includes;
         }
         if (isEmptyAnonymousObjectType(type)) {
             if (!(includes & TypeFlags.IncludesEmptyObject)) {
@@ -16610,13 +16615,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     includes |= TypeFlags.IncludesMissingType;
                     type = undefinedType;
                 }
-                if (!typeSet.has(type.id.toString())) {
+                const id = type.flags & TypeFlags.Union ? `|${getTypeListId((type as UnionType).types)}` : type.id.toString();
+                if (!typeSet.has(id)) {
                     if (type.flags & TypeFlags.Unit && includes & TypeFlags.Unit) {
                         // We have seen two distinct unit types which means we should reduce to an
                         // empty intersection. Adding TypeFlags.NonPrimitive causes that to happen.
                         includes |= TypeFlags.NonPrimitive;
                     }
-                    typeSet.set(type.id.toString(), type);
+                    typeSet.set(id, type);
                 }
             }
             includes |= flags & TypeFlags.IncludesMask;
