@@ -391,11 +391,6 @@ export namespace Compiler {
     }
 
     export interface TestFile {
-        /**
-         * Exact contents of '@Filename' if provided. Usually either absolute ('/index.ts')
-         * or non-relative ('index.ts'). This value is passed as `rootNames` to `createProgram`
-         * when no tsconfig file is present to simulate the behavior of `tsc` on the command line.
-         */
         unitName: string;
         content: string;
         fileOptions?: any;
