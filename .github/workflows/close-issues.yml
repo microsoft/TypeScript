@@ -36,6 +36,8 @@ jobs:
           }
 
           close_issues "Duplicate"
+          close_issues "Unactionable"
+          close_issues "Not a Defect"
           close_issues "External"
           close_issues "Working as Intended"
           close_issues "Question"
