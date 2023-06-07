@@ -14,3 +14,8 @@ var c = /** @class */ (function () {
     }
     return c;
 }());
+
+
+//// [b.d.ts]
+declare class c {
+}
