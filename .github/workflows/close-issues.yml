@@ -37,4 +37,3 @@ jobs:
           close_issues "External"
           close_issues "Working as Intended"
           close_issues "Question"
-
