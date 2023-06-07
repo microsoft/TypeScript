@@ -16230,6 +16230,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return type.elementFlags.length - findLastIndex(type.elementFlags, f => !(f & flags)) - 1;
     }
 
+    function getTotalFixedElementCount(type: TupleType) {
+        return type.fixedLength + getEndElementCount(type, ElementFlags.Fixed);
+    }
+
     function getElementTypes(type: TupleTypeReference): readonly Type[] {
         const typeArguments = getTypeArguments(type);
         const arity = getTypeReferenceArity(type);
@@ -17357,7 +17361,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     errorIfWritingToReadonlyIndex(getIndexInfoOfType(objectType, numberType));
                     return mapType(objectType, t => {
                         const restType = getRestTypeOfTupleType(t as TupleTypeReference) || undefinedType;
-                        return accessFlags & AccessFlags.IncludeUndefined ? getUnionType([restType, missingType]) : restType;
+                        return accessFlags & AccessFlags.IncludeUndefined && index >= getTotalFixedElementCount((t as TupleTypeReference).target) ? getUnionType([restType, missingType]) : restType;
                     });
                 }
             }
@@ -17698,8 +17702,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // preserve backwards compatibility. For example, an element access 'this["foo"]' has always been resolved
         // eagerly using the constraint type of 'this' at the given location.
         if (isGenericIndexType(indexType) || (accessNode && accessNode.kind !== SyntaxKind.IndexedAccessType ?
-            isGenericTupleType(objectType) && !indexTypeLessThan(indexType, objectType.target.fixedLength) :
-            isGenericObjectType(objectType) && !(isTupleType(objectType) && indexTypeLessThan(indexType, objectType.target.fixedLength)) || isGenericReducibleType(objectType))) {
+            isGenericTupleType(objectType) && !indexTypeLessThan(indexType, getTotalFixedElementCount(objectType.target)) :
+            isGenericObjectType(objectType) && !(isTupleType(objectType) && indexTypeLessThan(indexType, getTotalFixedElementCount(objectType.target))) || isGenericReducibleType(objectType))) {
             if (objectType.flags & TypeFlags.AnyOrUnknown) {
                 return objectType;
             }
@@ -23290,8 +23294,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!restType) {
                     return undefinedType;
                 }
-                if (compilerOptions.noUncheckedIndexedAccess &&
-                    index >= tupleType.target.fixedLength + getEndElementCount(tupleType.target, ElementFlags.Fixed)) {
+                if (compilerOptions.noUncheckedIndexedAccess && index >= getTotalFixedElementCount(tupleType.target)) {
                     return getUnionType([restType, undefinedType]);
                 }
                 return restType;
