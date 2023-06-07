@@ -198,6 +198,7 @@ import {
     nodeSeenTracker,
     NumericLiteral,
     ObjectLiteralExpression,
+    or,
     ParameterDeclaration,
     ParenthesizedExpression,
     Path,
@@ -2177,9 +2178,9 @@ export namespace Core {
         }
 
         // Check if the node is within an extends or implements clause
-        const containingClass = getContainingClassIfInHeritageClause(refNode);
-        if (containingClass) {
-            addReference(containingClass);
+        const containingNode = getContainingNodeIfInHeritageClause(refNode);
+        if (containingNode) {
+            addReference(containingNode);
             return;
         }
 
@@ -2212,9 +2213,9 @@ export namespace Core {
         }
     }
 
-    function getContainingClassIfInHeritageClause(node: Node): ClassLikeDeclaration | InterfaceDeclaration | undefined {
-        return isIdentifier(node) || isPropertyAccessExpression(node) ? getContainingClassIfInHeritageClause(node.parent)
-            : isExpressionWithTypeArguments(node) ? tryCast(node.parent.parent, isClassLike) : undefined;
+    function getContainingNodeIfInHeritageClause(node: Node): ClassLikeDeclaration | InterfaceDeclaration | undefined {
+        return isIdentifier(node) || isPropertyAccessExpression(node) ? getContainingNodeIfInHeritageClause(node.parent)
+            : isExpressionWithTypeArguments(node) ? tryCast(node.parent.parent, or(isClassLike, isInterfaceDeclaration)) : undefined;
     }
 
     /**

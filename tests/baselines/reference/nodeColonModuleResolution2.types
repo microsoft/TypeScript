@@ -1,3 +1,18 @@
+=== /a/b/main.ts ===
+import * as ph from 'fake:thing'
+>ph : typeof ph
+
+console.log(ph.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE)
+>console.log(ph.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>ph.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE : number
+>ph.constants : typeof ph.constants
+>ph : typeof ph
+>constants : typeof ph.constants
+>NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE : number
+
 === /a/b/node_modules/fake/thing/index.d.ts ===
 export namespace constants {
 >constants : typeof constants
@@ -35,18 +50,3 @@ export namespace constants {
     const NODE_PERFORMANCE_GC_FLAGS_SCHEDULE_IDLE: number;
 >NODE_PERFORMANCE_GC_FLAGS_SCHEDULE_IDLE : number
 }
-=== /a/b/main.ts ===
-import * as ph from 'fake:thing'
->ph : typeof ph
-
-console.log(ph.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE)
->console.log(ph.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE) : void
->console.log : (...data: any[]) => void
->console : Console
->log : (...data: any[]) => void
->ph.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE : number
->ph.constants : typeof ph.constants
->ph : typeof ph
->constants : typeof ph.constants
->NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE : number
-

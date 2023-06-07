@@ -2,11 +2,11 @@
 JsFile: c.js
 mapUrl: c.js.map
 sourceRoot: 
-sources: tests/cases/compiler/a.ts,tests/cases/compiler/b.ts
+sources: a.ts,b.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:c.js
-sourceFile:tests/cases/compiler/a.ts
+emittedFile:tests/cases/compiler/c.js
+sourceFile:a.ts
 -------------------------------------------------------------------
 >>>// --out and --outFile error
 1 >
@@ -64,8 +64,8 @@ sourceFile:tests/cases/compiler/a.ts
 4 >Emitted(6, 6) Source(3, 12) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
-emittedFile:c.js
-sourceFile:tests/cases/compiler/b.ts
+emittedFile:tests/cases/compiler/c.js
+sourceFile:b.ts
 -------------------------------------------------------------------
 >>>var B = /** @class */ (function () {
 1->

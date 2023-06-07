@@ -29,7 +29,7 @@ declare namespace Test {
 //// [DtsFileErrors]
 
 
-out.d.ts(1,23): error TS2688: Cannot find type definition file for 'jquery'.
+tests/cases/compiler/out.d.ts(1,23): error TS2688: Cannot find type definition file for 'jquery'.
 
 
 ==== /a/node_modules/@types/jquery/index.d.ts (0 errors) ====
@@ -37,7 +37,7 @@ out.d.ts(1,23): error TS2688: Cannot find type definition file for 'jquery'.
     
     }
     
-==== out.d.ts (1 errors) ====
+==== tests/cases/compiler/out.d.ts (1 errors) ====
     /// <reference types="jquery" />
                           ~~~~~~
 !!! error TS2688: Cannot find type definition file for 'jquery'.

@@ -25,6 +25,10 @@ use(y.toFixed());
 >y : number
 >toFixed : (fractionDigits?: number) => string
 
+=== c:/root/src/file3/index.d.ts ===
+export let x: number;
+>x : number
+
 === c:/root/generated/src/project/file2.ts ===
 import {a} from "module1";
 >a : number
@@ -51,10 +55,6 @@ export let a: number
 === c:/root/generated/src/templates/module2.ts ===
 export let b: number;
 >b : number
-
-=== c:/root/src/file3/index.d.ts ===
-export let x: number;
->x : number
 
 === c:/node_modules/module3.d.ts ===
 export let y: number;

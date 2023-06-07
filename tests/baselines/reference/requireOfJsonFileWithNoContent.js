@@ -12,8 +12,8 @@ if (x) {
 //// [b.json]
 
 
-//// [out/b.json]
-//// [out/file1.js]
+//// [tests/cases/compiler/out/b.json]
+//// [tests/cases/compiler/out/file1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var b1 = require("./b.json");

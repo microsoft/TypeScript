@@ -13,7 +13,7 @@ tests/cases/conformance/node/subfolder/index.ts(8,24): error TS2712: A dynamic i
 
 !!! error TS-1: Pre-emit (9) and post-emit (10) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
 !!! related TS-1: The excess diagnostics are:
-!!! related TS2705 /.src/tests/cases/conformance/node/index.ts:6:23: An async function or method in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
+!!! related TS2705 tests/cases/conformance/node/index.ts:6:23: An async function or method in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
 !!! error TS2468: Cannot find global value 'Promise'.
 ==== tests/cases/conformance/node/subfolder/index.ts (5 errors) ====
     // cjs format file

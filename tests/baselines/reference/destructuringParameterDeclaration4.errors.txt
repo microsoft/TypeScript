@@ -41,7 +41,7 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts(
     a1(...array2);            // Error parameter type is (number|string)[]
           ~~~~~~
 !!! error TS2552: Cannot find name 'array2'. Did you mean 'Array'?
-!!! related TS2728 /.ts/lib.es5.d.ts:--:--: 'Array' is declared here.
+!!! related TS2728 lib.es5.d.ts:--:--: 'Array' is declared here.
     a5([1, 2, "string", false, true]);       // Error, parameter type is [any, any, [[any]]]
               ~~~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type '[[any]]'.

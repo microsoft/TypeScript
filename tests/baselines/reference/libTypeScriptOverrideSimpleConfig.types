@@ -1,7 +1,3 @@
-=== /somepath/node_modules/@typescript/lib-dom/index.d.ts ===
-interface ABC { abc: string }
->abc : string
-
 === /somepath/index.ts ===
 /// <reference lib="dom" />
 const a: ABC = { abc: "Hello" }
@@ -16,4 +12,8 @@ window.localStorage
 >window.localStorage : any
 >window : any
 >localStorage : any
+
+=== /somepath/node_modules/@typescript/lib-dom/index.d.ts ===
+interface ABC { abc: string }
+>abc : string
 

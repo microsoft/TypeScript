@@ -2,11 +2,11 @@
 JsFile: bundle.d.ts
 mapUrl: bundle.d.ts.map
 sourceRoot: 
-sources: tests/cases/compiler/a.ts,tests/cases/compiler/index.ts
+sources: a.ts,index.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:bundle.d.ts
-sourceFile:tests/cases/compiler/a.ts
+emittedFile:tests/cases/compiler/bundle.d.ts
+sourceFile:a.ts
 -------------------------------------------------------------------
 >>>declare class Foo {
 1 >
@@ -87,8 +87,8 @@ sourceFile:tests/cases/compiler/a.ts
 1 >Emitted(8, 2) Source(8, 2) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
-emittedFile:bundle.d.ts
-sourceFile:tests/cases/compiler/index.ts
+emittedFile:tests/cases/compiler/bundle.d.ts
+sourceFile:index.ts
 -------------------------------------------------------------------
 >>>declare const c: Foo;
 1->

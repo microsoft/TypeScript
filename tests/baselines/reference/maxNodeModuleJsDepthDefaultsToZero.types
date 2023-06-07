@@ -1,3 +1,11 @@
+=== /typings/index.d.ts ===
+declare module "shortid" {
+>"shortid" : typeof import("shortid")
+
+    export var x: number;
+>x : number
+}
+
 === /index.ts ===
 /// <reference path="/typings/index.d.ts" />
 import * as foo from "shortid";
@@ -13,12 +21,4 @@ foo.y // ignored from shortid/index.js
 >foo : typeof foo
 >y : any
 
-
-=== /typings/index.d.ts ===
-declare module "shortid" {
->"shortid" : typeof import("shortid")
-
-    export var x: number;
->x : number
-}
 

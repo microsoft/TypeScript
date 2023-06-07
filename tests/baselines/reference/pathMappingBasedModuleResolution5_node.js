@@ -1,5 +1,8 @@
 //// [tests/cases/compiler/pathMappingBasedModuleResolution5_node.ts] ////
 
+//// [file4.ts]
+export var z1 = 1;
+
 //// [file1.ts]
 import {x} from "folder2/file1"
 import {y} from "folder3/file2"
@@ -22,9 +25,6 @@ export var y = 1;
 //// [index.d.ts]
 export var z: number;
 
-//// [file4.ts]
-export var z1 = 1;
-
 
 //// [file1.js]
 "use strict";
@@ -36,11 +36,6 @@ exports.x = 1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = void 0;
 exports.y = 1;
-//// [file4.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.z1 = void 0;
-exports.z1 = 1;
 //// [file1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

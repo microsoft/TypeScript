@@ -24,6 +24,7 @@ import {
     arrayToMultiMap,
     ArrayTypeNode,
     ArrowFunction,
+    AsExpression,
     AssertionExpression,
     AssignmentDeclarationKind,
     AssignmentKind,
@@ -1253,11 +1254,13 @@ export const enum CheckMode {
     Inferential = 1 << 1,                           // Inferential typing
     SkipContextSensitive = 1 << 2,                  // Skip context sensitive function expressions
     SkipGenericFunctions = 1 << 3,                  // Skip single signature generic functions
-    IsForSignatureHelp = 1 << 4,                    // Call resolution for purposes of signature help
-    IsForStringLiteralArgumentCompletions = 1 << 5, // Do not infer from the argument currently being typed
-    RestBindingElement = 1 << 6,                    // Checking a type that is going to be used to determine the type of a rest binding element
+    SkipAddingIntraExpressionSites = 1 << 4,        // Skip adding intra expression sites in nested expressions since only the outermost one has to be added
+    IsForSignatureHelp = 1 << 5,                    // Call resolution for purposes of signature help
+    IsForStringLiteralArgumentCompletions = 1 << 6, // Do not infer from the argument currently being typed
+    RestBindingElement = 1 << 7,                    // Checking a type that is going to be used to determine the type of a rest binding element
                                                     //   e.g. in `const { a, ...rest } = foo`, when checking the type of `foo` to determine the type of `rest`,
                                                     //   we need to preserve generic types instead of substituting them for constraints
+    TypeOnly = 1 << 8,                              // Called from getTypeOfExpression, diagnostics may be omitted
 }
 
 /** @internal */
@@ -5582,7 +5585,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function createIntrinsicType(kind: TypeFlags, intrinsicName: string, objectFlags = ObjectFlags.None): IntrinsicType {
         const type = createType(kind) as IntrinsicType;
         type.intrinsicName = intrinsicName;
-        type.objectFlags = objectFlags;
+        type.objectFlags = objectFlags | ObjectFlags.CouldContainTypeVariablesComputed | ObjectFlags.IsGenericTypeComputed | ObjectFlags.IsUnknownLikeUnionComputed | ObjectFlags.IsNeverIntersectionComputed;
         return type;
     }
 
@@ -18795,13 +18798,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 result = target.objectFlags & ObjectFlags.Reference ? createDeferredTypeReference((type as DeferredTypeReference).target, (type as DeferredTypeReference).node, newMapper, newAliasSymbol, newAliasTypeArguments) :
                     target.objectFlags & ObjectFlags.Mapped ? instantiateMappedType(target as MappedType, newMapper, newAliasSymbol, newAliasTypeArguments) :
                     instantiateAnonymousType(target, newMapper, newAliasSymbol, newAliasTypeArguments);
-                // If none of the type arguments for the outer type parameters contain type variables, it follows
-                // that the instantiated type doesn't reference type variables.
-                if (result.flags & TypeFlags.ObjectFlagsType && !((result as ObjectFlagsType).objectFlags & ObjectFlags.CouldContainTypeVariablesComputed)) {
-                    (result as ObjectFlagsType).objectFlags |= ObjectFlags.CouldContainTypeVariablesComputed |
-                        (some(typeArguments, couldContainTypeVariables) ? ObjectFlags.CouldContainTypeVariables : 0);
+                target.instantiations.set(id, result); // Set cached result early in case we recursively invoke instantiation while eagerly computing type variable visibility below
+                const resultObjectFlags = getObjectFlags(result);
+                if (result.flags & TypeFlags.ObjectFlagsType && !(resultObjectFlags & ObjectFlags.CouldContainTypeVariablesComputed)) {
+                    const resultCouldContainTypeVariables = some(typeArguments, couldContainTypeVariables); // one of the input type arguments might be or contain the result
+                    if (!(getObjectFlags(result) & ObjectFlags.CouldContainTypeVariablesComputed)) {
+                        // if `result` is one of the object types we tried to make (it may not be, due to how `instantiateMappedType` works), we can carry forward the type variable containment check from the input type arguments
+                        if (resultObjectFlags & (ObjectFlags.Mapped | ObjectFlags.Anonymous | ObjectFlags.Reference)) {
+                            (result as ObjectFlagsType).objectFlags |= ObjectFlags.CouldContainTypeVariablesComputed | (resultCouldContainTypeVariables ? ObjectFlags.CouldContainTypeVariables : 0);
+                        }
+                        // If none of the type arguments for the outer type parameters contain type variables, it follows
+                        // that the instantiated type doesn't reference type variables.
+                        // Intrinsics have `CouldContainTypeVariablesComputed` pre-set, so this should only cover unions and intersections resulting from `instantiateMappedType`
+                        else {
+                            (result as ObjectFlagsType).objectFlags |= !resultCouldContainTypeVariables ? ObjectFlags.CouldContainTypeVariablesComputed : 0;
+                        }
+                    }
                 }
-                target.instantiations.set(id, result);
             }
             return result;
         }
@@ -19358,9 +19371,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return true;
         }
         switch (node.kind) {
+            case SyntaxKind.AsExpression:
+                if (!isConstAssertion(node)) {
+                    break;
+                }
+                // fallthrough
             case SyntaxKind.JsxExpression:
             case SyntaxKind.ParenthesizedExpression:
-                return elaborateError((node as ParenthesizedExpression | JsxExpression).expression, source, target, relation, headMessage, containingMessageChain, errorOutputContainer);
+                return elaborateError((node as AsExpression | ParenthesizedExpression | JsxExpression).expression, source, target, relation, headMessage, containingMessageChain, errorOutputContainer);
             case SyntaxKind.BinaryExpression:
                 switch ((node as BinaryExpression).operatorToken.kind) {
                     case SyntaxKind.EqualsToken:
@@ -26459,6 +26477,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function isConstantReference(node: Node): boolean {
         switch (node.kind) {
+            case SyntaxKind.ThisKeyword:
+                return true;
             case SyntaxKind.Identifier:
                 if (!isThisInTypeQuery(node)) {
                     const symbol = getResolvedSymbol(node as Identifier);
@@ -26581,7 +26601,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (container && container !== flowContainer &&
                         reference.kind !== SyntaxKind.PropertyAccessExpression &&
                         reference.kind !== SyntaxKind.ElementAccessExpression &&
-                        reference.kind !== SyntaxKind.ThisKeyword) {
+                        !(reference.kind === SyntaxKind.ThisKeyword && container.kind !== SyntaxKind.ArrowFunction)
+                    ) {
                         flow = container.flowNode!;
                         continue;
                     }
@@ -29978,10 +29999,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 elementFlags.push(ElementFlags.Optional);
             }
             else {
-                const type = checkExpressionForMutableLocation(e, checkMode, forceTuple);
+                const shouldAddAsIntraExpressionInferenceSite = inTupleContext && checkMode && checkMode & CheckMode.Inferential && !(checkMode & (CheckMode.SkipContextSensitive | CheckMode.SkipAddingIntraExpressionSites)) && containsContextSensitiveOrCallOrNewExpression(e);
+                const elementCheckMode = (checkMode || CheckMode.Normal) | (shouldAddAsIntraExpressionInferenceSite ? CheckMode.SkipAddingIntraExpressionSites : 0);
+
+                const type = checkExpressionForMutableLocation(e, elementCheckMode, forceTuple);
                 elementTypes.push(addOptionality(type, /*isProperty*/ true, hasOmittedExpression));
                 elementFlags.push(hasOmittedExpression ? ElementFlags.Optional : ElementFlags.Required);
-                if (inTupleContext && checkMode && checkMode & CheckMode.Inferential && !(checkMode & CheckMode.SkipContextSensitive) && containsContextSensitiveOrCallOrNewExpression(e)) {
+                if (shouldAddAsIntraExpressionInferenceSite) {
                     const inferenceContext = getInferenceContext(node);
                     Debug.assert(inferenceContext);  // In CheckMode.Inferential we should always have an inference context
                     addIntraExpressionInferenceSite(inferenceContext, e, type);
@@ -30146,12 +30170,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (memberDecl.kind === SyntaxKind.PropertyAssignment ||
                 memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment ||
                 isObjectLiteralMethod(memberDecl)) {
-                let type = memberDecl.kind === SyntaxKind.PropertyAssignment ? checkPropertyAssignment(memberDecl, checkMode) :
+
+                const shouldAddAsIntraExpressionInferenceSite = contextualType && checkMode & CheckMode.Inferential && !(checkMode & (CheckMode.SkipContextSensitive | CheckMode.SkipAddingIntraExpressionSites)) &&
+                    (memberDecl.kind === SyntaxKind.PropertyAssignment || memberDecl.kind === SyntaxKind.MethodDeclaration) && containsContextSensitiveOrCallOrNewExpression(memberDecl);
+                const propCheckMode = checkMode | (shouldAddAsIntraExpressionInferenceSite ? CheckMode.SkipAddingIntraExpressionSites : 0);
+
+                let type = memberDecl.kind === SyntaxKind.PropertyAssignment ? checkPropertyAssignment(memberDecl, propCheckMode) :
                     // avoid resolving the left side of the ShorthandPropertyAssignment outside of the destructuring
                     // for error recovery purposes. For example, if a user wrote `{ a = 100 }` instead of `{ a: 100 }`.
                     // we don't want to say "could not find 'a'".
-                    memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment ? checkExpressionForMutableLocation(!inDestructuringPattern && memberDecl.objectAssignmentInitializer ? memberDecl.objectAssignmentInitializer : memberDecl.name, checkMode) :
-                    checkObjectLiteralMethod(memberDecl, checkMode);
+                    memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment ? checkExpressionForMutableLocation(!inDestructuringPattern && memberDecl.objectAssignmentInitializer ? memberDecl.objectAssignmentInitializer : memberDecl.name, propCheckMode) :
+                    checkObjectLiteralMethod(memberDecl, propCheckMode);
                 if (isInJavascript) {
                     const jsDocType = getTypeForDeclarationFromJSDocComment(memberDecl);
                     if (jsDocType) {
@@ -30206,8 +30235,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 member = prop;
                 allPropertiesTable?.set(prop.escapedName, prop);
 
-                if (contextualType && checkMode & CheckMode.Inferential && !(checkMode & CheckMode.SkipContextSensitive) &&
-                    (memberDecl.kind === SyntaxKind.PropertyAssignment || memberDecl.kind === SyntaxKind.MethodDeclaration) && containsContextSensitiveOrCallOrNewExpression(memberDecl)) {
+                if (shouldAddAsIntraExpressionInferenceSite) {
                     const inferenceContext = getInferenceContext(node);
                     Debug.assert(inferenceContext);  // In CheckMode.Inferential we should always have an inference context
                     const inferenceNode = memberDecl.kind === SyntaxKind.PropertyAssignment ? memberDecl.initializer : memberDecl;
@@ -30441,7 +30469,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         for (const attributeDecl of attributes.properties) {
             const member = attributeDecl.symbol;
             if (isJsxAttribute(attributeDecl)) {
-                const exprType = checkJsxAttribute(attributeDecl, checkMode);
+                const shouldAddAsIntraExpressionInferenceSite = contextualType && checkMode & CheckMode.Inferential && !(checkMode & (CheckMode.SkipContextSensitive | CheckMode.SkipAddingIntraExpressionSites)) && containsContextSensitiveOrCallOrNewExpression(attributeDecl);
+                const attributeCheckMode = checkMode | (shouldAddAsIntraExpressionInferenceSite ? CheckMode.SkipAddingIntraExpressionSites : 0);
+
+                const exprType = checkJsxAttribute(attributeDecl, attributeCheckMode);
                 objectFlags |= getObjectFlags(exprType) & ObjectFlags.PropagatingFlags;
 
                 const attributeSymbol = createSymbol(SymbolFlags.Property | member.flags, member.escapedName);
@@ -30463,7 +30494,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         addDeprecatedSuggestion(attributeDecl.name, prop.declarations, attributeDecl.name.escapedText as string);
                     }
                 }
-                if (contextualType && checkMode & CheckMode.Inferential && !(checkMode & CheckMode.SkipContextSensitive) && containsContextSensitiveOrCallOrNewExpression(attributeDecl)) {
+                if (shouldAddAsIntraExpressionInferenceSite) {
                     const inferenceContext = getInferenceContext(attributes);
                     Debug.assert(inferenceContext);  // In CheckMode.Inferential we should always have an inference context
                     const inferenceNode = (attributeDecl.initializer as JsxExpression).expression!;
@@ -36768,7 +36799,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const rightType = getLastResult(state);
                 Debug.assertIsDefined(rightType);
 
-                result = checkBinaryLikeExpressionWorker(node.left, node.operatorToken, node.right, leftType, rightType, node);
+                result = checkBinaryLikeExpressionWorker(node.left, node.operatorToken, node.right, leftType, rightType, state.checkMode, node);
             }
 
             state.skip = false;
@@ -36839,7 +36870,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         const rightType = checkExpression(right, checkMode);
-        return checkBinaryLikeExpressionWorker(left, operatorToken, right, leftType, rightType, errorNode);
+        return checkBinaryLikeExpressionWorker(left, operatorToken, right, leftType, rightType, checkMode, errorNode);
     }
 
     function checkBinaryLikeExpressionWorker(
@@ -36848,6 +36879,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         right: Expression,
         leftType: Type,
         rightType: Type,
+        checkMode?: CheckMode,
         errorNode?: Node
     ): Type {
         const operator = operatorToken.kind;
@@ -37001,14 +37033,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.ExclamationEqualsToken:
             case SyntaxKind.EqualsEqualsEqualsToken:
             case SyntaxKind.ExclamationEqualsEqualsToken:
-                if (isLiteralExpressionOfObject(left) || isLiteralExpressionOfObject(right)) {
-                    const eqType = operator === SyntaxKind.EqualsEqualsToken || operator === SyntaxKind.EqualsEqualsEqualsToken;
-                    error(errorNode, Diagnostics.This_condition_will_always_return_0_since_JavaScript_compares_objects_by_reference_not_value, eqType ? "false" : "true");
+                // We suppress errors in CheckMode.TypeOnly (meaning the invocation came from getTypeOfExpression). During
+                // control flow analysis it is possible for operands to temporarily have narrower types, and those narrower
+                // types may cause the operands to not be comparable. We don't want such errors reported (see #46475).
+                if (!(checkMode && checkMode & CheckMode.TypeOnly)) {
+                    if (isLiteralExpressionOfObject(left) || isLiteralExpressionOfObject(right)) {
+                        const eqType = operator === SyntaxKind.EqualsEqualsToken || operator === SyntaxKind.EqualsEqualsEqualsToken;
+                        error(errorNode, Diagnostics.This_condition_will_always_return_0_since_JavaScript_compares_objects_by_reference_not_value, eqType ? "false" : "true");
+                    }
+                    checkNaNEquality(errorNode, operator, left, right);
+                    reportOperatorErrorUnless((left, right) => isTypeEqualityComparableTo(left, right) || isTypeEqualityComparableTo(right, left));
                 }
-                checkNaNEquality(errorNode, operator, left, right);
-                reportOperatorErrorUnless((left, right) => isTypeEqualityComparableTo(left, right) || isTypeEqualityComparableTo(right, left));
                 return booleanType;
-
             case SyntaxKind.InstanceOfKeyword:
                 return checkInstanceOfExpression(left, right, leftType, rightType);
             case SyntaxKind.InKeyword:
@@ -37363,7 +37399,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkConditionalExpression(node: ConditionalExpression, checkMode?: CheckMode): Type {
-        const type = checkTruthinessExpression(node.condition);
+        const type = checkTruthinessExpression(node.condition, checkMode);
         checkTestingKnownTruthyCallableOrAwaitableType(node.condition, type, node.whenTrue);
         const type1 = checkExpression(node.whenTrue, checkMode);
         const type2 = checkExpression(node.whenFalse, checkMode);
@@ -37744,7 +37780,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         const startInvocationCount = flowInvocationCount;
-        const type = checkExpression(node);
+        const type = checkExpression(node, CheckMode.TypeOnly);
         // If control flow analysis was required to determine the type, it is worth caching.
         if (flowInvocationCount !== startInvocationCount) {
             const cache = flowTypeCache || (flowTypeCache = []);
@@ -37834,7 +37870,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (getIsolatedModules(compilerOptions)) {
             Debug.assert(!!(type.symbol.flags & SymbolFlags.ConstEnum));
             const constEnumDeclaration = type.symbol.valueDeclaration as EnumDeclaration;
-            if (constEnumDeclaration.flags & NodeFlags.Ambient) {
+            if (constEnumDeclaration.flags & NodeFlags.Ambient && !isValidTypeOnlyAliasUseSite(node)) {
                 error(node, Diagnostics.Cannot_access_ambient_const_enums_when_0_is_enabled, isolatedModulesLikeFlagName);
             }
         }
@@ -47038,7 +47074,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 if (requestedExternalEmitHelperNames.has(name)) continue;
                                 requestedExternalEmitHelperNames.add(name);
 
-                                const symbol = getSymbol(getExportsOfModule(helpersModule), escapeLeadingUnderscores(name), SymbolFlags.Value);
+                                const symbol = resolveSymbol(getSymbol(getExportsOfModule(helpersModule), escapeLeadingUnderscores(name), SymbolFlags.Value));
                                 if (!symbol) {
                                     error(location, Diagnostics.This_syntax_requires_an_imported_helper_named_1_which_does_not_exist_in_0_Consider_upgrading_your_version_of_0, externalHelpersModuleNameText, name);
                                 }

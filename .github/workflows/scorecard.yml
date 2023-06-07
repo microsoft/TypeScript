@@ -17,12 +17,6 @@ on:
 # Declare default permissions as read only.
 permissions: read-all
 
-# Ensure scripts are run with pipefail. See:
-# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#exit-codes-and-error-action-preference
-defaults:
-  run:
-    shell: bash
-
 jobs:
   analysis:
     name: Scorecard analysis
@@ -40,7 +34,7 @@ jobs:
           persist-credentials: false
 
       - name: "Run analysis"
-        uses: ossf/scorecard-action@99c53751e09b9529366343771cc321ec74e9bd3d # v2.0.6
+        uses: ossf/scorecard-action@80e868c13c90f172d68d1f4501dee99e2479f7af # v2.1.3
         with:
           results_file: results.sarif
           results_format: sarif
