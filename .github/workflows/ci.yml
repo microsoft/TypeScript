@@ -104,7 +104,7 @@ jobs:
 
     - uses: actions/setup-node@v3
       with:
-        node-version: 20
+        node-version: 16
     - run: |
         corepack enable npm
         npm --version
@@ -149,7 +149,7 @@ jobs:
 
     - uses: actions/setup-node@v3
       with:
-        node-version: 20
+        node-version: 16
     - run: |
         corepack enable npm
         npm --version
