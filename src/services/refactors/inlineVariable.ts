@@ -27,6 +27,7 @@ import {
     SourceFile,
     SymbolFlags,
     textChanges,
+    textRangeContainsPositionInclusive,
     TypeChecker,
     VariableDeclaration,
 } from "../_namespaces/ts";
@@ -168,7 +169,7 @@ function getReferenceNodes(declaration: InitializedVariableDeclaration, checker:
         }
 
         // Cannot inline recursive declarations (e.g. const foo = () => foo();)
-        if (findAncestor(ref, node => node === declaration.initializer)) {
+        if (textRangeContainsPositionInclusive(declaration, ref.pos)) {
             return true;
         }
 
