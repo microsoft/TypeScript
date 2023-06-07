@@ -1,4 +1,4 @@
-=== tests/cases/compiler/index.d.ts ===
+=== index.d.ts ===
 export class C extends Object {
 >C : C
 >Object : Object

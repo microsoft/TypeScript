@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/bug24730.js ===
+=== bug24730.js ===
 var UI = {}
 >UI : typeof UI
 >{} : {}

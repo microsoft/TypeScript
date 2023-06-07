@@ -1,4 +1,4 @@
-=== tests/cases/conformance/es6/arrowFunction/emitArrowFunctionAsIs.ts ===
+=== emitArrowFunctionAsIs.ts ===
 var arrow1 = a => { };
 >arrow1 : Symbol(arrow1, Decl(emitArrowFunctionAsIs.ts, 0, 3))
 >a : Symbol(a, Decl(emitArrowFunctionAsIs.ts, 0, 12))

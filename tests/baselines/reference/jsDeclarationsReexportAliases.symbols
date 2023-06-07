@@ -1,8 +1,8 @@
-=== tests/cases/conformance/jsdoc/declarations/cls.js ===
+=== cls.js ===
 export default class Foo {}
 >Foo : Symbol(Foo, Decl(cls.js, 0, 0))
 
-=== tests/cases/conformance/jsdoc/declarations/usage.js ===
+=== usage.js ===
 import {default as Fooa} from "./cls";
 >default : Symbol(Fooa, Decl(cls.js, 0, 0))
 >Fooa : Symbol(Fooa, Decl(usage.js, 0, 8))

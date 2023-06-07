@@ -1,4 +1,4 @@
-=== tests/cases/compiler/foo.ts ===
+=== foo.ts ===
 export class Foo {
 >Foo : Foo
 
@@ -6,7 +6,7 @@ export class Foo {
 >a : string
 }
 
-=== tests/cases/compiler/bar.ts ===
+=== bar.ts ===
 import {Foo} from './foo';
 >Foo : typeof Foo
 

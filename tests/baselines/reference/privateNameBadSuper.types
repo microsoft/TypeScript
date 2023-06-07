@@ -1,4 +1,4 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameBadSuper.ts ===
+=== privateNameBadSuper.ts ===
 class B {};
 >B : B
 

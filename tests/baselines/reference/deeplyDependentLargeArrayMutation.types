@@ -1,4 +1,4 @@
-=== tests/cases/compiler/foo.js ===
+=== foo.js ===
 // repro from #26031
 function build() {
 >build : () => void

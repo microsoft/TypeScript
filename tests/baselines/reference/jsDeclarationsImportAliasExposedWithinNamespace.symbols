@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/declarations/file.js ===
+=== file.js ===
 /**
  * @namespace myTypes
  * @global
@@ -23,7 +23,7 @@ const myTypes = {
 export {myTypes};
 >myTypes : Symbol(myTypes, Decl(file.js, 19, 8), Decl(file.js, 9, 50), Decl(file.js, 12, 12), Decl(file.js, 17, 38))
 
-=== tests/cases/conformance/jsdoc/declarations/file2.js ===
+=== file2.js ===
 import {myTypes} from './file.js';
 >myTypes : Symbol(myTypes, Decl(file2.js, 0, 8))
 

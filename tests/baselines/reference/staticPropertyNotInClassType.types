@@ -1,4 +1,4 @@
-=== tests/cases/conformance/classes/members/classTypes/staticPropertyNotInClassType.ts ===
+=== staticPropertyNotInClassType.ts ===
 module NonGeneric {
 >NonGeneric : typeof NonGeneric
 

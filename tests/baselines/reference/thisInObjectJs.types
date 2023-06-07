@@ -1,4 +1,4 @@
-=== tests/cases/compiler/index.js ===
+=== index.js ===
 export { }
 let obj = {
 >obj : { x: number; y: number[]; fun: typeof fun; f2: () => void; f3: typeof (Anonymous function); }

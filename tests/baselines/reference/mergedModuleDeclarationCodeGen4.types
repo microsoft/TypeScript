@@ -1,4 +1,4 @@
-=== tests/cases/compiler/mergedModuleDeclarationCodeGen4.ts ===
+=== mergedModuleDeclarationCodeGen4.ts ===
 module superContain {
 >superContain : typeof superContain
 

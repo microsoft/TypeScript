@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/github20832.js ===
+=== github20832.js ===
 // #20832
 /** @typedef {U} T - should be "error, can't find type named 'U' */
 /**

@@ -1,4 +1,4 @@
-=== tests/cases/conformance/expressions/optionalChaining/optionalChainingInTypeAssertions.ts ===
+=== optionalChainingInTypeAssertions.ts ===
 class Foo {
 >Foo : Symbol(Foo, Decl(optionalChainingInTypeAssertions.ts, 0, 0))
 

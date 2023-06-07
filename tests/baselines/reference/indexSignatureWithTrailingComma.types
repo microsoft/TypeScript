@@ -1,4 +1,4 @@
-=== tests/cases/compiler/indexSignatureWithTrailingComma.ts ===
+=== indexSignatureWithTrailingComma.ts ===
 type A = {
 >A : { [key: string]: string; }
 

@@ -1,4 +1,4 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameSetterExprReturnValue.ts ===
+=== privateNameSetterExprReturnValue.ts ===
 class C {
 >C : C
 

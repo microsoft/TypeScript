@@ -45,24 +45,24 @@ booleanLiteral = g[0];
 //// [g.json]
 [true, false]
 
-//// [tests/cases/compiler/out/b.json]
+//// [out/b.json]
 {
     "a": true,
     "b": "hello",
     "c": null,
     "d": false
 }
-//// [tests/cases/compiler/out/c.json]
+//// [out/c.json]
 ["a", null, "string"]
-//// [tests/cases/compiler/out/d.json]
+//// [out/d.json]
 "dConfig"
-//// [tests/cases/compiler/out/e.json]
+//// [out/e.json]
 -10
-//// [tests/cases/compiler/out/f.json]
+//// [out/f.json]
 [-10, 30]
-//// [tests/cases/compiler/out/g.json]
+//// [out/g.json]
 [true, false]
-//// [tests/cases/compiler/out/file1.js]
+//// [out/file1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var b = require("./b.json");
@@ -85,5 +85,5 @@ numberLiteral = f[0];
 booleanLiteral = g[0];
 
 
-//// [tests/cases/compiler/out/file1.d.ts]
+//// [out/file1.d.ts]
 export {};

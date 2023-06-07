@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/a.js ===
+=== a.js ===
 /** @type {String} */
 var S;
 >S : string
@@ -87,7 +87,7 @@ var f;
 var ctor;
 >ctor : new (s: string) => { s: string; }
 
-=== tests/cases/conformance/jsdoc/b.ts ===
+=== b.ts ===
 var S: string;
 >S : string
 

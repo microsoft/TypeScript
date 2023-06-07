@@ -1,4 +1,4 @@
-=== tests/cases/compiler/collisionThisExpressionAndAliasInGlobal.ts ===
+=== collisionThisExpressionAndAliasInGlobal.ts ===
 module a {
 >a : typeof a
 

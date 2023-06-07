@@ -9,7 +9,7 @@ declare const items: Item[];
 export = items;
 >items : Item[]
 
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+=== index.js ===
 /** @type {typeof import("/some-mod")} */
 const items = [];
 >items : Item[]

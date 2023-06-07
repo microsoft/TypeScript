@@ -1,4 +1,4 @@
-=== tests/cases/compiler/foo.js ===
+=== foo.js ===
 class C {
 >C : Symbol(C, Decl(foo.js, 0, 0))
 
@@ -10,7 +10,7 @@ class C {
   }
 }
 
-=== tests/cases/compiler/bar.ts ===
+=== bar.ts ===
 (new C()).p = "string";
 >(new C()).p : Symbol(C.p, Decl(foo.js, 1, 18))
 >C : Symbol(C, Decl(foo.js, 0, 0))

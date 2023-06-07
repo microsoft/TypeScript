@@ -1,4 +1,4 @@
-=== tests/cases/compiler/unknownSymbolOffContextualType1.ts ===
+=== unknownSymbolOffContextualType1.ts ===
 declare var document: Document;
 >document : Document
 

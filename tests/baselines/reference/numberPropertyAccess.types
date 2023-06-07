@@ -1,4 +1,4 @@
-=== tests/cases/conformance/types/primitives/number/numberPropertyAccess.ts ===
+=== numberPropertyAccess.ts ===
 var x = 1;
 >x : number
 >1 : 1

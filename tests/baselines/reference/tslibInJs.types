@@ -1,4 +1,4 @@
-=== tests/cases/compiler/main.js ===
+=== main.js ===
 "use strict";
 >"use strict" : "use strict"
 

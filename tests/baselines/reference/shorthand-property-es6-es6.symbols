@@ -1,4 +1,4 @@
-=== tests/cases/compiler/test.ts ===
+=== test.ts ===
 import {foo} from './foo';
 >foo : Symbol(foo, Decl(test.ts, 0, 8))
 

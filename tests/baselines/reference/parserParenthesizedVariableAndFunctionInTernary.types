@@ -1,4 +1,4 @@
-=== tests/cases/conformance/parser/ecmascript5/parserParenthesizedVariableAndFunctionInTernary.ts ===
+=== parserParenthesizedVariableAndFunctionInTernary.ts ===
 let a: any;
 >a : any
 

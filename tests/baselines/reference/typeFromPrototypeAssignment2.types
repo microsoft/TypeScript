@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/a.js ===
+=== a.js ===
 // non top-level:
 // all references to _map, set, get, addon should be ok
 (function container() {

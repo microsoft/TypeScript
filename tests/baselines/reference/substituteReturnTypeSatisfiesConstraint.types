@@ -1,4 +1,4 @@
-=== tests/cases/compiler/substituteReturnTypeSatisfiesConstraint.ts ===
+=== substituteReturnTypeSatisfiesConstraint.ts ===
 type M = { p: string };
 >M : { p: string; }
 >p : string

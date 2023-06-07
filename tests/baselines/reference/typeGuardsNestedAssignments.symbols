@@ -1,4 +1,4 @@
-=== tests/cases/conformance/controlFlow/typeGuardsNestedAssignments.ts ===
+=== typeGuardsNestedAssignments.ts ===
 class Foo {
 >Foo : Symbol(Foo, Decl(typeGuardsNestedAssignments.ts, 0, 0))
 

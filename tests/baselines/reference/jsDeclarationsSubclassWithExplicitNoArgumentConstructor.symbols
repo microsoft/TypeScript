@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+=== index.js ===
 export class Super {
 >Super : Symbol(Super, Decl(index.js, 0, 0))
 

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/types.d.ts ===
+=== types.d.ts ===
 
 declare namespace A {
     export namespace B {
@@ -8,7 +8,7 @@ declare namespace A {
         }
     }
 }
-=== tests/cases/compiler/usage.ts ===
+=== usage.ts ===
 class Foo {
 >Foo : Foo
 

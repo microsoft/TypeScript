@@ -1,4 +1,4 @@
-=== tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx ===
+=== reactDefaultPropsInferenceSuccess.tsx ===
 /// <reference path="react16.d.ts" />
 
 import React from 'react';

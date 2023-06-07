@@ -1,4 +1,4 @@
-=== tests/cases/compiler/noImplicitAnyParametersInModule.ts ===
+=== noImplicitAnyParametersInModule.ts ===
 module M {
 >M : typeof M
 

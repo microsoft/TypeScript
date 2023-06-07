@@ -1,4 +1,4 @@
-=== tests/cases/conformance/expressions/typeSatisfaction/a.ts ===
+=== ./a.ts ===
 interface Foo {
 >Foo : Symbol(Foo, Decl(a.ts, 0, 0))
 
@@ -8,7 +8,7 @@ interface Foo {
 export default {} satisfies Foo;
 >Foo : Symbol(Foo, Decl(a.ts, 0, 0))
 
-=== tests/cases/conformance/expressions/typeSatisfaction/b.ts ===
+=== ./b.ts ===
 interface Foo {
 >Foo : Symbol(Foo, Decl(b.ts, 0, 0))
 

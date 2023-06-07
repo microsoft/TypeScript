@@ -1,4 +1,4 @@
-=== tests/cases/compiler/moduleVariableArrayIndexer.ts ===
+=== moduleVariableArrayIndexer.ts ===
 module Bar {
 >Bar : typeof Bar
 

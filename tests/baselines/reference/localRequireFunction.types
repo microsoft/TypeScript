@@ -1,4 +1,4 @@
-=== tests/cases/compiler/app.js ===
+=== app.js ===
 function require(a) {
 >require : (a: any) => any
 >a : any

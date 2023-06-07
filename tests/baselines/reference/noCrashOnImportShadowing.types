@@ -1,9 +1,9 @@
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 export const zzz = 123;
 >zzz : 123
 >123 : 123
 
-=== tests/cases/compiler/a.ts ===
+=== a.ts ===
 import * as B from "./b";
 >B : typeof B
 
@@ -26,7 +26,7 @@ B.zzz;
 export { B };
 >B : typeof B
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import { B } from "./a";
 >B : typeof OriginalB
 

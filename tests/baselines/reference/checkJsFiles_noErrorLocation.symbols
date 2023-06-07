@@ -1,4 +1,4 @@
-=== tests/cases/compiler/a.js ===
+=== a.js ===
 // @ts-check
 class A {
 >A : Symbol(A, Decl(a.js, 0, 0))

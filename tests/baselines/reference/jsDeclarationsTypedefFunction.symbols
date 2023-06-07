@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/declarations/foo.js ===
+=== foo.js ===
 /**
  * @typedef {{
  *   [id: string]: [Function, Function];

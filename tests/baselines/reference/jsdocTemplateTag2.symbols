@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/github17339.js ===
+=== github17339.js ===
 var obj = {
 >obj : Symbol(obj, Decl(github17339.js, 0, 3))
 

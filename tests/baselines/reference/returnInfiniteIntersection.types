@@ -1,4 +1,4 @@
-=== tests/cases/compiler/returnInfiniteIntersection.ts ===
+=== returnInfiniteIntersection.ts ===
 function recursive() {
 >recursive : () => (<T>(subkey: T) => any & { p: any; }) & { p: any; }
 

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/exportDeclarationsInAmbientNamespaces.ts ===
+=== exportDeclarationsInAmbientNamespaces.ts ===
 declare namespace Q {
 >Q : typeof Q
 

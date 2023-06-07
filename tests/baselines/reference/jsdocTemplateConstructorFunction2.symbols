@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/templateTagWithNestedTypeLiteral.js ===
+=== templateTagWithNestedTypeLiteral.js ===
 /**
  * @param {T} t
  * @template T

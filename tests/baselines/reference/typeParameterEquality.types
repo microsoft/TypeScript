@@ -1,4 +1,4 @@
-=== tests/cases/compiler/typeParameterEquality.ts ===
+=== typeParameterEquality.ts ===
 class C {
 >C : C
 

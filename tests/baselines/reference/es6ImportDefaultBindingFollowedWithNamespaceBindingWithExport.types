@@ -1,9 +1,9 @@
-=== tests/cases/compiler/server.ts ===
+=== server.ts ===
 export var a = 10;
 >a : number
 >10 : 10
 
-=== tests/cases/compiler/client.ts ===
+=== client.ts ===
 export import defaultBinding, * as nameSpaceBinding  from "./server";
 >defaultBinding : any
 >nameSpaceBinding : typeof nameSpaceBinding

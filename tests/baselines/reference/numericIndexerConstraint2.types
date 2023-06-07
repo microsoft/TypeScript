@@ -1,4 +1,4 @@
-=== tests/cases/compiler/numericIndexerConstraint2.ts ===
+=== numericIndexerConstraint2.ts ===
 class Foo { foo() { } }
 >Foo : Foo
 >foo : () => void

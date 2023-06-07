@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/parseLinkTag.ts ===
+=== parseLinkTag.ts ===
 /** trailing @link tag {@link */
 var x;
 >x : Symbol(x, Decl(parseLinkTag.ts, 1, 3))

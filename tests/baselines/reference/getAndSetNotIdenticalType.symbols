@@ -1,4 +1,4 @@
-=== tests/cases/compiler/getAndSetNotIdenticalType.ts ===
+=== getAndSetNotIdenticalType.ts ===
 class C {
 >C : Symbol(C, Decl(getAndSetNotIdenticalType.ts, 0, 0))
 

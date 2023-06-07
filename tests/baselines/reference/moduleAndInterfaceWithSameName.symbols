@@ -1,4 +1,4 @@
-=== tests/cases/compiler/moduleAndInterfaceWithSameName.ts ===
+=== moduleAndInterfaceWithSameName.ts ===
 module Foo1 {
 >Foo1 : Symbol(Foo1, Decl(moduleAndInterfaceWithSameName.ts, 0, 0))
 

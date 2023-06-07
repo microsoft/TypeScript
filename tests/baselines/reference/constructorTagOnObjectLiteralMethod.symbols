@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/example.js ===
+=== example.js ===
 const obj = {
 >obj : Symbol(obj, Decl(example.js, 0, 5))
 

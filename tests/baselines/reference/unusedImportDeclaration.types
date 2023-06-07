@@ -1,4 +1,4 @@
-=== tests/cases/compiler/unusedImportDeclaration_testerA.ts ===
+=== unusedImportDeclaration_testerA.ts ===
 import B = require("./unusedImportDeclaration_testerB");
 >B : typeof B
 
@@ -26,7 +26,7 @@ foo("IN " + thingy.me + "!");
 >me : string
 >"!" : "!"
 
-=== tests/cases/compiler/unusedImportDeclaration_testerB.ts ===
+=== unusedImportDeclaration_testerB.ts ===
 class TesterB {
 >TesterB : TesterB
 

@@ -1,8 +1,8 @@
-=== tests/cases/compiler/exportSpecifierReferencingOuterDeclaration2_A.ts ===
+=== exportSpecifierReferencingOuterDeclaration2_A.ts ===
 
 declare module X { export interface bar { } }
 
-=== tests/cases/compiler/exportSpecifierReferencingOuterDeclaration2_B.ts ===
+=== exportSpecifierReferencingOuterDeclaration2_B.ts ===
 declare module X { export interface foo { } }
 export { X };
 >X : any

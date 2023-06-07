@@ -1,4 +1,4 @@
-=== tests/cases/compiler/noSuperInJSDocExtends.js ===
+=== noSuperInJSDocExtends.js ===
 class Based { }
 >Based : Symbol(Based, Decl(noSuperInJSDocExtends.js, 0, 0))
 

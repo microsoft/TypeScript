@@ -1,4 +1,4 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiersJs.js ===
+=== privateNamesIncompatibleModifiersJs.js ===
 class A {
 >A : A
 

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/input.ts ===
+=== input.ts ===
 export = exports;
 >exports : Symbol(exports, Decl(input.ts, 0, 17), Decl(input.ts, 9, 1))
 

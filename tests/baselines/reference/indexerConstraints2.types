@@ -1,4 +1,4 @@
-=== tests/cases/compiler/indexerConstraints2.ts ===
+=== indexerConstraints2.ts ===
 class A { a: number; }
 >A : A
 >a : number

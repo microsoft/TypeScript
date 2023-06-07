@@ -1,4 +1,4 @@
-=== tests/cases/compiler/crashInresolveReturnStatement.ts ===
+=== crashInresolveReturnStatement.ts ===
 class WorkItemToolbar {
 >WorkItemToolbar : WorkItemToolbar
 

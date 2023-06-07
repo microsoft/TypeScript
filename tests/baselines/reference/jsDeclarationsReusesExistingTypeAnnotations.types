@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+=== index.js ===
 class С1 {
 >С1 : С1
 

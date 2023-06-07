@@ -1,4 +1,4 @@
-=== tests/cases/conformance/types/members/classWithPublicProperty.ts ===
+=== classWithPublicProperty.ts ===
 class C {
 >C : C
 

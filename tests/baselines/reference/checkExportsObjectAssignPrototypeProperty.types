@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/validator.ts ===
+=== validator.ts ===
 import "./";
 
 import Person = require("./mod1");
@@ -94,7 +94,7 @@ m1.setonlyAccessor = 0;
 >0 : 0
 
 
-=== tests/cases/conformance/jsdoc/mod1.js ===
+=== mod1.js ===
 /**
  * @constructor
  * @param {string} name

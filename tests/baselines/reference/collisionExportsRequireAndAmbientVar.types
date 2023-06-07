@@ -1,4 +1,4 @@
-=== tests/cases/compiler/collisionExportsRequireAndAmbientVar_externalmodule.ts ===
+=== collisionExportsRequireAndAmbientVar_externalmodule.ts ===
 export declare var exports: number;
 >exports : number
 
@@ -28,7 +28,7 @@ module m2 {
 >10 : 10
 }
 
-=== tests/cases/compiler/collisionExportsRequireAndAmbientVar_globalFile.ts ===
+=== collisionExportsRequireAndAmbientVar_globalFile.ts ===
 declare var exports: number;
 >exports : number
 

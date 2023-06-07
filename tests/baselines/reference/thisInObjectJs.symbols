@@ -1,4 +1,4 @@
-=== tests/cases/compiler/index.js ===
+=== index.js ===
 export { }
 let obj = {
 >obj : Symbol(obj, Decl(index.js, 1, 3))

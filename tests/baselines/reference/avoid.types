@@ -1,4 +1,4 @@
-=== tests/cases/compiler/avoid.ts ===
+=== avoid.ts ===
 function f() {
 >f : () => void
 

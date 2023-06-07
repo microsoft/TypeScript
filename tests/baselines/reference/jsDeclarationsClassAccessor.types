@@ -1,7 +1,7 @@
-=== tests/cases/conformance/jsdoc/declarations/supplement.d.ts ===
+=== supplement.d.ts ===
 export { };
 declare module "./argument.js" {
->"./argument.js" : typeof import("tests/cases/conformance/jsdoc/declarations/argument")
+>"./argument.js" : typeof import("argument")
 
     interface Argument {
         idlType: any;
@@ -11,7 +11,7 @@ declare module "./argument.js" {
 >default : null
     }
 }
-=== tests/cases/conformance/jsdoc/declarations/base.js ===
+=== base.js ===
 export class Base {
 >Base : Base
 
@@ -34,7 +34,7 @@ export class Base {
 >json : { type: any; name: any; inheritance: any; }
     }
 }
-=== tests/cases/conformance/jsdoc/declarations/argument.js ===
+=== argument.js ===
 import { Base } from "./base.js";
 >Base : typeof Base
 

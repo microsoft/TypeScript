@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/npm-install.js ===
+=== npm-install.js ===
 function Installer () {
 >Installer : Symbol(Installer, Decl(npm-install.js, 0, 0))
 

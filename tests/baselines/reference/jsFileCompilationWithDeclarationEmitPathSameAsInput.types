@@ -1,9 +1,9 @@
-=== tests/cases/compiler/a.ts ===
+=== a.ts ===
 class c {
 >c : c
 }
 
-=== tests/cases/compiler/a.d.ts ===
+=== a.d.ts ===
 declare function isC(): boolean;
 >isC : () => boolean
 

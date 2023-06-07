@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/a.js ===
+=== a.js ===
 class C {
 >C : C
 
@@ -328,7 +328,7 @@ class C {
     }
 }
 
-=== tests/cases/conformance/salsa/b.ts ===
+=== b.ts ===
 var c = new C();
 >c : C
 >new C() : C

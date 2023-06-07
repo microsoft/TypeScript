@@ -1,4 +1,4 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameStaticAccessorsCallExpression.ts ===
+=== privateNameStaticAccessorsCallExpression.ts ===
 class A {
 >A : A
 

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/file.js ===
+=== file.js ===
 // @ts-check
 const obj = {
 >obj : { x: number; y: number; }

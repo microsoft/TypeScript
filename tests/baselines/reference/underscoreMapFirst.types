@@ -1,4 +1,4 @@
-=== tests/cases/compiler/underscoreMapFirst.ts ===
+=== underscoreMapFirst.ts ===
 declare module _ {
 >_ : typeof _
 

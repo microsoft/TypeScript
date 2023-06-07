@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/bug25127.js ===
+=== bug25127.js ===
 class Entry {
 >Entry : Entry
 

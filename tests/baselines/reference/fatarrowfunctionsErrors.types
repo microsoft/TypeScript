@@ -1,4 +1,4 @@
-=== tests/cases/compiler/fatarrowfunctionsErrors.ts ===
+=== fatarrowfunctionsErrors.ts ===
 foo((...Far:any[])=>{return 0;})
 >foo((...Far:any[])=>{return 0;}) : any
 >foo : any

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/staticPrototypeProperty.ts ===
+=== staticPrototypeProperty.ts ===
 class C {
 >C : C
 

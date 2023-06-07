@@ -1,4 +1,4 @@
-=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignatures.ts ===
+=== subtypingWithCallSignatures.ts ===
 module CallSignature {
 >CallSignature : typeof CallSignature
 

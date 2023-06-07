@@ -1,4 +1,4 @@
-=== tests/cases/compiler/es5-asyncFunctionSwitchStatements.ts ===
+=== es5-asyncFunctionSwitchStatements.ts ===
 declare var x, y, z, a, b, c;
 >x : Symbol(x, Decl(es5-asyncFunctionSwitchStatements.ts, 0, 11))
 >y : Symbol(y, Decl(es5-asyncFunctionSwitchStatements.ts, 0, 14))

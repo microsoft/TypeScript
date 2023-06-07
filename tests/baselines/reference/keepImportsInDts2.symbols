@@ -1,6 +1,6 @@
-=== tests/cases/compiler/folder/test.ts ===
+=== folder/test.ts ===
 
 export {};
-=== tests/cases/compiler/main.ts ===
+=== main.ts ===
 
 import "./folder/test"

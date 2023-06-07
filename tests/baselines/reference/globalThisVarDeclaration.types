@@ -1,4 +1,4 @@
-=== tests/cases/conformance/es2019/b.js ===
+=== b.js ===
 var a = 10;
 >a : number
 >10 : 10
@@ -54,7 +54,7 @@ top.b;
 >top : Window
 >b : any
 
-=== tests/cases/conformance/es2019/actual.ts ===
+=== actual.ts ===
 var b = 10;
 >b : number
 >10 : 10

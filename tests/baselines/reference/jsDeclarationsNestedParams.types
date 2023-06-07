@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/declarations/file.js ===
+=== file.js ===
 class X {
 >X : X
 

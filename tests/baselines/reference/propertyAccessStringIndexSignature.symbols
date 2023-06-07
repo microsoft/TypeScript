@@ -1,4 +1,4 @@
-=== tests/cases/conformance/expressions/propertyAccess/propertyAccessStringIndexSignature.ts ===
+=== propertyAccessStringIndexSignature.ts ===
 interface Flags { [name: string]: boolean };
 >Flags : Symbol(Flags, Decl(propertyAccessStringIndexSignature.ts, 0, 0))
 >name : Symbol(name, Decl(propertyAccessStringIndexSignature.ts, 0, 19))

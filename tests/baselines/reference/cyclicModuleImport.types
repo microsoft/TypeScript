@@ -1,4 +1,4 @@
-=== tests/cases/compiler/cyclicModuleImport.ts ===
+=== cyclicModuleImport.ts ===
 declare module "SubModule" {
 >"SubModule" : typeof import("SubModule")
 

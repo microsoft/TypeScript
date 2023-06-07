@@ -1,4 +1,4 @@
-=== tests/cases/compiler/duplicateConstructorOverloadSignature2.ts ===
+=== duplicateConstructorOverloadSignature2.ts ===
 class C<T> {
 >C : C<T>
 

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/declarationFunctionTypeNonlocalShouldNotBeAnError.ts ===
+=== declarationFunctionTypeNonlocalShouldNotBeAnError.ts ===
 namespace foo {
 >foo : typeof foo
 

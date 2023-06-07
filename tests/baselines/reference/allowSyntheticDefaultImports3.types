@@ -1,4 +1,4 @@
-=== tests/cases/compiler/a.ts ===
+=== a.ts ===
 import Namespace from "./b";
 >Namespace : any
 
@@ -9,7 +9,7 @@ export var x = new Namespace.Foo();
 >Namespace : any
 >Foo : any
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 export class Foo {
 >Foo : Foo
 

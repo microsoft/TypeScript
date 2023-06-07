@@ -1,4 +1,4 @@
-=== tests/cases/compiler/asiPublicPrivateProtected.ts ===
+=== asiPublicPrivateProtected.ts ===
 public
 >public : any
 

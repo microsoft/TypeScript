@@ -23,7 +23,7 @@ export default Foo;
 
 
 //// [jsxDeclarationsWithEsModuleInteropNoCrash.d.ts]
-/// <reference path="../../../..react16.d.ts" />
+/// <reference path="..react16.d.ts" />
 export default Foo;
 declare function Foo({ bar }: {
     bar: any;

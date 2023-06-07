@@ -1,4 +1,4 @@
-=== tests/cases/conformance/controlFlow/controlFlowInOperator.ts ===
+=== controlFlowInOperator.ts ===
 const a = 'a';
 >a : "a"
 >'a' : "a"

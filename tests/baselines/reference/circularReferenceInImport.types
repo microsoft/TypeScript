@@ -1,4 +1,4 @@
-=== tests/cases/compiler/db.d.ts ===
+=== db.d.ts ===
 declare namespace Db {
 >Db : typeof Types
 
@@ -10,7 +10,7 @@ declare namespace Db {
 export = Db;
 >Db : typeof Db
 
-=== tests/cases/compiler/app.ts ===
+=== app.ts ===
 import * as Db from "./db"
 >Db : typeof Db
 

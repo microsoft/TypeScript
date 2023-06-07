@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/declarations/Foo.js ===
+=== Foo.js ===
 class Base {
 >Base : Base
 
@@ -17,7 +17,7 @@ Foo.foo = "foo";
 >foo : string
 >"foo" : "foo"
 
-=== tests/cases/conformance/jsdoc/declarations/Bar.ts ===
+=== Bar.ts ===
 import { Foo } from "./Foo.js";
 >Foo : typeof Foo
 

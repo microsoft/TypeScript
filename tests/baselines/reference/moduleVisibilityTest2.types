@@ -1,4 +1,4 @@
-=== tests/cases/compiler/moduleVisibilityTest2.ts ===
+=== moduleVisibilityTest2.ts ===
 module OuterMod {
 >OuterMod : typeof OuterMod
 

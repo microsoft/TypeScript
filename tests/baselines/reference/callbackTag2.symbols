@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/cb.js ===
+=== cb.js ===
 /** @template T
  * @callback Id
  * @param {T} t

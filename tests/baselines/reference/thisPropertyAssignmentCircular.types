@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/thisPropertyAssignmentCircular.js ===
+=== thisPropertyAssignmentCircular.js ===
 export class Foo {
 >Foo : Foo
 

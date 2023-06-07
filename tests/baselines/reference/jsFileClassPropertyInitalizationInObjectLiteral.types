@@ -1,4 +1,4 @@
-=== tests/cases/compiler/foo.js ===
+=== foo.js ===
 module.exports = function () {
 >module.exports = function () {  class A { }  return {    c: A.b = 1,  }} : () => { c: number; }
 >module.exports : () => { c: number; }

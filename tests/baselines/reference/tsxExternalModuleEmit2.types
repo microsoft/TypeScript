@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsx/modules.d.ts ===
+=== modules.d.ts ===
 declare module 'mod' {
 >'mod' : typeof import("mod")
 
@@ -9,7 +9,7 @@ declare module 'mod' {
 >y : any
 }
 
-=== tests/cases/conformance/jsx/app.tsx ===
+=== app.tsx ===
 import Main from 'mod';
 >Main : any
 

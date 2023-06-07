@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/jsdocConstructorFunctionTypeReference.js ===
+=== jsdocConstructorFunctionTypeReference.js ===
 var Validator = function VFunc() {
 >Validator : Symbol(Validator, Decl(jsdocConstructorFunctionTypeReference.js, 0, 3))
 >VFunc : Symbol(VFunc, Decl(jsdocConstructorFunctionTypeReference.js, 0, 15))

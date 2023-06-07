@@ -1,4 +1,4 @@
-=== tests/cases/conformance/override/a.js ===
+=== a.js ===
 class A {
 >A : A
 

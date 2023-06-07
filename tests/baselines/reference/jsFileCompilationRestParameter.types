@@ -1,4 +1,4 @@
-=== tests/cases/compiler/a.js ===
+=== a.js ===
 function foo(...a) { }
 >foo : (...a: any[]) => void
 >a : any[]

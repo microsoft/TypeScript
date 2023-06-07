@@ -1,4 +1,4 @@
-=== tests/cases/compiler/noImplicitReturnsWithoutReturnExpression.ts ===
+=== noImplicitReturnsWithoutReturnExpression.ts ===
 function isMissingReturnExpression(): number {
 >isMissingReturnExpression : () => number
 

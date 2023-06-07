@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/example.js ===
+=== example.js ===
 const obj = {
 >obj : { Foo(): void; }
 >{  /** @constructor */  Foo() { this.bar = "bar" }} : { Foo(): void; }

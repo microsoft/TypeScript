@@ -1,4 +1,4 @@
-=== tests/cases/compiler/a.js ===
+=== a.js ===
 class c {
 >c : Symbol(c, Decl(a.js, 0, 0))
 

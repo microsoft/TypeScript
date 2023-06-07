@@ -1,4 +1,4 @@
-=== tests/cases/compiler/unknownSymbols1.ts ===
+=== unknownSymbols1.ts ===
 var x = asdf;
 >x : Symbol(x, Decl(unknownSymbols1.ts, 0, 3))
 

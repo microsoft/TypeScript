@@ -1,4 +1,4 @@
-=== tests/cases/compiler/untypedArgumentInLambdaExpression.ts ===
+=== untypedArgumentInLambdaExpression.ts ===
 declare function f(fn: (a: string) => string);
 >f : (fn: (a: string) => string) => any
 >fn : (a: string) => string

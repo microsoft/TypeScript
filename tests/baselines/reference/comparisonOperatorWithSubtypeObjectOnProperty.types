@@ -1,4 +1,4 @@
-=== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithSubtypeObjectOnProperty.ts ===
+=== comparisonOperatorWithSubtypeObjectOnProperty.ts ===
 class Base {
 >Base : Base
 

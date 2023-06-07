@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+=== index.js ===
 // these are recognized as TS concepts by the checker
 /** @type {String} */const a = "";
 >a : string

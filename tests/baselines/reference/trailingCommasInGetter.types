@@ -1,4 +1,4 @@
-=== tests/cases/conformance/es7/trailingCommasInGetter.ts ===
+=== trailingCommasInGetter.ts ===
 class X {
 >X : X
 

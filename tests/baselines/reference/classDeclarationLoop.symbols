@@ -1,4 +1,4 @@
-=== tests/cases/conformance/classes/classDeclarations/classDeclarationLoop.ts ===
+=== classDeclarationLoop.ts ===
 const arr = [];
 >arr : Symbol(arr, Decl(classDeclarationLoop.ts, 0, 5))
 

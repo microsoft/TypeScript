@@ -1,4 +1,4 @@
-=== tests/cases/compiler/extendGlobalThis2.ts ===
+=== extendGlobalThis2.ts ===
 namespace globalThis {
 >globalThis : typeof globalThis
 

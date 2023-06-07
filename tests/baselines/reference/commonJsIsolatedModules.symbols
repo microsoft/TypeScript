@@ -1,4 +1,4 @@
-=== tests/cases/compiler/index.js ===
+=== index.js ===
 module.exports = {}
 >module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
 >module : Symbol(module, Decl(index.js, 0, 0))

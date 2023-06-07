@@ -1,4 +1,4 @@
-=== tests/cases/compiler/inheritanceGrandParentPrivateMemberCollisionWithPublicMember.ts ===
+=== inheritanceGrandParentPrivateMemberCollisionWithPublicMember.ts ===
 class A {
 >A : A
 

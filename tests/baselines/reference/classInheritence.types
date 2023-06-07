@@ -1,4 +1,4 @@
-=== tests/cases/compiler/classInheritence.ts ===
+=== classInheritence.ts ===
 class B extends A { }
 >B : B
 >A : A

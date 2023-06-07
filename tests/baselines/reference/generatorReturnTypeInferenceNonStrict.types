@@ -1,4 +1,4 @@
-=== tests/cases/conformance/generators/generatorReturnTypeInferenceNonStrict.ts ===
+=== generatorReturnTypeInferenceNonStrict.ts ===
 declare const iterableIterator: IterableIterator<number>;
 >iterableIterator : IterableIterator<number>
 

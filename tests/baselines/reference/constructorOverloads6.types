@@ -1,4 +1,4 @@
-=== tests/cases/compiler/constructorOverloads6.ts ===
+=== constructorOverloads6.ts ===
 declare class FooBase {
 >FooBase : FooBase
 

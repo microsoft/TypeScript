@@ -1,4 +1,4 @@
-=== tests/cases/compiler/file1.js ===
+=== file1.js ===
 
 /**
  * @template {string} T
@@ -7,7 +7,7 @@
 
 export default {};
 
-=== tests/cases/compiler/file2.js ===
+=== file2.js ===
 
 /**
  * @template T

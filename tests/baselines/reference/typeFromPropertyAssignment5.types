@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/a.js ===
+=== a.js ===
 export default function MyClass() {
 >MyClass : typeof MyClass
 }
@@ -15,7 +15,7 @@ MyClass.bar
 >MyClass : typeof MyClass
 >bar : typeof C
 
-=== tests/cases/conformance/salsa/b.js ===
+=== b.js ===
 import MC from './a'
 >MC : typeof MC
 

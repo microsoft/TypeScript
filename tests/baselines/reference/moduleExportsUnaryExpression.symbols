@@ -1,4 +1,4 @@
-=== tests/cases/compiler/moduleExportsUnaryExpression.ts ===
+=== moduleExportsUnaryExpression.ts ===
 let x = 1;
 >x : Symbol(x, Decl(moduleExportsUnaryExpression.ts, 0, 3))
 

@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/file1.js ===
+=== file1.js ===
 // this file _should_ be a global file
 var GlobalThing = { x: 12 };
 >GlobalThing : { x: number; }
@@ -34,7 +34,7 @@ function f(type, ctor, exports) {
     }
 }
 
-=== tests/cases/conformance/jsdoc/ref.js ===
+=== ref.js ===
 GlobalThing.x
 >GlobalThing.x : number
 >GlobalThing : { x: number; }

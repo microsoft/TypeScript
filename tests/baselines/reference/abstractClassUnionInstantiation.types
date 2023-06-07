@@ -1,4 +1,4 @@
-=== tests/cases/compiler/abstractClassUnionInstantiation.ts ===
+=== abstractClassUnionInstantiation.ts ===
 class ConcreteA {}
 >ConcreteA : ConcreteA
 

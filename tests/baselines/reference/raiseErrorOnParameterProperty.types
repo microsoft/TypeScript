@@ -1,4 +1,4 @@
-=== tests/cases/compiler/raiseErrorOnParameterProperty.ts ===
+=== raiseErrorOnParameterProperty.ts ===
 class C1 {
 >C1 : C1
 

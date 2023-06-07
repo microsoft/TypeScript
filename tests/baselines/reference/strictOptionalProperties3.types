@@ -1,4 +1,4 @@
-=== tests/cases/compiler/a.js ===
+=== a.js ===
 /**
  * @typedef {object} A
  * @property {number} [value]

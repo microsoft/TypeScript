@@ -1,4 +1,4 @@
-=== tests/cases/conformance/parser/ecmascript5/IndexMemberDeclarations/parserIndexMemberDeclaration6.ts ===
+=== parserIndexMemberDeclaration6.ts ===
 class C {
 >C : C
 

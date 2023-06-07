@@ -1,4 +1,4 @@
-=== tests/cases/compiler/callWithWrongNumberOfTypeArguments.ts ===
+=== callWithWrongNumberOfTypeArguments.ts ===
 function f<T, U>() { }
 >f : <T, U>() => void
 

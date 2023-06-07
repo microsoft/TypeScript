@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsx/test.tsx ===
+=== test.tsx ===
 var Route: any;
 >Route : Symbol(Route, Decl(test.tsx, 0, 3))
 

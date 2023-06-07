@@ -1,4 +1,4 @@
-=== tests/cases/compiler/moduleNoEmit.ts ===
+=== moduleNoEmit.ts ===
 module Foo {
 >Foo : typeof Foo
 

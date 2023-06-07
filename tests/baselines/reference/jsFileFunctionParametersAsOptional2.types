@@ -1,4 +1,4 @@
-=== tests/cases/compiler/foo.js ===
+=== foo.js ===
 /**
  * @param a
  * @param b
@@ -11,7 +11,7 @@ function f(a, b, c) { }
 >c : any
 
 
-=== tests/cases/compiler/bar.ts ===
+=== bar.ts ===
 f(); // Error
 >f() : void
 >f : (a: any, b: any, c: any) => void

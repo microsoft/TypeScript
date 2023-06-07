@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/lateBoundClassMemberAssignmentJS2.js ===
+=== lateBoundClassMemberAssignmentJS2.js ===
 const _sym = "my-fake-sym";
 >_sym : "my-fake-sym"
 >"my-fake-sym" : "my-fake-sym"

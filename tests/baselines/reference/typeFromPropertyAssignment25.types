@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/bug24703.js ===
+=== bug24703.js ===
 var Common = {};
 >Common : typeof Common
 >{} : {}

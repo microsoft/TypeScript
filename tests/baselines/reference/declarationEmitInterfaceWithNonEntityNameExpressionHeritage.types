@@ -1,4 +1,4 @@
-=== tests/cases/compiler/declarationEmitInterfaceWithNonEntityNameExpressionHeritage.ts ===
+=== declarationEmitInterfaceWithNonEntityNameExpressionHeritage.ts ===
 class A { }
 >A : A
 

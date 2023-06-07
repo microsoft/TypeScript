@@ -1,6 +1,6 @@
-=== tests/cases/compiler/checkJsdocTypeTagOnExportAssignment8.js ===
+=== checkJsdocTypeTagOnExportAssignment8.js ===
 
-=== tests/cases/compiler/a.js ===
+=== a.js ===
 /**
  * @typedef Foo
  * @property {string} a

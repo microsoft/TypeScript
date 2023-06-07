@@ -1,4 +1,4 @@
-=== tests/cases/compiler/funcdecl.ts ===
+=== funcdecl.ts ===
 function simpleFunc() {
 >simpleFunc : () => string
 

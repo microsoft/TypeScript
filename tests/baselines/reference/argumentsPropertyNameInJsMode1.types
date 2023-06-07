@@ -1,4 +1,4 @@
-=== tests/cases/compiler/a.js ===
+=== a.js ===
 const foo = {
 >foo : { f1: (params: any) => void; }
 >{   f1: (params) => { }} : { f1: (params: any) => void; }

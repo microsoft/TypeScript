@@ -1,4 +1,4 @@
-=== tests/cases/compiler/jsxInferenceProducesLiteralAsExpected.tsx ===
+=== jsxInferenceProducesLiteralAsExpected.tsx ===
 import React = require("react");
 >React : typeof React
 

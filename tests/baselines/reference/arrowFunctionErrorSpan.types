@@ -1,4 +1,4 @@
-=== tests/cases/compiler/arrowFunctionErrorSpan.ts ===
+=== arrowFunctionErrorSpan.ts ===
 function f(a: () => number) { }
 >f : (a: () => number) => void
 >a : () => number

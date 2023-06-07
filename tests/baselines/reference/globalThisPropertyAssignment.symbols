@@ -1,4 +1,4 @@
-=== tests/cases/conformance/es2019/globalThisPropertyAssignment.js ===
+=== globalThisPropertyAssignment.js ===
 this.x = 1
 >this.x : Symbol(x, Decl(globalThisPropertyAssignment.js, 0, 0))
 >this : Symbol(globalThis, Decl(globalThisPropertyAssignment.js, 3, 12))

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/newNonReferenceType.ts ===
+=== newNonReferenceType.ts ===
 var a = new any();
 >a : any
 >new any() : any

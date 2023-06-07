@@ -1,4 +1,4 @@
-=== tests/cases/compiler/export.js ===
+=== export.js ===
 /**
  * @typedef {{
  * }}

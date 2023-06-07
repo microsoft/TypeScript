@@ -1,4 +1,4 @@
-=== tests/cases/compiler/file.js ===
+=== file.js ===
 /**
  * @param {number} \u0061
  * @param {number} a\u0061

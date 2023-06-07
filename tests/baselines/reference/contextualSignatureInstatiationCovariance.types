@@ -1,4 +1,4 @@
-=== tests/cases/compiler/contextualSignatureInstatiationCovariance.ts ===
+=== contextualSignatureInstatiationCovariance.ts ===
 interface Animal { x }
 >x : any
 

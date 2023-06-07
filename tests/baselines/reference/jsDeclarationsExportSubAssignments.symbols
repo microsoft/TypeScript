@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/declarations/cls.js ===
+=== cls.js ===
 const Strings = {
 >Strings : Symbol(Strings, Decl(cls.js, 0, 5))
 

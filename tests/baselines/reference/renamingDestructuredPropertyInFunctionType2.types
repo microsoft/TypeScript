@@ -1,4 +1,4 @@
-=== tests/cases/compiler/a.d.ts ===
+=== a.d.ts ===
 type O = { a: string; b: number; c: number; };
 >O : { a: string; b: number; c: number; }
 >a : string

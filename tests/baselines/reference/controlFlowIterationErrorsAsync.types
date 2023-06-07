@@ -1,4 +1,4 @@
-=== tests/cases/conformance/controlFlow/controlFlowIterationErrorsAsync.ts ===
+=== controlFlowIterationErrorsAsync.ts ===
 let cond: boolean;
 >cond : boolean
 

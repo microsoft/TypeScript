@@ -1,4 +1,4 @@
-=== tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts ===
+=== nonPrimitiveStrictNull.ts ===
 var a: object
 >a : object
 

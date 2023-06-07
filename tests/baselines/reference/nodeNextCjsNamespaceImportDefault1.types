@@ -1,9 +1,9 @@
-=== tests/cases/compiler/src/a.cts ===
+=== src/a.cts ===
 export const a: number = 1;
 >a : number
 >1 : 1
 
-=== tests/cases/compiler/src/foo.mts ===
+=== src/foo.mts ===
 import d, {a} from './a.cjs';
 >d : typeof d
 >a : number

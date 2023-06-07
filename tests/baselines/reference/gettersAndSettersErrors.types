@@ -1,4 +1,4 @@
-=== tests/cases/compiler/gettersAndSettersErrors.ts ===
+=== gettersAndSettersErrors.ts ===
 class C {
 >C : C
 

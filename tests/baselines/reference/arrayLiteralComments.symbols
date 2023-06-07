@@ -1,4 +1,4 @@
-=== tests/cases/compiler/arrayLiteralComments.ts ===
+=== arrayLiteralComments.ts ===
 var testArrayWithFunc = [
 >testArrayWithFunc : Symbol(testArrayWithFunc, Decl(arrayLiteralComments.ts, 0, 3))
 

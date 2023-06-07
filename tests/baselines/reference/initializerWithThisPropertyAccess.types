@@ -1,4 +1,4 @@
-=== tests/cases/compiler/initializerWithThisPropertyAccess.ts ===
+=== initializerWithThisPropertyAccess.ts ===
 class A {
 >A : A
 

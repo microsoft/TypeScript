@@ -1,4 +1,4 @@
-=== tests/cases/compiler/functionReturningItself.ts ===
+=== functionReturningItself.ts ===
 function somefn() {
 >somefn : () => typeof somefn
 

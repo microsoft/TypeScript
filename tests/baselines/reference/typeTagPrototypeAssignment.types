@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/bug27327.js ===
+=== bug27327.js ===
 function C() {
 >C : typeof C
 }

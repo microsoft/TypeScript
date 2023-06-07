@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/a.js ===
+=== a.js ===
 function Installer () {
 >Installer : typeof Installer
 

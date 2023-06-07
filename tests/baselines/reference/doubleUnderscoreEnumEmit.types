@@ -1,4 +1,4 @@
-=== tests/cases/compiler/doubleUnderscoreEnumEmit.ts ===
+=== doubleUnderscoreEnumEmit.ts ===
 enum Foo {
 >Foo : Foo
 

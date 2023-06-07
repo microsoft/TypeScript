@@ -1,4 +1,4 @@
-=== tests/cases/compiler/superCallWithMissingBaseClass.ts ===
+=== superCallWithMissingBaseClass.ts ===
 class Foo extends Bar {
 >Foo : Foo
 >Bar : any

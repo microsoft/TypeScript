@@ -1,4 +1,4 @@
-=== tests/cases/compiler/bitwiseCompoundAssignmentOperators.ts ===
+=== bitwiseCompoundAssignmentOperators.ts ===
 var a = true;
 >a : boolean
 >true : true

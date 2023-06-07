@@ -1,8 +1,8 @@
-=== tests/cases/compiler/input.ts ===
+=== input.ts ===
 export type Foo<T = string> = {};
 >Foo : Foo<T>
 
-=== tests/cases/compiler/usage.ts ===
+=== usage.ts ===
 import {Foo} from "./input";
 >Foo : any
 

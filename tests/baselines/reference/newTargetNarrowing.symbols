@@ -1,4 +1,4 @@
-=== tests/cases/conformance/es6/newTarget/newTargetNarrowing.ts ===
+=== newTargetNarrowing.ts ===
 function foo(x: true) { }
 >foo : Symbol(foo, Decl(newTargetNarrowing.ts, 0, 0))
 >x : Symbol(x, Decl(newTargetNarrowing.ts, 0, 13))

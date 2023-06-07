@@ -1,4 +1,4 @@
-=== tests/cases/compiler/constantEnumAssert.ts ===
+=== constantEnumAssert.ts ===
 enum E1 {
 >E1 : E1
 

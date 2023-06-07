@@ -1,4 +1,4 @@
-=== tests/cases/conformance/externalModules/index.ts ===
+=== index.ts ===
 export const x = 1;
 >x : 1
 >1 : 1
@@ -166,7 +166,7 @@ await
     1;
 >1 : 1
 
-=== tests/cases/conformance/externalModules/other.ts ===
+=== other.ts ===
 const _await = 1;
 >_await : 1
 >1 : 1

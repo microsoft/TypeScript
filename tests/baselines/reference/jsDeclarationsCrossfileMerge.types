@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+=== index.js ===
 const m = require("./exporter");
 >m : typeof m
 >require("./exporter") : typeof m
@@ -23,7 +23,7 @@ module.exports.memberName = "thing";
 >memberName : "thing"
 >"thing" : "thing"
 
-=== tests/cases/conformance/jsdoc/declarations/exporter.js ===
+=== exporter.js ===
 function validate() {}
 >validate : typeof validate
 

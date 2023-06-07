@@ -1,4 +1,4 @@
-=== tests/cases/conformance/controlFlow/definiteAssignmentAssertionsWithObjectShortHand.ts ===
+=== definiteAssignmentAssertionsWithObjectShortHand.ts ===
 const a: string | undefined = 'ff';
 >a : Symbol(a, Decl(definiteAssignmentAssertionsWithObjectShortHand.ts, 0, 5))
 

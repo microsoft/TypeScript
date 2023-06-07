@@ -1,4 +1,4 @@
-=== tests/cases/compiler/genericTypeArgumentInference1.ts ===
+=== genericTypeArgumentInference1.ts ===
 module Underscore {
 >Underscore : Symbol(Underscore, Decl(genericTypeArgumentInference1.ts, 0, 0))
 

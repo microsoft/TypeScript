@@ -1,4 +1,4 @@
-=== tests/cases/conformance/types/nonPrimitive/nonPrimitiveUnionIntersection.ts ===
+=== nonPrimitiveUnionIntersection.ts ===
 var a: object & string = ""; // error
 >a : Symbol(a, Decl(nonPrimitiveUnionIntersection.ts, 0, 3))
 

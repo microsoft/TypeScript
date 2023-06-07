@@ -1,8 +1,8 @@
-=== tests/cases/compiler/bar.ts ===
+=== bar.ts ===
 
 export interface IEventSourcedEntity { }
 
-=== tests/cases/compiler/test.ts ===
+=== test.ts ===
 import { IEventSourcedEntity } from "./bar";
 >IEventSourcedEntity : any
 

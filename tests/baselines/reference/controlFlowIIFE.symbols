@@ -1,4 +1,4 @@
-=== tests/cases/conformance/controlFlow/controlFlowIIFE.ts ===
+=== controlFlowIIFE.ts ===
 declare function getStringOrNumber(): string | number;
 >getStringOrNumber : Symbol(getStringOrNumber, Decl(controlFlowIIFE.ts, 0, 0))
 

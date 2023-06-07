@@ -1,4 +1,4 @@
-=== tests/cases/conformance/es6/modules/m1.ts ===
+=== m1.ts ===
 export default class foo {
 >foo : bar
 
@@ -16,7 +16,7 @@ var x = 10;
 export default x;
 >x : number
 
-=== tests/cases/conformance/es6/modules/m2.ts ===
+=== m2.ts ===
 import Entity from "./m1"
 >Entity : typeof Entity
 

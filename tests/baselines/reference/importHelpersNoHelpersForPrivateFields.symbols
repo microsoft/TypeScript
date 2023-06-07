@@ -1,4 +1,4 @@
-=== tests/cases/compiler/main.ts ===
+=== main.ts ===
 export class Foo {
 >Foo : Symbol(Foo, Decl(main.ts, 0, 0))
 
@@ -20,7 +20,7 @@ export class Foo {
     }
 }
 
-=== tests/cases/compiler/tslib.d.ts ===
+=== tslib.d.ts ===
 
 export {}
 

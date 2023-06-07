@@ -1,4 +1,4 @@
-=== tests/cases/compiler/declaration.d.ts ===
+=== declaration.d.ts ===
 export declare class D {
 >D : D
 }

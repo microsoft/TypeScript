@@ -1,4 +1,4 @@
-=== tests/cases/compiler/voidIsInitialized.ts ===
+=== voidIsInitialized.ts ===
 const x: void = undefined;
 >x : Symbol(x, Decl(voidIsInitialized.ts, 0, 5))
 >undefined : Symbol(undefined)

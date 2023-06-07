@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/declarations/source.js ===
+=== source.js ===
 /**
  * Foos a bar together using an `a` and a `b`
  * @param {number} a

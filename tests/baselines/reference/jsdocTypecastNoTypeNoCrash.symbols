@@ -1,4 +1,4 @@
-=== tests/cases/compiler/index.js ===
+=== index.js ===
 function Foo() {}
 >Foo : Symbol(Foo, Decl(index.js, 0, 0))
 

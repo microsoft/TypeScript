@@ -1,4 +1,4 @@
-=== tests/cases/compiler/lateBoundMethodNameAssigmentJS.js ===
+=== lateBoundMethodNameAssigmentJS.js ===
 const _symbol = Symbol("_sym");
 >_symbol : unique symbol
 >Symbol("_sym") : unique symbol

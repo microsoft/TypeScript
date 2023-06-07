@@ -1,4 +1,4 @@
-=== tests/cases/compiler/lateBoundConstraintTypeChecksCorrectly.ts ===
+=== lateBoundConstraintTypeChecksCorrectly.ts ===
 declare const fooProp: unique symbol;
 >fooProp : unique symbol
 

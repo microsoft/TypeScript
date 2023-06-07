@@ -1,4 +1,4 @@
-=== tests/cases/compiler/first.ts ===
+=== first.ts ===
 declare function mix<TMix>(mixin: TMix): TMix;
 >mix : <TMix>(mixin: TMix) => TMix
 >mixin : TMix
@@ -38,7 +38,7 @@ export class Monitor extends mix(DisposableMixin) {
     }
 }
 
-=== tests/cases/compiler/another.ts ===
+=== another.ts ===
 declare function mix<TMix>(mixin: TMix): TMix;
 >mix : <TMix>(mixin: TMix) => TMix
 >mixin : TMix

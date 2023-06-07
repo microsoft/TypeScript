@@ -1,4 +1,4 @@
-=== tests/cases/compiler/argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts ===
+=== argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts ===
 function A() {
 >A : () => typeof T
 

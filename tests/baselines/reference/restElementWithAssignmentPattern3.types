@@ -1,4 +1,4 @@
-=== tests/cases/conformance/es6/destructuring/restElementWithAssignmentPattern3.ts ===
+=== restElementWithAssignmentPattern3.ts ===
 var a: string, b: number;
 >a : string
 >b : number

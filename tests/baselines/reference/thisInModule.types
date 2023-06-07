@@ -1,4 +1,4 @@
-=== tests/cases/compiler/thisInModule.ts ===
+=== thisInModule.ts ===
 module myMod {
 >myMod : typeof myMod
 

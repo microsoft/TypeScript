@@ -1,4 +1,4 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionUnused.ts ===
+=== privateNameInInExpressionUnused.ts ===
 class Foo {
 >Foo : Foo
 

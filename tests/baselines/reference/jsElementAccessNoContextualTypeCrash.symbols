@@ -1,4 +1,4 @@
-=== tests/cases/compiler/jsElementAccessNoContextualTypeCrash.js ===
+=== jsElementAccessNoContextualTypeCrash.js ===
 var Common = {};
 >Common : Symbol(Common, Decl(jsElementAccessNoContextualTypeCrash.js, 0, 3), Decl(jsElementAccessNoContextualTypeCrash.js, 1, 38))
 

@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+=== index.js ===
 Object.defineProperty(module.exports, "a", { value: function a() {} });
 >Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

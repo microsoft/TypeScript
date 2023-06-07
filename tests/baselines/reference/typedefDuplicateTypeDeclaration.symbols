@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/typedefDuplicateTypeDeclaration.js ===
+=== typedefDuplicateTypeDeclaration.js ===
 
 /**
  * @typedef Name

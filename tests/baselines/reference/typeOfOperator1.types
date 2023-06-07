@@ -1,4 +1,4 @@
-=== tests/cases/compiler/typeOfOperator1.ts ===
+=== typeOfOperator1.ts ===
 var x = 1;
 >x : number
 >1 : 1

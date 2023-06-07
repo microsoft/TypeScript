@@ -1,4 +1,4 @@
-=== tests/cases/compiler/overloadCallTest.ts ===
+=== overloadCallTest.ts ===
 class foo {
 >foo : foo
 

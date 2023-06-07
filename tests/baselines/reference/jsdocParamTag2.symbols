@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/0.js ===
+=== 0.js ===
 // Object literal syntax
 /**
  * @param {{a: string, b: string}} obj

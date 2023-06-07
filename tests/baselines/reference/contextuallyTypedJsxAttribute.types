@@ -1,4 +1,4 @@
-=== tests/cases/compiler/index.tsx ===
+=== index.tsx ===
 interface Elements {
   foo: { callback?: (value: number) => void };
 >foo : { callback?: (value: number) => void; }

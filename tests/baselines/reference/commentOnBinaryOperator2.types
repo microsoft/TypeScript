@@ -1,4 +1,4 @@
-=== tests/cases/compiler/commentOnBinaryOperator2.ts ===
+=== commentOnBinaryOperator2.ts ===
 var a = 'some'
 >a : string
 >'some'    // comment    + 'text' : string

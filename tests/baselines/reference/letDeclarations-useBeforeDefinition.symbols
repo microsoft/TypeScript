@@ -1,4 +1,4 @@
-=== tests/cases/compiler/letDeclarations-useBeforeDefinition.ts ===
+=== letDeclarations-useBeforeDefinition.ts ===
 {
     l1;
 >l1 : Symbol(l1, Decl(letDeclarations-useBeforeDefinition.ts, 2, 7))

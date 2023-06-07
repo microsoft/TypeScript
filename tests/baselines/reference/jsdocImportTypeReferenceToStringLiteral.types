@@ -1,9 +1,9 @@
-=== tests/cases/conformance/jsdoc/b.js ===
+=== b.js ===
 export const FOO = "foo";
 >FOO : "foo"
 >"foo" : "foo"
 
-=== tests/cases/conformance/jsdoc/a.js ===
+=== a.js ===
 /** @type {import('./b').FOO} */
 let x;
 >x : "foo"

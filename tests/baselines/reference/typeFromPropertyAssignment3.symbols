@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/a.js ===
+=== a.js ===
 var Outer = function O() {
 >Outer : Symbol(Outer, Decl(a.js, 0, 3), Decl(a.js, 2, 1))
 >O : Symbol(O, Decl(a.js, 0, 11))

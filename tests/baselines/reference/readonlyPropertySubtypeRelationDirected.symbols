@@ -1,4 +1,4 @@
-=== tests/cases/compiler/one.ts ===
+=== one.ts ===
 export {};
 // When the non-readonly type is declared first, the unioned type of `three` in `doSomething` is never treated as readonly
 const two: { a: string } = { a: 'two' };
@@ -38,7 +38,7 @@ function doSomething(condition: boolean) {
     return three;
 >three : Symbol(three, Decl(one.ts, 8, 9))
 }
-=== tests/cases/compiler/two.ts ===
+=== two.ts ===
 export {};
 // When the non-readonly type is declared first, the unioned type of `three` in `doSomething` is never treated as readonly
 const two: { a: string } = { a: 'two' };
@@ -79,7 +79,7 @@ function doSomething(condition: boolean) {
 >three : Symbol(three, Decl(two.ts, 8, 9))
 }
 
-=== tests/cases/compiler/three.ts ===
+=== three.ts ===
 export {};
 // When the readonly type is declared first, the unioned type of `three` in `doSomething` is always treated as readonly by the compiler
 const one: { readonly a: string } = { a: 'one' };
@@ -120,7 +120,7 @@ function doSomething(condition: boolean) {
 >three : Symbol(three, Decl(three.ts, 8, 9))
 }
 
-=== tests/cases/compiler/four.ts ===
+=== four.ts ===
 export {};
 // When the readonly type is declared first, the unioned type of `three` in `doSomething` is always treated as readonly by the compiler
 const one: { readonly a: string } = { a: 'one' };

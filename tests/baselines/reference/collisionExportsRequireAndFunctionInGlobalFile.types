@@ -1,4 +1,4 @@
-=== tests/cases/compiler/collisionExportsRequireAndFunctionInGlobalFile.ts ===
+=== collisionExportsRequireAndFunctionInGlobalFile.ts ===
 function exports() {
 >exports : () => number
 

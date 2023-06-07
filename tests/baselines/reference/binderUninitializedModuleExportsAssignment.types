@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/loop.js ===
+=== loop.js ===
 var loop1 = loop2;
 >loop1 : any
 >loop2 : any

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/indexer3.ts ===
+=== indexer3.ts ===
 var dateMap: { [x: string]: Date; } = {}
 >dateMap : { [x: string]: Date; }
 >x : string

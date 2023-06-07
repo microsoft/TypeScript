@@ -1,4 +1,4 @@
-=== tests/cases/compiler/getAndSetAsMemberNames.ts ===
+=== getAndSetAsMemberNames.ts ===
 class C1 {
 >C1 : C1
 

@@ -1,4 +1,4 @@
-=== tests/cases/conformance/classes/members/classTypes/genericSetterInClassType.ts ===
+=== genericSetterInClassType.ts ===
 module Generic {
 >Generic : typeof Generic
 

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/mod.mts ===
+=== mod.mts ===
 import * as thing1 from "./mod.mjs" assert {field: 0};
 >thing1 : typeof thing1
 >field : any

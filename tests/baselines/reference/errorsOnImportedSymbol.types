@@ -1,4 +1,4 @@
-=== tests/cases/compiler/errorsOnImportedSymbol_1.ts ===
+=== errorsOnImportedSymbol_1.ts ===
 import Sammy = require("./errorsOnImportedSymbol_0");
 >Sammy : any
 
@@ -17,7 +17,7 @@ var y = Sammy.Sammy();
 >Sammy : any
 
 
-=== tests/cases/compiler/errorsOnImportedSymbol_0.ts ===
+=== errorsOnImportedSymbol_0.ts ===
 interface Sammy {
     new (): any;
     (): number;

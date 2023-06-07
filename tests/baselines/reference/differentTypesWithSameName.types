@@ -1,4 +1,4 @@
-=== tests/cases/compiler/differentTypesWithSameName.ts ===
+=== differentTypesWithSameName.ts ===
 module m {
 >m : typeof m
 

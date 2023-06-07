@@ -1,4 +1,4 @@
-=== tests/cases/compiler/noEmitHelpers.ts ===
+=== noEmitHelpers.ts ===
 class A { }
 >A : A
 

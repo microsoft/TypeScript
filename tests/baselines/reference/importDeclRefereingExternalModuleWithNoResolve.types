@@ -1,4 +1,4 @@
-=== tests/cases/compiler/importDeclRefereingExternalModuleWithNoResolve.ts ===
+=== importDeclRefereingExternalModuleWithNoResolve.ts ===
 import b = require("externalModule");
 >b : any
 

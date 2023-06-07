@@ -1,7 +1,7 @@
-tests/cases/compiler/divergentAccessorsTypes4.ts(29,1): error TS2322: Type '"hello"' is not assignable to type '42'.
+divergentAccessorsTypes4.ts(29,1): error TS2322: Type '"hello"' is not assignable to type '42'.
 
 
-==== tests/cases/compiler/divergentAccessorsTypes4.ts (1 errors) ====
+==== divergentAccessorsTypes4.ts (1 errors) ====
     class One {
       get prop1(): string { return ""; }
       set prop1(s: string | number) { }

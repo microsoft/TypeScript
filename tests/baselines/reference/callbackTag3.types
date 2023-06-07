@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/cb.js ===
+=== cb.js ===
 /** @callback Miracle
  * @returns {string} What were you expecting
  */

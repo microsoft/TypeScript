@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/inferringClassMembersFromAssignments6.js ===
+=== inferringClassMembersFromAssignments6.js ===
 function Foonly() {
 >Foonly : Symbol(Foonly, Decl(inferringClassMembersFromAssignments6.js, 0, 0))
 

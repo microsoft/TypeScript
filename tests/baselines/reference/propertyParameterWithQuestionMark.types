@@ -1,4 +1,4 @@
-=== tests/cases/compiler/propertyParameterWithQuestionMark.ts ===
+=== propertyParameterWithQuestionMark.ts ===
 class C {
 >C : C
 

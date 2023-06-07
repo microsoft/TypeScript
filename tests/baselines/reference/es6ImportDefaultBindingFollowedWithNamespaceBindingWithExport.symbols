@@ -1,8 +1,8 @@
-=== tests/cases/compiler/server.ts ===
+=== server.ts ===
 export var a = 10;
 >a : Symbol(a, Decl(server.ts, 0, 10))
 
-=== tests/cases/compiler/client.ts ===
+=== client.ts ===
 export import defaultBinding, * as nameSpaceBinding  from "./server";
 >defaultBinding : Symbol(defaultBinding, Decl(client.ts, 0, 13))
 >nameSpaceBinding : Symbol(nameSpaceBinding, Decl(client.ts, 0, 29))

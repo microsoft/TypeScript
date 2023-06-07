@@ -1,4 +1,4 @@
-=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts ===
+=== classStaticBlock6.ts ===
 class B {
 >B : B
 

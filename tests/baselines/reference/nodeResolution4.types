@@ -1,13 +1,13 @@
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 import y = require("./a");
 >y : typeof y
 
-=== tests/cases/compiler/ref.ts ===
+=== ref.ts ===
 var x = 1;
 >x : number
 >1 : 1
 
-=== tests/cases/compiler/a.ts ===
+=== a.ts ===
 /// <reference path="ref.ts"/>
 export var y;
 >y : any

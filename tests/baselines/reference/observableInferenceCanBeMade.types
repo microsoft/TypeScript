@@ -1,4 +1,4 @@
-=== tests/cases/compiler/observableInferenceCanBeMade.ts ===
+=== observableInferenceCanBeMade.ts ===
 // Repro from #33131
 
 declare function of<T>(a: T): Observable<T>;

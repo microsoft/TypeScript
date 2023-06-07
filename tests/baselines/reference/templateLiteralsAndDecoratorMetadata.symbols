@@ -1,4 +1,4 @@
-=== tests/cases/compiler/templateLiteralsAndDecoratorMetadata.ts ===
+=== templateLiteralsAndDecoratorMetadata.ts ===
 declare var format: any;
 >format : Symbol(format, Decl(templateLiteralsAndDecoratorMetadata.ts, 0, 11))
 

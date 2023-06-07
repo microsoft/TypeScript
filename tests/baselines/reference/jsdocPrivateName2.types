@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/jsdocPrivateName1.js ===
+=== jsdocPrivateName1.js ===
 
 // Expecting parse error for private field
 

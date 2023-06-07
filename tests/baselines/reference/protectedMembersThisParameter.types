@@ -1,4 +1,4 @@
-=== tests/cases/compiler/protectedMembersThisParameter.ts ===
+=== protectedMembersThisParameter.ts ===
 class Message {
 >Message : Message
 

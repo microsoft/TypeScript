@@ -1,4 +1,4 @@
-=== tests/cases/compiler/numberAsInLHS.ts ===
+=== numberAsInLHS.ts ===
 3 in [0, 1]
 >3 in [0, 1] : boolean
 >3 : 3

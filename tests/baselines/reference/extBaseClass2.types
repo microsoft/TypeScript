@@ -1,4 +1,4 @@
-=== tests/cases/compiler/extBaseClass2.ts ===
+=== extBaseClass2.ts ===
 module N {
 >N : typeof N
 

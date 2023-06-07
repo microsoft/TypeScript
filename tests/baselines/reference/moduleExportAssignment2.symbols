@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/npm.js ===
+=== npm.js ===
 var npm = module.exports = function (tree) {
 >npm : Symbol(npm, Decl(npm.js, 0, 3))
 >module.exports : Symbol(module.exports, Decl(npm.js, 0, 0))

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/QSpinner.js ===
+=== QSpinner.js ===
 import DefaultSpinner from './QSpinner'
 >DefaultSpinner : any
 

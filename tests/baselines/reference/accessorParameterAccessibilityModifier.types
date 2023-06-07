@@ -1,4 +1,4 @@
-=== tests/cases/compiler/accessorParameterAccessibilityModifier.ts ===
+=== accessorParameterAccessibilityModifier.ts ===
 class C {
 >C : C
 

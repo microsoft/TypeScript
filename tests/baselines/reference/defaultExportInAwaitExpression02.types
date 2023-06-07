@@ -1,4 +1,4 @@
-=== tests/cases/conformance/es6/modules/a.ts ===
+=== a.ts ===
 const x = new Promise( ( resolve, reject ) => { resolve( {} ); } );
 >x : Promise<unknown>
 >new Promise( ( resolve, reject ) => { resolve( {} ); } ) : Promise<unknown>
@@ -13,7 +13,7 @@ const x = new Promise( ( resolve, reject ) => { resolve( {} ); } );
 export default x;
 >x : Promise<unknown>
 
-=== tests/cases/conformance/es6/modules/b.ts ===
+=== b.ts ===
 import x from './a';
 >x : Promise<unknown>
 

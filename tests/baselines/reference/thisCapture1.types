@@ -1,4 +1,4 @@
-=== tests/cases/compiler/thisCapture1.ts ===
+=== thisCapture1.ts ===
 class X {
 >X : X
 

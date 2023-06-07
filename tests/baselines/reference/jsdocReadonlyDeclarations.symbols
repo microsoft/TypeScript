@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/jsdocReadonlyDeclarations.js ===
+=== jsdocReadonlyDeclarations.js ===
 class C {
 >C : Symbol(C, Decl(jsdocReadonlyDeclarations.js, 0, 0))
 

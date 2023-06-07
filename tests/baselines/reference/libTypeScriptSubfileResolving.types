@@ -5,7 +5,7 @@
 interface DOMIterable { abc: string }
 >abc : string
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 /// <reference lib="dom.iterable" />
 const a: DOMIterable = { abc: "Hello" }
 >a : DOMIterable

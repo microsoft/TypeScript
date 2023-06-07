@@ -1,4 +1,4 @@
-=== tests/cases/compiler/null.ts ===
+=== null.ts ===
 var x=null; 
 >x : any
 

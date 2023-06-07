@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/typeFromPropertyAssignment38.ts ===
+=== typeFromPropertyAssignment38.ts ===
 function F() {}
 >F : typeof F
 

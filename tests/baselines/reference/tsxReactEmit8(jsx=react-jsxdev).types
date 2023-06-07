@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsx/tsxReactEmit8.tsx ===
+=== tsxReactEmit8.tsx ===
 /// <reference path="react16.d.ts" />
 
 <div>1</div>;

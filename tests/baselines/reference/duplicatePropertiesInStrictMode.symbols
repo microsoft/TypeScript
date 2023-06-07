@@ -1,4 +1,4 @@
-=== tests/cases/compiler/duplicatePropertiesInStrictMode.ts ===
+=== duplicatePropertiesInStrictMode.ts ===
 "use strict";
 var x = {
 >x : Symbol(x, Decl(duplicatePropertiesInStrictMode.ts, 1, 3))

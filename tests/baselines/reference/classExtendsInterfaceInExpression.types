@@ -1,4 +1,4 @@
-=== tests/cases/compiler/classExtendsInterfaceInExpression.ts ===
+=== classExtendsInterfaceInExpression.ts ===
 interface A {}
 
 function factory(a: any): {new(): Object} {

@@ -1,4 +1,4 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameFieldsESNext.ts ===
+=== privateNameFieldsESNext.ts ===
 class C {
 >C : Symbol(C, Decl(privateNameFieldsESNext.ts, 0, 0))
 

@@ -1,8 +1,8 @@
-=== tests/cases/compiler/@angular/core/index.ts ===
+=== @angular/core/index.ts ===
 
 export {};
 
-=== tests/cases/compiler/@angular/core/testing/test.ts ===
+=== @angular/core/testing/test.ts ===
 
 import "@angular/core";
 

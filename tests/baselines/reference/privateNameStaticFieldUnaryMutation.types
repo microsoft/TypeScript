@@ -1,4 +1,4 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameStaticFieldUnaryMutation.ts ===
+=== privateNameStaticFieldUnaryMutation.ts ===
 class C {
 >C : C
 

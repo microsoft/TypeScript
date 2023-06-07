@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/declarations/bug38550.js ===
+=== bug38550.js ===
 export class Clazz {
 >Clazz : Clazz
 

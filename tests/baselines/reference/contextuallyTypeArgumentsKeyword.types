@@ -1,4 +1,4 @@
-=== tests/cases/compiler/foo.js ===
+=== foo.js ===
 // Repro for #16585
 const x = {
 >x : { bar(): void; }

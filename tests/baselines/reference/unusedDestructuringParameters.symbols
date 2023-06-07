@@ -1,4 +1,4 @@
-=== tests/cases/compiler/unusedDestructuringParameters.ts ===
+=== unusedDestructuringParameters.ts ===
 const f = ([a]) => { };
 >f : Symbol(f, Decl(unusedDestructuringParameters.ts, 0, 5))
 >a : Symbol(a, Decl(unusedDestructuringParameters.ts, 0, 12))

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/index.tsx ===
+=== index.tsx ===
 declare const React: any;
 >React : Symbol(React, Decl(index.tsx, 0, 13))
 

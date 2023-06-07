@@ -1,4 +1,4 @@
-=== tests/cases/compiler/consumer.ts ===
+=== consumer.ts ===
 import host = require("host");
 >host : typeof host
 
@@ -13,7 +13,7 @@ var v = new hostVar.Host();
 >hostVar : typeof host
 >Host : typeof host.Host
  
-=== tests/cases/compiler/host.ts ===
+=== host.ts ===
 export class Host { }
 >Host : Host
 

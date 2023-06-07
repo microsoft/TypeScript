@@ -1,4 +1,4 @@
-=== tests/cases/compiler/destructuringAssignment_private.ts ===
+=== destructuringAssignment_private.ts ===
 class C {
 >C : C
 

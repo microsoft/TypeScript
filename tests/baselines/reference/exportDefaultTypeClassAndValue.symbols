@@ -1,4 +1,4 @@
-=== tests/cases/compiler/exportDefaultTypeClassAndValue.ts ===
+=== exportDefaultTypeClassAndValue.ts ===
 const foo = 1
 >foo : Symbol(foo, Decl(exportDefaultTypeClassAndValue.ts, 0, 5))
 

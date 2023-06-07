@@ -1,4 +1,4 @@
-=== tests/cases/compiler/contextualTypeLogicalOr.ts ===
+=== contextualTypeLogicalOr.ts ===
 // Repro from #18005
 
 let x = 123;

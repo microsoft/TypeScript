@@ -1,4 +1,4 @@
-=== tests/cases/conformance/types/specifyingTypes/typeQueries/typeofClassWithPrivates.ts ===
+=== typeofClassWithPrivates.ts ===
 class C<T> {
 >C : C<T>
 

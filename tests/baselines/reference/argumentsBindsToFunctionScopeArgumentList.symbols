@@ -1,4 +1,4 @@
-=== tests/cases/compiler/argumentsBindsToFunctionScopeArgumentList.ts ===
+=== argumentsBindsToFunctionScopeArgumentList.ts ===
 var arguments = 10;
 >arguments : Symbol(arguments, Decl(argumentsBindsToFunctionScopeArgumentList.ts, 0, 3))
 

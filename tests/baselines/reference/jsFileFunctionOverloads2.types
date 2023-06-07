@@ -1,4 +1,4 @@
-=== tests/cases/compiler/jsFileFunctionOverloads2.js ===
+=== jsFileFunctionOverloads2.js ===
 // Also works if all @overload tags are combined in one comment.
 /**
  * @overload

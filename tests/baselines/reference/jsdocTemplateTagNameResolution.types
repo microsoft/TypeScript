@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/file.js ===
+=== file.js ===
 /**
  * @template T
  * @template {keyof T} K

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/implicitAnyGetAndSetAccessorWithAnyReturnType.ts ===
+=== implicitAnyGetAndSetAccessorWithAnyReturnType.ts ===
 // these should be errors
 class GetAndSet {
 >GetAndSet : Symbol(GetAndSet, Decl(implicitAnyGetAndSetAccessorWithAnyReturnType.ts, 0, 0))

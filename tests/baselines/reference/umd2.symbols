@@ -1,4 +1,4 @@
-=== tests/cases/conformance/externalModules/a.ts ===
+=== a.ts ===
 Foo.fn();
 let x: Foo.Thing;
 >x : Symbol(x, Decl(a.ts, 1, 3))

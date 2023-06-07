@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/forgot.js ===
+=== forgot.js ===
 /**
  * @param {T} a
  * @template T

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/parseInvalidNames.ts ===
+=== parseInvalidNames.ts ===
 namespace 100 {}
 >namespace : any
 >100 : 100

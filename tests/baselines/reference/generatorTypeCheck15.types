@@ -1,4 +1,4 @@
-=== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck15.ts ===
+=== generatorTypeCheck15.ts ===
 function* g() {
 >g : () => Generator<never, string, unknown>
 

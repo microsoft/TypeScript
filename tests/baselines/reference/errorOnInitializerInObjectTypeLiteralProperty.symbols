@@ -1,4 +1,4 @@
-=== tests/cases/compiler/errorOnInitializerInObjectTypeLiteralProperty.ts ===
+=== errorOnInitializerInObjectTypeLiteralProperty.ts ===
 var Foo: {
 >Foo : Symbol(Foo, Decl(errorOnInitializerInObjectTypeLiteralProperty.ts, 0, 3))
 

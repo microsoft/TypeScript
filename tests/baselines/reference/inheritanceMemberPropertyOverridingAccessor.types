@@ -1,4 +1,4 @@
-=== tests/cases/compiler/inheritanceMemberPropertyOverridingAccessor.ts ===
+=== inheritanceMemberPropertyOverridingAccessor.ts ===
 class a {
 >a : a
 

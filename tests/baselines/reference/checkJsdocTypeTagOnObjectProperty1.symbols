@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/0.js ===
+=== 0.js ===
 // @ts-check
 var lol = "hello Lol"
 >lol : Symbol(lol, Decl(0.js, 1, 3))

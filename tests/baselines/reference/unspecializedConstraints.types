@@ -1,4 +1,4 @@
-=== tests/cases/compiler/unspecializedConstraints.ts ===
+=== unspecializedConstraints.ts ===
 module ts {
 >ts : typeof ts
 

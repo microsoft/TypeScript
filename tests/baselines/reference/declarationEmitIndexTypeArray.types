@@ -1,4 +1,4 @@
-=== tests/cases/compiler/declarationEmitIndexTypeArray.ts ===
+=== declarationEmitIndexTypeArray.ts ===
 function doSomethingWithKeys<T>(...keys: (keyof T)[]) { }
 >doSomethingWithKeys : <T>(...keys: (keyof T)[]) => void
 >keys : (keyof T)[]

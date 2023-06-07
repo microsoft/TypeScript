@@ -1,4 +1,4 @@
-=== tests/cases/compiler/assignToFn.ts ===
+=== assignToFn.ts ===
 module M {
 >M : typeof M
 

@@ -1,4 +1,4 @@
-=== tests/cases/conformance/decorators/class/a.ts ===
+=== a.ts ===
 function decorator() {
 >decorator : Symbol(decorator, Decl(a.ts, 0, 0))
 

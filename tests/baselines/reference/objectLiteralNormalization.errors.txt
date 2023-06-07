@@ -1,19 +1,19 @@
-tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts(7,14): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts(8,1): error TS2322: Type '{ b: string; }' is not assignable to type '{ a: number; b?: undefined; c?: undefined; } | { a: number; b: string; c?: undefined; } | { a: number; b: string; c: boolean; }'.
+objectLiteralNormalization.ts(7,14): error TS2322: Type 'number' is not assignable to type 'string'.
+objectLiteralNormalization.ts(8,1): error TS2322: Type '{ b: string; }' is not assignable to type '{ a: number; b?: undefined; c?: undefined; } | { a: number; b: string; c?: undefined; } | { a: number; b: string; c: boolean; }'.
   Type '{ b: string; }' is not assignable to type '{ a: number; b: string; c?: undefined; } | { a: number; b: string; c: boolean; }'.
     Type '{ b: string; }' is missing the following properties from type '{ a: number; b: string; c: boolean; }': a, c
-tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts(9,1): error TS2322: Type '{ c: true; }' is not assignable to type '{ a: number; b?: undefined; c?: undefined; } | { a: number; b: string; c?: undefined; } | { a: number; b: string; c: boolean; }'.
+objectLiteralNormalization.ts(9,1): error TS2322: Type '{ c: true; }' is not assignable to type '{ a: number; b?: undefined; c?: undefined; } | { a: number; b: string; c?: undefined; } | { a: number; b: string; c: boolean; }'.
   Type '{ c: true; }' is missing the following properties from type '{ a: number; b: string; c: boolean; }': a, b
-tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts(17,1): error TS2322: Type '{ a: string; b: number; }' is not assignable to type '{ a: number; b: number; } | { a: string; b?: undefined; } | { a?: undefined; b?: undefined; }'.
+objectLiteralNormalization.ts(17,1): error TS2322: Type '{ a: string; b: number; }' is not assignable to type '{ a: number; b: number; } | { a: string; b?: undefined; } | { a?: undefined; b?: undefined; }'.
   Types of property 'b' are incompatible.
     Type 'number' is not assignable to type 'undefined'.
-tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts(18,1): error TS2322: Type '{ a: number; }' is not assignable to type '{ a: number; b: number; } | { a: string; b?: undefined; } | { a?: undefined; b?: undefined; }'.
+objectLiteralNormalization.ts(18,1): error TS2322: Type '{ a: number; }' is not assignable to type '{ a: number; b: number; } | { a: string; b?: undefined; } | { a?: undefined; b?: undefined; }'.
   Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts(48,20): error TS2322: Type '2' is not assignable to type '1'.
-tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts(49,14): error TS2322: Type '2' is not assignable to type '1'.
+objectLiteralNormalization.ts(48,20): error TS2322: Type '2' is not assignable to type '1'.
+objectLiteralNormalization.ts(49,14): error TS2322: Type '2' is not assignable to type '1'.
 
 
-==== tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts (7 errors) ====
+==== objectLiteralNormalization.ts (7 errors) ====
     // Object literals in unions are normalized upon widening
     let a1 = [{ a: 0 }, { a: 1, b: "x" }, { a: 2, b: "y", c: true }][0];
     a1.a;  // number
@@ -23,7 +23,7 @@ tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts
     a1 = { a: 0, b: 0 };  // Error
                  ~
 !!! error TS2322: Type 'number' is not assignable to type 'string'.
-!!! related TS6500 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:2:47: The expected type comes from property 'b' which is declared here on type '{ a: number; b?: undefined; c?: undefined; } | { a: number; b: string; c?: undefined; } | { a: number; b: string; c: boolean; }'
+!!! related TS6500 objectLiteralNormalization.ts:2:47: The expected type comes from property 'b' which is declared here on type '{ a: number; b?: undefined; c?: undefined; } | { a: number; b: string; c?: undefined; } | { a: number; b: string; c: boolean; }'
     a1 = { b: "y" };  // Error
     ~~
 !!! error TS2322: Type '{ b: string; }' is not assignable to type '{ a: number; b?: undefined; c?: undefined; } | { a: number; b: string; c?: undefined; } | { a: number; b: string; c: boolean; }'.
@@ -49,7 +49,7 @@ tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts
     ~~
 !!! error TS2322: Type '{ a: number; }' is not assignable to type '{ a: number; b: number; } | { a: string; b?: undefined; } | { a?: undefined; b?: undefined; }'.
 !!! error TS2322:   Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
-!!! related TS2728 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:11:19: 'b' is declared here.
+!!! related TS2728 objectLiteralNormalization.ts:11:19: 'b' is declared here.
     
     // Object literals containing spreads are not normalized
     declare let b1: { a: string, b: string } | { b: string, c: string };
@@ -82,9 +82,9 @@ tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts
     let e3 = f(data, { a: 2 });
                        ~
 !!! error TS2322: Type '2' is not assignable to type '1'.
-!!! related TS6500 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:43:21: The expected type comes from property 'a' which is declared here on type '{ a: 1; b: "abc"; c: true; }'
+!!! related TS6500 objectLiteralNormalization.ts:43:21: The expected type comes from property 'a' which is declared here on type '{ a: 1; b: "abc"; c: true; }'
     let e4 = f({ a: 2 }, data);
                  ~
 !!! error TS2322: Type '2' is not assignable to type '1'.
-!!! related TS6500 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:43:21: The expected type comes from property 'a' which is declared here on type '{ a: 1; b: "abc"; c: true; }'
+!!! related TS6500 objectLiteralNormalization.ts:43:21: The expected type comes from property 'a' which is declared here on type '{ a: 1; b: "abc"; c: true; }'
     

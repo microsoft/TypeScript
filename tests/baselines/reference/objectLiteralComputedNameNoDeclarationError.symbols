@@ -1,4 +1,4 @@
-=== tests/cases/compiler/objectLiteralComputedNameNoDeclarationError.ts ===
+=== objectLiteralComputedNameNoDeclarationError.ts ===
 const Foo = {
 >Foo : Symbol(Foo, Decl(objectLiteralComputedNameNoDeclarationError.ts, 0, 5))
 

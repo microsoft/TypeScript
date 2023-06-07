@@ -1,4 +1,4 @@
-=== tests/cases/compiler/a.js ===
+=== a.js ===
 /** @typedef {{ endTime: number, screenshots: number}} A.<b>*/
 Animation.AnimationModel.ScreenshotCapture.Request;
 >Animation.AnimationModel.ScreenshotCapture.Request : error

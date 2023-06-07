@@ -1,4 +1,4 @@
-=== tests/cases/compiler/numericEnumMappedType.ts ===
+=== numericEnumMappedType.ts ===
 // Repro from #31771
 
 enum E1 { ONE, TWO, THREE }

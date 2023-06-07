@@ -1,4 +1,4 @@
-=== tests/cases/conformance/controlFlow/controlFlowAliasing.ts ===
+=== controlFlowAliasing.ts ===
 // Narrowing by aliased conditional expressions
 
 function f10(x: string | number) {

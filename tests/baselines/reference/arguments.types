@@ -1,4 +1,4 @@
-=== tests/cases/compiler/arguments.ts ===
+=== arguments.ts ===
 function f() {
 >f : () => void
 

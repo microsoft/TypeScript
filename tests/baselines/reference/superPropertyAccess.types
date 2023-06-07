@@ -1,4 +1,4 @@
-=== tests/cases/compiler/superPropertyAccess.ts ===
+=== superPropertyAccess.ts ===
 class MyBase {
 >MyBase : MyBase
 

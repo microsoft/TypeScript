@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+=== index.js ===
 Object.defineProperty(module.exports, "a", { value: function a() {} });
 >Object.defineProperty(module.exports, "a", { value: function a() {} }) : typeof module.exports
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T

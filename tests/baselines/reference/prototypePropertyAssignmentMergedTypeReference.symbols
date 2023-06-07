@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/prototypePropertyAssignmentMergedTypeReference.js ===
+=== prototypePropertyAssignmentMergedTypeReference.js ===
 // https://github.com/microsoft/TypeScript/issues/33993
 var f = function() {
 >f : Symbol(f, Decl(prototypePropertyAssignmentMergedTypeReference.js, 1, 3))

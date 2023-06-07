@@ -1,4 +1,4 @@
-=== tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithStaticVariableAndExportedVarThatShareAName.ts ===
+=== ClassAndModuleThatMergeWithStaticVariableAndExportedVarThatShareAName.ts ===
 class Point {
 >Point : Point
 

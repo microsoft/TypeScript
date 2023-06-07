@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/spellingUncheckedJS.js ===
+=== spellingUncheckedJS.js ===
 export var inModule = 1
 >inModule : number
 >1 : 1
@@ -129,7 +129,7 @@ Jimmy
 Jon
 >Jon : error
 
-=== tests/cases/conformance/salsa/other.js ===
+=== other.js ===
 var Jimmy = 1
 >Jimmy : number
 >1 : 1

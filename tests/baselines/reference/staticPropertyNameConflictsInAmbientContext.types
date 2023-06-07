@@ -1,4 +1,4 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/decl.d.ts ===
+=== decl.d.ts ===
 // name
 declare class StaticName {
 >StaticName : StaticName

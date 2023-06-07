@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/declarations/source.js ===
+=== source.js ===
 function foo() {}
 >foo : typeof foo
 

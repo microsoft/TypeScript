@@ -1,4 +1,4 @@
-=== tests/cases/compiler/argumentsUsedInObjectLiteralProperty.ts ===
+=== argumentsUsedInObjectLiteralProperty.ts ===
 class A {
 >A : A
 

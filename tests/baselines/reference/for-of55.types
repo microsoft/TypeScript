@@ -1,4 +1,4 @@
-=== tests/cases/conformance/es6/for-ofStatements/for-of55.ts ===
+=== for-of55.ts ===
 let v = [1];
 >v : number[]
 >[1] : number[]

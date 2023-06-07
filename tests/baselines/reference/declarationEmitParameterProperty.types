@@ -1,4 +1,4 @@
-=== tests/cases/compiler/declarationEmitParameterProperty.ts ===
+=== declarationEmitParameterProperty.ts ===
 export class Foo {
 >Foo : Foo
 

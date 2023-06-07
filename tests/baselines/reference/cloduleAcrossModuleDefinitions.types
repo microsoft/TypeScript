@@ -1,4 +1,4 @@
-=== tests/cases/compiler/cloduleAcrossModuleDefinitions.ts ===
+=== cloduleAcrossModuleDefinitions.ts ===
 module A {
 >A : typeof A
 

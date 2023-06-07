@@ -1,4 +1,4 @@
-=== tests/cases/compiler/restArgAssignmentCompat.ts ===
+=== restArgAssignmentCompat.ts ===
 function f(...x: number[]) {
 >f : (...x: number[]) => void
 >x : number[]

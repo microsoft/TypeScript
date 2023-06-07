@@ -1,4 +1,4 @@
-=== tests/cases/compiler/bug25434.js ===
+=== bug25434.js ===
 // should not crash while checking
 function Test({ b = '' } = {}) {}
 >Test : ({ b }?: { b?: string; }) => void

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/operatorAddNullUndefined.ts ===
+=== operatorAddNullUndefined.ts ===
 enum E { x }
 >E : E
 >x : E.x

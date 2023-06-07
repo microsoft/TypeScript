@@ -1,4 +1,4 @@
-=== tests/cases/conformance/types/spread/spreadExcessProperty.ts ===
+=== spreadExcessProperty.ts ===
 type A = { a: string, b: string };
 >A : { a: string; b: string; }
 >a : string

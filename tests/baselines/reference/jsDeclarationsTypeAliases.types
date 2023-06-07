@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+=== index.js ===
 
 export {}; // flag file as module
 /**
@@ -27,7 +27,7 @@ export {}; // flag file as module
  * @returns {T}
  */
 
-=== tests/cases/conformance/jsdoc/declarations/mixed.js ===
+=== mixed.js ===
 /**
  * @typedef {{x: string} | number | LocalThing | ExportedThing} SomeType
  */

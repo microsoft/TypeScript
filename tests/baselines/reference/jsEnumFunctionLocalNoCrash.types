@@ -1,4 +1,4 @@
-=== tests/cases/compiler/index.js ===
+=== index.js ===
 function defineCommonExtensionSymbols(apiPrivate) {
 >defineCommonExtensionSymbols : (apiPrivate: any) => void
 >apiPrivate : any

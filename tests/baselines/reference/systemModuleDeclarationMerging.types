@@ -1,4 +1,4 @@
-=== tests/cases/compiler/systemModuleDeclarationMerging.ts ===
+=== systemModuleDeclarationMerging.ts ===
 export function F() {}
 >F : typeof F
 

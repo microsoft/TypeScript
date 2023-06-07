@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+=== index.js ===
 /** @type {?} */
 export const a = null;
 >a : Symbol(a, Decl(index.js, 1, 12))

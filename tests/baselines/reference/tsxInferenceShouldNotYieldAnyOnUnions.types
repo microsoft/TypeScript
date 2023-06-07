@@ -1,4 +1,4 @@
-=== tests/cases/compiler/index.tsx ===
+=== index.tsx ===
 namespace JSX {
     export interface Element {}
 }

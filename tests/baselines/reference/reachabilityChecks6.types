@@ -1,4 +1,4 @@
-=== tests/cases/compiler/reachabilityChecks6.ts ===
+=== reachabilityChecks6.ts ===
 function f0(x) {
 >f0 : (x: any) => void
 >x : any

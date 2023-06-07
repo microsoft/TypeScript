@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/webpackLibNormalModule.js ===
+=== webpackLibNormalModule.js ===
 class C {
 >C : Symbol(C, Decl(webpackLibNormalModule.js, 0, 0))
 

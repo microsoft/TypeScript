@@ -1,4 +1,4 @@
-=== tests/cases/compiler/main.js ===
+=== main.js ===
 function allRest() { arguments; }
 >allRest : (...args: any[]) => void
 >arguments : IArguments

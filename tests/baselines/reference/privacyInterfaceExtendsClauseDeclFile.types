@@ -1,4 +1,4 @@
-=== tests/cases/compiler/privacyInterfaceExtendsClauseDeclFile_externalModule.ts ===
+=== privacyInterfaceExtendsClauseDeclFile_externalModule.ts ===
 export module publicModule {
     export interface publicInterfaceInPublicModule {
     }
@@ -74,7 +74,7 @@ export interface publicInterfaceImplementingFromPrivateModuleInterface extends p
 >privateModule : any
 }
 
-=== tests/cases/compiler/privacyInterfaceExtendsClauseDeclFile_GlobalFile.ts ===
+=== privacyInterfaceExtendsClauseDeclFile_GlobalFile.ts ===
 
 module publicModuleInGlobal {
     export interface publicInterfaceInPublicModule {

@@ -1,37 +1,37 @@
-tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItselfIndirectly_file1.ts(1,7): error TS2506: 'C' is referenced directly or indirectly in its own base expression.
-tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItselfIndirectly_file2.ts(1,7): error TS2506: 'D' is referenced directly or indirectly in its own base expression.
-tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItselfIndirectly_file3.ts(1,7): error TS2506: 'E' is referenced directly or indirectly in its own base expression.
-tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItselfIndirectly_file4.ts(1,7): error TS2506: 'C2' is referenced directly or indirectly in its own base expression.
-tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItselfIndirectly_file5.ts(1,7): error TS2506: 'D2' is referenced directly or indirectly in its own base expression.
-tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItselfIndirectly_file6.ts(1,7): error TS2506: 'E2' is referenced directly or indirectly in its own base expression.
+classExtendsItselfIndirectly_file1.ts(1,7): error TS2506: 'C' is referenced directly or indirectly in its own base expression.
+classExtendsItselfIndirectly_file2.ts(1,7): error TS2506: 'D' is referenced directly or indirectly in its own base expression.
+classExtendsItselfIndirectly_file3.ts(1,7): error TS2506: 'E' is referenced directly or indirectly in its own base expression.
+classExtendsItselfIndirectly_file4.ts(1,7): error TS2506: 'C2' is referenced directly or indirectly in its own base expression.
+classExtendsItselfIndirectly_file5.ts(1,7): error TS2506: 'D2' is referenced directly or indirectly in its own base expression.
+classExtendsItselfIndirectly_file6.ts(1,7): error TS2506: 'E2' is referenced directly or indirectly in its own base expression.
 
 
-==== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItselfIndirectly_file1.ts (1 errors) ====
+==== classExtendsItselfIndirectly_file1.ts (1 errors) ====
     class C extends E { foo: string; } // error
           ~
 !!! error TS2506: 'C' is referenced directly or indirectly in its own base expression.
     
-==== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItselfIndirectly_file2.ts (1 errors) ====
+==== classExtendsItselfIndirectly_file2.ts (1 errors) ====
     class D extends C { bar: string; }
           ~
 !!! error TS2506: 'D' is referenced directly or indirectly in its own base expression.
     
-==== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItselfIndirectly_file3.ts (1 errors) ====
+==== classExtendsItselfIndirectly_file3.ts (1 errors) ====
     class E extends D { baz: number; }
           ~
 !!! error TS2506: 'E' is referenced directly or indirectly in its own base expression.
     
-==== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItselfIndirectly_file4.ts (1 errors) ====
+==== classExtendsItselfIndirectly_file4.ts (1 errors) ====
     class C2<T> extends E2<T> { foo: T; } // error
           ~~
 !!! error TS2506: 'C2' is referenced directly or indirectly in its own base expression.
     
-==== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItselfIndirectly_file5.ts (1 errors) ====
+==== classExtendsItselfIndirectly_file5.ts (1 errors) ====
     class D2<T> extends C2<T> { bar: T; }
           ~~
 !!! error TS2506: 'D2' is referenced directly or indirectly in its own base expression.
     
-==== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItselfIndirectly_file6.ts (1 errors) ====
+==== classExtendsItselfIndirectly_file6.ts (1 errors) ====
     class E2<T> extends D2<T> { baz: T; }
           ~~
 !!! error TS2506: 'E2' is referenced directly or indirectly in its own base expression.

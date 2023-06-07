@@ -1,4 +1,4 @@
-=== tests/cases/compiler/file1.d.ts ===
+=== file1.d.ts ===
 declare namespace NS1 {
 >NS1 : typeof NS1
 
@@ -13,7 +13,7 @@ declare namespace NS2 {
 >foo : number
 }
 
-=== tests/cases/compiler/file2.ts ===
+=== file2.ts ===
 export {NS1, NS1 as NNS1};
 >NS1 : typeof NS1
 >NS1 : typeof NS1

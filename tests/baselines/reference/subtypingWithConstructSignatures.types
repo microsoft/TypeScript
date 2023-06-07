@@ -1,4 +1,4 @@
-=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithConstructSignatures.ts ===
+=== subtypingWithConstructSignatures.ts ===
 module ConstructSignature {
 >ConstructSignature : typeof ConstructSignature
 

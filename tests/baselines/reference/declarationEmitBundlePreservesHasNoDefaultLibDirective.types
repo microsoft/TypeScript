@@ -1,4 +1,4 @@
-=== tests/cases/compiler/extensions.ts ===
+=== extensions.ts ===
 /// <reference no-default-lib="true"/>
 class Foo {
 >Foo : Foo
@@ -6,7 +6,7 @@ class Foo {
     public: string;
 >public : string
 }
-=== tests/cases/compiler/core.ts ===
+=== core.ts ===
 
 interface Array<T> {}
 interface Boolean {}

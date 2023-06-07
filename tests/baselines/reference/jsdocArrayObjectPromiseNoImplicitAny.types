@@ -1,4 +1,4 @@
-=== tests/cases/compiler/jsdocArrayObjectPromiseNoImplicitAny.js ===
+=== jsdocArrayObjectPromiseNoImplicitAny.js ===
 /** @type {Array} */
 var notAnyArray = [5];
 >notAnyArray : any[]

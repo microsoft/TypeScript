@@ -1,4 +1,4 @@
-=== tests/cases/conformance/externalModules/b.ts ===
+=== b.ts ===
 import { x, y } from "./a";
 >x : number
 >y : number
@@ -65,7 +65,7 @@ a3.y = 1;
 >y : number
 >1 : 1
 
-=== tests/cases/conformance/externalModules/a.ts ===
+=== a.ts ===
 export var x = 1;
 >x : number
 >1 : 1

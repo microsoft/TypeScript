@@ -1,4 +1,4 @@
-=== tests/cases/compiler/jsxEmptyExpressionNotCountedAsChild2.tsx ===
+=== jsxEmptyExpressionNotCountedAsChild2.tsx ===
 // repro from #38108
 
 export {}

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/duplicateIdentifierInCatchBlock.ts ===
+=== duplicateIdentifierInCatchBlock.ts ===
 var v;
 >v : Symbol(v, Decl(duplicateIdentifierInCatchBlock.ts, 0, 3))
 

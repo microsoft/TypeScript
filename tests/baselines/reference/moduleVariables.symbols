@@ -1,4 +1,4 @@
-=== tests/cases/compiler/moduleVariables.ts ===
+=== moduleVariables.ts ===
 declare var console: any;
 >console : Symbol(console, Decl(moduleVariables.ts, 0, 11))
  

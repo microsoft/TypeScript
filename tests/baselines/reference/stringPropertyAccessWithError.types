@@ -1,4 +1,4 @@
-=== tests/cases/conformance/types/primitives/string/stringPropertyAccessWithError.ts ===
+=== stringPropertyAccessWithError.ts ===
 var x = '';
 >x : string
 >'' : ""

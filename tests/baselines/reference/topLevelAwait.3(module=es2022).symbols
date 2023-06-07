@@ -1,4 +1,4 @@
-=== tests/cases/conformance/externalModules/index.d.ts ===
+=== index.d.ts ===
 // await keyword allowed as identifier in a declaration file
 export {};
 declare const await: any;

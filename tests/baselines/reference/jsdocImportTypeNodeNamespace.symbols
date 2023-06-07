@@ -1,4 +1,4 @@
-=== tests/cases/compiler/GeometryType.d.ts ===
+=== GeometryType.d.ts ===
 // #40767
 
 declare namespace _default {
@@ -10,7 +10,7 @@ declare namespace _default {
 export default _default;
 >_default : Symbol(_default, Decl(GeometryType.d.ts, 0, 0))
 
-=== tests/cases/compiler/Main.js ===
+=== Main.js ===
 
 export default function () {
   return /** @type {import('./GeometryType.js').default} */ ('Point');

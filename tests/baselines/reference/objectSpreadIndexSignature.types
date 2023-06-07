@@ -1,4 +1,4 @@
-=== tests/cases/conformance/types/spread/objectSpreadIndexSignature.ts ===
+=== objectSpreadIndexSignature.ts ===
 declare let indexed1: { [n: string]: number; a: number; };
 >indexed1 : { [n: string]: number; a: number; }
 >n : string

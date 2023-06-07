@@ -1,4 +1,4 @@
-=== tests/cases/compiler/SystemModuleForStatementNoInitializer.ts ===
+=== SystemModuleForStatementNoInitializer.ts ===
 export { };
 
 let i = 0;

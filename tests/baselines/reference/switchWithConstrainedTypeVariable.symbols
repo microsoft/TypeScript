@@ -1,4 +1,4 @@
-=== tests/cases/conformance/controlFlow/switchWithConstrainedTypeVariable.ts ===
+=== switchWithConstrainedTypeVariable.ts ===
 // Repro from #20840
 
 function function1<T extends 'a' | 'b'>(key: T) {

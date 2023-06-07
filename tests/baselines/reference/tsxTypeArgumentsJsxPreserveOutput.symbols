@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsx/foo.tsx ===
+=== foo.tsx ===
 import React = require('react');
 >React : Symbol(React, Decl(foo.tsx, 0, 0))
 

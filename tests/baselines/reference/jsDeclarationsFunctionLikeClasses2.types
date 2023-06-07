@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/declarations/source.js ===
+=== source.js ===
 /**
  * @param {number} len
  */
@@ -242,7 +242,7 @@ Point2D.prototype = {
     }
 };
 
-=== tests/cases/conformance/jsdoc/declarations/referencer.js ===
+=== referencer.js ===
 import {Point2D} from "./source";
 >Point2D : typeof Point2D
 

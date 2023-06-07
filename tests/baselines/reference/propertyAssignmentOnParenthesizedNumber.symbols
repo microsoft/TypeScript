@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/bug38934.js ===
+=== bug38934.js ===
 var x = {};
 >x : Symbol(x, Decl(bug38934.js, 0, 3))
 

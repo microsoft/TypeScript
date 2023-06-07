@@ -1,4 +1,4 @@
-=== tests/cases/conformance/decorators/services.ts ===
+=== services.ts ===
 export namespace Services {
 >Services : typeof Services
 
@@ -6,7 +6,7 @@ export namespace Services {
 >Service : Service
 }
 
-=== tests/cases/conformance/decorators/index.ts ===
+=== index.ts ===
 import type { Services } from './services';
 >Services : any
 

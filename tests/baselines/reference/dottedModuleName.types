@@ -1,4 +1,4 @@
-=== tests/cases/compiler/dottedModuleName.ts ===
+=== dottedModuleName.ts ===
 module M {
 >M : typeof M
 

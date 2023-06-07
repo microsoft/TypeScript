@@ -1,4 +1,4 @@
-=== tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterUsedAsConstraint.ts ===
+=== typeParameterUsedAsConstraint.ts ===
 class C<T, U extends T> { }
 >C : C<T, U>
 

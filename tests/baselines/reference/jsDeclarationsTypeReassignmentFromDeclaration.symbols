@@ -12,7 +12,7 @@ declare const items: Item[];
 export = items;
 >items : Symbol(items, Decl(some-mod.d.ts, 3, 13))
 
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+=== index.js ===
 /** @type {typeof import("/some-mod")} */
 const items = [];
 >items : Symbol(items, Decl(index.js, 1, 5))

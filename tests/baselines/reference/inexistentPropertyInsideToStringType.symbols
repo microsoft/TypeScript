@@ -1,4 +1,4 @@
-=== tests/cases/compiler/index.js ===
+=== index.js ===
 function toString() {
 >toString : Symbol(toString, Decl(lib.dom.d.ts, --, --), Decl(index.js, 0, 0))
 

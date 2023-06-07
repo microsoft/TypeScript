@@ -1,8 +1,8 @@
-tests/cases/conformance/types/typeRelationships/recursiveTypes/bug39372.js(25,7): error TS2322: Type '{}' is not assignable to type 'XMLObject<{ foo: string; }>'.
+bug39372.js(25,7): error TS2322: Type '{}' is not assignable to type 'XMLObject<{ foo: string; }>'.
   Type '{}' is missing the following properties from type '{ $A: { foo?: XMLObject<string>[]; }; $O: { foo?: { $$?: Record<string, string>; } & { $: string; }; }; $$?: Record<string, string>; }': $A, $O
 
 
-==== tests/cases/conformance/types/typeRelationships/recursiveTypes/bug39372.js (1 errors) ====
+==== bug39372.js (1 errors) ====
     /** @typedef {ReadonlyArray<Json>} JsonArray */
     /** @typedef {{ readonly [key: string]: Json }} JsonRecord */
     /** @typedef {boolean | number | string | null | JsonRecord | JsonArray | readonly []} Json */

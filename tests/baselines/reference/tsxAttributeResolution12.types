@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsx/react.d.ts ===
+=== react.d.ts ===
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {
@@ -13,7 +13,7 @@ declare module JSX {
 	}
 }
 
-=== tests/cases/conformance/jsx/file.tsx ===
+=== file.tsx ===
 declare class Component<P, S>  {
 >Component : Component<P, S>
 

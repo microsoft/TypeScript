@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/test.js ===
+=== test.js ===
 function f(x) {}
 >f : (x: any) => void
 >x : any

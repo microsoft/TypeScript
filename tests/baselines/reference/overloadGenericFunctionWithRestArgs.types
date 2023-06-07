@@ -1,4 +1,4 @@
-=== tests/cases/compiler/overloadGenericFunctionWithRestArgs.ts ===
+=== overloadGenericFunctionWithRestArgs.ts ===
 class B<V>{
 >B : B<V>
 

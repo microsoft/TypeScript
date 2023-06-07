@@ -1,4 +1,4 @@
-=== tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsDeclarationsInJs.js ===
+=== uniqueSymbolsDeclarationsInJs.js ===
 // classes
 class C {
 >C : Symbol(C, Decl(uniqueSymbolsDeclarationsInJs.js, 0, 0))

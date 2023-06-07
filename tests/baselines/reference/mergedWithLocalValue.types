@@ -1,8 +1,8 @@
-=== tests/cases/conformance/externalModules/typeOnly/a.ts ===
+=== a.ts ===
 export type A = "a";
 >A : "a"
 
-=== tests/cases/conformance/externalModules/typeOnly/b.ts ===
+=== b.ts ===
 import type { A } from "./a";
 >A : "a"
 

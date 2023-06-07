@@ -1,4 +1,4 @@
-=== tests/cases/compiler/catch.ts ===
+=== catch.ts ===
 function f() {
 >f : () => void
 

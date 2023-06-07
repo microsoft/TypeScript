@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/bug27346.js ===
+=== bug27346.js ===
 /**
  * @type {MyClass}
  */

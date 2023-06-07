@@ -1,8 +1,8 @@
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 export import React = require("./react.js");
 >React : typeof React
 
-=== tests/cases/compiler/react.ts ===
+=== react.ts ===
 export function createElement() {}
 >createElement : () => void
 

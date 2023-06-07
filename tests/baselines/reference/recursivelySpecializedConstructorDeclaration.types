@@ -1,4 +1,4 @@
-=== tests/cases/compiler/recursivelySpecializedConstructorDeclaration.ts ===
+=== recursivelySpecializedConstructorDeclaration.ts ===
 module MsPortal.Controls.Base.ItemList {
 >MsPortal : typeof MsPortal
 >Controls : typeof Controls

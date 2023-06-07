@@ -1,8 +1,8 @@
-=== tests/cases/compiler/x.ts ===
+=== x.ts ===
 export const x = 'X'
 >x : Symbol(x, Decl(x.ts, 0, 12))
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import {x} from './x.js'
 >x : Symbol(x, Decl(index.ts, 0, 8))
 

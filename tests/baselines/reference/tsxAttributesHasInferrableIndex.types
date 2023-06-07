@@ -1,4 +1,4 @@
-=== tests/cases/compiler/tsxAttributesHasInferrableIndex.tsx ===
+=== tsxAttributesHasInferrableIndex.tsx ===
 type AttributeValue = number | string | Date | boolean;
 >AttributeValue : string | number | boolean | Date
 

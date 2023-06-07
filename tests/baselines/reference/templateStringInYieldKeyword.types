@@ -1,4 +1,4 @@
-=== tests/cases/conformance/es6/templates/templateStringInYieldKeyword.ts ===
+=== templateStringInYieldKeyword.ts ===
 function* gen() {
 >gen : () => Generator<string, void, unknown>
 

@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/bug25097.js ===
+=== bug25097.js ===
 /** @type {C | null} */
 const c = null
 >c : C

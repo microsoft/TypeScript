@@ -1,4 +1,4 @@
-=== tests/cases/compiler/declFileCallSignatures_0.ts ===
+=== declFileCallSignatures_0.ts ===
 export interface ICallSignature {
     /** This comment should appear for foo*/
     (): string;
@@ -39,7 +39,7 @@ export interface ICallSignatureWithOwnTypeParametes {
 >a : T
 }
 
-=== tests/cases/compiler/declFileCallSignatures_1.ts ===
+=== declFileCallSignatures_1.ts ===
 interface IGlobalCallSignature {
     /** This comment should appear for foo*/
     (): string;

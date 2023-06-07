@@ -1,4 +1,4 @@
-=== tests/cases/compiler/staticClassMemberError.ts ===
+=== staticClassMemberError.ts ===
 class C {
 >C : C
 

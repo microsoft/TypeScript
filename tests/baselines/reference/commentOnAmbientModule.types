@@ -1,4 +1,4 @@
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 ///<reference path="a.ts"/>
 declare module E {
 >E : typeof E
@@ -13,7 +13,7 @@ declare module E {
 >foo : () => any
     }
 }
-=== tests/cases/compiler/a.ts ===
+=== a.ts ===
 /*!=========
     Keep this pinned comment
    =========

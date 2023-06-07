@@ -1,4 +1,4 @@
-=== tests/cases/conformance/es2019/globalThisBlockscopedProperties.ts ===
+=== globalThisBlockscopedProperties.ts ===
 var x = 1
 >x : number
 >1 : 1

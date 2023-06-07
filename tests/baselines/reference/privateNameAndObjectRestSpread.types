@@ -1,4 +1,4 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameAndObjectRestSpread.ts ===
+=== privateNameAndObjectRestSpread.ts ===
 class C {
 >C : C
 

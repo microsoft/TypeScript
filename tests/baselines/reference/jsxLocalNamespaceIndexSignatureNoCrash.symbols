@@ -1,4 +1,4 @@
-=== tests/cases/compiler/index.tsx ===
+=== index.tsx ===
 export class X {
 >X : Symbol(X, Decl(index.tsx, 0, 0), Decl(index.tsx, 4, 1))
 

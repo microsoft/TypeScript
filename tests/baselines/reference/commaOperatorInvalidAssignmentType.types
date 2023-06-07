@@ -1,4 +1,4 @@
-=== tests/cases/conformance/expressions/commaOperator/commaOperatorInvalidAssignmentType.ts ===
+=== commaOperatorInvalidAssignmentType.ts ===
 var BOOLEAN: boolean;
 >BOOLEAN : boolean
 

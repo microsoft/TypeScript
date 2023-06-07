@@ -1,8 +1,8 @@
-=== tests/cases/compiler/cloduleSplitAcrossFiles_class.ts ===
+=== cloduleSplitAcrossFiles_class.ts ===
 class D { }
 >D : D
 
-=== tests/cases/compiler/cloduleSplitAcrossFiles_module.ts ===
+=== cloduleSplitAcrossFiles_module.ts ===
 module D {
 >D : typeof D
 

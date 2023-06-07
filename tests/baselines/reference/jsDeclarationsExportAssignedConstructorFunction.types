@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedConstructorFunction.js ===
+=== jsDeclarationsExportAssignedConstructorFunction.js ===
 /** @constructor */
 module.exports.MyClass = function() {
 >module.exports.MyClass = function() {    this.x = 1} : typeof MyClass

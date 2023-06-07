@@ -1,4 +1,4 @@
-=== tests/cases/compiler/unresolvedTypeAssertionSymbol.ts ===
+=== unresolvedTypeAssertionSymbol.ts ===
 var x = 1;
 >x : number
 >1 : 1

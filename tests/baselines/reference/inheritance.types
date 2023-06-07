@@ -1,4 +1,4 @@
-=== tests/cases/compiler/inheritance.ts ===
+=== inheritance.ts ===
 class B1 {
 >B1 : B1
 

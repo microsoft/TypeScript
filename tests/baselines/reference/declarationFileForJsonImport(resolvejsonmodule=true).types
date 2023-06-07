@@ -1,4 +1,4 @@
-=== tests/cases/conformance/nonjsExtensions/main.ts ===
+=== main.ts ===
 import data from "./data.json";
 >data : string
 
@@ -6,7 +6,7 @@ let x: string = data;
 >x : string
 >data : string
 
-=== tests/cases/conformance/nonjsExtensions/data.d.json.ts ===
+=== data.d.json.ts ===
 declare var val: string;
 >val : string
 

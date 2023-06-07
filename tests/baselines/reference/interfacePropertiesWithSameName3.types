@@ -1,4 +1,4 @@
-=== tests/cases/compiler/interfacePropertiesWithSameName3.ts ===
+=== interfacePropertiesWithSameName3.ts ===
 interface D { a: number; }
 >a : number
 

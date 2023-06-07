@@ -1,4 +1,4 @@
-=== tests/cases/compiler/classStaticInitializersUsePropertiesBeforeDeclaration.ts ===
+=== classStaticInitializersUsePropertiesBeforeDeclaration.ts ===
 class Foo {
 >Foo : Foo
 

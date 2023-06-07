@@ -32,7 +32,7 @@ System.register(["react/jsx-dev-runtime"], function (exports_1, context_1) {
             }
         ],
         execute: function () {
-            _jsxFileName = "tests/cases/compiler/commentsOnJSXExpressionsArePreserved.tsx";
+            _jsxFileName = "commentsOnJSXExpressionsArePreserved.tsx";
             Component = /** @class */ (function () {
                 function Component() {
                 }

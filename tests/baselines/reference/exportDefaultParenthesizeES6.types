@@ -1,4 +1,4 @@
-=== tests/cases/compiler/classexpr.ts ===
+=== classexpr.ts ===
 export default (class Foo {} as any);
 >(class Foo {} as any) : any
 >class Foo {} as any : any

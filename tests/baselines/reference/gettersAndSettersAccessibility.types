@@ -1,4 +1,4 @@
-=== tests/cases/compiler/gettersAndSettersAccessibility.ts ===
+=== gettersAndSettersAccessibility.ts ===
 class C99 {
 >C99 : C99
 

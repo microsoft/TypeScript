@@ -1,4 +1,4 @@
-=== tests/cases/compiler/file.tsx ===
+=== file.tsx ===
 declare namespace JSX {
     interface Element {
         render(): Element | string | false;

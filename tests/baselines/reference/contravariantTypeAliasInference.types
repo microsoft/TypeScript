@@ -1,4 +1,4 @@
-=== tests/cases/compiler/contravariantTypeAliasInference.ts ===
+=== contravariantTypeAliasInference.ts ===
 type Func1<T> = (x: T) => void;
 >Func1 : Func1<T>
 >x : T

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/varAsID.ts ===
+=== varAsID.ts ===
 class Foo {
 >Foo : Foo
 

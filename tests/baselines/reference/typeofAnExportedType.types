@@ -1,4 +1,4 @@
-=== tests/cases/conformance/types/specifyingTypes/typeQueries/typeofAnExportedType.ts ===
+=== typeofAnExportedType.ts ===
 export var x = 1;
 >x : number
 >1 : 1

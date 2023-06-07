@@ -1,4 +1,4 @@
-=== tests/cases/compiler/returnTypeTypeArguments.ts ===
+=== returnTypeTypeArguments.ts ===
 class One<T>{
 >One : One<T>
 

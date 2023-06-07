@@ -1,4 +1,4 @@
-=== tests/cases/compiler/prefixIncrementAsOperandOfPlusExpression.ts ===
+=== prefixIncrementAsOperandOfPlusExpression.ts ===
 var x = 1;
 >x : Symbol(x, Decl(prefixIncrementAsOperandOfPlusExpression.ts, 0, 3))
 

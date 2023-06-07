@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/bug24730.js ===
+=== bug24730.js ===
 var UI = {}
 >UI : Symbol(UI, Decl(bug24730.js, 0, 3), Decl(bug24730.js, 0, 11), Decl(bug24730.js, 5, 2))
 

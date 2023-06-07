@@ -1,4 +1,4 @@
-=== tests/cases/compiler/classExpressionInClassStaticDeclarations.ts ===
+=== classExpressionInClassStaticDeclarations.ts ===
 class C {
 >C : C
 

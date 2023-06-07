@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsx/test.tsx ===
+=== test.tsx ===
 var Route: any;
 >Route : any
 

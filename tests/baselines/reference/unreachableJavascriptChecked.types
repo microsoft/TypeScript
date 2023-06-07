@@ -1,4 +1,4 @@
-=== tests/cases/compiler/unreachable.js ===
+=== unreachable.js ===
 function unreachable() {
 >unreachable : () => void | 2 | 3 | 4
 

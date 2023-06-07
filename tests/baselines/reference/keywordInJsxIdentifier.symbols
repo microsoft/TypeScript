@@ -1,4 +1,4 @@
-=== tests/cases/compiler/keywordInJsxIdentifier.tsx ===
+=== keywordInJsxIdentifier.tsx ===
 declare var React: any;
 >React : Symbol(React, Decl(keywordInJsxIdentifier.tsx, 0, 11))
 

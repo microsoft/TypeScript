@@ -1,4 +1,4 @@
-=== tests/cases/compiler/index.js ===
+=== index.js ===
 (function(require, module, exports){
 >require : Symbol(require, Decl(index.js, 0, 10))
 >module : Symbol(module, Decl(index.js, 0, 18))

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/importInsideModule_file2.ts ===
+=== importInsideModule_file2.ts ===
 export module myModule {
 >myModule : Symbol(myModule, Decl(importInsideModule_file2.ts, 0, 0))
 

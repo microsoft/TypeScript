@@ -1,4 +1,4 @@
-=== tests/cases/compiler/ambientModuleWithClassDeclarationWithExtends.ts ===
+=== ambientModuleWithClassDeclarationWithExtends.ts ===
 declare module foo {
 >foo : typeof foo
 

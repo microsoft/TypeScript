@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/a.js ===
+=== a.js ===
 /**
  * @param {string=} `args`
  * @param `bwarg` {?number?}
@@ -9,7 +9,7 @@ function f(args, bwarg) {
 >bwarg : number | null
 }
 
-=== tests/cases/conformance/jsdoc/ts.ts ===
+=== ts.ts ===
 /**
  * @param `arg` - this is fine
  */

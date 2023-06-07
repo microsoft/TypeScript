@@ -1,4 +1,4 @@
-=== tests/cases/compiler/sourceMapValidationClassWithDefaultConstructor.ts ===
+=== sourceMapValidationClassWithDefaultConstructor.ts ===
 class Greeter {
 >Greeter : Greeter
 

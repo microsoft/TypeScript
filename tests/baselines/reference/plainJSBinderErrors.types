@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/plainJSBinderErrors.js ===
+=== plainJSBinderErrors.js ===
 export default 12
 export default 13
 const await = 1

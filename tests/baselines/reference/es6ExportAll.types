@@ -1,4 +1,4 @@
-=== tests/cases/compiler/server.ts ===
+=== server.ts ===
 export class c {
 >c : c
 }
@@ -18,6 +18,6 @@ export var x = 10;
 export module uninstantiated {
 }
 
-=== tests/cases/compiler/client.ts ===
+=== client.ts ===
 
 export * from "server";

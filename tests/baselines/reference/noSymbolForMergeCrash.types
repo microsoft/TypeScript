@@ -1,9 +1,9 @@
-=== tests/cases/compiler/initial.ts ===
+=== initial.ts ===
 
 interface A { }
 namespace A {}
 
-=== tests/cases/compiler/final.ts ===
+=== final.ts ===
 type A = {}
 >A : {}
 

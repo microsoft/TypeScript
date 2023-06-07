@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/classthisboth.js ===
+=== classthisboth.js ===
 /**
  * @class
  * @this {{ e: number, m: number }}

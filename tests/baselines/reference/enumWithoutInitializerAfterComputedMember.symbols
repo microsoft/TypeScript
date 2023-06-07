@@ -1,4 +1,4 @@
-=== tests/cases/compiler/enumWithoutInitializerAfterComputedMember.ts ===
+=== enumWithoutInitializerAfterComputedMember.ts ===
 enum E {
 >E : Symbol(E, Decl(enumWithoutInitializerAfterComputedMember.ts, 0, 0))
 

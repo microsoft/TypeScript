@@ -1,4 +1,4 @@
-=== tests/cases/compiler/recur1.ts ===
+=== recur1.ts ===
 var salt:any = new salt.pepper();   
 >salt : any
 >new salt.pepper() : any

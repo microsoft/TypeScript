@@ -1,4 +1,4 @@
-=== tests/cases/compiler/extendsJavaScript.js ===
+=== extendsJavaScript.js ===
 /**
  * @extends {SomeBase}
  */

@@ -1,4 +1,4 @@
-=== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts ===
+=== typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts ===
 // #31995
 type State = {
 >State : { type: "numberVariant"; data: number; } | { type: "stringVariant"; data: string; }

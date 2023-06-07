@@ -1,4 +1,4 @@
-=== tests/cases/conformance/expressions/typeGuards/typeGuardNesting.ts ===
+=== typeGuardNesting.ts ===
 let strOrBool: string|boolean;
 >strOrBool : string | boolean
 

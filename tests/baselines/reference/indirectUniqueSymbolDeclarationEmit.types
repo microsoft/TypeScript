@@ -1,4 +1,4 @@
-=== tests/cases/compiler/indirectUniqueSymbolDeclarationEmit.ts ===
+=== indirectUniqueSymbolDeclarationEmit.ts ===
 export const x = Symbol();
 >x : unique symbol
 >Symbol() : unique symbol

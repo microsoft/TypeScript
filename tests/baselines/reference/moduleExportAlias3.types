@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/bug24062.js ===
+=== bug24062.js ===
 // #24062
 class C {
 >C : C

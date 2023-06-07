@@ -1,4 +1,4 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNamesAndStaticFields.ts ===
+=== privateNamesAndStaticFields.ts ===
 class A {
 >A : A
 

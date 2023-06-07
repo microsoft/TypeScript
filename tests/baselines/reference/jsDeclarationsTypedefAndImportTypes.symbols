@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/declarations/conn.js ===
+=== conn.js ===
 /**
  * @typedef {string | number} Whatever
  */
@@ -20,7 +20,7 @@ module.exports = Conn;
 >exports : Symbol(export=, Decl(conn.js, 8, 1))
 >Conn : Symbol(Conn, Decl(conn.js, 0, 0))
 
-=== tests/cases/conformance/jsdoc/declarations/usage.js ===
+=== usage.js ===
 /**
  * @typedef {import("./conn")} Conn
  */

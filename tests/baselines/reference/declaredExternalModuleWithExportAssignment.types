@@ -1,4 +1,4 @@
-=== tests/cases/compiler/declaredExternalModuleWithExportAssignment.ts ===
+=== declaredExternalModuleWithExportAssignment.ts ===
 declare module 'connect' {
 >'connect' : typeof import("connect")
 

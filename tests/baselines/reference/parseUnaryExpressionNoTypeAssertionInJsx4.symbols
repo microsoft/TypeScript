@@ -1,4 +1,4 @@
-=== tests/cases/compiler/index.tsx ===
+=== index.tsx ===
 const x = "oops";
 >x : Symbol(x, Decl(index.tsx, 0, 5))
 

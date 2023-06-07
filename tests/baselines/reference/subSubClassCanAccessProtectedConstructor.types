@@ -1,4 +1,4 @@
-=== tests/cases/compiler/subSubClassCanAccessProtectedConstructor.ts ===
+=== subSubClassCanAccessProtectedConstructor.ts ===
 class Base {
 >Base : Base
 

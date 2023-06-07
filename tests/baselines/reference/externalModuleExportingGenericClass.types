@@ -1,4 +1,4 @@
-=== tests/cases/compiler/externalModuleExportingGenericClass_file1.ts ===
+=== externalModuleExportingGenericClass_file1.ts ===
 import a = require('./externalModuleExportingGenericClass_file0');
 >a : typeof a
 
@@ -21,7 +21,7 @@ var v3: number = (new a<number>()).foo;
 >a : typeof a
 >foo : number
 
-=== tests/cases/compiler/externalModuleExportingGenericClass_file0.ts ===
+=== externalModuleExportingGenericClass_file0.ts ===
 class C<T> {
 >C : C<T>
 

@@ -1,4 +1,4 @@
-=== tests/cases/conformance/es6/modules/m1.ts ===
+=== m1.ts ===
 export default function f() {
 >f : () => void
 }
@@ -6,7 +6,7 @@ export {f};
 >f : () => void
 
 
-=== tests/cases/conformance/es6/modules/m2.ts ===
+=== m2.ts ===
 import foo from "./m1";
 >foo : () => void
 

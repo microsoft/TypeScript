@@ -1,4 +1,4 @@
-=== tests/cases/compiler/evolvingArrayResolvedAssert.ts ===
+=== evolvingArrayResolvedAssert.ts ===
 var C = [];
 >C : any[]
 >[] : never[]

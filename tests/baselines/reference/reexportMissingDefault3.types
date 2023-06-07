@@ -1,8 +1,8 @@
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 export const b = null;
 >b : any
 
-=== tests/cases/compiler/a.ts ===
+=== a.ts ===
 export { b } from "./b";
 >b : any
 

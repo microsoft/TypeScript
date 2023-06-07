@@ -1,4 +1,4 @@
-=== tests/cases/compiler/typeofThisInMethodSignature.ts ===
+=== typeofThisInMethodSignature.ts ===
 // Repro from #54167
 
 export class A {

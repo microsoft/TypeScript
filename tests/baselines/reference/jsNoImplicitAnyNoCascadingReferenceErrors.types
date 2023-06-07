@@ -1,11 +1,11 @@
-=== tests/cases/compiler/somelib.d.ts ===
+=== somelib.d.ts ===
 export declare class Foo<T> {
 >Foo : Foo<T>
 
     prop: T;
 >prop : T
 }
-=== tests/cases/compiler/index.js ===
+=== index.js ===
 import {Foo} from "./somelib";
 >Foo : typeof Foo
 

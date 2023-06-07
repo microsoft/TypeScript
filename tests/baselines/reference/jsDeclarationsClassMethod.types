@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/declarations/jsDeclarationsClassMethod.js ===
+=== jsDeclarationsClassMethod.js ===
 function C1() {
 >C1 : typeof C1
 

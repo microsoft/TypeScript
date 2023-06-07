@@ -1,4 +1,4 @@
-=== tests/cases/compiler/enumIdentifierLiterals.ts ===
+=== enumIdentifierLiterals.ts ===
 enum Nums {
 >Nums : Nums
 

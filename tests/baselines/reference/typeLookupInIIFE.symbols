@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/a.js ===
+=== a.js ===
 // #22973
 var ns = (function() {})();
 >ns : Symbol(ns, Decl(a.js, 1, 3))

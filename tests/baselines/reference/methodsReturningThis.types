@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/input.js ===
+=== input.js ===
 function Class()
 >Class : typeof Class
 {

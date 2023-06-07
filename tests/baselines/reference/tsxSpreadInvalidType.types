@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsx/a.tsx ===
+=== a.tsx ===
 namespace JSX {
     export interface IntrinsicElements { [key: string]: any }
 >key : string

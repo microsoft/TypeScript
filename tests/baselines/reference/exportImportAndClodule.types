@@ -1,4 +1,4 @@
-=== tests/cases/compiler/exportImportAndClodule.ts ===
+=== exportImportAndClodule.ts ===
 module K {
 >K : typeof K
 

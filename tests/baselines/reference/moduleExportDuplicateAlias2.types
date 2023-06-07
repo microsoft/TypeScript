@@ -1,7 +1,7 @@
-=== tests/cases/conformance/salsa/test.js ===
+=== test.js ===
 const { apply } = require('./moduleExportAliasDuplicateAlias')
 >apply : () => void
->require('./moduleExportAliasDuplicateAlias') : typeof import("tests/cases/conformance/salsa/moduleExportAliasDuplicateAlias")
+>require('./moduleExportAliasDuplicateAlias') : typeof import("moduleExportAliasDuplicateAlias")
 >require : any
 >'./moduleExportAliasDuplicateAlias' : "./moduleExportAliasDuplicateAlias"
 
@@ -9,7 +9,7 @@ apply()
 >apply() : void
 >apply : () => void
 
-=== tests/cases/conformance/salsa/moduleExportAliasDuplicateAlias.js ===
+=== moduleExportAliasDuplicateAlias.js ===
 module.exports.apply = undefined;
 >module.exports.apply = undefined : undefined
 >module.exports.apply : any

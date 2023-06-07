@@ -1,4 +1,4 @@
-=== tests/cases/compiler/assignmentCompatibilityForConstrainedTypeParameters.ts ===
+=== assignmentCompatibilityForConstrainedTypeParameters.ts ===
 function foo<T extends { bar: string }>() {
 >foo : <T extends { bar: string; }>() => void
 >bar : string

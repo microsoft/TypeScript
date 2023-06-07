@@ -1,4 +1,4 @@
-=== tests/cases/compiler/extendedUnicodePlaneIdentifiers.ts ===
+=== extendedUnicodePlaneIdentifiers.ts ===
 const 𝑚 = 4;
 >𝑚 : 4
 >4 : 4

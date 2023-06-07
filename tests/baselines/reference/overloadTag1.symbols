@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/overloadTag1.js ===
+=== overloadTag1.js ===
 /**
  * @overload
  * @param {number} a 

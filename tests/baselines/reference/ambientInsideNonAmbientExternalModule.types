@@ -1,4 +1,4 @@
-=== tests/cases/conformance/ambient/ambientInsideNonAmbientExternalModule.ts ===
+=== ambientInsideNonAmbientExternalModule.ts ===
 export declare var x;
 >x : any
 

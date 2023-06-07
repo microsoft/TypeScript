@@ -1,4 +1,4 @@
-=== tests/cases/compiler/typeParameterCompatibilityAccrossDeclarations.ts ===
+=== typeParameterCompatibilityAccrossDeclarations.ts ===
 var a = {
 >a : Symbol(a, Decl(typeParameterCompatibilityAccrossDeclarations.ts, 0, 3))
 

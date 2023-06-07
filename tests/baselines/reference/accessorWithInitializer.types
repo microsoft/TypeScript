@@ -1,4 +1,4 @@
-=== tests/cases/compiler/accessorWithInitializer.ts ===
+=== accessorWithInitializer.ts ===
 class C {
 >C : C
 

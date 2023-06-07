@@ -1,4 +1,4 @@
-=== tests/cases/compiler/B.ts ===
+=== B.ts ===
 import a = require('A');
 >a : typeof a
 
@@ -10,7 +10,7 @@ import A = a.A;
 export = A;
 >A : a.A
 
-=== tests/cases/compiler/A.ts ===
+=== A.ts ===
 export class A {
 >A : A
 }

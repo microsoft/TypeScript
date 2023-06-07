@@ -1,4 +1,4 @@
-=== tests/cases/conformance/internalModules/DeclarationMerging/module.ts ===
+=== module.ts ===
 module X.Y {
 >X : typeof X
 >Y : typeof Y
@@ -15,7 +15,7 @@ module X.Y {
     }
 }
 
-=== tests/cases/conformance/internalModules/DeclarationMerging/classPoint.ts ===
+=== classPoint.ts ===
 module X.Y {
 >X : typeof X
 >Y : typeof Y
@@ -50,7 +50,7 @@ module X.Y {
     }
 }
 
-=== tests/cases/conformance/internalModules/DeclarationMerging/simple.ts ===
+=== simple.ts ===
 module A {
 >A : typeof A
 

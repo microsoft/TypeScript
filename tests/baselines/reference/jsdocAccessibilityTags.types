@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/jsdocAccessibilityTag.js ===
+=== jsdocAccessibilityTag.js ===
 class A {
 >A : A
 

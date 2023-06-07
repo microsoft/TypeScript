@@ -1,4 +1,4 @@
-=== tests/cases/compiler/collisionCodeGenModuleWithModuleChildren.ts ===
+=== collisionCodeGenModuleWithModuleChildren.ts ===
 module M {
 >M : typeof M
 

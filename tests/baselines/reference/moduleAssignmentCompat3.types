@@ -1,4 +1,4 @@
-=== tests/cases/compiler/moduleAssignmentCompat3.ts ===
+=== moduleAssignmentCompat3.ts ===
 module A {
 >A : typeof A
 

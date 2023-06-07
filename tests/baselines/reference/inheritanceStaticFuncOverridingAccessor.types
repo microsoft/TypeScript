@@ -1,4 +1,4 @@
-=== tests/cases/compiler/inheritanceStaticFuncOverridingAccessor.ts ===
+=== inheritanceStaticFuncOverridingAccessor.ts ===
 class a {
 >a : a
 

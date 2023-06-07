@@ -1,4 +1,4 @@
-=== tests/cases/compiler/discriminateObjectTypesOnly.ts ===
+=== discriminateObjectTypesOnly.ts ===
 type Thing = number | object;
 >Thing : number | object
 

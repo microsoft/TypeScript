@@ -1,4 +1,4 @@
-=== tests/cases/compiler/interfaceWithCommaSeparators.ts ===
+=== interfaceWithCommaSeparators.ts ===
 var v: { bar(): void, baz }
 >v : { bar(): void; baz: any; }
 >bar : () => void

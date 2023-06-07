@@ -1,4 +1,4 @@
-=== tests/cases/compiler/enum.d.ts ===
+=== enum.d.ts ===
 export namespace Clone {
     const enum LOCAL {
 >LOCAL : LOCAL
@@ -28,7 +28,7 @@ export class Clone {
 >clone : (url: string) => void
 >url : string
 }
-=== tests/cases/compiler/usage.ts ===
+=== usage.ts ===
 import {Clone} from "./enum";
 >Clone : typeof Clone
 

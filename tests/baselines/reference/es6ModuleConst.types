@@ -1,4 +1,4 @@
-=== tests/cases/compiler/es6ModuleConst.ts ===
+=== es6ModuleConst.ts ===
 export const a = "hello";
 >a : "hello"
 >"hello" : "hello"

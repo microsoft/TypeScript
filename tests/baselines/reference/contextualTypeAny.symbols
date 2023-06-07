@@ -1,4 +1,4 @@
-=== tests/cases/compiler/contextualTypeAny.ts ===
+=== contextualTypeAny.ts ===
 var x: any;
 >x : Symbol(x, Decl(contextualTypeAny.ts, 0, 3))
 

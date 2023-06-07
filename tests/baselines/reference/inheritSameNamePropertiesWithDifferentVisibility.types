@@ -1,4 +1,4 @@
-=== tests/cases/compiler/inheritSameNamePropertiesWithDifferentVisibility.ts ===
+=== inheritSameNamePropertiesWithDifferentVisibility.ts ===
 class C {
 >C : C
 

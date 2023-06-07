@@ -1,4 +1,4 @@
-=== tests/cases/compiler/propertyAccessibility2.ts ===
+=== propertyAccessibility2.ts ===
 class C {
 >C : C
 

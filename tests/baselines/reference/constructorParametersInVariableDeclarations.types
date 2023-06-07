@@ -1,4 +1,4 @@
-=== tests/cases/compiler/constructorParametersInVariableDeclarations.ts ===
+=== constructorParametersInVariableDeclarations.ts ===
 class A {
 >A : A
 

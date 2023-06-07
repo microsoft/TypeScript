@@ -1,4 +1,4 @@
-=== tests/cases/compiler/inferenceFromParameterlessLambda.ts ===
+=== inferenceFromParameterlessLambda.ts ===
 function foo<T>(o: Take<T>, i: Make<T>) { }
 >foo : Symbol(foo, Decl(inferenceFromParameterlessLambda.ts, 0, 0))
 >T : Symbol(T, Decl(inferenceFromParameterlessLambda.ts, 0, 13))

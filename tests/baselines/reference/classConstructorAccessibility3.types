@@ -1,4 +1,4 @@
-=== tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility3.ts ===
+=== classConstructorAccessibility3.ts ===
 class Foo {
 >Foo : Foo
 

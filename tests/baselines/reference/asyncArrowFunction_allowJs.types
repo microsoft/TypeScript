@@ -1,4 +1,4 @@
-=== tests/cases/conformance/async/es2017/asyncArrowFunction/file.js ===
+=== file.js ===
 // Error (good)
 /** @type {function(): string} */
 const a = () => 0

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/instanceofWithStructurallyIdenticalTypes.ts ===
+=== instanceofWithStructurallyIdenticalTypes.ts ===
 // Repro from #7271
 
 class C1 { item: string }

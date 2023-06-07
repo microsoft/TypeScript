@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/bug25101.js ===
+=== bug25101.js ===
 /**
  * @template T
  * @extends {Set<T>} Should prefer this Set<T>, not the Set in the heritage clause

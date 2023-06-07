@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/test.js ===
+=== test.js ===
 /** @type {Array<?number>} */
 var nns;
 >nns : number[]

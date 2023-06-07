@@ -1,4 +1,4 @@
-=== tests/cases/compiler/collisionSuperAndLocalVarInProperty.ts ===
+=== collisionSuperAndLocalVarInProperty.ts ===
 var _super = 10; // No Error
 >_super : number
 >10 : 10

@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/jsdocAccessibilityTag.js ===
+=== jsdocAccessibilityTag.js ===
 class A {
 >A : Symbol(A, Decl(jsdocAccessibilityTag.js, 0, 0))
 

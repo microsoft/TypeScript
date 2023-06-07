@@ -1,4 +1,4 @@
-=== tests/cases/compiler/widenedTypes.ts ===
+=== widenedTypes.ts ===
 null instanceof (() => { });
 >null instanceof (() => { }) : boolean
 >(() => { }) : () => void

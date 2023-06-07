@@ -1,4 +1,4 @@
-=== tests/cases/compiler/service.ts ===
+=== service.ts ===
 import database = require('./db');
 >database : typeof database
 
@@ -42,7 +42,7 @@ class MyClass {
 export {MyClass};
 >MyClass : typeof MyClass
 
-=== tests/cases/compiler/db.ts ===
+=== db.ts ===
 export class db {
 >db : db
 

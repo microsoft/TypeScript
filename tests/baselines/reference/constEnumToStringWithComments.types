@@ -1,4 +1,4 @@
-=== tests/cases/compiler/constEnumToStringWithComments.ts ===
+=== constEnumToStringWithComments.ts ===
 const enum Foo {
 >Foo : Foo
 

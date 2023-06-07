@@ -1,4 +1,4 @@
-=== tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsDeclarationsInJsErrors.js ===
+=== uniqueSymbolsDeclarationsInJsErrors.js ===
 class C {
 >C : C
 

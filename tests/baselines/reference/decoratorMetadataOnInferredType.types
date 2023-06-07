@@ -1,4 +1,4 @@
-=== tests/cases/compiler/decoratorMetadataOnInferredType.ts ===
+=== decoratorMetadataOnInferredType.ts ===
 declare var console: {
 >console : { log(msg: string): void; }
 

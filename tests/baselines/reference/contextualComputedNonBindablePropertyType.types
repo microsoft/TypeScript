@@ -1,4 +1,4 @@
-=== tests/cases/compiler/contextualComputedNonBindablePropertyType.ts ===
+=== contextualComputedNonBindablePropertyType.ts ===
 // repro #51906
 
 declare function testD(): "d";

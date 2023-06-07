@@ -1,4 +1,4 @@
-=== tests/cases/compiler/moduleMemberWithoutTypeAnnotation2.ts ===
+=== moduleMemberWithoutTypeAnnotation2.ts ===
 module TypeScript {
 >TypeScript : typeof TypeScript
 

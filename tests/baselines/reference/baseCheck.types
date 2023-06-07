@@ -1,4 +1,4 @@
-=== tests/cases/compiler/baseCheck.ts ===
+=== baseCheck.ts ===
 class C { constructor(x: number, y: number) { } }
 >C : C
 >x : number

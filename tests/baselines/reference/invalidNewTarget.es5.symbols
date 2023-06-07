@@ -1,4 +1,4 @@
-=== tests/cases/conformance/es6/newTarget/invalidNewTarget.es5.ts ===
+=== invalidNewTarget.es5.ts ===
 const a = new.target;
 >a : Symbol(a, Decl(invalidNewTarget.es5.ts, 0, 5))
 

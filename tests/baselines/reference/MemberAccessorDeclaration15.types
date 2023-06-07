@@ -1,4 +1,4 @@
-=== tests/cases/compiler/MemberAccessorDeclaration15.ts ===
+=== MemberAccessorDeclaration15.ts ===
 class C {
 >C : C
 

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/a.ts ===
+=== a.ts ===
 declare var Err: any
 >Err : Symbol(Err, Decl(a.ts, 0, 11))
 
@@ -33,7 +33,7 @@ var o = {
         super.unknown
     }
 }
-=== tests/cases/compiler/b.js ===
+=== b.js ===
 class B extends Err {
 >B : Symbol(B, Decl(b.js, 0, 0))
 >Err : Symbol(Err, Decl(a.ts, 0, 11))

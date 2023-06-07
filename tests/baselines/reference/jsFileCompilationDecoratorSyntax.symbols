@@ -1,4 +1,4 @@
-=== tests/cases/compiler/a.js ===
+=== a.js ===
 @internal class C { }
 >C : Symbol(C, Decl(a.js, 0, 0))
 

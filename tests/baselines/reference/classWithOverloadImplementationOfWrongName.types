@@ -1,4 +1,4 @@
-=== tests/cases/compiler/classWithOverloadImplementationOfWrongName.ts ===
+=== classWithOverloadImplementationOfWrongName.ts ===
 class C {
 >C : C
 

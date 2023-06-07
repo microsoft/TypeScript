@@ -1,4 +1,4 @@
-=== tests/cases/compiler/asyncFunctionReturnType.ts ===
+=== asyncFunctionReturnType.ts ===
 async function fAsync() {
 >fAsync : () => Promise<(number | boolean)[]>
 

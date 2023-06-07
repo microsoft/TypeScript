@@ -1,4 +1,4 @@
-=== tests/cases/compiler/usage.ts ===
+=== usage.ts ===
 import { parse } from "url";
 >parse : () => import("url").Url
 

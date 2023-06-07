@@ -1,4 +1,4 @@
-=== tests/cases/compiler/aliasErrors.ts ===
+=== aliasErrors.ts ===
 module foo {    
 >foo : typeof foo
 

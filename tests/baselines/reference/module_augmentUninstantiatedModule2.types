@@ -1,4 +1,4 @@
-=== tests/cases/compiler/module_augmentUninstantiatedModule2.ts ===
+=== module_augmentUninstantiatedModule2.ts ===
 declare var ng: ng.IAngularStatic;
 >ng : ng.IAngularStatic
 >ng : any

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/inKeywordTypeguard.ts ===
+=== inKeywordTypeguard.ts ===
 class A { a: string; }
 >A : A
 >a : string

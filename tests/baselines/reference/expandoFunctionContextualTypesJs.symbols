@@ -1,4 +1,4 @@
-=== tests/cases/compiler/input.js ===
+=== input.js ===
 /** @typedef {{ color: "red" | "blue" }} MyComponentProps */
 
 /**

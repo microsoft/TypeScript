@@ -1,4 +1,4 @@
-=== tests/cases/compiler/contextualReturnTypeOfIIFE2.ts ===
+=== contextualReturnTypeOfIIFE2.ts ===
 declare namespace app {
 >app : typeof app
 

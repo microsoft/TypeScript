@@ -1,4 +1,4 @@
-=== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNumericLiteral.ts ===
+=== comparisonOperatorWithNumericLiteral.ts ===
 type BrandedNum = number & { __numberBrand: any };
 >BrandedNum : number & { __numberBrand: any; }
 >__numberBrand : any

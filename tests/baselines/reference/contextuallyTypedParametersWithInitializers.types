@@ -1,4 +1,4 @@
-=== tests/cases/compiler/contextuallyTypedParametersWithInitializers.ts ===
+=== contextuallyTypedParametersWithInitializers.ts ===
 declare function id1<T>(input: T): T;
 >id1 : <T>(input: T) => T
 >input : T

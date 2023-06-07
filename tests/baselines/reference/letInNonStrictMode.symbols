@@ -1,4 +1,4 @@
-=== tests/cases/compiler/letInNonStrictMode.ts ===
+=== letInNonStrictMode.ts ===
 let [x] = [1];
 >x : Symbol(x, Decl(letInNonStrictMode.ts, 0, 5))
 

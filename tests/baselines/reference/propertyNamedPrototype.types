@@ -1,4 +1,4 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/propertyNamedPrototype.ts ===
+=== propertyNamedPrototype.ts ===
 class C {
 >C : C
 

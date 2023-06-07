@@ -1,4 +1,4 @@
-=== tests/cases/compiler/unresolvableSelfReferencingAwaitedUnion.ts ===
+=== unresolvableSelfReferencingAwaitedUnion.ts ===
 // repro #49646
 
 type EnvFunction = <T>() => T;

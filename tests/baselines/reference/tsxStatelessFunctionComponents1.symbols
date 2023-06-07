@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+=== file.tsx ===
 function EmptyPropSFC() {
 >EmptyPropSFC : Symbol(EmptyPropSFC, Decl(file.tsx, 0, 0))
 

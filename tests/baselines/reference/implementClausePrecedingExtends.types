@@ -1,4 +1,4 @@
-=== tests/cases/compiler/implementClausePrecedingExtends.ts ===
+=== implementClausePrecedingExtends.ts ===
 class C { foo: number }
 >C : C
 >foo : number

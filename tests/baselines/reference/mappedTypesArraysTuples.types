@@ -1,4 +1,4 @@
-=== tests/cases/conformance/types/mapped/mappedTypesArraysTuples.ts ===
+=== mappedTypesArraysTuples.ts ===
 type Box<T> = { value: T };
 >Box : Box<T>
 >value : T

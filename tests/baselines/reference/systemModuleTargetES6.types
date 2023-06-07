@@ -1,4 +1,4 @@
-=== tests/cases/compiler/systemModuleTargetES6.ts ===
+=== systemModuleTargetES6.ts ===
 export class MyClass { }
 >MyClass : MyClass
 

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/stringTrim.ts ===
+=== stringTrim.ts ===
 var trimmed: string;
 >trimmed : Symbol(trimmed, Decl(stringTrim.ts, 0, 3))
 

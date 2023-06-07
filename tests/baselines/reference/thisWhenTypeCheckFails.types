@@ -1,4 +1,4 @@
-=== tests/cases/compiler/thisWhenTypeCheckFails.ts ===
+=== thisWhenTypeCheckFails.ts ===
 class c {
 >c : c
 

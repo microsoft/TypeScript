@@ -1,4 +1,4 @@
-=== tests/cases/compiler/main.ts ===
+=== main.ts ===
 import { X } from "./other";
 >X : 42
 
@@ -15,7 +15,7 @@ console.log('X is ' + X);
 >'X is ' : "X is "
 >X : 42
 
-=== tests/cases/compiler/other.ts ===
+=== other.ts ===
 export type X = {};
 >X : {}
 

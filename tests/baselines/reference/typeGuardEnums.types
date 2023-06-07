@@ -1,4 +1,4 @@
-=== tests/cases/conformance/expressions/typeGuards/typeGuardEnums.ts ===
+=== typeGuardEnums.ts ===
 enum E {}
 >E : E
 

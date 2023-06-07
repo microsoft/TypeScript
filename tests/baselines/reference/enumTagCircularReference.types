@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/bug27142.js ===
+=== bug27142.js ===
 /** @enum {E} */
 const E = { x: 0 };
 >E : { x: number; }

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/genericFunctionCallSignatureReturnTypeMismatch.ts ===
+=== genericFunctionCallSignatureReturnTypeMismatch.ts ===
 interface Array<T> {}
 
 var f : { <T>(x:T): T; }

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/arrayLiteralAndArrayConstructorEquivalence1.ts ===
+=== arrayLiteralAndArrayConstructorEquivalence1.ts ===
 var myCars=new Array(); 
 >myCars : any[]
 >new Array() : any[]

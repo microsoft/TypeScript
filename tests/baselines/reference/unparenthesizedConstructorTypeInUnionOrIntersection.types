@@ -1,4 +1,4 @@
-=== tests/cases/compiler/unparenthesizedConstructorTypeInUnionOrIntersection.ts ===
+=== unparenthesizedConstructorTypeInUnionOrIntersection.ts ===
 type U1 = string | new () => void;
 >U1 : string | (new () => void)
 

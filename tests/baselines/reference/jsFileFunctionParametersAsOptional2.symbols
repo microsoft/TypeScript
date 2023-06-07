@@ -1,4 +1,4 @@
-=== tests/cases/compiler/foo.js ===
+=== foo.js ===
 /**
  * @param a
  * @param b
@@ -11,7 +11,7 @@ function f(a, b, c) { }
 >c : Symbol(c, Decl(foo.js, 5, 16))
 
 
-=== tests/cases/compiler/bar.ts ===
+=== bar.ts ===
 f(); // Error
 >f : Symbol(f, Decl(foo.js, 0, 0))
 

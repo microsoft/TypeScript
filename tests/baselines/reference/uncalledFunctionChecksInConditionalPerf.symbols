@@ -1,4 +1,4 @@
-=== tests/cases/compiler/uncalledFunctionChecksInConditionalPerf.ts ===
+=== uncalledFunctionChecksInConditionalPerf.ts ===
 declare const b: boolean;
 >b : Symbol(b, Decl(uncalledFunctionChecksInConditionalPerf.ts, 0, 13))
 

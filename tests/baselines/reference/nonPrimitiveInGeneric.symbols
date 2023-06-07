@@ -1,4 +1,4 @@
-=== tests/cases/conformance/types/nonPrimitive/nonPrimitiveInGeneric.ts ===
+=== nonPrimitiveInGeneric.ts ===
 function generic<T>(t: T) {
 >generic : Symbol(generic, Decl(nonPrimitiveInGeneric.ts, 0, 0))
 >T : Symbol(T, Decl(nonPrimitiveInGeneric.ts, 0, 17))

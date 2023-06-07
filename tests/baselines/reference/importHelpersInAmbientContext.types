@@ -1,4 +1,4 @@
-=== tests/cases/compiler/a.d.ts ===
+=== a.d.ts ===
 export { };
 
 // Extends
@@ -35,7 +35,7 @@ export var { a, ...x } : Foo;
 >a : number
 >x : { b: string; }
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 export {};
 declare namespace N {
 >N : typeof N
@@ -75,7 +75,7 @@ declare namespace N {
 >x : { b: string; }
 }
 
-=== tests/cases/compiler/tslib.d.ts ===
+=== tslib.d.ts ===
 export declare function __extends(d: Function, b: Function): void;
 >__extends : (d: Function, b: Function) => void
 >d : Function

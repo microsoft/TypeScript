@@ -1,4 +1,4 @@
-=== tests/cases/compiler/index.tsx ===
+=== index.tsx ===
 interface ActionsObject<State> {
     [prop: string]: (state: State) => State;
 >prop : string

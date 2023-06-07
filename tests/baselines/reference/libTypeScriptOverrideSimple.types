@@ -2,7 +2,7 @@
 interface ABC { abc: string }
 >abc : string
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 /// <reference lib="dom" />
 const a: ABC = { abc: "Hello" }
 >a : ABC

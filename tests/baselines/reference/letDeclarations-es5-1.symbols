@@ -1,4 +1,4 @@
-=== tests/cases/compiler/letDeclarations-es5-1.ts ===
+=== letDeclarations-es5-1.ts ===
     let l1;
 >l1 : Symbol(l1, Decl(letDeclarations-es5-1.ts, 0, 7))
 

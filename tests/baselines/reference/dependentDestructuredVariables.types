@@ -1,4 +1,4 @@
-=== tests/cases/conformance/controlFlow/dependentDestructuredVariables.ts ===
+=== dependentDestructuredVariables.ts ===
 type Action =
 >Action : { kind: 'A'; payload: number; } | { kind: 'B'; payload: string; }
 

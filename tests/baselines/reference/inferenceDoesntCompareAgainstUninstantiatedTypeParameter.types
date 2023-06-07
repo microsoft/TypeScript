@@ -1,4 +1,4 @@
-=== tests/cases/compiler/inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts ===
+=== inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts ===
 class ClassA<TEntityClass>  {
 >ClassA : ClassA<TEntityClass>
 

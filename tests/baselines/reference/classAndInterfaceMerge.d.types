@@ -1,4 +1,4 @@
-=== tests/cases/conformance/classes/classDeclarations/classAndInterfaceMerge.d.ts ===
+=== classAndInterfaceMerge.d.ts ===
 interface C { }
 
 declare class C { }

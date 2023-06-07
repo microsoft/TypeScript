@@ -1,8 +1,8 @@
-=== tests/cases/compiler/ref/a.ts ===
+=== ref/a.ts ===
 export class A { }
 >A : A
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 import {A} from "./ref/a";
 >A : typeof A
 

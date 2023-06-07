@@ -1,4 +1,4 @@
-=== tests/cases/compiler/moduleAliasInterface.ts ===
+=== moduleAliasInterface.ts ===
 module _modes {
 >_modes : typeof _modes
 

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/typeParameterArgumentEquivalence4.ts ===
+=== typeParameterArgumentEquivalence4.ts ===
 function foo<T,U>() {
 >foo : <T, U>() => void
 

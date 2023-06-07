@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/thisTypeOfConstructorFunctions.js ===
+=== thisTypeOfConstructorFunctions.js ===
 /**
  * @class
  * @template T

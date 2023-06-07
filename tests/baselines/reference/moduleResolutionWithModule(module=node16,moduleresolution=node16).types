@@ -1,8 +1,8 @@
-=== tests/cases/compiler/node_modules/pkg/entrypoint.d.ts ===
+=== node_modules/pkg/entrypoint.d.ts ===
 export declare function thing(): void;
 >thing : () => void
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import * as p from "pkg";
 >p : typeof p
 

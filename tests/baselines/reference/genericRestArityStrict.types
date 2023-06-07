@@ -1,4 +1,4 @@
-=== tests/cases/conformance/types/rest/genericRestArityStrict.ts ===
+=== genericRestArityStrict.ts ===
 // Repro from #25559
 
 declare function call<TS extends unknown[]>(

@@ -1,11 +1,11 @@
-=== tests/cases/compiler/b.js ===
+=== b.js ===
 function foo() {
 >foo : { (): number; (): number; }
 
     return 10;
 >10 : 10
 }
-=== tests/cases/compiler/a.ts ===
+=== a.ts ===
 function foo() {
 >foo : { (): number; (): number; }
 

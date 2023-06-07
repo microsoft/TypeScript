@@ -1,4 +1,4 @@
-=== tests/cases/compiler/privatePropertyUsingObjectType.ts ===
+=== privatePropertyUsingObjectType.ts ===
 export class FilterManager {
 >FilterManager : FilterManager
 

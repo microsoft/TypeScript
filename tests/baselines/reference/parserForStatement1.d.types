@@ -1,4 +1,4 @@
-=== tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement1.d.ts ===
+=== parserForStatement1.d.ts ===
 
 for (;;) {
 }

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/collisionThisExpressionAndFunctionInGlobal.ts ===
+=== collisionThisExpressionAndFunctionInGlobal.ts ===
 function _this() { //Error
 >_this : () => number
 

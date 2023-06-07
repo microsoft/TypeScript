@@ -1,4 +1,4 @@
-=== tests/cases/compiler/importAsBaseClass_1.ts ===
+=== importAsBaseClass_1.ts ===
 import Greeter = require("./importAsBaseClass_0");
 >Greeter : typeof Greeter
 
@@ -6,7 +6,7 @@ class Hello extends Greeter { }
 >Hello : Hello
 >Greeter : typeof Greeter
 
-=== tests/cases/compiler/importAsBaseClass_0.ts ===
+=== importAsBaseClass_0.ts ===
 export class Greeter {
 >Greeter : Greeter
 

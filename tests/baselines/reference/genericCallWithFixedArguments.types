@@ -1,4 +1,4 @@
-=== tests/cases/compiler/genericCallWithFixedArguments.ts ===
+=== genericCallWithFixedArguments.ts ===
 class A { foo() { } }
 >A : A
 >foo : () => void

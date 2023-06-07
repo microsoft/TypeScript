@@ -1,4 +1,4 @@
-=== tests/cases/compiler/funduleOfFunctionWithoutReturnTypeAnnotation.ts ===
+=== funduleOfFunctionWithoutReturnTypeAnnotation.ts ===
 function fn() {
 >fn : typeof fn
 

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/undeclaredModuleError.ts ===
+=== undeclaredModuleError.ts ===
 import fs = require('fs');
 >fs : any
 

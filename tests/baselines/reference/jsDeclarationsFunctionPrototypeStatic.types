@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/declarations/source.js ===
+=== source.js ===
 module.exports = MyClass;
 >module.exports = MyClass : typeof MyClass
 >module.exports : typeof MyClass

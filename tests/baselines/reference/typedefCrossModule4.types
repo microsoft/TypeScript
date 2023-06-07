@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/mod3.js ===
+=== mod3.js ===
 /** @typedef {number} Foo */
 class Bar { }
 >Bar : Bar

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/superHasMethodsFromMergedInterface.ts ===
+=== superHasMethodsFromMergedInterface.ts ===
 class C { m1() { } }
 >C : C
 >m1 : () => void

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/errorRecoveryInClassDeclaration.ts ===
+=== errorRecoveryInClassDeclaration.ts ===
 class C {
 >C : C
 

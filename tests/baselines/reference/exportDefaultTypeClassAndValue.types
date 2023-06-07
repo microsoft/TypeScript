@@ -1,4 +1,4 @@
-=== tests/cases/compiler/exportDefaultTypeClassAndValue.ts ===
+=== exportDefaultTypeClassAndValue.ts ===
 const foo = 1
 >foo : 1
 >1 : 1

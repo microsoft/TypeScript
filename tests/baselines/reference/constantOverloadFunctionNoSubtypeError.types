@@ -1,4 +1,4 @@
-=== tests/cases/compiler/constantOverloadFunctionNoSubtypeError.ts ===
+=== constantOverloadFunctionNoSubtypeError.ts ===
 class Base { foo() { } }
 >Base : Base
 >foo : () => void

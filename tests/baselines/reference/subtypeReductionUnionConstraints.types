@@ -1,4 +1,4 @@
-=== tests/cases/compiler/subtypeReductionUnionConstraints.ts ===
+=== subtypeReductionUnionConstraints.ts ===
 // Repro from #53311
 
 type FooNode = {

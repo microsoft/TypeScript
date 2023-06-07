@@ -1,4 +1,4 @@
-=== tests/cases/conformance/types/never/neverUnionIntersection.ts ===
+=== neverUnionIntersection.ts ===
 type T01 = string | never;
 >T01 : string
 

@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/bug27341.js ===
+=== bug27341.js ===
 if (false) {
 >false : false
 

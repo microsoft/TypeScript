@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/bug27025.js ===
+=== bug27025.js ===
 export class Alpha { }
 >Alpha : Symbol(Alpha, Decl(bug27025.js, 0, 0))
 

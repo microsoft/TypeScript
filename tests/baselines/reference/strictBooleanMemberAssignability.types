@@ -1,4 +1,4 @@
-=== tests/cases/compiler/strictBooleanMemberAssignability.ts ===
+=== strictBooleanMemberAssignability.ts ===
 class Abc {
 >Abc : Abc
 

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/file.js ===
+=== file.js ===
 export function foo() {}
 >foo : typeof foo
 

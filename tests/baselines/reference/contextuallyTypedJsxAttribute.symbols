@@ -1,4 +1,4 @@
-=== tests/cases/compiler/index.tsx ===
+=== index.tsx ===
 interface Elements {
 >Elements : Symbol(Elements, Decl(index.tsx, 0, 0))
 

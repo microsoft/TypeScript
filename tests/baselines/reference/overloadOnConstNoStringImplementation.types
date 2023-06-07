@@ -1,4 +1,4 @@
-=== tests/cases/compiler/overloadOnConstNoStringImplementation.ts ===
+=== overloadOnConstNoStringImplementation.ts ===
 function x2(a: number, cb: (x: 'hi') => number);
 >x2 : { (a: number, cb: (x: 'hi') => number): any; (a: number, cb: (x: "bye") => number): any; }
 >a : number

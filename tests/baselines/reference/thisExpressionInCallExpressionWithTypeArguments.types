@@ -1,4 +1,4 @@
-=== tests/cases/compiler/thisExpressionInCallExpressionWithTypeArguments.ts ===
+=== thisExpressionInCallExpressionWithTypeArguments.ts ===
 class C {
 >C : C
 

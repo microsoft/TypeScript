@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/bug24754.js ===
+=== bug24754.js ===
 // #24754
 const webpack = function (){
 >webpack : { (): void; WebpackOptionsDefaulter: number; }

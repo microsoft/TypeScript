@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/axios.js ===
+=== axios.js ===
 class Axios {
 >Axios : Axios
 

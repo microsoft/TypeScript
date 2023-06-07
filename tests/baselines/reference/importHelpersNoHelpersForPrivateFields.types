@@ -1,4 +1,4 @@
-=== tests/cases/compiler/main.ts ===
+=== main.ts ===
 export class Foo {
 >Foo : Foo
 
@@ -23,7 +23,7 @@ export class Foo {
     }
 }
 
-=== tests/cases/compiler/tslib.d.ts ===
+=== tslib.d.ts ===
 
 export {}
 

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts ===
+=== privacyAccessorDeclFile_externalModule.ts ===
 class privateClass {
 >privateClass : privateClass
 }
@@ -1217,7 +1217,7 @@ module privateModule {
     }
 }
 
-=== tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts ===
+=== privacyAccessorDeclFile_GlobalFile.ts ===
 class publicClassInGlobal {
 >publicClassInGlobal : publicClassInGlobal
 }

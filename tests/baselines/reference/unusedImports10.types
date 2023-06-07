@@ -1,4 +1,4 @@
-=== tests/cases/compiler/unusedImports10.ts ===
+=== unusedImports10.ts ===
 module A {
 >A : typeof A
 

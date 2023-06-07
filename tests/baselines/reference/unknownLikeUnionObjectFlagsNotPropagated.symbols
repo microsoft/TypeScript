@@ -1,4 +1,4 @@
-=== tests/cases/compiler/unknownLikeUnionObjectFlagsNotPropagated.ts ===
+=== unknownLikeUnionObjectFlagsNotPropagated.ts ===
 // repro from #52475#issuecomment-1411215277
 
 type MyType = {} | null | undefined;

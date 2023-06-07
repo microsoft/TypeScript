@@ -1,4 +1,4 @@
-=== tests/cases/compiler/collisionThisExpressionAndLocalVarInFunction.ts ===
+=== collisionThisExpressionAndLocalVarInFunction.ts ===
 var console: {
 >console : { log(val: any): any; }
 

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/check.js ===
+=== check.js ===
 function container() {
 >container : () => void
 

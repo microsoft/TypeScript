@@ -1,9 +1,9 @@
-=== tests/cases/conformance/jsdoc/dummyType.d.ts ===
+=== dummyType.d.ts ===
 declare class C<T> { t: T }
 >C : C<T>
 >t : T
 
-=== tests/cases/conformance/jsdoc/badTypeArguments.js ===
+=== badTypeArguments.js ===
 /** @param {C.<>} x */
 /** @param {C.<number,>} y */
 // @ts-ignore

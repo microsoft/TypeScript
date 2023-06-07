@@ -1,4 +1,4 @@
-=== tests/cases/compiler/controlFlowJavascript.js ===
+=== controlFlowJavascript.js ===
 let cond = true;
 >cond : Symbol(cond, Decl(controlFlowJavascript.js, 0, 3))
 

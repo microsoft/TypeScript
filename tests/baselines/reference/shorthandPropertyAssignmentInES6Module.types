@@ -1,9 +1,9 @@
-=== tests/cases/compiler/existingModule.ts ===
+=== existingModule.ts ===
 export var x = 1;
 >x : number
 >1 : 1
 
-=== tests/cases/compiler/test.ts ===
+=== test.ts ===
 import {x} from './existingModule';
 >x : number
 

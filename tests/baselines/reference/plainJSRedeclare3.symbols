@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/plainJSRedeclare.js ===
+=== plainJSRedeclare.js ===
 const orbitol = 1
 >orbitol : Symbol(orbitol, Decl(plainJSRedeclare.js, 0, 5))
 

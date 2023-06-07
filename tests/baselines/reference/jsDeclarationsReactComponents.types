@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/declarations/jsDeclarationsReactComponents1.jsx ===
+=== jsDeclarationsReactComponents1.jsx ===
 /// <reference path="react16.d.ts" />
 import React from "react";
 >React : typeof React
@@ -52,7 +52,7 @@ TabbedShowLayout.defaultProps = {
 export default TabbedShowLayout;
 >TabbedShowLayout : { ({}: {}): JSX.Element; propTypes: { version: PropTypes.Requireable<number>; }; defaultProps: { tabs: undefined; }; }
 
-=== tests/cases/conformance/jsdoc/declarations/jsDeclarationsReactComponents2.jsx ===
+=== jsDeclarationsReactComponents2.jsx ===
 import React from "react";
 >React : typeof React
 
@@ -95,7 +95,7 @@ TabbedShowLayout.defaultProps = {
 export default TabbedShowLayout;
 >TabbedShowLayout : React.SFC<{}>
 
-=== tests/cases/conformance/jsdoc/declarations/jsDeclarationsReactComponents3.jsx ===
+=== jsDeclarationsReactComponents3.jsx ===
 import React from "react";
 >React : typeof React
 
@@ -138,7 +138,7 @@ TabbedShowLayout.defaultProps = {
 export default TabbedShowLayout;
 >TabbedShowLayout : { defaultProps: { tabs: string; }; } & ((props?: { elem: string; } | undefined) => JSX.Element)
 
-=== tests/cases/conformance/jsdoc/declarations/jsDeclarationsReactComponents4.jsx ===
+=== jsDeclarationsReactComponents4.jsx ===
 import React from "react";
 >React : typeof React
 
@@ -182,7 +182,7 @@ TabbedShowLayout.defaultProps = {
 export default TabbedShowLayout;
 >TabbedShowLayout : { (prop: { className: string; }): JSX.Element; defaultProps: { tabs: string; }; }
 
-=== tests/cases/conformance/jsdoc/declarations/jsDeclarationsReactComponents5.jsx ===
+=== jsDeclarationsReactComponents5.jsx ===
 import React from 'react';
 >React : typeof React
 

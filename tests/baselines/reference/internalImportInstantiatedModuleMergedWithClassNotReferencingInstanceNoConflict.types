@@ -1,4 +1,4 @@
-=== tests/cases/compiler/internalImportInstantiatedModuleMergedWithClassNotReferencingInstanceNoConflict.ts ===
+=== internalImportInstantiatedModuleMergedWithClassNotReferencingInstanceNoConflict.ts ===
 class A {
 >A : A
 

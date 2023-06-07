@@ -1,4 +1,4 @@
-=== tests/cases/compiler/declarationEmitNoNonRequiredParens.ts ===
+=== declarationEmitNoNonRequiredParens.ts ===
 export enum Test {
 >Test : Test
 

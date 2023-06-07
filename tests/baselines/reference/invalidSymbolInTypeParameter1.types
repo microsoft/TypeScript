@@ -1,4 +1,4 @@
-=== tests/cases/compiler/invalidSymbolInTypeParameter1.ts ===
+=== invalidSymbolInTypeParameter1.ts ===
 function test() {
 >test : () => void
 

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/incorrectClassOverloadChain.ts ===
+=== incorrectClassOverloadChain.ts ===
 class C {
 >C : C
 

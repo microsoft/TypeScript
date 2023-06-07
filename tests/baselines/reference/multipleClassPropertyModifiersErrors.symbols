@@ -1,4 +1,4 @@
-=== tests/cases/compiler/multipleClassPropertyModifiersErrors.ts ===
+=== multipleClassPropertyModifiersErrors.ts ===
 class C {
 >C : Symbol(C, Decl(multipleClassPropertyModifiersErrors.ts, 0, 0))
 

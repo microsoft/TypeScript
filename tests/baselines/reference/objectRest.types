@@ -1,4 +1,4 @@
-=== tests/cases/conformance/types/rest/objectRest.ts ===
+=== objectRest.ts ===
 var o = { a: 1, b: 'no' }
 >o : { a: number; b: string; }
 >{ a: 1, b: 'no' } : { a: number; b: string; }

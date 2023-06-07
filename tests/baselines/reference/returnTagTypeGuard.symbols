@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/bug25127.js ===
+=== bug25127.js ===
 class Entry {
 >Entry : Symbol(Entry, Decl(bug25127.js, 0, 0))
 

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/slightlyIndirectedDeepObjectLiteralElaborations.ts ===
+=== slightlyIndirectedDeepObjectLiteralElaborations.ts ===
 interface Foo {
 >Foo : Symbol(Foo, Decl(slightlyIndirectedDeepObjectLiteralElaborations.ts, 0, 0))
 

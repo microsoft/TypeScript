@@ -1,4 +1,4 @@
-=== tests/cases/compiler/narrowCommaOperatorNestedWithinLHS.ts ===
+=== narrowCommaOperatorNestedWithinLHS.ts ===
 const otherValue = () => true;
 >otherValue : () => boolean
 >() => true : () => boolean

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/mixedTypeEnumComparison.ts ===
+=== mixedTypeEnumComparison.ts ===
 const enum E {
 >E : E
 

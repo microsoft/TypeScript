@@ -1,4 +1,4 @@
-=== tests/cases/compiler/constructorStaticParamNameErrors.ts ===
+=== constructorStaticParamNameErrors.ts ===
 'use strict'
 >'use strict' : "use strict"
 

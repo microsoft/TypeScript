@@ -1,4 +1,4 @@
-=== tests/cases/compiler/typeParametersInStaticProperties.ts ===
+=== typeParametersInStaticProperties.ts ===
 class foo<T> {
 >foo : foo<T>
 

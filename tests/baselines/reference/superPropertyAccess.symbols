@@ -1,4 +1,4 @@
-=== tests/cases/compiler/superPropertyAccess.ts ===
+=== superPropertyAccess.ts ===
 class MyBase {
 >MyBase : Symbol(MyBase, Decl(superPropertyAccess.ts, 0, 0))
 

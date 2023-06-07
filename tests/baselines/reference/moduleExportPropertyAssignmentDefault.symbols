@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/axios.js ===
+=== axios.js ===
 var axios = {}
 >axios : Symbol(axios, Decl(axios.js, 0, 3))
 

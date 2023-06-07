@@ -1,4 +1,4 @@
-=== tests/cases/conformance/externalModules/vs/foo_0.ts ===
+=== vs/foo_0.ts ===
 var x = "filename";
 >x : Symbol(x, Decl(foo_0.ts, 0, 3))
 

@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+=== file.tsx ===
 declare namespace JSX { interface Element { } }
 
 function foo() {

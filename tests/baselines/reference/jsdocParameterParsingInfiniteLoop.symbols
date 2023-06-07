@@ -1,4 +1,4 @@
-=== tests/cases/compiler/example.js ===
+=== example.js ===
 // @ts-check
 /**
  * @type {function(@foo)}

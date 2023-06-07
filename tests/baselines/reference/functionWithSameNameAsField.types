@@ -1,4 +1,4 @@
-=== tests/cases/compiler/functionWithSameNameAsField.ts ===
+=== functionWithSameNameAsField.ts ===
 class TestProgressBar {
 >TestProgressBar : TestProgressBar
 

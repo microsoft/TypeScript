@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedConstructorFunctionWithSub.js ===
+=== jsDeclarationsExportAssignedConstructorFunctionWithSub.js ===
 /**
  * @param {number} p
  */

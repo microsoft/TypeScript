@@ -1,4 +1,4 @@
-=== tests/cases/compiler/moduleWithValuesAsType.ts ===
+=== moduleWithValuesAsType.ts ===
 module A {
 >A : typeof A
 

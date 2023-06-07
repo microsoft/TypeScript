@@ -1,4 +1,4 @@
-=== tests/cases/compiler/emitThisInObjectLiteralGetter.ts ===
+=== emitThisInObjectLiteralGetter.ts ===
 const example = {
 >example : Symbol(example, Decl(emitThisInObjectLiteralGetter.ts, 0, 5))
 

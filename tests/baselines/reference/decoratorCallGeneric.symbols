@@ -1,4 +1,4 @@
-=== tests/cases/conformance/decorators/decoratorCallGeneric.ts ===
+=== decoratorCallGeneric.ts ===
 interface I<T> {
 >I : Symbol(I, Decl(decoratorCallGeneric.ts, 0, 0))
 >T : Symbol(T, Decl(decoratorCallGeneric.ts, 0, 12))

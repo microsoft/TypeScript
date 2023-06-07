@@ -1,4 +1,4 @@
-=== tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx ===
+=== file.tsx ===
 import React = require('react')
 >React : Symbol(React, Decl(file.tsx, 0, 0))
 

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/excessPropertyCheckWithNestedArrayIntersection.ts ===
+=== excessPropertyCheckWithNestedArrayIntersection.ts ===
 interface ValueOnlyFields {
 >ValueOnlyFields : Symbol(ValueOnlyFields, Decl(excessPropertyCheckWithNestedArrayIntersection.ts, 0, 0))
 

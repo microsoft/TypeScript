@@ -1,4 +1,4 @@
-=== tests/cases/compiler/mergedModuleDeclarationCodeGen5.ts ===
+=== mergedModuleDeclarationCodeGen5.ts ===
 module M.buz.plop {
 >M : typeof M
 >buz : typeof buz

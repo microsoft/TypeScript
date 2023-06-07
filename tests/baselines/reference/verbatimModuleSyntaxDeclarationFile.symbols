@@ -1,4 +1,4 @@
-=== tests/cases/conformance/externalModules/type1.d.ts ===
+=== type1.d.ts ===
 declare namespace NS {
 >NS : Symbol(NS, Decl(type1.d.ts, 0, 0))
 
@@ -12,7 +12,7 @@ export = NS;
 export as namespace MyTypes;
 >MyTypes : Symbol(MyTypes, Decl(type1.d.ts, 4, 12))
 
-=== tests/cases/conformance/externalModules/type2.d.ts ===
+=== type2.d.ts ===
 import type * as NS from './type1';
 >NS : Symbol(NS, Decl(type2.d.ts, 0, 11))
 

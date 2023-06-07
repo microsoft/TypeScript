@@ -1,4 +1,4 @@
-=== tests/cases/compiler/a.js ===
+=== a.js ===
 let C = "sss";
 >C : Symbol(C, Decl(a.js, 0, 3))
 

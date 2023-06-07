@@ -1,4 +1,4 @@
-=== tests/cases/compiler/file1.ts ===
+=== file1.ts ===
 export const x: string = 3;
 >x : string
 >3 : 3

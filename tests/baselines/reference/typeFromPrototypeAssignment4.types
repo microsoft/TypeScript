@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/a.js ===
+=== a.js ===
 function Multimap4() {
 >Multimap4 : typeof Multimap4
 

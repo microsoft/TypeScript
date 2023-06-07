@@ -1,4 +1,4 @@
-=== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts ===
+=== comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts ===
 class Base {
 >Base : Symbol(Base, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 0, 0))
 

@@ -1,9 +1,9 @@
-=== tests/cases/compiler/c.ts ===
+=== c.ts ===
 let foo: typeof C;
 >foo : typeof C
 >C : typeof C
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 class C { }
 >C : C
 

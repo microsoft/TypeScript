@@ -1,4 +1,4 @@
-=== tests/cases/compiler/ts.ts ===
+=== ts.ts ===
 var o = {
 >o : Symbol(o, Decl(ts.ts, 0, 3))
 

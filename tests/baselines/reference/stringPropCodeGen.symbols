@@ -1,4 +1,4 @@
-=== tests/cases/compiler/stringPropCodeGen.ts ===
+=== stringPropCodeGen.ts ===
 var a = {
 >a : Symbol(a, Decl(stringPropCodeGen.ts, 0, 3))
 

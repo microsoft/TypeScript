@@ -1,4 +1,4 @@
-=== tests/cases/compiler/getterSetterSubtypeAssignment.ts ===
+=== getterSetterSubtypeAssignment.ts ===
 class NumberOrUndefined {
 >NumberOrUndefined : NumberOrUndefined
 

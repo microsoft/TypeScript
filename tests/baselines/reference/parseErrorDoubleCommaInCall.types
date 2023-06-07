@@ -1,4 +1,4 @@
-=== tests/cases/compiler/parseErrorDoubleCommaInCall.ts ===
+=== parseErrorDoubleCommaInCall.ts ===
 Boolean({
 >Boolean({    x: 0,,}) : boolean
 >Boolean : BooleanConstructor

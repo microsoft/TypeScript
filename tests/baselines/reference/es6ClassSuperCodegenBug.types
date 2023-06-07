@@ -1,4 +1,4 @@
-=== tests/cases/compiler/es6ClassSuperCodegenBug.ts ===
+=== es6ClassSuperCodegenBug.ts ===
 class A {
 >A : A
 

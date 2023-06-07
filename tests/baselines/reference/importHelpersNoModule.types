@@ -1,4 +1,4 @@
-=== tests/cases/compiler/external.ts ===
+=== external.ts ===
 export class A { }
 >A : A
 
@@ -22,7 +22,7 @@ class C {
     }
 }
 
-=== tests/cases/compiler/script.ts ===
+=== script.ts ===
 class A { }
 >A : A
 

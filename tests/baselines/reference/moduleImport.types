@@ -1,4 +1,4 @@
-=== tests/cases/compiler/moduleImport.ts ===
+=== moduleImport.ts ===
 module A.B.C {
 >A : typeof A
 >B : typeof B

@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/bug40140.js ===
+=== bug40140.js ===
 const u = require('untyped');
 >u : any
 >require('untyped') : any

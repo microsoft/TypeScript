@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/jsdocAccessibilityTagDeclarations.js ===
+=== jsdocAccessibilityTagDeclarations.js ===
 class Protected {
 >Protected : Protected
 

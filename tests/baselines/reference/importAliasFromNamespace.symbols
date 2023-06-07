@@ -1,4 +1,4 @@
-=== tests/cases/compiler/usage.ts ===
+=== usage.ts ===
 /// <reference path="./internal.ts" />
 namespace SomeOther.Thing {
 >SomeOther : Symbol(SomeOther, Decl(usage.ts, 0, 0))
@@ -32,7 +32,7 @@ namespace SomeOther.Thing {
         }
     }
 }
-=== tests/cases/compiler/internal.ts ===
+=== internal.ts ===
 namespace My.Internal {
 >My : Symbol(My, Decl(internal.ts, 0, 0))
 >Internal : Symbol(Internal, Decl(internal.ts, 0, 13))

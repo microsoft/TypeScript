@@ -1,4 +1,4 @@
-=== tests/cases/compiler/a.js ===
+=== a.js ===
 const Obj = {};
 >Obj : {}
 >{} : {}
@@ -6,7 +6,7 @@ const Obj = {};
 export default Obj;
 >Obj : {}
 
-=== tests/cases/compiler/b.js ===
+=== b.js ===
 import Obj from './a';
 >Obj : {}
 

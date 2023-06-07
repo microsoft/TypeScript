@@ -1,4 +1,4 @@
-=== tests/cases/conformance/classes/classExpressions/classExpressionLoop.ts ===
+=== classExpressionLoop.ts ===
 let arr = [];
 >arr : any[]
 >[] : undefined[]

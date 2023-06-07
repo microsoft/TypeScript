@@ -1,4 +1,4 @@
-=== tests/cases/compiler/yieldStringLiteral.ts ===
+=== yieldStringLiteral.ts ===
 function yieldString() {
 >yieldString : () => void
 

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/numberToString.ts ===
+=== numberToString.ts ===
 function f1(n:number):string {
 >f1 : (n: number) => string
 >n : number

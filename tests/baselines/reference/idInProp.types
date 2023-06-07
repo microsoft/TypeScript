@@ -1,4 +1,4 @@
-=== tests/cases/compiler/idInProp.ts ===
+=== idInProp.ts ===
 function f() {
 >f : () => void
 

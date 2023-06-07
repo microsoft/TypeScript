@@ -403,7 +403,6 @@ export namespace Compiler {
         compilerOptions: ts.CompilerOptions | undefined,
         // Current directory is needed for rwcRunner to be able to use currentDirectory defined in json file
         currentDirectory: string | undefined,
-        rootDir?: string,
         symlinks?: vfs.FileSet
     ): compiler.CompilationResult {
         const options: ts.CompilerOptions & HarnessOptions = compilerOptions ? ts.cloneCompilerOptions(compilerOptions) : { noResolve: false };
@@ -451,7 +450,7 @@ export namespace Compiler {
             fs.apply(symlinks);
         }
 
-        ts.assign(options, ts.convertToOptionsWithAbsolutePaths(options, path => ts.getNormalizedAbsolutePath(ts.getNormalizedAbsolutePath(path, rootDir), currentDirectory)));
+        ts.assign(options, ts.convertToOptionsWithAbsolutePaths(options, path => ts.getNormalizedAbsolutePath(path, currentDirectory)));
         const host = new fakes.CompilerHost(fs, options);
         const result = compiler.compileFiles(host, programFileNames, options, typeScriptVersion);
         result.symlinks = symlinks;
@@ -545,7 +544,7 @@ export namespace Compiler {
             return;
         }
         const { declInputFiles, declOtherFiles, harnessSettings, options, currentDirectory } = context;
-        const output = compileFiles(declInputFiles, declOtherFiles, harnessSettings, options, currentDirectory, /*rootDir*/ undefined, symlinks);
+        const output = compileFiles(declInputFiles, declOtherFiles, harnessSettings, options, currentDirectory, symlinks);
         return { declInputFiles, declOtherFiles, declResult: output };
     }
 
@@ -1208,7 +1207,7 @@ export namespace TestCaseParser {
     }
 
     /** Given a test file containing // @FileName directives, return an array of named units of code to be added to an existing compiler instance */
-    export function makeUnitsFromTest(code: string, fileName: string, rootDir: string, settings = extractCompilerSettings(code)): TestCaseContent {
+    export function makeUnitsFromTest(code: string, fileName: string, settings = extractCompilerSettings(code)): TestCaseContent {
         // List of all the subfiles we've parsed out
         const testUnitData: TestUnitData[] = [];
 
@@ -1223,7 +1222,7 @@ export namespace TestCaseParser {
 
         for (const line of lines) {
             let testMetaData: RegExpExecArray | null;
-            const possiblySymlinks = parseSymlinkFromTest(line, symlinks, ts.getNormalizedAbsolutePath(rootDir, vfs.srcFolder));
+            const possiblySymlinks = parseSymlinkFromTest(line, symlinks, vfs.srcFolder);
             if (possiblySymlinks) {
                 symlinks = possiblySymlinks;
             }
@@ -1294,7 +1293,7 @@ export namespace TestCaseParser {
                     const files: string[] = [];
                     const directories = new Set<string>();
                     for (const unit of testUnitData) {
-                        const fileName = ts.getNormalizedAbsolutePath(ts.getNormalizedAbsolutePath(unit.name, rootDir), vfs.srcFolder);
+                        const fileName = ts.getNormalizedAbsolutePath(unit.name, vfs.srcFolder);
                         if (fileName.toLowerCase().startsWith(dir.toLowerCase())) {
                             let path = fileName.substring(dir.length);
                             if (path.startsWith("/")) {
@@ -1325,7 +1324,7 @@ export namespace TestCaseParser {
             if (getConfigNameFromFileName(data.name)) {
                 const configJson = ts.parseJsonText(data.name, data.content);
                 assert.isTrue(configJson.endOfFileToken !== undefined);
-                const configFileName = ts.getNormalizedAbsolutePath(ts.getNormalizedAbsolutePath(data.name, rootDir), vfs.srcFolder);
+                const configFileName = ts.getNormalizedAbsolutePath(data.name, vfs.srcFolder);
                 const configDir = ts.getDirectoryPath(configFileName);
                 tsConfig = ts.parseJsonSourceFileConfigFileContent(configJson, parseConfigHost, configDir, /*existingOptions*/ undefined, configFileName);
                 tsConfigFileUnitData = data;

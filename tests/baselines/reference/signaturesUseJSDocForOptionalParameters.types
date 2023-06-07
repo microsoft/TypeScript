@@ -1,4 +1,4 @@
-=== tests/cases/compiler/jsDocOptionality.js ===
+=== jsDocOptionality.js ===
 function MyClass() {
 >MyClass : typeof MyClass
 

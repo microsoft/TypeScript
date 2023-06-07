@@ -1,4 +1,4 @@
-=== tests/cases/compiler/typeParameterAssignmentWithConstraints.ts ===
+=== typeParameterAssignmentWithConstraints.ts ===
 function f<A, B extends A>() {
 >f : <A, B extends A>() => void
 

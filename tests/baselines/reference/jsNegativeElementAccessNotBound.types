@@ -1,4 +1,4 @@
-=== tests/cases/compiler/jsNegativeELementAccessNotBound.js ===
+=== jsNegativeELementAccessNotBound.js ===
 var indexMap = {};
 >indexMap : {}
 >{} : {}

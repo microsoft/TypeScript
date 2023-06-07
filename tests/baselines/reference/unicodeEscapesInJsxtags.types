@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+=== file.tsx ===
 import * as React from "react";
 >React : typeof React
 

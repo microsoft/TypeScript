@@ -1,4 +1,4 @@
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import { variable } from "./variable";
 >variable : typeof globalThis
 
@@ -6,7 +6,7 @@ export { variable as globalThis };
 >variable : typeof globalThis
 >globalThis : typeof globalThis
 
-=== tests/cases/compiler/variable.ts ===
+=== variable.ts ===
 export const variable = globalThis;
 >variable : typeof globalThis
 >globalThis : typeof globalThis

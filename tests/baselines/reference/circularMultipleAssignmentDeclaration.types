@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/circularMultipleAssignmentDeclaration.js ===
+=== circularMultipleAssignmentDeclaration.js ===
 ns.next = ns.next || { shared: {} };
 >ns.next = ns.next || { shared: {} } : any
 >ns.next : any

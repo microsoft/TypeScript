@@ -1,4 +1,4 @@
-=== tests/cases/compiler/getSetEnumerable.ts ===
+=== getSetEnumerable.ts ===
 class GetSetEnumerableClassGet {
 >GetSetEnumerableClassGet : GetSetEnumerableClassGet
 

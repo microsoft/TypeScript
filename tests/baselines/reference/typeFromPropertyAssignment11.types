@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/module.js ===
+=== module.js ===
 var Inner = function() {}
 >Inner : typeof Inner
 >function() {} : typeof Inner

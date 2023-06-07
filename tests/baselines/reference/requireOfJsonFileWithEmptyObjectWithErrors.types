@@ -1,4 +1,4 @@
-=== tests/cases/compiler/file1.ts ===
+=== file1.ts ===
 import b1 = require('./b.json');
 >b1 : {}
 
@@ -31,7 +31,7 @@ if (x) {
 >b : any
 }
 
-=== tests/cases/compiler/b.json ===
+=== b.json ===
 {
 >{} : {}
 }

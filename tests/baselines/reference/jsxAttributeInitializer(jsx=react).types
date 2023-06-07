@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsx/a.tsx ===
+=== a.tsx ===
 declare var React: any;
 >React : any
 

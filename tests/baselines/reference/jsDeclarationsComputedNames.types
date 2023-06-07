@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+=== index.js ===
 const TopLevelSym = Symbol();
 >TopLevelSym : unique symbol
 >Symbol() : unique symbol
@@ -44,7 +44,7 @@ module.exports = {
     }
 }
 
-=== tests/cases/conformance/jsdoc/declarations/index2.js ===
+=== index2.js ===
 const TopLevelSym = Symbol();
 >TopLevelSym : unique symbol
 >Symbol() : unique symbol

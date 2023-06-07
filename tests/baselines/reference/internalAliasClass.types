@@ -1,4 +1,4 @@
-=== tests/cases/compiler/internalAliasClass.ts ===
+=== internalAliasClass.ts ===
 module a {
 >a : typeof a
 

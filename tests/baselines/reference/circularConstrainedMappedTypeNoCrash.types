@@ -1,4 +1,4 @@
-=== tests/cases/compiler/circularConstrainedMappedTypeNoCrash.ts ===
+=== circularConstrainedMappedTypeNoCrash.ts ===
 type Loop<T, U extends Loop<T, U>> = {
 >Loop : Loop<T, U>
 

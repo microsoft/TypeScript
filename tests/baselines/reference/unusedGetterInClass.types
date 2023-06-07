@@ -1,4 +1,4 @@
-=== tests/cases/compiler/unusedGetterInClass.ts ===
+=== unusedGetterInClass.ts ===
 class Employee {
 >Employee : Employee
 

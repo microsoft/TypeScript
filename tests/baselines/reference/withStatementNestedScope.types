@@ -1,4 +1,4 @@
-=== tests/cases/compiler/withStatementNestedScope.ts ===
+=== withStatementNestedScope.ts ===
 var x = 1;
 >x : number
 >1 : 1

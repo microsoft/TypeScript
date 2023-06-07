@@ -1,4 +1,4 @@
-=== tests/cases/compiler/enumConflictsWithGlobalIdentifier.ts ===
+=== enumConflictsWithGlobalIdentifier.ts ===
 enum Position { 
 >Position : Position
 

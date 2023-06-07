@@ -1,4 +1,4 @@
-=== tests/cases/compiler/m1.ts ===
+=== m1.ts ===
 module foo {
     const enum E { X }
 >E : E

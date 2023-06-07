@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsx/file1.tsx ===
+=== file1.tsx ===
 declare module JSX {
 	interface Element { }
 }

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/demo.d.ts ===
+=== demo.d.ts ===
 declare namespace demoNS {
 >demoNS : typeof demoNS
 
@@ -15,7 +15,7 @@ declare module 'demoModule' {
     export = alias;
 >alias : typeof alias
 }
-=== tests/cases/compiler/user.ts ===
+=== user.ts ===
 import { f } from 'demoModule';
 >f : () => void
 

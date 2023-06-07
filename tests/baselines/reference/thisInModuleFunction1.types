@@ -1,4 +1,4 @@
-=== tests/cases/compiler/thisInModuleFunction1.ts ===
+=== thisInModuleFunction1.ts ===
 module bar {
 >bar : typeof globalThis.bar
 

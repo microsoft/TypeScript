@@ -1,4 +1,4 @@
-=== tests/cases/compiler/objectLiteralWithGetAccessorInsideFunction.ts ===
+=== objectLiteralWithGetAccessorInsideFunction.ts ===
 function bar() {
 >bar : () => void
 

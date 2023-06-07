@@ -1,4 +1,4 @@
-=== tests/cases/compiler/computedPropertiesTransformedInOtherwiseNonTSClasses.ts ===
+=== computedPropertiesTransformedInOtherwiseNonTSClasses.ts ===
 namespace NS { 
 >NS : typeof NS
 

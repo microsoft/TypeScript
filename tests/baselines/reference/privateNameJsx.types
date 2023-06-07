@@ -1,4 +1,4 @@
-=== tests/cases/compiler/privateNameJsx.tsx ===
+=== privateNameJsx.tsx ===
 class Test {
 >Test : Test
 

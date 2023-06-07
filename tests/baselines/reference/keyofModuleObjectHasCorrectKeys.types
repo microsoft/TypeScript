@@ -1,4 +1,4 @@
-=== tests/cases/compiler/example.ts ===
+=== example.ts ===
 export default function add(a: number, b: number) {
 >add : (a: number, b: number) => number
 >a : number
@@ -10,7 +10,7 @@ export default function add(a: number, b: number) {
 >b : number
 }
 
-=== tests/cases/compiler/test.ts ===
+=== test.ts ===
 import * as example from './example';
 >example : typeof example
 

@@ -1,7 +1,7 @@
-=== tests/cases/compiler/a.ts ===
+=== a.ts ===
 class C<T> { }
 >C : C<T>
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 
 interface C<T> { }

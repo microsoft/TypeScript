@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/templateTagOnClasses.js ===
+=== templateTagOnClasses.js ===
 /**
  * @template T
  * @typedef {(t: T) => T} Id

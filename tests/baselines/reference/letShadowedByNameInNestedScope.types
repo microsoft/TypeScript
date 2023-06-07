@@ -1,4 +1,4 @@
-=== tests/cases/compiler/letShadowedByNameInNestedScope.ts ===
+=== letShadowedByNameInNestedScope.ts ===
 var x;
 >x : any
 

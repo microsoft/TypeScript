@@ -1,4 +1,4 @@
-=== tests/cases/compiler/extendedUnicodeEscapeSequenceIdentifiers.ts ===
+=== extendedUnicodeEscapeSequenceIdentifiers.ts ===
 const \u{0061} = 12;
 >\u{0061} : 12
 >12 : 12

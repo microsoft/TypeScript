@@ -1,4 +1,4 @@
-=== tests/cases/compiler/unusedVariablesWithUnderscoreInBindingElement.ts ===
+=== unusedVariablesWithUnderscoreInBindingElement.ts ===
 function t1() {
 >t1 : () => void
 

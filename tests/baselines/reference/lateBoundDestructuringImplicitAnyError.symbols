@@ -1,4 +1,4 @@
-=== tests/cases/compiler/lateBoundDestructuringImplicitAnyError.ts ===
+=== lateBoundDestructuringImplicitAnyError.ts ===
 let named = "foo";
 >named : Symbol(named, Decl(lateBoundDestructuringImplicitAnyError.ts, 0, 3))
 

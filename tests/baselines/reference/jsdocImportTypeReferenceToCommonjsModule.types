@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/ex.d.ts ===
+=== ex.d.ts ===
 declare var config: {
 >config : { fix: boolean; }
 
@@ -8,7 +8,7 @@ declare var config: {
 export = config;
 >config : { fix: boolean; }
 
-=== tests/cases/conformance/jsdoc/test.js ===
+=== test.js ===
 /** @param {import('./ex')} a */
 function demo(a) {
 >demo : (a: { fix: boolean; }) => void

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/excessPropertyCheckWithSpread.ts ===
+=== excessPropertyCheckWithSpread.ts ===
 declare function f({ a: number }): void
 >f : ({ a: number }: { a: any; }) => void
 >a : any

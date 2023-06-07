@@ -1,4 +1,4 @@
-=== tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts ===
+=== overloadingStaticFunctionsInFunctions.ts ===
 function boo {
 >boo : () => void
 

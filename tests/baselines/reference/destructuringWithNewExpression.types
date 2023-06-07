@@ -1,4 +1,4 @@
-=== tests/cases/compiler/destructuringWithNewExpression.ts ===
+=== destructuringWithNewExpression.ts ===
 class C {
 >C : C
 

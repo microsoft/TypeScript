@@ -1,4 +1,4 @@
-=== tests/cases/compiler/a.js ===
+=== a.js ===
 var x = 0;
 >x : number
 >0 : 0

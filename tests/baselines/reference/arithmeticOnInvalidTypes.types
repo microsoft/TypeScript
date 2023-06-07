@@ -1,4 +1,4 @@
-=== tests/cases/compiler/arithmeticOnInvalidTypes.ts ===
+=== arithmeticOnInvalidTypes.ts ===
 var x: Number;
 >x : Number
 

@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/cb.js ===
+=== cb.js ===
 /** @callback Sid
  * @param {string} s
  * @returns {string} What were you expecting

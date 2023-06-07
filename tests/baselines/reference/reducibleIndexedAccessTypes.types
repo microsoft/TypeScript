@@ -1,4 +1,4 @@
-=== tests/cases/compiler/reducibleIndexedAccessTypes.ts ===
+=== reducibleIndexedAccessTypes.ts ===
 // Repro from 53030
 
 enum Type { A, B, C }

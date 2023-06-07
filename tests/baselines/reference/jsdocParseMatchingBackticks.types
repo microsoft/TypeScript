@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/jsdocParseMatchingBackticks.js ===
+=== jsdocParseMatchingBackticks.js ===
 /**
  * `@param` initial at-param is OK in title comment
  * @param {string} x hi there `@param`

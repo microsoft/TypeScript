@@ -1,4 +1,4 @@
-=== tests/cases/compiler/typeArgumentInferenceOrdering.ts ===
+=== typeArgumentInferenceOrdering.ts ===
 class C {
 >C : C
 

@@ -1,4 +1,4 @@
-=== tests/cases/conformance/externalModules/index.ts ===
+=== index.ts ===
 export const x = 1;
 >x : Symbol(x, Decl(index.ts, 0, 12))
 
@@ -117,7 +117,7 @@ let y = await
 await
     1;
 
-=== tests/cases/conformance/externalModules/other.ts ===
+=== other.ts ===
 const _await = 1;
 >_await : Symbol(_await, Decl(other.ts, 0, 5))
 

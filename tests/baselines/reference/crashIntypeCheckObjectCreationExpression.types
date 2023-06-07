@@ -1,4 +1,4 @@
-=== tests/cases/compiler/crashIntypeCheckObjectCreationExpression.ts ===
+=== crashIntypeCheckObjectCreationExpression.ts ===
 export class BuildWorkspaceService {
 >BuildWorkspaceService : BuildWorkspaceService
 

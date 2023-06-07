@@ -1,4 +1,4 @@
-=== tests/cases/compiler/functionOverloadImplementationOfWrongName.ts ===
+=== functionOverloadImplementationOfWrongName.ts ===
 function foo(x);
 >foo : { (x: any): any; (x: any, y: any): any; }
 >x : any

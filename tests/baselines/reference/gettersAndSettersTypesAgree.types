@@ -1,4 +1,4 @@
-=== tests/cases/compiler/gettersAndSettersTypesAgree.ts ===
+=== gettersAndSettersTypesAgree.ts ===
 class C {
 >C : C
 

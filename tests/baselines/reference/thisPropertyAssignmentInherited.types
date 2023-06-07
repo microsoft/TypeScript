@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/thisPropertyAssignmentInherited.js ===
+=== thisPropertyAssignmentInherited.js ===
 export class Element {
 >Element : Element
 

@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+=== index.js ===
 /** @enum {string} */
 export const Target = {
 >Target : { START: string; MIDDLE: string; END: string; OK_I_GUESS: number; }

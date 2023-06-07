@@ -1,4 +1,4 @@
-=== tests/cases/conformance/es6/for-ofStatements/for-of49.ts ===
+=== for-of49.ts ===
 var k: string, v: boolean;
 >k : string
 >v : boolean

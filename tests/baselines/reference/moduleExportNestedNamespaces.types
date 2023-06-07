@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/mod.js ===
+=== mod.js ===
 module.exports.n = {};
 >module.exports.n = {} : typeof n
 >module.exports.n : typeof n
@@ -46,7 +46,7 @@ module.exports.Classic = class {
     }
 }
 
-=== tests/cases/conformance/salsa/use.js ===
+=== use.js ===
 import * as s from './mod'
 >s : typeof s
 

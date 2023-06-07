@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/file.js ===
+=== file.js ===
 /**
  * @template {string | number} [T=string] - ok: defaults are permitted
  * @typedef {[T]} A

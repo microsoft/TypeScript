@@ -1,4 +1,4 @@
-=== tests/cases/conformance/classes/members/privateNames/a.ts ===
+=== a.ts ===
 export class Foo {
 >Foo : Symbol(Foo, Decl(a.ts, 0, 0))
 
@@ -15,7 +15,7 @@ export class Foo {
     }
 }
     
-=== tests/cases/conformance/classes/members/privateNames/b.ts ===
+=== b.ts ===
 export class Foo {
 >Foo : Symbol(Foo, Decl(b.ts, 0, 0))
 
@@ -23,7 +23,7 @@ export class Foo {
 >#x : Symbol(Foo.#x, Decl(b.ts, 0, 18))
 }
 
-=== tests/cases/conformance/classes/members/privateNames/main.ts ===
+=== main.ts ===
 import { Foo as A } from "./a";
 >Foo : Symbol(A, Decl(a.ts, 0, 0))
 >A : Symbol(A, Decl(main.ts, 0, 8))

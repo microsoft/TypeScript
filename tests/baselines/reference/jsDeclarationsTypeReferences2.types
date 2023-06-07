@@ -1,9 +1,9 @@
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+=== index.js ===
 const{ a, m } = require("./something").o;
 >a : number
 >m : number
 >require("./something").o : { a: number; m: number; }
->require("./something") : typeof import("tests/cases/conformance/jsdoc/declarations/something")
+>require("./something") : typeof import("something")
 >require : any
 >"./something" : "./something"
 >o : { a: number; m: number; }
@@ -26,7 +26,7 @@ module.exports = {
 
 };
 
-=== tests/cases/conformance/jsdoc/declarations/something.ts ===
+=== something.ts ===
 export const o = {
 >o : { a: number; m: number; }
 >{    a: 1,    m: 1} : { a: number; m: number; }

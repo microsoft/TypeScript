@@ -1,4 +1,4 @@
-=== tests/cases/conformance/internalModules/exportDeclarations/ExportFunctionWithInaccessibleTypesInReturnTypeAnnotation.ts ===
+=== ExportFunctionWithInaccessibleTypesInReturnTypeAnnotation.ts ===
 module A {
 >A : typeof A
 

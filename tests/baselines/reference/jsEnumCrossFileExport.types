@@ -1,4 +1,4 @@
-=== tests/cases/compiler/enumDef.js ===
+=== enumDef.js ===
 var Host = {};
 >Host : typeof Host
 >{} : {}
@@ -56,7 +56,7 @@ Host.UserMetrics.Blah = {
 >x : number
 >12 : 12
 }
-=== tests/cases/compiler/index.js ===
+=== index.js ===
 var Other = {};
 >Other : typeof Other
 >{} : {}

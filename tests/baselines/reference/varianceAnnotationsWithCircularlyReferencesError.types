@@ -1,4 +1,4 @@
-=== tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotationsWithCircularlyReferencesError.ts ===
+=== varianceAnnotationsWithCircularlyReferencesError.ts ===
 type T1<in in> = T1 // Error: circularly references 
 >T1 : any
 

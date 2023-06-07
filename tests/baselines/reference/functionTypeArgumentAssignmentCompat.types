@@ -1,4 +1,4 @@
-=== tests/cases/compiler/functionTypeArgumentAssignmentCompat.ts ===
+=== functionTypeArgumentAssignmentCompat.ts ===
 var f : {
 >f : <T>(x: T) => T
 

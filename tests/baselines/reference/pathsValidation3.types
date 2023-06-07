@@ -1,4 +1,4 @@
-=== tests/cases/compiler/a.ts ===
+=== a.ts ===
 let x = 1;
 >x : number
 >1 : 1

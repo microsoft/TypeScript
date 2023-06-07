@@ -1,4 +1,4 @@
-=== tests/cases/conformance/types/thisType/thisTypeInFunctions3.ts ===
+=== thisTypeInFunctions3.ts ===
 declare class Base {
 >Base : Base
 

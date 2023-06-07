@@ -1,4 +1,4 @@
-=== tests/cases/compiler/extendFromAny.ts ===
+=== extendFromAny.ts ===
 declare var Base: any;
 >Base : any
 

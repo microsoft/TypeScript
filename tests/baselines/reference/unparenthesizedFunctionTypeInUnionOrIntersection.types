@@ -1,4 +1,4 @@
-=== tests/cases/compiler/unparenthesizedFunctionTypeInUnionOrIntersection.ts ===
+=== unparenthesizedFunctionTypeInUnionOrIntersection.ts ===
 type U1 = string | () => void;
 >U1 : string | (() => void)
 

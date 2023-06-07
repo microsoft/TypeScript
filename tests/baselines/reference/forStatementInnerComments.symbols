@@ -1,4 +1,4 @@
-=== tests/cases/compiler/forStatementInnerComments.ts ===
+=== forStatementInnerComments.ts ===
 declare var a;
 >a : Symbol(a, Decl(forStatementInnerComments.ts, 0, 11))
 

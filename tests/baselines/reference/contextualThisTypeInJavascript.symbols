@@ -1,4 +1,4 @@
-=== tests/cases/conformance/types/thisType/context.js ===
+=== context.js ===
 const obj = {
 >obj : Symbol(obj, Decl(context.js, 0, 5))
 

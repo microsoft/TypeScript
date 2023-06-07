@@ -1,4 +1,4 @@
-=== tests/cases/compiler/augmentedClassWithPrototypePropertyOnModule.ts ===
+=== augmentedClassWithPrototypePropertyOnModule.ts ===
 declare module m {
 >m : typeof m
 

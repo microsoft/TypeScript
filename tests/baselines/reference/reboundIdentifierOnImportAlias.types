@@ -1,4 +1,4 @@
-=== tests/cases/compiler/reboundIdentifierOnImportAlias.ts ===
+=== reboundIdentifierOnImportAlias.ts ===
 module Foo {
 >Foo : typeof Foo
 

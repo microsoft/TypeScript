@@ -1,4 +1,4 @@
-=== tests/cases/compiler/optionalParamterAndVariableDeclaration.ts ===
+=== optionalParamterAndVariableDeclaration.ts ===
 class C {
 >C : C
 

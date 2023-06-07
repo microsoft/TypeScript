@@ -1,4 +1,4 @@
-=== tests/cases/compiler/functionSubtypingOfVarArgs2.ts ===
+=== functionSubtypingOfVarArgs2.ts ===
 class EventBase {
 >EventBase : EventBase
 

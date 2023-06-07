@@ -1,4 +1,4 @@
-=== tests/cases/compiler/blockScopedEnumVariablesUseBeforeDef.ts ===
+=== blockScopedEnumVariablesUseBeforeDef.ts ===
 function foo1() {
 >foo1 : () => E
 

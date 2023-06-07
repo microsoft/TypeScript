@@ -1,4 +1,4 @@
-=== tests/cases/compiler/declarationEmitExpressionInExtends.ts ===
+=== declarationEmitExpressionInExtends.ts ===
 var x: {
 >x : Symbol(x, Decl(declarationEmitExpressionInExtends.ts, 0, 3))
 

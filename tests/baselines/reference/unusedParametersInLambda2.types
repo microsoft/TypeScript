@@ -1,4 +1,4 @@
-=== tests/cases/compiler/unusedParametersInLambda2.ts ===
+=== unusedParametersInLambda2.ts ===
 class A {
 >A : A
 

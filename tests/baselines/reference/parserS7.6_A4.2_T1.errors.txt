@@ -1,39 +1,39 @@
-tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(14,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
-tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(18,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
-tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(22,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
-tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(26,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
-tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(30,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
-tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(34,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
-tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(38,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
-tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(42,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
-tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(46,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
-tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(50,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
-tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(54,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(58,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(62,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(66,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(70,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(74,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(78,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(82,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(86,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(90,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(94,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(98,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(102,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(106,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(110,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(114,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(118,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(122,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(126,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(130,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(134,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(138,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(142,3): error TS2304: Cannot find name '$ERROR'.
+parserS7.6_A4.2_T1.ts(14,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
+parserS7.6_A4.2_T1.ts(18,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
+parserS7.6_A4.2_T1.ts(22,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
+parserS7.6_A4.2_T1.ts(26,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
+parserS7.6_A4.2_T1.ts(30,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
+parserS7.6_A4.2_T1.ts(34,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
+parserS7.6_A4.2_T1.ts(38,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
+parserS7.6_A4.2_T1.ts(42,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
+parserS7.6_A4.2_T1.ts(46,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
+parserS7.6_A4.2_T1.ts(50,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
+parserS7.6_A4.2_T1.ts(54,3): error TS2304: Cannot find name '$ERROR'.
+parserS7.6_A4.2_T1.ts(58,3): error TS2304: Cannot find name '$ERROR'.
+parserS7.6_A4.2_T1.ts(62,3): error TS2304: Cannot find name '$ERROR'.
+parserS7.6_A4.2_T1.ts(66,3): error TS2304: Cannot find name '$ERROR'.
+parserS7.6_A4.2_T1.ts(70,3): error TS2304: Cannot find name '$ERROR'.
+parserS7.6_A4.2_T1.ts(74,3): error TS2304: Cannot find name '$ERROR'.
+parserS7.6_A4.2_T1.ts(78,3): error TS2304: Cannot find name '$ERROR'.
+parserS7.6_A4.2_T1.ts(82,3): error TS2304: Cannot find name '$ERROR'.
+parserS7.6_A4.2_T1.ts(86,3): error TS2304: Cannot find name '$ERROR'.
+parserS7.6_A4.2_T1.ts(90,3): error TS2304: Cannot find name '$ERROR'.
+parserS7.6_A4.2_T1.ts(94,3): error TS2304: Cannot find name '$ERROR'.
+parserS7.6_A4.2_T1.ts(98,3): error TS2304: Cannot find name '$ERROR'.
+parserS7.6_A4.2_T1.ts(102,3): error TS2304: Cannot find name '$ERROR'.
+parserS7.6_A4.2_T1.ts(106,3): error TS2304: Cannot find name '$ERROR'.
+parserS7.6_A4.2_T1.ts(110,3): error TS2304: Cannot find name '$ERROR'.
+parserS7.6_A4.2_T1.ts(114,3): error TS2304: Cannot find name '$ERROR'.
+parserS7.6_A4.2_T1.ts(118,3): error TS2304: Cannot find name '$ERROR'.
+parserS7.6_A4.2_T1.ts(122,3): error TS2304: Cannot find name '$ERROR'.
+parserS7.6_A4.2_T1.ts(126,3): error TS2304: Cannot find name '$ERROR'.
+parserS7.6_A4.2_T1.ts(130,3): error TS2304: Cannot find name '$ERROR'.
+parserS7.6_A4.2_T1.ts(134,3): error TS2304: Cannot find name '$ERROR'.
+parserS7.6_A4.2_T1.ts(138,3): error TS2304: Cannot find name '$ERROR'.
+parserS7.6_A4.2_T1.ts(142,3): error TS2304: Cannot find name '$ERROR'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts (33 errors) ====
+==== parserS7.6_A4.2_T1.ts (33 errors) ====
     // Copyright 2009 the Sputnik authors.  All rights reserved.
     // This code is governed by the BSD license found in the LICENSE file.
     

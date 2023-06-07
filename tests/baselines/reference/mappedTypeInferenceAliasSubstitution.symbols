@@ -1,4 +1,4 @@
-=== tests/cases/compiler/mappedTypeInferenceAliasSubstitution.ts ===
+=== mappedTypeInferenceAliasSubstitution.ts ===
 // repro from #31616
 
 const v = { test: { smth: 5 } };

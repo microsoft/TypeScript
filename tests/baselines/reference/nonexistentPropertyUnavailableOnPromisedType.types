@@ -1,4 +1,4 @@
-=== tests/cases/compiler/nonexistentPropertyUnavailableOnPromisedType.ts ===
+=== nonexistentPropertyUnavailableOnPromisedType.ts ===
 function f(x: Promise<number>) {
 >f : (x: Promise<number>) => void
 >x : Promise<number>

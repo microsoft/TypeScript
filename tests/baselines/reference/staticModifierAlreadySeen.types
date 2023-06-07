@@ -1,4 +1,4 @@
-=== tests/cases/compiler/staticModifierAlreadySeen.ts ===
+=== staticModifierAlreadySeen.ts ===
 class C {
 >C : C
 

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/intersectionWithConflictingPrivates.ts ===
+=== intersectionWithConflictingPrivates.ts ===
 class A { private x: unknown; y?: string; }
 >A : A
 >x : unknown

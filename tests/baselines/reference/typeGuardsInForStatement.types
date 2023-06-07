@@ -1,4 +1,4 @@
-=== tests/cases/conformance/expressions/typeGuards/typeGuardsInForStatement.ts ===
+=== typeGuardsInForStatement.ts ===
 let cond: boolean;
 >cond : boolean
 

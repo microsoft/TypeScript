@@ -1,4 +1,4 @@
-=== tests/cases/compiler/internalAliasInitializedModule.ts ===
+=== internalAliasInitializedModule.ts ===
 module a {
 >a : typeof a
 

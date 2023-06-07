@@ -1,4 +1,4 @@
-=== tests/cases/compiler/typeParameterAsElementType.ts ===
+=== typeParameterAsElementType.ts ===
 function fee<T>() {
 >fee : <T>() => void
 

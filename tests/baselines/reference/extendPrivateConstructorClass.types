@@ -1,4 +1,4 @@
-=== tests/cases/compiler/extendPrivateConstructorClass.ts ===
+=== extendPrivateConstructorClass.ts ===
 declare namespace abc {
 >abc : typeof abc
 

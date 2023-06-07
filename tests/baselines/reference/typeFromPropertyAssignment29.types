@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/typeFromPropertyAssignment29.ts ===
+=== typeFromPropertyAssignment29.ts ===
 function ExpandoDecl(n: number) {
 >ExpandoDecl : typeof ExpandoDecl
 >n : number

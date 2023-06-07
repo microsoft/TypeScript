@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/mod1.js ===
+=== mod1.js ===
 class Alias {
 >Alias : Alias
 
@@ -13,7 +13,7 @@ module.exports = Alias;
 >exports : typeof Alias
 >Alias : typeof Alias
 
-=== tests/cases/conformance/salsa/main.js ===
+=== main.js ===
 import A from './mod1'
 >A : typeof A
 

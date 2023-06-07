@@ -1,4 +1,4 @@
-=== tests/cases/compiler/index.js ===
+=== index.js ===
 const a1 = {
 >a1 : { foo(): void; }
 >{    foo() {        this.x = 0;    }} : { foo(): void; }

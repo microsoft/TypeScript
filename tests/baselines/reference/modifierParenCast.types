@@ -1,4 +1,4 @@
-=== tests/cases/compiler/modifierParenCast.ts ===
+=== modifierParenCast.ts ===
 let readonly: any = undefined;
 >readonly : any
 >undefined : undefined

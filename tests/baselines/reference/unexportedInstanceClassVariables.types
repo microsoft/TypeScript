@@ -1,4 +1,4 @@
-=== tests/cases/compiler/unexportedInstanceClassVariables.ts ===
+=== unexportedInstanceClassVariables.ts ===
 module M{
 >M : typeof M
 

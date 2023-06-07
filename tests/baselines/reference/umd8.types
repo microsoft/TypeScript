@@ -1,4 +1,4 @@
-=== tests/cases/conformance/externalModules/a.ts ===
+=== a.ts ===
 /// <reference path="foo.d.ts" />
 import * as ff from './foo';
 >ff : typeof ff
@@ -20,7 +20,7 @@ let x: any = Foo; // Not OK in value position
 >x : any
 >Foo : typeof ff
 
-=== tests/cases/conformance/externalModules/foo.d.ts ===
+=== foo.d.ts ===
 declare class Thing {
 >Thing : Thing
 

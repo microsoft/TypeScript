@@ -1,4 +1,4 @@
-=== tests/cases/compiler/excessivelyLargeTupleSpread.ts ===
+=== excessivelyLargeTupleSpread.ts ===
 // #41771
 
 type BuildTuple<L extends number, T extends any[] = [any]> = 

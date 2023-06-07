@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/a.js ===
+=== a.js ===
 // mixed prototype-assignment+class declaration
 class C { constructor() { this.p = 1; } }
 >C : Symbol(C, Decl(a.js, 0, 0), Decl(a.js, 1, 41))

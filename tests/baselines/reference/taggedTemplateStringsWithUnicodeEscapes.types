@@ -1,4 +1,4 @@
-=== tests/cases/compiler/taggedTemplateStringsWithUnicodeEscapes.ts ===
+=== taggedTemplateStringsWithUnicodeEscapes.ts ===
 function f(...args: any[]) {
 >f : (...args: any[]) => void
 >args : any[]

@@ -1,4 +1,4 @@
-=== tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts ===
+=== invalidTypeOfTarget.ts ===
 var x1: typeof {};
 >x1 : any
 > : any

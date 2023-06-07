@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/typeTagOnFunctionReferencesGeneric.js ===
+=== typeTagOnFunctionReferencesGeneric.js ===
 /**
  * @typedef {<T>(m : T) => T} IFn
  */

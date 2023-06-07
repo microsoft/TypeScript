@@ -1,4 +1,4 @@
-=== tests/cases/conformance/ambient/ambientInsideNonAmbient.ts ===
+=== ambientInsideNonAmbient.ts ===
 module M {
 >M : typeof M
 

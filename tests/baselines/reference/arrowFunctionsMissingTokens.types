@@ -1,4 +1,4 @@
-=== tests/cases/compiler/arrowFunctionsMissingTokens.ts ===
+=== arrowFunctionsMissingTokens.ts ===
 module missingArrowsWithCurly {
 >missingArrowsWithCurly : typeof missingArrowsWithCurly
 

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/export.js ===
+=== export.js ===
 export type foo = 5;
 >foo : 5
 

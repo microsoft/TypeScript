@@ -1,4 +1,4 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/abstractProperty.ts ===
+=== abstractProperty.ts ===
 abstract class A {
 >A : A
 

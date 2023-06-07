@@ -1,4 +1,4 @@
-=== tests/cases/conformance/externalModules/a.ts ===
+=== a.ts ===
 Foo.fn();
 >Foo.fn() : any
 >Foo.fn : any

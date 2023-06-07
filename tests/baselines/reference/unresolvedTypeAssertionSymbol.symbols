@@ -1,4 +1,4 @@
-=== tests/cases/compiler/unresolvedTypeAssertionSymbol.ts ===
+=== unresolvedTypeAssertionSymbol.ts ===
 var x = 1;
 >x : Symbol(x, Decl(unresolvedTypeAssertionSymbol.ts, 0, 3))
 

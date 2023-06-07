@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/declarations/cls.js ===
+=== cls.js ===
 const Bar = require("./bar");
 >Bar : typeof Bar
 >require("./bar") : typeof Bar
@@ -38,7 +38,7 @@ module.exports.Strings = Strings;
 >Strings : { a: string; b: string; }
 >Strings : { a: string; b: string; }
 
-=== tests/cases/conformance/jsdoc/declarations/bar.js ===
+=== bar.js ===
 class Bar {}
 >Bar : Bar
 

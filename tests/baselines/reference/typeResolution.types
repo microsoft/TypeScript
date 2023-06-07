@@ -1,4 +1,4 @@
-=== tests/cases/compiler/typeResolution.ts ===
+=== typeResolution.ts ===
 export module TopLevelModule1 {
 >TopLevelModule1 : typeof TopLevelModule1
 

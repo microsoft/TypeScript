@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/a.js ===
+=== a.js ===
 /** @type {() => undefined} */
 function f1() {
 >f1 : Symbol(f1, Decl(a.js, 0, 0))

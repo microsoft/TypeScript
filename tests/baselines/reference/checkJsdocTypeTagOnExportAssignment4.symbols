@@ -1,6 +1,6 @@
-=== tests/cases/compiler/checkJsdocTypeTagOnExportAssignment4.js ===
+=== checkJsdocTypeTagOnExportAssignment4.js ===
 
-=== tests/cases/compiler/a.js ===
+=== a.js ===
 
 /**
  * @typedef {number} Foo

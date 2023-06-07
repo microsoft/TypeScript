@@ -1,4 +1,4 @@
-=== tests/cases/compiler/jsDocOptionality.js ===
+=== jsDocOptionality.js ===
 function MyClass() {
 >MyClass : Symbol(MyClass, Decl(jsDocOptionality.js, 0, 0))
 

@@ -1,4 +1,4 @@
-=== tests/cases/conformance/controlFlow/controlFlowElementAccess2.ts ===
+=== controlFlowElementAccess2.ts ===
 declare const config: {
 >config : { [key: string]: boolean | { prop: string; }; }
 

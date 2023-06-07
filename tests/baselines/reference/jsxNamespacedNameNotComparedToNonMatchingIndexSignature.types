@@ -1,4 +1,4 @@
-=== tests/cases/compiler/jsxNamespacedNameNotComparedToNonMatchingIndexSignature.tsx ===
+=== jsxNamespacedNameNotComparedToNonMatchingIndexSignature.tsx ===
 /// <reference path="react16.d.ts" />
 
 declare module "react" {

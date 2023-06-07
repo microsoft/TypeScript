@@ -1,4 +1,4 @@
-=== tests/cases/compiler/indexIntoEnum.ts ===
+=== indexIntoEnum.ts ===
 module M {
 >M : typeof M
 

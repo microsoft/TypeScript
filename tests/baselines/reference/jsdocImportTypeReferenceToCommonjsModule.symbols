@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/ex.d.ts ===
+=== ex.d.ts ===
 declare var config: {
 >config : Symbol(config, Decl(ex.d.ts, 0, 11))
 
@@ -8,7 +8,7 @@ declare var config: {
 export = config;
 >config : Symbol(config, Decl(ex.d.ts, 0, 11))
 
-=== tests/cases/conformance/jsdoc/test.js ===
+=== test.js ===
 /** @param {import('./ex')} a */
 function demo(a) {
 >demo : Symbol(demo, Decl(test.js, 0, 0))

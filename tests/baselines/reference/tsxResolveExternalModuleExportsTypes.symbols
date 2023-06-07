@@ -31,7 +31,7 @@ declare module 'a' {
     }
 }
 
-=== tests/cases/compiler/foo.tsx ===
+=== foo.tsx ===
 import { Test } from 'a';
 >Test : Symbol(Test, Decl(foo.tsx, 0, 8))
 

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/classExpressionTest2.ts ===
+=== classExpressionTest2.ts ===
 function M() {
 >M : Symbol(M, Decl(classExpressionTest2.ts, 0, 0))
 

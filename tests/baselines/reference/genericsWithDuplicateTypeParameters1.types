@@ -1,4 +1,4 @@
-=== tests/cases/compiler/genericsWithDuplicateTypeParameters1.ts ===
+=== genericsWithDuplicateTypeParameters1.ts ===
 function f<x, x>() { }
 >f : <x>() => void
 

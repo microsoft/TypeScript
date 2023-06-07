@@ -1,4 +1,4 @@
-=== tests/cases/compiler/declarationEmitEnumReadonlyProperty.ts ===
+=== declarationEmitEnumReadonlyProperty.ts ===
 enum E {
 >E : Symbol(E, Decl(declarationEmitEnumReadonlyProperty.ts, 0, 0))
 

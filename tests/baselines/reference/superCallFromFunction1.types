@@ -1,4 +1,4 @@
-=== tests/cases/compiler/superCallFromFunction1.ts ===
+=== superCallFromFunction1.ts ===
 function foo() {
 >foo : () => void
 

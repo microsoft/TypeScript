@@ -1,4 +1,4 @@
-=== tests/cases/compiler/main.ts ===
+=== main.ts ===
 /// <amd-module name="a"/>
 export const a = 1;
 >a : Symbol(a, Decl(main.ts, 1, 12))

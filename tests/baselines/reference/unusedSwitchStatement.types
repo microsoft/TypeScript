@@ -1,4 +1,4 @@
-=== tests/cases/compiler/unusedSwitchStatement.ts ===
+=== unusedSwitchStatement.ts ===
 switch (1) {
 >1 : 1
 

@@ -1,4 +1,4 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNamesAssertion.ts ===
+=== privateNamesAssertion.ts ===
 class Foo {
 >Foo : Foo
 

@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/paramTagNestedWithoutTopLevelObject.js ===
+=== paramTagNestedWithoutTopLevelObject.js ===
 /**
  * @param {number} xyz.p
  */

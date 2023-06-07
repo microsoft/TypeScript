@@ -1,4 +1,4 @@
-=== tests/cases/compiler/elaborationForPossiblyCallableTypeStillReferencesArgumentAtTopLevel.ts ===
+=== elaborationForPossiblyCallableTypeStillReferencesArgumentAtTopLevel.ts ===
 declare var ohno: new () => number;
 >ohno : new () => number
 

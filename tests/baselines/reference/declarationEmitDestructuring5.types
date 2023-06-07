@@ -1,4 +1,4 @@
-=== tests/cases/compiler/declarationEmitDestructuring5.ts ===
+=== declarationEmitDestructuring5.ts ===
 function baz([, z, , ]) { }
 >baz : ([, z, ,]: [any, any, any?]) => void
 > : undefined

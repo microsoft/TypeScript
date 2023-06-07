@@ -1,4 +1,4 @@
-=== tests/cases/compiler/relatedViaDiscriminatedTypeNoError2.ts ===
+=== relatedViaDiscriminatedTypeNoError2.ts ===
 type AObjOrBObj = { name: "A" } | { name: "B" };
 >AObjOrBObj : { name: "A"; } | { name: "B"; }
 >name : "A"

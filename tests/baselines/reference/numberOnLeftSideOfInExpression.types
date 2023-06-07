@@ -1,4 +1,4 @@
-=== tests/cases/compiler/numberOnLeftSideOfInExpression.ts ===
+=== numberOnLeftSideOfInExpression.ts ===
 var left: number;
 >left : number
 

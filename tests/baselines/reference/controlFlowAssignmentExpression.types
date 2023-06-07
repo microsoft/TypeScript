@@ -1,4 +1,4 @@
-=== tests/cases/conformance/controlFlow/controlFlowAssignmentExpression.ts ===
+=== controlFlowAssignmentExpression.ts ===
 let x: string | boolean | number;
 >x : string | number | boolean
 

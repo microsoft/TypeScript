@@ -1,4 +1,4 @@
-=== tests/cases/compiler/varAndFunctionShareName.ts ===
+=== varAndFunctionShareName.ts ===
 var myFn;
 >myFn : Symbol(myFn, Decl(varAndFunctionShareName.ts, 0, 3))
 

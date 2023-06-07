@@ -1,4 +1,4 @@
-=== tests/cases/compiler/this.ts ===
+=== this.ts ===
 import * as me from "./this";
 >me : typeof me
 

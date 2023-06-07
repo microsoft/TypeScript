@@ -1,4 +1,4 @@
-=== tests/cases/conformance/classes/members/classTypes/genericSetterInClassTypeJsDoc.js ===
+=== genericSetterInClassTypeJsDoc.js ===
 /**
  * @template T
  */

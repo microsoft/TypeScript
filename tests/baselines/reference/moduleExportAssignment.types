@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/use.js ===
+=== use.js ===
 var npmlog = require('./npmlog')
 >npmlog : { on(s: string): void; x: number; y: 2; }
 >require('./npmlog') : { on(s: string): void; x: number; y: 2; }
@@ -15,7 +15,7 @@ npmlog.on
 >npmlog : { on(s: string): void; x: number; y: 2; }
 >on : (s: string) => void
 
-=== tests/cases/conformance/salsa/npmlog.js ===
+=== npmlog.js ===
 class EE {
 >EE : EE
 

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/server.d.ts ===
+=== server.d.ts ===
 declare module "other" {
 >"other" : Symbol("other", Decl(server.d.ts, 0, 0))
 
@@ -23,7 +23,7 @@ declare module "server" {
 >S : Symbol(S, Decl(server.d.ts, 5, 37))
 }
 
-=== tests/cases/compiler/client.ts ===
+=== client.ts ===
 import {a} from "server";
 >a : Symbol(a, Decl(client.ts, 0, 8))
 

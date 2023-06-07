@@ -1,4 +1,4 @@
-=== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractFactoryFunction.ts ===
+=== classAbstractFactoryFunction.ts ===
 class A {}
 >A : A
 

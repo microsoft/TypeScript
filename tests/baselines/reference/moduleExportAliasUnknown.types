@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/bug27025.js ===
+=== bug27025.js ===
 module.exports = window.nonprop;
 >module.exports = window.nonprop : any
 >module.exports : any

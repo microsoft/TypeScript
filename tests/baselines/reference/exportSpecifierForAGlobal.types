@@ -1,8 +1,8 @@
-=== tests/cases/compiler/a.d.ts ===
+=== a.d.ts ===
 declare class X { }
 >X : X
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 export {X};
 >X : typeof X
 

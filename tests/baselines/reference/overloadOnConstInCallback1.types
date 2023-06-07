@@ -1,4 +1,4 @@
-=== tests/cases/compiler/overloadOnConstInCallback1.ts ===
+=== overloadOnConstInCallback1.ts ===
 class C {
 >C : C
 

@@ -1,4 +1,4 @@
-=== tests/cases/conformance/classes/classStaticBlock/classStaticBlockUseBeforeDef3.ts ===
+=== classStaticBlockUseBeforeDef3.ts ===
 class A {
 >A : A
 

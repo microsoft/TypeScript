@@ -1,4 +1,4 @@
-=== tests/cases/compiler/unionErrorMessageOnMatchingDiscriminant.ts ===
+=== unionErrorMessageOnMatchingDiscriminant.ts ===
 type A = {
 >A : { type: 'a'; data: {    a: string;}; }
 

@@ -1,4 +1,4 @@
-=== tests/cases/conformance/parser/ecmascript5/Statements/parserDoStatement1.d.ts ===
+=== parserDoStatement1.d.ts ===
 do {
 }
 while (e);

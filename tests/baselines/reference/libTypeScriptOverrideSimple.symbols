@@ -3,7 +3,7 @@ interface ABC { abc: string }
 >ABC : Symbol(ABC, Decl(index.d.ts, 0, 0))
 >abc : Symbol(ABC.abc, Decl(index.d.ts, 0, 15))
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 /// <reference lib="dom" />
 const a: ABC = { abc: "Hello" }
 >a : Symbol(a, Decl(index.ts, 1, 5))

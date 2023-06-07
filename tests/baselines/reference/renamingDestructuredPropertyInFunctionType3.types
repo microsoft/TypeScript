@@ -1,4 +1,4 @@
-=== tests/cases/compiler/renamingDestructuredPropertyInFunctionType3.ts ===
+=== renamingDestructuredPropertyInFunctionType3.ts ===
 const sym = Symbol();
 >sym : unique symbol
 >Symbol() : unique symbol

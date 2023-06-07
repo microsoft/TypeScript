@@ -1,4 +1,4 @@
-=== tests/cases/compiler/app.js ===
+=== app.js ===
 function require(a) {
 >require : Symbol(require, Decl(app.js, 0, 0))
 >a : Symbol(a, Decl(app.js, 0, 17))

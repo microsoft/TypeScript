@@ -1,4 +1,4 @@
-=== tests/cases/compiler/importDeclWithExportModifierAndExportAssignmentInAmbientContext.ts ===
+=== importDeclWithExportModifierAndExportAssignmentInAmbientContext.ts ===
 declare module "m" {
 >"m" : typeof import("m")
 

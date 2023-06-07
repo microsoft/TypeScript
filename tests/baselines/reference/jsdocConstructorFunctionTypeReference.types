@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/jsdocConstructorFunctionTypeReference.js ===
+=== jsdocConstructorFunctionTypeReference.js ===
 var Validator = function VFunc() {
 >Validator : typeof VFunc
 >function VFunc() {    this.flags = "gim"} : typeof VFunc

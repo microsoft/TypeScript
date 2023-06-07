@@ -1,4 +1,4 @@
-=== tests/cases/compiler/nullableFunctionError.ts ===
+=== nullableFunctionError.ts ===
 null();
 >null() : any
 

@@ -1,4 +1,4 @@
-=== tests/cases/conformance/types/nonPrimitive/nonPrimitiveInGeneric.ts ===
+=== nonPrimitiveInGeneric.ts ===
 function generic<T>(t: T) {
 >generic : <T>(t: T) => void
 >t : T

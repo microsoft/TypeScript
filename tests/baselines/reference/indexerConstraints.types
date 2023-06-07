@@ -1,4 +1,4 @@
-=== tests/cases/compiler/indexerConstraints.ts ===
+=== indexerConstraints.ts ===
 interface A { a: number; }
 >a : number
 

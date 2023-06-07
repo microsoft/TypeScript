@@ -1,4 +1,4 @@
-=== tests/cases/compiler/file1.ts ===
+=== file1.ts ===
 /// <reference path="file0.ts" />
 declare var OData: any;
 >OData : any
@@ -8,7 +8,7 @@ interface F { }
 
 
 
-=== tests/cases/compiler/file0.ts ===
+=== file0.ts ===
 var x = 10
 >x : number
 >10 : 10

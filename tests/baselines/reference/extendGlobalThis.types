@@ -1,4 +1,4 @@
-=== tests/cases/compiler/extension.d.ts ===
+=== extension.d.ts ===
 declare global {
 >global : typeof global
 
@@ -12,7 +12,7 @@ declare global {
 
 export {}
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import "./extention";
 
 globalThis.tests = "a-b";

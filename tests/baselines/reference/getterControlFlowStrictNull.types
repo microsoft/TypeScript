@@ -1,4 +1,4 @@
-=== tests/cases/compiler/getterControlFlowStrictNull.ts ===
+=== getterControlFlowStrictNull.ts ===
 class A {
 >A : A
 

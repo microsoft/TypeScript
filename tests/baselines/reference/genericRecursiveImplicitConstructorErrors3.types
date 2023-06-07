@@ -1,4 +1,4 @@
-=== tests/cases/compiler/genericRecursiveImplicitConstructorErrors3.ts ===
+=== genericRecursiveImplicitConstructorErrors3.ts ===
 module TypeScript {
 >TypeScript : typeof TypeScript
 

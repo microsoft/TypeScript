@@ -1,4 +1,4 @@
-=== tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/fileJs.js ===
+=== fileJs.js ===
 b ? (c) : d => e // Legal JS
 >b ? (c) : d => e : any
 >b : any
@@ -8,7 +8,7 @@ b ? (c) : d => e // Legal JS
 >d : any
 >e : any
 
-=== tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/fileTs.ts ===
+=== fileTs.ts ===
 b ? (c) : d => e
 >b ? (c) : d => e : any
 >b : any

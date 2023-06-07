@@ -1,4 +1,4 @@
-=== tests/cases/compiler/declFileModuleWithPropertyOfTypeModule.ts ===
+=== declFileModuleWithPropertyOfTypeModule.ts ===
 module m {
 >m : typeof m
 

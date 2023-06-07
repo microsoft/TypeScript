@@ -1,4 +1,4 @@
-=== tests/cases/compiler/recursiveProperties.ts ===
+=== recursiveProperties.ts ===
 class A {
 >A : A
 

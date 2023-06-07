@@ -1,4 +1,4 @@
-=== tests/cases/compiler/localClassesInLoop.ts ===
+=== localClassesInLoop.ts ===
 declare function use(a: any);
 >use : Symbol(use, Decl(localClassesInLoop.ts, 0, 0))
 >a : Symbol(a, Decl(localClassesInLoop.ts, 0, 21))

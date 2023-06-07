@@ -1,4 +1,4 @@
-=== tests/cases/compiler/declarationEmitNestedGenerics.ts ===
+=== declarationEmitNestedGenerics.ts ===
 function f<T>(p: T) {
 >f : <T>(p: T) => <T>(x: T) => typeof p
 >p : T

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/varBlock.ts ===
+=== varBlock.ts ===
 module m2 {
 >m2 : typeof m2
 

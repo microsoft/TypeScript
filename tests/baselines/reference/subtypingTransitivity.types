@@ -1,4 +1,4 @@
-=== tests/cases/compiler/subtypingTransitivity.ts ===
+=== subtypingTransitivity.ts ===
 class B {
 >B : B
 

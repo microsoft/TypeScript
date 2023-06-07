@@ -1,4 +1,4 @@
-=== tests/cases/compiler/collisionRestParameterClassConstructor.ts ===
+=== collisionRestParameterClassConstructor.ts ===
 // Constructors
 class c1 {
 >c1 : c1

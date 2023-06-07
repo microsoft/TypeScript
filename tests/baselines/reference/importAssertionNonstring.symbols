@@ -1,4 +1,4 @@
-=== tests/cases/compiler/mod.mts ===
+=== mod.mts ===
 import * as thing1 from "./mod.mjs" assert {field: 0};
 >thing1 : Symbol(thing1, Decl(mod.mts, 0, 6))
 

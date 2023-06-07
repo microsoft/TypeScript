@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsx/test.tsx ===
+=== test.tsx ===
 declare const React: any;
 >React : Symbol(React, Decl(test.tsx, 0, 13))
 

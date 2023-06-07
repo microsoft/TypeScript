@@ -1,4 +1,4 @@
-=== tests/cases/compiler/Element.ts ===
+=== Element.ts ===
 declare namespace JSX {
     interface Element {
         name: string;
@@ -80,7 +80,7 @@ function toCamelCase(text: string): string {
 >1 : 1
 }
 
-=== tests/cases/compiler/test.tsx ===
+=== test.tsx ===
 import { Element} from './Element';
 >Element : typeof Element
 

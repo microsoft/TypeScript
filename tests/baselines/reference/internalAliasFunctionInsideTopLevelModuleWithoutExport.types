@@ -1,4 +1,4 @@
-=== tests/cases/compiler/internalAliasFunctionInsideTopLevelModuleWithoutExport.ts ===
+=== internalAliasFunctionInsideTopLevelModuleWithoutExport.ts ===
 export module a {
 >a : typeof a
 

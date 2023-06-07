@@ -1,4 +1,4 @@
-=== tests/cases/compiler/topLevelLambda.ts ===
+=== topLevelLambda.ts ===
 module M {
 >M : Symbol(M, Decl(topLevelLambda.ts, 0, 0))
 

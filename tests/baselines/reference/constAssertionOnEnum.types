@@ -1,4 +1,4 @@
-=== tests/cases/conformance/expressions/typeAssertions/enum.ts ===
+=== enum.ts ===
 export enum Foo {
 >Foo : Foo
 
@@ -9,7 +9,7 @@ export enum Foo {
 >B : Foo.B
 }
 
-=== tests/cases/conformance/expressions/typeAssertions/test.ts ===
+=== test.ts ===
 import {Foo} from './enum';
 >Foo : typeof Foo
 
@@ -36,7 +36,7 @@ let bar = Bar.A as const;
 >Bar : typeof Bar
 >A : Bar.A
 
-=== tests/cases/conformance/expressions/typeAssertions/ns.ts ===
+=== ns.ts ===
 namespace ns {
 >ns : typeof ns
 
@@ -53,7 +53,7 @@ namespace ns {
 >X : Foo
 }
 
-=== tests/cases/conformance/expressions/typeAssertions/more.ts ===
+=== more.ts ===
 export enum Foo { X }
 >Foo : Foo
 >X : Foo.X

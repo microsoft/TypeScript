@@ -1,4 +1,4 @@
-=== tests/cases/compiler/ambientEnum1.ts ===
+=== ambientEnum1.ts ===
     declare enum E1 {
 >E1 : E1
 

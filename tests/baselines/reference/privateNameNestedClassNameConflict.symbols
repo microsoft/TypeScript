@@ -1,4 +1,4 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameNestedClassNameConflict.ts ===
+=== privateNameNestedClassNameConflict.ts ===
 class A {
 >A : Symbol(A, Decl(privateNameNestedClassNameConflict.ts, 0, 0))
 

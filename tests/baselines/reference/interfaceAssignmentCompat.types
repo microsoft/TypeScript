@@ -1,4 +1,4 @@
-=== tests/cases/compiler/interfaceAssignmentCompat.ts ===
+=== interfaceAssignmentCompat.ts ===
 module M {
 >M : typeof M
 

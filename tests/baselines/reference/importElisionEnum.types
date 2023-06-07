@@ -1,4 +1,4 @@
-=== tests/cases/compiler/enum.ts ===
+=== enum.ts ===
 export enum MyEnum {
 >MyEnum : MyEnum
 
@@ -16,7 +16,7 @@ export enum MyEnum {
 >d : MyEnum.d
 }
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import { MyEnum as MyEnumFromModule } from "./enum";
 >MyEnum : typeof MyEnumFromModule
 >MyEnumFromModule : typeof MyEnumFromModule

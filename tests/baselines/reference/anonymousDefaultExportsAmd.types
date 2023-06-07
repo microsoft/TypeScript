@@ -1,7 +1,7 @@
-=== tests/cases/conformance/es6/moduleExportsAmd/a.ts ===
+=== a.ts ===
 
 export default class {}
 
-=== tests/cases/conformance/es6/moduleExportsAmd/b.ts ===
+=== b.ts ===
 
 export default function() {}

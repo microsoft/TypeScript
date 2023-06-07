@@ -1,4 +1,4 @@
-=== tests/cases/compiler/interfaceWithMultipleDeclarations.ts ===
+=== interfaceWithMultipleDeclarations.ts ===
 interface I1<V> {
 }
 interface I1<S> { // Name mismatch

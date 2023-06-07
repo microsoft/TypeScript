@@ -1,4 +1,4 @@
-=== tests/cases/compiler/ts.ts ===
+=== ts.ts ===
 var o = {
 >o : { C: typeof C; }
 >{    C: class {    }} : { C: typeof C; }

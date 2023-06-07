@@ -1,4 +1,4 @@
-=== tests/cases/compiler/typeofInterface.ts ===
+=== typeofInterface.ts ===
 var I: { a: string};
 >I : { a: string; }
 >a : string

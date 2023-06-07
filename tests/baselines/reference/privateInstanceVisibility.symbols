@@ -1,4 +1,4 @@
-=== tests/cases/compiler/privateInstanceVisibility.ts ===
+=== privateInstanceVisibility.ts ===
 module Test {
 >Test : Symbol(Test, Decl(privateInstanceVisibility.ts, 0, 0))
  

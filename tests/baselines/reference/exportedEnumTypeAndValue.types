@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/def.js ===
+=== def.js ===
 /** @enum {number} */
 const MyEnum = {
 >MyEnum : { a: number; b: number; }
@@ -16,7 +16,7 @@ const MyEnum = {
 export default MyEnum;
 >MyEnum : number
 
-=== tests/cases/conformance/jsdoc/use.js ===
+=== use.js ===
 import MyEnum from "./def";
 >MyEnum : { a: number; b: number; }
 

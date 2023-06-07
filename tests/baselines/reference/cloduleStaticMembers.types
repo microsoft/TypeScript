@@ -1,4 +1,4 @@
-=== tests/cases/compiler/cloduleStaticMembers.ts ===
+=== cloduleStaticMembers.ts ===
 class Clod {
 >Clod : Clod
 

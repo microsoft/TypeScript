@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/seeTag4.js ===
+=== seeTag4.js ===
 /**
  * @typedef {any} A
  */

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/unusedTypeParameterInMethod3.ts ===
+=== unusedTypeParameterInMethod3.ts ===
 class A {
 >A : A
 

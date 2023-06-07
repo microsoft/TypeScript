@@ -9,12 +9,12 @@ import * as b from './b.json';
     "b": "hello"
 }
 
-//// [tests/cases/compiler/out/b.json]
+//// [out/b.json]
 {
     "a": true,
     "b": "hello"
 }
-//// [tests/cases/compiler/out/file1.js]
+//// [out/file1.js]
 System.register([], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/sourceMapValidationVariables.ts ===
+=== sourceMapValidationVariables.ts ===
 var a = 10;
 >a : Symbol(a, Decl(sourceMapValidationVariables.ts, 0, 3))
 

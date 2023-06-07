@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/npm.js ===
+=== npm.js ===
 var npm = module.exports = function (tree) {
 >npm : { (tree: any): void; asReadInstalled: (tree: any) => void; }
 >module.exports = function (tree) {} : { (tree: any): void; asReadInstalled: (tree: any) => void; }

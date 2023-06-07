@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/good.js ===
+=== good.js ===
 /**
  * @param
  * {number} x Arg x.
@@ -22,7 +22,7 @@ good(1, 2, 3)
 >3 : 3
 
 
-=== tests/cases/conformance/jsdoc/bad.js ===
+=== bad.js ===
 /**
  * @param *
  * {number} x Arg x.

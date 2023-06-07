@@ -1,4 +1,4 @@
-=== tests/cases/compiler/file1.ts ===
+=== file1.ts ===
 import b1 = require('./b.json'); // error
 >b1 : any
 

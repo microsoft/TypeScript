@@ -1,4 +1,4 @@
-=== tests/cases/compiler/main.ts ===
+=== main.ts ===
 export async function * f() {
 >f : () => AsyncGenerator<number, void, undefined>
 
@@ -16,7 +16,7 @@ export async function * f() {
 >3 : 3
 }
 
-=== tests/cases/compiler/tslib.d.ts ===
+=== tslib.d.ts ===
 
 export {}
 

@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/bug28576.js ===
+=== bug28576.js ===
 import x from 'arglebaz'
 >x : any
 {

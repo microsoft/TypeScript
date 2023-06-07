@@ -1,4 +1,4 @@
-=== tests/cases/conformance/parser/ecmascript5/parserArgumentList1.ts ===
+=== parserArgumentList1.ts ===
 export function removeClass (node:HTMLElement, className:string) {
 >removeClass : (node: HTMLElement, className: string) => void
 >node : HTMLElement

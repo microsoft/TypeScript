@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/Compilation.js ===
+=== Compilation.js ===
 // from webpack/lib/Compilation.js and filed at #26427
 /** @param {{ [s: string]: number }} map */
 function mappy(map) {}

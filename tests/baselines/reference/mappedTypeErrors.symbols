@@ -1,4 +1,4 @@
-=== tests/cases/conformance/types/mapped/mappedTypeErrors.ts ===
+=== mappedTypeErrors.ts ===
 interface Shape {
 >Shape : Symbol(Shape, Decl(mappedTypeErrors.ts, 0, 0))
 

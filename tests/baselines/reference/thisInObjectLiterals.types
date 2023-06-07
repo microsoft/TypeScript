@@ -1,4 +1,4 @@
-=== tests/cases/conformance/expressions/thisKeyword/thisInObjectLiterals.ts ===
+=== thisInObjectLiterals.ts ===
 class MyClass {
 >MyClass : MyClass
 

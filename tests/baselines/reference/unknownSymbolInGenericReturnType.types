@@ -1,4 +1,4 @@
-=== tests/cases/compiler/unknownSymbolInGenericReturnType.ts ===
+=== unknownSymbolInGenericReturnType.ts ===
 class Linq {
 >Linq : Linq
 

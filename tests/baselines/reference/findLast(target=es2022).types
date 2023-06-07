@@ -1,4 +1,4 @@
-=== tests/cases/compiler/findLast.ts ===
+=== findLast.ts ===
 const itemNumber: number | undefined = [0].findLast((item) => item === 0);
 >itemNumber : number
 >[0].findLast((item) => item === 0) : any

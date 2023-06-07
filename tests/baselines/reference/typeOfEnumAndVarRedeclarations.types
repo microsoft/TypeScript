@@ -1,4 +1,4 @@
-=== tests/cases/compiler/typeOfEnumAndVarRedeclarations.ts ===
+=== typeOfEnumAndVarRedeclarations.ts ===
 enum E {
 >E : E
 

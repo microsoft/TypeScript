@@ -1,4 +1,4 @@
-=== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithPropertyOfEveryType.ts ===
+=== interfaceWithPropertyOfEveryType.ts ===
 class C { foo: string; }
 >C : C
 >foo : string

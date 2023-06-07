@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/in.js ===
+=== in.js ===
 /**
  * @param {'literal'} p1
  * @param {"literal"} p2

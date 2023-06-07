@@ -1,4 +1,4 @@
-=== tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty12.ts ===
+=== typeGuardNarrowsIndexedAccessOfKnownProperty12.ts ===
 enum E {
 >E : Symbol(E, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty12.ts, 0, 0))
 

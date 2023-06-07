@@ -1,4 +1,4 @@
-=== tests/cases/conformance/controlFlow/controlFlowBinaryAndExpression.ts ===
+=== controlFlowBinaryAndExpression.ts ===
 let x: string | number | boolean;
 >x : Symbol(x, Decl(controlFlowBinaryAndExpression.ts, 0, 3))
 

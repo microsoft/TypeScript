@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/jsdocReadonly.js ===
+=== jsdocReadonly.js ===
 class LOL {
 >LOL : LOL
 

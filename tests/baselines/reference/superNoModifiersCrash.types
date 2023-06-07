@@ -1,4 +1,4 @@
-=== tests/cases/compiler/File.js ===
+=== File.js ===
 class Parent {
 >Parent : Parent
 

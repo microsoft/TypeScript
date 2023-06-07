@@ -1,4 +1,4 @@
-=== tests/cases/compiler/accessOverriddenBaseClassMember1.ts ===
+=== accessOverriddenBaseClassMember1.ts ===
 class Point {
 >Point : Symbol(Point, Decl(accessOverriddenBaseClassMember1.ts, 0, 0))
 

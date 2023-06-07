@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/test.js ===
+=== test.js ===
 /**
  * @typedef {(a: string, b: number) => void} Foo
  */

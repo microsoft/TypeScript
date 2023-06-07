@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/foo.js ===
+=== foo.js ===
 /** @param {Image} image */
 function process(image) {
 >process : Symbol(process, Decl(foo.js, 0, 0))

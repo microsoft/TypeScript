@@ -1,4 +1,4 @@
-=== tests/cases/compiler/noCrashOnMixin.ts ===
+=== noCrashOnMixin.ts ===
 class Abstract {
 >Abstract : Abstract
 

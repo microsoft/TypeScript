@@ -1,4 +1,4 @@
-=== tests/cases/compiler/genericTypeAssertions2.ts ===
+=== genericTypeAssertions2.ts ===
 class A<T> { foo(x: T) { } }
 >A : A<T>
 >foo : (x: T) => void

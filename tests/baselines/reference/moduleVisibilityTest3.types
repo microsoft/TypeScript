@@ -1,4 +1,4 @@
-=== tests/cases/compiler/moduleVisibilityTest3.ts ===
+=== moduleVisibilityTest3.ts ===
 module _modes {
 >_modes : typeof _modes
 

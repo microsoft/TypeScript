@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/privateIdentifierExpando.js ===
+=== privateIdentifierExpando.js ===
 const x = {};
 >x : {}
 >{} : {}

@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+=== index.js ===
 /** @enum {string} */
 export const Target = {
 >Target : Symbol(Target, Decl(index.js, 1, 12), Decl(index.js, 0, 4))

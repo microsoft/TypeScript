@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/callbackOnConstructor.js ===
+=== callbackOnConstructor.js ===
 export class Preferences {
 >Preferences : Preferences
 

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts ===
+=== blockScopedVariablesUseBeforeDef.ts ===
 function foo0() {
 >foo0 : () => void
 

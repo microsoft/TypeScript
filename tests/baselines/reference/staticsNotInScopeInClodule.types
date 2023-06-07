@@ -1,4 +1,4 @@
-=== tests/cases/compiler/staticsNotInScopeInClodule.ts ===
+=== staticsNotInScopeInClodule.ts ===
 class Clod {
 >Clod : Clod
 

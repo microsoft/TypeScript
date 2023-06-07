@@ -1,4 +1,4 @@
-=== tests/cases/compiler/noMappedGetSet.ts ===
+=== noMappedGetSet.ts ===
 type OH_NO = {
 >OH_NO : {}
 

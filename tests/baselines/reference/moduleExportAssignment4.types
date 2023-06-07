@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/async.js ===
+=== async.js ===
 exports.default = { m: 1, a: 1 }
 >exports.default = { m: 1, a: 1 } : { m: number; a: number; }
 >exports.default : any

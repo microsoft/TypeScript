@@ -1,4 +1,4 @@
-=== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithSubtypeObjectOnInstantiatedCallSignature.ts ===
+=== comparisonOperatorWithSubtypeObjectOnInstantiatedCallSignature.ts ===
 class Base {
 >Base : Base
 

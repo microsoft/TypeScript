@@ -1,4 +1,4 @@
-=== tests/cases/compiler/ambientExternalModuleReopen.ts ===
+=== ambientExternalModuleReopen.ts ===
 declare module "fs" {
 >"fs" : typeof import("fs")
 

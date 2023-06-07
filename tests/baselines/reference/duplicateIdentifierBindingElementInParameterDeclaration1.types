@@ -1,4 +1,4 @@
-=== tests/cases/compiler/duplicateIdentifierBindingElementInParameterDeclaration1.ts ===
+=== duplicateIdentifierBindingElementInParameterDeclaration1.ts ===
 function f0(a, [a, [b]], {b}) { }
 >f0 : (a: any, [a, [b]]: [any, [any]], { b }: { b: any; }) => void
 >a : any

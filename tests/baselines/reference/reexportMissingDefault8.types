@@ -1,11 +1,11 @@
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 const b = null;
 >b : any
 
 export = b;
 >b : any
 
-=== tests/cases/compiler/a.ts ===
+=== a.ts ===
 export { default } from "./b";
 >default : any
 

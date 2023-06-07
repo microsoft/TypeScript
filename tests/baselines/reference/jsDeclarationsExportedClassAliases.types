@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/declarations/utils/index.js ===
+=== utils/index.js ===
 // issue arises here on compilation
 const errors = require("./errors");
 >errors : typeof errors
@@ -17,7 +17,7 @@ module.exports = {
 >errors : typeof errors
 
 };
-=== tests/cases/conformance/jsdoc/declarations/utils/errors.js ===
+=== utils/errors.js ===
 class FancyError extends Error {
 >FancyError : FancyError
 >Error : Error

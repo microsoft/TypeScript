@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/typedefTagExtraneousProperty.js ===
+=== typedefTagExtraneousProperty.js ===
 /** @typedef {Object.<string,string>} Mmap
  * @property {string} ignoreMe - should be ignored
  */

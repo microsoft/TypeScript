@@ -1,4 +1,4 @@
-=== tests/cases/compiler/thisBinding.ts ===
+=== thisBinding.ts ===
 module M {
 >M : typeof M
 

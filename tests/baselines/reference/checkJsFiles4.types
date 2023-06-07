@@ -1,4 +1,4 @@
-=== tests/cases/compiler/a.js ===
+=== a.js ===
 // @ts-check
 var x = "string";
 >x : string

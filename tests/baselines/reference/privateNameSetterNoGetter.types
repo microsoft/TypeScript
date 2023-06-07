@@ -1,4 +1,4 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameSetterNoGetter.ts ===
+=== privateNameSetterNoGetter.ts ===
 const C = class {
 >C : typeof C
 >class {    set #x(x) {}    m() {        this.#x += 2; // Error    }} : typeof C

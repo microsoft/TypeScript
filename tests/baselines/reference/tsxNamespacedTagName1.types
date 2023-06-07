@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsx/a.tsx ===
+=== a.tsx ===
 const a = <svg:path></svg:path>;
 >a : error
 ><svg:path></svg:path> : error

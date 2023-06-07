@@ -1,4 +1,4 @@
-=== tests/cases/compiler/globalIsContextualKeyword.ts ===
+=== globalIsContextualKeyword.ts ===
 function a() {
 >a : () => void
 

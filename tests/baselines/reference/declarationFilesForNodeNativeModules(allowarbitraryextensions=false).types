@@ -1,4 +1,4 @@
-=== tests/cases/conformance/nonjsExtensions/main.ts ===
+=== main.ts ===
 import mod = require("./dir/native.node");
 >mod : any
 

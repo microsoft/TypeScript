@@ -1,4 +1,4 @@
-=== tests/cases/compiler/doubleUnderscoreLabels.ts ===
+=== doubleUnderscoreLabels.ts ===
 function doThing() {
 >doThing : () => void
 

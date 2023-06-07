@@ -1,4 +1,4 @@
-=== tests/cases/compiler/newLexicalEnvironmentForConvertedLoop.ts ===
+=== newLexicalEnvironmentForConvertedLoop.ts ===
 function baz(x: any) {
 >baz : (x: any) => any[][]
 >x : any

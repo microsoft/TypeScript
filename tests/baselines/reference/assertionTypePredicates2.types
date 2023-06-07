@@ -1,4 +1,4 @@
-=== tests/cases/conformance/controlFlow/assertionTypePredicates2.js ===
+=== assertionTypePredicates2.js ===
 /**
  * @typedef {{ x: number }} A
  */

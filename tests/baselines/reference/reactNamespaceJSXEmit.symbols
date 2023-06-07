@@ -1,4 +1,4 @@
-=== tests/cases/compiler/reactNamespaceJSXEmit.tsx ===
+=== reactNamespaceJSXEmit.tsx ===
 declare var myReactLib: any;
 >myReactLib : Symbol(myReactLib, Decl(reactNamespaceJSXEmit.tsx, 0, 11))
 

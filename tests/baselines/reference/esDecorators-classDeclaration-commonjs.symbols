@@ -1,4 +1,4 @@
-=== tests/cases/conformance/esDecorators/classDeclaration/esDecorators-classDeclaration-commonjs.ts ===
+=== esDecorators-classDeclaration-commonjs.ts ===
 declare var deco: any;
 >deco : Symbol(deco, Decl(esDecorators-classDeclaration-commonjs.ts, 0, 11))
 

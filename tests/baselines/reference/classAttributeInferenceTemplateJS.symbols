@@ -1,4 +1,4 @@
-=== tests/cases/compiler/index.js ===
+=== index.js ===
 class MyClass {
 >MyClass : Symbol(MyClass, Decl(index.js, 0, 0))
 

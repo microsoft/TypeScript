@@ -1,4 +1,4 @@
-=== tests/cases/compiler/file.d.ts ===
+=== file.d.ts ===
 declare namespace dojox {
 >dojox : typeof dojox
 

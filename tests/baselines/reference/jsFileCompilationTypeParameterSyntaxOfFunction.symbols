@@ -1,4 +1,4 @@
-=== tests/cases/compiler/a.js ===
+=== a.js ===
 function F<T>() { }
 >F : Symbol(F, Decl(a.js, 0, 0))
 >T : Symbol(T, Decl(a.js, 0, 11))

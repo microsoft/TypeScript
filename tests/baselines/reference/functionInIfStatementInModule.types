@@ -1,4 +1,4 @@
-=== tests/cases/compiler/functionInIfStatementInModule.ts ===
+=== functionInIfStatementInModule.ts ===
  
 module Midori
 >Midori : typeof Midori

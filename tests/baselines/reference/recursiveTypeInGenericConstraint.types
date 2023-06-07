@@ -1,4 +1,4 @@
-=== tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypeInGenericConstraint.ts ===
+=== recursiveTypeInGenericConstraint.ts ===
 class G<T> {
 >G : G<T>
 

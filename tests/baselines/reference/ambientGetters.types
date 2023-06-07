@@ -1,4 +1,4 @@
-=== tests/cases/compiler/ambientGetters.ts ===
+=== ambientGetters.ts ===
 declare class A {
 >A : A
 

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/duplicateIdentifierDifferentSpelling.ts ===
+=== duplicateIdentifierDifferentSpelling.ts ===
 class A {
 >A : A
 

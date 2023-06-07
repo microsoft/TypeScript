@@ -1,4 +1,4 @@
-=== tests/cases/conformance/types/contextualTypes/asyncFunctions/contextuallyTypeAsyncFunctionAwaitOperand.ts ===
+=== contextuallyTypeAsyncFunctionAwaitOperand.ts ===
 interface Obj { key: "value"; }
 >key : "value"
 

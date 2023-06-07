@@ -1,4 +1,4 @@
-=== tests/cases/compiler/genericFunctionsWithOptionalParameters3.ts ===
+=== genericFunctionsWithOptionalParameters3.ts ===
 class Collection<T> {
 >Collection : Collection<T>
 

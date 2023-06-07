@@ -1,4 +1,4 @@
-=== tests/cases/compiler/thisExpressionInIndexExpression.ts ===
+=== thisExpressionInIndexExpression.ts ===
 function f() {
 >f : () => (r: any) => any
 

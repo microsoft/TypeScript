@@ -1,4 +1,4 @@
-=== tests/cases/compiler/instantiateContextuallyTypedGenericThis.ts ===
+=== instantiateContextuallyTypedGenericThis.ts ===
 interface JQuery {
     each<T>(
 >each : <T>(collection: T[], callback: (this: T, dit: T) => T) => T[]

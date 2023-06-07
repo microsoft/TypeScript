@@ -1,4 +1,4 @@
-=== tests/cases/compiler/aliasUsageInFunctionExpression_main.ts ===
+=== aliasUsageInFunctionExpression_main.ts ===
 import Backbone = require("./aliasUsageInFunctionExpression_backbone");
 >Backbone : typeof Backbone
 
@@ -25,7 +25,7 @@ f = (x) => moduleA;
 >x : IHasVisualizationModel
 >moduleA : typeof moduleA
 
-=== tests/cases/compiler/aliasUsageInFunctionExpression_backbone.ts ===
+=== aliasUsageInFunctionExpression_backbone.ts ===
 export class Model {
 >Model : Model
 
@@ -33,7 +33,7 @@ export class Model {
 >someData : string
 }
 
-=== tests/cases/compiler/aliasUsageInFunctionExpression_moduleA.ts ===
+=== aliasUsageInFunctionExpression_moduleA.ts ===
 import Backbone = require("./aliasUsageInFunctionExpression_backbone");
 >Backbone : typeof Backbone
 

@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/a.js ===
+=== a.js ===
 /** @type {function(string): void} */
 const f = (value) => {
 >f : (arg0: string) => void

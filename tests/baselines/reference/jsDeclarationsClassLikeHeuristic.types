@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+=== index.js ===
 // https://github.com/microsoft/TypeScript/issues/35801
 let A;
 >A : any

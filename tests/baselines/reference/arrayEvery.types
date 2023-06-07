@@ -1,4 +1,4 @@
-=== tests/cases/compiler/arrayEvery.ts ===
+=== arrayEvery.ts ===
 const foo: (number | string)[] = ['aaa'];
 >foo : (string | number)[]
 >['aaa'] : string[]

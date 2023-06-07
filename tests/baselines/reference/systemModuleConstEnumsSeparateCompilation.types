@@ -1,4 +1,4 @@
-=== tests/cases/compiler/systemModuleConstEnumsSeparateCompilation.ts ===
+=== systemModuleConstEnumsSeparateCompilation.ts ===
 declare function use(a: any);
 >use : (a: any) => any
 >a : any

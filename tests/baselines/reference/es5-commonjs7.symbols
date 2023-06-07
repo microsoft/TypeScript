@@ -1,4 +1,4 @@
-=== tests/cases/compiler/test.d.ts ===
+=== test.d.ts ===
 export default undefined;
 >undefined : Symbol(undefined)
 

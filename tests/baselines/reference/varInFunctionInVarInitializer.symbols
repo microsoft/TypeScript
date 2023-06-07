@@ -1,4 +1,4 @@
-=== tests/cases/compiler/varInFunctionInVarInitializer.ts ===
+=== varInFunctionInVarInitializer.ts ===
 var a = function () {
 >a : Symbol(a, Decl(varInFunctionInVarInitializer.ts, 0, 3))
 

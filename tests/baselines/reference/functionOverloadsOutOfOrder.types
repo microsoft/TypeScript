@@ -1,4 +1,4 @@
-=== tests/cases/compiler/functionOverloadsOutOfOrder.ts ===
+=== functionOverloadsOutOfOrder.ts ===
 class d {
 >d : d
 

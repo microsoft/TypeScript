@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/bug25104.js ===
+=== bug25104.js ===
 class C {
 >C : Symbol(C, Decl(bug25104.js, 0, 0))
 

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/weakTypeAndPrimitiveNarrowing.ts ===
+=== weakTypeAndPrimitiveNarrowing.ts ===
 type LiteralsAndWeakTypes = 
 >LiteralsAndWeakTypes : { optional?: true | undefined; } | { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number | undefined; } | "A" | "B"
 

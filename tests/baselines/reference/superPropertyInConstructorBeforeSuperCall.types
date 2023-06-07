@@ -1,4 +1,4 @@
-=== tests/cases/conformance/classes/constructorDeclarations/superCalls/superPropertyInConstructorBeforeSuperCall.ts ===
+=== superPropertyInConstructorBeforeSuperCall.ts ===
 class B {
 >B : B
 

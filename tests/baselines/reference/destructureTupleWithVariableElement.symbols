@@ -1,4 +1,4 @@
-=== tests/cases/compiler/destructureTupleWithVariableElement.ts ===
+=== destructureTupleWithVariableElement.ts ===
 // repro from #52302
 
 type NonEmptyStringArray = [string, ...Array<string>]

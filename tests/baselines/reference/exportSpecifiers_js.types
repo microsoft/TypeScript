@@ -1,4 +1,4 @@
-=== tests/cases/conformance/externalModules/typeOnly/a.js ===
+=== ./a.js ===
 const foo = 0;
 >foo : 0
 >0 : 0

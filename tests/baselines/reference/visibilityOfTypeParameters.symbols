@@ -1,4 +1,4 @@
-=== tests/cases/compiler/visibilityOfTypeParameters.ts ===
+=== visibilityOfTypeParameters.ts ===
 export class MyClass {
 >MyClass : Symbol(MyClass, Decl(visibilityOfTypeParameters.ts, 0, 0))
 

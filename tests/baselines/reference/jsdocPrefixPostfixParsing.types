@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/prefixPostfix.js ===
+=== prefixPostfix.js ===
 /**
  * @param {number![]} x - number[]
  * @param {!number[]} y - number[]

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/server.d.ts ===
+=== server.d.ts ===
 declare module "other" {
 >"other" : typeof import("other")
 
@@ -23,7 +23,7 @@ declare module "server" {
 >S : typeof S
 }
 
-=== tests/cases/compiler/client.ts ===
+=== client.ts ===
 import {a} from "server";
 >a : number
 

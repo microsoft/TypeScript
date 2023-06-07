@@ -1,4 +1,4 @@
-=== tests/cases/compiler/incompleteObjectLiteral1.ts ===
+=== incompleteObjectLiteral1.ts ===
 var tt = { aa; }
 >tt : { aa: any; }
 >{ aa; } : { aa: any; }

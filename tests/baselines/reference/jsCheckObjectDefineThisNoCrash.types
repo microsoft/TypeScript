@@ -1,4 +1,4 @@
-=== tests/cases/compiler/jsCheckObjectDefineThisNoCrash.js ===
+=== jsCheckObjectDefineThisNoCrash.js ===
 class C {
 >C : C
 

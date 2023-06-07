@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/a.js ===
+=== a.js ===
 /** doc */
 const a = b = () => 0;
 >a : Symbol(a, Decl(a.js, 1, 5))

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/declaration.d.ts ===
+=== declaration.d.ts ===
 export declare class ClassWithSymbols {
 >ClassWithSymbols : Symbol(ClassWithSymbols, Decl(declaration.d.ts, 0, 0))
 

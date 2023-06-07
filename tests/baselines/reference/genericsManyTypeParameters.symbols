@@ -1,4 +1,4 @@
-=== tests/cases/compiler/genericsManyTypeParameters.ts ===
+=== genericsManyTypeParameters.ts ===
 function Foo<
 >Foo : Symbol(Foo, Decl(genericsManyTypeParameters.ts, 0, 0))
 

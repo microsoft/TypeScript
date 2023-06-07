@@ -1,4 +1,4 @@
-=== tests/cases/compiler/callOverloads1.ts ===
+=== callOverloads1.ts ===
 class Foo { // error
 >Foo : Foo
 

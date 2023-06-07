@@ -1,4 +1,4 @@
-=== tests/cases/compiler/collisionRestParameterInterfaceMembers.ts ===
+=== collisionRestParameterInterfaceMembers.ts ===
 // call
 interface i1 {
     (_i: number, ...restParameters); // no error - no code gen

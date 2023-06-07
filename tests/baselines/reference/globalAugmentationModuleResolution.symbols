@@ -1,4 +1,4 @@
-=== tests/cases/conformance/externalModules/a.ts ===
+=== a.ts ===
 export { };
 
 declare global {

@@ -1,4 +1,4 @@
-=== tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypesUsedAsFunctionParameters.ts ===
+=== recursiveTypesUsedAsFunctionParameters.ts ===
 class List<T> {
 >List : List<T>
 

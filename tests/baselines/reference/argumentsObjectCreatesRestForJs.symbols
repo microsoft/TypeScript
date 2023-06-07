@@ -1,4 +1,4 @@
-=== tests/cases/compiler/main.js ===
+=== main.js ===
 function allRest() { arguments; }
 >allRest : Symbol(allRest, Decl(main.js, 0, 0))
 >arguments : Symbol(arguments)

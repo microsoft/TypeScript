@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/typedefOnSemicolonClassElement.js ===
+=== typedefOnSemicolonClassElement.js ===
 export class Preferences {
 >Preferences : Symbol(Preferences, Decl(typedefOnSemicolonClassElement.js, 0, 0))
 

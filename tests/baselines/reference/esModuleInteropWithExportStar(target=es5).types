@@ -1,8 +1,8 @@
-=== tests/cases/compiler/fs.d.ts ===
+=== fs.d.ts ===
 export const x: number;
 >x : number
 
-=== tests/cases/compiler/mjts.ts ===
+=== mjts.ts ===
 import * as fs from "./fs";
 >fs : typeof fs
 

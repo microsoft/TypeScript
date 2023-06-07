@@ -1,4 +1,4 @@
-=== tests/cases/conformance/expressions/asOperator/asOpEmitParens.ts ===
+=== asOpEmitParens.ts ===
 declare var x;
 >x : any
 

@@ -1,4 +1,4 @@
-=== tests/cases/conformance/types/import/importWithTypeArguments.ts ===
+=== importWithTypeArguments.ts ===
 import<T>
 >import<T> : any
 

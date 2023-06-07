@@ -1,4 +1,4 @@
-=== tests/cases/conformance/externalModules/typeOnly/a.ts ===
+=== a.ts ===
 export namespace types {
 >types : typeof types
 
@@ -6,7 +6,7 @@ export namespace types {
 >A : A
 }
 
-=== tests/cases/conformance/externalModules/typeOnly/b.ts ===
+=== b.ts ===
 import type * as a from './a';
 >a : typeof a
 

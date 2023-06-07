@@ -1,4 +1,4 @@
-=== tests/cases/compiler/staticIndexSignatureAndNormalIndexSignature.ts ===
+=== staticIndexSignatureAndNormalIndexSignature.ts ===
 class Foo {
 >Foo : Foo
 

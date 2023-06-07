@@ -1,4 +1,4 @@
-=== tests/cases/compiler/emptyOptionalBindingPatternInDeclarationSignature.ts ===
+=== emptyOptionalBindingPatternInDeclarationSignature.ts ===
 // #50791
 
 declare function fn1({}?: { x: string }): void;

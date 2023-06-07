@@ -1,8 +1,8 @@
-=== tests/cases/compiler/external.d.ts ===
+=== external.d.ts ===
 export var x: number
 >x : number
 
-=== tests/cases/compiler/main.ts ===
+=== main.ts ===
 declare module "M" {
 >"M" : typeof import("M")
 

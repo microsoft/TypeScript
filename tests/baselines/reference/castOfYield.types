@@ -1,4 +1,4 @@
-=== tests/cases/compiler/castOfYield.ts ===
+=== castOfYield.ts ===
 function* f() {
 >f : () => {}
 

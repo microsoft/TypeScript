@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/module.js ===
+=== module.js ===
 var Inner = function() {}
 >Inner : Symbol(Inner, Decl(module.js, 0, 3), Decl(module.js, 0, 25))
 

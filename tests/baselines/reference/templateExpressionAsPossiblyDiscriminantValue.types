@@ -1,4 +1,4 @@
-=== tests/cases/compiler/templateExpressionAsPossiblyDiscriminantValue.ts ===
+=== templateExpressionAsPossiblyDiscriminantValue.ts ===
 // repro mentioned in https://github.com/microsoft/TypeScript/issues/53888
 
 type BiomePlainLinkProps = {

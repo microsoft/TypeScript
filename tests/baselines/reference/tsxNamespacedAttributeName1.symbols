@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsx/a.tsx ===
+=== a.tsx ===
 const a = <svg:path a:b={1}></svg:path>;
 >a : Symbol(a, Decl(a.tsx, 0, 5))
 >a:b : Symbol(a:b, Decl(a.tsx, 0, 19))

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/parameterDestructuringObjectLiteral.ts ===
+=== parameterDestructuringObjectLiteral.ts ===
 // Repro from #22644
 
 const fn1 = (options: { headers?: {} }) => { };

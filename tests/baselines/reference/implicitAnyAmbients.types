@@ -1,4 +1,4 @@
-=== tests/cases/compiler/implicitAnyAmbients.ts ===
+=== implicitAnyAmbients.ts ===
 declare module m {
 >m : typeof m
 

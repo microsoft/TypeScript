@@ -1,4 +1,4 @@
-=== tests/cases/conformance/types/intersection/intersectionThisTypes.ts ===
+=== intersectionThisTypes.ts ===
 interface Thing1 {
 >Thing1 : Symbol(Thing1, Decl(intersectionThisTypes.ts, 0, 0))
 

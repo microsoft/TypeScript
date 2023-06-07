@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/declarations/index1.js ===
+=== index1.js ===
 /**
  * const doc comment
  */

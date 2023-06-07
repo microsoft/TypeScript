@@ -1,4 +1,4 @@
-=== tests/cases/compiler/functionArgShadowing.ts ===
+=== functionArgShadowing.ts ===
 class A { foo() { } }
 >A : A
 >foo : () => void

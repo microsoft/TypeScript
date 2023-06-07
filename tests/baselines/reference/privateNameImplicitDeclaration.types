@@ -1,4 +1,4 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameImplicitDeclaration.js ===
+=== privateNameImplicitDeclaration.js ===
 class C {
 >C : C
 

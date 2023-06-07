@@ -1,4 +1,4 @@
-=== tests/cases/compiler/declFilePrivateStatic.ts ===
+=== declFilePrivateStatic.ts ===
 class C {
 >C : C
 

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/parameterPropertyReferencingOtherParameter.ts ===
+=== parameterPropertyReferencingOtherParameter.ts ===
 class Foo {
 >Foo : Foo
 

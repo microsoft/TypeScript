@@ -1,4 +1,4 @@
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 export function foo() {}
 >foo : typeof foo
 

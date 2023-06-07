@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+=== index.js ===
 var x = 12;
 >x : Symbol(x, Decl(index.js, 0, 3))
 

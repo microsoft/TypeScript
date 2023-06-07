@@ -1,4 +1,4 @@
-=== tests/cases/compiler/conditionalEqualityOnLiteralObjects.ts ===
+=== conditionalEqualityOnLiteralObjects.ts ===
 const a = { a: 1 }
 >a : { a: number; }
 >{ a: 1 } : { a: number; }

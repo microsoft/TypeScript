@@ -1,4 +1,4 @@
-=== tests/cases/compiler/getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts ===
+=== getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts ===
 declare function _<T>(value: Array<T>): _<T>;
 >_ : typeof _
 >value : T[]

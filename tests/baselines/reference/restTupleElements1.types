@@ -1,4 +1,4 @@
-=== tests/cases/conformance/types/tuple/restTupleElements1.ts ===
+=== restTupleElements1.ts ===
 type T00 = [string?];
 >T00 : [(string | undefined)?]
 

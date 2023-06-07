@@ -1,4 +1,4 @@
-=== tests/cases/compiler/newArrays.ts ===
+=== newArrays.ts ===
 module M {
 >M : typeof M
 

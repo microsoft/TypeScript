@@ -1,4 +1,4 @@
-=== tests/cases/compiler/multipleClassPropertyModifiersErrors.ts ===
+=== multipleClassPropertyModifiersErrors.ts ===
 class C {
 >C : C
 

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/letConstMatchingParameterNames.ts ===
+=== letConstMatchingParameterNames.ts ===
 let parent = true;
 >parent : Symbol(parent, Decl(letConstMatchingParameterNames.ts, 0, 3))
 

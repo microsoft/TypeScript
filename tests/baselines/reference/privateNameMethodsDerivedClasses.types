@@ -1,4 +1,4 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameMethodsDerivedClasses.ts ===
+=== privateNameMethodsDerivedClasses.ts ===
 class Base {
 >Base : Base
 

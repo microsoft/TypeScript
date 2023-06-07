@@ -1,14 +1,14 @@
-=== tests/cases/conformance/node/subfolder/index.ts ===
+=== subfolder/index.ts ===
 // cjs format file
 export {default} from "fs";
 >default : any
 
-=== tests/cases/conformance/node/index.ts ===
+=== index.ts ===
 // esm format file
 export {default} from "fs";
 >default : any
 
-=== tests/cases/conformance/node/types.d.ts ===
+=== types.d.ts ===
 declare module "fs";
 >"fs" : any
 

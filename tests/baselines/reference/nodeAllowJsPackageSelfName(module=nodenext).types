@@ -1,4 +1,4 @@
-=== tests/cases/conformance/node/allowJs/index.js ===
+=== index.js ===
 // esm format file
 import * as self from "package";
 >self : typeof self
@@ -6,7 +6,7 @@ import * as self from "package";
 self;
 >self : typeof self
 
-=== tests/cases/conformance/node/allowJs/index.mjs ===
+=== index.mjs ===
 // esm format file
 import * as self from "package";
 >self : typeof self
@@ -14,7 +14,7 @@ import * as self from "package";
 self;
 >self : typeof self
 
-=== tests/cases/conformance/node/allowJs/index.cjs ===
+=== index.cjs ===
 // esm format file
 import * as self from "package";
 >self : typeof self

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/privacyClassImplementsClauseDeclFile_externalModule.ts ===
+=== privacyClassImplementsClauseDeclFile_externalModule.ts ===
 export module publicModule {
 >publicModule : typeof publicModule
 
@@ -97,7 +97,7 @@ export class publicClassImplementingFromPrivateModuleInterface implements privat
 >privateModule : typeof privateModule
 }
 
-=== tests/cases/compiler/privacyClassImplementsClauseDeclFile_GlobalFile.ts ===
+=== privacyClassImplementsClauseDeclFile_GlobalFile.ts ===
 module publicModuleInGlobal {
 >publicModuleInGlobal : typeof publicModuleInGlobal
 

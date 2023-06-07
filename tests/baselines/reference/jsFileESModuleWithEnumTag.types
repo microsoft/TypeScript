@@ -1,4 +1,4 @@
-=== tests/cases/compiler/jsFileESModuleWithEnumTag.js ===
+=== jsFileESModuleWithEnumTag.js ===
 export {}; // mark as module
 /** @enum {number} */
 const ChangeDetectionStrategy = {

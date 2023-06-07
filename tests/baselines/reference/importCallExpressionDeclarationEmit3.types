@@ -1,9 +1,9 @@
-=== tests/cases/conformance/dynamicImport/0.ts ===
+=== 0.ts ===
 export function foo() { return "foo"; }
 >foo : () => string
 >"foo" : "foo"
 
-=== tests/cases/conformance/dynamicImport/1.ts ===
+=== 1.ts ===
 declare function getPath(): string;
 >getPath : () => string
 

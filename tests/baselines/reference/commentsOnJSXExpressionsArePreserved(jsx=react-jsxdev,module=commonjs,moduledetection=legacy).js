@@ -21,7 +21,7 @@ class Component {
 }
 
 //// [commentsOnJSXExpressionsArePreserved.js]
-var _jsxFileName = "tests/cases/compiler/commentsOnJSXExpressionsArePreserved.tsx";
+var _jsxFileName = "commentsOnJSXExpressionsArePreserved.tsx";
 var Component = /** @class */ (function () {
     function Component() {
     }

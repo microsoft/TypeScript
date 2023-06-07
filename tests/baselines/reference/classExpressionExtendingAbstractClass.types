@@ -1,4 +1,4 @@
-=== tests/cases/compiler/classExpressionExtendingAbstractClass.ts ===
+=== classExpressionExtendingAbstractClass.ts ===
 abstract class A {
 >A : A
 

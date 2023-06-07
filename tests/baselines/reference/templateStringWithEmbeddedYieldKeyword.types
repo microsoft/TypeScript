@@ -1,4 +1,4 @@
-=== tests/cases/conformance/es6/templates/templateStringWithEmbeddedYieldKeyword.ts ===
+=== templateStringWithEmbeddedYieldKeyword.ts ===
 function* gen {
 >gen : () => {}
 

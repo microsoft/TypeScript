@@ -1,4 +1,4 @@
-=== tests/cases/compiler/functionOnlyHasThrow.ts ===
+=== functionOnlyHasThrow.ts ===
 function clone():number {
 >clone : () => number
 

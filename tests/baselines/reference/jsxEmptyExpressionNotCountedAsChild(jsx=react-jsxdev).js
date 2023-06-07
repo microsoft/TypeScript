@@ -21,7 +21,7 @@ const element = (
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
-var _jsxFileName = "tests/cases/compiler/jsxEmptyExpressionNotCountedAsChild.tsx";
+var _jsxFileName = "jsxEmptyExpressionNotCountedAsChild.tsx";
 function Wrapper(props) {
     return (0, jsx_dev_runtime_1.jsxDEV)("div", { children: props.children }, void 0, false, { fileName: _jsxFileName, lineNumber: 9, columnNumber: 11 }, this);
 }

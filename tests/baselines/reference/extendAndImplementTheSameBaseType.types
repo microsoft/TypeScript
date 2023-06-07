@@ -1,4 +1,4 @@
-=== tests/cases/compiler/extendAndImplementTheSameBaseType.ts ===
+=== extendAndImplementTheSameBaseType.ts ===
 class C {
 >C : C
 

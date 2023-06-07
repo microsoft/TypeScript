@@ -1,4 +1,4 @@
-=== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithIdenticalObjects.ts ===
+=== comparisonOperatorWithIdenticalObjects.ts ===
 class A1 {
 >A1 : A1
 

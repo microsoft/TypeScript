@@ -1,4 +1,4 @@
-=== tests/cases/compiler/declarationEmitExpressionInExtends.ts ===
+=== declarationEmitExpressionInExtends.ts ===
 var x: {
 >x : new <T>(s: any) => Q
 

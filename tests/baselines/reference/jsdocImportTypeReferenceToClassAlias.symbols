@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/mod1.js ===
+=== mod1.js ===
 class C {
 >C : Symbol(C, Decl(mod1.js, 0, 0))
 
@@ -13,7 +13,7 @@ module.exports.C = C
 >C : Symbol(C, Decl(mod1.js, 2, 1))
 >C : Symbol(C, Decl(mod1.js, 0, 0))
 
-=== tests/cases/conformance/jsdoc/test.js ===
+=== test.js ===
 /** @typedef {import('./mod1').C} X */
 /** @param {X} c */
 function demo(c) {

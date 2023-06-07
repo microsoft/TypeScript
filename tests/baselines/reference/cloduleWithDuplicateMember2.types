@@ -1,4 +1,4 @@
-=== tests/cases/compiler/cloduleWithDuplicateMember2.ts ===
+=== cloduleWithDuplicateMember2.ts ===
 class C {
 >C : C
 

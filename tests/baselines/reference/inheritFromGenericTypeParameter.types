@@ -1,4 +1,4 @@
-=== tests/cases/compiler/inheritFromGenericTypeParameter.ts ===
+=== inheritFromGenericTypeParameter.ts ===
 class C<T> extends T { }
 >C : C<T>
 >T : any

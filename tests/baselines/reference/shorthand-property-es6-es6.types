@@ -1,4 +1,4 @@
-=== tests/cases/compiler/test.ts ===
+=== test.ts ===
 import {foo} from './foo';
 >foo : any
 

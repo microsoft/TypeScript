@@ -1,4 +1,4 @@
-=== tests/cases/compiler/yieldExpressionInFlowLoop.ts ===
+=== yieldExpressionInFlowLoop.ts ===
 function* f() {
 >f : () => Generator<any, void, any>
 

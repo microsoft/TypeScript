@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/a.js ===
+=== a.js ===
 var my = my ?? {};
 >my : typeof my
 >my ?? {} : typeof my | {}

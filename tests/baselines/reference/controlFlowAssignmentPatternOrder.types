@@ -1,4 +1,4 @@
-=== tests/cases/conformance/controlFlow/controlFlowAssignmentPatternOrder.ts ===
+=== controlFlowAssignmentPatternOrder.ts ===
 // https://github.com/microsoft/TypeScript/pull/41094#issuecomment-716044363
 declare function f(): void;
 >f : () => void

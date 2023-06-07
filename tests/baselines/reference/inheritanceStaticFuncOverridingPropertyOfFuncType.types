@@ -1,4 +1,4 @@
-=== tests/cases/compiler/inheritanceStaticFuncOverridingPropertyOfFuncType.ts ===
+=== inheritanceStaticFuncOverridingPropertyOfFuncType.ts ===
 class a {
 >a : a
 

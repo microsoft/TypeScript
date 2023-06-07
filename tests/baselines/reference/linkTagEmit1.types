@@ -1,9 +1,9 @@
-=== tests/cases/conformance/jsdoc/declarations.d.ts ===
+=== declarations.d.ts ===
 declare namespace NS {
     type R = number
 >R : number
 }
-=== tests/cases/conformance/jsdoc/linkTagEmit1.js ===
+=== linkTagEmit1.js ===
 /** @typedef {number} N */
 /**
  * @typedef {Object} D1

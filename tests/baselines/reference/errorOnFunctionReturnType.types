@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/foo.js ===
+=== foo.js ===
 /**
  * @callback FunctionReturningPromise
  * @returns {Promise<number>}

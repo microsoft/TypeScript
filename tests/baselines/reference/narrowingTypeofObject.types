@@ -1,4 +1,4 @@
-=== tests/cases/compiler/narrowingTypeofObject.ts ===
+=== narrowingTypeofObject.ts ===
 interface F { (): string }
 
 function test(x: number & { _foo: string }) {

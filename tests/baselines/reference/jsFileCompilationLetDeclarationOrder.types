@@ -1,4 +1,4 @@
-=== tests/cases/compiler/b.js ===
+=== b.js ===
 let a = 10;
 >a : number
 >10 : 10
@@ -8,7 +8,7 @@ b = 30;
 >b : number
 >30 : 30
 
-=== tests/cases/compiler/a.ts ===
+=== a.ts ===
 let b = 30;
 >b : number
 >30 : 30

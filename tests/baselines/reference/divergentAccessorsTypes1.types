@@ -1,4 +1,4 @@
-=== tests/cases/compiler/divergentAccessorsTypes1.ts ===
+=== divergentAccessorsTypes1.ts ===
 class Test1 {
 >Test1 : Test1
 

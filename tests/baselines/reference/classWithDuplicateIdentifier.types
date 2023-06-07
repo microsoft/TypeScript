@@ -1,4 +1,4 @@
-=== tests/cases/compiler/classWithDuplicateIdentifier.ts ===
+=== classWithDuplicateIdentifier.ts ===
 class C {
 >C : C
 

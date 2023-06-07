@@ -1,4 +1,4 @@
-=== tests/cases/compiler/doNotEmitDetachedComments.ts ===
+=== doNotEmitDetachedComments.ts ===
 /*
 
     multi line

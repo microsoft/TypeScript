@@ -1,4 +1,4 @@
-=== tests/cases/compiler/dynamicNamesErrors.ts ===
+=== dynamicNamesErrors.ts ===
 const c0 = "1";
 >c0 : Symbol(c0, Decl(dynamicNamesErrors.ts, 0, 5))
 

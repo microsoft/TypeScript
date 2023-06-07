@@ -1,4 +1,4 @@
-=== tests/cases/compiler/staticMustPrecedePublic.ts ===
+=== staticMustPrecedePublic.ts ===
 class Outer {
 >Outer : Outer
 

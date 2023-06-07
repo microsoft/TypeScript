@@ -1,4 +1,4 @@
-=== tests/cases/compiler/errorWithTruncatedType.ts ===
+=== errorWithTruncatedType.ts ===
 var x: {
 >x : Symbol(x, Decl(errorWithTruncatedType.ts, 0, 3))
 

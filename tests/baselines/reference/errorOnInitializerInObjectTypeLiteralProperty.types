@@ -1,4 +1,4 @@
-=== tests/cases/compiler/errorOnInitializerInObjectTypeLiteralProperty.ts ===
+=== errorOnInitializerInObjectTypeLiteralProperty.ts ===
 var Foo: {
 >Foo : { bar: number; }
 

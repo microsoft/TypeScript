@@ -1,4 +1,4 @@
-=== tests/cases/compiler/unreachable.js ===
+=== unreachable.js ===
 function unreachable() {
 >unreachable : Symbol(unreachable, Decl(unreachable.js, 0, 0))
 

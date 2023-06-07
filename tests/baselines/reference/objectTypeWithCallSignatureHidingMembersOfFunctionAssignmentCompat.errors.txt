@@ -1,12 +1,12 @@
-tests/cases/conformance/types/members/objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts(8,1): error TS2322: Type 'Object' is not assignable to type 'I'.
+objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts(8,1): error TS2322: Type 'Object' is not assignable to type 'I'.
   The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
     Type 'Object' provides no match for the signature '(): void'.
-tests/cases/conformance/types/members/objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts(14,1): error TS2322: Type 'Object' is not assignable to type '() => void'.
+objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts(14,1): error TS2322: Type 'Object' is not assignable to type '() => void'.
   The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
     Type 'Object' provides no match for the signature '(): void'.
 
 
-==== tests/cases/conformance/types/members/objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts (2 errors) ====
+==== objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts (2 errors) ====
     interface I {
         (): void;
     }

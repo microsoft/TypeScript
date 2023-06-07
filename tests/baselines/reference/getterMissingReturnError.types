@@ -1,4 +1,4 @@
-=== tests/cases/compiler/getterMissingReturnError.ts ===
+=== getterMissingReturnError.ts ===
 class test {
 >test : test
 

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/castOfAwait.ts ===
+=== castOfAwait.ts ===
 async function f() {
 >f : () => Promise<void>
 

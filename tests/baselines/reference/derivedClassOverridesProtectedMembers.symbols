@@ -1,4 +1,4 @@
-=== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers.ts ===
+=== derivedClassOverridesProtectedMembers.ts ===
 var x: { foo: string; }
 >x : Symbol(x, Decl(derivedClassOverridesProtectedMembers.ts, 0, 3))
 >foo : Symbol(foo, Decl(derivedClassOverridesProtectedMembers.ts, 0, 8))

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/emptyArrayDestructuringExpressionVisitedByTransformer.ts ===
+=== emptyArrayDestructuringExpressionVisitedByTransformer.ts ===
 var a = [] = [1].map(_ => _);
 >a : number[]
 >[] = [1].map(_ => _) : number[]

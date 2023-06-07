@@ -1,4 +1,4 @@
-=== tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts ===
+=== contextualTypeWithUnionTypeObjectLiteral.ts ===
 var str: string;
 >str : string
 

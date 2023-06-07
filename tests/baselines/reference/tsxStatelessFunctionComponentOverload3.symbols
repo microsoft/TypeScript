@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+=== file.tsx ===
 interface Context {
 >Context : Symbol(Context, Decl(file.tsx, 0, 0))
 

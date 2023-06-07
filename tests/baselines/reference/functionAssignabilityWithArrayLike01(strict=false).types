@@ -1,4 +1,4 @@
-=== tests/cases/compiler/functionAssignabilityWithArrayLike01.ts ===
+=== functionAssignabilityWithArrayLike01.ts ===
 function func() {}
 >func : () => void
 

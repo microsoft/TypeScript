@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/bug27134.js ===
+=== bug27134.js ===
 /**
  * @enum {number}
  */

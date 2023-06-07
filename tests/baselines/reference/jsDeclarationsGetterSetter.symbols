@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+=== index.js ===
 export class A {
 >A : Symbol(A, Decl(index.js, 0, 0))
 

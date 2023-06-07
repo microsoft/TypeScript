@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/declarations/source.js ===
+=== source.js ===
 export class Clazz {
 >Clazz : Clazz
 

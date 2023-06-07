@@ -1,4 +1,4 @@
-=== tests/cases/compiler/coAndContraVariantInferences.ts ===
+=== coAndContraVariantInferences.ts ===
 type A = { kind: 'a' };
 >A : { kind: 'a'; }
 >kind : "a"

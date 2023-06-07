@@ -1,4 +1,4 @@
-=== tests/cases/compiler/abstractPropertyInConstructor.ts ===
+=== abstractPropertyInConstructor.ts ===
 abstract class AbstractClass {
 >AbstractClass : AbstractClass
 

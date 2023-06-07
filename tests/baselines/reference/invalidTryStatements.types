@@ -1,4 +1,4 @@
-=== tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts ===
+=== invalidTryStatements.ts ===
 function fn() {
 >fn : () => void
 

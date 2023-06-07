@@ -1,4 +1,4 @@
-=== tests/cases/compiler/indexingTypesWithNever.ts ===
+=== indexingTypesWithNever.ts ===
 type TestObj = {
 >TestObj : { a: string; b: number; }
 

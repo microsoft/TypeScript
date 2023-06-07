@@ -1,4 +1,4 @@
-=== tests/cases/compiler/moduleCrashBug1.ts ===
+=== moduleCrashBug1.ts ===
 module _modes {
 >_modes : typeof _modes
 

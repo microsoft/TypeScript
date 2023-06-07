@@ -1,8 +1,8 @@
-=== tests/cases/compiler/a.ts ===
+=== a.ts ===
 import a = require('./b');
 >a : typeof a
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 export var c = '';
 >c : string
 >'' : ""

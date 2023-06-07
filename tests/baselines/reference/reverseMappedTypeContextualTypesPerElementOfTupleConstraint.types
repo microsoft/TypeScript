@@ -1,4 +1,4 @@
-=== tests/cases/compiler/reverseMappedTypeContextualTypesPerElementOfTupleConstraint.ts ===
+=== reverseMappedTypeContextualTypesPerElementOfTupleConstraint.ts ===
 type Tuple<T> = readonly [T, ...T[]];
 >Tuple : Tuple<T>
 

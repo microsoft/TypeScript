@@ -1,4 +1,4 @@
-=== tests/cases/compiler/contextualTypingReturnStatementWithReturnTypeAnnotation.ts ===
+=== contextualTypingReturnStatementWithReturnTypeAnnotation.ts ===
 type PropOfRaw<T> = readonly T[] | "not-array" | "no-prop";
 >PropOfRaw : PropOfRaw<T>
 

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/mappedTypeParameterConstraint.ts ===
+=== mappedTypeParameterConstraint.ts ===
 // Repro for #27596
 
 type MyMap<T> = {[P in keyof T]: T[keyof T]};

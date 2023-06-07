@@ -1,4 +1,4 @@
-=== tests/cases/compiler/genericConstructorFunction1.ts ===
+=== genericConstructorFunction1.ts ===
 function f1<T>(args: T) {
 >f1 : <T>(args: T) => Date
 >args : T

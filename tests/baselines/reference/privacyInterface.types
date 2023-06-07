@@ -1,4 +1,4 @@
-=== tests/cases/compiler/privacyInterface.ts ===
+=== privacyInterface.ts ===
 export module m1 {
 >m1 : typeof m1
 

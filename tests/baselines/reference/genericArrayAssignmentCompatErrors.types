@@ -1,4 +1,4 @@
-=== tests/cases/compiler/genericArrayAssignmentCompatErrors.ts ===
+=== genericArrayAssignmentCompatErrors.ts ===
 var myCars=new Array(); 
 >myCars : any[]
 >new Array() : any[]

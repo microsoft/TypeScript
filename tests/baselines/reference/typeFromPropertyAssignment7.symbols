@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/a.js ===
+=== a.js ===
 var obj = {};
 >obj : Symbol(obj, Decl(a.js, 0, 3), Decl(a.js, 0, 13))
 

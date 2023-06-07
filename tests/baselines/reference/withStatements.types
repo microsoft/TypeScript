@@ -1,4 +1,4 @@
-=== tests/cases/conformance/statements/withStatements/withStatements.ts ===
+=== withStatements.ts ===
 var x = 12;
 >x : number
 >12 : 12

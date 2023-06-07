@@ -1,4 +1,4 @@
-=== tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithAnyAndEveryType.ts ===
+=== additionOperatorWithAnyAndEveryType.ts ===
 function foo() { }
 >foo : Symbol(foo, Decl(additionOperatorWithAnyAndEveryType.ts, 0, 0))
 

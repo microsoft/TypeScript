@@ -1,4 +1,4 @@
-=== tests/cases/conformance/types/spread/spreadUnion4.ts ===
+=== spreadUnion4.ts ===
 declare const a: { x: () => void }
 >a : { x: () => void; }
 >x : () => void

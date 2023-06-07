@@ -1,4 +1,4 @@
-=== tests/cases/compiler/noCrashOnNoLib.ts ===
+=== noCrashOnNoLib.ts ===
 export function f() {
 >f : () => void
 

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/constructorArgWithGenericCallSignature.ts ===
+=== constructorArgWithGenericCallSignature.ts ===
 module Test {
 >Test : typeof Test
 

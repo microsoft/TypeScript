@@ -1,4 +1,4 @@
-=== tests/cases/compiler/functionOverloadsRecursiveGenericReturnType.ts ===
+=== functionOverloadsRecursiveGenericReturnType.ts ===
 class B<V>{
 >B : B<V>
 

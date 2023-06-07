@@ -1,4 +1,4 @@
-=== tests/cases/compiler/classMemberWithMissingIdentifier.ts ===
+=== classMemberWithMissingIdentifier.ts ===
 class C { 
 >C : C
 

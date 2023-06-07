@@ -1,4 +1,4 @@
-=== tests/cases/compiler/file1.ts ===
+=== file1.ts ===
 interface I { }
 class C1 { }
 >C1 : C1
@@ -31,7 +31,7 @@ module N {
     }
 }
 
-=== tests/cases/compiler/file2.ts ===
+=== file2.ts ===
 class I { } // error -- cannot merge interface with non-ambient class
 >I : I
 

@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/bug24252.js ===
+=== bug24252.js ===
 var A = {};
 >A : typeof A
 >{} : {}

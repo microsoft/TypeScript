@@ -1,4 +1,4 @@
-=== tests/cases/compiler/nativeToBoxedTypes.ts ===
+=== nativeToBoxedTypes.ts ===
 var N = new Number();
 >N : Number
 >new Number() : Number

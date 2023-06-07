@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/0.js ===
+=== 0.js ===
 /**
  * @param {Object} notSpecial
  * @param {string} unrelated - not actually related because it's not notSpecial.unrelated

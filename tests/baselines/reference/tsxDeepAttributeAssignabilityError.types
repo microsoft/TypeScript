@@ -1,4 +1,4 @@
-=== tests/cases/compiler/my-component.tsx ===
+=== my-component.tsx ===
 import * as React from 'react'
 >React : typeof React
 
@@ -25,7 +25,7 @@ export function MyComponent(_props: MyProps) {
 >span : any
 }
 
-=== tests/cases/compiler/file1.tsx ===
+=== file1.tsx ===
 import * as React from 'react'
 >React : typeof React
 

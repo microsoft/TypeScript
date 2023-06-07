@@ -1,4 +1,4 @@
-=== tests/cases/compiler/indexerAssignability.ts ===
+=== indexerAssignability.ts ===
 var a: { [s: string]: string; };
 >a : { [s: string]: string; }
 >s : string

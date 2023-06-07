@@ -1,4 +1,4 @@
-=== tests/cases/compiler/validUseOfThisInSuper.ts ===
+=== validUseOfThisInSuper.ts ===
 class Base {
 >Base : Base
 

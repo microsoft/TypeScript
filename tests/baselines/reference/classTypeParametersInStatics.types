@@ -1,4 +1,4 @@
-=== tests/cases/compiler/classTypeParametersInStatics.ts ===
+=== classTypeParametersInStatics.ts ===
 module Editor {
 >Editor : typeof Editor
 

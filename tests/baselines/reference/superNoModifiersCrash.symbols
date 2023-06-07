@@ -1,4 +1,4 @@
-=== tests/cases/compiler/File.js ===
+=== File.js ===
 class Parent {
 >Parent : Symbol(Parent, Decl(File.js, 0, 0))
 

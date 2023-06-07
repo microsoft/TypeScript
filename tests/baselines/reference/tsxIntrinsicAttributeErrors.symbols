@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsx/tsxIntrinsicAttributeErrors.tsx ===
+=== tsxIntrinsicAttributeErrors.tsx ===
 declare namespace JSX {
 >JSX : Symbol(JSX, Decl(tsxIntrinsicAttributeErrors.tsx, 0, 0))
 

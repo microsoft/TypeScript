@@ -1,4 +1,4 @@
-=== tests/cases/compiler/circularBaseTypes.ts ===
+=== circularBaseTypes.ts ===
 // Repro from #38098
 
 type M<T> = { value: T };

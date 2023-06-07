@@ -1,4 +1,4 @@
-=== tests/cases/compiler/fuzzy.ts ===
+=== fuzzy.ts ===
 module M {
 >M : typeof M
 

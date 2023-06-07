@@ -1,4 +1,4 @@
-=== tests/cases/compiler/strictModeWordInExportDeclaration.ts ===
+=== strictModeWordInExportDeclaration.ts ===
 "use strict"
 >"use strict" : "use strict"
 

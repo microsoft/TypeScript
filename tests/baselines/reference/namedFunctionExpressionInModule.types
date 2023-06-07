@@ -1,4 +1,4 @@
-=== tests/cases/compiler/namedFunctionExpressionInModule.ts ===
+=== namedFunctionExpressionInModule.ts ===
 module Variables{
 >Variables : typeof Variables
 

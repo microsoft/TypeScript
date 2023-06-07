@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/jsdocOuterTypeParameters3.js ===
+=== jsdocOuterTypeParameters3.js ===
 /** @template {T} */
 class Baz {
 >Baz : Symbol(Baz, Decl(jsdocOuterTypeParameters3.js, 0, 0))

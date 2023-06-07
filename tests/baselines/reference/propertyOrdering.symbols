@@ -1,4 +1,4 @@
-=== tests/cases/compiler/propertyOrdering.ts ===
+=== propertyOrdering.ts ===
 class Foo {
 >Foo : Symbol(Foo, Decl(propertyOrdering.ts, 0, 0))
 

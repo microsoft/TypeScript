@@ -1,4 +1,4 @@
-=== tests/cases/conformance/statements/switchStatements/switchStatements.ts ===
+=== switchStatements.ts ===
 module M {
 >M : typeof M
 

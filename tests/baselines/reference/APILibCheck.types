@@ -1,4 +1,4 @@
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import ts = require("typescript");
 >ts : typeof ts
 

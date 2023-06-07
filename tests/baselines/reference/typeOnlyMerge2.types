@@ -1,4 +1,4 @@
-=== tests/cases/conformance/externalModules/a.ts ===
+=== a.ts ===
 const A = {}
 >A : {}
 >{} : {}
@@ -6,7 +6,7 @@ const A = {}
 export { A };
 >A : {}
 
-=== tests/cases/conformance/externalModules/b.ts ===
+=== b.ts ===
 import { A } from "./a";
 >A : {}
 
@@ -16,7 +16,7 @@ type A = any;
 export type { A };
 >A : any
 
-=== tests/cases/conformance/externalModules/c.ts ===
+=== c.ts ===
 import { A } from "./b";
 >A : {}
 
@@ -24,7 +24,7 @@ namespace A {}
 export { A };
 >A : {}
 
-=== tests/cases/conformance/externalModules/d.ts ===
+=== d.ts ===
 import { A } from "./c";
 >A : {}
 

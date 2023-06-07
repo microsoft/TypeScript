@@ -1,4 +1,4 @@
-=== tests/cases/compiler/a.ts ===
+=== a.ts ===
 export { undefined };
 >undefined : undefined
 

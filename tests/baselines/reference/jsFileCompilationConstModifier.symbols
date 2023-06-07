@@ -1,4 +1,4 @@
-=== tests/cases/compiler/a.js ===
+=== a.js ===
 const c = 10;
 >c : Symbol(c, Decl(a.js, 0, 5))
 

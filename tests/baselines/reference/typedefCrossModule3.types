@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/mod2.js ===
+=== mod2.js ===
 /** @typedef {number} Foo */
 const ns = {};
 >ns : typeof ns

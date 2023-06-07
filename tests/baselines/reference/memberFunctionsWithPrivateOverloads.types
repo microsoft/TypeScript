@@ -1,4 +1,4 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPrivateOverloads.ts ===
+=== memberFunctionsWithPrivateOverloads.ts ===
 class C {
 >C : C
 

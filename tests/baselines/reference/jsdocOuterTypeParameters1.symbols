@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/jsdocOuterTypeParameters1.js ===
+=== jsdocOuterTypeParameters1.js ===
 /** @return {T} */
 const dedupingMixin = function(mixin) {};
 >dedupingMixin : Symbol(dedupingMixin, Decl(jsdocOuterTypeParameters1.js, 1, 5))

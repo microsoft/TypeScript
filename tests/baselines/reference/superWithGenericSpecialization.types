@@ -1,4 +1,4 @@
-=== tests/cases/compiler/superWithGenericSpecialization.ts ===
+=== superWithGenericSpecialization.ts ===
 class C<T> {
 >C : C<T>
 

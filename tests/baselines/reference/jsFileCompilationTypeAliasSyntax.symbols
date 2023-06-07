@@ -1,4 +1,4 @@
-=== tests/cases/compiler/a.js ===
+=== a.js ===
 type a = b;
 >a : Symbol(a, Decl(a.js, 0, 0))
 >b : Symbol(b)

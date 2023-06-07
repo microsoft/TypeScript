@@ -1,4 +1,4 @@
-=== tests/cases/compiler/checkSuperCallBeforeThisAccess.ts ===
+=== checkSuperCallBeforeThisAccess.ts ===
 class A {
 >A : A
 

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/returnValueInSetter.ts ===
+=== returnValueInSetter.ts ===
 class f {
 >f : Symbol(f, Decl(returnValueInSetter.ts, 0, 0))
 

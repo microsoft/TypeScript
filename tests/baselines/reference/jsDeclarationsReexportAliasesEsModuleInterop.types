@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/declarations/cls.js ===
+=== cls.js ===
 class Foo {}
 >Foo : Foo
 
@@ -9,7 +9,7 @@ module.exports = Foo;
 >exports : typeof Foo
 >Foo : typeof Foo
 
-=== tests/cases/conformance/jsdoc/declarations/usage.js ===
+=== usage.js ===
 import {default as Fooa} from "./cls";
 >default : typeof Fooa
 >Fooa : typeof Fooa

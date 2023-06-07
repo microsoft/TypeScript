@@ -1,4 +1,4 @@
-=== tests/cases/compiler/forInStatement4.ts ===
+=== forInStatement4.ts ===
 var expr: any;
 >expr : any
 

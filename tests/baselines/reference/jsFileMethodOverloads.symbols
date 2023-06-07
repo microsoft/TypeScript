@@ -1,4 +1,4 @@
-=== tests/cases/compiler/jsFileMethodOverloads.js ===
+=== jsFileMethodOverloads.js ===
 /**
  * @template T
  */

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/promiseDefinitionTest.ts ===
+=== promiseDefinitionTest.ts ===
 class Promise<T> {}
 >Promise : Promise<T>
 

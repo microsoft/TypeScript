@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/plainJSReservedStrict.js ===
+=== plainJSReservedStrict.js ===
 "use strict"
 >"use strict" : "use strict"
 

@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/typedefScope1.js ===
+=== typedefScope1.js ===
 function B1() {
 >B1 : () => void
 

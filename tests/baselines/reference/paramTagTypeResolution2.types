@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/38572.js ===
+=== 38572.js ===
 /**
  * @template T
  * @param {T} a

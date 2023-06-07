@@ -1,8 +1,8 @@
-=== tests/cases/compiler/file2.ts ===
+=== file2.ts ===
 import c = require('./file1')
 >c : typeof c
 
-=== tests/cases/compiler/file1.ts ===
+=== file1.ts ===
 export class Calculator {
 >Calculator : Calculator
 

@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/usage.js ===
+=== usage.js ===
 // note that usage is first in the compilation
 Outer.Inner.Message = function() {
 >Outer.Inner.Message = function() {} : () => void
@@ -32,7 +32,7 @@ x.name
 >x : Inner
 >name : () => string
 
-=== tests/cases/conformance/salsa/def.js ===
+=== def.js ===
 var Outer = {}
 >Outer : typeof Outer
 >{} : {}

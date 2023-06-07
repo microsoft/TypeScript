@@ -1,4 +1,4 @@
-=== tests/cases/compiler/declarationEmitBindingPatternWithReservedWord.ts ===
+=== declarationEmitBindingPatternWithReservedWord.ts ===
 type LocaleData = Record<string, never>
 >LocaleData : { [x: string]: never; }
 

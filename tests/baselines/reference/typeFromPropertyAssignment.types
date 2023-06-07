@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/a.js ===
+=== a.js ===
 var Outer = class O {
 >Outer : typeof O
 >class O {    m(x, y) { }} : typeof O

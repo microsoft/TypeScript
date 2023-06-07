@@ -1,4 +1,4 @@
-=== tests/cases/compiler/asyncIIFE.ts ===
+=== asyncIIFE.ts ===
 function f1() {
 >f1 : () => void
 
