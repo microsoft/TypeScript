@@ -17359,10 +17359,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 if (index >= 0) {
                     errorIfWritingToReadonlyIndex(getIndexInfoOfType(objectType, numberType));
-                    return mapType(objectType, t => {
-                        const restType = getRestTypeOfTupleType(t as TupleTypeReference) || undefinedType;
-                        return accessFlags & AccessFlags.IncludeUndefined && index >= getTotalFixedElementCount((t as TupleTypeReference).target) ? getUnionType([restType, missingType]) : restType;
-                    });
+                    return getTupleElementTypeOutOfStartCount(objectType, index, accessFlags & AccessFlags.IncludeUndefined ? missingType : undefined);
                 }
             }
         }
@@ -23288,17 +23285,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return propType;
         }
         if (everyType(type, isTupleType)) {
-            return mapType(type, t => {
-                const tupleType = t as TupleTypeReference;
-                const restType = getRestTypeOfTupleType(tupleType);
-                if (!restType) {
-                    return undefinedType;
-                }
-                if (compilerOptions.noUncheckedIndexedAccess && index >= getTotalFixedElementCount(tupleType.target)) {
-                    return getUnionType([restType, undefinedType]);
-                }
-                return restType;
-            });
+            return getTupleElementTypeOutOfStartCount(type, index, compilerOptions.noUncheckedIndexedAccess ? undefinedType : undefined);
         }
         return undefined;
     }
@@ -23414,6 +23401,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getRestTypeOfTupleType(type: TupleTypeReference) {
         return getElementTypeOfSliceOfTupleType(type, type.target.fixedLength);
+    }
+
+    function getTupleElementTypeOutOfStartCount(type: Type, index: number, undefinedOrMissingType: Type | undefined) {
+        return mapType(type, t => {
+            const tupleType = t as TupleTypeReference;
+            const restType = getRestTypeOfTupleType(tupleType);
+            if (!restType) {
+                return undefinedType;
+            }
+            if (undefinedOrMissingType && index >= getTotalFixedElementCount(tupleType.target)) {
+                return getUnionType([restType, undefinedOrMissingType]);
+            }
+            return restType;
+        });
     }
 
     function getRestArrayTypeOfTupleType(type: TupleTypeReference) {
