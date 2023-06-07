@@ -106,7 +106,7 @@ jobs:
       with:
         node-version: 16
     - run: |
-        corepack enable npm
+        # corepack enable npm
         npm --version
     
     - run:  npm ci
@@ -151,7 +151,7 @@ jobs:
       with:
         node-version: 16
     - run: |
-        corepack enable npm
+        # corepack enable npm
         npm --version
 
     - run: npm ci
