@@ -4329,6 +4329,14 @@
         "category": "Error",
         "code": 5108
     },
+    "Option 'moduleResolution' must be set to '{0}' (or left unspecified) when option 'module' is set to '{1}'.": {
+        "category": "Error",
+        "code": 5109
+    },
+    "Option 'module' must be set to '{0}' when option 'moduleResolution' is set to '{1}'.": {
+        "category": "Error",
+        "code": 5110
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
