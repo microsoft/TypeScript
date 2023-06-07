@@ -103,9 +103,6 @@ jobs:
     - uses: actions/checkout@v3
 
     - uses: actions/setup-node@v3
-      with:
-        node-version: "*"
-        check-latest: true
     - run: |
         corepack enable npm
         npm --version
@@ -149,9 +146,6 @@ jobs:
         ref: ${{ github.base_ref }}
 
     - uses: actions/setup-node@v3
-      with:
-        node-version: "*"
-        check-latest: true
     - run: |
         corepack enable npm
         npm --version
