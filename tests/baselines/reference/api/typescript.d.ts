@@ -3178,7 +3178,7 @@ declare namespace ts {
         noUncheckedIndexedAccess?: boolean;
         out?: string;
         outDir?: string;
-        outExtension?: Extension.Mjs | Extension.Cjs | Extension.Js | "infer";
+        outExtension?: OutExtensionKind;
         outFile?: string;
         paths?: MapLike<string[]>;
         preserveConstEnums?: boolean;
@@ -3415,6 +3415,13 @@ declare namespace ts {
         Cjs = ".cjs",
         Cts = ".cts",
         Dcts = ".d.cts"
+    }
+    enum OutExtensionKind {
+        InferFromInput = 0,
+        InferFromModule = 1,
+        Js = 2,
+        Cjs = 3,
+        Mjs = 4
     }
     interface ResolvedModuleWithFailedLookupLocations {
         readonly resolvedModule: ResolvedModuleFull | undefined;
