@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/exportedEnumTypeAndValue.ts] ////
+
 === def.js ===
 /** @enum {number} */
 const MyEnum = {

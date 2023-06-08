@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/collisionExportsRequireAndAmbientEnum.ts] ////
+
 === collisionExportsRequireAndAmbientEnum_externalmodule.ts ===
 export declare enum require {
 >require : Symbol(require, Decl(collisionExportsRequireAndAmbientEnum_externalmodule.ts, 0, 0))

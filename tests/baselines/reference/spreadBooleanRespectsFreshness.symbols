@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/spreadBooleanRespectsFreshness.ts] ////
+
 === spreadBooleanRespectsFreshness.ts ===
 type Foo = FooBase | FooArray;
 >Foo : Symbol(Foo, Decl(spreadBooleanRespectsFreshness.ts, 0, 0))

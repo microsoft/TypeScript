@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/topLevelAwaitErrors.8.ts] ////
+
 === index.ts ===
 // await disallowed in default import
 import await from "./other";

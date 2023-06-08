@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextualSignatureInArrayElementLibEs2015.ts] ////
+
 === contextualSignatureInArrayElementLibEs2015.ts ===
 // See: https://github.com/microsoft/TypeScript/pull/53280#discussion_r1138684984
 

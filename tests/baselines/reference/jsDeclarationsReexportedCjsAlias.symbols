@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsReexportedCjsAlias.ts] ////
+
 === main.js ===
 const { SomeClass, SomeClass: Another } = require('./lib');
 >SomeClass : Symbol(SomeClass, Decl(main.js, 0, 7))

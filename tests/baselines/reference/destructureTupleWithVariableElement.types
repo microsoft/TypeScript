@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/destructureTupleWithVariableElement.ts] ////
+
 === destructureTupleWithVariableElement.ts ===
 // repro from #52302
 

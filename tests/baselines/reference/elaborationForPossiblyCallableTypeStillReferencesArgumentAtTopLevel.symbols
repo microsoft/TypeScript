@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/elaborationForPossiblyCallableTypeStillReferencesArgumentAtTopLevel.ts] ////
+
 === elaborationForPossiblyCallableTypeStillReferencesArgumentAtTopLevel.ts ===
 declare var ohno: new () => number;
 >ohno : Symbol(ohno, Decl(elaborationForPossiblyCallableTypeStillReferencesArgumentAtTopLevel.ts, 0, 11))

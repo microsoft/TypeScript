@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocImportTypeReferenceToClassAlias.ts] ////
+
 === mod1.js ===
 class C {
 >C : Symbol(C, Decl(mod1.js, 0, 0))

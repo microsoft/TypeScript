@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/varRequireFromTypescript.ts] ////
+
 === use.js ===
 var ex = require('./ex')
 >ex : Symbol(ex, Decl(use.js, 0, 3))

@@ -734,7 +734,7 @@ export namespace Compiler {
             !errors || (errors.length === 0) ? null : getErrorBaseline(inputFiles, errors, pretty)); // eslint-disable-line no-null/no-null
     }
 
-    export function doTypeAndSymbolBaseline(baselinePath: string, program: ts.Program, allFiles: {unitName: string, content: string}[], opts?: Baseline.BaselineOptions, multifile?: boolean, skipTypeBaselines?: boolean, skipSymbolBaselines?: boolean, hasErrorBaseline?: boolean) {
+    export function doTypeAndSymbolBaseline(baselinePath: string, header: string, program: ts.Program, allFiles: {unitName: string, content: string}[], opts?: Baseline.BaselineOptions, multifile?: boolean, skipTypeBaselines?: boolean, skipSymbolBaselines?: boolean, hasErrorBaseline?: boolean) {
         // The full walker simulates the types that you would get from doing a full
         // compile.  The pull walker simulates the types you get when you just do
         // a type query for a random node (like how the LS would do it).  Most of the
@@ -809,7 +809,7 @@ export namespace Compiler {
                 const [, content] = value;
                 result += content;
             }
-            return result || null; // eslint-disable-line no-null/no-null
+            return result ? (`//// [${header}] ////\r\n\r\n` + result) : null; // eslint-disable-line no-null/no-null
         }
 
         function *iterateBaseLine(isSymbolBaseline: boolean, skipBaseline?: boolean): IterableIterator<[string, string]> {
@@ -910,9 +910,8 @@ export namespace Compiler {
         // check js output
         let tsCode = "";
         const tsSources = otherFiles.concat(toBeCompiled);
-        if (tsSources.length > 1) {
-            tsCode += "//// [" + header + "] ////\r\n\r\n";
-        }
+        tsCode += "//// [" + header + "] ////\r\n\r\n";
+
         for (let i = 0; i < tsSources.length; i++) {
             tsCode += "//// [" + ts.getBaseFileName(tsSources[i].unitName) + "]\r\n";
             tsCode += tsSources[i].content + (i < (tsSources.length - 1) ? "\r\n" : "");

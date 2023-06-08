@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privateNameJsx.tsx] ////
+
 === privateNameJsx.tsx ===
 class Test {
 >Test : Symbol(Test, Decl(privateNameJsx.tsx, 0, 0))

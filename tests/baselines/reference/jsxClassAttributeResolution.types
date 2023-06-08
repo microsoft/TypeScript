@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxClassAttributeResolution.tsx] ////
+
 === file.tsx ===
 class App {}
 >App : App

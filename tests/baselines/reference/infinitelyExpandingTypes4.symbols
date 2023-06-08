@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/infinitelyExpandingTypes4.ts] ////
+
 === infinitelyExpandingTypes4.ts ===
 interface Query<T> {
 >Query : Symbol(Query, Decl(infinitelyExpandingTypes4.ts, 0, 0))

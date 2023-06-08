@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/yieldExpressions/yieldExpressionInControlFlow.ts] ////
+
 === bug25149.js ===
 function* f() {
 >f : () => Generator<any, void, any>

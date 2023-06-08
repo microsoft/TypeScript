@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/allowSyntheticDefaultImports8.ts] ////
+
 === b.d.ts ===
 export function foo();
 >foo : () => any

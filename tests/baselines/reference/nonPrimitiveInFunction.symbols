@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/nonPrimitive/nonPrimitiveInFunction.ts] ////
+
 === nonPrimitiveInFunction.ts ===
 function takeObject(o: object) {}
 >takeObject : Symbol(takeObject, Decl(nonPrimitiveInFunction.ts, 0, 0))

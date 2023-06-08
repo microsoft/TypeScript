@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constEnumPreserveEmitNamedExport2.ts] ////
+
 === a.ts ===
 const enum A {
 >A : A

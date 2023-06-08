@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsTypedefPropertyAndExportAssignment.ts] ////
+
 === index.js ===
 const {taskGroups, taskNameToGroup} = require('./module.js');
 >taskGroups : Symbol(taskGroups, Decl(index.js, 0, 7))

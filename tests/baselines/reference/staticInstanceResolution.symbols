@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/staticInstanceResolution.ts] ////
+
 === staticInstanceResolution.ts ===
 class Comment {
 >Comment : Symbol(Comment, Decl(staticInstanceResolution.ts, 0, 0))

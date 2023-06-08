@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocTemplateConstructorFunction2.ts] ////
+
 === templateTagWithNestedTypeLiteral.js ===
 /**
  * @param {T} t

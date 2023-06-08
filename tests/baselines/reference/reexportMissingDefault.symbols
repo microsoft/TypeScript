@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reexportMissingDefault.ts] ////
+
 === b.ts ===
 export const b = null;
 >b : Symbol(b, Decl(b.ts, 0, 12))

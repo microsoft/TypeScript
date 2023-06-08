@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsExportAssignmentNonMutableLocation.ts] ////
+
 === file.js ===
 const customSymbol = Symbol("custom");
 >customSymbol : Symbol(customSymbol, Decl(file.js, 0, 5))

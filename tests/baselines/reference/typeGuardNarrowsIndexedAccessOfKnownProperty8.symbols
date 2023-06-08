@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty8.ts] ////
+
 === ./a.ts ===
 export const key = "a";
 >key : Symbol(key, Decl(a.ts, 0, 12))

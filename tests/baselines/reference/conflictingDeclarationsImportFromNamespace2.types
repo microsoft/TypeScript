@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/conflictingDeclarationsImportFromNamespace2.ts] ////
+
 === node_modules/@types/lodash/object.d.ts ===
 import _ = require("./index");
 >_ : _.LoDashStatic

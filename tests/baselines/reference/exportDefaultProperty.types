@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportDefaultProperty.ts] ////
+
 === index.ts ===
 /// <reference path="declarations.d.ts" />
 import fooBar from "foobar";

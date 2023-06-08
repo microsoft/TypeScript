@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/taggedTemplatesInModuleAndGlobal.ts] ////
+
 === global.ts ===
 namespace n {
 >n : typeof n

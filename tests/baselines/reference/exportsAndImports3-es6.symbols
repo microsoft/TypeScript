@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/modules/exportsAndImports3-es6.ts] ////
+
 === t1.ts ===
 export var v = 1;
 >v : Symbol(v, Decl(t1.ts, 0, 10))

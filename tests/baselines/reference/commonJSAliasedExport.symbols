@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/commonJSAliasedExport.ts] ////
+
 === bug43713.js ===
 const { funky } = require('./commonJSAliasedExport');
 >funky : Symbol(funky, Decl(bug43713.js, 0, 7))

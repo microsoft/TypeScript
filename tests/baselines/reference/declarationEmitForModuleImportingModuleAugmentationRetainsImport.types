@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitForModuleImportingModuleAugmentationRetainsImport.ts] ////
+
 === child1.ts ===
 import { ParentThing } from './parent';
 >ParentThing : typeof ParentThing

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericContextualTypingSpecialization.ts] ////
+
 === genericContextualTypingSpecialization.ts ===
 var b: number[];
 >b : Symbol(b, Decl(genericContextualTypingSpecialization.ts, 0, 3))

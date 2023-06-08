@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mappedTypeWithAsClauseAndLateBoundProperty2.ts] ////
+
 //// [mappedTypeWithAsClauseAndLateBoundProperty2.ts]
 export const thing = (null as any as { [K in keyof number[] as Exclude<K, "length">]: (number[])[K] });
 

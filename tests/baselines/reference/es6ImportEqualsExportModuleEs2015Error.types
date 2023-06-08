@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es6ImportEqualsExportModuleEs2015Error.ts] ////
+
 === a.ts ===
 class a { }
 >a : a

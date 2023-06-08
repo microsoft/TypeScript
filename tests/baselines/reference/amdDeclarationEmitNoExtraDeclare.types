@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/amdDeclarationEmitNoExtraDeclare.ts] ////
+
 === Class.ts ===
 import { Configurable } from "./Configurable"
 >Configurable : <T extends import("Configurable").Constructor<{}>>(base: T) => T

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/moduleExportsAliasLoop1.ts] ////
+
 === x.js ===
 exports.fn1();
 >exports.fn1() : any

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsClassStatic2.ts] ////
+
 === Foo.js ===
 class Base {
 >Base : Base

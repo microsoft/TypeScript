@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsTypeReferences.ts] ////
+
 === index.js ===
 /// <reference types="node" />
 

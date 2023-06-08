@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/namespaceMergedWithFunctionWithOverloadsUsage.ts] ////
+
 === index.ts ===
 import X = require("./file");
 >X : Symbol(X, Decl(index.ts, 0, 0))

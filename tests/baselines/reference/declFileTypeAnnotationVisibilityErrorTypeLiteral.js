@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts] ////
+
 //// [declFileTypeAnnotationVisibilityErrorTypeLiteral.ts]
 module m {
     class private1 {

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxPreserveEmit1.tsx] ////
+
 === test.tsx ===
 // Should emit 'react-router' in the AMD dependency list
 import React = require('react');

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/moduleExportsAliasLoop2.ts] ////
+
 === x.js ===
 const Foo = { min: 3 };
 >Foo : { min: number; }

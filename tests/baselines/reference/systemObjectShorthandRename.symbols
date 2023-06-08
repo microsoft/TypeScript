@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/systemObjectShorthandRename.ts] ////
+
 === x.ts ===
 export const x = 'X'
 >x : Symbol(x, Decl(x.ts, 0, 12))

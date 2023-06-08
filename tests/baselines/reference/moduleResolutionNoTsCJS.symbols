@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleResolutionNoTsCJS.ts] ////
+
 === x.ts ===
 
 // CommonJS output

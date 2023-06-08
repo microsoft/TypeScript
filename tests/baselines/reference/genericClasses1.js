@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericClasses1.ts] ////
+
 //// [genericClasses1.ts]
 class C<T> {
 	public x: T;

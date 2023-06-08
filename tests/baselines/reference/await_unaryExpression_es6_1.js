@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/async/es6/await_unaryExpression_es6_1.ts] ////
+
 //// [await_unaryExpression_es6_1.ts]
 async function bar() {
     !await 42; // OK

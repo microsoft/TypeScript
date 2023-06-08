@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/ambientExportDefaultErrors.ts] ////
+
 === consumer.ts ===
 
 /// <reference path="./indirection.d.ts" />

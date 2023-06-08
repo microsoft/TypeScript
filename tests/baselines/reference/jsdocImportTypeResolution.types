@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsdocImportTypeResolution.ts] ////
+
 === module.js ===
 export class MyClass {
 >MyClass : MyClass

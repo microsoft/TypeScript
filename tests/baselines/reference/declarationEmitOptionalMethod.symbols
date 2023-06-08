@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitOptionalMethod.ts] ////
+
 === declarationEmitOptionalMethod.ts ===
 export const Foo = (opts: {
 >Foo : Symbol(Foo, Decl(declarationEmitOptionalMethod.ts, 0, 12))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleAugmentationGlobal3.ts] ////
+
 === f1.ts ===
 export class A {};
 >A : A

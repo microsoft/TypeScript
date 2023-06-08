@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/outModuleConcatSystem.ts] ////
+
 === ref/a.ts ===
 export class A { }
 >A : A

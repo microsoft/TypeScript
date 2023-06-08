@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/systemModule13.ts] ////
+
 === systemModule13.ts ===
 export let [x,y,z] = [1, 2, 3];
 >x : Symbol(x, Decl(systemModule13.ts, 0, 12))

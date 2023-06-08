@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reexportMissingDefault5.ts] ////
+
 === b.d.ts ===
 declare var b: number;
 >b : number

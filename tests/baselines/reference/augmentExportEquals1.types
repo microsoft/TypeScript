@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/augmentExportEquals1.ts] ////
+
 === file3.ts ===
 import x = require("./file1");
 >x : number

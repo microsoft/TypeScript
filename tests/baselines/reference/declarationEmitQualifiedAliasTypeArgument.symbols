@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitQualifiedAliasTypeArgument.ts] ////
+
 === bbb.d.ts ===
 export interface INode<T> {
 >INode : Symbol(INode, Decl(bbb.d.ts, 0, 0))

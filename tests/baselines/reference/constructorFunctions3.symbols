@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/constructorFunctions3.ts] ////
+
 === a.js ===
 function Instance() {
 >Instance : Symbol(Instance, Decl(a.js, 0, 0))

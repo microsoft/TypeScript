@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/multiImportExport.ts] ////
+
 === consumer.ts ===
 import Drawing = require('./Drawing');
 >Drawing : typeof Drawing

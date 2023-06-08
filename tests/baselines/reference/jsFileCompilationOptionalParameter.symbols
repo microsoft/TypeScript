@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsFileCompilationOptionalParameter.ts] ////
+
 === a.js ===
 function F(p?) { }
 >F : Symbol(F, Decl(a.js, 0, 0))

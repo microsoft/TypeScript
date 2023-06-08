@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es7/exponentiationOperator/emitCompoundExponentiationAssignmentWithIndexingOnLHS2.ts] ////
+
 //// [emitCompoundExponentiationAssignmentWithIndexingOnLHS2.ts]
 var globalCounter = 0;
 function foo() {

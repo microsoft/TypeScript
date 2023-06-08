@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/augmentExportEquals5.ts] ////
+
 === express.d.ts ===
 declare module Express {
 >Express : Symbol(Express, Decl(express.d.ts, 0, 0))

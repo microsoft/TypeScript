@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/commonJSImportNestedClassTypeReference.ts] ////
+
 === main.js ===
 const { K } = require("./mod1");
 >K : typeof K

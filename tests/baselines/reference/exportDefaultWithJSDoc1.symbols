@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportDefaultWithJSDoc1.ts] ////
+
 === a.js ===
 
 /**

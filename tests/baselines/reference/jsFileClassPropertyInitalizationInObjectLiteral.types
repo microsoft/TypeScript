@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsFileClassPropertyInitalizationInObjectLiteral.ts] ////
+
 === foo.js ===
 module.exports = function () {
 >module.exports = function () {  class A { }  return {    c: A.b = 1,  }} : () => { c: number; }

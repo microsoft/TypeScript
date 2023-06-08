@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nestedRecursiveArraysOrObjectsError01.ts] ////
+
 === nestedRecursiveArraysOrObjectsError01.ts ===
 type Style = StyleBase | StyleArray;
 >Style : Symbol(Style, Decl(nestedRecursiveArraysOrObjectsError01.ts, 0, 0))

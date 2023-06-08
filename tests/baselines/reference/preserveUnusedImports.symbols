@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/preserveUnusedImports.ts] ////
+
 === a.ts ===
 export type A = {};
 >A : Symbol(A, Decl(a.ts, 0, 0))

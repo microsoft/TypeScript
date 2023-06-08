@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameStaticFieldAssignment.ts] ////
+
 //// [privateNameStaticFieldAssignment.ts]
 class A {
     static #field = 0;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedImports13.ts] ////
+
 === foo.tsx ===
 import React = require("react");
 >React : typeof React

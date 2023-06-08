@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/moduleExportsAliasLoop2.ts] ////
+
 === x.js ===
 const Foo = { min: 3 };
 >Foo : Symbol(Foo, Decl(x.js, 0, 5))

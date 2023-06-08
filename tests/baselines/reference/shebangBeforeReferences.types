@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/shebangBeforeReferences.ts] ////
+
 === f.ts ===
 #!/usr/bin/env node
 

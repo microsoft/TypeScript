@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsNoImplicitAnyNoCascadingReferenceErrors.ts] ////
+
 === somelib.d.ts ===
 export declare class Foo<T> {
 >Foo : Symbol(Foo, Decl(somelib.d.ts, --, --))

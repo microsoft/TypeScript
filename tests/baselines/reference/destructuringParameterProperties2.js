@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringParameterProperties2.ts] ////
+
 //// [destructuringParameterProperties2.ts]
 class C1 {
     constructor(private k: number, private [a, b, c]: [number, string, boolean]) {

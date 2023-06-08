@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts] ////
+
 === indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts ===
 type AnyFunction = (...args: any[]) => any;
 >AnyFunction : (...args: any[]) => any

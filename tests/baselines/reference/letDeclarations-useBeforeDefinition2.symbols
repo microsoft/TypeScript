@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/letDeclarations-useBeforeDefinition2.ts] ////
+
 === file1.ts ===
 l;
 >l : Symbol(l, Decl(file2.ts, 0, 5))

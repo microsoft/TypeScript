@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/destructuredDeclarationEmit.ts] ////
+
 === foo.ts ===
 const foo = { bar: 'hello', bat: 'world', bam: { bork: { bar: 'a', baz: 'b' } } };
 >foo : Symbol(foo, Decl(foo.ts, 0, 5))

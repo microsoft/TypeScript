@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/umd4.ts] ////
+
 === a.ts ===
 import * as Bar from './foo';
 >Bar : Symbol(Bar, Decl(a.ts, 0, 6))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/externalModuleAssignToVar.ts] ////
+
 === externalModuleAssignToVar_core.ts ===
 ///<reference path='externalModuleAssignToVar_core_require.ts'/>
 import ext = require('externalModuleAssignToVar_core_require');

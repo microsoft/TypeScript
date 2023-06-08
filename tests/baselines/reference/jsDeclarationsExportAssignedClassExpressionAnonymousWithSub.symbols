@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedClassExpressionAnonymousWithSub.ts] ////
+
 === index.js ===
 module.exports = class {
 >module.exports : Symbol(module.exports, Decl(index.js, 0, 0))

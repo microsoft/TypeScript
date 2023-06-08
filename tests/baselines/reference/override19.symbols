@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/override/override19.ts] ////
+
 === override19.ts ===
 type Foo = abstract new(...args: any) => any;
 >Foo : Symbol(Foo, Decl(override19.ts, 0, 0))

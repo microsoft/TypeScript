@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importHelpersNoHelpersForAsyncGenerators.ts] ////
+
 === main.ts ===
 export async function * f() {
 >f : () => AsyncGenerator<number, void, undefined>

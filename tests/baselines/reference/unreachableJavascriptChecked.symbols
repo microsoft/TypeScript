@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unreachableJavascriptChecked.ts] ////
+
 === unreachable.js ===
 function unreachable() {
 >unreachable : Symbol(unreachable, Decl(unreachable.js, 0, 0))

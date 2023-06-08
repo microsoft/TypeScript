@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignmentWithKeywordName.ts] ////
+
 === index.js ===
 var x = 12;
 >x : Symbol(x, Decl(index.js, 0, 3))

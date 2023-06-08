@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxDynamicTagName9.tsx] ////
+
 === react.d.ts ===
 declare module 'react' {
 >'react' : Symbol("react", Decl(react.d.ts, 0, 0))

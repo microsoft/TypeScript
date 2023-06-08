@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/async/es2017/await_unaryExpression_es2017.ts] ////
+
 === await_unaryExpression_es2017.ts ===
 async function bar() {
 >bar : Symbol(bar, Decl(await_unaryExpression_es2017.ts, 0, 0))

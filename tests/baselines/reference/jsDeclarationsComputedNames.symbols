@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsComputedNames.ts] ////
+
 === index.js ===
 const TopLevelSym = Symbol();
 >TopLevelSym : Symbol(TopLevelSym, Decl(index.js, 0, 5))

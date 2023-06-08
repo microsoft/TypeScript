@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/requireOfJsonFileWithAmd.ts] ////
+
 === file1.ts ===
 import b1 = require('./b');
 >b1 : Symbol(b1, Decl(file1.ts, 0, 0))

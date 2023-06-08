@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportAssignmentEnum.ts] ////
+
 === exportAssignmentEnum_B.ts ===
 import EnumE = require("./exportAssignmentEnum_A");
 >EnumE : Symbol(EnumE, Decl(exportAssignmentEnum_B.ts, 0, 0))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitExpandoPropertyPrivateName.ts] ////
+
 === a.ts ===
 interface I {}
 export function f(): I { return null as I; }

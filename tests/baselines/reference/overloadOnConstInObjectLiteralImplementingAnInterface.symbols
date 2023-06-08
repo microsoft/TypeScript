@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/overloadOnConstInObjectLiteralImplementingAnInterface.ts] ////
+
 === overloadOnConstInObjectLiteralImplementingAnInterface.ts ===
 interface I {
 >I : Symbol(I, Decl(overloadOnConstInObjectLiteralImplementingAnInterface.ts, 0, 0))

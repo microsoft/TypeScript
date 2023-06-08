@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/systemModule15.ts] ////
+
 === file1.ts ===
 import * as moduleB from "./file2"
 >moduleB : typeof moduleB

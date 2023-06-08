@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/jsxCheckJsxNoTypeArgumentsAllowed.tsx] ////
+
 === component.d.ts ===
 import * as React from "react";
 >React : typeof React

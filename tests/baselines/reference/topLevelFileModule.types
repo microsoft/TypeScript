@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/topLevelFileModule.ts] ////
+
 === foo_1.ts ===
 import foo = require("./vs/foo_0");
 >foo : typeof foo

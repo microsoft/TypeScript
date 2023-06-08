@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/intersection/intersectionsAndEmptyObjects.ts] ////
+
 === intersectionsAndEmptyObjects.ts ===
 // Empty object type literals are removed from intersections types
 // that contain other object types

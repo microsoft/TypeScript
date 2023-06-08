@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/aliasUsageInIndexerOfClass.ts] ////
+
 === aliasUsageInIndexerOfClass_main.ts ===
 import Backbone = require("./aliasUsageInIndexerOfClass_backbone");
 >Backbone : Symbol(Backbone, Decl(aliasUsageInIndexerOfClass_main.ts, 0, 0))

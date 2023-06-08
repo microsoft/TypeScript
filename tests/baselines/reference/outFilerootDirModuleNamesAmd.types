@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/moduleExportsAmd/outFilerootDirModuleNamesAmd.ts] ////
+
 === src/a.ts ===
 import foo from "./b";
 >foo : () => void

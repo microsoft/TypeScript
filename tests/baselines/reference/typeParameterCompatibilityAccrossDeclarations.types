@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeParameterCompatibilityAccrossDeclarations.ts] ////
+
 === typeParameterCompatibilityAccrossDeclarations.ts ===
 var a = {
 >a : { x: <T>(y: T) => T; }

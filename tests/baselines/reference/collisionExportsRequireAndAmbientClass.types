@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/collisionExportsRequireAndAmbientClass.ts] ////
+
 === collisionExportsRequireAndAmbientClass_externalmodule.ts ===
 export declare class require {
 >require : require

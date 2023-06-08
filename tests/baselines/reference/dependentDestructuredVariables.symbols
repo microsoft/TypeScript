@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/dependentDestructuredVariables.ts] ////
+
 === dependentDestructuredVariables.ts ===
 type Action =
 >Action : Symbol(Action, Decl(dependentDestructuredVariables.ts, 0, 0))

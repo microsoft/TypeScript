@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsFileCompilationExternalPackageError.ts] ////
+
 === moduleA/a.js ===
 import {a} from "b";
 >a : any

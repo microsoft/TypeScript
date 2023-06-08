@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/implicitAnyCastedValue.ts] ////
+
 === implicitAnyCastedValue.ts ===
 var x = function () {
 >x : Symbol(x, Decl(implicitAnyCastedValue.ts, 0, 3))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/dynamicNames.ts] ////
+
 === module.ts ===
 export const c0 = "a";
 >c0 : Symbol(c0, Decl(module.ts, 0, 12))

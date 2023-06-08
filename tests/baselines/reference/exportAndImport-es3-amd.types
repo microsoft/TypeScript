@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/modules/exportAndImport-es3-amd.ts] ////
+
 === m1.ts ===
 export default function f1() {
 >f1 : () => void

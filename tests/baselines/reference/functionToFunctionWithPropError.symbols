@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionToFunctionWithPropError.ts] ////
+
 === functionToFunctionWithPropError.ts ===
 declare let x: { (): string; prop: number };
 >x : Symbol(x, Decl(functionToFunctionWithPropError.ts, 0, 11))

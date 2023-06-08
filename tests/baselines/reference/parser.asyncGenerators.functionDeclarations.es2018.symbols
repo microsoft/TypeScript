@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript2018/asyncGenerators/parser.asyncGenerators.functionDeclarations.es2018.ts] ////
+
 === functionDeclarationIsOk.ts ===
 async function * f1() {
 >f1 : Symbol(f1, Decl(functionDeclarationIsOk.ts, 0, 0))

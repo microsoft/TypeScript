@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveExportAssignmentAndFindAliasedType5.ts] ////
+
 === recursiveExportAssignmentAndFindAliasedType5_moduleA.ts ===
 import moduleC = require("recursiveExportAssignmentAndFindAliasedType5_moduleC");
 >moduleC : any

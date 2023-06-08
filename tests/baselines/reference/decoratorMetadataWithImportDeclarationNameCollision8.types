@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/decoratorMetadataWithImportDeclarationNameCollision8.ts] ////
+
 === service.ts ===
 import database = require('./db');
 >database : typeof database

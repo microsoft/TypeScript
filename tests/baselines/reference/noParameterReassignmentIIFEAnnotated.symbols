@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noParameterReassignmentIIFEAnnotated.ts] ////
+
 === index.js ===
 self.importScripts = (function (importScripts) {
 >self.importScripts : Symbol(importScripts, Decl(lib.webworker.importscripts.d.ts, --, --))

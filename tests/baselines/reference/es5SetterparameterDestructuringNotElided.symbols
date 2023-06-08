@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es5SetterparameterDestructuringNotElided.ts] ////
+
 === es5SetterparameterDestructuringNotElided.ts ===
 const foo = {
 >foo : Symbol(foo, Decl(es5SetterparameterDestructuringNotElided.ts, 0, 5))

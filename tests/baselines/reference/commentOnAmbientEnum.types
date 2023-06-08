@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentOnAmbientEnum.ts] ////
+
 === b.ts ===
 ///<reference path="a.ts"/>
 declare enum E {

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/missingReturnStatement.ts] ////
+
 === missingReturnStatement.ts ===
 module Test {
 >Test : typeof Test

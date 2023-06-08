@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/collisionExportsRequireAndAlias.ts] ////
+
 === collisionExportsRequireAndAlias_file2.ts ===
 import require = require('collisionExportsRequireAndAlias_file1'); // Error
 >require : typeof require

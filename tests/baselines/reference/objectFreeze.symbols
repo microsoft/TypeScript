@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectFreeze.ts] ////
+
 === objectFreeze.ts ===
 const f = Object.freeze(function foo(a: number, b: string) { return false; });
 >f : Symbol(f, Decl(objectFreeze.ts, 0, 5))

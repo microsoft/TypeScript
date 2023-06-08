@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/typeFromJSInitializer2.ts] ////
+
 === a.js ===
 /** @type {() => undefined} */
 function f1() {

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts] ////
+
 === functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts ===
 function f10(): undefined {
 >f10 : () => undefined

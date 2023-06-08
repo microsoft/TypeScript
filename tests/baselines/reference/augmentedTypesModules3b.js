@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/augmentedTypesModules3b.ts] ////
+
 //// [augmentedTypesModules3b.ts]
 class m3b { foo() { } }
 module m3b { var y = 2; }

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/nodeModulesTypesVersionPackageExports.ts] ////
+
 === index.ts ===
 // esm format file
 import * as mod from "inner";

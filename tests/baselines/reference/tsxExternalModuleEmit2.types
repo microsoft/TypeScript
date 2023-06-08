@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxExternalModuleEmit2.tsx] ////
+
 === modules.d.ts ===
 declare module 'mod' {
 >'mod' : typeof import("mod")

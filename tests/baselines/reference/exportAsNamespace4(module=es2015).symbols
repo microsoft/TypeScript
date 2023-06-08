@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es2020/modules/exportAsNamespace4.ts] ////
+
 === 0.ts ===
 export const a = 1;
 >a : Symbol(a, Decl(0.ts, 0, 12))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationTypecheckNoUseBeforeReferenceCheck.ts] ////
+
 === index.d.ts ===
 export class C extends Object {
 >C : C

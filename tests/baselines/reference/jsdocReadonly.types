@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocReadonly.ts] ////
+
 === jsdocReadonly.js ===
 class LOL {
 >LOL : LOL

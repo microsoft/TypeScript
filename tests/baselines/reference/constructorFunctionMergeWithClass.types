@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/constructorFunctionMergeWithClass.ts] ////
+
 === file1.js ===
 var SomeClass = function () {
 >SomeClass : typeof SomeClass

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitMixinPrivateProtected.ts] ////
+
 === first.ts ===
 declare function mix<TMix>(mixin: TMix): TMix;
 >mix : <TMix>(mixin: TMix) => TMix

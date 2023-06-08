@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/legacyNodeModulesExportsSpecifierGenerationConditions.ts] ////
+
 === index.ts ===
 export const a = async () => (await import("inner")).x();
 >a : () => Promise<import("node_modules/inner/private").Thing>

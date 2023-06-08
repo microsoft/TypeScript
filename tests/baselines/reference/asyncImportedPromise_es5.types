@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/async/es5/asyncImportedPromise_es5.ts] ////
+
 === task.ts ===
 export class Task<T> extends Promise<T> { }
 >Task : Task<T>

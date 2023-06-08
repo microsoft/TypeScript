@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/ambientExternalModuleWithoutInternalImportDeclaration.ts] ////
+
 === ambientExternalModuleWithoutInternalImportDeclaration_1.ts ===
 ///<reference path='ambientExternalModuleWithoutInternalImportDeclaration_0.ts'/>
 import A = require('M');

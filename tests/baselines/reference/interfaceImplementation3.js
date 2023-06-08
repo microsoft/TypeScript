@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/interfaceImplementation3.ts] ////
+
 //// [interfaceImplementation3.ts]
 interface I1 {
     iObj:{ };

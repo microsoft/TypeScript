@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/operationsAvailableOnPromisedType.ts] ////
+
 //// [operationsAvailableOnPromisedType.ts]
 async function fn(
     a: number,

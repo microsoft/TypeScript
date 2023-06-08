@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/defaultPropsEmptyCurlyBecomesAnyForJs.ts] ////
+
 === library.d.ts ===
 export class Foo<T = {}, U = {}> {
 >Foo : Symbol(Foo, Decl(library.d.ts, --, --))

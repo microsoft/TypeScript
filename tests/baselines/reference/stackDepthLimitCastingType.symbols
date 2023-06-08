@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/stackDepthLimitCastingType.ts] ////
+
 === node_modules/backbone/index.d.ts ===
 declare global {
 >global : Symbol(global, Decl(index.d.ts, 0, 0))

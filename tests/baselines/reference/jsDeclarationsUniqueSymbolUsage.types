@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsUniqueSymbolUsage.ts] ////
+
 === a.js ===
 export const kSymbol = Symbol("my-symbol");
 >kSymbol : unique symbol

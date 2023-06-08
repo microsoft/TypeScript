@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/requireTwoPropertyAccesses.ts] ////
+
 === requireTwoPropertyAccesses.js ===
 const value = require("./mod").x.y
 >value : error

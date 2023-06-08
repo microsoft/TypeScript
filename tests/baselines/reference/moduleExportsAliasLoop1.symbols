@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/moduleExportsAliasLoop1.ts] ////
+
 === x.js ===
 exports.fn1();
 >exports : Symbol("x", Decl(x.js, 0, 0))

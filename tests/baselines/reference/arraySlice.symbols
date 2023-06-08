@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arraySlice.ts] ////
+
 === arraySlice.ts ===
 var arr: string[] | number[];
 >arr : Symbol(arr, Decl(arraySlice.ts, 0, 3))

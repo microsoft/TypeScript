@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocImportType.ts] ////
+
 === use.js ===
 /// <reference path='./types.d.ts'/>
 /** @typedef {import("./mod1")} C

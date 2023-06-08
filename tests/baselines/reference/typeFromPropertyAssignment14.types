@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment14.ts] ////
+
 === def.js ===
 var Outer = {};
 >Outer : typeof Outer

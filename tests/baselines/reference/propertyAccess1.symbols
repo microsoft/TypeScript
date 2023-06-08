@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/propertyAccess1.ts] ////
+
 === propertyAccess1.ts ===
 var foo: { a: number; };
 >foo : Symbol(foo, Decl(propertyAccess1.ts, 0, 3))

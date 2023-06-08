@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importedEnumMemberMergedWithExportedAliasIsError.ts] ////
+
 === enum.ts ===
 export enum Enum {
 >Enum : Enum

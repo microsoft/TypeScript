@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileConstructSignatures.ts] ////
+
 === declFileConstructSignatures_0.ts ===
 export interface IConstructSignature {
 >IConstructSignature : Symbol(IConstructSignature, Decl(declFileConstructSignatures_0.ts, 0, 0))

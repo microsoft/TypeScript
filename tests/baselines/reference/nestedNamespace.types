@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/typeOnly/nestedNamespace.ts] ////
+
 === a.ts ===
 export namespace types {
 >types : typeof types

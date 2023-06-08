@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/emitDecoratorMetadata_restArgs.ts] ////
+
 === emitDecoratorMetadata_restArgs.ts ===
 declare const MyClassDecorator: ClassDecorator;
 >MyClassDecorator : Symbol(MyClassDecorator, Decl(emitDecoratorMetadata_restArgs.ts, 0, 13))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mappedTypeGenericWithKnownKeys.ts] ////
+
 === mappedTypeGenericWithKnownKeys.ts ===
 // based on #50054
 

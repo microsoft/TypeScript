@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeUsedAsValueError2.ts] ////
+
 === world.ts ===
 import HelloInterface = require("helloInterface");
 >HelloInterface : any

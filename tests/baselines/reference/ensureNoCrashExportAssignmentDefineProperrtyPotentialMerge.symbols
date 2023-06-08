@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/ensureNoCrashExportAssignmentDefineProperrtyPotentialMerge.ts] ////
+
 === index.js ===
 const _item = require("./namespacer");
 >_item : Symbol(_item, Decl(index.js, 0, 5))

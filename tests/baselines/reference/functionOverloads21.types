@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionOverloads21.ts] ////
+
 === functionOverloads21.ts ===
 function foo(bar:{a:number;}[]);
 >foo : { (bar: {    a: number;}[]): any; (bar: { a: number; b: string; }[]): any; }

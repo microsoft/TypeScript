@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileGenericType.ts] ////
+
 === declFileGenericType.ts ===
 export module C {
 >C : typeof C

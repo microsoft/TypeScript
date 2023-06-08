@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contravariantInferenceAndTypeGuard.ts] ////
+
 === contravariantInferenceAndTypeGuard.ts ===
 interface ListItem<TData> {
 >ListItem : Symbol(ListItem, Decl(contravariantInferenceAndTypeGuard.ts, 0, 0))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile.ts] ////
+
 === privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts ===
 import exporter = require("./privacyFunctionCannotNameParameterTypeDeclFile_exporter");
 >exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))

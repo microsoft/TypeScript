@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleAugmentationsImports4.ts] ////
+
 === main.ts ===
 /// <reference path="d.d.ts"/>
 /// <reference path="e.d.ts"/>

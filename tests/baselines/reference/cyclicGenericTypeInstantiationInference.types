@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/cyclicGenericTypeInstantiationInference.ts] ////
+
 === cyclicGenericTypeInstantiationInference.ts ===
 function foo<T>() {
 >foo : <T>() => { y2: { y2: { y2: { y2: { y2: { y2: { y2: { y2: { y2: { y2: { y2: any; }; }; }; }; }; }; }; }; }; }; }

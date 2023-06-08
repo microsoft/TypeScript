@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/declarationWithNoInitializer.ts] ////
+
 === declarationWithNoInitializer.ts ===
 var [a, b];          // Error, no initializer
 >a : Symbol(a, Decl(declarationWithNoInitializer.ts, 0, 5))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitReexportedSymlinkReference2.ts] ////
+
 === monorepo/pkg3/src/index.ts ===
 
 export * from './keys';

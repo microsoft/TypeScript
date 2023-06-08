@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitCrossFileImportTypeOfAmbientModule.ts] ////
+
 === types/component.d.ts ===
 declare module '@namespace/component' {
 >'@namespace/component' : typeof import("@namespace/component")

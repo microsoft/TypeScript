@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/symbolMergeValueAndImportedType.ts] ////
+
 === main.ts ===
 import { X } from "./other";
 >X : Symbol(X, Decl(main.ts, 0, 8), Decl(main.ts, 1, 5))

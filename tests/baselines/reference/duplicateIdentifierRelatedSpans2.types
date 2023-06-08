@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicateIdentifierRelatedSpans2.ts] ////
+
 === file1.ts ===
 class A { }
 >A : A

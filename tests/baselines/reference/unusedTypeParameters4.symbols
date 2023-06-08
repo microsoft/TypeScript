@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedTypeParameters4.ts] ////
+
 === unusedTypeParameters4.ts ===
 var x: {
 >x : Symbol(x, Decl(unusedTypeParameters4.ts, 0, 3))

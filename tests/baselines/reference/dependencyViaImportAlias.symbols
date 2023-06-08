@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/dependencyViaImportAlias.ts] ////
+
 === B.ts ===
 import a = require('A');
 >a : Symbol(a, Decl(B.ts, 0, 0))

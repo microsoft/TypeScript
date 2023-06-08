@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/decorators/class/method/decoratorOnClassMethod12.ts] ////
+
 === decoratorOnClassMethod12.ts ===
 module M {
 >M : Symbol(M, Decl(decoratorOnClassMethod12.ts, 0, 0))

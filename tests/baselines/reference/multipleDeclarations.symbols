@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/multipleDeclarations.ts] ////
+
 === input.js ===
 function C() {
 >C : Symbol(C, Decl(input.js, 0, 0))

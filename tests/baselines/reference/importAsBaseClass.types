@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importAsBaseClass.ts] ////
+
 === importAsBaseClass_1.ts ===
 import Greeter = require("./importAsBaseClass_0");
 >Greeter : typeof Greeter

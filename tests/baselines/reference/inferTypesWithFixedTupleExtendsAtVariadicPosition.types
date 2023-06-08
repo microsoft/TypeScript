@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inferTypesWithFixedTupleExtendsAtVariadicPosition.ts] ////
+
 === inferTypesWithFixedTupleExtendsAtVariadicPosition.ts ===
 // repro #51138
 

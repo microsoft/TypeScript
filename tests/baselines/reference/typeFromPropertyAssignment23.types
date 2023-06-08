@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment23.ts] ////
+
 === a.js ===
 class B {
 >B : B

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitAnyMissingGetAccessor.ts] ////
+
 === noImplicitAnyMissingGetAccessor.ts ===
 abstract class Parent
 >Parent : Symbol(Parent, Decl(noImplicitAnyMissingGetAccessor.ts, 0, 0))

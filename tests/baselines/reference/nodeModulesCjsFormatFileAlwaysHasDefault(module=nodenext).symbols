@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/nodeModulesCjsFormatFileAlwaysHasDefault.ts] ////
+
 === subfolder/index.ts ===
 // cjs format file
 export const a = 1;

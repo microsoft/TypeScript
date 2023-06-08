@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/collisionExportsRequireAndClass.ts] ////
+
 === collisionExportsRequireAndClass_externalmodule.ts ===
 export class require {
 >require : Symbol(require, Decl(collisionExportsRequireAndClass_externalmodule.ts, 0, 0))

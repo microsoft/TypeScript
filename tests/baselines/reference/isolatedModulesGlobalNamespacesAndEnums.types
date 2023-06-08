@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/isolatedModulesGlobalNamespacesAndEnums.ts] ////
+
 === script-namespaces.ts ===
 namespace Instantiated {
 >Instantiated : typeof Instantiated

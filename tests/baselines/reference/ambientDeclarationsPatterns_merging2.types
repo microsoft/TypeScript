@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/ambient/ambientDeclarationsPatterns_merging2.ts] ////
+
 === types.ts ===
 declare module "*.foo" {
 >"*.foo" : typeof import("*.foo")

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/lateBoundMethodNameAssigmentJS.ts] ////
+
 === lateBoundMethodNameAssigmentJS.js ===
 const _symbol = Symbol("_sym");
 >_symbol : Symbol(_symbol, Decl(lateBoundMethodNameAssigmentJS.js, 0, 5))

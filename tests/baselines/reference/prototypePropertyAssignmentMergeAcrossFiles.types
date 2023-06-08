@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/prototypePropertyAssignmentMergeAcrossFiles.ts] ////
+
 === prototypePropertyAssignmentMergeAcrossFiles.js ===
 function C() {
 >C : typeof C

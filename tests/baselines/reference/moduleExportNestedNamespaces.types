@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/moduleExportNestedNamespaces.ts] ////
+
 === mod.js ===
 module.exports.n = {};
 >module.exports.n = {} : typeof n

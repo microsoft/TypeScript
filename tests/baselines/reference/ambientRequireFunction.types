@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/ambientRequireFunction.ts] ////
+
 === app.js ===
 /// <reference path="node.d.ts"/>
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/restParameters/emitRestParametersFunctionExpression.ts] ////
+
 === emitRestParametersFunctionExpression.ts ===
 var funcExp = (...rest) => { }
 >funcExp : Symbol(funcExp, Decl(emitRestParametersFunctionExpression.ts, 0, 3))

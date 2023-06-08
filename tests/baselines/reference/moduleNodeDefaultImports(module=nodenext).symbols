@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleNodeDefaultImports.ts] ////
+
 === mod.cts ===
 declare function fun(): void;
 >fun : Symbol(fun, Decl(mod.cts, 0, 0))

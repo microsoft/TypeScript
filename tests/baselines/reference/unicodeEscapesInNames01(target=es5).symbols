@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unicodeEscapesInNames01.ts] ////
+
 === identifierVariableWithEscape1.ts ===
 export let \u0078 = 10;
 >\u0078 : Symbol(\u0078, Decl(identifierVariableWithEscape1.ts, 0, 10))

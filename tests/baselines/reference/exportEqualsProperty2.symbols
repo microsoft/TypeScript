@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportEqualsProperty2.ts] ////
+
 === b.ts ===
 import B = require("./a");
 >B : Symbol(B, Decl(b.ts, 0, 0))

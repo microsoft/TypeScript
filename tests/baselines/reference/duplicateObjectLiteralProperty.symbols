@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicateObjectLiteralProperty.ts] ////
+
 === duplicateObjectLiteralProperty.ts ===
 var x = {
 >x : Symbol(x, Decl(duplicateObjectLiteralProperty.ts, 0, 3))

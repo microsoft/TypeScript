@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/inferingFromAny.ts] ////
+
 === a.ts ===
 var a: any;
 >a : any

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/callSignatureFunctionOverload.ts] ////
+
 === callSignatureFunctionOverload.ts ===
 var foo: {
 >foo : Symbol(foo, Decl(callSignatureFunctionOverload.ts, 0, 3))

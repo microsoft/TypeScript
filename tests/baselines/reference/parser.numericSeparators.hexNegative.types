@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript2021/numericSeparators/parser.numericSeparators.hexNegative.ts] ////
+
 === 1.ts ===
 0x00_
 >0x00_ : 0

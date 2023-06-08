@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitExpressionWithNonlocalPrivateUniqueSymbol.ts] ////
+
 === a.ts ===
 type AX = { readonly A: unique symbol };
 >AX : { readonly A: unique symbol; }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportClassExtendingIntersection.ts] ////
+
 === BaseClass.ts ===
 export type Constructor<T> = new (...args: any[]) => T;
 >Constructor : Constructor<T>

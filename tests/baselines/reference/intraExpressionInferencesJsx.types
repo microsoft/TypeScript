@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/intraExpressionInferencesJsx.tsx] ////
+
 === intraExpressionInferencesJsx.tsx ===
 /// <reference path="react16.d.ts" />
 

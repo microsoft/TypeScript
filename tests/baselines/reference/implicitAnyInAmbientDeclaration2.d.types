@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/implicitAnyInAmbientDeclaration2.d.ts] ////
+
 === implicitAnyInAmbientDeclaration2.d.ts ===
 declare function foo(x);  // this should be an error
 >foo : (x: any) => any

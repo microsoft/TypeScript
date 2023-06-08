@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noEmitOnError.ts] ////
+
 === noEmitOnError.ts ===
 var x: number = "";
 >x : number

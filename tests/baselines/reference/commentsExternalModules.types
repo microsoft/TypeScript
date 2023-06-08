@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentsExternalModules.ts] ////
+
 === commentsExternalModules_1.ts ===
 /**This is on import declaration*/
 import extMod = require("commentsExternalModules_0"); // trailing comment1

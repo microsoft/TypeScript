@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/spreadExpressionContainingObjectExpressionContextualType.ts] ////
+
 === spreadExpressionContainingObjectExpressionContextualType.ts ===
 // repro #49585
 

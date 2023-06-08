@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportImportMultipleFiles.ts] ////
+
 === exportImportMultipleFiles_userCode.ts ===
 import lib = require('./exportImportMultipleFiles_library');
 >lib : Symbol(lib, Decl(exportImportMultipleFiles_userCode.ts, 0, 0))

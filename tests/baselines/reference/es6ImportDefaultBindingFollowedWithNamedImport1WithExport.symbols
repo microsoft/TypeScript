@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamedImport1WithExport.ts] ////
+
 === server.ts ===
 var a = 10;
 >a : Symbol(a, Decl(server.ts, 0, 3))

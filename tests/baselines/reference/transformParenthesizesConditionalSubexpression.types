@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/transformParenthesizesConditionalSubexpression.ts] ////
+
 === transformParenthesizesConditionalSubexpression.ts ===
 var K = 'k'
 >K : string

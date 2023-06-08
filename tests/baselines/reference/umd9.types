@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/umd9.ts] ////
+
 === a.ts ===
 /// <reference path="foo.d.ts" />
 export const x = Foo; // OK in value position because allowUmdGlobalAccess: true

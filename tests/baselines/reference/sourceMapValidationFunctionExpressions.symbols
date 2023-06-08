@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/sourceMapValidationFunctionExpressions.ts] ////
+
 === sourceMapValidationFunctionExpressions.ts ===
 var greetings = 0;
 >greetings : Symbol(greetings, Decl(sourceMapValidationFunctionExpressions.ts, 0, 3))

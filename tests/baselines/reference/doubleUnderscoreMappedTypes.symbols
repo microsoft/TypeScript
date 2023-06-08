@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/doubleUnderscoreMappedTypes.ts] ////
+
 === doubleUnderscoreMappedTypes.ts ===
 interface Properties {
 >Properties : Symbol(Properties, Decl(doubleUnderscoreMappedTypes.ts, 0, 0))

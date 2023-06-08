@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/legacyNodeModulesExportsSpecifierGenerationConditions.ts] ////
+
 === index.ts ===
 export const a = async () => (await import("inner")).x();
 >a : Symbol(a, Decl(index.ts, 0, 12))

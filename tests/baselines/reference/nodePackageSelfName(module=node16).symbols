@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/nodePackageSelfName.ts] ////
+
 === index.ts ===
 // esm format file
 import * as self from "package";

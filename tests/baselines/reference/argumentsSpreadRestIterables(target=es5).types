@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/argumentsSpreadRestIterables.tsx] ////
+
 === argumentsSpreadRestIterables.tsx ===
 declare const itNum: Iterable<number>
 >itNum : Iterable<number>

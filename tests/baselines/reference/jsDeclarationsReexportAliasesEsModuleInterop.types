@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsReexportAliasesEsModuleInterop.ts] ////
+
 === cls.js ===
 class Foo {}
 >Foo : Foo

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/allowJs/nodeModulesAllowJsGeneratedNameCollisions.ts] ////
+
 === subfolder/index.js ===
 // cjs format file
 function require() {}

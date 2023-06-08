@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/tsxDeepAttributeAssignabilityError.tsx] ////
+
 === my-component.tsx ===
 import * as React from 'react'
 >React : Symbol(React, Decl(my-component.tsx, 0, 6))

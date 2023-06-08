@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/APILibCheck.ts] ////
+
 === index.ts ===
 import ts = require("typescript");
 >ts : typeof ts

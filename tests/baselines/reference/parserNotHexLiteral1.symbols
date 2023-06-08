@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/RegressionTests/parserNotHexLiteral1.ts] ////
+
 === parserNotHexLiteral1.ts ===
 var x = {e0: 'cat', x0: 'dog'};
 >x : Symbol(x, Decl(parserNotHexLiteral1.ts, 0, 3))

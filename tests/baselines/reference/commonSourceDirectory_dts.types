@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commonSourceDirectory_dts.ts] ////
+
 === /app/lib/bar.d.ts ===
 // Test that importing a file from `node_modules` does not affect calculation of the common source directory.
 

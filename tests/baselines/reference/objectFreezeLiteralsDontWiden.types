@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectFreezeLiteralsDontWiden.ts] ////
+
 === objectFreezeLiteralsDontWiden.ts ===
 const PUPPETEER_REVISIONS = Object.freeze({
 >PUPPETEER_REVISIONS : Readonly<{ chromium: "1011831"; firefox: "latest"; }>

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/modules/defaultExportInAwaitExpression02.ts] ////
+
 === a.ts ===
 const x = new Promise( ( resolve, reject ) => { resolve( {} ); } );
 >x : Symbol(x, Decl(a.ts, 0, 5))

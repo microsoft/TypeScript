@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/allowJs/nodeAllowJsPackageSelfName.ts] ////
+
 === index.js ===
 // esm format file
 import * as self from "package";

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/typeFromContextualThisType.ts] ////
+
 === bug25926.js ===
 /** @type {{ a(): void; b?(n: number): number; }} */
 const o1 = {

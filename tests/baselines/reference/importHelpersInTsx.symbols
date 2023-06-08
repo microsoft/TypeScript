@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importHelpersInTsx.tsx] ////
+
 === external.tsx ===
 declare var React: any;
 >React : Symbol(React, Decl(external.tsx, 0, 11))

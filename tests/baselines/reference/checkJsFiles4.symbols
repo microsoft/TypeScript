@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/checkJsFiles4.ts] ////
+
 === a.js ===
 // @ts-check
 var x = "string";

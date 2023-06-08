@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classMemberInitializerWithLamdaScoping4.ts] ////
+
 === classMemberInitializerWithLamdaScoping3_0.ts ===
 export var field1: string;
 >field1 : string

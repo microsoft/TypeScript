@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/VariableDeclarations/parserVariableDeclaration1.ts] ////
+
 === parserVariableDeclaration1.ts ===
 		var selection = a, 
 >selection : Symbol(selection, Decl(parserVariableDeclaration1.ts, 0, 5))

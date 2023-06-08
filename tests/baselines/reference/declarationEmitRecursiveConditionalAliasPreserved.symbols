@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitRecursiveConditionalAliasPreserved.ts] ////
+
 === input.d.ts ===
 type _BuildPowersOf2LengthArrays<
 >_BuildPowersOf2LengthArrays : Symbol(_BuildPowersOf2LengthArrays, Decl(input.d.ts, 0, 0))

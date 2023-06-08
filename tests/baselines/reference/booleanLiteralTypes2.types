@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/literal/booleanLiteralTypes2.ts] ////
+
 === booleanLiteralTypes2.ts ===
 type A1 = true | false;
 >A1 : boolean

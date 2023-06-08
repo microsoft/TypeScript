@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxHash.tsx] ////
+
 === jsxHash.tsx ===
 var t02 = <a>{0}#</a>;
 >t02 : Symbol(t02, Decl(jsxHash.tsx, 0, 3))

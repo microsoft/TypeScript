@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/metadataReferencedWithinFilteredUnion.ts] ////
+
 === Class1.ts ===
 export class Class1 {
 >Class1 : Symbol(Class1, Decl(Class1.ts, 0, 0))

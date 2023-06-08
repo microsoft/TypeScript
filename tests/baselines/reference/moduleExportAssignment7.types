@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/moduleExportAssignment7.ts] ////
+
 === mod.js ===
 class Thing  { x = 1 }
 >Thing : Thing

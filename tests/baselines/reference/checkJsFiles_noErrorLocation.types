@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/checkJsFiles_noErrorLocation.ts] ////
+
 === a.js ===
 // @ts-check
 class A {

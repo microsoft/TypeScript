@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inexistentPropertyInsideToStringType.ts] ////
+
 === index.js ===
 function toString() {
 >toString : typeof toString

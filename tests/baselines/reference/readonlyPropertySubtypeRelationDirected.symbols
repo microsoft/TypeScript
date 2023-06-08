@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/readonlyPropertySubtypeRelationDirected.ts] ////
+
 === one.ts ===
 export {};
 // When the non-readonly type is declared first, the unioned type of `three` in `doSomething` is never treated as readonly

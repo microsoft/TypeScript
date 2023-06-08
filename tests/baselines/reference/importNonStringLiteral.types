@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/importNonStringLiteral.ts] ////
+
 === vs/foo_0.ts ===
 var x = "filename";
 >x : string

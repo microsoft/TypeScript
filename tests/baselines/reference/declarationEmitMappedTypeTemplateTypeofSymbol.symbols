@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitMappedTypeTemplateTypeofSymbol.ts] ////
+
 === a.d.ts ===
 export declare const timestampSymbol: unique symbol;
 >timestampSymbol : Symbol(timestampSymbol, Decl(a.d.ts, 0, 20))

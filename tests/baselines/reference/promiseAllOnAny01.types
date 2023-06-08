@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/promiseAllOnAny01.ts] ////
+
 === promiseAllOnAny01.ts ===
 async function foo(x: any) {
 >foo : (x: any) => Promise<any[]>

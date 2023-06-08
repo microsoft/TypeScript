@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/moduleScoping.ts] ////
+
 === file1.ts ===
 var v1 = "sausages"; // Global scope
 >v1 : string

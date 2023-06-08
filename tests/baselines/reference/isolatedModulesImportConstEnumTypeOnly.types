@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/isolatedModulesImportConstEnumTypeOnly.ts] ////
+
 === enum.ts ===
 export const enum Foo { Bar }
 >Foo : Foo

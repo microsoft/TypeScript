@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/doNotemitTripleSlashComments.ts] ////
+
 === file2.ts ===
 /// <reference path="file1.ts" />
 

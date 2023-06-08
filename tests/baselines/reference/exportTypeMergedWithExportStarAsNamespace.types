@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/exportTypeMergedWithExportStarAsNamespace.ts] ////
+
 === usage.ts ===
 import { Something } from "./prelude"
 >Something : typeof import("Something")

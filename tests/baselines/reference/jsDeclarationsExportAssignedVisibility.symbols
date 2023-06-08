@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedVisibility.ts] ////
+
 === index.js ===
 const Obj = require("./obj");
 >Obj : Symbol(Obj, Decl(index.js, 0, 5))

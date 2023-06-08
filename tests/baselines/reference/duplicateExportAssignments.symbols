@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/duplicateExportAssignments.ts] ////
+
 === foo1.ts ===
 var x = 10;
 >x : Symbol(x, Decl(foo1.ts, 0, 3))

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/moduleExportAliasImported.ts] ////
+
 === bug28014.js ===
 exports.version = 1
 >exports.version = 1 : 1

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericSpecializations2.ts] ////
+
 === genericSpecializations2.ts ===
 class IFoo<T> {
 >IFoo : IFoo<T>

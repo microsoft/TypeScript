@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/findLast.ts] ////
+
 === findLast.ts ===
 const itemNumber: number | undefined = [0].findLast((item) => item === 0);
 >itemNumber : Symbol(itemNumber, Decl(findLast.ts, 0, 5))

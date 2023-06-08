@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsFileCompilationNoErrorWithoutDeclarationsWithJsFileReferenceWithOut.ts] ////
+
 === a.ts ===
 class c {
 >c : c

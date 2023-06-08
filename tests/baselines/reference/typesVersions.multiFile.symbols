@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/moduleResolution/typesVersions.multiFile.ts] ////
+
 === main.ts ===
 import { a } from "ext";
 >a : Symbol(a, Decl(main.ts, 0, 8))

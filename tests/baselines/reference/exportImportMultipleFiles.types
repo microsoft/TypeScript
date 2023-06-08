@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportImportMultipleFiles.ts] ////
+
 === exportImportMultipleFiles_userCode.ts ===
 import lib = require('./exportImportMultipleFiles_library');
 >lib : typeof lib

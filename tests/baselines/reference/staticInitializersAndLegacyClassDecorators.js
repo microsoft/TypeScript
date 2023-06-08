@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/staticInitializersAndLegacyClassDecorators.ts] ////
+
 //// [staticInitializersAndLegacyClassDecorators.ts]
 // https://github.com/microsoft/TypeScript/issues/52004
 declare var dec: any;

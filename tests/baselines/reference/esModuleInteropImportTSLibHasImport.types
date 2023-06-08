@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/esModuleInteropImportTSLibHasImport.ts] ////
+
 === types.d.ts ===
 declare module "tslib" { export const __exportStar: any; export const __importDefault: any; export const __importStar: any; }
 >"tslib" : typeof import("tslib")

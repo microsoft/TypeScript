@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/checkExportsObjectAssignPrototypeProperty.ts] ////
+
 === validator.ts ===
 import "./";
 

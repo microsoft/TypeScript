@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/inline/inlineJsxFactoryDeclarationsLocalTypes.tsx] ////
+
 === renderer.d.ts ===
 export namespace dom {
 >dom : Symbol(dom, Decl(renderer.d.ts, 17, 1), Decl(renderer.d.ts, 0, 0))

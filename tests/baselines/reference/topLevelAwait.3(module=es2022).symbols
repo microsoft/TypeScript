@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/topLevelAwait.3.ts] ////
+
 === index.d.ts ===
 // await keyword allowed as identifier in a declaration file
 export {};

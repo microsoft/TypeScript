@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/allowJs/nodeModulesAllowJsExportlessJsModuleDetectionAuto.ts] ////
+
 === foo.cjs ===
 
 // this file is a module despite having no imports

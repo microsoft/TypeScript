@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/propertyAssignmentUseParentType2.ts] ////
+
 === propertyAssignmentUseParentType2.js ===
 /** @type {{ (): boolean; nuo: 789 }} */
 export const inlined = () => true

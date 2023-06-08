@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts] ////
+
 === ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts ===
 class clodule<T> {
 >clodule : Symbol(clodule, Decl(ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts, 0, 0), Decl(ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts, 5, 1))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/namespaceMergedWithFunctionWithOverloadsUsage.ts] ////
+
 === index.ts ===
 import X = require("./file");
 >X : { (opts?: X.Whatever): void; (cb: Function, opts?: X.Whatever): void; }

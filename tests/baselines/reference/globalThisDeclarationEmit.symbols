@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/globalThisDeclarationEmit.ts] ////
+
 === index.ts ===
 import { variable } from "./variable";
 >variable : Symbol(variable, Decl(index.ts, 0, 8))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveConditionalCrash4.ts] ////
+
 === recursiveConditionalCrash4.ts ===
 // Repros from #53783
 

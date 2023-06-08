@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/errorWithSameNameType.ts] ////
+
 === a.ts ===
 export interface F {
     foo1: number

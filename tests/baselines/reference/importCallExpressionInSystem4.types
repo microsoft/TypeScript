@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/dynamicImport/importCallExpressionInSystem4.ts] ////
+
 === 0.ts ===
 export class B {
 >B : B

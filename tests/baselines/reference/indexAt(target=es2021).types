@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indexAt.ts] ////
+
 === indexAt.ts ===
 [0].at(0);
 >[0].at(0) : any

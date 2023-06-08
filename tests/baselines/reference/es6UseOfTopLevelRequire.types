@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es6UseOfTopLevelRequire.ts] ////
+
 === a.ts ===
 import require from "./b"
 >require : (s: string) => void

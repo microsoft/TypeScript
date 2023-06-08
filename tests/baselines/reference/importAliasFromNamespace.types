@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importAliasFromNamespace.ts] ////
+
 === usage.ts ===
 /// <reference path="./internal.ts" />
 namespace SomeOther.Thing {

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxViaImport.2.tsx] ////
+
 === consumer.tsx ===
 /// <reference path="component.d.ts" />
 import BaseComponent from 'BaseComponent';

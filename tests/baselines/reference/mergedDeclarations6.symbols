@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mergedDeclarations6.ts] ////
+
 === a.ts ===
 export class A {
 >A : Symbol(A, Decl(a.ts, 0, 0), Decl(b.ts, 2, 22))

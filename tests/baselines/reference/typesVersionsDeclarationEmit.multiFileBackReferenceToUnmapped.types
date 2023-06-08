@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/declarationEmit/typesVersionsDeclarationEmit.multiFileBackReferenceToUnmapped.ts] ////
+
 === main.ts ===
 import { fa } from "ext";
 >fa : () => import("node_modules/ext/other").A2

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionOverloads36.ts] ////
+
 === functionOverloads36.ts ===
 function foo(bar:{a:number;}):number;
 >foo : { (bar: {    a: number;}): number; (bar: { a: string; }): string; }

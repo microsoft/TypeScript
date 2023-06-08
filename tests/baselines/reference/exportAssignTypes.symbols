@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/exportAssignTypes.ts] ////
+
 === consumer.ts ===
 import iString = require('./expString');
 >iString : Symbol(iString, Decl(consumer.ts, 0, 0))

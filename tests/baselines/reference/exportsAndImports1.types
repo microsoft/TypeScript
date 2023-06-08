@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/modules/exportsAndImports1.ts] ////
+
 === t1.ts ===
 var v = 1;
 >v : number

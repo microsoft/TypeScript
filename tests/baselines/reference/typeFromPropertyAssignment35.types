@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment35.ts] ////
+
 === bug26877.js ===
 /** @param {Emu.D} x */
 function ollKorrect(x) {

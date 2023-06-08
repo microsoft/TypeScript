@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/controlFlowInstanceOfGuardPrimitives.ts] ////
+
 === controlFlowInstanceOfGuardPrimitives.ts ===
 function distinguish(thing: string | number | Date) {
 >distinguish : (thing: string | number | Date) => void

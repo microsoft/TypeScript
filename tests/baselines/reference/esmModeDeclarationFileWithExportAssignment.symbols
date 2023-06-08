@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/esmModeDeclarationFileWithExportAssignment.ts] ////
+
 === other.d.mts ===
 declare function example(): 5;
 >example : Symbol(example, Decl(other.d.mts, 0, 0))

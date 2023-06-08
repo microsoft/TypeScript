@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/relativeNamesInClassicResolution.ts] ////
+
 === somefolder/a.ts ===
 import {x} from "./b"
 >x : Symbol(x, Decl(a.ts, 0, 8))

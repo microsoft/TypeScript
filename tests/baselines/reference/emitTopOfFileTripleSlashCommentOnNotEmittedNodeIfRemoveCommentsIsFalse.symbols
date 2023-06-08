@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/emitTopOfFileTripleSlashCommentOnNotEmittedNodeIfRemoveCommentsIsFalse.ts] ////
+
 === file1.ts ===
 /// <reference path="file0.ts" />
 declare var OData: any;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/emptyDeclarationEmitIsModule.ts] ////
+
 === module.ts ===
 import * as i from "./index";
 >i : typeof i

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importAsBaseClass.ts] ////
+
 === importAsBaseClass_1.ts ===
 import Greeter = require("./importAsBaseClass_0");
 >Greeter : Symbol(Greeter, Decl(importAsBaseClass_1.ts, 0, 0))

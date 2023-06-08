@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment6.ts] ////
+
 === def.js ===
 class Outer {}
 >Outer : Outer

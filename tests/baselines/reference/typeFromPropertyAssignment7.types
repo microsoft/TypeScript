@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment7.ts] ////
+
 === a.js ===
 var obj = {};
 >obj : typeof obj

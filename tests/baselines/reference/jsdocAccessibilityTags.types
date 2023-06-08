@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocAccessibilityTags.ts] ////
+
 === jsdocAccessibilityTag.js ===
 class A {
 >A : A

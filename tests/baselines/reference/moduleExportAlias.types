@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/moduleExportAlias.ts] ////
+
 === a.ts ===
 import b = require("./b.js");
 >b : typeof b

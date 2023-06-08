@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reactImportDropped.ts] ////
+
 === react.d.ts ===
 export = React;
 >React : Symbol(React, Decl(react.d.ts, 1, 26))

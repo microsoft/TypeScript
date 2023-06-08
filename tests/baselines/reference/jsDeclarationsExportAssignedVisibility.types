@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedVisibility.ts] ////
+
 === index.js ===
 const Obj = require("./obj");
 >Obj : typeof Obj

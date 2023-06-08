@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/esModuleInteropDefaultImports.ts] ////
+
 === mod.ts ===
 declare function fun(): void;
 >fun : Symbol(fun, Decl(mod.ts, 0, 0))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/emitMemberAccessExpression.ts] ////
+
 === emitMemberAccessExpression_file3.ts ===
 /// <reference path="emitMemberAccessExpression_file2.ts" />
 /// <reference path="emitMemberAccessExpression_file1.ts" />

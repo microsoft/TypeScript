@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentsOnPropertyOfObjectLiteral1.ts] ////
+
 === commentsOnPropertyOfObjectLiteral1.ts ===
 var resolve = {
 >resolve : { id: (details: any) => any; id1: string; id2: (details: any) => any; id3: (details: any) => any; id4: (details: any) => any; }

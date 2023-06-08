@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsFileCompilationErrorOnDeclarationsWithJsFileReferenceWithOutDir.ts] ////
+
 === a.ts ===
 class c {
 >c : c

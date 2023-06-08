@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/controlFlowForCatchAndFinally.ts] ////
+
 === controlFlowForCatchAndFinally.ts ===
 type Page = {close(): Promise<void>; content(): Promise<string>};
 >Page : Symbol(Page, Decl(controlFlowForCatchAndFinally.ts, 0, 0))

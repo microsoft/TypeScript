@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/importImportOnlyModule.ts] ////
+
 === foo_2.ts ===
 import foo = require("./foo_1");
 >foo : typeof foo

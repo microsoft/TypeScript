@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsCommonjsRelativePath.ts] ////
+
 === reexport.js ===
 'use strict';
 >'use strict' : "use strict"

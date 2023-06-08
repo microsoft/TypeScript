@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/esModuleInteropDefaultMemberMustBeSyntacticallyDefaultExport.ts] ////
+
 === point.d.ts ===
 declare class Point {
 >Point : Point

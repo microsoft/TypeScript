@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionExpressionNames.ts] ////
+
 === b.js ===
 exports.E = function() {
 >exports.E : Symbol(E, Decl(b.js, 0, 0))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleResolutionNoTsESM.ts] ////
+
 === x.ts ===
 
 // ESM output

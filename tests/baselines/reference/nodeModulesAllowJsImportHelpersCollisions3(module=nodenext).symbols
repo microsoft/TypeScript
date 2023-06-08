@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/allowJs/nodeModulesAllowJsImportHelpersCollisions3.ts] ////
+
 === subfolder/index.js ===
 // cjs format file
 export {default} from "fs";

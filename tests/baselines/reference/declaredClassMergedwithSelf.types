@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/declaredClassMergedwithSelf.ts] ////
+
 === file1.ts ===
 declare class C1 {}
 >C1 : C1

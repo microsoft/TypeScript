@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/nonjsExtensions/declarationFileForTsJsImport.ts] ////
+
 === main.ts ===
 import def1 from "./file.js";
 >def1 : Symbol(def1, Decl(main.ts, 0, 6))

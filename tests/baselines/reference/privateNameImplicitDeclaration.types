@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameImplicitDeclaration.ts] ////
+
 === privateNameImplicitDeclaration.js ===
 class C {
 >C : C

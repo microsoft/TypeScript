@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mappedTypeInferenceAliasSubstitution.ts] ////
+
 === mappedTypeInferenceAliasSubstitution.ts ===
 // repro from #31616
 

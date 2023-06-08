@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/dynamicImport/importCallExpressionInUMD2.ts] ////
+
 === 0.ts ===
 export class B {
 >B : B

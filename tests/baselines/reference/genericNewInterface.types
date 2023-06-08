@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericNewInterface.ts] ////
+
 === genericNewInterface.ts ===
 function createInstance<T>(ctor: new (s: string) => T): T {
 >createInstance : <T>(ctor: new (s: string) => T) => T

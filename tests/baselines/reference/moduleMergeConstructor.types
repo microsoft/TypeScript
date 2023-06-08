@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleMergeConstructor.ts] ////
+
 === foo.d.ts ===
 declare module "foo" {
 >"foo" : typeof import("foo")

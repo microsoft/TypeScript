@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocBindingInUnreachableCode.ts] ////
+
 === bug27341.js ===
 if (false) {
 >false : false

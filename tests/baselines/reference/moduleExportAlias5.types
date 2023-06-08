@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/moduleExportAlias5.ts] ////
+
 === bug24754.js ===
 // #24754
 const webpack = function (){

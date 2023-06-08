@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/emitter/es2015/asyncGenerators/emitter.asyncGenerators.objectLiteralMethods.es2015.ts] ////
+
 === O1.ts ===
 const o1 = {
 >o1 : { f(): AsyncGenerator<never, void, unknown>; }

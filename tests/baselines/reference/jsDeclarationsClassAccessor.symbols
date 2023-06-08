@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsClassAccessor.ts] ////
+
 === supplement.d.ts ===
 export { };
 declare module "./argument.js" {

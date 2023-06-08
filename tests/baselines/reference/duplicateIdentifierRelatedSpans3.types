@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicateIdentifierRelatedSpans3.ts] ////
+
 === file1.ts ===
 interface TopLevel {
     duplicate1: () => string;

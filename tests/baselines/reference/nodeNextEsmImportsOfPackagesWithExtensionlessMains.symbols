@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nodeNextEsmImportsOfPackagesWithExtensionlessMains.ts] ////
+
 === index.ts ===
 import * as ip from 'ip';
 >ip : Symbol(ip, Decl(index.ts, 0, 6))

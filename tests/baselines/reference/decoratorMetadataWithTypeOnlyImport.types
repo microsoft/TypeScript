@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/decorators/decoratorMetadataWithTypeOnlyImport.ts] ////
+
 === service.ts ===
 export class Service {
 >Service : Service

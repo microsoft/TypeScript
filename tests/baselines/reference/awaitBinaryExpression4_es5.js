@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/async/es5/awaitBinaryExpression/awaitBinaryExpression4_es5.ts] ////
+
 //// [awaitBinaryExpression4_es5.ts]
 declare var a: boolean;
 declare var p: Promise<boolean>;

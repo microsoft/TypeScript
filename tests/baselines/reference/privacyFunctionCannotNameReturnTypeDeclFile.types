@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privacyFunctionCannotNameReturnTypeDeclFile.ts] ////
+
 === privacyFunctionReturnTypeDeclFile_consumer.ts ===
 import exporter = require("./privacyFunctionReturnTypeDeclFile_exporter");
 >exporter : typeof exporter

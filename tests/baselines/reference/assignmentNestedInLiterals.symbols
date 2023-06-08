@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/assignmentNestedInLiterals.ts] ////
+
 === assignmentNestedInLiterals.ts ===
 var target, x, y;
 >target : Symbol(target, Decl(assignmentNestedInLiterals.ts, 0, 3))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/conditionalTypesSimplifyWhenTrivial.ts] ////
+
 === conditionalTypesSimplifyWhenTrivial.ts ===
 const fn1 = <Params>(
 >fn1 : Symbol(fn1, Decl(conditionalTypesSimplifyWhenTrivial.ts, 0, 5))

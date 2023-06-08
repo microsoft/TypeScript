@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/propertyNamesWithStringLiteral.ts] ////
+
 === propertyNamesWithStringLiteral.ts ===
 class _Color {
 >_Color : _Color

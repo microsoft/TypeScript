@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importedAliasedConditionalTypeInstantiation.ts] ////
+
 === node_modules/aws-lambda/index.d.ts ===
 export type Handler<TEvent = any, TResult = any> = (
 >Handler : Symbol(Handler, Decl(index.d.ts, 0, 0))

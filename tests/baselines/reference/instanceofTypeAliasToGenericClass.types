@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/instanceofTypeAliasToGenericClass.ts] ////
+
 === instanceofTypeAliasToGenericClass.ts ===
 declare class TableClass<S = any> {
 >TableClass : TableClass<S>

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsdocImportTypeNodeNamespace.ts] ////
+
 === GeometryType.d.ts ===
 // #40767
 

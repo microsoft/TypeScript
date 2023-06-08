@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/constructorFunctions2.ts] ////
+
 === node.d.ts ===
 declare function require(id: string): any;
 >require : (id: string) => any

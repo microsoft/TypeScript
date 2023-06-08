@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsdocParameterParsingInfiniteLoop.ts] ////
+
 === example.js ===
 // @ts-check
 /**

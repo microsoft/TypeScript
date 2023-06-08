@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitInferredTypeAlias5.ts] ////
+
 === 0.ts ===
 export type Data = string | boolean;
 >Data : Symbol(Data, Decl(0.ts, 0, 0))

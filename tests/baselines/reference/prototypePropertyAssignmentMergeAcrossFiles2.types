@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/prototypePropertyAssignmentMergeAcrossFiles2.ts] ////
+
 === prototypePropertyAssignmentMergeAcrossFiles2.js ===
 var Ns = {}
 >Ns : typeof Ns

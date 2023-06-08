@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeAssertions/constAssertions.ts] ////
+
 === constAssertions.ts ===
 let v1 = 'abc' as const;
 >v1 : Symbol(v1, Decl(constAssertions.ts, 0, 3))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsFileCompilationHeritageClauseSyntaxOfClass.ts] ////
+
 === a.js ===
 class C implements D { }
 >C : C

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es6ImportNamedImportParsingError.ts] ////
+
 === es6ImportNamedImportParsingError_0.ts ===
 export var a = 10;
 >a : Symbol(a, Decl(es6ImportNamedImportParsingError_0.ts, 0, 10))

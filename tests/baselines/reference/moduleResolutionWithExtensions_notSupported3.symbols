@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleResolutionWithExtensions_notSupported3.ts] ////
+
 === /a.ts ===
 import jsx from "./jsx";
 >jsx : Symbol(jsx, Decl(a.ts, 0, 6))

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/ObjectTypes/parserObjectType4.ts] ////
+
 === parserObjectType4.ts ===
 var v: {
 >v : Symbol(v, Decl(parserObjectType4.ts, 0, 3))

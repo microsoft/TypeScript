@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/stringLiteral/stringLiteralTypesTypePredicates01.ts] ////
+
 === stringLiteralTypesTypePredicates01.ts ===
 type Kind = "A" | "B"
 >Kind : Symbol(Kind, Decl(stringLiteralTypesTypePredicates01.ts, 0, 0))

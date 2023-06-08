@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextualSignatureConditionalTypeInstantiationUsingDefault.ts] ////
+
 === contextualSignatureConditionalTypeInstantiationUsingDefault.ts ===
 // repro #46310
 

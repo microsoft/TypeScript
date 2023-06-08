@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsJson.ts] ////
+
 === index.js ===
 const j = require("./obj.json");
 >j : { x: number; y: number; obj: { items: ({ x: number; y?: undefined; err?: undefined; } | { x: number; y: number; err?: undefined; } | { x: number; err: boolean; y?: undefined; })[]; }; }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileForVarList.ts] ////
+
 === declFileForVarList.ts ===
 var x, y, z = 1;
 >x : any

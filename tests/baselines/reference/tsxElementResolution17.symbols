@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxElementResolution17.tsx] ////
+
 === consumer.tsx ===
 ///<reference path="file.tsx" />
 // Should keep s1 and elide s2

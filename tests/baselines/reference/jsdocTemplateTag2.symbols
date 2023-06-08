@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocTemplateTag2.ts] ////
+
 === github17339.js ===
 var obj = {
 >obj : Symbol(obj, Decl(github17339.js, 0, 3))

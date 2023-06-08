@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment19.ts] ////
+
 === index.js ===
 /// <reference path='./types.d.ts'/>
 const C = require("./semver")

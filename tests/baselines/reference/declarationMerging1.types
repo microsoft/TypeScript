@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationMerging1.ts] ////
+
 === file1.ts ===
 class A {
 >A : A

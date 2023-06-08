@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/restParamUsingMappedTypeOverUnionConstraint.ts] ////
+
 === restParamUsingMappedTypeOverUnionConstraint.ts ===
 // repro 29919#issuecomment-470948453
 

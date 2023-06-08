@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/umd-augmentation-1.ts] ////
+
 === b.ts ===
 /// <reference path="math2d-augment.d.ts" />
 import * as m from 'math2d';

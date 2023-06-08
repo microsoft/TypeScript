@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/jsContainerMergeTsDeclaration.ts] ////
+
 === a.js ===
 var /*1*/x = function foo() {
 >x : Symbol(x, Decl(a.js, 0, 3), Decl(a.js, 1, 1), Decl(b.ts, 0, 3))

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/for-inStatements/for-inStatementsArray.ts] ////
+
 === for-inStatementsArray.ts ===
 let a: Date[];
 >a : Symbol(a, Decl(for-inStatementsArray.ts, 0, 3))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/amdLikeInputDeclarationEmit.ts] ////
+
 === typing.d.ts ===
 declare function define<T=unknown>(name: string, modules: string[], ready: (...modules: unknown[]) => T);
 >define : Symbol(define, Decl(typing.d.ts, 0, 0))

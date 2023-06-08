@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/scanner/jsdocInvalidTokens.ts] ////
+
 === jsdocInvalidTokens.js ===
 /**
  *

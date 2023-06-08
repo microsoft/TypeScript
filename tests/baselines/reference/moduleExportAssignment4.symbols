@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/moduleExportAssignment4.ts] ////
+
 === async.js ===
 exports.default = { m: 1, a: 1 }
 >exports : Symbol(default, Decl(async.js, 0, 0))

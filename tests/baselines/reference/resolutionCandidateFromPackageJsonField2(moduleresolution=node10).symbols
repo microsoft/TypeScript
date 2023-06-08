@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/resolutionCandidateFromPackageJsonField2.ts] ////
+
 === dist/bar.ts ===
 export const a = 1234;
 >a : Symbol(a, Decl(bar.ts, 0, 12))

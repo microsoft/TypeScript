@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameJsBadAssignment.ts] ////
+
 === privateNameJsBadAssignment.js ===
 exports.#nope = 1;           // Error (outside class body)
 >exports.#nope = 1 : 1

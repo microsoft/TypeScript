@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleAugmentationWithNonExistentNamedImport.ts] ////
+
 === foo.d.ts ===
 export = Foo;
 >Foo : typeof Foo

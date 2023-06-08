@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/tripleSlashReferenceAbsoluteWindowsPath.ts] ////
+
 === C:\a\b\d.ts ===
 /// <reference path="C:\a\b\c.ts" />
 const y = x + 3;

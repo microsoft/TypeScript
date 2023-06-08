@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/generators/asyncGeneratorGenericNonWrappedReturn.ts] ////
+
 === asyncGeneratorGenericNonWrappedReturn.ts ===
 // #48966
 

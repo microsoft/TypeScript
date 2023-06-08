@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/aliasUsedAsNameValue.ts] ////
+
 === aliasUsedAsNameValue_2.ts ===
 ///<reference path='aliasUsedAsNameValue_0.ts' />
 ///<reference path='aliasUsedAsNameValue_1.ts' />

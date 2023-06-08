@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocSignatureOnReturnedFunction.ts] ////
+
 === jsdocSignatureOnReturnedFunction.js ===
 function f1() {
 >f1 : Symbol(f1, Decl(jsdocSignatureOnReturnedFunction.js, 0, 0))

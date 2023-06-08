@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportEqualsDefaultProperty.ts] ////
+
 === exp.ts ===
 var x = {
 >x : { greeting: string; default: number; }

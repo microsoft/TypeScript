@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importTypeTypeofClassStaticLookup.ts] ////
+
 === a.d.ts ===
 export declare class A {
 >A : Symbol(A, Decl(a.d.ts, 0, 0))

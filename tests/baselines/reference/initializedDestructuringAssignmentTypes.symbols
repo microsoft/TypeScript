@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/initializedDestructuringAssignmentTypes.ts] ////
+
 === initializedDestructuringAssignmentTypes.ts ===
 const [, a = ''] = ''.match('') || [];
 >a : Symbol(a, Decl(initializedDestructuringAssignmentTypes.ts, 0, 8))

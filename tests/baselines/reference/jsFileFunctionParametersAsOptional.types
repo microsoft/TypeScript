@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsFileFunctionParametersAsOptional.ts] ////
+
 === foo.js ===
 function f(a, b, c) { }
 >f : (a: any, b: any, c: any) => void

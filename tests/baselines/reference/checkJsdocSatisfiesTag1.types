@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocSatisfiesTag1.ts] ////
+
 === /a.js ===
 /**
  * @typedef {Object} T1

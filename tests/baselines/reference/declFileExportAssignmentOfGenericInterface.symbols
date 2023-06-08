@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileExportAssignmentOfGenericInterface.ts] ////
+
 === declFileExportAssignmentOfGenericInterface_1.ts ===
 import a = require('declFileExportAssignmentOfGenericInterface_0');
 >a : Symbol(a, Decl(declFileExportAssignmentOfGenericInterface_1.ts, 0, 0))

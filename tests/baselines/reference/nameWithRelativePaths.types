@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/nameWithRelativePaths.ts] ////
+
 === test/foo_3.ts ===
 import foo0 = require('../foo_0');
 >foo0 : typeof foo0

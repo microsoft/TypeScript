@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript2018/forAwait/parser.forAwait.es2018.ts] ////
+
 === topLevelWithDeclIsError.ts ===
 for await (const x of y) {
 >x : Symbol(x, Decl(topLevelWithDeclIsError.ts, 0, 16))

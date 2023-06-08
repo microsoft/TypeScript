@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/typeParameterExtendsUnionConstraintDistributed.ts] ////
+
 === typeParameterExtendsUnionConstraintDistributed.ts ===
 type A = 1 | 2;
 >A : 1 | 2

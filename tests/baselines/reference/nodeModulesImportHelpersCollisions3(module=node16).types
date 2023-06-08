@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/nodeModulesImportHelpersCollisions3.ts] ////
+
 === subfolder/index.ts ===
 // cjs format file
 export {default} from "fs";

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commonJsImportClassExpression.ts] ////
+
 === use.ts ===
 import Chunk = require('./mod1')
 >Chunk : Symbol(Chunk, Decl(use.ts, 0, 0))

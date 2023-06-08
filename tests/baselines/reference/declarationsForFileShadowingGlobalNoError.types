@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationsForFileShadowingGlobalNoError.ts] ////
+
 === dom.ts ===
 export type DOMNode = Node;
 >DOMNode : Node

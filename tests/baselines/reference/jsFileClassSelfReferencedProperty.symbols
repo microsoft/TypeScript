@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsFileClassSelfReferencedProperty.ts] ////
+
 === foo.js ===
 export class StackOverflowTest {
 >StackOverflowTest : Symbol(StackOverflowTest, Decl(foo.js, 0, 0))

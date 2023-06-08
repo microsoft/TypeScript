@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/promiseIdentityWithConstraints.ts] ////
+
 === promiseIdentityWithConstraints.ts ===
 export interface IPromise<T, V> {
 >IPromise : Symbol(IPromise, Decl(promiseIdentityWithConstraints.ts, 0, 0))

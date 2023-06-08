@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/typedefCrossModule2.ts] ////
+
 === use.js ===
 var mod = require('./mod1.js');
 >mod : Symbol(mod, Decl(use.js, 0, 3))

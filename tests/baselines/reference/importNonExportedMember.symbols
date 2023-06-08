@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importNonExportedMember.ts] ////
+
 === a.ts ===
 declare function foo(): any
 >foo : Symbol(foo, Decl(a.ts, 0, 0))

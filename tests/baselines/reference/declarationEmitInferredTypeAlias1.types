@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitInferredTypeAlias1.ts] ////
+
 === 0.ts ===
 {
     type Data = string | boolean;

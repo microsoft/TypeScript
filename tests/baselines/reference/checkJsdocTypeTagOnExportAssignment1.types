@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/checkJsdocTypeTagOnExportAssignment1.ts] ////
+
 === checkJsdocTypeTagOnExportAssignment1.js ===
 
 === a.js ===

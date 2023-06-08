@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/identityForSignaturesWithTypeParametersAndAny.ts] ////
+
 === identityForSignaturesWithTypeParametersAndAny.ts ===
 var f: <T, U>(x: T, y: U) => T;
 >f : Symbol(f, Decl(identityForSignaturesWithTypeParametersAndAny.ts, 0, 3), Decl(identityForSignaturesWithTypeParametersAndAny.ts, 1, 3))

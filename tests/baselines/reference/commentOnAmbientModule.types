@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentOnAmbientModule.ts] ////
+
 === b.ts ===
 ///<reference path="a.ts"/>
 declare module E {

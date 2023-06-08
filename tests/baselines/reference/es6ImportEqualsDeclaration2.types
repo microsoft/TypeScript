@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es6ImportEqualsDeclaration2.ts] ////
+
 === server.d.ts ===
 declare module "other" {
 >"other" : typeof import("other")

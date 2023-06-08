@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/relativePathToDeclarationFile.ts] ////
+
 === test/file1.ts ===
 import foo = require('foo');
 >foo : typeof foo

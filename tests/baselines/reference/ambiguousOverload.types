@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/ambiguousOverload.ts] ////
+
 === ambiguousOverload.ts ===
 function foof(bar: string, y): number;
 >foof : { (bar: string, y: any): number; (bar: string, x: any): string; }

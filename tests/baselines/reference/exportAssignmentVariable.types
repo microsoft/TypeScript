@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportAssignmentVariable.ts] ////
+
 === exportAssignmentVariable_B.ts ===
 import y = require("./exportAssignmentVariable_A");
 >y : number

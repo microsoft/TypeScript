@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardNarrowsPrimitiveIntersection.ts] ////
+
 === typeGuardNarrowsPrimitiveIntersection.ts ===
 type Tag = {__tag: any};
 >Tag : Symbol(Tag, Decl(typeGuardNarrowsPrimitiveIntersection.ts, 0, 0))

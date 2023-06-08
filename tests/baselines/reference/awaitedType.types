@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/awaitedType.ts] ////
+
 === awaitedType.ts ===
 type T1 = Awaited<number>;
 >T1 : number

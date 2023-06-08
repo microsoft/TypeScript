@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/decorators/invalid/decoratorOnImportEquals2.ts] ////
+
 === decoratorOnImportEquals2_1.ts ===
 @dec
 >dec : <T>(target: T) => T

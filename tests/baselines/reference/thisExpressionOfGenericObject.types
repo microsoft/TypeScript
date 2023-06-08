@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/thisExpressionOfGenericObject.ts] ////
+
 === thisExpressionOfGenericObject.ts ===
 class MyClass1<T> {
 >MyClass1 : MyClass1<T>

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitPathMappingMonorepo2.ts] ////
+
 === packages/lab/src/index.ts ===
 import { createSvgIcon } from "@ts-bug/core/utils";
 >createSvgIcon : (path: string, displayName: string) => import("packages/core/src/SvgIcon").SomeInterface

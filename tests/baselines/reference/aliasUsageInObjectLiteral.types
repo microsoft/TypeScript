@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/aliasUsageInObjectLiteral.ts] ////
+
 === aliasUsageInObjectLiteral_main.ts ===
 import Backbone = require("./aliasUsageInObjectLiteral_backbone");
 >Backbone : typeof Backbone

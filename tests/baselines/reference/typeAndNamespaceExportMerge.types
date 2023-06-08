@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/typeAndNamespaceExportMerge.ts] ////
+
 === constants.ts ===
 // @strict
 

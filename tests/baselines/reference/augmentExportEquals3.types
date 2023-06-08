@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/augmentExportEquals3.ts] ////
+
 === file1.ts ===
 function foo() {}
 >foo : typeof import("file1.ts")

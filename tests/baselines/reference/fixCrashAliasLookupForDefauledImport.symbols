@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/fixCrashAliasLookupForDefauledImport.ts] ////
+
 === input.ts ===
 export type Foo<T = string> = {};
 >Foo : Symbol(Foo, Decl(input.ts, 0, 0))

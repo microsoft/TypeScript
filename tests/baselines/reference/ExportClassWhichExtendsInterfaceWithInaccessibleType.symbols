@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/exportDeclarations/ExportClassWhichExtendsInterfaceWithInaccessibleType.ts] ////
+
 === ExportClassWhichExtendsInterfaceWithInaccessibleType.ts ===
 module A {
 >A : Symbol(A, Decl(ExportClassWhichExtendsInterfaceWithInaccessibleType.ts, 0, 0))

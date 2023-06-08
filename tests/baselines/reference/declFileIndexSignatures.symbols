@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileIndexSignatures.ts] ////
+
 === declFileIndexSignatures_0.ts ===
 export interface IStringIndexSignature {
 >IStringIndexSignature : Symbol(IStringIndexSignature, Decl(declFileIndexSignatures_0.ts, 0, 0))

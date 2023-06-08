@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/invalidUnicodeEscapeSequance4.ts] ////
+
 === invalidUnicodeEscapeSequance4.ts ===
 var a\u0031; // a1 is a valid identifier
 >a\u0031 : Symbol(a\u0031, Decl(invalidUnicodeEscapeSequance4.ts, 0, 3))

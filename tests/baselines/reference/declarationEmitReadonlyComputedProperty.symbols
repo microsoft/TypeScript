@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitReadonlyComputedProperty.ts] ////
+
 === bug.ts ===
 export const SYMBOL = Symbol()
 >SYMBOL : Symbol(SYMBOL, Decl(bug.ts, 0, 12))

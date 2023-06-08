@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsFileCompilationBindReachabilityErrors.ts] ////
+
 === a.js ===
 function foo(a, b) {
 >foo : (a: any, b: any) => any

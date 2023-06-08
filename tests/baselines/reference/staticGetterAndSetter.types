@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/staticGetterAndSetter.ts] ////
+
 === staticGetterAndSetter.ts ===
 class Foo {
 >Foo : Foo

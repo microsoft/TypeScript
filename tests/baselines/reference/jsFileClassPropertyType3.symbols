@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsFileClassPropertyType3.ts] ////
+
 === foo.js ===
 class C {
 >C : Symbol(C, Decl(foo.js, 0, 0))

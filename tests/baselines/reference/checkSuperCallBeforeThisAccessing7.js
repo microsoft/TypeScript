@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/checkSuperCallBeforeThisAccessing7.ts] ////
+
 //// [checkSuperCallBeforeThisAccessing7.ts]
 class Base {
     constructor(func: ()=>Base) {

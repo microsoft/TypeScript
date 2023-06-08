@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/declarationEmit/typesVersionsDeclarationEmit.multiFile.ts] ////
+
 === main.ts ===
 import { fa } from "ext";
 >fa : Symbol(fa, Decl(main.ts, 0, 8))

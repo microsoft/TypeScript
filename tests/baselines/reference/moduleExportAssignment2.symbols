@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/moduleExportAssignment2.ts] ////
+
 === npm.js ===
 var npm = module.exports = function (tree) {
 >npm : Symbol(npm, Decl(npm.js, 0, 3))

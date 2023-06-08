@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport5.ts] ////
+
 === usage.js ===
 const x = require("./lateBoundAssignmentDeclarationSupport5.js");
 >x : typeof x

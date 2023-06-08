@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/thisShadowingErrorSpans.ts] ////
+
 === thisShadowingErrorSpans.ts ===
 class C {
 >C : Symbol(C, Decl(thisShadowingErrorSpans.ts, 0, 0))

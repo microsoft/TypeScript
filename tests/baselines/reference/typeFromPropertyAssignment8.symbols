@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment8.ts] ////
+
 === a.js ===
 var my = my || {};
 >my : Symbol(my, Decl(a.js, 0, 3), Decl(a.js, 0, 18), Decl(a.js, 1, 22))

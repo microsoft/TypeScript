@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeGuardOnContainerTypeNoHang.ts] ////
+
 === typeGuardOnContainerTypeNoHang.ts ===
 export namespace TypeGuards {
 >TypeGuards : typeof TypeGuards

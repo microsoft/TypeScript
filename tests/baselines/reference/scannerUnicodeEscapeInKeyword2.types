@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/scanner/ecmascript5/scannerUnicodeEscapeInKeyword2.ts] ////
+
 === file1.ts ===
 var \u0061wait = 12; // ok
 >\u0061wait : number

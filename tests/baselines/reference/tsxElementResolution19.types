@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxElementResolution19.tsx] ////
+
 === react.d.ts ===
 declare module "react" {
 >"react" : typeof import("react")

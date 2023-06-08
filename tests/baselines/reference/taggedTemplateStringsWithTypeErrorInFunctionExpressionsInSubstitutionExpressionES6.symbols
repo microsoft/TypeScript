@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/templates/taggedTemplateStringsWithTypeErrorInFunctionExpressionsInSubstitutionExpressionES6.ts] ////
+
 === taggedTemplateStringsWithTypeErrorInFunctionExpressionsInSubstitutionExpressionES6.ts ===
 function foo(...rest: any[]) {
 >foo : Symbol(foo, Decl(taggedTemplateStringsWithTypeErrorInFunctionExpressionsInSubstitutionExpressionES6.ts, 0, 0))

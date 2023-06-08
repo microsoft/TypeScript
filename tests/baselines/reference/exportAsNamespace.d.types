@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportAsNamespace.d.ts] ////
+
 === exportAsNamespace.d.ts ===
 // issue: https://github.com/Microsoft/TypeScript/issues/11545
 

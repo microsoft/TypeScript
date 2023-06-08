@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importTypeResolutionJSDocEOF.ts] ////
+
 === interfaces.d.ts ===
 export interface Bar {
     prop: string

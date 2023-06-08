@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/syntheticDefaultExportsWithDynamicImports.ts] ////
+
 === node_modules/package/index.d.ts ===
 declare function packageExport(x: number): string;
 >packageExport : (x: number) => string

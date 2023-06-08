@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/dynamicImport/importCallExpressionInCJS4.ts] ////
+
 === 0.ts ===
 export class B {
 >B : Symbol(B, Decl(0.ts, 0, 0))

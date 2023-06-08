@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportDefaultParenthesize.ts] ////
+
 === commalist.ts ===
 export default {
     ['foo'+'']: 42,

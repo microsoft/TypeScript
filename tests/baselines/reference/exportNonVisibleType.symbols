@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/exportNonVisibleType.ts] ////
+
 === foo1.ts ===
 interface I1 {
 >I1 : Symbol(I1, Decl(foo1.ts, 0, 0))

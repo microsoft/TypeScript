@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitBundleWithAmbientReferences.ts] ////
+
 === lib/lib.d.ts ===
 declare module "lib/result" {
 >"lib/result" : Symbol("lib/result", Decl(lib.d.ts, --, --))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/crashIntypeCheckObjectCreationExpression.ts] ////
+
 === crashIntypeCheckObjectCreationExpression.ts ===
 export class BuildWorkspaceService {
 >BuildWorkspaceService : Symbol(BuildWorkspaceService, Decl(crashIntypeCheckObjectCreationExpression.ts, 0, 0))

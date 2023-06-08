@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reexportNameAliasedAndHoisted.ts] ////
+
 === gridview.ts ===
 export type Sizing = any;
 >Sizing : any

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/typedefTagWrapping.ts] ////
+
 === mod1.js ===
 /** 
  * @typedef {function(string): boolean}

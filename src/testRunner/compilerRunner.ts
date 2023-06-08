@@ -340,6 +340,7 @@ class CompilerTest {
 
         Compiler.doTypeAndSymbolBaseline(
             this.configuredName,
+            this.fileName,
             this.result.program!,
             this.toBeCompiled.concat(this.otherFiles).filter(file => !!this.result.program!.getSourceFile(file.unitName)),
             /*opts*/ undefined,

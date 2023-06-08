@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/topLevelAwaitErrors.7.ts] ////
+
 === index.ts ===
 // await disallowed in namespace import
 import * as await from "./other";

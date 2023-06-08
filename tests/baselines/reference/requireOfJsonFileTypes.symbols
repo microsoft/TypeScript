@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/requireOfJsonFileTypes.ts] ////
+
 === file1.ts ===
 import b = require('./b.json');
 >b : Symbol(b, Decl(file1.ts, 0, 0))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/expressionTypeNodeShouldError.ts] ////
+
 === base.d.ts ===
 declare const x: "foo".charCodeAt(0);
 >x : "foo"

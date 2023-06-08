@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileExportAssignmentOfGenericInterface.ts] ////
+
 === declFileExportAssignmentOfGenericInterface_1.ts ===
 import a = require('declFileExportAssignmentOfGenericInterface_0');
 >a : any

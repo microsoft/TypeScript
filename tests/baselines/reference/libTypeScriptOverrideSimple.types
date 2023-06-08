@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/libTypeScriptOverrideSimple.ts] ////
+
 === /node_modules/@typescript/lib-dom/index.d.ts ===
 interface ABC { abc: string }
 >abc : string

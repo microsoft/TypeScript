@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericDefaultsJs.ts] ////
+
 === decls.d.ts ===
 declare function f0<T>(x?: T): T;
 >f0 : <T>(x?: T) => T

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privacyClassImplementsClauseDeclFile.ts] ////
+
 === privacyClassImplementsClauseDeclFile_externalModule.ts ===
 export module publicModule {
 >publicModule : typeof publicModule

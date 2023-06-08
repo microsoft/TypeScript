@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts] ////
+
 === resolvingClassDeclarationWhenInBaseTypeResolution.ts ===
 module rionegrensis {
 >rionegrensis : typeof rionegrensis

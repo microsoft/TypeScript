@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveTupleTypes2.ts] ////
+
 //// [recursiveTupleTypes2.ts]
 interface Tree1 {
     children: [Tree1, Tree2];

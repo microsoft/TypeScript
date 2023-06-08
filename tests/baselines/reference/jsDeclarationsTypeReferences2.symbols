@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsTypeReferences2.ts] ////
+
 === index.js ===
 const{ a, m } = require("./something").o;
 >a : Symbol(a, Decl(index.js, 0, 6))

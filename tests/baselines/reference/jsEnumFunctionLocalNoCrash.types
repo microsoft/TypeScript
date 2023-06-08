@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsEnumFunctionLocalNoCrash.ts] ////
+
 === index.js ===
 function defineCommonExtensionSymbols(apiPrivate) {
 >defineCommonExtensionSymbols : (apiPrivate: any) => void

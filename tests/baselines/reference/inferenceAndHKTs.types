@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inferenceAndHKTs.ts] ////
+
 === inferenceAndHKTs.ts ===
 // Repro from #53970
 

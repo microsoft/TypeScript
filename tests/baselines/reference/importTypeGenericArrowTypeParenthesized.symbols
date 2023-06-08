@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importTypeGenericArrowTypeParenthesized.ts] ////
+
 === module.d.ts ===
 declare module "module" {
 >"module" : Symbol("module", Decl(module.d.ts, 0, 0))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxDeclarationsWithEsModuleInteropNoCrash.tsx] ////
+
 //// [jsxDeclarationsWithEsModuleInteropNoCrash.jsx]
 /// <reference path="/.lib/react16.d.ts" />
 import PropTypes from 'prop-types';

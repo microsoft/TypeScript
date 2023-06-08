@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression8.ts] ////
+
 === fileJs.js ===
 x ? y => ({ y }) : z => ({ z }) // Legal JS
 >y : Symbol(y, Decl(fileJs.js, 0, 3))

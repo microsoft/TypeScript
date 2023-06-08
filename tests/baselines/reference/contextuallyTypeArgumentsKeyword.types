@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextuallyTypeArgumentsKeyword.ts] ////
+
 === foo.js ===
 // Repro for #16585
 const x = {

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/typedefTagNested.ts] ////
+
 === a.js ===
 /** @typedef {Object} App
  * @property {string} name

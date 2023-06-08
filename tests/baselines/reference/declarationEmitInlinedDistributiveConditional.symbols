@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitInlinedDistributiveConditional.ts] ////
+
 === test.ts ===
 import {dropPrivateProps1, dropPrivateProps2} from './api';
 >dropPrivateProps1 : Symbol(dropPrivateProps1, Decl(test.ts, 0, 8))

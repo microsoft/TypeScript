@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/assignmentToVoidZero2.ts] ////
+
 === assignmentToVoidZero2.js ===
 exports.j = 1;
 >exports.j = 1 : 1

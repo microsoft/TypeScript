@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocImportTypeReferenceToCommonjsModule.ts] ////
+
 === ex.d.ts ===
 declare var config: {
 >config : Symbol(config, Decl(ex.d.ts, 0, 11))

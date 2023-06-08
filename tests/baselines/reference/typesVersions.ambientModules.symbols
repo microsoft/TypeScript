@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/moduleResolution/typesVersions.ambientModules.ts] ////
+
 === main.ts ===
 import { a } from "ext";
 >a : Symbol(a, Decl(main.ts, 0, 8))

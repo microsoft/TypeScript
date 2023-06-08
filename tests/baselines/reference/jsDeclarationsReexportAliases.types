@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsReexportAliases.ts] ////
+
 === cls.js ===
 export default class Foo {}
 >Foo : Foo

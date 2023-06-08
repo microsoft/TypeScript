@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/esDecorators/classDeclaration/esDecorators-classDeclaration-exportModifier.ts] ////
+
 === global.js ===
 /** @type {*} */
 var dec;

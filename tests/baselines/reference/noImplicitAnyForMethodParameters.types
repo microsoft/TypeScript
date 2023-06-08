@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitAnyForMethodParameters.ts] ////
+
 === noImplicitAnyForMethodParameters.ts ===
 declare class A {
 >A : A

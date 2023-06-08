@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts] ////
+
 === discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts ===
 // strictNullChecks: false
 

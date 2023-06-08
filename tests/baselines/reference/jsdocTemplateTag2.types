@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocTemplateTag2.ts] ////
+
 === github17339.js ===
 var obj = {
 >obj : { x: <T>(a: T) => T; }

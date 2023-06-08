@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es6ImportDefaultBindingWithExport.ts] ////
+
 === server.ts ===
 var a = 10;
 >a : number

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitInlinedDistributiveConditional.ts] ////
+
 === test.ts ===
 import {dropPrivateProps1, dropPrivateProps2} from './api';
 >dropPrivateProps1 : <Obj>(obj: Obj) => { [K in import("internal").PublicKeys1<keyof Obj>]: Obj[K]; }

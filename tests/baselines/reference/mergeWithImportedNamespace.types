@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mergeWithImportedNamespace.ts] ////
+
 === f1.ts ===
 export namespace N { export var x = 1; }
 >N : typeof N

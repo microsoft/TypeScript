@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/baseTypeOrderChecking.ts] ////
+
 === baseTypeOrderChecking.ts ===
 var someVariable: Class4<Class2>;
 >someVariable : Symbol(someVariable, Decl(baseTypeOrderChecking.ts, 0, 3))

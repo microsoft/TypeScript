@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/typeOnly/extendsClause.ts] ////
+
 === types.ts ===
 export interface I {}
 export class C {}

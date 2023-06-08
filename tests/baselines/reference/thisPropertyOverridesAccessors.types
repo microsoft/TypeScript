@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/thisPropertyOverridesAccessors.ts] ////
+
 === foo.ts ===
 class Foo {
 >Foo : Foo

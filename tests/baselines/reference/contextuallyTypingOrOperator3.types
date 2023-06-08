@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextuallyTypingOrOperator3.ts] ////
+
 === contextuallyTypingOrOperator3.ts ===
 function foo<T, U extends T>(u: U) {
 >foo : <T, U extends T>(u: U) => void

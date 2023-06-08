@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/typedefCrossModule2.ts] ////
+
 === use.js ===
 var mod = require('./mod1.js');
 >mod : { Baz: typeof Baz; Bar: typeof mod.Bar; Quid: 2; } | { Quack: number; Bar: typeof mod.Bar; Quid: 2; }

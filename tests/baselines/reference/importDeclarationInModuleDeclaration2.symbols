@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importDeclarationInModuleDeclaration2.ts] ////
+
 === check.js ===
 function container() {
 >container : Symbol(container, Decl(check.js, 0, 0))

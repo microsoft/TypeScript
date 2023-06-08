@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/assignmentCompatability22.ts] ////
+
 === assignmentCompatability22.ts ===
 module __test1__ {
 >__test1__ : typeof __test1__

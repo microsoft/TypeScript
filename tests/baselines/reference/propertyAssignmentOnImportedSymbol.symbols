@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/propertyAssignmentOnImportedSymbol.ts] ////
+
 === mod1.js ===
 export var hurk = {}
 >hurk : Symbol(hurk, Decl(mod1.js, 0, 10))

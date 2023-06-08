@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/nodeModulesResolveJsonModule.ts] ////
+
 === index.ts ===
 import pkg from "./package.json"
 >pkg : Symbol(pkg, Decl(index.ts, 0, 6))

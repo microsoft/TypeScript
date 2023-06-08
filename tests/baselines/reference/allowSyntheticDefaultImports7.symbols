@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/allowSyntheticDefaultImports7.ts] ////
+
 === b.d.ts ===
 export function foo();
 >foo : Symbol(foo, Decl(b.d.ts, 0, 0))

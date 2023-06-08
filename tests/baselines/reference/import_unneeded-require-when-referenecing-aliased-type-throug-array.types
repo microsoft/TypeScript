@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/import_unneeded-require-when-referenecing-aliased-type-throug-array.ts] ////
+
 === a.ts ===
 /// <reference path="b.ts" />
 import ITest = require('ITest');

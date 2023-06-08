@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/decorators/class/decoratedClassFromExternalModule.ts] ////
+
 === decorated.ts ===
 function decorate(target: any) { }
 >decorate : Symbol(decorate, Decl(decorated.ts, 0, 0))

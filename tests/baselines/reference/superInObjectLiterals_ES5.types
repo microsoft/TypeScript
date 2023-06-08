@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/superInObjectLiterals_ES5.ts] ////
+
 === superInObjectLiterals_ES5.ts ===
 var obj = {
 >obj : { __proto__: { method(): void; }; method(): void; prop: number; p1: () => void; p2: () => void; p3: () => void; }

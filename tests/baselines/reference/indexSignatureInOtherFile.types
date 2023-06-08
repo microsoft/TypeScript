@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indexSignatureInOtherFile.ts] ////
+
 === index.ts ===
 class Test extends Array1 {
 >Test : Test

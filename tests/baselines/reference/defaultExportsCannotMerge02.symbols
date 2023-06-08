@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/modules/defaultExportsCannotMerge02.ts] ////
+
 === m1.ts ===
 export default class Decl {
 >Decl : Symbol(Decl, Decl(m1.ts, 0, 0))

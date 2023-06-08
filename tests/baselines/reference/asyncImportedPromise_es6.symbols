@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/async/es6/asyncImportedPromise_es6.ts] ////
+
 === task.ts ===
 export class Task<T> extends Promise<T> { }
 >Task : Symbol(Task, Decl(task.ts, 0, 0))

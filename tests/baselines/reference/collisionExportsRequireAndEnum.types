@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/collisionExportsRequireAndEnum.ts] ////
+
 === collisionExportsRequireAndEnum_externalmodule.ts ===
 export enum require { // Error
 >require : require

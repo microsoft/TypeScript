@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedImports16.ts] ////
+
 === foo.tsx ===
 import Element = require("react");
 >Element : Symbol(Element, Decl(foo.tsx, 0, 0))

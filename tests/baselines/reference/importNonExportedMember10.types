@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importNonExportedMember10.ts] ////
+
 === a.ts ===
 class Foo {}
 >Foo : Foo

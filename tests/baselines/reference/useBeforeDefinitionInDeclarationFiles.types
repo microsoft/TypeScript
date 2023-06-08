@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/useBeforeDefinitionInDeclarationFiles.ts] ////
+
 === declaration.d.ts ===
 export declare class ClassWithSymbols {
 >ClassWithSymbols : ClassWithSymbols

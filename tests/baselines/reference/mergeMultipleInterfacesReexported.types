@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mergeMultipleInterfacesReexported.ts] ////
+
 === index.ts ===
 
 export * from './eventList';

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsReferenceToClassInstanceCrossFile.ts] ////
+
 === test.js ===
 const {Render} = require("./index");
 >Render : typeof Render

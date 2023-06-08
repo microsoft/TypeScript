@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/jsObjectsMarkedAsOpenEnded.ts] ////
+
 === a.js ===
 var variable = {};
 >variable : Symbol(variable, Decl(a.js, 0, 3), Decl(a.js, 0, 18))

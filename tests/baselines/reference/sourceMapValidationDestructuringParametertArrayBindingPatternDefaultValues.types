@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts] ////
+
 === sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts ===
 declare var console: {
 >console : { log(msg: any): void; }

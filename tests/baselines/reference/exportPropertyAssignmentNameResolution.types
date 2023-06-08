@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/exportPropertyAssignmentNameResolution.ts] ////
+
 === bug24492.js ===
 module.exports.D = class { }
 >module.exports.D = class { } : typeof D

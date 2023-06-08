@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitNameConflicts.ts] ////
+
 === declarationEmit_nameConflicts_0.ts ===
 import im = require('./declarationEmit_nameConflicts_1');
 >im : Symbol(im, Decl(declarationEmit_nameConflicts_0.ts, 0, 0))

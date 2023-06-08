@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileImportModuleWithExportAssignment.ts] ////
+
 === declFileImportModuleWithExportAssignment_1.ts ===
 /**This is on import declaration*/
 import a1 = require("./declFileImportModuleWithExportAssignment_0");

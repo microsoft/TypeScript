@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/emitThisInObjectLiteralGetter.ts] ////
+
 === emitThisInObjectLiteralGetter.ts ===
 const example = {
 >example : { readonly foo: (item: any) => any; }

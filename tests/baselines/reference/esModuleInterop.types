@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/esModuleInterop.ts] ////
+
 === hybrid/index.d.ts ===
 export function sayHello(): string;
 >sayHello : () => string

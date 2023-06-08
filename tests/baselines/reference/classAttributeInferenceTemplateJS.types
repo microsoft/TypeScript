@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classAttributeInferenceTemplateJS.ts] ////
+
 === index.js ===
 class MyClass {
 >MyClass : MyClass

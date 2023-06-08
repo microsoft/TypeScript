@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment9_1.ts] ////
+
 === a.js ===
 var my = my ?? {};
 >my : typeof my

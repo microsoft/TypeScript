@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nodeResolution4.ts] ////
+
 === b.ts ===
 import y = require("./a");
 >y : typeof y

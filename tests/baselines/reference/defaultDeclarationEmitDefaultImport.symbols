@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/defaultDeclarationEmitDefaultImport.ts] ////
+
 === root.ts ===
 export function getSomething(): Something { return null as any }
 >getSomething : Symbol(getSomething, Decl(root.ts, 0, 0))

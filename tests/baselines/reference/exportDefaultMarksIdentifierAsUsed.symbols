@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportDefaultMarksIdentifierAsUsed.ts] ////
+
 === a.js ===
 const Obj = {};
 >Obj : Symbol(Obj, Decl(a.js, 0, 5))

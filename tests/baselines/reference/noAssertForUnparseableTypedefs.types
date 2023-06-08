@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/noAssertForUnparseableTypedefs.ts] ////
+
 === bug26693.js ===
 /** @typedef {module:locale} hi */
 import { nope } from 'nope';

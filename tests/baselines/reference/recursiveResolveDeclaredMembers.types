@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveResolveDeclaredMembers.ts] ////
+
 === types.ts ===
 
 // #23025

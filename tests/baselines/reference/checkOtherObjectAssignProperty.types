@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/checkOtherObjectAssignProperty.ts] ////
+
 === importer.js ===
 const mod = require("./mod1");
 >mod : typeof mod

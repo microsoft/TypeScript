@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/externalModuleResolution.ts] ////
+
 === consumer.ts ===
 import x = require('./foo');
 >x : typeof x

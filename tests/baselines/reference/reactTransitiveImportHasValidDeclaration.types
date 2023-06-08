@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reactTransitiveImportHasValidDeclaration.ts] ////
+
 === node_modules/react/index.d.ts ===
 declare namespace React {
     export interface DetailedHTMLProps<T, U> {}

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importHelpersNoHelpers.ts] ////
+
 === external.ts ===
 export * from "./other";
 export class A { }

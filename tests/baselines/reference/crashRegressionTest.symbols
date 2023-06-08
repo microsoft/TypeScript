@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/crashRegressionTest.ts] ////
+
 === crashRegressionTest.ts ===
 module MsPortal.Util.TemplateEngine {
 >MsPortal : Symbol(MsPortal, Decl(crashRegressionTest.ts, 0, 0))

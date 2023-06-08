@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxNamespacePrefixInName.tsx] ////
+
 === jsxNamespacePrefixInName.tsx ===
 var justElement1 = <a:element />;
 >justElement1 : any

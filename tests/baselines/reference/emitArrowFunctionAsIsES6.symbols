@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/arrowFunction/emitArrowFunctionAsIsES6.ts] ////
+
 === emitArrowFunctionAsIsES6.ts ===
 var arrow1 =  a => { };
 >arrow1 : Symbol(arrow1, Decl(emitArrowFunctionAsIsES6.ts, 0, 3))

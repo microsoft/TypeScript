@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/tsxDeepAttributeAssignabilityError.tsx] ////
+
 === my-component.tsx ===
 import * as React from 'react'
 >React : typeof React

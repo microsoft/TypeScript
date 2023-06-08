@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/binaryArithmatic3.ts] ////
+
 //// [binaryArithmatic3.ts]
 var v = undefined | undefined;
 

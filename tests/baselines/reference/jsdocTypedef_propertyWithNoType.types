@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsdocTypedef_propertyWithNoType.ts] ////
+
 === /a.js ===
 /**
  * @typedef Foo

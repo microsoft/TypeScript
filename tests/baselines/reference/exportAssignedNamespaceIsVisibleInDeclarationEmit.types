@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportAssignedNamespaceIsVisibleInDeclarationEmit.ts] ////
+
 === thing.d.ts ===
 declare namespace Foo {
 >Foo : typeof Foo

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constEnumNoEmitReexport.ts] ////
+
 === ConstEnum.ts ===
 export const enum MyConstEnum {
 >MyConstEnum : Symbol(MyConstEnum, Decl(ConstEnum.ts, 0, 0))

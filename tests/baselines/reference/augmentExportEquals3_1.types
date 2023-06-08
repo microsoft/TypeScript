@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/augmentExportEquals3_1.ts] ////
+
 === file1.d.ts ===
 declare module "file1" {
 >"file1" : typeof import("file1")

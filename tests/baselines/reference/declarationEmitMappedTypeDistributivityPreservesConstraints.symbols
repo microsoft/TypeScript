@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitMappedTypeDistributivityPreservesConstraints.ts] ////
+
 === types.ts ===
 type Fns = Record<string, (...params: unknown[]) => unknown>
 >Fns : Symbol(Fns, Decl(types.ts, 0, 0))

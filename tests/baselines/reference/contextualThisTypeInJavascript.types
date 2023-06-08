@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/thisType/contextualThisTypeInJavascript.ts] ////
+
 === context.js ===
 const obj = {
 >obj : { prop: number; method(): void; }

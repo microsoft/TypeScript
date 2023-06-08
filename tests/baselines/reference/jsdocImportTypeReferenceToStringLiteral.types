@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocImportTypeReferenceToStringLiteral.ts] ////
+
 === b.js ===
 export const FOO = "foo";
 >FOO : "foo"

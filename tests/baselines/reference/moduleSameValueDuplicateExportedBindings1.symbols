@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleSameValueDuplicateExportedBindings1.ts] ////
+
 === a.ts ===
 
 export * from "./b";

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/restArgMissingName.ts] ////
+
 === restArgMissingName.ts ===
 function sum (...) {} 
 >sum : Symbol(sum, Decl(restArgMissingName.ts, 0, 0))

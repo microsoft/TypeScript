@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedVariablesWithUnderscoreInForOfLoop.ts] ////
+
 === unusedVariablesWithUnderscoreInForOfLoop.ts ===
 function t1() {
 >t1 : () => void

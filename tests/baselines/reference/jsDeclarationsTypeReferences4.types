@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsTypeReferences4.ts] ////
+
 === index.js ===
 /// <reference types="node" />
 export const Something = 2; // to show conflict that can occur

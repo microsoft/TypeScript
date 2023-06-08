@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/requireOfJsonFileWithAmd.ts] ////
+
 === file1.ts ===
 import b1 = require('./b');
 >b1 : any

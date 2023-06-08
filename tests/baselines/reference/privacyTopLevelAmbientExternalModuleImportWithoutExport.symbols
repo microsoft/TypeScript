@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privacyTopLevelAmbientExternalModuleImportWithoutExport.ts] ////
+
 === privacyTopLevelAmbientExternalModuleImportWithoutExport_core.ts ===
 ///<reference path='privacyTopLevelAmbientExternalModuleImportWithoutExport_require2.ts'/>
 ///<reference path='privacyTopLevelAmbientExternalModuleImportWithoutExport_require3.ts'/>

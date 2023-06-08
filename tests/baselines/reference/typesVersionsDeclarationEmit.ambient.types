@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/declarationEmit/typesVersionsDeclarationEmit.ambient.ts] ////
+
 === main.ts ===
 import { fa } from "ext";
 >fa : () => import("ext").A

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/nestedDestructuringOfRequire.ts] ////
+
 === main.js ===
 const {
     chalk: { grey }

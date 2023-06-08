@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/importsImplicitlyReadonly.ts] ////
+
 === b.ts ===
 import { x, y } from "./a";
 >x : Symbol(x, Decl(b.ts, 0, 8))

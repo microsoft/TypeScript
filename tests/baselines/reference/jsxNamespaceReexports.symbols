@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxNamespaceReexports.tsx] ////
+
 === library.ts ===
 function createElement(element: string, props: any, ...children: any[]): any {}
 >createElement : Symbol(createElement, Decl(library.ts, 0, 0))

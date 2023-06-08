@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/moduleResolution/importFromDot.ts] ////
+
 === a.ts ===
 export const rootA = 0;
 >rootA : Symbol(rootA, Decl(a.ts, 0, 12))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/awaitExpressionInnerCommentEmit.ts] ////
+
 === awaitExpressionInnerCommentEmit.ts ===
 async function foo() {
 >foo : () => Promise<void>

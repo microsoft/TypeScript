@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/typedefInnerNamepaths.ts] ////
+
 === bug25104.js ===
 class C {
 >C : C

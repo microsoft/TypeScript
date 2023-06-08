@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedParametersinConstructor1.ts] ////
+
 === unusedParametersinConstructor1.ts ===
 class greeter {
 >greeter : Symbol(greeter, Decl(unusedParametersinConstructor1.ts, 0, 0))

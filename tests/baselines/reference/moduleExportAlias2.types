@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/moduleExportAlias2.ts] ////
+
 === index.js ===
 /// <reference path='node.d.ts' />
 const C = require("./semver")

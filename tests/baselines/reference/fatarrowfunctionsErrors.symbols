@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/fatarrowfunctionsErrors.ts] ////
+
 === fatarrowfunctionsErrors.ts ===
 foo((...Far:any[])=>{return 0;})
 >Far : Symbol(Far, Decl(fatarrowfunctionsErrors.ts, 0, 5))

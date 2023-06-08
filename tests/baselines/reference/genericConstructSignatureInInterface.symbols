@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericConstructSignatureInInterface.ts] ////
+
 === genericConstructSignatureInInterface.ts ===
 interface C {
 >C : Symbol(C, Decl(genericConstructSignatureInInterface.ts, 0, 0))

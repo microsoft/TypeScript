@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inferFromNestedSameShapeTuple.ts] ////
+
 === inferFromNestedSameShapeTuple.ts ===
 // repro #48524
 

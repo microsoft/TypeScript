@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleAugmentationInAmbientModule1.ts] ////
+
 === main.ts ===
 /// <reference path="O.d.ts" />
 

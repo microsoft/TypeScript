@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/thisType/thisTypeErrors.ts] ////
+
 === thisTypeErrors.ts ===
 var x1: this;
 >x1 : any

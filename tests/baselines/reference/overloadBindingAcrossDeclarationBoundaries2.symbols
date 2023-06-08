@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/overloadBindingAcrossDeclarationBoundaries2.ts] ////
+
 === overloadBindingAcrossDeclarationBoundaries_file0.ts ===
 interface Opt1 {
 >Opt1 : Symbol(Opt1, Decl(overloadBindingAcrossDeclarationBoundaries_file0.ts, 0, 0))

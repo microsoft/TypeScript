@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/correctlyMarkAliasAsReferences1.tsx] ////
+
 === 0.tsx ===
 ///<reference path="declaration.d.ts" />
 import * as cx from 'classnames';

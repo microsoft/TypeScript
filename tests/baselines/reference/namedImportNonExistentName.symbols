@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/namedImportNonExistentName.ts] ////
+
 === foo.d.ts ===
 export = Foo;
 >Foo : Symbol(Foo, Decl(foo.d.ts, 1, 24))

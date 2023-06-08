@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/destructuredLateBoundNameHasCorrectTypes.ts] ////
+
 === destructuredLateBoundNameHasCorrectTypes.ts ===
 let { [Symbol.iterator]: destructured } = [];
 >Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))

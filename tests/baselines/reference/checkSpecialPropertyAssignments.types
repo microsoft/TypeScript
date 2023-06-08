@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/checkSpecialPropertyAssignments.ts] ////
+
 === bug24252.js ===
 var A = {};
 >A : typeof A

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment34.ts] ////
+
 === file1.js ===
 var N = {};
 >N : typeof N

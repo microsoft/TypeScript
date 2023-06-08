@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleAugmentationDeclarationEmit1.ts] ////
+
 === map.ts ===
 import { Observable } from "./observable"
 >Observable : Symbol(Observable, Decl(map.ts, 0, 8))

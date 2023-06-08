@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/symbolLinkDeclarationEmitModuleNamesImportRef.ts] ////
+
 === Folder/monorepo/core/index.ts ===
 import { styles } from "package-a";
 >styles : import("Folder/node_modules/styled-components/typings/styled-components").InterpolationValue[]

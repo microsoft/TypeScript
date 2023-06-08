@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/narrowingTruthyObject.ts] ////
+
 === narrowingTruthyObject.ts ===
 function foo(x: unknown, b: boolean) {
 >foo : (x: unknown, b: boolean) => void

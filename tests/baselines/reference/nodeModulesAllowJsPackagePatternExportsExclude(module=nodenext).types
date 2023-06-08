@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/allowJs/nodeModulesAllowJsPackagePatternExportsExclude.ts] ////
+
 === index.js ===
 // esm format file
 import * as cjsi from "inner/cjs/exclude/index";

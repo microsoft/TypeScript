@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsdocArrayObjectPromiseNoImplicitAny.ts] ////
+
 === jsdocArrayObjectPromiseNoImplicitAny.js ===
 /** @type {Array} */
 var notAnyArray = [5];

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/import_var-referencing-an-imported-module-alias.ts] ////
+
 === consumer.ts ===
 import host = require("host");
 >host : Symbol(host, Decl(consumer.ts, 0, 0))

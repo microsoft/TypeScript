@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserModifierOnStatementInBlock3.ts] ////
+
 === parserModifierOnStatementInBlock3.ts ===
 export function foo() {
 >foo : Symbol(foo, Decl(parserModifierOnStatementInBlock3.ts, 0, 0))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/defaultParameterAddsUndefinedWithStrictNullChecks.ts] ////
+
 === defaultParameterAddsUndefinedWithStrictNullChecks.ts ===
 function f(addUndefined1 = "J", addUndefined2?: number) {
 >f : (addUndefined1?: string, addUndefined2?: number) => number

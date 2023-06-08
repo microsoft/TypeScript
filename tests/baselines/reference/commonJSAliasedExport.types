@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/commonJSAliasedExport.ts] ////
+
 === bug43713.js ===
 const { funky } = require('./commonJSAliasedExport');
 >funky : (declaration: any) => boolean

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/tripleSlashTypesReferenceWithMissingExports.ts] ////
+
 === node_modules/pkg/index.d.ts ===
 interface GlobalThing { a: number }
 >a : number

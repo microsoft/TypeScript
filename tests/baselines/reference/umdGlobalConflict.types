@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/umdGlobalConflict.ts] ////
+
 === v1/index.d.ts ===
 export as namespace Alpha;
 >Alpha : typeof import("v1/index")

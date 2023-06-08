@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxElementResolution16.tsx] ////
+
 //// [file.tsx]
 declare module JSX {
 }

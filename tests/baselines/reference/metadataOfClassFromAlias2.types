@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/metadataOfClassFromAlias2.ts] ////
+
 === auxiliry.ts ===
 export class SomeClass {
 >SomeClass : SomeClass

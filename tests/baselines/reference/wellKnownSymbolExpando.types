@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/wellKnownSymbolExpando.ts] ////
+
 === wellKnownSymbolExpando.ts ===
 function f() {}
 >f : typeof f

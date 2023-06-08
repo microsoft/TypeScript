@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/nodeModulesPackagePatternExports.ts] ////
+
 === index.ts ===
 // esm format file
 import * as cjsi from "inner/cjs/index";

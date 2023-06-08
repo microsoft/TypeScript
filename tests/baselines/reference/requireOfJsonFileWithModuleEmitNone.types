@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/requireOfJsonFileWithModuleEmitNone.ts] ////
+
 === file1.ts ===
 import * as b from './b.json';
 >b : { a: boolean; b: string; }

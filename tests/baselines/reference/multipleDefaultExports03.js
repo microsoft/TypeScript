@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/modules/multipleDefaultExports03.ts] ////
+
 //// [multipleDefaultExports03.ts]
 export default class C {
 }

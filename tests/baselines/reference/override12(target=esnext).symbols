@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/override/override12.ts] ////
+
 === override12.ts ===
 class A {
 >A : Symbol(A, Decl(override12.ts, 0, 0))

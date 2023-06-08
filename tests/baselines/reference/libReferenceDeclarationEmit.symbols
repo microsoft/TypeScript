@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/declarationEmit/libReferenceDeclarationEmit.ts] ////
+
 === file1.ts ===
 /// <reference lib="dom" />
 export declare const elem: HTMLElement;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxSpreadFirstUnionNoErrors.tsx] ////
+
 === jsxSpreadFirstUnionNoErrors.tsx ===
 import React from "react";
 >React : Symbol(React, Decl(jsxSpreadFirstUnionNoErrors.tsx, 0, 6))

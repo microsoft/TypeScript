@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/jsContainerMergeTsDeclaration3.ts] ////
+
 === a.d.ts ===
 declare class A {}
 >A : A

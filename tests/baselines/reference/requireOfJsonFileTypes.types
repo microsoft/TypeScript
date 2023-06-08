@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/requireOfJsonFileTypes.ts] ////
+
 === file1.ts ===
 import b = require('./b.json');
 >b : { a: boolean; b: string; c: null; d: boolean; }

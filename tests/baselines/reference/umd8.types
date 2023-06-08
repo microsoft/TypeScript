@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/umd8.ts] ////
+
 === a.ts ===
 /// <reference path="foo.d.ts" />
 import * as ff from './foo';

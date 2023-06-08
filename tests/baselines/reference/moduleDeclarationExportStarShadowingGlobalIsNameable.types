@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleDeclarationExportStarShadowingGlobalIsNameable.ts] ////
+
 === model/index.ts ===
 
 export * from "./account";

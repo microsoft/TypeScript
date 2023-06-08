@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/nonjsExtensions/declarationFileForJsonImport.ts] ////
+
 === main.ts ===
 import data from "./data.json";
 >data : string

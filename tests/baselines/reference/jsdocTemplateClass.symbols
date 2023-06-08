@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocTemplateClass.ts] ////
+
 === templateTagOnClasses.js ===
 /**
  * @template T

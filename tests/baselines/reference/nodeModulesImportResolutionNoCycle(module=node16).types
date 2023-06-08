@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/nodeModulesImportResolutionNoCycle.ts] ////
+
 === index.ts ===
 // esm format file
 import * as type from "#type";

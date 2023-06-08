@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/importAssertion/importAssertion3.ts] ////
+
 === 0.ts ===
 export interface I { }
 >I : Symbol(I, Decl(0.ts, 0, 0))

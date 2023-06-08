@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/emitter/es2018/asyncGenerators/emitter.asyncGenerators.classMethods.es2018.ts] ////
+
 === C1.ts ===
 class C1 {
 >C1 : Symbol(C1, Decl(C1.ts, 0, 0))

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsClassExtendsVisibility.ts] ////
+
 === cls.js ===
 const Bar = require("./bar");
 >Bar : Symbol(Bar, Decl(cls.js, 0, 5))

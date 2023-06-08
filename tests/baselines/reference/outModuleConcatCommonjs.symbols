@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/outModuleConcatCommonjs.ts] ////
+
 === ref/a.ts ===
 // This should be an error
 

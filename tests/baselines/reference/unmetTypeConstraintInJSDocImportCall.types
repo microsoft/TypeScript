@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unmetTypeConstraintInJSDocImportCall.ts] ////
+
 === file1.js ===
 /**
  * @template {string} T

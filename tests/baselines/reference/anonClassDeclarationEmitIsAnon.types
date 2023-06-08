@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/anonClassDeclarationEmitIsAnon.ts] ////
+
 === wrapClass.ts ===
 export function wrapClass(param: any) {
 >wrapClass : (param: any) => typeof Wrapped

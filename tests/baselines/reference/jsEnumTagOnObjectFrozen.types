@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsEnumTagOnObjectFrozen.ts] ////
+
 === usage.js ===
 const { Thing, useThing, cbThing } = require("./index");
 >Thing : Readonly<{ a: "thing"; b: "chill"; }>

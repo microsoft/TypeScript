@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsdocReferenceGlobalTypeInCommonJs.ts] ////
+
 === a.js ===
 const other = require('./other');
 >other : Symbol(other, Decl(a.js, 0, 5))

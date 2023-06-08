@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classMemberInitializerWithLamdaScoping2.ts] ////
+
 === classMemberInitializerWithLamdaScoping2_0.ts ===
 var field1: string;
 >field1 : Symbol(field1, Decl(classMemberInitializerWithLamdaScoping2_0.ts, 0, 3))

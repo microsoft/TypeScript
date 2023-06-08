@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitExportAliasVisibiilityMarking.ts] ////
+
 === Types.ts ===
 type Suit = 'Hearts' | 'Spades' | 'Clubs' | 'Diamonds';
 >Suit : Symbol(Suit, Decl(Types.ts, 0, 0))

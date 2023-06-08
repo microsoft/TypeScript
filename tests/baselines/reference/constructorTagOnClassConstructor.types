@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/constructorTagOnClassConstructor.ts] ////
+
 === bug27025.js ===
 export class Alpha { }
 >Alpha : Alpha

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/systemModuleAmbientDeclarations.ts] ////
+
 === file1.ts ===
 declare class Promise { }
 >Promise : Promise

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/resolveNameWithNamspace.ts] ////
+
 === node.d.ts ===
 declare function require(moduleName: string): any;
 >require : Symbol(require, Decl(node.d.ts, 0, 0))

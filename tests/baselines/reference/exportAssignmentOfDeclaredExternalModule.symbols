@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportAssignmentOfDeclaredExternalModule.ts] ////
+
 === exportAssignmentOfDeclaredExternalModule_1.ts ===
 ///<reference path='exportAssignmentOfDeclaredExternalModule_0.ts'/>
 import Sammy = require('./exportAssignmentOfDeclaredExternalModule_0');

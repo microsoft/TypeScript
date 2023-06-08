@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es6ExportAssignment4.ts] ////
+
 === modules.d.ts ===
 declare module "a" {
 >"a" : typeof import("a")

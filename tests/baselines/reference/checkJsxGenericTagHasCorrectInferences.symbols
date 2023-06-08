@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/checkJsxGenericTagHasCorrectInferences.tsx] ////
+
 === file.tsx ===
 import * as React from "react";
 >React : Symbol(React, Decl(file.tsx, 0, 6))

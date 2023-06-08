@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignmentOutOfOrder.ts] ////
+
 === index.js ===
 First.Item = class I {}
 >First.Item = class I {} : typeof I

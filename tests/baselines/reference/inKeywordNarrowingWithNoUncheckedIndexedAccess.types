@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inKeywordNarrowingWithNoUncheckedIndexedAccess.ts] ////
+
 === inKeywordNarrowingWithNoUncheckedIndexedAccess.ts ===
 declare function invariant(condition: boolean): asserts condition;
 >invariant : (condition: boolean) => asserts condition

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/amdDeclarationEmitNoExtraDeclare.ts] ////
+
 === Class.ts ===
 import { Configurable } from "./Configurable"
 >Configurable : Symbol(Configurable, Decl(Class.ts, 0, 8))

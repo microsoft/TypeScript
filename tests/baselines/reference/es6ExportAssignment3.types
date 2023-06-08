@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es6ExportAssignment3.ts] ////
+
 === a.d.ts ===
 declare var a: number;
 >a : number

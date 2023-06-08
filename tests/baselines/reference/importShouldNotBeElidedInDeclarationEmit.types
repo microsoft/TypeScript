@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importShouldNotBeElidedInDeclarationEmit.ts] ////
+
 === node_modules/umd.d.ts ===
 export as namespace UMD;
 >UMD : typeof import("node_modules/umd")

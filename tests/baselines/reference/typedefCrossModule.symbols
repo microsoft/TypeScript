@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/typedefCrossModule.ts] ////
+
 === commonjs.d.ts ===
 declare var module: { exports: any};
 >module : Symbol(module, Decl(commonjs.d.ts, 0, 11))

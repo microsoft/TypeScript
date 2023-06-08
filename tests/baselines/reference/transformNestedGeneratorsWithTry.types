@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/transformNestedGeneratorsWithTry.ts] ////
+
 === main.ts ===
 // https://github.com/Microsoft/TypeScript/issues/11177
 import * as Bluebird from 'bluebird';

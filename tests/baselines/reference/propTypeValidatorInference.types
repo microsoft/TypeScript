@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/propTypeValidatorInference.ts] ////
+
 === node_modules/prop-types/index.d.ts ===
 export const nominalTypeHack: unique symbol;
 >nominalTypeHack : unique symbol

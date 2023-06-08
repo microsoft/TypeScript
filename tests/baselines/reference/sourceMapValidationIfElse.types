@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/sourceMapValidationIfElse.ts] ////
+
 === sourceMapValidationIfElse.ts ===
 var i = 10;
 >i : number

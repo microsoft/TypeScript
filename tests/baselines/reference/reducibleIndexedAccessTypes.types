@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reducibleIndexedAccessTypes.ts] ////
+
 === reducibleIndexedAccessTypes.ts ===
 // Repro from 53030
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/truthinessCallExpressionCoercion4.ts] ////
+
 === a.js ===
 function fn() {}
 >fn : Symbol(fn, Decl(a.js, 0, 0))

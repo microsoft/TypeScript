@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocTypeTag4.ts] ////
+
 === t.d.ts ===
 type A<T extends string> = { a: T }
 >A : A<T>

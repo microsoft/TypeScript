@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/expandoOnAlias.ts] ////
+
 === vue.js ===
 export class Vue {}
 >Vue : Symbol(Vue, Decl(vue.js, 0, 0))

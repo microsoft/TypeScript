@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxElementResolution.tsx] ////
+
 === tsxElementResolution.tsx ===
 declare namespace JSX {
 >JSX : Symbol(JSX, Decl(tsxElementResolution.tsx, 0, 0))

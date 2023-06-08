@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es6ImportDefaultBinding.ts] ////
+
 === es6ImportDefaultBinding_0.ts ===
 var a = 10;
 >a : Symbol(a, Decl(es6ImportDefaultBinding_0.ts, 0, 3))

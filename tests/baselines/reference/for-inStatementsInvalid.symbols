@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts] ////
+
 === for-inStatementsInvalid.ts ===
 var aNumber: number;
 >aNumber : Symbol(aNumber, Decl(for-inStatementsInvalid.ts, 0, 3))

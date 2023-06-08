@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/moduleExportWithExportPropertyAssignment.ts] ////
+
 === a.js ===
 /// <reference path='./requires.d.ts' />
 var mod1 = require('./mod1')

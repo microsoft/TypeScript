@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/esModuleInteropDefaultMemberMustBeSyntacticallyDefaultExport.ts] ////
+
 === point.d.ts ===
 declare class Point {
 >Point : Symbol(Point, Decl(point.d.ts, 0, 0))

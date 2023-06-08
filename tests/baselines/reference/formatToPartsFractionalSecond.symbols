@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/formatToPartsFractionalSecond.ts] ////
+
 === formatToPartsFractionalSecond.ts ===
 new Intl.DateTimeFormat().formatToParts().find((val) => val.type === 'fractionalSecond')
 >new Intl.DateTimeFormat().formatToParts().find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeofAmbientExternalModules.ts] ////
+
 === typeofAmbientExternalModules_2.ts ===
 ///<reference path='typeofAmbientExternalModules_0.ts'/>
 ///<reference path='typeofAmbientExternalModules_1.ts'/>

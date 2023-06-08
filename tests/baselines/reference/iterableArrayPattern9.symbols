@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/iterableArrayPattern9.ts] ////
+
 === iterableArrayPattern9.ts ===
 function fun([a, b] = new FooIterator) { }
 >fun : Symbol(fun, Decl(iterableArrayPattern9.ts, 0, 0))

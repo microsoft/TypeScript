@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/jsContainerMergeJsContainer.ts] ////
+
 === a.js ===
 // #24131
 const a = {};

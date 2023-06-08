@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/emitClassMergedWithConstNamespaceNotElided.ts] ////
+
 === enum.d.ts ===
 export namespace Clone {
     const enum LOCAL {

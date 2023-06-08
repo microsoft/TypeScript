@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitPrivateSymbolCausesVarDeclarationEmit2.ts] ////
+
 === a.ts ===
 export const x = Symbol();
 >x : Symbol(x, Decl(a.ts, 0, 12))

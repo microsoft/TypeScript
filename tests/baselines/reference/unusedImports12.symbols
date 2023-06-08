@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedImports12.ts] ////
+
 === a.ts ===
 import { Member } from './b';
 >Member : Symbol(Member, Decl(a.ts, 0, 8))

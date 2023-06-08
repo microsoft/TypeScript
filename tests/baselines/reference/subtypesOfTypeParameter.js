@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts] ////
+
 //// [subtypesOfTypeParameter.ts]
 // checking whether other types are subtypes of type parameters
 

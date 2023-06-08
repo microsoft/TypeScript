@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classExtendingBuiltinType.ts] ////
+
 === classExtendingBuiltinType.ts ===
 class C1 extends Object { }
 >C1 : Symbol(C1, Decl(classExtendingBuiltinType.ts, 0, 0))

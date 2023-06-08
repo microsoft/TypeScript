@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocParseStarEquals.ts] ////
+
 === a.js ===
 /** @param {...*=} args
     @return {*=} */

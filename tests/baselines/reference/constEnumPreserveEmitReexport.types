@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constEnumPreserveEmitReexport.ts] ////
+
 === ConstEnum.ts ===
 export const enum MyConstEnum {
 >MyConstEnum : MyConstEnum

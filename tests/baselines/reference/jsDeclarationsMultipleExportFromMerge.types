@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsMultipleExportFromMerge.ts] ////
+
 === items.js ===
 export const a = 1;
 >a : 1

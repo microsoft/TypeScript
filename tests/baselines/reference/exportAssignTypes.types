@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/exportAssignTypes.ts] ////
+
 === consumer.ts ===
 import iString = require('./expString');
 >iString : string

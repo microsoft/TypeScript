@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericsWithDuplicateTypeParameters1.ts] ////
+
 === genericsWithDuplicateTypeParameters1.ts ===
 function f<x, x>() { }
 >f : Symbol(f, Decl(genericsWithDuplicateTypeParameters1.ts, 0, 0))

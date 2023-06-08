@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/aliasUsageInObjectLiteral.ts] ////
+
 === aliasUsageInObjectLiteral_main.ts ===
 import Backbone = require("./aliasUsageInObjectLiteral_backbone");
 >Backbone : Symbol(Backbone, Decl(aliasUsageInObjectLiteral_main.ts, 0, 0))

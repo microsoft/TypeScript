@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/multipleClassPropertyModifiers.ts] ////
+
 //// [multipleClassPropertyModifiers.ts]
 class C {
     public static p1;

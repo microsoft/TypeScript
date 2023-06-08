@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocTypeReferenceToImportOfFunctionExpression.ts] ////
+
 === MC.js ===
 const MW = require("./MW");
 >MW : typeof MW

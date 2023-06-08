@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/import/importTypeLocal.ts] ////
+
 === foo.ts ===
 interface Point {
 >Point : Symbol(Point, Decl(foo.ts, 0, 0))

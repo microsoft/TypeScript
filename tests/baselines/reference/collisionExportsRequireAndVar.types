@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/collisionExportsRequireAndVar.ts] ////
+
 === collisionExportsRequireAndVar_externalmodule.ts ===
 export function foo() {
 >foo : () => void

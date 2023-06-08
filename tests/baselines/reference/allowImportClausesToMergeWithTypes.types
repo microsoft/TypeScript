@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/allowImportClausesToMergeWithTypes.ts] ////
+
 === b.ts ===
 export const zzz = 123;
 >zzz : 123

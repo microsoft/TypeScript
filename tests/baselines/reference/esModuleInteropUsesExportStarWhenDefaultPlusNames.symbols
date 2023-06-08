@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/esModuleInteropUsesExportStarWhenDefaultPlusNames.ts] ////
+
 === esModuleInteropUsesExportStarWhenDefaultPlusNames.ts ===
 import Deps, { var2 } from './dep';
 >Deps : Symbol(Deps, Decl(esModuleInteropUsesExportStarWhenDefaultPlusNames.ts, 0, 6))

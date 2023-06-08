@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/baseTypeAfterDerivedType.ts] ////
+
 === baseTypeAfterDerivedType.ts ===
 interface Derived extends Base {
 >Derived : Symbol(Derived, Decl(baseTypeAfterDerivedType.ts, 0, 0))

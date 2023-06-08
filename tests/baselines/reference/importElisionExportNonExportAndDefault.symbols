@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importElisionExportNonExportAndDefault.ts] ////
+
 === main.ts ===
 import MyFunction from "./MyComponent";
 >MyFunction : Symbol(MyFunction, Decl(main.ts, 0, 6))

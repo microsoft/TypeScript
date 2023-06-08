@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inferrenceInfiniteLoopWithSubtyping.ts] ////
+
 === graphql-compose.d.ts ===
 export type ObjMapReadOnly<T> = Readonly<{ [key: string]: Readonly<T> }>;
 >ObjMapReadOnly : Readonly<{ [key: string]: Readonly<T>; }>

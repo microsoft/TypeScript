@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/Accessors/parserAccessors9.ts] ////
+
 === parserAccessors9.ts ===
 var v = { set foo(a, b) { } }
 >v : Symbol(v, Decl(parserAccessors9.ts, 0, 3))

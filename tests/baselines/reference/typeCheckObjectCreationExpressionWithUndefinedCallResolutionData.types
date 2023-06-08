@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeCheckObjectCreationExpressionWithUndefinedCallResolutionData.ts] ////
+
 === file2.ts ===
 import f = require('./file1');
 >f : typeof f

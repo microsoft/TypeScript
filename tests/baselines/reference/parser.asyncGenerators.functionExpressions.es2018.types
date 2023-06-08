@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript2018/asyncGenerators/parser.asyncGenerators.functionExpressions.es2018.ts] ////
+
 === functionExpressionIsOk.ts ===
 const f1 = async function * f() {
 >f1 : () => AsyncGenerator<never, void, unknown>

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/typeFromJSConstructor.ts] ////
+
 === a.js ===
 function Installer () {
 >Installer : typeof Installer

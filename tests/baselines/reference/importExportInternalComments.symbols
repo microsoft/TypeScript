@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importExportInternalComments.ts] ////
+
 === include.d.ts ===
 declare module "foo";
 >"foo" : Symbol("foo", Decl(include.d.ts, 0, 0))

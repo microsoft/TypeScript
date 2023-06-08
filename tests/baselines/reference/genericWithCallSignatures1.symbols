@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericWithCallSignatures1.ts] ////
+
 === genericWithCallSignatures_1.ts ===
 ///<reference path="genericWithCallSignatures_0.ts"/>
 class MyClass {

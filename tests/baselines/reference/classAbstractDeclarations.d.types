@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractDeclarations.d.ts] ////
+
 === classAbstractDeclarations.d.ts ===
 declare abstract class A {
 >A : A

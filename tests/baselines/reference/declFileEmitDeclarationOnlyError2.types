@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileEmitDeclarationOnlyError2.ts] ////
+
 === hello.ts ===
 var hello = "yo!";
 >hello : string

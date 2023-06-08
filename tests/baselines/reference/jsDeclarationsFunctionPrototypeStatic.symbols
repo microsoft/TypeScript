@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsFunctionPrototypeStatic.ts] ////
+
 === source.js ===
 module.exports = MyClass;
 >module.exports : Symbol(module.exports, Decl(source.js, 0, 0))

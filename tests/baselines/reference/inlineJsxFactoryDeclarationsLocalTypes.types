@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/inline/inlineJsxFactoryDeclarationsLocalTypes.tsx] ////
+
 === renderer.d.ts ===
 export namespace dom {
     namespace JSX {

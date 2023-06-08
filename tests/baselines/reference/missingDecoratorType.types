@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/decorators/missingDecoratorType.ts] ////
+
 === a.ts ===
 
 interface Object { }

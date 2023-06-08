@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importUsedInGenericImportResolves.ts] ////
+
 === test1.d.ts ===
 export interface T<P> {
 >T : Symbol(T, Decl(test1.d.ts, 0, 0))

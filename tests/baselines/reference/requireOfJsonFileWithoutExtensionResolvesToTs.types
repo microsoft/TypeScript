@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/requireOfJsonFileWithoutExtensionResolvesToTs.ts] ////
+
 === file1.ts ===
 import c1 = require('./c'); // resolves to c.ts 
 >c1 : { a: boolean; b: string; }

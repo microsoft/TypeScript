@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/listFailure.ts] ////
+
 === listFailure.ts ===
 module Editor {
 >Editor : Symbol(Editor, Decl(listFailure.ts, 0, 0))

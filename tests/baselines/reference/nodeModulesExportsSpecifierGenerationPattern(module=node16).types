@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/nodeModulesExportsSpecifierGenerationPattern.ts] ////
+
 === index.ts ===
 // esm format file
 import { Thing } from "inner/other";

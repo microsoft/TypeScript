@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/generators/generatorAssignability.ts] ////
+
 === generatorAssignability.ts ===
 declare let _: any;
 >_ : any

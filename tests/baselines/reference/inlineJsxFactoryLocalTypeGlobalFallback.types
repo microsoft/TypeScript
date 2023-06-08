@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/inline/inlineJsxFactoryLocalTypeGlobalFallback.tsx] ////
+
 === renderer.d.ts ===
 declare global {
 >global : any

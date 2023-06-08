@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/targetEs6DecoratorMetadataImportNotElided.ts] ////
+
 === deps.ts ===
 export function Input(): any { }
 >Input : () => any

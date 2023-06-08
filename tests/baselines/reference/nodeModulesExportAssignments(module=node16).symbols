@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/nodeModulesExportAssignments.ts] ////
+
 === subfolder/index.ts ===
 // cjs format file
 const a = {};

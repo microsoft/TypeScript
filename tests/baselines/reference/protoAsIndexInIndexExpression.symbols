@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/protoAsIndexInIndexExpression.ts] ////
+
 === protoAsIndexInIndexExpression_1.ts ===
 ///<reference path='protoAsIndexInIndexExpression_0.ts'/>
 var EntityPrototype = undefined;

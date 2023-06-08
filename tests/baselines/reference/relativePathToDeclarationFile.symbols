@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/relativePathToDeclarationFile.ts] ////
+
 === test/file1.ts ===
 import foo = require('foo');
 >foo : Symbol(foo, Decl(file1.ts, 0, 0))

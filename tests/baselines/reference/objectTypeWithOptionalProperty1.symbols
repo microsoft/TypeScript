@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectTypeWithOptionalProperty1.ts] ////
+
 === objectTypeWithOptionalProperty1.ts ===
     var b = {
 >b : Symbol(b, Decl(objectTypeWithOptionalProperty1.ts, 0, 7))

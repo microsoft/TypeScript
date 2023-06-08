@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/externalModuleRefernceResolutionOrderInImportDeclaration.ts] ////
+
 === externalModuleRefernceResolutionOrderInImportDeclaration_file3.ts ===
 ///<reference path='externalModuleRefernceResolutionOrderInImportDeclaration_file2.ts'/>
 import file1 = require('./externalModuleRefernceResolutionOrderInImportDeclaration_file1');

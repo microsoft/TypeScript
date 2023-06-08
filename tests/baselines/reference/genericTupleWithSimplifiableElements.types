@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericTupleWithSimplifiableElements.ts] ////
+
 === genericTupleWithSimplifiableElements.ts ===
 // repro from #52354
 

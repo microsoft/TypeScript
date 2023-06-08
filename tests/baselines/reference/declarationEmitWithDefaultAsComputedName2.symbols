@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitWithDefaultAsComputedName2.ts] ////
+
 === other.ts ===
 type Experiment<Name> = {
 >Experiment : Symbol(Experiment, Decl(other.ts, 0, 0))

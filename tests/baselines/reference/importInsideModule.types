@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importInsideModule.ts] ////
+
 === importInsideModule_file2.ts ===
 export module myModule {
 >myModule : typeof myModule

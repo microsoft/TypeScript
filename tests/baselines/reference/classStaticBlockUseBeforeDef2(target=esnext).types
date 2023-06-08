@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlockUseBeforeDef2.ts] ////
+
 === classStaticBlockUseBeforeDef2.ts ===
 class C {
 >C : C

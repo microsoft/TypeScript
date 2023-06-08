@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/checkMergedGlobalUMDSymbol.ts] ////
+
 === three.d.ts ===
 export namespace THREE {
 >THREE : typeof THREE

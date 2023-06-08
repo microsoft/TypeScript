@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/moduleExportAlias3.ts] ////
+
 === bug24062.js ===
 // #24062
 class C {

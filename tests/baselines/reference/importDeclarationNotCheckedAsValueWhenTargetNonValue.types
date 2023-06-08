@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importDeclarationNotCheckedAsValueWhenTargetNonValue.ts] ////
+
 === file.d.ts ===
 declare namespace dojox {
 >dojox : typeof dojox

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/blockScopedBindingsReassignedInLoop4.ts] ////
+
 === blockScopedBindingsReassignedInLoop4.ts ===
 function f1() {
 >f1 : () => number

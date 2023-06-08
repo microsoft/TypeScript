@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameUncheckedJsOptionalChain.ts] ////
+
 === privateNameUncheckedJsOptionalChain.js ===
 class C {
 >C : C

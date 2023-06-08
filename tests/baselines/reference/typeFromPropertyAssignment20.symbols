@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment20.ts] ////
+
 === bluebird.js ===
 !function outer (f) { return f }(
 >outer : Symbol(outer, Decl(bluebird.js, 0, 1))

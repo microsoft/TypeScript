@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/emitter/es2018/asyncGenerators/emitter.asyncGenerators.functionExpressions.es2018.ts] ////
+
 === F1.ts ===
 const f1 = async function * () {
 >f1 : () => AsyncGenerator<never, void, unknown>

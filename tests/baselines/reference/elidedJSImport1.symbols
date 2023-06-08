@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/elidedJSImport1.ts] ////
+
 === caller.js ===
 import * as fs from 'fs';
 >fs : Symbol(fs, Decl(caller.js, 0, 6))

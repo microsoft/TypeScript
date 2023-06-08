@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentOnAmbientVariable2.ts] ////
+
 === commentOnAmbientVariable2_2.ts ===
 /// <reference path='commentOnAmbientVariable2_1.ts'/>
 declare var x: number;

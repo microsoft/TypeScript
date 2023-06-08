@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/sourceMapWithMultipleFilesWithCopyright.ts] ////
+
 === b.ts ===
 /*--------------------------------------------------------------------------
 Copyright 

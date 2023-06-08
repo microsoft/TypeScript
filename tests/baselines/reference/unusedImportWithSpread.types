@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedImportWithSpread.ts] ////
+
 === a.ts ===
 export default { a: 1 };
 >{ a: 1 } : { a: number; }

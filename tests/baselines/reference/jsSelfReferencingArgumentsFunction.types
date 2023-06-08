@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsSelfReferencingArgumentsFunction.ts] ////
+
 === foo.js ===
 // Test #16139
 function Foo() {

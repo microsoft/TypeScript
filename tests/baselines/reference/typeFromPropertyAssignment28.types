@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment28.ts] ////
+
 === a.js ===
 // mixed prototype-assignment+class declaration
 class C { constructor() { this.p = 1; } }

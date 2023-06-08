@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsFileCompilationTypeParameterSyntaxOfClassExpression.ts] ////
+
 === a.js ===
 const Bar = class<T> {};
 >Bar : typeof Bar

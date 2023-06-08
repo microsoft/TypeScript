@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importUsedInExtendsList1.ts] ////
+
 === importUsedInExtendsList1_1.ts ===
 ///<reference path='importUsedInExtendsList1_require.ts'/>
 import foo = require('./importUsedInExtendsList1_require');

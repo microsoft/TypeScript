@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleResolutionWithModule.ts] ////
+
 === node_modules/pkg/entrypoint.d.ts ===
 export declare function thing(): void;
 >thing : Symbol(thing, Decl(entrypoint.d.ts, 0, 0))

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfNumber.ts] ////
+
 === typeGuardOfFormTypeOfNumber.ts ===
 class C { private p: string };
 >C : Symbol(C, Decl(typeGuardOfFormTypeOfNumber.ts, 0, 0))

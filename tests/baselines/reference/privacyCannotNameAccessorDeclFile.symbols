@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privacyCannotNameAccessorDeclFile.ts] ////
+
 === privacyCannotNameAccessorDeclFile_consumer.ts ===
 import exporter = require("./privacyCannotNameAccessorDeclFile_exporter");
 >exporter : Symbol(exporter, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 0, 0))

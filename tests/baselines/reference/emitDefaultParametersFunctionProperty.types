@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/defaultParameters/emitDefaultParametersFunctionProperty.ts] ////
+
 === emitDefaultParametersFunctionProperty.ts ===
 var obj2 = {
 >obj2 : { func1(y?: number, ...rest: any[]): void; func2(x?: string): void; func3(x: string, z: number, y?: string): void; func4(x: string, z: number, y?: string, ...rest: any[]): void; }

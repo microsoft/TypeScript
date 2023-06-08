@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/caseInsensitiveFileSystemWithCapsImportTypeDeclarations.ts] ////
+
 === Uppercased_Dir/src/index.ts ===
 import { TypeB } from './type-b';
 >TypeB : Symbol(TypeB, Decl(index.ts, 0, 8))

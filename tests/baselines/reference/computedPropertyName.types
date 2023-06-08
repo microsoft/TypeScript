@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/typeOnly/computedPropertyName.ts] ////
+
 === framework-hooks.ts ===
 export const onInit = Symbol("onInit");
 >onInit : unique symbol

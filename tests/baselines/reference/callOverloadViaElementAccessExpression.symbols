@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/callOverloadViaElementAccessExpression.ts] ////
+
 === callOverloadViaElementAccessExpression.ts ===
 class C {
 >C : Symbol(C, Decl(callOverloadViaElementAccessExpression.ts, 0, 0))

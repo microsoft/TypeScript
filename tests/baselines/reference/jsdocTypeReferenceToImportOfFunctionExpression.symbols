@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocTypeReferenceToImportOfFunctionExpression.ts] ////
+
 === MC.js ===
 const MW = require("./MW");
 >MW : Symbol(MW, Decl(MC.js, 0, 5))

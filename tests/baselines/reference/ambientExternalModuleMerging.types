@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/ambient/ambientExternalModuleMerging.ts] ////
+
 === ambientExternalModuleMerging_use.ts ===
 import M = require("M");
 >M : typeof M

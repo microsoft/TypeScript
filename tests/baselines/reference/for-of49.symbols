@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/for-ofStatements/for-of49.ts] ////
+
 === for-of49.ts ===
 var k: string, v: boolean;
 >k : Symbol(k, Decl(for-of49.ts, 0, 3))

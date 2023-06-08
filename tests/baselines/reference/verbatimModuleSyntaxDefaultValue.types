@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/verbatimModuleSyntaxDefaultValue.ts] ////
+
 === index.ts ===
 class Task {}
 >Task : Task

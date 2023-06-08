@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsImportAliasExposedWithinNamespaceCjs.ts] ////
+
 === file2.js ===
 const {myTypes} = require('./file.js');
 >myTypes : { [x: string]: any; }

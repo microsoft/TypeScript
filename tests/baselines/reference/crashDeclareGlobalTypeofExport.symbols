@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/crashDeclareGlobalTypeofExport.ts] ////
+
 === bar.d.ts ===
 import * as foo from './foo'
 >foo : Symbol(foo, Decl(bar.d.ts, 0, 6))

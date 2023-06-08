@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportAssignedTypeAsTypeAnnotation.ts] ////
+
 === exportAssignedTypeAsTypeAnnotation_1.ts ===
 ///<reference path='exportAssignedTypeAsTypeAnnotation_0.ts'/>
 import test = require('exportAssignedTypeAsTypeAnnotation_0');

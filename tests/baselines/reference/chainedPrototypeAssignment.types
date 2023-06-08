@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/chainedPrototypeAssignment.ts] ////
+
 === use.js ===
 /// <reference path='./types.d.ts'/>
 var mod = require('./mod');

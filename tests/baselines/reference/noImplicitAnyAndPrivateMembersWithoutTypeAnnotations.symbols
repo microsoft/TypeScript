@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitAnyAndPrivateMembersWithoutTypeAnnotations.ts] ////
+
 === app.ts ===
 /// <reference path="test.d.ts" />
 var x = new Something();

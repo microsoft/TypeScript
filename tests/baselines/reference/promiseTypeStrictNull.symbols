@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/promiseTypeStrictNull.ts] ////
+
 === promiseTypeStrictNull.ts ===
 declare var p: Promise<boolean>;
 >p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))

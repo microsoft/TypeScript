@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitTypeAliasWithTypeParameters5.ts] ////
+
 === declarationEmitTypeAliasWithTypeParameters5.ts ===
 type Foo<T, Y> = {
 >Foo : Symbol(Foo, Decl(declarationEmitTypeAliasWithTypeParameters5.ts, 0, 0))

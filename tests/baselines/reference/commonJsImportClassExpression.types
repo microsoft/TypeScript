@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commonJsImportClassExpression.ts] ////
+
 === use.ts ===
 import Chunk = require('./mod1')
 >Chunk : typeof Chunk

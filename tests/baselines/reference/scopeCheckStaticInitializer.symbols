@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/scopeCheckStaticInitializer.ts] ////
+
 === scopeCheckStaticInitializer.ts ===
 class X {
 >X : Symbol(X, Decl(scopeCheckStaticInitializer.ts, 0, 0))

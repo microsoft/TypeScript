@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocTemplateTag3.ts] ////
+
 === a.js ===
 /**
  * @template {{ a: number, b: string }} T,U A Comment

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/typeTagModuleExports.ts] ////
+
 === bug27327.js ===
 /** @type {string} */
 module.exports = 0;

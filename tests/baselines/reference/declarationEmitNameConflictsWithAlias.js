@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitNameConflictsWithAlias.ts] ////
+
 //// [declarationEmitNameConflictsWithAlias.ts]
 export module C { export interface I { } }
 export import v = C;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextualOverloadListFromArrayUnion.ts] ////
+
 === one.ts ===
 declare const y: never[] | string[];
 >y : never[] | string[]

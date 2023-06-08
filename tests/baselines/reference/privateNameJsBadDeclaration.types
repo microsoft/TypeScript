@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameJsBadDeclaration.ts] ////
+
 === privateNameJsPrototype.js ===
 function A() { }
 >A : typeof A

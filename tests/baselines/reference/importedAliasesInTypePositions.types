@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importedAliasesInTypePositions.ts] ////
+
 === file2.ts ===
 import RT_ALIAS = require("file1");
 >RT_ALIAS : typeof RT_ALIAS

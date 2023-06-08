@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitForModuleImportingModuleAugmentationRetainsImport.ts] ////
+
 === child1.ts ===
 import { ParentThing } from './parent';
 >ParentThing : Symbol(ParentThing, Decl(child1.ts, 0, 8))

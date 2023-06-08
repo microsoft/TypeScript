@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inferObjectTypeFromStringLiteralToKeyof.ts] ////
+
 === inferObjectTypeFromStringLiteralToKeyof.ts ===
 declare function inference1<T>(name: keyof T): T;
 >inference1 : Symbol(inference1, Decl(inferObjectTypeFromStringLiteralToKeyof.ts, 0, 0))

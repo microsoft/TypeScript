@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/enumTagImported.ts] ////
+
 === type.js ===
 /** @typedef {import("./mod1").TestEnum} TE */
 /** @type {TE} */

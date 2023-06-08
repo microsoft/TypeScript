@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/aliasUsageInOrExpression.ts] ////
+
 === aliasUsageInOrExpression_main.ts ===
 import Backbone = require("./aliasUsageInOrExpression_backbone");
 >Backbone : Symbol(Backbone, Decl(aliasUsageInOrExpression_main.ts, 0, 0))

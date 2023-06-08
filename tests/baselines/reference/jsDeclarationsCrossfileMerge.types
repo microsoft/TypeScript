@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsCrossfileMerge.ts] ////
+
 === index.js ===
 const m = require("./exporter");
 >m : typeof m

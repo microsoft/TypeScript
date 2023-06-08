@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/paramTagNestedWithoutTopLevelObject4.ts] ////
+
 === paramTagNestedWithoutTopLevelObject4.js ===
 /**
  * @param {number} xyz.bar.p

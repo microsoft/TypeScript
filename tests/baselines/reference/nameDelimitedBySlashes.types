@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/nameDelimitedBySlashes.ts] ////
+
 === foo_1.ts ===
 import foo = require('./test/foo_0');
 >foo : typeof foo

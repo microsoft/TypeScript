@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/withImportDecl.ts] ////
+
 === withImportDecl_1.ts ===
 ///<reference path='withImportDecl_0.ts'/>
 var simpleVar;

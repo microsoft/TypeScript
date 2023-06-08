@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectLiteralPropertyImplicitlyAny.ts] ////
+
 === objectLiteralPropertyImplicitlyAny.ts ===
 const foo = Symbol.for("foo");
 >foo : unique symbol

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport4.ts] ////
+
 === usage.js ===
 const x = require("./lateBoundAssignmentDeclarationSupport4.js");
 >x : Symbol(x, Decl(usage.js, 0, 5))

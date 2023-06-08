@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/superCallInStaticMethod.ts] ////
+
 === superCallInStaticMethod.ts ===
 class Doing {
 >Doing : Symbol(Doing, Decl(superCallInStaticMethod.ts, 0, 0))

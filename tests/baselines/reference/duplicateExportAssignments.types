@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/duplicateExportAssignments.ts] ////
+
 === foo1.ts ===
 var x = 10;
 >x : number

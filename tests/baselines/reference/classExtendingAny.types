@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classExtendingAny.ts] ////
+
 === a.ts ===
 declare var Err: any
 >Err : any

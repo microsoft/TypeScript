@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/typeOnly/preserveValueImports.ts] ////
+
 === a.ts ===
 export default {};
 >{} : {}

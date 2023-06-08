@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/enumMergeWithExpando.ts] ////
+
 === lovefield-ts.d.ts ===
 // bug #27352, crashes from github.com/google/lovefield
 declare namespace lf {

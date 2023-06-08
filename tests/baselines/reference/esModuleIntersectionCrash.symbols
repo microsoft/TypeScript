@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/esModuleIntersectionCrash.ts] ////
+
 === mod.d.ts ===
 export = modObj;
 >modObj : Symbol(modObj, Decl(mod.d.ts, 1, 13), Decl(mod.d.ts, 1, 42))

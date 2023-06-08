@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleMemberMissingErrorIsRelative.ts] ////
+
 === folder/foo.ts ===
 
 export {};

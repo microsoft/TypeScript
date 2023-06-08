@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/destructureComputedProperty.ts] ////
+
 === destructureComputedProperty.ts ===
 declare const ab: { n: number } | { n: string };
 >ab : Symbol(ab, Decl(destructureComputedProperty.ts, 0, 13))

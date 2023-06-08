@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importsInAmbientModules2.ts] ////
+
 === external.d.ts ===
 export default class C {}
 >C : C

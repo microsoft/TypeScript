@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inferenceLimit.ts] ////
+
 === file1.ts ===
 "use strict";
 >"use strict" : "use strict"

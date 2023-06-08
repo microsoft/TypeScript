@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/checkJsFiles.ts] ////
+
 === a.js ===
 var x = "string";
 >x : Symbol(x, Decl(a.js, 0, 3))

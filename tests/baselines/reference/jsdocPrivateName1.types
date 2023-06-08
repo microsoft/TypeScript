@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocPrivateName1.ts] ////
+
 === jsdocPrivateName1.js ===
 class A {
 >A : A

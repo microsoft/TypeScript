@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/setterWithReturn.ts] ////
+
 === setterWithReturn.ts ===
 class C234 {
 >C234 : C234

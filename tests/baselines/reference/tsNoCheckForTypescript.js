@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/tsNoCheckForTypescript.ts] ////
+
 //// [file.ts]
 // @ts-nocheck
 

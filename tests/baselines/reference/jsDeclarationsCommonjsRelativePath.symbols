@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsCommonjsRelativePath.ts] ////
+
 === reexport.js ===
 'use strict';
 const Thing = require('./thing').Thing

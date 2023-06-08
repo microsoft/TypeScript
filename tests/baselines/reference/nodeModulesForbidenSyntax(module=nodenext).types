@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/nodeModulesForbidenSyntax.ts] ////
+
 === subfolder/index.ts ===
 // cjs format file
 const x = <T>() => <T><any>(void 0);

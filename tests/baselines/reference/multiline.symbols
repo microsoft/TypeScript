@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/directives/multiline.tsx] ////
+
 === a.ts ===
 export const texts: string[] = [];
 >texts : Symbol(texts, Decl(a.ts, 0, 12))

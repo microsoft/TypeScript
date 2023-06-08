@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/globalFunctionAugmentationOverload.ts] ////
+
 === mod.d.ts ===
 declare function expect(spy: Function): void;
 >expect : { (spy: Function): void; (element: string): void; }

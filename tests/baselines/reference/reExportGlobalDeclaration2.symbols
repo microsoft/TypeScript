@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reExportGlobalDeclaration2.ts] ////
+
 === file1.d.ts ===
 declare interface I1 {
 >I1 : Symbol(I1, Decl(file1.d.ts, 0, 0))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/sourceMapValidationForIn.ts] ////
+
 === sourceMapValidationForIn.ts ===
 for (var x in String) {
 >x : Symbol(x, Decl(sourceMapValidationForIn.ts, 0, 8))

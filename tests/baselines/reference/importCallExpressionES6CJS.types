@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/dynamicImport/importCallExpressionES6CJS.ts] ////
+
 === 0.ts ===
 export function foo() { return "foo"; }
 >foo : () => string
