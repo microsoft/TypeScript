@@ -604,8 +604,18 @@ export function getCombinedNodeFlagsAlwaysIncludeJSDoc(node: Declaration): Modif
 // (if it has one).  Similarly, flags for let/const are stored on the variable declaration
 // list.  By calling this function, all those flags are combined so that the client can treat
 // the node as if it actually had those flags.
+const weakCombinedNodeFlags = new WeakMap<Node, NodeFlags>();
 export function getCombinedNodeFlags(node: Node): NodeFlags {
-    return getCombinedFlags(node, n => n.flags);
+    let flags = weakCombinedNodeFlags.get(node);
+    if (flags === undefined) {
+        flags = getCombinedFlags(node, getNodeFlags);
+        weakCombinedNodeFlags.set(node, flags);
+    }
+    return flags;
+}
+
+function getNodeFlags(node: Node) {
+    return node.flags;
 }
 
 /** @internal */

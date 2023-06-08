@@ -608,7 +608,6 @@ import {
     isKnownSymbol,
     isLateVisibilityPaintedStatement,
     isLeftHandSideExpression,
-    isLet,
     isLineBreak,
     isLiteralComputedPropertyDeclarationName,
     isLiteralExpression,
@@ -41129,8 +41128,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!isJSObjectLiteralInitializer && node.parent.parent.kind !== SyntaxKind.ForInStatement) {
                     const initializerType = checkExpressionCached(initializer);
                     checkTypeAssignableToAndOptionallyElaborate(initializerType, type, node, initializer, /*headMessage*/ undefined);
-                    const nodeFlags = getCombinedNodeFlags(node);
-                    if ((nodeFlags & NodeFlags.AwaitUsing) === NodeFlags.AwaitUsing) {
+                    const blockScopeKind = getCombinedNodeFlags(node) & NodeFlags.BlockScoped;
+                    if (blockScopeKind === NodeFlags.AwaitUsing) {
                         const globalAsyncDisposableType = getGlobalAsyncDisposableType(/*reportErrors*/ true);
                         const globalDisposableType = getGlobalDisposableType(/*reportErrors*/ true);
                         if (globalAsyncDisposableType !== emptyObjectType && globalDisposableType !== emptyObjectType) {
@@ -41138,7 +41137,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             checkTypeAssignableTo(initializerType, optionalDisposableType, initializer, Diagnostics.The_initializer_of_an_await_using_declaration_must_be_either_an_object_with_a_Symbol_asyncDispose_or_Symbol_dispose_method_or_be_null_or_undefined);
                         }
                     }
-                    else if (nodeFlags & NodeFlags.Using) {
+                    else if (blockScopeKind === NodeFlags.Using) {
                         const globalDisposableType = getGlobalDisposableType(/*reportErrors*/ true);
                         if (globalDisposableType !== emptyObjectType) {
                             const optionalDisposableType = getUnionType([globalDisposableType, nullType, undefinedType]);
@@ -48495,36 +48494,37 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkGrammarVariableDeclaration(node: VariableDeclaration) {
-        if (isBindingPattern(node.name) && (isVarUsing(node) || isVarAwaitUsing(node))) {
-            if (isVarAwaitUsing(node)) {
-                return grammarErrorOnNode(node, Diagnostics._0_declarations_may_not_have_binding_patterns, "await using");
-            }
-            if (isVarUsing(node)) {
-                return grammarErrorOnNode(node, Diagnostics._0_declarations_may_not_have_binding_patterns, "using");
+        const nodeFlags = getCombinedNodeFlags(node);
+        const blockScopeKind = nodeFlags & NodeFlags.BlockScoped;
+        if (isBindingPattern(node.name)) {
+            switch (blockScopeKind) {
+                case NodeFlags.AwaitUsing:
+                    return grammarErrorOnNode(node, Diagnostics._0_declarations_may_not_have_binding_patterns, "await using");
+                case NodeFlags.Using:
+                    return grammarErrorOnNode(node, Diagnostics._0_declarations_may_not_have_binding_patterns, "using");
             }
         }
 
         if (node.parent.parent.kind !== SyntaxKind.ForInStatement && node.parent.parent.kind !== SyntaxKind.ForOfStatement) {
-            if (node.flags & NodeFlags.Ambient) {
+            if (nodeFlags & NodeFlags.Ambient) {
                 checkAmbientInitializer(node);
             }
             else if (!node.initializer) {
                 if (isBindingPattern(node.name) && !isBindingPattern(node.parent)) {
                     return grammarErrorOnNode(node, Diagnostics.A_destructuring_declaration_must_have_an_initializer);
                 }
-                if (isVarAwaitUsing(node)) {
-                    return grammarErrorOnNode(node, Diagnostics._0_declarations_must_be_initialized, "await using");
-                }
-                if (isVarUsing(node)) {
-                    return grammarErrorOnNode(node, Diagnostics._0_declarations_must_be_initialized, "using");
-                }
-                if (isVarConst(node)) {
-                    return grammarErrorOnNode(node, Diagnostics._0_declarations_must_be_initialized, "const");
+                switch (blockScopeKind) {
+                    case NodeFlags.AwaitUsing:
+                        return grammarErrorOnNode(node, Diagnostics._0_declarations_must_be_initialized, "await using");
+                    case NodeFlags.Using:
+                        return grammarErrorOnNode(node, Diagnostics._0_declarations_must_be_initialized, "using");
+                    case NodeFlags.Const:
+                        return grammarErrorOnNode(node, Diagnostics._0_declarations_must_be_initialized, "const");
                 }
             }
         }
 
-        if (node.exclamationToken && (node.parent.parent.kind !== SyntaxKind.VariableStatement || !node.type || node.initializer || node.flags & NodeFlags.Ambient)) {
+        if (node.exclamationToken && (node.parent.parent.kind !== SyntaxKind.VariableStatement || !node.type || node.initializer || nodeFlags & NodeFlags.Ambient)) {
             const message = node.initializer
                 ? Diagnostics.Declarations_with_initializers_cannot_also_have_definite_assignment_assertions
                 : !node.type
@@ -48538,8 +48538,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             checkESModuleMarker(node.name);
         }
 
-        const checkLetConstNames = (isLet(node) || isVarConst(node) || isVarUsing(node) || isVarAwaitUsing(node));
-
         // 1. LexicalDeclaration : LetOrConst BindingList ;
         // It is a Syntax Error if the BoundNames of BindingList contains "let".
         // 2. ForDeclaration: ForDeclaration : LetOrConst ForBinding
@@ -48547,7 +48545,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         // It is a SyntaxError if a VariableDeclaration or VariableDeclarationNoIn occurs within strict code
         // and its Identifier is eval or arguments
-        return checkLetConstNames && checkGrammarNameInLetOrConstDeclarations(node.name);
+        return !!blockScopeKind && checkGrammarNameInLetOrConstDeclarations(node.name);
     }
 
     function checkESModuleMarker(name: Identifier | BindingPattern): boolean {
@@ -48627,13 +48625,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkGrammarForDisallowedBlockScopedVariableStatement(node: VariableStatement) {
-        if (!allowLetAndConstDeclarations(node.parent) && node.declarationList.flags & NodeFlags.BlockScoped) {
-            const keyword = isLet(node.declarationList) ? "let" :
-                isVarConst(node.declarationList) ? "const" :
-                isVarUsing(node.declarationList) ? "using" :
-                isVarAwaitUsing(node.declarationList) ? "await using" :
-                Debug.fail("Unknown BlockScope flag");
-            return grammarErrorOnNode(node, Diagnostics._0_declarations_can_only_be_declared_inside_a_block, keyword);
+        if (!allowLetAndConstDeclarations(node.parent)) {
+            const blockScopeKind = getCombinedNodeFlags(node.declarationList) & NodeFlags.BlockScoped;
+            if (blockScopeKind) {
+                const keyword = blockScopeKind === NodeFlags.Let ? "let" :
+                    blockScopeKind === NodeFlags.Const ? "const" :
+                    blockScopeKind === NodeFlags.Using ? "using" :
+                    blockScopeKind === NodeFlags.AwaitUsing ? "await using" :
+                    Debug.fail("Unknown BlockScope flag");
+                return grammarErrorOnNode(node, Diagnostics._0_declarations_can_only_be_declared_inside_a_block, keyword);
+            }
         }
     }
 
