@@ -90,6 +90,7 @@ import {
     normalizeSlashes,
     NumericLiteral,
     ObjectLiteralExpression,
+    OutExtensionKind,
     ParseConfigHost,
     ParsedCommandLine,
     parseJsonText,
@@ -699,10 +700,10 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     {
         name: "outExtension",
         type: new Map(Object.entries({
-            cjs: Extension.Cjs,
-            mjs: Extension.Mjs,
-            js: Extension.Js,
-            infer: "infer",
+            infer: OutExtensionKind.InferFromModule,
+            js: OutExtensionKind.Js,
+            cjs: OutExtensionKind.Cjs,
+            mjs: OutExtensionKind.Mjs,
         })),
         defaultValueDescription: Diagnostics.undefined_will_determine_extension_based_on_the_input_file,
         affectsEmit: true,

@@ -7171,7 +7171,7 @@ export interface CompilerOptions {
     noUncheckedIndexedAccess?: boolean;
     out?: string;
     outDir?: string;
-    outExtension?: Extension.Mjs | Extension.Cjs | Extension.Js | "infer";
+    outExtension?: OutExtensionKind;
     outFile?: string;
     paths?: MapLike<string[]>;
     /**
@@ -7708,6 +7708,14 @@ export const enum Extension {
     Cjs = ".cjs",
     Cts = ".cts",
     Dcts = ".d.cts",
+}
+
+export const enum OutExtensionKind {
+    InferFromInput = 0,
+    InferFromModule = 1,
+    Js = 2,
+    Cjs = 3,
+    Mjs = 4,
 }
 
 export interface ResolvedModuleWithFailedLookupLocations {
