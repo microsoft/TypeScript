@@ -700,16 +700,17 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     {
         name: "outExtension",
         type: new Map(Object.entries({
-            infer: OutExtensionKind.InferFromModule,
+            input: OutExtensionKind.InferFromInput,
+            module: OutExtensionKind.InferFromModule,
             js: OutExtensionKind.Js,
             cjs: OutExtensionKind.Cjs,
             mjs: OutExtensionKind.Mjs,
         })),
-        defaultValueDescription: Diagnostics.undefined_will_determine_extension_based_on_the_input_file,
+        defaultValueDescription: "input",
         affectsEmit: true,
         affectsBuildInfo: true,
         category: Diagnostics.Emit,
-        description: Diagnostics.Specify_the_output_extension_for_all_emitted_files_infer_will_determine_extension_based_on_the_module_option,
+        description: Diagnostics.Specify_the_output_extension_for_all_emitted_files_input_will_determine_extension_based_on_the_extension_of_the_input_file_module_will_determine_extension_based_on_the_module_option,
     },
     {
         name: "rootDir",
