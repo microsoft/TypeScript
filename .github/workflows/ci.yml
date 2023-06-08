@@ -157,8 +157,11 @@ jobs:
     - run: |
         npm --version
         # corepack enable npm
+
+    - run: |
         npm install -g $(jq -r '.packageManager' < package.json)
         npm --version
+      working-directory: ./pr
 
     - run: npm ci
       working-directory: ./pr
