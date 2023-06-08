@@ -6099,6 +6099,14 @@
         "category": "Message",
         "code": 6718
     },
+    "Specify the output extension for all emitted files. 'infer' will determine extension based on the `module` option.": {
+        "category": "Message",
+        "code": 6719
+    },
+    "`undefined` will determine extension based on the input file.": {
+        "category": "Message",
+        "code": 6720
+    },
     "Default catch clause variables as 'unknown' instead of 'any'.": {
         "category": "Message",
         "code": 6803

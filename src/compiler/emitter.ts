@@ -574,6 +574,12 @@ function getSourceMapFilePath(jsFilePath: string, options: CompilerOptions) {
 export function getOutputExtension(fileName: string, options: CompilerOptions): Extension {
     return fileExtensionIs(fileName, Extension.Json) ? Extension.Json :
     options.jsx === JsxEmit.Preserve && fileExtensionIsOneOf(fileName, [Extension.Jsx, Extension.Tsx]) ? Extension.Jsx :
+    options.outExtension === "infer" ? (
+        options.module === ModuleKind.CommonJS ? Extension.Cjs :
+        options.module && options.module >= ModuleKind.ES2015 && options.module <= ModuleKind.ESNext ? Extension.Mjs :
+        Extension.Js
+    ) :
+    options.outExtension ? options.outExtension :
     fileExtensionIsOneOf(fileName, [Extension.Mts, Extension.Mjs]) ? Extension.Mjs :
     fileExtensionIsOneOf(fileName, [Extension.Cts, Extension.Cjs]) ? Extension.Cjs :
     Extension.Js;

@@ -7171,6 +7171,7 @@ export interface CompilerOptions {
     noUncheckedIndexedAccess?: boolean;
     out?: string;
     outDir?: string;
+    outExtension?: Extension.Mjs | Extension.Cjs | Extension.Js | "infer";
     outFile?: string;
     paths?: MapLike<string[]>;
     /**

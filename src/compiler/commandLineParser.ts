@@ -697,6 +697,20 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         description: Diagnostics.Specify_an_output_folder_for_all_emitted_files,
     },
     {
+        name: "outExtension",
+        type: new Map(Object.entries({
+            cjs: Extension.Cjs,
+            mjs: Extension.Mjs,
+            js: Extension.Js,
+            infer: "infer",
+        })),
+        defaultValueDescription: Diagnostics.undefined_will_determine_extension_based_on_the_input_file,
+        affectsEmit: true,
+        affectsBuildInfo: true,
+        category: Diagnostics.Emit,
+        description: Diagnostics.Specify_the_output_extension_for_all_emitted_files_infer_will_determine_extension_based_on_the_module_option,
+    },
+    {
         name: "rootDir",
         type: "string",
         affectsEmit: true,
