@@ -1,0 +1,30 @@
+=== tests/cases/compiler/input-1.ts ===
+export const ts = "foo";
+>ts : "foo"
+>"foo" : "foo"
+
+=== tests/cases/compiler/input-2.mts ===
+export const mts = "foo";
+>mts : "foo"
+>"foo" : "foo"
+
+=== tests/cases/compiler/input-3.cts ===
+export const cts = "foo";
+>cts : "foo"
+>"foo" : "foo"
+
+=== tests/cases/compiler/input-4.js ===
+export const js = "foo";
+>js : "foo"
+>"foo" : "foo"
+
+=== tests/cases/compiler/input-5.mjs ===
+export const mjs = "foo";
+>mjs : "foo"
+>"foo" : "foo"
+
+=== tests/cases/compiler/input-6.cjs ===
+export const cjs = "foo";
+>cjs : "foo"
+>"foo" : "foo"
+

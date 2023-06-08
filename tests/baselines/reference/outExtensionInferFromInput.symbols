@@ -1,0 +1,24 @@
+=== tests/cases/compiler/input-1.ts ===
+export const ts = "foo";
+>ts : Symbol(ts, Decl(input-1.ts, 0, 12))
+
+=== tests/cases/compiler/input-2.mts ===
+export const mts = "foo";
+>mts : Symbol(mts, Decl(input-2.mts, 0, 12))
+
+=== tests/cases/compiler/input-3.cts ===
+export const cts = "foo";
+>cts : Symbol(cts, Decl(input-3.cts, 0, 12))
+
+=== tests/cases/compiler/input-4.js ===
+export const js = "foo";
+>js : Symbol(js, Decl(input-4.js, 0, 12))
+
+=== tests/cases/compiler/input-5.mjs ===
+export const mjs = "foo";
+>mjs : Symbol(mjs, Decl(input-5.mjs, 0, 12))
+
+=== tests/cases/compiler/input-6.cjs ===
+export const cjs = "foo";
+>cjs : Symbol(cjs, Decl(input-6.cjs, 0, 12))
+
