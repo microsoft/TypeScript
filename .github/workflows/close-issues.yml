@@ -24,6 +24,8 @@ jobs:
 
     steps:
       - name: Close issues
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           DATE=$(date --date='2 days ago' --iso-8601)
 
