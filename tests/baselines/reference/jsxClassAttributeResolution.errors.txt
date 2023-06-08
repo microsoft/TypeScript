@@ -6,7 +6,7 @@ tests/cases/compiler/file.tsx(2,19): error TS2741: Property 'ref' is missing in 
     export const a = <App></App>;
                       ~~~
 !!! error TS2741: Property 'ref' is missing in type '{}' but required in type 'IntrinsicClassAttributesAlias<T>'.
-!!! related TS2728 /.src/tests/cases/compiler/node_modules/@types/react/index.d.ts:2:5: 'ref' is declared here.
+!!! related TS2728 tests/cases/compiler/node_modules/@types/react/index.d.ts:2:5: 'ref' is declared here.
 ==== tests/cases/compiler/node_modules/@types/react/package.json (0 errors) ====
     {
         "name": "@types/react",

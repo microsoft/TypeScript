@@ -1,3 +1,11 @@
+=== /root/src/foo.ts ===
+export function foo() {}
+>foo : () => void
+
+=== /root/src/bar.js ===
+export function bar() {}
+>bar : () => void
+
 === /root/a.ts ===
 import { foo as foo1 } from "/foo";
 >foo : () => void
@@ -70,12 +78,4 @@ import { foo as foo9 } from "http://server/foo";
 import { bar as bar9 } from "http://server/bar";
 >bar : () => void
 >bar9 : () => void
-
-=== /root/src/foo.ts ===
-export function foo() {}
->foo : () => void
-
-=== /root/src/bar.js ===
-export function bar() {}
->bar : () => void
 

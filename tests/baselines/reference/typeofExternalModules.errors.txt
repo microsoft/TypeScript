@@ -10,7 +10,7 @@ tests/cases/compiler/typeofExternalModules_core.ts(7,1): error TS2741: Property 
     y1 = exp;
     ~~
 !!! error TS2741: Property 'C' is missing in type 'typeof D' but required in type 'typeof import("tests/cases/compiler/typeofExternalModules_external")'.
-!!! related TS2728 /.src/tests/cases/compiler/typeofExternalModules_external.ts:1:14: 'C' is declared here.
+!!! related TS2728 tests/cases/compiler/typeofExternalModules_external.ts:1:14: 'C' is declared here.
     var y2: typeof exp = exp;
     y2 = ext;
     ~~

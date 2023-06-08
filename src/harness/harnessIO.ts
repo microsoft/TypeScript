@@ -403,6 +403,7 @@ export namespace Compiler {
         compilerOptions: ts.CompilerOptions | undefined,
         // Current directory is needed for rwcRunner to be able to use currentDirectory defined in json file
         currentDirectory: string | undefined,
+        rootDir?: string,
         symlinks?: vfs.FileSet
     ): compiler.CompilationResult {
         const options: ts.CompilerOptions & HarnessOptions = compilerOptions ? ts.cloneCompilerOptions(compilerOptions) : { noResolve: false };
@@ -424,12 +425,12 @@ export namespace Compiler {
                 typeScriptVersion = harnessSettings.typeScriptVersion;
             }
         }
-        if (options.rootDirs) {
-            options.rootDirs = ts.map(options.rootDirs, d => ts.getNormalizedAbsolutePath(d, currentDirectory));
-        }
 
         const useCaseSensitiveFileNames = options.useCaseSensitiveFileNames !== undefined ? options.useCaseSensitiveFileNames : true;
-        const programFileNames = inputFiles.map(file => file.unitName).filter(fileName => !ts.fileExtensionIs(fileName, ts.Extension.Json));
+        // When a tsconfig is present, root names passed to createProgram should already be absolute
+        const programFileNames = inputFiles
+            .map(file => options.configFile ? ts.getNormalizedAbsolutePath(file.unitName, currentDirectory) : file.unitName)
+            .filter(fileName => !ts.fileExtensionIs(fileName, ts.Extension.Json));
 
         // Files from built\local that are requested by test "@includeBuiltFiles" to be in the context.
         // Treat them as library files, so include them in build, but not in baselines.
@@ -449,6 +450,8 @@ export namespace Compiler {
         if (symlinks) {
             fs.apply(symlinks);
         }
+
+        ts.assign(options, ts.convertToOptionsWithAbsolutePaths(options, path => ts.getNormalizedAbsolutePath(ts.getNormalizedAbsolutePath(path, rootDir), currentDirectory)));
         const host = new fakes.CompilerHost(fs, options);
         const result = compiler.compileFiles(host, programFileNames, options, typeScriptVersion);
         result.symlinks = symlinks;
@@ -499,7 +502,10 @@ export namespace Compiler {
             else if (vpath.isTypeScript(file.unitName) || (vpath.isJavaScript(file.unitName) && ts.getAllowJSCompilerOption(options))) {
                 const declFile = findResultCodeFile(file.unitName);
                 if (declFile && !findUnit(declFile.file, declInputFiles) && !findUnit(declFile.file, declOtherFiles)) {
-                    dtsFiles.push({ unitName: declFile.file, content: Utils.removeByteOrderMark(declFile.text) });
+                    dtsFiles.push({
+                        unitName: declFile.file,
+                        content: Utils.removeByteOrderMark(declFile.text)
+                    });
                 }
             }
         }
@@ -539,7 +545,7 @@ export namespace Compiler {
             return;
         }
         const { declInputFiles, declOtherFiles, harnessSettings, options, currentDirectory } = context;
-        const output = compileFiles(declInputFiles, declOtherFiles, harnessSettings, options, currentDirectory, symlinks);
+        const output = compileFiles(declInputFiles, declOtherFiles, harnessSettings, options, currentDirectory, /*rootDir*/ undefined, symlinks);
         return { declInputFiles, declOtherFiles, declResult: output };
     }
 
@@ -556,7 +562,7 @@ export namespace Compiler {
             outputLines += content;
         }
         if (pretty) {
-            outputLines += ts.getErrorSummaryText(ts.getErrorCountForSummary(diagnostics), ts.getFilesInErrorForSummary(diagnostics), IO.newLine(), { getCurrentDirectory: () => "" });
+            outputLines += Utils.removeTestPathPrefixes(ts.getErrorSummaryText(ts.getErrorCountForSummary(diagnostics), ts.getFilesInErrorForSummary(diagnostics), IO.newLine(), { getCurrentDirectory: () => "" }));
         }
         return outputLines;
     }
@@ -597,6 +603,7 @@ export namespace Compiler {
             if (error.relatedInformation) {
                 for (const info of error.relatedInformation) {
                     let location = info.file ? " " + ts.formatLocation(info.file, info.start!, formatDiagnsoticHost, ts.identity) : "";
+                    location = Utils.removeTestPathPrefixes(location);
                     if (location && isDefaultLibraryFile(info.file!.fileName)) {
                         location = location.replace(/(lib(?:.*)\.d\.ts):\d+:\d+/i, "$1:--:--");
                     }
@@ -641,7 +648,7 @@ export namespace Compiler {
 
 
             // Header
-            outputLines += (newLine() + "==== " + inputFile.unitName + " (" + fileErrors.length + " errors) ====");
+            outputLines += (newLine() + "==== " + Utils.removeTestPathPrefixes(inputFile.unitName) + " (" + fileErrors.length + " errors) ====");
 
             // Make sure we emit something for every error
             let markedErrorCount = 0;
@@ -1171,13 +1178,13 @@ export namespace TestCaseParser {
     const optionRegex = /^[\/]{2}\s*@(\w+)\s*:\s*([^\r\n]*)/gm;  // multiple matches on multiple lines
     const linkRegex = /^[\/]{2}\s*@link\s*:\s*([^\r\n]*)\s*->\s*([^\r\n]*)/gm;  // multiple matches on multiple lines
 
-    export function parseSymlinkFromTest(line: string, symlinks: vfs.FileSet | undefined) {
+    export function parseSymlinkFromTest(line: string, symlinks: vfs.FileSet | undefined, absoluteRootDir?: string) {
         const linkMetaData = linkRegex.exec(line);
         linkRegex.lastIndex = 0;
         if (!linkMetaData) return undefined;
 
         if (!symlinks) symlinks = {};
-        symlinks[linkMetaData[2].trim()] = new vfs.Symlink(linkMetaData[1].trim());
+        symlinks[ts.getNormalizedAbsolutePath(linkMetaData[2].trim(), absoluteRootDir)] = new vfs.Symlink(ts.getNormalizedAbsolutePath(linkMetaData[1].trim(), absoluteRootDir));
         return symlinks;
     }
 
@@ -1201,7 +1208,7 @@ export namespace TestCaseParser {
     }
 
     /** Given a test file containing // @FileName directives, return an array of named units of code to be added to an existing compiler instance */
-    export function makeUnitsFromTest(code: string, fileName: string, rootDir?: string, settings = extractCompilerSettings(code)): TestCaseContent {
+    export function makeUnitsFromTest(code: string, fileName: string, rootDir: string, settings = extractCompilerSettings(code)): TestCaseContent {
         // List of all the subfiles we've parsed out
         const testUnitData: TestUnitData[] = [];
 
@@ -1216,7 +1223,7 @@ export namespace TestCaseParser {
 
         for (const line of lines) {
             let testMetaData: RegExpExecArray | null;
-            const possiblySymlinks = parseSymlinkFromTest(line, symlinks);
+            const possiblySymlinks = parseSymlinkFromTest(line, symlinks, ts.getNormalizedAbsolutePath(rootDir, vfs.srcFolder));
             if (possiblySymlinks) {
                 symlinks = possiblySymlinks;
             }
@@ -1282,8 +1289,31 @@ export namespace TestCaseParser {
         // unit tests always list files explicitly
         const parseConfigHost: ts.ParseConfigHost = {
             useCaseSensitiveFileNames: false,
-            readDirectory: () => [],
-            fileExists: () => true,
+            readDirectory: (directory, extensions, excludes, includes, depth) => {
+                return ts.matchFiles(directory, extensions, excludes, includes, /*useCaseSensitiveFileNames*/ false, "", depth, dir => {
+                    const files: string[] = [];
+                    const directories = new Set<string>();
+                    for (const unit of testUnitData) {
+                        const fileName = ts.getNormalizedAbsolutePath(ts.getNormalizedAbsolutePath(unit.name, rootDir), vfs.srcFolder);
+                        if (fileName.toLowerCase().startsWith(dir.toLowerCase())) {
+                            let path = fileName.substring(dir.length);
+                            if (path.startsWith("/")) {
+                                path = path.substring(1);
+                            }
+                            if (path.includes("/")) {
+                                const directoryName = path.substring(0, path.indexOf("/"));
+                                directories.add(directoryName);
+                            }
+                            else {
+                                files.push(path);
+                            }
+                        }
+                    }
+                    return { files, directories: ts.arrayFrom(directories) };
+
+                }, ts.identity);
+            },
+            fileExists: fileName => testUnitData.some(data => data.name.toLowerCase() === fileName.toLowerCase()),
             readFile: (name) => ts.forEach(testUnitData, data => data.name.toLowerCase() === name.toLowerCase() ? data.content : undefined)
         };
 
@@ -1295,12 +1325,9 @@ export namespace TestCaseParser {
             if (getConfigNameFromFileName(data.name)) {
                 const configJson = ts.parseJsonText(data.name, data.content);
                 assert.isTrue(configJson.endOfFileToken !== undefined);
-                let baseDir = ts.normalizePath(ts.getDirectoryPath(data.name));
-                if (rootDir) {
-                    baseDir = ts.getNormalizedAbsolutePath(baseDir, rootDir);
-                }
-                tsConfig = ts.parseJsonSourceFileConfigFileContent(configJson, parseConfigHost, baseDir);
-                tsConfig.options.configFilePath = data.name;
+                const configFileName = ts.getNormalizedAbsolutePath(ts.getNormalizedAbsolutePath(data.name, rootDir), vfs.srcFolder);
+                const configDir = ts.getDirectoryPath(configFileName);
+                tsConfig = ts.parseJsonSourceFileConfigFileContent(configJson, parseConfigHost, configDir, /*existingOptions*/ undefined, configFileName);
                 tsConfigFileUnitData = data;
 
                 // delete entry from the list

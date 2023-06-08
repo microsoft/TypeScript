@@ -2,11 +2,11 @@
 JsFile: file1.js
 mapUrl: file1.js.map
 sourceRoot: 
-sources: ../tests/cases/compiler/file1.ts
+sources: ../file1.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:out/file1.js
-sourceFile:../tests/cases/compiler/file1.ts
+emittedFile:tests/cases/compiler/out/file1.js
+sourceFile:../file1.ts
 -------------------------------------------------------------------
 >>>"use strict";
 >>>Object.defineProperty(exports, "__esModule", { value: true });

@@ -1256,12 +1256,13 @@ export const enum CheckMode {
     Inferential = 1 << 1,                           // Inferential typing
     SkipContextSensitive = 1 << 2,                  // Skip context sensitive function expressions
     SkipGenericFunctions = 1 << 3,                  // Skip single signature generic functions
-    IsForSignatureHelp = 1 << 4,                    // Call resolution for purposes of signature help
-    IsForStringLiteralArgumentCompletions = 1 << 5, // Do not infer from the argument currently being typed
-    RestBindingElement = 1 << 6,                    // Checking a type that is going to be used to determine the type of a rest binding element
+    SkipAddingIntraExpressionSites = 1 << 4,        // Skip adding intra expression sites in nested expressions since only the outermost one has to be added
+    IsForSignatureHelp = 1 << 5,                    // Call resolution for purposes of signature help
+    IsForStringLiteralArgumentCompletions = 1 << 6, // Do not infer from the argument currently being typed
+    RestBindingElement = 1 << 7,                    // Checking a type that is going to be used to determine the type of a rest binding element
                                                     //   e.g. in `const { a, ...rest } = foo`, when checking the type of `foo` to determine the type of `rest`,
                                                     //   we need to preserve generic types instead of substituting them for constraints
-    TypeOnly = 1 << 7,                              // Called from getTypeOfExpression, diagnostics may be omitted
+    TypeOnly = 1 << 8,                              // Called from getTypeOfExpression, diagnostics may be omitted
 }
 
 /** @internal */
@@ -5588,7 +5589,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function createIntrinsicType(kind: TypeFlags, intrinsicName: string, objectFlags = ObjectFlags.None): IntrinsicType {
         const type = createType(kind) as IntrinsicType;
         type.intrinsicName = intrinsicName;
-        type.objectFlags = objectFlags;
+        type.objectFlags = objectFlags | ObjectFlags.CouldContainTypeVariablesComputed | ObjectFlags.IsGenericTypeComputed | ObjectFlags.IsUnknownLikeUnionComputed | ObjectFlags.IsNeverIntersectionComputed;
         return type;
     }
 
@@ -18809,13 +18810,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 result = target.objectFlags & ObjectFlags.Reference ? createDeferredTypeReference((type as DeferredTypeReference).target, (type as DeferredTypeReference).node, newMapper, newAliasSymbol, newAliasTypeArguments) :
                     target.objectFlags & ObjectFlags.Mapped ? instantiateMappedType(target as MappedType, newMapper, newAliasSymbol, newAliasTypeArguments) :
                     instantiateAnonymousType(target, newMapper, newAliasSymbol, newAliasTypeArguments);
-                // If none of the type arguments for the outer type parameters contain type variables, it follows
-                // that the instantiated type doesn't reference type variables.
-                if (result.flags & TypeFlags.ObjectFlagsType && !((result as ObjectFlagsType).objectFlags & ObjectFlags.CouldContainTypeVariablesComputed)) {
-                    (result as ObjectFlagsType).objectFlags |= ObjectFlags.CouldContainTypeVariablesComputed |
-                        (some(typeArguments, couldContainTypeVariables) ? ObjectFlags.CouldContainTypeVariables : 0);
+                target.instantiations.set(id, result); // Set cached result early in case we recursively invoke instantiation while eagerly computing type variable visibility below
+                const resultObjectFlags = getObjectFlags(result);
+                if (result.flags & TypeFlags.ObjectFlagsType && !(resultObjectFlags & ObjectFlags.CouldContainTypeVariablesComputed)) {
+                    const resultCouldContainTypeVariables = some(typeArguments, couldContainTypeVariables); // one of the input type arguments might be or contain the result
+                    if (!(getObjectFlags(result) & ObjectFlags.CouldContainTypeVariablesComputed)) {
+                        // if `result` is one of the object types we tried to make (it may not be, due to how `instantiateMappedType` works), we can carry forward the type variable containment check from the input type arguments
+                        if (resultObjectFlags & (ObjectFlags.Mapped | ObjectFlags.Anonymous | ObjectFlags.Reference)) {
+                            (result as ObjectFlagsType).objectFlags |= ObjectFlags.CouldContainTypeVariablesComputed | (resultCouldContainTypeVariables ? ObjectFlags.CouldContainTypeVariables : 0);
+                        }
+                        // If none of the type arguments for the outer type parameters contain type variables, it follows
+                        // that the instantiated type doesn't reference type variables.
+                        // Intrinsics have `CouldContainTypeVariablesComputed` pre-set, so this should only cover unions and intersections resulting from `instantiateMappedType`
+                        else {
+                            (result as ObjectFlagsType).objectFlags |= !resultCouldContainTypeVariables ? ObjectFlags.CouldContainTypeVariablesComputed : 0;
+                        }
+                    }
                 }
-                target.instantiations.set(id, result);
             }
             return result;
         }
@@ -26469,6 +26480,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function isConstantReference(node: Node): boolean {
         switch (node.kind) {
+            case SyntaxKind.ThisKeyword:
+                return true;
             case SyntaxKind.Identifier:
                 if (!isThisInTypeQuery(node)) {
                     const symbol = getResolvedSymbol(node as Identifier);
@@ -29989,10 +30002,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 elementFlags.push(ElementFlags.Optional);
             }
             else {
-                const type = checkExpressionForMutableLocation(e, checkMode, forceTuple);
+                const shouldAddAsIntraExpressionInferenceSite = inTupleContext && checkMode && checkMode & CheckMode.Inferential && !(checkMode & (CheckMode.SkipContextSensitive | CheckMode.SkipAddingIntraExpressionSites)) && isContextSensitive(e);
+                const elementCheckMode = (checkMode || CheckMode.Normal) | (shouldAddAsIntraExpressionInferenceSite ? CheckMode.SkipAddingIntraExpressionSites : 0);
+
+                const type = checkExpressionForMutableLocation(e, elementCheckMode, forceTuple);
                 elementTypes.push(addOptionality(type, /*isProperty*/ true, hasOmittedExpression));
                 elementFlags.push(hasOmittedExpression ? ElementFlags.Optional : ElementFlags.Required);
-                if (inTupleContext && checkMode && checkMode & CheckMode.Inferential && !(checkMode & CheckMode.SkipContextSensitive) && isContextSensitive(e)) {
+                if (shouldAddAsIntraExpressionInferenceSite) {
                     const inferenceContext = getInferenceContext(node);
                     Debug.assert(inferenceContext);  // In CheckMode.Inferential we should always have an inference context
                     addIntraExpressionInferenceSite(inferenceContext, e, type);
@@ -30157,12 +30173,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (memberDecl.kind === SyntaxKind.PropertyAssignment ||
                 memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment ||
                 isObjectLiteralMethod(memberDecl)) {
-                let type = memberDecl.kind === SyntaxKind.PropertyAssignment ? checkPropertyAssignment(memberDecl, checkMode) :
+
+                const shouldAddAsIntraExpressionInferenceSite = contextualType && checkMode & CheckMode.Inferential && !(checkMode & (CheckMode.SkipContextSensitive | CheckMode.SkipAddingIntraExpressionSites)) &&
+                    (memberDecl.kind === SyntaxKind.PropertyAssignment || memberDecl.kind === SyntaxKind.MethodDeclaration) && isContextSensitive(memberDecl);
+                const propCheckMode = checkMode | (shouldAddAsIntraExpressionInferenceSite ? CheckMode.SkipAddingIntraExpressionSites : 0);
+
+                let type = memberDecl.kind === SyntaxKind.PropertyAssignment ? checkPropertyAssignment(memberDecl, propCheckMode) :
                     // avoid resolving the left side of the ShorthandPropertyAssignment outside of the destructuring
                     // for error recovery purposes. For example, if a user wrote `{ a = 100 }` instead of `{ a: 100 }`.
                     // we don't want to say "could not find 'a'".
-                    memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment ? checkExpressionForMutableLocation(!inDestructuringPattern && memberDecl.objectAssignmentInitializer ? memberDecl.objectAssignmentInitializer : memberDecl.name, checkMode) :
-                    checkObjectLiteralMethod(memberDecl, checkMode);
+                    memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment ? checkExpressionForMutableLocation(!inDestructuringPattern && memberDecl.objectAssignmentInitializer ? memberDecl.objectAssignmentInitializer : memberDecl.name, propCheckMode) :
+                    checkObjectLiteralMethod(memberDecl, propCheckMode);
                 if (isInJavascript) {
                     const jsDocType = getTypeForDeclarationFromJSDocComment(memberDecl);
                     if (jsDocType) {
@@ -30217,8 +30238,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 member = prop;
                 allPropertiesTable?.set(prop.escapedName, prop);
 
-                if (contextualType && checkMode & CheckMode.Inferential && !(checkMode & CheckMode.SkipContextSensitive) &&
-                    (memberDecl.kind === SyntaxKind.PropertyAssignment || memberDecl.kind === SyntaxKind.MethodDeclaration) && isContextSensitive(memberDecl)) {
+                if (shouldAddAsIntraExpressionInferenceSite) {
                     const inferenceContext = getInferenceContext(node);
                     Debug.assert(inferenceContext);  // In CheckMode.Inferential we should always have an inference context
                     const inferenceNode = memberDecl.kind === SyntaxKind.PropertyAssignment ? memberDecl.initializer : memberDecl;
@@ -30452,7 +30472,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         for (const attributeDecl of attributes.properties) {
             const member = attributeDecl.symbol;
             if (isJsxAttribute(attributeDecl)) {
-                const exprType = checkJsxAttribute(attributeDecl, checkMode);
+                const shouldAddAsIntraExpressionInferenceSite = contextualType && checkMode & CheckMode.Inferential && !(checkMode & (CheckMode.SkipContextSensitive | CheckMode.SkipAddingIntraExpressionSites)) && isContextSensitive(attributeDecl);
+                const attributeCheckMode = checkMode | (shouldAddAsIntraExpressionInferenceSite ? CheckMode.SkipAddingIntraExpressionSites : 0);
+
+                const exprType = checkJsxAttribute(attributeDecl, attributeCheckMode);
                 objectFlags |= getObjectFlags(exprType) & ObjectFlags.PropagatingFlags;
 
                 const attributeSymbol = createSymbol(SymbolFlags.Property | member.flags, member.escapedName);
@@ -30474,7 +30497,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         addDeprecatedSuggestion(attributeDecl.name, prop.declarations, attributeDecl.name.escapedText as string);
                     }
                 }
-                if (contextualType && checkMode & CheckMode.Inferential && !(checkMode & CheckMode.SkipContextSensitive) && isContextSensitive(attributeDecl)) {
+                if (shouldAddAsIntraExpressionInferenceSite) {
                     const inferenceContext = getInferenceContext(attributes);
                     Debug.assert(inferenceContext);  // In CheckMode.Inferential we should always have an inference context
                     const inferenceNode = (attributeDecl.initializer as JsxExpression).expression!;

@@ -1,3 +1,16 @@
+=== tests/cases/compiler/packages/b/src/index.ts ===
+import { a } from "@ts-bug/a";
+>a : (text: string) => import("@ts-bug/a").AText
+
+export function b(text: string) {
+>b : (text: string) => import("@ts-bug/a").AText
+>text : string
+
+  return a(text);
+>a(text) : import("@ts-bug/a").AText
+>a : (text: string) => import("@ts-bug/a").AText
+>text : string
+}
 === tests/cases/compiler/packages/a/index.d.ts ===
 declare module "@ts-bug/a" {
 >"@ts-bug/a" : typeof import("@ts-bug/a")
@@ -14,16 +27,3 @@ declare module "@ts-bug/a" {
 >text : string
   }
   
-=== tests/cases/compiler/packages/b/src/index.ts ===
-import { a } from "@ts-bug/a";
->a : (text: string) => import("@ts-bug/a").AText
-
-export function b(text: string) {
->b : (text: string) => import("@ts-bug/a").AText
->text : string
-
-  return a(text);
->a(text) : import("@ts-bug/a").AText
->a : (text: string) => import("@ts-bug/a").AText
->text : string
-}

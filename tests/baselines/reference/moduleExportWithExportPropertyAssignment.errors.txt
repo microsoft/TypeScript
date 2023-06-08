@@ -8,7 +8,7 @@ tests/cases/conformance/salsa/a.js(4,6): error TS2554: Expected 1 arguments, but
     mod1.f() // error, not enough arguments
          ~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
-!!! related TS6210 /.src/tests/cases/conformance/salsa/mod1.js:4:30: An argument for 'a' was not provided.
+!!! related TS6210 tests/cases/conformance/salsa/mod1.js:4:30: An argument for 'a' was not provided.
     
 ==== tests/cases/conformance/salsa/requires.d.ts (0 errors) ====
     declare var module: { exports: any };

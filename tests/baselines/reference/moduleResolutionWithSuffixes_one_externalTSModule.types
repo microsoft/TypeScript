@@ -1,12 +1,8 @@
-=== /node_modules/some-library/index.ios.ts ===
-export function ios() {}
->ios : () => void
-
-=== /node_modules/some-library/index.ts ===
-export function base() {}
->base : () => void
-
 === /test.ts ===
 import { ios } from "some-library";
+>ios : () => void
+
+=== /node_modules/some-library/index.ios.ts ===
+export function ios() {}
 >ios : () => void
 
