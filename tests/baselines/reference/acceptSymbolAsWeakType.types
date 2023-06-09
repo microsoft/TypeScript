@@ -1,4 +1,6 @@
-=== tests/cases/compiler/acceptSymbolAsWeakType.ts ===
+//// [tests/cases/compiler/acceptSymbolAsWeakType.ts] ////
+
+=== acceptSymbolAsWeakType.ts ===
 const s: symbol = Symbol('s');
 >s : symbol
 >Symbol('s') : unique symbol

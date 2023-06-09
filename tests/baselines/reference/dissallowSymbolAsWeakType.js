@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/dissallowSymbolAsWeakType.ts] ////
+
 //// [dissallowSymbolAsWeakType.ts]
 const s: symbol = Symbol('s');
 

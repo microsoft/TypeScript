@@ -1,4 +1,6 @@
-=== tests/cases/compiler/acceptSymbolAsWeakType.ts ===
+//// [tests/cases/compiler/acceptSymbolAsWeakType.ts] ////
+
+=== acceptSymbolAsWeakType.ts ===
 const s: symbol = Symbol('s');
 >s : Symbol(s, Decl(acceptSymbolAsWeakType.ts, 0, 5))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))

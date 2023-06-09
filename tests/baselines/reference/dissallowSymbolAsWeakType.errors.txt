@@ -1,4 +1,4 @@
-tests/cases/compiler/dissallowSymbolAsWeakType.ts(3,12): error TS2769: No overload matches this call.
+dissallowSymbolAsWeakType.ts(3,12): error TS2769: No overload matches this call.
   Overload 1 of 2, '(iterable: Iterable<object>): WeakSet<object>', gave the following error.
     Argument of type 'symbol[]' is not assignable to parameter of type 'Iterable<object>'.
       The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
@@ -8,10 +8,10 @@ tests/cases/compiler/dissallowSymbolAsWeakType.ts(3,12): error TS2769: No overlo
               Type 'symbol' is not assignable to type 'object'.
   Overload 2 of 2, '(values?: readonly object[]): WeakSet<object>', gave the following error.
     Type 'symbol' is not assignable to type 'object'.
-tests/cases/compiler/dissallowSymbolAsWeakType.ts(4,8): error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'object'.
-tests/cases/compiler/dissallowSymbolAsWeakType.ts(5,8): error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'object'.
-tests/cases/compiler/dissallowSymbolAsWeakType.ts(6,11): error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'object'.
-tests/cases/compiler/dissallowSymbolAsWeakType.ts(8,12): error TS2769: No overload matches this call.
+dissallowSymbolAsWeakType.ts(4,8): error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'object'.
+dissallowSymbolAsWeakType.ts(5,8): error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'object'.
+dissallowSymbolAsWeakType.ts(6,11): error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'object'.
+dissallowSymbolAsWeakType.ts(8,12): error TS2769: No overload matches this call.
   Overload 1 of 2, '(iterable: Iterable<readonly [object, boolean]>): WeakMap<object, boolean>', gave the following error.
     Argument of type '[symbol, false][]' is not assignable to parameter of type 'Iterable<readonly [object, boolean]>'.
       The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
@@ -23,16 +23,16 @@ tests/cases/compiler/dissallowSymbolAsWeakType.ts(8,12): error TS2769: No overlo
                   Type 'symbol' is not assignable to type 'object'.
   Overload 2 of 2, '(entries?: readonly [object, boolean][]): WeakMap<object, boolean>', gave the following error.
     Type 'symbol' is not assignable to type 'object'.
-tests/cases/compiler/dissallowSymbolAsWeakType.ts(9,8): error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'object'.
-tests/cases/compiler/dissallowSymbolAsWeakType.ts(10,8): error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'object'.
-tests/cases/compiler/dissallowSymbolAsWeakType.ts(11,8): error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'object'.
-tests/cases/compiler/dissallowSymbolAsWeakType.ts(12,11): error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'object'.
-tests/cases/compiler/dissallowSymbolAsWeakType.ts(14,24): error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'object'.
-tests/cases/compiler/dissallowSymbolAsWeakType.ts(18,12): error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'object'.
-tests/cases/compiler/dissallowSymbolAsWeakType.ts(19,14): error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'object'.
+dissallowSymbolAsWeakType.ts(9,8): error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'object'.
+dissallowSymbolAsWeakType.ts(10,8): error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'object'.
+dissallowSymbolAsWeakType.ts(11,8): error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'object'.
+dissallowSymbolAsWeakType.ts(12,11): error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'object'.
+dissallowSymbolAsWeakType.ts(14,24): error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'object'.
+dissallowSymbolAsWeakType.ts(18,12): error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'object'.
+dissallowSymbolAsWeakType.ts(19,14): error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'object'.
 
 
-==== tests/cases/compiler/dissallowSymbolAsWeakType.ts (12 errors) ====
+==== dissallowSymbolAsWeakType.ts (12 errors) ====
     const s: symbol = Symbol('s');
     
     const ws = new WeakSet([s]);
