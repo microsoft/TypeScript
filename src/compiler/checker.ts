@@ -42,6 +42,7 @@ import {
     BindingName,
     BindingPattern,
     bindSourceFile,
+    bindSyntheticTypeNode,
     Block,
     BreakOrContinueStatement,
     CallChain,
@@ -12515,6 +12516,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * For a description of late-binding, see `lateBindMember`.
      */
     function getMembersOfSymbol(symbol: Symbol) {
+        if(!symbol) debugger;
         return symbol.flags & SymbolFlags.LateBindingContainer
             ? getResolvedMembersOrExportsOfSymbol(symbol, MembersOrExportsResolutionKind.resolvedMembers)
             : symbol.members || emptySymbols;
@@ -46666,7 +46668,43 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             });
         }
+        function isSyntheticTypeEquivalent(
+            actualNode: Node, 
+            syntheticNode: TypeNode,
+            headMessage: DiagnosticMessage,
+        ): true | Diagnostic[] {
+            bindSyntheticTypeNode(syntheticNode, actualNode, compilerOptions);
+            const prevDeferredDiagnosticsCallbacksLength = deferredDiagnosticsCallbacks.length;
+            const syntheticType = getTypeOfNode(syntheticNode);
+            const actualNodeType = getTypeOfNode(actualNode);
+            
+            let actualType;
+            if(isFunctionLike(actualNode)) {
+                const signatures = getSignaturesOfType(actualNodeType, SignatureKind.Call);
+                actualType = signatures.length === 0? actualNodeType: getReturnTypeOfSignature(signatures[0]);
+            }
+            else {
+                actualType = actualNodeType
+            }
+            const errors: Diagnostic[] = []
 
+            try {
+                const resultOneWay = checkTypeRelatedTo(actualType, syntheticType, strictSubtypeRelation, actualNode, headMessage, undefined, { errors });
+                
+                if(!resultOneWay) {
+                    return errors;
+                }
+                const resultReveresed = checkTypeRelatedTo(syntheticType, actualType, strictSubtypeRelation, actualNode, headMessage, undefined, { errors });
+                
+                if(!resultReveresed) {
+                    return errors;
+                }
+
+                return true;
+            } finally {
+                deferredDiagnosticsCallbacks.length = prevDeferredDiagnosticsCallbacksLength;
+            }
+        }
         return {
             getReferencedExportContainer,
             getReferencedImportDeclaration,
@@ -46756,6 +46794,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return !sym.exports ? [] : nodeBuilder.symbolTableToDeclarationStatements(sym.exports, node, flags, tracker, bundled);
             },
             isImportRequiredByAugmentation,
+            isSyntheticTypeEquivalent,
         };
 
         function isImportRequiredByAugmentation(node: ImportDeclaration) {

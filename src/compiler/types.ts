@@ -5710,6 +5710,7 @@ export interface EmitResolver {
     isBindingCapturedByNode(node: Node, decl: VariableDeclaration | BindingElement): boolean;
     getDeclarationStatementsForSourceFile(node: SourceFile, flags: NodeBuilderFlags, tracker: SymbolTracker, bundled?: boolean): Statement[] | undefined;
     isImportRequiredByAugmentation(decl: ImportDeclaration): boolean;
+    isSyntheticTypeEquivalent(actualNode: Node, syntheticNodeType: TypeNode, headMessage: DiagnosticMessage): true | Diagnostic[];
 }
 
 export const enum SymbolFlags {

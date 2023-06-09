@@ -2192,6 +2192,11 @@ function getErrorSpanForArrowFunction(sourceFile: SourceFile, node: ArrowFunctio
 
 /** @internal */
 export function getErrorSpanForNode(sourceFile: SourceFile, node: Node): TextSpan {
+    // Temporary fix 
+    if(node.flags & NodeFlags.Synthesized && node.pos < 0) {
+        debugger;
+        return { start: 0, length: 0 }
+    }
     let errorNode: Node | undefined = node;
     switch (node.kind) {
         case SyntaxKind.SourceFile: {
