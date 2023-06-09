@@ -1,6 +1,6 @@
+import { createLoggerWithInMemoryLogs } from "../../../harness/tsserverLogger";
 import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
     createProjectService,
 } from "../helpers/tsserver";
 import {

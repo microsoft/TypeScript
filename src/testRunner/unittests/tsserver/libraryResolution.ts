@@ -1,7 +1,7 @@
+import { createLoggerWithInMemoryLogs } from "../../../harness/tsserverLogger";
 import { getServerHosForLibResolution } from "../helpers/libraryResolution";
 import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
     createSession,
     openFilesForSession
 } from "../helpers/tsserver";

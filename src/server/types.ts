@@ -29,4 +29,5 @@ export interface ServerHost extends System {
     require?(initialPath: string, moduleName: string): ModuleImportResult;
     /** @internal */
     importPlugin?(root: string, moduleName: string): Promise<ModuleImportResult>;
+    /** @internal */ now?(): Date;
 }

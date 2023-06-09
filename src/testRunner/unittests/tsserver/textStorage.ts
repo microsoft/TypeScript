@@ -1,5 +1,9 @@
+import { createLoggerWithInMemoryLogs } from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
-import { baselineTsserverLogs, createLoggerWithInMemoryLogs, createProjectService } from "../helpers/tsserver";
+import {
+    baselineTsserverLogs,
+    createProjectService,
+} from "../helpers/tsserver";
 import { createServerHost } from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: Text storage", () => {

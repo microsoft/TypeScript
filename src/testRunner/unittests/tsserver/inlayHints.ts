@@ -1,3 +1,4 @@
+import { createLoggerWithInMemoryLogs } from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
     commonFile1,
@@ -5,7 +6,6 @@ import {
 } from "../helpers/tscWatch";
 import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
     createSession,
     TestSession,
 } from "../helpers/tsserver";

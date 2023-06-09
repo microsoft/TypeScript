@@ -1,12 +1,12 @@
 import { expect } from "chai";
 
+import { mockHash } from "../../../harness/harnessIO";
 import { incrementalVerifier } from "../../../harness/incrementalUtils";
-import * as Harness from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
 import {
     createHasErrorMessageLogger,
     nullLogger,
-} from "../helpers/tsserver";
+} from "../../../harness/tsserverLogger";
+import * as ts from "../../_namespaces/ts";
 
 let lastWrittenToHost: string;
 const noopFileWatcher: ts.FileWatcher = { close: ts.noop };
@@ -31,7 +31,7 @@ const mockHost: ts.server.ServerHost = {
     clearTimeout: ts.noop,
     setImmediate: () => 0,
     clearImmediate: ts.noop,
-    createHash: Harness.mockHash,
+    createHash: mockHash,
     watchFile: () => noopFileWatcher,
     watchDirectory: () => noopFileWatcher
 };
