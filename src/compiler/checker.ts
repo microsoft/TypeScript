@@ -732,8 +732,6 @@ import {
     isValidESSymbolDeclaration,
     isValidTypeOnlyAliasUseSite,
     isValueSignatureDeclaration,
-    isVarAwaitUsing,
-    isVarConst,
     isVariableDeclaration,
     isVariableDeclarationInitializedToBareOrAccessedRequire,
     isVariableDeclarationInVariableStatement,
@@ -741,7 +739,6 @@ import {
     isVariableLike,
     isVariableLikeOrAccessor,
     isVariableStatement,
-    isVarUsing,
     isWriteAccess,
     isWriteOnlyAccess,
     IterableOrIteratorType,
@@ -17316,7 +17313,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (isCallLikeExpression(parent)) {
                 return isCallOrNewExpression(parent) && isIdentifier(node) && hasMatchingArgument(parent, node);
             }
-            return every(symbol.declarations, d => !isFunctionLike(d) || !!(getCombinedNodeFlagsCached(d) & NodeFlags.Deprecated));
+            return every(symbol.declarations, d => !isFunctionLike(d) || isDeprecatedDeclaration(d));
         }
         return true;
     }
@@ -26673,7 +26670,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 // A matching dotted name might also be an expando property on a function *expression*,
                 // in which case we continue control flow analysis back to the function's declaration
-                if (isVariableDeclaration(node) && (isInJSFile(node) || isVarConst(node))) {
+                if (isVariableDeclaration(node) && (isInJSFile(node) || (isVarConst(node)))) {
                     const init = getDeclaredExpandoInitializer(node);
                     if (init && (init.kind === SyntaxKind.FunctionExpression || init.kind === SyntaxKind.ArrowFunction)) {
                         return getTypeAtFlowNode(flow.antecedent);
@@ -31613,7 +31610,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (compilerOptions.noPropertyAccessFromIndexSignature && isPropertyAccessExpression(node)) {
                 error(right, Diagnostics.Property_0_comes_from_an_index_signature_so_it_must_be_accessed_with_0, unescapeLeadingUnderscores(right.escapedText));
             }
-            if (indexInfo.declaration && getCombinedNodeFlagsCached(indexInfo.declaration) & NodeFlags.Deprecated) {
+            if (indexInfo.declaration && isDeprecatedDeclaration(indexInfo.declaration)) {
                 addDeprecatedSuggestion(right, [indexInfo.declaration], right.escapedText as string);
             }
         }
@@ -41238,7 +41235,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkVariableDeclarationList(node: VariableDeclarationList) {
-        if (isVarUsing(node) || isVarAwaitUsing(node)) {
+        const blockScopeKind = getCombinedNodeFlags(node) & NodeFlags.BlockScoped;
+        if (blockScopeKind === NodeFlags.Using || blockScopeKind === NodeFlags.AwaitUsing) {
             checkExternalEmitHelpers(node, ExternalEmitHelpers.AddDisposableResourceAndDisposeResources);
         }
 
@@ -49082,6 +49080,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         lastGetCombinedNodeFlagsNode = node;
         lastGetCombinedNodeFlagsResult = getCombinedNodeFlags(node);
         return lastGetCombinedNodeFlagsResult;
+    }
+
+    function isVarConst(node: VariableDeclaration | VariableDeclarationList) {
+        // This local copy of `isVarConst` from utilities.ts exists so that it can leverage getCombinedNodeFlagsCached,
+        // which is local to `createTypeChecker`
+        return (getCombinedNodeFlagsCached(node) & NodeFlags.BlockScoped) === NodeFlags.Const;
     }
 }
 
