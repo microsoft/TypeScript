@@ -1,5 +1,10 @@
+import { createLoggerWithInMemoryLogs } from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
-import { baselineTsserverLogs, createLoggerWithInMemoryLogs, createSession, openFilesForSession } from "../helpers/tsserver";
+import {
+    baselineTsserverLogs,
+    createSession,
+    openFilesForSession,
+} from "../helpers/tsserver";
 import { createServerHost } from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: formatSettings", () => {

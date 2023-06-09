@@ -261,7 +261,7 @@ export namespace Compiler {
     export const es2015DefaultLibFileName = "lib.es2015.d.ts";
 
     // Cache of lib files from "built/local"
-    let libFileNameSourceFileMap: Map<string, ts.SourceFile> | undefined;
+    export let libFileNameSourceFileMap: Map<string, ts.SourceFile> | undefined;
 
     export function getDefaultLibrarySourceFile(fileName = defaultLibFileName): ts.SourceFile | undefined {
         if (!isDefaultLibraryFile(fileName)) {

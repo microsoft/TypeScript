@@ -1,8 +1,8 @@
+import { createLoggerWithInMemoryLogs } from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import { ensureErrorFreeBuild } from "../helpers/solutionBuilder";
 import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
     createSession,
     openFilesForSession,
     protocolToLocation,

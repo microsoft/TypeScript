@@ -1,5 +1,9 @@
+import { createLoggerWithInMemoryLogs } from "../../../harness/tsserverLogger";
 import { protocol } from "../../_namespaces/ts.server";
-import { baselineTsserverLogs, createLoggerWithInMemoryLogs, createSession } from "../helpers/tsserver";
+import {
+    baselineTsserverLogs,
+    createSession,
+} from "../helpers/tsserver";
 import { createServerHost, File } from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: services:: findAllReferences", () => {

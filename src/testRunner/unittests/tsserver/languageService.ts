@@ -1,5 +1,10 @@
+import { createLoggerWithInMemoryLogs } from "../../../harness/tsserverLogger";
 import * as Utils from "../../_namespaces/Utils";
-import { baselineTsserverLogs, createLoggerWithInMemoryLogs, createProjectService, logDiagnostics } from "../helpers/tsserver";
+import {
+    baselineTsserverLogs,
+    createProjectService,
+    logDiagnostics,
+} from "../helpers/tsserver";
 import { createServerHost } from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: languageService", () => {

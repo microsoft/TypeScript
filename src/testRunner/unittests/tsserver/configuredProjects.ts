@@ -1,3 +1,4 @@
+import { createLoggerWithInMemoryLogs } from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import { ensureErrorFreeBuild } from "../helpers/solutionBuilder";
 import {
@@ -6,7 +7,6 @@ import {
 } from "../helpers/tscWatch";
 import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
     createProjectService,
     createSession,
     logConfiguredProjectsHasOpenRefStatus,

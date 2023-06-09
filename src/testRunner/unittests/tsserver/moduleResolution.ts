@@ -1,8 +1,8 @@
+import { createLoggerWithInMemoryLogs } from "../../../harness/tsserverLogger";
 import * as Utils from "../../_namespaces/Utils";
 import { getFsConentsForNode10ResultAtTypesPackageJson, getFsContentsForNode10Result, getFsContentsForNode10ResultDts, getFsContentsForNode10ResultPackageJson } from "../helpers/node10Result";
 import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
     createSession,
     openFilesForSession,
     verifyGetErrRequest,
