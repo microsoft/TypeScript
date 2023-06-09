@@ -49,7 +49,7 @@ interface InliningInfo {
 }
 
 registerRefactor(refactorName, {
-    kinds: [ inlineVariableAction.kind ],
+    kinds: [inlineVariableAction.kind],
 
     getAvailableActions(context) {
         const {
