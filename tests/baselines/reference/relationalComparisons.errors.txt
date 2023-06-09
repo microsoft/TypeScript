@@ -1,0 +1,22 @@
+tests/cases/compiler/relationalComparisons.ts(15,5): error TS2365: Operator '>' cannot be applied to types 'any[]' and 'any[]'.
+
+
+==== tests/cases/compiler/relationalComparisons.ts (1 errors) ====
+    type Moment = {
+        valueOf(): number;
+    };
+    
+    declare const m1: Moment, m2: Moment;
+    declare const d1: Date, d2: Date;
+    
+    if (m1 > 0) { }
+    if (m1 > m2) { }
+    if (0 > m2) { }
+    
+    if (d1 > d2) { }
+    
+    declare const arr1: any[], arr2: any[];
+    if (arr1 > arr2) { }
+        ~~~~~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'any[]' and 'any[]'.
+    

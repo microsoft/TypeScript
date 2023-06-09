@@ -1,0 +1,43 @@
+=== tests/cases/compiler/relationalComparisons.ts ===
+type Moment = {
+>Moment : Symbol(Moment, Decl(relationalComparisons.ts, 0, 0))
+
+    valueOf(): number;
+>valueOf : Symbol(valueOf, Decl(relationalComparisons.ts, 0, 15))
+
+};
+
+declare const m1: Moment, m2: Moment;
+>m1 : Symbol(m1, Decl(relationalComparisons.ts, 4, 13))
+>Moment : Symbol(Moment, Decl(relationalComparisons.ts, 0, 0))
+>m2 : Symbol(m2, Decl(relationalComparisons.ts, 4, 25))
+>Moment : Symbol(Moment, Decl(relationalComparisons.ts, 0, 0))
+
+declare const d1: Date, d2: Date;
+>d1 : Symbol(d1, Decl(relationalComparisons.ts, 5, 13))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>d2 : Symbol(d2, Decl(relationalComparisons.ts, 5, 23))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+if (m1 > 0) { }
+>m1 : Symbol(m1, Decl(relationalComparisons.ts, 4, 13))
+
+if (m1 > m2) { }
+>m1 : Symbol(m1, Decl(relationalComparisons.ts, 4, 13))
+>m2 : Symbol(m2, Decl(relationalComparisons.ts, 4, 25))
+
+if (0 > m2) { }
+>m2 : Symbol(m2, Decl(relationalComparisons.ts, 4, 25))
+
+if (d1 > d2) { }
+>d1 : Symbol(d1, Decl(relationalComparisons.ts, 5, 13))
+>d2 : Symbol(d2, Decl(relationalComparisons.ts, 5, 23))
+
+declare const arr1: any[], arr2: any[];
+>arr1 : Symbol(arr1, Decl(relationalComparisons.ts, 13, 13))
+>arr2 : Symbol(arr2, Decl(relationalComparisons.ts, 13, 26))
+
+if (arr1 > arr2) { }
+>arr1 : Symbol(arr1, Decl(relationalComparisons.ts, 13, 13))
+>arr2 : Symbol(arr2, Decl(relationalComparisons.ts, 13, 26))
+
