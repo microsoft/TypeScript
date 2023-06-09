@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileTypeAnnotationTypeQuery.ts] ////
+
 //// [declFileTypeAnnotationTypeQuery.ts]
 class c {
 }

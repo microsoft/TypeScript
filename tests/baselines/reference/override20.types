@@ -1,4 +1,6 @@
-=== tests/cases/conformance/override/override20.ts ===
+//// [tests/cases/conformance/override/override20.ts] ////
+
+=== override20.ts ===
 const Foo: C1 & C2 =
 >Foo : C1 & C2
 

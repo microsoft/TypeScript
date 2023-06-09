@@ -1,4 +1,6 @@
-=== tests/cases/compiler/operationsAvailableOnPromisedType.ts ===
+//// [tests/cases/compiler/operationsAvailableOnPromisedType.ts] ////
+
+=== operationsAvailableOnPromisedType.ts ===
 async function fn(
 >fn : Symbol(fn, Decl(operationsAvailableOnPromisedType.ts, 0, 0))
 

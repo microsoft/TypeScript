@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arrayOfSubtypeIsAssignableToReadonlyArray.ts] ////
+
 //// [arrayOfSubtypeIsAssignableToReadonlyArray.ts]
 class A { a }
 class B extends A { b }

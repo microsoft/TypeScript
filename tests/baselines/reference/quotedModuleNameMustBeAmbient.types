@@ -1,4 +1,6 @@
-=== tests/cases/compiler/quotedModuleNameMustBeAmbient.ts ===
+//// [tests/cases/compiler/quotedModuleNameMustBeAmbient.ts] ////
+
+=== quotedModuleNameMustBeAmbient.ts ===
 module 'M' {}
 >'M' : typeof import("M")
 

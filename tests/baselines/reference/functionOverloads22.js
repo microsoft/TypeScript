@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionOverloads22.ts] ////
+
 //// [functionOverloads22.ts]
 function foo(bar:number):{a:number;}[];
 function foo(bar:string):{a:number; b:string;}[];

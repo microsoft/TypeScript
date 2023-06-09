@@ -9,7 +9,7 @@ import * as b from './b.json';
     "b": "hello"
 }
 
-//// [tests/cases/compiler/out/output.js]
+//// [out/output.js]
 define("b", [], {
     "a": true,
     "b": "hello"

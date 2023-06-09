@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/never/neverType.ts ===
+//// [tests/cases/conformance/types/never/neverType.ts] ////
+
+=== neverType.ts ===
 function error(message: string): never {
 >error : Symbol(error, Decl(neverType.ts, 0, 0))
 >message : Symbol(message, Decl(neverType.ts, 0, 15))

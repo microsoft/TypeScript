@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsJSDocRedirectedLookups.ts] ////
+
 //// [index.js]
 // these are recognized as TS concepts by the checker
 /** @type {String} */const a = "";
@@ -85,14 +87,14 @@
 //// [DtsFileErrors]
 
 
-tests/cases/conformance/jsdoc/declarations/out/index.d.ts(14,39): error TS2304: Cannot find name 'class'.
-tests/cases/conformance/jsdoc/declarations/out/index.d.ts(15,38): error TS2304: Cannot find name 'bool'.
-tests/cases/conformance/jsdoc/declarations/out/index.d.ts(16,37): error TS2304: Cannot find name 'int'.
-tests/cases/conformance/jsdoc/declarations/out/index.d.ts(17,39): error TS2552: Cannot find name 'float'. Did you mean 'GLfloat'?
-tests/cases/conformance/jsdoc/declarations/out/index.d.ts(18,41): error TS2304: Cannot find name 'integer'.
+out/index.d.ts(14,39): error TS2304: Cannot find name 'class'.
+out/index.d.ts(15,38): error TS2304: Cannot find name 'bool'.
+out/index.d.ts(16,37): error TS2304: Cannot find name 'int'.
+out/index.d.ts(17,39): error TS2552: Cannot find name 'float'. Did you mean 'GLfloat'?
+out/index.d.ts(18,41): error TS2304: Cannot find name 'integer'.
 
 
-==== tests/cases/conformance/jsdoc/declarations/out/index.d.ts (5 errors) ====
+==== out/index.d.ts (5 errors) ====
     /** @type {String} */ declare const a: string;
     /** @type {Number} */ declare const b: number;
     /** @type {Boolean} */ declare const c: boolean;

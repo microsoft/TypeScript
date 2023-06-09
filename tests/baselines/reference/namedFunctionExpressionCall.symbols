@@ -1,4 +1,6 @@
-=== tests/cases/compiler/namedFunctionExpressionCall.ts ===
+//// [tests/cases/compiler/namedFunctionExpressionCall.ts] ////
+
+=== namedFunctionExpressionCall.ts ===
 var recurser = function foo() {
 >recurser : Symbol(recurser, Decl(namedFunctionExpressionCall.ts, 0, 3))
 >foo : Symbol(foo, Decl(namedFunctionExpressionCall.ts, 0, 14))

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/destructuring/restElementWithInitializer1.ts ===
+//// [tests/cases/conformance/es6/destructuring/restElementWithInitializer1.ts] ////
+
+=== restElementWithInitializer1.ts ===
 var a: number[];
 >a : Symbol(a, Decl(restElementWithInitializer1.ts, 0, 3))
 

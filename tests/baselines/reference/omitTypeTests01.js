@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/omitTypeTests01.ts] ////
+
 //// [omitTypeTests01.ts]
 interface Foo {
     a: string;

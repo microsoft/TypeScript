@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mutuallyRecursiveInference.ts ===
+//// [tests/cases/compiler/mutuallyRecursiveInference.ts] ////
+
+=== mutuallyRecursiveInference.ts ===
 class T<A> {
 >T : T<A>
 

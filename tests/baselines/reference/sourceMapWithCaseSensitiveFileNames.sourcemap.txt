@@ -2,11 +2,11 @@
 JsFile: fooResult.js
 mapUrl: fooResult.js.map
 sourceRoot: 
-sources: ../tests/cases/compiler/testFiles/app.ts,../tests/cases/compiler/testFiles/app2.ts
+sources: ../testFiles/app.ts,../testFiles/app2.ts
 ===================================================================
 -------------------------------------------------------------------
 emittedFile:testfiles/fooResult.js
-sourceFile:../tests/cases/compiler/testFiles/app.ts
+sourceFile:../testFiles/app.ts
 -------------------------------------------------------------------
 >>>// Note in the out result we are using same folder name only different in casing
 1 >
@@ -75,7 +75,7 @@ sourceFile:../tests/cases/compiler/testFiles/app.ts
 ---
 -------------------------------------------------------------------
 emittedFile:testfiles/fooResult.js
-sourceFile:../tests/cases/compiler/testFiles/app2.ts
+sourceFile:../testFiles/app2.ts
 -------------------------------------------------------------------
 >>>var d = /** @class */ (function () {
 1->

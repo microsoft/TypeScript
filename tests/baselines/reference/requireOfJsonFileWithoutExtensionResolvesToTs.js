@@ -24,15 +24,15 @@ if (x2) {
 //// [c.ts]
 export = { a: true, b: "hello" };
 
-//// [tests/cases/compiler/out/c.js]
+//// [out/c.js]
 "use strict";
 module.exports = { a: true, b: "hello" };
-//// [tests/cases/compiler/out/c.json]
+//// [out/c.json]
 {
     "a": true,
     "b": "hello"
 }
-//// [tests/cases/compiler/out/file1.js]
+//// [out/file1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var c1 = require("./c"); // resolves to c.ts 

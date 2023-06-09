@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocReturnTag1.ts] ////
+
 //// [returns.js]
 /**
  * @returns {string} This comment is not currently exposed

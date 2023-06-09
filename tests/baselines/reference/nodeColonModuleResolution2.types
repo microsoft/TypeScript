@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nodeColonModuleResolution2.ts] ////
+
 === /a/b/main.ts ===
 import * as ph from 'fake:thing'
 >ph : typeof ph

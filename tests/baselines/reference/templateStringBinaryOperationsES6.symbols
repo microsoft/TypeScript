@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/templates/templateStringBinaryOperationsES6.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringBinaryOperationsES6.ts] ////
+
+=== templateStringBinaryOperationsES6.ts ===
 var a = 1 + `${ 3 }`;
 >a : Symbol(a, Decl(templateStringBinaryOperationsES6.ts, 0, 3))
 

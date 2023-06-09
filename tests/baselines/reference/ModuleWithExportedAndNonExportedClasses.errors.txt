@@ -1,8 +1,8 @@
-tests/cases/conformance/internalModules/exportDeclarations/ModuleWithExportedAndNonExportedClasses.ts(30,16): error TS2339: Property 'A2' does not exist on type 'typeof A'.
-tests/cases/conformance/internalModules/exportDeclarations/ModuleWithExportedAndNonExportedClasses.ts(31,17): error TS2339: Property 'A2' does not exist on type 'typeof A'.
+ModuleWithExportedAndNonExportedClasses.ts(30,16): error TS2339: Property 'A2' does not exist on type 'typeof A'.
+ModuleWithExportedAndNonExportedClasses.ts(31,17): error TS2339: Property 'A2' does not exist on type 'typeof A'.
 
 
-==== tests/cases/conformance/internalModules/exportDeclarations/ModuleWithExportedAndNonExportedClasses.ts (2 errors) ====
+==== ModuleWithExportedAndNonExportedClasses.ts (2 errors) ====
     module A {
         export class A {
             id: number;

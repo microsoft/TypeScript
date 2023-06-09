@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameStaticAccessorsAccess.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameStaticAccessorsAccess.ts] ////
+
+=== privateNameStaticAccessorsAccess.ts ===
 export {}
 class A2 {
 >A2 : Symbol(A2, Decl(privateNameStaticAccessorsAccess.ts, 0, 9))

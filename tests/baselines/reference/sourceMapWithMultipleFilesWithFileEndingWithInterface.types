@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/sourceMapWithMultipleFilesWithFileEndingWithInterface.ts] ////
+
+=== a.ts ===
 module M {
 >M : typeof M
 
@@ -24,7 +26,7 @@ interface Navigator {
 >func : any
 }
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 module m1 {
 >m1 : typeof m1
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inferConditionalConstraintMappedMember.ts] ////
+
 //// [inferConditionalConstraintMappedMember.ts]
 // Return keyof type without string index signature
 type KeysWithoutStringIndex<T> =

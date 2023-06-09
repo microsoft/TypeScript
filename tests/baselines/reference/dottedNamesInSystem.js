@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/dottedNamesInSystem.ts] ////
+
 //// [dottedNamesInSystem.ts]
 export namespace A.B.C {
     export function foo() {}

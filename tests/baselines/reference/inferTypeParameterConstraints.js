@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inferTypeParameterConstraints.ts] ////
+
 //// [inferTypeParameterConstraints.ts]
 // Repro from #42636
 

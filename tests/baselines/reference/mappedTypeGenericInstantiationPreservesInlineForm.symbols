@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mappedTypeGenericInstantiationPreservesInlineForm.ts ===
+//// [tests/cases/compiler/mappedTypeGenericInstantiationPreservesInlineForm.ts] ////
+
+=== mappedTypeGenericInstantiationPreservesInlineForm.ts ===
 // repro from #53109
 
 export const test1 = <T = Record<string, never>>(schema: {

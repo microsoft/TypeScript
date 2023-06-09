@@ -1,4 +1,6 @@
-=== tests/cases/compiler/assignment.ts ===
+//// [tests/cases/compiler/exportAssignmentImportMergeNoCrash.ts] ////
+
+=== assignment.ts ===
 export default {
 >{    foo: 12} : { foo: number; }
 
@@ -8,7 +10,7 @@ export default {
 
 };
 
-=== tests/cases/compiler/user.ts ===
+=== user.ts ===
 import Obj from "./assignment";
 >Obj : { foo: number; }
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/internalAliasVarInsideLocalModuleWithoutExportAccessError.ts] ////
+
 //// [internalAliasVarInsideLocalModuleWithoutExportAccessError.ts]
 export module a {
     export var x = 10;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleResolutionWithExtensions_withPaths.ts] ////
+
 === /relative.d.ts ===
 export declare function relative(): void;
 >relative : Symbol(relative, Decl(relative.d.ts, 0, 0))

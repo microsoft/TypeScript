@@ -1,4 +1,6 @@
-=== tests/cases/compiler/decoratorMetadataOnInferredType.ts ===
+//// [tests/cases/compiler/decoratorMetadataOnInferredType.ts] ////
+
+=== decoratorMetadataOnInferredType.ts ===
 declare var console: {
 >console : Symbol(console, Decl(decoratorMetadataOnInferredType.ts, 0, 11))
 

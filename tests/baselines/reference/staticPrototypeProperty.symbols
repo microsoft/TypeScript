@@ -1,4 +1,6 @@
-=== tests/cases/compiler/staticPrototypeProperty.ts ===
+//// [tests/cases/compiler/staticPrototypeProperty.ts] ////
+
+=== staticPrototypeProperty.ts ===
 class C {
 >C : Symbol(C, Decl(staticPrototypeProperty.ts, 0, 0))
 

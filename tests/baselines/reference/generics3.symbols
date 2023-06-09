@@ -1,4 +1,6 @@
-=== tests/cases/compiler/generics3.ts ===
+//// [tests/cases/compiler/generics3.ts] ////
+
+=== generics3.ts ===
 class C<T> { private x: T; }
 >C : Symbol(C, Decl(generics3.ts, 0, 0))
 >T : Symbol(T, Decl(generics3.ts, 0, 8))
