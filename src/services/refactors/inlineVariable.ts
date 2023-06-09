@@ -132,7 +132,7 @@ function getInliningInfo(file: SourceFile, startPosition: number, tryWithReferen
 
         // Find all references to the variable in the current file.
         const references = getReferenceNodes(parent, checker, file);
-        return references && { references, declaration: parent, replacement: getSynthesizedDeepClone(parent.initializer) };
+        return references && { references, declaration: parent, replacement: parent.initializer };
     }
 
     // Try finding the declaration and nodes to replace via the reference token.
@@ -148,7 +148,7 @@ function getInliningInfo(file: SourceFile, startPosition: number, tryWithReferen
         }
 
         const references = getReferenceNodes(declaration, checker, file);
-        return references && { references, declaration, replacement: getSynthesizedDeepClone(declaration.initializer) };
+        return references && { references, declaration, replacement: declaration.initializer };
     }
 
     return { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_variable_to_inline) };
@@ -189,8 +189,8 @@ function getReplacementExpression(reference: Node, replacement: Expression): Exp
     // instead just check for special cases with needsParentheses.
     const { parent } = reference;
     if (isExpression(parent) && (getExpressionPrecedence(replacement) < getExpressionPrecedence(parent) || needsParentheses(parent))) {
-        return factory.createParenthesizedExpression(replacement);
+        return getSynthesizedDeepClone(factory.createParenthesizedExpression(replacement));
     }
 
-    return replacement;
+    return getSynthesizedDeepClone(replacement);
 }
