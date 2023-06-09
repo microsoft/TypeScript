@@ -1,4 +1,6 @@
-=== tests/cases/compiler/thing.d.ts ===
+//// [tests/cases/compiler/exportAssignedNamespaceIsVisibleInDeclarationEmit.ts] ////
+
+=== thing.d.ts ===
 declare namespace Foo {
 >Foo : Symbol(Foo, Decl(thing.d.ts, 0, 0))
 
@@ -12,7 +14,7 @@ declare namespace Foo {
 export = Foo;
 >Foo : Symbol(Foo, Decl(thing.d.ts, 0, 0))
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import { f } from "./thing";
 >f : Symbol(f, Decl(index.ts, 0, 8))
 

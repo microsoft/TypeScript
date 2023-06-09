@@ -1,4 +1,6 @@
-=== tests/cases/compiler/reservedWords.ts ===
+//// [tests/cases/compiler/reservedWords.ts] ////
+
+=== reservedWords.ts ===
 var obj = {
 >obj : Symbol(obj, Decl(reservedWords.ts, 0, 3))
 

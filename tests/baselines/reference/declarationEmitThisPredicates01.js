@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/declarationEmit/typePredicates/declarationEmitThisPredicates01.ts] ////
+
 //// [declarationEmitThisPredicates01.ts]
 export class C {
     m(): this is D {

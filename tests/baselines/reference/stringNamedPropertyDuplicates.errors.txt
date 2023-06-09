@@ -1,13 +1,13 @@
-tests/cases/conformance/types/objectTypeLiteral/propertySignatures/stringNamedPropertyDuplicates.ts(3,5): error TS2300: Duplicate identifier '"a b"'.
-tests/cases/conformance/types/objectTypeLiteral/propertySignatures/stringNamedPropertyDuplicates.ts(5,12): error TS2300: Duplicate identifier '"c d"'.
-tests/cases/conformance/types/objectTypeLiteral/propertySignatures/stringNamedPropertyDuplicates.ts(9,5): error TS2300: Duplicate identifier 'a b'.
-tests/cases/conformance/types/objectTypeLiteral/propertySignatures/stringNamedPropertyDuplicates.ts(10,5): error TS2300: Duplicate identifier 'a b'.
-tests/cases/conformance/types/objectTypeLiteral/propertySignatures/stringNamedPropertyDuplicates.ts(14,5): error TS2300: Duplicate identifier 'a b'.
-tests/cases/conformance/types/objectTypeLiteral/propertySignatures/stringNamedPropertyDuplicates.ts(15,5): error TS2300: Duplicate identifier 'a b'.
-tests/cases/conformance/types/objectTypeLiteral/propertySignatures/stringNamedPropertyDuplicates.ts(20,5): error TS1005: ',' expected.
+stringNamedPropertyDuplicates.ts(3,5): error TS2300: Duplicate identifier '"a b"'.
+stringNamedPropertyDuplicates.ts(5,12): error TS2300: Duplicate identifier '"c d"'.
+stringNamedPropertyDuplicates.ts(9,5): error TS2300: Duplicate identifier 'a b'.
+stringNamedPropertyDuplicates.ts(10,5): error TS2300: Duplicate identifier 'a b'.
+stringNamedPropertyDuplicates.ts(14,5): error TS2300: Duplicate identifier 'a b'.
+stringNamedPropertyDuplicates.ts(15,5): error TS2300: Duplicate identifier 'a b'.
+stringNamedPropertyDuplicates.ts(20,5): error TS1005: ',' expected.
 
 
-==== tests/cases/conformance/types/objectTypeLiteral/propertySignatures/stringNamedPropertyDuplicates.ts (7 errors) ====
+==== stringNamedPropertyDuplicates.ts (7 errors) ====
     class C {
         "a b": number;
         "a b": number;

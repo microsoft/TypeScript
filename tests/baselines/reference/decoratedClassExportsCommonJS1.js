@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/decorators/class/decoratedClassExportsCommonJS1.ts] ////
+
 //// [decoratedClassExportsCommonJS1.ts]
 declare var Something: any;
 @Something({ v: () => Testing123 })

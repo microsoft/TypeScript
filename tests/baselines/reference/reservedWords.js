@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reservedWords.ts] ////
+
 //// [reservedWords.ts]
 var obj = {
     if: 0,

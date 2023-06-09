@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/VariableStatements/usingDeclarations/usingDeclarations.11.ts] ////
+
 //// [usingDeclarations.11.ts]
 class A {}
 class C1 extends A {

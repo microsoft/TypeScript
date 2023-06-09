@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/namespaceMergedWithImportAliasNoCrash.ts] ////
+
+=== file1.ts ===
 export namespace Library {
     export type Bar = { a: number };
 >Bar : { a: number; }
@@ -13,7 +15,7 @@ Library.foo; // should be an error
 >Library : any
 >foo : any
 
-=== tests/cases/compiler/file2.ts ===
+=== file2.ts ===
 import * as Lib from './file1';
 >Lib : typeof Lib
 

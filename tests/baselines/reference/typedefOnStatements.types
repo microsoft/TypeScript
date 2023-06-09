@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/typedefOnStatements.js ===
+//// [tests/cases/conformance/jsdoc/typedefOnStatements.ts] ////
+
+=== typedefOnStatements.js ===
 /** @typedef {{a: string}} A */
 ;
 /** @typedef {{ b: string }} B */

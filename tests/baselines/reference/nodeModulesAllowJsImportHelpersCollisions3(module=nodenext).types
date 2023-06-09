@@ -1,4 +1,6 @@
-=== tests/cases/conformance/node/allowJs/subfolder/index.js ===
+//// [tests/cases/conformance/node/allowJs/nodeModulesAllowJsImportHelpersCollisions3.ts] ////
+
+=== subfolder/index.js ===
 // cjs format file
 export {default} from "fs";
 >default : any
@@ -11,7 +13,7 @@ export {bar as baz} from "fs";
 >bar : any
 >baz : any
 
-=== tests/cases/conformance/node/allowJs/index.js ===
+=== index.js ===
 // esm format file
 export {default} from "fs";
 >default : any
@@ -24,7 +26,7 @@ export {bar as baz} from "fs";
 >bar : any
 >baz : any
 
-=== tests/cases/conformance/node/allowJs/types.d.ts ===
+=== types.d.ts ===
 declare module "fs";
 >"fs" : any
 

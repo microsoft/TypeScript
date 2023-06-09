@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/VariableStatements/usingDeclarations/usingDeclarationsWithESClassDecorators.1.ts] ////
+
 //// [usingDeclarationsWithESClassDecorators.1.ts]
 export {};
 

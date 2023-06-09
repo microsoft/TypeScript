@@ -1,7 +1,7 @@
-tests/cases/conformance/statements/VariableStatements/usingDeclarations/awaitUsingDeclarations.10.ts(5,12): error TS1156: 'await using' declarations can only be declared inside a block.
+awaitUsingDeclarations.10.ts(5,12): error TS1156: 'await using' declarations can only be declared inside a block.
 
 
-==== tests/cases/conformance/statements/VariableStatements/usingDeclarations/awaitUsingDeclarations.10.ts (1 errors) ====
+==== awaitUsingDeclarations.10.ts (1 errors) ====
     export {};
     
     declare var x: any;

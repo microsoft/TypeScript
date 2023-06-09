@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/VariableStatements/usingDeclarations/usingDeclarations.12.ts] ////
+
 //// [usingDeclarations.12.ts]
 class C1 {
     constructor() {}

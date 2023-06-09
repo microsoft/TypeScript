@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadOnConstInheritance1.ts ===
+//// [tests/cases/compiler/overloadOnConstInheritance1.ts] ////
+
+=== overloadOnConstInheritance1.ts ===
 interface Base {
 >Base : Symbol(Base, Decl(overloadOnConstInheritance1.ts, 0, 0))
 

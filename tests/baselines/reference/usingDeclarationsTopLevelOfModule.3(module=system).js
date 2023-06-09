@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/VariableStatements/usingDeclarations/usingDeclarationsTopLevelOfModule.3.ts] ////
+
 //// [usingDeclarationsTopLevelOfModule.3.ts]
 export { y };
 

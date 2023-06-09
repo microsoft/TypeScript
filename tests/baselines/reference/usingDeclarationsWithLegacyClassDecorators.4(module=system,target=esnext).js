@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/VariableStatements/usingDeclarations/usingDeclarationsWithLegacyClassDecorators.4.ts] ////
+
 //// [usingDeclarationsWithLegacyClassDecorators.4.ts]
 export {};
 

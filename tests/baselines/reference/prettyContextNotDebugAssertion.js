@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/prettyContextNotDebugAssertion.ts] ////
+
 //// [index.ts]
 if (true) {
 

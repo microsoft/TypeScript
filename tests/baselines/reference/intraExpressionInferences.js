@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/intraExpressionInferences.ts] ////
+
 //// [intraExpressionInferences.ts]
 // Repros from #47599
 

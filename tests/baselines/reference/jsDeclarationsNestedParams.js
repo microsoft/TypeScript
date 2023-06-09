@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsNestedParams.ts] ////
+
 //// [file.js]
 class X {
     /**

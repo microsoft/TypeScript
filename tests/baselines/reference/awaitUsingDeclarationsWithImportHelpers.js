@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/VariableStatements/usingDeclarations/awaitUsingDeclarationsWithImportHelpers.ts] ////
+
 //// [awaitUsingDeclarationsWithImportHelpers.ts]
 export {};
 

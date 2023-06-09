@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/esDecorators/classDeclaration/classThisReference/esDecorators-classDeclaration-classThisReference.es5.ts] ////
+
 //// [esDecorators-classDeclaration-classThisReference.es5.ts]
 declare let dec: any;
 

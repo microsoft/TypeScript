@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/VariableStatements/usingDeclarations/awaitUsingDeclarationsInForOf.3.ts] ////
+
 //// [awaitUsingDeclarationsInForOf.3.ts]
 async function main() {
     for (await using {} of []) {

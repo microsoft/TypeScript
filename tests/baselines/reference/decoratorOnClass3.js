@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/decorators/class/decoratorOnClass3.ts] ////
+
 //// [decoratorOnClass3.ts]
 declare function dec<T>(target: T): T;
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualTypingOfLambdaWithMultipleSignatures2.ts ===
+//// [tests/cases/compiler/contextualTypingOfLambdaWithMultipleSignatures2.ts] ////
+
+=== contextualTypingOfLambdaWithMultipleSignatures2.ts ===
 var f: {
 >f : { (x: string): string; (x: number): string; }
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/VariableStatements/usingDeclarations/usingDeclarations.5.ts] ////
+
 //// [usingDeclarations.5.ts]
 {
     using a = null,

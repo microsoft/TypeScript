@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/VariableStatements/usingDeclarations/usingDeclarationsNamedEvaluationDecoratorsAndClassFields.ts] ////
+
 //// [usingDeclarationsNamedEvaluationDecoratorsAndClassFields.ts]
 export {};
 

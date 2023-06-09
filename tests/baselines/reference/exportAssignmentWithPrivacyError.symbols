@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exportAssignmentWithPrivacyError.ts ===
+//// [tests/cases/compiler/exportAssignmentWithPrivacyError.ts] ////
+
+=== exportAssignmentWithPrivacyError.ts ===
 interface connectmodule {
 >connectmodule : Symbol(connectmodule, Decl(exportAssignmentWithPrivacyError.ts, 0, 0))
 

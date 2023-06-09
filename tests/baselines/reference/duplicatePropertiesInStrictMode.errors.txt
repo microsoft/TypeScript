@@ -1,7 +1,7 @@
-tests/cases/compiler/duplicatePropertiesInStrictMode.ts(4,3): error TS1117: An object literal cannot have multiple properties with the same name.
+duplicatePropertiesInStrictMode.ts(4,3): error TS1117: An object literal cannot have multiple properties with the same name.
 
 
-==== tests/cases/compiler/duplicatePropertiesInStrictMode.ts (1 errors) ====
+==== duplicatePropertiesInStrictMode.ts (1 errors) ====
     "use strict";
     var x = {
       x: 1,

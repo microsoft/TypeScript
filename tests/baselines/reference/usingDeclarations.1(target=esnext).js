@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/VariableStatements/usingDeclarations/usingDeclarations.1.ts] ////
+
 //// [usingDeclarations.1.ts]
 using d1 = { [Symbol.dispose]() {} };
 

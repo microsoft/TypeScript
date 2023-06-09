@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/esDecorators/classDeclaration/esDecorators-classDeclaration-commonjs.ts] ////
+
 //// [esDecorators-classDeclaration-commonjs.ts]
 declare var deco: any;
 

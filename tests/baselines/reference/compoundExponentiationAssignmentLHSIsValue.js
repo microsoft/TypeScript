@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSIsValue.ts] ////
+
 //// [compoundExponentiationAssignmentLHSIsValue.ts]
 // expected error for all the LHS of compound assignments (arithmetic and addition)
 var value: any;

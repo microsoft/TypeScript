@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/recursiveTypes/infiniteExpansionThroughTypeInference.ts ===
+//// [tests/cases/conformance/types/typeRelationships/recursiveTypes/infiniteExpansionThroughTypeInference.ts] ////
+
+=== infiniteExpansionThroughTypeInference.ts ===
 interface G<T> {
 >G : Symbol(G, Decl(infiniteExpansionThroughTypeInference.ts, 0, 0))
 >T : Symbol(T, Decl(infiniteExpansionThroughTypeInference.ts, 0, 12))

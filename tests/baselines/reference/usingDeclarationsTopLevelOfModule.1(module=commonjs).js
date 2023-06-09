@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/VariableStatements/usingDeclarations/usingDeclarationsTopLevelOfModule.1.ts] ////
+
 //// [usingDeclarationsTopLevelOfModule.1.ts]
 export const x = 1;
 export { y };

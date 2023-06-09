@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/switchCasesExpressionTypeMismatch.ts] ////
+
 //// [switchCasesExpressionTypeMismatch.ts]
 class Foo { }
 

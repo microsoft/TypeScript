@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/VariableStatements/usingDeclarations/usingDeclarationsTopLevelOfModule.2.ts] ////
+
 //// [usingDeclarationsTopLevelOfModule.2.ts]
 using z = { [Symbol.dispose]() {} };
 

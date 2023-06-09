@@ -5,7 +5,7 @@ sourceRoot:
 sources: a.ts,b.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/c.js
+emittedFile:c.js
 sourceFile:a.ts
 -------------------------------------------------------------------
 >>>var A = /** @class */ (function () {
@@ -53,7 +53,7 @@ sourceFile:a.ts
 4 >Emitted(5, 6) Source(1, 12) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/c.js
+emittedFile:c.js
 sourceFile:b.ts
 -------------------------------------------------------------------
 >>>var B = /** @class */ (function () {

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/VariableStatements/usingDeclarations/awaitUsingDeclarations.10.ts] ////
+
 //// [awaitUsingDeclarations.10.ts]
 export {};
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/collisionThisExpressionAndEnumInGlobal.ts ===
+//// [tests/cases/compiler/collisionThisExpressionAndEnumInGlobal.ts] ////
+
+=== collisionThisExpressionAndEnumInGlobal.ts ===
 enum _this { // Error
 >_this : _this
 

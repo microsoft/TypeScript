@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/decorators/class/decoratedClassExportsCommonJS2.ts] ////
+
 //// [a.ts]
 declare function forwardRef(x: any): any;
 declare var Something: any;

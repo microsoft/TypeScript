@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts] ////
+
 //// [derivedClassSuperProperties.ts]
 declare const decorate: any;
 

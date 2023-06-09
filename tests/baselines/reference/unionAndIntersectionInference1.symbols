@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/unionAndIntersectionInference1.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/unionAndIntersectionInference1.ts] ////
+
+=== unionAndIntersectionInference1.ts ===
 // Repro from #2264
 
 interface Y { 'i am a very certain type': Y }

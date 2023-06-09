@@ -1,7 +1,7 @@
-tests/cases/conformance/statements/VariableStatements/usingDeclarations/usingDeclarations.8.ts(2,11): error TS1155: 'using' declarations must be initialized.
+usingDeclarations.8.ts(2,11): error TS1155: 'using' declarations must be initialized.
 
 
-==== tests/cases/conformance/statements/VariableStatements/usingDeclarations/usingDeclarations.8.ts (1 errors) ====
+==== usingDeclarations.8.ts (1 errors) ====
     {
         using a;
               ~

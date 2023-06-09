@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxCallElaborationCheckNoCrash1.tsx] ////
+
 //// [jsxCallElaborationCheckNoCrash1.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/VariableStatements/usingDeclarations/awaitUsingDeclarations.3.ts] ////
+
 //// [awaitUsingDeclarations.3.ts]
 {
     await using d1 = { async [Symbol.asyncDispose]() {} },

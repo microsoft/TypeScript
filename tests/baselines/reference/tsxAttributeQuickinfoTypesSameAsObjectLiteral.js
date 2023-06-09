@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/tsxAttributeQuickinfoTypesSameAsObjectLiteral.tsx] ////
+
 //// [tsxAttributeQuickinfoTypesSameAsObjectLiteral.tsx]
 namespace JSX {
     export interface IntrinsicElements {

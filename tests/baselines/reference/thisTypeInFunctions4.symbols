@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/thisType/thisTypeInFunctions4.ts ===
+//// [tests/cases/conformance/types/thisType/thisTypeInFunctions4.ts] ////
+
+=== thisTypeInFunctions4.ts ===
 type WrongObject = {value: number};
 >WrongObject : Symbol(WrongObject, Decl(thisTypeInFunctions4.ts, 0, 0))
 >value : Symbol(value, Decl(thisTypeInFunctions4.ts, 0, 20))

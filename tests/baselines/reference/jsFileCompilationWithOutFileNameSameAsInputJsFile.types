@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsFileCompilationWithOutFileNameSameAsInputJsFile.ts] ////
+
 === /a.ts ===
 class c {
 >c : c

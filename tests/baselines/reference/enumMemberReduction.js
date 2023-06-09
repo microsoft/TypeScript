@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumMemberReduction.ts] ////
+
 //// [enumMemberReduction.ts]
 enum MyEnum {
   A,

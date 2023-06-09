@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/VariableStatements/usingDeclarations/awaitUsingDeclarations.7.ts] ////
+
 //// [awaitUsingDeclarations.7.ts]
 {
     await using a = null,

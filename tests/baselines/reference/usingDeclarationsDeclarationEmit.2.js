@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/VariableStatements/usingDeclarations/usingDeclarationsDeclarationEmit.2.ts] ////
+
 //// [usingDeclarationsDeclarationEmit.2.ts]
 using r1 = { [Symbol.dispose]() {} };
 export type R1 = typeof r1;

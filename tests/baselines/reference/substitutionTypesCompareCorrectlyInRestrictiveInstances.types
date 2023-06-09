@@ -1,4 +1,6 @@
-=== tests/cases/compiler/substitutionTypesCompareCorrectlyInRestrictiveInstances.ts ===
+//// [tests/cases/compiler/substitutionTypesCompareCorrectlyInRestrictiveInstances.ts] ////
+
+=== substitutionTypesCompareCorrectlyInRestrictiveInstances.ts ===
 type UnionKeys<T> = T extends any ? keyof T : never;
 >UnionKeys : UnionKeys<T>
 

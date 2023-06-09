@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/VariableStatements/usingDeclarations/awaitUsingDeclarations.8.ts] ////
+
 //// [awaitUsingDeclarations.8.ts]
 {
     await using a;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/destructuringTempOccursAfterPrologue.ts ===
+//// [tests/cases/compiler/destructuringTempOccursAfterPrologue.ts] ////
+
+=== destructuringTempOccursAfterPrologue.ts ===
 function test(p: any) {
 >test : (p: any) => void
 >p : any

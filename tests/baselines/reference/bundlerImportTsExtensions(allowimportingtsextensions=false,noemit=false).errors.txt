@@ -1,5 +1,5 @@
-error TS5056: Cannot write file 'tests/cases/conformance/moduleResolution/bundler/out/b.js' because it would be overwritten by multiple input files.
-error TS5056: Cannot write file 'tests/cases/conformance/moduleResolution/bundler/out/c.js' because it would be overwritten by multiple input files.
+error TS5056: Cannot write file 'out/b.js' because it would be overwritten by multiple input files.
+error TS5056: Cannot write file 'out/c.js' because it would be overwritten by multiple input files.
 error TS6054: File '/project/e.txt' has an unsupported extension. The only supported extensions are '.ts', '.tsx', '.d.ts', '.js', '.jsx', '.cts', '.d.cts', '.cjs', '.mts', '.d.mts', '.mjs'.
   The file is in the program because:
     Root file specified for compilation
@@ -13,8 +13,8 @@ error TS6054: File '/project/e.txt' has an unsupported extension. The only suppo
 /project/types.d.ts(2,16): error TS2846: A declaration file cannot be imported without 'import type'. Did you mean to import an implementation file './a.js' instead?
 
 
-!!! error TS5056: Cannot write file 'tests/cases/conformance/moduleResolution/bundler/out/b.js' because it would be overwritten by multiple input files.
-!!! error TS5056: Cannot write file 'tests/cases/conformance/moduleResolution/bundler/out/c.js' because it would be overwritten by multiple input files.
+!!! error TS5056: Cannot write file 'out/b.js' because it would be overwritten by multiple input files.
+!!! error TS5056: Cannot write file 'out/c.js' because it would be overwritten by multiple input files.
 !!! error TS6054: File '/project/e.txt' has an unsupported extension. The only supported extensions are '.ts', '.tsx', '.d.ts', '.js', '.jsx', '.cts', '.d.cts', '.cjs', '.mts', '.d.mts', '.mjs'.
 !!! error TS6054:   The file is in the program because:
 !!! error TS6054:     Root file specified for compilation

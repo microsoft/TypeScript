@@ -1,7 +1,7 @@
-tests/cases/compiler/assignToInvalidLHS.ts(4,9): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+assignToInvalidLHS.ts(4,9): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
 
 
-==== tests/cases/compiler/assignToInvalidLHS.ts (1 errors) ====
+==== assignToInvalidLHS.ts (1 errors) ====
     declare var y:any;
     
     // Below is actually valid JavaScript (see http://es5.github.com/#x8.7 ), even though will always fail at runtime with 'invalid left-hand side'

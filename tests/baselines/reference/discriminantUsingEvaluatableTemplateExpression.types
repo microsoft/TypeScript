@@ -1,4 +1,6 @@
-=== tests/cases/compiler/discriminantUsingEvaluatableTemplateExpression.ts ===
+//// [tests/cases/compiler/discriminantUsingEvaluatableTemplateExpression.ts] ////
+
+=== discriminantUsingEvaluatableTemplateExpression.ts ===
 // repro from https://github.com/microsoft/TypeScript/issues/53888
 
 type S = { d: "s"; cb: (x: string) => void };

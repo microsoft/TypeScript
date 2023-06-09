@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/controlFlowAliasing.ts] ////
+
 //// [controlFlowAliasing.ts]
 // Narrowing by aliased conditional expressions
 
