@@ -1474,6 +1474,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     var lastGetCombinedNodeFlagsNode: Node | undefined;
     var lastGetCombinedNodeFlagsResult = NodeFlags.None;
+    var lastGetCombinedModifierFlagsNode: Declaration | undefined;
+    var lastGetCombinedModifierFlagsResult = ModifierFlags.None;
 
     // for public members that accept a Node or one of its subtypes, we must guard against
     // synthetic nodes created during transformations by calling `getParseTreeNode`.
@@ -9954,7 +9956,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                     const parent = getDeclarationContainer(node);
                     // If the node is not exported or it is not ambient module element (except import declaration)
-                    if (!(getCombinedModifierFlags(node as Declaration) & ModifierFlags.Export) &&
+                    if (!(getCombinedModifierFlagsCached(node as Declaration) & ModifierFlags.Export) &&
                         !(node.kind !== SyntaxKind.ImportEqualsDeclaration && parent.kind !== SyntaxKind.SourceFile && parent.flags & NodeFlags.Ambient)) {
                         return isGlobalSourceFile(parent);
                     }
@@ -10468,7 +10470,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         if ((noImplicitAny || isInJSFile(declaration)) &&
             isVariableDeclaration(declaration) && !isBindingPattern(declaration.name) &&
-            !(getCombinedModifierFlags(declaration) & ModifierFlags.Export) && !(declaration.flags & NodeFlags.Ambient)) {
+            !(getCombinedModifierFlagsCached(declaration) & ModifierFlags.Export) && !(declaration.flags & NodeFlags.Ambient)) {
             // If --noImplicitAny is on or the declaration is in a Javascript file,
             // use control flow tracked 'any' type for non-ambient, non-exported var or let variables with no
             // initializer or a 'null' or 'undefined' initializer.
@@ -31716,7 +31718,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             && !isOptionalPropertyDeclaration(valueDeclaration)
             && !(isAccessExpression(node) && isAccessExpression(node.expression))
             && !isBlockScopedNameDeclaredBeforeUse(valueDeclaration, right)
-            && !(isMethodDeclaration(valueDeclaration) && getCombinedModifierFlags(valueDeclaration) & ModifierFlags.Static)
+            && !(isMethodDeclaration(valueDeclaration) && getCombinedModifierFlagsCached(valueDeclaration) & ModifierFlags.Static)
             && (compilerOptions.useDefineForClassFields || !isPropertyDeclaredInAncestorClass(prop))) {
             diagnosticMessage = error(right, Diagnostics.Property_0_is_used_before_its_initialization, declarationName);
         }
@@ -39042,7 +39044,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getEffectiveDeclarationFlags(n: Declaration, flagsToCheck: ModifierFlags): ModifierFlags {
-        let flags = getCombinedModifierFlags(n);
+        let flags = getCombinedModifierFlagsCached(n);
 
         // children of classes (even ambient classes) should not be marked as ambient or export
         // because those flags have no useful semantics there.
@@ -49059,6 +49061,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const name = getPropertyNameForPropertyNameNode(node);
         return name ? name :
             isComputedPropertyName(node) && isEntityNameExpression(node.expression) ? tryGetNameFromEntityNameExpression(node.expression) : undefined;
+    }
+
+    function getCombinedModifierFlagsCached(node: Declaration) {
+        // we hold onto the last node and result to speed up repeated lookups against the same node.
+        if (lastGetCombinedModifierFlagsNode === node) {
+            return lastGetCombinedModifierFlagsResult;
+        }
+
+        lastGetCombinedModifierFlagsNode = node;
+        lastGetCombinedModifierFlagsResult = getCombinedModifierFlags(node);
+        return lastGetCombinedModifierFlagsResult;
     }
 
     function getCombinedNodeFlagsCached(node: Node) {
