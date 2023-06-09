@@ -21,7 +21,7 @@ dissallowSymbolAsWeakType.ts(8,12): error TS2769: No overload matches this call.
               Type '[symbol, false]' is not assignable to type 'readonly [object, boolean]'.
                 Type at position 0 in source is not compatible with type at position 0 in target.
                   Type 'symbol' is not assignable to type 'object'.
-  Overload 2 of 2, '(entries?: readonly [object, boolean][]): WeakMap<object, boolean>', gave the following error.
+  Overload 2 of 2, '(entries?: readonly (readonly [object, boolean])[]): WeakMap<object, boolean>', gave the following error.
     Type 'symbol' is not assignable to type 'object'.
 dissallowSymbolAsWeakType.ts(9,8): error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'object'.
 dissallowSymbolAsWeakType.ts(10,8): error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'object'.
@@ -69,7 +69,7 @@ dissallowSymbolAsWeakType.ts(19,14): error TS2345: Argument of type 'symbol' is 
 !!! error TS2769:               Type '[symbol, false]' is not assignable to type 'readonly [object, boolean]'.
 !!! error TS2769:                 Type at position 0 in source is not compatible with type at position 0 in target.
 !!! error TS2769:                   Type 'symbol' is not assignable to type 'object'.
-!!! error TS2769:   Overload 2 of 2, '(entries?: readonly [object, boolean][]): WeakMap<object, boolean>', gave the following error.
+!!! error TS2769:   Overload 2 of 2, '(entries?: readonly (readonly [object, boolean])[]): WeakMap<object, boolean>', gave the following error.
 !!! error TS2769:     Type 'symbol' is not assignable to type 'object'.
     wm.set(s, true);
            ~
