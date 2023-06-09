@@ -268,6 +268,7 @@ export const enum SyntaxKind {
     NamedTupleMember,
     TemplateLiteralType,
     TemplateLiteralTypeSpan,
+    OmittedType,
     ImportType,
     // Binding patterns
     ObjectBindingPattern,
@@ -741,6 +742,7 @@ export type TypeNodeSyntaxKind =
     | SyntaxKind.JSDocNamepathType
     | SyntaxKind.JSDocSignature
     | SyntaxKind.JSDocTypeLiteral
+    | SyntaxKind.OmittedType
     ;
 
 export type TokenSyntaxKind =
@@ -2368,6 +2370,10 @@ export interface Expression extends Node {
 
 export interface OmittedExpression extends Expression {
     readonly kind: SyntaxKind.OmittedExpression;
+}
+
+export interface OmittedType extends TypeNode {
+    readonly kind: SyntaxKind.OmittedType;
 }
 
 // Represents an expression that is elided as part of a transformation to emit comments on a
@@ -8528,6 +8534,7 @@ export interface NodeFactory {
     createClassExpression(modifiers: readonly ModifierLike[] | undefined, name: string | Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassExpression;
     updateClassExpression(node: ClassExpression, modifiers: readonly ModifierLike[] | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassExpression;
     createOmittedExpression(): OmittedExpression;
+    createOmittedType(): OmittedType;
     createExpressionWithTypeArguments(expression: Expression, typeArguments: readonly TypeNode[] | undefined): ExpressionWithTypeArguments;
     updateExpressionWithTypeArguments(node: ExpressionWithTypeArguments, expression: Expression, typeArguments: readonly TypeNode[] | undefined): ExpressionWithTypeArguments;
     createAsExpression(expression: Expression, type: TypeNode): AsExpression;

@@ -1,0 +1,109 @@
+=== tests/cases/conformance/types/typeParameters/inferPartialTypeArgumentsErrors1.tsx ===
+declare function testConstraints1<A extends B, B extends string>(arg?: { a?: A[], b?: B[] }): { a: A[], b: B[] }
+>testConstraints1 : <A extends B, B extends string>(arg?: {    a?: A[];    b?: B[];}) => {    a: A[];    b: B[];}
+>arg : { a?: A[]; b?: B[]; }
+>a : A[]
+>b : B[]
+>a : A[]
+>b : B[]
+
+const expectError1 = testConstraints1<, "z"> ({ a: ["x", "y"] });
+>expectError1 : { a: ?[]; b: "z"[]; }
+>testConstraints1<, "z"> ({ a: ["x", "y"] }) : { a: ?[]; b: "z"[]; }
+>testConstraints1 : <A extends B, B extends string>(arg?: { a?: A[]; b?: B[]; }) => { a: A[]; b: B[]; }
+>{ a: ["x", "y"] } : { a: string[]; }
+>a : string[]
+>["x", "y"] : string[]
+>"x" : "x"
+>"y" : "y"
+
+declare function testConstraints2<A extends string, B extends A>(arg?: { a?: A[], b?: B[] }): { a: A[], b: B[] }
+>testConstraints2 : <A extends string, B extends A>(arg?: {    a?: A[];    b?: B[];}) => {    a: A[];    b: B[];}
+>arg : { a?: A[]; b?: B[]; }
+>a : A[]
+>b : B[]
+>a : A[]
+>b : B[]
+
+const expectAllowed1 = testConstraints2<, "x"> ({ a: ["x", "y"] }); // OK { a: string[], b: "x"[] }
+>expectAllowed1 : { a: ("x" | "y")[]; b: "x"[]; }
+>testConstraints2<, "x"> ({ a: ["x", "y"] }) : { a: ("x" | "y")[]; b: "x"[]; }
+>testConstraints2 : <A extends string, B extends A>(arg?: { a?: A[]; b?: B[]; }) => { a: A[]; b: B[]; }
+>{ a: ["x", "y"] } : { a: ("x" | "y")[]; }
+>a : ("x" | "y")[]
+>["x", "y"] : ("x" | "y")[]
+>"x" : "x"
+>"y" : "y"
+
+const expectAllowed2 = testConstraints2<"x" | "y", > ({ b: ["x"] }); // OK { a: ("x" | "y")[], b: ("x" | "y")[] }
+>expectAllowed2 : { a: ("x" | "y")[]; b: "x"[]; }
+>testConstraints2<"x" | "y", > ({ b: ["x"] }) : { a: ("x" | "y")[]; b: "x"[]; }
+>testConstraints2 : <A extends string, B extends A>(arg?: { a?: A[]; b?: B[]; }) => { a: A[]; b: B[]; }
+>{ b: ["x"] } : { b: "x"[]; }
+>b : "x"[]
+>["x"] : "x"[]
+>"x" : "x"
+
+const expectError2 = testConstraints2<, "z"> ({ a: ["x", "y"] }); // error - `A` infers as `"x" | "y"` which `"z"` does not satisfy
+>expectError2 : { a: ?[]; b: "z"[]; }
+>testConstraints2<, "z"> ({ a: ["x", "y"] }) : { a: ?[]; b: "z"[]; }
+>testConstraints2 : <A extends string, B extends A>(arg?: { a?: A[]; b?: B[]; }) => { a: A[]; b: B[]; }
+>{ a: ["x", "y"] } : { a: string[]; }
+>a : string[]
+>["x", "y"] : string[]
+>"x" : "x"
+>"y" : "y"
+
+const expectError3 = testConstraints2<"x" | "y", > ({ b: ["x", "y", "z"] }); // error "z" not in "x" | "y"
+>expectError3 : { a: ("x" | "y")[]; b: A[]; }
+>testConstraints2<"x" | "y", > ({ b: ["x", "y", "z"] }) : { a: ("x" | "y")[]; b: A[]; }
+>testConstraints2 : <A extends string, B extends A>(arg?: { a?: A[]; b?: B[]; }) => { a: A[]; b: B[]; }
+>{ b: ["x", "y", "z"] } : { b: ("z" | "x" | "y")[]; }
+>b : ("z" | "x" | "y")[]
+>["x", "y", "z"] : ("z" | "x" | "y")[]
+>"x" : "x"
+>"y" : "y"
+>"z" : "z"
+
+declare function complexConstraints<A extends string, B extends A, C extends B>(arg: { a?: A[], b?: B[], c?: C[] }): { a: A[], b: B[], c: C[] };
+>complexConstraints : <A extends string, B extends A, C extends B>(arg: {    a?: A[];    b?: B[];    c?: C[];}) => {    a: A[];    b: B[];    c: C[];}
+>arg : { a?: A[]; b?: B[]; c?: C[]; }
+>a : A[]
+>b : B[]
+>c : C[]
+>a : A[]
+>b : B[]
+>c : C[]
+
+const expectAllowed4 = complexConstraints<"x" | "y" | "z", , > ({ a: ["x"], c: ["x", "y"] }); // OK { a: ("x" | "y" | "z")[], b: ("x" | "y" | "z")[], c: ("x" | "y")[] }
+>expectAllowed4 : { a: ("z" | "x" | "y")[]; b: ("z" | "x" | "y")[]; c: ("x" | "y")[]; }
+>complexConstraints<"x" | "y" | "z", , > ({ a: ["x"], c: ["x", "y"] }) : { a: ("z" | "x" | "y")[]; b: ("z" | "x" | "y")[]; c: ("x" | "y")[]; }
+>complexConstraints : <A extends string, B extends A, C extends B>(arg: { a?: A[]; b?: B[]; c?: C[]; }) => { a: A[]; b: B[]; c: C[]; }
+>{ a: ["x"], c: ["x", "y"] } : { a: "x"[]; c: ("x" | "y")[]; }
+>a : "x"[]
+>["x"] : "x"[]
+>"x" : "x"
+>c : ("x" | "y")[]
+>["x", "y"] : ("x" | "y")[]
+>"x" : "x"
+>"y" : "y"
+
+// Fails because B inferred to be "x" but that conflicts with C as "x" | "y"
+const expectError4 = complexConstraints<"x" | "y" | "z", , "x" | "y">({b: ["x"]});
+>expectError4 : { a: ("z" | "x" | "y")[]; b: ?[]; c: ("x" | "y")[]; }
+>complexConstraints<"x" | "y" | "z", , "x" | "y">({b: ["x"]}) : { a: ("z" | "x" | "y")[]; b: ?[]; c: ("x" | "y")[]; }
+>complexConstraints : <A extends string, B extends A, C extends B>(arg: { a?: A[]; b?: B[]; c?: C[]; }) => { a: A[]; b: B[]; c: C[]; }
+>{b: ["x"]} : { b: string[]; }
+>b : string[]
+>["x"] : string[]
+>"x" : "x"
+
+const expectError5 = complexConstraints<"x", , >({c: ["y"]}); // error "y" does not extend "x"
+>expectError5 : { a: "x"[]; b: ?[]; c: B[]; }
+>complexConstraints<"x", , >({c: ["y"]}) : { a: "x"[]; b: ?[]; c: B[]; }
+>complexConstraints : <A extends string, B extends A, C extends B>(arg: { a?: A[]; b?: B[]; c?: C[]; }) => { a: A[]; b: B[]; c: C[]; }
+>{c: ["y"]} : { c: "y"[]; }
+>c : "y"[]
+>["y"] : "y"[]
+>"y" : "y"
+

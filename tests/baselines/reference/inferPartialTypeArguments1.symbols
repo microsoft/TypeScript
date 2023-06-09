@@ -1,0 +1,266 @@
+=== tests/cases/conformance/types/typeParameters/inferPartialTypeArguments1.tsx ===
+declare module JSX {
+>JSX : Symbol(JSX, Decl(inferPartialTypeArguments1.tsx, 0, 0))
+
+    interface Element {}
+>Element : Symbol(Element, Decl(inferPartialTypeArguments1.tsx, 0, 20))
+}
+declare namespace React {
+>React : Symbol(React, Decl(inferPartialTypeArguments1.tsx, 2, 1))
+
+    export function createElement(x: any, p: any, ...children: any[]): JSX.Element;
+>createElement : Symbol(createElement, Decl(inferPartialTypeArguments1.tsx, 3, 25))
+>x : Symbol(x, Decl(inferPartialTypeArguments1.tsx, 4, 34))
+>p : Symbol(p, Decl(inferPartialTypeArguments1.tsx, 4, 41))
+>children : Symbol(children, Decl(inferPartialTypeArguments1.tsx, 4, 49))
+>JSX : Symbol(JSX, Decl(inferPartialTypeArguments1.tsx, 0, 0))
+>Element : Symbol(JSX.Element, Decl(inferPartialTypeArguments1.tsx, 0, 20))
+}
+ class Foo<T, U> {
+>Foo : Symbol(Foo, Decl(inferPartialTypeArguments1.tsx, 5, 1))
+>T : Symbol(T, Decl(inferPartialTypeArguments1.tsx, 6, 11))
+>U : Symbol(U, Decl(inferPartialTypeArguments1.tsx, 6, 13))
+
+    constructor(public prop1: T, public prop2: U) {}
+>prop1 : Symbol(Foo.prop1, Decl(inferPartialTypeArguments1.tsx, 7, 16))
+>T : Symbol(T, Decl(inferPartialTypeArguments1.tsx, 6, 11))
+>prop2 : Symbol(Foo.prop2, Decl(inferPartialTypeArguments1.tsx, 7, 32))
+>U : Symbol(U, Decl(inferPartialTypeArguments1.tsx, 6, 13))
+}
+ function foo<T, U>(x: T, y: U): [T, U] { return [x, y]; }
+>foo : Symbol(foo, Decl(inferPartialTypeArguments1.tsx, 8, 1))
+>T : Symbol(T, Decl(inferPartialTypeArguments1.tsx, 9, 14))
+>U : Symbol(U, Decl(inferPartialTypeArguments1.tsx, 9, 16))
+>x : Symbol(x, Decl(inferPartialTypeArguments1.tsx, 9, 20))
+>T : Symbol(T, Decl(inferPartialTypeArguments1.tsx, 9, 14))
+>y : Symbol(y, Decl(inferPartialTypeArguments1.tsx, 9, 25))
+>U : Symbol(U, Decl(inferPartialTypeArguments1.tsx, 9, 16))
+>T : Symbol(T, Decl(inferPartialTypeArguments1.tsx, 9, 14))
+>U : Symbol(U, Decl(inferPartialTypeArguments1.tsx, 9, 16))
+>x : Symbol(x, Decl(inferPartialTypeArguments1.tsx, 9, 20))
+>y : Symbol(y, Decl(inferPartialTypeArguments1.tsx, 9, 25))
+
+ function tag<T, U>(x: TemplateStringsArray, ...args: (T | U)[]) { return args; }
+>tag : Symbol(tag, Decl(inferPartialTypeArguments1.tsx, 9, 58))
+>T : Symbol(T, Decl(inferPartialTypeArguments1.tsx, 10, 14))
+>U : Symbol(U, Decl(inferPartialTypeArguments1.tsx, 10, 16))
+>x : Symbol(x, Decl(inferPartialTypeArguments1.tsx, 10, 20))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>args : Symbol(args, Decl(inferPartialTypeArguments1.tsx, 10, 44))
+>T : Symbol(T, Decl(inferPartialTypeArguments1.tsx, 10, 14))
+>U : Symbol(U, Decl(inferPartialTypeArguments1.tsx, 10, 16))
+>args : Symbol(args, Decl(inferPartialTypeArguments1.tsx, 10, 44))
+
+ interface ComponentProps<T, U> {
+>ComponentProps : Symbol(ComponentProps, Decl(inferPartialTypeArguments1.tsx, 10, 81))
+>T : Symbol(T, Decl(inferPartialTypeArguments1.tsx, 11, 26))
+>U : Symbol(U, Decl(inferPartialTypeArguments1.tsx, 11, 28))
+
+    x: T;
+>x : Symbol(ComponentProps.x, Decl(inferPartialTypeArguments1.tsx, 11, 33))
+>T : Symbol(T, Decl(inferPartialTypeArguments1.tsx, 11, 26))
+
+    y: U;
+>y : Symbol(ComponentProps.y, Decl(inferPartialTypeArguments1.tsx, 12, 9))
+>U : Symbol(U, Decl(inferPartialTypeArguments1.tsx, 11, 28))
+
+    cb(props: this): void;
+>cb : Symbol(ComponentProps.cb, Decl(inferPartialTypeArguments1.tsx, 13, 9))
+>props : Symbol(props, Decl(inferPartialTypeArguments1.tsx, 14, 7))
+}
+ function Component<T, U>(x: ComponentProps<T, U>) {
+>Component : Symbol(Component, Decl(inferPartialTypeArguments1.tsx, 15, 1))
+>T : Symbol(T, Decl(inferPartialTypeArguments1.tsx, 16, 20))
+>U : Symbol(U, Decl(inferPartialTypeArguments1.tsx, 16, 22))
+>x : Symbol(x, Decl(inferPartialTypeArguments1.tsx, 16, 26))
+>ComponentProps : Symbol(ComponentProps, Decl(inferPartialTypeArguments1.tsx, 10, 81))
+>T : Symbol(T, Decl(inferPartialTypeArguments1.tsx, 16, 20))
+>U : Symbol(U, Decl(inferPartialTypeArguments1.tsx, 16, 22))
+
+    return <h></h>;
+}
+
+const instance1 = new Foo<number,>(0, "");
+>instance1 : Symbol(instance1, Decl(inferPartialTypeArguments1.tsx, 20, 5))
+>Foo : Symbol(Foo, Decl(inferPartialTypeArguments1.tsx, 5, 1))
+
+const result1 = foo<number,>(0, "");
+>result1 : Symbol(result1, Decl(inferPartialTypeArguments1.tsx, 21, 5))
+>foo : Symbol(foo, Decl(inferPartialTypeArguments1.tsx, 8, 1))
+
+// const tagged1 = tag<number, _>`tags ${12} ${""}`; // Because of how union inference works, this won't actually work
+const jsx1 = <Component<number,> x={12} y="" cb={props => void (props.x.toFixed() + props.y.toUpperCase())} />;
+>jsx1 : Symbol(jsx1, Decl(inferPartialTypeArguments1.tsx, 23, 5))
+>Component : Symbol(Component, Decl(inferPartialTypeArguments1.tsx, 15, 1))
+>x : Symbol(x, Decl(inferPartialTypeArguments1.tsx, 23, 32))
+>y : Symbol(y, Decl(inferPartialTypeArguments1.tsx, 23, 39))
+>cb : Symbol(cb, Decl(inferPartialTypeArguments1.tsx, 23, 44))
+>props : Symbol(props, Decl(inferPartialTypeArguments1.tsx, 23, 49))
+>props.x.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>props.x : Symbol(ComponentProps.x, Decl(inferPartialTypeArguments1.tsx, 11, 33))
+>props : Symbol(props, Decl(inferPartialTypeArguments1.tsx, 23, 49))
+>x : Symbol(ComponentProps.x, Decl(inferPartialTypeArguments1.tsx, 11, 33))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>props.y.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>props.y : Symbol(ComponentProps.y, Decl(inferPartialTypeArguments1.tsx, 12, 9))
+>props : Symbol(props, Decl(inferPartialTypeArguments1.tsx, 23, 49))
+>y : Symbol(ComponentProps.y, Decl(inferPartialTypeArguments1.tsx, 12, 9))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+
+const instance2 = new Foo<, string>(0, "");
+>instance2 : Symbol(instance2, Decl(inferPartialTypeArguments1.tsx, 25, 5))
+>Foo : Symbol(Foo, Decl(inferPartialTypeArguments1.tsx, 5, 1))
+
+const result2 = foo<, string>(0, "");
+>result2 : Symbol(result2, Decl(inferPartialTypeArguments1.tsx, 26, 5))
+>foo : Symbol(foo, Decl(inferPartialTypeArguments1.tsx, 8, 1))
+
+const tagged2 = tag<, string>`tags ${12} ${""}`; // this will, though! Just because the `*` comes first!
+>tagged2 : Symbol(tagged2, Decl(inferPartialTypeArguments1.tsx, 27, 5))
+>tag : Symbol(tag, Decl(inferPartialTypeArguments1.tsx, 9, 58))
+
+const jsx2 = <Component<, string> x={12} y="" cb={props => void (props.x.toFixed() + props.y.toUpperCase())} />;
+>jsx2 : Symbol(jsx2, Decl(inferPartialTypeArguments1.tsx, 28, 5))
+>Component : Symbol(Component, Decl(inferPartialTypeArguments1.tsx, 15, 1))
+>x : Symbol(x, Decl(inferPartialTypeArguments1.tsx, 28, 33))
+>y : Symbol(y, Decl(inferPartialTypeArguments1.tsx, 28, 40))
+>cb : Symbol(cb, Decl(inferPartialTypeArguments1.tsx, 28, 45))
+>props : Symbol(props, Decl(inferPartialTypeArguments1.tsx, 28, 50))
+>props.x.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>props.x : Symbol(ComponentProps.x, Decl(inferPartialTypeArguments1.tsx, 11, 33))
+>props : Symbol(props, Decl(inferPartialTypeArguments1.tsx, 28, 50))
+>x : Symbol(ComponentProps.x, Decl(inferPartialTypeArguments1.tsx, 11, 33))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>props.y.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>props.y : Symbol(ComponentProps.y, Decl(inferPartialTypeArguments1.tsx, 12, 9))
+>props : Symbol(props, Decl(inferPartialTypeArguments1.tsx, 28, 50))
+>y : Symbol(ComponentProps.y, Decl(inferPartialTypeArguments1.tsx, 12, 9))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+
+const instance3 = new Foo<,>(0, "");
+>instance3 : Symbol(instance3, Decl(inferPartialTypeArguments1.tsx, 30, 5))
+>Foo : Symbol(Foo, Decl(inferPartialTypeArguments1.tsx, 5, 1))
+
+const result3 = foo<,>(0, "");
+>result3 : Symbol(result3, Decl(inferPartialTypeArguments1.tsx, 31, 5))
+>foo : Symbol(foo, Decl(inferPartialTypeArguments1.tsx, 8, 1))
+
+const tagged3 = tag<,>`tags ${12} ${""}`;
+>tagged3 : Symbol(tagged3, Decl(inferPartialTypeArguments1.tsx, 32, 5))
+>tag : Symbol(tag, Decl(inferPartialTypeArguments1.tsx, 9, 58))
+
+const jsx3 = <Component<,> x={12} y="" cb={props => void (props.x.toFixed() + props.y.toUpperCase())} />;
+>jsx3 : Symbol(jsx3, Decl(inferPartialTypeArguments1.tsx, 33, 5))
+>Component : Symbol(Component, Decl(inferPartialTypeArguments1.tsx, 15, 1))
+>x : Symbol(x, Decl(inferPartialTypeArguments1.tsx, 33, 26))
+>y : Symbol(y, Decl(inferPartialTypeArguments1.tsx, 33, 33))
+>cb : Symbol(cb, Decl(inferPartialTypeArguments1.tsx, 33, 38))
+>props : Symbol(props, Decl(inferPartialTypeArguments1.tsx, 33, 43))
+>props.x.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>props.x : Symbol(ComponentProps.x, Decl(inferPartialTypeArguments1.tsx, 11, 33))
+>props : Symbol(props, Decl(inferPartialTypeArguments1.tsx, 33, 43))
+>x : Symbol(ComponentProps.x, Decl(inferPartialTypeArguments1.tsx, 11, 33))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>props.y.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>props.y : Symbol(ComponentProps.y, Decl(inferPartialTypeArguments1.tsx, 12, 9))
+>props : Symbol(props, Decl(inferPartialTypeArguments1.tsx, 33, 43))
+>y : Symbol(ComponentProps.y, Decl(inferPartialTypeArguments1.tsx, 12, 9))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+
+// with trailing comma
+const instance4 = new Foo<,,>(0, "");
+>instance4 : Symbol(instance4, Decl(inferPartialTypeArguments1.tsx, 36, 5))
+>Foo : Symbol(Foo, Decl(inferPartialTypeArguments1.tsx, 5, 1))
+
+const result4 = foo<,,>(0, "");
+>result4 : Symbol(result4, Decl(inferPartialTypeArguments1.tsx, 37, 5))
+>foo : Symbol(foo, Decl(inferPartialTypeArguments1.tsx, 8, 1))
+
+const tagged4 = tag<,,>`tags ${12} ${""}`;
+>tagged4 : Symbol(tagged4, Decl(inferPartialTypeArguments1.tsx, 38, 5))
+>tag : Symbol(tag, Decl(inferPartialTypeArguments1.tsx, 9, 58))
+
+const jsx4 = <Component<,,> x={12} y="" cb={props => void (props.x.toFixed() + props.y.toUpperCase())} />;
+>jsx4 : Symbol(jsx4, Decl(inferPartialTypeArguments1.tsx, 39, 5))
+>Component : Symbol(Component, Decl(inferPartialTypeArguments1.tsx, 15, 1))
+>x : Symbol(x, Decl(inferPartialTypeArguments1.tsx, 39, 27))
+>y : Symbol(y, Decl(inferPartialTypeArguments1.tsx, 39, 34))
+>cb : Symbol(cb, Decl(inferPartialTypeArguments1.tsx, 39, 39))
+>props : Symbol(props, Decl(inferPartialTypeArguments1.tsx, 39, 44))
+>props.x.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>props.x : Symbol(ComponentProps.x, Decl(inferPartialTypeArguments1.tsx, 11, 33))
+>props : Symbol(props, Decl(inferPartialTypeArguments1.tsx, 39, 44))
+>x : Symbol(ComponentProps.x, Decl(inferPartialTypeArguments1.tsx, 11, 33))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>props.y.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>props.y : Symbol(ComponentProps.y, Decl(inferPartialTypeArguments1.tsx, 12, 9))
+>props : Symbol(props, Decl(inferPartialTypeArguments1.tsx, 39, 44))
+>y : Symbol(ComponentProps.y, Decl(inferPartialTypeArguments1.tsx, 12, 9))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+
+declare function stillDefaultsIfNoInference<X, A = string, B = number, C = boolean>(arg: { a?: A, b?: B, c?: C, x?: X}): { a: A, b: B, c: C, x: X };
+>stillDefaultsIfNoInference : Symbol(stillDefaultsIfNoInference, Decl(inferPartialTypeArguments1.tsx, 39, 106))
+>X : Symbol(X, Decl(inferPartialTypeArguments1.tsx, 41, 44))
+>A : Symbol(A, Decl(inferPartialTypeArguments1.tsx, 41, 46))
+>B : Symbol(B, Decl(inferPartialTypeArguments1.tsx, 41, 58))
+>C : Symbol(C, Decl(inferPartialTypeArguments1.tsx, 41, 70))
+>arg : Symbol(arg, Decl(inferPartialTypeArguments1.tsx, 41, 84))
+>a : Symbol(a, Decl(inferPartialTypeArguments1.tsx, 41, 90))
+>A : Symbol(A, Decl(inferPartialTypeArguments1.tsx, 41, 46))
+>b : Symbol(b, Decl(inferPartialTypeArguments1.tsx, 41, 97))
+>B : Symbol(B, Decl(inferPartialTypeArguments1.tsx, 41, 58))
+>c : Symbol(c, Decl(inferPartialTypeArguments1.tsx, 41, 104))
+>C : Symbol(C, Decl(inferPartialTypeArguments1.tsx, 41, 70))
+>x : Symbol(x, Decl(inferPartialTypeArguments1.tsx, 41, 111))
+>X : Symbol(X, Decl(inferPartialTypeArguments1.tsx, 41, 44))
+>a : Symbol(a, Decl(inferPartialTypeArguments1.tsx, 41, 122))
+>A : Symbol(A, Decl(inferPartialTypeArguments1.tsx, 41, 46))
+>b : Symbol(b, Decl(inferPartialTypeArguments1.tsx, 41, 128))
+>B : Symbol(B, Decl(inferPartialTypeArguments1.tsx, 41, 58))
+>c : Symbol(c, Decl(inferPartialTypeArguments1.tsx, 41, 134))
+>C : Symbol(C, Decl(inferPartialTypeArguments1.tsx, 41, 70))
+>x : Symbol(x, Decl(inferPartialTypeArguments1.tsx, 41, 140))
+>X : Symbol(X, Decl(inferPartialTypeArguments1.tsx, 41, 44))
+
+const result5 = stillDefaultsIfNoInference<, , , object> ({ b: "test" }); // expect result1 type is {a: string, b: string, c: object, x: {}
+>result5 : Symbol(result5, Decl(inferPartialTypeArguments1.tsx, 42, 5))
+>stillDefaultsIfNoInference : Symbol(stillDefaultsIfNoInference, Decl(inferPartialTypeArguments1.tsx, 39, 106))
+>b : Symbol(b, Decl(inferPartialTypeArguments1.tsx, 42, 59))
+
+class Foo2<A extends {x: string} = {x: string, y: number}, B = number> {
+>Foo2 : Symbol(Foo2, Decl(inferPartialTypeArguments1.tsx, 42, 73))
+>A : Symbol(A, Decl(inferPartialTypeArguments1.tsx, 44, 11))
+>x : Symbol(x, Decl(inferPartialTypeArguments1.tsx, 44, 22))
+>x : Symbol(x, Decl(inferPartialTypeArguments1.tsx, 44, 36))
+>y : Symbol(y, Decl(inferPartialTypeArguments1.tsx, 44, 46))
+>B : Symbol(B, Decl(inferPartialTypeArguments1.tsx, 44, 58))
+
+    constructor(public a?: A, public b?: B) {}
+>a : Symbol(Foo2.a, Decl(inferPartialTypeArguments1.tsx, 45, 16))
+>A : Symbol(A, Decl(inferPartialTypeArguments1.tsx, 44, 11))
+>b : Symbol(Foo2.b, Decl(inferPartialTypeArguments1.tsx, 45, 29))
+>B : Symbol(B, Decl(inferPartialTypeArguments1.tsx, 44, 58))
+}
+const x = new Foo2<, string>();
+>x : Symbol(x, Decl(inferPartialTypeArguments1.tsx, 47, 5))
+>Foo2 : Symbol(Foo2, Decl(inferPartialTypeArguments1.tsx, 42, 73))
+
+x.a.x;
+>x.a.x : Symbol(x, Decl(inferPartialTypeArguments1.tsx, 44, 36))
+>x.a : Symbol(Foo2.a, Decl(inferPartialTypeArguments1.tsx, 45, 16))
+>x : Symbol(x, Decl(inferPartialTypeArguments1.tsx, 47, 5))
+>a : Symbol(Foo2.a, Decl(inferPartialTypeArguments1.tsx, 45, 16))
+>x : Symbol(x, Decl(inferPartialTypeArguments1.tsx, 44, 36))
+
+x.a.y;
+>x.a.y : Symbol(y, Decl(inferPartialTypeArguments1.tsx, 44, 46))
+>x.a : Symbol(Foo2.a, Decl(inferPartialTypeArguments1.tsx, 45, 16))
+>x : Symbol(x, Decl(inferPartialTypeArguments1.tsx, 47, 5))
+>a : Symbol(Foo2.a, Decl(inferPartialTypeArguments1.tsx, 45, 16))
+>y : Symbol(y, Decl(inferPartialTypeArguments1.tsx, 44, 46))
+
+x.b;
+>x.b : Symbol(Foo2.b, Decl(inferPartialTypeArguments1.tsx, 45, 29))
+>x : Symbol(x, Decl(inferPartialTypeArguments1.tsx, 47, 5))
+>b : Symbol(Foo2.b, Decl(inferPartialTypeArguments1.tsx, 45, 29))
+

@@ -345,6 +345,7 @@ import {
     ObjectLiteralElementLike,
     ObjectLiteralExpression,
     OmittedExpression,
+    OmittedType,
     OptionalTypeNode,
     OuterExpression,
     OuterExpressionKinds,
@@ -699,6 +700,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         createClassExpression,
         updateClassExpression,
         createOmittedExpression,
+        createOmittedType,
         createExpressionWithTypeArguments,
         updateExpressionWithTypeArguments,
         createAsExpression,
@@ -3566,6 +3568,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createOmittedExpression() {
         return createBaseNode<OmittedExpression>(SyntaxKind.OmittedExpression);
+    }
+
+    // @api
+    function createOmittedType() {
+        return createBaseNode<OmittedType>(SyntaxKind.OmittedType);
     }
 
     // @api

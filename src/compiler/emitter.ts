@@ -1938,6 +1938,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                     return emitTemplateType(node as TemplateLiteralTypeNode);
                 case SyntaxKind.TemplateLiteralTypeSpan:
                     return emitTemplateTypeSpan(node as TemplateLiteralTypeSpan);
+                case SyntaxKind.OmittedType:
+                    return;
                 case SyntaxKind.ImportType:
                     return emitImportTypeNode(node as ImportTypeNode);
 
