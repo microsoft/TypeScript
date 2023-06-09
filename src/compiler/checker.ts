@@ -1472,6 +1472,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     /** This will be set during calls to `getResolvedSignature` where services determines an apparent number of arguments greater than what is actually provided. */
     var apparentArgumentCount: number | undefined;
 
+    var lastGetCombinedNodeFlagsNode: Node | undefined;
+    var lastGetCombinedNodeFlagsResult = NodeFlags.None;
+
     // for public members that accept a Node or one of its subtypes, we must guard against
     // synthetic nodes created during transformations by calling `getParseTreeNode`.
     // for most of these, we perform the guard only on `checker` to avoid any possible
@@ -2389,7 +2392,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isDeprecatedDeclaration(declaration: Declaration) {
-        return !!(getCombinedNodeFlags(declaration) & NodeFlags.Deprecated);
+        return !!(getCombinedNodeFlagsCached(declaration) & NodeFlags.Deprecated);
     }
 
     function addDeprecatedSuggestion(location: Node, declarations: Node[], deprecatedEntity: string) {
@@ -10469,7 +10472,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // If --noImplicitAny is on or the declaration is in a Javascript file,
             // use control flow tracked 'any' type for non-ambient, non-exported var or let variables with no
             // initializer or a 'null' or 'undefined' initializer.
-            if (!(getCombinedNodeFlags(declaration) & NodeFlags.Constant) && (!declaration.initializer || isNullOrUndefined(declaration.initializer))) {
+            if (!(getCombinedNodeFlagsCached(declaration) & NodeFlags.Constant) && (!declaration.initializer || isNullOrUndefined(declaration.initializer))) {
                 return autoType;
             }
             // Use control flow tracked 'any[]' type for non-ambient, non-exported variables with an empty array
@@ -17311,7 +17314,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (isCallLikeExpression(parent)) {
                 return isCallOrNewExpression(parent) && isIdentifier(node) && hasMatchingArgument(parent, node);
             }
-            return every(symbol.declarations, d => !isFunctionLike(d) || !!(getCombinedNodeFlags(d) & NodeFlags.Deprecated));
+            return every(symbol.declarations, d => !isFunctionLike(d) || !!(getCombinedNodeFlagsCached(d) & NodeFlags.Deprecated));
         }
         return true;
     }
@@ -27841,7 +27844,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // destructuring from the narrowed parent type.
             if (isBindingElement(declaration) && !declaration.initializer && !declaration.dotDotDotToken && declaration.parent.elements.length >= 2) {
                 const parent = declaration.parent.parent;
-                if (parent.kind === SyntaxKind.VariableDeclaration && getCombinedNodeFlags(declaration) & NodeFlags.Constant || parent.kind === SyntaxKind.Parameter) {
+                if (parent.kind === SyntaxKind.VariableDeclaration && getCombinedNodeFlagsCached(declaration) & NodeFlags.Constant || parent.kind === SyntaxKind.Parameter) {
                     const links = getNodeLinks(parent);
                     if (!(links.flags & NodeCheckFlags.InCheckIdentifier)) {
                         links.flags |= NodeCheckFlags.InCheckIdentifier;
@@ -31080,7 +31083,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getDeclarationNodeFlagsFromSymbol(s: Symbol): NodeFlags {
-        return s.valueDeclaration ? getCombinedNodeFlags(s.valueDeclaration) : 0;
+        return s.valueDeclaration ? getCombinedNodeFlagsCached(s.valueDeclaration) : 0;
     }
 
     /**
@@ -31608,7 +31611,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (compilerOptions.noPropertyAccessFromIndexSignature && isPropertyAccessExpression(node)) {
                 error(right, Diagnostics.Property_0_comes_from_an_index_signature_so_it_must_be_accessed_with_0, unescapeLeadingUnderscores(right.escapedText));
             }
-            if (indexInfo.declaration && getCombinedNodeFlags(indexInfo.declaration) & NodeFlags.Deprecated) {
+            if (indexInfo.declaration && getCombinedNodeFlagsCached(indexInfo.declaration) & NodeFlags.Deprecated) {
                 addDeprecatedSuggestion(right, [indexInfo.declaration], right.escapedText as string);
             }
         }
@@ -37544,7 +37547,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function widenTypeInferredFromInitializer(declaration: HasExpressionInitializer, type: Type) {
-        const widened = getCombinedNodeFlags(declaration) & NodeFlags.Constant || isDeclarationReadonly(declaration) ? type : getWidenedLiteralType(type);
+        const widened = getCombinedNodeFlagsCached(declaration) & NodeFlags.Constant || isDeclarationReadonly(declaration) ? type : getWidenedLiteralType(type);
         if (isInJSFile(declaration)) {
             if (isEmptyLiteralType(widened)) {
                 reportImplicitAny(declaration, anyType);
@@ -40950,7 +40953,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         //      }
 
         // skip block-scoped variables and parameters
-        if ((getCombinedNodeFlags(node) & NodeFlags.BlockScoped) !== 0 || isParameterDeclaration(node)) {
+        if ((getCombinedNodeFlagsCached(node) & NodeFlags.BlockScoped) !== 0 || isParameterDeclaration(node)) {
             return;
         }
 
@@ -41128,7 +41131,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!isJSObjectLiteralInitializer && node.parent.parent.kind !== SyntaxKind.ForInStatement) {
                     const initializerType = checkExpressionCached(initializer);
                     checkTypeAssignableToAndOptionallyElaborate(initializerType, type, node, initializer, /*headMessage*/ undefined);
-                    const blockScopeKind = getCombinedNodeFlags(node) & NodeFlags.BlockScoped;
+                    const blockScopeKind = getCombinedNodeFlagsCached(node) & NodeFlags.BlockScoped;
                     if (blockScopeKind === NodeFlags.AwaitUsing) {
                         const globalAsyncDisposableType = getGlobalAsyncDisposableType(/*reportErrors*/ true);
                         const globalDisposableType = getGlobalDisposableType(/*reportErrors*/ true);
@@ -48494,7 +48497,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkGrammarVariableDeclaration(node: VariableDeclaration) {
-        const nodeFlags = getCombinedNodeFlags(node);
+        const nodeFlags = getCombinedNodeFlagsCached(node);
         const blockScopeKind = nodeFlags & NodeFlags.BlockScoped;
         if (isBindingPattern(node.name)) {
             switch (blockScopeKind) {
@@ -48626,7 +48629,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkGrammarForDisallowedBlockScopedVariableStatement(node: VariableStatement) {
         if (!allowLetAndConstDeclarations(node.parent)) {
-            const blockScopeKind = getCombinedNodeFlags(node.declarationList) & NodeFlags.BlockScoped;
+            const blockScopeKind = getCombinedNodeFlagsCached(node.declarationList) & NodeFlags.BlockScoped;
             if (blockScopeKind) {
                 const keyword = blockScopeKind === NodeFlags.Let ? "let" :
                     blockScopeKind === NodeFlags.Const ? "const" :
@@ -49056,6 +49059,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const name = getPropertyNameForPropertyNameNode(node);
         return name ? name :
             isComputedPropertyName(node) && isEntityNameExpression(node.expression) ? tryGetNameFromEntityNameExpression(node.expression) : undefined;
+    }
+
+    function getCombinedNodeFlagsCached(node: Node) {
+        // we hold onto the last node and result to speed up repeated lookups against the same node.
+        if (lastGetCombinedNodeFlagsNode === node) {
+            return lastGetCombinedNodeFlagsResult;
+        }
+        lastGetCombinedNodeFlagsNode = node;
+        lastGetCombinedNodeFlagsResult = getCombinedNodeFlags(node);
+        return lastGetCombinedNodeFlagsResult;
     }
 }
 

@@ -604,19 +604,8 @@ export function getCombinedNodeFlagsAlwaysIncludeJSDoc(node: Declaration): Modif
 // (if it has one).  Similarly, flags for let/const are stored on the variable declaration
 // list.  By calling this function, all those flags are combined so that the client can treat
 // the node as if it actually had those flags.
-//
-// We use a `WeakSet` as a weak reference to the last node we calculated so as to avoid
-// keeping a potentially large subtree in memory.
-let lastCombinedNodeFlagsNodeHolder = new WeakSet<Node>();
-let lastCombinedNodeFlags = NodeFlags.None;
 export function getCombinedNodeFlags(node: Node): NodeFlags {
-    // weakly hold on to only the last `node` we received.
-    if (lastCombinedNodeFlagsNodeHolder.has(node)) {
-        return lastCombinedNodeFlags;
-    }
-    lastCombinedNodeFlags = getCombinedFlags(node, getNodeFlags);
-    lastCombinedNodeFlagsNodeHolder = new WeakSet().add(node);
-    return lastCombinedNodeFlags;
+    return getCombinedFlags(node, getNodeFlags);
 }
 
 function getNodeFlags(node: Node) {
