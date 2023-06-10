@@ -25512,7 +25512,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isDiscriminantProperty(type: Type | undefined, name: __String) {
-    // function isDiscriminantProperty(type: Type | undefined, name: __String, skipPartial: boolean = false) {
         if (type && type.flags & TypeFlags.Union) {
             const prop = getUnionOrIntersectionProperty(type as UnionType, name);
             if (prop && getCheckFlags(prop) & CheckFlags.SyntheticProperty) {
@@ -25523,7 +25522,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         !isGenericType(getTypeOfSymbol(prop));
                 }
                 return !!(prop as TransientSymbol).links.isDiscriminantProperty;
-                // return !!(prop as TransientSymbol).links.isDiscriminantProperty && (!skipPartial || !((prop as TransientSymbol).links.checkFlags & CheckFlags.Partial));
             }
         }
         return false;
