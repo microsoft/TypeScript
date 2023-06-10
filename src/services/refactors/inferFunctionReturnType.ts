@@ -35,7 +35,7 @@ import {
 } from "../_namespaces/ts.refactor";
 
 const refactorName = "Infer function return type";
-const refactorDescription = Diagnostics.Infer_function_return_type.message;
+const refactorDescription = getLocaleSpecificMessage(Diagnostics.Infer_function_return_type);
 
 const inferReturnTypeAction = {
     name: refactorName,

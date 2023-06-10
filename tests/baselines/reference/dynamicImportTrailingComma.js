@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/dynamicImportTrailingComma.ts] ////
+
 //// [dynamicImportTrailingComma.ts]
 const path = './foo';
 import(path,);

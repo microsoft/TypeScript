@@ -1,4 +1,6 @@
-=== tests/cases/conformance/Symbols/ES5SymbolType1.ts ===
+//// [tests/cases/conformance/Symbols/ES5SymbolType1.ts] ////
+
+=== ES5SymbolType1.ts ===
 var s: symbol;
 >s : Symbol(s, Decl(ES5SymbolType1.ts, 0, 3))
 

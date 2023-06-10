@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsFunctionJSDoc.ts] ////
+
 //// [source.js]
 /**
  * Foos a bar together using an `a` and a `b`

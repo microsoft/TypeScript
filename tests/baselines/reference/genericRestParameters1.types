@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/rest/genericRestParameters1.ts ===
+//// [tests/cases/conformance/types/rest/genericRestParameters1.ts] ////
+
+=== genericRestParameters1.ts ===
 declare let f1: (...x: [number, string, boolean]) => void;
 >f1 : (x_0: number, x_1: string, x_2: boolean) => void
 >x : [number, string, boolean]

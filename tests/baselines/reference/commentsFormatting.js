@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentsFormatting.ts] ////
+
 //// [commentsFormatting.ts]
 module m {
     /** this is first line - aligned to class declaration

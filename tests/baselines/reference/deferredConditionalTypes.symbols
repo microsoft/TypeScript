@@ -1,4 +1,6 @@
-=== tests/cases/compiler/deferredConditionalTypes.ts ===
+//// [tests/cases/compiler/deferredConditionalTypes.ts] ////
+
+=== deferredConditionalTypes.ts ===
 type A<T> = { x: T } extends { x: 0 } ? 1 : 0;
 >A : Symbol(A, Decl(deferredConditionalTypes.ts, 0, 0))
 >T : Symbol(T, Decl(deferredConditionalTypes.ts, 0, 7))
@@ -154,4 +156,38 @@ type FilteredValuesMatchNever<O extends object>
 type FilteredRes1 = FilteredValuesMatchNever<[]>
 >FilteredRes1 : Symbol(FilteredRes1, Decl(deferredConditionalTypes.ts, 37, 51))
 >FilteredValuesMatchNever : Symbol(FilteredValuesMatchNever, Decl(deferredConditionalTypes.ts, 34, 1))
+
+// repro from #46761
+
+type Bit = 0 | 1;
+>Bit : Symbol(Bit, Decl(deferredConditionalTypes.ts, 39, 48))
+
+type AndBit<A extends Bit, B extends Bit> = [A, B] extends [1, 1] ? 1 : 0;
+>AndBit : Symbol(AndBit, Decl(deferredConditionalTypes.ts, 43, 17))
+>A : Symbol(A, Decl(deferredConditionalTypes.ts, 45, 12))
+>Bit : Symbol(Bit, Decl(deferredConditionalTypes.ts, 39, 48))
+>B : Symbol(B, Decl(deferredConditionalTypes.ts, 45, 26))
+>Bit : Symbol(Bit, Decl(deferredConditionalTypes.ts, 39, 48))
+>A : Symbol(A, Decl(deferredConditionalTypes.ts, 45, 12))
+>B : Symbol(B, Decl(deferredConditionalTypes.ts, 45, 26))
+
+type TestBit<A extends Bit, B extends Bit> = AndBit<
+>TestBit : Symbol(TestBit, Decl(deferredConditionalTypes.ts, 45, 74))
+>A : Symbol(A, Decl(deferredConditionalTypes.ts, 47, 13))
+>Bit : Symbol(Bit, Decl(deferredConditionalTypes.ts, 39, 48))
+>B : Symbol(B, Decl(deferredConditionalTypes.ts, 47, 27))
+>Bit : Symbol(Bit, Decl(deferredConditionalTypes.ts, 39, 48))
+>AndBit : Symbol(AndBit, Decl(deferredConditionalTypes.ts, 43, 17))
+
+  A extends 1 ? 0 : 1,
+>A : Symbol(A, Decl(deferredConditionalTypes.ts, 47, 13))
+
+  B extends 1 ? 0 : 1
+>B : Symbol(B, Decl(deferredConditionalTypes.ts, 47, 27))
+
+>;
+
+type TestBitRes = TestBit<1, 1>; 
+>TestBitRes : Symbol(TestBitRes, Decl(deferredConditionalTypes.ts, 50, 2))
+>TestBit : Symbol(TestBit, Decl(deferredConditionalTypes.ts, 45, 74))
 

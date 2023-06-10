@@ -1,17 +1,17 @@
-tests/cases/conformance/jsx/file.tsx(15,4): error TS17021: Unicode escape sequence cannot appear here.
-tests/cases/conformance/jsx/file.tsx(16,4): error TS17021: Unicode escape sequence cannot appear here.
-tests/cases/conformance/jsx/file.tsx(17,4): error TS17021: Unicode escape sequence cannot appear here.
-tests/cases/conformance/jsx/file.tsx(18,4): error TS17021: Unicode escape sequence cannot appear here.
-tests/cases/conformance/jsx/file.tsx(19,6): error TS17021: Unicode escape sequence cannot appear here.
-tests/cases/conformance/jsx/file.tsx(20,4): error TS17021: Unicode escape sequence cannot appear here.
-tests/cases/conformance/jsx/file.tsx(21,4): error TS17021: Unicode escape sequence cannot appear here.
-tests/cases/conformance/jsx/file.tsx(22,4): error TS17021: Unicode escape sequence cannot appear here.
-tests/cases/conformance/jsx/file.tsx(23,4): error TS17021: Unicode escape sequence cannot appear here.
-tests/cases/conformance/jsx/file.tsx(26,9): error TS17021: Unicode escape sequence cannot appear here.
-tests/cases/conformance/jsx/file.tsx(27,9): error TS17021: Unicode escape sequence cannot appear here.
+file.tsx(15,4): error TS17021: Unicode escape sequence cannot appear here.
+file.tsx(16,4): error TS17021: Unicode escape sequence cannot appear here.
+file.tsx(17,4): error TS17021: Unicode escape sequence cannot appear here.
+file.tsx(18,4): error TS17021: Unicode escape sequence cannot appear here.
+file.tsx(19,6): error TS17021: Unicode escape sequence cannot appear here.
+file.tsx(20,4): error TS17021: Unicode escape sequence cannot appear here.
+file.tsx(21,4): error TS17021: Unicode escape sequence cannot appear here.
+file.tsx(22,4): error TS17021: Unicode escape sequence cannot appear here.
+file.tsx(23,4): error TS17021: Unicode escape sequence cannot appear here.
+file.tsx(26,9): error TS17021: Unicode escape sequence cannot appear here.
+file.tsx(27,9): error TS17021: Unicode escape sequence cannot appear here.
 
 
-==== tests/cases/conformance/jsx/file.tsx (11 errors) ====
+==== file.tsx (11 errors) ====
     import * as React from "react";
     declare global {
         namespace JSX {

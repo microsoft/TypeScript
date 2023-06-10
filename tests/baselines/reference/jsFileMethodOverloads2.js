@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsFileMethodOverloads2.ts] ////
+
 //// [jsFileMethodOverloads2.js]
 // Also works if all @overload tags are combined in one comment.
 /**
@@ -102,5 +104,5 @@ declare class Example<T> {
     getTypeName(this: Example<number>): 'number';
     getTypeName(this: Example<string>): 'string';
     transform<U>(fn: (y: T) => U): U;
-    transform<U_1>(): T;
+    transform<U>(): T;
 }

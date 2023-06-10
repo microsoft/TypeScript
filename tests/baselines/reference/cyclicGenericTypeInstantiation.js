@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/cyclicGenericTypeInstantiation.ts] ////
+
 //// [cyclicGenericTypeInstantiation.ts]
 function foo<T>() {
     var z = foo<typeof y>();

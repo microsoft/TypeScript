@@ -1,4 +1,6 @@
-=== tests/cases/compiler/selfReferencesInFunctionParameters.ts ===
+//// [tests/cases/compiler/selfReferencesInFunctionParameters.ts] ////
+
+=== selfReferencesInFunctionParameters.ts ===
 function foo(x: number = x) {
 >foo : (x?: number) => void
 >x : number

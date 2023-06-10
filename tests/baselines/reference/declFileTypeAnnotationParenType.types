@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileTypeAnnotationParenType.ts ===
+//// [tests/cases/compiler/declFileTypeAnnotationParenType.ts] ////
+
+=== declFileTypeAnnotationParenType.ts ===
 class c {
 >c : c
 

@@ -1,8 +1,9 @@
-=== tests/cases/compiler/implicitAnyFunctionReturnNullOrUndefined.ts ===
+//// [tests/cases/compiler/implicitAnyFunctionReturnNullOrUndefined.ts] ////
+
+=== implicitAnyFunctionReturnNullOrUndefined.ts ===
 // this should be an error
 function nullWidenFunction() { return null;}             // error at "nullWidenFunction"
 >nullWidenFunction : () => any
->null : null
 
 function undefinedWidenFunction() { return undefined; }  // error at "undefinedWidenFunction"
 >undefinedWidenFunction : () => any
@@ -15,7 +16,6 @@ class C {
 >nullWidenFuncOfC : () => any
 
         return null;
->null : null
     }
 
     underfinedWidenFuncOfC() {  // error at "underfinedWidenFuncOfC"
@@ -29,7 +29,6 @@ class C {
 // this should not be an error
 function foo1(): any { return null; }
 >foo1 : () => any
->null : null
 
 function bar1(): any { return undefined; }
 >bar1 : () => any

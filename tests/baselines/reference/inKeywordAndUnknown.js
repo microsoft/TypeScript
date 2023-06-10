@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inKeywordAndUnknown.ts] ////
+
 //// [inKeywordAndUnknown.ts]
 // Repro from #50531
 

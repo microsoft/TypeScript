@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typedArrays-es5.ts] ////
+
 //// [typedArrays-es5.ts]
 const float32Array = new Float32Array(1);
 [...float32Array];

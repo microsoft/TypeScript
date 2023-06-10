@@ -1,4 +1,6 @@
-=== tests/cases/compiler/arrayFind.ts ===
+//// [tests/cases/compiler/arrayFind.ts] ////
+
+=== arrayFind.ts ===
 // test fix for #18112, type guard predicates should narrow returned element
 function isNumber(x: any): x is number {
 >isNumber : Symbol(isNumber, Decl(arrayFind.ts, 0, 0))
@@ -22,7 +24,7 @@ const foundNumber: number | undefined = arrayOfStringsNumbersAndBooleans.find(is
 const readonlyArrayOfStringsNumbersAndBooleans = arrayOfStringsNumbersAndBooleans as ReadonlyArray<string | number | boolean>;
 >readonlyArrayOfStringsNumbersAndBooleans : Symbol(readonlyArrayOfStringsNumbersAndBooleans, Decl(arrayFind.ts, 8, 5))
 >arrayOfStringsNumbersAndBooleans : Symbol(arrayOfStringsNumbersAndBooleans, Decl(arrayFind.ts, 5, 5))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 const readonlyFoundNumber: number | undefined = readonlyArrayOfStringsNumbersAndBooleans.find(isNumber);
 >readonlyFoundNumber : Symbol(readonlyFoundNumber, Decl(arrayFind.ts, 9, 5))

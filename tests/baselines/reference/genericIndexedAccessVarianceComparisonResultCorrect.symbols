@@ -1,0 +1,85 @@
+//// [tests/cases/compiler/genericIndexedAccessVarianceComparisonResultCorrect.ts] ////
+
+=== genericIndexedAccessVarianceComparisonResultCorrect.ts ===
+class A {
+>A : Symbol(A, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 0, 0))
+
+    x: string = 'A';
+>x : Symbol(A.x, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 0, 9))
+
+    y: number = 0;
+>y : Symbol(A.y, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 1, 20))
+}
+
+class B {
+>B : Symbol(B, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 3, 1))
+
+    x: string = 'B';
+>x : Symbol(B.x, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 5, 9))
+
+    z: boolean = true;
+>z : Symbol(B.z, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 6, 20))
+}
+
+type T<X extends { x: any }> = Pick<X, 'x'>;
+>T : Symbol(T, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 8, 1))
+>X : Symbol(X, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 10, 7))
+>x : Symbol(x, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 10, 18))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>X : Symbol(X, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 10, 7))
+
+type C = T<A>;
+>C : Symbol(C, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 10, 44))
+>T : Symbol(T, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 8, 1))
+>A : Symbol(A, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 0, 0))
+
+type D = T<B>;
+>D : Symbol(D, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 12, 14))
+>T : Symbol(T, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 8, 1))
+>B : Symbol(B, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 3, 1))
+
+type C_extends_D = C extends D ? true : false;                                  // true
+>C_extends_D : Symbol(C_extends_D, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 13, 14))
+>C : Symbol(C, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 10, 44))
+>D : Symbol(D, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 12, 14))
+
+type PickA_extends_PickB = Pick<A, 'x'> extends Pick<B, 'x'> ? true : false;    // true
+>PickA_extends_PickB : Symbol(PickA_extends_PickB, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 15, 46))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 0, 0))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>B : Symbol(B, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 3, 1))
+
+type TA_extends_TB = T<A> extends T<B> ? true : false;                          // should be true
+>TA_extends_TB : Symbol(TA_extends_TB, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 16, 76))
+>T : Symbol(T, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 8, 1))
+>A : Symbol(A, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 0, 0))
+>T : Symbol(T, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 8, 1))
+>B : Symbol(B, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 3, 1))
+
+declare let a: T<A>;
+>a : Symbol(a, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 19, 11))
+>T : Symbol(T, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 8, 1))
+>A : Symbol(A, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 0, 0))
+
+declare let b: T<B>;
+>b : Symbol(b, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 20, 11))
+>T : Symbol(T, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 8, 1))
+>B : Symbol(B, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 3, 1))
+
+declare let c: C;
+>c : Symbol(c, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 21, 11))
+>C : Symbol(C, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 10, 44))
+
+declare let d: D;
+>d : Symbol(d, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 22, 11))
+>D : Symbol(D, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 12, 14))
+
+b = a;      // should be no error
+>b : Symbol(b, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 20, 11))
+>a : Symbol(a, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 19, 11))
+
+c = d;
+>c : Symbol(c, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 21, 11))
+>d : Symbol(d, Decl(genericIndexedAccessVarianceComparisonResultCorrect.ts, 22, 11))
+

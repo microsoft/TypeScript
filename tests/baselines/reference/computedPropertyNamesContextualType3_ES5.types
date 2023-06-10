@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualType3_ES5.ts ===
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualType3_ES5.ts] ////
+
+=== computedPropertyNamesContextualType3_ES5.ts ===
 interface I {
     [s: string]: (x: string) => number;
 >s : string

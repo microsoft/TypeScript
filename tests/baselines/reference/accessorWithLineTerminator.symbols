@@ -1,4 +1,6 @@
-=== tests/cases/compiler/accessorWithLineTerminator.ts ===
+//// [tests/cases/compiler/accessorWithLineTerminator.ts] ////
+
+=== accessorWithLineTerminator.ts ===
 class C {
 >C : Symbol(C, Decl(accessorWithLineTerminator.ts, 0, 0))
 

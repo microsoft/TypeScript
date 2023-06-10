@@ -1,0 +1,11 @@
+nestedUnaryExpressionHang.ts(1,6): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+nestedUnaryExpressionHang.ts(1,34): error TS1109: Expression expected.
+
+
+==== nestedUnaryExpressionHang.ts (2 errors) ====
+    3333%!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+                                     
+!!! error TS1109: Expression expected.
+    

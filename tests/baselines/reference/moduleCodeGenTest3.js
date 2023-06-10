@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleCodeGenTest3.ts] ////
+
 //// [moduleCodeGenTest3.ts]
 module Baz { export var x = "hello"; }
 

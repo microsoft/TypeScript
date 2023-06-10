@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/unicodeEscapesInJsxtags.tsx] ////
+
+=== file.tsx ===
 import * as React from "react";
 >React : typeof React
 
@@ -32,7 +34,6 @@ const x = { video: () => null }
 >{ video: () => null } : { video: () => any; }
 >video : () => any
 >() => null : () => any
->null : null
 
 // unicode escape sequence is not allowed in tag name or JSX attribute name.
 // tag name:

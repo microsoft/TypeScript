@@ -1,3 +1,4 @@
+currentDirectory:: /a/b useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -123,35 +124,31 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/b/other2.ts (used version)
 
-PolledWatches::
-
 FsWatches::
-/a/b/project1.tsconfig.json:
+/a/b/alpha.tsconfig.json: *new*
   {}
-/a/b/alpha.tsconfig.json:
+/a/b/bravo.tsconfig.json: *new*
   {}
-/a/b/commonfile1.ts:
+/a/b/commonfile1.ts: *new*
   {}
-/a/b/commonfile2.ts:
+/a/b/commonfile2.ts: *new*
   {}
-/a/b/project2.tsconfig.json:
+/a/b/extendsconfig1.tsconfig.json: *new*
   {}
-/a/b/bravo.tsconfig.json:
+/a/b/extendsconfig2.tsconfig.json: *new*
   {}
-/a/b/other.ts:
+/a/b/extendsconfig3.tsconfig.json: *new*
   {}
-/a/b/project3.tsconfig.json:
+/a/b/other.ts: *new*
   {}
-/a/b/extendsconfig1.tsconfig.json:
+/a/b/other2.ts: *new*
   {}
-/a/b/extendsconfig2.tsconfig.json:
+/a/b/project1.tsconfig.json: *new*
   {}
-/a/b/extendsconfig3.tsconfig.json:
+/a/b/project2.tsconfig.json: *new*
   {}
-/a/b/other2.ts:
+/a/b/project3.tsconfig.json: *new*
   {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -311,6 +308,10 @@ Input::
 {"compilerOptions":{"strict":true}}
 
 
+Before running Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+3: timerToBuildInvalidatedProject
 Output::
 >> Screen clear
 [[90m12:01:12 AM[0m] File change detected. Starting incremental compilation...
@@ -335,36 +336,6 @@ Semantic diagnostics in builder refreshed for::
 /a/b/commonFile2.ts
 
 No shapes updated in the builder::
-
-PolledWatches::
-
-FsWatches::
-/a/b/project1.tsconfig.json:
-  {}
-/a/b/alpha.tsconfig.json:
-  {}
-/a/b/commonfile1.ts:
-  {}
-/a/b/commonfile2.ts:
-  {}
-/a/b/project2.tsconfig.json:
-  {}
-/a/b/bravo.tsconfig.json:
-  {}
-/a/b/other.ts:
-  {}
-/a/b/project3.tsconfig.json:
-  {}
-/a/b/extendsconfig1.tsconfig.json:
-  {}
-/a/b/extendsconfig2.tsconfig.json:
-  {}
-/a/b/extendsconfig3.tsconfig.json:
-  {}
-/a/b/other2.ts:
-  {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -452,6 +423,9 @@ Change:: Build project 2
 
 Input::
 
+Before running Timeout callback:: count: 1
+3: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 [[90m12:01:28 AM[0m] Project 'project2.tsconfig.json' is out of date because output 'project2.tsconfig.tsbuildinfo' is older than input 'alpha.tsconfig.json'
 
@@ -473,36 +447,6 @@ Semantic diagnostics in builder refreshed for::
 /a/b/other.ts
 
 No shapes updated in the builder::
-
-PolledWatches::
-
-FsWatches::
-/a/b/project1.tsconfig.json:
-  {}
-/a/b/alpha.tsconfig.json:
-  {}
-/a/b/commonfile1.ts:
-  {}
-/a/b/commonfile2.ts:
-  {}
-/a/b/project2.tsconfig.json:
-  {}
-/a/b/bravo.tsconfig.json:
-  {}
-/a/b/other.ts:
-  {}
-/a/b/project3.tsconfig.json:
-  {}
-/a/b/extendsconfig1.tsconfig.json:
-  {}
-/a/b/extendsconfig2.tsconfig.json:
-  {}
-/a/b/extendsconfig3.tsconfig.json:
-  {}
-/a/b/other2.ts:
-  {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -572,6 +516,9 @@ Input::
 {"extends":"./alpha.tsconfig.json","compilerOptions":{"strict":false}}
 
 
+Before running Timeout callback:: count: 1
+4: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:44 AM[0m] File change detected. Starting incremental compilation...
@@ -596,36 +543,6 @@ Semantic diagnostics in builder refreshed for::
 /a/b/other.ts
 
 No shapes updated in the builder::
-
-PolledWatches::
-
-FsWatches::
-/a/b/project1.tsconfig.json:
-  {}
-/a/b/alpha.tsconfig.json:
-  {}
-/a/b/commonfile1.ts:
-  {}
-/a/b/commonfile2.ts:
-  {}
-/a/b/project2.tsconfig.json:
-  {}
-/a/b/bravo.tsconfig.json:
-  {}
-/a/b/other.ts:
-  {}
-/a/b/project3.tsconfig.json:
-  {}
-/a/b/extendsconfig1.tsconfig.json:
-  {}
-/a/b/extendsconfig2.tsconfig.json:
-  {}
-/a/b/extendsconfig3.tsconfig.json:
-  {}
-/a/b/other2.ts:
-  {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -694,6 +611,9 @@ Input::
 {"extends":"./alpha.tsconfig.json"}
 
 
+Before running Timeout callback:: count: 1
+5: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:02:01 AM[0m] File change detected. Starting incremental compilation...
@@ -729,22 +649,12 @@ Shape signatures in builder refreshed for::
 /a/b/other.ts (computed .d.ts)
 /a/b/other2.ts (computed .d.ts)
 
-PolledWatches::
-
 FsWatches::
-/a/b/project1.tsconfig.json:
-  {}
 /a/b/alpha.tsconfig.json:
   {}
 /a/b/commonfile1.ts:
   {}
 /a/b/commonfile2.ts:
-  {}
-/a/b/project2.tsconfig.json:
-  {}
-/a/b/other.ts:
-  {}
-/a/b/project3.tsconfig.json:
   {}
 /a/b/extendsconfig1.tsconfig.json:
   {}
@@ -752,11 +662,23 @@ FsWatches::
   {}
 /a/b/extendsconfig3.tsconfig.json:
   {}
+/a/b/other.ts:
+  {}
 /a/b/other2.ts:
+  {}
+/a/b/project1.tsconfig.json:
+  {}
+/a/b/project2.tsconfig.json:
+  {}
+/a/b/project3.tsconfig.json:
+  {}
+
+FsWatches *deleted*::
+/a/b/bravo.tsconfig.json:
   {}
 
 FsWatchesRecursive::
-/a/b:
+/a/b: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -781,6 +703,10 @@ Input::
 {}
 
 
+Before running Timeout callback:: count: 1
+7: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+8: timerToBuildInvalidatedProject
 Output::
 >> Screen clear
 [[90m12:02:22 AM[0m] File change detected. Starting incremental compilation...
@@ -805,36 +731,6 @@ Semantic diagnostics in builder refreshed for::
 /a/b/commonFile2.ts
 
 No shapes updated in the builder::
-
-PolledWatches::
-
-FsWatches::
-/a/b/project1.tsconfig.json:
-  {}
-/a/b/alpha.tsconfig.json:
-  {}
-/a/b/commonfile1.ts:
-  {}
-/a/b/commonfile2.ts:
-  {}
-/a/b/project2.tsconfig.json:
-  {}
-/a/b/other.ts:
-  {}
-/a/b/project3.tsconfig.json:
-  {}
-/a/b/extendsconfig1.tsconfig.json:
-  {}
-/a/b/extendsconfig2.tsconfig.json:
-  {}
-/a/b/extendsconfig3.tsconfig.json:
-  {}
-/a/b/other2.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -919,6 +815,9 @@ Change:: Build project 2
 
 Input::
 
+Before running Timeout callback:: count: 1
+8: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 [[90m12:02:38 AM[0m] Project 'project2.tsconfig.json' is out of date because output 'commonFile1.js' is older than input 'alpha.tsconfig.json'
 
@@ -947,36 +846,6 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-PolledWatches::
-
-FsWatches::
-/a/b/project1.tsconfig.json:
-  {}
-/a/b/alpha.tsconfig.json:
-  {}
-/a/b/commonfile1.ts:
-  {}
-/a/b/commonfile2.ts:
-  {}
-/a/b/project2.tsconfig.json:
-  {}
-/a/b/other.ts:
-  {}
-/a/b/project3.tsconfig.json:
-  {}
-/a/b/extendsconfig1.tsconfig.json:
-  {}
-/a/b/extendsconfig2.tsconfig.json:
-  {}
-/a/b/extendsconfig3.tsconfig.json:
-  {}
-/a/b/other2.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/commonFile1.js] file written with same contents
@@ -997,6 +866,9 @@ Input::
 {"compilerOptions":{"strictNullChecks":true}}
 
 
+Before running Timeout callback:: count: 1
+9: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:02:57 AM[0m] File change detected. Starting incremental compilation...
@@ -1024,36 +896,6 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-PolledWatches::
-
-FsWatches::
-/a/b/project1.tsconfig.json:
-  {}
-/a/b/alpha.tsconfig.json:
-  {}
-/a/b/commonfile1.ts:
-  {}
-/a/b/commonfile2.ts:
-  {}
-/a/b/project2.tsconfig.json:
-  {}
-/a/b/other.ts:
-  {}
-/a/b/project3.tsconfig.json:
-  {}
-/a/b/extendsconfig1.tsconfig.json:
-  {}
-/a/b/extendsconfig2.tsconfig.json:
-  {}
-/a/b/extendsconfig3.tsconfig.json:
-  {}
-/a/b/other2.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/other2.js] file changed its modified time
@@ -1065,6 +907,9 @@ Input::
 {"extends":["./extendsConfig1.tsconfig.json","./extendsConfig2.tsconfig.json"],"compilerOptions":{"composite":false},"files":["/a/b/other2.ts"]}
 
 
+Before running Timeout callback:: count: 1
+10: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:03:06 AM[0m] File change detected. Starting incremental compilation...
@@ -1092,28 +937,30 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-PolledWatches::
-
 FsWatches::
-/a/b/project1.tsconfig.json:
-  {}
 /a/b/alpha.tsconfig.json:
   {}
 /a/b/commonfile1.ts:
   {}
 /a/b/commonfile2.ts:
   {}
-/a/b/project2.tsconfig.json:
-  {}
-/a/b/other.ts:
-  {}
-/a/b/project3.tsconfig.json:
-  {}
 /a/b/extendsconfig1.tsconfig.json:
   {}
 /a/b/extendsconfig2.tsconfig.json:
   {}
+/a/b/other.ts:
+  {}
 /a/b/other2.ts:
+  {}
+/a/b/project1.tsconfig.json:
+  {}
+/a/b/project2.tsconfig.json:
+  {}
+/a/b/project3.tsconfig.json:
+  {}
+
+FsWatches *deleted*::
+/a/b/extendsconfig3.tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -1129,6 +976,9 @@ Change:: Delete extendedConfigFile2 and report error
 Input::
 //// [/a/b/extendsConfig2.tsconfig.json] deleted
 
+Before running Timeout callback:: count: 1
+11: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:03:13 AM[0m] File change detected. Starting incremental compilation...
@@ -1140,34 +990,6 @@ Output::
 [[90m12:03:15 AM[0m] Found 1 error. Watching for file changes.
 
 
-
-PolledWatches::
-
-FsWatches::
-/a/b/project1.tsconfig.json:
-  {}
-/a/b/alpha.tsconfig.json:
-  {}
-/a/b/commonfile1.ts:
-  {}
-/a/b/commonfile2.ts:
-  {}
-/a/b/project2.tsconfig.json:
-  {}
-/a/b/other.ts:
-  {}
-/a/b/project3.tsconfig.json:
-  {}
-/a/b/extendsconfig1.tsconfig.json:
-  {}
-/a/b/extendsconfig2.tsconfig.json:
-  {}
-/a/b/other2.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
 
 exitCode:: ExitStatus.undefined
 

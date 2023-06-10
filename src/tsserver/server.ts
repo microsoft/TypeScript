@@ -1,6 +1,5 @@
 import {
     Debug,
-    getNodeMajorVersion,
     setStackTraceLimit,
     sys,
     version,
@@ -30,7 +29,7 @@ function start({ args, logger, cancellationToken, serverMode, unknownServerMode,
     logger.info(`Starting TS Server`);
     logger.info(`Version: ${version}`);
     logger.info(`Arguments: ${args.join(" ")}`);
-    logger.info(`Platform: ${platform} NodeVersion: ${getNodeMajorVersion()} CaseSensitive: ${sys.useCaseSensitiveFileNames}`);
+    logger.info(`Platform: ${platform} NodeVersion: ${process.version} CaseSensitive: ${sys.useCaseSensitiveFileNames}`);
     logger.info(`ServerMode: ${serverMode} hasUnknownServerMode: ${unknownServerMode}`);
 
     setStackTraceLimit();

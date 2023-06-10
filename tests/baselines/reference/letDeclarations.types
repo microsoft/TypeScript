@@ -1,4 +1,6 @@
-=== tests/cases/compiler/letDeclarations.ts ===
+//// [tests/cases/compiler/letDeclarations.ts] ////
+
+=== letDeclarations.ts ===
 let l1;
 >l1 : any
 
@@ -25,7 +27,6 @@ let l9 = 0, l10 :string = "", l11 = null;
 >l10 : string
 >"" : ""
 >l11 : any
->null : null
 
 for(let l11 in {}) { }
 >l11 : string

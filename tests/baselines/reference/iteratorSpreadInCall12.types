@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/spread/iteratorSpreadInCall12.ts ===
+//// [tests/cases/conformance/es6/spread/iteratorSpreadInCall12.ts] ////
+
+=== iteratorSpreadInCall12.ts ===
 class Foo<T> {
 >Foo : Foo<T>
 
@@ -73,7 +75,7 @@ new Foo(...[...new SymbolIterator, ...[...new _StringIterator]]);
 >new Foo(...[...new SymbolIterator, ...[...new _StringIterator]]) : Foo<string | symbol>
 >Foo : typeof Foo
 >...[...new SymbolIterator, ...[...new _StringIterator]] : string | symbol
->[...new SymbolIterator, ...[...new _StringIterator]] : (string | symbol)[]
+>[...new SymbolIterator, ...[...new _StringIterator]] : readonly (string | symbol)[]
 >...new SymbolIterator : symbol
 >new SymbolIterator : SymbolIterator
 >SymbolIterator : typeof SymbolIterator

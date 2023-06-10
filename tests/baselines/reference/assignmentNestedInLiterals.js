@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/assignmentNestedInLiterals.ts] ////
+
 //// [assignmentNestedInLiterals.ts]
 var target, x, y;
 target = [x = 1, y = x];

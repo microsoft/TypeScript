@@ -1,4 +1,6 @@
-=== tests/cases/compiler/narrowingWithNonNullExpression.ts ===
+//// [tests/cases/compiler/narrowingWithNonNullExpression.ts] ////
+
+=== narrowingWithNonNullExpression.ts ===
 const m = ''.match('');
 >m : RegExpMatchArray
 >''.match('') : RegExpMatchArray

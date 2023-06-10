@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classBlockScoping.ts] ////
+
 //// [classBlockScoping.ts]
 function f(b: boolean) {
   let Foo: any;

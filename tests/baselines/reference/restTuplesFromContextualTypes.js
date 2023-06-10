@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/rest/restTuplesFromContextualTypes.ts] ////
+
 //// [restTuplesFromContextualTypes.ts]
 declare const t1: [number, boolean, string];
 

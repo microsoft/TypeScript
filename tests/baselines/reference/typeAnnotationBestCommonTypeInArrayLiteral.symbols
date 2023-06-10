@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeAnnotationBestCommonTypeInArrayLiteral.ts ===
+//// [tests/cases/compiler/typeAnnotationBestCommonTypeInArrayLiteral.ts] ////
+
+=== typeAnnotationBestCommonTypeInArrayLiteral.ts ===
 interface IMenuItem {
 >IMenuItem : Symbol(IMenuItem, Decl(typeAnnotationBestCommonTypeInArrayLiteral.ts, 0, 0))
 

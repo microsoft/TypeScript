@@ -1,4 +1,6 @@
-=== tests/cases/compiler/input.ts ===
+//// [tests/cases/compiler/typeofImportInstantiationExpression.ts] ////
+
+=== input.ts ===
 // @strict
 
 // Repro from #52248
@@ -26,7 +28,7 @@ export function myFunction<T = any, U extends Record<string, any> = Record<strin
 >params : U
 >{} : {}
 
-=== tests/cases/compiler/main.ts ===
+=== main.ts ===
 type T1 = typeof import('./input.js').myFunction;
 >T1 : <T = any, U extends Record<string, any> = Record<string, any>>(arg: Arg<T, U>) => U
 >myFunction : error

@@ -19,6 +19,12 @@
 ////         return 1;
 ////     case '/*3*/'
 //// }
+////
+//// // repro from #52874
+//// declare let x: "foo" | "bar";
+//// switch (x) {
+////     case ('/*4*/')
+//// }
 
 verify.completions(
     {
@@ -38,5 +44,10 @@ verify.completions(
         isNewIdentifierLocation: false,
         includes: ["foo", "baz"],
         excludes: "bar",
+    },
+    {
+        marker: "4",
+        isNewIdentifierLocation: false,
+        includes: ["foo", "bar"],
     }
 );

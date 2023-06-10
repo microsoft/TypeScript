@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/extBaseClass1.ts] ////
+
 //// [extBaseClass1.ts]
 module M {
     export class B {

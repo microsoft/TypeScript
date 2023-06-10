@@ -1,15 +1,15 @@
 import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
 import {
-    loadProjectFromFiles,
     noChangeOnlyRuns,
     verifyTsc,
-} from "../tsc/helpers";
-import { verifyTscWatch } from "../tscWatch/helpers";
+} from "../helpers/tsc";
+import { verifyTscWatch } from "../helpers/tscWatch";
+import { loadProjectFromFiles } from "../helpers/vfs";
 import {
     createWatchedSystem,
     libFile,
-} from "../virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsbuild:: moduleResolution:: handles the modules and options from referenced project correctly", () => {
     function sys(optionsToExtend?: ts.CompilerOptions) {

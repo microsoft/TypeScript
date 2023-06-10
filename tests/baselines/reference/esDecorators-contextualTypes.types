@@ -1,4 +1,6 @@
-=== tests/cases/conformance/esDecorators/esDecorators-contextualTypes.ts ===
+//// [tests/cases/conformance/esDecorators/esDecorators-contextualTypes.ts] ////
+
+=== esDecorators-contextualTypes.ts ===
 @((t, c) => { })
 >((t, c) => { }) : (t: typeof C, c: ClassDecoratorContext<typeof C>) => void
 >(t, c) => { } : (t: typeof C, c: ClassDecoratorContext<typeof C>) => void

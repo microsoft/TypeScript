@@ -240,8 +240,8 @@ function convertToBlock(body: ConciseBody): Block {
         const file = body.getSourceFile();
         setTextRange(returnStatement, body);
         suppressLeadingAndTrailingTrivia(returnStatement);
-        copyTrailingAsLeadingComments(body, returnStatement, file, /* commentKind */ undefined, /* hasTrailingNewLine */ true);
-        return factory.createBlock([returnStatement], /* multiLine */ true);
+        copyTrailingAsLeadingComments(body, returnStatement, file, /*commentKind*/ undefined, /*hasTrailingNewLine*/ true);
+        return factory.createBlock([returnStatement], /*multiLine*/ true);
     }
     else {
         return body;
@@ -262,7 +262,7 @@ function getVariableInfo(func: FunctionExpression | ArrowFunction): VariableInfo
 function getEditInfoForConvertToAnonymousFunction(context: RefactorContext, func: FunctionExpression | ArrowFunction): FileTextChanges[] {
     const { file } = context;
     const body = convertToBlock(func.body);
-    const newNode = factory.createFunctionExpression(func.modifiers, func.asteriskToken, /* name */ undefined, func.typeParameters, func.parameters, func.type, body);
+    const newNode = factory.createFunctionExpression(func.modifiers, func.asteriskToken, /*name*/ undefined, func.typeParameters, func.parameters, func.type, body);
     return textChanges.ChangeTracker.with(context, t => t.replaceNode(file, func, newNode));
 }
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeVal.ts] ////
+
 //// [typeVal.ts]
 interface I {
     I:number;

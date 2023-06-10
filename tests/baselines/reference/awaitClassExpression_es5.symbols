@@ -1,4 +1,6 @@
-=== tests/cases/conformance/async/es5/awaitClassExpression_es5.ts ===
+//// [tests/cases/conformance/async/es5/awaitClassExpression_es5.ts] ////
+
+=== awaitClassExpression_es5.ts ===
 declare class C { }
 >C : Symbol(C, Decl(awaitClassExpression_es5.ts, 0, 0))
 

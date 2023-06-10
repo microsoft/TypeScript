@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/destructuring/destructuringParameterProperties2.ts ===
+//// [tests/cases/conformance/es6/destructuring/destructuringParameterProperties2.ts] ////
+
+=== destructuringParameterProperties2.ts ===
 class C1 {
 >C1 : C1
 
@@ -134,7 +136,6 @@ var z = new C1(10, [undefined, "", null]);
 >[undefined, "", null] : [undefined, string, null]
 >undefined : undefined
 >"" : ""
->null : null
 
 var [z_a, z_b, z_c] = [z.getA(), z.getB(), z.getC()];
 >z_a : any

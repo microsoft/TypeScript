@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/intersectionOfMixinConstructorTypeAndNonConstructorType.ts] ////
+
 //// [intersectionOfMixinConstructorTypeAndNonConstructorType.ts]
 // Repro for #17388
 

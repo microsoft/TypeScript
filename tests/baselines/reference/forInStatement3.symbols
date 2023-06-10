@@ -1,4 +1,6 @@
-=== tests/cases/compiler/forInStatement3.ts ===
+//// [tests/cases/compiler/forInStatement3.ts] ////
+
+=== forInStatement3.ts ===
 function F<T>() {
 >F : Symbol(F, Decl(forInStatement3.ts, 0, 0))
 >T : Symbol(T, Decl(forInStatement3.ts, 0, 11))
