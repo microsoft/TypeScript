@@ -28672,10 +28672,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         });
     }
 
-    function getThisTypeOfObjectLiteralFromContextualType(
-        containingLiteral: ObjectLiteralExpression,
-        contextualType = getApparentTypeOfContextualType(containingLiteral, /*contextFlags*/ undefined),
-    ) {
+    function getThisTypeOfObjectLiteralFromContextualType(containingLiteral: ObjectLiteralExpression, contextualType: Type | undefined) {
         let literal = containingLiteral;
         let type = contextualType;
         while (type) {
@@ -45433,7 +45430,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (isFunctionLike(container)) {
                 const containingLiteral = getContainingObjectLiteral(container);
                 if (containingLiteral) {
-                    const type = getThisTypeOfObjectLiteralFromContextualType(containingLiteral);
+                    const contextualType = getApparentTypeOfContextualType(containingLiteral, /*contextFlags*/ undefined);
+                    const type = getThisTypeOfObjectLiteralFromContextualType(containingLiteral, contextualType);
                     return type && !isTypeAny(type);
                 }
             }
