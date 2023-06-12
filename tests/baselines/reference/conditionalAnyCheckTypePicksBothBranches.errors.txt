@@ -1,7 +1,7 @@
-tests/cases/compiler/conditionalAnyCheckTypePicksBothBranches.ts(9,1): error TS2322: Type '0' is not assignable to type '1'.
+conditionalAnyCheckTypePicksBothBranches.ts(9,1): error TS2322: Type '0' is not assignable to type '1'.
 
 
-==== tests/cases/compiler/conditionalAnyCheckTypePicksBothBranches.ts (1 errors) ====
+==== conditionalAnyCheckTypePicksBothBranches.ts (1 errors) ====
     type T = any extends number ? 1 : 0;
     let x: T;
     x = 1;

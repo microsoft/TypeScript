@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/esnext/esnextmodulekindWithES5Target7.ts] ////
+
 //// [esnextmodulekindWithES5Target7.ts]
 export namespace N {
     var x = 0;

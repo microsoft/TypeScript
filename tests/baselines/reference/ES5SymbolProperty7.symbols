@@ -1,4 +1,6 @@
-=== tests/cases/conformance/Symbols/ES5SymbolProperty7.ts ===
+//// [tests/cases/conformance/Symbols/ES5SymbolProperty7.ts] ////
+
+=== ES5SymbolProperty7.ts ===
 var Symbol: { iterator: any };
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(ES5SymbolProperty7.ts, 0, 3))
 >iterator : Symbol(iterator, Decl(ES5SymbolProperty7.ts, 0, 13))

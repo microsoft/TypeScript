@@ -1,4 +1,6 @@
-=== tests/cases/compiler/literalsInComputedProperties1.ts ===
+//// [tests/cases/compiler/literalsInComputedProperties1.ts] ////
+
+=== literalsInComputedProperties1.ts ===
 let x = {
 >x : Symbol(x, Decl(literalsInComputedProperties1.ts, 0, 3))
 

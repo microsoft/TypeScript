@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/esDecorators/classDeclaration/classSuper/esDecorators-classDeclaration-classSuper.2.ts] ////
+
 //// [esDecorators-classDeclaration-classSuper.2.ts]
 declare var dec: any;
 

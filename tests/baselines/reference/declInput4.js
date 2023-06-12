@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declInput4.ts] ////
+
 //// [declInput4.ts]
 module M {
     class C { }

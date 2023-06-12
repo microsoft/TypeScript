@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/intraExpressionInferences.ts] ////
+
 //// [intraExpressionInferences.ts]
 // Repros from #47599
 
@@ -214,6 +216,123 @@ Foo({
   },
 });
 
+declare function nested<T>(arg: {
+  prop: {
+    produce: (arg1: number) => T;
+    consume: (arg2: T) => void;
+  };
+}): T;
+
+const resNested = nested({
+  prop: {
+    produce: (a) => [a],
+    consume: (arg) => arg.join(","),
+  },
+});
+
+declare function twoConsumers<T>(arg: {
+  a: (arg: string) => T;
+  consume1: (arg1: T) => void;
+  consume2: (arg2: T) => void;
+}): T;
+
+const resTwoConsumers = twoConsumers({
+  a: (arg) => [arg],
+  consume1: (arg1) => {},
+  consume2: (arg2) => {},
+});
+
+declare function multipleProducersBeforeConsumers<T, T2>(arg: {
+  a: (arg: string) => T;
+  b: (arg: string) => T2;
+  consume1: (arg1: T) => void;
+  consume2: (arg2: T2) => void;
+}): [T, T2];
+
+const resMultipleProducersBeforeConsumers = multipleProducersBeforeConsumers({
+  a: (arg) => [arg],
+  b: (arg) => Number(arg),
+  consume1: (arg1) => {},
+  consume2: (arg2) => {},
+});
+
+declare function withConditionalExpression<T, T2, T3>(arg: {
+  a: (arg1: string) => T;
+  b: (arg2: T) => T2;
+  c: (arg2: T2) => T3;
+}): [T, T2, T3];
+
+const resWithConditionalExpression = withConditionalExpression({
+  a: (arg) => [arg],
+  b: Math.random() ? (arg) => "first" as const : (arg) => "two" as const,
+  c: (arg) => Boolean(arg),
+});
+
+declare function onion<T, T2, T3>(arg: {
+  a: (arg1: string) => T;
+  nested: {
+    b: (arg2: T) => T2;
+    nested2: {
+      c: (arg2: T2) => T3;
+    };
+  };
+}): [T, T2, T3];
+
+const resOnion = onion({
+  a: (arg) => [arg],
+  nested: {
+    b: (arg) => arg.join(","),
+    nested2: {
+      c: (arg) => Boolean(arg),
+    },
+  },
+});
+
+declare function onion2<T, T2, T3, T4>(arg: {
+  a: (arg1: string) => T;
+  nested: {
+    b: (arg2: T) => T2;
+    c: (arg3: T) => T3;
+    nested2: {
+      d: (arg4: T3) => T4;
+    };
+  };
+}): [T, T2, T3, T4];
+
+const resOnion2 = onion2({
+  a: (arg) => [arg],
+  nested: {
+    b: (arg) => arg.join(","),
+    c: (arg) => Number(arg),
+    nested2: {
+      d: (arg) => Boolean(arg),
+    },
+  },
+});
+
+declare function distant<T>(args: {
+  foo: {
+    bar: {
+      baz: {
+        producer: (arg: string) => T;
+      };
+    };
+  };
+  consumer: (val: T) => unknown;
+}): T;
+
+const distantRes = distant({
+  foo: {
+    bar: {
+      baz: {
+        producer: (arg) => 1,
+      },
+    },
+  },
+  consumer: (val) => {},
+});
+
+
 //// [intraExpressionInferences.js]
 "use strict";
 // Repros from #47599
@@ -348,6 +467,57 @@ Foo(__assign({
         arg.toString();
     },
 }));
+var resNested = nested({
+    prop: {
+        produce: function (a) { return [a]; },
+        consume: function (arg) { return arg.join(","); },
+    },
+});
+var resTwoConsumers = twoConsumers({
+    a: function (arg) { return [arg]; },
+    consume1: function (arg1) { },
+    consume2: function (arg2) { },
+});
+var resMultipleProducersBeforeConsumers = multipleProducersBeforeConsumers({
+    a: function (arg) { return [arg]; },
+    b: function (arg) { return Number(arg); },
+    consume1: function (arg1) { },
+    consume2: function (arg2) { },
+});
+var resWithConditionalExpression = withConditionalExpression({
+    a: function (arg) { return [arg]; },
+    b: Math.random() ? function (arg) { return "first"; } : function (arg) { return "two"; },
+    c: function (arg) { return Boolean(arg); },
+});
+var resOnion = onion({
+    a: function (arg) { return [arg]; },
+    nested: {
+        b: function (arg) { return arg.join(","); },
+        nested2: {
+            c: function (arg) { return Boolean(arg); },
+        },
+    },
+});
+var resOnion2 = onion2({
+    a: function (arg) { return [arg]; },
+    nested: {
+        b: function (arg) { return arg.join(","); },
+        c: function (arg) { return Number(arg); },
+        nested2: {
+            d: function (arg) { return Boolean(arg); },
+        },
+    },
+});
+var distantRes = distant({
+    foo: {
+        bar: {
+            baz: {
+                producer: function (arg) { return 1; },
+            },
+        },
+    },
+    consumer: function (val) { },
+});
 
 
 //// [intraExpressionInferences.d.ts]
@@ -420,3 +590,61 @@ interface Props<T> {
     b: (arg: T) => void;
 }
 declare function Foo<T>(props: Props<T>): null;
+declare function nested<T>(arg: {
+    prop: {
+        produce: (arg1: number) => T;
+        consume: (arg2: T) => void;
+    };
+}): T;
+declare const resNested: number[];
+declare function twoConsumers<T>(arg: {
+    a: (arg: string) => T;
+    consume1: (arg1: T) => void;
+    consume2: (arg2: T) => void;
+}): T;
+declare const resTwoConsumers: string[];
+declare function multipleProducersBeforeConsumers<T, T2>(arg: {
+    a: (arg: string) => T;
+    b: (arg: string) => T2;
+    consume1: (arg1: T) => void;
+    consume2: (arg2: T2) => void;
+}): [T, T2];
+declare const resMultipleProducersBeforeConsumers: [string[], number];
+declare function withConditionalExpression<T, T2, T3>(arg: {
+    a: (arg1: string) => T;
+    b: (arg2: T) => T2;
+    c: (arg2: T2) => T3;
+}): [T, T2, T3];
+declare const resWithConditionalExpression: [string[], "first" | "two", boolean];
+declare function onion<T, T2, T3>(arg: {
+    a: (arg1: string) => T;
+    nested: {
+        b: (arg2: T) => T2;
+        nested2: {
+            c: (arg2: T2) => T3;
+        };
+    };
+}): [T, T2, T3];
+declare const resOnion: [string[], string, boolean];
+declare function onion2<T, T2, T3, T4>(arg: {
+    a: (arg1: string) => T;
+    nested: {
+        b: (arg2: T) => T2;
+        c: (arg3: T) => T3;
+        nested2: {
+            d: (arg4: T3) => T4;
+        };
+    };
+}): [T, T2, T3, T4];
+declare const resOnion2: [string[], string, number, boolean];
+declare function distant<T>(args: {
+    foo: {
+        bar: {
+            baz: {
+                producer: (arg: string) => T;
+            };
+        };
+    };
+    consumer: (val: T) => unknown;
+}): T;
+declare const distantRes: number;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/defaultParameterAddsUndefinedWithStrictNullChecks.ts ===
+//// [tests/cases/compiler/defaultParameterAddsUndefinedWithStrictNullChecks.ts] ////
+
+=== defaultParameterAddsUndefinedWithStrictNullChecks.ts ===
 function f(addUndefined1 = "J", addUndefined2?: number) {
 >f : Symbol(f, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 0, 0))
 >addUndefined1 : Symbol(addUndefined1, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 0, 11))

@@ -1,9 +1,9 @@
-tests/cases/compiler/nullableFunctionError.ts(1,1): error TS2721: Cannot invoke an object which is possibly 'null'.
-tests/cases/compiler/nullableFunctionError.ts(2,1): error TS2722: Cannot invoke an object which is possibly 'undefined'.
-tests/cases/compiler/nullableFunctionError.ts(4,1): error TS2723: Cannot invoke an object which is possibly 'null' or 'undefined'.
+nullableFunctionError.ts(1,1): error TS2721: Cannot invoke an object which is possibly 'null'.
+nullableFunctionError.ts(2,1): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+nullableFunctionError.ts(4,1): error TS2723: Cannot invoke an object which is possibly 'null' or 'undefined'.
 
 
-==== tests/cases/compiler/nullableFunctionError.ts (3 errors) ====
+==== nullableFunctionError.ts (3 errors) ====
     null();
     ~~~~
 !!! error TS2721: Cannot invoke an object which is possibly 'null'.

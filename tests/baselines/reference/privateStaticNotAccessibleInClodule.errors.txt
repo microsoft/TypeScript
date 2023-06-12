@@ -1,7 +1,7 @@
-tests/cases/conformance/classes/members/accessibility/privateStaticNotAccessibleInClodule.ts(9,22): error TS2341: Property 'bar' is private and only accessible within class 'C'.
+privateStaticNotAccessibleInClodule.ts(9,22): error TS2341: Property 'bar' is private and only accessible within class 'C'.
 
 
-==== tests/cases/conformance/classes/members/accessibility/privateStaticNotAccessibleInClodule.ts (1 errors) ====
+==== privateStaticNotAccessibleInClodule.ts (1 errors) ====
     // Any attempt to access a private property member outside the class body that contains its declaration results in a compile-time error.
     
     class C {

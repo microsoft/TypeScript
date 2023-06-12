@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithNumberType.ts ===
+//// [tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithNumberType.ts] ////
+
+=== decrementOperatorWithNumberType.ts ===
 // -- operator on number type
 var NUMBER: number;
 >NUMBER : Symbol(NUMBER, Decl(decrementOperatorWithNumberType.ts, 1, 3))

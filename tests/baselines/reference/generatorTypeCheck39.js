@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck39.ts] ////
+
 //// [generatorTypeCheck39.ts]
 function decorator(x: any) {
     return y => { };

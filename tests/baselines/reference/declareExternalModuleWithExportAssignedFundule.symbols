@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declareExternalModuleWithExportAssignedFundule.ts ===
+//// [tests/cases/compiler/declareExternalModuleWithExportAssignedFundule.ts] ////
+
+=== declareExternalModuleWithExportAssignedFundule.ts ===
 declare module "express" {
 >"express" : Symbol("express", Decl(declareExternalModuleWithExportAssignedFundule.ts, 0, 0))
 

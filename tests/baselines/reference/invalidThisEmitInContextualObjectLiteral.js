@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/invalidThisEmitInContextualObjectLiteral.ts] ////
+
 //// [invalidThisEmitInContextualObjectLiteral.ts]
 interface IDef {
 	p1: (e:string) => void;

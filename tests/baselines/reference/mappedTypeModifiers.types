@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/mapped/mappedTypeModifiers.ts ===
+//// [tests/cases/conformance/types/mapped/mappedTypeModifiers.ts] ////
+
+=== mappedTypeModifiers.ts ===
 type T = { a: number, b: string };
 >T : { a: number; b: string; }
 >a : number

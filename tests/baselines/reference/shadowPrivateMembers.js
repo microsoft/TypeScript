@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/shadowPrivateMembers.ts] ////
+
 //// [shadowPrivateMembers.ts]
 class base { private n() {} }
 class derived extends base { private n() {} }

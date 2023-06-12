@@ -1,8 +1,8 @@
-tests/cases/compiler/trailingCommaInHeterogenousArrayLiteral1.ts(5,26): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/trailingCommaInHeterogenousArrayLiteral1.ts(6,26): error TS2322: Type 'string' is not assignable to type 'number'.
+trailingCommaInHeterogenousArrayLiteral1.ts(5,26): error TS2322: Type 'string' is not assignable to type 'number'.
+trailingCommaInHeterogenousArrayLiteral1.ts(6,26): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/compiler/trailingCommaInHeterogenousArrayLiteral1.ts (2 errors) ====
+==== trailingCommaInHeterogenousArrayLiteral1.ts (2 errors) ====
     class arrTest {
         test(arg1: number[]) {    }
         callTest() {

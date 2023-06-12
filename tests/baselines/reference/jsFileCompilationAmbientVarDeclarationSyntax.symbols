@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.js ===
+//// [tests/cases/compiler/jsFileCompilationAmbientVarDeclarationSyntax.ts] ////
+
+=== a.js ===
 declare var v;
 >v : Symbol(v, Decl(a.js, 0, 11))
 

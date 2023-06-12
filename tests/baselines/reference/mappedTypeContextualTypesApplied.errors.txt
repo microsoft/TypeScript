@@ -1,10 +1,10 @@
-tests/cases/compiler/mappedTypeContextualTypesApplied.ts(18,10): error TS7023: 'foo' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
-tests/cases/compiler/mappedTypeContextualTypesApplied.ts(18,15): error TS7006: Parameter 's' implicitly has an 'any' type.
-tests/cases/compiler/mappedTypeContextualTypesApplied.ts(19,10): error TS7023: 'foo' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
-tests/cases/compiler/mappedTypeContextualTypesApplied.ts(19,15): error TS7006: Parameter 's' implicitly has an 'any' type.
+mappedTypeContextualTypesApplied.ts(18,10): error TS7023: 'foo' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+mappedTypeContextualTypesApplied.ts(18,15): error TS7006: Parameter 's' implicitly has an 'any' type.
+mappedTypeContextualTypesApplied.ts(19,10): error TS7023: 'foo' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+mappedTypeContextualTypesApplied.ts(19,15): error TS7006: Parameter 's' implicitly has an 'any' type.
 
 
-==== tests/cases/compiler/mappedTypeContextualTypesApplied.ts (4 errors) ====
+==== mappedTypeContextualTypesApplied.ts (4 errors) ====
     type TakeString = (s: string) => any;
     
     // Various functions accepting an object whose properties are TakeString functions.

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/templates/templateStringInFunctionExpression.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringInFunctionExpression.ts] ////
+
+=== templateStringInFunctionExpression.ts ===
 var x = function y() {
 >x : () => string
 >function y() {    `abc${ 0 }def`    return `abc${ 0 }def`;} : () => string

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/arrayAssignmentTest5.ts ===
+//// [tests/cases/compiler/arrayAssignmentTest5.ts] ////
+
+=== arrayAssignmentTest5.ts ===
 module Test {
 >Test : Symbol(Test, Decl(arrayAssignmentTest5.ts, 0, 0))
 

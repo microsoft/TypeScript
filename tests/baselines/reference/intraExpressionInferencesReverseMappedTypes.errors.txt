@@ -1,12 +1,12 @@
-tests/cases/conformance/types/typeRelationships/typeInference/intraExpressionInferencesReverseMappedTypes.ts(67,21): error TS18046: 'x' is of type 'unknown'.
-tests/cases/conformance/types/typeRelationships/typeInference/intraExpressionInferencesReverseMappedTypes.ts(71,21): error TS18046: 'x' is of type 'unknown'.
-tests/cases/conformance/types/typeRelationships/typeInference/intraExpressionInferencesReverseMappedTypes.ts(80,21): error TS18046: 'x' is of type 'unknown'.
-tests/cases/conformance/types/typeRelationships/typeInference/intraExpressionInferencesReverseMappedTypes.ts(86,21): error TS18046: 'x' is of type 'unknown'.
-tests/cases/conformance/types/typeRelationships/typeInference/intraExpressionInferencesReverseMappedTypes.ts(95,21): error TS18046: 'x' is of type 'unknown'.
-tests/cases/conformance/types/typeRelationships/typeInference/intraExpressionInferencesReverseMappedTypes.ts(101,21): error TS18046: 'x' is of type 'unknown'.
+intraExpressionInferencesReverseMappedTypes.ts(67,21): error TS18046: 'x' is of type 'unknown'.
+intraExpressionInferencesReverseMappedTypes.ts(71,21): error TS18046: 'x' is of type 'unknown'.
+intraExpressionInferencesReverseMappedTypes.ts(80,21): error TS18046: 'x' is of type 'unknown'.
+intraExpressionInferencesReverseMappedTypes.ts(86,21): error TS18046: 'x' is of type 'unknown'.
+intraExpressionInferencesReverseMappedTypes.ts(95,21): error TS18046: 'x' is of type 'unknown'.
+intraExpressionInferencesReverseMappedTypes.ts(101,21): error TS18046: 'x' is of type 'unknown'.
 
 
-==== tests/cases/conformance/types/typeRelationships/typeInference/intraExpressionInferencesReverseMappedTypes.ts (6 errors) ====
+==== intraExpressionInferencesReverseMappedTypes.ts (6 errors) ====
     // repro cases based on https://github.com/microsoft/TypeScript/issues/53018
     
     declare function f<T>(

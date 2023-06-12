@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/typeGuards/typeGuardNarrowsToLiteralTypeUnion.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardNarrowsToLiteralTypeUnion.ts] ////
+
+=== typeGuardNarrowsToLiteralTypeUnion.ts ===
 declare function isFoo(value: string) : value is ("foo" | "bar");
 >isFoo : (value: string) => value is "foo" | "bar"
 >value : string

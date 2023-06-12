@@ -1,4 +1,6 @@
-=== tests/cases/compiler/callOnInstance.ts ===
+//// [tests/cases/compiler/callOnInstance.ts] ////
+
+=== callOnInstance.ts ===
 declare function D(): string; // error
 >D : Symbol(D, Decl(callOnInstance.ts, 0, 0), Decl(callOnInstance.ts, 0, 29))
 

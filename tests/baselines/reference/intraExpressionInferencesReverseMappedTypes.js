@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/intraExpressionInferencesReverseMappedTypes.ts] ////
+
 //// [intraExpressionInferencesReverseMappedTypes.ts]
 // repro cases based on https://github.com/microsoft/TypeScript/issues/53018
 

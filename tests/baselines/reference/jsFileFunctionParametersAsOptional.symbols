@@ -1,4 +1,6 @@
-=== tests/cases/compiler/foo.js ===
+//// [tests/cases/compiler/jsFileFunctionParametersAsOptional.ts] ////
+
+=== foo.js ===
 function f(a, b, c) { }
 >f : Symbol(f, Decl(foo.js, 0, 0))
 >a : Symbol(a, Decl(foo.js, 0, 11))
@@ -6,7 +8,7 @@ function f(a, b, c) { }
 >c : Symbol(c, Decl(foo.js, 0, 16))
 
 
-=== tests/cases/compiler/bar.ts ===
+=== bar.ts ===
 f();
 >f : Symbol(f, Decl(foo.js, 0, 0))
 

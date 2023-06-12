@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericObjectSpreadResultInSwitch.ts ===
+//// [tests/cases/compiler/genericObjectSpreadResultInSwitch.ts] ////
+
+=== genericObjectSpreadResultInSwitch.ts ===
 type Params = {
 >Params : Symbol(Params, Decl(genericObjectSpreadResultInSwitch.ts, 0, 0))
 

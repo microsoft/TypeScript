@@ -66,6 +66,7 @@ File '/user/username/package.json' does not exist according to earlier cached lo
 File '/user/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'pkg' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -87,6 +88,7 @@ File '/user/username/package.json' does not exist according to earlier cached lo
 File '/user/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg1/package.json'.
 Entering conditional exports.
 Saw non-matching condition 'import'.
@@ -103,6 +105,7 @@ Directory '/user/username/projects/node_modules' does not exist, skipping all lo
 Directory '/user/username/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/user/username/projects/myproject/node_modules/pkg1/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
 Saw non-matching condition 'import'.
@@ -254,6 +257,7 @@ File '/user/username/package.json' does not exist according to earlier cached lo
 File '/user/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'pkg' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/user/username/projects/myproject/node_modules/pkg/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
 Matched 'exports' condition 'import'.

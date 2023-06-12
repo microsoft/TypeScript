@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/modules/defaultExportWithOverloads01.ts] ////
+
 //// [defaultExportWithOverloads01.ts]
 export default function f();
 export default function f(x: string);

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsNonIdentifierInferredNames.ts] ////
+
 //// [jsDeclarationsNonIdentifierInferredNames.jsx]
 /// <reference path="/.lib/react16.d.ts" />
 import * as React from "react";
@@ -28,7 +30,7 @@ export {};
 out/jsDeclarationsNonIdentifierInferredNames.d.ts(4,5): error TS2503: Cannot find namespace 'JSX'.
 
 
-==== ./out/jsDeclarationsNonIdentifierInferredNames.d.ts (1 errors) ====
+==== out/jsDeclarationsNonIdentifierInferredNames.d.ts (1 errors) ====
     export function ExampleFunctionalComponent({ "data-testid": dataTestId, [dynPropName]: dynProp }: {
         "data-testid": any;
         "data-dyn": any;

@@ -5,7 +5,7 @@ sourceRoot:
 sources: esDecorators-classDeclaration-sourceMap.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/conformance/esDecorators/classDeclaration/esDecorators-classDeclaration-sourceMap.js
+emittedFile:esDecorators-classDeclaration-sourceMap.js
 sourceFile:esDecorators-classDeclaration-sourceMap.ts
 -------------------------------------------------------------------
 >>>var __esDecorate = (this && this.__esDecorate) || function (ctor, descriptorIn, decorators, contextIn, initializers, extraInitializers) {
@@ -916,7 +916,7 @@ sourceRoot:
 sources: esDecorators-classDeclaration-sourceMap.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/conformance/esDecorators/classDeclaration/esDecorators-classDeclaration-sourceMap.d.ts
+emittedFile:esDecorators-classDeclaration-sourceMap.d.ts
 sourceFile:esDecorators-classDeclaration-sourceMap.ts
 -------------------------------------------------------------------
 >>>declare var dec: any;

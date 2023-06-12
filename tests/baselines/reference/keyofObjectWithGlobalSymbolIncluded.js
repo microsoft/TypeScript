@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/keyofObjectWithGlobalSymbolIncluded.ts] ////
+
 //// [keyofObjectWithGlobalSymbolIncluded.ts]
 const obj = {
     [Symbol.species]: Array

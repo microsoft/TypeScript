@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/thisType/context.js ===
+//// [tests/cases/conformance/types/thisType/contextualThisTypeInJavascript.ts] ////
+
+=== context.js ===
 const obj = {
 >obj : { prop: number; method(): void; }
 >{    prop: 2,    method() {        this;        this.prop;        this.method;        this.unknown; // ok, obj has a string indexer    }} : { prop: number; method(): void; }

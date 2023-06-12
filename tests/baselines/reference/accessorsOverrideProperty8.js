@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideProperty8.ts] ////
+
 //// [accessorsOverrideProperty8.ts]
 type Types = 'boolean' | 'unknown' | 'string';
 

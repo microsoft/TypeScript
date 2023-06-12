@@ -1,4 +1,6 @@
-=== tests/cases/compiler/index.js ===
+//// [tests/cases/compiler/elidedJSImport2.ts] ////
+
+=== index.js ===
 import { Foo } from "./other.js";
 >Foo : any
 
@@ -25,7 +27,7 @@ const z = new defaultFoo();
 >new defaultFoo() : error
 >defaultFoo : error
 
-=== tests/cases/compiler/other.d.ts ===
+=== other.d.ts ===
 export interface Foo {
     bar: number;
 >bar : number
@@ -36,7 +38,7 @@ export default interface Bar {
 >foo : number
 }
 
-=== tests/cases/compiler/other.js ===
+=== other.js ===
 export class Foo {
 >Foo : Foo
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/intraExpressionInferencesReverseMappedTypes.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/intraExpressionInferencesReverseMappedTypes.ts] ////
+
+=== intraExpressionInferencesReverseMappedTypes.ts ===
 // repro cases based on https://github.com/microsoft/TypeScript/issues/53018
 
 declare function f<T>(

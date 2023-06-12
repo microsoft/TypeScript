@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privacyTopLevelInternalReferenceImportWithExport.ts] ////
+
 //// [privacyTopLevelInternalReferenceImportWithExport.ts]
 // private elements
 module m_private {

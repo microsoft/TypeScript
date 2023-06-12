@@ -1,4 +1,6 @@
-=== tests/cases/compiler/switchCaseNarrowsMatchingClausesEvenWhenNonMatchingClausesExist.ts ===
+//// [tests/cases/compiler/switchCaseNarrowsMatchingClausesEvenWhenNonMatchingClausesExist.ts] ////
+
+=== switchCaseNarrowsMatchingClausesEvenWhenNonMatchingClausesExist.ts ===
 export const narrowToLiterals = (str: string) => {
 >narrowToLiterals : (str: string) => "abc" | "defaultValue"
 >(str: string) => {    switch (str) {      case 'abc': {        // inferred type as `abc`        return str;      }      default:        return 'defaultValue';    }  } : (str: string) => "abc" | "defaultValue"

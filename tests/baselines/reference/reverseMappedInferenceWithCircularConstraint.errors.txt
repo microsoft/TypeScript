@@ -1,7 +1,7 @@
-tests/cases/compiler/reverseMappedInferenceWithCircularConstraint.ts(47,3): error TS2322: Type '"unknown"' is not assignable to type '"pending"'.
+reverseMappedInferenceWithCircularConstraint.ts(47,3): error TS2322: Type '"unknown"' is not assignable to type '"pending"'.
 
 
-==== tests/cases/compiler/reverseMappedInferenceWithCircularConstraint.ts (1 errors) ====
+==== reverseMappedInferenceWithCircularConstraint.ts (1 errors) ====
     // repro from https://github.com/microsoft/TypeScript/issues/48798
     
     type AnyFunction = (...args: any[]) => any;
@@ -51,7 +51,7 @@ tests/cases/compiler/reverseMappedInferenceWithCircularConstraint.ts(47,3): erro
       initial: "unknown", // error
       ~~~~~~~
 !!! error TS2322: Type '"unknown"' is not assignable to type '"pending"'.
-!!! related TS6500 tests/cases/compiler/reverseMappedInferenceWithCircularConstraint.ts:24:3: The expected type comes from property 'initial' which is declared here on type 'InferNarrowestObject<Config<{ initial: "unknown"; states: { pending: { on: { done: unknown; }; }; }; }, { pending: { on: { done: unknown; }; }; }>>'
+!!! related TS6500 reverseMappedInferenceWithCircularConstraint.ts:24:3: The expected type comes from property 'initial' which is declared here on type 'InferNarrowestObject<Config<{ initial: "unknown"; states: { pending: { on: { done: unknown; }; }; }; }, { pending: { on: { done: unknown; }; }; }>>'
       states: {
         pending: {
           on: {

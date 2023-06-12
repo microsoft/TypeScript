@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constraintCheckInGenericBaseTypeReference.ts ===
+//// [tests/cases/compiler/constraintCheckInGenericBaseTypeReference.ts] ////
+
+=== constraintCheckInGenericBaseTypeReference.ts ===
 // No errors
 class Constraint {
 >Constraint : Symbol(Constraint, Decl(constraintCheckInGenericBaseTypeReference.ts, 0, 0))

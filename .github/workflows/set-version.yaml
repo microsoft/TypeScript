@@ -26,7 +26,9 @@ jobs:
       with:
         ref: ${{ github.event.client_payload.branch_name }}
     - run: |
-        corepack enable npm
+        npm --version
+        # corepack enable npm
+        npm install -g $(jq -r '.packageManager' < package.json)
         npm --version
     # notably, this is essentially the same script as `new-release-branch.yaml` (with fewer inputs), but it assumes the branch already exists
     # do note that executing the transform below will prevent the `configurePrerelease` script from running on the source, as it makes the

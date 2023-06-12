@@ -1,4 +1,6 @@
-=== tests/cases/compiler/stripMembersOptionality.ts ===
+//// [tests/cases/compiler/stripMembersOptionality.ts] ////
+
+=== stripMembersOptionality.ts ===
 // repro from #52494
 
 declare const someVal: Required<{

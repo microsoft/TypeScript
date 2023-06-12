@@ -1,4 +1,6 @@
-=== tests/cases/compiler/reverseMappedInferenceWithCircularConstraint.ts ===
+//// [tests/cases/compiler/reverseMappedInferenceWithCircularConstraint.ts] ////
+
+=== reverseMappedInferenceWithCircularConstraint.ts ===
 // repro from https://github.com/microsoft/TypeScript/issues/48798
 
 type AnyFunction = (...args: any[]) => any;

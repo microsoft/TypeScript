@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitNameConflicts3.ts] ////
+
 //// [declarationEmitNameConflicts3.ts]
 module M {
     export interface D { }
