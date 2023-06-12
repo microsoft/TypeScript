@@ -1,0 +1,65 @@
+typesForUrlSearchParams01.ts(2,5): error TS2322: Type '[string, string]' is not assignable to type 'string'.
+typesForUrlSearchParams01.ts(3,5): error TS2322: Type '[string, true]' is not assignable to type 'string'.
+typesForUrlSearchParams01.ts(4,5): error TS2322: Type '[string, false]' is not assignable to type 'string'.
+typesForUrlSearchParams01.ts(5,5): error TS2322: Type '[string, number]' is not assignable to type 'string'.
+typesForUrlSearchParams01.ts(8,22): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string'.
+typesForUrlSearchParams01.ts(9,25): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+typesForUrlSearchParams01.ts(10,25): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+typesForUrlSearchParams01.ts(17,28): error TS2495: Type 'URLSearchParams' is not an array type or a string type.
+typesForUrlSearchParams01.ts(21,37): error TS2339: Property 'entries' does not exist on type 'URLSearchParams'.
+typesForUrlSearchParams01.ts(25,30): error TS2339: Property 'values' does not exist on type 'URLSearchParams'.
+
+
+==== typesForUrlSearchParams01.ts (10 errors) ====
+    export const carQuery = new URLSearchParams([
+        ["query", "suv"],
+        ~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '[string, string]' is not assignable to type 'string'.
+        ["new", true],
+        ~~~~~~~~~~~~~
+!!! error TS2322: Type '[string, true]' is not assignable to type 'string'.
+        ["accidents", false],
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '[string, false]' is not assignable to type 'string'.
+        ["miles", 42_000],
+        ~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '[string, number]' is not assignable to type 'string'.
+    ]);
+    
+    carQuery.set("used", true);
+                         ~~~~
+!!! error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string'.
+    carQuery.append("year", 2023);
+                            ~~~~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+    carQuery.append("year", 2024);
+                            ~~~~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+    
+    let str: string | null, strs: string[];
+    
+    str = carQuery.get("query");
+    strs = carQuery.getAll("year");
+    
+    for (const [key, value] of carQuery) {
+                               ~~~~~~~~
+!!! error TS2495: Type 'URLSearchParams' is not an array type or a string type.
+        str = key;
+        str = value;
+    }
+    for (const [key, value] of carQuery.entries()) {
+                                        ~~~~~~~
+!!! error TS2339: Property 'entries' does not exist on type 'URLSearchParams'.
+        str = key;
+        str = value;
+    }
+    for (const value of carQuery.values()) {
+                                 ~~~~~~
+!!! error TS2339: Property 'values' does not exist on type 'URLSearchParams'.
+        str = value;
+    }
+    carQuery.forEach((value, key) => {
+        str = key;
+        str = value;
+    });
+    

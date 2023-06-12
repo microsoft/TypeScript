@@ -1,0 +1,95 @@
+//// [tests/cases/compiler/typesForUrlSearchParams01.ts] ////
+
+=== typesForUrlSearchParams01.ts ===
+export const carQuery = new URLSearchParams([
+>carQuery : Symbol(carQuery, Decl(typesForUrlSearchParams01.ts, 0, 12))
+>URLSearchParams : Symbol(URLSearchParams, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    ["query", "suv"],
+    ["new", true],
+    ["accidents", false],
+    ["miles", 42_000],
+]);
+
+carQuery.set("used", true);
+>carQuery.set : Symbol(URLSearchParams.set, Decl(lib.dom.d.ts, --, --))
+>carQuery : Symbol(carQuery, Decl(typesForUrlSearchParams01.ts, 0, 12))
+>set : Symbol(URLSearchParams.set, Decl(lib.dom.d.ts, --, --))
+
+carQuery.append("year", 2023);
+>carQuery.append : Symbol(URLSearchParams.append, Decl(lib.dom.d.ts, --, --))
+>carQuery : Symbol(carQuery, Decl(typesForUrlSearchParams01.ts, 0, 12))
+>append : Symbol(URLSearchParams.append, Decl(lib.dom.d.ts, --, --))
+
+carQuery.append("year", 2024);
+>carQuery.append : Symbol(URLSearchParams.append, Decl(lib.dom.d.ts, --, --))
+>carQuery : Symbol(carQuery, Decl(typesForUrlSearchParams01.ts, 0, 12))
+>append : Symbol(URLSearchParams.append, Decl(lib.dom.d.ts, --, --))
+
+let str: string | null, strs: string[];
+>str : Symbol(str, Decl(typesForUrlSearchParams01.ts, 11, 3))
+>strs : Symbol(strs, Decl(typesForUrlSearchParams01.ts, 11, 23))
+
+str = carQuery.get("query");
+>str : Symbol(str, Decl(typesForUrlSearchParams01.ts, 11, 3))
+>carQuery.get : Symbol(URLSearchParams.get, Decl(lib.dom.d.ts, --, --))
+>carQuery : Symbol(carQuery, Decl(typesForUrlSearchParams01.ts, 0, 12))
+>get : Symbol(URLSearchParams.get, Decl(lib.dom.d.ts, --, --))
+
+strs = carQuery.getAll("year");
+>strs : Symbol(strs, Decl(typesForUrlSearchParams01.ts, 11, 23))
+>carQuery.getAll : Symbol(URLSearchParams.getAll, Decl(lib.dom.d.ts, --, --))
+>carQuery : Symbol(carQuery, Decl(typesForUrlSearchParams01.ts, 0, 12))
+>getAll : Symbol(URLSearchParams.getAll, Decl(lib.dom.d.ts, --, --))
+
+for (const [key, value] of carQuery) {
+>key : Symbol(key, Decl(typesForUrlSearchParams01.ts, 16, 12))
+>value : Symbol(value, Decl(typesForUrlSearchParams01.ts, 16, 16))
+>carQuery : Symbol(carQuery, Decl(typesForUrlSearchParams01.ts, 0, 12))
+
+    str = key;
+>str : Symbol(str, Decl(typesForUrlSearchParams01.ts, 11, 3))
+>key : Symbol(key, Decl(typesForUrlSearchParams01.ts, 16, 12))
+
+    str = value;
+>str : Symbol(str, Decl(typesForUrlSearchParams01.ts, 11, 3))
+>value : Symbol(value, Decl(typesForUrlSearchParams01.ts, 16, 16))
+}
+for (const [key, value] of carQuery.entries()) {
+>key : Symbol(key, Decl(typesForUrlSearchParams01.ts, 20, 12))
+>value : Symbol(value, Decl(typesForUrlSearchParams01.ts, 20, 16))
+>carQuery : Symbol(carQuery, Decl(typesForUrlSearchParams01.ts, 0, 12))
+
+    str = key;
+>str : Symbol(str, Decl(typesForUrlSearchParams01.ts, 11, 3))
+>key : Symbol(key, Decl(typesForUrlSearchParams01.ts, 20, 12))
+
+    str = value;
+>str : Symbol(str, Decl(typesForUrlSearchParams01.ts, 11, 3))
+>value : Symbol(value, Decl(typesForUrlSearchParams01.ts, 20, 16))
+}
+for (const value of carQuery.values()) {
+>value : Symbol(value, Decl(typesForUrlSearchParams01.ts, 24, 10))
+>carQuery : Symbol(carQuery, Decl(typesForUrlSearchParams01.ts, 0, 12))
+
+    str = value;
+>str : Symbol(str, Decl(typesForUrlSearchParams01.ts, 11, 3))
+>value : Symbol(value, Decl(typesForUrlSearchParams01.ts, 24, 10))
+}
+carQuery.forEach((value, key) => {
+>carQuery.forEach : Symbol(URLSearchParams.forEach, Decl(lib.dom.d.ts, --, --))
+>carQuery : Symbol(carQuery, Decl(typesForUrlSearchParams01.ts, 0, 12))
+>forEach : Symbol(URLSearchParams.forEach, Decl(lib.dom.d.ts, --, --))
+>value : Symbol(value, Decl(typesForUrlSearchParams01.ts, 27, 18))
+>key : Symbol(key, Decl(typesForUrlSearchParams01.ts, 27, 24))
+
+    str = key;
+>str : Symbol(str, Decl(typesForUrlSearchParams01.ts, 11, 3))
+>key : Symbol(key, Decl(typesForUrlSearchParams01.ts, 27, 24))
+
+    str = value;
+>str : Symbol(str, Decl(typesForUrlSearchParams01.ts, 11, 3))
+>value : Symbol(value, Decl(typesForUrlSearchParams01.ts, 27, 18))
+
+});
+

@@ -1,0 +1,143 @@
+//// [tests/cases/compiler/typesForUrlSearchParams01.ts] ////
+
+=== typesForUrlSearchParams01.ts ===
+export const carQuery = new URLSearchParams([
+>carQuery : URLSearchParams
+>new URLSearchParams([    ["query", "suv"],    ["new", true],    ["accidents", false],    ["miles", 42_000],]) : URLSearchParams
+>URLSearchParams : { new (init?: string | string[][] | Record<string, string> | URLSearchParams | undefined): URLSearchParams; prototype: URLSearchParams; }
+>[    ["query", "suv"],    ["new", true],    ["accidents", false],    ["miles", 42_000],] : ((string | boolean)[] | (string | number)[])[]
+
+    ["query", "suv"],
+>["query", "suv"] : string[]
+>"query" : "query"
+>"suv" : "suv"
+
+    ["new", true],
+>["new", true] : (string | boolean)[]
+>"new" : "new"
+>true : true
+
+    ["accidents", false],
+>["accidents", false] : (string | boolean)[]
+>"accidents" : "accidents"
+>false : false
+
+    ["miles", 42_000],
+>["miles", 42_000] : (string | number)[]
+>"miles" : "miles"
+>42_000 : 42000
+
+]);
+
+carQuery.set("used", true);
+>carQuery.set("used", true) : void
+>carQuery.set : (name: string, value: string) => void
+>carQuery : URLSearchParams
+>set : (name: string, value: string) => void
+>"used" : "used"
+>true : true
+
+carQuery.append("year", 2023);
+>carQuery.append("year", 2023) : void
+>carQuery.append : (name: string, value: string) => void
+>carQuery : URLSearchParams
+>append : (name: string, value: string) => void
+>"year" : "year"
+>2023 : 2023
+
+carQuery.append("year", 2024);
+>carQuery.append("year", 2024) : void
+>carQuery.append : (name: string, value: string) => void
+>carQuery : URLSearchParams
+>append : (name: string, value: string) => void
+>"year" : "year"
+>2024 : 2024
+
+let str: string | null, strs: string[];
+>str : string | null
+>strs : string[]
+
+str = carQuery.get("query");
+>str = carQuery.get("query") : string | null
+>str : string | null
+>carQuery.get("query") : string | null
+>carQuery.get : (name: string) => string | null
+>carQuery : URLSearchParams
+>get : (name: string) => string | null
+>"query" : "query"
+
+strs = carQuery.getAll("year");
+>strs = carQuery.getAll("year") : string[]
+>strs : string[]
+>carQuery.getAll("year") : string[]
+>carQuery.getAll : (name: string) => string[]
+>carQuery : URLSearchParams
+>getAll : (name: string) => string[]
+>"year" : "year"
+
+for (const [key, value] of carQuery) {
+>key : any
+>value : any
+>carQuery : URLSearchParams
+
+    str = key;
+>str = key : any
+>str : string | null
+>key : any
+
+    str = value;
+>str = value : any
+>str : string | null
+>value : any
+}
+for (const [key, value] of carQuery.entries()) {
+>key : any
+>value : any
+>carQuery.entries() : any
+>carQuery.entries : any
+>carQuery : URLSearchParams
+>entries : any
+
+    str = key;
+>str = key : any
+>str : string | null
+>key : any
+
+    str = value;
+>str = value : any
+>str : string | null
+>value : any
+}
+for (const value of carQuery.values()) {
+>value : any
+>carQuery.values() : any
+>carQuery.values : any
+>carQuery : URLSearchParams
+>values : any
+
+    str = value;
+>str = value : any
+>str : string | null
+>value : any
+}
+carQuery.forEach((value, key) => {
+>carQuery.forEach((value, key) => {    str = key;    str = value;}) : void
+>carQuery.forEach : (callbackfn: (value: string, key: string, parent: URLSearchParams) => void, thisArg?: any) => void
+>carQuery : URLSearchParams
+>forEach : (callbackfn: (value: string, key: string, parent: URLSearchParams) => void, thisArg?: any) => void
+>(value, key) => {    str = key;    str = value;} : (value: string, key: string) => void
+>value : string
+>key : string
+
+    str = key;
+>str = key : string
+>str : string | null
+>key : string
+
+    str = value;
+>str = value : string
+>str : string | null
+>value : string
+
+});
+
