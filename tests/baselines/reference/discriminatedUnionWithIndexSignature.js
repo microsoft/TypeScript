@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/discriminatedUnionWithIndexSignature.ts] ////
+
 //// [discriminatedUnionWithIndexSignature.ts]
 export interface UnionAltA {
     type?: 'text';

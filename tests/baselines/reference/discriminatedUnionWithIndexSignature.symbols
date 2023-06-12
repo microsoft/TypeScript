@@ -1,4 +1,6 @@
-=== tests/cases/compiler/discriminatedUnionWithIndexSignature.ts ===
+//// [tests/cases/compiler/discriminatedUnionWithIndexSignature.ts] ////
+
+=== discriminatedUnionWithIndexSignature.ts ===
 export interface UnionAltA {
 >UnionAltA : Symbol(UnionAltA, Decl(discriminatedUnionWithIndexSignature.ts, 0, 0))
 
