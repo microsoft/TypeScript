@@ -38558,15 +38558,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // - The constructor declares parameter properties
 
                     const emittingNativeClassFields =
-                        getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2022 && useDefineForClassFields;
+                        getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2022;
                     const hasFieldWithInitializer =
-                        some((node.parent as ClassDeclaration).members, isInstanceFieldWithInitializer);
+                        some(node.parent.members, isInstanceFieldWithInitializer);
                     const hasPrivateMember =
-                        some((node.parent as ClassDeclaration).members,isPrivateIdentifierClassElementDeclaration);
+                        some(node.parent.members, isPrivateIdentifierClassElementDeclaration);
 
                     const superCallShouldBeRootLevel =
-                        !emittingNativeClassFields && hasFieldWithInitializer ||
-                        getEmitScriptTarget(compilerOptions) < ScriptTarget.ES2022 && hasPrivateMember ||
+                        !(emittingNativeClassFields && useDefineForClassFields) && hasFieldWithInitializer ||
+                        !emittingNativeClassFields && hasPrivateMember ||
                         some(node.parameters, p => hasSyntacticModifier(p, ModifierFlags.ParameterPropertyModifier));
 
                     if (superCallShouldBeRootLevel) {
