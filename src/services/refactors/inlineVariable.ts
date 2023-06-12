@@ -1,24 +1,26 @@
 import {
-    canHaveModifiers,
+    cast,
     Debug,
     Diagnostics,
     emptyArray,
     Expression,
     factory,
     FindAllReferences,
-    findAncestor,
     getExpressionPrecedence,
     getLocaleSpecificMessage,
     getSynthesizedDeepClone,
     getTokenAtPosition,
     Identifier,
     InitializedVariableDeclaration,
+    isExportAssignment,
     isExportModifier,
+    isExportSpecifier,
     isExpression,
     isIdentifier,
     isInitializedVariable,
     isTypeQueryNode,
     isVariableDeclarationInVariableStatement,
+    isVariableStatement,
     needsParentheses,
     Node,
     Program,
@@ -130,7 +132,7 @@ function getInliningInfo(file: SourceFile, startPosition: number, tryWithReferen
         }
 
         // Do not inline if the variable is exported.
-        if (findAncestor(parent, node => canHaveModifiers(node) && some(node.modifiers, isExportModifier))) {
+        if (isDeclarationExported(parent)) {
             return undefined;
         }
 
@@ -151,11 +153,23 @@ function getInliningInfo(file: SourceFile, startPosition: number, tryWithReferen
             return undefined;
         }
 
+        // Do not inline if the variable is exported.
+        if (isDeclarationExported(declaration)) {
+            return undefined;
+        }
+
         const references = getReferenceNodes(declaration, checker, file);
         return references && { references, declaration, replacement: declaration.initializer };
     }
 
     return { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_variable_to_inline) };
+}
+
+function isDeclarationExported(declaration: InitializedVariableDeclaration): boolean {
+    // We use this function after isVariableDeclarationInVariableStatement, which ensures
+    // that the cast below succeeds.
+    const variableStatement = cast(declaration.parent.parent, isVariableStatement);
+    return some(variableStatement.modifiers, isExportModifier);
 }
 
 function getReferenceNodes(declaration: InitializedVariableDeclaration, checker: TypeChecker, file: SourceFile): Identifier[] | undefined {
@@ -164,6 +178,11 @@ function getReferenceNodes(declaration: InitializedVariableDeclaration, checker:
         // Only inline if all references are reads. Else we might end up with an invalid scenario like:
         // const y = x++ + 1 -> const y = 2++ + 1
         if (FindAllReferences.isWriteAccessForReference(ref)) {
+            return true;
+        }
+
+        // We cannot inline exported variables like "export { x as y }" or "export default foo".
+        if (isExportSpecifier(ref.parent) || isExportAssignment(ref.parent)) {
             return true;
         }
 
