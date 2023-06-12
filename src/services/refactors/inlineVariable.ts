@@ -72,7 +72,15 @@ registerRefactor(refactorName, {
             return emptyArray;
         }
 
-        if (refactor.isRefactorErrorInfo(info) && preferences.provideRefactorNotApplicableReason) {
+        if (!refactor.isRefactorErrorInfo(info)) {
+            return [{
+                name: refactorName,
+                description: refactorDescription,
+                actions: [inlineVariableAction]
+            }];
+        }
+
+        if (preferences.provideRefactorNotApplicableReason) {
             return [{
                 name: refactorName,
                 description: refactorDescription,
@@ -80,14 +88,6 @@ registerRefactor(refactorName, {
                     ...inlineVariableAction,
                     notApplicableReason: info.error
                 }]
-            }];
-        }
-
-        if (!refactor.isRefactorErrorInfo(info)) {
-            return [{
-                name: refactorName,
-                description: refactorDescription,
-                actions: [inlineVariableAction]
             }];
         }
 
