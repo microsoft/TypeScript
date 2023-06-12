@@ -13719,6 +13719,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     result = computeBaseConstraint(getSimplifiedType(t, /*writing*/ false));
                     stack.pop();
                 }
+                else {
+                    result = circularConstraintType;
+                }
                 if (!popTypeResolution()) {
                     if (t.flags & TypeFlags.TypeParameter) {
                         const errorNode = getConstraintDeclaration(t as TypeParameter);
