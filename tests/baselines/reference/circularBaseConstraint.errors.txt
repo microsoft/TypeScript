@@ -1,7 +1,7 @@
-tests/cases/compiler/circularBaseConstraint.ts(14,8): error TS2304: Cannot find name 'a'.
+circularBaseConstraint.ts(14,8): error TS2304: Cannot find name 'a'.
 
 
-==== tests/cases/compiler/circularBaseConstraint.ts (1 errors) ====
+==== circularBaseConstraint.ts (1 errors) ====
     // Repro from #54610
     
     type A<T> = T;

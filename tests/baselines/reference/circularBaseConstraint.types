@@ -1,4 +1,6 @@
-=== tests/cases/compiler/circularBaseConstraint.ts ===
+//// [tests/cases/compiler/circularBaseConstraint.ts] ////
+
+=== circularBaseConstraint.ts ===
 // Repro from #54610
 
 type A<T> = T;
