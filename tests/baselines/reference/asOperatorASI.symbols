@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/asOperator/asOperatorASI.ts ===
+//// [tests/cases/conformance/expressions/asOperator/asOperatorASI.ts] ////
+
+=== asOperatorASI.ts ===
 class Foo { }
 >Foo : Symbol(Foo, Decl(asOperatorASI.ts, 0, 0))
 

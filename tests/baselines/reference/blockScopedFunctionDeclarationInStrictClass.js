@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/blockScopedFunctionDeclarationInStrictClass.ts] ////
+
 //// [blockScopedFunctionDeclarationInStrictClass.ts]
 class c {
     method() {

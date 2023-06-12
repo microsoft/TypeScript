@@ -1,8 +1,8 @@
-tests/cases/compiler/contextualTyping5.ts(1,20): error TS2741: Property 'id' is missing in type '{}' but required in type '{ id: number; }'.
+contextualTyping5.ts(1,20): error TS2741: Property 'id' is missing in type '{}' but required in type '{ id: number; }'.
 
 
-==== tests/cases/compiler/contextualTyping5.ts (1 errors) ====
+==== contextualTyping5.ts (1 errors) ====
     class foo { public bar:{id:number;} = { }; }
                        ~~~
 !!! error TS2741: Property 'id' is missing in type '{}' but required in type '{ id: number; }'.
-!!! related TS2728 tests/cases/compiler/contextualTyping5.ts:1:25: 'id' is declared here.
+!!! related TS2728 contextualTyping5.ts:1:25: 'id' is declared here.

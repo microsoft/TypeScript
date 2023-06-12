@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/test.js ===
+//// [tests/cases/conformance/salsa/contextualTypedSpecialAssignment.ts] ////
+
+=== test.js ===
 /** @typedef {{
     status: 'done'
     m(n: number): void
@@ -97,7 +99,7 @@ class Thing {
 exports.x = {
 >exports.x = {    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
 >exports.x : DoneStatus
->exports : typeof import("tests/cases/conformance/salsa/test")
+>exports : typeof import("test")
 >x : DoneStatus
 >{    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
 
@@ -111,7 +113,7 @@ exports.x = {
 }
 exports.x
 >exports.x : DoneStatus
->exports : typeof import("tests/cases/conformance/salsa/test")
+>exports : typeof import("test")
 >x : DoneStatus
 
 /** @type {DoneStatus} */
@@ -186,7 +188,7 @@ F.prototype = {
 >n : number
 }
 
-=== tests/cases/conformance/salsa/mod.js ===
+=== mod.js ===
 // module.exports assignment
 /** @type {{ status: 'done', m(n: number): void }} */
 module.exports = {

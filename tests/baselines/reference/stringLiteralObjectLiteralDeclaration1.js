@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/stringLiteralObjectLiteralDeclaration1.ts] ////
+
 //// [stringLiteralObjectLiteralDeclaration1.ts]
 module m1 {
   export var n = { 'foo bar': 4 };

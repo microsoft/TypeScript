@@ -1,4 +1,6 @@
-=== tests/cases/compiler/propertyNamesWithStringLiteral.ts ===
+//// [tests/cases/compiler/propertyNamesWithStringLiteral.ts] ////
+
+=== propertyNamesWithStringLiteral.ts ===
 class _Color {
 >_Color : Symbol(_Color, Decl(propertyNamesWithStringLiteral.ts, 0, 0))
 

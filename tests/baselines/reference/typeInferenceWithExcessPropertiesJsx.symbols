@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeInferenceWithExcessPropertiesJsx.tsx ===
+//// [tests/cases/compiler/typeInferenceWithExcessPropertiesJsx.tsx] ////
+
+=== typeInferenceWithExcessPropertiesJsx.tsx ===
 /// <reference path="react16.d.ts" />
 
 import React = require('react');

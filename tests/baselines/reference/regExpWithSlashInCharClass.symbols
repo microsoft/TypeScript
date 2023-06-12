@@ -1,4 +1,6 @@
-=== tests/cases/compiler/regExpWithSlashInCharClass.ts ===
+//// [tests/cases/compiler/regExpWithSlashInCharClass.ts] ////
+
+=== regExpWithSlashInCharClass.ts ===
 var foo1 = "a/".replace(/.[/]/, "");
 >foo1 : Symbol(foo1, Decl(regExpWithSlashInCharClass.ts, 0, 3))
 >"a/".replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

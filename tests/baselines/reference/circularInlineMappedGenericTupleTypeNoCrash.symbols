@@ -1,4 +1,6 @@
-=== tests/cases/compiler/circularInlineMappedGenericTupleTypeNoCrash.ts ===
+//// [tests/cases/compiler/circularInlineMappedGenericTupleTypeNoCrash.ts] ////
+
+=== circularInlineMappedGenericTupleTypeNoCrash.ts ===
 class Foo<Elements extends readonly unknown[]> {
 >Foo : Symbol(Foo, Decl(circularInlineMappedGenericTupleTypeNoCrash.ts, 0, 0))
 >Elements : Symbol(Elements, Decl(circularInlineMappedGenericTupleTypeNoCrash.ts, 0, 10))

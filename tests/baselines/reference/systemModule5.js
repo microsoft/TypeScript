@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/systemModule5.ts] ////
+
 //// [systemModule5.ts]
 export function foo() {}
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/isDeclarationVisibleNodeKinds.ts] ////
+
 //// [isDeclarationVisibleNodeKinds.ts]
 // Function types
 module schema {

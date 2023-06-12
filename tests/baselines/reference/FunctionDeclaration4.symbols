@@ -1,4 +1,6 @@
-=== tests/cases/compiler/FunctionDeclaration4.ts ===
+//// [tests/cases/compiler/FunctionDeclaration4.ts] ////
+
+=== FunctionDeclaration4.ts ===
 function foo();
 >foo : Symbol(foo, Decl(FunctionDeclaration4.ts, 0, 0))
 

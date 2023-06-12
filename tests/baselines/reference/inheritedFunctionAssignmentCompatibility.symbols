@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inheritedFunctionAssignmentCompatibility.ts ===
+//// [tests/cases/compiler/inheritedFunctionAssignmentCompatibility.ts] ////
+
+=== inheritedFunctionAssignmentCompatibility.ts ===
 interface IResultCallback extends Function { }
 >IResultCallback : Symbol(IResultCallback, Decl(inheritedFunctionAssignmentCompatibility.ts, 0, 0))
 >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

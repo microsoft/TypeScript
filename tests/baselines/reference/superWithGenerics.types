@@ -1,4 +1,6 @@
-=== tests/cases/compiler/superWithGenerics.ts ===
+//// [tests/cases/compiler/superWithGenerics.ts] ////
+
+=== superWithGenerics.ts ===
 declare class B<T> {    
 >B : B<T>
 

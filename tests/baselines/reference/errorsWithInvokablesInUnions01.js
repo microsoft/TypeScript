@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/errorsWithInvokablesInUnions01.ts] ////
+
 //// [errorsWithInvokablesInUnions01.ts]
 interface ConstructableA {
   new(): { somePropA: any };

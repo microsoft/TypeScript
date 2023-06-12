@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration7_es5.ts] ////
+
 //// [asyncFunctionDeclaration7_es5.ts]
 async function bar(): Promise<void> {
   // 'await' here is an identifier, and not a yield expression.

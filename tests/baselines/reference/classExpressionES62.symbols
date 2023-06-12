@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/classExpressions/classExpressionES62.ts ===
+//// [tests/cases/conformance/es6/classExpressions/classExpressionES62.ts] ////
+
+=== classExpressionES62.ts ===
 class D { }
 >D : Symbol(D, Decl(classExpressionES62.ts, 0, 0))
 

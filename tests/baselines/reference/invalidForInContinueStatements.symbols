@@ -1,4 +1,6 @@
-=== tests/cases/conformance/statements/continueStatements/invalidForInContinueStatements.ts ===
+//// [tests/cases/conformance/statements/continueStatements/invalidForInContinueStatements.ts] ////
+
+=== invalidForInContinueStatements.ts ===
 // All errors
 
 // naked continue not allowed

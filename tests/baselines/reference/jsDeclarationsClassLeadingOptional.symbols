@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/declarations/bar.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsClassLeadingOptional.ts] ////
+
+=== bar.js ===
 export class Z {
 >Z : Symbol(Z, Decl(bar.js, 0, 0))
 

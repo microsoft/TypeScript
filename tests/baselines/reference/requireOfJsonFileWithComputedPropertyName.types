@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/requireOfJsonFileWithComputedPropertyName.ts] ////
+
+=== file1.ts ===
 import b1 = require('./b.json');
 >b1 : { [x: number]: number; }
 
@@ -18,7 +20,7 @@ if (x) {
 >b2 : { [x: number]: number; }
 }
 
-=== tests/cases/compiler/b.json ===
+=== b.json ===
 {
 >{    [a]: 10} : { [x: number]: number; }
 

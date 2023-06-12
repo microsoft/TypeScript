@@ -1,4 +1,6 @@
-=== tests/cases/compiler/largeTupleTypes.ts ===
+//// [tests/cases/compiler/largeTupleTypes.ts] ////
+
+=== largeTupleTypes.ts ===
 // Repro from #54491
 
 type UnshiftTuple<T extends [...any[]]> = T extends [T[0], ...infer Tail] ? Tail : never;

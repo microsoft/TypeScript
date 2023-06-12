@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/a.ts ===
+//// [tests/cases/conformance/salsa/inferingFromAny.ts] ////
+
+=== a.ts ===
 var a: any;
 >a : any
 
@@ -92,7 +94,7 @@ declare function f19<T, K extends keyof T>(k: K, x: T[K]): T;
 >k : K
 >x : T[K]
 
-=== tests/cases/conformance/salsa/a.js ===
+=== a.js ===
 var a = f1(a);
 >a : any
 >f1(a) : any

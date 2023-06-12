@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constDeclarations-access2.ts] ////
+
 //// [constDeclarations-access2.ts]
 const x = 0
 

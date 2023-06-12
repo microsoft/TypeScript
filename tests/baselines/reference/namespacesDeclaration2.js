@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/namespacesDeclaration2.ts] ////
+
 //// [namespacesDeclaration2.ts]
 namespace N {
     function S() {}

@@ -1,9 +1,9 @@
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ObjectLiterals/parserErrorRecovery_ObjectLiteral4.ts(2,1): error TS1005: ',' expected.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ObjectLiterals/parserErrorRecovery_ObjectLiteral4.ts(2,7): error TS1005: ':' expected.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ObjectLiterals/parserErrorRecovery_ObjectLiteral4.ts(2,8): error TS1005: '}' expected.
+parserErrorRecovery_ObjectLiteral4.ts(2,1): error TS1005: ',' expected.
+parserErrorRecovery_ObjectLiteral4.ts(2,7): error TS1005: ':' expected.
+parserErrorRecovery_ObjectLiteral4.ts(2,8): error TS1005: '}' expected.
 
 
-==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ObjectLiterals/parserErrorRecovery_ObjectLiteral4.ts (3 errors) ====
+==== parserErrorRecovery_ObjectLiteral4.ts (3 errors) ====
     var v = { a: 1
     return;
     ~~~~~~
@@ -12,4 +12,4 @@ tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ObjectLiterals/parserEr
 !!! error TS1005: ':' expected.
            
 !!! error TS1005: '}' expected.
-!!! related TS1007 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ObjectLiterals/parserErrorRecovery_ObjectLiteral4.ts:1:9: The parser expected to find a '}' to match the '{' token here.
+!!! related TS1007 parserErrorRecovery_ObjectLiteral4.ts:1:9: The parser expected to find a '}' to match the '{' token here.

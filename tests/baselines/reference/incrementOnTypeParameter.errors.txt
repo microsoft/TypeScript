@@ -1,8 +1,8 @@
-tests/cases/compiler/incrementOnTypeParameter.ts(4,9): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/compiler/incrementOnTypeParameter.ts(5,39): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+incrementOnTypeParameter.ts(4,9): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+incrementOnTypeParameter.ts(5,39): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
 
 
-==== tests/cases/compiler/incrementOnTypeParameter.ts (2 errors) ====
+==== incrementOnTypeParameter.ts (2 errors) ====
     class C<T> {
         a: T;
         foo() {

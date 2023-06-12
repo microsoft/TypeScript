@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithTypeParameter.ts] ////
+
 //// [arithmeticOperatorWithTypeParameter.ts]
 // type parameter type is not valid for arithmetic operand
 function foo<T>(t: T) {

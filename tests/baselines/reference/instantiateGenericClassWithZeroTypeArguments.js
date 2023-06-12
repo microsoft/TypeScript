@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiateGenericClassWithZeroTypeArguments.ts] ////
+
 //// [instantiateGenericClassWithZeroTypeArguments.ts]
 // no errors expected when instantiating a generic type with no type arguments provided
 

@@ -1,11 +1,11 @@
-tests/cases/compiler/specializedSignatureAsCallbackParameter1.ts(7,1): error TS2769: No overload matches this call.
+specializedSignatureAsCallbackParameter1.ts(7,1): error TS2769: No overload matches this call.
   Overload 1 of 2, '(a: number, cb: (x: number) => number): any', gave the following error.
     Argument of type '(x: string) => number' is not assignable to parameter of type '(x: number) => number'.
       Types of parameters 'x' and 'x' are incompatible.
         Type 'number' is not assignable to type 'string'.
   Overload 2 of 2, '(a: string, cb: (x: number) => number): any', gave the following error.
     Argument of type 'number' is not assignable to parameter of type 'string'.
-tests/cases/compiler/specializedSignatureAsCallbackParameter1.ts(8,1): error TS2769: No overload matches this call.
+specializedSignatureAsCallbackParameter1.ts(8,1): error TS2769: No overload matches this call.
   Overload 1 of 2, '(a: number, cb: (x: number) => number): any', gave the following error.
     Argument of type '(x: 'hm') => number' is not assignable to parameter of type '(x: number) => number'.
       Types of parameters 'x' and 'x' are incompatible.
@@ -14,7 +14,7 @@ tests/cases/compiler/specializedSignatureAsCallbackParameter1.ts(8,1): error TS2
     Argument of type 'number' is not assignable to parameter of type 'string'.
 
 
-==== tests/cases/compiler/specializedSignatureAsCallbackParameter1.ts (2 errors) ====
+==== specializedSignatureAsCallbackParameter1.ts (2 errors) ====
     function x3(a: number, cb: (x: number) => number);
     function x3(a: string, cb: (x: number) => number);
     function x3(a: any, cb: (x: number) => number) {

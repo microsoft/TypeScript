@@ -1,7 +1,7 @@
-tests/cases/compiler/specialIntersectionsInMappedTypes.ts(14,1): error TS18048: 'a.other' is possibly 'undefined'.
+specialIntersectionsInMappedTypes.ts(14,1): error TS18048: 'a.other' is possibly 'undefined'.
 
 
-==== tests/cases/compiler/specialIntersectionsInMappedTypes.ts (1 errors) ====
+==== specialIntersectionsInMappedTypes.ts (1 errors) ====
     // Repro from #50683
     
     type Alignment = (string & {}) | "left" | "center" | "right";

@@ -1,10 +1,10 @@
-tests/cases/compiler/b.ts(1,12): error TS6133: 'T' is declared but its value is never read.
+b.ts(1,12): error TS6133: 'T' is declared but its value is never read.
 
 
-==== tests/cases/compiler/a.ts (0 errors) ====
+==== a.ts (0 errors) ====
     class C<T> { }
     
-==== tests/cases/compiler/b.ts (1 errors) ====
+==== b.ts (1 errors) ====
     interface C<T> { }
                ~~~
 !!! error TS6133: 'T' is declared but its value is never read.

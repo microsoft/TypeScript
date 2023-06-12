@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitDestructuringArrayPattern3.ts ===
+//// [tests/cases/compiler/declarationEmitDestructuringArrayPattern3.ts] ////
+
+=== declarationEmitDestructuringArrayPattern3.ts ===
 module M {
 >M : Symbol(M, Decl(declarationEmitDestructuringArrayPattern3.ts, 0, 0))
 

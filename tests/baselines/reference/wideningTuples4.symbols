@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/tuple/wideningTuples4.ts ===
+//// [tests/cases/conformance/types/tuple/wideningTuples4.ts] ////
+
+=== wideningTuples4.ts ===
 var a: [any];
 >a : Symbol(a, Decl(wideningTuples4.ts, 0, 3))
 

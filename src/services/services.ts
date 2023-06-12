@@ -1937,10 +1937,6 @@ export function createLanguageService(
     }
 
     function cleanupSemanticCache(): void {
-        program = undefined!; // TODO: GH#18217
-    }
-
-    function dispose(): void {
         if (program) {
             // Use paths to ensure we are using correct key and paths as document registry could be created with different current directory than host
             const key = documentRegistry.getKeyForCompilationSettings(program.getCompilerOptions());
@@ -1948,6 +1944,10 @@ export function createLanguageService(
                 documentRegistry.releaseDocumentWithKey(f.resolvedPath, key, f.scriptKind, f.impliedNodeFormat));
             program = undefined!; // TODO: GH#18217
         }
+    }
+
+    function dispose(): void {
+        cleanupSemanticCache();
         host = undefined!;
     }
 

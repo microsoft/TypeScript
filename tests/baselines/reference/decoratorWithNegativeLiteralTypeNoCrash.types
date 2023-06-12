@@ -1,4 +1,6 @@
-=== tests/cases/compiler/decoratorWithNegativeLiteralTypeNoCrash.ts ===
+//// [tests/cases/compiler/decoratorWithNegativeLiteralTypeNoCrash.ts] ////
+
+=== decoratorWithNegativeLiteralTypeNoCrash.ts ===
 class A {
 >A : A
 

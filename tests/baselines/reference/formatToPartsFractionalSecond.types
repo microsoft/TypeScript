@@ -1,4 +1,6 @@
-=== tests/cases/compiler/formatToPartsFractionalSecond.ts ===
+//// [tests/cases/compiler/formatToPartsFractionalSecond.ts] ////
+
+=== formatToPartsFractionalSecond.ts ===
 new Intl.DateTimeFormat().formatToParts().find((val) => val.type === 'fractionalSecond')
 >new Intl.DateTimeFormat().formatToParts().find((val) => val.type === 'fractionalSecond') : Intl.DateTimeFormatPart
 >new Intl.DateTimeFormat().formatToParts().find : { <S extends Intl.DateTimeFormatPart>(predicate: (value: Intl.DateTimeFormatPart, index: number, obj: Intl.DateTimeFormatPart[]) => value is S, thisArg?: any): S; (predicate: (value: Intl.DateTimeFormatPart, index: number, obj: Intl.DateTimeFormatPart[]) => unknown, thisArg?: any): Intl.DateTimeFormatPart; }

@@ -23,7 +23,9 @@ jobs:
     steps:
     - uses: actions/setup-node@v3
     - run: |
-        corepack enable npm
+        npm --version
+        # corepack enable npm
+        npm install -g $(jq -r '.packageManager' < package.json)
         npm --version
     - uses: actions/checkout@v3
       with:

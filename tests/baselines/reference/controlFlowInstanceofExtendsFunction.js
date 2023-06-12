@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/controlFlowInstanceofExtendsFunction.ts] ////
+
 //// [controlFlowInstanceofExtendsFunction.ts]
 declare global {
     interface Function {

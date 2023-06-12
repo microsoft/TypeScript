@@ -1,4 +1,6 @@
-=== tests/cases/compiler/server.ts ===
+//// [tests/cases/compiler/es6ExportAll.ts] ////
+
+=== server.ts ===
 export class c {
 >c : Symbol(c, Decl(server.ts, 0, 0))
 }
@@ -18,6 +20,6 @@ export module uninstantiated {
 >uninstantiated : Symbol(uninstantiated, Decl(server.ts, 7, 18))
 }
 
-=== tests/cases/compiler/client.ts ===
+=== client.ts ===
 
 export * from "server";
