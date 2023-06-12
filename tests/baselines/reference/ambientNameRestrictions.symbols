@@ -1,4 +1,6 @@
-=== tests/cases/compiler/ambientNameRestrictions.ts ===
+//// [tests/cases/compiler/ambientNameRestrictions.ts] ////
+
+=== ambientNameRestrictions.ts ===
 export declare namespace Foo {
 >Foo : Symbol(Foo, Decl(ambientNameRestrictions.ts, 0, 0))
 

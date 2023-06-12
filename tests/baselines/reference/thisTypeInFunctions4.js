@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/thisType/thisTypeInFunctions4.ts] ////
+
 //// [thisTypeInFunctions4.ts]
 type WrongObject = {value: number};
 type CorrectObject = {name: string};

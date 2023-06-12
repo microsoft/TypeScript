@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inferParameterWithMethodCallInitializer.ts] ////
+
 //// [inferParameterWithMethodCallInitializer.ts]
 function getNumber(): number {
     return 1;

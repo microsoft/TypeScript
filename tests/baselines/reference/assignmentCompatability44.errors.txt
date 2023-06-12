@@ -1,10 +1,10 @@
-tests/cases/compiler/assignmentCompatability44.ts(5,7): error TS2322: Type 'typeof Foo' is not assignable to type 'new () => Foo'.
+assignmentCompatability44.ts(5,7): error TS2322: Type 'typeof Foo' is not assignable to type 'new () => Foo'.
   Types of construct signatures are incompatible.
     Type 'new (x: number) => Foo' is not assignable to type 'new () => Foo'.
       Target signature provides too few arguments. Expected 1 or more, but got 0.
 
 
-==== tests/cases/compiler/assignmentCompatability44.ts (1 errors) ====
+==== assignmentCompatability44.ts (1 errors) ====
     class Foo {
         constructor(x: number) {}
     }

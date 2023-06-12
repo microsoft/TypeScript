@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/index.js ===
+//// [tests/cases/conformance/salsa/moduleExportAlias2.ts] ////
+
+=== index.js ===
 /// <reference path='node.d.ts' />
 const C = require("./semver")
 >C : typeof C
@@ -19,7 +21,7 @@ var c = new C
 >new C : C
 >C : typeof C
 
-=== tests/cases/conformance/salsa/node.d.ts ===
+=== node.d.ts ===
 declare function require(name: string): any;
 >require : (name: string) => any
 >name : string
@@ -31,7 +33,7 @@ declare var module: { exports: any };
 >module : { exports: any; }
 >exports : any
 
-=== tests/cases/conformance/salsa/semver.js ===
+=== semver.js ===
 /// <reference path='node.d.ts' />
 exports = module.exports = C
 >exports = module.exports = C : typeof C

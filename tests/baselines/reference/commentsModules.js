@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentsModules.ts] ////
+
 //// [commentsModules.ts]
 /** Module comment*/
 module m1 {

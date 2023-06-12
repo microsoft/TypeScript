@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleNoEmit.ts] ////
+
 //// [moduleNoEmit.ts]
 module Foo {
 	1+1;

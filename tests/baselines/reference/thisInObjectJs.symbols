@@ -1,4 +1,6 @@
-=== tests/cases/compiler/index.js ===
+//// [tests/cases/compiler/thisInObjectJs.ts] ////
+
+=== index.js ===
 export { }
 let obj = {
 >obj : Symbol(obj, Decl(index.js, 1, 3))

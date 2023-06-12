@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers5.ts ===
+//// [tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers5.ts] ////
+
+=== typeOfThisInStaticMembers5.ts ===
 class C {
 >C : Symbol(C, Decl(typeOfThisInStaticMembers5.ts, 0, 0))
 

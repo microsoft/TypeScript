@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/sourceMapValidationDestructuringVariableStatementArrayBindingPattern4.ts] ////
+
 //// [sourceMapValidationDestructuringVariableStatementArrayBindingPattern4.ts]
 var [x] = [1, 2];
 

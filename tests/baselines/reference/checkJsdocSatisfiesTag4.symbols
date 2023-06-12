@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocSatisfiesTag4.ts] ////
+
 === /a.js ===
 
 /**

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/collisionExportsRequireAndAlias_file2.ts ===
+//// [tests/cases/compiler/collisionExportsRequireAndAlias.ts] ////
+
+=== collisionExportsRequireAndAlias_file2.ts ===
 import require = require('collisionExportsRequireAndAlias_file1'); // Error
 >require : typeof require
 
@@ -23,12 +25,12 @@ export function foo2() {
 >exports : typeof exports
 >bar2 : () => void
 }
-=== tests/cases/compiler/collisionExportsRequireAndAlias_file1.ts ===
+=== collisionExportsRequireAndAlias_file1.ts ===
 export function bar() {
 >bar : () => void
 }
 
-=== tests/cases/compiler/collisionExportsRequireAndAlias_file3333.ts ===
+=== collisionExportsRequireAndAlias_file3333.ts ===
 export function bar2() {
 >bar2 : () => void
 }

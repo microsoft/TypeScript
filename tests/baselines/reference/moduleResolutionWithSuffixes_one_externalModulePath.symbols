@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleResolutionWithSuffixes_one_externalModulePath.ts] ////
+
 === /index.ts ===
 import { iosfoo } from "some-library/foo";
 >iosfoo : Symbol(iosfoo, Decl(index.ts, 0, 8))

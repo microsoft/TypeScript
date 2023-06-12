@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/strictNullEmptyDestructuring.ts] ////
+
 //// [strictNullEmptyDestructuring.ts]
 // Repro from #20873
 

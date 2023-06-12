@@ -5,7 +5,7 @@ sourceRoot:
 sources: a.ts,b.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/c.js
+emittedFile:c.js
 sourceFile:a.ts
 -------------------------------------------------------------------
 >>>// --out and --outFile error
@@ -64,7 +64,7 @@ sourceFile:a.ts
 4 >Emitted(6, 6) Source(3, 12) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/c.js
+emittedFile:c.js
 sourceFile:b.ts
 -------------------------------------------------------------------
 >>>var B = /** @class */ (function () {

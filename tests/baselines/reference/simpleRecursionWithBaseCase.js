@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/simpleRecursionWithBaseCase.ts] ////
+
 //// [simpleRecursionWithBaseCase.ts]
 function fn1(n: number) {
     if (n === 0) {

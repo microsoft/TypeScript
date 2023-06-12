@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/pathMappingBasedModuleResolution_withExtension.ts] ////
+
 === /foo/foo.ts ===
 export function foo() {}
 >foo : () => void

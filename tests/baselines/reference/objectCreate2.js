@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectCreate2.ts] ////
+
 //// [objectCreate2.ts]
 declare var union: null | { a: number, b: string };
 

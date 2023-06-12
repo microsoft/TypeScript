@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericWithCallSignatures_1.ts ===
+//// [tests/cases/compiler/genericWithCallSignatures1.ts] ////
+
+=== genericWithCallSignatures_1.ts ===
 ///<reference path="genericWithCallSignatures_0.ts"/>
 class MyClass {
 >MyClass : Symbol(MyClass, Decl(genericWithCallSignatures_1.ts, 0, 0))
@@ -17,7 +19,7 @@ class MyClass {
 >callableThing : Symbol(MyClass.callableThing, Decl(genericWithCallSignatures_1.ts, 1, 15))
     }
 }
-=== tests/cases/compiler/genericWithCallSignatures_0.ts ===
+=== genericWithCallSignatures_0.ts ===
 interface Callable<T> {
 >Callable : Symbol(Callable, Decl(genericWithCallSignatures_0.ts, 0, 0))
 >T : Symbol(T, Decl(genericWithCallSignatures_0.ts, 0, 19))

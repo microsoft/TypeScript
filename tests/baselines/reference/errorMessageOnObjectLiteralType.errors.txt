@@ -1,8 +1,8 @@
-tests/cases/compiler/errorMessageOnObjectLiteralType.ts(5,3): error TS2339: Property 'getOwnPropertyNamess' does not exist on type '{ a: string; b: number; }'.
-tests/cases/compiler/errorMessageOnObjectLiteralType.ts(6,8): error TS2551: Property 'getOwnPropertyNamess' does not exist on type 'ObjectConstructor'. Did you mean 'getOwnPropertyNames'?
+errorMessageOnObjectLiteralType.ts(5,3): error TS2339: Property 'getOwnPropertyNamess' does not exist on type '{ a: string; b: number; }'.
+errorMessageOnObjectLiteralType.ts(6,8): error TS2551: Property 'getOwnPropertyNamess' does not exist on type 'ObjectConstructor'. Did you mean 'getOwnPropertyNames'?
 
 
-==== tests/cases/compiler/errorMessageOnObjectLiteralType.ts (2 errors) ====
+==== errorMessageOnObjectLiteralType.ts (2 errors) ====
     var x: {
         a: string;
         b: number;

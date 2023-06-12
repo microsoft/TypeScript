@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsFunctions.ts] ////
+
+=== index.js ===
 export function a() {}
 >a : () => void
 
@@ -68,9 +70,9 @@ f.self = f;
  * @param {{y: typeof b}} b
  */
 function g(a, b) {
->g : (a: {    x: string;}, b: { y: typeof import("tests/cases/conformance/jsdoc/declarations/index").b; }) => void
+>g : (a: {    x: string;}, b: { y: typeof import("index").b; }) => void
 >a : { x: string; }
->b : { y: typeof import("tests/cases/conformance/jsdoc/declarations/index").b; }
+>b : { y: typeof import("index").b; }
 
     return a.x && b.y();
 >a.x && b.y() : void
@@ -78,9 +80,9 @@ function g(a, b) {
 >a : { x: string; }
 >x : string
 >b.y() : void
->b.y : typeof import("tests/cases/conformance/jsdoc/declarations/index").b
->b : { y: typeof import("tests/cases/conformance/jsdoc/declarations/index").b; }
->y : typeof import("tests/cases/conformance/jsdoc/declarations/index").b
+>b.y : typeof import("index").b
+>b : { y: typeof import("index").b; }
+>y : typeof import("index").b
 }
 
 export { g };
@@ -91,9 +93,9 @@ export { g };
  * @param {{y: typeof b}} b
  */
 function hh(a, b) {
->hh : (a: {    x: string;}, b: { y: typeof import("tests/cases/conformance/jsdoc/declarations/index").b; }) => void
+>hh : (a: {    x: string;}, b: { y: typeof import("index").b; }) => void
 >a : { x: string; }
->b : { y: typeof import("tests/cases/conformance/jsdoc/declarations/index").b; }
+>b : { y: typeof import("index").b; }
 
     return a.x && b.y();
 >a.x && b.y() : void
@@ -101,9 +103,9 @@ function hh(a, b) {
 >a : { x: string; }
 >x : string
 >b.y() : void
->b.y : typeof import("tests/cases/conformance/jsdoc/declarations/index").b
->b : { y: typeof import("tests/cases/conformance/jsdoc/declarations/index").b; }
->y : typeof import("tests/cases/conformance/jsdoc/declarations/index").b
+>b.y : typeof import("index").b
+>b : { y: typeof import("index").b; }
+>y : typeof import("index").b
 }
 
 export { hh as h };

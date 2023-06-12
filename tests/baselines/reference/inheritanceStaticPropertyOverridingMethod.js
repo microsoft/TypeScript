@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inheritanceStaticPropertyOverridingMethod.ts] ////
+
 //// [inheritanceStaticPropertyOverridingMethod.ts]
 class a {
     static x() {

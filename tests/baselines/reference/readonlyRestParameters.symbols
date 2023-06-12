@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/restParameters/readonlyRestParameters.ts ===
+//// [tests/cases/conformance/es6/restParameters/readonlyRestParameters.ts] ////
+
+=== readonlyRestParameters.ts ===
 function f0(a: string, b: string) {
 >f0 : Symbol(f0, Decl(readonlyRestParameters.ts, 0, 0))
 >a : Symbol(a, Decl(readonlyRestParameters.ts, 0, 12))

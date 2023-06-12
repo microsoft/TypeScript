@@ -1,16 +1,16 @@
-tests/cases/conformance/es7/exponentiationOperator/emitExponentiationOperator4.ts(14,1): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/es7/exponentiationOperator/emitExponentiationOperator4.ts(15,1): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/es7/exponentiationOperator/emitExponentiationOperator4.ts(16,1): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/es7/exponentiationOperator/emitExponentiationOperator4.ts(17,1): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/es7/exponentiationOperator/emitExponentiationOperator4.ts(18,1): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/es7/exponentiationOperator/emitExponentiationOperator4.ts(21,6): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/es7/exponentiationOperator/emitExponentiationOperator4.ts(22,6): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/es7/exponentiationOperator/emitExponentiationOperator4.ts(23,6): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/es7/exponentiationOperator/emitExponentiationOperator4.ts(24,6): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/es7/exponentiationOperator/emitExponentiationOperator4.ts(25,6): error TS2532: Object is possibly 'undefined'.
+emitExponentiationOperator4.ts(14,1): error TS2532: Object is possibly 'undefined'.
+emitExponentiationOperator4.ts(15,1): error TS2532: Object is possibly 'undefined'.
+emitExponentiationOperator4.ts(16,1): error TS2532: Object is possibly 'undefined'.
+emitExponentiationOperator4.ts(17,1): error TS2532: Object is possibly 'undefined'.
+emitExponentiationOperator4.ts(18,1): error TS2532: Object is possibly 'undefined'.
+emitExponentiationOperator4.ts(21,6): error TS2532: Object is possibly 'undefined'.
+emitExponentiationOperator4.ts(22,6): error TS2532: Object is possibly 'undefined'.
+emitExponentiationOperator4.ts(23,6): error TS2532: Object is possibly 'undefined'.
+emitExponentiationOperator4.ts(24,6): error TS2532: Object is possibly 'undefined'.
+emitExponentiationOperator4.ts(25,6): error TS2532: Object is possibly 'undefined'.
 
 
-==== tests/cases/conformance/es7/exponentiationOperator/emitExponentiationOperator4.ts (10 errors) ====
+==== emitExponentiationOperator4.ts (10 errors) ====
     var temp: any;
     
     (<number>temp) ** 3;

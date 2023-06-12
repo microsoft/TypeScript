@@ -1,8 +1,8 @@
-tests/cases/compiler/unusedDestructuringParameters.ts(1,12): error TS6133: 'a' is declared but its value is never read.
-tests/cases/compiler/unusedDestructuringParameters.ts(3,13): error TS6133: 'a' is declared but its value is never read.
+unusedDestructuringParameters.ts(1,12): error TS6133: 'a' is declared but its value is never read.
+unusedDestructuringParameters.ts(3,13): error TS6133: 'a' is declared but its value is never read.
 
 
-==== tests/cases/compiler/unusedDestructuringParameters.ts (2 errors) ====
+==== unusedDestructuringParameters.ts (2 errors) ====
     const f = ([a]) => { };
                ~~~
 !!! error TS6133: 'a' is declared but its value is never read.

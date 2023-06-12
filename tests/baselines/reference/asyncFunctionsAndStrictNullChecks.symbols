@@ -1,4 +1,6 @@
-=== tests/cases/compiler/asyncFunctionsAndStrictNullChecks.ts ===
+//// [tests/cases/compiler/asyncFunctionsAndStrictNullChecks.ts] ////
+
+=== asyncFunctionsAndStrictNullChecks.ts ===
 declare namespace Windows.Foundation {
 >Windows : Symbol(Windows, Decl(asyncFunctionsAndStrictNullChecks.ts, 0, 0))
 >Foundation : Symbol(Foundation, Decl(asyncFunctionsAndStrictNullChecks.ts, 0, 26))

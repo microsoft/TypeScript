@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxTypeArgumentsJsxPreserveOutput.tsx] ////
+
 //// [foo.tsx]
 import React = require('react');
 

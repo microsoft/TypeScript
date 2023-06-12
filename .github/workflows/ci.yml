@@ -107,7 +107,9 @@ jobs:
         node-version: "*"
         check-latest: true
     - run: |
-        corepack enable npm
+        npm --version
+        # corepack enable npm
+        npm install -g $(jq -r '.packageManager' < package.json)
         npm --version
     
     - run:  npm ci
@@ -153,8 +155,13 @@ jobs:
         node-version: "*"
         check-latest: true
     - run: |
-        corepack enable npm
         npm --version
+        # corepack enable npm
+
+    - run: |
+        npm install -g $(jq -r '.packageManager' < package.json)
+        npm --version
+      working-directory: ./pr
 
     - run: npm ci
       working-directory: ./pr

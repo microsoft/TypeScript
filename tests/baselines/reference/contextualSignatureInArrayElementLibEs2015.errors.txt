@@ -1,7 +1,7 @@
-tests/cases/compiler/contextualSignatureInArrayElementLibEs2015.ts(8,4): error TS7006: Parameter 'arg' implicitly has an 'any' type.
+contextualSignatureInArrayElementLibEs2015.ts(8,4): error TS7006: Parameter 'arg' implicitly has an 'any' type.
 
 
-==== tests/cases/compiler/contextualSignatureInArrayElementLibEs2015.ts (1 errors) ====
+==== contextualSignatureInArrayElementLibEs2015.ts (1 errors) ====
     // See: https://github.com/microsoft/TypeScript/pull/53280#discussion_r1138684984
     
     declare function test(

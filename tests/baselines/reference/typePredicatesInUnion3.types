@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typePredicatesInUnion3.ts ===
+//// [tests/cases/compiler/typePredicatesInUnion3.ts] ////
+
+=== typePredicatesInUnion3.ts ===
 // A union of function types is considered a type predicate if at least one constituent is a type
 // predicate and the other constituents are matching type predicates or functions returning `false`.
 

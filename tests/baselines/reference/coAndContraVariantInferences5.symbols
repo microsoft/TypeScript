@@ -1,4 +1,6 @@
-=== tests/cases/compiler/coAndContraVariantInferences5.ts ===
+//// [tests/cases/compiler/coAndContraVariantInferences5.ts] ////
+
+=== coAndContraVariantInferences5.ts ===
 type Thing = 'a' | 'b';
 >Thing : Symbol(Thing, Decl(coAndContraVariantInferences5.ts, 0, 0))
 

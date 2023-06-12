@@ -1,4 +1,6 @@
-=== tests/cases/conformance/node/index.ts ===
+//// [tests/cases/conformance/node/nodeModulesDeclarationEmitWithPackageExports.ts] ////
+
+=== index.ts ===
 // esm format file
 import * as cjs from "package/cjs";
 >cjs : typeof cjs
@@ -42,7 +44,7 @@ export const f = typei;
 >f : typeof typei
 >typei : typeof typei
 
-=== tests/cases/conformance/node/index.mts ===
+=== index.mts ===
 // esm format file
 import * as cjs from "package/cjs";
 >cjs : typeof cjs
@@ -86,7 +88,7 @@ export const f = typei;
 >f : typeof typei
 >typei : typeof typei
 
-=== tests/cases/conformance/node/index.cts ===
+=== index.cts ===
 // cjs format file
 import * as cjs from "package/cjs";
 >cjs : typeof cjs
@@ -130,7 +132,7 @@ export const f = typei;
 >f : typeof typei
 >typei : typeof typei
 
-=== tests/cases/conformance/node/node_modules/inner/index.d.ts ===
+=== node_modules/inner/index.d.ts ===
 // cjs format file
 import * as cjs from "inner/cjs";
 >cjs : typeof cjs
@@ -154,7 +156,7 @@ export const cjsMain = true;
 >cjsMain : true
 >true : true
 
-=== tests/cases/conformance/node/node_modules/inner/index.d.mts ===
+=== node_modules/inner/index.d.mts ===
 // esm format file
 import * as cjs from "inner/cjs";
 >cjs : typeof cjs
@@ -178,7 +180,7 @@ export const esm = true;
 >esm : true
 >true : true
 
-=== tests/cases/conformance/node/node_modules/inner/index.d.cts ===
+=== node_modules/inner/index.d.cts ===
 // cjs format file
 import * as cjs from "inner/cjs";
 >cjs : typeof cjs

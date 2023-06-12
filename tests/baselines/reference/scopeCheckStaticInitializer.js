@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/scopeCheckStaticInitializer.ts] ////
+
 //// [scopeCheckStaticInitializer.ts]
 class X {
     static illegalBeforeProperty = X.data;

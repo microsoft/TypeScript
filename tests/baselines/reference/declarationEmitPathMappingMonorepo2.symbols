@@ -1,11 +1,13 @@
-=== tests/cases/compiler/packages/lab/src/index.ts ===
+//// [tests/cases/compiler/declarationEmitPathMappingMonorepo2.ts] ////
+
+=== packages/lab/src/index.ts ===
 import { createSvgIcon } from "@ts-bug/core/utils";
 >createSvgIcon : Symbol(createSvgIcon, Decl(index.ts, 0, 8))
 
 export default createSvgIcon("Hello", "ArrowLeft");
 >createSvgIcon : Symbol(createSvgIcon, Decl(index.ts, 0, 8))
 
-=== tests/cases/compiler/packages/core/src/SvgIcon.d.ts ===
+=== packages/core/src/SvgIcon.d.ts ===
 import { StyledComponentProps } from "@ts-bug/styles";
 >StyledComponentProps : Symbol(StyledComponentProps, Decl(SvgIcon.d.ts, 0, 8))
 
@@ -29,7 +31,7 @@ declare const SvgIcon: SomeInterface;
 export default SvgIcon;
 >SvgIcon : Symbol(SvgIcon, Decl(SvgIcon.d.ts, 7, 13))
 
-=== tests/cases/compiler/packages/core/src/utils.d.ts ===
+=== packages/core/src/utils.d.ts ===
 import SvgIcon from "./SvgIcon";
 >SvgIcon : Symbol(SvgIcon, Decl(utils.d.ts, 0, 6))
 
@@ -39,7 +41,7 @@ export function createSvgIcon(path: string, displayName: string): typeof SvgIcon
 >displayName : Symbol(displayName, Decl(utils.d.ts, 1, 43))
 >SvgIcon : Symbol(SvgIcon, Decl(utils.d.ts, 0, 6))
 
-=== tests/cases/compiler/packages/styles/src/index.d.ts ===
+=== packages/styles/src/index.d.ts ===
 export interface StyledComponentProps<ClassKey extends string> {
 >StyledComponentProps : Symbol(StyledComponentProps, Decl(index.d.ts, 0, 0))
 >ClassKey : Symbol(ClassKey, Decl(index.d.ts, 0, 38))

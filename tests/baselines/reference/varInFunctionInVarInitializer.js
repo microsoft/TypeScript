@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/varInFunctionInVarInitializer.ts] ////
+
 //// [varInFunctionInVarInitializer.ts]
 var a = function () {
     var c = 1;

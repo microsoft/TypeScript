@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/scanner/ecmascript5/scannerEnum1.ts] ////
+
 //// [scannerEnum1.ts]
     export enum CodeGenTarget {
         ES3 = 0,

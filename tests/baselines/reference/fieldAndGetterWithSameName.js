@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/fieldAndGetterWithSameName.ts] ////
+
 //// [fieldAndGetterWithSameName.ts]
 export class C {
     x: number;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/promiseVoidErrorCallback.ts ===
+//// [tests/cases/compiler/promiseVoidErrorCallback.ts] ////
+
+=== promiseVoidErrorCallback.ts ===
 interface T1 {
 >T1 : Symbol(T1, Decl(promiseVoidErrorCallback.ts, 0, 0))
 

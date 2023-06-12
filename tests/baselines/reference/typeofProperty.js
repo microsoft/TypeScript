@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeofProperty.ts] ////
+
 //// [typeofProperty.ts]
 interface I1 {
     a: number;

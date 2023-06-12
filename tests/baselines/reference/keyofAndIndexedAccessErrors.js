@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts] ////
+
 //// [keyofAndIndexedAccessErrors.ts]
 class Shape {
     name: string;

@@ -1,9 +1,9 @@
-tests/cases/conformance/types/tuple/wideningTuples3.ts(3,5): error TS7005: Variable 'b' implicitly has an '[any, any]' type.
-tests/cases/conformance/types/tuple/wideningTuples3.ts(3,9): error TS2322: Type '[undefined, null]' is not assignable to type '[any]'.
+wideningTuples3.ts(3,5): error TS7005: Variable 'b' implicitly has an '[any, any]' type.
+wideningTuples3.ts(3,9): error TS2322: Type '[undefined, null]' is not assignable to type '[any]'.
   Source has 2 element(s) but target allows only 1.
 
 
-==== tests/cases/conformance/types/tuple/wideningTuples3.ts (2 errors) ====
+==== wideningTuples3.ts (2 errors) ====
     var a: [any];
     
     var b = a = [undefined, null];

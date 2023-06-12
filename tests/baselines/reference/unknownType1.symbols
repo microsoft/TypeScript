@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/unknown/unknownType1.ts ===
+//// [tests/cases/conformance/types/unknown/unknownType1.ts] ////
+
+=== unknownType1.ts ===
 // In an intersection everything absorbs unknown
 
 type T00 = unknown & null;  // null

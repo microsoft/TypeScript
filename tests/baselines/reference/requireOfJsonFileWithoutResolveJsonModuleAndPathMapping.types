@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/requireOfJsonFileWithoutResolveJsonModuleAndPathMapping.ts] ////
+
 === /a.ts ===
 import foobar from "foo/bar/foobar.json";
 >foobar : any

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/metadataOfUnionWithNull.ts] ////
+
 //// [metadataOfUnionWithNull.ts]
 function PropDeco(target: Object, propKey: string | symbol) { }
 
