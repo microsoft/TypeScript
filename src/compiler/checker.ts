@@ -10161,8 +10161,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return prop ? getTypeOfSymbol(prop) : undefined;
     }
 
-    function getTypeOfPropertyOrIndexSignature(type: Type, name: __String): Type {
-        return getTypeOfPropertyOfType(type, name) || getApplicableIndexInfoForName(type, name)?.type || unknownType;
+    function getTypeOfPropertyOrIndexSignature(type: Type, name: __String, addOptionalityToIndex = false): Type {
+        let propType;
+        return getTypeOfPropertyOfType(type, name) ||
+            (propType = getApplicableIndexInfoForName(type, name)?.type) && addOptionality(propType, /*isProperty*/ true, addOptionalityToIndex) ||
+            unknownType;
     }
 
     function isTypeAny(type: Type | undefined) {
@@ -22700,7 +22703,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let matched = false;
             for (let i = 0; i < types.length; i++) {
                 if (include[i]) {
-                    const targetType = getTypeOfPropertyOrOptionalIndexSignature(types[i], propertyName);
+                    const targetType = getTypeOfPropertyOrIndexSignature(types[i], propertyName, /*addOptional*/ true);
                     if (targetType && related(getDiscriminatingType(), targetType)) {
                         matched = true;
                     }
@@ -22718,15 +22721,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         const filtered = contains(include, Ternary.False) ? getUnionType(types.filter((_, i) => include[i])) : target;
         return filtered.flags & TypeFlags.Never ? target : filtered;
-
-        function getTypeOfPropertyOrOptionalIndexSignature(type: Type, name: __String): Type | undefined {
-            let propType = getTypeOfPropertyOfType(type, name);
-            if (propType) {
-                return propType;
-            }
-            propType = getApplicableIndexInfoForName(type, name)?.type;
-            return propType && addOptionality(propType, /*isProperty*/ true, /*isOptional*/ true);
-        }
     }
 
     /**
