@@ -1,4 +1,6 @@
-=== tests/cases/compiler/super1.ts ===
+//// [tests/cases/compiler/super1.ts] ////
+
+=== super1.ts ===
 // Case 1
 class Base1 {
 >Base1 : Symbol(Base1, Decl(super1.ts, 0, 0))

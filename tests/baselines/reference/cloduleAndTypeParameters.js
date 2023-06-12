@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/cloduleAndTypeParameters.ts] ////
+
 //// [cloduleAndTypeParameters.ts]
 class Foo<T extends Foo.Bar> {
   constructor() {

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mapConstructorOnReadonlyTuple.ts ===
+//// [tests/cases/compiler/mapConstructorOnReadonlyTuple.ts] ////
+
+=== mapConstructorOnReadonlyTuple.ts ===
 const pairs = [[{}, 1], [{}, 2]] as const;
 >pairs : Symbol(pairs, Decl(mapConstructorOnReadonlyTuple.ts, 0, 5))
 >const : Symbol(const)

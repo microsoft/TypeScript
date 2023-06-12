@@ -1,9 +1,9 @@
-tests/cases/compiler/errorInfoForRelatedIndexTypesNoConstraintElaboration.ts(6,15): error TS2322: Type 'IntrinsicElements[T1]' is not assignable to type 'IntrinsicElements[T2]'.
+errorInfoForRelatedIndexTypesNoConstraintElaboration.ts(6,15): error TS2322: Type 'IntrinsicElements[T1]' is not assignable to type 'IntrinsicElements[T2]'.
   Type 'T1' is not assignable to type 'T2'.
     'T1' is assignable to the constraint of type 'T2', but 'T2' could be instantiated with a different subtype of constraint 'keyof IntrinsicElements'.
 
 
-==== tests/cases/compiler/errorInfoForRelatedIndexTypesNoConstraintElaboration.ts (1 errors) ====
+==== errorInfoForRelatedIndexTypesNoConstraintElaboration.ts (1 errors) ====
     /// <reference path="/.lib/react16.d.ts" />
     
     class I<T1 extends keyof JSX.IntrinsicElements, T2 extends keyof JSX.IntrinsicElements> {

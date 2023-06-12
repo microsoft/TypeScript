@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/directives/ts-expect-error.ts] ////
+
 //// [ts-expect-error.ts]
 // @ts-expect-error additional commenting
 var invalidCommentedFancySingle: number = 'nope';

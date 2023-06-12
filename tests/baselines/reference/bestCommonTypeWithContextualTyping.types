@@ -1,4 +1,6 @@
-=== tests/cases/compiler/bestCommonTypeWithContextualTyping.ts ===
+//// [tests/cases/compiler/bestCommonTypeWithContextualTyping.ts] ////
+
+=== bestCommonTypeWithContextualTyping.ts ===
 interface Contextual {
     dummy;
 >dummy : any

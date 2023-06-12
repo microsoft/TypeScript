@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unaryOperatorsInStrictMode.ts] ////
+
 //// [unaryOperatorsInStrictMode.ts]
 "use strict"
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamedImportInEs5_0.ts ===
+//// [tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamedImportInEs5.ts] ////
+
+=== es6ImportDefaultBindingFollowedWithNamedImportInEs5_0.ts ===
 export var a = 10;
 >a : Symbol(a, Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_0.ts, 0, 10))
 
@@ -10,7 +12,7 @@ export var m = a;
 >m : Symbol(m, Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_0.ts, 2, 10))
 >a : Symbol(a, Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_0.ts, 0, 10))
 
-=== tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts ===
+=== es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts ===
 import defaultBinding1, { } from "./es6ImportDefaultBindingFollowedWithNamedImportInEs5_0";
 >defaultBinding1 : Symbol(defaultBinding1, Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 0, 6))
 

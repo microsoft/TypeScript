@@ -393,7 +393,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     private packageJsonsForAutoImport: Set<string> | undefined;
 
     /** @internal */
-    private noDtsResolutionProject?: AuxiliaryProject | undefined;
+    noDtsResolutionProject?: AuxiliaryProject | undefined;
 
     /** @internal */
     getResolvedProjectReferenceToRedirect(_fileName: string): ResolvedProjectReference | undefined {
@@ -969,6 +969,19 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         this.projectService.onUpdateLanguageServiceStateForProject(this, /*languageServiceEnabled*/ true);
     }
 
+    /** @internal */
+    cleanupProgram() {
+        if (this.program) {
+            // Root files are always attached to the project irrespective of program
+            for (const f of this.program.getSourceFiles()) {
+                this.detachScriptInfoIfNotRoot(f.fileName);
+            }
+            this.program.forEachResolvedProjectReference(ref =>
+                this.detachScriptInfoFromProject(ref.sourceFile.fileName));
+            this.program = undefined;
+        }
+    }
+
     disableLanguageService(lastFileExceededProgramSize?: string) {
         if (!this.languageServiceEnabled) {
             return;
@@ -976,6 +989,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         Debug.assert(this.projectService.serverMode !== LanguageServiceMode.Syntactic);
         this.languageService.cleanupSemanticCache();
         this.languageServiceEnabled = false;
+        this.cleanupProgram();
         this.lastFileExceededProgramSize = lastFileExceededProgramSize;
         this.builderState = undefined;
         if (this.autoImportProviderHost) {
@@ -984,6 +998,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         this.autoImportProviderHost = undefined;
         this.resolutionCache.closeTypeRootsWatch();
         this.clearGeneratedFileWatch();
+        this.projectService.verifyDocumentRegistry();
         this.projectService.onUpdateLanguageServiceStateForProject(this, /*languageServiceEnabled*/ false);
     }
 
@@ -1030,17 +1045,10 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     close() {
         this.projectService.typingsCache.onProjectClosed(this);
         this.closeWatchingTypingLocations();
-        if (this.program) {
-            // if we have a program - release all files that are enlisted in program but arent root
-            // The releasing of the roots happens later
-            // The project could have pending update remaining and hence the info could be in the files but not in program graph
-            for (const f of this.program.getSourceFiles()) {
-                this.detachScriptInfoIfNotRoot(f.fileName);
-            }
-            this.program.forEachResolvedProjectReference(ref =>
-                this.detachScriptInfoFromProject(ref.sourceFile.fileName));
-        }
-
+        // if we have a program - release all files that are enlisted in program but arent root
+        // The releasing of the roots happens later
+        // The project could have pending update remaining and hence the info could be in the files but not in program graph
+        this.cleanupProgram();
         // Release external files
         forEach(this.externalFiles, externalFile => this.detachScriptInfoIfNotRoot(externalFile));
         // Always remove root files from the project
@@ -1492,6 +1500,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     private updateGraphWorker() {
         const oldProgram = this.languageService.getCurrentProgram();
+        Debug.assert(oldProgram === this.program);
         Debug.assert(!this.isClosed(), "Called update graph worker of closed project");
         this.writeLog(`Starting updateGraphWorker: Project: ${this.getProjectName()}`);
         const start = timestamp();
@@ -1633,6 +1642,8 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         else if (this.program !== oldProgram) {
             this.writeLog(`Different program with same set of files`);
         }
+        // Verify the document registry count
+        this.projectService.verifyDocumentRegistry();
         return hasNewProgram;
     }
 
@@ -2342,7 +2353,8 @@ export class InferredProject extends Project {
     }
 }
 
-class AuxiliaryProject extends Project {
+/** @internal */
+export class AuxiliaryProject extends Project {
     constructor(projectService: ProjectService, documentRegistry: DocumentRegistry, compilerOptions: CompilerOptions, currentDirectory: string) {
         super(projectService.newAuxiliaryProjectName(),
             ProjectKind.Auxiliary,
@@ -2361,7 +2373,6 @@ class AuxiliaryProject extends Project {
         return true;
     }
 
-    /** @internal */
     override scheduleInvalidateResolutionsOfFailedLookupLocations(): void {
         // Invalidation will happen on-demand as part of updateGraph
         return;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/indexer.ts ===
+//// [tests/cases/compiler/indexer.ts] ////
+
+=== indexer.ts ===
 interface JQueryElement {
     id:string;
 >id : string

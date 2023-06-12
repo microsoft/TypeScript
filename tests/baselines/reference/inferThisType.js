@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/thisType/inferThisType.ts] ////
+
 //// [inferThisType.ts]
 declare function f<T>(g: (this: T) => void): T
 declare function h(this: number): void;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/infinitelyExpandingTypes5.ts] ////
+
 //// [infinitelyExpandingTypes5.ts]
 interface Query<T> {
     foo(x: T): Query<T[]>;

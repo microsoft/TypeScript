@@ -1,4 +1,6 @@
-=== tests/cases/compiler/incorrectClassOverloadChain.ts ===
+//// [tests/cases/compiler/incorrectClassOverloadChain.ts] ////
+
+=== incorrectClassOverloadChain.ts ===
 class C {
 >C : Symbol(C, Decl(incorrectClassOverloadChain.ts, 0, 0))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/isolatedModulesConstEnum.ts] ////
+
 === /foo.d.ts ===
 declare const enum EventName {
 >EventName : EventName

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ModuleElements/parserErrorRecovery_ModuleElement2.ts] ////
+
 //// [parserErrorRecovery_ModuleElement2.ts]
 function foo() {
 }

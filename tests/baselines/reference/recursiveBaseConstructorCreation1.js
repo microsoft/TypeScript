@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveBaseConstructorCreation1.ts] ////
+
 //// [recursiveBaseConstructorCreation1.ts]
 class C1 {
 public func(param: C2): any { }

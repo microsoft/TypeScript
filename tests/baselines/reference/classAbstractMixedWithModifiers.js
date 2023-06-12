@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMixedWithModifiers.ts] ////
+
 //// [classAbstractMixedWithModifiers.ts]
 abstract class A {
     abstract foo_a();

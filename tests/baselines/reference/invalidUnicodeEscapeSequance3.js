@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/invalidUnicodeEscapeSequance3.ts] ////
+
 //// [invalidUnicodeEscapeSequance3.ts]
 a\u
 

@@ -1,11 +1,11 @@
-tests/cases/compiler/strictModeReservedWordInModuleDeclaration.ts(2,8): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
-tests/cases/compiler/strictModeReservedWordInModuleDeclaration.ts(3,8): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
-tests/cases/compiler/strictModeReservedWordInModuleDeclaration.ts(4,8): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
-tests/cases/compiler/strictModeReservedWordInModuleDeclaration.ts(6,8): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
-tests/cases/compiler/strictModeReservedWordInModuleDeclaration.ts(6,16): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
+strictModeReservedWordInModuleDeclaration.ts(2,8): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
+strictModeReservedWordInModuleDeclaration.ts(3,8): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
+strictModeReservedWordInModuleDeclaration.ts(4,8): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
+strictModeReservedWordInModuleDeclaration.ts(6,8): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
+strictModeReservedWordInModuleDeclaration.ts(6,16): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
 
 
-==== tests/cases/compiler/strictModeReservedWordInModuleDeclaration.ts (5 errors) ====
+==== strictModeReservedWordInModuleDeclaration.ts (5 errors) ====
     "use strict"
     module public { }
            ~~~~~~

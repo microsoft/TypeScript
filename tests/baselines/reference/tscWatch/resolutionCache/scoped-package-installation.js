@@ -38,6 +38,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/lib/app.ts 25
 ======== Resolving module '@myapp/ts-types' from '/user/username/projects/myproject/lib/app.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module '@myapp/ts-types' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/user/username/projects/myproject/lib/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'myapp__ts-types'
 Directory '/user/username/projects/myproject/node_modules' does not exist, skipping all lookups in it.
@@ -51,6 +52,7 @@ Scoped package detected, looking in 'myapp__ts-types'
 Directory '/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'myapp__ts-types'
 Loading module '@myapp/ts-types' from 'node_modules' folder, target file types: JavaScript.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 Directory '/user/username/projects/myproject/lib/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/myproject/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/node_modules' does not exist, skipping all lookups in it.
@@ -208,6 +210,7 @@ CreatingProgramWith::
 ======== Resolving module '@myapp/ts-types' from '/user/username/projects/myproject/lib/app.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module '@myapp/ts-types' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/user/username/projects/myproject/lib/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'myapp__ts-types'
 Directory '/user/username/projects/myproject/node_modules/@types' does not exist, skipping all lookups in it.
@@ -221,6 +224,7 @@ Scoped package detected, looking in 'myapp__ts-types'
 Directory '/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'myapp__ts-types'
 Loading module '@myapp/ts-types' from 'node_modules' folder, target file types: JavaScript.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 Directory '/user/username/projects/myproject/lib/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/node_modules' does not exist, skipping all lookups in it.
@@ -295,6 +299,7 @@ CreatingProgramWith::
 ======== Resolving module '@myapp/ts-types' from '/user/username/projects/myproject/lib/app.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module '@myapp/ts-types' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/user/username/projects/myproject/lib/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'myapp__ts-types'
 File '/user/username/projects/myproject/node_modules/@myapp/ts-types.ts' does not exist.
@@ -311,6 +316,7 @@ Scoped package detected, looking in 'myapp__ts-types'
 Directory '/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'myapp__ts-types'
 Loading module '@myapp/ts-types' from 'node_modules' folder, target file types: JavaScript.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 Directory '/user/username/projects/myproject/lib/node_modules' does not exist, skipping all lookups in it.
 File '/user/username/projects/myproject/node_modules/@myapp/ts-types.js' does not exist.
 File '/user/username/projects/myproject/node_modules/@myapp/ts-types.jsx' does not exist.
@@ -414,6 +420,7 @@ CreatingProgramWith::
 ======== Resolving module '@myapp/ts-types' from '/user/username/projects/myproject/lib/app.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module '@myapp/ts-types' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/user/username/projects/myproject/lib/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'myapp__ts-types'
 File '/user/username/projects/myproject/node_modules/@myapp/ts-types/package.json' does not exist.

@@ -1,9 +1,4 @@
-=== /root/a.ts ===
-import { foo } from "/foo";
->foo : Symbol(foo, Decl(a.ts, 0, 8))
-
-import { bar } from "/bar";
->bar : Symbol(bar, Decl(a.ts, 1, 8))
+//// [tests/cases/compiler/pathMappingBasedModuleResolution_rootImport_noAliasWithRoot.ts] ////
 
 === /root/src/foo.ts ===
 export function foo() {}
@@ -12,4 +7,11 @@ export function foo() {}
 === /root/src/bar.js ===
 export function bar() {}
 >bar : Symbol(bar, Decl(bar.js, 0, 0))
+
+=== /root/a.ts ===
+import { foo } from "/foo";
+>foo : Symbol(foo, Decl(a.ts, 0, 8))
+
+import { bar } from "/bar";
+>bar : Symbol(bar, Decl(a.ts, 1, 8))
 

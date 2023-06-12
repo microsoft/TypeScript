@@ -1,18 +1,18 @@
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(8,8): error TS2304: Cannot find name 'super'.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(8,13): error TS1441: Cannot start a function call in a type annotation.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(8,14): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(10,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(13,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(17,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(20,15): error TS2304: Cannot find name 'super'.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(20,20): error TS1441: Cannot start a function call in a type annotation.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(20,21): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(22,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(25,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(29,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+derivedClassSuperCallsInNonConstructorMembers.ts(8,8): error TS2304: Cannot find name 'super'.
+derivedClassSuperCallsInNonConstructorMembers.ts(8,13): error TS1441: Cannot start a function call in a type annotation.
+derivedClassSuperCallsInNonConstructorMembers.ts(8,14): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+derivedClassSuperCallsInNonConstructorMembers.ts(10,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+derivedClassSuperCallsInNonConstructorMembers.ts(13,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+derivedClassSuperCallsInNonConstructorMembers.ts(17,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+derivedClassSuperCallsInNonConstructorMembers.ts(20,15): error TS2304: Cannot find name 'super'.
+derivedClassSuperCallsInNonConstructorMembers.ts(20,20): error TS1441: Cannot start a function call in a type annotation.
+derivedClassSuperCallsInNonConstructorMembers.ts(20,21): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+derivedClassSuperCallsInNonConstructorMembers.ts(22,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+derivedClassSuperCallsInNonConstructorMembers.ts(25,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+derivedClassSuperCallsInNonConstructorMembers.ts(29,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
 
 
-==== tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts (12 errors) ====
+==== derivedClassSuperCallsInNonConstructorMembers.ts (12 errors) ====
     // error to use super calls outside a constructor
     
     class Base {

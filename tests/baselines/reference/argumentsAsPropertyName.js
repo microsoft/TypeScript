@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/argumentsAsPropertyName.ts] ////
+
 //// [argumentsAsPropertyName.ts]
 // target: es5
 type MyType = {

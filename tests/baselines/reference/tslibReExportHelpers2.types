@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/tslibReExportHelpers2.ts] ////
+
 === /node_modules/tslib/index.d.ts ===
 export declare function __classPrivateFieldGet<T extends object, V>(
 >__classPrivateFieldGet : { <T extends object, V>(receiver: T, state: { has(o: T): boolean; get(o: T): V | undefined; }, kind?: "f"): V; <T extends new (...args: any[]) => unknown, V>(receiver: T, state: T, kind: "f", f: { value: V; }): V; }

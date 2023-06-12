@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/constructorDeclarations/classWithTwoConstructorDefinitions.ts] ////
+
 //// [classWithTwoConstructorDefinitions.ts]
 class C {
     constructor() { } // error

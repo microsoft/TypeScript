@@ -1,7 +1,7 @@
-tests/cases/compiler/objectLiteralPropertyImplicitlyAny.ts(2,13): error TS7018: Object literal's property '[foo]' implicitly has an 'any' type.
+objectLiteralPropertyImplicitlyAny.ts(2,13): error TS7018: Object literal's property '[foo]' implicitly has an 'any' type.
 
 
-==== tests/cases/compiler/objectLiteralPropertyImplicitlyAny.ts (1 errors) ====
+==== objectLiteralPropertyImplicitlyAny.ts (1 errors) ====
     const foo = Symbol.for("foo");
     const o = { [foo]: undefined };
                 ~~~~~~~~~~~~~~~~

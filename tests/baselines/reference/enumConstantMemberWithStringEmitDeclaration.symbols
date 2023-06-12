@@ -1,4 +1,6 @@
-=== tests/cases/conformance/enums/enumConstantMemberWithStringEmitDeclaration.ts ===
+//// [tests/cases/conformance/enums/enumConstantMemberWithStringEmitDeclaration.ts] ////
+
+=== enumConstantMemberWithStringEmitDeclaration.ts ===
 enum T1 {
 >T1 : Symbol(T1, Decl(enumConstantMemberWithStringEmitDeclaration.ts, 0, 0))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectLiteralFunctionArgContextualTyping.ts] ////
+
 //// [objectLiteralFunctionArgContextualTyping.ts]
 interface I {
     value: string;

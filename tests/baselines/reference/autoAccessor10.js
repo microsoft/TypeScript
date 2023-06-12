@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessor10.ts] ////
+
 //// [autoAccessor10.ts]
 class C1 {
     accessor a0 = 1;
