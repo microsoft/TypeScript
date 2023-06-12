@@ -95,11 +95,11 @@ interface FormData {
     [Symbol.iterator](): IterableIterator<string | File>;
 }
 
-interface URLSearchParams {
+interface URLSearchParams<T extends string | number | boolean> {
     /**
      * Returns an array of key, value pairs for every entry in the search params
      */
-    entries(): IterableIterator<[string, string]>;
+    entries(): IterableIterator<[string, T]>;
     /**
      * Returns a list of keys in the search params
      */
@@ -107,9 +107,9 @@ interface URLSearchParams {
     /**
      * Returns a list of values in the search params
      */
-    values(): IterableIterator<string>;
+    values(): IterableIterator<T>;
     /**
      * iterate over key/value pairs
      */
-    [Symbol.iterator](): IterableIterator<[string, string | number | boolean]>;
+    [Symbol.iterator](): IterableIterator<[string, T]>;
 }
