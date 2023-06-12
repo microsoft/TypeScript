@@ -111,5 +111,5 @@ interface URLSearchParams {
     /**
      * iterate over key/value pairs
      */
-    [Symbol.iterator](): IterableIterator<[string, string]>;
+    [Symbol.iterator](): IterableIterator<[string, string | number | boolean]>;
 }
