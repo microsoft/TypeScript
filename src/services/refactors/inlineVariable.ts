@@ -132,7 +132,7 @@ function getInliningInfo(file: SourceFile, startPosition: number, tryWithReferen
     if (isInitializedVariable(parent) && isVariableDeclarationInVariableStatement(parent)) {
         // Don't inline the variable if it has multiple declarations.
         if (checker.getMergedSymbol(parent.symbol).declarations?.length !== 1) {
-            return { error: getLocaleSpecificMessage(Diagnostics.Variables_that_share_a_name_with_a_type_or_namespace_in_the_same_scope_cannot_be_inlined) };
+            return { error: getLocaleSpecificMessage(Diagnostics.Variables_with_multiple_declarations_cannot_be_inlined) };
         }
 
         // Do not inline if the variable is exported.
@@ -152,7 +152,7 @@ function getInliningInfo(file: SourceFile, startPosition: number, tryWithReferen
 
         // Don't inline the variable if it has multiple declarations.
         if (definition?.declarations?.length !== 1) {
-            return { error: getLocaleSpecificMessage(Diagnostics.Variables_that_share_a_name_with_a_type_or_namespace_in_the_same_scope_cannot_be_inlined) };
+            return { error: getLocaleSpecificMessage(Diagnostics.Variables_with_multiple_declarations_cannot_be_inlined) };
         }
 
         // Make sure we're not inlining something like "let foo;" or "for (let i = 0; i < 5; i++) {}".
