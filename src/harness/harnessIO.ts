@@ -403,7 +403,6 @@ export namespace Compiler {
         compilerOptions: ts.CompilerOptions | undefined,
         // Current directory is needed for rwcRunner to be able to use currentDirectory defined in json file
         currentDirectory: string | undefined,
-        rootDir?: string,
         symlinks?: vfs.FileSet
     ): compiler.CompilationResult {
         const options: ts.CompilerOptions & HarnessOptions = compilerOptions ? ts.cloneCompilerOptions(compilerOptions) : { noResolve: false };
@@ -451,7 +450,7 @@ export namespace Compiler {
             fs.apply(symlinks);
         }
 
-        ts.assign(options, ts.convertToOptionsWithAbsolutePaths(options, path => ts.getNormalizedAbsolutePath(ts.getNormalizedAbsolutePath(path, rootDir), currentDirectory)));
+        ts.assign(options, ts.convertToOptionsWithAbsolutePaths(options, path => ts.getNormalizedAbsolutePath(path, currentDirectory)));
         const host = new fakes.CompilerHost(fs, options);
         const result = compiler.compileFiles(host, programFileNames, options, typeScriptVersion);
         result.symlinks = symlinks;
@@ -545,7 +544,7 @@ export namespace Compiler {
             return;
         }
         const { declInputFiles, declOtherFiles, harnessSettings, options, currentDirectory } = context;
-        const output = compileFiles(declInputFiles, declOtherFiles, harnessSettings, options, currentDirectory, /*rootDir*/ undefined, symlinks);
+        const output = compileFiles(declInputFiles, declOtherFiles, harnessSettings, options, currentDirectory, symlinks);
         return { declInputFiles, declOtherFiles, declResult: output };
     }
 
@@ -735,7 +734,7 @@ export namespace Compiler {
             !errors || (errors.length === 0) ? null : getErrorBaseline(inputFiles, errors, pretty)); // eslint-disable-line no-null/no-null
     }
 
-    export function doTypeAndSymbolBaseline(baselinePath: string, program: ts.Program, allFiles: {unitName: string, content: string}[], opts?: Baseline.BaselineOptions, multifile?: boolean, skipTypeBaselines?: boolean, skipSymbolBaselines?: boolean, hasErrorBaseline?: boolean) {
+    export function doTypeAndSymbolBaseline(baselinePath: string, header: string, program: ts.Program, allFiles: {unitName: string, content: string}[], opts?: Baseline.BaselineOptions, multifile?: boolean, skipTypeBaselines?: boolean, skipSymbolBaselines?: boolean, hasErrorBaseline?: boolean) {
         // The full walker simulates the types that you would get from doing a full
         // compile.  The pull walker simulates the types you get when you just do
         // a type query for a random node (like how the LS would do it).  Most of the
@@ -810,7 +809,7 @@ export namespace Compiler {
                 const [, content] = value;
                 result += content;
             }
-            return result || null; // eslint-disable-line no-null/no-null
+            return result ? (`//// [${header}] ////\r\n\r\n` + result) : null; // eslint-disable-line no-null/no-null
         }
 
         function *iterateBaseLine(isSymbolBaseline: boolean, skipBaseline?: boolean): IterableIterator<[string, string]> {
@@ -911,9 +910,8 @@ export namespace Compiler {
         // check js output
         let tsCode = "";
         const tsSources = otherFiles.concat(toBeCompiled);
-        if (tsSources.length > 1) {
-            tsCode += "//// [" + header + "] ////\r\n\r\n";
-        }
+        tsCode += "//// [" + header + "] ////\r\n\r\n";
+
         for (let i = 0; i < tsSources.length; i++) {
             tsCode += "//// [" + ts.getBaseFileName(tsSources[i].unitName) + "]\r\n";
             tsCode += tsSources[i].content + (i < (tsSources.length - 1) ? "\r\n" : "");
@@ -1208,7 +1206,7 @@ export namespace TestCaseParser {
     }
 
     /** Given a test file containing // @FileName directives, return an array of named units of code to be added to an existing compiler instance */
-    export function makeUnitsFromTest(code: string, fileName: string, rootDir: string, settings = extractCompilerSettings(code)): TestCaseContent {
+    export function makeUnitsFromTest(code: string, fileName: string, settings = extractCompilerSettings(code)): TestCaseContent {
         // List of all the subfiles we've parsed out
         const testUnitData: TestUnitData[] = [];
 
@@ -1223,7 +1221,7 @@ export namespace TestCaseParser {
 
         for (const line of lines) {
             let testMetaData: RegExpExecArray | null;
-            const possiblySymlinks = parseSymlinkFromTest(line, symlinks, ts.getNormalizedAbsolutePath(rootDir, vfs.srcFolder));
+            const possiblySymlinks = parseSymlinkFromTest(line, symlinks, vfs.srcFolder);
             if (possiblySymlinks) {
                 symlinks = possiblySymlinks;
             }
@@ -1294,7 +1292,7 @@ export namespace TestCaseParser {
                     const files: string[] = [];
                     const directories = new Set<string>();
                     for (const unit of testUnitData) {
-                        const fileName = ts.getNormalizedAbsolutePath(ts.getNormalizedAbsolutePath(unit.name, rootDir), vfs.srcFolder);
+                        const fileName = ts.getNormalizedAbsolutePath(unit.name, vfs.srcFolder);
                         if (fileName.toLowerCase().startsWith(dir.toLowerCase())) {
                             let path = fileName.substring(dir.length);
                             if (path.startsWith("/")) {
@@ -1325,7 +1323,7 @@ export namespace TestCaseParser {
             if (getConfigNameFromFileName(data.name)) {
                 const configJson = ts.parseJsonText(data.name, data.content);
                 assert.isTrue(configJson.endOfFileToken !== undefined);
-                const configFileName = ts.getNormalizedAbsolutePath(ts.getNormalizedAbsolutePath(data.name, rootDir), vfs.srcFolder);
+                const configFileName = ts.getNormalizedAbsolutePath(data.name, vfs.srcFolder);
                 const configDir = ts.getDirectoryPath(configFileName);
                 tsConfig = ts.parseJsonSourceFileConfigFileContent(configJson, parseConfigHost, configDir, /*existingOptions*/ undefined, configFileName);
                 tsConfigFileUnitData = data;

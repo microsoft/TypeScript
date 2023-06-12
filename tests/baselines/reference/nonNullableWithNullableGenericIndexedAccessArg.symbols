@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nonNullableWithNullableGenericIndexedAccessArg.ts ===
+//// [tests/cases/compiler/nonNullableWithNullableGenericIndexedAccessArg.ts] ////
+
+=== nonNullableWithNullableGenericIndexedAccessArg.ts ===
 // repro from #50539
 
 interface StateSchema {

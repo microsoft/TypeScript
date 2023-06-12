@@ -1,4 +1,6 @@
-=== tests/cases/conformance/internalModules/DeclarationMerging/function.ts ===
+//// [tests/cases/conformance/internalModules/DeclarationMerging/FunctionAndModuleWithSameNameAndDifferentCommonRoot.ts] ////
+
+=== function.ts ===
 module A {
 >A : typeof A
 
@@ -14,7 +16,7 @@ module A {
     }
 }
 
-=== tests/cases/conformance/internalModules/DeclarationMerging/module.ts ===
+=== module.ts ===
 module B {
 >B : typeof B
 
@@ -31,7 +33,7 @@ module B {
     }
 }
 
-=== tests/cases/conformance/internalModules/DeclarationMerging/test.ts ===
+=== test.ts ===
 var fn: () => { x: number; y: number };
 >fn : () => {    x: number;    y: number;}
 >x : number

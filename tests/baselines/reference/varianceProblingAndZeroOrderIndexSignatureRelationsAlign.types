@@ -1,4 +1,6 @@
-=== tests/cases/compiler/varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts ===
+//// [tests/cases/compiler/varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts] ////
+
+=== varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts ===
 type Either<L, A> = Left<L, A> | Right<L, A>;
 >Either : Either<L, A>
 

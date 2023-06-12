@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/intersection/intersectionTypeInference3.ts ===
+//// [tests/cases/conformance/types/intersection/intersectionTypeInference3.ts] ////
+
+=== intersectionTypeInference3.ts ===
 // Repro from #19682
 
 type Nominal<Kind extends string, Type> = Type & {

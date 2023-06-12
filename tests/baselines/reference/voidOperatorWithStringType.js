@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/voidOperator/voidOperatorWithStringType.ts] ////
+
 //// [voidOperatorWithStringType.ts]
 // void  operator on string type
 var STRING: string;

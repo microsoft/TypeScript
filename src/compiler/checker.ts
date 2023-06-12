@@ -1254,13 +1254,12 @@ export const enum CheckMode {
     Inferential = 1 << 1,                           // Inferential typing
     SkipContextSensitive = 1 << 2,                  // Skip context sensitive function expressions
     SkipGenericFunctions = 1 << 3,                  // Skip single signature generic functions
-    SkipAddingIntraExpressionSites = 1 << 4,        // Skip adding intra expression sites in nested expressions since only the outermost one has to be added
-    IsForSignatureHelp = 1 << 5,                    // Call resolution for purposes of signature help
-    IsForStringLiteralArgumentCompletions = 1 << 6, // Do not infer from the argument currently being typed
-    RestBindingElement = 1 << 7,                    // Checking a type that is going to be used to determine the type of a rest binding element
+    IsForSignatureHelp = 1 << 4,                    // Call resolution for purposes of signature help
+    IsForStringLiteralArgumentCompletions = 1 << 5, // Do not infer from the argument currently being typed
+    RestBindingElement = 1 << 6,                    // Checking a type that is going to be used to determine the type of a rest binding element
                                                     //   e.g. in `const { a, ...rest } = foo`, when checking the type of `foo` to determine the type of `rest`,
                                                     //   we need to preserve generic types instead of substituting them for constraints
-    TypeOnly = 1 << 8,                              // Called from getTypeOfExpression, diagnostics may be omitted
+    TypeOnly = 1 << 7,                              // Called from getTypeOfExpression, diagnostics may be omitted
 }
 
 /** @internal */
@@ -29999,13 +29998,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 elementFlags.push(ElementFlags.Optional);
             }
             else {
-                const shouldAddAsIntraExpressionInferenceSite = inTupleContext && checkMode && checkMode & CheckMode.Inferential && !(checkMode & (CheckMode.SkipContextSensitive | CheckMode.SkipAddingIntraExpressionSites)) && containsContextSensitiveOrCallOrNewExpression(e);
-                const elementCheckMode = (checkMode || CheckMode.Normal) | (shouldAddAsIntraExpressionInferenceSite ? CheckMode.SkipAddingIntraExpressionSites : 0);
-
-                const type = checkExpressionForMutableLocation(e, elementCheckMode, forceTuple);
+                const type = checkExpressionForMutableLocation(e, checkMode, forceTuple);
                 elementTypes.push(addOptionality(type, /*isProperty*/ true, hasOmittedExpression));
                 elementFlags.push(hasOmittedExpression ? ElementFlags.Optional : ElementFlags.Required);
-                if (shouldAddAsIntraExpressionInferenceSite) {
+                if (inTupleContext && checkMode && checkMode & CheckMode.Inferential && !(checkMode & CheckMode.SkipContextSensitive) && containsContextSensitiveOrCallOrNewExpression(e)) {
                     const inferenceContext = getInferenceContext(node);
                     Debug.assert(inferenceContext);  // In CheckMode.Inferential we should always have an inference context
                     addIntraExpressionInferenceSite(inferenceContext, e, type);
@@ -30170,17 +30166,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (memberDecl.kind === SyntaxKind.PropertyAssignment ||
                 memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment ||
                 isObjectLiteralMethod(memberDecl)) {
-
-                const shouldAddAsIntraExpressionInferenceSite = contextualType && checkMode & CheckMode.Inferential && !(checkMode & (CheckMode.SkipContextSensitive | CheckMode.SkipAddingIntraExpressionSites)) &&
-                    (memberDecl.kind === SyntaxKind.PropertyAssignment || memberDecl.kind === SyntaxKind.MethodDeclaration) && containsContextSensitiveOrCallOrNewExpression(memberDecl);
-                const propCheckMode = checkMode | (shouldAddAsIntraExpressionInferenceSite ? CheckMode.SkipAddingIntraExpressionSites : 0);
-
-                let type = memberDecl.kind === SyntaxKind.PropertyAssignment ? checkPropertyAssignment(memberDecl, propCheckMode) :
+                let type = memberDecl.kind === SyntaxKind.PropertyAssignment ? checkPropertyAssignment(memberDecl, checkMode) :
                     // avoid resolving the left side of the ShorthandPropertyAssignment outside of the destructuring
                     // for error recovery purposes. For example, if a user wrote `{ a = 100 }` instead of `{ a: 100 }`.
                     // we don't want to say "could not find 'a'".
-                    memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment ? checkExpressionForMutableLocation(!inDestructuringPattern && memberDecl.objectAssignmentInitializer ? memberDecl.objectAssignmentInitializer : memberDecl.name, propCheckMode) :
-                    checkObjectLiteralMethod(memberDecl, propCheckMode);
+                    memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment ? checkExpressionForMutableLocation(!inDestructuringPattern && memberDecl.objectAssignmentInitializer ? memberDecl.objectAssignmentInitializer : memberDecl.name, checkMode) :
+                    checkObjectLiteralMethod(memberDecl, checkMode);
                 if (isInJavascript) {
                     const jsDocType = getTypeForDeclarationFromJSDocComment(memberDecl);
                     if (jsDocType) {
@@ -30235,7 +30226,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 member = prop;
                 allPropertiesTable?.set(prop.escapedName, prop);
 
-                if (shouldAddAsIntraExpressionInferenceSite) {
+                if (contextualType && checkMode & CheckMode.Inferential && !(checkMode & CheckMode.SkipContextSensitive) &&
+                    (memberDecl.kind === SyntaxKind.PropertyAssignment || memberDecl.kind === SyntaxKind.MethodDeclaration) && containsContextSensitiveOrCallOrNewExpression(memberDecl)) {
                     const inferenceContext = getInferenceContext(node);
                     Debug.assert(inferenceContext);  // In CheckMode.Inferential we should always have an inference context
                     const inferenceNode = memberDecl.kind === SyntaxKind.PropertyAssignment ? memberDecl.initializer : memberDecl;
@@ -30469,10 +30461,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         for (const attributeDecl of attributes.properties) {
             const member = attributeDecl.symbol;
             if (isJsxAttribute(attributeDecl)) {
-                const shouldAddAsIntraExpressionInferenceSite = contextualType && checkMode & CheckMode.Inferential && !(checkMode & (CheckMode.SkipContextSensitive | CheckMode.SkipAddingIntraExpressionSites)) && containsContextSensitiveOrCallOrNewExpression(attributeDecl);
-                const attributeCheckMode = checkMode | (shouldAddAsIntraExpressionInferenceSite ? CheckMode.SkipAddingIntraExpressionSites : 0);
-
-                const exprType = checkJsxAttribute(attributeDecl, attributeCheckMode);
+                const exprType = checkJsxAttribute(attributeDecl, checkMode);
                 objectFlags |= getObjectFlags(exprType) & ObjectFlags.PropagatingFlags;
 
                 const attributeSymbol = createSymbol(SymbolFlags.Property | member.flags, member.escapedName);
@@ -30494,7 +30483,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         addDeprecatedSuggestion(attributeDecl.name, prop.declarations, attributeDecl.name.escapedText as string);
                     }
                 }
-                if (shouldAddAsIntraExpressionInferenceSite) {
+                if (contextualType && checkMode & CheckMode.Inferential && !(checkMode & CheckMode.SkipContextSensitive) && containsContextSensitiveOrCallOrNewExpression(attributeDecl)) {
                     const inferenceContext = getInferenceContext(attributes);
                     Debug.assert(inferenceContext);  // In CheckMode.Inferential we should always have an inference context
                     const inferenceNode = (attributeDecl.initializer as JsxExpression).expression!;

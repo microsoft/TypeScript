@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/metadataImportType.ts] ////
+
 //// [metadataImportType.ts]
 export class A {
     @test

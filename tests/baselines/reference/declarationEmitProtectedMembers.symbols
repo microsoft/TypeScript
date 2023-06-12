@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitProtectedMembers.ts ===
+//// [tests/cases/compiler/declarationEmitProtectedMembers.ts] ////
+
+=== declarationEmitProtectedMembers.ts ===
 // Class with protected members
 class C1 {
 >C1 : Symbol(C1, Decl(declarationEmitProtectedMembers.ts, 0, 0))

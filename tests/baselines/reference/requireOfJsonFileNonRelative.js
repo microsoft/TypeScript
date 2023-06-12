@@ -22,7 +22,7 @@ if (x) {
 }
 
 
-//// [tests/cases/compiler/out/file1.js]
+//// [out/file1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var b1 = require("b.json");

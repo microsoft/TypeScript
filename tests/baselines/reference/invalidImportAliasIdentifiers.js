@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIdentifiers.ts] ////
+
 //// [invalidImportAliasIdentifiers.ts]
 // none of these should work, since non are actually modules
 

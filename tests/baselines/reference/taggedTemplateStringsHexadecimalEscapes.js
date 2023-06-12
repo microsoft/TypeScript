@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/taggedTemplateStringsHexadecimalEscapes.ts] ////
+
 //// [taggedTemplateStringsHexadecimalEscapes.ts]
 function f(...args: any[]) {
 }

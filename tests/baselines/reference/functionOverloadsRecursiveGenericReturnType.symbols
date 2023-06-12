@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionOverloadsRecursiveGenericReturnType.ts ===
+//// [tests/cases/compiler/functionOverloadsRecursiveGenericReturnType.ts] ////
+
+=== functionOverloadsRecursiveGenericReturnType.ts ===
 class B<V>{
 >B : Symbol(B, Decl(functionOverloadsRecursiveGenericReturnType.ts, 0, 0))
 >V : Symbol(V, Decl(functionOverloadsRecursiveGenericReturnType.ts, 0, 8))

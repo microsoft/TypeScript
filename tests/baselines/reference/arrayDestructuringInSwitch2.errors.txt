@@ -1,7 +1,7 @@
-tests/cases/compiler/arrayDestructuringInSwitch2.ts(11,13): error TS2488: Type 'never' must have a '[Symbol.iterator]()' method that returns an iterator.
+arrayDestructuringInSwitch2.ts(11,13): error TS2488: Type 'never' must have a '[Symbol.iterator]()' method that returns an iterator.
 
 
-==== tests/cases/compiler/arrayDestructuringInSwitch2.ts (1 errors) ====
+==== arrayDestructuringInSwitch2.ts (1 errors) ====
     type X = { kind: "a", a: [1] } | { kind: "b", a: [] }
     
     function foo(x: X): 1 {

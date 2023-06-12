@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitAnyWithOverloads.ts] ////
+
 //// [noImplicitAnyWithOverloads.ts]
 interface A {
     foo;

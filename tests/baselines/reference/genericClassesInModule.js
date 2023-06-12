@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericClassesInModule.ts] ////
+
 //// [genericClassesInModule.ts]
 module Foo {
 

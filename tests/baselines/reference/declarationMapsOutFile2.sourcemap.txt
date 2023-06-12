@@ -5,7 +5,7 @@ sourceRoot:
 sources: a.ts,index.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/bundle.d.ts
+emittedFile:bundle.d.ts
 sourceFile:a.ts
 -------------------------------------------------------------------
 >>>declare class Foo {
@@ -87,7 +87,7 @@ sourceFile:a.ts
 1 >Emitted(8, 2) Source(8, 2) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/bundle.d.ts
+emittedFile:bundle.d.ts
 sourceFile:index.ts
 -------------------------------------------------------------------
 >>>declare const c: Foo;

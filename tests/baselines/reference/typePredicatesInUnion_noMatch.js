@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typePredicatesInUnion_noMatch.ts] ////
+
 //// [typePredicatesInUnion_noMatch.ts]
 interface A {
     pred(x: {}, y: {}): x is boolean;

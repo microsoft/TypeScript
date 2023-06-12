@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/esDecorators/classDeclaration/classSuper/esDecorators-classDeclaration-classSuper.7.ts] ////
+
 //// [esDecorators-classDeclaration-classSuper.7.ts]
 class A {}
 class B extends A {

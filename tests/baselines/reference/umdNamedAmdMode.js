@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/umdNamedAmdMode.ts] ////
+
 //// [main.ts]
 /// <amd-module name="a"/>
 export const a = 1;

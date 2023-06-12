@@ -1,8 +1,8 @@
-tests/cases/compiler/typeofAmbientExternalModules_2.ts(7,1): error TS2741: Property 'C' is missing in type 'typeof D' but required in type 'typeof import("tests/cases/compiler/typeofAmbientExternalModules_0")'.
-tests/cases/compiler/typeofAmbientExternalModules_2.ts(9,1): error TS2741: Property 'prototype' is missing in type 'typeof import("tests/cases/compiler/typeofAmbientExternalModules_0")' but required in type 'typeof D'.
+typeofAmbientExternalModules_2.ts(7,1): error TS2741: Property 'C' is missing in type 'typeof D' but required in type 'typeof import("typeofAmbientExternalModules_0")'.
+typeofAmbientExternalModules_2.ts(9,1): error TS2741: Property 'prototype' is missing in type 'typeof import("typeofAmbientExternalModules_0")' but required in type 'typeof D'.
 
 
-==== tests/cases/compiler/typeofAmbientExternalModules_2.ts (2 errors) ====
+==== typeofAmbientExternalModules_2.ts (2 errors) ====
     ///<reference path='typeofAmbientExternalModules_0.ts'/>
     ///<reference path='typeofAmbientExternalModules_1.ts'/>
     import ext = require('./typeofAmbientExternalModules_0');
@@ -11,16 +11,16 @@ tests/cases/compiler/typeofAmbientExternalModules_2.ts(9,1): error TS2741: Prope
     var y1: typeof ext = ext;
     y1 = exp;
     ~~
-!!! error TS2741: Property 'C' is missing in type 'typeof D' but required in type 'typeof import("tests/cases/compiler/typeofAmbientExternalModules_0")'.
-!!! related TS2728 tests/cases/compiler/typeofAmbientExternalModules_0.ts:1:14: 'C' is declared here.
+!!! error TS2741: Property 'C' is missing in type 'typeof D' but required in type 'typeof import("typeofAmbientExternalModules_0")'.
+!!! related TS2728 typeofAmbientExternalModules_0.ts:1:14: 'C' is declared here.
     var y2: typeof exp = exp;
     y2 = ext;
     ~~
-!!! error TS2741: Property 'prototype' is missing in type 'typeof import("tests/cases/compiler/typeofAmbientExternalModules_0")' but required in type 'typeof D'.
-==== tests/cases/compiler/typeofAmbientExternalModules_0.ts (0 errors) ====
+!!! error TS2741: Property 'prototype' is missing in type 'typeof import("typeofAmbientExternalModules_0")' but required in type 'typeof D'.
+==== typeofAmbientExternalModules_0.ts (0 errors) ====
     export class C { foo: string; }
     
-==== tests/cases/compiler/typeofAmbientExternalModules_1.ts (0 errors) ====
+==== typeofAmbientExternalModules_1.ts (0 errors) ====
     class D { bar: string; }
     export = D;
     

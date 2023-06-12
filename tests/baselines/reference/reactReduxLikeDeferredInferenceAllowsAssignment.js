@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reactReduxLikeDeferredInferenceAllowsAssignment.ts] ////
+
 //// [reactReduxLikeDeferredInferenceAllowsAssignment.ts]
 declare class Component<P> {
   constructor(props: Readonly<P>);

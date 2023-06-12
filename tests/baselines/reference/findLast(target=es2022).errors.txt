@@ -1,32 +1,32 @@
-tests/cases/compiler/findLast.ts(1,44): error TS2550: Property 'findLast' does not exist on type 'number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
-tests/cases/compiler/findLast.ts(2,51): error TS2550: Property 'findLast' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
-tests/cases/compiler/findLast.ts(3,17): error TS2550: Property 'findLast' does not exist on type 'Int8Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
-tests/cases/compiler/findLast.ts(4,18): error TS2550: Property 'findLast' does not exist on type 'Uint8Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
-tests/cases/compiler/findLast.ts(5,25): error TS2550: Property 'findLast' does not exist on type 'Uint8ClampedArray'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
-tests/cases/compiler/findLast.ts(6,18): error TS2550: Property 'findLast' does not exist on type 'Int16Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
-tests/cases/compiler/findLast.ts(7,19): error TS2550: Property 'findLast' does not exist on type 'Uint16Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
-tests/cases/compiler/findLast.ts(8,18): error TS2550: Property 'findLast' does not exist on type 'Int32Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
-tests/cases/compiler/findLast.ts(9,19): error TS2550: Property 'findLast' does not exist on type 'Uint32Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
-tests/cases/compiler/findLast.ts(10,20): error TS2550: Property 'findLast' does not exist on type 'Float32Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
-tests/cases/compiler/findLast.ts(11,20): error TS2550: Property 'findLast' does not exist on type 'Float64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
-tests/cases/compiler/findLast.ts(12,21): error TS2550: Property 'findLast' does not exist on type 'BigInt64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
-tests/cases/compiler/findLast.ts(13,22): error TS2550: Property 'findLast' does not exist on type 'BigUint64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
-tests/cases/compiler/findLast.ts(15,33): error TS2550: Property 'findLastIndex' does not exist on type 'number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
-tests/cases/compiler/findLast.ts(16,40): error TS2550: Property 'findLastIndex' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
-tests/cases/compiler/findLast.ts(17,17): error TS2550: Property 'findLastIndex' does not exist on type 'Int8Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
-tests/cases/compiler/findLast.ts(18,18): error TS2550: Property 'findLastIndex' does not exist on type 'Uint8Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
-tests/cases/compiler/findLast.ts(19,25): error TS2550: Property 'findLastIndex' does not exist on type 'Uint8ClampedArray'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
-tests/cases/compiler/findLast.ts(20,18): error TS2550: Property 'findLastIndex' does not exist on type 'Int16Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
-tests/cases/compiler/findLast.ts(21,19): error TS2550: Property 'findLastIndex' does not exist on type 'Uint16Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
-tests/cases/compiler/findLast.ts(22,18): error TS2550: Property 'findLastIndex' does not exist on type 'Int32Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
-tests/cases/compiler/findLast.ts(23,19): error TS2550: Property 'findLastIndex' does not exist on type 'Uint32Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
-tests/cases/compiler/findLast.ts(24,20): error TS2550: Property 'findLastIndex' does not exist on type 'Float32Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
-tests/cases/compiler/findLast.ts(25,20): error TS2550: Property 'findLastIndex' does not exist on type 'Float64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
-tests/cases/compiler/findLast.ts(26,21): error TS2550: Property 'findLastIndex' does not exist on type 'BigInt64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
-tests/cases/compiler/findLast.ts(27,22): error TS2550: Property 'findLastIndex' does not exist on type 'BigUint64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+findLast.ts(1,44): error TS2550: Property 'findLast' does not exist on type 'number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+findLast.ts(2,51): error TS2550: Property 'findLast' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+findLast.ts(3,17): error TS2550: Property 'findLast' does not exist on type 'Int8Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+findLast.ts(4,18): error TS2550: Property 'findLast' does not exist on type 'Uint8Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+findLast.ts(5,25): error TS2550: Property 'findLast' does not exist on type 'Uint8ClampedArray'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+findLast.ts(6,18): error TS2550: Property 'findLast' does not exist on type 'Int16Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+findLast.ts(7,19): error TS2550: Property 'findLast' does not exist on type 'Uint16Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+findLast.ts(8,18): error TS2550: Property 'findLast' does not exist on type 'Int32Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+findLast.ts(9,19): error TS2550: Property 'findLast' does not exist on type 'Uint32Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+findLast.ts(10,20): error TS2550: Property 'findLast' does not exist on type 'Float32Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+findLast.ts(11,20): error TS2550: Property 'findLast' does not exist on type 'Float64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+findLast.ts(12,21): error TS2550: Property 'findLast' does not exist on type 'BigInt64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+findLast.ts(13,22): error TS2550: Property 'findLast' does not exist on type 'BigUint64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+findLast.ts(15,33): error TS2550: Property 'findLastIndex' does not exist on type 'number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+findLast.ts(16,40): error TS2550: Property 'findLastIndex' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+findLast.ts(17,17): error TS2550: Property 'findLastIndex' does not exist on type 'Int8Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+findLast.ts(18,18): error TS2550: Property 'findLastIndex' does not exist on type 'Uint8Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+findLast.ts(19,25): error TS2550: Property 'findLastIndex' does not exist on type 'Uint8ClampedArray'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+findLast.ts(20,18): error TS2550: Property 'findLastIndex' does not exist on type 'Int16Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+findLast.ts(21,19): error TS2550: Property 'findLastIndex' does not exist on type 'Uint16Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+findLast.ts(22,18): error TS2550: Property 'findLastIndex' does not exist on type 'Int32Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+findLast.ts(23,19): error TS2550: Property 'findLastIndex' does not exist on type 'Uint32Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+findLast.ts(24,20): error TS2550: Property 'findLastIndex' does not exist on type 'Float32Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+findLast.ts(25,20): error TS2550: Property 'findLastIndex' does not exist on type 'Float64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+findLast.ts(26,21): error TS2550: Property 'findLastIndex' does not exist on type 'BigInt64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
+findLast.ts(27,22): error TS2550: Property 'findLastIndex' does not exist on type 'BigUint64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
 
 
-==== tests/cases/compiler/findLast.ts (26 errors) ====
+==== findLast.ts (26 errors) ====
     const itemNumber: number | undefined = [0].findLast((item) => item === 0);
                                                ~~~~~~~~
 !!! error TS2550: Property 'findLast' does not exist on type 'number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.

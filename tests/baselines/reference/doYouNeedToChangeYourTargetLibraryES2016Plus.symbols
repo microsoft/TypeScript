@@ -1,4 +1,6 @@
-=== tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts ===
+//// [tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts] ////
+
+=== doYouNeedToChangeYourTargetLibraryES2016Plus.ts ===
 // es2016
 const testIncludes = ["hello"].includes("world");
 >testIncludes : Symbol(testIncludes, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 1, 5))

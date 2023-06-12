@@ -1,8 +1,8 @@
-tests/cases/conformance/es6/templates/templateStringInSwitchAndCaseES6.ts(2,10): error TS2678: Type '"abc"' is not comparable to type '"abc0abc"'.
-tests/cases/conformance/es6/templates/templateStringInSwitchAndCaseES6.ts(3,10): error TS2678: Type '"123"' is not comparable to type '"abc0abc"'.
+templateStringInSwitchAndCaseES6.ts(2,10): error TS2678: Type '"abc"' is not comparable to type '"abc0abc"'.
+templateStringInSwitchAndCaseES6.ts(3,10): error TS2678: Type '"123"' is not comparable to type '"abc0abc"'.
 
 
-==== tests/cases/conformance/es6/templates/templateStringInSwitchAndCaseES6.ts (2 errors) ====
+==== templateStringInSwitchAndCaseES6.ts (2 errors) ====
     switch (`abc${0}abc`) {
         case `abc`:
              ~~~~~

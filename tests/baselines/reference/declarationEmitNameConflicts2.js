@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitNameConflicts2.ts] ////
+
 //// [declarationEmitNameConflicts2.ts]
 module X.Y.base {
     export function f() { }

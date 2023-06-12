@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature11.ts] ////
+
 //// [parserIndexSignature11.ts]
 interface I {
         [p]; // Used to be indexer, now it is a computed property

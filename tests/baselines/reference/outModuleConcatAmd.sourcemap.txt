@@ -5,7 +5,7 @@ sourceRoot:
 sources: ref/a.ts,b.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/all.js
+emittedFile:all.js
 sourceFile:ref/a.ts
 -------------------------------------------------------------------
 >>>var __extends = (this && this.__extends) || (function () {
@@ -80,7 +80,7 @@ sourceFile:ref/a.ts
 2 >Emitted(25, 19) Source(1, 15) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/all.js
+emittedFile:all.js
 sourceFile:b.ts
 -------------------------------------------------------------------
 >>>});

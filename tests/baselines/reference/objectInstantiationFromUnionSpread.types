@@ -1,4 +1,6 @@
-=== tests/cases/compiler/objectInstantiationFromUnionSpread.ts ===
+//// [tests/cases/compiler/objectInstantiationFromUnionSpread.ts] ////
+
+=== objectInstantiationFromUnionSpread.ts ===
 // #40995
 
 interface Success {

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/dynamicImportWithNestedThis_es5.ts] ////
+
 //// [dynamicImportWithNestedThis_es5.ts]
 // https://github.com/Microsoft/TypeScript/issues/17564
 class C {

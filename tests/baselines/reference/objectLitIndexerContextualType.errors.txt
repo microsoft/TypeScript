@@ -1,14 +1,14 @@
-tests/cases/compiler/objectLitIndexerContextualType.ts(12,13): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/compiler/objectLitIndexerContextualType.ts(12,17): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/compiler/objectLitIndexerContextualType.ts(15,13): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/compiler/objectLitIndexerContextualType.ts(15,17): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/compiler/objectLitIndexerContextualType.ts(18,5): error TS2322: Type '{ s: (t: any) => number; }' is not assignable to type 'J'.
+objectLitIndexerContextualType.ts(12,13): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+objectLitIndexerContextualType.ts(12,17): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+objectLitIndexerContextualType.ts(15,13): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+objectLitIndexerContextualType.ts(15,17): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+objectLitIndexerContextualType.ts(18,5): error TS2322: Type '{ s: (t: any) => number; }' is not assignable to type 'J'.
   Object literal may only specify known properties, and 's' does not exist in type 'J'.
-tests/cases/compiler/objectLitIndexerContextualType.ts(21,13): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/compiler/objectLitIndexerContextualType.ts(21,17): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+objectLitIndexerContextualType.ts(21,13): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+objectLitIndexerContextualType.ts(21,17): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 
 
-==== tests/cases/compiler/objectLitIndexerContextualType.ts (7 errors) ====
+==== objectLitIndexerContextualType.ts (7 errors) ====
     interface I {
         [s: string]: (s: string) => number;
     }

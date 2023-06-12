@@ -1,4 +1,6 @@
-=== tests/cases/compiler/controlFlowManyCallExpressionStatementsPerf.ts ===
+//// [tests/cases/compiler/controlFlowManyCallExpressionStatementsPerf.ts] ////
+
+=== controlFlowManyCallExpressionStatementsPerf.ts ===
 function test(x: boolean): boolean { return x; }
 >test : Symbol(test, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 0))
 >x : Symbol(x, Decl(controlFlowManyCallExpressionStatementsPerf.ts, 0, 14))

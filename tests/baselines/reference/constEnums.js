@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constEnums.ts] ////
+
 //// [constEnums.ts]
 const enum Enum1 {
    A0 = 100,

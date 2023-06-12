@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classMemberInitializerWithLamdaScoping.ts ===
+//// [tests/cases/compiler/classMemberInitializerWithLamdaScoping.ts] ////
+
+=== classMemberInitializerWithLamdaScoping.ts ===
 declare var console: {
 >console : Symbol(console, Decl(classMemberInitializerWithLamdaScoping.ts, 0, 11))
 

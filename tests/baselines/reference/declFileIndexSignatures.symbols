@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileIndexSignatures_0.ts ===
+//// [tests/cases/compiler/declFileIndexSignatures.ts] ////
+
+=== declFileIndexSignatures_0.ts ===
 export interface IStringIndexSignature {
 >IStringIndexSignature : Symbol(IStringIndexSignature, Decl(declFileIndexSignatures_0.ts, 0, 0))
 
@@ -31,7 +33,7 @@ export interface IIndexSignatureWithTypeParameter<T> {
 >T : Symbol(T, Decl(declFileIndexSignatures_0.ts, 12, 50))
 }
 
-=== tests/cases/compiler/declFileIndexSignatures_1.ts ===
+=== declFileIndexSignatures_1.ts ===
 interface IGlobalStringIndexSignature {
 >IGlobalStringIndexSignature : Symbol(IGlobalStringIndexSignature, Decl(declFileIndexSignatures_1.ts, 0, 0))
 
