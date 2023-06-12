@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/strictModeReservedWordInDestructuring.ts] ////
+
 //// [strictModeReservedWordInDestructuring.ts]
 "use strict"
 var [public] = [1];

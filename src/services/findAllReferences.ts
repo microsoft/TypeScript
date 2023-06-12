@@ -1725,7 +1725,10 @@ export namespace Core {
     }
 
     function getPossibleSymbolReferenceNodes(sourceFile: SourceFile, symbolName: string, container: Node = sourceFile): readonly Node[] {
-        return getPossibleSymbolReferencePositions(sourceFile, symbolName, container).map(pos => getTouchingPropertyName(sourceFile, pos));
+        return mapDefined(getPossibleSymbolReferencePositions(sourceFile, symbolName, container), pos => {
+            const referenceLocation = getTouchingPropertyName(sourceFile, pos);
+            return referenceLocation === sourceFile ? undefined : referenceLocation;
+        });
     }
 
     function getPossibleSymbolReferencePositions(sourceFile: SourceFile, symbolName: string, container: Node = sourceFile): readonly number[] {

@@ -1,7 +1,7 @@
-tests/cases/compiler/knockout.ts(21,20): error TS2339: Property 'd' does not exist on type 'Observable<string>'.
+knockout.ts(21,20): error TS2339: Property 'd' does not exist on type 'Observable<string>'.
 
 
-==== tests/cases/compiler/knockout.ts (1 errors) ====
+==== knockout.ts (1 errors) ====
       declare module ko {
        export interface Observable<T> {
          (): T;

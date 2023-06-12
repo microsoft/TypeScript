@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment39.ts] ////
+
 //// [a.js]
 const foo = {};
 foo["baz"] = {};

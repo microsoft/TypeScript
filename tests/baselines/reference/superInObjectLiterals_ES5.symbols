@@ -1,4 +1,6 @@
-=== tests/cases/compiler/superInObjectLiterals_ES5.ts ===
+//// [tests/cases/compiler/superInObjectLiterals_ES5.ts] ////
+
+=== superInObjectLiterals_ES5.ts ===
 var obj = {
 >obj : Symbol(obj, Decl(superInObjectLiterals_ES5.ts, 0, 3))
 

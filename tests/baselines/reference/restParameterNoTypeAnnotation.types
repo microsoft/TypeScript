@@ -1,4 +1,6 @@
-=== tests/cases/compiler/restParameterNoTypeAnnotation.ts ===
+//// [tests/cases/compiler/restParameterNoTypeAnnotation.ts] ////
+
+=== restParameterNoTypeAnnotation.ts ===
 function foo(...rest) {   
 >foo : (...rest: any[]) => number
 >rest : any[]

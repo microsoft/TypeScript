@@ -481,7 +481,7 @@ export function createSignatureDeclarationFromCallExpression(
         isIdentifier(arg) ? arg.text : isPropertyAccessExpression(arg) && isIdentifier(arg.name) ? arg.name.text : undefined);
     const instanceTypes = isJs ? [] : map(args, arg => checker.getTypeAtLocation(arg));
     const { argumentTypeNodes, argumentTypeParameters } = getArgumentTypesAndTypeParameters(
-        checker, importAdder, instanceTypes, contextNode, scriptTarget, /*flags*/ undefined, tracker
+        checker, importAdder, instanceTypes, contextNode, scriptTarget, NodeBuilderFlags.NoTruncation, tracker
     );
 
     const modifiers = modifierFlags

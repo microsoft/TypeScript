@@ -1,8 +1,8 @@
-tests/cases/conformance/salsa/bug24730.js(11,14): error TS2339: Property 'doesNotExist' does not exist on type 'C'.
-tests/cases/conformance/salsa/bug24730.js(12,26): error TS2339: Property 'doesntExistEither' does not exist on type 'number'.
+bug24730.js(11,14): error TS2339: Property 'doesNotExist' does not exist on type 'C'.
+bug24730.js(12,26): error TS2339: Property 'doesntExistEither' does not exist on type 'number'.
 
 
-==== tests/cases/conformance/salsa/bug24730.js (2 errors) ====
+==== bug24730.js (2 errors) ====
     var UI = {}
     UI.TreeElement = class {
         constructor() {

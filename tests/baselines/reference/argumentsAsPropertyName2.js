@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/argumentsAsPropertyName2.ts] ////
+
 //// [argumentsAsPropertyName2.ts]
 // target: es5
 

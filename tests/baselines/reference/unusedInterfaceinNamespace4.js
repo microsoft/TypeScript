@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedInterfaceinNamespace4.ts] ////
+
 //// [unusedInterfaceinNamespace4.ts]
 namespace Validation {
     interface i1 {

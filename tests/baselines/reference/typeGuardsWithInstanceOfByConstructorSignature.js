@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts] ////
+
 //// [typeGuardsWithInstanceOfByConstructorSignature.ts]
 interface AConstructor {
     new (): A;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/derivedTypeCallingBaseImplWithOptionalParams.ts ===
+//// [tests/cases/compiler/derivedTypeCallingBaseImplWithOptionalParams.ts] ////
+
+=== derivedTypeCallingBaseImplWithOptionalParams.ts ===
 interface MyInterface {
     myMethod(...myList: any[]);
 >myMethod : (...myList: any[]) => any

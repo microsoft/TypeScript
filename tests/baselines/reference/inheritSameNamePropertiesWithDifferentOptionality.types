@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inheritSameNamePropertiesWithDifferentOptionality.ts ===
+//// [tests/cases/compiler/inheritSameNamePropertiesWithDifferentOptionality.ts] ////
+
+=== inheritSameNamePropertiesWithDifferentOptionality.ts ===
 interface C {
     x?: number;
 >x : number

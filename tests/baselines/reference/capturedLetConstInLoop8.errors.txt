@@ -1,22 +1,22 @@
-tests/cases/compiler/capturedLetConstInLoop8.ts(73,21): error TS2367: This comparison appears to be unintentional because the types '0' and '1' have no overlap.
-tests/cases/compiler/capturedLetConstInLoop8.ts(76,21): error TS2367: This comparison appears to be unintentional because the types '0' and '1' have no overlap.
-tests/cases/compiler/capturedLetConstInLoop8.ts(79,21): error TS2367: This comparison appears to be unintentional because the types '0' and '1' have no overlap.
-tests/cases/compiler/capturedLetConstInLoop8.ts(82,21): error TS2367: This comparison appears to be unintentional because the types '0' and '1' have no overlap.
-tests/cases/compiler/capturedLetConstInLoop8.ts(86,21): error TS2367: This comparison appears to be unintentional because the types '0' and '2' have no overlap.
-tests/cases/compiler/capturedLetConstInLoop8.ts(89,21): error TS2367: This comparison appears to be unintentional because the types '0' and '2' have no overlap.
-tests/cases/compiler/capturedLetConstInLoop8.ts(92,21): error TS2367: This comparison appears to be unintentional because the types '0' and '2' have no overlap.
-tests/cases/compiler/capturedLetConstInLoop8.ts(95,21): error TS2367: This comparison appears to be unintentional because the types '0' and '2' have no overlap.
-tests/cases/compiler/capturedLetConstInLoop8.ts(98,21): error TS2367: This comparison appears to be unintentional because the types '0' and '3' have no overlap.
-tests/cases/compiler/capturedLetConstInLoop8.ts(102,17): error TS2367: This comparison appears to be unintentional because the types '0' and '1' have no overlap.
-tests/cases/compiler/capturedLetConstInLoop8.ts(105,17): error TS2367: This comparison appears to be unintentional because the types '0' and '1' have no overlap.
-tests/cases/compiler/capturedLetConstInLoop8.ts(108,17): error TS2367: This comparison appears to be unintentional because the types '0' and '2' have no overlap.
-tests/cases/compiler/capturedLetConstInLoop8.ts(111,17): error TS2367: This comparison appears to be unintentional because the types '0' and '2' have no overlap.
-tests/cases/compiler/capturedLetConstInLoop8.ts(114,17): error TS2367: This comparison appears to be unintentional because the types '0' and '2' have no overlap.
-tests/cases/compiler/capturedLetConstInLoop8.ts(117,17): error TS2367: This comparison appears to be unintentional because the types '0' and '2' have no overlap.
-tests/cases/compiler/capturedLetConstInLoop8.ts(120,17): error TS2367: This comparison appears to be unintentional because the types '0' and '3' have no overlap.
+capturedLetConstInLoop8.ts(73,21): error TS2367: This comparison appears to be unintentional because the types '0' and '1' have no overlap.
+capturedLetConstInLoop8.ts(76,21): error TS2367: This comparison appears to be unintentional because the types '0' and '1' have no overlap.
+capturedLetConstInLoop8.ts(79,21): error TS2367: This comparison appears to be unintentional because the types '0' and '1' have no overlap.
+capturedLetConstInLoop8.ts(82,21): error TS2367: This comparison appears to be unintentional because the types '0' and '1' have no overlap.
+capturedLetConstInLoop8.ts(86,21): error TS2367: This comparison appears to be unintentional because the types '0' and '2' have no overlap.
+capturedLetConstInLoop8.ts(89,21): error TS2367: This comparison appears to be unintentional because the types '0' and '2' have no overlap.
+capturedLetConstInLoop8.ts(92,21): error TS2367: This comparison appears to be unintentional because the types '0' and '2' have no overlap.
+capturedLetConstInLoop8.ts(95,21): error TS2367: This comparison appears to be unintentional because the types '0' and '2' have no overlap.
+capturedLetConstInLoop8.ts(98,21): error TS2367: This comparison appears to be unintentional because the types '0' and '3' have no overlap.
+capturedLetConstInLoop8.ts(102,17): error TS2367: This comparison appears to be unintentional because the types '0' and '1' have no overlap.
+capturedLetConstInLoop8.ts(105,17): error TS2367: This comparison appears to be unintentional because the types '0' and '1' have no overlap.
+capturedLetConstInLoop8.ts(108,17): error TS2367: This comparison appears to be unintentional because the types '0' and '2' have no overlap.
+capturedLetConstInLoop8.ts(111,17): error TS2367: This comparison appears to be unintentional because the types '0' and '2' have no overlap.
+capturedLetConstInLoop8.ts(114,17): error TS2367: This comparison appears to be unintentional because the types '0' and '2' have no overlap.
+capturedLetConstInLoop8.ts(117,17): error TS2367: This comparison appears to be unintentional because the types '0' and '2' have no overlap.
+capturedLetConstInLoop8.ts(120,17): error TS2367: This comparison appears to be unintentional because the types '0' and '3' have no overlap.
 
 
-==== tests/cases/compiler/capturedLetConstInLoop8.ts (16 errors) ====
+==== capturedLetConstInLoop8.ts (16 errors) ====
     function foo() {
         l0:
         for (let z = 0; z < 1; ++z) {

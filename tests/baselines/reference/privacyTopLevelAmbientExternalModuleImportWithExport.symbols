@@ -1,4 +1,6 @@
-=== tests/cases/compiler/privacyTopLevelAmbientExternalModuleImportWithExport_core.ts ===
+//// [tests/cases/compiler/privacyTopLevelAmbientExternalModuleImportWithExport.ts] ////
+
+=== privacyTopLevelAmbientExternalModuleImportWithExport_core.ts ===
 ///<reference path='privacyTopLevelAmbientExternalModuleImportWithExport_require2.ts'/>
 ///<reference path='privacyTopLevelAmbientExternalModuleImportWithExport_require3.ts'/>
 // Privacy errors - importing private elements
@@ -63,7 +65,7 @@ export var publicUse_im_public_mi_public = new im_public_mi_public.c_private();
 >im_public_mi_public : Symbol(im_public_mi_public, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_core.ts, 4, 112))
 >c_private : Symbol(im_public_mi_public.c_private, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_require2.ts, 2, 20))
 
-=== tests/cases/compiler/privacyTopLevelAmbientExternalModuleImportWithExport_require.ts ===
+=== privacyTopLevelAmbientExternalModuleImportWithExport_require.ts ===
 // Public elements
 export class c_public {
 >c_public : Symbol(c_public, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_require.ts, 0, 0))
@@ -72,7 +74,7 @@ export class c_public {
 >foo : Symbol(c_public.foo, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_require.ts, 1, 23))
 }
 
-=== tests/cases/compiler/privacyTopLevelAmbientExternalModuleImportWithExport_require1.ts ===
+=== privacyTopLevelAmbientExternalModuleImportWithExport_require1.ts ===
 export class c_public {
 >c_public : Symbol(c_public, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_require1.ts, 0, 0))
 
@@ -80,7 +82,7 @@ export class c_public {
 >bar : Symbol(c_public.bar, Decl(privacyTopLevelAmbientExternalModuleImportWithExport_require1.ts, 0, 23))
 }
 
-=== tests/cases/compiler/privacyTopLevelAmbientExternalModuleImportWithExport_require2.ts ===
+=== privacyTopLevelAmbientExternalModuleImportWithExport_require2.ts ===
 // private elements
 // Export - Error ambient modules allowed only in global
 declare module 'm' {
@@ -95,7 +97,7 @@ declare module 'm' {
 }
 
 
-=== tests/cases/compiler/privacyTopLevelAmbientExternalModuleImportWithExport_require3.ts ===
+=== privacyTopLevelAmbientExternalModuleImportWithExport_require3.ts ===
 declare module 'm2' {
 >'m2' : Symbol("m2", Decl(privacyTopLevelAmbientExternalModuleImportWithExport_require3.ts, 0, 0))
 

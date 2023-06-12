@@ -1,29 +1,29 @@
-tests/cases/conformance/controlFlow/neverReturningFunctions1.ts(13,5): error TS7027: Unreachable code detected.
-tests/cases/conformance/controlFlow/neverReturningFunctions1.ts(19,5): error TS7027: Unreachable code detected.
-tests/cases/conformance/controlFlow/neverReturningFunctions1.ts(30,5): error TS7027: Unreachable code detected.
-tests/cases/conformance/controlFlow/neverReturningFunctions1.ts(36,5): error TS7027: Unreachable code detected.
-tests/cases/conformance/controlFlow/neverReturningFunctions1.ts(51,5): error TS7027: Unreachable code detected.
-tests/cases/conformance/controlFlow/neverReturningFunctions1.ts(57,5): error TS7027: Unreachable code detected.
-tests/cases/conformance/controlFlow/neverReturningFunctions1.ts(63,5): error TS7027: Unreachable code detected.
-tests/cases/conformance/controlFlow/neverReturningFunctions1.ts(77,9): error TS7027: Unreachable code detected.
-tests/cases/conformance/controlFlow/neverReturningFunctions1.ts(82,9): error TS7027: Unreachable code detected.
-tests/cases/conformance/controlFlow/neverReturningFunctions1.ts(89,9): error TS7027: Unreachable code detected.
-tests/cases/conformance/controlFlow/neverReturningFunctions1.ts(96,13): error TS7027: Unreachable code detected.
-tests/cases/conformance/controlFlow/neverReturningFunctions1.ts(101,13): error TS7027: Unreachable code detected.
-tests/cases/conformance/controlFlow/neverReturningFunctions1.ts(103,9): error TS7027: Unreachable code detected.
-tests/cases/conformance/controlFlow/neverReturningFunctions1.ts(105,5): error TS7027: Unreachable code detected.
-tests/cases/conformance/controlFlow/neverReturningFunctions1.ts(111,9): error TS7027: Unreachable code detected.
-tests/cases/conformance/controlFlow/neverReturningFunctions1.ts(112,9): error TS7027: Unreachable code detected.
-tests/cases/conformance/controlFlow/neverReturningFunctions1.ts(122,9): error TS7027: Unreachable code detected.
-tests/cases/conformance/controlFlow/neverReturningFunctions1.ts(127,9): error TS7027: Unreachable code detected.
-tests/cases/conformance/controlFlow/neverReturningFunctions1.ts(129,5): error TS7027: Unreachable code detected.
-tests/cases/conformance/controlFlow/neverReturningFunctions1.ts(139,9): error TS7027: Unreachable code detected.
-tests/cases/conformance/controlFlow/neverReturningFunctions1.ts(141,5): error TS7027: Unreachable code detected.
-tests/cases/conformance/controlFlow/neverReturningFunctions1.ts(148,9): error TS7027: Unreachable code detected.
-tests/cases/conformance/controlFlow/neverReturningFunctions1.ts(153,5): error TS7027: Unreachable code detected.
+neverReturningFunctions1.ts(13,5): error TS7027: Unreachable code detected.
+neverReturningFunctions1.ts(19,5): error TS7027: Unreachable code detected.
+neverReturningFunctions1.ts(30,5): error TS7027: Unreachable code detected.
+neverReturningFunctions1.ts(36,5): error TS7027: Unreachable code detected.
+neverReturningFunctions1.ts(51,5): error TS7027: Unreachable code detected.
+neverReturningFunctions1.ts(57,5): error TS7027: Unreachable code detected.
+neverReturningFunctions1.ts(63,5): error TS7027: Unreachable code detected.
+neverReturningFunctions1.ts(77,9): error TS7027: Unreachable code detected.
+neverReturningFunctions1.ts(82,9): error TS7027: Unreachable code detected.
+neverReturningFunctions1.ts(89,9): error TS7027: Unreachable code detected.
+neverReturningFunctions1.ts(96,13): error TS7027: Unreachable code detected.
+neverReturningFunctions1.ts(101,13): error TS7027: Unreachable code detected.
+neverReturningFunctions1.ts(103,9): error TS7027: Unreachable code detected.
+neverReturningFunctions1.ts(105,5): error TS7027: Unreachable code detected.
+neverReturningFunctions1.ts(111,9): error TS7027: Unreachable code detected.
+neverReturningFunctions1.ts(112,9): error TS7027: Unreachable code detected.
+neverReturningFunctions1.ts(122,9): error TS7027: Unreachable code detected.
+neverReturningFunctions1.ts(127,9): error TS7027: Unreachable code detected.
+neverReturningFunctions1.ts(129,5): error TS7027: Unreachable code detected.
+neverReturningFunctions1.ts(139,9): error TS7027: Unreachable code detected.
+neverReturningFunctions1.ts(141,5): error TS7027: Unreachable code detected.
+neverReturningFunctions1.ts(148,9): error TS7027: Unreachable code detected.
+neverReturningFunctions1.ts(153,5): error TS7027: Unreachable code detected.
 
 
-==== tests/cases/conformance/controlFlow/neverReturningFunctions1.ts (23 errors) ====
+==== neverReturningFunctions1.ts (23 errors) ====
     function fail(message?: string): never {
         throw new Error(message);
     }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitDefaultExportWithTempVarNameWithBundling.ts] ////
+
 //// [pi.ts]
 export default 3.14159;
 

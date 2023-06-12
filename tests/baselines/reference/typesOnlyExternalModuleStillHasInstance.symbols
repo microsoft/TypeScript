@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/foo_1.ts ===
+//// [tests/cases/conformance/externalModules/typesOnlyExternalModuleStillHasInstance.ts] ////
+
+=== foo_1.ts ===
 import foo0 = require('./foo_0');
 >foo0 : Symbol(foo0, Decl(foo_1.ts, 0, 0))
 
@@ -14,7 +16,7 @@ var y: {M2: Object} = foo0;
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >foo0 : Symbol(foo0, Decl(foo_1.ts, 0, 0))
 
-=== tests/cases/conformance/externalModules/foo_0.ts ===
+=== foo_0.ts ===
 export interface Person {
 >Person : Symbol(Person, Decl(foo_0.ts, 0, 0))
 

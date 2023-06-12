@@ -1,4 +1,6 @@
-=== tests/cases/compiler/ParameterList7.ts ===
+//// [tests/cases/compiler/ParameterList7.ts] ////
+
+=== ParameterList7.ts ===
 class C1 {
 >C1 : Symbol(C1, Decl(ParameterList7.ts, 0, 0))
 

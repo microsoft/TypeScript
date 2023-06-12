@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nonInferrableTypePropagation2.ts] ////
+
 //// [nonInferrableTypePropagation2.ts]
 export interface Predicate<A> {
     (a: A): boolean

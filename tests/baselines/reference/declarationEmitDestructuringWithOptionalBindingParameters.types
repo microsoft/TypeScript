@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitDestructuringWithOptionalBindingParameters.ts ===
+//// [tests/cases/compiler/declarationEmitDestructuringWithOptionalBindingParameters.ts] ////
+
+=== declarationEmitDestructuringWithOptionalBindingParameters.ts ===
 function foo([x,y,z]?: [string, number, boolean]) {
 >foo : ([x, y, z]?: [string, number, boolean]) => void
 >x : string

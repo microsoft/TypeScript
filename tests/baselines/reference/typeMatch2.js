@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeMatch2.ts] ////
+
 //// [typeMatch2.ts]
 function f1() {
 	var a = { x: 1, y: 2 };

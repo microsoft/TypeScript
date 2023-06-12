@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es2021/logicalAssignment/logicalAssignment5.ts ===
+//// [tests/cases/conformance/es2021/logicalAssignment/logicalAssignment5.ts] ////
+
+=== logicalAssignment5.ts ===
 function foo1 (f?: (a: number) => void) {
 >foo1 : Symbol(foo1, Decl(logicalAssignment5.ts, 0, 0))
 >f : Symbol(f, Decl(logicalAssignment5.ts, 0, 15))

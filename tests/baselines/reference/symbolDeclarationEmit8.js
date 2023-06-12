@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolDeclarationEmit8.ts] ////
+
 //// [symbolDeclarationEmit8.ts]
 var obj = {
     [Symbol.isConcatSpreadable]: 0

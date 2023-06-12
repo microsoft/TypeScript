@@ -1,4 +1,6 @@
-=== tests/cases/compiler/computedTypesKeyofNoIndexSignatureType.ts ===
+//// [tests/cases/compiler/computedTypesKeyofNoIndexSignatureType.ts] ////
+
+=== computedTypesKeyofNoIndexSignatureType.ts ===
 type Compute<A> = { [K in keyof A]: Compute<A[K]>; } & {};
 >Compute : { [K in keyof A]: { [K in keyof A[K]]: { [K in keyof A[K][K]]: { [K in keyof A[K][K][K]]: { [K in keyof A[K][K][K][K]]: { [K in keyof A[K][K][K][K][K]]: { [K in keyof A[K][K][K][K][K][K]]: { [K in keyof A[K][K][K][K][K][K][K]]: { [K in keyof A[K][K][K][K][K][K][K][K]]: { [K in keyof A[K][K][K][K][K][K][K][K][K]]: { [K in keyof A[K][K][K][K][K][K][K][K][K][K]]: any; }; }; }; }; }; }; }; }; }; }; }
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/privacyImportParseErrors.ts ===
+//// [tests/cases/compiler/privacyImportParseErrors.ts] ////
+
+=== privacyImportParseErrors.ts ===
 export module m1 {
 >m1 : typeof m1
 
@@ -1149,7 +1151,7 @@ module m2 {
 }
 
 export module m3 {
->m3 : typeof import("tests/cases/compiler/privacyImportParseErrors").m3
+>m3 : typeof import("privacyImportParseErrors").m3
 
     import m3 = require("use_glo_M1_public");
 >m3 : any

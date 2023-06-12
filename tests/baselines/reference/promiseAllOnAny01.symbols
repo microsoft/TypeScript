@@ -1,4 +1,6 @@
-=== tests/cases/compiler/promiseAllOnAny01.ts ===
+//// [tests/cases/compiler/promiseAllOnAny01.ts] ////
+
+=== promiseAllOnAny01.ts ===
 async function foo(x: any) {
 >foo : Symbol(foo, Decl(promiseAllOnAny01.ts, 0, 0))
 >x : Symbol(x, Decl(promiseAllOnAny01.ts, 0, 19))

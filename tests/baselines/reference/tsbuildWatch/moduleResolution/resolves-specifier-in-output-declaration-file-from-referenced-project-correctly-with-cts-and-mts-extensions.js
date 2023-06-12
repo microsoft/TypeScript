@@ -71,6 +71,7 @@ Module resolution kind is not specified, using 'Node16'.
 Resolving in ESM mode with conditions 'import', 'types', 'node'.
 File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
 Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/myproject/packages/node_modules' does not exist, skipping all lookups in it.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg2/package.json'.
@@ -309,6 +310,7 @@ Module resolution kind is not specified, using 'Node16'.
 Resolving in CJS mode with conditions 'require', 'types', 'node'.
 File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
 Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/myproject/packages/node_modules' does not exist, skipping all lookups in it.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg2/package.json'.
@@ -394,6 +396,7 @@ Module resolution kind is not specified, using 'Node16'.
 Resolving in ESM mode with conditions 'import', 'types', 'node'.
 File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
 Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/myproject/packages/node_modules' does not exist, skipping all lookups in it.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg2/package.json'.
@@ -471,6 +474,7 @@ Module resolution kind is not specified, using 'Node16'.
 Resolving in CJS mode with conditions 'require', 'types', 'node'.
 File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
 Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/myproject/packages/node_modules' does not exist, skipping all lookups in it.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg2/package.json'.
@@ -578,6 +582,7 @@ Module resolution kind is not specified, using 'Node16'.
 Resolving in CJS mode with conditions 'require', 'types', 'node'.
 File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
 Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/myproject/packages/node_modules' does not exist, skipping all lookups in it.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg2/package.json'.

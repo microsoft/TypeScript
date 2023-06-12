@@ -1,4 +1,6 @@
-=== tests/cases/compiler/templateLiteralEscapeSequence.ts ===
+//// [tests/cases/compiler/templateLiteralEscapeSequence.ts] ////
+
+=== templateLiteralEscapeSequence.ts ===
 declare function tag(template: TemplateStringsArray, ...substitutions: any[]): string;
 >tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
 >template : TemplateStringsArray

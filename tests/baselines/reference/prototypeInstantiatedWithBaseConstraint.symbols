@@ -1,4 +1,6 @@
-=== tests/cases/compiler/prototypeInstantiatedWithBaseConstraint.ts ===
+//// [tests/cases/compiler/prototypeInstantiatedWithBaseConstraint.ts] ////
+
+=== prototypeInstantiatedWithBaseConstraint.ts ===
 class C<T> {
 >C : Symbol(C, Decl(prototypeInstantiatedWithBaseConstraint.ts, 0, 0))
 >T : Symbol(T, Decl(prototypeInstantiatedWithBaseConstraint.ts, 0, 8))
