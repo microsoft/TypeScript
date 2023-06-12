@@ -129,7 +129,7 @@ function getInliningInfo(file: SourceFile, startPosition: number, tryWithReferen
     // and that it has a value.
     if (isInitializedVariable(parent) && isVariableDeclarationInVariableStatement(parent)) {
         // Don't inline the variable if it has multiple declarations.
-        if (parent.symbol.declarations?.length !== 1) {
+        if (checker.getMergedSymbol(parent.symbol).declarations?.length !== 1) {
             return { error: getLocaleSpecificMessage(Diagnostics.Variables_that_share_a_name_with_a_type_or_namespace_in_the_same_scope_cannot_be_inlined) };
         }
 
@@ -145,7 +145,9 @@ function getInliningInfo(file: SourceFile, startPosition: number, tryWithReferen
 
     // Try finding the declaration and nodes to replace via the reference token.
     if (tryWithReferenceToken) {
-        const definition = checker.resolveName(token.text, token, SymbolFlags.Value, /*excludeGlobals*/ false);
+        let definition = checker.resolveName(token.text, token, SymbolFlags.Value, /*excludeGlobals*/ false);
+        definition = definition && checker.getMergedSymbol(definition);
+
         if (definition?.declarations?.length !== 1) {
             return { error: getLocaleSpecificMessage(Diagnostics.Variables_that_share_a_name_with_a_type_or_namespace_in_the_same_scope_cannot_be_inlined) };
         }
