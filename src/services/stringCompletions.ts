@@ -388,7 +388,7 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
                 // Get string literal completions from specialized signatures of the target
                 // i.e. declare function f(a: 'A');
                 // f("/*completion position*/")
-                return argumentInfo && getStringLiteralCompletionsFromSignature(argumentInfo.invocation, node, argumentInfo, typeChecker) || fromContextualType();
+                return argumentInfo && getStringLiteralCompletionsFromSignature(argumentInfo.invocation, node, argumentInfo, typeChecker) || fromContextualType(ContextFlags.None);
             }
             // falls through (is `require("")` or `require(""` or `import("")`)
 
