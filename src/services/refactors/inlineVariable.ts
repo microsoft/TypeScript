@@ -180,6 +180,10 @@ function getReferenceNodes(declaration: InitializedVariableDeclaration, checker:
 }
 
 function getReplacementExpression(reference: Node, replacement: Expression): Expression {
+    // Make sure each reference site gets its own copy of the replacement node.
+    replacement = getSynthesizedDeepClone(replacement);
+    const { parent } = reference;
+
     // Logic from binaryOperandNeedsParentheses: "If the operand has lower precedence,
     // then it needs to be parenthesized to preserve the intent of the expression.
     // If the operand has higher precedence, then it does not need to be parenthesized."
@@ -187,10 +191,9 @@ function getReplacementExpression(reference: Node, replacement: Expression): Exp
     // Note that binaryOperandNeedsParentheses has further logic when the precedences
     // are equal, but for the purposes of this refactor we keep things simple and
     // instead just check for special cases with needsParentheses.
-    const { parent } = reference;
     if (isExpression(parent) && (getExpressionPrecedence(replacement) < getExpressionPrecedence(parent) || needsParentheses(parent))) {
-        return getSynthesizedDeepClone(factory.createParenthesizedExpression(replacement));
+        return factory.createParenthesizedExpression(replacement);
     }
 
-    return getSynthesizedDeepClone(replacement);
+    return replacement;
 }
