@@ -22703,7 +22703,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let matched = false;
             for (let i = 0; i < types.length; i++) {
                 if (include[i]) {
-                    const targetType = getTypeOfPropertyOrIndexSignature(types[i], propertyName, /*addOptional*/ true);
+                    const targetType = getTypeOfPropertyOrIndexSignature(types[i], propertyName, /*addOptionalityToIndex*/ true);
                     if (targetType && related(getDiscriminatingType(), targetType)) {
                         matched = true;
                     }
