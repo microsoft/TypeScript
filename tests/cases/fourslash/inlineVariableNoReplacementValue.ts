@@ -1,7 +1,7 @@
 /// <reference path="fourslash.ts" />
 
-////let x/**/;
+////let /*a*/x/*b*/;
 ////const y = x + 1;
 
-goTo.marker("");
+goTo.select("a", "b");
 verify.not.refactorAvailable("Inline variable");

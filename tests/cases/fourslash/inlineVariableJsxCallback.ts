@@ -5,7 +5,7 @@
 
 // @Filename: file.tsx
 ////function Button() {
-////    const onClick /**/ = () => {
+////    const /*a*/onClick/*b*/ = () => {
 ////        console.log("clicked");
 ////    };
 ////
@@ -16,7 +16,7 @@
 ////    );
 ////}
 
-goTo.marker("");
+goTo.select("a", "b");
 verify.refactorAvailable("Inline variable");
 edit.applyRefactor({
     refactorName: "Inline variable",

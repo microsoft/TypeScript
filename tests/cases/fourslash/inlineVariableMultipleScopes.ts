@@ -1,12 +1,12 @@
 /// <reference path="fourslash.ts" />
 
-////let x/**/ = 1;
+////let /*a*/x/*b*/ = 1;
 ////function foo() {
 ////    console.log(x);
 ////}
 ////const y = x + 2;
 
-goTo.marker("");
+goTo.select("a", "b");
 verify.refactorAvailable("Inline variable");
 edit.applyRefactor({
     refactorName: "Inline variable",

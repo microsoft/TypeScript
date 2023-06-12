@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-////const foo/**/ = () => foo();
+////const /*a*/foo/*b*/ = () => foo();
 
-goTo.marker("");
+goTo.select("a", "b");
 verify.not.refactorAvailable("Inline variable");

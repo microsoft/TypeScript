@@ -1,7 +1,7 @@
 /// <reference path="fourslash.ts" />
 
-////const Foo/**/ = class Foo {}
+////const /*a*/Foo/*b*/ = class Foo {}
 ////type FooConstructor = typeof Foo;
 
-goTo.marker("");
+goTo.select("a", "b");
 verify.not.refactorAvailable("Inline variable");

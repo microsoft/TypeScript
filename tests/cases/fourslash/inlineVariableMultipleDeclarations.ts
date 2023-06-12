@@ -1,11 +1,11 @@
 /// <reference path="fourslash.ts" />
 
-////const foo/*a*/ = "foo";
-////type foo/*b*/ = string;
+////const /*a1*/foo/*b1*/ = "foo";
+////type /*a2*/foo/*b2*/ = string;
 ////type bar = foo;
 
-goTo.marker("a");
+goTo.select("a1", "b1");
 verify.not.refactorAvailable("Inline variable");
 
-goTo.marker("b");
+goTo.select("a2", "b2");
 verify.not.refactorAvailable("Inline variable");

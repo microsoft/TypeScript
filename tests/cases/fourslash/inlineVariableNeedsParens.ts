@@ -1,9 +1,9 @@
 /// <reference path="fourslash.ts" />
 
-////const x/**/ = 1 + 2;
+////const /*a*/x/*b*/ = 1 + 2;
 ////const y = x * 3;
 
-goTo.marker("");
+goTo.select("a", "b");
 verify.refactorAvailable("Inline variable");
 edit.applyRefactor({
     refactorName: "Inline variable",
