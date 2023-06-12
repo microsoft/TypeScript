@@ -99,6 +99,8 @@ registerRefactor(refactorName, {
 
         const { file, program, startPosition } = context;
 
+        // tryWithReferenceToken is true below since here we're already performing the refactor.
+        // The trigger kind was only relevant when checking the availability of the refactor.
         const info = getInliningInfo(file, startPosition, /*tryWithReferenceToken*/ true, program);
         if (!info || refactor.isRefactorErrorInfo(info)) {
             return undefined;
@@ -148,10 +150,12 @@ function getInliningInfo(file: SourceFile, startPosition: number, tryWithReferen
         let definition = checker.resolveName(token.text, token, SymbolFlags.Value, /*excludeGlobals*/ false);
         definition = definition && checker.getMergedSymbol(definition);
 
+        // Don't inline the variable if it has multiple declarations.
         if (definition?.declarations?.length !== 1) {
             return { error: getLocaleSpecificMessage(Diagnostics.Variables_that_share_a_name_with_a_type_or_namespace_in_the_same_scope_cannot_be_inlined) };
         }
 
+        // Make sure we're not inlining something like "let foo;" or "for (let i = 0; i < 5; i++) {}".
         const declaration = definition.declarations[0];
         if (!isInitializedVariable(declaration) || !isVariableDeclarationInVariableStatement(declaration) || !isIdentifier(declaration.name)) {
             return undefined;
