@@ -9,7 +9,7 @@ import {
     getExpressionPrecedence,
     getLocaleSpecificMessage,
     getSynthesizedDeepClone,
-    getTokenAtPosition,
+    getTouchingPropertyName,
     Identifier,
     InitializedVariableDeclaration,
     isCallLikeExpression,
@@ -120,7 +120,7 @@ registerRefactor(refactorName, {
 
 function getInliningInfo(file: SourceFile, startPosition: number, tryWithReferenceToken: boolean, program: Program): InliningInfo | RefactorErrorInfo | undefined {
     const checker = program.getTypeChecker();
-    const token = getTokenAtPosition(file, startPosition);
+    const token = getTouchingPropertyName(file, startPosition);
     const parent = token.parent;
 
     if (!isIdentifier(token)) {
