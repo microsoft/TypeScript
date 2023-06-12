@@ -12,10 +12,12 @@ import {
     getTokenAtPosition,
     Identifier,
     InitializedVariableDeclaration,
+    isCallLikeExpression,
     isExportAssignment,
     isExportModifier,
     isExportSpecifier,
     isExpression,
+    isFunctionLike,
     isIdentifier,
     isInitializedVariable,
     isTypeQueryNode,
@@ -215,6 +217,12 @@ function getReplacementExpression(reference: Node, replacement: Expression): Exp
     // are equal, but for the purposes of this refactor we keep things simple and
     // instead just check for special cases with needsParentheses.
     if (isExpression(parent) && (getExpressionPrecedence(replacement) < getExpressionPrecedence(parent) || needsParentheses(parent))) {
+        return factory.createParenthesizedExpression(replacement);
+    }
+
+    // Functions also need to be parenthesized.
+    // E.g.: const f = () => {}; f(); -> (() => {})();
+    if (isFunctionLike(replacement) && isCallLikeExpression(parent)) {
         return factory.createParenthesizedExpression(replacement);
     }
 
