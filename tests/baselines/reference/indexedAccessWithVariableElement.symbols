@@ -1,4 +1,6 @@
-=== tests/cases/compiler/indexedAccessWithVariableElement.ts ===
+//// [tests/cases/compiler/indexedAccessWithVariableElement.ts] ////
+
+=== indexedAccessWithVariableElement.ts ===
 // repro from https://github.com/microsoft/TypeScript/issues/54420
 
 declare const array1: [...number[], number]

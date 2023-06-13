@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/staticFieldWithInterfaceContext.ts] ////
+
 //// [staticFieldWithInterfaceContext.ts]
 interface I {
     x: { a: "a" };

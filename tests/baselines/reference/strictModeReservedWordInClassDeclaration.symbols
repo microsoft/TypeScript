@@ -1,4 +1,6 @@
-=== tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts ===
+//// [tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts] ////
+
+=== strictModeReservedWordInClassDeclaration.ts ===
 interface public { }
 >public : Symbol(public, Decl(strictModeReservedWordInClassDeclaration.ts, 0, 0))
 

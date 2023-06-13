@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/contextualTyping/functionExpressionContextualTyping2.ts] ////
+
 //// [functionExpressionContextualTyping2.ts]
 // A contextual signature S is extracted from a function type T as follows:
 //      If T is a function type with exactly one call signature, and if that call signature is non- generic, S is that signature.

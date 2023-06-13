@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericTypeAssertions6.ts] ////
+
 //// [genericTypeAssertions6.ts]
 class A<T,U> {
     constructor(x) {

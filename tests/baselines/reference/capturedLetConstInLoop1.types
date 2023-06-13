@@ -1,4 +1,6 @@
-=== tests/cases/compiler/capturedLetConstInLoop1.ts ===
+//// [tests/cases/compiler/capturedLetConstInLoop1.ts] ////
+
+=== capturedLetConstInLoop1.ts ===
 declare function use(x: any): any;
 >use : (x: any) => any
 >x : any

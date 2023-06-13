@@ -1,4 +1,6 @@
-=== tests/cases/compiler/recursiveConditionalTypes2.ts ===
+//// [tests/cases/compiler/recursiveConditionalTypes2.ts] ////
+
+=== recursiveConditionalTypes2.ts ===
 // repro from https://github.com/microsoft/TypeScript/issues/43877
 
 type UnionToIntersection<U> = (

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/tuple/variadicTuples1.ts ===
+//// [tests/cases/conformance/types/tuple/variadicTuples1.ts] ////
+
+=== variadicTuples1.ts ===
 // Variadics in tuple types
 
 type TV0<T extends unknown[]> = [string, ...T];

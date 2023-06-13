@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/libTypeScriptOverrideSimpleConfig.ts] ////
+
 === /somepath/index.ts ===
 /// <reference lib="dom" />
 const a: ABC = { abc: "Hello" }

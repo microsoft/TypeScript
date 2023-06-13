@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/narrowingUnionToUnion.ts] ////
+
 //// [narrowingUnionToUnion.ts]
 type Falsy = false | 0 | 0n | '' | null | undefined;
 

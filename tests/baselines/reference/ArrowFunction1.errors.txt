@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArrowFunctions/ArrowFunction1.ts(1,13): error TS1110: Type expected.
+ArrowFunction1.ts(1,13): error TS1110: Type expected.
 
 
-==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArrowFunctions/ArrowFunction1.ts (1 errors) ====
+==== ArrowFunction1.ts (1 errors) ====
     var v = (a: ) => {
                 ~
 !!! error TS1110: Type expected.

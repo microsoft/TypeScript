@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedVariablesWithUnderscoreInForOfLoop.ts ===
+//// [tests/cases/compiler/unusedVariablesWithUnderscoreInForOfLoop.ts] ////
+
+=== unusedVariablesWithUnderscoreInForOfLoop.ts ===
 function t1() {
 >t1 : Symbol(t1, Decl(unusedVariablesWithUnderscoreInForOfLoop.ts, 0, 0))
 

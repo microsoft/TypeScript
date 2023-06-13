@@ -1,13 +1,13 @@
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(30,18): error TS2322: Type 'string' is not assignable to type 'T'.
+derivedGenericClassWithAny.ts(30,18): error TS2322: Type 'string' is not assignable to type 'T'.
   'string' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string'.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(32,9): error TS2322: Type 'string' is not assignable to type 'T'.
+derivedGenericClassWithAny.ts(32,9): error TS2322: Type 'string' is not assignable to type 'T'.
   'string' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string'.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(41,1): error TS2322: Type 'E<string>' is not assignable to type 'C<number>'.
+derivedGenericClassWithAny.ts(41,1): error TS2322: Type 'E<string>' is not assignable to type 'C<number>'.
   Types of property 'x' are incompatible.
     Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts (3 errors) ====
+==== derivedGenericClassWithAny.ts (3 errors) ====
     class C<T extends number> {
         x: T;
         get X(): T { return null; }

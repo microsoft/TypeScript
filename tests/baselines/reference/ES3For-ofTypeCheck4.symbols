@@ -1,4 +1,6 @@
-=== tests/cases/conformance/statements/for-ofStatements/ES3For-ofTypeCheck4.ts ===
+//// [tests/cases/conformance/statements/for-ofStatements/ES3For-ofTypeCheck4.ts] ////
+
+=== ES3For-ofTypeCheck4.ts ===
 var union: string | string[];
 >union : Symbol(union, Decl(ES3For-ofTypeCheck4.ts, 0, 3))
 

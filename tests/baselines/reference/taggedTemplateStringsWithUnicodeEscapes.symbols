@@ -1,4 +1,6 @@
-=== tests/cases/compiler/taggedTemplateStringsWithUnicodeEscapes.ts ===
+//// [tests/cases/compiler/taggedTemplateStringsWithUnicodeEscapes.ts] ////
+
+=== taggedTemplateStringsWithUnicodeEscapes.ts ===
 function f(...args: any[]) {
 >f : Symbol(f, Decl(taggedTemplateStringsWithUnicodeEscapes.ts, 0, 0))
 >args : Symbol(args, Decl(taggedTemplateStringsWithUnicodeEscapes.ts, 0, 11))

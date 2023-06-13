@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/tooManyTypeParameters1.ts] ////
+
 //// [tooManyTypeParameters1.ts]
 function f<T>() { }
 f<string, string>();

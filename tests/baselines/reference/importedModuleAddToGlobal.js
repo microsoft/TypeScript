@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importedModuleAddToGlobal.ts] ////
+
 //// [importedModuleAddToGlobal.ts]
 // Binding for an import statement in a typeref position is being added to the global scope
 // Shouldn't compile b.B is not defined in C

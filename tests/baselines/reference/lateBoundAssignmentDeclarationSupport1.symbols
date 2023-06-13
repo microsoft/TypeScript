@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/usage.js ===
+//// [tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport1.ts] ////
+
+=== usage.js ===
 const x = require("./lateBoundAssignmentDeclarationSupport1.js");
 >x : Symbol(x, Decl(usage.js, 0, 5))
 >require : Symbol(require)
@@ -15,7 +17,7 @@ const z = x[x.S];
 >x : Symbol(x, Decl(usage.js, 0, 5))
 >S : Symbol(x.S, Decl(lateBoundAssignmentDeclarationSupport1.js, 5, 21))
 
-=== tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport1.js ===
+=== lateBoundAssignmentDeclarationSupport1.js ===
 // currently unsupported
 const _sym = Symbol();
 >_sym : Symbol(_sym, Decl(lateBoundAssignmentDeclarationSupport1.js, 1, 5))
@@ -25,11 +27,11 @@ const _str = "my-fake-sym";
 >_str : Symbol(_str, Decl(lateBoundAssignmentDeclarationSupport1.js, 2, 5))
 
 exports[_sym] = "ok";
->exports : Symbol("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport1", Decl(lateBoundAssignmentDeclarationSupport1.js, 0, 0))
+>exports : Symbol("lateBoundAssignmentDeclarationSupport1", Decl(lateBoundAssignmentDeclarationSupport1.js, 0, 0))
 >_sym : Symbol(_sym, Decl(lateBoundAssignmentDeclarationSupport1.js, 1, 5))
 
 exports[_str] = "ok";
->exports : Symbol("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport1", Decl(lateBoundAssignmentDeclarationSupport1.js, 0, 0))
+>exports : Symbol("lateBoundAssignmentDeclarationSupport1", Decl(lateBoundAssignmentDeclarationSupport1.js, 0, 0))
 >_str : Symbol(_str, Decl(lateBoundAssignmentDeclarationSupport1.js, 2, 5))
 
 exports.S = _sym;

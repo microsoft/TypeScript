@@ -1,4 +1,6 @@
-=== tests/cases/compiler/argumentsSpreadRestIterables.tsx ===
+//// [tests/cases/compiler/argumentsSpreadRestIterables.tsx] ////
+
+=== argumentsSpreadRestIterables.tsx ===
 declare const itNum: Iterable<number>
 >itNum : Symbol(itNum, Decl(argumentsSpreadRestIterables.tsx, 0, 13))
 >Iterable : Symbol(Iterable)

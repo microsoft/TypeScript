@@ -1,4 +1,6 @@
-=== tests/cases/conformance/moduleResolution/main.ts ===
+//// [tests/cases/conformance/moduleResolution/typesVersions.multiFile.ts] ////
+
+=== main.ts ===
 import { a } from "ext";
 >a : "ts3.1 a"
 
@@ -13,12 +15,12 @@ const bb: "ts3.1 b" = b;
 >bb : "ts3.1 b"
 >b : "ts3.1 b"
 
-=== tests/cases/conformance/moduleResolution/node_modules/ext/ts3.1/index.d.ts ===
+=== node_modules/ext/ts3.1/index.d.ts ===
 export const a = "ts3.1 a";
 >a : "ts3.1 a"
 >"ts3.1 a" : "ts3.1 a"
 
-=== tests/cases/conformance/moduleResolution/node_modules/ext/ts3.1/other.d.ts ===
+=== node_modules/ext/ts3.1/other.d.ts ===
 export const b = "ts3.1 b";
 >b : "ts3.1 b"
 >"ts3.1 b" : "ts3.1 b"

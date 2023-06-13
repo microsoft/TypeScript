@@ -1,8 +1,8 @@
-tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpressionDivideAmbiguity7.ts(1,2): error TS2304: Cannot find name 'a'.
-tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpressionDivideAmbiguity7.ts(2,3): error TS1005: ';' expected.
+parserRegularExpressionDivideAmbiguity7.ts(1,2): error TS2304: Cannot find name 'a'.
+parserRegularExpressionDivideAmbiguity7.ts(2,3): error TS1005: ';' expected.
 
 
-==== tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpressionDivideAmbiguity7.ts (2 errors) ====
+==== parserRegularExpressionDivideAmbiguity7.ts (2 errors) ====
     (a/8
      ~
 !!! error TS2304: Cannot find name 'a'.

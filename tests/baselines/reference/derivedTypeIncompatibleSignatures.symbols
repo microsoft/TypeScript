@@ -1,4 +1,6 @@
-=== tests/cases/compiler/derivedTypeIncompatibleSignatures.ts ===
+//// [tests/cases/compiler/derivedTypeIncompatibleSignatures.ts] ////
+
+=== derivedTypeIncompatibleSignatures.ts ===
 interface A {
 >A : Symbol(A, Decl(derivedTypeIncompatibleSignatures.ts, 0, 0))
 

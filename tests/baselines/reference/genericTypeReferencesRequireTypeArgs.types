@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericTypeReferencesRequireTypeArgs.ts ===
+//// [tests/cases/compiler/genericTypeReferencesRequireTypeArgs.ts] ////
+
+=== genericTypeReferencesRequireTypeArgs.ts ===
 class C<T> {
 >C : C<T>
 

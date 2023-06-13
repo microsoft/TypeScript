@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/libTypeScriptSubfileResolvingConfig.ts] ////
+
 === /somepath/index.ts ===
 /// <reference lib="dom.iterable" />
 const a: DOMIterable = { abc: "Hello" }

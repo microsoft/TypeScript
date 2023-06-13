@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/modules/m1.ts ===
+//// [tests/cases/conformance/es6/modules/exportsAndImportsWithUnderscores3.ts] ////
+
+=== m1.ts ===
 var R: any
 >R : Symbol(R, Decl(m1.ts, 0, 3))
 
@@ -15,7 +17,7 @@ export default R = {
 >"_hi" : Symbol("_hi", Decl(m1.ts, 3, 19))
 }
 
-=== tests/cases/conformance/es6/modules/m2.ts ===
+=== m2.ts ===
 import R from "./m1";
 >R : Symbol(R, Decl(m2.ts, 0, 6))
 

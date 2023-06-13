@@ -1,4 +1,6 @@
-=== tests/cases/compiler/assignmentCompatForEnums.ts ===
+//// [tests/cases/compiler/assignmentCompatForEnums.ts] ////
+
+=== assignmentCompatForEnums.ts ===
 enum TokenType { One, Two };
 >TokenType : TokenType
 >One : TokenType.One

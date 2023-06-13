@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/rest/objectRestForOf.ts ===
+//// [tests/cases/conformance/types/rest/objectRestForOf.ts] ////
+
+=== objectRestForOf.ts ===
 let array: { x: number, y: string }[];
 >array : { x: number; y: string; }[]
 >x : number

@@ -1,7 +1,7 @@
-tests/cases/compiler/commentsOnJSXExpressionsArePreserved.tsx(5,16): error TS2792: Cannot find module 'react/jsx-dev-runtime'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+commentsOnJSXExpressionsArePreserved.tsx(5,16): error TS2792: Cannot find module 'react/jsx-dev-runtime'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 
 
-==== tests/cases/compiler/commentsOnJSXExpressionsArePreserved.tsx (1 errors) ====
+==== commentsOnJSXExpressionsArePreserved.tsx (1 errors) ====
     // file is intentionally not a module - this tests for a crash in the module/system transforms alongside the `react-jsx` and `react-jsxdev` outputs
     namespace JSX {}
     class Component {

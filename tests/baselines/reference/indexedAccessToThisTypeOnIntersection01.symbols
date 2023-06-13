@@ -1,4 +1,6 @@
-=== tests/cases/compiler/indexedAccessToThisTypeOnIntersection01.ts ===
+//// [tests/cases/compiler/indexedAccessToThisTypeOnIntersection01.ts] ////
+
+=== indexedAccessToThisTypeOnIntersection01.ts ===
 interface A {
 >A : Symbol(A, Decl(indexedAccessToThisTypeOnIntersection01.ts, 0, 0))
 

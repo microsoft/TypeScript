@@ -1,7 +1,7 @@
-tests/cases/compiler/classMergedWithInterfaceMultipleBasesNoError.ts(8,30): error TS2729: Property 'handleIntersection' is used before its initialization.
+classMergedWithInterfaceMultipleBasesNoError.ts(8,30): error TS2729: Property 'handleIntersection' is used before its initialization.
 
 
-==== tests/cases/compiler/classMergedWithInterfaceMultipleBasesNoError.ts (1 errors) ====
+==== classMergedWithInterfaceMultipleBasesNoError.ts (1 errors) ====
     interface Bar { }
     interface Baz { }
     interface Q { }
@@ -12,6 +12,6 @@ tests/cases/compiler/classMergedWithInterfaceMultipleBasesNoError.ts(8,30): erro
         readonly observer = this.handleIntersection;
                                  ~~~~~~~~~~~~~~~~~~
 !!! error TS2729: Property 'handleIntersection' is used before its initialization.
-!!! related TS2728 tests/cases/compiler/classMergedWithInterfaceMultipleBasesNoError.ts:9:14: 'handleIntersection' is declared here.
+!!! related TS2728 classMergedWithInterfaceMultipleBasesNoError.ts:9:14: 'handleIntersection' is declared here.
         readonly handleIntersection = () => { }
     }

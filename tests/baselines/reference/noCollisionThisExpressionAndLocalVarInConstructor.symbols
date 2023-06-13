@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noCollisionThisExpressionAndLocalVarInConstructor.ts ===
+//// [tests/cases/compiler/noCollisionThisExpressionAndLocalVarInConstructor.ts] ////
+
+=== noCollisionThisExpressionAndLocalVarInConstructor.ts ===
 class class1 {
 >class1 : Symbol(class1, Decl(noCollisionThisExpressionAndLocalVarInConstructor.ts, 0, 0))
 

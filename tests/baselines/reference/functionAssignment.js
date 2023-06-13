@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionAssignment.ts] ////
+
 //// [functionAssignment.ts]
 function f(n: Function) { }
 f(function () { });

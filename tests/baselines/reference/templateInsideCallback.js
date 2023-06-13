@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/templateInsideCallback.ts] ////
+
 //// [templateInsideCallback.js]
 /**
  * @typedef Oops

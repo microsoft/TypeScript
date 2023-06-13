@@ -1,4 +1,6 @@
-=== tests/cases/compiler/yieldInForInInDownlevelGenerator.ts ===
+//// [tests/cases/compiler/yieldInForInInDownlevelGenerator.ts] ////
+
+=== yieldInForInInDownlevelGenerator.ts ===
 // https://github.com/microsoft/TypeScript/issues/49808
 function* gen() {
 >gen : Symbol(gen, Decl(yieldInForInInDownlevelGenerator.ts, 0, 0))

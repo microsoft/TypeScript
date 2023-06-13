@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringParameterProperties1.ts] ////
+
 //// [destructuringParameterProperties1.ts]
 class C1 {
     constructor(public [x, y, z]: string[]) {

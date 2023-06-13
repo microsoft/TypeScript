@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unionOfArraysFilterCall.ts ===
+//// [tests/cases/compiler/unionOfArraysFilterCall.ts] ////
+
+=== unionOfArraysFilterCall.ts ===
 interface Fizz {
 >Fizz : Symbol(Fizz, Decl(unionOfArraysFilterCall.ts, 0, 0))
 

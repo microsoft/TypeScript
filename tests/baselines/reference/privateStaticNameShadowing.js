@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateStaticNameShadowing.ts] ////
+
 //// [privateStaticNameShadowing.ts]
 class X {
     static #f = X.#m();

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/pathMappingBasedModuleResolution_rootImport_aliasWithRoot.ts] ////
+
 === /root/src/foo.ts ===
 export function foo() {}
 >foo : Symbol(foo, Decl(foo.ts, 0, 0))

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/packages/b/src/index.ts ===
+//// [tests/cases/compiler/declarationEmitPathMappingMonorepo.ts] ////
+
+=== packages/b/src/index.ts ===
 import { a } from "@ts-bug/a";
 >a : (text: string) => import("@ts-bug/a").AText
 
@@ -11,7 +13,7 @@ export function b(text: string) {
 >a : (text: string) => import("@ts-bug/a").AText
 >text : string
 }
-=== tests/cases/compiler/packages/a/index.d.ts ===
+=== packages/a/index.d.ts ===
 declare module "@ts-bug/a" {
 >"@ts-bug/a" : typeof import("@ts-bug/a")
 

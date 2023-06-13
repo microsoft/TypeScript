@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/decorators/1.0lib-noErrors.ts] ////
+
 //// [1.0lib-noErrors.ts]
 /* *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved. 
