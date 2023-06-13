@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameMethodsDerivedClasses.ts] ////
+
 //// [privateNameMethodsDerivedClasses.ts]
 class Base {
     #prop(): number{ return  123; }

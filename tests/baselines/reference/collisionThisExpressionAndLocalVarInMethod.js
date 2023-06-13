@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/collisionThisExpressionAndLocalVarInMethod.ts] ////
+
 //// [collisionThisExpressionAndLocalVarInMethod.ts]
 class a {
     method1() {

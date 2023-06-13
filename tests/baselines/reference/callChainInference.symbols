@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/optionalChaining/callChain/callChainInference.ts ===
+//// [tests/cases/conformance/expressions/optionalChaining/callChain/callChainInference.ts] ////
+
+=== callChainInference.ts ===
 // Repro from #42404
 
 interface Y {

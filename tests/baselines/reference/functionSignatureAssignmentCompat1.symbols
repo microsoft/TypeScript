@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionSignatureAssignmentCompat1.ts ===
+//// [tests/cases/compiler/functionSignatureAssignmentCompat1.ts] ////
+
+=== functionSignatureAssignmentCompat1.ts ===
 interface ParserFunc {
 >ParserFunc : Symbol(ParserFunc, Decl(functionSignatureAssignmentCompat1.ts, 0, 0))
 

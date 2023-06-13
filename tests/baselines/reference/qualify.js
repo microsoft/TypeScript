@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/qualify.ts] ////
+
 //// [qualify.ts]
 module M {
     export var m=0;

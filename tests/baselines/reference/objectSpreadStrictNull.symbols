@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/spread/objectSpreadStrictNull.ts ===
+//// [tests/cases/conformance/types/spread/objectSpreadStrictNull.ts] ////
+
+=== objectSpreadStrictNull.ts ===
 function f(
 >f : Symbol(f, Decl(objectSpreadStrictNull.ts, 0, 0))
 

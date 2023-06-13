@@ -1,4 +1,6 @@
-=== tests/cases/compiler/singleLineCommentInConciseArrowFunctionES3.ts ===
+//// [tests/cases/compiler/singleLineCommentInConciseArrowFunctionES3.ts] ////
+
+=== singleLineCommentInConciseArrowFunctionES3.ts ===
 function test() {
 >test : Symbol(test, Decl(singleLineCommentInConciseArrowFunctionES3.ts, 0, 0))
 

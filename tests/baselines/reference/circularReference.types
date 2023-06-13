@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/foo2.ts ===
+//// [tests/cases/conformance/externalModules/circularReference.ts] ////
+
+=== foo2.ts ===
 import foo1 = require('./foo1');
 >foo1 : typeof foo1
 
@@ -71,7 +73,7 @@ export module M1 {
 	}
 }
 
-=== tests/cases/conformance/externalModules/foo1.ts ===
+=== foo1.ts ===
 import foo2 = require('./foo2');
 >foo2 : typeof foo2
 

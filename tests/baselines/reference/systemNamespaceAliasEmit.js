@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/systemNamespaceAliasEmit.ts] ////
+
 //// [systemNamespaceAliasEmit.ts]
 namespace ns {
     const value = 1;

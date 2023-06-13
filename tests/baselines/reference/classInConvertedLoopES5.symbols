@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classInConvertedLoopES5.ts ===
+//// [tests/cases/compiler/classInConvertedLoopES5.ts] ////
+
+=== classInConvertedLoopES5.ts ===
 const classesByRow: Record<string, object> = {};
 >classesByRow : Symbol(classesByRow, Decl(classInConvertedLoopES5.ts, 0, 5))
 >Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))

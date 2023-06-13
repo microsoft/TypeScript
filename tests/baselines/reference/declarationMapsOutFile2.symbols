@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/declarationMapsOutFile2.ts] ////
+
+=== a.ts ===
 class Foo {
 >Foo : Symbol(Foo, Decl(a.ts, 0, 0))
 
@@ -20,7 +22,7 @@ class Foo {
 >Foo : Symbol(Foo, Decl(a.ts, 0, 0))
     }
 }
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 const c = new Foo();
 >c : Symbol(c, Decl(index.ts, 0, 5))
 >Foo : Symbol(Foo, Decl(a.ts, 0, 0))

@@ -79,6 +79,7 @@ Directory '/user/username/node_modules/@types' does not exist, skipping all look
 Directory '/user/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 Looking up in 'node_modules' folder, initial location '/user/username/projects/myproject'.
+Searching all ancestor node_modules directories for preferred extensions: Declaration.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -96,6 +97,7 @@ Directory '/user/username/node_modules/@types' does not exist, skipping all look
 Directory '/user/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 Looking up in 'node_modules' folder, initial location '/user/username/projects/myproject'.
+Searching all ancestor node_modules directories for preferred extensions: Declaration.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg1/package.json'.
 Entering conditional exports.
 Saw non-matching condition 'import'.
@@ -276,6 +278,7 @@ Directory '/user/username/node_modules/@types' does not exist, skipping all look
 Directory '/user/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 Looking up in 'node_modules' folder, initial location '/user/username/projects/myproject'.
+Searching all ancestor node_modules directories for preferred extensions: Declaration.
 File '/user/username/projects/myproject/node_modules/pkg/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
 Matched 'exports' condition 'import'.

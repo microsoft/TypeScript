@@ -1,8 +1,8 @@
-tests/cases/compiler/noImplicitReturnsWithoutReturnExpression.ts(2,5): error TS7030: Not all code paths return a value.
-tests/cases/compiler/noImplicitReturnsWithoutReturnExpression.ts(22,9): error TS7030: Not all code paths return a value.
+noImplicitReturnsWithoutReturnExpression.ts(2,5): error TS7030: Not all code paths return a value.
+noImplicitReturnsWithoutReturnExpression.ts(22,9): error TS7030: Not all code paths return a value.
 
 
-==== tests/cases/compiler/noImplicitReturnsWithoutReturnExpression.ts (2 errors) ====
+==== noImplicitReturnsWithoutReturnExpression.ts (2 errors) ====
     function isMissingReturnExpression(): number {
         return;
         ~~~~~~

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/accessibility/privateStaticMemberAccessibility.ts ===
+//// [tests/cases/conformance/classes/members/accessibility/privateStaticMemberAccessibility.ts] ////
+
+=== privateStaticMemberAccessibility.ts ===
 class Base {
 >Base : Symbol(Base, Decl(privateStaticMemberAccessibility.ts, 0, 0))
 

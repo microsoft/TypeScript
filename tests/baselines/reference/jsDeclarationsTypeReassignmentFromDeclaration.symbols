@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsTypeReassignmentFromDeclaration.ts] ////
+
 === /some-mod.d.ts ===
 interface Item {
 >Item : Symbol(Item, Decl(some-mod.d.ts, 0, 0))
@@ -12,7 +14,7 @@ declare const items: Item[];
 export = items;
 >items : Symbol(items, Decl(some-mod.d.ts, 3, 13))
 
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+=== index.js ===
 /** @type {typeof import("/some-mod")} */
 const items = [];
 >items : Symbol(items, Decl(index.js, 1, 5))

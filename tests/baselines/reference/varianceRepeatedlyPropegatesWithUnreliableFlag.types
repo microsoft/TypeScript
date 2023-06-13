@@ -1,4 +1,6 @@
-=== tests/cases/compiler/varianceRepeatedlyPropegatesWithUnreliableFlag.ts ===
+//// [tests/cases/compiler/varianceRepeatedlyPropegatesWithUnreliableFlag.ts] ////
+
+=== varianceRepeatedlyPropegatesWithUnreliableFlag.ts ===
 type A = { a: number };
 >A : { a: number; }
 >a : number

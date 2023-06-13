@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/overloadsWithProvisionalErrors.ts] ////
+
 //// [overloadsWithProvisionalErrors.ts]
 var func: {
     (s: string): number;

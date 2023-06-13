@@ -1,4 +1,6 @@
-=== tests/cases/compiler/enumPropertyAccess.ts ===
+//// [tests/cases/compiler/enumPropertyAccess.ts] ////
+
+=== enumPropertyAccess.ts ===
 enum Colors {
 >Colors : Symbol(Colors, Decl(enumPropertyAccess.ts, 0, 0))
 

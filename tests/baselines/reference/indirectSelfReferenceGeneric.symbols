@@ -1,4 +1,6 @@
-=== tests/cases/compiler/indirectSelfReferenceGeneric.ts ===
+//// [tests/cases/compiler/indirectSelfReferenceGeneric.ts] ////
+
+=== indirectSelfReferenceGeneric.ts ===
 class a<T> extends b<T> { }
 >a : Symbol(a, Decl(indirectSelfReferenceGeneric.ts, 0, 0))
 >T : Symbol(T, Decl(indirectSelfReferenceGeneric.ts, 0, 8))

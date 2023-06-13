@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/instanceofOnInstantiationExpression.ts] ////
+
 //// [instanceofOnInstantiationExpression.ts]
 declare class Box<T> {
     value: T;

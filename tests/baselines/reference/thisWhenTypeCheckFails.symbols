@@ -1,4 +1,6 @@
-=== tests/cases/compiler/thisWhenTypeCheckFails.ts ===
+//// [tests/cases/compiler/thisWhenTypeCheckFails.ts] ////
+
+=== thisWhenTypeCheckFails.ts ===
 class c {
 >c : Symbol(c, Decl(thisWhenTypeCheckFails.ts, 0, 0))
 

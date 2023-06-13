@@ -60,7 +60,6 @@ import {
     SortKind,
     SourceFile,
     stableSort,
-    suppressLeadingTrivia,
     SyntaxKind,
     textChanges,
     TransformFlags,
@@ -137,7 +136,7 @@ export function organizeImports(
         // on the first import because it is probably the header comment for the file.
         // Consider: we could do a more careful check that this trivia is actually a header,
         // but the consequences of being wrong are very minor.
-        suppressLeadingTrivia(oldImportDecls[0]);
+        setEmitFlags(oldImportDecls[0], EmitFlags.NoLeadingComments);
 
         const oldImportGroups = shouldCombine
             ? group(oldImportDecls, importDecl => getExternalModuleName(importDecl.moduleSpecifier)!)

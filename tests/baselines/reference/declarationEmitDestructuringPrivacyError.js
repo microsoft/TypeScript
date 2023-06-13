@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitDestructuringPrivacyError.ts] ////
+
 //// [declarationEmitDestructuringPrivacyError.ts]
 module m {
     class c {
