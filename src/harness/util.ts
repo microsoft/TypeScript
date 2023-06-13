@@ -21,7 +21,7 @@ const replaceTypesVersionsMessage = createDiagnosticMessageReplacer(
     ([entry, , moduleName], compilerVersion) => [entry, compilerVersion, moduleName]);
 
 export function sanitizeTraceResolutionLogEntry(text: string) {
-    return text && removeTestPathPrefixes(replaceTypesVersionsMessage(text, "3.1.0-dev"));
+    return text && replaceTypesVersionsMessage(text, "3.1.0-dev");
 }
 
 /**

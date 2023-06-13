@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importDeclFromTypeNodeInJsSource.ts] ////
+
 === /src/node_modules/@types/node/index.d.ts ===
 
 /// <reference path="events.d.ts" />

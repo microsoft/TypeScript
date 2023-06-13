@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeMatch1.ts] ////
+
 //// [typeMatch1.ts]
 interface I { z; }
 interface I2 { z; }

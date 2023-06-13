@@ -1,95 +1,97 @@
-=== tests/cases/conformance/esDecorators/classDeclaration/global.ts ===
+//// [tests/cases/conformance/esDecorators/classDeclaration/esDecorators-classDeclaration-exportModifier.2.ts] ////
+
+=== global.ts ===
 /** @type {*} */
 var dec;
 >dec : Symbol(dec, Decl(global.ts, 1, 3))
 
-=== tests/cases/conformance/esDecorators/classDeclaration/file1.ts ===
+=== file1.ts ===
 // ok
 @dec export class C1 { }
 >dec : Symbol(dec, Decl(global.ts, 1, 3))
 >C1 : Symbol(C1, Decl(file1.ts, 0, 0))
 
-=== tests/cases/conformance/esDecorators/classDeclaration/file2.ts ===
+=== file2.ts ===
 // ok
 @dec export default class C2 {}
 >dec : Symbol(dec, Decl(global.ts, 1, 3))
 >C2 : Symbol(C2, Decl(file2.ts, 0, 0))
 
-=== tests/cases/conformance/esDecorators/classDeclaration/file3.ts ===
+=== file3.ts ===
 // error
 export @dec default class C3 {}
 >dec : Symbol(dec, Decl(global.ts, 1, 3))
 >C3 : Symbol(C3, Decl(file3.ts, 0, 0))
 
-=== tests/cases/conformance/esDecorators/classDeclaration/file4.ts ===
+=== file4.ts ===
 // ok
 export @dec class C4 {}
 >dec : Symbol(dec, Decl(global.ts, 1, 3))
 >C4 : Symbol(C4, Decl(file4.ts, 0, 0))
 
-=== tests/cases/conformance/esDecorators/classDeclaration/file5.ts ===
+=== file5.ts ===
 // ok
 export default @dec class C5 {}
 >dec : Symbol(dec, Decl(global.ts, 1, 3))
 >C5 : Symbol(C5, Decl(file5.ts, 0, 0))
 
-=== tests/cases/conformance/esDecorators/classDeclaration/file6.ts ===
+=== file6.ts ===
 // error
 @dec export @dec class C6 {}
 >dec : Symbol(dec, Decl(global.ts, 1, 3))
 >dec : Symbol(dec, Decl(global.ts, 1, 3))
 >C6 : Symbol(C6, Decl(file6.ts, 0, 0))
 
-=== tests/cases/conformance/esDecorators/classDeclaration/file7.ts ===
+=== file7.ts ===
 // error
 @dec export default @dec class C7 {}
 >dec : Symbol(dec, Decl(global.ts, 1, 3))
 >dec : Symbol(dec, Decl(global.ts, 1, 3))
 >C7 : Symbol(C7, Decl(file7.ts, 0, 0))
 
-=== tests/cases/conformance/esDecorators/classDeclaration/file8.ts ===
+=== file8.ts ===
 // ok
 @dec abstract class C8 {}
 >dec : Symbol(dec, Decl(global.ts, 1, 3))
 >C8 : Symbol(C8, Decl(file8.ts, 0, 0))
 
-=== tests/cases/conformance/esDecorators/classDeclaration/file9.ts ===
+=== file9.ts ===
 // ok
 @dec export abstract class C9 {}
 >dec : Symbol(dec, Decl(global.ts, 1, 3))
 >C9 : Symbol(C9, Decl(file9.ts, 0, 0))
 
-=== tests/cases/conformance/esDecorators/classDeclaration/file10.ts ===
+=== file10.ts ===
 // ok
 @dec export default abstract class C10 {}
 >dec : Symbol(dec, Decl(global.ts, 1, 3))
 >C10 : Symbol(C10, Decl(file10.ts, 0, 0))
 
-=== tests/cases/conformance/esDecorators/classDeclaration/file11.ts ===
+=== file11.ts ===
 // ok
 export @dec abstract class C11 {}
 >dec : Symbol(dec, Decl(global.ts, 1, 3))
 >C11 : Symbol(C11, Decl(file11.ts, 0, 0))
 
-=== tests/cases/conformance/esDecorators/classDeclaration/file12.ts ===
+=== file12.ts ===
 // ok
 export default @dec abstract class C12 {}
 >dec : Symbol(dec, Decl(global.ts, 1, 3))
 >C12 : Symbol(C12, Decl(file12.ts, 0, 0))
 
-=== tests/cases/conformance/esDecorators/classDeclaration/file13.ts ===
+=== file13.ts ===
 // error
 abstract @dec class C13 {}
 >dec : Symbol(dec, Decl(global.ts, 1, 3))
 >C13 : Symbol(C13, Decl(file13.ts, 1, 8))
 
-=== tests/cases/conformance/esDecorators/classDeclaration/file14.ts ===
+=== file14.ts ===
 // error
 export abstract @dec class C14 {}
 >dec : Symbol(dec, Decl(global.ts, 1, 3))
 >C14 : Symbol(C14, Decl(file14.ts, 1, 15))
 
-=== tests/cases/conformance/esDecorators/classDeclaration/file15.ts ===
+=== file15.ts ===
 // error
 export default abstract @dec class C15 {}
 >dec : Symbol(dec, Decl(global.ts, 1, 3))

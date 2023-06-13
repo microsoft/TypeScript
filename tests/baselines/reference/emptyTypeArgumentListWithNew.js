@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/emptyTypeArgumentListWithNew.ts] ////
+
 //// [emptyTypeArgumentListWithNew.ts]
 class foo<T> { }
 new foo<>();

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/interfaces.d.ts ===
+//// [tests/cases/compiler/importTypeResolutionJSDocEOF.ts] ////
+
+=== interfaces.d.ts ===
 export interface Bar {
 >Bar : Symbol(Bar, Decl(interfaces.d.ts, 0, 0))
 
@@ -6,7 +8,7 @@ export interface Bar {
 >prop : Symbol(Bar.prop, Decl(interfaces.d.ts, 0, 22))
 }
 
-=== tests/cases/compiler/usage.js ===
+=== usage.js ===
 /** @type {Bar} */
 export let bar;
 >bar : Symbol(bar, Decl(usage.js, 1, 10))

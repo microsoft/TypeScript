@@ -44,7 +44,7 @@ registerCodeFix({
             actions = append(actions, createCodeFixActionWithoutFixAll(fixId, namespaceChanges, Diagnostics.Convert_named_imports_to_namespace_import));
         }
         if (typeOnlyChanges.length) {
-            actions = append(actions, createCodeFixActionWithoutFixAll(fixId, typeOnlyChanges, Diagnostics.Convert_to_type_only_import));
+            actions = append(actions, createCodeFixActionWithoutFixAll(fixId, typeOnlyChanges, Diagnostics.Use_import_type));
         }
         return actions;
     },

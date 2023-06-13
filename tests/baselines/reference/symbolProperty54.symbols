@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/Symbols/symbolProperty54.ts ===
+//// [tests/cases/conformance/es6/Symbols/symbolProperty54.ts] ////
+
+=== symbolProperty54.ts ===
 var obj = {
 >obj : Symbol(obj, Decl(symbolProperty54.ts, 0, 3))
 

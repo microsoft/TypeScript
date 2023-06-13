@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privateInstanceVisibility.ts] ////
+
 //// [privateInstanceVisibility.ts]
 module Test {
  

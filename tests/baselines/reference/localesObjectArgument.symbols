@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es2020/localesObjectArgument.ts ===
+//// [tests/cases/conformance/es2020/localesObjectArgument.ts] ////
+
+=== localesObjectArgument.ts ===
 const enUS = new Intl.Locale("en-US");
 >enUS : Symbol(enUS, Decl(localesObjectArgument.ts, 0, 5))
 >Intl.Locale : Symbol(Intl.Locale, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))

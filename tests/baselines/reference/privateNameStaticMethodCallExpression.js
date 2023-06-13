@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameStaticMethodCallExpression.ts] ////
+
 //// [privateNameStaticMethodCallExpression.ts]
 class AA {
     static #method() { this.x = 10; };

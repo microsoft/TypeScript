@@ -1,200 +1,134 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/infer.d.ts ===
-// export declare function infer(o: { m(): void } & ThisType<{ [|x|]: number }>): void;
+// export declare function infer(o: { m(): void } & ThisType<{ <|[|{| isWriteAccess: true |}x|]: number|> }>): void;
 
 // === /tests/cases/fourslash/a.js ===
 // import { infer } from "./infer";
 // infer({
 //     m() {
-//         this.[|x|] = 1;
+//         <|this.[|{| isWriteAccess: true |}x|] = 1;|>
 //         this./*FIND ALL REFS*/[|x|];
 //     },
 // });
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/infer.d.ts",
-      "kind": "property",
-      "name": "(property) x: number",
-      "textSpan": {
-        "start": 60,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "x",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 60,
-        "length": 9
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 60,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/infer.d.ts",
-        "contextSpan": {
-          "start": 60,
-          "length": 9
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 64,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/a.js",
-        "contextSpan": {
-          "start": 59,
-          "length": 11
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 84,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/a.js",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/infer.d.ts ===
+  // export declare function infer(o: { m(): void } & ThisType<{ <|[|x|]: number|> }>): void;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) x: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/b.js ===
 // /**
 //  * @template T
-//  * @param {{m(): void} & ThisType<{[|x|]: number}>} o
+//  * @param {{m(): void} & ThisType<{<|[|x|]: number|>}>} o
 //  */
 // function infer(o) {}
 // infer({
 //     m() {
-//         this.[|x|] = 2;
+//         <|this.[|{| isWriteAccess: true |}x|] = 2;|>
 //         this./*FIND ALL REFS*/[|x|];
 //     },
 // });
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/b.js",
-      "kind": "property",
-      "name": "(property) x: number",
-      "textSpan": {
-        "start": 54,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "x",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 54,
-        "length": 9
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 54,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/b.js",
-        "contextSpan": {
-          "start": 54,
-          "length": 9
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 125,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/b.js",
-        "contextSpan": {
-          "start": 120,
-          "length": 11
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 145,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/b.js",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/b.js ===
+  // /**
+  //  * @template T
+  //  * @param {{m(): void} & ThisType<{<|[|x|]: number|>}>} o
+  //  */
+  // function infer(o) {}
+  // infer({
+  //     m() {
+  //         this.x = 2;
+  //         this./*FIND ALL REFS*/x;
+  //     },
+  // });
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) x: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

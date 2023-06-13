@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts ===
+//// [tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts] ////
+
+=== unionTypeErrorMessageTypeRefs01.ts ===
 interface Foo { foo: any }
 >foo : any
 

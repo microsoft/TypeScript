@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/Expressions/parserMemberAccessAfterPostfixExpression1.ts] ////
+
 //// [parserMemberAccessAfterPostfixExpression1.ts]
 a--.toString()
 

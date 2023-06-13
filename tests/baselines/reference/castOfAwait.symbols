@@ -1,4 +1,6 @@
-=== tests/cases/compiler/castOfAwait.ts ===
+//// [tests/cases/compiler/castOfAwait.ts] ////
+
+=== castOfAwait.ts ===
 async function f() {
 >f : Symbol(f, Decl(castOfAwait.ts, 0, 0))
 

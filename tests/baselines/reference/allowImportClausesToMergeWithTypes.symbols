@@ -1,11 +1,13 @@
-=== tests/cases/compiler/b.ts ===
+//// [tests/cases/compiler/allowImportClausesToMergeWithTypes.ts] ////
+
+=== b.ts ===
 export const zzz = 123;
 >zzz : Symbol(zzz, Decl(b.ts, 0, 12))
 
 export default zzz;
 >zzz : Symbol(zzz, Decl(b.ts, 0, 12))
 
-=== tests/cases/compiler/a.ts ===
+=== a.ts ===
 export default interface zzz {
 >zzz : Symbol(zzz, Decl(a.ts, 0, 0), Decl(a.ts, 9, 8))
 
@@ -28,7 +30,7 @@ export { zzz as default };
 >zzz : Symbol(zzz, Decl(a.ts, 0, 0), Decl(a.ts, 4, 6))
 >default : Symbol(zzz, Decl(a.ts, 0, 0), Decl(a.ts, 9, 8))
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import zzz from "./a";
 >zzz : Symbol(zzz, Decl(index.ts, 0, 6))
 

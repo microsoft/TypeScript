@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitPrivateAsync.ts ===
+//// [tests/cases/compiler/declarationEmitPrivateAsync.ts] ////
+
+=== declarationEmitPrivateAsync.ts ===
 export class Foo {
 >Foo : Symbol(Foo, Decl(declarationEmitPrivateAsync.ts, 0, 0))
 

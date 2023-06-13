@@ -1,4 +1,6 @@
-=== tests/cases/compiler/enumWithQuotedElementName2.ts ===
+//// [tests/cases/compiler/enumWithQuotedElementName2.ts] ////
+
+=== enumWithQuotedElementName2.ts ===
 enum E {
 >E : Symbol(E, Decl(enumWithQuotedElementName2.ts, 0, 0))
 

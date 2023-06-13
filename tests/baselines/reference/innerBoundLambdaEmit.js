@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/innerBoundLambdaEmit.ts] ////
+
 //// [innerBoundLambdaEmit.ts]
 module M {
     export class Foo {

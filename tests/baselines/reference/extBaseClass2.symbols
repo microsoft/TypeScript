@@ -1,4 +1,6 @@
-=== tests/cases/compiler/extBaseClass2.ts ===
+//// [tests/cases/compiler/extBaseClass2.ts] ////
+
+=== extBaseClass2.ts ===
 module N {
 >N : Symbol(N, Decl(extBaseClass2.ts, 0, 0))
 

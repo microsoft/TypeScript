@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/classDeclaration/superCallBeforeThisAccessing1.ts] ////
+
 //// [superCallBeforeThisAccessing1.ts]
 declare var Factory: any
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeAliasFunctionTypeSharedSymbol.ts ===
+//// [tests/cases/compiler/typeAliasFunctionTypeSharedSymbol.ts] ////
+
+=== typeAliasFunctionTypeSharedSymbol.ts ===
 // Repro from comment in #21496
 
 function Mixin<TBase extends {new (...args: any[]): {}}>(Base: TBase) {

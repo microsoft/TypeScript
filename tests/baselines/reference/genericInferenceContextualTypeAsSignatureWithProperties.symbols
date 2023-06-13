@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericInferenceContextualTypeAsSignatureWithProperties.ts ===
+//// [tests/cases/compiler/genericInferenceContextualTypeAsSignatureWithProperties.ts] ////
+
+=== genericInferenceContextualTypeAsSignatureWithProperties.ts ===
 // repro from #52262
 
 const inner = <T extends 'a' | 'b' | 'c'>(cb: (arg: T) => void) => {};

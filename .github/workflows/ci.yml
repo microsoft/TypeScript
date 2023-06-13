@@ -13,6 +13,12 @@ on:
 permissions:
   contents: read
 
+# Ensure scripts are run with pipefail. See:
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#exit-codes-and-error-action-preference
+defaults:
+  run:
+    shell: bash
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -20,7 +26,7 @@ jobs:
     strategy:
       matrix:
         node-version:
-          - "19"
+          - "20"
           - "18"
           - "16"
           - "14"
@@ -101,7 +107,9 @@ jobs:
         node-version: "*"
         check-latest: true
     - run: |
-        corepack enable npm
+        npm --version
+        # corepack enable npm
+        npm install -g $(jq -r '.packageManager' < package.json)
         npm --version
     
     - run:  npm ci
@@ -147,8 +155,13 @@ jobs:
         node-version: "*"
         check-latest: true
     - run: |
-        corepack enable npm
         npm --version
+        # corepack enable npm
+
+    - run: |
+        npm install -g $(jq -r '.packageManager' < package.json)
+        npm --version
+      working-directory: ./pr
 
     - run: npm ci
       working-directory: ./pr
@@ -202,3 +215,30 @@ jobs:
 
     - name: Self build
       run: npx hereby build-src --built
+
+  unused-baselines:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: "*"
+        check-latest: true
+    - run:  npm ci
+
+    - name: Remove all baselines
+      run: rm -rf tests/baselines/reference
+
+    - name: Run tests
+      run: npm test &> /dev/null || exit 0
+
+    - name: Accept baselines
+      run: npx hereby baseline-accept
+
+    - name: Check for unused baselines
+      run: |
+        if ! git diff --exit-code --quiet; then
+          echo "Unused baselines:"
+          git diff --exit-code --name-only
+        fi

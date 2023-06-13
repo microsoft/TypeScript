@@ -1,8 +1,10 @@
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsTypedefPropertyAndExportAssignment.ts] ////
+
+=== index.js ===
 const {taskGroups, taskNameToGroup} = require('./module.js');
 >taskGroups : { parseHTML: { id: "parseHTML"; label: string; }; styleLayout: { id: "styleLayout"; label: string; }; }
->taskNameToGroup : { [x: string]: import("tests/cases/conformance/jsdoc/declarations/module").TaskGroup; }
->require('./module.js') : typeof import("tests/cases/conformance/jsdoc/declarations/module")
+>taskNameToGroup : { [x: string]: import("module").TaskGroup; }
+>require('./module.js') : typeof import("module")
 >require : any
 >'./module.js' : "./module.js"
 
@@ -24,7 +26,7 @@ class MainThreadTasks {
      * @param {TaskNode} y
      */
     constructor(x, y){}
->x : import("tests/cases/conformance/jsdoc/declarations/module").TaskGroup
+>x : import("module").TaskGroup
 >y : TaskNode
 }
 
@@ -35,7 +37,7 @@ module.exports = MainThreadTasks;
 >exports : typeof MainThreadTasks
 >MainThreadTasks : typeof MainThreadTasks
 
-=== tests/cases/conformance/jsdoc/declarations/module.js ===
+=== module.js ===
 /** @typedef {'parseHTML'|'styleLayout'} TaskGroupIds */
 
 /**

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript6/Iterators/parserForOfStatement5.ts] ////
+
 //// [parserForOfStatement5.ts]
 for (var a: number of X) {
 }

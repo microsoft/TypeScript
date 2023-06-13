@@ -1,4 +1,6 @@
-=== tests/cases/compiler/duplicateConstructorOverloadSignature.ts ===
+//// [tests/cases/compiler/duplicateConstructorOverloadSignature.ts] ////
+
+=== duplicateConstructorOverloadSignature.ts ===
 class C {
 >C : Symbol(C, Decl(duplicateConstructorOverloadSignature.ts, 0, 0))
 

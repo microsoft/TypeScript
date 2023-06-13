@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/derivedInterfaceIncompatibleWithBaseIndexer.ts] ////
+
 //// [derivedInterfaceIncompatibleWithBaseIndexer.ts]
 interface Base {
     [x: number]: { x: number; y: number; };

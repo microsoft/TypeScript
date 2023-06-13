@@ -1,45 +1,45 @@
-tests/cases/compiler/strictModeReservedWord.ts(1,5): error TS2480: 'let' is not allowed to be used as a name in 'let' or 'const' declarations.
-tests/cases/compiler/strictModeReservedWord.ts(5,9): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
-tests/cases/compiler/strictModeReservedWord.ts(6,9): error TS1212: Identifier expected. 'static' is a reserved word in strict mode.
-tests/cases/compiler/strictModeReservedWord.ts(7,9): error TS1212: Identifier expected. 'let' is a reserved word in strict mode.
-tests/cases/compiler/strictModeReservedWord.ts(7,9): error TS2480: 'let' is not allowed to be used as a name in 'let' or 'const' declarations.
-tests/cases/compiler/strictModeReservedWord.ts(8,9): error TS1212: Identifier expected. 'package' is a reserved word in strict mode.
-tests/cases/compiler/strictModeReservedWord.ts(8,9): error TS2300: Duplicate identifier 'package'.
-tests/cases/compiler/strictModeReservedWord.ts(9,14): error TS1212: Identifier expected. 'package' is a reserved word in strict mode.
-tests/cases/compiler/strictModeReservedWord.ts(9,14): error TS2300: Duplicate identifier 'package'.
-tests/cases/compiler/strictModeReservedWord.ts(10,18): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
-tests/cases/compiler/strictModeReservedWord.ts(10,27): error TS1212: Identifier expected. 'implements' is a reserved word in strict mode.
-tests/cases/compiler/strictModeReservedWord.ts(10,39): error TS1212: Identifier expected. 'let' is a reserved word in strict mode.
-tests/cases/compiler/strictModeReservedWord.ts(11,18): error TS1212: Identifier expected. 'implements' is a reserved word in strict mode.
-tests/cases/compiler/strictModeReservedWord.ts(11,30): error TS1212: Identifier expected. 'protected' is a reserved word in strict mode.
-tests/cases/compiler/strictModeReservedWord.ts(12,24): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
-tests/cases/compiler/strictModeReservedWord.ts(12,33): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
-tests/cases/compiler/strictModeReservedWord.ts(12,41): error TS1212: Identifier expected. 'package' is a reserved word in strict mode.
-tests/cases/compiler/strictModeReservedWord.ts(13,11): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
-tests/cases/compiler/strictModeReservedWord.ts(13,20): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
-tests/cases/compiler/strictModeReservedWord.ts(13,28): error TS1212: Identifier expected. 'package' is a reserved word in strict mode.
-tests/cases/compiler/strictModeReservedWord.ts(15,25): error TS1213: Identifier expected. 'package' is a reserved word in strict mode. Class definitions are automatically in strict mode.
-tests/cases/compiler/strictModeReservedWord.ts(15,41): error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
-tests/cases/compiler/strictModeReservedWord.ts(15,41): error TS2507: Type 'number' is not a constructor function type.
-tests/cases/compiler/strictModeReservedWord.ts(17,9): error TS2300: Duplicate identifier 'b'.
-tests/cases/compiler/strictModeReservedWord.ts(17,12): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
-tests/cases/compiler/strictModeReservedWord.ts(17,12): error TS2503: Cannot find namespace 'public'.
-tests/cases/compiler/strictModeReservedWord.ts(19,21): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
-tests/cases/compiler/strictModeReservedWord.ts(19,21): error TS2503: Cannot find namespace 'private'.
-tests/cases/compiler/strictModeReservedWord.ts(20,22): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
-tests/cases/compiler/strictModeReservedWord.ts(20,22): error TS2503: Cannot find namespace 'private'.
-tests/cases/compiler/strictModeReservedWord.ts(21,22): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
-tests/cases/compiler/strictModeReservedWord.ts(21,22): error TS2503: Cannot find namespace 'private'.
-tests/cases/compiler/strictModeReservedWord.ts(22,9): error TS2300: Duplicate identifier 'b'.
-tests/cases/compiler/strictModeReservedWord.ts(22,12): error TS1212: Identifier expected. 'interface' is a reserved word in strict mode.
-tests/cases/compiler/strictModeReservedWord.ts(22,12): error TS2503: Cannot find namespace 'interface'.
-tests/cases/compiler/strictModeReservedWord.ts(23,5): error TS2552: Cannot find name 'ublic'. Did you mean 'public'?
-tests/cases/compiler/strictModeReservedWord.ts(24,5): error TS1212: Identifier expected. 'static' is a reserved word in strict mode.
-tests/cases/compiler/strictModeReservedWord.ts(24,5): error TS2349: This expression is not callable.
+strictModeReservedWord.ts(1,5): error TS2480: 'let' is not allowed to be used as a name in 'let' or 'const' declarations.
+strictModeReservedWord.ts(5,9): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
+strictModeReservedWord.ts(6,9): error TS1212: Identifier expected. 'static' is a reserved word in strict mode.
+strictModeReservedWord.ts(7,9): error TS1212: Identifier expected. 'let' is a reserved word in strict mode.
+strictModeReservedWord.ts(7,9): error TS2480: 'let' is not allowed to be used as a name in 'let' or 'const' declarations.
+strictModeReservedWord.ts(8,9): error TS1212: Identifier expected. 'package' is a reserved word in strict mode.
+strictModeReservedWord.ts(8,9): error TS2300: Duplicate identifier 'package'.
+strictModeReservedWord.ts(9,14): error TS1212: Identifier expected. 'package' is a reserved word in strict mode.
+strictModeReservedWord.ts(9,14): error TS2300: Duplicate identifier 'package'.
+strictModeReservedWord.ts(10,18): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
+strictModeReservedWord.ts(10,27): error TS1212: Identifier expected. 'implements' is a reserved word in strict mode.
+strictModeReservedWord.ts(10,39): error TS1212: Identifier expected. 'let' is a reserved word in strict mode.
+strictModeReservedWord.ts(11,18): error TS1212: Identifier expected. 'implements' is a reserved word in strict mode.
+strictModeReservedWord.ts(11,30): error TS1212: Identifier expected. 'protected' is a reserved word in strict mode.
+strictModeReservedWord.ts(12,24): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
+strictModeReservedWord.ts(12,33): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
+strictModeReservedWord.ts(12,41): error TS1212: Identifier expected. 'package' is a reserved word in strict mode.
+strictModeReservedWord.ts(13,11): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
+strictModeReservedWord.ts(13,20): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
+strictModeReservedWord.ts(13,28): error TS1212: Identifier expected. 'package' is a reserved word in strict mode.
+strictModeReservedWord.ts(15,25): error TS1213: Identifier expected. 'package' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+strictModeReservedWord.ts(15,41): error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+strictModeReservedWord.ts(15,41): error TS2507: Type 'number' is not a constructor function type.
+strictModeReservedWord.ts(17,9): error TS2300: Duplicate identifier 'b'.
+strictModeReservedWord.ts(17,12): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
+strictModeReservedWord.ts(17,12): error TS2503: Cannot find namespace 'public'.
+strictModeReservedWord.ts(19,21): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
+strictModeReservedWord.ts(19,21): error TS2503: Cannot find namespace 'private'.
+strictModeReservedWord.ts(20,22): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
+strictModeReservedWord.ts(20,22): error TS2503: Cannot find namespace 'private'.
+strictModeReservedWord.ts(21,22): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
+strictModeReservedWord.ts(21,22): error TS2503: Cannot find namespace 'private'.
+strictModeReservedWord.ts(22,9): error TS2300: Duplicate identifier 'b'.
+strictModeReservedWord.ts(22,12): error TS1212: Identifier expected. 'interface' is a reserved word in strict mode.
+strictModeReservedWord.ts(22,12): error TS2503: Cannot find namespace 'interface'.
+strictModeReservedWord.ts(23,5): error TS2552: Cannot find name 'ublic'. Did you mean 'public'?
+strictModeReservedWord.ts(24,5): error TS1212: Identifier expected. 'static' is a reserved word in strict mode.
+strictModeReservedWord.ts(24,5): error TS2349: This expression is not callable.
   Type 'String' has no call signatures.
 
 
-==== tests/cases/compiler/strictModeReservedWord.ts (38 errors) ====
+==== strictModeReservedWord.ts (38 errors) ====
     let let = 10;
         ~~~
 !!! error TS2480: 'let' is not allowed to be used as a name in 'let' or 'const' declarations.
@@ -135,7 +135,7 @@ tests/cases/compiler/strictModeReservedWord.ts(24,5): error TS2349: This express
         ublic();
         ~~~~~
 !!! error TS2552: Cannot find name 'ublic'. Did you mean 'public'?
-!!! related TS2728 tests/cases/compiler/strictModeReservedWord.ts:5:9: 'public' is declared here.
+!!! related TS2728 strictModeReservedWord.ts:5:9: 'public' is declared here.
         static();
         ~~~~~~
 !!! error TS1212: Identifier expected. 'static' is a reserved word in strict mode.

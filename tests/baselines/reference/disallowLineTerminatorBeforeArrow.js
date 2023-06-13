@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts] ////
+
 //// [disallowLineTerminatorBeforeArrow.ts]
 var f1 = ()
     => { }

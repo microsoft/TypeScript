@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/strictModeReservedWordInModuleDeclaration.ts] ////
+
 //// [strictModeReservedWordInModuleDeclaration.ts]
 "use strict"
 module public { }

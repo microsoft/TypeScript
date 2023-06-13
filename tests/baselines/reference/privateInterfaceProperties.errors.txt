@@ -1,8 +1,8 @@
-tests/cases/compiler/privateInterfaceProperties.ts(4,7): error TS2420: Class 'c1' incorrectly implements interface 'i1'.
+privateInterfaceProperties.ts(4,7): error TS2420: Class 'c1' incorrectly implements interface 'i1'.
   Property 'name' is private in type 'c1' but not in type 'i1'.
 
 
-==== tests/cases/compiler/privateInterfaceProperties.ts (1 errors) ====
+==== privateInterfaceProperties.ts (1 errors) ====
     interface i1 { name:string; }
      
     // should be an error 

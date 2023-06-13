@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/promiseIdentity2.ts] ////
+
 //// [promiseIdentity2.ts]
 export interface IPromise<T, V> {
     then<U, W>(callback: (x: T) => IPromise<U, W>): IPromise<U, W>;

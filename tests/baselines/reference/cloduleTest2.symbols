@@ -1,4 +1,6 @@
-=== tests/cases/compiler/cloduleTest2.ts ===
+//// [tests/cases/compiler/cloduleTest2.ts] ////
+
+=== cloduleTest2.ts ===
 module T1 {
 >T1 : Symbol(T1, Decl(cloduleTest2.ts, 0, 0))
 

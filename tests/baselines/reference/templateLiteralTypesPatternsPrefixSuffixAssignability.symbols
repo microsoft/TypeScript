@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/literal/templateLiteralTypesPatternsPrefixSuffixAssignability.ts ===
+//// [tests/cases/conformance/types/literal/templateLiteralTypesPatternsPrefixSuffixAssignability.ts] ////
+
+=== templateLiteralTypesPatternsPrefixSuffixAssignability.ts ===
 const s1: `:${string}:` = ":"; // should error
 >s1 : Symbol(s1, Decl(templateLiteralTypesPatternsPrefixSuffixAssignability.ts, 0, 5))
 
