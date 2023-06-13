@@ -1,4 +1,6 @@
-=== tests/cases/compiler/operatorAddNullUndefined.ts ===
+//// [tests/cases/compiler/operatorAddNullUndefined.ts] ////
+
+=== operatorAddNullUndefined.ts ===
 enum E { x }
 >E : Symbol(E, Decl(operatorAddNullUndefined.ts, 0, 0))
 >x : Symbol(E.x, Decl(operatorAddNullUndefined.ts, 0, 8))

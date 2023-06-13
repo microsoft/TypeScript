@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextuallyTypedElementsOfGenericZippingTuples.ts ===
+//// [tests/cases/compiler/contextuallyTypedElementsOfGenericZippingTuples.ts] ////
+
+=== contextuallyTypedElementsOfGenericZippingTuples.ts ===
 declare function test<T extends unknown[], T2 extends unknown[]>(
 >test : Symbol(test, Decl(contextuallyTypedElementsOfGenericZippingTuples.ts, 0, 0))
 >T : Symbol(T, Decl(contextuallyTypedElementsOfGenericZippingTuples.ts, 0, 22))

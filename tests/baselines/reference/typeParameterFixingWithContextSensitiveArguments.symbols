@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeParameterFixingWithContextSensitiveArguments.ts ===
+//// [tests/cases/compiler/typeParameterFixingWithContextSensitiveArguments.ts] ////
+
+=== typeParameterFixingWithContextSensitiveArguments.ts ===
 function f<T, U>(y: T, f: (x: T) => U, x: T): [T, U] { return [y, f(x)]; }
 >f : Symbol(f, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 0, 0))
 >T : Symbol(T, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 0, 11))

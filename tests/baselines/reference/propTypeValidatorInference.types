@@ -1,13 +1,13 @@
-=== tests/cases/compiler/node_modules/prop-types/index.d.ts ===
+//// [tests/cases/compiler/propTypeValidatorInference.ts] ////
+
+=== node_modules/prop-types/index.d.ts ===
 export const nominalTypeHack: unique symbol;
 >nominalTypeHack : unique symbol
 
 export type IsOptional<T> = undefined | null extends T ? true : undefined extends T ? true : null extends T ? true : false;
 >IsOptional : IsOptional<T>
->null : null
 >true : true
 >true : true
->null : null
 >true : true
 >false : false
 
@@ -28,7 +28,6 @@ export interface Validator<T> {
 >componentName : string
 >location : string
 >propFullName : string
->null : null
 
     [nominalTypeHack]?: T;
 >[nominalTypeHack] : T | undefined
@@ -76,7 +75,7 @@ export function oneOfType<T extends Validator<any>>(types: T[]): Requireable<Non
 >types : T[]
 
 
-=== tests/cases/compiler/file.ts ===
+=== file.ts ===
 import * as PropTypes from "prop-types";
 >PropTypes : typeof PropTypes
 
@@ -295,5 +294,4 @@ const x: true = (null as any as ExtractPropsMatch);
 >(null as any as ExtractPropsMatch) : true
 >null as any as ExtractPropsMatch : true
 >null as any : any
->null : null
 

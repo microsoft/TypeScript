@@ -12,6 +12,7 @@ declare const elem: HTMLElement;
 //// [file1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/// <reference lib="dom" />
 //// [file2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

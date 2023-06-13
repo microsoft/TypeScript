@@ -1,7 +1,7 @@
-tests/cases/conformance/classes/members/privateNames/privateNamesConstructorChain-1.ts(6,15): error TS2339: Property '#bar' does not exist on type 'typeof Child'.
+privateNamesConstructorChain-1.ts(6,15): error TS2339: Property '#bar' does not exist on type 'typeof Child'.
 
 
-==== tests/cases/conformance/classes/members/privateNames/privateNamesConstructorChain-1.ts (1 errors) ====
+==== privateNamesConstructorChain-1.ts (1 errors) ====
     class Parent {
         #foo = 3;
         static #bar = 5;

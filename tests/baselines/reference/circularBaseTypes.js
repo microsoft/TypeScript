@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/circularBaseTypes.ts] ////
+
 //// [circularBaseTypes.ts]
 // Repro from #38098
 

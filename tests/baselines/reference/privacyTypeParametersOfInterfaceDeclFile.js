@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts] ////
+
 //// [privacyTypeParametersOfInterfaceDeclFile.ts]
 class privateClass {
 }
@@ -240,7 +242,7 @@ var publicModule;
         return publicClassInPublicModuleT;
     }());
     publicModule.publicClassInPublicModuleT = publicClassInPublicModuleT;
-})(publicModule = exports.publicModule || (exports.publicModule = {}));
+})(publicModule || (exports.publicModule = publicModule = {}));
 var privateModule;
 (function (privateModule) {
     var privateClassInPrivateModule = /** @class */ (function () {

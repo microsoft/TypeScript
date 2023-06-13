@@ -393,6 +393,7 @@ oh.no
  * Some\n\n * text\r\n * with newlines.
  */`);
             parsesCorrectly("Chained tags, no leading whitespace", `/**@a @b @c@d*/`);
+            parsesCorrectly("Single trailing whitespace", `/** trailing whitespace */`);
             parsesCorrectly("Initial star is not a tag", `/***@a*/`);
             parsesCorrectly("Initial star space is not a tag", `/*** @a*/`);
             parsesCorrectly("Initial email address is not a tag", `/**bill@example.com*/`);
@@ -432,7 +433,7 @@ oh.no
     describe("getStart", () => {
         it("runs when node with JSDoc but no parent pointers", () => {
             const root = ts.createSourceFile("foo.ts", "/** */var a = true;", ts.ScriptTarget.ES5, /*setParentNodes*/ false);
-            root.statements[0].getStart(root, /*includeJsdocComment*/ true);
+            root.statements[0].getStart(root, /*includeJsDocComment*/ true);
         });
     });
     describe("parseIsolatedJSDocComment", () => {

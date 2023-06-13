@@ -1,18 +1,18 @@
-tests/cases/conformance/classes/members/privateNames/privateNameAndAny.ts(9,15): error TS2339: Property '#bar' does not exist on type 'any'.
-tests/cases/conformance/classes/members/privateNames/privateNameAndAny.ts(13,9): error TS18046: 'thing' is of type 'unknown'.
-tests/cases/conformance/classes/members/privateNames/privateNameAndAny.ts(14,9): error TS18046: 'thing' is of type 'unknown'.
-tests/cases/conformance/classes/members/privateNames/privateNameAndAny.ts(15,9): error TS18046: 'thing' is of type 'unknown'.
-tests/cases/conformance/classes/members/privateNames/privateNameAndAny.ts(16,9): error TS18046: 'thing' is of type 'unknown'.
-tests/cases/conformance/classes/members/privateNames/privateNameAndAny.ts(16,15): error TS2339: Property '#bar' does not exist on type 'any'.
-tests/cases/conformance/classes/members/privateNames/privateNameAndAny.ts(17,9): error TS18046: 'thing' is of type 'unknown'.
-tests/cases/conformance/classes/members/privateNames/privateNameAndAny.ts(20,15): error TS2339: Property '#foo' does not exist on type 'never'.
-tests/cases/conformance/classes/members/privateNames/privateNameAndAny.ts(21,15): error TS2339: Property '#m' does not exist on type 'never'.
-tests/cases/conformance/classes/members/privateNames/privateNameAndAny.ts(22,15): error TS2339: Property '#baz' does not exist on type 'never'.
-tests/cases/conformance/classes/members/privateNames/privateNameAndAny.ts(23,15): error TS2339: Property '#bar' does not exist on type 'never'.
-tests/cases/conformance/classes/members/privateNames/privateNameAndAny.ts(24,15): error TS2339: Property '#foo' does not exist on type 'never'.
+privateNameAndAny.ts(9,15): error TS2339: Property '#bar' does not exist on type 'any'.
+privateNameAndAny.ts(13,9): error TS18046: 'thing' is of type 'unknown'.
+privateNameAndAny.ts(14,9): error TS18046: 'thing' is of type 'unknown'.
+privateNameAndAny.ts(15,9): error TS18046: 'thing' is of type 'unknown'.
+privateNameAndAny.ts(16,9): error TS18046: 'thing' is of type 'unknown'.
+privateNameAndAny.ts(16,15): error TS2339: Property '#bar' does not exist on type 'any'.
+privateNameAndAny.ts(17,9): error TS18046: 'thing' is of type 'unknown'.
+privateNameAndAny.ts(20,15): error TS2339: Property '#foo' does not exist on type 'never'.
+privateNameAndAny.ts(21,15): error TS2339: Property '#m' does not exist on type 'never'.
+privateNameAndAny.ts(22,15): error TS2339: Property '#baz' does not exist on type 'never'.
+privateNameAndAny.ts(23,15): error TS2339: Property '#bar' does not exist on type 'never'.
+privateNameAndAny.ts(24,15): error TS2339: Property '#foo' does not exist on type 'never'.
 
 
-==== tests/cases/conformance/classes/members/privateNames/privateNameAndAny.ts (12 errors) ====
+==== privateNameAndAny.ts (12 errors) ====
     class A {
         #foo = true;
         static #baz = 10;

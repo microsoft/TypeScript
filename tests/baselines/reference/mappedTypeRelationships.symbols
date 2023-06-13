@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/mapped/mappedTypeRelationships.ts ===
+//// [tests/cases/conformance/types/mapped/mappedTypeRelationships.ts] ////
+
+=== mappedTypeRelationships.ts ===
 function f1<T>(x: T, k: keyof T) {
 >f1 : Symbol(f1, Decl(mappedTypeRelationships.ts, 0, 0))
 >T : Symbol(T, Decl(mappedTypeRelationships.ts, 0, 12))
@@ -835,4 +837,59 @@ function f<T extends { x: {} }>(): Partial<T> {
 >undefined : Symbol(undefined)
 >T : Symbol(T, Decl(mappedTypeRelationships.ts, 188, 11))
 }
+
+// #32365
+interface SettingsTypes {
+>SettingsTypes : Symbol(SettingsTypes, Decl(mappedTypeRelationships.ts, 190, 1))
+
+  audio: {
+>audio : Symbol(SettingsTypes.audio, Decl(mappedTypeRelationships.ts, 193, 25))
+
+    volume: string;
+>volume : Symbol(volume, Decl(mappedTypeRelationships.ts, 194, 10))
+
+  };
+  video: {
+>video : Symbol(SettingsTypes.video, Decl(mappedTypeRelationships.ts, 196, 4))
+
+    resolution: string;
+>resolution : Symbol(resolution, Decl(mappedTypeRelationships.ts, 197, 10))
+
+  };
+}
+interface Settings<Params extends { [K in keyof Params]?: string }> {
+>Settings : Symbol(Settings, Decl(mappedTypeRelationships.ts, 200, 1))
+>Params : Symbol(Params, Decl(mappedTypeRelationships.ts, 201, 19))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 201, 37))
+>Params : Symbol(Params, Decl(mappedTypeRelationships.ts, 201, 19))
+
+  config: Params;
+>config : Symbol(Settings.config, Decl(mappedTypeRelationships.ts, 201, 69))
+>Params : Symbol(Params, Decl(mappedTypeRelationships.ts, 201, 19))
+}
+type ConcreteSettingsResult1 = Settings<SettingsTypes["audio"]>;
+>ConcreteSettingsResult1 : Symbol(ConcreteSettingsResult1, Decl(mappedTypeRelationships.ts, 203, 1))
+>Settings : Symbol(Settings, Decl(mappedTypeRelationships.ts, 200, 1))
+>SettingsTypes : Symbol(SettingsTypes, Decl(mappedTypeRelationships.ts, 190, 1))
+
+type ConcreteSettingsResult2 = Settings<SettingsTypes["audio" | "video"]>;
+>ConcreteSettingsResult2 : Symbol(ConcreteSettingsResult2, Decl(mappedTypeRelationships.ts, 204, 64))
+>Settings : Symbol(Settings, Decl(mappedTypeRelationships.ts, 200, 1))
+>SettingsTypes : Symbol(SettingsTypes, Decl(mappedTypeRelationships.ts, 190, 1))
+
+type GenericSettingsAccess<T extends keyof SettingsTypes> = Settings<SettingsTypes[T]>;
+>GenericSettingsAccess : Symbol(GenericSettingsAccess, Decl(mappedTypeRelationships.ts, 205, 74))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 206, 27))
+>SettingsTypes : Symbol(SettingsTypes, Decl(mappedTypeRelationships.ts, 190, 1))
+>Settings : Symbol(Settings, Decl(mappedTypeRelationships.ts, 200, 1))
+>SettingsTypes : Symbol(SettingsTypes, Decl(mappedTypeRelationships.ts, 190, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 206, 27))
+
+type GenericSettingsResult1 = GenericSettingsAccess<"audio">;
+>GenericSettingsResult1 : Symbol(GenericSettingsResult1, Decl(mappedTypeRelationships.ts, 206, 87))
+>GenericSettingsAccess : Symbol(GenericSettingsAccess, Decl(mappedTypeRelationships.ts, 205, 74))
+
+type GenericSettingsResult2 = GenericSettingsAccess<"audio" | "video">;
+>GenericSettingsResult2 : Symbol(GenericSettingsResult2, Decl(mappedTypeRelationships.ts, 207, 61))
+>GenericSettingsAccess : Symbol(GenericSettingsAccess, Decl(mappedTypeRelationships.ts, 205, 74))
 

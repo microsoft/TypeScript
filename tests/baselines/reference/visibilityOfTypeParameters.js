@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/visibilityOfTypeParameters.ts] ////
+
 //// [visibilityOfTypeParameters.ts]
 export class MyClass {
     protected myMethod<T>(val: T): T {

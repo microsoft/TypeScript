@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts ===
+//// [tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts] ////
+
+=== objectLiteralErrors.ts ===
 // Multiple properties with the same name
 var e1 = { a: 0, a: 0 };
 >e1 : Symbol(e1, Decl(objectLiteralErrors.ts, 1, 3))
@@ -70,10 +72,10 @@ var e14 = { 0: 0, 0x0: 0 };
 >0 : Symbol(0, Decl(objectLiteralErrors.ts, 14, 11), Decl(objectLiteralErrors.ts, 14, 17))
 >0x0 : Symbol(0, Decl(objectLiteralErrors.ts, 14, 11), Decl(objectLiteralErrors.ts, 14, 17))
 
-var e14 = { 0: 0, 000: 0 };
+var e14 = { 0: 0, 0o0: 0 };
 >e14 : Symbol(e14, Decl(objectLiteralErrors.ts, 14, 3), Decl(objectLiteralErrors.ts, 15, 3))
 >0 : Symbol(0, Decl(objectLiteralErrors.ts, 15, 11), Decl(objectLiteralErrors.ts, 15, 17))
->000 : Symbol(0, Decl(objectLiteralErrors.ts, 15, 11), Decl(objectLiteralErrors.ts, 15, 17))
+>0o0 : Symbol(0, Decl(objectLiteralErrors.ts, 15, 11), Decl(objectLiteralErrors.ts, 15, 17))
 
 var e15 = { "100": 0, 1e2: 0 };
 >e15 : Symbol(e15, Decl(objectLiteralErrors.ts, 16, 3))
@@ -162,10 +164,10 @@ var f14 = { 0: 0, get 0x0() { return 0; } };
 >0 : Symbol(0, Decl(objectLiteralErrors.ts, 34, 11))
 >0x0 : Symbol(0x0, Decl(objectLiteralErrors.ts, 34, 17))
 
-var f14 = { 0: 0, get 000() { return 0; } };
+var f14 = { 0: 0, get 0o0() { return 0; } };
 >f14 : Symbol(f14, Decl(objectLiteralErrors.ts, 34, 3), Decl(objectLiteralErrors.ts, 35, 3))
 >0 : Symbol(0, Decl(objectLiteralErrors.ts, 35, 11))
->000 : Symbol(000, Decl(objectLiteralErrors.ts, 35, 17))
+>0o0 : Symbol(0o0, Decl(objectLiteralErrors.ts, 35, 17))
 
 var f15 = { "100": 0, get 1e2() { return 0; } };
 >f15 : Symbol(f15, Decl(objectLiteralErrors.ts, 36, 3))
@@ -183,7 +185,7 @@ var f17 = { a: 0, get b() { return 1; }, get a() { return 0; } };
 >b : Symbol(b, Decl(objectLiteralErrors.ts, 38, 17))
 >a : Symbol(a, Decl(objectLiteralErrors.ts, 38, 40))
 
-// Get and set accessor with mismatched type annotations
+// Get and set accessor with mismatched type annotations (only g2 is an error after #43662 implemented)
 var g1 = { get a(): number { return 4; }, set a(n: string) { } };
 >g1 : Symbol(g1, Decl(objectLiteralErrors.ts, 41, 3))
 >a : Symbol(a, Decl(objectLiteralErrors.ts, 41, 10), Decl(objectLiteralErrors.ts, 41, 41))

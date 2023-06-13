@@ -1,0 +1,115 @@
+//// [tests/cases/compiler/subtypeReductionUnionConstraints.ts] ////
+
+=== subtypeReductionUnionConstraints.ts ===
+// Repro from #53311
+
+type FooNode = {
+>FooNode : Symbol(FooNode, Decl(subtypeReductionUnionConstraints.ts, 0, 0))
+
+    kind: 'foo';
+>kind : Symbol(kind, Decl(subtypeReductionUnionConstraints.ts, 2, 16))
+
+    children: Node[];
+>children : Symbol(children, Decl(subtypeReductionUnionConstraints.ts, 3, 16))
+>Node : Symbol(Node, Decl(subtypeReductionUnionConstraints.ts, 9, 1))
+
+};
+
+type BarNode = {
+>BarNode : Symbol(BarNode, Decl(subtypeReductionUnionConstraints.ts, 5, 2))
+
+    kind: 'bar';
+>kind : Symbol(kind, Decl(subtypeReductionUnionConstraints.ts, 7, 16))
+}
+
+type Node = FooNode | BarNode;
+>Node : Symbol(Node, Decl(subtypeReductionUnionConstraints.ts, 9, 1))
+>FooNode : Symbol(FooNode, Decl(subtypeReductionUnionConstraints.ts, 0, 0))
+>BarNode : Symbol(BarNode, Decl(subtypeReductionUnionConstraints.ts, 5, 2))
+
+type Document = {
+>Document : Symbol(Document, Decl(subtypeReductionUnionConstraints.ts, 11, 30))
+
+    kind: 'document';
+>kind : Symbol(kind, Decl(subtypeReductionUnionConstraints.ts, 13, 17))
+
+    children: Node[];
+>children : Symbol(children, Decl(subtypeReductionUnionConstraints.ts, 14, 21))
+>Node : Symbol(Node, Decl(subtypeReductionUnionConstraints.ts, 9, 1))
+
+};
+
+declare function isNode(node: unknown): node is Node;
+>isNode : Symbol(isNode, Decl(subtypeReductionUnionConstraints.ts, 16, 2))
+>node : Symbol(node, Decl(subtypeReductionUnionConstraints.ts, 18, 24))
+>node : Symbol(node, Decl(subtypeReductionUnionConstraints.ts, 18, 24))
+>Node : Symbol(Node, Decl(subtypeReductionUnionConstraints.ts, 9, 1))
+
+declare function isBar(node: Node): node is BarNode;
+>isBar : Symbol(isBar, Decl(subtypeReductionUnionConstraints.ts, 18, 53))
+>node : Symbol(node, Decl(subtypeReductionUnionConstraints.ts, 19, 23))
+>Node : Symbol(Node, Decl(subtypeReductionUnionConstraints.ts, 9, 1))
+>node : Symbol(node, Decl(subtypeReductionUnionConstraints.ts, 19, 23))
+>BarNode : Symbol(BarNode, Decl(subtypeReductionUnionConstraints.ts, 5, 2))
+
+export function visitNodes<T extends Node>(node: Document | Node, predicate: (testNode: Node) => testNode is T): void {
+>visitNodes : Symbol(visitNodes, Decl(subtypeReductionUnionConstraints.ts, 19, 52))
+>T : Symbol(T, Decl(subtypeReductionUnionConstraints.ts, 21, 27))
+>Node : Symbol(Node, Decl(subtypeReductionUnionConstraints.ts, 9, 1))
+>node : Symbol(node, Decl(subtypeReductionUnionConstraints.ts, 21, 43))
+>Document : Symbol(Document, Decl(subtypeReductionUnionConstraints.ts, 11, 30))
+>Node : Symbol(Node, Decl(subtypeReductionUnionConstraints.ts, 9, 1))
+>predicate : Symbol(predicate, Decl(subtypeReductionUnionConstraints.ts, 21, 65))
+>testNode : Symbol(testNode, Decl(subtypeReductionUnionConstraints.ts, 21, 78))
+>Node : Symbol(Node, Decl(subtypeReductionUnionConstraints.ts, 9, 1))
+>testNode : Symbol(testNode, Decl(subtypeReductionUnionConstraints.ts, 21, 78))
+>T : Symbol(T, Decl(subtypeReductionUnionConstraints.ts, 21, 27))
+
+    isNode(node) && predicate(node);
+>isNode : Symbol(isNode, Decl(subtypeReductionUnionConstraints.ts, 16, 2))
+>node : Symbol(node, Decl(subtypeReductionUnionConstraints.ts, 21, 43))
+>predicate : Symbol(predicate, Decl(subtypeReductionUnionConstraints.ts, 21, 65))
+>node : Symbol(node, Decl(subtypeReductionUnionConstraints.ts, 21, 43))
+
+    if (!isNode(node) || !isBar(node)) {
+>isNode : Symbol(isNode, Decl(subtypeReductionUnionConstraints.ts, 16, 2))
+>node : Symbol(node, Decl(subtypeReductionUnionConstraints.ts, 21, 43))
+>isBar : Symbol(isBar, Decl(subtypeReductionUnionConstraints.ts, 18, 53))
+>node : Symbol(node, Decl(subtypeReductionUnionConstraints.ts, 21, 43))
+
+        const nodes: Node[] = node.children;
+>nodes : Symbol(nodes, Decl(subtypeReductionUnionConstraints.ts, 24, 13))
+>Node : Symbol(Node, Decl(subtypeReductionUnionConstraints.ts, 9, 1))
+>node.children : Symbol(children, Decl(subtypeReductionUnionConstraints.ts, 3, 16), Decl(subtypeReductionUnionConstraints.ts, 14, 21))
+>node : Symbol(node, Decl(subtypeReductionUnionConstraints.ts, 21, 43))
+>children : Symbol(children, Decl(subtypeReductionUnionConstraints.ts, 3, 16), Decl(subtypeReductionUnionConstraints.ts, 14, 21))
+    }
+}
+
+// Repro from #53311
+
+type A = { a: string };
+>A : Symbol(A, Decl(subtypeReductionUnionConstraints.ts, 26, 1))
+>a : Symbol(a, Decl(subtypeReductionUnionConstraints.ts, 30, 10))
+
+type B = { b: string };
+>B : Symbol(B, Decl(subtypeReductionUnionConstraints.ts, 30, 23))
+>b : Symbol(b, Decl(subtypeReductionUnionConstraints.ts, 31, 10))
+
+function f1<T extends A | B>(t: T, x: A | B) {
+>f1 : Symbol(f1, Decl(subtypeReductionUnionConstraints.ts, 31, 23))
+>T : Symbol(T, Decl(subtypeReductionUnionConstraints.ts, 33, 12))
+>A : Symbol(A, Decl(subtypeReductionUnionConstraints.ts, 26, 1))
+>B : Symbol(B, Decl(subtypeReductionUnionConstraints.ts, 30, 23))
+>t : Symbol(t, Decl(subtypeReductionUnionConstraints.ts, 33, 29))
+>T : Symbol(T, Decl(subtypeReductionUnionConstraints.ts, 33, 12))
+>x : Symbol(x, Decl(subtypeReductionUnionConstraints.ts, 33, 34))
+>A : Symbol(A, Decl(subtypeReductionUnionConstraints.ts, 26, 1))
+>B : Symbol(B, Decl(subtypeReductionUnionConstraints.ts, 30, 23))
+
+    const a = [t, x];  // (A | B)[] by subtype reduction
+>a : Symbol(a, Decl(subtypeReductionUnionConstraints.ts, 34, 9))
+>t : Symbol(t, Decl(subtypeReductionUnionConstraints.ts, 33, 29))
+>x : Symbol(x, Decl(subtypeReductionUnionConstraints.ts, 33, 34))
+}
+

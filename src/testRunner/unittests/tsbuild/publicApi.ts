@@ -4,11 +4,13 @@ import * as vfs from "../../_namespaces/vfs";
 import {
     baselinePrograms,
     commandLineCallbacks,
-    loadProjectFromFiles,
     toPathWithSystem,
+} from "../helpers/baseline";
+import {
     TscCompileSystem,
     verifyTscBaseline,
-} from "../tsc/helpers";
+} from "../helpers/tsc";
+import { loadProjectFromFiles } from "../helpers/vfs";
 
 describe("unittests:: tsbuild:: Public API with custom transformers when passed to build", () => {
     let sys: TscCompileSystem;

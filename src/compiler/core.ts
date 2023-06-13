@@ -7,7 +7,6 @@ import {
     EqualityComparer,
     isWhiteSpaceLike,
     MapLike,
-    Push,
     Queue,
     SortedArray,
     SortedReadonlyArray,
@@ -365,21 +364,21 @@ export function *mapIterator<T, U>(iter: Iterable<T>, mapFn: (x: T) => U) {
  * Maps from T to T and avoids allocation if all elements map to themselves
  *
  * @internal */
-export function sameMap<T>(array: T[], f: (x: T, i: number) => T): T[];
+export function sameMap<T, U = T>(array: T[], f: (x: T, i: number) => U): U[];
 /** @internal */
-export function sameMap<T>(array: readonly T[], f: (x: T, i: number) => T): readonly T[];
+export function sameMap<T, U = T>(array: readonly T[], f: (x: T, i: number) => U): readonly U[];
 /** @internal */
-export function sameMap<T>(array: T[] | undefined, f: (x: T, i: number) => T): T[] | undefined;
+export function sameMap<T, U = T>(array: T[] | undefined, f: (x: T, i: number) => U): U[] | undefined;
 /** @internal */
-export function sameMap<T>(array: readonly T[] | undefined, f: (x: T, i: number) => T): readonly T[] | undefined;
+export function sameMap<T, U = T>(array: readonly T[] | undefined, f: (x: T, i: number) => U): readonly U[] | undefined;
 /** @internal */
-export function sameMap<T>(array: readonly T[] | undefined, f: (x: T, i: number) => T): readonly T[] | undefined {
+export function sameMap<T, U = T>(array: readonly T[] | undefined, f: (x: T, i: number) => U): readonly U[] | undefined {
     if (array) {
         for (let i = 0; i < array.length; i++) {
             const item = array[i];
             const mapped = f(item, i);
-            if (item !== mapped) {
-                const result = array.slice(0, i);
+            if (item as unknown !== mapped) {
+                const result: U[] = array.slice(0, i) as unknown[] as U[];
                 result.push(mapped);
                 for (i++; i < array.length; i++) {
                     result.push(f(array[i], i));
@@ -388,7 +387,7 @@ export function sameMap<T>(array: readonly T[] | undefined, f: (x: T, i: number)
             }
         }
     }
-    return array;
+    return array as unknown[] as U[];
 }
 
 /**
@@ -1001,14 +1000,13 @@ export function append<T>(to: T[] | undefined, value: T): T[];
 /** @internal */
 export function append<T>(to: T[] | undefined, value: T | undefined): T[] | undefined;
 /** @internal */
-export function append<T>(to: Push<T>, value: T | undefined): void;
+export function append<T>(to: T[], value: T | undefined): void;
 /** @internal */
-export function append<T>(to: Push<T> | T[] | undefined, value: T | undefined): T[] | undefined {
-        // If to is Push<T>, return value is void, so safe to cast to T[].
+export function append<T>(to: T[] | undefined, value: T | undefined): T[] | undefined {
     if (value === undefined) return to as T[];
     if (to === undefined) return [value];
     to.push(value);
-    return to as T[];
+    return to;
 }
 
 /**
@@ -1882,12 +1880,6 @@ export function cast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: 
  * @internal
  */
 export function noop(_?: unknown): void { }
-
-/** @internal */
-export const noopPush: Push<any> = {
-    push: noop,
-    length: 0
-};
 
 /**
  * Do nothing and return false
@@ -2877,8 +2869,6 @@ function trimEndImpl(s: string) {
     return s.slice(0, end + 1);
 }
 
-declare const process: any;
-
 /** @internal */
 export function isNodeLikeSystem(): boolean {
     // This is defined here rather than in sys.ts to prevent a cycle from its
@@ -2888,7 +2878,7 @@ export function isNodeLikeSystem(): boolean {
     // when bundled using esbuild, this function will be rewritten to `__require`
     // and definitely exist.
     return typeof process !== "undefined"
-        && process.nextTick
-        && !process.browser
+        && !!process.nextTick
+        && !(process as any).browser
         && typeof module === "object";
 }

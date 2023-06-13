@@ -1,293 +1,173 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsForDefaultExport01.ts ===
-// /*FIND ALL REFS*/export default class [|DefaultExportedClass|] {
-// }
+// /*FIND ALL REFS*/<|export default class [|{| isWriteAccess: true, isDefinition: true |}DefaultExportedClass|] {
+// }|>
 // 
 // var x: [|DefaultExportedClass|];
 // 
 // var y = new [|DefaultExportedClass|];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport01.ts",
-      "kind": "class",
-      "name": "class DefaultExportedClass",
-      "textSpan": {
-        "start": 21,
-        "length": 20
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "DefaultExportedClass",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 45
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 21,
-          "length": 20
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport01.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 45
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 54,
-          "length": 20
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport01.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 89,
-          "length": 20
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport01.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsForDefaultExport01.ts ===
+  // /*FIND ALL REFS*/<|export default class [|DefaultExportedClass|] {
+  // }|>
+  // 
+  // var x: DefaultExportedClass;
+  // 
+  // var y = new DefaultExportedClass;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class DefaultExportedClass",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "DefaultExportedClass",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsForDefaultExport01.ts ===
-// export default class /*FIND ALL REFS*/[|DefaultExportedClass|] {
-// }
+// <|export default class /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}DefaultExportedClass|] {
+// }|>
 // 
 // var x: [|DefaultExportedClass|];
 // 
 // var y = new [|DefaultExportedClass|];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport01.ts",
-      "kind": "class",
-      "name": "class DefaultExportedClass",
-      "textSpan": {
-        "start": 21,
-        "length": 20
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "DefaultExportedClass",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 45
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 21,
-          "length": 20
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport01.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 45
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 54,
-          "length": 20
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport01.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 89,
-          "length": 20
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport01.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsForDefaultExport01.ts ===
+  // <|export default class /*FIND ALL REFS*/[|DefaultExportedClass|] {
+  // }|>
+  // 
+  // var x: DefaultExportedClass;
+  // 
+  // var y = new DefaultExportedClass;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class DefaultExportedClass",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "DefaultExportedClass",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsForDefaultExport01.ts ===
-// export default class [|DefaultExportedClass|] {
-// }
+// <|export default class [|{| isWriteAccess: true |}DefaultExportedClass|] {
+// }|>
 // 
 // var x: /*FIND ALL REFS*/[|DefaultExportedClass|];
 // 
 // var y = new [|DefaultExportedClass|];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport01.ts",
-      "kind": "class",
-      "name": "class DefaultExportedClass",
-      "textSpan": {
-        "start": 21,
-        "length": 20
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "DefaultExportedClass",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 45
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 21,
-          "length": 20
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport01.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 45
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 54,
-          "length": 20
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport01.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 89,
-          "length": 20
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport01.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsForDefaultExport01.ts ===
+  // <|export default class [|DefaultExportedClass|] {
+  // }|>
+  // 
+  // var x: /*FIND ALL REFS*/DefaultExportedClass;
+  // 
+  // var y = new DefaultExportedClass;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class DefaultExportedClass",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "DefaultExportedClass",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsForDefaultExport01.ts ===
-// export default class [|DefaultExportedClass|] {
-// }
+// <|export default class [|{| isWriteAccess: true |}DefaultExportedClass|] {
+// }|>
 // 
 // var x: [|DefaultExportedClass|];
 // 
 // var y = new /*FIND ALL REFS*/[|DefaultExportedClass|];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport01.ts",
-      "kind": "class",
-      "name": "class DefaultExportedClass",
-      "textSpan": {
-        "start": 21,
-        "length": 20
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "DefaultExportedClass",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 45
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 21,
-          "length": 20
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport01.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 45
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 54,
-          "length": 20
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport01.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 89,
-          "length": 20
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport01.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsForDefaultExport01.ts ===
+  // <|export default class [|DefaultExportedClass|] {
+  // }|>
+  // 
+  // var x: DefaultExportedClass;
+  // 
+  // var y = new /*FIND ALL REFS*/DefaultExportedClass;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class DefaultExportedClass",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "DefaultExportedClass",
+      "kind": "className"
+     }
     ]
-  }
-]
+   }
+  ]

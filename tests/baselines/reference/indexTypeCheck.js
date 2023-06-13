@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indexTypeCheck.ts] ////
+
 //// [indexTypeCheck.ts]
 interface Red {
 	[n:number]; // ok

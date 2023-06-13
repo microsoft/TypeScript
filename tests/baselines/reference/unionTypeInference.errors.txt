@@ -1,8 +1,8 @@
-tests/cases/conformance/types/typeRelationships/typeInference/unionTypeInference.ts(13,24): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
-tests/cases/conformance/types/typeRelationships/typeInference/unionTypeInference.ts(31,15): error TS2345: Argument of type 'number' is not assignable to parameter of type 'never'.
+unionTypeInference.ts(13,24): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+unionTypeInference.ts(31,15): error TS2345: Argument of type 'number' is not assignable to parameter of type 'never'.
 
 
-==== tests/cases/conformance/types/typeRelationships/typeInference/unionTypeInference.ts (2 errors) ====
+==== unionTypeInference.ts (2 errors) ====
     declare const b: boolean;
     declare const s: string;
     declare const sn: string | number;

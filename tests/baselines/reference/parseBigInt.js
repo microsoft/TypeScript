@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/parseBigInt.ts] ////
+
 //// [parseBigInt.ts]
 // All bases should allow "n" suffix
 const bin = 0b101, binBig = 0b101n; // 5, 5n
@@ -120,7 +122,7 @@ const unaryPlusHex = +0x123n;
 // Parsing errors
 // In separate blocks because they each declare an "n" variable
 {
-    const legacyOct = 0123, n;
+    const legacyOct = 83, n;
 }
 {
     const scientific = 1e2n;

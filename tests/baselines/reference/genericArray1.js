@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericArray1.ts] ////
+
 //// [genericArray1.ts]
 /*
 var n: number[];

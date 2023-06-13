@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads01.ts] ////
+
 //// [stringLiteralTypesOverloads01.ts]
 type PrimitiveName = 'string' | 'number' | 'boolean';
 

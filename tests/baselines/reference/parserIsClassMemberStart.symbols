@@ -1,4 +1,6 @@
-=== tests/cases/compiler/parserIsClassMemberStart.ts ===
+//// [tests/cases/compiler/parserIsClassMemberStart.ts] ////
+
+=== parserIsClassMemberStart.ts ===
 class C {
 >C : Symbol(C, Decl(parserIsClassMemberStart.ts, 0, 0))
 

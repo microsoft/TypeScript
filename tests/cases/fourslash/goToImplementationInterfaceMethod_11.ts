@@ -9,4 +9,4 @@
 //// var x = <Foo> { [|hello|]: () => {} };
 //// var y = <Foo> (((({ [|hello|]: () => {} }))));
 
-verify.allRangesAppearInImplementationList("reference");
+verify.baselineGoToImplementation("reference");

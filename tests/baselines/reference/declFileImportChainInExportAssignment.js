@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileImportChainInExportAssignment.ts] ////
+
 //// [declFileImportChainInExportAssignment.ts]
 module m {
     export module c {

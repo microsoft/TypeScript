@@ -1,4 +1,6 @@
-=== tests/cases/compiler/collisionArgumentsArrowFunctions.ts ===
+//// [tests/cases/compiler/collisionArgumentsArrowFunctions.ts] ////
+
+=== collisionArgumentsArrowFunctions.ts ===
 var f1 = (i: number, ...arguments) => { //arguments is error
 >f1 : Symbol(f1, Decl(collisionArgumentsArrowFunctions.ts, 0, 3))
 >i : Symbol(i, Decl(collisionArgumentsArrowFunctions.ts, 0, 10))

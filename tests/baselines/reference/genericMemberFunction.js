@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericMemberFunction.ts] ////
+
 //// [genericMemberFunction.ts]
 export class BuildError<A, B, C>{
   public parent<A, B extends A, C>(): FileWithErrors<A, B, C> {

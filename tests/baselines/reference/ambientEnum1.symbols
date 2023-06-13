@@ -1,4 +1,6 @@
-=== tests/cases/compiler/ambientEnum1.ts ===
+//// [tests/cases/compiler/ambientEnum1.ts] ////
+
+=== ambientEnum1.ts ===
     declare enum E1 {
 >E1 : Symbol(E1, Decl(ambientEnum1.ts, 0, 0))
 

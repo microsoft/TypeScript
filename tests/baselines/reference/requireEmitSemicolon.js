@@ -32,7 +32,7 @@ define(["require", "exports"], function (require, exports) {
             return Person;
         }());
         Models.Person = Person;
-    })(Models = exports.Models || (exports.Models = {}));
+    })(Models || (exports.Models = Models = {}));
 });
 //// [requireEmitSemicolon_1.js]
 define(["require", "exports", "requireEmitSemicolon_0"], function (require, exports, P) {
@@ -50,5 +50,5 @@ define(["require", "exports", "requireEmitSemicolon_0"], function (require, expo
             return DB;
         }());
         Database.DB = DB;
-    })(Database = exports.Database || (exports.Database = {}));
+    })(Database || (exports.Database = Database = {}));
 });

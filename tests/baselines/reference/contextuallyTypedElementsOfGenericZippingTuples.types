@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextuallyTypedElementsOfGenericZippingTuples.ts ===
+//// [tests/cases/compiler/contextuallyTypedElementsOfGenericZippingTuples.ts] ////
+
+=== contextuallyTypedElementsOfGenericZippingTuples.ts ===
 declare function test<T extends unknown[], T2 extends unknown[]>(
 >test : <T extends unknown[], T2 extends unknown[]>(a: [...{ [K in keyof T]: { produce: (seed: string) => T[K]; }; }], b: [...{ [K in keyof T2]: { consume: (arg: T[K & keyof T]) => T2[K]; }; }]) => void
 
@@ -54,18 +56,18 @@ test(
     },
   ],
   [
->[    {      consume: (arg) => {        const received: string = arg;        return received;      },    },    {      consume: (arg) => {        const received: number = arg;        return received;      },    },  ] : [{ consume: (arg: string) => string; }, { consume: (arg: number) => number; }]
+>[    {      consume: (arg) => {        const received: string = arg;        return received;      },    },    {      consume: (arg) => {        const received: number = arg;        return received;      },    },  ] : [{ consume: (arg: string | number) => string; }, { consume: (arg: string | number) => number; }]
     {
->{      consume: (arg) => {        const received: string = arg;        return received;      },    } : { consume: (arg: string) => string; }
+>{      consume: (arg) => {        const received: string = arg;        return received;      },    } : { consume: (arg: string | number) => string; }
 
       consume: (arg) => {
->consume : (arg: string) => string
->(arg) => {        const received: string = arg;        return received;      } : (arg: string) => string
->arg : string
+>consume : (arg: string | number) => string
+>(arg) => {        const received: string = arg;        return received;      } : (arg: string | number) => string
+>arg : string | number
 
         const received: string = arg;
 >received : string
->arg : string
+>arg : string | number
 
         return received;
 >received : string
@@ -73,16 +75,16 @@ test(
       },
     },
     {
->{      consume: (arg) => {        const received: number = arg;        return received;      },    } : { consume: (arg: number) => number; }
+>{      consume: (arg) => {        const received: number = arg;        return received;      },    } : { consume: (arg: string | number) => number; }
 
       consume: (arg) => {
->consume : (arg: number) => number
->(arg) => {        const received: number = arg;        return received;      } : (arg: number) => number
->arg : number
+>consume : (arg: string | number) => number
+>(arg) => {        const received: number = arg;        return received;      } : (arg: string | number) => number
+>arg : string | number
 
         const received: number = arg;
 >received : number
->arg : number
+>arg : string | number
 
         return received;
 >received : number

@@ -1,12 +1,12 @@
-tests/cases/compiler/lambdaParamTypes.ts(17,31): error TS2339: Property 'foo' does not exist on type '{ name: string; id: number; }'.
-tests/cases/compiler/lambdaParamTypes.ts(18,31): error TS2339: Property 'foo' does not exist on type '{ name: string; id: number; }'.
-tests/cases/compiler/lambdaParamTypes.ts(19,34): error TS2339: Property 'charAt' does not exist on type 'number'.
-tests/cases/compiler/lambdaParamTypes.ts(20,36): error TS2339: Property 'toExponential' does not exist on type 'string'.
-tests/cases/compiler/lambdaParamTypes.ts(21,34): error TS2339: Property 'charAt' does not exist on type 'number'.
-tests/cases/compiler/lambdaParamTypes.ts(22,36): error TS2339: Property 'toExponential' does not exist on type 'string'.
+lambdaParamTypes.ts(17,31): error TS2339: Property 'foo' does not exist on type '{ name: string; id: number; }'.
+lambdaParamTypes.ts(18,31): error TS2339: Property 'foo' does not exist on type '{ name: string; id: number; }'.
+lambdaParamTypes.ts(19,34): error TS2339: Property 'charAt' does not exist on type 'number'.
+lambdaParamTypes.ts(20,36): error TS2339: Property 'toExponential' does not exist on type 'string'.
+lambdaParamTypes.ts(21,34): error TS2339: Property 'charAt' does not exist on type 'number'.
+lambdaParamTypes.ts(22,36): error TS2339: Property 'toExponential' does not exist on type 'string'.
 
 
-==== tests/cases/compiler/lambdaParamTypes.ts (6 errors) ====
+==== lambdaParamTypes.ts (6 errors) ====
     interface MyArrayWrapper<T> {
         constructor(initialItems?: T[]);
         doSomething(predicate: (x: T, y: T) => string): void;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/truthinessCallExpressionCoercion3.ts] ////
+
 //// [truthinessCallExpressionCoercion3.ts]
 // from #41640, based on an example in ant-design
 interface I {

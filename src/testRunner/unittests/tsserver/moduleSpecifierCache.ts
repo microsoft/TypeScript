@@ -1,16 +1,15 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    createServerHost,
-    File,
-    SymLink,
-} from "../virtualFileSystemWithWatch";
-import {
     baselineTsserverLogs,
-    configuredProjectAt,
     createLoggerWithInMemoryLogs,
     createSession,
     openFilesForSession,
-} from "./helpers";
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+    File,
+    SymLink,
+} from "../helpers/virtualFileSystemWithWatch";
 
 const packageJson: File = {
     path: "/package.json",
@@ -143,7 +142,7 @@ function setup() {
     const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
     openFilesForSession([aTs, bTs, cTs], session);
     const projectService = session.getProjectService();
-    const project = configuredProjectAt(projectService, 0);
+    const project = projectService.configuredProjects.get(tsconfig.path)!;
     session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
         command: ts.server.protocol.CommandTypes.Configure,
         arguments: {

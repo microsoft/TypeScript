@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments.ts] ////
+
+=== genericCallWithFunctionTypedArguments.ts ===
 // Generic functions used as arguments for function typed parameters are not used to make inferences from
 // Using function arguments, no errors expected
 
@@ -10,7 +12,6 @@ function foo<T>(x: (a: T) => T) {
     return x(null);
 >x(null) : T
 >x : (a: T) => T
->null : null
 }
 
 var r = foo(<U>(x: U) => ''); // {}

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/grammarAmbiguities1.ts ===
+//// [tests/cases/compiler/grammarAmbiguities1.ts] ////
+
+=== grammarAmbiguities1.ts ===
 class A { foo() { } }
 >A : A
 >foo : () => void

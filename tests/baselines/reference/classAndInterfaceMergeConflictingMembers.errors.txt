@@ -1,10 +1,10 @@
-tests/cases/conformance/classes/classDeclarations/classAndInterfaceMergeConflictingMembers.ts(10,15): error TS2687: All declarations of 'x' must have identical modifiers.
-tests/cases/conformance/classes/classDeclarations/classAndInterfaceMergeConflictingMembers.ts(14,5): error TS2687: All declarations of 'x' must have identical modifiers.
-tests/cases/conformance/classes/classDeclarations/classAndInterfaceMergeConflictingMembers.ts(18,13): error TS2687: All declarations of 'x' must have identical modifiers.
-tests/cases/conformance/classes/classDeclarations/classAndInterfaceMergeConflictingMembers.ts(22,5): error TS2687: All declarations of 'x' must have identical modifiers.
+classAndInterfaceMergeConflictingMembers.ts(10,15): error TS2687: All declarations of 'x' must have identical modifiers.
+classAndInterfaceMergeConflictingMembers.ts(14,5): error TS2687: All declarations of 'x' must have identical modifiers.
+classAndInterfaceMergeConflictingMembers.ts(18,13): error TS2687: All declarations of 'x' must have identical modifiers.
+classAndInterfaceMergeConflictingMembers.ts(22,5): error TS2687: All declarations of 'x' must have identical modifiers.
 
 
-==== tests/cases/conformance/classes/classDeclarations/classAndInterfaceMergeConflictingMembers.ts (4 errors) ====
+==== classAndInterfaceMergeConflictingMembers.ts (4 errors) ====
     declare class C1 {
         public x : number;
     }

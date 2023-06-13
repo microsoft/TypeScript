@@ -1,4 +1,6 @@
-=== tests/cases/compiler/server.ts ===
+//// [tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamedImportDts.ts] ////
+
+=== server.ts ===
 export class a { }
 >a : Symbol(a, Decl(server.ts, 0, 0))
 
@@ -17,7 +19,7 @@ export class a12 { }
 export class x11 { }
 >x11 : Symbol(x11, Decl(server.ts, 4, 20))
 
-=== tests/cases/compiler/client.ts ===
+=== client.ts ===
 import defaultBinding1, { } from "./server";
 >defaultBinding1 : Symbol(defaultBinding1, Decl(client.ts, 0, 6))
 

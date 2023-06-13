@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/multiExtendsSplitInterfaces2.ts] ////
+
 //// [multiExtendsSplitInterfaces2.ts]
 interface A {
 	a: number;
