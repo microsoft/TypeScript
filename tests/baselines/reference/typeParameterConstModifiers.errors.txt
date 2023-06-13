@@ -1,8 +1,8 @@
-tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterConstModifiers.ts(47,14): error TS1277: 'const' modifier can only appear on a type parameter of a function, method or class
-tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterConstModifiers.ts(53,9): error TS1277: 'const' modifier can only appear on a type parameter of a function, method or class
+typeParameterConstModifiers.ts(47,14): error TS1277: 'const' modifier can only appear on a type parameter of a function, method or class
+typeParameterConstModifiers.ts(53,9): error TS1277: 'const' modifier can only appear on a type parameter of a function, method or class
 
 
-==== tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterConstModifiers.ts (2 errors) ====
+==== typeParameterConstModifiers.ts (2 errors) ====
     declare function f1<const T>(x: T): T;
     
     const x11 = f1('a');

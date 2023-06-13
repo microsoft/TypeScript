@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classDeclaredBeforeClassFactory.ts ===
+//// [tests/cases/compiler/classDeclaredBeforeClassFactory.ts] ////
+
+=== classDeclaredBeforeClassFactory.ts ===
 // Should be OK due to hoisting
 class Derived extends makeBaseClass() {}
 >Derived : Symbol(Derived, Decl(classDeclaredBeforeClassFactory.ts, 0, 0))

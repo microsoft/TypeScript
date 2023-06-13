@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constructorPropertyJs.ts] ////
+
 //// [a.js]
 class C {
     /**

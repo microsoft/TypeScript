@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeofClass.ts ===
+//// [tests/cases/compiler/typeofClass.ts] ////
+
+=== typeofClass.ts ===
 class K {
 >K : Symbol(K, Decl(typeofClass.ts, 0, 0))
 

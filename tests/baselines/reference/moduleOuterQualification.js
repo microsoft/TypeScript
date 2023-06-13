@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleOuterQualification.ts] ////
+
 //// [moduleOuterQualification.ts]
 declare module outer {
   interface Beta { }

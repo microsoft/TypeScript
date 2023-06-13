@@ -1,7 +1,7 @@
-tests/cases/compiler/circularGetAccessor.ts(2,9): error TS2502: 'foo' is referenced directly or indirectly in its own type annotation.
+circularGetAccessor.ts(2,9): error TS2502: 'foo' is referenced directly or indirectly in its own type annotation.
 
 
-==== tests/cases/compiler/circularGetAccessor.ts (1 errors) ====
+==== circularGetAccessor.ts (1 errors) ====
     declare class C {
         get foo(): typeof this.foo;
             ~~~

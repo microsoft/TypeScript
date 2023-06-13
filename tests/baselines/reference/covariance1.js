@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/covariance1.ts] ////
+
 //// [covariance1.ts]
 module M {
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentsOnJSXExpressionsArePreserved.tsx] ////
+
 //// [commentsOnJSXExpressionsArePreserved.tsx]
 // file is intentionally not a module - this tests for a crash in the module/system transforms alongside the `react-jsx` and `react-jsxdev` outputs
 namespace JSX {}
@@ -21,7 +23,7 @@ class Component {
 }
 
 //// [commentsOnJSXExpressionsArePreserved.js]
-var _jsxFileName = "tests/cases/compiler/commentsOnJSXExpressionsArePreserved.tsx";
+var _jsxFileName = "commentsOnJSXExpressionsArePreserved.tsx";
 var Component = /** @class */ (function () {
     function Component() {
     }

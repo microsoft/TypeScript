@@ -1,7 +1,7 @@
-tests/cases/compiler/augmentedTypesModules3.ts(5,8): error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
+augmentedTypesModules3.ts(5,8): error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
 
 
-==== tests/cases/compiler/augmentedTypesModules3.ts (1 errors) ====
+==== augmentedTypesModules3.ts (1 errors) ====
     //// module then class
     module m3 { }
     class m3 { } // ok since the module is not instantiated

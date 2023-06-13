@@ -492,9 +492,7 @@ export function getDocCommentTemplateAtPosition(newLine: string, sourceFile: Sou
     // * if the caret was directly in front of the object, then we add an extra line and indentation.
     const openComment = "/**";
     const closeComment = " */";
-
-    // If any of the existing jsDoc has tags, ignore adding new ones.
-    const hasTag = (commentOwnerJsDoc || []).some(jsDoc => !!jsDoc.tags);
+    const hasTag = length(getJSDocTags(commentOwner)) > 0;
 
     if (tags && !hasTag) {
         const preamble = openComment + newLine + indentationStr + " * ";

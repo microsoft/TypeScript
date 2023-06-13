@@ -1,9 +1,9 @@
-tests/cases/compiler/capturedParametersInInitializers1.ts(18,20): error TS2373: Parameter 'y' cannot reference identifier 'z' declared after it.
-tests/cases/compiler/capturedParametersInInitializers1.ts(22,26): error TS2373: Parameter 'y' cannot reference identifier 'z' declared after it.
-tests/cases/compiler/capturedParametersInInitializers1.ts(38,21): error TS2373: Parameter 'y' cannot reference identifier 'z' declared after it.
+capturedParametersInInitializers1.ts(18,20): error TS2373: Parameter 'y' cannot reference identifier 'z' declared after it.
+capturedParametersInInitializers1.ts(22,26): error TS2373: Parameter 'y' cannot reference identifier 'z' declared after it.
+capturedParametersInInitializers1.ts(38,21): error TS2373: Parameter 'y' cannot reference identifier 'z' declared after it.
 
 
-==== tests/cases/compiler/capturedParametersInInitializers1.ts (3 errors) ====
+==== capturedParametersInInitializers1.ts (3 errors) ====
     // ok - usage is deferred
     function foo1(y = class {c = x}, x = 1) {
         new y().c;

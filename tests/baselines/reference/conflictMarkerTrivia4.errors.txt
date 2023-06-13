@@ -1,9 +1,9 @@
-tests/cases/compiler/conflictMarkerTrivia4.ts(1,12): error TS2304: Cannot find name 'div'.
-tests/cases/compiler/conflictMarkerTrivia4.ts(1,16): error TS1109: Expression expected.
-tests/cases/compiler/conflictMarkerTrivia4.ts(2,1): error TS1185: Merge conflict marker encountered.
+conflictMarkerTrivia4.ts(1,12): error TS2304: Cannot find name 'div'.
+conflictMarkerTrivia4.ts(1,16): error TS1109: Expression expected.
+conflictMarkerTrivia4.ts(2,1): error TS1185: Merge conflict marker encountered.
 
 
-==== tests/cases/compiler/conflictMarkerTrivia4.ts (3 errors) ====
+==== conflictMarkerTrivia4.ts (3 errors) ====
     const x = <div>
                ~~~
 !!! error TS2304: Cannot find name 'div'.

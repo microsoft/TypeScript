@@ -1,4 +1,6 @@
-=== tests/cases/conformance/internalModules/DeclarationMerging/function.ts ===
+//// [tests/cases/conformance/internalModules/DeclarationMerging/FunctionAndModuleWithSameNameAndDifferentCommonRoot.ts] ////
+
+=== function.ts ===
 module A {
 >A : Symbol(A, Decl(function.ts, 0, 0))
 
@@ -11,7 +13,7 @@ module A {
     }
 }
 
-=== tests/cases/conformance/internalModules/DeclarationMerging/module.ts ===
+=== module.ts ===
 module B {
 >B : Symbol(B, Decl(module.ts, 0, 0))
 
@@ -25,7 +27,7 @@ module B {
     }
 }
 
-=== tests/cases/conformance/internalModules/DeclarationMerging/test.ts ===
+=== test.ts ===
 var fn: () => { x: number; y: number };
 >fn : Symbol(fn, Decl(test.ts, 0, 3), Decl(test.ts, 1, 3))
 >x : Symbol(x, Decl(test.ts, 0, 15))

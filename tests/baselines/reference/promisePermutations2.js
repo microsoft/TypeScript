@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/promisePermutations2.ts] ////
+
 //// [promisePermutations2.ts]
 // same as promisePermutations but without the same overloads in Promise<T>
 

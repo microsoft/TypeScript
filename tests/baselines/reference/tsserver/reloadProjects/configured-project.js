@@ -134,9 +134,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json: *new*
-  {}
 /a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -245,9 +245,9 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
 /a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -312,6 +312,17 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	/user/username/projects/myproject/file2.ts Text-2 "export function bar(){}\n            bar();"
 	/user/username/projects/myproject/file1.ts SVC-1-0 "import { foo } from \"module1\";\n                foo();\n                import { bar } from \"./file2\";\n                bar();"
 
+
+	../../../../a/lib/lib.d.ts
+	  Default library for target 'es5'
+	node_modules/module1/index.d.ts
+	  Imported via "module1" from file 'file1.ts'
+	file2.ts
+	  Imported via "./file2" from file 'file1.ts'
+	  Matched by default include pattern '**/*'
+	file1.ts
+	  Matched by default include pattern '**/*'
+
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
@@ -344,9 +355,9 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
 /a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -453,11 +464,11 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
 /a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json:
   {}
 
 FsWatchesRecursive::

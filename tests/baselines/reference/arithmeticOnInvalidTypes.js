@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arithmeticOnInvalidTypes.ts] ////
+
 //// [arithmeticOnInvalidTypes.ts]
 var x: Number;
 var y: Number;

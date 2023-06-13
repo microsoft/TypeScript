@@ -140,9 +140,9 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.esnext.full.d.ts:
-  {"pollingInterval":500}
 /a/bower_components: *new*
+  {"pollingInterval":500}
+/a/lib/lib.esnext.full.d.ts:
   {"pollingInterval":500}
 /a/node_modules: *new*
   {"pollingInterval":500}
@@ -272,13 +272,13 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.esnext.full.d.ts:
-  {"pollingInterval":500}
 /a/bower_components:
   {"pollingInterval":500}
-/a/node_modules:
-  {"pollingInterval":500}
 /a/lib/lib.es6.d.ts: *new*
+  {"pollingInterval":500}
+/a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
+/a/node_modules:
   {"pollingInterval":500}
 /b/bower_components: *new*
   {"pollingInterval":500}
@@ -357,13 +357,13 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.esnext.full.d.ts:
-  {"pollingInterval":500}
 /a/bower_components:
   {"pollingInterval":500}
-/a/node_modules:
-  {"pollingInterval":500}
 /a/lib/lib.es6.d.ts:
+  {"pollingInterval":500}
+/a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
+/a/node_modules:
   {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/thisType/thisTypeInObjectLiterals.ts ===
+//// [tests/cases/conformance/types/thisType/thisTypeInObjectLiterals.ts] ////
+
+=== thisTypeInObjectLiterals.ts ===
 let o = {
 >o : Symbol(o, Decl(thisTypeInObjectLiterals.ts, 0, 3))
 

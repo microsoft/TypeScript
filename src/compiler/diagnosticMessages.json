@@ -1188,14 +1188,6 @@
         "category": "Error",
         "code": 1371
     },
-    "Convert to type-only import": {
-        "category": "Message",
-        "code": 1373
-    },
-    "Convert all imports not used as a value to type-only imports": {
-        "category": "Message",
-        "code": 1374
-    },
     "'await' expressions are only allowed at the top level of a file when that file is a module, but this file has no imports or exports. Consider adding an empty 'export {}' to make this file a module.": {
         "category": "Error",
         "code": 1375
@@ -4917,6 +4909,10 @@
         "category": "Message",
         "code": 6163
     },
+    "Skipping module '{0}' that looks like an absolute URI, target file types: {1}.": {
+        "category": "Message",
+        "code": 6164
+    },
     "Do not truncate error messages.": {
         "category": "Message",
         "code": 6165
@@ -5609,6 +5605,14 @@
     "Exiting conditional exports.": {
         "category": "Message",
         "code": 6416
+    },
+    "Searching all ancestor node_modules directories for preferred extensions: {0}.": {
+        "category": "Message",
+        "code": 6417
+    },
+    "Searching all ancestor node_modules directories for fallback extensions: {0}.": {
+        "category": "Message",
+        "code": 6418
     },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
@@ -7607,6 +7611,38 @@
     "Move to file": {
         "category": "Message",
         "code": 95178
+    },
+    "Cannot move to file, selected file is invalid": {
+        "category": "Message",
+        "code": 95179
+    },
+    "Use 'import type'": {
+        "category": "Message",
+        "code": 95180
+    },
+    "Use 'type {0}'": {
+        "category": "Message",
+        "code": 95181
+    },
+    "Fix all with type-only imports": {
+        "category": "Message",
+        "code": 95182
+    },
+    "Cannot move statements to the selected file": {
+        "category": "Message",
+        "code": 95183
+    },
+    "Inline variable": {
+        "category": "Message",
+        "code": 95184
+    },
+    "Could not find variable to inline.": {
+        "category": "Message",
+        "code": 95185
+    },
+    "Variables with multiple declarations cannot be inlined.": {
+        "category": "Message",
+        "code": 95186
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

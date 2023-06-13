@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declareFileExportAssignment.ts] ////
+
 //// [declareFileExportAssignment.ts]
 module m2 {
     export interface connectModule {

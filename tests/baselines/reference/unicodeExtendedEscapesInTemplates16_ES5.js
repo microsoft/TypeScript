@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInTemplates16_ES5.ts] ////
+
 //// [unicodeExtendedEscapesInTemplates16_ES5.ts]
 var x = `\u{ABCD}\u{EF12}\u{3456}\u{7890}`;
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/classTypes/genericSetterInClassTypeJsDoc.ts] ////
+
 //// [genericSetterInClassTypeJsDoc.js]
 /**
  * @template T

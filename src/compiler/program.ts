@@ -153,6 +153,7 @@ import {
     getTsBuildInfoEmitOutputFilePath,
     getTsConfigObjectLiteralExpression,
     getTsConfigPropArrayElementValue,
+    getTypesPackageName,
     HasChangedAutomaticTypeDirectiveNames,
     hasChangesInResolutions,
     hasExtension,
@@ -1429,6 +1430,8 @@ export const plainJSErrors: Set<number> = new Set([
     Diagnostics.Class_constructor_may_not_be_a_generator.code,
     Diagnostics.Class_constructor_may_not_be_an_accessor.code,
     Diagnostics.await_expressions_are_only_allowed_within_async_functions_and_at_the_top_levels_of_modules.code,
+    // Type errors
+    Diagnostics.This_condition_will_always_return_0_since_JavaScript_compares_objects_by_reference_not_value.code,
 ]);
 
 /**
@@ -1504,6 +1507,9 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
     let resolvedLibReferences: Map<string, LibResolution> | undefined;
     let resolvedLibProcessing: Map<string, LibResolution> | undefined;
+
+    let packageMap: Map<string, boolean> | undefined;
+
 
     // The below settings are to track if a .js file should be add to the program if loaded via searching under node_modules.
     // This works as imported modules are discovered recursively in a depth first manner, specifically:
@@ -1862,6 +1868,9 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         redirectTargetsMap,
         usesUriStyleNodeCoreModules,
         resolvedLibReferences,
+        getCurrentPackagesMap: () => packageMap,
+        typesPackageExists,
+        packageBundlesTypes,
         isEmittedFile,
         getConfigFileParsingDiagnostics,
         getProjectReferences,
@@ -1907,6 +1916,30 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     tracing?.pop();
 
     return program;
+
+    function getPackagesMap() {
+        if (packageMap) return packageMap;
+        packageMap = new Map();
+        // A package name maps to true when we detect it has .d.ts files.
+        // This is useful as an approximation of whether a package bundles its own types.
+        // Note: we only look at files already found by module resolution,
+        // so there may be files we did not consider.
+        files.forEach(sf => {
+            if (!sf.resolvedModules) return;
+
+            sf.resolvedModules.forEach(({ resolvedModule }) => {
+                if (resolvedModule?.packageId) packageMap!.set(resolvedModule.packageId.name, resolvedModule.extension === Extension.Dts || !!packageMap!.get(resolvedModule.packageId.name));
+            });
+        });
+        return packageMap;
+    }
+
+    function typesPackageExists(packageName: string): boolean {
+        return getPackagesMap().has(getTypesPackageName(packageName));
+    }
+    function packageBundlesTypes(packageName: string): boolean {
+        return !!getPackagesMap().get(packageName);
+    }
 
     function addResolutionDiagnostics(resolution: ResolvedModuleWithFailedLookupLocations | ResolvedTypeReferenceDirectiveWithFailedLookupLocations) {
         if (!resolution.resolutionDiagnostics?.length) return;
@@ -2338,8 +2371,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         for (const oldSourceFile of oldSourceFiles) {
             const sourceFileOptions = getCreateSourceFileOptions(oldSourceFile.fileName, moduleResolutionCache, host, options);
             let newSourceFile = host.getSourceFileByPath
-                ? host.getSourceFileByPath(oldSourceFile.fileName, oldSourceFile.resolvedPath, sourceFileOptions, /*onError*/ undefined, shouldCreateNewSourceFile || sourceFileOptions.impliedNodeFormat !== oldSourceFile.impliedNodeFormat)
-                : host.getSourceFile(oldSourceFile.fileName, sourceFileOptions, /*onError*/ undefined, shouldCreateNewSourceFile || sourceFileOptions.impliedNodeFormat !== oldSourceFile.impliedNodeFormat); // TODO: GH#18217
+                ? host.getSourceFileByPath(oldSourceFile.fileName, oldSourceFile.resolvedPath, sourceFileOptions, /*onError*/ undefined, shouldCreateNewSourceFile)
+                : host.getSourceFile(oldSourceFile.fileName, sourceFileOptions, /*onError*/ undefined, shouldCreateNewSourceFile); // TODO: GH#18217
 
             if (!newSourceFile) {
                 return StructureIsReused.Not;
@@ -2536,6 +2569,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         redirectTargetsMap = oldProgram.redirectTargetsMap;
         usesUriStyleNodeCoreModules = oldProgram.usesUriStyleNodeCoreModules;
         resolvedLibReferences = oldProgram.resolvedLibReferences;
+        packageMap = oldProgram.getCurrentPackagesMap();
 
         return StructureIsReused.Completely;
     }
@@ -3583,7 +3617,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             fileName,
             sourceFileOptions,
             hostErrorMessage => addFilePreprocessingFileExplainingDiagnostic(/*file*/ undefined, reason, Diagnostics.Cannot_read_file_0_Colon_1, [fileName, hostErrorMessage]),
-            shouldCreateNewSourceFile || (oldProgram?.getSourceFileByPath(toPath(fileName))?.impliedNodeFormat !== sourceFileOptions.impliedNodeFormat)
+            shouldCreateNewSourceFile,
         );
 
         if (packageId) {

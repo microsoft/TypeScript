@@ -74,13 +74,13 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/client/folder1/module1.ts: *new*
   {}
 /user/username/projects/myproject/client/linktofolder2/module2.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -160,15 +160,15 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/client/folder1/module1.ts:
   {}
 /user/username/projects/myproject/client/linktofolder2/module2.ts:
   {}
-/a/lib/lib.d.ts:
-  {}
 /user/username/projects/myproject/client/linktofolder2/module3.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json:
   {}
 
 FsWatchesRecursive::

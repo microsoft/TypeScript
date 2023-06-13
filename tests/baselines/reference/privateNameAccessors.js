@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameAccessors.ts] ////
+
 //// [privateNameAccessors.ts]
 class A1 {
     get #prop() { return ""; }

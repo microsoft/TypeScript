@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript2021/numericSeparators/parser.numericSeparators.decimal.ts] ////
+
 //// [parser.numericSeparators.decimal.ts]
 1_000_000_000
 1.1_00_01
