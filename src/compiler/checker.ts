@@ -1641,8 +1641,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         getFullyQualifiedName,
         getResolvedSignature: (node, candidatesOutArray, argumentCount) =>
             getResolvedSignatureWorker(node, candidatesOutArray, argumentCount, CheckMode.Normal),
-        getResolvedSignatureForStringLiteralCompletions: (call, editingArgument, candidatesOutArray) =>
-            runWithInferenceBlockedFromSourceNode(editingArgument, () => getResolvedSignatureWorker(call, candidatesOutArray, /*argumentCount*/ undefined, CheckMode.IsForStringLiteralArgumentCompletions)),
+        getResolvedSignatureForStringLiteralCompletions: (call, editingArgument, candidatesOutArray, checkMode = CheckMode.IsForStringLiteralArgumentCompletions) => {
+            if (checkMode & CheckMode.IsForStringLiteralArgumentCompletions) {
+                return runWithInferenceBlockedFromSourceNode(editingArgument, () => getResolvedSignatureWorker(call, candidatesOutArray, /*argumentCount*/ undefined, checkMode & ~CheckMode.IsForStringLiteralArgumentCompletions));
+            }
+            return runWithoutResolvedSignatureCaching(editingArgument, () => getResolvedSignatureWorker(call, candidatesOutArray, /*argumentCount*/ undefined, checkMode & ~CheckMode.IsForStringLiteralArgumentCompletions));
+        },
         getResolvedSignatureForSignatureHelp: (node, candidatesOutArray, argumentCount) =>
             runWithoutResolvedSignatureCaching(node, () => getResolvedSignatureWorker(node, candidatesOutArray, argumentCount, CheckMode.IsForSignatureHelp)),
         getExpandedParameters,
@@ -25230,7 +25234,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const constraint = getConstraintOfTypeParameter(inference.typeParameter);
             if (constraint) {
                 const instantiatedConstraint = instantiateType(constraint, context.nonFixingMapper);
-                if (!inferredType || !context.compareTypes(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
+                if (!inferredType || inferredType === wildcardType || !context.compareTypes(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
                     // If the fallback type satisfies the constraint, we pick it. Otherwise, we pick the constraint.
                     inference.inferredType = fallbackType && context.compareTypes(fallbackType, getTypeWithThisArgument(instantiatedConstraint, fallbackType)) ? fallbackType : instantiatedConstraint;
                 }
@@ -32508,7 +32512,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         for (let i = 0; i < argCount; i++) {
             const arg = args[i];
-            if (arg.kind !== SyntaxKind.OmittedExpression && !(checkMode & CheckMode.IsForStringLiteralArgumentCompletions && hasSkipDirectInferenceFlag(arg))) {
+            if (arg.kind !== SyntaxKind.OmittedExpression) {
                 const paramType = getTypeAtPosition(signature, i);
                 if (couldContainTypeVariables(paramType)) {
                     const argType = checkExpressionWithContextualType(arg, paramType, context, checkMode);
@@ -33152,7 +33156,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // decorators are applied to a declaration by the emitter, and not to an expression.
         const isSingleNonGenericCandidate = candidates.length === 1 && !candidates[0].typeParameters;
         let argCheckMode = !isDecorator && !isSingleNonGenericCandidate && some(args, isContextSensitive) ? CheckMode.SkipContextSensitive : CheckMode.Normal;
-        argCheckMode |= checkMode & CheckMode.IsForStringLiteralArgumentCompletions;
 
         // The following variables are captured and modified by calls to chooseOverload.
         // If overload resolution or type argument inference fails, we want to report the
@@ -33391,7 +33394,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // If one or more context sensitive arguments were excluded, we start including
                     // them now (and keeping do so for any subsequent candidates) and perform a second
                     // round of type inference and applicability checking for this particular candidate.
-                    argCheckMode = checkMode & CheckMode.IsForStringLiteralArgumentCompletions;
+                    argCheckMode = CheckMode.Normal;
                     if (inferenceContext) {
                         const typeArgumentTypes = inferTypeArguments(node, candidate, args, argCheckMode, inferenceContext);
                         checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJSFile(candidate.declaration), inferenceContext.inferredTypeParameters);
@@ -37901,7 +37904,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.StringLiteral:
                 return hasSkipDirectInferenceFlag(node) ?
-                    anyType :
+                    wildcardType :
                     getFreshTypeOfLiteralType(getStringLiteralType((node as StringLiteralLike).text));
             case SyntaxKind.NumericLiteral:
                 checkGrammarNumericLiteral(node as NumericLiteral);
