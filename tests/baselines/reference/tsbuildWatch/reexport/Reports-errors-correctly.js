@@ -131,23 +131,23 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
-/user/username/projects/reexport/src/pure/tsconfig.json: *new*
+/user/username/projects/reexport/src/main/index.ts: *new*
+  {}
+/user/username/projects/reexport/src/main/tsconfig.json: *new*
   {}
 /user/username/projects/reexport/src/pure/index.ts: *new*
   {}
 /user/username/projects/reexport/src/pure/session.ts: *new*
   {}
-/user/username/projects/reexport/src/main/tsconfig.json: *new*
-  {}
-/user/username/projects/reexport/src/main/index.ts: *new*
+/user/username/projects/reexport/src/pure/tsconfig.json: *new*
   {}
 /user/username/projects/reexport/src/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/reexport/src/pure: *new*
-  {}
 /user/username/projects/reexport/src/main: *new*
+  {}
+/user/username/projects/reexport/src/pure: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -283,6 +283,13 @@ export interface Session {
 
 
 
+Before running Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject
+Before running Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:09 AM[0m] File change detected. Starting incremental compilation...
@@ -442,6 +449,13 @@ export interface Session {
 
 
 
+Before running Timeout callback:: count: 1
+3: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+4: timerToBuildInvalidatedProject
+Before running Timeout callback:: count: 1
+4: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:34 AM[0m] File change detected. Starting incremental compilation...

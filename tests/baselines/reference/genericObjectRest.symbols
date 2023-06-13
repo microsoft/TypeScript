@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/rest/genericObjectRest.ts ===
+//// [tests/cases/conformance/types/rest/genericObjectRest.ts] ////
+
+=== genericObjectRest.ts ===
 const a = 'a';
 >a : Symbol(a, Decl(genericObjectRest.ts, 0, 5))
 

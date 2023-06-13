@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts ===
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts] ////
+
+=== subtypesOfTypeParameterWithRecursiveConstraints.ts ===
 // checking whether other types are subtypes of type parameters with constraints
 
 class Foo<T> { foo: T; }

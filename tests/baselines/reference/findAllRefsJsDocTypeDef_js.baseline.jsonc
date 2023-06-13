@@ -4,13 +4,7 @@
 // 
 // /**
 //  * @return {T}
-//  */
-// function f(obj) { return 0; }
-// 
-// /**
-//  * @return {T}
-//  */
-// function f2(obj) { return 0; }
+// --- (line: 5) skipped ---
 
 
 
@@ -34,13 +28,7 @@
   // 
   // /**
   //  * @return {T}
-  //  */
-  // function f(obj) { return 0; }
-  // 
-  // /**
-  //  * @return {T}
-  //  */
-  // function f2(obj) { return 0; }
+  // --- (line: 5) skipped ---
 
   // === Details ===
   [
@@ -107,10 +95,7 @@
   //  */
   // function f(obj) { return 0; }
   // 
-  // /**
-  //  * @return {T}
-  //  */
-  // function f2(obj) { return 0; }
+  // --- (line: 8) skipped ---
 
   // === Details ===
   [

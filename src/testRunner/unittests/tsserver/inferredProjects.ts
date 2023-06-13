@@ -1,10 +1,5 @@
 import * as ts from "../../_namespaces/ts";
-import { commonFile1 } from "../tscWatch/helpers";
-import {
-    createServerHost,
-    File,
-    libFile,
-} from "../virtualFileSystemWithWatch";
+import { commonFile1 } from "../helpers/tscWatch";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
@@ -14,7 +9,12 @@ import {
     logInferredProjectsOrphanStatus,
     openFilesForSession,
     setCompilerOptionsForInferredProjectsRequestForSession,
-} from "./helpers";
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+    File,
+    libFile,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: inferredProjects", () => {
     it("create inferred project", () => {
@@ -67,7 +67,7 @@ describe("unittests:: tsserver:: inferredProjects", () => {
         projectService.openClientFile(file3.path);
 
         host.writeFile(configFile.path, configFile.content);
-        host.checkTimeoutQueueLengthAndRun(2); // load configured project from disk + ensureProjectsForOpenFiles
+        host.runQueuedTimeoutCallbacks(); // load configured project from disk + ensureProjectsForOpenFiles
         baselineTsserverLogs("inferredProjects", "should use only one inferred project if useOneInferredProject is set", projectService);
     });
 
@@ -101,7 +101,7 @@ describe("unittests:: tsserver:: inferredProjects", () => {
         projectService.openClientFile(file1.path);
         projectService.openClientFile(modFile.path);
         projectService.setCompilerOptionsForInferredProjects({ moduleResolution: ts.ModuleResolutionKind.Classic });
-        host.checkTimeoutQueueLengthAndRun(3);
+        host.runQueuedTimeoutCallbacks();
         logInferredProjectsOrphanStatus(projectService);
         baselineTsserverLogs("inferredProjects", "project settings for inferred projects", projectService);
     });
@@ -286,7 +286,7 @@ describe("unittests:: tsserver:: inferredProjects", () => {
             allowJs: true,
             target: ts.ScriptTarget.ES2015
         }, session);
-        host.checkTimeoutQueueLength(0);
+        session.testhost.logTimeoutQueueLength();
         baselineTsserverLogs("inferredProjects", "Setting compiler options for inferred projects when there are no open files should not schedule any refresh", session);
     });
 });

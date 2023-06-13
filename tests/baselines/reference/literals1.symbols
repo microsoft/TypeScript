@@ -1,4 +1,6 @@
-=== tests/cases/compiler/literals1.ts ===
+//// [tests/cases/compiler/literals1.ts] ////
+
+=== literals1.ts ===
 var a = 42;
 >a : Symbol(a, Decl(literals1.ts, 0, 3))
 

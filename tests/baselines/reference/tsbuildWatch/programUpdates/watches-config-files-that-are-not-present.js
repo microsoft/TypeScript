@@ -103,15 +103,15 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
-/user/username/projects/sample1/core/tsconfig.json: *new*
-  {}
 /user/username/projects/sample1/core/anothermodule.ts: *new*
   {}
 /user/username/projects/sample1/core/index.ts: *new*
   {}
-/user/username/projects/sample1/tests/tsconfig.json: *new*
+/user/username/projects/sample1/core/tsconfig.json: *new*
   {}
 /user/username/projects/sample1/tests/index.ts: *new*
+  {}
+/user/username/projects/sample1/tests/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -246,23 +246,27 @@ PolledWatches *deleted*::
   {"pollingInterval":2000}
 
 FsWatches::
-/user/username/projects/sample1/core/tsconfig.json:
-  {}
 /user/username/projects/sample1/core/anothermodule.ts:
   {}
 /user/username/projects/sample1/core/index.ts:
   {}
-/user/username/projects/sample1/tests/tsconfig.json:
+/user/username/projects/sample1/core/tsconfig.json:
+  {}
+/user/username/projects/sample1/logic/tsconfig.json: *new*
   {}
 /user/username/projects/sample1/tests/index.ts:
   {}
-/user/username/projects/sample1/logic/tsconfig.json: *new*
+/user/username/projects/sample1/tests/tsconfig.json:
   {}
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
   {}
 
+Before running Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+3: timerToBuildInvalidatedProject
 Output::
 sysLog:: /user/username/projects/sample1/logic/tsconfig.json:: Changing watcher to PresentFileSystemEntryWatcher
 
@@ -293,19 +297,19 @@ Shape signatures in builder refreshed for::
 /user/username/projects/sample1/logic/index.ts (computed .d.ts during emit)
 
 FsWatches::
-/user/username/projects/sample1/core/tsconfig.json:
-  {}
 /user/username/projects/sample1/core/anothermodule.ts:
   {}
 /user/username/projects/sample1/core/index.ts:
   {}
-/user/username/projects/sample1/tests/tsconfig.json:
+/user/username/projects/sample1/core/tsconfig.json:
   {}
-/user/username/projects/sample1/tests/index.ts:
+/user/username/projects/sample1/logic/index.ts: *new*
   {}
 /user/username/projects/sample1/logic/tsconfig.json:
   {}
-/user/username/projects/sample1/logic/index.ts: *new*
+/user/username/projects/sample1/tests/index.ts:
+  {}
+/user/username/projects/sample1/tests/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -426,6 +430,9 @@ Change:: Build Tests
 
 Input::
 
+Before running Timeout callback:: count: 1
+3: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 [[90m12:01:19 AM[0m] Found 0 errors. Watching for file changes.
 

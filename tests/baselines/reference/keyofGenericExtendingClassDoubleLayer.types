@@ -1,4 +1,6 @@
-=== tests/cases/compiler/keyofGenericExtendingClassDoubleLayer.ts ===
+//// [tests/cases/compiler/keyofGenericExtendingClassDoubleLayer.ts] ////
+
+=== keyofGenericExtendingClassDoubleLayer.ts ===
 class Model<Attributes = any> {
 >Model : Model<Attributes>
 

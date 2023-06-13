@@ -1,4 +1,6 @@
-=== tests/cases/compiler/arrayLiteralContextualType.ts ===
+//// [tests/cases/compiler/arrayLiteralContextualType.ts] ////
+
+=== arrayLiteralContextualType.ts ===
 interface IAnimal {
 >IAnimal : Symbol(IAnimal, Decl(arrayLiteralContextualType.ts, 0, 0))
 

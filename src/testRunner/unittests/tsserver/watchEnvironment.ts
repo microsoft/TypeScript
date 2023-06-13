@@ -2,13 +2,7 @@ import * as ts from "../../_namespaces/ts";
 import {
     commonFile1,
     commonFile2,
-} from "../tscWatch/helpers";
-import {
-    createServerHost,
-    File,
-    libFile,
-    Tsc_WatchDirectory,
-} from "../virtualFileSystemWithWatch";
+} from "../helpers/tscWatch";
 import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,
@@ -21,7 +15,13 @@ import {
     setCompilerOptionsForInferredProjectsRequestForSession,
     TestSession,
     toExternalFiles,
-} from "./helpers";
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+    File,
+    libFile,
+    Tsc_WatchDirectory,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: watchEnvironment:: tsserverProjectSystem watchDirectories implementation", () => {
     function verifyCompletionListWithNewFileInSubFolder(scenario: string, tscWatchDirectory: Tsc_WatchDirectory) {
@@ -172,7 +172,7 @@ it(`unittests:: tsserver:: watchEnvironment:: tsserverProjectSystem recursive wa
         emacsIgnoredFileFromIgnoreDirectory
     ].forEach(ignoredEntity => {
         host.ensureFileOrFolder(ignoredEntity);
-        host.checkTimeoutQueueLength(0);
+        session.testhost.logTimeoutQueueLength();
     });
 
     baselineTsserverLogs("watchEnvironment", `recursive directory does not watch files starting with dot in node_modules`, session);

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inheritanceOfGenericConstructorMethod2.ts] ////
+
 //// [inheritanceOfGenericConstructorMethod2.ts]
 module M {
    export class C1 { }

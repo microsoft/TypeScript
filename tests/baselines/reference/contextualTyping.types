@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualTyping.ts ===
+//// [tests/cases/compiler/contextualTyping.ts] ////
+
+=== contextualTyping.ts ===
 // DEFAULT INTERFACES
 interface IFoo {
     n: number;

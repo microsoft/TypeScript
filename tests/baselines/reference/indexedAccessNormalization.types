@@ -1,4 +1,6 @@
-=== tests/cases/compiler/indexedAccessNormalization.ts ===
+//// [tests/cases/compiler/indexedAccessNormalization.ts] ////
+
+=== indexedAccessNormalization.ts ===
 // Repro from from #43152
 
 type MyMap<M extends object> = {

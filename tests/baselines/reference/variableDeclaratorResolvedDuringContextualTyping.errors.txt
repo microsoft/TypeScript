@@ -1,9 +1,9 @@
-tests/cases/compiler/variableDeclaratorResolvedDuringContextualTyping.ts(115,29): error TS2304: Cannot find name 'IUploadResult'.
-tests/cases/compiler/variableDeclaratorResolvedDuringContextualTyping.ts(116,32): error TS2339: Property 'jsonToStat' does not exist on type 'FileService'.
-tests/cases/compiler/variableDeclaratorResolvedDuringContextualTyping.ts(116,43): error TS2304: Cannot find name 'newFilePath'.
+variableDeclaratorResolvedDuringContextualTyping.ts(115,29): error TS2304: Cannot find name 'IUploadResult'.
+variableDeclaratorResolvedDuringContextualTyping.ts(116,32): error TS2339: Property 'jsonToStat' does not exist on type 'FileService'.
+variableDeclaratorResolvedDuringContextualTyping.ts(116,43): error TS2304: Cannot find name 'newFilePath'.
 
 
-==== tests/cases/compiler/variableDeclaratorResolvedDuringContextualTyping.ts (3 errors) ====
+==== variableDeclaratorResolvedDuringContextualTyping.ts (3 errors) ====
     module WinJS {
         export interface ValueCallback {
             (value: any): any;

@@ -1,9 +1,9 @@
-tests/cases/compiler/restArgAssignmentCompat.ts(7,1): error TS2322: Type '(...x: number[]) => void' is not assignable to type '(x: number[], y: string) => void'.
+restArgAssignmentCompat.ts(7,1): error TS2322: Type '(...x: number[]) => void' is not assignable to type '(x: number[], y: string) => void'.
   Types of parameters 'x' and 'x' are incompatible.
     Type 'number[]' is not assignable to type 'number'.
 
 
-==== tests/cases/compiler/restArgAssignmentCompat.ts (1 errors) ====
+==== restArgAssignmentCompat.ts (1 errors) ====
     function f(...x: number[]) {
         x.forEach((n, i) => void ('item ' + i + ' = ' + n));
     }

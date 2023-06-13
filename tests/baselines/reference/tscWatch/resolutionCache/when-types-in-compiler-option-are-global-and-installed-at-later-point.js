@@ -54,13 +54,15 @@ Shape signatures in builder refreshed for::
 PolledWatches::
 /user/username/projects/myproject/node_modules: *new*
   {"pollingInterval":500}
+/user/username/projects/node_modules: *new*
+  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/lib/app.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -87,16 +89,20 @@ declare namespace myapp {
 }
 
 
+PolledWatches::
+/user/username/projects/node_modules:
+  {"pollingInterval":500}
+
 PolledWatches *deleted*::
 /user/username/projects/myproject/node_modules:
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/lib/app.ts:
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/myproject/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -105,6 +111,14 @@ FsWatchesRecursive::
 /user/username/projects/myproject/node_modules: *new*
   {}
 
+Before running Timeout callback:: count: 2
+11: timerToInvalidateFailedLookupResolutions
+12: timerToUpdateProgram
+After running Timeout callback:: count: 1
+13: timerToUpdateProgram
+Before running Timeout callback:: count: 1
+13: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 sysLog:: /user/username/projects/myproject/node_modules:: Changing watcher to PresentFileSystemEntryWatcher
 
@@ -132,16 +146,20 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/node_modules/@myapp/ts-types/types/somefile.define.d.ts (used version)
 /user/username/projects/myproject/lib/app.ts (computed .d.ts)
 
+PolledWatches::
+/user/username/projects/node_modules:
+  {"pollingInterval":500}
+
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/lib/app.ts:
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/myproject/node_modules/@myapp/ts-types/package.json: *new*
   {}
 /user/username/projects/myproject/node_modules/@myapp/ts-types/types/somefile.define.d.ts: *new*
   {}
-/user/username/projects/myproject/node_modules/@myapp/ts-types/package.json: *new*
+/user/username/projects/myproject/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -158,6 +176,8 @@ Change:: No change, just check program
 
 Input::
 
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 Output::
 
 exitCode:: ExitStatus.undefined

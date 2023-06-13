@@ -1,7 +1,7 @@
-tests/cases/conformance/es6/spread/arraySpreadInCall.ts(21,12): error TS2554: Expected 0-1 arguments, but got 2.
+arraySpreadInCall.ts(21,12): error TS2554: Expected 0-1 arguments, but got 2.
 
 
-==== tests/cases/conformance/es6/spread/arraySpreadInCall.ts (1 errors) ====
+==== arraySpreadInCall.ts (1 errors) ====
     declare function f1(a: number, b: number, c: number, d: number, e: number, f: number): void;
     f1(1, 2, 3, 4, ...[5, 6]);
     f1(...[1], 2, 3, 4, 5, 6);

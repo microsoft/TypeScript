@@ -45,17 +45,19 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/project/file1.ts (used version)
 
 PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
 /user/username/projects/myproject/project/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types: *new*
+/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/project/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/project/file1.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/myproject/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -79,6 +81,9 @@ Input::
 export const y = 10;
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:29 AM[0m] File change detected. Starting incremental compilation...
@@ -102,19 +107,21 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/project/file2.ts (computed .d.ts)
 
 PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
 /user/username/projects/myproject/project/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/project/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/project/file1.ts:
   {}
-/a/lib/lib.d.ts:
-  {}
 /user/username/projects/myproject/project/file2.ts: *new*
+  {}
+/user/username/projects/myproject/project/tsconfig.json:
   {}
 
 FsWatchesRecursive::

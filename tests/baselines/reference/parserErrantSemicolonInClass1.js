@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserErrantSemicolonInClass1.ts] ////
+
 //// [parserErrantSemicolonInClass1.ts]
 class a {
     //constructor ();

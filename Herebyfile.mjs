@@ -171,7 +171,7 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             bundle: true,
             outfile,
             platform: "node",
-            target: "es2018",
+            target: ["es2020", "node14.17"],
             format: "cjs",
             sourcemap: "linked",
             sourcesContent: false,
@@ -577,6 +577,7 @@ export const runTests = task({
 // task("runtests").flags = {
 //     "-t --tests=<regex>": "Pattern for tests to run.",
 //     "   --failed": "Runs tests listed in '.failed-tests'.",
+//     "   --coverage": "Generate test coverage using c8",
 //     "-r --reporter=<reporter>": "The mocha reporter to use.",
 //     "-i --break": "Runs tests in inspector mode (NodeJS 8 and later)",
 //     "   --keepFailed": "Keep tests in .failed-tests even if they pass",
@@ -616,7 +617,6 @@ export const runTestsAndWatch = task({
         });
 
         process.on("SIGINT", endWatchMode);
-        process.on("SIGKILL", endWatchMode);
         process.on("beforeExit", endWatchMode);
         watchTestsEmitter.on("rebuild", onRebuild);
         testCaseWatcher.on("all", onChange);
@@ -715,6 +715,7 @@ export const runTestsParallel = task({
 });
 
 // task("runtests-parallel").flags = {
+//     "   --coverage": "Generate test coverage using c8",
 //     "   --light": "Run tests in light mode (fewer verifications, but tests run faster).",
 //     "   --keepFailed": "Keep tests in .failed-tests even if they pass.",
 //     "   --dirty": "Run tests without first cleaning test output directories.",

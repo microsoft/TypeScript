@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/complicatedGenericRecursiveBaseClassReference.ts] ////
+
 //// [complicatedGenericRecursiveBaseClassReference.ts]
 class S18<B, A, C> extends S18<A[], { S19: A; (): A }[], C[]>
 {

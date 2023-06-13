@@ -243,23 +243,25 @@ Dependencies for::
   /user/username/projects/sample1/core/index.d.ts
 
 PolledWatches::
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 /user/username/projects/sample1/logic/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/sample1/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/sample1/logic/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/sample1/core/anothermodule.d.ts: *new*
+  {}
+/user/username/projects/sample1/core/index.d.ts: *new*
   {}
 /user/username/projects/sample1/core/tsconfig.json: *new*
   {}
 /user/username/projects/sample1/logic/index.ts: *new*
   {}
-/user/username/projects/sample1/core/index.d.ts: *new*
-  {}
-/user/username/projects/sample1/core/anothermodule.d.ts: *new*
-  {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/sample1/logic/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -481,6 +483,9 @@ export declare function multiply(a: number, b: number): number;
 }
 
 
+Before running Timeout callback:: count: 1
+5: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:18 AM[0m] File change detected. Starting incremental compilation...

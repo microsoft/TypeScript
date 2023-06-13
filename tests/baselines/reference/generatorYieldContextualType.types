@@ -1,4 +1,6 @@
-=== tests/cases/conformance/generators/generatorYieldContextualType.ts ===
+//// [tests/cases/conformance/generators/generatorYieldContextualType.ts] ////
+
+=== generatorYieldContextualType.ts ===
 declare function f1<T, R, S>(gen: () => Generator<R, T, S>): void;
 >f1 : <T, R, S>(gen: () => Generator<R, T, S>) => void
 >gen : () => Generator<R, T, S>

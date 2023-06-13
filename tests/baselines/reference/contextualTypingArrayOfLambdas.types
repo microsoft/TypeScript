@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualTypingArrayOfLambdas.ts ===
+//// [tests/cases/compiler/contextualTypingArrayOfLambdas.ts] ////
+
+=== contextualTypingArrayOfLambdas.ts ===
 class A {
 >A : A
 

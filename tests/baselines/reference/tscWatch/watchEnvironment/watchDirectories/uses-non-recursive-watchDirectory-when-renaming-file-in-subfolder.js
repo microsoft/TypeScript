@@ -49,15 +49,15 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/username/project/tsconfig.json: *new*
-  {}
-/a/username/project/src/file1.ts: *new*
-  {}
 /a/lib/lib.d.ts: *new*
   {}
 /a/username/project: *new*
   {}
 /a/username/project/src: *new*
+  {}
+/a/username/project/src/file1.ts: *new*
+  {}
+/a/username/project/tsconfig.json: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -74,6 +74,9 @@ Input::
 
 //// [/a/username/project/src/file1.ts] deleted
 
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:26 AM[0m] File change detected. Starting incremental compilation...
@@ -100,8 +103,6 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/username/project/tsconfig.json:
-  {}
 /a/lib/lib.d.ts:
   {}
 /a/username/project:
@@ -109,6 +110,8 @@ FsWatches::
 /a/username/project/src:
   {}
 /a/username/project/src/file2.ts: *new*
+  {}
+/a/username/project/tsconfig.json:
   {}
 
 FsWatches *deleted*::

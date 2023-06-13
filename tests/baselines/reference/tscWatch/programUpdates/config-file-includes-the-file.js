@@ -56,18 +56,14 @@ Shape signatures in builder refreshed for::
 /a/c/f2.ts (used version)
 /a/c/f3.ts (used version)
 
-PolledWatches::
-/a/c/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
-/a/c/tsconfig.json: *new*
+/a/b/f1.ts: *new*
   {}
 /a/c/f2.ts: *new*
   {}
-/a/b/f1.ts: *new*
-  {}
 /a/c/f3.ts: *new*
+  {}
+/a/c/tsconfig.json: *new*
   {}
 /a/lib/lib.d.ts: *new*
   {}

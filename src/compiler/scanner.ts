@@ -1782,16 +1782,28 @@ export function createScanner(languageVersion: ScriptTarget,
             if (pos >= end) {
                 return token = SyntaxKind.EndOfFileToken;
             }
-            const ch = codePointAt(text, pos);
 
-            // Special handling for shebang
-            if (ch === CharacterCodes.hash && pos === 0 && isShebangTrivia(text, pos)) {
-                pos = scanShebangTrivia(text, pos);
-                if (skipTrivia) {
-                    continue;
+            const ch = codePointAt(text, pos);
+            if (pos === 0) {
+                // If a file wasn't valid text at all, it will usually be apparent at
+                // position 0 because UTF-8 decode will fail and produce U+FFFD.
+                // If that happens, just issue one error and refuse to try to scan further;
+                // this is likely a binary file that cannot be parsed
+                if (ch === CharacterCodes.replacementCharacter) {
+                    // Jump to the end of the file and fail.
+                    error(Diagnostics.File_appears_to_be_binary);
+                    pos = end;
+                    return token = SyntaxKind.NonTextFileMarkerTrivia;
                 }
-                else {
-                    return token = SyntaxKind.ShebangTrivia;
+                // Special handling for shebang
+                if (ch === CharacterCodes.hash && isShebangTrivia(text, pos)) {
+                    pos = scanShebangTrivia(text, pos);
+                    if (skipTrivia) {
+                        continue;
+                    }
+                    else {
+                        return token = SyntaxKind.ShebangTrivia;
+                    }
                 }
             }
 
@@ -2531,7 +2543,6 @@ export function createScanner(languageVersion: ScriptTarget,
             // everything after it to the token
             // Do note that this means that `scanJsxIdentifier` effectively _mutates_ the visible token without advancing to a new token
             // Any caller should be expecting this behavior and should only read the pos or token value after calling it.
-            let namespaceSeparator = false;
             while (pos < end) {
                 const ch = text.charCodeAt(pos);
                 if (ch === CharacterCodes.minus) {
@@ -2539,23 +2550,11 @@ export function createScanner(languageVersion: ScriptTarget,
                     pos++;
                     continue;
                 }
-                else if (ch === CharacterCodes.colon && !namespaceSeparator) {
-                    tokenValue += ":";
-                    pos++;
-                    namespaceSeparator = true;
-                    token = SyntaxKind.Identifier; // swap from keyword kind to identifier kind
-                    continue;
-                }
                 const oldPos = pos;
                 tokenValue += scanIdentifierParts(); // reuse `scanIdentifierParts` so unicode escapes are handled
                 if (pos === oldPos) {
                     break;
                 }
-            }
-            // Do not include a trailing namespace separator in the token, since this is against the spec.
-            if (tokenValue.slice(-1) === ":") {
-                tokenValue = tokenValue.slice(0, -1);
-                pos--;
             }
             return getIdentifierToken();
         }
@@ -2802,7 +2801,7 @@ const codePointAt: (s: string, i: number) => number = (String.prototype as any).
     }
     // Get the first code unit
     const first = str.charCodeAt(i);
-    // check if it’s the start of a surrogate pair
+    // check if it's the start of a surrogate pair
     if (first >= 0xD800 && first <= 0xDBFF && size > i + 1) { // high surrogate and there is a next code unit
         const second = str.charCodeAt(i + 1);
         if (second >= 0xDC00 && second <= 0xDFFF) { // low surrogate

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classdecl.ts] ////
+
 //// [classdecl.ts]
 class a {
     //constructor ();

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/javascriptThisAssignmentInStaticBlock.ts] ////
+
 === /src/a.js ===
 class Thing {
 >Thing : Symbol(Thing, Decl(a.js, 0, 0))

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers8.ts] ////
+
 //// [typeOfThisInStaticMembers8.ts]
 class C {
     static f = 1;

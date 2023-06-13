@@ -1188,14 +1188,6 @@
         "category": "Error",
         "code": 1371
     },
-    "Convert to type-only import": {
-        "category": "Message",
-        "code": 1373
-    },
-    "Convert all imports not used as a value to type-only imports": {
-        "category": "Message",
-        "code": 1374
-    },
     "'await' expressions are only allowed at the top level of a file when that file is a module, but this file has no imports or exports. Consider adding an empty 'export {}' to make this file a module.": {
         "category": "Error",
         "code": 1375
@@ -1605,6 +1597,10 @@
         "category": "Error",
         "code": 1489
     },
+    "File appears to be binary.": {
+        "category": "Error",
+        "code": 1490
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -1880,7 +1876,7 @@
         "category": "Error",
         "code": 2354
     },
-    "A function whose declared type is neither 'void' nor 'any' must return a value.": {
+    "A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.": {
         "category": "Error",
         "code": 2355
     },
@@ -1971,10 +1967,6 @@
     "Argument of type '{0}' is not assignable to parameter of type '{1}' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.": {
         "category": "Error",
         "code": 2379
-    },
-    "The return type of a 'get' accessor must be assignable to its 'set' accessor type": {
-        "category": "Error",
-        "code": 2380
     },
     "Overload signatures must all be exported or non-exported.": {
         "category": "Error",
@@ -2893,6 +2885,10 @@
         "category": "Error",
         "code": 2638
     },
+    "React components cannot include JSX namespace names": {
+        "category": "Error",
+        "code": 2639
+    },
 
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
         "category": "Error",
@@ -3618,10 +3614,6 @@
     "A declaration file cannot be imported without 'import type'. Did you mean to import an implementation file '{0}' instead?": {
         "category": "Error",
         "code": 2846
-    },
-    "A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.": {
-        "category": "Error",
-        "code": 2847
     },
     "The right-hand side of an 'instanceof' expression must not be an instantiation expression.": {
         "category": "Error",
@@ -4917,6 +4909,10 @@
         "category": "Message",
         "code": 6163
     },
+    "Skipping module '{0}' that looks like an absolute URI, target file types: {1}.": {
+        "category": "Message",
+        "code": 6164
+    },
     "Do not truncate error messages.": {
         "category": "Message",
         "code": 6165
@@ -5609,6 +5605,14 @@
     "Exiting conditional exports.": {
         "category": "Message",
         "code": 6416
+    },
+    "Searching all ancestor node_modules directories for preferred extensions: {0}.": {
+        "category": "Message",
+        "code": 6417
+    },
+    "Searching all ancestor node_modules directories for fallback extensions: {0}.": {
+        "category": "Message",
+        "code": 6418
     },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
@@ -6591,6 +6595,10 @@
     "Decorators may not appear after 'export' or 'export default' if they also appear before 'export'.": {
         "category": "Error",
         "code": 8038
+    },
+    "A JSDoc '@template' tag may not follow a '@typedef', '@callback', or '@overload' tag": {
+        "category": "Error",
+        "code": 8039
     },
 
     "Declaration emit for this file requires using private name '{0}'. An explicit type annotation may unblock declaration emit.": {
@@ -7600,6 +7608,42 @@
         "category": "Message",
         "code": 95177
     },
+    "Move to file": {
+        "category": "Message",
+        "code": 95178
+    },
+    "Cannot move to file, selected file is invalid": {
+        "category": "Message",
+        "code": 95179
+    },
+    "Use 'import type'": {
+        "category": "Message",
+        "code": 95180
+    },
+    "Use 'type {0}'": {
+        "category": "Message",
+        "code": 95181
+    },
+    "Fix all with type-only imports": {
+        "category": "Message",
+        "code": 95182
+    },
+    "Cannot move statements to the selected file": {
+        "category": "Message",
+        "code": 95183
+    },
+    "Inline variable": {
+        "category": "Message",
+        "code": 95184
+    },
+    "Could not find variable to inline.": {
+        "category": "Message",
+        "code": 95185
+    },
+    "Variables with multiple declarations cannot be inlined.": {
+        "category": "Message",
+        "code": 95186
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
@@ -7764,5 +7808,9 @@
     "Non-abstract class '{0}' does not implement all abstract members of '{1}'": {
         "category": "Error",
         "code": 18052
+    },
+    "Its type '{0}' is not a valid JSX element type.": {
+        "category": "Error",
+        "code": 18053
     }
 }

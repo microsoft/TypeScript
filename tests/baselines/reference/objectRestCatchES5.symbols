@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/rest/objectRestCatchES5.ts ===
+//// [tests/cases/conformance/types/rest/objectRestCatchES5.ts] ////
+
+=== objectRestCatchES5.ts ===
 let a = 1, b = 2;
 >a : Symbol(a, Decl(objectRestCatchES5.ts, 0, 3))
 >b : Symbol(b, Decl(objectRestCatchES5.ts, 0, 10))

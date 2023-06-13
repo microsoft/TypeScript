@@ -1,10 +1,10 @@
-tests/cases/compiler/a.js(1,8): error TS8006: 'module' declarations can only be used in TypeScript files.
-tests/cases/compiler/a.js(2,5): error TS2331: 'this' cannot be referenced in a module or namespace body.
-tests/cases/compiler/b.js(1,11): error TS8006: 'namespace' declarations can only be used in TypeScript files.
-tests/cases/compiler/b.js(2,5): error TS2331: 'this' cannot be referenced in a module or namespace body.
+a.js(1,8): error TS8006: 'module' declarations can only be used in TypeScript files.
+a.js(2,5): error TS2331: 'this' cannot be referenced in a module or namespace body.
+b.js(1,11): error TS8006: 'namespace' declarations can only be used in TypeScript files.
+b.js(2,5): error TS2331: 'this' cannot be referenced in a module or namespace body.
 
 
-==== tests/cases/compiler/a.js (2 errors) ====
+==== a.js (2 errors) ====
     module foo {
            ~~~
 !!! error TS8006: 'module' declarations can only be used in TypeScript files.
@@ -13,7 +13,7 @@ tests/cases/compiler/b.js(2,5): error TS2331: 'this' cannot be referenced in a m
 !!! error TS2331: 'this' cannot be referenced in a module or namespace body.
     }
     
-==== tests/cases/compiler/b.js (2 errors) ====
+==== b.js (2 errors) ====
     namespace blah {
               ~~~~
 !!! error TS8006: 'namespace' declarations can only be used in TypeScript files.

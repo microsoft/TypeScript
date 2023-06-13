@@ -45,11 +45,11 @@ Shape signatures in builder refreshed for::
 /a/username/project/src/file1.ts (used version)
 
 FsWatches::
-/a/username/project/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /a/username/project/src/file1.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/a/username/project/tsconfig.json: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -66,6 +66,21 @@ Input::
 
 //// [/a/username/project/src/file1.ts] deleted
 
+Before running Timeout callback:: count: 2
+1: pollPollingIntervalQueue
+2: timerToUpdateProgram
+After running Timeout callback:: count: 3
+3: timerToUpdateProgram
+4: pollLowPollingIntervalQueue
+5: pollPollingIntervalQueue
+Before running Timeout callback:: count: 3
+3: timerToUpdateProgram
+4: pollLowPollingIntervalQueue
+5: pollPollingIntervalQueue
+After running Timeout callback:: count: 3
+6: timerToUpdateProgram
+7: pollLowPollingIntervalQueue
+8: pollPollingIntervalQueue
 Output::
 >> Screen clear
 [[90m12:00:26 AM[0m] File change detected. Starting incremental compilation...
@@ -88,11 +103,11 @@ Shape signatures in builder refreshed for::
 /a/username/project/src/file2.ts (used version)
 
 FsWatches::
-/a/username/project/tsconfig.json:
-  {}
 /a/lib/lib.d.ts:
   {}
 /a/username/project/src/file2.ts: *new*
+  {}
+/a/username/project/tsconfig.json:
   {}
 
 FsWatches *deleted*::

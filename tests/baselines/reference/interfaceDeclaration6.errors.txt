@@ -1,9 +1,9 @@
-tests/cases/compiler/interfaceDeclaration6.ts(3,11): error TS2430: Interface 'i3' incorrectly extends interface 'i1'.
+interfaceDeclaration6.ts(3,11): error TS2430: Interface 'i3' incorrectly extends interface 'i1'.
   Types of property 'foo' are incompatible.
     Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/compiler/interfaceDeclaration6.ts (1 errors) ====
+==== interfaceDeclaration6.ts (1 errors) ====
     interface i1 { foo: number; };
     interface i2 extends i1 { foo: number; };
     interface i3 extends i1 { foo: string; };

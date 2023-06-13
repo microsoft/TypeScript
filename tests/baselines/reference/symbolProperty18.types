@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/Symbols/symbolProperty18.ts ===
+//// [tests/cases/conformance/es6/Symbols/symbolProperty18.ts] ////
+
+=== symbolProperty18.ts ===
 var i = {
 >i : { [Symbol.iterator]: number; [Symbol.toStringTag](): string; [Symbol.toPrimitive]: boolean; }
 >{    [Symbol.iterator]: 0,    [Symbol.toStringTag]() { return "" },    set [Symbol.toPrimitive](p: boolean) { }} : { [Symbol.iterator]: number; [Symbol.toStringTag](): string; [Symbol.toPrimitive]: boolean; }

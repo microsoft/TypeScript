@@ -1,4 +1,6 @@
-=== tests/cases/compiler/index.ts ===
+//// [tests/cases/compiler/nodeNextEsmImportsOfPackagesWithExtensionlessMains.ts] ////
+
+=== index.ts ===
 import * as ip from 'ip';
 >ip : typeof ip
 
@@ -16,11 +18,11 @@ export function getAddress(): string {
 >ip : typeof ip
 >address : () => string
 }
-=== tests/cases/compiler/node_modules/@types/ip/index.d.ts ===
+=== node_modules/@types/ip/index.d.ts ===
 export function address(): string;
 >address : () => string
 
-=== tests/cases/compiler/node_modules/nullthrows/nullthrows.d.ts ===
+=== node_modules/nullthrows/nullthrows.d.ts ===
 declare function nullthrows(x: any): any;
 >nullthrows : typeof nullthrows
 >x : any

@@ -50,18 +50,14 @@ Shape signatures in builder refreshed for::
 /a/b.ts (used version)
 /a/lib/lib.d.ts (used version)
 
-PolledWatches::
-/a/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
-/a/tsconfig.json: *new*
-  {}
 /a/a.ts: *new*
   {}
 /a/b.ts: *new*
   {}
 /a/lib/lib.d.ts: *new*
+  {}
+/a/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -86,6 +82,9 @@ Input::
 let x = 11
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:24 AM[0m] File change detected. Starting incremental compilation...
@@ -126,6 +125,9 @@ Input::
 let xy = 11
 
 
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:35 AM[0m] File change detected. Starting incremental compilation...

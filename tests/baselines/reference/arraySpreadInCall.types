@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/spread/arraySpreadInCall.ts ===
+//// [tests/cases/conformance/es6/spread/arraySpreadInCall.ts] ////
+
+=== arraySpreadInCall.ts ===
 declare function f1(a: number, b: number, c: number, d: number, e: number, f: number): void;
 >f1 : (a: number, b: number, c: number, d: number, e: number, f: number) => void
 >a : number

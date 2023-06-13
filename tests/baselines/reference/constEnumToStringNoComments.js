@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constEnumToStringNoComments.ts] ////
+
 //// [constEnumToStringNoComments.ts]
 const enum Foo {
     X = 100,

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocTemplateTagNameResolution.ts] ////
+
 //// [file.js]
 /**
  * @template T

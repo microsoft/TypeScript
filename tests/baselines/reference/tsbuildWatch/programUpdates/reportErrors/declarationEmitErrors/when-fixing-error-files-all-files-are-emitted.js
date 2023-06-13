@@ -59,11 +59,11 @@ Shape signatures in builder refreshed for::
 /user/username/projects/solution/app/filewithouterror.ts (computed .d.ts during emit)
 
 FsWatches::
-/user/username/projects/solution/app/tsconfig.json: *new*
-  {}
 /user/username/projects/solution/app/filewitherror.ts: *new*
   {}
 /user/username/projects/solution/app/filewithouterror.ts: *new*
+  {}
+/user/username/projects/solution/app/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -83,6 +83,9 @@ export var myClassWithError = class {
     };
 
 
+Before running Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:30 AM[0m] File change detected. Starting incremental compilation...

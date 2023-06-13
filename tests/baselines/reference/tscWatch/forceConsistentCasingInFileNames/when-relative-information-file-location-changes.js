@@ -97,17 +97,19 @@ Shape signatures in builder refreshed for::
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/modulea.ts: *new*
   {}
-/user/username/projects/myproject/modulec.ts: *new*
-  {}
 /user/username/projects/myproject/moduleb.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/myproject/modulec.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -142,6 +144,9 @@ Input::
                     import a = require("./ModuleC")
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:35 AM[0m] File change detected. Starting incremental compilation...

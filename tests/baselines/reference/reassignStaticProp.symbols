@@ -1,4 +1,6 @@
-=== tests/cases/compiler/reassignStaticProp.ts ===
+//// [tests/cases/compiler/reassignStaticProp.ts] ////
+
+=== reassignStaticProp.ts ===
 class foo {
 >foo : Symbol(foo, Decl(reassignStaticProp.ts, 0, 0))
  

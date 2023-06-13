@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/metadataOfClassFromModule.ts] ////
+
 //// [metadataOfClassFromModule.ts]
 module MyModule {
 

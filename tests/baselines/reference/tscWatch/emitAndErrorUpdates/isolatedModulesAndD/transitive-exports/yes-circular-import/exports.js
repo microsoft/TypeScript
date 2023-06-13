@@ -101,15 +101,13 @@ Shape signatures in builder refreshed for::
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/app.ts: *new*
-  {}
-/user/username/projects/myproject/lib2/public.ts: *new*
-  {}
-/user/username/projects/myproject/lib2/data.ts: *new*
   {}
 /user/username/projects/myproject/lib1/public.ts: *new*
   {}
@@ -117,9 +115,13 @@ FsWatches::
   {}
 /user/username/projects/myproject/lib1/tools/toolsinterface.ts: *new*
   {}
+/user/username/projects/myproject/lib2/data.ts: *new*
+  {}
 /user/username/projects/myproject/lib2/data2.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/myproject/lib2/public.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -283,6 +285,9 @@ export interface ITest {
 }
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:12 AM[0m] File change detected. Starting incremental compilation...
@@ -353,6 +358,9 @@ export interface ITest {
 }
 
 
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:41 AM[0m] File change detected. Starting incremental compilation...
@@ -417,6 +425,9 @@ export interface ITest {
 }
 
 
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:02:10 AM[0m] File change detected. Starting incremental compilation...

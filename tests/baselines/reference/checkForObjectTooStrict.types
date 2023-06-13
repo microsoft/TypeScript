@@ -1,4 +1,6 @@
-=== tests/cases/compiler/checkForObjectTooStrict.ts ===
+//// [tests/cases/compiler/checkForObjectTooStrict.ts] ////
+
+=== checkForObjectTooStrict.ts ===
 module Foo {
 >Foo : typeof Foo
 

@@ -101,6 +101,9 @@ Input::
 export * from "../c/f3"
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:27 AM[0m] File change detected. Starting incremental compilation...
@@ -141,9 +144,9 @@ FsWatches::
   {}
 /a/b/f2.ts:
   {}
-/a/lib/lib.d.ts:
-  {}
 /a/c/f3.ts: *new*
+  {}
+/a/lib/lib.d.ts:
   {}
 
 exitCode:: ExitStatus.undefined

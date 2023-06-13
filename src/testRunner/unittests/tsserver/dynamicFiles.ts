@@ -1,10 +1,5 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    createServerHost,
-    File,
-    libFile,
-} from "../virtualFileSystemWithWatch";
-import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,
     createProjectService,
@@ -13,7 +8,12 @@ import {
     protocolFileLocationFromSubstring,
     setCompilerOptionsForInferredProjectsRequestForSession,
     verifyDynamic,
-} from "./helpers";
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+    File,
+    libFile,
+} from "../helpers/virtualFileSystemWithWatch";
 
 function verifyPathRecognizedAsDynamic(subscenario: string, path: string) {
     it(subscenario, () => {
@@ -81,7 +81,7 @@ describe("unittests:: tsserver:: dynamicFiles:: Untitled files", () => {
             content: "const x = 10;"
         };
         host.writeFile(untitled.path, untitled.content);
-        host.checkTimeoutQueueLength(0);
+        service.testhost.logTimeoutQueueLength();
         service.openClientFile(untitled.path, untitled.content, /*scriptKind*/ undefined, "/user/username/projects/myproject");
 
         service.closeClientFile(untitledFile);

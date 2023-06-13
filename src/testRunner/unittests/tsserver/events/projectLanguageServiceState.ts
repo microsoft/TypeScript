@@ -1,16 +1,16 @@
 import * as ts from "../../../_namespaces/ts";
 import {
-    createServerHost,
-    File,
-    libFile,
-} from "../../virtualFileSystemWithWatch";
-import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,
     createProjectService,
     createSession,
     openFilesForSession,
-} from "../helpers";
+} from "../../helpers/tsserver";
+import {
+    createServerHost,
+    File,
+    libFile,
+} from "../../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: events:: ProjectLanguageServiceStateEvent", () => {
     it("language service disabled events are triggered", () => {
@@ -40,7 +40,7 @@ describe("unittests:: tsserver:: events:: ProjectLanguageServiceStateEvent", () 
         session.logger.log(`Language service enabled: ${session.getProjectService().configuredProjects.get(config.path)!.languageServiceEnabled}`);
 
         host.writeFile(configWithExclude.path, configWithExclude.content);
-        host.checkTimeoutQueueLengthAndRun(2);
+        host.runQueuedTimeoutCallbacks();
         session.logger.log(`Language service enabled: ${session.getProjectService().configuredProjects.get(config.path)!.languageServiceEnabled}`);
         baselineTsserverLogs("events/projectLanguageServiceState", "language service disabled events are triggered", session);
     });

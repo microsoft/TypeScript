@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/prefixIncrementAsOperandOfPlusExpression.ts] ////
+
 //// [prefixIncrementAsOperandOfPlusExpression.ts]
 var x = 1;
 var y = 1;

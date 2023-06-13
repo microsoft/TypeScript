@@ -1,7 +1,7 @@
-tests/cases/conformance/salsa/main.js(5,1): error TS2304: Cannot find name 'chalk'.
+main.js(5,1): error TS2304: Cannot find name 'chalk'.
 
 
-==== tests/cases/conformance/salsa/main.js (1 errors) ====
+==== main.js (1 errors) ====
     const {
         chalk: { grey }
     } = require('./mod1');
@@ -10,7 +10,7 @@ tests/cases/conformance/salsa/main.js(5,1): error TS2304: Cannot find name 'chal
     ~~~~~
 !!! error TS2304: Cannot find name 'chalk'.
     
-==== tests/cases/conformance/salsa/mod1.js (0 errors) ====
+==== mod1.js (0 errors) ====
     const chalk = {
         grey: {}
     };

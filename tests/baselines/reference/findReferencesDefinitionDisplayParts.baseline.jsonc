@@ -6,9 +6,7 @@
 // 
 // type Options = "option 1" | "option 2";
 // let myOption: Options = "option 1";
-// 
-// someLabel:
-// break someLabel;
+// --- (line: 7) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/findReferencesDefinitionDisplayParts.ts ===
@@ -18,9 +16,7 @@
   // 
   // type Options = "option 1" | "option 2";
   // let myOption: Options = "option 1";
-  // 
-  // someLabel:
-  // break someLabel;
+  // --- (line: 7) skipped ---
 
   // === Details ===
   [
@@ -55,10 +51,7 @@
 // }
 // 
 // type Options = "option 1" | "option 2";
-// let myOption: Options = "option 1";
-// 
-// someLabel:
-// break someLabel;
+// --- (line: 6) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/findReferencesDefinitionDisplayParts.ts ===
@@ -67,10 +60,7 @@
   // }
   // 
   // type Options = "option 1" | "option 2";
-  // let myOption: Options = "option 1";
-  // 
-  // someLabel:
-  // break someLabel;
+  // --- (line: 6) skipped ---
 
   // === Details ===
   [
@@ -146,10 +136,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/findReferencesDefinitionDisplayParts.ts ===
-// class Greeter {
-//     someFunction() { this;  }
-// }
-// 
+// --- (line: 4) skipped ---
 // type Options = "option 1" | "option 2";
 // let myOption: Options = "option 1";
 // 
@@ -158,10 +145,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/findReferencesDefinitionDisplayParts.ts ===
-  // class Greeter {
-  //     someFunction() { this;  }
-  // }
-  // 
+  // --- (line: 4) skipped ---
   // type Options = "option 1" | "option 2";
   // let myOption: Options = "option 1";
   // 

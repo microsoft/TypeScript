@@ -55,13 +55,13 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/rootfolder/project/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /a/rootfolder/project/scripts/javascript.js: *new*
   {}
 /a/rootfolder/project/scripts/typescript.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/a/rootfolder/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -86,6 +86,9 @@ Input::
 var zz30 = 100;
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:34 AM[0m] File change detected. Starting incremental compilation...

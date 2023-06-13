@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads04.ts] ////
+
 //// [stringLiteralTypesOverloads04.ts]
 declare function f(x: (p: "foo" | "bar") => "foo");
 

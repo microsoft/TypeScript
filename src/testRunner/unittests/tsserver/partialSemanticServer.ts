@@ -1,10 +1,5 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    createServerHost,
-    File,
-    libFile,
-} from "../virtualFileSystemWithWatch";
-import {
     baselineTsserverLogs,
     closeFilesForSession,
     createLoggerWithInMemoryLogs,
@@ -12,7 +7,12 @@ import {
     openFilesForSession,
     protocolFileLocationFromSubstring,
     verifyGetErrRequest,
-} from "./helpers";
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+    File,
+    libFile,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: Semantic operations on partialSemanticServer", () => {
     function setup() {
@@ -127,7 +127,7 @@ import { something } from "something";
         assert.isTrue(diagnostics.length === 1);
         assert.equal(diagnostics[0].messageText, expectedErrorMessage);
 
-        verifyGetErrRequest({ session, host, files: [file1], skip: [{ semantic: true, suggestion: true }] });
+        verifyGetErrRequest({ session, files: [file1], skip: [{ semantic: true, suggestion: true }] });
         baselineTsserverLogs("partialSemanticServer", "syntactic diagnostics are returned with no error", session);
     });
 

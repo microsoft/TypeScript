@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/internalAliasWithDottedNameEmit.ts] ////
+
 //// [internalAliasWithDottedNameEmit.ts]
 module a.b.c {
       export var d;
