@@ -1,4 +1,6 @@
-=== tests/cases/compiler/module_augmentExistingVariable.ts ===
+//// [tests/cases/compiler/module_augmentExistingVariable.ts] ////
+
+=== module_augmentExistingVariable.ts ===
 var console: any;
 >console : Symbol(console, Decl(module_augmentExistingVariable.ts, 0, 3))
 

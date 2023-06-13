@@ -1,7 +1,7 @@
-tests/cases/conformance/classes/members/privateNames/privateNameAmbientNoImplicitAny.ts(5,5): error TS7008: Member '#prop' implicitly has an 'any' type.
+privateNameAmbientNoImplicitAny.ts(5,5): error TS7008: Member '#prop' implicitly has an 'any' type.
 
 
-==== tests/cases/conformance/classes/members/privateNames/privateNameAmbientNoImplicitAny.ts (1 errors) ====
+==== privateNameAmbientNoImplicitAny.ts (1 errors) ====
     declare class A {
         #prop;
     }

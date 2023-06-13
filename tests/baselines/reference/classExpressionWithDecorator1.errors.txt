@@ -1,7 +1,7 @@
-tests/cases/compiler/classExpressionWithDecorator1.ts(1,9): error TS1206: Decorators are not valid here.
+classExpressionWithDecorator1.ts(1,9): error TS1206: Decorators are not valid here.
 
 
-==== tests/cases/compiler/classExpressionWithDecorator1.ts (1 errors) ====
+==== classExpressionWithDecorator1.ts (1 errors) ====
     var v = @decorate class C { static p = 1 };
             ~
 !!! error TS1206: Decorators are not valid here.

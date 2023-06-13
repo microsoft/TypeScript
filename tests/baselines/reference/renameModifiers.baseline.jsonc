@@ -37,12 +37,7 @@
 //     readonly b;
 //     public c;
 //     protected d;
-//     private e;
-// }
-// const enum E {
-// }
-// async function fn() {}
-// export default class C2 {}
+// --- (line: 6) skipped ---
 
 
 
@@ -54,11 +49,7 @@
 //     public c;
 //     protected d;
 //     private e;
-// }
-// const enum E {
-// }
-// async function fn() {}
-// export default class C2 {}
+// --- (line: 7) skipped ---
 
 
 
@@ -71,10 +62,7 @@
 //     protected d;
 //     private e;
 // }
-// const enum E {
-// }
-// async function fn() {}
-// export default class C2 {}
+// --- (line: 8) skipped ---
 
 
 
@@ -88,9 +76,7 @@
 //     private e;
 // }
 // const enum E {
-// }
-// async function fn() {}
-// export default class C2 {}
+// --- (line: 9) skipped ---
 
 
 
@@ -112,10 +98,7 @@
 
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameModifiers.ts ===
-// declare abstract class C1 {
-//     static a;
-//     readonly b;
-//     public c;
+// --- (line: 4) skipped ---
 //     protected d;
 //     private e;
 // }
@@ -128,12 +111,7 @@
 
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameModifiers.ts ===
-// declare abstract class C1 {
-//     static a;
-//     readonly b;
-//     public c;
-//     protected d;
-//     private e;
+// --- (line: 6) skipped ---
 // }
 // const enum E {
 // }
@@ -144,13 +122,7 @@
 
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameModifiers.ts ===
-// declare abstract class C1 {
-//     static a;
-//     readonly b;
-//     public c;
-//     protected d;
-//     private e;
-// }
+// --- (line: 7) skipped ---
 // const enum E {
 // }
 // async function fn() {}
@@ -160,13 +132,7 @@
 
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameModifiers.ts ===
-// declare abstract class C1 {
-//     static a;
-//     readonly b;
-//     public c;
-//     protected d;
-//     private e;
-// }
+// --- (line: 7) skipped ---
 // const enum E {
 // }
 // async function fn() {}

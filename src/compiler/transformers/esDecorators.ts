@@ -46,6 +46,7 @@ import {
     getAllDecoratorsOfClassElement,
     getCommentRange,
     getEffectiveBaseTypeNode,
+    getEmitScriptTarget,
     getFirstConstructorWithBody,
     getHeritageClause,
     getNonAssignmentOperatorForCompoundAssignment,
@@ -278,6 +279,9 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         endLexicalEnvironment,
         hoistVariableDeclaration,
     } = context;
+
+    const compilerOptions = context.getCompilerOptions();
+    const languageVersion = getEmitScriptTarget(compilerOptions);
 
     let top: LexicalEnvironmentStackEntry | undefined;
     let classInfo: ClassInfo | undefined;
@@ -636,7 +640,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
     function transformClassLike(node: ClassLikeDeclaration, className: Expression) {
         startLexicalEnvironment();
 
-        const classReference = node.name ?? factory.getGeneratedNameForNode(node);
+        const classReference = factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ false, /*ignoreAssignedName*/ true);
         const classInfo = createClassInfo(node);
         const classDefinitionStatements: Statement[] = [];
         let leadingBlockStatements: Statement[] | undefined;
@@ -1003,7 +1007,14 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
                 Debug.assertIsDefined(node.name, "A class declaration that is not a default export must have a name.");
                 const iife = transformClassLike(node, factory.createStringLiteralFromNode(node.name));
                 const modifiers = visitNodes(node.modifiers, modifierVisitor, isModifier);
-                const varDecl = factory.createVariableDeclaration(node.name, /*exclamationToken*/ undefined, /*type*/ undefined, iife);
+                // When we transform to ES5/3 this will be moved inside an IIFE and should reference the name
+                // without any block-scoped variable collision handling
+                const declName = languageVersion <= ScriptTarget.ES2015 ?
+                    factory.getInternalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true) :
+                    factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
+                const varDecl = factory.createVariableDeclaration(declName, /*exclamationToken*/ undefined, /*type*/ undefined, iife);
+                setOriginalNode(varDecl, node);
+
                 const varDecls = factory.createVariableDeclarationList([varDecl], NodeFlags.Let);
                 const statement = factory.createVariableStatement(modifiers, varDecls);
                 setOriginalNode(statement, node);

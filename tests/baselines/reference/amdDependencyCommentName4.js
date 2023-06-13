@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/amdDependencyCommentName4.ts] ////
+
 //// [amdDependencyCommentName4.ts]
 ///<amd-dependency path='aliasedModule5' name='n1'/>
 ///<amd-dependency path='unaliasedModule3'/>

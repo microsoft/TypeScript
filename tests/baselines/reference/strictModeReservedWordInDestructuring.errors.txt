@@ -1,13 +1,13 @@
-tests/cases/compiler/strictModeReservedWordInDestructuring.ts(2,6): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
-tests/cases/compiler/strictModeReservedWordInDestructuring.ts(3,10): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
-tests/cases/compiler/strictModeReservedWordInDestructuring.ts(4,7): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
-tests/cases/compiler/strictModeReservedWordInDestructuring.ts(5,15): error TS1212: Identifier expected. 'static' is a reserved word in strict mode.
-tests/cases/compiler/strictModeReservedWordInDestructuring.ts(5,38): error TS1212: Identifier expected. 'package' is a reserved word in strict mode.
-tests/cases/compiler/strictModeReservedWordInDestructuring.ts(6,7): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
-tests/cases/compiler/strictModeReservedWordInDestructuring.ts(6,15): error TS1212: Identifier expected. 'protected' is a reserved word in strict mode.
+strictModeReservedWordInDestructuring.ts(2,6): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
+strictModeReservedWordInDestructuring.ts(3,10): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
+strictModeReservedWordInDestructuring.ts(4,7): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
+strictModeReservedWordInDestructuring.ts(5,15): error TS1212: Identifier expected. 'static' is a reserved word in strict mode.
+strictModeReservedWordInDestructuring.ts(5,38): error TS1212: Identifier expected. 'package' is a reserved word in strict mode.
+strictModeReservedWordInDestructuring.ts(6,7): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
+strictModeReservedWordInDestructuring.ts(6,15): error TS1212: Identifier expected. 'protected' is a reserved word in strict mode.
 
 
-==== tests/cases/compiler/strictModeReservedWordInDestructuring.ts (7 errors) ====
+==== strictModeReservedWordInDestructuring.ts (7 errors) ====
     "use strict"
     var [public] = [1];
          ~~~~~~

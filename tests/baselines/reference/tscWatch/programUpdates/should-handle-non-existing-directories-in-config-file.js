@@ -45,17 +45,15 @@ Shape signatures in builder refreshed for::
 /a/src/app.ts (used version)
 
 PolledWatches::
-/a/node_modules/@types: *new*
-  {"pollingInterval":500}
 /a/notexistingfolder: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /a/src/app.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/a/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::

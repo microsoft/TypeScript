@@ -1,4 +1,6 @@
-=== tests/cases/compiler/callOverloads3.ts ===
+//// [tests/cases/compiler/callOverloads3.ts] ////
+
+=== callOverloads3.ts ===
 function Foo():Foo; // error
 >Foo : typeof Foo
 

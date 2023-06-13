@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nonMergedOverloads.ts] ////
+
 //// [nonMergedOverloads.ts]
 var f = 10;
 

@@ -35,7 +35,7 @@ export async function exec(cmd, args, options = {}) {
                 }
                 else {
                     const reason = options.token?.signaled ? options.token.reason ?? new CancelError() :
-                        new Error(`Process exited with code: ${exitCode}`);
+                        new ExecError(exitCode);
                     reject(reason);
                 }
                 subscription?.unsubscribe();
@@ -51,6 +51,19 @@ export async function exec(cmd, args, options = {}) {
             setTimeout(() => resolve({ exitCode: undefined }), 100);
         }
     }));
+}
+
+export class ExecError extends Error {
+    exitCode;
+
+    /**
+     * @param {number | null} exitCode
+     * @param {string} message
+     */
+    constructor(exitCode, message = `Process exited with code: ${exitCode}`) {
+        super(message);
+        this.exitCode = exitCode;
+    }
 }
 
 /**

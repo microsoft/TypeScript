@@ -53,6 +53,8 @@ DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
 [[90m12:00:40 AM[0m] Found 0 errors. Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project2 1 undefined Wild card directory
@@ -78,23 +80,25 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/projects/project2/class2.ts (computed .d.ts during emit)
 
 PolledWatches::
-/user/username/projects/myproject/projects/project2/node_modules/@types: *new*
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types: *new*
+/user/username/projects/myproject/projects/project2/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/projects/project2/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/projects/project1/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/projects/project1/class1.ts: *new*
   {}
+/user/username/projects/myproject/projects/project1/tsconfig.json: *new*
+  {}
 /user/username/projects/myproject/projects/project2/class2.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/myproject/projects/project2/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -229,25 +233,27 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/projects/project2/class2.ts (computed .d.ts)
 
 PolledWatches::
-/user/username/projects/myproject/projects/project2/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/projects/project2/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/projects/project2/tsconfig.json:
-  {}
-/user/username/projects/myproject/projects/project1/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/projects/project1/class1.ts:
   {}
+/user/username/projects/myproject/projects/project1/class3.ts: *new*
+  {}
+/user/username/projects/myproject/projects/project1/tsconfig.json:
+  {}
 /user/username/projects/myproject/projects/project2/class2.ts:
   {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/projects/project1/class3.ts: *new*
+/user/username/projects/myproject/projects/project2/tsconfig.json:
   {}
 
 FsWatchesRecursive::

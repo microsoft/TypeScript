@@ -966,13 +966,6 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             statements.push(exportStatement);
         }
 
-        const emitFlags = getEmitFlags(node);
-        if ((emitFlags & EmitFlags.HasEndOfDeclarationMarker) === 0) {
-            // Add a DeclarationMarker as a marker for the end of the declaration
-            statements.push(factory.createEndOfDeclarationMarker(node));
-            setEmitFlags(statement, emitFlags | EmitFlags.HasEndOfDeclarationMarker);
-        }
-
         return singleOrMany(statements);
     }
 

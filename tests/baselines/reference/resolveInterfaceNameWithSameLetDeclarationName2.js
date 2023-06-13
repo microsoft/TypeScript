@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/resolveInterfaceNameWithSameLetDeclarationName2.ts] ////
+
 //// [resolveInterfaceNameWithSameLetDeclarationName2.ts]
 interface foo { }
 interface bar { }

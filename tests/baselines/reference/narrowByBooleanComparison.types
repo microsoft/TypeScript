@@ -1,4 +1,6 @@
-=== tests/cases/compiler/narrowByBooleanComparison.ts ===
+//// [tests/cases/compiler/narrowByBooleanComparison.ts] ////
+
+=== narrowByBooleanComparison.ts ===
 type A = { type: "A" };
 >A : { type: "A"; }
 >type : "A"

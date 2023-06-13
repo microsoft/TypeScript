@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/decorators/class/property/decoratorOnClassProperty3.ts] ////
+
 //// [decoratorOnClassProperty3.ts]
 declare function dec(target: any, propertyKey: string): void;
 

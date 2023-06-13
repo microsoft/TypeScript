@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/typeFromPropertyAssignment31.ts ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment31.ts] ////
+
+=== typeFromPropertyAssignment31.ts ===
 function ExpandoMerge(n: number) {
 >ExpandoMerge : typeof ExpandoMerge
 >n : number

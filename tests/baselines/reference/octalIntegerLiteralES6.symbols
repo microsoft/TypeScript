@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/binaryAndOctalIntegerLiteral/octalIntegerLiteralES6.ts ===
+//// [tests/cases/conformance/es6/binaryAndOctalIntegerLiteral/octalIntegerLiteralES6.ts] ////
+
+=== octalIntegerLiteralES6.ts ===
 var oct1 = 0o45436;
 >oct1 : Symbol(oct1, Decl(octalIntegerLiteralES6.ts, 0, 3))
 

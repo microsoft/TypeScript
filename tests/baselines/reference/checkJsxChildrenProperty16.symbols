@@ -1,0 +1,65 @@
+//// [tests/cases/conformance/jsx/checkJsxChildrenProperty16.tsx] ////
+
+=== checkJsxChildrenProperty16.tsx ===
+/// <reference path="react16.d.ts" />
+
+// repro from #53493
+
+import React = require('react');
+>React : Symbol(React, Decl(checkJsxChildrenProperty16.tsx, 0, 0))
+
+export type Props =
+>Props : Symbol(Props, Decl(checkJsxChildrenProperty16.tsx, 4, 32))
+
+  | { renderNumber?: false; children: (arg: string) => void }
+>renderNumber : Symbol(renderNumber, Decl(checkJsxChildrenProperty16.tsx, 7, 5))
+>children : Symbol(children, Decl(checkJsxChildrenProperty16.tsx, 7, 27))
+>arg : Symbol(arg, Decl(checkJsxChildrenProperty16.tsx, 7, 39))
+
+  | {
+      renderNumber: true;
+>renderNumber : Symbol(renderNumber, Decl(checkJsxChildrenProperty16.tsx, 8, 5))
+
+      children: (arg: number) => void;
+>children : Symbol(children, Decl(checkJsxChildrenProperty16.tsx, 9, 25))
+>arg : Symbol(arg, Decl(checkJsxChildrenProperty16.tsx, 10, 17))
+
+    };
+
+export declare function Foo(props: Props): JSX.Element;
+>Foo : Symbol(Foo, Decl(checkJsxChildrenProperty16.tsx, 11, 6))
+>props : Symbol(props, Decl(checkJsxChildrenProperty16.tsx, 13, 28))
+>Props : Symbol(Props, Decl(checkJsxChildrenProperty16.tsx, 4, 32))
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12))
+>Element : Symbol(JSX.Element, Decl(react16.d.ts, 2494, 23))
+
+export const Test = () => {
+>Test : Symbol(Test, Decl(checkJsxChildrenProperty16.tsx, 15, 12))
+
+  return (
+    <>
+      <Foo>{(value) => {}}</Foo>
+>Foo : Symbol(Foo, Decl(checkJsxChildrenProperty16.tsx, 11, 6))
+>value : Symbol(value, Decl(checkJsxChildrenProperty16.tsx, 18, 13))
+>Foo : Symbol(Foo, Decl(checkJsxChildrenProperty16.tsx, 11, 6))
+
+      <Foo renderNumber>{(value) => {}}</Foo>
+>Foo : Symbol(Foo, Decl(checkJsxChildrenProperty16.tsx, 11, 6))
+>renderNumber : Symbol(renderNumber, Decl(checkJsxChildrenProperty16.tsx, 19, 10))
+>value : Symbol(value, Decl(checkJsxChildrenProperty16.tsx, 19, 26))
+>Foo : Symbol(Foo, Decl(checkJsxChildrenProperty16.tsx, 11, 6))
+
+      <Foo children={(value) => {}} />
+>Foo : Symbol(Foo, Decl(checkJsxChildrenProperty16.tsx, 11, 6))
+>children : Symbol(children, Decl(checkJsxChildrenProperty16.tsx, 21, 10))
+>value : Symbol(value, Decl(checkJsxChildrenProperty16.tsx, 21, 22))
+
+      <Foo renderNumber children={(value) => {}} />
+>Foo : Symbol(Foo, Decl(checkJsxChildrenProperty16.tsx, 11, 6))
+>renderNumber : Symbol(renderNumber, Decl(checkJsxChildrenProperty16.tsx, 22, 10))
+>children : Symbol(children, Decl(checkJsxChildrenProperty16.tsx, 22, 23))
+>value : Symbol(value, Decl(checkJsxChildrenProperty16.tsx, 22, 35))
+
+    </>
+  );
+};

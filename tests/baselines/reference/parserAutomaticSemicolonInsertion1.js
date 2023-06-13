@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/AutomaticSemicolonInsertion/parserAutomaticSemicolonInsertion1.ts] ////
+
 //// [parserAutomaticSemicolonInsertion1.ts]
 interface I {
     (): void;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/cyclicGenericTypeInstantiation.ts ===
+//// [tests/cases/compiler/cyclicGenericTypeInstantiation.ts] ////
+
+=== cyclicGenericTypeInstantiation.ts ===
 function foo<T>() {
 >foo : <T>() => { y2: { y2: { y2: { y2: { y2: { y2: { y2: { y2: { y2: { y2: { y2: any; }; }; }; }; }; }; }; }; }; }; }
 

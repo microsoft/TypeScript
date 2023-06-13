@@ -1,4 +1,6 @@
-=== tests/cases/conformance/internalModules/DeclarationMerging/module.d.ts ===
+//// [tests/cases/conformance/internalModules/DeclarationMerging/AmbientModuleAndAmbientWithSameNameAndCommonRoot.ts] ////
+
+=== module.d.ts ===
 declare module A {
 >A : typeof A
 
@@ -17,7 +19,7 @@ declare module A {
     }
 }
 
-=== tests/cases/conformance/internalModules/DeclarationMerging/class.d.ts ===
+=== class.d.ts ===
 declare module A {
 >A : typeof A
 
@@ -36,7 +38,7 @@ declare module A {
     }
 }
 
-=== tests/cases/conformance/internalModules/DeclarationMerging/test.ts ===
+=== test.ts ===
 var p: { x: number; y: number; }
 >p : { x: number; y: number; }
 >x : number

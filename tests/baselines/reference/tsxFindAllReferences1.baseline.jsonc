@@ -162,13 +162,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
-//     interface Element { }
-//     interface IntrinsicElements {
-//         div: {
-//             name?: string;
-//             isOpen?: boolean;
-//         };
+// --- (line: 7) skipped ---
 //         span: { n: string; };
 //     }
 // }

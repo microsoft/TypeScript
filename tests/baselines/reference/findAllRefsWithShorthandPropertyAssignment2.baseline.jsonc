@@ -4,10 +4,7 @@
 // 
 // module M { export var dx; }
 // module M {
-//    var z = 100;
-//    export var y = { dx, z };
-// }
-// M.y.dx;
+// --- (line: 5) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsWithShorthandPropertyAssignment2.ts ===
@@ -15,10 +12,7 @@
   // 
   // module M { export var dx; }
   // module M {
-  //    var z = 100;
-  //    export var y = { dx, z };
-  // }
-  // M.y.dx;
+  // --- (line: 5) skipped ---
 
   // === Details ===
   [

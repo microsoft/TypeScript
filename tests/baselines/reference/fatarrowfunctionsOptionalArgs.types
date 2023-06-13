@@ -1,4 +1,6 @@
-=== tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts ===
+//// [tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts] ////
+
+=== fatarrowfunctionsOptionalArgs.ts ===
 // valid
 
 // no params

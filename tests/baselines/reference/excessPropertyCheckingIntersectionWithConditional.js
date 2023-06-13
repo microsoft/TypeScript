@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/excessPropertyCheckingIntersectionWithConditional.ts] ////
+
 //// [excessPropertyCheckingIntersectionWithConditional.ts]
 type Foo<K> = K extends unknown ? { a: number } : unknown
 const createDefaultExample = <K,>(x: K): Foo<K> & { x: K; } => {

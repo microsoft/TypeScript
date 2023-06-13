@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/declarationMapsOutFile2.ts] ////
+
+=== a.ts ===
 class Foo {
 >Foo : Foo
 
@@ -22,7 +24,7 @@ class Foo {
 >Foo : typeof Foo
     }
 }
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 const c = new Foo();
 >c : Foo
 >new Foo() : Foo

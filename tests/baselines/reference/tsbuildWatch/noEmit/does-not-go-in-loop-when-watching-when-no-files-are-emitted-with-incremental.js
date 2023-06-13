@@ -60,11 +60,11 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/b.ts (used version)
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json: *new*
-  {}
 /user/username/projects/myproject/a.js: *new*
   {}
 /user/username/projects/myproject/b.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::

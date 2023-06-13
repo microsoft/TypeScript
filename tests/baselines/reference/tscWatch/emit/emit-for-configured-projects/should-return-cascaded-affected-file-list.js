@@ -74,16 +74,8 @@ Shape signatures in builder refreshed for::
 /a/b/globalfile3.ts (used version)
 /a/b/modulefile2.ts (used version)
 
-PolledWatches::
-/a/b/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
-/a/b/tsconfig.json: *new*
-  {}
 /a/b/file1consumer1.ts: *new*
-  {}
-/a/b/modulefile1.ts: *new*
   {}
 /a/b/file1consumer1consumer1.ts: *new*
   {}
@@ -91,7 +83,11 @@ FsWatches::
   {}
 /a/b/globalfile3.ts: *new*
   {}
+/a/b/modulefile1.ts: *new*
+  {}
 /a/b/modulefile2.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
   {}
 /a/lib/lib.d.ts: *new*
   {}

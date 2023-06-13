@@ -6,12 +6,7 @@
 //     }
 //     abstract class B {}
 // }
-// switch (0) {
-//     case 0:
-//         abstract class A { abstract m(): void; }
-//     default:
-//         abstract class B { abstract m(): void; }
-// }
+// --- (line: 7) skipped ---
 
 
 
@@ -23,22 +18,13 @@
 //     }
 //     abstract class B {}
 // }
-// switch (0) {
-//     case 0:
-//         abstract class A { abstract m(): void; }
-//     default:
-//         abstract class B { abstract m(): void; }
-// }
+// --- (line: 7) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesAbstract03.ts ===
-// function f() {
-//     abstract class A {
-//         abstract m(): void;
-//     }
-//     abstract class B {}
+// --- (line: 5) skipped ---
 // }
 // switch (0) {
 //     case 0:
@@ -51,11 +37,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesAbstract03.ts ===
-// function f() {
-//     abstract class A {
-//         abstract m(): void;
-//     }
-//     abstract class B {}
+// --- (line: 5) skipped ---
 // }
 // switch (0) {
 //     case 0:
@@ -68,13 +50,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesAbstract03.ts ===
-// function f() {
-//     abstract class A {
-//         abstract m(): void;
-//     }
-//     abstract class B {}
-// }
-// switch (0) {
+// --- (line: 7) skipped ---
 //     case 0:
 //         abstract class A { abstract m(): void; }
 //     default:
@@ -85,13 +61,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesAbstract03.ts ===
-// function f() {
-//     abstract class A {
-//         abstract m(): void;
-//     }
-//     abstract class B {}
-// }
-// switch (0) {
+// --- (line: 7) skipped ---
 //     case 0:
 //         abstract class A { abstract m(): void; }
 //     default:

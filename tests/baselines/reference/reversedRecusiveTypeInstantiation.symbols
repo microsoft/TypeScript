@@ -1,4 +1,6 @@
-=== tests/cases/compiler/reversedRecusiveTypeInstantiation.ts ===
+//// [tests/cases/compiler/reversedRecusiveTypeInstantiation.ts] ////
+
+=== reversedRecusiveTypeInstantiation.ts ===
 interface A<StringArgPos1, NumberArgPos2> {
 >A : Symbol(A, Decl(reversedRecusiveTypeInstantiation.ts, 0, 0))
 >StringArgPos1 : Symbol(StringArgPos1, Decl(reversedRecusiveTypeInstantiation.ts, 0, 12))

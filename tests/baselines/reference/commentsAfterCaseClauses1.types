@@ -1,4 +1,6 @@
-=== tests/cases/compiler/commentsAfterCaseClauses1.ts ===
+//// [tests/cases/compiler/commentsAfterCaseClauses1.ts] ////
+
+=== commentsAfterCaseClauses1.ts ===
 function getSecurity(level) {
 >getSecurity : (level: any) => "Hi" | "hello" | "world"
 >level : any

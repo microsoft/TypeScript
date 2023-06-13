@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/usingModuleWithExportImportInValuePosition.ts] ////
+
 //// [usingModuleWithExportImportInValuePosition.ts]
 module A {
 export var x = 'hello world'

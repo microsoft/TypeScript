@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/correlatedUnions.ts] ////
+
 //// [correlatedUnions.ts]
 // Various repros from #30581
 

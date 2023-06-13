@@ -28,13 +28,7 @@
   //     }
   // 
   //     public f(p) {
-  //         this.p = p;
-  //     }
-  // 
-  // }
-  // 
-  // var n = new foo(undefined);
-  // n.p = null;
+  // --- (line: 10) skipped ---
 
   // === Details ===
   [
@@ -120,13 +114,7 @@
   //     }
   // 
   //     public f(p) {
-  //         this.p = p;
-  //     }
-  // 
-  // }
-  // 
-  // var n = new foo(undefined);
-  // n.p = null;
+  // --- (line: 10) skipped ---
 
   // === Details ===
   [
@@ -216,9 +204,7 @@
   //     }
   // 
   // }
-  // 
-  // var n = new foo(undefined);
-  // n.p = null;
+  // --- (line: 14) skipped ---
 
   // === Details ===
   [

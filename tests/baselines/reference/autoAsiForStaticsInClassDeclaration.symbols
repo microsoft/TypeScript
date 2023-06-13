@@ -1,4 +1,6 @@
-=== tests/cases/compiler/autoAsiForStaticsInClassDeclaration.ts ===
+//// [tests/cases/compiler/autoAsiForStaticsInClassDeclaration.ts] ////
+
+=== autoAsiForStaticsInClassDeclaration.ts ===
 class C {
 >C : Symbol(C, Decl(autoAsiForStaticsInClassDeclaration.ts, 0, 0))
 

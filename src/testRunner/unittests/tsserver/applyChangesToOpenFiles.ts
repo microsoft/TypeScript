@@ -2,17 +2,17 @@ import * as ts from "../../_namespaces/ts";
 import {
     commonFile1,
     commonFile2,
-} from "../tscWatch/helpers";
-import {
-    createServerHost,
-    File,
-    libFile,
-} from "../virtualFileSystemWithWatch";
+} from "../helpers/tscWatch";
 import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,
     createSession,
-} from "./helpers";
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+    File,
+    libFile,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: applyChangesToOpenFiles", () => {
     function fileContentWithComment(file: File) {

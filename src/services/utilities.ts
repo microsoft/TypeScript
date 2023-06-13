@@ -54,6 +54,7 @@ import {
     ElementAccessExpression,
     EmitFlags,
     EmitHint,
+    emitModuleKindIsNonNodeESM,
     emptyArray,
     EndOfFileToken,
     endsWith,
@@ -88,8 +89,10 @@ import {
     getAssignmentDeclarationKind,
     getCombinedNodeFlagsAlwaysIncludeJSDoc,
     getDirectoryPath,
+    getEmitModuleKind,
     getEmitScriptTarget,
     getExternalModuleImportEqualsDeclarationExpression,
+    getImpliedNodeFormatForFile,
     getIndentString,
     getJSDocEnumTag,
     getLastChild,
@@ -108,8 +111,10 @@ import {
     getTextOfIdentifierOrLiteral,
     getTextOfNode,
     getTypesPackageName,
+    hasJSFileExtension,
     hasSyntacticModifier,
     HeritageClause,
+    hostGetCanonicalFileName,
     Identifier,
     identifierIsThisKeyword,
     identity,
@@ -256,6 +261,7 @@ import {
     JsTyping,
     JsxEmit,
     JsxOpeningLikeElement,
+    JsxTagNameExpression,
     LabeledStatement,
     LanguageServiceHost,
     last,
@@ -267,6 +273,7 @@ import {
     ModifierFlags,
     ModuleDeclaration,
     ModuleInstanceState,
+    ModuleKind,
     ModuleResolutionKind,
     ModuleSpecifierResolutionHost,
     moduleSpecifiers,
@@ -350,6 +357,7 @@ import {
     textSpanEnd,
     Token,
     tokenToString,
+    toPath,
     tryCast,
     Type,
     TypeChecker,
@@ -610,7 +618,7 @@ function selectTagNameOfJsxOpeningLikeElement(node: JsxOpeningLikeElement) {
     return node.tagName;
 }
 
-function isCalleeWorker<T extends CallExpression | NewExpression | TaggedTemplateExpression | Decorator | JsxOpeningLikeElement>(node: Node, pred: (node: Node) => node is T, calleeSelector: (node: T) => Expression, includeElementAccess: boolean, skipPastOuterExpressions: boolean) {
+function isCalleeWorker<T extends CallExpression | NewExpression | TaggedTemplateExpression | Decorator | JsxOpeningLikeElement>(node: Node, pred: (node: Node) => node is T, calleeSelector: (node: T) => Expression | JsxTagNameExpression, includeElementAccess: boolean, skipPastOuterExpressions: boolean) {
     let target = includeElementAccess ? climbPastPropertyOrElementAccess(node) : climbPastPropertyAccess(node);
     if (skipPastOuterExpressions) {
         target = skipOuterExpressions(target);
@@ -1739,7 +1747,14 @@ export function findPrecedingToken(position: number, sourceFile: SourceFileLike,
                 if (lookInPreviousChild) {
                     // actual start of the node is past the position - previous token should be at the end of previous child
                     const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ i, sourceFile, n.kind);
-                    return candidate && findRightmostToken(candidate, sourceFile);
+                    if (candidate) {
+                        // Ensure we recurse into JSDoc nodes with children.
+                        if (!excludeJsdoc && isJSDocCommentContainingNode(candidate) && candidate.getChildren(sourceFile).length) {
+                            return find(candidate);
+                        }
+                        return findRightmostToken(candidate, sourceFile);
+                    }
+                    return undefined;
                 }
                 else {
                     // candidate should be in this node
@@ -3130,7 +3145,12 @@ export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T>, in
 export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined, includeTrivia?: boolean): NodeArray<T> | undefined;
 /** @internal */
 export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined, includeTrivia = true): NodeArray<T> | undefined {
-    return nodes && factory.createNodeArray(nodes.map(n => getSynthesizedDeepClone(n, includeTrivia)), nodes.hasTrailingComma);
+    if (nodes) {
+        const cloned = factory.createNodeArray(nodes.map(n => getSynthesizedDeepClone(n, includeTrivia)), nodes.hasTrailingComma);
+        setTextRange(cloned, nodes);
+        return cloned;
+    }
+    return nodes;
 }
 
 /** @internal */
@@ -4157,4 +4177,46 @@ export function newCaseClauseTracker(checker: TypeChecker, clauses: readonly (Ca
                 return existingBigInts.has(pseudoBigIntToString(value));
         }
     }
+}
+
+/** @internal */
+export function fileShouldUseJavaScriptRequire(file: SourceFile | string, program: Program, host: LanguageServiceHost, preferRequire?: boolean) {
+    const fileName = typeof file === "string" ? file : file.fileName;
+    if (!hasJSFileExtension(fileName)) {
+        return false;
+    }
+    const compilerOptions = program.getCompilerOptions();
+    const moduleKind = getEmitModuleKind(compilerOptions);
+    const impliedNodeFormat = typeof file === "string"
+        ? getImpliedNodeFormatForFile(toPath(file, host.getCurrentDirectory(), hostGetCanonicalFileName(host)), program.getPackageJsonInfoCache?.(), host, compilerOptions)
+        : file.impliedNodeFormat;
+
+    if (impliedNodeFormat === ModuleKind.ESNext) {
+        return false;
+    }
+    if (impliedNodeFormat === ModuleKind.CommonJS) {
+        // Since we're in a JS file, assume the user is writing the JS that will run
+        // (i.e., assume `noEmit`), so a CJS-format file should just have require
+        // syntax, rather than imports that will be downleveled to `require`.
+        return true;
+    }
+    if (compilerOptions.verbatimModuleSyntax && moduleKind === ModuleKind.CommonJS) {
+        // Using ESM syntax under these options would result in an error.
+        return true;
+    }
+    if (compilerOptions.verbatimModuleSyntax && emitModuleKindIsNonNodeESM(moduleKind)) {
+        return false;
+    }
+
+    // impliedNodeFormat is undefined and `verbatimModuleSyntax` is off (or in an invalid combo)
+    // Use heuristics from existing code
+    if (typeof file === "object") {
+        if (file.commonJsModuleIndicator) {
+            return true;
+        }
+        if (file.externalModuleIndicator) {
+            return false;
+        }
+    }
+    return preferRequire;
 }
