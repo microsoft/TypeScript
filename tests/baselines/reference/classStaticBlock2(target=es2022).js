@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock2.ts] ////
+
 //// [classStaticBlock2.ts]
 const a = 1;
 const b = 2;

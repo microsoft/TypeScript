@@ -1,0 +1,96 @@
+error TS-1: Pre-emit (11) and post-emit (13) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
+templateInsideCallback.js(2,13): error TS8021: JSDoc '@typedef' tag should either have a type annotation or be followed by '@property' or '@member' tags.
+templateInsideCallback.js(9,5): error TS8039: A JSDoc '@template' tag may not follow a '@typedef', '@callback', or '@overload' tag
+templateInsideCallback.js(10,12): error TS2304: Cannot find name 'T'.
+templateInsideCallback.js(15,11): error TS2315: Type 'Call' is not generic.
+templateInsideCallback.js(17,18): error TS7006: Parameter 'x' implicitly has an 'any' type.
+templateInsideCallback.js(23,5): error TS8039: A JSDoc '@template' tag may not follow a '@typedef', '@callback', or '@overload' tag
+templateInsideCallback.js(30,5): error TS8039: A JSDoc '@template' tag may not follow a '@typedef', '@callback', or '@overload' tag
+templateInsideCallback.js(32,12): error TS2304: Cannot find name 'T'.
+templateInsideCallback.js(33,16): error TS2304: Cannot find name 'T'.
+templateInsideCallback.js(38,5): error TS8039: A JSDoc '@template' tag may not follow a '@typedef', '@callback', or '@overload' tag
+templateInsideCallback.js(39,12): error TS2304: Cannot find name 'T'.
+
+
+!!! error TS-1: Pre-emit (11) and post-emit (13) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
+!!! related TS-1: The excess diagnostics are:
+!!! related TS7012 templateInsideCallback.js:29:5: This overload implicitly returns the type 'any' because it lacks a return type annotation.
+!!! related TS7012 templateInsideCallback.js:37:5: This overload implicitly returns the type 'any' because it lacks a return type annotation.
+==== templateInsideCallback.js (11 errors) ====
+    /**
+     * @typedef Oops
+                ~~~~
+!!! error TS8021: JSDoc '@typedef' tag should either have a type annotation or be followed by '@property' or '@member' tags.
+     * @template T
+     * @property {T} a
+     * @property {T} b
+     */
+    /**
+     * @callback Call
+     * @template T
+        ~~~~~~~~
+!!! error TS8039: A JSDoc '@template' tag may not follow a '@typedef', '@callback', or '@overload' tag
+     * @param {T} x
+               ~
+!!! error TS2304: Cannot find name 'T'.
+     * @returns {T}
+     */
+    /**
+     * @template T
+     * @type {Call<T>}
+              ~~~~~~~
+!!! error TS2315: Type 'Call' is not generic.
+     */
+    const identity = x => x;
+                     ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+    
+    /**
+     * @typedef Nested
+     * @property {Object} oh
+     * @property {number} oh.no
+     * @template T
+        ~~~~~~~~
+!!! error TS8039: A JSDoc '@template' tag may not follow a '@typedef', '@callback', or '@overload' tag
+     * @property {string} oh.noooooo
+     */
+    
+    
+    /**
+     * @overload
+     * @template T
+        ~~~~~~~~
+!!! error TS8039: A JSDoc '@template' tag may not follow a '@typedef', '@callback', or '@overload' tag
+     * @template U
+     * @param {T[]} array
+               ~
+!!! error TS2304: Cannot find name 'T'.
+     * @param {(x: T) => U[]} iterable
+                   ~
+!!! error TS2304: Cannot find name 'T'.
+     * @returns {U[]}
+     */
+    /**
+     * @overload
+     * @template T
+        ~~~~~~~~
+!!! error TS8039: A JSDoc '@template' tag may not follow a '@typedef', '@callback', or '@overload' tag
+     * @param {T[][]} array
+               ~
+!!! error TS2304: Cannot find name 'T'.
+     * @returns {T[]}
+     */
+    /**
+     * @param {unknown[]} array
+     * @param {(x: unknown) => unknown} iterable
+     * @returns {unknown[]}
+     */
+    function flatMap(array, iterable = identity) {
+      /** @type {unknown[]} */
+      const result = [];
+      for (let i = 0; i < array.length; i += 1) {
+        result.push(.../** @type {unknown[]} */(iterable(array[i])));
+      }
+      return result;
+    }
+    

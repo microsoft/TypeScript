@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/any/narrowFromAnyWithTypePredicate.ts] ////
+
 //// [narrowFromAnyWithTypePredicate.ts]
 declare var x: any;
 declare function isFunction(x): x is Function;

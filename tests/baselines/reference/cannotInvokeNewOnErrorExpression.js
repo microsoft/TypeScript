@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/cannotInvokeNewOnErrorExpression.ts] ////
+
 //// [cannotInvokeNewOnErrorExpression.ts]
 module M
 {

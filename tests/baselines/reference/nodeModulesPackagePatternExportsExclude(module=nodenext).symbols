@@ -1,4 +1,6 @@
-=== tests/cases/conformance/node/index.ts ===
+//// [tests/cases/conformance/node/nodeModulesPackagePatternExportsExclude.ts] ////
+
+=== index.ts ===
 // esm format file
 import * as cjsi from "inner/cjs/exclude/index";
 >cjsi : Symbol(cjsi, Decl(index.ts, 1, 6))
@@ -36,7 +38,7 @@ mjsi2;
 typei2;
 >typei2 : Symbol(typei2, Decl(index.ts, 9, 6))
 
-=== tests/cases/conformance/node/index.mts ===
+=== index.mts ===
 // esm format file
 import * as cjsi from "inner/cjs/exclude/index";
 >cjsi : Symbol(cjsi, Decl(index.mts, 1, 6))
@@ -74,7 +76,7 @@ mjsi2;
 typei2;
 >typei2 : Symbol(typei2, Decl(index.mts, 9, 6))
 
-=== tests/cases/conformance/node/index.cts ===
+=== index.cts ===
 // cjs format file
 import * as cjsi from "inner/cjs/exclude/index";
 >cjsi : Symbol(cjsi, Decl(index.cts, 1, 6))
@@ -112,7 +114,7 @@ mjsi2;
 typei2;
 >typei2 : Symbol(typei2, Decl(index.cts, 9, 6))
 
-=== tests/cases/conformance/node/node_modules/inner/exclude/index.d.ts ===
+=== node_modules/inner/exclude/index.d.ts ===
 // cjs format file
 import * as cjs from "inner/cjs/exclude/index";
 >cjs : Symbol(cjs, Decl(index.d.ts, 1, 6))
@@ -132,7 +134,7 @@ export { mjs };
 export { type };
 >type : Symbol(type, Decl(index.d.ts, 6, 8))
 
-=== tests/cases/conformance/node/node_modules/inner/exclude/index.d.mts ===
+=== node_modules/inner/exclude/index.d.mts ===
 // esm format file
 import * as cjs from "inner/cjs/exclude/index";
 >cjs : Symbol(cjs, Decl(index.d.mts, 1, 6))
@@ -152,7 +154,7 @@ export { mjs };
 export { type };
 >type : Symbol(type, Decl(index.d.mts, 6, 8))
 
-=== tests/cases/conformance/node/node_modules/inner/exclude/index.d.cts ===
+=== node_modules/inner/exclude/index.d.cts ===
 // cjs format file
 import * as cjs from "inner/cjs/exclude/index";
 >cjs : Symbol(cjs, Decl(index.d.cts, 1, 6))
@@ -172,7 +174,7 @@ export { mjs };
 export { type };
 >type : Symbol(type, Decl(index.d.cts, 6, 8))
 
-=== tests/cases/conformance/node/node_modules/inner/index.d.ts ===
+=== node_modules/inner/index.d.ts ===
 // cjs format file
 import * as cjs from "inner/cjs/index";
 >cjs : Symbol(cjs, Decl(index.d.ts, 1, 6))
@@ -192,7 +194,7 @@ export { mjs };
 export { type };
 >type : Symbol(mjs.cjs.cjs.type.type, Decl(index.d.ts, 6, 8))
 
-=== tests/cases/conformance/node/node_modules/inner/index.d.mts ===
+=== node_modules/inner/index.d.mts ===
 // esm format file
 import * as cjs from "inner/cjs/index";
 >cjs : Symbol(cjs, Decl(index.d.mts, 1, 6))
@@ -212,7 +214,7 @@ export { mjs };
 export { type };
 >type : Symbol(cjs.cjs.mjs.type, Decl(index.d.mts, 6, 8))
 
-=== tests/cases/conformance/node/node_modules/inner/index.d.cts ===
+=== node_modules/inner/index.d.cts ===
 // cjs format file
 import * as cjs from "inner/cjs/index";
 >cjs : Symbol(cjs, Decl(index.d.cts, 1, 6))

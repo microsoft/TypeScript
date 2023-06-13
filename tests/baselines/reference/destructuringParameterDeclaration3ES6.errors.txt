@@ -1,11 +1,11 @@
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration3ES6.ts(26,4): error TS2345: Argument of type '[number, number, [[string]], boolean, boolean]' is not assignable to parameter of type '[any, any, [[any]]]'.
+destructuringParameterDeclaration3ES6.ts(26,4): error TS2345: Argument of type '[number, number, [[string]], boolean, boolean]' is not assignable to parameter of type '[any, any, [[any]]]'.
   Source has 5 element(s) but target allows only 3.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration3ES6.ts(29,12): error TS2322: Type 'number' is not assignable to type '[[any]]'.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration3ES6.ts(30,5): error TS2345: Argument of type '[number, number]' is not assignable to parameter of type '[any, any, [[any]], ...any[]]'.
+destructuringParameterDeclaration3ES6.ts(29,12): error TS2322: Type 'number' is not assignable to type '[[any]]'.
+destructuringParameterDeclaration3ES6.ts(30,5): error TS2345: Argument of type '[number, number]' is not assignable to parameter of type '[any, any, [[any]], ...any[]]'.
   Source has 2 element(s) but target requires 3.
 
 
-==== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration3ES6.ts (3 errors) ====
+==== destructuringParameterDeclaration3ES6.ts (3 errors) ====
     // If the parameter is a rest parameter, the parameter type is any[]
     // A type annotation for a rest parameter must denote an array type.
     

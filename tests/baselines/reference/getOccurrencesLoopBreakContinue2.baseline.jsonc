@@ -1,0 +1,102 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesLoopBreakContinue2.ts ===
+// --- (line: 4) skipped ---
+//     break label1;
+//     continue label1;
+// 
+//     label2: /*HIGHLIGHTS*/[|{| kind: "none" |}for|] (var i = 0; i < arr[n]; i++) {
+//         break label1;
+//         continue label1;
+// 
+//         [|{| kind: "none" |}break|];
+//         [|{| kind: "none" |}continue|];
+//         [|{| kind: "none" |}break|] label2;
+//         [|{| kind: "none" |}continue|] label2;
+// 
+//         function foo() {
+//             label3: while (true) {
+// --- (line: 19) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesLoopBreakContinue2.ts ===
+// --- (line: 4) skipped ---
+//     break label1;
+//     continue label1;
+// 
+//     label2: [|{| kind: "none" |}for|] (var i = 0; i < arr[n]; i++) {
+//         break label1;
+//         continue label1;
+// 
+//         /*HIGHLIGHTS*/[|{| kind: "none" |}break|];
+//         [|{| kind: "none" |}continue|];
+//         [|{| kind: "none" |}break|] label2;
+//         [|{| kind: "none" |}continue|] label2;
+// 
+//         function foo() {
+//             label3: while (true) {
+// --- (line: 19) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesLoopBreakContinue2.ts ===
+// --- (line: 4) skipped ---
+//     break label1;
+//     continue label1;
+// 
+//     label2: [|{| kind: "none" |}for|] (var i = 0; i < arr[n]; i++) {
+//         break label1;
+//         continue label1;
+// 
+//         [|{| kind: "none" |}break|];
+//         /*HIGHLIGHTS*/[|{| kind: "none" |}continue|];
+//         [|{| kind: "none" |}break|] label2;
+//         [|{| kind: "none" |}continue|] label2;
+// 
+//         function foo() {
+//             label3: while (true) {
+// --- (line: 19) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesLoopBreakContinue2.ts ===
+// --- (line: 4) skipped ---
+//     break label1;
+//     continue label1;
+// 
+//     label2: [|{| kind: "none" |}for|] (var i = 0; i < arr[n]; i++) {
+//         break label1;
+//         continue label1;
+// 
+//         [|{| kind: "none" |}break|];
+//         [|{| kind: "none" |}continue|];
+//         /*HIGHLIGHTS*/[|{| kind: "none" |}break|] label2;
+//         [|{| kind: "none" |}continue|] label2;
+// 
+//         function foo() {
+//             label3: while (true) {
+// --- (line: 19) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesLoopBreakContinue2.ts ===
+// --- (line: 4) skipped ---
+//     break label1;
+//     continue label1;
+// 
+//     label2: [|{| kind: "none" |}for|] (var i = 0; i < arr[n]; i++) {
+//         break label1;
+//         continue label1;
+// 
+//         [|{| kind: "none" |}break|];
+//         [|{| kind: "none" |}continue|];
+//         [|{| kind: "none" |}break|] label2;
+//         /*HIGHLIGHTS*/[|{| kind: "none" |}continue|] label2;
+// 
+//         function foo() {
+//             label3: while (true) {
+// --- (line: 19) skipped ---

@@ -380,7 +380,7 @@ export function preProcessFile(sourceText: string, readImportFiles = true, detec
                         case SyntaxKind.CloseBraceToken:
                             if (length(stack)) {
                                 if (lastOrUndefined(stack) === SyntaxKind.TemplateHead) {
-                                    if (scanner.reScanTemplateToken(/* isTaggedTemplate */ false) === SyntaxKind.TemplateTail) {
+                                    if (scanner.reScanTemplateToken(/*isTaggedTemplate*/ false) === SyntaxKind.TemplateTail) {
                                         stack.pop();
                                     }
                                 }

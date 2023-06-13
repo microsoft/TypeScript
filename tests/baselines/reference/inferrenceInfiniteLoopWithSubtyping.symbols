@@ -1,4 +1,6 @@
-=== tests/cases/compiler/graphql-compose.d.ts ===
+//// [tests/cases/compiler/inferrenceInfiniteLoopWithSubtyping.ts] ////
+
+=== graphql-compose.d.ts ===
 export type ObjMapReadOnly<T> = Readonly<{ [key: string]: Readonly<T> }>;
 >ObjMapReadOnly : Symbol(ObjMapReadOnly, Decl(graphql-compose.d.ts, 0, 0))
 >T : Symbol(T, Decl(graphql-compose.d.ts, 0, 27))
@@ -74,7 +76,7 @@ export class Resolver {
 }
 
 
-=== tests/cases/compiler/app.ts ===
+=== app.ts ===
 import { ObjectTypeComposer } from './graphql-compose';
 >ObjectTypeComposer : Symbol(ObjectTypeComposer, Decl(app.ts, 0, 8))
 

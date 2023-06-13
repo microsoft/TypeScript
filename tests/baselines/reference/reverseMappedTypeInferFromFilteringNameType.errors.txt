@@ -1,8 +1,8 @@
-tests/cases/compiler/reverseMappedTypeInferFromFilteringNameType.ts(34,7): error TS2322: Type '{ last: true; doesntExist: true; }' is not assignable to type 'AllowedNeeds<{ last: boolean; doesntExist: boolean; }>'.
+reverseMappedTypeInferFromFilteringNameType.ts(34,7): error TS2322: Type '{ last: true; doesntExist: true; }' is not assignable to type 'AllowedNeeds<{ last: boolean; doesntExist: boolean; }>'.
   Object literal may only specify known properties, and 'doesntExist' does not exist in type 'AllowedNeeds<{ last: boolean; doesntExist: boolean; }>'.
 
 
-==== tests/cases/compiler/reverseMappedTypeInferFromFilteringNameType.ts (1 errors) ====
+==== reverseMappedTypeInferFromFilteringNameType.ts (1 errors) ====
     declare class User {
       public name: string;
       public last: string;
@@ -40,7 +40,7 @@ tests/cases/compiler/reverseMappedTypeInferFromFilteringNameType.ts(34,7): error
           ~~~~~~~~~~~
 !!! error TS2322: Type '{ last: true; doesntExist: true; }' is not assignable to type 'AllowedNeeds<{ last: boolean; doesntExist: boolean; }>'.
 !!! error TS2322:   Object literal may only specify known properties, and 'doesntExist' does not exist in type 'AllowedNeeds<{ last: boolean; doesntExist: boolean; }>'.
-!!! related TS6500 tests/cases/compiler/reverseMappedTypeInferFromFilteringNameType.ts:14:7: The expected type comes from property 'needs' which is declared here on type '{ needs: AllowedNeeds<{ last: boolean; doesntExist: boolean; }>; compute: (x: Pick<User, "last">) => any; }'
+!!! related TS6500 reverseMappedTypeInferFromFilteringNameType.ts:14:7: The expected type comes from property 'needs' which is declared here on type '{ needs: AllowedNeeds<{ last: boolean; doesntExist: boolean; }>; compute: (x: Pick<User, "last">) => any; }'
         },
         compute: (user) => {},
       },

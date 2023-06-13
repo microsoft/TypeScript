@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/jsxs/react.tsx ===
+//// [tests/cases/conformance/jsx/jsxs/jsxJsxsCjsTransformKeyPropCustomImportPragma.tsx] ////
+
+=== react.tsx ===
 /// <reference path="react16.d.ts" />
 /* @jsxImportSource react */
 import "./preact";
@@ -22,7 +24,7 @@ const b2 = <div {...props2} key="bar">text</div>;
 
 export {};
 
-=== tests/cases/conformance/jsx/jsxs/preact.tsx ===
+=== preact.tsx ===
 /// <reference path="react16.d.ts" />
 /* @jsxImportSource preact */
 const props = { answer: 42 }

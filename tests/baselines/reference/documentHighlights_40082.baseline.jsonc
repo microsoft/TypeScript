@@ -1,0 +1,6 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/documentHighlights_40082.ts ===
+// export = (state, messages) => {
+//    <|export /*HIGHLIGHTS*/[|{| kind: "writtenReference" |}default|] {
+//    }|>
+// }

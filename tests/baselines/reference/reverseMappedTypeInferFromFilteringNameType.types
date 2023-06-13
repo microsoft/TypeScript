@@ -1,4 +1,6 @@
-=== tests/cases/compiler/reverseMappedTypeInferFromFilteringNameType.ts ===
+//// [tests/cases/compiler/reverseMappedTypeInferFromFilteringNameType.ts] ////
+
+=== reverseMappedTypeInferFromFilteringNameType.ts ===
 declare class User {
 >User : User
 

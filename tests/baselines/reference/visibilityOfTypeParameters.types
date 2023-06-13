@@ -1,4 +1,6 @@
-=== tests/cases/compiler/visibilityOfTypeParameters.ts ===
+//// [tests/cases/compiler/visibilityOfTypeParameters.ts] ////
+
+=== visibilityOfTypeParameters.ts ===
 export class MyClass {
 >MyClass : MyClass
 

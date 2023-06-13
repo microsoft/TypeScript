@@ -2,7 +2,7 @@ error TS5101: Option 'noStrictGenericChecks' is deprecated and will stop functio
 
 
 !!! error TS5101: Option 'noStrictGenericChecks' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-==== tests/cases/compiler/noStrictGenericChecks.ts (0 errors) ====
+==== noStrictGenericChecks.ts (0 errors) ====
     type A = <T, U>(x: T, y: U) => [T, U];
     type B = <S>(x: S, y: S) => [S, S];
     

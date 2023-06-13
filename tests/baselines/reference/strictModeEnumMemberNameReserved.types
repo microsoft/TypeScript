@@ -1,4 +1,6 @@
-=== tests/cases/compiler/strictModeEnumMemberNameReserved.ts ===
+//// [tests/cases/compiler/strictModeEnumMemberNameReserved.ts] ////
+
+=== strictModeEnumMemberNameReserved.ts ===
 "use strict";
 >"use strict" : "use strict"
 

@@ -1,39 +1,39 @@
-tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,28): error TS2304: Cannot find name 'DisplayPosition'.
-tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,45): error TS1137: Expression or comma expected.
-tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,46): error TS1005: ';' expected.
-tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,49): error TS1005: ';' expected.
-tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,51): error TS2300: Duplicate identifier '3'.
-tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,52): error TS1005: ';' expected.
-tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,54): error TS2300: Duplicate identifier '3'.
-tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,55): error TS1005: ';' expected.
-tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,57): error TS2300: Duplicate identifier '3'.
-tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,58): error TS1005: ';' expected.
-tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,60): error TS2300: Duplicate identifier '3'.
-tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,61): error TS1005: ';' expected.
-tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,64): error TS1005: ';' expected.
-tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,66): error TS2300: Duplicate identifier '3'.
-tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,67): error TS1005: ';' expected.
-tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,69): error TS2300: Duplicate identifier '3'.
-tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,70): error TS1005: ';' expected.
-tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,72): error TS2300: Duplicate identifier '3'.
-tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,73): error TS1005: ';' expected.
-tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,75): error TS2300: Duplicate identifier '3'.
-tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,76): error TS1005: ';' expected.
-tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,78): error TS2300: Duplicate identifier '3'.
-tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,79): error TS1005: ';' expected.
-tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,81): error TS2300: Duplicate identifier '3'.
-tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,82): error TS1005: ';' expected.
-tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,84): error TS2300: Duplicate identifier '0'.
-tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,85): error TS1005: ';' expected.
-tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,86): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
-tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,88): error TS1434: Unexpected keyword or identifier.
-tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,94): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
-tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,96): error TS2300: Duplicate identifier '0'.
-tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,97): error TS1005: ';' expected.
-tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(3,25): error TS2304: Cannot find name 'SeedCoords'.
+parser0_004152.ts(2,28): error TS2304: Cannot find name 'DisplayPosition'.
+parser0_004152.ts(2,45): error TS1137: Expression or comma expected.
+parser0_004152.ts(2,46): error TS1005: ';' expected.
+parser0_004152.ts(2,49): error TS1005: ';' expected.
+parser0_004152.ts(2,51): error TS2300: Duplicate identifier '3'.
+parser0_004152.ts(2,52): error TS1005: ';' expected.
+parser0_004152.ts(2,54): error TS2300: Duplicate identifier '3'.
+parser0_004152.ts(2,55): error TS1005: ';' expected.
+parser0_004152.ts(2,57): error TS2300: Duplicate identifier '3'.
+parser0_004152.ts(2,58): error TS1005: ';' expected.
+parser0_004152.ts(2,60): error TS2300: Duplicate identifier '3'.
+parser0_004152.ts(2,61): error TS1005: ';' expected.
+parser0_004152.ts(2,64): error TS1005: ';' expected.
+parser0_004152.ts(2,66): error TS2300: Duplicate identifier '3'.
+parser0_004152.ts(2,67): error TS1005: ';' expected.
+parser0_004152.ts(2,69): error TS2300: Duplicate identifier '3'.
+parser0_004152.ts(2,70): error TS1005: ';' expected.
+parser0_004152.ts(2,72): error TS2300: Duplicate identifier '3'.
+parser0_004152.ts(2,73): error TS1005: ';' expected.
+parser0_004152.ts(2,75): error TS2300: Duplicate identifier '3'.
+parser0_004152.ts(2,76): error TS1005: ';' expected.
+parser0_004152.ts(2,78): error TS2300: Duplicate identifier '3'.
+parser0_004152.ts(2,79): error TS1005: ';' expected.
+parser0_004152.ts(2,81): error TS2300: Duplicate identifier '3'.
+parser0_004152.ts(2,82): error TS1005: ';' expected.
+parser0_004152.ts(2,84): error TS2300: Duplicate identifier '0'.
+parser0_004152.ts(2,85): error TS1005: ';' expected.
+parser0_004152.ts(2,86): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+parser0_004152.ts(2,88): error TS1434: Unexpected keyword or identifier.
+parser0_004152.ts(2,94): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+parser0_004152.ts(2,96): error TS2300: Duplicate identifier '0'.
+parser0_004152.ts(2,97): error TS1005: ';' expected.
+parser0_004152.ts(3,25): error TS2304: Cannot find name 'SeedCoords'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts (33 errors) ====
+==== parser0_004152.ts (33 errors) ====
     export class Game {
         private position = new DisplayPosition([), 3, 3, 3, 3, 3, 0, 3, 3, 3, 3, 3, 3, 0], NoMove, 0);
                                ~~~~~~~~~~~~~~~

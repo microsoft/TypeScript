@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/classDeclarations/classImplementsMergedClassInterface.ts ===
+//// [tests/cases/conformance/classes/classDeclarations/classImplementsMergedClassInterface.ts] ////
+
+=== classImplementsMergedClassInterface.ts ===
 declare class C1 {
 >C1 : C1
 

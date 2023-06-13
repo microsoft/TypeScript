@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/errorLocationForInterfaceExtension.ts] ////
+
 //// [errorLocationForInterfaceExtension.ts]
 var n = '';
 

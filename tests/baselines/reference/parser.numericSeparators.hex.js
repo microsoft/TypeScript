@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript2021/numericSeparators/parser.numericSeparators.hex.ts] ////
+
 //// [parser.numericSeparators.hex.ts]
 0x00_11;
 0X0_1;

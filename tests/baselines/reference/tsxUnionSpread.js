@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/tsxUnionSpread.tsx] ////
+
 //// [index.tsx]
 namespace JSX {
     export interface Element {}

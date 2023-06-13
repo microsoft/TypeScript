@@ -1,13 +1,14 @@
 import * as ts from "../../_namespaces/ts";
-import { createServerHost, File } from "../virtualFileSystemWithWatch";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
     createLoggerWithInMemoryLogs,
     createSession,
+    openExternalProjectForSession,
     openFilesForSession,
     toExternalFiles,
-} from "./helpers";
+} from "../helpers/tsserver";
+import { createServerHost, File } from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: project telemetry", () => {
     it("does nothing for inferred project", () => {
@@ -78,14 +79,11 @@ describe("unittests:: tsserver:: project telemetry", () => {
         baselineTsserverLogs("telemetry", "works with external project", session);
 
         function open(): void {
-            session.executeCommandSeq<ts.server.protocol.OpenExternalProjectRequest>({
-                command: ts.server.protocol.CommandTypes.OpenExternalProject,
-                arguments: {
-                    rootFiles: toExternalFiles([file1.path]),
-                    options: compilerOptions,
-                    projectFileName,
-                }
-            });
+            openExternalProjectForSession({
+                rootFiles: toExternalFiles([file1.path]),
+                options: compilerOptions,
+                projectFileName,
+            }, session);
             openFilesForSession([file1], session); // Only on file open the project will be updated
         }
     });

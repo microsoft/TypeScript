@@ -1,4 +1,6 @@
-=== tests/cases/compiler/extendedInterfaceGenericType.ts ===
+//// [tests/cases/compiler/extendedInterfaceGenericType.ts] ////
+
+=== extendedInterfaceGenericType.ts ===
 interface Alpha<T> {
 >Alpha : Symbol(Alpha, Decl(extendedInterfaceGenericType.ts, 0, 0))
 >T : Symbol(T, Decl(extendedInterfaceGenericType.ts, 0, 16))

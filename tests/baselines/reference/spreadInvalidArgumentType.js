@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/spreadInvalidArgumentType.ts] ////
+
 //// [spreadInvalidArgumentType.ts]
 enum E { v1, v2 };
 

@@ -1,7 +1,7 @@
-tests/cases/compiler/genericTypeUsedWithoutTypeArguments3.ts(2,26): error TS2314: Generic type 'Foo<T>' requires 1 type argument(s).
+genericTypeUsedWithoutTypeArguments3.ts(2,26): error TS2314: Generic type 'Foo<T>' requires 1 type argument(s).
 
 
-==== tests/cases/compiler/genericTypeUsedWithoutTypeArguments3.ts (1 errors) ====
+==== genericTypeUsedWithoutTypeArguments3.ts (1 errors) ====
     interface Foo<T> { }
     interface Bar<T> extends Foo { }
                              ~~~

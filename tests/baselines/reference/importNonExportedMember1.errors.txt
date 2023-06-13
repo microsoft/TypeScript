@@ -1,14 +1,14 @@
-tests/cases/compiler/b.ts(1,10): error TS2459: Module '"./a"' declares 'bar' locally, but it is not exported.
+b.ts(1,10): error TS2459: Module '"./a"' declares 'bar' locally, but it is not exported.
 
 
-==== tests/cases/compiler/a.ts (0 errors) ====
+==== a.ts (0 errors) ====
     declare function foo(): any
     declare function bar(): any;
     export { foo };
     
-==== tests/cases/compiler/b.ts (1 errors) ====
+==== b.ts (1 errors) ====
     import { bar } from "./a";
              ~~~
 !!! error TS2459: Module '"./a"' declares 'bar' locally, but it is not exported.
-!!! related TS2728 tests/cases/compiler/a.ts:2:18: 'bar' is declared here.
+!!! related TS2728 a.ts:2:18: 'bar' is declared here.
     

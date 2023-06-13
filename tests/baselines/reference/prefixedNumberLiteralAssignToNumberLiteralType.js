@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/prefixedNumberLiteralAssignToNumberLiteralType.ts] ////
+
 //// [prefixedNumberLiteralAssignToNumberLiteralType.ts]
 let x: 1 = +1;
 

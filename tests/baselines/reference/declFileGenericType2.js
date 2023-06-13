@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileGenericType2.ts] ////
+
 //// [declFileGenericType2.ts]
 declare module templa.mvc {
     interface IModel {

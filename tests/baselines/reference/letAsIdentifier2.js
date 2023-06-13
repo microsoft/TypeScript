@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/letAsIdentifier2.ts] ////
+
 //// [letAsIdentifier2.ts]
 function let() {}
 

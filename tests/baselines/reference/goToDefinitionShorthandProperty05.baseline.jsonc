@@ -1,0 +1,32 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionShorthandProperty05.ts ===
+// interface Foo {
+//     <|[|{| defId: 1 |}foo|](): void|>
+// }
+// <|const [|{| defId: 0 |}foo|] = 1;|>
+// let x: Foo = {
+//     f/*GOTO DEF*/oo
+// }
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "const",
+    "name": "foo",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 1,
+    "kind": "method",
+    "name": "foo",
+    "containerName": "Foo",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]

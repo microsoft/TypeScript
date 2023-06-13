@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/controlFlowManyCallExpressionStatementsPerf.ts] ////
+
 //// [controlFlowManyCallExpressionStatementsPerf.ts]
 function test(x: boolean): boolean { return x; }
 

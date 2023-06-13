@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privacyTypeParametersOfClass.ts] ////
+
 //// [privacyTypeParametersOfClass.ts]
 class privateClass {
 }

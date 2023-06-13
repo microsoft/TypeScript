@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -58,13 +59,13 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 FsWatches::
-/user/username/projects/sample1/core/tsconfig.json: *new*
-  {}
 /user/username/projects/sample1/core/index.ts: *new*
   {}
-/user/username/projects/sample1/logic/tsconfig.json: *new*
+/user/username/projects/sample1/core/tsconfig.json: *new*
   {}
 /user/username/projects/sample1/logic/index.ts: *new*
+  {}
+/user/username/projects/sample1/logic/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -292,6 +293,10 @@ function foo() { return 10; }
 function myFunc() { return 10; }
 
 
+Before running Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject
 Output::
 >> Screen clear
 [[90m12:00:56 AM[0m] File change detected. Starting incremental compilation...
@@ -402,6 +407,9 @@ Change:: Build logic
 
 Input::
 
+Before running Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 [[90m12:01:29 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -560,6 +568,10 @@ function foo() { return 10; }
 function myFunc() { return 100; }
 
 
+Before running Timeout callback:: count: 1
+3: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+4: timerToBuildInvalidatedProject
 Output::
 >> Screen clear
 [[90m12:01:33 AM[0m] File change detected. Starting incremental compilation...
@@ -665,6 +677,9 @@ Change:: Build logic
 
 Input::
 
+Before running Timeout callback:: count: 1
+4: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 [[90m12:02:00 AM[0m] Found 0 errors. Watching for file changes.
 

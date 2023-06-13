@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/esDecorators/classExpression/esDecorators-classExpression-commentPreservation.ts] ////
+
 //// [esDecorators-classExpression-commentPreservation.ts]
 declare var dec: any;
 

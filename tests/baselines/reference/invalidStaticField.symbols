@@ -1,4 +1,6 @@
-=== tests/cases/compiler/invalidStaticField.ts ===
+//// [tests/cases/compiler/invalidStaticField.ts] ////
+
+=== invalidStaticField.ts ===
 class A { foo() { return B.NULL; } }
 >A : Symbol(A, Decl(invalidStaticField.ts, 0, 0))
 >foo : Symbol(A.foo, Decl(invalidStaticField.ts, 0, 9))

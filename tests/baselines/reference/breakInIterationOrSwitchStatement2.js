@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/breakInIterationOrSwitchStatement2.ts] ////
+
 //// [breakInIterationOrSwitchStatement2.ts]
 do {
   break;

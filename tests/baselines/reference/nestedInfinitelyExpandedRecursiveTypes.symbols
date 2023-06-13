@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nestedInfinitelyExpandedRecursiveTypes.ts ===
+//// [tests/cases/compiler/nestedInfinitelyExpandedRecursiveTypes.ts] ////
+
+=== nestedInfinitelyExpandedRecursiveTypes.ts ===
 interface F<T> {
 >F : Symbol(F, Decl(nestedInfinitelyExpandedRecursiveTypes.ts, 0, 0))
 >T : Symbol(T, Decl(nestedInfinitelyExpandedRecursiveTypes.ts, 0, 12))

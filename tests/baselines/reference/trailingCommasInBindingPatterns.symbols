@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es7/trailingCommasInBindingPatterns.ts ===
+//// [tests/cases/conformance/es7/trailingCommasInBindingPatterns.ts] ////
+
+=== trailingCommasInBindingPatterns.ts ===
 const [...a,] = [];
 >a : Symbol(a, Decl(trailingCommasInBindingPatterns.ts, 0, 7))
 

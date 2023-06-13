@@ -1,8 +1,10 @@
-=== tests/cases/compiler/@angular/core/index.ts ===
+//// [tests/cases/compiler/resolutionCandidateFromPackageJsonField1.ts] ////
+
+=== @angular/core/index.ts ===
 
 export {};
 
-=== tests/cases/compiler/@angular/core/testing/test.ts ===
+=== @angular/core/testing/test.ts ===
 
 import "@angular/core";
 

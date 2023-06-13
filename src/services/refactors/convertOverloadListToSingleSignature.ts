@@ -12,6 +12,7 @@ import {
     factory,
     findAncestor,
     FunctionDeclaration,
+    getLocaleSpecificMessage,
     getSourceFileOfNode,
     getSyntheticLeadingComments,
     getTokenAtPosition,
@@ -42,7 +43,7 @@ import {
 import { registerRefactor } from "../_namespaces/ts.refactor";
 
 const refactorName = "Convert overload list to single signature";
-const refactorDescription = Diagnostics.Convert_overload_list_to_single_signature.message;
+const refactorDescription = getLocaleSpecificMessage(Diagnostics.Convert_overload_list_to_single_signature);
 
 const functionOverloadAction = {
     name: refactorName,

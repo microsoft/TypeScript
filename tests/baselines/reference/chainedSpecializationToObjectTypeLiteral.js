@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/chainedSpecializationToObjectTypeLiteral.ts] ////
+
 //// [chainedSpecializationToObjectTypeLiteral.ts]
 interface Sequence<T> {
     each(iterator: (value: T) => void): void;
