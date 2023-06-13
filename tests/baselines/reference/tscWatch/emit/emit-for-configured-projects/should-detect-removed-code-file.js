@@ -56,16 +56,12 @@ Shape signatures in builder refreshed for::
 /a/b/modulefile1.ts (used version)
 /a/b/referencefile1.ts (used version)
 
-PolledWatches::
-/a/b/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
-/a/b/tsconfig.json: *new*
-  {}
 /a/b/modulefile1.ts: *new*
   {}
 /a/b/referencefile1.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
   {}
 /a/lib/lib.d.ts: *new*
   {}
@@ -134,15 +130,13 @@ Shape signatures in builder refreshed for::
 /a/b/referencefile1.ts (computed .d.ts)
 
 PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
 /a/b/modulefile1.ts: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json:
-  {}
 /a/b/referencefile1.ts:
+  {}
+/a/b/tsconfig.json:
   {}
 /a/lib/lib.d.ts:
   {}

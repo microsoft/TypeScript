@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mappedTypeRecursiveInference2.ts ===
+//// [tests/cases/compiler/mappedTypeRecursiveInference2.ts] ////
+
+=== mappedTypeRecursiveInference2.ts ===
 type MorphTuple = [string, "|>", any]
 >MorphTuple : [string, "|>", any]
 

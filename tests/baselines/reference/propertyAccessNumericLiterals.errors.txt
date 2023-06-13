@@ -1,11 +1,11 @@
-tests/cases/conformance/expressions/propertyAccess/propertyAccessNumericLiterals.ts(6,1): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
-tests/cases/conformance/expressions/propertyAccess/propertyAccessNumericLiterals.ts(7,1): error TS1489: Decimals with leading zeros are not allowed.
-tests/cases/conformance/expressions/propertyAccess/propertyAccessNumericLiterals.ts(8,2): error TS6188: Numeric separators are not allowed here.
-tests/cases/conformance/expressions/propertyAccess/propertyAccessNumericLiterals.ts(10,1): error TS1489: Decimals with leading zeros are not allowed.
-tests/cases/conformance/expressions/propertyAccess/propertyAccessNumericLiterals.ts(11,3): error TS6188: Numeric separators are not allowed here.
+propertyAccessNumericLiterals.ts(6,1): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
+propertyAccessNumericLiterals.ts(7,1): error TS1489: Decimals with leading zeros are not allowed.
+propertyAccessNumericLiterals.ts(8,2): error TS6188: Numeric separators are not allowed here.
+propertyAccessNumericLiterals.ts(10,1): error TS1489: Decimals with leading zeros are not allowed.
+propertyAccessNumericLiterals.ts(11,3): error TS6188: Numeric separators are not allowed here.
 
 
-==== tests/cases/conformance/expressions/propertyAccess/propertyAccessNumericLiterals.ts (5 errors) ====
+==== propertyAccessNumericLiterals.ts (5 errors) ====
     0xffffffff.toString();
     0o01234.toString();
     0b01101101.toString();

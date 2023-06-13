@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/overloadResolutionOnDefaultConstructor1.ts] ////
+
 //// [overloadResolutionOnDefaultConstructor1.ts]
 class Bar {
     public clone() {

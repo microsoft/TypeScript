@@ -1,8 +1,8 @@
-tests/cases/conformance/parser/ecmascript5/SuperExpressions/parserSuperExpression3.ts(3,10): error TS2339: Property 'super' does not exist on type 'C'.
-tests/cases/conformance/parser/ecmascript5/SuperExpressions/parserSuperExpression3.ts(3,16): error TS2304: Cannot find name 'T'.
+parserSuperExpression3.ts(3,10): error TS2339: Property 'super' does not exist on type 'C'.
+parserSuperExpression3.ts(3,16): error TS2304: Cannot find name 'T'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/SuperExpressions/parserSuperExpression3.ts (2 errors) ====
+==== parserSuperExpression3.ts (2 errors) ====
     class C {
       M() {
         this.super<T>(0);

@@ -1,9 +1,11 @@
-=== tests/cases/conformance/es6/modules/m1.ts ===
+//// [tests/cases/conformance/es6/modules/exportAndImport-es5-amd.ts] ////
+
+=== m1.ts ===
 export default function f1() {
 >f1 : Symbol(f1, Decl(m1.ts, 0, 0))
 }
 
-=== tests/cases/conformance/es6/modules/m2.ts ===
+=== m2.ts ===
 import f1 from "./m1";
 >f1 : Symbol(f1, Decl(m2.ts, 0, 6))
 

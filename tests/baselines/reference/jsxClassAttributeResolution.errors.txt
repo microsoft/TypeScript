@@ -1,28 +1,28 @@
-tests/cases/compiler/file.tsx(2,19): error TS2741: Property 'ref' is missing in type '{}' but required in type 'IntrinsicClassAttributesAlias<T>'.
+file.tsx(2,19): error TS2741: Property 'ref' is missing in type '{}' but required in type 'IntrinsicClassAttributesAlias<T>'.
 
 
-==== tests/cases/compiler/file.tsx (1 errors) ====
+==== file.tsx (1 errors) ====
     class App {}
     export const a = <App></App>;
                       ~~~
 !!! error TS2741: Property 'ref' is missing in type '{}' but required in type 'IntrinsicClassAttributesAlias<T>'.
-!!! related TS2728 /.src/tests/cases/compiler/node_modules/@types/react/index.d.ts:2:5: 'ref' is declared here.
-==== tests/cases/compiler/node_modules/@types/react/package.json (0 errors) ====
+!!! related TS2728 node_modules/@types/react/index.d.ts:2:5: 'ref' is declared here.
+==== node_modules/@types/react/package.json (0 errors) ====
     {
         "name": "@types/react",
         "version": "0.0.1",
         "main": "",
         "types": "index.d.ts",
     }
-==== tests/cases/compiler/node_modules/@types/react/index.d.ts (0 errors) ====
+==== node_modules/@types/react/index.d.ts (0 errors) ====
     interface IntrinsicClassAttributesAlias<T> {
         ref: T
     }
     declare namespace JSX {
         type IntrinsicClassAttributes<T> = IntrinsicClassAttributesAlias<T>
     }
-==== tests/cases/compiler/node_modules/@types/react/jsx-runtime.d.ts (0 errors) ====
+==== node_modules/@types/react/jsx-runtime.d.ts (0 errors) ====
     import './';
-==== tests/cases/compiler/node_modules/@types/react/jsx-dev-runtime.d.ts (0 errors) ====
+==== node_modules/@types/react/jsx-dev-runtime.d.ts (0 errors) ====
     import './';
     

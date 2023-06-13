@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/thisPropertyAssignmentInherited.js ===
+//// [tests/cases/conformance/salsa/thisPropertyAssignmentInherited.ts] ////
+
+=== thisPropertyAssignmentInherited.js ===
 export class Element {
 >Element : Symbol(Element, Decl(thisPropertyAssignmentInherited.js, 0, 0))
 

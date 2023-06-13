@@ -22,6 +22,7 @@ import {
     convertToOptionsWithAbsolutePaths,
     createBuildInfo,
     createGetCanonicalFileName,
+    createModuleNotFoundChain,
     createProgram,
     CustomTransformers,
     Debug,
@@ -68,8 +69,11 @@ import {
     ProjectReference,
     ReadBuildProgramHost,
     ReadonlyCollection,
+    RepopulateDiagnosticChainInfo,
+    RepopulateModuleNotFoundDiagnosticChain,
     returnFalse,
     returnUndefined,
+    sameMap,
     SemanticDiagnosticsBuilderProgram,
     skipTypeChecking,
     some,
@@ -103,7 +107,18 @@ export interface ReusableDiagnosticRelatedInformation {
 }
 
 /** @internal */
-export type ReusableDiagnosticMessageChain = DiagnosticMessageChain;
+export interface ReusableRepopulateModuleNotFoundChain {
+    info: RepopulateModuleNotFoundDiagnosticChain;
+    next?: ReusableDiagnosticMessageChain[];
+}
+
+/** @internal */
+export type SerializedDiagnosticMessageChain = Omit<DiagnosticMessageChain, "next" | "repopulateInfo"> & {
+    next?: ReusableDiagnosticMessageChain[];
+};
+
+/** @internal */
+export type ReusableDiagnosticMessageChain = SerializedDiagnosticMessageChain | ReusableRepopulateModuleNotFoundChain;
 
 /**
  * Signature (Hash of d.ts emitted), is string if it was emitted using same d.ts.map option as what compilerOptions indicate, otherwise tuple of string
@@ -364,7 +379,12 @@ function createBuilderProgramState(newProgram: Program, oldState: Readonly<Reusa
             // Unchanged file copy diagnostics
             const diagnostics = oldState!.semanticDiagnosticsPerFile!.get(sourceFilePath);
             if (diagnostics) {
-                state.semanticDiagnosticsPerFile!.set(sourceFilePath, oldState!.hasReusableDiagnostic ? convertToDiagnostics(diagnostics as readonly ReusableDiagnostic[], newProgram) : diagnostics as readonly Diagnostic[]);
+                state.semanticDiagnosticsPerFile!.set(
+                    sourceFilePath,
+                    oldState!.hasReusableDiagnostic ?
+                        convertToDiagnostics(diagnostics as readonly ReusableDiagnostic[], newProgram) :
+                        repopulateDiagnostics(diagnostics as readonly Diagnostic[], newProgram)
+                );
                 if (!state.semanticDiagnosticsFromOldState) {
                     state.semanticDiagnosticsFromOldState = new Set();
                 }
@@ -448,6 +468,43 @@ function getEmitSignatureFromOldSignature(options: CompilerOptions, oldOptions: 
         isString(oldEmitSignature) ? [oldEmitSignature] : oldEmitSignature[0];
 }
 
+function repopulateDiagnostics(diagnostics: readonly Diagnostic[], newProgram: Program): readonly Diagnostic[] {
+    if (!diagnostics.length) return diagnostics;
+    return sameMap(diagnostics, diag => {
+        if (isString(diag.messageText)) return diag;
+        const repopulatedChain = convertOrRepopulateDiagnosticMessageChain(diag.messageText, diag.file, newProgram, chain => chain.repopulateInfo?.());
+        return repopulatedChain === diag.messageText ?
+            diag :
+            { ...diag, messageText: repopulatedChain };
+    });
+}
+
+function convertOrRepopulateDiagnosticMessageChain<T extends DiagnosticMessageChain | ReusableDiagnosticMessageChain>(
+    chain: T,
+    sourceFile: SourceFile | undefined,
+    newProgram: Program,
+    repopulateInfo: (chain: T) => RepopulateDiagnosticChainInfo | undefined,
+): DiagnosticMessageChain {
+    const info = repopulateInfo(chain);
+    if (info) {
+        return {
+            ...createModuleNotFoundChain(sourceFile!, newProgram, info.moduleReference, info.mode, info.packageName || info.moduleReference),
+            next: convertOrRepopulateDiagnosticMessageChainArray(chain.next as T[], sourceFile, newProgram, repopulateInfo),
+        };
+    }
+    const next = convertOrRepopulateDiagnosticMessageChainArray(chain.next as T[], sourceFile, newProgram, repopulateInfo);
+    return next === chain.next ? chain as DiagnosticMessageChain : { ...chain as DiagnosticMessageChain, next };
+}
+
+function convertOrRepopulateDiagnosticMessageChainArray<T extends DiagnosticMessageChain | ReusableDiagnosticMessageChain>(
+    array: T[] | undefined,
+    sourceFile: SourceFile | undefined,
+    newProgram: Program,
+    repopulateInfo: (chain: T) => RepopulateDiagnosticChainInfo | undefined,
+): DiagnosticMessageChain[] | undefined {
+    return sameMap(array, chain => convertOrRepopulateDiagnosticMessageChain(chain, sourceFile, newProgram, repopulateInfo));
+}
+
 function convertToDiagnostics(diagnostics: readonly ReusableDiagnostic[], newProgram: Program): readonly Diagnostic[] {
     if (!diagnostics.length) return emptyArray;
     let buildInfoDirectory: string | undefined;
@@ -474,9 +531,13 @@ function convertToDiagnostics(diagnostics: readonly ReusableDiagnostic[], newPro
 
 function convertToDiagnosticRelatedInformation(diagnostic: ReusableDiagnosticRelatedInformation, newProgram: Program, toPath: (path: string) => Path): DiagnosticRelatedInformation {
     const { file } = diagnostic;
+    const sourceFile = file ? newProgram.getSourceFileByPath(toPath(file)) : undefined;
     return {
         ...diagnostic,
-        file: file ? newProgram.getSourceFileByPath(toPath(file)) : undefined
+        file: sourceFile,
+        messageText: isString(diagnostic.messageText) ?
+            diagnostic.messageText :
+            convertOrRepopulateDiagnosticMessageChain(diagnostic.messageText, sourceFile, newProgram, chain => (chain as ReusableRepopulateModuleNotFoundChain).info),
     };
 }
 
@@ -1232,8 +1293,34 @@ function convertToReusableDiagnosticRelatedInformation(diagnostic: DiagnosticRel
     const { file } = diagnostic;
     return {
         ...diagnostic,
-        file: file ? relativeToBuildInfo(file.resolvedPath) : undefined
+        file: file ? relativeToBuildInfo(file.resolvedPath) : undefined,
+        messageText: isString(diagnostic.messageText) ? diagnostic.messageText : convertToReusableDiagnosticMessageChain(diagnostic.messageText),
     };
+}
+
+function convertToReusableDiagnosticMessageChain(chain: DiagnosticMessageChain): ReusableDiagnosticMessageChain {
+    if (chain.repopulateInfo) {
+        return {
+            info: chain.repopulateInfo(),
+            next: convertToReusableDiagnosticMessageChainArray(chain.next),
+        };
+    }
+    const next = convertToReusableDiagnosticMessageChainArray(chain.next);
+    return next === chain.next ? chain : { ...chain, next };
+}
+
+function convertToReusableDiagnosticMessageChainArray(array: DiagnosticMessageChain[] | undefined): ReusableDiagnosticMessageChain[] | undefined {
+    if (!array) return array;
+    return forEach(array, (chain, index) => {
+        const reusable = convertToReusableDiagnosticMessageChain(chain);
+        if (chain === reusable) return undefined;
+        const result: ReusableDiagnosticMessageChain[] = index > 0 ? array.slice(0, index - 1) : [];
+        result.push(reusable);
+        for (let i = index + 1; i < array.length; i++) {
+            result.push(convertToReusableDiagnosticMessageChain(array[i]));
+        }
+        return result;
+    }) || array;
 }
 
 /** @internal */

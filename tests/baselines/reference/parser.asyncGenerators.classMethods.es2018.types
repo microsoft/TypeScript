@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/methodIsOk.ts ===
+//// [tests/cases/conformance/parser/ecmascript2018/asyncGenerators/parser.asyncGenerators.classMethods.es2018.ts] ////
+
+=== methodIsOk.ts ===
 class C1 {
 >C1 : C1
 
@@ -6,7 +8,7 @@ class C1 {
 >f : () => AsyncGenerator<never, void, unknown>
     }
 }
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitMethodNameIsOk.ts ===
+=== awaitMethodNameIsOk.ts ===
 class C2 {
 >C2 : C2
 
@@ -14,7 +16,7 @@ class C2 {
 >await : () => AsyncGenerator<never, void, unknown>
     }
 }
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldMethodNameIsOk.ts ===
+=== yieldMethodNameIsOk.ts ===
 class C3 {
 >C3 : C3
 
@@ -22,7 +24,7 @@ class C3 {
 >yield : () => AsyncGenerator<never, void, unknown>
     }
 }
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitParameterIsError.ts ===
+=== awaitParameterIsError.ts ===
 class C4 {
 >C4 : C4
 
@@ -31,7 +33,7 @@ class C4 {
 >await : any
     }
 }
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldParameterIsError.ts ===
+=== yieldParameterIsError.ts ===
 class C5 {
 >C5 : C5
 
@@ -40,7 +42,7 @@ class C5 {
 >yield : any
     }
 }
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitInParameterInitializerIsError.ts ===
+=== awaitInParameterInitializerIsError.ts ===
 class C6 {
 >C6 : C6
 
@@ -51,7 +53,7 @@ class C6 {
 >1 : 1
     }
 }
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldInParameterInitializerIsError.ts ===
+=== yieldInParameterInitializerIsError.ts ===
 class C7 {
 >C7 : C7
 
@@ -61,7 +63,7 @@ class C7 {
 >yield : any
     }
 }
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedAsyncGeneratorIsOk.ts ===
+=== nestedAsyncGeneratorIsOk.ts ===
 class C8 {
 >C8 : C8
 
@@ -73,7 +75,7 @@ class C8 {
         }
     }
 }
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionDeclarationNamedYieldIsError.ts ===
+=== nestedFunctionDeclarationNamedYieldIsError.ts ===
 class C9 {
 >C9 : C9
 
@@ -85,7 +87,7 @@ class C9 {
         }
     }
 }
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionExpressionNamedYieldIsError.ts ===
+=== nestedFunctionExpressionNamedYieldIsError.ts ===
 class C10 {
 >C10 : C10
 
@@ -100,7 +102,7 @@ class C10 {
         };
     }
 }
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionDeclarationNamedAwaitIsError.ts ===
+=== nestedFunctionDeclarationNamedAwaitIsError.ts ===
 class C11 {
 >C11 : C11
 
@@ -112,7 +114,7 @@ class C11 {
         }
     }
 }
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionExpressionNamedAwaitIsError.ts ===
+=== nestedFunctionExpressionNamedAwaitIsError.ts ===
 class C12 {
 >C12 : C12
 
@@ -127,7 +129,7 @@ class C12 {
         };
     }
 }
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldIsOk.ts ===
+=== yieldIsOk.ts ===
 class C13 {
 >C13 : C13
 
@@ -138,7 +140,7 @@ class C13 {
 >yield : any
     }
 }
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldWithValueIsOk.ts ===
+=== yieldWithValueIsOk.ts ===
 class C14 {
 >C14 : C14
 
@@ -150,7 +152,7 @@ class C14 {
 >1 : 1
     }
 }
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldStarMissingValueIsError.ts ===
+=== yieldStarMissingValueIsError.ts ===
 class C15 {
 >C15 : C15
 
@@ -162,7 +164,7 @@ class C15 {
 > : any
     }
 }
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldStarWithValueIsOk.ts ===
+=== yieldStarWithValueIsOk.ts ===
 class C16 {
 >C16 : C16
 
@@ -174,7 +176,7 @@ class C16 {
 >[] : undefined[]
     }
 }
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitWithValueIsOk.ts ===
+=== awaitWithValueIsOk.ts ===
 class C17 {
 >C17 : C17
 
@@ -186,7 +188,7 @@ class C17 {
 >1 : 1
     }
 }
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitMissingValueIsError.ts ===
+=== awaitMissingValueIsError.ts ===
 class C18 {
 >C18 : C18
 
@@ -198,7 +200,7 @@ class C18 {
 > : any
     }
 }
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitAsTypeIsOk.ts ===
+=== awaitAsTypeIsOk.ts ===
 interface await {}
 class C19 {
 >C19 : C19
@@ -210,7 +212,7 @@ class C19 {
 >x : await
     }
 }
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldAsTypeIsStrictError.ts ===
+=== yieldAsTypeIsStrictError.ts ===
 interface yield {}
 class C20 {
 >C20 : C20
@@ -222,7 +224,7 @@ class C20 {
 >x : yield
     }
 }
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldInClassComputedPropertyIsError.ts ===
+=== yieldInClassComputedPropertyIsError.ts ===
 class C21 {
 >C21 : C21
 
@@ -231,7 +233,7 @@ class C21 {
 >yield : any
     }
 }
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldInNestedComputedPropertyIsOk.ts ===
+=== yieldInNestedComputedPropertyIsOk.ts ===
 class C22 {
 >C22 : C22
 
@@ -246,7 +248,7 @@ class C22 {
 >1 : 1
     }
 }
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/asyncGeneratorGetAccessorIsError.ts ===
+=== asyncGeneratorGetAccessorIsError.ts ===
 class C23 {
 >C23 : C23
 
@@ -258,7 +260,7 @@ class C23 {
 >1 : 1
     }
 }
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/asyncGeneratorSetAccessorIsError.ts ===
+=== asyncGeneratorSetAccessorIsError.ts ===
 class C24 {
 >C24 : C24
 
@@ -268,7 +270,7 @@ class C24 {
 >value : number
     }
 }
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/asyncGeneratorPropertyIsError.ts ===
+=== asyncGeneratorPropertyIsError.ts ===
 class C25 {
 >C25 : C25
 

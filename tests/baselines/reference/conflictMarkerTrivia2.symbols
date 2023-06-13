@@ -1,4 +1,6 @@
-=== tests/cases/compiler/conflictMarkerTrivia2.ts ===
+//// [tests/cases/compiler/conflictMarkerTrivia2.ts] ////
+
+=== conflictMarkerTrivia2.ts ===
 class C {
 >C : Symbol(C, Decl(conflictMarkerTrivia2.ts, 0, 0))
 

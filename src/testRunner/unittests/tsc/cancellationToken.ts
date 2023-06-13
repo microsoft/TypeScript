@@ -4,17 +4,17 @@ import * as Utils from "../../_namespaces/Utils";
 import {
     baselineBuildInfo,
     CommandLineProgram,
-} from "../tsc/helpers";
+} from "../helpers/baseline";
 import {
     applyEdit,
     createBaseline,
     watchBaseline,
-} from "../tscWatch/helpers";
+} from "../helpers/tscWatch";
 import {
     createWatchedSystem,
     File,
     libFile,
-} from "../virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsc:: builder cancellationToken", () => {
     verifyCancellation(/*useBuildInfo*/ true, "when emitting buildInfo");

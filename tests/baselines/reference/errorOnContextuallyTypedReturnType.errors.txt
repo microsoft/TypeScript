@@ -1,9 +1,9 @@
-tests/cases/compiler/errorOnContextuallyTypedReturnType.ts(1,5): error TS2322: Type '() => void' is not assignable to type '() => boolean'.
+errorOnContextuallyTypedReturnType.ts(1,5): error TS2322: Type '() => void' is not assignable to type '() => boolean'.
   Type 'void' is not assignable to type 'boolean'.
-tests/cases/compiler/errorOnContextuallyTypedReturnType.ts(2,37): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+errorOnContextuallyTypedReturnType.ts(2,37): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
 
 
-==== tests/cases/compiler/errorOnContextuallyTypedReturnType.ts (2 errors) ====
+==== errorOnContextuallyTypedReturnType.ts (2 errors) ====
     var n1: () => boolean = function () { }; // expect an error here
         ~~
 !!! error TS2322: Type '() => void' is not assignable to type '() => boolean'.

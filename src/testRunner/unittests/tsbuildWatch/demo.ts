@@ -1,11 +1,11 @@
-import { libContent } from "../tsc/helpers";
-import { verifyTscWatch } from "../tscWatch/helpers";
+import { libContent } from "../helpers/contents";
+import { verifyTscWatch } from "../helpers/tscWatch";
 import {
     createWatchedSystem,
     File,
     getTsBuildProjectFile,
     libFile,
-} from "../virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsbuildWatch:: watchMode:: with demo project", () => {
     const projectLocation = `/user/username/projects/demo`;

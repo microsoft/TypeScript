@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/dynamicImport/importCallExpressionGrammarError.ts] ////
+
 //// [importCallExpressionGrammarError.ts]
 declare function getSpecifier(): string;
 declare var whatToLoad: boolean;

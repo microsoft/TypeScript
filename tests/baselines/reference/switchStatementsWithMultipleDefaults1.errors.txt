@@ -1,7 +1,7 @@
-tests/cases/compiler/switchStatementsWithMultipleDefaults1.ts(8,9): error TS1113: A 'default' clause cannot appear more than once in a 'switch' statement.
+switchStatementsWithMultipleDefaults1.ts(8,9): error TS1113: A 'default' clause cannot appear more than once in a 'switch' statement.
 
 
-==== tests/cases/compiler/switchStatementsWithMultipleDefaults1.ts (1 errors) ====
+==== switchStatementsWithMultipleDefaults1.ts (1 errors) ====
         var x = 10;
         
         switch (x) {

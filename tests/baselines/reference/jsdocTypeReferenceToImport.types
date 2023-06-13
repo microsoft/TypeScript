@@ -1,10 +1,12 @@
-=== tests/cases/conformance/jsdoc/jsdocTypeReferenceToImport.js ===
+//// [tests/cases/conformance/jsdoc/jsdocTypeReferenceToImport.ts] ////
+
+=== jsdocTypeReferenceToImport.js ===
 // #34802
 
 const C = require('./ex').C;
 >C : typeof C
 >require('./ex').C : typeof C
->require('./ex') : typeof import("tests/cases/conformance/jsdoc/ex")
+>require('./ex') : typeof import("ex")
 >require : any
 >'./ex' : "./ex"
 >C : typeof C
@@ -12,7 +14,7 @@ const C = require('./ex').C;
 const D = require('./ex')?.C;
 >D : typeof C
 >require('./ex')?.C : typeof C
->require('./ex') : typeof import("tests/cases/conformance/jsdoc/ex")
+>require('./ex') : typeof import("ex")
 >require : any
 >'./ex' : "./ex"
 >C : typeof C
@@ -49,7 +51,7 @@ d.end
 >d : C
 >end : number
 
-=== tests/cases/conformance/jsdoc/ex.d.ts ===
+=== ex.d.ts ===
 export class C {
 >C : C
 

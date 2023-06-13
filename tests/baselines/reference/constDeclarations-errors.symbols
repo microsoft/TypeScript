@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constDeclarations-errors.ts ===
+//// [tests/cases/compiler/constDeclarations-errors.ts] ////
+
+=== constDeclarations-errors.ts ===
 // error, missing intialicer
 const c1;
 >c1 : Symbol(c1, Decl(constDeclarations-errors.ts, 1, 5))

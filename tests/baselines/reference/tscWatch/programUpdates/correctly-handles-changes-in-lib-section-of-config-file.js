@@ -53,16 +53,12 @@ Shape signatures in builder refreshed for::
 /compiler/lib.es5.d.ts (used version)
 /src/app.ts (used version)
 
-PolledWatches::
-/src/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
-/src/tsconfig.json: *new*
+/compiler/lib.es5.d.ts: *new*
   {}
 /src/app.ts: *new*
   {}
-/compiler/lib.es5.d.ts: *new*
+/src/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -111,18 +107,14 @@ Shape signatures in builder refreshed for::
 /compiler/lib.es2015.promise.d.ts (used version)
 /src/app.ts (computed .d.ts)
 
-PolledWatches::
-/src/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches::
-/src/tsconfig.json:
-  {}
-/src/app.ts:
+/compiler/lib.es2015.promise.d.ts: *new*
   {}
 /compiler/lib.es5.d.ts:
   {}
-/compiler/lib.es2015.promise.d.ts: *new*
+/src/app.ts:
+  {}
+/src/tsconfig.json:
   {}
 
 FsWatchesRecursive::

@@ -5,7 +5,7 @@ sourceRoot:
 sources: sourceMapValidationClassWithDefaultConstructor.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/sourceMapValidationClassWithDefaultConstructor.js
+emittedFile:sourceMapValidationClassWithDefaultConstructor.js
 sourceFile:sourceMapValidationClassWithDefaultConstructor.ts
 -------------------------------------------------------------------
 >>>var Greeter = /** @class */ (function () {

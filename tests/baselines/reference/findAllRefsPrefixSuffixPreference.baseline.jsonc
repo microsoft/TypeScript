@@ -21,9 +21,7 @@
   // export { q };
   // const x = {
   //     z: 'value'
-  // }
-  // const { z } = x;
-  // log(z);
+  // --- (line: 6) skipped ---
 
   // === /file2.ts ===
   // declare function log(s: string | number): void;
@@ -298,9 +296,7 @@
   // export { q };
   // const x = {
   //     z: 'value'
-  // }
-  // const { z } = x;
-  // log(z);
+  // --- (line: 6) skipped ---
 
   // === Details ===
   [
@@ -434,9 +430,7 @@
   // export { q };
   // const x = {
   //     z: 'value'
-  // }
-  // const { z } = x;
-  // log(z);
+  // --- (line: 6) skipped ---
 
   // === Details ===
   [
@@ -714,9 +708,7 @@
 
 // === findAllReferences ===
 // === /file1.ts ===
-// declare function log(s: string | number): void;
-// const q = 1;
-// export { q };
+// --- (line: 3) skipped ---
 // const x = {
 //     z: 'value'
 // }
@@ -725,9 +717,7 @@
 
   // === Definitions ===
   // === /file1.ts ===
-  // declare function log(s: string | number): void;
-  // const q = 1;
-  // export { q };
+  // --- (line: 3) skipped ---
   // const x = {
   //     z: 'value'
   // }
@@ -926,9 +916,7 @@
 // @providePrefixAndSuffixTextForRename: true
 
 // === /file1.ts ===
-// declare function log(s: string | number): void;
-// const q = 1;
-// export { q };
+// --- (line: 3) skipped ---
 // const x = {
 //     z: 'value'
 // }
@@ -941,9 +929,7 @@
 // @providePrefixAndSuffixTextForRename: true
 
 // === /file1.ts ===
-// declare function log(s: string | number): void;
-// const q = 1;
-// export { q };
+// --- (line: 3) skipped ---
 // const x = {
 //     z: 'value'
 // }

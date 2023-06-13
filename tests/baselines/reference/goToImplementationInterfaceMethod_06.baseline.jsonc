@@ -1,11 +1,6 @@
 // === goToImplementation ===
 // === /tests/cases/fourslash/goToImplementationInterfaceMethod_06.ts ===
-// interface SuperFoo {
-//     hello (): void;
-// }
-// 
-// interface Foo extends SuperFoo {
-//     someOtherFunction(): void;
+// --- (line: 6) skipped ---
 // }
 // 
 // class Bar implements Foo {
@@ -25,18 +20,9 @@
 //     someOtherFunction() {}
 // };
 // 
-// class FooLike implements SuperFoo {
-//      hello() {}
-//      someOtherFunction() {}
-// }
-// 
-// class NotRelatedToFoo {
-//      hello() {}                // This case is equivalent to the last case, but is not returned because it does not share a common ancestor with Foo
-//      someOtherFunction() {}
-// }
-// 
-// class NotFoo implements SuperFoo {
-//      hello() {}                // We only want implementations of Foo, even though the function is declared in SuperFoo
+// --- (line: 26) skipped ---
+
+// --- (line: 37) skipped ---
 // }
 // 
 // function (x: Foo) {

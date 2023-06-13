@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/moduleResolutionWithoutExtension4.ts] ////
+
 === /src/foo.tsx ===
 export function foo() {
 >foo : Symbol(foo, Decl(foo.tsx, 0, 0))

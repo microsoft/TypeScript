@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeAssertionToGenericFunctionType.ts] ////
+
 //// [typeAssertionToGenericFunctionType.ts]
 var x = {
     a: < <T>(x: T) => T > ((x: any) => 1),

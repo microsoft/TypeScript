@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileModuleWithPropertyOfTypeModule.ts] ////
+
 //// [declFileModuleWithPropertyOfTypeModule.ts]
 module m {
     export class c {

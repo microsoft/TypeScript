@@ -1,4 +1,6 @@
-=== tests/cases/compiler/fixingTypeParametersRepeatedly3.ts ===
+//// [tests/cases/compiler/fixingTypeParametersRepeatedly3.ts] ////
+
+=== fixingTypeParametersRepeatedly3.ts ===
 interface Base {
 >Base : Symbol(Base, Decl(fixingTypeParametersRepeatedly3.ts, 0, 0))
 

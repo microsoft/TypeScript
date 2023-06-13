@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/a.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment2.ts] ////
+
+=== a.js ===
 function Outer() {
 >Outer : typeof Outer
 

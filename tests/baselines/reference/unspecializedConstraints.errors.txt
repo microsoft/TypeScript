@@ -1,7 +1,7 @@
-tests/cases/compiler/unspecializedConstraints.ts(84,44): error TS2552: Cannot find name 'TypeParameter'. Did you mean 'Parameter'?
+unspecializedConstraints.ts(84,44): error TS2552: Cannot find name 'TypeParameter'. Did you mean 'Parameter'?
 
 
-==== tests/cases/compiler/unspecializedConstraints.ts (1 errors) ====
+==== unspecializedConstraints.ts (1 errors) ====
     module ts {
         interface Map<T> {
             [index: string]: T;
@@ -88,7 +88,7 @@ tests/cases/compiler/unspecializedConstraints.ts(84,44): error TS2552: Cannot fi
             constructor(public typeParameters: TypeParameter[], public parameters: Parameter[], public returnType: Type) {
                                                ~~~~~~~~~~~~~
 !!! error TS2552: Cannot find name 'TypeParameter'. Did you mean 'Parameter'?
-!!! related TS2728 tests/cases/compiler/unspecializedConstraints.ts:99:11: 'Parameter' is declared here.
+!!! related TS2728 unspecializedConstraints.ts:99:11: 'Parameter' is declared here.
                 super();
             }
             equalsNoReturn(other: Signature): boolean {

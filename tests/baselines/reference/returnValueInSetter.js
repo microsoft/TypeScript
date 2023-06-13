@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/returnValueInSetter.ts] ////
+
 //// [returnValueInSetter.ts]
 class f {
     set x(value) {

@@ -53,23 +53,25 @@ Shape signatures in builder refreshed for::
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/src/file1.ts: *new*
-  {}
-/user/username/projects/myproject/node_modules/file2/index.d.ts: *new*
-  {}
 /a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/myproject/src: *new*
+/user/username/projects/myproject: *new*
   {}
 /user/username/projects/myproject/node_modules: *new*
   {}
 /user/username/projects/myproject/node_modules/file2: *new*
   {}
-/user/username/projects/myproject: *new*
+/user/username/projects/myproject/node_modules/file2/index.d.ts: *new*
+  {}
+/user/username/projects/myproject/src: *new*
+  {}
+/user/username/projects/myproject/src/file1.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -100,21 +102,23 @@ Input::
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/file1.ts:
-  {}
-/user/username/projects/myproject/node_modules/file2/index.d.ts:
-  {}
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject/src:
+/user/username/projects/myproject:
   {}
 /user/username/projects/myproject/node_modules:
   {}
-/user/username/projects/myproject:
+/user/username/projects/myproject/node_modules/file2/index.d.ts:
+  {}
+/user/username/projects/myproject/src:
+  {}
+/user/username/projects/myproject/src/file1.ts:
+  {}
+/user/username/projects/myproject/tsconfig.json:
   {}
 
 FsWatches *deleted*::
@@ -157,19 +161,23 @@ Shape signatures in builder refreshed for::
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/node_modules: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/file1.ts:
-  {}
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject/src:
+/user/username/projects/myproject:
   {}
 /user/username/projects/myproject/node_modules:
   {}
-/user/username/projects/myproject:
+/user/username/projects/myproject/src:
+  {}
+/user/username/projects/myproject/src/file1.ts:
+  {}
+/user/username/projects/myproject/tsconfig.json:
   {}
 
 FsWatches *deleted*::
@@ -277,21 +285,25 @@ Output::
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/file1.ts:
-  {}
 /a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/src:
-  {}
-/user/username/projects/myproject/node_modules:
   {}
 /user/username/projects/myproject:
   {}
+/user/username/projects/myproject/node_modules:
+  {}
 /user/username/projects/myproject/node_modules/file2: *new*
+  {}
+/user/username/projects/myproject/src:
+  {}
+/user/username/projects/myproject/src/file1.ts:
+  {}
+/user/username/projects/myproject/tsconfig.json:
   {}
 
 exitCode:: ExitStatus.undefined
@@ -345,23 +357,29 @@ Shape signatures in builder refreshed for::
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+
+PolledWatches *deleted*::
+/user/username/projects/node_modules:
+  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/file1.ts:
-  {}
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject/src:
+/user/username/projects/myproject:
   {}
 /user/username/projects/myproject/node_modules:
-  {}
-/user/username/projects/myproject:
   {}
 /user/username/projects/myproject/node_modules/file2:
   {}
 /user/username/projects/myproject/node_modules/file2/index.d.ts: *new*
+  {}
+/user/username/projects/myproject/src:
+  {}
+/user/username/projects/myproject/src/file1.ts:
+  {}
+/user/username/projects/myproject/tsconfig.json:
   {}
 
 exitCode:: ExitStatus.undefined

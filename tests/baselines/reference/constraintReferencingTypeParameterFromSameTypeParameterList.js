@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constraintReferencingTypeParameterFromSameTypeParameterList.ts] ////
+
 //// [constraintReferencingTypeParameterFromSameTypeParameterList.ts]
 // used to be valid, now an error to do this
 

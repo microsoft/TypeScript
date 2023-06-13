@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxReactEmit4.tsx] ////
+
 //// [file.tsx]
 declare module JSX {
 	interface Element { }

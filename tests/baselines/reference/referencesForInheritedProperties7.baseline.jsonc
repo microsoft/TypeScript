@@ -32,9 +32,7 @@
   //    propName: string;
   // }
   // 
-  // var v: class2;
-  // v.doStuff();
-  // v.propName;
+  // --- (line: 14) skipped ---
 
   // === Details ===
   [
@@ -332,9 +330,7 @@
   //    propName: string;
   // }
   // 
-  // var v: class2;
-  // v.doStuff();
-  // v.propName;
+  // --- (line: 14) skipped ---
 
   // === Details ===
   [
@@ -458,9 +454,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForInheritedProperties7.ts ===
-// class class1 extends class1 {
-//    doStuff() { }
-//    propName: string;
+// --- (line: 3) skipped ---
 // }
 // interface interface1 extends interface1 {
 //    doStuff(): void;
@@ -477,9 +471,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForInheritedProperties7.ts ===
-  // class class1 extends class1 {
-  //    doStuff() { }
-  //    propName: string;
+  // --- (line: 3) skipped ---
   // }
   // interface interface1 extends interface1 {
   //    doStuff(): void;
@@ -632,9 +624,7 @@
   //    propName: string;
   // }
   // 
-  // var v: class2;
-  // v.doStuff();
-  // v.propName;
+  // --- (line: 14) skipped ---
 
   // === Details ===
   [

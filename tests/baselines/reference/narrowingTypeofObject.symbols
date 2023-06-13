@@ -1,4 +1,6 @@
-=== tests/cases/compiler/narrowingTypeofObject.ts ===
+//// [tests/cases/compiler/narrowingTypeofObject.ts] ////
+
+=== narrowingTypeofObject.ts ===
 interface F { (): string }
 >F : Symbol(F, Decl(narrowingTypeofObject.ts, 0, 0))
 

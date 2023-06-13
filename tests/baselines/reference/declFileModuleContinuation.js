@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileModuleContinuation.ts] ////
+
 //// [declFileModuleContinuation.ts]
 module A.C {
     export interface Z {

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/continueInIterationStatement4.ts ===
+//// [tests/cases/compiler/continueInIterationStatement4.ts] ////
+
+=== continueInIterationStatement4.ts ===
 for (var i in something) {
 >i : Symbol(i, Decl(continueInIterationStatement4.ts, 0, 8))
 

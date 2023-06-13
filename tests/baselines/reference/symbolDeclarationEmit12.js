@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolDeclarationEmit12.ts] ////
+
 //// [symbolDeclarationEmit12.ts]
 module M {
     interface I { }

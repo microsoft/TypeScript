@@ -59,11 +59,11 @@ Shape signatures in builder refreshed for::
 /user/username/projects/solution/app/filewithouterror.ts (computed .d.ts during emit)
 
 FsWatches::
-/user/username/projects/solution/app/tsconfig.json: *new*
-  {}
 /user/username/projects/solution/app/filewitherror.ts: *new*
   {}
 /user/username/projects/solution/app/filewithouterror.ts: *new*
+  {}
+/user/username/projects/solution/app/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::

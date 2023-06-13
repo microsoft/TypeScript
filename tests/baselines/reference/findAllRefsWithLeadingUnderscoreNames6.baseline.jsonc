@@ -21,12 +21,7 @@
   //     public ___bar;
   //     public ____bar;
   // }
-  // 
-  // var x: Foo;
-  // x._bar;
-  // x.__bar;
-  // x.___bar;
-  // x.____bar;
+  // --- (line: 7) skipped ---
 
   // === Details ===
   [
@@ -105,12 +100,7 @@
   //     public ___bar;
   //     public ____bar;
   // }
-  // 
-  // var x: Foo;
-  // x._bar;
-  // x.__bar;
-  // x.___bar;
-  // x.____bar;
+  // --- (line: 7) skipped ---
 
   // === Details ===
   [

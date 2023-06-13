@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es2019/globalThisBlockscopedProperties.ts ===
+//// [tests/cases/conformance/es2019/globalThisBlockscopedProperties.ts] ////
+
+=== globalThisBlockscopedProperties.ts ===
 var x = 1
 >x : Symbol(x, Decl(globalThisBlockscopedProperties.ts, 0, 3))
 

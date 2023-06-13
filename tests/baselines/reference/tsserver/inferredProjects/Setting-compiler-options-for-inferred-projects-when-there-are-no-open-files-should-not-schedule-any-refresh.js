@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info 0    [00:00:13.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/a/b/commonFile1.ts]
 let x = 1
@@ -18,7 +18,7 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-Info 1    [00:00:14.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "compilerOptionsForInferredProjects",
       "arguments": {
@@ -30,7 +30,7 @@ Info 1    [00:00:14.000] request:
       "seq": 1,
       "type": "request"
     }
-Info 2    [00:00:15.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
       "responseRequired": true

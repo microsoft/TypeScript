@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionParameterArityMismatch.ts ===
+//// [tests/cases/compiler/functionParameterArityMismatch.ts] ////
+
+=== functionParameterArityMismatch.ts ===
 declare function f1(a: number);
 >f1 : { (a: number): any; (a: number, b: number, c: number): any; }
 >a : number

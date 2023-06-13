@@ -24,9 +24,7 @@
   //    propName: string;
   // }
   // 
-  // var v: interface1;
-  // v.propName;
-  // v.doStuff();
+  // --- (line: 10) skipped ---
 
   // === Details ===
   [

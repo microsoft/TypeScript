@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/staticMemberWithStringAndNumberNames.ts] ////
+
 //// [staticMemberWithStringAndNumberNames.ts]
 class C {
     static "foo" = 0;

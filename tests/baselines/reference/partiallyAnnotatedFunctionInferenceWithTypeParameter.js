@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/contextualTypes/partiallyAnnotatedFunction/partiallyAnnotatedFunctionInferenceWithTypeParameter.ts] ////
+
 //// [partiallyAnnotatedFunctionInferenceWithTypeParameter.ts]
 class C {
   test: string

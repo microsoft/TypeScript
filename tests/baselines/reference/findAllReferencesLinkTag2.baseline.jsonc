@@ -13,19 +13,7 @@
 //      * @see {Consider#This#show}
 //      * {@link Consider.This.show}
 //      * @see {NPR.Consider#This#show}
-//      * {@link NPR.Consider.This#show}
-//      * @see {NPR.Consider#This.show} # doesn't parse trailing .
-//      * @see {NPR.Consider.This.show}
-//      */
-//     export function ref() { }
-// }
-// /**
-//  * {@link NPR.Consider#This#show hello hello}
-//  * {@link NPR.Consider.This#show}
-//  * @see {NPR.Consider#This.show} # doesn't parse trailing .
-//  * @see {NPR.Consider.This.show}
-//  */
-// export function outerref() { }
+// --- (line: 14) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllReferencesLinkTag2.ts ===
@@ -38,23 +26,7 @@
   //     }
   //     /**
   //      * @see {Consider.prototype.m}
-  //      * {@link Consider#m}
-  //      * @see {Consider#This#show}
-  //      * {@link Consider.This.show}
-  //      * @see {NPR.Consider#This#show}
-  //      * {@link NPR.Consider.This#show}
-  //      * @see {NPR.Consider#This.show} # doesn't parse trailing .
-  //      * @see {NPR.Consider.This.show}
-  //      */
-  //     export function ref() { }
-  // }
-  // /**
-  //  * {@link NPR.Consider#This#show hello hello}
-  //  * {@link NPR.Consider.This#show}
-  //  * @see {NPR.Consider#This.show} # doesn't parse trailing .
-  //  * @see {NPR.Consider.This.show}
-  //  */
-  // export function outerref() { }
+  // --- (line: 10) skipped ---
 
   // === Details ===
   [
@@ -164,25 +136,7 @@
   //         }
   //         m() { }
   //     }
-  //     /**
-  //      * @see {Consider.prototype.m}
-  //      * {@link Consider#m}
-  //      * @see {Consider#This#show}
-  //      * {@link Consider.This.show}
-  //      * @see {NPR.Consider#This#show}
-  //      * {@link NPR.Consider.This#show}
-  //      * @see {NPR.Consider#This.show} # doesn't parse trailing .
-  //      * @see {NPR.Consider.This.show}
-  //      */
-  //     export function ref() { }
-  // }
-  // /**
-  //  * {@link NPR.Consider#This#show hello hello}
-  //  * {@link NPR.Consider.This#show}
-  //  * @see {NPR.Consider#This.show} # doesn't parse trailing .
-  //  * @see {NPR.Consider.This.show}
-  //  */
-  // export function outerref() { }
+  // --- (line: 8) skipped ---
 
   // === Details ===
   [
@@ -285,24 +239,7 @@
   //         m() { }
   //     }
   //     /**
-  //      * @see {Consider.prototype.m}
-  //      * {@link Consider#m}
-  //      * @see {Consider#This#show}
-  //      * {@link Consider.This.show}
-  //      * @see {NPR.Consider#This#show}
-  //      * {@link NPR.Consider.This#show}
-  //      * @see {NPR.Consider#This.show} # doesn't parse trailing .
-  //      * @see {NPR.Consider.This.show}
-  //      */
-  //     export function ref() { }
-  // }
-  // /**
-  //  * {@link NPR.Consider#This#show hello hello}
-  //  * {@link NPR.Consider.This#show}
-  //  * @see {NPR.Consider#This.show} # doesn't parse trailing .
-  //  * @see {NPR.Consider.This.show}
-  //  */
-  // export function outerref() { }
+  // --- (line: 9) skipped ---
 
   // === Details ===
   [
@@ -415,22 +352,7 @@
   //     /**
   //      * @see {Consider.prototype.m}
   //      * {@link Consider#m}
-  //      * @see {Consider#This#show}
-  //      * {@link Consider.This.show}
-  //      * @see {NPR.Consider#This#show}
-  //      * {@link NPR.Consider.This#show}
-  //      * @see {NPR.Consider#This.show} # doesn't parse trailing .
-  //      * @see {NPR.Consider.This.show}
-  //      */
-  //     export function ref() { }
-  // }
-  // /**
-  //  * {@link NPR.Consider#This#show hello hello}
-  //  * {@link NPR.Consider.This#show}
-  //  * @see {NPR.Consider#This.show} # doesn't parse trailing .
-  //  * @see {NPR.Consider.This.show}
-  //  */
-  // export function outerref() { }
+  // --- (line: 11) skipped ---
 
   // === Details ===
   [
@@ -472,11 +394,9 @@
 //     export class Consider {
 //         This = class {
 //             show() { }
-//         }
-//         m() { }
-//     }
-//     /**
-//      * @see {Consider.prototype.m}
+// --- (line: 5) skipped ---
+
+// --- (line: 9) skipped ---
 //      * {@link Consider#m}
 //      * @see {Consider#This#show}
 //      * {@link Consider.This.show}
@@ -519,10 +439,7 @@
   // /**
   //  * {@link NPR.Consider#This#show hello hello}
   //  * {@link NPR.Consider.This#show}
-  //  * @see {NPR.Consider#This.show} # doesn't parse trailing .
-  //  * @see {NPR.Consider.This.show}
-  //  */
-  // export function outerref() { }
+  // --- (line: 23) skipped ---
 
   // === Details ===
   [

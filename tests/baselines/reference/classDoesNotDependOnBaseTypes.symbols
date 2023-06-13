@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeAliases/classDoesNotDependOnBaseTypes.ts ===
+//// [tests/cases/conformance/types/typeAliases/classDoesNotDependOnBaseTypes.ts] ////
+
+=== classDoesNotDependOnBaseTypes.ts ===
 type StringTree = string | StringTreeCollection;
 >StringTree : Symbol(StringTree, Decl(classDoesNotDependOnBaseTypes.ts, 0, 0))
 >StringTreeCollection : Symbol(StringTreeCollection, Decl(classDoesNotDependOnBaseTypes.ts, 3, 1))

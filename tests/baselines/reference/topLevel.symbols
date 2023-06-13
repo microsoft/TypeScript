@@ -1,4 +1,6 @@
-=== tests/cases/compiler/topLevel.ts ===
+//// [tests/cases/compiler/topLevel.ts] ////
+
+=== topLevel.ts ===
 interface IPoint {
 >IPoint : Symbol(IPoint, Decl(topLevel.ts, 0, 0))
 

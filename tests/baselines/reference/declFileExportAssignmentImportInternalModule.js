@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileExportAssignmentImportInternalModule.ts] ////
+
 //// [declFileExportAssignmentImportInternalModule.ts]
 module m3 {
     export module m2 {

@@ -11,13 +11,7 @@
 //     }
 //     method() {
 //         super.x();
-//     }
-// }
-// class D {
-//     constructor() {
-//         super();
-//     }
-// }
+// --- (line: 12) skipped ---
 
   // === Details ===
   [
@@ -61,10 +55,7 @@
 //     }
 // }
 // class D {
-//     constructor() {
-//         super();
-//     }
-// }
+// --- (line: 15) skipped ---
 
   // === Details ===
   [
@@ -83,18 +74,7 @@
 
 // === goToDefinition ===
 // === /tests/cases/fourslash/goToDefinition_super.ts ===
-// class A {
-//     constructor() {}
-//     x() {}
-// }
-// class B extends A {}
-// class C extends B {
-//     constructor() {
-//         super();
-//     }
-//     method() {
-//         super.x();
-//     }
+// --- (line: 12) skipped ---
 // }
 // class D {
 //     constructor() {
