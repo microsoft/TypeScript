@@ -1,10 +1,10 @@
-tests/cases/compiler/duplicateIdentifiersAcrossContainerBoundaries.ts(9,21): error TS2814: Function with bodies can only merge with classes that are ambient.
-tests/cases/compiler/duplicateIdentifiersAcrossContainerBoundaries.ts(12,18): error TS2813: Class declaration cannot implement overload list for 'f'.
-tests/cases/compiler/duplicateIdentifiersAcrossContainerBoundaries.ts(37,12): error TS2300: Duplicate identifier 'x'.
-tests/cases/compiler/duplicateIdentifiersAcrossContainerBoundaries.ts(41,16): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifiersAcrossContainerBoundaries.ts(9,21): error TS2814: Function with bodies can only merge with classes that are ambient.
+duplicateIdentifiersAcrossContainerBoundaries.ts(12,18): error TS2813: Class declaration cannot implement overload list for 'f'.
+duplicateIdentifiersAcrossContainerBoundaries.ts(37,12): error TS2300: Duplicate identifier 'x'.
+duplicateIdentifiersAcrossContainerBoundaries.ts(41,16): error TS2300: Duplicate identifier 'x'.
 
 
-==== tests/cases/compiler/duplicateIdentifiersAcrossContainerBoundaries.ts (4 errors) ====
+==== duplicateIdentifiersAcrossContainerBoundaries.ts (4 errors) ====
     module M {
         export interface I { }
     }
@@ -16,13 +16,13 @@ tests/cases/compiler/duplicateIdentifiersAcrossContainerBoundaries.ts(41,16): er
         export function f() { }
                         ~
 !!! error TS2814: Function with bodies can only merge with classes that are ambient.
-!!! related TS6506 tests/cases/compiler/duplicateIdentifiersAcrossContainerBoundaries.ts:12:18: Consider adding a 'declare' modifier to this class.
+!!! related TS6506 duplicateIdentifiersAcrossContainerBoundaries.ts:12:18: Consider adding a 'declare' modifier to this class.
     }
     module M {
         export class f { } // error
                      ~
 !!! error TS2813: Class declaration cannot implement overload list for 'f'.
-!!! related TS6506 tests/cases/compiler/duplicateIdentifiersAcrossContainerBoundaries.ts:12:18: Consider adding a 'declare' modifier to this class.
+!!! related TS6506 duplicateIdentifiersAcrossContainerBoundaries.ts:12:18: Consider adding a 'declare' modifier to this class.
     }
     
     module M {

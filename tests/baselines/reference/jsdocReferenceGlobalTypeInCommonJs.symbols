@@ -1,8 +1,10 @@
-=== tests/cases/compiler/a.js ===
+//// [tests/cases/compiler/jsdocReferenceGlobalTypeInCommonJs.ts] ////
+
+=== a.js ===
 const other = require('./other');
 >other : Symbol(other, Decl(a.js, 0, 5))
 >require : Symbol(require)
->'./other' : Symbol("tests/cases/compiler/other", Decl(other.d.ts, 0, 0))
+>'./other' : Symbol("other", Decl(other.d.ts, 0, 0))
 
 /** @type {Puppeteer.Keyboard} */
 var ppk;
@@ -13,7 +15,7 @@ Puppeteer.connect;
 >Puppeteer : Symbol(Puppeteer, Decl(puppet.d.ts, 0, 0))
 >connect : Symbol(Puppeteer.connect, Decl(puppet.d.ts, 3, 1))
 
-=== tests/cases/compiler/puppet.d.ts ===
+=== puppet.d.ts ===
 export as namespace Puppeteer;
 >Puppeteer : Symbol(Puppeteer, Decl(puppet.d.ts, 0, 0))
 
@@ -27,7 +29,7 @@ export function connect(name: string): void;
 >connect : Symbol(connect, Decl(puppet.d.ts, 3, 1))
 >name : Symbol(name, Decl(puppet.d.ts, 4, 24))
 
-=== tests/cases/compiler/other.d.ts ===
+=== other.d.ts ===
 declare function f(): string;
 >f : Symbol(f, Decl(other.d.ts, 0, 0))
 

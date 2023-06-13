@@ -1,7 +1,7 @@
-tests/cases/conformance/jsx/file.tsx(12,5): error TS2304: Cannot find name 'blah'.
+file.tsx(12,5): error TS2304: Cannot find name 'blah'.
 
 
-==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
+==== file.tsx (1 errors) ====
     declare module JSX {
     	interface Element { }
     	interface IntrinsicElements {

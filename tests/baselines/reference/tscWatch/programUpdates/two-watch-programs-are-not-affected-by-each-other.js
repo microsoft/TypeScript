@@ -108,13 +108,13 @@ Shape signatures in builder refreshed for::
 /a/b/f1.ts (used version)
 
 FsWatches::
+/a/b/f1.ts: *new*
+  {}
 /a/c/f2.ts:
   {}
 /a/d/f3.ts:
   {}
 /a/lib/lib.d.ts:
-  {}
-/a/b/f1.ts: *new*
   {}
 
 exitCode:: ExitStatus.undefined

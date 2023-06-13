@@ -1,4 +1,6 @@
-=== tests/cases/compiler/trivialSubtypeReductionNoStructuralCheck2.ts ===
+//// [tests/cases/compiler/trivialSubtypeReductionNoStructuralCheck2.ts] ////
+
+=== trivialSubtypeReductionNoStructuralCheck2.ts ===
 declare const props: WizardStepProps;
 >props : Symbol(props, Decl(trivialSubtypeReductionNoStructuralCheck2.ts, 0, 13))
 >WizardStepProps : Symbol(WizardStepProps, Decl(trivialSubtypeReductionNoStructuralCheck2.ts, 8, 1))

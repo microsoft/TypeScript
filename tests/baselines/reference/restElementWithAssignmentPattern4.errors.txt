@@ -1,7 +1,7 @@
-tests/cases/conformance/es6/destructuring/restElementWithAssignmentPattern4.ts(3,18): error TS2339: Property 'b' does not exist on type '[string, number]'.
+restElementWithAssignmentPattern4.ts(3,18): error TS2339: Property 'b' does not exist on type '[string, number]'.
 
 
-==== tests/cases/conformance/es6/destructuring/restElementWithAssignmentPattern4.ts (1 errors) ====
+==== restElementWithAssignmentPattern4.ts (1 errors) ====
     var a: string, b: number;
     var tuple: [string, number] = ["", 1];
     [...{ 0: a = "", b }] = tuple;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts] ////
+
 //// [doYouNeedToChangeYourTargetLibraryES2015.ts]
 // es2015
 const noOp = () => {};

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/multipleDeclarations.ts] ////
+
 //// [input.js]
 function C() {
     this.m = null;

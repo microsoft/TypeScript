@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/generics4NoError.ts] ////
+
 //// [generics4NoError.ts]
 class C<T> { private x: T; }
 interface X { f(): string; }

@@ -1,7 +1,7 @@
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithEnumIndexer.ts(5,5): error TS2741: Property '[E.A]' is missing in type '{}' but required in type 'Record<E, any>'.
+assignmentCompatWithEnumIndexer.ts(5,5): error TS2741: Property '[E.A]' is missing in type '{}' but required in type 'Record<E, any>'.
 
 
-==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithEnumIndexer.ts (1 errors) ====
+==== assignmentCompatWithEnumIndexer.ts (1 errors) ====
     enum E {
         A
     }

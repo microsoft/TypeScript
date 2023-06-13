@@ -53,15 +53,17 @@ Shape signatures in builder refreshed for::
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/main.ts: *new*
   {}
 /user/username/projects/myproject/other.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -171,29 +173,33 @@ No shapes updated in the builder::
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500} *new*
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500} *new*
 
 PolledWatches *deleted*::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/a/lib/lib.d.ts:
   {} *new*
 /user/username/projects/myproject/main.ts:
   {} *new*
 /user/username/projects/myproject/other.ts:
   {} *new*
-/a/lib/lib.d.ts:
+/user/username/projects/myproject/tsconfig.json:
   {} *new*
 
 FsWatches *deleted*::
-/user/username/projects/myproject/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/main.ts:
   {}
 /user/username/projects/myproject/other.ts:
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/myproject/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -311,15 +317,17 @@ export const x = 10;
 PolledWatches *deleted*::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches *deleted*::
-/user/username/projects/myproject/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/main.ts:
   {}
 /user/username/projects/myproject/other.ts:
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/myproject/tsconfig.json:
   {}
 
 FsWatchesRecursive *deleted*::
@@ -352,15 +360,17 @@ Shape signatures in builder refreshed for::
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/main.ts: *new*
   {}
 /user/username/projects/myproject/other.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -471,29 +481,33 @@ No shapes updated in the builder::
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500} *new*
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500} *new*
 
 PolledWatches *deleted*::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/a/lib/lib.d.ts:
   {} *new*
 /user/username/projects/myproject/main.ts:
   {} *new*
 /user/username/projects/myproject/other.ts:
   {} *new*
-/a/lib/lib.d.ts:
+/user/username/projects/myproject/tsconfig.json:
   {} *new*
 
 FsWatches *deleted*::
-/user/username/projects/myproject/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/main.ts:
   {}
 /user/username/projects/myproject/other.ts:
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/myproject/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -598,15 +612,17 @@ export const x = 10;
 PolledWatches *deleted*::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches *deleted*::
-/user/username/projects/myproject/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/main.ts:
   {}
 /user/username/projects/myproject/other.ts:
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/myproject/tsconfig.json:
   {}
 
 FsWatchesRecursive *deleted*::
@@ -639,15 +655,17 @@ Shape signatures in builder refreshed for::
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/main.ts: *new*
   {}
 /user/username/projects/myproject/other.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::

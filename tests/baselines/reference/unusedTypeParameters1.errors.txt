@@ -1,7 +1,7 @@
-tests/cases/compiler/unusedTypeParameters1.ts(1,14): error TS6133: 'typeparameter1' is declared but its value is never read.
+unusedTypeParameters1.ts(1,14): error TS6133: 'typeparameter1' is declared but its value is never read.
 
 
-==== tests/cases/compiler/unusedTypeParameters1.ts (1 errors) ====
+==== unusedTypeParameters1.ts (1 errors) ====
     class greeter<typeparameter1> {
                  ~~~~~~~~~~~~~~~~
 !!! error TS6133: 'typeparameter1' is declared but its value is never read.

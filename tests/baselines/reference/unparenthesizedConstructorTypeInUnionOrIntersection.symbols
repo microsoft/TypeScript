@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unparenthesizedConstructorTypeInUnionOrIntersection.ts ===
+//// [tests/cases/compiler/unparenthesizedConstructorTypeInUnionOrIntersection.ts] ////
+
+=== unparenthesizedConstructorTypeInUnionOrIntersection.ts ===
 type U1 = string | new () => void;
 >U1 : Symbol(U1, Decl(unparenthesizedConstructorTypeInUnionOrIntersection.ts, 0, 0))
 

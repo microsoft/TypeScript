@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericTypeAssertions1.ts ===
+//// [tests/cases/compiler/genericTypeAssertions1.ts] ////
+
+=== genericTypeAssertions1.ts ===
 class A<T> { foo(x: T) { }}
 >A : A<T>
 >foo : (x: T) => void

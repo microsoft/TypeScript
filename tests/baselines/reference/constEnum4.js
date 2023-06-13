@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/constEnums/constEnum4.ts] ////
+
 //// [constEnum4.ts]
 if (1)
     const enum A { }

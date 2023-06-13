@@ -1,4 +1,6 @@
-=== tests/cases/compiler/forIn.ts ===
+//// [tests/cases/compiler/forIn.ts] ////
+
+=== forIn.ts ===
 var arr = null;
 >arr : Symbol(arr, Decl(forIn.ts, 0, 3))
 

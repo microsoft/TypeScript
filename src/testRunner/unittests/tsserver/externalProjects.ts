@@ -1,11 +1,6 @@
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 import {
-    createServerHost,
-    File,
-    libFile,
-} from "../virtualFileSystemWithWatch";
-import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,
     createProjectService,
@@ -18,7 +13,12 @@ import {
     toExternalFile,
     toExternalFiles,
     verifyDynamic,
-} from "./helpers";
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+    File,
+    libFile,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: externalProjects", () => {
     describe("can handle tsconfig file name with difference casing", () => {

@@ -26,33 +26,7 @@
 //         private static statPriv;
 //         protected static statProt;
 //     }
-// 
-//     export interface I1 {
-//     }
-// 
-//     export declare module ma.m1.m2.m3 {
-//         interface I2 {
-//         }
-//     }
-// 
-//     export module mb.m1.m2.m3 {
-//         declare var foo;
-// 
-//         export class C2 {
-//             public pub1;
-//             private priv1;
-//             protected prot1;
-// 
-//             protected constructor(public public, protected protected, private private) {
-//                 public = private = protected;
-//             }
-//         }
-//     }
-// 
-//     declare var ambientThing: number;
-//     export var exportedThing = 10;
-//     declare function foo(): string;
-// }
+// --- (line: 27) skipped ---
 
 
 
@@ -84,33 +58,7 @@
 //         private static statPriv;
 //         protected static statProt;
 //     }
-// 
-//     export interface I1 {
-//     }
-// 
-//     export declare module ma.m1.m2.m3 {
-//         interface I2 {
-//         }
-//     }
-// 
-//     export module mb.m1.m2.m3 {
-//         declare var foo;
-// 
-//         export class C2 {
-//             public pub1;
-//             private priv1;
-//             protected prot1;
-// 
-//             protected constructor(public public, protected protected, private private) {
-//                 public = private = protected;
-//             }
-//         }
-//     }
-// 
-//     declare var ambientThing: number;
-//     export var exportedThing = 10;
-//     declare function foo(): string;
-// }
+// --- (line: 27) skipped ---
 
 
 
@@ -142,33 +90,7 @@
 //         private static statPriv;
 //         protected static statProt;
 //     }
-// 
-//     export interface I1 {
-//     }
-// 
-//     export declare module ma.m1.m2.m3 {
-//         interface I2 {
-//         }
-//     }
-// 
-//     export module mb.m1.m2.m3 {
-//         declare var foo;
-// 
-//         export class C2 {
-//             public pub1;
-//             private priv1;
-//             protected prot1;
-// 
-//             protected constructor(public public, protected protected, private private) {
-//                 public = private = protected;
-//             }
-//         }
-//     }
-// 
-//     declare var ambientThing: number;
-//     export var exportedThing = 10;
-//     declare function foo(): string;
-// }
+// --- (line: 27) skipped ---
 
 
 
@@ -200,33 +122,7 @@
 //         private static statPriv;
 //         protected static statProt;
 //     }
-// 
-//     export interface I1 {
-//     }
-// 
-//     export declare module ma.m1.m2.m3 {
-//         interface I2 {
-//         }
-//     }
-// 
-//     export module mb.m1.m2.m3 {
-//         declare var foo;
-// 
-//         export class C2 {
-//             public pub1;
-//             private priv1;
-//             protected prot1;
-// 
-//             protected constructor(public public, protected protected, private private) {
-//                 public = private = protected;
-//             }
-//         }
-//     }
-// 
-//     declare var ambientThing: number;
-//     export var exportedThing = 10;
-//     declare function foo(): string;
-// }
+// --- (line: 27) skipped ---
 
 
 
@@ -258,33 +154,7 @@
 //         private static statPriv;
 //         protected static statProt;
 //     }
-// 
-//     export interface I1 {
-//     }
-// 
-//     export declare module ma.m1.m2.m3 {
-//         interface I2 {
-//         }
-//     }
-// 
-//     export module mb.m1.m2.m3 {
-//         declare var foo;
-// 
-//         export class C2 {
-//             public pub1;
-//             private priv1;
-//             protected prot1;
-// 
-//             protected constructor(public public, protected protected, private private) {
-//                 public = private = protected;
-//             }
-//         }
-//     }
-// 
-//     declare var ambientThing: number;
-//     export var exportedThing = 10;
-//     declare function foo(): string;
-// }
+// --- (line: 27) skipped ---
 
 
 
@@ -316,33 +186,7 @@
 //         private static statPriv;
 //         protected static statProt;
 //     }
-// 
-//     export interface I1 {
-//     }
-// 
-//     export declare module ma.m1.m2.m3 {
-//         interface I2 {
-//         }
-//     }
-// 
-//     export module mb.m1.m2.m3 {
-//         declare var foo;
-// 
-//         export class C2 {
-//             public pub1;
-//             private priv1;
-//             protected prot1;
-// 
-//             protected constructor(public public, protected protected, private private) {
-//                 public = private = protected;
-//             }
-//         }
-//     }
-// 
-//     declare var ambientThing: number;
-//     export var exportedThing = 10;
-//     declare function foo(): string;
-// }
+// --- (line: 27) skipped ---
 
 
 
@@ -374,33 +218,7 @@
 //         private static statPriv;
 //         protected static statProt;
 //     }
-// 
-//     export interface I1 {
-//     }
-// 
-//     export declare module ma.m1.m2.m3 {
-//         interface I2 {
-//         }
-//     }
-// 
-//     export module mb.m1.m2.m3 {
-//         declare var foo;
-// 
-//         export class C2 {
-//             public pub1;
-//             private priv1;
-//             protected prot1;
-// 
-//             protected constructor(public public, protected protected, private private) {
-//                 public = private = protected;
-//             }
-//         }
-//     }
-// 
-//     declare var ambientThing: number;
-//     export var exportedThing = 10;
-//     declare function foo(): string;
-// }
+// --- (line: 27) skipped ---
 
 
 
@@ -432,33 +250,7 @@
 //         private static statPriv;
 //         protected static statProt;
 //     }
-// 
-//     export interface I1 {
-//     }
-// 
-//     export declare module ma.m1.m2.m3 {
-//         interface I2 {
-//         }
-//     }
-// 
-//     export module mb.m1.m2.m3 {
-//         declare var foo;
-// 
-//         export class C2 {
-//             public pub1;
-//             private priv1;
-//             protected prot1;
-// 
-//             protected constructor(public public, protected protected, private private) {
-//                 public = private = protected;
-//             }
-//         }
-//     }
-// 
-//     declare var ambientThing: number;
-//     export var exportedThing = 10;
-//     declare function foo(): string;
-// }
+// --- (line: 27) skipped ---
 
 
 
@@ -490,30 +282,4 @@
 //         private static statPriv;
 //         protected static statProt;
 //     }
-// 
-//     export interface I1 {
-//     }
-// 
-//     export declare module ma.m1.m2.m3 {
-//         interface I2 {
-//         }
-//     }
-// 
-//     export module mb.m1.m2.m3 {
-//         declare var foo;
-// 
-//         export class C2 {
-//             public pub1;
-//             private priv1;
-//             protected prot1;
-// 
-//             protected constructor(public public, protected protected, private private) {
-//                 public = private = protected;
-//             }
-//         }
-//     }
-// 
-//     declare var ambientThing: number;
-//     export var exportedThing = 10;
-//     declare function foo(): string;
-// }
+// --- (line: 27) skipped ---

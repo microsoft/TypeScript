@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError.ts] ////
+
 //// [internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError.ts]
 export module a {
     export module b {
@@ -24,5 +26,5 @@ define(["require", "exports"], function (require, exports) {
     var c;
     (function (c) {
         c.x.foo();
-    })(c = exports.c || (exports.c = {}));
+    })(c || (exports.c = c = {}));
 });

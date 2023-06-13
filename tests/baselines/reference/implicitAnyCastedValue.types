@@ -1,4 +1,6 @@
-=== tests/cases/compiler/implicitAnyCastedValue.ts ===
+//// [tests/cases/compiler/implicitAnyCastedValue.ts] ////
+
+=== implicitAnyCastedValue.ts ===
 var x = function () {
 >x : () => any
 >function () {    return <any>0;  // this should not be an error} : () => any

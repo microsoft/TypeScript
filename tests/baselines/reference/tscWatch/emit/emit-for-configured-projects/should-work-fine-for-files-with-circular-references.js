@@ -52,16 +52,12 @@ Shape signatures in builder refreshed for::
 /a/b/file2.ts (used version)
 /a/b/file1.ts (used version)
 
-PolledWatches::
-/a/b/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
-/a/b/tsconfig.json: *new*
-  {}
 /a/b/file1.ts: *new*
   {}
 /a/b/file2.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
   {}
 /a/lib/lib.d.ts: *new*
   {}

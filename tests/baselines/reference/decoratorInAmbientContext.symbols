@@ -1,4 +1,6 @@
-=== tests/cases/conformance/decorators/decoratorInAmbientContext.ts ===
+//// [tests/cases/conformance/decorators/decoratorInAmbientContext.ts] ////
+
+=== decoratorInAmbientContext.ts ===
 declare function decorator(target: any, key: any): any;
 >decorator : Symbol(decorator, Decl(decoratorInAmbientContext.ts, 0, 0))
 >target : Symbol(target, Decl(decoratorInAmbientContext.ts, 0, 27))

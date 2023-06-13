@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/thisBinding2.ts] ////
+
 //// [thisBinding2.ts]
 class C {
  x: number;

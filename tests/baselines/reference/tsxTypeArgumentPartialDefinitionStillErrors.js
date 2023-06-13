@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/tsxTypeArgumentPartialDefinitionStillErrors.ts] ////
+
 //// [file.tsx]
 declare namespace JSX {
     interface Element {

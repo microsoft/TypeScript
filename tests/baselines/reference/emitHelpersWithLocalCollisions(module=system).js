@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/emitHelpersWithLocalCollisions.ts] ////
+
 //// [a.ts]
 declare var dec: any, __decorate: any;
 @dec export class A {
@@ -21,12 +23,11 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
-            A = class A {
-            };
-            A = __decorate([
+            exports_1("A", A = class A {
+            });
+            exports_1("A", A = __decorate([
                 dec
-            ], A);
-            exports_1("A", A);
+            ], A));
             o = { a: 1 };
             y = Object.assign({}, o);
         }

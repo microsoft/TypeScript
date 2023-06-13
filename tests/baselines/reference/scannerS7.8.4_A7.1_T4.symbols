@@ -1,4 +1,6 @@
-=== tests/cases/conformance/scanner/ecmascript5/scannerS7.8.4_A7.1_T4.ts ===
+//// [tests/cases/conformance/scanner/ecmascript5/scannerS7.8.4_A7.1_T4.ts] ////
+
+=== scannerS7.8.4_A7.1_T4.ts ===
 
 // Copyright 2009 the Sputnik authors.  All rights reserved.
 // This code is governed by the BSD license found in the LICENSE file.

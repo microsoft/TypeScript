@@ -1,4 +1,6 @@
-=== tests/cases/compiler/voidOperator1.ts ===
+//// [tests/cases/compiler/voidOperator1.ts] ////
+
+=== voidOperator1.ts ===
 var x: any = void 1;
 >x : Symbol(x, Decl(voidOperator1.ts, 0, 3))
 

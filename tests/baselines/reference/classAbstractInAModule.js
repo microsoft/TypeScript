@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInAModule.ts] ////
+
 //// [classAbstractInAModule.ts]
 module M {
     export abstract class A {}

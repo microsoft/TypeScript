@@ -1,8 +1,8 @@
-tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck8.ts(3,6): error TS2322: Type 'string | number | symbol' is not assignable to type 'symbol'.
+ES5For-ofTypeCheck8.ts(3,6): error TS2322: Type 'string | number | symbol' is not assignable to type 'symbol'.
   Type 'string' is not assignable to type 'symbol'.
 
 
-==== tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck8.ts (1 errors) ====
+==== ES5For-ofTypeCheck8.ts (1 errors) ====
     var union: string | string[]| number[]| symbol[];
     var v: symbol;
     for (v of union) { }

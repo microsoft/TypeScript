@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/javascriptDefinePropertyPrototypeNonConstructor.ts] ////
+
 === /a.js ===
 function Graphic() {
 >Graphic : typeof Graphic

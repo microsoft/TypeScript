@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeofEnum.ts] ////
+
 //// [typeofEnum.ts]
 enum E {
     e1,

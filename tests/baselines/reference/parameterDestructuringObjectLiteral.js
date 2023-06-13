@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/parameterDestructuringObjectLiteral.ts] ////
+
 //// [parameterDestructuringObjectLiteral.ts]
 // Repro from #22644
 

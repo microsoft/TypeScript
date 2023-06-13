@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/anonymousClassExpression1.ts] ////
+
 //// [anonymousClassExpression1.ts]
 function f() {
     return typeof class {} === "function";

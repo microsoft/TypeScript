@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeofStrictNull.ts ===
+//// [tests/cases/compiler/typeofStrictNull.ts] ////
+
+=== typeofStrictNull.ts ===
 let a: number;
 >a : Symbol(a, Decl(typeofStrictNull.ts, 0, 3))
 

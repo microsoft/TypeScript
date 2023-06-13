@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/sourceMapSample.ts] ////
+
 //// [sourceMapSample.ts]
 module Foo.Bar {
     "use strict";

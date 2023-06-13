@@ -1,4 +1,6 @@
-=== tests/cases/conformance/ambient/types.ts ===
+//// [tests/cases/conformance/ambient/ambientDeclarationsPatterns_merging3.ts] ////
+
+=== types.ts ===
 declare module "*.foo" {
 >"*.foo" : typeof import("*.foo")
 
@@ -6,7 +8,7 @@ declare module "*.foo" {
 >star : string
 }
 
-=== tests/cases/conformance/ambient/test.ts ===
+=== test.ts ===
 declare module "a.foo" {
 >"a.foo" : typeof import("a.foo")
 

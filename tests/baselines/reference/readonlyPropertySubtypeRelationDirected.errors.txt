@@ -1,14 +1,14 @@
-tests/cases/compiler/four.ts(11,11): error TS2540: Cannot assign to 'a' because it is a read-only property.
-tests/cases/compiler/four.ts(15,11): error TS2540: Cannot assign to 'a' because it is a read-only property.
-tests/cases/compiler/one.ts(11,11): error TS2540: Cannot assign to 'a' because it is a read-only property.
-tests/cases/compiler/one.ts(15,11): error TS2540: Cannot assign to 'a' because it is a read-only property.
-tests/cases/compiler/three.ts(11,11): error TS2540: Cannot assign to 'a' because it is a read-only property.
-tests/cases/compiler/three.ts(15,11): error TS2540: Cannot assign to 'a' because it is a read-only property.
-tests/cases/compiler/two.ts(11,11): error TS2540: Cannot assign to 'a' because it is a read-only property.
-tests/cases/compiler/two.ts(15,11): error TS2540: Cannot assign to 'a' because it is a read-only property.
+four.ts(11,11): error TS2540: Cannot assign to 'a' because it is a read-only property.
+four.ts(15,11): error TS2540: Cannot assign to 'a' because it is a read-only property.
+one.ts(11,11): error TS2540: Cannot assign to 'a' because it is a read-only property.
+one.ts(15,11): error TS2540: Cannot assign to 'a' because it is a read-only property.
+three.ts(11,11): error TS2540: Cannot assign to 'a' because it is a read-only property.
+three.ts(15,11): error TS2540: Cannot assign to 'a' because it is a read-only property.
+two.ts(11,11): error TS2540: Cannot assign to 'a' because it is a read-only property.
+two.ts(15,11): error TS2540: Cannot assign to 'a' because it is a read-only property.
 
 
-==== tests/cases/compiler/one.ts (2 errors) ====
+==== one.ts (2 errors) ====
     export {};
     // When the non-readonly type is declared first, the unioned type of `three` in `doSomething` is never treated as readonly
     const two: { a: string } = { a: 'two' };
@@ -31,7 +31,7 @@ tests/cases/compiler/two.ts(15,11): error TS2540: Cannot assign to 'a' because i
     
         return three;
     }
-==== tests/cases/compiler/two.ts (2 errors) ====
+==== two.ts (2 errors) ====
     export {};
     // When the non-readonly type is declared first, the unioned type of `three` in `doSomething` is never treated as readonly
     const two: { a: string } = { a: 'two' };
@@ -55,7 +55,7 @@ tests/cases/compiler/two.ts(15,11): error TS2540: Cannot assign to 'a' because i
         return three;
     }
     
-==== tests/cases/compiler/three.ts (2 errors) ====
+==== three.ts (2 errors) ====
     export {};
     // When the readonly type is declared first, the unioned type of `three` in `doSomething` is always treated as readonly by the compiler
     const one: { readonly a: string } = { a: 'one' };
@@ -79,7 +79,7 @@ tests/cases/compiler/two.ts(15,11): error TS2540: Cannot assign to 'a' because i
         return three;
     }
     
-==== tests/cases/compiler/four.ts (2 errors) ====
+==== four.ts (2 errors) ====
     export {};
     // When the readonly type is declared first, the unioned type of `three` in `doSomething` is always treated as readonly by the compiler
     const one: { readonly a: string } = { a: 'one' };

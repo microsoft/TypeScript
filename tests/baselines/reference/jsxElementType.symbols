@@ -1,0 +1,303 @@
+//// [tests/cases/compiler/jsxElementType.tsx] ////
+
+=== jsxElementType.tsx ===
+/// <reference path="react16.d.ts" />
+import * as React from "react";
+>React : Symbol(React, Decl(jsxElementType.tsx, 1, 6))
+
+type React18ReactFragment = ReadonlyArray<React18ReactNode>;
+>React18ReactFragment : Symbol(React18ReactFragment, Decl(jsxElementType.tsx, 1, 31))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>React18ReactNode : Symbol(React18ReactNode, Decl(jsxElementType.tsx, 3, 60))
+
+type React18ReactNode =
+>React18ReactNode : Symbol(React18ReactNode, Decl(jsxElementType.tsx, 3, 60))
+
+  | React.ReactElement<any>
+>React : Symbol(React, Decl(jsxElementType.tsx, 1, 6))
+>ReactElement : Symbol(React.ReactElement, Decl(react16.d.ts, 135, 9))
+
+  | string
+  | number
+  | React18ReactFragment
+>React18ReactFragment : Symbol(React18ReactFragment, Decl(jsxElementType.tsx, 1, 31))
+
+  | React.ReactPortal
+>React : Symbol(React, Decl(jsxElementType.tsx, 1, 6))
+>ReactPortal : Symbol(React.ReactPortal, Decl(react16.d.ts, 172, 9))
+
+  | boolean
+  | null
+  | undefined
+  | Promise<React18ReactNode>;
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>React18ReactNode : Symbol(React18ReactNode, Decl(jsxElementType.tsx, 3, 60))
+
+// // React.JSXElementConstructor but it now can return React nodes from function components.
+type NewReactJSXElementConstructor<P> =
+>NewReactJSXElementConstructor : Symbol(NewReactJSXElementConstructor, Decl(jsxElementType.tsx, 13, 30))
+>P : Symbol(P, Decl(jsxElementType.tsx, 16, 35))
+
+  | ((props: P) => React18ReactNode)
+>props : Symbol(props, Decl(jsxElementType.tsx, 17, 6))
+>P : Symbol(P, Decl(jsxElementType.tsx, 16, 35))
+>React18ReactNode : Symbol(React18ReactNode, Decl(jsxElementType.tsx, 3, 60))
+
+  | (new (props: P) => React.Component<P, any>);
+>props : Symbol(props, Decl(jsxElementType.tsx, 18, 10))
+>P : Symbol(P, Decl(jsxElementType.tsx, 16, 35))
+>React : Symbol(React, Decl(jsxElementType.tsx, 1, 6))
+>Component : Symbol(React.Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
+>P : Symbol(P, Decl(jsxElementType.tsx, 16, 35))
+
+declare global {
+>global : Symbol(global, Decl(jsxElementType.tsx, 18, 48), Decl(jsxElementType.tsx, 98, 25))
+
+  namespace JSX {
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12), Decl(jsxElementType.tsx, 20, 16), Decl(jsxElementType.tsx, 100, 16))
+
+    type ElementType = string | NewReactJSXElementConstructor<any>;
+>ElementType : Symbol(ElementType, Decl(jsxElementType.tsx, 21, 17))
+>NewReactJSXElementConstructor : Symbol(NewReactJSXElementConstructor, Decl(jsxElementType.tsx, 13, 30))
+
+    interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(react16.d.ts, 2514, 86), Decl(jsxElementType.tsx, 22, 67), Decl(jsxElementType.tsx, 101, 19))
+
+      ['my-custom-element']: React.DOMAttributes<unknown>;
+>['my-custom-element'] : Symbol(IntrinsicElements['my-custom-element'], Decl(jsxElementType.tsx, 23, 33))
+>'my-custom-element' : Symbol(IntrinsicElements['my-custom-element'], Decl(jsxElementType.tsx, 23, 33))
+>React : Symbol(React, Decl(jsxElementType.tsx, 1, 6))
+>DOMAttributes : Symbol(React.DOMAttributes, Decl(react16.d.ts, 844, 9))
+    }
+  }
+}
+
+let Component: NewReactJSXElementConstructor<{ title: string }>;
+>Component : Symbol(Component, Decl(jsxElementType.tsx, 29, 3))
+>NewReactJSXElementConstructor : Symbol(NewReactJSXElementConstructor, Decl(jsxElementType.tsx, 13, 30))
+>title : Symbol(title, Decl(jsxElementType.tsx, 29, 46))
+
+const RenderElement = ({ title }: { title: string }) => <div>{title}</div>;
+>RenderElement : Symbol(RenderElement, Decl(jsxElementType.tsx, 31, 5))
+>title : Symbol(title, Decl(jsxElementType.tsx, 31, 24))
+>title : Symbol(title, Decl(jsxElementType.tsx, 31, 35))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>title : Symbol(title, Decl(jsxElementType.tsx, 31, 24))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+
+Component = RenderElement;
+>Component : Symbol(Component, Decl(jsxElementType.tsx, 29, 3))
+>RenderElement : Symbol(RenderElement, Decl(jsxElementType.tsx, 31, 5))
+
+<RenderElement />;
+>RenderElement : Symbol(RenderElement, Decl(jsxElementType.tsx, 31, 5))
+
+<RenderElement title="react" />;
+>RenderElement : Symbol(RenderElement, Decl(jsxElementType.tsx, 31, 5))
+>title : Symbol(title, Decl(jsxElementType.tsx, 34, 14))
+
+<RenderElement excessProp />;
+>RenderElement : Symbol(RenderElement, Decl(jsxElementType.tsx, 31, 5))
+>excessProp : Symbol(excessProp, Decl(jsxElementType.tsx, 35, 14))
+
+const RenderString = ({ title }: { title: string }) => title;
+>RenderString : Symbol(RenderString, Decl(jsxElementType.tsx, 37, 5))
+>title : Symbol(title, Decl(jsxElementType.tsx, 37, 23))
+>title : Symbol(title, Decl(jsxElementType.tsx, 37, 34))
+>title : Symbol(title, Decl(jsxElementType.tsx, 37, 23))
+
+Component = RenderString;
+>Component : Symbol(Component, Decl(jsxElementType.tsx, 29, 3))
+>RenderString : Symbol(RenderString, Decl(jsxElementType.tsx, 37, 5))
+
+<RenderString />;
+>RenderString : Symbol(RenderString, Decl(jsxElementType.tsx, 37, 5))
+
+<RenderString title="react" />;
+>RenderString : Symbol(RenderString, Decl(jsxElementType.tsx, 37, 5))
+>title : Symbol(title, Decl(jsxElementType.tsx, 40, 13))
+
+<RenderString excessProp />;
+>RenderString : Symbol(RenderString, Decl(jsxElementType.tsx, 37, 5))
+>excessProp : Symbol(excessProp, Decl(jsxElementType.tsx, 41, 13))
+
+const RenderNumber = ({ title }: { title: string }) => title.length;
+>RenderNumber : Symbol(RenderNumber, Decl(jsxElementType.tsx, 43, 5))
+>title : Symbol(title, Decl(jsxElementType.tsx, 43, 23))
+>title : Symbol(title, Decl(jsxElementType.tsx, 43, 34))
+>title.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>title : Symbol(title, Decl(jsxElementType.tsx, 43, 23))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+Component = RenderNumber;
+>Component : Symbol(Component, Decl(jsxElementType.tsx, 29, 3))
+>RenderNumber : Symbol(RenderNumber, Decl(jsxElementType.tsx, 43, 5))
+
+<RenderNumber />;
+>RenderNumber : Symbol(RenderNumber, Decl(jsxElementType.tsx, 43, 5))
+
+<RenderNumber title="react" />;
+>RenderNumber : Symbol(RenderNumber, Decl(jsxElementType.tsx, 43, 5))
+>title : Symbol(title, Decl(jsxElementType.tsx, 46, 13))
+
+<RenderNumber excessProp />;
+>RenderNumber : Symbol(RenderNumber, Decl(jsxElementType.tsx, 43, 5))
+>excessProp : Symbol(excessProp, Decl(jsxElementType.tsx, 47, 13))
+
+const RenderArray = ({ title }: { title: string }) => [title];
+>RenderArray : Symbol(RenderArray, Decl(jsxElementType.tsx, 49, 5))
+>title : Symbol(title, Decl(jsxElementType.tsx, 49, 22))
+>title : Symbol(title, Decl(jsxElementType.tsx, 49, 33))
+>title : Symbol(title, Decl(jsxElementType.tsx, 49, 22))
+
+Component = RenderArray;
+>Component : Symbol(Component, Decl(jsxElementType.tsx, 29, 3))
+>RenderArray : Symbol(RenderArray, Decl(jsxElementType.tsx, 49, 5))
+
+<RenderArray />;
+>RenderArray : Symbol(RenderArray, Decl(jsxElementType.tsx, 49, 5))
+
+<RenderArray title="react" />;
+>RenderArray : Symbol(RenderArray, Decl(jsxElementType.tsx, 49, 5))
+>title : Symbol(title, Decl(jsxElementType.tsx, 52, 12))
+
+<RenderArray excessProp />;
+>RenderArray : Symbol(RenderArray, Decl(jsxElementType.tsx, 49, 5))
+>excessProp : Symbol(excessProp, Decl(jsxElementType.tsx, 53, 12))
+
+// React Server Component
+const RenderPromise = async ({ title }: { title: string }) => "react";
+>RenderPromise : Symbol(RenderPromise, Decl(jsxElementType.tsx, 56, 5))
+>title : Symbol(title, Decl(jsxElementType.tsx, 56, 30))
+>title : Symbol(title, Decl(jsxElementType.tsx, 56, 41))
+
+Component = RenderPromise;
+>Component : Symbol(Component, Decl(jsxElementType.tsx, 29, 3))
+>RenderPromise : Symbol(RenderPromise, Decl(jsxElementType.tsx, 56, 5))
+
+<RenderPromise />;
+>RenderPromise : Symbol(RenderPromise, Decl(jsxElementType.tsx, 56, 5))
+
+<RenderPromise title="react" />;
+>RenderPromise : Symbol(RenderPromise, Decl(jsxElementType.tsx, 56, 5))
+>title : Symbol(title, Decl(jsxElementType.tsx, 59, 14))
+
+<RenderPromise excessProp />;
+>RenderPromise : Symbol(RenderPromise, Decl(jsxElementType.tsx, 56, 5))
+>excessProp : Symbol(excessProp, Decl(jsxElementType.tsx, 60, 14))
+
+// Class components still work
+class RenderStringClass extends React.Component<{ title: string }> {
+>RenderStringClass : Symbol(RenderStringClass, Decl(jsxElementType.tsx, 60, 29))
+>React.Component : Symbol(React.Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
+>React : Symbol(React, Decl(jsxElementType.tsx, 1, 6))
+>Component : Symbol(React.Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
+>title : Symbol(title, Decl(jsxElementType.tsx, 63, 49))
+
+  render() {
+>render : Symbol(RenderStringClass.render, Decl(jsxElementType.tsx, 63, 68))
+
+    return this.props.title;
+>this.props.title : Symbol(title, Decl(jsxElementType.tsx, 63, 49))
+>this.props : Symbol(React.Component.props, Decl(react16.d.ts, 367, 32))
+>this : Symbol(RenderStringClass, Decl(jsxElementType.tsx, 60, 29))
+>props : Symbol(React.Component.props, Decl(react16.d.ts, 367, 32))
+>title : Symbol(title, Decl(jsxElementType.tsx, 63, 49))
+  }
+}
+Component = RenderStringClass;
+>Component : Symbol(Component, Decl(jsxElementType.tsx, 29, 3))
+>RenderStringClass : Symbol(RenderStringClass, Decl(jsxElementType.tsx, 60, 29))
+
+<RenderStringClass />;
+>RenderStringClass : Symbol(RenderStringClass, Decl(jsxElementType.tsx, 60, 29))
+
+<RenderStringClass title="react" />;
+>RenderStringClass : Symbol(RenderStringClass, Decl(jsxElementType.tsx, 60, 29))
+>title : Symbol(title, Decl(jsxElementType.tsx, 70, 18))
+
+<RenderStringClass excessProp />;
+>RenderStringClass : Symbol(RenderStringClass, Decl(jsxElementType.tsx, 60, 29))
+>excessProp : Symbol(excessProp, Decl(jsxElementType.tsx, 71, 18))
+
+// Host element types still work
+<div />;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+
+<my-custom-element />;
+>my-custom-element : Symbol(JSX.IntrinsicElements['my-custom-element'], Decl(jsxElementType.tsx, 23, 33))
+
+// Undeclared host element types are still rejected
+<boop />;
+<my-undeclared-custom-element />;
+
+// Highlighting various ecosystem compat issues
+// react-native-gesture-handler
+// https://github.com/software-mansion/react-native-gesture-handler/blob/79017e5e7cc2e82e6467851f870920ff836ee04f/src/components/GestureComponents.tsx#L139-L146
+interface ReactNativeFlatListProps<Item> {}
+>ReactNativeFlatListProps : Symbol(ReactNativeFlatListProps, Decl(jsxElementType.tsx, 78, 33))
+>Item : Symbol(Item, Decl(jsxElementType.tsx, 83, 35))
+
+function ReactNativeFlatList(
+>ReactNativeFlatList : Symbol(ReactNativeFlatList, Decl(jsxElementType.tsx, 83, 43))
+
+  props: {},
+>props : Symbol(props, Decl(jsxElementType.tsx, 84, 29))
+
+  ref: React.ForwardedRef<typeof ReactNativeFlatList>
+>ref : Symbol(ref, Decl(jsxElementType.tsx, 85, 12))
+>React : Symbol(React, Decl(jsxElementType.tsx, 1, 6))
+>ForwardedRef : Symbol(React.ForwardedRef, Decl(react16.d.ts, 2355, 9))
+>ReactNativeFlatList : Symbol(ReactNativeFlatList, Decl(jsxElementType.tsx, 83, 43))
+
+) {
+  return null;
+}
+<ReactNativeFlatList />;
+>ReactNativeFlatList : Symbol(ReactNativeFlatList, Decl(jsxElementType.tsx, 83, 43))
+
+// testing higher-order component compat
+function f1<T extends (props: {}) => React.ReactElement<any>>(Component: T) {
+>f1 : Symbol(f1, Decl(jsxElementType.tsx, 90, 24))
+>T : Symbol(T, Decl(jsxElementType.tsx, 93, 12))
+>props : Symbol(props, Decl(jsxElementType.tsx, 93, 23))
+>React : Symbol(React, Decl(jsxElementType.tsx, 1, 6))
+>ReactElement : Symbol(React.ReactElement, Decl(react16.d.ts, 135, 9))
+>Component : Symbol(Component, Decl(jsxElementType.tsx, 93, 62))
+>T : Symbol(T, Decl(jsxElementType.tsx, 93, 12))
+
+  return <Component />;
+>Component : Symbol(Component, Decl(jsxElementType.tsx, 93, 62))
+}
+
+<Unresolved />;
+<Unresolved foo="abc" />;
+>foo : Symbol(foo, Decl(jsxElementType.tsx, 98, 11))
+
+declare global {
+>global : Symbol(global, Decl(jsxElementType.tsx, 18, 48), Decl(jsxElementType.tsx, 98, 25))
+
+    namespace JSX {
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12), Decl(jsxElementType.tsx, 20, 16), Decl(jsxElementType.tsx, 100, 16))
+
+      interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(react16.d.ts, 2514, 86), Decl(jsxElementType.tsx, 22, 67), Decl(jsxElementType.tsx, 101, 19))
+
+          ['a:b']: { a: string };
+>['a:b'] : Symbol(IntrinsicElements['a:b'], Decl(jsxElementType.tsx, 102, 35))
+>'a:b' : Symbol(IntrinsicElements['a:b'], Decl(jsxElementType.tsx, 102, 35))
+>a : Symbol(a, Decl(jsxElementType.tsx, 103, 20))
+      }
+  }
+}
+
+<a:b a="accepted" />;
+>a : Symbol(a, Decl(jsxElementType.tsx, 108, 4))
+
+<a:b b="rejected" />;
+>b : Symbol(b, Decl(jsxElementType.tsx, 109, 4))
+
+<a:b a="accepted" b="rejected" />;
+>a : Symbol(a, Decl(jsxElementType.tsx, 110, 4))
+>b : Symbol(b, Decl(jsxElementType.tsx, 110, 17))
+

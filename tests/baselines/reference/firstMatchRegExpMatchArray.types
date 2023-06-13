@@ -1,4 +1,6 @@
-=== tests/cases/compiler/firstMatchRegExpMatchArray.ts ===
+//// [tests/cases/compiler/firstMatchRegExpMatchArray.ts] ////
+
+=== firstMatchRegExpMatchArray.ts ===
 const match = ''.match(/ /)
 >match : RegExpMatchArray | null
 >''.match(/ /) : RegExpMatchArray | null

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/react.d.ts ===
+//// [tests/cases/conformance/jsx/tsxExternalModuleEmit1.tsx] ////
+
+=== react.d.ts ===
 declare module 'react' {
 >'react' : Symbol("react", Decl(react.d.ts, 0, 0))
 
@@ -8,7 +10,7 @@ declare module 'react' {
 >U : Symbol(U, Decl(react.d.ts, 1, 19))
 }
 
-=== tests/cases/conformance/jsx/app.tsx ===
+=== app.tsx ===
 import * as React from 'react';
 >React : Symbol(React, Decl(app.tsx, 0, 6))
 
@@ -31,7 +33,7 @@ export class App extends React.Component<any, any> {
 
 }
 
-=== tests/cases/conformance/jsx/button.tsx ===
+=== button.tsx ===
 import * as React from 'react';
 >React : Symbol(React, Decl(button.tsx, 0, 6))
 

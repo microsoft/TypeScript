@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/templates/templateStringInSwitchAndCaseES6.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringInSwitchAndCaseES6.ts] ////
+
+=== templateStringInSwitchAndCaseES6.ts ===
 
 switch (`abc${0}abc`) {
     case `abc`:

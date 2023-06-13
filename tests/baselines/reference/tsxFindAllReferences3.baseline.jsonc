@@ -1,10 +1,6 @@
 // === findAllReferences ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
-//     interface Element { }
-//     interface IntrinsicElements {
-//     }
-//     interface ElementAttributesProperty { props }
+// --- (line: 5) skipped ---
 // }
 // class MyClass {
 //   props: {
@@ -17,11 +13,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/file.tsx ===
-  // declare module JSX {
-  //     interface Element { }
-  //     interface IntrinsicElements {
-  //     }
-  //     interface ElementAttributesProperty { props }
+  // --- (line: 5) skipped ---
   // }
   // class MyClass {
   //   props: {

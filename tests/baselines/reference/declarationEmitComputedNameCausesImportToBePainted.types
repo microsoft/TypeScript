@@ -1,4 +1,6 @@
-=== tests/cases/compiler/context.ts ===
+//// [tests/cases/compiler/declarationEmitComputedNameCausesImportToBePainted.ts] ////
+
+=== context.ts ===
 export const Key = Symbol();
 >Key : unique symbol
 >Symbol() : unique symbol
@@ -9,7 +11,7 @@ export interface Context {
 >[Key] : string
 >Key : unique symbol
 }
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import { Key, Context } from "./context";
 >Key : unique symbol
 >Context : any

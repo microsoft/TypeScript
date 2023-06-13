@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileTypeAnnotationTupleType.ts] ////
+
 //// [declFileTypeAnnotationTupleType.ts]
 class c {
 }

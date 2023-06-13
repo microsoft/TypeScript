@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/overloadTag2.ts] ////
+
 //// [overloadTag2.js]
 export class Foo {
     #a = true ? 1 : "1"

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates.ts ===
+//// [tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates.ts] ////
+
+=== mergedInterfacesWithInheritedPrivates.ts ===
 class C {
 >C : Symbol(C, Decl(mergedInterfacesWithInheritedPrivates.ts, 0, 0))
 

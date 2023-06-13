@@ -1,4 +1,6 @@
-=== tests/cases/compiler/internalAliasEnum.ts ===
+//// [tests/cases/compiler/internalAliasEnum.ts] ////
+
+=== internalAliasEnum.ts ===
 module a {
 >a : Symbol(a, Decl(internalAliasEnum.ts, 0, 0))
 

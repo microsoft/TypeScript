@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/checkJsxNotSetError.ts] ////
+
 === /foo.jsx ===
 const Foo = () => (
 >Foo : () => any

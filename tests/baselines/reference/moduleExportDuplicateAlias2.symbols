@@ -1,13 +1,15 @@
-=== tests/cases/conformance/salsa/test.js ===
+//// [tests/cases/conformance/salsa/moduleExportDuplicateAlias2.ts] ////
+
+=== test.js ===
 const { apply } = require('./moduleExportAliasDuplicateAlias')
 >apply : Symbol(apply, Decl(test.js, 0, 7))
 >require : Symbol(require)
->'./moduleExportAliasDuplicateAlias' : Symbol("tests/cases/conformance/salsa/moduleExportAliasDuplicateAlias", Decl(moduleExportAliasDuplicateAlias.js, 0, 0))
+>'./moduleExportAliasDuplicateAlias' : Symbol("moduleExportAliasDuplicateAlias", Decl(moduleExportAliasDuplicateAlias.js, 0, 0))
 
 apply()
 >apply : Symbol(apply, Decl(test.js, 0, 7))
 
-=== tests/cases/conformance/salsa/moduleExportAliasDuplicateAlias.js ===
+=== moduleExportAliasDuplicateAlias.js ===
 module.exports.apply = undefined;
 >module.exports.apply : Symbol(apply, Decl(moduleExportAliasDuplicateAlias.js, 0, 0), Decl(moduleExportAliasDuplicateAlias.js, 1, 16), Decl(moduleExportAliasDuplicateAlias.js, 2, 25))
 >module.exports : Symbol(apply, Decl(moduleExportAliasDuplicateAlias.js, 0, 0), Decl(moduleExportAliasDuplicateAlias.js, 1, 16), Decl(moduleExportAliasDuplicateAlias.js, 2, 25))

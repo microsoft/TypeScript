@@ -1,4 +1,6 @@
-=== tests/cases/compiler/variableDeclaratorResolvedDuringContextualTyping.ts ===
+//// [tests/cases/compiler/variableDeclaratorResolvedDuringContextualTyping.ts] ////
+
+=== variableDeclaratorResolvedDuringContextualTyping.ts ===
 module WinJS {
 >WinJS : Symbol(WinJS, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 0, 0))
 

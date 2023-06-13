@@ -1,4 +1,6 @@
-=== tests/cases/compiler/specializationOfExportedClass.ts ===
+//// [tests/cases/compiler/specializationOfExportedClass.ts] ////
+
+=== specializationOfExportedClass.ts ===
 module M {
 >M : Symbol(M, Decl(specializationOfExportedClass.ts, 0, 0))
 

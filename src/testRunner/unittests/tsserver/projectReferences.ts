@@ -1,13 +1,5 @@
 import * as ts from "../../_namespaces/ts";
-import { solutionBuildWithBaseline } from "../tscWatch/helpers";
-import {
-    createServerHost,
-    File,
-    getTsBuildProjectFile,
-    getTsBuildProjectFilePath,
-    libFile,
-    SymLink,
-} from "../virtualFileSystemWithWatch";
+import { solutionBuildWithBaseline } from "../helpers/solutionBuilder";
 import {
     baselineTsserverLogs,
     createHostWithSolutionBuild,
@@ -18,7 +10,15 @@ import {
     protocolFileLocationFromSubstring,
     protocolLocationFromSubstring,
     verifyGetErrRequest,
-} from "./helpers";
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+    File,
+    getTsBuildProjectFile,
+    getTsBuildProjectFilePath,
+    libFile,
+    SymLink,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: with project references and tsbuild", () => {
     describe("with container project", () => {
