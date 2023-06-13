@@ -1,4 +1,6 @@
-=== tests/cases/compiler/parseErrorInHeritageClause1.ts ===
+//// [tests/cases/compiler/parseErrorInHeritageClause1.ts] ////
+
+=== parseErrorInHeritageClause1.ts ===
 class C extends A ¬ {
 >C : Symbol(C, Decl(parseErrorInHeritageClause1.ts, 0, 0))
 }

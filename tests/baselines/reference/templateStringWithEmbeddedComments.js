@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/templates/templateStringWithEmbeddedComments.ts] ////
+
 //// [templateStringWithEmbeddedComments.ts]
 `head${ // single line comment
 10

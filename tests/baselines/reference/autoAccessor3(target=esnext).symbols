@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessor3.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessor3.ts] ////
+
+=== autoAccessor3.ts ===
 class C1 {
 >C1 : Symbol(C1, Decl(autoAccessor3.ts, 0, 0))
 

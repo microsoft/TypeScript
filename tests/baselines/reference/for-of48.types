@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/for-ofStatements/for-of48.ts ===
+//// [tests/cases/conformance/es6/for-ofStatements/for-of48.ts] ////
+
+=== for-of48.ts ===
 var x: string, y: number;
 >x : string
 >y : number

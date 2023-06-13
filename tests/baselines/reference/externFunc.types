@@ -1,4 +1,6 @@
-=== tests/cases/compiler/externFunc.ts ===
+//// [tests/cases/compiler/externFunc.ts] ////
+
+=== externFunc.ts ===
 declare function parseInt(s:string):number;
 >parseInt : { (string: string, radix?: number): number; (s: string): number; }
 >s : string

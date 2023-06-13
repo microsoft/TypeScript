@@ -164,11 +164,11 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/src/bar.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -248,31 +248,31 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/user/username/projects/myproject/jsconfig.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/src/sub/tsconfig.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/sub/jsconfig.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/tsconfig.json: *new*
-  {"pollingInterval":2000}
 /user/username/projects/myproject/src/jsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/jsconfig.json: *new*
+/user/username/projects/myproject/src/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/src/sub/jsconfig.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/myproject/src/sub/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/src/node_modules/@types: *new*
+/user/username/projects/myproject/src/sub/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/src/bar.ts:
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/myproject/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -406,31 +406,31 @@ After running Timeout callback:: count: 2
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
+/user/username/projects/myproject/src/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/src/sub/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/src/node_modules/@types:
+/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
-/user/username/projects/myproject/src/sub/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/sub/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/tsconfig.json:
+/user/username/projects/myproject/jsconfig.json:
   {"pollingInterval":2000}
 /user/username/projects/myproject/src/jsconfig.json:
   {"pollingInterval":2000}
-/user/username/projects/myproject/jsconfig.json:
+/user/username/projects/myproject/src/sub/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/sub/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/tsconfig.json:
   {"pollingInterval":2000}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/src/bar.ts:
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/myproject/tsconfig.json:
   {}
 
 FsWatchesRecursive::

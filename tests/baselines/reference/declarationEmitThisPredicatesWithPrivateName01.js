@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/declarationEmit/typePredicates/declarationEmitThisPredicatesWithPrivateName01.ts] ////
+
 //// [declarationEmitThisPredicatesWithPrivateName01.ts]
 export class C {
     m(): this is D {

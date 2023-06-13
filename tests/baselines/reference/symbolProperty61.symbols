@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/Symbols/symbolProperty61.ts ===
+//// [tests/cases/conformance/es6/Symbols/symbolProperty61.ts] ////
+
+=== symbolProperty61.ts ===
 declare global {
 >global : Symbol(global, Decl(symbolProperty61.ts, 0, 0))
 

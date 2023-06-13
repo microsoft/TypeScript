@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/trailingCommaInHeterogenousArrayLiteral1.ts] ////
+
 //// [trailingCommaInHeterogenousArrayLiteral1.ts]
 class arrTest {
     test(arg1: number[]) {    }

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/dottedNamesInSystem.ts ===
+//// [tests/cases/compiler/dottedNamesInSystem.ts] ////
+
+=== dottedNamesInSystem.ts ===
 export namespace A.B.C {
 >A : typeof A
 >B : typeof B

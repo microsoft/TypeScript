@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/declarations/bug38550.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsRestArgsWithThisTypeInJSDocFunction.ts] ////
+
+=== bug38550.js ===
 export class Clazz {
 >Clazz : Symbol(Clazz, Decl(bug38550.js, 0, 0))
 

@@ -1,15 +1,15 @@
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer3.ts(7,8): error TS2304: Cannot find name 'A'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer3.ts(20,9): error TS2322: Type '{ [x: string]: string; }' is not assignable to type 'A<T>'.
+assignmentCompatWithStringIndexer3.ts(7,8): error TS2304: Cannot find name 'A'.
+assignmentCompatWithStringIndexer3.ts(20,9): error TS2322: Type '{ [x: string]: string; }' is not assignable to type 'A<T>'.
   'string' index signatures are incompatible.
     Type 'string' is not assignable to type 'T'.
       'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer3.ts(21,9): error TS2322: Type 'A<T>' is not assignable to type '{ [x: string]: string; }'.
+assignmentCompatWithStringIndexer3.ts(21,9): error TS2322: Type 'A<T>' is not assignable to type '{ [x: string]: string; }'.
   'string' index signatures are incompatible.
     Type 'T' is not assignable to type 'string'.
       Type 'Derived' is not assignable to type 'string'.
 
 
-==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer3.ts (3 errors) ====
+==== assignmentCompatWithStringIndexer3.ts (3 errors) ====
     // Derived type indexer must be subtype of base type indexer
     
     interface Base { foo: string; }

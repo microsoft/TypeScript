@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/primitiveConstraints2.ts] ////
+
 //// [primitiveConstraints2.ts]
 class C<T> {
    public bar2<U extends T>(x: T, y: U): T {

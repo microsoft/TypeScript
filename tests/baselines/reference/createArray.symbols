@@ -1,4 +1,6 @@
-=== tests/cases/compiler/createArray.ts ===
+//// [tests/cases/compiler/createArray.ts] ////
+
+=== createArray.ts ===
 var na=new number[];
 >na : Symbol(na, Decl(createArray.ts, 0, 3))
 

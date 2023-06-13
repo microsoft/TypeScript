@@ -119,7 +119,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/tsconfig.json: *new*
+/package.json: *new*
   {}
 /src/ambient.d.ts: *new*
   {}
@@ -129,13 +129,13 @@ FsWatches::
   {}
 /src/c.ts: *new*
   {}
-/package.json: *new*
+/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/src: *new*
-  {}
 /node_modules: *new*
+  {}
+/src: *new*
   {}
 
 Before request
@@ -176,7 +176,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/tsconfig.json:
+/package.json:
   {}
 /src/ambient.d.ts:
   {}
@@ -184,7 +184,7 @@ FsWatches::
   {}
 /src/c.ts:
   {}
-/package.json:
+/tsconfig.json:
   {}
 
 FsWatches *deleted*::
@@ -192,9 +192,9 @@ FsWatches *deleted*::
   {}
 
 FsWatchesRecursive::
-/src:
-  {}
 /node_modules:
+  {}
+/src:
   {}
 
 Before request
@@ -237,13 +237,13 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/tsconfig.json:
+/package.json:
   {}
 /src/ambient.d.ts:
   {}
 /src/b-link.ts:
   {}
-/package.json:
+/tsconfig.json:
   {}
 
 FsWatches *deleted*::
@@ -251,9 +251,9 @@ FsWatches *deleted*::
   {}
 
 FsWatchesRecursive::
-/src:
-  {}
 /node_modules:
+  {}
+/src:
   {}
 
 Before request
@@ -830,21 +830,21 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/tsconfig.json:
+/package.json:
+  {}
+/src/a2.ts: *new*
   {}
 /src/ambient.d.ts:
   {}
 /src/b-link.ts:
   {}
-/package.json:
-  {}
-/src/a2.ts: *new*
+/tsconfig.json:
   {}
 
 FsWatchesRecursive::
-/src:
-  {}
 /node_modules:
+  {}
+/src:
   {}
 
 Info seq  [hh:mm:ss:mss] importability: false

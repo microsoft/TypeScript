@@ -1,4 +1,6 @@
-=== tests/cases/compiler/chainedImportAlias_file1.ts ===
+//// [tests/cases/compiler/chainedImportAlias.ts] ////
+
+=== chainedImportAlias_file1.ts ===
 import x = require('./chainedImportAlias_file0');
 >x : Symbol(x, Decl(chainedImportAlias_file1.ts, 0, 0))
 
@@ -13,7 +15,7 @@ y.m.foo();
 >m : Symbol(x.m, Decl(chainedImportAlias_file0.ts, 0, 0))
 >foo : Symbol(x.m.foo, Decl(chainedImportAlias_file0.ts, 0, 17))
 
-=== tests/cases/compiler/chainedImportAlias_file0.ts ===
+=== chainedImportAlias_file0.ts ===
 export module m {
 >m : Symbol(m, Decl(chainedImportAlias_file0.ts, 0, 0))
 

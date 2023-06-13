@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es6ModuleEnumDeclaration.ts ===
+//// [tests/cases/compiler/es6ModuleEnumDeclaration.ts] ////
+
+=== es6ModuleEnumDeclaration.ts ===
 export enum e1 {
 >e1 : e1
 

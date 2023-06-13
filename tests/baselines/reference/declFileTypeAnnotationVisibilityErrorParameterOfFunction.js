@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts] ////
+
 //// [declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts]
 module m {
     class private1 {

@@ -183,23 +183,23 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/myproject/node_modules: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules: *new*
-  {"pollingInterval":500}
 /user/username/projects/myproject/foo/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/myproject/node_modules: *new*
+  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules: *new*
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/foo/tsconfig.json: *new*
+/a/lib/lib.es2017.d.ts: *new*
   {}
 /user/username/projects/myproject/bar/index.ts: *new*
   {}
-/a/lib/lib.es2017.d.ts: *new*
+/user/username/projects/myproject/foo/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -360,29 +360,29 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/myproject/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/foo/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/myproject/bar/node_modules: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/bar/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/myproject/foo/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/foo/tsconfig.json:
+/a/lib/lib.dom.d.ts: *new*
   {}
 /a/lib/lib.es2017.d.ts:
   {}
 /user/username/projects/myproject/bar/tsconfig.json: *new*
   {}
-/a/lib/lib.dom.d.ts: *new*
+/user/username/projects/myproject/foo/tsconfig.json:
   {}
 
 FsWatches *deleted*::

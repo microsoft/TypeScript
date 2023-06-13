@@ -1,10 +1,12 @@
-=== tests/cases/compiler/idx.test.ts ===
+//// [tests/cases/compiler/moduleAugmentationDuringSyntheticDefaultCheck.ts] ////
+
+=== idx.test.ts ===
 /// <reference path="./idx" />
 
 import moment = require("moment-timezone");
 >moment : { default: () => moment.Moment; }
 
-=== tests/cases/compiler/node_modules/moment/index.d.ts ===
+=== node_modules/moment/index.d.ts ===
 declare function moment(): moment.Moment;
 >moment : () => moment.Moment
 >moment : any
@@ -16,9 +18,9 @@ declare namespace moment {
   }
 }
 export = moment;
->moment : () => import("tests/cases/compiler/node_modules/moment/index.d.ts").Moment
+>moment : () => import("node_modules/moment/index.d.ts").Moment
 
-=== tests/cases/compiler/node_modules/moment-timezone/index.d.ts ===
+=== node_modules/moment-timezone/index.d.ts ===
 import * as moment from 'moment';
 >moment : { default: () => moment.Moment; }
 
@@ -33,7 +35,7 @@ declare module "moment" {
 >tz : () => string
     }
 }
-=== tests/cases/compiler/idx.ts ===
+=== idx.ts ===
 import * as _moment from "moment";
 >_moment : { default: () => _moment.Moment; }
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mappedTypeNestedGenericInstantiation.ts ===
+//// [tests/cases/compiler/mappedTypeNestedGenericInstantiation.ts] ////
+
+=== mappedTypeNestedGenericInstantiation.ts ===
 // Repro from #13346
 
 interface Chainable<T> {

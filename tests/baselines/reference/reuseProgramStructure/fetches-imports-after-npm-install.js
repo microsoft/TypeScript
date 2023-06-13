@@ -35,6 +35,7 @@ resolvedTypeReferenceDirectiveNames: undefined
 ======== Resolving module 'a' from 'file1.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module 'a' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File 'node_modules/a/package.json' does not exist.
 File 'node_modules/a.ts' does not exist.
 File 'node_modules/a.tsx' does not exist.
@@ -46,6 +47,7 @@ File 'node_modules/@types/a/package.json' does not exist.
 File 'node_modules/@types/a.d.ts' does not exist.
 File 'node_modules/@types/a/index.d.ts' does not exist.
 Loading module 'a' from 'node_modules' folder, target file types: JavaScript.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File 'node_modules/a/package.json' does not exist according to earlier cached lookups.
 File 'node_modules/a.js' does not exist.
 File 'node_modules/a.jsx' does not exist.
@@ -100,6 +102,7 @@ resolvedTypeReferenceDirectiveNames: undefined
 ======== Resolving module 'a' from 'file1.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module 'a' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File 'node_modules/a/package.json' does not exist.
 File 'node_modules/a.ts' does not exist.
 File 'node_modules/a.tsx' does not exist.

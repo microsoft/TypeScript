@@ -1,4 +1,6 @@
-=== tests/cases/compiler/node_modules/aws-lambda/index.d.ts ===
+//// [tests/cases/compiler/importedAliasedConditionalTypeInstantiation.ts] ////
+
+=== node_modules/aws-lambda/index.d.ts ===
 export type Handler<TEvent = any, TResult = any> = (
 >Handler : Handler<TEvent, TResult>
 
@@ -18,7 +20,7 @@ export type Callback<TResult = any> = (error?: Error | string | null, result?: T
 >error : string | Error
 >result : TResult
 
-=== tests/cases/compiler/node_modules/lambda-tester/index.d.ts ===
+=== node_modules/lambda-tester/index.d.ts ===
 import { Handler, Callback } from 'aws-lambda';
 >Handler : any
 >Callback : any
@@ -75,7 +77,7 @@ declare function lambdaTester<T extends Handler>(handler: T): lambdaTester.Lambd
 export = lambdaTester;
 >lambdaTester : typeof lambdaTester
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import * as lambdaTester from 'lambda-tester';
 >lambdaTester : typeof lambdaTester
 

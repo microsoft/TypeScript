@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exportDefaultInterfaceAndFunctionOverloads.ts ===
+//// [tests/cases/compiler/exportDefaultInterfaceAndFunctionOverloads.ts] ////
+
+=== exportDefaultInterfaceAndFunctionOverloads.ts ===
 export default function foo(value: number): number
 >foo : { (value: number): number; (value: string): string; }
 >value : number

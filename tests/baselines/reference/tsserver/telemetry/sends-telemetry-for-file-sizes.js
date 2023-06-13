@@ -73,9 +73,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/jsconfig.json: *new*
-  {}
 /b.ts: *new*
+  {}
+/jsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -130,11 +130,11 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/jsconfig.json:
+/a/data/package.json: *new*
   {}
 /b.ts:
   {}
-/a/data/package.json: *new*
+/jsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -297,11 +297,11 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/jsconfig.json:
+/a/data/package.json:
   {}
 /b.ts:
   {}
-/a/data/package.json:
+/jsconfig.json:
   {}
 
 FsWatchesRecursive::

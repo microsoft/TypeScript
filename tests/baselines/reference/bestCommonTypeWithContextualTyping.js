@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/bestCommonTypeWithContextualTyping.ts] ////
+
 //// [bestCommonTypeWithContextualTyping.ts]
 interface Contextual {
     dummy;

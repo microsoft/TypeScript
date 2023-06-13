@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentsVarDecl.ts] ////
+
 //// [commentsVarDecl.ts]
 /** Variable comments*/
 var myVariable = 10; // This trailing Comment1

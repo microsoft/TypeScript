@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/shorthandOfExportedEntity02_targetES5_CommonJS.ts] ////
+
 //// [shorthandOfExportedEntity02_targetES5_CommonJS.ts]
 export const test = "test";
 

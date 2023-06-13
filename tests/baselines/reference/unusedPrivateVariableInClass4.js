@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedPrivateVariableInClass4.ts] ////
+
 //// [unusedPrivateVariableInClass4.ts]
 class greeter {
     private x: string;

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/objectLiterals/objectLiteralErrorsES3.ts ===
+//// [tests/cases/conformance/expressions/objectLiterals/objectLiteralErrorsES3.ts] ////
+
+=== objectLiteralErrorsES3.ts ===
 var e1 = { get a() { return 4; } };
 >e1 : Symbol(e1, Decl(objectLiteralErrorsES3.ts, 0, 3))
 >a : Symbol(a, Decl(objectLiteralErrorsES3.ts, 0, 10))

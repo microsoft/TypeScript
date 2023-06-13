@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportedInterfaceInaccessibleInCallbackInModule.ts] ////
+
 //// [exportedInterfaceInaccessibleInCallbackInModule.ts]
 export interface ProgressCallback {
 	(progress:any):any;

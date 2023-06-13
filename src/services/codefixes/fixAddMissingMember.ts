@@ -538,11 +538,6 @@ function getActionsForMissingMethodDeclaration(context: CodeFixContext, info: Ty
         return undefined;
     }
 
-    // Private methods are not implemented yet.
-    if (isPrivateIdentifier(token)) {
-        return undefined;
-    }
-
     const methodName = token.text;
     const addMethodDeclarationChanges = (modifierFlags: ModifierFlags) => textChanges.ChangeTracker.with(context, t => addMethodDeclaration(context, t, call, token, modifierFlags, parentDeclaration, declSourceFile));
     const actions = [createCodeFixAction(fixMissingMember, addMethodDeclarationChanges(modifierFlags & ModifierFlags.Static), [modifierFlags & ModifierFlags.Static ? Diagnostics.Declare_static_method_0 : Diagnostics.Declare_method_0, methodName], fixMissingMember, Diagnostics.Add_all_missing_members)];
@@ -556,7 +551,7 @@ function addMethodDeclaration(
     context: CodeFixContextBase,
     changes: textChanges.ChangeTracker,
     callExpression: CallExpression,
-    name: Identifier,
+    name: Identifier | PrivateIdentifier,
     modifierFlags: ModifierFlags,
     parentDeclaration: ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode,
     sourceFile: SourceFile,

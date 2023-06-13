@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/collisionThisExpressionAndNameResolution.ts] ////
+
 //// [collisionThisExpressionAndNameResolution.ts]
 var console : {
     log(message: any);

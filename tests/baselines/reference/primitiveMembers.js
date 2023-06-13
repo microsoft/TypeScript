@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/primitiveMembers.ts] ////
+
 //// [primitiveMembers.ts]
 var x = 5;
 var r = /yo/;

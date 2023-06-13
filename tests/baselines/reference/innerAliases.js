@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/innerAliases.ts] ////
+
 //// [innerAliases.ts]
 module A {
     export module B {

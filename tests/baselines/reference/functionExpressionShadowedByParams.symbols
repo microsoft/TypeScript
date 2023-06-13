@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionExpressionShadowedByParams.ts ===
+//// [tests/cases/compiler/functionExpressionShadowedByParams.ts] ////
+
+=== functionExpressionShadowedByParams.ts ===
 function b1(b1: number) {
 >b1 : Symbol(b1, Decl(functionExpressionShadowedByParams.ts, 0, 0))
 >b1 : Symbol(b1, Decl(functionExpressionShadowedByParams.ts, 0, 12))

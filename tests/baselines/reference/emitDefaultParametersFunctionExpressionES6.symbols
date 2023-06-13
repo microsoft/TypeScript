@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/defaultParameters/emitDefaultParametersFunctionExpressionES6.ts ===
+//// [tests/cases/conformance/es6/defaultParameters/emitDefaultParametersFunctionExpressionES6.ts] ////
+
+=== emitDefaultParametersFunctionExpressionES6.ts ===
 var lambda1 = (y = "hello") => { }
 >lambda1 : Symbol(lambda1, Decl(emitDefaultParametersFunctionExpressionES6.ts, 0, 3))
 >y : Symbol(y, Decl(emitDefaultParametersFunctionExpressionES6.ts, 0, 15))

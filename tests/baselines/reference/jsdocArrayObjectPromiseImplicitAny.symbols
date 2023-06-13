@@ -1,4 +1,6 @@
-=== tests/cases/compiler/jsdocArrayObjectPromiseImplicitAny.js ===
+//// [tests/cases/compiler/jsdocArrayObjectPromiseImplicitAny.ts] ////
+
+=== jsdocArrayObjectPromiseImplicitAny.js ===
 /** @type {Array} */
 var anyArray = [5];
 >anyArray : Symbol(anyArray, Decl(jsdocArrayObjectPromiseImplicitAny.js, 1, 3))

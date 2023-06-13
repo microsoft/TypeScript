@@ -1,4 +1,6 @@
-=== tests/cases/compiler/yieldStringLiteral.ts ===
+//// [tests/cases/compiler/yieldStringLiteral.ts] ////
+
+=== yieldStringLiteral.ts ===
 function yieldString() {
 >yieldString : Symbol(yieldString, Decl(yieldStringLiteral.ts, 0, 0))
 

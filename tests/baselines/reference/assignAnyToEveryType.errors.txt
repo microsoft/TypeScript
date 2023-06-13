@@ -1,7 +1,7 @@
-tests/cases/conformance/types/any/assignAnyToEveryType.ts(41,1): error TS2631: Cannot assign to 'M' because it is a namespace.
+assignAnyToEveryType.ts(41,1): error TS2631: Cannot assign to 'M' because it is a namespace.
 
 
-==== tests/cases/conformance/types/any/assignAnyToEveryType.ts (1 errors) ====
+==== assignAnyToEveryType.ts (1 errors) ====
     // all of these are valid
     
     var x: any;

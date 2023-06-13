@@ -1,4 +1,6 @@
-=== tests/cases/compiler/moduleMemberWithoutTypeAnnotation1.ts ===
+//// [tests/cases/compiler/moduleMemberWithoutTypeAnnotation1.ts] ////
+
+=== moduleMemberWithoutTypeAnnotation1.ts ===
 module TypeScript.Parser {
 >TypeScript : typeof TypeScript
 >Parser : typeof Parser

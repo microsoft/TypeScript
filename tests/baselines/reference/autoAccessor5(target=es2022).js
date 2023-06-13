@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessor5.ts] ////
+
 //// [autoAccessor5.ts]
 class C1 {
     accessor ["w"]: any;

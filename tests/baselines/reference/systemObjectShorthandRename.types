@@ -1,9 +1,11 @@
-=== tests/cases/compiler/x.ts ===
+//// [tests/cases/compiler/systemObjectShorthandRename.ts] ////
+
+=== x.ts ===
 export const x = 'X'
 >x : "X"
 >'X' : "X"
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import {x} from './x.js'
 >x : "X"
 
