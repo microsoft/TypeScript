@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualInnerCallFromConditionalContextualType.ts ===
+//// [tests/cases/compiler/contextualInnerCallFromConditionalContextualType.ts] ////
+
+=== contextualInnerCallFromConditionalContextualType.ts ===
 interface EventObject { type: string; }
 >EventObject : Symbol(EventObject, Decl(contextualInnerCallFromConditionalContextualType.ts, 0, 0))
 >type : Symbol(EventObject.type, Decl(contextualInnerCallFromConditionalContextualType.ts, 0, 23))

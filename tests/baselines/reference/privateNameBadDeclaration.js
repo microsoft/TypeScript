@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameBadDeclaration.ts] ////
+
 //// [privateNameBadDeclaration.ts]
 function A() { }
 A.prototype = {

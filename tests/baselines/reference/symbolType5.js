@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolType5.ts] ////
+
 //// [symbolType5.ts]
 var s = Symbol.for("multiply");
 s * s;

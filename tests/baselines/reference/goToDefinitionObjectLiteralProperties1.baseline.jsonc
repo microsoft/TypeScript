@@ -1,0 +1,53 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionObjectLiteralProperties1.ts ===
+// interface PropsBag {
+//    <|[|propx|]: number|>
+// }
+// function foo(arg: PropsBag) {}
+// foo({
+//    pr/*GOTO DEF*/opx: 10
+// })
+// function bar(firstarg: boolean, secondarg: PropsBag) {}
+// bar(true, {
+//    propx: 10
+// })
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "propx",
+    "containerName": "PropsBag",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionObjectLiteralProperties1.ts ===
+// interface PropsBag {
+//    <|[|propx|]: number|>
+// }
+// function foo(arg: PropsBag) {}
+// foo({
+//    propx: 10
+// })
+// function bar(firstarg: boolean, secondarg: PropsBag) {}
+// bar(true, {
+//    pr/*GOTO DEF*/opx: 10
+// })
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "propx",
+    "containerName": "PropsBag",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]

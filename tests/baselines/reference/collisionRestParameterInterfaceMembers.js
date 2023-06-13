@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/collisionRestParameterInterfaceMembers.ts] ////
+
 //// [collisionRestParameterInterfaceMembers.ts]
 // call
 interface i1 {

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/thisInInnerFunctions.ts] ////
+
 //// [thisInInnerFunctions.ts]
 class Foo {
     x = "hello";

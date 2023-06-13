@@ -1,4 +1,6 @@
-=== tests/cases/conformance/statements/for-ofStatements/ES5For-of22.ts ===
+//// [tests/cases/conformance/statements/for-ofStatements/ES5For-of22.ts] ////
+
+=== ES5For-of22.ts ===
 for (var x of [1, 2, 3]) {
 >x : Symbol(x, Decl(ES5For-of22.ts, 0, 8))
 

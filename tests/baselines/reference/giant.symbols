@@ -1,4 +1,6 @@
-=== tests/cases/compiler/giant.ts ===
+//// [tests/cases/compiler/giant.ts] ////
+
+=== giant.ts ===
 /*
     Prefixes
     p -> public

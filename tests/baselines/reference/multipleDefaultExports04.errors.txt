@@ -1,10 +1,10 @@
-tests/cases/conformance/es6/modules/multipleDefaultExports04.ts(1,25): error TS2323: Cannot redeclare exported variable 'default'.
-tests/cases/conformance/es6/modules/multipleDefaultExports04.ts(1,25): error TS2393: Duplicate function implementation.
-tests/cases/conformance/es6/modules/multipleDefaultExports04.ts(4,25): error TS2323: Cannot redeclare exported variable 'default'.
-tests/cases/conformance/es6/modules/multipleDefaultExports04.ts(4,25): error TS2393: Duplicate function implementation.
+multipleDefaultExports04.ts(1,25): error TS2323: Cannot redeclare exported variable 'default'.
+multipleDefaultExports04.ts(1,25): error TS2393: Duplicate function implementation.
+multipleDefaultExports04.ts(4,25): error TS2323: Cannot redeclare exported variable 'default'.
+multipleDefaultExports04.ts(4,25): error TS2393: Duplicate function implementation.
 
 
-==== tests/cases/conformance/es6/modules/multipleDefaultExports04.ts (4 errors) ====
+==== multipleDefaultExports04.ts (4 errors) ====
     export default function f() {
                             ~
 !!! error TS2323: Cannot redeclare exported variable 'default'.

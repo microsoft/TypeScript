@@ -1,4 +1,6 @@
-=== tests/cases/compiler/resolveTypeAliasWithSameLetDeclarationName1.ts ===
+//// [tests/cases/compiler/resolveTypeAliasWithSameLetDeclarationName1.ts] ////
+
+=== resolveTypeAliasWithSameLetDeclarationName1.ts ===
 class C { }
 >C : Symbol(C, Decl(resolveTypeAliasWithSameLetDeclarationName1.ts, 0, 0))
 

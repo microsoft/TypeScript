@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeInferenceReturnTypeCallback.ts ===
+//// [tests/cases/compiler/typeInferenceReturnTypeCallback.ts] ////
+
+=== typeInferenceReturnTypeCallback.ts ===
 interface IList<A> {
     map<B>(f: (t: A) => B): IList<B>;
 >map : <B>(f: (t: A) => B) => IList<B>
@@ -15,7 +17,6 @@ class Nil<C> implements IList<C>{
 >t : C
 
         return null;
->null : null
     }
 }
 
@@ -53,6 +54,5 @@ class Cons<T> implements IList<T>{
 >acc : E
 
         return null;
->null : null
     }
 }

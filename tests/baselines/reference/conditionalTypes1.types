@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/conditional/conditionalTypes1.ts ===
+//// [tests/cases/conformance/types/conditional/conditionalTypes1.ts] ////
+
+=== conditionalTypes1.ts ===
 type T00 = Exclude<"a" | "b" | "c" | "d", "a" | "c" | "f">;  // "b" | "d"
 >T00 : "b" | "d"
 
@@ -16,7 +18,6 @@ type T04 = NonNullable<string | number | undefined>;  // string | number
 
 type T05 = NonNullable<(() => string) | string[] | null | undefined>;  // (() => string) | string[]
 >T05 : (() => string) | string[]
->null : null
 
 function f1<T>(x: T, y: NonNullable<T>) {
 >f1 : <T>(x: T, y: NonNullable<T>) => void

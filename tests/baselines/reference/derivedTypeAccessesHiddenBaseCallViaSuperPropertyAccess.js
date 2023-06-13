@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/derivedTypeAccessesHiddenBaseCallViaSuperPropertyAccess.ts] ////
+
 //// [derivedTypeAccessesHiddenBaseCallViaSuperPropertyAccess.ts]
 class Base {
     foo(x: { a: number }): { a: number } {

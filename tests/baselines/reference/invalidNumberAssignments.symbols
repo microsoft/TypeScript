@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/primitives/number/invalidNumberAssignments.ts ===
+//// [tests/cases/conformance/types/primitives/number/invalidNumberAssignments.ts] ////
+
+=== invalidNumberAssignments.ts ===
 var x = 1;
 >x : Symbol(x, Decl(invalidNumberAssignments.ts, 0, 3))
 

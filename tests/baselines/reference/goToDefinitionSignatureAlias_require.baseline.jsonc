@@ -1,0 +1,41 @@
+// === goToDefinition ===
+// === /a.js ===
+// module.exports = <|function [|f|]() {}|>
+
+// === /b.js ===
+// const f = require("./a");
+// /*GOTO DEF*/[|f|]();
+
+  // === Details ===
+  [
+   {
+    "kind": "local function",
+    "name": "f",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /a.js ===
+// module.exports = <|function [|f|]() {}|>
+
+// === /bar.ts ===
+// import f = require("./a");
+// /*GOTO DEF*/[|f|]();
+
+  // === Details ===
+  [
+   {
+    "kind": "local function",
+    "name": "f",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]

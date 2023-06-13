@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_contextualTyping1.ts] ////
+
 //// [typeSatisfaction_contextualTyping1.ts]
 type Predicates = { [s: string]: (n: number) => boolean };
 

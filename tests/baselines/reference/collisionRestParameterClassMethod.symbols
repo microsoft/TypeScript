@@ -1,4 +1,6 @@
-=== tests/cases/compiler/collisionRestParameterClassMethod.ts ===
+//// [tests/cases/compiler/collisionRestParameterClassMethod.ts] ////
+
+=== collisionRestParameterClassMethod.ts ===
 class c1 {
 >c1 : Symbol(c1, Decl(collisionRestParameterClassMethod.ts, 0, 0))
 

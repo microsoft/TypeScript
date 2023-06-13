@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/staticMethodWithTypeParameterExtendsClauseDeclFile.ts] ////
+
 //// [staticMethodWithTypeParameterExtendsClauseDeclFile.ts]
 class privateClass {
 }

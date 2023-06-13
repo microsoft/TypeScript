@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/lovefield-ts.d.ts ===
+//// [tests/cases/conformance/salsa/enumMergeWithExpando.ts] ////
+
+=== lovefield-ts.d.ts ===
 // bug #27352, crashes from github.com/google/lovefield
 declare namespace lf {
 >lf : typeof lf
@@ -9,7 +11,7 @@ declare namespace lf {
 >DESC : Order.DESC
 }
 
-=== tests/cases/conformance/salsa/enums.js ===
+=== enums.js ===
 lf.Order = {}
 >lf.Order = {} : typeof lf.Order
 >lf.Order : typeof lf.Order

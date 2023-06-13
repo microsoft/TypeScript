@@ -1,4 +1,6 @@
-=== tests/cases/compiler/jsxNamespacePrefixInName.tsx ===
+//// [tests/cases/compiler/jsxNamespacePrefixInName.tsx] ////
+
+=== jsxNamespacePrefixInName.tsx ===
 var justElement1 = <a:element />;
 >justElement1 : Symbol(justElement1, Decl(jsxNamespacePrefixInName.tsx, 0, 3))
 
@@ -68,11 +70,10 @@ var both3 = <a:element a:attr={"value"}>{"text"}</a:element>;
 
 var endOfIdent1 = <a: attr={"value"} />;
 >endOfIdent1 : Symbol(endOfIdent1, Decl(jsxNamespacePrefixInName.tsx, 20, 3))
->attr : Symbol(attr, Decl(jsxNamespacePrefixInName.tsx, 20, 21))
 
 var endOfIdent2 = <a attr:={"value"} />;
 >endOfIdent2 : Symbol(endOfIdent2, Decl(jsxNamespacePrefixInName.tsx, 21, 3))
->attr : Symbol(attr, Decl(jsxNamespacePrefixInName.tsx, 21, 20))
+>attr: : Symbol(attr:, Decl(jsxNamespacePrefixInName.tsx, 21, 20))
 
 var beginOfIdent1 = <:a attr={"value"} />;
 >beginOfIdent1 : Symbol(beginOfIdent1, Decl(jsxNamespacePrefixInName.tsx, 23, 3))
@@ -82,7 +83,6 @@ var beginOfIdent1 = <:a attr={"value"} />;
 
 var beginOfIdent2 = <a :attr={"value"} />;
 >beginOfIdent2 : Symbol(beginOfIdent2, Decl(jsxNamespacePrefixInName.tsx, 24, 3))
->attr : Symbol(attr, Decl(jsxNamespacePrefixInName.tsx, 24, 24))
 
 var upcaseComponent1 = <ns:Upcase />;  // Parsed as intrinsic
 >upcaseComponent1 : Symbol(upcaseComponent1, Decl(jsxNamespacePrefixInName.tsx, 26, 3))

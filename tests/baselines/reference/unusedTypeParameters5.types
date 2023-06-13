@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedTypeParameters5.ts ===
+//// [tests/cases/compiler/unusedTypeParameters5.ts] ////
+
+=== unusedTypeParameters5.ts ===
 class A<Dummy> {
 >A : A<Dummy>
 

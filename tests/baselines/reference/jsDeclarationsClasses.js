@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsClasses.ts] ////
+
 //// [index.js]
 export class A {}
 
@@ -219,14 +221,13 @@ var A = /** @class */ (function () {
     return A;
 }());
 exports.A = A;
-var B = /** @class */ (function () {
+var B = exports.B = /** @class */ (function () {
     function B() {
     }
     B.cat = "cat";
     return B;
 }());
-exports.B = B;
-var C = /** @class */ (function () {
+var C = exports.C = /** @class */ (function () {
     function C() {
     }
     C.Cls = /** @class */ (function () {
@@ -236,7 +237,6 @@ var C = /** @class */ (function () {
     }());
     return C;
 }());
-exports.C = C;
 var D = /** @class */ (function () {
     /**
      * @param {number} a
@@ -250,7 +250,7 @@ exports.D = D;
 /**
  * @template T,U
  */
-var E = /** @class */ (function () {
+var E = exports.E = /** @class */ (function () {
     /**
      * @param {T} a
      * @param {U} b
@@ -317,7 +317,6 @@ var E = /** @class */ (function () {
     E.staticInitializedField = 12;
     return E;
 }());
-exports.E = E;
 /**
  * @template T,U
  */

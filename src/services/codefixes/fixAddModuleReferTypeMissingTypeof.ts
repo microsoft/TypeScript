@@ -39,6 +39,6 @@ function getImportTypeNode(sourceFile: SourceFile, pos: number): ImportTypeNode 
 }
 
 function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, importType: ImportTypeNode) {
-    const newTypeNode = factory.updateImportTypeNode(importType, importType.argument, importType.assertions, importType.qualifier, importType.typeArguments, /* isTypeOf */ true);
+    const newTypeNode = factory.updateImportTypeNode(importType, importType.argument, importType.assertions, importType.qualifier, importType.typeArguments, /*isTypeOf*/ true);
     changes.replaceNode(sourceFile, importType, newTypeNode);
 }

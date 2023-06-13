@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/systemModuleConstEnums.ts] ////
+
 //// [systemModuleConstEnums.ts]
 declare function use(a: any);
 const enum TopLevelConstEnum { X }

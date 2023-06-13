@@ -1,4 +1,6 @@
-=== tests/cases/compiler/code.ts ===
+//// [tests/cases/compiler/exportDefaultQualifiedNameNoError.ts] ////
+
+=== code.ts ===
 class C { static x = 0; };
 >C : Symbol(C, Decl(code.ts, 0, 0))
 >x : Symbol(C.x, Decl(code.ts, 0, 9))
@@ -8,7 +10,7 @@ export default C.x;
 >C : Symbol(C, Decl(code.ts, 0, 0))
 >x : Symbol(C.x, Decl(code.ts, 0, 9))
 
-=== tests/cases/compiler/usage.ts ===
+=== usage.ts ===
 import def from "./code";
 >def : Symbol(def, Decl(usage.ts, 0, 6))
 

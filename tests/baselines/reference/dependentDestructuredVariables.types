@@ -1,4 +1,6 @@
-=== tests/cases/conformance/controlFlow/dependentDestructuredVariables.ts ===
+//// [tests/cases/conformance/controlFlow/dependentDestructuredVariables.ts] ////
+
+=== dependentDestructuredVariables.ts ===
 type Action =
 >Action : { kind: 'A'; payload: number; } | { kind: 'B'; payload: string; }
 
@@ -632,7 +634,6 @@ declare function readFile(path: string, callback: (...args: [err: null, data: un
 >path : string
 >callback : (...args: [err: null, data: unknown[]] | [err: Error, data: undefined]) => void
 >args : [err: null, data: unknown[]] | [err: Error, data: undefined]
->null : null
 
 readFile('hello', (err, data) => {
 >readFile('hello', (err, data) => {    if (err === null) {        data.length;    }    else {        err.message;    }}) : void
@@ -645,7 +646,6 @@ readFile('hello', (err, data) => {
     if (err === null) {
 >err === null : boolean
 >err : Error | null
->null : null
 
         data.length;
 >data.length : number
@@ -1114,4 +1114,77 @@ const fa3: (...args: [true, number] | [false, string]) => void = (guard, value) 
         }
     }
 }
+
+// Repro from #52152
+
+interface ClientEvents {
+    warn: [message: string];
+>warn : [message: string]
+
+    shardDisconnect: [closeEvent: CloseEvent, shardId: number];
+>shardDisconnect : [closeEvent: CloseEvent, shardId: number]
+}
+  
+declare class Client {
+>Client : Client
+
+    public on<K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void): void;
+>on : <K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void) => void
+>event : K
+>listener : (...args: ClientEvents[K]) => void
+>args : ClientEvents[K]
+}
+
+const bot = new Client();
+>bot : Client
+>new Client() : Client
+>Client : typeof Client
+
+bot.on("shardDisconnect", (event, shard) => console.log(`Shard ${shard} disconnected (${event.code},${event.wasClean}): ${event.reason}`));
+>bot.on("shardDisconnect", (event, shard) => console.log(`Shard ${shard} disconnected (${event.code},${event.wasClean}): ${event.reason}`)) : void
+>bot.on : <K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void) => void
+>bot : Client
+>on : <K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void) => void
+>"shardDisconnect" : "shardDisconnect"
+>(event, shard) => console.log(`Shard ${shard} disconnected (${event.code},${event.wasClean}): ${event.reason}`) : (event: CloseEvent, shard: number) => void
+>event : CloseEvent
+>shard : number
+>console.log(`Shard ${shard} disconnected (${event.code},${event.wasClean}): ${event.reason}`) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>`Shard ${shard} disconnected (${event.code},${event.wasClean}): ${event.reason}` : string
+>shard : number
+>event.code : number
+>event : CloseEvent
+>code : number
+>event.wasClean : boolean
+>event : CloseEvent
+>wasClean : boolean
+>event.reason : string
+>event : CloseEvent
+>reason : string
+
+bot.on("shardDisconnect", event => console.log(`${event.code} ${event.wasClean} ${event.reason}`));
+>bot.on("shardDisconnect", event => console.log(`${event.code} ${event.wasClean} ${event.reason}`)) : void
+>bot.on : <K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void) => void
+>bot : Client
+>on : <K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void) => void
+>"shardDisconnect" : "shardDisconnect"
+>event => console.log(`${event.code} ${event.wasClean} ${event.reason}`) : (event: CloseEvent) => void
+>event : CloseEvent
+>console.log(`${event.code} ${event.wasClean} ${event.reason}`) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>`${event.code} ${event.wasClean} ${event.reason}` : string
+>event.code : number
+>event : CloseEvent
+>code : number
+>event.wasClean : boolean
+>event : CloseEvent
+>wasClean : boolean
+>event.reason : string
+>event : CloseEvent
+>reason : string
 

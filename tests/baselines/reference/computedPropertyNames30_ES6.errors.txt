@@ -1,7 +1,7 @@
-tests/cases/conformance/es6/computedProperties/computedPropertyNames30_ES6.ts(11,19): error TS2466: 'super' cannot be referenced in a computed property name.
+computedPropertyNames30_ES6.ts(11,19): error TS2466: 'super' cannot be referenced in a computed property name.
 
 
-==== tests/cases/conformance/es6/computedProperties/computedPropertyNames30_ES6.ts (1 errors) ====
+==== computedPropertyNames30_ES6.ts (1 errors) ====
     class Base {
     }
     class C extends Base {

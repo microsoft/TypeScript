@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitTypeParamMergedWithPrivate.ts] ////
+
 //// [declarationEmitTypeParamMergedWithPrivate.ts]
 export class Test<T> {
     private get T(): T {

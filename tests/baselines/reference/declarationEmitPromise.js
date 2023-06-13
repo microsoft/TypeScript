@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitPromise.ts] ////
+
 //// [declarationEmitPromise.ts]
 export class bluebird<T> {
     static all: Array<bluebird<any>>;

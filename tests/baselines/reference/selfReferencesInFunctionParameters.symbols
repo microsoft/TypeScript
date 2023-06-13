@@ -1,4 +1,6 @@
-=== tests/cases/compiler/selfReferencesInFunctionParameters.ts ===
+//// [tests/cases/compiler/selfReferencesInFunctionParameters.ts] ////
+
+=== selfReferencesInFunctionParameters.ts ===
 function foo(x: number = x) {
 >foo : Symbol(foo, Decl(selfReferencesInFunctionParameters.ts, 0, 0))
 >x : Symbol(x, Decl(selfReferencesInFunctionParameters.ts, 0, 13))

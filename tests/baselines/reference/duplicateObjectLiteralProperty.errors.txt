@@ -1,14 +1,14 @@
-tests/cases/compiler/duplicateObjectLiteralProperty.ts(4,5): error TS1117: An object literal cannot have multiple properties with the same name.
-tests/cases/compiler/duplicateObjectLiteralProperty.ts(5,5): error TS1117: An object literal cannot have multiple properties with the same name.
-tests/cases/compiler/duplicateObjectLiteralProperty.ts(6,5): error TS1117: An object literal cannot have multiple properties with the same name.
-tests/cases/compiler/duplicateObjectLiteralProperty.ts(8,9): error TS1117: An object literal cannot have multiple properties with the same name.
-tests/cases/compiler/duplicateObjectLiteralProperty.ts(14,9): error TS2300: Duplicate identifier 'a'.
-tests/cases/compiler/duplicateObjectLiteralProperty.ts(15,9): error TS2300: Duplicate identifier 'a'.
-tests/cases/compiler/duplicateObjectLiteralProperty.ts(16,9): error TS1118: An object literal cannot have multiple get/set accessors with the same name.
-tests/cases/compiler/duplicateObjectLiteralProperty.ts(16,9): error TS2300: Duplicate identifier 'a'.
+duplicateObjectLiteralProperty.ts(4,5): error TS1117: An object literal cannot have multiple properties with the same name.
+duplicateObjectLiteralProperty.ts(5,5): error TS1117: An object literal cannot have multiple properties with the same name.
+duplicateObjectLiteralProperty.ts(6,5): error TS1117: An object literal cannot have multiple properties with the same name.
+duplicateObjectLiteralProperty.ts(8,9): error TS1117: An object literal cannot have multiple properties with the same name.
+duplicateObjectLiteralProperty.ts(14,9): error TS2300: Duplicate identifier 'a'.
+duplicateObjectLiteralProperty.ts(15,9): error TS2300: Duplicate identifier 'a'.
+duplicateObjectLiteralProperty.ts(16,9): error TS1118: An object literal cannot have multiple get/set accessors with the same name.
+duplicateObjectLiteralProperty.ts(16,9): error TS2300: Duplicate identifier 'a'.
 
 
-==== tests/cases/compiler/duplicateObjectLiteralProperty.ts (8 errors) ====
+==== duplicateObjectLiteralProperty.ts (8 errors) ====
     var x = {
         a: 1,
         b: true, // OK

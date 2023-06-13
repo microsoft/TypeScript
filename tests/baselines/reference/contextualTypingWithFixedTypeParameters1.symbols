@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualTypingWithFixedTypeParameters1.ts ===
+//// [tests/cases/compiler/contextualTypingWithFixedTypeParameters1.ts] ////
+
+=== contextualTypingWithFixedTypeParameters1.ts ===
 var f10: <T>(x: T, b: () => (a: T) => void, y: T) => T;
 >f10 : Symbol(f10, Decl(contextualTypingWithFixedTypeParameters1.ts, 0, 3))
 >T : Symbol(T, Decl(contextualTypingWithFixedTypeParameters1.ts, 0, 10))

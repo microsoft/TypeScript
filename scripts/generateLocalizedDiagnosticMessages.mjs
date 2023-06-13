@@ -1,6 +1,6 @@
+import { XMLParser } from "fast-xml-parser";
 import fs from "fs";
 import path from "path";
-import { XMLParser } from "fast-xml-parser";
 
 /** @typedef {{
     LCX: {

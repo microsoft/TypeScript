@@ -1,8 +1,10 @@
-=== tests/cases/conformance/salsa/mod.js ===
+//// [tests/cases/conformance/salsa/exportNestedNamespaces.ts] ////
+
+=== mod.js ===
 exports.n = {};
 >exports.n = {} : typeof n
 >exports.n : typeof n
->exports : typeof import("tests/cases/conformance/salsa/mod")
+>exports : typeof import("mod")
 >n : typeof n
 >{} : {}
 
@@ -10,7 +12,7 @@ exports.n.K = function () {
 >exports.n.K = function () {    this.x = 10;} : typeof K
 >exports.n.K : typeof K
 >exports.n : typeof n
->exports : typeof import("tests/cases/conformance/salsa/mod")
+>exports : typeof import("mod")
 >n : typeof n
 >K : typeof K
 >function () {    this.x = 10;} : typeof K
@@ -25,7 +27,7 @@ exports.n.K = function () {
 exports.Classic = class {
 >exports.Classic = class {    constructor() {        this.p = 1    }} : typeof Classic
 >exports.Classic : typeof Classic
->exports : typeof import("tests/cases/conformance/salsa/mod")
+>exports : typeof import("mod")
 >Classic : typeof Classic
 >class {    constructor() {        this.p = 1    }} : typeof Classic
 
@@ -39,7 +41,7 @@ exports.Classic = class {
     }
 }
 
-=== tests/cases/conformance/salsa/use.js ===
+=== use.js ===
 import * as s from './mod'
 >s : typeof s
 

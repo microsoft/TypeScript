@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportDeclarationInInternalModule.ts] ////
+
 //// [exportDeclarationInInternalModule.ts]
 class Bbb {
 }

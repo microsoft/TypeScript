@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmit_nameConflicts_0.ts ===
+//// [tests/cases/compiler/declarationEmitNameConflicts.ts] ////
+
+=== declarationEmit_nameConflicts_0.ts ===
 import im = require('./declarationEmit_nameConflicts_1');
 >im : Symbol(im, Decl(declarationEmit_nameConflicts_0.ts, 0, 0))
 
@@ -143,7 +145,7 @@ export module M.Q {
 >I : Symbol(M.c.I, Decl(declarationEmit_nameConflicts_0.ts, 5, 32))
     }
 }
-=== tests/cases/compiler/declarationEmit_nameConflicts_1.ts ===
+=== declarationEmit_nameConflicts_1.ts ===
 module f { export class c { } }
 >f : Symbol(f, Decl(declarationEmit_nameConflicts_1.ts, 0, 0))
 >c : Symbol(c, Decl(declarationEmit_nameConflicts_1.ts, 0, 10))

@@ -55,17 +55,17 @@ const refactorName = "Convert import";
 const actions = {
     [ImportKind.Named]: {
         name: "Convert namespace import to named imports",
-        description: Diagnostics.Convert_namespace_import_to_named_imports.message,
+        description: getLocaleSpecificMessage(Diagnostics.Convert_namespace_import_to_named_imports),
         kind: "refactor.rewrite.import.named",
     },
     [ImportKind.Namespace]: {
         name: "Convert named imports to namespace import",
-        description: Diagnostics.Convert_named_imports_to_namespace_import.message,
+        description: getLocaleSpecificMessage(Diagnostics.Convert_named_imports_to_namespace_import),
         kind: "refactor.rewrite.import.namespace",
     },
     [ImportKind.Default]: {
         name: "Convert named imports to default import",
-        description: Diagnostics.Convert_named_imports_to_default_import.message,
+        description: getLocaleSpecificMessage(Diagnostics.Convert_named_imports_to_default_import),
         kind: "refactor.rewrite.import.default",
     },
 };
@@ -263,7 +263,7 @@ export function doChangeNamedToNamespaceOrDefault(sourceFile: SourceFile, progra
         ? factory.createIdentifier(namespaceImportName)
         : factory.createNamespaceImport(factory.createIdentifier(namespaceImportName)));
     if (neededNamedImports.size) {
-        const newNamedImports: ImportSpecifier[] = arrayFrom(neededNamedImports.values()).map(element =>
+        const newNamedImports: ImportSpecifier[] = arrayFrom(neededNamedImports.values(), element =>
             factory.createImportSpecifier(element.isTypeOnly, element.propertyName && factory.createIdentifier(element.propertyName.text), factory.createIdentifier(element.name.text)));
         changes.insertNodeAfter(sourceFile, toConvert.parent.parent, updateImport(importDecl, /*defaultImportName*/ undefined, newNamedImports));
     }

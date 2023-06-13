@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualInnerCallFromIndexedAccessType.ts ===
+//// [tests/cases/compiler/contextualInnerCallFromIndexedAccessType.ts] ////
+
+=== contextualInnerCallFromIndexedAccessType.ts ===
 interface EventObject { type: string; }
 >type : string
 

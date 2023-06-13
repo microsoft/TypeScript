@@ -30,7 +30,7 @@ verify.docCommentTemplateAt("interfaceFoo", /*expectedOffset*/ 3,
 verify.docCommentTemplateAt("propertybar", /*expectedOffset*/ 3,
   "/** */");
 
-verify.docCommentTemplateAt("methodbaz", /*expectedOffset*/ 12,
+verify.docCommentTemplateAt("methodbaz", /*expectedOffset*/ 11,
    `/**
      * 
      * @param message

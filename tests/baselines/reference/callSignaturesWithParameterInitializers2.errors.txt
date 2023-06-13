@@ -1,10 +1,10 @@
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithParameterInitializers2.ts(4,14): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithParameterInitializers2.ts(11,9): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithParameterInitializers2.ts(20,9): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithParameterInitializers2.ts(20,15): error TS1005: '{' expected.
+callSignaturesWithParameterInitializers2.ts(4,14): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+callSignaturesWithParameterInitializers2.ts(11,9): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+callSignaturesWithParameterInitializers2.ts(20,9): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+callSignaturesWithParameterInitializers2.ts(20,15): error TS1005: '{' expected.
 
 
-==== tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithParameterInitializers2.ts (4 errors) ====
+==== callSignaturesWithParameterInitializers2.ts (4 errors) ====
     // Optional parameters allow initializers only in implementation signatures
     // All the below declarations are errors
     

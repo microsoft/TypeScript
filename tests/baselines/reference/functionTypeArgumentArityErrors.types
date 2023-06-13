@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionTypeArgumentArityErrors.ts ===
+//// [tests/cases/compiler/functionTypeArgumentArityErrors.ts] ////
+
+=== functionTypeArgumentArityErrors.ts ===
 // Overloaded functions with default type arguments
 declare function f1<A = any>(): void;
 >f1 : { <A = any>(): void; <A, B, C, D = any>(): void; }

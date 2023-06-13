@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/members/objectTypeWithStringNamedNumericProperty.ts] ////
+
 //// [objectTypeWithStringNamedNumericProperty.ts]
 // string named numeric properties are legal and distinct when indexed by string values
 // indexed numerically the value is converted to a number
@@ -152,8 +154,8 @@ var r8 = i["-1.0"];
 var r9 = i["-1"];
 var r10 = i[0x1];
 var r11 = i[-0x1];
-var r12 = i[01];
-var r13 = i[-01];
+var r12 = i[1];
+var r13 = i[-1];
 var i;
 var r1 = i['0.1'];
 var r2 = i['.1'];
@@ -171,8 +173,8 @@ var r8 = i["-1.0"];
 var r9 = i["-1"];
 var r10 = i[0x1];
 var r11 = i[-0x1];
-var r12 = i[01];
-var r13 = i[-01];
+var r12 = i[1];
+var r13 = i[-1];
 var a;
 var r1 = a['0.1'];
 var r2 = a['.1'];
@@ -190,8 +192,8 @@ var r8 = i["-1.0"];
 var r9 = i["-1"];
 var r10 = i[0x1];
 var r11 = i[-0x1];
-var r12 = i[01];
-var r13 = i[-01];
+var r12 = i[1];
+var r13 = i[-1];
 var b = {
     "0.1": null,
     ".1": new Object(),
@@ -218,5 +220,5 @@ var r8 = i["-1.0"];
 var r9 = i["-1"];
 var r10 = i[0x1];
 var r11 = i[-0x1];
-var r12 = i[01];
-var r13 = i[-01];
+var r12 = i[1];
+var r13 = i[-1];

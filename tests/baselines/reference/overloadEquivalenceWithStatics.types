@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadEquivalenceWithStatics.ts ===
+//// [tests/cases/compiler/overloadEquivalenceWithStatics.ts] ////
+
+=== overloadEquivalenceWithStatics.ts ===
 class A1<T> {
 >A1 : A1<T>
 
@@ -15,7 +17,6 @@ static B<S>(v: any): A1<S> {
 >v : any
 
 return null;
->null : null
 }
 }
 

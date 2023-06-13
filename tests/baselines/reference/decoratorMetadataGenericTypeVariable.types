@@ -1,4 +1,6 @@
-=== tests/cases/compiler/decoratorMetadataGenericTypeVariable.ts ===
+//// [tests/cases/compiler/decoratorMetadataGenericTypeVariable.ts] ////
+
+=== decoratorMetadataGenericTypeVariable.ts ===
 export class C<TypeVariable> {
 >C : C<TypeVariable>
 

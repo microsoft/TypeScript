@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts] ////
+
 //// [taggedTemplatesWithTypeArguments2.ts]
 export interface SomethingTaggable {
     <T>(t: TemplateStringsArray, ...args: T[]): SomethingNewable;

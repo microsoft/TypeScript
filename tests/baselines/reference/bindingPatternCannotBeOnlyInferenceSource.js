@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/bindingPatternCannotBeOnlyInferenceSource.ts] ////
+
 //// [bindingPatternCannotBeOnlyInferenceSource.ts]
 declare function f<T>(): T;
 const {} = f();       // error (only in strictNullChecks)

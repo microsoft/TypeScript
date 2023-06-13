@@ -1,5 +1,5 @@
-import * as ts from "../../_namespaces/ts";
 import * as fakes from "../../_namespaces/fakes";
+import * as ts from "../../_namespaces/ts";
 import * as vfs from "../../_namespaces/vfs";
 
 describe("unittests:: tsbuild - graph-ordering", () => {
@@ -19,7 +19,7 @@ describe("unittests:: tsbuild - graph-ordering", () => {
     ];
 
     before(() => {
-        const fs = new vfs.FileSystem(false);
+        const fs = new vfs.FileSystem(/*ignoreCase*/ false);
         host = fakes.SolutionBuilderHost.create(fs);
         writeProjects(fs, ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"], deps);
     });

@@ -1,27 +1,27 @@
-tests/cases/conformance/jsx/file.tsx(11,2): error TS2769: No overload matches this call.
+file.tsx(11,2): error TS2769: No overload matches this call.
   Overload 1 of 2, '(n: string): { x: number; }', gave the following error.
     Type '{}' is not assignable to type 'string'.
   Overload 2 of 2, '(n: number): { y: string; }', gave the following error.
     Type '{}' is not assignable to type 'number'.
-tests/cases/conformance/jsx/file.tsx(18,2): error TS2769: No overload matches this call.
+file.tsx(18,2): error TS2769: No overload matches this call.
   Overload 1 of 2, '(n: string): { x: number; }', gave the following error.
     Type '{}' is not assignable to type 'string'.
   Overload 2 of 2, '(n: number): { y: string; }', gave the following error.
     Type '{}' is not assignable to type 'number'.
-tests/cases/conformance/jsx/file.tsx(18,2): error TS2786: 'Obj2' cannot be used as a JSX component.
+file.tsx(18,2): error TS2786: 'Obj2' cannot be used as a JSX component.
   Its return type '{ x: number; } & { y: string; }' is not a valid JSX element.
     Property 'something' is missing in type '{ x: number; } & { y: string; }' but required in type 'Element'.
-tests/cases/conformance/jsx/file.tsx(25,2): error TS2769: No overload matches this call.
+file.tsx(25,2): error TS2769: No overload matches this call.
   Overload 1 of 2, '(n: string): { x: number; }', gave the following error.
     Type '{ x: number; }' is not assignable to type 'string'.
   Overload 2 of 2, '(n: number): { x: number; y: string; }', gave the following error.
     Type '{ x: number; }' is not assignable to type 'number'.
-tests/cases/conformance/jsx/file.tsx(25,2): error TS2786: 'Obj3' cannot be used as a JSX component.
+file.tsx(25,2): error TS2786: 'Obj3' cannot be used as a JSX component.
   Its return type '{ x: number; } & { x: number; y: string; }' is not a valid JSX element.
     Property 'something' is missing in type '{ x: number; } & { x: number; y: string; }' but required in type 'Element'.
 
 
-==== tests/cases/conformance/jsx/file.tsx (5 errors) ====
+==== file.tsx (5 errors) ====
     declare module JSX {
     	interface Element { something; }
     	interface IntrinsicElements { }
@@ -56,7 +56,7 @@ tests/cases/conformance/jsx/file.tsx(25,2): error TS2786: 'Obj3' cannot be used 
 !!! error TS2786: 'Obj2' cannot be used as a JSX component.
 !!! error TS2786:   Its return type '{ x: number; } & { y: string; }' is not a valid JSX element.
 !!! error TS2786:     Property 'something' is missing in type '{ x: number; } & { y: string; }' but required in type 'Element'.
-!!! related TS2728 tests/cases/conformance/jsx/file.tsx:2:22: 'something' is declared here.
+!!! related TS2728 file.tsx:2:22: 'something' is declared here.
     
     interface Obj3 {
     	(n: string): { x: number };
@@ -74,5 +74,5 @@ tests/cases/conformance/jsx/file.tsx(25,2): error TS2786: 'Obj3' cannot be used 
 !!! error TS2786: 'Obj3' cannot be used as a JSX component.
 !!! error TS2786:   Its return type '{ x: number; } & { x: number; y: string; }' is not a valid JSX element.
 !!! error TS2786:     Property 'something' is missing in type '{ x: number; } & { x: number; y: string; }' but required in type 'Element'.
-!!! related TS2728 tests/cases/conformance/jsx/file.tsx:2:22: 'something' is declared here.
+!!! related TS2728 file.tsx:2:22: 'something' is declared here.
     

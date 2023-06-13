@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/ambientModuleExports.ts] ////
+
 //// [ambientModuleExports.ts]
 declare module Foo {
 	function a():void;

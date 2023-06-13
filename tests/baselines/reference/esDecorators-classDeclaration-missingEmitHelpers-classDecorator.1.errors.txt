@@ -1,0 +1,19 @@
+main.ts(6,1): error TS2343: This syntax requires an imported helper named '__esDecorate' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+main.ts(6,1): error TS2343: This syntax requires an imported helper named '__runInitializers' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+
+
+==== main.ts (2 errors) ====
+    export {}
+    
+    declare var dec: any;
+    
+    // needs: __esDecorate, __runInitializers
+    @dec class C {}
+    ~~~~
+!!! error TS2343: This syntax requires an imported helper named '__esDecorate' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+    ~~~~
+!!! error TS2343: This syntax requires an imported helper named '__runInitializers' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+    
+==== tslib.d.ts (0 errors) ====
+    export {}
+    

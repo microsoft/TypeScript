@@ -1,7 +1,8 @@
-=== tests/cases/compiler/es3-jsx-preserve.tsx ===
+//// [tests/cases/compiler/es3-jsx-preserve.tsx] ////
+
+=== es3-jsx-preserve.tsx ===
 const React: any = null;
 >React : any
->null : null
 
 const elem = <div></div>;
 >elem : any
