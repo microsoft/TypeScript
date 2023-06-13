@@ -10,18 +10,25 @@ on:
       - main
       - release-*
 
+permissions:
+  contents: read
+
+# Ensure scripts are run with pipefail. See:
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#exit-codes-and-error-action-preference
+defaults:
+  run:
+    shell: bash
+
 jobs:
   richnav:
     runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 5
 
       - uses: actions/setup-node@v3
-        with:
-          node-version: 14
 
       - name: Install dependencies
         run:  npm ci

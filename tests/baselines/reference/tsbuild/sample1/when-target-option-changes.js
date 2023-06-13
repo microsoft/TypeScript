@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -122,7 +123,7 @@ Output::
 [[90m12:00:10 AM[0m] Projects in this build: 
     * src/core/tsconfig.json
 
-[[90m12:00:11 AM[0m] Project 'src/core/tsconfig.json' is out of date because output file 'src/core/anotherModule.js' does not exist
+[[90m12:00:11 AM[0m] Project 'src/core/tsconfig.json' is out of date because output file 'src/core/tsconfig.tsbuildinfo' does not exist
 
 [[90m12:00:12 AM[0m] Building project '/src/core/tsconfig.json'...
 
@@ -148,7 +149,7 @@ export function multiply(a, b) { return a * b; }
 
 
 //// [/src/core/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.esnext.d.ts","../../lib/lib.esnext.full.d.ts","./anothermodule.ts","./index.ts","./some_decl.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"8926001564-/// <reference no-default-lib=\"true\"/>\n/// <reference lib=\"esnext\" />","-2676574883-export const World = \"hello\";\r\n","-18749805970-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n",{"version":"-9253692965-declare const dts: any;\r\n","affectsGlobalScope":true}],"options":{"target":99},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4,5]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.esnext.d.ts","../../lib/lib.esnext.full.d.ts","./anothermodule.ts","./index.ts","./some_decl.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"8926001564-/// <reference no-default-lib=\"true\"/>\n/// <reference lib=\"esnext\" />","-2676574883-export const World = \"hello\";\r\n","-18749805970-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n",{"version":"-9253692965-declare const dts: any;\r\n","affectsGlobalScope":true}],"root":[[3,5]],"options":{"target":99},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4,5]},"version":"FakeTSVersion"}
 
 //// [/src/core/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -162,6 +163,10 @@ export function multiply(a, b) { return a * b; }
     ],
     "fileInfos": {
       "../../lib/lib.esnext.d.ts": {
+        "original": {
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "affectsGlobalScope": true
+        },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -179,11 +184,28 @@ export function multiply(a, b) { return a * b; }
         "signature": "-18749805970-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n"
       },
       "./some_decl.d.ts": {
+        "original": {
+          "version": "-9253692965-declare const dts: any;\r\n",
+          "affectsGlobalScope": true
+        },
         "version": "-9253692965-declare const dts: any;\r\n",
         "signature": "-9253692965-declare const dts: any;\r\n",
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        [
+          3,
+          5
+        ],
+        [
+          "./anothermodule.ts",
+          "./index.ts",
+          "./some_decl.d.ts"
+        ]
+      ]
+    ],
     "options": {
       "target": 99
     },
@@ -198,7 +220,7 @@ export function multiply(a, b) { return a * b; }
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1191
+  "size": 1206
 }
 
 
@@ -219,12 +241,12 @@ Input::
 
 Output::
 /lib/tsc --b /src/core --verbose
-[[90m12:00:18 AM[0m] Projects in this build: 
+[[90m12:00:19 AM[0m] Projects in this build: 
     * src/core/tsconfig.json
 
-[[90m12:00:19 AM[0m] Project 'src/core/tsconfig.json' is out of date because oldest output 'src/core/anotherModule.js' is older than newest input 'src/core/tsconfig.json'
+[[90m12:00:20 AM[0m] Project 'src/core/tsconfig.json' is out of date because output 'src/core/tsconfig.tsbuildinfo' is older than input 'src/core/tsconfig.json'
 
-[[90m12:00:20 AM[0m] Building project '/src/core/tsconfig.json'...
+[[90m12:00:21 AM[0m] Building project '/src/core/tsconfig.json'...
 
 TSFILE: /src/core/anotherModule.js
 TSFILE: /src/core/index.js
@@ -256,7 +278,7 @@ exports.multiply = multiply;
 
 
 //// [/src/core/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","../../lib/lib.esnext.d.ts","./anothermodule.ts","./index.ts","./some_decl.d.ts"],"fileInfos":["8926001564-/// <reference no-default-lib=\"true\"/>\n/// <reference lib=\"esnext\" />",{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-2676574883-export const World = \"hello\";\r\n","-18749805970-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n",{"version":"-9253692965-declare const dts: any;\r\n","affectsGlobalScope":true}],"options":{"target":1},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4,5]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","../../lib/lib.esnext.d.ts","./anothermodule.ts","./index.ts","./some_decl.d.ts"],"fileInfos":["8926001564-/// <reference no-default-lib=\"true\"/>\n/// <reference lib=\"esnext\" />",{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-2676574883-export const World = \"hello\";\r\n","-18749805970-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n",{"version":"-9253692965-declare const dts: any;\r\n","affectsGlobalScope":true}],"root":[[3,5]],"options":{"target":1},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4,5]},"version":"FakeTSVersion"}
 
 //// [/src/core/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -274,6 +296,10 @@ exports.multiply = multiply;
         "signature": "8926001564-/// <reference no-default-lib=\"true\"/>\n/// <reference lib=\"esnext\" />"
       },
       "../../lib/lib.esnext.d.ts": {
+        "original": {
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "affectsGlobalScope": true
+        },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -287,11 +313,28 @@ exports.multiply = multiply;
         "signature": "-18749805970-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n"
       },
       "./some_decl.d.ts": {
+        "original": {
+          "version": "-9253692965-declare const dts: any;\r\n",
+          "affectsGlobalScope": true
+        },
         "version": "-9253692965-declare const dts: any;\r\n",
         "signature": "-9253692965-declare const dts: any;\r\n",
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        [
+          3,
+          5
+        ],
+        [
+          "./anothermodule.ts",
+          "./index.ts",
+          "./some_decl.d.ts"
+        ]
+      ]
+    ],
     "options": {
       "target": 1
     },
@@ -306,6 +349,6 @@ exports.multiply = multiply;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1178
+  "size": 1193
 }
 

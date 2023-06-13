@@ -1,4 +1,6 @@
-=== tests/cases/compiler/controlFlowLoopAnalysis.ts ===
+//// [tests/cases/compiler/controlFlowLoopAnalysis.ts] ////
+
+=== controlFlowLoopAnalysis.ts ===
 // Repro from #8418
 
 let cond: boolean;

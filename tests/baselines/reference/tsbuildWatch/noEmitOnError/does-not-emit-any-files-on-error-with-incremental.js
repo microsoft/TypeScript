@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/noEmitOnError useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/noEmitOnError/tsconfig.json]
 {
@@ -47,7 +48,7 @@ Output::
 [[90m12:00:32 AM[0m] Projects in this build: 
     * tsconfig.json
 
-[[90m12:00:33 AM[0m] Project 'tsconfig.json' is out of date because output file 'dev-build/shared/types/db.js' does not exist
+[[90m12:00:33 AM[0m] Project 'tsconfig.json' is out of date because output file 'dev-build/tsconfig.tsbuildinfo' does not exist
 
 [[90m12:00:34 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -56,7 +57,7 @@ Output::
 [7m4[0m ;
 [7m [0m [91m~[0m
 
-[[90m12:00:35 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:43 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -73,23 +74,104 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/user/username/projects/noemitonerror/tsconfig.json:
-  {"fileName":"/user/username/projects/noEmitOnError/tsconfig.json","pollingInterval":250}
-/user/username/projects/noemitonerror/shared/types/db.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/shared/types/db.ts","pollingInterval":250}
-/user/username/projects/noemitonerror/src/main.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/src/main.ts","pollingInterval":250}
-/user/username/projects/noemitonerror/src/other.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/src/other.ts","pollingInterval":250}
-
 FsWatches::
+/user/username/projects/noemitonerror/shared/types/db.ts: *new*
+  {}
+/user/username/projects/noemitonerror/src/main.ts: *new*
+  {}
+/user/username/projects/noemitonerror/src/other.ts: *new*
+  {}
+/user/username/projects/noemitonerror/tsconfig.json: *new*
+  {}
 
 FsWatchesRecursive::
-/user/username/projects/noemitonerror:
-  {"directoryName":"/user/username/projects/noemitonerror","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/noemitonerror: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
+
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":false,"affectsGlobalScope":true},{"version":"-9621097780-export interface A {\r\n    name: string;\r\n}","signature":false},{"version":"2626879346-import { A } from \"../shared/types/db\";\r\nconst a = {\r\n    lastName: 'sdsd'\r\n;","signature":false},{"version":"11373096570-console.log(\"hi\");\r\nexport { }","signature":false}],"root":[[2,4]],"options":{"noEmitOnError":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"changeFileSet":[1,2,3,4]},"version":"FakeTSVersion"}
+
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "program": {
+    "fileNames": [
+      "../../../../../a/lib/lib.d.ts",
+      "../shared/types/db.ts",
+      "../src/main.ts",
+      "../src/other.ts"
+    ],
+    "fileNamesList": [
+      [
+        "../shared/types/db.ts"
+      ]
+    ],
+    "fileInfos": {
+      "../../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "signature": false,
+          "affectsGlobalScope": true
+        },
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
+      },
+      "../shared/types/db.ts": {
+        "original": {
+          "version": "-9621097780-export interface A {\r\n    name: string;\r\n}",
+          "signature": false
+        },
+        "version": "-9621097780-export interface A {\r\n    name: string;\r\n}"
+      },
+      "../src/main.ts": {
+        "original": {
+          "version": "2626879346-import { A } from \"../shared/types/db\";\r\nconst a = {\r\n    lastName: 'sdsd'\r\n;",
+          "signature": false
+        },
+        "version": "2626879346-import { A } from \"../shared/types/db\";\r\nconst a = {\r\n    lastName: 'sdsd'\r\n;"
+      },
+      "../src/other.ts": {
+        "original": {
+          "version": "11373096570-console.log(\"hi\");\r\nexport { }",
+          "signature": false
+        },
+        "version": "11373096570-console.log(\"hi\");\r\nexport { }"
+      }
+    },
+    "root": [
+      [
+        [
+          2,
+          4
+        ],
+        [
+          "../shared/types/db.ts",
+          "../src/main.ts",
+          "../src/other.ts"
+        ]
+      ]
+    ],
+    "options": {
+      "noEmitOnError": true,
+      "outDir": "./"
+    },
+    "referencedMap": {
+      "../src/main.ts": [
+        "../shared/types/db.ts"
+      ]
+    },
+    "exportedModulesMap": {},
+    "changeFileSet": [
+      "../../../../../a/lib/lib.d.ts",
+      "../shared/types/db.ts",
+      "../src/main.ts",
+      "../src/other.ts"
+    ]
+  },
+  "version": "FakeTSVersion",
+  "size": 1110
+}
 
 
 Change:: No change
@@ -97,20 +179,23 @@ Change:: No change
 Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
 
+Before running Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:39 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:47 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:40 AM[0m] Project 'tsconfig.json' is out of date because output file 'dev-build/shared/types/db.js' does not exist
+[[90m12:00:48 AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'dev-build/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
 
-[[90m12:00:41 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
+[[90m12:00:49 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
 [96msrc/main.ts[0m:[93m4[0m:[93m1[0m - [91merror[0m[90m TS1005: [0m',' expected.
 
 [7m4[0m ;
 [7m [0m [91m~[0m
 
-[[90m12:00:42 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:50 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -126,22 +211,6 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
-
-WatchedFiles::
-/user/username/projects/noemitonerror/tsconfig.json:
-  {"fileName":"/user/username/projects/noEmitOnError/tsconfig.json","pollingInterval":250}
-/user/username/projects/noemitonerror/shared/types/db.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/shared/types/db.ts","pollingInterval":250}
-/user/username/projects/noemitonerror/src/main.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/src/main.ts","pollingInterval":250}
-/user/username/projects/noemitonerror/src/other.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/src/other.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/noemitonerror:
-  {"directoryName":"/user/username/projects/noemitonerror","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -156,15 +225,18 @@ const a = {
 };
 
 
+Before running Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:46 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:54 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:47 AM[0m] Project 'tsconfig.json' is out of date because output file 'dev-build/shared/types/db.js' does not exist
+[[90m12:00:55 AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'dev-build/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
 
-[[90m12:00:48 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
+[[90m12:00:56 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
-[[90m12:01:09 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:18 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -189,45 +261,10 @@ Shape signatures in builder refreshed for::
 /user/username/projects/noemitonerror/src/main.ts (computed .d.ts)
 /user/username/projects/noemitonerror/src/other.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/noemitonerror/tsconfig.json:
-  {"fileName":"/user/username/projects/noEmitOnError/tsconfig.json","pollingInterval":250}
-/user/username/projects/noemitonerror/shared/types/db.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/shared/types/db.ts","pollingInterval":250}
-/user/username/projects/noemitonerror/src/main.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/src/main.ts","pollingInterval":250}
-/user/username/projects/noemitonerror/src/other.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/src/other.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/noemitonerror:
-  {"directoryName":"/user/username/projects/noemitonerror","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js]
-"use strict";
-exports.__esModule = true;
-
-
-//// [/user/username/projects/noEmitOnError/dev-build/src/main.js]
-"use strict";
-exports.__esModule = true;
-var a = {
-    lastName: 'sdsd'
-};
-
-
-//// [/user/username/projects/noEmitOnError/dev-build/src/other.js]
-"use strict";
-exports.__esModule = true;
-console.log("hi");
-
-
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-9621097780-export interface A {\r\n    name: string;\r\n}","signature":"-5014788164-export interface A {\n    name: string;\n}\n"},{"version":"-2574605496-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n};","signature":"-3531856636-export {};\n"},{"version":"11373096570-console.log(\"hi\");\r\nexport { }","signature":"-3531856636-export {};\n"}],"options":{"noEmitOnError":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-9621097780-export interface A {\r\n    name: string;\r\n}","signature":"-5014788164-export interface A {\n    name: string;\n}\n"},{"version":"-2574605496-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n};","signature":"-3531856636-export {};\n"},{"version":"11373096570-console.log(\"hi\");\r\nexport { }","signature":"-3531856636-export {};\n"}],"root":[[2,4]],"options":{"noEmitOnError":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -245,23 +282,52 @@ console.log("hi");
     ],
     "fileInfos": {
       "../../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "affectsGlobalScope": true
+        },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
       "../shared/types/db.ts": {
+        "original": {
+          "version": "-9621097780-export interface A {\r\n    name: string;\r\n}",
+          "signature": "-5014788164-export interface A {\n    name: string;\n}\n"
+        },
         "version": "-9621097780-export interface A {\r\n    name: string;\r\n}",
         "signature": "-5014788164-export interface A {\n    name: string;\n}\n"
       },
       "../src/main.ts": {
+        "original": {
+          "version": "-2574605496-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n};",
+          "signature": "-3531856636-export {};\n"
+        },
         "version": "-2574605496-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n};",
         "signature": "-3531856636-export {};\n"
       },
       "../src/other.ts": {
+        "original": {
+          "version": "11373096570-console.log(\"hi\");\r\nexport { }",
+          "signature": "-3531856636-export {};\n"
+        },
         "version": "11373096570-console.log(\"hi\");\r\nexport { }",
         "signature": "-3531856636-export {};\n"
       }
     },
+    "root": [
+      [
+        [
+          2,
+          4
+        ],
+        [
+          "../shared/types/db.ts",
+          "../src/main.ts",
+          "../src/other.ts"
+        ]
+      ]
+    ],
     "options": {
       "noEmitOnError": true,
       "outDir": "./"
@@ -280,8 +346,27 @@ console.log("hi");
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1181
+  "size": 1196
 }
+
+//// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
+//// [/user/username/projects/noEmitOnError/dev-build/src/main.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var a = {
+    lastName: 'sdsd'
+};
+
+
+//// [/user/username/projects/noEmitOnError/dev-build/src/other.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+console.log("hi");
+
 
 
 Change:: Semantic Error
@@ -292,20 +377,23 @@ import { A } from "../shared/types/db";
 const a: string = 10;
 
 
+Before running Timeout callback:: count: 1
+3: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:13 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:22 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:14 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'dev-build/shared/types/db.js' is older than newest input 'src/main.ts'
+[[90m12:01:23 AM[0m] Project 'tsconfig.json' is out of date because output 'dev-build/tsconfig.tsbuildinfo' is older than input 'src/main.ts'
 
-[[90m12:01:15 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
+[[90m12:01:24 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
 [96msrc/main.ts[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
 
 [7m2[0m const a: string = 10;
 [7m [0m [91m      ~[0m
 
-[[90m12:01:22 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:01:32 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -324,26 +412,10 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/noemitonerror/src/main.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/noemitonerror/tsconfig.json:
-  {"fileName":"/user/username/projects/noEmitOnError/tsconfig.json","pollingInterval":250}
-/user/username/projects/noemitonerror/shared/types/db.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/shared/types/db.ts","pollingInterval":250}
-/user/username/projects/noemitonerror/src/main.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/src/main.ts","pollingInterval":250}
-/user/username/projects/noemitonerror/src/other.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/src/other.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/noemitonerror:
-  {"directoryName":"/user/username/projects/noemitonerror","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-9621097780-export interface A {\r\n    name: string;\r\n}","signature":"-5014788164-export interface A {\n    name: string;\n}\n"},{"version":"-11111345725-import { A } from \"../shared/types/db\";\nconst a: string = 10;","signature":"-3531856636-export {};\n"},{"version":"11373096570-console.log(\"hi\");\r\nexport { }","signature":"-3531856636-export {};\n"}],"options":{"noEmitOnError":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,[3,[{"file":"../src/main.ts","start":46,"length":1,"code":2322,"category":1,"messageText":"Type 'number' is not assignable to type 'string'."}]],4],"affectedFilesPendingEmit":[[3,1]]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-9621097780-export interface A {\r\n    name: string;\r\n}","signature":"-5014788164-export interface A {\n    name: string;\n}\n"},{"version":"-11111345725-import { A } from \"../shared/types/db\";\nconst a: string = 10;","signature":"-3531856636-export {};\n"},{"version":"11373096570-console.log(\"hi\");\r\nexport { }","signature":"-3531856636-export {};\n"}],"root":[[2,4]],"options":{"noEmitOnError":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,[3,[{"file":"../src/main.ts","start":46,"length":1,"code":2322,"category":1,"messageText":"Type 'number' is not assignable to type 'string'."}]],4],"affectedFilesPendingEmit":[3]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -361,23 +433,52 @@ exitCode:: ExitStatus.undefined
     ],
     "fileInfos": {
       "../../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "affectsGlobalScope": true
+        },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
       "../shared/types/db.ts": {
+        "original": {
+          "version": "-9621097780-export interface A {\r\n    name: string;\r\n}",
+          "signature": "-5014788164-export interface A {\n    name: string;\n}\n"
+        },
         "version": "-9621097780-export interface A {\r\n    name: string;\r\n}",
         "signature": "-5014788164-export interface A {\n    name: string;\n}\n"
       },
       "../src/main.ts": {
+        "original": {
+          "version": "-11111345725-import { A } from \"../shared/types/db\";\nconst a: string = 10;",
+          "signature": "-3531856636-export {};\n"
+        },
         "version": "-11111345725-import { A } from \"../shared/types/db\";\nconst a: string = 10;",
         "signature": "-3531856636-export {};\n"
       },
       "../src/other.ts": {
+        "original": {
+          "version": "11373096570-console.log(\"hi\");\r\nexport { }",
+          "signature": "-3531856636-export {};\n"
+        },
         "version": "11373096570-console.log(\"hi\");\r\nexport { }",
         "signature": "-3531856636-export {};\n"
       }
     },
+    "root": [
+      [
+        [
+          2,
+          4
+        ],
+        [
+          "../shared/types/db.ts",
+          "../src/main.ts",
+          "../src/other.ts"
+        ]
+      ]
+    ],
     "options": {
       "noEmitOnError": true,
       "outDir": "./"
@@ -409,12 +510,12 @@ exitCode:: ExitStatus.undefined
     "affectedFilesPendingEmit": [
       [
         "../src/main.ts",
-        "Full"
+        "Js"
       ]
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1344
+  "size": 1355
 }
 
 
@@ -423,20 +524,23 @@ Change:: No change
 Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
 
+Before running Timeout callback:: count: 1
+4: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:26 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:37 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:27 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'dev-build/shared/types/db.js' is older than newest input 'src/main.ts'
+[[90m12:01:38 AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'dev-build/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
 
-[[90m12:01:28 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
+[[90m12:01:39 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
 [96msrc/main.ts[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
 
 [7m2[0m const a: string = 10;
 [7m [0m [91m      ~[0m
 
-[[90m12:01:29 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:01:40 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -453,22 +557,6 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/user/username/projects/noemitonerror/tsconfig.json:
-  {"fileName":"/user/username/projects/noEmitOnError/tsconfig.json","pollingInterval":250}
-/user/username/projects/noemitonerror/shared/types/db.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/shared/types/db.ts","pollingInterval":250}
-/user/username/projects/noemitonerror/src/main.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/src/main.ts","pollingInterval":250}
-/user/username/projects/noemitonerror/src/other.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/src/other.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/noemitonerror:
-  {"directoryName":"/user/username/projects/noemitonerror","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
 exitCode:: ExitStatus.undefined
 
 
@@ -480,17 +568,18 @@ import { A } from "../shared/types/db";
 const a: string = "hello";
 
 
+Before running Timeout callback:: count: 1
+5: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:33 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:44 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:34 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'dev-build/shared/types/db.js' is older than newest input 'src/main.ts'
+[[90m12:01:45 AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'dev-build/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
 
-[[90m12:01:35 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
+[[90m12:01:46 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
-[[90m12:01:43 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/noEmitOnError/tsconfig.json'...
-
-[[90m12:01:47 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:57 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -509,34 +598,10 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/noemitonerror/src/main.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/noemitonerror/tsconfig.json:
-  {"fileName":"/user/username/projects/noEmitOnError/tsconfig.json","pollingInterval":250}
-/user/username/projects/noemitonerror/shared/types/db.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/shared/types/db.ts","pollingInterval":250}
-/user/username/projects/noemitonerror/src/main.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/src/main.ts","pollingInterval":250}
-/user/username/projects/noemitonerror/src/other.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/src/other.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/noemitonerror:
-  {"directoryName":"/user/username/projects/noemitonerror","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js] file changed its modified time
-//// [/user/username/projects/noEmitOnError/dev-build/src/main.js]
-"use strict";
-exports.__esModule = true;
-var a = "hello";
-
-
-//// [/user/username/projects/noEmitOnError/dev-build/src/other.js] file changed its modified time
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-9621097780-export interface A {\r\n    name: string;\r\n}","signature":"-5014788164-export interface A {\n    name: string;\n}\n"},{"version":"-8373351622-import { A } from \"../shared/types/db\";\nconst a: string = \"hello\";","signature":"-3531856636-export {};\n"},{"version":"11373096570-console.log(\"hi\");\r\nexport { }","signature":"-3531856636-export {};\n"}],"options":{"noEmitOnError":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-9621097780-export interface A {\r\n    name: string;\r\n}","signature":"-5014788164-export interface A {\n    name: string;\n}\n"},{"version":"-8373351622-import { A } from \"../shared/types/db\";\nconst a: string = \"hello\";","signature":"-3531856636-export {};\n"},{"version":"11373096570-console.log(\"hi\");\r\nexport { }","signature":"-3531856636-export {};\n"}],"root":[[2,4]],"options":{"noEmitOnError":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -554,23 +619,52 @@ var a = "hello";
     ],
     "fileInfos": {
       "../../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "affectsGlobalScope": true
+        },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
       "../shared/types/db.ts": {
+        "original": {
+          "version": "-9621097780-export interface A {\r\n    name: string;\r\n}",
+          "signature": "-5014788164-export interface A {\n    name: string;\n}\n"
+        },
         "version": "-9621097780-export interface A {\r\n    name: string;\r\n}",
         "signature": "-5014788164-export interface A {\n    name: string;\n}\n"
       },
       "../src/main.ts": {
+        "original": {
+          "version": "-8373351622-import { A } from \"../shared/types/db\";\nconst a: string = \"hello\";",
+          "signature": "-3531856636-export {};\n"
+        },
         "version": "-8373351622-import { A } from \"../shared/types/db\";\nconst a: string = \"hello\";",
         "signature": "-3531856636-export {};\n"
       },
       "../src/other.ts": {
+        "original": {
+          "version": "11373096570-console.log(\"hi\");\r\nexport { }",
+          "signature": "-3531856636-export {};\n"
+        },
         "version": "11373096570-console.log(\"hi\");\r\nexport { }",
         "signature": "-3531856636-export {};\n"
       }
     },
+    "root": [
+      [
+        [
+          2,
+          4
+        ],
+        [
+          "../shared/types/db.ts",
+          "../src/main.ts",
+          "../src/other.ts"
+        ]
+      ]
+    ],
     "options": {
       "noEmitOnError": true,
       "outDir": "./"
@@ -589,8 +683,14 @@ var a = "hello";
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1172
+  "size": 1187
 }
+
+//// [/user/username/projects/noEmitOnError/dev-build/src/main.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var a = "hello";
+
 
 
 Change:: No change
@@ -598,52 +698,21 @@ Change:: No change
 Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
 
+Before running Timeout callback:: count: 1
+6: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:51 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:02:01 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:52 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'dev-build/shared/types/db.js' is older than newest input 'src/main.ts'
+[[90m12:02:02 AM[0m] Project 'tsconfig.json' is up to date but needs to update timestamps of output files that are older than input files
 
-[[90m12:01:53 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
+[[90m12:02:03 AM[0m] Updating output timestamps of project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
-[[90m12:01:55 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/noEmitOnError/tsconfig.json'...
-
-[[90m12:01:56 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:05 AM[0m] Found 0 errors. Watching for file changes.
 
 
-
-Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
-Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"watch":true,"incremental":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/noEmitOnError/shared/types/db.ts
-/user/username/projects/noEmitOnError/src/main.ts
-/user/username/projects/noEmitOnError/src/other.ts
-
-Semantic diagnostics in builder refreshed for::
-
-No shapes updated in the builder::
-
-WatchedFiles::
-/user/username/projects/noemitonerror/tsconfig.json:
-  {"fileName":"/user/username/projects/noEmitOnError/tsconfig.json","pollingInterval":250}
-/user/username/projects/noemitonerror/shared/types/db.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/shared/types/db.ts","pollingInterval":250}
-/user/username/projects/noemitonerror/src/main.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/src/main.ts","pollingInterval":250}
-/user/username/projects/noemitonerror/src/other.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/src/other.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/noemitonerror:
-  {"directoryName":"/user/username/projects/noemitonerror","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js] file changed its modified time
-//// [/user/username/projects/noEmitOnError/dev-build/src/main.js] file changed its modified time
-//// [/user/username/projects/noEmitOnError/dev-build/src/other.js] file changed its modified time
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo] file changed its modified time

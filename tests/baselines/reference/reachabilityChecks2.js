@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reachabilityChecks2.ts] ////
+
 //// [reachabilityChecks2.ts]
 while (true) { }
 const enum E { X }

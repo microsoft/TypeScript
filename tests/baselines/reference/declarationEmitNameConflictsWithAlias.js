@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitNameConflictsWithAlias.ts] ////
+
 //// [declarationEmitNameConflictsWithAlias.ts]
 export module C { export interface I { } }
 export import v = C;
@@ -8,11 +10,11 @@ export module M {
 
 //// [declarationEmitNameConflictsWithAlias.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.M = void 0;
 var M;
 (function (M) {
-})(M = exports.M || (exports.M = {}));
+})(M || (exports.M = M = {}));
 
 
 //// [declarationEmitNameConflictsWithAlias.d.ts]

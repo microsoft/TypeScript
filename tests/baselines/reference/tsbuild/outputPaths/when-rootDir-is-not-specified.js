@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -36,7 +37,7 @@ exitCode:: ExitStatus.Success
 
 //// [/src/dist/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 10;
 
@@ -52,7 +53,7 @@ Output::
 [[90m12:00:14 AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90m12:00:15 AM[0m] Project 'src/tsconfig.json' is up to date because newest input 'src/src/index.ts' is older than oldest output 'src/dist/index.js'
+[[90m12:00:15 AM[0m] Project 'src/tsconfig.json' is up to date because newest input 'src/src/index.ts' is older than output 'src/dist/index.js'
 
 exitCode:: ExitStatus.Success
 

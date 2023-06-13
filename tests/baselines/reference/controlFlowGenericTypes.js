@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts] ////
+
 //// [controlFlowGenericTypes.ts]
 function f1<T extends string | undefined>(x: T, y: { a: T }, z: [T]): string {
     if (x) {
@@ -211,10 +213,18 @@ function update<T extends Control, K extends keyof T>(control : T | undefined, k
     }
 }
 
+// Repro from #50465
+
+type Column<T> = (keyof T extends never ? { id?: number | string } : { id: T }) & { title?: string; }
+
+function getColumnProperty<T>(column: Column<T>, key: keyof Column<T>) {
+  return column[key];
+}
+
 
 //// [controlFlowGenericTypes.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.bounceAndTakeIfA = void 0;
 function f1(x, y, z) {
     if (x) {
@@ -367,4 +377,7 @@ function update(control, key, value) {
     if (control !== undefined) {
         control[key] = value;
     }
+}
+function getColumnProperty(column, key) {
+    return column[key];
 }

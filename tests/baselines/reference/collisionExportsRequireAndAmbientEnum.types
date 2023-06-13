@@ -1,21 +1,23 @@
-=== tests/cases/compiler/collisionExportsRequireAndAmbientEnum_externalmodule.ts ===
+//// [tests/cases/compiler/collisionExportsRequireAndAmbientEnum.ts] ////
+
+=== collisionExportsRequireAndAmbientEnum_externalmodule.ts ===
 export declare enum require {
 >require : require
 
     _thisVal1,
->_thisVal1 : require
+>_thisVal1 : require._thisVal1
 
     _thisVal2,
->_thisVal2 : require
+>_thisVal2 : require._thisVal2
 }
 export declare enum exports {
 >exports : exports
 
     _thisVal1,
->_thisVal1 : exports
+>_thisVal1 : exports._thisVal1
 
     _thisVal2,
->_thisVal2 : exports
+>_thisVal2 : exports._thisVal2
 }
 declare module m1 {
 >m1 : typeof m1
@@ -24,19 +26,19 @@ declare module m1 {
 >require : require
 
         _thisVal1,
->_thisVal1 : require
+>_thisVal1 : require._thisVal1
 
         _thisVal2,
->_thisVal2 : require
+>_thisVal2 : require._thisVal2
     }
     enum exports {
 >exports : exports
 
         _thisVal1,
->_thisVal1 : exports
+>_thisVal1 : exports._thisVal1
 
         _thisVal2,
->_thisVal2 : exports
+>_thisVal2 : exports._thisVal2
     }
 }
 module m2 {
@@ -46,40 +48,40 @@ module m2 {
 >require : require
 
         _thisVal1,
->_thisVal1 : require
+>_thisVal1 : require._thisVal1
 
         _thisVal2,
->_thisVal2 : require
+>_thisVal2 : require._thisVal2
     }
     export declare enum exports {
 >exports : exports
 
         _thisVal1,
->_thisVal1 : exports
+>_thisVal1 : exports._thisVal1
 
         _thisVal2,
->_thisVal2 : exports
+>_thisVal2 : exports._thisVal2
     }
 }
 
-=== tests/cases/compiler/collisionExportsRequireAndAmbientEnum_globalFile.ts ===
+=== collisionExportsRequireAndAmbientEnum_globalFile.ts ===
 declare enum require {
 >require : require
 
     _thisVal1,
->_thisVal1 : require
+>_thisVal1 : require._thisVal1
 
     _thisVal2,
->_thisVal2 : require
+>_thisVal2 : require._thisVal2
 }
 declare enum exports {
 >exports : exports
 
     _thisVal1,
->_thisVal1 : exports
+>_thisVal1 : exports._thisVal1
 
     _thisVal2,
->_thisVal2 : exports
+>_thisVal2 : exports._thisVal2
 }
 declare module m3 {
 >m3 : typeof m3
@@ -88,19 +90,19 @@ declare module m3 {
 >require : require
 
         _thisVal1,
->_thisVal1 : require
+>_thisVal1 : require._thisVal1
 
         _thisVal2,
->_thisVal2 : require
+>_thisVal2 : require._thisVal2
     }
     enum exports {
 >exports : exports
 
         _thisVal1,
->_thisVal1 : exports
+>_thisVal1 : exports._thisVal1
 
         _thisVal2,
->_thisVal2 : exports
+>_thisVal2 : exports._thisVal2
     }
 }
 module m4 {
@@ -110,18 +112,18 @@ module m4 {
 >require : require
 
         _thisVal1,
->_thisVal1 : require
+>_thisVal1 : require._thisVal1
 
         _thisVal2,
->_thisVal2 : require
+>_thisVal2 : require._thisVal2
     }
     export declare enum exports {
 >exports : exports
 
         _thisVal1,
->_thisVal1 : exports
+>_thisVal1 : exports._thisVal1
 
         _thisVal2,
->_thisVal2 : exports
+>_thisVal2 : exports._thisVal2
     }
 }

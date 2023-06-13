@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentsOnPropertyOfObjectLiteral1.ts] ////
+
 //// [commentsOnPropertyOfObjectLiteral1.ts]
 var resolve = {
     id: /*! @ngInject */ (details: any) => details.id,
@@ -25,5 +27,5 @@ var resolve = {
     id4: 
     /*! @ngInject */
     /* C2 */
-    function (details) { return details.id; }
+    function (details) { return details.id; },
 };

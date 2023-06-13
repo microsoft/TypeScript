@@ -1,4 +1,6 @@
-=== tests/cases/compiler/requiredInitializedParameter3.ts ===
+//// [tests/cases/compiler/requiredInitializedParameter3.ts] ////
+
+=== requiredInitializedParameter3.ts ===
 interface I1 {
     method();
 >method : () => any

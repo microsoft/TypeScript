@@ -1,22 +1,22 @@
-tests/cases/conformance/es6/destructuring/destructuringSameNames.ts(21,7): error TS2451: Cannot redeclare block-scoped variable 'foo1'.
-tests/cases/conformance/es6/destructuring/destructuringSameNames.ts(21,13): error TS2451: Cannot redeclare block-scoped variable 'foo1'.
-tests/cases/conformance/es6/destructuring/destructuringSameNames.ts(22,7): error TS2451: Cannot redeclare block-scoped variable 'foo2'.
-tests/cases/conformance/es6/destructuring/destructuringSameNames.ts(22,19): error TS2451: Cannot redeclare block-scoped variable 'foo2'.
-tests/cases/conformance/es6/destructuring/destructuringSameNames.ts(23,13): error TS2451: Cannot redeclare block-scoped variable 'foo3'.
-tests/cases/conformance/es6/destructuring/destructuringSameNames.ts(23,19): error TS2451: Cannot redeclare block-scoped variable 'foo3'.
-tests/cases/conformance/es6/destructuring/destructuringSameNames.ts(24,9): error TS2451: Cannot redeclare block-scoped variable 'foo4'.
-tests/cases/conformance/es6/destructuring/destructuringSameNames.ts(24,15): error TS2451: Cannot redeclare block-scoped variable 'foo4'.
-tests/cases/conformance/es6/destructuring/destructuringSameNames.ts(25,9): error TS2451: Cannot redeclare block-scoped variable 'foo5'.
-tests/cases/conformance/es6/destructuring/destructuringSameNames.ts(25,21): error TS2451: Cannot redeclare block-scoped variable 'foo5'.
-tests/cases/conformance/es6/destructuring/destructuringSameNames.ts(26,15): error TS2451: Cannot redeclare block-scoped variable 'foo6'.
-tests/cases/conformance/es6/destructuring/destructuringSameNames.ts(26,21): error TS2451: Cannot redeclare block-scoped variable 'foo6'.
-tests/cases/conformance/es6/destructuring/destructuringSameNames.ts(28,6): error TS2451: Cannot redeclare block-scoped variable 'blah1'.
-tests/cases/conformance/es6/destructuring/destructuringSameNames.ts(28,13): error TS2451: Cannot redeclare block-scoped variable 'blah1'.
-tests/cases/conformance/es6/destructuring/destructuringSameNames.ts(29,8): error TS2451: Cannot redeclare block-scoped variable 'blah2'.
-tests/cases/conformance/es6/destructuring/destructuringSameNames.ts(29,15): error TS2451: Cannot redeclare block-scoped variable 'blah2'.
+destructuringSameNames.ts(21,7): error TS2451: Cannot redeclare block-scoped variable 'foo1'.
+destructuringSameNames.ts(21,13): error TS2451: Cannot redeclare block-scoped variable 'foo1'.
+destructuringSameNames.ts(22,7): error TS2451: Cannot redeclare block-scoped variable 'foo2'.
+destructuringSameNames.ts(22,19): error TS2451: Cannot redeclare block-scoped variable 'foo2'.
+destructuringSameNames.ts(23,13): error TS2451: Cannot redeclare block-scoped variable 'foo3'.
+destructuringSameNames.ts(23,19): error TS2451: Cannot redeclare block-scoped variable 'foo3'.
+destructuringSameNames.ts(24,9): error TS2451: Cannot redeclare block-scoped variable 'foo4'.
+destructuringSameNames.ts(24,15): error TS2451: Cannot redeclare block-scoped variable 'foo4'.
+destructuringSameNames.ts(25,9): error TS2451: Cannot redeclare block-scoped variable 'foo5'.
+destructuringSameNames.ts(25,21): error TS2451: Cannot redeclare block-scoped variable 'foo5'.
+destructuringSameNames.ts(26,15): error TS2451: Cannot redeclare block-scoped variable 'foo6'.
+destructuringSameNames.ts(26,21): error TS2451: Cannot redeclare block-scoped variable 'foo6'.
+destructuringSameNames.ts(28,6): error TS2451: Cannot redeclare block-scoped variable 'blah1'.
+destructuringSameNames.ts(28,13): error TS2451: Cannot redeclare block-scoped variable 'blah1'.
+destructuringSameNames.ts(29,8): error TS2451: Cannot redeclare block-scoped variable 'blah2'.
+destructuringSameNames.ts(29,15): error TS2451: Cannot redeclare block-scoped variable 'blah2'.
 
 
-==== tests/cases/conformance/es6/destructuring/destructuringSameNames.ts (16 errors) ====
+==== destructuringSameNames.ts (16 errors) ====
     // Valid cases
     
     let { foo, foo: bar } = { foo: 1 };

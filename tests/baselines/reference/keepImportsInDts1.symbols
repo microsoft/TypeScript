@@ -1,5 +1,8 @@
+//// [tests/cases/compiler/keepImportsInDts1.ts] ////
+
 === c:/test.d.ts ===
+
 export {}; 
-No type information for this code.=== c:/app/main.ts ===
+=== c:/app/main.ts ===
+
 import "test"
-No type information for this code.

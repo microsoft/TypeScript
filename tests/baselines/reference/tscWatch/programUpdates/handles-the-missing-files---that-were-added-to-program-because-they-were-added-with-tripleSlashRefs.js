@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/commonFile1.ts]
 /// <reference path="commonFile2.ts"/>
@@ -51,17 +52,15 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/b/commonfile1.ts (used version)
 
-WatchedFiles::
-/a/b/commonfile1.ts:
-  {"fileName":"/a/b/commonFile1.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/a/b/commonfile2.ts:
-  {"fileName":"/a/b/commonfile2.ts","pollingInterval":250}
+PolledWatches::
+/a/b/commonfile2.ts: *new*
+  {"pollingInterval":500}
 
 FsWatches::
-
-FsWatchesRecursive::
+/a/b/commonfile1.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -78,6 +77,19 @@ Input::
 let y = 1
 
 
+PolledWatches *deleted*::
+/a/b/commonfile2.ts:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/commonfile1.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:19 AM[0m] File change detected. Starting incremental compilation...
@@ -103,17 +115,13 @@ Shape signatures in builder refreshed for::
 /a/b/commonfile2.ts (computed .d.ts)
 /a/b/commonfile1.ts (computed .d.ts)
 
-WatchedFiles::
-/a/b/commonfile1.ts:
-  {"fileName":"/a/b/commonFile1.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/a/b/commonfile2.ts:
-  {"fileName":"/a/b/commonFile2.ts","pollingInterval":250}
-
 FsWatches::
-
-FsWatchesRecursive::
+/a/b/commonfile1.ts:
+  {}
+/a/b/commonfile2.ts: *new*
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 exitCode:: ExitStatus.undefined
 

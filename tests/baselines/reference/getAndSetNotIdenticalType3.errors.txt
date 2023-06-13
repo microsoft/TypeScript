@@ -1,28 +1,18 @@
-tests/cases/compiler/getAndSetNotIdenticalType3.ts(5,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/compiler/getAndSetNotIdenticalType3.ts(5,9): error TS2380: The return type of a 'get' accessor must be assignable to its 'set' accessor type
-  Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/getAndSetNotIdenticalType3.ts(8,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/compiler/getAndSetNotIdenticalType3.ts(9,9): error TS2322: Type 'A<string>' is not assignable to type 'A<number>'.
+getAndSetNotIdenticalType3.ts(9,9): error TS2322: Type 'A<string>' is not assignable to type 'A<number>'.
   Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/getAndSetNotIdenticalType3.ts(15,1): error TS2322: Type 'A<number>' is not assignable to type 'A<string>'.
+getAndSetNotIdenticalType3.ts(15,1): error TS2322: Type 'A<number>' is not assignable to type 'A<string>'.
+  Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/compiler/getAndSetNotIdenticalType3.ts (5 errors) ====
+==== getAndSetNotIdenticalType3.ts (2 errors) ====
     class A<T> { foo: T; }
     
     class C<T> {
         data: A<number>;
         get x(): A<number> {
-            ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-            ~
-!!! error TS2380: The return type of a 'get' accessor must be assignable to its 'set' accessor type
-!!! error TS2380:   Type 'number' is not assignable to type 'string'.
             return this.data;
         }
         set x(v: A<string>) {
-            ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             this.data = v;
             ~~~~~~~~~
 !!! error TS2322: Type 'A<string>' is not assignable to type 'A<number>'.
@@ -35,3 +25,4 @@ tests/cases/compiler/getAndSetNotIdenticalType3.ts(15,1): error TS2322: Type 'A<
     x.x = r;
     ~~~
 !!! error TS2322: Type 'A<number>' is not assignable to type 'A<string>'.
+!!! error TS2322:   Type 'number' is not assignable to type 'string'.

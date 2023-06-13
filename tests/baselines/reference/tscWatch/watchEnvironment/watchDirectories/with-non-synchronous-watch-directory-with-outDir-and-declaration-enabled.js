@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -49,39 +50,37 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/node_modules/file2/index.d.ts (used version)
 /user/username/projects/myproject/src/file1.ts (computed .d.ts during emit)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/src/file1.ts:
-  {"fileName":"/user/username/projects/myproject/src/file1.ts","pollingInterval":250}
-/user/username/projects/myproject/node_modules/file2/index.d.ts:
-  {"fileName":"/user/username/projects/myproject/node_modules/file2/index.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/myproject/node_modules/file2/package.json:
-  {"fileName":"/user/username/projects/myproject/node_modules/file2/package.json","pollingInterval":250}
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/src:
-  {"directoryName":"/user/username/projects/myproject/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules:
-  {"directoryName":"/user/username/projects/myproject/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules/file2:
-  {"directoryName":"/user/username/projects/myproject/node_modules/file2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/dist:
-  {"directoryName":"/user/username/projects/myproject/dist","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-FsWatchesRecursive::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject: *new*
+  {}
+/user/username/projects/myproject/dist: *new*
+  {}
+/user/username/projects/myproject/node_modules: *new*
+  {}
+/user/username/projects/myproject/node_modules/file2: *new*
+  {}
+/user/username/projects/myproject/node_modules/file2/index.d.ts: *new*
+  {}
+/user/username/projects/myproject/src: *new*
+  {}
+/user/username/projects/myproject/src/file1.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/dist/file1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/user/username/projects/myproject/dist/file1.d.ts]
@@ -93,35 +92,9 @@ Change:: No change
 
 Input::
 
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 Output::
-
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/src/file1.ts:
-  {"fileName":"/user/username/projects/myproject/src/file1.ts","pollingInterval":250}
-/user/username/projects/myproject/node_modules/file2/index.d.ts:
-  {"fileName":"/user/username/projects/myproject/node_modules/file2/index.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/myproject/node_modules/file2/package.json:
-  {"fileName":"/user/username/projects/myproject/node_modules/file2/package.json","pollingInterval":250}
-
-FsWatches::
-/user/username/projects/myproject/src:
-  {"directoryName":"/user/username/projects/myproject/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules:
-  {"directoryName":"/user/username/projects/myproject/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules/file2:
-  {"directoryName":"/user/username/projects/myproject/node_modules/file2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/dist:
-  {"directoryName":"/user/username/projects/myproject/dist","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -133,35 +106,12 @@ Input::
 export const y = 10;
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateChildWatches
+After running Timeout callback:: count: 2
+2: timerToInvalidateFailedLookupResolutions
+3: timerToUpdateProgram
 Output::
-
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/src/file1.ts:
-  {"fileName":"/user/username/projects/myproject/src/file1.ts","pollingInterval":250}
-/user/username/projects/myproject/node_modules/file2/index.d.ts:
-  {"fileName":"/user/username/projects/myproject/node_modules/file2/index.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/myproject/node_modules/file2/package.json:
-  {"fileName":"/user/username/projects/myproject/node_modules/file2/package.json","pollingInterval":250}
-
-FsWatches::
-/user/username/projects/myproject/src:
-  {"directoryName":"/user/username/projects/myproject/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules:
-  {"directoryName":"/user/username/projects/myproject/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules/file2:
-  {"directoryName":"/user/username/projects/myproject/node_modules/file2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/dist:
-  {"directoryName":"/user/username/projects/myproject/dist","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -170,11 +120,16 @@ Change:: Actual program update to include new file
 
 Input::
 
+Before running Timeout callback:: count: 2
+2: timerToInvalidateFailedLookupResolutions
+3: timerToUpdateProgram
+After running Timeout callback:: count: 1
+5: timerToUpdateChildWatches
 Output::
 >> Screen clear
-[[90m12:00:40 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:41 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:45 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:46 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -193,39 +148,39 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/src/file3.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/src/file1.ts:
-  {"fileName":"/user/username/projects/myproject/src/file1.ts","pollingInterval":250}
-/user/username/projects/myproject/node_modules/file2/index.d.ts:
-  {"fileName":"/user/username/projects/myproject/node_modules/file2/index.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/myproject/src/file3.ts:
-  {"fileName":"/user/username/projects/myproject/src/file3.ts","pollingInterval":250}
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/src:
-  {"directoryName":"/user/username/projects/myproject/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules:
-  {"directoryName":"/user/username/projects/myproject/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules/file2:
-  {"directoryName":"/user/username/projects/myproject/node_modules/file2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/a/lib/lib.d.ts:
+  {}
 /user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 /user/username/projects/myproject/dist:
-  {"directoryName":"/user/username/projects/myproject/dist","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-FsWatchesRecursive::
+  {}
+/user/username/projects/myproject/node_modules:
+  {}
+/user/username/projects/myproject/node_modules/file2:
+  {}
+/user/username/projects/myproject/node_modules/file2/index.d.ts:
+  {}
+/user/username/projects/myproject/src:
+  {}
+/user/username/projects/myproject/src/file1.ts:
+  {}
+/user/username/projects/myproject/src/file3.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/dist/file3.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = void 0;
 exports.y = 10;
 
@@ -239,35 +194,10 @@ Change:: After program emit with new file, should schedule and run timeout to up
 
 Input::
 
+Before running Timeout callback:: count: 1
+5: timerToUpdateChildWatches
+After running Timeout callback:: count: 0
 Output::
-
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/src/file1.ts:
-  {"fileName":"/user/username/projects/myproject/src/file1.ts","pollingInterval":250}
-/user/username/projects/myproject/node_modules/file2/index.d.ts:
-  {"fileName":"/user/username/projects/myproject/node_modules/file2/index.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/myproject/src/file3.ts:
-  {"fileName":"/user/username/projects/myproject/src/file3.ts","pollingInterval":250}
-
-FsWatches::
-/user/username/projects/myproject/src:
-  {"directoryName":"/user/username/projects/myproject/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules:
-  {"directoryName":"/user/username/projects/myproject/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules/file2:
-  {"directoryName":"/user/username/projects/myproject/node_modules/file2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/dist:
-  {"directoryName":"/user/username/projects/myproject/dist","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -276,35 +206,9 @@ Change:: No change
 
 Input::
 
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 Output::
-
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/src/file1.ts:
-  {"fileName":"/user/username/projects/myproject/src/file1.ts","pollingInterval":250}
-/user/username/projects/myproject/node_modules/file2/index.d.ts:
-  {"fileName":"/user/username/projects/myproject/node_modules/file2/index.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/myproject/src/file3.ts:
-  {"fileName":"/user/username/projects/myproject/src/file3.ts","pollingInterval":250}
-
-FsWatches::
-/user/username/projects/myproject/src:
-  {"directoryName":"/user/username/projects/myproject/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules:
-  {"directoryName":"/user/username/projects/myproject/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules/file2:
-  {"directoryName":"/user/username/projects/myproject/node_modules/file2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/dist:
-  {"directoryName":"/user/username/projects/myproject/dist","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 

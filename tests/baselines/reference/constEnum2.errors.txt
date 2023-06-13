@@ -1,10 +1,8 @@
-tests/cases/conformance/constEnums/constEnum2.ts(10,9): error TS2474: const enum member initializers can only contain literal values and other computed enum values.
-tests/cases/conformance/constEnums/constEnum2.ts(11,9): error TS2474: const enum member initializers can only contain literal values and other computed enum values.
-tests/cases/conformance/constEnums/constEnum2.ts(12,5): error TS1357: An enum member name must be followed by a ',', '=', or '}'.
-tests/cases/conformance/constEnums/constEnum2.ts(12,9): error TS2474: const enum member initializers can only contain literal values and other computed enum values.
+constEnum2.ts(10,9): error TS2474: const enum member initializers must be constant expressions.
+constEnum2.ts(11,9): error TS2474: const enum member initializers must be constant expressions.
 
 
-==== tests/cases/conformance/constEnums/constEnum2.ts (4 errors) ====
+==== constEnum2.ts (2 errors) ====
     // An enum declaration that specifies a const modifier is a constant enum declaration.
     // In a constant enum declaration, all members must have constant values and
     // it is an error for a member declaration to specify an expression that isn't classified as a constant enum expression.
@@ -16,13 +14,9 @@ tests/cases/conformance/constEnums/constEnum2.ts(12,9): error TS2474: const enum
         d = 10,
         e = 199 * Math.floor(Math.random() * 1000),
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2474: const enum member initializers can only contain literal values and other computed enum values.
-        f = d - (100 * Math.floor(Math.random() % 8))
+!!! error TS2474: const enum member initializers must be constant expressions.
+        f = d - (100 * Math.floor(Math.random() % 8)),
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2474: const enum member initializers can only contain literal values and other computed enum values.
+!!! error TS2474: const enum member initializers must be constant expressions.
         g = CONST,
-        ~
-!!! error TS1357: An enum member name must be followed by a ',', '=', or '}'.
-            ~~~~~
-!!! error TS2474: const enum member initializers can only contain literal values and other computed enum values.
     }

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/thisType/looseThisTypeInFunctions.ts] ////
+
 //// [looseThisTypeInFunctions.ts]
 interface I {
     n: number;
@@ -77,7 +79,7 @@ var o2 = {
     n: 1001,
     explicitThis: function (m) {
         return m + this.n.length; // error, this.n: number, no member 'length'
-    }
+    },
 };
 var x = i.explicitThis;
 var n = x(12); // callee:void doesn't match this:I

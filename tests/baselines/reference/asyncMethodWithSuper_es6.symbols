@@ -1,4 +1,6 @@
-=== tests/cases/conformance/async/es6/asyncMethodWithSuper_es6.ts ===
+//// [tests/cases/conformance/async/es6/asyncMethodWithSuper_es6.ts] ////
+
+=== asyncMethodWithSuper_es6.ts ===
 class A {
 >A : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
 
@@ -374,5 +376,103 @@ class B extends A {
 >"x" : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
 >f : Symbol(f, Decl(asyncMethodWithSuper_es6.ts, 171, 13))
     }
+}
+
+// https://github.com/microsoft/TypeScript/issues/46828
+class Base {
+>Base : Symbol(Base, Decl(asyncMethodWithSuper_es6.ts, 185, 1))
+
+    set setter(x: any) {}
+>setter : Symbol(Base.setter, Decl(asyncMethodWithSuper_es6.ts, 188, 12))
+>x : Symbol(x, Decl(asyncMethodWithSuper_es6.ts, 189, 15))
+
+    get getter(): any { return; }
+>getter : Symbol(Base.getter, Decl(asyncMethodWithSuper_es6.ts, 189, 25))
+
+    method(x: string): any {}
+>method : Symbol(Base.method, Decl(asyncMethodWithSuper_es6.ts, 190, 33))
+>x : Symbol(x, Decl(asyncMethodWithSuper_es6.ts, 191, 11))
+
+    static set setter(x: any) {}
+>setter : Symbol(Base.setter, Decl(asyncMethodWithSuper_es6.ts, 191, 29))
+>x : Symbol(x, Decl(asyncMethodWithSuper_es6.ts, 193, 22))
+
+    static get getter(): any { return; }
+>getter : Symbol(Base.getter, Decl(asyncMethodWithSuper_es6.ts, 193, 32))
+
+    static method(x: string): any {}
+>method : Symbol(Base.method, Decl(asyncMethodWithSuper_es6.ts, 194, 40))
+>x : Symbol(x, Decl(asyncMethodWithSuper_es6.ts, 195, 18))
+}
+
+class Derived extends Base {
+>Derived : Symbol(Derived, Decl(asyncMethodWithSuper_es6.ts, 196, 1))
+>Base : Symbol(Base, Decl(asyncMethodWithSuper_es6.ts, 185, 1))
+
+    a() { return async () => super.method('') }
+>a : Symbol(Derived.a, Decl(asyncMethodWithSuper_es6.ts, 198, 28))
+>super.method : Symbol(Base.method, Decl(asyncMethodWithSuper_es6.ts, 190, 33))
+>super : Symbol(Base, Decl(asyncMethodWithSuper_es6.ts, 185, 1))
+>method : Symbol(Base.method, Decl(asyncMethodWithSuper_es6.ts, 190, 33))
+
+    b() { return async () => super.getter }
+>b : Symbol(Derived.b, Decl(asyncMethodWithSuper_es6.ts, 199, 47))
+>super.getter : Symbol(Base.getter, Decl(asyncMethodWithSuper_es6.ts, 189, 25))
+>super : Symbol(Base, Decl(asyncMethodWithSuper_es6.ts, 185, 1))
+>getter : Symbol(Base.getter, Decl(asyncMethodWithSuper_es6.ts, 189, 25))
+
+    c() { return async () => super.setter = '' }
+>c : Symbol(Derived.c, Decl(asyncMethodWithSuper_es6.ts, 200, 43))
+>super.setter : Symbol(Base.setter, Decl(asyncMethodWithSuper_es6.ts, 188, 12))
+>super : Symbol(Base, Decl(asyncMethodWithSuper_es6.ts, 185, 1))
+>setter : Symbol(Base.setter, Decl(asyncMethodWithSuper_es6.ts, 188, 12))
+
+    d() { return async () => super["method"]('') }
+>d : Symbol(Derived.d, Decl(asyncMethodWithSuper_es6.ts, 201, 48))
+>super : Symbol(Base, Decl(asyncMethodWithSuper_es6.ts, 185, 1))
+>"method" : Symbol(Base.method, Decl(asyncMethodWithSuper_es6.ts, 190, 33))
+
+    e() { return async () => super["getter"] }
+>e : Symbol(Derived.e, Decl(asyncMethodWithSuper_es6.ts, 202, 50))
+>super : Symbol(Base, Decl(asyncMethodWithSuper_es6.ts, 185, 1))
+>"getter" : Symbol(Base.getter, Decl(asyncMethodWithSuper_es6.ts, 189, 25))
+
+    f() { return async () => super["setter"] = '' }
+>f : Symbol(Derived.f, Decl(asyncMethodWithSuper_es6.ts, 203, 46))
+>super : Symbol(Base, Decl(asyncMethodWithSuper_es6.ts, 185, 1))
+>"setter" : Symbol(Base.setter, Decl(asyncMethodWithSuper_es6.ts, 188, 12))
+
+    static a() { return async () => super.method('') }
+>a : Symbol(Derived.a, Decl(asyncMethodWithSuper_es6.ts, 204, 51))
+>super.method : Symbol(Base.method, Decl(asyncMethodWithSuper_es6.ts, 194, 40))
+>super : Symbol(Base, Decl(asyncMethodWithSuper_es6.ts, 185, 1))
+>method : Symbol(Base.method, Decl(asyncMethodWithSuper_es6.ts, 194, 40))
+
+    static b() { return async () => super.getter }
+>b : Symbol(Derived.b, Decl(asyncMethodWithSuper_es6.ts, 205, 54))
+>super.getter : Symbol(Base.getter, Decl(asyncMethodWithSuper_es6.ts, 193, 32))
+>super : Symbol(Base, Decl(asyncMethodWithSuper_es6.ts, 185, 1))
+>getter : Symbol(Base.getter, Decl(asyncMethodWithSuper_es6.ts, 193, 32))
+
+    static c() { return async () => super.setter = '' }
+>c : Symbol(Derived.c, Decl(asyncMethodWithSuper_es6.ts, 206, 50))
+>super.setter : Symbol(Base.setter, Decl(asyncMethodWithSuper_es6.ts, 191, 29))
+>super : Symbol(Base, Decl(asyncMethodWithSuper_es6.ts, 185, 1))
+>setter : Symbol(Base.setter, Decl(asyncMethodWithSuper_es6.ts, 191, 29))
+
+    static d() { return async () => super["method"]('') }
+>d : Symbol(Derived.d, Decl(asyncMethodWithSuper_es6.ts, 207, 55))
+>super : Symbol(Base, Decl(asyncMethodWithSuper_es6.ts, 185, 1))
+>"method" : Symbol(Base.method, Decl(asyncMethodWithSuper_es6.ts, 194, 40))
+
+    static e() { return async () => super["getter"] }
+>e : Symbol(Derived.e, Decl(asyncMethodWithSuper_es6.ts, 208, 57))
+>super : Symbol(Base, Decl(asyncMethodWithSuper_es6.ts, 185, 1))
+>"getter" : Symbol(Base.getter, Decl(asyncMethodWithSuper_es6.ts, 193, 32))
+
+    static f() { return async () => super["setter"] = '' }
+>f : Symbol(Derived.f, Decl(asyncMethodWithSuper_es6.ts, 209, 53))
+>super : Symbol(Base, Decl(asyncMethodWithSuper_es6.ts, 185, 1))
+>"setter" : Symbol(Base.setter, Decl(asyncMethodWithSuper_es6.ts, 191, 29))
 }
 

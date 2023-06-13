@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/letDeclarations2.ts] ////
+
 //// [letDeclarations2.ts]
 module M {
     let l1 = "s";

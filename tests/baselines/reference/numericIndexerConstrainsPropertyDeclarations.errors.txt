@@ -1,17 +1,12 @@
-tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations.ts(18,5): error TS2411: Property '2.0' of type 'number' is not assignable to 'number' index type 'string'.
-tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations.ts(21,5): error TS2411: Property '3.0' of type 'MyNumber' is not assignable to 'number' index type 'string'.
-tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations.ts(23,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations.ts(26,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations.ts(36,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations.ts(50,5): error TS2411: Property '2.0' of type 'number' is not assignable to 'number' index type 'string'.
-tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations.ts(68,5): error TS2411: Property '2.0' of type 'number' is not assignable to 'number' index type 'string'.
-tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations.ts(85,5): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations.ts(88,9): error TS2304: Cannot find name 'Myn'.
-tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations.ts(90,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations.ts(93,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+numericIndexerConstrainsPropertyDeclarations.ts(18,5): error TS2411: Property '2.0' of type 'number' is not assignable to 'number' index type 'string'.
+numericIndexerConstrainsPropertyDeclarations.ts(21,5): error TS2411: Property '3.0' of type 'MyNumber' is not assignable to 'number' index type 'string'.
+numericIndexerConstrainsPropertyDeclarations.ts(50,5): error TS2411: Property '2.0' of type 'number' is not assignable to 'number' index type 'string'.
+numericIndexerConstrainsPropertyDeclarations.ts(68,5): error TS2411: Property '2.0' of type 'number' is not assignable to 'number' index type 'string'.
+numericIndexerConstrainsPropertyDeclarations.ts(85,5): error TS2322: Type 'number' is not assignable to type 'string'.
+numericIndexerConstrainsPropertyDeclarations.ts(88,9): error TS2304: Cannot find name 'Myn'.
 
 
-==== tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations.ts (11 errors) ====
+==== numericIndexerConstrainsPropertyDeclarations.ts (6 errors) ====
     // String indexer types constrain the types of named properties in their containing type
     
     interface MyNumber extends Number {
@@ -39,13 +34,9 @@ tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerCo
 !!! error TS2411: Property '3.0' of type 'MyNumber' is not assignable to 'number' index type 'string'.
     
         get X() { // ok
-            ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return '';
         }
         set X(v) { } // ok
-            ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     
         foo() { 
             return '';
@@ -56,8 +47,6 @@ tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerCo
     
         static foo() { } // ok
         static get X() { // ok
-                   ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return 1;
         }
     }
@@ -113,7 +102,7 @@ tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerCo
         2.0: 1, 
         ~~~
 !!! error TS2322: Type 'number' is not assignable to type 'string'.
-!!! related TS6501 tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations.ts:78:10: The expected type comes from this index signature.
+!!! related TS6501 numericIndexerConstrainsPropertyDeclarations.ts:78:10: The expected type comes from this index signature.
         "3.0": '', 
         "4.0": 1, 
         f: <Myn>null, 
@@ -121,13 +110,9 @@ tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerCo
 !!! error TS2304: Cannot find name 'Myn'.
     
         get X() { 
-            ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return '';
         },
         set X(v) { }, 
-            ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         foo() { 
             return '';
         }

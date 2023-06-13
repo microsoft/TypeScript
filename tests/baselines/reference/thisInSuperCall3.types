@@ -1,4 +1,6 @@
-=== tests/cases/compiler/thisInSuperCall3.ts ===
+//// [tests/cases/compiler/thisInSuperCall3.ts] ////
+
+=== thisInSuperCall3.ts ===
 class Base { 
 >Base : Base
 

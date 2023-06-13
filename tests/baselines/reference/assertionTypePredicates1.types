@@ -1,4 +1,6 @@
-=== tests/cases/conformance/controlFlow/assertionTypePredicates1.ts ===
+//// [tests/cases/conformance/controlFlow/assertionTypePredicates1.ts] ////
+
+=== assertionTypePredicates1.ts ===
 declare function isString(value: unknown): value is string;
 >isString : (value: unknown) => value is string
 >value : unknown
@@ -150,7 +152,7 @@ function f01(x: unknown) {
 >undefined : undefined
 >typeof x === "string" : boolean
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->x : unknown
+>x : {} | null
 >"string" : "string"
 
         x;  // string | undefined

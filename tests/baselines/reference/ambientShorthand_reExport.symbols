@@ -1,15 +1,18 @@
-=== tests/cases/conformance/ambient/declarations.d.ts ===
+//// [tests/cases/conformance/ambient/ambientShorthand_reExport.ts] ////
+
+=== declarations.d.ts ===
 declare module "jquery";
 >"jquery" : Symbol("jquery", Decl(declarations.d.ts, 0, 0))
 
-=== tests/cases/conformance/ambient/reExportX.ts ===
+=== reExportX.ts ===
 export {x} from "jquery";
 >x : Symbol(x, Decl(reExportX.ts, 0, 8))
 
-=== tests/cases/conformance/ambient/reExportAll.ts ===
+=== reExportAll.ts ===
+
 export * from "jquery";
-No type information for this code.
-No type information for this code.=== tests/cases/conformance/ambient/reExportUser.ts ===
+
+=== reExportUser.ts ===
 import {x} from "./reExportX";
 >x : Symbol(x, Decl(reExportUser.ts, 0, 8))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeGuardOnContainerTypeNoHang.ts] ////
+
 //// [typeGuardOnContainerTypeNoHang.ts]
 export namespace TypeGuards {
     export function IsObject(value: any) : value is {[index:string]:any} {
@@ -8,7 +10,7 @@ export namespace TypeGuards {
 
 //// [typeGuardOnContainerTypeNoHang.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.TypeGuards = void 0;
 var TypeGuards;
 (function (TypeGuards) {
@@ -16,4 +18,4 @@ var TypeGuards;
         return typeof (value) === 'object';
     }
     TypeGuards.IsObject = IsObject;
-})(TypeGuards = exports.TypeGuards || (exports.TypeGuards = {}));
+})(TypeGuards || (exports.TypeGuards = TypeGuards = {}));

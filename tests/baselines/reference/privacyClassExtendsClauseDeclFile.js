@@ -113,7 +113,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.publicClassExtendingFromPrivateModuleClass = exports.publicClassExtendingPrivateClass = exports.publicClassExtendingPublicClass = exports.publicClass = exports.publicModule = void 0;
 var publicModule;
 (function (publicModule) {
@@ -175,7 +175,7 @@ var publicModule;
         return publicClassExtendingFromPrivateModuleClass;
     }(privateModule.publicClassInPrivateModule));
     publicModule.publicClassExtendingFromPrivateModuleClass = publicClassExtendingFromPrivateModuleClass;
-})(publicModule = exports.publicModule || (exports.publicModule = {}));
+})(publicModule || (exports.publicModule = publicModule = {}));
 var privateModule;
 (function (privateModule) {
     var publicClassInPrivateModule = /** @class */ (function () {

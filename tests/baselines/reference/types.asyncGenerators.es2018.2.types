@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.es2018.2.ts ===
+//// [tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.es2018.2.ts] ////
+
+=== types.asyncGenerators.es2018.2.ts ===
 async function * inferReturnType1() {
 >inferReturnType1 : () => AsyncGenerator<any, void, unknown>
 
@@ -20,9 +22,9 @@ async function * inferReturnType3() {
     yield* Promise.resolve([1, 2]);
 >yield* Promise.resolve([1, 2]) : any
 >Promise.resolve([1, 2]) : Promise<number[]>
->Promise.resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >[1, 2] : number[]
 >1 : 1
 >2 : 2

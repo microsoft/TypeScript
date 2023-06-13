@@ -1,4 +1,6 @@
-=== tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts ===
+//// [tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts] ////
+
+=== blockScopedVariablesUseBeforeDef.ts ===
 function foo0() {
 >foo0 : () => void
 
@@ -285,5 +287,36 @@ function foo16() {
 >(() => a) : () => any
 >() => a : () => any
 >a : any
+}
+
+function foo17() {
+>foo17 : () => void
+
+    const promise = (async () => {
+>promise : Promise<void>
+>(async () => {        promise        foo        await null        promise        foo    })() : Promise<void>
+>(async () => {        promise        foo        await null        promise        foo    }) : () => Promise<void>
+>async () => {        promise        foo        await null        promise        foo    } : () => Promise<void>
+
+        promise
+>promise : Promise<void>
+
+        foo
+>foo : 1
+
+        await null
+>await null : null
+
+        promise
+>promise : Promise<void>
+
+        foo
+>foo : 1
+
+    })()
+
+    const foo = 1;
+>foo : 1
+>1 : 1
 }
 

@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/moduleFile1.ts]
 export function Foo() { };
@@ -67,35 +68,31 @@ Shape signatures in builder refreshed for::
 /a/b/globalfile3.ts (used version)
 /a/b/modulefile2.ts (used version)
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/file1consumer1.ts:
-  {"fileName":"/a/b/file1Consumer1.ts","pollingInterval":250}
-/a/b/modulefile1.ts:
-  {"fileName":"/a/b/moduleFile1.ts","pollingInterval":250}
-/a/b/file1consumer2.ts:
-  {"fileName":"/a/b/file1Consumer2.ts","pollingInterval":250}
-/a/b/globalfile3.ts:
-  {"fileName":"/a/b/globalFile3.ts","pollingInterval":250}
-/a/b/modulefile2.ts:
-  {"fileName":"/a/b/moduleFile2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
 FsWatches::
+/a/b/file1consumer1.ts: *new*
+  {}
+/a/b/file1consumer2.ts: *new*
+  {}
+/a/b/globalfile3.ts: *new*
+  {}
+/a/b/modulefile1.ts: *new*
+  {}
+/a/b/modulefile2.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/a/b: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/moduleFile1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
 function Foo() { }
 exports.Foo = Foo;
@@ -104,14 +101,14 @@ exports.Foo = Foo;
 
 //// [/a/b/file1Consumer1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = void 0;
 exports.y = 10;
 
 
 //// [/a/b/file1Consumer2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var z = 10;
 
 
@@ -120,7 +117,7 @@ var z = 10;
 
 //// [/a/b/moduleFile2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo4 = void 0;
 exports.Foo4 = 10;
 
@@ -133,6 +130,9 @@ Input::
 export let y = Foo();
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:38 AM[0m] File change detected. Starting incremental compilation...
@@ -163,35 +163,11 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a/b/file1consumer1.ts (computed .d.ts)
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/file1consumer1.ts:
-  {"fileName":"/a/b/file1Consumer1.ts","pollingInterval":250}
-/a/b/modulefile1.ts:
-  {"fileName":"/a/b/moduleFile1.ts","pollingInterval":250}
-/a/b/file1consumer2.ts:
-  {"fileName":"/a/b/file1Consumer2.ts","pollingInterval":250}
-/a/b/globalfile3.ts:
-  {"fileName":"/a/b/globalFile3.ts","pollingInterval":250}
-/a/b/modulefile2.ts:
-  {"fileName":"/a/b/moduleFile2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/file1Consumer1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = void 0;
 exports.y = Foo();
 
@@ -204,6 +180,9 @@ Input::
 export var T: number;export function Foo() { };
 
 
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:46 AM[0m] File change detected. Starting incremental compilation...
@@ -236,35 +215,11 @@ Shape signatures in builder refreshed for::
 /a/b/modulefile1.ts (computed .d.ts)
 /a/b/file1consumer2.ts (computed .d.ts)
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/file1consumer1.ts:
-  {"fileName":"/a/b/file1Consumer1.ts","pollingInterval":250}
-/a/b/modulefile1.ts:
-  {"fileName":"/a/b/moduleFile1.ts","pollingInterval":250}
-/a/b/file1consumer2.ts:
-  {"fileName":"/a/b/file1Consumer2.ts","pollingInterval":250}
-/a/b/globalfile3.ts:
-  {"fileName":"/a/b/globalFile3.ts","pollingInterval":250}
-/a/b/modulefile2.ts:
-  {"fileName":"/a/b/moduleFile2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/moduleFile1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = exports.T = void 0;
 function Foo() { }
 exports.Foo = Foo;
@@ -280,6 +235,9 @@ Input::
 import {Foo} from "./moduleFile1";let y = Foo();
 
 
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:57 AM[0m] File change detected. Starting incremental compilation...
@@ -305,35 +263,11 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a/b/file1consumer1.ts (computed .d.ts)
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/file1consumer1.ts:
-  {"fileName":"/a/b/file1Consumer1.ts","pollingInterval":250}
-/a/b/modulefile1.ts:
-  {"fileName":"/a/b/moduleFile1.ts","pollingInterval":250}
-/a/b/file1consumer2.ts:
-  {"fileName":"/a/b/file1Consumer2.ts","pollingInterval":250}
-/a/b/globalfile3.ts:
-  {"fileName":"/a/b/globalFile3.ts","pollingInterval":250}
-/a/b/modulefile2.ts:
-  {"fileName":"/a/b/moduleFile2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/file1Consumer1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var moduleFile1_1 = require("./moduleFile1");
 var y = (0, moduleFile1_1.Foo)();
 
@@ -346,9 +280,12 @@ Input::
 export let y = Foo();
 
 
+Before running Timeout callback:: count: 1
+4: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:05 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:06 AM[0m] File change detected. Starting incremental compilation...
 
 [96ma/b/file1Consumer1.ts[0m:[93m1[0m:[93m9[0m - [91merror[0m[90m TS2305: [0mModule '"./moduleFile1"' has no exported member 'Foo'.
 
@@ -365,7 +302,7 @@ Output::
 [7m1[0m export let y = Foo();
 [7m [0m [91m               ~~~[0m
 
-[[90m12:01:15 AM[0m] Found 3 errors. Watching for file changes.
+[[90m12:01:16 AM[0m] Found 3 errors. Watching for file changes.
 
 
 
@@ -390,35 +327,11 @@ Shape signatures in builder refreshed for::
 /a/b/file1consumer2.ts (computed .d.ts)
 /a/b/file1consumer1.ts (computed .d.ts)
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/file1consumer1.ts:
-  {"fileName":"/a/b/file1Consumer1.ts","pollingInterval":250}
-/a/b/modulefile1.ts:
-  {"fileName":"/a/b/moduleFile1.ts","pollingInterval":250}
-/a/b/file1consumer2.ts:
-  {"fileName":"/a/b/file1Consumer2.ts","pollingInterval":250}
-/a/b/globalfile3.ts:
-  {"fileName":"/a/b/globalFile3.ts","pollingInterval":250}
-/a/b/modulefile2.ts:
-  {"fileName":"/a/b/moduleFile2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/moduleFile1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = void 0;
 exports.y = Foo();
 
@@ -434,11 +347,14 @@ export var T: number;export function Foo() { };
 
 //// [/a/b/file1Consumer1.ts] file written with same contents
 
+Before running Timeout callback:: count: 1
+6: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:22 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:23 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:32 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:33 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -463,35 +379,11 @@ Shape signatures in builder refreshed for::
 /a/b/file1consumer2.ts (computed .d.ts)
 /a/b/file1consumer1.ts (computed .d.ts)
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/file1consumer1.ts:
-  {"fileName":"/a/b/file1Consumer1.ts","pollingInterval":250}
-/a/b/modulefile1.ts:
-  {"fileName":"/a/b/moduleFile1.ts","pollingInterval":250}
-/a/b/file1consumer2.ts:
-  {"fileName":"/a/b/file1Consumer2.ts","pollingInterval":250}
-/a/b/globalfile3.ts:
-  {"fileName":"/a/b/globalFile3.ts","pollingInterval":250}
-/a/b/modulefile2.ts:
-  {"fileName":"/a/b/moduleFile2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/moduleFile1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = exports.T = void 0;
 function Foo() { }
 exports.Foo = Foo;

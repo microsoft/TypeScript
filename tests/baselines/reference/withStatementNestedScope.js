@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/withStatementNestedScope.ts] ////
+
 //// [withStatementNestedScope.ts]
 var x = 1;
 with (x) {

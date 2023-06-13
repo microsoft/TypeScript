@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsFunctionsCjs.ts] ////
+
+=== index.js ===
 module.exports.a = function a() {}
 >module.exports.a = function a() {} : () => void
 >module.exports.a : () => void
@@ -68,7 +70,6 @@ module.exports.d = function d(a, b) { return /** @type {*} */(null); }
 >a : number
 >b : number
 >(null) : any
->null : null
 
 /**
  * @template T,U
@@ -88,7 +89,6 @@ module.exports.e = function e(a, b) { return /** @type {*} */(null); }
 >a : T
 >b : U
 >(null) : any
->null : null
 
 /**
  * @template T

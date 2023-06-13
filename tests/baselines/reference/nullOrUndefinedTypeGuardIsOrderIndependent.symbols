@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/typeGuards/nullOrUndefinedTypeGuardIsOrderIndependent.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/nullOrUndefinedTypeGuardIsOrderIndependent.ts] ////
+
+=== nullOrUndefinedTypeGuardIsOrderIndependent.ts ===
 function test(strOrNull: string | null, strOrUndefined: string | undefined) {
 >test : Symbol(test, Decl(nullOrUndefinedTypeGuardIsOrderIndependent.ts, 0, 0))
 >strOrNull : Symbol(strOrNull, Decl(nullOrUndefinedTypeGuardIsOrderIndependent.ts, 0, 14))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/interfaceContextualType.ts] ////
+
 //// [interfaceContextualType.ts]
 export interface IOptions {
     italic?: boolean;
@@ -23,7 +25,7 @@ class Bug {
 
 //// [interfaceContextualType.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var Bug = /** @class */ (function () {
     function Bug() {
     }

@@ -1,6 +1,7 @@
 // @module: node16,nodenext
 // @declaration: true
 // @filename: index.ts
+// @traceResolution: true
 // esm format file
 import * as cjs from "#cjs";
 import * as mjs from "#mjs";

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/stringIndexerAssignments2.ts] ////
+
 //// [stringIndexerAssignments2.ts]
 class C1 {
     [index: string]: string

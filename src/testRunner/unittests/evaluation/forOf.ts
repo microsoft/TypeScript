@@ -1,3 +1,6 @@
+import * as evaluator from "../../_namespaces/evaluator";
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: evaluation:: forOfEvaluation", () => {
     it("es5 over a array with no Symbol", () => {
         const result = evaluator.evaluateTypeScript(`

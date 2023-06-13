@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/index.ts]
 const fn = (a: string, b: string) => b;
@@ -48,17 +49,15 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /user/username/projects/myproject/index.ts (used version)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/index.ts:
-  {"fileName":"/user/username/projects/myproject/index.ts","pollingInterval":250}
-
 FsWatches::
+/user/username/projects/myproject/index.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -70,11 +69,14 @@ Input::
 {"compilerOptions":{"noUnusedParameters":false}}
 
 
+Before running Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:26 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:29 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:30 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -90,18 +92,6 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/index.ts
 
 No shapes updated in the builder::
-
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/index.ts:
-  {"fileName":"/user/username/projects/myproject/index.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/sourceMapValidationFor.ts ===
+//// [tests/cases/compiler/sourceMapValidationFor.ts] ////
+
+=== sourceMapValidationFor.ts ===
 for (var i = 0; i < 10; i++) {
 >i : number
 >0 : 0

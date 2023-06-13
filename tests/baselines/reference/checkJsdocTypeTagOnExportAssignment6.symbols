@@ -1,6 +1,8 @@
-=== tests/cases/compiler/checkJsdocTypeTagOnExportAssignment6.js ===
+//// [tests/cases/compiler/checkJsdocTypeTagOnExportAssignment6.ts] ////
 
-No type information for this code.=== tests/cases/compiler/a.js ===
+=== checkJsdocTypeTagOnExportAssignment6.js ===
+
+=== a.js ===
 /**
  * @typedef {Object} Foo
  * @property {number} a
@@ -13,7 +15,7 @@ export default { a: 1, b: 1, c: 1 };
 >b : Symbol(b, Decl(a.js, 7, 22))
 >c : Symbol(c, Decl(a.js, 7, 28))
 
-=== tests/cases/compiler/b.js ===
+=== b.js ===
 import a from "./a";
 >a : Symbol(a, Decl(b.js, 0, 6))
 

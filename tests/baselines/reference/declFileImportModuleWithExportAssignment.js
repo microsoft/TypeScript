@@ -31,7 +31,7 @@ var m2;
 module.exports = m2;
 //// [declFileImportModuleWithExportAssignment_1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
 /**This is on import declaration*/
 var a1 = require("./declFileImportModuleWithExportAssignment_0");

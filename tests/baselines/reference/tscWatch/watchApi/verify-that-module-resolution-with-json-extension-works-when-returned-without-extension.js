@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -35,7 +36,7 @@ Output::
   [96msettings.json[0m:[93m1[0m:[93m1[0m
     [7m1[0m {"content":"Print this"}
     [7m [0m [96m~[0m
-    This module is declared with using 'export =', and can only be used with a default import when using the 'esModuleInterop' flag.
+    This module is declared with 'export =', and can only be used with a default import when using the 'esModuleInterop' flag.
 
 [[90m12:00:26 AM[0m] Found 1 error. Watching for file changes.
 
@@ -59,26 +60,26 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/settings.json (used version)
 /user/username/projects/myproject/index.ts (used version)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/index.ts:
-  {"fileName":"/user/username/projects/myproject/index.ts","pollingInterval":250}
-/user/username/projects/myproject/settings.json:
-  {"fileName":"/user/username/projects/myproject/settings.json","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/index.ts: *new*
+  {}
+/user/username/projects/myproject/settings.json: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 

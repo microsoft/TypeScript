@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextuallyTypedBooleanLiterals.ts] ////
+
 //// [contextuallyTypedBooleanLiterals.ts]
 // Repro from #48363
 
@@ -38,7 +40,7 @@ var x = observable(false);
 
 
 //// [contextuallyTypedBooleanLiterals.d.ts]
-declare type Box<T> = {
+type Box<T> = {
     get: () => T;
     set: (value: T) => void;
 };

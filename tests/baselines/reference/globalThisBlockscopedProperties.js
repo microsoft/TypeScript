@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es2019/globalThisBlockscopedProperties.ts] ////
+
 //// [globalThisBlockscopedProperties.ts]
 var x = 1
 const y = 2

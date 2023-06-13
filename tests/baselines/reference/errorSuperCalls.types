@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts ===
+//// [tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts] ////
+
+=== errorSuperCalls.ts ===
 //super call in class constructor with no base type
 class NoBase {
 >NoBase : NoBase
@@ -27,7 +29,6 @@ class NoBase {
 >super : any
 
         return null;
->null : null
     }
     set foo(v) {
 >foo : any
@@ -68,7 +69,6 @@ class NoBase {
 >super : any
 
         return null;
->null : null
     }
     static set q(n) {
 >q : any
@@ -136,7 +136,6 @@ class OtherDerived extends OtherBase {
 >super : any
 
         return null;
->null : null
     }
     set foo(n) {
 >foo : any

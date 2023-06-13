@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/callOfConditionalTypeWithConcreteBranches.ts] ////
+
 //// [callOfConditionalTypeWithConcreteBranches.ts]
 type Q<T> = number extends T ? (n: number) => void : never;
 function fn<T>(arg: Q<T>) {
@@ -43,7 +45,7 @@ export type AddFirstParameterToFunctions<Target> = {
 
 //// [callOfConditionalTypeWithConcreteBranches.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 function fn(arg) {
     // Expected: OK
     // Actual: Cannot convert 10 to number & T

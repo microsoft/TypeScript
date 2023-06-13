@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeVariableTypeGuards.ts ===
+//// [tests/cases/compiler/typeVariableTypeGuards.ts] ////
+
+=== typeVariableTypeGuards.ts ===
 // Repro from #14091
 
 interface Foo {
@@ -146,7 +148,6 @@ function f2<T extends Item | undefined>(obj: T | undefined) {
 function f3<T extends Item | undefined>(obj: T | null) {
 >f3 : <T extends Item | undefined>(obj: T | null) => void
 >obj : T | null
->null : null
 
     if (obj) {
 >obj : T | null
@@ -193,8 +194,8 @@ function f5<T, K extends keyof T>(obj: T | undefined, key: K) {
 >obj : T | undefined
 
         obj[key];
->obj[key] : T[K]
->obj : T
+>obj[key] : NonNullable<T>[K]
+>obj : NonNullable<T>
 >key : K
     }
 }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/uncalledFunctionChecksInConditional.ts] ////
+
 //// [uncalledFunctionChecksInConditional.ts]
 declare function isFoo(): boolean;
 declare function isBar(): boolean;
@@ -50,6 +52,10 @@ if (ux || y || uz || isFoo) {
     // error on isFoo
 }
 
+if (x && z) {
+    // no error
+    z();
+}
 
 //// [uncalledFunctionChecksInConditional.js]
 if (isFoo) {
@@ -81,4 +87,8 @@ if (x || uy || z || isUndefinedFoo) {
 }
 if (ux || y || uz || isFoo) {
     // error on isFoo
+}
+if (x && z) {
+    // no error
+    z();
 }

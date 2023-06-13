@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/functionCalls/callWithSpreadES6.ts ===
+//// [tests/cases/conformance/expressions/functionCalls/callWithSpreadES6.ts] ////
+
+=== callWithSpreadES6.ts ===
 interface X {
     foo(x: number, y: number, ...z: string[]);
 >foo : (x: number, y: number, ...z: string[]) => any
@@ -159,7 +161,7 @@ xa[1].foo(1, 2, ...a, "abc");
 >1 : 1
 >foo : (x: number, y: number, ...z: string[]) => any
 >...[1, 2, "abc"] : string | number
->[1, 2, "abc"] : (string | number)[]
+>[1, 2, "abc"] : readonly [number, number, string]
 >1 : 1
 >2 : 2
 >"abc" : "abc"

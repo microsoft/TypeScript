@@ -1,4 +1,6 @@
-=== tests/cases/conformance/controlFlow/controlFlowInOperator.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowInOperator.ts] ////
+
+=== controlFlowInOperator.ts ===
 const a = 'a';
 >a : "a"
 >'a' : "a"
@@ -44,7 +46,7 @@ if ('d' in c) {
 >c : A | B
 
     c; // never
->c : never
+>c : (A | B) & Record<"d", unknown>
 }
 
 if (a in c) {
@@ -67,6 +69,6 @@ if (d in c) {
 >c : A | B
 
     c; // never
->c : never
+>c : (A | B) & Record<"d", unknown>
 }
 

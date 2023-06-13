@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/voidOperator/voidOperatorWithBooleanType.ts] ////
+
 //// [voidOperatorWithBooleanType.ts]
 // void  operator on boolean type
 var BOOLEAN: boolean;

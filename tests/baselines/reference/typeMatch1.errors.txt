@@ -1,10 +1,10 @@
-tests/cases/compiler/typeMatch1.ts(18,1): error TS2322: Type 'D' is not assignable to type 'C'.
+typeMatch1.ts(18,1): error TS2322: Type 'D' is not assignable to type 'C'.
   Types have separate declarations of a private property 'x'.
-tests/cases/compiler/typeMatch1.ts(19,4): error TS2741: Property 'x' is missing in type 'typeof C' but required in type 'C'.
-tests/cases/compiler/typeMatch1.ts(20,1): error TS2367: This condition will always return 'false' since the types 'typeof C' and 'typeof D' have no overlap.
+typeMatch1.ts(19,4): error TS2741: Property 'x' is missing in type 'typeof C' but required in type 'C'.
+typeMatch1.ts(20,1): error TS2367: This comparison appears to be unintentional because the types 'typeof C' and 'typeof D' have no overlap.
 
 
-==== tests/cases/compiler/typeMatch1.ts (3 errors) ====
+==== typeMatch1.ts (3 errors) ====
     interface I { z; }
     interface I2 { z; }
     
@@ -29,11 +29,11 @@ tests/cases/compiler/typeMatch1.ts(20,1): error TS2367: This condition will alwa
     x6=C;
        ~
 !!! error TS2741: Property 'x' is missing in type 'typeof C' but required in type 'C'.
-!!! related TS2728 tests/cases/compiler/typeMatch1.ts:12:19: 'x' is declared here.
-!!! related TS6213 tests/cases/compiler/typeMatch1.ts:19:4: Did you mean to use 'new' with this expression?
+!!! related TS2728 typeMatch1.ts:12:19: 'x' is declared here.
+!!! related TS6213 typeMatch1.ts:19:4: Did you mean to use 'new' with this expression?
     C==D;
     ~~~~
-!!! error TS2367: This condition will always return 'false' since the types 'typeof C' and 'typeof D' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'typeof C' and 'typeof D' have no overlap.
     C==C;
     
     

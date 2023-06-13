@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es6ExportClauseInEs5.ts] ////
+
 //// [server.ts]
 class c {
 }
@@ -29,8 +31,7 @@ exports.c2 = c;
 var m;
 (function (m) {
     m.x = 10;
-})(m || (m = {}));
-exports.instantiatedModule = m;
+})(m || (exports.instantiatedModule = m = {}));
 var x = 10;
 exports.x = x;
 

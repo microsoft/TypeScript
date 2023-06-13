@@ -1,7 +1,7 @@
-tests/cases/conformance/statements/for-ofStatements/ES5For-of26.ts(1,10): error TS2461: Type 'number' is not an array type.
+ES5For-of26.ts(1,10): error TS2461: Type 'number' is not an array type.
 
 
-==== tests/cases/conformance/statements/for-ofStatements/ES5For-of26.ts (1 errors) ====
+==== ES5For-of26.ts (1 errors) ====
     for (var [a = 0, b = 1] of [2, 3]) {
              ~~~~~~~~~~~~~~
 !!! error TS2461: Type 'number' is not an array type.

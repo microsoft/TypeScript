@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts] ////
+
 //// [resolvingClassDeclarationWhenInBaseTypeResolution.ts]
 module rionegrensis {
   export class caniventer extends Lanthanum.nitidus<petrophilus.minutilla, julianae.sumatrana> {

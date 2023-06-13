@@ -9,7 +9,7 @@ import * from Zero from "./0"
 //// [0.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.C = void 0;
     var C = /** @class */ (function () {
         function C() {
@@ -21,7 +21,7 @@ define(["require", "exports"], function (require, exports) {
 //// [1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     from;
     "./0";
 });

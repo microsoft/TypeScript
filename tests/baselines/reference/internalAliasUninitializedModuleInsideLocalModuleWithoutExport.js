@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/internalAliasUninitializedModuleInsideLocalModuleWithoutExport.ts] ////
+
 //// [internalAliasUninitializedModuleInsideLocalModuleWithoutExport.ts]
 export module a {
     export module b {
@@ -15,12 +17,12 @@ export module c {
 
 //// [internalAliasUninitializedModuleInsideLocalModuleWithoutExport.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.c = void 0;
 var c;
 (function (c) {
     c.x.foo();
-})(c = exports.c || (exports.c = {}));
+})(c || (exports.c = c = {}));
 
 
 //// [internalAliasUninitializedModuleInsideLocalModuleWithoutExport.d.ts]

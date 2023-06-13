@@ -1,4 +1,6 @@
-=== tests/cases/compiler/propertyAccessExpressionInnerComments.ts ===
+//// [tests/cases/compiler/propertyAccessExpressionInnerComments.ts] ////
+
+=== propertyAccessExpressionInnerComments.ts ===
 /*1*/Array/*2*/./*3*/toString/*4*/
 >Array/*2*/./*3*/toString : Symbol(Function.toString, Decl(lib.es5.d.ts, --, --))
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

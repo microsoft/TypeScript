@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/keyofIsLiteralContexualType.ts] ////
+
 //// [keyofIsLiteralContexualType.ts]
 // keyof T is a literal contextual type
 

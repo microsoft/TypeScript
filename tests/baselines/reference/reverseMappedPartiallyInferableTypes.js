@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reverseMappedPartiallyInferableTypes.ts] ////
+
 //// [reverseMappedPartiallyInferableTypes.ts]
 // Repro from #30505
 
@@ -130,7 +132,7 @@ inferMappedReadonly({
 //// [reverseMappedPartiallyInferableTypes.js]
 "use strict";
 // Repro from #30505
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var r = extend({
     props: {
         notResolved: {

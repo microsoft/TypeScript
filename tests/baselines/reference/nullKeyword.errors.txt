@@ -1,7 +1,7 @@
-tests/cases/compiler/nullKeyword.ts(1,1): error TS2531: Object is possibly 'null'.
+nullKeyword.ts(1,1): error TS18050: The value 'null' cannot be used here.
 
 
-==== tests/cases/compiler/nullKeyword.ts (1 errors) ====
+==== nullKeyword.ts (1 errors) ====
     null.foo;
     ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.

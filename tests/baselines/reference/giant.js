@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/giant.ts] ////
+
 //// [giant.ts]
 /*
     Prefixes
@@ -683,7 +685,7 @@ export declare module eaM {
 //// [giant.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.eM = exports.eC = exports.eF = exports.eV = void 0;
     /*
         Prefixes
@@ -1106,7 +1108,7 @@ define(["require", "exports"], function (require, exports) {
             ;
         })(eM = eM_1.eM || (eM_1.eM = {}));
         ;
-    })(eM = exports.eM || (exports.eM = {}));
+    })(eM || (exports.eM = eM = {}));
     ;
 });
 

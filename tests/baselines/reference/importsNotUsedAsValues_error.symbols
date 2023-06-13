@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/typeOnly/importsNotUsedAsValues_error.ts] ////
+
 === /a.ts ===
 export default class {}
 export class A {}
@@ -154,9 +156,10 @@ console.log(h);
 >h : Symbol(h, Decl(i.ts, 1, 3))
 
 === /j.ts ===
+
 import H = require('./h'); // noUnusedLocals error only
-No type information for this code.
-No type information for this code.=== /k.ts ===
+
+=== /k.ts ===
 const enum K { One, Two }
 >K : Symbol(K, Decl(k.ts, 0, 0))
 >One : Symbol(K.One, Decl(k.ts, 0, 14))
@@ -175,5 +178,5 @@ K.One;
 >One : Symbol(K.One, Decl(k.ts, 0, 14))
 
 === /j.ts ===
+
 // Sad face https://github.com/microsoft/TypeScript/blob/6b04f5039429b9d412696fe2febe39ecc69ad365/src/testRunner/compilerRunner.ts#L207
-No type information for this code.

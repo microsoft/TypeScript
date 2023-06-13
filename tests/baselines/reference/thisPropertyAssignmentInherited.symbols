@@ -1,0 +1,50 @@
+//// [tests/cases/conformance/salsa/thisPropertyAssignmentInherited.ts] ////
+
+=== thisPropertyAssignmentInherited.js ===
+export class Element {
+>Element : Symbol(Element, Decl(thisPropertyAssignmentInherited.js, 0, 0))
+
+  /**
+   * @returns {String}
+   */
+  get textContent() {
+>textContent : Symbol(Element.textContent, Decl(thisPropertyAssignmentInherited.js, 0, 22), Decl(thisPropertyAssignmentInherited.js, 6, 3))
+
+    return  ''
+  }
+  set textContent(x) {}
+>textContent : Symbol(Element.textContent, Decl(thisPropertyAssignmentInherited.js, 0, 22), Decl(thisPropertyAssignmentInherited.js, 6, 3))
+>x : Symbol(x, Decl(thisPropertyAssignmentInherited.js, 7, 18))
+
+  cloneNode() { return this}
+>cloneNode : Symbol(Element.cloneNode, Decl(thisPropertyAssignmentInherited.js, 7, 23))
+>this : Symbol(Element, Decl(thisPropertyAssignmentInherited.js, 0, 0))
+}
+export class HTMLElement extends Element {}
+>HTMLElement : Symbol(HTMLElement, Decl(thisPropertyAssignmentInherited.js, 9, 1))
+>Element : Symbol(Element, Decl(thisPropertyAssignmentInherited.js, 0, 0))
+
+export class TextElement extends HTMLElement {
+>TextElement : Symbol(TextElement, Decl(thisPropertyAssignmentInherited.js, 10, 43))
+>HTMLElement : Symbol(HTMLElement, Decl(thisPropertyAssignmentInherited.js, 9, 1))
+
+  get innerHTML() { return this.textContent; }
+>innerHTML : Symbol(TextElement.innerHTML, Decl(thisPropertyAssignmentInherited.js, 11, 46), Decl(thisPropertyAssignmentInherited.js, 12, 46))
+>this.textContent : Symbol(Element.textContent, Decl(thisPropertyAssignmentInherited.js, 0, 22), Decl(thisPropertyAssignmentInherited.js, 6, 3))
+>this : Symbol(TextElement, Decl(thisPropertyAssignmentInherited.js, 10, 43))
+>textContent : Symbol(Element.textContent, Decl(thisPropertyAssignmentInherited.js, 0, 22), Decl(thisPropertyAssignmentInherited.js, 6, 3))
+
+  set innerHTML(html) { this.textContent = html; }
+>innerHTML : Symbol(TextElement.innerHTML, Decl(thisPropertyAssignmentInherited.js, 11, 46), Decl(thisPropertyAssignmentInherited.js, 12, 46))
+>html : Symbol(html, Decl(thisPropertyAssignmentInherited.js, 13, 16))
+>this.textContent : Symbol(Element.textContent, Decl(thisPropertyAssignmentInherited.js, 0, 22), Decl(thisPropertyAssignmentInherited.js, 6, 3))
+>this : Symbol(TextElement, Decl(thisPropertyAssignmentInherited.js, 10, 43))
+>textContent : Symbol(TextElement.textContent, Decl(thisPropertyAssignmentInherited.js, 13, 23))
+>html : Symbol(html, Decl(thisPropertyAssignmentInherited.js, 13, 16))
+
+  toString() {
+>toString : Symbol(TextElement.toString, Decl(thisPropertyAssignmentInherited.js, 13, 50))
+  }
+}
+
+

@@ -1,0 +1,18 @@
+// === goToSourceDefinition ===
+// === /node_modules/left-pad/index.js ===
+// module.exports = leftPad;
+// function [|leftPad|](str, len, ch) {}
+
+// === /index.mts ===
+// import leftPad = require("left-pad");
+// /*GOTO SOURCE DEF*/leftPad("", 4);
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "",
+    "name": ""
+   }
+  ]

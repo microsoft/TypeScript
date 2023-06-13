@@ -1,4 +1,6 @@
-=== tests/cases/compiler/commentsAfterCaseClauses1.ts ===
+//// [tests/cases/compiler/commentsAfterCaseClauses1.ts] ////
+
+=== commentsAfterCaseClauses1.ts ===
 function getSecurity(level) {
 >getSecurity : Symbol(getSecurity, Decl(commentsAfterCaseClauses1.ts, 0, 0))
 >level : Symbol(level, Decl(commentsAfterCaseClauses1.ts, 0, 21))

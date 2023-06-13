@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeInferenceLiteralUnion.ts] ////
+
 //// [typeInferenceLiteralUnion.ts]
 // Repro from #10901
 /**
@@ -38,7 +40,7 @@ extentMixed = extent([new NumCoercible(10), 13, '12', true]);
 
 //// [typeInferenceLiteralUnion.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.extent = void 0;
 // Not very useful, but meets Numeric
 var NumCoercible = /** @class */ (function () {

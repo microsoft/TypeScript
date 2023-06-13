@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/emitOneLineVariableDeclarationRemoveCommentsFalse.ts] ////
+
 //// [emitOneLineVariableDeclarationRemoveCommentsFalse.ts]
 let a = /*[[${something}]]*/ {};
 let b: any = /*[[${something}]]*/ {};

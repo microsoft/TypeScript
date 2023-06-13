@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/moduleNodeImportRequireEmit.ts] ////
+
+=== index.ts ===
+/// <reference path="./mod.d.ts" />
+// This should emit a call to createRequire(import.meta.url)
+import foo = require("foo");
+>foo : any
+
+foo;
+>foo : any
+
+=== mod.d.ts ===
+declare module "foo";
+>"foo" : any
+

@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -27,16 +28,16 @@ declare const console: { log(msg: any): void; };
 /a/lib/tsc.js -b -w -verbose
 Output::
 >> Screen clear
-[[90m12:00:25 AM[0m] Starting compilation in watch mode...
+[[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:26 AM[0m] Projects in this build: 
+[[90m12:00:24 AM[0m] Projects in this build: 
     * tsconfig.json
 
-[[90m12:00:27 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'a.js' is older than newest input 'b.ts'
+[[90m12:00:25 AM[0m] Project 'tsconfig.json' is out of date because output 'a.js' is older than input 'b.ts'
 
-[[90m12:00:28 AM[0m] Building project '/user/username/projects/myproject/tsconfig.json'...
+[[90m12:00:26 AM[0m] Building project '/user/username/projects/myproject/tsconfig.json'...
 
-[[90m12:00:29 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:27 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -58,19 +59,17 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.js (used version)
 /user/username/projects/myproject/b.ts (used version)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/a.js:
-  {"fileName":"/user/username/projects/myproject/a.js","pollingInterval":250}
-/user/username/projects/myproject/b.ts:
-  {"fileName":"/user/username/projects/myproject/b.ts","pollingInterval":250}
-
 FsWatches::
+/user/username/projects/myproject/a.js: *new*
+  {}
+/user/username/projects/myproject/b.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -80,15 +79,18 @@ Change:: No change
 Input::
 //// [/user/username/projects/myproject/a.js] file written with same contents
 
+Before running Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:31 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:34 AM[0m] Project 'tsconfig.json' is out of date because output file 'b.js' does not exist
+[[90m12:00:32 AM[0m] Project 'tsconfig.json' is out of date because output 'a.js' is older than input 'a.js'
 
-[[90m12:00:35 AM[0m] Building project '/user/username/projects/myproject/tsconfig.json'...
+[[90m12:00:33 AM[0m] Building project '/user/username/projects/myproject/tsconfig.json'...
 
-[[90m12:00:36 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:34 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -104,20 +106,6 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/a.js:
-  {"fileName":"/user/username/projects/myproject/a.js","pollingInterval":250}
-/user/username/projects/myproject/b.ts:
-  {"fileName":"/user/username/projects/myproject/b.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
 exitCode:: ExitStatus.undefined
 
 
@@ -128,15 +116,18 @@ Input::
 const x = 10;
 
 
+Before running Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:40 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:38 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:41 AM[0m] Project 'tsconfig.json' is out of date because output file 'b.js' does not exist
+[[90m12:00:39 AM[0m] Project 'tsconfig.json' is out of date because output 'a.js' is older than input 'a.js'
 
-[[90m12:00:42 AM[0m] Building project '/user/username/projects/myproject/tsconfig.json'...
+[[90m12:00:40 AM[0m] Building project '/user/username/projects/myproject/tsconfig.json'...
 
-[[90m12:00:43 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:41 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -156,20 +147,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.js (computed .d.ts)
 /user/username/projects/myproject/b.ts (used version)
-
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/a.js:
-  {"fileName":"/user/username/projects/myproject/a.js","pollingInterval":250}
-/user/username/projects/myproject/b.ts:
-  {"fileName":"/user/username/projects/myproject/b.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 

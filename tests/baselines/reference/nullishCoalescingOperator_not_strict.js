@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator_not_strict.ts] ////
+
 //// [nullishCoalescingOperator_not_strict.ts]
 declare const a1: 'literal' | undefined | null
 declare const a2: '' | undefined | null

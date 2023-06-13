@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/gettersAndSettersErrors.ts] ////
+
 //// [gettersAndSettersErrors.ts]
 class C {
     public get Foo() { return "foo";} // ok

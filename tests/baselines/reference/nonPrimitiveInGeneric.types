@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/nonPrimitive/nonPrimitiveInGeneric.ts ===
+//// [tests/cases/conformance/types/nonPrimitive/nonPrimitiveInGeneric.ts] ////
+
+=== nonPrimitiveInGeneric.ts ===
 function generic<T>(t: T) {
 >generic : <T>(t: T) => void
 >t : T
@@ -99,7 +101,6 @@ var x: Proxy<number>; // error
 
 var y: Proxy<null>; // ok
 >y : Proxy<null>
->null : null
 
 var z: Proxy<undefined> ; // ok
 >z : Proxy<undefined>

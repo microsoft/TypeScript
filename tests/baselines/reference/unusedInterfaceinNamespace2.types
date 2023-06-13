@@ -1,11 +1,13 @@
-=== tests/cases/compiler/unusedInterfaceinNamespace2.ts ===
+//// [tests/cases/compiler/unusedInterfaceinNamespace2.ts] ////
+
+=== unusedInterfaceinNamespace2.ts ===
+
 namespace Validation {
-No type information for this code.    interface i1 {
-No type information for this code.
-No type information for this code.    }
-No type information for this code.
-No type information for this code.    export interface i2 {
-No type information for this code.
-No type information for this code.    }
-No type information for this code.}
-No type information for this code.
+    interface i1 {
+
+    }
+
+    export interface i2 {
+
+    }
+}

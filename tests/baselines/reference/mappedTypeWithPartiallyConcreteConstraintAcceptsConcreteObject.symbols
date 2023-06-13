@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts ===
+//// [tests/cases/compiler/mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts] ////
+
+=== mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts ===
 type ExtractEvent<
 >ExtractEvent : Symbol(ExtractEvent, Decl(mappedTypeWithPartiallyConcreteConstraintAcceptsConcreteObject.ts, 0, 0))
 

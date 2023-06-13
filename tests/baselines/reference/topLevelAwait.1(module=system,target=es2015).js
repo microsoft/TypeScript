@@ -83,7 +83,7 @@ for await (const item of arr) {
 //// [other.js]
 System.register([], function (exports_1, context_1) {
     "use strict";
-    var e_1, _a, _await, arr;
+    var _a, e_1, _b, _c, _await, arr;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
@@ -93,15 +93,17 @@ System.register([], function (exports_1, context_1) {
             // for-await-of
             arr = [Promise.resolve()];
             try {
-                for (var arr_1 = __asyncValues(arr), arr_1_1; arr_1_1 = await arr_1.next(), !arr_1_1.done;) {
-                    const item = arr_1_1.value;
+                for (var _a = true, arr_1 = __asyncValues(arr), arr_1_1; arr_1_1 = await arr_1.next(), _a = arr_1_1.done, !_a; _a = true) {
+                    _c = arr_1_1.value;
+                    _a = false;
+                    const item = _c;
                     item;
                 }
             }
             catch (e_1_1) { e_1 = { error: e_1_1 }; }
             finally {
                 try {
-                    if (arr_1_1 && !arr_1_1.done && (_a = arr_1.return)) await _a.call(arr_1);
+                    if (!_a && !_a && (_b = arr_1.return)) await _b.call(arr_1);
                 }
                 finally { if (e_1) throw e_1.error; }
             }

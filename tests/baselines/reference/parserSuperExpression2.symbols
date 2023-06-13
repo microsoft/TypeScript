@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/SuperExpressions/parserSuperExpression2.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/SuperExpressions/parserSuperExpression2.ts] ////
+
+=== parserSuperExpression2.ts ===
 class C {
 >C : Symbol(C, Decl(parserSuperExpression2.ts, 0, 0))
 
@@ -6,5 +8,6 @@ class C {
 >M : Symbol(C.M, Decl(parserSuperExpression2.ts, 0, 9))
 
     super<T>(0);
+>T : Symbol(T)
   }
 }

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesWithTheSameNameButDifferentArity.ts] ////
+
 //// [twoGenericInterfacesWithTheSameNameButDifferentArity.ts]
 interface A<T> {
     x: T;

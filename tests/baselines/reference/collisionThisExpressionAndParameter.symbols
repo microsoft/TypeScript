@@ -1,4 +1,6 @@
-=== tests/cases/compiler/collisionThisExpressionAndParameter.ts ===
+//// [tests/cases/compiler/collisionThisExpressionAndParameter.ts] ////
+
+=== collisionThisExpressionAndParameter.ts ===
 class Foo {
 >Foo : Symbol(Foo, Decl(collisionThisExpressionAndParameter.ts, 0, 0))
 

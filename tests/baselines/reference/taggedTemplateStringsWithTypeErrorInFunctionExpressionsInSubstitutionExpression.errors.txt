@@ -1,7 +1,7 @@
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithTypeErrorInFunctionExpressionsInSubstitutionExpression.ts(4,31): error TS2322: Type 'string' is not assignable to type 'number'.
+taggedTemplateStringsWithTypeErrorInFunctionExpressionsInSubstitutionExpression.ts(4,31): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/es6/templates/taggedTemplateStringsWithTypeErrorInFunctionExpressionsInSubstitutionExpression.ts (1 errors) ====
+==== taggedTemplateStringsWithTypeErrorInFunctionExpressionsInSubstitutionExpression.ts (1 errors) ====
     function foo(...rest: any[]) {
     }
     

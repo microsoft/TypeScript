@@ -1,3 +1,4 @@
+currentDirectory:: /a useCaseSensitiveFileNames: false
 Input::
 //// [/a/app.ts]
 let x = 1
@@ -48,15 +49,9 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/a/tsconfig.json:
-  {"fileName":"/a/tsconfig.json","pollingInterval":250}
-
 FsWatches::
-
-FsWatchesRecursive::
-/a/node_modules/@types:
-  {"directoryName":"/a/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/a/tsconfig.json: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 

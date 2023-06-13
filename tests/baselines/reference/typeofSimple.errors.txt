@@ -1,8 +1,8 @@
-tests/cases/compiler/typeofSimple.ts(3,5): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/typeofSimple.ts(8,21): error TS2693: 'J' only refers to a type, but is being used as a value here.
+typeofSimple.ts(3,5): error TS2322: Type 'number' is not assignable to type 'string'.
+typeofSimple.ts(8,21): error TS2693: 'J' only refers to a type, but is being used as a value here.
 
 
-==== tests/cases/compiler/typeofSimple.ts (2 errors) ====
+==== typeofSimple.ts (2 errors) ====
     var v = 3;
     var v2: typeof v;
     var v3: string = v2; // Not assignment compatible

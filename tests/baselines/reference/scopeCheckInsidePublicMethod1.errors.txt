@@ -1,7 +1,7 @@
-tests/cases/compiler/scopeCheckInsidePublicMethod1.ts(4,7): error TS2662: Cannot find name 's'. Did you mean the static member 'C.s'?
+scopeCheckInsidePublicMethod1.ts(4,7): error TS2662: Cannot find name 's'. Did you mean the static member 'C.s'?
 
 
-==== tests/cases/compiler/scopeCheckInsidePublicMethod1.ts (1 errors) ====
+==== scopeCheckInsidePublicMethod1.ts (1 errors) ====
     class C {
        static s;
        public a() {

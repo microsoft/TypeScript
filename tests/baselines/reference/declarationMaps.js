@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationMaps.ts] ////
+
 //// [declarationMaps.ts]
 module m2 {
     export interface connectModule {

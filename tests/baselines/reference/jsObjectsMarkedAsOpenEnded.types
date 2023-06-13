@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/a.js ===
+//// [tests/cases/conformance/salsa/jsObjectsMarkedAsOpenEnded.ts] ////
+
+=== a.js ===
 var variable = {};
 >variable : typeof variable
 >{} : {}
@@ -27,7 +29,7 @@ class C {
 
         this.member.a = 0;
 >this.member.a = 0 : 0
->this.member.a : error
+>this.member.a : any
 >this.member : {}
 >this : this
 >member : {}
@@ -48,7 +50,7 @@ var obj = {
 
 obj.property.a = 0;
 >obj.property.a = 0 : 0
->obj.property.a : error
+>obj.property.a : any
 >obj.property : {}
 >obj : { property: {}; }
 >property : {}
@@ -68,7 +70,7 @@ function getObj() {
 }
 
 
-=== tests/cases/conformance/salsa/b.ts ===
+=== b.ts ===
 variable.a = 1;
 >variable.a = 1 : 1
 >variable.a : number

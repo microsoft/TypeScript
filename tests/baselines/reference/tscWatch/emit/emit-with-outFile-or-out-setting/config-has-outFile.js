@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/a.ts]
 let x = 1
@@ -43,23 +44,19 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/a/tsconfig.json:
-  {"fileName":"/a/tsconfig.json","pollingInterval":250}
-/a/a.ts:
-  {"fileName":"/a/a.ts","pollingInterval":250}
-/a/b.ts:
-  {"fileName":"/a/b.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
 FsWatches::
+/a/a.ts: *new*
+  {}
+/a/b.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+/a/tsconfig.json: *new*
+  {}
 
 FsWatchesRecursive::
-/a/node_modules/@types:
-  {"directoryName":"/a/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/a:
-  {"directoryName":"/a","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/a: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -76,6 +73,9 @@ Input::
 let x = 11
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:22 AM[0m] File change detected. Starting incremental compilation...
@@ -96,24 +96,6 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/a/tsconfig.json:
-  {"fileName":"/a/tsconfig.json","pollingInterval":250}
-/a/a.ts:
-  {"fileName":"/a/a.ts","pollingInterval":250}
-/a/b.ts:
-  {"fileName":"/a/b.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/a/node_modules/@types:
-  {"directoryName":"/a/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/a:
-  {"directoryName":"/a","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
 exitCode:: ExitStatus.undefined
 
 //// [/a/out.js]
@@ -129,6 +111,9 @@ Input::
 let xy = 11
 
 
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:30 AM[0m] File change detected. Starting incremental compilation...
@@ -148,24 +133,6 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
-
-WatchedFiles::
-/a/tsconfig.json:
-  {"fileName":"/a/tsconfig.json","pollingInterval":250}
-/a/a.ts:
-  {"fileName":"/a/a.ts","pollingInterval":250}
-/a/b.ts:
-  {"fileName":"/a/b.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/a/node_modules/@types:
-  {"directoryName":"/a/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/a:
-  {"directoryName":"/a","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 

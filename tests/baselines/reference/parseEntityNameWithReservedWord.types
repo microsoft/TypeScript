@@ -1,4 +1,6 @@
-=== tests/cases/compiler/parseEntityNameWithReservedWord.ts ===
+//// [tests/cases/compiler/parseEntityNameWithReservedWord.ts] ////
+
+=== parseEntityNameWithReservedWord.ts ===
 enum Bool { false }
 >Bool : Bool
 >false : Bool.false

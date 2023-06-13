@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -19,7 +20,7 @@ interface Array<T> { length: number; [n: number]: T; }
 function foo() { return 10; }
 
 //// [/user/username/projects/sample1/logic/tsconfig.json]
-{"compilerOptions":{"composite":true,"declaration":true,"outFile":"index.js"},"references":[{"path":"../core","prepend":true}]}
+{"compilerOptions":{"ignoreDeprecations":"5.0","composite":true,"declaration":true,"outFile":"index.js"},"references":[{"path":"../core","prepend":true}]}
 
 //// [/user/username/projects/sample1/logic/index.ts]
 function bar() { return foo() + 1 };
@@ -30,7 +31,7 @@ Output::
 >> Screen clear
 [[90m12:00:29 AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:50 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:52 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -46,7 +47,7 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 Program root files: ["/user/username/projects/sample1/logic/index.ts"]
-Program options: {"composite":true,"declaration":true,"outFile":"/user/username/projects/sample1/logic/index.js","watch":true,"configFilePath":"/user/username/projects/sample1/logic/tsconfig.json"}
+Program options: {"ignoreDeprecations":"5.0","composite":true,"declaration":true,"outFile":"/user/username/projects/sample1/logic/index.js","watch":true,"configFilePath":"/user/username/projects/sample1/logic/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -57,23 +58,21 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/user/username/projects/sample1/core/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/core/index.ts:
-  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/logic/index.ts:
-  {"fileName":"/user/username/projects/sample1/logic/index.ts","pollingInterval":250}
-
 FsWatches::
+/user/username/projects/sample1/core/index.ts: *new*
+  {}
+/user/username/projects/sample1/core/tsconfig.json: *new*
+  {}
+/user/username/projects/sample1/logic/index.ts: *new*
+  {}
+/user/username/projects/sample1/logic/tsconfig.json: *new*
+  {}
 
 FsWatchesRecursive::
-/user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/sample1/logic:
-  {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/sample1/core: *new*
+  {}
+/user/username/projects/sample1/logic: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -86,7 +85,7 @@ declare function foo(): number;
 
 
 //// [/user/username/projects/sample1/core/index.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":30,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":32,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":30,"kind":"text"}],"hash":"3762995390-function foo() { return 10; }\n"},"dts":{"sections":[{"pos":0,"end":32,"kind":"text"}],"hash":"517738360-declare function foo(): number;\n"}},"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","5450201652-function foo() { return 10; }"],"root":[2],"options":{"composite":true,"declaration":true,"outFile":"./index.js"},"outSignature":"517738360-declare function foo(): number;\n","latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/core/index.tsbuildinfo.readable.baseline.txt]
 {
@@ -102,7 +101,8 @@ declare function foo(): number;
           "end": 30,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "3762995390-function foo() { return 10; }\n"
     },
     "dts": {
       "sections": [
@@ -111,11 +111,35 @@ declare function foo(): number;
           "end": 32,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "517738360-declare function foo(): number;\n"
     }
   },
+  "program": {
+    "fileNames": [
+      "../../../../../a/lib/lib.d.ts",
+      "./index.ts"
+    ],
+    "fileInfos": {
+      "../../../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "./index.ts": "5450201652-function foo() { return 10; }"
+    },
+    "root": [
+      [
+        2,
+        "./index.ts"
+      ]
+    ],
+    "options": {
+      "composite": true,
+      "declaration": true,
+      "outFile": "./index.js"
+    },
+    "outSignature": "517738360-declare function foo(): number;\n",
+    "latestChangedDtsFile": "./index.d.ts"
+  },
   "version": "FakeTSVersion",
-  "size": 203
+  "size": 978
 }
 
 //// [/user/username/projects/sample1/core/index.tsbuildinfo.baseline.txt]
@@ -146,7 +170,7 @@ declare function bar(): number;
 
 
 //// [/user/username/projects/sample1/logic/index.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":30,"kind":"prepend","data":"../core/index.js","texts":[{"pos":0,"end":30,"kind":"text"}]},{"pos":30,"end":69,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":32,"kind":"prepend","data":"../core/index.d.ts","texts":[{"pos":0,"end":32,"kind":"text"}]},{"pos":32,"end":64,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":30,"kind":"prepend","data":"../core/index.js","texts":[{"pos":0,"end":30,"kind":"text"}]},{"pos":30,"end":69,"kind":"text"}],"hash":"9692417533-function foo() { return 10; }\nfunction bar() { return foo() + 1; }\n;\n"},"dts":{"sections":[{"pos":0,"end":32,"kind":"prepend","data":"../core/index.d.ts","texts":[{"pos":0,"end":32,"kind":"text"}]},{"pos":32,"end":64,"kind":"text"}],"hash":"9641219228-declare function foo(): number;\ndeclare function bar(): number;\n"}},"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../core/index.d.ts","./index.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","517738360-declare function foo(): number;\n","5542925109-function bar() { return foo() + 1 };"],"root":[3],"options":{"composite":true,"declaration":true,"outFile":"./index.js"},"outSignature":"9641219228-declare function foo(): number;\ndeclare function bar(): number;\n","latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/logic/index.tsbuildinfo.readable.baseline.txt]
 {
@@ -175,7 +199,8 @@ declare function bar(): number;
           "end": 69,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "9692417533-function foo() { return 10; }\nfunction bar() { return foo() + 1; }\n;\n"
     },
     "dts": {
       "sections": [
@@ -197,11 +222,37 @@ declare function bar(): number;
           "end": 64,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "9641219228-declare function foo(): number;\ndeclare function bar(): number;\n"
     }
   },
+  "program": {
+    "fileNames": [
+      "../../../../../a/lib/lib.d.ts",
+      "../core/index.d.ts",
+      "./index.ts"
+    ],
+    "fileInfos": {
+      "../../../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "../core/index.d.ts": "517738360-declare function foo(): number;\n",
+      "./index.ts": "5542925109-function bar() { return foo() + 1 };"
+    },
+    "root": [
+      [
+        3,
+        "./index.ts"
+      ]
+    ],
+    "options": {
+      "composite": true,
+      "declaration": true,
+      "outFile": "./index.js"
+    },
+    "outSignature": "9641219228-declare function foo(): number;\ndeclare function bar(): number;\n",
+    "latestChangedDtsFile": "./index.d.ts"
+  },
   "version": "FakeTSVersion",
-  "size": 417
+  "size": 1375
 }
 
 //// [/user/username/projects/sample1/logic/index.tsbuildinfo.baseline.txt]
@@ -242,9 +293,13 @@ function foo() { return 10; }
 function myFunc() { return 10; }
 
 
+Before running Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject
 Output::
 >> Screen clear
-[[90m12:00:54 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:56 AM[0m] File change detected. Starting incremental compilation...
 
 
 
@@ -259,24 +314,6 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/user/username/projects/sample1/core/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/core/index.ts:
-  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/logic/index.ts:
-  {"fileName":"/user/username/projects/sample1/logic/index.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/sample1/logic:
-  {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/sample1/core/index.js]
@@ -290,7 +327,7 @@ declare function myFunc(): number;
 
 
 //// [/user/username/projects/sample1/core/index.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":63,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":67,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":63,"kind":"text"}],"hash":"-6033649947-function foo() { return 10; }\nfunction myFunc() { return 10; }\n"},"dts":{"sections":[{"pos":0,"end":67,"kind":"text"}],"hash":"2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n"}},"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","-3957203077-function foo() { return 10; }\nfunction myFunc() { return 10; }"],"root":[2],"options":{"composite":true,"declaration":true,"outFile":"./index.js"},"outSignature":"2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n","latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/core/index.tsbuildinfo.readable.baseline.txt]
 {
@@ -306,7 +343,8 @@ declare function myFunc(): number;
           "end": 63,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "-6033649947-function foo() { return 10; }\nfunction myFunc() { return 10; }\n"
     },
     "dts": {
       "sections": [
@@ -315,11 +353,35 @@ declare function myFunc(): number;
           "end": 67,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n"
     }
   },
+  "program": {
+    "fileNames": [
+      "../../../../../a/lib/lib.d.ts",
+      "./index.ts"
+    ],
+    "fileInfos": {
+      "../../../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "./index.ts": "-3957203077-function foo() { return 10; }\nfunction myFunc() { return 10; }"
+    },
+    "root": [
+      [
+        2,
+        "./index.ts"
+      ]
+    ],
+    "options": {
+      "composite": true,
+      "declaration": true,
+      "outFile": "./index.js"
+    },
+    "outSignature": "2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n",
+    "latestChangedDtsFile": "./index.d.ts"
+  },
   "version": "FakeTSVersion",
-  "size": 203
+  "size": 1122
 }
 
 //// [/user/username/projects/sample1/core/index.tsbuildinfo.baseline.txt]
@@ -345,13 +407,16 @@ Change:: Build logic
 
 Input::
 
+Before running Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
-[[90m12:01:25 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:29 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/sample1/logic/index.ts"]
-Program options: {"composite":true,"declaration":true,"outFile":"/user/username/projects/sample1/logic/index.js","watch":true,"configFilePath":"/user/username/projects/sample1/logic/tsconfig.json"}
+Program options: {"ignoreDeprecations":"5.0","composite":true,"declaration":true,"outFile":"/user/username/projects/sample1/logic/index.js","watch":true,"configFilePath":"/user/username/projects/sample1/logic/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -361,24 +426,6 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
-
-WatchedFiles::
-/user/username/projects/sample1/core/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/core/index.ts:
-  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/logic/index.ts:
-  {"fileName":"/user/username/projects/sample1/logic/index.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/sample1/logic:
-  {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -396,7 +443,7 @@ declare function bar(): number;
 
 
 //// [/user/username/projects/sample1/logic/index.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":63,"kind":"prepend","data":"../core/index.js","texts":[{"pos":0,"end":63,"kind":"text"}]},{"pos":63,"end":102,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":67,"kind":"prepend","data":"../core/index.d.ts","texts":[{"pos":0,"end":67,"kind":"text"}]},{"pos":67,"end":99,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":63,"kind":"prepend","data":"../core/index.js","texts":[{"pos":0,"end":63,"kind":"text"}]},{"pos":63,"end":102,"kind":"text"}],"hash":"-12608297404-function foo() { return 10; }\nfunction myFunc() { return 10; }\nfunction bar() { return foo() + 1; }\n;\n"},"dts":{"sections":[{"pos":0,"end":67,"kind":"prepend","data":"../core/index.d.ts","texts":[{"pos":0,"end":67,"kind":"text"}]},{"pos":67,"end":99,"kind":"text"}],"hash":"-2581247747-declare function foo(): number;\ndeclare function myFunc(): number;\ndeclare function bar(): number;\n"}},"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../core/index.d.ts","./index.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n","5542925109-function bar() { return foo() + 1 };"],"root":[3],"options":{"composite":true,"declaration":true,"outFile":"./index.js"},"outSignature":"-2581247747-declare function foo(): number;\ndeclare function myFunc(): number;\ndeclare function bar(): number;\n","latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/logic/index.tsbuildinfo.readable.baseline.txt]
 {
@@ -425,7 +472,8 @@ declare function bar(): number;
           "end": 102,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "-12608297404-function foo() { return 10; }\nfunction myFunc() { return 10; }\nfunction bar() { return foo() + 1; }\n;\n"
     },
     "dts": {
       "sections": [
@@ -447,11 +495,37 @@ declare function bar(): number;
           "end": 99,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "-2581247747-declare function foo(): number;\ndeclare function myFunc(): number;\ndeclare function bar(): number;\n"
     }
   },
+  "program": {
+    "fileNames": [
+      "../../../../../a/lib/lib.d.ts",
+      "../core/index.d.ts",
+      "./index.ts"
+    ],
+    "fileInfos": {
+      "../../../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "../core/index.d.ts": "2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n",
+      "./index.ts": "5542925109-function bar() { return foo() + 1 };"
+    },
+    "root": [
+      [
+        3,
+        "./index.ts"
+      ]
+    ],
+    "options": {
+      "composite": true,
+      "declaration": true,
+      "outFile": "./index.js"
+    },
+    "outSignature": "-2581247747-declare function foo(): number;\ndeclare function myFunc(): number;\ndeclare function bar(): number;\n",
+    "latestChangedDtsFile": "./index.d.ts"
+  },
   "version": "FakeTSVersion",
-  "size": 418
+  "size": 1523
 }
 
 //// [/user/username/projects/sample1/logic/index.tsbuildinfo.baseline.txt]
@@ -494,9 +568,13 @@ function foo() { return 10; }
 function myFunc() { return 100; }
 
 
+Before running Timeout callback:: count: 1
+3: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+4: timerToBuildInvalidatedProject
 Output::
 >> Screen clear
-[[90m12:01:29 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:33 AM[0m] File change detected. Starting incremental compilation...
 
 
 
@@ -511,24 +589,6 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/user/username/projects/sample1/core/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/core/index.ts:
-  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/logic/index.ts:
-  {"fileName":"/user/username/projects/sample1/logic/index.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/sample1/logic:
-  {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/sample1/core/index.js]
@@ -536,9 +596,8 @@ function foo() { return 10; }
 function myFunc() { return 100; }
 
 
-//// [/user/username/projects/sample1/core/index.d.ts] file written with same contents
 //// [/user/username/projects/sample1/core/index.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":64,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":67,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":64,"kind":"text"}],"hash":"-5849092235-function foo() { return 10; }\nfunction myFunc() { return 100; }\n"},"dts":{"sections":[{"pos":0,"end":67,"kind":"text"}],"hash":"2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n"}},"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","-6034018805-function foo() { return 10; }\nfunction myFunc() { return 100; }"],"root":[2],"options":{"composite":true,"declaration":true,"outFile":"./index.js"},"outSignature":"2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n","latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/core/index.tsbuildinfo.readable.baseline.txt]
 {
@@ -554,7 +613,8 @@ function myFunc() { return 100; }
           "end": 64,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "-5849092235-function foo() { return 10; }\nfunction myFunc() { return 100; }\n"
     },
     "dts": {
       "sections": [
@@ -563,11 +623,35 @@ function myFunc() { return 100; }
           "end": 67,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n"
     }
   },
+  "program": {
+    "fileNames": [
+      "../../../../../a/lib/lib.d.ts",
+      "./index.ts"
+    ],
+    "fileInfos": {
+      "../../../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "./index.ts": "-6034018805-function foo() { return 10; }\nfunction myFunc() { return 100; }"
+    },
+    "root": [
+      [
+        2,
+        "./index.ts"
+      ]
+    ],
+    "options": {
+      "composite": true,
+      "declaration": true,
+      "outFile": "./index.js"
+    },
+    "outSignature": "2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n",
+    "latestChangedDtsFile": "./index.d.ts"
+  },
   "version": "FakeTSVersion",
-  "size": 203
+  "size": 1124
 }
 
 //// [/user/username/projects/sample1/core/index.tsbuildinfo.baseline.txt]
@@ -593,28 +677,13 @@ Change:: Build logic
 
 Input::
 
+Before running Timeout callback:: count: 1
+4: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
-[[90m12:01:58 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:00 AM[0m] Found 0 errors. Watching for file changes.
 
 
-
-WatchedFiles::
-/user/username/projects/sample1/core/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/core/index.ts:
-  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/logic/index.ts:
-  {"fileName":"/user/username/projects/sample1/logic/index.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/sample1/logic:
-  {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -625,9 +694,8 @@ function bar() { return foo() + 1; }
 ;
 
 
-//// [/user/username/projects/sample1/logic/index.d.ts] file changed its modified time
 //// [/user/username/projects/sample1/logic/index.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":64,"kind":"prepend","data":"../core/index.js","texts":[{"pos":0,"end":64,"kind":"text"}]},{"pos":64,"end":103,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":67,"kind":"prepend","data":"../core/index.d.ts","texts":[{"pos":0,"end":67,"kind":"text"}]},{"pos":67,"end":99,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":64,"kind":"prepend","data":"../core/index.js","texts":[{"pos":0,"end":64,"kind":"text"}]},{"pos":64,"end":103,"kind":"text"}],"hash":"-1300839212-function foo() { return 10; }\nfunction myFunc() { return 100; }\nfunction bar() { return foo() + 1; }\n;\n"},"dts":{"sections":[{"pos":0,"end":67,"kind":"prepend","data":"../core/index.d.ts","texts":[{"pos":0,"end":67,"kind":"text"}]},{"pos":67,"end":99,"kind":"text"}],"hash":"-2581247747-declare function foo(): number;\ndeclare function myFunc(): number;\ndeclare function bar(): number;\n"}},"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../core/index.d.ts","./index.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n","5542925109-function bar() { return foo() + 1 };"],"root":[3],"options":{"composite":true,"declaration":true,"outFile":"./index.js"},"outSignature":"-2581247747-declare function foo(): number;\ndeclare function myFunc(): number;\ndeclare function bar(): number;\n","latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/logic/index.tsbuildinfo.readable.baseline.txt]
 {
@@ -656,7 +724,8 @@ function bar() { return foo() + 1; }
           "end": 103,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "-1300839212-function foo() { return 10; }\nfunction myFunc() { return 100; }\nfunction bar() { return foo() + 1; }\n;\n"
     },
     "dts": {
       "sections": [
@@ -678,11 +747,37 @@ function bar() { return foo() + 1; }
           "end": 99,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "-2581247747-declare function foo(): number;\ndeclare function myFunc(): number;\ndeclare function bar(): number;\n"
     }
   },
+  "program": {
+    "fileNames": [
+      "../../../../../a/lib/lib.d.ts",
+      "../core/index.d.ts",
+      "./index.ts"
+    ],
+    "fileInfos": {
+      "../../../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "../core/index.d.ts": "2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n",
+      "./index.ts": "5542925109-function bar() { return foo() + 1 };"
+    },
+    "root": [
+      [
+        3,
+        "./index.ts"
+      ]
+    ],
+    "options": {
+      "composite": true,
+      "declaration": true,
+      "outFile": "./index.js"
+    },
+    "outSignature": "-2581247747-declare function foo(): number;\ndeclare function myFunc(): number;\ndeclare function bar(): number;\n",
+    "latestChangedDtsFile": "./index.d.ts"
+  },
   "version": "FakeTSVersion",
-  "size": 418
+  "size": 1523
 }
 
 //// [/user/username/projects/sample1/logic/index.tsbuildinfo.baseline.txt]

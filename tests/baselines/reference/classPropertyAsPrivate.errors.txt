@@ -1,35 +1,23 @@
-tests/cases/conformance/classes/members/accessibility/classPropertyAsPrivate.ts(3,17): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/classes/members/accessibility/classPropertyAsPrivate.ts(4,17): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/classes/members/accessibility/classPropertyAsPrivate.ts(8,24): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/classes/members/accessibility/classPropertyAsPrivate.ts(9,24): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/classes/members/accessibility/classPropertyAsPrivate.ts(15,3): error TS2341: Property 'x' is private and only accessible within class 'C'.
-tests/cases/conformance/classes/members/accessibility/classPropertyAsPrivate.ts(16,3): error TS2341: Property 'y' is private and only accessible within class 'C'.
-tests/cases/conformance/classes/members/accessibility/classPropertyAsPrivate.ts(17,3): error TS2341: Property 'y' is private and only accessible within class 'C'.
-tests/cases/conformance/classes/members/accessibility/classPropertyAsPrivate.ts(18,3): error TS2341: Property 'foo' is private and only accessible within class 'C'.
-tests/cases/conformance/classes/members/accessibility/classPropertyAsPrivate.ts(20,3): error TS2341: Property 'a' is private and only accessible within class 'C'.
-tests/cases/conformance/classes/members/accessibility/classPropertyAsPrivate.ts(21,3): error TS2341: Property 'b' is private and only accessible within class 'C'.
-tests/cases/conformance/classes/members/accessibility/classPropertyAsPrivate.ts(22,3): error TS2341: Property 'b' is private and only accessible within class 'C'.
-tests/cases/conformance/classes/members/accessibility/classPropertyAsPrivate.ts(23,3): error TS2341: Property 'foo' is private and only accessible within class 'C'.
+classPropertyAsPrivate.ts(15,3): error TS2341: Property 'x' is private and only accessible within class 'C'.
+classPropertyAsPrivate.ts(16,3): error TS2341: Property 'y' is private and only accessible within class 'C'.
+classPropertyAsPrivate.ts(17,3): error TS2341: Property 'y' is private and only accessible within class 'C'.
+classPropertyAsPrivate.ts(18,3): error TS2341: Property 'foo' is private and only accessible within class 'C'.
+classPropertyAsPrivate.ts(20,3): error TS2341: Property 'a' is private and only accessible within class 'C'.
+classPropertyAsPrivate.ts(21,3): error TS2341: Property 'b' is private and only accessible within class 'C'.
+classPropertyAsPrivate.ts(22,3): error TS2341: Property 'b' is private and only accessible within class 'C'.
+classPropertyAsPrivate.ts(23,3): error TS2341: Property 'foo' is private and only accessible within class 'C'.
 
 
-==== tests/cases/conformance/classes/members/accessibility/classPropertyAsPrivate.ts (12 errors) ====
+==== classPropertyAsPrivate.ts (8 errors) ====
     class C {
         private x: string;
         private get y() { return null; }
-                    ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         private set y(x) { }
-                    ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         private foo() { }
     
         private static a: string;
         private static get b() { return null; }
-                           ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         private static set b(x) { }
-                           ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         private static foo() { }
     }
     
