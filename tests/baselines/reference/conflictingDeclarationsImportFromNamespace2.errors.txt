@@ -1,0 +1,39 @@
+index.ts(1,13): error TS2440: Import declaration conflicts with local declaration of 'pick'.
+index.ts(1,23): error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
+index.ts(2,14): error TS7023: 'pick' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+
+
+==== node_modules/@types/lodash/object.d.ts (0 errors) ====
+    import _ = require("./index");
+    declare module "./index" {
+        interface LoDashStatic {
+          pick: <T extends object, U extends keyof T>(
+            object: T,
+            ...props: Array<U>
+          ) => Pick<T, U>;
+        }
+    }
+    
+==== node_modules/@types/lodash/pick.d.ts (0 errors) ====
+    import { pick } from "./index";
+    export = pick;
+    
+==== node_modules/@types/lodash/index.d.ts (0 errors) ====
+    /// <reference path="./object.d.ts" />
+    export = _;
+    export as namespace _;
+    declare const _: _.LoDashStatic;
+    declare namespace _ {
+        interface LoDashStatic {}
+    }
+    
+==== index.ts (3 errors) ====
+    import * as pick from 'lodash/pick';
+                ~~~~
+!!! error TS2440: Import declaration conflicts with local declaration of 'pick'.
+                          ~~~~~~~~~~~~~
+!!! error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
+    export const pick = () => pick();
+                 ~~~~
+!!! error TS7023: 'pick' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+    

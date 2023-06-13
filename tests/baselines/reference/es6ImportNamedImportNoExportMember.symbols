@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es6ImportNamedImportNoExportMember_0.ts ===
+//// [tests/cases/compiler/es6ImportNamedImportNoExportMember.ts] ////
+
+=== es6ImportNamedImportNoExportMember_0.ts ===
 export var a = 10;
 >a : Symbol(a, Decl(es6ImportNamedImportNoExportMember_0.ts, 0, 10))
 
@@ -6,7 +8,7 @@ export var x = a;
 >x : Symbol(x, Decl(es6ImportNamedImportNoExportMember_0.ts, 1, 10))
 >a : Symbol(a, Decl(es6ImportNamedImportNoExportMember_0.ts, 0, 10))
 
-=== tests/cases/compiler/es6ImportNamedImport_1.ts ===
+=== es6ImportNamedImport_1.ts ===
 import { a1 } from "./es6ImportNamedImportNoExportMember_0";
 >a1 : Symbol(a1, Decl(es6ImportNamedImport_1.ts, 0, 8))
 

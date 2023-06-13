@@ -1,14 +1,16 @@
-tests/cases/conformance/decorators/class/method/decoratorOnClassMethod8.ts(4,5): error TS1241: Unable to resolve signature of method decorator when called as an expression.
-tests/cases/conformance/decorators/class/method/decoratorOnClassMethod8.ts(4,5): error TS1270: Decorator function return type 'C' is not assignable to type 'void | TypedPropertyDescriptor<() => void>'.
+decoratorOnClassMethod8.ts(4,6): error TS1241: Unable to resolve signature of method decorator when called as an expression.
+  The runtime will invoke the decorator with 3 arguments, but the decorator expects 1.
+decoratorOnClassMethod8.ts(4,6): error TS1270: Decorator function return type 'C' is not assignable to type 'void | TypedPropertyDescriptor<() => void>'.
 
 
-==== tests/cases/conformance/decorators/class/method/decoratorOnClassMethod8.ts (2 errors) ====
+==== decoratorOnClassMethod8.ts (2 errors) ====
     declare function dec<T>(target: T): T;
     
     class C {
         @dec method() {}
-        ~~~~
+         ~~~
 !!! error TS1241: Unable to resolve signature of method decorator when called as an expression.
-        ~~~~
+!!! error TS1241:   The runtime will invoke the decorator with 3 arguments, but the decorator expects 1.
+         ~~~
 !!! error TS1270: Decorator function return type 'C' is not assignable to type 'void | TypedPropertyDescriptor<() => void>'.
     }

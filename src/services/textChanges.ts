@@ -10,6 +10,7 @@ import {
     concatenate,
     ConstructorDeclaration,
     contains,
+    createMultiMap,
     createNodeFactory,
     createPrinter,
     createRange,
@@ -51,9 +52,11 @@ import {
     getNewLineKind,
     getNewLineOrDefaultFromHost,
     getNodeId,
+    getOriginalNode,
     getPrecedingNonSpaceCharacterPosition,
     getScriptKindFromFileName,
     getShebang,
+    getSourceFileOfNode,
     getStartPositionOfLine,
     getTokenAtPosition,
     getTouchingToken,
@@ -116,6 +119,7 @@ import {
     mapDefined,
     MethodSignature,
     Modifier,
+    MultiMap,
     NamedImportBindings,
     NamedImports,
     NamespaceImport,
@@ -337,6 +341,11 @@ interface ChangeText extends BaseChange {
     readonly text: string;
 }
 
+interface NewFileInsertion {
+    readonly oldFile?: SourceFile;
+    readonly statements: readonly (Statement | SyntaxKind.NewLineTrivia)[];
+}
+
 function getAdjustedRange(sourceFile: SourceFile, startNode: Node, endNode: Node, options: ConfigurableStartEnd): TextRange {
     return { pos: getAdjustedStartPosition(sourceFile, startNode, options), end: getAdjustedEndPosition(sourceFile, endNode, options) };
 }
@@ -480,7 +489,7 @@ export function isThisTypeAnnotatable(containingFunction: SignatureDeclaration):
 /** @internal */
 export class ChangeTracker {
     private readonly changes: Change[] = [];
-    private readonly newFiles: { readonly oldFile: SourceFile | undefined, readonly fileName: string, readonly statements: readonly (Statement | SyntaxKind.NewLineTrivia)[] }[] = [];
+    private newFileChanges?: MultiMap<string, NewFileInsertion> ;
     private readonly classesWithNodesInsertedAtStart = new Map<number, { readonly node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression, readonly sourceFile: SourceFile }>(); // Set<ClassDeclaration> implemented as Map<node id, ClassDeclaration>
     private readonly deletedNodes: { readonly sourceFile: SourceFile, readonly node: Node | NodeArray<TypeParameterDeclaration> }[] = [];
 
@@ -620,6 +629,32 @@ export class ChangeTracker {
         else {
             this.insertNodeAt(sourceFile, pos, insert, options);
         }
+    }
+
+    public insertNodesAtEndOfFile(
+        sourceFile: SourceFile,
+        newNodes: readonly Statement[],
+        blankLineBetween: boolean): void {
+        this.insertAtEndOfFile(sourceFile, newNodes, blankLineBetween);
+    }
+
+    private insertAtEndOfFile(
+        sourceFile: SourceFile,
+        insert: readonly Statement[],
+        blankLineBetween: boolean): void {
+        const pos = sourceFile.end + 1;
+        const options = {
+            prefix: this.newLineCharacter,
+            suffix: this.newLineCharacter + (blankLineBetween ? this.newLineCharacter : ""),
+        };
+        this.insertNodesAt(sourceFile, pos, insert, options);
+    }
+
+    private insertStatementsInNewFile(fileName: string, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[], oldFile?: SourceFile): void {
+        if (!this.newFileChanges) {
+            this.newFileChanges = createMultiMap<string, NewFileInsertion>();
+        }
+        this.newFileChanges.add(fileName, { oldFile, statements });
     }
 
     public insertFirstParameter(sourceFile: SourceFile, parameters: NodeArray<ParameterDeclaration>, newParam: ParameterDeclaration): void {
@@ -1128,14 +1163,16 @@ export class ChangeTracker {
         this.finishDeleteDeclarations();
         this.finishClassesWithNodesInsertedAtStart();
         const changes = changesToText.getTextChangesFromChanges(this.changes, this.newLineCharacter, this.formatContext, validate);
-        for (const { oldFile, fileName, statements } of this.newFiles) {
-            changes.push(changesToText.newFileChanges(oldFile, fileName, statements, this.newLineCharacter, this.formatContext));
+        if (this.newFileChanges) {
+            this.newFileChanges.forEach((insertions, fileName) => {
+                changes.push(changesToText.newFileChanges(fileName, insertions, this.newLineCharacter, this.formatContext));
+            });
         }
         return changes;
     }
 
     public createNewFile(oldFile: SourceFile | undefined, fileName: string, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[]): void {
-        this.newFiles.push({ oldFile, fileName, statements });
+        this.insertStatementsInNewFile(fileName, statements, oldFile);
     }
 }
 
@@ -1207,11 +1244,6 @@ function getMembersOrProperties(node: ClassLikeDeclaration | InterfaceDeclaratio
 /** @internal */
 export type ValidateNonFormattedText = (node: Node, text: string) => void;
 
-/** @internal */
-export function getNewFileText(statements: readonly Statement[], scriptKind: ScriptKind, newLineCharacter: string, formatContext: formatting.FormatContext): string {
-    return changesToText.newFileChangesWorker(/*oldFile*/ undefined, scriptKind, statements, newLineCharacter, formatContext);
-}
-
 namespace changesToText {
     export function getTextChangesFromChanges(changes: readonly Change[], newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): FileTextChanges[] {
         return mapDefined(group(changes, c => c.sourceFile.path), changesInFile => {
@@ -1227,10 +1259,12 @@ namespace changesToText {
 
             const textChanges = mapDefined(normalized, c => {
                 const span = createTextSpanFromRange(c.range);
-                const newText = computeNewText(c, sourceFile, newLineCharacter, formatContext, validate);
-
+                const targetSourceFile = c.kind === ChangeKind.ReplaceWithSingleNode ? getSourceFileOfNode(getOriginalNode(c.node)) ?? c.sourceFile :
+                    c.kind === ChangeKind.ReplaceWithMultipleNodes ? getSourceFileOfNode(getOriginalNode(c.nodes[0])) ?? c.sourceFile :
+                    c.sourceFile;
+                const newText = computeNewText(c, targetSourceFile, sourceFile, newLineCharacter, formatContext, validate);
                 // Filter out redundant changes.
-                if (span.length === newText.length && stringContainsAt(sourceFile.text, newText, span.start)) {
+                if (span.length === newText.length && stringContainsAt(targetSourceFile.text, newText, span.start)) {
                     return undefined;
                 }
 
@@ -1241,20 +1275,20 @@ namespace changesToText {
         });
     }
 
-    export function newFileChanges(oldFile: SourceFile | undefined, fileName: string, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[], newLineCharacter: string, formatContext: formatting.FormatContext): FileTextChanges {
-        const text = newFileChangesWorker(oldFile, getScriptKindFromFileName(fileName), statements, newLineCharacter, formatContext);
+    export function newFileChanges(fileName: string, insertions: readonly NewFileInsertion[], newLineCharacter: string, formatContext: formatting.FormatContext): FileTextChanges {
+        const text = newFileChangesWorker(getScriptKindFromFileName(fileName), insertions, newLineCharacter, formatContext);
         return { fileName, textChanges: [createTextChange(createTextSpan(0, 0), text)], isNewFile: true };
     }
 
-    export function newFileChangesWorker(oldFile: SourceFile | undefined, scriptKind: ScriptKind, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[], newLineCharacter: string, formatContext: formatting.FormatContext): string {
+    export function newFileChangesWorker(scriptKind: ScriptKind, insertions: readonly NewFileInsertion[], newLineCharacter: string, formatContext: formatting.FormatContext): string {
         // TODO: this emits the file, parses it back, then formats it that -- may be a less roundabout way to do this
-        const nonFormattedText = statements.map(s => s === SyntaxKind.NewLineTrivia ? "" : getNonformattedText(s, oldFile, newLineCharacter).text).join(newLineCharacter);
+        const nonFormattedText = flatMap(insertions, insertion => insertion.statements.map(s => s === SyntaxKind.NewLineTrivia ? "" : getNonformattedText(s, insertion.oldFile, newLineCharacter).text)).join(newLineCharacter);
         const sourceFile = createSourceFile("any file name", nonFormattedText, ScriptTarget.ESNext, /*setParentNodes*/ true, scriptKind);
         const changes = formatting.formatDocument(sourceFile, formatContext);
         return applyChanges(nonFormattedText, changes) + newLineCharacter;
     }
 
-    function computeNewText(change: Change, sourceFile: SourceFile, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): string {
+    function computeNewText(change: Change, targetSourceFile: SourceFile, sourceFile: SourceFile, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): string {
         if (change.kind === ChangeKind.Remove) {
             return "";
         }
@@ -1263,26 +1297,26 @@ namespace changesToText {
         }
 
         const { options = {}, range: { pos } } = change;
-        const format = (n: Node) => getFormattedTextOfNode(n, sourceFile, pos, options, newLineCharacter, formatContext, validate);
+        const format = (n: Node) => getFormattedTextOfNode(n, targetSourceFile, sourceFile, pos, options, newLineCharacter, formatContext, validate);
         const text = change.kind === ChangeKind.ReplaceWithMultipleNodes
             ? change.nodes.map(n => removeSuffix(format(n), newLineCharacter)).join(change.options?.joiner || newLineCharacter)
             : format(change.node);
         // strip initial indentation (spaces or tabs) if text will be inserted in the middle of the line
-        const noIndent = (options.indentation !== undefined || getLineStartPositionForPosition(pos, sourceFile) === pos) ? text : text.replace(/^\s+/, "");
+        const noIndent = (options.indentation !== undefined || getLineStartPositionForPosition(pos, targetSourceFile) === pos) ? text : text.replace(/^\s+/, "");
         return (options.prefix || "") + noIndent
              + ((!options.suffix || endsWith(noIndent, options.suffix))
                 ? "" : options.suffix);
     }
 
     /** Note: this may mutate `nodeIn`. */
-    function getFormattedTextOfNode(nodeIn: Node, sourceFile: SourceFile, pos: number, { indentation, prefix, delta }: InsertNodeOptions, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): string {
-        const { node, text } = getNonformattedText(nodeIn, sourceFile, newLineCharacter);
+    function getFormattedTextOfNode(nodeIn: Node, targetSourceFile: SourceFile, sourceFile: SourceFile, pos: number, { indentation, prefix, delta }: InsertNodeOptions, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): string {
+        const { node, text } = getNonformattedText(nodeIn, targetSourceFile, newLineCharacter);
         if (validate) validate(node, text);
-        const formatOptions = getFormatCodeSettingsForWriting(formatContext, sourceFile);
+        const formatOptions = getFormatCodeSettingsForWriting(formatContext, targetSourceFile);
         const initialIndentation =
             indentation !== undefined
                 ? indentation
-                : formatting.SmartIndenter.getIndentation(pos, sourceFile, formatOptions, prefix === newLineCharacter || getLineStartPositionForPosition(pos, sourceFile) === pos);
+                : formatting.SmartIndenter.getIndentation(pos, sourceFile, formatOptions, prefix === newLineCharacter || getLineStartPositionForPosition(pos, targetSourceFile) === pos);
         if (delta === undefined) {
             delta = formatting.SmartIndenter.shouldIndentChildNode(formatOptions, nodeIn) ? (formatOptions.indentSize || 0) : 0;
         }
@@ -1293,7 +1327,7 @@ namespace changesToText {
                 return getLineAndCharacterOfPosition(this, pos);
             }
         };
-        const changes = formatting.formatNodeGivenIndentation(node, file, sourceFile.languageVariant, initialIndentation, delta, { ...formatContext, options: formatOptions });
+        const changes = formatting.formatNodeGivenIndentation(node, file, targetSourceFile.languageVariant, initialIndentation, delta, { ...formatContext, options: formatOptions });
         return applyChanges(text, changes);
     }
 
@@ -1342,11 +1376,18 @@ export function assignPositionsToNode(node: Node): Node {
     return newNode;
 }
 
-function assignPositionsToNodeArray(nodes: NodeArray<any>, visitor: Visitor, test?: (node: Node) => boolean, start?: number, count?: number) {
+function assignPositionsToNodeArray(
+    nodes: NodeArray<Node> | undefined,
+    visitor: Visitor,
+    test?: (node: Node) => boolean,
+    start?: number,
+    count?: number,
+): NodeArray<Node> | undefined {
     const visited = visitNodes(nodes, visitor, test, start, count);
     if (!visited) {
         return visited;
     }
+    Debug.assert(nodes);
     // clone nodearray if necessary
     const nodeArray = visited === nodes ? factory.createNodeArray(visited.slice(0)) : visited;
     setTextRangePosEnd(nodeArray, getPos(nodes), getEnd(nodes));
@@ -1716,7 +1757,7 @@ namespace deleteDeclaration {
             const nextToken = getTokenAtPosition(sourceFile, importClause.name!.end);
             if (nextToken && nextToken.kind === SyntaxKind.CommaToken) {
                 // shift first non-whitespace position after comma to the start position of the node
-                const end = skipTrivia(sourceFile.text, nextToken.end, /*stopAfterLineBreaks*/ false, /*stopAtComments*/ true);
+                const end = skipTrivia(sourceFile.text, nextToken.end, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
                 changes.deleteRange(sourceFile, { pos: start, end });
             }
             else {

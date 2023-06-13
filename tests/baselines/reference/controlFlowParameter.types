@@ -1,4 +1,6 @@
-=== tests/cases/conformance/controlFlow/controlFlowParameter.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowParameter.ts] ////
+
+=== controlFlowParameter.ts ===
 function f1(
 >f1 : (required?: unknown) => void
 

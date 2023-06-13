@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitInferredTypeAlias4.ts ===
+//// [tests/cases/compiler/declarationEmitInferredTypeAlias4.ts] ////
+
+=== declarationEmitInferredTypeAlias4.ts ===
 function f<A>() {
 >f : <A>() => A[] | { x: A[] | any; }
 

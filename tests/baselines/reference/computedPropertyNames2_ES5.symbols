@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/computedProperties/computedPropertyNames2_ES5.ts ===
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames2_ES5.ts] ////
+
+=== computedPropertyNames2_ES5.ts ===
 var methodName = "method";
 >methodName : Symbol(methodName, Decl(computedPropertyNames2_ES5.ts, 0, 3))
 

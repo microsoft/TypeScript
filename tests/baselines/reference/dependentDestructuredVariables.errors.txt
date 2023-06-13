@@ -1,13 +1,13 @@
-tests/cases/conformance/controlFlow/dependentDestructuredVariables.ts(334,5): error TS7022: 'value1' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
-tests/cases/conformance/controlFlow/dependentDestructuredVariables.ts(334,5): error TS7031: Binding element 'value1' implicitly has an 'any' type.
-tests/cases/conformance/controlFlow/dependentDestructuredVariables.ts(408,7): error TS2322: Type '(type: "one" | "two", x: string | number | undefined) => void' is not assignable to type '(...args: [type: "one", x?: number | undefined] | [type: "two", x: string]) => void'.
+dependentDestructuredVariables.ts(334,5): error TS7022: 'value1' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+dependentDestructuredVariables.ts(334,5): error TS7031: Binding element 'value1' implicitly has an 'any' type.
+dependentDestructuredVariables.ts(408,7): error TS2322: Type '(type: "one" | "two", x: string | number | undefined) => void' is not assignable to type '(...args: [type: "one", x?: number | undefined] | [type: "two", x: string]) => void'.
   Types of parameters 'type' and 'args' are incompatible.
     Type '[type: "one", x?: number | undefined] | [type: "two", x: string]' is not assignable to type '[type: "one" | "two", x: string | number | undefined]'.
       Type '[type: "one", x?: number | undefined]' is not assignable to type '[type: "one" | "two", x: string | number | undefined]'.
         Source provides no match for required element at position 1 in target.
 
 
-==== tests/cases/conformance/controlFlow/dependentDestructuredVariables.ts (3 errors) ====
+==== dependentDestructuredVariables.ts (3 errors) ====
     type Action =
         | { kind: 'A', payload: number }
         | { kind: 'B', payload: string };

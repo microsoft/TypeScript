@@ -1,11 +1,11 @@
-tests/cases/compiler/restTupleUnionWithRestContextualParams.ts(7,7): error TS2322: Type '(type: "one" | "two", x: string | number | undefined) => void' is not assignable to type '(...args: [type: "one", x?: number | undefined] | [type: "two", x: string]) => void'.
+restTupleUnionWithRestContextualParams.ts(7,7): error TS2322: Type '(type: "one" | "two", x: string | number | undefined) => void' is not assignable to type '(...args: [type: "one", x?: number | undefined] | [type: "two", x: string]) => void'.
   Types of parameters 'type' and 'args' are incompatible.
     Type '[type: "one", x?: number | undefined] | [type: "two", x: string]' is not assignable to type '[type: "one" | "two", x: string | number | undefined]'.
       Type '[type: "one", x?: number | undefined]' is not assignable to type '[type: "one" | "two", x: string | number | undefined]'.
         Source provides no match for required element at position 1 in target.
 
 
-==== tests/cases/compiler/restTupleUnionWithRestContextualParams.ts (1 errors) ====
+==== restTupleUnionWithRestContextualParams.ts (1 errors) ====
     const f1: (...args: [number, string, ...boolean[]] | [string, number, ...boolean[]]) => void = (a, b, c) => {};
     
     const f2: (x: string, ...args: [string] | [number, boolean]) => void = (a, b, c) => {};

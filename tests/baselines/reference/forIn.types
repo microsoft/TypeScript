@@ -1,7 +1,8 @@
-=== tests/cases/compiler/forIn.ts ===
+//// [tests/cases/compiler/forIn.ts] ////
+
+=== forIn.ts ===
 var arr = null;
 >arr : any
->null : null
 
 for (var i:number in arr) { // error
 >i : string

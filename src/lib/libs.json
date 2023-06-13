@@ -30,6 +30,7 @@
         "es2015.symbol",
         "es2015.symbol.wellknown",
         "es2016.array.include",
+        "es2017.date",
         "es2017.object",
         "es2017.sharedmemory",
         "es2017.string",
@@ -65,7 +66,10 @@
         "es2022.string",
         "es2022.regexp",
         "es2023.array",
+        "es2023.collection",
         "esnext.intl",
+        "decorators",
+        "decorators.legacy",
         // Default libraries
         "es5.full",
         "es2015.full",

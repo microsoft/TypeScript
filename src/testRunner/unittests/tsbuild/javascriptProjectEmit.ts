@@ -1,10 +1,12 @@
 import * as Utils from "../../_namespaces/Utils";
+import { symbolLibContent } from "../helpers/contents";
+import {
+    verifyTsc,
+} from "../helpers/tsc";
 import {
     loadProjectFromFiles,
-    replaceText,
-    symbolLibContent,
-    verifyTsc,
-} from "../tsc/helpers";
+    replaceText
+} from "../helpers/vfs";
 
 describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
     verifyTsc({
@@ -125,6 +127,7 @@ describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
                     {
                         "extends": "../tsconfig.base.json",
                         "compilerOptions": {
+                            "ignoreDeprecations":"5.0",
                             "composite": true,
                             "outFile": "sub-project.js",
                             
@@ -150,6 +153,7 @@ describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
                     {
                         "extends": "../tsconfig.base.json",
                         "compilerOptions": {
+                            "ignoreDeprecations":"5.0",
                             "composite": true,
                             "outFile": "sub-project-2.js",
                             
@@ -162,6 +166,7 @@ describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
             "/src/tsconfig.json": Utils.dedent`
                     {
                         "compilerOptions": {
+                            "ignoreDeprecations":"5.0",
                             "composite": true,
                             "outFile": "src.js"
                         },

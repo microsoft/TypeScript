@@ -1,4 +1,6 @@
-=== tests/cases/compiler/restTupleUnionShorterContextualParams.ts ===
+//// [tests/cases/compiler/restTupleUnionShorterContextualParams.ts] ////
+
+=== restTupleUnionShorterContextualParams.ts ===
 // repro #48663
 
 // showcase how those transitive assignments are OK

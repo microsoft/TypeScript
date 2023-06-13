@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericOfACloduleType1.ts] ////
+
 //// [genericOfACloduleType1.ts]
 class G<T>{ bar(x: T) { return x; } }
 module M {

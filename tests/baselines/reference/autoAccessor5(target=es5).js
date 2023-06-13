@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessor5.ts] ////
+
 //// [autoAccessor5.ts]
 class C1 {
     accessor ["w"]: any;
@@ -67,7 +69,7 @@ var C2 = /** @class */ (function () {
     function C2() {
         _C2__a_accessor_storage.set(this, 1);
     }
-    Object.defineProperty(C2.prototype, (_C2__a_accessor_storage = new WeakMap(), _a = f(), _a), {
+    Object.defineProperty(C2.prototype, (_C2__a_accessor_storage = new WeakMap(), _a = f()), {
         get: function () { return __classPrivateFieldGet(this, _C2__a_accessor_storage, "f"); },
         enumerable: false,
         configurable: true

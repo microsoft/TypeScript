@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/forLoopEndingMultilineComments.ts] ////
+
 //// [forLoopEndingMultilineComments.ts]
 declare var a: any;
 

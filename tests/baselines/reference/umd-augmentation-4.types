@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/a.ts ===
+//// [tests/cases/conformance/externalModules/umd-augmentation-4.ts] ////
+
+=== a.ts ===
 /// <reference path="node_modules/math2d/index.d.ts" />
 /// <reference path="math2d-augment.d.ts" />
 let v = new Math2d.Vector(3, 2);
@@ -42,15 +44,15 @@ var t = p.x;
 >p : Math2d.Point
 >x : number
 
-=== tests/cases/conformance/externalModules/node_modules/math2d/index.d.ts ===
+=== node_modules/math2d/index.d.ts ===
 export as namespace Math2d;
->Math2d : typeof import("tests/cases/conformance/externalModules/node_modules/math2d/index.d.ts")
+>Math2d : typeof import("node_modules/math2d/index.d.ts")
 
 export = M2D;
->M2D : typeof import("tests/cases/conformance/externalModules/node_modules/math2d/index.d.ts")
+>M2D : typeof import("node_modules/math2d/index.d.ts")
 
 declare namespace M2D {
->M2D : typeof import("tests/cases/conformance/externalModules/node_modules/math2d/index.d.ts")
+>M2D : typeof import("node_modules/math2d/index.d.ts")
 
 	interface Point {
 		x: number;
@@ -86,7 +88,7 @@ declare namespace M2D {
 }
 
 
-=== tests/cases/conformance/externalModules/math2d-augment.d.ts ===
+=== math2d-augment.d.ts ===
 import * as Math2d from 'math2d';
 >Math2d : typeof Math2d
 

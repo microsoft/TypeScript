@@ -1,14 +1,14 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    createWatchedSystem,
-    File,
-    libFile,
-} from "../virtualFileSystemWithWatch";
-import {
     createBaseline,
     createSolutionBuilderWithWatchHostForBaseline,
     runWatchBaseline,
-} from "../tscWatch/helpers";
+} from "../helpers/tscWatch";
+import {
+    createWatchedSystem,
+    File,
+    libFile,
+} from "../helpers/virtualFileSystemWithWatch";
 
 it("unittests:: tsbuildWatch:: watchMode:: Public API with custom transformers", () => {
     const solution: File = {
@@ -69,9 +69,8 @@ export function f22() { } // trailing`
                 caption: "change to shared",
                 edit: sys => sys.prependFile(sharedIndex.path, "export function fooBar() {}"),
                 timeouts: sys => {
-                    sys.checkTimeoutQueueLengthAndRun(1); // Shared
-                    sys.checkTimeoutQueueLengthAndRun(1); // webpack and solution
-                    sys.checkTimeoutQueueLength(0);
+                    sys.runQueuedTimeoutCallbacks(); // Shared
+                    sys.runQueuedTimeoutCallbacks(); // webpack and solution
                 }
             }
         ],

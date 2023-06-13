@@ -32,4 +32,4 @@
 //// import leftPad = require("left-pad");
 //// /*start*/leftPad("", 4);
 
-verify.goToSourceDefinition("start", "end");
+verify.baselineGoToSourceDefinition("start");

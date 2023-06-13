@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/prettyFileWithErrorsAndTabs.ts] ////
+
 //// [prettyFileWithErrorsAndTabs.ts]
 function f() {
 	{

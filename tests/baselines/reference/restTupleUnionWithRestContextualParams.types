@@ -1,4 +1,6 @@
-=== tests/cases/compiler/restTupleUnionWithRestContextualParams.ts ===
+//// [tests/cases/compiler/restTupleUnionWithRestContextualParams.ts] ////
+
+=== restTupleUnionWithRestContextualParams.ts ===
 const f1: (...args: [number, string, ...boolean[]] | [string, number, ...boolean[]]) => void = (a, b, c) => {};
 >f1 : (...args: [number, string, ...boolean[]] | [string, number, ...boolean[]]) => void
 >args : [number, string, ...boolean[]] | [string, number, ...boolean[]]

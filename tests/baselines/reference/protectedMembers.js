@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/protectedMembers.ts] ////
+
 //// [protectedMembers.ts]
 // Class with protected members
 class C1 {

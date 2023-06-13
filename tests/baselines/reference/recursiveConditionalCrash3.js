@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveConditionalCrash3.ts] ////
+
 //// [recursiveConditionalCrash3.ts]
 // #43529
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/destructuringWithNumberLiteral.ts] ////
+
 //// [destructuringWithNumberLiteral.ts]
 var { toExponential } = 0;
 

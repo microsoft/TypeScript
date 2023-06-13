@@ -1,0 +1,30 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameParameterPropertyDeclaration2.ts ===
+// class Foo {
+//     constructor(<|public /*RENAME*/[|publicParamRENAME|]: number|>) {
+//         let publicParam = [|publicParamRENAME|];
+//         this.[|publicParamRENAME|] += 10;
+//     }
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameParameterPropertyDeclaration2.ts ===
+// class Foo {
+//     constructor(<|public [|publicParamRENAME|]: number|>) {
+//         let publicParam = /*RENAME*/[|publicParamRENAME|];
+//         this.[|publicParamRENAME|] += 10;
+//     }
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameParameterPropertyDeclaration2.ts ===
+// class Foo {
+//     constructor(<|public [|publicParamRENAME|]: number|>) {
+//         let publicParam = [|publicParamRENAME|];
+//         this./*RENAME*/[|publicParamRENAME|] += 10;
+//     }
+// }

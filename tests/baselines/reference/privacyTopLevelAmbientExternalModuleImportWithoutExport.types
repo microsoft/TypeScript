@@ -1,4 +1,6 @@
-=== tests/cases/compiler/privacyTopLevelAmbientExternalModuleImportWithoutExport_core.ts ===
+//// [tests/cases/compiler/privacyTopLevelAmbientExternalModuleImportWithoutExport.ts] ////
+
+=== privacyTopLevelAmbientExternalModuleImportWithoutExport_core.ts ===
 ///<reference path='privacyTopLevelAmbientExternalModuleImportWithoutExport_require2.ts'/>
 ///<reference path='privacyTopLevelAmbientExternalModuleImportWithoutExport_require3.ts'/>
 // Privacy errors - importing private elements
@@ -71,7 +73,7 @@ export var publicUse_im_private_mi_public = new im_private_mi_public.c_public();
 >im_private_mi_public : typeof im_private_mi_public
 >c_public : typeof im_private_mi_public.c_public
 
-=== tests/cases/compiler/privacyTopLevelAmbientExternalModuleImportWithoutExport_require.ts ===
+=== privacyTopLevelAmbientExternalModuleImportWithoutExport_require.ts ===
 // Public elements
 export class c_public {
 >c_public : c_public
@@ -80,7 +82,7 @@ export class c_public {
 >foo : string
 }
 
-=== tests/cases/compiler/privacyTopLevelAmbientExternalModuleImportWithoutExport_require1.ts ===
+=== privacyTopLevelAmbientExternalModuleImportWithoutExport_require1.ts ===
 export class c_public {
 >c_public : c_public
 
@@ -88,7 +90,7 @@ export class c_public {
 >bar : string
 }
 
-=== tests/cases/compiler/privacyTopLevelAmbientExternalModuleImportWithoutExport_require2.ts ===
+=== privacyTopLevelAmbientExternalModuleImportWithoutExport_require2.ts ===
 // private elements
 // Export - Error ambient modules allowed only in global
 declare module 'm' {
@@ -102,7 +104,7 @@ declare module 'm' {
     }   
 }
 
-=== tests/cases/compiler/privacyTopLevelAmbientExternalModuleImportWithoutExport_require3.ts ===
+=== privacyTopLevelAmbientExternalModuleImportWithoutExport_require3.ts ===
 declare module 'm2' {
 >'m2' : typeof import("m2")
 

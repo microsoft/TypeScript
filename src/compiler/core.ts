@@ -7,12 +7,10 @@ import {
     EqualityComparer,
     isWhiteSpaceLike,
     MapLike,
-    Push,
     Queue,
     SortedArray,
     SortedReadonlyArray,
     TextSpan,
-    UnderscoreEscapedMap,
 } from "./_namespaces/ts";
 
 
@@ -142,6 +140,11 @@ export function intersperse<T>(input: T[], element: T): T[] {
  *
  * @internal
  */
+export function every<T, U extends T>(array: readonly T[], callback: (element: T, index: number) => element is U): array is readonly U[];
+/** @internal */
+export function every<T, U extends T>(array: readonly T[] | undefined, callback: (element: T, index: number) => element is U): array is readonly U[] | undefined;
+/** @internal */
+export function every<T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean;
 export function every<T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean {
     if (array) {
         for (let i = 0; i < array.length; i++) {
@@ -361,21 +364,21 @@ export function *mapIterator<T, U>(iter: Iterable<T>, mapFn: (x: T) => U) {
  * Maps from T to T and avoids allocation if all elements map to themselves
  *
  * @internal */
-export function sameMap<T>(array: T[], f: (x: T, i: number) => T): T[];
+export function sameMap<T, U = T>(array: T[], f: (x: T, i: number) => U): U[];
 /** @internal */
-export function sameMap<T>(array: readonly T[], f: (x: T, i: number) => T): readonly T[];
+export function sameMap<T, U = T>(array: readonly T[], f: (x: T, i: number) => U): readonly U[];
 /** @internal */
-export function sameMap<T>(array: T[] | undefined, f: (x: T, i: number) => T): T[] | undefined;
+export function sameMap<T, U = T>(array: T[] | undefined, f: (x: T, i: number) => U): U[] | undefined;
 /** @internal */
-export function sameMap<T>(array: readonly T[] | undefined, f: (x: T, i: number) => T): readonly T[] | undefined;
+export function sameMap<T, U = T>(array: readonly T[] | undefined, f: (x: T, i: number) => U): readonly U[] | undefined;
 /** @internal */
-export function sameMap<T>(array: readonly T[] | undefined, f: (x: T, i: number) => T): readonly T[] | undefined {
+export function sameMap<T, U = T>(array: readonly T[] | undefined, f: (x: T, i: number) => U): readonly U[] | undefined {
     if (array) {
         for (let i = 0; i < array.length; i++) {
             const item = array[i];
             const mapped = f(item, i);
-            if (item !== mapped) {
-                const result = array.slice(0, i);
+            if (item as unknown !== mapped) {
+                const result: U[] = array.slice(0, i) as unknown[] as U[];
                 result.push(mapped);
                 for (i++; i < array.length; i++) {
                     result.push(f(array[i], i));
@@ -384,7 +387,7 @@ export function sameMap<T>(array: readonly T[] | undefined, f: (x: T, i: number)
             }
         }
     }
-    return array;
+    return array as unknown[] as U[];
 }
 
 /**
@@ -478,7 +481,7 @@ export function sameFlatMap<T>(array: T[], mapfn: (x: T, i: number) => T | reado
 /** @internal */
 export function sameFlatMap<T>(array: readonly T[], mapfn: (x: T, i: number) => T | readonly T[]): readonly T[];
 /** @internal */
-export function sameFlatMap<T>(array: T[], mapfn: (x: T, i: number) => T | T[]): T[] {
+export function sameFlatMap<T>(array: readonly T[], mapfn: (x: T, i: number) => T | readonly T[]): readonly T[] {
     let result: T[] | undefined;
     if (array) {
         for (let i = 0; i < array.length; i++) {
@@ -703,11 +706,19 @@ export function concatenate<T>(array1: T[], array2: T[]): T[];
 /** @internal */
 export function concatenate<T>(array1: readonly T[], array2: readonly T[]): readonly T[];
 /** @internal */
-export function concatenate<T>(array1: T[] | undefined, array2: T[] | undefined): T[];
+export function concatenate<T>(array1: T[], array2: T[] | undefined): T[]; // eslint-disable-line @typescript-eslint/unified-signatures
 /** @internal */
-export function concatenate<T>(array1: readonly T[] | undefined, array2: readonly T[] | undefined): readonly T[];
+export function concatenate<T>(array1: T[] | undefined, array2: T[]): T[]; // eslint-disable-line @typescript-eslint/unified-signatures
 /** @internal */
-export function concatenate<T>(array1: T[], array2: T[]): T[] {
+export function concatenate<T>(array1: readonly T[], array2: readonly T[] | undefined): readonly T[]; // eslint-disable-line @typescript-eslint/unified-signatures
+/** @internal */
+export function concatenate<T>(array1: readonly T[] | undefined, array2: readonly T[]): readonly T[]; // eslint-disable-line @typescript-eslint/unified-signatures
+/** @internal */
+export function concatenate<T>(array1: T[] | undefined, array2: T[] | undefined): T[] | undefined;
+/** @internal */
+export function concatenate<T>(array1: readonly T[] | undefined, array2: readonly T[] | undefined): readonly T[] | undefined;
+/** @internal */
+export function concatenate<T>(array1: readonly T[] | undefined, array2: readonly T[] | undefined): readonly T[] | undefined {
     if (!some(array2)) return array1;
     if (!some(array1)) return array2;
     return [...array1, ...array2];
@@ -852,32 +863,25 @@ export const enum SortKind {
 }
 
 /** @internal */
-export function detectSortCaseSensitivity(array: readonly string[], useEslintOrdering?: boolean): SortKind;
-/** @internal */
-export function detectSortCaseSensitivity<T>(array: readonly T[], useEslintOrdering: boolean, getString: (element: T) => string): SortKind;
-/** @internal */
-export function detectSortCaseSensitivity<T>(array: readonly T[], useEslintOrdering: boolean, getString?: (element: T) => string): SortKind {
+export function detectSortCaseSensitivity<T>(
+    array: readonly T[],
+    getString: (element: T) => string,
+    compareStringsCaseSensitive: Comparer<string>,
+    compareStringsCaseInsensitive: Comparer<string>,
+): SortKind {
     let kind = SortKind.Both;
     if (array.length < 2) return kind;
-    const caseSensitiveComparer = getString
-        ? (a: T, b: T) => compareStringsCaseSensitive(getString(a), getString(b))
-        : compareStringsCaseSensitive as (a: T | undefined, b: T | undefined) => Comparison;
-    const compareCaseInsensitive = useEslintOrdering ? compareStringsCaseInsensitiveEslintCompatible : compareStringsCaseInsensitive;
-    const caseInsensitiveComparer = getString
-        ? (a: T, b: T) => compareCaseInsensitive(getString(a), getString(b))
-        : compareCaseInsensitive as (a: T | undefined, b: T | undefined) => Comparison;
-    for (let i = 1, len = array.length; i < len; i++) {
-        const prevElement = array[i - 1];
-        const element = array[i];
-        if (kind & SortKind.CaseSensitive && caseSensitiveComparer(prevElement, element) === Comparison.GreaterThan) {
+
+    let prevElement = getString(array[0]);
+    for (let i = 1, len = array.length; i < len && kind !== SortKind.None; i++) {
+        const element = getString(array[i]);
+        if (kind & SortKind.CaseSensitive && compareStringsCaseSensitive(prevElement, element) > 0) {
             kind &= ~SortKind.CaseSensitive;
         }
-        if (kind & SortKind.CaseInsensitive && caseInsensitiveComparer(prevElement, element) === Comparison.GreaterThan) {
+        if (kind & SortKind.CaseInsensitive && compareStringsCaseInsensitive(prevElement, element) > 0) {
             kind &= ~SortKind.CaseInsensitive;
         }
-        if (kind === SortKind.None) {
-            return kind;
-        }
+        prevElement = element;
     }
     return kind;
 }
@@ -915,7 +919,7 @@ export function compact<T>(array: T[]): T[]; // eslint-disable-line @typescript-
 /** @internal */
 export function compact<T>(array: readonly T[]): readonly T[]; // eslint-disable-line @typescript-eslint/unified-signatures
 /** @internal */
-export function compact<T>(array: T[]): T[] {
+export function compact<T>(array: readonly T[]): readonly T[] {
     let result: T[] | undefined;
     if (array) {
         for (let i = 0; i < array.length; i++) {
@@ -996,10 +1000,10 @@ export function append<T>(to: T[] | undefined, value: T): T[];
 /** @internal */
 export function append<T>(to: T[] | undefined, value: T | undefined): T[] | undefined;
 /** @internal */
-export function append<T>(to: Push<T>, value: T | undefined): void;
+export function append<T>(to: T[], value: T | undefined): void;
 /** @internal */
-export function append<T>(to: T[], value: T | undefined): T[] | undefined {
-    if (value === undefined) return to;
+export function append<T>(to: T[] | undefined, value: T | undefined): T[] | undefined {
+    if (value === undefined) return to as T[];
     if (to === undefined) return [value];
     to.push(value);
     return to;
@@ -1315,7 +1319,7 @@ export function reduceLeft<T, U>(array: readonly T[] | undefined, f: (memo: U, v
 /** @internal */
 export function reduceLeft<T>(array: readonly T[], f: (memo: T, value: T, i: number) => T): T | undefined;
 /** @internal */
-export function reduceLeft<T>(array: T[], f: (memo: T, value: T, i: number) => T, initial?: T, start?: number, count?: number): T | undefined {
+export function reduceLeft<T>(array: readonly T[] | undefined, f: (memo: T, value: T, i: number) => T, initial?: T, start?: number, count?: number): T | undefined {
     if (array && array.length > 0) {
         const size = array.length;
         if (size > 0) {
@@ -1540,6 +1544,22 @@ export function group<T, K>(values: readonly T[], getGroupId: (value: T) => K, r
 }
 
 /** @internal */
+export function groupBy<T, U extends T>(values: readonly T[] | undefined, keySelector: (value: T) => value is U): { true?: U[], false?: Exclude<T, U>[] };
+/** @internal */
+export function groupBy<T, K extends string | number | boolean | null | undefined>(values: readonly T[] | undefined, keySelector: (value: T) => K): { [P in K as `${P}`]?: T[]; };
+export function groupBy<T, K extends string | number | boolean | null | undefined>(values: readonly T[] | undefined, keySelector: (value: T) => K): { [P in K as `${P}`]?: T[]; } {
+    const result: Record<string, T[]> = {};
+    if (values) {
+        for (const value of values) {
+            const key = `${keySelector(value)}`;
+            const array = result[key] ??= [];
+            array.push(value);
+        }
+    }
+    return result as { [P in K as `${P}`]?: T[]; };
+}
+
+/** @internal */
 export function clone<T>(object: T): T {
     const result: any = {};
     for (const id in object) {
@@ -1604,10 +1624,6 @@ export interface MultiMap<K, V> extends Map<K, V[]> {
 }
 
 /** @internal */
-export function createMultiMap<K, V>(): MultiMap<K, V>;
-/** @internal */
-export function createMultiMap<V>(): MultiMap<string, V>;
-/** @internal */
 export function createMultiMap<K, V>(): MultiMap<K, V> {
     const map = new Map<K, V[]>() as MultiMap<K, V>;
     map.add = multiMapAdd;
@@ -1632,26 +1648,6 @@ function multiMapRemove<K, V>(this: MultiMap<K, V>, key: K, value: V) {
             this.delete(key);
         }
     }
-}
-
-/** @internal */
-export interface UnderscoreEscapedMultiMap<T> extends UnderscoreEscapedMap<T[]> {
-    /**
-     * Adds the value to an array of values associated with the key, and returns the array.
-     * Creates the array if it does not already exist.
-     */
-    add(key: __String, value: T): T[];
-    /**
-     * Removes a value from an array of values associated with the key.
-     * Does not preserve the order of those values.
-     * Does nothing if `key` is not in `map`, or `value` is not in `map[key]`.
-     */
-    remove(key: __String, value: T): void;
-}
-
-/** @internal */
-export function createUnderscoreEscapedMultiMap<T>(): UnderscoreEscapedMultiMap<T> {
-    return createMultiMap() as UnderscoreEscapedMultiMap<T>;
 }
 
 /** @internal */
@@ -1867,11 +1863,7 @@ export function isNumber(x: unknown): x is number {
 }
 
 /** @internal */
-export function tryCast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut): TOut | undefined;
-/** @internal */
-export function tryCast<T>(value: T, test: (value: T) => boolean): T | undefined;
-/** @internal */
-export function tryCast<T>(value: T, test: (value: T) => boolean): T | undefined {
+export function tryCast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut): TOut | undefined {
     return value !== undefined && test(value) ? value : undefined;
 }
 
@@ -1888,12 +1880,6 @@ export function cast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: 
  * @internal
  */
 export function noop(_?: unknown): void { }
-
-/** @internal */
-export const noopPush: Push<any> = {
-    push: noop,
-    length: 0
-};
 
 /**
  * Do nothing and return false
@@ -2038,6 +2024,64 @@ export function memoizeWeak<A extends object, T>(callback: (arg: A) => T): (arg:
     };
 }
 
+/** @internal */
+export interface MemoizeCache<A extends any[], T> {
+    has(args: A): boolean;
+    get(args: A): T | undefined;
+    set(args: A, value: T): void;
+}
+
+/**
+ * A version of `memoize` that supports multiple arguments, backed by a provided cache.
+ *
+ * @internal
+ */
+export function memoizeCached<A extends any[], T>(callback: (...args: A) => T, cache: MemoizeCache<A, T>): (...args: A) => T {
+    return (...args: A) => {
+        let value = cache.get(args);
+        if (value === undefined && !cache.has(args)) {
+            value = callback(...args);
+            cache.set(args, value);
+        }
+        return value!;
+    };
+}
+
+/**
+ * High-order function, composes functions. Note that functions are composed inside-out;
+ * for example, `compose(a, b)` is the equivalent of `x => b(a(x))`.
+ *
+ * @param args The functions to compose.
+ *
+ * @internal
+ */
+export function compose<T>(...args: ((t: T) => T)[]): (t: T) => T;
+/** @internal */
+export function compose<T>(a: (t: T) => T, b: (t: T) => T, c: (t: T) => T, d: (t: T) => T, e: (t: T) => T): (t: T) => T {
+    if (!!e) {
+        const args: ((t: T) => T)[] = [];
+        for (let i = 0; i < arguments.length; i++) {
+            args[i] = arguments[i];
+        }
+
+        return t => reduceLeft(args, (u, f) => f(u), t);
+    }
+    else if (d) {
+        return t => d(c(b(a(t))));
+    }
+    else if (c) {
+        return t => c(b(a(t)));
+    }
+    else if (b) {
+        return t => b(a(t));
+    }
+    else if (a) {
+        return t => a(t);
+    }
+    else {
+        return t => t;
+    }
+}
 /** @internal */
 export const enum AssertionLevel {
     None = 0,
@@ -2761,13 +2805,32 @@ export function padRight(s: string, length: number, padString: " " = " ") {
 /** @internal */
 export function takeWhile<T, U extends T>(array: readonly T[], predicate: (element: T) => element is U): U[];
 /** @internal */
-export function takeWhile<T>(array: readonly T[], predicate: (element: T) => boolean): T[] {
-    const len = array.length;
-    let index = 0;
-    while (index < len && predicate(array[index])) {
-        index++;
+export function takeWhile<T, U extends T>(array: readonly T[] | undefined, predicate: (element: T) => element is U): U[] | undefined;
+export function takeWhile<T, U extends T>(array: readonly T[] | undefined, predicate: (element: T) => element is U): U[] | undefined {
+    if (array) {
+        const len = array.length;
+        let index = 0;
+        while (index < len && predicate(array[index])) {
+            index++;
+        }
+        return array.slice(0, index) as U[];
     }
-    return array.slice(0, index);
+}
+
+/** @internal */
+export function skipWhile<T, U extends T>(array: readonly T[], predicate: (element: T) => element is U): Exclude<T, U>[];
+/** @internal */
+export function skipWhile<T, U extends T>(array: readonly T[] | undefined, predicate: (element: T) => element is U): Exclude<T, U>[] | undefined;
+/** @internal */
+export function skipWhile<T, U extends T>(array: readonly T[] | undefined, predicate: (element: T) => element is U): Exclude<T, U>[] | undefined {
+    if (array) {
+        const len = array.length;
+        let index = 0;
+        while (index < len && predicate(array[index])) {
+            index++;
+        }
+        return array.slice(index) as Exclude<T, U>[];
+    }
 }
 
 /**
@@ -2806,8 +2869,6 @@ function trimEndImpl(s: string) {
     return s.slice(0, end + 1);
 }
 
-declare const process: any;
-
 /** @internal */
 export function isNodeLikeSystem(): boolean {
     // This is defined here rather than in sys.ts to prevent a cycle from its
@@ -2817,7 +2878,7 @@ export function isNodeLikeSystem(): boolean {
     // when bundled using esbuild, this function will be rewritten to `__require`
     // and definitely exist.
     return typeof process !== "undefined"
-        && process.nextTick
-        && !process.browser
+        && !!process.nextTick
+        && !(process as any).browser
         && typeof module === "object";
 }

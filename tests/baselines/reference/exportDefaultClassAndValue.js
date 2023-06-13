@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportDefaultClassAndValue.ts] ////
+
 //// [exportDefaultClassAndValue.ts]
 const foo = 1
 export default foo

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/compoundVarDecl1.ts ===
+//// [tests/cases/compiler/compoundVarDecl1.ts] ////
+
+=== compoundVarDecl1.ts ===
 module Foo { var a = 1, b = 1; a = b + 2; }
 >Foo : Symbol(Foo, Decl(compoundVarDecl1.ts, 0, 0))
 >a : Symbol(a, Decl(compoundVarDecl1.ts, 0, 16))

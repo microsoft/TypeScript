@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noImplicitAnyForMethodParameters.ts ===
+//// [tests/cases/compiler/noImplicitAnyForMethodParameters.ts] ////
+
+=== noImplicitAnyForMethodParameters.ts ===
 declare class A {
 >A : Symbol(A, Decl(noImplicitAnyForMethodParameters.ts, 0, 0))
 

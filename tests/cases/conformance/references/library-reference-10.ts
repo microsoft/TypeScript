@@ -1,7 +1,6 @@
 // @noImplicitReferences: true
 // @traceResolution: true
-// @currentDirectory: /foo
-// @typeRoots: ./types
+// @typeRoots: /foo/types
 
 // package.json in a primary reference can refer to another file
 

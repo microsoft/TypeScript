@@ -1,13 +1,8 @@
-import * as ts from "./_namespaces/ts";
 import * as Harness from "./_namespaces/Harness";
+import * as ts from "./_namespaces/ts";
 
 export function encodeString(s: string): string {
     return ts.sys.bufferFrom!(s).toString("utf8");
-}
-
-export function byteLength(s: string, encoding?: string): number {
-    // stub implementation if Buffer is not available (in-browser case)
-    return Buffer.byteLength(s, encoding as ts.BufferEncoding | undefined);
 }
 
 export function evalFile(fileContents: string, fileName: string, nodeContext?: any) {
@@ -69,7 +64,7 @@ export function memoize<T extends ts.AnyFunction>(f: T, memoKey: (...anything: a
     } as any);
 }
 
-export const canonicalizeForHarness = ts.createGetCanonicalFileName(/*caseSensitive*/ false); // This is done so tests work on windows _and_ linux
+export const canonicalizeForHarness = ts.createGetCanonicalFileName(/*useCaseSensitiveFileNames*/ false); // This is done so tests work on windows _and_ linux
 
 export function assertInvariants(node: ts.Node | undefined, parent: ts.Node | undefined) {
     const queue: [ts.Node | undefined, ts.Node | undefined][] = [[node, parent]];

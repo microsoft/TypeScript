@@ -1,4 +1,6 @@
-=== tests/cases/compiler/ambientExternalModuleWithRelativeExternalImportDeclaration.ts ===
+//// [tests/cases/compiler/ambientExternalModuleWithRelativeExternalImportDeclaration.ts] ////
+
+=== ambientExternalModuleWithRelativeExternalImportDeclaration.ts ===
 declare module "OuterModule" {
 >"OuterModule" : typeof import("OuterModule")
 

@@ -1,0 +1,22 @@
+esDecorators-classDeclaration-fields-staticAmbient.ts(6,5): error TS1206: Decorators are not valid here.
+esDecorators-classDeclaration-fields-staticAmbient.ts(7,5): error TS1206: Decorators are not valid here.
+esDecorators-classDeclaration-fields-staticAmbient.ts(8,5): error TS1206: Decorators are not valid here.
+
+
+==== esDecorators-classDeclaration-fields-staticAmbient.ts (3 errors) ====
+    declare let dec: any;
+    
+    const field3 = "field3";
+    
+    class C {
+        @dec(1) static declare field1 = 1;
+        ~
+!!! error TS1206: Decorators are not valid here.
+        @dec(2) static declare ["field2"] = 2;
+        ~
+!!! error TS1206: Decorators are not valid here.
+        @dec(3) static declare [field3] = 3;
+        ~
+!!! error TS1206: Decorators are not valid here.
+    }
+    

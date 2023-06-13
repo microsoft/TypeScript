@@ -1,13 +1,13 @@
-tests/cases/conformance/moduleResolution/a/b.ts(1,20): error TS2305: Module '"."' has no exported member 'rootA'.
+a/b.ts(1,20): error TS2305: Module '"."' has no exported member 'rootA'.
 
 
-==== tests/cases/conformance/moduleResolution/a.ts (0 errors) ====
+==== a.ts (0 errors) ====
     export const rootA = 0;
     
-==== tests/cases/conformance/moduleResolution/a/index.ts (0 errors) ====
+==== a/index.ts (0 errors) ====
     export const indexInA = 0;
     
-==== tests/cases/conformance/moduleResolution/a/b.ts (1 errors) ====
+==== a/b.ts (1 errors) ====
     import { indexInA, rootA } from ".";
                        ~~~~~
 !!! error TS2305: Module '"."' has no exported member 'rootA'.

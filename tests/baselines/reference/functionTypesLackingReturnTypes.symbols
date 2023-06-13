@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionTypesLackingReturnTypes.ts ===
+//// [tests/cases/compiler/functionTypesLackingReturnTypes.ts] ////
+
+=== functionTypesLackingReturnTypes.ts ===
 // Error (no '=>')
 function f(x: ()) {
 >f : Symbol(f, Decl(functionTypesLackingReturnTypes.ts, 0, 0))

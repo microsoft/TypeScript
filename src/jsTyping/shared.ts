@@ -10,6 +10,7 @@ export type EventTypesRegistry = "event::typesRegistry";
 export type EventBeginInstallTypes = "event::beginInstallTypes";
 export type EventEndInstallTypes = "event::endInstallTypes";
 export type EventInitializationFailed = "event::initializationFailed";
+export type ActionWatchTypingLocations = "action::watchTypingLocations";
 /** @internal */
 export const ActionSet: ActionSet = "action::set";
 /** @internal */
@@ -24,6 +25,8 @@ export const EventBeginInstallTypes: EventBeginInstallTypes = "event::beginInsta
 export const EventEndInstallTypes: EventEndInstallTypes = "event::endInstallTypes";
 /** @internal */
 export const EventInitializationFailed: EventInitializationFailed = "event::initializationFailed";
+/** @internal */
+export const ActionWatchTypingLocations: ActionWatchTypingLocations = "action::watchTypingLocations";
 
 /** @internal */
 export namespace Arguments {

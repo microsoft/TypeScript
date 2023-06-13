@@ -1,4 +1,6 @@
-=== tests/cases/compiler/collisionSuperAndNameResolution.ts ===
+//// [tests/cases/compiler/collisionSuperAndNameResolution.ts] ////
+
+=== collisionSuperAndNameResolution.ts ===
 var console: {
 >console : Symbol(console, Decl(collisionSuperAndNameResolution.ts, 0, 3))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/narrowingOrderIndependent.ts] ////
+
 //// [narrowingOrderIndependent.ts]
 // Repro from #36709
 

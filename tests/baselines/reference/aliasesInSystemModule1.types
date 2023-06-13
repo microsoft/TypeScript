@@ -1,4 +1,6 @@
-=== tests/cases/compiler/aliasesInSystemModule1.ts ===
+//// [tests/cases/compiler/aliasesInSystemModule1.ts] ////
+
+=== aliasesInSystemModule1.ts ===
 import alias = require('foo');
 >alias : any
 

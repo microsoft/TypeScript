@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inferenceUnionOfObjectsMappedContextualType.ts ===
+//// [tests/cases/compiler/inferenceUnionOfObjectsMappedContextualType.ts] ////
+
+=== inferenceUnionOfObjectsMappedContextualType.ts ===
 type Entity = {
 >Entity : Symbol(Entity, Decl(inferenceUnionOfObjectsMappedContextualType.ts, 0, 0))
 

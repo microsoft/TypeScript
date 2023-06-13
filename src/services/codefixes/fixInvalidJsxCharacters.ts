@@ -25,8 +25,8 @@ registerCodeFix({
     fixIds: [fixIdExpression, fixIdHtmlEntity],
     getCodeActions(context) {
         const { sourceFile, preferences, span } = context;
-        const changeToExpression = textChanges.ChangeTracker.with(context, t => doChange(t, preferences, sourceFile, span.start, /* useHtmlEntity */ false));
-        const changeToHtmlEntity = textChanges.ChangeTracker.with(context, t => doChange(t, preferences, sourceFile, span.start, /* useHtmlEntity */ true));
+        const changeToExpression = textChanges.ChangeTracker.with(context, t => doChange(t, preferences, sourceFile, span.start, /*useHtmlEntity*/ false));
+        const changeToHtmlEntity = textChanges.ChangeTracker.with(context, t => doChange(t, preferences, sourceFile, span.start, /*useHtmlEntity*/ true));
 
         return [
             createCodeFixAction(fixIdExpression, changeToExpression, Diagnostics.Wrap_invalid_character_in_an_expression_container, fixIdExpression, Diagnostics.Wrap_all_invalid_characters_in_an_expression_container),

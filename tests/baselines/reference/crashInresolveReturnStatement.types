@@ -1,4 +1,6 @@
-=== tests/cases/compiler/crashInresolveReturnStatement.ts ===
+//// [tests/cases/compiler/crashInresolveReturnStatement.ts] ////
+
+=== crashInresolveReturnStatement.ts ===
 class WorkItemToolbar {
 >WorkItemToolbar : WorkItemToolbar
 
@@ -19,7 +21,6 @@ class CreateCopyOfWorkItemDialog {
 >getDialogResult : () => any
 
         return null;
->null : null
     }
 }
 function createWorkItemDialog<P0>(dialogType: P0) {

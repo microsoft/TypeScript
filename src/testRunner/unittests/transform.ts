@@ -1,9 +1,10 @@
-import * as ts from "../_namespaces/ts";
-import * as Harness from "../_namespaces/Harness";
-import * as evaluator from "../_namespaces/evaluator";
-import * as vfs from "../_namespaces/vfs";
 import * as documents from "../_namespaces/documents";
+import * as evaluator from "../_namespaces/evaluator";
 import * as fakes from "../_namespaces/fakes";
+import * as Harness from "../_namespaces/Harness";
+import * as ts from "../_namespaces/ts";
+import { NewLineKind, ScriptTarget, transpileModule } from "../_namespaces/ts";
+import * as vfs from "../_namespaces/vfs";
 
 describe("unittests:: TransformAPI", () => {
     function replaceUndefinedWithVoid0(context: ts.TransformationContext) {
@@ -30,10 +31,10 @@ describe("unittests:: TransformAPI", () => {
             }
             return ts.visitEachChild(node, visitor, context);
         }
-        return (file: ts.SourceFile) => ts.visitNode(file, visitor);
+        return (file: ts.SourceFile) => ts.visitNode(file, visitor, ts.isSourceFile);
     }
 
-    function replaceIdentifiersNamedOldNameWithNewName(context: ts.TransformationContext) {
+    function replaceIdentifiersNamedOldNameWithNewName<T extends ts.SourceFile | ts.Bundle>(context: ts.TransformationContext) {
         const previousOnSubstituteNode = context.onSubstituteNode;
         context.enableSubstitution(ts.SyntaxKind.Identifier);
         context.onSubstituteNode = (hint, node) => {
@@ -43,17 +44,17 @@ describe("unittests:: TransformAPI", () => {
             }
             return node;
         };
-        return (file: ts.SourceFile) => file;
+        return (file: T) => file;
     }
 
     function replaceIdentifiersNamedOldNameWithNewName2(context: ts.TransformationContext) {
-        const visitor: ts.Visitor = (node) => {
+        const visitor = (node: ts.Node): ts.Node => {
             if (ts.isIdentifier(node) && node.text === "oldName") {
                 return ts.factory.createIdentifier("newName");
             }
             return ts.visitEachChild(node, visitor, context);
         };
-        return (node: ts.SourceFile) => ts.visitNode(node, visitor);
+        return (node: ts.SourceFile) => ts.visitNode(node, visitor, ts.isSourceFile);
     }
 
     function createTaggedTemplateLiteral(): ts.Transformer<ts.SourceFile> {
@@ -109,7 +110,7 @@ describe("unittests:: TransformAPI", () => {
         return transformSourceFile(`let a: () => void`, [
             context => file => ts.visitNode(file, function visitor(node: ts.Node): ts.VisitResult<ts.Node> {
                 return ts.visitEachChild(node, visitor, context);
-            })
+            }, ts.isSourceFile)
         ]);
     });
 
@@ -120,7 +121,7 @@ describe("unittests:: TransformAPI", () => {
                     return ts.factory.createKeywordTypeNode(ts.SyntaxKind.UndefinedKeyword);
                 }
                 return ts.visitEachChild(node, visitor, context);
-            })
+            }, ts.isSourceFile)
         ]);
     });
 
@@ -303,6 +304,7 @@ describe("unittests:: TransformAPI", () => {
                 target: ts.ScriptTarget.ES5,
                 module: ts.ModuleKind.System,
                 newLine: ts.NewLineKind.CarriageReturnLineFeed,
+                moduleDetection: ts.ModuleDetectionKind.Force,
             }
         }).outputText;
 
@@ -328,13 +330,14 @@ describe("unittests:: TransformAPI", () => {
 
     // https://github.com/Microsoft/TypeScript/issues/17384
     testBaseline("transformAddDecoratedNode", () => {
-        return ts.transpileModule("", {
+        return transpileModule("", {
             transformers: {
                 before: [transformAddDecoratedNode],
             },
             compilerOptions: {
-                target: ts.ScriptTarget.ES5,
-                newLine: ts.NewLineKind.CarriageReturnLineFeed,
+                target: ScriptTarget.ES5,
+                experimentalDecorators: true,
+                newLine: NewLineKind.CarriageReturnLineFeed,
             }
         }).outputText;
 
@@ -345,7 +348,7 @@ describe("unittests:: TransformAPI", () => {
             function visitNode(sf: ts.SourceFile) {
                 // produce `class Foo { @Bar baz() {} }`;
                 const classDecl = ts.factory.createClassDeclaration(/*modifiers*/ undefined, "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, [
-                    ts.factory.createMethodDeclaration([ts.factory.createDecorator(ts.factory.createIdentifier("Bar"))], /**/ undefined, "baz", /**/ undefined, /**/ undefined, [], /**/ undefined, ts.factory.createBlock([]))
+                    ts.factory.createMethodDeclaration([ts.factory.createDecorator(ts.factory.createIdentifier("Bar"))], /*asteriskToken*/ undefined, "baz", /*questionToken*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, ts.factory.createBlock([]))
                 ]);
                 return ts.factory.updateSourceFile(sf, [classDecl]);
             }
@@ -366,13 +369,14 @@ describe("unittests:: TransformAPI", () => {
 
     // https://github.com/microsoft/TypeScript/issues/33295
     testBaseline("transformParameterProperty", () => {
-        return ts.transpileModule("", {
+        return transpileModule("", {
             transformers: {
                 before: [transformAddParameterProperty],
             },
             compilerOptions: {
-                target: ts.ScriptTarget.ES5,
-                newLine: ts.NewLineKind.CarriageReturnLineFeed,
+                target: ScriptTarget.ES5,
+                newLine: NewLineKind.CarriageReturnLineFeed,
+                experimentalDecorators: true,
             }
         }).outputText;
 
@@ -393,10 +397,10 @@ describe("unittests:: TransformAPI", () => {
     });
 
     function baselineDeclarationTransform(text: string, opts: ts.TranspileOptions) {
-        const fs = vfs.createFromFileSystem(Harness.IO, /*caseSensitive*/ true, { documents: [new documents.TextDocument("/.src/index.ts", text)] });
+        const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ true, { documents: [new documents.TextDocument("/.src/index.ts", text)] });
         const host = new fakes.CompilerHost(fs, opts.compilerOptions);
         const program = ts.createProgram(["/.src/index.ts"], opts.compilerOptions!, host);
-        program.emit(program.getSourceFile("/.src/index.ts"), (p, s, bom) => host.writeFile(p, s, bom), /*cancellationToken*/ undefined, /*onlyDts*/ true, opts.transformers);
+        program.emit(program.getSourceFile("/.src/index.ts"), (p, s, bom) => host.writeFile(p, s, bom), /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ true, opts.transformers);
         return fs.readFileSync("/.src/index.d.ts").toString();
     }
 
@@ -542,7 +546,7 @@ module MyModule {
 
     // https://github.com/Microsoft/TypeScript/issues/24709
     testBaseline("issue24709", () => {
-        const fs = vfs.createFromFileSystem(Harness.IO, /*caseSensitive*/ true);
+        const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ true);
         const transformed = ts.transform(ts.createSourceFile("source.ts", "class X { echo(x: string) { return x; } }", ts.ScriptTarget.ES3), [transformSourceFile]);
         const transformedSourceFile = transformed.transformed[0];
         transformed.dispose();
@@ -557,7 +561,7 @@ module MyModule {
         return host.readFile("source.js")!.toString();
 
         function transformSourceFile(context: ts.TransformationContext) {
-            const visitor: ts.Visitor = (node) => {
+            const visitor = (node: ts.Node): ts.Node => {
                 if (ts.isMethodDeclaration(node)) {
                     return ts.factory.updateMethodDeclaration(
                         node,
@@ -573,7 +577,7 @@ module MyModule {
                 }
                 return ts.visitEachChild(node, visitor, context);
             };
-            return (node: ts.SourceFile) => ts.visitNode(node, visitor);
+            return (node: ts.SourceFile) => ts.visitNode(node, visitor, ts.isSourceFile);
         }
 
     });
@@ -610,7 +614,7 @@ module MyModule {
         };
         function rootTransform<T extends ts.Node>(node: T): ts.Node {
             if (ts.isClassLike(node)) {
-                const newMembers = [ts.factory.createPropertyDeclaration([ts.factory.createModifier(ts.SyntaxKind.StaticKeyword)], "newField", /* questionOrExclamationToken */ undefined, /* type */ undefined, ts.factory.createStringLiteral("x"))];
+                const newMembers = [ts.factory.createPropertyDeclaration([ts.factory.createModifier(ts.SyntaxKind.StaticKeyword)], "newField", /*questionOrExclamationToken*/ undefined, /*type*/ undefined, ts.factory.createStringLiteral("x"))];
                 ts.setSyntheticLeadingComments(newMembers[0], [{ kind: ts.SyntaxKind.MultiLineCommentTrivia, text: "comment", pos: -1, end: -1, hasTrailingNewLine: true }]);
                 return ts.isClassDeclaration(node) ?
                     ts.factory.updateClassDeclaration(
@@ -643,8 +647,9 @@ class MyClass {
                 before: [addStaticFieldWithComment],
             },
             compilerOptions: {
-                target: ts.ScriptTarget.ES2015,
-                newLine: ts.NewLineKind.CarriageReturnLineFeed,
+                target: ScriptTarget.ES2015,
+                experimentalDecorators: true,
+                newLine: NewLineKind.CarriageReturnLineFeed,
             }
         }).outputText;
     });
@@ -658,11 +663,38 @@ const MyClass = class {
                 before: [addStaticFieldWithComment],
             },
             compilerOptions: {
-                target: ts.ScriptTarget.ES2015,
-                newLine: ts.NewLineKind.CarriageReturnLineFeed,
+                target: ScriptTarget.ES2015,
+                experimentalDecorators: true,
+                newLine: NewLineKind.CarriageReturnLineFeed,
             }
         }).outputText;
     });
 
+    testBaseline("jsxExpression", () => {
+        function doNothing(context: ts.TransformationContext) {
+            const visitor = (node: ts.Node): ts.Node => {
+                return ts.visitEachChild(node, visitor, context);
+            };
+            return (node: ts.SourceFile) => ts.visitNode(node, visitor, ts.isSourceFile);
+        }
+
+        return ts.transpileModule(`
+function test () {
+    return <>
+        {/* This comment breaks the transformer */}
+    </>
+}
+`, {
+            transformers: {
+                before: [doNothing],
+            },
+            compilerOptions: {
+                jsx: ts.JsxEmit.React,
+                target: ScriptTarget.ES2015,
+                experimentalDecorators: true,
+                newLine: NewLineKind.CarriageReturnLineFeed,
+            }
+        }).outputText;
+    });
 });
 

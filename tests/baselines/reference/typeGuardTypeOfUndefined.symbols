@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/typeGuards/typeGuardTypeOfUndefined.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardTypeOfUndefined.ts] ////
+
+=== typeGuardTypeOfUndefined.ts ===
 // undefined type guard adds no new type information
 function test1(a: any) {
 >test1 : Symbol(test1, Decl(typeGuardTypeOfUndefined.ts, 0, 0))
