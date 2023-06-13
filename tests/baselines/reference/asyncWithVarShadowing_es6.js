@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/async/es6/asyncWithVarShadowing_es6.ts] ////
+
 //// [asyncWithVarShadowing_es6.ts]
 // https://github.com/Microsoft/TypeScript/issues/20461
 declare const y: any;

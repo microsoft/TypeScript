@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentOnSimpleArrowFunctionBody1.ts] ////
+
 //// [commentOnSimpleArrowFunctionBody1.ts]
 function Foo(x: any)
 {

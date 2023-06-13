@@ -149,6 +149,7 @@ FileWatcher:: Added:: WatchInfo: /home/src/projects/project1/file2.ts 250 undefi
 ======== Resolving module '@typescript/lib-webworker' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.webworker.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-webworker' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-webworker'
 File '/home/src/projects/node_modules/@typescript/lib-webworker/package.json' does not exist.
@@ -168,6 +169,7 @@ FileWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@typescript/lib
 ======== Resolving module '@typescript/lib-scripthost' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-scripthost' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-scripthost'
 File '/home/src/projects/node_modules/@typescript/lib-scripthost/package.json' does not exist.
@@ -183,6 +185,7 @@ FileWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@typescript/lib
 ======== Resolving module '@typescript/lib-es5' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-es5' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-es5'
 File '/home/src/projects/node_modules/@typescript/lib-es5/package.json' does not exist.
@@ -210,6 +213,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project1/
 ======== Resolving module '@typescript/lib-dom' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-dom'
 File '/home/src/projects/node_modules/@typescript/lib-dom/package.json' does not exist.
@@ -525,6 +529,7 @@ Reusing resolution of type reference directive 'sometype' from '/home/src/projec
 ======== Resolving module '@typescript/lib-dom' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-dom'
 File '/home/src/projects/node_modules/@typescript/lib-dom/package.json' does not exist.
@@ -543,6 +548,7 @@ Scoped package detected, looking in 'typescript__lib-dom'
 Directory '/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-dom'
 Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: JavaScript.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 File '/home/src/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/node_modules/@typescript/lib-dom.js' does not exist.
@@ -1279,6 +1285,7 @@ Reusing resolution of module '@typescript/lib-es5' from '/home/src/projects/proj
 ======== Resolving module '@typescript/lib-dom' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-dom'
 File '/home/src/projects/node_modules/@typescript/lib-dom/package.json' does not exist.
@@ -1677,6 +1684,7 @@ Resolving real path for '/home/src/projects/project1/typeroot1/sometype/index.d.
 ======== Resolving module '@typescript/lib-dom' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-dom'
 File '/home/src/projects/node_modules/@typescript/lib-dom/package.json' does not exist.
@@ -1695,6 +1703,7 @@ Scoped package detected, looking in 'typescript__lib-dom'
 Directory '/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-dom'
 Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: JavaScript.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 File '/home/src/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/node_modules/@typescript/lib-dom.js' does not exist.
@@ -1966,6 +1975,7 @@ FileWatcher:: Close:: WatchInfo: /home/src/projects/node_modules/@typescript/lib
 ======== Resolving module '@typescript/lib-webworker' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.webworker.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-webworker' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-webworker'
 File '/home/src/projects/node_modules/@typescript/lib-webworker/package.json' does not exist.
@@ -1984,6 +1994,7 @@ Scoped package detected, looking in 'typescript__lib-webworker'
 Directory '/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-webworker'
 Loading module '@typescript/lib-webworker' from 'node_modules' folder, target file types: JavaScript.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 File '/home/src/projects/node_modules/@typescript/lib-webworker/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/node_modules/@typescript/lib-webworker.js' does not exist.
@@ -2254,6 +2265,7 @@ CreatingProgramWith::
 ======== Resolving module '@typescript/lib-webworker' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.webworker.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-webworker' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-webworker'
 File '/home/src/projects/node_modules/@typescript/lib-webworker/package.json' does not exist.

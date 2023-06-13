@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/interfaceExtendsClassWithPrivate1.ts] ////
+
 //// [interfaceExtendsClassWithPrivate1.ts]
 class C {
     public foo(x: any) { return x; }

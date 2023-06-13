@@ -1,4 +1,6 @@
-=== tests/cases/compiler/optionalParamterAndVariableDeclaration.ts ===
+//// [tests/cases/compiler/optionalParamterAndVariableDeclaration.ts] ////
+
+=== optionalParamterAndVariableDeclaration.ts ===
 class C {
 >C : Symbol(C, Decl(optionalParamterAndVariableDeclaration.ts, 0, 0))
 

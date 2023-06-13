@@ -1,3 +1,5 @@
-=== tests/cases/conformance/parser/ecmascript5/parserObjectCreationArrayLiteral2.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/parserObjectCreationArrayLiteral2.ts] ////
+
+=== parserObjectCreationArrayLiteral2.ts ===
 
 new Foo[1];

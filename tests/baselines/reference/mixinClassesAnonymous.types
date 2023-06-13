@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/mixinClassesAnonymous.ts ===
+//// [tests/cases/conformance/classes/mixinClassesAnonymous.ts] ////
+
+=== mixinClassesAnonymous.ts ===
 type Constructor<T> = new(...args: any[]) => T;
 >Constructor : Constructor<T>
 >args : any[]

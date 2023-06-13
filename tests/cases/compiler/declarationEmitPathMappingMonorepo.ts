@@ -24,5 +24,5 @@ export function b(text: string) {
     }
 }
 
-// @link: tests/cases/compiler/packages/a -> tests/cases/compiler/node_modules/@ts-bug/a
-// @link: tests/cases/compiler/packages/b -> tests/cases/compiler/node_modules/@ts-bug/b
+// @link: packages/a -> node_modules/@ts-bug/a
+// @link: packages/b -> node_modules/@ts-bug/b

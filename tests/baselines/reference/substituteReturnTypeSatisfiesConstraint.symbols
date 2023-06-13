@@ -1,4 +1,6 @@
-=== tests/cases/compiler/substituteReturnTypeSatisfiesConstraint.ts ===
+//// [tests/cases/compiler/substituteReturnTypeSatisfiesConstraint.ts] ////
+
+=== substituteReturnTypeSatisfiesConstraint.ts ===
 type M = { p: string };
 >M : Symbol(M, Decl(substituteReturnTypeSatisfiesConstraint.ts, 0, 0))
 >p : Symbol(p, Decl(substituteReturnTypeSatisfiesConstraint.ts, 0, 10))

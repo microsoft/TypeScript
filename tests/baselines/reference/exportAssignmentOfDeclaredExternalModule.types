@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exportAssignmentOfDeclaredExternalModule_1.ts ===
+//// [tests/cases/compiler/exportAssignmentOfDeclaredExternalModule.ts] ////
+
+=== exportAssignmentOfDeclaredExternalModule_1.ts ===
 ///<reference path='exportAssignmentOfDeclaredExternalModule_0.ts'/>
 import Sammy = require('./exportAssignmentOfDeclaredExternalModule_0');
 >Sammy : any
@@ -26,7 +28,7 @@ var b = z(); // call signature - no error
 >z() : number
 >z : Sammy
 
-=== tests/cases/compiler/exportAssignmentOfDeclaredExternalModule_0.ts ===
+=== exportAssignmentOfDeclaredExternalModule_0.ts ===
 interface Sammy {
     new (): any; // a constructor signature
         (): number; // a 0 arg call signature

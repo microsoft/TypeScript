@@ -1,11 +1,13 @@
-=== tests/cases/compiler/b.d.ts ===
+//// [tests/cases/compiler/allowSyntheticDefaultImports9.ts] ////
+
+=== b.d.ts ===
 export function foo();
 >foo : Symbol(foo, Decl(b.d.ts, 0, 0))
 
 export function bar();
 >bar : Symbol(bar, Decl(b.d.ts, 0, 22))
 
-=== tests/cases/compiler/a.ts ===
+=== a.ts ===
 import { default as Foo } from "./b";
 >default : Symbol(Foo, Decl(b.d.ts, 0, 0))
 >Foo : Symbol(Foo, Decl(a.ts, 0, 8))

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/SuperExpressions/parserSuperExpression4.ts] ////
+
 //// [parserSuperExpression4.ts]
 class C {
     private foo() {

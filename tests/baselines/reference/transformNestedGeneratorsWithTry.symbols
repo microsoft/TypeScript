@@ -1,4 +1,6 @@
-=== tests/cases/compiler/main.ts ===
+//// [tests/cases/compiler/transformNestedGeneratorsWithTry.ts] ////
+
+=== main.ts ===
 // https://github.com/Microsoft/TypeScript/issues/11177
 import * as Bluebird from 'bluebird';
 >Bluebird : Symbol(Bluebird, Decl(main.ts, 1, 6))
@@ -31,7 +33,7 @@ async function a(): Bluebird<void> {
 >error : Symbol(error, Decl(main.ts, 11, 11))
 }
 
-=== tests/cases/compiler/bluebird.d.ts ===
+=== bluebird.d.ts ===
 declare module "bluebird" {
 >"bluebird" : Symbol("bluebird", Decl(bluebird.d.ts, 0, 0))
 

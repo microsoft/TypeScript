@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/errorForConflictingExportEqualsValue.ts] ////
+
 //// [a.ts]
 export var x;
 export = x;

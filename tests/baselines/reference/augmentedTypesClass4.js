@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/augmentedTypesClass4.ts] ////
+
 //// [augmentedTypesClass4.ts]
 //// class then class
 class c3 { public foo() { } } // error

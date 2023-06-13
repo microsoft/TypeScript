@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/blockScopedFunctionDeclarationInStrictModule.ts] ////
+
 //// [blockScopedFunctionDeclarationInStrictModule.ts]
 if (true) {
     function foo() { }

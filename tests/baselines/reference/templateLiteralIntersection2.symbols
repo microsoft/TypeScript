@@ -1,4 +1,6 @@
-=== tests/cases/compiler/templateLiteralIntersection2.ts ===
+//// [tests/cases/compiler/templateLiteralIntersection2.ts] ////
+
+=== templateLiteralIntersection2.ts ===
 type Path = string & { _pathBrand: any };
 >Path : Symbol(Path, Decl(templateLiteralIntersection2.ts, 0, 0))
 >_pathBrand : Symbol(_pathBrand, Decl(templateLiteralIntersection2.ts, 0, 22))

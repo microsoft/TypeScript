@@ -1,4 +1,6 @@
-=== tests/cases/compiler/quickIntersectionCheckCorrectlyCachesErrors.tsx ===
+//// [tests/cases/compiler/quickIntersectionCheckCorrectlyCachesErrors.ts] ////
+
+=== quickIntersectionCheckCorrectlyCachesErrors.tsx ===
 interface F<P> {
 >F : Symbol(F, Decl(quickIntersectionCheckCorrectlyCachesErrors.tsx, 0, 0))
 >P : Symbol(P, Decl(quickIntersectionCheckCorrectlyCachesErrors.tsx, 0, 12))

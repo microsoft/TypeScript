@@ -1,8 +1,8 @@
-tests/cases/compiler/a.js(1,9): error TS1005: ')' expected.
-tests/cases/compiler/a.js(1,13): error TS1005: ';' expected.
+a.js(1,9): error TS1005: ')' expected.
+a.js(1,13): error TS1005: ';' expected.
 
 
-==== tests/cases/compiler/a.js (2 errors) ====
+==== a.js (2 errors) ====
     ( y = 1 ; 2 )
             ~
 !!! error TS1005: ')' expected.

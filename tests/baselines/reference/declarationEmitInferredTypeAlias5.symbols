@@ -1,4 +1,6 @@
-=== tests/cases/compiler/0.ts ===
+//// [tests/cases/compiler/declarationEmitInferredTypeAlias5.ts] ////
+
+=== 0.ts ===
 export type Data = string | boolean;
 >Data : Symbol(Data, Decl(0.ts, 0, 0))
 
@@ -6,7 +8,7 @@ let obj: Data = true;
 >obj : Symbol(obj, Decl(0.ts, 1, 3))
 >Data : Symbol(Data, Decl(0.ts, 0, 0))
 
-=== tests/cases/compiler/1.ts ===
+=== 1.ts ===
 import * as Z from "./0"
 >Z : Symbol(Z, Decl(1.ts, 0, 6))
 

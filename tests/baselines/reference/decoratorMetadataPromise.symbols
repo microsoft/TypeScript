@@ -1,4 +1,6 @@
-=== tests/cases/compiler/decoratorMetadataPromise.ts ===
+//// [tests/cases/compiler/decoratorMetadataPromise.ts] ////
+
+=== decoratorMetadataPromise.ts ===
 declare const decorator: MethodDecorator;
 >decorator : Symbol(decorator, Decl(decoratorMetadataPromise.ts, 0, 13))
 >MethodDecorator : Symbol(MethodDecorator, Decl(lib.decorators.legacy.d.ts, --, --))

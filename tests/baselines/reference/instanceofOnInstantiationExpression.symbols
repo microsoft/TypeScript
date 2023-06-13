@@ -1,4 +1,6 @@
-=== tests/cases/compiler/instanceofOnInstantiationExpression.ts ===
+//// [tests/cases/compiler/instanceofOnInstantiationExpression.ts] ////
+
+=== instanceofOnInstantiationExpression.ts ===
 declare class Box<T> {
 >Box : Symbol(Box, Decl(instanceofOnInstantiationExpression.ts, 0, 0))
 >T : Symbol(T, Decl(instanceofOnInstantiationExpression.ts, 0, 18))

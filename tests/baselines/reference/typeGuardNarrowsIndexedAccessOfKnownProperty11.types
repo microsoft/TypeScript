@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty11.ts ===
+//// [tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty11.ts] ////
+
+=== typeGuardNarrowsIndexedAccessOfKnownProperty11.ts ===
 enum E { A, B }
 >E : E
 >A : E.A

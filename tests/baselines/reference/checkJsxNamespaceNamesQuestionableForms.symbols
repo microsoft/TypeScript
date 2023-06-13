@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/checkJsxNamespaceNamesQuestionableForms.tsx ===
+//// [tests/cases/conformance/jsx/checkJsxNamespaceNamesQuestionableForms.tsx] ////
+
+=== checkJsxNamespaceNamesQuestionableForms.tsx ===
 declare namespace JSX {
 >JSX : Symbol(JSX, Decl(checkJsxNamespaceNamesQuestionableForms.tsx, 0, 0))
 

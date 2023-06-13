@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/override/override6.ts] ////
+
 //// [override6.ts]
 class B {
     public baz: number = 1;

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates.ts] ////
+
 //// [mergedInterfacesWithInheritedPrivates.ts]
 class C {
     private x: number;

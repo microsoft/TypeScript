@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericCallbacksAndClassHierarchy.ts] ////
+
 //// [genericCallbacksAndClassHierarchy.ts]
 module M {
     export interface I<T> {
