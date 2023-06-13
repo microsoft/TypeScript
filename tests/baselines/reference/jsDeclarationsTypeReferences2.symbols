@@ -1,10 +1,12 @@
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsTypeReferences2.ts] ////
+
+=== index.js ===
 const{ a, m } = require("./something").o;
 >a : Symbol(a, Decl(index.js, 0, 6))
 >m : Symbol(m, Decl(index.js, 0, 9))
 >require("./something").o : Symbol(o, Decl(something.ts, 0, 12))
 >require : Symbol(require)
->"./something" : Symbol("tests/cases/conformance/jsdoc/declarations/something", Decl(something.ts, 0, 0))
+>"./something" : Symbol("something", Decl(something.ts, 0, 0))
 >o : Symbol(o, Decl(something.ts, 0, 12))
 
 const thing = a + m
@@ -22,7 +24,7 @@ module.exports = {
 
 };
 
-=== tests/cases/conformance/jsdoc/declarations/something.ts ===
+=== something.ts ===
 export const o = {
 >o : Symbol(o, Decl(something.ts, 0, 12))
 

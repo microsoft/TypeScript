@@ -1,4 +1,6 @@
-=== tests/cases/compiler/superCallFromClassThatDerivesFromGenericTypeButWithIncorrectNumberOfTypeArguments1.ts ===
+//// [tests/cases/compiler/superCallFromClassThatDerivesFromGenericTypeButWithIncorrectNumberOfTypeArguments1.ts] ////
+
+=== superCallFromClassThatDerivesFromGenericTypeButWithIncorrectNumberOfTypeArguments1.ts ===
 class A<T1, T2> {
 >A : Symbol(A, Decl(superCallFromClassThatDerivesFromGenericTypeButWithIncorrectNumberOfTypeArguments1.ts, 0, 0))
 >T1 : Symbol(T1, Decl(superCallFromClassThatDerivesFromGenericTypeButWithIncorrectNumberOfTypeArguments1.ts, 0, 8))

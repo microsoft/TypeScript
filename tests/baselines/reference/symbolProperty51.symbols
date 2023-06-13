@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/Symbols/symbolProperty51.ts ===
+//// [tests/cases/conformance/es6/Symbols/symbolProperty51.ts] ////
+
+=== symbolProperty51.ts ===
 module M {
 >M : Symbol(M, Decl(symbolProperty51.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentLHSCanBeAssigned.ts ===
+//// [tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentLHSCanBeAssigned.ts] ////
+
+=== compoundAdditionAssignmentLHSCanBeAssigned.ts ===
 enum E { a, b }
 >E : Symbol(E, Decl(compoundAdditionAssignmentLHSCanBeAssigned.ts, 0, 0))
 >a : Symbol(E.a, Decl(compoundAdditionAssignmentLHSCanBeAssigned.ts, 0, 8))

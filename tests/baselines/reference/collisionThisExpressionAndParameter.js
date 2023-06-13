@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/collisionThisExpressionAndParameter.ts] ////
+
 //// [collisionThisExpressionAndParameter.ts]
 class Foo {
     x() {

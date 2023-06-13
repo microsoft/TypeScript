@@ -1,4 +1,6 @@
-=== tests/cases/compiler/aliasInaccessibleModule.ts ===
+//// [tests/cases/compiler/aliasInaccessibleModule.ts] ////
+
+=== aliasInaccessibleModule.ts ===
 module M {
 >M : Symbol(M, Decl(aliasInaccessibleModule.ts, 0, 0))
 

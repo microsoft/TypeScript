@@ -1,11 +1,11 @@
-tests/cases/compiler/objectLiteralWithSemicolons5.ts(1,20): error TS1005: ',' expected.
-tests/cases/compiler/objectLiteralWithSemicolons5.ts(1,25): error TS2304: Cannot find name 'b'.
-tests/cases/compiler/objectLiteralWithSemicolons5.ts(1,26): error TS1005: ',' expected.
-tests/cases/compiler/objectLiteralWithSemicolons5.ts(1,32): error TS2378: A 'get' accessor must return a value.
-tests/cases/compiler/objectLiteralWithSemicolons5.ts(1,41): error TS1005: ',' expected.
+objectLiteralWithSemicolons5.ts(1,20): error TS1005: ',' expected.
+objectLiteralWithSemicolons5.ts(1,25): error TS2304: Cannot find name 'b'.
+objectLiteralWithSemicolons5.ts(1,26): error TS1005: ',' expected.
+objectLiteralWithSemicolons5.ts(1,32): error TS2378: A 'get' accessor must return a value.
+objectLiteralWithSemicolons5.ts(1,41): error TS1005: ',' expected.
 
 
-==== tests/cases/compiler/objectLiteralWithSemicolons5.ts (5 errors) ====
+==== objectLiteralWithSemicolons5.ts (5 errors) ====
     var v = { foo() { }; a: b; get baz() { }; }
                        ~
 !!! error TS1005: ',' expected.

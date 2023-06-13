@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/switchStatements/switchStatements.ts] ////
+
 //// [switchStatements.ts]
 module M {
     export function fn(x: number) {

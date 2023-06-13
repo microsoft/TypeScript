@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constructorParametersThatShadowExternalNamesInVariableDeclarations.ts ===
+//// [tests/cases/compiler/constructorParametersThatShadowExternalNamesInVariableDeclarations.ts] ////
+
+=== constructorParametersThatShadowExternalNamesInVariableDeclarations.ts ===
 var x = 1;
 >x : Symbol(x, Decl(constructorParametersThatShadowExternalNamesInVariableDeclarations.ts, 0, 3))
 

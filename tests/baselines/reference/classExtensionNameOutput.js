@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classExtensionNameOutput.ts] ////
+
 //// [classExtensionNameOutput.ts]
 class A {}
 if (true) {

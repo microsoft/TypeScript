@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/expandoFunctionContextualTypesNoValue.ts] ////
+
 //// [expandoFunctionContextualTypesNoValue.ts]
 // GH #38532
 import Foo from "blah";

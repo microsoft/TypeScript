@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxReactEmitSpreadAttribute.ts] ////
+
 //// [test.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 

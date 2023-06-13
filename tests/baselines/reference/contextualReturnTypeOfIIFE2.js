@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextualReturnTypeOfIIFE2.ts] ////
+
 //// [contextualReturnTypeOfIIFE2.ts]
 declare namespace app {
   function foo(): void;

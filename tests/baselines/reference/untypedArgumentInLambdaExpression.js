@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/untypedArgumentInLambdaExpression.ts] ////
+
 //// [untypedArgumentInLambdaExpression.ts]
 declare function f(fn: (a: string) => string);
  

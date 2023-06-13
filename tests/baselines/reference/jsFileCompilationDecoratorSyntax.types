@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.js ===
+//// [tests/cases/compiler/jsFileCompilationDecoratorSyntax.ts] ////
+
+=== a.js ===
 @internal class C { }
 >internal : error
 >C : C

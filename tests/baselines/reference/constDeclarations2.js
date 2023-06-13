@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constDeclarations2.ts] ////
+
 //// [constDeclarations2.ts]
 // No error
 module M {

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/conditionallyDuplicateOverloadsCausedByOverloadResolution.ts ===
+//// [tests/cases/compiler/conditionallyDuplicateOverloadsCausedByOverloadResolution.ts] ////
+
+=== conditionallyDuplicateOverloadsCausedByOverloadResolution.ts ===
 declare function foo(func: (x: string, y: string) => any): boolean;
 >foo : { (func: (x: string, y: string) => any): boolean; (func: (x: string, y: number) => any): string; }
 >func : (x: string, y: string) => any

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/internalAliasClassInsideLocalModuleWithoutExport.ts] ////
+
 //// [internalAliasClassInsideLocalModuleWithoutExport.ts]
 export module x {
     export class c {

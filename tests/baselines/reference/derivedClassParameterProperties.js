@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassParameterProperties.ts] ////
+
 //// [derivedClassParameterProperties.ts]
 // ordering of super calls in derived constructors matters depending on other class contents
 

@@ -1,13 +1,13 @@
-tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorInvalidOperations.ts(5,20): error TS1005: ',' expected.
-tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorInvalidOperations.ts(5,26): error TS2703: The operand of a 'delete' operator must be a property reference.
-tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorInvalidOperations.ts(5,27): error TS1109: Expression expected.
-tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorInvalidOperations.ts(8,22): error TS2703: The operand of a 'delete' operator must be a property reference.
-tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorInvalidOperations.ts(8,23): error TS1109: Expression expected.
-tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorInvalidOperations.ts(13,16): error TS1102: 'delete' cannot be called on an identifier in strict mode.
-tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorInvalidOperations.ts(13,16): error TS2703: The operand of a 'delete' operator must be a property reference.
+deleteOperatorInvalidOperations.ts(5,20): error TS1005: ',' expected.
+deleteOperatorInvalidOperations.ts(5,26): error TS2703: The operand of a 'delete' operator must be a property reference.
+deleteOperatorInvalidOperations.ts(5,27): error TS1109: Expression expected.
+deleteOperatorInvalidOperations.ts(8,22): error TS2703: The operand of a 'delete' operator must be a property reference.
+deleteOperatorInvalidOperations.ts(8,23): error TS1109: Expression expected.
+deleteOperatorInvalidOperations.ts(13,16): error TS1102: 'delete' cannot be called on an identifier in strict mode.
+deleteOperatorInvalidOperations.ts(13,16): error TS2703: The operand of a 'delete' operator must be a property reference.
 
 
-==== tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorInvalidOperations.ts (7 errors) ====
+==== deleteOperatorInvalidOperations.ts (7 errors) ====
     // Unary operator delete
     var ANY;
     

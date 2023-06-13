@@ -1,17 +1,17 @@
-tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts(2,10): error TS2678: Type '"a"' is not comparable to type '""'.
-tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts(8,10): error TS2678: Type '"a"' is not comparable to type '""'.
-tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts(15,10): error TS2678: Type '"a"' is not comparable to type '""'.
-tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts(21,10): error TS2678: Type '"a"' is not comparable to type '""'.
-tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts(24,18): error TS2678: Type '"a"' is not comparable to type '""'.
-tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts(30,10): error TS2678: Type '"a"' is not comparable to type '""'.
-tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts(33,18): error TS2678: Type '"a"' is not comparable to type '""'.
-tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts(40,10): error TS2678: Type '"a"' is not comparable to type '""'.
-tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts(42,18): error TS2678: Type '"a"' is not comparable to type '""'.
-tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts(44,26): error TS2678: Type '"a"' is not comparable to type '""'.
-tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts(48,34): error TS2678: Type '"a"' is not comparable to type '""'.
+switchBreakStatements.ts(2,10): error TS2678: Type '"a"' is not comparable to type '""'.
+switchBreakStatements.ts(8,10): error TS2678: Type '"a"' is not comparable to type '""'.
+switchBreakStatements.ts(15,10): error TS2678: Type '"a"' is not comparable to type '""'.
+switchBreakStatements.ts(21,10): error TS2678: Type '"a"' is not comparable to type '""'.
+switchBreakStatements.ts(24,18): error TS2678: Type '"a"' is not comparable to type '""'.
+switchBreakStatements.ts(30,10): error TS2678: Type '"a"' is not comparable to type '""'.
+switchBreakStatements.ts(33,18): error TS2678: Type '"a"' is not comparable to type '""'.
+switchBreakStatements.ts(40,10): error TS2678: Type '"a"' is not comparable to type '""'.
+switchBreakStatements.ts(42,18): error TS2678: Type '"a"' is not comparable to type '""'.
+switchBreakStatements.ts(44,26): error TS2678: Type '"a"' is not comparable to type '""'.
+switchBreakStatements.ts(48,34): error TS2678: Type '"a"' is not comparable to type '""'.
 
 
-==== tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts (11 errors) ====
+==== switchBreakStatements.ts (11 errors) ====
     switch ('') {
         case 'a':
              ~~~

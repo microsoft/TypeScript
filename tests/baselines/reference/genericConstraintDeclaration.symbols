@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericConstraintDeclaration.ts ===
+//// [tests/cases/compiler/genericConstraintDeclaration.ts] ////
+
+=== genericConstraintDeclaration.ts ===
 class List<T extends {}>{
 >List : Symbol(List, Decl(genericConstraintDeclaration.ts, 0, 0))
 >T : Symbol(T, Decl(genericConstraintDeclaration.ts, 0, 11))

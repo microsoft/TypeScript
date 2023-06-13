@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/union/unionTypeIndexSignature.ts] ////
+
 //// [unionTypeIndexSignature.ts]
 var numOrDate: number | Date;
 var anyVar: number;

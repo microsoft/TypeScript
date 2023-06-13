@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/typedefOnSemicolonClassElement.ts] ////
+
 //// [typedefOnSemicolonClassElement.js]
 export class Preferences {
   /** @typedef {string} A */

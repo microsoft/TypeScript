@@ -66,6 +66,7 @@
         "es2022.string",
         "es2022.regexp",
         "es2023.array",
+        "es2023.collection",
         "esnext.intl",
         "decorators",
         "decorators.legacy",

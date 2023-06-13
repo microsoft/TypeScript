@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleDuplicateIdentifiers.ts] ////
+
 //// [moduleDuplicateIdentifiers.ts]
 export var Foo = 2;
 export var Foo = 42; // Should error

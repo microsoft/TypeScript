@@ -1,13 +1,15 @@
-=== tests/cases/conformance/declarationEmit/button.ts ===
+//// [tests/cases/conformance/declarationEmit/typeofImportTypeOnlyExport.ts] ////
+
+=== button.ts ===
 import {classMap} from './lit.js';
->classMap : () => { directive: typeof import("tests/cases/conformance/declarationEmit/lit").ClassMapDirective; }
+>classMap : () => { directive: typeof import("lit").ClassMapDirective; }
 
 export const c = classMap();
->c : { directive: typeof import("tests/cases/conformance/declarationEmit/lit").ClassMapDirective; }
->classMap() : { directive: typeof import("tests/cases/conformance/declarationEmit/lit").ClassMapDirective; }
->classMap : () => { directive: typeof import("tests/cases/conformance/declarationEmit/lit").ClassMapDirective; }
+>c : { directive: typeof import("lit").ClassMapDirective; }
+>classMap() : { directive: typeof import("lit").ClassMapDirective; }
+>classMap : () => { directive: typeof import("lit").ClassMapDirective; }
 
-=== tests/cases/conformance/declarationEmit/lit.ts ===
+=== lit.ts ===
 class ClassMapDirective {}
 >ClassMapDirective : ClassMapDirective
 

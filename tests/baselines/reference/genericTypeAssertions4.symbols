@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericTypeAssertions4.ts ===
+//// [tests/cases/compiler/genericTypeAssertions4.ts] ////
+
+=== genericTypeAssertions4.ts ===
 class A {
 >A : Symbol(A, Decl(genericTypeAssertions4.ts, 0, 0))
 

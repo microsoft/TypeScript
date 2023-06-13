@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/useUnknownInCatchVariables01.ts] ////
+
 //// [useUnknownInCatchVariables01.ts]
 try {
     // ...

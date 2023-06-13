@@ -1,9 +1,11 @@
-=== tests/cases/compiler/base.d.ts ===
+//// [tests/cases/compiler/expressionTypeNodeShouldError.ts] ////
+
+=== base.d.ts ===
 declare const x: "foo".charCodeAt(0);
 >x : Symbol(x, Decl(base.d.ts, 0, 13))
 >charCodeAt : Symbol(charCodeAt, Decl(base.d.ts, 0, 23))
 
-=== tests/cases/compiler/string.ts ===
+=== string.ts ===
 interface String {
 >String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(string.ts, 0, 0))
 
@@ -41,7 +43,7 @@ type ItemType = "".typeof(nodes.item(0));
 >nodes : Symbol(nodes, Decl(string.ts, 10, 5))
 >item : Symbol(HTMLCollectionOf.item, Decl(lib.dom.d.ts, --, --))
 
-=== tests/cases/compiler/number.ts ===
+=== number.ts ===
 interface Number {
 >Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(number.ts, 0, 0))
 
@@ -79,7 +81,7 @@ type ItemType2 = 4..typeof(nodes.item(0));
 >nodes : Symbol(nodes, Decl(string.ts, 10, 5))
 >item : Symbol(HTMLCollectionOf.item, Decl(lib.dom.d.ts, --, --))
 
-=== tests/cases/compiler/boolean.ts ===
+=== boolean.ts ===
 interface Boolean {
 >Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(boolean.ts, 0, 0))
 

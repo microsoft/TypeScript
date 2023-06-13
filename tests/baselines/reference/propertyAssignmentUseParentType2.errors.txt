@@ -1,9 +1,9 @@
-tests/cases/conformance/salsa/propertyAssignmentUseParentType2.js(11,14): error TS2322: Type '{ (): boolean; nuo: 1000; }' is not assignable to type '{ (): boolean; nuo: 789; }'.
+propertyAssignmentUseParentType2.js(11,14): error TS2322: Type '{ (): boolean; nuo: 1000; }' is not assignable to type '{ (): boolean; nuo: 789; }'.
   Types of property 'nuo' are incompatible.
     Type '1000' is not assignable to type '789'.
 
 
-==== tests/cases/conformance/salsa/propertyAssignmentUseParentType2.js (1 errors) ====
+==== propertyAssignmentUseParentType2.js (1 errors) ====
     /** @type {{ (): boolean; nuo: 789 }} */
     export const inlined = () => true
     inlined.nuo = 789

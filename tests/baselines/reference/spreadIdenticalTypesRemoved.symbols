@@ -1,4 +1,6 @@
-=== tests/cases/compiler/spreadIdenticalTypesRemoved.ts ===
+//// [tests/cases/compiler/spreadIdenticalTypesRemoved.ts] ////
+
+=== spreadIdenticalTypesRemoved.ts ===
 interface Animal {
 >Animal : Symbol(Animal, Decl(spreadIdenticalTypesRemoved.ts, 0, 0))
 

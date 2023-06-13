@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/unaryOperators/plusOperator/plusOperatorInvalidOperations.ts ===
+//// [tests/cases/conformance/expressions/unaryOperators/plusOperator/plusOperatorInvalidOperations.ts] ////
+
+=== plusOperatorInvalidOperations.ts ===
 // Unary operator +
 var b;
 >b : Symbol(b, Decl(plusOperatorInvalidOperations.ts, 1, 3))

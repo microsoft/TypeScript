@@ -849,8 +849,12 @@ export function getTextSpanOfEntry(entry: Entry) {
         getTextSpan(entry.node, entry.node.getSourceFile());
 }
 
-/** A node is considered a writeAccess iff it is a name of a declaration or a target of an assignment */
-function isWriteAccessForReference(node: Node): boolean {
+/**
+ * A node is considered a writeAccess iff it is a name of a declaration or a target of an assignment.
+ *
+ * @internal
+ */
+export function isWriteAccessForReference(node: Node): boolean {
     const decl = getDeclarationFromName(node);
     return !!decl && declarationIsWriteAccess(decl) || node.kind === SyntaxKind.DefaultKeyword || isWriteAccess(node);
 }
@@ -1725,7 +1729,10 @@ export namespace Core {
     }
 
     function getPossibleSymbolReferenceNodes(sourceFile: SourceFile, symbolName: string, container: Node = sourceFile): readonly Node[] {
-        return getPossibleSymbolReferencePositions(sourceFile, symbolName, container).map(pos => getTouchingPropertyName(sourceFile, pos));
+        return mapDefined(getPossibleSymbolReferencePositions(sourceFile, symbolName, container), pos => {
+            const referenceLocation = getTouchingPropertyName(sourceFile, pos);
+            return referenceLocation === sourceFile ? undefined : referenceLocation;
+        });
     }
 
     function getPossibleSymbolReferencePositions(sourceFile: SourceFile, symbolName: string, container: Node = sourceFile): readonly number[] {

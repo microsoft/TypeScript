@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts ===
+//// [tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts] ////
+
+=== overloadresolutionWithConstraintCheckingDeferred.ts ===
 interface A { x }
 >x : any
 

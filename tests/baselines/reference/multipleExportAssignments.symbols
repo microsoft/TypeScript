@@ -1,4 +1,6 @@
-=== tests/cases/compiler/multipleExportAssignments.ts ===
+//// [tests/cases/compiler/multipleExportAssignments.ts] ////
+
+=== multipleExportAssignments.ts ===
 interface connectModule {
 >connectModule : Symbol(connectModule, Decl(multipleExportAssignments.ts, 0, 0))
 

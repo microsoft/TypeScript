@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeParameters/typeParameterLists/typeParametersAvailableInNestedScope3.ts] ////
+
 //// [typeParametersAvailableInNestedScope3.ts]
 function foo<T>(v: T) {
     function a<T>(a: T) { return a; }

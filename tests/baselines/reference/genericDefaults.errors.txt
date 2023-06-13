@@ -1,17 +1,17 @@
-tests/cases/compiler/genericDefaults.ts(44,26): error TS2744: Type parameter defaults can only reference previously declared type parameters.
-tests/cases/compiler/genericDefaults.ts(237,26): error TS2744: Type parameter defaults can only reference previously declared type parameters.
-tests/cases/compiler/genericDefaults.ts(254,29): error TS2744: Type parameter defaults can only reference previously declared type parameters.
-tests/cases/compiler/genericDefaults.ts(277,26): error TS2744: Type parameter defaults can only reference previously declared type parameters.
-tests/cases/compiler/genericDefaults.ts(292,29): error TS2744: Type parameter defaults can only reference previously declared type parameters.
-tests/cases/compiler/genericDefaults.ts(314,26): error TS2744: Type parameter defaults can only reference previously declared type parameters.
-tests/cases/compiler/genericDefaults.ts(332,29): error TS2744: Type parameter defaults can only reference previously declared type parameters.
-tests/cases/compiler/genericDefaults.ts(357,26): error TS2744: Type parameter defaults can only reference previously declared type parameters.
-tests/cases/compiler/genericDefaults.ts(375,29): error TS2744: Type parameter defaults can only reference previously declared type parameters.
-tests/cases/compiler/genericDefaults.ts(423,19): error TS2744: Type parameter defaults can only reference previously declared type parameters.
-tests/cases/compiler/genericDefaults.ts(427,19): error TS2744: Type parameter defaults can only reference previously declared type parameters.
+genericDefaults.ts(44,26): error TS2744: Type parameter defaults can only reference previously declared type parameters.
+genericDefaults.ts(237,26): error TS2744: Type parameter defaults can only reference previously declared type parameters.
+genericDefaults.ts(254,29): error TS2744: Type parameter defaults can only reference previously declared type parameters.
+genericDefaults.ts(277,26): error TS2744: Type parameter defaults can only reference previously declared type parameters.
+genericDefaults.ts(292,29): error TS2744: Type parameter defaults can only reference previously declared type parameters.
+genericDefaults.ts(314,26): error TS2744: Type parameter defaults can only reference previously declared type parameters.
+genericDefaults.ts(332,29): error TS2744: Type parameter defaults can only reference previously declared type parameters.
+genericDefaults.ts(357,26): error TS2744: Type parameter defaults can only reference previously declared type parameters.
+genericDefaults.ts(375,29): error TS2744: Type parameter defaults can only reference previously declared type parameters.
+genericDefaults.ts(423,19): error TS2744: Type parameter defaults can only reference previously declared type parameters.
+genericDefaults.ts(427,19): error TS2744: Type parameter defaults can only reference previously declared type parameters.
 
 
-==== tests/cases/compiler/genericDefaults.ts (11 errors) ====
+==== genericDefaults.ts (11 errors) ====
     interface A { a: number; }
     interface B { b: number; }
     interface C { c: number; }

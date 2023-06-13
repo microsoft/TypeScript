@@ -1,11 +1,11 @@
-tests/cases/compiler/recursiveClassReferenceTest.ts(16,19): error TS2304: Cannot find name 'Element'.
-tests/cases/compiler/recursiveClassReferenceTest.ts(56,11): error TS2663: Cannot find name 'domNode'. Did you mean the instance member 'this.domNode'?
-tests/cases/compiler/recursiveClassReferenceTest.ts(88,36): error TS2663: Cannot find name 'mode'. Did you mean the instance member 'this.mode'?
-tests/cases/compiler/recursiveClassReferenceTest.ts(95,21): error TS2345: Argument of type 'Window' is not assignable to parameter of type 'IMode'.
+recursiveClassReferenceTest.ts(16,19): error TS2304: Cannot find name 'Element'.
+recursiveClassReferenceTest.ts(56,11): error TS2663: Cannot find name 'domNode'. Did you mean the instance member 'this.domNode'?
+recursiveClassReferenceTest.ts(88,36): error TS2663: Cannot find name 'mode'. Did you mean the instance member 'this.mode'?
+recursiveClassReferenceTest.ts(95,21): error TS2345: Argument of type 'Window' is not assignable to parameter of type 'IMode'.
   Property 'getInitialState' is missing in type 'Window' but required in type 'IMode'.
 
 
-==== tests/cases/compiler/recursiveClassReferenceTest.ts (4 errors) ====
+==== recursiveClassReferenceTest.ts (4 errors) ====
     // Scenario 1: Test reqursive function call with "this" parameter
     // Scenario 2: Test recursive function call with cast and "this" parameter
     
@@ -110,7 +110,7 @@ tests/cases/compiler/recursiveClassReferenceTest.ts(95,21): error TS2345: Argume
     			                 ~~~~
 !!! error TS2345: Argument of type 'Window' is not assignable to parameter of type 'IMode'.
 !!! error TS2345:   Property 'getInitialState' is missing in type 'Window' but required in type 'IMode'.
-!!! related TS2728 tests/cases/compiler/recursiveClassReferenceTest.ts:66:19: 'getInitialState' is declared here.
+!!! related TS2728 recursiveClassReferenceTest.ts:66:19: 'getInitialState' is declared here.
     		}
     
     

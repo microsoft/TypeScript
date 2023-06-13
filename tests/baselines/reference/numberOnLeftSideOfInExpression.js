@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/numberOnLeftSideOfInExpression.ts] ////
+
 //// [numberOnLeftSideOfInExpression.ts]
 var left: number;
 var right: any;

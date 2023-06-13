@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitAnyParametersInClass.ts] ////
+
 //// [noImplicitAnyParametersInClass.ts]
 class C {
     // No implicit-'any' errors.

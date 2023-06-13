@@ -1,9 +1,9 @@
-tests/cases/compiler/Api.ts(6,5): error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
-tests/cases/compiler/Api.ts(7,5): error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
-tests/cases/compiler/Api.ts(8,5): error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
+Api.ts(6,5): error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
+Api.ts(7,5): error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
+Api.ts(8,5): error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
 
 
-==== tests/cases/compiler/http-client.ts (0 errors) ====
+==== http-client.ts (0 errors) ====
     type TPromise<ResolveType, RejectType = any> = Omit<Promise<ResolveType>, "then" | "catch"> & {
         then<TResult1 = ResolveType, TResult2 = never>(
             onfulfilled?: ((value: ResolveType) => TResult1 | PromiseLike<TResult1>) | undefined | null,
@@ -24,7 +24,7 @@ tests/cases/compiler/Api.ts(8,5): error TS7056: The inferred type of this node e
             return '' as any;
         };
     }
-==== tests/cases/compiler/Api.ts (3 errors) ====
+==== Api.ts (3 errors) ====
     import { HttpClient } from "./http-client";
     
     export class Api<SecurityDataType = unknown> {

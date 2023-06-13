@@ -1,7 +1,5 @@
 /// <reference path='fourslash.ts' />
 
-// for readability 
-
 // @Filename: /customElements.tsx
 //// const jsx = <fbt:enum knownProp="accepted"
 ////     unknownProp="rejected">

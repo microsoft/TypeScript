@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/checkJsxNamespaceNamesQuestionableForms.tsx] ////
+
 //// [checkJsxNamespaceNamesQuestionableForms.tsx]
 declare namespace JSX {
     interface IntrinsicElements {

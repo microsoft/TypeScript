@@ -1,8 +1,8 @@
-tests/cases/compiler/contextualTyping.ts(189,18): error TS2384: Overload signatures must all be ambient or non-ambient.
-tests/cases/compiler/contextualTyping.ts(223,5): error TS2741: Property 'x' is missing in type '{}' but required in type 'B'.
+contextualTyping.ts(189,18): error TS2384: Overload signatures must all be ambient or non-ambient.
+contextualTyping.ts(223,5): error TS2741: Property 'x' is missing in type '{}' but required in type 'B'.
 
 
-==== tests/cases/compiler/contextualTyping.ts (2 errors) ====
+==== contextualTyping.ts (2 errors) ====
     // DEFAULT INTERFACES
     interface IFoo {
         n: number;
@@ -230,5 +230,5 @@ tests/cases/compiler/contextualTyping.ts(223,5): error TS2741: Property 'x' is m
     var x: B = { };
         ~
 !!! error TS2741: Property 'x' is missing in type '{}' but required in type 'B'.
-!!! related TS2728 tests/cases/compiler/contextualTyping.ts:221:15: 'x' is declared here.
+!!! related TS2728 contextualTyping.ts:221:15: 'x' is declared here.
     

@@ -1,37 +1,37 @@
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(13,21): error TS2339: Property 'x' does not exist on type '{}'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(16,46): error TS2322: Type 'string | undefined' is not assignable to type 'string | number'.
+objectSpreadNegative.ts(13,21): error TS2339: Property 'x' does not exist on type '{}'.
+objectSpreadNegative.ts(16,46): error TS2322: Type 'string | undefined' is not assignable to type 'string | number'.
   Type 'undefined' is not assignable to type 'string | number'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(16,65): error TS2322: Type 'number | undefined' is not assignable to type 'string | number'.
+objectSpreadNegative.ts(16,65): error TS2322: Type 'number | undefined' is not assignable to type 'string | number'.
   Type 'undefined' is not assignable to type 'string | number'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(23,1): error TS2741: Property 'b' is missing in type '{ s: string; }' but required in type '{ s: string; b: boolean; }'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(25,1): error TS2741: Property 's' is missing in type '{ b: boolean; }' but required in type '{ s: string; b: boolean; }'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(28,20): error TS2783: 'b' is specified more than once, so this usage will be overwritten.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(28,36): error TS1117: An object literal cannot have multiple properties with the same name.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(28,53): error TS1117: An object literal cannot have multiple properties with the same name.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(32,7): error TS2783: 'b' is specified more than once, so this usage will be overwritten.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(37,7): error TS2783: 'b' is specified more than once, so this usage will be overwritten.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(39,14): error TS2783: 'b' is specified more than once, so this usage will be overwritten.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(41,53): error TS2783: 'd' is specified more than once, so this usage will be overwritten.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(43,7): error TS2783: 'a' is specified more than once, so this usage will be overwritten.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(45,37): error TS2783: 'b' is specified more than once, so this usage will be overwritten.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(48,19): error TS2698: Spread types may only be created from object types.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(49,19): error TS2698: Spread types may only be created from object types.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(50,20): error TS2698: Spread types may only be created from object types.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(52,20): error TS2698: Spread types may only be created from object types.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(54,19): error TS2698: Spread types may only be created from object types.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(59,1): error TS2349: This expression is not callable.
+objectSpreadNegative.ts(23,1): error TS2741: Property 'b' is missing in type '{ s: string; }' but required in type '{ s: string; b: boolean; }'.
+objectSpreadNegative.ts(25,1): error TS2741: Property 's' is missing in type '{ b: boolean; }' but required in type '{ s: string; b: boolean; }'.
+objectSpreadNegative.ts(28,20): error TS2783: 'b' is specified more than once, so this usage will be overwritten.
+objectSpreadNegative.ts(28,36): error TS1117: An object literal cannot have multiple properties with the same name.
+objectSpreadNegative.ts(28,53): error TS1117: An object literal cannot have multiple properties with the same name.
+objectSpreadNegative.ts(32,7): error TS2783: 'b' is specified more than once, so this usage will be overwritten.
+objectSpreadNegative.ts(37,7): error TS2783: 'b' is specified more than once, so this usage will be overwritten.
+objectSpreadNegative.ts(39,14): error TS2783: 'b' is specified more than once, so this usage will be overwritten.
+objectSpreadNegative.ts(41,53): error TS2783: 'd' is specified more than once, so this usage will be overwritten.
+objectSpreadNegative.ts(43,7): error TS2783: 'a' is specified more than once, so this usage will be overwritten.
+objectSpreadNegative.ts(45,37): error TS2783: 'b' is specified more than once, so this usage will be overwritten.
+objectSpreadNegative.ts(48,19): error TS2698: Spread types may only be created from object types.
+objectSpreadNegative.ts(49,19): error TS2698: Spread types may only be created from object types.
+objectSpreadNegative.ts(50,20): error TS2698: Spread types may only be created from object types.
+objectSpreadNegative.ts(52,20): error TS2698: Spread types may only be created from object types.
+objectSpreadNegative.ts(54,19): error TS2698: Spread types may only be created from object types.
+objectSpreadNegative.ts(59,1): error TS2349: This expression is not callable.
   Type '{}' has no call signatures.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(63,1): error TS2322: Type '12' is not assignable to type 'undefined'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(69,9): error TS2339: Property 'm' does not exist on type '{ p: number; }'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(74,11): error TS2339: Property 'a' does not exist on type '{}'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(79,37): error TS2322: Type 'string | null | undefined' is not assignable to type 'string'.
+objectSpreadNegative.ts(63,1): error TS2322: Type '12' is not assignable to type 'undefined'.
+objectSpreadNegative.ts(69,9): error TS2339: Property 'm' does not exist on type '{ p: number; }'.
+objectSpreadNegative.ts(74,11): error TS2339: Property 'a' does not exist on type '{}'.
+objectSpreadNegative.ts(79,37): error TS2322: Type 'string | null | undefined' is not assignable to type 'string'.
   Type 'undefined' is not assignable to type 'string'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(84,31): error TS2322: Type 'number' is not assignable to type 'boolean'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(84,38): error TS2322: Type 'string | undefined' is not assignable to type 'boolean'.
+objectSpreadNegative.ts(84,31): error TS2322: Type 'number' is not assignable to type 'boolean'.
+objectSpreadNegative.ts(84,38): error TS2322: Type 'string | undefined' is not assignable to type 'boolean'.
   Type 'undefined' is not assignable to type 'boolean'.
 
 
-==== tests/cases/conformance/types/spread/objectSpreadNegative.ts (26 errors) ====
+==== objectSpreadNegative.ts (26 errors) ====
     let o = { a: 1, b: 'no' }
     
     /// private propagates
@@ -53,11 +53,11 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(84,38): error TS232
                                                  ~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'string | undefined' is not assignable to type 'string | number'.
 !!! error TS2322:   Type 'undefined' is not assignable to type 'string | number'.
-!!! related TS6500 tests/cases/conformance/types/spread/objectSpreadNegative.ts:16:20: The expected type comes from property 'sn' which is declared here on type '{ sn: string | number; }'
+!!! related TS6500 objectSpreadNegative.ts:16:20: The expected type comes from property 'sn' which is declared here on type '{ sn: string | number; }'
                                                                     ~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'number | undefined' is not assignable to type 'string | number'.
 !!! error TS2322:   Type 'undefined' is not assignable to type 'string | number'.
-!!! related TS6500 tests/cases/conformance/types/spread/objectSpreadNegative.ts:16:20: The expected type comes from property 'sn' which is declared here on type '{ sn: string | number; }'
+!!! related TS6500 objectSpreadNegative.ts:16:20: The expected type comes from property 'sn' which is declared here on type '{ sn: string | number; }'
     // error, 'sn' is optional in source, required in target
     
     // assignability as target
@@ -67,18 +67,18 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(84,38): error TS232
     spread = { s: "foo" };  // error, missing 'b'
     ~~~~~~
 !!! error TS2741: Property 'b' is missing in type '{ s: string; }' but required in type '{ s: string; b: boolean; }'.
-!!! related TS2728 tests/cases/conformance/types/spread/objectSpreadNegative.ts:22:21: 'b' is declared here.
+!!! related TS2728 objectSpreadNegative.ts:22:21: 'b' is declared here.
     let b = { b: false };
     spread = b; // error, missing 's'
     ~~~~~~
 !!! error TS2741: Property 's' is missing in type '{ b: boolean; }' but required in type '{ s: string; b: boolean; }'.
-!!! related TS2728 tests/cases/conformance/types/spread/objectSpreadNegative.ts:22:36: 's' is declared here.
+!!! related TS2728 objectSpreadNegative.ts:22:36: 's' is declared here.
     
     // literal repeats are not allowed, but spread repeats are fine
     let duplicated = { b: 'bad', ...o, b: 'bad', ...o2, b: 'bad' }
                        ~~~~~~~~
 !!! error TS2783: 'b' is specified more than once, so this usage will be overwritten.
-!!! related TS2785 tests/cases/conformance/types/spread/objectSpreadNegative.ts:28:30: This spread always overwrites this property.
+!!! related TS2785 objectSpreadNegative.ts:28:30: This spread always overwrites this property.
                                        ~
 !!! error TS1117: An object literal cannot have multiple properties with the same name.
                                                         ~
@@ -89,7 +89,7 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(84,38): error TS232
         { b: 'ignored', ...o }
           ~~~~~~~~~~~~
 !!! error TS2783: 'b' is specified more than once, so this usage will be overwritten.
-!!! related TS2785 tests/cases/conformance/types/spread/objectSpreadNegative.ts:32:21: This spread always overwrites this property.
+!!! related TS2785 objectSpreadNegative.ts:32:21: This spread always overwrites this property.
     
     let o3 = { a: 1, b: 'no' }
     let o4 = { b: 'yes', c: true }
@@ -97,27 +97,27 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(84,38): error TS232
         { b: 'ok', ...o3, ...o4 }
           ~~~~~~~
 !!! error TS2783: 'b' is specified more than once, so this usage will be overwritten.
-!!! related TS2785 tests/cases/conformance/types/spread/objectSpreadNegative.ts:37:16: This spread always overwrites this property.
+!!! related TS2785 objectSpreadNegative.ts:37:16: This spread always overwrites this property.
     let combinedMid: { a: number, b: string, c: boolean } =
         { ...o3, b: 'ok', ...o4 }
                  ~~~~~~~
 !!! error TS2783: 'b' is specified more than once, so this usage will be overwritten.
-!!! related TS2785 tests/cases/conformance/types/spread/objectSpreadNegative.ts:39:23: This spread always overwrites this property.
+!!! related TS2785 objectSpreadNegative.ts:39:23: This spread always overwrites this property.
     let combinedNested: { a: number, b: boolean, c: string, d: string } =
         { ...{ a: 4, ...{ b: false, c: 'overriden' } }, d: 'actually new', ...{ a: 5, d: 'maybe new' } }
                                                         ~~~~~~~~~~~~~~~~~
 !!! error TS2783: 'd' is specified more than once, so this usage will be overwritten.
-!!! related TS2785 tests/cases/conformance/types/spread/objectSpreadNegative.ts:41:72: This spread always overwrites this property.
+!!! related TS2785 objectSpreadNegative.ts:41:72: This spread always overwrites this property.
     let changeTypeBefore: { a: number, b: string } =
         { a: 'wrong type?', ...o3 };
           ~~~~~~~~~~~~~~~~
 !!! error TS2783: 'a' is specified more than once, so this usage will be overwritten.
-!!! related TS2785 tests/cases/conformance/types/spread/objectSpreadNegative.ts:43:25: This spread always overwrites this property.
+!!! related TS2785 objectSpreadNegative.ts:43:25: This spread always overwrites this property.
     let computedMiddle: { a: number, b: string, c: boolean, "in the middle": number } =
         { ...o3, ['in the middle']: 13, b: 'maybe?', ...o4 }
                                         ~~~~~~~~~~~
 !!! error TS2783: 'b' is specified more than once, so this usage will be overwritten.
-!!! related TS2785 tests/cases/conformance/types/spread/objectSpreadNegative.ts:45:50: This spread always overwrites this property.
+!!! related TS2785 objectSpreadNegative.ts:45:50: This spread always overwrites this property.
     
     // primitives are not allowed, except for falsy ones
     let spreadNum = { ...12 };
@@ -174,7 +174,7 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(84,38): error TS232
                                         ~~~~~~~~~
 !!! error TS2322: Type 'string | null | undefined' is not assignable to type 'string'.
 !!! error TS2322:   Type 'undefined' is not assignable to type 'string'.
-!!! related TS6500 tests/cases/conformance/types/spread/objectSpreadNegative.ts:77:15: The expected type comes from property 'attribute' which is declared here on type 'Item'
+!!! related TS6500 objectSpreadNegative.ts:77:15: The expected type comes from property 'attribute' which is declared here on type 'Item'
     
     // repro from #52850#discussion_r1136291508
     interface A { a?: string; }
@@ -182,9 +182,9 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(84,38): error TS232
     const o5: { a: boolean; } = { a: 12, ...a }; // error reported on both spread and the overriden property
                                   ~
 !!! error TS2322: Type 'number' is not assignable to type 'boolean'.
-!!! related TS6500 tests/cases/conformance/types/spread/objectSpreadNegative.ts:84:13: The expected type comes from property 'a' which is declared here on type '{ a: boolean; }'
+!!! related TS6500 objectSpreadNegative.ts:84:13: The expected type comes from property 'a' which is declared here on type '{ a: boolean; }'
                                          ~~~~
 !!! error TS2322: Type 'string | undefined' is not assignable to type 'boolean'.
 !!! error TS2322:   Type 'undefined' is not assignable to type 'boolean'.
-!!! related TS6500 tests/cases/conformance/types/spread/objectSpreadNegative.ts:84:13: The expected type comes from property 'a' which is declared here on type '{ a: boolean; }'
+!!! related TS6500 objectSpreadNegative.ts:84:13: The expected type comes from property 'a' which is declared here on type '{ a: boolean; }'
     
