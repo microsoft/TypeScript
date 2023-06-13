@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/import/foo.ts ===
+//// [tests/cases/conformance/types/import/importTypeLocal.ts] ////
+
+=== foo.ts ===
 interface Point {
 >Point : Symbol(Point, Decl(foo.ts, 0, 0))
 
@@ -11,7 +13,7 @@ interface Point {
 export = Point;
 >Point : Symbol(Point, Decl(foo.ts, 0, 0))
 
-=== tests/cases/conformance/types/import/foo2.ts ===
+=== foo2.ts ===
 namespace Bar {
 >Bar : Symbol(Bar, Decl(foo2.ts, 0, 0), Decl(foo2.ts, 12, 1))
 
@@ -56,7 +58,7 @@ class Bar {
 export { Bar }
 >Bar : Symbol(Bar, Decl(foo2.ts, 18, 8))
 
-=== tests/cases/conformance/types/import/usage.ts ===
+=== usage.ts ===
 export const x: import("./foo") = { x: 0, y: 0 };
 >x : Symbol(x, Decl(usage.ts, 0, 12))
 >x : Symbol(x, Decl(usage.ts, 0, 35))

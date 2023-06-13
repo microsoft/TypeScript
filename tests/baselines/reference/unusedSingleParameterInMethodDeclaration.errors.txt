@@ -1,8 +1,8 @@
-tests/cases/compiler/unusedSingleParameterInMethodDeclaration.ts(2,20): error TS6133: 'person' is declared but its value is never read.
-tests/cases/compiler/unusedSingleParameterInMethodDeclaration.ts(3,13): error TS6133: 'unused' is declared but its value is never read.
+unusedSingleParameterInMethodDeclaration.ts(2,20): error TS6133: 'person' is declared but its value is never read.
+unusedSingleParameterInMethodDeclaration.ts(3,13): error TS6133: 'unused' is declared but its value is never read.
 
 
-==== tests/cases/compiler/unusedSingleParameterInMethodDeclaration.ts (2 errors) ====
+==== unusedSingleParameterInMethodDeclaration.ts (2 errors) ====
     class Dummy {
         public greeter(person: string) {
                        ~~~~~~

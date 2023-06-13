@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/component.d.ts ===
+//// [tests/cases/conformance/jsx/jsxCheckJsxNoTypeArgumentsAllowed.tsx] ////
+
+=== component.d.ts ===
 import * as React from "react";
 >React : Symbol(React, Decl(component.d.ts, 0, 6))
 
@@ -25,7 +27,7 @@ export interface Prop {
 >b : Symbol(Prop.b, Decl(component.d.ts, 6, 14))
 }
 
-=== tests/cases/conformance/jsx/file.jsx ===
+=== file.jsx ===
 import { MyComp, Prop } from "./component";
 >MyComp : Symbol(MyComp, Decl(file.jsx, 0, 8))
 >Prop : Symbol(Prop, Decl(file.jsx, 0, 16))

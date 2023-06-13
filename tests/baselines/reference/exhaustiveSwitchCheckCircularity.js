@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exhaustiveSwitchCheckCircularity.ts] ////
+
 //// [exhaustiveSwitchCheckCircularity.ts]
 // Repro from #47539
 

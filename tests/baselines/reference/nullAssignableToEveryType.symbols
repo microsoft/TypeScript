@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/nullAssignableToEveryType.ts ===
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/nullAssignableToEveryType.ts] ////
+
+=== nullAssignableToEveryType.ts ===
 class C {
 >C : Symbol(C, Decl(nullAssignableToEveryType.ts, 0, 0))
 

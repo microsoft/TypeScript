@@ -1,10 +1,10 @@
-tests/cases/compiler/derivedInterfaceCallSignature.ts(11,11): error TS2430: Interface 'D3SvgArea' incorrectly extends interface 'D3SvgPath'.
+derivedInterfaceCallSignature.ts(11,11): error TS2430: Interface 'D3SvgArea' incorrectly extends interface 'D3SvgPath'.
   Types of property 'x' are incompatible.
     Type '(x: (data: any, index?: number) => number) => D3SvgArea' is not assignable to type '() => (data: any, index?: number) => number'.
       Target signature provides too few arguments. Expected 1 or more, but got 0.
 
 
-==== tests/cases/compiler/derivedInterfaceCallSignature.ts (1 errors) ====
+==== derivedInterfaceCallSignature.ts (1 errors) ====
     interface D3SvgPath {
         (data: any, index?: number): string;
     

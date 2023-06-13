@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleProperty1.ts] ////
+
 //// [moduleProperty1.ts]
 module M {
     var x=10;  // variable local to this module body

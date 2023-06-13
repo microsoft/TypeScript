@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxDeclarationsWithEsModuleInteropNoCrash.tsx] ////
+
 //// [jsxDeclarationsWithEsModuleInteropNoCrash.jsx]
 /// <reference path="/.lib/react16.d.ts" />
 import PropTypes from 'prop-types';
@@ -23,7 +25,7 @@ export default Foo;
 
 
 //// [jsxDeclarationsWithEsModuleInteropNoCrash.d.ts]
-/// <reference path="../../../..react16.d.ts" />
+/// <reference path="..react16.d.ts" />
 export default Foo;
 declare function Foo({ bar }: {
     bar: any;

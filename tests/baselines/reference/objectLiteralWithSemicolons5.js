@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectLiteralWithSemicolons5.ts] ////
+
 //// [objectLiteralWithSemicolons5.ts]
 var v = { foo() { }; a: b; get baz() { }; }
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/sourceMap-StringLiteralWithNewLine.ts ===
+//// [tests/cases/compiler/sourceMap-StringLiteralWithNewLine.ts] ////
+
+=== sourceMap-StringLiteralWithNewLine.ts ===
 interface Document {
 >Document : Symbol(Document, Decl(sourceMap-StringLiteralWithNewLine.ts, 0, 0))
 }

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/deduplicateImportsInSystem.ts ===
+//// [tests/cases/compiler/deduplicateImportsInSystem.ts] ////
+
+=== deduplicateImportsInSystem.ts ===
 import {A} from "f1";
 >A : Symbol(A, Decl(deduplicateImportsInSystem.ts, 0, 8))
 

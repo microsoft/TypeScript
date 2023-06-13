@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers11.ts] ////
+
 //// [typeOfThisInStaticMembers11.ts]
 declare const foo: any;
 

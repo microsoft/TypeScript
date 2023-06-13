@@ -1,4 +1,6 @@
-=== tests/cases/compiler/jsxGenericComponentWithSpreadingResultOfGenericFunction.tsx ===
+//// [tests/cases/compiler/jsxGenericComponentWithSpreadingResultOfGenericFunction.tsx] ////
+
+=== jsxGenericComponentWithSpreadingResultOfGenericFunction.tsx ===
 /// <reference path="react16.d.ts" />
 
 // repro #51577

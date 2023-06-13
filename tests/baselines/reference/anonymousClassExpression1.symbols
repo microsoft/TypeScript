@@ -1,4 +1,6 @@
-=== tests/cases/compiler/anonymousClassExpression1.ts ===
+//// [tests/cases/compiler/anonymousClassExpression1.ts] ////
+
+=== anonymousClassExpression1.ts ===
 function f() {
 >f : Symbol(f, Decl(anonymousClassExpression1.ts, 0, 0))
 

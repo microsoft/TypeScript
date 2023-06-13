@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inferenceOfNullableObjectTypesWithCommonBase.ts ===
+//// [tests/cases/compiler/inferenceOfNullableObjectTypesWithCommonBase.ts] ////
+
+=== inferenceOfNullableObjectTypesWithCommonBase.ts ===
 function equal<T>(a: T, b: T) { }
 >equal : <T>(a: T, b: T) => void
 >a : T

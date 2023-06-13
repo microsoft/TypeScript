@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualTypeFunctionObjectPropertyIntersection.ts ===
+//// [tests/cases/compiler/contextualTypeFunctionObjectPropertyIntersection.ts] ////
+
+=== contextualTypeFunctionObjectPropertyIntersection.ts ===
 // repro from #48812
 
 type Action<TEvent extends { type: string }> = (ev: TEvent) => void;

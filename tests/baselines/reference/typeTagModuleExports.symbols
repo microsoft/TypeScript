@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/bug27327.js ===
+//// [tests/cases/conformance/jsdoc/typeTagModuleExports.ts] ////
+
+=== bug27327.js ===
 /** @type {string} */
 module.exports = 0;
 >module.exports : Symbol(module.exports, Decl(bug27327.js, 0, 0))

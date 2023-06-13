@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/a.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment8_1.ts] ////
+
+=== a.js ===
 var my = my ?? {};
 >my : typeof my
 >my ?? {} : typeof my | {}
@@ -45,7 +47,7 @@ my.app.Application()
 >app : typeof my.app
 >Application : () => void
 
-=== tests/cases/conformance/salsa/b.js ===
+=== b.js ===
 var min = window.min ?? {};
 >min : typeof min
 >window.min ?? {} : typeof min | {}

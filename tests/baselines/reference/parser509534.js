@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/RegressionTests/parser509534.ts] ////
+
 //// [parser509534.ts]
 "use strict";
 var config = require("../config");

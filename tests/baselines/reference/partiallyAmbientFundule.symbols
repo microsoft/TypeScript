@@ -1,4 +1,6 @@
-=== tests/cases/compiler/partiallyAmbientFundule.ts ===
+//// [tests/cases/compiler/partiallyAmbientFundule.ts] ////
+
+=== partiallyAmbientFundule.ts ===
 declare module foo {
 >foo : Symbol(foo, Decl(partiallyAmbientFundule.ts, 2, 1), Decl(partiallyAmbientFundule.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/anyPlusAny1.ts ===
+//// [tests/cases/compiler/anyPlusAny1.ts] ////
+
+=== anyPlusAny1.ts ===
 var x: any;
 >x : Symbol(x, Decl(anyPlusAny1.ts, 0, 3))
 

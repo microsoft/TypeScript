@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericConstraint2.ts] ////
+
 //// [genericConstraint2.ts]
 interface Comparable<T> {
     comparer(other: T): number;

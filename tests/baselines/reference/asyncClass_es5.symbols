@@ -1,4 +1,6 @@
-=== tests/cases/conformance/async/es5/asyncClass_es5.ts ===
+//// [tests/cases/conformance/async/es5/asyncClass_es5.ts] ////
+
+=== asyncClass_es5.ts ===
 async class C {
 >C : Symbol(C, Decl(asyncClass_es5.ts, 0, 0))
 }

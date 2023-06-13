@@ -1,4 +1,6 @@
-=== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithPropertyThatIsPrivateInBaseType2.ts ===
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithPropertyThatIsPrivateInBaseType2.ts] ////
+
+=== interfaceWithPropertyThatIsPrivateInBaseType2.ts ===
 class Base {
 >Base : Symbol(Base, Decl(interfaceWithPropertyThatIsPrivateInBaseType2.ts, 0, 0))
 

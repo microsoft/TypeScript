@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts ===
+//// [tests/cases/compiler/declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts] ////
+
+=== declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts ===
 module m {
 >m : Symbol(m, Decl(declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts, 0, 0))
 

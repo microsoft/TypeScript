@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/isolatedModulesNoEmitOnError.ts] ////
+
+=== file1.ts ===
 export const x: string = 3;
 >x : Symbol(x, Decl(file1.ts, 0, 12))
 

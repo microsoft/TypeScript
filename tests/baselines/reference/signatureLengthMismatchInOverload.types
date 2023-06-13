@@ -1,4 +1,6 @@
-=== tests/cases/compiler/signatureLengthMismatchInOverload.ts ===
+//// [tests/cases/compiler/signatureLengthMismatchInOverload.ts] ////
+
+=== signatureLengthMismatchInOverload.ts ===
 function f(callback: (arg: string, arg2: string) => void): void;
 >f : { (callback: (arg: string, arg2: string) => void): void; (callback: (arg: number) => void): void; }
 >callback : (arg: string, arg2: string) => void

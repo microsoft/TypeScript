@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es2020/localesObjectArgument.ts] ////
+
 //// [localesObjectArgument.ts]
 const enUS = new Intl.Locale("en-US");
 const deDE = new Intl.Locale("de-DE");

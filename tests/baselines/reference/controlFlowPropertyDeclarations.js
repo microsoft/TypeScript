@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/controlFlowPropertyDeclarations.ts] ////
+
 //// [controlFlowPropertyDeclarations.ts]
 // Repro from ##8913
 

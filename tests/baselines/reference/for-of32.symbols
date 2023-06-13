@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/for-ofStatements/for-of32.ts ===
+//// [tests/cases/conformance/es6/for-ofStatements/for-of32.ts] ////
+
+=== for-of32.ts ===
 for (var v of v) { }
 >v : Symbol(v, Decl(for-of32.ts, 0, 8))
 >v : Symbol(v, Decl(for-of32.ts, 0, 8))

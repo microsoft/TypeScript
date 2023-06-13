@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts] ////
+
 //// [missingAndExcessProperties.ts]
 // Missing properties
 function f1() {

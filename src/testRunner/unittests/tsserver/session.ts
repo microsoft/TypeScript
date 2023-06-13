@@ -1,5 +1,6 @@
 import { expect } from "chai";
 
+import { incrementalVerifier } from "../../../harness/incrementalUtils";
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 import {
@@ -55,7 +56,8 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
             byteLength: Buffer.byteLength,
             hrtime: process.hrtime,
             logger: nullLogger(),
-            canUseEvents: true
+            canUseEvents: true,
+            incrementalVerifier,
         };
         return new TestSession(opts);
     }
@@ -387,7 +389,8 @@ describe("unittests:: tsserver:: Session:: exceptions", () => {
                 byteLength: Buffer.byteLength,
                 hrtime: process.hrtime,
                 logger: nullLogger(),
-                canUseEvents: true
+                canUseEvents: true,
+                incrementalVerifier,
             });
             this.addProtocolHandler(command, this.exceptionRaisingHandler);
         }
@@ -434,7 +437,8 @@ describe("unittests:: tsserver:: Session:: how Session is extendable via subclas
                 byteLength: Buffer.byteLength,
                 hrtime: process.hrtime,
                 logger: createHasErrorMessageLogger(),
-                canUseEvents: true
+                canUseEvents: true,
+                incrementalVerifier,
             });
             this.addProtocolHandler(this.customHandler, () => {
                 return { response: undefined, responseRequired: true };
@@ -502,7 +506,8 @@ describe("unittests:: tsserver:: Session:: an example of using the Session API t
                 byteLength: Buffer.byteLength,
                 hrtime: process.hrtime,
                 logger: createHasErrorMessageLogger(),
-                canUseEvents: true
+                canUseEvents: true,
+                incrementalVerifier,
             });
             this.addProtocolHandler("echo", (req: ts.server.protocol.Request) => ({
                 response: req.arguments,

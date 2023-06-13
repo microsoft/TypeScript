@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privacyGloImportParseErrors.ts] ////
+
 //// [privacyGloImportParseErrors.ts]
 module m1 {
     export module m1_M1_public {

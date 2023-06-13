@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/deepKeysIndexing.ts] ////
+
 //// [deepKeysIndexing.ts]
 // regression test from https://github.com/Microsoft/TypeScript/issues/29692
 interface DeepObject {

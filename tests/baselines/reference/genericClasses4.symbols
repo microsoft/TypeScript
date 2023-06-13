@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericClasses4.ts ===
+//// [tests/cases/compiler/genericClasses4.ts] ////
+
+=== genericClasses4.ts ===
 // once caused stack overflow
 class Vec2_T<A>
 >Vec2_T : Symbol(Vec2_T, Decl(genericClasses4.ts, 0, 0))

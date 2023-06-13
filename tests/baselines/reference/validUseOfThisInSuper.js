@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/validUseOfThisInSuper.ts] ////
+
 //// [validUseOfThisInSuper.ts]
 class Base {
     constructor(public b: Base) {
