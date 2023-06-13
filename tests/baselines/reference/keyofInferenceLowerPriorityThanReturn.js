@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/keyofInferenceLowerPriorityThanReturn.ts] ////
+
 //// [keyofInferenceLowerPriorityThanReturn.ts]
 // #22736
 declare class Write {

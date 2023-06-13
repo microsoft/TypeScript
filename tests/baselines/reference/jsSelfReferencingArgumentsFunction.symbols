@@ -1,4 +1,6 @@
-=== tests/cases/compiler/foo.js ===
+//// [tests/cases/compiler/jsSelfReferencingArgumentsFunction.ts] ////
+
+=== foo.js ===
 // Test #16139
 function Foo() {
 >Foo : Symbol(Foo, Decl(foo.js, 0, 0))

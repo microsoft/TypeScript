@@ -1,343 +1,243 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsObjectBindingElementPropertyName10.ts ===
 // interface Recursive {
-//     /*FIND ALL REFS*/[|next|]?: Recursive;
+//     /*FIND ALL REFS*/<|[|{| isDefinition: true |}next|]?: Recursive;|>
 //     value: any;
 // }
 // 
-// function f ({ [|next|]: { [|next|]: x} }: Recursive) {
+// function f (<|<|{ [|{| contextId: 1 |}next|]: { [|{| contextId: 2 |}next|]: x} }: Recursive|>|>) {
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsObjectBindingElementPropertyName10.ts",
-      "kind": "property",
-      "name": "(property) Recursive.next?: Recursive",
-      "textSpan": {
-        "start": 26,
-        "length": 4
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Recursive",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "next",
-          "kind": "propertyName"
-        },
-        {
-          "text": "?",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Recursive",
-          "kind": "interfaceName"
-        }
-      ],
-      "contextSpan": {
-        "start": 26,
-        "length": 17
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 26,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsObjectBindingElementPropertyName10.ts",
-        "contextSpan": {
-          "start": 26,
-          "length": 17
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 77,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsObjectBindingElementPropertyName10.ts",
-        "contextSpan": {
-          "start": 75,
-          "length": 31
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 85,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsObjectBindingElementPropertyName10.ts",
-        "contextSpan": {
-          "start": 75,
-          "length": 31
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsObjectBindingElementPropertyName10.ts ===
+  // interface Recursive {
+  //     /*FIND ALL REFS*/<|[|next|]?: Recursive;|>
+  //     value: any;
+  // }
+  // 
+  // function f ({ next: { next: x} }: Recursive) {
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) Recursive.next?: Recursive",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Recursive",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "next",
+      "kind": "propertyName"
+     },
+     {
+      "text": "?",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Recursive",
+      "kind": "interfaceName"
+     }
     ]
-  }
-]
+   }
+  ]
 
-undefined
 
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsObjectBindingElementPropertyName10.ts ===
 // interface Recursive {
-//     [|next|]?: Recursive;
+//     next?: Recursive;
 //     value: any;
 // }
 // 
-// function f ({ /*FIND ALL REFS*/[|next|]: { [|next|]: x} }: Recursive) {
+// function f (/*FIND ALL REFS*/{ next: { next: x} }: Recursive) {
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsObjectBindingElementPropertyName10.ts",
-      "kind": "property",
-      "name": "(property) Recursive.next?: Recursive",
-      "textSpan": {
-        "start": 26,
-        "length": 4
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Recursive",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "next",
-          "kind": "propertyName"
-        },
-        {
-          "text": "?",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Recursive",
-          "kind": "interfaceName"
-        }
-      ],
-      "contextSpan": {
-        "start": 26,
-        "length": 17
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 26,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsObjectBindingElementPropertyName10.ts",
-        "contextSpan": {
-          "start": 26,
-          "length": 17
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 77,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsObjectBindingElementPropertyName10.ts",
-        "contextSpan": {
-          "start": 75,
-          "length": 31
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 85,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsObjectBindingElementPropertyName10.ts",
-        "contextSpan": {
-          "start": 75,
-          "length": 31
-        },
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
 
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsObjectBindingElementPropertyName10.ts ===
 // interface Recursive {
-//     [|next|]?: Recursive;
+//     <|[|next|]?: Recursive;|>
 //     value: any;
 // }
 // 
-// function f ({ [|next|]: { /*FIND ALL REFS*/[|next|]: x} }: Recursive) {
+// function f (<|<|{ /*FIND ALL REFS*/[|{| contextId: 1 |}next|]: { [|{| contextId: 2 |}next|]: x} }: Recursive|>|>) {
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsObjectBindingElementPropertyName10.ts",
-      "kind": "property",
-      "name": "(property) Recursive.next?: Recursive",
-      "textSpan": {
-        "start": 26,
-        "length": 4
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Recursive",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "next",
-          "kind": "propertyName"
-        },
-        {
-          "text": "?",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Recursive",
-          "kind": "interfaceName"
-        }
-      ],
-      "contextSpan": {
-        "start": 26,
-        "length": 17
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 26,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsObjectBindingElementPropertyName10.ts",
-        "contextSpan": {
-          "start": 26,
-          "length": 17
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 77,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsObjectBindingElementPropertyName10.ts",
-        "contextSpan": {
-          "start": 75,
-          "length": 31
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 85,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsObjectBindingElementPropertyName10.ts",
-        "contextSpan": {
-          "start": 75,
-          "length": 31
-        },
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsObjectBindingElementPropertyName10.ts ===
+  // interface Recursive {
+  //     <|[|next|]?: Recursive;|>
+  //     value: any;
+  // }
+  // 
+  // function f ({ /*FIND ALL REFS*/next: { next: x} }: Recursive) {
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) Recursive.next?: Recursive",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Recursive",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "next",
+      "kind": "propertyName"
+     },
+     {
+      "text": "?",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Recursive",
+      "kind": "interfaceName"
+     }
     ]
-  }
-]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsObjectBindingElementPropertyName10.ts ===
+// interface Recursive {
+//     <|[|next|]?: Recursive;|>
+//     value: any;
+// }
+// 
+// function f (<|<|{ [|{| contextId: 1 |}next|]: { /*FIND ALL REFS*/[|{| contextId: 2 |}next|]: x} }: Recursive|>|>) {
+// }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsObjectBindingElementPropertyName10.ts ===
+  // interface Recursive {
+  //     <|[|next|]?: Recursive;|>
+  //     value: any;
+  // }
+  // 
+  // function f ({ next: { /*FIND ALL REFS*/next: x} }: Recursive) {
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) Recursive.next?: Recursive",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Recursive",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "next",
+      "kind": "propertyName"
+     },
+     {
+      "text": "?",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Recursive",
+      "kind": "interfaceName"
+     }
+    ]
+   }
+  ]

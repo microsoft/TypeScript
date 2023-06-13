@@ -1,4 +1,6 @@
-=== tests/cases/compiler/implementsInClassExpression.ts ===
+//// [tests/cases/compiler/implementsInClassExpression.ts] ////
+
+=== implementsInClassExpression.ts ===
 interface Foo {
 >Foo : Symbol(Foo, Decl(implementsInClassExpression.ts, 0, 0))
 

@@ -1,3 +1,5 @@
-=== tests/cases/conformance/parser/ecmascript5/Statements/parserContinueStatement1.d.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Statements/parserContinueStatement1.d.ts] ////
+
+=== parserContinueStatement1.d.ts ===
 
 continue;

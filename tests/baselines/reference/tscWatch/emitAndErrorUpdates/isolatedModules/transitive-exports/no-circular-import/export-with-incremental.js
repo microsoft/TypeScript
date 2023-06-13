@@ -1,11 +1,12 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
-//// [/user/username/projects/myproject/lib1/tools/tools.interface.ts]
+//// [/user/username/projects/myproject/lib1/tools/toolsinterface.ts]
 export interface ITest {
     title: string;
 }
 
 //// [/user/username/projects/myproject/lib1/tools/public.ts]
-export * from "./tools.interface";
+export * from "./toolsinterface";
 
 //// [/user/username/projects/myproject/app.ts]
 import { Data } from "lib2/public";
@@ -63,7 +64,7 @@ Program options: {"baseUrl":"/user/username/projects/myproject","watch":true,"is
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
-/user/username/projects/myproject/lib1/tools/tools.interface.ts
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts
 /user/username/projects/myproject/lib1/tools/public.ts
 /user/username/projects/myproject/lib1/public.ts
 /user/username/projects/myproject/lib2/data.ts
@@ -72,7 +73,7 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
-/user/username/projects/myproject/lib1/tools/tools.interface.ts
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts
 /user/username/projects/myproject/lib1/tools/public.ts
 /user/username/projects/myproject/lib1/public.ts
 /user/username/projects/myproject/lib2/data.ts
@@ -81,7 +82,7 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/lib1/tools/tools.interface.ts (used version)
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts (used version)
 /user/username/projects/myproject/lib1/tools/public.ts (used version)
 /user/username/projects/myproject/lib1/public.ts (used version)
 /user/username/projects/myproject/lib2/data.ts (used version)
@@ -89,32 +90,32 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/app.ts (used version)
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/myproject/app.ts:
+/user/username/projects/myproject/app.ts: *new*
   {}
-/user/username/projects/myproject/lib2/public.ts:
+/user/username/projects/myproject/lib1/public.ts: *new*
   {}
-/user/username/projects/myproject/lib2/data.ts:
+/user/username/projects/myproject/lib1/tools/public.ts: *new*
   {}
-/user/username/projects/myproject/lib1/public.ts:
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts: *new*
   {}
-/user/username/projects/myproject/lib1/tools/public.ts:
+/user/username/projects/myproject/lib2/data.ts: *new*
   {}
-/user/username/projects/myproject/lib1/tools/tools.interface.ts:
+/user/username/projects/myproject/lib2/public.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/myproject/lib1/tools/tools.interface.js]
+//// [/user/username/projects/myproject/lib1/tools/toolsinterface.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
@@ -136,7 +137,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(require("./tools.interface"), exports);
+__exportStar(require("./toolsinterface"), exports);
 
 
 //// [/user/username/projects/myproject/lib1/public.js]
@@ -212,14 +213,14 @@ exports.App = App;
 
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./lib1/tools/tools.interface.ts","./lib1/tools/public.ts","./lib1/public.ts","./lib2/data.ts","./lib2/public.ts","./app.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-4369626085-export interface ITest {\n    title: string;\n}","-13301115055-export * from \"./tools.interface\";","-5078933600-export * from \"./tools/public\";","-30573389178-import { ITest } from \"lib1/public\";\nexport class Data {\n    public test() {\n        const result: ITest = {\n            title: \"title\"\n        }\n        return result;\n    }\n}","-9530042629-export * from \"./data\";","-14937286564-import { Data } from \"lib2/public\";\nexport class App {\n    public constructor() {\n        new Data().test();\n    }\n}"],"fileIdsList":[[6],[3],[2],[4],[5]],"referencedMap":[[7,1],[4,2],[3,3],[5,4],[6,5]],"exportedModulesMap":[[7,1],[4,2],[3,3],[5,4],[6,5]],"semanticDiagnosticsPerFile":[1,7,4,3,2,5,6]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./lib1/tools/toolsinterface.ts","./lib1/tools/public.ts","./lib1/public.ts","./lib2/data.ts","./lib2/public.ts","./app.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-4369626085-export interface ITest {\n    title: string;\n}","-10750058173-export * from \"./toolsinterface\";","-5078933600-export * from \"./tools/public\";","-30573389178-import { ITest } from \"lib1/public\";\nexport class Data {\n    public test() {\n        const result: ITest = {\n            title: \"title\"\n        }\n        return result;\n    }\n}","-9530042629-export * from \"./data\";","-14937286564-import { Data } from \"lib2/public\";\nexport class App {\n    public constructor() {\n        new Data().test();\n    }\n}"],"root":[7],"fileIdsList":[[6],[3],[2],[4],[5]],"referencedMap":[[7,1],[4,2],[3,3],[5,4],[6,5]],"exportedModulesMap":[[7,1],[4,2],[3,3],[5,4],[6,5]],"semanticDiagnosticsPerFile":[1,7,4,3,2,5,6]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
     "fileNames": [
       "../../../../a/lib/lib.d.ts",
-      "./lib1/tools/tools.interface.ts",
+      "./lib1/tools/toolsinterface.ts",
       "./lib1/tools/public.ts",
       "./lib1/public.ts",
       "./lib2/data.ts",
@@ -234,7 +235,7 @@ exports.App = App;
         "./lib1/tools/public.ts"
       ],
       [
-        "./lib1/tools/tools.interface.ts"
+        "./lib1/tools/toolsinterface.ts"
       ],
       [
         "./lib1/public.ts"
@@ -253,13 +254,13 @@ exports.App = App;
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
       },
-      "./lib1/tools/tools.interface.ts": {
+      "./lib1/tools/toolsinterface.ts": {
         "version": "-4369626085-export interface ITest {\n    title: string;\n}",
         "signature": "-4369626085-export interface ITest {\n    title: string;\n}"
       },
       "./lib1/tools/public.ts": {
-        "version": "-13301115055-export * from \"./tools.interface\";",
-        "signature": "-13301115055-export * from \"./tools.interface\";"
+        "version": "-10750058173-export * from \"./toolsinterface\";",
+        "signature": "-10750058173-export * from \"./toolsinterface\";"
       },
       "./lib1/public.ts": {
         "version": "-5078933600-export * from \"./tools/public\";",
@@ -278,6 +279,12 @@ exports.App = App;
         "signature": "-14937286564-import { Data } from \"lib2/public\";\nexport class App {\n    public constructor() {\n        new Data().test();\n    }\n}"
       }
     },
+    "root": [
+      [
+        7,
+        "./app.ts"
+      ]
+    ],
     "referencedMap": {
       "./app.ts": [
         "./lib2/public.ts"
@@ -286,7 +293,7 @@ exports.App = App;
         "./lib1/tools/public.ts"
       ],
       "./lib1/tools/public.ts": [
-        "./lib1/tools/tools.interface.ts"
+        "./lib1/tools/toolsinterface.ts"
       ],
       "./lib2/data.ts": [
         "./lib1/public.ts"
@@ -303,7 +310,7 @@ exports.App = App;
         "./lib1/tools/public.ts"
       ],
       "./lib1/tools/public.ts": [
-        "./lib1/tools/tools.interface.ts"
+        "./lib1/tools/toolsinterface.ts"
       ],
       "./lib2/data.ts": [
         "./lib1/public.ts"
@@ -317,25 +324,28 @@ exports.App = App;
       "./app.ts",
       "./lib1/public.ts",
       "./lib1/tools/public.ts",
-      "./lib1/tools/tools.interface.ts",
+      "./lib1/tools/toolsinterface.ts",
       "./lib2/data.ts",
       "./lib2/public.ts"
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1347
+  "size": 1356
 }
 
 
 Change:: Rename property title to title2 of interface ITest to initialize signatures
 
 Input::
-//// [/user/username/projects/myproject/lib1/tools/tools.interface.ts]
+//// [/user/username/projects/myproject/lib1/tools/toolsinterface.ts]
 export interface ITest {
     title2: string;
 }
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:58 AM[0m] File change detected. Starting incremental compilation...
@@ -344,7 +354,7 @@ Output::
   Object literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?
 
 [7m5[0m             title: "title"
-[7m [0m [91m            ~~~~~~~~~~~~~~[0m
+[7m [0m [91m            ~~~~~[0m
 
 [[90m12:01:05 AM[0m] Found 1 error. Watching for file changes.
 
@@ -355,7 +365,7 @@ Program options: {"baseUrl":"/user/username/projects/myproject","watch":true,"is
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
-/user/username/projects/myproject/lib1/tools/tools.interface.ts
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts
 /user/username/projects/myproject/lib1/tools/public.ts
 /user/username/projects/myproject/lib1/public.ts
 /user/username/projects/myproject/lib2/data.ts
@@ -363,7 +373,7 @@ Program files::
 /user/username/projects/myproject/app.ts
 
 Semantic diagnostics in builder refreshed for::
-/user/username/projects/myproject/lib1/tools/tools.interface.ts
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts
 /user/username/projects/myproject/lib1/tools/public.ts
 /user/username/projects/myproject/lib1/public.ts
 /user/username/projects/myproject/lib2/data.ts
@@ -371,49 +381,25 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/app.ts
 
 Shape signatures in builder refreshed for::
-/user/username/projects/myproject/lib1/tools/tools.interface.ts (computed .d.ts)
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts (computed .d.ts)
 /user/username/projects/myproject/lib1/tools/public.ts (used version)
 /user/username/projects/myproject/lib1/public.ts (used version)
 /user/username/projects/myproject/lib2/data.ts (used version)
 /user/username/projects/myproject/lib2/public.ts (used version)
 /user/username/projects/myproject/app.ts (used version)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/app.ts:
-  {}
-/user/username/projects/myproject/lib2/public.ts:
-  {}
-/user/username/projects/myproject/lib2/data.ts:
-  {}
-/user/username/projects/myproject/lib1/public.ts:
-  {}
-/user/username/projects/myproject/lib1/tools/public.ts:
-  {}
-/user/username/projects/myproject/lib1/tools/tools.interface.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/myproject/lib1/tools/tools.interface.js] file written with same contents
+//// [/user/username/projects/myproject/lib1/tools/toolsinterface.js] file written with same contents
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./lib1/tools/tools.interface.ts","./lib1/tools/public.ts","./lib1/public.ts","./lib2/data.ts","./lib2/public.ts","./app.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-3501597171-export interface ITest {\n    title2: string;\n}","signature":"-3883556937-export interface ITest {\n    title2: string;\n}\n"},"-13301115055-export * from \"./tools.interface\";","-5078933600-export * from \"./tools/public\";","-30573389178-import { ITest } from \"lib1/public\";\nexport class Data {\n    public test() {\n        const result: ITest = {\n            title: \"title\"\n        }\n        return result;\n    }\n}","-9530042629-export * from \"./data\";","-14937286564-import { Data } from \"lib2/public\";\nexport class App {\n    public constructor() {\n        new Data().test();\n    }\n}"],"fileIdsList":[[6],[3],[2],[4],[5]],"referencedMap":[[7,1],[4,2],[3,3],[5,4],[6,5]],"exportedModulesMap":[[7,1],[4,2],[3,3],[5,4],[6,5]],"semanticDiagnosticsPerFile":[1,7,4,3,2,[5,[{"file":"./lib2/data.ts","start":121,"length":14,"code":2322,"category":1,"messageText":{"messageText":"Type '{ title: string; }' is not assignable to type 'ITest'.","category":1,"code":2322,"next":[{"messageText":"Object literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?","category":1,"code":2561}]}}]],6]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./lib1/tools/toolsinterface.ts","./lib1/tools/public.ts","./lib1/public.ts","./lib2/data.ts","./lib2/public.ts","./app.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-3501597171-export interface ITest {\n    title2: string;\n}","signature":"-3883556937-export interface ITest {\n    title2: string;\n}\n"},"-10750058173-export * from \"./toolsinterface\";","-5078933600-export * from \"./tools/public\";","-30573389178-import { ITest } from \"lib1/public\";\nexport class Data {\n    public test() {\n        const result: ITest = {\n            title: \"title\"\n        }\n        return result;\n    }\n}","-9530042629-export * from \"./data\";","-14937286564-import { Data } from \"lib2/public\";\nexport class App {\n    public constructor() {\n        new Data().test();\n    }\n}"],"root":[7],"fileIdsList":[[6],[3],[2],[4],[5]],"referencedMap":[[7,1],[4,2],[3,3],[5,4],[6,5]],"exportedModulesMap":[[7,1],[4,2],[3,3],[5,4],[6,5]],"semanticDiagnosticsPerFile":[1,7,4,3,2,[5,[{"file":"./lib2/data.ts","start":121,"length":5,"code":2322,"category":1,"messageText":{"messageText":"Type '{ title: string; }' is not assignable to type 'ITest'.","category":1,"code":2322,"next":[{"messageText":"Object literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?","category":1,"code":2561}]}}]],6]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
     "fileNames": [
       "../../../../a/lib/lib.d.ts",
-      "./lib1/tools/tools.interface.ts",
+      "./lib1/tools/toolsinterface.ts",
       "./lib1/tools/public.ts",
       "./lib1/public.ts",
       "./lib2/data.ts",
@@ -428,7 +414,7 @@ exitCode:: ExitStatus.undefined
         "./lib1/tools/public.ts"
       ],
       [
-        "./lib1/tools/tools.interface.ts"
+        "./lib1/tools/toolsinterface.ts"
       ],
       [
         "./lib1/public.ts"
@@ -447,7 +433,7 @@ exitCode:: ExitStatus.undefined
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
       },
-      "./lib1/tools/tools.interface.ts": {
+      "./lib1/tools/toolsinterface.ts": {
         "original": {
           "version": "-3501597171-export interface ITest {\n    title2: string;\n}",
           "signature": "-3883556937-export interface ITest {\n    title2: string;\n}\n"
@@ -456,8 +442,8 @@ exitCode:: ExitStatus.undefined
         "signature": "-3883556937-export interface ITest {\n    title2: string;\n}\n"
       },
       "./lib1/tools/public.ts": {
-        "version": "-13301115055-export * from \"./tools.interface\";",
-        "signature": "-13301115055-export * from \"./tools.interface\";"
+        "version": "-10750058173-export * from \"./toolsinterface\";",
+        "signature": "-10750058173-export * from \"./toolsinterface\";"
       },
       "./lib1/public.ts": {
         "version": "-5078933600-export * from \"./tools/public\";",
@@ -476,6 +462,12 @@ exitCode:: ExitStatus.undefined
         "signature": "-14937286564-import { Data } from \"lib2/public\";\nexport class App {\n    public constructor() {\n        new Data().test();\n    }\n}"
       }
     },
+    "root": [
+      [
+        7,
+        "./app.ts"
+      ]
+    ],
     "referencedMap": {
       "./app.ts": [
         "./lib2/public.ts"
@@ -484,7 +476,7 @@ exitCode:: ExitStatus.undefined
         "./lib1/tools/public.ts"
       ],
       "./lib1/tools/public.ts": [
-        "./lib1/tools/tools.interface.ts"
+        "./lib1/tools/toolsinterface.ts"
       ],
       "./lib2/data.ts": [
         "./lib1/public.ts"
@@ -501,7 +493,7 @@ exitCode:: ExitStatus.undefined
         "./lib1/tools/public.ts"
       ],
       "./lib1/tools/public.ts": [
-        "./lib1/tools/tools.interface.ts"
+        "./lib1/tools/toolsinterface.ts"
       ],
       "./lib2/data.ts": [
         "./lib1/public.ts"
@@ -515,14 +507,14 @@ exitCode:: ExitStatus.undefined
       "./app.ts",
       "./lib1/public.ts",
       "./lib1/tools/public.ts",
-      "./lib1/tools/tools.interface.ts",
+      "./lib1/tools/toolsinterface.ts",
       [
         "./lib2/data.ts",
         [
           {
             "file": "./lib2/data.ts",
             "start": 121,
-            "length": 14,
+            "length": 5,
             "code": 2322,
             "category": 1,
             "messageText": {
@@ -544,19 +536,22 @@ exitCode:: ExitStatus.undefined
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1812
+  "size": 1820
 }
 
 
 Change:: Rename property title2 to title of interface ITest to revert back to original text
 
 Input::
-//// [/user/username/projects/myproject/lib1/tools/tools.interface.ts]
+//// [/user/username/projects/myproject/lib1/tools/toolsinterface.ts]
 export interface ITest {
     title: string;
 }
 
 
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:12 AM[0m] File change detected. Starting incremental compilation...
@@ -570,7 +565,7 @@ Program options: {"baseUrl":"/user/username/projects/myproject","watch":true,"is
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
-/user/username/projects/myproject/lib1/tools/tools.interface.ts
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts
 /user/username/projects/myproject/lib1/tools/public.ts
 /user/username/projects/myproject/lib1/public.ts
 /user/username/projects/myproject/lib2/data.ts
@@ -578,7 +573,7 @@ Program files::
 /user/username/projects/myproject/app.ts
 
 Semantic diagnostics in builder refreshed for::
-/user/username/projects/myproject/lib1/tools/tools.interface.ts
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts
 /user/username/projects/myproject/lib1/tools/public.ts
 /user/username/projects/myproject/lib1/public.ts
 /user/username/projects/myproject/lib2/data.ts
@@ -586,49 +581,25 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/app.ts
 
 Shape signatures in builder refreshed for::
-/user/username/projects/myproject/lib1/tools/tools.interface.ts (computed .d.ts)
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts (computed .d.ts)
 /user/username/projects/myproject/lib1/tools/public.ts (used version)
 /user/username/projects/myproject/lib1/public.ts (used version)
 /user/username/projects/myproject/lib2/data.ts (used version)
 /user/username/projects/myproject/lib2/public.ts (used version)
 /user/username/projects/myproject/app.ts (used version)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/app.ts:
-  {}
-/user/username/projects/myproject/lib2/public.ts:
-  {}
-/user/username/projects/myproject/lib2/data.ts:
-  {}
-/user/username/projects/myproject/lib1/public.ts:
-  {}
-/user/username/projects/myproject/lib1/tools/public.ts:
-  {}
-/user/username/projects/myproject/lib1/tools/tools.interface.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/myproject/lib1/tools/tools.interface.js] file written with same contents
+//// [/user/username/projects/myproject/lib1/tools/toolsinterface.js] file written with same contents
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./lib1/tools/tools.interface.ts","./lib1/tools/public.ts","./lib1/public.ts","./lib2/data.ts","./lib2/public.ts","./app.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-4369626085-export interface ITest {\n    title: string;\n}","signature":"-2463740027-export interface ITest {\n    title: string;\n}\n"},"-13301115055-export * from \"./tools.interface\";","-5078933600-export * from \"./tools/public\";","-30573389178-import { ITest } from \"lib1/public\";\nexport class Data {\n    public test() {\n        const result: ITest = {\n            title: \"title\"\n        }\n        return result;\n    }\n}","-9530042629-export * from \"./data\";","-14937286564-import { Data } from \"lib2/public\";\nexport class App {\n    public constructor() {\n        new Data().test();\n    }\n}"],"fileIdsList":[[6],[3],[2],[4],[5]],"referencedMap":[[7,1],[4,2],[3,3],[5,4],[6,5]],"exportedModulesMap":[[7,1],[4,2],[3,3],[5,4],[6,5]],"semanticDiagnosticsPerFile":[1,7,4,3,2,5,6]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./lib1/tools/toolsinterface.ts","./lib1/tools/public.ts","./lib1/public.ts","./lib2/data.ts","./lib2/public.ts","./app.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-4369626085-export interface ITest {\n    title: string;\n}","signature":"-2463740027-export interface ITest {\n    title: string;\n}\n"},"-10750058173-export * from \"./toolsinterface\";","-5078933600-export * from \"./tools/public\";","-30573389178-import { ITest } from \"lib1/public\";\nexport class Data {\n    public test() {\n        const result: ITest = {\n            title: \"title\"\n        }\n        return result;\n    }\n}","-9530042629-export * from \"./data\";","-14937286564-import { Data } from \"lib2/public\";\nexport class App {\n    public constructor() {\n        new Data().test();\n    }\n}"],"root":[7],"fileIdsList":[[6],[3],[2],[4],[5]],"referencedMap":[[7,1],[4,2],[3,3],[5,4],[6,5]],"exportedModulesMap":[[7,1],[4,2],[3,3],[5,4],[6,5]],"semanticDiagnosticsPerFile":[1,7,4,3,2,5,6]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
     "fileNames": [
       "../../../../a/lib/lib.d.ts",
-      "./lib1/tools/tools.interface.ts",
+      "./lib1/tools/toolsinterface.ts",
       "./lib1/tools/public.ts",
       "./lib1/public.ts",
       "./lib2/data.ts",
@@ -643,7 +614,7 @@ exitCode:: ExitStatus.undefined
         "./lib1/tools/public.ts"
       ],
       [
-        "./lib1/tools/tools.interface.ts"
+        "./lib1/tools/toolsinterface.ts"
       ],
       [
         "./lib1/public.ts"
@@ -662,7 +633,7 @@ exitCode:: ExitStatus.undefined
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
       },
-      "./lib1/tools/tools.interface.ts": {
+      "./lib1/tools/toolsinterface.ts": {
         "original": {
           "version": "-4369626085-export interface ITest {\n    title: string;\n}",
           "signature": "-2463740027-export interface ITest {\n    title: string;\n}\n"
@@ -671,8 +642,8 @@ exitCode:: ExitStatus.undefined
         "signature": "-2463740027-export interface ITest {\n    title: string;\n}\n"
       },
       "./lib1/tools/public.ts": {
-        "version": "-13301115055-export * from \"./tools.interface\";",
-        "signature": "-13301115055-export * from \"./tools.interface\";"
+        "version": "-10750058173-export * from \"./toolsinterface\";",
+        "signature": "-10750058173-export * from \"./toolsinterface\";"
       },
       "./lib1/public.ts": {
         "version": "-5078933600-export * from \"./tools/public\";",
@@ -691,6 +662,12 @@ exitCode:: ExitStatus.undefined
         "signature": "-14937286564-import { Data } from \"lib2/public\";\nexport class App {\n    public constructor() {\n        new Data().test();\n    }\n}"
       }
     },
+    "root": [
+      [
+        7,
+        "./app.ts"
+      ]
+    ],
     "referencedMap": {
       "./app.ts": [
         "./lib2/public.ts"
@@ -699,7 +676,7 @@ exitCode:: ExitStatus.undefined
         "./lib1/tools/public.ts"
       ],
       "./lib1/tools/public.ts": [
-        "./lib1/tools/tools.interface.ts"
+        "./lib1/tools/toolsinterface.ts"
       ],
       "./lib2/data.ts": [
         "./lib1/public.ts"
@@ -716,7 +693,7 @@ exitCode:: ExitStatus.undefined
         "./lib1/tools/public.ts"
       ],
       "./lib1/tools/public.ts": [
-        "./lib1/tools/tools.interface.ts"
+        "./lib1/tools/toolsinterface.ts"
       ],
       "./lib2/data.ts": [
         "./lib1/public.ts"
@@ -730,25 +707,28 @@ exitCode:: ExitStatus.undefined
       "./app.ts",
       "./lib1/public.ts",
       "./lib1/tools/public.ts",
-      "./lib1/tools/tools.interface.ts",
+      "./lib1/tools/toolsinterface.ts",
       "./lib2/data.ts",
       "./lib2/public.ts"
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1435
+  "size": 1444
 }
 
 
 Change:: Rename property title to title2 of interface ITest
 
 Input::
-//// [/user/username/projects/myproject/lib1/tools/tools.interface.ts]
+//// [/user/username/projects/myproject/lib1/tools/toolsinterface.ts]
 export interface ITest {
     title2: string;
 }
 
 
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:26 AM[0m] File change detected. Starting incremental compilation...
@@ -757,7 +737,7 @@ Output::
   Object literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?
 
 [7m5[0m             title: "title"
-[7m [0m [91m            ~~~~~~~~~~~~~~[0m
+[7m [0m [91m            ~~~~~[0m
 
 [[90m12:01:33 AM[0m] Found 1 error. Watching for file changes.
 
@@ -768,7 +748,7 @@ Program options: {"baseUrl":"/user/username/projects/myproject","watch":true,"is
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
-/user/username/projects/myproject/lib1/tools/tools.interface.ts
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts
 /user/username/projects/myproject/lib1/tools/public.ts
 /user/username/projects/myproject/lib1/public.ts
 /user/username/projects/myproject/lib2/data.ts
@@ -776,7 +756,7 @@ Program files::
 /user/username/projects/myproject/app.ts
 
 Semantic diagnostics in builder refreshed for::
-/user/username/projects/myproject/lib1/tools/tools.interface.ts
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts
 /user/username/projects/myproject/lib1/tools/public.ts
 /user/username/projects/myproject/lib1/public.ts
 /user/username/projects/myproject/lib2/data.ts
@@ -784,49 +764,25 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/app.ts
 
 Shape signatures in builder refreshed for::
-/user/username/projects/myproject/lib1/tools/tools.interface.ts (computed .d.ts)
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts (computed .d.ts)
 /user/username/projects/myproject/lib1/tools/public.ts (used version)
 /user/username/projects/myproject/lib1/public.ts (used version)
 /user/username/projects/myproject/lib2/data.ts (used version)
 /user/username/projects/myproject/lib2/public.ts (used version)
 /user/username/projects/myproject/app.ts (used version)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/app.ts:
-  {}
-/user/username/projects/myproject/lib2/public.ts:
-  {}
-/user/username/projects/myproject/lib2/data.ts:
-  {}
-/user/username/projects/myproject/lib1/public.ts:
-  {}
-/user/username/projects/myproject/lib1/tools/public.ts:
-  {}
-/user/username/projects/myproject/lib1/tools/tools.interface.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/myproject/lib1/tools/tools.interface.js] file written with same contents
+//// [/user/username/projects/myproject/lib1/tools/toolsinterface.js] file written with same contents
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./lib1/tools/tools.interface.ts","./lib1/tools/public.ts","./lib1/public.ts","./lib2/data.ts","./lib2/public.ts","./app.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-3501597171-export interface ITest {\n    title2: string;\n}","signature":"-3883556937-export interface ITest {\n    title2: string;\n}\n"},"-13301115055-export * from \"./tools.interface\";","-5078933600-export * from \"./tools/public\";","-30573389178-import { ITest } from \"lib1/public\";\nexport class Data {\n    public test() {\n        const result: ITest = {\n            title: \"title\"\n        }\n        return result;\n    }\n}","-9530042629-export * from \"./data\";","-14937286564-import { Data } from \"lib2/public\";\nexport class App {\n    public constructor() {\n        new Data().test();\n    }\n}"],"fileIdsList":[[6],[3],[2],[4],[5]],"referencedMap":[[7,1],[4,2],[3,3],[5,4],[6,5]],"exportedModulesMap":[[7,1],[4,2],[3,3],[5,4],[6,5]],"semanticDiagnosticsPerFile":[1,7,4,3,2,[5,[{"file":"./lib2/data.ts","start":121,"length":14,"code":2322,"category":1,"messageText":{"messageText":"Type '{ title: string; }' is not assignable to type 'ITest'.","category":1,"code":2322,"next":[{"messageText":"Object literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?","category":1,"code":2561}]}}]],6]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./lib1/tools/toolsinterface.ts","./lib1/tools/public.ts","./lib1/public.ts","./lib2/data.ts","./lib2/public.ts","./app.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-3501597171-export interface ITest {\n    title2: string;\n}","signature":"-3883556937-export interface ITest {\n    title2: string;\n}\n"},"-10750058173-export * from \"./toolsinterface\";","-5078933600-export * from \"./tools/public\";","-30573389178-import { ITest } from \"lib1/public\";\nexport class Data {\n    public test() {\n        const result: ITest = {\n            title: \"title\"\n        }\n        return result;\n    }\n}","-9530042629-export * from \"./data\";","-14937286564-import { Data } from \"lib2/public\";\nexport class App {\n    public constructor() {\n        new Data().test();\n    }\n}"],"root":[7],"fileIdsList":[[6],[3],[2],[4],[5]],"referencedMap":[[7,1],[4,2],[3,3],[5,4],[6,5]],"exportedModulesMap":[[7,1],[4,2],[3,3],[5,4],[6,5]],"semanticDiagnosticsPerFile":[1,7,4,3,2,[5,[{"file":"./lib2/data.ts","start":121,"length":5,"code":2322,"category":1,"messageText":{"messageText":"Type '{ title: string; }' is not assignable to type 'ITest'.","category":1,"code":2322,"next":[{"messageText":"Object literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?","category":1,"code":2561}]}}]],6]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
     "fileNames": [
       "../../../../a/lib/lib.d.ts",
-      "./lib1/tools/tools.interface.ts",
+      "./lib1/tools/toolsinterface.ts",
       "./lib1/tools/public.ts",
       "./lib1/public.ts",
       "./lib2/data.ts",
@@ -841,7 +797,7 @@ exitCode:: ExitStatus.undefined
         "./lib1/tools/public.ts"
       ],
       [
-        "./lib1/tools/tools.interface.ts"
+        "./lib1/tools/toolsinterface.ts"
       ],
       [
         "./lib1/public.ts"
@@ -860,7 +816,7 @@ exitCode:: ExitStatus.undefined
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
       },
-      "./lib1/tools/tools.interface.ts": {
+      "./lib1/tools/toolsinterface.ts": {
         "original": {
           "version": "-3501597171-export interface ITest {\n    title2: string;\n}",
           "signature": "-3883556937-export interface ITest {\n    title2: string;\n}\n"
@@ -869,8 +825,8 @@ exitCode:: ExitStatus.undefined
         "signature": "-3883556937-export interface ITest {\n    title2: string;\n}\n"
       },
       "./lib1/tools/public.ts": {
-        "version": "-13301115055-export * from \"./tools.interface\";",
-        "signature": "-13301115055-export * from \"./tools.interface\";"
+        "version": "-10750058173-export * from \"./toolsinterface\";",
+        "signature": "-10750058173-export * from \"./toolsinterface\";"
       },
       "./lib1/public.ts": {
         "version": "-5078933600-export * from \"./tools/public\";",
@@ -889,6 +845,12 @@ exitCode:: ExitStatus.undefined
         "signature": "-14937286564-import { Data } from \"lib2/public\";\nexport class App {\n    public constructor() {\n        new Data().test();\n    }\n}"
       }
     },
+    "root": [
+      [
+        7,
+        "./app.ts"
+      ]
+    ],
     "referencedMap": {
       "./app.ts": [
         "./lib2/public.ts"
@@ -897,7 +859,7 @@ exitCode:: ExitStatus.undefined
         "./lib1/tools/public.ts"
       ],
       "./lib1/tools/public.ts": [
-        "./lib1/tools/tools.interface.ts"
+        "./lib1/tools/toolsinterface.ts"
       ],
       "./lib2/data.ts": [
         "./lib1/public.ts"
@@ -914,7 +876,7 @@ exitCode:: ExitStatus.undefined
         "./lib1/tools/public.ts"
       ],
       "./lib1/tools/public.ts": [
-        "./lib1/tools/tools.interface.ts"
+        "./lib1/tools/toolsinterface.ts"
       ],
       "./lib2/data.ts": [
         "./lib1/public.ts"
@@ -928,14 +890,14 @@ exitCode:: ExitStatus.undefined
       "./app.ts",
       "./lib1/public.ts",
       "./lib1/tools/public.ts",
-      "./lib1/tools/tools.interface.ts",
+      "./lib1/tools/toolsinterface.ts",
       [
         "./lib2/data.ts",
         [
           {
             "file": "./lib2/data.ts",
             "start": 121,
-            "length": 14,
+            "length": 5,
             "code": 2322,
             "category": 1,
             "messageText": {
@@ -957,6 +919,6 @@ exitCode:: ExitStatus.undefined
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1812
+  "size": 1820
 }
 

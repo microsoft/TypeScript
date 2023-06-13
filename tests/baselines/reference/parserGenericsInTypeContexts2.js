@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts2.ts] ////
+
 //// [parserGenericsInTypeContexts2.ts]
 class C extends A<X<T>, Y<Z<T>>> implements B<X<T>, Y<Z<T>>> {
 }

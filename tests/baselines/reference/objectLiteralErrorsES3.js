@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/objectLiterals/objectLiteralErrorsES3.ts] ////
+
 //// [objectLiteralErrorsES3.ts]
 var e1 = { get a() { return 4; } };
 var e2 = { set a(n) { } };

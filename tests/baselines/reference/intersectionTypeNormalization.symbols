@@ -1,4 +1,6 @@
-=== tests/cases/compiler/intersectionTypeNormalization.ts ===
+//// [tests/cases/compiler/intersectionTypeNormalization.ts] ////
+
+=== intersectionTypeNormalization.ts ===
 interface A { a: string }
 >A : Symbol(A, Decl(intersectionTypeNormalization.ts, 0, 0))
 >a : Symbol(A.a, Decl(intersectionTypeNormalization.ts, 0, 13))

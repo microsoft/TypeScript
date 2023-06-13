@@ -1,4 +1,6 @@
-=== tests/cases/compiler/propertyParameterWithQuestionMark.ts ===
+//// [tests/cases/compiler/propertyParameterWithQuestionMark.ts] ////
+
+=== propertyParameterWithQuestionMark.ts ===
 class C {
 >C : Symbol(C, Decl(propertyParameterWithQuestionMark.ts, 0, 0))
 

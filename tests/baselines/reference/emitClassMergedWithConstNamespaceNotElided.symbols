@@ -1,4 +1,6 @@
-=== tests/cases/compiler/enum.d.ts ===
+//// [tests/cases/compiler/emitClassMergedWithConstNamespaceNotElided.ts] ////
+
+=== enum.d.ts ===
 export namespace Clone {
 >Clone : Symbol(Clone, Decl(enum.d.ts, 0, 0), Decl(enum.d.ts, 7, 1))
 
@@ -26,7 +28,7 @@ export class Clone {
 >clone : Symbol(Clone.clone, Decl(enum.d.ts, 9, 20))
 >url : Symbol(url, Decl(enum.d.ts, 10, 17))
 }
-=== tests/cases/compiler/usage.ts ===
+=== usage.ts ===
 import {Clone} from "./enum";
 >Clone : Symbol(Clone, Decl(usage.ts, 0, 8))
 

@@ -1,0 +1,33 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionUndefinedSymbols.ts ===
+// some/*GOTO DEF*/Variable;
+// var a: someType;
+// var x = {}; x.someProperty;
+// var a: any; a.someProperty;
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionUndefinedSymbols.ts ===
+// someVariable;
+// var a: some/*GOTO DEF*/Type;
+// var x = {}; x.someProperty;
+// var a: any; a.someProperty;
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionUndefinedSymbols.ts ===
+// someVariable;
+// var a: someType;
+// var x = {}; x.some/*GOTO DEF*/Property;
+// var a: any; a.someProperty;
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionUndefinedSymbols.ts ===
+// someVariable;
+// var a: someType;
+// var x = {}; x.someProperty;
+// var a: any; a.some/*GOTO DEF*/Property;

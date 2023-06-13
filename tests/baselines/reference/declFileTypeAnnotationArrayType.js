@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileTypeAnnotationArrayType.ts] ////
+
 //// [declFileTypeAnnotationArrayType.ts]
 class c {
 }

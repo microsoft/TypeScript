@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts] ////
+
 //// [fatarrowfunctionsOptionalArgs.ts]
 // valid
 

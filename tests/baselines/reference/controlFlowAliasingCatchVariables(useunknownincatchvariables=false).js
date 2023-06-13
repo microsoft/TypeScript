@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/controlFlowAliasingCatchVariables.ts] ////
+
 //// [controlFlowAliasingCatchVariables.ts]
 try {}
 catch (e) {

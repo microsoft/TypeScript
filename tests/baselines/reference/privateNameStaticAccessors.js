@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameStaticAccessors.ts] ////
+
 //// [privateNameStaticAccessors.ts]
 class A1 {
     static get #prop() { return ""; }

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloadAssignability02.ts ===
+//// [tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloadAssignability02.ts] ////
+
+=== stringLiteralTypesOverloadAssignability02.ts ===
 function f(x: "foo"): number;
 >f : (x: "foo") => number
 >x : "foo"

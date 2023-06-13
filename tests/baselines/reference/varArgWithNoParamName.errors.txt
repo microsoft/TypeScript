@@ -1,7 +1,7 @@
-tests/cases/compiler/varArgWithNoParamName.ts(1,16): error TS1003: Identifier expected.
+varArgWithNoParamName.ts(1,16): error TS1003: Identifier expected.
 
 
-==== tests/cases/compiler/varArgWithNoParamName.ts (1 errors) ====
+==== varArgWithNoParamName.ts (1 errors) ====
     function t1(...) {}
                    ~
 !!! error TS1003: Identifier expected.

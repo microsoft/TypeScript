@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/controlFlowCommaExpressionAssertionMultiple.ts] ////
+
 //// [controlFlowCommaExpressionAssertionMultiple.ts]
 function Narrow<T>(value: any): asserts value is T {}
 

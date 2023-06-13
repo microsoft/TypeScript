@@ -1,3 +1,219 @@
+=== /tests/cases/fourslash/completionsCommentsClass.ts ===
+// /** This is class c2 without constructor*/
+// class c2 {
+// }
+// var i2 = new c2();
+// var i2_c = c2;
+// class c3 {
+//     /** Constructor comment*/
+//     constructor() {
+//     }
+// }
+// var i3 = new c3();
+// var i3_c = c3;
+// /** Class comment*/
+// class c4 {
+//     /** Constructor comment*/
+//     constructor() {
+//     }
+// }
+// var i4 = new c4();
+// var i4_c = c4;
+// /** Class with statics*/
+// class c5 {
+//     static s1: number;
+// }
+// var i5 = new c5();
+// var i5_c = c5;
+// /** class with statics and constructor*/
+// class c6 {
+//     /** s1 comment*/
+//     static s1: number;
+//     /** constructor comment*/
+//     constructor() {
+//     }
+// }
+// var i6 = new c6();
+// var i6_c = c6;
+// 
+// ^
+// | ----------------------------------------------------------------------
+// | class a
+// | class c2
+// | class c3
+// | class c4
+// | class c5
+// | class c6
+// | var i2: c2
+// | var i2_c: typeof c2
+// | var i3: c3
+// | var i3_c: typeof c3
+// | var i4: c4
+// | var i4_c: typeof c4
+// | var i5: c5
+// | var i5_c: typeof c5
+// | var i6: c6
+// | var i6_c: typeof c6
+// | namespace m
+// | var myVar: m.m2.c1
+// | abstract
+// | any
+// | interface Array<T>
+// | var Array: ArrayConstructor
+// | interface ArrayBuffer
+// | var ArrayBuffer: ArrayBufferConstructor
+// | as
+// | asserts
+// | async
+// | await
+// | bigint
+// | boolean
+// | interface Boolean
+// | var Boolean: BooleanConstructor
+// | break
+// | case
+// | catch
+// | class
+// | const
+// | continue
+// | interface DataView
+// | var DataView: DataViewConstructor
+// | interface Date
+// | var Date: DateConstructor
+// | debugger
+// | declare
+// | function decodeURI(encodedURI: string): string
+// | function decodeURIComponent(encodedURIComponent: string): string
+// | default
+// | delete
+// | do
+// | else
+// | function encodeURI(uri: string): string
+// | function encodeURIComponent(uriComponent: string | number | boolean): string
+// | enum
+// | interface Error
+// | var Error: ErrorConstructor
+// | function eval(x: string): any
+// | interface EvalError
+// | var EvalError: EvalErrorConstructor
+// | export
+// | extends
+// | false
+// | finally
+// | interface Float32Array
+// | var Float32Array: Float32ArrayConstructor
+// | interface Float64Array
+// | var Float64Array: Float64ArrayConstructor
+// | for
+// | function
+// | interface Function
+// | var Function: FunctionConstructor
+// | module globalThis
+// | if
+// | implements
+// | import
+// | in
+// | infer
+// | var Infinity: number
+// | instanceof
+// | interface Int16Array
+// | var Int16Array: Int16ArrayConstructor
+// | interface Int32Array
+// | var Int32Array: Int32ArrayConstructor
+// | interface Int8Array
+// | var Int8Array: Int8ArrayConstructor
+// | interface
+// | namespace Intl
+// | function isFinite(number: number): boolean
+// | function isNaN(number: number): boolean
+// | interface JSON
+// | var JSON: JSON
+// | keyof
+// | let
+// | interface Math
+// | var Math: Math
+// | module
+// | namespace
+// | var NaN: number
+// | never
+// | new
+// | null
+// | number
+// | interface Number
+// | var Number: NumberConstructor
+// | object
+// | interface Object
+// | var Object: ObjectConstructor
+// | package
+// | function parseFloat(string: string): number
+// | function parseInt(string: string, radix?: number): number
+// | interface RangeError
+// | var RangeError: RangeErrorConstructor
+// | readonly
+// | interface ReferenceError
+// | var ReferenceError: ReferenceErrorConstructor
+// | interface RegExp
+// | var RegExp: RegExpConstructor
+// | return
+// | satisfies
+// | string
+// | interface String
+// | var String: StringConstructor
+// | super
+// | switch
+// | symbol
+// | interface SyntaxError
+// | var SyntaxError: SyntaxErrorConstructor
+// | this
+// | throw
+// | true
+// | try
+// | type
+// | interface TypeError
+// | var TypeError: TypeErrorConstructor
+// | typeof
+// | interface Uint16Array
+// | var Uint16Array: Uint16ArrayConstructor
+// | interface Uint32Array
+// | var Uint32Array: Uint32ArrayConstructor
+// | interface Uint8Array
+// | var Uint8Array: Uint8ArrayConstructor
+// | interface Uint8ClampedArray
+// | var Uint8ClampedArray: Uint8ClampedArrayConstructor
+// | var undefined
+// | unique
+// | unknown
+// | interface URIError
+// | var URIError: URIErrorConstructor
+// | var
+// | void
+// | while
+// | with
+// | yield
+// | function escape(string: string): string
+// | function unescape(string: string): string
+// | ----------------------------------------------------------------------
+// class a {
+//     /**
+//     constructor for a
+//     @param a this is my a
+//     */
+//     constructor(a: string) {
+//     }
+// }
+// new a("Hello");
+// module m {
+//     export module m2 {
+//         /** class comment */
+//         export class c1 {
+//             /** constructor comment*/
+//             constructor() {
+//             }
+//         }
+//     }
+// }
+// var myVar = new m.m2.c1();
+
 [
   {
     "marker": {
@@ -5,7 +221,7 @@
       "position": 599,
       "name": "26"
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": true,
       "isMemberCompletion": false,

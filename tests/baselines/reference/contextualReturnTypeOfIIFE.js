@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextualReturnTypeOfIIFE.ts] ////
+
 //// [contextualReturnTypeOfIIFE.ts]
 const test1: Promise<[one: number, two: string]> = (async () => {
     return [1, 'two'];

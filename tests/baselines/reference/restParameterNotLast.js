@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/restParameterNotLast.ts] ////
+
 //// [restParameterNotLast.ts]
 function f(...x, y) { }
 

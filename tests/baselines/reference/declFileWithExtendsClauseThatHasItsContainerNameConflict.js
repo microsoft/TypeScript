@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileWithExtendsClauseThatHasItsContainerNameConflict.ts] ////
+
 //// [declFileWithExtendsClauseThatHasItsContainerNameConflict.ts]
 declare module A.B.C {
     class B {

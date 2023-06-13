@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/keyofGenericExtendingClassDoubleLayer.ts] ////
+
 //// [keyofGenericExtendingClassDoubleLayer.ts]
 class Model<Attributes = any> {
     public createdAt: Date;

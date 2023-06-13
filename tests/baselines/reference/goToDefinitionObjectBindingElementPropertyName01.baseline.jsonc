@@ -1,0 +1,21 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionObjectBindingElementPropertyName01.ts ===
+// interface I {
+//     <|[|property1|]: number;|>
+//     property2: string;
+// }
+// 
+// var foo: I;
+// var { /*GOTO DEF*/property1: prop1 } = foo;
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "property1",
+    "containerName": "I",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]

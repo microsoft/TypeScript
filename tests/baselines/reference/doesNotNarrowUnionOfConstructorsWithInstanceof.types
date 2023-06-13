@@ -1,4 +1,6 @@
-=== tests/cases/compiler/doesNotNarrowUnionOfConstructorsWithInstanceof.ts ===
+//// [tests/cases/compiler/doesNotNarrowUnionOfConstructorsWithInstanceof.ts] ////
+
+=== doesNotNarrowUnionOfConstructorsWithInstanceof.ts ===
 class A {
 >A : A
 

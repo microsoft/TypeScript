@@ -1,8 +1,10 @@
-=== tests/cases/conformance/expressions/asOperator/foo.ts ===
+//// [tests/cases/conformance/expressions/asOperator/asOperator4.ts] ////
+
+=== foo.ts ===
 export function foo() { }
 >foo : Symbol(foo, Decl(foo.ts, 0, 0))
 
-=== tests/cases/conformance/expressions/asOperator/bar.ts ===
+=== bar.ts ===
 import { foo } from './foo';
 >foo : Symbol(foo, Decl(bar.ts, 0, 8))
 

@@ -1,9 +1,9 @@
-tests/cases/conformance/types/keyof/keyofAndGenericIndexedAccessNarrowableConstraint.ts(15,15): error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
-tests/cases/conformance/types/keyof/keyofAndGenericIndexedAccessNarrowableConstraint.ts(15,20): error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
-tests/cases/conformance/types/keyof/keyofAndGenericIndexedAccessNarrowableConstraint.ts(19,16): error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
+keyofAndGenericIndexedAccessNarrowableConstraint.ts(15,15): error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
+keyofAndGenericIndexedAccessNarrowableConstraint.ts(15,20): error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
+keyofAndGenericIndexedAccessNarrowableConstraint.ts(19,16): error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
 
 
-==== tests/cases/conformance/types/keyof/keyofAndGenericIndexedAccessNarrowableConstraint.ts (3 errors) ====
+==== keyofAndGenericIndexedAccessNarrowableConstraint.ts (3 errors) ====
     export type Context = {
         V1: { a: string },
         V2: { b: string },

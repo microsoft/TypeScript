@@ -72,6 +72,7 @@ import {
     ObjectFlags,
     ObjectType,
     RelationComparisonResult,
+    ScriptKind,
     Signature,
     SignatureCheckMode,
     SignatureFlags,
@@ -275,13 +276,13 @@ export namespace Debug {
     export function assertEachNode<T extends Node, U extends T>(nodes: readonly T[], test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts nodes is readonly U[];
     export function assertEachNode<T extends Node, U extends T>(nodes: NodeArray<T> | undefined, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts nodes is NodeArray<U> | undefined;
     export function assertEachNode<T extends Node, U extends T>(nodes: readonly T[] | undefined, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts nodes is readonly U[] | undefined;
-    export function assertEachNode(nodes: readonly Node[], test: (node: Node) => boolean, message?: string, stackCrawlMark?: AnyFunction): void;
-    export function assertEachNode(nodes: readonly Node[] | undefined, test: (node: Node) => boolean, message?: string, stackCrawlMark?: AnyFunction) {
+    export function assertEachNode(nodes: readonly Node[], test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction): void;
+    export function assertEachNode(nodes: readonly Node[] | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction) {
         if (shouldAssertFunction(AssertionLevel.Normal, "assertEachNode")) {
             assert(
                 test === undefined || every(nodes, test),
                 message || "Unexpected node.",
-                () => `Node array did not pass test '${getFunctionName(test)}'.`,
+                () => `Node array did not pass test '${getFunctionName(test!)}'.`,
                 stackCrawlMark || assertEachNode);
         }
     }
@@ -437,6 +438,10 @@ export namespace Debug {
 
     export function formatSnippetKind(kind: SnippetKind | undefined): string {
         return formatEnum(kind, (ts as any).SnippetKind, /*isFlags*/ false);
+    }
+
+    export function formatScriptKind(kind: ScriptKind | undefined): string {
+        return formatEnum(kind, (ts as any).ScriptKind, /*isFlags*/ false);
     }
 
     export function formatNodeFlags(flags: NodeFlags | undefined): string {

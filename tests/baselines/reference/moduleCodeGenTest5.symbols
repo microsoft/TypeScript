@@ -1,4 +1,6 @@
-=== tests/cases/compiler/moduleCodeGenTest5.ts ===
+//// [tests/cases/compiler/moduleCodeGenTest5.ts] ////
+
+=== moduleCodeGenTest5.ts ===
 export var x = 0;
 >x : Symbol(x, Decl(moduleCodeGenTest5.ts, 0, 10))
 

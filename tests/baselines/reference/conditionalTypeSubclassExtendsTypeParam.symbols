@@ -1,4 +1,6 @@
-=== tests/cases/compiler/conditionalTypeSubclassExtendsTypeParam.ts ===
+//// [tests/cases/compiler/conditionalTypeSubclassExtendsTypeParam.ts] ////
+
+=== conditionalTypeSubclassExtendsTypeParam.ts ===
 declare class Model<M extends MR, MR extends {}> {
 >Model : Symbol(Model, Decl(conditionalTypeSubclassExtendsTypeParam.ts, 0, 0))
 >M : Symbol(M, Decl(conditionalTypeSubclassExtendsTypeParam.ts, 0, 20))

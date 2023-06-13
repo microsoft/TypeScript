@@ -1,10 +1,10 @@
-tests/cases/compiler/a.js(1,5): error TS2451: Cannot redeclare block-scoped variable 'C'.
-tests/cases/compiler/a.js(2,5): error TS2451: Cannot redeclare block-scoped variable 'C'.
-tests/cases/compiler/a.js(6,5): error TS7027: Unreachable code detected.
-tests/cases/compiler/a.js(11,9): error TS1100: Invalid use of 'arguments' in strict mode.
+a.js(1,5): error TS2451: Cannot redeclare block-scoped variable 'C'.
+a.js(2,5): error TS2451: Cannot redeclare block-scoped variable 'C'.
+a.js(6,5): error TS7027: Unreachable code detected.
+a.js(11,9): error TS1100: Invalid use of 'arguments' in strict mode.
 
 
-==== tests/cases/compiler/a.js (4 errors) ====
+==== a.js (4 errors) ====
     let C = "sss";
         ~
 !!! error TS2451: Cannot redeclare block-scoped variable 'C'.

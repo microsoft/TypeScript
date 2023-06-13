@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionType.ts ===
+//// [tests/cases/compiler/functionType.ts] ////
+
+=== functionType.ts ===
 function salt() {}
 >salt : Symbol(salt, Decl(functionType.ts, 0, 0))
 

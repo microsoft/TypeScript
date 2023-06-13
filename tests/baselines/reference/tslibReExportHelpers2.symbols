@@ -1,0 +1,77 @@
+//// [tests/cases/compiler/tslibReExportHelpers2.ts] ////
+
+=== /node_modules/tslib/index.d.ts ===
+export declare function __classPrivateFieldGet<T extends object, V>(
+>__classPrivateFieldGet : Symbol(__classPrivateFieldGet, Decl(index.d.ts, 0, 0), Decl(index.d.ts, 4, 5))
+>T : Symbol(T, Decl(index.d.ts, 0, 47))
+>V : Symbol(V, Decl(index.d.ts, 0, 64))
+
+  receiver: T,
+>receiver : Symbol(receiver, Decl(index.d.ts, 0, 68))
+>T : Symbol(T, Decl(index.d.ts, 0, 47))
+
+  state: { has(o: T): boolean, get(o: T): V | undefined },
+>state : Symbol(state, Decl(index.d.ts, 1, 14))
+>has : Symbol(has, Decl(index.d.ts, 2, 10))
+>o : Symbol(o, Decl(index.d.ts, 2, 15))
+>T : Symbol(T, Decl(index.d.ts, 0, 47))
+>get : Symbol(get, Decl(index.d.ts, 2, 30))
+>o : Symbol(o, Decl(index.d.ts, 2, 35))
+>T : Symbol(T, Decl(index.d.ts, 0, 47))
+>V : Symbol(V, Decl(index.d.ts, 0, 64))
+
+  kind?: "f"
+>kind : Symbol(kind, Decl(index.d.ts, 2, 58))
+
+): V;
+>V : Symbol(V, Decl(index.d.ts, 0, 64))
+
+export declare function __classPrivateFieldGet<T extends new (...args: any[]) => unknown, V>(
+>__classPrivateFieldGet : Symbol(__classPrivateFieldGet, Decl(index.d.ts, 0, 0), Decl(index.d.ts, 4, 5))
+>T : Symbol(T, Decl(index.d.ts, 5, 47))
+>args : Symbol(args, Decl(index.d.ts, 5, 62))
+>V : Symbol(V, Decl(index.d.ts, 5, 89))
+
+  receiver: T,
+>receiver : Symbol(receiver, Decl(index.d.ts, 5, 93))
+>T : Symbol(T, Decl(index.d.ts, 5, 47))
+
+  state: T,
+>state : Symbol(state, Decl(index.d.ts, 6, 14))
+>T : Symbol(T, Decl(index.d.ts, 5, 47))
+
+  kind: "f",
+>kind : Symbol(kind, Decl(index.d.ts, 7, 11))
+
+  f: { value: V }
+>f : Symbol(f, Decl(index.d.ts, 8, 12))
+>value : Symbol(value, Decl(index.d.ts, 9, 6))
+>V : Symbol(V, Decl(index.d.ts, 5, 89))
+
+): V;
+>V : Symbol(V, Decl(index.d.ts, 5, 89))
+
+=== /node_modules/tslib/index.d.mts ===
+export { __classPrivateFieldGet } from "./index.js";
+>__classPrivateFieldGet : Symbol(__classPrivateFieldGet, Decl(index.d.mts, 0, 8))
+
+=== /index.mts ===
+export class Foo {
+>Foo : Symbol(Foo, Decl(index.mts, 0, 0))
+
+  constructor() {
+    console.log(Foo.#test());
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>Foo.#test : Symbol(Foo.#test, Decl(index.mts, 3, 3))
+>Foo : Symbol(Foo, Decl(index.mts, 0, 0))
+  }
+
+  static #test() {
+>#test : Symbol(Foo.#test, Decl(index.mts, 3, 3))
+
+    return 'success';
+  }
+}
+

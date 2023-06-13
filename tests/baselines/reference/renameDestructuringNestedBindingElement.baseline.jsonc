@@ -1,0 +1,59 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDestructuringNestedBindingElement.ts ===
+// interface MultiRobot {
+//     name: string;
+//     skills: {
+//         /*RENAME*/<|[|primaryRENAME|]: string;|>
+//         secondary: string;
+//     };
+// }
+// let multiRobots: MultiRobot[];
+// for (<|let { skills: {[|primaryRENAME|]: primaryA, secondary: secondaryA } } of multiRobots|>) {
+//     console.log(primaryA);
+// }
+// for (<|let { skills: {[|primaryRENAME|]: primary/*END SUFFIX*/, secondary } } of multiRobots|>) {
+//     console.log(primary);
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDestructuringNestedBindingElement.ts ===
+// interface MultiRobot {
+//     name: string;
+//     skills: {
+//         <|[|primaryRENAME|]: string;|>
+//         secondary: string;
+//     };
+// }
+// let multiRobots: MultiRobot[];
+// for (<|let { skills: {/*RENAME*/[|primaryRENAME|]: primaryA, secondary: secondaryA } } of multiRobots|>) {
+//     console.log(primaryA);
+// }
+// for (<|let { skills: {[|primaryRENAME|]: primary/*END SUFFIX*/, secondary } } of multiRobots|>) {
+//     console.log(primary);
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDestructuringNestedBindingElement.ts ===
+// --- (line: 8) skipped ---
+// for (let { skills: {primary: primaryA, secondary: secondaryA } } of multiRobots) {
+//     console.log(primaryA);
+// }
+// for (<|let { skills: {/*START PREFIX*/primary: /*RENAME*/[|primaryRENAME|], secondary } } of multiRobots|>) {
+//     console.log([|primaryRENAME|]);
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDestructuringNestedBindingElement.ts ===
+// --- (line: 8) skipped ---
+// for (let { skills: {primary: primaryA, secondary: secondaryA } } of multiRobots) {
+//     console.log(primaryA);
+// }
+// for (<|let { skills: {/*START PREFIX*/primary: [|primaryRENAME|], secondary } } of multiRobots|>) {
+//     console.log(/*RENAME*/[|primaryRENAME|]);
+// }

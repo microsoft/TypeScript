@@ -1,4 +1,6 @@
-=== tests/cases/compiler/flowInFinally1.ts ===
+//// [tests/cases/compiler/flowInFinally1.ts] ////
+
+=== flowInFinally1.ts ===
 class A {
 >A : A
 
@@ -9,8 +11,6 @@ class A {
 
 let a: A | null = null;
 >a : A | null
->null : null
->null : null
 
 try {
   a = new A();

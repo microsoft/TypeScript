@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arrayConcat2.ts] ////
+
 //// [arrayConcat2.ts]
 var a: string[] = [];
 a.concat("hello", 'world');

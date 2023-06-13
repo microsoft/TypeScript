@@ -1,7 +1,23 @@
-import * as ts from "../../_namespaces/ts";
-import * as vfs from "../../_namespaces/vfs";
 import * as fakes from "../../_namespaces/fakes";
 import * as Harness from "../../_namespaces/Harness";
+import * as ts from "../../_namespaces/ts";
+import * as vfs from "../../_namespaces/vfs";
+import { libContent } from "../helpers/contents";
+import { createSolutionBuilderHostForBaseline } from "../helpers/solutionBuilder";
+import {
+    noChangeOnlyRuns,
+    noChangeRun,
+    testTscCompileLike,
+    TestTscEdit,
+    TscCompileSystem,
+    verifyTsc,
+    verifyTscCompileLike,
+} from "../helpers/tsc";
+import {
+    appendText, loadProjectFromDisk,
+    loadProjectFromFiles, prependText,
+    replaceText
+} from "../helpers/vfs";
 import {
     changeToHostTrackingWrittenFiles,
     createWatchedSystem,
@@ -9,23 +25,7 @@ import {
     getTsBuildProjectFilePath,
     libFile,
     TestServerHost,
-} from "../virtualFileSystemWithWatch";
-import {
-    appendText,
-    createSolutionBuilderHostForBaseline,
-    libContent,
-    loadProjectFromDisk,
-    loadProjectFromFiles,
-    noChangeOnlyRuns,
-    noChangeRun,
-    prependText,
-    replaceText,
-    testTscCompileLike,
-    TestTscEdit,
-    TscCompileSystem,
-    verifyTsc,
-    verifyTscCompileLike,
-} from "../tsc/helpers";
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsbuild:: on 'sample1' project", () => {
     let projFs: vfs.FileSystem;
@@ -161,7 +161,10 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
                 },
                 {
                     caption: "rebuilds when tsconfig changes",
-                    edit: fs => replaceText(fs, "/src/tests/tsconfig.json", `"composite": true`, `"composite": true, "target": "es3"`),
+                    edit: fs => {
+                        replaceText(fs, "/src/tests/tsconfig.json", `"composite": true`, `"composite": true, "target": "es2020"`);
+                        fs.writeFileSync("/lib/lib.es2020.full.d.ts", libContent);
+                    },
                 },
             ]
         });

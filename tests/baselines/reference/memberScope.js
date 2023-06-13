@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/memberScope.ts] ////
+
 //// [memberScope.ts]
 module Salt {
   export class Pepper {}

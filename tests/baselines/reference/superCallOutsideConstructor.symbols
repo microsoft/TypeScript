@@ -1,4 +1,6 @@
-=== tests/cases/compiler/superCallOutsideConstructor.ts ===
+//// [tests/cases/compiler/superCallOutsideConstructor.ts] ////
+
+=== superCallOutsideConstructor.ts ===
 class C {
 >C : Symbol(C, Decl(superCallOutsideConstructor.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/rest/objectRestPropertyMustBeLast.ts ===
+//// [tests/cases/conformance/types/rest/objectRestPropertyMustBeLast.ts] ////
+
+=== objectRestPropertyMustBeLast.ts ===
 var {...a, x } = { x: 1 };    // Error, rest must be last property
 >a : Symbol(a, Decl(objectRestPropertyMustBeLast.ts, 0, 5), Decl(objectRestPropertyMustBeLast.ts, 3, 5))
 >x : Symbol(x, Decl(objectRestPropertyMustBeLast.ts, 0, 10), Decl(objectRestPropertyMustBeLast.ts, 3, 10))

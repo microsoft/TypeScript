@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/bug28014.js ===
+//// [tests/cases/conformance/salsa/moduleExportAliasImported.ts] ////
+
+=== bug28014.js ===
 exports.version = 1
 >exports.version : Symbol(version, Decl(bug28014.js, 0, 0))
 >exports : Symbol(version, Decl(bug28014.js, 0, 0))
@@ -13,7 +15,7 @@ module.exports = alias
 >exports : Symbol(export=, Decl(bug28014.js, 1, 20))
 >alias : Symbol(alias, Decl(bug28014.js, 0, 19))
 
-=== tests/cases/conformance/salsa/importer.js ===
+=== importer.js ===
 import('./bug28014')
->'./bug28014' : Symbol("tests/cases/conformance/salsa/bug28014", Decl(bug28014.js, 0, 0))
+>'./bug28014' : Symbol("bug28014", Decl(bug28014.js, 0, 0))
 

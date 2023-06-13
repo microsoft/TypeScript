@@ -7,7 +7,7 @@ import {
     CheckFlags,
     contains,
     countWhere,
-    createPrinter,
+    createPrinterWithRemoveComments,
     createTextSpan,
     createTextSpanFromBounds,
     createTextSpanFromNode,
@@ -16,6 +16,7 @@ import {
     emptyArray,
     Expression,
     factory,
+    findAncestor,
     findContainingList,
     findIndex,
     findPrecedingToken,
@@ -30,7 +31,9 @@ import {
     Identifier,
     identity,
     InternalSymbolName,
+    isArrayBindingPattern,
     isBinaryExpression,
+    isBindingElement,
     isBlock,
     isCallOrNewExpression,
     isFunctionTypeNode,
@@ -41,6 +44,8 @@ import {
     isJsxOpeningLikeElement,
     isMethodDeclaration,
     isNoSubstitutionTemplateLiteral,
+    isObjectBindingPattern,
+    isParameter,
     isPropertyAccessExpression,
     isSourceFile,
     isSourceFileJS,
@@ -50,6 +55,7 @@ import {
     isTemplateSpan,
     isTemplateTail,
     isTransientSymbol,
+    JsxTagNameExpression,
     last,
     lastOrUndefined,
     ListFormat,
@@ -227,7 +233,7 @@ function createJSSignatureHelpItems(argumentInfo: ArgumentListInfo, program: Pro
 
 function containsPrecedingToken(startingToken: Node, sourceFile: SourceFile, container: Node) {
     const pos = startingToken.getFullStart();
-    // There’s a possibility that `startingToken.parent` contains only `startingToken` and
+    // There's a possibility that `startingToken.parent` contains only `startingToken` and
     // missing nodes, none of which are valid to be returned by `findPrecedingToken`. In that
     // case, the preceding token we want is actually higher up the tree—almost definitely the
     // next parent, but theoretically the situation with missing nodes might be happening on
@@ -387,8 +393,11 @@ function countBinaryExpressionParameters(b: BinaryExpression): number {
 }
 
 function tryGetParameterInfo(startingToken: Node, position: number, sourceFile: SourceFile, checker: TypeChecker): ArgumentListInfo | undefined {
-    const info = getContextualSignatureLocationInfo(startingToken, sourceFile, position, checker);
-    if (!info) return undefined;
+    const node = getAdjustedNode(startingToken);
+    if (node === undefined) return undefined;
+
+    const info = getContextualSignatureLocationInfo(node, sourceFile, position, checker);
+    if (info === undefined) return undefined;
     const { contextualType, argumentIndex, argumentCount, argumentsSpan } = info;
 
     // for optional function condition.
@@ -404,16 +413,26 @@ function tryGetParameterInfo(startingToken: Node, position: number, sourceFile: 
     return { isTypeParameterList: false, invocation, argumentsSpan, argumentIndex, argumentCount };
 }
 
+function getAdjustedNode(node: Node) {
+    switch (node.kind) {
+        case SyntaxKind.OpenParenToken:
+        case SyntaxKind.CommaToken:
+            return node;
+        default:
+            return findAncestor(node.parent, n =>
+                isParameter(n) ? true : isBindingElement(n) || isObjectBindingPattern(n) || isArrayBindingPattern(n) ? false : "quit");
+    }
+}
+
 interface ContextualSignatureLocationInfo { readonly contextualType: Type; readonly argumentIndex: number; readonly argumentCount: number; readonly argumentsSpan: TextSpan; }
-function getContextualSignatureLocationInfo(startingToken: Node, sourceFile: SourceFile, position: number, checker: TypeChecker): ContextualSignatureLocationInfo | undefined {
-    if (startingToken.kind !== SyntaxKind.OpenParenToken && startingToken.kind !== SyntaxKind.CommaToken) return undefined;
-    const { parent } = startingToken;
+function getContextualSignatureLocationInfo(node: Node, sourceFile: SourceFile, position: number, checker: TypeChecker): ContextualSignatureLocationInfo | undefined {
+    const { parent } = node;
     switch (parent.kind) {
         case SyntaxKind.ParenthesizedExpression:
         case SyntaxKind.MethodDeclaration:
         case SyntaxKind.FunctionExpression:
         case SyntaxKind.ArrowFunction:
-            const info = getArgumentOrParameterListInfo(startingToken, position, sourceFile);
+            const info = getArgumentOrParameterListInfo(node, position, sourceFile);
             if (!info) return undefined;
             const { argumentIndex, argumentCount, argumentsSpan } = info;
             const contextualType = isMethodDeclaration(parent) ? checker.getContextualTypeForObjectLiteralElement(parent) : checker.getContextualType(parent as ParenthesizedExpression | FunctionExpression | ArrowFunction);
@@ -421,7 +440,7 @@ function getContextualSignatureLocationInfo(startingToken: Node, sourceFile: Sou
         case SyntaxKind.BinaryExpression: {
             const highestBinary = getHighestBinary(parent as BinaryExpression);
             const contextualType = checker.getContextualType(highestBinary);
-            const argumentIndex = startingToken.kind === SyntaxKind.OpenParenToken ? 0 : countBinaryExpressionParameters(parent as BinaryExpression) - 1;
+            const argumentIndex = node.kind === SyntaxKind.OpenParenToken ? 0 : countBinaryExpressionParameters(parent as BinaryExpression) - 1;
             const argumentCount = countBinaryExpressionParameters(highestBinary);
             return contextualType && { contextualType, argumentIndex, argumentCount, argumentsSpan: createTextSpanFromNode(parent) };
         }
@@ -581,7 +600,7 @@ function getChildListThatStartsWithOpenerToken(parent: Node, openerToken: Node, 
     return children[indexOfOpenerToken + 1];
 }
 
-function getExpressionFromInvocation(invocation: CallInvocation | TypeArgsInvocation): Expression {
+function getExpressionFromInvocation(invocation: CallInvocation | TypeArgsInvocation): Expression | JsxTagNameExpression {
     return invocation.kind === InvocationKind.Call ? getInvokedExpression(invocation.node) : invocation.called;
 }
 
@@ -659,7 +678,7 @@ function createTypeHelpItems(
 function getTypeHelpItem(symbol: Symbol, typeParameters: readonly TypeParameter[], checker: TypeChecker, enclosingDeclaration: Node, sourceFile: SourceFile): SignatureHelpItem {
     const typeSymbolDisplay = symbolToDisplayParts(checker, symbol);
 
-    const printer = createPrinter({ removeComments: true });
+    const printer = createPrinterWithRemoveComments();
     const parameters = typeParameters.map(t => createSignatureHelpParameterForTypeParameter(t, checker, enclosingDeclaration, sourceFile, printer));
 
     const documentation = symbol.getDocumentationComment(checker);
@@ -699,7 +718,7 @@ interface SignatureHelpItemInfo { readonly isVariadic: boolean; readonly paramet
 
 function itemInfoForTypeParameters(candidateSignature: Signature, checker: TypeChecker, enclosingDeclaration: Node, sourceFile: SourceFile): SignatureHelpItemInfo[] {
     const typeParameters = (candidateSignature.target || candidateSignature).typeParameters;
-    const printer = createPrinter({ removeComments: true });
+    const printer = createPrinterWithRemoveComments();
     const parameters = (typeParameters || emptyArray).map(t => createSignatureHelpParameterForTypeParameter(t, checker, enclosingDeclaration, sourceFile, printer));
     const thisParameter = candidateSignature.thisParameter ? [checker.symbolToParameterDeclaration(candidateSignature.thisParameter, enclosingDeclaration, signatureHelpNodeBuilderFlags)!] : [];
 
@@ -713,7 +732,7 @@ function itemInfoForTypeParameters(candidateSignature: Signature, checker: TypeC
 }
 
 function itemInfoForParameters(candidateSignature: Signature, checker: TypeChecker, enclosingDeclaration: Node, sourceFile: SourceFile): SignatureHelpItemInfo[] {
-    const printer = createPrinter({ removeComments: true });
+    const printer = createPrinterWithRemoveComments();
     const typeParameterParts = mapToDisplayParts(writer => {
         if (candidateSignature.typeParameters && candidateSignature.typeParameters.length) {
             const args = factory.createNodeArray(candidateSignature.typeParameters.map(p => checker.typeParameterToDeclaration(p, enclosingDeclaration, signatureHelpNodeBuilderFlags)!));

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorExperimentalDecorators.ts] ////
+
 //// [autoAccessorExperimentalDecorators.ts]
 declare var dec: (target: any, key: PropertyKey, desc: PropertyDescriptor) => void;
 

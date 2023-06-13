@@ -17,15 +17,8 @@ export class SortedMap<K, V> {
         this._comparer = typeof comparer === "object" ? comparer.comparer : comparer;
         this._order = typeof comparer === "object" && comparer.sort === "insertion" ? [] : undefined;
         if (iterable) {
-            const iterator = getIterator(iterable);
-            try {
-                for (let i = nextResult(iterator); i; i = nextResult(iterator)) {
-                    const [key, value] = i.value;
-                    this.set(key, value);
-                }
-            }
-            finally {
-                closeIterator(iterator);
+            for (const [key, value] of iterable) {
+                this.set(key, value);
             }
         }
     }
@@ -216,7 +209,7 @@ export class SortedMap<K, V> {
     }
 }
 
-export function insertAt<T>(array: T[], index: number, value: T): void {
+function insertAt<T>(array: T[], index: number, value: T): void {
     if (index === 0) {
         array.unshift(value);
     }
@@ -229,20 +222,6 @@ export function insertAt<T>(array: T[], index: number, value: T): void {
         }
         array[index] = value;
     }
-}
-
-export function getIterator<T>(iterable: Iterable<T>): Iterator<T> {
-    return iterable[Symbol.iterator]();
-}
-
-export function nextResult<T>(iterator: Iterator<T>): IteratorResult<T> | undefined {
-    const result = iterator.next();
-    return result.done ? undefined : result;
-}
-
-export function closeIterator<T>(iterator: Iterator<T>) {
-    const fn = iterator.return;
-    if (typeof fn === "function") fn.call(iterator);
 }
 
 /**
