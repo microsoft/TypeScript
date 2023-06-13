@@ -1,9 +1,9 @@
-tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration5.ts(1,17): error TS2304: Cannot find name 'A'.
-tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration5.ts(1,30): error TS2304: Cannot find name 'B'.
-tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration5.ts(1,32): error TS1175: 'implements' clause already seen.
+parserClassDeclaration5.ts(1,17): error TS2304: Cannot find name 'A'.
+parserClassDeclaration5.ts(1,30): error TS2304: Cannot find name 'B'.
+parserClassDeclaration5.ts(1,32): error TS1175: 'implements' clause already seen.
 
 
-==== tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration5.ts (3 errors) ====
+==== parserClassDeclaration5.ts (3 errors) ====
     class C extends A implements B implements C {
                     ~
 !!! error TS2304: Cannot find name 'A'.

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileTypeAnnotationTypeAlias.ts ===
+//// [tests/cases/compiler/declFileTypeAnnotationTypeAlias.ts] ////
+
+=== declFileTypeAnnotationTypeAlias.ts ===
 module M {
 >M : typeof M
 

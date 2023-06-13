@@ -1,4 +1,6 @@
-=== tests/cases/compiler/stradac.ts ===
+//// [tests/cases/compiler/stradac.ts] ////
+
+=== stradac.ts ===
 var x = 10;
 >x : number
 >10 : 10

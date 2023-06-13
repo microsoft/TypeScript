@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualTypeSelfReferencing.ts ===
+//// [tests/cases/compiler/contextualTypeSelfReferencing.ts] ////
+
+=== contextualTypeSelfReferencing.ts ===
 // repro from https://github.com/microsoft/TypeScript/issues/54048
 
 type narrow<def> = def extends string

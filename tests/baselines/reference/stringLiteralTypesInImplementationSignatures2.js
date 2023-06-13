@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/objectTypeLiteral/callSignatures/stringLiteralTypesInImplementationSignatures2.ts] ////
+
 //// [stringLiteralTypesInImplementationSignatures2.ts]
 // String literal types are only valid in overload signatures
 

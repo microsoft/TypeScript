@@ -1,4 +1,6 @@
-=== tests/cases/compiler/moduleAliasInterface.ts ===
+//// [tests/cases/compiler/moduleAliasInterface.ts] ////
+
+=== moduleAliasInterface.ts ===
 module _modes {
 >_modes : Symbol(_modes, Decl(moduleAliasInterface.ts, 0, 0))
 

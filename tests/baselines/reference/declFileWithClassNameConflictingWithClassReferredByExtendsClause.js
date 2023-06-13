@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts] ////
+
 //// [declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts]
 declare module A.B.Base {
     export class W {

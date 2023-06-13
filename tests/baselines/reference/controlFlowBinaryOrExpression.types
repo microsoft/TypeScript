@@ -1,4 +1,6 @@
-=== tests/cases/conformance/controlFlow/controlFlowBinaryOrExpression.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowBinaryOrExpression.ts] ////
+
+=== controlFlowBinaryOrExpression.ts ===
 let x: string | number | boolean;
 >x : string | number | boolean
 

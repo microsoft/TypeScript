@@ -1,14 +1,16 @@
-=== tests/cases/conformance/jsdoc/main.js ===
+//// [tests/cases/conformance/jsdoc/paramTagTypeResolution.ts] ////
+
+=== main.js ===
 var f = require('./first');
 >f : Symbol(f, Decl(main.js, 0, 3))
 >require : Symbol(require)
->'./first' : Symbol("tests/cases/conformance/jsdoc/first", Decl(first.js, 0, 0))
+>'./first' : Symbol("first", Decl(first.js, 0, 0))
 
 f(1, n => { })
 >f : Symbol(f, Decl(main.js, 0, 3))
 >n : Symbol(n, Decl(main.js, 1, 4))
 
-=== tests/cases/conformance/jsdoc/first.js ===
+=== first.js ===
 /** @template T
  * @param {T} x
  * @param {(t: T) => void} k

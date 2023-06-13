@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/spellingUncheckedJS.js ===
+//// [tests/cases/conformance/salsa/spellingUncheckedJS.ts] ////
+
+=== spellingUncheckedJS.js ===
 export var inModule = 1
 >inModule : Symbol(inModule, Decl(spellingUncheckedJS.js, 0, 10))
 
@@ -78,7 +80,7 @@ Jimmy
 
 Jon
 
-=== tests/cases/conformance/salsa/other.js ===
+=== other.js ===
 var Jimmy = 1
 >Jimmy : Symbol(Jimmy, Decl(other.js, 0, 3))
 

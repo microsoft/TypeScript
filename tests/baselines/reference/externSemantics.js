@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/externSemantics.ts] ////
+
 //// [externSemantics.ts]
 declare var x=10;
 declare var v;

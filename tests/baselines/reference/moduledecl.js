@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduledecl.ts] ////
+
 //// [moduledecl.ts]
 module a {
 }

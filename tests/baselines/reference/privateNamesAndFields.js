@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesAndFields.ts] ////
+
 //// [privateNamesAndFields.ts]
 class A {
     #foo: number;

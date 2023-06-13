@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/comparable/switchCaseWithUnionTypes01.ts ===
+//// [tests/cases/conformance/types/typeRelationships/comparable/switchCaseWithUnionTypes01.ts] ////
+
+=== switchCaseWithUnionTypes01.ts ===
 var strOrNum: string | number;
 >strOrNum : Symbol(strOrNum, Decl(switchCaseWithUnionTypes01.ts, 0, 3))
 

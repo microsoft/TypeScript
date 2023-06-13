@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importInTypePosition.ts] ////
+
 //// [importInTypePosition.ts]
 module A {
     export class Point {

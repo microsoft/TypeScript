@@ -83,13 +83,13 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/tsconfig.json: *new*
+/a/file3.d.ts: *new*
   {}
 /a/lib.d.ts: *new*
   {}
-/a/file3.d.ts: *new*
-  {}
 /a/lib.es6.d.ts: *new*
+  {}
+/tsconfig.json: *new*
   {}
 
 Before request

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/primitives/number/validNumberAssignments.ts] ////
+
 //// [validNumberAssignments.ts]
 var x = 1;
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/spread/objectSpread.ts ===
+//// [tests/cases/conformance/types/spread/objectSpread.ts] ////
+
+=== objectSpread.ts ===
 let o = { a: 1, b: 'no' }
 >o : Symbol(o, Decl(objectSpread.ts, 0, 3))
 >a : Symbol(a, Decl(objectSpread.ts, 0, 9))

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/ConstEnum.ts ===
+//// [tests/cases/compiler/constEnumNoEmitReexport.ts] ////
+
+=== ConstEnum.ts ===
 export const enum MyConstEnum {
 >MyConstEnum : Symbol(MyConstEnum, Decl(ConstEnum.ts, 0, 0))
 
@@ -9,30 +11,30 @@ export const enum MyConstEnum {
 >Bar : Symbol(MyConstEnum.Bar, Decl(ConstEnum.ts, 1, 8))
 
 };
-=== tests/cases/compiler/ImportExport.ts ===
+=== ImportExport.ts ===
 import { MyConstEnum } from './ConstEnum';
 >MyConstEnum : Symbol(MyConstEnum, Decl(ImportExport.ts, 0, 8))
 
 export { MyConstEnum };
 >MyConstEnum : Symbol(MyConstEnum, Decl(ImportExport.ts, 1, 8))
 
-=== tests/cases/compiler/ImportExportDefault.ts ===
+=== ImportExportDefault.ts ===
 import { MyConstEnum } from './ConstEnum';
 >MyConstEnum : Symbol(MyConstEnum, Decl(ImportExportDefault.ts, 0, 8))
 
 export default MyConstEnum;
 >MyConstEnum : Symbol(MyConstEnum, Decl(ImportExportDefault.ts, 0, 8))
 
-=== tests/cases/compiler/ReExportDefault.ts ===
+=== ReExportDefault.ts ===
 export { MyConstEnum as default } from './ConstEnum';
 >MyConstEnum : Symbol(MyConstEnum, Decl(ConstEnum.ts, 0, 0))
 >default : Symbol(default, Decl(ReExportDefault.ts, 0, 8))
 
-=== tests/cases/compiler/ReExport.ts ===
+=== ReExport.ts ===
 export { MyConstEnum } from './ConstEnum';
 >MyConstEnum : Symbol(MyConstEnum, Decl(ReExport.ts, 0, 8))
 
-=== tests/cases/compiler/Usage1.ts ===
+=== Usage1.ts ===
 import MyConstEnum1 from './ImportExportDefault';
 >MyConstEnum1 : Symbol(MyConstEnum1, Decl(Usage1.ts, 0, 6))
 
@@ -49,7 +51,7 @@ MyConstEnum2.Foo;
 >MyConstEnum2 : Symbol(MyConstEnum2, Decl(Usage1.ts, 1, 6))
 >Foo : Symbol(MyConstEnum1.Foo, Decl(ConstEnum.ts, 0, 31))
 
-=== tests/cases/compiler/Usage2.ts ===
+=== Usage2.ts ===
 import { MyConstEnum } from './ImportExport';
 >MyConstEnum : Symbol(MyConstEnum, Decl(Usage2.ts, 0, 8))
 
@@ -58,7 +60,7 @@ MyConstEnum.Foo;
 >MyConstEnum : Symbol(MyConstEnum, Decl(Usage2.ts, 0, 8))
 >Foo : Symbol(MyConstEnum.Foo, Decl(ConstEnum.ts, 0, 31))
 
-=== tests/cases/compiler/Usage3.ts ===
+=== Usage3.ts ===
 import { MyConstEnum } from './ReExport';
 >MyConstEnum : Symbol(MyConstEnum, Decl(Usage3.ts, 0, 8))
 

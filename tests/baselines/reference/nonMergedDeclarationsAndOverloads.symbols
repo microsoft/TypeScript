@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nonMergedDeclarationsAndOverloads.ts ===
+//// [tests/cases/compiler/nonMergedDeclarationsAndOverloads.ts] ////
+
+=== nonMergedDeclarationsAndOverloads.ts ===
 class A {
 >A : Symbol(A, Decl(nonMergedDeclarationsAndOverloads.ts, 0, 0))
 

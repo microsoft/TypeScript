@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/tuple/variadicTuples2.ts] ////
+
 //// [variadicTuples2.ts]
 // Declarations
 

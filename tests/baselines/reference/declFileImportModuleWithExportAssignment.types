@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileImportModuleWithExportAssignment_1.ts ===
+//// [tests/cases/compiler/declFileImportModuleWithExportAssignment.ts] ////
+
+=== declFileImportModuleWithExportAssignment_1.ts ===
 /**This is on import declaration*/
 import a1 = require("./declFileImportModuleWithExportAssignment_0");
 >a1 : { (): a1.connectExport; test1: a1.connectModule; test2(): a1.connectModule; }
@@ -13,7 +15,7 @@ a.test1(null, null, null);
 >a : { (): a1.connectExport; test1: a1.connectModule; test2(): a1.connectModule; }
 >test1 : a1.connectModule
 
-=== tests/cases/compiler/declFileImportModuleWithExportAssignment_0.ts ===
+=== declFileImportModuleWithExportAssignment_0.ts ===
 module m2 {
     export interface connectModule {
         (res, req, next): void;

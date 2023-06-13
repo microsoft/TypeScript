@@ -53,19 +53,19 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/index.ts (used version)
 
 PolledWatches::
-/users/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 /users/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/project/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /users/username/projects/project/globals.d.ts: *new*
   {}
 /users/username/projects/project/index.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/users/username/projects/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -147,19 +147,19 @@ Input::
 //// [/users/username/projects/project/globals.d.ts] deleted
 
 PolledWatches *deleted*::
-/users/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 /users/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches *deleted*::
-/users/username/projects/project/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /users/username/projects/project/globals.d.ts:
   {}
 /users/username/projects/project/index.ts:
   {}
-/a/lib/lib.d.ts:
+/users/username/projects/project/tsconfig.json:
   {}
 
 FsWatchesRecursive *deleted*::
@@ -194,17 +194,17 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/index.ts (computed .d.ts)
 
 PolledWatches::
-/users/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 /users/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/project/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /users/username/projects/project/index.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/users/username/projects/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::

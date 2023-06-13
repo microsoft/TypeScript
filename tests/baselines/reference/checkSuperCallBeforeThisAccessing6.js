@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/checkSuperCallBeforeThisAccessing6.ts] ////
+
 //// [checkSuperCallBeforeThisAccessing6.ts]
 class Base {
     constructor(...arg) {

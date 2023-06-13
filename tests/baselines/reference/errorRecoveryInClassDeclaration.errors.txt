@@ -1,11 +1,11 @@
-tests/cases/compiler/errorRecoveryInClassDeclaration.ts(3,17): error TS2304: Cannot find name 'foo'.
-tests/cases/compiler/errorRecoveryInClassDeclaration.ts(4,13): error TS2304: Cannot find name 'public'.
-tests/cases/compiler/errorRecoveryInClassDeclaration.ts(4,20): error TS1005: ',' expected.
-tests/cases/compiler/errorRecoveryInClassDeclaration.ts(4,20): error TS2304: Cannot find name 'blaz'.
-tests/cases/compiler/errorRecoveryInClassDeclaration.ts(4,27): error TS1005: ',' expected.
+errorRecoveryInClassDeclaration.ts(3,17): error TS2304: Cannot find name 'foo'.
+errorRecoveryInClassDeclaration.ts(4,13): error TS2304: Cannot find name 'public'.
+errorRecoveryInClassDeclaration.ts(4,20): error TS1005: ',' expected.
+errorRecoveryInClassDeclaration.ts(4,20): error TS2304: Cannot find name 'blaz'.
+errorRecoveryInClassDeclaration.ts(4,27): error TS1005: ',' expected.
 
 
-==== tests/cases/compiler/errorRecoveryInClassDeclaration.ts (5 errors) ====
+==== errorRecoveryInClassDeclaration.ts (5 errors) ====
     class C {
         public bar() {
             var v = foo(

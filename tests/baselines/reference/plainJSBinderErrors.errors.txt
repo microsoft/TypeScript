@@ -1,31 +1,31 @@
-tests/cases/conformance/salsa/plainJSBinderErrors.js(1,1): error TS2528: A module cannot have multiple default exports.
-tests/cases/conformance/salsa/plainJSBinderErrors.js(2,1): error TS2528: A module cannot have multiple default exports.
-tests/cases/conformance/salsa/plainJSBinderErrors.js(3,7): error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
-tests/cases/conformance/salsa/plainJSBinderErrors.js(4,7): error TS1214: Identifier expected. 'yield' is a reserved word in strict mode. Modules are automatically in strict mode.
-tests/cases/conformance/salsa/plainJSBinderErrors.js(6,11): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
-tests/cases/conformance/salsa/plainJSBinderErrors.js(9,11): error TS1214: Identifier expected. 'yield' is a reserved word in strict mode. Modules are automatically in strict mode.
-tests/cases/conformance/salsa/plainJSBinderErrors.js(12,5): error TS18012: '#constructor' is a reserved word.
-tests/cases/conformance/salsa/plainJSBinderErrors.js(15,20): error TS1102: 'delete' cannot be called on an identifier in strict mode.
-tests/cases/conformance/salsa/plainJSBinderErrors.js(18,16): error TS1102: 'delete' cannot be called on an identifier in strict mode.
-tests/cases/conformance/salsa/plainJSBinderErrors.js(19,16): error TS1102: 'delete' cannot be called on an identifier in strict mode.
-tests/cases/conformance/salsa/plainJSBinderErrors.js(22,15): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'eval'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
-tests/cases/conformance/salsa/plainJSBinderErrors.js(23,15): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
-tests/cases/conformance/salsa/plainJSBinderErrors.js(27,9): error TS1101: 'with' statements are not allowed in strict mode.
-tests/cases/conformance/salsa/plainJSBinderErrors.js(33,13): error TS1344: 'A label is not allowed here.
-tests/cases/conformance/salsa/plainJSBinderErrors.js(34,13): error TS1107: Jump target cannot cross function boundary.
-tests/cases/conformance/salsa/plainJSBinderErrors.js(39,7): error TS1215: Invalid use of 'eval'. Modules are automatically in strict mode.
-tests/cases/conformance/salsa/plainJSBinderErrors.js(40,7): error TS1215: Invalid use of 'arguments'. Modules are automatically in strict mode.
+plainJSBinderErrors.js(1,1): error TS2528: A module cannot have multiple default exports.
+plainJSBinderErrors.js(2,1): error TS2528: A module cannot have multiple default exports.
+plainJSBinderErrors.js(3,7): error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
+plainJSBinderErrors.js(4,7): error TS1214: Identifier expected. 'yield' is a reserved word in strict mode. Modules are automatically in strict mode.
+plainJSBinderErrors.js(6,11): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+plainJSBinderErrors.js(9,11): error TS1214: Identifier expected. 'yield' is a reserved word in strict mode. Modules are automatically in strict mode.
+plainJSBinderErrors.js(12,5): error TS18012: '#constructor' is a reserved word.
+plainJSBinderErrors.js(15,20): error TS1102: 'delete' cannot be called on an identifier in strict mode.
+plainJSBinderErrors.js(18,16): error TS1102: 'delete' cannot be called on an identifier in strict mode.
+plainJSBinderErrors.js(19,16): error TS1102: 'delete' cannot be called on an identifier in strict mode.
+plainJSBinderErrors.js(22,15): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'eval'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+plainJSBinderErrors.js(23,15): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+plainJSBinderErrors.js(27,9): error TS1101: 'with' statements are not allowed in strict mode.
+plainJSBinderErrors.js(33,13): error TS1344: 'A label is not allowed here.
+plainJSBinderErrors.js(34,13): error TS1107: Jump target cannot cross function boundary.
+plainJSBinderErrors.js(39,7): error TS1215: Invalid use of 'eval'. Modules are automatically in strict mode.
+plainJSBinderErrors.js(40,7): error TS1215: Invalid use of 'arguments'. Modules are automatically in strict mode.
 
 
-==== tests/cases/conformance/salsa/plainJSBinderErrors.js (17 errors) ====
+==== plainJSBinderErrors.js (17 errors) ====
     export default 12
     ~~~~~~~~~~~~~~~~~
 !!! error TS2528: A module cannot have multiple default exports.
-!!! related TS2753 tests/cases/conformance/salsa/plainJSBinderErrors.js:2:1: Another export default is here.
+!!! related TS2753 plainJSBinderErrors.js:2:1: Another export default is here.
     export default 13
     ~~~~~~~~~~~~~~~~~
 !!! error TS2528: A module cannot have multiple default exports.
-!!! related TS2752 tests/cases/conformance/salsa/plainJSBinderErrors.js:1:1: The first export default is here.
+!!! related TS2752 plainJSBinderErrors.js:1:1: The first export default is here.
     const await = 1
           ~~~~~
 !!! error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.

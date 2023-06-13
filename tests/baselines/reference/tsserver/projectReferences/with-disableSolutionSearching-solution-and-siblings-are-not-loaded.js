@@ -111,19 +111,19 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 /user/username/projects/solution/compiler/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/solution/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
 /user/username/projects/solution/compiler/tsconfig.json: *new*
   {}
 /user/username/projects/solution/compiler/types.ts: *new*
-  {}
-/a/lib/lib.d.ts: *new*
   {}
 
 Before request

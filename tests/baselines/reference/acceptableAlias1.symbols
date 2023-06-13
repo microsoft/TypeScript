@@ -1,4 +1,6 @@
-=== tests/cases/compiler/acceptableAlias1.ts ===
+//// [tests/cases/compiler/acceptableAlias1.ts] ////
+
+=== acceptableAlias1.ts ===
 module M {
 >M : Symbol(M, Decl(acceptableAlias1.ts, 0, 0))
 

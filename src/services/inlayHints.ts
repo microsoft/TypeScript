@@ -4,11 +4,13 @@ import {
     CallExpression,
     createPrinterWithRemoveComments,
     Debug,
+    ElementFlags,
     EmitHint,
     EnumMember,
     equateStringsCaseInsensitive,
     Expression,
     findChildOfKind,
+    findIndex,
     forEachChild,
     FunctionDeclaration,
     FunctionExpression,
@@ -44,6 +46,7 @@ import {
     isParameterDeclaration,
     isPropertyAccessExpression,
     isPropertyDeclaration,
+    isSpreadElement,
     isTypeNode,
     isVarConst,
     isVariableDeclaration,
@@ -61,6 +64,7 @@ import {
     SymbolFlags,
     SyntaxKind,
     textSpanIntersectsWith,
+    TupleTypeReference,
     Type,
     TypeFormatFlags,
     unescapeLeadingUnderscores,
@@ -226,14 +230,31 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
             return;
         }
 
-        for (let i = 0; i < args.length; ++i) {
-            const originalArg = args[i];
+        let signatureParamPos = 0;
+        for (const originalArg of args) {
             const arg = skipParentheses(originalArg);
             if (shouldShowLiteralParameterNameHintsOnly(preferences) && !isHintableLiteral(arg)) {
                 continue;
             }
 
-            const identifierNameInfo = checker.getParameterIdentifierNameAtPosition(signature, i);
+            let spreadArgs = 0;
+            if (isSpreadElement(arg)) {
+                const spreadType = checker.getTypeAtLocation(arg.expression);
+                if (checker.isTupleType(spreadType)) {
+                    const { elementFlags, fixedLength } = (spreadType as TupleTypeReference).target;
+                    if (fixedLength === 0) {
+                        continue;
+                    }
+                    const firstOptionalIndex = findIndex(elementFlags, f => !(f & ElementFlags.Required));
+                    const requiredArgs = firstOptionalIndex < 0 ? fixedLength : firstOptionalIndex;
+                    if (requiredArgs > 0) {
+                        spreadArgs = firstOptionalIndex < 0 ? fixedLength : firstOptionalIndex;
+                    }
+                }
+            }
+
+            const identifierNameInfo = checker.getParameterIdentifierNameAtPosition(signature, signatureParamPos);
+            signatureParamPos = signatureParamPos + (spreadArgs || 1);
             if (identifierNameInfo) {
                 const [parameterName, isFirstVariadicArgument] = identifierNameInfo;
                 const isParameterNameNotSameAsArgument = preferences.includeInlayParameterNameHintsWhenArgumentMatchesName || !identifierOrAccessExpressionPostfixMatchesParameterName(arg, parameterName);

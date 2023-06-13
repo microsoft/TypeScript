@@ -67,7 +67,16 @@ Info seq  [hh:mm:ss:mss] Plugin validation succeeded
 Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for ^memfs:/foo.ts
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["^memfs:/foo.ts"]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "projectsUpdatedInBackground",
+     "body": {
+      "openFiles": [
+       "^memfs:/foo.ts"
+      ]
+     }
+    }
 Before running Timeout callback:: count: 2
 1: /dev/null/inferredProject1*
 2: checkOne
@@ -77,7 +86,15 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferred
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: false structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Same program as before
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"^memfs:/foo.ts","diagnostics":[]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "syntaxDiag",
+     "body": {
+      "file": "^memfs:/foo.ts",
+      "diagnostics": []
+     }
+    }
 After running Timeout callback:: count: 0
 
 External files before plugin after plugin is loaded: external.txt

@@ -1,7 +1,7 @@
-tests/cases/compiler/unusedFunctionsinNamespaces2.ts(2,9): error TS6133: 'function1' is declared but its value is never read.
+unusedFunctionsinNamespaces2.ts(2,9): error TS6133: 'function1' is declared but its value is never read.
 
 
-==== tests/cases/compiler/unusedFunctionsinNamespaces2.ts (1 errors) ====
+==== unusedFunctionsinNamespaces2.ts (1 errors) ====
     namespace Validation {
         var function1 = function() {
             ~~~~~~~~~

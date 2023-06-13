@@ -1,8 +1,8 @@
-tests/cases/compiler/accessorAccidentalCallDiagnostic.ts(6,14): error TS6234: This expression is not callable because it is a 'get' accessor. Did you mean to use it without '()'?
+accessorAccidentalCallDiagnostic.ts(6,14): error TS6234: This expression is not callable because it is a 'get' accessor. Did you mean to use it without '()'?
   Type 'Number' has no call signatures.
 
 
-==== tests/cases/compiler/accessorAccidentalCallDiagnostic.ts (1 errors) ====
+==== accessorAccidentalCallDiagnostic.ts (1 errors) ====
     // https://github.com/microsoft/TypeScript/issues/24554
     class Test24554 {
         get property(): number { return 1; }

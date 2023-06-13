@@ -72,7 +72,16 @@ Info seq  [hh:mm:ss:mss] Plugin validation succeeded
 Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for ^memfs:/foo.ts
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["^memfs:/foo.ts"]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "projectsUpdatedInBackground",
+     "body": {
+      "openFiles": [
+       "^memfs:/foo.ts"
+      ]
+     }
+    }
 at this point all plugin modules should have been instantiated and all plugins should have been invoked
 pluginModuleInstantiated:: true
 pluginInvoked:: true

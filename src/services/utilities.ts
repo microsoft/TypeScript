@@ -261,6 +261,7 @@ import {
     JsTyping,
     JsxEmit,
     JsxOpeningLikeElement,
+    JsxTagNameExpression,
     LabeledStatement,
     LanguageServiceHost,
     last,
@@ -617,7 +618,7 @@ function selectTagNameOfJsxOpeningLikeElement(node: JsxOpeningLikeElement) {
     return node.tagName;
 }
 
-function isCalleeWorker<T extends CallExpression | NewExpression | TaggedTemplateExpression | Decorator | JsxOpeningLikeElement>(node: Node, pred: (node: Node) => node is T, calleeSelector: (node: T) => Expression, includeElementAccess: boolean, skipPastOuterExpressions: boolean) {
+function isCalleeWorker<T extends CallExpression | NewExpression | TaggedTemplateExpression | Decorator | JsxOpeningLikeElement>(node: Node, pred: (node: Node) => node is T, calleeSelector: (node: T) => Expression | JsxTagNameExpression, includeElementAccess: boolean, skipPastOuterExpressions: boolean) {
     let target = includeElementAccess ? climbPastPropertyOrElementAccess(node) : climbPastPropertyAccess(node);
     if (skipPastOuterExpressions) {
         target = skipOuterExpressions(target);
