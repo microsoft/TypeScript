@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/constructorDeclarations/superCalls/privateMethodSuperNotStatement(target=es2021).ts ===
+//// [tests/cases/conformance/classes/constructorDeclarations/superCalls/privateMethodSuperNotStatement(target=es2021).ts] ////
+
+=== privateMethodSuperNotStatement(target=es2021).ts ===
 class A extends class {} {
 >A : Symbol(A, Decl(privateMethodSuperNotStatement(target=es2021).ts, 0, 0))
 

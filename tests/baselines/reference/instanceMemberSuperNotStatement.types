@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/constructorDeclarations/superCalls/instanceMemberSuperNotStatement.ts ===
+//// [tests/cases/conformance/classes/constructorDeclarations/superCalls/instanceMemberSuperNotStatement.ts] ////
+
+=== instanceMemberSuperNotStatement.ts ===
 class A extends class {} {
 >A : A
 >class {} : (Anonymous class)

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/constructorDeclarations/superCalls/privateMethodSuperNotStatement(target=es2021).ts] ////
+
 //// [privateMethodSuperNotStatement(target=es2021).ts]
 class A extends class {} {
   constructor() {

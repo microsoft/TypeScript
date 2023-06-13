@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/constructorDeclarations/superCalls/instanceMemberSuperNotStatementNoUDFC.ts] ////
+
 //// [instanceMemberSuperNotStatementNoUDFC.ts]
 class A extends class {} {
   a = 1;

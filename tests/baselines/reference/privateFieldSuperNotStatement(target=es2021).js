@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/constructorDeclarations/superCalls/privateFieldSuperNotStatement(target=es2021).ts] ////
+
 //// [privateFieldSuperNotStatement(target=es2021).ts]
 class B {}
 class A extends B {

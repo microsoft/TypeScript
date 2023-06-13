@@ -1,7 +1,7 @@
-tests/cases/conformance/classes/constructorDeclarations/superCalls/instanceMemberSuperNotStatementNoUDFC.ts(4,17): error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+instanceMemberSuperNotStatementNoUDFC.ts(4,17): error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
 
 
-==== tests/cases/conformance/classes/constructorDeclarations/superCalls/instanceMemberSuperNotStatementNoUDFC.ts (1 errors) ====
+==== instanceMemberSuperNotStatementNoUDFC.ts (1 errors) ====
     class A extends class {} {
       a = 1;
       constructor() {

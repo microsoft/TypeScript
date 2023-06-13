@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterSuperNotStatement.ts ===
+//// [tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterSuperNotStatement.ts] ////
+
+=== constructorParameterSuperNotStatement.ts ===
 class A extends class {} {
 >A : A
 >class {} : (Anonymous class)

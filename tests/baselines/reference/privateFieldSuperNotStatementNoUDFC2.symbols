@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/constructorDeclarations/superCalls/privateFieldSuperNotStatementNoUDFC2.ts ===
+//// [tests/cases/conformance/classes/constructorDeclarations/superCalls/privateFieldSuperNotStatementNoUDFC2.ts] ////
+
+=== privateFieldSuperNotStatementNoUDFC2.ts ===
 class B {}
 >B : Symbol(B, Decl(privateFieldSuperNotStatementNoUDFC2.ts, 0, 0))
 

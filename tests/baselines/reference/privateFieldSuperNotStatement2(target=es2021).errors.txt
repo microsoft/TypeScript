@@ -1,7 +1,7 @@
-tests/cases/conformance/classes/constructorDeclarations/superCalls/privateFieldSuperNotStatement2(target=es2021).ts(5,17): error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+privateFieldSuperNotStatement2(target=es2021).ts(5,17): error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
 
 
-==== tests/cases/conformance/classes/constructorDeclarations/superCalls/privateFieldSuperNotStatement2(target=es2021).ts (1 errors) ====
+==== privateFieldSuperNotStatement2(target=es2021).ts (1 errors) ====
     class B {}
     class A extends B {
       #x = 1;

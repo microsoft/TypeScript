@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterSuperNotStatement.ts] ////
+
 //// [constructorParameterSuperNotStatement.ts]
 class A extends class {} {
   constructor(public a: number) {

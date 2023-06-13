@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/constructorDeclarations/superCalls/privateMethodSuperNotStatement.ts] ////
+
 //// [privateMethodSuperNotStatement.ts]
 class A extends class {} {
   constructor() {

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/constructorDeclarations/superCalls/privateMethodSuperNotStatement.ts ===
+//// [tests/cases/conformance/classes/constructorDeclarations/superCalls/privateMethodSuperNotStatement.ts] ////
+
+=== privateMethodSuperNotStatement.ts ===
 class A extends class {} {
 >A : A
 >class {} : (Anonymous class)

@@ -1,7 +1,7 @@
-tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterSuperNotStatement.ts(3,17): error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+constructorParameterSuperNotStatement.ts(3,17): error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
 
 
-==== tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterSuperNotStatement.ts (1 errors) ====
+==== constructorParameterSuperNotStatement.ts (1 errors) ====
     class A extends class {} {
       constructor(public a: number) {
         console.log(super());

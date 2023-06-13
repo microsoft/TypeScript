@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/constructorDeclarations/superCalls/privateFieldSuperNotStatementNoUDFC.ts] ////
+
 //// [privateFieldSuperNotStatementNoUDFC.ts]
 class B {}
 class A extends B {

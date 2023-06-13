@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/constructorDeclarations/superCalls/privateFieldSuperNotStatement(target=es2021).ts ===
+//// [tests/cases/conformance/classes/constructorDeclarations/superCalls/privateFieldSuperNotStatement(target=es2021).ts] ////
+
+=== privateFieldSuperNotStatement(target=es2021).ts ===
 class B {}
 >B : B
 

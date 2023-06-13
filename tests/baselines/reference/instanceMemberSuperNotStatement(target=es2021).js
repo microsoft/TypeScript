@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/constructorDeclarations/superCalls/instanceMemberSuperNotStatement(target=es2021).ts] ////
+
 //// [instanceMemberSuperNotStatement(target=es2021).ts]
 class A extends class {} {
   a = 1;
