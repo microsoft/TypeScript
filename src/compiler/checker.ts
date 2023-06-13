@@ -10165,8 +10165,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return prop ? getTypeOfSymbol(prop) : undefined;
     }
 
-    function getTypeOfPropertyOrIndexSignature(type: Type, name: __String): Type {
-        return getTypeOfPropertyOfType(type, name) || getApplicableIndexInfoForName(type, name)?.type || unknownType;
+    function getTypeOfPropertyOrIndexSignature(type: Type, name: __String, addOptionalityToIndex: boolean): Type {
+        let propType;
+        return getTypeOfPropertyOfType(type, name) ||
+            (propType = getApplicableIndexInfoForName(type, name)?.type) && addOptionality(propType, /*isProperty*/ true, addOptionalityToIndex) ||
+            unknownType;
     }
 
     function isTypeAny(type: Type | undefined) {
@@ -22700,7 +22703,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let matched = false;
             for (let i = 0; i < types.length; i++) {
                 if (include[i]) {
-                    const targetType = getTypeOfPropertyOfType(types[i], propertyName);
+                    const targetType = getTypeOfPropertyOrIndexSignature(types[i], propertyName, /*addOptionalityToIndex*/ true);
                     if (targetType && related(getDiscriminatingType(), targetType)) {
                         matched = true;
                     }
@@ -27013,7 +27016,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             propType = removeNullable && optionalChain ? getOptionalType(propType) : propType;
             const narrowedPropType = narrowType(propType);
             return filterType(type, t => {
-                const discriminantType = getTypeOfPropertyOrIndexSignature(t, propName);
+                const discriminantType = getTypeOfPropertyOrIndexSignature(t, propName, /*addOptionalityToIndex*/ false);
                 return !(discriminantType.flags & TypeFlags.Never) && !(narrowedPropType.flags & TypeFlags.Never) && areTypesComparable(narrowedPropType, discriminantType);
             });
         }
