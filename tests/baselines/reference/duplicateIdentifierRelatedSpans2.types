@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/duplicateIdentifierRelatedSpans2.ts] ////
+
+=== file1.ts ===
 class A { }
 >A : A
 
@@ -26,7 +28,7 @@ class H { }
 class I { }
 >I : I
 
-=== tests/cases/compiler/file2.ts ===
+=== file2.ts ===
 class A { }
 >A : A
 

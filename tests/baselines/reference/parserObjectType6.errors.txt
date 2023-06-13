@@ -1,8 +1,8 @@
-tests/cases/conformance/parser/ecmascript5/ObjectTypes/parserObjectType6.ts(2,7): error TS2304: Cannot find name 'B'.
-tests/cases/conformance/parser/ecmascript5/ObjectTypes/parserObjectType6.ts(3,4): error TS1096: An index signature must have exactly one parameter.
+parserObjectType6.ts(2,7): error TS2304: Cannot find name 'B'.
+parserObjectType6.ts(3,4): error TS1096: An index signature must have exactly one parameter.
 
 
-==== tests/cases/conformance/parser/ecmascript5/ObjectTypes/parserObjectType6.ts (2 errors) ====
+==== parserObjectType6.ts (2 errors) ====
     var v: {
        a: B
           ~

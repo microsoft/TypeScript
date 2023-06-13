@@ -1,4 +1,6 @@
-=== tests/cases/compiler/commentsemitComments.ts ===
+//// [tests/cases/compiler/commentsemitComments.ts] ////
+
+=== commentsemitComments.ts ===
 /** Variable comments*/
 var myVariable = 10;
 >myVariable : Symbol(myVariable, Decl(commentsemitComments.ts, 1, 3))

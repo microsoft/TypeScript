@@ -1,4 +1,6 @@
-=== tests/cases/compiler/extendArray.ts ===
+//// [tests/cases/compiler/extendArray.ts] ////
+
+=== extendArray.ts ===
 var a = [1,2];
 >a : number[]
 >[1,2] : number[]

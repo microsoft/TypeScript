@@ -1,0 +1,50 @@
+divergentAccessorsTypes6.ts(11,1): error TS2322: Type 'CSSStyleDeclaration' is not assignable to type 'string'.
+divergentAccessorsTypes6.ts(19,23): error TS2344: Type 'string' does not satisfy the constraint 'never'.
+divergentAccessorsTypes6.ts(23,23): error TS2344: Type 'string' does not satisfy the constraint 'never'.
+divergentAccessorsTypes6.ts(29,16): error TS2322: Type 'number' is not assignable to type 'string'.
+
+
+==== divergentAccessorsTypes6.ts (4 errors) ====
+    export {};
+    
+    interface Element {
+        get style(): CSSStyleDeclaration;
+        set style(cssText: string);
+    }
+    
+    declare const element: Element;
+    element.style = "color: red";
+    element.style.animationTimingFunction;
+    element.style = element.style; // error
+    ~~~~~~~~~~~~~
+!!! error TS2322: Type 'CSSStyleDeclaration' is not assignable to type 'string'.
+    
+    // Now that we don't check for getter/setter assignability, we should
+    // ensure the setter annotation is actually checked even if it's never observed.
+    
+    type Fail<T extends never> = T;
+    interface I1 {
+        get x(): number;
+        set x(value: Fail<string>);
+                          ~~~~~~
+!!! error TS2344: Type 'string' does not satisfy the constraint 'never'.
+    }
+    const o1 = {
+        get x(): number { return 0; },
+        set x(value: Fail<string>) {}
+                          ~~~~~~
+!!! error TS2344: Type 'string' does not satisfy the constraint 'never'.
+    }
+    
+    // A setter annotation still implies the getter return type.
+    
+    const o2 = {
+        get p1() { return 0; }, // error - no annotation means type is implied from the setter annotation
+                   ~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+        set p1(value: string) {},
+    
+        get p2(): number { return 0; }, // ok - explicit annotation
+        set p2(value: string) {},
+    };
+    

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/functionCalls/defs.d.ts ===
+//// [tests/cases/conformance/expressions/functionCalls/callWithMissingVoidUndefinedUnknownAnyInJs.ts] ////
+
+=== defs.d.ts ===
 declare function f1(p: void): void;
 >f1 : (p: void) => void
 >p : void
@@ -31,7 +33,7 @@ declare const o3: I<unknown>;
 declare const o4: I<any>;
 >o4 : I<any>
 
-=== tests/cases/conformance/expressions/functionCalls/jsfile.js ===
+=== jsfile.js ===
 // current behavior: treat trailing `void` as optional
 f1();
 >f1() : void
@@ -74,7 +76,7 @@ o4.m();
 >o4 : I<any>
 >m : (p: any) => void
 
-=== tests/cases/conformance/expressions/functionCalls/tsfile.ts ===
+=== tsfile.ts ===
 // current behavior: treat trailing `void` as optional
 f1();
 >f1() : void

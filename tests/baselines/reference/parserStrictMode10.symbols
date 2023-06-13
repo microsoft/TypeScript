@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode10.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode10.ts] ////
+
+=== parserStrictMode10.ts ===
 "use strict";
 function f(eval) {
 >f : Symbol(f, Decl(parserStrictMode10.ts, 0, 13))

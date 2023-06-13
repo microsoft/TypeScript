@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/sourceMapValidationEnums.ts] ////
+
 //// [sourceMapValidationEnums.ts]
 enum e {
     x,

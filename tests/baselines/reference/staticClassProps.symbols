@@ -1,4 +1,6 @@
-=== tests/cases/compiler/staticClassProps.ts ===
+//// [tests/cases/compiler/staticClassProps.ts] ////
+
+=== staticClassProps.ts ===
 class C
 >C : Symbol(C, Decl(staticClassProps.ts, 0, 0))
 {

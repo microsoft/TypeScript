@@ -1,4 +1,6 @@
-=== tests/cases/compiler/ramdaToolsNoInfinite2.ts ===
+//// [tests/cases/compiler/ramdaToolsNoInfinite2.ts] ////
+
+=== ramdaToolsNoInfinite2.ts ===
 declare module "Any/Kind" {
 >"Any/Kind" : typeof import("Any/Kind")
 
@@ -279,7 +281,6 @@ declare module "Union/NonNullable" {
 
     export type NonNullable<U extends Union> = Exclude<U, undefined | null>;
 >NonNullable : NonNullable<U>
->null : null
 }
 declare module "Object/ListOf" {
 >"Object/ListOf" : typeof import("Object/ListOf")

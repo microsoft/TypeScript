@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -174,28 +175,26 @@ Shape signatures in builder refreshed for::
 /user/username/projects/sample1/logic/index.d.ts (used version)
 /user/username/projects/sample1/tests/index.ts (computed .d.ts during emit)
 
-PolledWatches::
-
 FsWatches::
-/user/username/projects/sample1/core/tsconfig.json:
+/user/username/projects/sample1/core/anothermodule.ts: *new*
   {}
-/user/username/projects/sample1/core/anothermodule.ts:
+/user/username/projects/sample1/core/index.ts: *new*
   {}
-/user/username/projects/sample1/core/index.ts:
+/user/username/projects/sample1/core/tsconfig.json: *new*
   {}
-/user/username/projects/sample1/logic/tsconfig.json:
+/user/username/projects/sample1/logic/index.ts: *new*
   {}
-/user/username/projects/sample1/logic/index.ts:
+/user/username/projects/sample1/logic/tsconfig.json: *new*
   {}
-/user/username/projects/sample1/tests/tsconfig.json:
+/user/username/projects/sample1/tests/index.ts: *new*
   {}
-/user/username/projects/sample1/tests/index.ts:
+/user/username/projects/sample1/tests/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/sample1/core:
+/user/username/projects/sample1/core: *new*
   {}
-/user/username/projects/sample1/logic:
+/user/username/projects/sample1/logic: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -527,6 +526,10 @@ Input::
 export const newFileConst = 30;
 
 
+Before running Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject
 Output::
 >> Screen clear
 [[90m12:01:26 AM[0m] File change detected. Starting incremental compilation...
@@ -548,24 +551,22 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/sample1/core/newfile.ts (computed .d.ts)
 
-PolledWatches::
-
 FsWatches::
-/user/username/projects/sample1/core/tsconfig.json:
-  {}
 /user/username/projects/sample1/core/anothermodule.ts:
   {}
 /user/username/projects/sample1/core/index.ts:
   {}
-/user/username/projects/sample1/logic/tsconfig.json:
+/user/username/projects/sample1/core/newfile.ts: *new*
+  {}
+/user/username/projects/sample1/core/tsconfig.json:
   {}
 /user/username/projects/sample1/logic/index.ts:
   {}
-/user/username/projects/sample1/tests/tsconfig.json:
+/user/username/projects/sample1/logic/tsconfig.json:
   {}
 /user/username/projects/sample1/tests/index.ts:
   {}
-/user/username/projects/sample1/core/newfile.ts:
+/user/username/projects/sample1/tests/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -675,6 +676,9 @@ Change:: Build logic and tests
 
 Input::
 
+Before running Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 [[90m12:01:42 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -707,32 +711,6 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-PolledWatches::
-
-FsWatches::
-/user/username/projects/sample1/core/tsconfig.json:
-  {}
-/user/username/projects/sample1/core/anothermodule.ts:
-  {}
-/user/username/projects/sample1/core/index.ts:
-  {}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {}
-/user/username/projects/sample1/logic/index.ts:
-  {}
-/user/username/projects/sample1/tests/tsconfig.json:
-  {}
-/user/username/projects/sample1/tests/index.ts:
-  {}
-/user/username/projects/sample1/core/newfile.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/sample1/core:
-  {}
-/user/username/projects/sample1/logic:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/sample1/logic/tsconfig.tsbuildinfo] file changed its modified time
@@ -746,6 +724,10 @@ export const newFileConst = 30;
 export class someClass2 { }
 
 
+Before running Timeout callback:: count: 1
+3: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+4: timerToBuildInvalidatedProject
 Output::
 >> Screen clear
 [[90m12:01:46 AM[0m] File change detected. Starting incremental compilation...
@@ -766,32 +748,6 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/sample1/core/newfile.ts (computed .d.ts)
-
-PolledWatches::
-
-FsWatches::
-/user/username/projects/sample1/core/tsconfig.json:
-  {}
-/user/username/projects/sample1/core/anothermodule.ts:
-  {}
-/user/username/projects/sample1/core/index.ts:
-  {}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {}
-/user/username/projects/sample1/logic/index.ts:
-  {}
-/user/username/projects/sample1/tests/tsconfig.json:
-  {}
-/user/username/projects/sample1/tests/index.ts:
-  {}
-/user/username/projects/sample1/core/newfile.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/sample1/core:
-  {}
-/user/username/projects/sample1/logic:
-  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -902,6 +858,9 @@ Change:: Build logic and tests
 
 Input::
 
+Before running Timeout callback:: count: 1
+4: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 [[90m12:02:05 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -933,32 +892,6 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
-
-PolledWatches::
-
-FsWatches::
-/user/username/projects/sample1/core/tsconfig.json:
-  {}
-/user/username/projects/sample1/core/anothermodule.ts:
-  {}
-/user/username/projects/sample1/core/index.ts:
-  {}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {}
-/user/username/projects/sample1/logic/index.ts:
-  {}
-/user/username/projects/sample1/tests/tsconfig.json:
-  {}
-/user/username/projects/sample1/tests/index.ts:
-  {}
-/user/username/projects/sample1/core/newfile.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/sample1/core:
-  {}
-/user/username/projects/sample1/logic:
-  {}
 
 exitCode:: ExitStatus.undefined
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeParameterConstraints1.ts] ////
+
 //// [typeParameterConstraints1.ts]
 function foo1<T extends any>(test: T) { }
 function foo2<T extends number>(test: T) { }

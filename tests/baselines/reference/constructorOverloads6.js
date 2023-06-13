@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constructorOverloads6.ts] ////
+
 //// [constructorOverloads6.ts]
 declare class FooBase {
     constructor(s: string);

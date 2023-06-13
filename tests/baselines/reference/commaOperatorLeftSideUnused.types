@@ -1,4 +1,6 @@
-=== tests/cases/compiler/commaOperatorLeftSideUnused.ts ===
+//// [tests/cases/compiler/commaOperatorLeftSideUnused.ts] ////
+
+=== commaOperatorLeftSideUnused.ts ===
 var xx: any;
 >xx : any
 
@@ -118,7 +120,6 @@ xx = (null, xx);
 >xx : any
 >(null, xx) : any
 >null, xx : any
->null : null
 >xx : any
 
 xx = (undefined, 10);

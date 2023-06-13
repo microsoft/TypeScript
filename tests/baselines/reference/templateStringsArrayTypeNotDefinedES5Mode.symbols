@@ -1,4 +1,6 @@
-=== tests/cases/compiler/templateStringsArrayTypeNotDefinedES5Mode.ts ===
+//// [tests/cases/compiler/templateStringsArrayTypeNotDefinedES5Mode.ts] ////
+
+=== templateStringsArrayTypeNotDefinedES5Mode.ts ===
 function f(x: TemplateStringsArray, y: number, z: number) {
 >f : Symbol(f, Decl(templateStringsArrayTypeNotDefinedES5Mode.ts, 0, 0))
 >x : Symbol(x, Decl(templateStringsArrayTypeNotDefinedES5Mode.ts, 0, 11))

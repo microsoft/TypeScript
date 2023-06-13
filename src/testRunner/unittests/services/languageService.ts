@@ -5,7 +5,7 @@ import {
     createServerHost,
     File,
     libFile,
-} from "../virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: services:: languageService", () => {
     const files: {[index: string]: string} = {

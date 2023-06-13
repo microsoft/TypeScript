@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocTypeTag2.ts] ////
+
 //// [0.js]
 // @ts-check
 /** @type {String} */

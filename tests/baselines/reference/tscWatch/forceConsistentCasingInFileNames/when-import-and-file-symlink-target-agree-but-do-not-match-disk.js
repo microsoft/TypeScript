@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/XY.ts]
 
@@ -80,23 +81,25 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/b.ts (used version)
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/myproject/xy.ts:
+/user/username/projects/myproject/b.ts: *new*
   {}
-/user/username/projects/myproject/b.ts:
+/user/username/projects/myproject/link.ts: *new*
   {}
-/user/username/projects/myproject/link.ts:
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/myproject/xy.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject:
+/user/username/projects/myproject: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -138,6 +141,9 @@ export const b = 2;
 
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:35 AM[0m] File change detected. Starting incremental compilation...
@@ -180,26 +186,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/xy.ts (computed .d.ts)
 /user/username/projects/myproject/b.ts (computed .d.ts)
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/xy.ts:
-  {}
-/user/username/projects/myproject/b.ts:
-  {}
-/user/username/projects/myproject/link.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
 
 exitCode:: ExitStatus.undefined
 

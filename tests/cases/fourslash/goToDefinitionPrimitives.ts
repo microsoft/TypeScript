@@ -2,4 +2,4 @@
 
 ////var x: st/*primitive*/ring;
 
-verify.goToDefinition("primitive", []);
+verify.baselineGoToDefinition("primitive");

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typePredicatesInUnion2.ts ===
+//// [tests/cases/compiler/typePredicatesInUnion2.ts] ////
+
+=== typePredicatesInUnion2.ts ===
 declare function isString(x: any): x is string;
 >isString : (x: any) => x is string
 >x : any

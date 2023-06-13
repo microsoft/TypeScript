@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/packages/pkg1/package.json]
 {"name":"pkg1","version":"1.0.0","main":"build/index.js"}
@@ -44,6 +45,7 @@ Output::
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/myproject/packages/node_modules' does not exist, skipping all lookups in it.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg2/package.json'.
@@ -96,37 +98,39 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/packages/pkg1/index.ts (used version)
 
 PolledWatches::
-/user/username/projects/myproject/packages/pkg1/node_modules:
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules:
+/user/username/projects/myproject/packages/node_modules: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/pkg1/node_modules/@types:
+/user/username/projects/myproject/packages/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules/@types:
+/user/username/projects/myproject/packages/pkg1/node_modules: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/packages/pkg1/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/packages/pkg1/tsconfig.json:
+/a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/myproject/packages/pkg1/index.ts:
+/user/username/projects/myproject/packages/pkg1/index.ts: *new*
   {}
-/user/username/projects/myproject/packages/pkg2/build/index.d.ts:
+/user/username/projects/myproject/packages/pkg1/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/packages/pkg2/build/const.d.ts:
+/user/username/projects/myproject/packages/pkg2/build/const.d.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/myproject/packages/pkg2/build/index.d.ts: *new*
   {}
-/user/username/projects/myproject/packages/pkg2/package.json:
+/user/username/projects/myproject/packages/pkg2/package.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/packages/pkg2:
+/user/username/projects/myproject/node_modules: *new*
   {}
-/user/username/projects/myproject/node_modules:
+/user/username/projects/myproject/packages/pkg1: *new*
   {}
-/user/username/projects/myproject/packages/pkg1:
+/user/username/projects/myproject/packages/pkg2: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -146,6 +150,13 @@ Input::
 {"name":"pkg2","version":"1.0.0","main":"build/other.js"}
 
 
+Before running Timeout callback:: count: 1
+1: timerToInvalidateFailedLookupResolutions
+After running Timeout callback:: count: 1
+2: timerToUpdateProgram
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:53 AM[0m] File change detected. Starting incremental compilation...
@@ -153,6 +164,7 @@ Output::
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/myproject/packages/node_modules' does not exist, skipping all lookups in it.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg2/package.json'.
@@ -197,33 +209,45 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/packages/pkg1/index.ts (computed .d.ts)
 
 PolledWatches::
-/user/username/projects/myproject/packages/pkg1/node_modules:
+/user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/packages/node_modules:
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/pkg1/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/myproject/packages/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/packages/pkg1/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/myproject/packages/pkg1/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/packages/pkg1/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/packages/pkg1/index.ts:
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/myproject/packages/pkg1/tsconfig.json:
+  {}
+/user/username/projects/myproject/packages/pkg2/build/other.d.ts: *new*
   {}
 /user/username/projects/myproject/packages/pkg2/package.json:
   {}
-/user/username/projects/myproject/packages/pkg2/build/other.d.ts:
+
+FsWatches *deleted*::
+/user/username/projects/myproject/packages/pkg2/build/const.d.ts:
+  {}
+/user/username/projects/myproject/packages/pkg2/build/index.d.ts:
   {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/node_modules:
   {}
 /user/username/projects/myproject/packages/pkg1:
+  {}
+
+FsWatchesRecursive *deleted*::
+/user/username/projects/myproject/packages/pkg2:
   {}
 
 exitCode:: ExitStatus.undefined
@@ -237,6 +261,13 @@ Input::
 {"name":"pkg2","version":"1.0.0","main":"build/index.js"}
 
 
+Before running Timeout callback:: count: 1
+3: timerToInvalidateFailedLookupResolutions
+After running Timeout callback:: count: 1
+4: timerToUpdateProgram
+Before running Timeout callback:: count: 1
+4: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:02 AM[0m] File change detected. Starting incremental compilation...
@@ -244,6 +275,7 @@ Output::
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/myproject/packages/node_modules' does not exist, skipping all lookups in it.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg2/package.json'.
@@ -294,29 +326,35 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/packages/pkg1/index.ts (computed .d.ts)
 
 PolledWatches::
-/user/username/projects/myproject/packages/pkg1/node_modules:
+/user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/packages/node_modules:
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/pkg1/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/myproject/packages/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/packages/pkg1/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/myproject/packages/pkg1/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/packages/pkg1/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/packages/pkg1/index.ts:
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/myproject/packages/pkg1/tsconfig.json:
+  {}
+/user/username/projects/myproject/packages/pkg2/build/const.d.ts: *new*
+  {}
+/user/username/projects/myproject/packages/pkg2/build/index.d.ts: *new*
   {}
 /user/username/projects/myproject/packages/pkg2/package.json:
   {}
-/user/username/projects/myproject/packages/pkg2/build/index.d.ts:
-  {}
-/user/username/projects/myproject/packages/pkg2/build/const.d.ts:
+
+FsWatches *deleted*::
+/user/username/projects/myproject/packages/pkg2/build/other.d.ts:
   {}
 
 FsWatchesRecursive::
@@ -324,7 +362,7 @@ FsWatchesRecursive::
   {}
 /user/username/projects/myproject/packages/pkg1:
   {}
-/user/username/projects/myproject/packages/pkg2:
+/user/username/projects/myproject/packages/pkg2: *new*
   {}
 
 exitCode:: ExitStatus.undefined

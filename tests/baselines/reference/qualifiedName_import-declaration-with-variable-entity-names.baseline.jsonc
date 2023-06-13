@@ -1,0 +1,38 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/qualifiedName_import-declaration-with-variable-entity-names.ts ===
+// module Alpha {
+//     <|export var [|{| kind: "writtenReference" |}x|] = 100;|>
+// }
+// 
+// module Beta {
+//     import p = Alpha./*HIGHLIGHTS*/[|{| kind: "reference" |}x|];
+// }
+// 
+// var x = Alpha.[|{| kind: "reference" |}x|]
+
+
+
+// === getDefinitionAtPosition ===
+// === /tests/cases/fourslash/qualifiedName_import-declaration-with-variable-entity-names.ts ===
+// module Alpha {
+//     <|export var [|x|] = 100;|>
+// }
+// 
+// module Beta {
+//     import p = Alpha./*GOTO DEF POS*/x;
+// }
+// 
+// var x = Alpha.x
+
+  // === Details ===
+  [
+   {
+    "kind": "var",
+    "name": "x",
+    "containerName": "Alpha",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

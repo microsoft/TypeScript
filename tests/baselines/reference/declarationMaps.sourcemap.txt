@@ -5,7 +5,7 @@ sourceRoot:
 sources: declarationMaps.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/declarationMaps.d.ts
+emittedFile:declarationMaps.d.ts
 sourceFile:declarationMaps.ts
 -------------------------------------------------------------------
 >>>declare module m2 {

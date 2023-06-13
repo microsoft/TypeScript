@@ -1,8 +1,10 @@
-=== tests/cases/compiler/es6ImportNameSpaceImportInEs5_0.ts ===
+//// [tests/cases/compiler/es6ImportNameSpaceImportInEs5.ts] ////
+
+=== es6ImportNameSpaceImportInEs5_0.ts ===
 export var a = 10;  
 >a : Symbol(a, Decl(es6ImportNameSpaceImportInEs5_0.ts, 0, 10))
 
-=== tests/cases/compiler/es6ImportNameSpaceImportInEs5_1.ts ===
+=== es6ImportNameSpaceImportInEs5_1.ts ===
 import * as nameSpaceBinding from "./es6ImportNameSpaceImportInEs5_0";
 >nameSpaceBinding : Symbol(nameSpaceBinding, Decl(es6ImportNameSpaceImportInEs5_1.ts, 0, 6))
 

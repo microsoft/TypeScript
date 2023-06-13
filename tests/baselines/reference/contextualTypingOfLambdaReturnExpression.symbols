@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualTypingOfLambdaReturnExpression.ts ===
+//// [tests/cases/compiler/contextualTypingOfLambdaReturnExpression.ts] ////
+
+=== contextualTypingOfLambdaReturnExpression.ts ===
 function callb(lam: (l: number) => void);
 >callb : Symbol(callb, Decl(contextualTypingOfLambdaReturnExpression.ts, 0, 0), Decl(contextualTypingOfLambdaReturnExpression.ts, 0, 41), Decl(contextualTypingOfLambdaReturnExpression.ts, 1, 41))
 >lam : Symbol(lam, Decl(contextualTypingOfLambdaReturnExpression.ts, 0, 15))

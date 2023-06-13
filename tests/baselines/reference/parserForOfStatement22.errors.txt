@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript6/Iterators/parserForOfStatement22.ts(2,6): error TS1106: The left-hand side of a 'for...of' statement may not be 'async'.
+parserForOfStatement22.ts(2,6): error TS1106: The left-hand side of a 'for...of' statement may not be 'async'.
 
 
-==== tests/cases/conformance/parser/ecmascript6/Iterators/parserForOfStatement22.ts (1 errors) ====
+==== parserForOfStatement22.ts (1 errors) ====
     var async;
     for (async of [1, 2]) {}
          ~~~~~

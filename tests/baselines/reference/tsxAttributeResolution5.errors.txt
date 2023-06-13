@@ -1,13 +1,13 @@
-tests/cases/conformance/jsx/file.tsx(21,10): error TS2322: Type 'T' is not assignable to type 'Attribs1'.
+file.tsx(21,10): error TS2322: Type 'T' is not assignable to type 'Attribs1'.
   Type '{ x: number; }' is not assignable to type 'Attribs1'.
     Types of property 'x' are incompatible.
       Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/jsx/file.tsx(25,10): error TS2322: Type 'T' is not assignable to type 'Attribs1'.
+file.tsx(25,10): error TS2322: Type 'T' is not assignable to type 'Attribs1'.
   Property 'x' is missing in type '{ y: string; }' but required in type 'Attribs1'.
-tests/cases/conformance/jsx/file.tsx(29,2): error TS2741: Property 'x' is missing in type '{}' but required in type 'Attribs1'.
+file.tsx(29,2): error TS2741: Property 'x' is missing in type '{}' but required in type 'Attribs1'.
 
 
-==== tests/cases/conformance/jsx/file.tsx (3 errors) ====
+==== file.tsx (3 errors) ====
     declare module JSX {
     	interface Element { }
     	interface IntrinsicElements {
@@ -41,13 +41,13 @@ tests/cases/conformance/jsx/file.tsx(29,2): error TS2741: Property 'x' is missin
     	        ~~~~~
 !!! error TS2322: Type 'T' is not assignable to type 'Attribs1'.
 !!! error TS2322:   Property 'x' is missing in type '{ y: string; }' but required in type 'Attribs1'.
-!!! related TS2728 tests/cases/conformance/jsx/file.tsx:9:2: 'x' is declared here.
+!!! related TS2728 file.tsx:9:2: 'x' is declared here.
     }
     
     
     <test1 {...{}} />; // Error, missing x
      ~~~~~
 !!! error TS2741: Property 'x' is missing in type '{}' but required in type 'Attribs1'.
-!!! related TS2728 tests/cases/conformance/jsx/file.tsx:9:2: 'x' is declared here.
+!!! related TS2728 file.tsx:9:2: 'x' is declared here.
     <test2 {...{}} />; // Error, missing toString
     

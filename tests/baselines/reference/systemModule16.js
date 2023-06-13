@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/systemModule16.ts] ////
+
 //// [systemModule16.ts]
 import * as x from "foo";
 import * as y from "bar";

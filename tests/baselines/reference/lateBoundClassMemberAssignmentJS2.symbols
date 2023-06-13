@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/lateBoundClassMemberAssignmentJS2.js ===
+//// [tests/cases/conformance/salsa/lateBoundClassMemberAssignmentJS2.ts] ////
+
+=== lateBoundClassMemberAssignmentJS2.js ===
 const _sym = "my-fake-sym";
 >_sym : Symbol(_sym, Decl(lateBoundClassMemberAssignmentJS2.js, 0, 5))
 

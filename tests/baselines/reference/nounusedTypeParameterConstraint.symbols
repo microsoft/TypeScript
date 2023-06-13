@@ -1,8 +1,10 @@
-=== tests/cases/compiler/bar.ts ===
+//// [tests/cases/compiler/nounusedTypeParameterConstraint.ts] ////
+
+=== bar.ts ===
 export interface IEventSourcedEntity { }
 >IEventSourcedEntity : Symbol(IEventSourcedEntity, Decl(bar.ts, 0, 0))
 
-=== tests/cases/compiler/test.ts ===
+=== test.ts ===
 import { IEventSourcedEntity } from "./bar";
 >IEventSourcedEntity : Symbol(IEventSourcedEntity, Decl(test.ts, 0, 8))
 

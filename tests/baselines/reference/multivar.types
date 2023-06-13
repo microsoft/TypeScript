@@ -1,4 +1,6 @@
-=== tests/cases/compiler/multivar.ts ===
+//// [tests/cases/compiler/multivar.ts] ////
+
+=== multivar.ts ===
 var a,b,c;
 >a : any
 >b : any

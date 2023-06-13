@@ -1,7 +1,7 @@
-tests/cases/conformance/controlFlow/controlFlowWhileStatement.ts(81,12): error TS2365: Operator '>' cannot be applied to types 'string | number' and 'number'.
+controlFlowWhileStatement.ts(81,12): error TS2365: Operator '>' cannot be applied to types 'string | number' and 'number'.
 
 
-==== tests/cases/conformance/controlFlow/controlFlowWhileStatement.ts (1 errors) ====
+==== controlFlowWhileStatement.ts (1 errors) ====
     let cond: boolean;
     function a() {
         let x: string | number;

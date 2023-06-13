@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/superCalls/superCalls.ts] ////
+
 //// [superCalls.ts]
 class Base {
     x = 43;

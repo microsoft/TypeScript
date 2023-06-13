@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es5ModuleInternalNamedImports.ts] ////
+
 //// [es5ModuleInternalNamedImports.ts]
 export module M {
     // variable
@@ -65,5 +67,5 @@ define(["require", "exports"], function (require, exports) {
         })(M_E = M.M_E || (M.M_E = {}));
         // alias
         M.M_A = M_M;
-    })(M = exports.M || (exports.M = {}));
+    })(M || (exports.M = M = {}));
 });

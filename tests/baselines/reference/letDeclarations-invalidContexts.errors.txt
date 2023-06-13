@@ -1,15 +1,15 @@
-tests/cases/compiler/letDeclarations-invalidContexts.ts(3,5): error TS1157: 'let' declarations can only be declared inside a block.
-tests/cases/compiler/letDeclarations-invalidContexts.ts(5,5): error TS1157: 'let' declarations can only be declared inside a block.
-tests/cases/compiler/letDeclarations-invalidContexts.ts(8,5): error TS1157: 'let' declarations can only be declared inside a block.
-tests/cases/compiler/letDeclarations-invalidContexts.ts(11,5): error TS1157: 'let' declarations can only be declared inside a block.
-tests/cases/compiler/letDeclarations-invalidContexts.ts(15,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
-tests/cases/compiler/letDeclarations-invalidContexts.ts(19,5): error TS1157: 'let' declarations can only be declared inside a block.
-tests/cases/compiler/letDeclarations-invalidContexts.ts(22,5): error TS1157: 'let' declarations can only be declared inside a block.
-tests/cases/compiler/letDeclarations-invalidContexts.ts(25,12): error TS1157: 'let' declarations can only be declared inside a block.
-tests/cases/compiler/letDeclarations-invalidContexts.ts(28,29): error TS1157: 'let' declarations can only be declared inside a block.
+letDeclarations-invalidContexts.ts(3,5): error TS1157: 'let' declarations can only be declared inside a block.
+letDeclarations-invalidContexts.ts(5,5): error TS1157: 'let' declarations can only be declared inside a block.
+letDeclarations-invalidContexts.ts(8,5): error TS1157: 'let' declarations can only be declared inside a block.
+letDeclarations-invalidContexts.ts(11,5): error TS1157: 'let' declarations can only be declared inside a block.
+letDeclarations-invalidContexts.ts(15,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+letDeclarations-invalidContexts.ts(19,5): error TS1157: 'let' declarations can only be declared inside a block.
+letDeclarations-invalidContexts.ts(22,5): error TS1157: 'let' declarations can only be declared inside a block.
+letDeclarations-invalidContexts.ts(25,12): error TS1157: 'let' declarations can only be declared inside a block.
+letDeclarations-invalidContexts.ts(28,29): error TS1157: 'let' declarations can only be declared inside a block.
 
 
-==== tests/cases/compiler/letDeclarations-invalidContexts.ts (9 errors) ====
+==== letDeclarations-invalidContexts.ts (9 errors) ====
     // Errors, let must be defined inside a block
     if (true) 
         let l1 = 0;

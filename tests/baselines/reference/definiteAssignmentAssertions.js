@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts] ////
+
 //// [definiteAssignmentAssertions.ts]
 // Suppress strict property initialization check
 

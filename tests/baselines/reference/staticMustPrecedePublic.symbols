@@ -1,4 +1,6 @@
-=== tests/cases/compiler/staticMustPrecedePublic.ts ===
+//// [tests/cases/compiler/staticMustPrecedePublic.ts] ////
+
+=== staticMustPrecedePublic.ts ===
 class Outer {
 >Outer : Symbol(Outer, Decl(staticMustPrecedePublic.ts, 0, 0))
 

@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/FunctionDeclarations/parserFunctionDeclaration7.ts(2,13): error TS2391: Function implementation is missing or not immediately following the declaration.
+parserFunctionDeclaration7.ts(2,13): error TS2391: Function implementation is missing or not immediately following the declaration.
 
 
-==== tests/cases/conformance/parser/ecmascript5/FunctionDeclarations/parserFunctionDeclaration7.ts (1 errors) ====
+==== parserFunctionDeclaration7.ts (1 errors) ====
     module M {
        function foo();
                 ~~~

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringCatch.ts] ////
+
 //// [destructuringCatch.ts]
 try {
     throw [0, 1];

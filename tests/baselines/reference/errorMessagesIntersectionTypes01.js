@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/errorMessagesIntersectionTypes01.ts] ////
+
 //// [errorMessagesIntersectionTypes01.ts]
 interface Foo {
     fooProp: boolean;

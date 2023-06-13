@@ -1,4 +1,6 @@
-=== tests/cases/compiler/conditionalTypeRelaxingConstraintAssignability.ts ===
+//// [tests/cases/compiler/conditionalTypeRelaxingConstraintAssignability.ts] ////
+
+=== conditionalTypeRelaxingConstraintAssignability.ts ===
 export type ElChildren =
 >ElChildren : string | undefined
 

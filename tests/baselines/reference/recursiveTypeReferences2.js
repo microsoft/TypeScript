@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypeReferences2.ts] ////
+
 //// [bug39372.js]
 /** @typedef {ReadonlyArray<Json>} JsonArray */
 /** @typedef {{ readonly [key: string]: Json }} JsonRecord */

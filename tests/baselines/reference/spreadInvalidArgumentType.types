@@ -1,4 +1,6 @@
-=== tests/cases/compiler/spreadInvalidArgumentType.ts ===
+//// [tests/cases/compiler/spreadInvalidArgumentType.ts] ////
+
+=== spreadInvalidArgumentType.ts ===
 enum E { v1, v2 };
 >E : E
 >v1 : E.v1
@@ -58,7 +60,6 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 
     var n: null;
 >n : null
->null : null
 
     var a: any;
 >a : any
