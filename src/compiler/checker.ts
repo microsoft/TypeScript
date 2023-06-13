@@ -12499,20 +12499,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (getObjectFlags(type) & ObjectFlags.Reference) {
             const target = (type as TypeReference).target;
             const typeArguments = getTypeArguments(type as TypeReference);
-            if (length(target.typeParameters) === length(typeArguments)) {
-                const ref = createTypeReference(target, concatenate(typeArguments, [thisArgument || target.thisType!]));
-                return needApparentType ? getApparentType(ref) : ref;
-            }
+            return length(target.typeParameters) === length(typeArguments) ? createTypeReference(target, concatenate(typeArguments, [thisArgument || target.thisType!])) : type;
         }
         else if (type.flags & TypeFlags.Intersection) {
             const types = sameMap((type as IntersectionType).types, t => getTypeWithThisArgument(t, thisArgument, needApparentType));
             return types !== (type as IntersectionType).types ? getIntersectionType(types) : type;
         }
         return needApparentType ? getApparentType(type) : type;
-    }
-
-    function getThisArgument(type: Type) {
-        return getObjectFlags(type) & ObjectFlags.Reference && length(getTypeArguments(type as TypeReference)) > getTypeReferenceArity(type as TypeReference) ? last(getTypeArguments(type as TypeReference)) : type;
     }
 
     function resolveObjectTypeMembers(type: ObjectType, source: InterfaceTypeWithDeclaredMembers, typeParameters: readonly TypeParameter[], typeArguments: readonly Type[]) {
@@ -13696,7 +13689,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return type.resolvedBaseConstraint;
         }
         const stack: object[] = [];
-        return type.resolvedBaseConstraint = getTypeWithThisArgument(getImmediateBaseConstraint(type), getThisArgument(type));
+        return type.resolvedBaseConstraint = getImmediateBaseConstraint(type);
 
         function getImmediateBaseConstraint(t: Type): Type {
             if (!t.immediateBaseConstraint) {
@@ -13802,8 +13795,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // We substitute constraints for variadic elements only when the constraints are array types or
                 // non-variadic tuple types as we want to avoid further (possibly unbounded) recursion.
                 const newElements = map(getElementTypes(t), (v, i) => {
-                    const constraint = t.target.elementFlags[i] & ElementFlags.Variadic && getBaseConstraint(v) || v;
-                    return constraint && everyType(constraint, c => isArrayOrTupleType(c) && !isGenericTupleType(c)) ? constraint : v;
+                    const constraint = v.flags & TypeFlags.TypeParameter && t.target.elementFlags[i] & ElementFlags.Variadic && getBaseConstraint(v) || v;
+                    return constraint !== v && everyType(constraint, c => isArrayOrTupleType(c) && !isGenericTupleType(c)) ? constraint : v;
                 });
                 return createTupleType(newElements, t.target.elementFlags, t.target.readonly, t.target.labeledElementDeclarations);
             }
@@ -13811,8 +13804,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function getApparentTypeOfIntersectionType(type: IntersectionType) {
-        return type.resolvedApparentType || (type.resolvedApparentType = getTypeWithThisArgument(type, type, /*needApparentType*/ true));
+    function getApparentTypeOfIntersectionType(type: IntersectionType, thisArgument: Type) {
+        return type.resolvedApparentType || (type.resolvedApparentType = getTypeWithThisArgument(type, thisArgument, /*needApparentType*/ true));
     }
 
     function getResolvedTypeParameterDefault(typeParameter: TypeParameter): Type | undefined {
@@ -13890,9 +13883,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * type itself.
      */
     function getApparentType(type: Type): Type {
-        const t = !(type.flags & TypeFlags.Instantiable) ? type : getBaseConstraintOfType(type) || unknownType;
-        return getObjectFlags(t) & ObjectFlags.Mapped ? getApparentTypeOfMappedType(t as MappedType) :
-            t.flags & TypeFlags.Intersection ? getApparentTypeOfIntersectionType(t as IntersectionType) :
+        const t = type.flags & TypeFlags.Instantiable ? getBaseConstraintOfType(type) || unknownType : type;
+        const objectFlags = getObjectFlags(t);
+        return objectFlags & ObjectFlags.Mapped ? getApparentTypeOfMappedType(t as MappedType) :
+            objectFlags & ObjectFlags.Reference && t !== type ? getTypeWithThisArgument(t, type) :
+            t.flags & TypeFlags.Intersection ? getApparentTypeOfIntersectionType(t as IntersectionType, type) :
             t.flags & TypeFlags.StringLike ? globalStringType :
             t.flags & TypeFlags.NumberLike ? globalNumberType :
             t.flags & TypeFlags.BigIntLike ? getGlobalBigIntType() :
@@ -21570,9 +21565,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 const c = target as ConditionalType;
                 // We check for a relationship to a conditional type target only when the conditional type has no
-                // 'infer' positions and is not distributive or is distributive but doesn't reference the check type
-                // parameter in either of the result types.
-                if (!c.root.inferTypeParameters && !isDistributionDependent(c.root)) {
+                // 'infer' positions, is not distributive or is distributive but doesn't reference the check type
+                // parameter in either of the result types, and the source isn't an instantiation of the same
+                // conditional type (as happens when computing variance).
+                if (!c.root.inferTypeParameters && !isDistributionDependent(c.root) && !(source.flags & TypeFlags.Conditional && (source as ConditionalType).root === c.root)) {
                     // Check if the conditional is always true or always false but still deferred for distribution purposes.
                     const skipTrue = !isTypeAssignableTo(getPermissiveInstantiation(c.checkType), getPermissiveInstantiation(c.extendsType));
                     const skipFalse = !skipTrue && isTypeAssignableTo(getRestrictiveInstantiation(c.checkType), getRestrictiveInstantiation(c.extendsType));
