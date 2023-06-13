@@ -73,8 +73,6 @@ import {
     VariableDeclaration,
 } from "./_namespaces/ts";
 
-const maxHintsLength = 30;
-
 const leadingParameterNameCommentRegexFactory = (name: string) => {
     return new RegExp(`^\\s?/\\*\\*?\\s?${name}\\s?\\*\\/\\s?$`);
 };
@@ -153,7 +151,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
 
     function addParameterHints(text: string, position: number, isFirstVariadicArgument: boolean) {
         result.push({
-            text: `${isFirstVariadicArgument ? "..." : ""}${truncation(text, maxHintsLength)}:`,
+            text: `${isFirstVariadicArgument ? "..." : ""}${text}:`,
             position,
             kind: InlayHintKind.Parameter,
             whitespaceAfter: true,
@@ -162,7 +160,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
 
     function addTypeHints(text: string, position: number) {
         result.push({
-            text: `: ${truncation(text, maxHintsLength)}`,
+            text: `: ${text}`,
             position,
             kind: InlayHintKind.Type,
             whitespaceBefore: true,
@@ -171,7 +169,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
 
     function addEnumMemberValueHints(text: string, position: number) {
         result.push({
-            text: `= ${truncation(text, maxHintsLength)}`,
+            text: `= ${text}`,
             position,
             kind: InlayHintKind.Enum,
             whitespaceBefore: true,
@@ -392,13 +390,6 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
         }
 
         return printTypeInSingleLine(signatureParamType);
-    }
-
-    function truncation(text: string, maxLength: number) {
-        if (text.length > maxLength) {
-            return text.substr(0, maxLength - "...".length) + "...";
-        }
-        return text;
     }
 
     function printTypeInSingleLine(type: Type) {
