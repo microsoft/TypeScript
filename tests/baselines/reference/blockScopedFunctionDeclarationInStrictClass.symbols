@@ -1,4 +1,6 @@
-=== tests/cases/compiler/blockScopedFunctionDeclarationInStrictClass.ts ===
+//// [tests/cases/compiler/blockScopedFunctionDeclarationInStrictClass.ts] ////
+
+=== blockScopedFunctionDeclarationInStrictClass.ts ===
 class c {
 >c : Symbol(c, Decl(blockScopedFunctionDeclarationInStrictClass.ts, 0, 0))
 

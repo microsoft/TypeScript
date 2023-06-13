@@ -1,4 +1,6 @@
-=== tests/cases/conformance/controlFlow/neverReturningFunctions1.ts ===
+//// [tests/cases/conformance/controlFlow/neverReturningFunctions1.ts] ////
+
+=== neverReturningFunctions1.ts ===
 function fail(message?: string): never {
 >fail : Symbol(fail, Decl(neverReturningFunctions1.ts, 0, 0))
 >message : Symbol(message, Decl(neverReturningFunctions1.ts, 0, 14))

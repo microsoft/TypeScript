@@ -1,9 +1,9 @@
-tests/cases/conformance/types/thisType/thisTypeInFunctions.ts(118,29): error TS2339: Property 'n' does not exist on type 'typeof globalThis'.
-tests/cases/conformance/types/thisType/thisTypeInFunctions.ts(119,32): error TS2339: Property 'n' does not exist on type 'typeof globalThis'.
-tests/cases/conformance/types/thisType/thisTypeInFunctions.ts(120,36): error TS2339: Property 'n' does not exist on type 'typeof globalThis'.
+thisTypeInFunctions.ts(118,29): error TS2339: Property 'n' does not exist on type 'typeof globalThis'.
+thisTypeInFunctions.ts(119,32): error TS2339: Property 'n' does not exist on type 'typeof globalThis'.
+thisTypeInFunctions.ts(120,36): error TS2339: Property 'n' does not exist on type 'typeof globalThis'.
 
 
-==== tests/cases/conformance/types/thisType/thisTypeInFunctions.ts (3 errors) ====
+==== thisTypeInFunctions.ts (3 errors) ====
     // body checking
     class B {
         n: number;

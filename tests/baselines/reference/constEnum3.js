@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/constEnums/constEnum3.ts] ////
+
 //// [constEnum3.ts]
 const enum TestType { foo, bar }
 type TestTypeStr = keyof typeof TestType;

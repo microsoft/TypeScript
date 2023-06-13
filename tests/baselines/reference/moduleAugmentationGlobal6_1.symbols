@@ -1,4 +1,6 @@
-=== tests/cases/compiler/moduleAugmentationGlobal6_1.ts ===
+//// [tests/cases/compiler/moduleAugmentationGlobal6_1.ts] ////
+
+=== moduleAugmentationGlobal6_1.ts ===
 global {
 >global : Symbol(global, Decl(moduleAugmentationGlobal6_1.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/asyncIIFE.ts ===
+//// [tests/cases/compiler/asyncIIFE.ts] ////
+
+=== asyncIIFE.ts ===
 function f1() {
 >f1 : Symbol(f1, Decl(asyncIIFE.ts, 0, 0))
 

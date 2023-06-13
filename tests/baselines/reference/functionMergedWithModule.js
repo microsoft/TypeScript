@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionMergedWithModule.ts] ////
+
 //// [functionMergedWithModule.ts]
 function foo(title: string) {
     var x = 10;

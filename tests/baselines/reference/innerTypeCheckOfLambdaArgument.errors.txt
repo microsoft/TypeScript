@@ -1,7 +1,7 @@
-tests/cases/compiler/innerTypeCheckOfLambdaArgument.ts(10,7): error TS2322: Type 'number' is not assignable to type 'string'.
+innerTypeCheckOfLambdaArgument.ts(10,7): error TS2322: Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/compiler/innerTypeCheckOfLambdaArgument.ts (1 errors) ====
+==== innerTypeCheckOfLambdaArgument.ts (1 errors) ====
     function takesCallback(callback: (n) =>any) {
     
     }

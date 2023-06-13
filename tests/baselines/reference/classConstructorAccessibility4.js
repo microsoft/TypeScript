@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility4.ts] ////
+
 //// [classConstructorAccessibility4.ts]
 class A {
     private constructor() { }

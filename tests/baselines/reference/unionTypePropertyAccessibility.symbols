@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/union/unionTypePropertyAccessibility.ts ===
+//// [tests/cases/conformance/types/union/unionTypePropertyAccessibility.ts] ////
+
+=== unionTypePropertyAccessibility.ts ===
 class Default {
 >Default : Symbol(Default, Decl(unionTypePropertyAccessibility.ts, 0, 0))
 

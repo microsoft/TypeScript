@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mappedTypeRecursiveInference.ts ===
+//// [tests/cases/compiler/mappedTypeRecursiveInference.ts] ////
+
+=== mappedTypeRecursiveInference.ts ===
 interface A { a: A }
 >a : A
 

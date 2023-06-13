@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declaredExternalModuleWithExportAssignment.ts ===
+//// [tests/cases/compiler/declaredExternalModuleWithExportAssignment.ts] ////
+
+=== declaredExternalModuleWithExportAssignment.ts ===
 declare module 'connect' {
 >'connect' : Symbol("connect", Decl(declaredExternalModuleWithExportAssignment.ts, 0, 0))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/implicitConstParameters.ts] ////
+
 //// [implicitConstParameters.ts]
 function doSomething(cb: () => void) {
     cb();

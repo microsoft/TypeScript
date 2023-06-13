@@ -1,17 +1,19 @@
-=== tests/cases/compiler/second.d.ts ===
+//// [tests/cases/compiler/reexportedMissingAlias.ts] ////
+
+=== second.d.ts ===
 // Fixes #15094
 export import Component = CompletelyMissing;
 >Component : any
 >CompletelyMissing : any
 
-=== tests/cases/compiler/first.d.ts ===
+=== first.d.ts ===
 import * as Second from './second';
 >Second : typeof Second
 
 export = Second;
 >Second : typeof Second
 
-=== tests/cases/compiler/crash.ts ===
+=== crash.ts ===
 import { Component } from './first';
 >Component : any
 

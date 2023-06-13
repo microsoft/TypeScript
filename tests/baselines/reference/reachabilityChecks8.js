@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reachabilityChecks8.ts] ////
+
 //// [reachabilityChecks8.ts]
 try {
     for (

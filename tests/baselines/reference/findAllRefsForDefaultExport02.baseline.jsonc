@@ -1,7 +1,8 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsForDefaultExport02.ts ===
-// /*FIND ALL REFS*/export default function [|DefaultExportedFunction|]() {
+// /*FIND ALL REFS*/<|export default function [|{| isWriteAccess: true, isDefinition: true |}DefaultExportedFunction|]() {
 //     return [|DefaultExportedFunction|];
-// }
+// }|>
 // 
 // var x: typeof [|DefaultExportedFunction|];
 // 
@@ -10,134 +11,95 @@
 // namespace DefaultExportedFunction {
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport02.ts",
-      "kind": "function",
-      "name": "function DefaultExportedFunction(): () => typeof DefaultExportedFunction",
-      "textSpan": {
-        "start": 24,
-        "length": 23
-      },
-      "displayParts": [
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "DefaultExportedFunction",
-          "kind": "functionName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=>",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "typeof",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "DefaultExportedFunction",
-          "kind": "functionName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 89
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 24,
-          "length": 23
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport02.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 89
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 63,
-          "length": 23
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport02.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 105,
-          "length": 23
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport02.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 139,
-          "length": 23
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport02.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsForDefaultExport02.ts ===
+  // /*FIND ALL REFS*/<|export default function [|DefaultExportedFunction|]() {
+  //     return DefaultExportedFunction;
+  // }|>
+  // 
+  // var x: typeof DefaultExportedFunction;
+  // 
+  // --- (line: 7) skipped ---
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "function DefaultExportedFunction(): () => typeof DefaultExportedFunction",
+    "displayParts": [
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "DefaultExportedFunction",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=>",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "typeof",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "DefaultExportedFunction",
+      "kind": "functionName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsForDefaultExport02.ts ===
-// export default function /*FIND ALL REFS*/[|DefaultExportedFunction|]() {
+// <|export default function /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}DefaultExportedFunction|]() {
 //     return [|DefaultExportedFunction|];
-// }
+// }|>
 // 
 // var x: typeof [|DefaultExportedFunction|];
 // 
@@ -146,134 +108,95 @@
 // namespace DefaultExportedFunction {
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport02.ts",
-      "kind": "function",
-      "name": "function DefaultExportedFunction(): () => typeof DefaultExportedFunction",
-      "textSpan": {
-        "start": 24,
-        "length": 23
-      },
-      "displayParts": [
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "DefaultExportedFunction",
-          "kind": "functionName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=>",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "typeof",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "DefaultExportedFunction",
-          "kind": "functionName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 89
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 24,
-          "length": 23
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport02.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 89
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 63,
-          "length": 23
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport02.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 105,
-          "length": 23
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport02.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 139,
-          "length": 23
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport02.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsForDefaultExport02.ts ===
+  // <|export default function /*FIND ALL REFS*/[|DefaultExportedFunction|]() {
+  //     return DefaultExportedFunction;
+  // }|>
+  // 
+  // var x: typeof DefaultExportedFunction;
+  // 
+  // --- (line: 7) skipped ---
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "function DefaultExportedFunction(): () => typeof DefaultExportedFunction",
+    "displayParts": [
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "DefaultExportedFunction",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=>",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "typeof",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "DefaultExportedFunction",
+      "kind": "functionName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsForDefaultExport02.ts ===
-// export default function [|DefaultExportedFunction|]() {
+// <|export default function [|{| isWriteAccess: true |}DefaultExportedFunction|]() {
 //     return /*FIND ALL REFS*/[|DefaultExportedFunction|];
-// }
+// }|>
 // 
 // var x: typeof [|DefaultExportedFunction|];
 // 
@@ -282,130 +205,95 @@
 // namespace DefaultExportedFunction {
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport02.ts",
-      "kind": "function",
-      "name": "function DefaultExportedFunction(): () => typeof DefaultExportedFunction",
-      "textSpan": {
-        "start": 24,
-        "length": 23
-      },
-      "displayParts": [
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "DefaultExportedFunction",
-          "kind": "functionName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=>",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "typeof",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "DefaultExportedFunction",
-          "kind": "functionName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 89
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 24,
-          "length": 23
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport02.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 89
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 63,
-          "length": 23
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport02.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 105,
-          "length": 23
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport02.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 139,
-          "length": 23
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport02.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsForDefaultExport02.ts ===
+  // <|export default function [|DefaultExportedFunction|]() {
+  //     return /*FIND ALL REFS*/DefaultExportedFunction;
+  // }|>
+  // 
+  // var x: typeof DefaultExportedFunction;
+  // 
+  // --- (line: 7) skipped ---
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "function DefaultExportedFunction(): () => typeof DefaultExportedFunction",
+    "displayParts": [
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "DefaultExportedFunction",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=>",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "typeof",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "DefaultExportedFunction",
+      "kind": "functionName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsForDefaultExport02.ts ===
-// export default function [|DefaultExportedFunction|]() {
+// <|export default function [|{| isWriteAccess: true |}DefaultExportedFunction|]() {
 //     return [|DefaultExportedFunction|];
-// }
+// }|>
 // 
 // var x: typeof /*FIND ALL REFS*/[|DefaultExportedFunction|];
 // 
@@ -414,130 +302,98 @@
 // namespace DefaultExportedFunction {
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport02.ts",
-      "kind": "function",
-      "name": "function DefaultExportedFunction(): () => typeof DefaultExportedFunction",
-      "textSpan": {
-        "start": 24,
-        "length": 23
-      },
-      "displayParts": [
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "DefaultExportedFunction",
-          "kind": "functionName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=>",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "typeof",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "DefaultExportedFunction",
-          "kind": "functionName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 89
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 24,
-          "length": 23
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport02.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 89
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 63,
-          "length": 23
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport02.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 105,
-          "length": 23
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport02.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 139,
-          "length": 23
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport02.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsForDefaultExport02.ts ===
+  // <|export default function [|DefaultExportedFunction|]() {
+  //     return DefaultExportedFunction;
+  // }|>
+  // 
+  // var x: typeof /*FIND ALL REFS*/DefaultExportedFunction;
+  // 
+  // var y = DefaultExportedFunction();
+  // 
+  // namespace DefaultExportedFunction {
+  // }
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "function DefaultExportedFunction(): () => typeof DefaultExportedFunction",
+    "displayParts": [
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "DefaultExportedFunction",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=>",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "typeof",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "DefaultExportedFunction",
+      "kind": "functionName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsForDefaultExport02.ts ===
-// export default function [|DefaultExportedFunction|]() {
+// <|export default function [|{| isWriteAccess: true |}DefaultExportedFunction|]() {
 //     return [|DefaultExportedFunction|];
-// }
+// }|>
 // 
 // var x: typeof [|DefaultExportedFunction|];
 // 
@@ -546,244 +402,183 @@
 // namespace DefaultExportedFunction {
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport02.ts",
-      "kind": "function",
-      "name": "function DefaultExportedFunction(): () => typeof DefaultExportedFunction",
-      "textSpan": {
-        "start": 24,
-        "length": 23
-      },
-      "displayParts": [
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "DefaultExportedFunction",
-          "kind": "functionName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=>",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "typeof",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "DefaultExportedFunction",
-          "kind": "functionName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 89
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 24,
-          "length": 23
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport02.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 89
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 63,
-          "length": 23
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport02.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 105,
-          "length": 23
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport02.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 139,
-          "length": 23
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport02.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsForDefaultExport02.ts ===
+  // <|export default function [|DefaultExportedFunction|]() {
+  //     return DefaultExportedFunction;
+  // }|>
+  // 
+  // var x: typeof DefaultExportedFunction;
+  // 
+  // var y = /*FIND ALL REFS*/DefaultExportedFunction();
+  // 
+  // namespace DefaultExportedFunction {
+  // }
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "function DefaultExportedFunction(): () => typeof DefaultExportedFunction",
+    "displayParts": [
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "DefaultExportedFunction",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=>",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "typeof",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "DefaultExportedFunction",
+      "kind": "functionName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsForDefaultExport02.ts ===
-// export default function DefaultExportedFunction() {
-//     return DefaultExportedFunction;
-// }
-// 
-// var x: typeof DefaultExportedFunction;
+// --- (line: 5) skipped ---
 // 
 // var y = DefaultExportedFunction();
 // 
-// /*FIND ALL REFS*/namespace [|DefaultExportedFunction|] {
-// }
+// /*FIND ALL REFS*/<|namespace [|{| isWriteAccess: true, isDefinition: true |}DefaultExportedFunction|] {
+// }|>
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport02.ts",
-      "kind": "function",
-      "name": "namespace DefaultExportedFunction",
-      "textSpan": {
-        "start": 24,
-        "length": 23
-      },
-      "displayParts": [
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "DefaultExportedFunction",
-          "kind": "moduleName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 89
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 177,
-          "length": 23
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport02.ts",
-        "contextSpan": {
-          "start": 167,
-          "length": 37
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsForDefaultExport02.ts ===
+  // <|export default function [|DefaultExportedFunction|]() {
+  //     return DefaultExportedFunction;
+  // }|>
+  // 
+  // var x: typeof DefaultExportedFunction;
+  // 
+  // var y = DefaultExportedFunction();
+  // 
+  // /*FIND ALL REFS*/namespace DefaultExportedFunction {
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "namespace DefaultExportedFunction",
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "DefaultExportedFunction",
+      "kind": "moduleName"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsForDefaultExport02.ts ===
-// export default function DefaultExportedFunction() {
-//     return DefaultExportedFunction;
-// }
-// 
-// var x: typeof DefaultExportedFunction;
+// --- (line: 5) skipped ---
 // 
 // var y = DefaultExportedFunction();
 // 
-// namespace /*FIND ALL REFS*/[|DefaultExportedFunction|] {
-// }
+// <|namespace /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}DefaultExportedFunction|] {
+// }|>
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport02.ts",
-      "kind": "function",
-      "name": "namespace DefaultExportedFunction",
-      "textSpan": {
-        "start": 24,
-        "length": 23
-      },
-      "displayParts": [
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "DefaultExportedFunction",
-          "kind": "moduleName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 89
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 177,
-          "length": 23
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport02.ts",
-        "contextSpan": {
-          "start": 167,
-          "length": 37
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsForDefaultExport02.ts ===
+  // <|export default function [|DefaultExportedFunction|]() {
+  //     return DefaultExportedFunction;
+  // }|>
+  // 
+  // var x: typeof DefaultExportedFunction;
+  // 
+  // var y = DefaultExportedFunction();
+  // 
+  // namespace /*FIND ALL REFS*/DefaultExportedFunction {
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "namespace DefaultExportedFunction",
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "DefaultExportedFunction",
+      "kind": "moduleName"
+     }
     ]
-  }
-]
+   }
+  ]

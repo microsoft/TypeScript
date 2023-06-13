@@ -1,4 +1,6 @@
-=== tests/cases/compiler/reverseMappedTypeInferFromItsProperties.ts ===
+//// [tests/cases/compiler/reverseMappedTypeInferFromItsProperties.ts] ////
+
+=== reverseMappedTypeInferFromItsProperties.ts ===
 // repro from #29479
 
 type Selector<S, R> = (state: S) => R;

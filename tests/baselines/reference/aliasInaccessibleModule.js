@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/aliasInaccessibleModule.ts] ////
+
 //// [aliasInaccessibleModule.ts]
 module M {
     module N {

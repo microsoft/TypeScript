@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/ifDoWhileStatements/ifDoWhileStatements.ts] ////
+
 //// [ifDoWhileStatements.ts]
 interface I {
     id: number;

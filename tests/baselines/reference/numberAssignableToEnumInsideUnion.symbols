@@ -1,4 +1,6 @@
-=== tests/cases/compiler/numberAssignableToEnumInsideUnion.ts ===
+//// [tests/cases/compiler/numberAssignableToEnumInsideUnion.ts] ////
+
+=== numberAssignableToEnumInsideUnion.ts ===
 enum E { A, B }
 >E : Symbol(E, Decl(numberAssignableToEnumInsideUnion.ts, 0, 0))
 >A : Symbol(E.A, Decl(numberAssignableToEnumInsideUnion.ts, 0, 8))

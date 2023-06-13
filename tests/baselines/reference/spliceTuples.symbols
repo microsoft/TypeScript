@@ -1,4 +1,6 @@
-=== tests/cases/compiler/spliceTuples.ts ===
+//// [tests/cases/compiler/spliceTuples.ts] ////
+
+=== spliceTuples.ts ===
 declare const sb: [string, boolean];
 >sb : Symbol(sb, Decl(spliceTuples.ts, 0, 13))
 

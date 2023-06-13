@@ -1,4 +1,6 @@
-=== tests/cases/compiler/awaitExpressionInnerCommentEmit.ts ===
+//// [tests/cases/compiler/awaitExpressionInnerCommentEmit.ts] ////
+
+=== awaitExpressionInnerCommentEmit.ts ===
 async function foo() {
 >foo : Symbol(foo, Decl(awaitExpressionInnerCommentEmit.ts, 0, 0))
 

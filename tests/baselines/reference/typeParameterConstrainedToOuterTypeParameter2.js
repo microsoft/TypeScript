@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeParameterConstrainedToOuterTypeParameter2.ts] ////
+
 //// [typeParameterConstrainedToOuterTypeParameter2.ts]
 interface A<T> {
     foo<U extends T>(x: A<A<U>>)

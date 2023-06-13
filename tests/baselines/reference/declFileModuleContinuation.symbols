@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileModuleContinuation.ts ===
+//// [tests/cases/compiler/declFileModuleContinuation.ts] ////
+
+=== declFileModuleContinuation.ts ===
 module A.C {
 >A : Symbol(A, Decl(declFileModuleContinuation.ts, 0, 0), Decl(declFileModuleContinuation.ts, 3, 1))
 >C : Symbol(C, Decl(declFileModuleContinuation.ts, 0, 9))

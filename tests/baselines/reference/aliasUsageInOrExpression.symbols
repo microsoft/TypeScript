@@ -1,4 +1,6 @@
-=== tests/cases/compiler/aliasUsageInOrExpression_main.ts ===
+//// [tests/cases/compiler/aliasUsageInOrExpression.ts] ////
+
+=== aliasUsageInOrExpression_main.ts ===
 import Backbone = require("./aliasUsageInOrExpression_backbone");
 >Backbone : Symbol(Backbone, Decl(aliasUsageInOrExpression_main.ts, 0, 0))
 
@@ -53,7 +55,7 @@ var f: { x: IHasVisualizationModel } = <{ x: IHasVisualizationModel }>null ? { x
 >x : Symbol(x, Decl(aliasUsageInOrExpression_main.ts, 10, 78))
 >moduleA : Symbol(moduleA, Decl(aliasUsageInOrExpression_main.ts, 0, 65))
 
-=== tests/cases/compiler/aliasUsageInOrExpression_backbone.ts ===
+=== aliasUsageInOrExpression_backbone.ts ===
 export class Model {
 >Model : Symbol(Model, Decl(aliasUsageInOrExpression_backbone.ts, 0, 0))
 
@@ -61,7 +63,7 @@ export class Model {
 >someData : Symbol(Model.someData, Decl(aliasUsageInOrExpression_backbone.ts, 0, 20))
 }
 
-=== tests/cases/compiler/aliasUsageInOrExpression_moduleA.ts ===
+=== aliasUsageInOrExpression_moduleA.ts ===
 import Backbone = require("./aliasUsageInOrExpression_backbone");
 >Backbone : Symbol(Backbone, Decl(aliasUsageInOrExpression_moduleA.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts ===
+//// [tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts] ////
+
+=== thisInInvalidContexts.ts ===
 class BaseErrClass {
 >BaseErrClass : BaseErrClass
 

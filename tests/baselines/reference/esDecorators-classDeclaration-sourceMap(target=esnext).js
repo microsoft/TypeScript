@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/esDecorators/classDeclaration/esDecorators-classDeclaration-sourceMap.ts] ////
+
 //// [esDecorators-classDeclaration-sourceMap.ts]
 declare var dec: any;
 

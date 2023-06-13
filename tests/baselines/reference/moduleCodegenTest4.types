@@ -1,4 +1,6 @@
-=== tests/cases/compiler/moduleCodegenTest4.ts ===
+//// [tests/cases/compiler/moduleCodegenTest4.ts] ////
+
+=== moduleCodegenTest4.ts ===
 export module Baz { export var x = "hello"; }
 >Baz : typeof Baz
 >x : string

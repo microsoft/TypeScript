@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inheritanceStaticPropertyOverridingAccessor.ts] ////
+
 //// [inheritanceStaticPropertyOverridingAccessor.ts]
 class a {
     static get x(): () => string {

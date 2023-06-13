@@ -1,3 +1,5 @@
-=== tests/cases/compiler/undeclaredVarEmit.ts ===
+//// [tests/cases/compiler/undeclaredVarEmit.ts] ////
+
+=== undeclaredVarEmit.ts ===
 
 f: number;

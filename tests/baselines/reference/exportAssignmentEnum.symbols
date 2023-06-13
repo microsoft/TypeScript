@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exportAssignmentEnum_B.ts ===
+//// [tests/cases/compiler/exportAssignmentEnum.ts] ////
+
+=== exportAssignmentEnum_B.ts ===
 import EnumE = require("./exportAssignmentEnum_A");
 >EnumE : Symbol(EnumE, Decl(exportAssignmentEnum_B.ts, 0, 0))
 
@@ -20,7 +22,7 @@ var c = EnumE.C;
 >EnumE : Symbol(EnumE, Decl(exportAssignmentEnum_B.ts, 0, 0))
 >C : Symbol(EnumE.C, Decl(exportAssignmentEnum_A.ts, 2, 3))
 
-=== tests/cases/compiler/exportAssignmentEnum_A.ts ===
+=== exportAssignmentEnum_A.ts ===
 enum E {
 >E : Symbol(E, Decl(exportAssignmentEnum_A.ts, 0, 0))
 

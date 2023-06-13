@@ -1,30 +1,30 @@
-tests/cases/compiler/parameterNamesInTypeParameterList.ts(1,30): error TS2552: Cannot find name 'a'. Did you mean 'A'?
-tests/cases/compiler/parameterNamesInTypeParameterList.ts(5,30): error TS2552: Cannot find name 'a'. Did you mean 'A'?
-tests/cases/compiler/parameterNamesInTypeParameterList.ts(9,30): error TS2552: Cannot find name 'a'. Did you mean 'A'?
-tests/cases/compiler/parameterNamesInTypeParameterList.ts(14,22): error TS2552: Cannot find name 'a'. Did you mean 'A'?
-tests/cases/compiler/parameterNamesInTypeParameterList.ts(17,22): error TS2552: Cannot find name 'a'. Did you mean 'A'?
-tests/cases/compiler/parameterNamesInTypeParameterList.ts(20,22): error TS2552: Cannot find name 'a'. Did you mean 'A'?
+parameterNamesInTypeParameterList.ts(1,30): error TS2552: Cannot find name 'a'. Did you mean 'A'?
+parameterNamesInTypeParameterList.ts(5,30): error TS2552: Cannot find name 'a'. Did you mean 'A'?
+parameterNamesInTypeParameterList.ts(9,30): error TS2552: Cannot find name 'a'. Did you mean 'A'?
+parameterNamesInTypeParameterList.ts(14,22): error TS2552: Cannot find name 'a'. Did you mean 'A'?
+parameterNamesInTypeParameterList.ts(17,22): error TS2552: Cannot find name 'a'. Did you mean 'A'?
+parameterNamesInTypeParameterList.ts(20,22): error TS2552: Cannot find name 'a'. Did you mean 'A'?
 
 
-==== tests/cases/compiler/parameterNamesInTypeParameterList.ts (6 errors) ====
+==== parameterNamesInTypeParameterList.ts (6 errors) ====
     function f0<T extends typeof a>(a: T) {
                                  ~
 !!! error TS2552: Cannot find name 'a'. Did you mean 'A'?
-!!! related TS2728 tests/cases/compiler/parameterNamesInTypeParameterList.ts:13:7: 'A' is declared here.
+!!! related TS2728 parameterNamesInTypeParameterList.ts:13:7: 'A' is declared here.
     	a.b;
     }
     
     function f1<T extends typeof a>({a}: {a:T}) {
                                  ~
 !!! error TS2552: Cannot find name 'a'. Did you mean 'A'?
-!!! related TS2728 tests/cases/compiler/parameterNamesInTypeParameterList.ts:13:7: 'A' is declared here.
+!!! related TS2728 parameterNamesInTypeParameterList.ts:13:7: 'A' is declared here.
     	a.b;
     }
     
     function f2<T extends typeof a>([a]: T[]) {
                                  ~
 !!! error TS2552: Cannot find name 'a'. Did you mean 'A'?
-!!! related TS2728 tests/cases/compiler/parameterNamesInTypeParameterList.ts:13:7: 'A' is declared here.
+!!! related TS2728 parameterNamesInTypeParameterList.ts:13:7: 'A' is declared here.
     	a.b;
     }
     
@@ -32,19 +32,19 @@ tests/cases/compiler/parameterNamesInTypeParameterList.ts(20,22): error TS2552: 
     	m0<T extends typeof a>(a: T) {
     	                    ~
 !!! error TS2552: Cannot find name 'a'. Did you mean 'A'?
-!!! related TS2728 tests/cases/compiler/parameterNamesInTypeParameterList.ts:13:7: 'A' is declared here.
+!!! related TS2728 parameterNamesInTypeParameterList.ts:13:7: 'A' is declared here.
     		a.b
     	}
     	m1<T extends typeof a>({a}: {a:T}) {
     	                    ~
 !!! error TS2552: Cannot find name 'a'. Did you mean 'A'?
-!!! related TS2728 tests/cases/compiler/parameterNamesInTypeParameterList.ts:13:7: 'A' is declared here.
+!!! related TS2728 parameterNamesInTypeParameterList.ts:13:7: 'A' is declared here.
     		a.b
     	}
     	m2<T extends typeof a>([a]: T[]) {
     	                    ~
 !!! error TS2552: Cannot find name 'a'. Did you mean 'A'?
-!!! related TS2728 tests/cases/compiler/parameterNamesInTypeParameterList.ts:13:7: 'A' is declared here.
+!!! related TS2728 parameterNamesInTypeParameterList.ts:13:7: 'A' is declared here.
     		a.b
     	}
     }

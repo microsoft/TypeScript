@@ -1,7 +1,8 @@
-tests/cases/compiler/reverseMappedTypeContextualTypeNotCircular.ts(10,3): error TS2322: Type '(state: any, props: any) => {}' is not assignable to type 'Selector<any, {}>'.
+reverseMappedTypeContextualTypeNotCircular.ts(10,3): error TS2322: Type '(state: any, props: any) => {}' is not assignable to type 'Selector<any, {}>'.
+  Target signature provides too few arguments. Expected 2 or more, but got 1.
 
 
-==== tests/cases/compiler/reverseMappedTypeContextualTypeNotCircular.ts (1 errors) ====
+==== reverseMappedTypeContextualTypeNotCircular.ts (1 errors) ====
     type Selector<S, R> = (state: S) => R;
     
     declare function createStructuredSelector<S, T>(
@@ -14,6 +15,7 @@ tests/cases/compiler/reverseMappedTypeContextualTypeNotCircular.ts(10,3): error 
       editable: (state: any, props: any) => editable(), // expect "Type '(state: any, props: any) => {}' is not assignable to type 'Selector<any, {}>'", _not_ a circularity error
       ~~~~~~~~
 !!! error TS2322: Type '(state: any, props: any) => {}' is not assignable to type 'Selector<any, {}>'.
-!!! related TS6500 tests/cases/compiler/reverseMappedTypeContextualTypeNotCircular.ts:10:3: The expected type comes from property 'editable' which is declared here on type '{ editable: Selector<any, {}>; }'
+!!! error TS2322:   Target signature provides too few arguments. Expected 2 or more, but got 1.
+!!! related TS6500 reverseMappedTypeContextualTypeNotCircular.ts:10:3: The expected type comes from property 'editable' which is declared here on type '{ editable: Selector<any, {}>; }'
     });
     

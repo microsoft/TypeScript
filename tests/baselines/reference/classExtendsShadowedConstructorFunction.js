@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsShadowedConstructorFunction.ts] ////
+
 //// [classExtendsShadowedConstructorFunction.ts]
 class C { foo: string; }
 

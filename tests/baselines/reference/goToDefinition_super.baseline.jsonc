@@ -1,0 +1,83 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinition_super.ts ===
+// class A {
+//     [|{| defId: 0 |}constructor() {}|]
+//     x() {}
+// }
+// <|class [|{| defId: 1 |}B|] extends A {}|>
+// class C extends B {
+//     constructor() {
+//         /*GOTO DEF*/super();
+//     }
+//     method() {
+//         super.x();
+// --- (line: 12) skipped ---
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "constructor",
+    "name": "__constructor",
+    "containerName": "A",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 1,
+    "kind": "class",
+    "name": "B",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinition_super.ts ===
+// class A {
+//     constructor() {}
+//     x() {}
+// }
+// <|class [|B|] extends A {}|>
+// class C extends B {
+//     constructor() {
+//         super();
+//     }
+//     method() {
+//         /*GOTO DEF*/super.x();
+//     }
+// }
+// class D {
+// --- (line: 15) skipped ---
+
+  // === Details ===
+  [
+   {
+    "kind": "class",
+    "name": "B",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinition_super.ts ===
+// --- (line: 12) skipped ---
+// }
+// class D {
+//     constructor() {
+//         /*GOTO DEF*/super();
+//     }
+// }

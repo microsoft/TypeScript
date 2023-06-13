@@ -1,4 +1,6 @@
-=== tests/cases/compiler/numericLiteralsWithTrailingDecimalPoints02.ts ===
+//// [tests/cases/compiler/numericLiteralsWithTrailingDecimalPoints02.ts] ////
+
+=== numericLiteralsWithTrailingDecimalPoints02.ts ===
 1..toString();
 >1..toString() : string
 >1..toString : (radix?: number) => string
