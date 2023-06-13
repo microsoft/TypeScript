@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/missingSelf.ts] ////
+
 //// [missingSelf.ts]
 class CalcButton
 {

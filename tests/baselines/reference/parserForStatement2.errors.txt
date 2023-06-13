@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement2.ts(4,30): error TS2304: Cannot find name 'd'.
+parserForStatement2.ts(4,30): error TS2304: Cannot find name 'd'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement2.ts (1 errors) ====
+==== parserForStatement2.ts (1 errors) ====
     var a;
     var b = [];
     var c;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxSpreadTag.ts] ////
+
 //// [a.tsx]
 declare const React: any;
 

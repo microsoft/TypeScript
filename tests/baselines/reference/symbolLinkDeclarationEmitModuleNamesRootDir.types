@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/symbolLinkDeclarationEmitModuleNamesRootDir.ts] ////
+
 === /monorepo/core/src/application.ts ===
 import { Constructor } from "@loopback/context";
 >Constructor : any

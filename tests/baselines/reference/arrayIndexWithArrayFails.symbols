@@ -1,4 +1,6 @@
-=== tests/cases/compiler/arrayIndexWithArrayFails.ts ===
+//// [tests/cases/compiler/arrayIndexWithArrayFails.ts] ////
+
+=== arrayIndexWithArrayFails.ts ===
 declare const arr1: (string | string[])[];
 >arr1 : Symbol(arr1, Decl(arrayIndexWithArrayFails.ts, 0, 13))
 

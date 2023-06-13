@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumPropertyAccess.ts] ////
+
 //// [enumPropertyAccess.ts]
 enum Colors {
     Red,

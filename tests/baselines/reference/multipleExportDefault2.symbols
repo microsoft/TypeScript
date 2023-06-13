@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/multipleExportDefault2.ts ===
+//// [tests/cases/conformance/externalModules/multipleExportDefault2.ts] ////
+
+=== multipleExportDefault2.ts ===
 export default {
     uhoh: "another default",
 >uhoh : Symbol(uhoh, Decl(multipleExportDefault2.ts, 0, 16))

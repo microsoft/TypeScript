@@ -1,4 +1,6 @@
-=== tests/cases/compiler/recursiveClassInstantiationsWithDefaultConstructors.ts ===
+//// [tests/cases/compiler/recursiveClassInstantiationsWithDefaultConstructors.ts] ////
+
+=== recursiveClassInstantiationsWithDefaultConstructors.ts ===
 module TypeScript2 {
 >TypeScript2 : Symbol(TypeScript2, Decl(recursiveClassInstantiationsWithDefaultConstructors.ts, 0, 0))
 

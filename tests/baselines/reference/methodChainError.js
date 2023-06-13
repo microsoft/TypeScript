@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/methodChainError.ts] ////
+
 //// [methodChainError.ts]
 class Builder {
     notMethod: string

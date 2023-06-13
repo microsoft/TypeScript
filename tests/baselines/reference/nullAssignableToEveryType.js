@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/nullAssignableToEveryType.ts] ////
+
 //// [nullAssignableToEveryType.ts]
 class C {
     foo: string;

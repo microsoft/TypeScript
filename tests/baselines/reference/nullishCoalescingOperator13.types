@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator13.ts ===
+//// [tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator13.ts] ////
+
+=== nullishCoalescingOperator13.ts ===
 // repro from https://github.com/microsoft/TypeScript/issues/54551
 
 declare const b: string | undefined

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/interfacePropertiesWithSameName1.ts ===
+//// [tests/cases/compiler/interfacePropertiesWithSameName1.ts] ////
+
+=== interfacePropertiesWithSameName1.ts ===
 interface Mover {
 >Mover : Symbol(Mover, Decl(interfacePropertiesWithSameName1.ts, 0, 0))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedSwitchStatement.ts] ////
+
 //// [unusedSwitchStatement.ts]
 switch (1) {
     case 0:

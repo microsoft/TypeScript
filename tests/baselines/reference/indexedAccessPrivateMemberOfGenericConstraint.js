@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indexedAccessPrivateMemberOfGenericConstraint.ts] ////
+
 //// [indexedAccessPrivateMemberOfGenericConstraint.ts]
 class A {
   private a: number;

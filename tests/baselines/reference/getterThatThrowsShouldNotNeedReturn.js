@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/getterThatThrowsShouldNotNeedReturn.ts] ////
+
 //// [getterThatThrowsShouldNotNeedReturn.ts]
 class Greeter {
  public get greet(): string {

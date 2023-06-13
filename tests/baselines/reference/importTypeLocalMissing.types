@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/import/foo.ts ===
+//// [tests/cases/conformance/types/import/importTypeLocalMissing.ts] ////
+
+=== foo.ts ===
 interface Point {
     x: number;
 >x : number
@@ -9,7 +11,7 @@ interface Point {
 export = Point;
 >Point : Point
 
-=== tests/cases/conformance/types/import/foo2.ts ===
+=== foo2.ts ===
 namespace Bar {
     export interface I {
         a: string;
@@ -44,7 +46,7 @@ class Bar {
 export { Bar }
 >Bar : typeof Bar
 
-=== tests/cases/conformance/types/import/usage.ts ===
+=== usage.ts ===
 export const x: import("./fo") = { x: 0, y: 0 };
 >x : any
 >{ x: 0, y: 0 } : { x: number; y: number; }

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/esnext/esnextmodulekindWithES5Target5.ts ===
+//// [tests/cases/conformance/externalModules/esnext/esnextmodulekindWithES5Target5.ts] ////
+
+=== esnextmodulekindWithES5Target5.ts ===
 export enum E1 {
 >E1 : Symbol(E1, Decl(esnextmodulekindWithES5Target5.ts, 0, 0))
 

@@ -1,7 +1,7 @@
-tests/cases/conformance/types/intersection/intersectionNarrowing.ts(36,16): error TS2367: This comparison appears to be unintentional because the types 'T & number' and 'string' have no overlap.
+intersectionNarrowing.ts(36,16): error TS2367: This comparison appears to be unintentional because the types 'T & number' and 'string' have no overlap.
 
 
-==== tests/cases/conformance/types/intersection/intersectionNarrowing.ts (1 errors) ====
+==== intersectionNarrowing.ts (1 errors) ====
     // Repros from #43130
     
     function f1<T>(x: T & string | T & undefined) {

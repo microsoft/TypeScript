@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/asyncFunctionContextuallyTypedReturns.ts] ////
+
 //// [asyncFunctionContextuallyTypedReturns.ts]
 declare function f(cb: (v: boolean) => [0] | PromiseLike<[0]>): void;
 f(v => v ? [0] : Promise.reject());

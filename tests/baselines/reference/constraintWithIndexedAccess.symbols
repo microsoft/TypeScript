@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constraintWithIndexedAccess.ts ===
+//// [tests/cases/compiler/constraintWithIndexedAccess.ts] ////
+
+=== constraintWithIndexedAccess.ts ===
 // #52399
 type DataFetchFns = {
 >DataFetchFns : Symbol(DataFetchFns, Decl(constraintWithIndexedAccess.ts, 0, 0))

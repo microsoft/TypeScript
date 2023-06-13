@@ -7632,6 +7632,18 @@
         "category": "Message",
         "code": 95183
     },
+    "Inline variable": {
+        "category": "Message",
+        "code": 95184
+    },
+    "Could not find variable to inline.": {
+        "category": "Message",
+        "code": 95185
+    },
+    "Variables with multiple declarations cannot be inlined.": {
+        "category": "Message",
+        "code": 95186
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",

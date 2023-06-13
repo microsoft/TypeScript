@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitInferredUndefinedPropFromFunctionInArray.ts] ////
+
 //// [declarationEmitInferredUndefinedPropFromFunctionInArray.ts]
 // repro from https://github.com/microsoft/TypeScript/issues/53914
 

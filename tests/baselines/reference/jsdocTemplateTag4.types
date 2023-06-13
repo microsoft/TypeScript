@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/a.js ===
+//// [tests/cases/conformance/jsdoc/jsdocTemplateTag4.ts] ////
+
+=== a.js ===
 /**
  * Should work for function declarations
  * @constructor

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/members/indexSignatures1.ts] ////
+
 //// [indexSignatures1.ts]
 // Symbol index signature checking
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers5.ts] ////
+
 //// [assignmentCompatWithObjectMembers5.ts]
 class C {
     foo: string;

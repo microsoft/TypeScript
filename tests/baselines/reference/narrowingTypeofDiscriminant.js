@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/narrowingTypeofDiscriminant.ts] ////
+
 //// [narrowingTypeofDiscriminant.ts]
 function f1(obj: { kind: 'a', data: string } | { kind: 1, data: number }) {
     if (typeof obj.kind === "string") {

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/internalAliasUninitializedModuleInsideTopLevelModuleWithExport.ts] ////
+
 //// [internalAliasUninitializedModuleInsideTopLevelModuleWithExport.ts]
 export module a {
     export module b {

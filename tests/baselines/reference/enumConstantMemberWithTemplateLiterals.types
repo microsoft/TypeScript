@@ -1,4 +1,6 @@
-=== tests/cases/conformance/enums/enumConstantMemberWithTemplateLiterals.ts ===
+//// [tests/cases/conformance/enums/enumConstantMemberWithTemplateLiterals.ts] ////
+
+=== enumConstantMemberWithTemplateLiterals.ts ===
 enum T1 {
 >T1 : T1
 

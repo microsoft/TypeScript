@@ -1,4 +1,6 @@
-=== tests/cases/compiler/privateVisibility.ts ===
+//// [tests/cases/compiler/privateVisibility.ts] ////
+
+=== privateVisibility.ts ===
 class Foo {
 >Foo : Symbol(Foo, Decl(privateVisibility.ts, 0, 0))
 

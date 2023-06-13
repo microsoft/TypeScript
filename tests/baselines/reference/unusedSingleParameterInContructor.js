@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedSingleParameterInContructor.ts] ////
+
 //// [unusedSingleParameterInContructor.ts]
 class Dummy {
     constructor(person: string) {

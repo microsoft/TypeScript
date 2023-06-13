@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declareDottedModuleName.ts] ////
+
 //// [declareDottedModuleName.ts]
 module M {
     module P.Q { } // This shouldnt be emitted

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractCrashedOnce.ts] ////
+
 //// [classAbstractCrashedOnce.ts]
 abstract class foo {
     protected abstract test();

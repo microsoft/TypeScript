@@ -1,4 +1,6 @@
-=== tests/cases/compiler/targetTypeObjectLiteralToAny.ts ===
+//// [tests/cases/compiler/targetTypeObjectLiteralToAny.ts] ////
+
+=== targetTypeObjectLiteralToAny.ts ===
 function suggest(){ 
 >suggest : Symbol(suggest, Decl(targetTypeObjectLiteralToAny.ts, 0, 0))
 

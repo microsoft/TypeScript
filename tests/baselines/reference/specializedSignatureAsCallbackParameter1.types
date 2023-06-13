@@ -1,4 +1,6 @@
-=== tests/cases/compiler/specializedSignatureAsCallbackParameter1.ts ===
+//// [tests/cases/compiler/specializedSignatureAsCallbackParameter1.ts] ////
+
+=== specializedSignatureAsCallbackParameter1.ts ===
 function x3(a: number, cb: (x: number) => number);
 >x3 : { (a: number, cb: (x: number) => number): any; (a: string, cb: (x: number) => number): any; }
 >a : number

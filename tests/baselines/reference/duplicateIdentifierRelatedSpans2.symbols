@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/duplicateIdentifierRelatedSpans2.ts] ////
+
+=== file1.ts ===
 class A { }
 >A : Symbol(A, Decl(file1.ts, 0, 0))
 
@@ -26,7 +28,7 @@ class H { }
 class I { }
 >I : Symbol(I, Decl(file1.ts, 7, 11))
 
-=== tests/cases/compiler/file2.ts ===
+=== file2.ts ===
 class A { }
 >A : Symbol(A, Decl(file2.ts, 0, 0))
 
