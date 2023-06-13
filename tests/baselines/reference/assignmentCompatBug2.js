@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/assignmentCompatBug2.ts] ////
+
 //// [assignmentCompatBug2.ts]
 var b2: { b: number;} = { a: 0 }; // error
 

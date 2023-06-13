@@ -1,4 +1,6 @@
-=== tests/cases/compiler/uncalledFunctionChecksInConditional2.ts ===
+//// [tests/cases/compiler/uncalledFunctionChecksInConditional2.ts] ////
+
+=== uncalledFunctionChecksInConditional2.ts ===
 {
   const perf = window.performance
 >perf : Performance
@@ -69,6 +71,41 @@
 >perf.measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure
 >perf : Performance
 >measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure
+>!!true : true
+>!true : false
+>true : true
+
+  ) {
+    perf.mark("");
+>perf.mark("") : PerformanceMark
+>perf.mark : (markName: string, markOptions?: PerformanceMarkOptions | undefined) => PerformanceMark
+>perf : Performance
+>mark : (markName: string, markOptions?: PerformanceMarkOptions | undefined) => PerformanceMark
+>"" : ""
+  }
+
+  // With ??
+  if (
+    (
+>(      perf &&      perf.mark &&      perf.measure    ) ?? !!true : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure
+>(      perf &&      perf.mark &&      perf.measure    ) : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure
+
+      perf &&
+>perf &&      perf.mark &&      perf.measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure
+>perf &&      perf.mark : (markName: string, markOptions?: PerformanceMarkOptions | undefined) => PerformanceMark
+>perf : Performance
+
+      perf.mark &&
+>perf.mark : (markName: string, markOptions?: PerformanceMarkOptions | undefined) => PerformanceMark
+>perf : Performance
+>mark : (markName: string, markOptions?: PerformanceMarkOptions | undefined) => PerformanceMark
+
+      perf.measure
+>perf.measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure
+>perf : Performance
+>measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure
+
+    ) ?? !!true
 >!!true : true
 >!true : false
 >true : true

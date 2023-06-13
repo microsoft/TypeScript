@@ -1,9 +1,11 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/filesEmittingIntoSameOutput.ts] ////
+
+=== a.ts ===
 class c {
 >c : Symbol(c, Decl(a.ts, 0, 0))
 }
 
-=== tests/cases/compiler/a.tsx ===
+=== a.tsx ===
 function foo() {
 >foo : Symbol(foo, Decl(a.tsx, 0, 0))
 }

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/destructuringInitializerContextualTypeFromContext.ts ===
+//// [tests/cases/compiler/destructuringInitializerContextualTypeFromContext.ts] ////
+
+=== destructuringInitializerContextualTypeFromContext.ts ===
 interface SFC<P = {}> {
 >SFC : Symbol(SFC, Decl(destructuringInitializerContextualTypeFromContext.ts, 0, 0))
 >P : Symbol(P, Decl(destructuringInitializerContextualTypeFromContext.ts, 0, 14))
@@ -51,9 +53,9 @@ const Child: SFC<Props> = ({
 
 }) => `name: ${name} props: ${JSON.stringify(props)}`;
 >name : Symbol(name, Decl(destructuringInitializerContextualTypeFromContext.ts, 15, 13))
->JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >props : Symbol(props, Decl(destructuringInitializerContextualTypeFromContext.ts, 16, 21))
 
 // Repro from #29189

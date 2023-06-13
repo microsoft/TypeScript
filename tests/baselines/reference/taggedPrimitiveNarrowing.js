@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/taggedPrimitiveNarrowing.ts] ////
+
 //// [taggedPrimitiveNarrowing.ts]
 type Hash = string & { __hash: true };
 

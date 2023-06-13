@@ -1,7 +1,8 @@
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithOverloadedConstructorTypedArguments2.ts(31,20): error TS2345: Argument of type 'new <T>(x: T, y: T) => string' is not assignable to parameter of type '{ new (x: unknown): string; new (x: unknown, y?: unknown): string; }'.
+genericCallWithOverloadedConstructorTypedArguments2.ts(31,20): error TS2345: Argument of type 'new <T>(x: T, y: T) => string' is not assignable to parameter of type '{ new (x: unknown): string; new (x: unknown, y?: unknown): string; }'.
+  Target signature provides too few arguments. Expected 2 or more, but got 1.
 
 
-==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithOverloadedConstructorTypedArguments2.ts (1 errors) ====
+==== genericCallWithOverloadedConstructorTypedArguments2.ts (1 errors) ====
     // Function typed arguments with multiple signatures must be passed an implementation that matches all of them
     // Inferences are made quadratic-pairwise to and from these overload sets
     
@@ -35,6 +36,7 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithOve
         var r10 = foo6(b); // error
                        ~
 !!! error TS2345: Argument of type 'new <T>(x: T, y: T) => string' is not assignable to parameter of type '{ new (x: unknown): string; new (x: unknown, y?: unknown): string; }'.
+!!! error TS2345:   Target signature provides too few arguments. Expected 2 or more, but got 1.
     
         function foo7<T>(x:T, cb: { new(x: T): string; new(x: T, y?: T): string }) {
             return cb;

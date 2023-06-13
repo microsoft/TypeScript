@@ -1,4 +1,6 @@
-=== tests/cases/compiler/interMixingModulesInterfaces3.ts ===
+//// [tests/cases/compiler/interMixingModulesInterfaces3.ts] ////
+
+=== interMixingModulesInterfaces3.ts ===
 module A {
 >A : typeof A
 
@@ -9,7 +11,6 @@ module A {
 >createB : () => B
 
             return null;
->null : null
         }
     }
 
@@ -25,5 +26,4 @@ module A {
 var x: A.B = null;
 >x : A.B
 >A : any
->null : null
 

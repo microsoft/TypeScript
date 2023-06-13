@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/functions/parameterInitializersForwardReferencing1_es6.ts] ////
+
 //// [parameterInitializersForwardReferencing1_es6.ts]
 let foo: string = "";
 

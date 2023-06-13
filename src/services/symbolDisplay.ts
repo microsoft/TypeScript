@@ -5,7 +5,7 @@ import {
     CallExpression,
     CheckFlags,
     contains,
-    createPrinter,
+    createPrinterWithRemoveComments,
     Debug,
     displayPart,
     EmitHint,
@@ -75,7 +75,6 @@ import {
     NodeBuilderFlags,
     ObjectFlags,
     operatorPart,
-    Printer,
     PropertyAccessExpression,
     PropertyDeclaration,
     punctuationPart,
@@ -259,7 +258,6 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
     let hasAddedSymbolInfo = false;
     const isThisExpression = location.kind === SyntaxKind.ThisKeyword && isInExpressionContext(location) || isThisInTypeQuery(location);
     let type: Type | undefined;
-    let printer: Printer;
     let documentationFromAlias: SymbolDisplayPart[] | undefined;
     let tagsFromAlias: JSDocTagInfo[] | undefined;
     let hasMultipleSignatures = false;
@@ -454,7 +452,7 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
         displayParts.push(spacePart());
         displayParts.push(operatorPart(SyntaxKind.EqualsToken));
         displayParts.push(spacePart());
-        addRange(displayParts, typeToDisplayParts(typeChecker, isConstTypeReference(location.parent) ? typeChecker.getTypeAtLocation(location.parent) : typeChecker.getDeclaredTypeOfSymbol(symbol), enclosingDeclaration, TypeFormatFlags.InTypeAlias));
+        addRange(displayParts, typeToDisplayParts(typeChecker, location.parent && isConstTypeReference(location.parent) ? typeChecker.getTypeAtLocation(location.parent) : typeChecker.getDeclaredTypeOfSymbol(symbol), enclosingDeclaration, TypeFormatFlags.InTypeAlias));
     }
     if (symbolFlags & SymbolFlags.Enum) {
         prefixNextMeaning();
@@ -537,12 +535,12 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
     // don't use symbolFlags since getAliasedSymbol requires the flag on the symbol itself
     if (symbol.flags & SymbolFlags.Alias) {
         prefixNextMeaning();
-        if (!hasAddedSymbolInfo) {
+        if (!hasAddedSymbolInfo || documentation.length === 0 && tags.length === 0) {
             const resolvedSymbol = typeChecker.getAliasedSymbol(symbol);
             if (resolvedSymbol !== symbol && resolvedSymbol.declarations && resolvedSymbol.declarations.length > 0) {
                 const resolvedNode = resolvedSymbol.declarations[0];
                 const declarationName = getNameOfDeclaration(resolvedNode);
-                if (declarationName) {
+                if (declarationName && !hasAddedSymbolInfo) {
                     const isExternalModuleDeclaration =
                         isModuleWithStringLiteralName(resolvedNode) &&
                         hasSyntacticModifier(resolvedNode, ModifierFlags.Ambient);
@@ -730,10 +728,7 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
     return { displayParts, documentation, symbolKind, tags: tags.length === 0 ? undefined : tags };
 
     function getPrinter() {
-        if (!printer) {
-            printer = createPrinter({ removeComments: true });
-        }
-        return printer;
+        return createPrinterWithRemoveComments();
     }
 
     function prefixNextMeaning() {
@@ -840,7 +835,6 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
             documentation = allSignatures[0].getDocumentationComment(typeChecker);
             tags = allSignatures[0].getJsDocTags().filter(tag => tag.name !== "deprecated"); // should only include @deprecated JSDoc tag on the first overload (#49368)
         }
-
     }
 
     function writeTypeParametersOfSymbol(symbol: Symbol, enclosingDeclaration: Node | undefined) {

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractManyKeywords.ts] ////
+
 //// [classAbstractManyKeywords.ts]
 export default abstract class A {}
 export abstract class B {}

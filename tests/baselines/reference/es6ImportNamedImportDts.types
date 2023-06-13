@@ -1,4 +1,6 @@
-=== tests/cases/compiler/server.ts ===
+//// [tests/cases/compiler/es6ImportNamedImportDts.ts] ////
+
+=== server.ts ===
 export class a { }
 >a : a
 
@@ -41,7 +43,7 @@ export class aaaa { }
 export class aaaa1 { }
 >aaaa1 : aaaa1
 
-=== tests/cases/compiler/client.ts ===
+=== client.ts ===
 import { } from "./server";
 import { a } from "./server";
 >a : typeof a

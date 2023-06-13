@@ -1,4 +1,6 @@
-=== tests/cases/compiler/ipromise2.ts ===
+//// [tests/cases/compiler/ipromise2.ts] ////
+
+=== ipromise2.ts ===
 declare module Windows.Foundation {
 >Windows : Symbol(Windows, Decl(ipromise2.ts, 0, 0))
 >Foundation : Symbol(Foundation, Decl(ipromise2.ts, 0, 23))

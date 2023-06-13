@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithTemplateStrings01.ts] ////
+
 //// [stringLiteralTypesWithTemplateStrings01.ts]
 let ABC: "ABC" = `ABC`;
 let DE_NEWLINE_F: "DE\nF" = `DE

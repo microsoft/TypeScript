@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicateConstructorOverloadSignature2.ts] ////
+
 //// [duplicateConstructorOverloadSignature2.ts]
 class C<T> {
     constructor(x: T);

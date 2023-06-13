@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exportEqualErrorType_1.ts ===
+//// [tests/cases/compiler/exportEqualErrorType.ts] ////
+
+=== exportEqualErrorType_1.ts ===
 ///<reference path='exportEqualErrorType_0.ts'/>
 import connect = require('exportEqualErrorType_0');
 >connect : Symbol(connect, Decl(exportEqualErrorType_1.ts, 0, 0))
@@ -9,7 +11,7 @@ connect().use(connect.static('foo')); // Error  1      The property 'static' doe
 >use : Symbol(connect.connectExport.use, Decl(exportEqualErrorType_0.ts, 4, 36))
 >connect : Symbol(connect, Decl(exportEqualErrorType_1.ts, 0, 0))
 
-=== tests/cases/compiler/exportEqualErrorType_0.ts ===
+=== exportEqualErrorType_0.ts ===
 module server {
 >server : Symbol(server, Decl(exportEqualErrorType_0.ts, 0, 0), Decl(exportEqualErrorType_0.ts, 8, 3))
 

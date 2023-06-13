@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/literal/literalTypes2.ts] ////
+
 //// [literalTypes2.ts]
 enum E {
     A, B, C

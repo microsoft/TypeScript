@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitNoNonRequiredParens.ts] ////
+
 //// [declarationEmitNoNonRequiredParens.ts]
 export enum Test {
     A, B, C
@@ -16,7 +18,7 @@ var Test;
     Test[Test["A"] = 0] = "A";
     Test[Test["B"] = 1] = "B";
     Test[Test["C"] = 2] = "C";
-})(Test = exports.Test || (exports.Test = {}));
+})(Test || (exports.Test = Test = {}));
 exports.bar = null;
 
 

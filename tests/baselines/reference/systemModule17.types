@@ -1,10 +1,12 @@
-=== tests/cases/compiler/f1.ts ===
+//// [tests/cases/compiler/systemModule17.ts] ////
+
+=== f1.ts ===
 export class A {}
 >A : A
 
 export interface I {}
 
-=== tests/cases/compiler/f2.ts ===
+=== f2.ts ===
 var x = 1;
 >x : number
 >1 : 1

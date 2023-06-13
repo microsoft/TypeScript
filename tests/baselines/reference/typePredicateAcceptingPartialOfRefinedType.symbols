@@ -1,0 +1,28 @@
+//// [tests/cases/compiler/typePredicateAcceptingPartialOfRefinedType.ts] ////
+
+=== typePredicateAcceptingPartialOfRefinedType.ts ===
+// repro #51953
+
+interface Test {
+>Test : Symbol(Test, Decl(typePredicateAcceptingPartialOfRefinedType.ts, 0, 0))
+
+  testy?: string;
+>testy : Symbol(Test.testy, Decl(typePredicateAcceptingPartialOfRefinedType.ts, 2, 16))
+}
+
+interface Options {
+>Options : Symbol(Options, Decl(typePredicateAcceptingPartialOfRefinedType.ts, 4, 1))
+
+  test: Test['testy'];
+>test : Symbol(Options.test, Decl(typePredicateAcceptingPartialOfRefinedType.ts, 6, 19))
+>Test : Symbol(Test, Decl(typePredicateAcceptingPartialOfRefinedType.ts, 0, 0))
+}
+
+declare function includesAllRequiredOptions(options: Partial<Options>): options is Options;
+>includesAllRequiredOptions : Symbol(includesAllRequiredOptions, Decl(typePredicateAcceptingPartialOfRefinedType.ts, 8, 1))
+>options : Symbol(options, Decl(typePredicateAcceptingPartialOfRefinedType.ts, 10, 44))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Options : Symbol(Options, Decl(typePredicateAcceptingPartialOfRefinedType.ts, 4, 1))
+>options : Symbol(options, Decl(typePredicateAcceptingPartialOfRefinedType.ts, 10, 44))
+>Options : Symbol(Options, Decl(typePredicateAcceptingPartialOfRefinedType.ts, 4, 1))
+

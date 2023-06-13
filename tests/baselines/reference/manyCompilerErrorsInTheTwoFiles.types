@@ -1,23 +1,20 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/manyCompilerErrorsInTheTwoFiles.ts] ////
+
+=== a.ts ===
 const a =!@#!@$
 >a : boolean
->! : boolean
+>!@ : boolean
 > : any
-> : any
->! : boolean
-> : any
+>!@$ : boolean
 >$ : any
 
 const b = !@#!@#!@#!
 >b : boolean
->! : boolean
+>!@ : boolean
 > : any
+>!@ : boolean
 > : any
->! : boolean
-> : any
-> : any
->! : boolean
-> : any
+>!@ : boolean
 > : any
 >!OK! : boolean
 
@@ -34,7 +31,7 @@ GOTTA GO FAST
 >GO : any
 >FAST : any
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 fhqwhgads
 >fhqwhgads : any
 

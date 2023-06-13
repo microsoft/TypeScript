@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/aliasesInSystemModule2.ts] ////
+
 //// [aliasesInSystemModule2.ts]
 import {alias} from "foo";
 import cls = alias.Class;

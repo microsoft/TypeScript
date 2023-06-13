@@ -97,7 +97,7 @@ function getRenameInfoForNode(
     }
 
     // Cannot rename `default` as in `import { default as foo } from "./someModule";
-    if (isIdentifier(node) && node.originalKeywordKind === SyntaxKind.DefaultKeyword && symbol.parent && symbol.parent.flags & SymbolFlags.Module) {
+    if (isIdentifier(node) && node.escapedText === "default" && symbol.parent && symbol.parent.flags & SymbolFlags.Module) {
         return undefined;
     }
 
@@ -166,7 +166,7 @@ function wouldRenameInOtherNodeModules(
 }
 
 function getPackagePathComponents(filePath: Path): string[] | undefined {
-    const components = getPathComponents(filePath);
+    const components = getPathComponents(filePath) as string[];
     const nodeModulesIdx = components.lastIndexOf("node_modules");
     if (nodeModulesIdx === -1) {
         return undefined;

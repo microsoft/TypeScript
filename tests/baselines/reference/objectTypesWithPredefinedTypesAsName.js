@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/specifyingTypes/predefinedTypes/objectTypesWithPredefinedTypesAsName.ts] ////
+
 //// [objectTypesWithPredefinedTypesAsName.ts]
 // it is an error to use a predefined type as a type name
 

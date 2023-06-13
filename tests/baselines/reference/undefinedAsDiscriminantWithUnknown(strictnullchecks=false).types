@@ -1,4 +1,6 @@
-=== tests/cases/compiler/undefinedAsDiscriminantWithUnknown.ts ===
+//// [tests/cases/compiler/undefinedAsDiscriminantWithUnknown.ts] ////
+
+=== undefinedAsDiscriminantWithUnknown.ts ===
 type S = 
 >S : { type: 'string'; value: string; } | { type: 'number'; value: number; } | { type: 'unknown'; value: unknown; } | { value: undefined; }
 

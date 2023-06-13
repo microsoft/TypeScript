@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/ambient/ambientExternalModuleInsideNonAmbientExternalModule.ts] ////
+
 //// [ambientExternalModuleInsideNonAmbientExternalModule.ts]
 export declare module "M" { }
 

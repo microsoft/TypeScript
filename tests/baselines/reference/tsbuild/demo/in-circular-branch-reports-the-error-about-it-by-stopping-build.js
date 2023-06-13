@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -164,6 +165,6 @@ Output::
 
 Found 1 error.
 
-exitCode:: ExitStatus.ProjectReferenceCycle_OutputsSkupped
+exitCode:: ExitStatus.ProjectReferenceCycle_OutputsSkipped
 
 

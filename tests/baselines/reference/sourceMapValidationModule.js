@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/sourceMapValidationModule.ts] ////
+
 //// [sourceMapValidationModule.ts]
 module m2 {
     var a = 10;

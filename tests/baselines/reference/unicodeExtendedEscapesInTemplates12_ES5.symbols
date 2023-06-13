@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInTemplates12_ES5.ts ===
+//// [tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInTemplates12_ES5.ts] ////
+
+=== unicodeExtendedEscapesInTemplates12_ES5.ts ===
 var x = `\u{FFFFFFFF}`;
 >x : Symbol(x, Decl(unicodeExtendedEscapesInTemplates12_ES5.ts, 0, 3))
 

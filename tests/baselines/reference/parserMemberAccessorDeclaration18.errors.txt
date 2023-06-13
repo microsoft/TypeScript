@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration18.ts(2,12): error TS1053: A 'set' accessor cannot have rest parameter.
+parserMemberAccessorDeclaration18.ts(2,12): error TS1053: A 'set' accessor cannot have rest parameter.
 
 
-==== tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration18.ts (1 errors) ====
+==== parserMemberAccessorDeclaration18.ts (1 errors) ====
     class C {
        set Foo(...a) { }
                ~~~

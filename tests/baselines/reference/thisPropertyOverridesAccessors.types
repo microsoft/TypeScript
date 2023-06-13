@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/foo.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/thisPropertyOverridesAccessors.ts] ////
+
+=== foo.ts ===
 class Foo {
 >Foo : Foo
 
@@ -11,7 +13,7 @@ class Foo {
 >value : number
 }
 
-=== tests/cases/conformance/classes/propertyMemberDeclarations/bar.js ===
+=== bar.js ===
 class Bar extends Foo {
 >Bar : Bar
 >Foo : Foo

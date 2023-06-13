@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reverseMappedTypeContextualTypeNotCircular.ts] ////
+
 //// [reverseMappedTypeContextualTypeNotCircular.ts]
 type Selector<S, R> = (state: S) => R;
 

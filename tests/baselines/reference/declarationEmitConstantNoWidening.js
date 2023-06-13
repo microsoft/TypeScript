@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitConstantNoWidening.ts] ////
+
 //// [declarationEmitConstantNoWidening.ts]
 export const FOO = 'FOO'; 
 export class Bar {

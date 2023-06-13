@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/arrayLiterals/arrayLiterals2ES5.ts ===
+//// [tests/cases/conformance/expressions/arrayLiterals/arrayLiterals2ES5.ts] ////
+
+=== arrayLiterals2ES5.ts ===
 // ElementList:  ( Modified )
 //      Elisionopt   AssignmentExpression
 //      Elisionopt   SpreadElement
@@ -67,7 +69,6 @@ var b0: [any, any, any] = [undefined, null, undefined];
 >b0 : [any, any, any]
 >[undefined, null, undefined] : [undefined, null, undefined]
 >undefined : undefined
->null : null
 >undefined : undefined
 
 var b1: [number[], string[]] = [[1, 2, 3], ["hello", "string"]];
@@ -132,7 +133,6 @@ var temp3 = [undefined, null, undefined];
 >temp3 : any[]
 >[undefined, null, undefined] : null[]
 >undefined : undefined
->null : null
 >undefined : undefined
 
 var temp4 = [];

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inKeywordAndIntersection.ts] ////
+
 //// [inKeywordAndIntersection.ts]
 class A { a = 0 }
 class B { b = 0 }

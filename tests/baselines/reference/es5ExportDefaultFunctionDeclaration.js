@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es5ExportDefaultFunctionDeclaration.ts] ////
+
 //// [es5ExportDefaultFunctionDeclaration.ts]
 export default function f() { }
 

@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/stringMappingAssignability.ts] ////
+
+=== stringMappingAssignability.ts ===
+const x: Uppercase<string> = 42;
+>x : Symbol(x, Decl(stringMappingAssignability.ts, 0, 5))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+
+const y: Uppercase<string> = { foo: "bar" };
+>y : Symbol(y, Decl(stringMappingAssignability.ts, 1, 5))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>foo : Symbol(foo, Decl(stringMappingAssignability.ts, 1, 30))
+

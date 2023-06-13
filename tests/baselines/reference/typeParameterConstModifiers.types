@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterConstModifiers.ts ===
+//// [tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterConstModifiers.ts] ////
+
+=== typeParameterConstModifiers.ts ===
 declare function f1<const T>(x: T): T;
 >f1 : <const T>(x: T) => T
 >x : T
@@ -177,6 +179,25 @@ const x61 = f6(1, 'b', { a: 1, b: 'x' });
 >b : "x"
 >'x' : "x"
 
+const x62 = f6(...[1, 'b']);
+>x62 : readonly [number, string]
+>f6(...[1, 'b']) : readonly [number, string]
+>f6 : <const T extends readonly unknown[]>(...args: T) => T
+>...[1, 'b'] : string | number
+>[1, 'b'] : readonly [number, string]
+>1 : 1
+>'b' : "b"
+
+const x63 = f6(true, ...[1, 'b']);
+>x63 : readonly [true, number, string]
+>f6(true, ...[1, 'b']) : readonly [true, number, string]
+>f6 : <const T extends readonly unknown[]>(...args: T) => T
+>true : true
+>...[1, 'b'] : string | number
+>[1, 'b'] : readonly [number, string]
+>1 : 1
+>'b' : "b"
+
 class C1<const T> {
 >C1 : C1<T>
 
@@ -299,4 +320,71 @@ set(obj, ['a', 'b', 'c'], value);
 >'b' : "b"
 >'c' : "c"
 >value : "123"
+
+// Repro from #52007
+
+declare function inners<const T extends readonly any[]>(...args: readonly [unknown, ...T, unknown]): T;
+>inners : <const T extends readonly any[]>(...args: readonly [unknown, ...T, unknown]) => T
+>args : readonly [unknown, ...T, unknown]
+
+const test = inners(1,2,3,4,5);
+>test : [2, 3, 4]
+>inners(1,2,3,4,5) : [2, 3, 4]
+>inners : <const T extends readonly any[]>(...args: readonly [unknown, ...T, unknown]) => T
+>1 : 1
+>2 : 2
+>3 : 3
+>4 : 4
+>5 : 5
+
+declare function inners2<const T extends readonly any[]>(args: readonly [unknown, ...T, unknown]): T;
+>inners2 : <const T extends readonly any[]>(args: readonly [unknown, ...T, unknown]) => T
+>args : readonly [unknown, ...T, unknown]
+
+const test2 = inners2([1,2,3,4,5]);
+>test2 : [2, 3, 4]
+>inners2([1,2,3,4,5]) : [2, 3, 4]
+>inners2 : <const T extends readonly any[]>(args: readonly [unknown, ...T, unknown]) => T
+>[1,2,3,4,5] : [number, 2, 3, 4, number]
+>1 : 1
+>2 : 2
+>3 : 3
+>4 : 4
+>5 : 5
+
+// Repro from #53307
+
+type NotEmpty<T extends Record<string, any>> = keyof T extends never ? never : T;
+>NotEmpty : NotEmpty<T>
+
+const thing = <const O extends Record<string, any>>(o: NotEmpty<O>) => o;
+>thing : <const O extends Record<string, any>>(o: NotEmpty<O>) => NotEmpty<O>
+><const O extends Record<string, any>>(o: NotEmpty<O>) => o : <const O extends Record<string, any>>(o: NotEmpty<O>) => NotEmpty<O>
+>o : NotEmpty<O>
+>o : NotEmpty<O>
+
+const t = thing({ foo: '' });  // readonly { foo: "" }
+>t : { readonly foo: ""; }
+>thing({ foo: '' }) : { readonly foo: ""; }
+>thing : <const O extends Record<string, any>>(o: NotEmpty<O>) => NotEmpty<O>
+>{ foo: '' } : { foo: ""; }
+>foo : ""
+>'' : ""
+
+type NotEmptyMapped<T extends Record<string, any>> = keyof T extends never ? never : { [K in keyof T]: T[K] };
+>NotEmptyMapped : NotEmptyMapped<T>
+
+const thingMapped = <const O extends Record<string, any>>(o: NotEmptyMapped<O>) => o;
+>thingMapped : <const O extends Record<string, any>>(o: NotEmptyMapped<O>) => NotEmptyMapped<O>
+><const O extends Record<string, any>>(o: NotEmptyMapped<O>) => o : <const O extends Record<string, any>>(o: NotEmptyMapped<O>) => NotEmptyMapped<O>
+>o : NotEmptyMapped<O>
+>o : NotEmptyMapped<O>
+
+const tMapped = thingMapped({ foo: '' });  // { foo: "" }
+>tMapped : { foo: ""; }
+>thingMapped({ foo: '' }) : { foo: ""; }
+>thingMapped : <const O extends Record<string, any>>(o: NotEmptyMapped<O>) => NotEmptyMapped<O>
+>{ foo: '' } : { foo: ""; }
+>foo : ""
+>'' : ""
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/undefinedIsSubtypeOfEverything.ts] ////
+
 //// [undefinedIsSubtypeOfEverything.ts]
 // undefined is a subtype of every other types, no errors expected below
 

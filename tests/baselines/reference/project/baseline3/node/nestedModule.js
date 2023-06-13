@@ -8,4 +8,4 @@ var outer;
         var local = 1;
         inner.a = local;
     })(inner = outer.inner || (outer.inner = {}));
-})(outer = exports.outer || (exports.outer = {}));
+})(outer || (exports.outer = outer = {}));

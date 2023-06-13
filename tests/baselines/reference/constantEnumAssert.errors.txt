@@ -1,7 +1,7 @@
-tests/cases/compiler/constantEnumAssert.ts(49,20): error TS1355: A 'const' assertions can only be applied to references to enum members, or string, number, boolean, array, or object literals.
+constantEnumAssert.ts(49,20): error TS1355: A 'const' assertions can only be applied to references to enum members, or string, number, boolean, array, or object literals.
 
 
-==== tests/cases/compiler/constantEnumAssert.ts (1 errors) ====
+==== constantEnumAssert.ts (1 errors) ====
     enum E1 {
         a,
         b

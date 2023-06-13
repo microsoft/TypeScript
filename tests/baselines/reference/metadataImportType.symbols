@@ -1,4 +1,6 @@
-=== tests/cases/compiler/metadataImportType.ts ===
+//// [tests/cases/compiler/metadataImportType.ts] ////
+
+=== metadataImportType.ts ===
 export class A {
 >A : Symbol(A, Decl(metadataImportType.ts, 0, 0))
 
