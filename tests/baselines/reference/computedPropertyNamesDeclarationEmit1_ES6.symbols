@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/computedProperties/computedPropertyNamesDeclarationEmit1_ES6.ts ===
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNamesDeclarationEmit1_ES6.ts] ////
+
+=== computedPropertyNamesDeclarationEmit1_ES6.ts ===
 class C {
 >C : Symbol(C, Decl(computedPropertyNamesDeclarationEmit1_ES6.ts, 0, 0))
 

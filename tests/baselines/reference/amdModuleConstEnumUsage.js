@@ -23,7 +23,7 @@ define(["require", "exports"], function (require, exports) {
     (function (CharCode) {
         CharCode[CharCode["A"] = 0] = "A";
         CharCode[CharCode["B"] = 1] = "B";
-    })(CharCode = exports.CharCode || (exports.CharCode = {}));
+    })(CharCode || (exports.CharCode = CharCode = {}));
 });
 //// [file.js]
 define(["require", "exports"], function (require, exports) {

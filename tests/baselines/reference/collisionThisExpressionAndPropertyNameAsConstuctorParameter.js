@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/collisionThisExpressionAndPropertyNameAsConstuctorParameter.ts] ////
+
 //// [collisionThisExpressionAndPropertyNameAsConstuctorParameter.ts]
 class Foo2 {
     constructor(_this: number) { //Error

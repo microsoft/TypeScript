@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/conditional/inferTypesWithExtends2.ts] ////
+
 //// [inferTypesWithExtends2.ts]
 // infer twice with different constraints (same behavior as class/interface)
 type X1<T> =

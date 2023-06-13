@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es5ExportEqualsDts.ts] ////
+
 //// [es5ExportEqualsDts.ts]
 class A {
     foo() {

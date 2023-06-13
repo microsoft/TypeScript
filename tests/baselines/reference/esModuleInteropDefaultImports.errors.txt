@@ -1,24 +1,24 @@
-tests/cases/compiler/b.ts(15,1): error TS2349: This expression is not callable.
-  Type 'typeof import("tests/cases/compiler/mod")' has no call signatures.
-tests/cases/compiler/b.ts(16,1): error TS2349: This expression is not callable.
-  Type 'typeof import("tests/cases/compiler/mod")' has no call signatures.
-tests/cases/compiler/b.ts(17,1): error TS2349: This expression is not callable.
-  Type 'typeof import("tests/cases/compiler/mod")' has no call signatures.
-tests/cases/compiler/b.ts(18,1): error TS2349: This expression is not callable.
-  Type 'typeof import("tests/cases/compiler/mod")' has no call signatures.
-tests/cases/compiler/b.ts(19,6): error TS2349: This expression is not callable.
-  Type 'typeof import("tests/cases/compiler/mod")' has no call signatures.
-tests/cases/compiler/b.ts(20,6): error TS2349: This expression is not callable.
-  Type 'typeof import("tests/cases/compiler/mod")' has no call signatures.
+b.ts(15,1): error TS2349: This expression is not callable.
+  Type 'typeof import("mod")' has no call signatures.
+b.ts(16,1): error TS2349: This expression is not callable.
+  Type 'typeof import("mod")' has no call signatures.
+b.ts(17,1): error TS2349: This expression is not callable.
+  Type 'typeof import("mod")' has no call signatures.
+b.ts(18,1): error TS2349: This expression is not callable.
+  Type 'typeof import("mod")' has no call signatures.
+b.ts(19,6): error TS2349: This expression is not callable.
+  Type 'typeof import("mod")' has no call signatures.
+b.ts(20,6): error TS2349: This expression is not callable.
+  Type 'typeof import("mod")' has no call signatures.
 
 
-==== tests/cases/compiler/mod.ts (0 errors) ====
+==== mod.ts (0 errors) ====
     declare function fun(): void;
     export default fun;
-==== tests/cases/compiler/a.ts (0 errors) ====
+==== a.ts (0 errors) ====
     import mod = require("./mod");
     export = mod;
-==== tests/cases/compiler/b.ts (6 errors) ====
+==== b.ts (6 errors) ====
     import a from "./a";
     import { default as b } from "./a";
     import c, { default as d } from "./a";
@@ -36,27 +36,27 @@ tests/cases/compiler/b.ts(20,6): error TS2349: This expression is not callable.
     a();
     ~
 !!! error TS2349: This expression is not callable.
-!!! error TS2349:   Type 'typeof import("tests/cases/compiler/mod")' has no call signatures.
+!!! error TS2349:   Type 'typeof import("mod")' has no call signatures.
     b();
     ~
 !!! error TS2349: This expression is not callable.
-!!! error TS2349:   Type 'typeof import("tests/cases/compiler/mod")' has no call signatures.
+!!! error TS2349:   Type 'typeof import("mod")' has no call signatures.
     c();
     ~
 !!! error TS2349: This expression is not callable.
-!!! error TS2349:   Type 'typeof import("tests/cases/compiler/mod")' has no call signatures.
+!!! error TS2349:   Type 'typeof import("mod")' has no call signatures.
     d();
     ~
 !!! error TS2349: This expression is not callable.
-!!! error TS2349:   Type 'typeof import("tests/cases/compiler/mod")' has no call signatures.
+!!! error TS2349:   Type 'typeof import("mod")' has no call signatures.
     self.default();
          ~~~~~~~
 !!! error TS2349: This expression is not callable.
-!!! error TS2349:   Type 'typeof import("tests/cases/compiler/mod")' has no call signatures.
+!!! error TS2349:   Type 'typeof import("mod")' has no call signatures.
     self.def();
          ~~~
 !!! error TS2349: This expression is not callable.
-!!! error TS2349:   Type 'typeof import("tests/cases/compiler/mod")' has no call signatures.
+!!! error TS2349:   Type 'typeof import("mod")' has no call signatures.
     
     // should all work
     a.default();

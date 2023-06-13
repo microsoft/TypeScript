@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/test/foo_3.ts ===
+//// [tests/cases/conformance/externalModules/nameWithRelativePaths.ts] ////
+
+=== test/foo_3.ts ===
 import foo0 = require('../foo_0');
 >foo0 : typeof foo0
 
@@ -27,12 +29,12 @@ if(foo2.M2.x){
 >f : () => number
 }
 
-=== tests/cases/conformance/externalModules/foo_0.ts ===
+=== foo_0.ts ===
 export var foo = 42;
 >foo : number
 >42 : 42
 
-=== tests/cases/conformance/externalModules/test/test/foo_1.ts ===
+=== test/test/foo_1.ts ===
 export function f(){
 >f : () => number
 
@@ -40,7 +42,7 @@ export function f(){
 >42 : 42
 }
 
-=== tests/cases/conformance/externalModules/test/foo_2.ts ===
+=== test/foo_2.ts ===
 export module M2 {
 >M2 : typeof M2
 

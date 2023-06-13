@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/tuple/restTupleElements1.ts ===
+//// [tests/cases/conformance/types/tuple/restTupleElements1.ts] ////
+
+=== restTupleElements1.ts ===
 type T00 = [string?];
 >T00 : Symbol(T00, Decl(restTupleElements1.ts, 0, 0))
 

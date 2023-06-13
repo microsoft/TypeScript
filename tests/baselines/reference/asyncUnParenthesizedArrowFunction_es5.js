@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/async/es5/asyncArrowFunction/asyncUnParenthesizedArrowFunction_es5.ts] ////
+
 //// [asyncUnParenthesizedArrowFunction_es5.ts]
 declare function someOtherFunction(i: any): Promise<void>;
 const x = async i => await someOtherFunction(i)

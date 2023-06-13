@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/specializedSignatureAsCallbackParameter1.ts] ////
+
 //// [specializedSignatureAsCallbackParameter1.ts]
 function x3(a: number, cb: (x: number) => number);
 function x3(a: string, cb: (x: number) => number);

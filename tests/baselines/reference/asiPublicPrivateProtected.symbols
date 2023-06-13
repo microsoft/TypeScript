@@ -1,4 +1,6 @@
-=== tests/cases/compiler/asiPublicPrivateProtected.ts ===
+//// [tests/cases/compiler/asiPublicPrivateProtected.ts] ////
+
+=== asiPublicPrivateProtected.ts ===
 public
 class NonPublicClass {
 >NonPublicClass : Symbol(NonPublicClass, Decl(asiPublicPrivateProtected.ts, 0, 6))

@@ -1,7 +1,7 @@
-tests/cases/conformance/jsx/file.tsx(15,26): error TS2339: Property 'len' does not exist on type 'string'.
+file.tsx(15,26): error TS2339: Property 'len' does not exist on type 'string'.
 
 
-==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
+==== file.tsx (1 errors) ====
     declare module JSX {
     	interface Element { }
     	interface IntrinsicElements {

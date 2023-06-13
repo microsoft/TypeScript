@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unparenthesizedFunctionTypeInUnionOrIntersection.ts ===
+//// [tests/cases/compiler/unparenthesizedFunctionTypeInUnionOrIntersection.ts] ////
+
+=== unparenthesizedFunctionTypeInUnionOrIntersection.ts ===
 type U1 = string | () => void;
 >U1 : string | (() => void)
 
@@ -39,7 +41,6 @@ type I3 = & () => boolean
 
 type I4 = & () => boolean & null;
 >I4 : () => boolean & null
->null : null
 
 type I5 = string & (any: any, any2: any) => any & any;
 >I5 : string & ((any: any, any2: any) => any & any)

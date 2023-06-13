@@ -1,4 +1,6 @@
-=== tests/cases/compiler/generics4.ts ===
+//// [tests/cases/compiler/generics4.ts] ////
+
+=== generics4.ts ===
 class C<T> { private x: T; }
 >C : C<T>
 >x : T

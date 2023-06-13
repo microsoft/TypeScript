@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignabilityInInheritance.ts ===
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignabilityInInheritance.ts] ////
+
+=== enumAssignabilityInInheritance.ts ===
 // enum is only a subtype of number, no types are subtypes of enum, all of these except the first are errors
 
 
@@ -46,7 +48,6 @@ var r3 = foo(<any>null); // any
 >foo(<any>null) : any
 >foo : { (x: E): E; (x: number): number; (x: any): any; }
 ><any>null : any
->null : null
 
 declare function foo2(x: string): string;
 >foo2 : { (x: string): string; (x: E): E; }

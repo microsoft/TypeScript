@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/topLevelAwaitNonModule.ts] ////
+
 //// [topLevelAwaitNonModule.ts]
 await x;
 

@@ -1,7 +1,7 @@
-tests/cases/compiler/generatorReturnExpressionIsChecked.ts(2,12): error TS2304: Cannot find name 'invalid'.
+generatorReturnExpressionIsChecked.ts(2,12): error TS2304: Cannot find name 'invalid'.
 
 
-==== tests/cases/compiler/generatorReturnExpressionIsChecked.ts (1 errors) ====
+==== generatorReturnExpressionIsChecked.ts (1 errors) ====
     function* f(): Iterator<number> {
         return invalid;
                ~~~~~~~

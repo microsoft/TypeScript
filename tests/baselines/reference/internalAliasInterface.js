@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/internalAliasInterface.ts] ////
+
 //// [internalAliasInterface.ts]
 module a {
     export interface I {

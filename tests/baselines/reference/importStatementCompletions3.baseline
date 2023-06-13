@@ -34,7 +34,7 @@
               "kind": "text"
             }
           ],
-          "insertText": "import { foo$1 } from \"./\\\\$foo\";",
+          "insertText": "import { foo$1 } from \"./\\$foo\";",
           "replacementSpan": {
             "start": 0,
             "length": 8
@@ -49,6 +49,7 @@
           "isImportStatementCompletion": true,
           "data": {
             "exportName": "foo",
+            "exportMapKey": "foo|*|",
             "moduleSpecifier": "./$foo",
             "fileName": "/tests/cases/fourslash/$foo.ts"
           },

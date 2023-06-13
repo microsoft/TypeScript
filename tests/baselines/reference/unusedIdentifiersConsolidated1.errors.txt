@@ -1,23 +1,23 @@
-tests/cases/compiler/unusedIdentifiersConsolidated1.ts(1,18): error TS6133: 'person' is declared but its value is never read.
-tests/cases/compiler/unusedIdentifiersConsolidated1.ts(2,9): error TS6133: 'unused' is declared but its value is never read.
-tests/cases/compiler/unusedIdentifiersConsolidated1.ts(5,32): error TS6133: 'unusedtypeparameter' is declared but its value is never read.
-tests/cases/compiler/unusedIdentifiersConsolidated1.ts(6,13): error TS6133: 'unusedprivatevariable' is declared but its value is never read.
-tests/cases/compiler/unusedIdentifiersConsolidated1.ts(7,13): error TS6133: 'greeting' is declared but its value is never read.
-tests/cases/compiler/unusedIdentifiersConsolidated1.ts(11,17): error TS6133: 'message' is declared but its value is never read.
-tests/cases/compiler/unusedIdentifiersConsolidated1.ts(12,13): error TS6133: 'unused2' is declared but its value is never read.
-tests/cases/compiler/unusedIdentifiersConsolidated1.ts(16,20): error TS6133: 'person' is declared but its value is never read.
-tests/cases/compiler/unusedIdentifiersConsolidated1.ts(17,13): error TS6133: 'unused' is declared but its value is never read.
-tests/cases/compiler/unusedIdentifiersConsolidated1.ts(24,13): error TS6133: 'unUsedPrivateFunction' is declared but its value is never read.
-tests/cases/compiler/unusedIdentifiersConsolidated1.ts(37,11): error TS6133: 'numberRegexp' is declared but its value is never read.
-tests/cases/compiler/unusedIdentifiersConsolidated1.ts(44,17): error TS6133: 'unUsedPrivateFunction' is declared but its value is never read.
-tests/cases/compiler/unusedIdentifiersConsolidated1.ts(57,15): error TS6196: 'usedLocallyInterface2' is declared but never used.
-tests/cases/compiler/unusedIdentifiersConsolidated1.ts(64,11): error TS6196: 'dummy' is declared but never used.
-tests/cases/compiler/unusedIdentifiersConsolidated1.ts(67,15): error TS6196: 'unusedInterface' is declared but never used.
-tests/cases/compiler/unusedIdentifiersConsolidated1.ts(79,11): error TS6196: 'class3' is declared but never used.
-tests/cases/compiler/unusedIdentifiersConsolidated1.ts(99,15): error TS6196: 'interface5' is declared but never used.
+unusedIdentifiersConsolidated1.ts(1,18): error TS6133: 'person' is declared but its value is never read.
+unusedIdentifiersConsolidated1.ts(2,9): error TS6133: 'unused' is declared but its value is never read.
+unusedIdentifiersConsolidated1.ts(5,32): error TS6133: 'unusedtypeparameter' is declared but its value is never read.
+unusedIdentifiersConsolidated1.ts(6,13): error TS6133: 'unusedprivatevariable' is declared but its value is never read.
+unusedIdentifiersConsolidated1.ts(7,13): error TS6133: 'greeting' is declared but its value is never read.
+unusedIdentifiersConsolidated1.ts(11,17): error TS6133: 'message' is declared but its value is never read.
+unusedIdentifiersConsolidated1.ts(12,13): error TS6133: 'unused2' is declared but its value is never read.
+unusedIdentifiersConsolidated1.ts(16,20): error TS6133: 'person' is declared but its value is never read.
+unusedIdentifiersConsolidated1.ts(17,13): error TS6133: 'unused' is declared but its value is never read.
+unusedIdentifiersConsolidated1.ts(24,13): error TS6133: 'unUsedPrivateFunction' is declared but its value is never read.
+unusedIdentifiersConsolidated1.ts(37,11): error TS6133: 'numberRegexp' is declared but its value is never read.
+unusedIdentifiersConsolidated1.ts(44,17): error TS6133: 'unUsedPrivateFunction' is declared but its value is never read.
+unusedIdentifiersConsolidated1.ts(57,15): error TS6196: 'usedLocallyInterface2' is declared but never used.
+unusedIdentifiersConsolidated1.ts(64,11): error TS6196: 'dummy' is declared but never used.
+unusedIdentifiersConsolidated1.ts(67,15): error TS6196: 'unusedInterface' is declared but never used.
+unusedIdentifiersConsolidated1.ts(79,11): error TS6196: 'class3' is declared but never used.
+unusedIdentifiersConsolidated1.ts(99,15): error TS6196: 'interface5' is declared but never used.
 
 
-==== tests/cases/compiler/unusedIdentifiersConsolidated1.ts (17 errors) ====
+==== unusedIdentifiersConsolidated1.ts (17 errors) ====
     function greeter(person: string) {
                      ~~~~~~
 !!! error TS6133: 'person' is declared but its value is never read.

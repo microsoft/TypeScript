@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nestedTypeVariableInfersLiteral.ts] ////
+
 //// [nestedTypeVariableInfersLiteral.ts]
 // https://github.com/Microsoft/TypeScript/issues/19632
 declare function direct<A extends string>(a: A | A[]): Record<A, string>

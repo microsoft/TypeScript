@@ -1,12 +1,12 @@
-tests/cases/compiler/objectLiteralParameterResolution.ts(9,14): error TS2304: Cannot find name 'wrapSuccessCallback'.
-tests/cases/compiler/objectLiteralParameterResolution.ts(9,34): error TS2304: Cannot find name 'requestContext'.
-tests/cases/compiler/objectLiteralParameterResolution.ts(9,50): error TS2304: Cannot find name 'callback'.
-tests/cases/compiler/objectLiteralParameterResolution.ts(10,12): error TS2304: Cannot find name 'wrapErrorCallback'.
-tests/cases/compiler/objectLiteralParameterResolution.ts(10,30): error TS2304: Cannot find name 'requestContext'.
-tests/cases/compiler/objectLiteralParameterResolution.ts(10,46): error TS2304: Cannot find name 'errorCallback'.
+objectLiteralParameterResolution.ts(9,14): error TS2304: Cannot find name 'wrapSuccessCallback'.
+objectLiteralParameterResolution.ts(9,34): error TS2304: Cannot find name 'requestContext'.
+objectLiteralParameterResolution.ts(9,50): error TS2304: Cannot find name 'callback'.
+objectLiteralParameterResolution.ts(10,12): error TS2304: Cannot find name 'wrapErrorCallback'.
+objectLiteralParameterResolution.ts(10,30): error TS2304: Cannot find name 'requestContext'.
+objectLiteralParameterResolution.ts(10,46): error TS2304: Cannot find name 'errorCallback'.
 
 
-==== tests/cases/compiler/objectLiteralParameterResolution.ts (6 errors) ====
+==== objectLiteralParameterResolution.ts (6 errors) ====
     interface Foo{
         extend<T>(target: T, ...objs: any[]): T;
         extend<T>(deep: boolean, target: T, ...objs: any[]): T;

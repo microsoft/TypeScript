@@ -1,0 +1,25 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllReferencesImportMeta.ts ===
+// // Haha that's so meta!
+// 
+// let x = import.[|meta|]/*FIND ALL REFS*/;
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllReferencesImportMeta.ts ===
+  // // Haha that's so meta!
+  // 
+  // let x = import.[|meta|]/*FIND ALL REFS*/;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "keyword",
+    "displayParts": [
+     {
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]

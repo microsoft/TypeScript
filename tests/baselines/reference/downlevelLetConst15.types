@@ -1,4 +1,6 @@
-=== tests/cases/compiler/downlevelLetConst15.ts ===
+//// [tests/cases/compiler/downlevelLetConst15.ts] ////
+
+=== downlevelLetConst15.ts ===
 'use strict'
 >'use strict' : "use strict"
 

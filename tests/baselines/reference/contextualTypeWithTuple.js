@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts] ////
+
 //// [contextualTypeWithTuple.ts]
 // no error
 var numStrTuple: [number, string] = [5, "hello"];

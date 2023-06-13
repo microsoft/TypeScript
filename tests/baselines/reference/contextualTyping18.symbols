@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualTyping18.ts ===
+//// [tests/cases/compiler/contextualTyping18.ts] ////
+
+=== contextualTyping18.ts ===
 var foo: {id:number;} = <{id:number;}>({ }); foo = {id: 5};
 >foo : Symbol(foo, Decl(contextualTyping18.ts, 0, 3))
 >id : Symbol(id, Decl(contextualTyping18.ts, 0, 10))

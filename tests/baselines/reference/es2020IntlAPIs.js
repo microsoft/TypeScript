@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es2020/es2020IntlAPIs.ts] ////
+
 //// [es2020IntlAPIs.ts]
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_identification_and_negotiation
 const count = 26254.39;

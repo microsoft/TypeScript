@@ -1,4 +1,6 @@
-=== tests/cases/compiler/collisionExportsRequireAndFunctionInGlobalFile.ts ===
+//// [tests/cases/compiler/collisionExportsRequireAndFunctionInGlobalFile.ts] ////
+
+=== collisionExportsRequireAndFunctionInGlobalFile.ts ===
 function exports() {
 >exports : Symbol(exports, Decl(collisionExportsRequireAndFunctionInGlobalFile.ts, 0, 0))
 

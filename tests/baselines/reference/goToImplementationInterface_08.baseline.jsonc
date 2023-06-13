@@ -1,0 +1,69 @@
+// === goToImplementation ===
+// === /tests/cases/fourslash/goToImplementationInterface_08.ts ===
+// --- (line: 6) skipped ---
+// interface C extends B, A {}
+// 
+// class X implements B {
+//     <|[|hello|]() {}|>
+// }
+// 
+// function someFunction(d : A) {
+//     d.he/*GOTO IMPL*/llo();
+// }
+
+  // === Details ===
+  [
+   {
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "X",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "hello",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ],
+    "kind": "method"
+   }
+  ]

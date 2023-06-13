@@ -1,4 +1,6 @@
-=== tests/cases/compiler/continueStatementInternalComments.ts ===
+//// [tests/cases/compiler/continueStatementInternalComments.ts] ////
+
+=== continueStatementInternalComments.ts ===
 foo: for (;;) {
 >foo : any
 

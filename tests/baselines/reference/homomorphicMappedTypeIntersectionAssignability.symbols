@@ -1,4 +1,6 @@
-=== tests/cases/compiler/homomorphicMappedTypeIntersectionAssignability.ts ===
+//// [tests/cases/compiler/homomorphicMappedTypeIntersectionAssignability.ts] ////
+
+=== homomorphicMappedTypeIntersectionAssignability.ts ===
 function f<TType>(
 >f : Symbol(f, Decl(homomorphicMappedTypeIntersectionAssignability.ts, 0, 0))
 >TType : Symbol(TType, Decl(homomorphicMappedTypeIntersectionAssignability.ts, 0, 11))

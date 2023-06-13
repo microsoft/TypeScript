@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nestedBlockScopedBindings4.ts] ////
+
 //// [nestedBlockScopedBindings4.ts]
 function a0() {
     for (let x; x < 1;) {

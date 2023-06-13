@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/functionCalls/callWithSpread.ts] ////
+
 //// [callWithSpread.ts]
 interface X {
     foo(x: number, y: number, ...z: string[]): X;

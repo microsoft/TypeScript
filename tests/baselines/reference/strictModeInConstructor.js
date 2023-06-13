@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/strictModeInConstructor.ts] ////
+
 //// [strictModeInConstructor.ts]
 class A {
 }
