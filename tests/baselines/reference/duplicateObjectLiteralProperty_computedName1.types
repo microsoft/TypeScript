@@ -1,4 +1,6 @@
-=== tests/cases/compiler/duplicateObjectLiteralProperty_computedName1.ts ===
+//// [tests/cases/compiler/duplicateObjectLiteralProperty_computedName1.ts] ////
+
+=== duplicateObjectLiteralProperty_computedName1.ts ===
 const t1 = {
 >t1 : { 1: number; }
 >{    1: 1,    [1]: 0 // duplicate} : { 1: number; }

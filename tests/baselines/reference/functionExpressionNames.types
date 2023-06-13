@@ -1,8 +1,10 @@
-=== tests/cases/compiler/b.js ===
+//// [tests/cases/compiler/functionExpressionNames.ts] ////
+
+=== b.js ===
 exports.E = function() {
 >exports.E = function() {    this.e = 'exported'} : typeof E
 >exports.E : typeof E
->exports : typeof import("tests/cases/compiler/b")
+>exports : typeof import("b")
 >E : typeof E
 >function() {    this.e = 'exported'} : typeof E
 
@@ -17,7 +19,7 @@ var e = new exports.E();
 >e : E
 >new exports.E() : E
 >exports.E : typeof E
->exports : typeof import("tests/cases/compiler/b")
+>exports : typeof import("b")
 >E : typeof E
 
 var o = {

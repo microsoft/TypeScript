@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileInternalAliases.ts] ////
+
 //// [declFileInternalAliases.ts]
 module m {
     export class c {

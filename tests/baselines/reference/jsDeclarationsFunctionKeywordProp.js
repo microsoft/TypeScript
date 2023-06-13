@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsFunctionKeywordProp.ts] ////
+
 //// [source.js]
 function foo() {}
 foo.null = true;

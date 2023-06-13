@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeParameterConstraintInstantiation.ts ===
+//// [tests/cases/compiler/typeParameterConstraintInstantiation.ts] ////
+
+=== typeParameterConstraintInstantiation.ts ===
 // Check that type parameter constraints are properly instantiated
 
 interface Mapper<T> {

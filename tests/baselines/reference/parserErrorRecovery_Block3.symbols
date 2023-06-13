@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/Blocks/parserErrorRecovery_Block3.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/Blocks/parserErrorRecovery_Block3.ts] ////
+
+=== parserErrorRecovery_Block3.ts ===
 class C  {
 >C : Symbol(C, Decl(parserErrorRecovery_Block3.ts, 0, 0))
 

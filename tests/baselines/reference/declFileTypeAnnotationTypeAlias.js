@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileTypeAnnotationTypeAlias.ts] ////
+
 //// [declFileTypeAnnotationTypeAlias.ts]
 module M {
     export type Value = string | number | boolean;

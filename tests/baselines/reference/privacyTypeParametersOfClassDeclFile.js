@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privacyTypeParametersOfClassDeclFile.ts] ////
+
 //// [privacyTypeParametersOfClassDeclFile.ts]
 class privateClass {
 }
@@ -318,7 +320,7 @@ var publicModule;
         };
         return privateClassWithTypeParametersFromPrivateModule;
     }());
-})(publicModule = exports.publicModule || (exports.publicModule = {}));
+})(publicModule || (exports.publicModule = publicModule = {}));
 var privateModule;
 (function (privateModule) {
     var privateClassInPrivateModule = /** @class */ (function () {

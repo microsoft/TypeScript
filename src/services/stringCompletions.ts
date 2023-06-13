@@ -44,6 +44,7 @@ import {
     flatten,
     forEachAncestorDirectory,
     getBaseFileName,
+    getConditions,
     getContextualTypeFromParent,
     getDirectoryPath,
     getEffectiveTypeRoots,
@@ -59,6 +60,7 @@ import {
     getResolvePackageJsonExports,
     getSupportedExtensions,
     getSupportedExtensionsWithJsonIfResolveJsonModule,
+    getTextOfJsxAttributeName,
     getTokenAtPosition,
     hasIndexSignature,
     hasProperty,
@@ -386,7 +388,7 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
                 // Get string literal completions from specialized signatures of the target
                 // i.e. declare function f(a: 'A');
                 // f("/*completion position*/")
-                return argumentInfo && getStringLiteralCompletionsFromSignature(argumentInfo.invocation, node, argumentInfo, typeChecker) || fromContextualType();
+                return argumentInfo && getStringLiteralCompletionsFromSignature(argumentInfo.invocation, node, argumentInfo, typeChecker) || fromContextualType(ContextFlags.None);
             }
             // falls through (is `require("")` or `require(""` or `import("")`)
 
@@ -487,7 +489,7 @@ function getStringLiteralCompletionsFromSignature(call: CallLikeExpression, arg:
         if (!signatureHasRestParameter(candidate) && argumentInfo.argumentCount > candidate.parameters.length) return;
         let type = candidate.getTypeParameterAtPosition(argumentInfo.argumentIndex);
         if (isJsxOpeningLikeElement(call)) {
-            const propType = checker.getTypeOfPropertyOfType(type, (editingArgument as JsxAttribute).name.text);
+            const propType = checker.getTypeOfPropertyOfType(type, getTextOfJsxAttributeName((editingArgument as JsxAttribute).name));
             if (propType) {
                 type = propType;
             }
@@ -923,7 +925,7 @@ function getCompletionEntriesForNonRelativeModules(
                             }
                             const keys = getOwnKeys(exports);
                             const fragmentSubpath = components.join("/") + (components.length && hasTrailingDirectorySeparator(fragment) ? "/" : "");
-                            const conditions = mode === ModuleKind.ESNext ? ["node", "import", "types"] : ["node", "require", "types"];
+                            const conditions = getConditions(compilerOptions, mode === ModuleKind.ESNext);
                             addCompletionEntriesFromPathsOrExports(
                                 result,
                                 fragmentSubpath,

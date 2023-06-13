@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/renamingDestructuredPropertyInFunctionType3.ts] ////
+
 //// [renamingDestructuredPropertyInFunctionType3.ts]
 const sym = Symbol();
 type O = Record<symbol, unknown>

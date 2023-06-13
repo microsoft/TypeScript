@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/primitiveUnionDetection.ts] ////
+
 //// [primitiveUnionDetection.ts]
 // Repro from #46624
 

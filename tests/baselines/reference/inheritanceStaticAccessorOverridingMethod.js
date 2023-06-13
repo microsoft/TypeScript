@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inheritanceStaticAccessorOverridingMethod.ts] ////
+
 //// [inheritanceStaticAccessorOverridingMethod.ts]
 class a {
     static x() {

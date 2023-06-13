@@ -1,4 +1,6 @@
-=== tests/cases/compiler/asyncAwaitWithCapturedBlockScopeVar.ts ===
+//// [tests/cases/compiler/asyncAwaitWithCapturedBlockScopeVar.ts] ////
+
+=== asyncAwaitWithCapturedBlockScopeVar.ts ===
 async function fn1() {
 >fn1 : Symbol(fn1, Decl(asyncAwaitWithCapturedBlockScopeVar.ts, 0, 0))
 

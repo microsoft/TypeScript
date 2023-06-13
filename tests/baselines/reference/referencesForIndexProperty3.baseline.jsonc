@@ -17,10 +17,7 @@
   // }
   // 
   // var y: Object;
-  // y.toMyString();
-  // 
-  // var x = {};
-  // x["toMyString"]();
+  // --- (line: 6) skipped ---
 
   // === Details ===
   [

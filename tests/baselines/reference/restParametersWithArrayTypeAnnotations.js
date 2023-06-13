@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersWithArrayTypeAnnotations.ts] ////
+
 //// [restParametersWithArrayTypeAnnotations.ts]
 // Rest parameters must be an array type if they have a type annotation, errors only for the functions with 2 rest params
 

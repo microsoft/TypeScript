@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nestedObjectRest.ts ===
+//// [tests/cases/compiler/nestedObjectRest.ts] ////
+
+=== nestedObjectRest.ts ===
 // https://github.com/microsoft/TypeScript/issues/43400
 var x, y;
 >x : Symbol(x, Decl(nestedObjectRest.ts, 1, 3))

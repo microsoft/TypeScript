@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/destructuringControlFlowNoCrash.ts] ////
+
 //// [destructuringControlFlowNoCrash.ts]
 // legal JS, if nonsensical, which also triggers the issue
 const {

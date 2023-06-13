@@ -1,16 +1,16 @@
-tests/cases/compiler/intersectionsAndOptionalProperties.ts(5,1): error TS2322: Type '{ a: null; b: string; }' is not assignable to type '{ a?: number | undefined; b: string; }'.
+intersectionsAndOptionalProperties.ts(5,1): error TS2322: Type '{ a: null; b: string; }' is not assignable to type '{ a?: number | undefined; b: string; }'.
   Types of property 'a' are incompatible.
     Type 'null' is not assignable to type 'number | undefined'.
-tests/cases/compiler/intersectionsAndOptionalProperties.ts(6,1): error TS2322: Type '{ a: null; } & { b: string; }' is not assignable to type '{ a?: number | undefined; b: string; }'.
+intersectionsAndOptionalProperties.ts(6,1): error TS2322: Type '{ a: null; } & { b: string; }' is not assignable to type '{ a?: number | undefined; b: string; }'.
   Types of property 'a' are incompatible.
     Type 'null' is not assignable to type 'number | undefined'.
-tests/cases/compiler/intersectionsAndOptionalProperties.ts(19,5): error TS2322: Type 'From' is not assignable to type 'To'.
+intersectionsAndOptionalProperties.ts(19,5): error TS2322: Type 'From' is not assignable to type 'To'.
   Types of property 'field' are incompatible.
     Type 'null' is not assignable to type 'number | undefined'.
-tests/cases/compiler/intersectionsAndOptionalProperties.ts(20,5): error TS2322: Type 'null' is not assignable to type 'number | undefined'.
+intersectionsAndOptionalProperties.ts(20,5): error TS2322: Type 'null' is not assignable to type 'number | undefined'.
 
 
-==== tests/cases/compiler/intersectionsAndOptionalProperties.ts (4 errors) ====
+==== intersectionsAndOptionalProperties.ts (4 errors) ====
     declare let x: { a?: number, b: string };
     declare let y: { a: null, b: string };
     declare let z: { a: null } & { b: string };

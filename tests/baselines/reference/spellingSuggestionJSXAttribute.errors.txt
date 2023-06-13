@@ -1,32 +1,32 @@
-tests/cases/compiler/spellingSuggestionJSXAttribute.tsx(8,4): error TS2322: Type '{ class: string; }' is not assignable to type 'DetailedHTMLProps<AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>'.
+spellingSuggestionJSXAttribute.tsx(8,4): error TS2322: Type '{ class: string; }' is not assignable to type 'DetailedHTMLProps<AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>'.
   Property 'class' does not exist on type 'DetailedHTMLProps<AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>'. Did you mean 'className'?
-tests/cases/compiler/spellingSuggestionJSXAttribute.tsx(9,4): error TS2322: Type '{ for: string; }' is not assignable to type 'DetailedHTMLProps<AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>'.
+spellingSuggestionJSXAttribute.tsx(9,4): error TS2322: Type '{ for: string; }' is not assignable to type 'DetailedHTMLProps<AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>'.
   Property 'for' does not exist on type 'DetailedHTMLProps<AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>'.
-tests/cases/compiler/spellingSuggestionJSXAttribute.tsx(10,8): error TS2322: Type '{ for: string; }' is not assignable to type 'DetailedHTMLProps<LabelHTMLAttributes<HTMLLabelElement>, HTMLLabelElement>'.
+spellingSuggestionJSXAttribute.tsx(10,8): error TS2322: Type '{ for: string; }' is not assignable to type 'DetailedHTMLProps<LabelHTMLAttributes<HTMLLabelElement>, HTMLLabelElement>'.
   Property 'for' does not exist on type 'DetailedHTMLProps<LabelHTMLAttributes<HTMLLabelElement>, HTMLLabelElement>'. Did you mean 'htmlFor'?
-tests/cases/compiler/spellingSuggestionJSXAttribute.tsx(11,8): error TS2322: Type '{ for: string; class: string; }' is not assignable to type 'DetailedHTMLProps<LabelHTMLAttributes<HTMLLabelElement>, HTMLLabelElement>'.
+spellingSuggestionJSXAttribute.tsx(11,8): error TS2322: Type '{ for: string; class: string; }' is not assignable to type 'DetailedHTMLProps<LabelHTMLAttributes<HTMLLabelElement>, HTMLLabelElement>'.
   Property 'for' does not exist on type 'DetailedHTMLProps<LabelHTMLAttributes<HTMLLabelElement>, HTMLLabelElement>'. Did you mean 'htmlFor'?
-tests/cases/compiler/spellingSuggestionJSXAttribute.tsx(12,9): error TS2769: No overload matches this call.
+spellingSuggestionJSXAttribute.tsx(12,9): error TS2769: No overload matches this call.
   Overload 1 of 2, '(props: Readonly<{ className?: string; htmlFor?: string; }>): MyComp', gave the following error.
     Type '{ class: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp> & Readonly<{ children?: ReactNode; }> & Readonly<{ className?: string; htmlFor?: string; }>'.
       Property 'class' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp> & Readonly<{ children?: ReactNode; }> & Readonly<{ className?: string; htmlFor?: string; }>'. Did you mean 'className'?
   Overload 2 of 2, '(props: { className?: string; htmlFor?: string; }, context?: any): MyComp', gave the following error.
     Type '{ class: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp> & Readonly<{ children?: ReactNode; }> & Readonly<{ className?: string; htmlFor?: string; }>'.
       Property 'class' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp> & Readonly<{ children?: ReactNode; }> & Readonly<{ className?: string; htmlFor?: string; }>'. Did you mean 'className'?
-tests/cases/compiler/spellingSuggestionJSXAttribute.tsx(13,10): error TS2322: Type '{ class: string; }' is not assignable to type 'IntrinsicAttributes & { className?: string; htmlFor?: string; }'.
+spellingSuggestionJSXAttribute.tsx(13,10): error TS2322: Type '{ class: string; }' is not assignable to type 'IntrinsicAttributes & { className?: string; htmlFor?: string; }'.
   Property 'class' does not exist on type 'IntrinsicAttributes & { className?: string; htmlFor?: string; }'. Did you mean 'className'?
-tests/cases/compiler/spellingSuggestionJSXAttribute.tsx(14,9): error TS2769: No overload matches this call.
+spellingSuggestionJSXAttribute.tsx(14,9): error TS2769: No overload matches this call.
   Overload 1 of 2, '(props: Readonly<{ className?: string; htmlFor?: string; }>): MyComp', gave the following error.
     Type '{ for: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp> & Readonly<{ children?: ReactNode; }> & Readonly<{ className?: string; htmlFor?: string; }>'.
       Property 'for' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp> & Readonly<{ children?: ReactNode; }> & Readonly<{ className?: string; htmlFor?: string; }>'. Did you mean 'htmlFor'?
   Overload 2 of 2, '(props: { className?: string; htmlFor?: string; }, context?: any): MyComp', gave the following error.
     Type '{ for: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp> & Readonly<{ children?: ReactNode; }> & Readonly<{ className?: string; htmlFor?: string; }>'.
       Property 'for' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp> & Readonly<{ children?: ReactNode; }> & Readonly<{ className?: string; htmlFor?: string; }>'. Did you mean 'htmlFor'?
-tests/cases/compiler/spellingSuggestionJSXAttribute.tsx(15,10): error TS2322: Type '{ for: string; }' is not assignable to type 'IntrinsicAttributes & { className?: string; htmlFor?: string; }'.
+spellingSuggestionJSXAttribute.tsx(15,10): error TS2322: Type '{ for: string; }' is not assignable to type 'IntrinsicAttributes & { className?: string; htmlFor?: string; }'.
   Property 'for' does not exist on type 'IntrinsicAttributes & { className?: string; htmlFor?: string; }'. Did you mean 'htmlFor'?
 
 
-==== tests/cases/compiler/spellingSuggestionJSXAttribute.tsx (8 errors) ====
+==== spellingSuggestionJSXAttribute.tsx (8 errors) ====
     /// <reference path="/.lib/react16.d.ts" />
     import * as React from "react";
     

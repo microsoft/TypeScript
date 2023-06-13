@@ -1,13 +1,13 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    createServerHost,
-} from "../virtualFileSystemWithWatch";
-import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,
     createSession,
     verifyGetErrRequest,
-} from "./helpers";
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+} from "../helpers/virtualFileSystemWithWatch";
 describe("unittests:: tsserver:: inconsistentErrorInEditor", () => {
     it("should not error", () => {
         const host = createServerHost([]);

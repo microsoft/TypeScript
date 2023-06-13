@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/weakType.ts] ////
+
 //// [weakType.ts]
 interface Settings {
     timeout?: number;

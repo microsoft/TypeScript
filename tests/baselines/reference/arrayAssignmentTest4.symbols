@@ -1,4 +1,6 @@
-=== tests/cases/compiler/arrayAssignmentTest4.ts ===
+//// [tests/cases/compiler/arrayAssignmentTest4.ts] ////
+
+=== arrayAssignmentTest4.ts ===
 class C3 {
 >C3 : Symbol(C3, Decl(arrayAssignmentTest4.ts, 0, 0))
 

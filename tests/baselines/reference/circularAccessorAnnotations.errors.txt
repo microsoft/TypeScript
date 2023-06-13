@@ -1,10 +1,10 @@
-tests/cases/compiler/circularAccessorAnnotations.ts(2,9): error TS2502: 'foo' is referenced directly or indirectly in its own type annotation.
-tests/cases/compiler/circularAccessorAnnotations.ts(6,9): error TS2502: 'foo' is referenced directly or indirectly in its own type annotation.
-tests/cases/compiler/circularAccessorAnnotations.ts(15,9): error TS2502: 'foo' is referenced directly or indirectly in its own type annotation.
-tests/cases/compiler/circularAccessorAnnotations.ts(19,9): error TS2502: 'foo' is referenced directly or indirectly in its own type annotation.
+circularAccessorAnnotations.ts(2,9): error TS2502: 'foo' is referenced directly or indirectly in its own type annotation.
+circularAccessorAnnotations.ts(6,9): error TS2502: 'foo' is referenced directly or indirectly in its own type annotation.
+circularAccessorAnnotations.ts(15,9): error TS2502: 'foo' is referenced directly or indirectly in its own type annotation.
+circularAccessorAnnotations.ts(19,9): error TS2502: 'foo' is referenced directly or indirectly in its own type annotation.
 
 
-==== tests/cases/compiler/circularAccessorAnnotations.ts (4 errors) ====
+==== circularAccessorAnnotations.ts (4 errors) ====
     declare const c1: {
         get foo(): typeof c1.foo;
             ~~~

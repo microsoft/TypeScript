@@ -1,172 +1,172 @@
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(4,21): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(24,33): error TS2694: Namespace 'TypeScript' has no exported member 'AST'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(38,34): error TS2694: Namespace 'TypeScript' has no exported member 'AST'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(48,37): error TS2694: Namespace 'TypeScript' has no exported member 'AST'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(68,39): error TS2694: Namespace 'TypeScript' has no exported member 'NodeType'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(70,35): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(75,32): error TS2694: Namespace 'TypeScript' has no exported member 'AST'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(79,32): error TS2694: Namespace 'TypeScript' has no exported member 'AST'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(86,47): error TS2694: Namespace 'TypeScript' has no exported member 'AST'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(94,56): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(95,56): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(96,31): error TS2694: Namespace 'TypeScript' has no exported member 'InterfaceDeclaration'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(103,56): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(104,56): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(105,31): error TS2694: Namespace 'TypeScript' has no exported member 'InterfaceDeclaration'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(112,56): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(113,56): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(114,31): error TS2694: Namespace 'TypeScript' has no exported member 'ArgDecl'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(121,56): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(122,56): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(123,31): error TS2694: Namespace 'TypeScript' has no exported member 'VarDecl'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(130,56): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(131,56): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(132,31): error TS2694: Namespace 'TypeScript' has no exported member 'ModuleDeclaration'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(139,56): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(140,56): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(141,31): error TS2694: Namespace 'TypeScript' has no exported member 'FuncDecl'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(148,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(149,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(156,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(157,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(164,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(165,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(172,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(173,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(174,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(175,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(176,31): error TS2694: Namespace 'TypeScript' has no exported member 'FuncDecl'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(177,31): error TS2694: Namespace 'TypeScript' has no exported member 'FuncDecl'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(178,31): error TS2694: Namespace 'TypeScript' has no exported member 'ClassDeclaration'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(185,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(186,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(191,61): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(192,28): error TS2339: Property 'hasFlag' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(192,49): error TS2694: Namespace 'TypeScript' has no exported member 'ModuleDeclaration'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(192,109): error TS2339: Property 'ModuleFlags' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(197,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(198,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(199,31): error TS2694: Namespace 'TypeScript' has no exported member 'ModuleDeclaration'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(200,28): error TS2339: Property 'hasFlag' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(200,49): error TS2694: Namespace 'TypeScript' has no exported member 'ModuleDeclaration'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(200,113): error TS2339: Property 'ModuleFlags' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(205,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(206,31): error TS2694: Namespace 'TypeScript' has no exported member 'Script'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(211,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(212,31): error TS2694: Namespace 'TypeScript' has no exported member 'SwitchStatement'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(217,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(218,31): error TS2694: Namespace 'TypeScript' has no exported member 'ModuleDeclaration'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(223,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(224,31): error TS2694: Namespace 'TypeScript' has no exported member 'ClassDeclaration'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(229,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(230,31): error TS2694: Namespace 'TypeScript' has no exported member 'FuncDecl'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(235,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(236,31): error TS2694: Namespace 'TypeScript' has no exported member 'InterfaceDeclaration'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(241,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(242,30): error TS2694: Namespace 'TypeScript' has no exported member 'Block'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(247,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(248,30): error TS2694: Namespace 'TypeScript' has no exported member 'ForStatement'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(253,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(254,30): error TS2694: Namespace 'TypeScript' has no exported member 'CaseStatement'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(259,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(260,30): error TS2694: Namespace 'TypeScript' has no exported member 'Try'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(265,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(266,30): error TS2694: Namespace 'TypeScript' has no exported member 'Catch'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(271,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(272,30): error TS2694: Namespace 'TypeScript' has no exported member 'DoWhileStatement'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(277,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(278,30): error TS2694: Namespace 'TypeScript' has no exported member 'WhileStatement'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(283,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(284,30): error TS2694: Namespace 'TypeScript' has no exported member 'ForInStatement'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(289,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(290,30): error TS2694: Namespace 'TypeScript' has no exported member 'WithStatement'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(295,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(296,30): error TS2694: Namespace 'TypeScript' has no exported member 'Finally'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(301,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(302,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(303,30): error TS2694: Namespace 'TypeScript' has no exported member 'SwitchStatement'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(308,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(309,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(310,30): error TS2694: Namespace 'TypeScript' has no exported member 'SwitchStatement'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(311,30): error TS2694: Namespace 'TypeScript' has no exported member 'SwitchStatement'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(316,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(317,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(318,30): error TS2694: Namespace 'TypeScript' has no exported member 'UnaryExpression'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(327,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(328,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(329,30): error TS2694: Namespace 'TypeScript' has no exported member 'UnaryExpression'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(330,30): error TS2694: Namespace 'TypeScript' has no exported member 'ASTList'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(335,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(336,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(337,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(338,30): error TS2694: Namespace 'TypeScript' has no exported member 'UnaryExpression'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(343,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(344,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(345,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(346,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(347,30): error TS2694: Namespace 'TypeScript' has no exported member 'UnaryExpression'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(352,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(353,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(354,30): error TS2694: Namespace 'TypeScript' has no exported member 'UnaryExpression'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(359,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(360,30): error TS2694: Namespace 'TypeScript' has no exported member 'BinaryExpression'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(365,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(366,30): error TS2694: Namespace 'TypeScript' has no exported member 'BinaryExpression'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(371,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(377,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(378,30): error TS2694: Namespace 'TypeScript' has no exported member 'IfStatement'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(383,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(384,30): error TS2694: Namespace 'TypeScript' has no exported member 'IfStatement'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(393,61): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(394,30): error TS2694: Namespace 'TypeScript' has no exported member 'ASTList'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(399,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(400,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(401,30): error TS2694: Namespace 'TypeScript' has no exported member 'FuncDecl'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(406,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(407,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(408,30): error TS2694: Namespace 'TypeScript' has no exported member 'FuncDecl'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(413,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(414,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(415,30): error TS2694: Namespace 'TypeScript' has no exported member 'CallExpression'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(420,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(421,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(422,30): error TS2694: Namespace 'TypeScript' has no exported member 'CallExpression'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(427,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(428,30): error TS2694: Namespace 'TypeScript' has no exported member 'Block'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(432,52): error TS2694: Namespace 'TypeScript' has no exported member 'ASTSpan'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(462,61): error TS2694: Namespace 'TypeScript' has no exported member 'AST'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(463,52): error TS2694: Namespace 'TypeScript' has no exported member 'Comment'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(478,45): error TS2694: Namespace 'TypeScript' has no exported member 'AST'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(478,69): error TS2694: Namespace 'TypeScript' has no exported member 'AST'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(478,82): error TS2304: Cannot find name 'IAstWalker'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(489,21): error TS2304: Cannot find name 'hasFlag'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(490,49): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(516,22): error TS2304: Cannot find name 'hasFlag'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(525,20): error TS2339: Property 'getAstWalkerFactory' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(533,62): error TS2694: Namespace 'TypeScript' has no exported member 'Script'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(535,36): error TS2694: Namespace 'TypeScript' has no exported member 'AST'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(535,60): error TS2694: Namespace 'TypeScript' has no exported member 'AST'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(535,84): error TS2694: Namespace 'TypeScript' has no exported member 'IAstWalker'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(535,108): error TS2694: Namespace 'TypeScript' has no exported member 'AST'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(551,20): error TS2339: Property 'getAstWalkerFactory' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(558,45): error TS2694: Namespace 'TypeScript' has no exported member 'AST'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(558,95): error TS2694: Namespace 'TypeScript' has no exported member 'IAstWalker'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(559,45): error TS2694: Namespace 'TypeScript' has no exported member 'AST'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(559,69): error TS2694: Namespace 'TypeScript' has no exported member 'AST'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(559,93): error TS2694: Namespace 'TypeScript' has no exported member 'IAstWalker'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(565,46): error TS2694: Namespace 'TypeScript' has no exported member 'AST'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(565,70): error TS2694: Namespace 'TypeScript' has no exported member 'AST'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(565,94): error TS2694: Namespace 'TypeScript' has no exported member 'IAstWalker'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error TS2339: Property 'getAstWalkerFactory' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(4,21): error TS6053: File 'typescript.ts' not found.
+parserRealSource14.ts(24,33): error TS2694: Namespace 'TypeScript' has no exported member 'AST'.
+parserRealSource14.ts(38,34): error TS2694: Namespace 'TypeScript' has no exported member 'AST'.
+parserRealSource14.ts(48,37): error TS2694: Namespace 'TypeScript' has no exported member 'AST'.
+parserRealSource14.ts(68,39): error TS2694: Namespace 'TypeScript' has no exported member 'NodeType'.
+parserRealSource14.ts(70,35): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(75,32): error TS2694: Namespace 'TypeScript' has no exported member 'AST'.
+parserRealSource14.ts(79,32): error TS2694: Namespace 'TypeScript' has no exported member 'AST'.
+parserRealSource14.ts(86,47): error TS2694: Namespace 'TypeScript' has no exported member 'AST'.
+parserRealSource14.ts(94,56): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(95,56): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(96,31): error TS2694: Namespace 'TypeScript' has no exported member 'InterfaceDeclaration'.
+parserRealSource14.ts(103,56): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(104,56): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(105,31): error TS2694: Namespace 'TypeScript' has no exported member 'InterfaceDeclaration'.
+parserRealSource14.ts(112,56): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(113,56): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(114,31): error TS2694: Namespace 'TypeScript' has no exported member 'ArgDecl'.
+parserRealSource14.ts(121,56): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(122,56): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(123,31): error TS2694: Namespace 'TypeScript' has no exported member 'VarDecl'.
+parserRealSource14.ts(130,56): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(131,56): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(132,31): error TS2694: Namespace 'TypeScript' has no exported member 'ModuleDeclaration'.
+parserRealSource14.ts(139,56): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(140,56): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(141,31): error TS2694: Namespace 'TypeScript' has no exported member 'FuncDecl'.
+parserRealSource14.ts(148,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(149,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(156,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(157,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(164,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(165,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(172,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(173,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(174,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(175,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(176,31): error TS2694: Namespace 'TypeScript' has no exported member 'FuncDecl'.
+parserRealSource14.ts(177,31): error TS2694: Namespace 'TypeScript' has no exported member 'FuncDecl'.
+parserRealSource14.ts(178,31): error TS2694: Namespace 'TypeScript' has no exported member 'ClassDeclaration'.
+parserRealSource14.ts(185,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(186,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(191,61): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(192,28): error TS2339: Property 'hasFlag' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(192,49): error TS2694: Namespace 'TypeScript' has no exported member 'ModuleDeclaration'.
+parserRealSource14.ts(192,109): error TS2339: Property 'ModuleFlags' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(197,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(198,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(199,31): error TS2694: Namespace 'TypeScript' has no exported member 'ModuleDeclaration'.
+parserRealSource14.ts(200,28): error TS2339: Property 'hasFlag' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(200,49): error TS2694: Namespace 'TypeScript' has no exported member 'ModuleDeclaration'.
+parserRealSource14.ts(200,113): error TS2339: Property 'ModuleFlags' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(205,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(206,31): error TS2694: Namespace 'TypeScript' has no exported member 'Script'.
+parserRealSource14.ts(211,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(212,31): error TS2694: Namespace 'TypeScript' has no exported member 'SwitchStatement'.
+parserRealSource14.ts(217,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(218,31): error TS2694: Namespace 'TypeScript' has no exported member 'ModuleDeclaration'.
+parserRealSource14.ts(223,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(224,31): error TS2694: Namespace 'TypeScript' has no exported member 'ClassDeclaration'.
+parserRealSource14.ts(229,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(230,31): error TS2694: Namespace 'TypeScript' has no exported member 'FuncDecl'.
+parserRealSource14.ts(235,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(236,31): error TS2694: Namespace 'TypeScript' has no exported member 'InterfaceDeclaration'.
+parserRealSource14.ts(241,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(242,30): error TS2694: Namespace 'TypeScript' has no exported member 'Block'.
+parserRealSource14.ts(247,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(248,30): error TS2694: Namespace 'TypeScript' has no exported member 'ForStatement'.
+parserRealSource14.ts(253,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(254,30): error TS2694: Namespace 'TypeScript' has no exported member 'CaseStatement'.
+parserRealSource14.ts(259,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(260,30): error TS2694: Namespace 'TypeScript' has no exported member 'Try'.
+parserRealSource14.ts(265,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(266,30): error TS2694: Namespace 'TypeScript' has no exported member 'Catch'.
+parserRealSource14.ts(271,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(272,30): error TS2694: Namespace 'TypeScript' has no exported member 'DoWhileStatement'.
+parserRealSource14.ts(277,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(278,30): error TS2694: Namespace 'TypeScript' has no exported member 'WhileStatement'.
+parserRealSource14.ts(283,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(284,30): error TS2694: Namespace 'TypeScript' has no exported member 'ForInStatement'.
+parserRealSource14.ts(289,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(290,30): error TS2694: Namespace 'TypeScript' has no exported member 'WithStatement'.
+parserRealSource14.ts(295,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(296,30): error TS2694: Namespace 'TypeScript' has no exported member 'Finally'.
+parserRealSource14.ts(301,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(302,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(303,30): error TS2694: Namespace 'TypeScript' has no exported member 'SwitchStatement'.
+parserRealSource14.ts(308,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(309,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(310,30): error TS2694: Namespace 'TypeScript' has no exported member 'SwitchStatement'.
+parserRealSource14.ts(311,30): error TS2694: Namespace 'TypeScript' has no exported member 'SwitchStatement'.
+parserRealSource14.ts(316,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(317,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(318,30): error TS2694: Namespace 'TypeScript' has no exported member 'UnaryExpression'.
+parserRealSource14.ts(327,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(328,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(329,30): error TS2694: Namespace 'TypeScript' has no exported member 'UnaryExpression'.
+parserRealSource14.ts(330,30): error TS2694: Namespace 'TypeScript' has no exported member 'ASTList'.
+parserRealSource14.ts(335,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(336,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(337,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(338,30): error TS2694: Namespace 'TypeScript' has no exported member 'UnaryExpression'.
+parserRealSource14.ts(343,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(344,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(345,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(346,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(347,30): error TS2694: Namespace 'TypeScript' has no exported member 'UnaryExpression'.
+parserRealSource14.ts(352,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(353,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(354,30): error TS2694: Namespace 'TypeScript' has no exported member 'UnaryExpression'.
+parserRealSource14.ts(359,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(360,30): error TS2694: Namespace 'TypeScript' has no exported member 'BinaryExpression'.
+parserRealSource14.ts(365,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(366,30): error TS2694: Namespace 'TypeScript' has no exported member 'BinaryExpression'.
+parserRealSource14.ts(371,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(377,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(378,30): error TS2694: Namespace 'TypeScript' has no exported member 'IfStatement'.
+parserRealSource14.ts(383,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(384,30): error TS2694: Namespace 'TypeScript' has no exported member 'IfStatement'.
+parserRealSource14.ts(393,61): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(394,30): error TS2694: Namespace 'TypeScript' has no exported member 'ASTList'.
+parserRealSource14.ts(399,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(400,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(401,30): error TS2694: Namespace 'TypeScript' has no exported member 'FuncDecl'.
+parserRealSource14.ts(406,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(407,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(408,30): error TS2694: Namespace 'TypeScript' has no exported member 'FuncDecl'.
+parserRealSource14.ts(413,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(414,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(415,30): error TS2694: Namespace 'TypeScript' has no exported member 'CallExpression'.
+parserRealSource14.ts(420,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(421,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(422,30): error TS2694: Namespace 'TypeScript' has no exported member 'CallExpression'.
+parserRealSource14.ts(427,65): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(428,30): error TS2694: Namespace 'TypeScript' has no exported member 'Block'.
+parserRealSource14.ts(432,52): error TS2694: Namespace 'TypeScript' has no exported member 'ASTSpan'.
+parserRealSource14.ts(462,61): error TS2694: Namespace 'TypeScript' has no exported member 'AST'.
+parserRealSource14.ts(463,52): error TS2694: Namespace 'TypeScript' has no exported member 'Comment'.
+parserRealSource14.ts(478,45): error TS2694: Namespace 'TypeScript' has no exported member 'AST'.
+parserRealSource14.ts(478,69): error TS2694: Namespace 'TypeScript' has no exported member 'AST'.
+parserRealSource14.ts(478,82): error TS2304: Cannot find name 'IAstWalker'.
+parserRealSource14.ts(489,21): error TS2304: Cannot find name 'hasFlag'.
+parserRealSource14.ts(490,49): error TS2339: Property 'NodeType' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(516,22): error TS2304: Cannot find name 'hasFlag'.
+parserRealSource14.ts(525,20): error TS2339: Property 'getAstWalkerFactory' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(533,62): error TS2694: Namespace 'TypeScript' has no exported member 'Script'.
+parserRealSource14.ts(535,36): error TS2694: Namespace 'TypeScript' has no exported member 'AST'.
+parserRealSource14.ts(535,60): error TS2694: Namespace 'TypeScript' has no exported member 'AST'.
+parserRealSource14.ts(535,84): error TS2694: Namespace 'TypeScript' has no exported member 'IAstWalker'.
+parserRealSource14.ts(535,108): error TS2694: Namespace 'TypeScript' has no exported member 'AST'.
+parserRealSource14.ts(551,20): error TS2339: Property 'getAstWalkerFactory' does not exist on type 'typeof TypeScript'.
+parserRealSource14.ts(558,45): error TS2694: Namespace 'TypeScript' has no exported member 'AST'.
+parserRealSource14.ts(558,95): error TS2694: Namespace 'TypeScript' has no exported member 'IAstWalker'.
+parserRealSource14.ts(559,45): error TS2694: Namespace 'TypeScript' has no exported member 'AST'.
+parserRealSource14.ts(559,69): error TS2694: Namespace 'TypeScript' has no exported member 'AST'.
+parserRealSource14.ts(559,93): error TS2694: Namespace 'TypeScript' has no exported member 'IAstWalker'.
+parserRealSource14.ts(565,46): error TS2694: Namespace 'TypeScript' has no exported member 'AST'.
+parserRealSource14.ts(565,70): error TS2694: Namespace 'TypeScript' has no exported member 'AST'.
+parserRealSource14.ts(565,94): error TS2694: Namespace 'TypeScript' has no exported member 'IAstWalker'.
+parserRealSource14.ts(572,20): error TS2339: Property 'getAstWalkerFactory' does not exist on type 'typeof TypeScript'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts (160 errors) ====
+==== parserRealSource14.ts (160 errors) ====
     // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
     // See LICENSE.txt in the project root for complete license information.
     
     ///<reference path='typescript.ts' />
                         ~~~~~~~~~~~~~
-!!! error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
+!!! error TS6053: File 'typescript.ts' not found.
     
     module TypeScript {
         export function lastOf(items: any[]): any {

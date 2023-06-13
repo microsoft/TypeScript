@@ -1,4 +1,6 @@
-=== tests/cases/compiler/systemNamespaceAliasEmit.ts ===
+//// [tests/cases/compiler/systemNamespaceAliasEmit.ts] ////
+
+=== systemNamespaceAliasEmit.ts ===
 namespace ns {
 >ns : typeof ns
 

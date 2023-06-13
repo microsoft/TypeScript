@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/propagationOfPromiseInitialization.ts] ////
+
 //// [propagationOfPromiseInitialization.ts]
 interface IPromise<T> {
     then<TResult>(successCallback: (promiseValue: T) => TResult, errorCallback?: (reason: any) => TResult): IPromise<TResult>;

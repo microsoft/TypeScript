@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/circularResolvedSignature.ts] ////
+
 //// [circularResolvedSignature.ts]
 declare function useState<S>(initialState: (() => S)): [S, (s: S) => void];
 

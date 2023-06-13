@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constDeclarations-es5.ts ===
+//// [tests/cases/compiler/constDeclarations-es5.ts] ////
+
+=== constDeclarations-es5.ts ===
 const z7 = false;
 >z7 : Symbol(z7, Decl(constDeclarations-es5.ts, 0, 5))
 

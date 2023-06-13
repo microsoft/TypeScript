@@ -507,10 +507,7 @@
 
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameImportOfReExport.ts ===
-// declare module "a" {
-//     export class C {}
-// }
-// declare module "b" {
+// --- (line: 4) skipped ---
 //     export { C } from "a";
 // }
 // declare module "c" {
@@ -522,10 +519,7 @@
 
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameImportOfReExport.ts ===
-// declare module "a" {
-//     export class C {}
-// }
-// declare module "b" {
+// --- (line: 4) skipped ---
 //     export { C } from "a";
 // }
 // declare module "c" {

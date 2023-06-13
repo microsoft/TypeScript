@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es3-jsx-react.tsx] ////
+
 //// [es3-jsx-react.tsx]
 const React: any = null;
 

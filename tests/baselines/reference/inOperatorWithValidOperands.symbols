@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithValidOperands.ts ===
+//// [tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithValidOperands.ts] ////
+
+=== inOperatorWithValidOperands.ts ===
 var x: any;
 >x : Symbol(x, Decl(inOperatorWithValidOperands.ts, 0, 3))
 

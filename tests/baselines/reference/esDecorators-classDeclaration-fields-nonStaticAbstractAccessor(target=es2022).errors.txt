@@ -1,9 +1,9 @@
-tests/cases/conformance/esDecorators/classDeclaration/fields/esDecorators-classDeclaration-fields-nonStaticAbstractAccessor.ts(6,5): error TS1206: Decorators are not valid here.
-tests/cases/conformance/esDecorators/classDeclaration/fields/esDecorators-classDeclaration-fields-nonStaticAbstractAccessor.ts(7,5): error TS1206: Decorators are not valid here.
-tests/cases/conformance/esDecorators/classDeclaration/fields/esDecorators-classDeclaration-fields-nonStaticAbstractAccessor.ts(8,5): error TS1206: Decorators are not valid here.
+esDecorators-classDeclaration-fields-nonStaticAbstractAccessor.ts(6,5): error TS1206: Decorators are not valid here.
+esDecorators-classDeclaration-fields-nonStaticAbstractAccessor.ts(7,5): error TS1206: Decorators are not valid here.
+esDecorators-classDeclaration-fields-nonStaticAbstractAccessor.ts(8,5): error TS1206: Decorators are not valid here.
 
 
-==== tests/cases/conformance/esDecorators/classDeclaration/fields/esDecorators-classDeclaration-fields-nonStaticAbstractAccessor.ts (3 errors) ====
+==== esDecorators-classDeclaration-fields-nonStaticAbstractAccessor.ts (3 errors) ====
     declare let dec: any;
     
     const field3 = "field3";

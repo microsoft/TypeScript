@@ -16,9 +16,7 @@
   //     s: string;
   // }
   // interface J {
-  //     a: I[0],
-  //     b: I["s"],
-  // }
+  // --- (line: 6) skipped ---
 
   // === Details ===
   [

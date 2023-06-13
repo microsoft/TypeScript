@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/InterfaceDeclarations/parserInterfaceDeclaration9.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/InterfaceDeclarations/parserInterfaceDeclaration9.ts] ////
+
+=== parserInterfaceDeclaration9.ts ===
 interface I1 {
 >I1 : Symbol(I1, Decl(parserInterfaceDeclaration9.ts, 0, 0))
 

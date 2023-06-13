@@ -1,15 +1,7 @@
 
 import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
-import {
-    compilerOptionsToConfigJson,
-} from "../tsc/helpers";
-import {
-    createServerHost,
-    File,
-    libFile,
-    TestServerHost,
-} from "../virtualFileSystemWithWatch";
+import { compilerOptionsToConfigJson } from "../helpers/contents";
 import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,
@@ -20,7 +12,13 @@ import {
     TestTypingsInstaller,
     toExternalFiles,
     verifyGetErrRequest,
-} from "./helpers";
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+    File,
+    libFile,
+    TestServerHost,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem extra resolution pass in server host", () => {
     it("can load typings that are proper modules", () => {

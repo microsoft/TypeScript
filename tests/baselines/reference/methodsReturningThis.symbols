@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/input.js ===
+//// [tests/cases/conformance/salsa/methodsReturningThis.ts] ////
+
+=== input.js ===
 function Class()
 >Class : Symbol(Class, Decl(input.js, 0, 0))
 {

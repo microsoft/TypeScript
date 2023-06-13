@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts] ////
+
 //// [subtypesOfTypeParameterWithConstraints4.ts]
 // checking whether other types are subtypes of type parameters with constraints
 

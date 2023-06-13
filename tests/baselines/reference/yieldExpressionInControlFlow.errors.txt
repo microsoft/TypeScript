@@ -1,9 +1,9 @@
-tests/cases/conformance/es6/yieldExpressions/alsoFails.ts(3,9): error TS7034: Variable 'o' implicitly has type 'any[]' in some locations where its type cannot be determined.
-tests/cases/conformance/es6/yieldExpressions/alsoFails.ts(5,20): error TS7005: Variable 'o' implicitly has an 'any[]' type.
-tests/cases/conformance/es6/yieldExpressions/bug25149.js(4,13): error TS7057: 'yield' expression implicitly results in an 'any' type because its containing generator lacks a return-type annotation.
+alsoFails.ts(3,9): error TS7034: Variable 'o' implicitly has type 'any[]' in some locations where its type cannot be determined.
+alsoFails.ts(5,20): error TS7005: Variable 'o' implicitly has an 'any[]' type.
+bug25149.js(4,13): error TS7057: 'yield' expression implicitly results in an 'any' type because its containing generator lacks a return-type annotation.
 
 
-==== tests/cases/conformance/es6/yieldExpressions/bug25149.js (1 errors) ====
+==== bug25149.js (1 errors) ====
     function* f() {
         var o
         while (true) {
@@ -13,7 +13,7 @@ tests/cases/conformance/es6/yieldExpressions/bug25149.js(4,13): error TS7057: 'y
         }
     }
     
-==== tests/cases/conformance/es6/yieldExpressions/alsoFails.ts (2 errors) ====
+==== alsoFails.ts (2 errors) ====
     // fails in Typescript too
     function* g() {
         var o = []

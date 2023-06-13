@@ -1,4 +1,6 @@
-=== tests/cases/compiler/infiniteConstraints.ts ===
+//// [tests/cases/compiler/infiniteConstraints.ts] ////
+
+=== infiniteConstraints.ts ===
 // Both of the following types trigger the recursion limiter in getImmediateBaseConstraint
 
 type T1<B extends { [K in keyof B]: Extract<B[Exclude<keyof B, K>], { val: string }>["val"] }> = B;

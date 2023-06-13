@@ -1,4 +1,6 @@
-=== tests/cases/compiler/selfReferencingTypeReferenceInference.ts ===
+//// [tests/cases/compiler/selfReferencingTypeReferenceInference.ts] ////
+
+=== selfReferencingTypeReferenceInference.ts ===
 interface Box<T> {
 >Box : Symbol(Box, Decl(selfReferencingTypeReferenceInference.ts, 0, 0))
 >T : Symbol(T, Decl(selfReferencingTypeReferenceInference.ts, 0, 14))

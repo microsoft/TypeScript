@@ -1,8 +1,8 @@
-tests/cases/compiler/multipleExportAssignments.ts(13,10): error TS2300: Duplicate identifier 'export='.
-tests/cases/compiler/multipleExportAssignments.ts(14,10): error TS2300: Duplicate identifier 'export='.
+multipleExportAssignments.ts(13,10): error TS2300: Duplicate identifier 'export='.
+multipleExportAssignments.ts(14,10): error TS2300: Duplicate identifier 'export='.
 
 
-==== tests/cases/compiler/multipleExportAssignments.ts (2 errors) ====
+==== multipleExportAssignments.ts (2 errors) ====
     interface connectModule {
         (res, req, next): void;
     }

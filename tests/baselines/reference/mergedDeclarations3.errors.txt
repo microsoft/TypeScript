@@ -1,8 +1,8 @@
-tests/cases/compiler/mergedDeclarations3.ts(37,7): error TS2339: Property 'x' does not exist on type 'typeof foo'.
-tests/cases/compiler/mergedDeclarations3.ts(39,7): error TS2339: Property 'z' does not exist on type 'typeof foo'.
+mergedDeclarations3.ts(37,7): error TS2339: Property 'x' does not exist on type 'typeof foo'.
+mergedDeclarations3.ts(39,7): error TS2339: Property 'z' does not exist on type 'typeof foo'.
 
 
-==== tests/cases/compiler/mergedDeclarations3.ts (2 errors) ====
+==== mergedDeclarations3.ts (2 errors) ====
     module M {
      export enum Color {
        Red, Green

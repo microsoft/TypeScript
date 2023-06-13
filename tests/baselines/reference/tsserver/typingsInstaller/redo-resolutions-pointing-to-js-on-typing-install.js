@@ -22,11 +22,15 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/b/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/b/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/b/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -43,23 +47,25 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
 
 PolledWatches::
-/user/username/projects/a/b/tsconfig.json: *new*
-  {"pollingInterval":2000}
+/a/lib/lib.d.ts: *new*
+  {"pollingInterval":500}
 /user/username/projects/a/b/jsconfig.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/a/tsconfig.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/a/jsconfig.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/a/b/node_modules: *new*
   {"pollingInterval":500}
-/user/username/projects/a/node_modules: *new*
-  {"pollingInterval":500}
-/a/lib/lib.d.ts: *new*
-  {"pollingInterval":500}
 /user/username/projects/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/a/b/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/a/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/a/node_modules: *new*
+  {"pollingInterval":500}
 /user/username/projects/a/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/a/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatchesRecursive::
@@ -106,12 +112,12 @@ TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["commander"]
 TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":["commander"],"filesToWatch":["/user/username/projects/a/b/bower_components","/user/username/projects/a/b/node_modules"]}
 TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":["commander"],"filesToWatch":["/user/username/projects/a/b/bower_components","/user/username/projects/a/b/node_modules"]}
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/b/bower_components
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/b/bower_components 1 undefined Project: /dev/null/inferredProject1* watcher already invoked: false
-TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/b/bower_components 1 undefined Project: /dev/null/inferredProject1* watcher already invoked: false
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/b/node_modules
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/b/node_modules 1 undefined Project: /dev/null/inferredProject1* watcher already invoked: false
-TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/b/node_modules 1 undefined Project: /dev/null/inferredProject1* watcher already invoked: false
+TI:: [hh:mm:ss:mss] Sending response:
+    {"kind":"action::watchTypingLocations","projectName":"/dev/null/inferredProject1*","files":["/user/username/projects/a/b/bower_components","/user/username/projects/a/b/node_modules"]}
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/b/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/b/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/b/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/b/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Installing typings ["commander"]
 TI:: [hh:mm:ss:mss] Npm config file: /user/username/projects/a/cache/package.json
 TI:: [hh:mm:ss:mss] Sending response:
@@ -128,25 +134,27 @@ TI:: [hh:mm:ss:mss] #1 with arguments'["@types/commander@tsFakeMajor.Minor"]':: 
 TI:: Before installWorker
 
 PolledWatches::
-/user/username/projects/a/b/tsconfig.json:
-  {"pollingInterval":2000}
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/user/username/projects/a/b/bower_components: *new*
+  {"pollingInterval":500}
 /user/username/projects/a/b/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/a/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/a/jsconfig.json:
   {"pollingInterval":2000}
 /user/username/projects/a/b/node_modules:
   {"pollingInterval":500}
-/user/username/projects/a/node_modules:
-  {"pollingInterval":500}
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
 /user/username/projects/a/b/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/a/b/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/a/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/a/node_modules:
   {"pollingInterval":500}
 /user/username/projects/a/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/a/b/bower_components: *new*
+/user/username/projects/a/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatchesRecursive::
@@ -197,6 +205,8 @@ TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/user/username/projects/a/b/bower_components","/user/username/projects/a/b/node_modules"]}
 TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/user/username/projects/a/b/bower_components","/user/username/projects/a/b/node_modules"]}
 TI:: [hh:mm:ss:mss] Sending response:
+    {"kind":"action::watchTypingLocations","projectName":"/dev/null/inferredProject1*"}
+TI:: [hh:mm:ss:mss] Sending response:
     {"projectName":"/dev/null/inferredProject1*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typings":[],"unresolvedImports":[],"kind":"action::set"}
 Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
@@ -206,29 +216,31 @@ After running Timeout callback:: count: 2
 4: *ensureProjectForOpenFiles*
 
 PolledWatches::
-/user/username/projects/a/b/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/a/b/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/a/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/a/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/a/b/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/a/node_modules:
-  {"pollingInterval":500}
 /a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/user/username/projects/a/b/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/a/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/a/b/bower_components:
   {"pollingInterval":500}
+/user/username/projects/a/b/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/a/b/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/a/b/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/a/b/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/a/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/a/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/a/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/a/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatchesRecursive::
-/user/username/projects/node_modules:
-  {}
 /user/username/projects/a/cache/node_modules: *new*
+  {}
+/user/username/projects/node_modules:
   {}

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/templates/templateStringWithEmbeddedYieldKeywordES6.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringWithEmbeddedYieldKeywordES6.ts] ////
+
+=== templateStringWithEmbeddedYieldKeywordES6.ts ===
 function* gen() {
 >gen : Symbol(gen, Decl(templateStringWithEmbeddedYieldKeywordES6.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noUnusedLocals_writeOnly.ts ===
+//// [tests/cases/compiler/noUnusedLocals_writeOnly.ts] ////
+
+=== noUnusedLocals_writeOnly.ts ===
 function f(x = 0, b = false) {
 >f : Symbol(f, Decl(noUnusedLocals_writeOnly.ts, 0, 0))
 >x : Symbol(x, Decl(noUnusedLocals_writeOnly.ts, 0, 11))

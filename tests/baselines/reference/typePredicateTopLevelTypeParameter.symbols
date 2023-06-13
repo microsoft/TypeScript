@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typePredicateTopLevelTypeParameter.ts ===
+//// [tests/cases/compiler/typePredicateTopLevelTypeParameter.ts] ////
+
+=== typePredicateTopLevelTypeParameter.ts ===
 // Repro from #51980
 
 function getPermissions(user: string) {

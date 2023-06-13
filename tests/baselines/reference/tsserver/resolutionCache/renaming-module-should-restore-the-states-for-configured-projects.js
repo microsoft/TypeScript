@@ -40,6 +40,8 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/username/pr
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Missing file
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/@types 1 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/@types 1 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/@types 1 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/@types 1 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/username/projects/project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/users/username/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -70,13 +72,15 @@ After request
 PolledWatches::
 /a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
+/users/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 /users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/project/tsconfig.json: *new*
-  {}
 /users/username/projects/project/modulefile.ts: *new*
+  {}
+/users/username/projects/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -124,6 +128,8 @@ export function bar() { };
 
 PolledWatches::
 /a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/users/username/projects/node_modules/@types:
   {"pollingInterval":500}
 /users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
@@ -182,17 +188,19 @@ After running Timeout callback:: count: 0
 PolledWatches::
 /a/lib/lib.d.ts:
   {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types:
+/users/username/projects/node_modules/@types:
   {"pollingInterval":500}
 /users/username/projects/project/modulefile: *new*
   {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/project/tsconfig.json:
+/users/username/projects/project: *new*
   {}
 /users/username/projects/project/modulefile1.ts: *new*
   {}
-/users/username/projects/project: *new*
+/users/username/projects/project/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -262,15 +270,17 @@ export function bar() { };
 PolledWatches::
 /a/lib/lib.d.ts:
   {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types:
+/users/username/projects/node_modules/@types:
   {"pollingInterval":500}
 /users/username/projects/project/modulefile:
   {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/project/tsconfig.json:
-  {}
 /users/username/projects/project:
+  {}
+/users/username/projects/project/tsconfig.json:
   {}
 
 FsWatches *deleted*::
@@ -329,6 +339,8 @@ After request
 PolledWatches::
 /a/lib/lib.d.ts:
   {"pollingInterval":500}
+/users/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 /users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
 
@@ -337,9 +349,9 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/project/tsconfig.json:
-  {}
 /users/username/projects/project/modulefile.ts: *new*
+  {}
+/users/username/projects/project/tsconfig.json:
   {}
 
 FsWatches *deleted*::
