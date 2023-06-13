@@ -1,4 +1,6 @@
-=== tests/cases/compiler/spreadTupleAccessedByTypeParameter.ts ===
+//// [tests/cases/compiler/spreadTupleAccessedByTypeParameter.ts] ////
+
+=== spreadTupleAccessedByTypeParameter.ts ===
 export function test<N extends number>(singletons: ["a"][], i: N) {
 >test : <N extends number>(singletons: ["a"][], i: N) => []
 >singletons : ["a"][]

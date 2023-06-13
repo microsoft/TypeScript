@@ -1,4 +1,6 @@
-=== tests/cases/compiler/strictModeReservedWord.ts ===
+//// [tests/cases/compiler/strictModeReservedWord.ts] ////
+
+=== strictModeReservedWord.ts ===
 let let = 10;
 >let : Symbol(let, Decl(strictModeReservedWord.ts, 0, 3))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/parameterListAsTupleType.ts ===
+//// [tests/cases/compiler/parameterListAsTupleType.ts] ////
+
+=== parameterListAsTupleType.ts ===
 function foo(a: number, b: string) {
 >foo : (a: number, b: string) => boolean
 >a : number

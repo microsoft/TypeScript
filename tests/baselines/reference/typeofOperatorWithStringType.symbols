@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithStringType.ts ===
+//// [tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithStringType.ts] ////
+
+=== typeofOperatorWithStringType.ts ===
 // typeof  operator on string type
 var STRING: string;
 >STRING : Symbol(STRING, Decl(typeofOperatorWithStringType.ts, 1, 3))

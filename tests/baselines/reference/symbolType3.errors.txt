@@ -1,13 +1,13 @@
-tests/cases/conformance/es6/Symbols/symbolType3.ts(2,8): error TS2704: The operand of a 'delete' operator cannot be a read-only property.
-tests/cases/conformance/es6/Symbols/symbolType3.ts(5,3): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/es6/Symbols/symbolType3.ts(6,3): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/es6/Symbols/symbolType3.ts(7,3): error TS2469: The '+' operator cannot be applied to type 'symbol'.
-tests/cases/conformance/es6/Symbols/symbolType3.ts(8,3): error TS2469: The '-' operator cannot be applied to type 'symbol'.
-tests/cases/conformance/es6/Symbols/symbolType3.ts(9,3): error TS2469: The '~' operator cannot be applied to type 'symbol'.
-tests/cases/conformance/es6/Symbols/symbolType3.ts(12,2): error TS2469: The '+' operator cannot be applied to type 'symbol'.
+symbolType3.ts(2,8): error TS2704: The operand of a 'delete' operator cannot be a read-only property.
+symbolType3.ts(5,3): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+symbolType3.ts(6,3): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+symbolType3.ts(7,3): error TS2469: The '+' operator cannot be applied to type 'symbol'.
+symbolType3.ts(8,3): error TS2469: The '-' operator cannot be applied to type 'symbol'.
+symbolType3.ts(9,3): error TS2469: The '~' operator cannot be applied to type 'symbol'.
+symbolType3.ts(12,2): error TS2469: The '+' operator cannot be applied to type 'symbol'.
 
 
-==== tests/cases/conformance/es6/Symbols/symbolType3.ts (7 errors) ====
+==== symbolType3.ts (7 errors) ====
     var s = Symbol();
     delete Symbol.iterator;
            ~~~~~~~~~~~~~~~

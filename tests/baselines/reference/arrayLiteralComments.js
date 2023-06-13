@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arrayLiteralComments.ts] ////
+
 //// [arrayLiteralComments.ts]
 var testArrayWithFunc = [
     // Function comment

@@ -1,10 +1,10 @@
-import * as ts from "./_namespaces/ts";
-import * as vfs from "./_namespaces/vfs";
-import * as Utils from "./_namespaces/Utils";
-import * as vpath from "./_namespaces/vpath";
-import * as documents from "./_namespaces/documents";
 import * as collections from "./_namespaces/collections";
+import * as documents from "./_namespaces/documents";
 import * as Harness from "./_namespaces/Harness";
+import * as ts from "./_namespaces/ts";
+import * as Utils from "./_namespaces/Utils";
+import * as vfs from "./_namespaces/vfs";
+import * as vpath from "./_namespaces/vpath";
 
 /**
  * Fake implementations of various compiler dependencies.

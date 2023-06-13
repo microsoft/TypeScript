@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericCallWithObjectLiteralArguments1.ts ===
+//// [tests/cases/compiler/genericCallWithObjectLiteralArguments1.ts] ////
+
+=== genericCallWithObjectLiteralArguments1.ts ===
 function foo<T>(n: { x: T; y: T }, m: T) { return m; }
 >foo : Symbol(foo, Decl(genericCallWithObjectLiteralArguments1.ts, 0, 0))
 >T : Symbol(T, Decl(genericCallWithObjectLiteralArguments1.ts, 0, 13))

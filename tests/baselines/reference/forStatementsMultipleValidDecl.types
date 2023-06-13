@@ -1,4 +1,6 @@
-=== tests/cases/conformance/statements/forStatements/forStatementsMultipleValidDecl.ts ===
+//// [tests/cases/conformance/statements/forStatements/forStatementsMultipleValidDecl.ts] ////
+
+=== forStatementsMultipleValidDecl.ts ===
 // all expected to be valid
 
 for (var x: number; ;) { }
@@ -102,7 +104,6 @@ for (var fn = <(s: string) => number> null; ;) { }
 >fn : (s: string) => number
 ><(s: string) => number> null : (s: string) => number
 >s : string
->null : null
 
 for (var fn: typeof fn; ;) { }
 >fn : (s: string) => number

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/import/foo.ts ===
+//// [tests/cases/conformance/types/import/importTypeLocal.ts] ////
+
+=== foo.ts ===
 interface Point {
     x: number;
 >x : number
@@ -9,7 +11,7 @@ interface Point {
 export = Point;
 >Point : Point
 
-=== tests/cases/conformance/types/import/foo2.ts ===
+=== foo2.ts ===
 namespace Bar {
     export interface I {
         a: string;
@@ -44,9 +46,9 @@ class Bar {
 export { Bar }
 >Bar : typeof Bar
 
-=== tests/cases/conformance/types/import/usage.ts ===
+=== usage.ts ===
 export const x: import("./foo") = { x: 0, y: 0 };
->x : import("tests/cases/conformance/types/import/foo")
+>x : import("foo")
 >{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
 >0 : 0
@@ -54,7 +56,7 @@ export const x: import("./foo") = { x: 0, y: 0 };
 >0 : 0
 
 export let y: import("./foo2").Bar.I = { a: "", b: 0 };
->y : import("tests/cases/conformance/types/import/foo2").Bar.I
+>y : import("foo2").Bar.I
 >Bar : any
 >{ a: "", b: 0 } : { a: string; b: number; }
 >a : string
@@ -76,7 +78,7 @@ export class Bar2 {
 }
 
 export let shim: typeof import("./foo2") = {
->shim : typeof import("tests/cases/conformance/types/import/foo2")
+>shim : typeof import("foo2")
 >{    Bar: Bar2} : { Bar: typeof Bar2; }
 
     Bar: Bar2

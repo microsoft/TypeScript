@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inlineSourceMap2.ts] ////
+
 //// [inlineSourceMap2.ts]
 // configuration errors
 

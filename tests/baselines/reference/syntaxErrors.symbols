@@ -1,11 +1,13 @@
-=== tests/cases/conformance/jsdoc/dummyType.d.ts ===
+//// [tests/cases/conformance/jsdoc/syntaxErrors.ts] ////
+
+=== dummyType.d.ts ===
 declare class C<T> { t: T }
 >C : Symbol(C, Decl(dummyType.d.ts, 0, 0))
 >T : Symbol(T, Decl(dummyType.d.ts, 0, 16))
 >t : Symbol(C.t, Decl(dummyType.d.ts, 0, 20))
 >T : Symbol(T, Decl(dummyType.d.ts, 0, 16))
 
-=== tests/cases/conformance/jsdoc/badTypeArguments.js ===
+=== badTypeArguments.js ===
 /** @param {C.<>} x */
 /** @param {C.<number,>} y */
 // @ts-ignore

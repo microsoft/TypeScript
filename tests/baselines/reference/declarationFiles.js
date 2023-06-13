@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/thisType/declarationFiles.ts] ////
+
 //// [declarationFiles.ts]
 class C1 {
     x: this;

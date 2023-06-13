@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/typeOnly/a.ts ===
+//// [tests/cases/conformance/externalModules/typeOnly/preserveValueImports_errors.ts] ////
+
+=== a.ts ===
 export type A = {};
 >A : {}
 
@@ -6,7 +8,7 @@ export type { A as default };
 >A : any
 >default : A
 
-=== tests/cases/conformance/externalModules/typeOnly/b.ts ===
+=== b.ts ===
 class B {};
 >B : B
 
@@ -15,7 +17,7 @@ export type { B, B as default };
 >B : typeof B
 >default : B
 
-=== tests/cases/conformance/externalModules/typeOnly/c.ts ===
+=== c.ts ===
 import DefaultA from "./a";
 >DefaultA : any
 
@@ -28,7 +30,7 @@ import DefaultB from "./b";
 import { B } from "./b";
 >B : typeof DefaultB
 
-=== tests/cases/conformance/externalModules/typeOnly/c.fixed.ts ===
+=== c.fixed.ts ===
 import type DefaultA from "./a";
 >DefaultA : DefaultA
 
@@ -41,35 +43,35 @@ import type DefaultB from "./b";
 import type { B } from "./b";
 >B : DefaultB
 
-=== tests/cases/conformance/externalModules/typeOnly/d.ts ===
+=== d.ts ===
 export { A as AA } from "./a";
 >A : any
 >AA : any
 
 export { B as BB } from "./b";
->B : typeof import("tests/cases/conformance/externalModules/typeOnly/b").B
->BB : typeof import("tests/cases/conformance/externalModules/typeOnly/b").B
+>B : typeof import("b").B
+>BB : typeof import("b").B
 
-=== tests/cases/conformance/externalModules/typeOnly/d.fixed.ts ===
+=== d.fixed.ts ===
 export type { A as AA } from "./a";
 >A : any
->AA : import("tests/cases/conformance/externalModules/typeOnly/a").A
+>AA : import("a").A
 
 export type { B as BB } from "./b";
->B : typeof import("tests/cases/conformance/externalModules/typeOnly/b").B
->BB : import("tests/cases/conformance/externalModules/typeOnly/b").B
+>B : typeof import("b").B
+>BB : import("b").B
 
-=== tests/cases/conformance/externalModules/typeOnly/e.ts ===
+=== e.ts ===
 import { AA, BB } from "./d";
 >AA : any
 >BB : typeof BB
 
-=== tests/cases/conformance/externalModules/typeOnly/e.fixed.ts ===
+=== e.fixed.ts ===
 import type { AA, BB } from "./d";
 >AA : AA
 >BB : BB
 
-=== tests/cases/conformance/externalModules/typeOnly/f.ts ===
+=== f.ts ===
 import type { A } from "./a";
 >A : A
 
@@ -81,7 +83,7 @@ export { A, B as BB };
 >B : typeof B
 >BB : typeof B
 
-=== tests/cases/conformance/externalModules/typeOnly/f.fixed.ts ===
+=== f.fixed.ts ===
 import type { A } from "./a";
 >A : A
 

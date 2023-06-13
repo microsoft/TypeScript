@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileTypeAnnotationUnionType.ts] ////
+
 //// [declFileTypeAnnotationUnionType.ts]
 class c {
     private p: string;

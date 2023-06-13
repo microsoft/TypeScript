@@ -1,4 +1,6 @@
-=== tests/cases/compiler/reactSFCAndFunctionResolvable.tsx ===
+//// [tests/cases/compiler/reactSFCAndFunctionResolvable.tsx] ////
+
+=== reactSFCAndFunctionResolvable.tsx ===
 /// <reference path="react16.d.ts" />
 
 import * as React from 'react';

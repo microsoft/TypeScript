@@ -1,20 +1,20 @@
+import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
-import * as Harness from "../../_namespaces/Harness";
-import {
-    createWatchedSystem,
-    File,
-    libFile,
-} from "../virtualFileSystemWithWatch";
 import {
     baselineBuildInfo,
     CommandLineProgram,
-} from "../tsc/helpers";
+} from "../helpers/baseline";
 import {
     applyEdit,
     createBaseline,
     watchBaseline,
-} from "../tscWatch/helpers";
+} from "../helpers/tscWatch";
+import {
+    createWatchedSystem,
+    File,
+    libFile,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsc:: builder cancellationToken", () => {
     verifyCancellation(/*useBuildInfo*/ true, "when emitting buildInfo");
@@ -145,7 +145,7 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
                         parsedConfig.options,
                         host,
                         builderProgram,
-                    /* configFileParsingDiagnostics*/ undefined,
+                    /*configFileParsingDiagnostics*/ undefined,
                     /*projectReferences*/ undefined,
                     );
                 updatePrograms();
@@ -174,7 +174,7 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
                     parsedConfig.options,
                     host,
                 /*oldProgram*/ undefined,
-                /* configFileParsingDiagnostics*/ undefined,
+                /*configFileParsingDiagnostics*/ undefined,
                 /*projectReferences*/ undefined,
                 );
                 updatePrograms();

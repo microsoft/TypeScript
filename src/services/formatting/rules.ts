@@ -1,15 +1,4 @@
 import {
-    anyContext,
-    ContextPredicate,
-    FormattingContext,
-    FormattingRequestKind,
-    Rule,
-    RuleAction,
-    RuleFlags,
-    TextRangeWithKind,
-    TokenRange,
-} from "../_namespaces/ts.formatting";
-import {
     BinaryExpression,
     contains,
     findAncestor,
@@ -32,6 +21,17 @@ import {
     typeKeywords,
     YieldExpression,
 } from "../_namespaces/ts";
+import {
+    anyContext,
+    ContextPredicate,
+    FormattingContext,
+    FormattingRequestKind,
+    Rule,
+    RuleAction,
+    RuleFlags,
+    TextRangeWithKind,
+    TokenRange,
+} from "../_namespaces/ts.formatting";
 
 /** @internal */
 export interface RuleSpec {
@@ -904,7 +904,7 @@ function isSemicolonDeletionContext(context: FormattingContext): boolean {
     if (context.contextNode.kind === SyntaxKind.InterfaceDeclaration ||
         context.contextNode.kind === SyntaxKind.TypeAliasDeclaration
     ) {
-        // Can’t remove semicolon after `foo`; it would parse as a method declaration:
+        // Can't remove semicolon after `foo`; it would parse as a method declaration:
         //
         // interface I {
         //   foo;

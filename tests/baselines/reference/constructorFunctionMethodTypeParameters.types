@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/constructorFunctionMethodTypeParameters.js ===
+//// [tests/cases/conformance/salsa/constructorFunctionMethodTypeParameters.ts] ////
+
+=== constructorFunctionMethodTypeParameters.js ===
 /**
  * @template {string} T
  * @param {T} t

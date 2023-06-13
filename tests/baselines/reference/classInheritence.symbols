@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classInheritence.ts ===
+//// [tests/cases/compiler/classInheritence.ts] ////
+
+=== classInheritence.ts ===
 class B extends A { }
 >B : Symbol(B, Decl(classInheritence.ts, 0, 0))
 >A : Symbol(A, Decl(classInheritence.ts, 0, 21))

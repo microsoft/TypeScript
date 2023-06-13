@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privacyGloImport.ts] ////
+
 //// [privacyGloImport.ts]
 module m1 {
     export module m1_M1_public {

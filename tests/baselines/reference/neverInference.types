@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/never/neverInference.ts ===
+//// [tests/cases/conformance/types/never/neverInference.ts] ////
+
+=== neverInference.ts ===
 declare function f1<T>(x: T[]): T;
 >f1 : <T>(x: T[]) => T
 >x : T[]
@@ -38,7 +40,6 @@ type Node<T> = { value: T, next: Node<T> } | null
 >Node : Node<T>
 >value : T
 >next : Node<T>
->null : null
 
 declare function compareNumbers(x: number, y: number): number;
 >compareNumbers : (x: number, y: number) => number

@@ -1,21 +1,21 @@
 // @ts-check
-import path from "path";
-import fs from "fs";
-import del from "del";
-import { task } from "hereby";
-import _glob from "glob";
-import util from "util";
+import { CancelToken } from "@esfx/canceltoken";
 import chalk from "chalk";
-import fsExtra from "fs-extra";
-import { Debouncer, Deferred, exec, getDiffTool, getDirSize, memoize, needsUpdate, readJson } from "./scripts/build/utils.mjs";
-import { localBaseline, localRwcBaseline, refBaseline, refRwcBaseline, runConsoleTests } from "./scripts/build/tests.mjs";
-import { buildProject, cleanProject, watchProject } from "./scripts/build/projects.mjs";
+import chokidar from "chokidar";
+import del from "del";
+import esbuild from "esbuild";
+import { EventEmitter } from "events";
+import fs from "fs";
+import _glob from "glob";
+import { task } from "hereby";
+import path from "path";
+import util from "util";
+
 import { localizationDirectories } from "./scripts/build/localization.mjs";
 import cmdLineOptions from "./scripts/build/options.mjs";
-import esbuild from "esbuild";
-import chokidar from "chokidar";
-import { EventEmitter } from "events";
-import { CancelToken } from "@esfx/canceltoken";
+import { buildProject, cleanProject, watchProject } from "./scripts/build/projects.mjs";
+import { localBaseline, localRwcBaseline, refBaseline, refRwcBaseline, runConsoleTests } from "./scripts/build/tests.mjs";
+import { Debouncer, Deferred, exec, getDiffTool, memoize, needsUpdate, readJson } from "./scripts/build/utils.mjs";
 
 const glob = util.promisify(_glob);
 
@@ -59,10 +59,7 @@ export const generateLibs = task({
 
             for (const source of lib.sources) {
                 const contents = await fs.promises.readFile(source, "utf-8");
-                // TODO(jakebailey): "\n\n" is for compatibility with our current tests; our test baselines
-                // are sensitive to the positions of things in the lib files. Eventually remove this,
-                // or remove lib.d.ts line numbers from our baselines.
-                output += "\n\n" + contents.replace(/\r\n/g, "\n");
+                output += "\n" + contents.replace(/\r\n/g, "\n");
             }
 
             await fs.promises.writeFile(lib.target, output);
@@ -174,7 +171,7 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             bundle: true,
             outfile,
             platform: "node",
-            target: "es2018",
+            target: ["es2020", "node14.17"],
             format: "cjs",
             sourcemap: "linked",
             sourcesContent: false,
@@ -182,28 +179,6 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             packages: "external",
             logLevel: "warning",
             // legalComments: "none", // If we add copyright headers to the source files, uncomment.
-            plugins: [
-                {
-                    name: "fix-require",
-                    setup: (build) => {
-                        build.onEnd(async () => {
-                            // esbuild converts calls to "require" to "__require"; this function
-                            // calls the real require if it exists, or throws if it does not (rather than
-                            // throwing an error like "require not defined"). But, since we want typescript
-                            // to be consumable by other bundlers, we need to convert these calls back to
-                            // require so our imports are visible again.
-                            //
-                            // The leading spaces are to keep the offsets the same within the files to keep
-                            // source maps working (though this only really matters for the line the require is on).
-                            //
-                            // See: https://github.com/evanw/esbuild/issues/1905
-                            let contents = await fs.promises.readFile(outfile, "utf-8");
-                            contents = contents.replace(/__require\(/g, "  require(");
-                            await fs.promises.writeFile(outfile, contents);
-                        });
-                    },
-                }
-            ]
         };
 
         if (taskOptions.exportIsTsObject) {
@@ -213,6 +188,30 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             options.globalName = "ts";
             // If we are in a CJS context, export the ts namespace.
             options.footer = { js: `\nif (typeof module !== "undefined" && module.exports) { module.exports = ts; }` };
+
+            // esbuild converts calls to "require" to "__require"; this function
+            // calls the real require if it exists, or throws if it does not (rather than
+            // throwing an error like "require not defined"). But, since we want typescript
+            // to be consumable by other bundlers, we need to convert these calls back to
+            // require so our imports are visible again.
+            //
+            // The leading spaces are to keep the offsets the same within the files to keep
+            // source maps working (though this only really matters for the line the require is on).
+            //
+            // See: https://github.com/evanw/esbuild/issues/1905
+            options.define = { require: "$$require" };
+            options.plugins = [
+                {
+                    name: "fix-require",
+                    setup: (build) => {
+                        build.onEnd(async () => {
+                            let contents = await fs.promises.readFile(outfile, "utf-8");
+                            contents = contents.replace(/\$\$require/g, "  require");
+                            await fs.promises.writeFile(outfile, contents);
+                        });
+                    },
+                }
+            ];
         }
 
         return options;
@@ -578,6 +577,7 @@ export const runTests = task({
 // task("runtests").flags = {
 //     "-t --tests=<regex>": "Pattern for tests to run.",
 //     "   --failed": "Runs tests listed in '.failed-tests'.",
+//     "   --coverage": "Generate test coverage using c8",
 //     "-r --reporter=<reporter>": "The mocha reporter to use.",
 //     "-i --break": "Runs tests in inspector mode (NodeJS 8 and later)",
 //     "   --keepFailed": "Keep tests in .failed-tests even if they pass",
@@ -617,7 +617,6 @@ export const runTestsAndWatch = task({
         });
 
         process.on("SIGINT", endWatchMode);
-        process.on("SIGKILL", endWatchMode);
         process.on("beforeExit", endWatchMode);
         watchTestsEmitter.on("rebuild", onRebuild);
         testCaseWatcher.on("all", onChange);
@@ -702,13 +701,21 @@ export const runTestsAndWatch = task({
     },
 });
 
-export const runTestsParallel = task({
-    name: "runtests-parallel",
+const doRunTestsParallel = task({
+    name: "do-runtests-parallel",
     description: "Runs all the tests in parallel using the built run.js file.",
     dependencies: runtestsDeps,
     run: () => runConsoleTests(testRunner, "min", /*runInParallel*/ cmdLineOptions.workers > 1),
 });
+
+export const runTestsParallel = task({
+    name: "runtests-parallel",
+    description: "Runs all the tests in parallel using the built run.js file, linting in parallel if --lint=true.",
+    dependencies: [doRunTestsParallel].concat(cmdLineOptions.lint ? [lint] : []),
+});
+
 // task("runtests-parallel").flags = {
+//     "   --coverage": "Generate test coverage using c8",
 //     "   --light": "Run tests in light mode (fewer verifications, but tests run faster).",
 //     "   --keepFailed": "Keep tests in .failed-tests even if they pass.",
 //     "   --dirty": "Run tests without first cleaning test output directories.",
@@ -826,12 +833,8 @@ export const produceLKG = task({
         if (missingFiles.length > 0) {
             throw new Error("Cannot replace the LKG unless all built targets are present in directory 'built/local/'. The following files are missing:\n" + missingFiles.join("\n"));
         }
-        const sizeBefore = getDirSize("lib");
+
         await exec(process.execPath, ["scripts/produceLKG.mjs"]);
-        const sizeAfter = getDirSize("lib");
-        if (sizeAfter > (sizeBefore * 1.10)) {
-            throw new Error("The lib folder increased by 10% or more. This likely indicates a bug.");
-        }
     }
 });
 
@@ -876,15 +879,4 @@ export const help = task({
     description: "Prints the top-level tasks.",
     hiddenFromTaskList: true,
     run: () => exec("hereby", ["--tasks"], { hidePrompt: true }),
-});
-
-export const bumpLkgToNightly = task({
-    name: "bump-lkg-to-nightly",
-    description: "Bumps typescript in package.json to the latest nightly and copies it to LKG.",
-    run: async () => {
-        await exec("npm", ["install", "--save-dev", "--save-exact", "typescript@next"]);
-        await fs.promises.rm("lib", { recursive: true, force: true });
-        await fsExtra.copy("node_modules/typescript/lib", "lib");
-        await fs.promises.writeFile("lib/.gitattributes", "* text eol=lf");
-    }
 });

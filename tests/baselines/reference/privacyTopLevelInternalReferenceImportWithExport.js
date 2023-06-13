@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privacyTopLevelInternalReferenceImportWithExport.ts] ////
+
 //// [privacyTopLevelInternalReferenceImportWithExport.ts]
 // private elements
 module m_private {
@@ -161,7 +163,7 @@ define(["require", "exports"], function (require, exports) {
             }());
             mi_public.c = c;
         })(mi_public = m_public.mi_public || (m_public.mi_public = {}));
-    })(m_public = exports.m_public || (exports.m_public = {}));
+    })(m_public || (exports.m_public = m_public = {}));
     // Privacy errors - importing private elements
     exports.im_public_c_private = m_private.c_private;
     exports.im_public_e_private = m_private.e_private;

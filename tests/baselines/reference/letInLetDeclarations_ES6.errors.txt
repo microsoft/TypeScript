@@ -1,8 +1,8 @@
-tests/cases/compiler/letInLetDeclarations_ES6.ts(2,13): error TS2480: 'let' is not allowed to be used as a name in 'let' or 'const' declarations.
-tests/cases/compiler/letInLetDeclarations_ES6.ts(5,17): error TS2480: 'let' is not allowed to be used as a name in 'let' or 'const' declarations.
+letInLetDeclarations_ES6.ts(2,13): error TS2480: 'let' is not allowed to be used as a name in 'let' or 'const' declarations.
+letInLetDeclarations_ES6.ts(5,17): error TS2480: 'let' is not allowed to be used as a name in 'let' or 'const' declarations.
 
 
-==== tests/cases/compiler/letInLetDeclarations_ES6.ts (2 errors) ====
+==== letInLetDeclarations_ES6.ts (2 errors) ====
     // All use of let in const declaration should be an error
     let x = 50, let = 5;
                 ~~~

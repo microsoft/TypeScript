@@ -1,4 +1,6 @@
-=== tests/cases/compiler/withImportDecl_1.ts ===
+//// [tests/cases/compiler/withImportDecl.ts] ////
+
+=== withImportDecl_1.ts ===
 ///<reference path='withImportDecl_0.ts'/>
 var simpleVar;
 >simpleVar : any
@@ -92,7 +94,7 @@ b.foo;
 >b : m3.A
 >foo : string
 
-=== tests/cases/compiler/withImportDecl_0.ts ===
+=== withImportDecl_0.ts ===
 export class A { foo: string; }
 >A : A
 >foo : string

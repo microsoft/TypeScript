@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericClassImplementingGenericInterfaceFromAnotherModule.ts] ////
+
 //// [genericClassImplementingGenericInterfaceFromAnotherModule.ts]
 module foo {
     export interface IFoo<T> { }

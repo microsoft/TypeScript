@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/widenedTypes/objectLiteralWidened.ts] ////
+
 //// [objectLiteralWidened.ts]
 // object literal properties are widened to any
 

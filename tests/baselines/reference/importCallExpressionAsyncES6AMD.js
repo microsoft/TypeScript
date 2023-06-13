@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/dynamicImport/importCallExpressionAsyncES6AMD.ts] ////
+
 //// [test.ts]
 export async function fn() {
     const req = await import('./test') // ONE

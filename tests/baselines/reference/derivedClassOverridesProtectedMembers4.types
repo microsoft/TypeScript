@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers4.ts ===
+//// [tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers4.ts] ////
+
+=== derivedClassOverridesProtectedMembers4.ts ===
 var x: { foo: string; }
 >x : { foo: string; }
 >foo : string

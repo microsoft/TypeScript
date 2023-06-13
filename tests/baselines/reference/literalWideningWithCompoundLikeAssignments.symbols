@@ -1,4 +1,6 @@
-=== tests/cases/compiler/literalWideningWithCompoundLikeAssignments.ts ===
+//// [tests/cases/compiler/literalWideningWithCompoundLikeAssignments.ts] ////
+
+=== literalWideningWithCompoundLikeAssignments.ts ===
 // repro from #13865
 
 const empty: "" = "";

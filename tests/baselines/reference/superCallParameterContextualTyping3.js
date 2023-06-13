@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/contextualTyping/superCallParameterContextualTyping3.ts] ////
+
 //// [superCallParameterContextualTyping3.ts]
 interface ContextualType<T> {
     method(parameter: T): void;

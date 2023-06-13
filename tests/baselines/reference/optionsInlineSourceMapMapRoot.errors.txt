@@ -4,5 +4,5 @@ error TS5069: Option 'mapRoot' cannot be specified without specifying option 'so
 
 !!! error TS5053: Option 'mapRoot' cannot be specified with option 'inlineSourceMap'.
 !!! error TS5069: Option 'mapRoot' cannot be specified without specifying option 'sourceMap' or option 'declarationMap'.
-==== tests/cases/compiler/optionsInlineSourceMapMapRoot.ts (0 errors) ====
+==== optionsInlineSourceMapMapRoot.ts (0 errors) ====
     var a = 10;

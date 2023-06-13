@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericCloduleInModule.ts ===
+//// [tests/cases/compiler/genericCloduleInModule.ts] ////
+
+=== genericCloduleInModule.ts ===
 module A {
 >A : Symbol(A, Decl(genericCloduleInModule.ts, 0, 0))
 

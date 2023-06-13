@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/use.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment17.ts] ////
+
+=== use.js ===
 /// <reference path='./types.d.ts'/>
 var mini = require('./minimatch')
 >mini : typeof mini
@@ -33,14 +35,14 @@ mini.filter()
 >mini : typeof mini
 >filter : () => void
 
-=== tests/cases/conformance/salsa/types.d.ts ===
+=== types.d.ts ===
 declare var require: any;
 >require : any
 
 declare var module: any;
 >module : any
 
-=== tests/cases/conformance/salsa/minimatch.js ===
+=== minimatch.js ===
 /// <reference path='./types.d.ts'/>
 module.exports = minimatch
 >module.exports = minimatch : typeof minimatch

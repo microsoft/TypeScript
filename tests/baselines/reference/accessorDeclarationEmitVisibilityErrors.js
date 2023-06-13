@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/accessorDeclarationEmitVisibilityErrors.ts] ////
+
 //// [accessorDeclarationEmitVisibilityErrors.ts]
 export class Q {
     set bet(arg: DoesNotExist) {}

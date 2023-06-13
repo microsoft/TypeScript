@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/members/classWithPrivateProperty.ts] ////
+
 //// [classWithPrivateProperty.ts]
 // accessing any private outside the class is an error
 

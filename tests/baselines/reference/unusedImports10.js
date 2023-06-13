@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedImports10.ts] ////
+
 //// [unusedImports10.ts]
 module A {
     export class Calculator {

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/targetTypeTest1.ts ===
+//// [tests/cases/compiler/targetTypeTest1.ts] ////
+
+=== targetTypeTest1.ts ===
 declare class Point
 >Point : Symbol(Point, Decl(targetTypeTest1.ts, 8, 1), Decl(targetTypeTest1.ts, 0, 0), Decl(targetTypeTest1.ts, 22, 17))
 {

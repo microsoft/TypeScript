@@ -1,4 +1,6 @@
-=== tests/cases/compiler/discriminantsAndNullOrUndefined.ts ===
+//// [tests/cases/compiler/discriminantsAndNullOrUndefined.ts] ////
+
+=== discriminantsAndNullOrUndefined.ts ===
 // Repro from #10228
 
 interface A { kind: 'A'; }

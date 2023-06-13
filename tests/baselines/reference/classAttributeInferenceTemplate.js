@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classAttributeInferenceTemplate.ts] ////
+
 //// [classAttributeInferenceTemplate.ts]
 class MyClass {
     property;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/strictModeReservedWord.ts] ////
+
 //// [strictModeReservedWord.ts]
 let let = 10;
 

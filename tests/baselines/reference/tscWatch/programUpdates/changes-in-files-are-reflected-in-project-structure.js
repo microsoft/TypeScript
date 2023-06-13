@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/f1.ts]
 export * from "./f2"
@@ -55,17 +56,13 @@ Shape signatures in builder refreshed for::
 /a/b/f2.ts (used version)
 /a/b/f1.ts (used version)
 
-PolledWatches::
-
 FsWatches::
-/a/b/f1.ts:
+/a/b/f1.ts: *new*
   {}
-/a/b/f2.ts:
+/a/b/f2.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -104,6 +101,9 @@ Input::
 export * from "../c/f3"
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:27 AM[0m] File change detected. Starting incremental compilation...
@@ -139,19 +139,15 @@ Shape signatures in builder refreshed for::
 /a/b/f2.ts (computed .d.ts)
 /a/b/f1.ts (computed .d.ts)
 
-PolledWatches::
-
 FsWatches::
 /a/b/f1.ts:
   {}
 /a/b/f2.ts:
   {}
+/a/c/f3.ts: *new*
+  {}
 /a/lib/lib.d.ts:
   {}
-/a/c/f3.ts:
-  {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 

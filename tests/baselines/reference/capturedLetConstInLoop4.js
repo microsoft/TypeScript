@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/capturedLetConstInLoop4.ts] ////
+
 //// [capturedLetConstInLoop4.ts]
 //======let
 export function exportedFoo() {

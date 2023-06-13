@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/accessibility/classPropertyAsProtected.ts ===
+//// [tests/cases/conformance/classes/members/accessibility/classPropertyAsProtected.ts] ////
+
+=== classPropertyAsProtected.ts ===
 class C {
 >C : C
 
@@ -7,7 +9,6 @@ class C {
 
     protected get y() { return null; }
 >y : any
->null : null
 
     protected set y(x) { }
 >y : any
@@ -21,7 +22,6 @@ class C {
 
     protected static get b() { return null; }
 >b : any
->null : null
 
     protected static set b(x) { }
 >b : any

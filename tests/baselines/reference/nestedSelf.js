@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nestedSelf.ts] ////
+
 //// [nestedSelf.ts]
 module M {
  export class C {
