@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/avoidListingPropertiesForTypesWithOnlyCallOrConstructSignatures.ts] ////
+
 //// [avoidListingPropertiesForTypesWithOnlyCallOrConstructSignatures.ts]
 interface Dog {
     barkable: true

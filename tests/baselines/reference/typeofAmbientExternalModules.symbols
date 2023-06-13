@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeofAmbientExternalModules_2.ts ===
+//// [tests/cases/compiler/typeofAmbientExternalModules.ts] ////
+
+=== typeofAmbientExternalModules_2.ts ===
 ///<reference path='typeofAmbientExternalModules_0.ts'/>
 ///<reference path='typeofAmbientExternalModules_1.ts'/>
 import ext = require('./typeofAmbientExternalModules_0');
@@ -25,12 +27,12 @@ y2 = ext;
 >y2 : Symbol(y2, Decl(typeofAmbientExternalModules_2.ts, 7, 3))
 >ext : Symbol(ext, Decl(typeofAmbientExternalModules_2.ts, 0, 0))
 
-=== tests/cases/compiler/typeofAmbientExternalModules_0.ts ===
+=== typeofAmbientExternalModules_0.ts ===
 export class C { foo: string; }
 >C : Symbol(C, Decl(typeofAmbientExternalModules_0.ts, 0, 0))
 >foo : Symbol(C.foo, Decl(typeofAmbientExternalModules_0.ts, 0, 16))
 
-=== tests/cases/compiler/typeofAmbientExternalModules_1.ts ===
+=== typeofAmbientExternalModules_1.ts ===
 class D { bar: string; }
 >D : Symbol(D, Decl(typeofAmbientExternalModules_1.ts, 0, 0))
 >bar : Symbol(D.bar, Decl(typeofAmbientExternalModules_1.ts, 0, 9))

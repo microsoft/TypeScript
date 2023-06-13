@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithOptionalProperties.ts] ////
+
 //// [subtypingWithOptionalProperties.ts]
 // subtyping is not transitive due to optional properties but the subtyping algorithm assumes it is for the 99% case
 

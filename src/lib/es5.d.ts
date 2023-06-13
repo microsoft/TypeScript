@@ -1648,6 +1648,15 @@ type Uncapitalize<S extends string> = intrinsic;
 interface ThisType<T> { }
 
 /**
+ * Stores types to be used with WeakSet, WeakMap, WeakRef, and FinalizationRegistry
+ */
+interface WeakKeyTypes {
+    object: object;
+}
+
+type WeakKey = WeakKeyTypes[keyof WeakKeyTypes];
+
+/**
  * Represents a raw buffer of binary data, which is used to store data for the
  * different typed arrays. ArrayBuffers cannot be read from or written to directly,
  * but can be passed to a typed array or DataView Object to interpret the raw
@@ -4311,12 +4320,21 @@ interface Float64Array {
     sort(compareFn?: (a: number, b: number) => number): this;
 
     /**
+     * Gets a new Float64Array view of the ArrayBuffer store for this array, referencing the elements
      * at begin, inclusive, up to end, exclusive.
      * @param begin The index of the beginning of the array.
      * @param end The index of the end of the array.
      */
     subarray(begin?: number, end?: number): Float64Array;
 
+    /**
+     * Converts a number to a string by using the current locale.
+     */
+    toLocaleString(): string;
+
+    /**
+     * Returns a string representation of an array.
+     */
     toString(): string;
 
     /** Returns the primitive value of the specified object. */
@@ -4365,11 +4383,12 @@ declare var Float64Array: Float64ArrayConstructor;
 
 declare namespace Intl {
     interface CollatorOptions {
-        usage?: string | undefined;
-        localeMatcher?: string | undefined;
+        usage?: "sort" | "search" | undefined;
+        localeMatcher?: "lookup" | "best fit" | undefined;
         numeric?: boolean | undefined;
-        caseFirst?: string | undefined;
-        sensitivity?: string | undefined;
+        caseFirst?: "upper" | "lower" | "false" | undefined;
+        sensitivity?: "base" | "accent" | "case" | "variant" | undefined;
+        collation?: "big5han" | "compat" | "dict" | "direct" | "ducet" | "emoji" | "eor" | "gb2312" | "phonebk" | "phonetic" | "pinyin" | "reformed" | "searchjl" | "stroke" | "trad" | "unihan" | "zhuyin" | undefined;
         ignorePunctuation?: boolean | undefined;
     }
 

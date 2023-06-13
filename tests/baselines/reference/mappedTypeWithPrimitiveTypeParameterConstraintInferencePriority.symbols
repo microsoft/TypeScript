@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mappedTypeWithPrimitiveTypeParameterConstraintInferencePriority.ts ===
+//// [tests/cases/compiler/mappedTypeWithPrimitiveTypeParameterConstraintInferencePriority.ts] ////
+
+=== mappedTypeWithPrimitiveTypeParameterConstraintInferencePriority.ts ===
 // repro from https://github.com/microsoft/TypeScript/issues/54000
 
 function foo<T>(record: Record<string, T>, entity: T) {}

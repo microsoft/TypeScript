@@ -1,8 +1,10 @@
-=== tests/cases/compiler/somefolder/a.ts ===
+//// [tests/cases/compiler/relativeNamesInClassicResolution.ts] ////
+
+=== somefolder/a.ts ===
 import {x} from "./b"
 >x : Symbol(x, Decl(a.ts, 0, 8))
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 export let x = 1;
 >x : Symbol(x, Decl(b.ts, 0, 10))
 

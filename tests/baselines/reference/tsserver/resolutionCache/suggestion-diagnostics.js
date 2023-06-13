@@ -63,12 +63,12 @@ TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/bower_components","/node_modules"]}
 TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/bower_components","/node_modules"]}
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /bower_components
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject1* watcher already invoked: false
-TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject1* watcher already invoked: false
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject1* watcher already invoked: false
-TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject1* watcher already invoked: false
+TI:: [hh:mm:ss:mss] Sending response:
+    {"kind":"action::watchTypingLocations","projectName":"/dev/null/inferredProject1*","files":["/bower_components","/node_modules"]}
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Sending response:
     {"projectName":"/dev/null/inferredProject1*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typings":[],"unresolvedImports":[],"kind":"action::set"}
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
@@ -117,14 +117,30 @@ Before running Timeout callback:: count: 1
 1: checkOne
 
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/a.js","diagnostics":[]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "syntaxDiag",
+     "body": {
+      "file": "/a.js",
+      "diagnostics": []
+     }
+    }
 After running Timeout callback:: count: 0
 
 Before running Immedidate callback:: count: 1
 1: semanticCheck
 
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/a.js","diagnostics":[]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "semanticDiag",
+     "body": {
+      "file": "/a.js",
+      "diagnostics": []
+     }
+    }
 After running Immedidate callback:: count: 1
 2: suggestionCheck
 
@@ -132,7 +148,37 @@ Before running Immedidate callback:: count: 1
 2: suggestionCheck
 
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/a.js","diagnostics":[{"start":{"line":1,"offset":12},"end":{"line":1,"offset":13},"text":"'p' is declared but its value is never read.","code":6133,"category":"suggestion","reportsUnnecessary":true}]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "suggestionDiag",
+     "body": {
+      "file": "/a.js",
+      "diagnostics": [
+       {
+        "start": {
+         "line": 1,
+         "offset": 12
+        },
+        "end": {
+         "line": 1,
+         "offset": 13
+        },
+        "text": "'p' is declared but its value is never read.",
+        "code": 6133,
+        "category": "suggestion",
+        "reportsUnnecessary": true
+       }
+      ]
+     }
+    }
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "requestCompleted",
+     "body": {
+      "request_seq": 2
+     }
+    }
 After running Immedidate callback:: count: 0

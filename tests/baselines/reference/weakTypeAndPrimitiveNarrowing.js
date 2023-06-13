@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/weakTypeAndPrimitiveNarrowing.ts] ////
+
 //// [weakTypeAndPrimitiveNarrowing.ts]
 type LiteralsAndWeakTypes = 
   | 'A'

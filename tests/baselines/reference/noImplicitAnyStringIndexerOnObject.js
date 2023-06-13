@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts] ////
+
 //// [noImplicitAnyStringIndexerOnObject.ts]
 var a = {}["hello"];
 var b: string = { '': 'foo' }[''];

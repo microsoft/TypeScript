@@ -1,4 +1,6 @@
-=== tests/cases/compiler/jsxIntrinsicUnions.tsx ===
+//// [tests/cases/compiler/jsxIntrinsicUnions.tsx] ////
+
+=== jsxIntrinsicUnions.tsx ===
 /// <reference path="react16.d.ts" />
 
 import * as React from "react";

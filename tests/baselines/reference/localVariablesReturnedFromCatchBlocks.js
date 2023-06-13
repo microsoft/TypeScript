@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/localVariablesReturnedFromCatchBlocks.ts] ////
+
 //// [localVariablesReturnedFromCatchBlocks.ts]
 function f() {
     try {

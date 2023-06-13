@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration4.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration4.ts] ////
+
+=== parserClassDeclaration4.ts ===
 class C extends A implements B extends C {
 >C : Symbol(C, Decl(parserClassDeclaration4.ts, 0, 0))
 >C : Symbol(C, Decl(parserClassDeclaration4.ts, 0, 0))

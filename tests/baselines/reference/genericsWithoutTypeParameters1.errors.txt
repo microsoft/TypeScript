@@ -1,21 +1,21 @@
-tests/cases/compiler/genericsWithoutTypeParameters1.ts(9,9): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
-tests/cases/compiler/genericsWithoutTypeParameters1.ts(10,9): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
-tests/cases/compiler/genericsWithoutTypeParameters1.ts(11,11): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
-tests/cases/compiler/genericsWithoutTypeParameters1.ts(12,11): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
-tests/cases/compiler/genericsWithoutTypeParameters1.ts(14,17): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
-tests/cases/compiler/genericsWithoutTypeParameters1.ts(14,23): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
-tests/cases/compiler/genericsWithoutTypeParameters1.ts(15,20): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
-tests/cases/compiler/genericsWithoutTypeParameters1.ts(15,29): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
-tests/cases/compiler/genericsWithoutTypeParameters1.ts(17,13): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
-tests/cases/compiler/genericsWithoutTypeParameters1.ts(18,14): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
-tests/cases/compiler/genericsWithoutTypeParameters1.ts(21,8): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
-tests/cases/compiler/genericsWithoutTypeParameters1.ts(22,8): error TS2314: Generic type 'D<T>' requires 1 type argument(s).
-tests/cases/compiler/genericsWithoutTypeParameters1.ts(26,8): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
-tests/cases/compiler/genericsWithoutTypeParameters1.ts(27,8): error TS2314: Generic type 'J<T>' requires 1 type argument(s).
-tests/cases/compiler/genericsWithoutTypeParameters1.ts(31,22): error TS2314: Generic type 'A<T>' requires 1 type argument(s).
+genericsWithoutTypeParameters1.ts(9,9): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
+genericsWithoutTypeParameters1.ts(10,9): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
+genericsWithoutTypeParameters1.ts(11,11): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
+genericsWithoutTypeParameters1.ts(12,11): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
+genericsWithoutTypeParameters1.ts(14,17): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
+genericsWithoutTypeParameters1.ts(14,23): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
+genericsWithoutTypeParameters1.ts(15,20): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
+genericsWithoutTypeParameters1.ts(15,29): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
+genericsWithoutTypeParameters1.ts(17,13): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
+genericsWithoutTypeParameters1.ts(18,14): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
+genericsWithoutTypeParameters1.ts(21,8): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
+genericsWithoutTypeParameters1.ts(22,8): error TS2314: Generic type 'D<T>' requires 1 type argument(s).
+genericsWithoutTypeParameters1.ts(26,8): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
+genericsWithoutTypeParameters1.ts(27,8): error TS2314: Generic type 'J<T>' requires 1 type argument(s).
+genericsWithoutTypeParameters1.ts(31,22): error TS2314: Generic type 'A<T>' requires 1 type argument(s).
 
 
-==== tests/cases/compiler/genericsWithoutTypeParameters1.ts (15 errors) ====
+==== genericsWithoutTypeParameters1.ts (15 errors) ====
     class C<T> {
         foo(): T { return null }
     }

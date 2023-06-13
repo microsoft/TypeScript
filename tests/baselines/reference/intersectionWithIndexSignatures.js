@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/intersection/intersectionWithIndexSignatures.ts] ////
+
 //// [intersectionWithIndexSignatures.ts]
 type A = { a: string };
 type B = { b: string };

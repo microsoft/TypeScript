@@ -1,4 +1,6 @@
-=== tests/cases/compiler/keyRemappingKeyofResult.ts ===
+//// [tests/cases/compiler/keyRemappingKeyofResult.ts] ////
+
+=== keyRemappingKeyofResult.ts ===
 const sym = Symbol("")
 >sym : unique symbol
 >Symbol("") : unique symbol

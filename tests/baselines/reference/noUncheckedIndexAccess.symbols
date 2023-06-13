@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noUncheckedIndexAccess.ts ===
+//// [tests/cases/compiler/noUncheckedIndexAccess.ts] ////
+
+=== noUncheckedIndexAccess.ts ===
 enum Meat {
 >Meat : Symbol(Meat, Decl(noUncheckedIndexAccess.ts, 0, 0))
 

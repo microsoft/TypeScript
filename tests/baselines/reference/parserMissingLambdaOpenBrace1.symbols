@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserMissingLambdaOpenBrace1.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserMissingLambdaOpenBrace1.ts] ////
+
+=== parserMissingLambdaOpenBrace1.ts ===
 class C {
 >C : Symbol(C, Decl(parserMissingLambdaOpenBrace1.ts, 0, 0))
 

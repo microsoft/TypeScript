@@ -1,4 +1,6 @@
-=== tests/cases/compiler/foo.ts ===
+//// [tests/cases/compiler/destructuredDeclarationEmit.ts] ////
+
+=== foo.ts ===
 const foo = { bar: 'hello', bat: 'world', bam: { bork: { bar: 'a', baz: 'b' } } };
 >foo : Symbol(foo, Decl(foo.ts, 0, 5))
 >bar : Symbol(bar, Decl(foo.ts, 0, 13))
@@ -19,7 +21,7 @@ export { foo, arr };
 >foo : Symbol(foo, Decl(foo.ts, 2, 8))
 >arr : Symbol(arr, Decl(foo.ts, 2, 13))
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import { foo, arr } from './foo';
 >foo : Symbol(foo, Decl(index.ts, 0, 8))
 >arr : Symbol(arr, Decl(index.ts, 0, 13))

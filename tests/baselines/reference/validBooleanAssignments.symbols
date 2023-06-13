@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/primitives/boolean/validBooleanAssignments.ts ===
+//// [tests/cases/conformance/types/primitives/boolean/validBooleanAssignments.ts] ////
+
+=== validBooleanAssignments.ts ===
 var x = true;
 >x : Symbol(x, Decl(validBooleanAssignments.ts, 0, 3))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/propertyAccess/propertyAccessWidening.ts] ////
+
 //// [propertyAccessWidening.ts]
 // Repro from #31762
 

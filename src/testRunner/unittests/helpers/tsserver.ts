@@ -1,5 +1,7 @@
+import { incrementalVerifier } from "../../../harness/incrementalUtils";
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
+import { ActionWatchTypingLocations } from "../../_namespaces/ts.server";
 import { ensureErrorFreeBuild } from "./solutionBuilder";
 import {
     changeToHostTrackingWrittenFiles,
@@ -34,6 +36,29 @@ export const customTypesMap = {
             }
         }`
 };
+
+function replaceAll(source: string, searchValue: string, replaceValue: string): string {
+    let result: string | undefined =
+        (source as string & { replaceAll: typeof source.replace }).replaceAll?.(searchValue, replaceValue);
+
+    if (result !== undefined) {
+       return result;
+    }
+
+    result = "";
+    const searchLength = searchValue.length;
+    while (true) {
+        const index = source.indexOf(searchValue);
+        if (index < 0) {
+            break;
+        }
+        result += source.slice(0, index);
+        result += replaceValue;
+        source = source.slice(index + searchLength);
+    }
+    result += source;
+    return result;
+}
 
 export interface PostExecAction {
     readonly success: boolean;
@@ -114,23 +139,24 @@ export function createLoggerWritingToConsole(host: TestServerHost): Logger {
     }, host);
 }
 
-function sanitizeLog(s: string) {
-    return s.replace(/Elapsed::?\s*\d+(?:\.\d+)?ms/g, "Elapsed:: *ms")
-        .replace(/\"updateGraphDurationMs\"\:\d+(?:\.\d+)?/g, `"updateGraphDurationMs":*`)
-        .replace(/\"createAutoImportProviderProgramDurationMs\"\:\d+(?:\.\d+)?/g, `"createAutoImportProviderProgramDurationMs":*`)
-        .replace(`"version":"${ts.version}"`, `"version":"FakeVersion"`)
-        .replace(/getCompletionData: Get current token: \d+(?:\.\d+)?/g, `getCompletionData: Get current token: *`)
-        .replace(/getCompletionData: Is inside comment: \d+(?:\.\d+)?/g, `getCompletionData: Is inside comment: *`)
-        .replace(/getCompletionData: Get previous token: \d+(?:\.\d+)?/g, `getCompletionData: Get previous token: *`)
-        .replace(/getCompletionsAtPosition: isCompletionListBlocker: \d+(?:\.\d+)?/g, `getCompletionsAtPosition: isCompletionListBlocker: *`)
-        .replace(/getCompletionData: Semantic work: \d+(?:\.\d+)?/g, `getCompletionData: Semantic work: *`)
-        .replace(/getCompletionsAtPosition: getCompletionEntriesFromSymbols: \d+(?:\.\d+)?/g, `getCompletionsAtPosition: getCompletionEntriesFromSymbols: *`)
-        .replace(/forEachExternalModuleToImportFrom autoImportProvider: \d+(?:\.\d+)?/g, `forEachExternalModuleToImportFrom autoImportProvider: *`)
-        .replace(/getExportInfoMap: done in \d+(?:\.\d+)?/g, `getExportInfoMap: done in *`)
-        .replace(/collectAutoImports: \d+(?:\.\d+)?/g, `collectAutoImports: *`)
-        .replace(/continuePreviousIncompleteResponse: \d+(?:\.\d+)?/g, `continuePreviousIncompleteResponse: *`)
-        .replace(/dependencies in \d+(?:\.\d+)?/g, `dependencies in *`)
-        .replace(/\"exportMapKey\"\:\s*\"[_$a-zA-Z][_$_$a-zA-Z0-9]*\|\d+\|/g, match => match.replace(/\|\d+\|/, `|*|`));
+function sanitizeLog(s: string): string {
+    s = s.replace(/Elapsed::?\s*\d+(?:\.\d+)?ms/g, "Elapsed:: *ms");
+    s = s.replace(/\"updateGraphDurationMs\"\:\s*\d+(?:\.\d+)?/g, `"updateGraphDurationMs": *`);
+    s = s.replace(/\"createAutoImportProviderProgramDurationMs\"\:\s*\d+(?:\.\d+)?/g, `"createAutoImportProviderProgramDurationMs": *`);
+    s = replaceAll(s, ts.version, "FakeVersion");
+    s = s.replace(/getCompletionData: Get current token: \d+(?:\.\d+)?/g, `getCompletionData: Get current token: *`);
+    s = s.replace(/getCompletionData: Is inside comment: \d+(?:\.\d+)?/g, `getCompletionData: Is inside comment: *`);
+    s = s.replace(/getCompletionData: Get previous token: \d+(?:\.\d+)?/g, `getCompletionData: Get previous token: *`);
+    s = s.replace(/getCompletionsAtPosition: isCompletionListBlocker: \d+(?:\.\d+)?/g, `getCompletionsAtPosition: isCompletionListBlocker: *`);
+    s = s.replace(/getCompletionData: Semantic work: \d+(?:\.\d+)?/g, `getCompletionData: Semantic work: *`);
+    s = s.replace(/getCompletionsAtPosition: getCompletionEntriesFromSymbols: \d+(?:\.\d+)?/g, `getCompletionsAtPosition: getCompletionEntriesFromSymbols: *`);
+    s = s.replace(/forEachExternalModuleToImportFrom autoImportProvider: \d+(?:\.\d+)?/g, `forEachExternalModuleToImportFrom autoImportProvider: *`);
+    s = s.replace(/getExportInfoMap: done in \d+(?:\.\d+)?/g, `getExportInfoMap: done in *`);
+    s = s.replace(/collectAutoImports: \d+(?:\.\d+)?/g, `collectAutoImports: *`);
+    s = s.replace(/continuePreviousIncompleteResponse: \d+(?:\.\d+)?/g, `continuePreviousIncompleteResponse: *`);
+    s = s.replace(/dependencies in \d+(?:\.\d+)?/g, `dependencies in *`);
+    s = s.replace(/\"exportMapKey\"\:\s*\"[_$a-zA-Z][_$_$a-zA-Z0-9]*\|\d+\|/g, match => match.replace(/\|\d+\|/, `|*|`));
+    return s;
 }
 
 export function createLoggerWithInMemoryLogs(host: TestServerHost): Logger {
@@ -158,14 +184,22 @@ export function appendAllScriptInfos(session: TestSession) {
     session.logger.log("");
 }
 
-const versionRegExp = new RegExp(ts.version, "g");
-const tsMajorMinorVersion = new RegExp(`@ts${ts.versionMajorMinor}`, "g");
 function loggerToTypingsInstallerLog(logger: Logger): ts.server.typingsInstaller.Log | undefined {
     return logger?.loggingEnabled() ? {
         isEnabled: ts.returnTrue,
-        writeLine: s => logger.log(`TI:: [${nowString(logger.host!)}] ${sanitizeLog(s).replace(versionRegExp, "FakeVersion")
-                .replace(tsMajorMinorVersion, `@tsFakeMajor.Minor`)
-            }`),
+        writeLine: s => {
+            // This is a VERY VERY NAIVE sanitization strategy.
+            // If a substring containing the exact TypeScript version is found,
+            // even if it's unrelated to TypeScript itself, then it will be replaced,
+            // leaving us with two options:
+            //
+            //  1. Deal with flip-flopping baselines.
+            //  2. Change the TypeScript version until no matching substring is found.
+            //
+            const initialLog = sanitizeLog(s);
+            const pseudoSanitizedLog = replaceAll(initialLog, `@ts${ts.versionMajorMinor}`, `@tsFakeMajor.Minor`);
+            return logger.log(`TI:: [${nowString(logger.host!)}] ${pseudoSanitizedLog}`);
+        },
     } : undefined;
 }
 
@@ -280,11 +314,12 @@ export class TestTypingsInstallerWorker extends ts.server.typingsInstaller.Typin
         this.addPostExecAction("success", requestId, packageNames, cb);
     }
 
-    sendResponse(response: ts.server.SetTypings | ts.server.InvalidateCachedTypings) {
+    sendResponse(response: ts.server.SetTypings | ts.server.InvalidateCachedTypings | ts.server.WatchTypingLocations) {
         if (this.log.isEnabled()) {
             this.log.writeLine(`Sending response:\n    ${JSON.stringify(response)}`);
         }
-        this.projectService.updateTypingsForProject(response);
+        if (response.kind !== ActionWatchTypingLocations) this.projectService.updateTypingsForProject(response);
+        else this.projectService.watchTypingLocations(response);
     }
 
     enqueueInstallTypingsRequest(project: ts.server.Project, typeAcquisition: ts.TypeAcquisition, unresolvedImports: ts.SortedReadonlyArray<string>) {
@@ -324,7 +359,9 @@ export class TestTypingsInstaller<T extends TestTypingsInstallerWorker = TestTyp
         this.projectService = projectService;
     }
 
-    onProjectClosed = ts.noop;
+    onProjectClosed(p: ts.server.Project) {
+        this.installer?.closeProject({ projectName: p.getProjectName(), kind: "closeProject" });
+    }
 
     enqueueInstallTypingsRequest(project: ts.server.Project, typeAcquisition: ts.TypeAcquisition, unresolvedImports: ts.SortedReadonlyArray<string>) {
         if (!this.installer) {
@@ -517,7 +554,8 @@ export function createSession(host: TestServerHost, opts: Partial<TestSessionOpt
         byteLength: Buffer.byteLength,
         hrtime: process.hrtime,
         logger,
-        canUseEvents: false
+        canUseEvents: false,
+        incrementalVerifier,
     };
 
     return new TestSession({ ...sessionOptions, ...opts });
@@ -570,6 +608,7 @@ export class TestProjectService extends ts.server.ProjectService {
             useInferredProjectPerProjectRoot: false,
             typingsInstaller,
             typesMapLocation: customTypesMap.path,
+            incrementalVerifier,
             ...opts
         });
         ts.Debug.assert(opts.allowNonBaseliningLogger || this.logger.hasLevel(ts.server.LogLevel.verbose), "Use Baselining logger and baseline tsserver log or create using allowNonBaseliningLogger");

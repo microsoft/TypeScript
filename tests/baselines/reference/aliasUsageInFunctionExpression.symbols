@@ -1,4 +1,6 @@
-=== tests/cases/compiler/aliasUsageInFunctionExpression_main.ts ===
+//// [tests/cases/compiler/aliasUsageInFunctionExpression.ts] ////
+
+=== aliasUsageInFunctionExpression_main.ts ===
 import Backbone = require("./aliasUsageInFunctionExpression_backbone");
 >Backbone : Symbol(Backbone, Decl(aliasUsageInFunctionExpression_main.ts, 0, 0))
 
@@ -25,7 +27,7 @@ f = (x) => moduleA;
 >x : Symbol(x, Decl(aliasUsageInFunctionExpression_main.ts, 6, 5))
 >moduleA : Symbol(moduleA, Decl(aliasUsageInFunctionExpression_main.ts, 0, 71))
 
-=== tests/cases/compiler/aliasUsageInFunctionExpression_backbone.ts ===
+=== aliasUsageInFunctionExpression_backbone.ts ===
 export class Model {
 >Model : Symbol(Model, Decl(aliasUsageInFunctionExpression_backbone.ts, 0, 0))
 
@@ -33,7 +35,7 @@ export class Model {
 >someData : Symbol(Model.someData, Decl(aliasUsageInFunctionExpression_backbone.ts, 0, 20))
 }
 
-=== tests/cases/compiler/aliasUsageInFunctionExpression_moduleA.ts ===
+=== aliasUsageInFunctionExpression_moduleA.ts ===
 import Backbone = require("./aliasUsageInFunctionExpression_backbone");
 >Backbone : Symbol(Backbone, Decl(aliasUsageInFunctionExpression_moduleA.ts, 0, 0))
 

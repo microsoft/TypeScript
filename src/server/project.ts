@@ -13,16 +13,19 @@ import {
     closeFileWatcher,
     closeFileWatcherOf,
     combinePaths,
+    comparePaths,
     CompilerHost,
     CompilerOptions,
     concatenate,
     ConfigFileProgramReloadLevel,
+    containsPath,
     createCacheableExportInfoMap,
     createLanguageService,
     createResolutionCache,
     createSymlinkCache,
     Debug,
     Diagnostic,
+    directorySeparator,
     DirectoryStructureHost,
     DirectoryWatcherCallback,
     DocumentPositionMapper,
@@ -45,6 +48,7 @@ import {
     generateDjb2Hash,
     getAllowJSCompilerOption,
     getAutomaticTypeDirectiveNames,
+    getBaseFileName,
     GetCanonicalFileName,
     getDeclarationEmitOutputFilePathWorker,
     getDefaultCompilerOptions,
@@ -126,6 +130,7 @@ import {
     WatchType,
 } from "./_namespaces/ts";
 import {
+    ActionInvalidate,
     asNormalizedPath,
     createModuleSpecifierCache,
     emptyArray,
@@ -287,6 +292,14 @@ export interface EmitResult {
     diagnostics: readonly Diagnostic[];
 }
 
+const enum TypingWatcherType {
+    FileWatcher = "FileWatcher",
+    DirectoryWatcher = "DirectoryWatcher"
+}
+
+type TypingWatchers = Map<Path, FileWatcher> & { isInvoked?: boolean; };
+
+
 export abstract class Project implements LanguageServiceHost, ModuleResolutionHost {
     private rootFiles: ScriptInfo[] = [];
     private rootFilesMap = new Map<string, ProjectRootFile>();
@@ -371,13 +384,16 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     typingFiles: SortedReadonlyArray<string> = emptyArray;
 
     /** @internal */
+    private typingWatchers: TypingWatchers | undefined;
+
+    /** @internal */
     originalConfiguredProjects: Set<NormalizedPath> | undefined;
 
     /** @internal */
     private packageJsonsForAutoImport: Set<string> | undefined;
 
     /** @internal */
-    private noDtsResolutionProject?: AuxiliaryProject | undefined;
+    noDtsResolutionProject?: AuxiliaryProject | undefined;
 
     /** @internal */
     getResolvedProjectReferenceToRedirect(_fileName: string): ResolvedProjectReference | undefined {
@@ -953,6 +969,19 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         this.projectService.onUpdateLanguageServiceStateForProject(this, /*languageServiceEnabled*/ true);
     }
 
+    /** @internal */
+    cleanupProgram() {
+        if (this.program) {
+            // Root files are always attached to the project irrespective of program
+            for (const f of this.program.getSourceFiles()) {
+                this.detachScriptInfoIfNotRoot(f.fileName);
+            }
+            this.program.forEachResolvedProjectReference(ref =>
+                this.detachScriptInfoFromProject(ref.sourceFile.fileName));
+            this.program = undefined;
+        }
+    }
+
     disableLanguageService(lastFileExceededProgramSize?: string) {
         if (!this.languageServiceEnabled) {
             return;
@@ -960,6 +989,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         Debug.assert(this.projectService.serverMode !== LanguageServiceMode.Syntactic);
         this.languageService.cleanupSemanticCache();
         this.languageServiceEnabled = false;
+        this.cleanupProgram();
         this.lastFileExceededProgramSize = lastFileExceededProgramSize;
         this.builderState = undefined;
         if (this.autoImportProviderHost) {
@@ -968,6 +998,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         this.autoImportProviderHost = undefined;
         this.resolutionCache.closeTypeRootsWatch();
         this.clearGeneratedFileWatch();
+        this.projectService.verifyDocumentRegistry();
         this.projectService.onUpdateLanguageServiceStateForProject(this, /*languageServiceEnabled*/ false);
     }
 
@@ -1012,17 +1043,12 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     close() {
-        if (this.program) {
-            // if we have a program - release all files that are enlisted in program but arent root
-            // The releasing of the roots happens later
-            // The project could have pending update remaining and hence the info could be in the files but not in program graph
-            for (const f of this.program.getSourceFiles()) {
-                this.detachScriptInfoIfNotRoot(f.fileName);
-            }
-            this.program.forEachResolvedProjectReference(ref =>
-                this.detachScriptInfoFromProject(ref.sourceFile.fileName));
-        }
-
+        this.projectService.typingsCache.onProjectClosed(this);
+        this.closeWatchingTypingLocations();
+        // if we have a program - release all files that are enlisted in program but arent root
+        // The releasing of the roots happens later
+        // The project could have pending update remaining and hence the info could be in the files but not in program graph
+        this.cleanupProgram();
         // Release external files
         forEach(this.externalFiles, externalFile => this.detachScriptInfoIfNotRoot(externalFile));
         // Always remove root files from the project
@@ -1361,6 +1387,108 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     /** @internal */
+    private closeWatchingTypingLocations() {
+        if (this.typingWatchers) clearMap(this.typingWatchers, closeFileWatcher);
+        this.typingWatchers = undefined;
+    }
+
+    /** @internal */
+    private onTypingInstallerWatchInvoke() {
+        this.typingWatchers!.isInvoked = true;
+        this.projectService.updateTypingsForProject({ projectName: this.getProjectName(), kind: ActionInvalidate });
+    }
+
+    /** @internal */
+    watchTypingLocations(files: readonly string[] | undefined) {
+        if (!files) {
+            this.typingWatchers!.isInvoked = false;
+            return;
+        }
+
+        if (!files.length) {
+            // shut down existing watchers
+            this.closeWatchingTypingLocations();
+            return;
+        }
+
+        const toRemove = new Map(this.typingWatchers);
+        if (!this.typingWatchers) this.typingWatchers = new Map();
+
+        // handler should be invoked once for the entire set of files since it will trigger full rediscovery of typings
+        this.typingWatchers.isInvoked = false;
+        const createProjectWatcher = (path: string, typingsWatcherType: TypingWatcherType) => {
+            const canonicalPath = this.toPath(path);
+            toRemove.delete(canonicalPath);
+            if (!this.typingWatchers!.has(canonicalPath)) {
+                this.typingWatchers!.set(canonicalPath, typingsWatcherType === TypingWatcherType.FileWatcher ?
+                    this.projectService.watchFactory.watchFile(
+                        path,
+                        () => !this.typingWatchers!.isInvoked ?
+                            this.onTypingInstallerWatchInvoke() :
+                            this.writeLog(`TypingWatchers already invoked`),
+                        PollingInterval.High,
+                        this.projectService.getWatchOptions(this),
+                        WatchType.TypingInstallerLocationFile,
+                        this,
+                    ) :
+                    this.projectService.watchFactory.watchDirectory(
+                        path,
+                        f => {
+                            if (this.typingWatchers!.isInvoked) return this.writeLog(`TypingWatchers already invoked`);
+                            if (!fileExtensionIs(f, Extension.Json)) return this.writeLog(`Ignoring files that are not *.json`);
+                            if (comparePaths(f, combinePaths(this.projectService.typingsInstaller.globalTypingsCacheLocation!, "package.json"), !this.useCaseSensitiveFileNames())) return this.writeLog(`Ignoring package.json change at global typings location`);
+                            this.onTypingInstallerWatchInvoke();
+                        },
+                        WatchDirectoryFlags.Recursive,
+                        this.projectService.getWatchOptions(this),
+                        WatchType.TypingInstallerLocationDirectory,
+                        this,
+                    )
+                );
+            }
+        };
+
+        // Create watches from list of files
+        for (const file of files) {
+            const basename = getBaseFileName(file);
+            if (basename === "package.json" || basename === "bower.json") {
+                // package.json or bower.json exists, watch the file to detect changes and update typings
+                createProjectWatcher(file, TypingWatcherType.FileWatcher);
+                continue;
+            }
+
+            // path in projectRoot, watch project root
+            if (containsPath(this.currentDirectory, file, this.currentDirectory, !this.useCaseSensitiveFileNames())) {
+                const subDirectory = file.indexOf(directorySeparator, this.currentDirectory.length + 1);
+                if (subDirectory !== -1) {
+                    // Watch subDirectory
+                    createProjectWatcher(file.substr(0, subDirectory), TypingWatcherType.DirectoryWatcher);
+                }
+                else {
+                    // Watch the directory itself
+                    createProjectWatcher(file, TypingWatcherType.DirectoryWatcher);
+                }
+                continue;
+            }
+
+            // path in global cache, watch global cache
+            if (containsPath(this.projectService.typingsInstaller.globalTypingsCacheLocation!, file, this.currentDirectory, !this.useCaseSensitiveFileNames())) {
+                createProjectWatcher(this.projectService.typingsInstaller.globalTypingsCacheLocation!, TypingWatcherType.DirectoryWatcher);
+                continue;
+            }
+
+            // watch node_modules or bower_components
+            createProjectWatcher(file, TypingWatcherType.DirectoryWatcher);
+        }
+
+        // Remove unused watches
+        toRemove.forEach((watch, path) => {
+            watch.close();
+            this.typingWatchers!.delete(path);
+        });
+    }
+
+    /** @internal */
     getCurrentProgram(): Program | undefined {
         return this.program;
     }
@@ -1372,6 +1500,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     private updateGraphWorker() {
         const oldProgram = this.languageService.getCurrentProgram();
+        Debug.assert(oldProgram === this.program);
         Debug.assert(!this.isClosed(), "Called update graph worker of closed project");
         this.writeLog(`Starting updateGraphWorker: Project: ${this.getProjectName()}`);
         const start = timestamp();
@@ -1513,6 +1642,8 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         else if (this.program !== oldProgram) {
             this.writeLog(`Different program with same set of files`);
         }
+        // Verify the document registry count
+        this.projectService.verifyDocumentRegistry();
         return hasNewProgram;
     }
 
@@ -2222,7 +2353,8 @@ export class InferredProject extends Project {
     }
 }
 
-class AuxiliaryProject extends Project {
+/** @internal */
+export class AuxiliaryProject extends Project {
     constructor(projectService: ProjectService, documentRegistry: DocumentRegistry, compilerOptions: CompilerOptions, currentDirectory: string) {
         super(projectService.newAuxiliaryProjectName(),
             ProjectKind.Auxiliary,
@@ -2241,7 +2373,6 @@ class AuxiliaryProject extends Project {
         return true;
     }
 
-    /** @internal */
     override scheduleInvalidateResolutionsOfFailedLookupLocations(): void {
         // Invalidation will happen on-demand as part of updateGraph
         return;

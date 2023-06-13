@@ -1,4 +1,6 @@
-=== tests/cases/compiler/checkSuperCallBeforeThisAccessing8.ts ===
+//// [tests/cases/compiler/checkSuperCallBeforeThisAccessing8.ts] ////
+
+=== checkSuperCallBeforeThisAccessing8.ts ===
 class Base {
 >Base : Base
 

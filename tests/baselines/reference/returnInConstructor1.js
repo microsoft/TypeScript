@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/returnInConstructor1.ts] ////
+
 //// [returnInConstructor1.ts]
 class A {
     foo() { }

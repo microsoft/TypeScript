@@ -1,7 +1,8 @@
-tests/cases/conformance/functions/functionImplementations.ts(90,1): error TS2839: This condition will always return 'false' since JavaScript compares objects by reference, not value.
+functionImplementations.ts(85,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'Base'.
+functionImplementations.ts(90,1): error TS2839: This condition will always return 'false' since JavaScript compares objects by reference, not value.
 
 
-==== tests/cases/conformance/functions/functionImplementations.ts (1 errors) ====
+==== functionImplementations.ts (2 errors) ====
     // FunctionExpression with no return type annotation and no return statement returns void
     var v: void = function () { } ();
     
@@ -87,6 +88,9 @@ tests/cases/conformance/functions/functionImplementations.ts(90,1): error TS2839
     
     // FunctionExpression with no return type annotation with multiple return statements with one a recursive call
     var a = function f() {
+        ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'Base'.
+!!! related TS6203 functionImplementations.ts:5:5: 'a' was also declared here.
         return new Base(); return new Derived(); return f(); // ?
     } ();
     

@@ -1,18 +1,18 @@
-tests/cases/compiler/interfaceDeclaration1.ts(2,5): error TS2300: Duplicate identifier 'item'.
-tests/cases/compiler/interfaceDeclaration1.ts(3,5): error TS2300: Duplicate identifier 'item'.
-tests/cases/compiler/interfaceDeclaration1.ts(7,5): error TS2300: Duplicate identifier 'item'.
-tests/cases/compiler/interfaceDeclaration1.ts(8,5): error TS2300: Duplicate identifier 'item'.
-tests/cases/compiler/interfaceDeclaration1.ts(8,5): error TS2717: Subsequent property declarations must have the same type.  Property 'item' must be of type 'any', but here has type 'number'.
-tests/cases/compiler/interfaceDeclaration1.ts(22,11): error TS2310: Type 'I5' recursively references itself as a base type.
-tests/cases/compiler/interfaceDeclaration1.ts(35,7): error TS2420: Class 'C1' incorrectly implements interface 'I3'.
+interfaceDeclaration1.ts(2,5): error TS2300: Duplicate identifier 'item'.
+interfaceDeclaration1.ts(3,5): error TS2300: Duplicate identifier 'item'.
+interfaceDeclaration1.ts(7,5): error TS2300: Duplicate identifier 'item'.
+interfaceDeclaration1.ts(8,5): error TS2300: Duplicate identifier 'item'.
+interfaceDeclaration1.ts(8,5): error TS2717: Subsequent property declarations must have the same type.  Property 'item' must be of type 'any', but here has type 'number'.
+interfaceDeclaration1.ts(22,11): error TS2310: Type 'I5' recursively references itself as a base type.
+interfaceDeclaration1.ts(35,7): error TS2420: Class 'C1' incorrectly implements interface 'I3'.
   Property 'prototype' is missing in type 'C1' but required in type 'I3'.
-tests/cases/compiler/interfaceDeclaration1.ts(41,11): error TS2310: Type 'i8' recursively references itself as a base type.
-tests/cases/compiler/interfaceDeclaration1.ts(42,11): error TS2310: Type 'i9' recursively references itself as a base type.
-tests/cases/compiler/interfaceDeclaration1.ts(52,11): error TS2320: Interface 'i12' cannot simultaneously extend types 'i10' and 'i11'.
+interfaceDeclaration1.ts(41,11): error TS2310: Type 'i8' recursively references itself as a base type.
+interfaceDeclaration1.ts(42,11): error TS2310: Type 'i9' recursively references itself as a base type.
+interfaceDeclaration1.ts(52,11): error TS2320: Interface 'i12' cannot simultaneously extend types 'i10' and 'i11'.
   Named property 'foo' of types 'i10' and 'i11' are not identical.
 
 
-==== tests/cases/compiler/interfaceDeclaration1.ts (10 errors) ====
+==== interfaceDeclaration1.ts (10 errors) ====
     interface I1 {
         item:number;
         ~~~~
@@ -31,7 +31,7 @@ tests/cases/compiler/interfaceDeclaration1.ts(52,11): error TS2320: Interface 'i
 !!! error TS2300: Duplicate identifier 'item'.
         ~~~~
 !!! error TS2717: Subsequent property declarations must have the same type.  Property 'item' must be of type 'any', but here has type 'number'.
-!!! related TS6203 tests/cases/compiler/interfaceDeclaration1.ts:7:5: 'item' was also declared here.
+!!! related TS6203 interfaceDeclaration1.ts:7:5: 'item' was also declared here.
     }
     
     interface I3 {
@@ -64,7 +64,7 @@ tests/cases/compiler/interfaceDeclaration1.ts(52,11): error TS2320: Interface 'i
           ~~
 !!! error TS2420: Class 'C1' incorrectly implements interface 'I3'.
 !!! error TS2420:   Property 'prototype' is missing in type 'C1' but required in type 'I3'.
-!!! related TS2728 tests/cases/compiler/interfaceDeclaration1.ts:12:5: 'prototype' is declared here.
+!!! related TS2728 interfaceDeclaration1.ts:12:5: 'prototype' is declared here.
         constructor() {
             var prototype: number = 3;
         }

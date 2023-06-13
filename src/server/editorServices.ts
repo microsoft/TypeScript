@@ -176,6 +176,7 @@ import {
     ThrottledOperations,
     toNormalizedPath,
     TypingsCache,
+    WatchTypingLocations,
 } from "./_namespaces/ts.server";
 import * as protocol from "./protocol";
 
@@ -589,6 +590,7 @@ export interface ProjectServiceOptions {
     typesMapLocation?: string;
     serverMode?: LanguageServiceMode;
     session: Session<unknown> | undefined;
+    /** @internal */ incrementalVerifier?: (service: ProjectService) => void;
 }
 
 interface OriginalFileInfo { fileName: NormalizedPath; path: Path; }
@@ -988,11 +990,12 @@ export class ProjectService {
     /** @internal */
     readonly session: Session<unknown> | undefined;
 
-
     private performanceEventHandler?: PerformanceEventHandler;
 
     private pendingPluginEnablements?: Map<Project, Promise<BeginEnablePluginResult>[]>;
     private currentPluginEnablementPromise?: Promise<void>;
+
+    /** @internal */ verifyDocumentRegistry = noop;
 
     constructor(opts: ProjectServiceOptions) {
         this.host = opts.host;
@@ -1056,6 +1059,7 @@ export class ProjectService {
                 watchDirectory: returnNoopFileWatcher,
             } :
             getWatchFactory(this.host, watchLogLevel, log, getDetailWatchInfo);
+        opts.incrementalVerifier?.(this);
     }
 
     toPath(fileName: string) {
@@ -1151,6 +1155,11 @@ export class ProjectService {
                 this.typingsCache.enqueueInstallTypingsForProject(project, project.lastCachedUnresolvedImportsList, /*forceRefresh*/ true);
                 return;
         }
+    }
+
+    /** @internal */
+    watchTypingLocations(response: WatchTypingLocations) {
+        this.findProject(response.projectName)?.watchTypingLocations(response.files);
     }
 
     /** @internal */
@@ -1328,7 +1337,7 @@ export class ProjectService {
     }
 
     /** @internal */
-    private forEachProject(cb: (project: Project) => void) {
+    forEachProject(cb: (project: Project) => void) {
         this.externalProjects.forEach(cb);
         this.configuredProjects.forEach(cb);
         this.inferredProjects.forEach(cb);
@@ -2634,6 +2643,7 @@ export class ProjectService {
     private clearSemanticCache(project: Project) {
         project.resolutionCache.clear();
         project.getLanguageService(/*ensureSynchronized*/ false).cleanupSemanticCache();
+        project.cleanupProgram();
         project.markAsDirty();
     }
 
