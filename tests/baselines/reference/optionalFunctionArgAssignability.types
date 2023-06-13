@@ -1,4 +1,6 @@
-=== tests/cases/compiler/optionalFunctionArgAssignability.ts ===
+//// [tests/cases/compiler/optionalFunctionArgAssignability.ts] ////
+
+=== optionalFunctionArgAssignability.ts ===
 interface Promise<T> {
     then<U>(onFulfill?: (value: T) => U, onReject?: (reason: any) => U): Promise<U>;
 >then : { <TResult1 = T, TResult2 = never>(onfulfilled?: (value: T) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(onFulfill?: (value: T) => U, onReject?: (reason: any) => U): Promise<U>; }
@@ -16,7 +18,6 @@ var a = function then<U>(onFulfill?: (value: string) => U, onReject?: (reason: a
 >value : string
 >onReject : (reason: any) => U
 >reason : any
->null : null
 
 var b = function then<U>(onFulFill?: (value: number) => U, onReject?: (reason: any) => U): Promise<U> { return null };
 >b : <U>(onFulFill?: (value: number) => U, onReject?: (reason: any) => U) => Promise<U>
@@ -26,7 +27,6 @@ var b = function then<U>(onFulFill?: (value: number) => U, onReject?: (reason: a
 >value : number
 >onReject : (reason: any) => U
 >reason : any
->null : null
 
 a = b; // error because number is not assignable to string
 >a = b : <U>(onFulFill?: (value: number) => U, onReject?: (reason: any) => U) => Promise<U>

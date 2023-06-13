@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/test.tsx ===
+//// [tests/cases/conformance/jsx/tsxPreserveEmit1.tsx] ////
+
+=== test.tsx ===
 // Should emit 'react-router' in the AMD dependency list
 import React = require('react');
 >React : Symbol(React, Decl(test.tsx, 0, 0))
@@ -31,7 +33,7 @@ module M {
 >X : Symbol(X, Decl(test.tsx, 9, 11))
 }
 
-=== tests/cases/conformance/jsx/react.d.ts ===
+=== react.d.ts ===
 declare module 'react' {
 >'react' : Symbol("react", Decl(react.d.ts, 0, 0))
 

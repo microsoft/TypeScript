@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericClassWithStaticFactory.ts] ////
+
 //// [genericClassWithStaticFactory.ts]
 module Editor {
 

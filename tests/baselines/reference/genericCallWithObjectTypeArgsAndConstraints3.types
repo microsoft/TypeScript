@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints3.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints3.ts] ////
+
+=== genericCallWithObjectTypeArgsAndConstraints3.ts ===
 // Generic call with constraints infering type parameter from object member properties
 
 class Base {
@@ -94,7 +96,6 @@ function f3<T extends Base>(y: (a: T) => T, x: T) {
     return y(null);
 >y(null) : T
 >y : (a: T) => T
->null : null
 }
 
 // all ok - second argument is processed before x is fixed
@@ -125,5 +126,4 @@ var r6 = f3(x => x, null);
 >x => x : (x: any) => any
 >x : any
 >x : any
->null : null
 

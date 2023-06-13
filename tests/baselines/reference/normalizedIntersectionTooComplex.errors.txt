@@ -1,8 +1,8 @@
-tests/cases/compiler/normalizedIntersectionTooComplex.ts(36,14): error TS2590: Expression produces a union type that is too complex to represent.
-tests/cases/compiler/normalizedIntersectionTooComplex.ts(36,40): error TS7006: Parameter 'x' implicitly has an 'any' type.
+normalizedIntersectionTooComplex.ts(36,40): error TS7006: Parameter 'x' implicitly has an 'any' type.
+normalizedIntersectionTooComplex.ts(36,40): error TS2590: Expression produces a union type that is too complex to represent.
 
 
-==== tests/cases/compiler/normalizedIntersectionTooComplex.ts (2 errors) ====
+==== normalizedIntersectionTooComplex.ts (2 errors) ====
     // Repro from #30050
     
     interface Obj<T> {
@@ -39,8 +39,8 @@ tests/cases/compiler/normalizedIntersectionTooComplex.ts(36,40): error TS7006: P
     declare var all: keyof Big;
     const ctor = getCtor(all);
     const comp = ctor({ common: "ok", ref: x => console.log(x) });
-                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2590: Expression produces a union type that is too complex to represent.
                                            ~
 !!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+                                           ~~~~~~~~~~~~~~~~~~~
+!!! error TS2590: Expression produces a union type that is too complex to represent.
     

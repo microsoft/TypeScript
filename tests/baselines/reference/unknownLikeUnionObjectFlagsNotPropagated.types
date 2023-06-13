@@ -1,14 +1,14 @@
-=== tests/cases/compiler/unknownLikeUnionObjectFlagsNotPropagated.ts ===
+//// [tests/cases/compiler/unknownLikeUnionObjectFlagsNotPropagated.ts] ////
+
+=== unknownLikeUnionObjectFlagsNotPropagated.ts ===
 // repro from #52475#issuecomment-1411215277
 
 type MyType = {} | null | undefined;
 >MyType : {} | null | undefined
->null : null
 
 const myVar: MyType = null as MyType;
 >myVar : MyType
 >null as MyType : MyType
->null : null
 
 myVar?.toLocaleString;
 >myVar?.toLocaleString : (() => string) | undefined

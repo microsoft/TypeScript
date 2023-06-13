@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionReadonlyName.ts ===
+//// [tests/cases/compiler/functionReadonlyName.ts] ////
+
+=== functionReadonlyName.ts ===
 const f0 = new Function()
 >f0 : Symbol(f0, Decl(functionReadonlyName.ts, 0, 5))
 >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

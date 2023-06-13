@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exportAssignmentEnum_B.ts ===
+//// [tests/cases/compiler/exportAssignmentEnum.ts] ////
+
+=== exportAssignmentEnum_B.ts ===
 import EnumE = require("./exportAssignmentEnum_A");
 >EnumE : typeof EnumE
 
@@ -20,7 +22,7 @@ var c = EnumE.C;
 >EnumE : typeof EnumE
 >C : EnumE.C
 
-=== tests/cases/compiler/exportAssignmentEnum_A.ts ===
+=== exportAssignmentEnum_A.ts ===
 enum E {
 >E : E
 

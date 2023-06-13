@@ -1,4 +1,6 @@
-=== tests/cases/compiler/deferredConditionalTypes.ts ===
+//// [tests/cases/compiler/deferredConditionalTypes.ts] ////
+
+=== deferredConditionalTypes.ts ===
 type A<T> = { x: T } extends { x: 0 } ? 1 : 0;
 >A : A<T>
 >x : T
@@ -89,4 +91,22 @@ type FilteredValuesMatchNever<O extends object>
 
 type FilteredRes1 = FilteredValuesMatchNever<[]>
 >FilteredRes1 : true
+
+// repro from #46761
+
+type Bit = 0 | 1;
+>Bit : 0 | 1
+
+type AndBit<A extends Bit, B extends Bit> = [A, B] extends [1, 1] ? 1 : 0;
+>AndBit : AndBit<A, B>
+
+type TestBit<A extends Bit, B extends Bit> = AndBit<
+>TestBit : TestBit<A, B>
+
+  A extends 1 ? 0 : 1,
+  B extends 1 ? 0 : 1
+>;
+
+type TestBitRes = TestBit<1, 1>; 
+>TestBitRes : 0
 

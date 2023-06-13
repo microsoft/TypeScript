@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxInExtendsClause.tsx] ////
+
 //// [jsxInExtendsClause.tsx]
 // https://github.com/Microsoft/TypeScript/issues/13157
 declare namespace React {

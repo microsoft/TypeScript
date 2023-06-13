@@ -1,4 +1,6 @@
-=== tests/cases/conformance/async/es5/awaitBinaryExpression/awaitBinaryExpression1_es5.ts ===
+//// [tests/cases/conformance/async/es5/awaitBinaryExpression/awaitBinaryExpression1_es5.ts] ////
+
+=== awaitBinaryExpression1_es5.ts ===
 declare var a: boolean;
 >a : Symbol(a, Decl(awaitBinaryExpression1_es5.ts, 0, 11))
 

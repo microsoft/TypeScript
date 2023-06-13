@@ -1,0 +1,233 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThis6.ts ===
+// [|{| kind: "reference" |}this|]/*HIGHLIGHTS*/;
+// [|{| kind: "reference" |}this|];
+// 
+// function f() {
+//     this;
+// --- (line: 6) skipped ---
+
+// --- (line: 130) skipped ---
+// }
+// 
+// var x = {
+//     a: [|{| kind: "reference" |}this|],
+// 
+//     f() {
+//         this;
+// --- (line: 138) skipped ---
+
+// --- (line: 162) skipped ---
+//     },
+// 
+//     l: () => {
+//         [|{| kind: "reference" |}this|];
+//         function foo() {
+//             this;
+//         }
+//         const bar = () => {
+//             [|{| kind: "reference" |}this|];
+//         }
+//     },
+// };
+// 
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThis6.ts ===
+// this;
+// this;
+// 
+// function f() {
+//     [|{| kind: "reference" |}this|]/*HIGHLIGHTS*/;
+//     [|{| kind: "reference" |}this|];
+//     () => [|{| kind: "reference" |}this|];
+//     () => {
+//         if ([|{| kind: "reference" |}this|]) {
+//             [|{| kind: "reference" |}this|];
+//         }
+//         else {
+//             [|{| kind: "reference" |}this|].this;
+//         }
+//     }
+//     function inside() {
+// --- (line: 17) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThis6.ts ===
+// --- (line: 21) skipped ---
+// }
+// 
+// module m {
+//     var x = th/*HIGHLIGHTS*/is;
+//     function f() {
+//         this;
+//         this;
+// --- (line: 29) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThis6.ts ===
+// --- (line: 61) skipped ---
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 [|{| kind: "reference" |}this|]/*HIGHLIGHTS*/;
+//             })(this);
+//         }
+//     }
+// --- (line: 69) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThis6.ts ===
+// [|{| kind: "reference" |}this|];
+// [|{| kind: "reference" |}this|];
+// 
+// function f() {
+//     this;
+// --- (line: 6) skipped ---
+
+// --- (line: 130) skipped ---
+// }
+// 
+// var x = {
+//     a: /*HIGHLIGHTS*/[|{| kind: "reference" |}this|],
+// 
+//     f() {
+//         this;
+// --- (line: 138) skipped ---
+
+// --- (line: 162) skipped ---
+//     },
+// 
+//     l: () => {
+//         [|{| kind: "reference" |}this|];
+//         function foo() {
+//             this;
+//         }
+//         const bar = () => {
+//             [|{| kind: "reference" |}this|];
+//         }
+//     },
+// };
+// 
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThis6.ts ===
+// --- (line: 133) skipped ---
+//     a: this,
+// 
+//     f() {
+//         [|{| kind: "reference" |}this|]/*HIGHLIGHTS*/;
+//         function foo() {
+//             this;
+//         }
+//         const bar = () => {
+//             [|{| kind: "reference" |}this|];
+//         }
+//     },
+// 
+//     g() {
+//         [|{| kind: "reference" |}this|];
+//     },
+// 
+//     get h() {
+//         [|{| kind: "reference" |}this|];
+//         function foo() {
+//             this;
+//         }
+//         const bar = () => {
+//             [|{| kind: "reference" |}this|];
+//         }
+//         return;
+//     },
+// 
+//     set h(foo: any) {
+//         [|{| kind: "reference" |}this|];
+//     },
+// 
+//     l: () => {
+// --- (line: 166) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThis6.ts ===
+// --- (line: 133) skipped ---
+//     a: this,
+// 
+//     f() {
+//         [|{| kind: "reference" |}this|];
+//         function foo() {
+//             this;
+//         }
+//         const bar = () => {
+//             [|{| kind: "reference" |}this|];
+//         }
+//     },
+// 
+//     g() {
+//         [|{| kind: "reference" |}this|];
+//     },
+// 
+//     get h() {
+//         /*HIGHLIGHTS*/[|{| kind: "reference" |}this|];
+//         function foo() {
+//             this;
+//         }
+//         const bar = () => {
+//             [|{| kind: "reference" |}this|];
+//         }
+//         return;
+//     },
+// 
+//     set h(foo: any) {
+//         [|{| kind: "reference" |}this|];
+//     },
+// 
+//     l: () => {
+// --- (line: 166) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThis6.ts ===
+// [|{| kind: "reference" |}this|];
+// [|{| kind: "reference" |}this|];
+// 
+// function f() {
+//     this;
+// --- (line: 6) skipped ---
+
+// --- (line: 130) skipped ---
+// }
+// 
+// var x = {
+//     a: [|{| kind: "reference" |}this|],
+// 
+//     f() {
+//         this;
+// --- (line: 138) skipped ---
+
+// --- (line: 162) skipped ---
+//     },
+// 
+//     l: () => {
+//         /*HIGHLIGHTS*/[|{| kind: "reference" |}this|];
+//         function foo() {
+//             this;
+//         }
+//         const bar = () => {
+//             [|{| kind: "reference" |}this|];
+//         }
+//     },
+// };
+// 

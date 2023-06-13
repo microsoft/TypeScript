@@ -1,15 +1,15 @@
-tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts(5,11): error TS2558: Expected 0 type arguments, but got 1.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts(8,13): error TS2558: Expected 0 type arguments, but got 1.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts(11,13): error TS2558: Expected 0 type arguments, but got 1.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts(18,22): error TS2558: Expected 0 type arguments, but got 1.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts(24,14): error TS2558: Expected 0 type arguments, but got 1.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts(31,23): error TS2558: Expected 0 type arguments, but got 1.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts(37,15): error TS2558: Expected 0 type arguments, but got 1.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts(40,10): error TS2347: Untyped function calls may not accept type arguments.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts(43,10): error TS2347: Untyped function calls may not accept type arguments.
+callNonGenericFunctionWithTypeArguments.ts(5,11): error TS2558: Expected 0 type arguments, but got 1.
+callNonGenericFunctionWithTypeArguments.ts(8,13): error TS2558: Expected 0 type arguments, but got 1.
+callNonGenericFunctionWithTypeArguments.ts(11,13): error TS2558: Expected 0 type arguments, but got 1.
+callNonGenericFunctionWithTypeArguments.ts(18,22): error TS2558: Expected 0 type arguments, but got 1.
+callNonGenericFunctionWithTypeArguments.ts(24,14): error TS2558: Expected 0 type arguments, but got 1.
+callNonGenericFunctionWithTypeArguments.ts(31,23): error TS2558: Expected 0 type arguments, but got 1.
+callNonGenericFunctionWithTypeArguments.ts(37,15): error TS2558: Expected 0 type arguments, but got 1.
+callNonGenericFunctionWithTypeArguments.ts(40,10): error TS2347: Untyped function calls may not accept type arguments.
+callNonGenericFunctionWithTypeArguments.ts(43,10): error TS2347: Untyped function calls may not accept type arguments.
 
 
-==== tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts (9 errors) ====
+==== callNonGenericFunctionWithTypeArguments.ts (9 errors) ====
     // it is always illegal to provide type arguments to a non-generic function
     // all invocations here are illegal
     

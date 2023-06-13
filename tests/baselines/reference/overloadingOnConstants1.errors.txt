@@ -1,10 +1,10 @@
-tests/cases/compiler/overloadingOnConstants1.ts(22,5): error TS2741: Property 'bar' is missing in type 'Base' but required in type 'Derived1'.
-tests/cases/compiler/overloadingOnConstants1.ts(23,5): error TS2741: Property 'biz' is missing in type 'Derived1' but required in type 'Derived3'.
-tests/cases/compiler/overloadingOnConstants1.ts(24,5): error TS2741: Property 'bar' is missing in type 'Derived2' but required in type 'Derived1'.
-tests/cases/compiler/overloadingOnConstants1.ts(25,5): error TS2741: Property 'bar' is missing in type 'Derived3' but required in type 'Derived1'.
+overloadingOnConstants1.ts(22,5): error TS2741: Property 'bar' is missing in type 'Base' but required in type 'Derived1'.
+overloadingOnConstants1.ts(23,5): error TS2741: Property 'biz' is missing in type 'Derived1' but required in type 'Derived3'.
+overloadingOnConstants1.ts(24,5): error TS2741: Property 'bar' is missing in type 'Derived2' but required in type 'Derived1'.
+overloadingOnConstants1.ts(25,5): error TS2741: Property 'bar' is missing in type 'Derived3' but required in type 'Derived1'.
 
 
-==== tests/cases/compiler/overloadingOnConstants1.ts (4 errors) ====
+==== overloadingOnConstants1.ts (4 errors) ====
     class Base { foo() { } }
     class Derived1 extends Base { bar() { } }
     class Derived2 extends Base { baz() { } }
@@ -29,16 +29,16 @@ tests/cases/compiler/overloadingOnConstants1.ts(25,5): error TS2741: Property 'b
     var htmlElement2: Derived1 = d2.createElement("yo")
         ~~~~~~~~~~~~
 !!! error TS2741: Property 'bar' is missing in type 'Base' but required in type 'Derived1'.
-!!! related TS2728 tests/cases/compiler/overloadingOnConstants1.ts:2:31: 'bar' is declared here.
+!!! related TS2728 overloadingOnConstants1.ts:2:31: 'bar' is declared here.
     var htmlCanvasElement2: Derived3 = d2.createElement("canvas");
         ~~~~~~~~~~~~~~~~~~
 !!! error TS2741: Property 'biz' is missing in type 'Derived1' but required in type 'Derived3'.
-!!! related TS2728 tests/cases/compiler/overloadingOnConstants1.ts:4:31: 'biz' is declared here.
+!!! related TS2728 overloadingOnConstants1.ts:4:31: 'biz' is declared here.
     var htmlDivElement2: Derived1 = d2.createElement("div");
         ~~~~~~~~~~~~~~~
 !!! error TS2741: Property 'bar' is missing in type 'Derived2' but required in type 'Derived1'.
-!!! related TS2728 tests/cases/compiler/overloadingOnConstants1.ts:2:31: 'bar' is declared here.
+!!! related TS2728 overloadingOnConstants1.ts:2:31: 'bar' is declared here.
     var htmlSpanElement2: Derived1 = d2.createElement("span");
         ~~~~~~~~~~~~~~~~
 !!! error TS2741: Property 'bar' is missing in type 'Derived3' but required in type 'Derived1'.
-!!! related TS2728 tests/cases/compiler/overloadingOnConstants1.ts:2:31: 'bar' is declared here.
+!!! related TS2728 overloadingOnConstants1.ts:2:31: 'bar' is declared here.

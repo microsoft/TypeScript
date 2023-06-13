@@ -166,7 +166,7 @@ function wouldRenameInOtherNodeModules(
 }
 
 function getPackagePathComponents(filePath: Path): string[] | undefined {
-    const components = getPathComponents(filePath);
+    const components = getPathComponents(filePath) as string[];
     const nodeModulesIdx = components.lastIndexOf("node_modules");
     if (nodeModulesIdx === -1) {
         return undefined;

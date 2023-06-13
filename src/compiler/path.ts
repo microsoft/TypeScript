@@ -451,6 +451,9 @@ function pathComponents(path: string, rootLength: number) {
     return [root, ...rest];
 }
 
+/** @internal */
+export type PathPathComponents = Path[] & { __pathComponensBrand: any };
+
 /**
  * Parse a path into an array containing a root component (at index 0) and zero or more path
  * components (at indices > 0). The result is not normalized.
@@ -484,6 +487,9 @@ function pathComponents(path: string, rootLength: number) {
  *
  * @internal
  */
+export function getPathComponents(path: Path): PathPathComponents;
+/** @internal */
+export function getPathComponents(path: string, currentDirectory?: string): string[];
 export function getPathComponents(path: string, currentDirectory = "") {
     path = combinePaths(currentDirectory, path);
     return pathComponents(path, getRootLength(path));
@@ -501,11 +507,11 @@ export function getPathComponents(path: string, currentDirectory = "") {
  *
  * @internal
  */
-export function getPathFromPathComponents(pathComponents: readonly string[]) {
-    if (pathComponents.length === 0) return "";
+export function getPathFromPathComponents<T extends string>(pathComponents: readonly T[], length?: number) {
+    if (pathComponents.length === 0) return "" as T;
 
     const root = pathComponents[0] && ensureTrailingDirectorySeparator(pathComponents[0]);
-    return root + pathComponents.slice(1).join(directorySeparator);
+    return root + pathComponents.slice(1, length).join(directorySeparator) as T;
 }
 
 //// Path Normalization

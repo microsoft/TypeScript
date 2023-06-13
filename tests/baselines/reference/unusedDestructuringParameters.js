@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedDestructuringParameters.ts] ////
+
 //// [unusedDestructuringParameters.ts]
 const f = ([a]) => { };
 f([1]);

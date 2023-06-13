@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es3-jsx-react.tsx ===
+//// [tests/cases/compiler/es3-jsx-react.tsx] ////
+
+=== es3-jsx-react.tsx ===
 const React: any = null;
 >React : Symbol(React, Decl(es3-jsx-react.tsx, 0, 5))
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/for-ofStatements/for-of28.ts ===
+//// [tests/cases/conformance/es6/for-ofStatements/for-of28.ts] ////
+
+=== for-of28.ts ===
 class StringIterator {
 >StringIterator : Symbol(StringIterator, Decl(for-of28.ts, 0, 0))
 

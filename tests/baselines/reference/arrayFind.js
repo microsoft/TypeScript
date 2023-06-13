@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arrayFind.ts] ////
+
 //// [arrayFind.ts]
 // test fix for #18112, type guard predicates should narrow returned element
 function isNumber(x: any): x is number {

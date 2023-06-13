@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileTypeofInAnonymousType.ts] ////
+
 //// [declFileTypeofInAnonymousType.ts]
 module m1 {
     export class c {

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/metadataOfUnionWithNull.ts ===
+//// [tests/cases/compiler/metadataOfUnionWithNull.ts] ////
+
+=== metadataOfUnionWithNull.ts ===
 function PropDeco(target: Object, propKey: string | symbol) { }
 >PropDeco : (target: Object, propKey: string | symbol) => void
 >target : Object
@@ -16,7 +18,6 @@ class B {
 
     x: "foo" | null;
 >x : "foo"
->null : null
 
     @PropDeco
 >PropDeco : (target: Object, propKey: string | symbol) => void
@@ -36,7 +37,6 @@ class B {
 
     a: null;
 >a : null
->null : null
 
     @PropDeco
 >PropDeco : (target: Object, propKey: string | symbol) => void
@@ -55,14 +55,12 @@ class B {
 
     d: undefined | null;
 >d : null
->null : null
 
     @PropDeco
 >PropDeco : (target: Object, propKey: string | symbol) => void
 
     e: symbol | null;
 >e : symbol
->null : null
 
     @PropDeco
 >PropDeco : (target: Object, propKey: string | symbol) => void
@@ -75,19 +73,16 @@ class B {
 
     g: A | null;
 >g : A
->null : null
 
     @PropDeco
 >PropDeco : (target: Object, propKey: string | symbol) => void
 
     h: null | B;
 >h : B
->null : null
 
     @PropDeco
 >PropDeco : (target: Object, propKey: string | symbol) => void
 
     j: null | symbol;
 >j : symbol
->null : null
 }

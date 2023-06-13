@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileTypeAnnotationVisibilityErrorAccessors.ts ===
+//// [tests/cases/compiler/declFileTypeAnnotationVisibilityErrorAccessors.ts] ////
+
+=== declFileTypeAnnotationVisibilityErrorAccessors.ts ===
 module m {
 >m : typeof m
 

@@ -1,8 +1,8 @@
-tests/cases/conformance/types/thisType/thisTypeErrors2.ts(2,20): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
-tests/cases/conformance/types/thisType/thisTypeErrors2.ts(9,38): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+thisTypeErrors2.ts(2,20): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+thisTypeErrors2.ts(9,38): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
 
 
-==== tests/cases/conformance/types/thisType/thisTypeErrors2.ts (2 errors) ====
+==== thisTypeErrors2.ts (2 errors) ====
     class Base {
         constructor(a: this) {
                        ~~~~

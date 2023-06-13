@@ -48,7 +48,7 @@ export function preProcessFile(sourceText: string, readImportFiles = true, detec
 
     function getFileReference() {
         const fileName = scanner.getTokenValue();
-        const pos = scanner.getTokenPos();
+        const pos = scanner.getTokenStart();
         return { fileName, pos, end: pos + fileName.length };
     }
 
@@ -380,7 +380,7 @@ export function preProcessFile(sourceText: string, readImportFiles = true, detec
                         case SyntaxKind.CloseBraceToken:
                             if (length(stack)) {
                                 if (lastOrUndefined(stack) === SyntaxKind.TemplateHead) {
-                                    if (scanner.reScanTemplateToken(/* isTaggedTemplate */ false) === SyntaxKind.TemplateTail) {
+                                    if (scanner.reScanTemplateToken(/*isTaggedTemplate*/ false) === SyntaxKind.TemplateTail) {
                                         stack.pop();
                                     }
                                 }

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/declarationEmit/classDoesNotDependOnPrivateMember.ts ===
+//// [tests/cases/conformance/declarationEmit/classDoesNotDependOnPrivateMember.ts] ////
+
+=== classDoesNotDependOnPrivateMember.ts ===
 module M {
 >M : typeof M
 

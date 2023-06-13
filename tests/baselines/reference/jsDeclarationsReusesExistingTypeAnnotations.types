@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsReusesExistingTypeAnnotations.ts] ////
+
+=== index.js ===
 class С1 {
 >С1 : С1
 
@@ -15,12 +17,10 @@ class С1 {
     /** @type {?string} */
     p3 = null;
 >p3 : string | null
->null : null
 
     /** @type {string | null} */
     p4 = null;
 >p4 : string | null
->null : null
 }
 
 class С2 {
@@ -47,7 +47,6 @@ class С2 {
 >p3 : string | null
 
         return null;
->null : null
     }
 
     /** @type {string | null} */
@@ -55,7 +54,6 @@ class С2 {
 >p4 : string | null
 
         return null;
->null : null
     }
 }
 
@@ -110,7 +108,6 @@ class С3 {
 >p3 : string | null
 
         return null;
->null : null
     }
 
     /** @param {?string} value */
@@ -131,7 +128,6 @@ class С3 {
 >p4 : string | null
 
         return null;
->null : null
     }
 
     /** @param {string | null} value */

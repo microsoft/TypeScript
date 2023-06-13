@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionReadonlyLength.ts ===
+//// [tests/cases/compiler/functionReadonlyLength.ts] ////
+
+=== functionReadonlyLength.ts ===
 const f0 = new Function()
 >f0 : Symbol(f0, Decl(functionReadonlyLength.ts, 0, 5))
 >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

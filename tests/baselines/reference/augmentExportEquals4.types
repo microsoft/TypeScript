@@ -1,18 +1,20 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/augmentExportEquals4.ts] ////
+
+=== file1.ts ===
 class foo {}
->foo : import("tests/cases/compiler/file1.ts")
+>foo : import("file1.ts")
 
 namespace foo {
->foo : typeof import("tests/cases/compiler/file1.ts")
+>foo : typeof import("file1.ts")
 
     export var v = 1;
 >v : number
 >1 : 1
 }
 export = foo;
->foo : import("tests/cases/compiler/file1.ts")
+>foo : import("file1.ts")
 
-=== tests/cases/compiler/file2.ts ===
+=== file2.ts ===
 import x = require("./file1"); 
 >x : typeof x
 
@@ -34,7 +36,7 @@ declare module "./file1" {
 >b : number
 }
 
-=== tests/cases/compiler/file3.ts ===
+=== file3.ts ===
 import * as x from "./file1";
 >x : typeof x
 

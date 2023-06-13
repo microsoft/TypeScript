@@ -1,10 +1,10 @@
-tests/cases/compiler/lift.ts(14,32): error TS2304: Cannot find name 'x'.
-tests/cases/compiler/lift.ts(14,34): error TS2304: Cannot find name 'z'.
-tests/cases/compiler/lift.ts(15,37): error TS2304: Cannot find name 'x'.
-tests/cases/compiler/lift.ts(15,39): error TS2304: Cannot find name 'z'.
+lift.ts(14,32): error TS2304: Cannot find name 'x'.
+lift.ts(14,34): error TS2304: Cannot find name 'z'.
+lift.ts(15,37): error TS2304: Cannot find name 'x'.
+lift.ts(15,39): error TS2304: Cannot find name 'z'.
 
 
-==== tests/cases/compiler/lift.ts (4 errors) ====
+==== lift.ts (4 errors) ====
     class B {
         constructor(public y:number) {
         }

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/union/unionTypeConstructSignatures.ts ===
+//// [tests/cases/conformance/types/union/unionTypeConstructSignatures.ts] ////
+
+=== unionTypeConstructSignatures.ts ===
 var numOrDate: number | Date;
 >numOrDate : Symbol(numOrDate, Decl(unionTypeConstructSignatures.ts, 0, 3))
 >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))

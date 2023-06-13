@@ -1,14 +1,14 @@
-tests/cases/compiler/indexTypeCheck.ts(2,2): error TS1021: An index signature must have a type annotation.
-tests/cases/compiler/indexTypeCheck.ts(3,2): error TS1021: An index signature must have a type annotation.
-tests/cases/compiler/indexTypeCheck.ts(17,2): error TS2413: 'number' index type 'number' is not assignable to 'string' index type 'string'.
-tests/cases/compiler/indexTypeCheck.ts(22,2): error TS2413: 'number' index type 'Orange' is not assignable to 'string' index type 'Yellow'.
-tests/cases/compiler/indexTypeCheck.ts(27,2): error TS2413: 'number' index type 'number' is not assignable to 'string' index type 'string'.
-tests/cases/compiler/indexTypeCheck.ts(32,3): error TS1096: An index signature must have exactly one parameter.
-tests/cases/compiler/indexTypeCheck.ts(36,3): error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
-tests/cases/compiler/indexTypeCheck.ts(51,8): error TS2538: Type 'Blue' cannot be used as an index type.
+indexTypeCheck.ts(2,2): error TS1021: An index signature must have a type annotation.
+indexTypeCheck.ts(3,2): error TS1021: An index signature must have a type annotation.
+indexTypeCheck.ts(17,2): error TS2413: 'number' index type 'number' is not assignable to 'string' index type 'string'.
+indexTypeCheck.ts(22,2): error TS2413: 'number' index type 'Orange' is not assignable to 'string' index type 'Yellow'.
+indexTypeCheck.ts(27,2): error TS2413: 'number' index type 'number' is not assignable to 'string' index type 'string'.
+indexTypeCheck.ts(32,3): error TS1096: An index signature must have exactly one parameter.
+indexTypeCheck.ts(36,3): error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
+indexTypeCheck.ts(51,8): error TS2538: Type 'Blue' cannot be used as an index type.
 
 
-==== tests/cases/compiler/indexTypeCheck.ts (8 errors) ====
+==== indexTypeCheck.ts (8 errors) ====
     interface Red {
     	[n:number]; // ok
     	~~~~~~~~~~~

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/relatedViaDiscriminatedTypeNoError2.ts] ////
+
 //// [relatedViaDiscriminatedTypeNoError2.ts]
 type AObjOrBObj = { name: "A" } | { name: "B" };
 type AOrBObj = { name: "A" | "B" };

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts] ////
+
+=== objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts ===
 // Two call or construct signatures are considered identical when they have the same number of type parameters and, considering those 
 // parameters pairwise identical, have identical type parameter constraints, identical number of parameters with identical kind(required, 
 // optional or rest) and types, and identical return types.
@@ -8,7 +10,6 @@ class B<T extends Array<number>> {
 
     constructor(x: T) { return null; }
 >x : T
->null : null
 }
 
 class C<T extends String> {
@@ -16,7 +17,6 @@ class C<T extends String> {
 
     constructor(x: T) { return null; }
 >x : T
->null : null
 }
 
 interface I<T extends Number> {
