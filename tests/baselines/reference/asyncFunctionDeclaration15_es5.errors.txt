@@ -1,18 +1,18 @@
-tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration15_es5.ts(6,23): error TS1055: Type '{}' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.
-tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration15_es5.ts(6,23): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
-tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration15_es5.ts(7,23): error TS1055: Type 'any' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.
-tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration15_es5.ts(8,23): error TS1055: Type 'number' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.
-tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration15_es5.ts(8,23): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
-tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration15_es5.ts(9,23): error TS1055: Type 'PromiseLike' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.
-tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration15_es5.ts(10,23): error TS1055: Type 'typeof Thenable' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.
+asyncFunctionDeclaration15_es5.ts(6,23): error TS1055: Type '{}' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.
+asyncFunctionDeclaration15_es5.ts(6,23): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+asyncFunctionDeclaration15_es5.ts(7,23): error TS1055: Type 'any' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.
+asyncFunctionDeclaration15_es5.ts(8,23): error TS1055: Type 'number' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.
+asyncFunctionDeclaration15_es5.ts(8,23): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+asyncFunctionDeclaration15_es5.ts(9,23): error TS1055: Type 'PromiseLike' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.
+asyncFunctionDeclaration15_es5.ts(10,23): error TS1055: Type 'typeof Thenable' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.
   Construct signature return types 'Thenable' and 'PromiseLike<T>' are incompatible.
     The types returned by 'then(...)' are incompatible between these types.
       Type 'void' is not assignable to type 'PromiseLike<TResult1 | TResult2>'.
-tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration15_es5.ts(17,16): error TS1058: The return type of an async function must either be a valid promise or must not contain a callable 'then' member.
-tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration15_es5.ts(23,25): error TS1320: Type of 'await' operand must either be a valid promise or must not contain a callable 'then' member.
+asyncFunctionDeclaration15_es5.ts(17,16): error TS1058: The return type of an async function must either be a valid promise or must not contain a callable 'then' member.
+asyncFunctionDeclaration15_es5.ts(23,25): error TS1320: Type of 'await' operand must either be a valid promise or must not contain a callable 'then' member.
 
 
-==== tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration15_es5.ts (9 errors) ====
+==== asyncFunctionDeclaration15_es5.ts (9 errors) ====
     declare class Thenable { then(): void; }
     declare let a: any;
     declare let obj: { then: string; };

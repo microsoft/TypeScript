@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileTypeofModule.ts] ////
+
 //// [declFileTypeofModule.ts]
 module m1 {
     export var c: string;

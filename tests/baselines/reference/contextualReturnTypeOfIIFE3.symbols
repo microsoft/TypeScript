@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualReturnTypeOfIIFE3.ts ===
+//// [tests/cases/compiler/contextualReturnTypeOfIIFE3.ts] ////
+
+=== contextualReturnTypeOfIIFE3.ts ===
 declare namespace app {
 >app : Symbol(app, Decl(contextualReturnTypeOfIIFE3.ts, 0, 0))
 

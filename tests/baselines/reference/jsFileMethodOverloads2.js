@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsFileMethodOverloads2.ts] ////
+
 //// [jsFileMethodOverloads2.js]
 // Also works if all @overload tags are combined in one comment.
 /**

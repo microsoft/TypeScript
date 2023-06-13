@@ -1,4 +1,6 @@
-=== tests/cases/compiler/varBlock.ts ===
+//// [tests/cases/compiler/varBlock.ts] ////
+
+=== varBlock.ts ===
 module m2 {
 >m2 : Symbol(m2, Decl(varBlock.ts, 0, 0))
 

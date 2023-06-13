@@ -1,9 +1,11 @@
-=== tests/cases/conformance/decorators/class/a.ts ===
+//// [tests/cases/conformance/decorators/class/decoratorInstantiateModulesInFunctionBodies.ts] ////
+
+=== a.ts ===
 // from #3108
 export var test = 'abc';
 >test : Symbol(test, Decl(a.ts, 1, 10))
 
-=== tests/cases/conformance/decorators/class/b.ts ===
+=== b.ts ===
 import { test } from './a';
 >test : Symbol(test, Decl(b.ts, 0, 8))
 

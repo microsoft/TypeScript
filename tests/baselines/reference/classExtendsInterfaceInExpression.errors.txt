@@ -1,7 +1,7 @@
-tests/cases/compiler/classExtendsInterfaceInExpression.ts(7,25): error TS2693: 'A' only refers to a type, but is being used as a value here.
+classExtendsInterfaceInExpression.ts(7,25): error TS2693: 'A' only refers to a type, but is being used as a value here.
 
 
-==== tests/cases/compiler/classExtendsInterfaceInExpression.ts (1 errors) ====
+==== classExtendsInterfaceInExpression.ts (1 errors) ====
     interface A {}
     
     function factory(a: any): {new(): Object} {

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/recursiveInferenceBug.ts ===
+//// [tests/cases/compiler/recursiveInferenceBug.ts] ////
+
+=== recursiveInferenceBug.ts ===
 function f(x: number) {
 >f : Symbol(f, Decl(recursiveInferenceBug.ts, 0, 0))
 >x : Symbol(x, Decl(recursiveInferenceBug.ts, 0, 11))

@@ -480,7 +480,7 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
                     continue;
                 }
                 finishObjectLiteralIfNeeded();
-                expressions.push(attr.expression);
+                expressions.push(Debug.checkDefined(visitNode(attr.expression, visitor, isExpression)));
                 continue;
             }
             properties.push(transformJsxAttributeToObjectLiteralElement(attr));

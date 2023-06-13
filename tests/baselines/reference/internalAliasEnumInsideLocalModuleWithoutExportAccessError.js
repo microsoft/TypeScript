@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/internalAliasEnumInsideLocalModuleWithoutExportAccessError.ts] ////
+
 //// [internalAliasEnumInsideLocalModuleWithoutExportAccessError.ts]
 export module a {
     export enum weekend {

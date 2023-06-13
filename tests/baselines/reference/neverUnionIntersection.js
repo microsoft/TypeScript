@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/never/neverUnionIntersection.ts] ////
+
 //// [neverUnionIntersection.ts]
 type T01 = string | never;
 type T02 = string & never;

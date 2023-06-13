@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedVariablesWithUnderscoreInBindingElement.ts ===
+//// [tests/cases/compiler/unusedVariablesWithUnderscoreInBindingElement.ts] ////
+
+=== unusedVariablesWithUnderscoreInBindingElement.ts ===
 function t1() {
 >t1 : Symbol(t1, Decl(unusedVariablesWithUnderscoreInBindingElement.ts, 0, 0))
 

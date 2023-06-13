@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/inline/renderer.d.ts ===
+//// [tests/cases/conformance/jsx/inline/inlineJsxFactoryDeclarations.tsx] ////
+
+=== renderer.d.ts ===
 declare global {
 >global : Symbol(global, Decl(renderer.d.ts, 0, 0))
 
@@ -26,7 +28,7 @@ export { dom as default };
 >dom : Symbol(dom, Decl(renderer.d.ts, 6, 1))
 >default : Symbol(default, Decl(renderer.d.ts, 10, 8))
 
-=== tests/cases/conformance/jsx/inline/otherreacty.tsx ===
+=== otherreacty.tsx ===
 /** @jsx React.createElement */
 import * as React from "./renderer";
 >React : Symbol(React, Decl(otherreacty.tsx, 1, 6))
@@ -35,7 +37,7 @@ import * as React from "./renderer";
 >h : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
 >h : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
 
-=== tests/cases/conformance/jsx/inline/other.tsx ===
+=== other.tsx ===
 /** @jsx h */
 import { dom as h } from "./renderer"
 >dom : Symbol(h, Decl(renderer.d.ts, 6, 1))
@@ -46,7 +48,7 @@ export const prerendered = <h></h>;
 >h : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
 >h : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
 
-=== tests/cases/conformance/jsx/inline/othernoalias.tsx ===
+=== othernoalias.tsx ===
 /** @jsx otherdom */
 import { otherdom } from "./renderer"
 >otherdom : Symbol(otherdom, Decl(othernoalias.tsx, 1, 8))
@@ -56,7 +58,7 @@ export const prerendered2 = <h></h>;
 >h : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
 >h : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
 
-=== tests/cases/conformance/jsx/inline/reacty.tsx ===
+=== reacty.tsx ===
 import React from "./renderer"
 >React : Symbol(React, Decl(reacty.tsx, 0, 6))
 
@@ -65,7 +67,7 @@ export const prerendered3 = <h></h>;
 >h : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
 >h : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
 
-=== tests/cases/conformance/jsx/inline/index.tsx ===
+=== index.tsx ===
 /** @jsx dom */
 import { dom } from "./renderer"
 >dom : Symbol(dom, Decl(index.tsx, 1, 8))

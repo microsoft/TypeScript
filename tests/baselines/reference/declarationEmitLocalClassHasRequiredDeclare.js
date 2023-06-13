@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitLocalClassHasRequiredDeclare.ts] ////
+
 //// [declarationEmitLocalClassHasRequiredDeclare.ts]
 export declare namespace A {
     namespace X { }

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileClassWithStaticMethodReturningConstructor.ts ===
+//// [tests/cases/compiler/declFileClassWithStaticMethodReturningConstructor.ts] ////
+
+=== declFileClassWithStaticMethodReturningConstructor.ts ===
 export class Enhancement {
 >Enhancement : Enhancement
 

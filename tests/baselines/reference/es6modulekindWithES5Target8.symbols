@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/es6/es6modulekindWithES5Target8.ts ===
+//// [tests/cases/conformance/externalModules/es6/es6modulekindWithES5Target8.ts] ////
+
+=== es6modulekindWithES5Target8.ts ===
 export const c = 0;
 >c : Symbol(c, Decl(es6modulekindWithES5Target8.ts, 0, 12))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/exportAssignmentAndDeclaration.ts] ////
+
 //// [foo_0.ts]
 export enum E1 {
 	A,B,C

@@ -1,8 +1,8 @@
-tests/cases/compiler/methodInAmbientClass1.ts(2,12): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
-tests/cases/compiler/methodInAmbientClass1.ts(2,20): error TS1183: An implementation cannot be declared in ambient contexts.
+methodInAmbientClass1.ts(2,12): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+methodInAmbientClass1.ts(2,20): error TS1183: An implementation cannot be declared in ambient contexts.
 
 
-==== tests/cases/compiler/methodInAmbientClass1.ts (2 errors) ====
+==== methodInAmbientClass1.ts (2 errors) ====
         declare class Foo {
         	fn(): boolean {
         	      ~~~~~~~

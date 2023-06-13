@@ -1,4 +1,6 @@
-=== tests/cases/compiler/duplicateLocalVariable2.ts ===
+//// [tests/cases/compiler/duplicateLocalVariable2.ts] ////
+
+=== duplicateLocalVariable2.ts ===
 export class TestCase {
 >TestCase : Symbol(TestCase, Decl(duplicateLocalVariable2.ts, 0, 0))
 

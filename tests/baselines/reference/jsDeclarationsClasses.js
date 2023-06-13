@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsClasses.ts] ////
+
 //// [index.js]
 export class A {}
 

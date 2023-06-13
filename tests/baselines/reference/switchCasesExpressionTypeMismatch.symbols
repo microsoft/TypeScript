@@ -1,4 +1,6 @@
-=== tests/cases/compiler/switchCasesExpressionTypeMismatch.ts ===
+//// [tests/cases/compiler/switchCasesExpressionTypeMismatch.ts] ////
+
+=== switchCasesExpressionTypeMismatch.ts ===
 class Foo { }
 >Foo : Symbol(Foo, Decl(switchCasesExpressionTypeMismatch.ts, 0, 0))
 

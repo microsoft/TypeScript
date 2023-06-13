@@ -1,4 +1,6 @@
-=== tests/cases/compiler/localVariablesReturnedFromCatchBlocks.ts ===
+//// [tests/cases/compiler/localVariablesReturnedFromCatchBlocks.ts] ////
+
+=== localVariablesReturnedFromCatchBlocks.ts ===
 function f() {
 >f : Symbol(f, Decl(localVariablesReturnedFromCatchBlocks.ts, 0, 0))
 

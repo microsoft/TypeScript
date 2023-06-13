@@ -1,27 +1,27 @@
-tests/cases/conformance/internalModules/moduleBody/invalidModuleWithStatementsOfEveryKind.ts(4,5): error TS1044: 'public' modifier cannot appear on a module or namespace element.
-tests/cases/conformance/internalModules/moduleBody/invalidModuleWithStatementsOfEveryKind.ts(6,5): error TS1044: 'public' modifier cannot appear on a module or namespace element.
-tests/cases/conformance/internalModules/moduleBody/invalidModuleWithStatementsOfEveryKind.ts(12,5): error TS1044: 'public' modifier cannot appear on a module or namespace element.
-tests/cases/conformance/internalModules/moduleBody/invalidModuleWithStatementsOfEveryKind.ts(13,5): error TS1044: 'public' modifier cannot appear on a module or namespace element.
-tests/cases/conformance/internalModules/moduleBody/invalidModuleWithStatementsOfEveryKind.ts(15,5): error TS1044: 'public' modifier cannot appear on a module or namespace element.
-tests/cases/conformance/internalModules/moduleBody/invalidModuleWithStatementsOfEveryKind.ts(19,5): error TS1044: 'public' modifier cannot appear on a module or namespace element.
-tests/cases/conformance/internalModules/moduleBody/invalidModuleWithStatementsOfEveryKind.ts(25,5): error TS1044: 'public' modifier cannot appear on a module or namespace element.
-tests/cases/conformance/internalModules/moduleBody/invalidModuleWithStatementsOfEveryKind.ts(29,5): error TS1044: 'private' modifier cannot appear on a module or namespace element.
-tests/cases/conformance/internalModules/moduleBody/invalidModuleWithStatementsOfEveryKind.ts(31,5): error TS1044: 'private' modifier cannot appear on a module or namespace element.
-tests/cases/conformance/internalModules/moduleBody/invalidModuleWithStatementsOfEveryKind.ts(37,5): error TS1044: 'private' modifier cannot appear on a module or namespace element.
-tests/cases/conformance/internalModules/moduleBody/invalidModuleWithStatementsOfEveryKind.ts(38,5): error TS1044: 'private' modifier cannot appear on a module or namespace element.
-tests/cases/conformance/internalModules/moduleBody/invalidModuleWithStatementsOfEveryKind.ts(40,5): error TS1044: 'private' modifier cannot appear on a module or namespace element.
-tests/cases/conformance/internalModules/moduleBody/invalidModuleWithStatementsOfEveryKind.ts(44,5): error TS1044: 'private' modifier cannot appear on a module or namespace element.
-tests/cases/conformance/internalModules/moduleBody/invalidModuleWithStatementsOfEveryKind.ts(50,5): error TS1044: 'private' modifier cannot appear on a module or namespace element.
-tests/cases/conformance/internalModules/moduleBody/invalidModuleWithStatementsOfEveryKind.ts(55,5): error TS1044: 'static' modifier cannot appear on a module or namespace element.
-tests/cases/conformance/internalModules/moduleBody/invalidModuleWithStatementsOfEveryKind.ts(57,5): error TS1044: 'static' modifier cannot appear on a module or namespace element.
-tests/cases/conformance/internalModules/moduleBody/invalidModuleWithStatementsOfEveryKind.ts(63,5): error TS1044: 'static' modifier cannot appear on a module or namespace element.
-tests/cases/conformance/internalModules/moduleBody/invalidModuleWithStatementsOfEveryKind.ts(64,5): error TS1044: 'static' modifier cannot appear on a module or namespace element.
-tests/cases/conformance/internalModules/moduleBody/invalidModuleWithStatementsOfEveryKind.ts(66,5): error TS1044: 'static' modifier cannot appear on a module or namespace element.
-tests/cases/conformance/internalModules/moduleBody/invalidModuleWithStatementsOfEveryKind.ts(70,5): error TS1044: 'static' modifier cannot appear on a module or namespace element.
-tests/cases/conformance/internalModules/moduleBody/invalidModuleWithStatementsOfEveryKind.ts(76,5): error TS1044: 'static' modifier cannot appear on a module or namespace element.
+invalidModuleWithStatementsOfEveryKind.ts(4,5): error TS1044: 'public' modifier cannot appear on a module or namespace element.
+invalidModuleWithStatementsOfEveryKind.ts(6,5): error TS1044: 'public' modifier cannot appear on a module or namespace element.
+invalidModuleWithStatementsOfEveryKind.ts(12,5): error TS1044: 'public' modifier cannot appear on a module or namespace element.
+invalidModuleWithStatementsOfEveryKind.ts(13,5): error TS1044: 'public' modifier cannot appear on a module or namespace element.
+invalidModuleWithStatementsOfEveryKind.ts(15,5): error TS1044: 'public' modifier cannot appear on a module or namespace element.
+invalidModuleWithStatementsOfEveryKind.ts(19,5): error TS1044: 'public' modifier cannot appear on a module or namespace element.
+invalidModuleWithStatementsOfEveryKind.ts(25,5): error TS1044: 'public' modifier cannot appear on a module or namespace element.
+invalidModuleWithStatementsOfEveryKind.ts(29,5): error TS1044: 'private' modifier cannot appear on a module or namespace element.
+invalidModuleWithStatementsOfEveryKind.ts(31,5): error TS1044: 'private' modifier cannot appear on a module or namespace element.
+invalidModuleWithStatementsOfEveryKind.ts(37,5): error TS1044: 'private' modifier cannot appear on a module or namespace element.
+invalidModuleWithStatementsOfEveryKind.ts(38,5): error TS1044: 'private' modifier cannot appear on a module or namespace element.
+invalidModuleWithStatementsOfEveryKind.ts(40,5): error TS1044: 'private' modifier cannot appear on a module or namespace element.
+invalidModuleWithStatementsOfEveryKind.ts(44,5): error TS1044: 'private' modifier cannot appear on a module or namespace element.
+invalidModuleWithStatementsOfEveryKind.ts(50,5): error TS1044: 'private' modifier cannot appear on a module or namespace element.
+invalidModuleWithStatementsOfEveryKind.ts(55,5): error TS1044: 'static' modifier cannot appear on a module or namespace element.
+invalidModuleWithStatementsOfEveryKind.ts(57,5): error TS1044: 'static' modifier cannot appear on a module or namespace element.
+invalidModuleWithStatementsOfEveryKind.ts(63,5): error TS1044: 'static' modifier cannot appear on a module or namespace element.
+invalidModuleWithStatementsOfEveryKind.ts(64,5): error TS1044: 'static' modifier cannot appear on a module or namespace element.
+invalidModuleWithStatementsOfEveryKind.ts(66,5): error TS1044: 'static' modifier cannot appear on a module or namespace element.
+invalidModuleWithStatementsOfEveryKind.ts(70,5): error TS1044: 'static' modifier cannot appear on a module or namespace element.
+invalidModuleWithStatementsOfEveryKind.ts(76,5): error TS1044: 'static' modifier cannot appear on a module or namespace element.
 
 
-==== tests/cases/conformance/internalModules/moduleBody/invalidModuleWithStatementsOfEveryKind.ts (21 errors) ====
+==== invalidModuleWithStatementsOfEveryKind.ts (21 errors) ====
     // All of these should be an error
     
     module Y {

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privacyImport.ts] ////
+
 //// [privacyImport.ts]
 export module m1 {
     export module m1_M1_public {

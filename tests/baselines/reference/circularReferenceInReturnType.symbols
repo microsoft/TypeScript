@@ -1,4 +1,6 @@
-=== tests/cases/compiler/circularReferenceInReturnType.ts ===
+//// [tests/cases/compiler/circularReferenceInReturnType.ts] ////
+
+=== circularReferenceInReturnType.ts ===
 declare function fn1<T>(cb: () => T): string;
 >fn1 : Symbol(fn1, Decl(circularReferenceInReturnType.ts, 0, 0))
 >T : Symbol(T, Decl(circularReferenceInReturnType.ts, 0, 21))

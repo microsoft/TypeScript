@@ -1,4 +1,6 @@
-=== tests/cases/compiler/innerTypeCheckOfLambdaArgument.ts ===
+//// [tests/cases/compiler/innerTypeCheckOfLambdaArgument.ts] ////
+
+=== innerTypeCheckOfLambdaArgument.ts ===
 function takesCallback(callback: (n) =>any) {
 >takesCallback : (callback: (n: any) => any) => void
 >callback : (n: any) => any

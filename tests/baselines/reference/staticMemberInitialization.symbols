@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/staticMemberInitialization.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/staticMemberInitialization.ts] ////
+
+=== staticMemberInitialization.ts ===
 class C {
 >C : Symbol(C, Decl(staticMemberInitialization.ts, 0, 0))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/collisionCodeGenModuleWithMemberInterfaceConflict.ts] ////
+
 //// [collisionCodeGenModuleWithMemberInterfaceConflict.ts]
 module m1 {
     export interface m1 {

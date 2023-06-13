@@ -1,7 +1,7 @@
-tests/cases/compiler/externSyntax.ts(8,20): error TS1183: An implementation cannot be declared in ambient contexts.
+externSyntax.ts(8,20): error TS1183: An implementation cannot be declared in ambient contexts.
 
 
-==== tests/cases/compiler/externSyntax.ts (1 errors) ====
+==== externSyntax.ts (1 errors) ====
     declare var v;
     declare module M {
         export class D {

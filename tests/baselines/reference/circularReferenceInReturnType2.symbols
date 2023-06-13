@@ -1,4 +1,6 @@
-=== tests/cases/compiler/circularReferenceInReturnType2.ts ===
+//// [tests/cases/compiler/circularReferenceInReturnType2.ts] ////
+
+=== circularReferenceInReturnType2.ts ===
 type ObjectType<Source> = {
 >ObjectType : Symbol(ObjectType, Decl(circularReferenceInReturnType2.ts, 0, 0))
 >Source : Symbol(Source, Decl(circularReferenceInReturnType2.ts, 0, 16))

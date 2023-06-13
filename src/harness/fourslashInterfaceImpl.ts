@@ -1225,6 +1225,8 @@ export namespace Completion {
         varEntry("Float64Array"),
         interfaceEntry("Float64ArrayConstructor"),
         moduleEntry("Intl"),
+        typeEntry("WeakKey"),
+        interfaceEntry("WeakKeyTypes"),
     ];
 
     export const globalThisEntry: ExpectedCompletionEntry = {

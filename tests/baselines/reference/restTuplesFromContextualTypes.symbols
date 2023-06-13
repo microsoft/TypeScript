@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/rest/restTuplesFromContextualTypes.ts ===
+//// [tests/cases/conformance/types/rest/restTuplesFromContextualTypes.ts] ////
+
+=== restTuplesFromContextualTypes.ts ===
 declare const t1: [number, boolean, string];
 >t1 : Symbol(t1, Decl(restTuplesFromContextualTypes.ts, 0, 13))
 

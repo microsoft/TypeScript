@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadsWithComputedNames.ts ===
+//// [tests/cases/compiler/overloadsWithComputedNames.ts] ////
+
+=== overloadsWithComputedNames.ts ===
 // https://github.com/microsoft/TypeScript/issues/52329
 class Person {
 >Person : Symbol(Person, Decl(overloadsWithComputedNames.ts, 0, 0))

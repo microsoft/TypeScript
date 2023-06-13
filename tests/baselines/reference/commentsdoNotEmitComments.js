@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentsdoNotEmitComments.ts] ////
+
 //// [commentsdoNotEmitComments.ts]
 /** Variable comments*/
 var myVariable = 10;

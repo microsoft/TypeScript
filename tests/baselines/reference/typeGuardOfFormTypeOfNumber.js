@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfNumber.ts] ////
+
 //// [typeGuardOfFormTypeOfNumber.ts]
 class C { private p: string };
 

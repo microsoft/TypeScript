@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/multipleExports.ts] ////
+
 //// [multipleExports.ts]
 export module M {
     export var v = 0;
