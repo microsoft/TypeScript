@@ -151,6 +151,23 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /common/tsconfig.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+After Request
+watchedFiles::
+/common/src/MyModule.ts: *new*
+  {"pollingInterval":500}
+/common/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/lib.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts: *new*
+  {"pollingInterval":500}
+
+watchedDirectoriesRecursive::
+/common/src: *new*
+  {}
+
 Info seq  [hh:mm:ss:mss] request:
     {"seq":1,"type":"request","arguments":{"file":"/web/src/Helper.ts"},"command":"open"}
 Info seq  [hh:mm:ss:mss] Search path: /web/src
@@ -259,6 +276,31 @@ Info seq  [hh:mm:ss:mss] 	FileName: /common/tsconfig.json ProjectRootPath: undef
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /web/src/Helper.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /web/tsconfig.json
+After Request
+watchedFiles::
+/common/src/MyModule.ts:
+  {"pollingInterval":500}
+/common/tsconfig.json:
+  {"pollingInterval":2000}
+/lib.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/web/src/MyApp.ts: *new*
+  {"pollingInterval":500}
+/web/tsconfig.json: *new*
+  {"pollingInterval":2000}
+
+watchedDirectoriesRecursive::
+/common/dist/src: *new*
+  {}
+/common/src:
+  {}
+/web/src: *new*
+  {}
+
 Info seq  [hh:mm:ss:mss] request:
     {"seq":2,"type":"request","arguments":{"preferences":{"includeCompletionsForModuleExports":true,"includeCompletionsWithInsertText":true,"importModuleSpecifierPreference":"non-relative"}},"command":"configure"}
 Info seq  [hh:mm:ss:mss] response:

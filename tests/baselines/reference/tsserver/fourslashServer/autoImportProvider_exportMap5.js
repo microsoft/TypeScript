@@ -179,6 +179,32 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /tsconfig.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+After Request
+watchedFiles::
+/lib.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts: *new*
+  {"pollingInterval":500}
+/node_modules/@types/dependency/lib/index.d.ts: *new*
+  {"pollingInterval":500}
+/node_modules/@types/dependency/lib/package.json: *new*
+  {"pollingInterval":2000}
+/node_modules/@types/dependency/package.json: *new*
+  {"pollingInterval":2000}
+  {"pollingInterval":2000}
+/package.json: *new*
+  {"pollingInterval":250}
+/src/foo.ts: *new*
+  {"pollingInterval":500}
+/tsconfig.json: *new*
+  {"pollingInterval":2000}
+
+watchedDirectoriesRecursive::
+: *new*
+  {}
+
 Info seq  [hh:mm:ss:mss] request:
     {"seq":1,"type":"request","arguments":{"file":"/src/foo.ts"},"command":"open"}
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /src/foo.ts 500 undefined WatchType: Closed Script info
@@ -197,6 +223,34 @@ Info seq  [hh:mm:ss:mss] 	FileName: /tsconfig.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /src/foo.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+After Request
+watchedFiles::
+/lib.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/node_modules/@types/dependency/lib/index.d.ts:
+  {"pollingInterval":500}
+/node_modules/@types/dependency/lib/package.json:
+  {"pollingInterval":2000}
+/node_modules/@types/dependency/package.json:
+  {"pollingInterval":2000}
+  {"pollingInterval":2000}
+/package.json:
+  {"pollingInterval":250}
+/tsconfig.json:
+  {"pollingInterval":2000}
+
+watchedFiles *deleted*::
+/src/foo.ts:
+  {"pollingInterval":500}
+
+watchedDirectoriesRecursive::
+:
+  {}
+
 Info seq  [hh:mm:ss:mss] request:
     {"seq":2,"type":"request","arguments":{"preferences":{"includeCompletionsForModuleExports":true,"includeInsertTextCompletions":true,"allowIncompleteCompletions":true}},"command":"configure"}
 Info seq  [hh:mm:ss:mss] response:
@@ -958,3 +1012,32 @@ Info seq  [hh:mm:ss:mss] response:
       ]
      }
     }
+After Request
+watchedFiles::
+/lib.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/node_modules/@types/dependency/lib/index.d.ts:
+  {"pollingInterval":500}
+/node_modules/@types/dependency/lib/lol.d.ts: *new*
+  {"pollingInterval":500}
+/node_modules/@types/dependency/lib/package.json:
+  {"pollingInterval":2000}
+  {"pollingInterval":2000} *new*
+/node_modules/@types/dependency/package.json:
+  {"pollingInterval":2000}
+  {"pollingInterval":2000}
+  {"pollingInterval":2000} *new*
+/package.json:
+  {"pollingInterval":250}
+/tsconfig.json:
+  {"pollingInterval":2000}
+
+watchedDirectoriesRecursive::
+:
+  {}
+/node_modules: *new*
+  {}

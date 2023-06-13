@@ -1,18 +1,15 @@
+import { createWatchUtils } from "../../../harness/watchUtils";
 import * as Harness from "../../_namespaces/Harness";
 import {
-    arrayFrom,
     clear,
     clone,
     combinePaths,
     compareStringsCaseSensitive,
-    contains,
     createGetCanonicalFileName,
-    createMultiMap,
     createSystemWatchFunctions,
     Debug,
     directorySeparator,
     FileSystemEntryKind,
-    FileWatcher,
     FileWatcherCallback,
     FileWatcherEventKind,
     filterMutate,
@@ -283,9 +280,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
     readonly immediateCallbacks = new Callbacks(this, "Immedidate");
     readonly screenClears: number[] = [];
 
-    readonly watchedFiles = createMultiMap<Path, TestFileWatcher>();
-    readonly fsWatches = createMultiMap<Path, TestFsWatcher>();
-    readonly fsWatchesRecursive = createMultiMap<Path, TestFsWatcher>();
+    readonly watchUtils = createWatchUtils<FsWatchCallback, Path>("PolledWatches", "FsWatches");
     runWithFallbackPolling: boolean;
     public readonly useCaseSensitiveFileNames: boolean;
     public readonly newLine: string;
@@ -612,27 +607,8 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         this.removeFileOrFolder(currentEntry);
     }
 
-    private hasWatchChanges?: boolean;
-    private createWatcher<T>(map: MultiMap<Path, T>, path: Path, callback: T): FileWatcher {
-        this.hasWatchChanges = true;
-        map.add(path, callback);
-        let closed = false;
-        return {
-            close: () => {
-                Debug.assert(!closed);
-                map.remove(path, callback);
-                this.hasWatchChanges = true;
-                closed = true;
-            }
-        };
-    }
-
     private watchFileWorker(fileName: string, cb: FileWatcherCallback, pollingInterval: PollingInterval) {
-        return this.createWatcher(
-            this.watchedFiles,
-            this.toFullPath(fileName),
-            { cb, pollingInterval }
-        );
+        return this.watchUtils.watchFile(this.toFullPath(fileName), cb, pollingInterval);
     }
 
     private fsWatchWorker(
@@ -644,20 +620,13 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         const path = this.toFullPath(fileOrDirectory);
         // Error if the path does not exist
         if (this.inodeWatching && !this.inodes?.has(path)) throw new Error();
-        const result = this.createWatcher(
-            recursive ? this.fsWatchesRecursive : this.fsWatches,
-            path,
-            {
-                cb,
-                inode: this.inodes?.get(path)
-            }
-        ) as FsWatchWorkerWatcher;
+        const result = this.watchUtils.fsWatch(path, recursive, cb, path => this.inodes?.get(path)) as FsWatchWorkerWatcher;
         result.on = noop;
         return result;
     }
 
     invokeFileWatcher(fileFullPath: string, eventKind: FileWatcherEventKind, modifiedTime: Date | undefined) {
-        invokeWatcherCallbacks(this.watchedFiles.get(this.toPath(fileFullPath)), ({ cb }) => cb(fileFullPath, eventKind, modifiedTime));
+        invokeWatcherCallbacks(this.watchUtils.watchedFiles.get(this.toPath(fileFullPath)), ({ cb }) => cb(fileFullPath, eventKind, modifiedTime));
     }
 
     private fsWatchCallback(map: MultiMap<Path, TestFsWatcher>, fullPath: string, eventName: "rename" | "change", modifiedTime: Date | undefined, entryFullPath: string | undefined, useTildeSuffix: boolean | undefined) {
@@ -673,11 +642,11 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
     }
 
     invokeFsWatchesCallbacks(fullPath: string, eventName: "rename" | "change", modifiedTime?: Date, entryFullPath?: string, useTildeSuffix?: boolean) {
-        this.fsWatchCallback(this.fsWatches, fullPath, eventName, modifiedTime, entryFullPath, useTildeSuffix);
+        this.fsWatchCallback(this.watchUtils.fsWatches, fullPath, eventName, modifiedTime, entryFullPath, useTildeSuffix);
     }
 
     invokeFsWatchesRecursiveCallbacks(fullPath: string, eventName: "rename" | "change", modifiedTime?: Date, entryFullPath?: string, useTildeSuffix?: boolean) {
-        this.fsWatchCallback(this.fsWatchesRecursive, fullPath, eventName, modifiedTime, entryFullPath, useTildeSuffix);
+        this.fsWatchCallback(this.watchUtils.fsWatchesRecursive, fullPath, eventName, modifiedTime, entryFullPath, useTildeSuffix);
     }
 
     private getRelativePathToDirectory(directoryFullPath: string, fileFullPath: string) {
@@ -993,16 +962,8 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         baseline.push("");
     }
 
-    private serializedWatchedFiles: Map<string, TestFileWatcher[]> | undefined;
-    private serializedFsWatches: Map<string, TestFsWatcher[]> | undefined;
-    private serializedFsWatchesRecursive: Map<string, TestFsWatcher[]> | undefined;
     serializeWatches(baseline: string[] = []) {
-        if (!this.hasWatchChanges) return baseline;
-        this.serializedWatchedFiles = serializeMultiMap(baseline, "PolledWatches", this.watchedFiles, this.serializedWatchedFiles);
-        this.serializedFsWatches = serializeMultiMap(baseline, "FsWatches", this.fsWatches, this.serializedFsWatches);
-        this.serializedFsWatchesRecursive = serializeMultiMap(baseline, "FsWatchesRecursive", this.fsWatchesRecursive, this.serializedFsWatchesRecursive);
-        this.hasWatchChanges = false;
-        return baseline;
+        return this.watchUtils.serializeWatches(baseline);
     }
 
     realpath(s: string): string {
@@ -1101,56 +1062,6 @@ function diffFsEntry(baseline: string[], oldFsEntry: FSEntry | undefined, newFsE
     }
     else if (isFsSymLink(newFsEntry)) {
         diffFsSymLink(baseline, newFsEntry, newInode);
-    }
-}
-
-function serializeMultiMap<T>(baseline: string[], caption: string, multiMap: MultiMap<string, T>, serialized: Map<string, T[]> | undefined) {
-    let hasChange = diffMap(baseline, caption, multiMap, serialized, /*deleted*/ false);
-    hasChange = diffMap(baseline, caption, serialized, multiMap, /*deleted*/ true) || hasChange;
-    if (hasChange) {
-        serialized = new Map();
-        multiMap.forEach((value, key) => serialized!.set(key, new Array(...value)));
-    }
-    return serialized;
-}
-
-function diffMap<T>(
-    baseline: string[],
-    caption: string,
-    map: Map<string, T[]> | undefined,
-    old: Map<string, T[]> | undefined,
-    deleted: boolean
-) {
-    let captionAdded = false;
-    let baselineChanged = false;
-    let hasChange = false;
-    if (map) {
-        for (const key of arrayFrom(map.keys()).sort(compareStringsCaseSensitive)) {
-            const existing = old?.get(key);
-            let addedKey = false;
-            const values = map.get(key)!;
-            for (const value of values) {
-                const hasExisting = contains(existing, value);
-                if (deleted && hasExisting) continue;
-                if (!hasExisting) hasChange = true;
-                if (!addedKey) {
-                    addBaseline(`${key}:${deleted || existing ? "" : " *new*"}`);
-                    addedKey = true;
-                }
-                addBaseline(`  ${JSON.stringify(value)}${deleted || hasExisting || !existing ? "" : " *new*"}`);
-            }
-        }
-    }
-    if (baselineChanged) baseline.push("");
-    return hasChange;
-
-    function addBaseline(s: string) {
-        if (!captionAdded) {
-            baseline.push(`${caption}${deleted ? " *deleted*" : ""}::`);
-            captionAdded = true;
-        }
-        baseline.push(s);
-        baselineChanged = true;
     }
 }
 

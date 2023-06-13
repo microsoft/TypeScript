@@ -88,6 +88,15 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /tsconfig.base.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+After Request
+watchedFiles::
+/lib.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts: *new*
+  {"pollingInterval":500}
+
 Info seq  [hh:mm:ss:mss] request:
     {"seq":1,"type":"request","arguments":{"formatOptions":{"indentSize":4,"tabSize":4,"newLineCharacter":"\n","convertTabsToSpaces":true,"indentStyle":2,"insertSpaceAfterConstructor":false,"insertSpaceAfterCommaDelimiter":true,"insertSpaceAfterSemicolonInForStatements":true,"insertSpaceBeforeAndAfterBinaryOperators":true,"insertSpaceAfterKeywordsInControlFlowStatements":true,"insertSpaceAfterFunctionKeywordForAnonymousFunctions":false,"insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis":false,"insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets":false,"insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces":true,"insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces":false,"insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces":false,"insertSpaceBeforeFunctionParenthesis":false,"placeOpenBraceOnNewLineForFunctions":false,"placeOpenBraceOnNewLineForControlBlocks":false,"semicolons":"ignore","trimTrailingWhitespace":true,"indentSwitchCase":true,"newline":"\n"}},"command":"configure"}
 Info seq  [hh:mm:ss:mss] Format host information updated
@@ -243,6 +252,33 @@ Info seq  [hh:mm:ss:mss] 	FileName: /tsconfig.base.json ProjectRootPath: undefin
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /packages/pkg-1/src/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /packages/pkg-1/tsconfig.json
+After Request
+watchedFiles::
+/lib.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/packages/pkg-1/package.json: *new*
+  {"pollingInterval":250}
+/packages/pkg-1/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/packages/pkg-2/src/index.ts: *new*
+  {"pollingInterval":500}
+/packages/pkg-2/src/utils.ts: *new*
+  {"pollingInterval":500}
+/packages/pkg-2/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/tsconfig.base.json: *new*
+  {"pollingInterval":2000}
+
+watchedDirectoriesRecursive::
+/packages/pkg-1: *new*
+  {}
+/packages/pkg-2: *new*
+  {}
+
 Info seq  [hh:mm:ss:mss] request:
     {"seq":3,"type":"request","arguments":{"preferences":{"importModuleSpecifierPreference":"project-relative"}},"command":"configure"}
 Info seq  [hh:mm:ss:mss] response:
@@ -349,6 +385,35 @@ Info seq  [hh:mm:ss:mss] response:
       }
      ]
     }
+After Request
+watchedFiles::
+/lib.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/packages/pkg-1/package.json:
+  {"pollingInterval":250}
+/packages/pkg-1/tsconfig.json:
+  {"pollingInterval":2000}
+/packages/pkg-2/src/index.ts:
+  {"pollingInterval":500}
+/packages/pkg-2/src/utils.ts:
+  {"pollingInterval":500}
+/packages/pkg-2/tsconfig.json:
+  {"pollingInterval":2000}
+/tsconfig.base.json:
+  {"pollingInterval":2000}
+
+watchedDirectoriesRecursive::
+/packages/pkg-1:
+  {}
+/packages/pkg-1/node_modules: *new*
+  {}
+/packages/pkg-2:
+  {}
+
 Info seq  [hh:mm:ss:mss] request:
     {"seq":9,"type":"request","arguments":{"file":"/packages/pkg-1/src/index.ts","line":1,"offset":1,"endLine":1,"endOffset":1,"insertString":"import { Pkg2 } from \"pkg-2/utils\";\n\n"},"command":"change"}
 Info seq  [hh:mm:ss:mss] request:
@@ -441,6 +506,37 @@ Info seq  [hh:mm:ss:mss] 	FileName: /packages/pkg-1/src/index.ts ProjectRootPath
 Info seq  [hh:mm:ss:mss] 		Projects: /packages/pkg-1/tsconfig.json
 Info seq  [hh:mm:ss:mss] 	FileName: /packages/pkg-2/src/blah/foo/data.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /packages/pkg-2/tsconfig.json
+After Request
+watchedFiles::
+/lib.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/packages/pkg-1/package.json:
+  {"pollingInterval":250}
+/packages/pkg-1/tsconfig.json:
+  {"pollingInterval":2000}
+/packages/pkg-2/package.json: *new*
+  {"pollingInterval":250}
+/packages/pkg-2/src/index.ts:
+  {"pollingInterval":500}
+/packages/pkg-2/src/utils.ts:
+  {"pollingInterval":500}
+/packages/pkg-2/tsconfig.json:
+  {"pollingInterval":2000}
+/tsconfig.base.json:
+  {"pollingInterval":2000}
+
+watchedDirectoriesRecursive::
+/packages/pkg-1:
+  {}
+/packages/pkg-1/node_modules:
+  {}
+/packages/pkg-2:
+  {}
+
 Info seq  [hh:mm:ss:mss] request:
     {"seq":12,"type":"request","arguments":{"preferences":{"importModuleSpecifierPreference":"project-relative"}},"command":"configure"}
 Info seq  [hh:mm:ss:mss] response:

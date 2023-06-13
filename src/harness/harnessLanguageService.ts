@@ -15,6 +15,7 @@ import {
     HarnessLSCouldNotResolveModule,
     Logger,
 } from "./tsserverLogger";
+import { createWatchUtils } from "./watchUtils";
 
 export function makeDefaultProxy(info: ts.server.PluginCreateInfo): ts.LanguageService {
     const proxy = Object.create(/*o*/ null); // eslint-disable-line no-null/no-null
@@ -774,6 +775,7 @@ class SessionServerHost implements ts.server.ServerHost {
     args: string[] = [];
     newLine: string;
     useCaseSensitiveFileNames = false;
+    watchUtils = createWatchUtils<ts.DirectoryWatcherCallback>("watchedFiles", "watchedDirectories");
 
     constructor(private host: NativeLanguageServiceHost) {
         this.newLine = this.host.getNewLine();
@@ -840,12 +842,12 @@ class SessionServerHost implements ts.server.ServerHost {
         return this.host.readDirectory(path, extensions, exclude, include, depth);
     }
 
-    watchFile(): ts.FileWatcher {
-        return { close: ts.noop };
+    watchFile(file: string, cb: ts.FileWatcherCallback, pollingInterval: ts.PollingInterval): ts.FileWatcher {
+        return this.watchUtils.watchFile(file, cb, pollingInterval);
     }
 
-    watchDirectory(): ts.FileWatcher {
-        return { close: ts.noop };
+    watchDirectory(dir: string, cb: ts.DirectoryWatcherCallback, recursive: boolean): ts.FileWatcher {
+        return this.watchUtils.fsWatch(dir, recursive, cb);
     }
 
     setTimeout(_callback: (...args: any[]) => void, _ms: number, ..._args: any[]): any {
@@ -970,21 +972,18 @@ class SessionServerHost implements ts.server.ServerHost {
 }
 
 class FourslashSession extends ts.server.Session {
+    constructor(opts: ts.server.SessionOptions, readonly baselineHost: (when: string) => void) {
+        super(opts);
+    }
     getText(fileName: string) {
         return ts.getSnapshotText(this.projectService.getDefaultProjectForFile(ts.server.toNormalizedPath(fileName), /*ensureProject*/ true)!.getScriptSnapshot(fileName)!);
     }
+    public override onMessage(message: string): void {
+        this.baselineHost("Before Request");
+        super.onMessage(message);
+        this.baselineHost("After Request");
+    }
 }
-
-// if (this.logger.hasLevel(ts.server.LogLevel.verbose)) {
-//     this.testhost.baselineHost("Before request");
-//     this.logger.info(`request:${ts.server.indent(JSON.stringify(request, undefined, 2))}`);
-// }
-// const response = super.executeCommand(request);
-// if (this.logger.hasLevel(ts.server.LogLevel.verbose)) {
-//     this.logger.info(`response:${ts.server.indent(JSON.stringify(response.response === ts.getSupportedCodeFixes() ? { ...response, response: "ts.getSupportedCodeFixes()" } : response, undefined, 2))}`);
-//     this.testhost.baselineHost("After request");
-// }
-// return response;
 export class ServerLanguageServiceAdapter implements LanguageServiceAdapter {
     private host: SessionClientHost;
     private client: ts.server.SessionClient;
@@ -1011,8 +1010,13 @@ export class ServerLanguageServiceAdapter implements LanguageServiceAdapter {
             canUseEvents: true,
             incrementalVerifier,
         };
-        this.server = new FourslashSession(opts);
-
+        this.server = new FourslashSession(opts, when => {
+            const baseline = serverHost.watchUtils.serializeWatches();
+            if (baseline.length) {
+                this.logger.log(when);
+                baseline.forEach(s => this.logger.log(s));
+            }
+        });
 
         // Fake the connection between the client and the server
         serverHost.writeMessage = client.onMessage.bind(client);

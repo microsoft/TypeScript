@@ -270,6 +270,35 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /packages/app/package.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+After Request
+watchedFiles::
+/lib.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts: *new*
+  {"pollingInterval":500}
+/packages/app/package.json: *new*
+  {"pollingInterval":250}
+/packages/app/src/index.ts: *new*
+  {"pollingInterval":500}
+/packages/app/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/packages/dep/src/index.ts: *new*
+  {"pollingInterval":500}
+/packages/dep/src/sub/folder/index.ts: *new*
+  {"pollingInterval":500}
+/packages/dep/tsconfig.json: *new*
+  {"pollingInterval":2000}
+
+watchedDirectoriesRecursive::
+/packages/app: *new*
+  {}
+/packages/dep: *new*
+  {}
+/packages/dep/src: *new*
+  {}
+
 Info seq  [hh:mm:ss:mss] request:
     {"seq":1,"type":"request","arguments":{"file":"/packages/app/src/index.ts"},"command":"open"}
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /packages/app/src/index.ts 500 undefined WatchType: Closed Script info
@@ -292,6 +321,37 @@ Info seq  [hh:mm:ss:mss] 	FileName: /packages/app/package.json ProjectRootPath: 
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /packages/app/src/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /packages/app/tsconfig.json
+After Request
+watchedFiles::
+/lib.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/packages/app/package.json:
+  {"pollingInterval":250}
+/packages/app/tsconfig.json:
+  {"pollingInterval":2000}
+/packages/dep/src/index.ts:
+  {"pollingInterval":500}
+/packages/dep/src/sub/folder/index.ts:
+  {"pollingInterval":500}
+/packages/dep/tsconfig.json:
+  {"pollingInterval":2000}
+
+watchedFiles *deleted*::
+/packages/app/src/index.ts:
+  {"pollingInterval":500}
+
+watchedDirectoriesRecursive::
+/packages/app:
+  {}
+/packages/dep:
+  {}
+/packages/dep/src:
+  {}
+
 Info seq  [hh:mm:ss:mss] request:
     {"seq":2,"type":"request","arguments":{"preferences":{}},"command":"configure"}
 Info seq  [hh:mm:ss:mss] response:
@@ -409,6 +469,36 @@ Info seq  [hh:mm:ss:mss] response:
       }
      ]
     }
+After Request
+watchedFiles::
+/lib.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/packages/app/package.json:
+  {"pollingInterval":250}
+/packages/app/tsconfig.json:
+  {"pollingInterval":2000}
+/packages/dep/src/index.ts:
+  {"pollingInterval":500}
+/packages/dep/src/sub/folder/index.ts:
+  {"pollingInterval":500}
+/packages/dep/tsconfig.json:
+  {"pollingInterval":2000}
+
+watchedDirectoriesRecursive::
+/packages/app:
+  {}
+/packages/app/node_modules: *new*
+  {}
+/packages/dep:
+  {}
+/packages/dep/src:
+  {}
+  {} *new*
+
 Info seq  [hh:mm:ss:mss] request:
     {"seq":7,"type":"request","arguments":{"file":"/packages/app/src/index.ts","line":1,"offset":1,"endLine":1,"endOffset":1,"insertString":"import { dep } from \"dep/sub/folder\";\r\n\r\n"},"command":"change"}
 Info seq  [hh:mm:ss:mss] request:
