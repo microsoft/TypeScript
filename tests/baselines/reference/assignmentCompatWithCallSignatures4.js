@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures4.ts] ////
+
 //// [assignmentCompatWithCallSignatures4.ts]
 // These are mostly permitted with the current loose rules. All ok unless otherwise noted.
 

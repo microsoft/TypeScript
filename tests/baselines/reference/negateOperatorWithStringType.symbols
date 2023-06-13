@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorWithStringType.ts ===
+//// [tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorWithStringType.ts] ////
+
+=== negateOperatorWithStringType.ts ===
 // - operator on string type
 var STRING: string;
 >STRING : Symbol(STRING, Decl(negateOperatorWithStringType.ts, 1, 3))

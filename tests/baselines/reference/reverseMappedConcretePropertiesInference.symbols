@@ -1,4 +1,6 @@
-=== tests/cases/compiler/reverseMappedConcretePropertiesInference.ts ===
+//// [tests/cases/compiler/reverseMappedConcretePropertiesInference.ts] ////
+
+=== reverseMappedConcretePropertiesInference.ts ===
 declare function test<T extends Record<string, { foo: unknown; bar: unknown }>>(a: {
 >test : Symbol(test, Decl(reverseMappedConcretePropertiesInference.ts, 0, 0))
 >T : Symbol(T, Decl(reverseMappedConcretePropertiesInference.ts, 0, 22))

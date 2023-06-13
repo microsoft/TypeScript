@@ -1,4 +1,6 @@
-=== tests/cases/compiler/blockScopedFunctionDeclarationES6.ts ===
+//// [tests/cases/compiler/blockScopedFunctionDeclarationES6.ts] ////
+
+=== blockScopedFunctionDeclarationES6.ts ===
 if (true) {
     function foo() { }
 >foo : Symbol(foo, Decl(blockScopedFunctionDeclarationES6.ts, 0, 11))

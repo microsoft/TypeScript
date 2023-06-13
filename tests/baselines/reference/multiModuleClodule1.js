@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/multiModuleClodule1.ts] ////
+
 //// [multiModuleClodule1.ts]
 class C {
     constructor(x: number) { }

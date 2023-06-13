@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeInferenceAggregateFromIndicesNotAssignableToConstraint.ts ===
+//// [tests/cases/compiler/typeInferenceAggregateFromIndicesNotAssignableToConstraint.ts] ////
+
+=== typeInferenceAggregateFromIndicesNotAssignableToConstraint.ts ===
 interface Expression extends Node {
     _expressionBrand: any;
 >_expressionBrand : any

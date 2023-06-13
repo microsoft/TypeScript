@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileAliasUseBeforeDeclaration_test.ts ===
+//// [tests/cases/compiler/declFileAliasUseBeforeDeclaration.ts] ////
+
+=== declFileAliasUseBeforeDeclaration_test.ts ===
 export function bar(a: foo.Foo) { }
 >bar : Symbol(bar, Decl(declFileAliasUseBeforeDeclaration_test.ts, 0, 0))
 >a : Symbol(a, Decl(declFileAliasUseBeforeDeclaration_test.ts, 0, 20))
@@ -8,7 +10,7 @@ export function bar(a: foo.Foo) { }
 import foo = require("./declFileAliasUseBeforeDeclaration_foo");
 >foo : Symbol(foo, Decl(declFileAliasUseBeforeDeclaration_test.ts, 0, 35))
 
-=== tests/cases/compiler/declFileAliasUseBeforeDeclaration_foo.ts ===
+=== declFileAliasUseBeforeDeclaration_foo.ts ===
 export class Foo { }
 >Foo : Symbol(Foo, Decl(declFileAliasUseBeforeDeclaration_foo.ts, 0, 0))
 

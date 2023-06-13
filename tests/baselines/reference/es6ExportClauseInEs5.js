@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es6ExportClauseInEs5.ts] ////
+
 //// [server.ts]
 class c {
 }

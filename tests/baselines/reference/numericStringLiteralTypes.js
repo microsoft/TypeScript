@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/literal/numericStringLiteralTypes.ts] ////
+
 //// [numericStringLiteralTypes.ts]
 type T0 = string & `${string}`;  // string
 type T1 = string & `${number}`;  // `${number}

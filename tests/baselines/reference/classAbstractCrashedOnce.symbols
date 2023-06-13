@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractCrashedOnce.ts ===
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractCrashedOnce.ts] ////
+
+=== classAbstractCrashedOnce.ts ===
 abstract class foo {
 >foo : Symbol(foo, Decl(classAbstractCrashedOnce.ts, 0, 0))
 

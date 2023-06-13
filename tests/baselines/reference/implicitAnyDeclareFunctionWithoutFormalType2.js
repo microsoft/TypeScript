@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/implicitAnyDeclareFunctionWithoutFormalType2.ts] ////
+
 //// [implicitAnyDeclareFunctionWithoutFormalType2.ts]
 // generates function fn1(): number;
 function fn1() {

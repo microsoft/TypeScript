@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/variableDeclarationDeclarationEmitUniqueSymbolPartialStatement.ts] ////
+
 //// [variableDeclarationDeclarationEmitUniqueSymbolPartialStatement.ts]
 const key = Symbol(), value = 12;
 

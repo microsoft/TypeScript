@@ -1,4 +1,6 @@
-=== tests/cases/compiler/testContainerList.ts ===
+//// [tests/cases/compiler/testContainerList.ts] ////
+
+=== testContainerList.ts ===
 // Regression test for #325
 module A {
 >A : Symbol(A, Decl(testContainerList.ts, 0, 0))

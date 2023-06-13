@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nameCollisionsInPropertyAssignments.ts ===
+//// [tests/cases/compiler/nameCollisionsInPropertyAssignments.ts] ////
+
+=== nameCollisionsInPropertyAssignments.ts ===
 var x = 1
 >x : Symbol(x, Decl(nameCollisionsInPropertyAssignments.ts, 0, 3))
 

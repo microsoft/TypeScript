@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/constructorNameInObjectLiteralAccessor.ts ===
+//// [tests/cases/conformance/salsa/constructorNameInObjectLiteralAccessor.ts] ////
+
+=== constructorNameInObjectLiteralAccessor.ts ===
 const c1 = {
 >c1 : { constructor: void; }
 >{    get constructor() { return },    set constructor(value) {}} : { constructor: void; }

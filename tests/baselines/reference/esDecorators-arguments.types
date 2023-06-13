@@ -1,4 +1,6 @@
-=== tests/cases/conformance/esDecorators/esDecorators-arguments.ts ===
+//// [tests/cases/conformance/esDecorators/esDecorators-arguments.ts] ////
+
+=== esDecorators-arguments.ts ===
 @(() => {})
 >(() => {}) : () => void
 >() => {} : () => void

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeInferenceOnIndexUnion.ts] ////
+
 //// [typeInferenceOnIndexUnion.ts]
 type Options = { k: "a", a: number } | { k: "b", b: string };
 declare function f<T extends Options>(p: T["k"]): T;

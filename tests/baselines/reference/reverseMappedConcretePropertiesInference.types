@@ -1,4 +1,6 @@
-=== tests/cases/compiler/reverseMappedConcretePropertiesInference.ts ===
+//// [tests/cases/compiler/reverseMappedConcretePropertiesInference.ts] ////
+
+=== reverseMappedConcretePropertiesInference.ts ===
 declare function test<T extends Record<string, { foo: unknown; bar: unknown }>>(a: {
 >test : <T extends Record<string, { foo: unknown; bar: unknown; }>>(a: { [K in keyof T]: { foo: T[K]["foo"]; onFoo: (fooArg: T[K]["foo"]) => void; bar: T[K]["bar"]; onBar: (barArg: T[K]["bar"]) => void; }; }) => T
 >foo : unknown

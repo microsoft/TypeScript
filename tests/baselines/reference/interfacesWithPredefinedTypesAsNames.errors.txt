@@ -1,14 +1,14 @@
-tests/cases/conformance/interfaces/interfaceDeclarations/interfacesWithPredefinedTypesAsNames.ts(1,11): error TS2427: Interface name cannot be 'any'.
-tests/cases/conformance/interfaces/interfaceDeclarations/interfacesWithPredefinedTypesAsNames.ts(2,11): error TS2427: Interface name cannot be 'number'.
-tests/cases/conformance/interfaces/interfaceDeclarations/interfacesWithPredefinedTypesAsNames.ts(3,11): error TS2427: Interface name cannot be 'string'.
-tests/cases/conformance/interfaces/interfaceDeclarations/interfacesWithPredefinedTypesAsNames.ts(4,11): error TS2427: Interface name cannot be 'boolean'.
-tests/cases/conformance/interfaces/interfaceDeclarations/interfacesWithPredefinedTypesAsNames.ts(5,1): error TS2304: Cannot find name 'interface'.
-tests/cases/conformance/interfaces/interfaceDeclarations/interfacesWithPredefinedTypesAsNames.ts(5,11): error TS2427: Interface name cannot be 'void'.
-tests/cases/conformance/interfaces/interfaceDeclarations/interfacesWithPredefinedTypesAsNames.ts(6,11): error TS2427: Interface name cannot be 'unknown'.
-tests/cases/conformance/interfaces/interfaceDeclarations/interfacesWithPredefinedTypesAsNames.ts(7,11): error TS2427: Interface name cannot be 'never'.
+interfacesWithPredefinedTypesAsNames.ts(1,11): error TS2427: Interface name cannot be 'any'.
+interfacesWithPredefinedTypesAsNames.ts(2,11): error TS2427: Interface name cannot be 'number'.
+interfacesWithPredefinedTypesAsNames.ts(3,11): error TS2427: Interface name cannot be 'string'.
+interfacesWithPredefinedTypesAsNames.ts(4,11): error TS2427: Interface name cannot be 'boolean'.
+interfacesWithPredefinedTypesAsNames.ts(5,1): error TS2304: Cannot find name 'interface'.
+interfacesWithPredefinedTypesAsNames.ts(5,11): error TS2427: Interface name cannot be 'void'.
+interfacesWithPredefinedTypesAsNames.ts(6,11): error TS2427: Interface name cannot be 'unknown'.
+interfacesWithPredefinedTypesAsNames.ts(7,11): error TS2427: Interface name cannot be 'never'.
 
 
-==== tests/cases/conformance/interfaces/interfaceDeclarations/interfacesWithPredefinedTypesAsNames.ts (8 errors) ====
+==== interfacesWithPredefinedTypesAsNames.ts (8 errors) ====
     interface any { }
               ~~~
 !!! error TS2427: Interface name cannot be 'any'.

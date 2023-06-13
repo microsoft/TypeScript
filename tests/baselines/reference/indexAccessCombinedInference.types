@@ -1,4 +1,6 @@
-=== tests/cases/compiler/indexAccessCombinedInference.ts ===
+//// [tests/cases/compiler/indexAccessCombinedInference.ts] ////
+
+=== indexAccessCombinedInference.ts ===
 // Simple case
 interface Args {
     TA: object,

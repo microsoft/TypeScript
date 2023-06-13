@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constIndexedAccess.ts ===
+//// [tests/cases/compiler/constIndexedAccess.ts] ////
+
+=== constIndexedAccess.ts ===
 const enum numbers {
 >numbers : Symbol(numbers, Decl(constIndexedAccess.ts, 0, 0))
 

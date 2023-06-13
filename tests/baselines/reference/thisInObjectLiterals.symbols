@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/thisKeyword/thisInObjectLiterals.ts ===
+//// [tests/cases/conformance/expressions/thisKeyword/thisInObjectLiterals.ts] ////
+
+=== thisInObjectLiterals.ts ===
 class MyClass {
 >MyClass : Symbol(MyClass, Decl(thisInObjectLiterals.ts, 0, 0))
 

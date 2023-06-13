@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/orderMattersForSignatureGroupIdentity.ts] ////
+
 //// [orderMattersForSignatureGroupIdentity.ts]
 interface A {
     (x: { s: string }): string

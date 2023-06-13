@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeInferenceAggregateFromIndicesNotAssignableToConstraint.ts ===
+//// [tests/cases/compiler/typeInferenceAggregateFromIndicesNotAssignableToConstraint.ts] ////
+
+=== typeInferenceAggregateFromIndicesNotAssignableToConstraint.ts ===
 interface Expression extends Node {
 >Expression : Symbol(Expression, Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraint.ts, 0, 0))
 >Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(typeInferenceAggregateFromIndicesNotAssignableToConstraint.ts, 4, 89))

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeInferenceOnIndexUnion.ts ===
+//// [tests/cases/compiler/typeInferenceOnIndexUnion.ts] ////
+
+=== typeInferenceOnIndexUnion.ts ===
 type Options = { k: "a", a: number } | { k: "b", b: string };
 >Options : { k: "a"; a: number; } | { k: "b"; b: string; }
 >k : "a"

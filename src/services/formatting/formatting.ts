@@ -515,17 +515,22 @@ function formatSpanWorker(
         processNode(enclosingNode, enclosingNode, startLine, undecoratedStartLine, initialIndentation, delta);
     }
 
-    if (!formattingScanner.isOnToken()) {
+    // Leading trivia items get attached to and processed with the token that proceeds them. If the
+    // range ends in the middle of some leading trivia, the token that proceeds them won't be in the
+    // range and thus won't get processed. So we process those remaining trivia items here.
+    const remainingTrivia = formattingScanner.getCurrentLeadingTrivia();
+    if (remainingTrivia) {
         const indentation = SmartIndenter.nodeWillIndentChild(options, enclosingNode, /*child*/ undefined, sourceFile, /*indentByDefault*/ false)
             ? initialIndentation + options.indentSize!
             : initialIndentation;
-        const leadingTrivia = formattingScanner.getCurrentLeadingTrivia();
-        if (leadingTrivia) {
-            indentTriviaItems(leadingTrivia, indentation, /*indentNextTokenOrTrivia*/ false,
-                item => processRange(item, sourceFile.getLineAndCharacterOfPosition(item.pos), enclosingNode, enclosingNode, /*dynamicIndentation*/ undefined!));
-            if (options.trimTrailingWhitespace !== false) {
-                trimTrailingWhitespacesForRemainingRange(leadingTrivia);
+        indentTriviaItems(remainingTrivia, indentation, /*indentNextTokenOrTrivia*/ true,
+            item => {
+                processRange(item, sourceFile.getLineAndCharacterOfPosition(item.pos), enclosingNode, enclosingNode, /*dynamicIndentation*/ undefined!);
+                insertIndentation(item.pos, indentation, /*lineAdded*/ false);
             }
+        );
+        if (options.trimTrailingWhitespace !== false) {
+            trimTrailingWhitespacesForRemainingRange(remainingTrivia);
         }
     }
 

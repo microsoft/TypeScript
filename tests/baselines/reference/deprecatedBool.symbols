@@ -1,4 +1,6 @@
-=== tests/cases/compiler/deprecatedBool.ts ===
+//// [tests/cases/compiler/deprecatedBool.ts] ////
+
+=== deprecatedBool.ts ===
 var b4: boolean;
 >b4 : Symbol(b4, Decl(deprecatedBool.ts, 0, 3))
 

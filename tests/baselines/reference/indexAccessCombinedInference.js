@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indexAccessCombinedInference.ts] ////
+
 //// [indexAccessCombinedInference.ts]
 // Simple case
 interface Args {

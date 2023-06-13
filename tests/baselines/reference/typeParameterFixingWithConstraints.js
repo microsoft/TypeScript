@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeParameterFixingWithConstraints.ts] ////
+
 //// [typeParameterFixingWithConstraints.ts]
 interface IBar {
     [barId: string]: any;

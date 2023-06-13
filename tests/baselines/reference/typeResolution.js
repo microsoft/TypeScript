@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeResolution.ts] ////
+
 //// [typeResolution.ts]
 export module TopLevelModule1 {
     export module SubModule1 {

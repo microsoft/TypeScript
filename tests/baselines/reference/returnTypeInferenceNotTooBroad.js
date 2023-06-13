@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/returnTypeInferenceNotTooBroad.ts] ////
+
 //// [returnTypeInferenceNotTooBroad.ts]
 type Signs = { kind: 'a'; a: 3; } | { kind: 'b'; b: 2; } | { kind: 'c'; c: 1; };
 interface Opts<T> {

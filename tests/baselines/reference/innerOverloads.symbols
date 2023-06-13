@@ -1,4 +1,6 @@
-=== tests/cases/compiler/innerOverloads.ts ===
+//// [tests/cases/compiler/innerOverloads.ts] ////
+
+=== innerOverloads.ts ===
 function outer() {
 >outer : Symbol(outer, Decl(innerOverloads.ts, 0, 0))
 

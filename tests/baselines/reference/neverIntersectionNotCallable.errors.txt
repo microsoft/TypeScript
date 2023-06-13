@@ -1,8 +1,8 @@
-tests/cases/conformance/types/never/neverIntersectionNotCallable.ts(2,1): error TS2349: This expression is not callable.
+neverIntersectionNotCallable.ts(2,1): error TS2349: This expression is not callable.
   Type 'never' has no call signatures.
 
 
-==== tests/cases/conformance/types/never/neverIntersectionNotCallable.ts (1 errors) ====
+==== neverIntersectionNotCallable.ts (1 errors) ====
     declare const f: { (x: string): number, a: "" } & { a: number }
     f()
     ~

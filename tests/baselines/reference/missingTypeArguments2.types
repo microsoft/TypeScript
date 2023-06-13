@@ -1,4 +1,6 @@
-=== tests/cases/compiler/missingTypeArguments2.ts ===
+//// [tests/cases/compiler/missingTypeArguments2.ts] ////
+
+=== missingTypeArguments2.ts ===
 class A<T> { }
 >A : A<T>
 

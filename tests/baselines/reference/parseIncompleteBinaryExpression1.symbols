@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/Expressions/parseIncompleteBinaryExpression1.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Expressions/parseIncompleteBinaryExpression1.ts] ////
+
+=== parseIncompleteBinaryExpression1.ts ===
 var v = || b;
 >v : Symbol(v, Decl(parseIncompleteBinaryExpression1.ts, 0, 3))
 

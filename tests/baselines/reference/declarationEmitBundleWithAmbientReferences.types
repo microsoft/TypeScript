@@ -1,4 +1,6 @@
-=== tests/cases/compiler/lib/lib.d.ts ===
+//// [tests/cases/compiler/declarationEmitBundleWithAmbientReferences.ts] ////
+
+=== lib/lib.d.ts ===
 declare module "lib/result" {
 >"lib/result" : typeof import("lib/result")
 
@@ -9,14 +11,14 @@ declare module "lib/result" {
     export interface Success<T> { }
 }
 
-=== tests/cases/compiler/src/datastore_result.ts ===
+=== src/datastore_result.ts ===
 import { Result } from "lib/result";
 >Result : any
 
 export type T<T> = Result<Error, T>;
->T : import("tests/cases/compiler/src/datastore_result").T<T>
+>T : import("src/datastore_result").T<T>
 
-=== tests/cases/compiler/src/conditional_directive_field.ts ===
+=== src/conditional_directive_field.ts ===
 import * as DatastoreResult from "src/datastore_result";
 >DatastoreResult : typeof DatastoreResult
 

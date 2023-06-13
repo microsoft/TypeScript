@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/esDecorators/classExpression/namedEvaluation/esDecorators-classExpression-namedEvaluation.6.ts] ////
+
 //// [esDecorators-classExpression-namedEvaluation.6.ts]
 declare let dec: any, obj: any, x: any;
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileForInterfaceWithRestParams.ts ===
+//// [tests/cases/compiler/declFileForInterfaceWithRestParams.ts] ////
+
+=== declFileForInterfaceWithRestParams.ts ===
 interface I {
 >I : Symbol(I, Decl(declFileForInterfaceWithRestParams.ts, 0, 0))
 

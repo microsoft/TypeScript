@@ -1,4 +1,6 @@
-=== tests/cases/compiler/asyncFunctionReturnType.2.ts ===
+//// [tests/cases/compiler/asyncFunctionReturnType.2.ts] ////
+
+=== asyncFunctionReturnType.2.ts ===
 // https://github.com/microsoft/TypeScript/issues/47291
 class X {
 >X : Symbol(X, Decl(asyncFunctionReturnType.2.ts, 0, 0))

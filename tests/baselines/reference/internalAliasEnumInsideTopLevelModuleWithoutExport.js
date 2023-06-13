@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/internalAliasEnumInsideTopLevelModuleWithoutExport.ts] ////
+
 //// [internalAliasEnumInsideTopLevelModuleWithoutExport.ts]
 export module a {
     export enum weekend {

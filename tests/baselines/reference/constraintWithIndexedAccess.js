@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constraintWithIndexedAccess.ts] ////
+
 //// [constraintWithIndexedAccess.ts]
 // #52399
 type DataFetchFns = {

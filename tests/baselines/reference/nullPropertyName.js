@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/declarationEmit/nullPropertyName.ts] ////
+
 //// [nullPropertyName.ts]
 function foo() {}
 // properties

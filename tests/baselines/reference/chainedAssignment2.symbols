@@ -1,4 +1,6 @@
-=== tests/cases/compiler/chainedAssignment2.ts ===
+//// [tests/cases/compiler/chainedAssignment2.ts] ////
+
+=== chainedAssignment2.ts ===
 var a: string;
 >a : Symbol(a, Decl(chainedAssignment2.ts, 0, 3))
 
