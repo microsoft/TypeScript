@@ -1,4 +1,6 @@
-=== tests/cases/compiler/index.ts ===
+//// [tests/cases/compiler/exportEqualsProperty.ts] ////
+
+=== index.ts ===
 /// <reference path="declarations.d.ts" />
 import { X } from "foobar";
 >X : number
@@ -33,7 +35,7 @@ fooLength + 1;
 >fooLength : number
 >1 : 1
 
-=== tests/cases/compiler/declarations.d.ts ===
+=== declarations.d.ts ===
 // This test is just like exportDefaultProperty, but with `export =`.
 
 declare namespace foo.bar {
@@ -67,7 +69,7 @@ declare module "foobarx" {
 >X : number
 }
 
-=== tests/cases/compiler/a.ts ===
+=== a.ts ===
 namespace A {
 >A : typeof A
 
@@ -85,7 +87,7 @@ export = A.B;
 >A : typeof A
 >B : typeof A.B
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 export = "foo".length;
 >"foo".length : number
 >"foo" : "foo"

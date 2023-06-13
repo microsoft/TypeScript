@@ -1,4 +1,6 @@
-=== tests/cases/compiler/controlFlowCommaExpressionFunctionCall.ts ===
+//// [tests/cases/compiler/controlFlowCommaExpressionFunctionCall.ts] ////
+
+=== controlFlowCommaExpressionFunctionCall.ts ===
 const otherValue = () => true;
 >otherValue : () => boolean
 >() => true : () => boolean
@@ -7,7 +9,6 @@ const otherValue = () => true;
 const value : number | string = null as any;
 >value : string | number
 >null as any : any
->null : null
 
 function isNumber(obj: any): obj is number {
 >isNumber : (obj: any) => obj is number

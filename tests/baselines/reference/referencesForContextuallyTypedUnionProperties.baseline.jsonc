@@ -1,7 +1,8 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts ===
 // interface A {
 //     a: number;
-//     /*FIND ALL REFS*/[|common|]: string;
+//     /*FIND ALL REFS*/<|[|{| defId: 0, isDefinition: true |}common|]: string;|>
 // }
 // 
 // interface B {
@@ -10,3432 +11,2069 @@
 // }
 // 
 // // Assignment
-// var v1: A | B = { a: 0, [|common|]: "" };
-// var v2: A | B = { b: 0, [|common|]: 3 };
+// var v1: A | B = { a: 0, <|[|{| defId: 1, isWriteAccess: true |}common|]: ""|> };
+// var v2: A | B = { b: 0, <|[|{| defId: 1, isWriteAccess: true |}common|]: 3|> };
 // 
 // // Function call
 // function consumer(f:  A | B) { }
-// consumer({ a: 0, b: 0, [|common|]: 1 });
+// consumer({ a: 0, b: 0, <|[|{| defId: 1, isWriteAccess: true |}common|]: 1|> });
 // 
 // // Type cast
-// var c = <A | B> { [|common|]: 0, b: 0 };
+// var c = <A | B> { <|[|{| defId: 1, isWriteAccess: true |}common|]: 0|>, b: 0 };
 // 
 // // Array literal
-// var ar: Array<A|B> = [{ a: 0, [|common|]: "" }, { b: 0, [|common|]: 0 }];
+// var ar: Array<A|B> = [{ a: 0, <|[|{| defId: 1, isWriteAccess: true |}common|]: ""|> }, { b: 0, <|[|{| defId: 1, isWriteAccess: true |}common|]: 0|> }];
 // 
 // // Nested object literal
-// var ob: { aorb: A|B } = { aorb: { b: 0, [|common|]: 0 } };
+// var ob: { aorb: A|B } = { aorb: { b: 0, <|[|{| defId: 1, isWriteAccess: true |}common|]: 0|> } };
 // 
 // // Widened type
-// var w: A|B = { a:0, [|common|]: undefined };
+// var w: A|B = { a:0, <|[|{| defId: 1, isWriteAccess: true |}common|]: undefined|> };
 // 
 // // Untped -- should not be included
 // var u1 = { a: 0, b: 0, common: "" };
 // var u2 = { b: 0, common: 0 };
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-      "kind": "property",
-      "name": "(property) A.common: string",
-      "textSpan": {
-        "start": 33,
-        "length": 6
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "A",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "common",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 33,
-        "length": 15
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 33,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 33,
-          "length": 15
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-      "kind": "property",
-      "name": "(property) common: string | number",
-      "textSpan": {
-        "start": 33,
-        "length": 6
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "common",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "|",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 33,
-        "length": 15
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 142,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 142,
-          "length": 10
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 180,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 180,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 267,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 267,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 313,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 313,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 380,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 380,
-          "length": 10
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 402,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 402,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 482,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 482,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 534,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 534,
-          "length": 17
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts ===
+  // interface A {
+  //     a: number;
+  //     /*FIND ALL REFS*/<|[|{| defId: 0 |}<|[|{| defId: 1 |}common|]|]: string;|>|>
+  // }
+  // 
+  // interface B {
+  // --- (line: 7) skipped ---
 
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) A.common: string",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "A",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "common",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) common: string | number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "common",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "|",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts ===
+// --- (line: 4) skipped ---
+// 
+// interface B {
+//     b: number;
+//     /*FIND ALL REFS*/<|[|{| defId: 0, isDefinition: true |}common|]: number;|>
+// }
+// 
+// // Assignment
+// var v1: A | B = { a: 0, <|[|{| defId: 1, isWriteAccess: true |}common|]: ""|> };
+// var v2: A | B = { b: 0, <|[|{| defId: 1, isWriteAccess: true |}common|]: 3|> };
+// 
+// // Function call
+// function consumer(f:  A | B) { }
+// consumer({ a: 0, b: 0, <|[|{| defId: 1, isWriteAccess: true |}common|]: 1|> });
+// 
+// // Type cast
+// var c = <A | B> { <|[|{| defId: 1, isWriteAccess: true |}common|]: 0|>, b: 0 };
+// 
+// // Array literal
+// var ar: Array<A|B> = [{ a: 0, <|[|{| defId: 1, isWriteAccess: true |}common|]: ""|> }, { b: 0, <|[|{| defId: 1, isWriteAccess: true |}common|]: 0|> }];
+// 
+// // Nested object literal
+// var ob: { aorb: A|B } = { aorb: { b: 0, <|[|{| defId: 1, isWriteAccess: true |}common|]: 0|> } };
+// 
+// // Widened type
+// var w: A|B = { a:0, <|[|{| defId: 1, isWriteAccess: true |}common|]: undefined|> };
+// 
+// // Untped -- should not be included
+// var u1 = { a: 0, b: 0, common: "" };
+// var u2 = { b: 0, common: 0 };
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts ===
+  // interface A {
+  //     a: number;
+  //     <|[|{| defId: 1 |}common|]: string;|>
+  // }
+  // 
+  // interface B {
+  //     b: number;
+  //     /*FIND ALL REFS*/<|[|{| defId: 0 |}common|]: number;|>
+  // }
+  // 
+  // // Assignment
+  // --- (line: 12) skipped ---
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) B.common: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "B",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "common",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) common: string | number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "common",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "|",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts ===
 // interface A {
 //     a: number;
-//     common: string;
+//     <|[|{| defId: 0 |}common|]: string;|>
 // }
 // 
 // interface B {
 //     b: number;
-//     /*FIND ALL REFS*/[|common|]: number;
+//     <|[|{| defId: 1 |}common|]: number;|>
 // }
 // 
 // // Assignment
-// var v1: A | B = { a: 0, [|common|]: "" };
-// var v2: A | B = { b: 0, [|common|]: 3 };
+// var v1: A | B = { a: 0, /*FIND ALL REFS*/<|[|{| defId: 2, isWriteAccess: true, isDefinition: true |}common|]: ""|> };
+// var v2: A | B = { b: 0, <|[|{| defId: 2, isWriteAccess: true |}common|]: 3|> };
 // 
 // // Function call
 // function consumer(f:  A | B) { }
-// consumer({ a: 0, b: 0, [|common|]: 1 });
+// consumer({ a: 0, b: 0, <|[|{| defId: 2, isWriteAccess: true |}common|]: 1|> });
 // 
 // // Type cast
-// var c = <A | B> { [|common|]: 0, b: 0 };
+// var c = <A | B> { <|[|{| defId: 2, isWriteAccess: true |}common|]: 0|>, b: 0 };
 // 
 // // Array literal
-// var ar: Array<A|B> = [{ a: 0, [|common|]: "" }, { b: 0, [|common|]: 0 }];
+// var ar: Array<A|B> = [{ a: 0, <|[|{| defId: 2, isWriteAccess: true |}common|]: ""|> }, { b: 0, <|[|{| defId: 2, isWriteAccess: true |}common|]: 0|> }];
 // 
 // // Nested object literal
-// var ob: { aorb: A|B } = { aorb: { b: 0, [|common|]: 0 } };
+// var ob: { aorb: A|B } = { aorb: { b: 0, <|[|{| defId: 2, isWriteAccess: true |}common|]: 0|> } };
 // 
 // // Widened type
-// var w: A|B = { a:0, [|common|]: undefined };
+// var w: A|B = { a:0, <|[|{| defId: 2, isWriteAccess: true |}common|]: undefined|> };
 // 
 // // Untped -- should not be included
 // var u1 = { a: 0, b: 0, common: "" };
 // var u2 = { b: 0, common: 0 };
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-      "kind": "property",
-      "name": "(property) B.common: number",
-      "textSpan": {
-        "start": 85,
-        "length": 6
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "B",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "common",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 85,
-        "length": 15
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 85,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 85,
-          "length": 15
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-      "kind": "property",
-      "name": "(property) common: string | number",
-      "textSpan": {
-        "start": 33,
-        "length": 6
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "common",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "|",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 33,
-        "length": 15
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 142,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 142,
-          "length": 10
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 180,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 180,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 267,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 267,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 313,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 313,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 380,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 380,
-          "length": 10
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 402,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 402,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 482,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 482,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 534,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 534,
-          "length": 17
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts ===
+  // interface A {
+  //     a: number;
+  //     <|[|{| defId: 0 |}<|[|{| defId: 2 |}common|]|]: string;|>|>
+  // }
+  // 
+  // interface B {
+  //     b: number;
+  //     <|[|{| defId: 1 |}common|]: number;|>
+  // }
+  // 
+  // // Assignment
+  // var v1: A | B = { a: 0, /*FIND ALL REFS*/common: "" };
+  // var v2: A | B = { b: 0, common: 3 };
+  // 
+  // // Function call
+  // --- (line: 16) skipped ---
 
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) A.common: string",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "A",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "common",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) B.common: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "B",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "common",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 2,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) common: string | number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "common",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "|",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts ===
 // interface A {
 //     a: number;
-//     [|common|]: string;
+//     <|[|{| defId: 0 |}common|]: string;|>
 // }
 // 
 // interface B {
 //     b: number;
-//     [|common|]: number;
+//     <|[|{| defId: 1 |}common|]: number;|>
 // }
 // 
 // // Assignment
-// var v1: A | B = { a: 0, /*FIND ALL REFS*/[|common|]: "" };
-// var v2: A | B = { b: 0, [|common|]: 3 };
+// var v1: A | B = { a: 0, <|[|{| defId: 2, isWriteAccess: true |}common|]: ""|> };
+// var v2: A | B = { b: 0, /*FIND ALL REFS*/<|[|{| defId: 2, isWriteAccess: true, isDefinition: true |}common|]: 3|> };
 // 
 // // Function call
 // function consumer(f:  A | B) { }
-// consumer({ a: 0, b: 0, [|common|]: 1 });
+// consumer({ a: 0, b: 0, <|[|{| defId: 2, isWriteAccess: true |}common|]: 1|> });
 // 
 // // Type cast
-// var c = <A | B> { [|common|]: 0, b: 0 };
+// var c = <A | B> { <|[|{| defId: 2, isWriteAccess: true |}common|]: 0|>, b: 0 };
 // 
 // // Array literal
-// var ar: Array<A|B> = [{ a: 0, [|common|]: "" }, { b: 0, [|common|]: 0 }];
+// var ar: Array<A|B> = [{ a: 0, <|[|{| defId: 2, isWriteAccess: true |}common|]: ""|> }, { b: 0, <|[|{| defId: 2, isWriteAccess: true |}common|]: 0|> }];
 // 
 // // Nested object literal
-// var ob: { aorb: A|B } = { aorb: { b: 0, [|common|]: 0 } };
+// var ob: { aorb: A|B } = { aorb: { b: 0, <|[|{| defId: 2, isWriteAccess: true |}common|]: 0|> } };
 // 
 // // Widened type
-// var w: A|B = { a:0, [|common|]: undefined };
+// var w: A|B = { a:0, <|[|{| defId: 2, isWriteAccess: true |}common|]: undefined|> };
 // 
 // // Untped -- should not be included
 // var u1 = { a: 0, b: 0, common: "" };
 // var u2 = { b: 0, common: 0 };
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-      "kind": "property",
-      "name": "(property) A.common: string",
-      "textSpan": {
-        "start": 33,
-        "length": 6
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "A",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "common",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 33,
-        "length": 15
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 33,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 33,
-          "length": 15
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-      "kind": "property",
-      "name": "(property) B.common: number",
-      "textSpan": {
-        "start": 85,
-        "length": 6
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "B",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "common",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 85,
-        "length": 15
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 85,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 85,
-          "length": 15
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-      "kind": "property",
-      "name": "(property) common: string | number",
-      "textSpan": {
-        "start": 33,
-        "length": 6
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "common",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "|",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 33,
-        "length": 15
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 142,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 142,
-          "length": 10
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 180,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 180,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 267,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 267,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 313,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 313,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 380,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 380,
-          "length": 10
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 402,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 402,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 482,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 482,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 534,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 534,
-          "length": 17
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts ===
+  // interface A {
+  //     a: number;
+  //     <|[|{| defId: 0 |}<|[|{| defId: 2 |}common|]|]: string;|>|>
+  // }
+  // 
+  // interface B {
+  //     b: number;
+  //     <|[|{| defId: 1 |}common|]: number;|>
+  // }
+  // 
+  // // Assignment
+  // var v1: A | B = { a: 0, common: "" };
+  // var v2: A | B = { b: 0, /*FIND ALL REFS*/common: 3 };
+  // 
+  // // Function call
+  // function consumer(f:  A | B) { }
+  // --- (line: 17) skipped ---
 
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) A.common: string",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "A",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "common",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) B.common: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "B",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "common",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 2,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) common: string | number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "common",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "|",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts ===
 // interface A {
 //     a: number;
-//     [|common|]: string;
+//     <|[|{| defId: 0 |}common|]: string;|>
 // }
 // 
 // interface B {
 //     b: number;
-//     [|common|]: number;
+//     <|[|{| defId: 1 |}common|]: number;|>
 // }
 // 
 // // Assignment
-// var v1: A | B = { a: 0, [|common|]: "" };
-// var v2: A | B = { b: 0, /*FIND ALL REFS*/[|common|]: 3 };
+// var v1: A | B = { a: 0, <|[|{| defId: 2, isWriteAccess: true |}common|]: ""|> };
+// var v2: A | B = { b: 0, <|[|{| defId: 2, isWriteAccess: true |}common|]: 3|> };
 // 
 // // Function call
 // function consumer(f:  A | B) { }
-// consumer({ a: 0, b: 0, [|common|]: 1 });
+// consumer({ a: 0, b: 0, /*FIND ALL REFS*/<|[|{| defId: 2, isWriteAccess: true, isDefinition: true |}common|]: 1|> });
 // 
 // // Type cast
-// var c = <A | B> { [|common|]: 0, b: 0 };
+// var c = <A | B> { <|[|{| defId: 2, isWriteAccess: true |}common|]: 0|>, b: 0 };
 // 
 // // Array literal
-// var ar: Array<A|B> = [{ a: 0, [|common|]: "" }, { b: 0, [|common|]: 0 }];
+// var ar: Array<A|B> = [{ a: 0, <|[|{| defId: 2, isWriteAccess: true |}common|]: ""|> }, { b: 0, <|[|{| defId: 2, isWriteAccess: true |}common|]: 0|> }];
 // 
 // // Nested object literal
-// var ob: { aorb: A|B } = { aorb: { b: 0, [|common|]: 0 } };
+// var ob: { aorb: A|B } = { aorb: { b: 0, <|[|{| defId: 2, isWriteAccess: true |}common|]: 0|> } };
 // 
 // // Widened type
-// var w: A|B = { a:0, [|common|]: undefined };
+// var w: A|B = { a:0, <|[|{| defId: 2, isWriteAccess: true |}common|]: undefined|> };
 // 
 // // Untped -- should not be included
 // var u1 = { a: 0, b: 0, common: "" };
 // var u2 = { b: 0, common: 0 };
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-      "kind": "property",
-      "name": "(property) A.common: string",
-      "textSpan": {
-        "start": 33,
-        "length": 6
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "A",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "common",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 33,
-        "length": 15
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 33,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 33,
-          "length": 15
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-      "kind": "property",
-      "name": "(property) B.common: number",
-      "textSpan": {
-        "start": 85,
-        "length": 6
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "B",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "common",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 85,
-        "length": 15
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 85,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 85,
-          "length": 15
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-      "kind": "property",
-      "name": "(property) common: string | number",
-      "textSpan": {
-        "start": 33,
-        "length": 6
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "common",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "|",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 33,
-        "length": 15
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 142,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 142,
-          "length": 10
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 180,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 180,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 267,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 267,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 313,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 313,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 380,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 380,
-          "length": 10
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 402,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 402,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 482,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 482,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 534,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 534,
-          "length": 17
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts ===
+  // interface A {
+  //     a: number;
+  //     <|[|{| defId: 0 |}<|[|{| defId: 2 |}common|]|]: string;|>|>
+  // }
+  // 
+  // interface B {
+  //     b: number;
+  //     <|[|{| defId: 1 |}common|]: number;|>
+  // }
+  // 
+  // // Assignment
+  // var v1: A | B = { a: 0, common: "" };
+  // var v2: A | B = { b: 0, common: 3 };
+  // 
+  // // Function call
+  // function consumer(f:  A | B) { }
+  // consumer({ a: 0, b: 0, /*FIND ALL REFS*/common: 1 });
+  // 
+  // // Type cast
+  // var c = <A | B> { common: 0, b: 0 };
+  // --- (line: 21) skipped ---
 
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) A.common: string",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "A",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "common",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) B.common: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "B",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "common",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 2,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) common: string | number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "common",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "|",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts ===
 // interface A {
 //     a: number;
-//     [|common|]: string;
+//     <|[|{| defId: 0 |}common|]: string;|>
 // }
 // 
 // interface B {
 //     b: number;
-//     [|common|]: number;
+//     <|[|{| defId: 1 |}common|]: number;|>
 // }
 // 
 // // Assignment
-// var v1: A | B = { a: 0, [|common|]: "" };
-// var v2: A | B = { b: 0, [|common|]: 3 };
+// var v1: A | B = { a: 0, <|[|{| defId: 2, isWriteAccess: true |}common|]: ""|> };
+// var v2: A | B = { b: 0, <|[|{| defId: 2, isWriteAccess: true |}common|]: 3|> };
 // 
 // // Function call
 // function consumer(f:  A | B) { }
-// consumer({ a: 0, b: 0, /*FIND ALL REFS*/[|common|]: 1 });
+// consumer({ a: 0, b: 0, <|[|{| defId: 2, isWriteAccess: true |}common|]: 1|> });
 // 
 // // Type cast
-// var c = <A | B> { [|common|]: 0, b: 0 };
+// var c = <A | B> { /*FIND ALL REFS*/<|[|{| defId: 2, isWriteAccess: true, isDefinition: true |}common|]: 0|>, b: 0 };
 // 
 // // Array literal
-// var ar: Array<A|B> = [{ a: 0, [|common|]: "" }, { b: 0, [|common|]: 0 }];
+// var ar: Array<A|B> = [{ a: 0, <|[|{| defId: 2, isWriteAccess: true |}common|]: ""|> }, { b: 0, <|[|{| defId: 2, isWriteAccess: true |}common|]: 0|> }];
 // 
 // // Nested object literal
-// var ob: { aorb: A|B } = { aorb: { b: 0, [|common|]: 0 } };
+// var ob: { aorb: A|B } = { aorb: { b: 0, <|[|{| defId: 2, isWriteAccess: true |}common|]: 0|> } };
 // 
 // // Widened type
-// var w: A|B = { a:0, [|common|]: undefined };
+// var w: A|B = { a:0, <|[|{| defId: 2, isWriteAccess: true |}common|]: undefined|> };
 // 
 // // Untped -- should not be included
 // var u1 = { a: 0, b: 0, common: "" };
 // var u2 = { b: 0, common: 0 };
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-      "kind": "property",
-      "name": "(property) A.common: string",
-      "textSpan": {
-        "start": 33,
-        "length": 6
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "A",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "common",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 33,
-        "length": 15
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 33,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 33,
-          "length": 15
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-      "kind": "property",
-      "name": "(property) B.common: number",
-      "textSpan": {
-        "start": 85,
-        "length": 6
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "B",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "common",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 85,
-        "length": 15
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 85,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 85,
-          "length": 15
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-      "kind": "property",
-      "name": "(property) common: string | number",
-      "textSpan": {
-        "start": 33,
-        "length": 6
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "common",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "|",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 33,
-        "length": 15
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 142,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 142,
-          "length": 10
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 180,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 180,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 267,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 267,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 313,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 313,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 380,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 380,
-          "length": 10
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 402,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 402,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 482,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 482,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 534,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 534,
-          "length": 17
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts ===
+  // interface A {
+  //     a: number;
+  //     <|[|{| defId: 0 |}<|[|{| defId: 2 |}common|]|]: string;|>|>
+  // }
+  // 
+  // interface B {
+  //     b: number;
+  //     <|[|{| defId: 1 |}common|]: number;|>
+  // }
+  // 
+  // // Assignment
+  // --- (line: 12) skipped ---
 
+  // --- (line: 16) skipped ---
+  // consumer({ a: 0, b: 0, common: 1 });
+  // 
+  // // Type cast
+  // var c = <A | B> { /*FIND ALL REFS*/common: 0, b: 0 };
+  // 
+  // // Array literal
+  // var ar: Array<A|B> = [{ a: 0, common: "" }, { b: 0, common: 0 }];
+  // --- (line: 24) skipped ---
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) A.common: string",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "A",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "common",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) B.common: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "B",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "common",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 2,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) common: string | number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "common",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "|",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts ===
 // interface A {
 //     a: number;
-//     [|common|]: string;
+//     <|[|{| defId: 0 |}common|]: string;|>
 // }
 // 
 // interface B {
 //     b: number;
-//     [|common|]: number;
+//     <|[|{| defId: 1 |}common|]: number;|>
 // }
 // 
 // // Assignment
-// var v1: A | B = { a: 0, [|common|]: "" };
-// var v2: A | B = { b: 0, [|common|]: 3 };
+// var v1: A | B = { a: 0, <|[|{| defId: 2, isWriteAccess: true |}common|]: ""|> };
+// var v2: A | B = { b: 0, <|[|{| defId: 2, isWriteAccess: true |}common|]: 3|> };
 // 
 // // Function call
 // function consumer(f:  A | B) { }
-// consumer({ a: 0, b: 0, [|common|]: 1 });
+// consumer({ a: 0, b: 0, <|[|{| defId: 2, isWriteAccess: true |}common|]: 1|> });
 // 
 // // Type cast
-// var c = <A | B> { /*FIND ALL REFS*/[|common|]: 0, b: 0 };
+// var c = <A | B> { <|[|{| defId: 2, isWriteAccess: true |}common|]: 0|>, b: 0 };
 // 
 // // Array literal
-// var ar: Array<A|B> = [{ a: 0, [|common|]: "" }, { b: 0, [|common|]: 0 }];
+// var ar: Array<A|B> = [{ a: 0, /*FIND ALL REFS*/<|[|{| defId: 2, isWriteAccess: true, isDefinition: true |}common|]: ""|> }, { b: 0, <|[|{| defId: 2, isWriteAccess: true |}common|]: 0|> }];
 // 
 // // Nested object literal
-// var ob: { aorb: A|B } = { aorb: { b: 0, [|common|]: 0 } };
+// var ob: { aorb: A|B } = { aorb: { b: 0, <|[|{| defId: 2, isWriteAccess: true |}common|]: 0|> } };
 // 
 // // Widened type
-// var w: A|B = { a:0, [|common|]: undefined };
+// var w: A|B = { a:0, <|[|{| defId: 2, isWriteAccess: true |}common|]: undefined|> };
 // 
 // // Untped -- should not be included
 // var u1 = { a: 0, b: 0, common: "" };
 // var u2 = { b: 0, common: 0 };
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-      "kind": "property",
-      "name": "(property) A.common: string",
-      "textSpan": {
-        "start": 33,
-        "length": 6
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "A",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "common",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 33,
-        "length": 15
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 33,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 33,
-          "length": 15
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-      "kind": "property",
-      "name": "(property) B.common: number",
-      "textSpan": {
-        "start": 85,
-        "length": 6
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "B",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "common",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 85,
-        "length": 15
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 85,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 85,
-          "length": 15
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-      "kind": "property",
-      "name": "(property) common: string | number",
-      "textSpan": {
-        "start": 33,
-        "length": 6
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "common",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "|",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 33,
-        "length": 15
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 142,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 142,
-          "length": 10
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 180,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 180,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 267,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 267,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 313,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 313,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 380,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 380,
-          "length": 10
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 402,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 402,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 482,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 482,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 534,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 534,
-          "length": 17
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts ===
+  // interface A {
+  //     a: number;
+  //     <|[|{| defId: 0 |}<|[|{| defId: 2 |}common|]|]: string;|>|>
+  // }
+  // 
+  // interface B {
+  //     b: number;
+  //     <|[|{| defId: 1 |}common|]: number;|>
+  // }
+  // 
+  // // Assignment
+  // --- (line: 12) skipped ---
 
+  // --- (line: 19) skipped ---
+  // var c = <A | B> { common: 0, b: 0 };
+  // 
+  // // Array literal
+  // var ar: Array<A|B> = [{ a: 0, /*FIND ALL REFS*/common: "" }, { b: 0, common: 0 }];
+  // 
+  // // Nested object literal
+  // var ob: { aorb: A|B } = { aorb: { b: 0, common: 0 } };
+  // --- (line: 27) skipped ---
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) A.common: string",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "A",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "common",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) B.common: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "B",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "common",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 2,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) common: string | number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "common",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "|",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts ===
 // interface A {
 //     a: number;
-//     [|common|]: string;
+//     <|[|{| defId: 0 |}common|]: string;|>
 // }
 // 
 // interface B {
 //     b: number;
-//     [|common|]: number;
+//     <|[|{| defId: 1 |}common|]: number;|>
 // }
 // 
 // // Assignment
-// var v1: A | B = { a: 0, [|common|]: "" };
-// var v2: A | B = { b: 0, [|common|]: 3 };
+// var v1: A | B = { a: 0, <|[|{| defId: 2, isWriteAccess: true |}common|]: ""|> };
+// var v2: A | B = { b: 0, <|[|{| defId: 2, isWriteAccess: true |}common|]: 3|> };
 // 
 // // Function call
 // function consumer(f:  A | B) { }
-// consumer({ a: 0, b: 0, [|common|]: 1 });
+// consumer({ a: 0, b: 0, <|[|{| defId: 2, isWriteAccess: true |}common|]: 1|> });
 // 
 // // Type cast
-// var c = <A | B> { [|common|]: 0, b: 0 };
+// var c = <A | B> { <|[|{| defId: 2, isWriteAccess: true |}common|]: 0|>, b: 0 };
 // 
 // // Array literal
-// var ar: Array<A|B> = [{ a: 0, /*FIND ALL REFS*/[|common|]: "" }, { b: 0, [|common|]: 0 }];
+// var ar: Array<A|B> = [{ a: 0, <|[|{| defId: 2, isWriteAccess: true |}common|]: ""|> }, { b: 0, /*FIND ALL REFS*/<|[|{| defId: 2, isWriteAccess: true, isDefinition: true |}common|]: 0|> }];
 // 
 // // Nested object literal
-// var ob: { aorb: A|B } = { aorb: { b: 0, [|common|]: 0 } };
+// var ob: { aorb: A|B } = { aorb: { b: 0, <|[|{| defId: 2, isWriteAccess: true |}common|]: 0|> } };
 // 
 // // Widened type
-// var w: A|B = { a:0, [|common|]: undefined };
+// var w: A|B = { a:0, <|[|{| defId: 2, isWriteAccess: true |}common|]: undefined|> };
 // 
 // // Untped -- should not be included
 // var u1 = { a: 0, b: 0, common: "" };
 // var u2 = { b: 0, common: 0 };
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-      "kind": "property",
-      "name": "(property) A.common: string",
-      "textSpan": {
-        "start": 33,
-        "length": 6
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "A",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "common",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 33,
-        "length": 15
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 33,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 33,
-          "length": 15
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-      "kind": "property",
-      "name": "(property) B.common: number",
-      "textSpan": {
-        "start": 85,
-        "length": 6
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "B",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "common",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 85,
-        "length": 15
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 85,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 85,
-          "length": 15
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-      "kind": "property",
-      "name": "(property) common: string | number",
-      "textSpan": {
-        "start": 33,
-        "length": 6
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "common",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "|",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 33,
-        "length": 15
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 142,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 142,
-          "length": 10
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 180,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 180,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 267,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 267,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 313,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 313,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 380,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 380,
-          "length": 10
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 402,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 402,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 482,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 482,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 534,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 534,
-          "length": 17
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts ===
+  // interface A {
+  //     a: number;
+  //     <|[|{| defId: 0 |}<|[|{| defId: 2 |}common|]|]: string;|>|>
+  // }
+  // 
+  // interface B {
+  //     b: number;
+  //     <|[|{| defId: 1 |}common|]: number;|>
+  // }
+  // 
+  // // Assignment
+  // --- (line: 12) skipped ---
 
+  // --- (line: 19) skipped ---
+  // var c = <A | B> { common: 0, b: 0 };
+  // 
+  // // Array literal
+  // var ar: Array<A|B> = [{ a: 0, common: "" }, { b: 0, /*FIND ALL REFS*/common: 0 }];
+  // 
+  // // Nested object literal
+  // var ob: { aorb: A|B } = { aorb: { b: 0, common: 0 } };
+  // --- (line: 27) skipped ---
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) A.common: string",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "A",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "common",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) B.common: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "B",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "common",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 2,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) common: string | number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "common",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "|",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts ===
 // interface A {
 //     a: number;
-//     [|common|]: string;
+//     <|[|{| defId: 0 |}common|]: string;|>
 // }
 // 
 // interface B {
 //     b: number;
-//     [|common|]: number;
+//     <|[|{| defId: 1 |}common|]: number;|>
 // }
 // 
 // // Assignment
-// var v1: A | B = { a: 0, [|common|]: "" };
-// var v2: A | B = { b: 0, [|common|]: 3 };
+// var v1: A | B = { a: 0, <|[|{| defId: 2, isWriteAccess: true |}common|]: ""|> };
+// var v2: A | B = { b: 0, <|[|{| defId: 2, isWriteAccess: true |}common|]: 3|> };
 // 
 // // Function call
 // function consumer(f:  A | B) { }
-// consumer({ a: 0, b: 0, [|common|]: 1 });
+// consumer({ a: 0, b: 0, <|[|{| defId: 2, isWriteAccess: true |}common|]: 1|> });
 // 
 // // Type cast
-// var c = <A | B> { [|common|]: 0, b: 0 };
+// var c = <A | B> { <|[|{| defId: 2, isWriteAccess: true |}common|]: 0|>, b: 0 };
 // 
 // // Array literal
-// var ar: Array<A|B> = [{ a: 0, [|common|]: "" }, { b: 0, /*FIND ALL REFS*/[|common|]: 0 }];
+// var ar: Array<A|B> = [{ a: 0, <|[|{| defId: 2, isWriteAccess: true |}common|]: ""|> }, { b: 0, <|[|{| defId: 2, isWriteAccess: true |}common|]: 0|> }];
 // 
 // // Nested object literal
-// var ob: { aorb: A|B } = { aorb: { b: 0, [|common|]: 0 } };
+// var ob: { aorb: A|B } = { aorb: { b: 0, /*FIND ALL REFS*/<|[|{| defId: 2, isWriteAccess: true, isDefinition: true |}common|]: 0|> } };
 // 
 // // Widened type
-// var w: A|B = { a:0, [|common|]: undefined };
+// var w: A|B = { a:0, <|[|{| defId: 2, isWriteAccess: true |}common|]: undefined|> };
 // 
 // // Untped -- should not be included
 // var u1 = { a: 0, b: 0, common: "" };
 // var u2 = { b: 0, common: 0 };
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-      "kind": "property",
-      "name": "(property) A.common: string",
-      "textSpan": {
-        "start": 33,
-        "length": 6
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "A",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "common",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 33,
-        "length": 15
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 33,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 33,
-          "length": 15
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-      "kind": "property",
-      "name": "(property) B.common: number",
-      "textSpan": {
-        "start": 85,
-        "length": 6
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "B",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "common",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 85,
-        "length": 15
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 85,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 85,
-          "length": 15
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-      "kind": "property",
-      "name": "(property) common: string | number",
-      "textSpan": {
-        "start": 33,
-        "length": 6
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "common",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "|",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 33,
-        "length": 15
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 142,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 142,
-          "length": 10
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 180,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 180,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 267,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 267,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 313,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 313,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 380,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 380,
-          "length": 10
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 402,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 402,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 482,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 482,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 534,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 534,
-          "length": 17
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts ===
+  // interface A {
+  //     a: number;
+  //     <|[|{| defId: 0 |}<|[|{| defId: 2 |}common|]|]: string;|>|>
+  // }
+  // 
+  // interface B {
+  //     b: number;
+  //     <|[|{| defId: 1 |}common|]: number;|>
+  // }
+  // 
+  // // Assignment
+  // --- (line: 12) skipped ---
 
+  // --- (line: 22) skipped ---
+  // var ar: Array<A|B> = [{ a: 0, common: "" }, { b: 0, common: 0 }];
+  // 
+  // // Nested object literal
+  // var ob: { aorb: A|B } = { aorb: { b: 0, /*FIND ALL REFS*/common: 0 } };
+  // 
+  // // Widened type
+  // var w: A|B = { a:0, common: undefined };
+  // --- (line: 30) skipped ---
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) A.common: string",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "A",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "common",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) B.common: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "B",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "common",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 2,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) common: string | number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "common",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "|",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts ===
 // interface A {
 //     a: number;
-//     [|common|]: string;
+//     <|[|{| defId: 0 |}common|]: string;|>
 // }
 // 
 // interface B {
 //     b: number;
-//     [|common|]: number;
+//     <|[|{| defId: 1 |}common|]: number;|>
 // }
 // 
 // // Assignment
-// var v1: A | B = { a: 0, [|common|]: "" };
-// var v2: A | B = { b: 0, [|common|]: 3 };
+// var v1: A | B = { a: 0, <|[|{| defId: 2, isWriteAccess: true |}common|]: ""|> };
+// var v2: A | B = { b: 0, <|[|{| defId: 2, isWriteAccess: true |}common|]: 3|> };
 // 
 // // Function call
 // function consumer(f:  A | B) { }
-// consumer({ a: 0, b: 0, [|common|]: 1 });
+// consumer({ a: 0, b: 0, <|[|{| defId: 2, isWriteAccess: true |}common|]: 1|> });
 // 
 // // Type cast
-// var c = <A | B> { [|common|]: 0, b: 0 };
+// var c = <A | B> { <|[|{| defId: 2, isWriteAccess: true |}common|]: 0|>, b: 0 };
 // 
 // // Array literal
-// var ar: Array<A|B> = [{ a: 0, [|common|]: "" }, { b: 0, [|common|]: 0 }];
+// var ar: Array<A|B> = [{ a: 0, <|[|{| defId: 2, isWriteAccess: true |}common|]: ""|> }, { b: 0, <|[|{| defId: 2, isWriteAccess: true |}common|]: 0|> }];
 // 
 // // Nested object literal
-// var ob: { aorb: A|B } = { aorb: { b: 0, /*FIND ALL REFS*/[|common|]: 0 } };
+// var ob: { aorb: A|B } = { aorb: { b: 0, <|[|{| defId: 2, isWriteAccess: true |}common|]: 0|> } };
 // 
 // // Widened type
-// var w: A|B = { a:0, [|common|]: undefined };
+// var w: A|B = { a:0, /*FIND ALL REFS*/<|[|{| defId: 2, isWriteAccess: true, isDefinition: true |}common|]: undefined|> };
 // 
 // // Untped -- should not be included
 // var u1 = { a: 0, b: 0, common: "" };
 // var u2 = { b: 0, common: 0 };
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-      "kind": "property",
-      "name": "(property) A.common: string",
-      "textSpan": {
-        "start": 33,
-        "length": 6
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "A",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "common",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 33,
-        "length": 15
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 33,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 33,
-          "length": 15
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-      "kind": "property",
-      "name": "(property) B.common: number",
-      "textSpan": {
-        "start": 85,
-        "length": 6
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "B",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "common",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 85,
-        "length": 15
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 85,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 85,
-          "length": 15
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-      "kind": "property",
-      "name": "(property) common: string | number",
-      "textSpan": {
-        "start": 33,
-        "length": 6
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "common",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "|",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 33,
-        "length": 15
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 142,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 142,
-          "length": 10
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 180,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 180,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 267,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 267,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 313,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 313,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 380,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 380,
-          "length": 10
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 402,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 402,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 482,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 482,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 534,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 534,
-          "length": 17
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts ===
+  // interface A {
+  //     a: number;
+  //     <|[|{| defId: 0 |}<|[|{| defId: 2 |}common|]|]: string;|>|>
+  // }
+  // 
+  // interface B {
+  //     b: number;
+  //     <|[|{| defId: 1 |}common|]: number;|>
+  // }
+  // 
+  // // Assignment
+  // --- (line: 12) skipped ---
 
-// === /tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts ===
-// interface A {
-//     a: number;
-//     [|common|]: string;
-// }
-// 
-// interface B {
-//     b: number;
-//     [|common|]: number;
-// }
-// 
-// // Assignment
-// var v1: A | B = { a: 0, [|common|]: "" };
-// var v2: A | B = { b: 0, [|common|]: 3 };
-// 
-// // Function call
-// function consumer(f:  A | B) { }
-// consumer({ a: 0, b: 0, [|common|]: 1 });
-// 
-// // Type cast
-// var c = <A | B> { [|common|]: 0, b: 0 };
-// 
-// // Array literal
-// var ar: Array<A|B> = [{ a: 0, [|common|]: "" }, { b: 0, [|common|]: 0 }];
-// 
-// // Nested object literal
-// var ob: { aorb: A|B } = { aorb: { b: 0, [|common|]: 0 } };
-// 
-// // Widened type
-// var w: A|B = { a:0, /*FIND ALL REFS*/[|common|]: undefined };
-// 
-// // Untped -- should not be included
-// var u1 = { a: 0, b: 0, common: "" };
-// var u2 = { b: 0, common: 0 };
+  // --- (line: 25) skipped ---
+  // var ob: { aorb: A|B } = { aorb: { b: 0, common: 0 } };
+  // 
+  // // Widened type
+  // var w: A|B = { a:0, /*FIND ALL REFS*/common: undefined };
+  // 
+  // // Untped -- should not be included
+  // var u1 = { a: 0, b: 0, common: "" };
+  // var u2 = { b: 0, common: 0 };
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-      "kind": "property",
-      "name": "(property) A.common: string",
-      "textSpan": {
-        "start": 33,
-        "length": 6
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "A",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "common",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 33,
-        "length": 15
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 33,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 33,
-          "length": 15
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) A.common: string",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "A",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "common",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     }
     ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-      "kind": "property",
-      "name": "(property) B.common: number",
-      "textSpan": {
-        "start": 85,
-        "length": 6
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "B",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "common",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 85,
-        "length": 15
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 85,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 85,
-          "length": 15
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) B.common: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "B",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "common",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-      "kind": "property",
-      "name": "(property) common: string | number",
-      "textSpan": {
-        "start": 33,
-        "length": 6
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "common",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "|",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 33,
-        "length": 15
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 142,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 142,
-          "length": 10
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 180,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 180,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 267,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 267,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 313,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 313,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 380,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 380,
-          "length": 10
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 402,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 402,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 482,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 482,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 534,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties.ts",
-        "contextSpan": {
-          "start": 534,
-          "length": 17
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
+   },
+   {
+    "defId": 2,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) common: string | number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "common",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "|",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

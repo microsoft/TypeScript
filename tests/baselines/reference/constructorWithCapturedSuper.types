@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constructorWithCapturedSuper.ts ===
+//// [tests/cases/compiler/constructorWithCapturedSuper.ts] ////
+
+=== constructorWithCapturedSuper.ts ===
 let oneA: A;
 >oneA : A
 

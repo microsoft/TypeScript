@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedTypeParameterInMethod5.ts] ////
+
 //// [unusedTypeParameterInMethod5.ts]
 class A {
     public f1 = function<X>() {

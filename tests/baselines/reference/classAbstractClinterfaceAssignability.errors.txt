@@ -1,8 +1,8 @@
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractClinterfaceAssignability.ts(23,1): error TS2322: Type 'typeof A' is not assignable to type 'IConstructor'.
+classAbstractClinterfaceAssignability.ts(23,1): error TS2322: Type 'typeof A' is not assignable to type 'IConstructor'.
   Cannot assign an abstract constructor type to a non-abstract constructor type.
 
 
-==== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractClinterfaceAssignability.ts (1 errors) ====
+==== classAbstractClinterfaceAssignability.ts (1 errors) ====
     interface I {
         x: number;
     }

@@ -43,10 +43,8 @@ Please keep and fill in the line that best applies:
 ### ⏯ Playground Link
 
 <!--
-  A link to a TypeScript Playground "Share" link which shows this behavior
-
-  The TypeScript Workbench can be used for more complex setups, try
-  https://www.typescriptlang.org/dev/bug-workbench/
+  A link to a TypeScript Playground "Share" link which shows this behavior.
+  This should have the same code as the code snippet below, and use whichever settings are relevant to your report.
 
   As a last resort, you can link to a repo, but these will be slower for us to investigate.
 -->
@@ -54,7 +52,7 @@ Please keep and fill in the line that best applies:
 
 ### 💻 Code
 
-<!-- Please post the relevant code sample here as well-->
+<!-- Please post the relevant code sample here as well. This code and the Playground code should be the same, do not use separate examples -->
 ```ts
 // We can quickly address your report if:
 //  - The code sample is short. Nearly all TypeScript bugs can be demonstrated in 20-30 lines of code!

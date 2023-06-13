@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts] ////
+
 //// [subtypingWithObjectMembers.ts]
 class Base { foo: string; }
 class Derived extends Base { bar: string; }

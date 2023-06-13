@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inferenceOptionalProperties.ts] ////
+
 //// [inferenceOptionalProperties.ts]
 declare function test<T>(x: { [key: string]: T }): T;
 

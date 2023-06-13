@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/spread/objectSpreadNoTransform.ts ===
+//// [tests/cases/conformance/types/spread/objectSpreadNoTransform.ts] ////
+
+=== objectSpreadNoTransform.ts ===
 const y = { a: 'yes', b: 'no' };
 >y : Symbol(y, Decl(objectSpreadNoTransform.ts, 0, 5))
 >a : Symbol(a, Decl(objectSpreadNoTransform.ts, 0, 11))

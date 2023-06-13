@@ -1,4 +1,6 @@
-=== tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts ===
+//// [tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts] ////
+
+=== for-inStatementsInvalid.ts ===
 var aNumber: number;
 >aNumber : number
 
@@ -121,7 +123,6 @@ class A {
 >this : this
 
         return null;
->null : null
     }
 
     static baz() : number {
@@ -145,7 +146,6 @@ class A {
 >baz : () => number
 
         return null;
->null : null
     }
 }
 
@@ -187,7 +187,6 @@ class B extends A {
 >biz : () => number
 
         return null;
->null : null
     }
 }
 

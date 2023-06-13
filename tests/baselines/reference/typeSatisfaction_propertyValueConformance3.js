@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_propertyValueConformance3.ts] ////
+
 //// [typeSatisfaction_propertyValueConformance3.ts]
 export type Color = { r: number, g: number, b: number };
 

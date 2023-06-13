@@ -9,6 +9,7 @@ import {
     ExportedModulesFromDeclarationEmit,
     GetCanonicalFileName,
     getDirectoryPath,
+    getIsolatedModules,
     getSourceFileOfNode,
     HostForComputeHash,
     isDeclarationFileName,
@@ -108,7 +109,7 @@ export namespace BuilderState {
     export interface ReadonlyManyToManyPathMap {
         getKeys(v: Path): ReadonlySet<Path> | undefined;
         getValues(k: Path): ReadonlySet<Path> | undefined;
-        keys(): Iterator<Path>;
+        keys(): IterableIterator<Path>;
     }
 
     export interface ManyToManyPathMap extends ReadonlyManyToManyPathMap {
@@ -420,7 +421,7 @@ export namespace BuilderState {
                 ), sourceFiles!);
             },
             cancellationToken,
-            /*emitOnlyDtsFiles*/ true,
+            /*emitOnly*/ true,
             /*customTransformers*/ undefined,
             /*forceDtsEmit*/ true
         );
@@ -521,9 +522,8 @@ export namespace BuilderState {
                 seenMap.add(path);
                 const references = state.referencedMap.getValues(path);
                 if (references) {
-                    const iterator = references.keys();
-                    for (let iterResult = iterator.next(); !iterResult.done; iterResult = iterator.next()) {
-                        queue.push(iterResult.value);
+                    for (const key of references.keys()) {
+                        queue.push(key);
                     }
                 }
             }
@@ -636,7 +636,7 @@ export namespace BuilderState {
         }
 
         const compilerOptions = programOfThisState.getCompilerOptions();
-        if (compilerOptions && (compilerOptions.isolatedModules || outFile(compilerOptions))) {
+        if (compilerOptions && (getIsolatedModules(compilerOptions) || outFile(compilerOptions))) {
             return [sourceFileWithUpdatedShape];
         }
 

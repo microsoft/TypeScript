@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inferSecondaryParameter.ts] ////
+
 //// [inferSecondaryParameter.ts]
 // type inference on 'bug' should give 'any'
 

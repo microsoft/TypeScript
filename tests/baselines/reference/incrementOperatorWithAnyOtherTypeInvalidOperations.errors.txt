@@ -1,53 +1,53 @@
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(24,25): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(25,25): error TS2629: Cannot assign to 'A' because it is a class.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(26,25): error TS2631: Cannot assign to 'M' because it is a namespace.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(27,25): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(28,25): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(30,23): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(31,23): error TS2629: Cannot assign to 'A' because it is a class.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(32,23): error TS2631: Cannot assign to 'M' because it is a namespace.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(33,23): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(34,24): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(37,26): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(38,26): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(38,26): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(39,26): error TS2539: Cannot assign to 'undefined' because it is not a variable.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(41,24): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(41,24): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(42,24): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(43,24): error TS2539: Cannot assign to 'undefined' because it is not a variable.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(46,26): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(47,26): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(48,26): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(48,27): error TS2365: Operator '+' cannot be applied to types 'null' and 'undefined'.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(49,26): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(49,27): error TS2365: Operator '+' cannot be applied to types 'null' and 'null'.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(50,26): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(50,27): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(51,26): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(52,26): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(54,24): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(55,24): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(56,24): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(56,25): error TS2365: Operator '+' cannot be applied to types 'null' and 'undefined'.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(57,24): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(57,25): error TS2365: Operator '+' cannot be applied to types 'null' and 'null'.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(58,24): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(58,25): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(59,24): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(60,24): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(63,3): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(65,1): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(67,7): error TS1005: ';' expected.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(67,9): error TS1109: Expression expected.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(68,3): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(68,7): error TS1005: ';' expected.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(68,9): error TS1109: Expression expected.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(69,10): error TS1005: ';' expected.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts(69,12): error TS1109: Expression expected.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(24,25): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(25,25): error TS2629: Cannot assign to 'A' because it is a class.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(26,25): error TS2631: Cannot assign to 'M' because it is a namespace.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(27,25): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(28,25): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(30,23): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(31,23): error TS2629: Cannot assign to 'A' because it is a class.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(32,23): error TS2631: Cannot assign to 'M' because it is a namespace.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(33,23): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(34,24): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(37,26): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(38,26): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(38,26): error TS18050: The value 'null' cannot be used here.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(39,26): error TS2539: Cannot assign to 'undefined' because it is not a variable.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(41,24): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(41,24): error TS18050: The value 'null' cannot be used here.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(42,24): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(43,24): error TS2539: Cannot assign to 'undefined' because it is not a variable.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(46,26): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(47,26): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(48,26): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(48,27): error TS2365: Operator '+' cannot be applied to types 'null' and 'undefined'.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(49,26): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(49,27): error TS2365: Operator '+' cannot be applied to types 'null' and 'null'.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(50,26): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(50,27): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(51,26): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(52,26): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(54,24): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(55,24): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(56,24): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(56,25): error TS2365: Operator '+' cannot be applied to types 'null' and 'undefined'.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(57,24): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(57,25): error TS2365: Operator '+' cannot be applied to types 'null' and 'null'.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(58,24): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(58,25): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(59,24): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(60,24): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(63,3): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(65,1): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(67,7): error TS1005: ';' expected.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(67,9): error TS1109: Expression expected.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(68,3): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(68,7): error TS1005: ';' expected.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(68,9): error TS1109: Expression expected.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(69,10): error TS1005: ';' expected.
+incrementOperatorWithAnyOtherTypeInvalidOperations.ts(69,12): error TS1109: Expression expected.
 
 
-==== tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts (47 errors) ====
+==== incrementOperatorWithAnyOtherTypeInvalidOperations.ts (47 errors) ====
     // ++ operator on any type
     var ANY1: any;
     var ANY2: any[] = [1, 2];

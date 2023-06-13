@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/a.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment18.ts] ////
+
+=== a.js ===
 var GLOBSTAR = m.GLOBSTAR = {}
 >GLOBSTAR : typeof m.GLOBSTAR
 >m.GLOBSTAR = {} : typeof m.GLOBSTAR

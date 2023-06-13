@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/operatorAddNullUndefined.ts] ////
+
 //// [operatorAddNullUndefined.ts]
 enum E { x }
 var x1 = null + null;

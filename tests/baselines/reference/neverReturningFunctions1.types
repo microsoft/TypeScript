@@ -1,4 +1,6 @@
-=== tests/cases/conformance/controlFlow/neverReturningFunctions1.ts ===
+//// [tests/cases/conformance/controlFlow/neverReturningFunctions1.ts] ////
+
+=== neverReturningFunctions1.ts ===
 function fail(message?: string): never {
 >fail : (message?: string) => never
 >message : string | undefined
@@ -718,12 +720,10 @@ function foo(services: Readonly<Services>, s: string | null): string {
 >foo : (services: Readonly<Services>, s: string | null) => string
 >services : Readonly<Services>
 >s : string | null
->null : null
 
     if (s === null) {
 >s === null : boolean
 >s : string | null
->null : null
 
         services.panic("ouch");
 >services.panic("ouch") : never

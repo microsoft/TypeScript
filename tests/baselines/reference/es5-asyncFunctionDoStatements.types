@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es5-asyncFunctionDoStatements.ts ===
+//// [tests/cases/compiler/es5-asyncFunctionDoStatements.ts] ////
+
+=== es5-asyncFunctionDoStatements.ts ===
 declare var x, y, z, a, b, c;
 >x : any
 >y : any

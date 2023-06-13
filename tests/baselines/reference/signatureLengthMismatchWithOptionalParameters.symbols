@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/signatureLengthMismatchWithOptionalParameters.ts] ////
+
+=== signatureLengthMismatchWithOptionalParameters.ts ===
+function callee(n: number | undefined, m: string) { }
+>callee : Symbol(callee, Decl(signatureLengthMismatchWithOptionalParameters.ts, 0, 0))
+>n : Symbol(n, Decl(signatureLengthMismatchWithOptionalParameters.ts, 0, 16))
+>m : Symbol(m, Decl(signatureLengthMismatchWithOptionalParameters.ts, 0, 38))
+
+function caller(arg: (n?: number) => void) { }
+>caller : Symbol(caller, Decl(signatureLengthMismatchWithOptionalParameters.ts, 0, 53))
+>arg : Symbol(arg, Decl(signatureLengthMismatchWithOptionalParameters.ts, 2, 16))
+>n : Symbol(n, Decl(signatureLengthMismatchWithOptionalParameters.ts, 2, 22))
+
+caller(callee);
+>caller : Symbol(caller, Decl(signatureLengthMismatchWithOptionalParameters.ts, 0, 53))
+>callee : Symbol(callee, Decl(signatureLengthMismatchWithOptionalParameters.ts, 0, 0))
+

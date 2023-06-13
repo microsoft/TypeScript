@@ -20,7 +20,6 @@
                 "flags": "JSDoc",
                 "modifierFlagsCache": 0,
                 "transformFlags": 0,
-                "originalKeywordKind": "ThisKeyword",
                 "escapedText": "this"
             },
             "type": {

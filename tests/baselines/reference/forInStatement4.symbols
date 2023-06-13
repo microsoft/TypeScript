@@ -1,4 +1,6 @@
-=== tests/cases/compiler/forInStatement4.ts ===
+//// [tests/cases/compiler/forInStatement4.ts] ////
+
+=== forInStatement4.ts ===
 var expr: any;
 >expr : Symbol(expr, Decl(forInStatement4.ts, 0, 3))
 

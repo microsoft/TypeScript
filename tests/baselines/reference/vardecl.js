@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/vardecl.ts] ////
+
 //// [vardecl.ts]
 var simpleVar;
 

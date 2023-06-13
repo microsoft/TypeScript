@@ -1,0 +1,73 @@
+//// [tests/cases/conformance/externalModules/verbatimModuleSyntaxNoElisionESM.ts] ////
+
+=== /a.ts ===
+export const a = 0;
+>a : Symbol(a, Decl(a.ts, 0, 12))
+
+export type A = typeof a;
+>A : Symbol(A, Decl(a.ts, 0, 19))
+>a : Symbol(a, Decl(a.ts, 0, 12))
+
+export class AClass {}
+>AClass : Symbol(AClass, Decl(a.ts, 1, 25))
+
+=== /b.ts ===
+import { a, A, AClass } from "./a";
+>a : Symbol(a, Decl(b.ts, 0, 8))
+>A : Symbol(A, Decl(b.ts, 0, 11))
+>AClass : Symbol(AClass, Decl(b.ts, 0, 14))
+
+import type { a as aValue, A as AType } from "./a";
+>a : Symbol(a, Decl(a.ts, 0, 12))
+>aValue : Symbol(aValue, Decl(b.ts, 1, 13))
+>A : Symbol(A, Decl(a.ts, 0, 19))
+>AType : Symbol(AType, Decl(b.ts, 1, 26))
+
+import { type A as AType2 } from "./a";
+>A : Symbol(A, Decl(a.ts, 0, 19))
+>AType2 : Symbol(AType2, Decl(b.ts, 2, 8))
+
+export { A };
+>A : Symbol(A, Decl(b.ts, 4, 8))
+
+export { A as A2 } from "./a";
+>A : Symbol(A, Decl(a.ts, 0, 19))
+>A2 : Symbol(A2, Decl(b.ts, 5, 8))
+
+export type { A as A3 } from "./a";
+>A : Symbol(A, Decl(a.ts, 0, 19))
+>A3 : Symbol(A3, Decl(b.ts, 6, 13))
+
+export { type A as A4 } from "./a";
+>A : Symbol(A, Decl(a.ts, 0, 19))
+>A4 : Symbol(A4, Decl(b.ts, 7, 8))
+
+export type { AClass } from "./a";
+>AClass : Symbol(AClass, Decl(b.ts, 8, 13))
+
+=== /c.ts ===
+import { AClass } from "./b";
+>AClass : Symbol(AClass, Decl(c.ts, 0, 8))
+
+=== /main4.ts ===
+
+export default 1; // ok
+
+=== /main5.ts ===
+export default class C {} // ok
+>C : Symbol(C, Decl(main5.ts, 0, 0))
+
+=== /main6.ts ===
+interface I {}
+>I : Symbol(I, Decl(main6.ts, 0, 0))
+
+export default I; // error
+>I : Symbol(I, Decl(main6.ts, 0, 0))
+
+=== /main7.ts ===
+import type C from "./main5";
+>C : Symbol(C, Decl(main7.ts, 0, 6))
+
+export default C; // error
+>C : Symbol(C, Decl(main7.ts, 0, 6))
+

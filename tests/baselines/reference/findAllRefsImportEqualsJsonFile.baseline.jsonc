@@ -1,451 +1,287 @@
+// === findAllReferences ===
 // === /a.ts ===
-// import /*FIND ALL REFS*/[|j|] = require("./j.json");
+// <|import /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}j|] = require("./j.json");|>
 // [|j|];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.ts",
-      "kind": "alias",
-      "name": "import j = require(\"./j.json\")",
-      "textSpan": {
-        "start": 7,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "j",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "require",
-          "kind": "keyword"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\"./j.json\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 31
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 7,
-          "length": 1
-        },
-        "fileName": "/a.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 31
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 32,
-          "length": 1
-        },
-        "fileName": "/a.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /a.ts ===
+  // <|import /*FIND ALL REFS*/[|j|] = require("./j.json");|>
+  // j;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import j = require(\"./j.json\")",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "j",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "require",
+      "kind": "keyword"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\"./j.json\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /a.ts ===
-// import [|j|] = require("./j.json");
+// <|import [|{| isWriteAccess: true |}j|] = require("./j.json");|>
 // /*FIND ALL REFS*/[|j|];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.ts",
-      "kind": "alias",
-      "name": "import j = require(\"./j.json\")",
-      "textSpan": {
-        "start": 7,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "j",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "require",
-          "kind": "keyword"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\"./j.json\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 31
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 7,
-          "length": 1
-        },
-        "fileName": "/a.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 31
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 32,
-          "length": 1
-        },
-        "fileName": "/a.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /a.ts ===
+  // <|import [|j|] = require("./j.json");|>
+  // /*FIND ALL REFS*/j;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import j = require(\"./j.json\")",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "j",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "require",
+      "kind": "keyword"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\"./j.json\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     }
     ]
-  }
-]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// <|import j = require("/*FIND ALL REFS*/[|./j.json|]");|>
+// j;
+
+// === /b.js ===
+// <|const j = require("[|./j.json|]");|>
+// j;
 
 // === /j.json ===
 // [|{ "x": 0 }|]
 
-// === /b.js ===
-// const j = require("[|./j.json|]");
-// j;
+  // === Definitions ===
+  // === /j.json ===
+  // [|{ "x": 0 }|]
 
-// === /a.ts ===
-// import j = require("/*FIND ALL REFS*/[|./j.json|]");
-// j;
-
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/j.json",
-      "kind": "module",
-      "name": "module \"/j\"",
-      "textSpan": {
-        "start": 0,
-        "length": 10
-      },
-      "displayParts": [
-        {
-          "text": "module",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"/j\"",
-          "kind": "moduleName"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 20,
-          "length": 8
-        },
-        "fileName": "/a.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 31
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 19,
-          "length": 8
-        },
-        "fileName": "/b.js",
-        "contextSpan": {
-          "start": 0,
-          "length": 30
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 0,
-          "length": 10
-        },
-        "fileName": "/j.json",
-        "isWriteAccess": false
-      }
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "module \"/j\"",
+    "displayParts": [
+     {
+      "text": "module",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"/j\"",
+      "kind": "moduleName"
+     }
     ]
-  }
-]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// <|import j = require("[|./j.json|]");|>
+// j;
+
+// === /b.js ===
+// <|const j = require("/*FIND ALL REFS*/[|./j.json|]");|>
+// j;
 
 // === /j.json ===
 // [|{ "x": 0 }|]
 
-// === /b.js ===
-// const j = require("/*FIND ALL REFS*/[|./j.json|]");
-// j;
+  // === Definitions ===
+  // === /j.json ===
+  // [|{ "x": 0 }|]
 
-// === /a.ts ===
-// import j = require("[|./j.json|]");
-// j;
-
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/j.json",
-      "kind": "module",
-      "name": "module \"/j\"",
-      "textSpan": {
-        "start": 0,
-        "length": 10
-      },
-      "displayParts": [
-        {
-          "text": "module",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"/j\"",
-          "kind": "moduleName"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 20,
-          "length": 8
-        },
-        "fileName": "/a.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 31
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 19,
-          "length": 8
-        },
-        "fileName": "/b.js",
-        "contextSpan": {
-          "start": 0,
-          "length": 30
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 0,
-          "length": 10
-        },
-        "fileName": "/j.json",
-        "isWriteAccess": false
-      }
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "module \"/j\"",
+    "displayParts": [
+     {
+      "text": "module",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"/j\"",
+      "kind": "moduleName"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /b.js ===
-// const /*FIND ALL REFS*/[|j|] = require("./j.json");
+// <|const /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}j|] = require("./j.json");|>
 // [|j|];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/b.js",
-      "kind": "alias",
-      "name": "import j",
-      "textSpan": {
-        "start": 6,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "j",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 30
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 6,
-          "length": 1
-        },
-        "fileName": "/b.js",
-        "contextSpan": {
-          "start": 0,
-          "length": 30
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 31,
-          "length": 1
-        },
-        "fileName": "/b.js",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /b.js ===
+  // <|const /*FIND ALL REFS*/[|j|] = require("./j.json");|>
+  // j;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import j",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "j",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /b.js ===
-// const [|j|] = require("./j.json");
+// <|const [|{| isWriteAccess: true |}j|] = require("./j.json");|>
 // /*FIND ALL REFS*/[|j|];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/b.js",
-      "kind": "alias",
-      "name": "import j",
-      "textSpan": {
-        "start": 6,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "j",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 30
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 6,
-          "length": 1
-        },
-        "fileName": "/b.js",
-        "contextSpan": {
-          "start": 0,
-          "length": 30
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 31,
-          "length": 1
-        },
-        "fileName": "/b.js",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /b.js ===
+  // <|const [|j|] = require("./j.json");|>
+  // /*FIND ALL REFS*/j;
 
-undefined
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import j",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "j",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /j.json ===
+// /*FIND ALL REFS*/{ "x": 0 }

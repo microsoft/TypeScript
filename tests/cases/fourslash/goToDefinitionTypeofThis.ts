@@ -8,8 +8,8 @@
 ////    get self(/*getterDecl*/this: number) { type X = typeof [|/*getterUse*/this|]; }
 ////}
 
-verify.goToDefinition({
-    "fnUse": "fnDecl",
-    "clsUse": "cls",
-    "getterUse": "getterDecl"
-});
+verify.baselineGoToDefinition(
+    "fnUse",
+    "clsUse",
+    "getterUse",
+);

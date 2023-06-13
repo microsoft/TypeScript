@@ -1,4 +1,6 @@
-=== tests/cases/compiler/spellingSuggestionJSXAttribute.tsx ===
+//// [tests/cases/compiler/spellingSuggestionJSXAttribute.tsx] ////
+
+=== spellingSuggestionJSXAttribute.tsx ===
 /// <reference path="react16.d.ts" />
 import * as React from "react";
 >React : typeof React
@@ -11,7 +13,6 @@ function MyComp2(props: { className?: string, htmlFor?: string }) {
 
     return null!;
 >null! : null
->null : null
 }
 class MyComp extends React.Component<{ className?: string, htmlFor?: string }> { }
 >MyComp : MyComp

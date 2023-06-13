@@ -1,4 +1,6 @@
-=== tests/cases/compiler/infinitelyExpandingOverloads.ts ===
+//// [tests/cases/compiler/infinitelyExpandingOverloads.ts] ////
+
+=== infinitelyExpandingOverloads.ts ===
 interface KnockoutSubscription2<T> {
     target: KnockoutObservableBase2<T>;
 >target : KnockoutObservableBase2<T>
@@ -47,6 +49,5 @@ class Widget<TValue> {
 >options : ViewModel<TValue>
 
         return null;
->null : null
     }
 }

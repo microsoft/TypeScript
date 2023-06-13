@@ -1,4 +1,6 @@
-=== tests/cases/compiler/parseGenericArrowRatherThanLeftShift.ts ===
+//// [tests/cases/compiler/parseGenericArrowRatherThanLeftShift.ts] ////
+
+=== parseGenericArrowRatherThanLeftShift.ts ===
 type Bar = ReturnType<<T>(x: T) => number>;
 >Bar : number
 >x : T

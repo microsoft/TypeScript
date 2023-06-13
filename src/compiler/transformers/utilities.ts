@@ -1,4 +1,5 @@
 import {
+    __String,
     AccessorDeclaration,
     AllDecorators,
     append,
@@ -29,6 +30,7 @@ import {
     getDecorators,
     getFirstConstructorWithBody,
     getNamespaceDeclarationNode,
+    getNodeForGeneratedName,
     getNodeId,
     getOriginalNode,
     hasDecorators,
@@ -47,8 +49,10 @@ import {
     isDefaultImport,
     isExpressionStatement,
     isGeneratedIdentifier,
+    isGeneratedPrivateIdentifier,
     isIdentifier,
     isKeyword,
+    isLocalName,
     isMethodOrAccessor,
     isNamedExports,
     isNamedImports,
@@ -67,6 +71,7 @@ import {
     Node,
     NodeArray,
     parameterIsThisKeyword,
+    PrivateIdentifier,
     PrivateIdentifierAccessorDeclaration,
     PrivateIdentifierAutoAccessorPropertyDeclaration,
     PrivateIdentifierMethodDeclaration,
@@ -156,7 +161,7 @@ export function getImportNeedsImportDefaultHelper(node: ImportDeclaration): bool
 /** @internal */
 export function collectExternalModuleInfo(context: TransformationContext, sourceFile: SourceFile, resolver: EmitResolver, compilerOptions: CompilerOptions): ExternalModuleInfo {
     const externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[] = [];
-    const exportSpecifiers = createMultiMap<ExportSpecifier>();
+    const exportSpecifiers = createMultiMap<string, ExportSpecifier>();
     const exportedBindings: Identifier[][] = [];
     const uniqueExports = new Map<string, boolean>();
     let exportedNames: Identifier[] | undefined;
@@ -232,7 +237,7 @@ export function collectExternalModuleInfo(context: TransformationContext, source
             case SyntaxKind.VariableStatement:
                 if (hasSyntacticModifier(node, ModifierFlags.Export)) {
                     for (const decl of (node as VariableStatement).declarationList.declarations) {
-                        exportedNames = collectExportedVariableInfo(decl, uniqueExports, exportedNames);
+                        exportedNames = collectExportedVariableInfo(decl, uniqueExports, exportedNames, exportedBindings);
                     }
                 }
                 break;
@@ -310,11 +315,11 @@ export function collectExternalModuleInfo(context: TransformationContext, source
     }
 }
 
-function collectExportedVariableInfo(decl: VariableDeclaration | BindingElement, uniqueExports: Map<string, boolean>, exportedNames: Identifier[] | undefined) {
+function collectExportedVariableInfo(decl: VariableDeclaration | BindingElement, uniqueExports: Map<string, boolean>, exportedNames: Identifier[] | undefined, exportedBindings: Identifier[][]) {
     if (isBindingPattern(decl.name)) {
         for (const element of decl.name.elements) {
             if (!isOmittedExpression(element)) {
-                exportedNames = collectExportedVariableInfo(element, uniqueExports, exportedNames);
+                exportedNames = collectExportedVariableInfo(element, uniqueExports, exportedNames, exportedBindings);
             }
         }
     }
@@ -323,6 +328,9 @@ function collectExportedVariableInfo(decl: VariableDeclaration | BindingElement,
         if (!uniqueExports.get(text)) {
             uniqueExports.set(text, true);
             exportedNames = append(exportedNames, decl.name);
+            if (isLocalName(decl.name)) {
+                multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(decl), decl.name);
+            }
         }
     }
     return exportedNames;
@@ -552,10 +560,13 @@ export function getAllDecoratorsOfClass(node: ClassLikeDeclaration): AllDecorato
  *
  * @internal
  */
-export function getAllDecoratorsOfClassElement(member: ClassElement, parent: ClassLikeDeclaration): AllDecorators | undefined {
+export function getAllDecoratorsOfClassElement(member: ClassElement, parent: ClassLikeDeclaration, useLegacyDecorators: boolean): AllDecorators | undefined {
     switch (member.kind) {
         case SyntaxKind.GetAccessor:
         case SyntaxKind.SetAccessor:
+            if (!useLegacyDecorators) {
+                return getAllDecoratorsOfMethod(member as AccessorDeclaration);
+            }
             return getAllDecoratorsOfAccessors(member as AccessorDeclaration, parent);
 
         case SyntaxKind.MethodDeclaration:
@@ -609,7 +620,7 @@ function getAllDecoratorsOfAccessors(accessor: AccessorDeclaration, parent: Clas
  *
  * @param method The class method member.
  */
-function getAllDecoratorsOfMethod(method: MethodDeclaration): AllDecorators | undefined {
+function getAllDecoratorsOfMethod(method: MethodDeclaration | AccessorDeclaration): AllDecorators | undefined {
     if (!method.body) {
         return undefined;
     }
@@ -636,4 +647,81 @@ function getAllDecoratorsOfProperty(property: PropertyDeclaration): AllDecorator
     }
 
     return { decorators };
+}
+
+/** @internal */
+export interface PrivateEnvironment<TData, TEntry> {
+    readonly data: TData;
+
+    /**
+     * A mapping of private names to information needed for transformation.
+     */
+    identifiers?: Map<__String, TEntry>;
+
+    /**
+     * A mapping of generated private names to information needed for transformation.
+     */
+    generatedIdentifiers?: Map<Node, TEntry>;
+}
+
+/** @internal */
+export interface LexicalEnvironment<in out TEnvData, TPrivateEnvData, TPrivateEntry> {
+    data: TEnvData;
+    privateEnv?: PrivateEnvironment<TPrivateEnvData, TPrivateEntry>;
+    readonly previous: LexicalEnvironment<TEnvData, TPrivateEnvData, TPrivateEntry> | undefined;
+}
+
+/** @internal */
+export function walkUpLexicalEnvironments<TEnvData, TPrivateEnvData, TPrivateEntry, U>(
+    env: LexicalEnvironment<TEnvData, TPrivateEnvData, TPrivateEntry> | undefined,
+    cb: (env: LexicalEnvironment<TEnvData, TPrivateEnvData, TPrivateEntry>) => U
+): U | undefined {
+    while (env) {
+        const result = cb(env);
+        if (result !== undefined) return result;
+        env = env.previous;
+    }
+}
+
+/** @internal */
+export function newPrivateEnvironment<TData, TEntry>(data: TData): PrivateEnvironment<TData, TEntry> {
+    return { data };
+}
+
+/** @internal */
+export function getPrivateIdentifier<TData, TEntry>(
+    privateEnv: PrivateEnvironment<TData, TEntry> | undefined,
+    name: PrivateIdentifier
+) {
+    return isGeneratedPrivateIdentifier(name) ?
+        privateEnv?.generatedIdentifiers?.get(getNodeForGeneratedName(name)) :
+        privateEnv?.identifiers?.get(name.escapedText);
+}
+
+/** @internal */
+export function setPrivateIdentifier<TData, TEntry>(
+    privateEnv: PrivateEnvironment<TData, TEntry>,
+    name: PrivateIdentifier,
+    entry: TEntry
+) {
+    if (isGeneratedPrivateIdentifier(name)) {
+        privateEnv.generatedIdentifiers ??= new Map();
+        privateEnv.generatedIdentifiers.set(getNodeForGeneratedName(name), entry);
+    }
+    else {
+        privateEnv.identifiers ??= new Map();
+        privateEnv.identifiers.set(name.escapedText, entry);
+    }
+}
+
+/** @internal */
+export function accessPrivateIdentifier<
+    TEnvData,
+    TPrivateEnvData,
+    TPrivateEntry,
+>(
+    env: LexicalEnvironment<TEnvData, TPrivateEnvData, TPrivateEntry> | undefined,
+    name: PrivateIdentifier,
+) {
+    return walkUpLexicalEnvironments(env, env => getPrivateIdentifier(env.privateEnv, name));
 }

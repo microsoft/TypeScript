@@ -1,7 +1,7 @@
-tests/cases/conformance/es6/destructuring/iterableArrayPattern24.ts(2,1): error TS2488: Type '{ 0: string; 1: true; }' must have a '[Symbol.iterator]()' method that returns an iterator.
+iterableArrayPattern24.ts(2,1): error TS2488: Type '{ 0: string; 1: true; }' must have a '[Symbol.iterator]()' method that returns an iterator.
 
 
-==== tests/cases/conformance/es6/destructuring/iterableArrayPattern24.ts (1 errors) ====
+==== iterableArrayPattern24.ts (1 errors) ====
     var a: string, b: boolean[];
     [a, ...b] = { 0: "", 1: true };
     ~~~~~~~~~

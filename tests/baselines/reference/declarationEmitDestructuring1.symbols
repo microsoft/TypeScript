@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitDestructuring1.ts ===
+//// [tests/cases/compiler/declarationEmitDestructuring1.ts] ////
+
+=== declarationEmitDestructuring1.ts ===
 function foo([a, b, c]: [string, string, string]): void { }
 >foo : Symbol(foo, Decl(declarationEmitDestructuring1.ts, 0, 0))
 >a : Symbol(a, Decl(declarationEmitDestructuring1.ts, 0, 14))

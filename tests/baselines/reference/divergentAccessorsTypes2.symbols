@@ -1,4 +1,6 @@
-=== tests/cases/compiler/divergentAccessorsTypes2.ts ===
+//// [tests/cases/compiler/divergentAccessorsTypes2.ts] ////
+
+=== divergentAccessorsTypes2.ts ===
 class Test1<T> {
 >Test1 : Symbol(Test1, Decl(divergentAccessorsTypes2.ts, 0, 0))
 >T : Symbol(T, Decl(divergentAccessorsTypes2.ts, 0, 12))

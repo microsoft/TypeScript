@@ -1,0 +1,11 @@
+//// [tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNumberOperand.ts] ////
+
+=== comparisonOperatorWithNumberOperand.ts ===
+// repro #52036
+declare const t1: number | Promise<number>
+>t1 : Symbol(t1, Decl(comparisonOperatorWithNumberOperand.ts, 1, 13))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+
+t1 >= 0 // error
+>t1 : Symbol(t1, Decl(comparisonOperatorWithNumberOperand.ts, 1, 13))
+

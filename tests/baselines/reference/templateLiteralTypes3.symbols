@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/literal/templateLiteralTypes3.ts ===
+//// [tests/cases/conformance/types/literal/templateLiteralTypes3.ts] ////
+
+=== templateLiteralTypes3.ts ===
 // Inference from template literal type to template literal type
 
 type Foo1<T> = T extends `*${infer U}*` ? U : never;
@@ -579,4 +581,10 @@ function ft1<T extends string>(t: T, u: Uppercase<T>, u1: Uppercase<`1.${T}.3`>,
 >u1 : Symbol(u1, Decl(templateLiteralTypes3.ts, 185, 53))
 >u2 : Symbol(u2, Decl(templateLiteralTypes3.ts, 185, 80))
 }
+
+// Repro from #52685
+
+type Boom = 'abc' | 'def' | `a${string}` | Lowercase<string>;
+>Boom : Symbol(Boom, Decl(templateLiteralTypes3.ts, 189, 1))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
 

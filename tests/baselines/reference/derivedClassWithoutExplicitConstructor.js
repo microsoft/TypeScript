@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/derivedClassWithoutExplicitConstructor.ts] ////
+
 //// [derivedClassWithoutExplicitConstructor.ts]
 class Base {
     a = 1;

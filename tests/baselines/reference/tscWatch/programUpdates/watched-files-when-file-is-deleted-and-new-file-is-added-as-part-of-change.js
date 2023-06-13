@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/home/username/project/src/file1.ts]
 var a = 10;
@@ -44,19 +45,19 @@ Shape signatures in builder refreshed for::
 /home/username/project/src/file1.ts (used version)
 
 PolledWatches::
-/home/username/project/node_modules/@types:
+/home/username/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/home/username/project/tsconfig.json:
+/a/lib/lib.d.ts: *new*
   {}
-/home/username/project/src/file1.ts:
+/home/username/project/src/file1.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/home/username/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/home/username/project:
+/home/username/project: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -74,6 +75,9 @@ var a = 10;
 
 //// [/home/username/project/src/file1.ts] deleted
 
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:28 AM[0m] File change detected. Starting incremental compilation...
@@ -101,11 +105,15 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/username/project/tsconfig.json:
-  {}
 /a/lib/lib.d.ts:
   {}
-/home/username/project/src/file2.ts:
+/home/username/project/src/file2.ts: *new*
+  {}
+/home/username/project/tsconfig.json:
+  {}
+
+FsWatches *deleted*::
+/home/username/project/src/file1.ts:
   {}
 
 FsWatchesRecursive::

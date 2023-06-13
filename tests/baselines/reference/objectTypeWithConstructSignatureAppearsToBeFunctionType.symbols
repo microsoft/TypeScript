@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/members/objectTypeWithConstructSignatureAppearsToBeFunctionType.ts ===
+//// [tests/cases/conformance/types/members/objectTypeWithConstructSignatureAppearsToBeFunctionType.ts] ////
+
+=== objectTypeWithConstructSignatureAppearsToBeFunctionType.ts ===
 // no errors expected below 
 
 interface I {

@@ -19,6 +19,7 @@ import {
     concatenate,
     ConciseBody,
     ConstructorDeclaration,
+    containsObjectRestOrSpread,
     createForOfBindingStatement,
     createSuperAccessVariableStatement,
     Debug,
@@ -61,9 +62,9 @@ import {
     isParameter,
     isPropertyAccessExpression,
     isPropertyName,
+    isQuestionToken,
     isStatement,
     isSuperProperty,
-    isToken,
     isVariableDeclarationList,
     LabeledStatement,
     LeftHandSideExpression,
@@ -95,7 +96,6 @@ import {
     SyntaxKind,
     TaggedTemplateExpression,
     TextRange,
-    Token,
     TransformationContext,
     TransformFlags,
     unwrapInnermostStatementOfLabel,
@@ -240,7 +240,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
         return visitorWorker(node, /*expressionResultIsUnused*/ true);
     }
 
-    function visitorNoAsyncModifier(node: Node): VisitResult<Node> {
+    function visitorNoAsyncModifier(node: Node): VisitResult<Node | undefined> {
         if (node.kind === SyntaxKind.AsyncKeyword) {
             return undefined;
         }
@@ -578,7 +578,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
      * expression of an `ExpressionStatement`).
      */
     function visitBinaryExpression(node: BinaryExpression, expressionResultIsUnused: boolean): Expression {
-        if (isDestructuringAssignment(node) && node.left.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
+        if (isDestructuringAssignment(node) && containsObjectRestOrSpread(node.left)) {
             return flattenDestructuringAssignment(
                 node,
                 visitor,
@@ -704,7 +704,8 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
      */
     function visitForOfStatement(node: ForOfStatement, outermostLabeledStatement: LabeledStatement | undefined): VisitResult<Statement> {
         const ancestorFacts = enterSubtree(HierarchyFacts.IterationStatementExcludes, HierarchyFacts.IterationStatementIncludes);
-        if (node.initializer.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
+        if (node.initializer.transformFlags & TransformFlags.ContainsObjectRestOrSpread ||
+            isAssignmentPattern(node.initializer) && containsObjectRestOrSpread(node.initializer)) {
             node = transformForOfStatementWithObjectRest(node);
         }
         const result = node.awaitModifier ?
@@ -766,11 +767,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
         const exitNonUserCodeStatement = factory.createExpressionStatement(exitNonUserCodeExpression);
         setSourceMapRange(exitNonUserCodeStatement, node.expression);
 
-        const enterNonUserCodeExpression = factory.createAssignment(nonUserCode, factory.createTrue());
-        const enterNonUserCodeStatement = factory.createExpressionStatement(enterNonUserCodeExpression);
-        setSourceMapRange(exitNonUserCodeStatement, node.expression);
-
-        const statements: Statement[] = [];
+        const statements: Statement[] = [iteratorValueStatement, exitNonUserCodeStatement];
         const binding = createForOfBindingStatement(factory, node.initializer, value);
         statements.push(visitNode(binding, visitor, isStatement));
 
@@ -786,28 +783,13 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
             statements.push(statement);
         }
 
-        const body = setEmitFlags(
-            setTextRange(
-                factory.createBlock(
-                    setTextRange(factory.createNodeArray(statements), statementsLocation),
-                    /*multiLine*/ true
-                ),
-                bodyLocation
+        return setTextRange(
+            factory.createBlock(
+                setTextRange(factory.createNodeArray(statements), statementsLocation),
+                /*multiLine*/ true
             ),
-            EmitFlags.NoSourceMap | EmitFlags.NoTokenSourceMaps
+            bodyLocation
         );
-
-        return factory.createBlock([
-            iteratorValueStatement,
-            exitNonUserCodeStatement,
-            factory.createTryStatement(
-                body,
-                /*catchClause*/ undefined,
-                factory.createBlock([
-                    enterNonUserCodeStatement
-                ])
-            )
-        ]);
     }
 
     function createDownlevelAwait(expression: Expression) {
@@ -858,7 +840,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                         factory.createAssignment(done, getDone),
                         factory.createLogicalNot(done)
                     ]),
-                    /*incrementor*/ undefined,
+                    /*incrementor*/ factory.createAssignment(nonUserCode, factory.createTrue()),
                     /*statement*/ convertForOfStatementHead(node, getValue, nonUserCode)
                 ),
                 /*location*/ node
@@ -1041,7 +1023,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                 ? undefined
                 : node.asteriskToken,
             visitNode(node.name, visitor, isPropertyName),
-            visitNode<Token<SyntaxKind.QuestionToken>>(/*questionToken*/ undefined, visitor, isToken),
+            visitNode(/*node*/ undefined, visitor, isQuestionToken),
             /*typeParameters*/ undefined,
             visitParameterList(node.parameters, parameterVisitor, context),
             /*type*/ undefined,
@@ -1282,7 +1264,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                     context,
                     FlattenLevel.ObjectRest,
                     factory.getGeneratedNameForNode(parameter),
-                    /*doNotRecordTempVariablesInLine*/ false,
+                    /*hoistTempVariables*/ false,
                     /*skipInitializer*/ true,
                 );
                 if (some(declarations)) {

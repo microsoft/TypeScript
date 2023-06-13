@@ -1,8 +1,8 @@
-tests/cases/conformance/controlFlow/dependentDestructuredVariables.ts(334,5): error TS7022: 'value1' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
-tests/cases/conformance/controlFlow/dependentDestructuredVariables.ts(334,5): error TS7031: Binding element 'value1' implicitly has an 'any' type.
+dependentDestructuredVariables.ts(334,5): error TS7022: 'value1' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+dependentDestructuredVariables.ts(334,5): error TS7031: Binding element 'value1' implicitly has an 'any' type.
 
 
-==== tests/cases/conformance/controlFlow/dependentDestructuredVariables.ts (2 errors) ====
+==== dependentDestructuredVariables.ts (2 errors) ====
     type Action =
         | { kind: 'A', payload: number }
         | { kind: 'B', payload: string };
@@ -394,4 +394,19 @@ tests/cases/conformance/controlFlow/dependentDestructuredVariables.ts(334,5): er
             }
         }
     }
+    
+    // Repro from #52152
+    
+    interface ClientEvents {
+        warn: [message: string];
+        shardDisconnect: [closeEvent: CloseEvent, shardId: number];
+    }
+      
+    declare class Client {
+        public on<K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void): void;
+    }
+    
+    const bot = new Client();
+    bot.on("shardDisconnect", (event, shard) => console.log(`Shard ${shard} disconnected (${event.code},${event.wasClean}): ${event.reason}`));
+    bot.on("shardDisconnect", event => console.log(`${event.code} ${event.wasClean} ${event.reason}`));
     
