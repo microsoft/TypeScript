@@ -1,13 +1,13 @@
-tests/cases/conformance/jsdoc/0.js(3,5): error TS2322: Type 'boolean' is not assignable to type 'string'.
-tests/cases/conformance/jsdoc/0.js(6,5): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/jsdoc/0.js(8,12): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
-tests/cases/conformance/jsdoc/0.js(10,4): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
-tests/cases/conformance/jsdoc/0.js(17,1): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/jsdoc/0.js(20,21): error TS2339: Property 'concat' does not exist on type 'number'.
-tests/cases/conformance/jsdoc/0.js(24,19): error TS2322: Type 'number' is not assignable to type 'string'.
+0.js(3,5): error TS2322: Type 'boolean' is not assignable to type 'string'.
+0.js(6,5): error TS2322: Type 'string' is not assignable to type 'number'.
+0.js(8,12): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
+0.js(10,4): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+0.js(17,1): error TS2322: Type 'number' is not assignable to type 'string'.
+0.js(20,21): error TS2339: Property 'concat' does not exist on type 'number'.
+0.js(24,19): error TS2322: Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/conformance/jsdoc/0.js (7 errors) ====
+==== 0.js (7 errors) ====
     // @ts-check
     /** @type {String} */
     var S = true;

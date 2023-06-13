@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolProperty15.ts] ////
+
 //// [symbolProperty15.ts]
 class C { }
 interface I {

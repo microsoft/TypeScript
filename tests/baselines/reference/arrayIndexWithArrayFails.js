@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arrayIndexWithArrayFails.ts] ////
+
 //// [arrayIndexWithArrayFails.ts]
 declare const arr1: (string | string[])[];
 declare const arr2: number[];

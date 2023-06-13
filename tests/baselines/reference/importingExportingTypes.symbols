@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/importingExportingTypes.ts] ////
+
 === /node_modules/@types/node/index.d.ts ===
 declare module "fs" {
 >"fs" : Symbol("fs", Decl(index.d.ts, 0, 0))

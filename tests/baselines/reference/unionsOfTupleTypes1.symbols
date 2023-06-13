@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/tuple/unionsOfTupleTypes1.ts ===
+//// [tests/cases/conformance/types/tuple/unionsOfTupleTypes1.ts] ////
+
+=== unionsOfTupleTypes1.ts ===
 type T1 = [string, number];
 >T1 : Symbol(T1, Decl(unionsOfTupleTypes1.ts, 0, 0))
 

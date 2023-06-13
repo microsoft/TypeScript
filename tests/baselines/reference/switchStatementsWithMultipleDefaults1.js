@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/switchStatementsWithMultipleDefaults1.ts] ////
+
 //// [switchStatementsWithMultipleDefaults1.ts]
     var x = 10;
     

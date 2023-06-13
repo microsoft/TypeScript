@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericClassPropertyInheritanceSpecialization.ts ===
+//// [tests/cases/compiler/genericClassPropertyInheritanceSpecialization.ts] ////
+
+=== genericClassPropertyInheritanceSpecialization.ts ===
 interface KnockoutObservableBase<T> {
 >KnockoutObservableBase : Symbol(KnockoutObservableBase, Decl(genericClassPropertyInheritanceSpecialization.ts, 0, 0))
 >T : Symbol(T, Decl(genericClassPropertyInheritanceSpecialization.ts, 0, 33))

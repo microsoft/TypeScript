@@ -1,11 +1,11 @@
-tests/cases/compiler/main.ts(1,25): error TS2343: This syntax requires an imported helper named '__asyncGenerator' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
-tests/cases/compiler/main.ts(1,25): error TS2343: This syntax requires an imported helper named '__await' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
-tests/cases/compiler/main.ts(1,25): error TS2343: This syntax requires an imported helper named '__generator' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
-tests/cases/compiler/main.ts(4,5): error TS2343: This syntax requires an imported helper named '__asyncDelegator' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
-tests/cases/compiler/main.ts(4,5): error TS2343: This syntax requires an imported helper named '__asyncValues' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+main.ts(1,25): error TS2343: This syntax requires an imported helper named '__asyncGenerator' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+main.ts(1,25): error TS2343: This syntax requires an imported helper named '__await' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+main.ts(1,25): error TS2343: This syntax requires an imported helper named '__generator' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+main.ts(4,5): error TS2343: This syntax requires an imported helper named '__asyncDelegator' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+main.ts(4,5): error TS2343: This syntax requires an imported helper named '__asyncValues' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
 
 
-==== tests/cases/compiler/main.ts (5 errors) ====
+==== main.ts (5 errors) ====
     export async function * f() {
                             ~
 !!! error TS2343: This syntax requires an imported helper named '__asyncGenerator' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
@@ -16,12 +16,12 @@ tests/cases/compiler/main.ts(4,5): error TS2343: This syntax requires an importe
         await 1;
         yield 2;
         yield* [3];
-        ~~~~~~~~~~
+        ~~~~~
 !!! error TS2343: This syntax requires an imported helper named '__asyncDelegator' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
-        ~~~~~~~~~~
+        ~~~~~
 !!! error TS2343: This syntax requires an imported helper named '__asyncValues' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
     }
     
-==== tests/cases/compiler/tslib.d.ts (0 errors) ====
+==== tslib.d.ts (0 errors) ====
     export {}
     

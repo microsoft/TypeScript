@@ -1,0 +1,53 @@
+//// [tests/cases/compiler/templateExpressionAsPossiblyDiscriminantValue.ts] ////
+
+=== templateExpressionAsPossiblyDiscriminantValue.ts ===
+// repro mentioned in https://github.com/microsoft/TypeScript/issues/53888
+
+type BiomePlainLinkProps = {
+>BiomePlainLinkProps : Symbol(BiomePlainLinkProps, Decl(templateExpressionAsPossiblyDiscriminantValue.ts, 0, 0))
+
+  href: string;
+>href : Symbol(href, Decl(templateExpressionAsPossiblyDiscriminantValue.ts, 2, 28))
+
+  onClick?: (event: string) => void;
+>onClick : Symbol(onClick, Decl(templateExpressionAsPossiblyDiscriminantValue.ts, 3, 15))
+>event : Symbol(event, Decl(templateExpressionAsPossiblyDiscriminantValue.ts, 4, 13))
+}
+
+type BiomeButtonProps = {
+>BiomeButtonProps : Symbol(BiomeButtonProps, Decl(templateExpressionAsPossiblyDiscriminantValue.ts, 5, 1))
+
+  href?: never;
+>href : Symbol(href, Decl(templateExpressionAsPossiblyDiscriminantValue.ts, 7, 25))
+
+  onClick?: (event: number) => void;
+>onClick : Symbol(onClick, Decl(templateExpressionAsPossiblyDiscriminantValue.ts, 8, 15))
+>event : Symbol(event, Decl(templateExpressionAsPossiblyDiscriminantValue.ts, 9, 13))
+}
+
+export type ClickableDiscriminatedUnion =
+>ClickableDiscriminatedUnion : Symbol(ClickableDiscriminatedUnion, Decl(templateExpressionAsPossiblyDiscriminantValue.ts, 10, 1))
+
+  | BiomePlainLinkProps
+>BiomePlainLinkProps : Symbol(BiomePlainLinkProps, Decl(templateExpressionAsPossiblyDiscriminantValue.ts, 0, 0))
+
+  | BiomeButtonProps;
+>BiomeButtonProps : Symbol(BiomeButtonProps, Decl(templateExpressionAsPossiblyDiscriminantValue.ts, 5, 1))
+
+const p3: ClickableDiscriminatedUnion = {
+>p3 : Symbol(p3, Decl(templateExpressionAsPossiblyDiscriminantValue.ts, 16, 5))
+>ClickableDiscriminatedUnion : Symbol(ClickableDiscriminatedUnion, Decl(templateExpressionAsPossiblyDiscriminantValue.ts, 10, 1))
+
+  href: `2${undefined}332132`,
+>href : Symbol(href, Decl(templateExpressionAsPossiblyDiscriminantValue.ts, 16, 41))
+>undefined : Symbol(undefined)
+
+  onClick: (ev) => console.log('@@@@', ev),
+>onClick : Symbol(onClick, Decl(templateExpressionAsPossiblyDiscriminantValue.ts, 17, 30))
+>ev : Symbol(ev, Decl(templateExpressionAsPossiblyDiscriminantValue.ts, 18, 12))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>ev : Symbol(ev, Decl(templateExpressionAsPossiblyDiscriminantValue.ts, 18, 12))
+}
+

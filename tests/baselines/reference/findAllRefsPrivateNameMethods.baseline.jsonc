@@ -1,451 +1,335 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsPrivateNameMethods.ts ===
 // class C {
-//     /*FIND ALL REFS*/[|#foo|](){ }
+//     /*FIND ALL REFS*/<|[|{| isWriteAccess: true, isDefinition: true |}#foo|](){ }|>
 //     constructor() {
 //         this.[|#foo|]();
 //     }
 // }
 // class D extends C {
-//     constructor() {
-//         super()
-//         this.#foo = 20;
-//     }
-// }
-// class E {
-//     #foo(){ }
-//     constructor() {
-//         this.#foo();
-//     }
-// }
+// --- (line: 8) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameMethods.ts",
-      "kind": "method",
-      "name": "(method) C.#foo(): void",
-      "textSpan": {
-        "start": 14,
-        "length": 4
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "#foo",
-          "kind": "methodName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 14,
-        "length": 9
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 14,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameMethods.ts",
-        "contextSpan": {
-          "start": 14,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 57,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameMethods.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsPrivateNameMethods.ts ===
+  // class C {
+  //     /*FIND ALL REFS*/<|[|#foo|](){ }|>
+  //     constructor() {
+  //         this.#foo();
+  //     }
+  // --- (line: 6) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) C.#foo(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "#foo",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsPrivateNameMethods.ts ===
 // class C {
-//     [|#foo|](){ }
+//     <|[|{| isWriteAccess: true |}#foo|](){ }|>
 //     constructor() {
 //         this./*FIND ALL REFS*/[|#foo|]();
 //     }
 // }
 // class D extends C {
-//     constructor() {
-//         super()
-//         this.#foo = 20;
-//     }
-// }
-// class E {
-//     #foo(){ }
-//     constructor() {
-//         this.#foo();
-//     }
-// }
+// --- (line: 8) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameMethods.ts",
-      "kind": "method",
-      "name": "(method) C.#foo(): void",
-      "textSpan": {
-        "start": 14,
-        "length": 4
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "#foo",
-          "kind": "methodName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 14,
-        "length": 9
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 14,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameMethods.ts",
-        "contextSpan": {
-          "start": 14,
-          "length": 9
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 57,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameMethods.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsPrivateNameMethods.ts ===
+  // class C {
+  //     <|[|#foo|](){ }|>
+  //     constructor() {
+  //         this./*FIND ALL REFS*/#foo();
+  //     }
+  // }
+  // class D extends C {
+  // --- (line: 8) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) C.#foo(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "#foo",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsPrivateNameMethods.ts ===
-// class C {
-//     #foo(){ }
-//     constructor() {
-//         this.#foo();
-//     }
-// }
-// class D extends C {
-//     constructor() {
-//         super()
-//         this.#foo = 20;
+// --- (line: 10) skipped ---
 //     }
 // }
 // class E {
-//     /*FIND ALL REFS*/[|#foo|](){ }
+//     /*FIND ALL REFS*/<|[|{| isWriteAccess: true, isDefinition: true |}#foo|](){ }|>
 //     constructor() {
 //         this.[|#foo|]();
 //     }
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameMethods.ts",
-      "kind": "method",
-      "name": "(method) E.#foo(): void",
-      "textSpan": {
-        "start": 175,
-        "length": 4
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "E",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "#foo",
-          "kind": "methodName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 175,
-        "length": 9
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 175,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameMethods.ts",
-        "contextSpan": {
-          "start": 175,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 218,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameMethods.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsPrivateNameMethods.ts ===
+  // --- (line: 10) skipped ---
+  //     }
+  // }
+  // class E {
+  //     /*FIND ALL REFS*/<|[|#foo|](){ }|>
+  //     constructor() {
+  //         this.#foo();
+  //     }
+  // }
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) E.#foo(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "E",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "#foo",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsPrivateNameMethods.ts ===
-// class C {
-//     #foo(){ }
-//     constructor() {
-//         this.#foo();
-//     }
-// }
-// class D extends C {
-//     constructor() {
-//         super()
-//         this.#foo = 20;
+// --- (line: 10) skipped ---
 //     }
 // }
 // class E {
-//     [|#foo|](){ }
+//     <|[|{| isWriteAccess: true |}#foo|](){ }|>
 //     constructor() {
 //         this./*FIND ALL REFS*/[|#foo|]();
 //     }
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameMethods.ts",
-      "kind": "method",
-      "name": "(method) E.#foo(): void",
-      "textSpan": {
-        "start": 175,
-        "length": 4
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "E",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "#foo",
-          "kind": "methodName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 175,
-        "length": 9
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 175,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameMethods.ts",
-        "contextSpan": {
-          "start": 175,
-          "length": 9
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 218,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameMethods.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsPrivateNameMethods.ts ===
+  // --- (line: 10) skipped ---
+  //     }
+  // }
+  // class E {
+  //     <|[|#foo|](){ }|>
+  //     constructor() {
+  //         this./*FIND ALL REFS*/#foo();
+  //     }
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) E.#foo(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "E",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "#foo",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

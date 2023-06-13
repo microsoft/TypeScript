@@ -1,4 +1,6 @@
-=== tests/cases/compiler/literalFreshnessPropagationOnNarrowing.ts ===
+//// [tests/cases/compiler/literalFreshnessPropagationOnNarrowing.ts] ////
+
+=== literalFreshnessPropagationOnNarrowing.ts ===
 function f1() {
 >f1 : () => void
 
@@ -36,17 +38,14 @@ function f2() {
     let el: Element = null as any;
 >el : string | false
 >null as any : any
->null : null
 
     let arr: Element[] = null as any;
 >arr : (string | false)[]
 >null as any : any
->null : null
 
     let elOrA: ElementOrArray = null as any;
 >elOrA : (string | false) | (string | false)[]
 >null as any : any
->null : null
 
     // Desired/actual: All OK
     let a1: ElementOrArray = el;

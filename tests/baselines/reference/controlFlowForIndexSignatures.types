@@ -1,4 +1,6 @@
-=== tests/cases/compiler/controlFlowForIndexSignatures.ts ===
+//// [tests/cases/compiler/controlFlowForIndexSignatures.ts] ////
+
+=== controlFlowForIndexSignatures.ts ===
 type Foo = { bar: string };
 >Foo : { bar: string; }
 >bar : string

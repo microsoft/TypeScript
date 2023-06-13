@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/members/objectTypeWithStringIndexerHidingObjectIndexer.ts] ////
+
 //// [objectTypeWithStringIndexerHidingObjectIndexer.ts]
 // object types can define string indexers that are more specific than the default 'any' that would be returned
 // no errors expected below 

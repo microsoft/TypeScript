@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -149,19 +150,19 @@ Shape signatures in builder refreshed for::
 /user/username/projects/sample1/tests/index.ts (computed .d.ts during emit)
 
 FsWatches::
-/user/username/projects/sample1/core/tsconfig.json: *new*
-  {}
 /user/username/projects/sample1/core/anothermodule.ts: *new*
   {}
 /user/username/projects/sample1/core/index.ts: *new*
   {}
-/user/username/projects/sample1/logic/tsconfig.json: *new*
+/user/username/projects/sample1/core/tsconfig.json: *new*
   {}
 /user/username/projects/sample1/logic/index.ts: *new*
   {}
-/user/username/projects/sample1/tests/tsconfig.json: *new*
+/user/username/projects/sample1/logic/tsconfig.json: *new*
   {}
 /user/username/projects/sample1/tests/index.ts: *new*
+  {}
+/user/username/projects/sample1/tests/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -495,6 +496,9 @@ export function multiply(a: number, b: number) { return a * b; }
 function foo() { }
 
 
+Before running Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:17 AM[0m] File change detected. Starting incremental compilation...

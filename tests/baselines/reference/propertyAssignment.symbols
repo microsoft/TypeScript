@@ -1,4 +1,6 @@
-=== tests/cases/compiler/propertyAssignment.ts ===
+//// [tests/cases/compiler/propertyAssignment.ts] ////
+
+=== propertyAssignment.ts ===
 var foo1: { new ():any; }   
 >foo1 : Symbol(foo1, Decl(propertyAssignment.ts, 0, 3))
 

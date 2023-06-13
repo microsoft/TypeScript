@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/awaitedType.ts] ////
+
 //// [awaitedType.ts]
 type T1 = Awaited<number>;
 type T2 = Awaited<Promise<number>>;
@@ -227,6 +229,30 @@ async function mainFindMany() {
   const itsTwo2 = await findManyWrapper({ include: "bar" });
 }
 
+// repro from #41831
+
+{
+  const promises = [Promise.resolve(0)] as const
+
+  Promise.all(promises).then((results) => {
+    const first = results[0]
+    const second = results[1] // error
+  })
+}
+
+// repro from #40330
+
+async function test40330() {
+
+    const promiseNumber = Promise.resolve(1);
+    const promiseVoid = async () => {}
+
+    const res = await Promise.all([
+        promiseNumber,
+        ...[promiseVoid()]
+    ])
+}
+
 
 //// [awaitedType.js]
 async function main() {
@@ -354,4 +380,21 @@ async function mainFindMany() {
     const itsOne = await findManyWrapper({});
     const itsTwo1 = await findManyWrapper({ select: "foo" });
     const itsTwo2 = await findManyWrapper({ include: "bar" });
+}
+// repro from #41831
+{
+    const promises = [Promise.resolve(0)];
+    Promise.all(promises).then((results) => {
+        const first = results[0];
+        const second = results[1]; // error
+    });
+}
+// repro from #40330
+async function test40330() {
+    const promiseNumber = Promise.resolve(1);
+    const promiseVoid = async () => { };
+    const res = await Promise.all([
+        promiseNumber,
+        ...[promiseVoid()]
+    ]);
 }

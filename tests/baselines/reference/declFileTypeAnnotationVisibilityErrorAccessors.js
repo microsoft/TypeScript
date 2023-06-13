@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileTypeAnnotationVisibilityErrorAccessors.ts] ////
+
 //// [declFileTypeAnnotationVisibilityErrorAccessors.ts]
 module m {
     class private1 {

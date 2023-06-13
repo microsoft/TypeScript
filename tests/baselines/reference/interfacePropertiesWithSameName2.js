@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/interfacePropertiesWithSameName2.ts] ////
+
 //// [interfacePropertiesWithSameName2.ts]
 interface Mover {
     move(): void;

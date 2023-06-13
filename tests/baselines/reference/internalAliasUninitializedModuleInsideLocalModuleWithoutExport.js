@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/internalAliasUninitializedModuleInsideLocalModuleWithoutExport.ts] ////
+
 //// [internalAliasUninitializedModuleInsideLocalModuleWithoutExport.ts]
 export module a {
     export module b {
@@ -20,7 +22,7 @@ exports.c = void 0;
 var c;
 (function (c) {
     c.x.foo();
-})(c = exports.c || (exports.c = {}));
+})(c || (exports.c = c = {}));
 
 
 //// [internalAliasUninitializedModuleInsideLocalModuleWithoutExport.d.ts]

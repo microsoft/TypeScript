@@ -5,7 +5,7 @@ sourceRoot:
 sources: templateLiteralsSourceMap.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/templateLiteralsSourceMap.js
+emittedFile:templateLiteralsSourceMap.js
 sourceFile:templateLiteralsSourceMap.ts
 -------------------------------------------------------------------
 >>>var s = "a".concat(0, "b").concat(1, "c").concat(2);

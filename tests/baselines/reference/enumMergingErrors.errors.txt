@@ -1,8 +1,8 @@
-tests/cases/conformance/enums/enumMergingErrors.ts(26,22): error TS2432: In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.
-tests/cases/conformance/enums/enumMergingErrors.ts(38,22): error TS2432: In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.
+enumMergingErrors.ts(26,22): error TS2432: In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.
+enumMergingErrors.ts(38,22): error TS2432: In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.
 
 
-==== tests/cases/conformance/enums/enumMergingErrors.ts (2 errors) ====
+==== enumMergingErrors.ts (2 errors) ====
     // Enum with constant, computed, constant members split across 3 declarations with the same root module
     module M {
         export enum E1 { A = 0 }

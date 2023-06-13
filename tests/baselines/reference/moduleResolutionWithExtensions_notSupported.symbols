@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleResolutionWithExtensions_notSupported.ts] ////
+
 === /a.ts ===
 import tsx from "./tsx"; // Not allowed.
 >tsx : Symbol(tsx, Decl(a.ts, 0, 6))

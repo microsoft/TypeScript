@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/lambdaASIEmit.ts] ////
+
 //// [lambdaASIEmit.ts]
 function Foo(x: any)
 {

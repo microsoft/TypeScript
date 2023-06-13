@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionWithDefaultParameterWithNoStatements9.ts] ////
+
 //// [functionWithDefaultParameterWithNoStatements9.ts]
 function foo(a = console.log) { }
 

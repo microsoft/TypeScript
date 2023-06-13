@@ -1,7 +1,7 @@
-tests/cases/compiler/argumentsObjectIterator03_ES5.ts(2,9): error TS2461: Type 'IArguments' is not an array type.
+argumentsObjectIterator03_ES5.ts(2,9): error TS2461: Type 'IArguments' is not an array type.
 
 
-==== tests/cases/compiler/argumentsObjectIterator03_ES5.ts (1 errors) ====
+==== argumentsObjectIterator03_ES5.ts (1 errors) ====
     function asReversedTuple(a: number, b: string, c: boolean): [boolean, string, number] {
         let [x, y, z] = arguments;
             ~~~~~~~~~

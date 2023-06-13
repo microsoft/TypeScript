@@ -1,4 +1,6 @@
-=== tests/cases/compiler/strictSubtypeAndNarrowing.ts ===
+//// [tests/cases/compiler/strictSubtypeAndNarrowing.ts] ////
+
+=== strictSubtypeAndNarrowing.ts ===
 // Check that `any` is a strict supertype of `unknown`
 
 declare const x11: { x: unknown };
@@ -384,7 +386,6 @@ function ff3(value: string | string[] | { [index: number]: boolean, length: numb
 >length : number
 >length : string
 >a : string
->null : null
 
     if (isArrayLike(value)) {
 >isArrayLike(value) : boolean

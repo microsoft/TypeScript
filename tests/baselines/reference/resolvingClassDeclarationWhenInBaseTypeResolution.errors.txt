@@ -1,35 +1,35 @@
-tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(2,45): error TS2449: Class 'nitidus' used before its declaration.
-tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(9,56): error TS2449: Class 'mixtus' used before its declaration.
-tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(45,48): error TS2449: Class 'psilurus' used before its declaration.
-tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(60,44): error TS2449: Class 'jugularis' used before its declaration.
-tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(96,44): error TS2449: Class 'aurata' used before its declaration.
-tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(114,48): error TS2449: Class 'gilbertii' used before its declaration.
-tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(126,43): error TS2449: Class 'johorensis' used before its declaration.
-tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(182,54): error TS2449: Class 'falconeri' used before its declaration.
-tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(199,47): error TS2449: Class 'pygmaea' used before its declaration.
-tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(247,46): error TS2449: Class 'ciliolabrum' used before its declaration.
-tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(272,35): error TS2449: Class 'coludo' used before its declaration.
-tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(301,41): error TS2449: Class 'oreas' used before its declaration.
-tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(403,53): error TS2449: Class 'johorensis' used before its declaration.
-tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(436,55): error TS2449: Class 'punicus' used before its declaration.
-tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(469,52): error TS2449: Class 'stolzmanni' used before its declaration.
-tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(490,42): error TS2449: Class 'portoricensis' used before its declaration.
-tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(495,50): error TS2449: Class 'pelurus' used before its declaration.
-tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(500,49): error TS2449: Class 'lasiurus' used before its declaration.
-tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(534,50): error TS2449: Class 'stolzmanni' used before its declaration.
-tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(549,53): error TS2449: Class 'daphaenodon' used before its declaration.
-tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(580,54): error TS2449: Class 'johorensis' used before its declaration.
-tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(589,52): error TS2449: Class 'stolzmanni' used before its declaration.
-tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(605,55): error TS2449: Class 'psilurus' used before its declaration.
-tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Class 'lasiurus' used before its declaration.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(2,45): error TS2449: Class 'nitidus' used before its declaration.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(9,56): error TS2449: Class 'mixtus' used before its declaration.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(45,48): error TS2449: Class 'psilurus' used before its declaration.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(60,44): error TS2449: Class 'jugularis' used before its declaration.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(96,44): error TS2449: Class 'aurata' used before its declaration.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(114,48): error TS2449: Class 'gilbertii' used before its declaration.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(126,43): error TS2449: Class 'johorensis' used before its declaration.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(182,54): error TS2449: Class 'falconeri' used before its declaration.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(199,47): error TS2449: Class 'pygmaea' used before its declaration.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(247,46): error TS2449: Class 'ciliolabrum' used before its declaration.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(272,35): error TS2449: Class 'coludo' used before its declaration.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(301,41): error TS2449: Class 'oreas' used before its declaration.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(403,53): error TS2449: Class 'johorensis' used before its declaration.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(436,55): error TS2449: Class 'punicus' used before its declaration.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(469,52): error TS2449: Class 'stolzmanni' used before its declaration.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(490,42): error TS2449: Class 'portoricensis' used before its declaration.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(495,50): error TS2449: Class 'pelurus' used before its declaration.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(500,49): error TS2449: Class 'lasiurus' used before its declaration.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(534,50): error TS2449: Class 'stolzmanni' used before its declaration.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(549,53): error TS2449: Class 'daphaenodon' used before its declaration.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(580,54): error TS2449: Class 'johorensis' used before its declaration.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(589,52): error TS2449: Class 'stolzmanni' used before its declaration.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(605,55): error TS2449: Class 'psilurus' used before its declaration.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Class 'lasiurus' used before its declaration.
 
 
-==== tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts (24 errors) ====
+==== resolvingClassDeclarationWhenInBaseTypeResolution.ts (24 errors) ====
     module rionegrensis {
       export class caniventer extends Lanthanum.nitidus<petrophilus.minutilla, julianae.sumatrana> {
                                                 ~~~~~~~
 !!! error TS2449: Class 'nitidus' used before its declaration.
-!!! related TS2728 tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts:114:16: 'nitidus' is declared here.
+!!! related TS2728 resolvingClassDeclarationWhenInBaseTypeResolution.ts:114:16: 'nitidus' is declared here.
         salomonseni() : caniventer { var x : caniventer; () => { var y = this; }; return x; }
         uchidai() : lavali.xanthognathus { var x : lavali.xanthognathus; () => { var y = this; }; return x; }
         raffrayana() : lavali.otion { var x : lavali.otion; () => { var y = this; }; return x; }
@@ -39,7 +39,7 @@ tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53
       export class veraecrucis<T0, T1> extends trivirgatus.mixtus<gabriellae.amicus, lutreolus.punicus> {
                                                            ~~~~~~
 !!! error TS2449: Class 'mixtus' used before its declaration.
-!!! related TS2728 tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts:199:16: 'mixtus' is declared here.
+!!! related TS2728 resolvingClassDeclarationWhenInBaseTypeResolution.ts:199:16: 'mixtus' is declared here.
         naso() : panamensis.setulosus<lutreolus.punicus, howi.coludo<quasiater.bobrinskoi, provocax.melanoleuca>> { var x : panamensis.setulosus<lutreolus.punicus, howi.coludo<quasiater.bobrinskoi, provocax.melanoleuca>>; () => { var y = this; }; return x; }
         vancouverensis() : imperfecta.ciliolabrum<argurus.oreas, argurus.peninsulae> { var x : imperfecta.ciliolabrum<argurus.oreas, argurus.peninsulae>; () => { var y = this; }; return x; }
         africana() : argurus.gilbertii<panamensis.linulus<lavali.lepturus, argurus.oreas>, sagitta.cinereus<lavali.xanthognathus, argurus.oreas>> { var x : argurus.gilbertii<panamensis.linulus<lavali.lepturus, argurus.oreas>, sagitta.cinereus<lavali.xanthognathus, argurus.oreas>>; () => { var y = this; }; return x; }
@@ -78,7 +78,7 @@ tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53
       export class oralis<T0, T1> extends caurinus.psilurus {
                                                    ~~~~~~~~
 !!! error TS2449: Class 'psilurus' used before its declaration.
-!!! related TS2728 tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts:1010:18: 'psilurus' is declared here.
+!!! related TS2728 resolvingClassDeclarationWhenInBaseTypeResolution.ts:1010:18: 'psilurus' is declared here.
         cepapi() : caurinus.psilurus { var x : caurinus.psilurus; () => { var y = this; }; return x; }
         porteri() : lavali.thaeleri { var x : lavali.thaeleri; () => { var y = this; }; return x; }
         bindi() : caurinus.mahaganus<gabriellae.amicus, panglima.amphibius<macrorhinos.daphaenodon, patas.uralensis>> { var x : caurinus.mahaganus<gabriellae.amicus, panglima.amphibius<macrorhinos.daphaenodon, patas.uralensis>>; () => { var y = this; }; return x; }
@@ -96,7 +96,7 @@ tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53
       export class sumatrana extends Lanthanum.jugularis {
                                                ~~~~~~~~~
 !!! error TS2449: Class 'jugularis' used before its declaration.
-!!! related TS2728 tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts:136:16: 'jugularis' is declared here.
+!!! related TS2728 resolvingClassDeclarationWhenInBaseTypeResolution.ts:136:16: 'jugularis' is declared here.
         wolffsohni() : Lanthanum.suillus<dammermani.melanops, quasiater.carolinensis> { var x : Lanthanum.suillus<dammermani.melanops, quasiater.carolinensis>; () => { var y = this; }; return x; }
         geata() : ruatanica.hector<sumatrana, quasiater.bobrinskoi> { var x : ruatanica.hector<sumatrana, quasiater.bobrinskoi>; () => { var y = this; }; return x; }
         awashensis() : petrophilus.minutilla { var x : petrophilus.minutilla; () => { var y = this; }; return x; }
@@ -135,7 +135,7 @@ tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53
       export class durangae extends dogramacii.aurata {
                                                ~~~~~~
 !!! error TS2449: Class 'aurata' used before its declaration.
-!!! related TS2728 tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts:346:16: 'aurata' is declared here.
+!!! related TS2728 resolvingClassDeclarationWhenInBaseTypeResolution.ts:346:16: 'aurata' is declared here.
         Californium() : panamensis.setulosus<lutreolus.punicus, dammermani.melanops> { var x : panamensis.setulosus<lutreolus.punicus, dammermani.melanops>; () => { var y = this; }; return x; }
         Flerovium() : howi.angulatus<petrophilus.minutilla, lavali.xanthognathus> { var x : howi.angulatus<petrophilus.minutilla, lavali.xanthognathus>; () => { var y = this; }; return x; }
         phrudus() : sagitta.stolzmanni { var x : sagitta.stolzmanni; () => { var y = this; }; return x; }
@@ -156,7 +156,7 @@ tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53
       export class nitidus<T0, T1> extends argurus.gilbertii<lavali.thaeleri, lutreolus.punicus> {
                                                    ~~~~~~~~~
 !!! error TS2449: Class 'gilbertii' used before its declaration.
-!!! related TS2728 tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts:702:18: 'gilbertii' is declared here.
+!!! related TS2728 resolvingClassDeclarationWhenInBaseTypeResolution.ts:702:18: 'gilbertii' is declared here.
         granatensis() : quasiater.bobrinskoi { var x : quasiater.bobrinskoi; () => { var y = this; }; return x; }
         negligens() : minutus.inez<lavali.wilsoni, lavali.wilsoni> { var x : minutus.inez<lavali.wilsoni, lavali.wilsoni>; () => { var y = this; }; return x; }
         lewisi() : julianae.oralis<lavali.xanthognathus, argurus.oreas> { var x : julianae.oralis<lavali.xanthognathus, argurus.oreas>; () => { var y = this; }; return x; }
@@ -171,7 +171,7 @@ tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53
       export class megalonyx extends caurinus.johorensis<caurinus.megaphyllus, julianae.steerii> {
                                               ~~~~~~~~~~
 !!! error TS2449: Class 'johorensis' used before its declaration.
-!!! related TS2728 tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts:979:18: 'johorensis' is declared here.
+!!! related TS2728 resolvingClassDeclarationWhenInBaseTypeResolution.ts:979:18: 'johorensis' is declared here.
         phillipsii() : macrorhinos.konganensis { var x : macrorhinos.konganensis; () => { var y = this; }; return x; }
         melanogaster() : rionegrensis.veraecrucis<trivirgatus.falconeri, quasiater.carolinensis> { var x : rionegrensis.veraecrucis<trivirgatus.falconeri, quasiater.carolinensis>; () => { var y = this; }; return x; }
         elaphus() : nitidus<petrophilus.minutilla, julianae.sumatrana> { var x : nitidus<petrophilus.minutilla, julianae.sumatrana>; () => { var y = this; }; return x; }
@@ -230,7 +230,7 @@ tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53
       export class crenulata<T0, T1> extends trivirgatus.falconeri {
                                                          ~~~~~~~~~
 !!! error TS2449: Class 'falconeri' used before its declaration.
-!!! related TS2728 tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts:212:16: 'falconeri' is declared here.
+!!! related TS2728 resolvingClassDeclarationWhenInBaseTypeResolution.ts:212:16: 'falconeri' is declared here.
         salvanius() : howi.coludo<howi.marcanoi, rionegrensis.caniventer> { var x : howi.coludo<howi.marcanoi, rionegrensis.caniventer>; () => { var y = this; }; return x; }
         maritimus() : ruatanica.americanus { var x : ruatanica.americanus; () => { var y = this; }; return x; }
         edax() : lutreolus.cor<imperfecta.lasiurus<howi.marcanoi, imperfecta.ciliolabrum<Lanthanum.megalonyx, petrophilus.minutilla>>, rionegrensis.caniventer> { var x : lutreolus.cor<imperfecta.lasiurus<howi.marcanoi, imperfecta.ciliolabrum<Lanthanum.megalonyx, petrophilus.minutilla>>, rionegrensis.caniventer>; () => { var y = this; }; return x; }
@@ -250,7 +250,7 @@ tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53
       export class mixtus<T0, T1> extends argurus.pygmaea<argurus.oreas, panglima.fundatus<quasiater.carolinensis, macrorhinos.daphaenodon>> {
                                                   ~~~~~~~
 !!! error TS2449: Class 'pygmaea' used before its declaration.
-!!! related TS2728 tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts:598:18: 'pygmaea' is declared here.
+!!! related TS2728 resolvingClassDeclarationWhenInBaseTypeResolution.ts:598:18: 'pygmaea' is declared here.
         ochrogaster() : dogramacii.aurata { var x : dogramacii.aurata; () => { var y = this; }; return x; }
         bryophilus() : macrorhinos.marmosurus<dogramacii.koepckeae, panglima.abidi<dogramacii.aurata, chrysaeolus.sarasinorum<caurinus.megaphyllus, lavali.xanthognathus>>> { var x : macrorhinos.marmosurus<dogramacii.koepckeae, panglima.abidi<dogramacii.aurata, chrysaeolus.sarasinorum<caurinus.megaphyllus, lavali.xanthognathus>>>; () => { var y = this; }; return x; }
         liechtensteini() : rendalli.zuluensis { var x : rendalli.zuluensis; () => { var y = this; }; return x; }
@@ -301,7 +301,7 @@ tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53
       export class americanus extends imperfecta.ciliolabrum<argurus.germaini, lutreolus.foina> {
                                                  ~~~~~~~~~~~
 !!! error TS2449: Class 'ciliolabrum' used before its declaration.
-!!! related TS2728 tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts:809:18: 'ciliolabrum' is declared here.
+!!! related TS2728 resolvingClassDeclarationWhenInBaseTypeResolution.ts:809:18: 'ciliolabrum' is declared here.
         nasoloi() : macrorhinos.konganensis { var x : macrorhinos.konganensis; () => { var y = this; }; return x; }
         mystacalis() : howi.angulatus<quasiater.carolinensis, sagitta.stolzmanni> { var x : howi.angulatus<quasiater.carolinensis, sagitta.stolzmanni>; () => { var y = this; }; return x; }
         fardoulisi() : trivirgatus.oconnelli { var x : trivirgatus.oconnelli; () => { var y = this; }; return x; }
@@ -329,7 +329,7 @@ tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53
       export class otion extends howi.coludo<argurus.oreas, howi.marcanoi> {
                                       ~~~~~~
 !!! error TS2449: Class 'coludo' used before its declaration.
-!!! related TS2728 tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts:889:18: 'coludo' is declared here.
+!!! related TS2728 resolvingClassDeclarationWhenInBaseTypeResolution.ts:889:18: 'coludo' is declared here.
         bonaerensis() : provocax.melanoleuca { var x : provocax.melanoleuca; () => { var y = this; }; return x; }
         dussumieri() : nigra.gracilis<julianae.steerii, dogramacii.kaiseri> { var x : nigra.gracilis<julianae.steerii, dogramacii.kaiseri>; () => { var y = this; }; return x; }
         osvaldoreigi() : julianae.albidens<julianae.steerii, quasiater.carolinensis> { var x : julianae.albidens<julianae.steerii, quasiater.carolinensis>; () => { var y = this; }; return x; }
@@ -361,7 +361,7 @@ tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53
       export class thaeleri extends argurus.oreas {
                                             ~~~~~
 !!! error TS2449: Class 'oreas' used before its declaration.
-!!! related TS2728 tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts:627:18: 'oreas' is declared here.
+!!! related TS2728 resolvingClassDeclarationWhenInBaseTypeResolution.ts:627:18: 'oreas' is declared here.
         coromandra() : julianae.galapagoensis { var x : julianae.galapagoensis; () => { var y = this; }; return x; }
         parvipes() : nigra.dolichurus<argurus.germaini, samarensis.pallidus> { var x : nigra.dolichurus<argurus.germaini, samarensis.pallidus>; () => { var y = this; }; return x; }
         sponsorius() : rionegrensis.veraecrucis<chrysaeolus.sarasinorum<caurinus.psilurus, quasiater.bobrinskoi>, julianae.steerii> { var x : rionegrensis.veraecrucis<chrysaeolus.sarasinorum<caurinus.psilurus, quasiater.bobrinskoi>, julianae.steerii>; () => { var y = this; }; return x; }
@@ -466,7 +466,7 @@ tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53
         export class amphibius<T0, T1> extends caurinus.johorensis<Lanthanum.nitidus<petrophilus.minutilla, julianae.sumatrana>, Lanthanum.jugularis> {
                                                         ~~~~~~~~~~
 !!! error TS2449: Class 'johorensis' used before its declaration.
-!!! related TS2728 tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts:979:18: 'johorensis' is declared here.
+!!! related TS2728 resolvingClassDeclarationWhenInBaseTypeResolution.ts:979:18: 'johorensis' is declared here.
             bottegi(): macrorhinos.marmosurus<rendalli.moojeni<amphibius<trivirgatus.falconeri, caurinus.psilurus>, gabriellae.echinatus>, sagitta.stolzmanni> { var x: macrorhinos.marmosurus<rendalli.moojeni<amphibius<trivirgatus.falconeri, caurinus.psilurus>, gabriellae.echinatus>, sagitta.stolzmanni>; () => { var y = this; }; return x; }
             jerdoni(): macrorhinos.daphaenodon { var x: macrorhinos.daphaenodon; () => { var y = this; }; return x; }
             camtschatica(): samarensis.pallidus { var x: samarensis.pallidus; () => { var y = this; }; return x; }
@@ -502,7 +502,7 @@ tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53
         export class himalayana<T0, T1> extends lutreolus.punicus {
                                                           ~~~~~~~
 !!! error TS2449: Class 'punicus' used before its declaration.
-!!! related TS2728 tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts:722:18: 'punicus' is declared here.
+!!! related TS2728 resolvingClassDeclarationWhenInBaseTypeResolution.ts:722:18: 'punicus' is declared here.
             simoni(): argurus.netscheri<lavali.lepturus, argurus.dauricus<argurus.oreas, quasiater.carolinensis>> { var x: argurus.netscheri<lavali.lepturus, argurus.dauricus<argurus.oreas, quasiater.carolinensis>>; () => { var y = this; }; return x; }
             lobata(): samarensis.pallidus { var x: samarensis.pallidus; () => { var y = this; }; return x; }
             rusticus(): dogramacii.aurata { var x: dogramacii.aurata; () => { var y = this; }; return x; }
@@ -538,7 +538,7 @@ tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53
         export class angulatus<T0, T1> extends sagitta.stolzmanni {
                                                        ~~~~~~~~~~
 !!! error TS2449: Class 'stolzmanni' used before its declaration.
-!!! related TS2728 tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts:901:18: 'stolzmanni' is declared here.
+!!! related TS2728 resolvingClassDeclarationWhenInBaseTypeResolution.ts:901:18: 'stolzmanni' is declared here.
             pennatus(): howi.marcanoi { var x: howi.marcanoi; () => { var y = this; }; return x; }
         }
     }
@@ -562,7 +562,7 @@ tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53
         export class walkeri extends minutus.portoricensis {
                                              ~~~~~~~~~~~~~
 !!! error TS2449: Class 'portoricensis' used before its declaration.
-!!! related TS2728 tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts:851:18: 'portoricensis' is declared here.
+!!! related TS2728 resolvingClassDeclarationWhenInBaseTypeResolution.ts:851:18: 'portoricensis' is declared here.
             maracajuensis(): samarensis.cahirinus<Lanthanum.jugularis, ruatanica.americanus> { var x: samarensis.cahirinus<Lanthanum.jugularis, ruatanica.americanus>; () => { var y = this; }; return x; }
         }
     }
@@ -570,7 +570,7 @@ tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53
         export class inez<T0, T1> extends samarensis.pelurus<argurus.germaini, julianae.durangae> {
                                                      ~~~~~~~
 !!! error TS2449: Class 'pelurus' used before its declaration.
-!!! related TS2728 tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts:534:18: 'pelurus' is declared here.
+!!! related TS2728 resolvingClassDeclarationWhenInBaseTypeResolution.ts:534:18: 'pelurus' is declared here.
             vexillaris(): samarensis.cahirinus<lavali.lepturus, lavali.wilsoni> { var x: samarensis.cahirinus<lavali.lepturus, lavali.wilsoni>; () => { var y = this; }; return x; }
         }
     }
@@ -578,7 +578,7 @@ tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53
         export class konganensis extends imperfecta.lasiurus<caurinus.psilurus, caurinus.psilurus> {
                                                     ~~~~~~~~
 !!! error TS2449: Class 'lasiurus' used before its declaration.
-!!! related TS2728 tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts:788:18: 'lasiurus' is declared here.
+!!! related TS2728 resolvingClassDeclarationWhenInBaseTypeResolution.ts:788:18: 'lasiurus' is declared here.
         }
     }
     module panamensis {
@@ -615,7 +615,7 @@ tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53
         export class pelurus<T0, T1> extends sagitta.stolzmanni {
                                                      ~~~~~~~~~~
 !!! error TS2449: Class 'stolzmanni' used before its declaration.
-!!! related TS2728 tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts:901:18: 'stolzmanni' is declared here.
+!!! related TS2728 resolvingClassDeclarationWhenInBaseTypeResolution.ts:901:18: 'stolzmanni' is declared here.
             Palladium(): panamensis.linulus<macrorhinos.konganensis, rionegrensis.caniventer> { var x: panamensis.linulus<macrorhinos.konganensis, rionegrensis.caniventer>; () => { var y = this; }; return x; }
             castanea(): argurus.netscheri<minutus.inez<argurus.peninsulae, julianae.nudicaudus>, julianae.oralis<lavali.xanthognathus, argurus.oreas>> { var x: argurus.netscheri<minutus.inez<argurus.peninsulae, julianae.nudicaudus>, julianae.oralis<lavali.xanthognathus, argurus.oreas>>; () => { var y = this; }; return x; }
             chamek(): argurus.pygmaea<julianae.galapagoensis, provocax.melanoleuca> { var x: argurus.pygmaea<julianae.galapagoensis, provocax.melanoleuca>; () => { var y = this; }; return x; }
@@ -633,7 +633,7 @@ tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53
         export class fuscus<T0, T1> extends macrorhinos.daphaenodon {
                                                         ~~~~~~~~~~~
 !!! error TS2449: Class 'daphaenodon' used before its declaration.
-!!! related TS2728 tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts:739:18: 'daphaenodon' is declared here.
+!!! related TS2728 resolvingClassDeclarationWhenInBaseTypeResolution.ts:739:18: 'daphaenodon' is declared here.
             planifrons(): nigra.gracilis<julianae.nudicaudus, dogramacii.aurata> { var x: nigra.gracilis<julianae.nudicaudus, dogramacii.aurata>; () => { var y = this; }; return x; }
             badia(): julianae.sumatrana { var x: julianae.sumatrana; () => { var y = this; }; return x; }
             prymnolopha(): sagitta.walkeri { var x: sagitta.walkeri; () => { var y = this; }; return x; }
@@ -667,7 +667,7 @@ tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53
         export class leptoceros<T0, T1> extends caurinus.johorensis<argurus.peninsulae, daubentonii.arboreus<argurus.germaini, sagitta.stolzmanni>> {
                                                          ~~~~~~~~~~
 !!! error TS2449: Class 'johorensis' used before its declaration.
-!!! related TS2728 tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts:979:18: 'johorensis' is declared here.
+!!! related TS2728 resolvingClassDeclarationWhenInBaseTypeResolution.ts:979:18: 'johorensis' is declared here.
             victus(): rionegrensis.caniventer { var x: rionegrensis.caniventer; () => { var y = this; }; return x; }
             hoplomyoides(): panglima.fundatus<julianae.gerbillus<imperfecta.subspinosus, julianae.durangae>, nigra.gracilis<argurus.luctuosa, imperfecta.subspinosus>> { var x: panglima.fundatus<julianae.gerbillus<imperfecta.subspinosus, julianae.durangae>, nigra.gracilis<argurus.luctuosa, imperfecta.subspinosus>>; () => { var y = this; }; return x; }
             gratiosus(): lavali.lepturus { var x: lavali.lepturus; () => { var y = this; }; return x; }
@@ -679,7 +679,7 @@ tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53
         export class nigricans<T0, T1> extends sagitta.stolzmanni {
                                                        ~~~~~~~~~~
 !!! error TS2449: Class 'stolzmanni' used before its declaration.
-!!! related TS2728 tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts:901:18: 'stolzmanni' is declared here.
+!!! related TS2728 resolvingClassDeclarationWhenInBaseTypeResolution.ts:901:18: 'stolzmanni' is declared here.
             woosnami(): dogramacii.robustulus { var x: dogramacii.robustulus; () => { var y = this; }; return x; }
         }
     }
@@ -698,7 +698,7 @@ tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53
         export class sarasinorum<T0, T1> extends caurinus.psilurus {
                                                           ~~~~~~~~
 !!! error TS2449: Class 'psilurus' used before its declaration.
-!!! related TS2728 tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts:1010:18: 'psilurus' is declared here.
+!!! related TS2728 resolvingClassDeclarationWhenInBaseTypeResolution.ts:1010:18: 'psilurus' is declared here.
             belzebul(): samarensis.pallidus { var x: samarensis.pallidus; () => { var y = this; }; return x; }
             hinpoon(): nigra.caucasica<julianae.sumatrana, trivirgatus.oconnelli> { var x: nigra.caucasica<julianae.sumatrana, trivirgatus.oconnelli>; () => { var y = this; }; return x; }
             kandti(): quasiater.wattsi<Lanthanum.jugularis, julianae.sumatrana> { var x: quasiater.wattsi<Lanthanum.jugularis, julianae.sumatrana>; () => { var y = this; }; return x; }
@@ -865,7 +865,7 @@ tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53
         export class klossii<T0, T1> extends imperfecta.lasiurus<dogramacii.robustulus, caurinus.psilurus> {
                                                         ~~~~~~~~
 !!! error TS2449: Class 'lasiurus' used before its declaration.
-!!! related TS2728 tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts:788:18: 'lasiurus' is declared here.
+!!! related TS2728 resolvingClassDeclarationWhenInBaseTypeResolution.ts:788:18: 'lasiurus' is declared here.
         }
         export class amicus {
             pirrensis(): argurus.luctuosa { var x: argurus.luctuosa; () => { var y = this; }; return x; }

@@ -1,8 +1,8 @@
-tests/cases/conformance/jsx/file.tsx(11,38): error TS2322: Type '{ Property1: true; property1: string; property2: number; }' is not assignable to type 'IntrinsicAttributes & AnotherComponentProps'.
+file.tsx(11,38): error TS2322: Type '{ Property1: true; property1: string; property2: number; }' is not assignable to type 'IntrinsicAttributes & AnotherComponentProps'.
   Property 'Property1' does not exist on type 'IntrinsicAttributes & AnotherComponentProps'. Did you mean 'property1'?
 
 
-==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
+==== file.tsx (1 errors) ====
     import React = require('react');
     
     interface ComponentProps {

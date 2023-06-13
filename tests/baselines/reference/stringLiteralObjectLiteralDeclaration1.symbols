@@ -1,4 +1,6 @@
-=== tests/cases/compiler/stringLiteralObjectLiteralDeclaration1.ts ===
+//// [tests/cases/compiler/stringLiteralObjectLiteralDeclaration1.ts] ////
+
+=== stringLiteralObjectLiteralDeclaration1.ts ===
 module m1 {
 >m1 : Symbol(m1, Decl(stringLiteralObjectLiteralDeclaration1.ts, 0, 0))
 

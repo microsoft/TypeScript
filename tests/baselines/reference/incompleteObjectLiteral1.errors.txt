@@ -1,8 +1,8 @@
-tests/cases/compiler/incompleteObjectLiteral1.ts(1,12): error TS18004: No value exists in scope for the shorthand property 'aa'. Either declare one or provide an initializer.
-tests/cases/compiler/incompleteObjectLiteral1.ts(1,14): error TS1005: ',' expected.
+incompleteObjectLiteral1.ts(1,12): error TS18004: No value exists in scope for the shorthand property 'aa'. Either declare one or provide an initializer.
+incompleteObjectLiteral1.ts(1,14): error TS1005: ',' expected.
 
 
-==== tests/cases/compiler/incompleteObjectLiteral1.ts (2 errors) ====
+==== incompleteObjectLiteral1.ts (2 errors) ====
     var tt = { aa; }
                ~~
 !!! error TS18004: No value exists in scope for the shorthand property 'aa'. Either declare one or provide an initializer.

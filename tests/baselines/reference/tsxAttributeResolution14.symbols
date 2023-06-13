@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/react.d.ts ===
+//// [tests/cases/conformance/jsx/tsxAttributeResolution14.tsx] ////
+
+=== react.d.ts ===
 declare module JSX {
 >JSX : Symbol(JSX, Decl(react.d.ts, 0, 0))
 
@@ -16,7 +18,7 @@ declare module JSX {
 >prop : Symbol(ElementAttributesProperty.prop, Decl(react.d.ts, 5, 41))
 }
 
-=== tests/cases/conformance/jsx/file.tsx ===
+=== file.tsx ===
 interface IProps {
 >IProps : Symbol(IProps, Decl(file.tsx, 0, 0))
 

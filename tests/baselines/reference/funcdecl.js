@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/funcdecl.ts] ////
+
 //// [funcdecl.ts]
 function simpleFunc() {
     return "this is my simple func";

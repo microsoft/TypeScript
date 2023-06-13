@@ -1,4 +1,6 @@
-=== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersection.ts ===
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersection.ts] ////
+
+=== interfaceExtendsObjectIntersection.ts ===
 type T1 = { a: number };
 >T1 : Symbol(T1, Decl(interfaceExtendsObjectIntersection.ts, 0, 0))
 >a : Symbol(a, Decl(interfaceExtendsObjectIntersection.ts, 0, 11))

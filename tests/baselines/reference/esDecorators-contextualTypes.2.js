@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/esDecorators/esDecorators-contextualTypes.2.ts] ////
+
 //// [esDecorators-contextualTypes.2.ts]
 class C {
     @boundMethodLogger("Yadda", /*bound*/ true)

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/specializedOverloadWithRestParameters.ts ===
+//// [tests/cases/compiler/specializedOverloadWithRestParameters.ts] ////
+
+=== specializedOverloadWithRestParameters.ts ===
 class Base { foo() { } }
 >Base : Base
 >foo : () => void
@@ -23,7 +25,6 @@ function f(tagName: any): Base {
 >tagName : any
 
     return null;
->null : null
 }
 function g(tagName: 'span', arg): Derived1;    // error
 >g : { (tagName: 'span', arg: any): Derived1; (tagName: number, arg: any): Base; }
@@ -40,5 +41,4 @@ function g(tagName: any): Base {
 >tagName : any
 
     return null;
->null : null
 }

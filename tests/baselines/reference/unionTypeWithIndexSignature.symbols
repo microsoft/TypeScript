@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/union/unionTypeWithIndexSignature.ts ===
+//// [tests/cases/conformance/types/union/unionTypeWithIndexSignature.ts] ////
+
+=== unionTypeWithIndexSignature.ts ===
 type Two = { foo: { bar: true }, baz: true } | { [s: string]: string };
 >Two : Symbol(Two, Decl(unionTypeWithIndexSignature.ts, 0, 0))
 >foo : Symbol(foo, Decl(unionTypeWithIndexSignature.ts, 0, 12))

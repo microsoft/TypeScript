@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privacyCheckTypeOfInvisibleModuleError.ts] ////
+
 //// [privacyCheckTypeOfInvisibleModuleError.ts]
 module Outer {
     module Inner {

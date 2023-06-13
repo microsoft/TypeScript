@@ -1,4 +1,6 @@
-=== tests/cases/conformance/ambient/ambientInsideNonAmbientExternalModule.ts ===
+//// [tests/cases/conformance/ambient/ambientInsideNonAmbientExternalModule.ts] ////
+
+=== ambientInsideNonAmbientExternalModule.ts ===
 export declare var x;
 >x : Symbol(x, Decl(ambientInsideNonAmbientExternalModule.ts, 0, 18))
 

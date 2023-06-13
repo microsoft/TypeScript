@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitWithComposite.ts] ////
+
 //// [test.ts]
 interface Foo {
     x: number;

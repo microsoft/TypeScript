@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitNestedGenerics.ts ===
+//// [tests/cases/compiler/declarationEmitNestedGenerics.ts] ////
+
+=== declarationEmitNestedGenerics.ts ===
 function f<T>(p: T) {
 >f : <T>(p: T) => <T>(x: T) => typeof p
 >p : T
@@ -8,7 +10,6 @@ function f<T>(p: T) {
 >x : T
 >p : T
 >null as any : any
->null : null
 
     return g;
 >g : <T>(x: T) => T
@@ -23,7 +24,6 @@ function g<T>(x: T) {
 >x : T
 >x : T
 >null as any : any
->null : null
 
     return y;
 >y : T extends (infer T)[] ? T : T

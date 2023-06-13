@@ -1,4 +1,6 @@
-=== tests/cases/compiler/index.js ===
+//// [tests/cases/compiler/noParameterReassignmentJSIIFE.ts] ////
+
+=== index.js ===
 self.importScripts = (function (importScripts) {
 >self.importScripts = (function (importScripts) {    return function () {        return importScripts.apply(this, arguments);    };})(importScripts) : (...args: string[]) => any
 >self.importScripts : (...urls: string[]) => void

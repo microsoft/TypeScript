@@ -1,4 +1,6 @@
-=== tests/cases/compiler/commentsVariableStatement1.ts ===
+//// [tests/cases/compiler/commentsVariableStatement1.ts] ////
+
+=== commentsVariableStatement1.ts ===
 /** Comment */
 var v = 1;
 >v : Symbol(v, Decl(commentsVariableStatement1.ts, 1, 3))

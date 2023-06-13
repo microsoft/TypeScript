@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithNumericIndexers2.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithNumericIndexers2.ts] ////
+
+=== objectTypesIdentityWithNumericIndexers2.ts ===
 // object types are identical structurally
 
 class Base { foo: string; }
@@ -58,7 +60,6 @@ var b: { [x: number]: Derived; } = { 0: <Derived>null };
 >{ 0: <Derived>null } : { 0: Derived; }
 >0 : Derived
 ><Derived>null : Derived
->null : null
 
 function foo1(x: A);
 >foo1 : { (x: A): any; (x: A): any; }

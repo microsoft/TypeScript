@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileExportAssignmentOfGenericInterface_1.ts ===
+//// [tests/cases/compiler/declFileExportAssignmentOfGenericInterface.ts] ////
+
+=== declFileExportAssignmentOfGenericInterface_1.ts ===
 import a = require('declFileExportAssignmentOfGenericInterface_0');
 >a : any
 
@@ -10,7 +12,7 @@ x.a;
 >x : a<a<string>>
 >a : string
 
-=== tests/cases/compiler/declFileExportAssignmentOfGenericInterface_0.ts ===
+=== declFileExportAssignmentOfGenericInterface_0.ts ===
 interface Foo<T> {
     a: string;
 >a : string

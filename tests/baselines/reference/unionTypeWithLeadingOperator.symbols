@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unionTypeWithLeadingOperator.ts ===
+//// [tests/cases/compiler/unionTypeWithLeadingOperator.ts] ////
+
+=== unionTypeWithLeadingOperator.ts ===
 type A = | string;
 >A : Symbol(A, Decl(unionTypeWithLeadingOperator.ts, 0, 0))
 

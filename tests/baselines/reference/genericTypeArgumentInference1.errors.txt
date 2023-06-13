@@ -1,9 +1,9 @@
-tests/cases/compiler/genericTypeArgumentInference1.ts(12,39): error TS2345: Argument of type '<T>(value: T) => T' is not assignable to parameter of type 'Iterator<string | number | boolean, boolean>'.
+genericTypeArgumentInference1.ts(12,39): error TS2345: Argument of type '<T>(value: T) => T' is not assignable to parameter of type 'Iterator<string | number | boolean, boolean>'.
   Type 'string | number | boolean' is not assignable to type 'boolean'.
     Type 'string' is not assignable to type 'boolean'.
 
 
-==== tests/cases/compiler/genericTypeArgumentInference1.ts (1 errors) ====
+==== genericTypeArgumentInference1.ts (1 errors) ====
     module Underscore {
         export interface Iterator<T, U> {
             (value: T, index: any, list: any): U;

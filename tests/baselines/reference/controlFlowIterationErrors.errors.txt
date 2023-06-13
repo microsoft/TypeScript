@@ -1,15 +1,15 @@
-tests/cases/conformance/controlFlow/controlFlowIterationErrors.ts(11,17): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'string'.
+controlFlowIterationErrors.ts(11,17): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'string'.
   Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/controlFlow/controlFlowIterationErrors.ts(22,17): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'string'.
+controlFlowIterationErrors.ts(22,17): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'string'.
   Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/controlFlow/controlFlowIterationErrors.ts(34,17): error TS2769: No overload matches this call.
+controlFlowIterationErrors.ts(34,17): error TS2769: No overload matches this call.
   Overload 1 of 2, '(x: string): number', gave the following error.
     Argument of type 'string | number' is not assignable to parameter of type 'string'.
       Type 'number' is not assignable to type 'string'.
   Overload 2 of 2, '(x: number): string', gave the following error.
     Argument of type 'string | number' is not assignable to parameter of type 'number'.
       Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/controlFlow/controlFlowIterationErrors.ts(45,17): error TS2769: No overload matches this call.
+controlFlowIterationErrors.ts(45,17): error TS2769: No overload matches this call.
   Overload 1 of 2, '(x: string): number', gave the following error.
     Argument of type 'string | number' is not assignable to parameter of type 'string'.
       Type 'number' is not assignable to type 'string'.
@@ -18,7 +18,7 @@ tests/cases/conformance/controlFlow/controlFlowIterationErrors.ts(45,17): error 
       Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/controlFlow/controlFlowIterationErrors.ts (4 errors) ====
+==== controlFlowIterationErrors.ts (4 errors) ====
     let cond: boolean;
     
     function len(s: string) {

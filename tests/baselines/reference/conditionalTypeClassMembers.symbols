@@ -1,4 +1,6 @@
-=== tests/cases/compiler/conditionalTypeClassMembers.ts ===
+//// [tests/cases/compiler/conditionalTypeClassMembers.ts] ////
+
+=== conditionalTypeClassMembers.ts ===
 declare class MyRecord {
 >MyRecord : Symbol(MyRecord, Decl(conditionalTypeClassMembers.ts, 0, 0))
 

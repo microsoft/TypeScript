@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/thisType/thisTypeErrors.ts] ////
+
 //// [thisTypeErrors.ts]
 var x1: this;
 var x2: { a: this };

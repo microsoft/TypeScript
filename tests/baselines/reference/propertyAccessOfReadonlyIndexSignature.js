@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/propertyAccessOfReadonlyIndexSignature.ts] ////
+
 //// [propertyAccessOfReadonlyIndexSignature.ts]
 interface Test {
     readonly [key: string]: string;

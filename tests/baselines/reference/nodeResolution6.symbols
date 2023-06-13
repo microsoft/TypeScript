@@ -1,12 +1,14 @@
-=== tests/cases/compiler/b.ts ===
+//// [tests/cases/compiler/nodeResolution6.ts] ////
+
+=== b.ts ===
 import y = require("a"); 
 >y : Symbol(y, Decl(b.ts, 0, 0))
 
-=== tests/cases/compiler/node_modules/ref.ts ===
+=== node_modules/ref.ts ===
 var x = 1;
 >x : Symbol(x, Decl(ref.ts, 0, 3))
 
-=== tests/cases/compiler/node_modules/a.d.ts ===
+=== node_modules/a.d.ts ===
 /// <reference path="ref.ts"/>
 export declare var y;
 >y : Symbol(y, Decl(a.d.ts, 1, 18))

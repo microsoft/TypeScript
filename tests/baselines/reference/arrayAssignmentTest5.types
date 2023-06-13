@@ -1,4 +1,6 @@
-=== tests/cases/compiler/arrayAssignmentTest5.ts ===
+//// [tests/cases/compiler/arrayAssignmentTest5.ts] ////
+
+=== arrayAssignmentTest5.ts ===
 module Test {
 >Test : typeof Test
 
@@ -83,7 +85,6 @@ module Test {
 >includeStates : boolean
 
             return null;
->null : null
         }
     }
 }
