@@ -1,5 +1,11 @@
 import * as ts from "../../_namespaces/ts";
 import {
+    commonFile1,
+    commonFile2,
+    noopChange,
+    verifyTscWatch,
+} from "../helpers/tscWatch";
+import {
     createWatchedSystem,
     File,
     libFile,
@@ -7,13 +13,7 @@ import {
     TestServerHost,
     Tsc_WatchDirectory,
     Tsc_WatchFile,
-} from "../virtualFileSystemWithWatch";
-import {
-    commonFile1,
-    commonFile2,
-    noopChange,
-    verifyTscWatch,
-} from "./helpers";
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different polling/non polling options", () => {
     const scenario = "watchEnvironment";
@@ -31,16 +31,16 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
             environmentVariables.set("TSC_WATCHFILE", Tsc_WatchFile.DynamicPolling);
             return createWatchedSystem([file1, libFile], { environmentVariables });
         },
-        changes: [
+        edits: [
             {
                 caption: "Time spent to Transition libFile and file1 to low priority queue",
-                change: ts.noop,
+                edit: ts.noop,
                 timeouts: (sys, programs) => {
                     const initialProgram = programs[0][0];
                     const mediumPollingIntervalThreshold = ts.unchangedPollThresholds[ts.PollingInterval.Medium];
                     for (let index = 0; index < mediumPollingIntervalThreshold; index++) {
                         // Transition libFile and file1 to low priority queue
-                        sys.checkTimeoutQueueLengthAndRun(1);
+                        sys.runQueuedTimeoutCallbacks();
                         assert.deepEqual(programs[0][0], initialProgram);
                     }
                     return;
@@ -49,32 +49,32 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
             {
                 caption: "Make change to file",
                 // Make a change to file
-                change: sys => sys.writeFile("/a/username/project/typescript.ts", "var zz30 = 100;"),
+                edit: sys => sys.writeFile("/a/username/project/typescript.ts", "var zz30 = 100;"),
                 // During this timeout the file would be detected as unchanged
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "Callbacks: medium priority + high priority queue and scheduled program update",
-                change: ts.noop,
+                edit: ts.noop,
                 // Callbacks: medium priority + high priority queue and scheduled program update
                 // This should detect change in the file
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(3),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "Polling queues polled and everything is in the high polling queue",
-                change: ts.noop,
+                edit: ts.noop,
                 timeouts: (sys, programs) => {
                     const initialProgram = programs[0][0];
                     const mediumPollingIntervalThreshold = ts.unchangedPollThresholds[ts.PollingInterval.Medium];
                     const newThreshold = ts.unchangedPollThresholds[ts.PollingInterval.Low] + mediumPollingIntervalThreshold;
                     for (let fileUnchangeDetected = 1; fileUnchangeDetected < newThreshold; fileUnchangeDetected++) {
                         // For high + Medium/low polling interval
-                        sys.checkTimeoutQueueLengthAndRun(2);
+                        sys.runQueuedTimeoutCallbacks();
                         assert.deepEqual(programs[0][0], initialProgram);
                     }
 
                     // Everything goes in high polling interval queue
-                    sys.checkTimeoutQueueLengthAndRun(1);
+                    sys.runQueuedTimeoutCallbacks();
                     return;
                 },
             }
@@ -97,15 +97,15 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
             const files = [libFile, commonFile1, commonFile2, configFile];
             return createWatchedSystem(files);
         },
-        changes: [
+        edits: [
             {
                 caption: "The timeout is to check the status of all files",
-                change: ts.noop,
+                edit: ts.noop,
                 timeouts: (sys, programs) => {
                     // On each timeout file does not change
                     const initialProgram = programs[0][0];
                     for (let index = 0; index < 4; index++) {
-                        sys.checkTimeoutQueueLengthAndRun(1);
+                        sys.runQueuedTimeoutCallbacks();
                         assert.deepEqual(programs[0][0], initialProgram);
                     }
                 },
@@ -113,22 +113,22 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
             {
                 caption: "Make change to file but should detect as changed and schedule program update",
                 // Make a change to file
-                change: sys => sys.writeFile(commonFile1.path, "var zz30 = 100;"),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                edit: sys => sys.writeFile(commonFile1.path, "var zz30 = 100;"),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "Callbacks: queue and scheduled program update",
-                change: ts.noop,
+                edit: ts.noop,
                 // Callbacks: scheduled program update and queue for the polling
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(2),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "The timeout is to check the status of all files",
-                change: ts.noop,
+                edit: ts.noop,
                 timeouts: (sys, programs) => {
                     // On each timeout file does not change
                     const initialProgram = programs[0][0];
-                    sys.checkTimeoutQueueLengthAndRun(1);
+                    sys.runQueuedTimeoutCallbacks();
                     assert.deepEqual(programs[0][0], initialProgram);
                 },
             },
@@ -161,11 +161,11 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                     environmentVariables.set("TSC_WATCHDIRECTORY", tscWatchDirectory);
                     return createWatchedSystem(files, { environmentVariables });
                 },
-                changes: [
+                edits: [
                     {
                         caption: "Rename file1 to file2",
                         // Rename the file:
-                        change: sys => sys.renameFile(file.path, file.path.replace("file1.ts", "file2.ts")),
+                        edit: sys => sys.renameFile(file.path, file.path.replace("file1.ts", "file2.ts")),
                         timeouts: sys => {
                             if (tscWatchDirectory === Tsc_WatchDirectory.DynamicPolling) {
                                 // With dynamic polling the fs change would be detected only by running timeouts
@@ -229,7 +229,6 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                 environmentVariables.set("TSC_WATCHDIRECTORY", Tsc_WatchDirectory.NonRecursiveWatchDirectory);
                 return createWatchedSystem(files, { environmentVariables, currentDirectory: cwd });
             },
-            changes: ts.emptyArray
         });
 
         verifyTscWatch({
@@ -252,73 +251,60 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                 const files = [libFile, file1, file2, configFile];
                 return createWatchedSystem(files, { runWithoutRecursiveWatches: true });
             },
-            changes: [
+            edits: [
                 {
                     caption: "Directory watch updates because of file1.js creation",
-                    change: ts.noop,
+                    edit: ts.noop,
                     timeouts: sys => {
-                        sys.checkTimeoutQueueLengthAndRun(1); // To update directory callbacks for file1.js output
-                        sys.checkTimeoutQueueLength(0);
+                        sys.runQueuedTimeoutCallbacks(); // To update directory callbacks for file1.js output
                     },
                 },
                 {
                     caption: "Remove directory node_modules",
                     // Remove directory node_modules
-                    change: sys => sys.deleteFolder(`/user/username/projects/myproject/node_modules`, /*recursive*/ true),
-                    timeouts: sys => {
-                        sys.checkTimeoutQueueLength(3); // 1. Failed lookup invalidation 2. For updating program and 3. for updating child watches
-                        sys.runQueuedTimeoutCallbacks(sys.getNextTimeoutId() - 2); // Update program
-                    },
+                    edit: sys => sys.deleteFolder(`/user/username/projects/myproject/node_modules`, /*recursive*/ true),
+                    // 1. Failed lookup invalidation 2. For updating program and 3. for updating child watches
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(sys.getNextTimeoutId() - 2), // Update program,
                 },
                 {
                     caption: "Pending directory watchers and program update",
-                    change: ts.noop,
+                    edit: ts.noop,
                     timeouts: sys => {
-                        sys.checkTimeoutQueueLengthAndRun(1); // To update directory watchers
-                        sys.checkTimeoutQueueLengthAndRun(2); // To Update program and failed lookup update
-                        sys.checkTimeoutQueueLengthAndRun(1); // Actual program update
-                        sys.checkTimeoutQueueLength(0);
+                        sys.runQueuedTimeoutCallbacks(); // To update directory watchers
+                        sys.runQueuedTimeoutCallbacks(); // To Update program and failed lookup update
+                        sys.runQueuedTimeoutCallbacks(); // Actual program update
                     },
                 },
                 {
                     caption: "Start npm install",
                     // npm install
-                    change: sys => sys.createDirectory(`/user/username/projects/myproject/node_modules`),
-                    timeouts: sys => sys.checkTimeoutQueueLength(1), // To update folder structure
+                    edit: sys => sys.createDirectory(`/user/username/projects/myproject/node_modules`),
+                    timeouts: sys => sys.logTimeoutQueueLength(), // To update folder structure
                 },
                 {
                     caption: "npm install folder creation of file2",
-                    change: sys => sys.createDirectory(`/user/username/projects/myproject/node_modules/file2`),
-                    timeouts: sys => sys.checkTimeoutQueueLength(1), // To update folder structure
+                    edit: sys => sys.createDirectory(`/user/username/projects/myproject/node_modules/file2`),
+                    timeouts: sys => sys.logTimeoutQueueLength(), // To update folder structure
                 },
                 {
                     caption: "npm install index file in file2",
-                    change: sys => sys.writeFile(`/user/username/projects/myproject/node_modules/file2/index.d.ts`, `export const x = 10;`),
-                    timeouts: sys => sys.checkTimeoutQueueLength(1), // To update folder structure
+                    edit: sys => sys.writeFile(`/user/username/projects/myproject/node_modules/file2/index.d.ts`, `export const x = 10;`),
+                    timeouts: sys => sys.logTimeoutQueueLength(), // To update folder structure
                 },
                 {
                     caption: "Updates the program",
-                    change: ts.noop,
-                    timeouts: sys => {
-                        sys.runQueuedTimeoutCallbacks();
-                        sys.checkTimeoutQueueLength(2); // To Update program and failed lookup update
-                    },
+                    edit: ts.noop,
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(), // To Update program and failed lookup update
                 },
                 {
                     caption: "Invalidates module resolution cache",
-                    change: ts.noop,
-                    timeouts: sys => {
-                        sys.runQueuedTimeoutCallbacks();
-                        sys.checkTimeoutQueueLength(1); // To Update program
-                    },
+                    edit: ts.noop,
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(), // To Update program
                 },
                 {
                     caption: "Pending updates",
-                    change: ts.noop,
-                    timeouts: sys => {
-                        sys.runQueuedTimeoutCallbacks();
-                        sys.checkTimeoutQueueLength(0);
-                    },
+                    edit: ts.noop,
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
             ],
         });
@@ -343,22 +329,22 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                 const files = [libFile, file1, file2, configFile];
                 return createWatchedSystem(files, { runWithoutRecursiveWatches: true });
             },
-            changes: [
+            edits: [
                 noopChange,
                 {
                     caption: "Add new file, should schedule and run timeout to update directory watcher",
-                    change: sys => sys.writeFile(`/user/username/projects/myproject/src/file3.ts`, `export const y = 10;`),
-                    timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1), // Update the child watch
+                    edit: sys => sys.writeFile(`/user/username/projects/myproject/src/file3.ts`, `export const y = 10;`),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(), // Update the child watch
                 },
                 {
                     caption: "Actual program update to include new file",
-                    change: ts.noop,
-                    timeouts: sys => sys.checkTimeoutQueueLengthAndRun(2), // Scheduling failed lookup update and program update
+                    edit: ts.noop,
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(), // Scheduling failed lookup update and program update
                 },
                 {
                     caption: "After program emit with new file, should schedule and run timeout to update directory watcher",
-                    change: ts.noop,
-                    timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1), // Update the child watch
+                    edit: ts.noop,
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(), // Update the child watch
                 },
                 noopChange,
             ],
@@ -384,24 +370,21 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                 const files = [libFile, file1, file2, configFile];
                 return createWatchedSystem(files, { runWithoutRecursiveWatches: true });
             },
-            changes: [
+            edits: [
                 noopChange,
                 {
                     caption: "rename the file",
-                    change: sys => sys.renameFile(`/user/username/projects/myproject/src/file2.ts`, `/user/username/projects/myproject/src/renamed.ts`),
-                    timeouts: sys => {
-                        sys.checkTimeoutQueueLength(2); // 1. For updating program and 2. for updating child watches
-                        sys.runQueuedTimeoutCallbacks(1); // Update program
-                    },
+                    edit: sys => sys.renameFile(`/user/username/projects/myproject/src/file2.ts`, `/user/username/projects/myproject/src/renamed.ts`),
+                    // 1. For updating program and 2. for updating child watches
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(1), // Update program
                 },
                 {
                     caption: "Pending directory watchers and program update",
-                    change: ts.noop,
+                    edit: ts.noop,
                     timeouts: sys => {
-                        sys.checkTimeoutQueueLengthAndRun(1); // To update directory watchers
-                        sys.checkTimeoutQueueLengthAndRun(2); // To Update program and failed lookup update
-                        sys.checkTimeoutQueueLengthAndRun(1); // Actual program update
-                        sys.checkTimeoutQueueLength(0);
+                        sys.runQueuedTimeoutCallbacks(); // To update directory watchers
+                        sys.runQueuedTimeoutCallbacks(); // To Update program and failed lookup update
+                        sys.runQueuedTimeoutCallbacks(); // Actual program update
                     },
                 },
             ],
@@ -425,7 +408,6 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                 const files = [libFile, commonFile1, commonFile2, configFile];
                 return createWatchedSystem(files);
             },
-            changes: ts.emptyArray
         });
 
         verifyTscWatch({
@@ -444,7 +426,6 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                 const files = [libFile, commonFile1, commonFile2, configFile];
                 return createWatchedSystem(files, { runWithoutRecursiveWatches: true });
             },
-            changes: ts.emptyArray
         });
 
         verifyTscWatch({
@@ -463,7 +444,6 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                 const files = [libFile, commonFile1, commonFile2, configFile];
                 return createWatchedSystem(files, { runWithoutRecursiveWatches: true, runWithFallbackPolling: true });
             },
-            changes: ts.emptyArray
         });
 
         verifyTscWatch({
@@ -478,7 +458,6 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                 const files = [libFile, commonFile1, commonFile2, configFile];
                 return createWatchedSystem(files);
             },
-            changes: ts.emptyArray
         });
 
         describe("exclude options", () => {
@@ -517,11 +496,11 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                     subScenario: `watchOptions/with excludeFiles option${additionalFlags.join("")}`,
                     commandLineArgs: ["-w", ...additionalFlags],
                     sys: () => sys({ excludeFiles: ["node_modules/*"] }),
-                    changes: [
+                    edits: [
                         {
                             caption: "Change foo",
-                            change: sys => sys.replaceFileText(`/user/username/projects/myproject/node_modules/bar/foo.d.ts`, "foo", "fooBar"),
-                            timeouts: sys => sys.checkTimeoutQueueLength(0),
+                            edit: sys => sys.replaceFileText(`/user/username/projects/myproject/node_modules/bar/foo.d.ts`, "foo", "fooBar"),
+                            timeouts: sys => sys.logTimeoutQueueLength(),
                         }
                     ]
                 });
@@ -531,11 +510,11 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                     subScenario: `watchOptions/with excludeDirectories option${additionalFlags.join("")}`,
                     commandLineArgs: ["-w", ...additionalFlags],
                     sys: () => sys({ excludeDirectories: ["node_modules"] }),
-                    changes: [
+                    edits: [
                         {
                             caption: "delete fooBar",
-                            change: sys => sys.deleteFile(`/user/username/projects/myproject/node_modules/bar/fooBar.d.ts`),
-                            timeouts: sys => sys.checkTimeoutQueueLength(0),                            }
+                            edit: sys => sys.deleteFile(`/user/username/projects/myproject/node_modules/bar/fooBar.d.ts`),
+                            timeouts: sys => sys.logTimeoutQueueLength(),                            }
                     ]
                 });
 
@@ -544,19 +523,16 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                     subScenario: `watchOptions/with excludeDirectories option with recursive directory watching${additionalFlags.join("")}`,
                     commandLineArgs: ["-w", ...additionalFlags],
                     sys: () => sys({ excludeDirectories: ["**/temp"] }, /*runWithoutRecursiveWatches*/ true),
-                    changes: [
+                    edits: [
                         {
                             caption: "Directory watch updates because of main.js creation",
-                            change: ts.noop,
-                            timeouts: sys => {
-                                sys.checkTimeoutQueueLengthAndRun(1); // To update directory callbacks for main.js output
-                                sys.checkTimeoutQueueLength(0);
-                            },
+                            edit: ts.noop,
+                            timeouts: sys => sys.runQueuedTimeoutCallbacks(), // To update directory callbacks for main.js output
                         },
                         {
                             caption: "add new folder to temp",
-                            change: sys => sys.ensureFileOrFolder({ path: `/user/username/projects/myproject/node_modules/bar/temp/fooBar/index.d.ts`, content: "export function temp(): string;" }),
-                            timeouts: sys => sys.checkTimeoutQueueLength(0),
+                            edit: sys => sys.ensureFileOrFolder({ path: `/user/username/projects/myproject/node_modules/bar/temp/fooBar/index.d.ts`, content: "export function temp(): string;" }),
+                            timeouts: sys => sys.logTimeoutQueueLength(),
                         }
                     ]
                 });
@@ -583,21 +559,21 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
             },
             { currentDirectory: "/user/username/projects/myproject", }
         ),
-        changes: [
+        edits: [
             {
                 caption: "Introduce error such that when callback happens file is already appeared",
                 // vm's wq generates this kind of event
                 // Skip delete event so inode changes but when the create's rename occurs file is on disk
-                change: sys => sys.modifyFile(`/user/username/projects/myproject/foo.ts`, `export declare function foo2(): string;`, {
+                edit: sys => sys.modifyFile(`/user/username/projects/myproject/foo.ts`, `export declare function foo2(): string;`, {
                     invokeFileDeleteCreateAsPartInsteadOfChange: true,
                     ignoreDelete: true,
                 }),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "Replace file with rename event that fixes error",
-                change: sys => sys.modifyFile(`/user/username/projects/myproject/foo.ts`, `export declare function foo(): string;`, { invokeFileDeleteCreateAsPartInsteadOfChange: true, }),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                edit: sys => sys.modifyFile(`/user/username/projects/myproject/foo.ts`, `export declare function foo(): string;`, { invokeFileDeleteCreateAsPartInsteadOfChange: true, }),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ]
     });
@@ -619,16 +595,16 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                     inodeWatching: true
                 }
             ),
-            changes: [
+            edits: [
                 {
                     caption: "Replace file with rename event that introduces error",
-                    change: sys => sys.modifyFile(`/user/username/projects/myproject/foo.d.ts`, `export function foo2(): string;`, { invokeFileDeleteCreateAsPartInsteadOfChange: true }),
-                    timeouts: sys => sys.checkTimeoutQueueLengthAndRun(2),
+                    edit: sys => sys.modifyFile(`/user/username/projects/myproject/foo.d.ts`, `export function foo2(): string;`, { invokeFileDeleteCreateAsPartInsteadOfChange: true }),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
                 {
                     caption: "Replace file with rename event that fixes error",
-                    change: sys => sys.modifyFile(`/user/username/projects/myproject/foo.d.ts`, `export function foo(): string;`, { invokeFileDeleteCreateAsPartInsteadOfChange: true }),
-                    timeouts: sys => sys.checkTimeoutQueueLengthAndRun(2),
+                    edit: sys => sys.modifyFile(`/user/username/projects/myproject/foo.d.ts`, `export function foo(): string;`, { invokeFileDeleteCreateAsPartInsteadOfChange: true }),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
             ]
         });
@@ -649,16 +625,16 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                     inodeWatching: true
                 }
             ),
-            changes: [
+            edits: [
                 {
                     caption: "Replace file with rename event that introduces error",
-                    change: sys => sys.modifyFile(`/user/username/projects/myproject/foo.d.ts`, `export function foo2(): string;`, { invokeFileDeleteCreateAsPartInsteadOfChange: true, useTildeAsSuffixInRenameEventFileName: true }),
-                    timeouts: sys => sys.checkTimeoutQueueLengthAndRun(2),
+                    edit: sys => sys.modifyFile(`/user/username/projects/myproject/foo.d.ts`, `export function foo2(): string;`, { invokeFileDeleteCreateAsPartInsteadOfChange: true, useTildeAsSuffixInRenameEventFileName: true }),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
                 {
                     caption: "Replace file with rename event that fixes error",
-                    change: sys => sys.modifyFile(`/user/username/projects/myproject/foo.d.ts`, `export function foo(): string;`, { invokeFileDeleteCreateAsPartInsteadOfChange: true, useTildeAsSuffixInRenameEventFileName: true }),
-                    timeouts: sys => sys.checkTimeoutQueueLengthAndRun(2),
+                    edit: sys => sys.modifyFile(`/user/username/projects/myproject/foo.d.ts`, `export function foo(): string;`, { invokeFileDeleteCreateAsPartInsteadOfChange: true, useTildeAsSuffixInRenameEventFileName: true }),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
             ]
         });
@@ -682,22 +658,22 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                     inodeWatching: true,
                 }
             ),
-            changes: [
+            edits: [
                 {
                     caption: "Introduce error such that when callback happens file is already appeared",
                     // vm's wq generates this kind of event
                     // Skip delete event so inode changes but when the create's rename occurs file is on disk
-                    change: sys => sys.modifyFile(`/user/username/projects/myproject/foo.ts`, `export declare function foo2(): string;`, {
+                    edit: sys => sys.modifyFile(`/user/username/projects/myproject/foo.ts`, `export declare function foo2(): string;`, {
                         invokeFileDeleteCreateAsPartInsteadOfChange: true,
                         ignoreDelete: true,
                         skipInodeCheckOnCreate: true
                     }),
-                    timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
                 {
                     caption: "Replace file with rename event that fixes error",
-                    change: sys => sys.modifyFile(`/user/username/projects/myproject/foo.ts`, `export declare function foo(): string;`, { invokeFileDeleteCreateAsPartInsteadOfChange: true, }),
-                    timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                    edit: sys => sys.modifyFile(`/user/username/projects/myproject/foo.ts`, `export declare function foo(): string;`, { invokeFileDeleteCreateAsPartInsteadOfChange: true, }),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
             ]
         });
@@ -711,15 +687,25 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
             "/user/username/projects/project/main.ts": `let a: string = "Hello"`,
             [libFile.path]: libFile.content,
         }, { currentDirectory: "/user/username/projects/project" }),
-        changes: [
+        edits: [
             {
                 caption: "change main.ts",
-                change: sys => sys.replaceFileText("/user/username/projects/project/main.ts", "Hello", "Hello World"),
+                edit: sys => sys.replaceFileText("/user/username/projects/project/main.ts", "Hello", "Hello World"),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "receive another change event without modifying the file",
-                change: sys => sys.invokeFsWatches("/user/username/projects/project/main.ts", "change", /*modifiedTime*/ undefined, /*useTildeSuffix*/ undefined),
+                edit: sys => sys.invokeFsWatches("/user/username/projects/project/main.ts", "change", /*modifiedTime*/ undefined, /*useTildeSuffix*/ undefined),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+            },
+            {
+                caption: "change main.ts to empty text",
+                edit: sys => sys.writeFile("/user/username/projects/project/main.ts", ""),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+            },
+            {
+                caption: "receive another change event without modifying the file",
+                edit: sys => sys.invokeFsWatches("/user/username/projects/project/main.ts", "change", /*modifiedTime*/ undefined, /*useTildeSuffix*/ undefined),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]

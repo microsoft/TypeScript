@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsdocPropertyTagInvalid.ts] ////
+
 === /a.js ===
 /**
  * @typedef MyType

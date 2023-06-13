@@ -1,4 +1,6 @@
-=== tests/cases/compiler/arrayconcat.ts ===
+//// [tests/cases/compiler/arrayconcat.ts] ////
+
+=== arrayconcat.ts ===
 interface IOptions {
 >IOptions : Symbol(IOptions, Decl(arrayconcat.ts, 0, 0))
 

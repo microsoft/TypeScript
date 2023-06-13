@@ -1,0 +1,292 @@
+//// [tests/cases/compiler/excessPropertyCheckIntersectionWithRecursiveType.ts] ////
+
+=== excessPropertyCheckIntersectionWithRecursiveType.ts ===
+// repro from #44750
+
+type Request = { l1: { l2: boolean } };
+>Request : Symbol(Request, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 0, 0))
+>l1 : Symbol(l1, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 2, 16))
+>l2 : Symbol(l2, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 2, 22))
+
+type Example<T> = { ex?: T | null };
+>Example : Symbol(Example, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 2, 39))
+>T : Symbol(T, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 3, 13))
+>ex : Symbol(ex, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 3, 19))
+>T : Symbol(T, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 3, 13))
+
+type Schema1<T> = (T extends boolean ? { type: 'boolean'; } : { props: { [P in keyof T]: Schema1<T[P]> }; }) & Example<T>;
+>Schema1 : Symbol(Schema1, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 3, 36))
+>T : Symbol(T, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 5, 13))
+>T : Symbol(T, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 5, 13))
+>type : Symbol(type, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 5, 40))
+>props : Symbol(props, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 5, 63))
+>P : Symbol(P, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 5, 74))
+>T : Symbol(T, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 5, 13))
+>Schema1 : Symbol(Schema1, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 3, 36))
+>T : Symbol(T, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 5, 13))
+>P : Symbol(P, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 5, 74))
+>Example : Symbol(Example, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 2, 39))
+>T : Symbol(T, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 5, 13))
+
+export const schemaObj1: Schema1<Request> = {
+>schemaObj1 : Symbol(schemaObj1, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 7, 12))
+>Schema1 : Symbol(Schema1, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 3, 36))
+>Request : Symbol(Request, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 0, 0))
+
+  props: {
+>props : Symbol(props, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 7, 45))
+
+    l1: {
+>l1 : Symbol(l1, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 8, 10))
+
+      props: {
+>props : Symbol(props, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 9, 9))
+
+        l2: { type: 'boolean' },
+>l2 : Symbol(l2, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 10, 14))
+>type : Symbol(type, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 11, 13))
+
+        invalid: false,
+>invalid : Symbol(invalid, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 11, 32))
+
+      },
+    },
+  },
+}
+
+type Schema2<T> = (T extends boolean ? { type: 'boolean'; } & Example<T> : { props: { [P in keyof T]: Schema2<T[P]> }; } & Example<T>);
+>Schema2 : Symbol(Schema2, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 16, 1))
+>T : Symbol(T, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 18, 13))
+>T : Symbol(T, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 18, 13))
+>type : Symbol(type, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 18, 40))
+>Example : Symbol(Example, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 2, 39))
+>T : Symbol(T, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 18, 13))
+>props : Symbol(props, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 18, 76))
+>P : Symbol(P, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 18, 87))
+>T : Symbol(T, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 18, 13))
+>Schema2 : Symbol(Schema2, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 16, 1))
+>T : Symbol(T, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 18, 13))
+>P : Symbol(P, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 18, 87))
+>Example : Symbol(Example, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 2, 39))
+>T : Symbol(T, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 18, 13))
+
+export const schemaObj2: Schema2<Request> = {
+>schemaObj2 : Symbol(schemaObj2, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 20, 12))
+>Schema2 : Symbol(Schema2, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 16, 1))
+>Request : Symbol(Request, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 0, 0))
+
+  props: {
+>props : Symbol(props, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 20, 45))
+
+    l1: {
+>l1 : Symbol(l1, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 21, 10))
+
+      props: {
+>props : Symbol(props, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 22, 9))
+
+        l2: { type: 'boolean' },
+>l2 : Symbol(l2, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 23, 14))
+>type : Symbol(type, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 24, 13))
+
+        invalid: false,
+>invalid : Symbol(invalid, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 24, 32))
+
+      },
+    },
+  },
+}
+
+type Schema3<T> = Example<T> & (T extends boolean ? { type: 'boolean'; } : { props: { [P in keyof T]: Schema3<T[P]> }; });
+>Schema3 : Symbol(Schema3, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 29, 1))
+>T : Symbol(T, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 31, 13))
+>Example : Symbol(Example, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 2, 39))
+>T : Symbol(T, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 31, 13))
+>T : Symbol(T, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 31, 13))
+>type : Symbol(type, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 31, 53))
+>props : Symbol(props, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 31, 76))
+>P : Symbol(P, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 31, 87))
+>T : Symbol(T, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 31, 13))
+>Schema3 : Symbol(Schema3, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 29, 1))
+>T : Symbol(T, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 31, 13))
+>P : Symbol(P, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 31, 87))
+
+export const schemaObj3: Schema3<Request> = {
+>schemaObj3 : Symbol(schemaObj3, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 33, 12))
+>Schema3 : Symbol(Schema3, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 29, 1))
+>Request : Symbol(Request, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 0, 0))
+
+  props: {
+>props : Symbol(props, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 33, 45))
+
+    l1: {
+>l1 : Symbol(l1, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 34, 10))
+
+      props: {
+>props : Symbol(props, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 35, 9))
+
+        l2: { type: 'boolean' },
+>l2 : Symbol(l2, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 36, 14))
+>type : Symbol(type, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 37, 13))
+
+        invalid: false,
+>invalid : Symbol(invalid, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 37, 32))
+
+      },
+    },
+  },
+}
+
+type Schema4<T> = (T extends boolean ? { type: 'boolean'; } & Example<T> : { props: Example<T> & { [P in keyof T]: Schema4<T[P]> }; });
+>Schema4 : Symbol(Schema4, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 42, 1))
+>T : Symbol(T, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 44, 13))
+>T : Symbol(T, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 44, 13))
+>type : Symbol(type, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 44, 40))
+>Example : Symbol(Example, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 2, 39))
+>T : Symbol(T, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 44, 13))
+>props : Symbol(props, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 44, 76))
+>Example : Symbol(Example, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 2, 39))
+>T : Symbol(T, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 44, 13))
+>P : Symbol(P, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 44, 100))
+>T : Symbol(T, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 44, 13))
+>Schema4 : Symbol(Schema4, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 42, 1))
+>T : Symbol(T, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 44, 13))
+>P : Symbol(P, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 44, 100))
+
+export const schemaObj4: Schema4<Request> = {
+>schemaObj4 : Symbol(schemaObj4, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 46, 12))
+>Schema4 : Symbol(Schema4, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 42, 1))
+>Request : Symbol(Request, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 0, 0))
+
+  props: {
+>props : Symbol(props, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 46, 45))
+
+    l1: {
+>l1 : Symbol(l1, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 47, 10))
+
+      props: {
+>props : Symbol(props, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 48, 9))
+
+        l2: { type: 'boolean' },
+>l2 : Symbol(l2, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 49, 14))
+>type : Symbol(type, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 50, 13))
+
+        invalid: false,
+>invalid : Symbol(invalid, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 50, 32))
+
+      },
+    },
+  },
+}
+
+// repro from #40405
+
+type Length<T extends any[]> = T["length"];
+>Length : Symbol(Length, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 55, 1))
+>T : Symbol(T, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 59, 12))
+>T : Symbol(T, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 59, 12))
+
+type Prepend<V, T extends any[]> = ((head: V, ...args: T) => void) extends (
+>Prepend : Symbol(Prepend, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 59, 43))
+>V : Symbol(V, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 60, 13))
+>T : Symbol(T, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 60, 15))
+>head : Symbol(head, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 60, 37))
+>V : Symbol(V, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 60, 13))
+>args : Symbol(args, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 60, 45))
+>T : Symbol(T, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 60, 15))
+
+  ...args: infer R
+>args : Symbol(args, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 60, 76))
+>R : Symbol(R, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 61, 16))
+
+) => void
+  ? R
+>R : Symbol(R, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 61, 16))
+
+  : any;
+
+type BuildTree<T, N extends number = -1, I extends any[] = []> = {
+>BuildTree : Symbol(BuildTree, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 64, 8))
+>T : Symbol(T, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 66, 15))
+>N : Symbol(N, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 66, 17))
+>I : Symbol(I, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 66, 40))
+
+  1: T;
+>1 : Symbol(1, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 66, 66))
+>T : Symbol(T, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 66, 15))
+
+  0: T & { children: BuildTree<T, N, Prepend<any, I>>[] };
+>0 : Symbol(0, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 67, 7))
+>T : Symbol(T, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 66, 15))
+>children : Symbol(children, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 68, 10))
+>BuildTree : Symbol(BuildTree, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 64, 8))
+>T : Symbol(T, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 66, 15))
+>N : Symbol(N, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 66, 17))
+>Prepend : Symbol(Prepend, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 59, 43))
+>I : Symbol(I, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 66, 40))
+
+}[Length<I> extends N ? 1 : 0];
+>Length : Symbol(Length, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 55, 1))
+>I : Symbol(I, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 66, 40))
+>N : Symbol(N, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 66, 17))
+
+interface User {
+>User : Symbol(User, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 69, 31))
+
+  name: string;
+>name : Symbol(User.name, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 71, 16))
+}
+
+type GrandUser = BuildTree<User, 2>;
+>GrandUser : Symbol(GrandUser, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 73, 1))
+>BuildTree : Symbol(BuildTree, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 64, 8))
+>User : Symbol(User, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 69, 31))
+
+const grandUser: GrandUser = {
+>grandUser : Symbol(grandUser, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 77, 5))
+>GrandUser : Symbol(GrandUser, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 73, 1))
+
+  name: "Grand User",
+>name : Symbol(name, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 77, 30))
+
+  children: [
+>children : Symbol(children, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 78, 21))
+    {
+      name: "Son",
+>name : Symbol(name, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 80, 5))
+
+      children: [
+>children : Symbol(children, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 81, 18))
+        {
+          name: "Grand son",
+>name : Symbol(name, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 83, 9))
+
+          children: [
+>children : Symbol(children, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 84, 28))
+            {
+              name: "123",
+>name : Symbol(name, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 86, 13))
+
+              children: [
+>children : Symbol(children, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 87, 26))
+                {
+                  name: "Some other name",
+>name : Symbol(name, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 89, 17))
+
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};
+
+grandUser.children[0].children[0].children[0];
+>grandUser.children[0].children : Symbol(children, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 68, 10))
+>grandUser.children : Symbol(children, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 68, 10))
+>grandUser : Symbol(grandUser, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 77, 5))
+>children : Symbol(children, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 68, 10))
+>children : Symbol(children, Decl(excessPropertyCheckIntersectionWithRecursiveType.ts, 68, 10))
+
+

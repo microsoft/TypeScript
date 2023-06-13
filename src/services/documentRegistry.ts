@@ -8,17 +8,14 @@ import {
     ensureScriptKind,
     firstDefinedIterator,
     forEachEntry,
-    getCompilerOptionValue,
     getEmitScriptTarget,
     getImpliedNodeFormatForFile,
+    getKeyForCompilerOptions,
     getOrUpdate,
     getSetExternalModuleIndicator,
-    hasProperty,
     identity,
-    isArray,
     IScriptSnapshot,
     isDeclarationFileName,
-    map,
     MinimalResolutionCacheHost,
     Path,
     ResolutionMode,
@@ -120,6 +117,8 @@ export interface DocumentRegistry {
     ): SourceFile;
 
     getKeyForCompilationSettings(settings: CompilerOptions): DocumentRegistryBucketKey;
+    /** @internal */
+    getDocumentRegistryBucketKeyWithMode(key: DocumentRegistryBucketKey, mode: ResolutionMode): DocumentRegistryBucketKeyWithMode;
     /**
      * Informs the DocumentRegistry that a file is not needed any longer.
      *
@@ -150,10 +149,8 @@ export interface DocumentRegistry {
     releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey, scriptKind?: ScriptKind): void;
     releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey, scriptKind: ScriptKind, impliedNodeFormat: ResolutionMode): void; // eslint-disable-line @typescript-eslint/unified-signatures
 
-    /** @internal */
-    getLanguageServiceRefCounts(path: Path, scriptKind: ScriptKind): [string, number | undefined][];
-
     reportStats(): string;
+    /** @internal */ getBuckets(): Map<DocumentRegistryBucketKeyWithMode, Map<Path, BucketEntry>>;
 }
 
 /** @internal */
@@ -164,7 +161,8 @@ export interface ExternalDocumentCache {
 
 export type DocumentRegistryBucketKey = string & { __bucketKey: any };
 
-interface DocumentRegistryEntry {
+/** @internal */
+export interface DocumentRegistryEntry {
     sourceFile: SourceFile;
 
     // The number of language services that this source file is referenced in.   When no more
@@ -173,8 +171,10 @@ interface DocumentRegistryEntry {
     languageServiceRefCount: number;
 }
 
-type BucketEntry = DocumentRegistryEntry | Map<ScriptKind, DocumentRegistryEntry>;
-function isDocumentRegistryEntry(entry: BucketEntry): entry is DocumentRegistryEntry {
+/** @internal */
+export type BucketEntry = DocumentRegistryEntry | Map<ScriptKind, DocumentRegistryEntry>;
+/** @internal */
+export function isDocumentRegistryEntry(entry: BucketEntry): entry is DocumentRegistryEntry {
     return !!(entry as DocumentRegistryEntry).sourceFile;
 }
 
@@ -386,14 +386,6 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
         }
     }
 
-    function getLanguageServiceRefCounts(path: Path, scriptKind: ScriptKind) {
-        return arrayFrom(buckets.entries(), ([key, bucket]): [string, number | undefined] => {
-            const bucketEntry = bucket.get(path);
-            const entry = bucketEntry && getDocumentRegistryEntry(bucketEntry, scriptKind);
-            return [key, entry && entry.languageServiceRefCount];
-        });
-    }
-
     return {
         acquireDocument,
         acquireDocumentWithKey,
@@ -401,30 +393,15 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
         updateDocumentWithKey,
         releaseDocument,
         releaseDocumentWithKey,
-        getLanguageServiceRefCounts,
+        getKeyForCompilationSettings,
+        getDocumentRegistryBucketKeyWithMode,
         reportStats,
-        getKeyForCompilationSettings
+        getBuckets: () => buckets,
     };
 }
 
-function compilerOptionValueToString(value: unknown): string {
-    if (value === null || typeof value !== "object") { // eslint-disable-line no-null/no-null
-        return "" + value;
-    }
-    if (isArray(value)) {
-        return `[${map(value, e => compilerOptionValueToString(e))?.join(",")}]`;
-    }
-    let str = "{";
-    for (const key in value) {
-        if (hasProperty(value, key)) {
-            str += `${key}: ${compilerOptionValueToString((value as any)[key])}`;
-        }
-    }
-    return str + "}";
-}
-
 function getKeyForCompilationSettings(settings: CompilerOptions): DocumentRegistryBucketKey {
-    return sourceFileAffectingCompilerOptions.map(option => compilerOptionValueToString(getCompilerOptionValue(settings, option))).join("|") + (settings.pathsBasePath ? `|${settings.pathsBasePath}` : undefined) as DocumentRegistryBucketKey;
+    return getKeyForCompilerOptions(settings, sourceFileAffectingCompilerOptions) as DocumentRegistryBucketKey;
 }
 
 function getDocumentRegistryBucketKeyWithMode(key: DocumentRegistryBucketKey, mode: ResolutionMode) {

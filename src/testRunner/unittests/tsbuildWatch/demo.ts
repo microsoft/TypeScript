@@ -1,11 +1,11 @@
+import { libContent } from "../helpers/contents";
+import { verifyTscWatch } from "../helpers/tscWatch";
 import {
     createWatchedSystem,
     File,
     getTsBuildProjectFile,
     libFile,
-} from "../virtualFileSystemWithWatch";
-import { libContent } from "../tsc/helpers";
-import { verifyTscWatch } from "../tscWatch/helpers";
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsbuildWatch:: watchMode:: with demo project", () => {
     const projectLocation = `/user/username/projects/demo`;
@@ -50,14 +50,13 @@ describe("unittests:: tsbuildWatch:: watchMode:: with demo project", () => {
             ));
             return sys;
         },
-        changes: [
+        edits: [
             {
                 caption: "Fix error",
-                change: sys => sys.writeFile(coreFiles[0].path, coreFiles[0].content),
+                edit: sys => sys.writeFile(coreFiles[0].path, coreFiles[0].content),
                 timeouts: sys => {
-                    sys.checkTimeoutQueueLengthAndRun(1); // build core
-                    sys.checkTimeoutQueueLengthAndRun(1); // build animals, zoo and solution
-                    sys.checkTimeoutQueueLength(0);
+                    sys.runQueuedTimeoutCallbacks(); // build core
+                    sys.runQueuedTimeoutCallbacks(); // build animals, zoo and solution
                 },
             }
         ]
@@ -73,17 +72,14 @@ describe("unittests:: tsbuildWatch:: watchMode:: with demo project", () => {
 ${coreFiles[1].content}`);
             return sys;
         },
-        changes: [
+        edits: [
             {
                 caption: "Prepend a line",
-                change: sys => sys.writeFile(coreFiles[1].path, `
+                edit: sys => sys.writeFile(coreFiles[1].path, `
 import * as A from '../animals';
 ${coreFiles[1].content}`),
                 // build core
-                timeouts: sys => {
-                    sys.checkTimeoutQueueLengthAndRun(1);
-                    sys.checkTimeoutQueueLength(0);
-                },
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
     });

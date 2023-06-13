@@ -18,10 +18,10 @@ var b = z(); // call signature - no error
 
 //// [exportAssignmentOfDeclaredExternalModule_0.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [exportAssignmentOfDeclaredExternalModule_1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var x = new Sammy(); // error to use as constructor as there is not constructor symbol
 var y = Sammy(); // error to use interface name as call target
 var z; // no error - z is of type interface Sammy from module 'M'

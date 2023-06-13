@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nestedFreshLiteral.ts ===
+//// [tests/cases/compiler/nestedFreshLiteral.ts] ////
+
+=== nestedFreshLiteral.ts ===
 interface CSSProps  {
   color?: string
 >color : string | undefined

@@ -1,22 +1,20 @@
-import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
+import * as ts from "../../_namespaces/ts";
+import { CommandLineProgram } from "../helpers/baseline";
+import { libContent } from "../helpers/contents";
+import {
+    applyEdit,
+    createBaseline,
+    SystemSnap,
+    verifyTscWatch,
+    watchBaseline,
+} from "../helpers/tscWatch";
 import {
     createWatchedSystem,
     File,
     libFile,
     TestServerHost,
-} from "../virtualFileSystemWithWatch";
-import {
-    CommandLineProgram,
-    libContent,
-} from "../tsc/helpers";
-import {
-    applyChange,
-    createBaseline,
-    SystemSnap,
-    verifyTscWatch,
-    watchBaseline,
-} from "./helpers";
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsc-watch:: emit file --incremental", () => {
     const project = "/users/username/projects/project";
@@ -55,7 +53,7 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
         build(oldSnap);
 
         if (modifyFs) {
-            const oldSnap = applyChange(sys, baseline, modifyFs);
+            const oldSnap = applyEdit(sys, baseline, modifyFs);
             build(oldSnap);
         }
 
@@ -404,6 +402,5 @@ export const Fragment: unique symbol;
             [libFile.path]: libFile.content,
         }),
         commandLineArgs: ["--p", "src/project", "-i", "-w"],
-        changes: ts.emptyArray
     });
 });

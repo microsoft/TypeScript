@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/compareTypeParameterConstrainedByLiteralToLiteral.ts] ////
+
 //// [compareTypeParameterConstrainedByLiteralToLiteral.ts]
 // Test for #26758
 

@@ -12,7 +12,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/a/b/c/bar/c/d/e.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/a/b/c/bar.ts",
@@ -21,8 +22,7 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/a/b/c/bar/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "./bar" from /a/b/c/d.ts with typings: c/d/e.d.ts with host that doesnt have directoryExists
@@ -39,7 +39,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/a/b/c/bar/c/d/e.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/a/b/c/bar.ts",
@@ -48,8 +49,7 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/a/b/c/bar/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "../../bar" from /a/b/c/d.ts with typings: e.d.ts
@@ -66,7 +66,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/a/bar/e.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/a/bar.ts",
@@ -75,8 +76,7 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/a/bar/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "../../bar" from /a/b/c/d.ts with typings: e.d.ts with host that doesnt have directoryExists
@@ -93,7 +93,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/a/bar/e.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/a/bar.ts",
@@ -102,8 +103,7 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/a/bar/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "/bar" from /a/b/c/d.ts with typings: e.d.ts
@@ -120,7 +120,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/bar/e.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/bar.ts",
@@ -129,8 +130,7 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/bar/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "/bar" from /a/b/c/d.ts with typings: e.d.ts with host that doesnt have directoryExists
@@ -147,7 +147,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/bar/e.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/bar.ts",
@@ -156,8 +157,7 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/bar/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "c:/bar" from c:/a/b/c/d.ts with typings: e.d.ts
@@ -174,7 +174,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "c:/bar/e.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "c:/bar.ts",
@@ -183,8 +184,7 @@ Resolution:: {
   ],
   "affectingLocations": [
     "c:/bar/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "c:/bar" from c:/a/b/c/d.ts with typings: e.d.ts with host that doesnt have directoryExists
@@ -201,7 +201,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "c:/bar/e.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "c:/bar.ts",
@@ -210,6 +211,5 @@ Resolution:: {
   ],
   "affectingLocations": [
     "c:/bar/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }

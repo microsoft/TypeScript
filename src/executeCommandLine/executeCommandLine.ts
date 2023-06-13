@@ -1,4 +1,4 @@
-import * as ts from "./_namespaces/ts";
+import * as performance from "../compiler/performance";
 import {
     arrayFrom,
     BuilderProgram,
@@ -19,8 +19,8 @@ import {
     createDiagnosticReporter,
     createGetCanonicalFileName,
     createIncrementalCompilerHost,
-    createProgram,
     CreateProgram,
+    createProgram,
     CreateProgramOptions,
     createSolutionBuilder,
     createSolutionBuilderHost,
@@ -29,6 +29,7 @@ import {
     createWatchCompilerHostOfConfigFile,
     createWatchCompilerHostOfFilesAndCompilerOptions,
     createWatchProgram,
+    createWatchStatusReporter as ts_createWatchStatusReporter,
     Debug,
     Diagnostic,
     DiagnosticMessage,
@@ -51,7 +52,6 @@ import {
     getCompilerOptionsDiffValue,
     getConfigFileParsingDiagnostics,
     getDiagnosticText,
-    getEntries,
     getErrorSummaryText,
     getLineStarts,
     getNormalizedAbsolutePath,
@@ -67,6 +67,7 @@ import {
     parseCommandLine,
     parseConfigFileWithSystem,
     ParsedCommandLine,
+    performIncrementalCompilation as ts_performIncrementalCompilation,
     Program,
     reduceLeftIterator,
     ReportEmitErrorSummary,
@@ -88,7 +89,6 @@ import {
     WatchCompilerHost,
     WatchOptions,
 } from "./_namespaces/ts";
-import * as performance from "../compiler/_namespaces/ts.performance";
 
 interface Statistic {
     name: string;
@@ -253,9 +253,9 @@ function generateOptionOutput(sys: System, option: CommandLineOption, rightAlign
         typeof option.defaultValueDescription === "object"
             ? getDiagnosticText(option.defaultValueDescription)
             : formatDefaultValue(
-                  option.defaultValueDescription,
-                  option.type === "list" ? option.element.type : option.type
-              );
+                option.defaultValueDescription,
+                option.type === "list" || option.type === "listOrElement" ? option.element.type : option.type
+            );
     const terminalWidth = sys.getWidthOfTerminal?.() ?? 0;
 
     // Note: child_process might return `terminalWidth` as undefined.
@@ -365,6 +365,7 @@ function generateOptionOutput(sys: System, option: CommandLineOption, rightAlign
         };
 
         function getValueType(option: CommandLineOption) {
+            Debug.assert(option.type !== "listOrElement");
             switch (option.type) {
                 case "string":
                 case "number":
@@ -386,7 +387,7 @@ function generateOptionOutput(sys: System, option: CommandLineOption, rightAlign
                     possibleValues = option.type;
                     break;
                 case "list":
-                    // TODO: check infinite loop
+                case "listOrElement":
                     possibleValues = getPossibleValues(option.element);
                     break;
                 case "object":
@@ -399,7 +400,7 @@ function generateOptionOutput(sys: System, option: CommandLineOption, rightAlign
                     option.type.forEach((value, name) => {
                         (inverted[value] ||= []).push(name);
                     });
-                    return getEntries(inverted)
+                    return Object.entries(inverted)
                         .map(([, synonyms]) => synonyms.join("/"))
                         .join(", ");
             }
@@ -484,8 +485,8 @@ function printEasyHelp(sys: System, simpleOptions: readonly CommandLineOption[])
 
     output = [
         ...output,
-        ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.COMMAND_LINE_FLAGS), cliCommands, /*subCategory*/ false, /* beforeOptionsDescription */ undefined, /* afterOptionsDescription*/ undefined),
-        ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.COMMON_COMPILER_OPTIONS), configOpts, /*subCategory*/ false, /* beforeOptionsDescription */ undefined, formatMessage(/*_dummy*/ undefined, Diagnostics.You_can_learn_about_all_of_the_compiler_options_at_0, "https://aka.ms/tsc"))
+        ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.COMMAND_LINE_FLAGS), cliCommands, /*subCategory*/ false, /*beforeOptionsDescription*/ undefined, /*afterOptionsDescription*/ undefined),
+        ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.COMMON_COMPILER_OPTIONS), configOpts, /*subCategory*/ false, /*beforeOptionsDescription*/ undefined, formatMessage(/*dummy*/ undefined, Diagnostics.You_can_learn_about_all_of_the_compiler_options_at_0, "https://aka.ms/tsc"))
     ];
 
     for (const line of output) {
@@ -503,9 +504,9 @@ function printEasyHelp(sys: System, simpleOptions: readonly CommandLineOption[])
 
 function printAllHelp(sys: System, compilerOptions: readonly CommandLineOption[], buildOptions: readonly CommandLineOption[], watchOptions: readonly CommandLineOption[]) {
     let output: string[] = [...getHeader(sys,`${getDiagnosticText(Diagnostics.tsc_Colon_The_TypeScript_Compiler)} - ${getDiagnosticText(Diagnostics.Version_0, version)}`)];
-    output = [...output, ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.ALL_COMPILER_OPTIONS), compilerOptions, /*subCategory*/ true, /* beforeOptionsDescription */ undefined, formatMessage(/*_dummy*/ undefined, Diagnostics.You_can_learn_about_all_of_the_compiler_options_at_0, "https://aka.ms/tsc"))];
+    output = [...output, ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.ALL_COMPILER_OPTIONS), compilerOptions, /*subCategory*/ true, /*beforeOptionsDescription*/ undefined, formatMessage(/*dummy*/ undefined, Diagnostics.You_can_learn_about_all_of_the_compiler_options_at_0, "https://aka.ms/tsc"))];
     output = [...output, ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.WATCH_OPTIONS), watchOptions, /*subCategory*/ false, getDiagnosticText(Diagnostics.Including_watch_w_will_start_watching_the_current_project_for_the_file_changes_Once_set_you_can_config_watch_mode_with_Colon))];
-    output = [...output, ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.BUILD_OPTIONS), buildOptions, /*subCategory*/ false, formatMessage(/*_dummy*/ undefined, Diagnostics.Using_build_b_will_make_tsc_behave_more_like_a_build_orchestrator_than_a_compiler_This_is_used_to_trigger_building_composite_projects_which_you_can_learn_more_about_at_0, "https://aka.ms/tsc-composite-builds"))];
+    output = [...output, ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.BUILD_OPTIONS), buildOptions, /*subCategory*/ false, formatMessage(/*dummy*/ undefined, Diagnostics.Using_build_b_will_make_tsc_behave_more_like_a_build_orchestrator_than_a_compiler_This_is_used_to_trigger_building_composite_projects_which_you_can_learn_more_about_at_0, "https://aka.ms/tsc-composite-builds"))];
     for (const line of output) {
         sys.write(line);
     }
@@ -513,7 +514,7 @@ function printAllHelp(sys: System, compilerOptions: readonly CommandLineOption[]
 
 function printBuildHelp(sys: System, buildOptions: readonly CommandLineOption[]) {
     let output: string[] = [...getHeader(sys,`${getDiagnosticText(Diagnostics.tsc_Colon_The_TypeScript_Compiler)} - ${getDiagnosticText(Diagnostics.Version_0, version)}`)];
-    output = [...output, ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.BUILD_OPTIONS), buildOptions, /*subCategory*/ false, formatMessage(/*_dummy*/ undefined, Diagnostics.Using_build_b_will_make_tsc_behave_more_like_a_build_orchestrator_than_a_compiler_This_is_used_to_trigger_building_composite_projects_which_you_can_learn_more_about_at_0, "https://aka.ms/tsc-composite-builds"))];
+    output = [...output, ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.BUILD_OPTIONS), buildOptions, /*subCategory*/ false, formatMessage(/*dummy*/ undefined, Diagnostics.Using_build_b_will_make_tsc_behave_more_like_a_build_orchestrator_than_a_compiler_This_is_used_to_trigger_building_composite_projects_which_you_can_learn_more_about_at_0, "https://aka.ms/tsc-composite-builds"))];
     for (const line of output) {
         sys.write(line);
     }
@@ -889,7 +890,7 @@ function performCompilation(
     config: ParsedCommandLine
 ) {
     const { fileNames, options, projectReferences } = config;
-    const host = createCompilerHostWorker(options, /*setParentPos*/ undefined, sys);
+    const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, sys);
     const currentDirectory = host.getCurrentDirectory();
     const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
     changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, currentDirectory, getCanonicalFileName));
@@ -909,7 +910,7 @@ function performCompilation(
         s => sys.write(s + sys.newLine),
         createReportErrorSummary(sys, options)
     );
-    reportStatistics(sys, program, /*builder*/ undefined);
+    reportStatistics(sys, program, /*solutionPerformance*/ undefined);
     cb(program);
     return sys.exit(exitStatus);
 }
@@ -923,7 +924,7 @@ function performIncrementalCompilation(
     const { options, fileNames, projectReferences } = config;
     enableStatisticsAndTracing(sys, options, /*isBuildMode*/ false);
     const host = createIncrementalCompilerHost(options, sys);
-    const exitStatus = ts.performIncrementalCompilation({
+    const exitStatus = ts_performIncrementalCompilation({
         host,
         system: sys,
         rootNames: fileNames,
@@ -933,7 +934,7 @@ function performIncrementalCompilation(
         reportDiagnostic,
         reportErrorSummary: createReportErrorSummary(sys, options),
         afterProgramEmitAndDiagnostics: builderProgram => {
-            reportStatistics(sys, builderProgram.getProgram(), /*builder*/ undefined);
+            reportStatistics(sys, builderProgram.getProgram(), /*solutionPerformance*/ undefined);
             cb(builderProgram);
         }
     });
@@ -978,13 +979,13 @@ function updateWatchCompilationHost(
     const emitFilesUsingBuilder = watchCompilerHost.afterProgramCreate!; // TODO: GH#18217
     watchCompilerHost.afterProgramCreate = builderProgram => {
         emitFilesUsingBuilder(builderProgram);
-        reportStatistics(sys, builderProgram.getProgram(), /*builder*/ undefined);
+        reportStatistics(sys, builderProgram.getProgram(), /*solutionPerformance*/ undefined);
         cb(builderProgram);
     };
 }
 
 function createWatchStatusReporter(sys: System, options: CompilerOptions | BuildOptions) {
-    return ts.createWatchStatusReporter(sys, shouldBePretty(sys, options));
+    return ts_createWatchStatusReporter(sys, shouldBePretty(sys, options));
 }
 
 function createWatchOfConfigFile(
@@ -1158,8 +1159,8 @@ function reportStatistics(sys: System, programOrConfig: Program | ParsedCommandL
 
             const lineCounts = countLines(program);
             if (compilerOptions.extendedDiagnostics) {
-                for (const key of arrayFrom(lineCounts.keys())) {
-                    reportCountStatistic("Lines of " + key, lineCounts.get(key)!);
+                for (const [key, value] of lineCounts.entries()) {
+                    reportCountStatistic("Lines of " + key, value);
                 }
             }
             else {

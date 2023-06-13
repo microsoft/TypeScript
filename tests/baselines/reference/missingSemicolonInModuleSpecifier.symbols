@@ -1,8 +1,10 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/missingSemicolonInModuleSpecifier.ts] ////
+
+=== a.ts ===
 export const x = 1;
 >x : Symbol(x, Decl(a.ts, 0, 12))
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 import {x} from "./a"
 >x : Symbol(x, Decl(b.ts, 0, 8))
 

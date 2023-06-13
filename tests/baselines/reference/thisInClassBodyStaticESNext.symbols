@@ -1,4 +1,6 @@
-=== tests/cases/compiler/thisInClassBodyStaticESNext.ts ===
+//// [tests/cases/compiler/thisInClassBodyStaticESNext.ts] ////
+
+=== thisInClassBodyStaticESNext.ts ===
 // all are allowed with es-compliant class field emit
 class Foo {
 >Foo : Symbol(Foo, Decl(thisInClassBodyStaticESNext.ts, 0, 0))

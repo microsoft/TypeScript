@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/baseConstraintOfDecorator.ts] ////
+
 //// [baseConstraintOfDecorator.ts]
 export function classExtender<TFunction>(superClass: TFunction, _instanceModifier: (instance: any, args: any[]) => void): TFunction {
     return class decoratorFunc extends superClass {
@@ -36,7 +38,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.classExtender2 = exports.classExtender = void 0;
 function classExtender(superClass, _instanceModifier) {
     return /** @class */ (function (_super) {

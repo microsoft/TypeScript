@@ -28,12 +28,12 @@ const y: OriginalB = x;
 
 //// [b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.zzz = void 0;
 exports.zzz = 123;
 //// [a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.B = void 0;
 var B = require("./b");
 exports.B = B;
@@ -41,7 +41,7 @@ var x = { x: "" };
 B.zzz;
 //// [index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var a_1 = require("./a");
 var x = { x: "" };
 a_1.B.zzz;

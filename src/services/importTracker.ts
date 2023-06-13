@@ -7,6 +7,7 @@ import {
     CallExpression,
     CancellationToken,
     canHaveModifiers,
+    canHaveSymbol,
     cast,
     Debug,
     ExportAssignment,
@@ -43,6 +44,7 @@ import {
     isImportEqualsDeclaration,
     isImportTypeNode,
     isInJSFile,
+    isJSDocCallbackTag,
     isJSDocTypedefTag,
     isModuleExportsAccessExpression,
     isNamedExports,
@@ -61,6 +63,7 @@ import {
     NamedImportsOrExports,
     NamespaceImport,
     Node,
+    nodeIsSynthesized,
     nodeSeenTracker,
     Program,
     some,
@@ -73,6 +76,7 @@ import {
     SymbolFlags,
     symbolName,
     SyntaxKind,
+    tryCast,
     TypeChecker,
     ValidImportTypeNode,
     VariableDeclaration,
@@ -219,7 +223,7 @@ function getImportersForExport(
                         }
                         else if (direct.exportClause.kind === SyntaxKind.NamespaceExport) {
                             // `export * as foo from "foo"` add to indirect uses
-                            addIndirectUser(getSourceFileLikeForImportDeclaration(direct), /** addTransitiveDependencies */ true);
+                            addIndirectUser(getSourceFileLikeForImportDeclaration(direct), /*addTransitiveDependencies*/ true);
                         }
                         else {
                             // This is `export { foo } from "foo"` and creates an alias symbol, so recursive search will get handle re-exports.
@@ -230,7 +234,7 @@ function getImportersForExport(
                     case SyntaxKind.ImportType:
                         // Only check for typeof import('xyz')
                         if (!isAvailableThroughGlobal && direct.isTypeOf && !direct.qualifier && isExported(direct)) {
-                            addIndirectUser(direct.getSourceFile(), /** addTransitiveDependencies */ true);
+                            addIndirectUser(direct.getSourceFile(), /*addTransitiveDependencies*/ true);
                         }
                         directImports.push(direct);
                         break;
@@ -244,7 +248,7 @@ function getImportersForExport(
 
     function handleImportCall(importCall: ImportCall) {
         const top = findAncestor(importCall, isAmbientModuleDeclaration) || importCall.getSourceFile();
-        addIndirectUser(top, /** addTransitiveDependencies */ !!isExported(importCall, /** stopAtAmbientModule */ true));
+        addIndirectUser(top, /** addTransitiveDependencies */ !!isExported(importCall, /*stopAtAmbientModule*/ true));
     }
 
     function isExported(node: Node, stopAtAmbientModule = false) {
@@ -263,7 +267,7 @@ function getImportersForExport(
             const sourceFileLike = getSourceFileLikeForImportDeclaration(importDeclaration);
             Debug.assert(sourceFileLike.kind === SyntaxKind.SourceFile || sourceFileLike.kind === SyntaxKind.ModuleDeclaration);
             if (isReExport || findNamespaceReExports(sourceFileLike, name, checker)) {
-                addIndirectUser(sourceFileLike, /** addTransitiveDependencies */ true);
+                addIndirectUser(sourceFileLike, /*addTransitiveDependencies*/ true);
             }
             else {
                 addIndirectUser(sourceFileLike);
@@ -286,7 +290,7 @@ function getImportersForExport(
         if (directImports) {
             for (const directImport of directImports) {
                 if (!isImportTypeNode(directImport)) {
-                    addIndirectUser(getSourceFileLikeForImportDeclaration(directImport), /** addTransitiveDependencies */ true);
+                    addIndirectUser(getSourceFileLikeForImportDeclaration(directImport), /*addTransitiveDependencies*/ true);
                 }
             }
         }
@@ -447,7 +451,10 @@ export type ModuleReference =
     /** "import" also includes require() calls. */
     | { kind: "import", literal: StringLiteralLike }
     /** <reference path> or <reference types> */
-    | { kind: "reference", referencingFile: SourceFile, ref: FileReference };
+    | { kind: "reference", referencingFile: SourceFile, ref: FileReference }
+    /** Containing file implicitly references the module (eg, via implicit jsx runtime import) */
+    | { kind: "implicit", literal: StringLiteralLike, referencingFile: SourceFile };
+
 /** @internal */
 export function findModuleReferences(program: Program, sourceFiles: readonly SourceFile[], searchModuleSymbol: Symbol): ModuleReference[] {
     const refs: ModuleReference[] = [];
@@ -461,17 +468,17 @@ export function findModuleReferences(program: Program, sourceFiles: readonly Sou
                 }
             }
             for (const ref of referencingFile.typeReferenceDirectives) {
-                const referenced = program.getResolvedTypeReferenceDirectives().get(ref.fileName, ref.resolutionMode || referencingFile.impliedNodeFormat);
+                const referenced = program.getResolvedTypeReferenceDirectives().get(ref.fileName, ref.resolutionMode || referencingFile.impliedNodeFormat)?.resolvedTypeReferenceDirective;
                 if (referenced !== undefined && referenced.resolvedFileName === (searchSourceFile as SourceFile).fileName) {
                     refs.push({ kind: "reference", referencingFile, ref });
                 }
             }
         }
 
-        forEachImport(referencingFile, (_importDecl, moduleSpecifier) => {
+        forEachImport(referencingFile, (importDecl, moduleSpecifier) => {
             const moduleSymbol = checker.getSymbolAtLocation(moduleSpecifier);
             if (moduleSymbol === searchModuleSymbol) {
-                refs.push({ kind: "import", literal: moduleSpecifier });
+                refs.push(nodeIsSynthesized(importDecl) ? { kind: "implicit", literal: moduleSpecifier, referencingFile } : { kind: "import", literal: moduleSpecifier });
             }
         });
     }
@@ -610,7 +617,7 @@ export function getImportOrExportSymbol(node: Node, symbol: Symbol, checker: Typ
             else if (isBinaryExpression(grandparent)) {
                 return getSpecialPropertyExport(grandparent, /*useLhsSymbol*/ true);
             }
-            else if (isJSDocTypedefTag(parent)) {
+            else if (isJSDocTypedefTag(parent) || isJSDocCallbackTag(parent)) {
                 return exportInfo(symbol, ExportKind.Named);
             }
         }
@@ -650,6 +657,7 @@ export function getImportOrExportSymbol(node: Node, symbol: Symbol, checker: Typ
 
         // Search on the local symbol in the exporting module, not the exported symbol.
         importedSymbol = skipExportSpecifierSymbol(importedSymbol, checker);
+
         // Similarly, skip past the symbol for 'export ='
         if (importedSymbol.escapedName === "export=") {
             importedSymbol = getExportEqualsLocalSymbol(importedSymbol, checker);
@@ -683,10 +691,10 @@ function getExportEqualsLocalSymbol(importedSymbol: Symbol, checker: TypeChecker
 
     const decl = Debug.checkDefined(importedSymbol.valueDeclaration);
     if (isExportAssignment(decl)) { // `export = class {}`
-        return decl.expression.symbol;
+        return tryCast(decl.expression, canHaveSymbol)?.symbol;
     }
     else if (isBinaryExpression(decl)) { // `module.exports = class {}`
-        return decl.right.symbol;
+        return tryCast(decl.right, canHaveSymbol)?.symbol;
     }
     else if (isSourceFile(decl)) { // json module
         return decl.symbol;
@@ -741,7 +749,7 @@ function skipExportSpecifierSymbol(symbol: Symbol, checker: TypeChecker): Symbol
     if (symbol.declarations) {
         for (const declaration of symbol.declarations) {
             if (isExportSpecifier(declaration) && !declaration.propertyName && !declaration.parent.parent.moduleSpecifier) {
-                return checker.getExportSpecifierLocalTargetSymbol(declaration)!;
+                return checker.getExportSpecifierLocalTargetSymbol(declaration) || symbol;
             }
             else if (isPropertyAccessExpression(declaration) && isModuleExportsAccessExpression(declaration.expression) && !isPrivateIdentifier(declaration.name)) {
                 // Export of form 'module.exports.propName = expr';

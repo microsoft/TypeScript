@@ -1,3 +1,4 @@
+currentDirectory:: /Users/name/projects/web useCaseSensitiveFileNames: false
 Input::
 //// [/Users/name/projects/web/src/bin.ts]
 import { foo } from "yargs";
@@ -41,7 +42,7 @@ File '/Users/package.json' does not exist.
 File '/package.json' does not exist.
 ======== Resolving module 'yargs' from '/Users/name/projects/web/src/bin.ts'. ========
 Explicitly specified module resolution kind: 'NodeNext'.
-Resolving in CJS mode with conditions 'node', 'require', 'types'.
+Resolving in CJS mode with conditions 'require', 'types', 'node'.
 File '/Users/name/projects/web/src/package.json' does not exist according to earlier cached lookups.
 File '/Users/name/projects/web/package.json' does not exist according to earlier cached lookups.
 File '/Users/name/projects/package.json' does not exist according to earlier cached lookups.
@@ -49,34 +50,41 @@ File '/Users/name/package.json' does not exist according to earlier cached looku
 File '/Users/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'yargs' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/Users/name/projects/web/src/node_modules' does not exist, skipping all lookups in it.
 File '/Users/name/projects/web/node_modules/yargs.ts' does not exist.
 File '/Users/name/projects/web/node_modules/yargs.tsx' does not exist.
 File '/Users/name/projects/web/node_modules/yargs.d.ts' does not exist.
 Found 'package.json' at '/Users/name/projects/web/node_modules/@types/yargs/package.json'.
+Entering conditional exports.
 Matched 'exports' condition 'types'.
+Entering conditional exports.
 Saw non-matching condition 'import'.
 Matched 'exports' condition 'default'.
 Using 'exports' subpath '.' with target './index.d.ts'.
-File '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts' exist - use it as a name resolution result.
+File '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts' exists - use it as a name resolution result.
+Resolved under condition 'default'.
+Exiting conditional exports.
+Resolved under condition 'types'.
+Exiting conditional exports.
 Resolving real path for '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts', result '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts'.
 ======== Module name 'yargs' was successfully resolved to '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts' with Package ID 'yargs/index.d.ts@17.0.12'. ========
 File '/Users/name/projects/web/node_modules/@types/yargs/package.json' exists according to earlier cached lookups.
-======== Resolving type reference directive 'yargs', containing file '/Users/name/projects/web/__inferred type names__.ts', root directory '/Users/name/projects/web/node_modules/@types'. ========
-Resolving with primary search path '/Users/name/projects/web/node_modules/@types'.
+======== Resolving type reference directive 'yargs', containing file '/Users/name/projects/web/__inferred type names__.ts', root directory '/Users/name/projects/web/node_modules/@types,/Users/name/projects/node_modules/@types,/Users/name/node_modules/@types,/Users/node_modules/@types,/node_modules/@types'. ========
+Resolving with primary search path '/Users/name/projects/web/node_modules/@types, /Users/name/projects/node_modules/@types, /Users/name/node_modules/@types, /Users/node_modules/@types, /node_modules/@types'.
 File '/Users/name/projects/web/node_modules/@types/yargs/package.json' exists according to earlier cached lookups.
 'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
 'package.json' does not have a 'main' field.
-File '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts' exist - use it as a name resolution result.
+File '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts', result '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts'.
 ======== Type reference directive 'yargs' was successfully resolved to '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts' with Package ID 'yargs/index.d.ts@17.0.12', primary: true. ========
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 node_modules/@types/yargs/index.d.ts
   Imported via "yargs" from file 'src/bin.ts' with packageId 'yargs/index.d.ts@17.0.12'
   Entry point for implicit type library 'yargs' with packageId 'yargs/index.d.ts@17.0.12'
@@ -107,41 +115,45 @@ Shape signatures in builder refreshed for::
 /users/name/projects/web/src/bin.ts (used version)
 
 PolledWatches::
-/users/name/projects/web/src/package.json:
+/users/name/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/name/projects/package.json: *new*
   {"pollingInterval":2000}
-/users/name/projects/web/package.json:
+/users/name/projects/web/package.json: *new*
   {"pollingInterval":2000}
-/users/name/projects/package.json:
+/users/name/projects/web/src/package.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::
-/users/name/projects/web/tsconfig.json:
+/a/lib/lib.d.ts: *new*
   {}
-/users/name/projects/web/src/bin.ts:
+/users/name/projects: *new*
   {}
-/users/name/projects/web/node_modules/@types/yargs/index.d.ts:
+/users/name/projects/web: *new*
   {}
-/a/lib/lib.d.ts:
+/users/name/projects/web/node_modules/@types/yargs/index.d.ts: *new*
   {}
-/users/name/projects/web:
+/users/name/projects/web/node_modules/@types/yargs/package.json: *new*
   {}
-/users/name/projects/web/node_modules/@types/yargs/package.json:
+/users/name/projects/web/src/bin.ts: *new*
+  {}
+/users/name/projects/web/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/users/name/projects/web/src:
+/users/name/projects/web: *new*
   {}
-/users/name/projects/web/node_modules:
+/users/name/projects/web/node_modules: *new*
   {}
-/users/name/projects/web/node_modules/@types:
+/users/name/projects/web/node_modules/@types: *new*
   {}
-/users/name/projects/web:
+/users/name/projects/web/src: *new*
   {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/Users/name/projects/web/src/bin.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 

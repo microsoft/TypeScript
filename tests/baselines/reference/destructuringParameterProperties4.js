@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringParameterProperties4.ts] ////
+
 //// [destructuringParameterProperties4.ts]
 class C1<T, U, V> {
     constructor(private k: T, protected [a, b, c]: [T,U,V]) {

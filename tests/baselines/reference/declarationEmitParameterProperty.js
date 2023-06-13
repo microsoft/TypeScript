@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitParameterProperty.ts] ////
+
 //// [declarationEmitParameterProperty.ts]
 export class Foo {
   constructor(public bar?: string) {
@@ -7,7 +9,7 @@ export class Foo {
 
 //// [declarationEmitParameterProperty.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
 var Foo = /** @class */ (function () {
     function Foo(bar) {

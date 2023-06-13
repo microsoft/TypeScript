@@ -1,4 +1,6 @@
-=== tests/cases/conformance/Symbols/ES5SymbolProperty1.ts ===
+//// [tests/cases/conformance/Symbols/ES5SymbolProperty1.ts] ////
+
+=== ES5SymbolProperty1.ts ===
 interface SymbolConstructor {
 >SymbolConstructor : Symbol(SymbolConstructor, Decl(ES5SymbolProperty1.ts, 0, 0))
 

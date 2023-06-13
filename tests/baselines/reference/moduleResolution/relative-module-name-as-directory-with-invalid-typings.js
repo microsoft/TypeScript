@@ -15,7 +15,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/b/index.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": true
+    "isExternalLibraryImport": true,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/a/node_modules/b/package.json",
@@ -36,8 +37,7 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/node_modules/b/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "b" from /a/b.ts with typings: ["a","b"] with host that doesnt have directoryExists
@@ -57,7 +57,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/b/index.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": true
+    "isExternalLibraryImport": true,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/a/node_modules/b/package.json",
@@ -78,8 +79,7 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/node_modules/b/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "b" from /a/b.ts with typings: {"a":"b"}
@@ -99,7 +99,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/b/index.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": true
+    "isExternalLibraryImport": true,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/a/node_modules/b/package.json",
@@ -120,8 +121,7 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/node_modules/b/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "b" from /a/b.ts with typings: {"a":"b"} with host that doesnt have directoryExists
@@ -141,7 +141,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/b/index.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": true
+    "isExternalLibraryImport": true,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/a/node_modules/b/package.json",
@@ -162,8 +163,7 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/node_modules/b/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "b" from /a/b.ts with typings: true
@@ -183,7 +183,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/b/index.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": true
+    "isExternalLibraryImport": true,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/a/node_modules/b/package.json",
@@ -204,8 +205,7 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/node_modules/b/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "b" from /a/b.ts with typings: true with host that doesnt have directoryExists
@@ -225,7 +225,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/b/index.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": true
+    "isExternalLibraryImport": true,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/a/node_modules/b/package.json",
@@ -246,8 +247,7 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/node_modules/b/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "b" from /a/b.ts with typings: null
@@ -267,7 +267,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/b/index.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": true
+    "isExternalLibraryImport": true,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/a/node_modules/b/package.json",
@@ -288,8 +289,7 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/node_modules/b/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "b" from /a/b.ts with typings: null with host that doesnt have directoryExists
@@ -309,7 +309,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/b/index.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": true
+    "isExternalLibraryImport": true,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/a/node_modules/b/package.json",
@@ -330,8 +331,7 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/node_modules/b/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "b" from /a/b.ts with typings: undefined
@@ -351,7 +351,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/b/index.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": true
+    "isExternalLibraryImport": true,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/a/node_modules/b/package.json",
@@ -372,8 +373,7 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/node_modules/b/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "b" from /a/b.ts with typings: undefined with host that doesnt have directoryExists
@@ -393,7 +393,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/b/index.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": true
+    "isExternalLibraryImport": true,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/a/node_modules/b/package.json",
@@ -414,6 +415,5 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/node_modules/b/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }

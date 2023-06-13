@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/divergentAccessors1.ts] ////
+
 //// [divergentAccessors1.ts]
 // Accessors in interfaces/types
 

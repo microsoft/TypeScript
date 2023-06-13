@@ -53,6 +53,7 @@ import {
     isRestParameter,
     isRightSideOfQualifiedNameOrPropertyAccess,
     isSetAccessorDeclaration,
+    isTransientSymbol,
     isVariableDeclaration,
     isVariableStatement,
     LanguageServiceHost,
@@ -63,8 +64,8 @@ import {
     mapEntries,
     NewExpression,
     Node,
-    nodeSeenTracker,
     NodeSeenTracker,
+    nodeSeenTracker,
     ObjectFlags,
     ParameterDeclaration,
     PrefixUnaryExpression,
@@ -88,17 +89,14 @@ import {
     SourceFile,
     Symbol,
     SymbolFlags,
-    SymbolLinks,
     SyntaxKind,
     textChanges,
     Token,
-    TransientSymbol,
     tryCast,
     Type,
     TypeFlags,
     TypeNode,
     TypeReference,
-    UnderscoreEscapedMap,
     UnionOrIntersectionType,
     UnionReduction,
     UserPreferences,
@@ -442,7 +440,7 @@ function tryReplaceImportTypeNodeWithAutoImport(
 ): boolean {
     const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
     if (importableReference && changes.tryInsertTypeAnnotation(sourceFile, declaration, importableReference.typeNode)) {
-        forEach(importableReference.symbols, s => importAdder.addImportFromExportedSymbol(s, /*usageIsTypeOnly*/ true));
+        forEach(importableReference.symbols, s => importAdder.addImportFromExportedSymbol(s, /*isValidTypeOnlyUseSite*/ true));
         return true;
     }
     return false;
@@ -490,7 +488,7 @@ function annotateJSDocParameters(changes: textChanges.ChangeTracker, sourceFile:
     }
     else {
         const paramTags = map(inferences, ({ name, typeNode, isOptional }) =>
-            factory.createJSDocParameterTag(/*tagName*/ undefined, name, /*isBracketed*/ !!isOptional, factory.createJSDocTypeExpression(typeNode), /* isNameFirst */ false, /*comment*/ undefined));
+            factory.createJSDocParameterTag(/*tagName*/ undefined, name, /*isBracketed*/ !!isOptional, factory.createJSDocTypeExpression(typeNode), /*isNameFirst*/ false, /*comment*/ undefined));
         changes.addJSDocTags(sourceFile, signature, paramTags);
     }
 }
@@ -581,7 +579,7 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
         isNumberOrString: boolean | undefined;
 
         candidateTypes: Type[] | undefined;
-        properties: UnderscoreEscapedMap<Usage> | undefined;
+        properties: Map<__String, Usage> | undefined;
         calls: CallUsage[] | undefined;
         constructs: CallUsage[] | undefined;
         numberIndex: Usage | undefined;
@@ -871,6 +869,9 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
             case SyntaxKind.EqualsEqualsEqualsToken:
             case SyntaxKind.ExclamationEqualsEqualsToken:
             case SyntaxKind.ExclamationEqualsToken:
+            case SyntaxKind.AmpersandAmpersandEqualsToken:
+            case SyntaxKind.QuestionQuestionEqualsToken:
+            case SyntaxKind.BarBarEqualsToken:
                 addCandidateType(usage, checker.getTypeAtLocation(parent.left === node ? parent.right : parent.left));
                 break;
 
@@ -1024,10 +1025,10 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
         const numberIndices = [];
         let stringIndexReadonly = false;
         let numberIndexReadonly = false;
-        const props = createMultiMap<Type>();
+        const props = createMultiMap<__String, Type>();
         for (const anon of anons) {
             for (const p of checker.getPropertiesOfType(anon)) {
-                props.add(p.name, p.valueDeclaration ? checker.getTypeOfSymbolAtLocation(p, p.valueDeclaration) : checker.getAnyType());
+                props.add(p.escapedName, p.valueDeclaration ? checker.getTypeOfSymbolAtLocation(p, p.valueDeclaration) : checker.getAnyType());
             }
             calls.push(...checker.getSignaturesOfType(anon, SignatureKind.Call));
             constructs.push(...checker.getSignaturesOfType(anon, SignatureKind.Construct));
@@ -1044,8 +1045,8 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
         }
         const members = mapEntries(props, (name, types) => {
             const isOptional = types.length < anons.length ? SymbolFlags.Optional : 0;
-            const s = checker.createSymbol(SymbolFlags.Property | isOptional, name as __String);
-            s.type = checker.getUnionType(types);
+            const s = checker.createSymbol(SymbolFlags.Property | isOptional, name);
+            s.links.type = checker.getUnionType(types);
             return [name, s];
         });
         const indexInfos = [];
@@ -1053,7 +1054,7 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
         if (numberIndices.length) indexInfos.push(checker.createIndexInfo(checker.getNumberType(), checker.getUnionType(numberIndices), numberIndexReadonly));
         return checker.createAnonymousType(
             anons[0].symbol,
-            members as UnderscoreEscapedMap<TransientSymbol>,
+            members,
             calls,
             constructs,
             indexInfos);
@@ -1080,7 +1081,7 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
 
         const candidateTypes = (usage.candidateTypes || []).map(t => checker.getBaseTypeOfLiteralType(t));
         const callsType = usage.calls?.length ? inferStructuralType(usage) : undefined;
-        if (callsType && candidateTypes) {
+        if (callsType && candidateTypes) { // TODO: should this be `some(candidateTypes)`?
             types.push(checker.getUnionType([callsType, ...candidateTypes], UnionReduction.Subtype));
         }
         else {
@@ -1101,7 +1102,7 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
         if (usage.properties) {
             usage.properties.forEach((u, name) => {
                 const symbol = checker.createSymbol(SymbolFlags.Property, name);
-                symbol.type = combineFromUsage(u);
+                symbol.links.type = combineFromUsage(u);
                 members.set(name, symbol);
             });
         }
@@ -1202,7 +1203,7 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
             if (elementType) {
                 genericParamType = elementType;
             }
-            const targetType = (usageParam as SymbolLinks).type
+            const targetType = tryCast(usageParam, isTransientSymbol)?.links.type
                 || (usageParam.valueDeclaration ? checker.getTypeOfSymbolAtLocation(usageParam, usageParam.valueDeclaration) : checker.getAnyType());
             types.push(...inferTypeParameters(genericParamType, targetType, typeParameter));
         }
@@ -1221,7 +1222,7 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
         const length = Math.max(...calls.map(c => c.argumentTypes.length));
         for (let i = 0; i < length; i++) {
             const symbol = checker.createSymbol(SymbolFlags.FunctionScopedVariable, escapeLeadingUnderscores(`arg${i}`));
-            symbol.type = combineTypes(calls.map(call => call.argumentTypes[i] || checker.getUndefinedType()));
+            symbol.links.type = combineTypes(calls.map(call => call.argumentTypes[i] || checker.getUndefinedType()));
             if (calls.some(call => call.argumentTypes[i] === undefined)) {
                 symbol.flags |= SymbolFlags.Optional;
             }

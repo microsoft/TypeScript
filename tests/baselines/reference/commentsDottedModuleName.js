@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentsDottedModuleName.ts] ////
+
 //// [commentsDottedModuleName.ts]
 /** this is multi declare module*/
 export module outerModule.InnerModule {
@@ -24,7 +26,7 @@ define(["require", "exports"], function (require, exports) {
             }());
             InnerModule.b = b;
         })(InnerModule = outerModule.InnerModule || (outerModule.InnerModule = {}));
-    })(outerModule = exports.outerModule || (exports.outerModule = {}));
+    })(outerModule || (exports.outerModule = outerModule = {}));
 });
 
 

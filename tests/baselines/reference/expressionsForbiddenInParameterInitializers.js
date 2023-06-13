@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/expressionsForbiddenInParameterInitializers.ts] ////
+
 //// [bar.ts]
 export async function foo({ foo = await import("./bar") }) {
 }
@@ -44,7 +46,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.foo2 = exports.foo = void 0;
 function foo(_a) {
     var _b = _a.foo, foo = _b === void 0 ? yield Promise.resolve().then(function () { return require("./bar"); }) : _b;

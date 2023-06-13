@@ -1,4 +1,6 @@
-=== tests/cases/compiler/letDeclarations-access.ts ===
+//// [tests/cases/compiler/letDeclarations-access.ts] ////
+
+=== letDeclarations-access.ts ===
 let x = 0
 >x : Symbol(x, Decl(letDeclarations-access.ts, 0, 3))
 

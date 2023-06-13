@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/superAccessInFatArrow1.ts] ////
+
 //// [superAccessInFatArrow1.ts]
 module test {
     export class A {

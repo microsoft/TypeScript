@@ -1,4 +1,6 @@
-=== tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts ===
+//// [tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts] ////
+
+=== ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts ===
 class Point {
 >Point : Point
 
@@ -20,7 +22,6 @@ module Point {
 
     export function Origin() { return null; } //expected duplicate identifier error
 >Origin : () => any
->null : null
 }
 
 

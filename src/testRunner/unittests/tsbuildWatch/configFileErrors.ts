@@ -1,16 +1,11 @@
+import { dedent } from "../../_namespaces/Utils";
+import { verifyTscWatch } from "../helpers/tscWatch";
 import {
     createWatchedSystem,
     libFile,
-    TestServerHost,
-} from "../virtualFileSystemWithWatch";
-import { verifyTscWatch } from "../tscWatch/helpers";
-import { dedent } from "../../_namespaces/Utils";
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsbuildWatch:: watchMode:: configFileErrors:: reports syntax errors in config file", () => {
-    function build(sys: TestServerHost) {
-        sys.checkTimeoutQueueLengthAndRun(1); // build the project
-        sys.checkTimeoutQueueLength(0);
-    }
     verifyTscWatch({
         scenario: "configFileErrors",
         subScenario: "reports syntax errors in config file",
@@ -36,30 +31,30 @@ describe("unittests:: tsbuildWatch:: watchMode:: configFileErrors:: reports synt
             { currentDirectory: "/user/username/projects/myproject" }
         ),
         commandLineArgs: ["--b", "-w"],
-        changes: [
+        edits: [
             {
                 caption: "reports syntax errors after change to config file",
-                change: sys => sys.replaceFileText(`/user/username/projects/myproject/tsconfig.json`, ",", `,
+                edit: sys => sys.replaceFileText(`/user/username/projects/myproject/tsconfig.json`, ",", `,
         "declaration": true,`),
-                timeouts: build,
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(), // build the project
             },
             {
                 caption: "reports syntax errors after change to ts file",
-                change: sys => sys.replaceFileText(`/user/username/projects/myproject/a.ts`, "foo", "fooBar"),
-                timeouts: build,
+                edit: sys => sys.replaceFileText(`/user/username/projects/myproject/a.ts`, "foo", "fooBar"),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(), // build the project
             },
             {
                 caption: "reports error when there is no change to tsconfig file",
-                change: sys => sys.replaceFileText(`/user/username/projects/myproject/tsconfig.json`, "", ""),
-                timeouts: build,
+                edit: sys => sys.replaceFileText(`/user/username/projects/myproject/tsconfig.json`, "", ""),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(), // build the project
             },
             {
                 caption: "builds after fixing config file errors",
-                change: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, JSON.stringify({
+                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, JSON.stringify({
                     compilerOptions: { composite: true, declaration: true },
                     files: ["a.ts", "b.ts"]
                 })),
-                timeouts: build,
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(), // build the project
             }
         ]
     });

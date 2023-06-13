@@ -31,12 +31,6 @@ export interface BuilderProgramHost {
      */
     writeFile?: WriteFileCallback;
     /**
-     * disable using source file version as signature for testing
-     *
-     * @internal
-     */
-    disableUseFileVersionAsSignature?: boolean;
-    /**
      * Store the list of files that update signature during the emit
      *
      * @internal

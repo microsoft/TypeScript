@@ -72,6 +72,7 @@ import {
     ObjectFlags,
     ObjectType,
     RelationComparisonResult,
+    ScriptKind,
     Signature,
     SignatureCheckMode,
     SignatureFlags,
@@ -275,13 +276,13 @@ export namespace Debug {
     export function assertEachNode<T extends Node, U extends T>(nodes: readonly T[], test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts nodes is readonly U[];
     export function assertEachNode<T extends Node, U extends T>(nodes: NodeArray<T> | undefined, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts nodes is NodeArray<U> | undefined;
     export function assertEachNode<T extends Node, U extends T>(nodes: readonly T[] | undefined, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts nodes is readonly U[] | undefined;
-    export function assertEachNode(nodes: readonly Node[], test: (node: Node) => boolean, message?: string, stackCrawlMark?: AnyFunction): void;
-    export function assertEachNode(nodes: readonly Node[] | undefined, test: (node: Node) => boolean, message?: string, stackCrawlMark?: AnyFunction) {
+    export function assertEachNode(nodes: readonly Node[], test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction): void;
+    export function assertEachNode(nodes: readonly Node[] | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction) {
         if (shouldAssertFunction(AssertionLevel.Normal, "assertEachNode")) {
             assert(
                 test === undefined || every(nodes, test),
                 message || "Unexpected node.",
-                () => `Node array did not pass test '${getFunctionName(test)}'.`,
+                () => `Node array did not pass test '${getFunctionName(test!)}'.`,
                 stackCrawlMark || assertEachNode);
         }
     }
@@ -439,6 +440,10 @@ export namespace Debug {
         return formatEnum(kind, (ts as any).SnippetKind, /*isFlags*/ false);
     }
 
+    export function formatScriptKind(kind: ScriptKind | undefined): string {
+        return formatEnum(kind, (ts as any).ScriptKind, /*isFlags*/ false);
+    }
+
     export function formatNodeFlags(flags: NodeFlags | undefined): string {
         return formatEnum(flags, (ts as any).NodeFlags, /*isFlags*/ true);
     }
@@ -588,23 +593,8 @@ export namespace Debug {
         if (isDebugInfoEnabled) return;
 
         // avoid recomputing
-        let weakTypeTextMap: WeakMap<Type, string> | undefined;
-        let weakNodeTextMap: WeakMap<Node, string> | undefined;
-
-        function getWeakTypeTextMap() {
-            if (weakTypeTextMap === undefined) {
-                if (typeof WeakMap === "function") weakTypeTextMap = new WeakMap();
-            }
-            return weakTypeTextMap;
-        }
-
-        function getWeakNodeTextMap() {
-            if (weakNodeTextMap === undefined) {
-                if (typeof WeakMap === "function") weakNodeTextMap = new WeakMap();
-            }
-            return weakNodeTextMap;
-        }
-
+        const weakTypeTextMap = new WeakMap<Type, string>();
+        const weakNodeTextMap = new WeakMap<Node, string>();
 
         // Add additional properties in debug mode to assist with debugging.
         Object.defineProperties(objectAllocator.getSymbolConstructor().prototype, {
@@ -658,11 +648,10 @@ export namespace Debug {
             __debugTypeToString: {
                 value(this: Type) {
                     // avoid recomputing
-                    const map = getWeakTypeTextMap();
-                    let text = map?.get(this);
+                    let text = weakTypeTextMap.get(this);
                     if (text === undefined) {
                         text = this.checker.typeToString(this);
-                        map?.set(this, text);
+                        weakTypeTextMap.set(this, text);
                     }
                     return text;
                 }
@@ -738,13 +727,12 @@ export namespace Debug {
                         value(this: Node, includeTrivia?: boolean) {
                             if (nodeIsSynthesized(this)) return "";
                             // avoid recomputing
-                            const map = getWeakNodeTextMap();
-                            let text = map?.get(this);
+                            let text = weakNodeTextMap.get(this);
                             if (text === undefined) {
                                 const parseNode = getParseTreeNode(this);
                                 const sourceFile = parseNode && getSourceFileOfNode(parseNode);
                                 text = sourceFile ? getSourceTextOfNodeFromSourceFile(sourceFile, parseNode, includeTrivia) : "";
-                                map?.set(this, text);
+                                weakNodeTextMap.set(this, text);
                             }
                             return text;
                         }

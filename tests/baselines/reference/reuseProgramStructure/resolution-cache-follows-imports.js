@@ -12,9 +12,12 @@ import {_} from 'b'
 var x = 1
 resolvedModules: 
 b: {
-  "resolvedFileName": "b.ts",
-  "extension": ".ts",
-  "isExternalLibraryImport": false
+  "resolvedModule": {
+    "resolvedFileName": "b.ts",
+    "extension": ".ts",
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
+  }
 }
 resolvedTypeReferenceDirectiveNames: undefined
 
@@ -39,9 +42,12 @@ import {_} from 'b'
 var x = 2
 resolvedModules: 
 b: {
-  "resolvedFileName": "b.ts",
-  "extension": ".ts",
-  "isExternalLibraryImport": false
+  "resolvedModule": {
+    "resolvedFileName": "b.ts",
+    "extension": ".ts",
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
+  }
 }
 resolvedTypeReferenceDirectiveNames: undefined
 
@@ -82,17 +88,31 @@ import x from 'b'
 var x = 2
 resolvedModules: 
 b: {
-  "resolvedFileName": "b.ts",
-  "extension": ".ts",
-  "isExternalLibraryImport": false
+  "resolvedModule": {
+    "resolvedFileName": "b.ts",
+    "extension": ".ts",
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
+  }
 }
-c: undefined
+c: {
+  "failedLookupLocations": [
+    "c.ts",
+    "c.tsx",
+    "c.d.ts",
+    "node_modules/@types/c/package.json",
+    "node_modules/@types/c.d.ts",
+    "node_modules/@types/c/index.d.ts",
+    "c.js",
+    "c.jsx"
+  ]
+}
 resolvedTypeReferenceDirectiveNames: undefined
 
 
 MissingPaths:: ["lib.d.ts"]
 
 a.ts(2,15): error TS2306: File 'b.ts' is not a module.
-a.ts(3,31): error TS2792: Cannot find module 'c'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+a.ts(3,31): error TS2792: Cannot find module 'c'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 
 

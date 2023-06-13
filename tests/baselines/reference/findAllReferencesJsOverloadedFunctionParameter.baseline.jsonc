@@ -1,0 +1,66 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/foo.js ===
+// --- (line: 6) skipped ---
+//  * @param {string} x
+//  * @returns {string} 
+//  *
+//  * @param {unknown} [|x|]
+//  * @returns {unknown} 
+//  */
+// function foo([|{| isWriteAccess: true, isDefinition: true |}x|]/*FIND ALL REFS*/) {
+//   return [|x|];
+// }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/foo.js ===
+  // --- (line: 9) skipped ---
+  //  * @param {unknown} x
+  //  * @returns {unknown} 
+  //  */
+  // function foo([|x|]/*FIND ALL REFS*/) {
+  //   return x;
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "parameter",
+    "name": "(parameter) x: unknown",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "parameter",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "unknown",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]

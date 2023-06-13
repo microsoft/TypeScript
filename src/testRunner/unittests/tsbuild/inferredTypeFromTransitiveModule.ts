@@ -1,10 +1,12 @@
 import * as vfs from "../../_namespaces/vfs";
 import {
+    verifyTsc,
+} from "../helpers/tsc";
+import {
     appendText,
     loadProjectFromDisk,
-    replaceText,
-    verifyTscWithEdits,
-} from "../tsc/helpers";
+    replaceText
+} from "../helpers/vfs";
 
 describe("unittests:: tsbuild:: inferredTypeFromTransitiveModule::", () => {
     let projFs: vfs.FileSystem;
@@ -15,24 +17,24 @@ describe("unittests:: tsbuild:: inferredTypeFromTransitiveModule::", () => {
         projFs = undefined!;
     });
 
-    verifyTscWithEdits({
+    verifyTsc({
         scenario: "inferredTypeFromTransitiveModule",
         subScenario: "inferred type from transitive module",
         fs: () => projFs,
         commandLineArgs: ["--b", "/src", "--verbose"],
         edits: [
             {
-                subScenario: "incremental-declaration-changes",
-                modifyFs: changeBarParam,
+                caption: "incremental-declaration-changes",
+                edit: changeBarParam,
             },
             {
-                subScenario: "incremental-declaration-changes",
-                modifyFs: changeBarParamBack,
+                caption: "incremental-declaration-changes",
+                edit: changeBarParamBack,
             },
         ],
     });
 
-    verifyTscWithEdits({
+    verifyTsc({
         subScenario: "inferred type from transitive module with isolatedModules",
         fs: () => projFs,
         scenario: "inferredTypeFromTransitiveModule",
@@ -40,17 +42,17 @@ describe("unittests:: tsbuild:: inferredTypeFromTransitiveModule::", () => {
         modifyFs: changeToIsolatedModules,
         edits: [
             {
-                subScenario: "incremental-declaration-changes",
-                modifyFs: changeBarParam
+                caption: "incremental-declaration-changes",
+                edit: changeBarParam
             },
             {
-                subScenario: "incremental-declaration-changes",
-                modifyFs: changeBarParamBack,
+                caption: "incremental-declaration-changes",
+                edit: changeBarParamBack,
             },
         ]
     });
 
-    verifyTscWithEdits({
+    verifyTsc({
         scenario: "inferredTypeFromTransitiveModule",
         subScenario: "reports errors in files affected by change in signature with isolatedModules",
         fs: () => projFs,
@@ -63,20 +65,20 @@ bar("hello");`);
         },
         edits: [
             {
-                subScenario: "incremental-declaration-changes",
-                modifyFs: changeBarParam
+                caption: "incremental-declaration-changes",
+                edit: changeBarParam
             },
             {
-                subScenario: "incremental-declaration-changes",
-                modifyFs: changeBarParamBack,
+                caption: "incremental-declaration-changes",
+                edit: changeBarParamBack,
             },
             {
-                subScenario: "incremental-declaration-changes",
-                modifyFs: changeBarParam
+                caption: "incremental-declaration-changes",
+                edit: changeBarParam
             },
             {
-                subScenario: "Fix Error",
-                modifyFs: fs => replaceText(fs, "/src/lazyIndex.ts", `bar("hello")`, "bar()")
+                caption: "Fix Error",
+                edit: fs => replaceText(fs, "/src/lazyIndex.ts", `bar("hello")`, "bar()")
             },
         ]
     });

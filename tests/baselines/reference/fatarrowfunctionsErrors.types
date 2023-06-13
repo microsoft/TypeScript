@@ -1,4 +1,6 @@
-=== tests/cases/compiler/fatarrowfunctionsErrors.ts ===
+//// [tests/cases/compiler/fatarrowfunctionsErrors.ts] ////
+
+=== fatarrowfunctionsErrors.ts ===
 foo((...Far:any[])=>{return 0;})
 >foo((...Far:any[])=>{return 0;}) : any
 >foo : any
@@ -43,8 +45,6 @@ false? (() => null): null;
 >false : false
 >(() => null) : () => any
 >() => null : () => any
->null : null
->null : null
 
 // missing fatarrow
 var x1 = () :void {};

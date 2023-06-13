@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/tsxReactEmit5.tsx] ////
+
+=== file.tsx ===
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {
@@ -7,11 +9,11 @@ declare module JSX {
 	}
 }
 
-=== tests/cases/conformance/jsx/test.d.ts ===
+=== test.d.ts ===
 export var React;
 >React : any
 
-=== tests/cases/conformance/jsx/react-consumer.tsx ===
+=== react-consumer.tsx ===
 import {React} from "./test";
 >React : any
 

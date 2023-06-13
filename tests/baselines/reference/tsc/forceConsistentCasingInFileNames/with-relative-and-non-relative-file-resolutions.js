@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -56,7 +57,7 @@ Output::
     File is included via import here.
 
 lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 src/project/node_modules/fp-ts/lib/Struct.d.ts
   Imported via "fp-ts/lib/Struct" from file 'src/project/src/struct.d.ts'
   Imported via "fp-ts/lib/struct" from file 'src/project/src/struct.d.ts'

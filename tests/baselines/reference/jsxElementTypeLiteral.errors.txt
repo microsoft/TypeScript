@@ -1,0 +1,37 @@
+jsxElementTypeLiteral.tsx(16,10): error TS2786: 'span' cannot be used as a JSX component.
+  Its type '"span"' is not a valid JSX element type.
+jsxElementTypeLiteral.tsx(20,9): error TS2339: Property 'ruhroh' does not exist on type 'JSX.IntrinsicElements'.
+jsxElementTypeLiteral.tsx(20,10): error TS2786: 'ruhroh' cannot be used as a JSX component.
+  Its type '"ruhroh"' is not a valid JSX element type.
+
+
+==== jsxElementTypeLiteral.tsx (3 errors) ====
+    /// <reference path="/.lib/react16.d.ts" />
+    import * as React from "react";
+    
+    declare global {
+      namespace JSX {
+        // This should only use keys of JSX.IntrinsicElements.
+        // Diverging here to illustrate different error messages.
+        type ElementType = "div";
+      }
+    }
+    
+    // should be fine - `ElementType` accepts `div`
+    let a = <div />;
+    
+    // should be an error - `ElementType` does not accept `span`
+    let b = <span />;
+             ~~~~
+!!! error TS2786: 'span' cannot be used as a JSX component.
+!!! error TS2786:   Its type '"span"' is not a valid JSX element type.
+    
+    // Should be an error.
+    // `ruhroh` is in neither `IntrinsicElements` nor `ElementType`
+    let c = <ruhroh />;
+            ~~~~~~~~~~
+!!! error TS2339: Property 'ruhroh' does not exist on type 'JSX.IntrinsicElements'.
+             ~~~~~~
+!!! error TS2786: 'ruhroh' cannot be used as a JSX component.
+!!! error TS2786:   Its type '"ruhroh"' is not a valid JSX element type.
+    

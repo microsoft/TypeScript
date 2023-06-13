@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/operationsAvailableOnPromisedType.ts] ////
+
 //// [operationsAvailableOnPromisedType.ts]
 async function fn(
     a: number,
@@ -114,14 +116,11 @@ function fn(a, b, c, d, e, f, g) {
                     if (!(c_1_1 = _e.sent(), _b = c_1_1.done, !_b)) return [3 /*break*/, 5];
                     _d = c_1_1.value;
                     _a = false;
-                    try {
-                        s = _d;
-                    }
-                    finally {
-                        _a = true;
-                    }
+                    s = _d;
                     _e.label = 4;
-                case 4: return [3 /*break*/, 2];
+                case 4:
+                    _a = true;
+                    return [3 /*break*/, 2];
                 case 5: return [3 /*break*/, 12];
                 case 6:
                     e_1_1 = _e.sent();
@@ -129,7 +128,7 @@ function fn(a, b, c, d, e, f, g) {
                     return [3 /*break*/, 12];
                 case 7:
                     _e.trys.push([7, , 10, 11]);
-                    if (!(!_a && !_b && (_c = c_1["return"]))) return [3 /*break*/, 9];
+                    if (!(!_a && !_b && (_c = c_1.return))) return [3 /*break*/, 9];
                     return [4 /*yield*/, _c.call(c_1)];
                 case 8:
                     _e.sent();

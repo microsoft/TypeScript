@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitAnyIndexingSuppressed.ts] ////
+
 //// [noImplicitAnyIndexingSuppressed.ts]
 enum MyEmusEnum {
     emu

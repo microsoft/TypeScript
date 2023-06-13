@@ -1,7 +1,7 @@
 import {
     ANONYMOUS,
     Debug,
-    DiagnosticAndArguments,
+    DiagnosticOrDiagnosticAndArguments,
     Diagnostics,
     emptyArray,
     factory,
@@ -30,7 +30,7 @@ registerCodeFix({
     errorCodes,
     getCodeActions: function getCodeActionsToFixImplicitThis(context) {
         const { sourceFile, program, span } = context;
-        let diagnostic: DiagnosticAndArguments | undefined;
+        let diagnostic: DiagnosticOrDiagnosticAndArguments | undefined;
         const changes = textChanges.ChangeTracker.with(context, t => {
             diagnostic = doChange(t, sourceFile, span.start, program.getTypeChecker());
         });
@@ -42,14 +42,14 @@ registerCodeFix({
     }),
 });
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number, checker: TypeChecker): DiagnosticAndArguments | undefined {
+function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number, checker: TypeChecker): DiagnosticOrDiagnosticAndArguments | undefined {
     const token = getTokenAtPosition(sourceFile, pos);
     if (!isThis(token)) return undefined;
 
-    const fn = getThisContainer(token, /*includeArrowFunctions*/ false);
+    const fn = getThisContainer(token, /*includeArrowFunctions*/ false, /*includeClassComputedPropertyName*/ false);
     if (!isFunctionDeclaration(fn) && !isFunctionExpression(fn)) return undefined;
 
-    if (!isSourceFile(getThisContainer(fn, /*includeArrowFunctions*/ false))) { // 'this' is defined outside, convert to arrow function
+    if (!isSourceFile(getThisContainer(fn, /*includeArrowFunctions*/ false, /*includeClassComputedPropertyName*/ false))) { // 'this' is defined outside, convert to arrow function
         const fnKeyword = Debug.checkDefined(findChildOfKind(fn, SyntaxKind.FunctionKeyword, sourceFile));
         const { name } = fn;
         const body = Debug.checkDefined(fn.body); // Should be defined because the function contained a 'this' expression

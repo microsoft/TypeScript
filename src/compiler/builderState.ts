@@ -2,7 +2,6 @@ import {
     arrayFrom,
     CancellationToken,
     computeSignatureWithDiagnostics,
-    createGetCanonicalFileName,
     CustomTransformers,
     Debug,
     EmitOutput,
@@ -10,6 +9,7 @@ import {
     ExportedModulesFromDeclarationEmit,
     GetCanonicalFileName,
     getDirectoryPath,
+    getIsolatedModules,
     getSourceFileOfNode,
     HostForComputeHash,
     isDeclarationFileName,
@@ -109,7 +109,7 @@ export namespace BuilderState {
     export interface ReadonlyManyToManyPathMap {
         getKeys(v: Path): ReadonlySet<Path> | undefined;
         getValues(k: Path): ReadonlySet<Path> | undefined;
-        keys(): Iterator<Path>;
+        keys(): IterableIterator<Path>;
     }
 
     export interface ManyToManyPathMap extends ReadonlyManyToManyPathMap {
@@ -233,7 +233,7 @@ export namespace BuilderState {
 
         // Handle type reference directives
         if (sourceFile.resolvedTypeReferenceDirectiveNames) {
-            sourceFile.resolvedTypeReferenceDirectiveNames.forEach((resolvedTypeReferenceDirective) => {
+            sourceFile.resolvedTypeReferenceDirectiveNames.forEach(({ resolvedTypeReferenceDirective }) => {
                 if (!resolvedTypeReferenceDirective) {
                     return;
                 }
@@ -295,7 +295,7 @@ export namespace BuilderState {
     /**
      * Creates the state of file references and signature for the new program from oldState if it is safe
      */
-    export function create(newProgram: Program, oldState?: Readonly<BuilderState>, disableUseFileVersionAsSignature?: boolean): BuilderState {
+    export function create(newProgram: Program, oldState: Readonly<BuilderState> | undefined, disableUseFileVersionAsSignature: boolean): BuilderState {
         const fileInfos = new Map<Path, FileInfo>();
         const options = newProgram.getCompilerOptions();
         const isOutFile = outFile(options);
@@ -303,7 +303,6 @@ export namespace BuilderState {
             createManyToManyPathMap() : undefined;
         const exportedModulesMap = referencedMap ? createManyToManyPathMap() : undefined;
         const useOldState = canReuseOldState(referencedMap, oldState);
-        const getCanonicalFileName = createGetCanonicalFileName(newProgram.useCaseSensitiveFileNames());
 
         // Ensure source files have parent pointers set
         newProgram.getTypeChecker();
@@ -316,7 +315,7 @@ export namespace BuilderState {
                 useOldState ? oldState!.fileInfos.get(sourceFile.resolvedPath)?.signature : undefined :
                 oldUncommittedSignature || undefined;
             if (referencedMap) {
-                const newReferences = getReferencedFiles(newProgram, sourceFile, getCanonicalFileName);
+                const newReferences = getReferencedFiles(newProgram, sourceFile, newProgram.getCanonicalFileName);
                 if (newReferences) {
                     referencedMap.set(sourceFile.resolvedPath, newReferences);
                 }
@@ -402,6 +401,32 @@ export namespace BuilderState {
         (state.hasCalledUpdateShapeSignature ||= new Set()).add(path);
     }
 
+    export function computeDtsSignature(
+        programOfThisState: Program,
+        sourceFile: SourceFile,
+        cancellationToken: CancellationToken | undefined,
+        host: HostForComputeHash,
+        onNewSignature: (signature: string, sourceFiles: readonly SourceFile[]) => void,
+    ) {
+        programOfThisState.emit(
+            sourceFile,
+            (fileName, text, _writeByteOrderMark, _onError, sourceFiles, data) => {
+                Debug.assert(isDeclarationFileName(fileName), `File extension for signature expected to be dts: Got:: ${fileName}`);
+                onNewSignature(computeSignatureWithDiagnostics(
+                    programOfThisState,
+                    sourceFile,
+                    text,
+                    host,
+                    data,
+                ), sourceFiles!);
+            },
+            cancellationToken,
+            /*emitOnly*/ true,
+            /*customTransformers*/ undefined,
+            /*forceDtsEmit*/ true
+        );
+    }
+
     /**
      * Returns if the shape of the signature has changed since last emit
      */
@@ -420,26 +445,12 @@ export namespace BuilderState {
         const prevSignature = info.signature;
         let latestSignature: string | undefined;
         if (!sourceFile.isDeclarationFile && !useFileVersionAsSignature) {
-            programOfThisState.emit(
-                sourceFile,
-                (fileName, text, _writeByteOrderMark, _onError, sourceFiles, data) => {
-                    Debug.assert(isDeclarationFileName(fileName), `File extension for signature expected to be dts: Got:: ${fileName}`);
-                    latestSignature = computeSignatureWithDiagnostics(
-                        programOfThisState,
-                        sourceFile,
-                        text,
-                        host,
-                        data,
-                    );
-                    if (latestSignature !== prevSignature) {
-                        updateExportedModules(state, sourceFile, sourceFiles![0].exportedModulesFromDeclarationEmit);
-                    }
-                },
-                cancellationToken,
-                /*emitOnlyDtsFiles*/ true,
-                /*customTransformers*/ undefined,
-                /*forceDtsEmit*/ true
-            );
+            computeDtsSignature(programOfThisState, sourceFile, cancellationToken, host, (signature, sourceFiles) => {
+                latestSignature = signature;
+                if (latestSignature !== prevSignature) {
+                    updateExportedModules(state, sourceFile, sourceFiles[0].exportedModulesFromDeclarationEmit);
+                }
+            });
         }
         // Default is to use file version as signature
         if (latestSignature === undefined) {
@@ -468,28 +479,23 @@ export namespace BuilderState {
     export function updateExportedModules(state: BuilderState, sourceFile: SourceFile, exportedModulesFromDeclarationEmit: ExportedModulesFromDeclarationEmit | undefined) {
         if (!state.exportedModulesMap) return;
         (state.oldExportedModulesMap ||= new Map()).set(sourceFile.resolvedPath, state.exportedModulesMap.getValues(sourceFile.resolvedPath) || false);
-        if (!exportedModulesFromDeclarationEmit) {
-            state.exportedModulesMap.deleteKey(sourceFile.resolvedPath);
-            return;
-        }
-
-        let exportedModules: Set<Path> | undefined;
-        exportedModulesFromDeclarationEmit.forEach(symbol => addExportedModule(getReferencedFilesFromImportedModuleSymbol(symbol)));
+        const exportedModules = getExportedModules(exportedModulesFromDeclarationEmit);
         if (exportedModules) {
             state.exportedModulesMap.set(sourceFile.resolvedPath, exportedModules);
         }
         else {
             state.exportedModulesMap.deleteKey(sourceFile.resolvedPath);
         }
+    }
 
-        function addExportedModule(exportedModulePaths: Path[] | undefined) {
-            if (exportedModulePaths?.length) {
-                if (!exportedModules) {
-                    exportedModules = new Set();
-                }
-                exportedModulePaths.forEach(path => exportedModules!.add(path));
-            }
-        }
+    export function getExportedModules(exportedModulesFromDeclarationEmit: ExportedModulesFromDeclarationEmit | undefined) {
+        let exportedModules: Set<Path> | undefined;
+        exportedModulesFromDeclarationEmit?.forEach(
+            symbol => getReferencedFilesFromImportedModuleSymbol(symbol).forEach(
+                path => (exportedModules ??= new Set()).add(path)
+            )
+        );
+        return exportedModules;
     }
 
     /**
@@ -516,9 +522,8 @@ export namespace BuilderState {
                 seenMap.add(path);
                 const references = state.referencedMap.getValues(path);
                 if (references) {
-                    const iterator = references.keys();
-                    for (let iterResult = iterator.next(); !iterResult.done; iterResult = iterator.next()) {
-                        queue.push(iterResult.value);
+                    for (const key of references.keys()) {
+                        queue.push(key);
                     }
                 }
             }
@@ -631,7 +636,7 @@ export namespace BuilderState {
         }
 
         const compilerOptions = programOfThisState.getCompilerOptions();
-        if (compilerOptions && (compilerOptions.isolatedModules || outFile(compilerOptions))) {
+        if (compilerOptions && (getIsolatedModules(compilerOptions) || outFile(compilerOptions))) {
             return [sourceFileWithUpdatedShape];
         }
 

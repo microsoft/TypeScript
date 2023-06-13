@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitInferredTypeAlias9.ts] ////
+
 //// [declarationEmitInferredTypeAlias9.ts]
 type Foo<T> = T | { x: Foo<T> };
 var x: Foo<number[]>;
@@ -8,7 +10,7 @@ export function returnSomeGlobalValue() {
 
 //// [declarationEmitInferredTypeAlias9.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.returnSomeGlobalValue = void 0;
 var x;
 function returnSomeGlobalValue() {

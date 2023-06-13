@@ -1,13 +1,14 @@
 import {
-    loadProjectFromDisk,
-    loadProjectFromFiles,
     noChangeOnlyRuns,
-    replaceText,
-    verifyTscWithEdits,
-} from "../tsc/helpers";
+    verifyTsc,
+} from "../helpers/tsc";
+import {
+    loadProjectFromDisk,
+    loadProjectFromFiles, replaceText
+} from "../helpers/vfs";
 
 describe("unittests:: tsbuild:: when containerOnly project is referenced", () => {
-    verifyTscWithEdits({
+    verifyTsc({
         scenario: "containerOnlyReferenced",
         subScenario: "verify that subsequent builds after initial build doesnt build anything",
         fs: () => loadProjectFromDisk("tests/projects/containerOnlyReferenced"),
@@ -15,7 +16,7 @@ describe("unittests:: tsbuild:: when containerOnly project is referenced", () =>
         edits: noChangeOnlyRuns
     });
 
-    verifyTscWithEdits({
+    verifyTsc({
         scenario: "containerOnlyReferenced",
         subScenario: "when solution is referenced indirectly",
         fs: () => loadProjectFromFiles({
@@ -41,8 +42,8 @@ describe("unittests:: tsbuild:: when containerOnly project is referenced", () =>
         }),
         commandLineArgs: ["--b", "/src/project4", "--verbose", "--explainFiles"],
         edits: [{
-            subScenario: "modify project3 file",
-            modifyFs: fs => replaceText(fs, "/src/project3/src/c.ts", "c = ", "cc = "),
+            caption: "modify project3 file",
+            edit: fs => replaceText(fs, "/src/project3/src/c.ts", "c = ", "cc = "),
         }],
     });
 });

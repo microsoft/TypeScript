@@ -1,0 +1,176 @@
+//// [tests/cases/compiler/narrowByInstanceof.ts] ////
+
+=== narrowByInstanceof.ts ===
+interface A { a: string }
+>A : Symbol(A, Decl(narrowByInstanceof.ts, 0, 0))
+>a : Symbol(A.a, Decl(narrowByInstanceof.ts, 0, 13))
+
+interface B { b: string }
+>B : Symbol(B, Decl(narrowByInstanceof.ts, 0, 25))
+>b : Symbol(B.b, Decl(narrowByInstanceof.ts, 1, 13))
+
+interface C { c: string }
+>C : Symbol(C, Decl(narrowByInstanceof.ts, 1, 25))
+>c : Symbol(C.c, Decl(narrowByInstanceof.ts, 2, 13))
+
+type AA = {
+>AA : Symbol(AA, Decl(narrowByInstanceof.ts, 2, 25))
+
+    (): void;
+    prototype: A;
+>prototype : Symbol(prototype, Decl(narrowByInstanceof.ts, 5, 13))
+>A : Symbol(A, Decl(narrowByInstanceof.ts, 0, 0))
+}
+
+type BB = {
+>BB : Symbol(BB, Decl(narrowByInstanceof.ts, 7, 1))
+
+    new(): B;
+>B : Symbol(B, Decl(narrowByInstanceof.ts, 0, 25))
+}
+
+function foo(x: A | B | C, A: AA, B: BB, AB: AA | BB) {
+>foo : Symbol(foo, Decl(narrowByInstanceof.ts, 11, 1))
+>x : Symbol(x, Decl(narrowByInstanceof.ts, 13, 13))
+>A : Symbol(A, Decl(narrowByInstanceof.ts, 0, 0))
+>B : Symbol(B, Decl(narrowByInstanceof.ts, 0, 25))
+>C : Symbol(C, Decl(narrowByInstanceof.ts, 1, 25))
+>A : Symbol(A, Decl(narrowByInstanceof.ts, 13, 26))
+>AA : Symbol(AA, Decl(narrowByInstanceof.ts, 2, 25))
+>B : Symbol(B, Decl(narrowByInstanceof.ts, 13, 33))
+>BB : Symbol(BB, Decl(narrowByInstanceof.ts, 7, 1))
+>AB : Symbol(AB, Decl(narrowByInstanceof.ts, 13, 40))
+>AA : Symbol(AA, Decl(narrowByInstanceof.ts, 2, 25))
+>BB : Symbol(BB, Decl(narrowByInstanceof.ts, 7, 1))
+
+    if (x instanceof A) {
+>x : Symbol(x, Decl(narrowByInstanceof.ts, 13, 13))
+>A : Symbol(A, Decl(narrowByInstanceof.ts, 13, 26))
+
+        x;  // A
+>x : Symbol(x, Decl(narrowByInstanceof.ts, 13, 13))
+    }
+    else {
+        x;  // B | C
+>x : Symbol(x, Decl(narrowByInstanceof.ts, 13, 13))
+    }
+    if (x instanceof B) {
+>x : Symbol(x, Decl(narrowByInstanceof.ts, 13, 13))
+>B : Symbol(B, Decl(narrowByInstanceof.ts, 13, 33))
+
+        x;  // B
+>x : Symbol(x, Decl(narrowByInstanceof.ts, 13, 13))
+    }
+    else {
+        x;  // A | C
+>x : Symbol(x, Decl(narrowByInstanceof.ts, 13, 13))
+    }
+    if (x instanceof AB) {
+>x : Symbol(x, Decl(narrowByInstanceof.ts, 13, 13))
+>AB : Symbol(AB, Decl(narrowByInstanceof.ts, 13, 40))
+
+        x;  // A | B
+>x : Symbol(x, Decl(narrowByInstanceof.ts, 13, 13))
+    }
+    else {
+        x;  // A | B | C
+>x : Symbol(x, Decl(narrowByInstanceof.ts, 13, 13))
+    }
+}
+
+function bar(target: any, Promise: any) {
+>bar : Symbol(bar, Decl(narrowByInstanceof.ts, 32, 1))
+>target : Symbol(target, Decl(narrowByInstanceof.ts, 34, 13))
+>Promise : Symbol(Promise, Decl(narrowByInstanceof.ts, 34, 25))
+
+    if (target instanceof Promise) {
+>target : Symbol(target, Decl(narrowByInstanceof.ts, 34, 13))
+>Promise : Symbol(Promise, Decl(narrowByInstanceof.ts, 34, 25))
+
+        target.__then();
+>target : Symbol(target, Decl(narrowByInstanceof.ts, 34, 13))
+    }
+}
+
+// Repro from #52571
+
+class PersonMixin extends Function {
+>PersonMixin : Symbol(PersonMixin, Decl(narrowByInstanceof.ts, 38, 1))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    public check(o: any) {
+>check : Symbol(PersonMixin.check, Decl(narrowByInstanceof.ts, 42, 36))
+>o : Symbol(o, Decl(narrowByInstanceof.ts, 43, 17))
+
+        return typeof o === "object" && o !== null && o instanceof Person;
+>o : Symbol(o, Decl(narrowByInstanceof.ts, 43, 17))
+>o : Symbol(o, Decl(narrowByInstanceof.ts, 43, 17))
+>o : Symbol(o, Decl(narrowByInstanceof.ts, 43, 17))
+>Person : Symbol(Person, Decl(narrowByInstanceof.ts, 48, 30))
+    }    
+}
+
+const cls = new PersonMixin();
+>cls : Symbol(cls, Decl(narrowByInstanceof.ts, 48, 5))
+>PersonMixin : Symbol(PersonMixin, Decl(narrowByInstanceof.ts, 38, 1))
+
+class Person {
+>Person : Symbol(Person, Decl(narrowByInstanceof.ts, 48, 30))
+
+    work(): void { console.log("work") }
+>work : Symbol(Person.work, Decl(narrowByInstanceof.ts, 50, 14))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+    sayHi(): void { console.log("Hi") }
+>sayHi : Symbol(Person.sayHi, Decl(narrowByInstanceof.ts, 51, 40))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+}
+
+class Car {
+>Car : Symbol(Car, Decl(narrowByInstanceof.ts, 53, 1))
+
+    sayHi(): void { console.log("Wof Wof") }
+>sayHi : Symbol(Car.sayHi, Decl(narrowByInstanceof.ts, 55, 11))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+}
+
+function test(o: Person | Car) {
+>test : Symbol(test, Decl(narrowByInstanceof.ts, 57, 1))
+>o : Symbol(o, Decl(narrowByInstanceof.ts, 59, 14))
+>Person : Symbol(Person, Decl(narrowByInstanceof.ts, 48, 30))
+>Car : Symbol(Car, Decl(narrowByInstanceof.ts, 53, 1))
+
+    if (o instanceof cls) {
+>o : Symbol(o, Decl(narrowByInstanceof.ts, 59, 14))
+>cls : Symbol(cls, Decl(narrowByInstanceof.ts, 48, 5))
+
+        console.log("Is Person");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+        (o as Person).work()
+>(o as Person).work : Symbol(Person.work, Decl(narrowByInstanceof.ts, 50, 14))
+>o : Symbol(o, Decl(narrowByInstanceof.ts, 59, 14))
+>Person : Symbol(Person, Decl(narrowByInstanceof.ts, 48, 30))
+>work : Symbol(Person.work, Decl(narrowByInstanceof.ts, 50, 14))
+    }
+    else {
+        console.log("Is Car")
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+        o.sayHi();
+>o.sayHi : Symbol(sayHi, Decl(narrowByInstanceof.ts, 51, 40), Decl(narrowByInstanceof.ts, 55, 11))
+>o : Symbol(o, Decl(narrowByInstanceof.ts, 59, 14))
+>sayHi : Symbol(sayHi, Decl(narrowByInstanceof.ts, 51, 40), Decl(narrowByInstanceof.ts, 55, 11))
+    }
+}
+

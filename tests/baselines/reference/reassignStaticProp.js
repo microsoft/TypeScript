@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reassignStaticProp.ts] ////
+
 //// [reassignStaticProp.ts]
 class foo {
  

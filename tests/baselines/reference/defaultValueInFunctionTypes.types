@@ -1,4 +1,6 @@
-=== tests/cases/compiler/defaultValueInFunctionTypes.ts ===
+//// [tests/cases/compiler/defaultValueInFunctionTypes.ts] ////
+
+=== defaultValueInFunctionTypes.ts ===
 var x: (a: number = 1) => number;
 >x : (a?: number) => number
 >a : number

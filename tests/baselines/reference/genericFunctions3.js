@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericFunctions3.ts] ////
+
 //// [genericFunctions3.ts]
 interface Query<T> {
     foo(x: string): Query<T[]>;

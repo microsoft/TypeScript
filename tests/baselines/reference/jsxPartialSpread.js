@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxPartialSpread.tsx] ////
+
 //// [jsxPartialSpread.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 const Select = (p: {value?: unknown}) => <p></p>;
@@ -14,7 +16,7 @@ export function Repro({ SelectProps = {} }: { SelectProps?: Partial<Parameters<t
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Repro = void 0;
 /// <reference path="react16.d.ts" />
 var Select = function (p) { return <p></p>; };

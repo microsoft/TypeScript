@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitNoNonRequiredParens.ts ===
+//// [tests/cases/compiler/declarationEmitNoNonRequiredParens.ts] ////
+
+=== declarationEmitNoNonRequiredParens.ts ===
 export enum Test {
 >Test : Symbol(Test, Decl(declarationEmitNoNonRequiredParens.ts, 0, 0))
 

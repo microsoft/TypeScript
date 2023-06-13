@@ -1,20 +1,20 @@
-tests/cases/conformance/decorators/decoratorMetadata-jsdoc.ts(5,9): error TS8020: JSDoc types can only be used inside documentation comments.
-tests/cases/conformance/decorators/decoratorMetadata-jsdoc.ts(7,9): error TS8020: JSDoc types can only be used inside documentation comments.
-tests/cases/conformance/decorators/decoratorMetadata-jsdoc.ts(9,9): error TS8020: JSDoc types can only be used inside documentation comments.
+decoratorMetadata-jsdoc.ts(5,9): error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string'?
+decoratorMetadata-jsdoc.ts(7,9): error TS17019: '!' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string'?
+decoratorMetadata-jsdoc.ts(9,9): error TS8020: JSDoc types can only be used inside documentation comments.
 
 
-==== tests/cases/conformance/decorators/decoratorMetadata-jsdoc.ts (3 errors) ====
+==== decoratorMetadata-jsdoc.ts (3 errors) ====
     declare var decorator: any;
     
     class X {
         @decorator()
         a?: string?;
             ~~~~~~~
-!!! error TS8020: JSDoc types can only be used inside documentation comments.
+!!! error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string'?
         @decorator()
         b?: string!;
             ~~~~~~~
-!!! error TS8020: JSDoc types can only be used inside documentation comments.
+!!! error TS17019: '!' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string'?
         @decorator()
         c?: *;
             ~

@@ -24,11 +24,9 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/root/folder1/file1.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
-  },
-  "failedLookupLocations": [],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
+  }
 }
 
 Resolving "folder1/file2" from /root/folder1/main.ts
@@ -36,7 +34,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/root/generated/folder1/file2.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/root/folder1/file2.ts",
@@ -46,9 +45,7 @@ Resolution:: {
     "/root/folder1/file2/index.ts",
     "/root/folder1/file2/index.tsx",
     "/root/folder1/file2/index.d.ts"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "/rooted/folder1/file2" from /root/folder1/main.ts
@@ -56,11 +53,9 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/root/generated/folder1/file2.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
-  },
-  "failedLookupLocations": [],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
+  }
 }
 
 Resolving "folder2/file3" from /root/folder1/main.ts
@@ -68,7 +63,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/root/generated/folder2/file3/index.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/root/folder2/file3.ts",
@@ -84,9 +80,7 @@ Resolution:: {
     "/root/generated/folder2/file3/package.json",
     "/root/generated/folder2/file3/index.ts",
     "/root/generated/folder2/file3/index.tsx"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "folder2/file4" from /root/folder1/main.ts
@@ -94,7 +88,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/root/generated/folder2/file4/dist/types.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/root/folder2/file4.ts",
@@ -110,8 +105,7 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/root/generated/folder2/file4/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "somefolder/file5" from /root/folder1/main.ts
@@ -119,7 +113,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/root/someanotherfolder/file5/index.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/root/someanotherfolder/file5.ts",
@@ -128,9 +123,7 @@ Resolution:: {
     "/root/someanotherfolder/file5/package.json",
     "/root/someanotherfolder/file5/index.ts",
     "/root/someanotherfolder/file5/index.tsx"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "file6" from /root/folder1/main.ts
@@ -138,7 +131,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/root/node_modules/file6.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": true
+    "isExternalLibraryImport": true,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/root/file6.ts",
@@ -166,9 +160,7 @@ Resolution:: {
     "/root/folder1/node_modules/@types/file6.d.ts",
     "/root/folder1/node_modules/@types/file6/index.d.ts",
     "/root/node_modules/file6/package.json"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }
 
 //// [/root/folder1/file1.ts]
@@ -197,11 +189,9 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/root/folder1/file1.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
-  },
-  "failedLookupLocations": [],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
+  }
 }
 
 Resolving "folder1/file2" from /root/folder1/main.ts with host that doesnt have directoryExists
@@ -209,7 +199,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/root/generated/folder1/file2.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/root/folder1/file2.ts",
@@ -219,9 +210,7 @@ Resolution:: {
     "/root/folder1/file2/index.ts",
     "/root/folder1/file2/index.tsx",
     "/root/folder1/file2/index.d.ts"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "/rooted/folder1/file2" from /root/folder1/main.ts with host that doesnt have directoryExists
@@ -229,11 +218,9 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/root/generated/folder1/file2.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
-  },
-  "failedLookupLocations": [],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
+  }
 }
 
 Resolving "folder2/file3" from /root/folder1/main.ts with host that doesnt have directoryExists
@@ -241,7 +228,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/root/generated/folder2/file3/index.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/root/folder2/file3.ts",
@@ -257,9 +245,7 @@ Resolution:: {
     "/root/generated/folder2/file3/package.json",
     "/root/generated/folder2/file3/index.ts",
     "/root/generated/folder2/file3/index.tsx"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "folder2/file4" from /root/folder1/main.ts with host that doesnt have directoryExists
@@ -267,7 +253,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/root/generated/folder2/file4/dist/types.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/root/folder2/file4.ts",
@@ -283,8 +270,7 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/root/generated/folder2/file4/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "somefolder/file5" from /root/folder1/main.ts with host that doesnt have directoryExists
@@ -292,7 +278,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/root/someanotherfolder/file5/index.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/root/someanotherfolder/file5.ts",
@@ -301,9 +288,7 @@ Resolution:: {
     "/root/someanotherfolder/file5/package.json",
     "/root/someanotherfolder/file5/index.ts",
     "/root/someanotherfolder/file5/index.tsx"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "file6" from /root/folder1/main.ts with host that doesnt have directoryExists
@@ -311,7 +296,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/root/node_modules/file6.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": true
+    "isExternalLibraryImport": true,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/root/file6.ts",
@@ -339,7 +325,5 @@ Resolution:: {
     "/root/folder1/node_modules/@types/file6.d.ts",
     "/root/folder1/node_modules/@types/file6/index.d.ts",
     "/root/node_modules/file6/package.json"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }

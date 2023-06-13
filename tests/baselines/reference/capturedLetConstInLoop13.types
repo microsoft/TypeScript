@@ -1,4 +1,6 @@
-=== tests/cases/compiler/capturedLetConstInLoop13.ts ===
+//// [tests/cases/compiler/capturedLetConstInLoop13.ts] ////
+
+=== capturedLetConstInLoop13.ts ===
 class Main {
 >Main : Main
 

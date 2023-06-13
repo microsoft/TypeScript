@@ -5,7 +5,7 @@ sourceRoot:
 sources: ES5For-of36.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/conformance/statements/for-ofStatements/ES5For-of36.js
+emittedFile:ES5For-of36.js
 sourceFile:ES5For-of36.ts
 -------------------------------------------------------------------
 >>>var __values = (this && this.__values) || function(o) {
@@ -170,7 +170,7 @@ sourceFile:ES5For-of36.ts
 >>>catch (e_1_1) { e_1 = { error: e_1_1 }; }
 >>>finally {
 >>>    try {
->>>        if (_c && !_c.done && (_a = _b["return"])) _a.call(_b);
+>>>        if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
 >>>    }
 >>>    finally { if (e_1) throw e_1.error; }
 >>>}

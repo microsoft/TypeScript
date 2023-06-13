@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericLambaArgWithoutTypeArguments.ts ===
+//// [tests/cases/compiler/genericLambaArgWithoutTypeArguments.ts] ////
+
+=== genericLambaArgWithoutTypeArguments.ts ===
 interface Foo<T> {
    x: T;
 >x : T
@@ -8,7 +10,6 @@ function foo(a) {
 >a : any
 
    return null;
->null : null
 }
 foo((arg: Foo) => { return arg.x; });
 >foo((arg: Foo) => { return arg.x; }) : any

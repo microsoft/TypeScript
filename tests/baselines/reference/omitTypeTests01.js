@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/omitTypeTests01.ts] ////
+
 //// [omitTypeTests01.ts]
 interface Foo {
     a: string;
@@ -20,7 +22,7 @@ export function getBazA(baz: Baz) {
 
 //// [omitTypeTests01.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.getBazA = exports.getBarA = void 0;
 function getBarA(bar) {
     return bar.a;

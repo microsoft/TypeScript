@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/moduleFile1.ts]
 export function Foo() { };
@@ -36,12 +37,7 @@ Output::
 >> Screen clear
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
-[96ma/b/globalFile3.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS1208: [0m'globalFile3.ts' cannot be compiled under '--isolatedModules' because it is considered a global script file. Add an import, export, or an empty 'export {}' statement to make it a module.
-
-[7m1[0m interface GlobalFoo { age: number }
-[7m [0m [91m~~~~~~~~~[0m
-
-[[90m12:00:34 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:34 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -72,35 +68,31 @@ Shape signatures in builder refreshed for::
 /a/b/globalfile3.ts (used version)
 /a/b/modulefile2.ts (used version)
 
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches::
-/a/b/tsconfig.json:
+/a/b/file1consumer1.ts: *new*
   {}
-/a/b/file1consumer1.ts:
+/a/b/file1consumer2.ts: *new*
   {}
-/a/b/modulefile1.ts:
+/a/b/globalfile3.ts: *new*
   {}
-/a/b/file1consumer2.ts:
+/a/b/modulefile1.ts: *new*
   {}
-/a/b/globalfile3.ts:
+/a/b/modulefile2.ts: *new*
   {}
-/a/b/modulefile2.ts:
+/a/b/tsconfig.json: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a/b:
+/a/b: *new*
   {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/moduleFile1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
 function Foo() { }
 exports.Foo = Foo;
@@ -109,14 +101,14 @@ exports.Foo = Foo;
 
 //// [/a/b/file1Consumer1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = void 0;
 exports.y = 10;
 
 
 //// [/a/b/file1Consumer2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var z = 10;
 
 
@@ -125,7 +117,7 @@ var z = 10;
 
 //// [/a/b/moduleFile2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo4 = void 0;
 exports.Foo4 = 10;
 
@@ -138,16 +130,14 @@ Input::
 export var T: number;export function Foo() { };
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:38 AM[0m] File change detected. Starting incremental compilation...
 
-[96ma/b/globalFile3.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS1208: [0m'globalFile3.ts' cannot be compiled under '--isolatedModules' because it is considered a global script file. Add an import, export, or an empty 'export {}' statement to make it a module.
-
-[7m1[0m interface GlobalFoo { age: number }
-[7m [0m [91m~~~~~~~~~[0m
-
-[[90m12:00:42 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:42 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -172,35 +162,11 @@ Shape signatures in builder refreshed for::
 /a/b/file1consumer2.ts (used version)
 /a/b/file1consumer1.ts (used version)
 
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/file1consumer1.ts:
-  {}
-/a/b/modulefile1.ts:
-  {}
-/a/b/file1consumer2.ts:
-  {}
-/a/b/globalfile3.ts:
-  {}
-/a/b/modulefile2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/moduleFile1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = exports.T = void 0;
 function Foo() { }
 exports.Foo = Foo;

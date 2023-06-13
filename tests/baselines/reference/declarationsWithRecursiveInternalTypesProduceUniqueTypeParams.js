@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts] ////
+
 //// [declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts]
 // Note that both of the following have an `any` in their return type from where we bottom out the type printout
 // for having too many instances of the same symbol nesting.
@@ -55,7 +57,7 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.testRecFun = exports.updateIfChanged = void 0;
 var updateIfChanged = function (t) {
     var reduce = function (u, update) {

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/returnTypeInferenceNotTooBroad.ts] ////
+
 //// [returnTypeInferenceNotTooBroad.ts]
 type Signs = { kind: 'a'; a: 3; } | { kind: 'b'; b: 2; } | { kind: 'c'; c: 1; };
 interface Opts<T> {
@@ -16,7 +18,7 @@ export const yone = unwrap(sepsis({ low: 1, sign: { kind: 'a', a: 3 }}));
 
 //// [returnTypeInferenceNotTooBroad.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.yone = exports.yun = exports.y = void 0;
 exports.y = sepsis({ low: 1, sign: { kind: 'a', a: 3 } });
 // $ExpectType { kind: "a"; a: 3; }

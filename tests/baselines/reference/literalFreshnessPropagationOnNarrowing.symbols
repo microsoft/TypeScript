@@ -1,4 +1,6 @@
-=== tests/cases/compiler/literalFreshnessPropagationOnNarrowing.ts ===
+//// [tests/cases/compiler/literalFreshnessPropagationOnNarrowing.ts] ////
+
+=== literalFreshnessPropagationOnNarrowing.ts ===
 function f1() {
 >f1 : Symbol(f1, Decl(literalFreshnessPropagationOnNarrowing.ts, 0, 0))
 

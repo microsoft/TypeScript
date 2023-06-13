@@ -5,9 +5,12 @@ File: /a.ts
 import * as a from "a";a;
 resolvedModules: 
 a: {
-  "resolvedFileName": "/a.ts",
-  "extension": ".ts",
-  "isExternalLibraryImport": false
+  "resolvedModule": {
+    "resolvedFileName": "/a.ts",
+    "extension": ".ts",
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
+  }
 }
 resolvedTypeReferenceDirectiveNames: undefined
 
@@ -25,9 +28,12 @@ File: /a.ts
 import * as a from "a";a;
 resolvedModules: 
 a: {
-  "resolvedFileName": "/a.ts",
-  "extension": ".ts",
-  "isExternalLibraryImport": false
+  "resolvedModule": {
+    "resolvedFileName": "/a.ts",
+    "extension": ".ts",
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
+  }
 }
 resolvedTypeReferenceDirectiveNames: undefined
 

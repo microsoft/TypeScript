@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/asyncImportNestedYield.ts] ////
+
 //// [asyncImportNestedYield.ts]
 async function* foo() {
     import((await import(yield "foo")).default);
@@ -51,7 +53,7 @@ function foo() {
                 case 1: return [4 /*yield*/, _a.sent()];
                 case 2: return [4 /*yield*/, __await.apply(void 0, [Promise.resolve("".concat(_a.sent())).then(function (s) { return require(s); })])];
                 case 3:
-                    Promise.resolve("".concat((_a.sent())["default"])).then(function (s) { return require(s); });
+                    Promise.resolve("".concat((_a.sent()).default)).then(function (s) { return require(s); });
                     return [2 /*return*/];
             }
         });

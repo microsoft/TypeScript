@@ -1,0 +1,53 @@
+//// [tests/cases/compiler/parseInvalidNonNullableTypes.ts] ////
+
+=== parseInvalidNonNullableTypes.ts ===
+function f1(a: string): a is string! {
+>f1 : Symbol(f1, Decl(parseInvalidNonNullableTypes.ts, 0, 0))
+>a : Symbol(a, Decl(parseInvalidNonNullableTypes.ts, 0, 12))
+>a : Symbol(a, Decl(parseInvalidNonNullableTypes.ts, 0, 12))
+
+    return true;
+}
+
+function f2(a: string): a is !string {
+>f2 : Symbol(f2, Decl(parseInvalidNonNullableTypes.ts, 2, 1))
+>a : Symbol(a, Decl(parseInvalidNonNullableTypes.ts, 4, 12))
+>a : Symbol(a, Decl(parseInvalidNonNullableTypes.ts, 4, 12))
+
+    return true;
+}
+
+function f3(a: string!) {}
+>f3 : Symbol(f3, Decl(parseInvalidNonNullableTypes.ts, 6, 1))
+>a : Symbol(a, Decl(parseInvalidNonNullableTypes.ts, 8, 12))
+
+function f4(a: number!) {}
+>f4 : Symbol(f4, Decl(parseInvalidNonNullableTypes.ts, 8, 26))
+>a : Symbol(a, Decl(parseInvalidNonNullableTypes.ts, 9, 12))
+
+function f5(a: !string) {}
+>f5 : Symbol(f5, Decl(parseInvalidNonNullableTypes.ts, 9, 26))
+>a : Symbol(a, Decl(parseInvalidNonNullableTypes.ts, 11, 12))
+
+function f6(a: !number) {}
+>f6 : Symbol(f6, Decl(parseInvalidNonNullableTypes.ts, 11, 26))
+>a : Symbol(a, Decl(parseInvalidNonNullableTypes.ts, 12, 12))
+
+function f7(): string! {}
+>f7 : Symbol(f7, Decl(parseInvalidNonNullableTypes.ts, 12, 26))
+
+function f8(): !string {}
+>f8 : Symbol(f8, Decl(parseInvalidNonNullableTypes.ts, 14, 25))
+
+const a = 1 as any!;
+>a : Symbol(a, Decl(parseInvalidNonNullableTypes.ts, 17, 5))
+
+const b: number! = 1;
+>b : Symbol(b, Decl(parseInvalidNonNullableTypes.ts, 18, 5))
+
+const c = 1 as !any;
+>c : Symbol(c, Decl(parseInvalidNonNullableTypes.ts, 20, 5))
+
+const d: !number = 1;
+>d : Symbol(d, Decl(parseInvalidNonNullableTypes.ts, 21, 5))
+

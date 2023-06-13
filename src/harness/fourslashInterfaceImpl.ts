@@ -97,10 +97,6 @@ export class GoTo {
         this.state.goToEOF();
     }
 
-    public implementation() {
-        this.state.goToImplementation();
-    }
-
     public position(positionOrLineAndCharacter: number | ts.LineAndCharacter, fileNameOrIndex?: string | number): void {
         if (fileNameOrIndex !== undefined) {
             this.file(fileNameOrIndex);
@@ -133,7 +129,7 @@ export class VerifyNegatable {
 
     constructor(protected state: FourSlash.TestState, private negative = false) {
         if (!negative) {
-            this.not = new VerifyNegatable(state, true);
+            this.not = new VerifyNegatable(state, /*negative*/ true);
         }
     }
 
@@ -173,20 +169,20 @@ export class VerifyNegatable {
         this.state.verifyQuickInfoExists(this.negative);
     }
 
-    public typeDefinitionCountIs(expectedCount: number) {
-        this.state.verifyTypeDefinitionsCount(this.negative, expectedCount);
-    }
-
-    public implementationListIsEmpty() {
-        this.state.verifyImplementationListIsEmpty(this.negative);
-    }
-
     public isValidBraceCompletionAtPosition(openingBrace: string) {
         this.state.verifyBraceCompletionAtPosition(this.negative, openingBrace);
     }
 
     public jsxClosingTag(map: { [markerName: string]: ts.JsxClosingTagInfo | undefined }): void {
         this.state.verifyJsxClosingTag(map);
+    }
+
+    public linkedEditing(map: { [markerName: string]: ts.LinkedEditingInfo | undefined }): void {
+        this.state.verifyLinkedEditingRange(map);
+    }
+
+    public baselineLinkedEditing(): void {
+        this.state.baselineLinkedEditing();
     }
 
     public isInCommentAtPosition(onlyMultiLineDiverges?: boolean) {
@@ -252,9 +248,17 @@ export class Verify extends VerifyNegatable {
     }
 
     public completions(...optionsArray: VerifyCompletionsOptions[]) {
+        if (optionsArray.length === 1) {
+            return this.state.verifyCompletions(optionsArray[0]);
+        }
         for (const options of optionsArray) {
             this.state.verifyCompletions(options);
         }
+        return {
+            andApplyCodeAction: () => {
+                throw new Error("Cannot call andApplyCodeAction on multiple completions requests");
+            },
+        };
     }
 
     public getInlayHints(expected: readonly VerifyInlayHintsOptions[], span: ts.TextSpan, preference?: ts.UserPreferences) {
@@ -310,34 +314,6 @@ export class Verify extends VerifyNegatable {
         this.state.verifyFormatDocumentChangesNothing();
     }
 
-    public goToDefinitionIs(endMarkers: ArrayOrSingle<string>) {
-        this.state.verifyGoToDefinitionIs(endMarkers);
-    }
-
-    public goToDefinition(startMarkerName: ArrayOrSingle<string>, endMarkerName: ArrayOrSingle<string>, range?: FourSlash.Range): void;
-    public goToDefinition(startsAndEnds: [ArrayOrSingle<string>, ArrayOrSingle<string>][] | { [startMarkerName: string]: ArrayOrSingle<string> }): void;
-    public goToDefinition(arg0: any, endMarkerName?: ArrayOrSingle<string>) {
-        this.state.verifyGoToDefinition(arg0, endMarkerName);
-    }
-
-    public goToType(startMarkerName: ArrayOrSingle<string>, endMarkerName: ArrayOrSingle<string>): void;
-    public goToType(startsAndEnds: [ArrayOrSingle<string>, ArrayOrSingle<string>][] | { [startMarkerName: string]: ArrayOrSingle<string> }): void;
-    public goToType(arg0: any, endMarkerName?: ArrayOrSingle<string>) {
-        this.state.verifyGoToType(arg0, endMarkerName);
-    }
-
-    public goToSourceDefinition(startMarkerNames: ArrayOrSingle<string>, end: { file: string } | ArrayOrSingle<string>) {
-        this.state.verifyGoToSourceDefinition(startMarkerNames, end);
-    }
-
-    public goToDefinitionForMarkers(...markerNames: string[]) {
-        this.state.verifyGoToDefinitionForMarkers(markerNames);
-    }
-
-    public goToDefinitionName(name: string, containerName: string) {
-        this.state.verifyGoToDefinitionName(name, containerName);
-    }
-
     public verifyGetEmitOutputForCurrentFile(expected: string): void {
         this.state.verifyGetEmitOutputForCurrentFile(expected);
     }
@@ -354,20 +330,72 @@ export class Verify extends VerifyNegatable {
         this.state.verifyTypeOfSymbolAtLocation(range, symbol, expected);
     }
 
-    public baselineFindAllReferences(...markerNames: string[]) {
-        this.state.verifyBaselineFindAllReferences(...markerNames);
+    public typeAtLocation(range: FourSlash.Range, expected: string) {
+        this.state.verifyTypeAtLocation(range, expected);
     }
 
-    public baselineFindAllReferencesMulti(seq: number, ...markerNames: string[]) {
-        this.state.verifyBaselineFindAllReferencesMulti(seq, ...markerNames);
+    public baselineCommands(...commands: BaselineCommand[]) {
+        this.state.verifyBaselineCommands(...commands);
     }
 
-    public baselineGetFileReferences(fileName: string) {
-        this.state.verifyBaselineGetFileReferences(fileName);
+    public baselineFindAllReferences(...markerOrRange: FourSlash.MarkerOrNameOrRange[]) {
+        this.state.verifyBaselineCommands({ type: "findAllReferences", markerOrRange });
     }
 
-    public findReferencesDefinitionDisplayPartsAtCaretAre(expected: ts.SymbolDisplayPart[]) {
-        this.state.verifyDisplayPartsOfReferencedSymbol(expected);
+    public baselineFindAllReferencesAtRangesWithText(...rangeText: string[]) {
+        this.state.verifyBaselineCommands({ type: "findAllReferences", rangeText });
+    }
+
+    public baselineGetFileReferences(...fileName: string[]) {
+        this.state.verifyBaselineCommands({ type: "getFileReferences", fileName });
+    }
+
+    public baselineGoToDefinition(...markerOrRange: FourSlash.MarkerOrNameOrRange[]) {
+        this.state.verifyBaselineCommands({ type: "goToDefinition", markerOrRange });
+    }
+
+    public baselineGoToDefinitionAtRangesWithText(...rangeText: string[]) {
+        this.state.verifyBaselineCommands({ type: "goToDefinition", rangeText });
+    }
+
+    public baselineGetDefinitionAtPosition(...markerOrRange: FourSlash.MarkerOrNameOrRange[]) {
+        this.state.verifyBaselineCommands({ type: "getDefinitionAtPosition", markerOrRange });
+    }
+
+    public baselineGetDefinitionAtRangesWithText(...rangeText: string[]) {
+        this.state.verifyBaselineCommands({ type: "getDefinitionAtPosition", rangeText });
+    }
+
+    public baselineGoToSourceDefinition(...markerOrRange: FourSlash.MarkerOrNameOrRange[]) {
+        this.state.verifyBaselineCommands({ type: "goToSourceDefinition", markerOrRange });
+    }
+
+    public baselineGoToSourceDefinitionAtRangesWithText(...rangeText: string[]) {
+        this.state.verifyBaselineCommands({ type: "goToSourceDefinition", rangeText });
+    }
+
+    public baselineGoToType(...markerOrRange: FourSlash.MarkerOrNameOrRange[]) {
+        this.state.verifyBaselineCommands({ type: "goToType", markerOrRange });
+    }
+
+    public baselineGoToTypeAtRangesWithText(...rangeText: string[]) {
+        this.state.verifyBaselineCommands({ type: "goToType", rangeText });
+    }
+
+    public baselineGoToImplementation(...markerOrRange: FourSlash.MarkerOrNameOrRange[]) {
+        this.state.verifyBaselineCommands({ type: "goToImplementation", markerOrRange });
+    }
+
+    public baselineGoToImplementationAtRangesWithText(...rangeText: string[]) {
+        this.state.verifyBaselineCommands({ type: "goToImplementation", rangeText });
+    }
+
+    public baselineDocumentHighlights(markerOrRange?: ArrayOrSingle<FourSlash.MarkerOrNameOrRange>, options?: VerifyDocumentHighlightsOptions) {
+        this.state.verifyBaselineCommands({ type: "documentHighlights", markerOrRange, options });
+    }
+
+    public baselineDocumentHighlightsAtRangesWithText(rangeText?: ArrayOrSingle<string>, options?: VerifyDocumentHighlightsOptions) {
+        this.state.verifyBaselineCommands({ type: "documentHighlights", rangeText, options });
     }
 
     public noErrors() {
@@ -448,7 +476,7 @@ export class Verify extends VerifyNegatable {
 
     public docCommentTemplateAt(marker: string | FourSlash.Marker, expectedOffset: number, expectedText: string, options?: ts.DocCommentTemplateOptions) {
         this.state.goToMarker(marker);
-        this.state.verifyDocCommentTemplate({ newText: expectedText.replace(/\r?\n/g, "\r\n"), caretOffset: expectedOffset }, options);
+        this.state.verifyDocCommentTemplate({ newText: expectedText.replace(/\r?\n/g, ts.testFormatSettings.newLineCharacter!), caretOffset: expectedOffset }, options);
     }
 
     public noDocCommentTemplateAt(marker: string | FourSlash.Marker) {
@@ -476,7 +504,7 @@ export class Verify extends VerifyNegatable {
         this.state.getAndApplyCodeActions(errorCode, index);
     }
 
-    public applyCodeActionFromCompletion(markerName: string, options: VerifyCompletionActionOptions): void {
+    public applyCodeActionFromCompletion(markerName: string | undefined, options: VerifyCompletionActionOptions): void {
         this.state.applyCodeActionFromCompletion(markerName, options);
     }
 
@@ -486,6 +514,10 @@ export class Verify extends VerifyNegatable {
 
     public importFixModuleSpecifiers(marker: string, moduleSpecifiers: string[], preferences?: ts.UserPreferences) {
         this.state.verifyImportFixModuleSpecifiers(marker, moduleSpecifiers, preferences);
+    }
+
+    public baselineAutoImports(marker: string, fullNamesForCodeFix?: string[], options?: ts.UserPreferences) {
+        this.state.baselineAutoImports(marker, fullNamesForCodeFix, options);
     }
 
     public navigationBar(json: any, options?: { checkSpans?: boolean }) {
@@ -498,42 +530,6 @@ export class Verify extends VerifyNegatable {
 
     public navigateTo(...options: VerifyNavigateToOptions[]): void {
         this.state.verifyNavigateTo(options);
-    }
-
-    public occurrencesAtPositionContains(range: FourSlash.Range, isWriteAccess?: boolean) {
-        this.state.verifyOccurrencesAtPositionListContains(range.fileName, range.pos, range.end, isWriteAccess);
-    }
-
-    public occurrencesAtPositionCount(expectedCount: number) {
-        this.state.verifyOccurrencesAtPositionListCount(expectedCount);
-    }
-
-    public rangesAreOccurrences(isWriteAccess?: boolean, ranges?: FourSlash.Range[]) {
-        this.state.verifyRangesAreOccurrences(isWriteAccess, ranges);
-    }
-
-    public rangesWithSameTextAreRenameLocations(...texts: string[]) {
-        this.state.verifyRangesWithSameTextAreRenameLocations(...texts);
-    }
-
-    public rangesAreRenameLocations(options?: FourSlash.Range[] | { findInStrings?: boolean, findInComments?: boolean, ranges?: FourSlash.Range[], providePrefixAndSuffixTextForRename?: boolean }) {
-        this.state.verifyRangesAreRenameLocations(options);
-    }
-
-    public rangesAreDocumentHighlights(ranges?: FourSlash.Range[], options?: VerifyDocumentHighlightsOptions) {
-        this.state.verifyRangesAreDocumentHighlights(ranges, options);
-    }
-
-    public rangesWithSameTextAreDocumentHighlights() {
-        this.state.verifyRangesWithSameTextAreDocumentHighlights();
-    }
-
-    public documentHighlightsOf(startRange: FourSlash.Range, ranges: FourSlash.Range[], options?: VerifyDocumentHighlightsOptions) {
-        this.state.verifyDocumentHighlightsOf(startRange, ranges, options);
-    }
-
-    public noDocumentHighlights(startRange: FourSlash.Range) {
-        this.state.verifyNoDocumentHighlights(startRange);
     }
 
     /**
@@ -577,12 +573,12 @@ export class Verify extends VerifyNegatable {
         this.state.verifyRenameInfoFailed(message, preferences);
     }
 
-    public renameLocations(startRanges: ArrayOrSingle<FourSlash.Range>, options: RenameLocationsOptions) {
-        this.state.verifyRenameLocations(startRanges, options);
+    public baselineRename(markerOrRange?: ArrayOrSingle<FourSlash.MarkerOrNameOrRange>, options?: RenameOptions) {
+        this.state.verifyBaselineCommands({ type: "findRenameLocations", markerOrRange, options });
     }
 
-    public baselineRename(marker: string, options: RenameOptions) {
-        this.state.baselineRename(marker, options);
+    public baselineRenameAtRangesWithText(rangeText?: ArrayOrSingle<string>, options?: RenameOptions) {
+        this.state.verifyBaselineCommands({ type: "findRenameLocations", rangeText, options });
     }
 
     public verifyQuickInfoDisplayParts(kind: string, kindModifiers: string, textSpan: FourSlash.TextSpan,
@@ -606,10 +602,6 @@ export class Verify extends VerifyNegatable {
         this.state.verifyProjectInfo(expected);
     }
 
-    public allRangesAppearInImplementationList(markerName: string) {
-        this.state.verifyRangesInImplementationList(markerName);
-    }
-
     public getEditsForFileRename(options: GetEditsForFileRenameOptions) {
         this.state.getEditsForFileRename(options);
     }
@@ -622,17 +614,24 @@ export class Verify extends VerifyNegatable {
         this.state.moveToNewFile(options);
     }
 
+    public moveToFile(options: MoveToFileOptions): void {
+        this.state.moveToFile(options);
+    }
+
     public noMoveToNewFile(): void {
         this.state.noMoveToNewFile();
     }
 
-    public organizeImports(newContent: string, mode?: ts.OrganizeImportsMode): void {
-        this.state.verifyOrganizeImports(newContent, mode);
+    public organizeImports(newContent: string, mode?: ts.OrganizeImportsMode, preferences?: ts.UserPreferences): void {
+        this.state.verifyOrganizeImports(newContent, mode, preferences);
     }
 }
 
 export class Edit {
     constructor(private state: FourSlash.TestState) {
+    }
+    public caretPosition() {
+        return this.state.caretPosition();
     }
     public backspace(count?: number) {
         this.state.deleteCharBehindMarker(count);
@@ -1084,6 +1083,7 @@ export namespace Completion {
         "string",
         "symbol",
         "true",
+        "typeof",
         "undefined",
         "unique",
         "unknown",
@@ -1166,6 +1166,16 @@ export namespace Completion {
         typeEntry("PropertyDecorator"),
         typeEntry("MethodDecorator"),
         typeEntry("ParameterDecorator"),
+        typeEntry("ClassMemberDecoratorContext"),
+        typeEntry("DecoratorContext"),
+        interfaceEntry("ClassDecoratorContext"),
+        interfaceEntry("ClassMethodDecoratorContext"),
+        interfaceEntry("ClassGetterDecoratorContext"),
+        interfaceEntry("ClassSetterDecoratorContext"),
+        interfaceEntry("ClassAccessorDecoratorContext"),
+        interfaceEntry("ClassAccessorDecoratorTarget"),
+        interfaceEntry("ClassAccessorDecoratorResult"),
+        interfaceEntry("ClassFieldDecoratorContext"),
         typeEntry("PromiseConstructorLike"),
         interfaceEntry("PromiseLike"),
         interfaceEntry("Promise"),
@@ -1215,6 +1225,8 @@ export namespace Completion {
         varEntry("Float64Array"),
         interfaceEntry("Float64ArrayConstructor"),
         moduleEntry("Intl"),
+        typeEntry("WeakKey"),
+        interfaceEntry("WeakKeyTypes"),
     ];
 
     export const globalThisEntry: ExpectedCompletionEntry = {
@@ -1732,6 +1744,7 @@ export interface ExpectedCompletionEntryObject {
     readonly name: string;
     readonly source?: string;
     readonly insertText?: string;
+    readonly filterText?: string;
     readonly replacementSpan?: FourSlash.Range;
     readonly hasAction?: boolean; // If not specified, will assert that this is false.
     readonly isRecommended?: boolean; // If not specified, will assert that this is false.
@@ -1828,7 +1841,7 @@ export interface VerifyCompletionListContainsOptions extends ts.UserPreferences 
 }
 
 export interface VerifyDocumentHighlightsOptions {
-    filesToSearch?: readonly string[];
+    filesToSearch: readonly string[];
 }
 
 export type NewFileContent = string | { readonly [filename: string]: string };
@@ -1894,6 +1907,12 @@ export interface MoveToNewFileOptions {
     readonly preferences?: ts.UserPreferences;
 }
 
+export interface MoveToFileOptions {
+    readonly newFileContents: { readonly [fileName: string]: string };
+    readonly interactiveRefactorArguments: ts.InteractiveRefactorArguments;
+    readonly preferences?: ts.UserPreferences;
+}
+
 export type RenameLocationsOptions = readonly RenameLocationOptions[] | {
     readonly findInStrings?: boolean;
     readonly findInComments?: boolean;
@@ -1908,4 +1927,27 @@ export interface RenameOptions {
     readonly findInStrings?: boolean;
     readonly findInComments?: boolean;
     readonly providePrefixAndSuffixTextForRename?: boolean;
+    readonly quotePreference?: "auto" | "double" | "single";
 }
+export type BaselineCommandWithMarkerOrRange = {
+    type: "findAllReferences" | "goToDefinition" | "getDefinitionAtPosition" | "goToSourceDefinition" | "goToType" | "goToImplementation";
+    markerOrRange?: ArrayOrSingle<FourSlash.MarkerOrNameOrRange>;
+    rangeText?: ArrayOrSingle<string>;
+} | {
+    type: "findRenameLocations";
+    markerOrRange?: ArrayOrSingle<FourSlash.MarkerOrNameOrRange>;
+    rangeText?: ArrayOrSingle<string>;
+    options?: RenameOptions;
+} | {
+    type: "documentHighlights";
+    markerOrRange?: ArrayOrSingle<FourSlash.MarkerOrNameOrRange>;
+    rangeText?: ArrayOrSingle<string>;
+    options?: VerifyDocumentHighlightsOptions;
+};
+export type BaselineCommand = BaselineCommandWithMarkerOrRange | {
+    type: "getFileReferences";
+    fileName: ArrayOrSingle<string>;
+} | {
+    type: "customWork";
+    work: () => string | undefined;
+};

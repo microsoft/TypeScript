@@ -49,7 +49,7 @@ let c = a.getCls().y.toLowerCase();
 //// [f.js]
 define("a", ["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.A = void 0;
     var A = /** @class */ (function () {
         function A() {
@@ -60,7 +60,7 @@ define("a", ["require", "exports"], function (require, exports) {
 });
 define("b", ["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.B = void 0;
     var B = /** @class */ (function () {
         function B() {
@@ -71,7 +71,7 @@ define("b", ["require", "exports"], function (require, exports) {
 });
 define("main", ["require", "exports", "D", "E"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     var a;
     var b = a.getB().x.toFixed();
     var c = a.getCls().y.toLowerCase();
@@ -79,8 +79,8 @@ define("main", ["require", "exports", "D", "E"], function (require, exports) {
 
 
 //// [f.d.ts]
-/// <reference path="tests/cases/compiler/d.d.ts" />
-/// <reference path="tests/cases/compiler/e.d.ts" />
+/// <reference path="d.d.ts" />
+/// <reference path="e.d.ts" />
 declare module "a" {
     export class A {
     }

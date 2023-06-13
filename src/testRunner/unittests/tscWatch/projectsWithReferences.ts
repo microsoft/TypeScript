@@ -1,15 +1,14 @@
-import * as ts from "../../_namespaces/ts";
+import {
+    createSolutionBuilder,
+    createSystemWithSolutionBuild,
+} from "../helpers/solutionBuilder";
+import { verifyTscWatch } from "../helpers/tscWatch";
 import {
     getTsBuildProjectFile,
     getTsBuildProjectFilePath,
     libFile,
     TestServerHost,
-} from "../virtualFileSystemWithWatch";
-import {
-    createSolutionBuilder,
-    createSystemWithSolutionBuild,
-    verifyTscWatch,
-} from "./helpers";
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsc-watch:: projects with references: invoking when references are already built", () => {
     verifyTscWatch({
@@ -30,31 +29,31 @@ describe("unittests:: tsc-watch:: projects with references: invoking when refere
             ],
             { currentDirectory: `/user/username/projects/sample1` }
         ),
-        commandLineArgs: ["-w", "-p", "tests"],
-        changes: [
+        commandLineArgs: ["-w", "-p", "tests", "--traceResolution", "--explainFiles"],
+        edits: [
             {
                 caption: "local edit in logic ts, and build logic",
-                change: sys => {
+                edit: sys => {
                     sys.appendFile(getTsBuildProjectFilePath("sample1", "logic/index.ts"), `function foo() { }`);
                     const solutionBuilder = createSolutionBuilder(sys, ["logic"]);
                     solutionBuilder.build();
                 },
                 // not ideal, but currently because of d.ts but no new file is written
                 // There will be timeout queued even though file contents are same
-                timeouts: sys => sys.checkTimeoutQueueLength(0),
+                timeouts: sys => sys.logTimeoutQueueLength(),
             },
             {
                 caption: "non local edit in logic ts, and build logic",
-                change: sys => {
+                edit: sys => {
                     sys.appendFile(getTsBuildProjectFilePath("sample1", "logic/index.ts"), `export function gfoo() { }`);
                     const solutionBuilder = createSolutionBuilder(sys, ["logic"]);
                     solutionBuilder.build();
                 },
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1)
+                timeouts: sys => sys.runQueuedTimeoutCallbacks()
             },
             {
                 caption: "change in project reference config file builds correctly",
-                change: sys => {
+                edit: sys => {
                     sys.writeFile(getTsBuildProjectFilePath("sample1", "logic/tsconfig.json"), JSON.stringify({
                         compilerOptions: { composite: true, declaration: true, declarationDir: "decls" },
                         references: [{ path: "../core" }]
@@ -62,7 +61,7 @@ describe("unittests:: tsc-watch:: projects with references: invoking when refere
                     const solutionBuilder = createSolutionBuilder(sys, ["logic"]);
                     solutionBuilder.build();
                 },
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1)
+                timeouts: sys => sys.runQueuedTimeoutCallbacks()
             },
         ],
         baselineDependencies: true
@@ -91,62 +90,62 @@ describe("unittests:: tsc-watch:: projects with references: invoking when refere
             ],
             { currentDirectory: `/user/username/projects/transitiveReferences` }
         ),
-        commandLineArgs: ["-w", "-p", "tsconfig.c.json"],
-        changes: [
+        commandLineArgs: ["-w", "-p", "tsconfig.c.json", "--traceResolution", "--explainFiles"],
+        edits: [
             {
                 caption: "non local edit b ts, and build b",
-                change: sys => {
+                edit: sys => {
                     sys.appendFile(getTsBuildProjectFilePath("transitiveReferences", "b.ts"), `export function gfoo() { }`);
                     const solutionBuilder = createSolutionBuilder(sys, ["tsconfig.b.json"]);
                     solutionBuilder.build();
                 },
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1)
+                timeouts: sys => sys.runQueuedTimeoutCallbacks()
             },
             {
                 caption: "edit on config file",
-                change: sys => {
+                edit: sys => {
                     sys.ensureFileOrFolder({
                         path: getTsBuildProjectFilePath("transitiveReferences", "nrefs/a.d.ts"),
                         content: sys.readFile(getTsBuildProjectFilePath("transitiveReferences", "refs/a.d.ts"))!
                     });
                     changeCompilerOpitonsPaths(sys, getTsBuildProjectFilePath("transitiveReferences", "tsconfig.c.json"), { "@ref/*": ["./nrefs/*"] });
                 },
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1)
+                timeouts: sys => sys.runQueuedTimeoutCallbacks()
             },
             {
                 caption: "Revert config file edit",
-                change: sys => changeCompilerOpitonsPaths(sys, getTsBuildProjectFilePath("transitiveReferences", "tsconfig.c.json"), { "@ref/*": ["./refs/*"] }),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1)
+                edit: sys => changeCompilerOpitonsPaths(sys, getTsBuildProjectFilePath("transitiveReferences", "tsconfig.c.json"), { "@ref/*": ["./refs/*"] }),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks()
             },
             {
                 caption: "edit in referenced config file",
-                change: sys => changeCompilerOpitonsPaths(sys, getTsBuildProjectFilePath("transitiveReferences", "tsconfig.b.json"), { "@ref/*": ["./nrefs/*"] }),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1)
+                edit: sys => changeCompilerOpitonsPaths(sys, getTsBuildProjectFilePath("transitiveReferences", "tsconfig.b.json"), { "@ref/*": ["./nrefs/*"] }),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks()
             },
             {
                 caption: "Revert referenced config file edit",
-                change: sys => changeCompilerOpitonsPaths(sys, getTsBuildProjectFilePath("transitiveReferences", "tsconfig.b.json"), { "@ref/*": ["./refs/*"] }),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1)
+                edit: sys => changeCompilerOpitonsPaths(sys, getTsBuildProjectFilePath("transitiveReferences", "tsconfig.b.json"), { "@ref/*": ["./refs/*"] }),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks()
             },
             {
                 caption: "deleting referenced config file",
-                change: sys => sys.deleteFile(getTsBuildProjectFilePath("transitiveReferences", "tsconfig.b.json")),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1)
+                edit: sys => sys.deleteFile(getTsBuildProjectFilePath("transitiveReferences", "tsconfig.b.json")),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks()
             },
             {
                 caption: "Revert deleting referenced config file",
-                change: sys => sys.ensureFileOrFolder(getTsBuildProjectFile("transitiveReferences", "tsconfig.b.json")),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1)
+                edit: sys => sys.ensureFileOrFolder(getTsBuildProjectFile("transitiveReferences", "tsconfig.b.json")),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks()
             },
             {
                 caption: "deleting transitively referenced config file",
-                change: sys => sys.deleteFile(getTsBuildProjectFilePath("transitiveReferences", "tsconfig.a.json")),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1)
+                edit: sys => sys.deleteFile(getTsBuildProjectFilePath("transitiveReferences", "tsconfig.a.json")),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks()
             },
             {
                 caption: "Revert deleting transitively referenced config file",
-                change: sys => sys.ensureFileOrFolder(getTsBuildProjectFile("transitiveReferences", "tsconfig.a.json")),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1)
+                edit: sys => sys.ensureFileOrFolder(getTsBuildProjectFile("transitiveReferences", "tsconfig.a.json")),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks()
             },
         ],
         baselineDependencies: true,
@@ -179,8 +178,7 @@ describe("unittests:: tsc-watch:: projects with references: invoking when refere
             ],
             { currentDirectory: `/user/username/projects/transitiveReferences` }
         ),
-        commandLineArgs: ["-w", "-p", "tsconfig.c.json"],
-        changes: ts.emptyArray,
+        commandLineArgs: ["-w", "-p", "tsconfig.c.json", "--traceResolution", "--explainFiles"],
         baselineDependencies: true,
     });
 
@@ -234,51 +232,51 @@ X;`,
             ],
             { currentDirectory: `/user/username/projects/transitiveReferences` }
         ),
-        commandLineArgs: ["-w", "-p", "c"],
-        changes: [
+        commandLineArgs: ["-w", "-p", "c", "--traceResolution", "--explainFiles"],
+        edits: [
             {
                 caption: "non local edit b ts, and build b",
-                change: sys => {
+                edit: sys => {
                     sys.appendFile(getTsBuildProjectFilePath("transitiveReferences", "b/index.ts"), `export function gfoo() { }`);
                     const solutionBuilder = createSolutionBuilder(sys, ["b"]);
                     solutionBuilder.build();
                 },
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1)
+                timeouts: sys => sys.runQueuedTimeoutCallbacks()
             },
             {
                 caption: "edit on config file",
-                change: sys => {
+                edit: sys => {
                     sys.ensureFileOrFolder({
                         path: getTsBuildProjectFilePath("transitiveReferences", "nrefs/a.d.ts"),
                         content: sys.readFile(getTsBuildProjectFilePath("transitiveReferences", "refs/a.d.ts"))!
                     });
                     changeCompilerOpitonsPaths(sys, getTsBuildProjectFilePath("transitiveReferences", "c/tsconfig.json"), { "@ref/*": ["../nrefs/*"] });
                 },
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1)
+                timeouts: sys => sys.runQueuedTimeoutCallbacks()
             },
             {
                 caption: "Revert config file edit",
-                change: sys => changeCompilerOpitonsPaths(sys, getTsBuildProjectFilePath("transitiveReferences", "c/tsconfig.json"), { "@ref/*": ["../refs/*"] }),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1)
+                edit: sys => changeCompilerOpitonsPaths(sys, getTsBuildProjectFilePath("transitiveReferences", "c/tsconfig.json"), { "@ref/*": ["../refs/*"] }),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks()
             },
             {
                 caption: "edit in referenced config file",
-                change: sys => changeCompilerOpitonsPaths(sys, getTsBuildProjectFilePath("transitiveReferences", "b/tsconfig.json"), { "@ref/*": ["../nrefs/*"] }),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1)
+                edit: sys => changeCompilerOpitonsPaths(sys, getTsBuildProjectFilePath("transitiveReferences", "b/tsconfig.json"), { "@ref/*": ["../nrefs/*"] }),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks()
             },
             {
                 caption: "Revert referenced config file edit",
-                change: sys => changeCompilerOpitonsPaths(sys, getTsBuildProjectFilePath("transitiveReferences", "b/tsconfig.json"), { "@ref/*": ["../refs/*"] }),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1)
+                edit: sys => changeCompilerOpitonsPaths(sys, getTsBuildProjectFilePath("transitiveReferences", "b/tsconfig.json"), { "@ref/*": ["../refs/*"] }),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks()
             },
             {
                 caption: "deleting referenced config file",
-                change: sys => sys.deleteFile(getTsBuildProjectFilePath("transitiveReferences", "b/tsconfig.json")),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(2)
+                edit: sys => sys.deleteFile(getTsBuildProjectFilePath("transitiveReferences", "b/tsconfig.json")),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks()
             },
             {
                 caption: "Revert deleting referenced config file",
-                change: sys => sys.writeFile(
+                edit: sys => sys.writeFile(
                     getTsBuildProjectFilePath("transitiveReferences", "b/tsconfig.json"),
                     JSON.stringify({
                         compilerOptions: { composite: true, baseUrl: "./", paths: { "@ref/*": ["../*"] } },
@@ -286,23 +284,23 @@ X;`,
                         references: [{ path: `../a` }]
                     })
                 ),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(2)
+                timeouts: sys => sys.runQueuedTimeoutCallbacks()
             },
             {
                 caption: "deleting transitively referenced config file",
-                change: sys => sys.deleteFile(getTsBuildProjectFilePath("transitiveReferences", "a/tsconfig.json")),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(2)
+                edit: sys => sys.deleteFile(getTsBuildProjectFilePath("transitiveReferences", "a/tsconfig.json")),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks()
             },
             {
                 caption: "Revert deleting transitively referenced config file",
-                change: sys => sys.writeFile(
+                edit: sys => sys.writeFile(
                     getTsBuildProjectFilePath("transitiveReferences", "a/tsconfig.json"),
                     JSON.stringify({
                         compilerOptions: { composite: true },
                         files: ["index.ts"]
                     }),
                 ),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(2)
+                timeouts: sys => sys.runQueuedTimeoutCallbacks()
             },
         ],
         baselineDependencies: true,
@@ -353,71 +351,71 @@ X;`,
             ],
             { currentDirectory: `/user/username/projects/transitiveReferences` }
         ),
-        commandLineArgs: ["-w", "-p", "c"],
-        changes: [
+        commandLineArgs: ["-w", "-p", "c", "--traceResolution", "--explainFiles"],
+        edits: [
             {
                 caption: "non local edit b ts, and build b",
-                change: sys => {
+                edit: sys => {
                     sys.appendFile(getTsBuildProjectFilePath("transitiveReferences", "b/index.ts"), `export function gfoo() { }`);
                     const solutionBuilder = createSolutionBuilder(sys, ["b"]);
                     solutionBuilder.build();
                 },
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1)
+                timeouts: sys => sys.runQueuedTimeoutCallbacks()
             },
             {
                 caption: "edit on config file",
-                change: sys => {
+                edit: sys => {
                     sys.ensureFileOrFolder({
                         path: getTsBuildProjectFilePath("transitiveReferences", "nrefs/a.d.ts"),
                         content: sys.readFile(getTsBuildProjectFilePath("transitiveReferences", "refs/a.d.ts"))!
                     });
                     changeCompilerOpitonsPaths(sys, getTsBuildProjectFilePath("transitiveReferences", "c/tsconfig.json"), { "@ref/*": ["../nrefs/*"] });
                 },
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1)
+                timeouts: sys => sys.runQueuedTimeoutCallbacks()
             },
             {
                 caption: "Revert config file edit",
-                change: sys => changeCompilerOpitonsPaths(sys, getTsBuildProjectFilePath("transitiveReferences", "c/tsconfig.json"), { "@ref/*": ["../refs/*"] }),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1)
+                edit: sys => changeCompilerOpitonsPaths(sys, getTsBuildProjectFilePath("transitiveReferences", "c/tsconfig.json"), { "@ref/*": ["../refs/*"] }),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks()
             },
             {
                 caption: "edit in referenced config file",
-                change: sys => changeCompilerOpitonsPaths(sys, getTsBuildProjectFilePath("transitiveReferences", "b/tsconfig.json"), { "@ref/*": ["../nrefs/*"] }),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1)
+                edit: sys => changeCompilerOpitonsPaths(sys, getTsBuildProjectFilePath("transitiveReferences", "b/tsconfig.json"), { "@ref/*": ["../nrefs/*"] }),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks()
             },
             {
                 caption: "Revert referenced config file edit",
-                change: sys => changeCompilerOpitonsPaths(sys, getTsBuildProjectFilePath("transitiveReferences", "b/tsconfig.json"), { "@ref/*": ["../refs/*"] }),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1)
+                edit: sys => changeCompilerOpitonsPaths(sys, getTsBuildProjectFilePath("transitiveReferences", "b/tsconfig.json"), { "@ref/*": ["../refs/*"] }),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks()
             },
             {
                 caption: "deleting referenced config file",
-                change: sys => sys.deleteFile(getTsBuildProjectFilePath("transitiveReferences", "b/tsconfig.json")),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(2)
+                edit: sys => sys.deleteFile(getTsBuildProjectFilePath("transitiveReferences", "b/tsconfig.json")),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks()
             },
             {
                 caption: "Revert deleting referenced config file",
-                change: sys => sys.writeFile(
+                edit: sys => sys.writeFile(
                     getTsBuildProjectFilePath("transitiveReferences", "b/tsconfig.json"),
                     JSON.stringify({
                         compilerOptions: { composite: true, baseUrl: "./", paths: { "@ref/*": ["../*"] } },
                         references: [{ path: `../a` }]
                     })
                 ),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(2)
+                timeouts: sys => sys.runQueuedTimeoutCallbacks()
             },
             {
                 caption: "deleting transitively referenced config file",
-                change: sys => sys.deleteFile(getTsBuildProjectFilePath("transitiveReferences", "a/tsconfig.json")),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(2)
+                edit: sys => sys.deleteFile(getTsBuildProjectFilePath("transitiveReferences", "a/tsconfig.json")),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks()
             },
             {
                 caption: "Revert deleting transitively referenced config file",
-                change: sys => sys.writeFile(
+                edit: sys => sys.writeFile(
                     getTsBuildProjectFilePath("transitiveReferences", "a/tsconfig.json"),
                     JSON.stringify({ compilerOptions: { composite: true } }),
                 ),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(2)
+                timeouts: sys => sys.runQueuedTimeoutCallbacks()
             },
         ],
         baselineDependencies: true,
@@ -439,16 +437,16 @@ X;`,
             ],
             { currentDirectory: `/user/username/projects/sample1` }
         ),
-        commandLineArgs: ["-w", "-p", "logic"],
-        changes: [
+        commandLineArgs: ["-w", "-p", "logic", "--traceResolution", "--explainFiles"],
+        edits: [
             {
                 caption: "change declration map in core",
-                change: sys => {
+                edit: sys => {
                     sys.replaceFileText(getTsBuildProjectFilePath("sample1", "core/tsconfig.json"), `"declarationMap": true,`, `"declarationMap": false,`);
                     const solutionBuilder = createSolutionBuilder(sys, ["core"]);
                     solutionBuilder.build();
                 },
-                timeouts: sys => sys.runQueuedTimeoutCallbacks(0),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
         baselineDependencies: true

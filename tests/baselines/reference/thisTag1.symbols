@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/a.js ===
+//// [tests/cases/conformance/jsdoc/thisTag1.ts] ////
+
+=== a.js ===
 /** @this {{ n: number }} Mount Holyoke Preparatory School
  * @param {string} s
  * @return {number}
@@ -9,7 +11,7 @@ function f(s) {
 
     return this.n + s.length
 >this.n : Symbol(n, Decl(a.js, 0, 12))
->this : Symbol(__type, Decl(a.js, 0, 11))
+>this : Symbol(this)
 >n : Symbol(n, Decl(a.js, 0, 12))
 >s.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >s : Symbol(s, Decl(a.js, 4, 11))

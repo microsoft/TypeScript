@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/tuple/named/namedTupleMembersErrors.ts] ////
+
 //// [namedTupleMembersErrors.ts]
 export type Segment1 = [length: number, number]; // partially named, disallowed
 export type Segment2 = [number, size: number]; // partially named, disallowed
@@ -24,7 +26,7 @@ export type RecusiveRest = [first: string, ...rest: RecusiveRest]; // marked as 
 
 //// [namedTupleMembersErrors.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [namedTupleMembersErrors.d.ts]

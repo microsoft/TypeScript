@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts] ////
+
 //// [controlFlowGenericTypes.ts]
 function f1<T extends string | undefined>(x: T, y: { a: T }, z: [T]): string {
     if (x) {
@@ -222,7 +224,7 @@ function getColumnProperty<T>(column: Column<T>, key: keyof Column<T>) {
 
 //// [controlFlowGenericTypes.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.bounceAndTakeIfA = void 0;
 function f1(x, y, z) {
     if (x) {

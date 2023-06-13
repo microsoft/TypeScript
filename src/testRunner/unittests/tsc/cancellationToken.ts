@@ -1,20 +1,20 @@
+import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
-import * as Harness from "../../_namespaces/Harness";
+import {
+    baselineBuildInfo,
+    CommandLineProgram,
+} from "../helpers/baseline";
+import {
+    applyEdit,
+    createBaseline,
+    watchBaseline,
+} from "../helpers/tscWatch";
 import {
     createWatchedSystem,
     File,
     libFile,
-} from "../virtualFileSystemWithWatch";
-import {
-    baselineBuildInfo,
-    CommandLineProgram,
-} from "../tsc/helpers";
-import {
-    applyChange,
-    createBaseline,
-    watchBaseline,
-} from "../tscWatch/helpers";
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsc:: builder cancellationToken", () => {
     verifyCancellation(/*useBuildInfo*/ true, "when emitting buildInfo");
@@ -87,7 +87,7 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
 
             // Cancel on first semantic operation
             // Change
-            oldSnap = applyChange(
+            oldSnap = applyEdit(
                 sys,
                 baseline,
                 sys => sys.appendFile(cFile.path, "export function foo() {}"),
@@ -125,7 +125,7 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
             Harness.Baseline.runBaseline(`tsc/cancellationToken/${scenario.split(" ").join("-")}.js`, baseline.join("\r\n"));
 
             function noChange(caption: string) {
-                oldSnap = applyChange(sys, baseline, ts.noop, caption);
+                oldSnap = applyEdit(sys, baseline, ts.noop, caption);
             }
 
             function updatePrograms() {
@@ -145,7 +145,7 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
                         parsedConfig.options,
                         host,
                         builderProgram,
-                    /* configFileParsingDiagnostics*/ undefined,
+                    /*configFileParsingDiagnostics*/ undefined,
                     /*projectReferences*/ undefined,
                     );
                 updatePrograms();
@@ -174,7 +174,7 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
                     parsedConfig.options,
                     host,
                 /*oldProgram*/ undefined,
-                /* configFileParsingDiagnostics*/ undefined,
+                /*configFileParsingDiagnostics*/ undefined,
                 /*projectReferences*/ undefined,
                 );
                 updatePrograms();

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/internalAliasVarInsideLocalModuleWithExport.ts] ////
+
 //// [internalAliasVarInsideLocalModuleWithExport.ts]
 export module a {
     export var x = 10;
@@ -12,17 +14,17 @@ export module c {
 //// [internalAliasVarInsideLocalModuleWithExport.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.c = exports.a = void 0;
     var a;
     (function (a) {
         a.x = 10;
-    })(a = exports.a || (exports.a = {}));
+    })(a || (exports.a = a = {}));
     var c;
     (function (c) {
         c.b = a.x;
         c.bVal = c.b;
-    })(c = exports.c || (exports.c = {}));
+    })(c || (exports.c = c = {}));
 });
 
 

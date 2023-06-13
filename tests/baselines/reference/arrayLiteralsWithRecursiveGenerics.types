@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/recursiveTypes/arrayLiteralsWithRecursiveGenerics.ts ===
+//// [tests/cases/conformance/types/typeRelationships/recursiveTypes/arrayLiteralsWithRecursiveGenerics.ts] ////
+
+=== arrayLiteralsWithRecursiveGenerics.ts ===
 class List<T> {
 >List : List<T>
 
@@ -54,7 +56,6 @@ var zs = [list, null]; // List<number>[]
 >zs : List<number>[]
 >[list, null] : List<number>[]
 >list : List<number>
->null : null
 
 var myDerivedList: DerivedList<number>;
 >myDerivedList : DerivedList<number>

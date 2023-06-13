@@ -1,0 +1,84 @@
+//// [tests/cases/compiler/jsFileFunctionOverloads2.ts] ////
+
+=== jsFileFunctionOverloads2.js ===
+// Also works if all @overload tags are combined in one comment.
+/**
+ * @overload
+ * @param {number} x
+ * @returns {'number'}
+ *
+ * @overload
+ * @param {string} x
+ * @returns {'string'}
+ *
+ * @overload
+ * @param {boolean} x
+ * @returns {'boolean'}
+ *
+ * @param {unknown} x
+ * @returns {string}
+ */
+ function getTypeName(x) {
+>getTypeName : Symbol(getTypeName, Decl(jsFileFunctionOverloads2.js, 0, 0))
+>x : Symbol(x, Decl(jsFileFunctionOverloads2.js, 17, 22))
+
+  return typeof x;
+>x : Symbol(x, Decl(jsFileFunctionOverloads2.js, 17, 22))
+}
+
+/**
+ * @template T
+ * @param {T} x 
+ * @returns {T}
+ */
+const identity = x => x;
+>identity : Symbol(identity, Decl(jsFileFunctionOverloads2.js, 26, 5))
+>x : Symbol(x, Decl(jsFileFunctionOverloads2.js, 26, 16))
+>x : Symbol(x, Decl(jsFileFunctionOverloads2.js, 26, 16))
+
+/**
+ * @template T
+ * @template U
+ * @overload
+ * @param {T[]} array 
+ * @param {(x: T) => U[]} iterable 
+ * @returns {U[]}
+ *
+ * @overload
+ * @param {T[][]} array
+ * @returns {T[]}
+ *
+ * @param {unknown[]} array 
+ * @param {(x: unknown) => unknown} iterable 
+ * @returns {unknown[]}
+ */
+function flatMap(array, iterable = identity) {
+>flatMap : Symbol(flatMap, Decl(jsFileFunctionOverloads2.js, 26, 24))
+>array : Symbol(array, Decl(jsFileFunctionOverloads2.js, 44, 17))
+>iterable : Symbol(iterable, Decl(jsFileFunctionOverloads2.js, 44, 23))
+>identity : Symbol(identity, Decl(jsFileFunctionOverloads2.js, 26, 5))
+
+  /** @type {unknown[]} */
+  const result = [];
+>result : Symbol(result, Decl(jsFileFunctionOverloads2.js, 46, 7))
+
+  for (let i = 0; i < array.length; i += 1) {
+>i : Symbol(i, Decl(jsFileFunctionOverloads2.js, 47, 10))
+>i : Symbol(i, Decl(jsFileFunctionOverloads2.js, 47, 10))
+>array.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>array : Symbol(array, Decl(jsFileFunctionOverloads2.js, 44, 17))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>i : Symbol(i, Decl(jsFileFunctionOverloads2.js, 47, 10))
+
+    result.push(.../** @type {unknown[]} */(iterable(array[i])));
+>result.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>result : Symbol(result, Decl(jsFileFunctionOverloads2.js, 46, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>iterable : Symbol(iterable, Decl(jsFileFunctionOverloads2.js, 44, 23))
+>array : Symbol(array, Decl(jsFileFunctionOverloads2.js, 44, 17))
+>i : Symbol(i, Decl(jsFileFunctionOverloads2.js, 47, 10))
+  }
+  return result;
+>result : Symbol(result, Decl(jsFileFunctionOverloads2.js, 46, 7))
+}
+

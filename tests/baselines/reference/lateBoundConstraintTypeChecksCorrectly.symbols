@@ -1,4 +1,6 @@
-=== tests/cases/compiler/lateBoundConstraintTypeChecksCorrectly.ts ===
+//// [tests/cases/compiler/lateBoundConstraintTypeChecksCorrectly.ts] ////
+
+=== lateBoundConstraintTypeChecksCorrectly.ts ===
 declare const fooProp: unique symbol;
 >fooProp : Symbol(fooProp, Decl(lateBoundConstraintTypeChecksCorrectly.ts, 0, 13))
 

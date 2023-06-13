@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mappedTypeNestedGenericInstantiation.ts] ////
+
 //// [mappedTypeNestedGenericInstantiation.ts]
 // Repro from #13346
 

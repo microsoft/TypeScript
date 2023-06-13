@@ -23,6 +23,7 @@ import {
     CallSignatureDeclaration,
     CaseBlock,
     CaseClause,
+    CaseKeyword,
     CatchClause,
     ClassDeclaration,
     ClassExpression,
@@ -39,12 +40,12 @@ import {
     DebuggerStatement,
     Decorator,
     DefaultClause,
+    DefaultKeyword,
     DeleteExpression,
     DoStatement,
     DotDotDotToken,
     ElementAccessExpression,
     EmptyStatement,
-    EndOfDeclarationMarker,
     EnumDeclaration,
     EnumMember,
     EqualsGreaterThanToken,
@@ -97,6 +98,7 @@ import {
     JSDocNonNullableType,
     JSDocNullableType,
     JSDocOptionalType,
+    JSDocOverloadTag,
     JSDocOverrideTag,
     JSDocParameterTag,
     JSDocPrivateTag,
@@ -105,10 +107,12 @@ import {
     JSDocPublicTag,
     JSDocReadonlyTag,
     JSDocReturnTag,
+    JSDocSatisfiesTag,
     JSDocSeeTag,
     JSDocSignature,
     JSDocTemplateTag,
     JSDocThisTag,
+    JSDocThrowsTag,
     JSDocTypedefTag,
     JSDocTypeExpression,
     JSDocTypeLiteral,
@@ -123,6 +127,7 @@ import {
     JsxElement,
     JsxExpression,
     JsxFragment,
+    JsxNamespacedName,
     JsxOpeningElement,
     JsxOpeningFragment,
     JsxSelfClosingElement,
@@ -131,7 +136,6 @@ import {
     LabeledStatement,
     LiteralTypeNode,
     MappedTypeNode,
-    MergeDeclarationMarker,
     MetaProperty,
     MethodDeclaration,
     MethodSignature,
@@ -287,27 +291,22 @@ export function isAsteriskToken(node: Node): node is AsteriskToken {
     return node.kind === SyntaxKind.AsteriskToken;
 }
 
-/** @internal */
 export function isExclamationToken(node: Node): node is ExclamationToken {
     return node.kind === SyntaxKind.ExclamationToken;
 }
 
-/** @internal */
 export function isQuestionToken(node: Node): node is QuestionToken {
     return node.kind === SyntaxKind.QuestionToken;
 }
 
-/** @internal */
 export function isColonToken(node: Node): node is ColonToken {
     return node.kind === SyntaxKind.ColonToken;
 }
 
-/** @internal */
 export function isQuestionDotToken(node: Node): node is QuestionDotToken {
     return node.kind === SyntaxKind.QuestionDotToken;
 }
 
-/** @internal */
 export function isEqualsGreaterThanToken(node: Node): node is EqualsGreaterThanToken {
     return node.kind === SyntaxKind.EqualsGreaterThanToken;
 }
@@ -330,16 +329,19 @@ export function isExportModifier(node: Node): node is ExportKeyword {
 }
 
 /** @internal */
+export function isDefaultModifier(node: Node): node is DefaultKeyword {
+    return node.kind === SyntaxKind.DefaultKeyword;
+}
+
+/** @internal */
 export function isAsyncModifier(node: Node): node is AsyncKeyword {
     return node.kind === SyntaxKind.AsyncKeyword;
 }
 
-/** @internal */
 export function isAssertsKeyword(node: Node): node is AssertsKeyword {
     return node.kind === SyntaxKind.AssertsKeyword;
 }
 
-/** @internal */
 export function isAwaitKeyword(node: Node): node is AwaitKeyword {
     return node.kind === SyntaxKind.AwaitKeyword;
 }
@@ -377,6 +379,11 @@ export function isSuperKeyword(node: Node): node is SuperExpression {
 /** @internal */
 export function isImportKeyword(node: Node): node is ImportExpression {
     return node.kind === SyntaxKind.ImportKeyword;
+}
+
+/** @internal */
+export function isCaseKeyword(node: Node): node is CaseKeyword {
+    return node.kind === SyntaxKind.CaseKeyword;
 }
 
 // Names
@@ -893,16 +900,6 @@ export function isSyntheticReference(node: Node): node is SyntheticReferenceExpr
     return node.kind === SyntaxKind.SyntheticReferenceExpression;
 }
 
-/** @internal */
-export function isMergeDeclarationMarker(node: Node): node is MergeDeclarationMarker {
-    return node.kind === SyntaxKind.MergeDeclarationMarker;
-}
-
-/** @internal */
-export function isEndOfDeclarationMarker(node: Node): node is EndOfDeclarationMarker {
-    return node.kind === SyntaxKind.EndOfDeclarationMarker;
-}
-
 // Module References
 
 export function isExternalModuleReference(node: Node): node is ExternalModuleReference {
@@ -955,6 +952,10 @@ export function isJsxExpression(node: Node): node is JsxExpression {
     return node.kind === SyntaxKind.JsxExpression;
 }
 
+export function isJsxNamespacedName(node: Node): node is JsxNamespacedName {
+    return node.kind === SyntaxKind.JsxNamespacedName;
+}
+
 // Clauses
 
 export function isCaseClause(node: Node): node is CaseClause {
@@ -996,7 +997,7 @@ export function isEnumMember(node: Node): node is EnumMember {
 // Unparsed
 
 // TODO(rbuckton): isUnparsedPrologue
-
+/** @deprecated */
 export function isUnparsedPrepend(node: Node): node is UnparsedPrepend {
     return node.kind === SyntaxKind.UnparsedPrepend;
 }
@@ -1014,6 +1015,7 @@ export function isBundle(node: Node): node is Bundle {
     return node.kind === SyntaxKind.Bundle;
 }
 
+/** @deprecated */
 export function isUnparsedSource(node: Node): node is UnparsedSource {
     return node.kind === SyntaxKind.UnparsedSource;
 }
@@ -1128,6 +1130,10 @@ export function isJSDocOverrideTag(node: Node): node is JSDocOverrideTag {
     return node.kind === SyntaxKind.JSDocOverrideTag;
 }
 
+export function isJSDocOverloadTag(node: Node): node is JSDocOverloadTag {
+    return node.kind === SyntaxKind.JSDocOverloadTag;
+}
+
 export function isJSDocDeprecatedTag(node: Node): node is JSDocDeprecatedTag {
     return node.kind === SyntaxKind.JSDocDeprecatedTag;
 }
@@ -1174,6 +1180,14 @@ export function isJSDocPropertyTag(node: Node): node is JSDocPropertyTag {
 
 export function isJSDocImplementsTag(node: Node): node is JSDocImplementsTag {
     return node.kind === SyntaxKind.JSDocImplementsTag;
+}
+
+export function isJSDocSatisfiesTag(node: Node): node is JSDocSatisfiesTag {
+    return node.kind === SyntaxKind.JSDocSatisfiesTag;
+}
+
+export function isJSDocThrowsTag(node: Node): node is JSDocThrowsTag {
+    return node.kind === SyntaxKind.JSDocThrowsTag;
 }
 
 // Synthesized list

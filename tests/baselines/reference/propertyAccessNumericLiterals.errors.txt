@@ -1,0 +1,31 @@
+propertyAccessNumericLiterals.ts(6,1): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
+propertyAccessNumericLiterals.ts(7,1): error TS1489: Decimals with leading zeros are not allowed.
+propertyAccessNumericLiterals.ts(8,2): error TS6188: Numeric separators are not allowed here.
+propertyAccessNumericLiterals.ts(10,1): error TS1489: Decimals with leading zeros are not allowed.
+propertyAccessNumericLiterals.ts(11,3): error TS6188: Numeric separators are not allowed here.
+
+
+==== propertyAccessNumericLiterals.ts (5 errors) ====
+    0xffffffff.toString();
+    0o01234.toString();
+    0b01101101.toString();
+    1234..toString();
+    1e0.toString();
+    000.toString();
+    ~~~
+!!! error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
+    08.8e5.toString();
+    ~~~~~~
+!!! error TS1489: Decimals with leading zeros are not allowed.
+    0_8.8e5.toString();
+     ~
+!!! error TS6188: Numeric separators are not allowed here.
+    8.8e5.toString();
+    088e4.toString();
+    ~~~~~
+!!! error TS1489: Decimals with leading zeros are not allowed.
+    88_e4.toString();
+      ~
+!!! error TS6188: Numeric separators are not allowed here.
+    88e4.toString();
+    8_8e4.toString();

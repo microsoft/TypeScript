@@ -1,10 +1,10 @@
+import { libContent } from "../helpers/contents";
+import { verifyTscWatch } from "../helpers/tscWatch";
 import {
     createWatchedSystem,
     getTsBuildProjectFile,
     libFile,
-} from "../virtualFileSystemWithWatch";
-import { libContent } from "../tsc/helpers";
-import { verifyTscWatch } from "../tscWatch/helpers";
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsbuildWatch:: watchMode:: with reexport when referenced project reexports definitions from another file", () => {
     verifyTscWatch({
@@ -23,23 +23,21 @@ describe("unittests:: tsbuildWatch:: watchMode:: with reexport when referenced p
             ],
             { currentDirectory: `/user/username/projects/reexport` }
         ),
-        changes: [
+        edits: [
             {
                 caption: "Introduce error",
-                change: sys => sys.replaceFileText(`/user/username/projects/reexport/src/pure/session.ts`, "// ", ""),
+                edit: sys => sys.replaceFileText(`/user/username/projects/reexport/src/pure/session.ts`, "// ", ""),
                 timeouts: sys => {
-                    sys.checkTimeoutQueueLengthAndRun(1); // build src/pure
-                    sys.checkTimeoutQueueLengthAndRun(1); // build src/main and src
-                    sys.checkTimeoutQueueLength(0);
+                    sys.runQueuedTimeoutCallbacks(); // build src/pure
+                    sys.runQueuedTimeoutCallbacks(); // build src/main and src
                 },
             },
             {
                 caption: "Fix error",
-                change: sys => sys.replaceFileText(`/user/username/projects/reexport/src/pure/session.ts`, "bar: ", "// bar: "),
+                edit: sys => sys.replaceFileText(`/user/username/projects/reexport/src/pure/session.ts`, "bar: ", "// bar: "),
                 timeouts: sys => {
-                    sys.checkTimeoutQueueLengthAndRun(1); // build src/pure
-                    sys.checkTimeoutQueueLengthAndRun(1); // build src/main and src
-                    sys.checkTimeoutQueueLength(0);
+                    sys.runQueuedTimeoutCallbacks(); // build src/pure
+                    sys.runQueuedTimeoutCallbacks(); // build src/main and src
                 },
             }
         ]

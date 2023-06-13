@@ -1,4 +1,6 @@
-=== tests/cases/compiler/jsxFragmentFactoryNoUnusedLocals.tsx ===
+//// [tests/cases/compiler/jsxFragmentFactoryNoUnusedLocals.tsx] ////
+
+=== jsxFragmentFactoryNoUnusedLocals.tsx ===
 /// <reference path="react16.d.ts" />
 import { Fragment, createElement } from "react"
 >Fragment : import("react").ComponentType<{}>
@@ -20,7 +22,6 @@ export function Counter({ count = 0 }: CounterProps) {
 >cnt : any
 >setCnt : any
 >null as any : any
->null : null
 
     return <>
 ><>        <p>{cnt}</p>        <button onClick={() => setCnt((prev) => prev + 1)} type="button">Update</button>    </> : JSX.Element

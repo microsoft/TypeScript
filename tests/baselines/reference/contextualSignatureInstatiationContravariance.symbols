@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualSignatureInstatiationContravariance.ts ===
+//// [tests/cases/compiler/contextualSignatureInstatiationContravariance.ts] ////
+
+=== contextualSignatureInstatiationContravariance.ts ===
 interface Animal { x }
 >Animal : Symbol(Animal, Decl(contextualSignatureInstatiationContravariance.ts, 0, 0))
 >x : Symbol(Animal.x, Decl(contextualSignatureInstatiationContravariance.ts, 0, 18))

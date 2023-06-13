@@ -1,13 +1,15 @@
 import * as ts from "../../_namespaces/ts";
 import {
+    baselineTsserverLogs,
+    createLoggerWithInMemoryLogs,
+    createSession,
+    openFilesForSession,
+} from "../helpers/tsserver";
+import {
     createServerHost,
     File,
     SymLink,
-} from "../virtualFileSystemWithWatch";
-import {
-    createSession,
-    openFilesForSession,
-} from "./helpers";
+} from "../helpers/virtualFileSystemWithWatch";
 
 const appTsconfigJson: File = {
     path: "/packages/app/tsconfig.json",
@@ -66,16 +68,19 @@ describe("unittests:: tsserver:: symlinkCache", () => {
             project.getSymlinkCache()?.getSymlinkedDirectories()?.get(link.path + "/" as ts.Path),
             { real: "/packages/dep/", realPath: "/packages/dep/" as ts.Path }
         );
+        baselineTsserverLogs("symlinkCache", "contains symlinks discovered by project references resolution after program creation", session);
     });
 
     it("works for paths close to the root", () => {
         const cache = ts.createSymlinkCache("/", ts.createGetCanonicalFileName(/*useCaseSensitiveFileNames*/ false));
         // Used to crash, #44953
-        const map = ts.createModeAwareCache<ts.ResolvedTypeReferenceDirective | undefined>();
+        const map = ts.createModeAwareCache<ts.ResolvedTypeReferenceDirectiveWithFailedLookupLocations>();
         map.set("foo", /*mode*/ undefined, {
-            primary: true,
-            originalPath: "/foo",
-            resolvedFileName: "/one/two/foo",
+            resolvedTypeReferenceDirective: {
+                primary: true,
+                originalPath: "/foo",
+                resolvedFileName: "/one/two/foo",
+            }
         });
         cache.setSymlinksFromResolutions([], map);
     });
@@ -91,7 +96,7 @@ function setup() {
         depSrcSubFolderIndexTs,
         link,
     ]);
-    const session = createSession(host);
+    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
     const projectService = session.getProjectService();
     return {
         host,

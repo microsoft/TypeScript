@@ -1,13 +1,5 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    createWatchedSystem,
-    File,
-    getTsBuildProjectFile,
-    getTsBuildProjectFilePath,
-    libFile,
-    TestServerHost,
-} from "../virtualFileSystemWithWatch";
-import {
     commonFile1,
     commonFile2,
     createBaseline,
@@ -16,7 +8,14 @@ import {
     runWatchBaseline,
     TscWatchCompileChange,
     verifyTscWatch,
-} from "../tscWatch/helpers";
+} from "../helpers/tscWatch";
+import {
+    createWatchedSystem,
+    File,
+    getTsBuildProjectFile,
+    getTsBuildProjectFilePath,
+    libFile,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsbuildWatch:: watchMode:: program updates", () => {
     const enum SubProject {
@@ -50,8 +49,8 @@ describe("unittests:: tsbuildWatch:: watchMode:: program updates", () => {
     function changeFile(fileName: string | (() => string), content: string | (() => string), caption: string): TscWatchCompileChange {
         return {
             caption,
-            change: sys => sys.writeFile(ts.isString(fileName) ? fileName : fileName(), ts.isString(content) ? content : content()),
-            timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1), // Builds core
+            edit: sys => sys.writeFile(ts.isString(fileName) ? fileName : fileName(), ts.isString(content) ? content : content()),
+            timeouts: sys => sys.runQueuedTimeoutCallbacks(), // Builds core
         };
     }
 
@@ -86,7 +85,6 @@ describe("unittests:: tsbuildWatch:: watchMode:: program updates", () => {
         subScenario: "creates solution in watch mode",
         commandLineArgs: ["-b", "-w", `sample1/${SubProject.tests}`],
         sys: () => createWatchedSystem(allFiles, { currentDirectory: "/user/username/projects" }),
-        changes: ts.emptyArray
     });
 
     it("verify building references watches only those projects", () => {
@@ -102,7 +100,6 @@ describe("unittests:: tsbuildWatch:: watchMode:: program updates", () => {
             baseline,
             oldSnap,
             getPrograms,
-            changes: ts.emptyArray,
             watchOrSolution: solutionBuilder
         });
     });
@@ -117,11 +114,8 @@ describe("unittests:: tsbuildWatch:: watchMode:: program updates", () => {
         function verifyProjectChanges(subScenario: string, allFilesGetter: () => readonly File[]) {
             const buildLogicAndTests: TscWatchCompileChange = {
                 caption: "Build logic and tests",
-                change: ts.noop,
-                timeouts: sys => {
-                    sys.checkTimeoutQueueLengthAndRun(1);
-                    sys.checkTimeoutQueueLength(0);
-                },
+                edit: ts.noop,
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             };
 
             verifyTscWatch({
@@ -132,7 +126,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: program updates", () => {
                     allFilesGetter(),
                     { currentDirectory: "/user/username/projects" }
                 ),
-                changes: [
+                edits: [
                     changeCore(() => `${core[1].content}
 export class someClass { }`, "Make change to core"),
                     buildLogicAndTests,
@@ -141,7 +135,7 @@ export class someClass { }`, "Make change to core"),
                     buildLogicAndTests,
                     {
                         caption: "Make two changes",
-                        change: sys => {
+                        edit: sys => {
                             const change1 = `${core[1].content}
 export class someClass { }`;
                             sys.writeFile(core[1].path, change1);
@@ -150,7 +144,7 @@ export class someClass { }`;
                             sys.writeFile(core[1].path, `${change1}
 export class someClass2 { }`);
                         },
-                        timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1), // Builds core
+                        timeouts: sys => sys.runQueuedTimeoutCallbacks(), // Builds core
                     },
                     buildLogicAndTests,
                 ]
@@ -164,7 +158,7 @@ export class someClass2 { }`);
                     allFilesGetter(),
                     { currentDirectory: "/user/username/projects" }
                 ),
-                changes: [
+                edits: [
                     changeCore(() => `${core[1].content}
 function foo() { }`, "Make local change to core"),
                 ]
@@ -181,7 +175,7 @@ function foo() { }`, "Make local change to core"),
                     allFilesGetter(),
                     { currentDirectory: "/user/username/projects" }
                 ),
-                changes: [
+                edits: [
                     changeNewFile(newFile.content),
                     buildLogicAndTests,
                     changeNewFile(`${newFile.content}
@@ -224,20 +218,17 @@ export class someClass2 { }`),
             [libFile, ...core, logic[1], ...tests],
             { currentDirectory: "/user/username/projects" }
         ),
-        changes: [
+        edits: [
             {
                 caption: "Write logic tsconfig and build logic",
-                change: sys => sys.writeFile(logic[0].path, logic[0].content),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1), // Builds logic
+                edit: sys => sys.writeFile(logic[0].path, logic[0].content),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(), // Builds logic
             },
             {
                 caption: "Build Tests",
-                change: ts.noop,
+                edit: ts.noop,
                 // Build tests
-                timeouts: sys => {
-                    sys.checkTimeoutQueueLengthAndRun(1);
-                    sys.checkTimeoutQueueLength(0);
-                },
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
     });
@@ -255,12 +246,9 @@ export class someClass2 { }`),
         });
         const buildLogic: TscWatchCompileChange = {
             caption: "Build logic",
-            change: ts.noop,
+            edit: ts.noop,
             // Builds logic
-            timeouts: sys => {
-                sys.checkTimeoutQueueLengthAndRun(1);
-                sys.checkTimeoutQueueLength(0);
-            },
+            timeouts: sys => sys.runQueuedTimeoutCallbacks(),
         };
         verifyTscWatch({
             scenario: "programUpdates",
@@ -276,7 +264,7 @@ export class someClass2 { }`),
                 const logicTsConfig: File = {
                     path: logic[0].path,
                     content: JSON.stringify({
-                        compilerOptions: { composite: true, declaration: true, outFile: "index.js" },
+                        compilerOptions: { ignoreDeprecations: "5.0", composite: true, declaration: true, outFile: "index.js" },
                         references: [{ path: "../core", prepend: true }]
                     })
                 };
@@ -286,7 +274,7 @@ export class someClass2 { }`),
                 };
                 return createWatchedSystem([libFile, coreTsConfig, coreIndex, logicTsConfig, logicIndex], { currentDirectory: "/user/username/projects" });
             },
-            changes: [
+            edits: [
                 changeCore(() => `${coreIndex.content}
 function myFunc() { return 10; }`, "Make non local change and build core"),
                 buildLogic,
@@ -337,23 +325,23 @@ createSomeObject().message;`
                 const files = [libFile, libraryTs, libraryTsconfig, appTs, appTsconfig];
                 return createWatchedSystem(files, { currentDirectory: `${"/user/username/projects"}/sample1` });
             },
-            changes: [
+            edits: [
                 {
                     caption: "Introduce error",
                     // Change message in library to message2
-                    change: sys => sys.writeFile(libraryTs.path, libraryTs.content.replace(/message/g, "message2")),
+                    edit: sys => sys.writeFile(libraryTs.path, libraryTs.content.replace(/message/g, "message2")),
                     timeouts: sys => {
-                        sys.checkTimeoutQueueLengthAndRun(1); // Build library
-                        sys.checkTimeoutQueueLengthAndRun(1); // Build App
+                        sys.runQueuedTimeoutCallbacks(); // Build library
+                        sys.runQueuedTimeoutCallbacks(); // Build App
                     },
                 },
                 {
                     caption: "Fix error",
                     // Revert library changes
-                    change: sys => sys.writeFile(libraryTs.path, libraryTs.content),
+                    edit: sys => sys.writeFile(libraryTs.path, libraryTs.content),
                     timeouts: sys => {
-                        sys.checkTimeoutQueueLengthAndRun(1); // Build library
-                        sys.checkTimeoutQueueLengthAndRun(1); // Build App
+                        sys.runQueuedTimeoutCallbacks(); // Build library
+                        sys.runQueuedTimeoutCallbacks(); // Build App
                     },
                 },
             ]
@@ -368,26 +356,20 @@ createSomeObject().message;`
                 subScenario: `reportErrors/${subScenario}`,
                 commandLineArgs: ["-b", "-w", `sample1/${SubProject.tests}`, ...buildOptions],
                 sys: () => createWatchedSystem(allFiles, { currentDirectory: "/user/username/projects" }),
-                changes: [
+                edits: [
                     {
                         caption: "change logic",
-                        change: sys => sys.writeFile(logic[1].path, `${logic[1].content}
+                        edit: sys => sys.writeFile(logic[1].path, `${logic[1].content}
 let y: string = 10;`),
                         // Builds logic
-                        timeouts: sys => {
-                            sys.checkTimeoutQueueLengthAndRun(1);
-                            sys.checkTimeoutQueueLength(0);
-                        },
+                        timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                     },
                     {
                         caption: "change core",
-                        change: sys => sys.writeFile(core[1].path, `${core[1].content}
+                        edit: sys => sys.writeFile(core[1].path, `${core[1].content}
 let x: string = 10;`),
                         // Builds core
-                        timeouts: sys => {
-                            sys.checkTimeoutQueueLengthAndRun(1);
-                            sys.checkTimeoutQueueLength(0);
-                        },
+                        timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                     }
                 ]
             });
@@ -419,22 +401,17 @@ let x: string = 10;`),
                 content: JSON.stringify({ compilerOptions: { composite: true } })
             };
 
-            function incrementalBuild(sys: TestServerHost) {
-                sys.checkTimeoutQueueLengthAndRun(1); // Build the app
-                sys.checkTimeoutQueueLength(0);
-            }
-
             const fixError: TscWatchCompileChange = {
                 caption: "Fix error in fileWithError",
                 // Fix error
-                change: sys => sys.writeFile(fileWithError.path, fileWithFixedError.content),
-                timeouts: incrementalBuild
+                edit: sys => sys.writeFile(fileWithError.path, fileWithFixedError.content),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             };
 
             const changeFileWithoutError: TscWatchCompileChange = {
                 caption: "Change fileWithoutError",
-                change: sys => sys.writeFile(fileWithoutError.path, fileWithoutError.content.replace(/myClass/g, "myClass2")),
-                timeouts: incrementalBuild
+                edit: sys => sys.writeFile(fileWithoutError.path, fileWithoutError.content.replace(/myClass/g, "myClass2")),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             };
 
             verifyTscWatch({
@@ -445,7 +422,7 @@ let x: string = 10;`),
                     [libFile, fileWithError, fileWithoutError, tsconfig],
                     { currentDirectory: `${"/user/username/projects"}/${solution}` }
                 ),
-                changes: [
+                edits: [
                     fixError
                 ]
             });
@@ -458,7 +435,7 @@ let x: string = 10;`),
                     [libFile, fileWithError, fileWithoutError, tsconfig],
                     { currentDirectory: `${"/user/username/projects"}/${solution}` }
                 ),
-                changes: [
+                edits: [
                     changeFileWithoutError
                 ]
             });
@@ -466,8 +443,8 @@ let x: string = 10;`),
             describe("when reporting errors on introducing error", () => {
                 const introduceError: TscWatchCompileChange = {
                     caption: "Introduce error",
-                    change: sys => sys.writeFile(fileWithError.path, fileWithError.content),
-                    timeouts: incrementalBuild,
+                    edit: sys => sys.writeFile(fileWithError.path, fileWithError.content),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 };
 
                 verifyTscWatch({
@@ -478,7 +455,7 @@ let x: string = 10;`),
                         [libFile, fileWithFixedError, fileWithoutError, tsconfig],
                         { currentDirectory: `${"/user/username/projects"}/${solution}` }
                     ),
-                    changes: [
+                    edits: [
                         introduceError,
                         fixError
                     ]
@@ -492,7 +469,7 @@ let x: string = 10;`),
                         [libFile, fileWithFixedError, fileWithoutError, tsconfig],
                         { currentDirectory: `${"/user/username/projects"}/${solution}` }
                     ),
-                    changes: [
+                    edits: [
                         introduceError,
                         changeFileWithoutError
                     ]
@@ -506,23 +483,20 @@ let x: string = 10;`),
         subScenario: "incremental updates in verbose mode",
         commandLineArgs: ["-b", "-w", `sample1/${SubProject.tests}`, "-verbose"],
         sys: () => createWatchedSystem(allFiles, { currentDirectory: "/user/username/projects" }),
-        changes: [
+        edits: [
             {
                 caption: "Make non dts change",
-                change: sys => sys.writeFile(logic[1].path, `${logic[1].content}
+                edit: sys => sys.writeFile(logic[1].path, `${logic[1].content}
 function someFn() { }`),
-                timeouts: sys => {
-                    sys.checkTimeoutQueueLengthAndRun(1); // build logic and updates tests
-                    sys.checkTimeoutQueueLength(0);
-                },
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(), // build logic and updates tests
             },
             {
                 caption: "Make dts change",
-                change: sys => sys.writeFile(logic[1].path, `${logic[1].content}
+                edit: sys => sys.writeFile(logic[1].path, `${logic[1].content}
 export function someFn() { }`),
                 timeouts: sys => {
-                    sys.checkTimeoutQueueLengthAndRun(1); // build logic
-                    sys.checkTimeoutQueueLengthAndRun(1); // build tests
+                    sys.runQueuedTimeoutCallbacks(); // build logic
+                    sys.runQueuedTimeoutCallbacks(); // build tests
                 },
             }
         ],
@@ -547,10 +521,10 @@ export function someFn() { }`),
             };
             return createWatchedSystem([index, configFile, libFile], { currentDirectory: "/user/username/projects/myproject" });
         },
-        changes: [
+        edits: [
             {
                 caption: "Change tsconfig to set noUnusedParameters to false",
-                change: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, JSON.stringify({
+                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, JSON.stringify({
                     compilerOptions: {
                         noUnusedParameters: false
                     }
@@ -565,12 +539,12 @@ export function someFn() { }`),
         subScenario: "should not trigger recompilation because of program emit",
         commandLineArgs: ["-b", "-w", `sample1/${SubProject.core}`, "-verbose"],
         sys: () => createWatchedSystem([libFile, ...core], { currentDirectory: "/user/username/projects" }),
-        changes: [
+        edits: [
             noopChange,
             {
                 caption: "Add new file",
-                change: sys => sys.writeFile(`sample1/${SubProject.core}/file3.ts`, `export const y = 10;`),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1)
+                edit: sys => sys.writeFile(`sample1/${SubProject.core}/file3.ts`, `export const y = 10;`),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks()
             },
             noopChange,
         ]
@@ -585,12 +559,12 @@ export function someFn() { }`),
             const newCoreConfig: File = { path: coreConfig.path, content: JSON.stringify({ compilerOptions: { composite: true, outDir: "outDir" } }) };
             return createWatchedSystem([libFile, newCoreConfig, ...rest], { currentDirectory: "/user/username/projects" });
         },
-        changes: [
+        edits: [
             noopChange,
             {
                 caption: "Add new file",
-                change: sys => sys.writeFile(`sample1/${SubProject.core}/file3.ts`, `export const y = 10;`),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1)
+                edit: sys => sys.writeFile(`sample1/${SubProject.core}/file3.ts`, `export const y = 10;`),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks()
             },
             noopChange
         ]
@@ -599,7 +573,7 @@ export function someFn() { }`),
     verifyTscWatch({
         scenario: "programUpdates",
         subScenario: "works with extended source files",
-        commandLineArgs: ["-b", "-w", "-v", "project1.tsconfig.json", "project2.tsconfig.json"],
+        commandLineArgs: ["-b", "-w", "-v", "project1.tsconfig.json", "project2.tsconfig.json", "project3.tsconfig.json"],
         sys: () => {
             const alphaExtendedConfigFile: File = {
                 path: "/a/b/alpha.tsconfig.json",
@@ -635,63 +609,111 @@ export function someFn() { }`),
                     files: [otherFile.path]
                 })
             };
+            const otherFile2: File = {
+                path: "/a/b/other2.ts",
+                content: "let k = 0;",
+            };
+            const extendsConfigFile1: File = {
+                path: "/a/b/extendsConfig1.tsconfig.json",
+                content: JSON.stringify({
+                    compilerOptions: {
+                        composite: true,
+                    }
+                })
+            };
+            const extendsConfigFile2: File = {
+                path: "/a/b/extendsConfig2.tsconfig.json",
+                content: JSON.stringify({
+                    compilerOptions: {
+                        strictNullChecks: false,
+                    }
+                })
+            };
+            const extendsConfigFile3: File = {
+                path: "/a/b/extendsConfig3.tsconfig.json",
+                content: JSON.stringify({
+                    compilerOptions: {
+                        noImplicitAny: true,
+                    }
+                })
+            };
+            const project3Config: File = {
+                path: "/a/b/project3.tsconfig.json",
+                content: JSON.stringify({
+                    extends: ["./extendsConfig1.tsconfig.json", "./extendsConfig2.tsconfig.json", "./extendsConfig3.tsconfig.json"],
+                    compilerOptions: {
+                        composite: false,
+                    },
+                    files: [otherFile2.path]
+                })
+            };
             return createWatchedSystem([
                 libFile,
                 alphaExtendedConfigFile, project1Config, commonFile1, commonFile2,
-                bravoExtendedConfigFile, project2Config, otherFile
+                bravoExtendedConfigFile, project2Config, otherFile, otherFile2,
+                    extendsConfigFile1, extendsConfigFile2, extendsConfigFile3, project3Config
             ], { currentDirectory: "/a/b" });
         },
-        changes: [
+        edits: [
             {
                 caption: "Modify alpha config",
-                change: sys => sys.writeFile("/a/b/alpha.tsconfig.json", JSON.stringify({
+                edit: sys => sys.writeFile("/a/b/alpha.tsconfig.json", JSON.stringify({
                     compilerOptions: { strict: true }
                 })),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1) // Build project1
+                timeouts: sys => sys.runQueuedTimeoutCallbacks() // Build project1
             },
             {
                 caption: "Build project 2",
-                change: ts.noop,
-                timeouts: sys => { // Build project2
-                    sys.checkTimeoutQueueLengthAndRun(1);
-                    sys.checkTimeoutQueueLength(0);
-                },
+                edit: ts.noop,
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(), // Build project2
             },
             {
                 caption: "change bravo config",
-                change: sys => sys.writeFile("/a/b/bravo.tsconfig.json", JSON.stringify({
+                edit: sys => sys.writeFile("/a/b/bravo.tsconfig.json", JSON.stringify({
                     extends: "./alpha.tsconfig.json",
                     compilerOptions: { strict: false }
                 })),
-                timeouts: sys => { // Build project2
-                    sys.checkTimeoutQueueLengthAndRun(1);
-                    sys.checkTimeoutQueueLength(0);
-                },
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(), // Build project2
             },
             {
                 caption: "project 2 extends alpha",
-                change: sys => sys.writeFile("/a/b/project2.tsconfig.json", JSON.stringify({
+                edit: sys => sys.writeFile("/a/b/project2.tsconfig.json", JSON.stringify({
                     extends: "./alpha.tsconfig.json",
                 })),
-                timeouts: sys => { // Build project2
-                    sys.checkTimeoutQueueLengthAndRun(1);
-                    sys.checkTimeoutQueueLength(0);
-                },
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(), // Build project2
             },
             {
                 caption: "update aplha config",
-                change: sys => sys.writeFile("/a/b/alpha.tsconfig.json", "{}"),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1), // build project1
+                edit: sys => sys.writeFile("/a/b/alpha.tsconfig.json", "{}"),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(), // build project1
             },
             {
                 caption: "Build project 2",
-                change: ts.noop,
-                timeouts: sys => { // Build project2
-                    sys.checkTimeoutQueueLengthAndRun(1);
-                    sys.checkTimeoutQueueLength(0);
-                },
+                edit: ts.noop,
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(), // Build project3
             },
-        ]
+            {
+                caption: "Modify extendsConfigFile2",
+                edit: sys => sys.writeFile("/a/b/extendsConfig2.tsconfig.json", JSON.stringify({
+                    compilerOptions: { strictNullChecks: true }
+                })),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(), // Build project3
+            },
+            {
+                caption: "Modify project 3",
+                edit: sys => sys.writeFile("/a/b/project3.tsconfig.json", JSON.stringify({
+                    extends: ["./extendsConfig1.tsconfig.json", "./extendsConfig2.tsconfig.json"],
+                    compilerOptions: { composite: false },
+                    files: ["/a/b/other2.ts"]
+                })),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(), // Build project3
+            },
+            {
+                caption: "Delete extendedConfigFile2 and report error",
+                edit: sys => sys.deleteFile("./extendsConfig2.tsconfig.json"),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(), // Build project3
+            }
+        ],
     });
 
     verifyTscWatch({
@@ -759,10 +781,10 @@ export function someFn() { }`),
                 bravoExtendedConfigFile, project2Config, otherFile
             ], { currentDirectory: "/a/b" });
         },
-        changes: [
+        edits: [
             {
                 caption: "Remove project2 from base config",
-                change: sys => sys.modifyFile("/a/b/tsconfig.json", JSON.stringify({
+                edit: sys => sys.modifyFile("/a/b/tsconfig.json", JSON.stringify({
                     references: [
                         {
                             path: "./project1.tsconfig.json",
@@ -770,10 +792,7 @@ export function someFn() { }`),
                     ],
                     files: [],
                 })),
-                timeouts: sys => {
-                    sys.checkTimeoutQueueLengthAndRun(1);
-                    sys.checkTimeoutQueueLength(0);
-                },
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
     });
@@ -788,6 +807,5 @@ export function someFn() { }`),
             [libFile.path]: libFile.content,
         }),
         commandLineArgs: ["--b", "src/project", "-i", "-w"],
-        changes: ts.emptyArray
     });
 });

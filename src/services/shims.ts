@@ -256,7 +256,7 @@ export interface LanguageServiceShim extends Shim {
      * Returns a JSON-encoded value of the type:
      * { fileName: string, textSpan: { start: number, length: number } }[]
      */
-    findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): string;
+    findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, preferences?: UserPreferences | boolean): string;
 
     /**
      * Returns a JSON-encoded value of the type:
@@ -301,13 +301,6 @@ export interface LanguageServiceShim extends Shim {
     getFileReferences(fileName: string): string;
 
     /**
-     * @deprecated
-     * Returns a JSON-encoded value of the type:
-     * { fileName: string; textSpan: { start: number; length: number}; isWriteAccess: boolean }[]
-     */
-    getOccurrencesAtPosition(fileName: string, position: number): string;
-
-    /**
      * Returns a JSON-encoded value of the type:
      * { fileName: string; highlights: { start: number; length: number }[] }[]
      *
@@ -349,7 +342,7 @@ export interface LanguageServiceShim extends Shim {
     /**
      * Returns JSON-encoded value of the type TextInsertion.
      */
-    getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions): string;
+    getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions, formatOptions?: FormatCodeSettings): string;
 
     /**
      * Returns JSON-encoded boolean to indicate whether we should support brace location
@@ -743,7 +736,7 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
      * Ensure (almost) deterministic release of internal Javascript resources when
      * some external native objects holds onto us (e.g. Com/Interop).
      */
-    public dispose(dummy: {}): void {
+    public override dispose(dummy: {}): void {
         this.logger.log("dispose()");
         this.languageService.dispose();
         this.languageService = null!; // eslint-disable-line no-null/no-null
@@ -781,7 +774,7 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
     }
 
     private realizeDiagnostics(diagnostics: readonly Diagnostic[]): { message: string; start: number; length: number; category: string; }[] {
-        const newLine = getNewLineOrDefaultFromHost(this.host);
+        const newLine = getNewLineOrDefaultFromHost(this.host, /*formatSettings*/ undefined);
         return realizeDiagnostics(diagnostics, newLine);
     }
 
@@ -959,10 +952,10 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
         );
     }
 
-    public findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): string {
+    public findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, preferences: UserPreferences): string {
         return this.forwardJSONCall(
-            `findRenameLocations('${fileName}', ${position}, ${findInStrings}, ${findInComments}, ${providePrefixAndSuffixTextForRename})`,
-            () => this.languageService.findRenameLocations(fileName, position, findInStrings, findInComments, providePrefixAndSuffixTextForRename)
+            `findRenameLocations('${fileName}', ${position}, ${findInStrings}, ${findInComments})`,
+            () => this.languageService.findRenameLocations(fileName, position, findInStrings, findInComments, preferences)
         );
     }
 
@@ -1018,13 +1011,6 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
         return this.forwardJSONCall(
             `getFileReferences('${fileName})`,
             () => this.languageService.getFileReferences(fileName)
-        );
-    }
-
-    public getOccurrencesAtPosition(fileName: string, position: number): string {
-        return this.forwardJSONCall(
-            `getOccurrencesAtPosition('${fileName}', ${position})`,
-            () => this.languageService.getOccurrencesAtPosition(fileName, position)
         );
     }
 
@@ -1091,10 +1077,10 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
             });
     }
 
-    public getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions): string {
+    public getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions, formatOptions?: FormatCodeSettings): string {
         return this.forwardJSONCall(
             `getDocCommentTemplateAtPosition('${fileName}', ${position})`,
-            () => this.languageService.getDocCommentTemplateAtPosition(fileName, position, options)
+            () => this.languageService.getDocCommentTemplateAtPosition(fileName, position, options, formatOptions)
         );
     }
 
@@ -1293,7 +1279,7 @@ class CoreServicesShimObject extends ShimBase implements CoreServicesShim {
             `getPreProcessedFileInfo('${fileName}')`,
             () => {
                 // for now treat files as JavaScript
-                const result = preProcessFile(getSnapshotText(sourceTextSnapshot), /* readImportFiles */ true, /* detectJavaScriptImports */ true);
+                const result = preProcessFile(getSnapshotText(sourceTextSnapshot), /*readImportFiles*/ true, /*detectJavaScriptImports*/ true);
                 return {
                     referencedFiles: this.convertFileReferences(result.referencedFiles),
                     importedFiles: this.convertFileReferences(result.importedFiles),
@@ -1356,7 +1342,7 @@ class CoreServicesShimObject extends ShimBase implements CoreServicesShim {
     }
 
     public discoverTypings(discoverTypingsJson: string): string {
-        const getCanonicalFileName = createGetCanonicalFileName(/*useCaseSensitivefileNames:*/ false);
+        const getCanonicalFileName = createGetCanonicalFileName(/*useCaseSensitiveFileNames*/ false);
         return this.forwardJSONCall("discoverTypings()", () => {
             const info = JSON.parse(discoverTypingsJson) as DiscoverTypingsInfo;
             if (this.safeList === undefined) {
@@ -1395,7 +1381,7 @@ export class TypeScriptServicesFactory implements ShimFactory {
                 this.documentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory());
             }
             const hostAdapter = new LanguageServiceShimHostAdapter(host);
-            const languageService = createLanguageService(hostAdapter, this.documentRegistry, /*syntaxOnly*/ false);
+            const languageService = createLanguageService(hostAdapter, this.documentRegistry, /*syntaxOnlyOrLanguageServiceMode*/ false);
             return new LanguageServiceShimObject(this, host, languageService);
         }
         catch (err) {

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterNames.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterNames.ts] ////
+
+=== objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterNames.ts ===
 // object types are identical structurally
 
 class B<U> {
@@ -6,7 +8,6 @@ class B<U> {
 
     constructor(x: U) { return null; }
 >x : U
->null : null
 }
 
 class C<V> {
@@ -14,7 +15,6 @@ class C<V> {
 
     constructor(x: V) { return null; }
 >x : V
->null : null
 }
 
 interface I<X> {

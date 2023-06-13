@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndNumericIndexer.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndNumericIndexer.ts] ////
+
+=== genericCallWithObjectTypeArgsAndNumericIndexer.ts ===
 // Type inference infers from indexers in target type, no errors expected
 
 function foo<T>(x: T) {

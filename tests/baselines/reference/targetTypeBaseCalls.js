@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/targetTypeBaseCalls.ts] ////
+
 //// [targetTypeBaseCalls.ts]
 function foo(x: (s: string) => void) { }
  

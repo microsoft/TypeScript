@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/optionsStrictPropertyInitializationStrictNullChecks.ts] ////
+
 //// [optionsStrictPropertyInitializationStrictNullChecks.ts]
 var x;
 

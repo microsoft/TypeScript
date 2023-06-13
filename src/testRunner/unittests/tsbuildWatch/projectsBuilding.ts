@@ -1,14 +1,14 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    createWatchedSystem,
-    File,
-    libFile,
-} from "../virtualFileSystemWithWatch";
-import {
     noopChange,
     TscWatchCompileChange,
     verifyTscWatch,
-} from "../tscWatch/helpers";
+} from "../helpers/tscWatch";
+import {
+    createWatchedSystem,
+    File,
+    libFile,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsbuildWatch:: watchMode:: projectsBuilding", () => {
     function pkgs<T>(cb: (index: number) => T, count: number, startIndex?: number): T[] {
@@ -50,8 +50,8 @@ describe("unittests:: tsbuildWatch:: watchMode:: projectsBuilding", () => {
     function checkBuildPkg(startIndex: number, count: number): TscWatchCompileChange {
         return {
             caption: `build ${pkgs(index => `pkg${index}`, count, startIndex).join(",")}`,
-            change: ts.noop,
-            timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+            edit: ts.noop,
+            timeouts: sys => sys.runQueuedTimeoutCallbacks(),
         };
     }
     verifyTscWatch({
@@ -62,17 +62,17 @@ describe("unittests:: tsbuildWatch:: watchMode:: projectsBuilding", () => {
             [libFile, ...ts.flatMap(pkgs(pkgFiles, 3), ts.identity), solution(3)],
             { currentDirectory: "/user/username/projects/myproject" }
         ),
-        changes: [
+        edits: [
             {
                 caption: "dts doesn't change",
-                change: sys => sys.appendFile(`/user/username/projects/myproject/pkg0/index.ts`, `const someConst2 = 10;`),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1), // Build pkg0 and update timestamps
+                edit: sys => sys.appendFile(`/user/username/projects/myproject/pkg0/index.ts`, `const someConst2 = 10;`),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(), // Build pkg0 and update timestamps
             },
             noopChange,
             {
                 caption: "dts change",
-                change: sys => sys.appendFile(`/user/username/projects/myproject/pkg0/index.ts`, `export const someConst = 10;`),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1) // Build pkg0
+                edit: sys => sys.appendFile(`/user/username/projects/myproject/pkg0/index.ts`, `export const someConst = 10;`),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks() // Build pkg0
             },
             checkBuildPkg(1, 2),
             noopChange,
@@ -86,17 +86,17 @@ describe("unittests:: tsbuildWatch:: watchMode:: projectsBuilding", () => {
             [libFile, ...ts.flatMap(pkgs(pkgFiles, 5), ts.identity), solution(5)],
             { currentDirectory: "/user/username/projects/myproject" }
         ),
-        changes: [
+        edits: [
             {
                 caption: "dts doesn't change",
-                change: sys => sys.appendFile(`/user/username/projects/myproject/pkg0/index.ts`, `const someConst2 = 10;`),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1), // Build pkg0 and update timestamps
+                edit: sys => sys.appendFile(`/user/username/projects/myproject/pkg0/index.ts`, `const someConst2 = 10;`),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(), // Build pkg0 and update timestamps
             },
             noopChange,
             {
                 caption: "dts change",
-                change: sys => sys.appendFile(`/user/username/projects/myproject/pkg0/index.ts`, `export const someConst = 10;`),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1) // Build pkg0
+                edit: sys => sys.appendFile(`/user/username/projects/myproject/pkg0/index.ts`, `export const someConst = 10;`),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks() // Build pkg0
             },
             checkBuildPkg(1, 4),
             noopChange,
@@ -110,31 +110,31 @@ describe("unittests:: tsbuildWatch:: watchMode:: projectsBuilding", () => {
             [libFile, ...ts.flatMap(pkgs(pkgFiles, 8), ts.identity), solution(8)],
             { currentDirectory: "/user/username/projects/myproject" }
         ),
-        changes: [
+        edits: [
             {
                 caption: "dts doesn't change",
-                change: sys => sys.appendFile(`/user/username/projects/myproject/pkg0/index.ts`, `const someConst2 = 10;`),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1), // Build pkg0 and update timestamps
+                edit: sys => sys.appendFile(`/user/username/projects/myproject/pkg0/index.ts`, `const someConst2 = 10;`),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(), // Build pkg0 and update timestamps
             },
             noopChange,
             {
                 caption: "dts change",
-                change: sys => sys.appendFile(`/user/username/projects/myproject/pkg0/index.ts`, `export const someConst = 10;`),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1) // Build pkg0
+                edit: sys => sys.appendFile(`/user/username/projects/myproject/pkg0/index.ts`, `export const someConst = 10;`),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks() // Build pkg0
             },
             checkBuildPkg(1, 5),
             checkBuildPkg(6, 2),
             noopChange,
             {
                 caption: "dts change2",
-                change: sys => sys.appendFile(`/user/username/projects/myproject/pkg0/index.ts`, `export const someConst3 = 10;`),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1) // Build pkg0
+                edit: sys => sys.appendFile(`/user/username/projects/myproject/pkg0/index.ts`, `export const someConst3 = 10;`),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks() // Build pkg0
             },
             checkBuildPkg(1, 5),
             {
                 caption: "change while building",
-                change: sys => sys.appendFile(`/user/username/projects/myproject/pkg0/index.ts`, `const someConst4 = 10;`),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1) // Build pkg0
+                edit: sys => sys.appendFile(`/user/username/projects/myproject/pkg0/index.ts`, `const someConst4 = 10;`),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks() // Build pkg0
             },
             checkBuildPkg(6, 2),
             noopChange,
@@ -148,17 +148,17 @@ describe("unittests:: tsbuildWatch:: watchMode:: projectsBuilding", () => {
             [libFile, ...ts.flatMap(pkgs(pkgFiles, 23), ts.identity), solution(23)],
             { currentDirectory: "/user/username/projects/myproject" }
         ),
-        changes: [
+        edits: [
             {
                 caption: "dts doesn't change",
-                change: sys => sys.appendFile(`/user/username/projects/myproject/pkg0/index.ts`, `const someConst2 = 10;`),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1), // Build pkg0 and update timestamps
+                edit: sys => sys.appendFile(`/user/username/projects/myproject/pkg0/index.ts`, `const someConst2 = 10;`),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(), // Build pkg0 and update timestamps
             },
             noopChange,
             {
                 caption: "dts change",
-                change: sys => sys.appendFile(`/user/username/projects/myproject/pkg0/index.ts`, `export const someConst = 10;`),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1) // Build pkg0
+                edit: sys => sys.appendFile(`/user/username/projects/myproject/pkg0/index.ts`, `export const someConst = 10;`),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks() // Build pkg0
             },
             checkBuildPkg(1, 5),
             checkBuildPkg(6, 5),
@@ -168,21 +168,21 @@ describe("unittests:: tsbuildWatch:: watchMode:: projectsBuilding", () => {
             noopChange,
             {
                 caption: "dts change2",
-                change: sys => sys.appendFile(`/user/username/projects/myproject/pkg0/index.ts`, `export const someConst3 = 10;`),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1) // Build pkg0
+                edit: sys => sys.appendFile(`/user/username/projects/myproject/pkg0/index.ts`, `export const someConst3 = 10;`),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks() // Build pkg0
             },
             checkBuildPkg(1, 5),
             checkBuildPkg(6, 5),
             {
                 caption: "change while building",
-                change: sys => sys.appendFile(`/user/username/projects/myproject/pkg0/index.ts`, `const someConst4 = 10;`),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1) // Build pkg0
+                edit: sys => sys.appendFile(`/user/username/projects/myproject/pkg0/index.ts`, `const someConst4 = 10;`),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks() // Build pkg0
             },
             checkBuildPkg(11, 5),
             {
                 caption: "change while building: dts changes",
-                change: sys => sys.appendFile(`/user/username/projects/myproject/pkg0/index.ts`, `export const someConst5 = 10;`),
-                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1) // Build pkg0
+                edit: sys => sys.appendFile(`/user/username/projects/myproject/pkg0/index.ts`, `export const someConst5 = 10;`),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks() // Build pkg0
             },
             checkBuildPkg(1, 5),
             checkBuildPkg(6, 5),
