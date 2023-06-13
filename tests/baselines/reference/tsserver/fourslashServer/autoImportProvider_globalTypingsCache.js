@@ -91,6 +91,43 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /Library/Caches/typescript/node_modules/@types/react-router-dom/package.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+After Request
+watchedFiles::
+/Library/Caches/typescript/node_modules/@types/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/Library/Caches/typescript/node_modules/@types/react-router-dom/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/Library/Caches/typescript/node_modules/@types/react-router-dom/package.json: *new*
+  {"pollingInterval":2000}
+/Library/Caches/typescript/node_modules/@types/react-router-dom/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/Library/Caches/typescript/node_modules/@types/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/Library/Caches/typescript/node_modules/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/Library/Caches/typescript/node_modules/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/lib.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts: *new*
+  {"pollingInterval":500}
+
+watchedDirectoriesRecursive::
+/Library/Caches/typescript/node_modules: *new*
+  {}
+/Library/Caches/typescript/node_modules/@types: *new*
+  {}
+/Library/Caches/typescript/node_modules/@types/node_modules/@types: *new*
+  {}
+/Library/Caches/typescript/node_modules/@types/react-router-dom/node_modules: *new*
+  {}
+/Library/Caches/typescript/node_modules/@types/react-router-dom/node_modules/@types: *new*
+  {}
+/Library/Caches/typescript/node_modules/node_modules/@types: *new*
+  {}
+
 Info seq  [hh:mm:ss:mss] request:
     {"seq":1,"type":"request","arguments":{"file":"/project/index.js"},"command":"open"}
 Info seq  [hh:mm:ss:mss] Search path: /project
@@ -197,6 +234,49 @@ Info seq  [hh:mm:ss:mss] 	FileName: /Library/Caches/typescript/node_modules/@typ
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /project/index.js ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /project/tsconfig.json
+After Request
+watchedFiles::
+/Library/Caches/typescript/node_modules/@types/jsconfig.json:
+  {"pollingInterval":2000}
+/Library/Caches/typescript/node_modules/@types/react-router-dom/jsconfig.json:
+  {"pollingInterval":2000}
+/Library/Caches/typescript/node_modules/@types/react-router-dom/package.json:
+  {"pollingInterval":2000}
+/Library/Caches/typescript/node_modules/@types/react-router-dom/tsconfig.json:
+  {"pollingInterval":2000}
+/Library/Caches/typescript/node_modules/@types/tsconfig.json:
+  {"pollingInterval":2000}
+/Library/Caches/typescript/node_modules/jsconfig.json:
+  {"pollingInterval":2000}
+/Library/Caches/typescript/node_modules/tsconfig.json:
+  {"pollingInterval":2000}
+/lib.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/project/package.json: *new*
+  {"pollingInterval":250}
+/project/tsconfig.json: *new*
+  {"pollingInterval":2000}
+
+watchedDirectoriesRecursive::
+/Library/Caches/typescript/node_modules:
+  {}
+/Library/Caches/typescript/node_modules/@types:
+  {}
+/Library/Caches/typescript/node_modules/@types/node_modules/@types:
+  {}
+/Library/Caches/typescript/node_modules/@types/react-router-dom/node_modules:
+  {}
+/Library/Caches/typescript/node_modules/@types/react-router-dom/node_modules/@types:
+  {}
+/Library/Caches/typescript/node_modules/node_modules/@types:
+  {}
+/project: *new*
+  {}
+
 Info seq  [hh:mm:ss:mss] request:
     {"seq":2,"type":"request","arguments":{"preferences":{"allowIncompleteCompletions":true,"includeCompletionsForModuleExports":true}},"command":"configure"}
 Info seq  [hh:mm:ss:mss] response:
@@ -792,3 +872,47 @@ Info seq  [hh:mm:ss:mss] response:
       ]
      }
     }
+After Request
+watchedFiles::
+/Library/Caches/typescript/node_modules/@types/jsconfig.json:
+  {"pollingInterval":2000}
+/Library/Caches/typescript/node_modules/@types/react-router-dom/jsconfig.json:
+  {"pollingInterval":2000}
+/Library/Caches/typescript/node_modules/@types/react-router-dom/package.json:
+  {"pollingInterval":2000}
+/Library/Caches/typescript/node_modules/@types/react-router-dom/tsconfig.json:
+  {"pollingInterval":2000}
+/Library/Caches/typescript/node_modules/@types/tsconfig.json:
+  {"pollingInterval":2000}
+/Library/Caches/typescript/node_modules/jsconfig.json:
+  {"pollingInterval":2000}
+/Library/Caches/typescript/node_modules/tsconfig.json:
+  {"pollingInterval":2000}
+/lib.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/project/package.json:
+  {"pollingInterval":250}
+/project/tsconfig.json:
+  {"pollingInterval":2000}
+
+watchedDirectoriesRecursive::
+/Library/Caches/typescript/node_modules:
+  {}
+/Library/Caches/typescript/node_modules/@types:
+  {}
+/Library/Caches/typescript/node_modules/@types/node_modules/@types:
+  {}
+/Library/Caches/typescript/node_modules/@types/react-router-dom/node_modules:
+  {}
+/Library/Caches/typescript/node_modules/@types/react-router-dom/node_modules/@types:
+  {}
+/Library/Caches/typescript/node_modules/node_modules/@types:
+  {}
+/library/caches/typescript/node_modules: *new*
+  {}
+/project:
+  {}

@@ -126,6 +126,21 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /a/tsconfig.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+After Request
+watchedFiles::
+/a/a.ts: *new*
+  {"pollingInterval":500}
+/a/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/b/b.ts: *new*
+  {"pollingInterval":500}
+/lib.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts: *new*
+  {"pollingInterval":500}
+
 Info seq  [hh:mm:ss:mss] request:
     {"seq":1,"type":"request","arguments":{"file":"/a/a.ts"},"command":"open"}
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/a.ts 500 undefined WatchType: Closed Script info
@@ -144,6 +159,23 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/tsconfig.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /a/a.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /a/tsconfig.json
+After Request
+watchedFiles::
+/a/tsconfig.json:
+  {"pollingInterval":2000}
+/b/b.ts:
+  {"pollingInterval":500}
+/lib.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+
+watchedFiles *deleted*::
+/a/a.ts:
+  {"pollingInterval":500}
+
 Info seq  [hh:mm:ss:mss] request:
     {"seq":2,"type":"request","arguments":{"file":"/a/a.ts","line":2,"offset":1},"command":"references-full"}
 Info seq  [hh:mm:ss:mss] Finding references to /a/a.ts position 35 in project /a/tsconfig.json
@@ -240,6 +272,23 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/a.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /a/tsconfig.json
 Info seq  [hh:mm:ss:mss] 	FileName: /b/b.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /a/tsconfig.json,/b/tsconfig.json
+After Request
+watchedFiles::
+/a/tsconfig.json:
+  {"pollingInterval":2000}
+/b/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/lib.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+
+watchedFiles *deleted*::
+/b/b.ts:
+  {"pollingInterval":500}
+
 Info seq  [hh:mm:ss:mss] request:
     {"seq":4,"type":"request","arguments":{"file":"/b/b.ts","line":1,"offset":1},"command":"references-full"}
 Info seq  [hh:mm:ss:mss] Finding references to /b/b.ts position 0 in project /b/tsconfig.json

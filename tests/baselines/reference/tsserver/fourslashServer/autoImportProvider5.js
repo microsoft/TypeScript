@@ -81,6 +81,21 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /package.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+After Request
+watchedFiles::
+/lib.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts: *new*
+  {"pollingInterval":500}
+/node_modules/react-hook-form/dist/index.d.ts: *new*
+  {"pollingInterval":500}
+/node_modules/react-hook-form/dist/useForm.d.ts: *new*
+  {"pollingInterval":500}
+/package.json: *new*
+  {"pollingInterval":250}
+
 Info seq  [hh:mm:ss:mss] request:
     {"seq":1,"type":"request","arguments":{"file":"/index.ts"},"command":"open"}
 Info seq  [hh:mm:ss:mss] Search path: /
@@ -259,6 +274,25 @@ Info seq  [hh:mm:ss:mss] response:
       }
      ]
     }
+After Request
+watchedFiles::
+/lib.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/node_modules/react-hook-form/dist/index.d.ts:
+  {"pollingInterval":500}
+/node_modules/react-hook-form/dist/useForm.d.ts:
+  {"pollingInterval":500}
+/package.json:
+  {"pollingInterval":250}
+
+watchedDirectoriesRecursive::
+/node_modules: *new*
+  {}
+
 Info seq  [hh:mm:ss:mss] request:
     {"seq":7,"type":"request","arguments":{"file":"/index.ts","line":1,"offset":1,"endLine":1,"endOffset":1,"insertString":"import { useForm } from \"react-hook-form\";\r\n\r\n"},"command":"change"}
 Info seq  [hh:mm:ss:mss] request:

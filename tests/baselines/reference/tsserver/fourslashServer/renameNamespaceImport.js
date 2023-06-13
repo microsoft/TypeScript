@@ -128,6 +128,23 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /lib/tsconfig.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+After Request
+watchedFiles::
+/lib.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts: *new*
+  {"pollingInterval":500}
+/lib/index.ts: *new*
+  {"pollingInterval":500}
+/lib/tsconfig.json: *new*
+  {"pollingInterval":2000}
+
+watchedDirectoriesRecursive::
+/lib: *new*
+  {}
+
 Info seq  [hh:mm:ss:mss] request:
     {"seq":1,"type":"request","arguments":{"file":"/lib/index.ts"},"command":"open"}
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /lib/index.ts 500 undefined WatchType: Closed Script info
@@ -146,6 +163,25 @@ Info seq  [hh:mm:ss:mss] 	FileName: /lib/tsconfig.json ProjectRootPath: undefine
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /lib/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /lib/tsconfig.json
+After Request
+watchedFiles::
+/lib.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/lib/tsconfig.json:
+  {"pollingInterval":2000}
+
+watchedFiles *deleted*::
+/lib/index.ts:
+  {"pollingInterval":500}
+
+watchedDirectoriesRecursive::
+/lib:
+  {}
+
 Info seq  [hh:mm:ss:mss] request:
     {"seq":2,"type":"request","arguments":{"file":"/src/index.ts"},"command":"open"}
 Info seq  [hh:mm:ss:mss] Search path: /src
@@ -234,6 +270,25 @@ Info seq  [hh:mm:ss:mss] 	FileName: /lib/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /lib/tsconfig.json,/src/tsconfig.json
 Info seq  [hh:mm:ss:mss] 	FileName: /src/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /src/tsconfig.json
+After Request
+watchedFiles::
+/lib.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/lib/tsconfig.json:
+  {"pollingInterval":2000}
+/src/tsconfig.json: *new*
+  {"pollingInterval":2000}
+
+watchedDirectoriesRecursive::
+/lib:
+  {}
+/src: *new*
+  {}
+
 Info seq  [hh:mm:ss:mss] request:
     {"seq":3,"type":"request","arguments":{"preferences":{"providePrefixAndSuffixTextForRename":true,"quotePreference":"double"}},"command":"configure"}
 Info seq  [hh:mm:ss:mss] response:

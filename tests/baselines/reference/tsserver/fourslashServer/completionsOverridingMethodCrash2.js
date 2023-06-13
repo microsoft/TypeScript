@@ -148,6 +148,25 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /tsconfig.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+After Request
+watchedFiles::
+/classes.ts: *new*
+  {"pollingInterval":500}
+/lib.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts: *new*
+  {"pollingInterval":500}
+/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/utils.ts: *new*
+  {"pollingInterval":500}
+
+watchedDirectoriesRecursive::
+: *new*
+  {}
+
 Info seq  [hh:mm:ss:mss] request:
     {"seq":1,"type":"request","arguments":{"file":"/classes.ts"},"command":"open"}
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /classes.ts 500 undefined WatchType: Closed Script info
@@ -166,6 +185,27 @@ Info seq  [hh:mm:ss:mss] 	FileName: /tsconfig.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /classes.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+After Request
+watchedFiles::
+/lib.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/tsconfig.json:
+  {"pollingInterval":2000}
+/utils.ts:
+  {"pollingInterval":500}
+
+watchedFiles *deleted*::
+/classes.ts:
+  {"pollingInterval":500}
+
+watchedDirectoriesRecursive::
+:
+  {}
+
 Info seq  [hh:mm:ss:mss] request:
     {"seq":2,"type":"request","arguments":{"preferences":{"includeCompletionsWithInsertText":true,"includeCompletionsWithSnippetText":true,"includeCompletionsWithClassMemberSnippets":true}},"command":"configure"}
 Info seq  [hh:mm:ss:mss] response:
@@ -321,6 +361,25 @@ Info seq  [hh:mm:ss:mss] 	FileName: /classes.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
 Info seq  [hh:mm:ss:mss] 	FileName: /utils.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+After Request
+watchedFiles::
+/lib.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/tsconfig.json:
+  {"pollingInterval":2000}
+
+watchedFiles *deleted*::
+/utils.ts:
+  {"pollingInterval":500}
+
+watchedDirectoriesRecursive::
+:
+  {}
+
 Info seq  [hh:mm:ss:mss] request:
     {"seq":5,"type":"request","arguments":{"file":"/classes.ts"},"command":"open"}
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)

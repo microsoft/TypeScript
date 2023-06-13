@@ -132,6 +132,31 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /tests/cases/fourslash/server/a.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /tests/cases/fourslash/server/tsconfig.json
+After Request
+watchedFiles::
+/lib.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts: *new*
+  {"pollingInterval":500}
+/tests/cases/fourslash/server/b.ts: *new*
+  {"pollingInterval":500}
+/tests/cases/fourslash/server/c.ts: *new*
+  {"pollingInterval":500}
+/tests/cases/fourslash/server/tsconfig.json: *new*
+  {"pollingInterval":2000}
+
+watchedDirectoriesRecursive::
+/tests/cases/fourslash/node_modules: *new*
+  {}
+/tests/cases/fourslash/node_modules/@types: *new*
+  {}
+/tests/cases/fourslash/server/node_modules: *new*
+  {}
+/tests/cases/fourslash/server/node_modules/@types: *new*
+  {}
+
 Info seq  [hh:mm:ss:mss] request:
     {"seq":1,"type":"request","arguments":{"file":"/tests/cases/fourslash/server/a.ts"},"command":"open"}
 Info seq  [hh:mm:ss:mss] Project '/tests/cases/fourslash/server/tsconfig.json' (Configured)

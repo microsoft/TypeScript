@@ -100,6 +100,19 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /referencesForGlobals_1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+After Request
+watchedFiles::
+/lib.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts: *new*
+  {"pollingInterval":500}
+/referencesForGlobals_2.ts: *new*
+  {"pollingInterval":500}
+/tsconfig.json: *new*
+  {"pollingInterval":2000}
+
 Info seq  [hh:mm:ss:mss] request:
     {"seq":1,"type":"request","arguments":{"file":"/referencesForGlobals_2.ts"},"command":"open"}
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /referencesForGlobals_2.ts 500 undefined WatchType: Closed Script info
@@ -114,6 +127,21 @@ Info seq  [hh:mm:ss:mss] 	FileName: /referencesForGlobals_1.ts ProjectRootPath: 
 Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
 Info seq  [hh:mm:ss:mss] 	FileName: /referencesForGlobals_2.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+After Request
+watchedFiles::
+/lib.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/tsconfig.json:
+  {"pollingInterval":2000}
+
+watchedFiles *deleted*::
+/referencesForGlobals_2.ts:
+  {"pollingInterval":500}
+
 Info seq  [hh:mm:ss:mss] request:
     {"seq":2,"type":"request","arguments":{"file":"/referencesForGlobals_2.ts","line":1,"offset":9},"command":"references-full"}
 Info seq  [hh:mm:ss:mss] Finding references to /referencesForGlobals_2.ts position 8 in project /tsconfig.json

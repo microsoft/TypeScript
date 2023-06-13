@@ -149,6 +149,23 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /tsconfig.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+After Request
+watchedFiles::
+/index.ts: *new*
+  {"pollingInterval":500}
+/lib.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts: *new*
+  {"pollingInterval":500}
+/tsconfig.json: *new*
+  {"pollingInterval":2000}
+
+watchedDirectoriesRecursive::
+: *new*
+  {}
+
 Info seq  [hh:mm:ss:mss] request:
     {"seq":1,"type":"request","arguments":{"file":"/index.ts"},"command":"open"}
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /index.ts 500 undefined WatchType: Closed Script info
@@ -167,6 +184,25 @@ Info seq  [hh:mm:ss:mss] 	FileName: /tsconfig.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+After Request
+watchedFiles::
+/lib.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/tsconfig.json:
+  {"pollingInterval":2000}
+
+watchedFiles *deleted*::
+/index.ts:
+  {"pollingInterval":500}
+
+watchedDirectoriesRecursive::
+:
+  {}
+
 Info seq  [hh:mm:ss:mss] request:
     {"seq":2,"type":"request","arguments":{"file":"/index.ts","line":1,"offset":10},"command":"findSourceDefinition"}
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/auxiliaryProject1*
@@ -243,3 +279,23 @@ Info seq  [hh:mm:ss:mss] response:
       }
      ]
     }
+After Request
+watchedFiles::
+/lib.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/node_modules/react/cjs/react.development.js: *new*
+  {"pollingInterval":500}
+/node_modules/react/cjs/react.production.min.js: *new*
+  {"pollingInterval":500}
+/node_modules/react/index.js: *new*
+  {"pollingInterval":500}
+/tsconfig.json:
+  {"pollingInterval":2000}
+
+watchedDirectoriesRecursive::
+:
+  {}

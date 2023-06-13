@@ -146,6 +146,29 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /project/tsconfig.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+After Request
+watchedFiles::
+/lib.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts: *new*
+  {"pollingInterval":500}
+/project/a.ts: *new*
+  {"pollingInterval":500}
+/project/b.ts: *new*
+  {"pollingInterval":500}
+/project/c.ts: *new*
+  {"pollingInterval":500}
+/project/d.ts: *new*
+  {"pollingInterval":500}
+/project/tsconfig.json: *new*
+  {"pollingInterval":2000}
+
+watchedDirectoriesRecursive::
+/project: *new*
+  {}
+
 Info seq  [hh:mm:ss:mss] request:
     {"seq":1,"type":"request","arguments":{"file":"/project/a.ts"},"command":"fileReferences"}
 Info seq  [hh:mm:ss:mss] response:

@@ -280,6 +280,33 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /a/package.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+After Request
+watchedFiles::
+/a/index.ts: *new*
+  {"pollingInterval":500}
+/a/package.json: *new*
+  {"pollingInterval":250}
+/a/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/b/index.ts: *new*
+  {"pollingInterval":500}
+/b/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/lib.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts: *new*
+  {"pollingInterval":500}
+/lib.esnext.full.d.ts: *new*
+  {"pollingInterval":500}
+
+watchedDirectoriesRecursive::
+/a: *new*
+  {}
+/b: *new*
+  {}
+
 Info seq  [hh:mm:ss:mss] request:
     {"seq":1,"type":"request","arguments":{"file":"/a/index.ts"},"command":"open"}
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/index.ts 500 undefined WatchType: Closed Script info
@@ -306,6 +333,35 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/package.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /a/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /a/tsconfig.json
+After Request
+watchedFiles::
+/a/package.json:
+  {"pollingInterval":250}
+/a/tsconfig.json:
+  {"pollingInterval":2000}
+/b/index.ts:
+  {"pollingInterval":500}
+/b/tsconfig.json:
+  {"pollingInterval":2000}
+/lib.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
+
+watchedFiles *deleted*::
+/a/index.ts:
+  {"pollingInterval":500}
+
+watchedDirectoriesRecursive::
+/a:
+  {}
+/b:
+  {}
+
 Info seq  [hh:mm:ss:mss] request:
     {"seq":2,"type":"request","arguments":{"preferences":{}},"command":"configure"}
 Info seq  [hh:mm:ss:mss] response:
@@ -418,6 +474,33 @@ Info seq  [hh:mm:ss:mss] response:
       }
      ]
     }
+After Request
+watchedFiles::
+/a/package.json:
+  {"pollingInterval":250}
+/a/tsconfig.json:
+  {"pollingInterval":2000}
+/b/index.ts:
+  {"pollingInterval":500}
+/b/tsconfig.json:
+  {"pollingInterval":2000}
+/lib.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
+
+watchedDirectoriesRecursive::
+/a:
+  {}
+/a/node_modules: *new*
+  {}
+/b:
+  {}
+
 Info seq  [hh:mm:ss:mss] request:
     {"seq":7,"type":"request","arguments":{"file":"/a/index.ts","line":1,"offset":1,"endLine":1,"endOffset":1,"insertString":"import { Shape } from \"b\";\r\n\r\n"},"command":"change"}
 Info seq  [hh:mm:ss:mss] request:

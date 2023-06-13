@@ -374,6 +374,41 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /tsconfig.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+After Request
+watchedFiles::
+/lib.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts: *new*
+  {"pollingInterval":500}
+/packages/client/index.ts: *new*
+  {"pollingInterval":500}
+/packages/client/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/packages/server/index.js: *new*
+  {"pollingInterval":500}
+/packages/server/router.js: *new*
+  {"pollingInterval":500}
+/packages/server/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/packages/shared/src/referenced.ts: *new*
+  {"pollingInterval":500}
+/packages/shared/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/tsconfig.json: *new*
+  {"pollingInterval":2000}
+
+watchedDirectoriesRecursive::
+/packages/client: *new*
+  {}
+/packages/server: *new*
+  {}
+/packages/shared: *new*
+  {}
+/packages/shared/dist: *new*
+  {}
+
 Info seq  [hh:mm:ss:mss] request:
     {"seq":1,"type":"request","arguments":{"file":"/packages/shared/src/referenced.ts"},"command":"fileReferences"}
 Info seq  [hh:mm:ss:mss] response:

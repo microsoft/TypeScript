@@ -441,6 +441,91 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /tsconfig.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+After Request
+watchedFiles::
+/index.ts: *new*
+  {"pollingInterval":500}
+/lib.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts: *new*
+  {"pollingInterval":500}
+/lib.es2015.collection.d.ts: *new*
+  {"pollingInterval":500}
+/lib.es2015.core.d.ts: *new*
+  {"pollingInterval":500}
+/lib.es2015.d.ts: *new*
+  {"pollingInterval":500}
+/lib.es2015.generator.d.ts: *new*
+  {"pollingInterval":500}
+/lib.es2015.iterable.d.ts: *new*
+  {"pollingInterval":500}
+/lib.es2015.promise.d.ts: *new*
+  {"pollingInterval":500}
+/lib.es2015.proxy.d.ts: *new*
+  {"pollingInterval":500}
+/lib.es2015.reflect.d.ts: *new*
+  {"pollingInterval":500}
+/lib.es2015.symbol.d.ts: *new*
+  {"pollingInterval":500}
+/lib.es2015.symbol.wellknown.d.ts: *new*
+  {"pollingInterval":500}
+/lib.es2016.array.include.d.ts: *new*
+  {"pollingInterval":500}
+/lib.es2016.d.ts: *new*
+  {"pollingInterval":500}
+/lib.es2017.d.ts: *new*
+  {"pollingInterval":500}
+/lib.es2017.date.d.ts: *new*
+  {"pollingInterval":500}
+/lib.es2017.intl.d.ts: *new*
+  {"pollingInterval":500}
+/lib.es2017.object.d.ts: *new*
+  {"pollingInterval":500}
+/lib.es2017.sharedmemory.d.ts: *new*
+  {"pollingInterval":500}
+/lib.es2017.string.d.ts: *new*
+  {"pollingInterval":500}
+/lib.es2017.typedarrays.d.ts: *new*
+  {"pollingInterval":500}
+/lib.es2018.asyncgenerator.d.ts: *new*
+  {"pollingInterval":500}
+/lib.es2018.asynciterable.d.ts: *new*
+  {"pollingInterval":500}
+/lib.es2018.d.ts: *new*
+  {"pollingInterval":500}
+/lib.es2018.intl.d.ts: *new*
+  {"pollingInterval":500}
+/lib.es2018.promise.d.ts: *new*
+  {"pollingInterval":500}
+/lib.es2018.regexp.d.ts: *new*
+  {"pollingInterval":500}
+/lib.es2019.array.d.ts: *new*
+  {"pollingInterval":500}
+/lib.es2019.d.ts: *new*
+  {"pollingInterval":500}
+/lib.es2019.intl.d.ts: *new*
+  {"pollingInterval":500}
+/lib.es2019.object.d.ts: *new*
+  {"pollingInterval":500}
+/lib.es2019.string.d.ts: *new*
+  {"pollingInterval":500}
+/lib.es2019.symbol.d.ts: *new*
+  {"pollingInterval":500}
+/lib.es5.d.ts: *new*
+  {"pollingInterval":500}
+/node_modules/@types/react/index.d.ts: *new*
+  {"pollingInterval":500}
+/package.json: *new*
+  {"pollingInterval":250}
+/tsconfig.json: *new*
+  {"pollingInterval":2000}
+
+watchedDirectoriesRecursive::
+: *new*
+  {}
+
 Info seq  [hh:mm:ss:mss] request:
     {"seq":1,"type":"request","arguments":{"file":"/index.ts"},"command":"open"}
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /index.ts 500 undefined WatchType: Closed Script info
@@ -459,6 +544,93 @@ Info seq  [hh:mm:ss:mss] 	FileName: /tsconfig.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+After Request
+watchedFiles::
+/lib.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/lib.es2015.collection.d.ts:
+  {"pollingInterval":500}
+/lib.es2015.core.d.ts:
+  {"pollingInterval":500}
+/lib.es2015.d.ts:
+  {"pollingInterval":500}
+/lib.es2015.generator.d.ts:
+  {"pollingInterval":500}
+/lib.es2015.iterable.d.ts:
+  {"pollingInterval":500}
+/lib.es2015.promise.d.ts:
+  {"pollingInterval":500}
+/lib.es2015.proxy.d.ts:
+  {"pollingInterval":500}
+/lib.es2015.reflect.d.ts:
+  {"pollingInterval":500}
+/lib.es2015.symbol.d.ts:
+  {"pollingInterval":500}
+/lib.es2015.symbol.wellknown.d.ts:
+  {"pollingInterval":500}
+/lib.es2016.array.include.d.ts:
+  {"pollingInterval":500}
+/lib.es2016.d.ts:
+  {"pollingInterval":500}
+/lib.es2017.d.ts:
+  {"pollingInterval":500}
+/lib.es2017.date.d.ts:
+  {"pollingInterval":500}
+/lib.es2017.intl.d.ts:
+  {"pollingInterval":500}
+/lib.es2017.object.d.ts:
+  {"pollingInterval":500}
+/lib.es2017.sharedmemory.d.ts:
+  {"pollingInterval":500}
+/lib.es2017.string.d.ts:
+  {"pollingInterval":500}
+/lib.es2017.typedarrays.d.ts:
+  {"pollingInterval":500}
+/lib.es2018.asyncgenerator.d.ts:
+  {"pollingInterval":500}
+/lib.es2018.asynciterable.d.ts:
+  {"pollingInterval":500}
+/lib.es2018.d.ts:
+  {"pollingInterval":500}
+/lib.es2018.intl.d.ts:
+  {"pollingInterval":500}
+/lib.es2018.promise.d.ts:
+  {"pollingInterval":500}
+/lib.es2018.regexp.d.ts:
+  {"pollingInterval":500}
+/lib.es2019.array.d.ts:
+  {"pollingInterval":500}
+/lib.es2019.d.ts:
+  {"pollingInterval":500}
+/lib.es2019.intl.d.ts:
+  {"pollingInterval":500}
+/lib.es2019.object.d.ts:
+  {"pollingInterval":500}
+/lib.es2019.string.d.ts:
+  {"pollingInterval":500}
+/lib.es2019.symbol.d.ts:
+  {"pollingInterval":500}
+/lib.es5.d.ts:
+  {"pollingInterval":500}
+/node_modules/@types/react/index.d.ts:
+  {"pollingInterval":500}
+/package.json:
+  {"pollingInterval":250}
+/tsconfig.json:
+  {"pollingInterval":2000}
+
+watchedFiles *deleted*::
+/index.ts:
+  {"pollingInterval":500}
+
+watchedDirectoriesRecursive::
+:
+  {}
+
 Info seq  [hh:mm:ss:mss] request:
     {"seq":2,"type":"request","arguments":{"preferences":{"includeCompletionsForModuleExports":true}},"command":"configure"}
 Info seq  [hh:mm:ss:mss] response:

@@ -57,6 +57,29 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /tests/cases/fourslash/server/referencesToStringLiteralValue.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+After Request
+watchedFiles::
+/lib.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts: *new*
+  {"pollingInterval":500}
+/tests/cases/fourslash/server/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/tests/cases/fourslash/server/tsconfig.json: *new*
+  {"pollingInterval":2000}
+
+watchedDirectoriesRecursive::
+/tests/cases/fourslash/node_modules: *new*
+  {}
+/tests/cases/fourslash/node_modules/@types: *new*
+  {}
+/tests/cases/fourslash/server/node_modules: *new*
+  {}
+/tests/cases/fourslash/server/node_modules/@types: *new*
+  {}
+
 Info seq  [hh:mm:ss:mss] request:
     {"seq":1,"type":"request","arguments":{"file":"/tests/cases/fourslash/server/referencesToStringLiteralValue.ts","line":1,"offset":25},"command":"references-full"}
 Info seq  [hh:mm:ss:mss] Finding references to /tests/cases/fourslash/server/referencesToStringLiteralValue.ts position 24 in project /dev/null/inferredProject1*

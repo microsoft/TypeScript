@@ -80,6 +80,15 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /node_modules/dependency/package.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+After Request
+watchedFiles::
+/lib.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts: *new*
+  {"pollingInterval":500}
+
 Info seq  [hh:mm:ss:mss] request:
     {"seq":1,"type":"request","arguments":{"file":"/src/foo.ts"},"command":"open"}
 Info seq  [hh:mm:ss:mss] Search path: /src
@@ -222,6 +231,27 @@ Info seq  [hh:mm:ss:mss] 	FileName: /node_modules/dependency/package.json Projec
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /src/foo.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+After Request
+watchedFiles::
+/lib.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/lib.esnext.full.d.ts: *new*
+  {"pollingInterval":500}
+/node_modules/dependency/lib/index.d.ts: *new*
+  {"pollingInterval":500}
+/node_modules/dependency/lib/lol.d.ts: *new*
+  {"pollingInterval":500}
+/node_modules/dependency/lib/package.json: *new*
+  {"pollingInterval":2000}
+/package.json: *new*
+  {"pollingInterval":250}
+/tsconfig.json: *new*
+  {"pollingInterval":2000}
+
 Info seq  [hh:mm:ss:mss] request:
     {"seq":2,"type":"request","arguments":{"file":"/src/foo.ts","line":1,"offset":31},"command":"completionInfo"}
 Info seq  [hh:mm:ss:mss] response:
@@ -477,6 +507,28 @@ Info seq  [hh:mm:ss:mss] response:
       ]
      }
     }
+After Request
+watchedFiles::
+/lib.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
+/node_modules/dependency/lib/index.d.ts:
+  {"pollingInterval":500}
+/node_modules/dependency/lib/lol.d.ts:
+  {"pollingInterval":500}
+/node_modules/dependency/lib/package.json:
+  {"pollingInterval":2000}
+  {"pollingInterval":2000} *new*
+/package.json:
+  {"pollingInterval":250}
+/tsconfig.json:
+  {"pollingInterval":2000}
+
 Info seq  [hh:mm:ss:mss] request:
     {"seq":29,"type":"request","arguments":{"file":"/src/foo.ts","line":1,"offset":42,"endLine":1,"endOffset":42,"insertString":""},"command":"change"}
 Info seq  [hh:mm:ss:mss] request:
@@ -545,3 +597,27 @@ Info seq  [hh:mm:ss:mss] response:
       ]
      }
     }
+After Request
+watchedFiles::
+/lib.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
+/node_modules/dependency/lib/index.d.ts:
+  {"pollingInterval":500}
+/node_modules/dependency/lib/lol.d.ts:
+  {"pollingInterval":500}
+/node_modules/dependency/lib/package.json:
+  {"pollingInterval":2000}
+/package.json:
+  {"pollingInterval":250}
+/tsconfig.json:
+  {"pollingInterval":2000}
+
+watchedFiles *deleted*::
+/node_modules/dependency/lib/package.json:
+  {"pollingInterval":2000}

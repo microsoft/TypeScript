@@ -71,6 +71,15 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /node_modules/common-dependency/package.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+After Request
+watchedFiles::
+/lib.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts: *new*
+  {"pollingInterval":500}
+
 Info seq  [hh:mm:ss:mss] request:
     {"seq":1,"type":"request","arguments":{"file":"/packages/a/index.ts"},"command":"open"}
 Info seq  [hh:mm:ss:mss] Search path: /packages/a
@@ -241,6 +250,33 @@ Info seq  [hh:mm:ss:mss] 	FileName: /node_modules/common-dependency/package.json
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /packages/a/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /packages/a/tsconfig.json
+After Request
+watchedFiles::
+/lib.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/lib.esnext.full.d.ts: *new*
+  {"pollingInterval":500}
+/node_modules/common-dependency/index.d.ts: *new*
+  {"pollingInterval":500}
+/node_modules/package-dependency/index.d.ts: *new*
+  {"pollingInterval":500}
+/package.json: *new*
+  {"pollingInterval":250}
+/packages/a/package.json: *new*
+  {"pollingInterval":250}
+/packages/a/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/tsconfig.json: *new*
+  {"pollingInterval":2000}
+
+watchedDirectoriesRecursive::
+/packages/a: *new*
+  {}
+
 Info seq  [hh:mm:ss:mss] request:
     {"seq":2,"type":"request","arguments":{"preferences":{"includeCompletionsForModuleExports":true}},"command":"configure"}
 Info seq  [hh:mm:ss:mss] response:
