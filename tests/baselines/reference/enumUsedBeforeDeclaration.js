@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumUsedBeforeDeclaration.ts] ////
+
 //// [enumUsedBeforeDeclaration.ts]
 const v: Color = Color.Green;
 const v2: ConstColor = ConstColor.Green;

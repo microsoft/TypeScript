@@ -1,4 +1,6 @@
-=== tests/cases/compiler/prefixedNumberLiteralAssignToNumberLiteralType.ts ===
+//// [tests/cases/compiler/prefixedNumberLiteralAssignToNumberLiteralType.ts] ////
+
+=== prefixedNumberLiteralAssignToNumberLiteralType.ts ===
 let x: 1 = +1;
 >x : Symbol(x, Decl(prefixedNumberLiteralAssignToNumberLiteralType.ts, 0, 3))
 

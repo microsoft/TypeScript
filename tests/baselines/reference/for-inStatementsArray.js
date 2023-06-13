@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/for-inStatements/for-inStatementsArray.ts] ////
+
 //// [for-inStatementsArray.ts]
 let a: Date[];
 let b: boolean[];

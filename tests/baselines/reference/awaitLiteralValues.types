@@ -1,4 +1,6 @@
-=== tests/cases/compiler/awaitLiteralValues.ts ===
+//// [tests/cases/compiler/awaitLiteralValues.ts] ////
+
+=== awaitLiteralValues.ts ===
 function awaitString() {
 >awaitString : () => void
 
@@ -36,7 +38,6 @@ function awaitNull() {
 
     await null;
 >await null : null
->null : null
 }
 
 function awaitUndefined() {

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts] ////
+
+=== parserRealSource9.ts ===
 // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
 // See LICENSE.txt in the project root for complete license information.
 
@@ -20,7 +22,6 @@ module TypeScript {
 
             var extendsList: Type[] = null;
 >extendsList : Type[]
->null : null
 
             if (typeLinks) {
 >typeLinks : TypeLink[]
@@ -526,7 +527,6 @@ module TypeScript {
 >bindType : (scope: SymbolScope, type: Type, instanceType: Type) => void
 >scope : SymbolScope
 >instanceType : Type
->null : null
             }
             if (type.hasMembers()) {
 >type.hasMembers() : any
@@ -754,7 +754,6 @@ module TypeScript {
 >type : Type
 >call : any
 >scope : SymbolScope
->null : null
             }
             if (type.index) {
 >type.index : any
@@ -770,7 +769,6 @@ module TypeScript {
 >type : Type
 >index : any
 >scope : SymbolScope
->null : null
             }
             if (type.elementType) {
 >type.elementType : any
@@ -786,7 +784,6 @@ module TypeScript {
 >type.elementType : any
 >type : Type
 >elementType : any
->null : null
             }
         }
 

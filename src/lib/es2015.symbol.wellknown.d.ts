@@ -56,7 +56,7 @@ interface SymbolConstructor {
     readonly toStringTag: unique symbol;
 
     /**
-     * An Object whose own property names are property names that are excluded from the 'with'
+     * An Object whose truthy properties are properties that are excluded from the 'with'
      * environment bindings of the associated objects.
      */
     readonly unscopables: unique symbol;
@@ -73,17 +73,21 @@ interface Symbol {
 
 interface Array<T> {
     /**
-     * Returns an object whose properties have the value 'true'
+     * Is an object whose properties have the value 'true'
      * when they will be absent when used in a 'with' statement.
      */
-    [Symbol.unscopables](): {
-        copyWithin: boolean;
-        entries: boolean;
-        fill: boolean;
-        find: boolean;
-        findIndex: boolean;
-        keys: boolean;
-        values: boolean;
+    readonly [Symbol.unscopables]: {
+        [K in keyof any[]]?: boolean;
+    };
+}
+
+interface ReadonlyArray<T> {
+    /**
+     * Is an object whose properties have the value 'true'
+     * when they will be absent when used in a 'with' statement.
+     */
+    readonly [Symbol.unscopables]: {
+        [K in keyof readonly any[]]?: boolean;
     };
 }
 
@@ -115,7 +119,7 @@ interface Map<K, V> {
     readonly [Symbol.toStringTag]: string;
 }
 
-interface WeakMap<K extends object, V> {
+interface WeakMap<K extends WeakKey, V> {
     readonly [Symbol.toStringTag]: string;
 }
 
@@ -123,7 +127,7 @@ interface Set<T> {
     readonly [Symbol.toStringTag]: string;
 }
 
-interface WeakSet<T extends object> {
+interface WeakSet<T extends WeakKey> {
     readonly [Symbol.toStringTag]: string;
 }
 

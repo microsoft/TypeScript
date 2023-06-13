@@ -1,7 +1,7 @@
-tests/cases/conformance/classes/members/privateNames/privateNameStaticMethodAsync.ts(11,11): error TS1029: 'static' modifier must precede 'async' modifier.
+privateNameStaticMethodAsync.ts(11,11): error TS1029: 'static' modifier must precede 'async' modifier.
 
 
-==== tests/cases/conformance/classes/members/privateNames/privateNameStaticMethodAsync.ts (1 errors) ====
+==== privateNameStaticMethodAsync.ts (1 errors) ====
     const C = class {
         static async #bar() { return await Promise.resolve(42); }
         static async foo() {

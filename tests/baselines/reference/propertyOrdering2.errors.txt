@@ -1,7 +1,7 @@
-tests/cases/compiler/propertyOrdering2.ts(5,21): error TS2339: Property 'y' does not exist on type 'Foo'.
+propertyOrdering2.ts(5,21): error TS2339: Property 'y' does not exist on type 'Foo'.
 
 
-==== tests/cases/compiler/propertyOrdering2.ts (1 errors) ====
+==== propertyOrdering2.ts (1 errors) ====
     class Foo {
         constructor(public x, y) { }
            foo() {

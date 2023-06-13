@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/transformsElideNullUndefinedType.ts] ////
+
 //// [transformsElideNullUndefinedType.ts]
 var v0: null;
 var v1: undefined;

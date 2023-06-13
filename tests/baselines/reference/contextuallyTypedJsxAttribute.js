@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextuallyTypedJsxAttribute.ts] ////
+
 //// [index.tsx]
 interface Elements {
   foo: { callback?: (value: number) => void };

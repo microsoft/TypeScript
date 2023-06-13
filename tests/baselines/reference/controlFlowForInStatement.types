@@ -1,4 +1,6 @@
-=== tests/cases/conformance/controlFlow/controlFlowForInStatement.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowForInStatement.ts] ////
+
+=== controlFlowForInStatement.ts ===
 let x: string | number | boolean | RegExp | Function;
 >x : string | number | boolean | Function | RegExp
 

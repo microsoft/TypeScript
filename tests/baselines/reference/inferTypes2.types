@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/conditional/inferTypes2.ts ===
+//// [tests/cases/conformance/types/conditional/inferTypes2.ts] ////
+
+=== inferTypes2.ts ===
 // Repros from #22755
 
 export declare function foo<T>(obj: T): T extends () => infer P ? P : never;
@@ -43,7 +45,6 @@ type AlsoWeird = unknown extends infer U ? U : never;
 
 const a: Weird = null;
 >a : any
->null : null
 
 const b: string = a;
 >b : string

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noUnusedLocals_writeOnly.ts ===
+//// [tests/cases/compiler/noUnusedLocals_writeOnly.ts] ////
+
+=== noUnusedLocals_writeOnly.ts ===
 function f(x = 0, b = false) {
 >f : Symbol(f, Decl(noUnusedLocals_writeOnly.ts, 0, 0))
 >x : Symbol(x, Decl(noUnusedLocals_writeOnly.ts, 0, 11))
@@ -8,64 +10,58 @@ function f(x = 0, b = false) {
     x = 1;
 >x : Symbol(x, Decl(noUnusedLocals_writeOnly.ts, 0, 11))
 
-    x++;
->x : Symbol(x, Decl(noUnusedLocals_writeOnly.ts, 0, 11))
-
-    x /= 2;
->x : Symbol(x, Decl(noUnusedLocals_writeOnly.ts, 0, 11))
-
     ([x] = [1]);
 >x : Symbol(x, Decl(noUnusedLocals_writeOnly.ts, 0, 11))
 
     ({ x } = { x: 1 });
->x : Symbol(x, Decl(noUnusedLocals_writeOnly.ts, 6, 6))
->x : Symbol(x, Decl(noUnusedLocals_writeOnly.ts, 6, 14))
+>x : Symbol(x, Decl(noUnusedLocals_writeOnly.ts, 4, 6))
+>x : Symbol(x, Decl(noUnusedLocals_writeOnly.ts, 4, 14))
 
     ({ x: x } = { x: 1 });
->x : Symbol(x, Decl(noUnusedLocals_writeOnly.ts, 7, 6))
+>x : Symbol(x, Decl(noUnusedLocals_writeOnly.ts, 5, 6))
 >x : Symbol(x, Decl(noUnusedLocals_writeOnly.ts, 0, 11))
->x : Symbol(x, Decl(noUnusedLocals_writeOnly.ts, 7, 17))
+>x : Symbol(x, Decl(noUnusedLocals_writeOnly.ts, 5, 17))
 
     ({ a: [{ b: x }] } = { a: [{ b: 1 }] });
->a : Symbol(a, Decl(noUnusedLocals_writeOnly.ts, 8, 6))
->b : Symbol(b, Decl(noUnusedLocals_writeOnly.ts, 8, 12))
+>a : Symbol(a, Decl(noUnusedLocals_writeOnly.ts, 6, 6))
+>b : Symbol(b, Decl(noUnusedLocals_writeOnly.ts, 6, 12))
 >x : Symbol(x, Decl(noUnusedLocals_writeOnly.ts, 0, 11))
->a : Symbol(a, Decl(noUnusedLocals_writeOnly.ts, 8, 26))
->b : Symbol(b, Decl(noUnusedLocals_writeOnly.ts, 8, 32))
+>a : Symbol(a, Decl(noUnusedLocals_writeOnly.ts, 6, 26))
+>b : Symbol(b, Decl(noUnusedLocals_writeOnly.ts, 6, 32))
 
     ({ x = 2 } = { x: b ? 1 : undefined });
->x : Symbol(x, Decl(noUnusedLocals_writeOnly.ts, 9, 6))
->x : Symbol(x, Decl(noUnusedLocals_writeOnly.ts, 9, 18))
+>x : Symbol(x, Decl(noUnusedLocals_writeOnly.ts, 7, 6))
+>x : Symbol(x, Decl(noUnusedLocals_writeOnly.ts, 7, 18))
 >b : Symbol(b, Decl(noUnusedLocals_writeOnly.ts, 0, 17))
 >undefined : Symbol(undefined)
 
     let used = 1;
->used : Symbol(used, Decl(noUnusedLocals_writeOnly.ts, 10, 7))
+>used : Symbol(used, Decl(noUnusedLocals_writeOnly.ts, 8, 7))
 
     ({ x = used } = { x: b ? 1 : undefined });
->x : Symbol(x, Decl(noUnusedLocals_writeOnly.ts, 11, 6))
->used : Symbol(used, Decl(noUnusedLocals_writeOnly.ts, 10, 7))
->x : Symbol(x, Decl(noUnusedLocals_writeOnly.ts, 11, 21))
+>x : Symbol(x, Decl(noUnusedLocals_writeOnly.ts, 9, 6))
+>used : Symbol(used, Decl(noUnusedLocals_writeOnly.ts, 8, 7))
+>x : Symbol(x, Decl(noUnusedLocals_writeOnly.ts, 9, 21))
 >b : Symbol(b, Decl(noUnusedLocals_writeOnly.ts, 0, 17))
 >undefined : Symbol(undefined)
 
     let y = 0;
->y : Symbol(y, Decl(noUnusedLocals_writeOnly.ts, 13, 7))
+>y : Symbol(y, Decl(noUnusedLocals_writeOnly.ts, 11, 7))
 
     // This is a write access to y, but not a write-*only* access.
     f(y++);
 >f : Symbol(f, Decl(noUnusedLocals_writeOnly.ts, 0, 0))
->y : Symbol(y, Decl(noUnusedLocals_writeOnly.ts, 13, 7))
+>y : Symbol(y, Decl(noUnusedLocals_writeOnly.ts, 11, 7))
 
     let z = 0;
->z : Symbol(z, Decl(noUnusedLocals_writeOnly.ts, 17, 7))
+>z : Symbol(z, Decl(noUnusedLocals_writeOnly.ts, 15, 7))
 
     f(z = 1); // This effectively doesn't use `z`, values just pass through it.
 >f : Symbol(f, Decl(noUnusedLocals_writeOnly.ts, 0, 0))
->z : Symbol(z, Decl(noUnusedLocals_writeOnly.ts, 17, 7))
+>z : Symbol(z, Decl(noUnusedLocals_writeOnly.ts, 15, 7))
 }
 function f2(_: ReadonlyArray<number>): void {}
->f2 : Symbol(f2, Decl(noUnusedLocals_writeOnly.ts, 19, 1))
->_ : Symbol(_, Decl(noUnusedLocals_writeOnly.ts, 20, 12))
+>f2 : Symbol(f2, Decl(noUnusedLocals_writeOnly.ts, 17, 1))
+>_ : Symbol(_, Decl(noUnusedLocals_writeOnly.ts, 18, 12))
 >ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitAnyParametersInAmbientModule.ts] ////
+
 //// [noImplicitAnyParametersInAmbientModule.ts]
 declare module D_M {
     // No implicit-'any' errors.

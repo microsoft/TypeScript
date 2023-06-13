@@ -1,9 +1,9 @@
-tests/cases/conformance/classes/constructorDeclarations/constructorParameters/readonlyInConstructorParameters.ts(4,10): error TS2540: Cannot assign to 'x' because it is a read-only property.
-tests/cases/conformance/classes/constructorDeclarations/constructorParameters/readonlyInConstructorParameters.ts(7,26): error TS1029: 'public' modifier must precede 'readonly' modifier.
-tests/cases/conformance/classes/constructorDeclarations/constructorParameters/readonlyInConstructorParameters.ts(13,10): error TS2341: Property 'x' is private and only accessible within class 'F'.
+readonlyInConstructorParameters.ts(4,10): error TS2540: Cannot assign to 'x' because it is a read-only property.
+readonlyInConstructorParameters.ts(7,26): error TS1029: 'public' modifier must precede 'readonly' modifier.
+readonlyInConstructorParameters.ts(13,10): error TS2341: Property 'x' is private and only accessible within class 'F'.
 
 
-==== tests/cases/conformance/classes/constructorDeclarations/constructorParameters/readonlyInConstructorParameters.ts (3 errors) ====
+==== readonlyInConstructorParameters.ts (3 errors) ====
     class C {
         constructor(readonly x: number) {}
     }

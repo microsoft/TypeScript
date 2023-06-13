@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declareFileExportAssignmentWithVarFromVariableStatement.ts] ////
+
 //// [declareFileExportAssignmentWithVarFromVariableStatement.ts]
 module m2 {
     export interface connectModule {

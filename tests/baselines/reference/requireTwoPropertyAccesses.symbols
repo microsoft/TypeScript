@@ -1,10 +1,12 @@
-=== tests/cases/conformance/salsa/requireTwoPropertyAccesses.js ===
+//// [tests/cases/conformance/salsa/requireTwoPropertyAccesses.ts] ////
+
+=== requireTwoPropertyAccesses.js ===
 const value = require("./mod").x.y
 >value : Symbol(value, Decl(requireTwoPropertyAccesses.js, 0, 5))
 >require("./mod").x.y : Symbol(y, Decl(mod.js, 2, 8))
 >require("./mod").x : Symbol(x, Decl(mod.js, 1, 18))
 >require : Symbol(require)
->"./mod" : Symbol("tests/cases/conformance/salsa/mod", Decl(mod.js, 0, 0))
+>"./mod" : Symbol("mod", Decl(mod.js, 0, 0))
 >x : Symbol(x, Decl(mod.js, 1, 18))
 >y : Symbol(y, Decl(mod.js, 2, 8))
 
@@ -14,7 +16,7 @@ console.log(value)
 >log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >value : Symbol(value, Decl(requireTwoPropertyAccesses.js, 0, 5))
 
-=== tests/cases/conformance/salsa/mod.js ===
+=== mod.js ===
 // @declaration
 module.exports = {
 >module.exports : Symbol(module.exports, Decl(mod.js, 0, 0))

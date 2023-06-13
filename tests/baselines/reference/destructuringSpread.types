@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/destructuring/destructuringSpread.ts ===
+//// [tests/cases/conformance/es6/destructuring/destructuringSpread.ts] ////
+
+=== destructuringSpread.ts ===
 const { x } = {
 >x : number
 >{  ...{},  x: 0} : { x: number; }

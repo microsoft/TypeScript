@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/metadataOfStringLiteral.ts] ////
+
 //// [metadataOfStringLiteral.ts]
 function PropDeco(target: Object, propKey: string | symbol) { }
 

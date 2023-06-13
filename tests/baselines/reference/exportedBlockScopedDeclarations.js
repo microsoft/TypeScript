@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportedBlockScopedDeclarations.ts] ////
+
 //// [exportedBlockScopedDeclarations.ts]
 const foo = foo; // compile error
 export const bar = bar; // should be compile error

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/propertyAccess/propertyAccessStringIndexSignature.ts] ////
+
 //// [propertyAccessStringIndexSignature.ts]
 interface Flags { [name: string]: boolean };
 let flags: Flags;

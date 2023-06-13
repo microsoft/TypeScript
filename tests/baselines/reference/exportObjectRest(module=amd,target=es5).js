@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportObjectRest.ts] ////
+
 //// [exportObjectRest.ts]
 export const { x, ...rest } = { x: 'x', y: 'y' };
 

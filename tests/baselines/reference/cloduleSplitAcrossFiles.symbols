@@ -1,8 +1,10 @@
-=== tests/cases/compiler/cloduleSplitAcrossFiles_class.ts ===
+//// [tests/cases/compiler/cloduleSplitAcrossFiles.ts] ////
+
+=== cloduleSplitAcrossFiles_class.ts ===
 class D { }
 >D : Symbol(D, Decl(cloduleSplitAcrossFiles_class.ts, 0, 0), Decl(cloduleSplitAcrossFiles_module.ts, 0, 0))
 
-=== tests/cases/compiler/cloduleSplitAcrossFiles_module.ts ===
+=== cloduleSplitAcrossFiles_module.ts ===
 module D {
 >D : Symbol(D, Decl(cloduleSplitAcrossFiles_class.ts, 0, 0), Decl(cloduleSplitAcrossFiles_module.ts, 0, 0))
 

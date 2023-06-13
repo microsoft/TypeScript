@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/accessibility/classPropertyIsPublicByDefault.ts ===
+//// [tests/cases/conformance/classes/members/accessibility/classPropertyIsPublicByDefault.ts] ////
+
+=== classPropertyIsPublicByDefault.ts ===
 class C {
 >C : C
 
@@ -7,7 +9,6 @@ class C {
 
     get y() { return null; }
 >y : any
->null : null
 
     set y(x) { }
 >y : any
@@ -21,7 +22,6 @@ class C {
 
     static get b() { return null; }
 >b : any
->null : null
 
     static set b(x) { }
 >b : any

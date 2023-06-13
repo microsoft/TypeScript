@@ -1,7 +1,7 @@
-tests/cases/compiler/withStatementNestedScope.ts(2,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+withStatementNestedScope.ts(2,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
 
 
-==== tests/cases/compiler/withStatementNestedScope.ts (1 errors) ====
+==== withStatementNestedScope.ts (1 errors) ====
     var x = 1;
     with (x) {
     ~~~~~~~~

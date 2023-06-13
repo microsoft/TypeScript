@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/staticMemberAccessOffDerivedType1.ts] ////
+
 //// [staticMemberAccessOffDerivedType1.ts]
 class SomeBase {
     static GetNumber() {

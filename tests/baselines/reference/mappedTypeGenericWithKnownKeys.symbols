@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mappedTypeGenericWithKnownKeys.ts ===
+//// [tests/cases/compiler/mappedTypeGenericWithKnownKeys.ts] ////
+
+=== mappedTypeGenericWithKnownKeys.ts ===
 // based on #50054
 
 function test<Shape extends Record<string, string>>(shape: Shape, key: keyof Shape) {

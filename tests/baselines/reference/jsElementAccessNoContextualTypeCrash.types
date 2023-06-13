@@ -1,4 +1,6 @@
-=== tests/cases/compiler/jsElementAccessNoContextualTypeCrash.js ===
+//// [tests/cases/compiler/jsElementAccessNoContextualTypeCrash.ts] ////
+
+=== jsElementAccessNoContextualTypeCrash.js ===
 var Common = {};
 >Common : typeof Common
 >{} : {}

@@ -19,8 +19,10 @@
 ////k.[|/*useb*/b|];
 ////k.[|/*useab*/ab|];
 
-verify.goToDefinition("useI", ["defI"]);
-verify.goToDefinition("useIJ", ["defI", "defJ"]);
-verify.goToDefinition("usea", ["defa"]);
-verify.goToDefinition("useb", ["defb"]);
-verify.goToDefinition("useab", ["defa", "defb"]);
+verify.baselineGoToDefinition(
+    "useI",
+    "useIJ",
+    "usea",
+    "useb",
+    "useab",
+);

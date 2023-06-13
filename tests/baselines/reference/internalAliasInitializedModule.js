@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/internalAliasInitializedModule.ts] ////
+
 //// [internalAliasInitializedModule.ts]
 module a {
     export module b {

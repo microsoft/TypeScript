@@ -5,7 +5,7 @@ sourceRoot:
 sources: sourceMapValidationSwitch.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/sourceMapValidationSwitch.js
+emittedFile:sourceMapValidationSwitch.js
 sourceFile:sourceMapValidationSwitch.ts
 -------------------------------------------------------------------
 >>>var x = 10;

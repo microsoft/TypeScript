@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/overloadOnConstConstraintChecks3.ts] ////
+
 //// [overloadOnConstConstraintChecks3.ts]
 class A { private x = 1} 
 class B extends A {}

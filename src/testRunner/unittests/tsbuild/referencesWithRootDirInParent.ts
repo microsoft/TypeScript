@@ -1,9 +1,11 @@
 import * as vfs from "../../_namespaces/vfs";
 import {
-    loadProjectFromDisk,
-    replaceText,
     verifyTsc,
-} from "../tsc/helpers";
+} from "../helpers/tsc";
+import {
+    loadProjectFromDisk,
+    replaceText
+} from "../helpers/vfs";
 
 describe("unittests:: tsbuild:: with rootDir of project reference in parentDirectory", () => {
     let projFs: vfs.FileSystem;

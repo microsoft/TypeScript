@@ -1,4 +1,6 @@
-=== tests/cases/compiler/stringMatchAll.ts ===
+//// [tests/cases/compiler/stringMatchAll.ts] ////
+
+=== stringMatchAll.ts ===
 const matches = "matchAll".matchAll(/\w/g);
 >matches : IterableIterator<RegExpMatchArray>
 >"matchAll".matchAll(/\w/g) : IterableIterator<RegExpMatchArray>
