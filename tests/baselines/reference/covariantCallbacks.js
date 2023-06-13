@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts] ////
+
 //// [covariantCallbacks.ts]
 // Test that callback parameters are related covariantly
 

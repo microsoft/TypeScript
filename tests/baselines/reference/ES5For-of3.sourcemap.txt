@@ -5,7 +5,7 @@ sourceRoot:
 sources: ES5For-of3.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/conformance/statements/for-ofStatements/ES5For-of3.js
+emittedFile:ES5For-of3.js
 sourceFile:ES5For-of3.ts
 -------------------------------------------------------------------
 >>>for (var _i = 0, _a = ['a', 'b', 'c']; _i < _a.length; _i++) {

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/templates/templateStringInTaggedTemplate.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringInTaggedTemplate.ts] ////
+
+=== templateStringInTaggedTemplate.ts ===
 `I AM THE ${ `${ `TAG` } ` } PORTION`    `I ${ "AM" } THE TEMPLATE PORTION`
 >`I AM THE ${ `${ `TAG` } ` } PORTION`    `I ${ "AM" } THE TEMPLATE PORTION` : any
 >`I AM THE ${ `${ `TAG` } ` } PORTION` : string

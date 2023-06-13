@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/jsxReactTestSuite.tsx] ////
+
 //// [jsxReactTestSuite.tsx]
 declare var React: any;
 declare var Component:any;

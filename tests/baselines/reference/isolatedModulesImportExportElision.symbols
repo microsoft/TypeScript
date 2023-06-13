@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/isolatedModulesImportExportElision.ts] ////
+
+=== file1.ts ===
 import {c} from "module"
 >c : Symbol(c, Decl(file1.ts, 0, 8))
 

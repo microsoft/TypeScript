@@ -1,7 +1,7 @@
 // @noResolve: true
 // @declaration: true
 // @module: amd
-// @outFile: tests/cases/compiler/out/datastore.bundle.js
+// @outFile: out/datastore.bundle.js
 // @filename: lib/lib.d.ts
 declare module "lib/result" {
     export type Result<E extends Error, T> = (E & Failure<E>) | (T & Success<T>);

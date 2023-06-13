@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/internalAliasFunction.ts] ////
+
 //// [internalAliasFunction.ts]
 module a {
     export function foo(x: number) {

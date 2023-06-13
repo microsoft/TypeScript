@@ -1,4 +1,6 @@
-=== tests/cases/compiler/importUsedInExtendsList1_1.ts ===
+//// [tests/cases/compiler/importUsedInExtendsList1.ts] ////
+
+=== importUsedInExtendsList1_1.ts ===
 ///<reference path='importUsedInExtendsList1_require.ts'/>
 import foo = require('./importUsedInExtendsList1_require');
 >foo : Symbol(foo, Decl(importUsedInExtendsList1_1.ts, 0, 0))
@@ -19,7 +21,7 @@ var r: string = s.foo;
 >s : Symbol(s, Decl(importUsedInExtendsList1_1.ts, 3, 3))
 >foo : Symbol(foo.Super.foo, Decl(importUsedInExtendsList1_require.ts, 0, 20))
 
-=== tests/cases/compiler/importUsedInExtendsList1_require.ts ===
+=== importUsedInExtendsList1_require.ts ===
 export class Super { foo: string; }
 >Super : Symbol(Super, Decl(importUsedInExtendsList1_require.ts, 0, 0))
 >foo : Symbol(Super.foo, Decl(importUsedInExtendsList1_require.ts, 0, 20))

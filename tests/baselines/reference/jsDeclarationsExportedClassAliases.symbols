@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/declarations/utils/index.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportedClassAliases.ts] ////
+
+=== utils/index.js ===
 // issue arises here on compilation
 const errors = require("./errors");
 >errors : Symbol(errors, Decl(index.js, 1, 5))
@@ -14,7 +16,7 @@ module.exports = {
 >errors : Symbol(errors, Decl(index.js, 3, 18))
 
 };
-=== tests/cases/conformance/jsdoc/declarations/utils/errors.js ===
+=== utils/errors.js ===
 class FancyError extends Error {
 >FancyError : Symbol(FancyError, Decl(errors.js, 0, 0))
 >Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

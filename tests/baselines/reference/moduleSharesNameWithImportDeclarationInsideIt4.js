@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleSharesNameWithImportDeclarationInsideIt4.ts] ////
+
 //// [moduleSharesNameWithImportDeclarationInsideIt4.ts]
 module Z.M {
     export function bar() {

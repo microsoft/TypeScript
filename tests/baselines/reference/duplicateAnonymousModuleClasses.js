@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicateAnonymousModuleClasses.ts] ////
+
 //// [duplicateAnonymousModuleClasses.ts]
 module F {
 

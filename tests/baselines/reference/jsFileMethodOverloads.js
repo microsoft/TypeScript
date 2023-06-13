@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsFileMethodOverloads.ts] ////
+
 //// [jsFileMethodOverloads.js]
 /**
  * @template T

@@ -1,8 +1,8 @@
-tests/cases/conformance/es6/for-ofStatements/for-of16.ts(8,11): error TS2488: Type 'StringIterator' must have a '[Symbol.iterator]()' method that returns an iterator.
-tests/cases/conformance/es6/for-ofStatements/for-of16.ts(10,11): error TS2488: Type 'StringIterator' must have a '[Symbol.iterator]()' method that returns an iterator.
+for-of16.ts(8,11): error TS2488: Type 'StringIterator' must have a '[Symbol.iterator]()' method that returns an iterator.
+for-of16.ts(10,11): error TS2488: Type 'StringIterator' must have a '[Symbol.iterator]()' method that returns an iterator.
 
 
-==== tests/cases/conformance/es6/for-ofStatements/for-of16.ts (2 errors) ====
+==== for-of16.ts (2 errors) ====
     class StringIterator {
         [Symbol.iterator]() {
             return this;
@@ -13,9 +13,9 @@ tests/cases/conformance/es6/for-ofStatements/for-of16.ts(10,11): error TS2488: T
     for (v of new StringIterator) { } // Should fail
               ~~~~~~~~~~~~~~~~~~
 !!! error TS2488: Type 'StringIterator' must have a '[Symbol.iterator]()' method that returns an iterator.
-!!! related TS2489 tests/cases/conformance/es6/for-ofStatements/for-of16.ts:8:11: An iterator must have a 'next()' method.
+!!! related TS2489 for-of16.ts:8:11: An iterator must have a 'next()' method.
     
     for (v of new StringIterator) { } // Should still fail (related errors should still be shown even though type is cached).
               ~~~~~~~~~~~~~~~~~~
 !!! error TS2488: Type 'StringIterator' must have a '[Symbol.iterator]()' method that returns an iterator.
-!!! related TS2489 tests/cases/conformance/es6/for-ofStatements/for-of16.ts:10:11: An iterator must have a 'next()' method.
+!!! related TS2489 for-of16.ts:10:11: An iterator must have a 'next()' method.

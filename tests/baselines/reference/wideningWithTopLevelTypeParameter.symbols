@@ -1,4 +1,6 @@
-=== tests/cases/compiler/wideningWithTopLevelTypeParameter.ts ===
+//// [tests/cases/compiler/wideningWithTopLevelTypeParameter.ts] ////
+
+=== wideningWithTopLevelTypeParameter.ts ===
 type C1<T> = T extends unknown ? T | undefined : never;
 >C1 : Symbol(C1, Decl(wideningWithTopLevelTypeParameter.ts, 0, 0))
 >T : Symbol(T, Decl(wideningWithTopLevelTypeParameter.ts, 0, 8))

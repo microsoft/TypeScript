@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxNamespacedNameNotComparedToNonMatchingIndexSignature.tsx] ////
+
 //// [jsxNamespacedNameNotComparedToNonMatchingIndexSignature.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 

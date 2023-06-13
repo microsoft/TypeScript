@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/thisPropertyAssignmentInherited.ts] ////
+
 //// [thisPropertyAssignmentInherited.js]
 export class Element {
   /**

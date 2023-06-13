@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleResolutionPackageIdWithRelativeAndAbsolutePath.ts] ////
+
 === /project/src/app.ts ===
 import * as t from "anotherLib"; // Include the lib that recursively includes option as relative module resolution in this directory
 >t : Symbol(t, Decl(app.ts, 0, 6))

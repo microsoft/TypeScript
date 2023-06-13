@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens16.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens16.ts] ////
+
+=== parserSkippedTokens16.ts ===
 foo(): Bar { }
 function Foo      () ¬   { }
 >Foo : Symbol(Foo, Decl(parserSkippedTokens16.ts, 0, 14))

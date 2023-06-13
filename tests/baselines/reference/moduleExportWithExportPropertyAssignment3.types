@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/a.js ===
+//// [tests/cases/conformance/salsa/moduleExportWithExportPropertyAssignment3.ts] ////
+
+=== a.js ===
 /// <reference path='./requires.d.ts' />
 var mod1 = require('./mod1')
 >mod1 : { justExport: number; bothBefore: number | "string"; bothAfter: number | "string"; justProperty: "string"; }
@@ -37,7 +39,7 @@ mod1.justProperty.length
 >justProperty : "string"
 >length : number
 
-=== tests/cases/conformance/salsa/requires.d.ts ===
+=== requires.d.ts ===
 declare var module: { exports: any };
 >module : { exports: any; }
 >exports : any
@@ -46,7 +48,7 @@ declare function require(name: string): any;
 >require : (name: string) => any
 >name : string
 
-=== tests/cases/conformance/salsa/mod1.js ===
+=== mod1.js ===
 /// <reference path='./requires.d.ts' />
 module.exports.bothBefore = 'string'
 >module.exports.bothBefore = 'string' : "string"

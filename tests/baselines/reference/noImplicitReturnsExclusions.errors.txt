@@ -1,13 +1,13 @@
-tests/cases/compiler/noImplicitReturnsExclusions.ts(16,26): error TS7030: Not all code paths return a value.
-tests/cases/compiler/noImplicitReturnsExclusions.ts(24,26): error TS7030: Not all code paths return a value.
-tests/cases/compiler/noImplicitReturnsExclusions.ts(40,10): error TS7030: Not all code paths return a value.
-tests/cases/compiler/noImplicitReturnsExclusions.ts(44,10): error TS7030: Not all code paths return a value.
-tests/cases/compiler/noImplicitReturnsExclusions.ts(48,10): error TS7030: Not all code paths return a value.
-tests/cases/compiler/noImplicitReturnsExclusions.ts(53,10): error TS7030: Not all code paths return a value.
-tests/cases/compiler/noImplicitReturnsExclusions.ts(88,53): error TS7030: Not all code paths return a value.
+noImplicitReturnsExclusions.ts(16,26): error TS7030: Not all code paths return a value.
+noImplicitReturnsExclusions.ts(24,26): error TS7030: Not all code paths return a value.
+noImplicitReturnsExclusions.ts(40,10): error TS7030: Not all code paths return a value.
+noImplicitReturnsExclusions.ts(44,10): error TS7030: Not all code paths return a value.
+noImplicitReturnsExclusions.ts(48,10): error TS7030: Not all code paths return a value.
+noImplicitReturnsExclusions.ts(53,10): error TS7030: Not all code paths return a value.
+noImplicitReturnsExclusions.ts(88,53): error TS7030: Not all code paths return a value.
 
 
-==== tests/cases/compiler/noImplicitReturnsExclusions.ts (7 errors) ====
+==== noImplicitReturnsExclusions.ts (7 errors) ====
     // Functions with a return type of any, undefined, or a type that includes void are excluded
     // from --noImplicitReturns checks.
     

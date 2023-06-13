@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/controlFlowLoopAnalysis.ts] ////
+
 //// [controlFlowLoopAnalysis.ts]
 // Repro from #8418
 

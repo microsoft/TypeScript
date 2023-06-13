@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextuallyTypeGeneratorReturnTypeFromUnion.ts ===
+//// [tests/cases/compiler/contextuallyTypeGeneratorReturnTypeFromUnion.ts] ////
+
+=== contextuallyTypeGeneratorReturnTypeFromUnion.ts ===
 // repro #51187
 
 type Action = () => (Generator<string, string, string[]> | string)

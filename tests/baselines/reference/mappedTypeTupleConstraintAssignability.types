@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mappedTypeTupleConstraintAssignability.ts ===
+//// [tests/cases/compiler/mappedTypeTupleConstraintAssignability.ts] ////
+
+=== mappedTypeTupleConstraintAssignability.ts ===
 // https://github.com/microsoft/TypeScript/issues/53359#issuecomment-1475390594
 
 type Writeable<T> = { -readonly [P in keyof T]: T[P] };

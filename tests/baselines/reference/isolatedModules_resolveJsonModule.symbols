@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/isolatedModules_resolveJsonModule.ts] ////
+
 === /a.ts ===
 import j = require("./j.json");
 >j : Symbol(j, Decl(a.ts, 0, 0))

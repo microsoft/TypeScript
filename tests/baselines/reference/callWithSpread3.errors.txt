@@ -1,18 +1,18 @@
-tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(14,10): error TS2554: Expected 2 arguments, but got 3.
-tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(15,15): error TS2554: Expected 2 arguments, but got 5.
-tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(16,15): error TS2554: Expected 2 arguments, but got 5.
-tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(17,15): error TS2554: Expected 2 arguments, but got 6.
-tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(18,12): error TS2554: Expected 2 arguments, but got 3.
-tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(19,5): error TS2554: Expected 2 arguments, but got 3.
-tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(20,6): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
-tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(21,6): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
-tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(22,6): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
-tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(23,6): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
-tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(25,7): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
-tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(31,6): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
+callWithSpread3.ts(14,10): error TS2554: Expected 2 arguments, but got 3.
+callWithSpread3.ts(15,15): error TS2554: Expected 2 arguments, but got 5.
+callWithSpread3.ts(16,15): error TS2554: Expected 2 arguments, but got 5.
+callWithSpread3.ts(17,15): error TS2554: Expected 2 arguments, but got 6.
+callWithSpread3.ts(18,12): error TS2554: Expected 2 arguments, but got 3.
+callWithSpread3.ts(19,5): error TS2554: Expected 2 arguments, but got 3.
+callWithSpread3.ts(20,6): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
+callWithSpread3.ts(21,6): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+callWithSpread3.ts(22,6): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
+callWithSpread3.ts(23,6): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
+callWithSpread3.ts(25,7): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+callWithSpread3.ts(31,6): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
 
 
-==== tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts (12 errors) ====
+==== callWithSpread3.ts (12 errors) ====
     declare const s2: [string, string];
     declare const s3: [string, string, string];
     declare const s2_: [string, string, ...string[]];

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/for-await-ofStatements/forAwaitPerIterationBindingDownlevel.ts] ////
+
 //// [forAwaitPerIterationBindingDownlevel.ts]
 const sleep = (tm: number) => new Promise(resolve => setTimeout(resolve, tm));
 

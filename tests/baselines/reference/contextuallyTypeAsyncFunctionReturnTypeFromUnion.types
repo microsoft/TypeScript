@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextuallyTypeAsyncFunctionReturnTypeFromUnion.ts ===
+//// [tests/cases/compiler/contextuallyTypeAsyncFunctionReturnTypeFromUnion.ts] ////
+
+=== contextuallyTypeAsyncFunctionReturnTypeFromUnion.ts ===
 // repro #47682
 
 declare class StateMachine<T> {

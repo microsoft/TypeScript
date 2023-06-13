@@ -1,8 +1,10 @@
-=== tests/cases/compiler/server.ts ===
+//// [tests/cases/compiler/es6ImportNameSpaceImportDts.ts] ////
+
+=== server.ts ===
 export class c { };  
 >c : c
 
-=== tests/cases/compiler/client.ts ===
+=== client.ts ===
 import * as nameSpaceBinding from "./server";
 >nameSpaceBinding : typeof nameSpaceBinding
 

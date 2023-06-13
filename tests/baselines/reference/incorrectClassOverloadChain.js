@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/incorrectClassOverloadChain.ts] ////
+
 //// [incorrectClassOverloadChain.ts]
 class C {
     foo(): string;

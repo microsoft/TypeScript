@@ -1,8 +1,10 @@
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsPackageJson.ts] ////
+
+=== index.js ===
 const j = require("./package.json");
 >j : Symbol(j, Decl(index.js, 0, 5))
 >require : Symbol(require)
->"./package.json" : Symbol("tests/cases/conformance/jsdoc/declarations/package", Decl(package.json, 0, 0))
+>"./package.json" : Symbol("package", Decl(package.json, 0, 0))
 
 module.exports = j;
 >module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
@@ -10,7 +12,7 @@ module.exports = j;
 >exports : Symbol(export=, Decl(index.js, 0, 36))
 >j : Symbol(j, Decl(index.js, 0, 5))
 
-=== tests/cases/conformance/jsdoc/declarations/package.json ===
+=== package.json ===
 {
     "name": "pkg",
 >"name" : Symbol("name", Decl(package.json, 0, 1))

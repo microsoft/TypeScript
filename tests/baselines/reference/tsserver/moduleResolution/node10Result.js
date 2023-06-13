@@ -187,6 +187,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] Loading module 'foo' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Found 'package.json' at '/home/src/projects/project/node_modules/foo/package.json'.
 Info seq  [hh:mm:ss:mss] Entering conditional exports.
 Info seq  [hh:mm:ss:mss] Matched 'exports' condition 'import'.
@@ -201,6 +202,7 @@ Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/node_modules' does not ex
 Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Entering conditional exports.
 Info seq  [hh:mm:ss:mss] Matched 'exports' condition 'import'.
@@ -216,6 +218,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according 
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Loading module 'foo' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'typesVersions' field.
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'typings' field.
@@ -232,6 +235,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according 
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Loading module 'bar' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Found 'package.json' at '/home/src/projects/project/node_modules/bar/package.json'.
 Info seq  [hh:mm:ss:mss] Entering conditional exports.
 Info seq  [hh:mm:ss:mss] Matched 'exports' condition 'import'.
@@ -250,6 +254,7 @@ Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/node_modules' does not ex
 Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Entering conditional exports.
 Info seq  [hh:mm:ss:mss] Matched 'exports' condition 'import'.
@@ -265,6 +270,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according 
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Loading module 'bar' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'typesVersions' field.
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'typings' field.
@@ -297,6 +303,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according 
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Loading module 'foo2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Found 'package.json' at '/home/src/projects/project/node_modules/foo2/package.json'.
 Info seq  [hh:mm:ss:mss] Entering conditional exports.
 Info seq  [hh:mm:ss:mss] Matched 'exports' condition 'types'.
@@ -315,6 +322,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according 
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Loading module 'bar2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Found 'package.json' at '/home/src/projects/project/node_modules/bar2/package.json'.
 Info seq  [hh:mm:ss:mss] Entering conditional exports.
 Info seq  [hh:mm:ss:mss] Matched 'exports' condition 'import'.
@@ -708,6 +716,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according 
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Loading module 'bar' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Entering conditional exports.
 Info seq  [hh:mm:ss:mss] Matched 'exports' condition 'import'.
@@ -726,6 +735,7 @@ Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/node_modules' does not ex
 Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Entering conditional exports.
 Info seq  [hh:mm:ss:mss] Matched 'exports' condition 'import'.
@@ -741,6 +751,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according 
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Loading module 'bar' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'typings' field.
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'types' field.
@@ -867,6 +878,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according 
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Loading module 'foo' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Found 'package.json' at '/home/src/projects/project/node_modules/foo/package.json'.
 Info seq  [hh:mm:ss:mss] Entering conditional exports.
 Info seq  [hh:mm:ss:mss] Matched 'exports' condition 'import'.
@@ -881,6 +893,7 @@ Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/node_modules' does not ex
 Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Entering conditional exports.
 Info seq  [hh:mm:ss:mss] Matched 'exports' condition 'import'.
@@ -896,6 +909,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according 
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Loading module 'foo' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'typesVersions' field.
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'typings' field.
@@ -1091,6 +1105,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according 
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Loading module 'bar' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Entering conditional exports.
 Info seq  [hh:mm:ss:mss] Matched 'exports' condition 'import'.
@@ -1109,6 +1124,7 @@ Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/node_modules' does not ex
 Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Entering conditional exports.
 Info seq  [hh:mm:ss:mss] Matched 'exports' condition 'import'.
@@ -1124,6 +1140,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according 
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Loading module 'bar' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'typings' field.
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'types' field.
@@ -1319,6 +1336,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according 
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Loading module 'foo' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Found 'package.json' at '/home/src/projects/project/node_modules/foo/package.json'.
 Info seq  [hh:mm:ss:mss] Entering conditional exports.
 Info seq  [hh:mm:ss:mss] Matched 'exports' condition 'import'.
@@ -1333,6 +1351,7 @@ Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/node_modules' does not ex
 Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Entering conditional exports.
 Info seq  [hh:mm:ss:mss] Matched 'exports' condition 'import'.
@@ -1348,6 +1367,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according 
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Loading module 'foo' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'typesVersions' field.
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'typings' field.
@@ -1538,6 +1558,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according 
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Loading module 'bar' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Entering conditional exports.
 Info seq  [hh:mm:ss:mss] Matched 'exports' condition 'import'.
@@ -1745,6 +1766,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according 
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Loading module 'foo' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Found 'package.json' at '/home/src/projects/project/node_modules/foo/package.json'.
 Info seq  [hh:mm:ss:mss] Entering conditional exports.
 Info seq  [hh:mm:ss:mss] Matched 'exports' condition 'types'.
@@ -1967,6 +1989,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according 
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Loading module 'bar2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar2/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Entering conditional exports.
 Info seq  [hh:mm:ss:mss] Matched 'exports' condition 'import'.
@@ -1985,6 +2008,7 @@ Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/node_modules' does not ex
 Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar2/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Entering conditional exports.
 Info seq  [hh:mm:ss:mss] Matched 'exports' condition 'import'.
@@ -2000,6 +2024,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according 
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Loading module 'bar2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar2/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'typesVersions' field.
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'typings' field.
@@ -2242,6 +2267,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according 
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Loading module 'foo2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Entering conditional exports.
 Info seq  [hh:mm:ss:mss] Matched 'exports' condition 'import'.
@@ -2256,6 +2282,7 @@ Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/node_modules' does not ex
 Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Entering conditional exports.
 Info seq  [hh:mm:ss:mss] Matched 'exports' condition 'import'.
@@ -2271,6 +2298,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according 
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Loading module 'foo2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'typesVersions' field.
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'typings' field.
@@ -2463,6 +2491,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according 
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Loading module 'bar2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar2/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Entering conditional exports.
 Info seq  [hh:mm:ss:mss] Matched 'exports' condition 'import'.
@@ -2481,6 +2510,7 @@ Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/node_modules' does not ex
 Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar2/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Entering conditional exports.
 Info seq  [hh:mm:ss:mss] Matched 'exports' condition 'import'.
@@ -2496,6 +2526,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according 
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Loading module 'bar2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar2/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'typings' field.
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'types' field.
@@ -2702,6 +2733,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according 
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Loading module 'foo2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Found 'package.json' at '/home/src/projects/project/node_modules/foo2/package.json'.
 Info seq  [hh:mm:ss:mss] Entering conditional exports.
 Info seq  [hh:mm:ss:mss] Matched 'exports' condition 'import'.
@@ -2716,6 +2748,7 @@ Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/node_modules' does not ex
 Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Entering conditional exports.
 Info seq  [hh:mm:ss:mss] Matched 'exports' condition 'import'.
@@ -2731,6 +2764,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according 
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Loading module 'foo2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'typesVersions' field.
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'typings' field.
@@ -2926,6 +2960,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according 
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Loading module 'bar2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar2/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Entering conditional exports.
 Info seq  [hh:mm:ss:mss] Matched 'exports' condition 'import'.
@@ -2944,6 +2979,7 @@ Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/node_modules' does not ex
 Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar2/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Entering conditional exports.
 Info seq  [hh:mm:ss:mss] Matched 'exports' condition 'import'.
@@ -2959,6 +2995,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according 
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Loading module 'bar2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar2/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'typings' field.
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'types' field.
@@ -3154,6 +3191,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according 
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Loading module 'foo2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Found 'package.json' at '/home/src/projects/project/node_modules/foo2/package.json'.
 Info seq  [hh:mm:ss:mss] Entering conditional exports.
 Info seq  [hh:mm:ss:mss] Matched 'exports' condition 'import'.
@@ -3168,6 +3206,7 @@ Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/node_modules' does not ex
 Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Entering conditional exports.
 Info seq  [hh:mm:ss:mss] Matched 'exports' condition 'import'.
@@ -3183,6 +3222,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according 
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Loading module 'foo2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'typesVersions' field.
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'typings' field.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers2.ts] ////
+
 //// [subtypingWithObjectMembers2.ts]
 interface Base {
     foo: string;

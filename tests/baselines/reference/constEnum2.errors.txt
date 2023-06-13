@@ -1,8 +1,8 @@
-tests/cases/conformance/constEnums/constEnum2.ts(10,9): error TS2474: const enum member initializers must be constant expressions.
-tests/cases/conformance/constEnums/constEnum2.ts(11,9): error TS2474: const enum member initializers must be constant expressions.
+constEnum2.ts(10,9): error TS2474: const enum member initializers must be constant expressions.
+constEnum2.ts(11,9): error TS2474: const enum member initializers must be constant expressions.
 
 
-==== tests/cases/conformance/constEnums/constEnum2.ts (2 errors) ====
+==== constEnum2.ts (2 errors) ====
     // An enum declaration that specifies a const modifier is a constant enum declaration.
     // In a constant enum declaration, all members must have constant values and
     // it is an error for a member declaration to specify an expression that isn't classified as a constant enum expression.
