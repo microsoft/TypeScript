@@ -1,10 +1,10 @@
-tests/cases/compiler/genericTypeReferencesRequireTypeArgs.ts(7,9): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
-tests/cases/compiler/genericTypeReferencesRequireTypeArgs.ts(8,9): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
-tests/cases/compiler/genericTypeReferencesRequireTypeArgs.ts(9,11): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
-tests/cases/compiler/genericTypeReferencesRequireTypeArgs.ts(10,11): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
+genericTypeReferencesRequireTypeArgs.ts(7,9): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
+genericTypeReferencesRequireTypeArgs.ts(8,9): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
+genericTypeReferencesRequireTypeArgs.ts(9,11): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
+genericTypeReferencesRequireTypeArgs.ts(10,11): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
 
 
-==== tests/cases/compiler/genericTypeReferencesRequireTypeArgs.ts (4 errors) ====
+==== genericTypeReferencesRequireTypeArgs.ts (4 errors) ====
     class C<T> {
        foo(): T { return null }
     }

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/intersection/intersectionTypeInference2.ts ===
+//// [tests/cases/conformance/types/intersection/intersectionTypeInference2.ts] ////
+
+=== intersectionTypeInference2.ts ===
 declare function f<T>(x: { prop: T }): T;
 >f : Symbol(f, Decl(intersectionTypeInference2.ts, 0, 0))
 >T : Symbol(T, Decl(intersectionTypeInference2.ts, 0, 19))

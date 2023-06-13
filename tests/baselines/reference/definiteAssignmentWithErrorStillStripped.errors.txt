@@ -1,7 +1,7 @@
-tests/cases/compiler/definiteAssignmentWithErrorStillStripped.ts(2,6): error TS1264: Declarations with definite assignment assertions must also have type annotations.
+definiteAssignmentWithErrorStillStripped.ts(2,6): error TS1264: Declarations with definite assignment assertions must also have type annotations.
 
 
-==== tests/cases/compiler/definiteAssignmentWithErrorStillStripped.ts (1 errors) ====
+==== definiteAssignmentWithErrorStillStripped.ts (1 errors) ====
     class C {
         p!;
          ~

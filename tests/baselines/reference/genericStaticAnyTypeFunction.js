@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericStaticAnyTypeFunction.ts] ////
+
 //// [genericStaticAnyTypeFunction.ts]
 class A {
 

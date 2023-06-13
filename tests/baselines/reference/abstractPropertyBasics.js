@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/abstractPropertyBasics.ts] ////
+
 //// [abstractPropertyBasics.ts]
 interface A {
     prop: string;

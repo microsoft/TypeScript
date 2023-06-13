@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/DeclarationMerging/TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts] ////
+
 //// [TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts]
 module A {
     export class Point {

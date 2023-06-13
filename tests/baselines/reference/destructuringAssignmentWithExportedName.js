@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/destructuringAssignmentWithExportedName.ts] ////
+
 //// [destructuringAssignmentWithExportedName.ts]
 export let exportedFoo: any;
 let nonexportedFoo: any;

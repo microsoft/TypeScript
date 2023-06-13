@@ -1,4 +1,6 @@
-=== tests/cases/compiler/simpleRecursionWithBaseCase.ts ===
+//// [tests/cases/compiler/simpleRecursionWithBaseCase.ts] ////
+
+=== simpleRecursionWithBaseCase.ts ===
 function fn1(n: number) {
 >fn1 : (n: number) => number
 >n : number

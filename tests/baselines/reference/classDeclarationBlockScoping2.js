@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classDeclarationBlockScoping2.ts] ////
+
 //// [classDeclarationBlockScoping2.ts]
 function f() {
     class C {}

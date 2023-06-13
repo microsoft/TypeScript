@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privacyFunc.ts] ////
+
 //// [privacyFunc.ts]
 module m1 {
     export class C1_public {

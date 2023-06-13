@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/baseExpressionTypeParameters.ts] ////
+
 //// [baseExpressionTypeParameters.ts]
 // Repro from #17829
 

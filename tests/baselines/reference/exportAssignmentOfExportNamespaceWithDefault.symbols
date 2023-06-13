@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/main.ts ===
+//// [tests/cases/conformance/externalModules/exportAssignmentOfExportNamespaceWithDefault.ts] ////
+
+=== main.ts ===
 // https://github.com/microsoft/TypeScript/issues/39149
 import a from "a";
 >a : Symbol(a, Decl(main.ts, 1, 6))
@@ -6,7 +8,7 @@ import a from "a";
 a();
 >a : Symbol(a, Decl(main.ts, 1, 6))
 
-=== tests/cases/conformance/externalModules/external.d.ts ===
+=== external.d.ts ===
 declare module "b" {
 >"b" : Symbol("b", Decl(external.d.ts, 0, 0))
 

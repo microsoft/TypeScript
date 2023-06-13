@@ -1,9 +1,9 @@
-tests/cases/conformance/es6/variableDeclarations/VariableDeclaration13_es6.ts(4,5): error TS1181: Array element destructuring pattern expected.
-tests/cases/conformance/es6/variableDeclarations/VariableDeclaration13_es6.ts(4,6): error TS1005: ';' expected.
-tests/cases/conformance/es6/variableDeclarations/VariableDeclaration13_es6.ts(4,8): error TS1128: Declaration or statement expected.
+VariableDeclaration13_es6.ts(4,5): error TS1181: Array element destructuring pattern expected.
+VariableDeclaration13_es6.ts(4,6): error TS1005: ';' expected.
+VariableDeclaration13_es6.ts(4,8): error TS1128: Declaration or statement expected.
 
 
-==== tests/cases/conformance/es6/variableDeclarations/VariableDeclaration13_es6.ts (3 errors) ====
+==== VariableDeclaration13_es6.ts (3 errors) ====
     // An ExpressionStatement cannot start with the two token sequence `let [` because
     // that would make it ambiguous with a `let` LexicalDeclaration whose first LexicalBinding was an ArrayBindingPattern.
     var let: any;

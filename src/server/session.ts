@@ -946,6 +946,7 @@ export interface SessionOptions {
     pluginProbeLocations?: readonly string[];
     allowLocalPluginLoads?: boolean;
     typesMapLocation?: string;
+    /** @internal */ incrementalVerifier?: (service: ProjectService) => void;
 }
 
 export class Session<TMessage = string> implements EventSender {
@@ -1010,7 +1011,8 @@ export class Session<TMessage = string> implements EventSender {
             allowLocalPluginLoads: opts.allowLocalPluginLoads,
             typesMapLocation: opts.typesMapLocation,
             serverMode: opts.serverMode,
-            session: this
+            session: this,
+            incrementalVerifier: opts.incrementalVerifier,
         };
         this.projectService = new ProjectService(settings);
         this.projectService.setPerformanceEventHandler(this.performanceEventHandler.bind(this));
@@ -1339,6 +1341,7 @@ export class Session<TMessage = string> implements EventSender {
         this.logger.info(`cleaning ${caption}`);
         for (const p of projects) {
             p.getLanguageService(/*ensureSynchronized*/ false).cleanupSemanticCache();
+            p.cleanupProgram();
         }
     }
 

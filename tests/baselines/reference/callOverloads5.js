@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/callOverloads5.ts] ////
+
 //// [callOverloads5.ts]
 function Foo():Foo; // error
 function Foo(s:string):Foo; // error

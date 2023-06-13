@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/functionCalls/callWithSpread4.ts] ////
+
 //// [callWithSpread4.ts]
 type R = { a: number }
 type W = { b: number }

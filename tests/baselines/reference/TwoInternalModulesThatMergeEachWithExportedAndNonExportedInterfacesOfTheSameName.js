@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/DeclarationMerging/TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts] ////
+
 //// [TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts]
 module A {
     export interface Point {

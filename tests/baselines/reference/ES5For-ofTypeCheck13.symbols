@@ -1,4 +1,6 @@
-=== tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck13.ts ===
+//// [tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck13.ts] ////
+
+=== ES5For-ofTypeCheck13.ts ===
 const strSet: Set<string> = new Set()
 >strSet : Symbol(strSet, Decl(ES5For-ofTypeCheck13.ts, 0, 5))
 >Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))

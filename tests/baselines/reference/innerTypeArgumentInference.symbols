@@ -1,4 +1,6 @@
-=== tests/cases/compiler/innerTypeArgumentInference.ts ===
+//// [tests/cases/compiler/innerTypeArgumentInference.ts] ////
+
+=== innerTypeArgumentInference.ts ===
 interface Generator<T> { (): T; }
 >Generator : Symbol(Generator, Decl(innerTypeArgumentInference.ts, 0, 0))
 >T : Symbol(T, Decl(innerTypeArgumentInference.ts, 0, 20))

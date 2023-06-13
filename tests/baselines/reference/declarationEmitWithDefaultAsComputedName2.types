@@ -1,4 +1,6 @@
-=== tests/cases/compiler/other.ts ===
+//// [tests/cases/compiler/declarationEmitWithDefaultAsComputedName2.ts] ////
+
+=== other.ts ===
 type Experiment<Name> = {
 >Experiment : Experiment<Name>
 
@@ -24,7 +26,7 @@ export default createExperiment({
 
 });
 
-=== tests/cases/compiler/main.ts ===
+=== main.ts ===
 import * as other2 from "./other";
 >other2 : typeof other2
 

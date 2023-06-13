@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/tuple/variadicTuples1.ts] ////
+
 //// [variadicTuples1.ts]
 // Variadics in tuple types
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/interfaceNameAsIdentifier.ts] ////
+
 //// [interfaceNameAsIdentifier.ts]
 interface C {
     (): void;

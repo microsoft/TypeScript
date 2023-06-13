@@ -1,4 +1,6 @@
-=== tests/cases/compiler/derivedClasses.ts ===
+//// [tests/cases/compiler/derivedClasses.ts] ////
+
+=== derivedClasses.ts ===
 class Red extends Color {
 >Red : Symbol(Red, Decl(derivedClasses.ts, 0, 0))
 >Color : Symbol(Color, Decl(derivedClasses.ts, 5, 1))

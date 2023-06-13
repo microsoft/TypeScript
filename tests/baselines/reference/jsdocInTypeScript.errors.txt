@@ -1,12 +1,12 @@
-tests/cases/compiler/jsdocInTypeScript.ts(16,23): error TS2304: Cannot find name 'MyType'.
-tests/cases/compiler/jsdocInTypeScript.ts(23,33): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/compiler/jsdocInTypeScript.ts(25,3): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
-tests/cases/compiler/jsdocInTypeScript.ts(25,15): error TS2339: Property 'length' does not exist on type 'number'.
-tests/cases/compiler/jsdocInTypeScript.ts(30,3): error TS2339: Property 'x' does not exist on type '{}'.
-tests/cases/compiler/jsdocInTypeScript.ts(42,12): error TS2503: Cannot find namespace 'N'.
+jsdocInTypeScript.ts(16,23): error TS2304: Cannot find name 'MyType'.
+jsdocInTypeScript.ts(23,33): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+jsdocInTypeScript.ts(25,3): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+jsdocInTypeScript.ts(25,15): error TS2339: Property 'length' does not exist on type 'number'.
+jsdocInTypeScript.ts(30,3): error TS2339: Property 'x' does not exist on type '{}'.
+jsdocInTypeScript.ts(42,12): error TS2503: Cannot find namespace 'N'.
 
 
-==== tests/cases/compiler/jsdocInTypeScript.ts (6 errors) ====
+==== jsdocInTypeScript.ts (6 errors) ====
     // JSDoc typedef tags are not bound TypeScript files.
     /** @typedef {function} T */
     declare const x: T;

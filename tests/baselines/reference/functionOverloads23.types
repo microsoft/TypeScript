@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionOverloads23.ts ===
+//// [tests/cases/compiler/functionOverloads23.ts] ////
+
+=== functionOverloads23.ts ===
 function foo(bar:(b:string)=>void);
 >foo : { (bar: (b: string) => void): any; (bar: (a: number) => void): any; }
 >bar : (b: string) => void

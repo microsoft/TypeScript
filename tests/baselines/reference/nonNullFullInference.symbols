@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nonNullFullInference.ts ===
+//// [tests/cases/compiler/nonNullFullInference.ts] ////
+
+=== nonNullFullInference.ts ===
 // https://github.com/microsoft/TypeScript/issues/19577
 
 function testNonNullInference(numbers: number[]) {

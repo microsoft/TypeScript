@@ -1,4 +1,6 @@
-=== tests/cases/compiler/strictModeUseContextualKeyword.ts ===
+//// [tests/cases/compiler/strictModeUseContextualKeyword.ts] ////
+
+=== strictModeUseContextualKeyword.ts ===
 "use strict"
 var as = 0;
 >as : Symbol(as, Decl(strictModeUseContextualKeyword.ts, 1, 3))

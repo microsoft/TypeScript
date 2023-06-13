@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/conditional/conditionalTypesExcessProperties.ts ===
+//// [tests/cases/conformance/types/conditional/conditionalTypesExcessProperties.ts] ////
+
+=== conditionalTypesExcessProperties.ts ===
 type Something<T> = { test: string } &  (T extends object ? {
 >Something : Something<T>
 >test : string

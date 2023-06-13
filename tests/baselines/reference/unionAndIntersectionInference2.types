@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/unionAndIntersectionInference2.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/unionAndIntersectionInference2.ts] ////
+
+=== unionAndIntersectionInference2.ts ===
 declare function f1<T>(x: T | string): T;
 >f1 : <T>(x: T | string) => T
 >x : string | T

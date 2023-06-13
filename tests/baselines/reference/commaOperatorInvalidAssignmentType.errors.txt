@@ -1,12 +1,12 @@
-tests/cases/conformance/expressions/commaOperator/commaOperatorInvalidAssignmentType.ts(10,1): error TS2322: Type 'string' is not assignable to type 'boolean'.
-tests/cases/conformance/expressions/commaOperator/commaOperatorInvalidAssignmentType.ts(11,1): error TS2322: Type 'number' is not assignable to type 'boolean'.
-tests/cases/conformance/expressions/commaOperator/commaOperatorInvalidAssignmentType.ts(13,1): error TS2322: Type 'boolean' is not assignable to type 'number'.
-tests/cases/conformance/expressions/commaOperator/commaOperatorInvalidAssignmentType.ts(14,1): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/expressions/commaOperator/commaOperatorInvalidAssignmentType.ts(16,1): error TS2322: Type 'boolean' is not assignable to type 'string'.
-tests/cases/conformance/expressions/commaOperator/commaOperatorInvalidAssignmentType.ts(17,1): error TS2322: Type 'number' is not assignable to type 'string'.
+commaOperatorInvalidAssignmentType.ts(10,1): error TS2322: Type 'string' is not assignable to type 'boolean'.
+commaOperatorInvalidAssignmentType.ts(11,1): error TS2322: Type 'number' is not assignable to type 'boolean'.
+commaOperatorInvalidAssignmentType.ts(13,1): error TS2322: Type 'boolean' is not assignable to type 'number'.
+commaOperatorInvalidAssignmentType.ts(14,1): error TS2322: Type 'string' is not assignable to type 'number'.
+commaOperatorInvalidAssignmentType.ts(16,1): error TS2322: Type 'boolean' is not assignable to type 'string'.
+commaOperatorInvalidAssignmentType.ts(17,1): error TS2322: Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/conformance/expressions/commaOperator/commaOperatorInvalidAssignmentType.ts (6 errors) ====
+==== commaOperatorInvalidAssignmentType.ts (6 errors) ====
     var BOOLEAN: boolean;
     var NUMBER: number;
     var STRING: string;

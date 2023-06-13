@@ -1,4 +1,6 @@
-=== tests/cases/compiler/thisInAccessors.ts ===
+//// [tests/cases/compiler/thisInAccessors.ts] ////
+
+=== thisInAccessors.ts ===
 // this capture only in getter
 class GetterOnly {
 >GetterOnly : Symbol(GetterOnly, Decl(thisInAccessors.ts, 0, 0))

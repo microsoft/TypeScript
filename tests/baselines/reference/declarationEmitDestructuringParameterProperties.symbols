@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitDestructuringParameterProperties.ts ===
+//// [tests/cases/compiler/declarationEmitDestructuringParameterProperties.ts] ////
+
+=== declarationEmitDestructuringParameterProperties.ts ===
 class C1 {
 >C1 : Symbol(C1, Decl(declarationEmitDestructuringParameterProperties.ts, 0, 0))
 

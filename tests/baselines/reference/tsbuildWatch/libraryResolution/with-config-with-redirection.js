@@ -150,6 +150,7 @@ Output::
 ======== Resolving module '@typescript/lib-webworker' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.webworker.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-webworker' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-webworker'
 File '/home/src/projects/node_modules/@typescript/lib-webworker/package.json' does not exist.
@@ -164,6 +165,7 @@ Resolving real path for '/home/src/projects/node_modules/@typescript/lib-webwork
 ======== Resolving module '@typescript/lib-scripthost' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-scripthost' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-scripthost'
 File '/home/src/projects/node_modules/@typescript/lib-scripthost/package.json' does not exist.
@@ -178,6 +180,7 @@ Resolving real path for '/home/src/projects/node_modules/@typescript/lib-scripth
 ======== Resolving module '@typescript/lib-es5' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-es5' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-es5'
 File '/home/src/projects/node_modules/@typescript/lib-es5/package.json' does not exist.
@@ -199,6 +202,7 @@ Resolving real path for '/home/src/projects/project1/typeroot1/sometype/index.d.
 ======== Resolving module '@typescript/lib-dom' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-dom'
 File '/home/src/projects/node_modules/@typescript/lib-dom/package.json' does not exist.
@@ -239,6 +243,7 @@ project1/typeroot1/sometype/index.d.ts
 ======== Resolving module '@typescript/lib-es5' from '/home/src/projects/project2/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-es5' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/projects/project2/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-es5'
 Resolution for module '@typescript/lib-es5' was found in cache from location '/home/src/projects'.
@@ -246,6 +251,7 @@ Resolution for module '@typescript/lib-es5' was found in cache from location '/h
 ======== Resolving module '@typescript/lib-dom' from '/home/src/projects/project2/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/projects/project2/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-dom'
 Resolution for module '@typescript/lib-dom' was found in cache from location '/home/src/projects'.
@@ -265,6 +271,7 @@ project2/utils.d.ts
 ======== Resolving module '@typescript/lib-es5' from '/home/src/projects/project3/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-es5' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/projects/project3/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-es5'
 Resolution for module '@typescript/lib-es5' was found in cache from location '/home/src/projects'.
@@ -272,6 +279,7 @@ Resolution for module '@typescript/lib-es5' was found in cache from location '/h
 ======== Resolving module '@typescript/lib-dom' from '/home/src/projects/project3/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/projects/project3/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-dom'
 Resolution for module '@typescript/lib-dom' was found in cache from location '/home/src/projects'.
@@ -291,6 +299,7 @@ project3/utils.d.ts
 ======== Resolving module '@typescript/lib-esnext' from '/home/src/projects/project4/__lib_node_modules_lookup_lib.esnext.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-esnext' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/projects/project4/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-esnext'
 File '/home/src/projects/node_modules/@typescript/lib-esnext/package.json' does not exist.
@@ -305,6 +314,7 @@ Resolving real path for '/home/src/projects/node_modules/@typescript/lib-esnext/
 ======== Resolving module '@typescript/lib-dom' from '/home/src/projects/project4/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/projects/project4/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-dom'
 Resolution for module '@typescript/lib-dom' was found in cache from location '/home/src/projects'.
@@ -312,6 +322,7 @@ Resolution for module '@typescript/lib-dom' was found in cache from location '/h
 ======== Resolving module '@typescript/lib-webworker' from '/home/src/projects/project4/__lib_node_modules_lookup_lib.webworker.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-webworker' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/projects/project4/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-webworker'
 Resolution for module '@typescript/lib-webworker' was found in cache from location '/home/src/projects'.

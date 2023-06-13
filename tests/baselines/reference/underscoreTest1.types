@@ -1,4 +1,6 @@
-=== tests/cases/compiler/underscoreTest1_underscoreTests.ts ===
+//// [tests/cases/compiler/underscoreTest1.ts] ////
+
+=== underscoreTest1_underscoreTests.ts ===
 /// <reference path="underscoreTest1_underscore.ts" />
 
 declare var $;
@@ -1720,7 +1722,7 @@ _.template("Using 'with': <%= data.answer %>", { answer: 'no' }, { variable: 'da
 >variable : string
 >'data' : "data"
 
-=== tests/cases/compiler/underscoreTest1_underscore.ts ===
+=== underscoreTest1_underscore.ts ===
 interface Dictionary<T> {
     [x: string]: T;
 >x : string

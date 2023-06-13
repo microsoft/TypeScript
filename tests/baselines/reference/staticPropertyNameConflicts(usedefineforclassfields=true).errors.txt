@@ -1,23 +1,23 @@
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(25,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototype'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(30,12): error TS2300: Duplicate identifier 'prototype'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(30,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototypeFn'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(84,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototype_Anonymous'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(89,12): error TS2300: Duplicate identifier 'prototype'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(89,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototypeFn_Anonymous'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(135,12): error TS1319: A default export can only be used in an ECMAScript-style module.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(142,12): error TS1319: A default export can only be used in an ECMAScript-style module.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(150,12): error TS1319: A default export can only be used in an ECMAScript-style module.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(151,16): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototype'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(157,12): error TS1319: A default export can only be used in an ECMAScript-style module.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(158,16): error TS2300: Duplicate identifier 'prototype'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(158,16): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototypeFn'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(165,12): error TS1319: A default export can only be used in an ECMAScript-style module.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(172,12): error TS1319: A default export can only be used in an ECMAScript-style module.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(180,12): error TS1319: A default export can only be used in an ECMAScript-style module.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(187,12): error TS1319: A default export can only be used in an ECMAScript-style module.
+staticPropertyNameConflicts.ts(25,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototype'.
+staticPropertyNameConflicts.ts(30,12): error TS2300: Duplicate identifier 'prototype'.
+staticPropertyNameConflicts.ts(30,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototypeFn'.
+staticPropertyNameConflicts.ts(84,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototype_Anonymous'.
+staticPropertyNameConflicts.ts(89,12): error TS2300: Duplicate identifier 'prototype'.
+staticPropertyNameConflicts.ts(89,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototypeFn_Anonymous'.
+staticPropertyNameConflicts.ts(135,12): error TS1319: A default export can only be used in an ECMAScript-style module.
+staticPropertyNameConflicts.ts(142,12): error TS1319: A default export can only be used in an ECMAScript-style module.
+staticPropertyNameConflicts.ts(150,12): error TS1319: A default export can only be used in an ECMAScript-style module.
+staticPropertyNameConflicts.ts(151,16): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototype'.
+staticPropertyNameConflicts.ts(157,12): error TS1319: A default export can only be used in an ECMAScript-style module.
+staticPropertyNameConflicts.ts(158,16): error TS2300: Duplicate identifier 'prototype'.
+staticPropertyNameConflicts.ts(158,16): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototypeFn'.
+staticPropertyNameConflicts.ts(165,12): error TS1319: A default export can only be used in an ECMAScript-style module.
+staticPropertyNameConflicts.ts(172,12): error TS1319: A default export can only be used in an ECMAScript-style module.
+staticPropertyNameConflicts.ts(180,12): error TS1319: A default export can only be used in an ECMAScript-style module.
+staticPropertyNameConflicts.ts(187,12): error TS1319: A default export can only be used in an ECMAScript-style module.
 
 
-==== tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts (17 errors) ====
+==== staticPropertyNameConflicts.ts (17 errors) ====
     // name
     class StaticName {
         static name: number; // error without useDefineForClassFields

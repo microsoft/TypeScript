@@ -1,4 +1,6 @@
-=== tests/cases/compiler/superErrors.ts ===
+//// [tests/cases/compiler/superErrors.ts] ////
+
+=== superErrors.ts ===
 function foo() {
 >foo : Symbol(foo, Decl(superErrors.ts, 0, 0))
 

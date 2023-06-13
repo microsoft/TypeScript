@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/indexSignatureTypeInference.ts] ////
+
 //// [indexSignatureTypeInference.ts]
 interface NumberMap<T> {
     [index: number]: T;
