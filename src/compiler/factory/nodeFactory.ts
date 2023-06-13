@@ -175,6 +175,7 @@ import {
     isHoistedFunction,
     isHoistedVariableStatement,
     isIdentifier,
+    isIdentifierText,
     isImportDeclaration,
     isImportEqualsDeclaration,
     isImportKeyword,
@@ -313,6 +314,7 @@ import {
     ModuleBlock,
     ModuleBody,
     ModuleDeclaration,
+    ModuleExportName,
     ModuleKind,
     ModuleName,
     ModuleReference,
@@ -983,6 +985,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         get createLogicalNot() { return getPrefixUnaryCreateFunction(SyntaxKind.ExclamationToken); },
         get createPostfixIncrement() { return getPostfixUnaryCreateFunction(SyntaxKind.PlusPlusToken); },
         get createPostfixDecrement() { return getPostfixUnaryCreateFunction(SyntaxKind.MinusMinusToken); },
+        createModuleExportName,
 
         // Compound nodes
         createImmediatelyInvokedFunctionExpression,
@@ -4713,7 +4716,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function createNamespaceExport(name: Identifier): NamespaceExport {
+    function createNamespaceExport(name: ModuleExportName): NamespaceExport {
         const node = createBaseDeclaration<NamespaceExport>(SyntaxKind.NamespaceExport);
         node.name = name;
         node.transformFlags |=
@@ -4724,7 +4727,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function updateNamespaceExport(node: NamespaceExport, name: Identifier) {
+    function updateNamespaceExport(node: NamespaceExport, name: ModuleExportName) {
         return node.name !== name
             ? update(createNamespaceExport(name), node)
             : node;
@@ -4747,7 +4750,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function createImportSpecifier(isTypeOnly: boolean, propertyName: Identifier | undefined, name: Identifier) {
+    function createImportSpecifier(isTypeOnly: boolean, propertyName: ModuleExportName | undefined, name: Identifier) {
         const node = createBaseDeclaration<ImportSpecifier>(SyntaxKind.ImportSpecifier);
         node.isTypeOnly = isTypeOnly;
         node.propertyName = propertyName;
@@ -4760,7 +4763,15 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function updateImportSpecifier(node: ImportSpecifier, isTypeOnly: boolean, propertyName: Identifier | undefined, name: Identifier) {
+    function createModuleExportName(name: string, languageVersion: ScriptTarget): ModuleExportName;
+    function createModuleExportName(name: string | undefined, languageVersion: ScriptTarget): ModuleExportName | undefined;
+    function createModuleExportName(name: string | undefined, languageVersion: ScriptTarget): ModuleExportName | undefined {
+        if (name === undefined) return undefined;
+        return isIdentifierText(name, languageVersion) ? createIdentifier(name) : createStringLiteral(name);
+    }
+
+    // @api
+    function updateImportSpecifier(node: ImportSpecifier, isTypeOnly: boolean, propertyName: ModuleExportName | undefined, name: Identifier) {
         return node.isTypeOnly !== isTypeOnly
             || node.propertyName !== propertyName
             || node.name !== name
@@ -4868,11 +4879,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function createExportSpecifier(isTypeOnly: boolean, propertyName: string | Identifier | undefined, name: string | Identifier) {
+    function createExportSpecifier(isTypeOnly: boolean, propertyName: ModuleExportName | undefined, name: ModuleExportName) {
         const node = createBaseNode<ExportSpecifier>(SyntaxKind.ExportSpecifier);
         node.isTypeOnly = isTypeOnly;
-        node.propertyName = asName(propertyName);
-        node.name = asName(name);
+        node.propertyName = propertyName;
+        node.name = name;
         node.transformFlags |=
             propagateChildFlags(node.propertyName) |
             propagateChildFlags(node.name);
@@ -4883,7 +4894,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function updateExportSpecifier(node: ExportSpecifier, isTypeOnly: boolean, propertyName: Identifier | undefined, name: Identifier) {
+    function updateExportSpecifier(node: ExportSpecifier, isTypeOnly: boolean, propertyName: ModuleExportName | undefined, name: ModuleExportName) {
         return node.isTypeOnly !== isTypeOnly
             || node.propertyName !== propertyName
             || node.name !== name

@@ -18,7 +18,6 @@ import {
     isTransientSymbol,
     makeImport,
     ModuleKind,
-    NamespaceImport,
     NewExpression,
     Node,
     SourceFile,
@@ -34,7 +33,7 @@ const fixName = "invalidImportSyntax";
 
 function getCodeFixesForImportDeclaration(context: CodeFixContext, node: ImportDeclaration): CodeFixAction[] {
     const sourceFile = getSourceFileOfNode(node);
-    const namespace = getNamespaceDeclarationNode(node) as NamespaceImport;
+    const namespace = getNamespaceDeclarationNode(node)!;
     const opts = context.program.getCompilerOptions();
     const variations: CodeFixAction[] = [];
 

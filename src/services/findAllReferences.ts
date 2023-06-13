@@ -191,6 +191,8 @@ import {
     MethodDeclaration,
     ModifierFlags,
     ModuleDeclaration,
+    ModuleExportName,
+    moduleExportNameTextEscaped,
     MultiMap,
     NamedDeclaration,
     Node,
@@ -1519,7 +1521,7 @@ export namespace Core {
         exportingModuleSymbol: Symbol,
         exportName: string,
         isDefaultExport: boolean,
-        cb: (ref: Identifier) => void,
+        cb: (ref: ModuleExportName) => void,
     ): void {
         const importTracker = createImportTracker(sourceFiles, new Set(sourceFiles.map(f => f.fileName)), checker, cancellationToken);
         const { importSearches, indirectUsers, singleReferences } = importTracker(exportSymbol, { exportKind: isDefaultExport ? ExportKind.Default : ExportKind.Named, exportingModuleSymbol }, /*isForRename*/ false);
@@ -1927,7 +1929,7 @@ export namespace Core {
     }
 
     function getReferencesAtExportSpecifier(
-        referenceLocation: Identifier,
+        referenceLocation: ModuleExportName,
         referenceSymbol: Symbol,
         exportSpecifier: ExportSpecifier,
         search: Search,
@@ -1946,7 +1948,7 @@ export namespace Core {
 
         if (!propertyName) {
             // Don't rename at `export { default } from "m";`. (but do continue to search for imports of the re-export)
-            if (!(state.options.use === FindReferencesUse.Rename && (name.escapedText === InternalSymbolName.Default))) {
+            if (!(state.options.use === FindReferencesUse.Rename && (moduleExportNameTextEscaped(name) === InternalSymbolName.Default))) {
                 addRef();
             }
         }
@@ -1969,8 +1971,8 @@ export namespace Core {
 
         // For `export { foo as bar }`, rename `foo`, but not `bar`.
         if (!isForRenameWithPrefixAndSuffixText(state.options) || alwaysGetReferences) {
-            const isDefaultExport = referenceLocation.escapedText === "default"
-                || exportSpecifier.name.escapedText === "default";
+            const isDefaultExport = moduleExportNameTextEscaped(referenceLocation) === "default"
+                || moduleExportNameTextEscaped(exportSpecifier.name) === "default";
             const exportKind = isDefaultExport ? ExportKind.Default : ExportKind.Named;
             const exportSymbol = Debug.checkDefined(exportSpecifier.symbol);
             const exportInfo = getExportInfo(exportSymbol, exportKind, state.checker);
@@ -1990,11 +1992,11 @@ export namespace Core {
         }
     }
 
-    function getLocalSymbolForExportSpecifier(referenceLocation: Identifier, referenceSymbol: Symbol, exportSpecifier: ExportSpecifier, checker: TypeChecker): Symbol {
+    function getLocalSymbolForExportSpecifier(referenceLocation: ModuleExportName, referenceSymbol: Symbol, exportSpecifier: ExportSpecifier, checker: TypeChecker): Symbol {
         return isExportSpecifierAlias(referenceLocation, exportSpecifier) && checker.getExportSpecifierLocalTargetSymbol(exportSpecifier) || referenceSymbol;
     }
 
-    function isExportSpecifierAlias(referenceLocation: Identifier, exportSpecifier: ExportSpecifier): boolean {
+    function isExportSpecifierAlias(referenceLocation: ModuleExportName, exportSpecifier: ExportSpecifier): boolean {
         const { parent, propertyName, name } = exportSpecifier;
         Debug.assert(propertyName === referenceLocation || name === referenceLocation);
         if (propertyName) {

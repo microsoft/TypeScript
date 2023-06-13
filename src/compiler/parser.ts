@@ -120,7 +120,6 @@ import {
     ImportClause,
     ImportDeclaration,
     ImportEqualsDeclaration,
-    ImportOrExportSpecifier,
     ImportSpecifier,
     ImportTypeAssertionContainer,
     ImportTypeNode,
@@ -253,6 +252,7 @@ import {
     modifiersToFlags,
     ModuleBlock,
     ModuleDeclaration,
+    ModuleExportName,
     ModuleKind,
     Mutable,
     NamedExportBindings,
@@ -2874,7 +2874,7 @@ namespace Parser {
                 if (token() === SyntaxKind.FromKeyword && lookAhead(nextTokenIsStringLiteral)) {
                     return false;
                 }
-                return tokenIsIdentifierOrKeyword(token());
+                return token() === SyntaxKind.StringLiteral || tokenIsIdentifierOrKeyword(token());
             case ParsingContext.JsxAttributes:
                 return tokenIsIdentifierOrKeyword(token()) || token() === SyntaxKind.OpenBraceToken;
             case ParsingContext.JsxChildren:
@@ -8357,22 +8357,26 @@ namespace Parser {
         return parseImportOrExportSpecifier(SyntaxKind.ImportSpecifier) as ImportSpecifier;
     }
 
-    function parseImportOrExportSpecifier(kind: SyntaxKind): ImportOrExportSpecifier {
+    function parseImportOrExportSpecifier(kind: SyntaxKind) {
         const pos = getNodePos();
+        // ModuleExportName:
+        //   Identifier
+        //   StringLiteral
         // ImportSpecifier:
         //   BindingIdentifier
-        //   IdentifierName as BindingIdentifier
+        //   ModuleExportName as BindingIdentifier
         // ExportSpecifier:
-        //   IdentifierName
-        //   IdentifierName as IdentifierName
+        //   ModuleExportName
+        //   ModuleExportName as ModuleExportName
         let checkIdentifierIsKeyword = isKeyword(token()) && !isIdentifier();
         let checkIdentifierStart = scanner.getTokenStart();
         let checkIdentifierEnd = scanner.getTokenEnd();
         let isTypeOnly = false;
-        let propertyName: Identifier | undefined;
+        let propertyName: ModuleExportName | undefined;
         let canParseAsKeyword = true;
-        let name = parseIdentifierName();
-        if (name.escapedText === "type") {
+        let mustParseAsKeyword = false;
+        let name = parseModuleExportName(parseIdentifierName);
+        if (name.kind === SyntaxKind.Identifier && name.escapedText === "type") {
             // If the first token of an import specifier is 'type', there are a lot of possibilities,
             // especially if we see 'as' afterwards:
             //
@@ -8380,6 +8384,7 @@ namespace Parser {
             // import { type as } from "mod";       - isTypeOnly: true,    name: as
             // import { type as as } from "mod";    - isTypeOnly: false,   name: as,    propertyName: type
             // import { type as as as } from "mod"; - isTypeOnly: true,    name: as,    propertyName: as
+            // export { type as as "s" } from "mod";- isTypeOnly: true,    name: "s",   propertyName: as
             if (token() === SyntaxKind.AsKeyword) {
                 // { type as ...? }
                 const firstAs = parseIdentifierName();
@@ -8388,9 +8393,10 @@ namespace Parser {
                     const secondAs = parseIdentifierName();
                     if (tokenIsIdentifierOrKeyword(token())) {
                         // { type as as something }
+                        // { type as as "something" } (only in exports)
                         isTypeOnly = true;
                         propertyName = firstAs;
-                        name = parseNameWithKeywordCheck();
+                        name = parseModuleExportNameOnlyForExports();
                         canParseAsKeyword = false;
                     }
                     else {
@@ -8404,7 +8410,7 @@ namespace Parser {
                     // { type as something }
                     propertyName = name;
                     canParseAsKeyword = false;
-                    name = parseNameWithKeywordCheck();
+                    name = parseModuleExportNameOnlyForExports();
                 }
                 else {
                     // { type as }
@@ -8412,23 +8418,35 @@ namespace Parser {
                     name = firstAs;
                 }
             }
+            // export { type "x" }
+            // import { type "x" as ... }
+            else if (token() === SyntaxKind.StringLiteral) {
+                isTypeOnly = true;
+                if (kind === SyntaxKind.ImportSpecifier) mustParseAsKeyword = true;
+                name = parseModuleExportName(parseNameWithKeywordCheck);
+            }
             else if (tokenIsIdentifierOrKeyword(token())) {
                 // { type something ...? }
                 isTypeOnly = true;
                 name = parseNameWithKeywordCheck();
             }
         }
+        // import { "x" as ... }
+        else if (kind === SyntaxKind.ImportSpecifier && name.kind === SyntaxKind.StringLiteral) {
+            mustParseAsKeyword = true;
+        }
 
-        if (canParseAsKeyword && token() === SyntaxKind.AsKeyword) {
+        if (mustParseAsKeyword || (canParseAsKeyword && token() === SyntaxKind.AsKeyword)) {
             propertyName = name;
             parseExpected(SyntaxKind.AsKeyword);
-            name = parseNameWithKeywordCheck();
+            name = parseModuleExportNameOnlyForExports();
         }
         if (kind === SyntaxKind.ImportSpecifier && checkIdentifierIsKeyword) {
             parseErrorAt(checkIdentifierStart, checkIdentifierEnd, Diagnostics.Identifier_expected);
         }
+        if (kind === SyntaxKind.ImportSpecifier) Debug.assert(name.kind === SyntaxKind.Identifier);
         const node = kind === SyntaxKind.ImportSpecifier
-            ? factory.createImportSpecifier(isTypeOnly, propertyName, name)
+            ? factory.createImportSpecifier(isTypeOnly, propertyName, name as Identifier)
             : factory.createExportSpecifier(isTypeOnly, propertyName, name);
         return finishNode(node, pos);
 
@@ -8438,10 +8456,22 @@ namespace Parser {
             checkIdentifierEnd = scanner.getTokenEnd();
             return parseIdentifierName();
         }
+        function parseModuleExportNameOnlyForExports() {
+            if (kind === SyntaxKind.ImportSpecifier) return parseNameWithKeywordCheck();
+            return parseModuleExportName(parseNameWithKeywordCheck);
+        }
+        function parseModuleExportName(parser: () => Identifier): ModuleExportName {
+            if (token() === SyntaxKind.StringLiteral) return parseStringLiteral();
+            return parser();
+        }
+        function parseStringLiteral(): StringLiteral {
+            // TODO: the spec requires it pass IsStringWellFormedUnicode
+            return parseLiteralLikeNode(SyntaxKind.StringLiteral) as StringLiteral;
+        }
     }
 
     function parseNamespaceExport(pos: number): NamespaceExport {
-        return finishNode(factory.createNamespaceExport(parseIdentifierName()), pos);
+        return finishNode(factory.createNamespaceExport(token() === SyntaxKind.StringLiteral ? parseLiteralLikeNode(SyntaxKind.StringLiteral) as StringLiteral : parseIdentifierName()), pos);
     }
 
     function parseExportDeclaration(pos: number, hasJSDoc: boolean, modifiers: NodeArray<ModifierLike> | undefined): ExportDeclaration {

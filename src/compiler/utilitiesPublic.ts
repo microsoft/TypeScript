@@ -851,8 +851,8 @@ function getDeclarationIdentifier(node: Declaration | Expression): Identifier | 
 }
 
 /** @internal */
-export function nodeHasName(statement: Node, name: Identifier) {
-    if (isNamedDeclaration(statement) && isIdentifier(statement.name) && idText(statement.name as Identifier) === idText(name)) {
+export function nodeHasName(statement: Node, name: Identifier | string) {
+    if (isNamedDeclaration(statement) && isIdentifier(statement.name) && idText(statement.name) === (typeof name === "string" ? name : idText(name))) {
         return true;
     }
     if (isVariableStatement(statement) && some(statement.declarationList.declarations, d => nodeHasName(d, name))) {

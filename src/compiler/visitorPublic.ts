@@ -59,6 +59,7 @@ import {
     isModifier,
     isModifierLike,
     isModuleBody,
+    isModuleExportName,
     isModuleName,
     isModuleReference,
     isNamedExportBindings,
@@ -1355,7 +1356,7 @@ const visitEachChildTable: VisitEachChildTable = {
 
     [SyntaxKind.NamespaceExport]: function visitEachChildOfNamespaceExport(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
         return context.factory.updateNamespaceExport(node,
-            Debug.checkDefined(nodeVisitor(node.name, visitor, isIdentifier)));
+            Debug.checkDefined(nodeVisitor(node.name, visitor, isModuleExportName)));
     },
 
     [SyntaxKind.NamedImports]: function visitEachChildOfNamedImports(node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) {
@@ -1366,7 +1367,7 @@ const visitEachChildTable: VisitEachChildTable = {
     [SyntaxKind.ImportSpecifier]: function visitEachChildOfImportSpecifier(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
         return context.factory.updateImportSpecifier(node,
             node.isTypeOnly,
-            nodeVisitor(node.propertyName, visitor, isIdentifier),
+            nodeVisitor(node.propertyName, visitor, isModuleExportName),
             Debug.checkDefined(nodeVisitor(node.name, visitor, isIdentifier)));
     },
 
@@ -1393,8 +1394,8 @@ const visitEachChildTable: VisitEachChildTable = {
     [SyntaxKind.ExportSpecifier]: function visitEachChildOfExportSpecifier(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
         return context.factory.updateExportSpecifier(node,
             node.isTypeOnly,
-            nodeVisitor(node.propertyName, visitor, isIdentifier),
-            Debug.checkDefined(nodeVisitor(node.name, visitor, isIdentifier)));
+            nodeVisitor(node.propertyName, visitor, isModuleExportName),
+            Debug.checkDefined(nodeVisitor(node.name, visitor, isModuleExportName)));
     },
 
     // Module references

@@ -58,9 +58,11 @@ import {
     isFunctionTypeNode,
     isIdentifier,
     isImportMeta,
+    isImportOrExportSpecifier,
     isJSDocOverrideTag,
     isJsxOpeningLikeElement,
     isJumpStatementTarget,
+    isModuleExportName,
     isModuleSpecifierLike,
     isNameOfFunctionDeclaration,
     isNewExpressionTarget,
@@ -516,6 +518,9 @@ function getSymbol(node: Node, checker: TypeChecker, stopAtAlias: boolean | unde
 //   (2) when the aliased symbol is originating from an import.
 //
 function shouldSkipAlias(node: Node, declaration: Node): boolean {
+    if (isModuleExportName(node) && isImportOrExportSpecifier(declaration)) {
+        return true;
+    }
     if (node.kind !== SyntaxKind.Identifier) {
         return false;
     }

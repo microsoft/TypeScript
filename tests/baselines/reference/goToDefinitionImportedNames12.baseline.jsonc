@@ -1,0 +1,103 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/a.ts ===
+// <|const [|a|] = 1;|>
+// export { a as " b " };
+
+// === /tests/cases/fourslash/e.ts ===
+// import { c } from "./d";
+// /*GOTO DEF*/[|c|];
+
+  // === Details ===
+  [
+   {
+    "kind": "const",
+    "name": "a",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/a.ts ===
+// <|const [|a|] = 1;|>
+// export { a as " b " };
+
+// === /tests/cases/fourslash/c.ts ===
+// export { /*GOTO DEF*/[|" b "|] as c } from "./b";
+
+  // === Details ===
+  [
+   {
+    "kind": "const",
+    "name": "a",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/a.ts ===
+// <|const [|a|] = 1;|>
+// export { a as " b " };
+
+// === /tests/cases/fourslash/c.ts ===
+// export { " b " as /*GOTO DEF*/[|c|] } from "./b";
+
+  // === Details ===
+  [
+   {
+    "kind": "const",
+    "name": "a",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/a.ts ===
+// <|const [|a|] = 1;|>
+// export { /*GOTO DEF*/a as " b " };
+
+  // === Details ===
+  [
+   {
+    "kind": "const",
+    "name": "a",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/a.ts ===
+// <|const [|a|] = 1;|>
+// export { a as /*GOTO DEF*/" b " };
+
+  // === Details ===
+  [
+   {
+    "kind": "const",
+    "name": "a",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]

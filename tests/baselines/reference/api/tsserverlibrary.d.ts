@@ -5752,7 +5752,7 @@ declare namespace ts {
     interface NamespaceExport extends NamedDeclaration {
         readonly kind: SyntaxKind.NamespaceExport;
         readonly parent: ExportDeclaration;
-        readonly name: Identifier;
+        readonly name: ModuleExportName;
     }
     interface NamespaceExportDeclaration extends DeclarationStatement, JSDocContainer {
         readonly kind: SyntaxKind.NamespaceExportDeclaration;
@@ -5783,7 +5783,7 @@ declare namespace ts {
     interface ImportSpecifier extends NamedDeclaration {
         readonly kind: SyntaxKind.ImportSpecifier;
         readonly parent: NamedImports;
-        readonly propertyName?: Identifier;
+        readonly propertyName?: ModuleExportName;
         readonly name: Identifier;
         readonly isTypeOnly: boolean;
     }
@@ -5791,9 +5791,10 @@ declare namespace ts {
         readonly kind: SyntaxKind.ExportSpecifier;
         readonly parent: NamedExports;
         readonly isTypeOnly: boolean;
-        readonly propertyName?: Identifier;
-        readonly name: Identifier;
+        readonly propertyName?: ModuleExportName;
+        readonly name: ModuleExportName;
     }
+    type ModuleExportName = Identifier | StringLiteral;
     type ImportOrExportSpecifier = ImportSpecifier | ExportSpecifier;
     type TypeOnlyCompatibleAliasDeclaration = ImportClause | ImportEqualsDeclaration | NamespaceImport | ImportOrExportSpecifier | ExportDeclaration | NamespaceExport;
     type TypeOnlyImportDeclaration = ImportClause & {
@@ -7875,20 +7876,20 @@ declare namespace ts {
         updateImportTypeAssertionContainer(node: ImportTypeAssertionContainer, clause: AssertClause, multiLine?: boolean): ImportTypeAssertionContainer;
         createNamespaceImport(name: Identifier): NamespaceImport;
         updateNamespaceImport(node: NamespaceImport, name: Identifier): NamespaceImport;
-        createNamespaceExport(name: Identifier): NamespaceExport;
-        updateNamespaceExport(node: NamespaceExport, name: Identifier): NamespaceExport;
+        createNamespaceExport(name: ModuleExportName): NamespaceExport;
+        updateNamespaceExport(node: NamespaceExport, name: ModuleExportName): NamespaceExport;
         createNamedImports(elements: readonly ImportSpecifier[]): NamedImports;
         updateNamedImports(node: NamedImports, elements: readonly ImportSpecifier[]): NamedImports;
-        createImportSpecifier(isTypeOnly: boolean, propertyName: Identifier | undefined, name: Identifier): ImportSpecifier;
-        updateImportSpecifier(node: ImportSpecifier, isTypeOnly: boolean, propertyName: Identifier | undefined, name: Identifier): ImportSpecifier;
+        createImportSpecifier(isTypeOnly: boolean, propertyName: ModuleExportName | undefined, name: Identifier): ImportSpecifier;
+        updateImportSpecifier(node: ImportSpecifier, isTypeOnly: boolean, propertyName: ModuleExportName | undefined, name: Identifier): ImportSpecifier;
         createExportAssignment(modifiers: readonly ModifierLike[] | undefined, isExportEquals: boolean | undefined, expression: Expression): ExportAssignment;
         updateExportAssignment(node: ExportAssignment, modifiers: readonly ModifierLike[] | undefined, expression: Expression): ExportAssignment;
         createExportDeclaration(modifiers: readonly ModifierLike[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier?: Expression, assertClause?: AssertClause): ExportDeclaration;
         updateExportDeclaration(node: ExportDeclaration, modifiers: readonly ModifierLike[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier: Expression | undefined, assertClause: AssertClause | undefined): ExportDeclaration;
         createNamedExports(elements: readonly ExportSpecifier[]): NamedExports;
         updateNamedExports(node: NamedExports, elements: readonly ExportSpecifier[]): NamedExports;
-        createExportSpecifier(isTypeOnly: boolean, propertyName: string | Identifier | undefined, name: string | Identifier): ExportSpecifier;
-        updateExportSpecifier(node: ExportSpecifier, isTypeOnly: boolean, propertyName: Identifier | undefined, name: Identifier): ExportSpecifier;
+        createExportSpecifier(isTypeOnly: boolean, propertyName: ModuleExportName | undefined, name: ModuleExportName): ExportSpecifier;
+        updateExportSpecifier(node: ExportSpecifier, isTypeOnly: boolean, propertyName: ModuleExportName | undefined, name: ModuleExportName): ExportSpecifier;
         createExternalModuleReference(expression: Expression): ExternalModuleReference;
         updateExternalModuleReference(node: ExternalModuleReference, expression: Expression): ExternalModuleReference;
         createJSDocAllType(): JSDocAllType;
@@ -8057,6 +8058,8 @@ declare namespace ts {
         createLogicalNot(operand: Expression): PrefixUnaryExpression;
         createPostfixIncrement(operand: Expression): PostfixUnaryExpression;
         createPostfixDecrement(operand: Expression): PostfixUnaryExpression;
+        createModuleExportName(name: string, languageVersion: ScriptTarget): ModuleExportName;
+        createModuleExportName(name: string | undefined, languageVersion: ScriptTarget): ModuleExportName | undefined;
         createImmediatelyInvokedFunctionExpression(statements: readonly Statement[]): CallExpression;
         createImmediatelyInvokedFunctionExpression(statements: readonly Statement[], param: ParameterDeclaration, paramValue: Expression): CallExpression;
         createImmediatelyInvokedArrowFunction(statements: readonly Statement[]): CallExpression;
@@ -8824,6 +8827,9 @@ declare namespace ts {
         parent: ConstructorDeclaration;
         name: Identifier;
     };
+    function getNamespaceDeclarationNode(node: ImportEqualsDeclaration): ImportEqualsDeclaration;
+    function getNamespaceDeclarationNode(node: ExportDeclaration): NamespaceExport | undefined;
+    function getNamespaceDeclarationNode(node: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration): ImportEqualsDeclaration | NamespaceImport | NamespaceExport | undefined;
     /**
      * This function checks multiple locations for JSDoc comments that apply to a host node.
      * At each location, the whole comment may apply to the node, or only a specific tag in
@@ -8844,6 +8850,7 @@ declare namespace ts {
      * ```
      */
     function getJSDocCommentsAndTags(hostNode: Node): readonly (JSDoc | JSDocTag)[];
+    function isModuleExportNameStringLiteral(node: __String | ModuleExportName | undefined): node is StringLiteral;
     /** @deprecated */
     function createUnparsedSourceFile(text: string): UnparsedSource;
     /** @deprecated */
@@ -8950,6 +8957,7 @@ declare namespace ts {
     function isEqualsGreaterThanToken(node: Node): node is EqualsGreaterThanToken;
     function isIdentifier(node: Node): node is Identifier;
     function isPrivateIdentifier(node: Node): node is PrivateIdentifier;
+    function isModuleExportName(node: Node): node is ModuleExportName;
     function isAssertsKeyword(node: Node): node is AssertsKeyword;
     function isAwaitKeyword(node: Node): node is AwaitKeyword;
     function isQualifiedName(node: Node): node is QualifiedName;

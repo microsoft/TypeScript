@@ -17,6 +17,7 @@ import {
     chainBundle,
     ClassDeclaration,
     collectExternalModuleInfo,
+    createElementAccessOrPropertyAccessExpression,
     Debug,
     Declaration,
     DefaultClause,
@@ -118,6 +119,8 @@ import {
     mapDefined,
     Modifier,
     ModifierFlags,
+    ModuleExportName,
+    moduleExportNameText,
     ModuleKind,
     Node,
     NodeArray,
@@ -267,7 +270,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                     factory.createExpressionStatement(
                         reduceLeft(
                             currentModuleInfo.exportedNames!.slice(i, i + chunkSize),
-                            (prev, nextId) => factory.createAssignment(factory.createPropertyAccessExpression(factory.createIdentifier("exports"), factory.createIdentifier(idText(nextId))), prev),
+                            (prev, nextId) => factory.createAssignment(createElementAccessOrPropertyAccessExpression(factory.createIdentifier("exports"), factory.cloneNode(nextId)), prev),
                             factory.createVoidZero() as Expression
                         )
                     )
@@ -594,7 +597,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             append(statements, createUnderscoreUnderscoreESModule());
         }
         if (length(currentModuleInfo.exportedNames)) {
-            append(statements, factory.createExpressionStatement(reduceLeft(currentModuleInfo.exportedNames, (prev, nextId) => factory.createAssignment(factory.createPropertyAccessExpression(factory.createIdentifier("exports"), factory.createIdentifier(idText(nextId))), prev), factory.createVoidZero() as Expression)));
+            append(statements, factory.createExpressionStatement(reduceLeft(currentModuleInfo.exportedNames, (prev, nextId) => factory.createAssignment(createElementAccessOrPropertyAccessExpression(factory.createIdentifier("exports"), factory.cloneNode(nextId)), prev), factory.createVoidZero() as Expression)));
         }
 
         // Visit each statement of the module body.
@@ -1587,8 +1590,8 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                     const exportNeedsImportDefault =
                         !!getESModuleInterop(compilerOptions) &&
                         !(getInternalEmitFlags(node) & InternalEmitFlags.NeverApplyImportHelper) &&
-                        idText(specifier.propertyName || specifier.name) === "default";
-                    const exportedValue = factory.createPropertyAccessExpression(
+                        moduleExportNameText(specifier.propertyName || specifier.name) === "default";
+                    const exportedValue = createElementAccessOrPropertyAccessExpression(
                         exportNeedsImportDefault ? emitHelpers().createImportDefaultHelper(generatedName) : generatedName,
                         specifier.propertyName || specifier.name);
                     statements.push(
@@ -1619,7 +1622,10 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                                 getHelperExpressionForExport(node, moduleKind !== ModuleKind.AMD ?
                                     createRequireCall(node) :
                                     isExportNamespaceAsDefaultDeclaration(node) ? generatedName :
-                                        factory.createIdentifier(idText(node.exportClause.name)))
+                                        node.exportClause.name.kind === SyntaxKind.Identifier ?
+                                            factory.createIdentifier(idText(node.exportClause.name)) :
+                                            factory.getGeneratedNameForNode(node.exportClause.name)
+                                )
                             )
                         ),
                         node
@@ -2037,7 +2043,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      * @param location The location to use for source maps and comments for the export.
      * @param allowComments Whether to allow comments on the export.
      */
-    function appendExportStatement(statements: Statement[] | undefined, exportName: Identifier, expression: Expression, location?: TextRange, allowComments?: boolean, liveBinding?: boolean): Statement[] | undefined {
+    function appendExportStatement(statements: Statement[] | undefined, exportName: ModuleExportName, expression: Expression, location?: TextRange, allowComments?: boolean, liveBinding?: boolean): Statement[] | undefined {
         statements = append(statements, createExportStatement(exportName, expression, location, allowComments, liveBinding));
         return statements;
     }
@@ -2079,7 +2085,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      * @param location The location to use for source maps and comments for the export.
      * @param allowComments An optional value indicating whether to emit comments for the statement.
      */
-    function createExportStatement(name: Identifier, value: Expression, location?: TextRange, allowComments?: boolean, liveBinding?: boolean) {
+    function createExportStatement(name: ModuleExportName, value: Expression, location?: TextRange, allowComments?: boolean, liveBinding?: boolean) {
         const statement = setTextRange(factory.createExpressionStatement(createExportExpression(name, value, /*location*/ undefined, liveBinding)), location);
         startOnNewLine(statement);
         if (!allowComments) {
@@ -2096,7 +2102,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      * @param value The exported value.
      * @param location The location to use for source maps and comments for the export.
      */
-    function createExportExpression(name: Identifier, value: Expression, location?: TextRange, liveBinding?: boolean) {
+    function createExportExpression(name: ModuleExportName, value: Expression, location?: TextRange, liveBinding?: boolean) {
         return setTextRange(
             liveBinding && languageVersion !== ScriptTarget.ES3 ? factory.createCallExpression(
                 factory.createPropertyAccessExpression(
@@ -2121,7 +2127,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                     ])
                 ]
             ) : factory.createAssignment(
-                factory.createPropertyAccessExpression(
+                createElementAccessOrPropertyAccessExpression(
                     factory.createIdentifier("exports"),
                     factory.cloneNode(name)
                 ),
@@ -2320,7 +2326,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                 else if (isImportSpecifier(importDeclaration)) {
                     const name = importDeclaration.propertyName || importDeclaration.name;
                     return setTextRange(
-                        factory.createPropertyAccessExpression(
+                        createElementAccessOrPropertyAccessExpression(
                             factory.getGeneratedNameForNode(importDeclaration.parent?.parent?.parent || importDeclaration),
                             factory.cloneNode(name)
                         ),

@@ -1601,6 +1601,10 @@
         "category": "Error",
         "code": 1490
     },
+    "String literal module export names are not allowed when the 'module' option is set to 'es2020' or lower.": {
+        "category": "Error",
+        "code": 1491
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -1658,6 +1662,10 @@
     "Add `extends` constraint to all type parameters": {
         "category": "Message",
         "code": 2212
+    },
+    "String literal module export names must be followed by a 'from' clause.": {
+        "category": "Error",
+        "code": 2213
     },
 
     "Duplicate identifier '{0}'.": {

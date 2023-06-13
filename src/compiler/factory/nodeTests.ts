@@ -143,6 +143,7 @@ import {
     MissingDeclaration,
     ModuleBlock,
     ModuleDeclaration,
+    ModuleExportName,
     NamedExports,
     NamedImports,
     NamedTupleMember,
@@ -319,6 +320,10 @@ export function isIdentifier(node: Node): node is Identifier {
 
 export function isPrivateIdentifier(node: Node): node is PrivateIdentifier {
     return node.kind === SyntaxKind.PrivateIdentifier;
+}
+
+export function isModuleExportName(node: Node): node is ModuleExportName {
+    return node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.StringLiteral;
 }
 
 // Reserved Words

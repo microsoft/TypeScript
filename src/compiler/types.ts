@@ -3733,7 +3733,7 @@ export interface NamespaceImport extends NamedDeclaration {
 export interface NamespaceExport extends NamedDeclaration {
     readonly kind: SyntaxKind.NamespaceExport;
     readonly parent: ExportDeclaration;
-    readonly name: Identifier
+    readonly name: ModuleExportName;
 }
 
 export interface NamespaceExportDeclaration extends DeclarationStatement, JSDocContainer {
@@ -3773,7 +3773,7 @@ export type NamedImportsOrExports = NamedImports | NamedExports;
 export interface ImportSpecifier extends NamedDeclaration {
     readonly kind: SyntaxKind.ImportSpecifier;
     readonly parent: NamedImports;
-    readonly propertyName?: Identifier;  // Name preceding "as" keyword (or undefined when "as" is absent)
+    readonly propertyName?: ModuleExportName;  // Name preceding "as" keyword (or undefined when "as" is absent)
     readonly name: Identifier;           // Declared name
     readonly isTypeOnly: boolean;
 }
@@ -3782,10 +3782,11 @@ export interface ExportSpecifier extends NamedDeclaration, JSDocContainer {
     readonly kind: SyntaxKind.ExportSpecifier;
     readonly parent: NamedExports;
     readonly isTypeOnly: boolean;
-    readonly propertyName?: Identifier;  // Name preceding "as" keyword (or undefined when "as" is absent)
-    readonly name: Identifier;           // Declared name
+    readonly propertyName?: ModuleExportName;  // Name preceding "as" keyword (or undefined when "as" is absent)
+    readonly name: ModuleExportName;           // Declared name
 }
 
+export type ModuleExportName = Identifier | StringLiteral;
 export type ImportOrExportSpecifier =
     | ImportSpecifier
     | ExportSpecifier
@@ -5681,7 +5682,7 @@ export interface EmitResolver {
     getNodeCheckFlags(node: Node): NodeCheckFlags;
     isDeclarationVisible(node: Declaration | AnyImportSyntax): boolean;
     isLateBound(node: Declaration): node is LateBoundDeclaration;
-    collectLinkedAliases(node: Identifier, setVisibility?: boolean): Node[] | undefined;
+    collectLinkedAliases(node: ModuleExportName, setVisibility?: boolean): Node[] | undefined;
     isImplementationOfOverload(node: SignatureDeclaration): boolean | undefined;
     isRequiredInitializedParameter(node: ParameterDeclaration): boolean;
     isOptionalUninitializedParameterProperty(node: ParameterDeclaration): boolean;
@@ -5949,6 +5950,8 @@ export interface ReverseMappedSymbol extends TransientSymbol {
     links: ReverseMappedSymbolLinks;
 }
 
+// All names should starts with __, since it's possible to declare an arbitrary symbol name with
+// export { ident as "this" }
 export const enum InternalSymbolName {
     Call = "__call", // Call signatures
     Constructor = "__constructor", // Constructor implementations
@@ -8625,20 +8628,20 @@ export interface NodeFactory {
     updateImportTypeAssertionContainer(node: ImportTypeAssertionContainer, clause: AssertClause, multiLine?: boolean): ImportTypeAssertionContainer;
     createNamespaceImport(name: Identifier): NamespaceImport;
     updateNamespaceImport(node: NamespaceImport, name: Identifier): NamespaceImport;
-    createNamespaceExport(name: Identifier): NamespaceExport;
-    updateNamespaceExport(node: NamespaceExport, name: Identifier): NamespaceExport;
+    createNamespaceExport(name: ModuleExportName): NamespaceExport;
+    updateNamespaceExport(node: NamespaceExport, name: ModuleExportName): NamespaceExport;
     createNamedImports(elements: readonly ImportSpecifier[]): NamedImports;
     updateNamedImports(node: NamedImports, elements: readonly ImportSpecifier[]): NamedImports;
-    createImportSpecifier(isTypeOnly: boolean, propertyName: Identifier | undefined, name: Identifier): ImportSpecifier;
-    updateImportSpecifier(node: ImportSpecifier, isTypeOnly: boolean, propertyName: Identifier | undefined, name: Identifier): ImportSpecifier;
+    createImportSpecifier(isTypeOnly: boolean, propertyName: ModuleExportName | undefined, name: Identifier): ImportSpecifier;
+    updateImportSpecifier(node: ImportSpecifier, isTypeOnly: boolean, propertyName: ModuleExportName | undefined, name: Identifier): ImportSpecifier;
     createExportAssignment(modifiers: readonly ModifierLike[] | undefined, isExportEquals: boolean | undefined, expression: Expression): ExportAssignment;
     updateExportAssignment(node: ExportAssignment, modifiers: readonly ModifierLike[] | undefined, expression: Expression): ExportAssignment;
     createExportDeclaration(modifiers: readonly ModifierLike[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier?: Expression, assertClause?: AssertClause): ExportDeclaration;
     updateExportDeclaration(node: ExportDeclaration, modifiers: readonly ModifierLike[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier: Expression | undefined, assertClause: AssertClause | undefined): ExportDeclaration;
     createNamedExports(elements: readonly ExportSpecifier[]): NamedExports;
     updateNamedExports(node: NamedExports, elements: readonly ExportSpecifier[]): NamedExports;
-    createExportSpecifier(isTypeOnly: boolean, propertyName: string | Identifier | undefined, name: string | Identifier): ExportSpecifier;
-    updateExportSpecifier(node: ExportSpecifier, isTypeOnly: boolean, propertyName: Identifier | undefined, name: Identifier): ExportSpecifier;
+    createExportSpecifier(isTypeOnly: boolean, propertyName: ModuleExportName | undefined, name: ModuleExportName): ExportSpecifier;
+    updateExportSpecifier(node: ExportSpecifier, isTypeOnly: boolean, propertyName: ModuleExportName | undefined, name: ModuleExportName): ExportSpecifier;
     /** @internal */ createMissingDeclaration(): MissingDeclaration;
 
     //
@@ -8870,6 +8873,8 @@ export interface NodeFactory {
     createLogicalNot(operand: Expression): PrefixUnaryExpression;
     createPostfixIncrement(operand: Expression): PostfixUnaryExpression;
     createPostfixDecrement(operand: Expression): PostfixUnaryExpression;
+    createModuleExportName(name: string, languageVersion: ScriptTarget): ModuleExportName;
+    createModuleExportName(name: string | undefined, languageVersion: ScriptTarget): ModuleExportName | undefined;
 
     //
     // Compound Nodes

@@ -243,6 +243,8 @@ import {
     ModifierFlags,
     ModuleBlock,
     ModuleDeclaration,
+    moduleExportNameText,
+    moduleExportNameTextEscaped,
     Mutable,
     NamespaceExportDeclaration,
     Node,
@@ -432,7 +434,7 @@ function getModuleInstanceStateForAliasTarget(specifier: ExportSpecifier, visite
             const statements = p.statements;
             let found: ModuleInstanceState | undefined;
             for (const statement of statements) {
-                if (nodeHasName(statement, name)) {
+                if (nodeHasName(statement, moduleExportNameText(name))) {
                     if (!statement.parent) {
                         setParent(statement, p);
                         setParentRecursive(statement, /*incremental*/ false);
@@ -738,7 +740,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     function declareSymbol(symbolTable: SymbolTable, parent: Symbol | undefined, node: Declaration, includes: SymbolFlags, excludes: SymbolFlags, isReplaceableByMethod?: boolean, isComputedName?: boolean): Symbol {
         Debug.assert(isComputedName || !hasDynamicName(node));
 
-        const isDefaultExport = hasSyntacticModifier(node, ModifierFlags.Default) || isExportSpecifier(node) && node.name.escapedText === "default";
+        const isDefaultExport = hasSyntacticModifier(node, ModifierFlags.Default) || isExportSpecifier(node) && moduleExportNameTextEscaped(node.name) === "default";
 
         // The exported symbol for an export default function/class node is always named "default"
         const name = isComputedName ? InternalSymbolName.Computed

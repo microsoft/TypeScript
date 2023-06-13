@@ -285,6 +285,7 @@ import {
     ModifierSyntaxKind,
     modifierToFlag,
     ModuleDeclaration,
+    moduleExportNameTextEscaped,
     ModuleReference,
     moduleResolutionSupportsPackageJsonExportsAndImports,
     NamedImportBindings,
@@ -1747,6 +1748,16 @@ function createCompletionEntry(
         data = originToCompletionEntryData(origin);
         hasAction = !importStatementCompletion;
     }
+    const parentNamedImportOrExport = findAncestor(location, isNamedImportsOrExports);
+    if (parentNamedImportOrExport && !isIdentifierText(name, ScriptTarget.Latest)) {
+        if (parentNamedImportOrExport.kind === SyntaxKind.NamedImports) {
+            insertText = `${quotePropertyName(sourceFile, preferences, name)} as $\{1:item}`;
+            isSnippet = true;
+        }
+        else {
+            insertText = quotePropertyName(sourceFile, preferences, name);
+        }
+    }
 
     // TODO(drosen): Right now we just permit *all* semantic meanings when calling
     // 'getSymbolKind' which is permissible given that it is backwards compatible; but
@@ -2450,7 +2461,7 @@ export function getCompletionEntriesFromSymbols(
     for (let i = 0; i < symbols.length; i++) {
         const symbol = symbols[i];
         const origin = symbolToOriginInfoMap?.[i];
-        const info = getCompletionEntryDisplayNameForSymbol(symbol, target, origin, kind, !!jsxIdentifierExpected);
+        const info = getCompletionEntryDisplayNameForSymbol(symbol, target, origin, kind, !!jsxIdentifierExpected, !!findAncestor(location, isNamedImportsOrExports));
         if (!info || (uniques.get(info.name) && (!origin || !originIsObjectLiteralMethod(origin))) || kind === CompletionKind.Global && symbolToSortTextMap && !shouldIncludeSymbol(symbol, symbolToSortTextMap)) {
             continue;
         }
@@ -2660,7 +2671,7 @@ function getSymbolCompletionFromEntryId(
     // completion entry.
     return firstDefined(symbols, (symbol, index): SymbolCompletion | undefined => {
         const origin = symbolToOriginInfoMap[index];
-        const info = getCompletionEntryDisplayNameForSymbol(symbol, getEmitScriptTarget(compilerOptions), origin, completionKind, completionData.isJsxIdentifierExpected);
+        const info = getCompletionEntryDisplayNameForSymbol(symbol, getEmitScriptTarget(compilerOptions), origin, completionKind, completionData.isJsxIdentifierExpected, !!completionData.importStatementCompletion);
         return info && info.name === entryId.name && (
             entryId.source === CompletionSource.ClassMemberSnippet && symbol.flags & SymbolFlags.ClassMember
             || entryId.source === CompletionSource.ObjectLiteralMethodSnippet && symbol.flags & (SymbolFlags.Property | SymbolFlags.Method)
@@ -3954,7 +3965,9 @@ function getCompletionData(
                 getEmitScriptTarget(compilerOptions),
                 /*origin*/ undefined,
                 CompletionKind.ObjectPropertyDeclaration,
-                /*jsxIdentifierExpected*/ false);
+                /*jsxIdentifierExpected*/ false,
+                /*moduleExportNameExpected*/ false,
+            );
             if (!displayName) {
                 return;
             }
@@ -4282,7 +4295,7 @@ function getCompletionData(
         completionKind = CompletionKind.MemberLike;
         isNewIdentifierLocation = false;
         const exports = typeChecker.getExportsAndPropertiesOfModule(moduleSpecifierSymbol);
-        const existing = new Set((namedImportsOrExports.elements as NodeArray<ImportOrExportSpecifier>).filter(n => !isCurrentlyEditingNode(n)).map(n => (n.propertyName || n.name).escapedText));
+        const existing = new Set((namedImportsOrExports.elements as NodeArray<ImportOrExportSpecifier>).filter(n => !isCurrentlyEditingNode(n)).map(n => moduleExportNameTextEscaped(n.propertyName || n.name)));
         const uniques = exports.filter(e => e.escapedName !== InternalSymbolName.Default && !existing.has(e.escapedName));
         symbols = concatenate(symbols, uniques);
         if (!uniques.length) {
@@ -4793,7 +4806,9 @@ function getCompletionData(
                 target,
                 origin,
                 CompletionKind.ObjectPropertyDeclaration,
-                /*jsxIdentifierExpected*/ false);
+                /*jsxIdentifierExpected*/ false,
+                /*moduleExportNameExpected*/ false
+            );
             if (displayName) {
                 const originalSortText = symbolToSortTextMap[symbolId] ?? SortText.LocationPriority;
                 const { name } = displayName;
@@ -4944,6 +4959,7 @@ function getCompletionEntryDisplayNameForSymbol(
     origin: SymbolOriginInfo | undefined,
     kind: CompletionKind,
     jsxIdentifierExpected: boolean,
+    moduleExportNameExpected: boolean
 ): CompletionEntryDisplayNameForSymbol | undefined {
     if (originIsIgnore(origin)) {
         return undefined;
@@ -4959,6 +4975,9 @@ function getCompletionEntryDisplayNameForSymbol(
     }
 
     const validNameResult: CompletionEntryDisplayNameForSymbol = { name, needsConvertPropertyAccess: false };
+    if (moduleExportNameExpected) {
+        return validNameResult;
+    }
     if (isIdentifierText(name, target, jsxIdentifierExpected ? LanguageVariant.JSX : LanguageVariant.Standard) || symbol.valueDeclaration && isPrivateIdentifierClassElementDeclaration(symbol.valueDeclaration)) {
         return validNameResult;
     }
