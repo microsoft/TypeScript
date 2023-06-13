@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitInvalidExport.ts] ////
+
 //// [declarationEmitInvalidExport.ts]
 if (false) {
   export var myClass = 0;

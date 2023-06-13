@@ -1,7 +1,7 @@
-tests/cases/compiler/propertyAccess1.ts(3,5): error TS2339: Property 'b' does not exist on type '{ a: number; }'.
+propertyAccess1.ts(3,5): error TS2339: Property 'b' does not exist on type '{ a: number; }'.
 
 
-==== tests/cases/compiler/propertyAccess1.ts (1 errors) ====
+==== propertyAccess1.ts (1 errors) ====
     var foo: { a: number; };
     foo.a = 4;
     foo.b = 5;

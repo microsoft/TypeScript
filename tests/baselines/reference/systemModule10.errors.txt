@@ -1,8 +1,8 @@
-tests/cases/compiler/systemModule10.ts(1,20): error TS2792: Cannot find module 'file1'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-tests/cases/compiler/systemModule10.ts(2,21): error TS2792: Cannot find module 'file2'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+systemModule10.ts(1,20): error TS2792: Cannot find module 'file1'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+systemModule10.ts(2,21): error TS2792: Cannot find module 'file2'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 
 
-==== tests/cases/compiler/systemModule10.ts (2 errors) ====
+==== systemModule10.ts (2 errors) ====
     import n, {x} from 'file1'
                        ~~~~~~~
 !!! error TS2792: Cannot find module 'file1'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?

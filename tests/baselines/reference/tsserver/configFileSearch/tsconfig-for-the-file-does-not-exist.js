@@ -73,23 +73,23 @@ Before running Timeout callback:: count: 2
 
 
 PolledWatches::
-/a/b/projects/project/src/tsconfig.json: *new*
-  {"pollingInterval":2000}
-/a/b/projects/project/src/jsconfig.json: *new*
-  {"pollingInterval":2000}
+/a/b/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 /a/b/projects/project/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/a/b/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+/a/b/projects/project/src/jsconfig.json: *new*
   {"pollingInterval":2000}
 /a/b/projects/project/src/node_modules/@types: *new*
   {"pollingInterval":500}
-/a/b/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-/a/b/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
+/a/b/projects/project/src/tsconfig.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
 /a/b/projects/project/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
   {}
 
 Info seq  [hh:mm:ss:mss] Running: /a/b/projects/project/tsconfig.json
@@ -161,25 +161,25 @@ Info seq  [hh:mm:ss:mss] 		Projects: /a/b/projects/project/tsconfig.json
 After running Timeout callback:: count: 0
 
 PolledWatches::
-/a/b/projects/project/src/node_modules/@types:
+/a/b/projects/node_modules/@types:
   {"pollingInterval":500}
 /a/b/projects/project/node_modules/@types:
   {"pollingInterval":500}
-/a/b/projects/node_modules/@types:
+/a/b/projects/project/src/node_modules/@types:
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
-/a/b/projects/project/src/tsconfig.json:
+/a/b/projects/project/jsconfig.json:
   {"pollingInterval":2000}
 /a/b/projects/project/src/jsconfig.json:
   {"pollingInterval":2000}
-/a/b/projects/project/jsconfig.json:
+/a/b/projects/project/src/tsconfig.json:
   {"pollingInterval":2000}
 
 FsWatches::
-/a/lib/lib.d.ts:
-  {}
 /a/b/projects/project/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
   {}
 
 FsWatchesRecursive::
@@ -216,11 +216,11 @@ Before running Timeout callback:: count: 1
 //// [/a/b/projects/project/tsconfig.json] deleted
 
 PolledWatches::
-/a/b/projects/project/src/node_modules/@types:
+/a/b/projects/node_modules/@types:
   {"pollingInterval":500}
 /a/b/projects/project/node_modules/@types:
   {"pollingInterval":500}
-/a/b/projects/node_modules/@types:
+/a/b/projects/project/src/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
@@ -274,19 +274,19 @@ Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 After running Timeout callback:: count: 0
 
 PolledWatches::
-/a/b/projects/project/src/node_modules/@types:
+/a/b/projects/node_modules/@types:
   {"pollingInterval":500}
+/a/b/projects/project/jsconfig.json: *new*
+  {"pollingInterval":2000}
 /a/b/projects/project/node_modules/@types:
   {"pollingInterval":500}
-/a/b/projects/node_modules/@types:
+/a/b/projects/project/src/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/a/b/projects/project/src/node_modules/@types:
   {"pollingInterval":500}
 /a/b/projects/project/src/tsconfig.json: *new*
   {"pollingInterval":2000}
-/a/b/projects/project/src/jsconfig.json: *new*
-  {"pollingInterval":2000}
 /a/b/projects/project/tsconfig.json: *new*
-  {"pollingInterval":2000}
-/a/b/projects/project/jsconfig.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::

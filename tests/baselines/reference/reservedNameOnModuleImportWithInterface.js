@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reservedNameOnModuleImportWithInterface.ts] ////
+
 //// [reservedNameOnModuleImportWithInterface.ts]
 declare module test {
     interface mi_string { }

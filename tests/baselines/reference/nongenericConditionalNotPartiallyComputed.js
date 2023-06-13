@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nongenericConditionalNotPartiallyComputed.ts] ////
+
 //// [nongenericConditionalNotPartiallyComputed.ts]
 // Expected: type A = number
 // Got: type A = number[] extends (infer T)[] ? T : never

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/undefinedArgumentInference.ts ===
+//// [tests/cases/compiler/undefinedArgumentInference.ts] ////
+
+=== undefinedArgumentInference.ts ===
 function foo1<T>(f1: { x: T; y: T }): T {
 >foo1 : Symbol(foo1, Decl(undefinedArgumentInference.ts, 0, 0))
 >T : Symbol(T, Decl(undefinedArgumentInference.ts, 0, 14))

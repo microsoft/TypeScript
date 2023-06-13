@@ -1,11 +1,13 @@
-=== tests/cases/compiler/b.js ===
+//// [tests/cases/compiler/jsFileCompilationLetDeclarationOrder.ts] ////
+
+=== b.js ===
 let a = 10;
 >a : Symbol(a, Decl(b.js, 0, 3))
 
 b = 30;
 >b : Symbol(b, Decl(a.ts, 0, 3))
 
-=== tests/cases/compiler/a.ts ===
+=== a.ts ===
 let b = 30;
 >b : Symbol(b, Decl(a.ts, 0, 3))
 

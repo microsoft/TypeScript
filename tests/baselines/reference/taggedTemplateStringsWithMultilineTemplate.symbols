@@ -1,4 +1,6 @@
-=== tests/cases/compiler/taggedTemplateStringsWithMultilineTemplate.ts ===
+//// [tests/cases/compiler/taggedTemplateStringsWithMultilineTemplate.ts] ////
+
+=== taggedTemplateStringsWithMultilineTemplate.ts ===
 function f(...args: any[]): void {
 >f : Symbol(f, Decl(taggedTemplateStringsWithMultilineTemplate.ts, 0, 0))
 >args : Symbol(args, Decl(taggedTemplateStringsWithMultilineTemplate.ts, 0, 11))

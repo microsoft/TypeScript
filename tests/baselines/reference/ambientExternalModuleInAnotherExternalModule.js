@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/ambientExternalModuleInAnotherExternalModule.ts] ////
+
 //// [ambientExternalModuleInAnotherExternalModule.ts]
 class D { }
 export = D;

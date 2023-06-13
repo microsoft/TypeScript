@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectSpreadWithinMethodWithinObjectWithSpread.ts] ////
+
 //// [objectSpreadWithinMethodWithinObjectWithSpread.ts]
 const obj = {};
 const a = {

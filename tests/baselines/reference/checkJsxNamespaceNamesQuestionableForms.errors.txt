@@ -1,10 +1,10 @@
-tests/cases/conformance/jsx/checkJsxNamespaceNamesQuestionableForms.tsx(12,5): error TS1003: Identifier expected.
-tests/cases/conformance/jsx/checkJsxNamespaceNamesQuestionableForms.tsx(12,13): error TS1005: '>' expected.
-tests/cases/conformance/jsx/checkJsxNamespaceNamesQuestionableForms.tsx(12,14): error TS2304: Cannot find name 'x'.
-tests/cases/conformance/jsx/checkJsxNamespaceNamesQuestionableForms.tsx(12,16): error TS1109: Expression expected.
+checkJsxNamespaceNamesQuestionableForms.tsx(12,5): error TS1003: Identifier expected.
+checkJsxNamespaceNamesQuestionableForms.tsx(12,13): error TS1005: '>' expected.
+checkJsxNamespaceNamesQuestionableForms.tsx(12,14): error TS2304: Cannot find name 'x'.
+checkJsxNamespaceNamesQuestionableForms.tsx(12,16): error TS1109: Expression expected.
 
 
-==== tests/cases/conformance/jsx/checkJsxNamespaceNamesQuestionableForms.tsx (4 errors) ====
+==== checkJsxNamespaceNamesQuestionableForms.tsx (4 errors) ====
     declare namespace JSX {
         interface IntrinsicElements {
             'this:b': any;

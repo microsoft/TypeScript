@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/localImportNameVsGlobalName.ts] ////
+
 //// [localImportNameVsGlobalName.ts]
 module Keyboard {
   export enum Key { UP, DOWN, LEFT, RIGHT }

@@ -1,6 +1,6 @@
 // @target: ES6
 // @module: amd
-// @rootDir: tests/cases/conformance/es6/moduleExportsAmd/src
+// @rootDir: src
 // @outFile: output.js
 // @filename: src/a.ts
 import foo from "./b";

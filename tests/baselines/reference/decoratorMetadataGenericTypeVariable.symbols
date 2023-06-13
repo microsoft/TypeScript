@@ -1,4 +1,6 @@
-=== tests/cases/compiler/decoratorMetadataGenericTypeVariable.ts ===
+//// [tests/cases/compiler/decoratorMetadataGenericTypeVariable.ts] ////
+
+=== decoratorMetadataGenericTypeVariable.ts ===
 export class C<TypeVariable> {
 >C : Symbol(C, Decl(decoratorMetadataGenericTypeVariable.ts, 0, 0))
 >TypeVariable : Symbol(TypeVariable, Decl(decoratorMetadataGenericTypeVariable.ts, 0, 15))

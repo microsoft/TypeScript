@@ -1,11 +1,11 @@
-tests/cases/conformance/types/rest/genericRestParameters1.ts(135,23): error TS2344: Type 'Function' does not satisfy the constraint '(...args: any) => any'.
+genericRestParameters1.ts(135,23): error TS2344: Type 'Function' does not satisfy the constraint '(...args: any) => any'.
   Type 'Function' provides no match for the signature '(...args: any): any'.
-tests/cases/conformance/types/rest/genericRestParameters1.ts(164,1): error TS2322: Type '(a: never) => void' is not assignable to type '(...args: any[]) => void'.
+genericRestParameters1.ts(164,1): error TS2322: Type '(a: never) => void' is not assignable to type '(...args: any[]) => void'.
   Types of parameters 'a' and 'args' are incompatible.
     Type 'any' is not assignable to type 'never'.
 
 
-==== tests/cases/conformance/types/rest/genericRestParameters1.ts (2 errors) ====
+==== genericRestParameters1.ts (2 errors) ====
     declare let f1: (...x: [number, string, boolean]) => void;
     declare let f2: (x0: number, x1: string, x2: boolean) => void;
     

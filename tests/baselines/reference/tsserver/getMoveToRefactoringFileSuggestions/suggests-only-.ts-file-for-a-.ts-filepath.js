@@ -110,8 +110,6 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/tsconfig.json: *new*
-  {}
 /file2.tsx: *new*
   {}
 /file3.mts: *new*
@@ -123,6 +121,8 @@ FsWatches::
 /file6.d.ts: *new*
   {}
 /file7.ts: *new*
+  {}
+/tsconfig.json: *new*
   {}
 
 Before request

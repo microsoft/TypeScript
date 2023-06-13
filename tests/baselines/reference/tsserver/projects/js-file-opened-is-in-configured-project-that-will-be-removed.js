@@ -192,13 +192,13 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/apps/editor/scripts/createconfigvariable.js: *new*
   {}
 /user/username/projects/myproject/apps/editor/src/src.js: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -235,15 +235,15 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/apps/editor/scripts/createconfigvariable.js:
   {}
 /user/username/projects/myproject/apps/editor/src/src.js:
   {}
-/a/lib/lib.d.ts:
-  {}
 /user/username/projects/myproject/mocks/cssmock.js: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -431,37 +431,37 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
 
 PolledWatches::
+/user/username/projects/myproject/apps/editor/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/apps/editor/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/apps/editor/scripts/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/apps/editor/scripts/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/apps/editor/scripts/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/apps/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/apps/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/apps/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/jsconfig.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/apps/editor/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/myproject/apps/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/myproject/apps/editor/scripts/tsconfig.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/apps/editor/scripts/jsconfig.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/apps/editor/jsconfig.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/apps/tsconfig.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/apps/jsconfig.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/jsconfig.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/apps/editor/scripts/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/apps/editor/src/src.js:
   {}
-/a/lib/lib.d.ts:
-  {}
 /user/username/projects/myproject/apps/editor/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json:
   {}
 
 FsWatches *deleted*::
@@ -545,41 +545,41 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/user/username/projects/myproject/apps/editor/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/apps/editor/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/apps/editor/scripts/bower_components: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/apps/editor/scripts/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/apps/editor/scripts/node_modules: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/apps/editor/scripts/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/apps/editor/scripts/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/apps/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/apps/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/apps/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/jsconfig.json:
+  {"pollingInterval":2000}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/apps/editor/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/apps/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/apps/editor/scripts/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/apps/editor/scripts/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/apps/editor/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/apps/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/apps/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/apps/editor/scripts/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/apps/editor/scripts/bower_components: *new*
-  {"pollingInterval":500}
-/user/username/projects/myproject/apps/editor/scripts/node_modules: *new*
-  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/apps/editor/src/src.js:
   {}
-/a/lib/lib.d.ts:
-  {}
 /user/username/projects/myproject/apps/editor/tsconfig.json:
+  {}
+/user/username/projects/myproject/tsconfig.json:
   {}
 
 FsWatchesRecursive::

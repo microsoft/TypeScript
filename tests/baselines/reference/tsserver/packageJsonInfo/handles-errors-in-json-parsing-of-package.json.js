@@ -109,9 +109,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/tsconfig.json:
-  {}
 /a/data/package.json: *new*
+  {}
+/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -165,11 +165,11 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/tsconfig.json:
-  {}
 /a/data/package.json:
   {}
 /package.json: *new*
+  {}
+/tsconfig.json:
   {}
 
 FsWatchesRecursive::

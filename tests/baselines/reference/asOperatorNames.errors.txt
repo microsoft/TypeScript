@@ -1,7 +1,7 @@
-tests/cases/conformance/expressions/asOperator/asOperatorNames.ts(2,9): error TS2352: Conversion of type 'number' to type 'string' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+asOperatorNames.ts(2,9): error TS2352: Conversion of type 'number' to type 'string' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 
 
-==== tests/cases/conformance/expressions/asOperator/asOperatorNames.ts (1 errors) ====
+==== asOperatorNames.ts (1 errors) ====
     var a = 20;
     var b = a as string;
             ~~~~~~~~~~~

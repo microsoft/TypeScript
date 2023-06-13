@@ -120,7 +120,7 @@ Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject2*
 After running Timeout callback:: count: 0
 
 PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
 /a/b/f2: *new*
+  {"pollingInterval":500}
+/a/lib/lib.d.ts:
   {"pollingInterval":500}

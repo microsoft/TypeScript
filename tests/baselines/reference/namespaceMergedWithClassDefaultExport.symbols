@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/namespaceMergedWithClassDefaultExport.ts] ////
+
 === /node_modules/some-lib/types/index.d.ts ===
 declare module 'some-lib' {
 >'some-lib' : Symbol("some-lib", Decl(index.d.ts, 0, 0))

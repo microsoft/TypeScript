@@ -1,4 +1,6 @@
-=== tests/cases/compiler/ambientExternalModuleWithRelativeModuleName.ts ===
+//// [tests/cases/compiler/ambientExternalModuleWithRelativeModuleName.ts] ////
+
+=== ambientExternalModuleWithRelativeModuleName.ts ===
 declare module "./relativeModule" {
 >"./relativeModule" : Symbol("./relativeModule", Decl(ambientExternalModuleWithRelativeModuleName.ts, 0, 0))
 

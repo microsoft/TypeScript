@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/incrementalInvalid.ts] ////
+
 //// [incrementalInvalid.ts]
 const x = 10;
 

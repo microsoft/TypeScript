@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericTemplateOverloadResolution.ts ===
+//// [tests/cases/compiler/genericTemplateOverloadResolution.ts] ////
+
+=== genericTemplateOverloadResolution.ts ===
 interface IFooFn {
 >IFooFn : Symbol(IFooFn, Decl(genericTemplateOverloadResolution.ts, 0, 0))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts] ////
+
 //// [enumAssignability.ts]
 // enums assignable to number, any, Object, errors unless otherwise noted
 

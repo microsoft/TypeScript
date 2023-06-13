@@ -1,17 +1,17 @@
-tests/cases/compiler/optionalParameterInDestructuringWithInitializer.ts(6,8): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
+optionalParameterInDestructuringWithInitializer.ts(6,8): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
   Type 'undefined' is not assignable to type 'number'.
-tests/cases/compiler/optionalParameterInDestructuringWithInitializer.ts(16,7): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
+optionalParameterInDestructuringWithInitializer.ts(16,7): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
   Type 'undefined' is not assignable to type 'number'.
-tests/cases/compiler/optionalParameterInDestructuringWithInitializer.ts(21,7): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
+optionalParameterInDestructuringWithInitializer.ts(21,7): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
   Type 'undefined' is not assignable to type 'number'.
-tests/cases/compiler/optionalParameterInDestructuringWithInitializer.ts(31,8): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
+optionalParameterInDestructuringWithInitializer.ts(31,8): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
   Type 'undefined' is not assignable to type 'number'.
-tests/cases/compiler/optionalParameterInDestructuringWithInitializer.ts(45,10): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
+optionalParameterInDestructuringWithInitializer.ts(45,10): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
   Type 'undefined' is not assignable to type 'number'.
-tests/cases/compiler/optionalParameterInDestructuringWithInitializer.ts(52,24): error TS2322: Type 'null' is not assignable to type 'number'.
+optionalParameterInDestructuringWithInitializer.ts(52,24): error TS2322: Type 'null' is not assignable to type 'number'.
 
 
-==== tests/cases/compiler/optionalParameterInDestructuringWithInitializer.ts (6 errors) ====
+==== optionalParameterInDestructuringWithInitializer.ts (6 errors) ====
     // https://github.com/Microsoft/TypeScript/issues/17080
     
     declare function f(a:number,b:number): void;

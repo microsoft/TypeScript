@@ -1,11 +1,11 @@
-tests/cases/compiler/f2.ts(1,9): error TS2440: Import declaration conflicts with local declaration of 'f'.
+f2.ts(1,9): error TS2440: Import declaration conflicts with local declaration of 'f'.
 
 
-==== tests/cases/compiler/f1.ts (0 errors) ====
+==== f1.ts (0 errors) ====
     export function f() {
     }
     
-==== tests/cases/compiler/f2.ts (1 errors) ====
+==== f2.ts (1 errors) ====
     import {f} from './f1';
             ~
 !!! error TS2440: Import declaration conflicts with local declaration of 'f'.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/exportNonInitializedVariablesUMD.ts] ////
+
 //// [exportNonInitializedVariablesUMD.ts]
 var;
 let;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitReturnsInAsync2.ts] ////
+
 //// [noImplicitReturnsInAsync2.ts]
 // Should be an error, Promise<number>, currently retorted correctly 
 async function test3(isError: boolean = true) {

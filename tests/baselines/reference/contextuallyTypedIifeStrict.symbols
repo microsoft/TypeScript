@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/functions/contextuallyTypedIifeStrict.ts ===
+//// [tests/cases/conformance/expressions/functions/contextuallyTypedIifeStrict.ts] ////
+
+=== contextuallyTypedIifeStrict.ts ===
 // arrow
 (jake => { })("build");
 >jake : Symbol(jake, Decl(contextuallyTypedIifeStrict.ts, 1, 1))

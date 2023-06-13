@@ -1,4 +1,6 @@
-=== tests/cases/compiler/instantiateConstraintsToTypeArguments2.ts ===
+//// [tests/cases/compiler/instantiateConstraintsToTypeArguments2.ts] ////
+
+=== instantiateConstraintsToTypeArguments2.ts ===
 interface A<T extends A<T, S>, S extends A<T, S>> { }
 >A : Symbol(A, Decl(instantiateConstraintsToTypeArguments2.ts, 0, 0))
 >T : Symbol(T, Decl(instantiateConstraintsToTypeArguments2.ts, 0, 12))

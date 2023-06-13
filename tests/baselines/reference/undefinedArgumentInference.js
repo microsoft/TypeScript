@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/undefinedArgumentInference.ts] ////
+
 //// [undefinedArgumentInference.ts]
 function foo1<T>(f1: { x: T; y: T }): T {
 

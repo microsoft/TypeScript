@@ -1,4 +1,6 @@
-=== tests/cases/compiler/class2.ts ===
+//// [tests/cases/compiler/class2.ts] ////
+
+=== class2.ts ===
 class foo { constructor() { static f = 3; } }
 >foo : foo
 >f : number

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/literals/strictModeOctalLiterals.ts] ////
+
 //// [strictModeOctalLiterals.ts]
 export enum E {
     A = 12 + 01

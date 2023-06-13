@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/destructuringTypeGuardFlow.ts] ////
+
 //// [destructuringTypeGuardFlow.ts]
 type foo = {
   bar: number | null;
