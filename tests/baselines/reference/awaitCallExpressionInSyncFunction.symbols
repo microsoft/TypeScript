@@ -1,4 +1,6 @@
-=== tests/cases/compiler/awaitCallExpressionInSyncFunction.ts ===
+//// [tests/cases/compiler/awaitCallExpressionInSyncFunction.ts] ////
+
+=== awaitCallExpressionInSyncFunction.ts ===
 function foo() {
 >foo : Symbol(foo, Decl(awaitCallExpressionInSyncFunction.ts, 0, 0))
 

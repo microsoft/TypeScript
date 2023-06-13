@@ -1,4 +1,6 @@
-=== tests/cases/compiler/namedFunctionExpressionInModule.ts ===
+//// [tests/cases/compiler/namedFunctionExpressionInModule.ts] ////
+
+=== namedFunctionExpressionInModule.ts ===
 module Variables{
 >Variables : Symbol(Variables, Decl(namedFunctionExpressionInModule.ts, 0, 0))
 

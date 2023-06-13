@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/abstractIdentifierNameStrict.ts] ////
+
 //// [abstractIdentifierNameStrict.ts]
 var abstract = true;
 

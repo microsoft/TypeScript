@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/keyofInferenceIntersectsResults.ts] ////
+
 //// [keyofInferenceIntersectsResults.ts]
 interface X {
     a: string;

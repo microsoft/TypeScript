@@ -1,7 +1,7 @@
-tests/cases/compiler/crashIntypeCheckObjectCreationExpression.ts(3,45): error TS2304: Cannot find name 'X'.
+crashIntypeCheckObjectCreationExpression.ts(3,45): error TS2304: Cannot find name 'X'.
 
 
-==== tests/cases/compiler/crashIntypeCheckObjectCreationExpression.ts (1 errors) ====
+==== crashIntypeCheckObjectCreationExpression.ts (1 errors) ====
     export class BuildWorkspaceService {
         public injectRequestService<P0, P1, P2>(service: P0) {
             this.injectBuildService<number>(new X(service));

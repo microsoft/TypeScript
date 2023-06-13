@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration14.ts] ////
+
 //// [parserMemberAccessorDeclaration14.ts]
 class C {
    set Foo(a: number, b: number) { }

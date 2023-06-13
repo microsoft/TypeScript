@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/tslibReExportHelpers2.ts] ////
+
 === /node_modules/tslib/index.d.ts ===
 export declare function __classPrivateFieldGet<T extends object, V>(
 >__classPrivateFieldGet : Symbol(__classPrivateFieldGet, Decl(index.d.ts, 0, 0), Decl(index.d.ts, 4, 5))

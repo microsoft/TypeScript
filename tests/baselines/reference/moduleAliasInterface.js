@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleAliasInterface.ts] ////
+
 //// [moduleAliasInterface.ts]
 module _modes {
  export interface IMode {

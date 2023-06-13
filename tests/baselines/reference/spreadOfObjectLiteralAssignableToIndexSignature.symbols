@@ -1,4 +1,6 @@
-=== tests/cases/compiler/spreadOfObjectLiteralAssignableToIndexSignature.ts ===
+//// [tests/cases/compiler/spreadOfObjectLiteralAssignableToIndexSignature.ts] ////
+
+=== spreadOfObjectLiteralAssignableToIndexSignature.ts ===
 const foo: Record<never, never> = {} // OK
 >foo : Symbol(foo, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 0, 5))
 >Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))

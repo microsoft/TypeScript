@@ -1,4 +1,6 @@
-=== tests/cases/compiler/thisConditionalOnMethodReturnOfGenericInstance.ts ===
+//// [tests/cases/compiler/thisConditionalOnMethodReturnOfGenericInstance.ts] ////
+
+=== thisConditionalOnMethodReturnOfGenericInstance.ts ===
 class A<T> {
 >A : A<T>
 

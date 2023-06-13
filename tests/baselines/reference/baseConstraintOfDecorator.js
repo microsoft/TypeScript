@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/baseConstraintOfDecorator.ts] ////
+
 //// [baseConstraintOfDecorator.ts]
 export function classExtender<TFunction>(superClass: TFunction, _instanceModifier: (instance: any, args: any[]) => void): TFunction {
     return class decoratorFunc extends superClass {

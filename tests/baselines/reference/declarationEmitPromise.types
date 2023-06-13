@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitPromise.ts ===
+//// [tests/cases/compiler/declarationEmitPromise.ts] ////
+
+=== declarationEmitPromise.ts ===
 export class bluebird<T> {
 >bluebird : bluebird<T>
 

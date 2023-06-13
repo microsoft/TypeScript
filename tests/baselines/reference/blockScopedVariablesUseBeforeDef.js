@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts] ////
+
 //// [blockScopedVariablesUseBeforeDef.ts]
 function foo0() {
     let a = x;

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameStaticAccessorsAccess.ts] ////
+
 //// [privateNameStaticAccessorsAccess.ts]
 export {}
 class A2 {

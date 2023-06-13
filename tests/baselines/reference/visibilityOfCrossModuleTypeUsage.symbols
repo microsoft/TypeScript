@@ -1,4 +1,6 @@
-=== tests/cases/compiler/visibilityOfCrossModuleTypeUsage_fs.ts ===
+//// [tests/cases/compiler/visibilityOfCrossModuleTypeUsage.ts] ////
+
+=== visibilityOfCrossModuleTypeUsage_fs.ts ===
 import commands = require('./visibilityOfCrossModuleTypeUsage_commands');
 >commands : Symbol(commands, Decl(visibilityOfCrossModuleTypeUsage_fs.ts, 0, 0))
 
@@ -19,7 +21,7 @@ function run(configuration: commands.IConfiguration) {
 >configuration : Symbol(configuration, Decl(visibilityOfCrossModuleTypeUsage_fs.ts, 1, 13))
 >server : Symbol(commands.IConfiguration.server, Decl(visibilityOfCrossModuleTypeUsage_commands.ts, 6, 33))
 }
-=== tests/cases/compiler/visibilityOfCrossModuleTypeUsage_commands.ts ===
+=== visibilityOfCrossModuleTypeUsage_commands.ts ===
 //visibilityOfCrossModuleTypeUsage
 
 import fs = require('./visibilityOfCrossModuleTypeUsage_fs');
@@ -42,7 +44,7 @@ export interface IConfiguration {
 >IServer : Symbol(server.IServer, Decl(visibilityOfCrossModuleTypeUsage_server.ts, 0, 0))
 }
 
-=== tests/cases/compiler/visibilityOfCrossModuleTypeUsage_server.ts ===
+=== visibilityOfCrossModuleTypeUsage_server.ts ===
 export interface IServer {
 >IServer : Symbol(IServer, Decl(visibilityOfCrossModuleTypeUsage_server.ts, 0, 0))
 }

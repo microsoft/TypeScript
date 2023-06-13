@@ -1,4 +1,6 @@
-=== tests/cases/compiler/restUnion2.ts ===
+//// [tests/cases/compiler/restUnion2.ts] ////
+
+=== restUnion2.ts ===
 declare const undefinedUnion: { n: number } | undefined;
 >undefinedUnion : { n: number; } | undefined
 >n : number

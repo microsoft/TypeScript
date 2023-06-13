@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts ===
+//// [tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts] ////
+
+=== inOperatorWithInvalidOperands.ts ===
 class Foo {}
 >Foo : Symbol(Foo, Decl(inOperatorWithInvalidOperands.ts, 0, 0))
 

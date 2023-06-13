@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/chainedAssignment3.ts] ////
+
 //// [chainedAssignment3.ts]
 class A {
     id: number;

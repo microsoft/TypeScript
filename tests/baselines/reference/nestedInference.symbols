@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nestedInference.ts ===
+//// [tests/cases/compiler/nestedInference.ts] ////
+
+=== nestedInference.ts ===
 // repro from #52864
 
 const matcher = Symbol("@ts-pattern/matcher");

@@ -1,8 +1,8 @@
-tests/cases/conformance/async/es2017/await_unaryExpression_es2017_3.ts(2,7): error TS1109: Expression expected.
-tests/cases/conformance/async/es2017/await_unaryExpression_es2017_3.ts(6,7): error TS1109: Expression expected.
+await_unaryExpression_es2017_3.ts(2,7): error TS1109: Expression expected.
+await_unaryExpression_es2017_3.ts(6,7): error TS1109: Expression expected.
 
 
-==== tests/cases/conformance/async/es2017/await_unaryExpression_es2017_3.ts (2 errors) ====
+==== await_unaryExpression_es2017_3.ts (2 errors) ====
     async function bar1() {
         ++await 42; // Error
           ~~~~~

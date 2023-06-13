@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts] ////
+
 //// [privacyTypeParametersOfInterfaceDeclFile.ts]
 class privateClass {
 }

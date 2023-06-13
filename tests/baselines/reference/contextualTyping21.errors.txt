@@ -1,7 +1,7 @@
-tests/cases/compiler/contextualTyping21.ts(1,51): error TS2322: Type 'number' is not assignable to type '{ id: number; }'.
+contextualTyping21.ts(1,51): error TS2322: Type 'number' is not assignable to type '{ id: number; }'.
 
 
-==== tests/cases/compiler/contextualTyping21.ts (1 errors) ====
+==== contextualTyping21.ts (1 errors) ====
     var foo:{id:number;}[] = [{id:1}]; foo = [{id:1}, 1];
                                                       ~
 !!! error TS2322: Type 'number' is not assignable to type '{ id: number; }'.

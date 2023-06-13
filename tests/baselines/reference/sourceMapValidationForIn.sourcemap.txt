@@ -5,7 +5,7 @@ sourceRoot:
 sources: sourceMapValidationForIn.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/sourceMapValidationForIn.js
+emittedFile:sourceMapValidationForIn.js
 sourceFile:sourceMapValidationForIn.ts
 -------------------------------------------------------------------
 >>>for (var x in String) {

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/inferringClassMembersFromAssignments6.js ===
+//// [tests/cases/conformance/salsa/inferringClassMembersFromAssignments6.ts] ////
+
+=== inferringClassMembersFromAssignments6.js ===
 function Foonly() {
 >Foonly : typeof Foonly
 

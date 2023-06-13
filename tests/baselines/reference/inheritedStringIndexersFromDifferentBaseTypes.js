@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inheritedStringIndexersFromDifferentBaseTypes.ts] ////
+
 //// [inheritedStringIndexersFromDifferentBaseTypes.ts]
 // string indexer tests
 interface A {

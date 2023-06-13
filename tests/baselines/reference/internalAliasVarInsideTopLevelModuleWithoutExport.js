@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/internalAliasVarInsideTopLevelModuleWithoutExport.ts] ////
+
 //// [internalAliasVarInsideTopLevelModuleWithoutExport.ts]
 export module a {
     export var x = 10;

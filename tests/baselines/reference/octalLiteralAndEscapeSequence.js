@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/octalLiteralAndEscapeSequence.ts] ////
+
 //// [octalLiteralAndEscapeSequence.ts]
 00;
 05;

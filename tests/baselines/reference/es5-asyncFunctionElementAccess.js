@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es5-asyncFunctionElementAccess.ts] ////
+
 //// [es5-asyncFunctionElementAccess.ts]
 declare var x, y, z, a, b, c;
 

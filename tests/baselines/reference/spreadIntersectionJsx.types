@@ -1,4 +1,6 @@
-=== tests/cases/compiler/spreadIntersectionJsx.tsx ===
+//// [tests/cases/compiler/spreadIntersectionJsx.tsx] ////
+
+=== spreadIntersectionJsx.tsx ===
 const React: any = null;
 >React : any
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mutuallyRecursiveGenericBaseTypes2.ts ===
+//// [tests/cases/compiler/mutuallyRecursiveGenericBaseTypes2.ts] ////
+
+=== mutuallyRecursiveGenericBaseTypes2.ts ===
 class foo<T>
 >foo : Symbol(foo, Decl(mutuallyRecursiveGenericBaseTypes2.ts, 0, 0))
 >T : Symbol(T, Decl(mutuallyRecursiveGenericBaseTypes2.ts, 0, 10))

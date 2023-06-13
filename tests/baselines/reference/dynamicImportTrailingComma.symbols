@@ -1,4 +1,6 @@
-=== tests/cases/compiler/dynamicImportTrailingComma.ts ===
+//// [tests/cases/compiler/dynamicImportTrailingComma.ts] ////
+
+=== dynamicImportTrailingComma.ts ===
 const path = './foo';
 >path : Symbol(path, Decl(dynamicImportTrailingComma.ts, 0, 5))
 

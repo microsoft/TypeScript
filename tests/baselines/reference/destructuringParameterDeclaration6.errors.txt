@@ -1,19 +1,19 @@
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration6.ts(7,18): error TS1005: ':' expected.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration6.ts(9,14): error TS1181: Array element destructuring pattern expected.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration6.ts(9,19): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration6.ts(9,19): error TS1005: '(' expected.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration6.ts(9,21): error TS1109: Expression expected.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration6.ts(9,24): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration6.ts(9,24): error TS1005: '(' expected.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration6.ts(9,26): error TS2304: Cannot find name 'public'.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration6.ts(9,32): error TS1005: ';' expected.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration6.ts(9,33): error TS1128: Declaration or statement expected.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration6.ts(10,16): error TS1359: Identifier expected. 'while' is a reserved word that cannot be used here.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration6.ts(10,21): error TS1005: '(' expected.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration6.ts(12,13): error TS2370: A rest parameter must be of an array type.
+destructuringParameterDeclaration6.ts(7,18): error TS1005: ':' expected.
+destructuringParameterDeclaration6.ts(9,14): error TS1181: Array element destructuring pattern expected.
+destructuringParameterDeclaration6.ts(9,19): error TS2695: Left side of comma operator is unused and has no side effects.
+destructuringParameterDeclaration6.ts(9,19): error TS1005: '(' expected.
+destructuringParameterDeclaration6.ts(9,21): error TS1109: Expression expected.
+destructuringParameterDeclaration6.ts(9,24): error TS2695: Left side of comma operator is unused and has no side effects.
+destructuringParameterDeclaration6.ts(9,24): error TS1005: '(' expected.
+destructuringParameterDeclaration6.ts(9,26): error TS2304: Cannot find name 'public'.
+destructuringParameterDeclaration6.ts(9,32): error TS1005: ';' expected.
+destructuringParameterDeclaration6.ts(9,33): error TS1128: Declaration or statement expected.
+destructuringParameterDeclaration6.ts(10,16): error TS1359: Identifier expected. 'while' is a reserved word that cannot be used here.
+destructuringParameterDeclaration6.ts(10,21): error TS1005: '(' expected.
+destructuringParameterDeclaration6.ts(12,13): error TS2370: A rest parameter must be of an array type.
 
 
-==== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration6.ts (13 errors) ====
+==== destructuringParameterDeclaration6.ts (13 errors) ====
     // A parameter declaration may specify either an identifier or a binding pattern.
     
     // Reserved words are not allowed to be used as an identifier in parameter declaration

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitExpandoWithGenericConstraint.ts] ////
+
 //// [declarationEmitExpandoWithGenericConstraint.ts]
 export interface Point {
     readonly x: number;

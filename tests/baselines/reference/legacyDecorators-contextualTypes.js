@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/decorators/legacyDecorators-contextualTypes.ts] ////
+
 //// [legacyDecorators-contextualTypes.ts]
 @((t) => { })
 class C {

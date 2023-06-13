@@ -1,7 +1,9 @@
-=== tests/cases/conformance/jsdoc/declarations/file2.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsImportAliasExposedWithinNamespaceCjs.ts] ////
+
+=== file2.js ===
 const {myTypes} = require('./file.js');
 >myTypes : { [x: string]: any; }
->require('./file.js') : typeof import("tests/cases/conformance/jsdoc/declarations/file")
+>require('./file.js') : typeof import("file")
 >require : any
 >'./file.js' : "./file.js"
 
@@ -54,7 +56,7 @@ module.exports = {testFn, testFnTypes};
 >testFn : (input: testFnTypes.input) => number
 >testFnTypes : { [x: string]: any; }
 
-=== tests/cases/conformance/jsdoc/declarations/file.js ===
+=== file.js ===
 /**
  * @namespace myTypes
  * @global
@@ -80,7 +82,7 @@ const myTypes = {
 exports.myTypes = myTypes;
 >exports.myTypes = myTypes : { [x: string]: any; }
 >exports.myTypes : { [x: string]: any; }
->exports : typeof import("tests/cases/conformance/jsdoc/declarations/file")
+>exports : typeof import("file")
 >myTypes : { [x: string]: any; }
 >myTypes : { [x: string]: any; }
 
