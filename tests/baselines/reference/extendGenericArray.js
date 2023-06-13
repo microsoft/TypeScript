@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/extendGenericArray.ts] ////
+
 //// [extendGenericArray.ts]
 interface Array<T> {
     foo(): T;

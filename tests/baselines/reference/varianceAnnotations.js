@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts] ////
+
 //// [varianceAnnotations.ts]
 type Covariant<out T> = {
     x: T;

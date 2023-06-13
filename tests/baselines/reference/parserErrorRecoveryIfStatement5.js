@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/IfStatements/parserErrorRecoveryIfStatement5.ts] ////
+
 //// [parserErrorRecoveryIfStatement5.ts]
 class Foo {
   f1() {

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameInLhsReceiverExpression.ts] ////
+
 //// [privateNameInLhsReceiverExpression.ts]
 class Test {
     #y = 123;

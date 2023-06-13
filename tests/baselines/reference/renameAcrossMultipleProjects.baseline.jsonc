@@ -1,0 +1,39 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.ts ===
+// <|var /*RENAME*/[|xRENAME|]: number;|>
+
+// === /tests/cases/fourslash/b.ts ===
+// /// <reference path="a.ts" />
+// [|xRENAME|]++;
+
+// === /tests/cases/fourslash/c.ts ===
+// /// <reference path="a.ts" />
+// [|xRENAME|]++;
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.ts ===
+// <|var [|xRENAME|]: number;|>
+
+// === /tests/cases/fourslash/b.ts ===
+// /// <reference path="a.ts" />
+// /*RENAME*/[|xRENAME|]++;
+
+// === /tests/cases/fourslash/c.ts ===
+// /// <reference path="a.ts" />
+// [|xRENAME|]++;
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.ts ===
+// <|var [|xRENAME|]: number;|>
+
+// === /tests/cases/fourslash/b.ts ===
+// /// <reference path="a.ts" />
+// [|xRENAME|]++;
+
+// === /tests/cases/fourslash/c.ts ===
+// /// <reference path="a.ts" />
+// /*RENAME*/[|xRENAME|]++;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeParameterExtendsPrimitive.ts ===
+//// [tests/cases/compiler/typeParameterExtendsPrimitive.ts] ////
+
+=== typeParameterExtendsPrimitive.ts ===
 // #14473
 function f<T extends number>() {
 >f : Symbol(f, Decl(typeParameterExtendsPrimitive.ts, 0, 0))

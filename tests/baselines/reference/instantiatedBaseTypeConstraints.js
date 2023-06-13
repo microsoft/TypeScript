@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/instantiatedBaseTypeConstraints.ts] ////
+
 //// [instantiatedBaseTypeConstraints.ts]
 interface Foo<T extends Foo<T, C>, C> {
   foo(bar: C): void;

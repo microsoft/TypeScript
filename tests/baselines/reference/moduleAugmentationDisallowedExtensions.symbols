@@ -1,8 +1,10 @@
-=== tests/cases/compiler/x0.ts ===
+//// [tests/cases/compiler/moduleAugmentationDisallowedExtensions.ts] ////
+
+=== x0.ts ===
 export let a = 1;
 >a : Symbol(a, Decl(x0.ts, 0, 10))
 
-=== tests/cases/compiler/x.ts ===
+=== x.ts ===
 namespace N1 {
 >N1 : Symbol(N1, Decl(x.ts, 0, 0))
 
@@ -11,7 +13,7 @@ namespace N1 {
 }
 
 declare module "./observable" {
->"./observable" : Symbol("tests/cases/compiler/observable", Decl(observable.ts, 0, 0), Decl(x.ts, 2, 1))
+>"./observable" : Symbol("observable", Decl(observable.ts, 0, 0), Decl(x.ts, 2, 1))
 
     var x: number;
 >x : Symbol(x, Decl(x.ts, 5, 7))
@@ -70,14 +72,14 @@ declare module "./observable" {
 }
 
 declare module "./test" {
->"./test" : Symbol("tests/cases/compiler/test", Decl(test.ts, 0, 0), Decl(x.ts, 20, 1))
+>"./test" : Symbol("test", Decl(test.ts, 0, 0), Decl(x.ts, 20, 1))
 
     export = N1;
 >N1 : Symbol(N1, Decl(x.ts, 0, 0))
 }
 export {}
 
-=== tests/cases/compiler/observable.ts ===
+=== observable.ts ===
 export declare class Observable<T> {
 >Observable : Symbol(Observable, Decl(observable.ts, 0, 0))
 >T : Symbol(T, Decl(observable.ts, 0, 32))
@@ -93,11 +95,11 @@ export declare class Observable<T> {
 export var x = 1;
 >x : Symbol(x, Decl(observable.ts, 3, 10))
 
-=== tests/cases/compiler/test.ts ===
+=== test.ts ===
 export let b = 1;
 >b : Symbol(b, Decl(test.ts, 0, 10))
 
-=== tests/cases/compiler/main.ts ===
+=== main.ts ===
 import { Observable } from "./observable"
 >Observable : Symbol(Observable, Decl(main.ts, 0, 8))
 

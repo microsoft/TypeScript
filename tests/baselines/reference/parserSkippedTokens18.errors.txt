@@ -1,10 +1,10 @@
-tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens18.ts(1,1): error TS2304: Cannot find name 'foo'.
-tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens18.ts(1,5): error TS2304: Cannot find name 'a'.
-tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens18.ts(1,7): error TS1127: Invalid character.
-tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens18.ts(1,8): error TS1005: ')' expected.
+parserSkippedTokens18.ts(1,1): error TS2304: Cannot find name 'foo'.
+parserSkippedTokens18.ts(1,5): error TS2304: Cannot find name 'a'.
+parserSkippedTokens18.ts(1,7): error TS1127: Invalid character.
+parserSkippedTokens18.ts(1,8): error TS1005: ')' expected.
 
 
-==== tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens18.ts (4 errors) ====
+==== parserSkippedTokens18.ts (4 errors) ====
     foo(a \
     ~~~
 !!! error TS2304: Cannot find name 'foo'.

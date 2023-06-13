@@ -1,4 +1,6 @@
-=== tests/cases/compiler/emptyMemberAccess.ts ===
+//// [tests/cases/compiler/emptyMemberAccess.ts] ////
+
+=== emptyMemberAccess.ts ===
 function getObj() {
 >getObj : Symbol(getObj, Decl(emptyMemberAccess.ts, 0, 0))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arithmeticOnInvalidTypes2.ts] ////
+
 //// [arithmeticOnInvalidTypes2.ts]
 var obj = function f<T>(a: T, b: T) {
     var z1 = a + b;

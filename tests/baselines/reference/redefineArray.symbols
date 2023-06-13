@@ -1,4 +1,6 @@
-=== tests/cases/compiler/redefineArray.ts ===
+//// [tests/cases/compiler/redefineArray.ts] ////
+
+=== redefineArray.ts ===
 Array = function (n:number, s:string) {return n;};
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >n : Symbol(n, Decl(redefineArray.ts, 0, 18))

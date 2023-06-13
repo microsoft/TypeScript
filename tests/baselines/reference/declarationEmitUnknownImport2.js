@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitUnknownImport2.ts] ////
+
 //// [declarationEmitUnknownImport2.ts]
 import Foo From './Foo'; // Syntax error
 export default Foo

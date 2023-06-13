@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextualSignatureInstantiation3.ts] ////
+
 //// [contextualSignatureInstantiation3.ts]
 function map<T, U>(items: T[], f: (x: T) => U): U[]{
     return items.map(f);

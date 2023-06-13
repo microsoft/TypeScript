@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/discriminantPropertyCheck.ts] ////
+
 //// [discriminantPropertyCheck.ts]
 type Item = Item1 | Item2;
 

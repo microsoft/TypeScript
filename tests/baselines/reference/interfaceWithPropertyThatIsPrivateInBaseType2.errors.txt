@@ -1,10 +1,10 @@
-tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithPropertyThatIsPrivateInBaseType2.ts(5,11): error TS2430: Interface 'Foo' incorrectly extends interface 'Base'.
+interfaceWithPropertyThatIsPrivateInBaseType2.ts(5,11): error TS2430: Interface 'Foo' incorrectly extends interface 'Base'.
   Property 'x' is private in type 'Base' but not in type 'Foo'.
-tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithPropertyThatIsPrivateInBaseType2.ts(13,11): error TS2430: Interface 'Foo2<T>' incorrectly extends interface 'Base2<T>'.
+interfaceWithPropertyThatIsPrivateInBaseType2.ts(13,11): error TS2430: Interface 'Foo2<T>' incorrectly extends interface 'Base2<T>'.
   Property 'x' is private in type 'Base2<T>' but not in type 'Foo2<T>'.
 
 
-==== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithPropertyThatIsPrivateInBaseType2.ts (2 errors) ====
+==== interfaceWithPropertyThatIsPrivateInBaseType2.ts (2 errors) ====
     class Base {
         private x() {}
     }

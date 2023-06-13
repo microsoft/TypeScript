@@ -1,5 +1,5 @@
 // @checkJs: true
-// @outDir: tests/cases/compiler/out
+// @outDir: out
 // @declaration: true
 // @module: esnext
 // @moduleResolution: nodenext

@@ -1,3 +1,4 @@
+currentDirectory:: /home/username/project useCaseSensitiveFileNames: true
 Input::
 //// [/home/username/project/app/file.ts]
 var a = 10;
@@ -48,11 +49,11 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/username/project/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /home/username/project/app/file.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/home/username/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -74,6 +75,9 @@ var a = 10;
 var b = 10;
 
 
+Before running Timeout callback:: count: 1
+4: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:28 AM[0m] File change detected. Starting incremental compilation...

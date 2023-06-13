@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericInterfacesWithoutTypeArguments.ts] ////
+
 //// [genericInterfacesWithoutTypeArguments.ts]
 interface I<T> { }
 class C<T> { }

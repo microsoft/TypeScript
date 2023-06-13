@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinNestedSubclass.ts ===
+//// [tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinNestedSubclass.ts] ////
+
+=== protectedClassPropertyAccessibleWithinNestedSubclass.ts ===
 class B {
 >B : Symbol(B, Decl(protectedClassPropertyAccessibleWithinNestedSubclass.ts, 0, 0))
 

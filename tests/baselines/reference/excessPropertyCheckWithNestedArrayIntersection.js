@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/excessPropertyCheckWithNestedArrayIntersection.ts] ////
+
 //// [excessPropertyCheckWithNestedArrayIntersection.ts]
 interface ValueOnlyFields {
     fields: Array<{

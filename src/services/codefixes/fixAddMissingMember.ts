@@ -29,6 +29,7 @@ import {
     getCheckFlags,
     getClassLikeDeclarationOfSymbol,
     getEmitScriptTarget,
+    getEscapedTextOfJsxAttributeName,
     getFirstConstructorWithBody,
     getNodeId,
     getObjectFlags,
@@ -309,7 +310,7 @@ function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, ch
         const param = signature.parameters[argIndex].valueDeclaration;
         if (!(param && isParameter(param) && isIdentifier(param.name))) return undefined;
 
-        const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent), checker.getParameterType(signature, argIndex), /* requireOptionalProperties */ false, /* matchDiscriminantProperties */ false));
+        const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent), checker.getParameterType(signature, argIndex), /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ false));
         if (!length(properties)) return undefined;
         return { kind: InfoKind.ObjectLiteral, token: param.name, properties, parentDeclaration: parent };
     }
@@ -318,7 +319,7 @@ function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, ch
 
     if (isIdentifier(token) && hasInitializer(parent) && parent.initializer && isObjectLiteralExpression(parent.initializer)) {
         const targetType = checker.getContextualType(token) || checker.getTypeAtLocation(token);
-        const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent.initializer), targetType, /* requireOptionalProperties */ false, /* matchDiscriminantProperties */ false));
+        const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent.initializer), targetType, /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ false));
         if (!length(properties)) return undefined;
 
         return { kind: InfoKind.ObjectLiteral, token, properties, parentDeclaration: parent.initializer };
@@ -425,7 +426,7 @@ function addMissingMemberInJs(changeTracker: textChanges.ChangeTracker, sourceFi
         const property = factory.createPropertyDeclaration(
             /*modifiers*/ undefined,
             tokenName,
-            /*questionToken*/ undefined,
+            /*questionOrExclamationToken*/ undefined,
             /*type*/ undefined,
             /*initializer*/ undefined);
 
@@ -489,7 +490,7 @@ function addPropertyDeclaration(changeTracker: textChanges.ChangeTracker, source
     const modifiers = modifierFlags ? factory.createNodeArray(factory.createModifiersFromModifierFlags(modifierFlags)) : undefined;
 
     const property = isClassLike(node)
-        ? factory.createPropertyDeclaration(modifiers, tokenName, /*questionToken*/ undefined, typeNode, /*initializer*/ undefined)
+        ? factory.createPropertyDeclaration(modifiers, tokenName, /*questionOrExclamationToken*/ undefined, typeNode, /*initializer*/ undefined)
         : factory.createPropertySignature(/*modifiers*/ undefined, tokenName, /*questionToken*/ undefined, typeNode);
 
     const lastProp = getNodeToInsertPropertyAfter(node);
@@ -537,11 +538,6 @@ function getActionsForMissingMethodDeclaration(context: CodeFixContext, info: Ty
         return undefined;
     }
 
-    // Private methods are not implemented yet.
-    if (isPrivateIdentifier(token)) {
-        return undefined;
-    }
-
     const methodName = token.text;
     const addMethodDeclarationChanges = (modifierFlags: ModifierFlags) => textChanges.ChangeTracker.with(context, t => addMethodDeclaration(context, t, call, token, modifierFlags, parentDeclaration, declSourceFile));
     const actions = [createCodeFixAction(fixMissingMember, addMethodDeclarationChanges(modifierFlags & ModifierFlags.Static), [modifierFlags & ModifierFlags.Static ? Diagnostics.Declare_static_method_0 : Diagnostics.Declare_method_0, methodName], fixMissingMember, Diagnostics.Add_all_missing_members)];
@@ -555,7 +551,7 @@ function addMethodDeclaration(
     context: CodeFixContextBase,
     changes: textChanges.ChangeTracker,
     callExpression: CallExpression,
-    name: Identifier,
+    name: Identifier | PrivateIdentifier,
     modifierFlags: ModifierFlags,
     parentDeclaration: ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode,
     sourceFile: SourceFile,
@@ -742,7 +738,7 @@ function getUnmatchedAttributes(checker: TypeChecker, target: ScriptTarget, sour
     const seenNames = new Set<__String>();
     for (const sourceProp of source.attributes.properties) {
         if (isJsxAttribute(sourceProp)) {
-            seenNames.add(sourceProp.name.escapedText);
+            seenNames.add(getEscapedTextOfJsxAttributeName(sourceProp.name));
         }
         if (isJsxSpreadAttribute(sourceProp)) {
             const type = checker.getTypeAtLocation(sourceProp.expression);

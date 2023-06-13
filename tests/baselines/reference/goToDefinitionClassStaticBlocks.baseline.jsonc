@@ -1,0 +1,138 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionClassStaticBlocks.ts ===
+// class ClassStaticBocks {
+//     static x;
+//     /*GOTO DEF*/<|[|{| textSpan: true, defId: 0 |}static|] {}|>
+//     static y;
+//     <|[|{| defId: 1 |}static|] {}|>
+//     static y;
+//     <|[|{| defId: 2 |}static|] {}|>
+// }
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "constructor",
+    "name": "static {}",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 1,
+    "kind": "constructor",
+    "name": "static {}",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 2,
+    "kind": "constructor",
+    "name": "static {}",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionClassStaticBlocks.ts ===
+// class ClassStaticBocks {
+//     static x;
+//     <|[|{| defId: 0 |}static|] {}|>
+//     static y;
+//     /*GOTO DEF*/<|[|{| textSpan: true, defId: 1 |}static|] {}|>
+//     static y;
+//     <|[|{| defId: 2 |}static|] {}|>
+// }
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "constructor",
+    "name": "static {}",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 1,
+    "kind": "constructor",
+    "name": "static {}",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 2,
+    "kind": "constructor",
+    "name": "static {}",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionClassStaticBlocks.ts ===
+// class ClassStaticBocks {
+//     static x;
+//     <|[|{| defId: 0 |}static|] {}|>
+//     static y;
+//     <|[|{| defId: 1 |}static|] {}|>
+//     static y;
+//     /*GOTO DEF*/<|[|{| textSpan: true, defId: 2 |}static|] {}|>
+// }
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "constructor",
+    "name": "static {}",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 1,
+    "kind": "constructor",
+    "name": "static {}",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 2,
+    "kind": "constructor",
+    "name": "static {}",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

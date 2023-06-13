@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideProperty2.ts] ////
+
 //// [accessorsOverrideProperty2.ts]
 class Base {
   x = 1;

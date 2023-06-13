@@ -1,4 +1,6 @@
-=== tests/cases/compiler/reverseMappedIntersectionInference.ts ===
+//// [tests/cases/compiler/reverseMappedIntersectionInference.ts] ////
+
+=== reverseMappedIntersectionInference.ts ===
 type Results<T> = {
 >Results : Symbol(Results, Decl(reverseMappedIntersectionInference.ts, 0, 0))
 >T : Symbol(T, Decl(reverseMappedIntersectionInference.ts, 0, 13))

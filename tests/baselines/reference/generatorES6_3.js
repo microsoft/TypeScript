@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/generatorES6_3.ts] ////
+
 //// [generatorES6_3.ts]
 var v = function*() {
     yield 0

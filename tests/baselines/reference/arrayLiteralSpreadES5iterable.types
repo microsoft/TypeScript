@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/spread/arrayLiteralSpreadES5iterable.ts ===
+//// [tests/cases/conformance/es6/spread/arrayLiteralSpreadES5iterable.ts] ////
+
+=== arrayLiteralSpreadES5iterable.ts ===
 function f0() {
 >f0 : () => void
 

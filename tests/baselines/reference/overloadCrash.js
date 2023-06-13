@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/overloadCrash.ts] ////
+
 //// [overloadCrash.ts]
 interface I1 {a:number; b:number;};
 interface I2 {c:number; d:number;};

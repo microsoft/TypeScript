@@ -1,4 +1,6 @@
-=== tests/cases/compiler/numberVsBigIntOperations.ts ===
+//// [tests/cases/compiler/numberVsBigIntOperations.ts] ////
+
+=== numberVsBigIntOperations.ts ===
 // Cannot mix bigints and numbers
 let bigInt = 1n, num = 2;
 >bigInt : Symbol(bigInt, Decl(numberVsBigIntOperations.ts, 1, 3))

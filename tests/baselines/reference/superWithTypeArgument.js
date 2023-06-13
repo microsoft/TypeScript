@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/superWithTypeArgument.ts] ////
+
 //// [superWithTypeArgument.ts]
 class C {
     

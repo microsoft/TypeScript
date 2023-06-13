@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts] ////
+
 //// [exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts]
 var temp: any;
 

@@ -1,34 +1,34 @@
-tests/cases/compiler/controlFlowSelfReferentialLoop.ts(5,17): error TS7006: Parameter 'a' implicitly has an 'any' type.
-tests/cases/compiler/controlFlowSelfReferentialLoop.ts(5,19): error TS7006: Parameter 'b' implicitly has an 'any' type.
-tests/cases/compiler/controlFlowSelfReferentialLoop.ts(5,21): error TS7006: Parameter 'c' implicitly has an 'any' type.
-tests/cases/compiler/controlFlowSelfReferentialLoop.ts(5,23): error TS7006: Parameter 'd' implicitly has an 'any' type.
-tests/cases/compiler/controlFlowSelfReferentialLoop.ts(5,25): error TS7006: Parameter 'x' implicitly has an 'any' type.
-tests/cases/compiler/controlFlowSelfReferentialLoop.ts(5,27): error TS7006: Parameter 's' implicitly has an 'any' type.
-tests/cases/compiler/controlFlowSelfReferentialLoop.ts(5,29): error TS7006: Parameter 'ac' implicitly has an 'any' type.
-tests/cases/compiler/controlFlowSelfReferentialLoop.ts(9,17): error TS7006: Parameter 'a' implicitly has an 'any' type.
-tests/cases/compiler/controlFlowSelfReferentialLoop.ts(9,19): error TS7006: Parameter 'b' implicitly has an 'any' type.
-tests/cases/compiler/controlFlowSelfReferentialLoop.ts(9,21): error TS7006: Parameter 'c' implicitly has an 'any' type.
-tests/cases/compiler/controlFlowSelfReferentialLoop.ts(9,23): error TS7006: Parameter 'd' implicitly has an 'any' type.
-tests/cases/compiler/controlFlowSelfReferentialLoop.ts(9,25): error TS7006: Parameter 'x' implicitly has an 'any' type.
-tests/cases/compiler/controlFlowSelfReferentialLoop.ts(9,27): error TS7006: Parameter 's' implicitly has an 'any' type.
-tests/cases/compiler/controlFlowSelfReferentialLoop.ts(9,29): error TS7006: Parameter 'ac' implicitly has an 'any' type.
-tests/cases/compiler/controlFlowSelfReferentialLoop.ts(13,17): error TS7006: Parameter 'a' implicitly has an 'any' type.
-tests/cases/compiler/controlFlowSelfReferentialLoop.ts(13,19): error TS7006: Parameter 'b' implicitly has an 'any' type.
-tests/cases/compiler/controlFlowSelfReferentialLoop.ts(13,21): error TS7006: Parameter 'c' implicitly has an 'any' type.
-tests/cases/compiler/controlFlowSelfReferentialLoop.ts(13,23): error TS7006: Parameter 'd' implicitly has an 'any' type.
-tests/cases/compiler/controlFlowSelfReferentialLoop.ts(13,25): error TS7006: Parameter 'x' implicitly has an 'any' type.
-tests/cases/compiler/controlFlowSelfReferentialLoop.ts(13,27): error TS7006: Parameter 's' implicitly has an 'any' type.
-tests/cases/compiler/controlFlowSelfReferentialLoop.ts(13,29): error TS7006: Parameter 'ac' implicitly has an 'any' type.
-tests/cases/compiler/controlFlowSelfReferentialLoop.ts(17,17): error TS7006: Parameter 'a' implicitly has an 'any' type.
-tests/cases/compiler/controlFlowSelfReferentialLoop.ts(17,19): error TS7006: Parameter 'b' implicitly has an 'any' type.
-tests/cases/compiler/controlFlowSelfReferentialLoop.ts(17,21): error TS7006: Parameter 'c' implicitly has an 'any' type.
-tests/cases/compiler/controlFlowSelfReferentialLoop.ts(17,23): error TS7006: Parameter 'd' implicitly has an 'any' type.
-tests/cases/compiler/controlFlowSelfReferentialLoop.ts(17,25): error TS7006: Parameter 'x' implicitly has an 'any' type.
-tests/cases/compiler/controlFlowSelfReferentialLoop.ts(17,27): error TS7006: Parameter 's' implicitly has an 'any' type.
-tests/cases/compiler/controlFlowSelfReferentialLoop.ts(17,29): error TS7006: Parameter 'ac' implicitly has an 'any' type.
+controlFlowSelfReferentialLoop.ts(5,17): error TS7006: Parameter 'a' implicitly has an 'any' type.
+controlFlowSelfReferentialLoop.ts(5,19): error TS7006: Parameter 'b' implicitly has an 'any' type.
+controlFlowSelfReferentialLoop.ts(5,21): error TS7006: Parameter 'c' implicitly has an 'any' type.
+controlFlowSelfReferentialLoop.ts(5,23): error TS7006: Parameter 'd' implicitly has an 'any' type.
+controlFlowSelfReferentialLoop.ts(5,25): error TS7006: Parameter 'x' implicitly has an 'any' type.
+controlFlowSelfReferentialLoop.ts(5,27): error TS7006: Parameter 's' implicitly has an 'any' type.
+controlFlowSelfReferentialLoop.ts(5,29): error TS7006: Parameter 'ac' implicitly has an 'any' type.
+controlFlowSelfReferentialLoop.ts(9,17): error TS7006: Parameter 'a' implicitly has an 'any' type.
+controlFlowSelfReferentialLoop.ts(9,19): error TS7006: Parameter 'b' implicitly has an 'any' type.
+controlFlowSelfReferentialLoop.ts(9,21): error TS7006: Parameter 'c' implicitly has an 'any' type.
+controlFlowSelfReferentialLoop.ts(9,23): error TS7006: Parameter 'd' implicitly has an 'any' type.
+controlFlowSelfReferentialLoop.ts(9,25): error TS7006: Parameter 'x' implicitly has an 'any' type.
+controlFlowSelfReferentialLoop.ts(9,27): error TS7006: Parameter 's' implicitly has an 'any' type.
+controlFlowSelfReferentialLoop.ts(9,29): error TS7006: Parameter 'ac' implicitly has an 'any' type.
+controlFlowSelfReferentialLoop.ts(13,17): error TS7006: Parameter 'a' implicitly has an 'any' type.
+controlFlowSelfReferentialLoop.ts(13,19): error TS7006: Parameter 'b' implicitly has an 'any' type.
+controlFlowSelfReferentialLoop.ts(13,21): error TS7006: Parameter 'c' implicitly has an 'any' type.
+controlFlowSelfReferentialLoop.ts(13,23): error TS7006: Parameter 'd' implicitly has an 'any' type.
+controlFlowSelfReferentialLoop.ts(13,25): error TS7006: Parameter 'x' implicitly has an 'any' type.
+controlFlowSelfReferentialLoop.ts(13,27): error TS7006: Parameter 's' implicitly has an 'any' type.
+controlFlowSelfReferentialLoop.ts(13,29): error TS7006: Parameter 'ac' implicitly has an 'any' type.
+controlFlowSelfReferentialLoop.ts(17,17): error TS7006: Parameter 'a' implicitly has an 'any' type.
+controlFlowSelfReferentialLoop.ts(17,19): error TS7006: Parameter 'b' implicitly has an 'any' type.
+controlFlowSelfReferentialLoop.ts(17,21): error TS7006: Parameter 'c' implicitly has an 'any' type.
+controlFlowSelfReferentialLoop.ts(17,23): error TS7006: Parameter 'd' implicitly has an 'any' type.
+controlFlowSelfReferentialLoop.ts(17,25): error TS7006: Parameter 'x' implicitly has an 'any' type.
+controlFlowSelfReferentialLoop.ts(17,27): error TS7006: Parameter 's' implicitly has an 'any' type.
+controlFlowSelfReferentialLoop.ts(17,29): error TS7006: Parameter 'ac' implicitly has an 'any' type.
 
 
-==== tests/cases/compiler/controlFlowSelfReferentialLoop.ts (28 errors) ====
+==== controlFlowSelfReferentialLoop.ts (28 errors) ====
     // Repro from #12319
     
     function md5(string:string): void {

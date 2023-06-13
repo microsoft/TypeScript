@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesAndStaticFields.ts] ////
+
 //// [privateNamesAndStaticFields.ts]
 class A {
     static #foo: number;

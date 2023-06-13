@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitTypeAliasWithTypeParameters3.ts ===
+//// [tests/cases/compiler/declarationEmitTypeAliasWithTypeParameters3.ts] ////
+
+=== declarationEmitTypeAliasWithTypeParameters3.ts ===
 type Foo<T> = {
 >Foo : Foo<T>
 
