@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitDefaultExport8.ts] ////
+
 //// [declarationEmitDefaultExport8.ts]
 var _default = 1;
 export {_default as d}

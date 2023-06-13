@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameFieldParenthesisLeftAssignment.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameFieldParenthesisLeftAssignment.ts] ////
+
+=== privateNameFieldParenthesisLeftAssignment.ts ===
 class Foo {
 >Foo : Symbol(Foo, Decl(privateNameFieldParenthesisLeftAssignment.ts, 0, 0))
 

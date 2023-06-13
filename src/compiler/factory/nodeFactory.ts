@@ -125,6 +125,7 @@ import {
     getSyntheticLeadingComments,
     getSyntheticTrailingComments,
     getTextOfIdentifierOrLiteral,
+    HasDecorators,
     hasInvalidEscape,
     HasModifiers,
     hasProperty,
@@ -1023,6 +1024,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         liftToBlock,
         mergeLexicalEnvironment,
         updateModifiers,
+        updateModifierLike,
     };
 
     forEach(nodeFactoryPatchers, fn => fn(factory));
@@ -6986,6 +6988,18 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             isImportDeclaration(node) ? updateImportDeclaration(node, modifierArray, node.importClause, node.moduleSpecifier, node.assertClause) :
             isExportAssignment(node) ? updateExportAssignment(node, modifierArray, node.expression) :
             isExportDeclaration(node) ? updateExportDeclaration(node, modifierArray, node.isTypeOnly, node.exportClause, node.moduleSpecifier, node.assertClause) :
+            Debug.assertNever(node);
+    }
+
+    function updateModifierLike<T extends HasModifiers & HasDecorators>(node: T, modifiers: readonly ModifierLike[]): T;
+    function updateModifierLike(node: HasModifiers & HasDecorators, modifierArray: readonly ModifierLike[]) {
+        return isParameter(node) ? updateParameterDeclaration(node, modifierArray, node.dotDotDotToken, node.name, node.questionToken, node.type, node.initializer) :
+            isPropertyDeclaration(node) ? updatePropertyDeclaration(node, modifierArray, node.name, node.questionToken ?? node.exclamationToken, node.type, node.initializer) :
+            isMethodDeclaration(node) ? updateMethodDeclaration(node, modifierArray, node.asteriskToken, node.name, node.questionToken, node.typeParameters, node.parameters, node.type, node.body) :
+            isGetAccessorDeclaration(node) ? updateGetAccessorDeclaration(node, modifierArray, node.name, node.parameters, node.type, node.body) :
+            isSetAccessorDeclaration(node) ? updateSetAccessorDeclaration(node, modifierArray, node.name, node.parameters, node.body) :
+            isClassExpression(node) ? updateClassExpression(node, modifierArray, node.name, node.typeParameters, node.heritageClauses, node.members) :
+            isClassDeclaration(node) ? updateClassDeclaration(node, modifierArray, node.name, node.typeParameters, node.heritageClauses, node.members) :
             Debug.assertNever(node);
     }
 

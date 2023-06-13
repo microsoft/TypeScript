@@ -1,4 +1,6 @@
-=== tests/cases/compiler/Bar.ts ===
+//// [tests/cases/compiler/importShadowsGlobalName.ts] ////
+
+=== Bar.ts ===
 import Error = require('Foo');
 >Error : typeof Error
 
@@ -9,7 +11,7 @@ class Bar extends Error {}
 export = Bar;
 >Bar : Bar
 
-=== tests/cases/compiler/Foo.ts ===
+=== Foo.ts ===
 class Foo {}
 >Foo : Foo
 

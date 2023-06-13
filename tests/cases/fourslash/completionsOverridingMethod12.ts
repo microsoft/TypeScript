@@ -10,11 +10,11 @@
 ////}
 ////
 ////abstract class B extends A {
-////    [|abstract|] /*a*/
+////    abstract /*a*/
 ////}
 ////
 ////abstract class B1 extends A {
-////    [|abstract override|] /*b*/
+////    abstract override /*b*/
 ////}
 
 verify.completions({
@@ -28,9 +28,9 @@ verify.completions({
     includes: [
         {
             name: "P",
-            sortText: completion.SortText.ClassMemberSnippets,
-            replacementSpan: test.ranges()[0],
-            insertText: "public abstract get P(): string;",
+            sortText: completion.SortText.LocationPriority,
+            insertText: "abstract get P(): string;",
+            filterText: "P",
         },
     ],
 });
@@ -46,9 +46,9 @@ verify.completions({
     includes: [
         {
             name: "P",
-            sortText: completion.SortText.ClassMemberSnippets,
-            replacementSpan: test.ranges()[1],
-            insertText: "public abstract override get P(): string;",
+            sortText: completion.SortText.LocationPriority,
+            insertText: "abstract override get P(): string;",
+            filterText: "P",
         },
     ],
 });

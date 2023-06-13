@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exportDefaultFunctionInNamespace.ts ===
+//// [tests/cases/compiler/exportDefaultFunctionInNamespace.ts] ////
+
+=== exportDefaultFunctionInNamespace.ts ===
 namespace ns_function {
 >ns_function : typeof ns_function
 

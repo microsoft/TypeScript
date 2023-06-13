@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nestedThisContainer.ts ===
+//// [tests/cases/compiler/nestedThisContainer.ts] ////
+
+=== nestedThisContainer.ts ===
 type Foo = any;
 >Foo : Symbol(Foo, Decl(nestedThisContainer.ts, 0, 0))
 

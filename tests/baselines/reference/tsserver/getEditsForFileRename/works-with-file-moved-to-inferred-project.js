@@ -60,9 +60,9 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/b.ts: *new*
-  {"pollingInterval":500}
 /a/lib/lib.d.ts: *new*
+  {"pollingInterval":500}
+/b.ts: *new*
   {"pollingInterval":500}
 
 FsWatches::

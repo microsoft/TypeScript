@@ -1,4 +1,6 @@
-=== tests/cases/compiler/externModule.ts ===
+//// [tests/cases/compiler/externModule.ts] ////
+
+=== externModule.ts ===
 declare module {
 >declare : any
 >module : any

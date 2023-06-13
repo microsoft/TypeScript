@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declInput.ts ===
+//// [tests/cases/compiler/declInput.ts] ////
+
+=== declInput.ts ===
 interface bar {
 
 }

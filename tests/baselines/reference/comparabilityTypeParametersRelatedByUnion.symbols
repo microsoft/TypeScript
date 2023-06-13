@@ -1,4 +1,6 @@
-=== tests/cases/compiler/comparabilityTypeParametersRelatedByUnion.ts ===
+//// [tests/cases/compiler/comparabilityTypeParametersRelatedByUnion.ts] ////
+
+=== comparabilityTypeParametersRelatedByUnion.ts ===
 class C<T> {
 >C : Symbol(C, Decl(comparabilityTypeParametersRelatedByUnion.ts, 0, 0))
 >T : Symbol(T, Decl(comparabilityTypeParametersRelatedByUnion.ts, 0, 8))

@@ -67,15 +67,15 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/runtime/a;: *new*
-  {"pollingInterval":500}
 /a/lib/lib.d.ts: *new*
+  {"pollingInterval":500}
+/a/runtime/a;: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/tsconfig.json: *new*
-  {}
 /a/b.ts: *new*
+  {}
+/a/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -112,9 +112,9 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/runtime/a;:
-  {"pollingInterval":500}
 /a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/runtime/a;:
   {"pollingInterval":500}
 
 FsWatches::

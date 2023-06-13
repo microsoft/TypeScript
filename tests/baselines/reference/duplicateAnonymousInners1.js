@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicateAnonymousInners1.ts] ////
+
 //// [duplicateAnonymousInners1.ts]
 module Foo {
 

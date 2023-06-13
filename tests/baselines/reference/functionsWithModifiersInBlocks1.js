@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionsWithModifiersInBlocks1.ts] ////
+
 //// [functionsWithModifiersInBlocks1.ts]
 {
    declare function f() { }

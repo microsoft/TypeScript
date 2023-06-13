@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeParameterFixingWithContextSensitiveArguments4.ts] ////
+
 //// [typeParameterFixingWithContextSensitiveArguments4.ts]
 function f<T, U>(y: T, y1: U, p: (z: U) => T, p1: (x: T) => U): [T, U] { return [y, p1(y)]; }
 interface A { a: A; }

@@ -1,11 +1,11 @@
-tests/cases/compiler/paramPropertiesInSignatures.ts(2,14): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/compiler/paramPropertiesInSignatures.ts(3,14): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/compiler/paramPropertiesInSignatures.ts(8,14): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/compiler/paramPropertiesInSignatures.ts(9,14): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/compiler/paramPropertiesInSignatures.ts(10,14): error TS2369: A parameter property is only allowed in a constructor implementation.
+paramPropertiesInSignatures.ts(2,14): error TS2369: A parameter property is only allowed in a constructor implementation.
+paramPropertiesInSignatures.ts(3,14): error TS2369: A parameter property is only allowed in a constructor implementation.
+paramPropertiesInSignatures.ts(8,14): error TS2369: A parameter property is only allowed in a constructor implementation.
+paramPropertiesInSignatures.ts(9,14): error TS2369: A parameter property is only allowed in a constructor implementation.
+paramPropertiesInSignatures.ts(10,14): error TS2369: A parameter property is only allowed in a constructor implementation.
 
 
-==== tests/cases/compiler/paramPropertiesInSignatures.ts (5 errors) ====
+==== paramPropertiesInSignatures.ts (5 errors) ====
     class C1 {
     	constructor(public p1:string); // ERROR
     	            ~~~~~~~~~~~~~~~~

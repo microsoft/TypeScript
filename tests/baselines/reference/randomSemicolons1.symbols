@@ -1,4 +1,6 @@
-=== tests/cases/compiler/randomSemicolons1.ts ===
+//// [tests/cases/compiler/randomSemicolons1.ts] ////
+
+=== randomSemicolons1.ts ===
 ; ;
 var a = 1;
 >a : Symbol(a, Decl(randomSemicolons1.ts, 1, 3))

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts] ////
+
 //// [typeParameterAssignability2.ts]
 // type parameters are not assignable to one another unless directly or indirectly constrained to one another
 

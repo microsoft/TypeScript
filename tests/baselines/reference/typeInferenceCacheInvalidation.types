@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeInferenceCacheInvalidation.ts ===
+//// [tests/cases/compiler/typeInferenceCacheInvalidation.ts] ////
+
+=== typeInferenceCacheInvalidation.ts ===
 // Repro from #32230
 
 type Callback<TFoo, TBar> = (foo: TFoo, bar: TBar) => any

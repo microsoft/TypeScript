@@ -1,4 +1,6 @@
-=== tests/cases/conformance/constEnums/constEnum4.ts ===
+//// [tests/cases/conformance/constEnums/constEnum4.ts] ////
+
+=== constEnum4.ts ===
 if (1)
     const enum A { }
 >A : Symbol(A, Decl(constEnum4.ts, 0, 6))

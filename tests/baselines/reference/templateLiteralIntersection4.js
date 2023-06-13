@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/templateLiteralIntersection4.ts] ////
+
 //// [templateLiteralIntersection4.ts]
 type StateHook<S> = () => [S, unknown];
 

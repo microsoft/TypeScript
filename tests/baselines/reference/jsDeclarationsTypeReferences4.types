@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsTypeReferences4.ts] ////
+
+=== index.js ===
 /// <reference types="node" />
 export const Something = 2; // to show conflict that can occur
 >Something : 2
@@ -31,7 +33,7 @@ export namespace A {
     }
 }
 
-=== tests/cases/conformance/jsdoc/declarations/node_modules/@types/node/index.d.ts ===
+=== node_modules/@types/node/index.d.ts ===
 declare module "fs" {
 >"fs" : typeof import("fs")
 

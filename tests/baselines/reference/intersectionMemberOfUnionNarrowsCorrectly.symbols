@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/intersection/intersectionMemberOfUnionNarrowsCorrectly.ts ===
+//// [tests/cases/conformance/types/intersection/intersectionMemberOfUnionNarrowsCorrectly.ts] ////
+
+=== intersectionMemberOfUnionNarrowsCorrectly.ts ===
 export type U = { kind?: 'A', a: string } | { kind?: 'B' } & { b: string };
 >U : Symbol(U, Decl(intersectionMemberOfUnionNarrowsCorrectly.ts, 0, 0))
 >kind : Symbol(kind, Decl(intersectionMemberOfUnionNarrowsCorrectly.ts, 0, 17))

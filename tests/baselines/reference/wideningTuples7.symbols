@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/tuple/wideningTuples7.ts ===
+//// [tests/cases/conformance/types/tuple/wideningTuples7.ts] ////
+
+=== wideningTuples7.ts ===
 var foo = function bar() {
 >foo : Symbol(foo, Decl(wideningTuples7.ts, 0, 3))
 >bar : Symbol(bar, Decl(wideningTuples7.ts, 0, 9))

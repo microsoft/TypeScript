@@ -354,15 +354,15 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
 /user/username/projects/myproject/SiblingClass/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/tsbase.json: *new*
-  {}
-/user/username/projects/myproject/buttonClass/tsconfig.json: *new*
   {}
 /user/username/projects/myproject/buttonClass/Source.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/myproject/buttonClass/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/tsbase.json: *new*
   {}
 
 Before request

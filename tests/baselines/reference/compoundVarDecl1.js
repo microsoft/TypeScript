@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/compoundVarDecl1.ts] ////
+
 //// [compoundVarDecl1.ts]
 module Foo { var a = 1, b = 1; a = b + 2; }
 

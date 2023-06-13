@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/typeGuardsAsAssertions.ts] ////
+
 //// [typeGuardsAsAssertions.ts]
 // Repro from #8513
 

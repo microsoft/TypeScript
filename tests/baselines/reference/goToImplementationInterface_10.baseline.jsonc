@@ -1,0 +1,71 @@
+// === goToImplementation ===
+// === /a.ts ===
+// interface /*GOTO IMPL*/A {
+// 	foo: boolean;
+// }
+// <|interface [|{| defId: 0 |}B|] extends A {
+// 	bar: boolean;
+// }|>
+// <|export class [|{| defId: 1 |}C|] implements B {
+// 	foo = true;
+// 	bar = true;
+// }|>
+// <|export class [|{| defId: 2 |}D|] extends C { }|>
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "displayParts": [
+     {
+      "text": "interface",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "B",
+      "kind": "interfaceName"
+     }
+    ],
+    "kind": "interface"
+   },
+   {
+    "defId": 1,
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     }
+    ],
+    "kind": "class"
+   },
+   {
+    "defId": 2,
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "D",
+      "kind": "className"
+     }
+    ],
+    "kind": "class"
+   }
+  ]

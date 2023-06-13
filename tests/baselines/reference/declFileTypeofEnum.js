@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileTypeofEnum.ts] ////
+
 //// [declFileTypeofEnum.ts]
 enum days {
     monday,
