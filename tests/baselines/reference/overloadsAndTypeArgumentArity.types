@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadsAndTypeArgumentArity.ts ===
+//// [tests/cases/compiler/overloadsAndTypeArgumentArity.ts] ////
+
+=== overloadsAndTypeArgumentArity.ts ===
 declare function Callbacks(flags?: string): void;
 >Callbacks : { (flags?: string): void; <T>(flags?: string): void; <T1, T2>(flags?: string): void; <T1, T2, T3>(flags?: string): void; }
 >flags : string

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/_apply.js ===
+//// [tests/cases/compiler/jsFileCompilationRestParamJsDocFunction.ts] ////
+
+=== _apply.js ===
 /**
  * A faster alternative to `Function#apply`, this function invokes `func`
  * with the `this` binding of `thisArg` and the arguments of `args`.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/targetTypeVoidFunc.ts] ////
+
 //// [targetTypeVoidFunc.ts]
 function f1(): { new (): number; } {
     return function () { return; }

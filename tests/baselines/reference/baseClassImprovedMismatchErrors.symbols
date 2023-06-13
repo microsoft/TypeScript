@@ -1,4 +1,6 @@
-=== tests/cases/compiler/baseClassImprovedMismatchErrors.ts ===
+//// [tests/cases/compiler/baseClassImprovedMismatchErrors.ts] ////
+
+=== baseClassImprovedMismatchErrors.ts ===
 class Base {
 >Base : Symbol(Base, Decl(baseClassImprovedMismatchErrors.ts, 0, 0))
 

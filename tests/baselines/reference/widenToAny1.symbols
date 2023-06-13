@@ -1,4 +1,6 @@
-=== tests/cases/compiler/widenToAny1.ts ===
+//// [tests/cases/compiler/widenToAny1.ts] ////
+
+=== widenToAny1.ts ===
 function foo1<T>(f1: { x: T; y: T }): T {
 >foo1 : Symbol(foo1, Decl(widenToAny1.ts, 0, 0))
 >T : Symbol(T, Decl(widenToAny1.ts, 0, 14))

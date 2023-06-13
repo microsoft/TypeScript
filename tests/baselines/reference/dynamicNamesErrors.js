@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/dynamicNamesErrors.ts] ////
+
 //// [dynamicNamesErrors.ts]
 const c0 = "1";
 const c1 = 1;

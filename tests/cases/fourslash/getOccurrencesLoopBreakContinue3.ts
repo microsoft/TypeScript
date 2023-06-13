@@ -63,4 +63,4 @@
 ////
 ////label7: while (true) continue label5;
 
-verify.rangesAreOccurrences(false);
+verify.baselineDocumentHighlights();

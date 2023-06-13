@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/a.ts]
 let x = 1
@@ -27,7 +28,8 @@ Output::
 >> Screen clear
 [[90m12:00:15 AM[0m] Starting compilation in watch mode...
 
-[96ma/tsconfig.json[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS5101: [0mFlag 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+[96ma/tsconfig.json[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS5101: [0mOption 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+  Use 'outFile' instead.
 
 [7m1[0m {"compilerOptions":{"out":"/a/out.js"}}
 [7m [0m [91m                    ~~~~~[0m
@@ -48,22 +50,18 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-PolledWatches::
-/a/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches::
-/a/tsconfig.json:
+/a/a.ts: *new*
   {}
-/a/a.ts:
+/a/b.ts: *new*
   {}
-/a/b.ts:
+/a/lib/lib.d.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/a:
+/a: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -81,11 +79,15 @@ Input::
 let x = 11
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:22 AM[0m] File change detected. Starting incremental compilation...
 
-[96ma/tsconfig.json[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS5101: [0mFlag 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+[96ma/tsconfig.json[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS5101: [0mOption 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+  Use 'outFile' instead.
 
 [7m1[0m {"compilerOptions":{"out":"/a/out.js"}}
 [7m [0m [91m                    ~~~~~[0m
@@ -106,24 +108,6 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-PolledWatches::
-/a/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/tsconfig.json:
-  {}
-/a/a.ts:
-  {}
-/a/b.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 //// [/a/out.js]
@@ -139,11 +123,15 @@ Input::
 let xy = 11
 
 
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:30 AM[0m] File change detected. Starting incremental compilation...
 
-[96ma/tsconfig.json[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS5101: [0mFlag 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+[96ma/tsconfig.json[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS5101: [0mOption 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+  Use 'outFile' instead.
 
 [7m1[0m {"compilerOptions":{"out":"/a/out.js"}}
 [7m [0m [91m                    ~~~~~[0m
@@ -163,24 +151,6 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
-
-PolledWatches::
-/a/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/tsconfig.json:
-  {}
-/a/a.ts:
-  {}
-/a/b.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a:
-  {}
 
 exitCode:: ExitStatus.undefined
 

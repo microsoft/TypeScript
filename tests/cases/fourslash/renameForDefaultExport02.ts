@@ -12,4 +12,4 @@
 ////var y = /*4*/[|DefaultExportedFunction|]();
 
 const ranges = test.rangesByText().get("DefaultExportedFunction");
-verify.renameLocations(ranges.filter(r => !(r.marker && r.marker.data.inComment)), { findInComments: true, ranges });
+verify.baselineRename(ranges.filter(r => !(r.marker && r.marker.data.inComment)), { findInComments: true, });

@@ -1,192 +1,123 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsForVariableInExtendsClause02.ts ===
-// /*FIND ALL REFS*/interface [|Base|] { }
+// /*FIND ALL REFS*/<|interface [|{| isWriteAccess: true, isDefinition: true |}Base|] { }|>
 // namespace n {
 //     var Base = class { };
 //     interface I extends [|Base|] { }
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsForVariableInExtendsClause02.ts",
-      "kind": "interface",
-      "name": "interface Base",
-      "textSpan": {
-        "start": 10,
-        "length": 4
-      },
-      "displayParts": [
-        {
-          "text": "interface",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Base",
-          "kind": "interfaceName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 18
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 10,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForVariableInExtendsClause02.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 18
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 83,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForVariableInExtendsClause02.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsForVariableInExtendsClause02.ts ===
+  // /*FIND ALL REFS*/<|interface [|Base|] { }|>
+  // namespace n {
+  //     var Base = class { };
+  //     interface I extends Base { }
+  // }
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "interface",
+    "name": "interface Base",
+    "displayParts": [
+     {
+      "text": "interface",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Base",
+      "kind": "interfaceName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsForVariableInExtendsClause02.ts ===
-// interface /*FIND ALL REFS*/[|Base|] { }
+// <|interface /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}Base|] { }|>
 // namespace n {
 //     var Base = class { };
 //     interface I extends [|Base|] { }
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsForVariableInExtendsClause02.ts",
-      "kind": "interface",
-      "name": "interface Base",
-      "textSpan": {
-        "start": 10,
-        "length": 4
-      },
-      "displayParts": [
-        {
-          "text": "interface",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Base",
-          "kind": "interfaceName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 18
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 10,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForVariableInExtendsClause02.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 18
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 83,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForVariableInExtendsClause02.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsForVariableInExtendsClause02.ts ===
+  // <|interface /*FIND ALL REFS*/[|Base|] { }|>
+  // namespace n {
+  //     var Base = class { };
+  //     interface I extends Base { }
+  // }
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "interface",
+    "name": "interface Base",
+    "displayParts": [
+     {
+      "text": "interface",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Base",
+      "kind": "interfaceName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsForVariableInExtendsClause02.ts ===
-// interface [|Base|] { }
+// <|interface [|{| isWriteAccess: true |}Base|] { }|>
 // namespace n {
 //     var Base = class { };
 //     interface I extends /*FIND ALL REFS*/[|Base|] { }
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsForVariableInExtendsClause02.ts",
-      "kind": "interface",
-      "name": "interface Base",
-      "textSpan": {
-        "start": 10,
-        "length": 4
-      },
-      "displayParts": [
-        {
-          "text": "interface",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Base",
-          "kind": "interfaceName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 18
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 10,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForVariableInExtendsClause02.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 18
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 83,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForVariableInExtendsClause02.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsForVariableInExtendsClause02.ts ===
+  // <|interface [|Base|] { }|>
+  // namespace n {
+  //     var Base = class { };
+  //     interface I extends /*FIND ALL REFS*/Base { }
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "interface",
+    "name": "interface Base",
+    "displayParts": [
+     {
+      "text": "interface",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Base",
+      "kind": "interfaceName"
+     }
     ]
-  }
-]
+   }
+  ]

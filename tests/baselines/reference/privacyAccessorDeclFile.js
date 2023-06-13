@@ -2018,7 +2018,7 @@ var publicModule;
         });
         return privateClassWithPrivateModuleSetAccessorTypes;
     }());
-})(publicModule = exports.publicModule || (exports.publicModule = {}));
+})(publicModule || (exports.publicModule = publicModule = {}));
 var privateModule;
 (function (privateModule) {
     var privateClass = /** @class */ (function () {

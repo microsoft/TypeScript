@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privacyCheckOnTypeParameterReferenceInConstructorParameter.ts] ////
+
 //// [privacyCheckOnTypeParameterReferenceInConstructorParameter.ts]
 export class A<T1>{
     constructor(callback: (self: A<T1>) => void) {

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/union/discriminatedUnionTypes3.ts] ////
+
 //// [discriminatedUnionTypes3.ts]
 // Repro from #44435
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/unionAndIntersectionInference3.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/unionAndIntersectionInference3.ts] ////
+
+=== unionAndIntersectionInference3.ts ===
 // Repro from #30720
 
 type Maybe<T> = T | undefined;
@@ -148,7 +150,6 @@ export type ComponentClass<P> = new (props: P) => Component<P>;
 export type FunctionComponent<P> = (props: P) => null;
 >FunctionComponent : FunctionComponent<P>
 >props : P
->null : null
 
 export type ComponentType<P> = FunctionComponent<P> | ComponentClass<P>;
 >ComponentType : ComponentType<P>

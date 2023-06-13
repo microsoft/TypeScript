@@ -1,40 +1,27 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForLabel3.ts ===
-// /*FIND ALL REFS*/[|label|]: while (true) {
+// /*FIND ALL REFS*/<|[|label|]: while (true) {
 //     var label = "label";
-// }
+// }|>
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForLabel3.ts",
-      "kind": "label",
-      "name": "label",
-      "textSpan": {
-        "start": 0,
-        "length": 5
-      },
-      "displayParts": [
-        {
-          "text": "label",
-          "kind": "text"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 0,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/referencesForLabel3.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 48
-        },
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForLabel3.ts ===
+  // /*FIND ALL REFS*/[|label|]: while (true) {
+  //     var label = "label";
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "label",
+    "name": "label",
+    "displayParts": [
+     {
+      "text": "label",
+      "kind": "text"
+     }
     ]
-  }
-]
+   }
+  ]

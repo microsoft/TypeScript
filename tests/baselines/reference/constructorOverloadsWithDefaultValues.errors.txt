@@ -1,8 +1,8 @@
-tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorOverloadsWithDefaultValues.ts(3,17): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
-tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorOverloadsWithDefaultValues.ts(10,17): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+constructorOverloadsWithDefaultValues.ts(3,17): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+constructorOverloadsWithDefaultValues.ts(10,17): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
 
 
-==== tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorOverloadsWithDefaultValues.ts (2 errors) ====
+==== constructorOverloadsWithDefaultValues.ts (2 errors) ====
     class C {
         foo: string;
         constructor(x = 1); // error

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/targetTypeTest2.ts] ////
+
 //// [targetTypeTest2.ts]
 // Test target typing for array literals and call expressions
 

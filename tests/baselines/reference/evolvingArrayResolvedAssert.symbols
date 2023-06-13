@@ -1,4 +1,6 @@
-=== tests/cases/compiler/evolvingArrayResolvedAssert.ts ===
+//// [tests/cases/compiler/evolvingArrayResolvedAssert.ts] ////
+
+=== evolvingArrayResolvedAssert.ts ===
 var C = [];
 >C : Symbol(C, Decl(evolvingArrayResolvedAssert.ts, 0, 3))
 

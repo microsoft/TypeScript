@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/tuple/named/namedTupleMembersErrors.ts ===
+//// [tests/cases/conformance/types/tuple/named/namedTupleMembersErrors.ts] ////
+
+=== namedTupleMembersErrors.ts ===
 export type Segment1 = [length: number, number]; // partially named, disallowed
 >Segment1 : Symbol(Segment1, Decl(namedTupleMembersErrors.ts, 0, 0))
 

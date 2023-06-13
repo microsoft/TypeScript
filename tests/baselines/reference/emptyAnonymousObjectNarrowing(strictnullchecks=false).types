@@ -1,4 +1,6 @@
-=== tests/cases/compiler/emptyAnonymousObjectNarrowing.ts ===
+//// [tests/cases/compiler/emptyAnonymousObjectNarrowing.ts] ////
+
+=== emptyAnonymousObjectNarrowing.ts ===
 declare let nonNull: {};
 >nonNull : {}
 
@@ -101,7 +103,6 @@ else {
 if (nonNull === null) {
 >nonNull === null : boolean
 >nonNull : {}
->null : null
 
   nonNull;
 >nonNull : {}

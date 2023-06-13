@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inferTypeArgumentsInSignatureWithRestParameters.ts] ////
+
 //// [inferTypeArgumentsInSignatureWithRestParameters.ts]
 function f<T>(array: T[], ...args) { }
 function g(array: number[], ...args) { }

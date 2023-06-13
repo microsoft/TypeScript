@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeInferenceFixEarly.ts ===
+//// [tests/cases/compiler/typeInferenceFixEarly.ts] ////
+
+=== typeInferenceFixEarly.ts ===
 declare function f<T>(p: (t: T) => T): T;
 >f : Symbol(f, Decl(typeInferenceFixEarly.ts, 0, 0))
 >T : Symbol(T, Decl(typeInferenceFixEarly.ts, 0, 19))

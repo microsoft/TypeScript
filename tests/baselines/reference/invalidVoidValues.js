@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/primitives/void/invalidVoidValues.ts] ////
+
 //// [invalidVoidValues.ts]
 var x: void;
 x = 1;

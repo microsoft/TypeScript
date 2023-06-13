@@ -1,4 +1,6 @@
-=== tests/cases/compiler/objectLitIndexerContextualType.ts ===
+//// [tests/cases/compiler/objectLitIndexerContextualType.ts] ////
+
+=== objectLitIndexerContextualType.ts ===
 interface I {
 >I : Symbol(I, Decl(objectLitIndexerContextualType.ts, 0, 0))
 

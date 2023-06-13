@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts ===
+//// [tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts] ////
+
+=== callWithSpread2.ts ===
 declare function all(a?: number, b?: number): void;
 >all : Symbol(all, Decl(callWithSpread2.ts, 0, 0))
 >a : Symbol(a, Decl(callWithSpread2.ts, 0, 21))

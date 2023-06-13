@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/noInfer.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/noInfer.ts] ////
+
+=== noInfer.ts ===
 export declare function foo<T extends string>(a: T, b: NoInfer<T>): void
 >foo : Symbol(foo, Decl(noInfer.ts, 0, 0))
 >T : Symbol(T, Decl(noInfer.ts, 0, 28))

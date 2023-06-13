@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherType.ts] ////
+
 //// [decrementOperatorWithAnyOtherType.ts]
 // -- operator on any type
 

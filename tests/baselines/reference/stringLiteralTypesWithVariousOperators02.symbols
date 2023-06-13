@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts ===
+//// [tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts] ////
+
+=== stringLiteralTypesWithVariousOperators02.ts ===
 let abc: "ABC" = "ABC";
 >abc : Symbol(abc, Decl(stringLiteralTypesWithVariousOperators02.ts, 0, 3))
 

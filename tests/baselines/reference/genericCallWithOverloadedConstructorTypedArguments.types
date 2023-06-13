@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithOverloadedConstructorTypedArguments.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithOverloadedConstructorTypedArguments.ts] ////
+
+=== genericCallWithOverloadedConstructorTypedArguments.ts ===
 // Function typed arguments with multiple signatures must be passed an implementation that matches all of them
 // Inferences are made quadratic-pairwise to and from these overload sets
 
@@ -23,7 +25,6 @@ module NonGenericParameter {
         return new cb(null);
 >new cb(null) : boolean
 >cb : { new (x: boolean): boolean; new (x: string): string; }
->null : null
     }
 
     var r = foo4(a);

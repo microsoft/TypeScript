@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserErrantSemicolonInClass1.ts(15,16): error TS1049: A 'set' accessor must have exactly one parameter.
+parserErrantSemicolonInClass1.ts(15,16): error TS1049: A 'set' accessor must have exactly one parameter.
 
 
-==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserErrantSemicolonInClass1.ts (1 errors) ====
+==== parserErrantSemicolonInClass1.ts (1 errors) ====
     class a {
         //constructor ();
         constructor (n: number);

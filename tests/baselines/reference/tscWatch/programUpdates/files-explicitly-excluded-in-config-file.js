@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -55,22 +56,18 @@ Shape signatures in builder refreshed for::
 /a/b/commonfile1.ts (used version)
 /a/b/commonfile2.ts (used version)
 
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches::
-/a/b/tsconfig.json:
+/a/b/commonfile1.ts: *new*
   {}
-/a/b/commonfile1.ts:
+/a/b/commonfile2.ts: *new*
   {}
-/a/b/commonfile2.ts:
+/a/b/tsconfig.json: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a/b:
+/a/b: *new*
   {}
 
 exitCode:: ExitStatus.undefined

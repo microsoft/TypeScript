@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/voidReturnIndexUnionInference.ts] ////
+
 //// [voidReturnIndexUnionInference.ts]
 // repro from https://github.com/Microsoft/TypeScript/issues/25274
 export function safeInvoke<A1, R>(

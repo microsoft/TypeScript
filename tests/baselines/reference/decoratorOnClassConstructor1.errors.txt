@@ -1,7 +1,7 @@
-tests/cases/conformance/decorators/class/constructor/decoratorOnClassConstructor1.ts(4,5): error TS1206: Decorators are not valid here.
+decoratorOnClassConstructor1.ts(4,5): error TS1206: Decorators are not valid here.
 
 
-==== tests/cases/conformance/decorators/class/constructor/decoratorOnClassConstructor1.ts (1 errors) ====
+==== decoratorOnClassConstructor1.ts (1 errors) ====
     declare function dec<T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T>;
     
     class C {

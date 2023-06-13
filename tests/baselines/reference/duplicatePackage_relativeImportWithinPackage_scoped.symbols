@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicatePackage_relativeImportWithinPackage_scoped.ts] ////
+
 === /index.ts ===
 import { use } from "@foo/bar/use";
 >use : Symbol(use, Decl(index.ts, 0, 8))

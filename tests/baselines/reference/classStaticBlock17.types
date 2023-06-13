@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock17.ts ===
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock17.ts] ////
+
+=== classStaticBlock17.ts ===
 let friendA: { getX(o: A): number, setX(o: A, v: number): void };
 >friendA : { getX(o: A): number; setX(o: A, v: number): void; }
 >getX : (o: A) => number

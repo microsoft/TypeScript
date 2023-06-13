@@ -1,4 +1,6 @@
-=== tests/cases/compiler/objectIndexer.ts ===
+//// [tests/cases/compiler/objectIndexer.ts] ////
+
+=== objectIndexer.ts ===
 export interface Callback {
 >Callback : Symbol(Callback, Decl(objectIndexer.ts, 0, 0))
 

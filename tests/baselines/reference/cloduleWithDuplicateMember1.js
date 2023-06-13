@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/cloduleWithDuplicateMember1.ts] ////
+
 //// [cloduleWithDuplicateMember1.ts]
 class C {
     get x() { return 1; }

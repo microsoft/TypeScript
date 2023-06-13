@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/enums/enumConstantMemberWithTemplateLiterals.ts] ////
+
 //// [enumConstantMemberWithTemplateLiterals.ts]
 enum T1 {
     a = `1`

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInTemplates11_ES5.ts] ////
+
 //// [unicodeExtendedEscapesInTemplates11_ES5.ts]
 // ES6 Spec - 10.1.1 Static Semantics: UTF16Encoding (cp)
 //  2. Let cu2 be ((cp – 65536) modulo 1024) + 0xDC00.

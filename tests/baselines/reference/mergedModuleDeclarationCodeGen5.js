@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mergedModuleDeclarationCodeGen5.ts] ////
+
 //// [mergedModuleDeclarationCodeGen5.ts]
 module M.buz.plop {
     export function doom() { }

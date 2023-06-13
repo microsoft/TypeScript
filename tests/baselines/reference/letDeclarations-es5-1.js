@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/letDeclarations-es5-1.ts] ////
+
 //// [letDeclarations-es5-1.ts]
     let l1;
     let l2: number;

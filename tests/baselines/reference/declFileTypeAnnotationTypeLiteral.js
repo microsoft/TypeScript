@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileTypeAnnotationTypeLiteral.ts] ////
+
 //// [declFileTypeAnnotationTypeLiteral.ts]
 class c {
 }

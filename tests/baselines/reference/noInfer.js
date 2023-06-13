@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/noInfer.ts] ////
+
 //// [noInfer.ts]
 export declare function foo<T extends string>(a: T, b: NoInfer<T>): void
 

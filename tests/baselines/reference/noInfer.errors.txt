@@ -1,16 +1,16 @@
-tests/cases/conformance/types/typeRelationships/typeInference/noInfer.ts(4,12): error TS2345: Argument of type '"bar"' is not assignable to parameter of type '"foo"'.
-tests/cases/conformance/types/typeRelationships/typeInference/noInfer.ts(12,30): error TS2741: Property 'woof' is missing in type 'Animal' but required in type 'Dog'.
-tests/cases/conformance/types/typeRelationships/typeInference/noInfer.ts(18,16): error TS2345: Argument of type '{ x: number; }' is not assignable to parameter of type '{ x: number; y: number; }'.
+noInfer.ts(4,12): error TS2345: Argument of type '"bar"' is not assignable to parameter of type '"foo"'.
+noInfer.ts(12,30): error TS2741: Property 'woof' is missing in type 'Animal' but required in type 'Dog'.
+noInfer.ts(18,16): error TS2345: Argument of type '{ x: number; }' is not assignable to parameter of type '{ x: number; y: number; }'.
   Property 'y' is missing in type '{ x: number; }' but required in type '{ x: number; y: number; }'.
-tests/cases/conformance/types/typeRelationships/typeInference/noInfer.ts(23,22): error TS2345: Argument of type '{ x: number; y: number; }' is not assignable to parameter of type '{ x: number; }'.
+noInfer.ts(23,22): error TS2345: Argument of type '{ x: number; y: number; }' is not assignable to parameter of type '{ x: number; }'.
   Object literal may only specify known properties, and 'y' does not exist in type '{ x: number; }'.
-tests/cases/conformance/types/typeRelationships/typeInference/noInfer.ts(24,14): error TS2345: Argument of type '{ x: number; y: number; }' is not assignable to parameter of type '{ x: number; }'.
+noInfer.ts(24,14): error TS2345: Argument of type '{ x: number; y: number; }' is not assignable to parameter of type '{ x: number; }'.
   Object literal may only specify known properties, and 'y' does not exist in type '{ x: number; }'.
-tests/cases/conformance/types/typeRelationships/typeInference/noInfer.ts(31,14): error TS2345: Argument of type '{}' is not assignable to parameter of type '{ foo: number; }'.
+noInfer.ts(31,14): error TS2345: Argument of type '{}' is not assignable to parameter of type '{ foo: number; }'.
   Property 'foo' is missing in type '{}' but required in type '{ foo: number; }'.
 
 
-==== tests/cases/conformance/types/typeRelationships/typeInference/noInfer.ts (6 errors) ====
+==== noInfer.ts (6 errors) ====
     export declare function foo<T extends string>(a: T, b: NoInfer<T>): void
     
     foo('foo', 'foo') // ok
@@ -27,8 +27,8 @@ tests/cases/conformance/types/typeRelationships/typeInference/noInfer.ts(31,14):
     doSomething(new Dog(), () => new Animal()); // error
                                  ~~~~~~~~~~~~
 !!! error TS2741: Property 'woof' is missing in type 'Animal' but required in type 'Dog'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/typeInference/noInfer.ts:7:43: 'woof' is declared here.
-!!! related TS6502 tests/cases/conformance/types/typeRelationships/typeInference/noInfer.ts:8:62: The expected type comes from the return type of this signature.
+!!! related TS2728 noInfer.ts:7:43: 'woof' is declared here.
+!!! related TS6502 noInfer.ts:8:62: The expected type comes from the return type of this signature.
     
     export declare function assertEqual<T>(actual: T, expected: NoInfer<T>): boolean;
     
@@ -38,17 +38,17 @@ tests/cases/conformance/types/typeRelationships/typeInference/noInfer.ts(31,14):
                    ~~~~~~~~
 !!! error TS2345: Argument of type '{ x: number; }' is not assignable to parameter of type '{ x: number; y: number; }'.
 !!! error TS2345:   Property 'y' is missing in type '{ x: number; }' but required in type '{ x: number; y: number; }'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/typeInference/noInfer.ts:17:19: 'y' is declared here.
+!!! related TS2728 noInfer.ts:17:19: 'y' is declared here.
     
     export declare function invoke<T, R>(func: (value: T) => R, value: NoInfer<T>): R;
     export declare function test(value: { x: number; }): number;
     
     invoke(test, { x: 1, y: 2 }); // error
-                         ~~~~
+                         ~
 !!! error TS2345: Argument of type '{ x: number; y: number; }' is not assignable to parameter of type '{ x: number; }'.
 !!! error TS2345:   Object literal may only specify known properties, and 'y' does not exist in type '{ x: number; }'.
     test({ x: 1, y: 2 }); // error
-                 ~~~~
+                 ~
 !!! error TS2345: Argument of type '{ x: number; y: number; }' is not assignable to parameter of type '{ x: number; }'.
 !!! error TS2345:   Object literal may only specify known properties, and 'y' does not exist in type '{ x: number; }'.
     
@@ -61,7 +61,7 @@ tests/cases/conformance/types/typeRelationships/typeInference/noInfer.ts(31,14):
                  ~~
 !!! error TS2345: Argument of type '{}' is not assignable to parameter of type '{ foo: number; }'.
 !!! error TS2345:   Property 'foo' is missing in type '{}' but required in type '{ foo: number; }'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/typeInference/noInfer.ts:28:40: 'foo' is declared here.
+!!! related TS2728 noInfer.ts:28:40: 'foo' is declared here.
     
     export declare function mutate<T>(callback: (a: NoInfer<T>, b: number) => T): T;
     export const mutate1 = mutate((a, b) => b);

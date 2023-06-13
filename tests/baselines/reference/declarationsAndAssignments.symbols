@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts ===
+//// [tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts] ////
+
+=== declarationsAndAssignments.ts ===
 function f0() {
 >f0 : Symbol(f0, Decl(declarationsAndAssignments.ts, 0, 0))
 

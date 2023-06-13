@@ -19,8 +19,9 @@ const aRanges = [A0, A1];
 const bRanges = [B0, B1];
 const cRanges = [B2];
 
-verify.baselineFindAllReferences("A", "B", "C")
-
-verify.rangesAreRenameLocations(aRanges);
-verify.renameLocations([B0, B1], [...bRanges, ...cRanges]);
-verify.renameLocations(B2, [{ range: B2, prefixText: "B as " }]);
+verify.baselineCommands(
+    { type: "findAllReferences", markerOrRange: ["A", "B", "C"] },
+    { type: "findRenameLocations", markerOrRange: aRanges },
+    { type: "findRenameLocations", markerOrRange: [B0, B1] },
+    { type: "findRenameLocations", markerOrRange: B2 },
+);

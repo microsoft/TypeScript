@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/foo.tsx ===
+//// [tests/cases/conformance/jsx/tsxTypeArgumentsJsxPreserveOutput.tsx] ////
+
+=== foo.tsx ===
 import React = require('react');
 >React : typeof React
 
@@ -13,7 +15,6 @@ function Foo<T>() {
 >Foo : <T>() => any
 
     return null;
->null : null
 }
 
 <>
@@ -39,7 +40,6 @@ function Foo<T>() {
     <Foo<null> />
 ><Foo<null> /> : JSX.Element
 >Foo : <T>() => any
->null : null
 
     <Foo<any> />
 ><Foo<any> /> : JSX.Element
@@ -85,7 +85,6 @@ function Foo<T>() {
     <Foo<null>></Foo>
 ><Foo<null>></Foo> : JSX.Element
 >Foo : <T>() => any
->null : null
 >Foo : <T>() => any
 
     <Foo<any>></Foo>

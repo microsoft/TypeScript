@@ -1,4 +1,6 @@
-=== tests/cases/compiler/alwaysStrictModule4.ts ===
+//// [tests/cases/compiler/alwaysStrictModule4.ts] ////
+
+=== alwaysStrictModule4.ts ===
 // Module commonjs
 export const a = 1
 >a : Symbol(a, Decl(alwaysStrictModule4.ts, 1, 12))

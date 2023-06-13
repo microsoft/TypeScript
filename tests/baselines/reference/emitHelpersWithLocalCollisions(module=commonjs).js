@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/emitHelpersWithLocalCollisions.ts] ////
+
 //// [a.ts]
 declare var dec: any, __decorate: any;
 @dec export class A {
@@ -17,11 +19,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
-let A = class A {
+let A = exports.A = class A {
 };
-A = __decorate([
+exports.A = A = __decorate([
     dec
 ], A);
-exports.A = A;
 const o = { a: 1 };
 const y = Object.assign({}, o);

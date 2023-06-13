@@ -1,4 +1,6 @@
-=== tests/cases/compiler/discriminatedUnionJsxElement.tsx ===
+//// [tests/cases/compiler/discriminatedUnionJsxElement.tsx] ////
+
+=== discriminatedUnionJsxElement.tsx ===
 // Repro from #46021
 
 interface IData<MenuItemVariant extends ListItemVariant = ListItemVariant.OneLine> {

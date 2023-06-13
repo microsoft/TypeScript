@@ -1,0 +1,27 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/file.tsx ===
+// --- (line: 5) skipped ---
+// }
+// class MyClass {
+//   props: {
+//     /*RENAME*/<|[|nameRENAME|]?: string;|>
+//     size?: number;
+// }
+// 
+// 
+// var x = <MyClass <|[|nameRENAME|]='hello'|>/>;
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/file.tsx ===
+// --- (line: 5) skipped ---
+// }
+// class MyClass {
+//   props: {
+//     <|[|nameRENAME|]?: string;|>
+//     size?: number;
+// }
+// 
+// 
+// var x = <MyClass /*RENAME*/<|[|nameRENAME|]='hello'|>/>;
