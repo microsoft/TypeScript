@@ -1,8 +1,8 @@
-tests/cases/compiler/numericIndexerTyping1.ts(9,5): error TS2322: Type 'Date' is not assignable to type 'string'.
-tests/cases/compiler/numericIndexerTyping1.ts(12,5): error TS2322: Type 'Date' is not assignable to type 'string'.
+numericIndexerTyping1.ts(9,5): error TS2322: Type 'Date' is not assignable to type 'string'.
+numericIndexerTyping1.ts(12,5): error TS2322: Type 'Date' is not assignable to type 'string'.
 
 
-==== tests/cases/compiler/numericIndexerTyping1.ts (2 errors) ====
+==== numericIndexerTyping1.ts (2 errors) ====
     interface I {
         [x: string]: Date;
     }

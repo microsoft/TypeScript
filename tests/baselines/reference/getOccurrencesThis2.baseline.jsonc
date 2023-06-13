@@ -1,0 +1,129 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThis2.ts ===
+// this;
+// this;
+// 
+// function f() {
+//     /*HIGHLIGHTS*/[|{| kind: "reference" |}this|];
+//     [|{| kind: "reference" |}this|];
+//     () => [|{| kind: "reference" |}this|];
+//     () => {
+//         if ([|{| kind: "reference" |}this|]) {
+//             [|{| kind: "reference" |}this|];
+//         }
+//         else {
+//             [|{| kind: "reference" |}this|].this;
+//         }
+//     }
+//     function inside() {
+// --- (line: 17) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThis2.ts ===
+// this;
+// this;
+// 
+// function f() {
+//     [|{| kind: "reference" |}this|];
+//     /*HIGHLIGHTS*/[|{| kind: "reference" |}this|];
+//     () => [|{| kind: "reference" |}this|];
+//     () => {
+//         if ([|{| kind: "reference" |}this|]) {
+//             [|{| kind: "reference" |}this|];
+//         }
+//         else {
+//             [|{| kind: "reference" |}this|].this;
+//         }
+//     }
+//     function inside() {
+// --- (line: 17) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThis2.ts ===
+// this;
+// this;
+// 
+// function f() {
+//     [|{| kind: "reference" |}this|];
+//     [|{| kind: "reference" |}this|];
+//     () => /*HIGHLIGHTS*/[|{| kind: "reference" |}this|];
+//     () => {
+//         if ([|{| kind: "reference" |}this|]) {
+//             [|{| kind: "reference" |}this|];
+//         }
+//         else {
+//             [|{| kind: "reference" |}this|].this;
+//         }
+//     }
+//     function inside() {
+// --- (line: 17) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThis2.ts ===
+// this;
+// this;
+// 
+// function f() {
+//     [|{| kind: "reference" |}this|];
+//     [|{| kind: "reference" |}this|];
+//     () => [|{| kind: "reference" |}this|];
+//     () => {
+//         if (/*HIGHLIGHTS*/[|{| kind: "reference" |}this|]) {
+//             [|{| kind: "reference" |}this|];
+//         }
+//         else {
+//             [|{| kind: "reference" |}this|].this;
+//         }
+//     }
+//     function inside() {
+// --- (line: 17) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThis2.ts ===
+// this;
+// this;
+// 
+// function f() {
+//     [|{| kind: "reference" |}this|];
+//     [|{| kind: "reference" |}this|];
+//     () => [|{| kind: "reference" |}this|];
+//     () => {
+//         if ([|{| kind: "reference" |}this|]) {
+//             /*HIGHLIGHTS*/[|{| kind: "reference" |}this|];
+//         }
+//         else {
+//             [|{| kind: "reference" |}this|].this;
+//         }
+//     }
+//     function inside() {
+// --- (line: 17) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThis2.ts ===
+// this;
+// this;
+// 
+// function f() {
+//     [|{| kind: "reference" |}this|];
+//     [|{| kind: "reference" |}this|];
+//     () => [|{| kind: "reference" |}this|];
+//     () => {
+//         if ([|{| kind: "reference" |}this|]) {
+//             [|{| kind: "reference" |}this|];
+//         }
+//         else {
+//             /*HIGHLIGHTS*/[|{| kind: "reference" |}this|].this;
+//         }
+//     }
+//     function inside() {
+// --- (line: 17) skipped ---

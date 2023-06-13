@@ -81,7 +81,7 @@ export function getSmartSelectionRange(pos: number, sourceFile: SourceFile): Sel
                 // 1. Blocks are effectively redundant with SyntaxLists.
                 // 2. TemplateSpans, along with the SyntaxLists containing them, are a somewhat unintuitive grouping
                 //    of things that should be considered independently.
-                // 3. A VariableStatement’s children are just a VaraiableDeclarationList and a semicolon.
+                // 3. A VariableStatement's children are just a VaraiableDeclarationList and a semicolon.
                 // 4. A lone VariableDeclaration in a VaraibleDeclaration feels redundant with the VariableStatement.
                 // Dive in without pushing a selection range.
                 if (isBlock(node)
@@ -135,8 +135,8 @@ export function getSmartSelectionRange(pos: number, sourceFile: SourceFile): Sel
                 break;
             }
 
-            // If we made it to the end of the for loop, we’re done.
-            // In practice, I’ve only seen this happen at the very end
+            // If we made it to the end of the for loop, we're done.
+            // In practice, I've only seen this happen at the very end
             // of a SourceFile.
             if (i === children.length - 1) {
                 break outer;
@@ -153,7 +153,7 @@ export function getSmartSelectionRange(pos: number, sourceFile: SourceFile): Sel
             if (!selectionRange || (
                 // Skip ranges that are identical to the parent
                 !textSpansEqual(textSpan, selectionRange.textSpan) &&
-                // Skip ranges that don’t contain the original position
+                // Skip ranges that don't contain the original position
                 textSpanIntersectsWithPosition(textSpan, pos)
             )) {
                 selectionRange = { textSpan, ...selectionRange && { parent: selectionRange } };
@@ -182,8 +182,8 @@ export function getSmartSelectionRange(pos: number, sourceFile: SourceFile): Sel
  * @param node The candidate node to snap to.
  */
 function positionShouldSnapToNode(sourceFile: SourceFile, pos: number, node: Node) {
-    // Can’t use 'ts.positionBelongsToNode()' here because it cleverly accounts
-    // for missing nodes, which can’t really be considered when deciding what
+    // Can't use 'ts.positionBelongsToNode()' here because it cleverly accounts
+    // for missing nodes, which can't really be considered when deciding what
     // to select.
     Debug.assert(node.pos <= pos);
     if (pos < node.end) {
@@ -203,7 +203,7 @@ const isImport = or(isImportDeclaration, isImportEqualsDeclaration);
  * transforming them into an artificial tree according to their intuitive
  * grouping where no grouping actually exists in the parse tree. For example,
  * top-level imports are grouped into their own SyntaxList so they can be
- * selected all together, even though in the AST they’re just siblings of each
+ * selected all together, even though in the AST they're just siblings of each
  * other as well as of other top-level statements and declarations.
  */
 function getSelectionChildren(node: Node): readonly Node[] {
@@ -213,13 +213,13 @@ function getSelectionChildren(node: Node): readonly Node[] {
     }
 
     // Mapped types _look_ like ObjectTypes with a single member,
-    // but in fact don’t contain a SyntaxList or a node containing
-    // the “key/value” pair like ObjectTypes do, but it seems intuitive
+    // but in fact don't contain a SyntaxList or a node containing
+    // the "key/value" pair like ObjectTypes do, but it seems intuitive
     // that the selection would snap to those points. The philosophy
     // of choosing a selection range is not so much about what the
     // syntax currently _is_ as what the syntax might easily become
     // if the user is making a selection; e.g., we synthesize a selection
-    // around the “key/value” pair not because there’s a node there, but
+    // around the "key/value" pair not because there's a node there, but
     // because it allows the mapped type to become an object type with a
     // few keystrokes.
     if (isMappedTypeNode(node)) {

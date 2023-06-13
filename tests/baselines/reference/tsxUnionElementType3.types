@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/tsxUnionElementType3.tsx] ////
+
+=== file.tsx ===
 import React = require('react');
 >React : typeof React
 
@@ -13,7 +15,6 @@ class RC1 extends React.Component<{x : number}, {}> {
 >render : () => any
 
         return null;
->null : null
     }
 }
 
@@ -28,7 +29,6 @@ class RC2 extends React.Component<{ x: string }, {}> {
 >render : () => any
 
         return null;
->null : null
     }
     private method() { }
 >method : () => void
@@ -44,7 +44,6 @@ class RC3 extends React.Component<{}, {}> {
 >render : () => any
 
         return null;
->null : null
     }
 }
 
@@ -58,7 +57,6 @@ class RC4 extends React.Component<{}, {}> {
 >render : () => any
 
         return null;
->null : null
     }
 }
 

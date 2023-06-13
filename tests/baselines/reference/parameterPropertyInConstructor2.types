@@ -1,4 +1,6 @@
-=== tests/cases/compiler/parameterPropertyInConstructor2.ts ===
+//// [tests/cases/compiler/parameterPropertyInConstructor2.ts] ////
+
+=== parameterPropertyInConstructor2.ts ===
 module mod {
 >mod : typeof mod
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unknownPropertiesAreAssignableToObjectUnion.ts ===
+//// [tests/cases/compiler/unknownPropertiesAreAssignableToObjectUnion.ts] ////
+
+=== unknownPropertiesAreAssignableToObjectUnion.ts ===
 const x: Object | string = { x: 0 };
 >x : Symbol(x, Decl(unknownPropertiesAreAssignableToObjectUnion.ts, 0, 5))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

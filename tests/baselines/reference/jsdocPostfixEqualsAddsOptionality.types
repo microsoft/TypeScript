@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/a.js ===
+//// [tests/cases/conformance/jsdoc/jsdocPostfixEqualsAddsOptionality.ts] ////
+
+=== a.js ===
 /** @param {number=} a */
 function f(a) {
 >f : (a?: number | undefined) => void
@@ -12,7 +14,6 @@ function f(a) {
     a = null // should not be allowed
 >a = null : null
 >a : number | undefined
->null : null
 
     a = undefined
 >a = undefined : undefined
@@ -26,7 +27,6 @@ f()
 f(null) // should not be allowed
 >f(null) : void
 >f : (a?: number | undefined) => void
->null : null
 
 f(undefined)
 >f(undefined) : void
@@ -51,7 +51,6 @@ function g(a) {
     a = null
 >a = null : null
 >a : number | null | undefined
->null : null
 
     a = undefined
 >a = undefined : undefined
@@ -65,7 +64,6 @@ g()
 g(null)
 >g(null) : void
 >g : (a?: number | null | undefined) => void
->null : null
 
 g(undefined)
 >g(undefined) : void

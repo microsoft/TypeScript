@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/collisionSuperAndNameResolution.ts] ////
+
 //// [collisionSuperAndNameResolution.ts]
 var console: {
     log(message: any);

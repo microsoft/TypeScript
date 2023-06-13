@@ -1,7 +1,7 @@
-tests/cases/conformance/jsx/file.tsx(8,1): error TS2339: Property 'div' does not exist on type 'JSX.IntrinsicElements'.
+file.tsx(8,1): error TS2339: Property 'div' does not exist on type 'JSX.IntrinsicElements'.
 
 
-==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
+==== file.tsx (1 errors) ====
     declare module JSX {
     	interface Element { }
     	interface IntrinsicElements { }

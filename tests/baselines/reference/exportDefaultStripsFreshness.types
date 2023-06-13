@@ -1,4 +1,6 @@
-=== tests/cases/compiler/items.ts ===
+//// [tests/cases/compiler/exportDefaultStripsFreshness.ts] ////
+
+=== items.ts ===
 export default {
 >{    foob: "a"} : { foob: string; }
 
@@ -15,7 +17,7 @@ export const q = {
 >foob : string
 >"b" : "b"
 }
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import B, {q} from "./items";
 >B : { foob: string; }
 >q : { foob: string; }

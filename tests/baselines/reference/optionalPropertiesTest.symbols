@@ -1,4 +1,6 @@
-=== tests/cases/compiler/optionalPropertiesTest.ts ===
+//// [tests/cases/compiler/optionalPropertiesTest.ts] ////
+
+=== optionalPropertiesTest.ts ===
 var x: {p1:number; p2?:string; p3?:{():number;};};
 >x : Symbol(x, Decl(optionalPropertiesTest.ts, 0, 3))
 >p1 : Symbol(p1, Decl(optionalPropertiesTest.ts, 0, 8))

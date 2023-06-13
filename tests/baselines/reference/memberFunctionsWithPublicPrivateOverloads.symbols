@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts] ////
+
+=== memberFunctionsWithPublicPrivateOverloads.ts ===
 class C {
 >C : Symbol(C, Decl(memberFunctionsWithPublicPrivateOverloads.ts, 0, 0))
 

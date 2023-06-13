@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/ParameterLists/parserParameterList5.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ParameterLists/parserParameterList5.ts] ////
+
+=== parserParameterList5.ts ===
 function A(): (public B) => C {
 >A : Symbol(A, Decl(parserParameterList5.ts, 0, 0))
 >B : Symbol(B, Decl(parserParameterList5.ts, 0, 15))

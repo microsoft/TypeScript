@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck38.ts ===
+//// [tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck38.ts] ////
+
+=== generatorTypeCheck38.ts ===
 var yield;
 >yield : Symbol(yield, Decl(generatorTypeCheck38.ts, 0, 3))
 

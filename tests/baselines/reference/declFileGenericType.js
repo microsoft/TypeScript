@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileGenericType.ts] ////
+
 //// [declFileGenericType.ts]
 export module C {
     export class A<T>{ }
@@ -91,7 +93,7 @@ var C;
         return D;
     }());
     C.D = D;
-})(C = exports.C || (exports.C = {}));
+})(C || (exports.C = C = {}));
 exports.b = C.F;
 exports.c = C.F2;
 exports.d = C.F3;

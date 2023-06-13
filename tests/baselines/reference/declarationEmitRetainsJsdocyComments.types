@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitRetainsJsdocyComments.ts ===
+//// [tests/cases/compiler/declarationEmitRetainsJsdocyComments.ts] ////
+
+=== declarationEmitRetainsJsdocyComments.ts ===
 /**
  * comment1
  * @param p 
@@ -52,7 +54,6 @@ export let {
 
 } = null as any;
 >null as any : any
->null : null
 
 declare global {
 >global : any

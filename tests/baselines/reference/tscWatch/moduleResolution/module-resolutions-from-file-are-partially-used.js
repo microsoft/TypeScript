@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
 {"compilerOptions":{"moduleResolution":"node16"}}
@@ -58,13 +59,14 @@ File '/user/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module 'pkg' from '/user/username/projects/myproject/index.ts'. ========
 Explicitly specified module resolution kind: 'Node16'.
-Resolving in ESM mode with conditions 'node', 'import', 'types'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
 File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
 File '/user/username/package.json' does not exist according to earlier cached lookups.
 File '/user/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'pkg' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -79,13 +81,14 @@ Resolving real path for '/user/username/projects/myproject/node_modules/pkg/impo
 ======== Module name 'pkg' was successfully resolved to '/user/username/projects/myproject/node_modules/pkg/import.d.ts' with Package ID 'pkg/import.d.ts@0.0.1'. ========
 ======== Resolving module 'pkg1' from '/user/username/projects/myproject/index.ts'. ========
 Explicitly specified module resolution kind: 'Node16'.
-Resolving in CJS mode with conditions 'node', 'require', 'types'.
+Resolving in CJS mode with conditions 'require', 'types', 'node'.
 File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
 File '/user/username/package.json' does not exist according to earlier cached lookups.
 File '/user/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg1/package.json'.
 Entering conditional exports.
 Saw non-matching condition 'import'.
@@ -102,6 +105,7 @@ Directory '/user/username/projects/node_modules' does not exist, skipping all lo
 Directory '/user/username/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/user/username/projects/myproject/node_modules/pkg1/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
 Saw non-matching condition 'import'.
@@ -119,7 +123,7 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name 'pkg1' was not resolved. ========
 ======== Resolving module './a' from '/user/username/projects/myproject/index.ts'. ========
 Explicitly specified module resolution kind: 'Node16'.
-Resolving in CJS mode with conditions 'node', 'require', 'types'.
+Resolving in CJS mode with conditions 'require', 'types', 'node'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/a', target file types: TypeScript, JavaScript, Declaration.
 File '/user/username/projects/myproject/a.ts' exists - use it as a name resolution result.
 ======== Module name './a' was successfully resolved to '/user/username/projects/myproject/a.ts'. ========
@@ -158,35 +162,41 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/index.ts (used version)
 
 PolledWatches::
-/user/username/projects/myproject/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/myproject/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/node_modules: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/myproject/a.ts:
+/user/username/projects: *new*
   {}
-/user/username/projects/myproject/index.ts:
+/user/username/projects/myproject: *new*
   {}
-/user/username/projects/myproject/node_modules/pkg/import.d.ts:
+/user/username/projects/myproject/a.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/myproject/index.ts: *new*
   {}
-/user/username/projects/myproject:
+/user/username/projects/myproject/node_modules/pkg/import.d.ts: *new*
   {}
-/user/username/projects/myproject/node_modules/pkg/package.json:
+/user/username/projects/myproject/node_modules/pkg/package.json: *new*
   {}
-/user/username/projects/myproject/node_modules/pkg1/package.json:
+/user/username/projects/myproject/node_modules/pkg1/package.json: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules:
+/user/username/projects/myproject: *new*
   {}
-/user/username/projects/myproject:
+/user/username/projects/myproject/node_modules: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -212,6 +222,9 @@ export const x = 10;
 import type { ImportInterface } from "pkg" assert { "resolution-mode": "import" }
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:47 AM[0m] File change detected. Starting incremental compilation...
@@ -237,13 +250,14 @@ File '/user/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module 'pkg' from '/user/username/projects/myproject/a.ts'. ========
 Explicitly specified module resolution kind: 'Node16'.
-Resolving in ESM mode with conditions 'node', 'import', 'types'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
 File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
 File '/user/username/package.json' does not exist according to earlier cached lookups.
 File '/user/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'pkg' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/user/username/projects/myproject/node_modules/pkg/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -293,38 +307,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.ts (computed .d.ts)
 /user/username/projects/myproject/index.ts (computed .d.ts)
-
-PolledWatches::
-/user/username/projects/myproject/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/a.ts:
-  {}
-/user/username/projects/myproject/index.ts:
-  {}
-/user/username/projects/myproject/node_modules/pkg/import.d.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject:
-  {}
-/user/username/projects/myproject/node_modules/pkg/package.json:
-  {}
-/user/username/projects/myproject/node_modules/pkg1/package.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/node_modules:
-  {}
-/user/username/projects/myproject:
-  {}
 
 exitCode:: ExitStatus.undefined
 

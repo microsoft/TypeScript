@@ -1,24 +1,26 @@
-=== tests/cases/conformance/parser/ecmascript2018/forAwait/topLevelWithDeclIsError.ts ===
+//// [tests/cases/conformance/parser/ecmascript2018/forAwait/parser.forAwait.es2018.ts] ////
+
+=== topLevelWithDeclIsError.ts ===
 for await (const x of y) {
 >x : any
 >y : any
 }
-=== tests/cases/conformance/parser/ecmascript2018/forAwait/topLevelWithExprIsError.ts ===
+=== topLevelWithExprIsError.ts ===
 for await (x of y) {
 >x : any
 >y : any
 }
-=== tests/cases/conformance/parser/ecmascript2018/forAwait/forAwaitInWithDeclIsError.ts ===
+=== forAwaitInWithDeclIsError.ts ===
 for await (const x in y) {
 >x : string
 >y : any
 }
-=== tests/cases/conformance/parser/ecmascript2018/forAwait/forAwaitInWithExprIsError.ts ===
+=== forAwaitInWithExprIsError.ts ===
 for await (x in y) {
 >x : any
 >y : any
 }
-=== tests/cases/conformance/parser/ecmascript2018/forAwait/inFunctionDeclWithDeclIsError.ts ===
+=== inFunctionDeclWithDeclIsError.ts ===
 function f5() {
 >f5 : () => void
 
@@ -30,7 +32,7 @@ function f5() {
 >y : any
     }
 }
-=== tests/cases/conformance/parser/ecmascript2018/forAwait/inFunctionDeclWithExprIsError.ts ===
+=== inFunctionDeclWithExprIsError.ts ===
 function f6() {
 >f6 : () => void
 
@@ -43,7 +45,7 @@ function f6() {
 >y : any
     }
 }
-=== tests/cases/conformance/parser/ecmascript2018/forAwait/inAsyncFunctionWithDeclIsOk.ts ===
+=== inAsyncFunctionWithDeclIsOk.ts ===
 async function f7() {
 >f7 : () => Promise<void>
 
@@ -55,7 +57,7 @@ async function f7() {
 >y : any
     }
 }
-=== tests/cases/conformance/parser/ecmascript2018/forAwait/inAsyncFunctionWithExprIsOk.ts ===
+=== inAsyncFunctionWithExprIsOk.ts ===
 async function f8() {
 >f8 : () => Promise<void>
 
@@ -68,7 +70,7 @@ async function f8() {
 >y : any
     }
 }
-=== tests/cases/conformance/parser/ecmascript2018/forAwait/inAsyncGeneratorWithDeclIsOk.ts ===
+=== inAsyncGeneratorWithDeclIsOk.ts ===
 async function* f9() {
 >f9 : () => AsyncGenerator<never, void, unknown>
 
@@ -80,7 +82,7 @@ async function* f9() {
 >y : any
     }
 }
-=== tests/cases/conformance/parser/ecmascript2018/forAwait/inAsyncGeneratorWithExpressionIsOk.ts ===
+=== inAsyncGeneratorWithExpressionIsOk.ts ===
 async function* f10() {
 >f10 : () => AsyncGenerator<never, void, unknown>
 
@@ -93,7 +95,7 @@ async function* f10() {
 >y : any
     }
 }
-=== tests/cases/conformance/parser/ecmascript2018/forAwait/inGeneratorWithDeclIsError.ts ===
+=== inGeneratorWithDeclIsError.ts ===
 function* f11() {
 >f11 : () => Generator<never, void, unknown>
 
@@ -105,7 +107,7 @@ function* f11() {
 >y : any
     }
 }
-=== tests/cases/conformance/parser/ecmascript2018/forAwait/inGeneratorWithExprIsError.ts ===
+=== inGeneratorWithExprIsError.ts ===
 function* f12() {
 >f12 : () => Generator<never, void, unknown>
 

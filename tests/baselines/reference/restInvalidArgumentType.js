@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/restInvalidArgumentType.ts] ////
+
 //// [restInvalidArgumentType.ts]
 enum E { v1, v2 };
 

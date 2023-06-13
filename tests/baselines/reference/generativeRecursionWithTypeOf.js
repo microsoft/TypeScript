@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/generativeRecursionWithTypeOf.ts] ////
+
 //// [generativeRecursionWithTypeOf.ts]
 class C<T> {
     static foo(x: number) { }

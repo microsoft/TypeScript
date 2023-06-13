@@ -1,16 +1,16 @@
-tests/cases/conformance/internalModules/DeclarationMerging/module.ts(2,19): error TS2433: A namespace declaration cannot be in a different file from a class or function with which it is merged.
-tests/cases/conformance/internalModules/DeclarationMerging/simple.ts(13,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'fn' must be of type '() => { x: number; y: number; }', but here has type 'typeof Point'.
-tests/cases/conformance/internalModules/DeclarationMerging/test.ts(2,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'fn' must be of type '() => { x: number; y: number; }', but here has type 'typeof Point'.
+module.ts(2,19): error TS2433: A namespace declaration cannot be in a different file from a class or function with which it is merged.
+simple.ts(13,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'fn' must be of type '() => { x: number; y: number; }', but here has type 'typeof Point'.
+test.ts(2,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'fn' must be of type '() => { x: number; y: number; }', but here has type 'typeof Point'.
 
 
-==== tests/cases/conformance/internalModules/DeclarationMerging/function.ts (0 errors) ====
+==== function.ts (0 errors) ====
     module A {
         export function Point() {
             return { x: 0, y: 0 };
         }
     }
     
-==== tests/cases/conformance/internalModules/DeclarationMerging/module.ts (1 errors) ====
+==== module.ts (1 errors) ====
     module A {
         export module Point {
                       ~~~~~
@@ -19,19 +19,19 @@ tests/cases/conformance/internalModules/DeclarationMerging/test.ts(2,5): error T
         }
     }
     
-==== tests/cases/conformance/internalModules/DeclarationMerging/test.ts (1 errors) ====
+==== test.ts (1 errors) ====
     var fn: () => { x: number; y: number };
     var fn = A.Point;
         ~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'fn' must be of type '() => { x: number; y: number; }', but here has type 'typeof Point'.
-!!! related TS6203 tests/cases/conformance/internalModules/DeclarationMerging/test.ts:1:5: 'fn' was also declared here.
+!!! related TS6203 test.ts:1:5: 'fn' was also declared here.
     
     var cl: { x: number; y: number; }
     var cl = A.Point();
     var cl = A.Point.Origin; // not expected to be an error.
     
     
-==== tests/cases/conformance/internalModules/DeclarationMerging/simple.ts (1 errors) ====
+==== simple.ts (1 errors) ====
     module B {
     
         export function Point() {
@@ -47,7 +47,7 @@ tests/cases/conformance/internalModules/DeclarationMerging/test.ts(2,5): error T
     var fn = B.Point;  // not expected to be an error. bug 840000: [corelang] Function of fundule not assignalbe as expected
         ~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'fn' must be of type '() => { x: number; y: number; }', but here has type 'typeof Point'.
-!!! related TS6203 tests/cases/conformance/internalModules/DeclarationMerging/test.ts:1:5: 'fn' was also declared here.
+!!! related TS6203 test.ts:1:5: 'fn' was also declared here.
     
     var cl: { x: number; y: number; }
     var cl = B.Point();

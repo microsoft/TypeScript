@@ -1,4 +1,6 @@
-=== tests/cases/compiler/forwardDeclaredCommonTypes01.ts ===
+//// [tests/cases/compiler/forwardDeclaredCommonTypes01.ts] ////
+
+=== forwardDeclaredCommonTypes01.ts ===
 interface Promise<T> {}
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(forwardDeclaredCommonTypes01.ts, 0, 0))
 >T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(forwardDeclaredCommonTypes01.ts, 0, 18))

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/map.ts ===
+//// [tests/cases/compiler/moduleAugmentationNoNewNames.ts] ////
+
+=== map.ts ===
 import { Observable } from "./observable"
 >Observable : typeof Observable
 
@@ -14,7 +16,7 @@ import { Observable } from "./observable"
 >function() { } : () => void
 
 declare module "./observable" {
->"./observable" : typeof import("tests/cases/compiler/observable")
+>"./observable" : typeof import("observable")
 
     interface Observable<T> {
         map<U>(proj: (e:T) => U): Observable<U>
@@ -40,7 +42,7 @@ declare module "./observable" {
     module Z {}
 }
 
-=== tests/cases/compiler/observable.ts ===
+=== observable.ts ===
 export declare class Observable<T> {
 >Observable : Observable<T>
 
@@ -50,7 +52,7 @@ export declare class Observable<T> {
 >e : T
 }
 
-=== tests/cases/compiler/main.ts ===
+=== main.ts ===
 import { Observable } from "./observable"
 >Observable : typeof Observable
 

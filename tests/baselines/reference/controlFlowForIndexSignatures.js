@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/controlFlowForIndexSignatures.ts] ////
+
 //// [controlFlowForIndexSignatures.ts]
 type Foo = { bar: string };
 const boo: Foo = { bar: 'bar' };
