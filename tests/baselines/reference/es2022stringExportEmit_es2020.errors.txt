@@ -1,0 +1,31 @@
+index.ts(1,13): error TS1491: String literal module export names are not allowed when the 'module' option is set to 'es2020' or lower.
+index.ts(3,13): error TS1491: String literal module export names are not allowed when the 'module' option is set to 'es2020' or lower.
+index.ts(7,10): error TS1491: String literal module export names are not allowed when the 'module' option is set to 'es2020' or lower.
+mod.ts(3,25): error TS1491: String literal module export names are not allowed when the 'module' option is set to 'es2020' or lower.
+
+
+==== mod.ts (1 errors) ====
+    export let x = 1;
+    x = 2;
+    export { x as "y", x as ' "hello" ' }
+                            ~~~~~~~~~~~
+!!! error TS1491: String literal module export names are not allowed when the 'module' option is set to 'es2020' or lower.
+    
+==== index.ts (3 errors) ====
+    import { y, ' "hello" ' as Hello } from './mod'
+                ~~~~~~~~~~~
+!!! error TS1491: String literal module export names are not allowed when the 'module' option is set to 'es2020' or lower.
+    console.log(y, Hello)
+    export * as " mod " from "./mod"
+                ~~~~~~~
+!!! error TS1491: String literal module export names are not allowed when the 'module' option is set to 'es2020' or lower.
+    export {
+        x as y,
+        y as y2,
+        x as " reexport x ",
+             ~~~~~~~~~~~~~~
+!!! error TS1491: String literal module export names are not allowed when the 'module' option is set to 'es2020' or lower.
+        "x" as " reexport x2 ",
+        ' "hello" ' as Hello
+    } from './mod'
+    

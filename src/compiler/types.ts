@@ -8963,7 +8963,7 @@ export interface NodeFactory {
      *
      * @internal
      */
-    getExportName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean): Identifier;
+    getExportName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean): Identifier | ModuleExportName;
     /**
      * Gets the name of a declaration for use in declarations.
      *
@@ -8984,7 +8984,7 @@ export interface NodeFactory {
      *
      * @internal
      */
-    getNamespaceMemberName(ns: Identifier, name: Identifier, allowComments?: boolean, allowSourceMaps?: boolean): PropertyAccessExpression;
+    getNamespaceMemberName(ns: Identifier, name: Identifier, allowComments?: boolean, allowSourceMaps?: boolean): AccessExpression;
     /**
      * Gets the exported name of a declaration for use in expressions.
      *
@@ -8998,7 +8998,7 @@ export interface NodeFactory {
      *
      * @internal
      */
-    getExternalModuleOrNamespaceExportName(ns: Identifier | undefined, node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean): Identifier | PropertyAccessExpression;
+    getExternalModuleOrNamespaceExportName(ns: Identifier | undefined, node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean): Identifier | AccessExpression;
 
     //
     // Utilities

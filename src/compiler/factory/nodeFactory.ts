@@ -1,5 +1,6 @@
 import {
     __String,
+    AccessExpression,
     addRange,
     append,
     appendIfUnique,
@@ -61,6 +62,7 @@ import {
     containsObjectRestOrSpread,
     ContinueStatement,
     createBaseNodeFactory,
+    createElementAccessOrPropertyAccessExpression,
     createNodeConverters,
     createParenthesizerRules,
     createScanner,
@@ -188,6 +190,7 @@ import {
     isMethodDeclaration,
     isMethodSignature,
     isModuleDeclaration,
+    isModuleExportName,
     isNamedDeclaration,
     isNodeArray,
     isNodeKind,
@@ -6658,9 +6661,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             : reduceLeft(expressions, factory.createComma)!;
     }
 
-    function getName(node: Declaration | undefined, allowComments?: boolean, allowSourceMaps?: boolean, emitFlags: EmitFlags = 0, ignoreAssignedName?: boolean) {
+    function getName(node: Declaration | undefined, allowComments?: boolean, allowSourceMaps?: boolean, emitFlags: EmitFlags = 0, ignoreAssignedName?: boolean): Identifier | ModuleExportName {
         const nodeName = ignoreAssignedName ? node && getNonAssignedNameOfDeclaration(node) : getNameOfDeclaration(node);
-        if (nodeName && isIdentifier(nodeName) && !isGeneratedIdentifier(nodeName)) {
+        // ModuleExportName includes Identifier
+        if (nodeName && isModuleExportName(nodeName) && !isGeneratedIdentifier(nodeName)) {
             // TODO(rbuckton): Does this need to be parented?
             const name = setParent(setTextRange(cloneNode(nodeName), nodeName), nodeName.parent);
             emitFlags |= getEmitFlags(nodeName);
@@ -6684,7 +6688,9 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
      * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
      */
     function getInternalName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean) {
-        return getName(node, allowComments, allowSourceMaps, EmitFlags.LocalName | EmitFlags.InternalName);
+        const name = getName(node, allowComments, allowSourceMaps, EmitFlags.LocalName | EmitFlags.InternalName);
+        Debug.assertNode(name, isIdentifier);
+        return name;
     }
 
     /**
@@ -6699,7 +6705,9 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
      * @param ignoreAssignedName Indicates that the assigned name of a declaration shouldn't be considered.
      */
     function getLocalName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean, ignoreAssignedName?: boolean) {
-        return getName(node, allowComments, allowSourceMaps, EmitFlags.LocalName, ignoreAssignedName);
+        const name = getName(node, allowComments, allowSourceMaps, EmitFlags.LocalName, ignoreAssignedName);
+        Debug.assertNode(name, isIdentifier);
+        return name;
     }
 
     /**
@@ -6712,7 +6720,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
      * @param allowComments A value indicating whether comments may be emitted for the name.
      * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
      */
-    function getExportName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean): Identifier {
+    function getExportName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean): Identifier | ModuleExportName {
         return getName(node, allowComments, allowSourceMaps, EmitFlags.ExportName);
     }
 
@@ -6724,7 +6732,9 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
      * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
      */
     function getDeclarationName(node: Declaration | undefined, allowComments?: boolean, allowSourceMaps?: boolean) {
-        return getName(node, allowComments, allowSourceMaps);
+        const name = getName(node, allowComments, allowSourceMaps);
+        Debug.assertNode(name, isIdentifier);
+        return name;
     }
 
     /**
@@ -6735,8 +6745,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
      * @param allowComments A value indicating whether comments may be emitted for the name.
      * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
      */
-    function getNamespaceMemberName(ns: Identifier, name: Identifier, allowComments?: boolean, allowSourceMaps?: boolean): PropertyAccessExpression {
-        const qualifiedName = createPropertyAccessExpression(ns, nodeIsSynthesized(name) ? name : cloneNode(name));
+    function getNamespaceMemberName(ns: Identifier, name: ModuleExportName, allowComments?: boolean, allowSourceMaps?: boolean): AccessExpression {
+        const qualifiedName = createElementAccessOrPropertyAccessExpression(ns, nodeIsSynthesized(name) ? name : cloneNode(name));
         setTextRange(qualifiedName, name);
         let emitFlags: EmitFlags = 0;
         if (!allowSourceMaps) emitFlags |= EmitFlags.NoSourceMap;
@@ -6756,11 +6766,13 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
      * @param allowComments A value indicating whether comments may be emitted for the name.
      * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
      */
-    function getExternalModuleOrNamespaceExportName(ns: Identifier | undefined, node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean): Identifier | PropertyAccessExpression {
+    function getExternalModuleOrNamespaceExportName(ns: Identifier | undefined, node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean): Identifier | AccessExpression {
         if (ns && hasSyntacticModifier(node, ModifierFlags.Export)) {
             return getNamespaceMemberName(ns, getName(node), allowComments, allowSourceMaps);
         }
-        return getExportName(node, allowComments, allowSourceMaps);
+        const name = getExportName(node, allowComments, allowSourceMaps);
+        Debug.assertNode(name, isIdentifier);
+        return name;
     }
 
     /**
