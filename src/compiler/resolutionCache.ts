@@ -89,8 +89,24 @@ export interface HasInvalidatedFromResolutionCache {
  * @internal
  */
 export interface ResolutionCache {
+    resolvedModuleNames: Map<Path, ModeAwareCache<CachedResolvedModuleWithFailedLookupLocations>>;
+    resolvedTypeReferenceDirectives: Map<Path, ModeAwareCache<CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations>>;
+    resolvedLibraries: Map<string, CachedResolvedModuleWithFailedLookupLocations>;
+    resolvedFileToResolution: Map<Path, Set<ResolutionWithFailedLookupLocations>>;
+    resolutionsWithFailedLookups: Set<ResolutionWithFailedLookupLocations>;
+    resolutionsWithOnlyAffectingLocations: Set<ResolutionWithFailedLookupLocations>;
+    directoryWatchesOfFailedLookups: Map<string, DirectoryWatchesOfFailedLookup>;
+    fileWatchesOfAffectingLocations: Map<string, FileWatcherOfAffectingLocation>;
     startRecordingFilesWithChangedResolutions(): void;
     finishRecordingFilesWithChangedResolutions(): Path[] | undefined;
+
+    watchFailedLookupLocationsOfExternalModuleResolutions<T extends ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName>(
+        name: string,
+        resolution: T,
+        filePath: Path,
+        getResolutionWithResolvedFileName: GetResolutionWithResolvedFileName<T, R>,
+        deferWatchingNonRelativeResolution: boolean,
+    ): void;
 
     resolveModuleNameLiterals(
         moduleLiterals: readonly StringLiteralLike[],
@@ -154,7 +170,8 @@ export interface ResolutionWithFailedLookupLocations {
     node10Result?: string;
 }
 
-interface ResolutionWithResolvedFileName {
+/** @internal */
+export interface ResolutionWithResolvedFileName {
     resolvedFileName: string | undefined;
     packageId?: PackageId;
 }
@@ -163,7 +180,8 @@ interface ResolutionWithResolvedFileName {
 export interface CachedResolvedModuleWithFailedLookupLocations extends ResolvedModuleWithFailedLookupLocations, ResolutionWithFailedLookupLocations {
 }
 
-interface CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations extends ResolvedTypeReferenceDirectiveWithFailedLookupLocations, ResolutionWithFailedLookupLocations {
+/** @internal */
+export interface CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations extends ResolvedTypeReferenceDirectiveWithFailedLookupLocations, ResolutionWithFailedLookupLocations {
 }
 
 /** @internal */
@@ -187,7 +205,8 @@ export interface ResolutionCacheHost extends MinimalResolutionCacheHost {
     onDiscoveredSymlink?(): void;
 }
 
-interface FileWatcherOfAffectingLocation {
+/** @internal */
+export interface FileWatcherOfAffectingLocation {
     /** watcher for the lookup */
     watcher: FileWatcher;
     resolutions: number;
@@ -195,7 +214,8 @@ interface FileWatcherOfAffectingLocation {
     paths: Set<string>;
 }
 
-interface DirectoryWatchesOfFailedLookup {
+/** @internal */
+export interface DirectoryWatchesOfFailedLookup {
     /** watcher for the lookup */
     watcher: FileWatcher;
     /** ref count keeping this watch alive */
@@ -483,7 +503,8 @@ function resolveModuleNameUsingGlobalCache(
     return primaryResult;
 }
 
-type GetResolutionWithResolvedFileName<T extends ResolutionWithFailedLookupLocations = ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName = ResolutionWithResolvedFileName> = (resolution: T) => R | undefined;
+/** @internal */
+export type GetResolutionWithResolvedFileName<T extends ResolutionWithFailedLookupLocations = ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName = ResolutionWithResolvedFileName> = (resolution: T) => R | undefined;
 
 /** @internal */
 export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootDirForResolution: string, logChangesWhenResolvingModule: boolean): ResolutionCache {
@@ -494,7 +515,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
 
     const resolutionsWithFailedLookups = new Set<ResolutionWithFailedLookupLocations>();
     const resolutionsWithOnlyAffectingLocations = new Set<ResolutionWithFailedLookupLocations>();
-    const resolvedFileToResolution = new Map<string, Set<ResolutionWithFailedLookupLocations>>();
+    const resolvedFileToResolution = new Map<Path, Set<ResolutionWithFailedLookupLocations>>();
     const impliedFormatPackageJsons = new Map<Path, readonly string[]>();
 
     let hasChangedAutomaticTypeDirectiveNames = false;
@@ -545,6 +566,15 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
     const typeRootsWatches = new Map<string, FileWatcher>();
 
     return {
+        resolvedModuleNames,
+        resolvedTypeReferenceDirectives,
+        resolvedLibraries,
+        resolvedFileToResolution,
+        resolutionsWithFailedLookups,
+        resolutionsWithOnlyAffectingLocations,
+        directoryWatchesOfFailedLookups,
+        fileWatchesOfAffectingLocations,
+        watchFailedLookupLocationsOfExternalModuleResolutions,
         getModuleResolutionCache: () => moduleResolutionCache,
         startRecordingFilesWithChangedResolutions,
         finishRecordingFilesWithChangedResolutions,
@@ -667,7 +697,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
             if (!newProgram?.resolvedLibReferences?.has(libFileName)) {
                 stopWatchFailedLookupLocationOfResolution(
                     resolution,
-                    resolutionHost.toPath(getInferredLibraryNameResolveFrom(newProgram!.getCompilerOptions(), getCurrentDirectory(), libFileName)),
+                    resolutionHost.toPath(getInferredLibraryNameResolveFrom(resolutionHost.getCompilationSettings(), getCurrentDirectory(), libFileName)),
                     getResolvedModule,
                 );
                 resolvedLibraries.delete(libFileName);

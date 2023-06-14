@@ -1523,7 +1523,6 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         tracing?.pop();
 
         Debug.assert(oldProgram === undefined || this.program !== undefined);
-        this.projectService.verifyProgram(this);
 
         // bump up the version if
         // - oldProgram is not set - this is a first time updateGraph is called
@@ -1599,6 +1598,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             }
         }
 
+        this.projectService.verifyProgram(this);
         if (this.exportMapCache && !this.exportMapCache.isEmpty()) {
             this.exportMapCache.releaseSymbols();
             if (this.hasAddedorRemovedFiles || oldProgram && !this.program!.structureIsReused) {
