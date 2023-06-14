@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportImportCanSubstituteConstEnumForValue.ts] ////
+
 //// [exportImportCanSubstituteConstEnumForValue.ts]
 module MsPortalFx.ViewModels.Dialogs {
 

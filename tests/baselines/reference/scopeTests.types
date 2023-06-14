@@ -1,4 +1,6 @@
-=== tests/cases/compiler/scopeTests.ts ===
+//// [tests/cases/compiler/scopeTests.ts] ////
+
+=== scopeTests.ts ===
 class C { private v; public p; static s; }
 >C : C
 >v : any

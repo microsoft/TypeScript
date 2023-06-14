@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionOverloadsOutOfOrder.ts ===
+//// [tests/cases/compiler/functionOverloadsOutOfOrder.ts] ////
+
+=== functionOverloadsOutOfOrder.ts ===
 class d {
 >d : Symbol(d, Decl(functionOverloadsOutOfOrder.ts, 0, 0))
 

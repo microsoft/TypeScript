@@ -1,4 +1,6 @@
-=== tests/cases/compiler/missingDomElements.ts ===
+//// [tests/cases/compiler/missingDomElements.ts] ////
+
+=== missingDomElements.ts ===
 interface Element {}
 >Element : Symbol(Element, Decl(missingDomElements.ts, 0, 0))
 

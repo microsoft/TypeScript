@@ -14,7 +14,7 @@ and limitations under the License.
 ***************************************************************************** */
 
 declare namespace ts {
-    const versionMajorMinor = "5.1";
+    const versionMajorMinor = "5.2";
     /** The version of the TypeScript compiler release */
     const version: string;
     /**
@@ -51,395 +51,395 @@ declare namespace ts {
         WhitespaceTrivia = 5,
         ShebangTrivia = 6,
         ConflictMarkerTrivia = 7,
-        NumericLiteral = 8,
-        BigIntLiteral = 9,
-        StringLiteral = 10,
-        JsxText = 11,
-        JsxTextAllWhiteSpaces = 12,
-        RegularExpressionLiteral = 13,
-        NoSubstitutionTemplateLiteral = 14,
-        TemplateHead = 15,
-        TemplateMiddle = 16,
-        TemplateTail = 17,
-        OpenBraceToken = 18,
-        CloseBraceToken = 19,
-        OpenParenToken = 20,
-        CloseParenToken = 21,
-        OpenBracketToken = 22,
-        CloseBracketToken = 23,
-        DotToken = 24,
-        DotDotDotToken = 25,
-        SemicolonToken = 26,
-        CommaToken = 27,
-        QuestionDotToken = 28,
-        LessThanToken = 29,
-        LessThanSlashToken = 30,
-        GreaterThanToken = 31,
-        LessThanEqualsToken = 32,
-        GreaterThanEqualsToken = 33,
-        EqualsEqualsToken = 34,
-        ExclamationEqualsToken = 35,
-        EqualsEqualsEqualsToken = 36,
-        ExclamationEqualsEqualsToken = 37,
-        EqualsGreaterThanToken = 38,
-        PlusToken = 39,
-        MinusToken = 40,
-        AsteriskToken = 41,
-        AsteriskAsteriskToken = 42,
-        SlashToken = 43,
-        PercentToken = 44,
-        PlusPlusToken = 45,
-        MinusMinusToken = 46,
-        LessThanLessThanToken = 47,
-        GreaterThanGreaterThanToken = 48,
-        GreaterThanGreaterThanGreaterThanToken = 49,
-        AmpersandToken = 50,
-        BarToken = 51,
-        CaretToken = 52,
-        ExclamationToken = 53,
-        TildeToken = 54,
-        AmpersandAmpersandToken = 55,
-        BarBarToken = 56,
-        QuestionToken = 57,
-        ColonToken = 58,
-        AtToken = 59,
-        QuestionQuestionToken = 60,
+        NonTextFileMarkerTrivia = 8,
+        NumericLiteral = 9,
+        BigIntLiteral = 10,
+        StringLiteral = 11,
+        JsxText = 12,
+        JsxTextAllWhiteSpaces = 13,
+        RegularExpressionLiteral = 14,
+        NoSubstitutionTemplateLiteral = 15,
+        TemplateHead = 16,
+        TemplateMiddle = 17,
+        TemplateTail = 18,
+        OpenBraceToken = 19,
+        CloseBraceToken = 20,
+        OpenParenToken = 21,
+        CloseParenToken = 22,
+        OpenBracketToken = 23,
+        CloseBracketToken = 24,
+        DotToken = 25,
+        DotDotDotToken = 26,
+        SemicolonToken = 27,
+        CommaToken = 28,
+        QuestionDotToken = 29,
+        LessThanToken = 30,
+        LessThanSlashToken = 31,
+        GreaterThanToken = 32,
+        LessThanEqualsToken = 33,
+        GreaterThanEqualsToken = 34,
+        EqualsEqualsToken = 35,
+        ExclamationEqualsToken = 36,
+        EqualsEqualsEqualsToken = 37,
+        ExclamationEqualsEqualsToken = 38,
+        EqualsGreaterThanToken = 39,
+        PlusToken = 40,
+        MinusToken = 41,
+        AsteriskToken = 42,
+        AsteriskAsteriskToken = 43,
+        SlashToken = 44,
+        PercentToken = 45,
+        PlusPlusToken = 46,
+        MinusMinusToken = 47,
+        LessThanLessThanToken = 48,
+        GreaterThanGreaterThanToken = 49,
+        GreaterThanGreaterThanGreaterThanToken = 50,
+        AmpersandToken = 51,
+        BarToken = 52,
+        CaretToken = 53,
+        ExclamationToken = 54,
+        TildeToken = 55,
+        AmpersandAmpersandToken = 56,
+        BarBarToken = 57,
+        QuestionToken = 58,
+        ColonToken = 59,
+        AtToken = 60,
+        QuestionQuestionToken = 61,
         /** Only the JSDoc scanner produces BacktickToken. The normal scanner produces NoSubstitutionTemplateLiteral and related kinds. */
-        BacktickToken = 61,
+        BacktickToken = 62,
         /** Only the JSDoc scanner produces HashToken. The normal scanner produces PrivateIdentifier. */
-        HashToken = 62,
-        EqualsToken = 63,
-        PlusEqualsToken = 64,
-        MinusEqualsToken = 65,
-        AsteriskEqualsToken = 66,
-        AsteriskAsteriskEqualsToken = 67,
-        SlashEqualsToken = 68,
-        PercentEqualsToken = 69,
-        LessThanLessThanEqualsToken = 70,
-        GreaterThanGreaterThanEqualsToken = 71,
-        GreaterThanGreaterThanGreaterThanEqualsToken = 72,
-        AmpersandEqualsToken = 73,
-        BarEqualsToken = 74,
-        BarBarEqualsToken = 75,
-        AmpersandAmpersandEqualsToken = 76,
-        QuestionQuestionEqualsToken = 77,
-        CaretEqualsToken = 78,
-        Identifier = 79,
-        PrivateIdentifier = 80,
-        BreakKeyword = 82,
-        CaseKeyword = 83,
-        CatchKeyword = 84,
-        ClassKeyword = 85,
-        ConstKeyword = 86,
-        ContinueKeyword = 87,
-        DebuggerKeyword = 88,
-        DefaultKeyword = 89,
-        DeleteKeyword = 90,
-        DoKeyword = 91,
-        ElseKeyword = 92,
-        EnumKeyword = 93,
-        ExportKeyword = 94,
-        ExtendsKeyword = 95,
-        FalseKeyword = 96,
-        FinallyKeyword = 97,
-        ForKeyword = 98,
-        FunctionKeyword = 99,
-        IfKeyword = 100,
-        ImportKeyword = 101,
-        InKeyword = 102,
-        InstanceOfKeyword = 103,
-        NewKeyword = 104,
-        NullKeyword = 105,
-        ReturnKeyword = 106,
-        SuperKeyword = 107,
-        SwitchKeyword = 108,
-        ThisKeyword = 109,
-        ThrowKeyword = 110,
-        TrueKeyword = 111,
-        TryKeyword = 112,
-        TypeOfKeyword = 113,
-        VarKeyword = 114,
-        VoidKeyword = 115,
-        WhileKeyword = 116,
-        WithKeyword = 117,
-        ImplementsKeyword = 118,
-        InterfaceKeyword = 119,
-        LetKeyword = 120,
-        PackageKeyword = 121,
-        PrivateKeyword = 122,
-        ProtectedKeyword = 123,
-        PublicKeyword = 124,
-        StaticKeyword = 125,
-        YieldKeyword = 126,
-        AbstractKeyword = 127,
-        AccessorKeyword = 128,
-        AsKeyword = 129,
-        AssertsKeyword = 130,
-        AssertKeyword = 131,
-        AnyKeyword = 132,
-        AsyncKeyword = 133,
-        AwaitKeyword = 134,
-        BooleanKeyword = 135,
-        ConstructorKeyword = 136,
-        DeclareKeyword = 137,
-        GetKeyword = 138,
-        InferKeyword = 139,
-        IntrinsicKeyword = 140,
-        IsKeyword = 141,
-        KeyOfKeyword = 142,
-        ModuleKeyword = 143,
-        NamespaceKeyword = 144,
-        NeverKeyword = 145,
-        OutKeyword = 146,
-        ReadonlyKeyword = 147,
-        RequireKeyword = 148,
-        NumberKeyword = 149,
-        ObjectKeyword = 150,
-        SatisfiesKeyword = 151,
-        SetKeyword = 152,
-        StringKeyword = 153,
-        SymbolKeyword = 154,
-        TypeKeyword = 155,
-        UndefinedKeyword = 156,
-        UniqueKeyword = 157,
-        UnknownKeyword = 158,
-        FromKeyword = 159,
-        GlobalKeyword = 160,
-        BigIntKeyword = 161,
-        OverrideKeyword = 162,
-        OfKeyword = 163,
-        QualifiedName = 164,
-        ComputedPropertyName = 165,
-        TypeParameter = 166,
-        Parameter = 167,
-        Decorator = 168,
-        PropertySignature = 169,
-        PropertyDeclaration = 170,
-        MethodSignature = 171,
-        MethodDeclaration = 172,
-        ClassStaticBlockDeclaration = 173,
-        Constructor = 174,
-        GetAccessor = 175,
-        SetAccessor = 176,
-        CallSignature = 177,
-        ConstructSignature = 178,
-        IndexSignature = 179,
-        TypePredicate = 180,
-        TypeReference = 181,
-        FunctionType = 182,
-        ConstructorType = 183,
-        TypeQuery = 184,
-        TypeLiteral = 185,
-        ArrayType = 186,
-        TupleType = 187,
-        OptionalType = 188,
-        RestType = 189,
-        UnionType = 190,
-        IntersectionType = 191,
-        ConditionalType = 192,
-        InferType = 193,
-        ParenthesizedType = 194,
-        ThisType = 195,
-        TypeOperator = 196,
-        IndexedAccessType = 197,
-        MappedType = 198,
-        LiteralType = 199,
-        NamedTupleMember = 200,
-        TemplateLiteralType = 201,
-        TemplateLiteralTypeSpan = 202,
-        ImportType = 203,
-        ObjectBindingPattern = 204,
-        ArrayBindingPattern = 205,
-        BindingElement = 206,
-        ArrayLiteralExpression = 207,
-        ObjectLiteralExpression = 208,
-        PropertyAccessExpression = 209,
-        ElementAccessExpression = 210,
-        CallExpression = 211,
-        NewExpression = 212,
-        TaggedTemplateExpression = 213,
-        TypeAssertionExpression = 214,
-        ParenthesizedExpression = 215,
-        FunctionExpression = 216,
-        ArrowFunction = 217,
-        DeleteExpression = 218,
-        TypeOfExpression = 219,
-        VoidExpression = 220,
-        AwaitExpression = 221,
-        PrefixUnaryExpression = 222,
-        PostfixUnaryExpression = 223,
-        BinaryExpression = 224,
-        ConditionalExpression = 225,
-        TemplateExpression = 226,
-        YieldExpression = 227,
-        SpreadElement = 228,
-        ClassExpression = 229,
-        OmittedExpression = 230,
-        ExpressionWithTypeArguments = 231,
-        AsExpression = 232,
-        NonNullExpression = 233,
-        MetaProperty = 234,
-        SyntheticExpression = 235,
-        SatisfiesExpression = 236,
-        TemplateSpan = 237,
-        SemicolonClassElement = 238,
-        Block = 239,
-        EmptyStatement = 240,
-        VariableStatement = 241,
-        ExpressionStatement = 242,
-        IfStatement = 243,
-        DoStatement = 244,
-        WhileStatement = 245,
-        ForStatement = 246,
-        ForInStatement = 247,
-        ForOfStatement = 248,
-        ContinueStatement = 249,
-        BreakStatement = 250,
-        ReturnStatement = 251,
-        WithStatement = 252,
-        SwitchStatement = 253,
-        LabeledStatement = 254,
-        ThrowStatement = 255,
-        TryStatement = 256,
-        DebuggerStatement = 257,
-        VariableDeclaration = 258,
-        VariableDeclarationList = 259,
-        FunctionDeclaration = 260,
-        ClassDeclaration = 261,
-        InterfaceDeclaration = 262,
-        TypeAliasDeclaration = 263,
-        EnumDeclaration = 264,
-        ModuleDeclaration = 265,
-        ModuleBlock = 266,
-        CaseBlock = 267,
-        NamespaceExportDeclaration = 268,
-        ImportEqualsDeclaration = 269,
-        ImportDeclaration = 270,
-        ImportClause = 271,
-        NamespaceImport = 272,
-        NamedImports = 273,
-        ImportSpecifier = 274,
-        ExportAssignment = 275,
-        ExportDeclaration = 276,
-        NamedExports = 277,
-        NamespaceExport = 278,
-        ExportSpecifier = 279,
-        MissingDeclaration = 280,
-        ExternalModuleReference = 281,
-        JsxElement = 282,
-        JsxSelfClosingElement = 283,
-        JsxOpeningElement = 284,
-        JsxClosingElement = 285,
-        JsxFragment = 286,
-        JsxOpeningFragment = 287,
-        JsxClosingFragment = 288,
-        JsxAttribute = 289,
-        JsxAttributes = 290,
-        JsxSpreadAttribute = 291,
-        JsxExpression = 292,
-        CaseClause = 293,
-        DefaultClause = 294,
-        HeritageClause = 295,
-        CatchClause = 296,
-        AssertClause = 297,
-        AssertEntry = 298,
-        ImportTypeAssertionContainer = 299,
-        PropertyAssignment = 300,
-        ShorthandPropertyAssignment = 301,
-        SpreadAssignment = 302,
-        EnumMember = 303,
-        /** @deprecated */ UnparsedPrologue = 304,
-        /** @deprecated */ UnparsedPrepend = 305,
-        /** @deprecated */ UnparsedText = 306,
-        /** @deprecated */ UnparsedInternalText = 307,
-        /** @deprecated */ UnparsedSyntheticReference = 308,
-        SourceFile = 309,
-        Bundle = 310,
-        /** @deprecated */ UnparsedSource = 311,
-        /** @deprecated */ InputFiles = 312,
-        JSDocTypeExpression = 313,
-        JSDocNameReference = 314,
-        JSDocMemberName = 315,
-        JSDocAllType = 316,
-        JSDocUnknownType = 317,
-        JSDocNullableType = 318,
-        JSDocNonNullableType = 319,
-        JSDocOptionalType = 320,
-        JSDocFunctionType = 321,
-        JSDocVariadicType = 322,
-        JSDocNamepathType = 323,
-        JSDoc = 324,
+        HashToken = 63,
+        EqualsToken = 64,
+        PlusEqualsToken = 65,
+        MinusEqualsToken = 66,
+        AsteriskEqualsToken = 67,
+        AsteriskAsteriskEqualsToken = 68,
+        SlashEqualsToken = 69,
+        PercentEqualsToken = 70,
+        LessThanLessThanEqualsToken = 71,
+        GreaterThanGreaterThanEqualsToken = 72,
+        GreaterThanGreaterThanGreaterThanEqualsToken = 73,
+        AmpersandEqualsToken = 74,
+        BarEqualsToken = 75,
+        BarBarEqualsToken = 76,
+        AmpersandAmpersandEqualsToken = 77,
+        QuestionQuestionEqualsToken = 78,
+        CaretEqualsToken = 79,
+        Identifier = 80,
+        PrivateIdentifier = 81,
+        BreakKeyword = 83,
+        CaseKeyword = 84,
+        CatchKeyword = 85,
+        ClassKeyword = 86,
+        ConstKeyword = 87,
+        ContinueKeyword = 88,
+        DebuggerKeyword = 89,
+        DefaultKeyword = 90,
+        DeleteKeyword = 91,
+        DoKeyword = 92,
+        ElseKeyword = 93,
+        EnumKeyword = 94,
+        ExportKeyword = 95,
+        ExtendsKeyword = 96,
+        FalseKeyword = 97,
+        FinallyKeyword = 98,
+        ForKeyword = 99,
+        FunctionKeyword = 100,
+        IfKeyword = 101,
+        ImportKeyword = 102,
+        InKeyword = 103,
+        InstanceOfKeyword = 104,
+        NewKeyword = 105,
+        NullKeyword = 106,
+        ReturnKeyword = 107,
+        SuperKeyword = 108,
+        SwitchKeyword = 109,
+        ThisKeyword = 110,
+        ThrowKeyword = 111,
+        TrueKeyword = 112,
+        TryKeyword = 113,
+        TypeOfKeyword = 114,
+        VarKeyword = 115,
+        VoidKeyword = 116,
+        WhileKeyword = 117,
+        WithKeyword = 118,
+        ImplementsKeyword = 119,
+        InterfaceKeyword = 120,
+        LetKeyword = 121,
+        PackageKeyword = 122,
+        PrivateKeyword = 123,
+        ProtectedKeyword = 124,
+        PublicKeyword = 125,
+        StaticKeyword = 126,
+        YieldKeyword = 127,
+        AbstractKeyword = 128,
+        AccessorKeyword = 129,
+        AsKeyword = 130,
+        AssertsKeyword = 131,
+        AssertKeyword = 132,
+        AnyKeyword = 133,
+        AsyncKeyword = 134,
+        AwaitKeyword = 135,
+        BooleanKeyword = 136,
+        ConstructorKeyword = 137,
+        DeclareKeyword = 138,
+        GetKeyword = 139,
+        InferKeyword = 140,
+        IntrinsicKeyword = 141,
+        IsKeyword = 142,
+        KeyOfKeyword = 143,
+        ModuleKeyword = 144,
+        NamespaceKeyword = 145,
+        NeverKeyword = 146,
+        OutKeyword = 147,
+        ReadonlyKeyword = 148,
+        RequireKeyword = 149,
+        NumberKeyword = 150,
+        ObjectKeyword = 151,
+        SatisfiesKeyword = 152,
+        SetKeyword = 153,
+        StringKeyword = 154,
+        SymbolKeyword = 155,
+        TypeKeyword = 156,
+        UndefinedKeyword = 157,
+        UniqueKeyword = 158,
+        UnknownKeyword = 159,
+        FromKeyword = 160,
+        GlobalKeyword = 161,
+        BigIntKeyword = 162,
+        OverrideKeyword = 163,
+        OfKeyword = 164,
+        QualifiedName = 165,
+        ComputedPropertyName = 166,
+        TypeParameter = 167,
+        Parameter = 168,
+        Decorator = 169,
+        PropertySignature = 170,
+        PropertyDeclaration = 171,
+        MethodSignature = 172,
+        MethodDeclaration = 173,
+        ClassStaticBlockDeclaration = 174,
+        Constructor = 175,
+        GetAccessor = 176,
+        SetAccessor = 177,
+        CallSignature = 178,
+        ConstructSignature = 179,
+        IndexSignature = 180,
+        TypePredicate = 181,
+        TypeReference = 182,
+        FunctionType = 183,
+        ConstructorType = 184,
+        TypeQuery = 185,
+        TypeLiteral = 186,
+        ArrayType = 187,
+        TupleType = 188,
+        OptionalType = 189,
+        RestType = 190,
+        UnionType = 191,
+        IntersectionType = 192,
+        ConditionalType = 193,
+        InferType = 194,
+        ParenthesizedType = 195,
+        ThisType = 196,
+        TypeOperator = 197,
+        IndexedAccessType = 198,
+        MappedType = 199,
+        LiteralType = 200,
+        NamedTupleMember = 201,
+        TemplateLiteralType = 202,
+        TemplateLiteralTypeSpan = 203,
+        ImportType = 204,
+        ObjectBindingPattern = 205,
+        ArrayBindingPattern = 206,
+        BindingElement = 207,
+        ArrayLiteralExpression = 208,
+        ObjectLiteralExpression = 209,
+        PropertyAccessExpression = 210,
+        ElementAccessExpression = 211,
+        CallExpression = 212,
+        NewExpression = 213,
+        TaggedTemplateExpression = 214,
+        TypeAssertionExpression = 215,
+        ParenthesizedExpression = 216,
+        FunctionExpression = 217,
+        ArrowFunction = 218,
+        DeleteExpression = 219,
+        TypeOfExpression = 220,
+        VoidExpression = 221,
+        AwaitExpression = 222,
+        PrefixUnaryExpression = 223,
+        PostfixUnaryExpression = 224,
+        BinaryExpression = 225,
+        ConditionalExpression = 226,
+        TemplateExpression = 227,
+        YieldExpression = 228,
+        SpreadElement = 229,
+        ClassExpression = 230,
+        OmittedExpression = 231,
+        ExpressionWithTypeArguments = 232,
+        AsExpression = 233,
+        NonNullExpression = 234,
+        MetaProperty = 235,
+        SyntheticExpression = 236,
+        SatisfiesExpression = 237,
+        TemplateSpan = 238,
+        SemicolonClassElement = 239,
+        Block = 240,
+        EmptyStatement = 241,
+        VariableStatement = 242,
+        ExpressionStatement = 243,
+        IfStatement = 244,
+        DoStatement = 245,
+        WhileStatement = 246,
+        ForStatement = 247,
+        ForInStatement = 248,
+        ForOfStatement = 249,
+        ContinueStatement = 250,
+        BreakStatement = 251,
+        ReturnStatement = 252,
+        WithStatement = 253,
+        SwitchStatement = 254,
+        LabeledStatement = 255,
+        ThrowStatement = 256,
+        TryStatement = 257,
+        DebuggerStatement = 258,
+        VariableDeclaration = 259,
+        VariableDeclarationList = 260,
+        FunctionDeclaration = 261,
+        ClassDeclaration = 262,
+        InterfaceDeclaration = 263,
+        TypeAliasDeclaration = 264,
+        EnumDeclaration = 265,
+        ModuleDeclaration = 266,
+        ModuleBlock = 267,
+        CaseBlock = 268,
+        NamespaceExportDeclaration = 269,
+        ImportEqualsDeclaration = 270,
+        ImportDeclaration = 271,
+        ImportClause = 272,
+        NamespaceImport = 273,
+        NamedImports = 274,
+        ImportSpecifier = 275,
+        ExportAssignment = 276,
+        ExportDeclaration = 277,
+        NamedExports = 278,
+        NamespaceExport = 279,
+        ExportSpecifier = 280,
+        MissingDeclaration = 281,
+        ExternalModuleReference = 282,
+        JsxElement = 283,
+        JsxSelfClosingElement = 284,
+        JsxOpeningElement = 285,
+        JsxClosingElement = 286,
+        JsxFragment = 287,
+        JsxOpeningFragment = 288,
+        JsxClosingFragment = 289,
+        JsxAttribute = 290,
+        JsxAttributes = 291,
+        JsxSpreadAttribute = 292,
+        JsxExpression = 293,
+        JsxNamespacedName = 294,
+        CaseClause = 295,
+        DefaultClause = 296,
+        HeritageClause = 297,
+        CatchClause = 298,
+        AssertClause = 299,
+        AssertEntry = 300,
+        ImportTypeAssertionContainer = 301,
+        PropertyAssignment = 302,
+        ShorthandPropertyAssignment = 303,
+        SpreadAssignment = 304,
+        EnumMember = 305,
+        /** @deprecated */ UnparsedPrologue = 306,
+        /** @deprecated */ UnparsedPrepend = 307,
+        /** @deprecated */ UnparsedText = 308,
+        /** @deprecated */ UnparsedInternalText = 309,
+        /** @deprecated */ UnparsedSyntheticReference = 310,
+        SourceFile = 311,
+        Bundle = 312,
+        /** @deprecated */ UnparsedSource = 313,
+        /** @deprecated */ InputFiles = 314,
+        JSDocTypeExpression = 315,
+        JSDocNameReference = 316,
+        JSDocMemberName = 317,
+        JSDocAllType = 318,
+        JSDocUnknownType = 319,
+        JSDocNullableType = 320,
+        JSDocNonNullableType = 321,
+        JSDocOptionalType = 322,
+        JSDocFunctionType = 323,
+        JSDocVariadicType = 324,
+        JSDocNamepathType = 325,
+        JSDoc = 326,
         /** @deprecated Use SyntaxKind.JSDoc */
-        JSDocComment = 324,
-        JSDocText = 325,
-        JSDocTypeLiteral = 326,
-        JSDocSignature = 327,
-        JSDocLink = 328,
-        JSDocLinkCode = 329,
-        JSDocLinkPlain = 330,
-        JSDocTag = 331,
-        JSDocAugmentsTag = 332,
-        JSDocImplementsTag = 333,
-        JSDocAuthorTag = 334,
-        JSDocDeprecatedTag = 335,
-        JSDocClassTag = 336,
-        JSDocPublicTag = 337,
-        JSDocPrivateTag = 338,
-        JSDocProtectedTag = 339,
-        JSDocReadonlyTag = 340,
-        JSDocOverrideTag = 341,
-        JSDocCallbackTag = 342,
-        JSDocOverloadTag = 343,
-        JSDocEnumTag = 344,
-        JSDocParameterTag = 345,
-        JSDocReturnTag = 346,
-        JSDocThisTag = 347,
-        JSDocTypeTag = 348,
-        JSDocTemplateTag = 349,
-        JSDocTypedefTag = 350,
-        JSDocSeeTag = 351,
-        JSDocPropertyTag = 352,
-        JSDocThrowsTag = 353,
-        JSDocSatisfiesTag = 354,
-        SyntaxList = 355,
-        NotEmittedStatement = 356,
-        PartiallyEmittedExpression = 357,
-        CommaListExpression = 358,
-        MergeDeclarationMarker = 359,
-        EndOfDeclarationMarker = 360,
+        JSDocComment = 326,
+        JSDocText = 327,
+        JSDocTypeLiteral = 328,
+        JSDocSignature = 329,
+        JSDocLink = 330,
+        JSDocLinkCode = 331,
+        JSDocLinkPlain = 332,
+        JSDocTag = 333,
+        JSDocAugmentsTag = 334,
+        JSDocImplementsTag = 335,
+        JSDocAuthorTag = 336,
+        JSDocDeprecatedTag = 337,
+        JSDocClassTag = 338,
+        JSDocPublicTag = 339,
+        JSDocPrivateTag = 340,
+        JSDocProtectedTag = 341,
+        JSDocReadonlyTag = 342,
+        JSDocOverrideTag = 343,
+        JSDocCallbackTag = 344,
+        JSDocOverloadTag = 345,
+        JSDocEnumTag = 346,
+        JSDocParameterTag = 347,
+        JSDocReturnTag = 348,
+        JSDocThisTag = 349,
+        JSDocTypeTag = 350,
+        JSDocTemplateTag = 351,
+        JSDocTypedefTag = 352,
+        JSDocSeeTag = 353,
+        JSDocPropertyTag = 354,
+        JSDocThrowsTag = 355,
+        JSDocSatisfiesTag = 356,
+        SyntaxList = 357,
+        NotEmittedStatement = 358,
+        PartiallyEmittedExpression = 359,
+        CommaListExpression = 360,
         SyntheticReferenceExpression = 361,
         Count = 362,
-        FirstAssignment = 63,
-        LastAssignment = 78,
-        FirstCompoundAssignment = 64,
-        LastCompoundAssignment = 78,
-        FirstReservedWord = 82,
-        LastReservedWord = 117,
-        FirstKeyword = 82,
-        LastKeyword = 163,
-        FirstFutureReservedWord = 118,
-        LastFutureReservedWord = 126,
-        FirstTypeNode = 180,
-        LastTypeNode = 203,
-        FirstPunctuation = 18,
-        LastPunctuation = 78,
+        FirstAssignment = 64,
+        LastAssignment = 79,
+        FirstCompoundAssignment = 65,
+        LastCompoundAssignment = 79,
+        FirstReservedWord = 83,
+        LastReservedWord = 118,
+        FirstKeyword = 83,
+        LastKeyword = 164,
+        FirstFutureReservedWord = 119,
+        LastFutureReservedWord = 127,
+        FirstTypeNode = 181,
+        LastTypeNode = 204,
+        FirstPunctuation = 19,
+        LastPunctuation = 79,
         FirstToken = 0,
-        LastToken = 163,
+        LastToken = 164,
         FirstTriviaToken = 2,
         LastTriviaToken = 7,
-        FirstLiteralToken = 8,
-        LastLiteralToken = 14,
-        FirstTemplateToken = 14,
-        LastTemplateToken = 17,
-        FirstBinaryOperator = 29,
-        LastBinaryOperator = 78,
-        FirstStatement = 241,
-        LastStatement = 257,
-        FirstNode = 164,
-        FirstJSDocNode = 313,
-        LastJSDocNode = 354,
-        FirstJSDocTagNode = 331,
-        LastJSDocTagNode = 354
+        FirstLiteralToken = 9,
+        LastLiteralToken = 15,
+        FirstTemplateToken = 15,
+        LastTemplateToken = 18,
+        FirstBinaryOperator = 30,
+        LastBinaryOperator = 79,
+        FirstStatement = 242,
+        LastStatement = 258,
+        FirstNode = 165,
+        FirstJSDocNode = 315,
+        LastJSDocNode = 356,
+        FirstJSDocTagNode = 333,
+        LastJSDocTagNode = 356
     }
     type TriviaSyntaxKind = SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia | SyntaxKind.NewLineTrivia | SyntaxKind.WhitespaceTrivia | SyntaxKind.ShebangTrivia | SyntaxKind.ConflictMarkerTrivia;
     type LiteralSyntaxKind = SyntaxKind.NumericLiteral | SyntaxKind.BigIntLiteral | SyntaxKind.StringLiteral | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.RegularExpressionLiteral | SyntaxKind.NoSubstitutionTemplateLiteral;
@@ -550,7 +550,7 @@ declare namespace ts {
     interface FlowContainer extends Node {
         _flowContainerBrand: any;
     }
-    type HasJSDoc = AccessorDeclaration | ArrowFunction | BinaryExpression | Block | BreakStatement | CallSignatureDeclaration | CaseClause | ClassLikeDeclaration | ClassStaticBlockDeclaration | ConstructorDeclaration | ConstructorTypeNode | ConstructSignatureDeclaration | ContinueStatement | DebuggerStatement | DoStatement | ElementAccessExpression | EmptyStatement | EndOfFileToken | EnumDeclaration | EnumMember | ExportAssignment | ExportDeclaration | ExportSpecifier | ExpressionStatement | ForInStatement | ForOfStatement | ForStatement | FunctionDeclaration | FunctionExpression | FunctionTypeNode | Identifier | IfStatement | ImportDeclaration | ImportEqualsDeclaration | IndexSignatureDeclaration | InterfaceDeclaration | JSDocFunctionType | JSDocSignature | LabeledStatement | MethodDeclaration | MethodSignature | ModuleDeclaration | NamedTupleMember | NamespaceExportDeclaration | ObjectLiteralExpression | ParameterDeclaration | ParenthesizedExpression | PropertyAccessExpression | PropertyAssignment | PropertyDeclaration | PropertySignature | ReturnStatement | ShorthandPropertyAssignment | SpreadAssignment | SwitchStatement | ThrowStatement | TryStatement | TypeAliasDeclaration | TypeParameterDeclaration | VariableDeclaration | VariableStatement | WhileStatement | WithStatement;
+    type HasJSDoc = AccessorDeclaration | ArrowFunction | BinaryExpression | Block | BreakStatement | CallSignatureDeclaration | CaseClause | ClassLikeDeclaration | ClassStaticBlockDeclaration | ConstructorDeclaration | ConstructorTypeNode | ConstructSignatureDeclaration | ContinueStatement | DebuggerStatement | DoStatement | ElementAccessExpression | EmptyStatement | EndOfFileToken | EnumDeclaration | EnumMember | ExportAssignment | ExportDeclaration | ExportSpecifier | ExpressionStatement | ForInStatement | ForOfStatement | ForStatement | FunctionDeclaration | FunctionExpression | FunctionTypeNode | Identifier | IfStatement | ImportDeclaration | ImportEqualsDeclaration | IndexSignatureDeclaration | InterfaceDeclaration | JSDocFunctionType | JSDocSignature | LabeledStatement | MethodDeclaration | MethodSignature | ModuleDeclaration | NamedTupleMember | NamespaceExportDeclaration | ObjectLiteralExpression | ParameterDeclaration | ParenthesizedExpression | PropertyAccessExpression | PropertyAssignment | PropertyDeclaration | PropertySignature | ReturnStatement | SemicolonClassElement | ShorthandPropertyAssignment | SpreadAssignment | SwitchStatement | ThrowStatement | TryStatement | TypeAliasDeclaration | TypeParameterDeclaration | VariableDeclaration | VariableStatement | WhileStatement | WithStatement;
     type HasType = SignatureDeclaration | VariableDeclaration | ParameterDeclaration | PropertySignature | PropertyDeclaration | TypePredicateNode | ParenthesizedTypeNode | TypeOperatorNode | MappedTypeNode | AssertionExpression | TypeAliasDeclaration | JSDocTypeExpression | JSDocNonNullableType | JSDocNullableType | JSDocOptionalType | JSDocVariadicType;
     type HasTypeArguments = CallExpression | NewExpression | TaggedTemplateExpression | JsxOpeningElement | JsxSelfClosingElement;
     type HasInitializer = HasExpressionInitializer | ForStatement | ForInStatement | ForOfStatement | JsxAttribute;
@@ -644,7 +644,7 @@ declare namespace ts {
     type EntityName = Identifier | QualifiedName;
     type PropertyName = Identifier | StringLiteral | NumericLiteral | ComputedPropertyName | PrivateIdentifier;
     type MemberName = Identifier | PrivateIdentifier;
-    type DeclarationName = Identifier | PrivateIdentifier | StringLiteralLike | NumericLiteral | ComputedPropertyName | ElementAccessExpression | BindingPattern | EntityNameExpression;
+    type DeclarationName = PropertyName | JsxAttributeName | StringLiteralLike | ElementAccessExpression | BindingPattern | EntityNameExpression;
     interface Declaration extends Node {
         _declarationBrand: any;
     }
@@ -829,7 +829,7 @@ declare namespace ts {
         readonly body?: FunctionBody | undefined;
     }
     /** For when we encounter a semicolon in a class declaration. ES6 allows these as class elements. */
-    interface SemicolonClassElement extends ClassElement {
+    interface SemicolonClassElement extends ClassElement, JSDocContainer {
         readonly kind: SyntaxKind.SemicolonClassElement;
         readonly parent: ClassLikeDeclaration;
     }
@@ -991,7 +991,7 @@ declare namespace ts {
         readonly kind: SyntaxKind.StringLiteral;
     }
     type StringLiteralLike = StringLiteral | NoSubstitutionTemplateLiteral;
-    type PropertyNameLiteral = Identifier | StringLiteralLike | NumericLiteral;
+    type PropertyNameLiteral = Identifier | StringLiteralLike | NumericLiteral | JsxNamespacedName;
     interface TemplateLiteralTypeNode extends TypeNode {
         kind: SyntaxKind.TemplateLiteralType;
         readonly head: TemplateHead;
@@ -1347,13 +1347,20 @@ declare namespace ts {
     }
     type JsxOpeningLikeElement = JsxSelfClosingElement | JsxOpeningElement;
     type JsxAttributeLike = JsxAttribute | JsxSpreadAttribute;
-    type JsxTagNameExpression = Identifier | ThisExpression | JsxTagNamePropertyAccess;
+    type JsxAttributeName = Identifier | JsxNamespacedName;
+    type JsxTagNameExpression = Identifier | ThisExpression | JsxTagNamePropertyAccess | JsxNamespacedName;
     interface JsxTagNamePropertyAccess extends PropertyAccessExpression {
-        readonly expression: JsxTagNameExpression;
+        readonly expression: Identifier | ThisExpression | JsxTagNamePropertyAccess;
     }
-    interface JsxAttributes extends ObjectLiteralExpressionBase<JsxAttributeLike> {
+    interface JsxAttributes extends PrimaryExpression, Declaration {
+        readonly properties: NodeArray<JsxAttributeLike>;
         readonly kind: SyntaxKind.JsxAttributes;
         readonly parent: JsxOpeningLikeElement;
+    }
+    interface JsxNamespacedName extends Node {
+        readonly kind: SyntaxKind.JsxNamespacedName;
+        readonly name: Identifier;
+        readonly namespace: Identifier;
     }
     interface JsxOpeningElement extends Expression {
         readonly kind: SyntaxKind.JsxOpeningElement;
@@ -1382,15 +1389,16 @@ declare namespace ts {
         readonly kind: SyntaxKind.JsxClosingFragment;
         readonly parent: JsxFragment;
     }
-    interface JsxAttribute extends ObjectLiteralElement {
+    interface JsxAttribute extends Declaration {
         readonly kind: SyntaxKind.JsxAttribute;
         readonly parent: JsxAttributes;
-        readonly name: Identifier;
+        readonly name: JsxAttributeName;
         readonly initializer?: JsxAttributeValue;
     }
     type JsxAttributeValue = StringLiteral | JsxExpression | JsxElement | JsxSelfClosingElement | JsxFragment;
     interface JsxSpreadAttribute extends ObjectLiteralElement {
         readonly kind: SyntaxKind.JsxSpreadAttribute;
+        readonly name: PropertyName;
         readonly parent: JsxAttributes;
         readonly expression: Expression;
     }
@@ -3491,9 +3499,8 @@ declare namespace ts {
         ReuseTempVariableScope = 1048576,
         CustomPrologue = 2097152,
         NoHoisting = 4194304,
-        HasEndOfDeclarationMarker = 8388608,
-        Iterator = 16777216,
-        NoAsciiEscaping = 33554432
+        Iterator = 8388608,
+        NoAsciiEscaping = 16777216
     }
     interface EmitHelperBase {
         readonly name: string;
@@ -3927,14 +3934,16 @@ declare namespace ts {
         createJsxOpeningFragment(): JsxOpeningFragment;
         createJsxJsxClosingFragment(): JsxClosingFragment;
         updateJsxFragment(node: JsxFragment, openingFragment: JsxOpeningFragment, children: readonly JsxChild[], closingFragment: JsxClosingFragment): JsxFragment;
-        createJsxAttribute(name: Identifier, initializer: JsxAttributeValue | undefined): JsxAttribute;
-        updateJsxAttribute(node: JsxAttribute, name: Identifier, initializer: JsxAttributeValue | undefined): JsxAttribute;
+        createJsxAttribute(name: JsxAttributeName, initializer: JsxAttributeValue | undefined): JsxAttribute;
+        updateJsxAttribute(node: JsxAttribute, name: JsxAttributeName, initializer: JsxAttributeValue | undefined): JsxAttribute;
         createJsxAttributes(properties: readonly JsxAttributeLike[]): JsxAttributes;
         updateJsxAttributes(node: JsxAttributes, properties: readonly JsxAttributeLike[]): JsxAttributes;
         createJsxSpreadAttribute(expression: Expression): JsxSpreadAttribute;
         updateJsxSpreadAttribute(node: JsxSpreadAttribute, expression: Expression): JsxSpreadAttribute;
         createJsxExpression(dotDotDotToken: DotDotDotToken | undefined, expression: Expression | undefined): JsxExpression;
         updateJsxExpression(node: JsxExpression, expression: Expression | undefined): JsxExpression;
+        createJsxNamespacedName(namespace: Identifier, name: Identifier): JsxNamespacedName;
+        updateJsxNamespacedName(node: JsxNamespacedName, namespace: Identifier, name: Identifier): JsxNamespacedName;
         createCaseClause(expression: Expression, statements: readonly Statement[]): CaseClause;
         updateCaseClause(node: CaseClause, expression: Expression, statements: readonly Statement[]): CaseClause;
         createDefaultClause(statements: readonly Statement[]): DefaultClause;
@@ -4417,7 +4426,7 @@ declare namespace ts {
     function isIdentifierStart(ch: number, languageVersion: ScriptTarget | undefined): boolean;
     function isIdentifierPart(ch: number, languageVersion: ScriptTarget | undefined, identifierVariant?: LanguageVariant): boolean;
     function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean, languageVariant?: LanguageVariant, textInitial?: string, onError?: ErrorCallback, start?: number, length?: number): Scanner;
-    type ErrorCallback = (message: DiagnosticMessage, length: number) => void;
+    type ErrorCallback = (message: DiagnosticMessage, length: number, arg0?: any) => void;
     interface Scanner {
         /** @deprecated use {@link getTokenFullStart} */
         getStartPos(): number;
@@ -4441,6 +4450,7 @@ declare namespace ts {
         reScanSlashToken(): SyntaxKind;
         reScanAsteriskEqualsToken(): SyntaxKind;
         reScanTemplateToken(isTaggedTemplate: boolean): SyntaxKind;
+        /** @deprecated use {@link reScanTemplateToken}(false) */
         reScanTemplateHeadOrNoSubstitutionTemplate(): SyntaxKind;
         scanJsxIdentifier(): SyntaxKind;
         scanJsxAttributeValue(): SyntaxKind;
@@ -4761,6 +4771,26 @@ declare namespace ts {
         parent: ConstructorDeclaration;
         name: Identifier;
     };
+    /**
+     * This function checks multiple locations for JSDoc comments that apply to a host node.
+     * At each location, the whole comment may apply to the node, or only a specific tag in
+     * the comment. In the first case, location adds the entire {@link JSDoc} object. In the
+     * second case, it adds the applicable {@link JSDocTag}.
+     *
+     * For example, a JSDoc comment before a parameter adds the entire {@link JSDoc}. But a
+     * `@param` tag on the parent function only adds the {@link JSDocTag} for the `@param`.
+     *
+     * ```ts
+     * /** JSDoc will be returned for `a` *\/
+     * const a = 0
+     * /**
+     *  * Entire JSDoc will be returned for `b`
+     *  * @param c JSDocTag will be returned for `c`
+     *  *\/
+     * function b(/** JSDoc will be returned for `c` *\/ c) {}
+     * ```
+     */
+    function getJSDocCommentsAndTags(hostNode: Node): readonly (JSDoc | JSDocTag)[];
     /** @deprecated */
     function createUnparsedSourceFile(text: string): UnparsedSource;
     /** @deprecated */
@@ -5004,6 +5034,7 @@ declare namespace ts {
     function isJsxAttributes(node: Node): node is JsxAttributes;
     function isJsxSpreadAttribute(node: Node): node is JsxSpreadAttribute;
     function isJsxExpression(node: Node): node is JsxExpression;
+    function isJsxNamespacedName(node: Node): node is JsxNamespacedName;
     function isCaseClause(node: Node): node is CaseClause;
     function isDefaultClause(node: Node): node is DefaultClause;
     function isHeritageClause(node: Node): node is HeritageClause;
@@ -5208,7 +5239,7 @@ declare namespace ts {
      *   this list is only the set of defaults that are implicitly included.
      */
     function getAutomaticTypeDirectiveNames(options: CompilerOptions, host: ModuleResolutionHost): string[];
-    function createModuleResolutionCache(currentDirectory: string, getCanonicalFileName: (s: string) => string, options?: CompilerOptions): ModuleResolutionCache;
+    function createModuleResolutionCache(currentDirectory: string, getCanonicalFileName: (s: string) => string, options?: CompilerOptions, packageJsonInfoCache?: PackageJsonInfoCache): ModuleResolutionCache;
     function createTypeReferenceDirectiveResolutionCache(currentDirectory: string, getCanonicalFileName: (s: string) => string, options?: CompilerOptions, packageJsonInfoCache?: PackageJsonInfoCache): TypeReferenceDirectiveResolutionCache;
     function resolveModuleNameFromCache(moduleName: string, containingFile: string, cache: ModuleResolutionCache, mode?: ResolutionMode): ResolvedModuleWithFailedLookupLocations | undefined;
     function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference, resolutionMode?: ResolutionMode): ResolvedModuleWithFailedLookupLocations;
@@ -5397,7 +5428,7 @@ declare namespace ts {
      * Calculates the resulting resolution mode for some reference in some file - this is generally the explicitly
      * provided resolution mode in the reference, unless one is not present, in which case it is the mode of the containing file.
      */
-    function getModeForFileReference(ref: FileReference | string, containingFileMode: ResolutionMode): ts.ResolutionMode;
+    function getModeForFileReference(ref: FileReference | string, containingFileMode: ResolutionMode): ResolutionMode;
     /**
      * Calculates the final resolution mode for an import at some index within a file's imports list. This is generally the explicitly
      * defined mode of the import if provided, or, if not, the mode of the containing file (with some exceptions: import=require is always commonjs, dynamic import is always esm).
@@ -5417,7 +5448,7 @@ declare namespace ts {
      */
     function getModeForUsageLocation(file: {
         impliedNodeFormat?: ResolutionMode;
-    }, usage: StringLiteralLike): ts.ModuleKind.CommonJS | ts.ModuleKind.ESNext | undefined;
+    }, usage: StringLiteralLike): ModuleKind.CommonJS | ModuleKind.ESNext | undefined;
     function getConfigFileParsingDiagnostics(configFileParseResult: ParsedCommandLine): readonly Diagnostic[];
     /**
      * A function for determining if a given file is esm or cjs format, assuming modern node module resolution rules, as configured by the
@@ -5598,8 +5629,8 @@ declare namespace ts {
          */
         emitNextAffectedFile(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): AffectedFileResult<EmitResult>;
     }
-    function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadBuildProgramHost): ts.EmitAndSemanticDiagnosticsBuilderProgram | undefined;
-    function createIncrementalCompilerHost(options: CompilerOptions, system?: ts.System): CompilerHost;
+    function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadBuildProgramHost): EmitAndSemanticDiagnosticsBuilderProgram | undefined;
+    function createIncrementalCompilerHost(options: CompilerOptions, system?: System): CompilerHost;
     function createIncrementalProgram<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>({ rootNames, options, configFileParsingDiagnostics, projectReferences, host, createProgram }: IncrementalProgramOptions<T>): T;
     /**
      * Create the watch compiler host for either configFile or fileNames and its options
@@ -5755,8 +5786,8 @@ declare namespace ts {
      * Create a function that reports watch status by writing to the system and handles the formating of the diagnostic
      */
     function createBuilderStatusReporter(system: System, pretty?: boolean): DiagnosticReporter;
-    function createSolutionBuilderHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system?: ts.System, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter, reportErrorSummary?: ReportEmitErrorSummary): ts.SolutionBuilderHost<T>;
-    function createSolutionBuilderWithWatchHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system?: ts.System, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter): ts.SolutionBuilderWithWatchHost<T>;
+    function createSolutionBuilderHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system?: System, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter, reportErrorSummary?: ReportEmitErrorSummary): SolutionBuilderHost<T>;
+    function createSolutionBuilderWithWatchHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system?: System, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter): SolutionBuilderWithWatchHost<T>;
     function createSolutionBuilder<T extends BuilderProgram>(host: SolutionBuilderHost<T>, rootNames: readonly string[], defaultOptions: BuildOptions): SolutionBuilder<T>;
     function createSolutionBuilderWithWatch<T extends BuilderProgram>(host: SolutionBuilderWithWatchHost<T>, rootNames: readonly string[], defaultOptions: BuildOptions, baseWatchOptions?: WatchOptions): SolutionBuilder<T>;
     interface BuildOptions {
@@ -5846,6 +5877,14 @@ declare namespace ts {
         emit(writeFile?: WriteFileCallback, customTransformers?: CustomTransformers): EmitResult | BuildInvalidedProject<T> | undefined;
     }
     type InvalidatedProject<T extends BuilderProgram> = UpdateOutputFileStampsProject | BuildInvalidedProject<T> | UpdateBundleProject<T>;
+    namespace JsTyping {
+        interface TypingResolutionHost {
+            directoryExists(path: string): boolean;
+            fileExists(fileName: string): boolean;
+            readFile(path: string, encoding?: string): string | undefined;
+            readDirectory(rootDir: string, extensions: readonly string[], excludes: readonly string[] | undefined, includes: readonly string[] | undefined, depth?: number): string[];
+        }
+    }
     namespace server {
         type ActionSet = "action::set";
         type ActionInvalidate = "action::invalidate";
@@ -5854,8 +5893,9 @@ declare namespace ts {
         type EventBeginInstallTypes = "event::beginInstallTypes";
         type EventEndInstallTypes = "event::endInstallTypes";
         type EventInitializationFailed = "event::initializationFailed";
+        type ActionWatchTypingLocations = "action::watchTypingLocations";
         interface TypingInstallerResponse {
-            readonly kind: ActionSet | ActionInvalidate | EventTypesRegistry | ActionPackageInstalled | EventBeginInstallTypes | EventEndInstallTypes | EventInitializationFailed;
+            readonly kind: ActionSet | ActionInvalidate | EventTypesRegistry | ActionPackageInstalled | EventBeginInstallTypes | EventEndInstallTypes | EventInitializationFailed | ActionWatchTypingLocations;
         }
         interface TypingInstallerRequestWithProjectName {
             readonly projectName: string;
@@ -5864,7 +5904,6 @@ declare namespace ts {
             readonly fileNames: string[];
             readonly projectRootPath: Path;
             readonly compilerOptions: CompilerOptions;
-            readonly watchOptions?: WatchOptions;
             readonly typeAcquisition: TypeAcquisition;
             readonly unresolvedImports: SortedReadonlyArray<string>;
             readonly cachePath?: string;
@@ -5911,12 +5950,23 @@ declare namespace ts {
             readonly kind: EventEndInstallTypes;
             readonly installSuccess: boolean;
         }
+        interface InstallTypingHost extends JsTyping.TypingResolutionHost {
+            useCaseSensitiveFileNames: boolean;
+            writeFile(path: string, content: string): void;
+            createDirectory(path: string): void;
+            getCurrentDirectory?(): string;
+        }
         interface SetTypings extends ProjectResponse {
             readonly typeAcquisition: TypeAcquisition;
             readonly compilerOptions: CompilerOptions;
             readonly typings: string[];
             readonly unresolvedImports: SortedReadonlyArray<string>;
             readonly kind: ActionSet;
+        }
+        interface WatchTypingLocations extends ProjectResponse {
+            /** if files is undefined, retain same set of watchers */
+            readonly files: readonly string[] | undefined;
+            readonly kind: ActionWatchTypingLocations;
         }
     }
     function getDefaultFormatCodeSettings(newLineCharacter?: string): FormatCodeSettings;
@@ -6123,6 +6173,8 @@ declare namespace ts {
         getRenameInfo(fileName: string, position: number, preferences: UserPreferences): RenameInfo;
         /** @deprecated Use the signature with `UserPreferences` instead. */
         getRenameInfo(fileName: string, position: number, options?: RenameInfoOptions): RenameInfo;
+        findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, preferences: UserPreferences): readonly RenameLocation[] | undefined;
+        /** @deprecated Pass `providePrefixAndSuffixTextForRename` as part of a `UserPreferences` parameter. */
         findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): readonly RenameLocation[] | undefined;
         getSmartSelectionRange(fileName: string, position: number): SelectionRange;
         getDefinitionAtPosition(fileName: string, position: number): readonly DefinitionInfo[] | undefined;
@@ -6154,6 +6206,7 @@ declare namespace ts {
          * Editors should call this after `>` is typed.
          */
         getJsxClosingTagAtPosition(fileName: string, position: number): JsxClosingTagInfo | undefined;
+        getLinkedEditingRangeAtPosition(fileName: string, position: number): LinkedEditingInfo | undefined;
         getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan | undefined;
         toLineColumnOffset?(fileName: string, position: number): LineAndCharacter;
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: readonly number[], formatOptions: FormatCodeSettings, preferences: UserPreferences): readonly CodeFixAction[];
@@ -6167,8 +6220,18 @@ declare namespace ts {
         applyCodeActionCommand(fileName: string, action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
         /** @deprecated `fileName` will be ignored */
         applyCodeActionCommand(fileName: string, action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
-        getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined, triggerReason?: RefactorTriggerReason, kind?: string): ApplicableRefactorInfo[];
-        getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string, preferences: UserPreferences | undefined): RefactorEditInfo | undefined;
+        /**
+         * @param includeInteractiveActions Include refactor actions that require additional arguments to be
+         * passed when calling `getEditsForRefactor`. When true, clients should inspect the `isInteractive`
+         * property of each returned `RefactorActionInfo` and ensure they are able to collect the appropriate
+         * arguments for any interactive action before offering it.
+         */
+        getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined, triggerReason?: RefactorTriggerReason, kind?: string, includeInteractiveActions?: boolean): ApplicableRefactorInfo[];
+        getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string, preferences: UserPreferences | undefined, interactiveRefactorArguments?: InteractiveRefactorArguments): RefactorEditInfo | undefined;
+        getMoveToRefactoringFileSuggestions(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined, triggerReason?: RefactorTriggerReason, kind?: string): {
+            newFileName: string;
+            files: string[];
+        };
         organizeImports(args: OrganizeImportsArgs, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
         getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean, forceDtsEmit?: boolean): EmitOutput;
@@ -6182,6 +6245,10 @@ declare namespace ts {
     }
     interface JsxClosingTagInfo {
         readonly newText: string;
+    }
+    interface LinkedEditingInfo {
+        readonly ranges: TextSpan[];
+        wordPattern?: string;
     }
     interface CombinedCodeFixScope {
         type: "file";
@@ -6435,6 +6502,11 @@ declare namespace ts {
          * The hierarchical dotted name of the refactor action.
          */
         kind?: string;
+        /**
+         * Indicates that the action requires additional arguments to be passed
+         * when calling `getEditsForRefactor`.
+         */
+        isInteractive?: boolean;
     }
     /**
      * A set of edits to make in response to a refactor action, plus an optional
@@ -6445,6 +6517,7 @@ declare namespace ts {
         renameFilename?: string;
         renameLocation?: number;
         commands?: CodeActionCommand[];
+        notApplicableReason?: string;
     }
     type RefactorTriggerReason = "implicit" | "invoked";
     interface TextInsertion {
@@ -6571,6 +6644,7 @@ declare namespace ts {
         readonly insertSpaceBeforeTypeAnnotation?: boolean;
         readonly indentMultiLineObjectLiteralBeginningOnBlankLine?: boolean;
         readonly semicolons?: SemicolonPreference;
+        readonly indentSwitchCase?: boolean;
     }
     interface DefinitionInfo extends DocumentSpan {
         kind: ScriptElementKind;
@@ -6665,6 +6739,9 @@ declare namespace ts {
     }
     interface DocCommentTemplateOptions {
         readonly generateReturnInDocTemplate?: boolean;
+    }
+    interface InteractiveRefactorArguments {
+        targetFile: string;
     }
     interface SignatureHelpParameter {
         name: string;
@@ -6762,6 +6839,7 @@ declare namespace ts {
         kindModifiers?: string;
         sortText: string;
         insertText?: string;
+        filterText?: string;
         isSnippet?: true;
         /**
          * An optional span that indicates the text to be replaced by this completion item.

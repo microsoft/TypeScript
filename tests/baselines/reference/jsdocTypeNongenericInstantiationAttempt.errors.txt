@@ -1,14 +1,14 @@
-tests/cases/compiler/index.js(2,19): error TS2315: Type 'Boolean' is not generic.
-tests/cases/compiler/index2.js(2,19): error TS2315: Type 'Void' is not generic.
-tests/cases/compiler/index3.js(2,19): error TS2315: Type 'Undefined' is not generic.
-tests/cases/compiler/index4.js(2,19): error TS2315: Type 'Function' is not generic.
-tests/cases/compiler/index5.js(2,19): error TS2315: Type 'String' is not generic.
-tests/cases/compiler/index6.js(2,19): error TS2315: Type 'Number' is not generic.
-tests/cases/compiler/index7.js(2,19): error TS2315: Type 'Object' is not generic.
-tests/cases/compiler/index8.js(4,15): error TS2304: Cannot find name 'T'.
+index.js(2,19): error TS2315: Type 'Boolean' is not generic.
+index2.js(2,19): error TS2315: Type 'Void' is not generic.
+index3.js(2,19): error TS2315: Type 'Undefined' is not generic.
+index4.js(2,19): error TS2315: Type 'Function' is not generic.
+index5.js(2,19): error TS2315: Type 'String' is not generic.
+index6.js(2,19): error TS2315: Type 'Number' is not generic.
+index7.js(2,19): error TS2315: Type 'Object' is not generic.
+index8.js(4,15): error TS2304: Cannot find name 'T'.
 
 
-==== tests/cases/compiler/index.js (1 errors) ====
+==== index.js (1 errors) ====
     /**
      * @param {<T>(m: Boolean<T>) => string} somebody
                       ~~~~~~~~~~
@@ -18,7 +18,7 @@ tests/cases/compiler/index8.js(4,15): error TS2304: Cannot find name 'T'.
         return 'Hello ' + somebody;
     }
     
-==== tests/cases/compiler/index2.js (1 errors) ====
+==== index2.js (1 errors) ====
     /**
      * @param {<T>(m: Void<T>) => string} somebody
                       ~~~~~~~
@@ -29,7 +29,7 @@ tests/cases/compiler/index8.js(4,15): error TS2304: Cannot find name 'T'.
     }
     
     
-==== tests/cases/compiler/index3.js (1 errors) ====
+==== index3.js (1 errors) ====
     /**
      * @param {<T>(m: Undefined<T>) => string} somebody
                       ~~~~~~~~~~~~
@@ -40,7 +40,7 @@ tests/cases/compiler/index8.js(4,15): error TS2304: Cannot find name 'T'.
     }
     
     
-==== tests/cases/compiler/index4.js (1 errors) ====
+==== index4.js (1 errors) ====
     /**
      * @param {<T>(m: Function<T>) => string} somebody
                       ~~~~~~~~~~~
@@ -51,7 +51,7 @@ tests/cases/compiler/index8.js(4,15): error TS2304: Cannot find name 'T'.
     }
     
     
-==== tests/cases/compiler/index5.js (1 errors) ====
+==== index5.js (1 errors) ====
     /**
      * @param {<T>(m: String<T>) => string} somebody
                       ~~~~~~~~~
@@ -62,7 +62,7 @@ tests/cases/compiler/index8.js(4,15): error TS2304: Cannot find name 'T'.
     }
     
     
-==== tests/cases/compiler/index6.js (1 errors) ====
+==== index6.js (1 errors) ====
     /**
      * @param {<T>(m: Number<T>) => string} somebody
                       ~~~~~~~~~
@@ -73,7 +73,7 @@ tests/cases/compiler/index8.js(4,15): error TS2304: Cannot find name 'T'.
     }
     
     
-==== tests/cases/compiler/index7.js (1 errors) ====
+==== index7.js (1 errors) ====
     /**
      * @param {<T>(m: Object<T>) => string} somebody
                       ~~~~~~~~~
@@ -83,7 +83,7 @@ tests/cases/compiler/index8.js(4,15): error TS2304: Cannot find name 'T'.
         return 'Hello ' + somebody;
     }
     
-==== tests/cases/compiler/index8.js (1 errors) ====
+==== index8.js (1 errors) ====
     function fn() {}
     
     /**

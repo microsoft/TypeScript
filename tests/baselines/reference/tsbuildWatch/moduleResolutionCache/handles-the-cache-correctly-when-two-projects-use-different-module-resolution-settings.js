@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/project1/index.ts]
 import { foo } from "file";
@@ -108,21 +109,21 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/node_modules/@types/foo/index.d.ts (used version)
 
 PolledWatches::
-/user/username/projects/myproject/project1/node_modules/file/package.json: *new*
+/user/username/projects/myproject/node_modules/@types/bar/package.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/myproject/node_modules/@types/foo/package.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/node_modules/@types/bar/package.json: *new*
+/user/username/projects/myproject/project1/node_modules/file/package.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::
-/user/username/projects/myproject/project1/tsconfig.json: *new*
-  {}
 /user/username/projects/myproject/project1/index.ts: *new*
   {}
-/user/username/projects/myproject/project2/tsconfig.json: *new*
+/user/username/projects/myproject/project1/tsconfig.json: *new*
   {}
 /user/username/projects/myproject/project2/index.ts: *new*
+  {}
+/user/username/projects/myproject/project2/tsconfig.json: *new*
   {}
 /user/username/projects/myproject/tsconfig.json: *new*
   {}
@@ -303,6 +304,9 @@ Input::
 import { foo } from "file";const bar = 10;
 
 
+Before running Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:18 AM[0m] File change detected. Starting incremental compilation...

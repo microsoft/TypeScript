@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/thisType/thisTypeSyntacticContext.ts ===
+//// [tests/cases/conformance/types/thisType/thisTypeSyntacticContext.ts] ////
+
+=== thisTypeSyntacticContext.ts ===
 function f(this: { n: number }) {
 >f : Symbol(f, Decl(thisTypeSyntacticContext.ts, 0, 0))
 >this : Symbol(this, Decl(thisTypeSyntacticContext.ts, 0, 11))

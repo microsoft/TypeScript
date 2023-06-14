@@ -112,7 +112,7 @@ exports.c = c;
 //@after/src/shared/tsconfig.json
 var e;
 (function (e) {
-})(e = exports.e || (exports.e = {}));
+})(e || (exports.e = e = {}));
 // leading
 /*@before/src/shared/tsconfig.json*/
 function f2() { } // trailing
@@ -197,7 +197,7 @@ exports.c2 = c2;
 //@after/src/webpack/tsconfig.json
 var e2;
 (function (e2) {
-})(e2 = exports.e2 || (exports.e2 = {}));
+})(e2 || (exports.e2 = e2 = {}));
 // leading
 /*@before/src/webpack/tsconfig.json*/
 function f22() { } // trailing

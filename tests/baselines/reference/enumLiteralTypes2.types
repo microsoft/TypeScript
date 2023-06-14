@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/literal/enumLiteralTypes2.ts ===
+//// [tests/cases/conformance/types/literal/enumLiteralTypes2.ts] ////
+
+=== enumLiteralTypes2.ts ===
 const enum Choice { Unknown, Yes, No };
 >Choice : Choice
 >Unknown : Choice.Unknown

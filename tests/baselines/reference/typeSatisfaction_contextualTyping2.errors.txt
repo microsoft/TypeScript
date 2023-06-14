@@ -1,7 +1,7 @@
-tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_contextualTyping2.ts(2,7): error TS7006: Parameter 's' implicitly has an 'any' type.
+typeSatisfaction_contextualTyping2.ts(2,7): error TS7006: Parameter 's' implicitly has an 'any' type.
 
 
-==== tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_contextualTyping2.ts (1 errors) ====
+==== typeSatisfaction_contextualTyping2.ts (1 errors) ====
     let obj: { f(s: string): void } & Record<string, unknown> = {
         f(s) { }, // "incorrect" implicit any on 's'
           ~

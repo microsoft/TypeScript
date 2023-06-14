@@ -1,4 +1,6 @@
-=== tests/cases/compiler/redeclareParameterInCatchBlock.ts ===
+//// [tests/cases/compiler/redeclareParameterInCatchBlock.ts] ////
+
+=== redeclareParameterInCatchBlock.ts ===
 try {
 
 } catch(e) {

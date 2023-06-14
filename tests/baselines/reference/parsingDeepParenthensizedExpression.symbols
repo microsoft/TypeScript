@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.js ===
+//// [tests/cases/compiler/parsingDeepParenthensizedExpression.ts] ////
+
+=== a.js ===
 function Y(e, t) {
 >Y : Symbol(Y, Decl(a.js, 0, 0))
 >e : Symbol(e, Decl(a.js, 0, 11))

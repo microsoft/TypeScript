@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inferFromGenericFunctionReturnTypes3.ts ===
+//// [tests/cases/compiler/inferFromGenericFunctionReturnTypes3.ts] ////
+
+=== inferFromGenericFunctionReturnTypes3.ts ===
 // Repros from #5487
 
 function truePromise(): Promise<true> {

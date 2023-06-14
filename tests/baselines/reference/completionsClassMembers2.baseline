@@ -8,6 +8,7 @@
 //     
 //     ^
 // | ----------------------------------------------------------------------
+// | (method) I.method(): void
 // | abstract
 // | accessor
 // | async
@@ -21,7 +22,6 @@
 // | readonly
 // | set
 // | static
-// | (method) I.method(): void
 // | ----------------------------------------------------------------------
 // }
 
@@ -38,6 +38,65 @@
       "isMemberCompletion": true,
       "isNewIdentifierLocation": true,
       "entries": [
+        {
+          "name": "method",
+          "kind": "method",
+          "kindModifiers": "",
+          "sortText": "11",
+          "insertText": "method(): void {\n}",
+          "filterText": "method",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "method",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "I",
+              "kind": "interfaceName"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "method",
+              "kind": "methodName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": []
+        },
         {
           "name": "abstract",
           "kind": "keyword",
@@ -193,64 +252,6 @@
               "kind": "keyword"
             }
           ]
-        },
-        {
-          "name": "method",
-          "kind": "method",
-          "kindModifiers": "",
-          "sortText": "17",
-          "insertText": "method(): void {\n}",
-          "displayParts": [
-            {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": "method",
-              "kind": "text"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "I",
-              "kind": "interfaceName"
-            },
-            {
-              "text": ".",
-              "kind": "punctuation"
-            },
-            {
-              "text": "method",
-              "kind": "methodName"
-            },
-            {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "void",
-              "kind": "keyword"
-            }
-          ],
-          "documentation": []
         }
       ]
     }

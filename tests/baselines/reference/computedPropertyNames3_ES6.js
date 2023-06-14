@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames3_ES6.ts] ////
+
 //// [computedPropertyNames3_ES6.ts]
 var id;
 class C {

@@ -1,8 +1,8 @@
-tests/cases/compiler/contextualTyping33.ts(1,90): error TS2322: Type '() => string' is not assignable to type '{ (): number; (i: number): number; }'.
+contextualTyping33.ts(1,90): error TS2322: Type '() => string' is not assignable to type '{ (): number; (i: number): number; }'.
   Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/compiler/contextualTyping33.ts (1 errors) ====
+==== contextualTyping33.ts (1 errors) ====
     function foo(param: {():number; (i:number):number; }[]) { }; foo([function(){return 1;}, function(){return "foo"}]);
                                                                                              ~~~~~~~~
 !!! error TS2322: Type '() => string' is not assignable to type '{ (): number; (i: number): number; }'.

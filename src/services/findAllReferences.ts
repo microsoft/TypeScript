@@ -29,6 +29,7 @@ import {
     escapeLeadingUnderscores,
     ExportSpecifier,
     Expression,
+    externalHelpersModuleNameText,
     FileIncludeReason,
     FileReference,
     filter,
@@ -41,6 +42,7 @@ import {
     firstOrUndefined,
     flatMap,
     forEachChild,
+    forEachChildRecursively,
     forEachReturnStatement,
     ForInOrOfStatement,
     FunctionDeclaration,
@@ -70,6 +72,7 @@ import {
     getNodeKind,
     getPropertySymbolFromBindingElement,
     getPropertySymbolsFromContextualType,
+    getQuoteFromPreference,
     getReferencedFileLocation,
     getSuperContainer,
     getSymbolId,
@@ -130,6 +133,8 @@ import {
     isJSDocMemberName,
     isJSDocTag,
     isJsxClosingElement,
+    isJsxElement,
+    isJsxFragment,
     isJsxOpeningElement,
     isJsxSelfClosingElement,
     isJumpStatementTarget,
@@ -147,6 +152,7 @@ import {
     isNamespaceExportDeclaration,
     isNewExpressionTarget,
     isNoSubstitutionTemplateLiteral,
+    isNumericLiteral,
     isObjectBindingElementWithoutPropertyName,
     isObjectLiteralExpression,
     isObjectLiteralMethod,
@@ -192,6 +198,7 @@ import {
     nodeSeenTracker,
     NumericLiteral,
     ObjectLiteralExpression,
+    or,
     ParameterDeclaration,
     ParenthesizedExpression,
     Path,
@@ -201,6 +208,7 @@ import {
     PropertyAssignment,
     PropertyDeclaration,
     punctuationPart,
+    QuotePreference,
     rangeIsOnSingleLine,
     ReferencedSymbol,
     ReferencedSymbolDefinitionInfo,
@@ -231,6 +239,7 @@ import {
     textPart,
     TextSpan,
     tokenToString,
+    TransformFlags,
     tryAddToSet,
     tryCast,
     tryGetClassExtendingExpressionWithTypeArguments,
@@ -668,8 +677,8 @@ function getDefinitionKindAndDisplayParts(symbol: Symbol, checker: TypeChecker, 
 }
 
 /** @internal */
-export function toRenameLocation(entry: Entry, originalNode: Node, checker: TypeChecker, providePrefixAndSuffixText: boolean): RenameLocation {
-    return { ...entryToDocumentSpan(entry), ...(providePrefixAndSuffixText && getPrefixAndSuffixText(entry, originalNode, checker)) };
+export function toRenameLocation(entry: Entry, originalNode: Node, checker: TypeChecker, providePrefixAndSuffixText: boolean, quotePreference: QuotePreference): RenameLocation {
+    return { ...entryToDocumentSpan(entry), ...(providePrefixAndSuffixText && getPrefixAndSuffixText(entry, originalNode, checker, quotePreference)) };
 }
 
 function toReferencedSymbolEntry(entry: Entry, symbol: Symbol | undefined): ReferencedSymbolEntry {
@@ -711,7 +720,7 @@ function entryToDocumentSpan(entry: Entry): DocumentSpan {
 }
 
 interface PrefixAndSuffix { readonly prefixText?: string; readonly suffixText?: string; }
-function getPrefixAndSuffixText(entry: Entry, originalNode: Node, checker: TypeChecker): PrefixAndSuffix {
+function getPrefixAndSuffixText(entry: Entry, originalNode: Node, checker: TypeChecker, quotePreference: QuotePreference): PrefixAndSuffix {
     if (entry.kind !== EntryKind.Span && isIdentifier(originalNode)) {
         const { node, kind } = entry;
         const parent = node.parent;
@@ -753,6 +762,12 @@ function getPrefixAndSuffixText(entry: Entry, originalNode: Node, checker: TypeC
                 { prefixText: name + " as " } :
                 { suffixText: " as " + name };
         }
+    }
+
+    // If the node is a numerical indexing literal, then add quotes around the property access.
+    if (entry.kind !== EntryKind.Span && isNumericLiteral(entry.node) && isAccessExpression(entry.node.parent)) {
+        const quote = getQuoteFromPreference(quotePreference);
+        return { prefixText: quote, suffixText: quote };
     }
 
     return emptyOptions;
@@ -834,8 +849,12 @@ export function getTextSpanOfEntry(entry: Entry) {
         getTextSpan(entry.node, entry.node.getSourceFile());
 }
 
-/** A node is considered a writeAccess iff it is a name of a declaration or a target of an assignment */
-function isWriteAccessForReference(node: Node): boolean {
+/**
+ * A node is considered a writeAccess iff it is a name of a declaration or a target of an assignment.
+ *
+ * @internal
+ */
+export function isWriteAccessForReference(node: Node): boolean {
     const decl = getDeclarationFromName(node);
     return !!decl && declarationIsWriteAccess(decl) || node.kind === SyntaxKind.DefaultKeyword || isWriteAccess(node);
 }
@@ -1125,6 +1144,14 @@ export namespace Core {
                 // import("foo") with no qualifier will reference the `export =` of the module, which may be referenced anyway.
                 return nodeEntry(reference.literal);
             }
+            else if (reference.kind === "implicit") {
+                // Return either: The first JSX node in the (if not a tslib import), the first statement of the file, or the whole file if neither of those exist
+                const range = reference.literal.text !== externalHelpersModuleNameText && forEachChildRecursively(
+                    reference.referencingFile,
+                    n => !(n.transformFlags & TransformFlags.ContainsJsx) ? "skip" : isJsxElement(n) || isJsxSelfClosingElement(n) || isJsxFragment(n) ? n : undefined
+                ) || reference.referencingFile.statements[0] || reference.referencingFile;
+                return nodeEntry(range);
+            }
             else {
                 return {
                     kind: EntryKind.Span,
@@ -1190,7 +1217,7 @@ export namespace Core {
                 return undefined;
             }
             // Likewise, when we *are* looking for a special keyword, make sure we
-            // *don’t* include readonly member modifiers.
+            // *don't* include readonly member modifiers.
             return getAllReferencesForKeyword(
                 sourceFiles,
                 node.kind,
@@ -1431,7 +1458,7 @@ export namespace Core {
             });
         }
 
-        // Source file ID → symbol ID → Whether the symbol has been searched for in the source file.
+        // Source file ID -> symbol ID -> Whether the symbol has been searched for in the source file.
         private readonly sourceFileToSeenSymbols: Set<number>[] = [];
         /** Returns `true` the first time we search for a symbol in a file and `false` afterwards. */
         markSearchedSymbols(sourceFile: SourceFile, symbols: readonly Symbol[]): boolean {
@@ -1702,7 +1729,10 @@ export namespace Core {
     }
 
     function getPossibleSymbolReferenceNodes(sourceFile: SourceFile, symbolName: string, container: Node = sourceFile): readonly Node[] {
-        return getPossibleSymbolReferencePositions(sourceFile, symbolName, container).map(pos => getTouchingPropertyName(sourceFile, pos));
+        return mapDefined(getPossibleSymbolReferencePositions(sourceFile, symbolName, container), pos => {
+            const referenceLocation = getTouchingPropertyName(sourceFile, pos);
+            return referenceLocation === sourceFile ? undefined : referenceLocation;
+        });
     }
 
     function getPossibleSymbolReferencePositions(sourceFile: SourceFile, symbolName: string, container: Node = sourceFile): readonly number[] {
@@ -2155,9 +2185,9 @@ export namespace Core {
         }
 
         // Check if the node is within an extends or implements clause
-        const containingClass = getContainingClassIfInHeritageClause(refNode);
-        if (containingClass) {
-            addReference(containingClass);
+        const containingNode = getContainingNodeIfInHeritageClause(refNode);
+        if (containingNode) {
+            addReference(containingNode);
             return;
         }
 
@@ -2190,9 +2220,9 @@ export namespace Core {
         }
     }
 
-    function getContainingClassIfInHeritageClause(node: Node): ClassLikeDeclaration | InterfaceDeclaration | undefined {
-        return isIdentifier(node) || isPropertyAccessExpression(node) ? getContainingClassIfInHeritageClause(node.parent)
-            : isExpressionWithTypeArguments(node) ? tryCast(node.parent.parent, isClassLike) : undefined;
+    function getContainingNodeIfInHeritageClause(node: Node): ClassLikeDeclaration | InterfaceDeclaration | undefined {
+        return isIdentifier(node) || isPropertyAccessExpression(node) ? getContainingNodeIfInHeritageClause(node.parent)
+            : isExpressionWithTypeArguments(node) ? tryCast(node.parent.parent, or(isClassLike, isInterfaceDeclaration)) : undefined;
     }
 
     /**
@@ -2300,7 +2330,7 @@ export namespace Core {
     }
 
     function getReferencesForThisKeyword(thisOrSuperKeyword: Node, sourceFiles: readonly SourceFile[], cancellationToken: CancellationToken): SymbolAndEntries[] | undefined {
-        let searchSpaceNode: Node = getThisContainer(thisOrSuperKeyword, /* includeArrowFunctions */ false, /*includeClassComputedPropertyName*/ false);
+        let searchSpaceNode: Node = getThisContainer(thisOrSuperKeyword, /*includeArrowFunctions*/ false, /*includeClassComputedPropertyName*/ false);
 
         // Whether 'this' occurs in a static context within a class.
         let staticFlag = ModifierFlags.Static;
@@ -2342,7 +2372,7 @@ export namespace Core {
                 if (!isThis(node)) {
                     return false;
                 }
-                const container = getThisContainer(node, /* includeArrowFunctions */ false, /*includeClassComputedPropertyName*/ false);
+                const container = getThisContainer(node, /*includeArrowFunctions*/ false, /*includeClassComputedPropertyName*/ false);
                 if (!canHaveSymbol(container)) return false;
                 switch (searchSpaceNode.kind) {
                     case SyntaxKind.FunctionExpression:

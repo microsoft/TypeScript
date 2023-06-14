@@ -1,10 +1,10 @@
-tests/cases/compiler/omittedExpressionForOfLoop.ts(1,19): error TS2304: Cannot find name 'doesNotExist'.
-tests/cases/compiler/omittedExpressionForOfLoop.ts(4,19): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/compiler/omittedExpressionForOfLoop.ts(7,12): error TS2488: Type 'never' must have a '[Symbol.iterator]()' method that returns an iterator.
-tests/cases/compiler/omittedExpressionForOfLoop.ts(10,12): error TS2488: Type 'never' must have a '[Symbol.iterator]()' method that returns an iterator.
+omittedExpressionForOfLoop.ts(1,19): error TS2304: Cannot find name 'doesNotExist'.
+omittedExpressionForOfLoop.ts(4,19): error TS18050: The value 'undefined' cannot be used here.
+omittedExpressionForOfLoop.ts(7,12): error TS2488: Type 'never' must have a '[Symbol.iterator]()' method that returns an iterator.
+omittedExpressionForOfLoop.ts(10,12): error TS2488: Type 'never' must have a '[Symbol.iterator]()' method that returns an iterator.
 
 
-==== tests/cases/compiler/omittedExpressionForOfLoop.ts (4 errors) ====
+==== omittedExpressionForOfLoop.ts (4 errors) ====
     for (const [,] of doesNotExist) {
                       ~~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'doesNotExist'.

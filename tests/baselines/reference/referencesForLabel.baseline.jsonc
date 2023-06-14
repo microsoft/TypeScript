@@ -1,255 +1,171 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForLabel.ts ===
-// /*FIND ALL REFS*/[|label|]: while (true) {
-//     if (false) break [|label|];
-//     if (true) continue [|label|];
+// /*FIND ALL REFS*/<|[|label|]: while (true) {
+//     if (false) <|break [|label|];|>
+//     if (true) <|continue [|label|];|>
+// }|>
+// 
+// label: while (false) { }
+// var label = "label";
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForLabel.ts ===
+  // /*FIND ALL REFS*/[|label|]: while (true) {
+  //     if (false) break label;
+  //     if (true) continue label;
+  // }
+  // --- (line: 5) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "label",
+    "name": "label",
+    "displayParts": [
+     {
+      "text": "label",
+      "kind": "text"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForLabel.ts ===
+// label: while (true) {
+//     if (false) /*FIND ALL REFS*/break label;
+//     if (true) continue label;
 // }
 // 
 // label: while (false) { }
 // var label = "label";
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForLabel.ts",
-      "kind": "label",
-      "name": "label",
-      "textSpan": {
-        "start": 0,
-        "length": 5
-      },
-      "displayParts": [
-        {
-          "text": "label",
-          "kind": "text"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 0,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/referencesForLabel.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 81
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 43,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/referencesForLabel.ts",
-        "contextSpan": {
-          "start": 37,
-          "length": 12
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 73,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/referencesForLabel.ts",
-        "contextSpan": {
-          "start": 64,
-          "length": 15
-        },
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
 
-undefined
 
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForLabel.ts ===
-// [|label|]: while (true) {
-//     if (false) break /*FIND ALL REFS*/[|label|];
-//     if (true) continue [|label|];
+// <|[|label|]: while (true) {
+//     if (false) <|break /*FIND ALL REFS*/[|label|];|>
+//     if (true) <|continue [|label|];|>
+// }|>
+// 
+// label: while (false) { }
+// var label = "label";
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForLabel.ts ===
+  // [|label|]: while (true) {
+  //     if (false) break /*FIND ALL REFS*/label;
+  //     if (true) continue label;
+  // }
+  // 
+  // label: while (false) { }
+  // var label = "label";
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "label",
+    "name": "label",
+    "displayParts": [
+     {
+      "text": "label",
+      "kind": "text"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForLabel.ts ===
+// label: while (true) {
+//     if (false) break label;
+//     if (true) /*FIND ALL REFS*/continue label;
 // }
 // 
 // label: while (false) { }
 // var label = "label";
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForLabel.ts",
-      "kind": "label",
-      "name": "label",
-      "textSpan": {
-        "start": 0,
-        "length": 5
-      },
-      "displayParts": [
-        {
-          "text": "label",
-          "kind": "text"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 0,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/referencesForLabel.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 81
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 43,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/referencesForLabel.ts",
-        "contextSpan": {
-          "start": 37,
-          "length": 12
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 73,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/referencesForLabel.ts",
-        "contextSpan": {
-          "start": 64,
-          "length": 15
-        },
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
 
-undefined
 
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForLabel.ts ===
-// [|label|]: while (true) {
-//     if (false) break [|label|];
-//     if (true) continue /*FIND ALL REFS*/[|label|];
-// }
+// <|[|label|]: while (true) {
+//     if (false) <|break [|label|];|>
+//     if (true) <|continue /*FIND ALL REFS*/[|label|];|>
+// }|>
 // 
 // label: while (false) { }
 // var label = "label";
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForLabel.ts",
-      "kind": "label",
-      "name": "label",
-      "textSpan": {
-        "start": 0,
-        "length": 5
-      },
-      "displayParts": [
-        {
-          "text": "label",
-          "kind": "text"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 0,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/referencesForLabel.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 81
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 43,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/referencesForLabel.ts",
-        "contextSpan": {
-          "start": 37,
-          "length": 12
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 73,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/referencesForLabel.ts",
-        "contextSpan": {
-          "start": 64,
-          "length": 15
-        },
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForLabel.ts ===
+  // [|label|]: while (true) {
+  //     if (false) break label;
+  //     if (true) continue /*FIND ALL REFS*/label;
+  // }
+  // 
+  // label: while (false) { }
+  // var label = "label";
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "label",
+    "name": "label",
+    "displayParts": [
+     {
+      "text": "label",
+      "kind": "text"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForLabel.ts ===
 // label: while (true) {
 //     if (false) break label;
 //     if (true) continue label;
 // }
 // 
-// /*FIND ALL REFS*/[|label|]: while (false) { }
+// /*FIND ALL REFS*/<|[|label|]: while (false) { }|>
 // var label = "label";
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForLabel.ts",
-      "kind": "label",
-      "name": "label",
-      "textSpan": {
-        "start": 83,
-        "length": 5
-      },
-      "displayParts": [
-        {
-          "text": "label",
-          "kind": "text"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 83,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/referencesForLabel.ts",
-        "contextSpan": {
-          "start": 83,
-          "length": 24
-        },
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForLabel.ts ===
+  // label: while (true) {
+  //     if (false) break label;
+  //     if (true) continue label;
+  // }
+  // 
+  // /*FIND ALL REFS*/[|label|]: while (false) { }
+  // var label = "label";
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "label",
+    "name": "label",
+    "displayParts": [
+     {
+      "text": "label",
+      "kind": "text"
+     }
     ]
-  }
-]
+   }
+  ]

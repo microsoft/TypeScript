@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/badInferenceLowerPriorityThanGoodInference.ts] ////
+
 //// [badInferenceLowerPriorityThanGoodInference.ts]
 // Repro from #13118
 

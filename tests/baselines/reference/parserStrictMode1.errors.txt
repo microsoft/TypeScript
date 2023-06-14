@@ -1,10 +1,10 @@
-tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode1.ts(1,1): error TS2304: Cannot find name 'foo1'.
-tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode1.ts(2,1): error TS2304: Cannot find name 'foo1'.
-tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode1.ts(3,1): error TS2304: Cannot find name 'foo1'.
-tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode1.ts(4,1): error TS2304: Cannot find name 'static'.
+parserStrictMode1.ts(1,1): error TS2304: Cannot find name 'foo1'.
+parserStrictMode1.ts(2,1): error TS2304: Cannot find name 'foo1'.
+parserStrictMode1.ts(3,1): error TS2304: Cannot find name 'foo1'.
+parserStrictMode1.ts(4,1): error TS2304: Cannot find name 'static'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode1.ts (4 errors) ====
+==== parserStrictMode1.ts (4 errors) ====
     foo1();
     ~~~~
 !!! error TS2304: Cannot find name 'foo1'.

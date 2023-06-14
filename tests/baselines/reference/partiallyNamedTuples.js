@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/tuple/named/partiallyNamedTuples.ts] ////
+
 //// [partiallyNamedTuples.ts]
 type NamedAndAnonymous = [a: string, number];
 

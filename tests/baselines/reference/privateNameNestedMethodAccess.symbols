@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameNestedMethodAccess.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameNestedMethodAccess.ts] ////
+
+=== privateNameNestedMethodAccess.ts ===
 class C {
 >C : Symbol(C, Decl(privateNameNestedMethodAccess.ts, 0, 0))
 

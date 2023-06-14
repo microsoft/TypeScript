@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithMethodInES6.ts ===
+//// [tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithMethodInES6.ts] ////
+
+=== emitClassDeclarationWithMethodInES6.ts ===
 class D {
 >D : Symbol(D, Decl(emitClassDeclarationWithMethodInES6.ts, 0, 0))
 

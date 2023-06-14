@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/assignmentCompatability_checking-call-member-off-of-function-interface.ts] ////
+
 //// [assignmentCompatability_checking-call-member-off-of-function-interface.ts]
 // 3.8.4 Assignment Compatibility 
 

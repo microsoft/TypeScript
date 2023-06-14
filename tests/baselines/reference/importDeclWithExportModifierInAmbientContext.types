@@ -1,4 +1,6 @@
-=== tests/cases/compiler/importDeclWithExportModifierInAmbientContext.ts ===
+//// [tests/cases/compiler/importDeclWithExportModifierInAmbientContext.ts] ////
+
+=== importDeclWithExportModifierInAmbientContext.ts ===
 declare module "m" {
 >"m" : typeof import("m")
 

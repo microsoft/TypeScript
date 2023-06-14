@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/mixinClassesAnonymous.ts] ////
+
 //// [mixinClassesAnonymous.ts]
 type Constructor<T> = new(...args: any[]) => T;
 

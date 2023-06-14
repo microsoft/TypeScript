@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxTypeArgumentResolution.tsx] ////
+
 //// [file.tsx]
 import React = require('react');
 

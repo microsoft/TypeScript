@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/tuple/named/namedTupleMembersErrors.ts ===
+//// [tests/cases/conformance/types/tuple/named/namedTupleMembersErrors.ts] ////
+
+=== namedTupleMembersErrors.ts ===
 export type Segment1 = [length: number, number];
 >Segment1 : [length: number, number]
 

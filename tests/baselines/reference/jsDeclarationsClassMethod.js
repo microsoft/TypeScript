@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsClassMethod.ts] ////
+
 //// [jsDeclarationsClassMethod.js]
 function C1() {
     /**

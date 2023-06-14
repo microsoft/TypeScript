@@ -1,4 +1,6 @@
-=== tests/cases/conformance/node/index.ts ===
+//// [tests/cases/conformance/node/nodeModulesResolveJsonModule.ts] ////
+
+=== index.ts ===
 import pkg from "./package.json"
 >pkg : { name: string; version: string; type: string; default: string; }
 
@@ -23,7 +25,7 @@ export const name2 = ns.default.name;
 >default : { name: string; version: string; type: string; default: string; }
 >name : string
 
-=== tests/cases/conformance/node/index.cts ===
+=== index.cts ===
 import pkg from "./package.json"
 >pkg : { name: string; version: string; type: string; default: string; }
 
@@ -48,7 +50,7 @@ export const name2 = ns.default.name;
 >default : { name: string; version: string; type: string; default: string; }
 >name : string
 
-=== tests/cases/conformance/node/index.mts ===
+=== index.mts ===
 import pkg from "./package.json"
 >pkg : { name: string; version: string; type: string; default: string; }
 
@@ -73,7 +75,7 @@ export const name2 = ns.default.name;
 >default : { name: string; version: string; type: string; default: string; }
 >name : string
 
-=== tests/cases/conformance/node/package.json ===
+=== package.json ===
 {
 >{    "name": "pkg",    "version": "0.0.1",    "type": "module",    "default": "misedirection"} : { name: string; version: string; type: string; default: string; }
 

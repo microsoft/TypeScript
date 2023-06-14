@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/arrayAssignmentPatternWithAny.ts] ////
+
 //// [arrayAssignmentPatternWithAny.ts]
 var a: any;
 var x: string;

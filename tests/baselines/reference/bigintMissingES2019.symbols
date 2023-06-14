@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es2020/bigintMissingES2019.ts ===
+//// [tests/cases/conformance/es2020/bigintMissingES2019.ts] ////
+
+=== bigintMissingES2019.ts ===
 declare function test<A, B extends A>(): void;
 >test : Symbol(test, Decl(bigintMissingES2019.ts, 0, 0))
 >A : Symbol(A, Decl(bigintMissingES2019.ts, 0, 22))

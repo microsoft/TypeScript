@@ -4,5 +4,5 @@
 ////    type = 'Text' as /**/const;
 ////}
 
-verify.goToDefinition("", []);
+verify.baselineGoToDefinition("");
 verify.noErrors();

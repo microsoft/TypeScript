@@ -1,0 +1,31 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsClassStatic2.ts] ////
+
+=== Foo.js ===
+class Base {
+>Base : Symbol(Base, Decl(Foo.js, 0, 0))
+
+  static foo = "";
+>foo : Symbol(Base.foo, Decl(Foo.js, 0, 12))
+}
+export class Foo extends Base {}
+>Foo : Symbol(Foo, Decl(Foo.js, 2, 1), Decl(Foo.js, 3, 32))
+>Base : Symbol(Base, Decl(Foo.js, 0, 0))
+
+Foo.foo = "foo";
+>Foo.foo : Symbol(Foo.foo, Decl(Foo.js, 3, 32))
+>Foo : Symbol(Foo, Decl(Foo.js, 2, 1), Decl(Foo.js, 3, 32))
+>foo : Symbol(Foo.foo, Decl(Foo.js, 3, 32))
+
+=== Bar.ts ===
+import { Foo } from "./Foo.js";
+>Foo : Symbol(Foo, Decl(Bar.ts, 0, 8))
+
+class Bar extends Foo {}
+>Bar : Symbol(Bar, Decl(Bar.ts, 0, 31))
+>Foo : Symbol(Foo, Decl(Bar.ts, 0, 8))
+
+Bar.foo = "foo";
+>Bar.foo : Symbol(Foo.foo, Decl(Foo.js, 3, 32))
+>Bar : Symbol(Bar, Decl(Bar.ts, 0, 31))
+>foo : Symbol(Foo.foo, Decl(Foo.js, 3, 32))
+

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitUseStrict_umd.ts] ////
+
 //// [noImplicitUseStrict_umd.ts]
 export var x = 0;
 
