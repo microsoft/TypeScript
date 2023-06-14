@@ -1,0 +1,21 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionShorthandProperty06.ts ===
+// interface Foo {
+//     <|[|foo|](): void|>
+// }
+// const foo = 1;
+// let x: Foo = {
+//     f/*GOTO DEF*/oo()
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "method",
+    "name": "foo",
+    "containerName": "Foo",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]

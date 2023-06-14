@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/errorWithTruncatedType.ts] ////
+
 //// [errorWithTruncatedType.ts]
 var x: {
     propertyWithAnExceedinglyLongName1: string;

@@ -1,11 +1,11 @@
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractConstructorAssignability.ts(7,5): error TS2322: Type 'typeof B' is not assignable to type 'typeof A'.
+classAbstractConstructorAssignability.ts(7,5): error TS2322: Type 'typeof B' is not assignable to type 'typeof A'.
   Cannot assign an abstract constructor type to a non-abstract constructor type.
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractConstructorAssignability.ts(9,5): error TS2322: Type 'typeof B' is not assignable to type 'typeof C'.
+classAbstractConstructorAssignability.ts(9,5): error TS2322: Type 'typeof B' is not assignable to type 'typeof C'.
   Cannot assign an abstract constructor type to a non-abstract constructor type.
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractConstructorAssignability.ts(12,1): error TS2511: Cannot create an instance of an abstract class.
+classAbstractConstructorAssignability.ts(12,1): error TS2511: Cannot create an instance of an abstract class.
 
 
-==== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractConstructorAssignability.ts (3 errors) ====
+==== classAbstractConstructorAssignability.ts (3 errors) ====
     class A {}
     
     abstract class B extends A {}

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classImplementsClass2.ts] ////
+
 //// [classImplementsClass2.ts]
 class A { foo(): number { return 1; } }
 class C implements A {} // error

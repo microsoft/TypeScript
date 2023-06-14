@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsFileCompilationShortHandProperty.ts] ////
+
 //// [a.js]
 function foo() {
     var a = 10;

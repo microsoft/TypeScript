@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/yieldStringLiteral.ts] ////
+
 //// [yieldStringLiteral.ts]
 function yieldString() {
     yield 'literal';

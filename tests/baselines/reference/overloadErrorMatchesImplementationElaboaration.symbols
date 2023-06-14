@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadErrorMatchesImplementationElaboaration.ts ===
+//// [tests/cases/compiler/overloadErrorMatchesImplementationElaboaration.ts] ////
+
+=== overloadErrorMatchesImplementationElaboaration.ts ===
 class EventAggregator
 >EventAggregator : Symbol(EventAggregator, Decl(overloadErrorMatchesImplementationElaboaration.ts, 0, 0))
 {

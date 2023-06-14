@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/javascriptThisAssignmentInStaticBlock.ts] ////
+
 //// [a.js]
 class Thing {
     static {

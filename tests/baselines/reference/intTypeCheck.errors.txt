@@ -1,102 +1,102 @@
-tests/cases/compiler/intTypeCheck.ts(35,6): error TS2304: Cannot find name 'p'.
-tests/cases/compiler/intTypeCheck.ts(71,6): error TS2304: Cannot find name 'p'.
-tests/cases/compiler/intTypeCheck.ts(85,5): error TS2386: Overload signatures must all be optional or required.
-tests/cases/compiler/intTypeCheck.ts(99,5): error TS2696: The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
+intTypeCheck.ts(35,6): error TS2304: Cannot find name 'p'.
+intTypeCheck.ts(71,6): error TS2304: Cannot find name 'p'.
+intTypeCheck.ts(85,5): error TS2386: Overload signatures must all be optional or required.
+intTypeCheck.ts(99,5): error TS2696: The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
   Type 'Object' is missing the following properties from type 'i1': p, p3, p6
-tests/cases/compiler/intTypeCheck.ts(100,20): error TS2351: This expression is not constructable.
+intTypeCheck.ts(100,20): error TS2351: This expression is not constructable.
   Type 'i1' has no construct signatures.
-tests/cases/compiler/intTypeCheck.ts(101,5): error TS2739: Type 'Base' is missing the following properties from type 'i1': p, p3, p6
-tests/cases/compiler/intTypeCheck.ts(103,5): error TS2322: Type '() => void' is not assignable to type 'i1'.
-tests/cases/compiler/intTypeCheck.ts(106,5): error TS2322: Type 'boolean' is not assignable to type 'i1'.
-tests/cases/compiler/intTypeCheck.ts(106,20): error TS1109: Expression expected.
-tests/cases/compiler/intTypeCheck.ts(106,21): error TS2693: 'i1' only refers to a type, but is being used as a value here.
-tests/cases/compiler/intTypeCheck.ts(107,21): error TS2351: This expression is not constructable.
+intTypeCheck.ts(101,5): error TS2739: Type 'Base' is missing the following properties from type 'i1': p, p3, p6
+intTypeCheck.ts(103,5): error TS2322: Type '() => void' is not assignable to type 'i1'.
+intTypeCheck.ts(106,5): error TS2322: Type 'boolean' is not assignable to type 'i1'.
+intTypeCheck.ts(106,20): error TS1109: Expression expected.
+intTypeCheck.ts(106,21): error TS2693: 'i1' only refers to a type, but is being used as a value here.
+intTypeCheck.ts(107,21): error TS2351: This expression is not constructable.
   Type '{}' has no construct signatures.
-tests/cases/compiler/intTypeCheck.ts(112,5): error TS2322: Type '{}' is not assignable to type 'i2'.
+intTypeCheck.ts(112,5): error TS2322: Type '{}' is not assignable to type 'i2'.
   Type '{}' provides no match for the signature '(): any'.
-tests/cases/compiler/intTypeCheck.ts(113,5): error TS2322: Type 'Object' is not assignable to type 'i2'.
+intTypeCheck.ts(113,5): error TS2322: Type 'Object' is not assignable to type 'i2'.
   The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
     Type 'Object' provides no match for the signature '(): any'.
-tests/cases/compiler/intTypeCheck.ts(114,17): error TS2350: Only a void function can be called with the 'new' keyword.
-tests/cases/compiler/intTypeCheck.ts(115,5): error TS2322: Type 'Base' is not assignable to type 'i2'.
+intTypeCheck.ts(114,17): error TS2350: Only a void function can be called with the 'new' keyword.
+intTypeCheck.ts(115,5): error TS2322: Type 'Base' is not assignable to type 'i2'.
   Type 'Base' provides no match for the signature '(): any'.
-tests/cases/compiler/intTypeCheck.ts(120,5): error TS2322: Type 'boolean' is not assignable to type 'i2'.
-tests/cases/compiler/intTypeCheck.ts(120,21): error TS1109: Expression expected.
-tests/cases/compiler/intTypeCheck.ts(120,22): error TS2693: 'i2' only refers to a type, but is being used as a value here.
-tests/cases/compiler/intTypeCheck.ts(121,21): error TS2351: This expression is not constructable.
+intTypeCheck.ts(120,5): error TS2322: Type 'boolean' is not assignable to type 'i2'.
+intTypeCheck.ts(120,21): error TS1109: Expression expected.
+intTypeCheck.ts(120,22): error TS2693: 'i2' only refers to a type, but is being used as a value here.
+intTypeCheck.ts(121,21): error TS2351: This expression is not constructable.
   Type '{}' has no construct signatures.
-tests/cases/compiler/intTypeCheck.ts(126,5): error TS2322: Type '{}' is not assignable to type 'i3'.
+intTypeCheck.ts(126,5): error TS2322: Type '{}' is not assignable to type 'i3'.
   Type '{}' provides no match for the signature 'new (): any'.
-tests/cases/compiler/intTypeCheck.ts(127,5): error TS2322: Type 'Object' is not assignable to type 'i3'.
+intTypeCheck.ts(127,5): error TS2322: Type 'Object' is not assignable to type 'i3'.
   The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
     Type 'Object' provides no match for the signature 'new (): any'.
-tests/cases/compiler/intTypeCheck.ts(129,5): error TS2322: Type 'Base' is not assignable to type 'i3'.
+intTypeCheck.ts(129,5): error TS2322: Type 'Base' is not assignable to type 'i3'.
   Type 'Base' provides no match for the signature 'new (): any'.
-tests/cases/compiler/intTypeCheck.ts(131,5): error TS2322: Type '() => void' is not assignable to type 'i3'.
+intTypeCheck.ts(131,5): error TS2322: Type '() => void' is not assignable to type 'i3'.
   Type '() => void' provides no match for the signature 'new (): any'.
-tests/cases/compiler/intTypeCheck.ts(134,5): error TS2322: Type 'boolean' is not assignable to type 'i3'.
-tests/cases/compiler/intTypeCheck.ts(134,21): error TS1109: Expression expected.
-tests/cases/compiler/intTypeCheck.ts(134,22): error TS2693: 'i3' only refers to a type, but is being used as a value here.
-tests/cases/compiler/intTypeCheck.ts(135,21): error TS2351: This expression is not constructable.
+intTypeCheck.ts(134,5): error TS2322: Type 'boolean' is not assignable to type 'i3'.
+intTypeCheck.ts(134,21): error TS1109: Expression expected.
+intTypeCheck.ts(134,22): error TS2693: 'i3' only refers to a type, but is being used as a value here.
+intTypeCheck.ts(135,21): error TS2351: This expression is not constructable.
   Type '{}' has no construct signatures.
-tests/cases/compiler/intTypeCheck.ts(142,21): error TS2351: This expression is not constructable.
+intTypeCheck.ts(142,21): error TS2351: This expression is not constructable.
   Type 'i4' has no construct signatures.
-tests/cases/compiler/intTypeCheck.ts(148,5): error TS2322: Type 'boolean' is not assignable to type 'i4'.
-tests/cases/compiler/intTypeCheck.ts(148,21): error TS1109: Expression expected.
-tests/cases/compiler/intTypeCheck.ts(148,22): error TS2693: 'i4' only refers to a type, but is being used as a value here.
-tests/cases/compiler/intTypeCheck.ts(149,21): error TS2351: This expression is not constructable.
+intTypeCheck.ts(148,5): error TS2322: Type 'boolean' is not assignable to type 'i4'.
+intTypeCheck.ts(148,21): error TS1109: Expression expected.
+intTypeCheck.ts(148,22): error TS2693: 'i4' only refers to a type, but is being used as a value here.
+intTypeCheck.ts(149,21): error TS2351: This expression is not constructable.
   Type '{}' has no construct signatures.
-tests/cases/compiler/intTypeCheck.ts(154,5): error TS2739: Type '{}' is missing the following properties from type 'i5': p, p3, p6
-tests/cases/compiler/intTypeCheck.ts(155,5): error TS2696: The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
+intTypeCheck.ts(154,5): error TS2739: Type '{}' is missing the following properties from type 'i5': p, p3, p6
+intTypeCheck.ts(155,5): error TS2696: The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
   Type 'Object' is missing the following properties from type 'i5': p, p3, p6
-tests/cases/compiler/intTypeCheck.ts(156,21): error TS2351: This expression is not constructable.
+intTypeCheck.ts(156,21): error TS2351: This expression is not constructable.
   Type 'i5' has no construct signatures.
-tests/cases/compiler/intTypeCheck.ts(157,5): error TS2739: Type 'Base' is missing the following properties from type 'i5': p, p3, p6
-tests/cases/compiler/intTypeCheck.ts(159,5): error TS2322: Type '() => void' is not assignable to type 'i5'.
-tests/cases/compiler/intTypeCheck.ts(162,5): error TS2322: Type 'boolean' is not assignable to type 'i5'.
-tests/cases/compiler/intTypeCheck.ts(162,21): error TS1109: Expression expected.
-tests/cases/compiler/intTypeCheck.ts(162,22): error TS2693: 'i5' only refers to a type, but is being used as a value here.
-tests/cases/compiler/intTypeCheck.ts(163,21): error TS2351: This expression is not constructable.
+intTypeCheck.ts(157,5): error TS2739: Type 'Base' is missing the following properties from type 'i5': p, p3, p6
+intTypeCheck.ts(159,5): error TS2322: Type '() => void' is not assignable to type 'i5'.
+intTypeCheck.ts(162,5): error TS2322: Type 'boolean' is not assignable to type 'i5'.
+intTypeCheck.ts(162,21): error TS1109: Expression expected.
+intTypeCheck.ts(162,22): error TS2693: 'i5' only refers to a type, but is being used as a value here.
+intTypeCheck.ts(163,21): error TS2351: This expression is not constructable.
   Type '{}' has no construct signatures.
-tests/cases/compiler/intTypeCheck.ts(168,5): error TS2322: Type '{}' is not assignable to type 'i6'.
+intTypeCheck.ts(168,5): error TS2322: Type '{}' is not assignable to type 'i6'.
   Type '{}' provides no match for the signature '(): any'.
-tests/cases/compiler/intTypeCheck.ts(169,5): error TS2322: Type 'Object' is not assignable to type 'i6'.
+intTypeCheck.ts(169,5): error TS2322: Type 'Object' is not assignable to type 'i6'.
   The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
     Type 'Object' provides no match for the signature '(): any'.
-tests/cases/compiler/intTypeCheck.ts(170,17): error TS2350: Only a void function can be called with the 'new' keyword.
-tests/cases/compiler/intTypeCheck.ts(171,5): error TS2322: Type 'Base' is not assignable to type 'i6'.
+intTypeCheck.ts(170,17): error TS2350: Only a void function can be called with the 'new' keyword.
+intTypeCheck.ts(171,5): error TS2322: Type 'Base' is not assignable to type 'i6'.
   Type 'Base' provides no match for the signature '(): any'.
-tests/cases/compiler/intTypeCheck.ts(173,5): error TS2322: Type '() => void' is not assignable to type 'i6'.
+intTypeCheck.ts(173,5): error TS2322: Type '() => void' is not assignable to type 'i6'.
   Type 'void' is not assignable to type 'number'.
-tests/cases/compiler/intTypeCheck.ts(176,5): error TS2322: Type 'boolean' is not assignable to type 'i6'.
-tests/cases/compiler/intTypeCheck.ts(176,21): error TS1109: Expression expected.
-tests/cases/compiler/intTypeCheck.ts(176,22): error TS2693: 'i6' only refers to a type, but is being used as a value here.
-tests/cases/compiler/intTypeCheck.ts(177,21): error TS2351: This expression is not constructable.
+intTypeCheck.ts(176,5): error TS2322: Type 'boolean' is not assignable to type 'i6'.
+intTypeCheck.ts(176,21): error TS1109: Expression expected.
+intTypeCheck.ts(176,22): error TS2693: 'i6' only refers to a type, but is being used as a value here.
+intTypeCheck.ts(177,21): error TS2351: This expression is not constructable.
   Type '{}' has no construct signatures.
-tests/cases/compiler/intTypeCheck.ts(182,5): error TS2322: Type '{}' is not assignable to type 'i7'.
+intTypeCheck.ts(182,5): error TS2322: Type '{}' is not assignable to type 'i7'.
   Type '{}' provides no match for the signature 'new (): any'.
-tests/cases/compiler/intTypeCheck.ts(183,5): error TS2322: Type 'Object' is not assignable to type 'i7'.
+intTypeCheck.ts(183,5): error TS2322: Type 'Object' is not assignable to type 'i7'.
   The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
     Type 'Object' provides no match for the signature 'new (): any'.
-tests/cases/compiler/intTypeCheck.ts(185,17): error TS2352: Conversion of type 'Base' to type 'i7' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+intTypeCheck.ts(185,17): error TS2352: Conversion of type 'Base' to type 'i7' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Type 'Base' provides no match for the signature 'new (): any'.
-tests/cases/compiler/intTypeCheck.ts(187,5): error TS2322: Type '() => void' is not assignable to type 'i7'.
+intTypeCheck.ts(187,5): error TS2322: Type '() => void' is not assignable to type 'i7'.
   Type '() => void' provides no match for the signature 'new (): any'.
-tests/cases/compiler/intTypeCheck.ts(190,5): error TS2322: Type 'boolean' is not assignable to type 'i7'.
-tests/cases/compiler/intTypeCheck.ts(190,21): error TS1109: Expression expected.
-tests/cases/compiler/intTypeCheck.ts(190,22): error TS2693: 'i7' only refers to a type, but is being used as a value here.
-tests/cases/compiler/intTypeCheck.ts(191,21): error TS2351: This expression is not constructable.
+intTypeCheck.ts(190,5): error TS2322: Type 'boolean' is not assignable to type 'i7'.
+intTypeCheck.ts(190,21): error TS1109: Expression expected.
+intTypeCheck.ts(190,22): error TS2693: 'i7' only refers to a type, but is being used as a value here.
+intTypeCheck.ts(191,21): error TS2351: This expression is not constructable.
   Type '{}' has no construct signatures.
-tests/cases/compiler/intTypeCheck.ts(198,21): error TS2351: This expression is not constructable.
+intTypeCheck.ts(198,21): error TS2351: This expression is not constructable.
   Type 'i8' has no construct signatures.
-tests/cases/compiler/intTypeCheck.ts(204,5): error TS2322: Type 'boolean' is not assignable to type 'i8'.
-tests/cases/compiler/intTypeCheck.ts(204,21): error TS1109: Expression expected.
-tests/cases/compiler/intTypeCheck.ts(204,22): error TS2693: 'i8' only refers to a type, but is being used as a value here.
-tests/cases/compiler/intTypeCheck.ts(205,21): error TS2351: This expression is not constructable.
+intTypeCheck.ts(204,5): error TS2322: Type 'boolean' is not assignable to type 'i8'.
+intTypeCheck.ts(204,21): error TS1109: Expression expected.
+intTypeCheck.ts(204,22): error TS2693: 'i8' only refers to a type, but is being used as a value here.
+intTypeCheck.ts(205,21): error TS2351: This expression is not constructable.
   Type '{}' has no construct signatures.
 
 
-==== tests/cases/compiler/intTypeCheck.ts (63 errors) ====
+==== intTypeCheck.ts (63 errors) ====
     interface i1 {
         //Property Signatures
         p;

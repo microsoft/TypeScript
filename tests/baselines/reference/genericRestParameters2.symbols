@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/rest/genericRestParameters2.ts ===
+//// [tests/cases/conformance/types/rest/genericRestParameters2.ts] ////
+
+=== genericRestParameters2.ts ===
 declare const t1: [number, string, ...boolean[]];
 >t1 : Symbol(t1, Decl(genericRestParameters2.ts, 0, 13))
 

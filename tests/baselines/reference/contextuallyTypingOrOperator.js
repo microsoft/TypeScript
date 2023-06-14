@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextuallyTypingOrOperator.ts] ////
+
 //// [contextuallyTypingOrOperator.ts]
 var v: { a: (_: string) => number } = { a: s => s.length } || { a: s => 1 };
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionExpressionReturningItself.ts] ////
+
 //// [functionExpressionReturningItself.ts]
 var x = function somefn() { return somefn; };
 

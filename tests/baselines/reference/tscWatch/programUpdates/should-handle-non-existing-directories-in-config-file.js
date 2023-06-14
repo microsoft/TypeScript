@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/src/app.ts]
 let x = 1;
@@ -44,21 +45,19 @@ Shape signatures in builder refreshed for::
 /a/src/app.ts (used version)
 
 PolledWatches::
-/a/node_modules/@types:
-  {"pollingInterval":500}
-/a/notexistingfolder:
+/a/notexistingfolder: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/tsconfig.json:
+/a/lib/lib.d.ts: *new*
   {}
-/a/src/app.ts:
+/a/src/app.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/a/src:
+/a/src: *new*
   {}
 
 exitCode:: ExitStatus.undefined

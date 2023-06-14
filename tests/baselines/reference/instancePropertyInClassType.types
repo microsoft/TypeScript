@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/classTypes/instancePropertyInClassType.ts ===
+//// [tests/cases/conformance/classes/members/classTypes/instancePropertyInClassType.ts] ////
+
+=== instancePropertyInClassType.ts ===
 module NonGeneric {
 >NonGeneric : typeof NonGeneric
 
@@ -82,7 +84,6 @@ module Generic {
 >y : U
 
             return null;
->null : null
         }
         set y(v: U) { }
 >y : U

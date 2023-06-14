@@ -1,9 +1,9 @@
-tests/cases/compiler/objectFreeze.ts(9,1): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/objectFreeze.ts(9,1): error TS2542: Index signature in type 'readonly number[]' only permits reading.
-tests/cases/compiler/objectFreeze.ts(12,3): error TS2540: Cannot assign to 'b' because it is a read-only property.
+objectFreeze.ts(9,1): error TS2322: Type 'string' is not assignable to type 'number'.
+objectFreeze.ts(9,1): error TS2542: Index signature in type 'readonly number[]' only permits reading.
+objectFreeze.ts(12,3): error TS2540: Cannot assign to 'b' because it is a read-only property.
 
 
-==== tests/cases/compiler/objectFreeze.ts (3 errors) ====
+==== objectFreeze.ts (3 errors) ====
     const f = Object.freeze(function foo(a: number, b: string) { return false; });
     f(1, "") === false;
     

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/uncalledFunctionChecksInConditional2.ts] ////
+
 //// [uncalledFunctionChecksInConditional2.ts]
 {
   const perf = window.performance

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/parserImportDeclaration1.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/parserImportDeclaration1.ts] ////
+
+=== parserImportDeclaration1.ts ===
 import TypeScript = TypeScriptServices.TypeScript;
 >TypeScript : Symbol(TypeScript, Decl(parserImportDeclaration1.ts, 0, 0))
 

@@ -1,7 +1,7 @@
-tests/cases/conformance/async/es6/asyncQualifiedReturnType_es6.ts(6,21): error TS1064: The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<void>'?
+asyncQualifiedReturnType_es6.ts(6,21): error TS1064: The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<void>'?
 
 
-==== tests/cases/conformance/async/es6/asyncQualifiedReturnType_es6.ts (1 errors) ====
+==== asyncQualifiedReturnType_es6.ts (1 errors) ====
     namespace X {
         export class MyPromise<T> extends Promise<T> {
         }

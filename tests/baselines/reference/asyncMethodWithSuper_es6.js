@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/async/es6/asyncMethodWithSuper_es6.ts] ////
+
 //// [asyncMethodWithSuper_es6.ts]
 class A {
     x() {

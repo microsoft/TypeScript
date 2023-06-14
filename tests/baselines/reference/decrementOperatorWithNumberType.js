@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithNumberType.ts] ////
+
 //// [decrementOperatorWithNumberType.ts]
 // -- operator on number type
 var NUMBER: number;

@@ -664,7 +664,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
 
     function createClassPrivateFieldInHelper(state: Identifier, receiver: Expression) {
         context.requestEmitHelper(classPrivateFieldInHelper);
-        return factory.createCallExpression(getUnscopedHelperName("__classPrivateFieldIn"), /* typeArguments*/ undefined, [state, receiver]);
+        return factory.createCallExpression(getUnscopedHelperName("__classPrivateFieldIn"), /*typeArguments*/ undefined, [state, receiver]);
     }
 }
 
@@ -761,10 +761,10 @@ export const esDecorateHelper: UnscopedEmitHelper = {
                     if (result === null || typeof result !== "object") throw new TypeError("Object expected");
                     if (_ = accept(result.get)) descriptor.get = _;
                     if (_ = accept(result.set)) descriptor.set = _;
-                    if (_ = accept(result.init)) initializers.push(_);
+                    if (_ = accept(result.init)) initializers.unshift(_);
                 }
                 else if (_ = accept(result)) {
-                    if (kind === "field") initializers.push(_);
+                    if (kind === "field") initializers.unshift(_);
                     else descriptor[key] = _;
                 }
             }

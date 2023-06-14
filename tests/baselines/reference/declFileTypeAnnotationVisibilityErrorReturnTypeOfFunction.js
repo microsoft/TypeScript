@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts] ////
+
 //// [declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts]
 module m {
     class private1 {

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/globalThisCapture.ts] ////
+
 //// [globalThisCapture.ts]
 // Add a lambda to ensure global 'this' capture is triggered
 (()=>this.window);

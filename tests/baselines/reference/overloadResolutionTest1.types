@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadResolutionTest1.ts ===
+//// [tests/cases/compiler/overloadResolutionTest1.ts] ////
+
+=== overloadResolutionTest1.ts ===
 function foo(bar:{a:number;}[]):string;
 >foo : { (bar: {    a: number;}[]): string; (bar: { a: boolean; }[]): number; }
 >bar : { a: number; }[]
@@ -49,7 +51,6 @@ var x1111 = foo([{a:null}]); // works - ambiguous call is resolved to be the fir
 >[{a:null}] : { a: null; }[]
 >{a:null} : { a: null; }
 >a : null
->null : null
 
 
 

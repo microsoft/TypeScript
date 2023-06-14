@@ -1,8 +1,10 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/jsFileCompilationDuplicateVariable.ts] ////
+
+=== a.ts ===
 var x = 10;
 >x : Symbol(x, Decl(a.ts, 0, 3), Decl(b.js, 0, 3))
 
-=== tests/cases/compiler/b.js ===
+=== b.js ===
 var x = "hello"; // Error is recorded here, but suppressed because the js file isn't checked
 >x : Symbol(x, Decl(a.ts, 0, 3), Decl(b.js, 0, 3))
 

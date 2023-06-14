@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/implicitAnyGenericTypeInference.ts] ////
+
 //// [implicitAnyGenericTypeInference.ts]
 interface Comparer<T> {
     compareTo<U>(x: T, y: U): U;

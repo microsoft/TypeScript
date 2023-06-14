@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileTypeAnnotationTypeReference.ts] ////
+
 //// [declFileTypeAnnotationTypeReference.ts]
 class c {
 }
