@@ -1669,21 +1669,6 @@ interface ArrayBuffer {
     readonly byteLength: number;
 
     /**
-     * Read-only. The maximum length that this ArrayBuffer can be resized to (in bytes).
-     */
-    readonly maxByteLength: number;
-
-    /**
-     * Read-only. Whether this ArrayBuffer can be resized or not.
-     */
-    readonly resizable: boolean;
-
-    /**
-     * Resizes the ArrayBuffer to the specified size (in bytes).
-     */
-    resize(newLength: number): undefined;
-
-    /**
      * Returns a section of an ArrayBuffer.
      */
     slice(begin: number, end?: number): ArrayBuffer;
@@ -1697,16 +1682,9 @@ interface ArrayBufferTypes {
 }
 type ArrayBufferLike = ArrayBufferTypes[keyof ArrayBufferTypes];
 
-/**
- * ArrayBuffer constructor options
- */
-interface ArrayBufferOptions {
-    maxByteLength?: number;
-}
-
 interface ArrayBufferConstructor {
     readonly prototype: ArrayBuffer;
-    new(byteLength: number, options?: ArrayBufferOptions): ArrayBuffer;
+    new(byteLength: number): ArrayBuffer;
     isView(arg: any): arg is ArrayBufferView;
 }
 declare var ArrayBuffer: ArrayBufferConstructor;
