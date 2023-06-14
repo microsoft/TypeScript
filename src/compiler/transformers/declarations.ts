@@ -91,6 +91,7 @@ import {
     getSyntacticModifierFlags,
     getTextOfNode,
     getThisParameter,
+    getTokenPosOfNode,
     getTrailingCommentRanges,
     hasDynamicName,
     hasEffectiveModifier,
@@ -135,6 +136,7 @@ import {
     isFunctionDeclaration,
     isFunctionLike,
     isFunctionTypeNode,
+    isGetAccessorDeclaration,
     isGlobalScopeAugmentation,
     isIdentifier,
     isIdentifierANonContextualKeyword,
@@ -215,8 +217,10 @@ import {
     NodeFactory,
     NodeFlags,
     NodeId,
+    NodeWithTypeArguments,
     normalizeSlashes,
     nullTransformationContext,
+    ObjectLiteralElementLike,
     ObjectLiteralExpression,
     OmittedExpression,
     orderedRemoveItem,
@@ -880,19 +884,19 @@ export function transformDeclarations(context: TransformationContext) {
     }
     function entityNameExpressionToQualifiedName(node:EntityNameOrEntityNameExpression): EntityName {
         if(isIdentifier(node)) {
-            return factory.cloneNode(node);
+            return setTextRange(factory.cloneNode(node), node);
         }
         else if(isPropertyAccessExpression(node)) {
-            return factory.createQualifiedName(
+            return setTextRange(factory.createQualifiedName(
                 entityNameExpressionToQualifiedName(node.expression),
                 factory.cloneNode(node.name)
-            );
+            ), node);
         }
         else if(isQualifiedName(node)) {
-            return factory.createQualifiedName(
+            return setTextRange(factory.createQualifiedName(
                 entityNameExpressionToQualifiedName(node),
                 factory.cloneNode(node.right)
-            );
+            ), node);
         }
         throw Error("Should not happen");
     }
@@ -929,6 +933,45 @@ export function transformDeclarations(context: TransformationContext) {
 
     function mergeFlags(existing: LocalTypeInfoFlags, newFlags: LocalTypeInfoFlags): LocalTypeInfoFlags {
         return existing | (newFlags | LocalTypeInfoFlags.Optimistic);
+    }
+    function getAccessorInfo(properties: NodeArray<ObjectLiteralElementLike>, knownAccessor: SetAccessorDeclaration | GetAccessorDeclaration) {
+        const nameKey = getMemberKey(knownAccessor);
+        const knownIsGetAccessor = isGetAccessorDeclaration(knownAccessor);
+        const otherAccessorTest =  knownIsGetAccessor ? isSetAccessorDeclaration: isGetAccessorDeclaration;
+        const otherAccessorIndex = properties.findIndex(n => otherAccessorTest(n) && getMemberKey(n) === nameKey);
+        const otherAccessor = properties[otherAccessorIndex] as SetAccessorDeclaration | GetAccessorDeclaration | undefined;
+        
+        
+        const getAccessor = knownIsGetAccessor ? knownAccessor: 
+            otherAccessor && isGetAccessorDeclaration(otherAccessor)? otherAccessor:
+            undefined;
+        const setAccessor = !knownIsGetAccessor ? knownAccessor: 
+            otherAccessor && isSetAccessorDeclaration(otherAccessor)? otherAccessor:
+            undefined;
+
+        
+        return { 
+            otherAccessorIndex,
+            otherAccessor,
+            getAccessor,
+            setAccessor,
+        }
+    }
+    function inferAccessorType(getAccessor?: GetAccessorDeclaration, setAccessor?: SetAccessorDeclaration) {
+        
+        let accessorType = getAccessor?.type && deepClone(visitType(getAccessor?.type, getAccessor));
+        
+        if(!accessorType && setAccessor) {
+            accessorType = setAccessor.parameters[0].type;
+            accessorType = accessorType && deepClone(visitType(accessorType, setAccessor));
+        }
+
+        if(!accessorType && getAccessor) {
+            const localPropType = inferReturnType(getAccessor)
+            accessorType = localPropType.typeNode;
+        }
+
+        return accessorType ?? makeInvalidType();
     }
     function localInference(node: Node, inferenceFlags: NarrowBehavior = NarrowBehavior.None): LocalTypeInfo {
         const nextInferenceFlags = inferenceFlags & NarrowBehavior.NotKeepLiterals;
@@ -994,10 +1037,10 @@ export function transformDeclarations(context: TransformationContext) {
                 }
             case SyntaxKind.NewExpression:
                 const newExpr = node as NewExpression;
-                if(isIdentifier(newExpr.expression)) {
+                if(isEntityNameExpression(newExpr.expression)) {
                     
                     const typeNode = visitSyntheticType(factory.createTypeReferenceNode(
-                        deepClone(newExpr.expression),
+                        entityNameExpressionToQualifiedName(newExpr.expression),
                         visitNodes(newExpr.typeArguments, deepClone, isTypeNode)!
                     ), node);
                     // Optimistic since the constructor might not have the same name as the type
@@ -1158,13 +1201,15 @@ export function transformDeclarations(context: TransformationContext) {
             case SyntaxKind.ObjectLiteralExpression: {
                 const objectLiteral = node as ObjectLiteralExpression;
                 const properties: TypeElement[] = [];
-                let addedIntersections: TypeNode[] | undefined
-                for(const prop of objectLiteral.properties) {
+                let addedIntersections: TypeNode[] | undefined;
+
+                for(let propIndex =0, length = objectLiteral.properties.length; propIndex<length; propIndex++ ) {
+                    const prop = objectLiteral.properties[propIndex]
                     if(prop.name && isComputedPropertyName(prop.name) && isEntityNameExpression(prop.name.expression)) {
                         checkEntityNameVisibility(prop.name.expression, prop);
                     }
                     const name = prop.name && deepClone(visitNode(prop.name, visitDeclarationSubtree, isPropertyName)!);
-                    
+                    let newProp;
                     if(isMethodDeclaration(prop) && name) {
                         const oldEnclosingDeclaration = enclosingDeclaration;
                         enclosingDeclaration = prop;
@@ -1172,7 +1217,7 @@ export function transformDeclarations(context: TransformationContext) {
                         const typeParameters = visitNodes(prop.typeParameters, visitDeclarationSubtree, isTypeParameterDeclaration)?.map(deepClone);
                         const parameters = prop.parameters.map(p => deepClone(ensureParameter(p)));
                         if (inferenceFlags & NarrowBehavior.AsConst) {
-                            properties.push(factory.createPropertySignature(
+                            newProp = factory.createPropertySignature(
                                 [factory.createModifier(SyntaxKind.ReadonlyKeyword)],
                                 name,
                                 /*questionToken*/ undefined,
@@ -1181,17 +1226,17 @@ export function transformDeclarations(context: TransformationContext) {
                                     parameters,
                                     returnType.typeNode,
                                 )
-                            ));
+                            );
                         }
                         else {
-                            properties.push(factory.createMethodSignature(
+                            newProp = factory.createMethodSignature(
                                 [],
                                 name,
                                 /*questionToken*/ undefined,
                                 typeParameters,
                                 parameters,
                                 returnType.typeNode,
-                            ));
+                            );
                         }
                         enclosingDeclaration = oldEnclosingDeclaration;
                     }
@@ -1199,36 +1244,81 @@ export function transformDeclarations(context: TransformationContext) {
                         const modifiers = inferenceFlags & NarrowBehavior.AsConst ?
                             [factory.createModifier(SyntaxKind.ReadonlyKeyword)]:
                             [];
-                        properties.push(factory.createPropertySignature(
+                        newProp = factory.createPropertySignature(
                             modifiers,
                             name,
                             /*questionToken*/ undefined,
                             localInference(prop.initializer, nextInferenceFlags).typeNode
-                        ));
+                        );
                     }
                     else if(isShorthandPropertyAssignment(prop) && name) {
                         const modifiers = inferenceFlags & NarrowBehavior.AsConst ?
                             [factory.createModifier(SyntaxKind.ReadonlyKeyword)]:
                             [];
-                        properties.push(factory.createPropertySignature(
+                        newProp = factory.createPropertySignature(
                             modifiers,
                             name,
                             /*questionToken*/ undefined,
                             localInference(prop.name, nextInferenceFlags).typeNode
-                        ));
+                        );
                     }
                     else if(isSpreadAssignment(prop)) {
                         addedIntersections ??= [];
-                        addedIntersections.push(localInference(prop.expression).typeNode)
+                        addedIntersections.push(localInference(prop.expression, nextInferenceFlags).typeNode)
                     }
                     else {
-                        return invalid(prop);
+                        if(isGetAccessorDeclaration(prop) || isSetAccessorDeclaration(prop)) {
+                            const nameKey = getMemberKey(prop);
+                            if(nameKey && name) {
+                                const { getAccessor, setAccessor, otherAccessorIndex } = getAccessorInfo(objectLiteral.properties, prop);
+                                if(otherAccessorIndex === -1 || otherAccessorIndex > propIndex) {
+                                    const accessorType = inferAccessorType(getAccessor, setAccessor);
+                                    const modifiers: Modifier[] = []
+                                    if(!setAccessor) {
+                                        modifiers.push(factory.createModifier(SyntaxKind.ReadonlyKeyword))
+                                    }    
+                                    
+                                    newProp = factory.createPropertySignature(
+                                        modifiers,
+                                        name,
+                                        /*questionToken*/ undefined,
+                                        accessorType,
+                                    );
+                                }
+                            } else {
+                                return invalid(prop);
+                            }
+                        } else {
+                            return invalid(prop);
+                        }
+                    }
+
+                    if(newProp) {
+                        const prevPos = newProp.name.pos;
+                        const newPos = getTokenPosOfNode(newProp.name, currentSourceFile);
+                        
+                        setTextRange(newProp.name, {
+                            pos: newPos,
+                            end: newProp.name.end
+                        });
+                        setTextRange(newProp, {
+                            pos: prevPos,
+                            end: newProp.name.end,
+                        })
+                        setCommentRange(newProp, {
+                            pos: prevPos,
+                            end: newProp.name.pos
+                        })
+                        
+                        properties.push(newProp)
                     }
                 }
 
                 let typeNode: TypeNode = factory.createTypeLiteralNode(properties);
                 if (addedIntersections) {
-                    addedIntersections.push(typeNode);
+                    if(properties.length !== 0) {
+                        addedIntersections.push(typeNode);
+                    }
                     typeNode = factory.createIntersectionTypeNode(addedIntersections); 
                 }
                 return regular(typeNode, objectLiteral);
@@ -1302,7 +1392,7 @@ export function transformDeclarations(context: TransformationContext) {
         return visitedType ?? makeInvalidTypeAndReport(owner);
     }
 
-    function getMemberKey(member: MethodSignature | PropertySignature) {
+    function getMemberKey(member: MethodSignature | PropertySignature | GetAccessorDeclaration | SetAccessorDeclaration) {
         if(isIdentifier(member.name)) {
             return "I:" + member.name.escapedText;
         }
@@ -1597,6 +1687,16 @@ export function transformDeclarations(context: TransformationContext) {
                     return typesEqual(a.type, aErrorTarget, b.type, bErrorTarget);
                 }
             }
+            function nodeTypeArgumentsEqual(a: NodeWithTypeArguments, aErrorTarget: Node | undefined, b: NodeWithTypeArguments, bErrorTarget: Node | undefined) {
+                if(a.typeArguments === undefined && b.typeArguments === undefined) {
+                    return true;
+                }
+                if(a.typeArguments?.length !== b.typeArguments?.length) {
+                    return false;
+                }
+                
+                return !!a.typeArguments?.every((aArg, index) => typesEqual(aArg, aErrorTarget, b.typeArguments?.[index], bErrorTarget))
+            }
             function typesEqual(a: TypeNode | undefined, aErrorTarget: Node | undefined, b: TypeNode | undefined, bErrorTarget: Node | undefined): boolean {
                 if (a === undefined || b === undefined) return a === b;
                 if (a.kind !== b.kind) return false;
@@ -1646,15 +1746,10 @@ export function transformDeclarations(context: TransformationContext) {
                     return typesEqual(a.elementType, aErrorTarget, b.elementType, bErrorTarget);
                 }
                 else if(isTypeReferenceNode(a) && isTypeReferenceNode(b)) {
-                    entityNameEqual(a.typeName, b.typeName);
-                    if(a.typeArguments === undefined && b.typeArguments === undefined) {
-                        return true;
-                    }
-                    if(a.typeArguments?.length !== b.typeArguments?.length) {
+                    if(!entityNameEqual(a.typeName, b.typeName)) {
                         return false;
                     }
-                    
-                    return !!a.typeArguments?.every((aArg, index) => typesEqual(aArg, aErrorTarget, b.typeArguments?.[index], bErrorTarget))
+                    return nodeTypeArgumentsEqual(a, aErrorTarget, b, bErrorTarget);
                 }
                 else if(isTypeLiteralNode(a) && isTypeLiteralNode(b)) {
                     if(a.members.length !== b.members.length) return false;
@@ -1696,21 +1791,10 @@ export function transformDeclarations(context: TransformationContext) {
                     return signatureEqual(a, aErrorTarget, b, bErrorTarget);
                 }
                 else if(isTypeQueryNode(a) && isTypeQueryNode(b)) {
-                    let aEntity = a.exprName;
-                    let bEntity = b.exprName;
-                    while(true) {
-                        if(isIdentifier(aEntity) && isIdentifier(bEntity)) {
-                            return aEntity.escapedText === bEntity.escapedText;
-                        }
-                        if(isQualifiedName(aEntity) && isQualifiedName(bEntity)) {
-                            if(aEntity.right.escapedText !== bEntity.right.escapedText) {
-                                return false;
-                            }
-                            aEntity = aEntity.left;
-                            bEntity = bEntity.left;
-                        }
-                        return false; 
+                    if(!entityNameEqual(a.exprName, b.exprName)) {
+                        return false;
                     }
+                    return nodeTypeArgumentsEqual(a, aErrorTarget, b, bErrorTarget);
                 }
                 else {
                     return false;
@@ -1835,7 +1919,7 @@ export function transformDeclarations(context: TransformationContext) {
 
         let returnType;
         if(!isBlock(node.body)) {
-            returnType = localInference(node.body);
+            returnType = localInference(node.body, NarrowBehavior.KeepLiterals);
         }
         else {
             collectReturnAndYield(node.body, returnStatements, yieldExpressions);
@@ -2009,6 +2093,9 @@ export function transformDeclarations(context: TransformationContext) {
             localType = inferReturnType(node);
         }
         else if(isMethodDeclaration(node)) {
+            localType = inferReturnType(node);
+        }
+        else if(isGetAccessorDeclaration(node)) {
             localType = inferReturnType(node);
         }
         if(localType) {

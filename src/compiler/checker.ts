@@ -46673,13 +46673,31 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             syntheticNode: TypeNode,
             headMessage: DiagnosticMessage,
         ): true | Diagnostic[] {
+            const isActualNodeFunctionLike = isFunctionLike(actualNode);
+
+            let syntheticTypeNodeContainer: Node = syntheticNode;
+
+            if(isActualNodeFunctionLike) {
+                const fakeParameter = factory.createParameterDeclaration( undefined, undefined, "__p", undefined, syntheticNode);
+                fakeParameter.symbol = createSymbol(SymbolFlags.Variable, "__p" as __String)
+                syntheticTypeNodeContainer = fakeParameter;
+            }
+
+                
+            setParent(syntheticNode, actualNode);
             bindSyntheticTypeNode(syntheticNode, actualNode, compilerOptions);
+
+            
+            setParent(syntheticNode, syntheticTypeNodeContainer);
+            setParent(syntheticTypeNodeContainer, actualNode);
+            checkSourceElement(syntheticNode);
+
             const prevDeferredDiagnosticsCallbacksLength = deferredDiagnosticsCallbacks.length;
             const syntheticType = getTypeOfNode(syntheticNode);
             const actualNodeType = getTypeOfNode(actualNode);
             
             let actualType;
-            if(isFunctionLike(actualNode)) {
+            if(isActualNodeFunctionLike) {
                 const signatures = getSignaturesOfType(actualNodeType, SignatureKind.Call);
                 actualType = signatures.length === 0? actualNodeType: getReturnTypeOfSignature(signatures[0]);
             }
