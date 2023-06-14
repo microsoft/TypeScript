@@ -1107,7 +1107,8 @@ export function getInferredLibraryNameResolveFrom(options: CompilerOptions, curr
     return combinePaths(containingDirectory, `__lib_node_modules_lookup_${libFileName}__.ts`);
 }
 
-function getLibraryNameFromLibFileName(libFileName: string) {
+/** @internal */
+export function getLibraryNameFromLibFileName(libFileName: string) {
     // Support resolving to lib.dom.d.ts -> @typescript/lib-dom, and
     //                      lib.dom.iterable.d.ts -> @typescript/lib-dom/iterable
     //                      lib.es2015.symbol.wellknown.d.ts -> @typescript/lib-es2015/symbol-wellknown
