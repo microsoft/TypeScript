@@ -8456,8 +8456,15 @@ namespace Parser {
             checkIdentifierEnd = scanner.getTokenEnd();
             return parseIdentifierName();
         }
-        function parseModuleExportNameOnlyForExports() {
-            if (kind === SyntaxKind.ImportSpecifier) return parseNameWithKeywordCheck();
+        function parseModuleExportNameOnlyForExports(): ModuleExportName {
+            if (kind === SyntaxKind.ImportSpecifier) {
+                if (token() !== SyntaxKind.Identifier && !isKeyword(token())) {
+                    const node = createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ false, Diagnostics.Imported_name_can_only_be_an_Identifier);
+                    nextToken();
+                    return node;
+                }
+                return parseNameWithKeywordCheck();
+            }
             return parseModuleExportName(parseNameWithKeywordCheck);
         }
         function parseModuleExportName(parser: () => Identifier): ModuleExportName {

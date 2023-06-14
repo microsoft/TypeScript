@@ -1,0 +1,18 @@
+index.ts(1,10): error TS2214: String literal module export names must be followed by a 'from' clause.
+index2.ts(1,17): error TS2213: Imported name can only be an Identifier
+
+
+==== mod.ts (0 errors) ====
+    const a = 1;
+    export { a }
+    
+==== index.ts (1 errors) ====
+    export { "non-ident" };
+             ~~~~~~~~~~~
+!!! error TS2214: String literal module export names must be followed by a 'from' clause.
+    
+==== index2.ts (1 errors) ====
+    import { "a" as "b" } from "./mod";
+                    ~~~
+!!! error TS2213: Imported name can only be an Identifier
+    

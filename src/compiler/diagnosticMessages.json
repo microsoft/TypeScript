@@ -1663,9 +1663,13 @@
         "category": "Message",
         "code": 2212
     },
-    "String literal module export names must be followed by a 'from' clause.": {
+    "Imported name can only be an Identifier": {
         "category": "Error",
         "code": 2213
+    },
+    "String literal module export names must be followed by a 'from' clause.": {
+        "category": "Error",
+        "code": 2214
     },
 
     "Duplicate identifier '{0}'.": {
