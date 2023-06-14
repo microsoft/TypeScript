@@ -7512,7 +7512,7 @@
         "category": "Message",
         "code": 95153
     },
-    "Can only convert string concatenation": {
+    "Can only convert string concatenation or string literals": {
         "category": "Message",
         "code": 95154
     },

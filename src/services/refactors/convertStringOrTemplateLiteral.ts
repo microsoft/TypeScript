@@ -56,15 +56,20 @@ function getRefactorActionsToConvertToTemplateString(context: RefactorContext): 
     const { file, startPosition } = context;
     const node = getNodeOrParentOfParentheses(file, startPosition);
     const maybeBinary = getParentBinaryExpression(node);
+    const nodeIsStringLiteral = isStringLiteral(maybeBinary);
     const refactorInfo: ApplicableRefactorInfo = { name: refactorName, description: refactorDescription, actions: [] };
 
-    if (isBinaryExpression(maybeBinary) && treeToArray(maybeBinary).isValidConcatenation) {
+    if (nodeIsStringLiteral && context.triggerReason !== "invoked") {
+        return emptyArray;
+    }
+
+    if (nodeIsStringLiteral || isBinaryExpression(maybeBinary) && treeToArray(maybeBinary).isValidConcatenation) {
         refactorInfo.actions.push(convertStringAction);
         return [refactorInfo];
     }
     else if (context.preferences.provideRefactorNotApplicableReason) {
         refactorInfo.actions.push({ ...convertStringAction,
-            notApplicableReason: getLocaleSpecificMessage(Diagnostics.Can_only_convert_string_concatenation)
+            notApplicableReason: getLocaleSpecificMessage(Diagnostics.Can_only_convert_string_concatenation_or_string_literals)
         });
         return [refactorInfo];
     }
