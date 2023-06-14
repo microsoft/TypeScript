@@ -4227,10 +4227,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function reportNonExportedMember(node: Node, name: ModuleExportName, declarationName: string, moduleSymbol: Symbol, moduleName: string): void {
-        // for import { "ident" as T } we can provide meaningful error message. (ident is defined locally)
-        // for import { "not ident" as T } we will still look for the locals of the target module symbol, but
-        // since it's impossible to define a local ident with invalid name, we will use the normal message "Module_0_has_no_exported_member_1"
+    function reportNonExportedMember(node: Node, name: Identifier | ModuleExportName, declarationName: string, moduleSymbol: Symbol, moduleName: string): void {
         const localSymbol = tryCast(moduleSymbol.valueDeclaration, canHaveLocals)?.locals?.get(moduleExportNameTextEscaped(name));
         const exports = moduleSymbol.exports;
         if (localSymbol) {

@@ -5950,8 +5950,6 @@ export interface ReverseMappedSymbol extends TransientSymbol {
     links: ReverseMappedSymbolLinks;
 }
 
-// All names should starts with __, since it's possible to declare an arbitrary symbol name with
-// export { ident as "this" }
 export const enum InternalSymbolName {
     Call = "__call", // Call signatures
     Constructor = "__constructor", // Constructor implementations
