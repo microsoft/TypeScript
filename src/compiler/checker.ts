@@ -26665,7 +26665,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 // A matching dotted name might also be an expando property on a function *expression*,
                 // in which case we continue control flow analysis back to the function's declaration
-                if (isVariableDeclaration(node) && (isInJSFile(node) || (isVarConst(node)))) {
+                if (isVariableDeclaration(node) && (isInJSFile(node) || isVarConstLike(node))) {
                     const init = getDeclaredExpandoInitializer(node);
                     if (init && (init.kind === SyntaxKind.FunctionExpression || init.kind === SyntaxKind.ArrowFunction)) {
                         return getTypeAtFlowNode(flow.antecedent);
@@ -34233,7 +34233,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let name: Expression | BindingName | undefined;
         let decl: Node | undefined;
         if (isVariableDeclaration(node.parent) && node.parent.initializer === node) {
-            if (!isInJSFile(node) && !(isVarConst(node.parent) && isFunctionLikeDeclaration(node))) {
+            if (!isInJSFile(node) && !(isVarConstLike(node.parent) && isFunctionLikeDeclaration(node))) {
                 return undefined;
             }
             name = node.parent.name;
@@ -46670,7 +46670,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean {
-        if (isDeclarationReadonly(node) || isVariableDeclaration(node) && isVarConst(node)) {
+        if (isDeclarationReadonly(node) || isVariableDeclaration(node) && isVarConstLike(node)) {
             return isFreshLiteralType(getTypeOfSymbol(getSymbolOfDeclaration(node)));
         }
         return false;
@@ -47184,6 +47184,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return grammarErrorOnFirstToken(node, Diagnostics.Neither_decorators_nor_modifiers_may_be_applied_to_this_parameters);
         }
 
+        const blockScopeKind = isVariableStatement(node) ? node.declarationList.flags & NodeFlags.BlockScoped : NodeFlags.None;
         let lastStatic: Node | undefined, lastDeclare: Node | undefined, lastAsync: Node | undefined, lastOverride: Node | undefined, firstDecorator: Decorator | undefined;
         let flags = ModifierFlags.None;
         let sawExportBeforeDecorators = false;
@@ -47414,8 +47415,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         else if (node.kind === SyntaxKind.Parameter) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "export");
                         }
-                        else if (isVariableStatement(node) && node.declarationList.flags & NodeFlags.Using) {
+                        else if (blockScopeKind === NodeFlags.Using) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_using_declaration, "export");
+                        }
+                        else if (blockScopeKind === NodeFlags.AwaitUsing) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_an_await_using_declaration, "export");
                         }
                         flags |= ModifierFlags.Export;
                         break;
@@ -47424,8 +47428,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         if (container.kind === SyntaxKind.ModuleDeclaration && !isAmbientModule(container)) {
                             return grammarErrorOnNode(modifier, Diagnostics.A_default_export_can_only_be_used_in_an_ECMAScript_style_module);
                         }
-                        else if (isVariableStatement(node) && node.declarationList.flags & NodeFlags.Using) {
+                        else if (blockScopeKind === NodeFlags.Using) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_using_declaration, "default");
+                        }
+                        else if (blockScopeKind === NodeFlags.AwaitUsing) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_an_await_using_declaration, "default");
                         }
                         else if (!(flags & ModifierFlags.Export)) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "export", "default");
@@ -47452,8 +47459,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         else if (node.kind === SyntaxKind.Parameter) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "declare");
                         }
-                        else if (isVariableStatement(node) && node.declarationList.flags & NodeFlags.Using) {
+                        else if (blockScopeKind === NodeFlags.Using) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_using_declaration, "declare");
+                        }
+                        else if (blockScopeKind === NodeFlags.AwaitUsing) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_an_await_using_declaration, "declare");
                         }
                         else if ((node.parent.flags & NodeFlags.Ambient) && node.parent.kind === SyntaxKind.ModuleBlock) {
                             return grammarErrorOnNode(modifier, Diagnostics.A_declare_modifier_cannot_be_used_in_an_already_ambient_context);
@@ -48480,7 +48490,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 initializer.kind === SyntaxKind.TrueKeyword || initializer.kind === SyntaxKind.FalseKeyword ||
                 isBigIntLiteralExpression(initializer)
             );
-            const isConstOrReadonly = isDeclarationReadonly(node) || isVariableDeclaration(node) && isVarConst(node);
+            const isConstOrReadonly = isDeclarationReadonly(node) || isVariableDeclaration(node) && (isVarConstLike(node));
             if (isConstOrReadonly && !node.type) {
                 if (isInvalidInitializer) {
                     return grammarErrorOnNode(initializer, Diagnostics.A_const_initializer_in_an_ambient_context_must_be_a_string_or_numeric_literal_or_literal_enum_reference);
@@ -49078,10 +49088,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return lastGetCombinedNodeFlagsResult;
     }
 
-    function isVarConst(node: VariableDeclaration | VariableDeclarationList) {
-        // This local copy of `isVarConst` from utilities.ts exists so that it can leverage getCombinedNodeFlagsCached,
-        // which is local to `createTypeChecker`
-        return (getCombinedNodeFlagsCached(node) & NodeFlags.BlockScoped) === NodeFlags.Const;
+    function isVarConstLike(node: VariableDeclaration | VariableDeclarationList) {
+        const blockScopeKind = getCombinedNodeFlagsCached(node) & NodeFlags.BlockScoped;
+        return blockScopeKind === NodeFlags.Const ||
+            blockScopeKind === NodeFlags.Using ||
+            blockScopeKind === NodeFlags.AwaitUsing;
     }
 }
 

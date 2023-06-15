@@ -1613,6 +1613,10 @@
         "category": "Error",
         "code": 1494
     },
+    "'{0}' modifier cannot appear on an 'await using' declaration.": {
+        "category": "Error",
+        "code": 1495
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
