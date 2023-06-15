@@ -274,6 +274,7 @@ import {
     getEmitModuleResolutionKind,
     getEmitScriptTarget,
     getEnclosingBlockScopeContainer,
+    getEnclosingContainer,
     getEntityNameFromTypeNode,
     getErrorSpanForNode,
     getEscapedTextOfIdentifierOrLiteral,
@@ -39024,7 +39025,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             n.parent.kind !== SyntaxKind.ClassDeclaration &&
             n.parent.kind !== SyntaxKind.ClassExpression &&
             n.flags & NodeFlags.Ambient) {
-            if (!(flags & ModifierFlags.Ambient) && !(isModuleBlock(n.parent) && isModuleDeclaration(n.parent.parent) && isGlobalScopeAugmentation(n.parent.parent))) {
+            const container = getEnclosingContainer(n);
+            if ((container.flags & NodeFlags.ExportContext) && !(flags & ModifierFlags.Ambient) && !(isModuleBlock(n.parent) && isModuleDeclaration(n.parent.parent) && isGlobalScopeAugmentation(n.parent.parent))) {
                 // It is nested in an ambient context, which means it is automatically exported
                 flags |= ModifierFlags.Export;
             }

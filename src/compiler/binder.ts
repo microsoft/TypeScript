@@ -455,7 +455,8 @@ function getModuleInstanceStateForAliasTarget(specifier: ExportSpecifier, visite
     return ModuleInstanceState.Instantiated; // Couldn't locate, assume could refer to a value
 }
 
-const enum ContainerFlags {
+/** @internal */
+export const enum ContainerFlags {
     // The current node is not a container, and no container manipulation should happen before
     // recursing into it.
     None = 0,
@@ -3768,7 +3769,8 @@ export function isExportsOrModuleExportsOrAlias(sourceFile: SourceFile, node: Ex
     return false;
 }
 
-function getContainerFlags(node: Node): ContainerFlags {
+/** @internal */
+export function getContainerFlags(node: Node): ContainerFlags {
     switch (node.kind) {
         case SyntaxKind.ClassExpression:
         case SyntaxKind.ClassDeclaration:
