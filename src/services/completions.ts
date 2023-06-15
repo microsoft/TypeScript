@@ -5525,8 +5525,8 @@ function getVariableOrParameterDeclaration(contextToken: Node | undefined, locat
             : ((isParameter(node) || isTypeParameterDeclaration(node)) && !isIndexSignatureDeclaration(node.parent)));
     const possiblyVariableDeclaration = findAncestor(location, (node) => {
         return isFunctionBlock(node) || isArrowFunctionBody(node) || isBindingPattern(node) ?
-            "quit" : isVariableDeclaration(node)
-    })
+            "quit" : isVariableDeclaration(node);
+    });
     return (possiblyVariableDeclaration || possiblyParameterDeclaration) as ParameterDeclaration | TypeParameterDeclaration | VariableDeclaration | undefined;
 }
 
