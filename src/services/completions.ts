@@ -5527,7 +5527,7 @@ function getVariableOrParameterDeclaration(contextToken: Node | undefined, locat
         return isFunctionBlock(node) || isArrowFunctionBody(node) || isBindingPattern(node) ?
             "quit" : isVariableDeclaration(node);
     });
-    return (possiblyVariableDeclaration || possiblyParameterDeclaration) as ParameterDeclaration | TypeParameterDeclaration | VariableDeclaration | undefined;
+    return (possiblyParameterDeclaration || possiblyVariableDeclaration) as ParameterDeclaration | TypeParameterDeclaration | VariableDeclaration | undefined;
 }
 
 function isArrowFunctionBody(node: Node) {

@@ -1,6 +1,5 @@
 ///<reference path="fourslash.ts" />
 
-//@Filename
 ////const c = "s";
 /////*1*/
 ////const d = 1
