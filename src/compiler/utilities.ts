@@ -2025,8 +2025,8 @@ export function isAnyImportOrReExport(node: Node): node is AnyImportOrReExport {
 }
 
 /** @internal */
-export function getEnclosingContainer(node: Node): Node {
-    return findAncestor(node.parent, n => !!(getContainerFlags(n) & ContainerFlags.IsContainer))!;
+export function getEnclosingContainer(node: Node): Node | undefined {
+    return findAncestor(node.parent, n => !!(getContainerFlags(n) & ContainerFlags.IsContainer));
 }
 
 // Gets the nearest enclosing block scope container that has the provided node

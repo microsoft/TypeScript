@@ -39026,8 +39026,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             n.parent.kind !== SyntaxKind.ClassExpression &&
             n.flags & NodeFlags.Ambient) {
             const container = getEnclosingContainer(n);
-            if ((container.flags & NodeFlags.ExportContext) && !(flags & ModifierFlags.Ambient) && !(isModuleBlock(n.parent) && isModuleDeclaration(n.parent.parent) && isGlobalScopeAugmentation(n.parent.parent))) {
-                // It is nested in an ambient context, which means it is automatically exported
+            if ((container && container.flags & NodeFlags.ExportContext) && !(flags & ModifierFlags.Ambient) && !(isModuleBlock(n.parent) && isModuleDeclaration(n.parent.parent) && isGlobalScopeAugmentation(n.parent.parent))) {
+                // It is nested in an ambient export context, which means it is automatically exported
                 flags |= ModifierFlags.Export;
             }
             flags |= ModifierFlags.Ambient;
