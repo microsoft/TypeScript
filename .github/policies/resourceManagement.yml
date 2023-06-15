@@ -1,0 +1,83 @@
+id: 
+name: GitOps.PullRequestIssueManagement
+description: GitOps.PullRequestIssueManagement primitive
+owner: 
+resource: repository
+disabled: false
+where: 
+configuration:
+  resourceManagementConfiguration:
+    scheduledSearches: []
+    eventResponderTasks:
+    - if:
+      - payloadType: Pull_Request
+      - includesModifiedFiles:
+          files:
+          - src/server/protocol.ts
+      - isAction:
+          action: Opened
+      then:
+      - addReply:
+          reply: Thanks for the PR! It looks like you've changed the TSServer protocol in some way. Please ensure that any changes here don't break consumers of the current TSServer API. For some extra review, we'll ping @sheetalkamat, @mjbvz, @zkat, and @joj for you. Feel free to loop in other consumers/maintainers if necessary
+      description: 
+    - if:
+      - payloadType: Pull_Request
+      - includesModifiedFiles:
+          files:
+          - lib
+      - not:
+          activitySenderHasAssociation:
+            association: Member
+      - isActivitySender:
+          issueAuthor: True
+      - not:
+          hasLabel:
+            label: lib update
+      then:
+      - addReply:
+          reply: It looks like you've sent a pull request to update our 'lib' files. These files aren't meant to be edited by hand, as they consist of last-known good states of the compiler and are generated from 'src/lib' or possibly our lib generator. Unless this is necessary, consider closing the pull request and sending a separate PR to update 'src/lib' or https://github.com/microsoft/TypeScript-DOM-lib-generator
+      description: 
+    - if:
+      - payloadType: Pull_Request
+      - isAction:
+          action: Opened
+      - or:
+        - includesModifiedFiles:
+            files:
+            - lib/lib.dom
+        - includesModifiedFiles:
+            files:
+            - src/lib/dom.generated.d.ts
+        - includesModifiedFiles:
+            files:
+            - src/lib/dom.iterable.generated.d.ts
+        - includesModifiedFiles:
+            files:
+            - webworker.generated.d.ts
+        - includesModifiedFiles:
+            files:
+            - lib/lib.webworker.d.ts
+      - not:
+          activitySenderHasAssociation:
+            association: Member
+      then:
+      - addReply:
+          reply: It looks like you've sent a pull request to update some generated declaration files related to the DOM. These files aren't meant to be edited by hand, as they are synchronized with files in [the TSJS-lib-generator repository](https://github.com/Microsoft/TSJS-lib-generator). You can [read more here](https://github.com/Microsoft/TypeScript/blob/master/CONTRIBUTING.md#contributing-libdts-fixes). For house-keeping purposes, this pull request will be closed.
+      - closeIssue
+      description: 
+    - if:
+      - payloadType: Pull_Request
+      - includesModifiedFiles:
+          files:
+          - tests/baselines/reference/api/typescript.d.ts
+          - tests/baselines/reference/api/tsserverlibrary.d.ts
+      then:
+      - addReply:
+          reply: >-
+            Looks like you're introducing a change to the public API surface area. If this includes breaking changes, please document them [on our wiki's API Breaking Changes page](https://github.com/microsoft/TypeScript/wiki/API-Breaking-Changes).
+
+
+            Also, please make sure @DanielRosenwasser and @RyanCavanaugh are aware of the changes, just as a heads up
+      description: 
+onFailure: 
+onSuccess: 
