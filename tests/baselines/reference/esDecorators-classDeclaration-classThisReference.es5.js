@@ -32,8 +32,10 @@ var C = function () {
     }());
     __setFunctionName(_classThis, "C");
     (function () {
-        __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name }, null, _classExtraInitializers);
+        var metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : undefined;
+        __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: metadata }, null, _classExtraInitializers);
         C = _classThis = _classDescriptor.value;
+        if (metadata) Object.defineProperty(_classThis, Symbol.metadata, { configurable: true, writable: true, enumerable: true, value: metadata });
     })();
     (function () {
         _classThis;

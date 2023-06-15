@@ -39,8 +39,10 @@ class C3 extends ((() => {}) as any) {
     });
     var C1 = class extends _classSuper {
         static {
-            __esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name }, null, _classExtraInitializers);
+            const metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(this[Symbol.metadata]) : undefined;
+            __esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name, metadata: metadata }, null, _classExtraInitializers);
             C1 = _classThis = _classDescriptor.value;
+            if (metadata) Object.defineProperty(_classThis, Symbol.metadata, { configurable: true, writable: true, enumerable: true, value: metadata });
         }
         static {
             Reflect.get(_classSuper, "name", _classThis);
@@ -60,8 +62,10 @@ class C3 extends ((() => {}) as any) {
     let _classSuper_1 = (0, function () { });
     var C2 = class extends _classSuper_1 {
         static {
-            __esDecorate(null, _classDescriptor_1 = { value: this }, _classDecorators_1, { kind: "class", name: this.name }, null, _classExtraInitializers_1);
+            const metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(this[Symbol.metadata]) : undefined;
+            __esDecorate(null, _classDescriptor_1 = { value: this }, _classDecorators_1, { kind: "class", name: this.name, metadata: metadata }, null, _classExtraInitializers_1);
             C2 = _classThis_1 = _classDescriptor_1.value;
+            if (metadata) Object.defineProperty(_classThis_1, Symbol.metadata, { configurable: true, writable: true, enumerable: true, value: metadata });
         }
         static {
             Reflect.get(_classSuper_1, "name", _classThis_1);
@@ -81,8 +85,10 @@ class C3 extends ((() => {}) as any) {
     let _classSuper_2 = (0, (() => { }));
     var C3 = class extends _classSuper_2 {
         static {
-            __esDecorate(null, _classDescriptor_2 = { value: this }, _classDecorators_2, { kind: "class", name: this.name }, null, _classExtraInitializers_2);
+            const metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(this[Symbol.metadata]) : undefined;
+            __esDecorate(null, _classDescriptor_2 = { value: this }, _classDecorators_2, { kind: "class", name: this.name, metadata: metadata }, null, _classExtraInitializers_2);
             C3 = _classThis_2 = _classDescriptor_2.value;
+            if (metadata) Object.defineProperty(_classThis_2, Symbol.metadata, { configurable: true, writable: true, enumerable: true, value: metadata });
         }
         static {
             Reflect.get(_classSuper_2, "name", _classThis_2);

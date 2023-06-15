@@ -50,8 +50,10 @@ let B = (() => {
     let _m_decorators;
     return class B extends A {
         static {
+            const metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(this[Symbol.metadata]) : undefined;
             _m_decorators = [foo];
-            __esDecorate(this, null, _m_decorators, { kind: "method", name: "m", static: false, private: false, access: { has: obj => "m" in obj, get: obj => obj.m } }, null, _instanceExtraInitializers);
+            __esDecorate(this, null, _m_decorators, { kind: "method", name: "m", static: false, private: false, access: { has: obj => "m" in obj, get: obj => obj.m }, metadata: metadata }, null, _instanceExtraInitializers);
+            if (metadata) Object.defineProperty(this, Symbol.metadata, { configurable: true, writable: true, enumerable: true, value: metadata });
         }
         constructor() {
             'inject';
@@ -75,8 +77,10 @@ let C = (() => {
     let _get_val_decorators;
     return class C {
         static {
+            const metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : undefined;
             _get_val_decorators = [foo];
-            __esDecorate(this, null, _get_val_decorators, { kind: "getter", name: "val", static: false, private: false, access: { has: obj => "val" in obj, get: obj => obj.val } }, null, _instanceExtraInitializers_1);
+            __esDecorate(this, null, _get_val_decorators, { kind: "getter", name: "val", static: false, private: false, access: { has: obj => "val" in obj, get: obj => obj.val }, metadata: metadata }, null, _instanceExtraInitializers_1);
+            if (metadata) Object.defineProperty(this, Symbol.metadata, { configurable: true, writable: true, enumerable: true, value: metadata });
         }
         constructor() {
             __runInitializers(this, _instanceExtraInitializers_1);
@@ -90,8 +94,10 @@ let D = (() => {
     let _get_val_decorators;
     return class D extends A {
         static {
+            const metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(this[Symbol.metadata]) : undefined;
             _get_val_decorators = [foo];
-            __esDecorate(this, null, _get_val_decorators, { kind: "getter", name: "val", static: false, private: false, access: { has: obj => "val" in obj, get: obj => obj.val } }, null, _instanceExtraInitializers_2);
+            __esDecorate(this, null, _get_val_decorators, { kind: "getter", name: "val", static: false, private: false, access: { has: obj => "val" in obj, get: obj => obj.val }, metadata: metadata }, null, _instanceExtraInitializers_2);
+            if (metadata) Object.defineProperty(this, Symbol.metadata, { configurable: true, writable: true, enumerable: true, value: metadata });
         }
         constructor() {
             super();

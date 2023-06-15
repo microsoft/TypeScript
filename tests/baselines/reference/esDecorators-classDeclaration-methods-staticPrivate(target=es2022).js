@@ -20,8 +20,10 @@ let C = (() => {
     let _static_private_method1_descriptor;
     return class C {
         static {
+            const metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : undefined;
             _static_private_method1_decorators = [dec];
-            __esDecorate(this, _static_private_method1_descriptor = { value: __setFunctionName(function () { }, "#method1") }, _static_private_method1_decorators, { kind: "method", name: "#method1", static: true, private: true, access: { has: obj => #method1 in obj, get: obj => obj.#method1 } }, null, _staticExtraInitializers);
+            __esDecorate(this, _static_private_method1_descriptor = { value: __setFunctionName(function () { }, "#method1") }, _static_private_method1_decorators, { kind: "method", name: "#method1", static: true, private: true, access: { has: obj => #method1 in obj, get: obj => obj.#method1 }, metadata: metadata }, null, _staticExtraInitializers);
+            if (metadata) Object.defineProperty(this, Symbol.metadata, { configurable: true, writable: true, enumerable: true, value: metadata });
             __runInitializers(this, _staticExtraInitializers);
         }
         static get #method1() { return _static_private_method1_descriptor.value; }
@@ -37,8 +39,10 @@ let D = (() => {
         static { __setFunctionName(this, "D"); }
         static { _method1 = function _method1() { }; }
         static {
-            __esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name }, null, _classExtraInitializers);
+            const metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : undefined;
+            __esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name, metadata: metadata }, null, _classExtraInitializers);
             D = _classThis = _classDescriptor.value;
+            if (metadata) Object.defineProperty(_classThis, Symbol.metadata, { configurable: true, writable: true, enumerable: true, value: metadata });
             __runInitializers(_classThis, _classExtraInitializers);
         }
     };

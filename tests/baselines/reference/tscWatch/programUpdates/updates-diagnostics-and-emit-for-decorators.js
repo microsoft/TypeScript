@@ -128,8 +128,10 @@ export let A = (() => {
     };
     __setFunctionName(_classThis, "A");
     (() => {
-        __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name }, null, _classExtraInitializers);
+        const metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : undefined;
+        __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: metadata }, null, _classExtraInitializers);
         A = _classThis = _classDescriptor.value;
+        if (metadata) Object.defineProperty(_classThis, Symbol.metadata, { configurable: true, writable: true, enumerable: true, value: metadata });
         __runInitializers(_classThis, _classExtraInitializers);
     })();
     return A = _classThis;

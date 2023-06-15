@@ -24,8 +24,10 @@ declare let dec: any;
     var class_1 = class {
         static {
             __setFunctionName(this, "");
-            __esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name }, null, _classExtraInitializers);
+            const metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : undefined;
+            __esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name, metadata: metadata }, null, _classExtraInitializers);
             class_1 = _classThis = _classDescriptor.value;
+            if (metadata) Object.defineProperty(_classThis, Symbol.metadata, { configurable: true, writable: true, enumerable: true, value: metadata });
             __runInitializers(_classThis, _classExtraInitializers);
         }
     };
@@ -37,8 +39,10 @@ declare let dec: any;
     let _y_initializers = [];
     return class {
         static {
+            const metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : undefined;
             _y_decorators = [dec];
-            __esDecorate(null, null, _y_decorators, { kind: "field", name: "y", static: false, private: false, access: { has: obj => "y" in obj, get: obj => obj.y, set: (obj, value) => { obj.y = value; } } }, _y_initializers, _instanceExtraInitializers);
+            __esDecorate(null, null, _y_decorators, { kind: "field", name: "y", static: false, private: false, access: { has: obj => "y" in obj, get: obj => obj.y, set: (obj, value) => { obj.y = value; } }, metadata: metadata }, _y_initializers, _instanceExtraInitializers);
+            if (metadata) Object.defineProperty(this, Symbol.metadata, { configurable: true, writable: true, enumerable: true, value: metadata });
         }
         y = (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, _y_initializers, void 0));
     };
@@ -51,8 +55,10 @@ declare let dec: any;
     let _classThis_1;
     var C = class {
         static {
-            __esDecorate(null, _classDescriptor_1 = { value: this }, _classDecorators_1, { kind: "class", name: this.name }, null, _classExtraInitializers_1);
+            const metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : undefined;
+            __esDecorate(null, _classDescriptor_1 = { value: this }, _classDecorators_1, { kind: "class", name: this.name, metadata: metadata }, null, _classExtraInitializers_1);
             C = _classThis_1 = _classDescriptor_1.value;
+            if (metadata) Object.defineProperty(_classThis_1, Symbol.metadata, { configurable: true, writable: true, enumerable: true, value: metadata });
             __runInitializers(_classThis_1, _classExtraInitializers_1);
         }
     };
@@ -64,8 +70,10 @@ declare let dec: any;
     let _y_initializers = [];
     return class C {
         static {
+            const metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : undefined;
             _y_decorators = [dec];
-            __esDecorate(null, null, _y_decorators, { kind: "field", name: "y", static: false, private: false, access: { has: obj => "y" in obj, get: obj => obj.y, set: (obj, value) => { obj.y = value; } } }, _y_initializers, _instanceExtraInitializers_1);
+            __esDecorate(null, null, _y_decorators, { kind: "field", name: "y", static: false, private: false, access: { has: obj => "y" in obj, get: obj => obj.y, set: (obj, value) => { obj.y = value; } }, metadata: metadata }, _y_initializers, _instanceExtraInitializers_1);
+            if (metadata) Object.defineProperty(this, Symbol.metadata, { configurable: true, writable: true, enumerable: true, value: metadata });
         }
         y = (__runInitializers(this, _instanceExtraInitializers_1), __runInitializers(this, _y_initializers, void 0));
     };

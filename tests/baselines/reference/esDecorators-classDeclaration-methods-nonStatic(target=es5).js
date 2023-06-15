@@ -32,9 +32,11 @@ var C = function () {
             return C;
         }()),
         (function () {
-            __esDecorate(_a, null, _method1_decorators, { kind: "method", name: "method1", static: false, private: false, access: { has: function (obj) { return "method1" in obj; }, get: function (obj) { return obj.method1; } } }, null, _instanceExtraInitializers);
-            __esDecorate(_a, null, _member_decorators, { kind: "method", name: "method2", static: false, private: false, access: { has: function (obj) { return "method2" in obj; }, get: function (obj) { return obj["method2"]; } } }, null, _instanceExtraInitializers);
-            __esDecorate(_a, null, _member_decorators_1, { kind: "method", name: _b, static: false, private: false, access: { has: function (obj) { return _b in obj; }, get: function (obj) { return obj[_b]; } } }, null, _instanceExtraInitializers);
+            var metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : undefined;
+            __esDecorate(_a, null, _method1_decorators, { kind: "method", name: "method1", static: false, private: false, access: { has: function (obj) { return "method1" in obj; }, get: function (obj) { return obj.method1; } }, metadata: metadata }, null, _instanceExtraInitializers);
+            __esDecorate(_a, null, _member_decorators, { kind: "method", name: "method2", static: false, private: false, access: { has: function (obj) { return "method2" in obj; }, get: function (obj) { return obj["method2"]; } }, metadata: metadata }, null, _instanceExtraInitializers);
+            __esDecorate(_a, null, _member_decorators_1, { kind: "method", name: _b, static: false, private: false, access: { has: function (obj) { return _b in obj; }, get: function (obj) { return obj[_b]; } }, metadata: metadata }, null, _instanceExtraInitializers);
+            if (metadata) Object.defineProperty(_a, Symbol.metadata, { configurable: true, writable: true, enumerable: true, value: metadata });
         })(),
         _a;
 }();

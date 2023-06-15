@@ -25,8 +25,10 @@ let C = (() => {
     let _private_set_foo_descriptor;
     return class C {
         static {
+            const metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : undefined;
             _private_set_foo_decorators = [dec];
-            tslib_1.__esDecorate(this, _private_set_foo_descriptor = { set: tslib_1.__setFunctionName(function (value) { }, "#foo", "set") }, _private_set_foo_decorators, { kind: "setter", name: "#foo", static: false, private: true, access: { has: obj => #foo in obj, set: (obj, value) => { obj.#foo = value; } } }, null, _instanceExtraInitializers);
+            tslib_1.__esDecorate(this, _private_set_foo_descriptor = { set: tslib_1.__setFunctionName(function (value) { }, "#foo", "set") }, _private_set_foo_decorators, { kind: "setter", name: "#foo", static: false, private: true, access: { has: obj => #foo in obj, set: (obj, value) => { obj.#foo = value; } }, metadata: metadata }, null, _instanceExtraInitializers);
+            if (metadata) Object.defineProperty(this, Symbol.metadata, { configurable: true, writable: true, enumerable: true, value: metadata });
         }
         set #foo(value) { return _private_set_foo_descriptor.set.call(this, value); }
         constructor() {

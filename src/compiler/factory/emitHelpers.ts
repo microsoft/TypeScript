@@ -59,6 +59,8 @@ export interface ESDecorateClassContext {
      * The name of the decorated element.
      */
     name: Expression;
+
+    metadata?: Expression;
 }
 
 /**
@@ -75,6 +77,7 @@ export interface ESDecorateClassElementContext {
     static: boolean;
     private: boolean;
     access: ESDecorateClassElementAccess;
+    metadata?: Expression;
 }
 
 /** @internal */
@@ -245,12 +248,14 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
     // ES Decorators Helpers
 
     function createESDecorateClassContextObject(contextIn: ESDecorateClassContext) {
-        return factory.createObjectLiteralExpression([
+        const properties = [
             factory.createPropertyAssignment(factory.createIdentifier("kind"), factory.createStringLiteral("class")),
-            factory.createPropertyAssignment(factory.createIdentifier("name"), contextIn.name)
-        ]);
-    }
+            factory.createPropertyAssignment(factory.createIdentifier("name"), contextIn.name),
+        ];
 
+        if (contextIn.metadata) properties.push(factory.createPropertyAssignment(factory.createIdentifier("metadata"), contextIn.metadata));
+        return factory.createObjectLiteralExpression(properties);
+    }
 
     function createESDecorateClassElementAccessGetMethod(elementName: ESDecorateName) {
         const accessor = elementName.computed ?
@@ -344,13 +349,16 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
     }
 
     function createESDecorateClassElementContextObject(contextIn: ESDecorateClassElementContext) {
-        return factory.createObjectLiteralExpression([
+        const properties = [
             factory.createPropertyAssignment(factory.createIdentifier("kind"), factory.createStringLiteral(contextIn.kind)),
             factory.createPropertyAssignment(factory.createIdentifier("name"), contextIn.name.computed ? contextIn.name.name : factory.createStringLiteralFromNode(contextIn.name.name)),
             factory.createPropertyAssignment(factory.createIdentifier("static"), contextIn.static ? factory.createTrue() : factory.createFalse()),
             factory.createPropertyAssignment(factory.createIdentifier("private"), contextIn.private ? factory.createTrue() : factory.createFalse()),
-            factory.createPropertyAssignment(factory.createIdentifier("access"), createESDecorateClassElementAccessObject(contextIn.name, contextIn.access))
-        ]);
+            factory.createPropertyAssignment(factory.createIdentifier("access"), createESDecorateClassElementAccessObject(contextIn.name, contextIn.access)),
+        ];
+
+        if (contextIn.metadata) properties.push(factory.createPropertyAssignment(factory.createIdentifier("metadata"), contextIn.metadata));
+        return factory.createObjectLiteralExpression(properties);
     }
 
     function createESDecorateContextObject(contextIn: ESDecorateContext) {
@@ -381,7 +389,6 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
             value ? [thisArg, initializers, value] : [thisArg, initializers]
         );
     }
-
     // ES2018 Helpers
 
     function createAssignHelper(attributesSegments: Expression[]) {

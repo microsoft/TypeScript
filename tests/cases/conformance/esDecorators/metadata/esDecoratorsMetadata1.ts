@@ -1,0 +1,22 @@
+// @target: es2022,es2015
+// @noTypesAndSymbols: true
+// @filename: /foo.ts
+
+interface SymbolConstructor {
+    readonly metadata: string;
+}
+
+function meta(key: string, value: string) {
+    return (_, context) => {
+        context.metadata[key] = value;
+    };
+}
+
+@meta('a', 'x')
+class C {
+    @meta('b', 'y')
+    m() { }
+}
+
+C[Symbol.metadata].a; // 'x'
+C[Symbol.metadata].b; // 'y'

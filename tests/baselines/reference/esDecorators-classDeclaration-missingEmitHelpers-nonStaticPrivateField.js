@@ -25,8 +25,10 @@ let C = (() => {
     let _private_x_initializers = [];
     return class C {
         static {
+            const metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : undefined;
             _private_x_decorators = [dec];
-            tslib_1.__esDecorate(null, null, _private_x_decorators, { kind: "field", name: "#x", static: false, private: true, access: { has: obj => #x in obj, get: obj => obj.#x, set: (obj, value) => { obj.#x = value; } } }, _private_x_initializers, _instanceExtraInitializers);
+            tslib_1.__esDecorate(null, null, _private_x_decorators, { kind: "field", name: "#x", static: false, private: true, access: { has: obj => #x in obj, get: obj => obj.#x, set: (obj, value) => { obj.#x = value; } }, metadata: metadata }, _private_x_initializers, _instanceExtraInitializers);
+            if (metadata) Object.defineProperty(this, Symbol.metadata, { configurable: true, writable: true, enumerable: true, value: metadata });
         }
         #x = (tslib_1.__runInitializers(this, _instanceExtraInitializers), tslib_1.__runInitializers(this, _private_x_initializers, void 0));
     };

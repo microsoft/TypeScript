@@ -41,9 +41,11 @@ let C = (() => {
             static set [_b](value) { __classPrivateFieldSet(this, _a, value, "f", _C__b_accessor_storage); }
         },
         (() => {
-            __esDecorate(_a, null, _static_field1_decorators, { kind: "accessor", name: "field1", static: true, private: false, access: { has: obj => "field1" in obj, get: obj => obj.field1, set: (obj, value) => { obj.field1 = value; } } }, _static_field1_initializers, _staticExtraInitializers);
-            __esDecorate(_a, null, _static_member_decorators, { kind: "accessor", name: "field2", static: true, private: false, access: { has: obj => "field2" in obj, get: obj => obj["field2"], set: (obj, value) => { obj["field2"] = value; } } }, _static_member_initializers, _staticExtraInitializers);
-            __esDecorate(_a, null, _static_member_decorators_1, { kind: "accessor", name: _b, static: true, private: false, access: { has: obj => _b in obj, get: obj => obj[_b], set: (obj, value) => { obj[_b] = value; } } }, _static_member_initializers_1, _staticExtraInitializers);
+            const metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : undefined;
+            __esDecorate(_a, null, _static_field1_decorators, { kind: "accessor", name: "field1", static: true, private: false, access: { has: obj => "field1" in obj, get: obj => obj.field1, set: (obj, value) => { obj.field1 = value; } }, metadata: metadata }, _static_field1_initializers, _staticExtraInitializers);
+            __esDecorate(_a, null, _static_member_decorators, { kind: "accessor", name: "field2", static: true, private: false, access: { has: obj => "field2" in obj, get: obj => obj["field2"], set: (obj, value) => { obj["field2"] = value; } }, metadata: metadata }, _static_member_initializers, _staticExtraInitializers);
+            __esDecorate(_a, null, _static_member_decorators_1, { kind: "accessor", name: _b, static: true, private: false, access: { has: obj => _b in obj, get: obj => obj[_b], set: (obj, value) => { obj[_b] = value; } }, metadata: metadata }, _static_member_initializers_1, _staticExtraInitializers);
+            if (metadata) Object.defineProperty(_a, Symbol.metadata, { configurable: true, writable: true, enumerable: true, value: metadata });
             __runInitializers(_a, _staticExtraInitializers);
         })(),
         _C_field1_accessor_storage = { value: __runInitializers(_a, _static_field1_initializers, 1) },
@@ -63,8 +65,10 @@ let D = (() => {
     };
     __setFunctionName(_classThis, "D");
     (() => {
-        __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name }, null, _classExtraInitializers);
+        const metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : undefined;
+        __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: metadata }, null, _classExtraInitializers);
         D = _classThis = _classDescriptor.value;
+        if (metadata) Object.defineProperty(_classThis, Symbol.metadata, { configurable: true, writable: true, enumerable: true, value: metadata });
     })();
     _field1_accessor_storage = { value: 1 };
     (() => {

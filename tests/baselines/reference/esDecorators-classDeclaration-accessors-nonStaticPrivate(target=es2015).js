@@ -27,10 +27,12 @@ let C = (() => {
         _C_method1_get = function _C_method1_get() { return _private_get_method1_descriptor.get.call(this); },
         _C_method1_set = function _C_method1_set(value) { return _private_set_method1_descriptor.set.call(this, value); },
         (() => {
+            const metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : undefined;
             _private_get_method1_decorators = [dec(1)];
             _private_set_method1_decorators = [dec(2)];
-            __esDecorate(_a, _private_get_method1_descriptor = { get: __setFunctionName(function () { return 0; }, "#method1", "get") }, _private_get_method1_decorators, { kind: "getter", name: "#method1", static: false, private: true, access: { has: obj => __classPrivateFieldIn(_C_instances, obj), get: obj => __classPrivateFieldGet(obj, _C_instances, "a", _C_method1_get) } }, null, _instanceExtraInitializers);
-            __esDecorate(_a, _private_set_method1_descriptor = { set: __setFunctionName(function (value) { }, "#method1", "set") }, _private_set_method1_decorators, { kind: "setter", name: "#method1", static: false, private: true, access: { has: obj => __classPrivateFieldIn(_C_instances, obj), set: (obj, value) => { __classPrivateFieldSet(obj, _C_instances, value, "a", _C_method1_set); } } }, null, _instanceExtraInitializers);
+            __esDecorate(_a, _private_get_method1_descriptor = { get: __setFunctionName(function () { return 0; }, "#method1", "get") }, _private_get_method1_decorators, { kind: "getter", name: "#method1", static: false, private: true, access: { has: obj => __classPrivateFieldIn(_C_instances, obj), get: obj => __classPrivateFieldGet(obj, _C_instances, "a", _C_method1_get) }, metadata: metadata }, null, _instanceExtraInitializers);
+            __esDecorate(_a, _private_set_method1_descriptor = { set: __setFunctionName(function (value) { }, "#method1", "set") }, _private_set_method1_decorators, { kind: "setter", name: "#method1", static: false, private: true, access: { has: obj => __classPrivateFieldIn(_C_instances, obj), set: (obj, value) => { __classPrivateFieldSet(obj, _C_instances, value, "a", _C_method1_set); } }, metadata: metadata }, null, _instanceExtraInitializers);
+            if (metadata) Object.defineProperty(_a, Symbol.metadata, { configurable: true, writable: true, enumerable: true, value: metadata });
         })(),
         _a;
 })();

@@ -28,12 +28,14 @@ let C = (() => {
     let _set_member_decorators_1;
     return class C {
         static {
-            __esDecorate(this, null, _get_method1_decorators, { kind: "getter", name: "method1", static: false, private: false, access: { has: obj => "method1" in obj, get: obj => obj.method1 } }, null, _instanceExtraInitializers);
-            __esDecorate(this, null, _set_method1_decorators, { kind: "setter", name: "method1", static: false, private: false, access: { has: obj => "method1" in obj, set: (obj, value) => { obj.method1 = value; } } }, null, _instanceExtraInitializers);
-            __esDecorate(this, null, _get_member_decorators, { kind: "getter", name: "method2", static: false, private: false, access: { has: obj => "method2" in obj, get: obj => obj["method2"] } }, null, _instanceExtraInitializers);
-            __esDecorate(this, null, _set_member_decorators, { kind: "setter", name: "method2", static: false, private: false, access: { has: obj => "method2" in obj, set: (obj, value) => { obj["method2"] = value; } } }, null, _instanceExtraInitializers);
-            __esDecorate(this, null, _get_member_decorators_1, { kind: "getter", name: _a, static: false, private: false, access: { has: obj => _a in obj, get: obj => obj[_a] } }, null, _instanceExtraInitializers);
-            __esDecorate(this, null, _set_member_decorators_1, { kind: "setter", name: _b, static: false, private: false, access: { has: obj => _b in obj, set: (obj, value) => { obj[_b] = value; } } }, null, _instanceExtraInitializers);
+            const metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : undefined;
+            __esDecorate(this, null, _get_method1_decorators, { kind: "getter", name: "method1", static: false, private: false, access: { has: obj => "method1" in obj, get: obj => obj.method1 }, metadata: metadata }, null, _instanceExtraInitializers);
+            __esDecorate(this, null, _set_method1_decorators, { kind: "setter", name: "method1", static: false, private: false, access: { has: obj => "method1" in obj, set: (obj, value) => { obj.method1 = value; } }, metadata: metadata }, null, _instanceExtraInitializers);
+            __esDecorate(this, null, _get_member_decorators, { kind: "getter", name: "method2", static: false, private: false, access: { has: obj => "method2" in obj, get: obj => obj["method2"] }, metadata: metadata }, null, _instanceExtraInitializers);
+            __esDecorate(this, null, _set_member_decorators, { kind: "setter", name: "method2", static: false, private: false, access: { has: obj => "method2" in obj, set: (obj, value) => { obj["method2"] = value; } }, metadata: metadata }, null, _instanceExtraInitializers);
+            __esDecorate(this, null, _get_member_decorators_1, { kind: "getter", name: _a, static: false, private: false, access: { has: obj => _a in obj, get: obj => obj[_a] }, metadata: metadata }, null, _instanceExtraInitializers);
+            __esDecorate(this, null, _set_member_decorators_1, { kind: "setter", name: _b, static: false, private: false, access: { has: obj => _b in obj, set: (obj, value) => { obj[_b] = value; } }, metadata: metadata }, null, _instanceExtraInitializers);
+            if (metadata) Object.defineProperty(this, Symbol.metadata, { configurable: true, writable: true, enumerable: true, value: metadata });
         }
         get method1() { return 0; }
         set method1(value) { }

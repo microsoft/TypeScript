@@ -26,8 +26,10 @@ let C = (() => {
     let _static_private_x_descriptor;
     return class C {
         static {
+            const metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : undefined;
             _static_private_x_decorators = [dec];
-            tslib_1.__esDecorate(this, _static_private_x_descriptor = { get: tslib_1.__setFunctionName(function () { return this.#x_accessor_storage; }, "#x", "get"), set: tslib_1.__setFunctionName(function (value) { this.#x_accessor_storage = value; }, "#x", "set") }, _static_private_x_decorators, { kind: "accessor", name: "#x", static: true, private: true, access: { has: obj => #x in obj, get: obj => obj.#x, set: (obj, value) => { obj.#x = value; } } }, _static_private_x_initializers, _staticExtraInitializers);
+            tslib_1.__esDecorate(this, _static_private_x_descriptor = { get: tslib_1.__setFunctionName(function () { return this.#x_accessor_storage; }, "#x", "get"), set: tslib_1.__setFunctionName(function (value) { this.#x_accessor_storage = value; }, "#x", "set") }, _static_private_x_decorators, { kind: "accessor", name: "#x", static: true, private: true, access: { has: obj => #x in obj, get: obj => obj.#x, set: (obj, value) => { obj.#x = value; } }, metadata: metadata }, _static_private_x_initializers, _staticExtraInitializers);
+            if (metadata) Object.defineProperty(this, Symbol.metadata, { configurable: true, writable: true, enumerable: true, value: metadata });
             tslib_1.__runInitializers(this, _staticExtraInitializers);
         }
         static #x_accessor_storage = tslib_1.__runInitializers(this, _static_private_x_initializers, void 0);

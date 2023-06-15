@@ -17,8 +17,10 @@ let C = (() => {
     let _speak_decorators;
     return class C {
         static {
+            const metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : undefined;
             _speak_decorators = [bound];
-            __esDecorate(this, null, _speak_decorators, { kind: "method", name: "speak", static: false, private: false, access: { has: obj => "speak" in obj, get: obj => obj.speak } }, null, _instanceExtraInitializers);
+            __esDecorate(this, null, _speak_decorators, { kind: "method", name: "speak", static: false, private: false, access: { has: obj => "speak" in obj, get: obj => obj.speak }, metadata: metadata }, null, _instanceExtraInitializers);
+            if (metadata) Object.defineProperty(this, Symbol.metadata, { configurable: true, writable: true, enumerable: true, value: metadata });
         }
         message = (__runInitializers(this, _instanceExtraInitializers), void 0);
         constructor(message) {

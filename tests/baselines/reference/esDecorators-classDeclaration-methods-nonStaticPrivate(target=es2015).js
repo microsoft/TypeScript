@@ -23,8 +23,10 @@ let C = (() => {
         _C_instances = new WeakSet(),
         _C_method1_get = function _C_method1_get() { return _private_method1_descriptor.value; },
         (() => {
+            const metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : undefined;
             _private_method1_decorators = [dec];
-            __esDecorate(_a, _private_method1_descriptor = { value: __setFunctionName(function () { }, "#method1") }, _private_method1_decorators, { kind: "method", name: "#method1", static: false, private: true, access: { has: obj => __classPrivateFieldIn(_C_instances, obj), get: obj => __classPrivateFieldGet(obj, _C_instances, "a", _C_method1_get) } }, null, _instanceExtraInitializers);
+            __esDecorate(_a, _private_method1_descriptor = { value: __setFunctionName(function () { }, "#method1") }, _private_method1_decorators, { kind: "method", name: "#method1", static: false, private: true, access: { has: obj => __classPrivateFieldIn(_C_instances, obj), get: obj => __classPrivateFieldGet(obj, _C_instances, "a", _C_method1_get) }, metadata: metadata }, null, _instanceExtraInitializers);
+            if (metadata) Object.defineProperty(_a, Symbol.metadata, { configurable: true, writable: true, enumerable: true, value: metadata });
         })(),
         _a;
 })();

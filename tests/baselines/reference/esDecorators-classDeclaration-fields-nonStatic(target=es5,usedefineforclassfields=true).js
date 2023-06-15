@@ -13,6 +13,7 @@ class C {
 
 
 //// [esDecorators-classDeclaration-fields-nonStatic.js]
+var _this = this;
 var field3 = "field3";
 var C = function () {
     var _a;
@@ -52,9 +53,11 @@ var C = function () {
         _member_decorators_1 = [dec(3)],
         _b = __propKey(field3),
         (function () {
-            __esDecorate(null, null, _field1_decorators, { kind: "field", name: "field1", static: false, private: false, access: { has: function (obj) { return "field1" in obj; }, get: function (obj) { return obj.field1; }, set: function (obj, value) { obj.field1 = value; } } }, _field1_initializers, _instanceExtraInitializers);
-            __esDecorate(null, null, _member_decorators, { kind: "field", name: "field2", static: false, private: false, access: { has: function (obj) { return "field2" in obj; }, get: function (obj) { return obj["field2"]; }, set: function (obj, value) { obj["field2"] = value; } } }, _member_initializers, _instanceExtraInitializers);
-            __esDecorate(null, null, _member_decorators_1, { kind: "field", name: _b, static: false, private: false, access: { has: function (obj) { return _b in obj; }, get: function (obj) { return obj[_b]; }, set: function (obj, value) { obj[_b] = value; } } }, _member_initializers_1, _instanceExtraInitializers);
+            var metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : undefined;
+            __esDecorate(null, null, _field1_decorators, { kind: "field", name: "field1", static: false, private: false, access: { has: function (obj) { return "field1" in obj; }, get: function (obj) { return obj.field1; }, set: function (obj, value) { obj.field1 = value; } }, metadata: metadata }, _field1_initializers, _instanceExtraInitializers);
+            __esDecorate(null, null, _member_decorators, { kind: "field", name: "field2", static: false, private: false, access: { has: function (obj) { return "field2" in obj; }, get: function (obj) { return obj["field2"]; }, set: function (obj, value) { obj["field2"] = value; } }, metadata: metadata }, _member_initializers, _instanceExtraInitializers);
+            __esDecorate(null, null, _member_decorators_1, { kind: "field", name: _b, static: false, private: false, access: { has: function (obj) { return _b in obj; }, get: function (obj) { return obj[_b]; }, set: function (obj, value) { obj[_b] = value; } }, metadata: metadata }, _member_initializers_1, _instanceExtraInitializers);
+            if (metadata) Object.defineProperty(_a, Symbol.metadata, { configurable: true, writable: true, enumerable: true, value: metadata });
         })(),
         _a;
 }();
