@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/internalAliasInterfaceInsideLocalModuleWithoutExport.ts] ////
+
 //// [internalAliasInterfaceInsideLocalModuleWithoutExport.ts]
 export module a {
     export interface I {

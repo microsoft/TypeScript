@@ -1,4 +1,6 @@
-=== tests/cases/conformance/node/allowJs/subfolder/index.js ===
+//// [tests/cases/conformance/node/allowJs/nodeModulesAllowJsTopLevelAwait.ts] ////
+
+=== subfolder/index.js ===
 // cjs format file
 const x = await 1;
 >x : 1
@@ -12,7 +14,7 @@ for await (const y of []) {}
 >y : any
 >[] : undefined[]
 
-=== tests/cases/conformance/node/allowJs/index.js ===
+=== index.js ===
 // esm format file
 const x = await 1;
 >x : 1

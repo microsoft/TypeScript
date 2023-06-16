@@ -1,4 +1,6 @@
-=== tests/cases/compiler/staticVisibility.ts ===
+//// [tests/cases/compiler/staticVisibility.ts] ////
+
+=== staticVisibility.ts ===
 class C1 {
 >C1 : C1
     

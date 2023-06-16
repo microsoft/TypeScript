@@ -1,4 +1,6 @@
-=== tests/cases/compiler/augmentedTypeBracketNamedPropertyAccess.ts ===
+//// [tests/cases/compiler/augmentedTypeBracketNamedPropertyAccess.ts] ////
+
+=== augmentedTypeBracketNamedPropertyAccess.ts ===
 interface Object {
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(augmentedTypeBracketNamedPropertyAccess.ts, 0, 0))
 

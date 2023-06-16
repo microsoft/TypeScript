@@ -1,12 +1,14 @@
-=== tests/cases/conformance/dynamicImport/0.ts ===
+//// [tests/cases/conformance/dynamicImport/importCallExpressionInScriptContext2.ts] ////
+
+=== 0.ts ===
 export function foo() { return "foo"; }
 >foo : Symbol(foo, Decl(0.ts, 0, 0))
 
-=== tests/cases/conformance/dynamicImport/1.ts ===
+=== 1.ts ===
 "use strict"
 var p1 = import("./0");
 >p1 : Symbol(p1, Decl(1.ts, 1, 3))
->"./0" : Symbol("tests/cases/conformance/dynamicImport/0", Decl(0.ts, 0, 0))
+>"./0" : Symbol("0", Decl(0.ts, 0, 0))
 
 function arguments() { }
 >arguments : Symbol(arguments, Decl(1.ts, 1, 23))

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/cloduleWithPriorUninstantiatedModule.ts ===
+//// [tests/cases/compiler/cloduleWithPriorUninstantiatedModule.ts] ////
+
+=== cloduleWithPriorUninstantiatedModule.ts ===
 // Non-ambient & uninstantiated module.
 module Moclodule {
     export interface Someinterface {

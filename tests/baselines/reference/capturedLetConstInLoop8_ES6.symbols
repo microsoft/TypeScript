@@ -1,4 +1,6 @@
-=== tests/cases/compiler/capturedLetConstInLoop8_ES6.ts ===
+//// [tests/cases/compiler/capturedLetConstInLoop8_ES6.ts] ////
+
+=== capturedLetConstInLoop8_ES6.ts ===
 function foo() {
 >foo : Symbol(foo, Decl(capturedLetConstInLoop8_ES6.ts, 0, 0))
 

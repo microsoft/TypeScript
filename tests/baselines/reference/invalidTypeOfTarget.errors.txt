@@ -1,18 +1,18 @@
-tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts(1,16): error TS1003: Identifier expected.
-tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts(2,16): error TS1003: Identifier expected.
-tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts(2,24): error TS1005: '=>' expected.
-tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts(3,16): error TS1003: Identifier expected.
-tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts(4,16): error TS1003: Identifier expected.
-tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts(5,16): error TS1003: Identifier expected.
-tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts(6,16): error TS2304: Cannot find name 'null'.
-tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts(7,16): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
-tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts(7,25): error TS1005: ',' expected.
-tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts(7,26): error TS1005: ',' expected.
-tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts(7,29): error TS1005: '=>' expected.
-tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts(8,16): error TS1003: Identifier expected.
+invalidTypeOfTarget.ts(1,16): error TS1003: Identifier expected.
+invalidTypeOfTarget.ts(2,16): error TS1003: Identifier expected.
+invalidTypeOfTarget.ts(2,24): error TS1005: '=>' expected.
+invalidTypeOfTarget.ts(3,16): error TS1003: Identifier expected.
+invalidTypeOfTarget.ts(4,16): error TS1003: Identifier expected.
+invalidTypeOfTarget.ts(5,16): error TS1003: Identifier expected.
+invalidTypeOfTarget.ts(6,16): error TS2304: Cannot find name 'null'.
+invalidTypeOfTarget.ts(7,16): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
+invalidTypeOfTarget.ts(7,25): error TS1005: ',' expected.
+invalidTypeOfTarget.ts(7,26): error TS1005: ',' expected.
+invalidTypeOfTarget.ts(7,29): error TS1005: '=>' expected.
+invalidTypeOfTarget.ts(8,16): error TS1003: Identifier expected.
 
 
-==== tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts (12 errors) ====
+==== invalidTypeOfTarget.ts (12 errors) ====
     var x1: typeof {};
                    ~
 !!! error TS1003: Identifier expected.
@@ -36,7 +36,7 @@ tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts
     var x7: typeof function f() { };
                    ~~~~~~~~
 !!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
-!!! related TS2728 /.ts/lib.es5.d.ts:--:--: 'Function' is declared here.
+!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
                             ~
 !!! error TS1005: ',' expected.
                              ~

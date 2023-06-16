@@ -1,17 +1,17 @@
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/optionalPropertyAssignableToStringIndexSignature.ts(6,1): error TS2322: Type '{ k1: string | undefined; }' is not assignable to type '{ [key: string]: string; }'.
+optionalPropertyAssignableToStringIndexSignature.ts(6,1): error TS2322: Type '{ k1: string | undefined; }' is not assignable to type '{ [key: string]: string; }'.
   Property 'k1' is incompatible with index signature.
     Type 'string | undefined' is not assignable to type 'string'.
       Type 'undefined' is not assignable to type 'string'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/optionalPropertyAssignableToStringIndexSignature.ts(10,1): error TS2322: Type '{ 1?: string | undefined; }' is not assignable to type '{ [key: number]: string; }'.
+optionalPropertyAssignableToStringIndexSignature.ts(10,1): error TS2322: Type '{ 1?: string | undefined; }' is not assignable to type '{ [key: number]: string; }'.
   Property '1' is incompatible with index signature.
     Type 'string | undefined' is not assignable to type 'string'.
       Type 'undefined' is not assignable to type 'string'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/optionalPropertyAssignableToStringIndexSignature.ts(13,5): error TS2322: Type '{ k1?: undefined; }' is not assignable to type '{ [key: string]: string; }'.
+optionalPropertyAssignableToStringIndexSignature.ts(13,5): error TS2322: Type '{ k1?: undefined; }' is not assignable to type '{ [key: string]: string; }'.
   Property 'k1' is incompatible with index signature.
     Type 'undefined' is not assignable to type 'string'.
 
 
-==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/optionalPropertyAssignableToStringIndexSignature.ts (3 errors) ====
+==== optionalPropertyAssignableToStringIndexSignature.ts (3 errors) ====
     declare let optionalProperties: { k1?: string };
     declare let undefinedProperties: { k1: string | undefined };
     

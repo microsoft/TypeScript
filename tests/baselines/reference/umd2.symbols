@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/a.ts ===
+//// [tests/cases/conformance/externalModules/umd2.ts] ////
+
+=== a.ts ===
 Foo.fn();
 let x: Foo.Thing;
 >x : Symbol(x, Decl(a.ts, 1, 3))

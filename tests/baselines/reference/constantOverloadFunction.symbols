@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constantOverloadFunction.ts ===
+//// [tests/cases/compiler/constantOverloadFunction.ts] ////
+
+=== constantOverloadFunction.ts ===
 class Base { foo() { } }
 >Base : Symbol(Base, Decl(constantOverloadFunction.ts, 0, 0))
 >foo : Symbol(Base.foo, Decl(constantOverloadFunction.ts, 0, 12))

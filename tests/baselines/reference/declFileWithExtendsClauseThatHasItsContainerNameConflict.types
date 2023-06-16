@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileWithExtendsClauseThatHasItsContainerNameConflict.ts ===
+//// [tests/cases/compiler/declFileWithExtendsClauseThatHasItsContainerNameConflict.ts] ////
+
+=== declFileWithExtendsClauseThatHasItsContainerNameConflict.ts ===
 declare module A.B.C {
 >A : typeof A
 >B : typeof B

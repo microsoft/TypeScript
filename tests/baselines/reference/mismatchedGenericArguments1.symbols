@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mismatchedGenericArguments1.ts ===
+//// [tests/cases/compiler/mismatchedGenericArguments1.ts] ////
+
+=== mismatchedGenericArguments1.ts ===
 interface IFoo<T> {
 >IFoo : Symbol(IFoo, Decl(mismatchedGenericArguments1.ts, 0, 0))
 >T : Symbol(T, Decl(mismatchedGenericArguments1.ts, 0, 15))

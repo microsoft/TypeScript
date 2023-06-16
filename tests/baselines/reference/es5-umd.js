@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es5-umd.ts] ////
+
 //// [es5-umd.ts]
 class A
 {

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mergedClassWithNamespacePrototype.ts] ////
+
 === /a.d.ts ===
 declare class Foo {}
 >Foo : Foo

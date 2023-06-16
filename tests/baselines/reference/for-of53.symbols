@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/for-ofStatements/for-of53.ts ===
+//// [tests/cases/conformance/es6/for-ofStatements/for-of53.ts] ////
+
+=== for-of53.ts ===
 for (let v of []) {
 >v : Symbol(v, Decl(for-of53.ts, 0, 8))
 

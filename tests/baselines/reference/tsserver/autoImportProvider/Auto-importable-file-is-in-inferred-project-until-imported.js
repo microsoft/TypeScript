@@ -105,11 +105,11 @@ After request
 PolledWatches::
 /a/lib/lib.d.ts:
   {"pollingInterval":500}
-/node_modules/@angular/forms/node_modules/@types:
-  {"pollingInterval":500}
 /node_modules/@angular/forms/bower_components: *new*
   {"pollingInterval":500}
 /node_modules/@angular/forms/node_modules: *new*
+  {"pollingInterval":500}
+/node_modules/@angular/forms/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
@@ -188,19 +188,19 @@ After request
 PolledWatches::
 /a/lib/lib.d.ts:
   {"pollingInterval":500}
-/node_modules/@angular/forms/node_modules/@types:
-  {"pollingInterval":500}
 /node_modules/@angular/forms/bower_components:
   {"pollingInterval":500}
 /node_modules/@angular/forms/node_modules:
+  {"pollingInterval":500}
+/node_modules/@angular/forms/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
 /node_modules/@angular/forms/package.json:
   {}
-/tsconfig.json: *new*
-  {}
 /package.json: *new*
+  {}
+/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::

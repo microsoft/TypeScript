@@ -1,4 +1,6 @@
-=== tests/cases/compiler/superElementAccess.ts ===
+//// [tests/cases/compiler/superElementAccess.ts] ////
+
+=== superElementAccess.ts ===
 class MyBase {
 >MyBase : Symbol(MyBase, Decl(superElementAccess.ts, 0, 0))
 

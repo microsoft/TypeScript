@@ -1,4 +1,6 @@
-=== tests/cases/compiler/infinitelyExpandingTypesNonGenericBase.ts ===
+//// [tests/cases/compiler/infinitelyExpandingTypesNonGenericBase.ts] ////
+
+=== infinitelyExpandingTypesNonGenericBase.ts ===
 class Functionality<V> {
 >Functionality : Functionality<V>
 

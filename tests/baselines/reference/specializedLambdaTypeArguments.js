@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/specializedLambdaTypeArguments.ts] ////
+
 //// [specializedLambdaTypeArguments.ts]
 class X<A> {
 	prop: X< <Tany>() => Tany >;

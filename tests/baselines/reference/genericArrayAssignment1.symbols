@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericArrayAssignment1.ts ===
+//// [tests/cases/compiler/genericArrayAssignment1.ts] ////
+
+=== genericArrayAssignment1.ts ===
 var s: string[];
 >s : Symbol(s, Decl(genericArrayAssignment1.ts, 0, 3))
 

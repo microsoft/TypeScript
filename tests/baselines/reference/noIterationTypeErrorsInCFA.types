@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noIterationTypeErrorsInCFA.ts ===
+//// [tests/cases/compiler/noIterationTypeErrorsInCFA.ts] ////
+
+=== noIterationTypeErrorsInCFA.ts ===
 interface F {
     d(): void
 >d : () => void

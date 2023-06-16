@@ -2,11 +2,11 @@
 JsFile: c.js
 mapUrl: c.js.map
 sourceRoot: 
-sources: tests/cases/compiler/a.ts,tests/cases/compiler/b.ts
+sources: a.ts,b.ts
 ===================================================================
 -------------------------------------------------------------------
 emittedFile:c.js
-sourceFile:tests/cases/compiler/a.ts
+sourceFile:a.ts
 -------------------------------------------------------------------
 >>>var A = /** @class */ (function () {
 1 >
@@ -54,7 +54,7 @@ sourceFile:tests/cases/compiler/a.ts
 ---
 -------------------------------------------------------------------
 emittedFile:c.js
-sourceFile:tests/cases/compiler/b.ts
+sourceFile:b.ts
 -------------------------------------------------------------------
 >>>var B = /** @class */ (function () {
 1->

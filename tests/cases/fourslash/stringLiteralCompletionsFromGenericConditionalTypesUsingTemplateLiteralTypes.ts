@@ -31,5 +31,5 @@
 //// const shallowExpression = parse("foo|/*ts*/")
 //// const nestedExpression = parse({ prop: "foo|/*ts2*/" })
 
-verify.completions({ marker: ["ts"], exact: ["foo", "bar", "baz", "foo|foo", "foo|bar", "foo|baz"] });
+verify.completions({ marker: ["ts"], exact: ["foo|foo", "foo|bar", "foo|baz"] });
 verify.completions({ marker: ["ts2"], exact: ["foo|foo", "foo|bar", "foo|baz"] });

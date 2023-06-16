@@ -1,8 +1,8 @@
-tests/cases/compiler/es6DeclOrdering.ts(6,20): error TS2339: Property '_store' does not exist on type 'Bar'.
-tests/cases/compiler/es6DeclOrdering.ts(11,13): error TS2339: Property '_store' does not exist on type 'Bar'.
+es6DeclOrdering.ts(6,20): error TS2339: Property '_store' does not exist on type 'Bar'.
+es6DeclOrdering.ts(11,13): error TS2339: Property '_store' does not exist on type 'Bar'.
 
 
-==== tests/cases/compiler/es6DeclOrdering.ts (2 errors) ====
+==== es6DeclOrdering.ts (2 errors) ====
     class Bar {
     
        //public bar() { }

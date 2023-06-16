@@ -1,4 +1,6 @@
-=== tests/cases/conformance/controlFlow/controlFlowStringIndex.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowStringIndex.ts] ////
+
+=== controlFlowStringIndex.ts ===
 type A = {
 >A : Symbol(A, Decl(controlFlowStringIndex.ts, 0, 0))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/mapped/mappedTypeInferenceErrors.ts] ////
+
 //// [mappedTypeInferenceErrors.ts]
 // Repro from #19316
 

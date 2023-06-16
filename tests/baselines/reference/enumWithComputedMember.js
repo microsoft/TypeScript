@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumWithComputedMember.ts] ////
+
 //// [enumWithComputedMember.ts]
 enum A { 
     X = "".length, 

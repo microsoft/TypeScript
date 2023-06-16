@@ -1,4 +1,5 @@
 import * as Utils from "../../_namespaces/Utils";
+import { getFsConentsForNode10ResultAtTypesPackageJson, getFsContentsForNode10Result, getFsContentsForNode10ResultDts, getFsContentsForNode10ResultPackageJson } from "../helpers/node10Result";
 import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,
@@ -129,5 +130,50 @@ describe("unittests:: tsserver:: moduleResolution", () => {
 
             baselineTsserverLogs("moduleResolution", "package json file is edited when package json with type module exists", session);
         });
+    });
+
+    it("node10Result", () => {
+        const host = createServerHost(getFsContentsForNode10Result());
+        const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
+        openFilesForSession(["/home/src/projects/project/index.mts"], session);
+        verifyGetErrRequest({
+            files: ["/home/src/projects/project/index.mts"],
+            session,
+        });
+        host.deleteFile("/home/src/projects/project/node_modules/@types/bar/index.d.ts");
+        verifyErrors();
+        host.deleteFile("/home/src/projects/project/node_modules/foo/index.d.ts");
+        verifyErrors();
+        host.writeFile("/home/src/projects/project/node_modules/@types/bar/index.d.ts", getFsContentsForNode10ResultDts("bar"));
+        verifyErrors();
+        host.writeFile("/home/src/projects/project/node_modules/foo/index.d.ts", getFsContentsForNode10ResultDts("foo"));
+        verifyErrors();
+        host.writeFile("/home/src/projects/project/node_modules/@types/bar/package.json", getFsConentsForNode10ResultAtTypesPackageJson("bar", /*addTypesCondition*/ true));
+        verifyErrors();
+        host.writeFile("/home/src/projects/project/node_modules/foo/package.json", getFsContentsForNode10ResultPackageJson("foo", /*addTypes*/ true, /*addTypesCondition*/ true));
+        verifyErrors();
+        host.writeFile("/home/src/projects/project/node_modules/@types/bar2/package.json", getFsConentsForNode10ResultAtTypesPackageJson("bar2", /*addTypesCondition*/ false));
+        verifyErrors();
+        host.writeFile("/home/src/projects/project/node_modules/foo2/package.json", getFsContentsForNode10ResultPackageJson("foo2", /*addTypes*/ true, /*addTypesCondition*/ false));
+        verifyErrors();
+        host.deleteFile("/home/src/projects/project/node_modules/@types/bar2/index.d.ts");
+        verifyErrors();
+        host.deleteFile("/home/src/projects/project/node_modules/foo2/index.d.ts");
+        verifyErrors();
+        host.writeFile("/home/src/projects/project/node_modules/@types/bar2/index.d.ts", getFsContentsForNode10ResultDts("bar2"));
+        verifyErrors();
+        host.writeFile("/home/src/projects/project/node_modules/foo2/index.d.ts", getFsContentsForNode10ResultDts("foo2"));
+        verifyErrors();
+
+        baselineTsserverLogs("moduleResolution", "node10Result", session);
+
+        function verifyErrors() {
+            host.runQueuedTimeoutCallbacks();
+            host.runQueuedImmediateCallbacks();
+            verifyGetErrRequest({
+                files: ["/home/src/projects/project/index.mts"],
+                session,
+            });
+        }
     });
 });

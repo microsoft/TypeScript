@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/parseErrorIncorrectReturnToken.ts] ////
+
 //// [parseErrorIncorrectReturnToken.ts]
 type F1 = {
     (n: number) => string; // should be : not =>

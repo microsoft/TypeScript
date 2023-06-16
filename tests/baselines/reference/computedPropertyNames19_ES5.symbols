@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/computedProperties/computedPropertyNames19_ES5.ts ===
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames19_ES5.ts] ////
+
+=== computedPropertyNames19_ES5.ts ===
 module M {
 >M : Symbol(M, Decl(computedPropertyNames19_ES5.ts, 0, 0))
 

@@ -198,6 +198,7 @@ import {
     nodeSeenTracker,
     NumericLiteral,
     ObjectLiteralExpression,
+    or,
     ParameterDeclaration,
     ParenthesizedExpression,
     Path,
@@ -848,8 +849,12 @@ export function getTextSpanOfEntry(entry: Entry) {
         getTextSpan(entry.node, entry.node.getSourceFile());
 }
 
-/** A node is considered a writeAccess iff it is a name of a declaration or a target of an assignment */
-function isWriteAccessForReference(node: Node): boolean {
+/**
+ * A node is considered a writeAccess iff it is a name of a declaration or a target of an assignment.
+ *
+ * @internal
+ */
+export function isWriteAccessForReference(node: Node): boolean {
     const decl = getDeclarationFromName(node);
     return !!decl && declarationIsWriteAccess(decl) || node.kind === SyntaxKind.DefaultKeyword || isWriteAccess(node);
 }
@@ -1724,7 +1729,10 @@ export namespace Core {
     }
 
     function getPossibleSymbolReferenceNodes(sourceFile: SourceFile, symbolName: string, container: Node = sourceFile): readonly Node[] {
-        return getPossibleSymbolReferencePositions(sourceFile, symbolName, container).map(pos => getTouchingPropertyName(sourceFile, pos));
+        return mapDefined(getPossibleSymbolReferencePositions(sourceFile, symbolName, container), pos => {
+            const referenceLocation = getTouchingPropertyName(sourceFile, pos);
+            return referenceLocation === sourceFile ? undefined : referenceLocation;
+        });
     }
 
     function getPossibleSymbolReferencePositions(sourceFile: SourceFile, symbolName: string, container: Node = sourceFile): readonly number[] {
@@ -2177,9 +2185,9 @@ export namespace Core {
         }
 
         // Check if the node is within an extends or implements clause
-        const containingClass = getContainingClassIfInHeritageClause(refNode);
-        if (containingClass) {
-            addReference(containingClass);
+        const containingNode = getContainingNodeIfInHeritageClause(refNode);
+        if (containingNode) {
+            addReference(containingNode);
             return;
         }
 
@@ -2212,9 +2220,9 @@ export namespace Core {
         }
     }
 
-    function getContainingClassIfInHeritageClause(node: Node): ClassLikeDeclaration | InterfaceDeclaration | undefined {
-        return isIdentifier(node) || isPropertyAccessExpression(node) ? getContainingClassIfInHeritageClause(node.parent)
-            : isExpressionWithTypeArguments(node) ? tryCast(node.parent.parent, isClassLike) : undefined;
+    function getContainingNodeIfInHeritageClause(node: Node): ClassLikeDeclaration | InterfaceDeclaration | undefined {
+        return isIdentifier(node) || isPropertyAccessExpression(node) ? getContainingNodeIfInHeritageClause(node.parent)
+            : isExpressionWithTypeArguments(node) ? tryCast(node.parent.parent, or(isClassLike, isInterfaceDeclaration)) : undefined;
     }
 
     /**

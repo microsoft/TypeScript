@@ -140,9 +140,9 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
 /a/bower_components: *new*
+  {"pollingInterval":500}
+/a/lib/lib.es6.d.ts:
   {"pollingInterval":500}
 /a/node_modules: *new*
   {"pollingInterval":500}
@@ -272,13 +272,13 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
 /a/bower_components:
   {"pollingInterval":500}
-/a/node_modules:
+/a/lib/lib.es6.d.ts:
   {"pollingInterval":500}
 /a/lib/lib.esnext.full.d.ts: *new*
+  {"pollingInterval":500}
+/a/node_modules:
   {"pollingInterval":500}
 /b/bower_components: *new*
   {"pollingInterval":500}
@@ -357,13 +357,13 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
 /a/bower_components:
   {"pollingInterval":500}
-/a/node_modules:
+/a/lib/lib.es6.d.ts:
   {"pollingInterval":500}
 /a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
+/a/node_modules:
   {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
@@ -412,13 +412,13 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
 /a/bower_components:
   {"pollingInterval":500}
-/a/node_modules:
+/a/lib/lib.es6.d.ts:
   {"pollingInterval":500}
 /a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
+/a/node_modules:
   {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
@@ -469,13 +469,13 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
 /a/bower_components:
   {"pollingInterval":500}
-/a/node_modules:
+/a/lib/lib.es6.d.ts:
   {"pollingInterval":500}
 /a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
+/a/node_modules:
   {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
@@ -487,9 +487,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/file1.ts:
-  {}
 /A/file2.ts: *new*
+  {}
+/a/file1.ts:
   {}
 
 Before request
@@ -526,13 +526,13 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
 /a/bower_components:
   {"pollingInterval":500}
-/a/node_modules:
+/a/lib/lib.es6.d.ts:
   {"pollingInterval":500}
 /a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
+/a/node_modules:
   {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
@@ -544,9 +544,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/file1.ts:
-  {}
 /A/file2.ts:
+  {}
+/a/file1.ts:
   {}
 /b/file2.ts: *new*
   {}
@@ -583,13 +583,13 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
 /a/bower_components:
   {"pollingInterval":500}
-/a/node_modules:
+/a/lib/lib.es6.d.ts:
   {"pollingInterval":500}
 /a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
+/a/node_modules:
   {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
@@ -601,9 +601,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/file1.ts:
-  {}
 /A/file2.ts:
+  {}
+/a/file1.ts:
   {}
 /b/file2.ts:
   {}
@@ -706,9 +706,9 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
 /a/bower_components:
+  {"pollingInterval":500}
+/a/lib/lib.es6.d.ts:
   {"pollingInterval":500}
 /a/node_modules:
   {"pollingInterval":500}
@@ -726,9 +726,9 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches *deleted*::
-/a/file1.ts:
-  {}
 /A/file2.ts:
+  {}
+/a/file1.ts:
   {}
 /b/file2.ts:
   {}
@@ -800,17 +800,17 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
-/a/bower_components:
-  {"pollingInterval":500}
-/a/node_modules:
-  {"pollingInterval":500}
-/a/lib/lib.esnext.full.d.ts: *new*
-  {"pollingInterval":500}
 /A/bower_components: *new*
   {"pollingInterval":500}
 /A/node_modules: *new*
+  {"pollingInterval":500}
+/a/bower_components:
+  {"pollingInterval":500}
+/a/lib/lib.es6.d.ts:
+  {"pollingInterval":500}
+/a/lib/lib.esnext.full.d.ts: *new*
+  {"pollingInterval":500}
+/a/node_modules:
   {"pollingInterval":500}
 
 Before request
@@ -884,17 +884,17 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
-/a/bower_components:
-  {"pollingInterval":500}
-/a/node_modules:
-  {"pollingInterval":500}
-/a/lib/lib.esnext.full.d.ts:
-  {"pollingInterval":500}
 /A/bower_components:
   {"pollingInterval":500}
 /A/node_modules:
+  {"pollingInterval":500}
+/a/bower_components:
+  {"pollingInterval":500}
+/a/lib/lib.es6.d.ts:
+  {"pollingInterval":500}
+/a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
+/a/node_modules:
   {"pollingInterval":500}
 /b/bower_components: *new*
   {"pollingInterval":500}
@@ -977,17 +977,17 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
-/a/bower_components:
-  {"pollingInterval":500}
-/a/node_modules:
-  {"pollingInterval":500}
-/a/lib/lib.esnext.full.d.ts:
-  {"pollingInterval":500}
 /A/bower_components:
   {"pollingInterval":500}
 /A/node_modules:
+  {"pollingInterval":500}
+/a/bower_components:
+  {"pollingInterval":500}
+/a/lib/lib.es6.d.ts:
+  {"pollingInterval":500}
+/a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
+/a/node_modules:
   {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
@@ -1040,17 +1040,17 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
-/a/bower_components:
-  {"pollingInterval":500}
-/a/node_modules:
-  {"pollingInterval":500}
-/a/lib/lib.esnext.full.d.ts:
-  {"pollingInterval":500}
 /A/bower_components:
   {"pollingInterval":500}
 /A/node_modules:
+  {"pollingInterval":500}
+/a/bower_components:
+  {"pollingInterval":500}
+/a/lib/lib.es6.d.ts:
+  {"pollingInterval":500}
+/a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
+/a/node_modules:
   {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
@@ -1105,17 +1105,17 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
-/a/bower_components:
-  {"pollingInterval":500}
-/a/node_modules:
-  {"pollingInterval":500}
-/a/lib/lib.esnext.full.d.ts:
-  {"pollingInterval":500}
 /A/bower_components:
   {"pollingInterval":500}
 /A/node_modules:
+  {"pollingInterval":500}
+/a/bower_components:
+  {"pollingInterval":500}
+/a/lib/lib.es6.d.ts:
+  {"pollingInterval":500}
+/a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
+/a/node_modules:
   {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
@@ -1127,9 +1127,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/file1.ts:
-  {}
 /A/file2.ts: *new*
+  {}
+/a/file1.ts:
   {}
 
 Before request
@@ -1170,17 +1170,17 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
-/a/bower_components:
-  {"pollingInterval":500}
-/a/node_modules:
-  {"pollingInterval":500}
-/a/lib/lib.esnext.full.d.ts:
-  {"pollingInterval":500}
 /A/bower_components:
   {"pollingInterval":500}
 /A/node_modules:
+  {"pollingInterval":500}
+/a/bower_components:
+  {"pollingInterval":500}
+/a/lib/lib.es6.d.ts:
+  {"pollingInterval":500}
+/a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
+/a/node_modules:
   {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
@@ -1192,9 +1192,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/file1.ts:
-  {}
 /A/file2.ts:
+  {}
+/a/file1.ts:
   {}
 /b/file2.ts: *new*
   {}
@@ -1235,17 +1235,17 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
-/a/bower_components:
-  {"pollingInterval":500}
-/a/node_modules:
-  {"pollingInterval":500}
-/a/lib/lib.esnext.full.d.ts:
-  {"pollingInterval":500}
 /A/bower_components:
   {"pollingInterval":500}
 /A/node_modules:
+  {"pollingInterval":500}
+/a/bower_components:
+  {"pollingInterval":500}
+/a/lib/lib.es6.d.ts:
+  {"pollingInterval":500}
+/a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
+/a/node_modules:
   {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
@@ -1257,9 +1257,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/file1.ts:
-  {}
 /A/file2.ts:
+  {}
+/a/file1.ts:
   {}
 /b/file2.ts:
   {}
@@ -1396,19 +1396,19 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
 /a/bower_components:
+  {"pollingInterval":500}
+/a/lib/lib.es6.d.ts:
   {"pollingInterval":500}
 /a/node_modules:
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
-/a/lib/lib.esnext.full.d.ts:
-  {"pollingInterval":500}
 /A/bower_components:
   {"pollingInterval":500}
 /A/node_modules:
+  {"pollingInterval":500}
+/a/lib/lib.esnext.full.d.ts:
   {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
@@ -1420,9 +1420,9 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches *deleted*::
-/a/file1.ts:
-  {}
 /A/file2.ts:
+  {}
+/a/file1.ts:
   {}
 /b/file2.ts:
   {}
@@ -1554,13 +1554,13 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
 /a/bower_components:
   {"pollingInterval":500}
-/a/node_modules:
+/a/lib/lib.es6.d.ts:
   {"pollingInterval":500}
 /a/lib/lib.esnext.full.d.ts: *new*
+  {"pollingInterval":500}
+/a/node_modules:
   {"pollingInterval":500}
 /b/bower_components: *new*
   {"pollingInterval":500}
@@ -1639,13 +1639,13 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
 /a/bower_components:
   {"pollingInterval":500}
-/a/node_modules:
+/a/lib/lib.es6.d.ts:
   {"pollingInterval":500}
 /a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
+/a/node_modules:
   {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
@@ -1694,13 +1694,13 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
 /a/bower_components:
   {"pollingInterval":500}
-/a/node_modules:
+/a/lib/lib.es6.d.ts:
   {"pollingInterval":500}
 /a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
+/a/node_modules:
   {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
@@ -1751,13 +1751,13 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
 /a/bower_components:
   {"pollingInterval":500}
-/a/node_modules:
+/a/lib/lib.es6.d.ts:
   {"pollingInterval":500}
 /a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
+/a/node_modules:
   {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
@@ -1769,9 +1769,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/file1.ts:
-  {}
 /A/file2.ts: *new*
+  {}
+/a/file1.ts:
   {}
 
 Before request
@@ -1808,13 +1808,13 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
 /a/bower_components:
   {"pollingInterval":500}
-/a/node_modules:
+/a/lib/lib.es6.d.ts:
   {"pollingInterval":500}
 /a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
+/a/node_modules:
   {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
@@ -1826,9 +1826,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/file1.ts:
-  {}
 /A/file2.ts:
+  {}
+/a/file1.ts:
   {}
 /b/file2.ts: *new*
   {}
@@ -1865,13 +1865,13 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
 /a/bower_components:
   {"pollingInterval":500}
-/a/node_modules:
+/a/lib/lib.es6.d.ts:
   {"pollingInterval":500}
 /a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
+/a/node_modules:
   {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
@@ -1883,9 +1883,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/file1.ts:
-  {}
 /A/file2.ts:
+  {}
+/a/file1.ts:
   {}
 /b/file2.ts:
   {}
@@ -1988,9 +1988,9 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
 /a/bower_components:
+  {"pollingInterval":500}
+/a/lib/lib.es6.d.ts:
   {"pollingInterval":500}
 /a/node_modules:
   {"pollingInterval":500}
@@ -2008,9 +2008,9 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches *deleted*::
-/a/file1.ts:
-  {}
 /A/file2.ts:
+  {}
+/a/file1.ts:
   {}
 /b/file2.ts:
   {}
@@ -2082,17 +2082,17 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
-/a/bower_components:
-  {"pollingInterval":500}
-/a/node_modules:
-  {"pollingInterval":500}
-/a/lib/lib.es2017.full.d.ts: *new*
-  {"pollingInterval":500}
 /A/bower_components: *new*
   {"pollingInterval":500}
 /A/node_modules: *new*
+  {"pollingInterval":500}
+/a/bower_components:
+  {"pollingInterval":500}
+/a/lib/lib.es2017.full.d.ts: *new*
+  {"pollingInterval":500}
+/a/lib/lib.es6.d.ts:
+  {"pollingInterval":500}
+/a/node_modules:
   {"pollingInterval":500}
 
 Before request
@@ -2166,19 +2166,19 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
-/a/bower_components:
-  {"pollingInterval":500}
-/a/node_modules:
-  {"pollingInterval":500}
-/a/lib/lib.es2017.full.d.ts:
-  {"pollingInterval":500}
 /A/bower_components:
   {"pollingInterval":500}
 /A/node_modules:
   {"pollingInterval":500}
+/a/bower_components:
+  {"pollingInterval":500}
+/a/lib/lib.es2017.full.d.ts:
+  {"pollingInterval":500}
+/a/lib/lib.es6.d.ts:
+  {"pollingInterval":500}
 /a/lib/lib.esnext.full.d.ts: *new*
+  {"pollingInterval":500}
+/a/node_modules:
   {"pollingInterval":500}
 /b/bower_components: *new*
   {"pollingInterval":500}
@@ -2261,19 +2261,19 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
-/a/bower_components:
-  {"pollingInterval":500}
-/a/node_modules:
-  {"pollingInterval":500}
-/a/lib/lib.es2017.full.d.ts:
-  {"pollingInterval":500}
 /A/bower_components:
   {"pollingInterval":500}
 /A/node_modules:
   {"pollingInterval":500}
+/a/bower_components:
+  {"pollingInterval":500}
+/a/lib/lib.es2017.full.d.ts:
+  {"pollingInterval":500}
+/a/lib/lib.es6.d.ts:
+  {"pollingInterval":500}
 /a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
+/a/node_modules:
   {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
@@ -2326,19 +2326,19 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
-/a/bower_components:
-  {"pollingInterval":500}
-/a/node_modules:
-  {"pollingInterval":500}
-/a/lib/lib.es2017.full.d.ts:
-  {"pollingInterval":500}
 /A/bower_components:
   {"pollingInterval":500}
 /A/node_modules:
   {"pollingInterval":500}
+/a/bower_components:
+  {"pollingInterval":500}
+/a/lib/lib.es2017.full.d.ts:
+  {"pollingInterval":500}
+/a/lib/lib.es6.d.ts:
+  {"pollingInterval":500}
 /a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
+/a/node_modules:
   {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
@@ -2393,19 +2393,19 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
-/a/bower_components:
-  {"pollingInterval":500}
-/a/node_modules:
-  {"pollingInterval":500}
-/a/lib/lib.es2017.full.d.ts:
-  {"pollingInterval":500}
 /A/bower_components:
   {"pollingInterval":500}
 /A/node_modules:
   {"pollingInterval":500}
+/a/bower_components:
+  {"pollingInterval":500}
+/a/lib/lib.es2017.full.d.ts:
+  {"pollingInterval":500}
+/a/lib/lib.es6.d.ts:
+  {"pollingInterval":500}
 /a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
+/a/node_modules:
   {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
@@ -2417,9 +2417,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/file1.ts:
-  {}
 /A/file2.ts: *new*
+  {}
+/a/file1.ts:
   {}
 
 Before request
@@ -2460,19 +2460,19 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
-/a/bower_components:
-  {"pollingInterval":500}
-/a/node_modules:
-  {"pollingInterval":500}
-/a/lib/lib.es2017.full.d.ts:
-  {"pollingInterval":500}
 /A/bower_components:
   {"pollingInterval":500}
 /A/node_modules:
   {"pollingInterval":500}
+/a/bower_components:
+  {"pollingInterval":500}
+/a/lib/lib.es2017.full.d.ts:
+  {"pollingInterval":500}
+/a/lib/lib.es6.d.ts:
+  {"pollingInterval":500}
 /a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
+/a/node_modules:
   {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
@@ -2484,9 +2484,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/file1.ts:
-  {}
 /A/file2.ts:
+  {}
+/a/file1.ts:
   {}
 /b/file2.ts: *new*
   {}
@@ -2527,19 +2527,19 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
-/a/bower_components:
-  {"pollingInterval":500}
-/a/node_modules:
-  {"pollingInterval":500}
-/a/lib/lib.es2017.full.d.ts:
-  {"pollingInterval":500}
 /A/bower_components:
   {"pollingInterval":500}
 /A/node_modules:
   {"pollingInterval":500}
+/a/bower_components:
+  {"pollingInterval":500}
+/a/lib/lib.es2017.full.d.ts:
+  {"pollingInterval":500}
+/a/lib/lib.es6.d.ts:
+  {"pollingInterval":500}
 /a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
+/a/node_modules:
   {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
@@ -2551,9 +2551,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/file1.ts:
-  {}
 /A/file2.ts:
+  {}
+/a/file1.ts:
   {}
 /b/file2.ts:
   {}

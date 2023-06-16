@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/undefinedTypeAssignment4.ts] ////
+
 //// [undefinedTypeAssignment4.ts]
 class undefined {
 	foo: string;

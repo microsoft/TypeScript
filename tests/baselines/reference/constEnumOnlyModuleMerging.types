@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constEnumOnlyModuleMerging.ts ===
+//// [tests/cases/compiler/constEnumOnlyModuleMerging.ts] ////
+
+=== constEnumOnlyModuleMerging.ts ===
 module Outer {
 >Outer : typeof Outer
 

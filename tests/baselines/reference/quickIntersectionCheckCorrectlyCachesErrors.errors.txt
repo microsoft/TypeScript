@@ -1,7 +1,7 @@
-tests/cases/compiler/quickIntersectionCheckCorrectlyCachesErrors.tsx(10,21): error TS2304: Cannot find name 'React'.
+quickIntersectionCheckCorrectlyCachesErrors.tsx(10,21): error TS2304: Cannot find name 'React'.
 
 
-==== tests/cases/compiler/quickIntersectionCheckCorrectlyCachesErrors.tsx (1 errors) ====
+==== quickIntersectionCheckCorrectlyCachesErrors.tsx (1 errors) ====
     interface F<P> {
         (props: P & { children?: boolean }): void;
         propTypes: { [K in keyof P]: null extends P ? K : K };

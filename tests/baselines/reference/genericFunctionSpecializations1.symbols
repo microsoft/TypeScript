@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericFunctionSpecializations1.ts ===
+//// [tests/cases/compiler/genericFunctionSpecializations1.ts] ////
+
+=== genericFunctionSpecializations1.ts ===
 function foo3<T>(test: string); // error
 >foo3 : Symbol(foo3, Decl(genericFunctionSpecializations1.ts, 0, 0), Decl(genericFunctionSpecializations1.ts, 0, 31))
 >T : Symbol(T, Decl(genericFunctionSpecializations1.ts, 0, 14))

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/deferredLookupTypeResolution.ts ===
+//// [tests/cases/compiler/deferredLookupTypeResolution.ts] ////
+
+=== deferredLookupTypeResolution.ts ===
 // Repro from #17456
 
 type StringContains<S extends string, L extends string> = (

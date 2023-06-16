@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/propertyAssignmentUseParentType1.ts] ////
+
 //// [propertyAssignmentUseParentType1.ts]
 interface N {
     (): boolean

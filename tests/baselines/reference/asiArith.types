@@ -1,4 +1,6 @@
-=== tests/cases/compiler/asiArith.ts ===
+//// [tests/cases/compiler/asiArith.ts] ////
+
+=== asiArith.ts ===
 var x = 1;
 >x : number
 >1 : 1

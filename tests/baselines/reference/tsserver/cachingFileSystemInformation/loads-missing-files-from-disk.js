@@ -57,18 +57,18 @@ export var y = 1
 
 
 PolledWatches::
-/users/username/projects/project/tsconfig.json: *new*
-  {"pollingInterval":2000}
+/users/username/projects/node_modules: *new*
+  {"pollingInterval":500}
+/users/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 /users/username/projects/project/jsconfig.json: *new*
   {"pollingInterval":2000}
 /users/username/projects/project/node_modules: *new*
   {"pollingInterval":500}
-/users/username/projects/node_modules: *new*
-  {"pollingInterval":500}
 /users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
-/users/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
+/users/username/projects/project/tsconfig.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /users/username/projects: *new*

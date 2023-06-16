@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitDistributiveConditionalWithInfer.ts] ////
+
 //// [declarationEmitDistributiveConditionalWithInfer.ts]
 // This function's type is changed on declaration
 export const fun = (

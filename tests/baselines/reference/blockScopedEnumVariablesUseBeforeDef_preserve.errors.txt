@@ -1,12 +1,12 @@
-tests/cases/compiler/blockScopedEnumVariablesUseBeforeDef_preserve.ts(2,12): error TS2450: Enum 'E' used before its declaration.
+blockScopedEnumVariablesUseBeforeDef_preserve.ts(2,12): error TS2450: Enum 'E' used before its declaration.
 
 
-==== tests/cases/compiler/blockScopedEnumVariablesUseBeforeDef_preserve.ts (1 errors) ====
+==== blockScopedEnumVariablesUseBeforeDef_preserve.ts (1 errors) ====
     function foo1() {
         return E.A
                ~
 !!! error TS2450: Enum 'E' used before its declaration.
-!!! related TS2728 tests/cases/compiler/blockScopedEnumVariablesUseBeforeDef_preserve.ts:3:10: 'E' is declared here.
+!!! related TS2728 blockScopedEnumVariablesUseBeforeDef_preserve.ts:3:10: 'E' is declared here.
         enum E { A }
     }
     

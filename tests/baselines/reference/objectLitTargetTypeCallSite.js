@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectLitTargetTypeCallSite.ts] ////
+
 //// [objectLitTargetTypeCallSite.ts]
 function process( x: {a:number; b:string;}) {
 	return x.a;

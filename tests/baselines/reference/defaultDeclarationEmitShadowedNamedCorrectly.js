@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/defaultDeclarationEmitShadowedNamedCorrectly.ts] ////
+
 //// [this.ts]
 import * as me from "./this";
 export interface Things<P, T> {

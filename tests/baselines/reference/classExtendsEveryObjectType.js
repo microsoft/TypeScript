@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsEveryObjectType.ts] ////
+
 //// [classExtendsEveryObjectType.ts]
 interface I {
     foo: string;
