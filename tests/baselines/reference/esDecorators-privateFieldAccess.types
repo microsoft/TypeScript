@@ -1,0 +1,34 @@
+//// [tests/cases/conformance/esDecorators/esDecorators-privateFieldAccess.ts] ////
+
+=== esDecorators-privateFieldAccess.ts ===
+declare let dec: any;
+>dec : any
+
+@dec(x => x.#foo) // error
+>dec(x => x.#foo) : any
+>dec : any
+>x => x.#foo : (x: any) => any
+>x : any
+>x.#foo : any
+>x : any
+
+class Foo {
+>Foo : Foo
+
+    #foo = 3;
+>#foo : number
+>3 : 3
+
+    @dec(this, (x: Foo) => x.#foo) // ok
+>dec(this, (x: Foo) => x.#foo) : any
+>dec : any
+>this : typeof globalThis
+>(x: Foo) => x.#foo : (x: Foo) => number
+>x : Foo
+>x.#foo : number
+>x : Foo
+
+    m() {}
+>m : () => void
+}
+

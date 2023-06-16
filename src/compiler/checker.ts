@@ -31515,6 +31515,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
 
+            if (findAncestor(right.parent, n => isDecorator(n) && isClassLike(n.parent))) {
+                grammarErrorOnNode(right, Diagnostics.Private_identifiers_are_not_allowed_outside_class_bodies);
+                return anyType;
+            }
+
             const lexicallyScopedSymbol = lookupSymbolForPrivateIdentifierDeclaration(right.escapedText, right);
             if (assignmentKind && lexicallyScopedSymbol && lexicallyScopedSymbol.valueDeclaration && isMethodDeclaration(lexicallyScopedSymbol.valueDeclaration)) {
                 grammarErrorOnNode(right, Diagnostics.Cannot_assign_to_private_method_0_Private_methods_are_not_writable, idText(right));
