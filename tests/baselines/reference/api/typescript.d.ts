@@ -11040,7 +11040,7 @@ declare namespace ts {
          * in the case of InternalSymbolName.ExportEquals and InternalSymbolName.Default.
          */
         exportName: string;
-        exportMapKey?: string;
+        exportMapKey?: ExportMapInfoKey;
         moduleSpecifier?: string;
         /** The file name declaring the export's module symbol, if it was an external module */
         fileName?: string;
@@ -11050,7 +11050,7 @@ declare namespace ts {
         isPackageJsonImport?: true;
     }
     interface CompletionEntryDataUnresolved extends CompletionEntryDataAutoImport {
-        exportMapKey: string;
+        exportMapKey: ExportMapInfoKey;
     }
     interface CompletionEntryDataResolved extends CompletionEntryDataAutoImport {
         moduleSpecifier: string;
@@ -11365,6 +11365,9 @@ declare namespace ts {
         span: TextSpan;
         preferences: UserPreferences;
     }
+    type ExportMapInfoKey = string & {
+        __exportInfoKey: void;
+    };
     /** The classifier is used for syntactic highlighting in editors via the TSServer */
     function createClassifier(): Classifier;
     interface DocumentHighlights {
