@@ -46,7 +46,6 @@ import {
     DotDotDotToken,
     ElementAccessExpression,
     EmptyStatement,
-    EndOfDeclarationMarker,
     EnumDeclaration,
     EnumMember,
     EqualsGreaterThanToken,
@@ -137,7 +136,6 @@ import {
     LabeledStatement,
     LiteralTypeNode,
     MappedTypeNode,
-    MergeDeclarationMarker,
     MetaProperty,
     MethodDeclaration,
     MethodSignature,
@@ -900,16 +898,6 @@ export function isNotEmittedStatement(node: Node): node is NotEmittedStatement {
 /** @internal */
 export function isSyntheticReference(node: Node): node is SyntheticReferenceExpression {
     return node.kind === SyntaxKind.SyntheticReferenceExpression;
-}
-
-/** @internal */
-export function isMergeDeclarationMarker(node: Node): node is MergeDeclarationMarker {
-    return node.kind === SyntaxKind.MergeDeclarationMarker;
-}
-
-/** @internal */
-export function isEndOfDeclarationMarker(node: Node): node is EndOfDeclarationMarker {
-    return node.kind === SyntaxKind.EndOfDeclarationMarker;
 }
 
 // Module References

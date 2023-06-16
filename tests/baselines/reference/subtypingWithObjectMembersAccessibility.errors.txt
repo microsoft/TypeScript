@@ -1,12 +1,12 @@
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersAccessibility.ts(15,7): error TS2415: Class 'B' incorrectly extends base class 'A'.
+subtypingWithObjectMembersAccessibility.ts(15,7): error TS2415: Class 'B' incorrectly extends base class 'A'.
   Property 'foo' is private in type 'B' but not in type 'A'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersAccessibility.ts(23,7): error TS2415: Class 'B2' incorrectly extends base class 'A2'.
+subtypingWithObjectMembersAccessibility.ts(23,7): error TS2415: Class 'B2' incorrectly extends base class 'A2'.
   Property '1' is private in type 'B2' but not in type 'A2'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersAccessibility.ts(31,7): error TS2415: Class 'B3' incorrectly extends base class 'A3'.
+subtypingWithObjectMembersAccessibility.ts(31,7): error TS2415: Class 'B3' incorrectly extends base class 'A3'.
   Property ''1'' is private in type 'B3' but not in type 'A3'.
 
 
-==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersAccessibility.ts (3 errors) ====
+==== subtypingWithObjectMembersAccessibility.ts (3 errors) ====
     // Derived member is private, base member is not causes errors
     
     class Base {

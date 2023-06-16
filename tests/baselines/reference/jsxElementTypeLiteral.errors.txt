@@ -1,11 +1,11 @@
-tests/cases/compiler/jsxElementTypeLiteral.tsx(16,10): error TS2786: 'span' cannot be used as a JSX component.
+jsxElementTypeLiteral.tsx(16,10): error TS2786: 'span' cannot be used as a JSX component.
   Its type '"span"' is not a valid JSX element type.
-tests/cases/compiler/jsxElementTypeLiteral.tsx(20,9): error TS2339: Property 'ruhroh' does not exist on type 'JSX.IntrinsicElements'.
-tests/cases/compiler/jsxElementTypeLiteral.tsx(20,10): error TS2786: 'ruhroh' cannot be used as a JSX component.
+jsxElementTypeLiteral.tsx(20,9): error TS2339: Property 'ruhroh' does not exist on type 'JSX.IntrinsicElements'.
+jsxElementTypeLiteral.tsx(20,10): error TS2786: 'ruhroh' cannot be used as a JSX component.
   Its type '"ruhroh"' is not a valid JSX element type.
 
 
-==== tests/cases/compiler/jsxElementTypeLiteral.tsx (3 errors) ====
+==== jsxElementTypeLiteral.tsx (3 errors) ====
     /// <reference path="/.lib/react16.d.ts" />
     import * as React from "react";
     

@@ -1009,8 +1009,18 @@ export class TestState {
             assert.equal<boolean | undefined>(actual.isPackageJsonImport, expected.isPackageJsonImport, `At entry ${actual.name}: Expected 'isPackageJsonImport' properties to match`);
         }
 
-        assert.equal(actual.labelDetails?.description, expected.labelDetails?.description, `At entry ${actual.name}: Expected 'labelDetails.description' properties to match`);
-        assert.equal(actual.labelDetails?.detail, expected.labelDetails?.detail, `At entry ${actual.name}: Expected 'labelDetails.detail' properties to match`);
+        assert.equal(
+            actual.filterText,
+            expected.filterText,
+            `At entry ${actual.name}: Completion 'filterText' not match: ${showTextDiff(expected.filterText || "", actual.filterText || "")}`);
+        assert.equal(
+            actual.labelDetails?.description,
+            expected.labelDetails?.description,
+            `At entry ${actual.name}: Completion 'labelDetails.description' did not match: ${showTextDiff(expected.labelDetails?.description || "", actual.labelDetails?.description || "")}`);
+        assert.equal(
+            actual.labelDetails?.detail,
+            expected.labelDetails?.detail,
+            `At entry ${actual.name}: Completion 'labelDetails.detail' did not match: ${showTextDiff(expected.labelDetails?.detail || "", actual.labelDetails?.detail || "")}`);
         assert.equal(actual.hasAction, expected.hasAction, `At entry ${actual.name}: Expected 'hasAction' properties to match`);
         assert.equal(actual.isRecommended, expected.isRecommended, `At entry ${actual.name}: Expected 'isRecommended' properties to match'`);
         assert.equal(actual.isSnippet, expected.isSnippet, `At entry ${actual.name}: Expected 'isSnippet' properties to match`);
@@ -3299,7 +3309,6 @@ export class TestState {
                     ts.Debug.fail(`Did not expect a change in ${change.fileName}`);
                 }
                 const oldText = this.tryGetFileContent(change.fileName);
-                ts.Debug.assert(!!change.isNewFile === (oldText === undefined));
                 const newContent = change.isNewFile ? ts.first(change.textChanges).newText : ts.textChanges.applyChanges(oldText!, change.textChanges);
                 this.verifyTextMatches(newContent, /*includeWhitespace*/ true, expectedNewContent);
             }
@@ -3574,6 +3583,73 @@ export class TestState {
             this.goToMarker(markerName);
             const actual = this.languageService.getLinkedEditingRangeAtPosition(this.activeFile.fileName, this.currentCaretPosition);
             assert.deepEqual(actual, map[markerName], markerName);
+        }
+    }
+
+    public baselineLinkedEditing(): void {
+        const baselineFile = this.getBaselineFileNameForContainingTestFile(".linkedEditing.txt");
+        const files = this.testData.files;
+
+        let baselineContent = "";
+        let offset = 0;
+        for (const f of files) {
+            const result = getLinkedEditingBaselineWorker(f, offset, this.languageService);
+            baselineContent += result.baselineContent + `\n\n\n`;
+            offset = result.offset;
+        }
+
+        Harness.Baseline.runBaseline(baselineFile, baselineContent);
+
+        function getLinkedEditingBaselineWorker(activeFile: FourSlashFile, offset: number, languageService: ts.LanguageService) {
+            const fileName = activeFile.fileName;
+            let baselineContent = `=== ${fileName} ===\n`;
+
+            // get linkedEdit at every position in the file, then group positions by their linkedEdit
+            const linkedEditsInFile = new Map<string, number[]>();
+            for(let pos = 0; pos < activeFile.content.length; pos++) {
+                const linkedEditAtPosition = languageService.getLinkedEditingRangeAtPosition(fileName, pos);
+                if (!linkedEditAtPosition) continue;
+
+                const linkedEditString = JSON.stringify(linkedEditAtPosition);
+                const existingPositions = linkedEditsInFile.get(linkedEditString) ?? [];
+                linkedEditsInFile.set(linkedEditString, [...existingPositions, pos]);
+            }
+
+            const linkedEditsByRange = [...linkedEditsInFile.entries()].sort((a, b) => a[1][0] - b[1][0]);
+            if (linkedEditsByRange.length === 0) {
+                return { baselineContent: baselineContent + activeFile.content + `\n\n--No linked edits found--`, offset };
+            }
+
+            let inlineLinkedEditBaselines: { start: number, end: number, index: number }[] = [];
+            let linkedEditInfoBaseline = "";
+            for (const edit of linkedEditsByRange) {
+                const [linkedEdit, positions] = edit;
+                let rangeStart = 0;
+                for (let j = 0; j < positions.length - 1; j++) {
+                    // for each distinct range in the list of positions, add an entry to the list of places that need to be annotated in the baseline
+                    if (positions[j] + 1 !== positions[j + 1]) {
+                        inlineLinkedEditBaselines.push({ start: positions[rangeStart], end: positions[j], index: offset });
+                        rangeStart = j + 1;
+                    }
+                }
+                inlineLinkedEditBaselines.push({ start: positions[rangeStart], end: positions[positions.length - 1], index: offset });
+
+                // add the LinkedEditInfo with its index to the baseline
+                linkedEditInfoBaseline += `\n\n=== ${offset} ===\n` + linkedEdit;
+                offset++;
+            }
+
+            inlineLinkedEditBaselines = inlineLinkedEditBaselines.sort((a, b) => a.start - b.start);
+            const fileText = activeFile.content;
+            baselineContent += fileText.slice(0, inlineLinkedEditBaselines[0].start);
+            for (let i = 0; i < inlineLinkedEditBaselines.length; i++) {
+                const e = inlineLinkedEditBaselines[i];
+                const sliceEnd = inlineLinkedEditBaselines[i + 1]?.start;
+                baselineContent += `[|/*${e.index}*/` + fileText.slice(e.start, e.end) + `|]` + fileText.slice(e.end, sliceEnd);
+            }
+
+            baselineContent += linkedEditInfoBaseline;
+            return { baselineContent, offset };
         }
     }
 
@@ -3912,6 +3988,18 @@ export class TestState {
         this.verifyNewContent({ newFileContent: options.newFileContents }, editInfo.edits);
     }
 
+    public moveToFile(options: FourSlashInterface.MoveToFileOptions): void {
+        assert(this.getRanges().length === 1, "Must have exactly one fourslash range (source enclosed between '[|' and '|]' delimiters) in the source file");
+        const range = this.getRanges()[0];
+        const refactor = ts.find(this.getApplicableRefactors(range, { allowTextChangesInNewFiles: true }, /*triggerReason*/ undefined, /*kind*/ undefined, /*includeInteractiveActions*/ true), r => r.name === "Move to file")!;
+        assert(refactor.actions.length === 1);
+        const action = ts.first(refactor.actions);
+        assert(action.name === "Move to file" && action.description === "Move to file");
+
+        const editInfo = this.languageService.getEditsForRefactor(range.fileName, this.formatCodeSettings, range, refactor.name, action.name, options.preferences || ts.emptyOptions, options.interactiveRefactorArguments)!;
+        this.verifyNewContent({ newFileContent: options.newFileContents }, editInfo.edits);
+    }
+
     private testNewFileContents(edits: readonly ts.FileTextChanges[], newFileContents: { [fileName: string]: string }, description: string): void {
         for (const { fileName, textChanges } of edits) {
             const newContent = newFileContents[fileName];
@@ -4217,11 +4305,11 @@ export class TestState {
     private getApplicableRefactorsAtSelection(triggerReason: ts.RefactorTriggerReason = "implicit", kind?: string, preferences = ts.emptyOptions) {
         return this.getApplicableRefactorsWorker(this.getSelection(), this.activeFile.fileName, preferences, triggerReason, kind);
     }
-    private getApplicableRefactors(rangeOrMarker: Range | Marker, preferences = ts.emptyOptions, triggerReason: ts.RefactorTriggerReason = "implicit", kind?: string): readonly ts.ApplicableRefactorInfo[] {
-        return this.getApplicableRefactorsWorker("position" in rangeOrMarker ? rangeOrMarker.position : rangeOrMarker, rangeOrMarker.fileName, preferences, triggerReason, kind); // eslint-disable-line local/no-in-operator
+    private getApplicableRefactors(rangeOrMarker: Range | Marker, preferences = ts.emptyOptions, triggerReason: ts.RefactorTriggerReason = "implicit", kind?: string, includeInteractiveActions?: boolean): readonly ts.ApplicableRefactorInfo[] {
+        return this.getApplicableRefactorsWorker("position" in rangeOrMarker ? rangeOrMarker.position : rangeOrMarker, rangeOrMarker.fileName, preferences, triggerReason, kind, includeInteractiveActions); // eslint-disable-line local/no-in-operator
     }
-    private getApplicableRefactorsWorker(positionOrRange: number | ts.TextRange, fileName: string, preferences = ts.emptyOptions, triggerReason: ts.RefactorTriggerReason, kind?: string): readonly ts.ApplicableRefactorInfo[] {
-        return this.languageService.getApplicableRefactors(fileName, positionOrRange, preferences, triggerReason, kind) || ts.emptyArray;
+    private getApplicableRefactorsWorker(positionOrRange: number | ts.TextRange, fileName: string, preferences = ts.emptyOptions, triggerReason: ts.RefactorTriggerReason, kind?: string, includeInteractiveActions?: boolean): readonly ts.ApplicableRefactorInfo[] {
+        return this.languageService.getApplicableRefactors(fileName, positionOrRange, preferences, triggerReason, kind, includeInteractiveActions) || ts.emptyArray;
     }
 
     public configurePlugin(pluginName: string, configuration: any): void {

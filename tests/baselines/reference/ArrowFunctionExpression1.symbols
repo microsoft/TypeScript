@@ -1,4 +1,6 @@
-=== tests/cases/compiler/ArrowFunctionExpression1.ts ===
+//// [tests/cases/compiler/ArrowFunctionExpression1.ts] ////
+
+=== ArrowFunctionExpression1.ts ===
 var v = (public x: string) => { };
 >v : Symbol(v, Decl(ArrowFunctionExpression1.ts, 0, 3))
 >x : Symbol(x, Decl(ArrowFunctionExpression1.ts, 0, 9))

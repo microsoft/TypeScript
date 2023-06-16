@@ -1,4 +1,6 @@
-=== tests/cases/compiler/circularlyReferentialInterfaceAccessNoCrash.ts ===
+//// [tests/cases/compiler/circularlyReferentialInterfaceAccessNoCrash.ts] ////
+
+=== circularlyReferentialInterfaceAccessNoCrash.ts ===
 type Mxs = Mx<'list', Mxs['p1']>;
 >Mxs : Symbol(Mxs, Decl(circularlyReferentialInterfaceAccessNoCrash.ts, 0, 0))
 >Mx : Symbol(Mx, Decl(circularlyReferentialInterfaceAccessNoCrash.ts, 0, 33))

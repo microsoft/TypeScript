@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mappedTypeWithCombinedTypeMappers.ts] ////
+
 //// [mappedTypeWithCombinedTypeMappers.ts]
 // Repro from #13351
 

@@ -35,16 +35,16 @@ import {
 } from "../_namespaces/ts.refactor";
 
 const refactorName = "Add or remove braces in an arrow function";
-const refactorDescription = Diagnostics.Add_or_remove_braces_in_an_arrow_function.message;
+const refactorDescription = getLocaleSpecificMessage(Diagnostics.Add_or_remove_braces_in_an_arrow_function);
 
 const addBracesAction = {
     name: "Add braces to arrow function",
-    description: Diagnostics.Add_braces_to_arrow_function.message,
+    description: getLocaleSpecificMessage(Diagnostics.Add_braces_to_arrow_function),
     kind: "refactor.rewrite.arrow.braces.add",
 };
 const removeBracesAction = {
     name: "Remove braces from arrow function",
-    description: Diagnostics.Remove_braces_from_arrow_function.message,
+    description: getLocaleSpecificMessage(Diagnostics.Remove_braces_from_arrow_function),
     kind: "refactor.rewrite.arrow.braces.remove"
 };
 registerRefactor(refactorName, {

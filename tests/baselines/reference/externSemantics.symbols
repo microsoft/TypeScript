@@ -1,4 +1,6 @@
-=== tests/cases/compiler/externSemantics.ts ===
+//// [tests/cases/compiler/externSemantics.ts] ////
+
+=== externSemantics.ts ===
 declare var x=10;
 >x : Symbol(x, Decl(externSemantics.ts, 0, 11))
 

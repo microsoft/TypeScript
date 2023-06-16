@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mappedTypeMultiInference.ts] ////
+
 //// [mappedTypeMultiInference.ts]
 interface Style {
     flashy: any;

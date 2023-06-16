@@ -1,10 +1,10 @@
-tests/cases/compiler/interfaceImplementation6.ts(9,7): error TS2420: Class 'C2' incorrectly implements interface 'I1'.
+interfaceImplementation6.ts(9,7): error TS2420: Class 'C2' incorrectly implements interface 'I1'.
   Property 'item' is private in type 'C2' but not in type 'I1'.
-tests/cases/compiler/interfaceImplementation6.ts(13,7): error TS2420: Class 'C3' incorrectly implements interface 'I1'.
+interfaceImplementation6.ts(13,7): error TS2420: Class 'C3' incorrectly implements interface 'I1'.
   Property 'item' is missing in type 'C3' but required in type 'I1'.
 
 
-==== tests/cases/compiler/interfaceImplementation6.ts (2 errors) ====
+==== interfaceImplementation6.ts (2 errors) ====
     interface I1 {
         item:number;
     }
@@ -24,7 +24,7 @@ tests/cases/compiler/interfaceImplementation6.ts(13,7): error TS2420: Class 'C3'
           ~~
 !!! error TS2420: Class 'C3' incorrectly implements interface 'I1'.
 !!! error TS2420:   Property 'item' is missing in type 'C3' but required in type 'I1'.
-!!! related TS2728 tests/cases/compiler/interfaceImplementation6.ts:2:5: 'item' is declared here.
+!!! related TS2728 interfaceImplementation6.ts:2:5: 'item' is declared here.
         constructor() {
            var item: number;
         }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/wrappedIncovations1.ts] ////
+
 //// [wrappedIncovations1.ts]
 var v = this
   .foo()

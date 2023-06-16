@@ -652,7 +652,8 @@ export interface LanguageService {
      * arguments for any interactive action before offering it.
      */
     getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined, triggerReason?: RefactorTriggerReason, kind?: string, includeInteractiveActions?: boolean): ApplicableRefactorInfo[];
-    getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string, preferences: UserPreferences | undefined): RefactorEditInfo | undefined;
+    getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string, preferences: UserPreferences | undefined, interactiveRefactorArguments?: InteractiveRefactorArguments): RefactorEditInfo | undefined;
+    getMoveToRefactoringFileSuggestions(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined, triggerReason?: RefactorTriggerReason, kind?: string): { newFileName: string, files: string[] };
     organizeImports(args: OrganizeImportsArgs, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
     getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
 
@@ -1001,6 +1002,7 @@ export interface RefactorEditInfo {
     renameFilename?: string;
     renameLocation?: number;
     commands?: CodeActionCommand[];
+    notApplicableReason?: string;
 }
 
 export type RefactorTriggerReason = "implicit" | "invoked";
@@ -1293,6 +1295,10 @@ export interface DocCommentTemplateOptions {
     readonly generateReturnInDocTemplate?: boolean;
 }
 
+export interface InteractiveRefactorArguments {
+    targetFile: string;
+}
+
 export interface SignatureHelpParameter {
     name: string;
     documentation: SymbolDisplayPart[];
@@ -1401,6 +1407,7 @@ export interface CompletionEntry {
     kindModifiers?: string; // see ScriptElementKindModifier, comma separated
     sortText: string;
     insertText?: string;
+    filterText?: string;
     isSnippet?: true;
     /**
      * An optional span that indicates the text to be replaced by this completion item.
@@ -1785,10 +1792,10 @@ export interface Refactor {
     kinds?: string[];
 
     /** Compute the associated code actions */
-    getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined;
+    getEditsForAction(context: RefactorContext, actionName: string, interactiveRefactorArguments?: InteractiveRefactorArguments): RefactorEditInfo | undefined;
 
     /** Compute (quickly) which actions are available here */
-    getAvailableActions(context: RefactorContext, includeInteractive?: boolean): readonly ApplicableRefactorInfo[];
+    getAvailableActions(context: RefactorContext, includeInteractive?: boolean, interactiveRefactorArguments?: InteractiveRefactorArguments): readonly ApplicableRefactorInfo[];
 }
 
 /** @internal */

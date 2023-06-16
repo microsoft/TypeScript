@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock8.ts] ////
+
 //// [classStaticBlock8.ts]
 function foo (v: number) {
     label: while (v) {

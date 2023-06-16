@@ -1,10 +1,12 @@
-=== tests/cases/conformance/decorators/class/a.ts ===
+//// [tests/cases/conformance/decorators/class/decoratorInstantiateModulesInFunctionBodies.ts] ////
+
+=== a.ts ===
 // from #3108
 export var test = 'abc';
 >test : string
 >'abc' : "abc"
 
-=== tests/cases/conformance/decorators/class/b.ts ===
+=== b.ts ===
 import { test } from './a';
 >test : string
 

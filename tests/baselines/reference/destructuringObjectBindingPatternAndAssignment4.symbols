@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment4.ts ===
+//// [tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment4.ts] ////
+
+=== destructuringObjectBindingPatternAndAssignment4.ts ===
 const {
     a = 1,
 >a : Symbol(a, Decl(destructuringObjectBindingPatternAndAssignment4.ts, 0, 7))

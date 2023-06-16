@@ -1,9 +1,9 @@
-tests/cases/compiler/genericArrayAssignmentCompatErrors.ts(2,19): error TS2351: This expression is not constructable.
+genericArrayAssignmentCompatErrors.ts(2,19): error TS2351: This expression is not constructable.
   Type 'undefined[]' has no construct signatures.
-tests/cases/compiler/genericArrayAssignmentCompatErrors.ts(4,14): error TS2314: Generic type 'Array<T>' requires 1 type argument(s).
+genericArrayAssignmentCompatErrors.ts(4,14): error TS2314: Generic type 'Array<T>' requires 1 type argument(s).
 
 
-==== tests/cases/compiler/genericArrayAssignmentCompatErrors.ts (2 errors) ====
+==== genericArrayAssignmentCompatErrors.ts (2 errors) ====
     var myCars=new Array(); 
     var myCars2 = new [];
                       ~~

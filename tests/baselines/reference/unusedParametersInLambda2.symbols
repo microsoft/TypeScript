@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedParametersInLambda2.ts ===
+//// [tests/cases/compiler/unusedParametersInLambda2.ts] ////
+
+=== unusedParametersInLambda2.ts ===
 class A {
 >A : Symbol(A, Decl(unusedParametersInLambda2.ts, 0, 0))
 

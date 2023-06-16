@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThisWithImplicitThis.ts ===
+//// [tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThisWithImplicitThis.ts] ////
+
+=== typeofThisWithImplicitThis.ts ===
 function Test1() {
 >Test1 : Symbol(Test1, Decl(typeofThisWithImplicitThis.ts, 0, 0))
 

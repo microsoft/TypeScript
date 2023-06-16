@@ -5,7 +5,7 @@ sourceRoot:
 sources: extendedEscapesForAstralsInVarsAndClasses.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.js
+emittedFile:extendedEscapesForAstralsInVarsAndClasses.js
 sourceFile:extendedEscapesForAstralsInVarsAndClasses.ts
 -------------------------------------------------------------------
 >>>// Example from https://mathiasbynens.be/notes/javascript-identifiers-es6

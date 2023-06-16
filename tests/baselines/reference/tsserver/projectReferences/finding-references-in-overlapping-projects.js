@@ -153,23 +153,23 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 /user/username/projects/solution/b/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/solution/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/solution/b/tsconfig.json: *new*
-  {}
-/user/username/projects/solution/a/tsconfig.json: *new*
-  {}
-/user/username/projects/solution/a/index.ts: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/solution: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/solution/a/index.ts: *new*
+  {}
+/user/username/projects/solution/a/tsconfig.json: *new*
+  {}
+/user/username/projects/solution/b/tsconfig.json: *new*
   {}
 /user/username/projects/solution/tsconfig.json: *new*
   {}
@@ -526,39 +526,39 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/solution/b/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/solution/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/solution/a/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/solution/b/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/solution/c/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/solution/d/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/solution/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/solution/b/tsconfig.json:
-  {}
-/user/username/projects/solution/a/tsconfig.json:
-  {}
-/user/username/projects/solution/a/index.ts:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/solution:
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/solution/a/index.ts:
   {}
-/user/username/projects/solution/tsconfig.json:
+/user/username/projects/solution/a/tsconfig.json:
   {}
-/user/username/projects/solution/c/tsconfig.json: *new*
-  {}
-/user/username/projects/solution/d/tsconfig.json: *new*
+/user/username/projects/solution/b/tsconfig.json:
   {}
 /user/username/projects/solution/c/index.ts: *new*
   {}
+/user/username/projects/solution/c/tsconfig.json: *new*
+  {}
 /user/username/projects/solution/d/index.ts: *new*
+  {}
+/user/username/projects/solution/d/tsconfig.json: *new*
+  {}
+/user/username/projects/solution/tsconfig.json:
   {}
 
 FsWatchesRecursive::

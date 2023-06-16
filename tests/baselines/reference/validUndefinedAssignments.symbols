@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/primitives/undefined/validUndefinedAssignments.ts ===
+//// [tests/cases/conformance/types/primitives/undefined/validUndefinedAssignments.ts] ////
+
+=== validUndefinedAssignments.ts ===
 var x: typeof undefined;
 >x : Symbol(x, Decl(validUndefinedAssignments.ts, 0, 3))
 >undefined : Symbol(undefined)

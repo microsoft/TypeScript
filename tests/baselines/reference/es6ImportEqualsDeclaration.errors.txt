@@ -1,12 +1,12 @@
-tests/cases/compiler/client.ts(1,1): error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
-tests/cases/compiler/server.ts(2,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+client.ts(1,1): error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+server.ts(2,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 
 
-==== tests/cases/compiler/client.ts (1 errors) ====
+==== client.ts (1 errors) ====
     import a = require("server");
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
-==== tests/cases/compiler/server.ts (1 errors) ====
+==== server.ts (1 errors) ====
     var a = 10;
     export = a;
     ~~~~~~~~~~~

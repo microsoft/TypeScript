@@ -1,4 +1,6 @@
-=== tests/cases/compiler/recursiveBaseCheck.ts ===
+//// [tests/cases/compiler/recursiveBaseCheck.ts] ////
+
+=== recursiveBaseCheck.ts ===
 declare module Module {
 >Module : Symbol(Module, Decl(recursiveBaseCheck.ts, 0, 0))
 

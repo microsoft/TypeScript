@@ -68,12 +68,12 @@ TI:: [hh:mm:ss:mss] Explicitly included types: ["jquery"]
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":["jquery"],"filesToWatch":["/a/app/bower_components","/a/app/node_modules"]}
 TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":["jquery"],"filesToWatch":["/a/app/bower_components","/a/app/node_modules"]}
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/app/bower_components
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/app/bower_components 1 undefined Project: /a/app/test.csproj watcher already invoked: false
-TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/app/bower_components 1 undefined Project: /a/app/test.csproj watcher already invoked: false
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/app/node_modules
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/app/node_modules 1 undefined Project: /a/app/test.csproj watcher already invoked: false
-TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/app/node_modules 1 undefined Project: /a/app/test.csproj watcher already invoked: false
+TI:: [hh:mm:ss:mss] Sending response:
+    {"kind":"action::watchTypingLocations","projectName":"/a/app/test.csproj","files":["/a/app/bower_components","/a/app/node_modules"]}
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/app/bower_components 1 undefined Project: /a/app/test.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/app/bower_components 1 undefined Project: /a/app/test.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/app/node_modules 1 undefined Project: /a/app/test.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/app/node_modules 1 undefined Project: /a/app/test.csproj WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Installing typings ["jquery"]
 TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
 TI:: [hh:mm:ss:mss] Sending response:
@@ -83,11 +83,11 @@ TI:: [hh:mm:ss:mss] #1 with arguments'["@types/jquery@tsFakeMajor.Minor"]':: tru
 TI:: Before installWorker
 
 PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
 /a/app/bower_components: *new*
   {"pollingInterval":500}
 /a/app/node_modules: *new*
+  {"pollingInterval":500}
+/a/lib/lib.d.ts:
   {"pollingInterval":500}
 
 FsWatches::

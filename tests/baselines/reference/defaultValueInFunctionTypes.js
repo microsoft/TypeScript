@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/defaultValueInFunctionTypes.ts] ////
+
 //// [defaultValueInFunctionTypes.ts]
 type Foo = ({ first = 0 }: { first?: number }) => unknown;
 

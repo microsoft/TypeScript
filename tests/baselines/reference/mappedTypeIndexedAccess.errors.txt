@@ -1,12 +1,12 @@
-tests/cases/compiler/mappedTypeIndexedAccess.ts(18,5): error TS2322: Type '{ key: "foo"; value: number; }' is not assignable to type 'Pair<FooBar>'.
+mappedTypeIndexedAccess.ts(18,5): error TS2322: Type '{ key: "foo"; value: number; }' is not assignable to type 'Pair<FooBar>'.
   Types of property 'value' are incompatible.
     Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/mappedTypeIndexedAccess.ts(24,5): error TS2322: Type '{ key: "foo"; value: number; }' is not assignable to type '{ key: "foo"; value: string; } | { key: "bar"; value: number; }'.
+mappedTypeIndexedAccess.ts(24,5): error TS2322: Type '{ key: "foo"; value: number; }' is not assignable to type '{ key: "foo"; value: string; } | { key: "bar"; value: number; }'.
   Types of property 'value' are incompatible.
     Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/compiler/mappedTypeIndexedAccess.ts (2 errors) ====
+==== mappedTypeIndexedAccess.ts (2 errors) ====
     // Repro from #15756
     
     type Pairs<T> = {

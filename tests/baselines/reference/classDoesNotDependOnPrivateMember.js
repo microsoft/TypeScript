@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/declarationEmit/classDoesNotDependOnPrivateMember.ts] ////
+
 //// [classDoesNotDependOnPrivateMember.ts]
 module M {
     interface I { }

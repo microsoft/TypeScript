@@ -1,4 +1,6 @@
-=== tests/cases/compiler/defaultValueInFunctionTypes.ts ===
+//// [tests/cases/compiler/defaultValueInFunctionTypes.ts] ////
+
+=== defaultValueInFunctionTypes.ts ===
 type Foo = ({ first = 0 }: { first?: number }) => unknown;
 >Foo : ({ first }: { first?: number; }) => unknown
 >first : number

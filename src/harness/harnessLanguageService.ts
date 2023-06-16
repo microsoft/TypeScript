@@ -9,6 +9,7 @@ import * as ts from "./_namespaces/ts";
 import { getNewLineCharacter } from "./_namespaces/ts";
 import * as vfs from "./_namespaces/vfs";
 import * as vpath from "./_namespaces/vpath";
+import { incrementalVerifier } from "./incrementalUtils";
 
 export function makeDefaultProxy(info: ts.server.PluginCreateInfo): ts.LanguageService {
     const proxy = Object.create(/*o*/ null); // eslint-disable-line no-null/no-null
@@ -616,6 +617,9 @@ class LanguageServiceShimProxy implements ts.LanguageService {
     getApplicableRefactors(): ts.ApplicableRefactorInfo[] {
         throw new Error("Not supported on the shim.");
     }
+    getMoveToRefactoringFileSuggestions(): { newFileName: string, files: string[] } {
+        throw new Error("Not supported on the shim.");
+    }
     organizeImports(_args: ts.OrganizeImportsArgs, _formatOptions: ts.FormatCodeSettings): readonly ts.FileTextChanges[] {
         throw new Error("Not supported on the shim.");
     }
@@ -1013,7 +1017,8 @@ export class ServerLanguageServiceAdapter implements LanguageServiceAdapter {
             byteLength: Buffer.byteLength,
             hrtime: process.hrtime,
             logger: serverHost,
-            canUseEvents: true
+            canUseEvents: true,
+            incrementalVerifier,
         };
         this.server = new FourslashSession(opts);
 

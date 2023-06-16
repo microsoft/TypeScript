@@ -1,8 +1,10 @@
-=== tests/cases/compiler/classMemberInitializerWithLamdaScoping3_0.ts ===
+//// [tests/cases/compiler/classMemberInitializerWithLamdaScoping4.ts] ////
+
+=== classMemberInitializerWithLamdaScoping3_0.ts ===
 export var field1: string;
 >field1 : Symbol(field1, Decl(classMemberInitializerWithLamdaScoping3_0.ts, 0, 10))
 
-=== tests/cases/compiler/classMemberInitializerWithLamdaScoping3_1.ts ===
+=== classMemberInitializerWithLamdaScoping3_1.ts ===
 declare var console: {
 >console : Symbol(console, Decl(classMemberInitializerWithLamdaScoping3_1.ts, 0, 11))
 

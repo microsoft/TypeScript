@@ -1,4 +1,6 @@
-=== tests/cases/compiler/optionalParamInOverride.ts ===
+//// [tests/cases/compiler/optionalParamInOverride.ts] ////
+
+=== optionalParamInOverride.ts ===
 class Z {
 >Z : Symbol(Z, Decl(optionalParamInOverride.ts, 0, 0))
 

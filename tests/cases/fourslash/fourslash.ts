@@ -198,6 +198,9 @@ declare namespace FourSlashInterface {
         readonly semicolons?: ts.SemicolonPreference;
         readonly indentSwitchCase?: boolean;
     }
+    interface InteractiveRefactorArguments {
+        targetFile: string;
+    }
     interface Range {
         fileName: string;
         pos: number;
@@ -260,6 +263,7 @@ declare namespace FourSlashInterface {
         isValidBraceCompletionAtPosition(openingBrace?: string): void;
         jsxClosingTag(map: { [markerName: string]: { readonly newText: string } | undefined }): void;
         linkedEditing(map: { [markerName: string]: LinkedEditingInfo | undefined }): void;
+        baselineLinkedEditing(): void;
         isInCommentAtPosition(onlyMultiLineDiverges?: boolean): void;
         codeFix(options: {
             description: string | [string, ...(string | number)[]] | DiagnosticIgnoredInterpolations,
@@ -431,7 +435,11 @@ declare namespace FourSlashInterface {
             readonly preferences?: UserPreferences;
         }): void;
         noMoveToNewFile(): void;
-
+        moveToFile(options: {
+            readonly newFileContents: { readonly [fileName: string]: string };
+            readonly interactiveRefactorArguments: InteractiveRefactorArguments;
+            readonly preferences?: UserPreferences;
+        }): void;
         generateTypes(...options: GenerateTypesOptions[]): void;
 
         organizeImports(newContent: string, mode?: ts.OrganizeImportsMode, preferences?: UserPreferences): void;
@@ -695,6 +703,7 @@ declare namespace FourSlashInterface {
         readonly name: string;
         readonly source?: string;
         readonly insertText?: string;
+        readonly filterText?: string;
         readonly replacementSpan?: Range;
         readonly hasAction?: boolean;
         readonly isRecommended?: boolean;

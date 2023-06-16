@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumNumbering1.ts] ////
+
 //// [enumNumbering1.ts]
 enum Test {
     A,

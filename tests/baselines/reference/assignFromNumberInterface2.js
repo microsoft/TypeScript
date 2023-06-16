@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/primitives/number/assignFromNumberInterface2.ts] ////
+
 //// [assignFromNumberInterface2.ts]
 interface Number {
     doStuff(): string;

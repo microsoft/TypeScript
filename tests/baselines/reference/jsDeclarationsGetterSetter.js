@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsGetterSetter.ts] ////
+
 //// [index.js]
 export class A {
     get x() {

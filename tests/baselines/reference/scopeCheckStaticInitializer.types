@@ -1,4 +1,6 @@
-=== tests/cases/compiler/scopeCheckStaticInitializer.ts ===
+//// [tests/cases/compiler/scopeCheckStaticInitializer.ts] ////
+
+=== scopeCheckStaticInitializer.ts ===
 class X {
 >X : X
 

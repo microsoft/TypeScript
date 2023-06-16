@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/literal/literalTypes1.ts] ////
+
 //// [literalTypes1.ts]
 let zero: 0 = 0;
 let one: 1 = 1;
