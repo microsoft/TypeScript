@@ -12,23 +12,48 @@ declare let dec: any;
 >x.#foo : any
 >x : any
 
-class Foo {
->Foo : Foo
+class A {
+>A : A
 
     #foo = 3;
 >#foo : number
 >3 : 3
 
-    @dec(this, (x: Foo) => x.#foo) // ok
->dec(this, (x: Foo) => x.#foo) : any
+    @dec(this, (x: A) => x.#foo) // ok
+>dec(this, (x: A) => x.#foo) : any
 >dec : any
 >this : typeof globalThis
->(x: Foo) => x.#foo : (x: Foo) => number
->x : Foo
+>(x: A) => x.#foo : (x: A) => number
+>x : A
 >x.#foo : number
->x : Foo
+>x : A
 
     m() {}
 >m : () => void
+}
+
+class B {
+>B : B
+
+    #foo = 2;
+>#foo : number
+>2 : 2
+
+    m() {
+>m : () => typeof C
+
+        @dec(() => this.#foo) // ok
+>dec(() => this.#foo) : any
+>dec : any
+>() => this.#foo : () => number
+>this.#foo : number
+>this : this
+
+        class C {}
+>C : C
+
+        return C;
+>C : typeof C
+    }
 }
 

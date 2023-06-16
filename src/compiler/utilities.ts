@@ -10270,3 +10270,8 @@ export function getTextOfJsxNamespacedName(node: JsxNamespacedName) {
 export function intrinsicTagNameToString(node: Identifier | JsxNamespacedName) {
     return isIdentifier(node) ? idText(node) : getTextOfJsxNamespacedName(node);
 }
+
+/** @internal */
+export function getOutermostDecoratedClass(node: Node) {
+    return findAncestor(node.parent, n => isDecorator(n) && isClassLike(n.parent) && getContainingClass(n.parent.parent) === undefined);
+}

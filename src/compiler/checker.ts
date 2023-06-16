@@ -329,6 +329,7 @@ import {
     getObjectFlags,
     getOriginalNode,
     getOrUpdate,
+    getOutermostDecoratedClass,
     getParameterSymbolFromJSDoc,
     getParseTreeNode,
     getPropertyAssignmentAliasLikeExpression,
@@ -31515,7 +31516,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
 
-            if (findAncestor(right.parent, n => isDecorator(n) && isClassLike(n.parent))) {
+            if (getOutermostDecoratedClass(right)) {
                 grammarErrorOnNode(right, Diagnostics.Private_identifiers_are_not_allowed_outside_class_bodies);
                 return anyType;
             }

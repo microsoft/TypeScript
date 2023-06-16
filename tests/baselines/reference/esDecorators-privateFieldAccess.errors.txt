@@ -7,10 +7,19 @@ esDecorators-privateFieldAccess.ts(3,13): error TS18016: Private identifiers are
     @dec(x => x.#foo) // error
                 ~~~~
 !!! error TS18016: Private identifiers are not allowed outside class bodies.
-    class Foo {
+    class A {
         #foo = 3;
     
-        @dec(this, (x: Foo) => x.#foo) // ok
+        @dec(this, (x: A) => x.#foo) // ok
         m() {}
+    }
+    
+    class B {
+        #foo = 2;
+        m() {
+            @dec(() => this.#foo) // ok
+            class C {}
+            return C;
+        }
     }
     
