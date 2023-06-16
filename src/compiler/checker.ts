@@ -1862,17 +1862,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function runWithoutResolvedSignatureCaching<T>(node: Node | undefined, fn: () => T): T {
         const containingCall = findAncestor(node, isCallLikeExpression);
+        const containingCallResolvedSignature = containingCall && getNodeLinks(containingCall).resolvedSignature;
         if (containingCall) {
-            const links = getNodeLinks(containingCall);
-            const containingCallResolvedSignature = links.resolvedSignature;
-            links.resolvedSignature = undefined;
-            const result = fn();
-            links.resolvedSignature = containingCallResolvedSignature;
-            return result;
+            getNodeLinks(containingCall).resolvedSignature = undefined;
         }
-        else {
-            return fn();
+        const result = fn();
+        if (containingCall) {
+            getNodeLinks(containingCall).resolvedSignature = containingCallResolvedSignature;
         }
+        return result;
     }
 
     function runWithInferenceBlockedFromSourceNode<T>(node: Node | undefined, fn: () => T): T {
