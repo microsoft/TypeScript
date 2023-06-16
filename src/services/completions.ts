@@ -8,6 +8,7 @@ import {
     BreakOrContinueStatement,
     CancellationToken,
     canHaveDecorators,
+    canSymbolBeImportedViaESImportStatement,
     canUsePropertyAccess,
     CaseBlock,
     cast,
@@ -36,6 +37,7 @@ import {
     ConstructorDeclaration,
     ContextFlags,
     countWhere,
+    createIdentifierTextFromAnyString,
     createModuleSpecifierResolutionHost,
     createPackageJsonImportFilter,
     createPrinter,
@@ -207,6 +209,7 @@ import {
     isNamedImportsOrExports,
     isNamespaceImport,
     isNodeDescendantOf,
+    isNonContextualKeyword,
     isObjectBindingPattern,
     isObjectLiteralExpression,
     isObjectTypeDeclaration,
@@ -1746,15 +1749,27 @@ function createCompletionEntry(
 
     if (originIsExport(origin) || originIsResolvedExport(origin)) {
         data = originToCompletionEntryData(origin);
+        if (!isIdentifierText(name, ScriptTarget.Latest)) {
+            insertText = createIdentifierTextFromAnyString(name);
+            filterText = name;
+        }
         hasAction = !importStatementCompletion;
     }
     const parentNamedImportOrExport = findAncestor(location, isNamedImportsOrExports);
-    if (parentNamedImportOrExport && !isIdentifierText(name, ScriptTarget.Latest)) {
+    if (parentNamedImportOrExport) {
         if (parentNamedImportOrExport.kind === SyntaxKind.NamedImports) {
-            insertText = `${quotePropertyName(sourceFile, preferences, name)} as $\{1:item}`;
-            isSnippet = true;
+            const possibleToken = stringToToken(name);
+            // import { break as break_ }
+            if (parentNamedImportOrExport && possibleToken && (possibleToken === SyntaxKind.AwaitKeyword || isNonContextualKeyword(possibleToken))) {
+                insertText = `${name} as ${name}_`;
+            }
+            else if (!isIdentifierText(name, ScriptTarget.Latest)) {
+                // import { "some thing" as some_thing }
+                insertText = `${quotePropertyName(sourceFile, preferences, name)} as ${createIdentifierTextFromAnyString(name)}`;
+            }
         }
-        else {
+        else if (!isIdentifierText(name, ScriptTarget.Latest)) {
+            // export { "some thing" }
             insertText = quotePropertyName(sourceFile, preferences, name);
         }
     }
@@ -2461,7 +2476,7 @@ export function getCompletionEntriesFromSymbols(
     for (let i = 0; i < symbols.length; i++) {
         const symbol = symbols[i];
         const origin = symbolToOriginInfoMap?.[i];
-        const info = getCompletionEntryDisplayNameForSymbol(symbol, target, origin, kind, !!jsxIdentifierExpected, !!findAncestor(location, isNamedImportsOrExports));
+        const info = getCompletionEntryDisplayNameForSymbol(symbol, target, origin, kind, !!jsxIdentifierExpected);
         if (!info || (uniques.get(info.name) && (!origin || !originIsObjectLiteralMethod(origin))) || kind === CompletionKind.Global && symbolToSortTextMap && !shouldIncludeSymbol(symbol, symbolToSortTextMap)) {
             continue;
         }
@@ -2671,7 +2686,7 @@ function getSymbolCompletionFromEntryId(
     // completion entry.
     return firstDefined(symbols, (symbol, index): SymbolCompletion | undefined => {
         const origin = symbolToOriginInfoMap[index];
-        const info = getCompletionEntryDisplayNameForSymbol(symbol, getEmitScriptTarget(compilerOptions), origin, completionKind, completionData.isJsxIdentifierExpected, !!completionData.importStatementCompletion);
+        const info = getCompletionEntryDisplayNameForSymbol(symbol, getEmitScriptTarget(compilerOptions), origin, completionKind, completionData.isJsxIdentifierExpected);
         return info && info.name === entryId.name && (
             entryId.source === CompletionSource.ClassMemberSnippet && symbol.flags & SymbolFlags.ClassMember
             || entryId.source === CompletionSource.ObjectLiteralMethodSnippet && symbol.flags & (SymbolFlags.Property | SymbolFlags.Method)
@@ -3849,8 +3864,11 @@ function getCompletionData(
                 exportInfo.search(
                     sourceFile.path,
                     /*preferCapitalized*/ isRightOfOpenTag,
-                    (symbolName, targetFlags) => {
-                        if (!isIdentifierText(symbolName, getEmitScriptTarget(host.getCompilationSettings()))) return false;
+                    (symbolName, targetFlags, symbol) => {
+                        if (
+                            !canSymbolBeImportedViaESImportStatement(symbol) &&
+                            !isIdentifierText(symbolName, getEmitScriptTarget(host.getCompilationSettings()))
+                        ) return false;
                         if (!detailsEntryId && isStringANonContextualKeyword(symbolName)) return false;
                         if (!isTypeOnlyLocation && !importStatementCompletion && !(targetFlags & SymbolFlags.Value)) return false;
                         if (isTypeOnlyLocation && !(targetFlags & (SymbolFlags.Module | SymbolFlags.Type))) return false;
@@ -3966,7 +3984,6 @@ function getCompletionData(
                 /*origin*/ undefined,
                 CompletionKind.ObjectPropertyDeclaration,
                 /*jsxIdentifierExpected*/ false,
-                /*moduleExportNameExpected*/ false,
             );
             if (!displayName) {
                 return;
@@ -4807,7 +4824,6 @@ function getCompletionData(
                 origin,
                 CompletionKind.ObjectPropertyDeclaration,
                 /*jsxIdentifierExpected*/ false,
-                /*moduleExportNameExpected*/ false
             );
             if (displayName) {
                 const originalSortText = symbolToSortTextMap[symbolId] ?? SortText.LocationPriority;
@@ -4958,8 +4974,7 @@ function getCompletionEntryDisplayNameForSymbol(
     target: ScriptTarget,
     origin: SymbolOriginInfo | undefined,
     kind: CompletionKind,
-    jsxIdentifierExpected: boolean,
-    moduleExportNameExpected: boolean
+    jsxIdentifierExpected: boolean
 ): CompletionEntryDisplayNameForSymbol | undefined {
     if (originIsIgnore(origin)) {
         return undefined;
@@ -4975,8 +4990,8 @@ function getCompletionEntryDisplayNameForSymbol(
     }
 
     const validNameResult: CompletionEntryDisplayNameForSymbol = { name, needsConvertPropertyAccess: false };
-    if (moduleExportNameExpected) {
-        return validNameResult;
+    if (canSymbolBeImportedViaESImportStatement(symbol)) {
+        return { name, needsConvertPropertyAccess: !isIdentifierText(name, ScriptTarget.Latest) };
     }
     if (isIdentifierText(name, target, jsxIdentifierExpected ? LanguageVariant.JSX : LanguageVariant.Standard) || symbol.valueDeclaration && isPrivateIdentifierClassElementDeclaration(symbol.valueDeclaration)) {
         return validNameResult;

@@ -270,6 +270,7 @@ import {
     isGetAccessorDeclaration,
     isHeritageClause,
     isIdentifier,
+    isIdentifierPart,
     isIdentifierStart,
     isIdentifierText,
     isImportTypeNode,
@@ -1781,14 +1782,12 @@ export function isAmbientModule(node: Node): node is AmbientModuleDeclaration {
 }
 
 /** @internal */
-export function isModuleWithStringLiteralName(node: Node): node is ModuleDeclaration {
+export function isModuleWithStringLiteralName(node: Node): node is ModuleDeclaration & { name: StringLiteral } {
     return isModuleDeclaration(node) && node.name.kind === SyntaxKind.StringLiteral;
 }
 
 /** @internal */
-export function isNonGlobalAmbientModule(node: Node): node is ModuleDeclaration & { name: StringLiteral } {
-    return isModuleDeclaration(node) && isStringLiteral(node.name);
-}
+export const isNonGlobalAmbientModule = isModuleWithStringLiteralName;
 
 /**
  * An effective module (namespace) declaration is either
@@ -10295,4 +10294,31 @@ export function moduleExportNameTextEscaped(node: ModuleExportName): __String {
 export function isModuleExportNameStringLiteral(node: __String | ModuleExportName | undefined): node is StringLiteral {
     if (!node) return false;
     return typeof node !== "string" && node.kind === SyntaxKind.StringLiteral;
+}
+/** @internal */
+export function createIdentifierTextFromAnyString(name: string): string {
+    let targetName = "";
+    // don't use c style loop, it will break Unicode surrogate pairs
+    for (const char of name) {
+        if (targetName.length === 0) {
+            targetName += isIdentifierStart(char.codePointAt(0)!, ScriptTarget.Latest) ? char : "_";
+        }
+        else if (isIdentifierPart(char.codePointAt(0)!, ScriptTarget.Latest)) {
+            targetName += char;
+        }
+        else targetName += "_";
+    }
+    if (!targetName.length) return "item";
+    return targetName;
+}
+/**
+ * @internal
+ * TODO: this cannot handle the following code:
+ * declare class T { static prop: string; }
+ * export = T
+ *
+ * In this case, parent of the symbol (prop) is class T, which does not have ValueModule flag, although it is used as one.
+ */
+export function canSymbolBeImportedViaESImportStatement(symbol: Symbol | undefined) {
+    return (symbol?.parent?.flags || 0) & SymbolFlags.ValueModule;
 }

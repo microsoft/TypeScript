@@ -114,7 +114,7 @@ export interface ExportInfoMap {
     clear(): void;
     add(importingFile: Path, symbol: Symbol, key: __String, moduleSymbol: Symbol, moduleFile: SourceFile | undefined, exportKind: ExportKind, isFromPackageJson: boolean, checker: TypeChecker): void;
     get(importingFile: Path, key: string): readonly SymbolExportInfo[] | undefined;
-    search<T>(importingFile: Path, preferCapitalized: boolean, matches: (name: string, targetFlags: SymbolFlags) => boolean, action: (info: readonly SymbolExportInfo[], symbolName: string, isFromAmbientModule: boolean, key: string) => T | undefined): T | undefined;
+    search<T>(importingFile: Path, preferCapitalized: boolean, matches: (name: string, targetFlags: SymbolFlags, symbol?: Symbol) => boolean, action: (info: readonly SymbolExportInfo[], symbolName: string, isFromAmbientModule: boolean, key: string) => T | undefined): T | undefined;
     releaseSymbols(): void;
     isEmpty(): boolean;
     /** @returns Whether the change resulted in the cache being cleared */
@@ -230,7 +230,7 @@ export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost): 
             return forEachEntry(exportInfo, (info, key) => {
                 const { symbolName, ambientModuleName } = parseKey(key);
                 const name = preferCapitalized && info[0].capitalizedSymbolName || symbolName;
-                if (matches(name, info[0].targetFlags)) {
+                if (matches(name, info[0].targetFlags, info[0].symbol)) {
                     const rehydrated = info.map(rehydrateCachedInfo);
                     const filtered = rehydrated.filter((r, i) => isNotShadowedByDeeperNodeModulesPackage(r, info[i].packageName));
                     if (filtered.length) {
