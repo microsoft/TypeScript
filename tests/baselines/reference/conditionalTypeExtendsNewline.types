@@ -1,0 +1,59 @@
+//// [tests/cases/compiler/conditionalTypeExtendsNewline.ts] ////
+
+=== conditionalTypeExtendsNewline.ts ===
+// Repro from #53589
+
+type Example1 = string 
+>Example1 : true
+
+     extends string ? true : false;
+>true : true
+>false : false
+
+type Example2 = `${string
+>Example2 : "true"
+
+     extends string ? true : false}`;
+>true : true
+>false : false
+
+type Example3 = Array<string
+>Example3 : true[]
+
+     extends string ? true : false>;
+>true : true
+>false : false
+
+type Example4<K extends string
+>Example4 : string
+
+     extends string ? true : false> = string;
+>true : true
+>false : false
+
+type Example5<K = string
+>Example5 : string
+
+     extends string ? true : false> = string;
+>true : true
+>false : false
+
+function foo(a: string
+>foo : (a: string extends string ? true : false) => void
+>a : true
+
+     extends string ? true : false): void {};
+>true : true
+>false : false
+
+type Example6<A> = {
+>Example6 : Example6<A>
+
+  foo: string
+>foo : true
+
+     extends string ? true : false;
+>true : true
+>false : false
+
+};

@@ -4853,7 +4853,7 @@ namespace Parser {
         }
         const pos = getNodePos();
         const type = parseUnionTypeOrHigher();
-        if (!inDisallowConditionalTypesContext() && !scanner.hasPrecedingLineBreak() && parseOptional(SyntaxKind.ExtendsKeyword)) {
+        if (!inDisallowConditionalTypesContext() && tryParse(hasConditionalTypeExtends)) {
             // The type following 'extends' is not permitted to be another conditional type
             const extendsType = disallowConditionalTypesAnd(parseType);
             parseExpected(SyntaxKind.QuestionToken);
@@ -4863,6 +4863,10 @@ namespace Parser {
             return finishNode(factory.createConditionalTypeNode(type, extendsType, trueType, falseType), pos);
         }
         return type;
+    }
+
+    function hasConditionalTypeExtends() {
+        return parseOptional(SyntaxKind.ExtendsKeyword) && !(parseOptional(SyntaxKind.QuestionToken) || parseOptional(SyntaxKind.ColonToken));
     }
 
     function parseTypeAnnotation(): TypeNode | undefined {
