@@ -15,10 +15,15 @@ type Example4<K extends string
 type Example5<K = string
      extends string ? true : false> = string;
 
-function foo(a: string
+function example6(a: string
      extends string ? true : false): void {};
 
-type Example6<A> = {
+type Example7 = {
   foo: string
      extends string ? true : false;
+};
+
+type Example8 = {
+     [Key in string as Key 
+          extends string ? 'true' : 'false']: string;
 };

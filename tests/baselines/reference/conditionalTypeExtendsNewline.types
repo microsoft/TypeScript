@@ -38,16 +38,16 @@ type Example5<K = string
 >true : true
 >false : false
 
-function foo(a: string
->foo : (a: string extends string ? true : false) => void
+function example6(a: string
+>example6 : (a: string extends string ? true : false) => void
 >a : true
 
      extends string ? true : false): void {};
 >true : true
 >false : false
 
-type Example6<A> = {
->Example6 : Example6<A>
+type Example7 = {
+>Example7 : { foo: string extends string ? true : false; }
 
   foo: string
 >foo : true
@@ -57,3 +57,11 @@ type Example6<A> = {
 >false : false
 
 };
+
+type Example8 = {
+>Example8 : { true: string; }
+
+     [Key in string as Key 
+          extends string ? 'true' : 'false']: string;
+};
+

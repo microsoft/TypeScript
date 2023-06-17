@@ -31,18 +31,28 @@ type Example5<K = string
 
      extends string ? true : false> = string;
 
-function foo(a: string
->foo : Symbol(foo, Decl(conditionalTypeExtendsNewline.ts, 15, 45))
->a : Symbol(a, Decl(conditionalTypeExtendsNewline.ts, 17, 13))
+function example6(a: string
+>example6 : Symbol(example6, Decl(conditionalTypeExtendsNewline.ts, 15, 45))
+>a : Symbol(a, Decl(conditionalTypeExtendsNewline.ts, 17, 18))
 
      extends string ? true : false): void {};
 
-type Example6<A> = {
->Example6 : Symbol(Example6, Decl(conditionalTypeExtendsNewline.ts, 18, 45))
->A : Symbol(A, Decl(conditionalTypeExtendsNewline.ts, 20, 14))
+type Example7 = {
+>Example7 : Symbol(Example7, Decl(conditionalTypeExtendsNewline.ts, 18, 45))
 
   foo: string
->foo : Symbol(foo, Decl(conditionalTypeExtendsNewline.ts, 20, 20))
+>foo : Symbol(foo, Decl(conditionalTypeExtendsNewline.ts, 20, 17))
 
      extends string ? true : false;
 };
+
+type Example8 = {
+>Example8 : Symbol(Example8, Decl(conditionalTypeExtendsNewline.ts, 23, 2))
+
+     [Key in string as Key 
+>Key : Symbol(Key, Decl(conditionalTypeExtendsNewline.ts, 26, 6))
+>Key : Symbol(Key, Decl(conditionalTypeExtendsNewline.ts, 26, 6))
+
+          extends string ? 'true' : 'false']: string;
+};
+
