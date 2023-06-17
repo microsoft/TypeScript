@@ -11,12 +11,17 @@ class A {
     m() {}
 }
 
+@dec((x: B) => x.#foo) // error
 class B {
+    #foo = 3;
+}
+
+class C {
     #foo = 2;
     m() {
         @dec(() => this.#foo) // ok
-        class C {}
-        return C;
+        class D {}
+        return D;
     }
 }
 
@@ -28,12 +33,16 @@ class A {
     @dec(this, (x) => x.#foo) // ok
     m() { }
 }
+@dec((x) => x.#foo) // error
 class B {
+    #foo = 3;
+}
+class C {
     #foo = 2;
     m() {
         @dec(() => this.#foo) // ok
-        class C {
+        class D {
         }
-        return C;
+        return D;
     }
 }

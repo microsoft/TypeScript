@@ -32,15 +32,31 @@ class A {
 >m : () => void
 }
 
+@dec((x: B) => x.#foo) // error
+>dec((x: B) => x.#foo) : any
+>dec : any
+>(x: B) => x.#foo : (x: B) => any
+>x : B
+>x.#foo : any
+>x : B
+
 class B {
 >B : B
+
+    #foo = 3;
+>#foo : number
+>3 : 3
+}
+
+class C {
+>C : C
 
     #foo = 2;
 >#foo : number
 >2 : 2
 
     m() {
->m : () => typeof C
+>m : () => typeof D
 
         @dec(() => this.#foo) // ok
 >dec(() => this.#foo) : any
@@ -49,11 +65,11 @@ class B {
 >this.#foo : number
 >this : this
 
-        class C {}
->C : C
+        class D {}
+>D : D
 
-        return C;
->C : typeof C
+        return D;
+>D : typeof D
     }
 }
 

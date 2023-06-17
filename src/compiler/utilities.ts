@@ -2809,6 +2809,12 @@ export function getContainingFunctionOrClassStaticBlock(node: Node): SignatureDe
 }
 
 /** @internal */
+export function getContainingClassExcludingClassDecorators(node: Node): ClassLikeDeclaration | undefined {
+    const decorator = findAncestor(node.parent, n => isClassLike(n) ? "quit" : isDecorator(n));
+    return decorator && isClassLike(decorator.parent) ? getContainingClass(decorator.parent) : getContainingClass(decorator ?? node);
+}
+
+/** @internal */
 export type ThisContainer =
     | FunctionDeclaration
     | FunctionExpression
@@ -10269,9 +10275,4 @@ export function getTextOfJsxNamespacedName(node: JsxNamespacedName) {
 /** @internal */
 export function intrinsicTagNameToString(node: Identifier | JsxNamespacedName) {
     return isIdentifier(node) ? idText(node) : getTextOfJsxNamespacedName(node);
-}
-
-/** @internal */
-export function getOutermostDecoratedClass(node: Node) {
-    return findAncestor(node.parent, n => isDecorator(n) && isClassLike(n.parent) && getContainingClass(n.parent.parent) === undefined);
 }
