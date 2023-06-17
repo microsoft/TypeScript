@@ -900,3 +900,112 @@ function getValueConcrete<K extends keyof Foo1>(
 >k : K
 }
 
+// repro from https://github.com/microsoft/TypeScript/issues/54680
+
+type A_54680 = {
+>A_54680 : { type: "A"; value: string; }
+
+  type: "A";
+>type : "A"
+
+  value: string;
+>value : string
+
+};
+
+type B_54680 = {
+>B_54680 : { type: "B"; value: number; }
+
+  type: "B";
+>type : "B"
+
+  value: number;
+>value : number
+
+};
+
+type Message_54680 = A_54680 | B_54680;
+>Message_54680 : A_54680 | B_54680
+
+function handle_54680_1<M extends Message_54680>(callbacks: {
+>handle_54680_1 : <M extends Message_54680>(callbacks: { [K in M["type"]]: (msg: Extract<M, { type: K; }>["value"]) => unknown; }) => void
+>callbacks : { [K in M["type"]]: (msg: Extract<M, { type: K; }>["value"]) => unknown; }
+
+  [K in M["type"]]: (msg: Extract<M, { type: K }>["value"]) => unknown;
+>msg : Extract<M, { type: K; }>["value"]
+>type : K
+
+}) {
+  window.addEventListener("message", (event) => {
+>window.addEventListener("message", (event) => {    const msg = event.data as M;    callbacks[msg.type as keyof typeof callbacks](msg.value);  }) : void
+>window.addEventListener : { <K extends keyof WindowEventMap>(type: K, listener: (this: Window, ev: WindowEventMap[K]) => any, options?: boolean | AddEventListenerOptions | undefined): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions | undefined): void; } & { <K extends keyof WindowEventMap>(type: K, listener: (this: Window, ev: WindowEventMap[K]) => any, options?: boolean | AddEventListenerOptions | undefined): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions | undefined): void; }
+>window : Window & typeof globalThis
+>addEventListener : { <K extends keyof WindowEventMap>(type: K, listener: (this: Window, ev: WindowEventMap[K]) => any, options?: boolean | AddEventListenerOptions | undefined): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions | undefined): void; } & { <K extends keyof WindowEventMap>(type: K, listener: (this: Window, ev: WindowEventMap[K]) => any, options?: boolean | AddEventListenerOptions | undefined): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions | undefined): void; }
+>"message" : "message"
+>(event) => {    const msg = event.data as M;    callbacks[msg.type as keyof typeof callbacks](msg.value);  } : (this: Window, event: MessageEvent<any>) => void
+>event : MessageEvent<any>
+
+    const msg = event.data as M;
+>msg : M
+>event.data as M : M
+>event.data : any
+>event : MessageEvent<any>
+>data : any
+
+    callbacks[msg.type as keyof typeof callbacks](msg.value);
+>callbacks[msg.type as keyof typeof callbacks](msg.value) : unknown
+>callbacks[msg.type as keyof typeof callbacks] : { [K in M["type"]]: (msg: Extract<M, { type: K; }>["value"]) => unknown; }[M["type"]]
+>callbacks : { [K in M["type"]]: (msg: Extract<M, { type: K; }>["value"]) => unknown; }
+>msg.type as keyof typeof callbacks : M["type"]
+>msg.type : "A" | "B"
+>msg : Message_54680
+>type : "A" | "B"
+>callbacks : { [K in M["type"]]: (msg: Extract<M, { type: K; }>["value"]) => unknown; }
+>msg.value : string | number
+>msg : Message_54680
+>value : string | number
+
+  });
+}
+
+function handle_54680_2<M extends Message_54680>(callbacks: {
+>handle_54680_2 : <M extends Message_54680>(callbacks: { [K in M["type"]]: (msg: (M & { type: K; })["value"]) => unknown; }) => void
+>callbacks : { [K in M["type"]]: (msg: (M & { type: K; })["value"]) => unknown; }
+
+  [K in M["type"]]: (msg: (M & { type: K })["value"]) => unknown;
+>msg : (M & { type: K; })["value"]
+>type : K
+
+}) {
+  window.addEventListener("message", (event) => {
+>window.addEventListener("message", (event) => {    const msg = event.data as M;    callbacks[msg.type as keyof typeof callbacks](msg.value);  }) : void
+>window.addEventListener : { <K extends keyof WindowEventMap>(type: K, listener: (this: Window, ev: WindowEventMap[K]) => any, options?: boolean | AddEventListenerOptions | undefined): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions | undefined): void; } & { <K extends keyof WindowEventMap>(type: K, listener: (this: Window, ev: WindowEventMap[K]) => any, options?: boolean | AddEventListenerOptions | undefined): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions | undefined): void; }
+>window : Window & typeof globalThis
+>addEventListener : { <K extends keyof WindowEventMap>(type: K, listener: (this: Window, ev: WindowEventMap[K]) => any, options?: boolean | AddEventListenerOptions | undefined): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions | undefined): void; } & { <K extends keyof WindowEventMap>(type: K, listener: (this: Window, ev: WindowEventMap[K]) => any, options?: boolean | AddEventListenerOptions | undefined): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions | undefined): void; }
+>"message" : "message"
+>(event) => {    const msg = event.data as M;    callbacks[msg.type as keyof typeof callbacks](msg.value);  } : (this: Window, event: MessageEvent<any>) => void
+>event : MessageEvent<any>
+
+    const msg = event.data as M;
+>msg : M
+>event.data as M : M
+>event.data : any
+>event : MessageEvent<any>
+>data : any
+
+    callbacks[msg.type as keyof typeof callbacks](msg.value);
+>callbacks[msg.type as keyof typeof callbacks](msg.value) : unknown
+>callbacks[msg.type as keyof typeof callbacks] : { [K in M["type"]]: (msg: (M & { type: K; })["value"]) => unknown; }[M["type"]]
+>callbacks : { [K in M["type"]]: (msg: (M & { type: K; })["value"]) => unknown; }
+>msg.type as keyof typeof callbacks : M["type"]
+>msg.type : "A" | "B"
+>msg : Message_54680
+>type : "A" | "B"
+>callbacks : { [K in M["type"]]: (msg: (M & { type: K; })["value"]) => unknown; }
+>msg.value : string | number
+>msg : Message_54680
+>value : string | number
+
+  });
+}
+

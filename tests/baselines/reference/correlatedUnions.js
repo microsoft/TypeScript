@@ -302,6 +302,38 @@ function getValueConcrete<K extends keyof Foo1>(
   return o[k];
 }
 
+// repro from https://github.com/microsoft/TypeScript/issues/54680
+
+type A_54680 = {
+  type: "A";
+  value: string;
+};
+
+type B_54680 = {
+  type: "B";
+  value: number;
+};
+
+type Message_54680 = A_54680 | B_54680;
+
+function handle_54680_1<M extends Message_54680>(callbacks: {
+  [K in M["type"]]: (msg: Extract<M, { type: K }>["value"]) => unknown;
+}) {
+  window.addEventListener("message", (event) => {
+    const msg = event.data as M;
+    callbacks[msg.type as keyof typeof callbacks](msg.value);
+  });
+}
+
+function handle_54680_2<M extends Message_54680>(callbacks: {
+  [K in M["type"]]: (msg: (M & { type: K })["value"]) => unknown;
+}) {
+  window.addEventListener("message", (event) => {
+    const msg = event.data as M;
+    callbacks[msg.type as keyof typeof callbacks](msg.value);
+  });
+}
+
 
 //// [correlatedUnions.js]
 "use strict";
@@ -432,6 +464,18 @@ function getConfigOrDefault(userConfig, key, defaultValue) {
 }
 function getValueConcrete(o, k) {
     return o[k];
+}
+function handle_54680_1(callbacks) {
+    window.addEventListener("message", function (event) {
+        var msg = event.data;
+        callbacks[msg.type](msg.value);
+    });
+}
+function handle_54680_2(callbacks) {
+    window.addEventListener("message", function (event) {
+        var msg = event.data;
+        callbacks[msg.type](msg.value);
+    });
 }
 
 
@@ -613,3 +657,22 @@ type Foo1 = {
     y: string;
 };
 declare function getValueConcrete<K extends keyof Foo1>(o: Partial<Foo1>, k: K): Foo1[K] | undefined;
+type A_54680 = {
+    type: "A";
+    value: string;
+};
+type B_54680 = {
+    type: "B";
+    value: number;
+};
+type Message_54680 = A_54680 | B_54680;
+declare function handle_54680_1<M extends Message_54680>(callbacks: {
+    [K in M["type"]]: (msg: Extract<M, {
+        type: K;
+    }>["value"]) => unknown;
+}): void;
+declare function handle_54680_2<M extends Message_54680>(callbacks: {
+    [K in M["type"]]: (msg: (M & {
+        type: K;
+    })["value"]) => unknown;
+}): void;

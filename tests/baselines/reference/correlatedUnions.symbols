@@ -1016,3 +1016,115 @@ function getValueConcrete<K extends keyof Foo1>(
 >k : Symbol(k, Decl(correlatedUnions.ts, 295, 19))
 }
 
+// repro from https://github.com/microsoft/TypeScript/issues/54680
+
+type A_54680 = {
+>A_54680 : Symbol(A_54680, Decl(correlatedUnions.ts, 299, 1))
+
+  type: "A";
+>type : Symbol(type, Decl(correlatedUnions.ts, 303, 16))
+
+  value: string;
+>value : Symbol(value, Decl(correlatedUnions.ts, 304, 12))
+
+};
+
+type B_54680 = {
+>B_54680 : Symbol(B_54680, Decl(correlatedUnions.ts, 306, 2))
+
+  type: "B";
+>type : Symbol(type, Decl(correlatedUnions.ts, 308, 16))
+
+  value: number;
+>value : Symbol(value, Decl(correlatedUnions.ts, 309, 12))
+
+};
+
+type Message_54680 = A_54680 | B_54680;
+>Message_54680 : Symbol(Message_54680, Decl(correlatedUnions.ts, 311, 2))
+>A_54680 : Symbol(A_54680, Decl(correlatedUnions.ts, 299, 1))
+>B_54680 : Symbol(B_54680, Decl(correlatedUnions.ts, 306, 2))
+
+function handle_54680_1<M extends Message_54680>(callbacks: {
+>handle_54680_1 : Symbol(handle_54680_1, Decl(correlatedUnions.ts, 313, 39))
+>M : Symbol(M, Decl(correlatedUnions.ts, 315, 24))
+>Message_54680 : Symbol(Message_54680, Decl(correlatedUnions.ts, 311, 2))
+>callbacks : Symbol(callbacks, Decl(correlatedUnions.ts, 315, 49))
+
+  [K in M["type"]]: (msg: Extract<M, { type: K }>["value"]) => unknown;
+>K : Symbol(K, Decl(correlatedUnions.ts, 316, 3))
+>M : Symbol(M, Decl(correlatedUnions.ts, 315, 24))
+>msg : Symbol(msg, Decl(correlatedUnions.ts, 316, 21))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>M : Symbol(M, Decl(correlatedUnions.ts, 315, 24))
+>type : Symbol(type, Decl(correlatedUnions.ts, 316, 38))
+>K : Symbol(K, Decl(correlatedUnions.ts, 316, 3))
+
+}) {
+  window.addEventListener("message", (event) => {
+>window.addEventListener : Symbol(addEventListener, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+>addEventListener : Symbol(addEventListener, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>event : Symbol(event, Decl(correlatedUnions.ts, 318, 38))
+
+    const msg = event.data as M;
+>msg : Symbol(msg, Decl(correlatedUnions.ts, 319, 9))
+>event.data : Symbol(MessageEvent.data, Decl(lib.dom.d.ts, --, --))
+>event : Symbol(event, Decl(correlatedUnions.ts, 318, 38))
+>data : Symbol(MessageEvent.data, Decl(lib.dom.d.ts, --, --))
+>M : Symbol(M, Decl(correlatedUnions.ts, 315, 24))
+
+    callbacks[msg.type as keyof typeof callbacks](msg.value);
+>callbacks : Symbol(callbacks, Decl(correlatedUnions.ts, 315, 49))
+>msg.type : Symbol(type, Decl(correlatedUnions.ts, 303, 16), Decl(correlatedUnions.ts, 308, 16))
+>msg : Symbol(msg, Decl(correlatedUnions.ts, 319, 9))
+>type : Symbol(type, Decl(correlatedUnions.ts, 303, 16), Decl(correlatedUnions.ts, 308, 16))
+>callbacks : Symbol(callbacks, Decl(correlatedUnions.ts, 315, 49))
+>msg.value : Symbol(value, Decl(correlatedUnions.ts, 304, 12), Decl(correlatedUnions.ts, 309, 12))
+>msg : Symbol(msg, Decl(correlatedUnions.ts, 319, 9))
+>value : Symbol(value, Decl(correlatedUnions.ts, 304, 12), Decl(correlatedUnions.ts, 309, 12))
+
+  });
+}
+
+function handle_54680_2<M extends Message_54680>(callbacks: {
+>handle_54680_2 : Symbol(handle_54680_2, Decl(correlatedUnions.ts, 322, 1))
+>M : Symbol(M, Decl(correlatedUnions.ts, 324, 24))
+>Message_54680 : Symbol(Message_54680, Decl(correlatedUnions.ts, 311, 2))
+>callbacks : Symbol(callbacks, Decl(correlatedUnions.ts, 324, 49))
+
+  [K in M["type"]]: (msg: (M & { type: K })["value"]) => unknown;
+>K : Symbol(K, Decl(correlatedUnions.ts, 325, 3))
+>M : Symbol(M, Decl(correlatedUnions.ts, 324, 24))
+>msg : Symbol(msg, Decl(correlatedUnions.ts, 325, 21))
+>M : Symbol(M, Decl(correlatedUnions.ts, 324, 24))
+>type : Symbol(type, Decl(correlatedUnions.ts, 325, 32))
+>K : Symbol(K, Decl(correlatedUnions.ts, 325, 3))
+
+}) {
+  window.addEventListener("message", (event) => {
+>window.addEventListener : Symbol(addEventListener, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+>addEventListener : Symbol(addEventListener, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>event : Symbol(event, Decl(correlatedUnions.ts, 327, 38))
+
+    const msg = event.data as M;
+>msg : Symbol(msg, Decl(correlatedUnions.ts, 328, 9))
+>event.data : Symbol(MessageEvent.data, Decl(lib.dom.d.ts, --, --))
+>event : Symbol(event, Decl(correlatedUnions.ts, 327, 38))
+>data : Symbol(MessageEvent.data, Decl(lib.dom.d.ts, --, --))
+>M : Symbol(M, Decl(correlatedUnions.ts, 324, 24))
+
+    callbacks[msg.type as keyof typeof callbacks](msg.value);
+>callbacks : Symbol(callbacks, Decl(correlatedUnions.ts, 324, 49))
+>msg.type : Symbol(type, Decl(correlatedUnions.ts, 303, 16), Decl(correlatedUnions.ts, 308, 16))
+>msg : Symbol(msg, Decl(correlatedUnions.ts, 328, 9))
+>type : Symbol(type, Decl(correlatedUnions.ts, 303, 16), Decl(correlatedUnions.ts, 308, 16))
+>callbacks : Symbol(callbacks, Decl(correlatedUnions.ts, 324, 49))
+>msg.value : Symbol(value, Decl(correlatedUnions.ts, 304, 12), Decl(correlatedUnions.ts, 309, 12))
+>msg : Symbol(msg, Decl(correlatedUnions.ts, 328, 9))
+>value : Symbol(value, Decl(correlatedUnions.ts, 304, 12), Decl(correlatedUnions.ts, 309, 12))
+
+  });
+}
+
