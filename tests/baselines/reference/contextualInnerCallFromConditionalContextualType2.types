@@ -1,0 +1,144 @@
+//// [tests/cases/compiler/contextualInnerCallFromConditionalContextualType2.ts] ////
+
+=== contextualInnerCallFromConditionalContextualType2.ts ===
+interface ActorImpl {
+  src: string;
+>src : string
+
+  output: any;
+>output : any
+}
+
+interface DoneInvokeEvent<TData> {
+  type: `done.invoke.${string}`;
+>type : `done.invoke.${string}`
+
+  output: TData;
+>output : TData
+}
+
+type AssignActionObject<TEvent extends { type: string }> = {
+>AssignActionObject : AssignActionObject<TEvent>
+>type : string
+
+  type: "xstate.assign";
+>type : "xstate.assign"
+
+  ev: TEvent;
+>ev : TEvent
+
+  (ev: TEvent): void;
+>ev : TEvent
+
+};
+
+type ActionFunction<TEvent extends { type: string }> = (ev: TEvent) => void;
+>ActionFunction : ActionFunction<TEvent>
+>type : string
+>ev : TEvent
+
+declare function assign<TEvent extends { type: string }>(
+>assign : <TEvent extends { type: string; }>(assigner: (ev: TEvent) => void) => AssignActionObject<TEvent>
+>type : string
+
+  assigner: (ev: TEvent) => void
+>assigner : (ev: TEvent) => void
+>ev : TEvent
+
+): AssignActionObject<TEvent>;
+
+type Action<TEvent extends { type: string }> =
+>Action : Action<TEvent>
+>type : string
+
+  | AssignActionObject<TEvent>
+  | ActionFunction<TEvent>;
+
+declare function createMachine<TActors extends ActorImpl>(config: {
+>createMachine : <TActors extends ActorImpl>(config: { types: {    actors: TActors;}; states: Record<string, { invoke: TActors extends { src: infer TSrc; } ? { src: TSrc; onDone: Action<DoneInvokeEvent<TActors["output"]>>; } : never; }>; }) => void
+>config : { types: {    actors: TActors;}; states: Record<string, { invoke: TActors extends { src: infer TSrc; } ? { src: TSrc; onDone: Action<DoneInvokeEvent<TActors["output"]>>; } : never; }>; }
+
+  types: {
+>types : { actors: TActors; }
+
+    actors: TActors;
+>actors : TActors
+
+  };
+  states: Record<
+>states : Record<string, { invoke: TActors extends { src: infer TSrc; } ? { src: TSrc; onDone: Action<DoneInvokeEvent<TActors["output"]>>; } : never; }>
+
+    string,
+    {
+      invoke: TActors extends { src: infer TSrc }
+>invoke : TActors extends { src: infer TSrc; } ? { src: TSrc; onDone: Action<DoneInvokeEvent<TActors["output"]>>; } : never
+>src : TSrc
+
+        ? {
+            src: TSrc;
+>src : TSrc
+
+            onDone: Action<DoneInvokeEvent<TActors["output"]>>;
+>onDone : Action<DoneInvokeEvent<TActors["output"]>>
+          }
+        : never;
+    }
+  >;
+}): void;
+
+createMachine({
+>createMachine({  types: {    actors: {} as {      src: "getRandomNumber";      output: { result: number };    },  },  states: {    a: {      invoke: {        src: "getRandomNumber",        onDone: assign((event) => {          event;          // ^?        }),      },    },  },}) : void
+>createMachine : <TActors extends ActorImpl>(config: { types: { actors: TActors; }; states: Record<string, { invoke: TActors extends { src: infer TSrc; } ? { src: TSrc; onDone: Action<DoneInvokeEvent<TActors["output"]>>; } : never; }>; }) => void
+>{  types: {    actors: {} as {      src: "getRandomNumber";      output: { result: number };    },  },  states: {    a: {      invoke: {        src: "getRandomNumber",        onDone: assign((event) => {          event;          // ^?        }),      },    },  },} : { types: { actors: { src: "getRandomNumber"; output: {    result: number;}; }; }; states: { a: { invoke: { src: "getRandomNumber"; onDone: AssignActionObject<DoneInvokeEvent<{ result: number; }>>; }; }; }; }
+
+  types: {
+>types : { actors: { src: "getRandomNumber"; output: {    result: number;}; }; }
+>{    actors: {} as {      src: "getRandomNumber";      output: { result: number };    },  } : { actors: { src: "getRandomNumber"; output: {    result: number;}; }; }
+
+    actors: {} as {
+>actors : { src: "getRandomNumber"; output: {    result: number;}; }
+>{} as {      src: "getRandomNumber";      output: { result: number };    } : { src: "getRandomNumber"; output: {    result: number;}; }
+>{} : {}
+
+      src: "getRandomNumber";
+>src : "getRandomNumber"
+
+      output: { result: number };
+>output : { result: number; }
+>result : number
+
+    },
+  },
+  states: {
+>states : { a: { invoke: { src: "getRandomNumber"; onDone: AssignActionObject<DoneInvokeEvent<{ result: number; }>>; }; }; }
+>{    a: {      invoke: {        src: "getRandomNumber",        onDone: assign((event) => {          event;          // ^?        }),      },    },  } : { a: { invoke: { src: "getRandomNumber"; onDone: AssignActionObject<DoneInvokeEvent<{ result: number; }>>; }; }; }
+
+    a: {
+>a : { invoke: { src: "getRandomNumber"; onDone: AssignActionObject<DoneInvokeEvent<{ result: number; }>>; }; }
+>{      invoke: {        src: "getRandomNumber",        onDone: assign((event) => {          event;          // ^?        }),      },    } : { invoke: { src: "getRandomNumber"; onDone: AssignActionObject<DoneInvokeEvent<{ result: number; }>>; }; }
+
+      invoke: {
+>invoke : { src: "getRandomNumber"; onDone: AssignActionObject<DoneInvokeEvent<{ result: number; }>>; }
+>{        src: "getRandomNumber",        onDone: assign((event) => {          event;          // ^?        }),      } : { src: "getRandomNumber"; onDone: AssignActionObject<DoneInvokeEvent<{ result: number; }>>; }
+
+        src: "getRandomNumber",
+>src : "getRandomNumber"
+>"getRandomNumber" : "getRandomNumber"
+
+        onDone: assign((event) => {
+>onDone : AssignActionObject<DoneInvokeEvent<{ result: number; }>>
+>assign((event) => {          event;          // ^?        }) : AssignActionObject<DoneInvokeEvent<{ result: number; }>>
+>assign : <TEvent extends { type: string; }>(assigner: (ev: TEvent) => void) => AssignActionObject<TEvent>
+>(event) => {          event;          // ^?        } : (event: DoneInvokeEvent<{ result: number; }>) => void
+>event : DoneInvokeEvent<{ result: number; }>
+
+          event;
+>event : DoneInvokeEvent<{ result: number; }>
+
+          // ^?
+        }),
+      },
+    },
+  },
+});
+
