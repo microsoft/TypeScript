@@ -4853,7 +4853,7 @@ namespace Parser {
         }
         const pos = getNodePos();
         const type = parseUnionTypeOrHigher();
-        if (!inDisallowConditionalTypesContext() && tryParse(hasConditionalTypeExtends)) {
+        if (!inDisallowConditionalTypesContext() && tryParse(parseConditionalTypeExtends)) {
             // The type following 'extends' is not permitted to be another conditional type
             const extendsType = disallowConditionalTypesAnd(parseType);
             parseExpected(SyntaxKind.QuestionToken);
@@ -4865,7 +4865,9 @@ namespace Parser {
         return type;
     }
 
-    function hasConditionalTypeExtends() {
+    function parseConditionalTypeExtends() {
+        // If the `extends` keyword is followed by a : or a ?: then the `extends` is
+        // a key in an object type rather than the keyword (see #21637)
         return parseOptional(SyntaxKind.ExtendsKeyword) && !(parseOptional(SyntaxKind.QuestionToken) || parseOptional(SyntaxKind.ColonToken));
     }
 
