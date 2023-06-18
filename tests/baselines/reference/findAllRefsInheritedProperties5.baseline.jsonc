@@ -5,13 +5,7 @@
 //     prop1: number;
 // }
 // 
-// class D extends C {
-//     prop0: string;
-// }
-// 
-// var d: D;
-// d.prop0;
-// d.prop1;
+// --- (line: 6) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsInheritedProperties5.ts ===
@@ -20,13 +14,7 @@
   //     prop1: number;
   // }
   // 
-  // class D extends C {
-  //     prop0: string;
-  // }
-  // 
-  // var d: D;
-  // d.prop0;
-  // d.prop1;
+  // --- (line: 6) skipped ---
 
   // === Details ===
   [
@@ -90,12 +78,7 @@
 // }
 // 
 // class D extends C {
-//     prop0: string;
-// }
-// 
-// var d: D;
-// d.prop0;
-// d.prop1;
+// --- (line: 7) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsInheritedProperties5.ts ===
@@ -105,12 +88,7 @@
   // }
   // 
   // class D extends C {
-  //     prop0: string;
-  // }
-  // 
-  // var d: D;
-  // d.prop0;
-  // d.prop1;
+  // --- (line: 7) skipped ---
 
   // === Details ===
   [
@@ -168,9 +146,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsInheritedProperties5.ts ===
-// class C extends D {
-//     prop0: string;
-//     prop1: number;
+// --- (line: 3) skipped ---
 // }
 // 
 // class D extends C {
@@ -183,9 +159,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsInheritedProperties5.ts ===
-  // class C extends D {
-  //     prop0: string;
-  //     prop1: number;
+  // --- (line: 3) skipped ---
   // }
   // 
   // class D extends C {
@@ -252,9 +226,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsInheritedProperties5.ts ===
-// class C extends D {
-//     prop0: string;
-//     prop1: number;
+// --- (line: 3) skipped ---
 // }
 // 
 // class D extends C {
@@ -267,9 +239,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsInheritedProperties5.ts ===
-  // class C extends D {
-  //     prop0: string;
-  //     prop1: number;
+  // --- (line: 3) skipped ---
   // }
   // 
   // class D extends C {
@@ -336,14 +306,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsInheritedProperties5.ts ===
-// class C extends D {
-//     prop0: string;
-//     prop1: number;
-// }
-// 
-// class D extends C {
-//     prop0: string;
-// }
+// --- (line: 8) skipped ---
 // 
 // var d: D;
 // d.prop0;

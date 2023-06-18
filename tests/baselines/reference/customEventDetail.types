@@ -1,4 +1,6 @@
-=== tests/cases/compiler/customEventDetail.ts ===
+//// [tests/cases/compiler/customEventDetail.ts] ////
+
+=== customEventDetail.ts ===
 var x: CustomEvent;
 >x : CustomEvent<any>
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privacyCheckExportAssignmentOnExportedGenericInterface2.ts] ////
+
 //// [privacyCheckExportAssignmentOnExportedGenericInterface2.ts]
 export = Foo;
 

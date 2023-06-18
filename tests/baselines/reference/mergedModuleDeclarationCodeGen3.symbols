@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mergedModuleDeclarationCodeGen3.ts ===
+//// [tests/cases/compiler/mergedModuleDeclarationCodeGen3.ts] ////
+
+=== mergedModuleDeclarationCodeGen3.ts ===
 module my.data {
 >my : Symbol(my, Decl(mergedModuleDeclarationCodeGen3.ts, 0, 0), Decl(mergedModuleDeclarationCodeGen3.ts, 2, 1))
 >data : Symbol(data, Decl(mergedModuleDeclarationCodeGen3.ts, 0, 10), Decl(mergedModuleDeclarationCodeGen3.ts, 3, 10))

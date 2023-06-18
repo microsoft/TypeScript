@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/ambientEnumElementInitializer6.ts] ////
+
 //// [ambientEnumElementInitializer6.ts]
 declare module M {
     enum E {

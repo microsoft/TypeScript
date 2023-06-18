@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileImportModuleWithExportAssignment_1.ts ===
+//// [tests/cases/compiler/declFileImportModuleWithExportAssignment.ts] ////
+
+=== declFileImportModuleWithExportAssignment_1.ts ===
 /**This is on import declaration*/
 import a1 = require("./declFileImportModuleWithExportAssignment_0");
 >a1 : Symbol(a1, Decl(declFileImportModuleWithExportAssignment_1.ts, 0, 0))
@@ -12,7 +14,7 @@ a.test1(null, null, null);
 >a : Symbol(a, Decl(declFileImportModuleWithExportAssignment_1.ts, 2, 10))
 >test1 : Symbol(test1, Decl(declFileImportModuleWithExportAssignment_0.ts, 11, 25))
 
-=== tests/cases/compiler/declFileImportModuleWithExportAssignment_0.ts ===
+=== declFileImportModuleWithExportAssignment_0.ts ===
 module m2 {
 >m2 : Symbol(m2, Decl(declFileImportModuleWithExportAssignment_0.ts, 0, 0), Decl(declFileImportModuleWithExportAssignment_0.ts, 10, 3))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exhaustiveSwitchImplicitReturn.ts] ////
+
 //// [exhaustiveSwitchImplicitReturn.ts]
 enum E1 {
     A = "a",

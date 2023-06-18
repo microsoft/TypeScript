@@ -55,6 +55,8 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/myfolder/allpr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/myfolder/allproject/project/node_modules/@types 1 undefined Project: c:/myfolder/allproject/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/myfolder/allproject/node_modules/@types 1 undefined Project: c:/myfolder/allproject/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/myfolder/allproject/node_modules/@types 1 undefined Project: c:/myfolder/allproject/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/myfolder/node_modules/@types 1 undefined Project: c:/myfolder/allproject/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/myfolder/node_modules/@types 1 undefined Project: c:/myfolder/allproject/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: c:/myfolder/allproject/project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project 'c:/myfolder/allproject/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
@@ -85,17 +87,19 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+c:/myfolder/allproject/node_modules/@types: *new*
+  {"pollingInterval":500}
 c:/myfolder/allproject/project/node_modules/@types: *new*
   {"pollingInterval":500}
-c:/myfolder/allproject/node_modules/@types: *new*
+c:/myfolder/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-c:/myfolder/allproject/project/tsconfig.json: *new*
+c:/a/lib/lib.d.ts: *new*
   {}
 c:/myfolder/allproject/project/file2.ts: *new*
   {}
-c:/a/lib/lib.d.ts: *new*
+c:/myfolder/allproject/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::

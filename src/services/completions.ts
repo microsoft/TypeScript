@@ -7,6 +7,7 @@ import {
     BindingPattern,
     BreakOrContinueStatement,
     CancellationToken,
+    canHaveDecorators,
     canUsePropertyAccess,
     CaseBlock,
     cast,
@@ -44,6 +45,7 @@ import {
     createTextSpanFromRange,
     Debug,
     Declaration,
+    Decorator,
     Diagnostics,
     diagnosticToString,
     displayPart,
@@ -82,6 +84,7 @@ import {
     getEmitModuleResolutionKind,
     getEmitScriptTarget,
     getEscapedTextOfIdentifierOrLiteral,
+    getEscapedTextOfJsxAttributeName,
     getExportInfoMap,
     getFormatCodeSettingsForWriting,
     getJSDocParameterTags,
@@ -90,6 +93,7 @@ import {
     getLineAndCharacterOfPosition,
     getLineStartPositionForPosition,
     getLocalSymbolForExportDefault,
+    getModifiers,
     getNameOfDeclaration,
     getNameTable,
     getNewLineCharacter,
@@ -144,6 +148,7 @@ import {
     isConstructorDeclaration,
     isContextualKeyword,
     isDeclarationName,
+    isDecorator,
     isDeprecatedDeclaration,
     isEntityName,
     isEnumMember,
@@ -167,6 +172,8 @@ import {
     isImportKeyword,
     isImportSpecifier,
     isInComment,
+    isIndexSignatureDeclaration,
+    isInferTypeNode,
     isInitializedProperty,
     isInJSFile,
     isInRightSideOfInternalImportEqualsDeclaration,
@@ -234,6 +241,7 @@ import {
     isTypeOfExpression,
     isTypeOnlyImportDeclaration,
     isTypeOnlyImportOrExportDeclaration,
+    isTypeParameterDeclaration,
     isTypeReferenceType,
     isValidTypeOnlyAliasUseSite,
     isVariableDeclaration,
@@ -272,6 +280,7 @@ import {
     memoizeOne,
     MethodDeclaration,
     ModifierFlags,
+    ModifierLike,
     modifiersToFlags,
     ModifierSyntaxKind,
     modifierToFlag,
@@ -291,6 +300,7 @@ import {
     ObjectType,
     ObjectTypeDeclaration,
     or,
+    ParameterDeclaration,
     ParenthesizedTypeNode,
     positionBelongsToNode,
     positionIsASICandidate,
@@ -359,6 +369,7 @@ import {
     TypeLiteralNode,
     TypeNode,
     TypeOnlyImportDeclaration,
+    TypeParameterDeclaration,
     TypeQueryNode,
     TypeReferenceNode,
     unescapeLeadingUnderscores,
@@ -1603,6 +1614,7 @@ function createCompletionEntry(
     includeSymbol: boolean
 ): CompletionEntry | undefined {
     let insertText: string | undefined;
+    let filterText: string | undefined;
     let replacementSpan = getReplacementSpanForContextToken(replacementToken);
     let data: CompletionEntryData | undefined;
     let isSnippet: true | undefined;
@@ -1676,12 +1688,16 @@ function createCompletionEntry(
         completionKind === CompletionKind.MemberLike &&
         isClassLikeMemberCompletion(symbol, location, sourceFile)) {
         let importAdder;
-        ({ insertText, isSnippet, importAdder, replacementSpan } =
-            getEntryForMemberCompletion(host, program, options, preferences, name, symbol, location, position, contextToken, formatContext));
-        sortText = SortText.ClassMemberSnippets; // sortText has to be lower priority than the sortText for keywords. See #47852.
-        if (importAdder?.hasFixes()) {
-            hasAction = true;
-            source = CompletionSource.ClassMemberSnippet;
+        const memberCompletionEntry = getEntryForMemberCompletion(host, program, options, preferences, name, symbol, location, position, contextToken, formatContext);
+        if (memberCompletionEntry) {
+            ({ insertText, filterText, isSnippet, importAdder } = memberCompletionEntry);
+            if (importAdder?.hasFixes()) {
+                hasAction = true;
+                source = CompletionSource.ClassMemberSnippet;
+            }
+        }
+        else {
+            return undefined; // Skip this entry
         }
     }
 
@@ -1749,6 +1765,7 @@ function createCompletionEntry(
         hasAction: hasAction ? true : undefined,
         isRecommended: isRecommendedCompletionMatch(symbol, recommendedCompletion, typeChecker) || undefined,
         insertText,
+        filterText,
         replacementSpan,
         sourceDisplay,
         labelDetails,
@@ -1820,15 +1837,15 @@ function getEntryForMemberCompletion(
     position: number,
     contextToken: Node | undefined,
     formatContext: formatting.FormatContext | undefined,
-): { insertText: string, isSnippet?: true, importAdder?: codefix.ImportAdder, replacementSpan?: TextSpan } {
+): { insertText: string, filterText?: string, isSnippet?: true, importAdder?: codefix.ImportAdder, eraseRange?: TextRange } | undefined {
     const classLikeDeclaration = findAncestor(location, isClassLike);
     if (!classLikeDeclaration) {
-        return { insertText: name };
+        return undefined; // This should never happen.
     }
 
     let isSnippet: true | undefined;
-    let replacementSpan: TextSpan | undefined;
     let insertText: string = name;
+    const filterText: string = name;
 
     const checker = program.getTypeChecker();
     const sourceFile = location.getSourceFile();
@@ -1857,11 +1874,11 @@ function getEntryForMemberCompletion(
     }
 
     let modifiers = ModifierFlags.None;
+    const { modifiers: presentModifiers, range: eraseRange, decorators: presentDecorators } = getPresentModifiers(contextToken, sourceFile, position);
     // Whether the suggested member should be abstract.
     // e.g. in `abstract class C { abstract | }`, we should offer abstract method signatures at position `|`.
-    const { modifiers: presentModifiers, span: modifiersSpan } = getPresentModifiers(contextToken, sourceFile, position);
-    const isAbstract = !!(presentModifiers & ModifierFlags.Abstract);
-    const completionNodes: Node[] = [];
+    const isAbstract = presentModifiers & ModifierFlags.Abstract && classLikeDeclaration.modifierFlagsCache & ModifierFlags.Abstract;
+    let completionNodes: codefix.AddNode[] = [];
     codefix.addNewNodeForMemberSymbol(
         symbol,
         classLikeDeclaration,
@@ -1890,20 +1907,49 @@ function getEntryForMemberCompletion(
                 // This is needed when we have overloaded signatures,
                 // so this callback will be called for multiple nodes/signatures,
                 // and we need to make sure the modifiers are uniform for all nodes/signatures.
-                modifiers = node.modifierFlagsCache | requiredModifiers | presentModifiers;
+                modifiers = node.modifierFlagsCache | requiredModifiers;
             }
             node = factory.updateModifiers(node, modifiers);
             completionNodes.push(node);
         },
         body,
         codefix.PreserveOptionalFlags.Property,
-        isAbstract);
+        !!isAbstract);
 
     if (completionNodes.length) {
+        const isMethod = symbol.flags & SymbolFlags.Method;
+        let allowedModifiers = modifiers | ModifierFlags.Override | ModifierFlags.Public;
+        if (!isMethod) {
+            allowedModifiers |= ModifierFlags.Ambient | ModifierFlags.Readonly;
+        }
+        else {
+            allowedModifiers |= ModifierFlags.Async;
+        }
+        const allowedAndPresent = presentModifiers & allowedModifiers;
+        if (presentModifiers & (~allowedModifiers)) {
+            return undefined; // This completion entry will be filtered out.
+        }
+        // If the original member is protected, we allow it to change to public.
+        if (modifiers & ModifierFlags.Protected && allowedAndPresent & ModifierFlags.Public) {
+            modifiers &= ~ModifierFlags.Protected;
+        }
+        // `public` modifier is optional and can be dropped.
+        if (allowedAndPresent !== ModifierFlags.None && !(allowedAndPresent & ModifierFlags.Public)) {
+            modifiers &= ~ModifierFlags.Public;
+        }
+        modifiers |= allowedAndPresent;
+        completionNodes = completionNodes.map(node => factory.updateModifiers(node, modifiers));
+        // Add back the decorators that were already present.
+        if (presentDecorators?.length) {
+            const lastNode = completionNodes[completionNodes.length - 1];
+            if (canHaveDecorators(lastNode)) {
+                completionNodes[completionNodes.length - 1] = factory.updateModifierLike(lastNode, (presentDecorators as ModifierLike[]).concat(getModifiers(lastNode) || []));
+            }
+        }
+
         const format = ListFormat.MultiLine | ListFormat.NoTrailingNewLine;
-        replacementSpan = modifiersSpan;
-         // If we have access to formatting settings, we print the nodes using the emitter,
-         // and then format the printed text.
+        // If we have access to formatting settings, we print the nodes using the emitter,
+        // and then format the printed text.
         if (formatContext) {
             insertText = printer.printAndFormatSnippetList(
                 format,
@@ -1919,21 +1965,22 @@ function getEntryForMemberCompletion(
         }
     }
 
-    return { insertText, isSnippet, importAdder, replacementSpan };
+    return { insertText, filterText, isSnippet, importAdder, eraseRange };
 }
 
 function getPresentModifiers(
     contextToken: Node | undefined,
     sourceFile: SourceFile,
-    position: number): { modifiers: ModifierFlags, span?: TextSpan } {
+    position: number): { modifiers: ModifierFlags, decorators?: Decorator[], range?: TextRange } {
     if (!contextToken ||
         getLineAndCharacterOfPosition(sourceFile, position).line
             > getLineAndCharacterOfPosition(sourceFile, contextToken.getEnd()).line) {
         return { modifiers: ModifierFlags.None };
     }
     let modifiers = ModifierFlags.None;
-    let span;
+    let decorators: Decorator[] | undefined;
     let contextMod;
+    const range: TextRange = { pos: position, end: position };
     /*
     Cases supported:
     In
@@ -1953,15 +2000,19 @@ function getPresentModifiers(
     `location.parent` is property declaration ``protected override m``,
     `location.parent.parent` is class declaration ``class C { ... }``.
     */
-    if (contextMod = isModifierLike(contextToken)) {
-        modifiers |= modifierToFlag(contextMod);
-        span = createTextSpanFromNode(contextToken);
-    }
-    if (isPropertyDeclaration(contextToken.parent)) {
+    if (isPropertyDeclaration(contextToken.parent) && contextToken.parent.modifiers) {
         modifiers |= modifiersToFlags(contextToken.parent.modifiers) & ModifierFlags.Modifier;
-        span = createTextSpanFromNode(contextToken.parent);
+        decorators = contextToken.parent.modifiers.filter(isDecorator) || [];
+        range.pos = Math.min(range.pos, contextToken.parent.modifiers.pos);
     }
-    return { modifiers, span };
+    if (contextMod = isModifierLike(contextToken)) {
+        const contextModifierFlag = modifierToFlag(contextMod);
+        if (!(modifiers & contextModifierFlag)) {
+            modifiers |= contextModifierFlag;
+            range.pos = Math.min(range.pos, contextToken.pos);
+        }
+    }
+    return { modifiers, decorators, range: range.pos !== position ? range : undefined };
 }
 
 function isModifierLike(node: Node): ModifierSyntaxKind | undefined {
@@ -2388,7 +2439,7 @@ export function getCompletionEntriesFromSymbols(
     includeSymbol = false
 ): UniqueNameSet {
     const start = timestamp();
-    const variableDeclaration = getVariableDeclaration(location);
+    const variableOrParameterDeclaration = getVariableOrParameterDeclaration(contextToken);
     const useSemicolons = probablyUsesSemicolons(sourceFile);
     const typeChecker = program.getTypeChecker();
     // Tracks unique names.
@@ -2462,8 +2513,25 @@ export function getCompletionEntriesFromSymbols(
             }
             // Filter out variables from their own initializers
             // `const a = /* no 'a' here */`
-            if (variableDeclaration && symbol.valueDeclaration === variableDeclaration) {
+            if (tryCast(variableOrParameterDeclaration, isVariableDeclaration) && symbol.valueDeclaration === variableOrParameterDeclaration) {
                 return false;
+            }
+
+            // Filter out parameters from their own initializers
+            // `function f(a = /* no 'a' and 'b' here */, b) { }` or
+            // `function f<T = /* no 'T' here */>(a: T) { }`
+            const symbolDeclaration = symbol.valueDeclaration ?? symbol.declarations?.[0];
+            if (variableOrParameterDeclaration && symbolDeclaration && (
+                (isTypeParameterDeclaration(variableOrParameterDeclaration) && isTypeParameterDeclaration(symbolDeclaration)) ||
+                (isParameter(variableOrParameterDeclaration) && isParameter(symbolDeclaration))
+            )) {
+                const symbolDeclarationPos = symbolDeclaration.pos;
+                const parameters = isParameter(variableOrParameterDeclaration) ? variableOrParameterDeclaration.parent.parameters :
+                    isInferTypeNode(variableOrParameterDeclaration.parent) ? undefined :
+                    variableOrParameterDeclaration.parent.typeParameters;
+                if (symbolDeclarationPos >= variableOrParameterDeclaration.pos && parameters && symbolDeclarationPos < parameters.end) {
+                    return false;
+                }
             }
 
             // External modules can have global export declarations that will be
@@ -2747,7 +2815,7 @@ function getCompletionEntryCodeActionsAndSourceDisplay(
     }
 
     if (source === CompletionSource.ClassMemberSnippet) {
-        const { importAdder } = getEntryForMemberCompletion(
+        const { importAdder, eraseRange } = getEntryForMemberCompletion(
             host,
             program,
             compilerOptions,
@@ -2757,11 +2825,18 @@ function getCompletionEntryCodeActionsAndSourceDisplay(
             location,
             position,
             contextToken,
-            formatContext);
-        if (importAdder) {
+            formatContext)!;
+        if (importAdder || eraseRange) {
             const changes = textChanges.ChangeTracker.with(
                 { host, formatContext, preferences },
-                importAdder.writeFixes);
+                tracker => {
+                    if (importAdder) {
+                        importAdder.writeFixes(tracker);
+                    }
+                    if (eraseRange) {
+                        tracker.deleteRange(sourceFile, eraseRange);
+                    }
+                });
             return {
                 sourceDisplay: undefined,
                 codeActions: [{
@@ -2915,7 +2990,7 @@ function getContextualType(previousToken: Node, position: number, sourceFile: So
                 isEqualityOperatorKind(previousToken.kind) && isBinaryExpression(parent) && isEqualityOperatorKind(parent.operatorToken.kind) ?
                     // completion at `x ===/**/` should be for the right side
                     checker.getTypeAtLocation(parent.left) :
-                    checker.getContextualType(previousToken as Expression);
+                    checker.getContextualType(previousToken as Expression, ContextFlags.Completions) || checker.getContextualType(previousToken as Expression);
     }
 }
 
@@ -4584,9 +4659,9 @@ function getCompletionData(
         return isDeclarationName(contextToken)
             && !isShorthandPropertyAssignment(contextToken.parent)
             && !isJsxAttribute(contextToken.parent)
-            // Don't block completions if we're in `class C /**/` or `interface I /**/`, because we're *past* the end of the identifier and might want to complete `extends`.
-            // If `contextToken !== previousToken`, this is `class C ex/**/ or `interface I ex/**/``.
-            && !((isClassLike(contextToken.parent) || isInterfaceDeclaration(contextToken.parent)) && (contextToken !== previousToken || position > previousToken.end));
+            // Don't block completions if we're in `class C /**/`, `interface I /**/` or `<T /**/>` , because we're *past* the end of the identifier and might want to complete `extends`.
+            // If `contextToken !== previousToken`, this is `class C ex/**/`, `interface I ex/**/` or `<T ex/**/>`.
+            && !((isClassLike(contextToken.parent) || isInterfaceDeclaration(contextToken.parent) || isTypeParameterDeclaration(contextToken.parent)) && (contextToken !== previousToken || position > previousToken.end));
     }
 
     function isPreviousPropertyDeclarationTerminated(contextToken: Node, position: number) {
@@ -4787,7 +4862,7 @@ function getCompletionData(
             }
 
             if (attr.kind === SyntaxKind.JsxAttribute) {
-                seenNames.add(attr.name.escapedText);
+                seenNames.add(getEscapedTextOfJsxAttributeName(attr.name));
             }
             else if (isJsxSpreadAttribute(attr)) {
                 setMembersDeclaredBySpreadAssignment(attr, membersDeclaredBySpreadAssignment);
@@ -5441,17 +5516,22 @@ function isModuleSpecifierMissingOrEmpty(specifier: ModuleReference | Expression
     return !tryCast(isExternalModuleReference(specifier) ? specifier.expression : specifier, isStringLiteralLike)?.text;
 }
 
-function getVariableDeclaration(property: Node): VariableDeclaration | undefined {
-    const variableDeclaration = findAncestor(property, node =>
+function getVariableOrParameterDeclaration(contextToken: Node | undefined) {
+    if (!contextToken) return;
+
+    const declaration = findAncestor(contextToken, node =>
         isFunctionBlock(node) || isArrowFunctionBody(node) || isBindingPattern(node)
             ? "quit"
-            : isVariableDeclaration(node));
-
-    return variableDeclaration as VariableDeclaration | undefined;
+            : isVariableDeclaration(node) || ((isParameter(node) || isTypeParameterDeclaration(node)) && !isIndexSignatureDeclaration(node.parent)));
+    return declaration as ParameterDeclaration | TypeParameterDeclaration | VariableDeclaration | undefined;
 }
 
 function isArrowFunctionBody(node: Node) {
-    return node.parent && isArrowFunction(node.parent) && node.parent.body === node;
+    return node.parent && isArrowFunction(node.parent) &&
+        (node.parent.body === node ||
+        // const a = () => /**/;
+        node.kind === SyntaxKind.EqualsGreaterThanToken
+    );
 }
 
 /** True if symbol is a type or a module containing at least one type. */

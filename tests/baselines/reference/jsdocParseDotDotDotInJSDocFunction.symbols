@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/a.js ===
+//// [tests/cases/conformance/jsdoc/jsdocParseDotDotDotInJSDocFunction.ts] ////
+
+=== a.js ===
 // from bcryptjs
 /** @param {function(...[*])} callback */
 function g(callback) {

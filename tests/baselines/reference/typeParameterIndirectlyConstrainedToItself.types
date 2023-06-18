@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterIndirectlyConstrainedToItself.ts ===
+//// [tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterIndirectlyConstrainedToItself.ts] ////
+
+=== typeParameterIndirectlyConstrainedToItself.ts ===
 class C<U extends T, T extends U> { }
 >C : C<U, T>
 

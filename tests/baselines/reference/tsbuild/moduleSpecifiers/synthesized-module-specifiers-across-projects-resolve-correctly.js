@@ -198,10 +198,9 @@ export declare class LassieDog extends Dog {
 //// [/src/src-dogs/lassie/lassiedog.js]
 import { Dog } from '../dog.js';
 import { LASSIE_CONFIG } from './lassieconfig.js';
-class LassieDog extends Dog {
+export class LassieDog extends Dog {
     static getDogConfig = () => LASSIE_CONFIG;
 }
-export { LassieDog };
 
 
 //// [/src/src-dogs/tsconfig.tsbuildinfo]

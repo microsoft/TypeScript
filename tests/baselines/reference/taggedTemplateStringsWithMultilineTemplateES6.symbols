@@ -1,4 +1,6 @@
-=== tests/cases/compiler/taggedTemplateStringsWithMultilineTemplateES6.ts ===
+//// [tests/cases/compiler/taggedTemplateStringsWithMultilineTemplateES6.ts] ////
+
+=== taggedTemplateStringsWithMultilineTemplateES6.ts ===
 function f(...args: any[]): void {
 >f : Symbol(f, Decl(taggedTemplateStringsWithMultilineTemplateES6.ts, 0, 0))
 >args : Symbol(args, Decl(taggedTemplateStringsWithMultilineTemplateES6.ts, 0, 11))

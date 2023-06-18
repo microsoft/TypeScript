@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/mapped/mappedTypeWithAny.ts] ////
+
 //// [mappedTypeWithAny.ts]
 type Item = { value: string };
 type ItemMap<T> = { [P in keyof T]: Item };

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/ambientStatement1.ts ===
+//// [tests/cases/compiler/ambientStatement1.ts] ////
+
+=== ambientStatement1.ts ===
     declare module M1 {
 >M1 : Symbol(M1, Decl(ambientStatement1.ts, 0, 0))
 

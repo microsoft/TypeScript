@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privacyGloFunc.ts] ////
+
 //// [privacyGloFunc.ts]
 export module m1 {
     export class C1_public {
@@ -685,7 +687,7 @@ define(["require", "exports"], function (require, exports) {
             return new C2_private(); //error
         }
         m1.f12_public = f12_public;
-    })(m1 = exports.m1 || (exports.m1 = {}));
+    })(m1 || (exports.m1 = m1 = {}));
     var m2;
     (function (m2) {
         var m2_C1_public = /** @class */ (function () {

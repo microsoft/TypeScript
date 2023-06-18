@@ -506,10 +506,9 @@
 // }
 // declare module "mod" {
 //     export = N;
-// }
-// declare module "a" {
-//     import * as N from "mod";
-//     export { N }; // Renaming N here would rename
+// --- (line: 6) skipped ---
+
+// --- (line: 9) skipped ---
 // }
 // declare module "b" {
 //     import { N } from "a";
@@ -523,15 +522,7 @@
   // }
   // declare module "mod" {
   //     export = N;
-  // }
-  // declare module "a" {
-  //     import * as N from "mod";
-  //     export { N }; // Renaming N here would rename
-  // }
-  // declare module "b" {
-  //     import { N } from "a";
-  //     export const y: typeof N.x;
-  // }
+  // --- (line: 6) skipped ---
 
   // === Details ===
   [
@@ -619,10 +610,7 @@
 
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameImportOfExportEquals.ts ===
-// declare namespace N {
-//     export var x: number;
-// }
-// declare module "mod" {
+// --- (line: 4) skipped ---
 //     export = N;
 // }
 // declare module "a" {
@@ -638,11 +626,7 @@
 
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameImportOfExportEquals.ts ===
-// declare namespace N {
-//     export var x: number;
-// }
-// declare module "mod" {
-//     export = N;
+// --- (line: 5) skipped ---
 // }
 // declare module "a" {
 //     import * as N from "mod";
@@ -657,14 +641,7 @@
 
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameImportOfExportEquals.ts ===
-// declare namespace N {
-//     export var x: number;
-// }
-// declare module "mod" {
-//     export = N;
-// }
-// declare module "a" {
-//     import * as N from "mod";
+// --- (line: 8) skipped ---
 //     export { N }; // Renaming N here would rename
 // }
 // declare module "b" {
@@ -676,14 +653,7 @@
 
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameImportOfExportEquals.ts ===
-// declare namespace N {
-//     export var x: number;
-// }
-// declare module "mod" {
-//     export = N;
-// }
-// declare module "a" {
-//     import * as N from "mod";
+// --- (line: 8) skipped ---
 //     export { N }; // Renaming N here would rename
 // }
 // declare module "b" {
@@ -700,10 +670,9 @@
 // }
 // declare module "mod" {
 //     export = N;
-// }
-// declare module "a" {
-//     import * as N from "mod";
-//     export { N }; // Renaming N here would rename
+// --- (line: 6) skipped ---
+
+// --- (line: 9) skipped ---
 // }
 // declare module "b" {
 //     import { N } from "a";
@@ -719,10 +688,9 @@
 // }
 // declare module "mod" {
 //     export = N;
-// }
-// declare module "a" {
-//     import * as N from "mod";
-//     export { N }; // Renaming N here would rename
+// --- (line: 6) skipped ---
+
+// --- (line: 9) skipped ---
 // }
 // declare module "b" {
 //     import { N } from "a";

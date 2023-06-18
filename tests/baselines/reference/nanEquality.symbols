@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nanEquality.ts ===
+//// [tests/cases/compiler/nanEquality.ts] ////
+
+=== nanEquality.ts ===
 declare const x: number;
 >x : Symbol(x, Decl(nanEquality.ts, 0, 13))
 

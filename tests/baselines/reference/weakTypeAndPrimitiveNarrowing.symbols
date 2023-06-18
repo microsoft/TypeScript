@@ -1,4 +1,6 @@
-=== tests/cases/compiler/weakTypeAndPrimitiveNarrowing.ts ===
+//// [tests/cases/compiler/weakTypeAndPrimitiveNarrowing.ts] ////
+
+=== weakTypeAndPrimitiveNarrowing.ts ===
 type LiteralsAndWeakTypes = 
 >LiteralsAndWeakTypes : Symbol(LiteralsAndWeakTypes, Decl(weakTypeAndPrimitiveNarrowing.ts, 0, 0))
 

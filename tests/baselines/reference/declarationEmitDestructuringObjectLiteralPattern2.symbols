@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitDestructuringObjectLiteralPattern2.ts ===
+//// [tests/cases/compiler/declarationEmitDestructuringObjectLiteralPattern2.ts] ////
+
+=== declarationEmitDestructuringObjectLiteralPattern2.ts ===
 var { a: x11, b: { a: y11, b: { a: z11 }}} = { a: 1, b: { a: "hello", b: { a: true } } };
 >a : Symbol(a, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 0, 46))
 >x11 : Symbol(x11, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 0, 5))

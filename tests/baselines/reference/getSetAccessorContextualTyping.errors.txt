@@ -1,7 +1,7 @@
-tests/cases/conformance/expressions/contextualTyping/getSetAccessorContextualTyping.ts(8,9): error TS2322: Type 'string' is not assignable to type 'number'.
+getSetAccessorContextualTyping.ts(8,9): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/expressions/contextualTyping/getSetAccessorContextualTyping.ts (1 errors) ====
+==== getSetAccessorContextualTyping.ts (1 errors) ====
     // In the body of a get accessor with no return type annotation,
     // if a matching set accessor exists and that set accessor has a parameter type annotation,
     // return expressions are contextually typed by the type given in the set accessor's parameter type annotation.

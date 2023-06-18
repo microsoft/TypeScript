@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/convertClassExpressionToFunctionFromObjectProperty2.ts] ////
+
 //// [convertClassExpressionToFunctionFromObjectProperty2.ts]
 ({
     x: class {

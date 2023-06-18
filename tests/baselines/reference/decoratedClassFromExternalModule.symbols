@@ -1,4 +1,6 @@
-=== tests/cases/conformance/decorators/class/decorated.ts ===
+//// [tests/cases/conformance/decorators/class/decoratedClassFromExternalModule.ts] ////
+
+=== decorated.ts ===
 function decorate(target: any) { }
 >decorate : Symbol(decorate, Decl(decorated.ts, 0, 0))
 >target : Symbol(target, Decl(decorated.ts, 0, 18))
@@ -9,7 +11,7 @@ function decorate(target: any) { }
 export default class Decorated { }
 >Decorated : Symbol(Decorated, Decl(decorated.ts, 0, 34))
 
-=== tests/cases/conformance/decorators/class/undecorated.ts ===
+=== undecorated.ts ===
 import Decorated from 'decorated';
 >Decorated : Symbol(Decorated, Decl(undecorated.ts, 0, 6))
 

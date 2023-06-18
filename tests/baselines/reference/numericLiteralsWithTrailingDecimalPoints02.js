@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/numericLiteralsWithTrailingDecimalPoints02.ts] ////
+
 //// [numericLiteralsWithTrailingDecimalPoints02.ts]
 1..toString();
 1.0.toString();

@@ -147,21 +147,21 @@ Before running Timeout callback:: count: 2
 PolledWatches::
 /user/username/projects/myproject/a/b/jsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/a/tsconfig.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/a/jsconfig.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/tsconfig.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/jsconfig.json: *new*
+/user/username/projects/myproject/a/c/jsconfig.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/myproject/a/c/tsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/a/c/jsconfig.json: *new*
+/user/username/projects/myproject/a/d/jsconfig.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/myproject/a/d/tsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/a/d/jsconfig.json: *new*
+/user/username/projects/myproject/a/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/a/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/tsconfig.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::
@@ -190,6 +190,8 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a/node_modules/@types 1 undefined Project: /user/username/projects/myproject/a/b/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/a/b/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/a/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/a/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/a/b/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/a/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -253,29 +255,31 @@ Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 After running Timeout callback:: count: 0
 
 PolledWatches::
-/user/username/projects/myproject/a/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/a/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/a/c/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/a/c/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/a/d/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/a/d/jsconfig.json:
-  {"pollingInterval":2000}
 /a/lib/lib.es6.d.ts: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/myproject/a/c/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/a/c/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/a/d/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/a/d/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/a/jsconfig.json:
+  {"pollingInterval":2000}
 /user/username/projects/myproject/a/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/myproject/a/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/jsconfig.json:
+  {"pollingInterval":2000}
 /user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 PolledWatches *deleted*::

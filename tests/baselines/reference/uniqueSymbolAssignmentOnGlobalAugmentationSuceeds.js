@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/uniqueSymbolAssignmentOnGlobalAugmentationSuceeds.ts] ////
+
 //// [uniqueSymbolAssignmentOnGlobalAugmentationSuceeds.ts]
 const FOO_SYMBOL = Symbol('Foo');
 

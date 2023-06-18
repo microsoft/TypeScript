@@ -116,8 +116,6 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/tsconfig.json: *new*
-  {}
 /ambient.d.ts: *new*
   {}
 /b.ts: *new*
@@ -125,6 +123,8 @@ FsWatches::
 /lib/foo/constants.d.ts: *new*
   {}
 /package.json: *new*
+  {}
+/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -171,13 +171,13 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/tsconfig.json:
-  {}
 /ambient.d.ts:
   {}
 /lib/foo/constants.d.ts:
   {}
 /package.json:
+  {}
+/tsconfig.json:
   {}
 
 FsWatches *deleted*::
@@ -333,8 +333,6 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/tsconfig.json:
-  {}
 /ambient.d.ts:
   {}
 /lib/foo/constants.d.ts:
@@ -342,6 +340,8 @@ FsWatches::
 /package.json:
   {}
 /src/a2.ts: *new*
+  {}
+/tsconfig.json:
   {}
 
 FsWatchesRecursive::

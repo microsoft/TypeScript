@@ -1,14 +1,14 @@
-tests/cases/compiler/functionsWithModifiersInBlocks1.ts(2,4): error TS1184: Modifiers cannot appear here.
-tests/cases/compiler/functionsWithModifiersInBlocks1.ts(2,21): error TS2393: Duplicate function implementation.
-tests/cases/compiler/functionsWithModifiersInBlocks1.ts(2,25): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/functionsWithModifiersInBlocks1.ts(3,4): error TS1184: Modifiers cannot appear here.
-tests/cases/compiler/functionsWithModifiersInBlocks1.ts(3,20): error TS2393: Duplicate function implementation.
-tests/cases/compiler/functionsWithModifiersInBlocks1.ts(4,4): error TS1184: Modifiers cannot appear here.
-tests/cases/compiler/functionsWithModifiersInBlocks1.ts(4,28): error TS2393: Duplicate function implementation.
-tests/cases/compiler/functionsWithModifiersInBlocks1.ts(4,32): error TS1183: An implementation cannot be declared in ambient contexts.
+functionsWithModifiersInBlocks1.ts(2,4): error TS1184: Modifiers cannot appear here.
+functionsWithModifiersInBlocks1.ts(2,21): error TS2393: Duplicate function implementation.
+functionsWithModifiersInBlocks1.ts(2,25): error TS1183: An implementation cannot be declared in ambient contexts.
+functionsWithModifiersInBlocks1.ts(3,4): error TS1184: Modifiers cannot appear here.
+functionsWithModifiersInBlocks1.ts(3,20): error TS2393: Duplicate function implementation.
+functionsWithModifiersInBlocks1.ts(4,4): error TS1184: Modifiers cannot appear here.
+functionsWithModifiersInBlocks1.ts(4,28): error TS2393: Duplicate function implementation.
+functionsWithModifiersInBlocks1.ts(4,32): error TS1183: An implementation cannot be declared in ambient contexts.
 
 
-==== tests/cases/compiler/functionsWithModifiersInBlocks1.ts (8 errors) ====
+==== functionsWithModifiersInBlocks1.ts (8 errors) ====
     {
        declare function f() { }
        ~~~~~~~

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericCallToOverloadedMethodWithOverloadedArguments.ts] ////
+
 //// [genericCallToOverloadedMethodWithOverloadedArguments.ts]
 module m1 {
     interface Promise<T> {

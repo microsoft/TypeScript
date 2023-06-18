@@ -640,7 +640,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
     function transformClassLike(node: ClassLikeDeclaration, className: Expression) {
         startLexicalEnvironment();
 
-        const classReference = node.name ?? factory.getGeneratedNameForNode(node);
+        const classReference = factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ false, /*ignoreAssignedName*/ true);
         const classInfo = createClassInfo(node);
         const classDefinitionStatements: Statement[] = [];
         let leadingBlockStatements: Statement[] | undefined;
@@ -1013,6 +1013,8 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
                     factory.getInternalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true) :
                     factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
                 const varDecl = factory.createVariableDeclaration(declName, /*exclamationToken*/ undefined, /*type*/ undefined, iife);
+                setOriginalNode(varDecl, node);
+
                 const varDecls = factory.createVariableDeclarationList([varDecl], NodeFlags.Let);
                 const statement = factory.createVariableStatement(modifiers, varDecls);
                 setOriginalNode(statement, node);

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/enumWithParenthesizedInitializer1.ts ===
+//// [tests/cases/compiler/enumWithParenthesizedInitializer1.ts] ////
+
+=== enumWithParenthesizedInitializer1.ts ===
 enum E {
 >E : Symbol(E, Decl(enumWithParenthesizedInitializer1.ts, 0, 0))
 

@@ -15,10 +15,7 @@
   // 
   // let a: Bar;
   // let b: Bar<string>;
-  // let c: Bar<string, number>;
-  // let d: Bar.X;
-  // let e: Bar.X<string>;
-  // let f: Bar.X.Y;
+  // --- (line: 5) skipped ---
 
   // === Details ===
   [
@@ -427,9 +424,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsUnresolvedSymbols2.ts ===
-  // import { Bar } from "does-not-exist";
-  // 
-  // let a: Bar;
+  // --- (line: 3) skipped ---
   // let b: Bar<string>;
   // let c: Bar<string, number>;
   // let d: Bar.X;
@@ -496,10 +491,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsUnresolvedSymbols2.ts ===
-// import { Bar } from "does-not-exist";
-// 
-// let a: Bar;
-// let b: Bar<string>;
+// --- (line: 4) skipped ---
 // let c: Bar<string, number>;
 // let d: Bar.X;
 // let e: Bar.X<string>;
@@ -507,10 +499,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsUnresolvedSymbols2.ts ===
-  // import { Bar } from "does-not-exist";
-  // 
-  // let a: Bar;
-  // let b: Bar<string>;
+  // --- (line: 4) skipped ---
   // let c: Bar<string, number>;
   // let d: Bar.X;
   // let e: Bar.X<string>;
@@ -531,10 +520,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsUnresolvedSymbols2.ts ===
-// import { Bar } from "does-not-exist";
-// 
-// let a: Bar;
-// let b: Bar<string>;
+// --- (line: 4) skipped ---
 // let c: Bar<string, number>;
 // let d: Bar.X;
 // let e: Bar.X<string>;
@@ -542,10 +528,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsUnresolvedSymbols2.ts ===
-  // import { Bar } from "does-not-exist";
-  // 
-  // let a: Bar;
-  // let b: Bar<string>;
+  // --- (line: 4) skipped ---
   // let c: Bar<string, number>;
   // let d: Bar.X;
   // let e: Bar.X<string>;

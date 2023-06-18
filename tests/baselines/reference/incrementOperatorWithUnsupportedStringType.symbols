@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithUnsupportedStringType.ts ===
+//// [tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithUnsupportedStringType.ts] ////
+
+=== incrementOperatorWithUnsupportedStringType.ts ===
 // ++ operator on string type
 var STRING: string;
 >STRING : Symbol(STRING, Decl(incrementOperatorWithUnsupportedStringType.ts, 1, 3))

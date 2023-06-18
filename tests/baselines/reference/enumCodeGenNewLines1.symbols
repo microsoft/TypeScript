@@ -1,4 +1,6 @@
-=== tests/cases/compiler/enumCodeGenNewLines1.ts ===
+//// [tests/cases/compiler/enumCodeGenNewLines1.ts] ////
+
+=== enumCodeGenNewLines1.ts ===
 enum foo {
 >foo : Symbol(foo, Decl(enumCodeGenNewLines1.ts, 0, 0))
 

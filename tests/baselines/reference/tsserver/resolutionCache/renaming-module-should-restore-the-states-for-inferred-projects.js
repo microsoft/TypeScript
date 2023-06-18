@@ -26,6 +26,8 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projec
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -53,14 +55,16 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/users/username/projects/project/tsconfig.json: *new*
-  {"pollingInterval":2000}
-/users/username/projects/project/jsconfig.json: *new*
-  {"pollingInterval":2000}
 /a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
+/users/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/project/jsconfig.json: *new*
+  {"pollingInterval":2000}
 /users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
+/users/username/projects/project/tsconfig.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /users/username/projects/project/modulefile.ts: *new*
@@ -98,14 +102,16 @@ export function bar() { };
 //// [/users/username/projects/project/moduleFile.ts] deleted
 
 PolledWatches::
-/users/username/projects/project/tsconfig.json:
-  {"pollingInterval":2000}
-/users/username/projects/project/jsconfig.json:
-  {"pollingInterval":2000}
 /a/lib/lib.d.ts:
   {"pollingInterval":500}
+/users/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/project/jsconfig.json:
+  {"pollingInterval":2000}
 /users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
+/users/username/projects/project/tsconfig.json:
+  {"pollingInterval":2000}
 
 FsWatches *deleted*::
 /users/username/projects/project/modulefile.ts:
@@ -147,16 +153,18 @@ Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 After running Timeout callback:: count: 0
 
 PolledWatches::
-/users/username/projects/project/tsconfig.json:
-  {"pollingInterval":2000}
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/users/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 /users/username/projects/project/jsconfig.json:
   {"pollingInterval":2000}
-/a/lib/lib.d.ts:
+/users/username/projects/project/modulefile: *new*
   {"pollingInterval":500}
 /users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
-/users/username/projects/project/modulefile: *new*
-  {"pollingInterval":500}
+/users/username/projects/project/tsconfig.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /users/username/projects/project: *new*
@@ -280,14 +288,16 @@ Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 After running Timeout callback:: count: 0
 
 PolledWatches::
-/users/username/projects/project/tsconfig.json:
-  {"pollingInterval":2000}
-/users/username/projects/project/jsconfig.json:
-  {"pollingInterval":2000}
 /a/lib/lib.d.ts:
   {"pollingInterval":500}
+/users/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/project/jsconfig.json:
+  {"pollingInterval":2000}
 /users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
+/users/username/projects/project/tsconfig.json:
+  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /users/username/projects/project/modulefile:

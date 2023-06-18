@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/tuple/named/namedTupleMembersErrors.ts] ////
+
 //// [namedTupleMembersErrors.ts]
 export type Segment1 = [length: number, number]; // partially named, disallowed
 export type Segment2 = [number, size: number]; // partially named, disallowed

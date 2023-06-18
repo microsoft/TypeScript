@@ -1,7 +1,7 @@
-tests/cases/conformance/async/es5/asyncDeclare_es5.ts(1,9): error TS1040: 'async' modifier cannot be used in an ambient context.
+asyncDeclare_es5.ts(1,9): error TS1040: 'async' modifier cannot be used in an ambient context.
 
 
-==== tests/cases/conformance/async/es5/asyncDeclare_es5.ts (1 errors) ====
+==== asyncDeclare_es5.ts (1 errors) ====
     declare async function foo(): Promise<void>;
             ~~~~~
 !!! error TS1040: 'async' modifier cannot be used in an ambient context.

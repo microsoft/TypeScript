@@ -91,7 +91,7 @@ define(["require", "exports"], function (require, exports) {
             return foo();
         }
         m1.fooExport = fooExport;
-    })(m1 = exports.m1 || (exports.m1 = {}));
+    })(m1 || (exports.m1 = m1 = {}));
     m1.fooExport();
     var myvar = new m1.m2.c();
     /** Module comment */
@@ -122,7 +122,7 @@ define(["require", "exports"], function (require, exports) {
             return foo();
         }
         m4.fooExport = fooExport;
-    })(m4 = exports.m4 || (exports.m4 = {}));
+    })(m4 || (exports.m4 = m4 = {}));
     m4.fooExport();
     var myvar2 = new m4.m2.c();
 });

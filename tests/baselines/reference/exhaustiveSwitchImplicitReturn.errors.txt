@@ -1,10 +1,10 @@
-tests/cases/compiler/exhaustiveSwitchImplicitReturn.ts(50,32): error TS7030: Not all code paths return a value.
-tests/cases/compiler/exhaustiveSwitchImplicitReturn.ts(80,10): error TS7030: Not all code paths return a value.
-tests/cases/compiler/exhaustiveSwitchImplicitReturn.ts(96,10): error TS7030: Not all code paths return a value.
-tests/cases/compiler/exhaustiveSwitchImplicitReturn.ts(112,10): error TS7030: Not all code paths return a value.
+exhaustiveSwitchImplicitReturn.ts(50,32): error TS7030: Not all code paths return a value.
+exhaustiveSwitchImplicitReturn.ts(80,10): error TS7030: Not all code paths return a value.
+exhaustiveSwitchImplicitReturn.ts(96,10): error TS7030: Not all code paths return a value.
+exhaustiveSwitchImplicitReturn.ts(112,10): error TS7030: Not all code paths return a value.
 
 
-==== tests/cases/compiler/exhaustiveSwitchImplicitReturn.ts (4 errors) ====
+==== exhaustiveSwitchImplicitReturn.ts (4 errors) ====
     enum E1 {
         A = "a",
         B = "b"

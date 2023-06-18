@@ -108,17 +108,17 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/pkg2/index.ts (computed .d.ts during emit)
 
 FsWatches::
-/user/username/projects/myproject/pkg0/tsconfig.json: *new*
-  {}
 /user/username/projects/myproject/pkg0/index.ts: *new*
   {}
-/user/username/projects/myproject/pkg1/tsconfig.json: *new*
+/user/username/projects/myproject/pkg0/tsconfig.json: *new*
   {}
 /user/username/projects/myproject/pkg1/index.ts: *new*
   {}
-/user/username/projects/myproject/pkg2/tsconfig.json: *new*
+/user/username/projects/myproject/pkg1/tsconfig.json: *new*
   {}
 /user/username/projects/myproject/pkg2/index.ts: *new*
+  {}
+/user/username/projects/myproject/pkg2/tsconfig.json: *new*
   {}
 /user/username/projects/myproject/tsconfig.json: *new*
   {}

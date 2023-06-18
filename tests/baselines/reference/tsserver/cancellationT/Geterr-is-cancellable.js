@@ -33,8 +33,6 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a 1 undefined Co
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a 1 undefined Config: /a/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/node_modules/@types 1 undefined Project: /a/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/node_modules/@types 1 undefined Project: /a/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -61,8 +59,6 @@ After request
 
 PolledWatches::
 /a/lib/lib.d.ts: *new*
-  {"pollingInterval":500}
-/a/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -98,7 +94,14 @@ Before running Timeout callback:: count: 1
 1: checkOne
 
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "requestCompleted",
+     "body": {
+      "request_seq": 2
+     }
+    }
 TestServerCancellationToken:: resetRequest:: 2 is as expected
 After running Timeout callback:: count: 0
 
@@ -152,7 +155,14 @@ Before running Timeout callback:: count: 1
 
 TestServerCancellationToken:: Cancellation is requested
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":3}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "requestCompleted",
+     "body": {
+      "request_seq": 3
+     }
+    }
 TestServerCancellationToken:: resetRequest:: 3 is as expected
 After running Timeout callback:: count: 0
 
@@ -181,7 +191,15 @@ Before running Timeout callback:: count: 1
 3: checkOne
 
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/a/app.ts","diagnostics":[]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "syntaxDiag",
+     "body": {
+      "file": "/a/app.ts",
+      "diagnostics": []
+     }
+    }
 TestServerCancellationToken:: resetRequest:: 5 is as expected
 After running Timeout callback:: count: 0
 
@@ -191,7 +209,14 @@ Before running Immedidate callback:: count: 1
 
 TestServerCancellationToken:: Cancellation is requested
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":5}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "requestCompleted",
+     "body": {
+      "request_seq": 5
+     }
+    }
 TestServerCancellationToken:: resetRequest:: 5 is as expected
 After running Immedidate callback:: count: 0
 
@@ -220,7 +245,15 @@ Before running Timeout callback:: count: 1
 4: checkOne
 
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/a/app.ts","diagnostics":[]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "syntaxDiag",
+     "body": {
+      "file": "/a/app.ts",
+      "diagnostics": []
+     }
+    }
 TestServerCancellationToken:: resetRequest:: 6 is as expected
 After running Timeout callback:: count: 0
 
@@ -228,7 +261,15 @@ Before running Immedidate callback:: count: 1
 2: semanticCheck
 
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/a/app.ts","diagnostics":[]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "semanticDiag",
+     "body": {
+      "file": "/a/app.ts",
+      "diagnostics": []
+     }
+    }
 TestServerCancellationToken:: resetRequest:: 6 is as expected
 After running Immedidate callback:: count: 1
 3: suggestionCheck
@@ -237,9 +278,24 @@ Before running Immedidate callback:: count: 1
 3: suggestionCheck
 
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/a/app.ts","diagnostics":[]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "suggestionDiag",
+     "body": {
+      "file": "/a/app.ts",
+      "diagnostics": []
+     }
+    }
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":6}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "requestCompleted",
+     "body": {
+      "request_seq": 6
+     }
+    }
 TestServerCancellationToken:: resetRequest:: 6 is as expected
 After running Immedidate callback:: count: 0
 
@@ -268,7 +324,15 @@ Before running Timeout callback:: count: 1
 5: checkOne
 
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/a/app.ts","diagnostics":[]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "syntaxDiag",
+     "body": {
+      "file": "/a/app.ts",
+      "diagnostics": []
+     }
+    }
 TestServerCancellationToken:: resetRequest:: 7 is as expected
 After running Timeout callback:: count: 0
 
@@ -287,7 +351,14 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":7}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "requestCompleted",
+     "body": {
+      "request_seq": 7
+     }
+    }
 TestServerCancellationToken:: resetRequest:: 8 is as expected
 Info seq  [hh:mm:ss:mss] response:
     {

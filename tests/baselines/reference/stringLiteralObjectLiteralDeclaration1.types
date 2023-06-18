@@ -1,4 +1,6 @@
-=== tests/cases/compiler/stringLiteralObjectLiteralDeclaration1.ts ===
+//// [tests/cases/compiler/stringLiteralObjectLiteralDeclaration1.ts] ////
+
+=== stringLiteralObjectLiteralDeclaration1.ts ===
 module m1 {
 >m1 : typeof m1
 

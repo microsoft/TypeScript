@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privacyCheckExportAssignmentOnExportedGenericInterface1.ts] ////
+
 //// [privacyCheckExportAssignmentOnExportedGenericInterface1.ts]
 module Foo {
     export interface A<T> {
