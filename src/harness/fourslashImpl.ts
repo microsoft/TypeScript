@@ -774,7 +774,7 @@ export class TestState {
         const defs = getDefs();
         const defIdMap = new Map<ts.DefinitionInfo | ts.ImplementationLocation, number>();
         const definitions = defs ? ts.isArray(defs) ? defs : defs.definitions : undefined;
-        if (definitions!.length > 1) {
+        if (definitions?.length! > 1) {
             definitions!.forEach((def, index) => defIdMap.set(def, index));
         }
         let baseline = this.getBaselineForDocumentSpansWithFileContents<ts.DefinitionInfo | ts.ImplementationLocation>(

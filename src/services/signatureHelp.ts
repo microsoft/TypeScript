@@ -743,7 +743,7 @@ function itemInfoForParameters(candidateSignature: Signature, checker: TypeCheck
     const isVariadic: (parameterList: readonly Symbol[]) => boolean =
         !checker.hasEffectiveRestParameter(candidateSignature) ? _ => false
         : lists.length === 1 ? _ => true
-        : pList => !!(pList.length && tryCast(pList[pList.length - 1], isTransientSymbol)!.links.checkFlags & CheckFlags.RestParameter);
+        : pList => !!(pList.length && tryCast(pList[pList.length - 1], isTransientSymbol)?.links.checkFlags! & CheckFlags.RestParameter);
     return lists.map(parameterList => ({
         isVariadic: isVariadic(parameterList),
         parameters: parameterList.map(p => createSignatureHelpParameterForParameter(p, checker, enclosingDeclaration, sourceFile, printer)),

@@ -3289,7 +3289,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             return;
         }
         const rootExpr = getLeftmostAccessExpression(node.left);
-        if (isIdentifier(rootExpr) && lookupSymbolForName(container, rootExpr.escapedText)!.flags & SymbolFlags.Alias) {
+        if (isIdentifier(rootExpr) && lookupSymbolForName(container, rootExpr.escapedText)?.flags! & SymbolFlags.Alias) {
             return;
         }
         // Fix up parent pointers since we're going to use these nodes before we bind into them
@@ -3322,7 +3322,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     }
 
     function bindPotentiallyMissingNamespaces(namespaceSymbol: Symbol | undefined, entityName: BindableStaticNameExpression, isToplevel: boolean, isPrototypeProperty: boolean, containerIsClass: boolean) {
-        if (namespaceSymbol!.flags & SymbolFlags.Alias) {
+        if (namespaceSymbol?.flags! & SymbolFlags.Alias) {
             return namespaceSymbol;
         }
         if (isToplevel && !isPrototypeProperty) {
