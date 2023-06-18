@@ -1,4 +1,4 @@
-controlFlowGenericTypes.ts(49,15): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'Box<T>'.
+controlFlowGenericTypes.ts(49,15): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'Box<unknown>'.
 controlFlowGenericTypes.ts(55,15): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'Box<unknown>'.
 controlFlowGenericTypes.ts(81,11): error TS2339: Property 'foo' does not exist on type 'MyUnion'.
   Property 'foo' does not exist on type 'AA'.
@@ -61,7 +61,7 @@ controlFlowGenericTypes.ts(168,9): error TS18048: 'iSpec' is possibly 'undefined
         if (!isBox(x)) {
             unbox(x);  // Error
                   ~
-!!! error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'Box<T>'.
+!!! error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'Box<unknown>'.
         }
     }
     
@@ -247,5 +247,19 @@ controlFlowGenericTypes.ts(168,9): error TS18048: 'iSpec' is possibly 'undefined
     
     function getColumnProperty<T>(column: Column<T>, key: keyof Column<T>) {
       return column[key];
+    }
+    
+    // Repro from #54405
+    
+    type Root = Record<string, string | number>;
+    
+    declare function bug<T>(cb: () => number): void;
+    
+    function foo<T extends Root>(root: T, key: keyof T) {
+      const union = root[key];
+      bug(() => {
+        if (typeof union === "string") throw new Error();
+        return union;
+      });
     }
     

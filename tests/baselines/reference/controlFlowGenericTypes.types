@@ -143,7 +143,7 @@ function g3<T extends Box<T> | undefined>(x: T) {
 >x : Box<T> | undefined
 
         unbox(x);  // Error
->unbox(x) : T
+>unbox(x) : unknown
 >unbox : <T>(x: Box<T>) => T
 >x : undefined
     }
@@ -594,5 +594,44 @@ function getColumnProperty<T>(column: Column<T>, key: keyof Column<T>) {
 >column[key] : Column<T>["title" | keyof (keyof T extends never ? { id?: string | number | undefined; } : { id: T; })]
 >column : Column<T>
 >key : "title" | keyof (keyof T extends never ? { id?: string | number | undefined; } : { id: T; })
+}
+
+// Repro from #54405
+
+type Root = Record<string, string | number>;
+>Root : { [x: string]: string | number; }
+
+declare function bug<T>(cb: () => number): void;
+>bug : <T>(cb: () => number) => void
+>cb : () => number
+
+function foo<T extends Root>(root: T, key: keyof T) {
+>foo : <T extends Root>(root: T, key: keyof T) => void
+>root : T
+>key : keyof T
+
+  const union = root[key];
+>union : T[keyof T]
+>root[key] : T[keyof T]
+>root : T
+>key : keyof T
+
+  bug(() => {
+>bug(() => {    if (typeof union === "string") throw new Error();    return union;  }) : void
+>bug : <T>(cb: () => number) => void
+>() => {    if (typeof union === "string") throw new Error();    return union;  } : () => number
+
+    if (typeof union === "string") throw new Error();
+>typeof union === "string" : boolean
+>typeof union : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>union : T[keyof T]
+>"string" : "string"
+>new Error() : Error
+>Error : ErrorConstructor
+
+    return union;
+>union : number
+
+  });
 }
 

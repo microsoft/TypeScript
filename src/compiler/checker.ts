@@ -27758,8 +27758,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // control flow analysis an opportunity to narrow it further. For example, for a reference of a type
         // parameter type 'T extends string | undefined' with a contextual type 'string', we substitute
         // 'string | undefined' to give control flow analysis the opportunity to narrow to type 'string'.
-        const substituteConstraints = !(checkMode && checkMode & CheckMode.Inferential) &&
-            someType(type, isGenericTypeWithUnionConstraint) &&
+        const substituteConstraints = someType(type, isGenericTypeWithUnionConstraint) &&
             (isConstraintPosition(type, reference) || hasContextualTypeWithNoGenericTypes(reference, checkMode));
         return substituteConstraints ? mapType(type, getBaseConstraintOrType) : type;
     }

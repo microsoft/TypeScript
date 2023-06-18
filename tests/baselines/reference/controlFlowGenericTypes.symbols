@@ -654,3 +654,41 @@ function getColumnProperty<T>(column: Column<T>, key: keyof Column<T>) {
 >key : Symbol(key, Decl(controlFlowGenericTypes.ts, 216, 48))
 }
 
+// Repro from #54405
+
+type Root = Record<string, string | number>;
+>Root : Symbol(Root, Decl(controlFlowGenericTypes.ts, 218, 1))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+declare function bug<T>(cb: () => number): void;
+>bug : Symbol(bug, Decl(controlFlowGenericTypes.ts, 222, 44))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 224, 21))
+>cb : Symbol(cb, Decl(controlFlowGenericTypes.ts, 224, 24))
+
+function foo<T extends Root>(root: T, key: keyof T) {
+>foo : Symbol(foo, Decl(controlFlowGenericTypes.ts, 224, 48))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 226, 13))
+>Root : Symbol(Root, Decl(controlFlowGenericTypes.ts, 218, 1))
+>root : Symbol(root, Decl(controlFlowGenericTypes.ts, 226, 29))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 226, 13))
+>key : Symbol(key, Decl(controlFlowGenericTypes.ts, 226, 37))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 226, 13))
+
+  const union = root[key];
+>union : Symbol(union, Decl(controlFlowGenericTypes.ts, 227, 7))
+>root : Symbol(root, Decl(controlFlowGenericTypes.ts, 226, 29))
+>key : Symbol(key, Decl(controlFlowGenericTypes.ts, 226, 37))
+
+  bug(() => {
+>bug : Symbol(bug, Decl(controlFlowGenericTypes.ts, 222, 44))
+
+    if (typeof union === "string") throw new Error();
+>union : Symbol(union, Decl(controlFlowGenericTypes.ts, 227, 7))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    return union;
+>union : Symbol(union, Decl(controlFlowGenericTypes.ts, 227, 7))
+
+  });
+}
+
