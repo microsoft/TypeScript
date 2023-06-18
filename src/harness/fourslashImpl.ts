@@ -774,7 +774,7 @@ export class TestState {
         const defs = getDefs();
         const defIdMap = new Map<ts.DefinitionInfo | ts.ImplementationLocation, number>();
         const definitions = defs ? ts.isArray(defs) ? defs : defs.definitions : undefined;
-        if (definitions?.length! > 1) {
+        if (definitions!.length > 1) {
             definitions!.forEach((def, index) => defIdMap.set(def, index));
         }
         let baseline = this.getBaselineForDocumentSpansWithFileContents<ts.DefinitionInfo | ts.ImplementationLocation>(
@@ -2402,7 +2402,7 @@ export class TestState {
             q1.marker.fileName === q1.marker.fileName
             ? (q1.marker.position > q2.marker.position ? -1 : 1)
             : (q1.marker.fileName > q1.marker.fileName ? 1 : -1));
-        const files: Map<string, string[]> = new Map();
+        const files = new Map<string, string[]>();
         let previous: T | undefined;
         for (const { marker, item } of sorted) {
             const span = (item ? getSpan(item) : undefined) ?? { start: marker.position, length: 1 };

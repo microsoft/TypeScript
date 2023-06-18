@@ -5732,7 +5732,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return rightMeaning === SymbolFlags.Value ? SymbolFlags.Value : SymbolFlags.Namespace;
     }
 
-    function getAccessibleSymbolChain(symbol: Symbol | undefined, enclosingDeclaration: Node | undefined, meaning: SymbolFlags, useOnlyExternalAliasing: boolean, visitedSymbolTablesMap: Map<SymbolId, SymbolTable[]> = new Map()): Symbol[] | undefined {
+    function getAccessibleSymbolChain(symbol: Symbol | undefined, enclosingDeclaration: Node | undefined, meaning: SymbolFlags, useOnlyExternalAliasing: boolean, visitedSymbolTablesMap = new Map<SymbolId, SymbolTable[]>()): Symbol[] | undefined {
         if (!(symbol && !isPropertyOrMethodDeclarationSymbol(symbol))) {
             return undefined;
         }
@@ -7165,7 +7165,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             function preserveCommentsOn<T extends Node>(node: T) {
                 if (some(propertySymbol.declarations, d => d.kind === SyntaxKind.JSDocPropertyTag)) {
-                    const d = propertySymbol.declarations?.find(d => d.kind === SyntaxKind.JSDocPropertyTag)! as JSDocPropertyTag;
+                    const d = propertySymbol.declarations!.find(d => d.kind === SyntaxKind.JSDocPropertyTag) as JSDocPropertyTag;
                     const commentText = getTextOfJSDocComment(d.comment);
                     if (commentText) {
                         setSyntheticLeadingComments(node, [{ kind: SyntaxKind.MultiLineCommentTrivia, text: "*\n * " + commentText.replace(/\n/g, "\n * ") + "\n ", pos: -1, end: -1, hasTrailingNewLine: true }]);
@@ -11616,7 +11616,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getOuterTypeParametersOfClassOrInterface(symbol: Symbol): TypeParameter[] | undefined {
         const declaration = (symbol.flags & SymbolFlags.Class || symbol.flags & SymbolFlags.Function)
             ? symbol.valueDeclaration
-            : symbol.declarations?.find(decl => {
+            : symbol.declarations!.find(decl => {
                 if (decl.kind === SyntaxKind.InterfaceDeclaration) {
                     return true;
                 }
@@ -11625,7 +11625,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 const initializer = (decl as VariableDeclaration).initializer;
                 return !!initializer && (initializer.kind === SyntaxKind.FunctionExpression || initializer.kind === SyntaxKind.ArrowFunction);
-            })!;
+            });
         Debug.assert(!!declaration, "Class was missing valueDeclaration -OR- non-class had no interface declarations");
         return getOuterTypeParameters(declaration);
     }
@@ -16766,7 +16766,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // Also, unlike union types, the order of the constituent types is preserved in order that overload resolution
     // for intersections of types with signatures can be deterministic.
     function getIntersectionType(types: readonly Type[], aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[], noSupertypeReduction?: boolean): Type {
-        const typeMembershipMap: Map<string, Type> = new Map();
+        const typeMembershipMap = new Map<string, Type>();
         const includes = addTypesToIntersection(typeMembershipMap, 0 as TypeFlags, types);
         const typeSet: Type[] = arrayFrom(typeMembershipMap.values());
         // An intersection type is considered empty if it contains
@@ -43958,7 +43958,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // so for now we will just not allow them in scripts, which is the only place they can merge cross-file.
                     error(node.name, Diagnostics.Namespaces_are_not_allowed_in_global_script_files_when_0_is_enabled_If_this_file_is_not_intended_to_be_a_global_script_set_moduleDetection_to_force_or_add_an_empty_export_statement, isolatedModulesLikeFlagName);
                 }
-                if (symbol.declarations?.length! > 1) {
+                if (symbol.declarations!.length > 1) {
                     const firstNonAmbientClassOrFunc = getFirstNonAmbientClassOrFunctionDeclaration(symbol);
                     if (firstNonAmbientClassOrFunc) {
                         if (getSourceFileOfNode(node) !== getSourceFileOfNode(firstNonAmbientClassOrFunc)) {

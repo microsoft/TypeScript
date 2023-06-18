@@ -647,7 +647,7 @@ function detectSortingWorker(importGroups: ImportDeclaration[][], preferences: U
         // Check import specifiers
         const declarationWithNamedImports = find(
             importGroup,
-            i => tryCast(i.importClause?.namedBindings, isNamedImports)?.elements.length! > 1);
+            i => tryCast(i.importClause?.namedBindings, isNamedImports)!.elements.length > 1);
         if (declarationWithNamedImports) {
             const namedImportSort = detectImportSpecifierSorting((declarationWithNamedImports.importClause!.namedBindings as NamedImports).elements, preferences);
             if (namedImportSort) {
