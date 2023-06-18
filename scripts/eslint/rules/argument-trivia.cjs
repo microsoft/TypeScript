@@ -25,7 +25,6 @@ module.exports = createRule({
     meta: {
         docs: {
             description: ``,
-            recommended: "error",
         },
         messages: {
             argumentTriviaArgumentError: `Tag argument with parameter name`,
