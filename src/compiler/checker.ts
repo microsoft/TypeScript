@@ -30111,7 +30111,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     propTypes.push(getTypeOfSymbol(properties[i]));
                 }
                 else {
-                    const source = tryCast(prop, isTransientSymbol)?.links.computedNameType || getStringLiteralType(unescapeLeadingUnderscores(prop.escapedName));
+                    const source = getSymbolLinks(prop).computedNameType || getStringLiteralType(unescapeLeadingUnderscores(prop.escapedName));
                     if (isTypeAssignableTo(source, keyType)) {
                         propTypes.push(getTypeOfSymbol(properties[i]));
                     }
