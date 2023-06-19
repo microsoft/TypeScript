@@ -2044,7 +2044,12 @@ export function transformDeclarations(context: TransformationContext) {
 
     // Copied similar function in checker. Maybe a reusable one should be created.
     function deepClone<T extends Node>(node: T): T {
-        return setTextRange(factory.cloneNode(visitEachChild(node, deepClone, nullTransformationContext, deepCloneNodes)), node);
+        const clonedNode = visitEachChild(node, deepClone, nullTransformationContext, deepCloneNodes);
+        // If node has children visitEachChild will already return a new node
+        if(clonedNode !== node) {
+            return clonedNode;
+        }
+        return setTextRange(factory.cloneNode(node), node);
         
         function deepCloneNodes(
             nodes: NodeArray<Node> | undefined,
