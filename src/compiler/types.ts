@@ -5839,6 +5839,7 @@ export interface SymbolLinks {
     type?: Type;                                // Type of value symbol
     writeType?: Type;                           // Type of value symbol in write contexts
     nameType?: Type;                            // Type associated with a late-bound symbol
+    computedNameType?: Type;                    // Type of the computed property name not usable as property name
     uniqueESSymbolType?: Type;                  // UniqueESSymbol type for a symbol
     declaredType?: Type;                        // Type of class, interface, enum, type alias, or type parameter
     typeParameters?: TypeParameter[];           // Type parameters of type alias (undefined if non-generic)

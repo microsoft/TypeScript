@@ -30099,18 +30099,27 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             isTypeAssignableToKind(checkComputedPropertyName(firstDecl.name), TypeFlags.ESSymbol));
     }
 
-    function getObjectLiteralIndexInfo(node: ObjectLiteralExpression, offset: number, properties: Symbol[], keyType: Type): IndexInfo {
+    function getObjectLiteralIndexInfo(offset: number, properties: Symbol[], keyType: Type, isReadonly: boolean): IndexInfo {
         const propTypes: Type[] = [];
         for (let i = offset; i < properties.length; i++) {
             const prop = properties[i];
-            if (keyType === stringType && !isSymbolWithSymbolName(prop) ||
-                keyType === numberType && isSymbolWithNumericName(prop) ||
-                keyType === esSymbolType && isSymbolWithSymbolName(prop)) {
+            if (keyType === numberType && isSymbolWithNumericName(prop) || keyType === esSymbolType && isSymbolWithSymbolName(prop)) {
                 propTypes.push(getTypeOfSymbol(properties[i]));
+            }
+            else if (!isSymbolWithSymbolName(prop)) {
+                if (keyType === stringType) {
+                    propTypes.push(getTypeOfSymbol(properties[i]));
+                }
+                else {
+                    const source = tryCast(prop, isTransientSymbol)?.links.computedNameType || getStringLiteralType(unescapeLeadingUnderscores(prop.escapedName));
+                    if (isTypeAssignableTo(source, keyType)) {
+                        propTypes.push(getTypeOfSymbol(properties[i]));
+                    }
+                }
             }
         }
         const unionType = propTypes.length ? getUnionType(propTypes, UnionReduction.Subtype) : undefinedType;
-        return createIndexInfo(keyType, unionType, isConstContext(node));
+        return createIndexInfo(keyType, unionType, isReadonly);
     }
 
     function getImmediateAliasedSymbol(symbol: Symbol): Symbol | undefined {
@@ -30133,6 +30142,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const allPropertiesTable = strictNullChecks ? createSymbolTable() : undefined;
         let propertiesTable = createSymbolTable();
         let propertiesArray: Symbol[] = [];
+        let computedNameTypes: Type[] = [];
         let spread: Type = emptyObjectType;
 
         pushCachedContextualType(node);
@@ -30191,7 +30201,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (nameType) {
                     prop.links.nameType = nameType;
                 }
-
+                else if (computedNameType) {
+                    prop.links.computedNameType = computedNameType;
+                }
                 if (inDestructuringPattern) {
                     // If object literal is an assignment pattern and if the assignment pattern specifies a default value
                     // for the property, make the property optional.
@@ -30243,6 +30255,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     spread = getSpreadType(spread, createObjectLiteralType(), node.symbol, objectFlags, inConstContext);
                     propertiesArray = [];
                     propertiesTable = createSymbolTable();
+                    computedNameTypes = [];
                     hasComputedStringProperty = false;
                     hasComputedNumberProperty = false;
                     hasComputedSymbolProperty = false;
@@ -30275,8 +30288,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 checkNodeDeferred(memberDecl);
             }
 
-            if (computedNameType && !(computedNameType.flags & TypeFlags.StringOrNumberLiteralOrUnique)) {
-                if (isTypeAssignableTo(computedNameType, stringNumberSymbolType)) {
+            if (computedNameType && !isTypeUsableAsPropertyName(computedNameType)) {
+                if (isPatternLiteralType(computedNameType)) {
+                    computedNameTypes.push(computedNameType);
+                }
+                else if (isTypeAssignableTo(computedNameType, stringNumberSymbolType)) {
                     if (isTypeAssignableTo(computedNameType, numberType)) {
                         hasComputedNumberProperty = true;
                     }
@@ -30339,6 +30355,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 spread = getSpreadType(spread, createObjectLiteralType(), node.symbol, objectFlags, inConstContext);
                 propertiesArray = [];
                 propertiesTable = createSymbolTable();
+                computedNameTypes = [];
                 hasComputedStringProperty = false;
                 hasComputedNumberProperty = false;
             }
@@ -30349,10 +30366,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return createObjectLiteralType();
 
         function createObjectLiteralType() {
-            const indexInfos = [];
-            if (hasComputedStringProperty) indexInfos.push(getObjectLiteralIndexInfo(node, offset, propertiesArray, stringType));
-            if (hasComputedNumberProperty) indexInfos.push(getObjectLiteralIndexInfo(node, offset, propertiesArray, numberType));
-            if (hasComputedSymbolProperty) indexInfos.push(getObjectLiteralIndexInfo(node, offset, propertiesArray, esSymbolType));
+            let indexInfos: IndexInfo[] = [];
+            for (const computedNameType of computedNameTypes) {
+                const indexInfo = getObjectLiteralIndexInfo(offset, propertiesArray, computedNameType, /*isReadonly*/ inConstContext);
+                indexInfos = appendIndexInfo(indexInfos, indexInfo, /*union*/ true);
+            }
+            if (hasComputedStringProperty) indexInfos.push(getObjectLiteralIndexInfo(offset, propertiesArray, stringType, /*isReadonly*/ inConstContext));
+            if (hasComputedNumberProperty) indexInfos.push(getObjectLiteralIndexInfo(offset, propertiesArray, numberType, /*isReadonly*/ inConstContext));
+            if (hasComputedSymbolProperty) indexInfos.push(getObjectLiteralIndexInfo(offset, propertiesArray, esSymbolType, /*isReadonly*/ inConstContext));
             const result = createAnonymousType(node.symbol, propertiesTable, emptyArray, emptyArray, indexInfos);
             result.objectFlags |= objectFlags | ObjectFlags.ObjectLiteral | ObjectFlags.ContainsObjectOrArrayLiteral;
             if (isJSObjectLiteral) {

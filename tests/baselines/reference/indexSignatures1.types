@@ -998,7 +998,7 @@ type A = Record<IdType, string>;
 
 const a: A = { [id]: 'test' }
 >a : A
->{ [id]: 'test' } : { [x: string]: string; }
+>{ [id]: 'test' } : { [x: `${number}-${number}-${number}-${number}`]: string; }
 >[id] : string
 >id : `${number}-${number}-${number}-${number}`
 >'test' : "test"

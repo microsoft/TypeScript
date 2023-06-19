@@ -1,0 +1,317 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNamesTemplateLiteralTypes.ts] ////
+
+=== computedPropertyNamesTemplateLiteralTypes.ts ===
+declare const str1: string;
+>str1 : string
+
+declare const pattern1: `foo${string}`;
+>pattern1 : `foo${string}`
+
+declare const pattern2: `foobar${string}`;
+>pattern2 : `foobar${string}`
+
+declare const samepattern1: `foo${string}`;
+>samepattern1 : `foo${string}`
+
+const obj1 = {
+>obj1 : { [x: `foo${string}`]: boolean; }
+>{  [pattern1]: true,} : { [x: `foo${string}`]: boolean; }
+
+  [pattern1]: true,
+>[pattern1] : boolean
+>pattern1 : `foo${string}`
+>true : true
+
+};
+
+const obj2 = {
+>obj2 : { [x: `foo${string}`]: boolean; [x: string]: number | boolean; }
+>{  [pattern1]: true,  [str1]: 100,} : { [x: `foo${string}`]: boolean; [x: string]: number | boolean; }
+
+  [pattern1]: true,
+>[pattern1] : boolean
+>pattern1 : `foo${string}`
+>true : true
+
+  [str1]: 100,
+>[str1] : number
+>str1 : string
+>100 : 100
+
+};
+
+const obj3 = {
+>obj3 : { [x: string]: number | boolean; [x: `foo${string}`]: boolean; }
+>{  [str1]: 100,  [pattern1]: true,} : { [x: string]: number | boolean; [x: `foo${string}`]: boolean; }
+
+  [str1]: 100,
+>[str1] : number
+>str1 : string
+>100 : 100
+
+  [pattern1]: true,
+>[pattern1] : boolean
+>pattern1 : `foo${string}`
+>true : true
+
+};
+
+const obj4 = {
+>obj4 : { [x: `foo${string}`]: string | boolean; [x: `foobar${string}`]: string; }
+>{  [pattern1]: true,  [pattern2]: "hello",} : { [x: `foo${string}`]: string | boolean; [x: `foobar${string}`]: string; }
+
+  [pattern1]: true,
+>[pattern1] : boolean
+>pattern1 : `foo${string}`
+>true : true
+
+  [pattern2]: "hello",
+>[pattern2] : string
+>pattern2 : `foobar${string}`
+>"hello" : "hello"
+
+};
+
+const obj5 = {
+>obj5 : { [x: `foobar${string}`]: string; [x: `foo${string}`]: string | boolean; }
+>{  [pattern2]: "hello",  [pattern1]: true,} : { [x: `foobar${string}`]: string; [x: `foo${string}`]: string | boolean; }
+
+  [pattern2]: "hello",
+>[pattern2] : string
+>pattern2 : `foobar${string}`
+>"hello" : "hello"
+
+  [pattern1]: true,
+>[pattern1] : boolean
+>pattern1 : `foo${string}`
+>true : true
+
+};
+
+const obj6 = {
+>obj6 : { [x: `foo${string}`]: string | boolean; [x: `foobar${string}`]: string; other: number; }
+>{  [pattern1]: true,  [pattern2]: "hello",  other: 100,} : { [x: `foo${string}`]: string | boolean; [x: `foobar${string}`]: string; other: number; }
+
+  [pattern1]: true,
+>[pattern1] : boolean
+>pattern1 : `foo${string}`
+>true : true
+
+  [pattern2]: "hello",
+>[pattern2] : string
+>pattern2 : `foobar${string}`
+>"hello" : "hello"
+
+  other: 100,
+>other : number
+>100 : 100
+
+};
+
+const obj7 = {
+>obj7 : { [x: `foo${string}`]: string | number | boolean; [x: `foobar${string}`]: string; fooooooooo: number; }
+>{  [pattern1]: true,  [pattern2]: "hello",  fooooooooo: 100,} : { [x: `foo${string}`]: string | number | boolean; [x: `foobar${string}`]: string; fooooooooo: number; }
+
+  [pattern1]: true,
+>[pattern1] : boolean
+>pattern1 : `foo${string}`
+>true : true
+
+  [pattern2]: "hello",
+>[pattern2] : string
+>pattern2 : `foobar${string}`
+>"hello" : "hello"
+
+  fooooooooo: 100,
+>fooooooooo : number
+>100 : 100
+
+};
+
+const obj8 = {
+>obj8 : { [x: `foo${string}`]: string | number | boolean; [x: `foobar${string}`]: string | number; foobarrrrr: number; }
+>{  [pattern1]: true,  [pattern2]: "hello",  foobarrrrr: 100,} : { [x: `foo${string}`]: string | number | boolean; [x: `foobar${string}`]: string | number; foobarrrrr: number; }
+
+  [pattern1]: true,
+>[pattern1] : boolean
+>pattern1 : `foo${string}`
+>true : true
+
+  [pattern2]: "hello",
+>[pattern2] : string
+>pattern2 : `foobar${string}`
+>"hello" : "hello"
+
+  foobarrrrr: 100,
+>foobarrrrr : number
+>100 : 100
+
+};
+
+const obj9 = {
+>obj9 : { [x: `foo${string}`]: string | boolean; }
+>{  [pattern1]: true,  [samepattern1]: "hello",} : { [x: `foo${string}`]: string | boolean; }
+
+  [pattern1]: true,
+>[pattern1] : boolean
+>pattern1 : `foo${string}`
+>true : true
+
+  [samepattern1]: "hello",
+>[samepattern1] : string
+>samepattern1 : `foo${string}`
+>"hello" : "hello"
+
+};
+
+const obj10 = {
+>obj10 : { readonly [x: `foo${string}`]: true; }
+>{  [pattern1]: true,} as const : { readonly [x: `foo${string}`]: true; }
+>{  [pattern1]: true,} : { readonly [x: `foo${string}`]: true; }
+
+  [pattern1]: true,
+>[pattern1] : true
+>pattern1 : `foo${string}`
+>true : true
+
+} as const;
+
+const obj11 = {
+>obj11 : { [x: `foo${string}`]: string | number | boolean; }
+>{  [pattern1]: 100,  ...obj9,} : { [x: `foo${string}`]: string | number | boolean; }
+
+  [pattern1]: 100,
+>[pattern1] : number
+>pattern1 : `foo${string}`
+>100 : 100
+
+  ...obj9,
+>obj9 : { [x: `foo${string}`]: string | boolean; }
+
+};
+
+const obj12 = {
+>obj12 : { [x: `foo${string}`]: string | number | boolean; }
+>{  ...obj9,  [pattern1]: 100,} : { [x: `foo${string}`]: string | number | boolean; }
+
+  ...obj9,
+>obj9 : { [x: `foo${string}`]: string | boolean; }
+
+  [pattern1]: 100,
+>[pattern1] : number
+>pattern1 : `foo${string}`
+>100 : 100
+
+};
+
+const obj13 = {
+>obj13 : {}
+>{  [pattern1]: 100,  ...{    [pattern2]: "hello",  },} : {}
+
+  [pattern1]: 100,
+>[pattern1] : number
+>pattern1 : `foo${string}`
+>100 : 100
+
+  ...{
+>{    [pattern2]: "hello",  } : { [x: `foobar${string}`]: string; }
+
+    [pattern2]: "hello",
+>[pattern2] : string
+>pattern2 : `foobar${string}`
+>"hello" : "hello"
+
+  },
+};
+
+const obj14 = {
+>obj14 : { [x: `foo${string}`]: string | number | boolean | number[]; foobarrrrr: number[]; }
+>{  [pattern1]: 100,  ...{    [pattern1]: true,    [pattern2]: "hello",    foobarrrrr: [1, 2, 3],  },} : { [x: `foo${string}`]: string | number | boolean | number[]; foobarrrrr: number[]; }
+
+  [pattern1]: 100,
+>[pattern1] : number
+>pattern1 : `foo${string}`
+>100 : 100
+
+  ...{
+>{    [pattern1]: true,    [pattern2]: "hello",    foobarrrrr: [1, 2, 3],  } : { [x: `foo${string}`]: string | boolean | number[]; [x: `foobar${string}`]: string | number[]; foobarrrrr: number[]; }
+
+    [pattern1]: true,
+>[pattern1] : boolean
+>pattern1 : `foo${string}`
+>true : true
+
+    [pattern2]: "hello",
+>[pattern2] : string
+>pattern2 : `foobar${string}`
+>"hello" : "hello"
+
+    foobarrrrr: [1, 2, 3],
+>foobarrrrr : number[]
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+
+  },
+};
+
+// repro from https://github.com/microsoft/TypeScript/issues/46309
+
+interface IDocument_46309 {
+  name: string;
+>name : string
+
+  [added_: `added_${string}`]: number[] | undefined;
+>added_ : `added_${string}`
+}
+
+const tech1_46309 = {
+>tech1_46309 : { uuid: string; }
+>{  uuid: "70b26275-5096-4e4b-9d50-3c965c9e5073",} : { uuid: string; }
+
+  uuid: "70b26275-5096-4e4b-9d50-3c965c9e5073",
+>uuid : string
+>"70b26275-5096-4e4b-9d50-3c965c9e5073" : "70b26275-5096-4e4b-9d50-3c965c9e5073"
+
+};
+
+const doc_46309: IDocument_46309 = {
+>doc_46309 : IDocument_46309
+>{  name: "",  [`added_${tech1_46309.uuid}`]: [19700101],} : { [x: string]: string | number[]; name: string; }
+
+  name: "",
+>name : string
+>"" : ""
+
+  [`added_${tech1_46309.uuid}`]: [19700101],
+>[`added_${tech1_46309.uuid}`] : number[]
+>`added_${tech1_46309.uuid}` : string
+>tech1_46309.uuid : string
+>tech1_46309 : { uuid: string; }
+>uuid : string
+>[19700101] : number[]
+>19700101 : 19700101
+
+};
+
+const doc2_46309: IDocument_46309 = {
+>doc2_46309 : IDocument_46309
+>{  name: "",  [`added_${tech1_46309.uuid}` as const]: [19700101],} : { [x: `added_${string}`]: number[]; name: string; }
+
+  name: "",
+>name : string
+>"" : ""
+
+  [`added_${tech1_46309.uuid}` as const]: [19700101],
+>[`added_${tech1_46309.uuid}` as const] : number[]
+>`added_${tech1_46309.uuid}` as const : `added_${string}`
+>`added_${tech1_46309.uuid}` : `added_${string}`
+>tech1_46309.uuid : string
+>tech1_46309 : { uuid: string; }
+>uuid : string
+>[19700101] : number[]
+>19700101 : 19700101
+
+};
+

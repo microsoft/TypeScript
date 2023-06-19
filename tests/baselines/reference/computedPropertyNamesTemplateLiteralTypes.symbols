@@ -1,0 +1,259 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNamesTemplateLiteralTypes.ts] ////
+
+=== computedPropertyNamesTemplateLiteralTypes.ts ===
+declare const str1: string;
+>str1 : Symbol(str1, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 0, 13))
+
+declare const pattern1: `foo${string}`;
+>pattern1 : Symbol(pattern1, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 1, 13))
+
+declare const pattern2: `foobar${string}`;
+>pattern2 : Symbol(pattern2, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 2, 13))
+
+declare const samepattern1: `foo${string}`;
+>samepattern1 : Symbol(samepattern1, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 3, 13))
+
+const obj1 = {
+>obj1 : Symbol(obj1, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 5, 5))
+
+  [pattern1]: true,
+>[pattern1] : Symbol([pattern1], Decl(computedPropertyNamesTemplateLiteralTypes.ts, 5, 14))
+>pattern1 : Symbol(pattern1, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 1, 13))
+
+};
+
+const obj2 = {
+>obj2 : Symbol(obj2, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 9, 5))
+
+  [pattern1]: true,
+>[pattern1] : Symbol([pattern1], Decl(computedPropertyNamesTemplateLiteralTypes.ts, 9, 14))
+>pattern1 : Symbol(pattern1, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 1, 13))
+
+  [str1]: 100,
+>[str1] : Symbol([str1], Decl(computedPropertyNamesTemplateLiteralTypes.ts, 10, 19))
+>str1 : Symbol(str1, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 0, 13))
+
+};
+
+const obj3 = {
+>obj3 : Symbol(obj3, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 14, 5))
+
+  [str1]: 100,
+>[str1] : Symbol([str1], Decl(computedPropertyNamesTemplateLiteralTypes.ts, 14, 14))
+>str1 : Symbol(str1, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 0, 13))
+
+  [pattern1]: true,
+>[pattern1] : Symbol([pattern1], Decl(computedPropertyNamesTemplateLiteralTypes.ts, 15, 14))
+>pattern1 : Symbol(pattern1, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 1, 13))
+
+};
+
+const obj4 = {
+>obj4 : Symbol(obj4, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 19, 5))
+
+  [pattern1]: true,
+>[pattern1] : Symbol([pattern1], Decl(computedPropertyNamesTemplateLiteralTypes.ts, 19, 14))
+>pattern1 : Symbol(pattern1, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 1, 13))
+
+  [pattern2]: "hello",
+>[pattern2] : Symbol([pattern2], Decl(computedPropertyNamesTemplateLiteralTypes.ts, 20, 19))
+>pattern2 : Symbol(pattern2, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 2, 13))
+
+};
+
+const obj5 = {
+>obj5 : Symbol(obj5, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 24, 5))
+
+  [pattern2]: "hello",
+>[pattern2] : Symbol([pattern2], Decl(computedPropertyNamesTemplateLiteralTypes.ts, 24, 14))
+>pattern2 : Symbol(pattern2, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 2, 13))
+
+  [pattern1]: true,
+>[pattern1] : Symbol([pattern1], Decl(computedPropertyNamesTemplateLiteralTypes.ts, 25, 22))
+>pattern1 : Symbol(pattern1, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 1, 13))
+
+};
+
+const obj6 = {
+>obj6 : Symbol(obj6, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 29, 5))
+
+  [pattern1]: true,
+>[pattern1] : Symbol([pattern1], Decl(computedPropertyNamesTemplateLiteralTypes.ts, 29, 14))
+>pattern1 : Symbol(pattern1, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 1, 13))
+
+  [pattern2]: "hello",
+>[pattern2] : Symbol([pattern2], Decl(computedPropertyNamesTemplateLiteralTypes.ts, 30, 19))
+>pattern2 : Symbol(pattern2, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 2, 13))
+
+  other: 100,
+>other : Symbol(other, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 31, 22))
+
+};
+
+const obj7 = {
+>obj7 : Symbol(obj7, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 35, 5))
+
+  [pattern1]: true,
+>[pattern1] : Symbol([pattern1], Decl(computedPropertyNamesTemplateLiteralTypes.ts, 35, 14))
+>pattern1 : Symbol(pattern1, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 1, 13))
+
+  [pattern2]: "hello",
+>[pattern2] : Symbol([pattern2], Decl(computedPropertyNamesTemplateLiteralTypes.ts, 36, 19))
+>pattern2 : Symbol(pattern2, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 2, 13))
+
+  fooooooooo: 100,
+>fooooooooo : Symbol(fooooooooo, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 37, 22))
+
+};
+
+const obj8 = {
+>obj8 : Symbol(obj8, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 41, 5))
+
+  [pattern1]: true,
+>[pattern1] : Symbol([pattern1], Decl(computedPropertyNamesTemplateLiteralTypes.ts, 41, 14))
+>pattern1 : Symbol(pattern1, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 1, 13))
+
+  [pattern2]: "hello",
+>[pattern2] : Symbol([pattern2], Decl(computedPropertyNamesTemplateLiteralTypes.ts, 42, 19))
+>pattern2 : Symbol(pattern2, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 2, 13))
+
+  foobarrrrr: 100,
+>foobarrrrr : Symbol(foobarrrrr, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 43, 22))
+
+};
+
+const obj9 = {
+>obj9 : Symbol(obj9, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 47, 5))
+
+  [pattern1]: true,
+>[pattern1] : Symbol([pattern1], Decl(computedPropertyNamesTemplateLiteralTypes.ts, 47, 14))
+>pattern1 : Symbol(pattern1, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 1, 13))
+
+  [samepattern1]: "hello",
+>[samepattern1] : Symbol([samepattern1], Decl(computedPropertyNamesTemplateLiteralTypes.ts, 48, 19))
+>samepattern1 : Symbol(samepattern1, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 3, 13))
+
+};
+
+const obj10 = {
+>obj10 : Symbol(obj10, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 52, 5))
+
+  [pattern1]: true,
+>[pattern1] : Symbol([pattern1], Decl(computedPropertyNamesTemplateLiteralTypes.ts, 52, 15))
+>pattern1 : Symbol(pattern1, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 1, 13))
+
+} as const;
+>const : Symbol(const)
+
+const obj11 = {
+>obj11 : Symbol(obj11, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 56, 5))
+
+  [pattern1]: 100,
+>[pattern1] : Symbol([pattern1], Decl(computedPropertyNamesTemplateLiteralTypes.ts, 56, 15))
+>pattern1 : Symbol(pattern1, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 1, 13))
+
+  ...obj9,
+>obj9 : Symbol(obj9, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 47, 5))
+
+};
+
+const obj12 = {
+>obj12 : Symbol(obj12, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 61, 5))
+
+  ...obj9,
+>obj9 : Symbol(obj9, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 47, 5))
+
+  [pattern1]: 100,
+>[pattern1] : Symbol([pattern1], Decl(computedPropertyNamesTemplateLiteralTypes.ts, 62, 10))
+>pattern1 : Symbol(pattern1, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 1, 13))
+
+};
+
+const obj13 = {
+>obj13 : Symbol(obj13, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 66, 5))
+
+  [pattern1]: 100,
+>[pattern1] : Symbol([pattern1], Decl(computedPropertyNamesTemplateLiteralTypes.ts, 66, 15))
+>pattern1 : Symbol(pattern1, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 1, 13))
+
+  ...{
+    [pattern2]: "hello",
+>[pattern2] : Symbol([pattern2], Decl(computedPropertyNamesTemplateLiteralTypes.ts, 68, 6))
+>pattern2 : Symbol(pattern2, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 2, 13))
+
+  },
+};
+
+const obj14 = {
+>obj14 : Symbol(obj14, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 73, 5))
+
+  [pattern1]: 100,
+>[pattern1] : Symbol([pattern1], Decl(computedPropertyNamesTemplateLiteralTypes.ts, 73, 15))
+>pattern1 : Symbol(pattern1, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 1, 13))
+
+  ...{
+    [pattern1]: true,
+>[pattern1] : Symbol([pattern1], Decl(computedPropertyNamesTemplateLiteralTypes.ts, 75, 6))
+>pattern1 : Symbol(pattern1, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 1, 13))
+
+    [pattern2]: "hello",
+>[pattern2] : Symbol([pattern2], Decl(computedPropertyNamesTemplateLiteralTypes.ts, 76, 21))
+>pattern2 : Symbol(pattern2, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 2, 13))
+
+    foobarrrrr: [1, 2, 3],
+>foobarrrrr : Symbol(foobarrrrr, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 77, 24))
+
+  },
+};
+
+// repro from https://github.com/microsoft/TypeScript/issues/46309
+
+interface IDocument_46309 {
+>IDocument_46309 : Symbol(IDocument_46309, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 80, 2))
+
+  name: string;
+>name : Symbol(IDocument_46309.name, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 84, 27))
+
+  [added_: `added_${string}`]: number[] | undefined;
+>added_ : Symbol(added_, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 86, 3))
+}
+
+const tech1_46309 = {
+>tech1_46309 : Symbol(tech1_46309, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 89, 5))
+
+  uuid: "70b26275-5096-4e4b-9d50-3c965c9e5073",
+>uuid : Symbol(uuid, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 89, 21))
+
+};
+
+const doc_46309: IDocument_46309 = {
+>doc_46309 : Symbol(doc_46309, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 93, 5))
+>IDocument_46309 : Symbol(IDocument_46309, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 80, 2))
+
+  name: "",
+>name : Symbol(name, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 93, 36))
+
+  [`added_${tech1_46309.uuid}`]: [19700101],
+>[`added_${tech1_46309.uuid}`] : Symbol([`added_${tech1_46309.uuid}`], Decl(computedPropertyNamesTemplateLiteralTypes.ts, 94, 11))
+>tech1_46309.uuid : Symbol(uuid, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 89, 21))
+>tech1_46309 : Symbol(tech1_46309, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 89, 5))
+>uuid : Symbol(uuid, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 89, 21))
+
+};
+
+const doc2_46309: IDocument_46309 = {
+>doc2_46309 : Symbol(doc2_46309, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 98, 5))
+>IDocument_46309 : Symbol(IDocument_46309, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 80, 2))
+
+  name: "",
+>name : Symbol(name, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 98, 37))
+
+  [`added_${tech1_46309.uuid}` as const]: [19700101],
+>[`added_${tech1_46309.uuid}` as const] : Symbol([`added_${tech1_46309.uuid}` as const], Decl(computedPropertyNamesTemplateLiteralTypes.ts, 99, 11))
+>tech1_46309.uuid : Symbol(uuid, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 89, 21))
+>tech1_46309 : Symbol(tech1_46309, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 89, 5))
+>uuid : Symbol(uuid, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 89, 21))
+>const : Symbol(const)
+
+};
+
