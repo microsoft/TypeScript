@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/thisType/thisTypeInFunctions4.ts ===
+//// [tests/cases/conformance/types/thisType/thisTypeInFunctions4.ts] ////
+
+=== thisTypeInFunctions4.ts ===
 type WrongObject = {value: number};
 >WrongObject : { value: number; }
 >value : number

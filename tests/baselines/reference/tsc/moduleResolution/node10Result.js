@@ -167,6 +167,7 @@ File '/home/src/package.json' does not exist.
 File '/home/package.json' does not exist.
 File '/package.json' does not exist.
 Loading module 'foo' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/foo/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -181,6 +182,7 @@ Directory '/home/src/projects/node_modules' does not exist, skipping all lookups
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -196,6 +198,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'foo' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
 'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.
@@ -212,6 +215,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'bar' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/bar/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -230,6 +234,7 @@ Directory '/home/src/projects/node_modules' does not exist, skipping all lookups
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/home/src/projects/project/node_modules/bar/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -245,6 +250,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'bar' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/home/src/projects/project/node_modules/bar/package.json' exists according to earlier cached lookups.
 'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.
@@ -277,6 +283,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'foo2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/foo2/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'types'.
@@ -295,6 +302,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'bar2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/bar2/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -513,6 +521,7 @@ File '/home/src/package.json' does not exist.
 File '/home/package.json' does not exist.
 File '/package.json' does not exist.
 Loading module 'foo' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/foo/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -527,6 +536,7 @@ Directory '/home/src/projects/node_modules' does not exist, skipping all lookups
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -542,6 +552,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'foo' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
 'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.
@@ -558,6 +569,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'bar' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/bar/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -576,6 +588,7 @@ Directory '/home/src/projects/node_modules' does not exist, skipping all lookups
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/home/src/projects/project/node_modules/bar/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -591,6 +604,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'bar' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/home/src/projects/project/node_modules/bar/package.json' exists according to earlier cached lookups.
 'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.
@@ -636,6 +650,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'foo2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/foo2/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'types'.
@@ -654,6 +669,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'bar2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/bar2/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -725,6 +741,7 @@ File '/home/src/package.json' does not exist.
 File '/home/package.json' does not exist.
 File '/package.json' does not exist.
 Loading module 'foo' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/foo/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -739,6 +756,7 @@ Directory '/home/src/projects/node_modules' does not exist, skipping all lookups
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -754,6 +772,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'foo' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
 'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.
@@ -783,6 +802,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'bar' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/bar/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -801,6 +821,7 @@ Directory '/home/src/projects/node_modules' does not exist, skipping all lookups
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/home/src/projects/project/node_modules/bar/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -816,6 +837,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'bar' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/home/src/projects/project/node_modules/bar/package.json' exists according to earlier cached lookups.
 'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.
@@ -861,6 +883,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'foo2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/foo2/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'types'.
@@ -879,6 +902,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'bar2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/bar2/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -952,6 +976,7 @@ File '/home/src/package.json' does not exist.
 File '/home/package.json' does not exist.
 File '/package.json' does not exist.
 Loading module 'foo' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/foo/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -966,6 +991,7 @@ Directory '/home/src/projects/node_modules' does not exist, skipping all lookups
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -981,6 +1007,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'foo' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
 'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.
@@ -1010,6 +1037,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'bar' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/bar/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -1028,6 +1056,7 @@ Directory '/home/src/projects/node_modules' does not exist, skipping all lookups
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/home/src/projects/project/node_modules/bar/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -1043,6 +1072,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'bar' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/home/src/projects/project/node_modules/bar/package.json' exists according to earlier cached lookups.
 'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.
@@ -1075,6 +1105,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'foo2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/foo2/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'types'.
@@ -1093,6 +1124,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'bar2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/bar2/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -1166,6 +1198,7 @@ File '/home/src/package.json' does not exist.
 File '/home/package.json' does not exist.
 File '/package.json' does not exist.
 Loading module 'foo' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/foo/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -1180,6 +1213,7 @@ Directory '/home/src/projects/node_modules' does not exist, skipping all lookups
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -1195,6 +1229,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'foo' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
 'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.
@@ -1211,6 +1246,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'bar' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/bar/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -1229,6 +1265,7 @@ Directory '/home/src/projects/node_modules' does not exist, skipping all lookups
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/home/src/projects/project/node_modules/bar/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -1244,6 +1281,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'bar' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/home/src/projects/project/node_modules/bar/package.json' exists according to earlier cached lookups.
 'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.
@@ -1276,6 +1314,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'foo2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/foo2/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'types'.
@@ -1294,6 +1333,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'bar2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/bar2/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -1377,6 +1417,7 @@ File '/home/src/package.json' does not exist.
 File '/home/package.json' does not exist.
 File '/package.json' does not exist.
 Loading module 'foo' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/foo/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -1391,6 +1432,7 @@ Directory '/home/src/projects/node_modules' does not exist, skipping all lookups
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -1406,6 +1448,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'foo' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
 'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.
@@ -1422,6 +1465,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'bar' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/bar/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -1450,6 +1494,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'foo2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/foo2/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'types'.
@@ -1468,6 +1513,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'bar2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/bar2/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -1677,6 +1723,7 @@ File '/home/src/package.json' does not exist.
 File '/home/package.json' does not exist.
 File '/package.json' does not exist.
 Loading module 'foo' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/foo/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'types'.
@@ -1695,6 +1742,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'bar' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/bar/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -1723,6 +1771,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'foo2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/foo2/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'types'.
@@ -1741,6 +1790,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'bar2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/bar2/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -1929,6 +1979,7 @@ File '/home/src/package.json' does not exist.
 File '/home/package.json' does not exist.
 File '/package.json' does not exist.
 Loading module 'foo' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/foo/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'types'.
@@ -1947,6 +1998,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'bar' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/bar/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -1975,6 +2027,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'foo2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/foo2/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'types'.
@@ -1993,6 +2046,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'bar2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/bar2/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -2011,6 +2065,7 @@ Directory '/home/src/projects/node_modules' does not exist, skipping all lookups
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/home/src/projects/project/node_modules/bar2/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -2026,6 +2081,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'bar2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/home/src/projects/project/node_modules/bar2/package.json' exists according to earlier cached lookups.
 'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.
@@ -2236,6 +2292,7 @@ File '/home/src/package.json' does not exist.
 File '/home/package.json' does not exist.
 File '/package.json' does not exist.
 Loading module 'foo' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/foo/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'types'.
@@ -2254,6 +2311,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'bar' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/bar/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -2282,6 +2340,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'foo2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/foo2/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -2296,6 +2355,7 @@ Directory '/home/src/projects/node_modules' does not exist, skipping all lookups
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -2311,6 +2371,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'foo2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
 'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.
@@ -2327,6 +2388,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'bar2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/bar2/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -2345,6 +2407,7 @@ Directory '/home/src/projects/node_modules' does not exist, skipping all lookups
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/home/src/projects/project/node_modules/bar2/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -2360,6 +2423,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'bar2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/home/src/projects/project/node_modules/bar2/package.json' exists according to earlier cached lookups.
 'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.
@@ -2568,6 +2632,7 @@ File '/home/src/package.json' does not exist.
 File '/home/package.json' does not exist.
 File '/package.json' does not exist.
 Loading module 'foo' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/foo/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'types'.
@@ -2586,6 +2651,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'bar' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/bar/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -2614,6 +2680,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'foo2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/foo2/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -2628,6 +2695,7 @@ Directory '/home/src/projects/node_modules' does not exist, skipping all lookups
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -2643,6 +2711,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'foo2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
 'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.
@@ -2659,6 +2728,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'bar2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/bar2/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -2677,6 +2747,7 @@ Directory '/home/src/projects/node_modules' does not exist, skipping all lookups
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/home/src/projects/project/node_modules/bar2/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -2692,6 +2763,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'bar2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/home/src/projects/project/node_modules/bar2/package.json' exists according to earlier cached lookups.
 'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.
@@ -2780,6 +2852,7 @@ File '/home/src/package.json' does not exist.
 File '/home/package.json' does not exist.
 File '/package.json' does not exist.
 Loading module 'foo' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/foo/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'types'.
@@ -2798,6 +2871,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'bar' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/bar/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -2826,6 +2900,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'foo2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/foo2/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -2840,6 +2915,7 @@ Directory '/home/src/projects/node_modules' does not exist, skipping all lookups
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -2855,6 +2931,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'foo2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
 'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.
@@ -2884,6 +2961,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'bar2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/bar2/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -2902,6 +2980,7 @@ Directory '/home/src/projects/node_modules' does not exist, skipping all lookups
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/home/src/projects/project/node_modules/bar2/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -2917,6 +2996,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'bar2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/home/src/projects/project/node_modules/bar2/package.json' exists according to earlier cached lookups.
 'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.
@@ -3007,6 +3087,7 @@ File '/home/src/package.json' does not exist.
 File '/home/package.json' does not exist.
 File '/package.json' does not exist.
 Loading module 'foo' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/foo/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'types'.
@@ -3025,6 +3106,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'bar' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/bar/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -3053,6 +3135,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'foo2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/foo2/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -3067,6 +3150,7 @@ Directory '/home/src/projects/node_modules' does not exist, skipping all lookups
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -3082,6 +3166,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'foo2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
 'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.
@@ -3111,6 +3196,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'bar2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/bar2/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -3129,6 +3215,7 @@ Directory '/home/src/projects/node_modules' does not exist, skipping all lookups
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/home/src/projects/project/node_modules/bar2/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -3144,6 +3231,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'bar2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/home/src/projects/project/node_modules/bar2/package.json' exists according to earlier cached lookups.
 'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.
@@ -3221,6 +3309,7 @@ File '/home/src/package.json' does not exist.
 File '/home/package.json' does not exist.
 File '/package.json' does not exist.
 Loading module 'foo' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/foo/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'types'.
@@ -3239,6 +3328,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'bar' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/bar/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -3267,6 +3357,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'foo2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/foo2/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -3281,6 +3372,7 @@ Directory '/home/src/projects/node_modules' does not exist, skipping all lookups
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -3296,6 +3388,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'foo2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
 'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.
@@ -3312,6 +3405,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'bar2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/home/src/projects/project/node_modules/bar2/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -3330,6 +3424,7 @@ Directory '/home/src/projects/node_modules' does not exist, skipping all lookups
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/home/src/projects/project/node_modules/bar2/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
@@ -3345,6 +3440,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'bar2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/home/src/projects/project/node_modules/bar2/package.json' exists according to earlier cached lookups.
 'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.

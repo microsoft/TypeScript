@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/for-inStatements/for-inStatements.ts] ////
+
 //// [for-inStatements.ts]
 var aString: string;
 for (aString in {}) { }

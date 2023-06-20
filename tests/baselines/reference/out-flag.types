@@ -1,4 +1,6 @@
-=== tests/cases/compiler/out-flag.ts ===
+//// [tests/cases/compiler/out-flag.ts] ////
+
+=== out-flag.ts ===
 //// @out: bin\
 
 // my class comments

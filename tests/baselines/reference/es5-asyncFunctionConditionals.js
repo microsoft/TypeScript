@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es5-asyncFunctionConditionals.ts] ////
+
 //// [es5-asyncFunctionConditionals.ts]
 declare var x, y, z, a, b, c;
 

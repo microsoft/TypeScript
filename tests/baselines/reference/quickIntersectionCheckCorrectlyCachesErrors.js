@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/quickIntersectionCheckCorrectlyCachesErrors.ts] ////
+
 //// [quickIntersectionCheckCorrectlyCachesErrors.tsx]
 interface F<P> {
     (props: P & { children?: boolean }): void;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/capturedLetConstInLoop11.ts ===
+//// [tests/cases/compiler/capturedLetConstInLoop11.ts] ////
+
+=== capturedLetConstInLoop11.ts ===
 for (;;) {
     let x = 1;
 >x : Symbol(x, Decl(capturedLetConstInLoop11.ts, 1, 7))

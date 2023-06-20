@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nonInferrableTypePropagation3.ts ===
+//// [tests/cases/compiler/nonInferrableTypePropagation3.ts] ////
+
+=== nonInferrableTypePropagation3.ts ===
 // Repro from #53748
 
 declare type Callback<Args extends any[], Out, R> = (...args: Args) => (data: Out) => R;

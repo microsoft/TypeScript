@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitClassMemberWithComputedPropertyName.ts] ////
+
 //// [declarationEmitClassMemberWithComputedPropertyName.ts]
 const k1 = Symbol();
 const k2 = 'foo' as const;

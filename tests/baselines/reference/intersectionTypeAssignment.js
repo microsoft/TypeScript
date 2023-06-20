@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/intersection/intersectionTypeAssignment.ts] ////
+
 //// [intersectionTypeAssignment.ts]
 var a: { a: string };
 var b: { b: string };

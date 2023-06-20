@@ -1,4 +1,6 @@
-=== tests/cases/compiler/accessInstanceMemberFromStaticMethod01.ts ===
+//// [tests/cases/compiler/accessInstanceMemberFromStaticMethod01.ts] ////
+
+=== accessInstanceMemberFromStaticMethod01.ts ===
 class C {
 >C : Symbol(C, Decl(accessInstanceMemberFromStaticMethod01.ts, 0, 0))
 

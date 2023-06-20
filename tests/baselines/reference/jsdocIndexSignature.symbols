@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/indices.js ===
+//// [tests/cases/conformance/jsdoc/jsdocIndexSignature.ts] ////
+
+=== indices.js ===
 /** @type {Object.<string, number>} */
 var o1;
 >o1 : Symbol(o1, Decl(indices.js, 1, 3))

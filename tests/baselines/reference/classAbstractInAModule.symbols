@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInAModule.ts ===
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInAModule.ts] ////
+
+=== classAbstractInAModule.ts ===
 module M {
 >M : Symbol(M, Decl(classAbstractInAModule.ts, 0, 0))
 

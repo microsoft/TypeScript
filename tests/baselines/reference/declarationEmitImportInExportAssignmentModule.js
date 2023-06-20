@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitImportInExportAssignmentModule.ts] ////
+
 //// [declarationEmitImportInExportAssignmentModule.ts]
 module m {
     export module c {

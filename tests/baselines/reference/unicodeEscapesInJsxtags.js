@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/unicodeEscapesInJsxtags.tsx] ////
+
 //// [file.tsx]
 import * as React from "react";
 declare global {

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileWithInternalModuleNameConflictsInExtendsClause2.ts] ////
+
 //// [declFileWithInternalModuleNameConflictsInExtendsClause2.ts]
 module X.A.C {
     export interface Z {

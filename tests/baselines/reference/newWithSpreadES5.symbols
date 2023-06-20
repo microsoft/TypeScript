@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/functionCalls/newWithSpreadES5.ts ===
+//// [tests/cases/conformance/expressions/functionCalls/newWithSpreadES5.ts] ////
+
+=== newWithSpreadES5.ts ===
 function f(x: number, y: number, ...z: string[]) {
 >f : Symbol(f, Decl(newWithSpreadES5.ts, 0, 0))
 >x : Symbol(x, Decl(newWithSpreadES5.ts, 0, 11))

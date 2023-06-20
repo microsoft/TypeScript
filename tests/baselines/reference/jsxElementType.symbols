@@ -1,4 +1,6 @@
-=== tests/cases/compiler/jsxElementType.tsx ===
+//// [tests/cases/compiler/jsxElementType.tsx] ////
+
+=== jsxElementType.tsx ===
 /// <reference path="react16.d.ts" />
 import * as React from "react";
 >React : Symbol(React, Decl(jsxElementType.tsx, 1, 6))

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/excessPropertyCheckingIntersectionWithConditional.ts ===
+//// [tests/cases/compiler/excessPropertyCheckingIntersectionWithConditional.ts] ////
+
+=== excessPropertyCheckingIntersectionWithConditional.ts ===
 type Foo<K> = K extends unknown ? { a: number } : unknown
 >Foo : Symbol(Foo, Decl(excessPropertyCheckingIntersectionWithConditional.ts, 0, 0))
 >K : Symbol(K, Decl(excessPropertyCheckingIntersectionWithConditional.ts, 0, 9))

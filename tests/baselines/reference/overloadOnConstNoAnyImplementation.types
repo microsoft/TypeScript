@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadOnConstNoAnyImplementation.ts ===
+//// [tests/cases/compiler/overloadOnConstNoAnyImplementation.ts] ////
+
+=== overloadOnConstNoAnyImplementation.ts ===
 function x1(a: number, cb: (x: 'hi') => number);
 >x1 : { (a: number, cb: (x: 'hi') => number): any; (a: number, cb: (x: "bye") => number): any; }
 >a : number

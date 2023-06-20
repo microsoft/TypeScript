@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitFunctionDuplicateNamespace.ts ===
+//// [tests/cases/compiler/declarationEmitFunctionDuplicateNamespace.ts] ////
+
+=== declarationEmitFunctionDuplicateNamespace.ts ===
 function f(a: 0): 0;
 >f : typeof f
 >a : 0

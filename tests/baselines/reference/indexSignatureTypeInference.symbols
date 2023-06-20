@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/indexSignatureTypeInference.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/indexSignatureTypeInference.ts] ////
+
+=== indexSignatureTypeInference.ts ===
 interface NumberMap<T> {
 >NumberMap : Symbol(NumberMap, Decl(indexSignatureTypeInference.ts, 0, 0))
 >T : Symbol(T, Decl(indexSignatureTypeInference.ts, 0, 20))

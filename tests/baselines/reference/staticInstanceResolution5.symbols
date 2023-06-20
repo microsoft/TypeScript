@@ -1,4 +1,6 @@
-=== tests/cases/compiler/staticInstanceResolution5_1.ts ===
+//// [tests/cases/compiler/staticInstanceResolution5.ts] ////
+
+=== staticInstanceResolution5_1.ts ===
 import WinJS = require('staticInstanceResolution5_0');
 >WinJS : Symbol(WinJS, Decl(staticInstanceResolution5_1.ts, 0, 0))
 
@@ -18,7 +20,7 @@ function z(w3: WinJS) { }
 >w3 : Symbol(w3, Decl(staticInstanceResolution5_1.ts, 5, 11))
 >WinJS : Symbol(WinJS)
 
-=== tests/cases/compiler/staticInstanceResolution5_0.ts ===
+=== staticInstanceResolution5_0.ts ===
 export class Promise {
 >Promise : Symbol(Promise, Decl(staticInstanceResolution5_0.ts, 0, 0))
 

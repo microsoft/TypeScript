@@ -1,4 +1,6 @@
-=== tests/cases/compiler/importDeclWithDeclareModifierInAmbientContext.ts ===
+//// [tests/cases/compiler/importDeclWithDeclareModifierInAmbientContext.ts] ////
+
+=== importDeclWithDeclareModifierInAmbientContext.ts ===
 declare module "m" {
 >"m" : Symbol("m", Decl(importDeclWithDeclareModifierInAmbientContext.ts, 0, 0))
 

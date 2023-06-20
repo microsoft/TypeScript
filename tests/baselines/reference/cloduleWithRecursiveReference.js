@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/cloduleWithRecursiveReference.ts] ////
+
 //// [cloduleWithRecursiveReference.ts]
 module M
 {

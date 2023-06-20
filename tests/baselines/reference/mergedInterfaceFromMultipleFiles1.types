@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mergedInterfaceFromMultipleFiles1_1.ts ===
+//// [tests/cases/compiler/mergedInterfaceFromMultipleFiles1.ts] ////
+
+=== mergedInterfaceFromMultipleFiles1_1.ts ===
 /// <reference path='mergedInterfaceFromMultipleFiles1_0.ts'/>
 
 interface D { bar(): number; }
@@ -40,7 +42,7 @@ var e: Date = c.b();
 >c : C
 >b : () => Date
 
-=== tests/cases/compiler/mergedInterfaceFromMultipleFiles1_0.ts ===
+=== mergedInterfaceFromMultipleFiles1_0.ts ===
 interface I { foo(): string; }
 >foo : () => string
 

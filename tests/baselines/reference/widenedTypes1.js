@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/widenedTypes1.ts] ////
+
 //// [widenedTypes1.ts]
 var a = null;
 var b = undefined;

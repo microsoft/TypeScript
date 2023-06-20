@@ -1,0 +1,149 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/infer.d.ts ===
+// export declare function infer(o: { m: Record<string, Function> } & ThisType<{ <|[|{| isWriteAccess: true |}x|]: number|> }>): void;
+
+// === /tests/cases/fourslash/a.js ===
+// import { infer } from "./infer";
+// infer({
+//     m: {
+//         initData() {
+//             <|this.[|{| isWriteAccess: true |}x|] = 1;|>
+//             this./*FIND ALL REFS*/[|x|];
+//         },
+//     }
+// });
+
+// === /tests/cases/fourslash/b.ts ===
+// import { infer } from "./infer";
+// infer({
+//     m: {
+//         initData() {
+//             this.[|{| isWriteAccess: true |}x|] = 1;
+//             this.[|x|];
+//         },
+//     }
+// });
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/infer.d.ts ===
+  // export declare function infer(o: { m: Record<string, Function> } & ThisType<{ <|[|x|]: number|> }>): void;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) x: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/infer.d.ts ===
+// export declare function infer(o: { m: Record<string, Function> } & ThisType<{ <|[|{| isWriteAccess: true |}x|]: number|> }>): void;
+
+// === /tests/cases/fourslash/a.js ===
+// import { infer } from "./infer";
+// infer({
+//     m: {
+//         initData() {
+//             <|this.[|{| isWriteAccess: true |}x|] = 1;|>
+//             this.[|x|];
+//         },
+//     }
+// });
+
+// === /tests/cases/fourslash/b.ts ===
+// import { infer } from "./infer";
+// infer({
+//     m: {
+//         initData() {
+//             this.[|{| isWriteAccess: true |}x|] = 1;
+//             this./*FIND ALL REFS*/[|x|];
+//         },
+//     }
+// });
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/infer.d.ts ===
+  // export declare function infer(o: { m: Record<string, Function> } & ThisType<{ <|[|x|]: number|> }>): void;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) x: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]

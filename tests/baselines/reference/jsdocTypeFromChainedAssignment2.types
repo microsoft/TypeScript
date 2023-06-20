@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/use.js ===
+//// [tests/cases/conformance/jsdoc/jsdocTypeFromChainedAssignment2.ts] ////
+
+=== use.js ===
 var mod = require('./mod');
 >mod : typeof mod
 >require('./mod') : typeof mod
@@ -33,16 +35,16 @@ mod.i(1)
 >i : (mom: string) => string
 >1 : 1
 
-=== tests/cases/conformance/jsdoc/mod.js ===
+=== mod.js ===
 /** @param {number} n */
 exports.f = exports.g = function fg(n) {
 >exports.f = exports.g = function fg(n) {    return n + 1} : (n: number) => number
 >exports.f : (n: number) => number
->exports : typeof import("tests/cases/conformance/jsdoc/mod")
+>exports : typeof import("mod")
 >f : (n: number) => number
 >exports.g = function fg(n) {    return n + 1} : (n: number) => number
 >exports.g : (n: number) => number
->exports : typeof import("tests/cases/conformance/jsdoc/mod")
+>exports : typeof import("mod")
 >g : (n: number) => number
 >function fg(n) {    return n + 1} : (n: number) => number
 >fg : (n: number) => number

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitAnyFunctions.ts] ////
+
 //// [noImplicitAnyFunctions.ts]
 declare function f1();
 

@@ -1430,6 +1430,8 @@ export const plainJSErrors: Set<number> = new Set([
     Diagnostics.Class_constructor_may_not_be_a_generator.code,
     Diagnostics.Class_constructor_may_not_be_an_accessor.code,
     Diagnostics.await_expressions_are_only_allowed_within_async_functions_and_at_the_top_levels_of_modules.code,
+    // Type errors
+    Diagnostics.This_condition_will_always_return_0_since_JavaScript_compares_objects_by_reference_not_value.code,
 ]);
 
 /**
@@ -2369,8 +2371,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         for (const oldSourceFile of oldSourceFiles) {
             const sourceFileOptions = getCreateSourceFileOptions(oldSourceFile.fileName, moduleResolutionCache, host, options);
             let newSourceFile = host.getSourceFileByPath
-                ? host.getSourceFileByPath(oldSourceFile.fileName, oldSourceFile.resolvedPath, sourceFileOptions, /*onError*/ undefined, shouldCreateNewSourceFile || sourceFileOptions.impliedNodeFormat !== oldSourceFile.impliedNodeFormat)
-                : host.getSourceFile(oldSourceFile.fileName, sourceFileOptions, /*onError*/ undefined, shouldCreateNewSourceFile || sourceFileOptions.impliedNodeFormat !== oldSourceFile.impliedNodeFormat); // TODO: GH#18217
+                ? host.getSourceFileByPath(oldSourceFile.fileName, oldSourceFile.resolvedPath, sourceFileOptions, /*onError*/ undefined, shouldCreateNewSourceFile)
+                : host.getSourceFile(oldSourceFile.fileName, sourceFileOptions, /*onError*/ undefined, shouldCreateNewSourceFile); // TODO: GH#18217
 
             if (!newSourceFile) {
                 return StructureIsReused.Not;
@@ -3622,7 +3624,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             fileName,
             sourceFileOptions,
             hostErrorMessage => addFilePreprocessingFileExplainingDiagnostic(/*file*/ undefined, reason, Diagnostics.Cannot_read_file_0_Colon_1, [fileName, hostErrorMessage]),
-            shouldCreateNewSourceFile || (oldProgram?.getSourceFileByPath(toPath(fileName))?.impliedNodeFormat !== sourceFileOptions.impliedNodeFormat)
+            shouldCreateNewSourceFile,
         );
 
         if (packageId) {

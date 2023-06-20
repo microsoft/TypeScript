@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitNoNonRequiredParens.ts] ////
+
 //// [declarationEmitNoNonRequiredParens.ts]
 export enum Test {
     A, B, C

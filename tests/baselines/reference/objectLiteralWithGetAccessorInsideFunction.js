@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectLiteralWithGetAccessorInsideFunction.ts] ////
+
 //// [objectLiteralWithGetAccessorInsideFunction.ts]
 function bar() {
     var x = {

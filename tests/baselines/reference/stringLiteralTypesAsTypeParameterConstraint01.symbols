@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTypeParameterConstraint01.ts ===
+//// [tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTypeParameterConstraint01.ts] ////
+
+=== stringLiteralTypesAsTypeParameterConstraint01.ts ===
 function foo<T extends "foo">(f: (x: T) => T) {
 >foo : Symbol(foo, Decl(stringLiteralTypesAsTypeParameterConstraint01.ts, 0, 0))
 >T : Symbol(T, Decl(stringLiteralTypesAsTypeParameterConstraint01.ts, 0, 13))

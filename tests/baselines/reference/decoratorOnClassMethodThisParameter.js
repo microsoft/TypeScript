@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/decorators/class/method/parameter/decoratorOnClassMethodThisParameter.ts] ////
+
 //// [decoratorOnClassMethodThisParameter.ts]
 declare function dec(target: Object, propertyKey: string | symbol, parameterIndex: number): void;
 

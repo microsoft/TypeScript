@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/multipleInferenceContexts.ts] ////
+
 //// [multipleInferenceContexts.ts]
 type ConstructorOptions<Data> =
     & ComponentOptionsProperties<Data>

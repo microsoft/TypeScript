@@ -1,4 +1,6 @@
-=== tests/cases/compiler/externModule.ts ===
+//// [tests/cases/compiler/externModule.ts] ////
+
+=== externModule.ts ===
 declare module {
     export class XDate {
 >XDate : Symbol(XDate, Decl(externModule.ts, 0, 16))

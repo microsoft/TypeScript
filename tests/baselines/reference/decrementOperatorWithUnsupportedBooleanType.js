@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithUnsupportedBooleanType.ts] ////
+
 //// [decrementOperatorWithUnsupportedBooleanType.ts]
 // -- operator on boolean type
 var BOOLEAN: boolean;

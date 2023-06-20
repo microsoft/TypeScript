@@ -1,4 +1,6 @@
-=== tests/cases/compiler/signatureLengthMismatchCall.ts ===
+//// [tests/cases/compiler/signatureLengthMismatchCall.ts] ////
+
+=== signatureLengthMismatchCall.ts ===
 function takesCallback(fn: (a: number) => void) {
 >takesCallback : Symbol(takesCallback, Decl(signatureLengthMismatchCall.ts, 0, 0))
 >fn : Symbol(fn, Decl(signatureLengthMismatchCall.ts, 0, 23))

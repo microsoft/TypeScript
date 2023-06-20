@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/members/objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts ===
+//// [tests/cases/conformance/types/members/objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts] ////
+
+=== objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts ===
 interface I {
 >I : Symbol(I, Decl(objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts, 0, 0))
 

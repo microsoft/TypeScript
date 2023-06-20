@@ -1,4 +1,6 @@
-=== tests/cases/conformance/async/es6/asyncArrowFunction/arrowFunctionWithParameterNameAsync_es6.ts ===
+//// [tests/cases/conformance/async/es6/asyncArrowFunction/arrowFunctionWithParameterNameAsync_es6.ts] ////
+
+=== arrowFunctionWithParameterNameAsync_es6.ts ===
 const x = async => async;
 >x : Symbol(x, Decl(arrowFunctionWithParameterNameAsync_es6.ts, 0, 5))
 >async : Symbol(async, Decl(arrowFunctionWithParameterNameAsync_es6.ts, 0, 9))
