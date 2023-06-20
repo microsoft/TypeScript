@@ -1,11 +1,11 @@
-tests/cases/compiler/useBeforeDeclaration_jsx.tsx(6,19): error TS2729: Property 'z' is used before its initialization.
-tests/cases/compiler/useBeforeDeclaration_jsx.tsx(7,19): error TS2729: Property 'z' is used before its initialization.
-tests/cases/compiler/useBeforeDeclaration_jsx.tsx(8,28): error TS2729: Property 'x' is used before its initialization.
-tests/cases/compiler/useBeforeDeclaration_jsx.tsx(9,28): error TS2729: Property 'y' is used before its initialization.
-tests/cases/compiler/useBeforeDeclaration_jsx.tsx(10,25): error TS2729: Property 'y' is used before its initialization.
+useBeforeDeclaration_jsx.tsx(6,19): error TS2729: Property 'z' is used before its initialization.
+useBeforeDeclaration_jsx.tsx(7,19): error TS2729: Property 'z' is used before its initialization.
+useBeforeDeclaration_jsx.tsx(8,28): error TS2729: Property 'x' is used before its initialization.
+useBeforeDeclaration_jsx.tsx(9,28): error TS2729: Property 'y' is used before its initialization.
+useBeforeDeclaration_jsx.tsx(10,25): error TS2729: Property 'y' is used before its initialization.
 
 
-==== tests/cases/compiler/useBeforeDeclaration_jsx.tsx (5 errors) ====
+==== useBeforeDeclaration_jsx.tsx (5 errors) ====
     namespace JSX {
         export interface Element {}
     }
@@ -14,23 +14,23 @@ tests/cases/compiler/useBeforeDeclaration_jsx.tsx(10,25): error TS2729: Property
         static a = <C.z></C.z>;
                       ~
 !!! error TS2729: Property 'z' is used before its initialization.
-!!! related TS2728 tests/cases/compiler/useBeforeDeclaration_jsx.tsx:13:12: 'z' is declared here.
+!!! related TS2728 useBeforeDeclaration_jsx.tsx:13:12: 'z' is declared here.
         static b = <C.z/>;
                       ~
 !!! error TS2729: Property 'z' is used before its initialization.
-!!! related TS2728 tests/cases/compiler/useBeforeDeclaration_jsx.tsx:13:12: 'z' is declared here.
+!!! related TS2728 useBeforeDeclaration_jsx.tsx:13:12: 'z' is declared here.
         static c = <span {...C.x}></span>;
                                ~
 !!! error TS2729: Property 'x' is used before its initialization.
-!!! related TS2728 tests/cases/compiler/useBeforeDeclaration_jsx.tsx:11:12: 'x' is declared here.
+!!! related TS2728 useBeforeDeclaration_jsx.tsx:11:12: 'x' is declared here.
         static d = <span id={C.y}></span>;
                                ~
 !!! error TS2729: Property 'y' is used before its initialization.
-!!! related TS2728 tests/cases/compiler/useBeforeDeclaration_jsx.tsx:12:12: 'y' is declared here.
+!!! related TS2728 useBeforeDeclaration_jsx.tsx:12:12: 'y' is declared here.
         static e = <span>{C.y}</span>;
                             ~
 !!! error TS2729: Property 'y' is used before its initialization.
-!!! related TS2728 tests/cases/compiler/useBeforeDeclaration_jsx.tsx:12:12: 'y' is declared here.
+!!! related TS2728 useBeforeDeclaration_jsx.tsx:12:12: 'y' is declared here.
         static x = {};
         static y = '';
         static z = () => <b></b>;

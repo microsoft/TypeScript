@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/mapped/mappedTypeAsClauses.ts ===
+//// [tests/cases/conformance/types/mapped/mappedTypeAsClauses.ts] ////
+
+=== mappedTypeAsClauses.ts ===
 // Mapped type 'as N' clauses
 
 type Getters<T> = { [P in keyof T & string as `get${Capitalize<P>}`]: () => T[P] };

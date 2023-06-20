@@ -1,4 +1,6 @@
-=== tests/cases/compiler/numericIndexerConstraint2.ts ===
+//// [tests/cases/compiler/numericIndexerConstraint2.ts] ////
+
+=== numericIndexerConstraint2.ts ===
 class Foo { foo() { } }
 >Foo : Symbol(Foo, Decl(numericIndexerConstraint2.ts, 0, 0))
 >foo : Symbol(Foo.foo, Decl(numericIndexerConstraint2.ts, 0, 11))

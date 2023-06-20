@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxLocalNamespaceIndexSignatureNoCrash.tsx] ////
+
 //// [index.tsx]
 export class X {
     static jsx() {

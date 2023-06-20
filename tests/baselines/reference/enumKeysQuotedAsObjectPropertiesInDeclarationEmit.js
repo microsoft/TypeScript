@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumKeysQuotedAsObjectPropertiesInDeclarationEmit.ts] ////
+
 //// [enumKeysQuotedAsObjectPropertiesInDeclarationEmit.ts]
 export enum MouseButton {
 	LEFT_BUTTON = 1,

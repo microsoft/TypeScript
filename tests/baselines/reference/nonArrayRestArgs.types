@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nonArrayRestArgs.ts ===
+//// [tests/cases/compiler/nonArrayRestArgs.ts] ////
+
+=== nonArrayRestArgs.ts ===
 function foo(...rest: number) { // error
 >foo : (...rest: number) => string
 >rest : number

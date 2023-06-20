@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mergedDeclarations2.ts] ////
+
 //// [mergedDeclarations2.ts]
 enum Foo {
     b

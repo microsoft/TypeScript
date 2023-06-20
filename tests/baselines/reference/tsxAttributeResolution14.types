@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/react.d.ts ===
+//// [tests/cases/conformance/jsx/tsxAttributeResolution14.tsx] ////
+
+=== react.d.ts ===
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {
@@ -9,7 +11,7 @@ declare module JSX {
 >prop : any
 }
 
-=== tests/cases/conformance/jsx/file.tsx ===
+=== file.tsx ===
 interface IProps {
   primaryText: string,
 >primaryText : string

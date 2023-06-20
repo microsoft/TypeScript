@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importDeclRefereingExternalModuleWithNoResolve.ts] ////
+
 //// [importDeclRefereingExternalModuleWithNoResolve.ts]
 import b = require("externalModule");
 declare module "m1" {

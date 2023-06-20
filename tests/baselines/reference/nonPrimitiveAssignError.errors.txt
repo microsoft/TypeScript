@@ -1,13 +1,13 @@
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveAssignError.ts(5,1): error TS2741: Property 'foo' is missing in type '{}' but required in type '{ foo: string; }'.
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveAssignError.ts(13,1): error TS2322: Type 'number' is not assignable to type 'object'.
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveAssignError.ts(14,1): error TS2322: Type 'boolean' is not assignable to type 'object'.
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveAssignError.ts(15,1): error TS2322: Type 'string' is not assignable to type 'object'.
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveAssignError.ts(17,1): error TS2322: Type 'object' is not assignable to type 'number'.
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveAssignError.ts(18,1): error TS2322: Type 'object' is not assignable to type 'boolean'.
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveAssignError.ts(19,1): error TS2322: Type 'object' is not assignable to type 'string'.
+nonPrimitiveAssignError.ts(5,1): error TS2741: Property 'foo' is missing in type '{}' but required in type '{ foo: string; }'.
+nonPrimitiveAssignError.ts(13,1): error TS2322: Type 'number' is not assignable to type 'object'.
+nonPrimitiveAssignError.ts(14,1): error TS2322: Type 'boolean' is not assignable to type 'object'.
+nonPrimitiveAssignError.ts(15,1): error TS2322: Type 'string' is not assignable to type 'object'.
+nonPrimitiveAssignError.ts(17,1): error TS2322: Type 'object' is not assignable to type 'number'.
+nonPrimitiveAssignError.ts(18,1): error TS2322: Type 'object' is not assignable to type 'boolean'.
+nonPrimitiveAssignError.ts(19,1): error TS2322: Type 'object' is not assignable to type 'string'.
 
 
-==== tests/cases/conformance/types/nonPrimitive/nonPrimitiveAssignError.ts (7 errors) ====
+==== nonPrimitiveAssignError.ts (7 errors) ====
     var x = {};
     var y = {foo: "bar"};
     var a: object;
@@ -15,7 +15,7 @@ tests/cases/conformance/types/nonPrimitive/nonPrimitiveAssignError.ts(19,1): err
     y = a; // expect error
     ~
 !!! error TS2741: Property 'foo' is missing in type '{}' but required in type '{ foo: string; }'.
-!!! related TS2728 tests/cases/conformance/types/nonPrimitive/nonPrimitiveAssignError.ts:2:10: 'foo' is declared here.
+!!! related TS2728 nonPrimitiveAssignError.ts:2:10: 'foo' is declared here.
     a = x;
     a = y;
     

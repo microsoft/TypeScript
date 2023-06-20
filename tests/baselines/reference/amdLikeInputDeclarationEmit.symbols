@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typing.d.ts ===
+//// [tests/cases/compiler/amdLikeInputDeclarationEmit.ts] ////
+
+=== typing.d.ts ===
 declare function define<T=unknown>(name: string, modules: string[], ready: (...modules: unknown[]) => T);
 >define : Symbol(define, Decl(typing.d.ts, 0, 0))
 >T : Symbol(T, Decl(typing.d.ts, 0, 24))
@@ -8,7 +10,7 @@ declare function define<T=unknown>(name: string, modules: string[], ready: (...m
 >modules : Symbol(modules, Decl(typing.d.ts, 0, 76))
 >T : Symbol(T, Decl(typing.d.ts, 0, 24))
 
-=== tests/cases/compiler/deps/BaseClass.d.ts ===
+=== deps/BaseClass.d.ts ===
 declare module "deps/BaseClass" {
 >"deps/BaseClass" : Symbol("deps/BaseClass", Decl(BaseClass.d.ts, 0, 0))
 
@@ -26,7 +28,7 @@ declare module "deps/BaseClass" {
     export = BaseClass;
 >BaseClass : Symbol(BaseClass, Decl(BaseClass.d.ts, 0, 33))
 }
-=== tests/cases/compiler/ExtendedClass.js ===
+=== ExtendedClass.js ===
 define("lib/ExtendedClass", ["deps/BaseClass"], 
 >define : Symbol(define, Decl(typing.d.ts, 0, 0))
 

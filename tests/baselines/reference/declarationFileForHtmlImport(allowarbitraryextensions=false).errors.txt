@@ -1,7 +1,7 @@
-tests/cases/conformance/nonjsExtensions/file.ts(1,22): error TS6263: Module './component.html' was resolved to 'tests/cases/conformance/nonjsExtensions/component.d.html.ts', but '--allowArbitraryExtensions' is not set.
+file.ts(1,22): error TS6263: Module './component.html' was resolved to 'component.d.html.ts', but '--allowArbitraryExtensions' is not set.
 
 
-==== tests/cases/conformance/nonjsExtensions/component.d.html.ts (0 errors) ====
+==== component.d.html.ts (0 errors) ====
     // html modules were proposed at https://github.com/WICG/webcomponents/blob/gh-pages/proposals/html-modules-explainer.md
     
     // per proposal, `default` is user-defined, but if not present, will be the document of the imported module
@@ -15,10 +15,10 @@ tests/cases/conformance/nonjsExtensions/file.ts(1,22): error TS6263: Module './c
         connectedCallback(): void;
     }
     
-==== tests/cases/conformance/nonjsExtensions/file.ts (1 errors) ====
+==== file.ts (1 errors) ====
     import * as mod from "./component.html";
                          ~~~~~~~~~~~~~~~~~~
-!!! error TS6263: Module './component.html' was resolved to 'tests/cases/conformance/nonjsExtensions/component.d.html.ts', but '--allowArbitraryExtensions' is not set.
+!!! error TS6263: Module './component.html' was resolved to 'component.d.html.ts', but '--allowArbitraryExtensions' is not set.
     
     window.customElements.define("my-html5-element", mod.HTML5Element);
     

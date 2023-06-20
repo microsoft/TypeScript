@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/contextualTyping/functionExpressionContextualTyping3.ts] ////
+
 //// [functionExpressionContextualTyping3.ts]
 // #31114
 declare function f<T>(value: T | number): void;

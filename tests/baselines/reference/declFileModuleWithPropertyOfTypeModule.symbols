@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileModuleWithPropertyOfTypeModule.ts ===
+//// [tests/cases/compiler/declFileModuleWithPropertyOfTypeModule.ts] ////
+
+=== declFileModuleWithPropertyOfTypeModule.ts ===
 module m {
 >m : Symbol(m, Decl(declFileModuleWithPropertyOfTypeModule.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constAndNS.ts ===
+//// [tests/cases/compiler/namespacesWithTypeAliasOnlyExportsMerge.ts] ////
+
+=== constAndNS.ts ===
 type A = number;
 >A : Symbol(A, Decl(constAndNS.ts, 0, 0))
 
@@ -54,7 +56,7 @@ declare const try4: Q4.default.A;
 >A : Symbol(Q.A, Decl(constAndNS.ts, 3, 12))
 
 export {};
-=== tests/cases/compiler/circular.ts ===
+=== circular.ts ===
 declare namespace NS1 {
 >NS1 : Symbol(NS1, Decl(circular.ts, 0, 0))
 
@@ -68,7 +70,7 @@ declare namespace NS2 {
 >NS1 : Symbol(NS1, Decl(circular.ts, 4, 12))
 }
 export {};
-=== tests/cases/compiler/circularWithUses.ts ===
+=== circularWithUses.ts ===
 type A = string;
 >A : Symbol(A, Decl(circularWithUses.ts, 0, 0))
 

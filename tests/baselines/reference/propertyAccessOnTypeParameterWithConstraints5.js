@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOnTypeParameterWithConstraints5.ts] ////
+
 //// [propertyAccessOnTypeParameterWithConstraints5.ts]
 class A {
     foo(): string { return ''; }

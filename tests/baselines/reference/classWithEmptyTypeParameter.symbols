@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classWithEmptyTypeParameter.ts ===
+//// [tests/cases/compiler/classWithEmptyTypeParameter.ts] ////
+
+=== classWithEmptyTypeParameter.ts ===
 class C<> {
 >C : Symbol(C, Decl(classWithEmptyTypeParameter.ts, 0, 0))
 }

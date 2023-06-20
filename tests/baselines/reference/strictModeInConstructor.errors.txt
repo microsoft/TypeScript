@@ -1,8 +1,8 @@
-tests/cases/compiler/strictModeInConstructor.ts(27,5): error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
-tests/cases/compiler/strictModeInConstructor.ts(29,17): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+strictModeInConstructor.ts(27,5): error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
+strictModeInConstructor.ts(29,17): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
 
 
-==== tests/cases/compiler/strictModeInConstructor.ts (2 errors) ====
+==== strictModeInConstructor.ts (2 errors) ====
     class A {
     }
     

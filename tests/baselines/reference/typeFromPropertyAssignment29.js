@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment29.ts] ////
+
 //// [typeFromPropertyAssignment29.ts]
 function ExpandoDecl(n: number) {
     return n.toString();

@@ -1,7 +1,7 @@
-tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithObjectLiteral.ts(35,43): error TS2345: Argument of type 'E2' is not assignable to parameter of type 'E1'.
+typeArgumentInferenceWithObjectLiteral.ts(35,43): error TS2345: Argument of type 'E2' is not assignable to parameter of type 'E1'.
 
 
-==== tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithObjectLiteral.ts (1 errors) ====
+==== typeArgumentInferenceWithObjectLiteral.ts (1 errors) ====
     interface Computed<T> {
         read(): T;
         write(value: T);

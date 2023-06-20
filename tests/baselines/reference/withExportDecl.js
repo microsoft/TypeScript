@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/withExportDecl.ts] ////
+
 //// [withExportDecl.ts]
 var simpleVar;
 export var exportedSimpleVar;

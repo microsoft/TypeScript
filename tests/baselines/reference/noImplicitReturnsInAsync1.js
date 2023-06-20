@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitReturnsInAsync1.ts] ////
+
 //// [noImplicitReturnsInAsync1.ts]
 async function test(isError: boolean = false) {
     if (isError === true) {

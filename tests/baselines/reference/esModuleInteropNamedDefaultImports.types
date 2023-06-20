@@ -1,11 +1,13 @@
-=== tests/cases/compiler/mod.ts ===
+//// [tests/cases/compiler/esModuleInteropNamedDefaultImports.ts] ////
+
+=== mod.ts ===
 export default class Foo {}
 >Foo : Foo
 
 export class Bar {}
 >Bar : Bar
 
-=== tests/cases/compiler/idx.ts ===
+=== idx.ts ===
 import Foo from "./mod";
 >Foo : typeof Foo
 

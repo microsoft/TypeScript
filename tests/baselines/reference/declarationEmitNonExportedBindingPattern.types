@@ -1,4 +1,6 @@
-=== tests/cases/compiler/test.ts ===
+//// [tests/cases/compiler/declarationEmitNonExportedBindingPattern.ts] ////
+
+=== test.ts ===
 function getFoo() {
 >getFoo : () => { foo: { test: number; }; }
 

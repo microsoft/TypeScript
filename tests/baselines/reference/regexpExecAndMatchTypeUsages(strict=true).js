@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/regexpExecAndMatchTypeUsages.ts] ////
+
 //// [regexpExecAndMatchTypeUsages.ts]
 export function foo(matchResult: RegExpMatchArray, execResult: RegExpExecArray) {
     matchResult[0].length;

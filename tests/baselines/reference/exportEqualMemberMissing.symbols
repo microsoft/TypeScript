@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exportEqualMemberMissing_1.ts ===
+//// [tests/cases/compiler/exportEqualMemberMissing.ts] ////
+
+=== exportEqualMemberMissing_1.ts ===
 ///<reference path='exportEqualMemberMissing_0.ts'/>
 import connect = require('./exportEqualMemberMissing_0');
 >connect : Symbol(connect, Decl(exportEqualMemberMissing_1.ts, 0, 0))
@@ -9,7 +11,7 @@ connect().use(connect.static('foo')); // Error	1	The property 'static' does not 
 >use : Symbol(connect.connectExport.use, Decl(exportEqualMemberMissing_0.ts, 4, 36))
 >connect : Symbol(connect, Decl(exportEqualMemberMissing_1.ts, 0, 0))
 
-=== tests/cases/compiler/exportEqualMemberMissing_0.ts ===
+=== exportEqualMemberMissing_0.ts ===
 module server {
 >server : Symbol(server, Decl(exportEqualMemberMissing_0.ts, 0, 0), Decl(exportEqualMemberMissing_0.ts, 8, 3))
 

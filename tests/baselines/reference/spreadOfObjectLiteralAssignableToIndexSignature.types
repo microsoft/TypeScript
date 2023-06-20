@@ -1,4 +1,6 @@
-=== tests/cases/compiler/spreadOfObjectLiteralAssignableToIndexSignature.ts ===
+//// [tests/cases/compiler/spreadOfObjectLiteralAssignableToIndexSignature.ts] ////
+
+=== spreadOfObjectLiteralAssignableToIndexSignature.ts ===
 const foo: Record<never, never> = {} // OK
 >foo : Record<never, never>
 >{} : {}

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/esModuleInteropImportDefaultWhenAllNamedAreDefaultAlias.ts ===
+//// [tests/cases/compiler/esModuleInteropImportDefaultWhenAllNamedAreDefaultAlias.ts] ////
+
+=== esModuleInteropImportDefaultWhenAllNamedAreDefaultAlias.ts ===
 import {default as a, default as b} from "m";
 >a : Symbol(a, Decl(esModuleInteropImportDefaultWhenAllNamedAreDefaultAlias.ts, 0, 8))
 >b : Symbol(b, Decl(esModuleInteropImportDefaultWhenAllNamedAreDefaultAlias.ts, 0, 21))

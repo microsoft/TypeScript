@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/potentiallyUnassignedVariableInCatch.ts] ////
+
 //// [potentiallyUnassignedVariableInCatch.ts]
 let foo;
 try {

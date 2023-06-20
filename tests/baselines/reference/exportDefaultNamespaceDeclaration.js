@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/declarationEmit/exportDefaultNamespaceDeclaration.ts] ////
+
 //// [exportDefaultNamespaceDeclaration.ts]
 export default function someFunc() {
     return 'hello!';

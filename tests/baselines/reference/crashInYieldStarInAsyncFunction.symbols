@@ -1,4 +1,6 @@
-=== tests/cases/compiler/crashInYieldStarInAsyncFunction.ts ===
+//// [tests/cases/compiler/crashInYieldStarInAsyncFunction.ts] ////
+
+=== crashInYieldStarInAsyncFunction.ts ===
 // https://github.com/microsoft/TypeScript/issues/53145
 var obj = {
 >obj : Symbol(obj, Decl(crashInYieldStarInAsyncFunction.ts, 1, 3))
