@@ -12,40 +12,57 @@ const declarationEmitNodeBuilderFlags =
     NodeBuilderFlags.GenerateNamesForShadowedTypeParams |
     NodeBuilderFlags.NoTruncation;
 
+function sortDiagnostics(a: ts.Diagnostic, b: ts.Diagnostic) {
+    if (a.start! < b.start!) {
+        return -1;
+    }
+    if (a.start! === b.start!) {
+        if (a.length === b.length) {
+            return 0;
+        }
+        if (a.length! < b.length!){
+            return -1;
+        }
+        return 1;
+    }
+    return 1;
+}
+
+function isVarConst(node: ts.VariableDeclaration | ts.VariableDeclarationList): boolean {
+    return !!(ts.getCombinedNodeFlags(node) & ts.NodeFlags.Const);
+}
+
+function isDeclarationReadonly(declaration: ts.Declaration): boolean {
+    return !!(ts.getCombinedModifierFlags(declaration) & ts.ModifierFlags.Readonly && !ts.isParameterPropertyDeclaration(declaration, declaration.parent));
+}
+
+function isLiteralConstDeclaration(node: ts.VariableDeclaration | ts.PropertyDeclaration | ts.PropertySignature | ts.ParameterDeclaration): boolean {
+    if (isDeclarationReadonly(node) || ts.isVariableDeclaration(node) && isVarConst(node)) {
+        // TODO: Make sure this is a valid approximation for literal types
+        return !node.type && "initializer" in node && !!node.initializer && ts.isLiteralExpression(node.initializer);
+        // Original TS version
+        // return isFreshLiteralType(getTypeOfSymbol(getSymbolOfNode(node)));
+    }
+    return false;
+}
+
+function tryGetReturnType(typeChecker: ts.TypeChecker, node: ts.SignatureDeclaration): ts.Type | undefined {
+    const signature = typeChecker.getSignatureFromDeclaration(node);
+    if (signature) {
+        return typeChecker.getReturnTypeOfSignature(signature);
+    }
+}
 
 // Define a transformer function
-export function addTypeAnnotationTransformer(program: ts.Program, moduleResolutionHost?: ts.ModuleResolutionHost) {
-    function tryGetReturnType(
-        typeChecker: ts.TypeChecker,
-        node: ts.SignatureDeclaration
-    ): ts.Type | undefined {
-        const signature = typeChecker.getSignatureFromDeclaration(node);
-        if (signature) {
-            return typeChecker.getReturnTypeOfSignature(signature);
-        }
-    }
-
-    function isVarConst(node: ts.VariableDeclaration | ts.VariableDeclarationList): boolean {
-        return !!(ts.getCombinedNodeFlags(node) & ts.NodeFlags.Const);
-    }
-
-    function isDeclarationReadonly(declaration: ts.Declaration): boolean {
-        return !!(ts.getCombinedModifierFlags(declaration) & ts.ModifierFlags.Readonly && !ts.isParameterPropertyDeclaration(declaration, declaration.parent));
-    }
-
-    function isLiteralConstDeclaration(node: ts.VariableDeclaration | ts.PropertyDeclaration | ts.PropertySignature | ts.ParameterDeclaration): boolean {
-        if (isDeclarationReadonly(node) || ts.isVariableDeclaration(node) && isVarConst(node)) {
-            // TODO: Make sure this is a valid approximation for literal types
-            return !node.type && "initializer" in node && !!node.initializer && ts.isLiteralExpression(node.initializer);
-            // Original TS version
-            // return isFreshLiteralType(getTypeOfSymbol(getSymbolOfNode(node)));
-        }
-        return false;
-    }
-
+export function addTypeAnnotationTransformer(sourceFile: ts.SourceFile, program: ts.Program, moduleResolutionHost?: ts.ModuleResolutionHost) {
     const typeChecker = program.getTypeChecker();
+    const sortedDiags = program.getDeclarationDiagnostics(sourceFile)
+                               .filter((diag) => diag.code === 9007)
+                               .sort(sortDiagnostics).
+                                map((diag) => { return { start: diag.start!, end: diag.start! + diag.length! };});
 
     return (context: ts.TransformationContext) => {
+        if (!sortedDiags) return (node: ts.Node) => node;
         let hasError = false;
         const reportError = () => {
             hasError = true;
@@ -78,9 +95,9 @@ export function addTypeAnnotationTransformer(program: ts.Program, moduleResoluti
                 hasError = false;
                 return undefined;
             }
-
             return typeNode;
         }
+        let diagIndex = 0;
         // Return a visitor function
         return (rootNode: ts.Node) => {
             function updateTypesInNodeArray<T extends ts.Node>(nodeArray: ts.NodeArray<T>): ts.NodeArray<T>;
@@ -96,176 +113,220 @@ export function addTypeAnnotationTransformer(program: ts.Program, moduleResoluti
 
             // Define a visitor function
             function visit(node: ts.Node): ts.Node | ts.Node[] {
-                if(ts.isParameter(node) && !node.type) {
-                    const type = typeChecker.getTypeAtLocation(node);
-                    if(type) {
-                        const typeNode = typeToTypeNode(type, node);
-                        return ts.factory.updateParameterDeclaration(
-                            node,
-                            node.modifiers,
-                            node.dotDotDotToken,
-                            node.name,
-                            node.questionToken,
+                // Only visit descendants when there's diagnostics on this location.
+                while (diagIndex < sortedDiags.length && sortedDiags[diagIndex].start < node.getStart()) {
+                    ++diagIndex;
+                }
+                if (diagIndex >= sortedDiags.length) {
+                    return node;
+                }
+                if ((node.getStart() !== sortedDiags[diagIndex].start || node.getEnd() !== sortedDiags[diagIndex].end) &&
+                    sortedDiags[diagIndex].end > node.getEnd()) {
+                    return node;
+                }
+
+                switch (node.kind) {
+                case ts.SyntaxKind.Parameter:
+                    const parameter = node as ts.ParameterDeclaration;
+                    if (!parameter.type) {
+                        const type = typeChecker.getTypeAtLocation(node);
+                        if (type) {
+                            const typeNode = typeToTypeNode(type, node);
+                            return ts.factory.updateParameterDeclaration(
+                                parameter,
+                                parameter.modifiers,
+                                parameter.dotDotDotToken,
+                                parameter.name,
+                                parameter.questionToken,
+                                typeNode,
+                                parameter.initializer
+                            );
+                        }
+                    }
+                    break;
+                case ts.SyntaxKind.VariableDeclaration:
+                    const variableDeclaration = node as ts.VariableDeclaration;
+                    if (!variableDeclaration.type && !isLiteralConstDeclaration(variableDeclaration)) {
+                        const type = typeChecker.getTypeAtLocation(variableDeclaration);
+                        const typeNode = typeToTypeNode(type, variableDeclaration);
+                        return ts.factory.updateVariableDeclaration(
+                            variableDeclaration,
+                            variableDeclaration.name,
+                            /**exclamationToken=*/ undefined,
                             typeNode,
-                            node.initializer
+                            variableDeclaration.initializer
                         );
                     }
-                }
-                // Check if node is a variable declaration
-                if (ts.isVariableDeclaration(node) && !node.type && !isLiteralConstDeclaration(node)) {
-                    const type = typeChecker.getTypeAtLocation(node);
-                    const typeNode = typeToTypeNode(type, node);
-                    return ts.factory.updateVariableDeclaration(
-                        node,
-                        node.name,
-                        /**exclamationToken=*/undefined,
-                        typeNode,
-                        node.initializer
-                    );
-                }
-
-                if (ts.isFunctionDeclaration(node) && !node.type) {
-                    const type = tryGetReturnType(typeChecker, node);
-                    if(type) {
-
-                        const typeNode = typeToTypeNode(type, node);
-                        return ts.factory.updateFunctionDeclaration(
-                            node,
-                            node.modifiers,
-                            node.asteriskToken,
-                            node.name,
-                            updateTypesInNodeArray(node.typeParameters),
-                            updateTypesInNodeArray(node.parameters),
-                            typeNode,
-                            node.body
-                        );
+                    break;
+                case ts.SyntaxKind.FunctionDeclaration:
+                    const functionDecl = node as ts.FunctionDeclaration;
+                    if (!functionDecl.type) {
+                        const type = tryGetReturnType(typeChecker, functionDecl);
+                        if(type) {
+                            const typeNode = typeToTypeNode(type, functionDecl);
+                            return ts.factory.updateFunctionDeclaration(
+                                functionDecl,
+                                functionDecl.modifiers,
+                                functionDecl.asteriskToken,
+                                functionDecl.name,
+                                updateTypesInNodeArray(functionDecl.typeParameters),
+                                updateTypesInNodeArray(functionDecl.parameters),
+                                typeNode,
+                                functionDecl.body
+                            );
+                        }
                     }
-                }
-                if(ts.isPropertySignature(node) && !node.type && !isLiteralConstDeclaration(node)) {
-                    const type = typeChecker.getTypeAtLocation(node);
-                    const typeNode = typeToTypeNode(type, node);
-                    return ts.factory.updatePropertySignature(
-                        node,
-                        node.modifiers,
-                        node.name,
-                        node.questionToken,
-                        typeNode,
-                    );
-                }
-                if(ts.isPropertyDeclaration(node) && !node.type && !isLiteralConstDeclaration(node)) {
-                    const type = typeChecker.getTypeAtLocation(node);
-                    const typeNode = typeToTypeNode(type, node);
-                    return ts.factory.updatePropertyDeclaration(
-                        node,
-                        node.modifiers,
-                        node.name,
-                        node.questionToken ?? node.exclamationToken,
-                        typeNode,
-                        node.initializer
-                    );
-                }
-                if(ts.isMethodSignature(node) && !node.type) {
-                    const type = tryGetReturnType(typeChecker, node);
-                    if(type) {
-
+                    break;
+                case ts.SyntaxKind.PropertySignature:
+                    const propertySignature = node as ts.PropertySignature;
+                    if(!propertySignature.type && !isLiteralConstDeclaration(propertySignature)) {
+                        const type = typeChecker.getTypeAtLocation(node);
                         const typeNode = typeToTypeNode(type, node);
-                        return ts.factory.updateMethodSignature(
-                            node,
-                            node.modifiers,
-                            node.name,
-                            node.questionToken,
-                            updateTypesInNodeArray(node.typeParameters),
-                            updateTypesInNodeArray(node.parameters),
+                        return ts.factory.updatePropertySignature(
+                            propertySignature,
+                            propertySignature.modifiers,
+                            propertySignature.name,
+                            propertySignature.questionToken,
                             typeNode,
                         );
                     }
-                }
-                if(ts.isCallSignatureDeclaration(node)) {
-                    const type =    tryGetReturnType(typeChecker, node);
+                    break;
+                case ts.SyntaxKind.PropertyDeclaration:
+                    const propDecl = node as ts.PropertyDeclaration;
+                    if(!propDecl.type && !isLiteralConstDeclaration(propDecl)) {
+                        const type = typeChecker.getTypeAtLocation(node);
+                        const typeNode = typeToTypeNode(type, propDecl);
+                        return ts.factory.updatePropertyDeclaration(
+                            propDecl,
+                            propDecl.modifiers,
+                            propDecl.name,
+                            propDecl.questionToken ?? propDecl.exclamationToken,
+                            typeNode,
+                            propDecl.initializer
+                        );
+                    }
+                    break;
+                case ts.SyntaxKind.MethodSignature:
+                    const methodSignature = node as ts.MethodSignature;
+                    if(!methodSignature.type) {
+                        const type = tryGetReturnType(typeChecker, methodSignature);
+                        if(type) {
+                            const typeNode = typeToTypeNode(type, node);
+                            return ts.factory.updateMethodSignature(
+                                methodSignature,
+                                methodSignature.modifiers,
+                                methodSignature.name,
+                                methodSignature.questionToken,
+                                updateTypesInNodeArray(methodSignature.typeParameters),
+                                updateTypesInNodeArray(methodSignature.parameters),
+                                typeNode,
+                            );
+                        }
+                    }
+                    break;
+                case ts.SyntaxKind.CallSignature:
+                    const callSignature = node as ts.CallSignatureDeclaration;
+                    const type = tryGetReturnType(typeChecker, callSignature);
                     if(type) {
                         const typeNode = typeToTypeNode(type, node);
                         return ts.factory.updateCallSignature(
-                            node,
-                            updateTypesInNodeArray(node.typeParameters),
-                            updateTypesInNodeArray(node.parameters),
+                            callSignature,
+                            updateTypesInNodeArray(callSignature.typeParameters),
+                            updateTypesInNodeArray(callSignature.parameters),
                             typeNode,
                         );
                     }
-                }
-                if(ts.isMethodDeclaration(node) && !node.type) {
-                    const type = tryGetReturnType(typeChecker, node);
-                    if(type) {
-
-                        const typeNode = typeToTypeNode(type, node);
-                        return ts.factory.updateMethodDeclaration(
-                            node,
-                            node.modifiers,
-                            node.asteriskToken,
-                            node.name,
-                            node.questionToken,
-                            updateTypesInNodeArray(node.typeParameters),
-                            updateTypesInNodeArray(node.parameters),
-                            typeNode,
-                            node.body,
+                    break;
+                case ts.SyntaxKind.MethodDeclaration:
+                    const methodDeclaration = node as ts.MethodDeclaration;
+                    if(!methodDeclaration.type) {
+                        const type = tryGetReturnType(typeChecker, methodDeclaration);
+                        if(type) {
+                            const typeNode = typeToTypeNode(type, node);
+                            return ts.factory.updateMethodDeclaration(
+                                methodDeclaration,
+                                methodDeclaration.modifiers,
+                                methodDeclaration.asteriskToken,
+                                methodDeclaration.name,
+                                methodDeclaration.questionToken,
+                                updateTypesInNodeArray(methodDeclaration.typeParameters),
+                                updateTypesInNodeArray(methodDeclaration.parameters),
+                                typeNode,
+                                methodDeclaration.body,
+                            );
+                        }
+                    }
+                    break;
+                case ts.SyntaxKind.GetAccessor:
+                    const getAccessor = node as ts.GetAccessorDeclaration;
+                    if(!getAccessor.type) {
+                        const returnType = tryGetReturnType(typeChecker, getAccessor);
+                        if(returnType) {
+                            const typeNode = typeToTypeNode(returnType, node);
+                            return ts.factory.updateGetAccessorDeclaration(
+                                getAccessor,
+                                getAccessor.modifiers,
+                                getAccessor.name,
+                                updateTypesInNodeArray(getAccessor.parameters),
+                                typeNode,
+                                getAccessor.body,
+                            );
+                        }
+                    }
+                    break;
+                case ts.SyntaxKind.SetAccessor:
+                    const setAccessor = node as ts.SetAccessorDeclaration;
+                    if(!setAccessor.parameters[0]?.type) {
+                        return ts.factory.updateSetAccessorDeclaration(
+                            setAccessor,
+                            setAccessor.modifiers,
+                            setAccessor.name,
+                            updateTypesInNodeArray(setAccessor.parameters),
+                            setAccessor.body,
                         );
                     }
-                }
-                if(ts.isGetAccessorDeclaration(node) && !node.type) {
-                    const type = tryGetReturnType(typeChecker, node);
-                    if(type) {
-                        const typeNode = typeToTypeNode(type, node);
-                        return ts.factory.updateGetAccessorDeclaration(
-                            node,
-                            node.modifiers,
-                            node.name,
-                            updateTypesInNodeArray(node.parameters),
-                            typeNode,
-                            node.body,
-                        );
-                    }
-                }
-                if(ts.isSetAccessorDeclaration(node) && !node.parameters[0]?.type) {
-                    return ts.factory.updateSetAccessorDeclaration(
-                        node,
-                        node.modifiers,
-                        node.name,
-                        updateTypesInNodeArray(node.parameters),
-                        node.body,
-                    );
-                }
-                if (ts.isConstructorDeclaration(node)) {
+                    break;
+                case ts.SyntaxKind.Constructor:
+                    const constructor = node as ts.ConstructorDeclaration;
                     return ts.factory.updateConstructorDeclaration(
-                        node,
-                        node.modifiers,
-                        updateTypesInNodeArray(node.parameters),
-                        node.body,
+                        constructor,
+                        constructor.modifiers,
+                        updateTypesInNodeArray(constructor.parameters),
+                        constructor.body,
                     );
-                }
-                if(ts.isConstructSignatureDeclaration(node)) {
-                    const type = tryGetReturnType(typeChecker, node);
-                    if(type) {
-                        const typeNode = typeToTypeNode(type, node);
+                case ts.SyntaxKind.ConstructSignature:
+                    const constructorSignature = node as ts.ConstructSignatureDeclaration;
+                    const typeConstructor = tryGetReturnType(typeChecker, constructorSignature);
+                    if(typeConstructor) {
+                        const typeNode = typeToTypeNode(typeConstructor, constructorSignature);
                         return ts.factory.updateConstructSignature(
-                            node,
-                            updateTypesInNodeArray(node.typeParameters),
-                            updateTypesInNodeArray(node.parameters),
+                            constructorSignature,
+                            updateTypesInNodeArray(constructorSignature.typeParameters),
+                            updateTypesInNodeArray(constructorSignature.parameters),
                             typeNode,
                         );
                     }
-                }
-                if(ts.isExportAssignment(node) && node.expression.kind !== ts.SyntaxKind.Identifier) {
-                    const type = typeChecker.getTypeAtLocation(node.expression);
-                    if(type) {
-                        const typeNode = typeToTypeNode(type, node);
-                        const newId = ts.factory.createIdentifier("_default");
-                        const varDecl = ts.factory.createVariableDeclaration(newId, /*exclamationToken*/ undefined, typeNode, /*initializer*/ undefined);
-                        const statement = ts.factory.createVariableStatement(
-                            [],
-                            ts.factory.createVariableDeclarationList([varDecl], ts.NodeFlags.Const)
-                        );
-                        return [statement, ts.factory.updateExportAssignment(node, node.modifiers, newId)];
+                    break;
+                case ts.SyntaxKind.ExportAssignment:
+                    const exportAssignment = node as ts.ExportAssignment;
+                    if(exportAssignment.expression.kind !== ts.SyntaxKind.Identifier) {
+                        const type = typeChecker.getTypeAtLocation(exportAssignment.expression);
+                        if(type) {
+                            const typeNode = typeToTypeNode(type, exportAssignment);
+                            const newId = ts.factory.createIdentifier("_default");
+                            const varDecl = ts.factory.createVariableDeclaration(newId, /*exclamationToken*/ undefined, typeNode, /*initializer*/ undefined);
+                            const statement = ts.factory.createVariableStatement(
+                                [],
+                                ts.factory.createVariableDeclarationList([varDecl], ts.NodeFlags.Const)
+                            );
+                            return [statement, ts.factory.updateExportAssignment(exportAssignment, exportAssignment.modifiers, newId)];
+                        }
                     }
+                    break;
+                default:
+                    break;
                 }
+
                 // Otherwise, visit each child node recursively
                 return ts.visitEachChild(node, visit, context);
             }

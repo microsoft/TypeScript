@@ -11,7 +11,9 @@
     "transform-tests-parallel": "node ./build/code-mod/parallel-run.js --rootPaths=../tests/cases --shardCount=8",
     "transform-test": "node ./build/code-mod/test-updater.js --rootPaths=../tests/cases",
     "run-transformed-tests-parallel": "node ./build/test-runner/parallel-run.js --rootPaths=./tsc-tests/updated-tests --libPath=../tests/lib --type=all --shardCount=8",
-    "run-transformed-test": "node ./build/test-runner/test-runner-main.js --type=all --rootPaths=c:/dev/TSC/TypeScript/tests/cases "
+    "run-transformed-test": "node ./build/test-runner/test-runner-main.js --type=all --rootPaths=c:/dev/TSC/TypeScript/tests/cases ",
+    "fixer-test": "node ./build/code-mod/fixer-test.js --rootPaths=./fixer-test/source ",
+    "fixer-test-update": "node ./build/code-mod/fixer-test.js --rootPaths=./fixer-test/source --update "
   },
   "author": "",
   "license": "ISC",
