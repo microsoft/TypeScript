@@ -1376,6 +1376,20 @@ export type HasIllegalModifiers =
     | NamespaceExportDeclaration
     ;
 
+
+export type HasInferredType =
+    | FunctionDeclaration
+    | MethodDeclaration
+    | GetAccessorDeclaration
+    | SetAccessorDeclaration
+    | BindingElement
+    | ConstructSignatureDeclaration
+    | VariableDeclaration
+    | MethodSignature
+    | CallSignatureDeclaration
+    | ParameterDeclaration
+    | PropertyDeclaration
+    | PropertySignature;
 /**
  * Declarations that can contain other declarations. Corresponds with `ContainerFlags.IsContainer` in binder.ts.
  *
