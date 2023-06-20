@@ -18,7 +18,7 @@ verify.completions({
     name: "secondary",
     sortText: completion.SortText.OptionalMember,
     hasAction: true,
-    source: completion.CompletionSource.ObjectLiteralExpression,
+    source: completion.CompletionSource.ObjectLiteralMemberWithComma,
    }],
   preferences: {
     allowIncompleteCompletions: true,
@@ -29,7 +29,7 @@ verify.completions({
 verify.applyCodeActionFromCompletion("", {
   name: "secondary",
   description: `Add missing comma for an object member completion 'secondary'.`,
-  source: completion.CompletionSource.ObjectLiteralExpression,
+  source: completion.CompletionSource.ObjectLiteralMemberWithComma,
   newFileContent:
 `interface ColorPalette {
   primary?: string;

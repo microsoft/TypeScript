@@ -446,7 +446,7 @@ export enum CompletionSource {
     /** Case completions for switch statements */
     SwitchCases = "SwitchCases/",
     /** Completions for an Object literal expression */
-    ObjectLiteralExpression = "ObjectLiteralExpression/",
+    ObjectLiteralMemberWithComma = "ObjectLiteralMemberWithComma/",
 }
 
 /** @internal */
@@ -1687,9 +1687,11 @@ function createCompletionEntry(
         hasAction = true;
     }
 
-    if ((contextToken && isPropertyAssignment(contextToken.parent) && findNextToken(contextToken, contextToken?.parent, sourceFile)?.kind !== SyntaxKind.CommaToken &&
-        completionKind === CompletionKind.ObjectPropertyDeclaration)) {
-        source = CompletionSource.ObjectLiteralExpression;
+    if (completionKind === CompletionKind.ObjectPropertyDeclaration && contextToken &&
+        findPrecedingToken(contextToken.pos, sourceFile, contextToken)?.kind !== SyntaxKind.CommaToken &&
+        findNextToken(contextToken, contextToken.parent, sourceFile)?.kind !== SyntaxKind.CommaToken &&
+        (findAncestor(contextToken.parent, (node: Node) => isPropertyAssignment(node))?.getLastToken() === contextToken || isMethodDeclaration(contextToken.parent.parent))) {
+        source = CompletionSource.ObjectLiteralMemberWithComma;
         hasAction = true;
     }
 
@@ -2675,7 +2677,7 @@ function getSymbolCompletionFromEntryId(
             entryId.source === CompletionSource.ClassMemberSnippet && symbol.flags & SymbolFlags.ClassMember
             || entryId.source === CompletionSource.ObjectLiteralMethodSnippet && symbol.flags & (SymbolFlags.Property | SymbolFlags.Method)
             || getSourceFromOrigin(origin) === entryId.source
-            || entryId.source === CompletionSource.ObjectLiteralExpression)
+            || entryId.source === CompletionSource.ObjectLiteralMemberWithComma)
             ? { type: "symbol" as const, symbol, location, origin, contextToken, previousToken, isJsxInitializer, isTypeOnlyLocation }
             : undefined;
     }) || { type: "none" };
@@ -2871,10 +2873,10 @@ function getCompletionEntryCodeActionsAndSourceDisplay(
         return { codeActions: [codeAction], sourceDisplay: undefined };
     }
 
-    if (source === CompletionSource.ObjectLiteralExpression && contextToken) {
+    if (source === CompletionSource.ObjectLiteralMemberWithComma && contextToken) {
         const changes = textChanges.ChangeTracker.with(
             { host, formatContext, preferences },
-            tracker=>tracker.insertText(sourceFile, contextToken.end,","));
+            tracker => tracker.insertText(sourceFile, contextToken.end,","));
         if (changes) {
             return {
                 sourceDisplay: undefined,
@@ -4920,6 +4922,11 @@ function tryGetObjectLikeCompletionContainer(contextToken: Node | undefined): Ob
                     return parent;
                 }
                 break;
+            case SyntaxKind.CloseBraceToken: // const x = { } |
+                if (parent.parent && parent.parent.parent && isMethodDeclaration(parent.parent) && isObjectLiteralExpression(parent.parent.parent)) {
+                    return parent.parent.parent;
+                }
+                break;
             case SyntaxKind.AsteriskToken:
                 return isMethodDeclaration(parent) ? tryCast(parent.parent, isObjectLiteralExpression) : undefined;
             case SyntaxKind.AsyncKeyword:
@@ -4928,8 +4935,10 @@ function tryGetObjectLikeCompletionContainer(contextToken: Node | undefined): Ob
                 return (contextToken as Identifier).text === "async" && isShorthandPropertyAssignment(contextToken.parent)
                     ? contextToken.parent.parent : undefined;
             default:
-                if (parent.parent && isObjectLiteralExpression(parent.parent) && contextToken.kind !== SyntaxKind.ColonToken) {
-                    return parent.parent;
+                const ancestorNode = findAncestor(parent, (node: Node) => isPropertyAssignment(node));
+                if (contextToken.kind !== SyntaxKind.ColonToken && ancestorNode && ancestorNode.getLastToken() === contextToken &&
+                    isObjectLiteralExpression(ancestorNode.parent)) {
+                    return ancestorNode.parent;
                 }
         }
     }

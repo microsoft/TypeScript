@@ -601,11 +601,6 @@ export class ChangeTracker {
         this.replaceNode(sourceFile, oldNode, newNode, { suffix });
     }
 
-    public replacePropertyAssignmentOnSameLine(sourceFile: SourceFile, oldNode: PropertyAssignment, newNode: PropertyAssignment): void {
-        const suffix = this.nextCommaToken(sourceFile, oldNode) ? "" : ",";
-        this.replaceNode(sourceFile, oldNode, newNode, { suffix });
-    }
-
     public insertNodeAt(sourceFile: SourceFile, pos: number, newNode: Node, options: InsertNodeOptions = {}): void {
         this.replaceRange(sourceFile, createRange(pos), newNode, options);
     }
