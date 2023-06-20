@@ -46,3 +46,4 @@ jobs:
           close_issues "Out of Scope"
           close_issues "Declined"
           close_issues "Won't Fix"
+          close_issues "Too Complex"
