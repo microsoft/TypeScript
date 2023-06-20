@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitModuleWithScopeMarker.ts] ////
+
 //// [declarationEmitModuleWithScopeMarker.ts]
 declare module "bar" {
     var before: typeof func;

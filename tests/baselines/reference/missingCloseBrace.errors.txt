@@ -1,7 +1,7 @@
-tests/cases/compiler/missingCloseBrace.ts(9,1): error TS1005: '}' expected.
+missingCloseBrace.ts(9,1): error TS1005: '}' expected.
 
 
-==== tests/cases/compiler/missingCloseBrace.ts (1 errors) ====
+==== missingCloseBrace.ts (1 errors) ====
     function base_init() {
         {
     
@@ -13,4 +13,4 @@ tests/cases/compiler/missingCloseBrace.ts(9,1): error TS1005: '}' expected.
     
     
 !!! error TS1005: '}' expected.
-!!! related TS1007 tests/cases/compiler/missingCloseBrace.ts:1:22: The parser expected to find a '}' to match the '{' token here.
+!!! related TS1007 missingCloseBrace.ts:1:22: The parser expected to find a '}' to match the '{' token here.

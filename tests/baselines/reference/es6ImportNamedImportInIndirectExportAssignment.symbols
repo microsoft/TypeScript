@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es6ImportNamedImportInIndirectExportAssignment_0.ts ===
+//// [tests/cases/compiler/es6ImportNamedImportInIndirectExportAssignment.ts] ////
+
+=== es6ImportNamedImportInIndirectExportAssignment_0.ts ===
 export module a {
 >a : Symbol(a, Decl(es6ImportNamedImportInIndirectExportAssignment_0.ts, 0, 0))
 
@@ -7,7 +9,7 @@ export module a {
     }
 }
 
-=== tests/cases/compiler/es6ImportNamedImportInIndirectExportAssignment_1.ts ===
+=== es6ImportNamedImportInIndirectExportAssignment_1.ts ===
 import { a } from "./es6ImportNamedImportInIndirectExportAssignment_0";
 >a : Symbol(a, Decl(es6ImportNamedImportInIndirectExportAssignment_1.ts, 0, 8))
 

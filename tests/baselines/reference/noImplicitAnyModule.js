@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitAnyModule.ts] ////
+
 //// [noImplicitAnyModule.ts]
 declare module Module {
     interface Interface {

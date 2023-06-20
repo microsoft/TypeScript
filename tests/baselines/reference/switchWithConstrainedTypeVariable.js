@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/switchWithConstrainedTypeVariable.ts] ////
+
 //// [switchWithConstrainedTypeVariable.ts]
 // Repro from #20840
 

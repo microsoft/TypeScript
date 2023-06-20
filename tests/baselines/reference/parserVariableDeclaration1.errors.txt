@@ -1,10 +1,10 @@
-tests/cases/conformance/parser/ecmascript5/VariableDeclarations/parserVariableDeclaration1.ts(1,19): error TS2304: Cannot find name 'a'.
-tests/cases/conformance/parser/ecmascript5/VariableDeclarations/parserVariableDeclaration1.ts(2,15): error TS2304: Cannot find name 'b'.
-tests/cases/conformance/parser/ecmascript5/VariableDeclarations/parserVariableDeclaration1.ts(3,12): error TS2304: Cannot find name 'c'.
-tests/cases/conformance/parser/ecmascript5/VariableDeclarations/parserVariableDeclaration1.ts(4,14): error TS2304: Cannot find name 'd'.
+parserVariableDeclaration1.ts(1,19): error TS2304: Cannot find name 'a'.
+parserVariableDeclaration1.ts(2,15): error TS2304: Cannot find name 'b'.
+parserVariableDeclaration1.ts(3,12): error TS2304: Cannot find name 'c'.
+parserVariableDeclaration1.ts(4,14): error TS2304: Cannot find name 'd'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/VariableDeclarations/parserVariableDeclaration1.ts (4 errors) ====
+==== parserVariableDeclaration1.ts (4 errors) ====
     		var selection = a, 
     		                ~
 !!! error TS2304: Cannot find name 'a'.

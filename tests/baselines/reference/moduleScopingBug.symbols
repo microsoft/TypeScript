@@ -1,4 +1,6 @@
-=== tests/cases/compiler/moduleScopingBug.ts ===
+//// [tests/cases/compiler/moduleScopingBug.ts] ////
+
+=== moduleScopingBug.ts ===
 module M
 >M : Symbol(M, Decl(moduleScopingBug.ts, 0, 0))
 

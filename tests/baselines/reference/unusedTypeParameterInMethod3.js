@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedTypeParameterInMethod3.ts] ////
+
 //// [unusedTypeParameterInMethod3.ts]
 class A {
     public f1<X, Y, Z>() {

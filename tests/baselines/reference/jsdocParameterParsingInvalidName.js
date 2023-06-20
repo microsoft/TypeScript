@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsdocParameterParsingInvalidName.ts] ////
+
 //// [jsdocParameterParsingInvalidName.ts]
 class c {
     /**

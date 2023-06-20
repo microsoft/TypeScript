@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/giant.ts] ////
+
 //// [giant.ts]
 /*
     Prefixes

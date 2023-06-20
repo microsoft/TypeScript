@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/a.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment9.ts] ////
+
+=== a.js ===
 var my = my || {};
 >my : typeof my
 >my || {} : typeof my | {}

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/accessorsNotAllowedInES3.ts] ////
+
 //// [accessorsNotAllowedInES3.ts]
 class C {
     get x(): number { return 1; }

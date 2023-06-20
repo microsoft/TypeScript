@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectLiteralEnumPropertyNames.ts] ////
+
 //// [objectLiteralEnumPropertyNames.ts]
 // Fixes #16887
 enum Strs {

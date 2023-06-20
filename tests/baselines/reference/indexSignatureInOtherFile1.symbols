@@ -1,4 +1,6 @@
-=== tests/cases/compiler/other.ts ===
+//// [tests/cases/compiler/indexSignatureInOtherFile1.ts] ////
+
+=== other.ts ===
 interface Array1<T> {
 >Array1 : Symbol(Array1, Decl(other.ts, 0, 0), Decl(other.ts, 9, 11), Decl(other.ts, 9, 38), Decl(other.ts, 14, 1))
 >T : Symbol(T, Decl(other.ts, 0, 17), Decl(other.ts, 12, 17), Decl(other.ts, 17, 17))
@@ -76,7 +78,7 @@ interface Array1<T> {
   };
 }
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 class Test extends Array1 {
 >Test : Symbol(Test, Decl(index.ts, 0, 0))
 >Array1 : Symbol(Array1, Decl(other.ts, 0, 0), Decl(other.ts, 9, 11), Decl(other.ts, 9, 38), Decl(other.ts, 14, 1))

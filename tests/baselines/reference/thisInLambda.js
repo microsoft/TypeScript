@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/thisInLambda.ts] ////
+
 //// [thisInLambda.ts]
 class Foo {
     x = "hello";

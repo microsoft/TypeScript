@@ -1,11 +1,13 @@
-=== tests/cases/compiler/foo.tsx ===
+//// [tests/cases/compiler/unusedImports15.ts] ////
+
+=== foo.tsx ===
 import Element = require("react");
 >Element : Symbol(Element, Decl(foo.tsx, 0, 0))
 
 export const FooComponent = <div></div>
 >FooComponent : Symbol(FooComponent, Decl(foo.tsx, 2, 12))
 
-=== tests/cases/compiler/node_modules/@types/react/index.d.ts ===
+=== node_modules/@types/react/index.d.ts ===
 export = React;
 >React : Symbol(React, Decl(index.d.ts, 1, 26))
 

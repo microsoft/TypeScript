@@ -5,7 +5,7 @@ sourceRoot:
 sources: sourceMap-InterfacePrecedingVariableDeclaration1.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/sourceMap-InterfacePrecedingVariableDeclaration1.js
+emittedFile:sourceMap-InterfacePrecedingVariableDeclaration1.js
 sourceFile:sourceMap-InterfacePrecedingVariableDeclaration1.ts
 -------------------------------------------------------------------
 >>>var x = 0;

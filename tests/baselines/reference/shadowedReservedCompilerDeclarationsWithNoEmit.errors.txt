@@ -1,7 +1,7 @@
-tests/cases/compiler/shadowedReservedCompilerDeclarationsWithNoEmit.ts(23,13): error TS1215: Invalid use of 'arguments'. Modules are automatically in strict mode.
+shadowedReservedCompilerDeclarationsWithNoEmit.ts(23,13): error TS1215: Invalid use of 'arguments'. Modules are automatically in strict mode.
 
 
-==== tests/cases/compiler/shadowedReservedCompilerDeclarationsWithNoEmit.ts (1 errors) ====
+==== shadowedReservedCompilerDeclarationsWithNoEmit.ts (1 errors) ====
     // Shadowed captured this and super
     class Base { }
     class C extends Base {

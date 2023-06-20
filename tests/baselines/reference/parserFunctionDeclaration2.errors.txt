@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/FunctionDeclarations/parserFunctionDeclaration2.ts(1,24): error TS1183: An implementation cannot be declared in ambient contexts.
+parserFunctionDeclaration2.ts(1,24): error TS1183: An implementation cannot be declared in ambient contexts.
 
 
-==== tests/cases/conformance/parser/ecmascript5/FunctionDeclarations/parserFunctionDeclaration2.ts (1 errors) ====
+==== parserFunctionDeclaration2.ts (1 errors) ====
     declare function Foo() {
                            ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.

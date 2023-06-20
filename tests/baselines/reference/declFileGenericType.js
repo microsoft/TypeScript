@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileGenericType.ts] ////
+
 //// [declFileGenericType.ts]
 export module C {
     export class A<T>{ }

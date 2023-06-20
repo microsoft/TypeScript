@@ -80,15 +80,15 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/index.ts: *new*
   {}
 /user/username/projects/myproject/index2.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
-  {}
 /user/username/projects/myproject/package.json: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::

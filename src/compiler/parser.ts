@@ -141,6 +141,7 @@ import {
     isJSDocNullableType,
     isJSDocReturnTag,
     isJSDocTypeTag,
+    isJsxNamespacedName,
     isJsxOpeningElement,
     isJsxOpeningFragment,
     isKeyword,
@@ -222,7 +223,6 @@ import {
     JsxSelfClosingElement,
     JsxSpreadAttribute,
     JsxTagNameExpression,
-    JsxTagNamePropertyAccess,
     JsxText,
     JsxTokenSyntaxKind,
     LabeledStatement,
@@ -1464,6 +1464,8 @@ var nodeCount: number;
 var identifiers: Map<string, string>;
 var identifierCount: number;
 
+// TODO(jakebailey): This type is a lie; this value actually contains the result
+// of ORing a bunch of `1 << ParsingContext.XYZ`.
 var parsingContext: ParsingContext;
 
 var notParenthesizedArrow: Set<number> | undefined;
@@ -2846,6 +2848,12 @@ function isListElement(parsingContext: ParsingContext, inErrorRecovery: boolean)
             return tokenIsIdentifierOrKeyword(token()) || token() === SyntaxKind.OpenBraceToken;
         case ParsingContext.JsxChildren:
             return true;
+        case ParsingContext.JSDocComment:
+            return true;
+        case ParsingContext.Count:
+            return Debug.fail("ParsingContext.Count used as a context"); // Not a real context, only a marker.
+        default:
+            Debug.assertNever(parsingContext, "Non-exhaustive case in 'isListElement'.");
     }
 
     return Debug.fail("Non-exhaustive case in 'isListElement'.");
@@ -2984,6 +2992,9 @@ function isVariableDeclaratorListTerminator(): boolean {
 
 // True if positioned at element or terminator of the current list or any enclosing list
 function isInSomeParsingContext(): boolean {
+    // We should be in at least one parsing context, be it SourceElements while parsing
+    // a SourceFile, or JSDocComment when lazily parsing JSDoc.
+    Debug.assert(parsingContext, "Missing parsing context");
     for (let kind = 0; kind < ParsingContext.Count; kind++) {
         if (parsingContext & (1 << kind)) {
             if (isListElement(kind, /*inErrorRecovery*/ true) || isListTerminator(kind)) {
@@ -3359,6 +3370,7 @@ function parsingContextErrors(context: ParsingContext) {
         case ParsingContext.JsxAttributes: return parseErrorAtCurrentToken(Diagnostics.Identifier_expected);
         case ParsingContext.JsxChildren: return parseErrorAtCurrentToken(Diagnostics.Identifier_expected);
         case ParsingContext.AssertEntries: return parseErrorAtCurrentToken(Diagnostics.Identifier_or_string_literal_expected); // AssertionKey.
+        case ParsingContext.JSDocComment: return parseErrorAtCurrentToken(Diagnostics.Identifier_expected);
         case ParsingContext.Count: return Debug.fail("ParsingContext.Count used as a context"); // Not a real context, only a marker.
         default: Debug.assertNever(context);
     }
@@ -6086,11 +6098,15 @@ function parseJsxElementName(): JsxTagNameExpression {
     //      primaryExpression in the form of an identifier and "this" keyword
     // We can't just simply use parseLeftHandSideExpressionOrHigher because then we will start consider class,function etc as a keyword
     // We only want to consider "this" as a primaryExpression
-    let expression: JsxTagNameExpression = parseJsxTagName();
-    while (parseOptional(SyntaxKind.DotToken)) {
-        expression = finishNode(factoryCreatePropertyAccessExpression(expression, parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateIdentifiers*/ false)), pos) as JsxTagNamePropertyAccess;
+    const initialExpression = parseJsxTagName();
+    if (isJsxNamespacedName(initialExpression)) {
+        return initialExpression; // `a:b.c` is invalid syntax, don't even look for the `.` if we parse `a:b`, and let `parseAttribute` report "unexpected :" instead.
     }
-    return expression;
+    let expression: PropertyAccessExpression | Identifier | ThisExpression = initialExpression;
+    while (parseOptional(SyntaxKind.DotToken)) {
+        expression = finishNode(factoryCreatePropertyAccessExpression(expression, parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateIdentifiers*/ false)), pos);
+    }
+    return expression as JsxTagNameExpression;
 }
 
 function parseJsxTagName(): Identifier | JsxNamespacedName | ThisExpression {
@@ -7264,6 +7280,8 @@ function parseDeclaration(): Statement {
 
 function tryReuseAmbientDeclaration(pos: number): Statement | undefined {
     return doInsideOfContext(NodeFlags.Ambient, () => {
+        // TODO(jakebailey): this is totally wrong; `parsingContext` is the result of ORing a bunch of `1 << ParsingContext.XYZ`.
+        // The enum should really be a bunch of flags.
         const node = currentNode(parsingContext, pos);
         if (node) {
             return consumeNode(node) as Statement;
@@ -8467,6 +8485,7 @@ const enum ParsingContext {
     HeritageClauses,           // Heritage clauses for a class or interface declaration.
     ImportOrExportSpecifiers,  // Named import clause's import specifier list,
     AssertEntries,             // Import entries list.
+    JSDocComment,              // Parsing via JSDocParser
     Count                      // Number of parsing contexts
 }
 
@@ -8571,6 +8590,9 @@ const enum PropertyLikeParse {
 }
 
 function parseJSDocCommentWorker(start = 0, length: number | undefined): JSDoc | undefined {
+    const saveParsingContext = parsingContext;
+    parsingContext |= 1 << ParsingContext.JSDocComment;
+
     const content = sourceText;
     const end = length === undefined ? content.length : start + length;
     length = end - start;
@@ -8593,7 +8615,11 @@ function parseJSDocCommentWorker(start = 0, length: number | undefined): JSDoc |
     const parts: JSDocComment[] = [];
 
     // + 3 for leading /**, - 5 in total for /** */
-    return scanner.scanRange(start + 3, length - 5, () => {
+    const result = scanner.scanRange(start + 3, length - 5, doJSDocScan);
+    parsingContext = saveParsingContext;
+    return result;
+
+    function doJSDocScan() {
         // Initially we can parse out a tag.  We also have seen a starting asterisk.
         // This is so that /** * @type */ doesn't parse.
         let state = JSDocState.SawAsterisk;
@@ -8699,7 +8725,7 @@ function parseJSDocCommentWorker(start = 0, length: number | undefined): JSDoc |
         if (parts.length && tags) Debug.assertIsDefined(commentsPos, "having parsed tags implies that the end of the comment span should be set");
         const tagsArray = tags && createNodeArray(tags, tagsPos, tagsEnd);
         return finishNode(factory.createJSDocComment(parts.length ? createNodeArray(parts, start, commentsPos) : trimmedComments.length ? trimmedComments : undefined, tagsArray), start, end);
-    });
+    }
 
     function removeLeadingNewlines(comments: string[]) {
         while (comments.length && (comments[0] === "\n" || comments[0] === "\r")) {
@@ -9113,11 +9139,14 @@ function parseJSDocCommentWorker(start = 0, length: number | undefined): JSDoc |
     function parseNestedTypeLiteral(typeExpression: JSDocTypeExpression | undefined, name: EntityName, target: PropertyLikeParse, indent: number) {
         if (typeExpression && isObjectOrObjectArrayTypeReference(typeExpression.type)) {
             const pos = getNodePos();
-            let child: JSDocPropertyLikeTag | JSDocTypeTag | false;
+            let child: JSDocPropertyLikeTag | JSDocTypeTag | JSDocTemplateTag | false;
             let children: JSDocPropertyLikeTag[] | undefined;
             while (child = tryParse(() => parseChildParameterOrPropertyTag(target, indent, name))) {
                 if (child.kind === SyntaxKind.JSDocParameterTag || child.kind === SyntaxKind.JSDocPropertyTag) {
                     children = append(children, child);
+                }
+                else if (child.kind === SyntaxKind.JSDocTemplateTag) {
+                    parseErrorAtRange(child.tagName, Diagnostics.A_JSDoc_template_tag_may_not_follow_a_typedef_callback_or_overload_tag);
                 }
             }
             if (children) {
@@ -9264,11 +9293,14 @@ function parseJSDocCommentWorker(start = 0, length: number | undefined): JSDoc |
 
         let end: number | undefined;
         if (!typeExpression || isObjectOrObjectArrayTypeReference(typeExpression.type)) {
-            let child: JSDocTypeTag | JSDocPropertyTag | false;
+            let child: JSDocTypeTag | JSDocPropertyTag | JSDocTemplateTag | false;
             let childTypeTag: JSDocTypeTag | undefined;
             let jsDocPropertyTags: JSDocPropertyTag[] | undefined;
             let hasChildren = false;
             while (child = tryParse(() => parseChildPropertyTag(indent))) {
+                if (child.kind === SyntaxKind.JSDocTemplateTag) {
+                    break;
+                }
                 hasChildren = true;
                 if (child.kind === SyntaxKind.JSDocTypeTag) {
                     if (childTypeTag) {
@@ -9335,9 +9367,13 @@ function parseJSDocCommentWorker(start = 0, length: number | undefined): JSDoc |
 
     function parseCallbackTagParameters(indent: number) {
         const pos = getNodePos();
-        let child: JSDocParameterTag | false;
+        let child: JSDocParameterTag | JSDocTemplateTag | false;
         let parameters;
-        while (child = tryParse(() => parseChildParameterOrPropertyTag(PropertyLikeParse.CallbackParameter, indent) as JSDocParameterTag)) {
+        while (child = tryParse(() => parseChildParameterOrPropertyTag(PropertyLikeParse.CallbackParameter, indent) as JSDocParameterTag | JSDocTemplateTag)) {
+            if (child.kind === SyntaxKind.JSDocTemplateTag) {
+                parseErrorAtRange(child.tagName, Diagnostics.A_JSDoc_template_tag_may_not_follow_a_typedef_callback_or_overload_tag);
+                break;
+            }
             parameters = append(parameters, child);
         }
         return createNodeArray(parameters || [], pos);
@@ -9393,10 +9429,10 @@ function parseJSDocCommentWorker(start = 0, length: number | undefined): JSDoc |
     }
 
     function parseChildPropertyTag(indent: number) {
-        return parseChildParameterOrPropertyTag(PropertyLikeParse.Property, indent) as JSDocTypeTag | JSDocPropertyTag | false;
+        return parseChildParameterOrPropertyTag(PropertyLikeParse.Property, indent) as JSDocTypeTag | JSDocPropertyTag | JSDocTemplateTag | false;
     }
 
-    function parseChildParameterOrPropertyTag(target: PropertyLikeParse, indent: number, name?: EntityName): JSDocTypeTag | JSDocPropertyTag | JSDocParameterTag | false {
+    function parseChildParameterOrPropertyTag(target: PropertyLikeParse, indent: number, name?: EntityName): JSDocTypeTag | JSDocPropertyTag | JSDocParameterTag | JSDocTemplateTag | false {
         let canParseTag = true;
         let seenAsterisk = false;
         while (true) {
@@ -9432,13 +9468,13 @@ function parseJSDocCommentWorker(start = 0, length: number | undefined): JSDoc |
         }
     }
 
-    function tryParseChildTag(target: PropertyLikeParse, indent: number): JSDocTypeTag | JSDocPropertyTag | JSDocParameterTag | false {
+    function tryParseChildTag(target: PropertyLikeParse, indent: number): JSDocTypeTag | JSDocPropertyTag | JSDocParameterTag | JSDocTemplateTag | false {
         Debug.assert(token() === SyntaxKind.AtToken);
         const start = scanner.getTokenFullStart();
         nextTokenJSDoc();
 
         const tagName = parseJSDocIdentifierName();
-        skipWhitespace();
+        const indentText = skipWhitespaceOrAsterisk();
         let t: PropertyLikeParse;
         switch (tagName.escapedText) {
             case "type":
@@ -9452,6 +9488,8 @@ function parseJSDocCommentWorker(start = 0, length: number | undefined): JSDoc |
             case "param":
                 t = PropertyLikeParse.Parameter | PropertyLikeParse.CallbackParameter;
                 break;
+            case "template":
+                return parseTemplateTag(start, tagName, indent, indentText);
             default:
                 return false;
         }

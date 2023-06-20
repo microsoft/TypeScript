@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noImplicitUseStrict_amd.ts ===
+//// [tests/cases/compiler/noImplicitUseStrict_amd.ts] ////
+
+=== noImplicitUseStrict_amd.ts ===
 export var x = 0;
 >x : Symbol(x, Decl(noImplicitUseStrict_amd.ts, 0, 10))
 

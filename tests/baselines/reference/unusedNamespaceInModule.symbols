@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedNamespaceInModule.ts ===
+//// [tests/cases/compiler/unusedNamespaceInModule.ts] ////
+
+=== unusedNamespaceInModule.ts ===
 module A {
 >A : Symbol(A, Decl(unusedNamespaceInModule.ts, 0, 0))
 

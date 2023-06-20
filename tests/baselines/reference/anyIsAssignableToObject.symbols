@@ -1,4 +1,6 @@
-=== tests/cases/compiler/anyIsAssignableToObject.ts ===
+//// [tests/cases/compiler/anyIsAssignableToObject.ts] ////
+
+=== anyIsAssignableToObject.ts ===
 interface P {
 >P : Symbol(P, Decl(anyIsAssignableToObject.ts, 0, 0))
 

@@ -1,28 +1,28 @@
-tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors.ts(27,9): error TS2769: No overload matches this call.
+overloadResolutionConstructors.ts(27,9): error TS2769: No overload matches this call.
   Overload 1 of 2, '(s: string): string', gave the following error.
     Argument of type '{}' is not assignable to parameter of type 'string'.
   Overload 2 of 2, '(s: number): number', gave the following error.
     Argument of type '{}' is not assignable to parameter of type 'number'.
-tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors.ts(43,15): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
-tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors.ts(67,9): error TS2558: Expected 3 type arguments, but got 4.
-tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors.ts(77,25): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
-tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors.ts(78,25): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
-tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors.ts(88,9): error TS2344: Type 'boolean' does not satisfy the constraint 'number'.
-tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors.ts(91,9): error TS2769: No overload matches this call.
+overloadResolutionConstructors.ts(43,15): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+overloadResolutionConstructors.ts(67,9): error TS2558: Expected 3 type arguments, but got 4.
+overloadResolutionConstructors.ts(77,25): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+overloadResolutionConstructors.ts(78,25): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+overloadResolutionConstructors.ts(88,9): error TS2344: Type 'boolean' does not satisfy the constraint 'number'.
+overloadResolutionConstructors.ts(91,9): error TS2769: No overload matches this call.
   Overload 1 of 2, '(n: string, m: any): any', gave the following error.
     Argument of type 'boolean' is not assignable to parameter of type 'string'.
   Overload 2 of 2, '(n: number, m: any): any', gave the following error.
     Argument of type 'boolean' is not assignable to parameter of type 'number'.
-tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors.ts(92,15): error TS2769: No overload matches this call.
+overloadResolutionConstructors.ts(92,15): error TS2769: No overload matches this call.
   Overload 1 of 2, '(n: any, m: number): any', gave the following error.
     Argument of type 'boolean' is not assignable to parameter of type 'number'.
   Overload 2 of 2, '(n: any, m: string): any', gave the following error.
     Argument of type 'boolean' is not assignable to parameter of type 'string'.
-tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors.ts(100,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'n' must be of type 'number', but here has type 'string'.
-tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors.ts(100,26): error TS2339: Property 'toFixed' does not exist on type 'string'.
+overloadResolutionConstructors.ts(100,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'n' must be of type 'number', but here has type 'string'.
+overloadResolutionConstructors.ts(100,26): error TS2339: Property 'toFixed' does not exist on type 'string'.
 
 
-==== tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors.ts (10 errors) ====
+==== overloadResolutionConstructors.ts (10 errors) ====
     class SomeBase {
         private n;
     
@@ -153,7 +153,7 @@ tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors
     var n = new fn5((n) => n.toFixed());
         ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'n' must be of type 'number', but here has type 'string'.
-!!! related TS6203 tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors.ts:58:5: 'n' was also declared here.
+!!! related TS6203 overloadResolutionConstructors.ts:58:5: 'n' was also declared here.
                              ~~~~~~~
 !!! error TS2339: Property 'toFixed' does not exist on type 'string'.
     var s = new fn5((n) => n.substr(0));

@@ -1,14 +1,14 @@
-tests/cases/conformance/expressions/contextualTyping/arrayLiteralExpressionContextualTyping.ts(6,5): error TS2322: Type '[number, number, number, number]' is not assignable to type '[number, number, number]'.
+arrayLiteralExpressionContextualTyping.ts(6,5): error TS2322: Type '[number, number, number, number]' is not assignable to type '[number, number, number]'.
   Source has 4 element(s) but target allows only 3.
-tests/cases/conformance/expressions/contextualTyping/arrayLiteralExpressionContextualTyping.ts(7,5): error TS2322: Type '[number, number, number, string]' is not assignable to type '[string | number, string | number, string | number]'.
+arrayLiteralExpressionContextualTyping.ts(7,5): error TS2322: Type '[number, number, number, string]' is not assignable to type '[string | number, string | number, string | number]'.
   Source has 4 element(s) but target allows only 3.
-tests/cases/conformance/expressions/contextualTyping/arrayLiteralExpressionContextualTyping.ts(8,5): error TS2322: Type '[number, number, number, string]' is not assignable to type '[number, number, number]'.
+arrayLiteralExpressionContextualTyping.ts(8,5): error TS2322: Type '[number, number, number, string]' is not assignable to type '[number, number, number]'.
   Source has 4 element(s) but target allows only 3.
-tests/cases/conformance/expressions/contextualTyping/arrayLiteralExpressionContextualTyping.ts(14,5): error TS2322: Type '[number, number, number, number, number, number]' is not assignable to type '[number, number, number]'.
+arrayLiteralExpressionContextualTyping.ts(14,5): error TS2322: Type '[number, number, number, number, number, number]' is not assignable to type '[number, number, number]'.
   Source has 6 element(s) but target allows only 3.
 
 
-==== tests/cases/conformance/expressions/contextualTyping/arrayLiteralExpressionContextualTyping.ts (4 errors) ====
+==== arrayLiteralExpressionContextualTyping.ts (4 errors) ====
     // In a contextually typed array literal expression containing no spread elements, an element expression at index N is contextually typed by
     //      the type of the property with the numeric name N in the contextual type, if any, or otherwise
     //      the numeric index type of the contextual type, if any.

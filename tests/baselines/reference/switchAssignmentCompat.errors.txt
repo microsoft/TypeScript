@@ -1,7 +1,7 @@
-tests/cases/compiler/switchAssignmentCompat.ts(4,10): error TS2678: Type 'typeof Foo' is not comparable to type '0'.
+switchAssignmentCompat.ts(4,10): error TS2678: Type 'typeof Foo' is not comparable to type '0'.
 
 
-==== tests/cases/compiler/switchAssignmentCompat.ts (1 errors) ====
+==== switchAssignmentCompat.ts (1 errors) ====
     class Foo { }
     
     switch (0) {

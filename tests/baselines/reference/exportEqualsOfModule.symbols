@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exportEqualsOfModule.ts ===
+//// [tests/cases/compiler/exportEqualsOfModule.ts] ////
+
+=== exportEqualsOfModule.ts ===
 declare module '~popsicle/dist/request' {
 >'~popsicle/dist/request' : Symbol("~popsicle/dist/request", Decl(exportEqualsOfModule.ts, 0, 0))
 

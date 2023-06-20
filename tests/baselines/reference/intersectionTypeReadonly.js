@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/intersection/intersectionTypeReadonly.ts] ////
+
 //// [intersectionTypeReadonly.ts]
 interface Base {
     readonly value: number;

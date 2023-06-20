@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overrideBaseIntersectionMethod.ts ===
+//// [tests/cases/compiler/overrideBaseIntersectionMethod.ts] ////
+
+=== overrideBaseIntersectionMethod.ts ===
 // Repro from #14615
 
 type Constructor<T> = new (...args: any[]) => T;

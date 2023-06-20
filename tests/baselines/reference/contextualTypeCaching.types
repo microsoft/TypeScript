@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualTypeCaching.ts ===
+//// [tests/cases/compiler/contextualTypeCaching.ts] ////
+
+=== contextualTypeCaching.ts ===
 // Repro from #52575
 
 export interface Event<T> {

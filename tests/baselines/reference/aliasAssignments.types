@@ -1,4 +1,6 @@
-=== tests/cases/compiler/aliasAssignments_1.ts ===
+//// [tests/cases/compiler/aliasAssignments.ts] ////
+
+=== aliasAssignments_1.ts ===
 import moduleA = require("./aliasAssignments_moduleA");
 >moduleA : typeof moduleA
 
@@ -20,7 +22,7 @@ y = moduleA; // should be error
 >y : number
 >moduleA : typeof moduleA
 
-=== tests/cases/compiler/aliasAssignments_moduleA.ts ===
+=== aliasAssignments_moduleA.ts ===
 export class someClass {
 >someClass : someClass
 

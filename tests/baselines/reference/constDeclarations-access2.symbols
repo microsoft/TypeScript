@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constDeclarations-access2.ts ===
+//// [tests/cases/compiler/constDeclarations-access2.ts] ////
+
+=== constDeclarations-access2.ts ===
 const x = 0
 >x : Symbol(x, Decl(constDeclarations-access2.ts, 0, 5))
 

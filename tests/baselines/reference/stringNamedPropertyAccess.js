@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/objectTypeLiteral/propertySignatures/stringNamedPropertyAccess.ts] ////
+
 //// [stringNamedPropertyAccess.ts]
 class C {
     "a b": number;

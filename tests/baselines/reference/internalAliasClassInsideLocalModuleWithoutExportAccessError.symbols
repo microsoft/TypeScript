@@ -1,4 +1,6 @@
-=== tests/cases/compiler/internalAliasClassInsideLocalModuleWithoutExportAccessError.ts ===
+//// [tests/cases/compiler/internalAliasClassInsideLocalModuleWithoutExportAccessError.ts] ////
+
+=== internalAliasClassInsideLocalModuleWithoutExportAccessError.ts ===
 export module x {
 >x : Symbol(x, Decl(internalAliasClassInsideLocalModuleWithoutExportAccessError.ts, 0, 0))
 

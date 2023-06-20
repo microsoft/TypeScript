@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentsDottedModuleName.ts] ////
+
 //// [commentsDottedModuleName.ts]
 /** this is multi declare module*/
 export module outerModule.InnerModule {
