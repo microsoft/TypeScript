@@ -1,7 +1,7 @@
-tests/cases/compiler/a.js(2,3): error TS8017: Signature declarations can only be used in TypeScript files.
+a.js(2,3): error TS8017: Signature declarations can only be used in TypeScript files.
 
 
-==== tests/cases/compiler/a.js (1 errors) ====
+==== a.js (1 errors) ====
     class A {
       foo();
       ~~~
