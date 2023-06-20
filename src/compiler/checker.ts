@@ -10169,6 +10169,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return getTypeOfPropertyOfType(type, name) || getApplicableIndexInfoForName(type, name)?.type || unknownType;
     }
 
+    /**
+     * Similar to `getTypeOfPropertyOrIndexSignature`,
+     * but returns `undefined` if there is no matching property or index signature,
+     * and adds optionality to index signature types.
+     */
+    function getTypeOfPropertyOrIndexSignatureOfType(type: Type, name: __String): Type | undefined {
+        let propType;
+        return getTypeOfPropertyOfType(type, name) ||
+            (propType = getApplicableIndexInfoForName(type, name)?.type) &&
+            addOptionality(propType, /*isProperty*/ true, /*isOptional*/ true);
+    }
+
     function isTypeAny(type: Type | undefined) {
         return type && (type.flags & TypeFlags.Any) !== 0;
     }
@@ -22718,13 +22730,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         const filtered = contains(include, Ternary.False) ? getUnionType(types.filter((_, i) => include[i])) : target;
         return filtered.flags & TypeFlags.Never ? target : filtered;
-
-        function getTypeOfPropertyOrIndexSignatureOfType(type: Type, name: __String): Type | undefined {
-            let propType;
-            return getTypeOfPropertyOfType(type, name) ||
-                (propType = getApplicableIndexInfoForName(type, name)?.type) &&
-                addOptionality(propType, /*isProperty*/ true, /*isOptional*/ true);
-        }
     }
 
     /**
