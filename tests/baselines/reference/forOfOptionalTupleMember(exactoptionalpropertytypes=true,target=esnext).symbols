@@ -1,0 +1,31 @@
+//// [tests/cases/compiler/forOfOptionalTupleMember.ts] ////
+
+=== forOfOptionalTupleMember.ts ===
+// repro from https://github.com/microsoft/TypeScript/issues/54302
+
+type Item = {
+>Item : Symbol(Item, Decl(forOfOptionalTupleMember.ts, 0, 0))
+
+  value: string;
+>value : Symbol(value, Decl(forOfOptionalTupleMember.ts, 2, 13))
+
+};
+
+type Foo = [Item?];
+>Foo : Symbol(Foo, Decl(forOfOptionalTupleMember.ts, 4, 2))
+>Item : Symbol(Item, Decl(forOfOptionalTupleMember.ts, 0, 0))
+
+declare const foo: Foo;
+>foo : Symbol(foo, Decl(forOfOptionalTupleMember.ts, 8, 13))
+>Foo : Symbol(Foo, Decl(forOfOptionalTupleMember.ts, 4, 2))
+
+for (let item of foo) {
+>item : Symbol(item, Decl(forOfOptionalTupleMember.ts, 10, 8))
+>foo : Symbol(foo, Decl(forOfOptionalTupleMember.ts, 8, 13))
+
+  item.value;
+>item.value : Symbol(value, Decl(forOfOptionalTupleMember.ts, 2, 13))
+>item : Symbol(item, Decl(forOfOptionalTupleMember.ts, 10, 8))
+>value : Symbol(value, Decl(forOfOptionalTupleMember.ts, 2, 13))
+}
+

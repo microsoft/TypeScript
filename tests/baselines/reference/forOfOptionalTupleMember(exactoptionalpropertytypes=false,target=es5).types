@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/forOfOptionalTupleMember.ts] ////
+
+=== forOfOptionalTupleMember.ts ===
+// repro from https://github.com/microsoft/TypeScript/issues/54302
+
+type Item = {
+>Item : { value: string; }
+
+  value: string;
+>value : string
+
+};
+
+type Foo = [Item?];
+>Foo : [(Item | undefined)?]
+
+declare const foo: Foo;
+>foo : Foo
+
+for (let item of foo) {
+>item : Item | undefined
+>foo : Foo
+
+  item.value;
+>item.value : string
+>item : Item | undefined
+>value : string
+}
+
