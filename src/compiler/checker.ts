@@ -1828,14 +1828,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     };
 
     function runWithoutResolvedSignatureCaching<T>(node: Node | undefined, fn: () => T): T {
-        const containingCall = findAncestor(node, isCallLikeExpression);
-        const containingCallResolvedSignature = containingCall && getNodeLinks(containingCall).resolvedSignature;
-        if (containingCall) {
-            getNodeLinks(containingCall).resolvedSignature = undefined;
+        const cachedSignatures = [];
+        while (node) {
+            if (isCallLikeExpression(node)) {
+                const nodeLinks = getNodeLinks(node);
+                const resolvedSignature = nodeLinks.resolvedSignature;
+                cachedSignatures.push([nodeLinks, resolvedSignature] as const);
+                nodeLinks.resolvedSignature = undefined;
+            }
+            node = node.parent;
         }
         const result = fn();
-        if (containingCall) {
-            getNodeLinks(containingCall).resolvedSignature = containingCallResolvedSignature;
+        for (const [nodeLinks, resolvedSignature] of cachedSignatures) {
+            nodeLinks.resolvedSignature = resolvedSignature;
         }
         return result;
     }
