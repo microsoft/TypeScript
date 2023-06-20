@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/exportDefaultConstEnum.ts] ////
+
+=== a.ts ===
 export default const enum A {
 >A : A
 
@@ -9,7 +11,7 @@ export default const enum A {
 >B : A.B
 }
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 import A from "./a"
 >A : typeof A
 
