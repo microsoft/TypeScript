@@ -1,0 +1,48 @@
+//// [tests/cases/conformance/types/typeParameters/typeParameterLists/carryingForwardTypeVariableContainment.ts] ////
+
+=== /a.ts ===
+export type Brand<Base, Branding, ReservedName extends string = "__type__"> =
+>Brand : Brand<Base, Branding, ReservedName>
+
+    Base & { [K in ReservedName]: Branding } & { __witness__: Base };
+>__witness__ : Base
+
+export type BoundedInteger<LowerBound extends number, UpperBound extends number> =
+>BoundedInteger : BoundedInteger<LowerBound, UpperBound>
+
+    Brand<number, "BoundedInteger">;
+export const toBoundedInteger =
+>toBoundedInteger : <LowerBound extends number, UpperBound extends number>(bounds: { lowerBound: LowerBound; upperBound: UpperBound; }) => (n: number) => BoundedInteger<LowerBound, UpperBound>
+
+    <LowerBound extends number, UpperBound extends number>(bounds: { lowerBound: LowerBound; upperBound: UpperBound; }) =>
+><LowerBound extends number, UpperBound extends number>(bounds: { lowerBound: LowerBound; upperBound: UpperBound; }) =>        (n: number): BoundedInteger<LowerBound, UpperBound> => ({} as any) : <LowerBound extends number, UpperBound extends number>(bounds: { lowerBound: LowerBound; upperBound: UpperBound; }) => (n: number) => BoundedInteger<LowerBound, UpperBound>
+>bounds : { lowerBound: LowerBound; upperBound: UpperBound; }
+>lowerBound : LowerBound
+>upperBound : UpperBound
+
+        (n: number): BoundedInteger<LowerBound, UpperBound> => ({} as any);
+>(n: number): BoundedInteger<LowerBound, UpperBound> => ({} as any) : (n: number) => BoundedInteger<LowerBound, UpperBound>
+>n : number
+>({} as any) : any
+>{} as any : any
+>{} : {}
+
+=== /b.ts ===
+export type LexicalCommand<TPayload> = Record<string, never>;
+>LexicalCommand : LexicalCommand<TPayload>
+
+export type InsertTextPayload = Readonly<{ text: string }>;
+>InsertTextPayload : Readonly<{ text: string; }>
+>text : string
+
+function createCommand<T>(): LexicalCommand<T> {
+>createCommand : <T>() => LexicalCommand<T>
+
+    return { };
+>{ } : {}
+}
+export const INSERT_TEXT_COMMAND = createCommand();
+>INSERT_TEXT_COMMAND : LexicalCommand<unknown>
+>createCommand() : LexicalCommand<unknown>
+>createCommand : <T>() => LexicalCommand<T>
+

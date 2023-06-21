@@ -1,0 +1,66 @@
+//// [tests/cases/conformance/types/typeParameters/typeParameterLists/carryingForwardTypeVariableContainment.ts] ////
+
+=== /a.ts ===
+export type Brand<Base, Branding, ReservedName extends string = "__type__"> =
+>Brand : Symbol(Brand, Decl(a.ts, 0, 0))
+>Base : Symbol(Base, Decl(a.ts, 0, 18))
+>Branding : Symbol(Branding, Decl(a.ts, 0, 23))
+>ReservedName : Symbol(ReservedName, Decl(a.ts, 0, 33))
+
+    Base & { [K in ReservedName]: Branding } & { __witness__: Base };
+>Base : Symbol(Base, Decl(a.ts, 0, 18))
+>K : Symbol(K, Decl(a.ts, 1, 14))
+>ReservedName : Symbol(ReservedName, Decl(a.ts, 0, 33))
+>Branding : Symbol(Branding, Decl(a.ts, 0, 23))
+>__witness__ : Symbol(__witness__, Decl(a.ts, 1, 48))
+>Base : Symbol(Base, Decl(a.ts, 0, 18))
+
+export type BoundedInteger<LowerBound extends number, UpperBound extends number> =
+>BoundedInteger : Symbol(BoundedInteger, Decl(a.ts, 1, 69))
+>LowerBound : Symbol(LowerBound, Decl(a.ts, 2, 27))
+>UpperBound : Symbol(UpperBound, Decl(a.ts, 2, 53))
+
+    Brand<number, "BoundedInteger">;
+>Brand : Symbol(Brand, Decl(a.ts, 0, 0))
+
+export const toBoundedInteger =
+>toBoundedInteger : Symbol(toBoundedInteger, Decl(a.ts, 4, 12))
+
+    <LowerBound extends number, UpperBound extends number>(bounds: { lowerBound: LowerBound; upperBound: UpperBound; }) =>
+>LowerBound : Symbol(LowerBound, Decl(a.ts, 5, 5))
+>UpperBound : Symbol(UpperBound, Decl(a.ts, 5, 31))
+>bounds : Symbol(bounds, Decl(a.ts, 5, 59))
+>lowerBound : Symbol(lowerBound, Decl(a.ts, 5, 68))
+>LowerBound : Symbol(LowerBound, Decl(a.ts, 5, 5))
+>upperBound : Symbol(upperBound, Decl(a.ts, 5, 92))
+>UpperBound : Symbol(UpperBound, Decl(a.ts, 5, 31))
+
+        (n: number): BoundedInteger<LowerBound, UpperBound> => ({} as any);
+>n : Symbol(n, Decl(a.ts, 6, 9))
+>BoundedInteger : Symbol(BoundedInteger, Decl(a.ts, 1, 69))
+>LowerBound : Symbol(LowerBound, Decl(a.ts, 5, 5))
+>UpperBound : Symbol(UpperBound, Decl(a.ts, 5, 31))
+
+=== /b.ts ===
+export type LexicalCommand<TPayload> = Record<string, never>;
+>LexicalCommand : Symbol(LexicalCommand, Decl(b.ts, 0, 0))
+>TPayload : Symbol(TPayload, Decl(b.ts, 0, 27))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+export type InsertTextPayload = Readonly<{ text: string }>;
+>InsertTextPayload : Symbol(InsertTextPayload, Decl(b.ts, 0, 61))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>text : Symbol(text, Decl(b.ts, 1, 42))
+
+function createCommand<T>(): LexicalCommand<T> {
+>createCommand : Symbol(createCommand, Decl(b.ts, 1, 59))
+>T : Symbol(T, Decl(b.ts, 2, 23))
+>LexicalCommand : Symbol(LexicalCommand, Decl(b.ts, 0, 0))
+>T : Symbol(T, Decl(b.ts, 2, 23))
+
+    return { };
+}
+export const INSERT_TEXT_COMMAND = createCommand();
+>INSERT_TEXT_COMMAND : Symbol(INSERT_TEXT_COMMAND, Decl(b.ts, 5, 12))
+>createCommand : Symbol(createCommand, Decl(b.ts, 1, 59))
+

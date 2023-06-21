@@ -18995,7 +18995,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function instantiateAnonymousType(type: AnonymousType, mapper: TypeMapper, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): AnonymousType {
-        const result = createObjectType(type.objectFlags & ~(ObjectFlags.CouldContainTypeVariablesComputed | ObjectFlags.CouldContainTypeVariables) | ObjectFlags.Instantiated, type.symbol) as AnonymousType;
+        const result = createObjectType(type.objectFlags | ObjectFlags.Instantiated, type.symbol) as AnonymousType;
         if (type.objectFlags & ObjectFlags.Mapped) {
             (result as MappedType).declaration = (type as MappedType).declaration;
             // C.f. instantiateSignature
