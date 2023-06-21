@@ -1,5 +1,5 @@
-import { Symbol, ClassDeclaration, CompilerOptions, DeclarationName, DiagnosticWithLocation, EnumDeclaration, FunctionDeclaration, InterfaceDeclaration, ModuleDeclaration, ModuleKind, Node, PackageJsonInfoCache, Path, QualifiedName, SourceFile, SymbolFlags, TransformationContext as _TransformationContext, TypeAliasDeclaration, VariableStatement, NodeBuilderFlags, Statement, AccessorDeclaration, BindingElement, Declaration, ElementAccessExpression, EntityName, EntityNameOrEntityNameExpression, EnumMember, ExportDeclaration, Expression, Identifier, ImportCall, ImportDeclaration, ImportEqualsDeclaration, ImportTypeNode, ParameterDeclaration, PropertyAccessExpression, PropertyDeclaration, PropertySignature, SignatureDeclaration, StringLiteralLike, TypeNode, VariableDeclaration, VariableLikeDeclaration, ModuleBlock, LiteralTypeNode, BinaryExpression, ComputedPropertyName, NamedDeclaration, StringLiteral, ParenthesizedExpression, AsExpression, NonNullExpression, PartiallyEmittedExpression, SatisfiesExpression, TypeAssertion, EntityNameExpression, HasModifiers, Modifier, ModifierFlags, Program, UnparsedSource, FileReference, EmitFlags, EmitHelper, SourceMapRange, SynthesizedComment, TextRange, NoSubstitutionTemplateLiteral, MapLike } from "typescript";
-import { AllAccessorDeclarations, AnyImportSyntax, DiagnosticMessage } from "./utils";
+import { Symbol, ClassDeclaration, CompilerOptions, DeclarationName, DiagnosticWithLocation, EnumDeclaration, FunctionDeclaration, InterfaceDeclaration, ModuleDeclaration, ModuleKind, Node, PackageJsonInfoCache, Path, QualifiedName, SourceFile, SymbolFlags, TransformationContext as _TransformationContext, TypeAliasDeclaration, VariableStatement, NodeBuilderFlags, Statement, AccessorDeclaration, BindingElement, Declaration, ElementAccessExpression, EntityName, EntityNameOrEntityNameExpression, EnumMember, ExportDeclaration, Expression, Identifier, ImportCall, ImportDeclaration, ImportEqualsDeclaration, ImportTypeNode, ParameterDeclaration, PropertyAccessExpression, PropertyDeclaration, PropertySignature, SignatureDeclaration, StringLiteralLike, TypeNode, VariableDeclaration, VariableLikeDeclaration, ModuleBlock, LiteralTypeNode, BinaryExpression, ComputedPropertyName, NamedDeclaration, StringLiteral, ParenthesizedExpression, AsExpression, NonNullExpression, PartiallyEmittedExpression, SatisfiesExpression, TypeAssertion, EntityNameExpression, HasModifiers, Modifier, ModifierFlags, Program, UnparsedSource, FileReference, EmitFlags, EmitHelper, SourceMapRange, SynthesizedComment, TextRange, NoSubstitutionTemplateLiteral, MapLike, DiagnosticMessage, Diagnostic, EmitHint, factory, NodeFactory } from "typescript";
+import { AllAccessorDeclarations, AnyImportSyntax } from "./utils";
 
 
 /** @internal */
@@ -17,7 +17,47 @@ export interface TransformationContext extends _TransformationContext {
     /** @internal */ getEmitHelperFactory(): EmitHelperFactory;
     factory: _TransformationContext['factory'] & {
         updateModifiers<T extends HasModifiers>(node: T, modifiers: readonly Modifier[] | ModifierFlags | undefined): T;
+        cloneNode<T extends Node | undefined>(node: T): T;
     }
+}
+
+export const nullTransformationContext: TransformationContext = {
+    factory: factory as any, // eslint-disable-line object-shorthand
+    getCompilerOptions: () => ({}),
+    getEmitResolver: notImplemented,
+    getEmitHost: notImplemented,
+    getEmitHelperFactory: notImplemented,
+    startLexicalEnvironment: noop,
+    resumeLexicalEnvironment: noop,
+    suspendLexicalEnvironment: noop,
+    endLexicalEnvironment: returnUndefined,
+    hoistVariableDeclaration: noop,
+    hoistFunctionDeclaration: noop,
+    requestEmitHelper: noop,
+    readEmitHelpers: notImplemented,
+    enableSubstitution: noop,
+    enableEmitNotification: noop,
+    isSubstitutionEnabled: notImplemented,
+    isEmitNotificationEnabled: notImplemented,
+    onSubstituteNode: noEmitSubstitution,
+    onEmitNode: noEmitNotification,
+    addDiagnostic: noop,
+};
+export function notImplemented(): never {
+    throw new Error("Not implemented");
+}
+export function returnUndefined(): undefined {
+    return undefined;
+}
+export function noop(_?: unknown): void { }
+/** @internal */
+export function noEmitSubstitution(_hint: EmitHint, node: Node) {
+    return node;
+}
+
+/** @internal */
+export function noEmitNotification(hint: EmitHint, node: Node, callback: (hint: EmitHint, node: Node) => void) {
+    callback(hint, node);
 }
 
 export interface EmitHost extends ModuleSpecifierResolutionHost, ResolveModuleNameResolutionHost {
@@ -29,6 +69,7 @@ export interface EmitHost extends ModuleSpecifierResolutionHost, ResolveModuleNa
 }
 
 export interface EmitResolver {
+    isSyntheticTypeEquivalent(actualTypeNode: Node, typeNode: TypeNode, message: DiagnosticMessage): Diagnostic[] | true;
     hasGlobalName(name: string): boolean;
     getReferencedExportContainer(node: Identifier, prefixLocals?: boolean): SourceFile | ModuleDeclaration | EnumDeclaration | undefined;
     getReferencedImportDeclaration(node: Identifier): Declaration | undefined;

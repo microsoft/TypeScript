@@ -4,16 +4,15 @@ import { transformDeclarations } from './declaration-emit';
 import { createEmitHost } from './emit-host';
 import { createEmitResolver } from './emit-resolver';
 import { TransformationContext } from './types';
+import { tracer } from './perf-tracer';
 
-
-
-export function transformFile(fileName: string, source: string, allProjectFiles: string[], tsLibFiles: string[], options: ts.CompilerOptions, moduleType: ts.ResolutionMode) {
+export function transformFile(sourceFile: ts.SourceFile, allProjectFiles: string[], tsLibFiles: string[], options: ts.CompilerOptions, moduleType: ts.ResolutionMode) {
     
-    let sourceFile = ts.createSourceFile(fileName, source, options.target ?? ts.ScriptTarget.ES3, true, 
-        fileName.endsWith(".tsx") ? ts.ScriptKind.TSX : ts.ScriptKind.TS);
     const getCompilerOptions = () => options;
+    tracer.current?.start("bind")
     const emitResolver = createEmitResolver(sourceFile, options, moduleType);
     const emitHost =  createEmitHost(allProjectFiles, tsLibFiles, options);
+    tracer.current?.end("bind")
     const diagnostics: ts.Diagnostic[] = []
     const x =  transformDeclarations({
         getEmitHost() {
@@ -28,17 +27,24 @@ export function transformFile(fileName: string, source: string, allProjectFiles:
             diagnostics.push(diag)
         },
     } as Partial<TransformationContext> as TransformationContext)
-
+    tracer.current?.start("transform")
     let result = x(sourceFile);
+    tracer.current?.end("transform");
 
+    tracer.current?.start("print")
     const printer = ts.createPrinter({
         onlyPrintJsDocStyle: true,
         newLine: options.newLine ?? ts.NewLineKind.CarriageReturnLineFeed,
         target: options.target,
     } as ts.PrinterOptions)
 
-    return {
-        code: printer.printFile(result),
-        diagnostics,
-    };
+    try {
+        return {
+            code: printer.printFile(result),
+            diagnostics,
+        };
+    }
+    finally {
+        tracer.current?.end("print")
+    }
 }

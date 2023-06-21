@@ -1077,6 +1077,7 @@ export function isJSONFile(f: string) {
 }
 export function isTypeScriptFile(f: string) {
     return f.endsWith(Extension.Ts)
+        || f.endsWith(Extension.Tsx)
         || f.endsWith(Extension.Mts)
         || f.endsWith(Extension.Cts);
 }

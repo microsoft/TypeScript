@@ -45,10 +45,12 @@ export function runTypeScript(caseData: TestCaseParser.TestCaseContent, settings
         return createHarnessTestFile(unit);
     });
 
+    if (settings.isolatedDeclarations === undefined) {
+        settings.isolatedDeclarations = true;
+    }
     const result = compileFiles(toBeCompiled, [], {
         declaration: "true",
         // declarationMap: "true",
-        isolatedDeclarations: "true",
         removeComments: "false",
     }, settings, undefined);
 
@@ -90,7 +92,9 @@ export function runIsolated(caseData: TestCaseParser.TestCaseContent, libFiles: 
     const results = caseData.testUnitData
         .filter(isRelevantTestFile)
         .map(file => {
-            const declaration = transformFile(toSrc(file.name), Utils.removeByteOrderMark(file.content), projectFiles, libs, settings, packageResolution)
+            const sourceFile = ts.createSourceFile(toSrc(file.name), Utils.removeByteOrderMark(file.content), settings.target ?? ts.ScriptTarget.ES2015, true,
+                file.name.endsWith(".tsx") ? ts.ScriptKind.TSX : ts.ScriptKind.TS)
+            const declaration = transformFile(sourceFile, projectFiles, libs, settings, packageResolution)
             return {
                 content: declaration.code,
                 fileName: changeExtension(file.name, getDeclarationExtension(file.name)),

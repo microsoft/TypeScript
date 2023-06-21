@@ -29,10 +29,14 @@ function assertNever(o: never): never {
 }
 
 type _Node = Node;
+type _NodeArray<T extends Node>  = NodeArray<T>;
+type _SourceFile = SourceFile;
 declare module 'typescript' {
     interface SourceFile {
         externalModuleIndicator?: _Node | true;
     }
+    export function forEachChildRecursively<T>(rootNode: _Node, cbNode: (node: _Node, parent: _Node) => T | "skip" | undefined, cbNodes?: (nodes: _NodeArray<_Node>, parent: _Node) => T | "skip" | undefined): T | undefined
+    export function getTokenPosOfNode(node: _Node, sourceFile?: _SourceFile, includeJsDoc?: boolean): number;
 }
 export function getEmitModuleDetectionKind(options: CompilerOptions) {
     return options.moduleDetection ||

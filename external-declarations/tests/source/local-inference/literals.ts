@@ -1,3 +1,6 @@
+// @strict:true,false
+// @target: es2015
+
 export let n = 0;
 export let hex = 0x1;
 export let neg = -11;

@@ -35,6 +35,9 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
     }
     
     return {
+        isSyntheticTypeEquivalent(actualTypeNode, typeNode, message) {
+            return true
+        },
         isDeclarationVisible,
         isLiteralConstDeclaration,
         createLiteralConstValue(node) {
