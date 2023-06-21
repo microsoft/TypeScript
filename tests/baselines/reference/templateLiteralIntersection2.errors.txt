@@ -1,11 +1,11 @@
-tests/cases/compiler/templateLiteralIntersection2.ts(7,12): error TS2345: Argument of type '"foo/bar"' is not assignable to parameter of type '`${Path}/${Path}`'.
-tests/cases/compiler/templateLiteralIntersection2.ts(20,10): error TS2345: Argument of type '""' is not assignable to parameter of type '`a${string}` & `${string}a`'.
+templateLiteralIntersection2.ts(7,12): error TS2345: Argument of type '"foo/bar"' is not assignable to parameter of type '`${Path}/${Path}`'.
+templateLiteralIntersection2.ts(20,10): error TS2345: Argument of type '""' is not assignable to parameter of type '`a${string}` & `${string}a`'.
   Type '""' is not assignable to type '`a${string}`'.
-tests/cases/compiler/templateLiteralIntersection2.ts(22,10): error TS2345: Argument of type '"ab"' is not assignable to parameter of type '`a${string}` & `${string}a`'.
+templateLiteralIntersection2.ts(22,10): error TS2345: Argument of type '"ab"' is not assignable to parameter of type '`a${string}` & `${string}a`'.
   Type '"ab"' is not assignable to type '`${string}a`'.
 
 
-==== tests/cases/compiler/templateLiteralIntersection2.ts (3 errors) ====
+==== templateLiteralIntersection2.ts (3 errors) ====
     type Path = string & { _pathBrand: any };
     
     type JoinedPath = `${Path}/${Path}`;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeAliasFunctionTypeSharedSymbol.ts] ////
+
 //// [typeAliasFunctionTypeSharedSymbol.ts]
 // Repro from comment in #21496
 

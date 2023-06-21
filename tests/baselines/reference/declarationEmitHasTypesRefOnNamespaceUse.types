@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitHasTypesRefOnNamespaceUse.ts] ////
+
 === /src/index.ts ===
 class Src implements NS.Dep { }
 >Src : Src

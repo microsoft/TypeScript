@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/keywordField.ts] ////
+
 //// [keywordField.ts]
 var obj:any = {};
 

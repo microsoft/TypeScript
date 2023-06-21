@@ -1,4 +1,6 @@
-=== tests/cases/compiler/enumMemberReduction.ts ===
+//// [tests/cases/compiler/enumMemberReduction.ts] ////
+
+=== enumMemberReduction.ts ===
 enum MyEnum {
 >MyEnum : Symbol(MyEnum, Decl(enumMemberReduction.ts, 0, 0))
 

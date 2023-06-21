@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/modularizeLibrary_UsingES5LibAndES6ArrayLib.ts] ////
+
 //// [modularizeLibrary_UsingES5LibAndES6ArrayLib.ts]
 // No error
 function f(x: number, y: number, z: number) {

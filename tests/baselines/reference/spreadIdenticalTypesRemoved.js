@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/spreadIdenticalTypesRemoved.ts] ////
+
 //// [spreadIdenticalTypesRemoved.ts]
 interface Animal {
     name: string;

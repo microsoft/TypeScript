@@ -1,4 +1,6 @@
-=== tests/cases/compiler/f.ts ===
+//// [tests/cases/compiler/moduleAugmentationInAmbientModule5.ts] ////
+
+=== f.ts ===
 /// <reference path="array.d.ts"/>
 import "array";
 
@@ -16,7 +18,7 @@ let y = x.getA().x;
 >getA : () => import("A").A
 >x : number
 
-=== tests/cases/compiler/array.d.ts ===
+=== array.d.ts ===
 declare module "A" {
 >"A" : typeof import("A")
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator8.ts] ////
+
 //// [nullishCoalescingOperator8.ts]
 declare const a: { p: string | undefined, m(): string | undefined };
 declare const b: { p: string | undefined, m(): string | undefined };

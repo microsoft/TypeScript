@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es2021/logicalAssignment/logicalAssignment9.ts ===
+//// [tests/cases/conformance/es2021/logicalAssignment/logicalAssignment9.ts] ////
+
+=== logicalAssignment9.ts ===
 declare let x: { a?: boolean };
 >x : Symbol(x, Decl(logicalAssignment9.ts, 0, 11))
 >a : Symbol(a, Decl(logicalAssignment9.ts, 0, 16))

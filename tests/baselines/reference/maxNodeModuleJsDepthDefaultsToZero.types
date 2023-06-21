@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/maxNodeModuleJsDepthDefaultsToZero.ts] ////
+
 === /typings/index.d.ts ===
 declare module "shortid" {
 >"shortid" : typeof import("shortid")

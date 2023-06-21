@@ -1,4 +1,6 @@
-=== tests/cases/compiler/emitOneLineVariableDeclarationRemoveCommentsFalse.ts ===
+//// [tests/cases/compiler/emitOneLineVariableDeclarationRemoveCommentsFalse.ts] ////
+
+=== emitOneLineVariableDeclarationRemoveCommentsFalse.ts ===
 let a = /*[[${something}]]*/ {};
 >a : Symbol(a, Decl(emitOneLineVariableDeclarationRemoveCommentsFalse.ts, 0, 3))
 

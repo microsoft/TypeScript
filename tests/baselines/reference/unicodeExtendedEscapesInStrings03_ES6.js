@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInStrings03_ES6.ts] ////
+
 //// [unicodeExtendedEscapesInStrings03_ES6.ts]
 var x = "\u{0000}";
 

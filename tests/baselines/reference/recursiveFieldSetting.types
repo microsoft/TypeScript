@@ -1,4 +1,6 @@
-=== tests/cases/compiler/recursiveFieldSetting.ts ===
+//// [tests/cases/compiler/recursiveFieldSetting.ts] ////
+
+=== recursiveFieldSetting.ts ===
 // #32721
 
 class Recursive1 {

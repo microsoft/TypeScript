@@ -1,8 +1,10 @@
-=== tests/cases/conformance/dynamicImport/defaultPath.ts ===
+//// [tests/cases/conformance/dynamicImport/importCallExpressionReturnPromiseOfAny.ts] ////
+
+=== defaultPath.ts ===
 export class C {}
 >C : Symbol(C, Decl(defaultPath.ts, 0, 0))
 
-=== tests/cases/conformance/dynamicImport/1.ts ===
+=== 1.ts ===
 import * as defaultModule from "./defaultPath";
 >defaultModule : Symbol(defaultModule, Decl(1.ts, 0, 6))
 

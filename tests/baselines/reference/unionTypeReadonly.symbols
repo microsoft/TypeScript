@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/union/unionTypeReadonly.ts ===
+//// [tests/cases/conformance/types/union/unionTypeReadonly.ts] ////
+
+=== unionTypeReadonly.ts ===
 interface Base {
 >Base : Symbol(Base, Decl(unionTypeReadonly.ts, 0, 0))
 

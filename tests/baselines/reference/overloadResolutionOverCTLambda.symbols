@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadResolutionOverCTLambda.ts ===
+//// [tests/cases/compiler/overloadResolutionOverCTLambda.ts] ////
+
+=== overloadResolutionOverCTLambda.ts ===
 function foo(b: (item: number) => boolean) { }
 >foo : Symbol(foo, Decl(overloadResolutionOverCTLambda.ts, 0, 0))
 >b : Symbol(b, Decl(overloadResolutionOverCTLambda.ts, 0, 13))

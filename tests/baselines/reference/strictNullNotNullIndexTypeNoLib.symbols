@@ -1,4 +1,6 @@
-=== tests/cases/compiler/strictNullNotNullIndexTypeNoLib.ts ===
+//// [tests/cases/compiler/strictNullNotNullIndexTypeNoLib.ts] ////
+
+=== strictNullNotNullIndexTypeNoLib.ts ===
 type Readonly<T> = {readonly [K in keyof T]: T[K]}
 >Readonly : Symbol(Readonly, Decl(strictNullNotNullIndexTypeNoLib.ts, 0, 0))
 >T : Symbol(T, Decl(strictNullNotNullIndexTypeNoLib.ts, 0, 14))

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/declarationEmit/typePredicates/declarationEmitIdentifierPredicatesWithPrivateName01.ts] ////
+
 //// [declarationEmitIdentifierPredicatesWithPrivateName01.ts]
 interface I {
     a: number;

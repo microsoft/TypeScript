@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/emptyAnonymousObjectNarrowing.ts] ////
+
 //// [emptyAnonymousObjectNarrowing.ts]
 declare let nonNull: {};
 if (nonNull === "foo") {

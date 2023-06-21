@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inKeywordTypeguard.ts ===
+//// [tests/cases/compiler/inKeywordTypeguard.ts] ////
+
+=== inKeywordTypeguard.ts ===
 class A { a: string; }
 >A : Symbol(A, Decl(inKeywordTypeguard.ts, 0, 0))
 >a : Symbol(A.a, Decl(inKeywordTypeguard.ts, 0, 9))

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/nonjsExtensions/main.ts ===
+//// [tests/cases/conformance/nonjsExtensions/declarationFileForTsJsImport.ts] ////
+
+=== main.ts ===
 import def1 from "./file.js";
 >def1 : any
 
@@ -35,84 +37,84 @@ import def11 from "./file.d.mts";
 import def12 from "./file.d.json.ts";
 >def12 : any
 
-=== tests/cases/conformance/nonjsExtensions/file.d.js.ts ===
+=== file.d.js.ts ===
 declare var bad: "bad1";
 >bad : "bad1"
 
 export default bad;
 >bad : "bad1"
 
-=== tests/cases/conformance/nonjsExtensions/file.d.jsx.ts ===
+=== file.d.jsx.ts ===
 declare var bad: "bad2";
 >bad : "bad2"
 
 export default bad;
 >bad : "bad2"
 
-=== tests/cases/conformance/nonjsExtensions/file.d.ts.ts ===
+=== file.d.ts.ts ===
 declare var bad: "bad3";
 >bad : "bad3"
 
 export default bad;
 >bad : "bad3"
 
-=== tests/cases/conformance/nonjsExtensions/file.d.tsx.ts ===
+=== file.d.tsx.ts ===
 declare var bad: "bad4";
 >bad : "bad4"
 
 export default bad;
 >bad : "bad4"
 
-=== tests/cases/conformance/nonjsExtensions/file.d.mjs.ts ===
+=== file.d.mjs.ts ===
 declare var bad: "bad5";
 >bad : "bad5"
 
 export default bad;
 >bad : "bad5"
 
-=== tests/cases/conformance/nonjsExtensions/file.d.cjs.ts ===
+=== file.d.cjs.ts ===
 declare var bad: "bad6";
 >bad : "bad6"
 
 export default bad;
 >bad : "bad6"
 
-=== tests/cases/conformance/nonjsExtensions/file.d.mts.ts ===
+=== file.d.mts.ts ===
 declare var bad: "bad7";
 >bad : "bad7"
 
 export default bad;
 >bad : "bad7"
 
-=== tests/cases/conformance/nonjsExtensions/file.d.cts.ts ===
+=== file.d.cts.ts ===
 declare var bad: "bad8";
 >bad : "bad8"
 
 export default bad;
 >bad : "bad8"
 
-=== tests/cases/conformance/nonjsExtensions/file.d.d.ts.ts ===
+=== file.d.d.ts.ts ===
 declare var bad: "bad9";
 >bad : "bad9"
 
 export default bad;
 >bad : "bad9"
 
-=== tests/cases/conformance/nonjsExtensions/file.d.d.mts.ts ===
+=== file.d.d.mts.ts ===
 declare var bad: "bad10";
 >bad : "bad10"
 
 export default bad;
 >bad : "bad10"
 
-=== tests/cases/conformance/nonjsExtensions/file.d.d.cts.ts ===
+=== file.d.d.cts.ts ===
 declare var bad: "bad11";
 >bad : "bad11"
 
 export default bad;
 >bad : "bad11"
 
-=== tests/cases/conformance/nonjsExtensions/file.d.d.json.ts ===
+=== file.d.d.json.ts ===
 declare var bad: "bad12";
 >bad : "bad12"
 

@@ -32,7 +32,9 @@ jobs:
       with:
         node-version: 16
     - run: |
-        corepack enable npm
+        npm --version
+        # corepack enable npm
+        npm install -g $(jq -r '.packageManager' < package.json)
         npm --version
 
     - name: Update package-lock.json and push

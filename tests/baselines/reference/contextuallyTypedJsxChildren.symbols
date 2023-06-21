@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextuallyTypedJsxChildren.tsx ===
+//// [tests/cases/compiler/contextuallyTypedJsxChildren.tsx] ////
+
+=== contextuallyTypedJsxChildren.tsx ===
 /// <reference path="react16.d.ts" />
 
 import React from 'react';

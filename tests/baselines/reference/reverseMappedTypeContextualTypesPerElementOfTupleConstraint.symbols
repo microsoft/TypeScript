@@ -1,4 +1,6 @@
-=== tests/cases/compiler/reverseMappedTypeContextualTypesPerElementOfTupleConstraint.ts ===
+//// [tests/cases/compiler/reverseMappedTypeContextualTypesPerElementOfTupleConstraint.ts] ////
+
+=== reverseMappedTypeContextualTypesPerElementOfTupleConstraint.ts ===
 type Tuple<T> = readonly [T, ...T[]];
 >Tuple : Symbol(Tuple, Decl(reverseMappedTypeContextualTypesPerElementOfTupleConstraint.ts, 0, 0))
 >T : Symbol(T, Decl(reverseMappedTypeContextualTypesPerElementOfTupleConstraint.ts, 0, 11))

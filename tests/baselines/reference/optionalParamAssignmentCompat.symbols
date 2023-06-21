@@ -1,4 +1,6 @@
-=== tests/cases/compiler/optionalParamAssignmentCompat.ts ===
+//// [tests/cases/compiler/optionalParamAssignmentCompat.ts] ////
+
+=== optionalParamAssignmentCompat.ts ===
 interface I1 {
 >I1 : Symbol(I1, Decl(optionalParamAssignmentCompat.ts, 0, 0))
 

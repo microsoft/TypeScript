@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/templates/templateStringWithEmbeddedInstanceOf.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringWithEmbeddedInstanceOf.ts] ////
+
+=== templateStringWithEmbeddedInstanceOf.ts ===
 var x = `abc${ "hello" instanceof String }def`;
 >x : string
 >`abc${ "hello" instanceof String }def` : string

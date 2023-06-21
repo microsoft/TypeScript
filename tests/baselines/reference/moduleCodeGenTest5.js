@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleCodeGenTest5.ts] ////
+
 //// [moduleCodeGenTest5.ts]
 export var x = 0;
 var y = 0;

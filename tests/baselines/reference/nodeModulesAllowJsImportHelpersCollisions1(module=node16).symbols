@@ -1,4 +1,6 @@
-=== tests/cases/conformance/node/allowJs/subfolder/index.js ===
+//// [tests/cases/conformance/node/allowJs/nodeModulesAllowJsImportHelpersCollisions1.ts] ////
+
+=== subfolder/index.js ===
 // cjs format file
 import {default as _fs} from "fs";
 >default : Symbol(_fs, Decl(types.d.ts, 0, 0))
@@ -13,7 +15,7 @@ import * as fs from "fs";
 fs.readFile;
 >fs : Symbol(fs, Decl(index.js, 3, 6))
 
-=== tests/cases/conformance/node/allowJs/index.js ===
+=== index.js ===
 // esm format file
 import {default as _fs} from "fs";
 >default : Symbol(_fs, Decl(types.d.ts, 0, 0))
@@ -28,7 +30,7 @@ import * as fs from "fs";
 fs.readFile;
 >fs : Symbol(fs, Decl(index.js, 3, 6))
 
-=== tests/cases/conformance/node/allowJs/types.d.ts ===
+=== types.d.ts ===
 declare module "fs";
 >"fs" : Symbol("fs", Decl(types.d.ts, 0, 0))
 

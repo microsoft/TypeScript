@@ -1,4 +1,6 @@
-=== tests/cases/compiler/asiAbstract.ts ===
+//// [tests/cases/compiler/asiAbstract.ts] ////
+
+=== asiAbstract.ts ===
 abstract
 class NonAbstractClass {
 >NonAbstractClass : Symbol(NonAbstractClass, Decl(asiAbstract.ts, 0, 8))

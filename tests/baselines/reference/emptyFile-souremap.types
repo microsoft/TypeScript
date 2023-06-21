@@ -1,2 +1,4 @@
-=== tests/cases/compiler/emptyFile-souremap.ts ===
+//// [tests/cases/compiler/emptyFile-souremap.ts] ////
+
+=== emptyFile-souremap.ts ===
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts] ////
+
 //// [comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts]
 class Base {
     public a: string;

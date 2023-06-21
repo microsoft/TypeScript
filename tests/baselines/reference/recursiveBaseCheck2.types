@@ -1,4 +1,6 @@
-=== tests/cases/compiler/recursiveBaseCheck2.ts ===
+//// [tests/cases/compiler/recursiveBaseCheck2.ts] ////
+
+=== recursiveBaseCheck2.ts ===
 declare module Box2D.Collision.Shapes {
 >Box2D : typeof Box2D
 >Collision : typeof Collision

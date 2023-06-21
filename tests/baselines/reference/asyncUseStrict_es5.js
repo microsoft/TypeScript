@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/async/es5/asyncUseStrict_es5.ts] ////
+
 //// [asyncUseStrict_es5.ts]
 declare var a: boolean;
 declare var p: Promise<boolean>;

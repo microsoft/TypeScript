@@ -1,4 +1,6 @@
-=== tests/cases/compiler/staticInterfaceAssignmentCompat.ts ===
+//// [tests/cases/compiler/staticInterfaceAssignmentCompat.ts] ////
+
+=== staticInterfaceAssignmentCompat.ts ===
 class Shape {
 >Shape : Symbol(Shape, Decl(staticInterfaceAssignmentCompat.ts, 0, 0))
 

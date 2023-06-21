@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/foo_2.ts ===
+//// [tests/cases/conformance/externalModules/exportAssignmentCircularModules.ts] ////
+
+=== foo_2.ts ===
 import foo0 = require("./foo_0");
 >foo0 : Symbol(foo0, Decl(foo_2.ts, 0, 0))
 
@@ -14,7 +16,7 @@ module Foo {
 export = Foo;
 >Foo : Symbol(Foo, Decl(foo_2.ts, 0, 33))
 
-=== tests/cases/conformance/externalModules/foo_0.ts ===
+=== foo_0.ts ===
 import foo1 = require('./foo_1');
 >foo1 : Symbol(foo1, Decl(foo_0.ts, 0, 0))
 
@@ -30,7 +32,7 @@ module Foo {
 export = Foo;
 >Foo : Symbol(Foo, Decl(foo_0.ts, 0, 33))
 
-=== tests/cases/conformance/externalModules/foo_1.ts ===
+=== foo_1.ts ===
 import foo2 = require("./foo_2");
 >foo2 : Symbol(foo2, Decl(foo_1.ts, 0, 0))
 

@@ -1,16 +1,16 @@
-tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts(17,36): error TS2339: Property 'foo' does not exist on type 'unknown'.
-tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts(18,37): error TS2339: Property 'foo' does not exist on type 'unknown'.
-tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts(19,23): error TS1196: Catch clause variable type annotation must be 'any' or 'unknown' if specified.
-tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts(20,23): error TS1196: Catch clause variable type annotation must be 'any' or 'unknown' if specified.
-tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts(29,29): error TS2492: Cannot redeclare identifier 'x' in catch clause.
-tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts(30,29): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'boolean', but here has type 'string'.
-tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts(36,22): error TS2339: Property 'x' does not exist on type '{}'.
-tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts(37,22): error TS2339: Property 'x' does not exist on type '{}'.
-tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts(38,27): error TS1196: Catch clause variable type annotation must be 'any' or 'unknown' if specified.
-tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts(39,27): error TS1196: Catch clause variable type annotation must be 'any' or 'unknown' if specified.
+catchClauseWithTypeAnnotation.ts(17,36): error TS2339: Property 'foo' does not exist on type 'unknown'.
+catchClauseWithTypeAnnotation.ts(18,37): error TS2339: Property 'foo' does not exist on type 'unknown'.
+catchClauseWithTypeAnnotation.ts(19,23): error TS1196: Catch clause variable type annotation must be 'any' or 'unknown' if specified.
+catchClauseWithTypeAnnotation.ts(20,23): error TS1196: Catch clause variable type annotation must be 'any' or 'unknown' if specified.
+catchClauseWithTypeAnnotation.ts(29,29): error TS2492: Cannot redeclare identifier 'x' in catch clause.
+catchClauseWithTypeAnnotation.ts(30,29): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'boolean', but here has type 'string'.
+catchClauseWithTypeAnnotation.ts(36,22): error TS2339: Property 'x' does not exist on type '{}'.
+catchClauseWithTypeAnnotation.ts(37,22): error TS2339: Property 'x' does not exist on type '{}'.
+catchClauseWithTypeAnnotation.ts(38,27): error TS1196: Catch clause variable type annotation must be 'any' or 'unknown' if specified.
+catchClauseWithTypeAnnotation.ts(39,27): error TS1196: Catch clause variable type annotation must be 'any' or 'unknown' if specified.
 
 
-==== tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts (10 errors) ====
+==== catchClauseWithTypeAnnotation.ts (10 errors) ====
     type any1 = any;
     type unknown1 = unknown;
     
@@ -53,7 +53,7 @@ tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.t
         try { } catch (x) { var x: string; }
                                 ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'boolean', but here has type 'string'.
-!!! related TS6203 tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts:4:13: 'x' was also declared here.
+!!! related TS6203 catchClauseWithTypeAnnotation.ts:4:13: 'x' was also declared here.
         try { } catch (x) { var x: boolean; }
     
         try { } catch ({ x }) { } // should be OK

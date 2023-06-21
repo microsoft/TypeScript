@@ -1,7 +1,7 @@
 [
-    "======== Resolving type reference directive '@beep/boop', containing file '/a.ts', root directory '/.src/tests/cases/conformance/references/types'. ========",
-    "Resolving with primary search path '/.src/tests/cases/conformance/references/types'.",
-    "Directory '/.src/tests/cases/conformance/references/types' does not exist, skipping all lookups in it.",
+    "======== Resolving type reference directive '@beep/boop', containing file '/a.ts', root directory '/.src/types'. ========",
+    "Resolving with primary search path '/.src/types'.",
+    "Directory '/.src/types' does not exist, skipping all lookups in it.",
     "Looking up in 'node_modules' folder, initial location '/'.",
     "Searching all ancestor node_modules directories for preferred extensions: Declaration.",
     "Scoped package detected, looking in 'beep__boop'",

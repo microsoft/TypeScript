@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/thisInModule.ts] ////
+
 //// [thisInModule.ts]
 module myMod {
     var x;

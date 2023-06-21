@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/subtypeRelationForNever.ts] ////
+
 //// [subtypeRelationForNever.ts]
 function fail(message: string) : never { throw new Error(message); }
 function withFew<a, r>(values: a[], haveFew: (values: a[]) => r, haveNone: (reason: string) => r): r {

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/illegalModifiersOnClassElements.ts] ////
+
 //// [illegalModifiersOnClassElements.ts]
 class C {
     declare foo = 1;

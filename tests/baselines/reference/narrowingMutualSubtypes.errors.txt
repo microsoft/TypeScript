@@ -1,10 +1,10 @@
-tests/cases/compiler/narrowingMutualSubtypes.ts(117,17): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'any[] | Record<string, any>'.
+narrowingMutualSubtypes.ts(117,17): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'any[] | Record<string, any>'.
   No index signature with a parameter of type 'string' was found on type 'any[] | Record<string, any>'.
-tests/cases/compiler/narrowingMutualSubtypes.ts(118,29): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'any[] | Record<string, any>'.
+narrowingMutualSubtypes.ts(118,29): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'any[] | Record<string, any>'.
   No index signature with a parameter of type 'string' was found on type 'any[] | Record<string, any>'.
 
 
-==== tests/cases/compiler/narrowingMutualSubtypes.ts (2 errors) ====
+==== narrowingMutualSubtypes.ts (2 errors) ====
     // Check that `any` is a strict supertype of `unknown`
     
     declare const ru1: { [x: string]: unknown };

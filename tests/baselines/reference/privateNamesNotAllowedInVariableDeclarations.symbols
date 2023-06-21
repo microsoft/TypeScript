@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNamesNotAllowedInVariableDeclarations.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesNotAllowedInVariableDeclarations.ts] ////
+
+=== privateNamesNotAllowedInVariableDeclarations.ts ===
 const #foo = 3;
 >#foo : Symbol(#foo, Decl(privateNamesNotAllowedInVariableDeclarations.ts, 0, 5))
 

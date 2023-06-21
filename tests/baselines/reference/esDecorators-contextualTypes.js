@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/esDecorators/esDecorators-contextualTypes.ts] ////
+
 //// [esDecorators-contextualTypes.ts]
 @((t, c) => { })
 class C {

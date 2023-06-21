@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericSignatureInheritance2.ts ===
+//// [tests/cases/compiler/genericSignatureInheritance2.ts] ////
+
+=== genericSignatureInheritance2.ts ===
 interface I {
 >I : Symbol(I, Decl(genericSignatureInheritance2.ts, 0, 0))
 
