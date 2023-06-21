@@ -2675,11 +2675,16 @@ export interface InlayHintsRequest extends Request {
 }
 
 export interface InlayHintItem {
-    text: string;
+    text: string | InlayHintItemDisplayPart[];
     position: Location;
     kind: InlayHintKind;
     whitespaceBefore?: boolean;
     whitespaceAfter?: boolean;
+}
+
+export interface InlayHintItemDisplayPart {
+    text: string;
+    span: FileSpan;
 }
 
 export interface InlayHintsResponse extends Response {

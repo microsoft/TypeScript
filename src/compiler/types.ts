@@ -4992,7 +4992,7 @@ export interface TypeChecker {
      * @internal
      */
     getParameterType(signature: Signature, parameterIndex: number): Type;
-    /** @internal */ getParameterIdentifierNameAtPosition(signature: Signature, parameterIndex: number): [parameterName: __String, isRestParameter: boolean] | undefined;
+    /** @internal */ getParameterIdentifierInfoAtPosition(signature: Signature, parameterIndex: number): [parameter: Identifier, parameterName: __String, isRestParameter: boolean] | undefined;
     getNullableType(type: Type, flags: TypeFlags): Type;
     getNonNullableType(type: Type): Type;
     /** @internal */ getNonOptionalType(type: Type): Type;

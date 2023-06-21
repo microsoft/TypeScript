@@ -1538,7 +1538,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return node ? getTypeFromTypeNode(node) : errorType;
         },
         getParameterType: getTypeAtPosition,
-        getParameterIdentifierNameAtPosition,
+        getParameterIdentifierInfoAtPosition,
         getPromisedTypeOfPromise,
         getAwaitedType: type => getAwaitedType(type),
         getReturnTypeOfSignature,
@@ -34845,18 +34845,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return restParameter.escapedName;
     }
 
-    function getParameterIdentifierNameAtPosition(signature: Signature, pos: number): [parameterName: __String, isRestParameter: boolean] | undefined {
+    function getParameterIdentifierInfoAtPosition(signature: Signature, pos: number): [parameter: Identifier, parameterName: __String, isRestParameter: boolean] | undefined {
         if (signature.declaration?.kind === SyntaxKind.JSDocFunctionType) {
             return undefined;
         }
         const paramCount = signature.parameters.length - (signatureHasRestParameter(signature) ? 1 : 0);
         if (pos < paramCount) {
             const param = signature.parameters[pos];
-            return isParameterDeclarationWithIdentifierName(param) ? [param.escapedName, false] : undefined;
+            const paramIdent = getParameterDeclarationIdentifier(param);
+            return paramIdent ? [paramIdent, param.escapedName, false] : undefined;
         }
 
         const restParameter = signature.parameters[paramCount] || unknownSymbol;
-        if (!isParameterDeclarationWithIdentifierName(restParameter)) {
+        const restIdent = getParameterDeclarationIdentifier(restParameter);
+        if (!restIdent) {
             return undefined;
         }
 
@@ -34866,20 +34868,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const index = pos - paramCount;
             const associatedName = associatedNames?.[index];
             const isRestTupleElement = !!associatedName?.dotDotDotToken;
-            return associatedName ? [
-                getTupleElementLabel(associatedName),
-                isRestTupleElement
-            ] : undefined;
+
+            if (associatedName) {
+                Debug.assert(isIdentifier(associatedName.name));
+                return [associatedName.name, associatedName.name.escapedText, isRestTupleElement];
+            }
+
+            return undefined;
         }
 
         if (pos === paramCount) {
-            return [restParameter.escapedName, true];
+            return [restIdent, restParameter.escapedName, true];
         }
         return undefined;
     }
 
-    function isParameterDeclarationWithIdentifierName(symbol: Symbol) {
-        return symbol.valueDeclaration && isParameter(symbol.valueDeclaration) && isIdentifier(symbol.valueDeclaration.name);
+    function getParameterDeclarationIdentifier(symbol: Symbol) {
+        return symbol.valueDeclaration && isParameter(symbol.valueDeclaration) && isIdentifier(symbol.valueDeclaration.name) && symbol.valueDeclaration.name;
     }
     function isValidDeclarationForTupleLabel(d: Declaration): d is NamedTupleMember | (ParameterDeclaration & { name: Identifier }) {
         return d.kind === SyntaxKind.NamedTupleMember || (isParameter(d) && d.name && isIdentifier(d.name));

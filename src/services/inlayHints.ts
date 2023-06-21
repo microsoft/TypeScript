@@ -3,6 +3,7 @@ import {
     ArrowFunction,
     CallExpression,
     createPrinterWithRemoveComments,
+    createTextSpanFromNode,
     Debug,
     ElementFlags,
     EmitHint,
@@ -23,6 +24,7 @@ import {
     hasContextSensitiveParameters,
     Identifier,
     InlayHint,
+    InlayHintDisplayPart,
     InlayHintKind,
     InlayHintsContext,
     isArrowFunction,
@@ -57,7 +59,6 @@ import {
     ParameterDeclaration,
     PrefixUnaryExpression,
     PropertyDeclaration,
-    Signature,
     skipParentheses,
     some,
     Symbol,
@@ -149,9 +150,10 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
         return isArrowFunction(node) || isFunctionExpression(node) || isFunctionDeclaration(node) || isMethodDeclaration(node) || isGetAccessorDeclaration(node);
     }
 
-    function addParameterHints(text: string, position: number, isFirstVariadicArgument: boolean) {
+    function addParameterHints(text: string, parameter: Identifier, position: number, isFirstVariadicArgument: boolean) {
+        const displayPart = getInlayHintDisplayPart(`${isFirstVariadicArgument ? "..." : ""}${text}:`, parameter);
         result.push({
-            text: `${isFirstVariadicArgument ? "..." : ""}${text}:`,
+            text: [displayPart],
             position,
             kind: InlayHintKind.Parameter,
             whitespaceAfter: true,
@@ -222,9 +224,8 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
             return;
         }
 
-        const candidates: Signature[] = [];
-        const signature = checker.getResolvedSignatureForSignatureHelp(expr, candidates);
-        if (!signature || !candidates.length) {
+        const signature = checker.getResolvedSignatureForSignatureHelp(expr);
+        if (!signature) {
             return;
         }
 
@@ -251,10 +252,10 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                 }
             }
 
-            const identifierNameInfo = checker.getParameterIdentifierNameAtPosition(signature, signatureParamPos);
+            const identifierInfo = checker.getParameterIdentifierInfoAtPosition(signature, signatureParamPos);
             signatureParamPos = signatureParamPos + (spreadArgs || 1);
-            if (identifierNameInfo) {
-                const [parameterName, isFirstVariadicArgument] = identifierNameInfo;
+            if (identifierInfo) {
+                const [parameter, parameterName, isFirstVariadicArgument] = identifierInfo;
                 const isParameterNameNotSameAsArgument = preferences.includeInlayParameterNameHintsWhenArgumentMatchesName || !identifierOrAccessExpressionPostfixMatchesParameterName(arg, parameterName);
                 if (!isParameterNameNotSameAsArgument && !isFirstVariadicArgument) {
                     continue;
@@ -265,7 +266,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                     continue;
                 }
 
-                addParameterHints(name, originalArg.getStart(), isFirstVariadicArgument);
+                addParameterHints(name, parameter, originalArg.getStart(), isFirstVariadicArgument);
             }
         }
     }
@@ -413,5 +414,14 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
             return !(isHintableLiteral(initializer) || isNewExpression(initializer) || isObjectLiteralExpression(initializer) || isAssertionExpression(initializer));
         }
         return true;
+    }
+
+    function getInlayHintDisplayPart(text: string, node: Node): InlayHintDisplayPart {
+        const sourceFile = node.getSourceFile();
+        return {
+            text,
+            span: createTextSpanFromNode(node, sourceFile),
+            file: sourceFile.fileName
+        };
     }
 }
