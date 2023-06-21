@@ -286,6 +286,53 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
         ]);
     });
 
+    it("'using' in Block, 'throw' in body and dispose, no global SuppressedError (es2018)", () => {
+        const { main, output } = evaluator.evaluateTypeScript(`
+        export const output: any[] = [];
+
+        const disposable = {
+            [Symbol.dispose]() {
+                output.push("disposed");
+                throw "dispose error";
+            }
+        };
+
+        function body() {
+            output.push("body");
+            throw "body error";
+        }
+
+        export function main() {
+            output.push("before try");
+            try {
+                output.push("enter try");
+                using _ = disposable;
+                body();
+                output.push("exit try");
+            }
+            catch (e) {
+                output.push(e);
+            }
+            output.push("after try");
+        }
+        `, { target: ts.ScriptTarget.ES2018 });
+
+        main();
+
+        assert.deepEqual(output.slice(0, 4), [
+            "before try",
+            "enter try",
+            "body",
+            "disposed"]);
+        assert.instanceOf(output[4], Error);
+        assert.strictEqual(output[4].name, "SuppressedError");
+        assert.strictEqual(output[4].error, "dispose error");
+        assert.strictEqual(output[4].suppressed, "body error");
+        assert.deepEqual(output.slice(5), [
+            "after try"
+        ]);
+    });
+
     it("'using' in Block, 'return' in body (es2018)", () => {
         const { main, output } = evaluator.evaluateTypeScript(`
         export const output: any[] = [];

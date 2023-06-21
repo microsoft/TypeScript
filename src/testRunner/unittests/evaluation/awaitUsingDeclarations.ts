@@ -175,6 +175,53 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
         ]);
     });
 
+    it("'await using' in Block, 'throw' in body and dispose, no global SuppressedError (es2018)", async () => {
+        const { main, output } = evaluator.evaluateTypeScript(`
+        export const output: any[] = [];
+
+        const disposable = {
+            async [Symbol.asyncDispose]() {
+                output.push("disposed");
+                throw "dispose error";
+            }
+        };
+
+        function body() {
+            output.push("body");
+            throw "body error";
+        }
+
+        export async function main() {
+            output.push("before try");
+            try {
+                output.push("enter try");
+                await using _ = disposable;
+                body();
+                output.push("exit try");
+            }
+            catch (e) {
+                output.push(e);
+            }
+            output.push("after try");
+        }
+        `, { target: ts.ScriptTarget.ES2018 });
+
+        await main();
+
+        assert.deepEqual(output.slice(0, 4), [
+            "before try",
+            "enter try",
+            "body",
+            "disposed"]);
+        assert.instanceOf(output[4], Error);
+        assert.strictEqual(output[4].name, "SuppressedError");
+        assert.strictEqual(output[4].error, "dispose error");
+        assert.strictEqual(output[4].suppressed, "body error");
+        assert.deepEqual(output.slice(5), [
+            "after try"
+        ]);
+    });
+
     it("'await using' in Block, 'return' in body (es2018)", async () => {
         const { main, output } = evaluator.evaluateTypeScript(`
         export const output: any[] = [];

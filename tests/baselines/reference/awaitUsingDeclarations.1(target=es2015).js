@@ -129,26 +129,31 @@ var __addDisposableResource = (this && this.__addDisposableResource) || function
     }
     return value;
 };
-var __disposeResources = (this && this.__disposeResources) || function (env) {
-    function fail(e) {
-        env.error = env.hasError ? new SuppressedError(e, env.error) : e;
-        env.hasError = true;
-    }
-    function next() {
-        while (env.stack.length) {
-            var rec = env.stack.pop();
-            try {
-                var result = rec.dispose && rec.dispose.call(rec.value);
-                if (rec.async) return Promise.resolve(result).then(next, function(e) { fail(e); return next(); });
-            }
-            catch (e) {
-                fail(e);
-            }
+var __disposeResources = (this && this.__disposeResources) || (function (SuppressedError) {
+    return function (env) {
+        function fail(e) {
+            env.error = env.hasError ? new SuppressedError(e, env.error, "An error was suppressed during disposal.") : e;
+            env.hasError = true;
         }
-        if (env.hasError) throw env.error;
-    }
-    return next();
-};
+        function next() {
+            while (env.stack.length) {
+                var rec = env.stack.pop();
+                try {
+                    var result = rec.dispose && rec.dispose.call(rec.value);
+                    if (rec.async) return Promise.resolve(result).then(next, function(e) { fail(e); return next(); });
+                }
+                catch (e) {
+                    fail(e);
+                }
+            }
+            if (env.hasError) throw env.error;
+        }
+        return next();
+    };
+})(typeof SuppressedError === "function" ? SuppressedError : function (error, suppressed, message) {
+    var e = new Error(message);
+    return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
+});
 var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }
 var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
     if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
