@@ -1,0 +1,51 @@
+//// [tests/cases/compiler/es2022stringExportEmit_system.ts] ////
+
+=== mod.ts ===
+export let x = 1;
+>x : Symbol(x, Decl(mod.ts, 0, 10))
+
+x = 2;
+>x : Symbol(x, Decl(mod.ts, 0, 10))
+
+export { x as "y", x as ' "hello" ' }
+>x : Symbol(x, Decl(mod.ts, 0, 10))
+>"y" : Symbol("y", Decl(mod.ts, 2, 8))
+>x : Symbol(x, Decl(mod.ts, 0, 10))
+>' "hello" ' : Symbol(' "hello" ', Decl(mod.ts, 2, 18))
+
+=== index.ts ===
+import { y, ' "hello" ' as Hello } from './mod'
+>y : Symbol(y, Decl(index.ts, 0, 8))
+>Hello : Symbol(Hello, Decl(index.ts, 0, 11))
+
+console.log(y, Hello)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>y : Symbol(y, Decl(index.ts, 0, 8))
+>Hello : Symbol(Hello, Decl(index.ts, 0, 11))
+
+export * as " mod " from "./mod"
+>" mod " : Symbol(" mod ", Decl(index.ts, 2, 6))
+
+export {
+    x as y,
+>x : Symbol(y, Decl(mod.ts, 0, 10))
+>y : Symbol(y, Decl(index.ts, 3, 8))
+
+    y as y2,
+>y : Symbol("y", Decl(mod.ts, 2, 8))
+>y2 : Symbol(y2, Decl(index.ts, 4, 11))
+
+    x as " reexport x ",
+>x : Symbol(y, Decl(mod.ts, 0, 10))
+>" reexport x " : Symbol(" reexport x ", Decl(index.ts, 5, 12))
+
+    "x" as " reexport x2 ",
+>" reexport x2 " : Symbol(" reexport x2 ", Decl(index.ts, 6, 24))
+
+    ' "hello" ' as Hello
+>Hello : Symbol(Hello, Decl(index.ts, 7, 27))
+
+} from './mod'
+

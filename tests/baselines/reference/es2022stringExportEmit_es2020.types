@@ -1,0 +1,55 @@
+//// [tests/cases/compiler/es2022stringExportEmit_es2020.ts] ////
+
+=== mod.ts ===
+export let x = 1;
+>x : number
+>1 : 1
+
+x = 2;
+>x = 2 : 2
+>x : number
+>2 : 2
+
+export { x as "y", x as ' "hello" ' }
+>x : number
+>"y" : number
+>x : number
+>' "hello" ' : number
+
+=== index.ts ===
+import { y, ' "hello" ' as Hello } from './mod'
+>y : number
+>Hello : number
+
+console.log(y, Hello)
+>console.log(y, Hello) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>y : number
+>Hello : number
+
+export * as " mod " from "./mod"
+>" mod " : typeof import("mod")
+
+export {
+    x as y,
+>x : number
+>y : number
+
+    y as y2,
+>y : number
+>y2 : number
+
+    x as " reexport x ",
+>x : number
+>" reexport x " : number
+
+    "x" as " reexport x2 ",
+>" reexport x2 " : number
+
+    ' "hello" ' as Hello
+>Hello : number
+
+} from './mod'
+

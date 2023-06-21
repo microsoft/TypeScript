@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/es2022stringExportError.ts] ////
+
+=== mod.ts ===
+const a = 1;
+>a : 1
+>1 : 1
+
+export { a }
+>a : 1
+
+=== index.ts ===
+export { "non-ident" };
+>"non-ident" : any
+
+=== index2.ts ===
+import { "a" as "b" } from "./mod";
+> : 1
+

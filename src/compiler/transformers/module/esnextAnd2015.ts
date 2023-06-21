@@ -10,6 +10,7 @@ import {
     EmitHint,
     ExportAssignment,
     ExportDeclaration,
+    ExportSpecifier,
     Expression,
     GeneratedIdentifierFlags,
     getEmitFlags,
@@ -22,17 +23,21 @@ import {
     idText,
     ImportDeclaration,
     ImportEqualsDeclaration,
+    ImportSpecifier,
     insertStatementsAfterCustomPrologue,
     isExportNamespaceAsDefaultDeclaration,
     isExternalModule,
     isExternalModuleImportEqualsDeclaration,
     isExternalModuleIndicator,
     isIdentifier,
+    isIdentifierText,
     isNamespaceExport,
     isSourceFile,
     isStatement,
     ModifierFlags,
+    ModuleExportName,
     ModuleKind,
+    NamedImports,
     Node,
     NodeFlags,
     ScriptTarget,
@@ -119,6 +124,8 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
 
     function visitor(node: Node): VisitResult<Node | undefined> {
         switch (node.kind) {
+            case SyntaxKind.ImportDeclaration:
+                return visitImportDeclaration(node as ImportDeclaration);
             case SyntaxKind.ImportEqualsDeclaration:
                 // Though an error in es2020 modules, in node-flavor es2020 modules, we can helpfully transform this to a synthetic `require` call
                 // To give easy access to a synchronous `require` in node-flavor esm. We do the transform even in scenarios where we error, but `import.meta.url`
@@ -186,6 +193,73 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
     }
 
     /**
+     * Visits an ImportDeclaration node.
+     *
+     * @param node The node to visit.
+     */
+    function visitImportDeclaration(node: ImportDeclaration): VisitResult<Statement> {
+        if (compilerOptions.module !== ModuleKind.ES2015 && compilerOptions.module !== ModuleKind.ES2020) return node;
+        if (node.importClause?.namedBindings?.kind !== SyntaxKind.NamedImports) return node;
+
+        const clause = node.importClause;
+        const substitutions: ImportSpecifier[] = [];
+        let needUpdate = false;
+        const bindings = clause.namedBindings as NamedImports;
+        const nextImports: ImportSpecifier[] = [];
+        for (const element of bindings.elements) {
+            if (element.propertyName?.kind === SyntaxKind.StringLiteral) {
+                const id = tryConvertModuleExportNameToIdentifier(element.propertyName);
+                if (id) {
+                    needUpdate = true;
+                    nextImports.push(factory.updateImportSpecifier(element, element.isTypeOnly, id, element.name));
+                }
+                else {
+                    substitutions.push(element);
+                }
+            }
+            else nextImports.push(element);
+        }
+        if (!needUpdate && !substitutions.length) return node;
+        node = factory.updateImportDeclaration(
+            node,
+            node.modifiers,
+            factory.updateImportClause(clause, clause.isTypeOnly, clause.name, factory.updateNamedImports(bindings, nextImports)),
+            node.moduleSpecifier,
+            node.assertClause
+        );
+        if (!substitutions.length) return node;
+        const nsImportName = factory.getGeneratedNameForNode(node);
+        for (const element of substitutions) {
+            // TODO: this does not support ESM live binding. Not worth to introduce so much node substitute code for this?
+            context.addInitializationStatement(
+                factory.createVariableStatement(
+                    /*modifiers*/ undefined,
+                    factory.createVariableDeclarationList(
+                        [factory.createVariableDeclaration(
+                            element.name,
+                        /*exclamationToken*/ undefined,
+                        /*type*/ undefined,
+                            factory.createElementAccessExpression(
+                                nsImportName,
+                                element.propertyName!
+                            )
+                        )],
+                        NodeFlags.Const
+                    )
+                )
+            );
+        }
+        const nsImport = factory.createImportDeclaration(
+            node.modifiers,
+            factory.createImportClause(/*isTypeOnly*/ false, /*name*/ undefined, factory.createNamespaceImport(nsImportName)),
+            node.moduleSpecifier,
+            node.assertClause
+        );
+        if (!clause.name && nextImports.length === 0) return nsImport;
+        return [node, nsImport];
+    }
+
+    /**
      * Visits an ImportEqualsDeclaration node.
      *
      * @param node The node to visit.
@@ -226,7 +300,7 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
             statements = append(statements, factory.createExportDeclaration(
                 /*modifiers*/ undefined,
                 node.isTypeOnly,
-                factory.createNamedExports([factory.createExportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, idText(node.name))])
+                factory.createNamedExports([factory.createExportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, node.name)])
             ));
         }
         return statements;
@@ -237,7 +311,61 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
         return node.isExportEquals ? undefined : node;
     }
 
+    function tryConvertModuleExportNameToIdentifier(node: ModuleExportName): Identifier | undefined {
+        if (node.kind === SyntaxKind.Identifier) return node;
+        if (!isIdentifierText(node.text, languageVersion)) return undefined;
+        const id = factory.createIdentifier(node.text);
+        setOriginalNode(id, node);
+        return id;
+    }
+
     function visitExportDeclaration(node: ExportDeclaration) {
+        // transform StringLiteral to Identifier when it's possible.
+        if (compilerOptions.module === ModuleKind.ES2015 || compilerOptions.module === ModuleKind.ES2020) {
+            const clause = node.exportClause;
+            if (clause?.kind === SyntaxKind.NamespaceExport && clause.name.kind === SyntaxKind.StringLiteral) {
+                const id = tryConvertModuleExportNameToIdentifier(clause.name);
+                if (id) {
+                    node = factory.updateExportDeclaration(
+                        node,
+                        node.modifiers,
+                        node.isTypeOnly,
+                        factory.updateNamespaceExport(clause, id),
+                        node.moduleSpecifier,
+                        node.assertClause
+                    );
+                }
+                else return undefined;
+            }
+            if (clause?.kind === SyntaxKind.NamedExports) {
+                const nextExports: ExportSpecifier[] = [];
+                let needUpdate = false;
+                for (const element of clause.elements) {
+                    const exported = element.propertyName || element.name;
+                    // ill-formed
+                    if (exported.kind === SyntaxKind.StringLiteral && !node.moduleSpecifier) return node;
+                    const prop = element.propertyName && tryConvertModuleExportNameToIdentifier(element.propertyName);
+                    const name = tryConvertModuleExportNameToIdentifier(element.name);
+                    if (element.name !== name || prop !== element.propertyName) {
+                        needUpdate = true;
+                        if ((element.propertyName && !prop) || !name) continue;
+                        nextExports.push(factory.updateExportSpecifier(element, element.isTypeOnly, prop, name || element.name));
+                    }
+                    else nextExports.push(element);
+                }
+                if (needUpdate) {
+                    node = factory.updateExportDeclaration(
+                        node,
+                        node.modifiers,
+                        node.isTypeOnly,
+                        factory.updateNamedExports(clause, nextExports),
+                        node.moduleSpecifier,
+                        node.assertClause
+                    );
+                }
+            }
+        }
+
         // `export * as ns` only needs to be transformed in ES2015
         if (compilerOptions.module !== undefined && compilerOptions.module > ModuleKind.ES2015) {
             return node;

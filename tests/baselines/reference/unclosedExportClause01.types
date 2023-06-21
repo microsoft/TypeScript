@@ -8,21 +8,18 @@ export var x = "x";
 === t2.ts ===
 export { x, from "./t1"
 >x : string
->from : any
 
 === t3.ts ===
+
 export { from "./t1"
->from : any
 
 === t4.ts ===
 export { x as a from "./t1"
 >x : string
 >a : string
->from : any
 
 === t5.ts ===
 export { x as a, from "./t1"
 >x : string
 >a : string
->from : any
 

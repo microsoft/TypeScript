@@ -7,32 +7,10 @@
 ////export {};
 ////declare module "./a" {
 ////    export const bar = 0;
+////    export { bar as "Bar non ident", bar as break, bar as await, bar as unique }
 ////}
 
 // @Filename: /user.ts
 /////**/
 
-verify.completions({
-    marker: "",
-    includes: [
-        {
-            name: "foo",
-            text: "const foo: 0",
-            source: "/a",
-            sourceDisplay: "./a",
-            hasAction: true,
-            sortText: completion.SortText.AutoImportSuggestions
-        },
-        {
-            name: "bar",
-            text: "const bar: 0",
-            source: "/a",
-            sourceDisplay: "./a",
-            hasAction: true,
-            sortText: completion.SortText.AutoImportSuggestions
-        },
-    ],
-    preferences: {
-        includeCompletionsForModuleExports: true,
-    },
-});
+verify.baselineCompletions();

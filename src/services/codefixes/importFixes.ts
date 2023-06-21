@@ -14,6 +14,7 @@ import {
     compareValues,
     Comparison,
     CompilerOptions,
+    createIdentifierTextFromAnyString,
     createModuleSpecifierResolutionHost,
     createMultiMap,
     createPackageJsonImportFilter,
@@ -66,6 +67,7 @@ import {
     isIdentifier,
     isIdentifierPart,
     isIdentifierStart,
+    isIdentifierText,
     isImportableFile,
     isImportEqualsDeclaration,
     isInJSFile,
@@ -633,16 +635,21 @@ function tryUseExistingNamespaceImport(existingImports: readonly FixAddToExistin
     //     import * as ns from "foo";
     //     import { member1, member2 } from "foo";
     //
-    //     member3/**/ <-- cusor here
+    //     member3/**/ <-- cursor here
     //
     // in this case we should provie 2 actions:
     //     1. change "member3" to "ns.member3"
     //     2. add "member3" to the second import statement's import list
     // and it is up to the user to decide which one fits best.
-    return firstDefined(existingImports, ({ declaration, importKind }): FixUseNamespaceImport | undefined => {
+    return firstDefined(existingImports, ({ declaration, importKind, symbol }): FixUseNamespaceImport | undefined => {
         if (importKind !== ImportKind.Named) return undefined;
         const namespacePrefix = getNamespaceLikeImportText(declaration);
         const moduleSpecifier = namespacePrefix && tryGetModuleSpecifierFromDeclaration(declaration)?.text;
+        // for the code below where module "x" has an export called "hello world"
+        //     import * as ns from "x";
+        //     hellow<cursor here>
+        // current completion implementation does not allow us to complet it to ns["hello world"] because we need to insert "] after the full export name inserted.
+        if (!isIdentifierText(symbol.name, ScriptTarget.Latest)) return undefined;
         if (moduleSpecifier) {
             return { kind: ImportFixKind.UseNamespace, namespacePrefix, usagePosition: position, moduleSpecifier };
         }
@@ -1413,10 +1420,14 @@ function doAddExistingFix(
 
         const comparer = OrganizeImports.getOrganizeImportsComparer(preferences, ignoreCaseForSorting);
         const newSpecifiers = stableSort(
-            namedImports.map(namedImport => factory.createImportSpecifier(
-                (!clause.isTypeOnly || promoteFromTypeOnly) && needsTypeOnly(namedImport),
-                /*propertyName*/ undefined,
-                factory.createIdentifier(namedImport.name))),
+            namedImports.map(namedImport => {
+                const isValidIdentifier = isIdentifierText(namedImport.name, ScriptTarget.Latest);
+                return factory.createImportSpecifier(
+                    (!clause.isTypeOnly || promoteFromTypeOnly) && needsTypeOnly(namedImport),
+                    isValidIdentifier ? undefined : factory.createStringLiteral(namedImport.name),
+                    factory.createIdentifier(isValidIdentifier ? namedImport.name : createIdentifierTextFromAnyString(namedImport.name))
+                );
+            }),
             (s1, s2) => OrganizeImports.compareImportOrExportSpecifiers(s1, s2, comparer));
 
         // The sorting preference computed earlier may or may not have validated that these particular
@@ -1529,10 +1540,14 @@ function getNewImports(
             !some(namedImports, i => i.addAsTypeOnly === AddAsTypeOnly.NotAllowed);
         statements = combine(statements, makeImport(
             defaultImport && factory.createIdentifier(defaultImport.name),
-            namedImports?.map(({ addAsTypeOnly, name }) => factory.createImportSpecifier(
-                !topLevelTypeOnly && addAsTypeOnly === AddAsTypeOnly.Required,
-                /*propertyName*/ undefined,
-                factory.createIdentifier(name))),
+            namedImports?.map(({ addAsTypeOnly, name }) => {
+                const isValidIdentifier = isIdentifierText(name, ScriptTarget.Latest);
+                return factory.createImportSpecifier(
+                    !topLevelTypeOnly && addAsTypeOnly === AddAsTypeOnly.Required,
+                    isValidIdentifier ? undefined : factory.createStringLiteral(name),
+                    factory.createIdentifier(isValidIdentifier ? name : createIdentifierTextFromAnyString(name))
+                );
+            }),
             moduleSpecifier,
             quotePreference,
             topLevelTypeOnly));

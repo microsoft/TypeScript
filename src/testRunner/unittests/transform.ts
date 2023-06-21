@@ -282,7 +282,7 @@ describe("unittests:: TransformAPI", () => {
                     if (node.kind === ts.SyntaxKind.ExportDeclaration) {
                         const ed = node as ts.Node as ts.ExportDeclaration;
                         const exports = [{ name: "x" }];
-                        const exportSpecifiers = exports.map(e => ts.factory.createExportSpecifier(/*isTypeOnly*/ false, e.name, e.name));
+                        const exportSpecifiers = exports.map(e => ts.factory.createExportSpecifier(/*isTypeOnly*/ false, ts.factory.createModuleExportName(e.name, ts.ScriptTarget.ESNext), ts.factory.createModuleExportName(e.name, ts.ScriptTarget.ESNext)));
                         const exportClause = ts.factory.createNamedExports(exportSpecifiers);
                         const newEd = ts.factory.updateExportDeclaration(ed, ed.modifiers, ed.isTypeOnly, exportClause, ed.moduleSpecifier, ed.assertClause);
 
@@ -697,4 +697,3 @@ function test () {
         }).outputText;
     });
 });
-

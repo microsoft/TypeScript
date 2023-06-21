@@ -376,7 +376,7 @@ function convertNamedExport(
         */
         const newNodes = [
             makeConst(/*modifiers*/ undefined, rename, assignment.right),
-            makeExportDeclaration([factory.createExportSpecifier(/*isTypeOnly*/ false, rename, text)]),
+            makeExportDeclaration([factory.createExportSpecifier(/*isTypeOnly*/ false, factory.createModuleExportName(rename, ScriptTarget.ESNext), factory.createModuleExportName(text, ScriptTarget.ESNext))]),
         ];
         changes.replaceNodeWithNodes(sourceFile, assignment.parent, newNodes);
     }
@@ -399,7 +399,7 @@ function reExportStar(moduleSpecifier: string): ExportDeclaration {
     return makeExportDeclaration(/*exportSpecifiers*/ undefined, moduleSpecifier);
 }
 function reExportDefault(moduleSpecifier: string): ExportDeclaration {
-    return makeExportDeclaration([factory.createExportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, "default")], moduleSpecifier);
+    return makeExportDeclaration([factory.createExportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, factory.createIdentifier("default"))], moduleSpecifier);
 }
 
 function convertExportsPropertyAssignment({ left, right, parent }: BinaryExpression & { left: PropertyAccessExpression }, sourceFile: SourceFile, changes: textChanges.ChangeTracker): void {

@@ -270,6 +270,7 @@ import {
     isGetAccessorDeclaration,
     isHeritageClause,
     isIdentifier,
+    isIdentifierPart,
     isIdentifierStart,
     isIdentifierText,
     isImportTypeNode,
@@ -392,6 +393,7 @@ import {
     ModuleBlock,
     ModuleDeclaration,
     ModuleDetectionKind,
+    ModuleExportName,
     ModuleKind,
     ModuleResolutionKind,
     moduleResolutionOptionDeclarations,
@@ -1206,7 +1208,7 @@ function isJSDocTypeExpressionOrChild(node: Node): boolean {
 
 /** @internal */
 export function isExportNamespaceAsDefaultDeclaration(node: Node): boolean {
-    return !!(isExportDeclaration(node) && node.exportClause && isNamespaceExport(node.exportClause) && node.exportClause.name.escapedText === "default");
+    return !!(isExportDeclaration(node) && node.exportClause && isNamespaceExport(node.exportClause) && moduleExportNameTextEscaped(node.exportClause.name) === "default");
 }
 
 /** @internal */
@@ -1780,14 +1782,12 @@ export function isAmbientModule(node: Node): node is AmbientModuleDeclaration {
 }
 
 /** @internal */
-export function isModuleWithStringLiteralName(node: Node): node is ModuleDeclaration {
+export function isModuleWithStringLiteralName(node: Node): node is ModuleDeclaration & { name: StringLiteral } {
     return isModuleDeclaration(node) && node.name.kind === SyntaxKind.StringLiteral;
 }
 
 /** @internal */
-export function isNonGlobalAmbientModule(node: Node): node is ModuleDeclaration & { name: StringLiteral } {
-    return isModuleDeclaration(node) && isStringLiteral(node.name);
-}
+export const isNonGlobalAmbientModule = isModuleWithStringLiteralName;
 
 /**
  * An effective module (namespace) declaration is either
@@ -2042,7 +2042,7 @@ export function forEachEnclosingBlockScopeContainer(node: Node, cb: (container: 
 // Computed property names will just be emitted as "[<expr>]", where <expr> is the source
 // text of the expression in the computed property.
 /** @internal */
-export function declarationNameToString(name: DeclarationName | QualifiedName | undefined) {
+export function declarationNameToString(name: DeclarationName | QualifiedName | ModuleExportName | undefined) {
     return !name || getFullWidth(name) === 0 ? "(Missing)" : getTextOfNode(name);
 }
 
@@ -3873,6 +3873,12 @@ export function getElementOrPropertyAccessName(node: AccessExpression): __String
 }
 
 /** @internal */
+export function createElementAccessOrPropertyAccessExpression(lhs: Expression, rhs: Expression) {
+    if (isMemberName(rhs)) return factory.createPropertyAccessExpression(lhs, rhs);
+    return factory.createElementAccessExpression(lhs, rhs);
+}
+
+/** @internal */
 export function getAssignmentDeclarationPropertyAccessKind(lhs: AccessExpression): AssignmentDeclarationKind {
     if (lhs.expression.kind === SyntaxKind.ThisKeyword) {
         return AssignmentDeclarationKind.ThisProperty;
@@ -4022,6 +4028,10 @@ export function getExternalModuleName(node: AnyImportOrReExport | ImportTypeNode
 }
 
 /** @internal */
+export function getNamespaceDeclarationNode(node: ImportDeclaration): NamespaceImport | undefined;
+export function getNamespaceDeclarationNode(node: ImportEqualsDeclaration): ImportEqualsDeclaration;
+export function getNamespaceDeclarationNode(node: ExportDeclaration): NamespaceExport | undefined;
+export function getNamespaceDeclarationNode(node: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration): ImportEqualsDeclaration | NamespaceImport | NamespaceExport | undefined;
 export function getNamespaceDeclarationNode(node: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration): ImportEqualsDeclaration | NamespaceImport | NamespaceExport | undefined {
     switch (node.kind) {
         case SyntaxKind.ImportDeclaration:
@@ -10269,4 +10279,46 @@ export function getTextOfJsxNamespacedName(node: JsxNamespacedName) {
 /** @internal */
 export function intrinsicTagNameToString(node: Identifier | JsxNamespacedName) {
     return isIdentifier(node) ? idText(node) : getTextOfJsxNamespacedName(node);
+}
+
+/** @internal */
+export function moduleExportNameText(node: ModuleExportName): string {
+    if (node.kind === SyntaxKind.StringLiteral) return node.text;
+    return idText(node);
+}
+/** @internal */
+export function moduleExportNameTextEscaped(node: ModuleExportName): __String {
+    if (node.kind === SyntaxKind.StringLiteral) return escapeLeadingUnderscores(node.text);
+    return node.escapedText;
+}
+export function isModuleExportNameStringLiteral(node: __String | ModuleExportName | undefined): node is StringLiteral {
+    if (!node) return false;
+    return typeof node !== "string" && node.kind === SyntaxKind.StringLiteral;
+}
+/** @internal */
+export function createIdentifierTextFromAnyString(name: string): string {
+    let targetName = "";
+    // don't use c style loop, it will break Unicode surrogate pairs
+    for (const char of name) {
+        if (targetName.length === 0) {
+            targetName += isIdentifierStart(char.codePointAt(0)!, ScriptTarget.Latest) ? char : "_";
+        }
+        else if (isIdentifierPart(char.codePointAt(0)!, ScriptTarget.Latest)) {
+            targetName += char;
+        }
+        else targetName += "_";
+    }
+    if (!targetName.length) return "item";
+    return targetName;
+}
+/**
+ * @internal
+ * TODO: this cannot handle the following code:
+ * declare class T { static prop: string; }
+ * export = T
+ *
+ * In this case, parent of the symbol (prop) is class T, which does not have ValueModule flag, although it is used as one.
+ */
+export function canSymbolBeImportedViaESImportStatement(symbol: Symbol | undefined) {
+    return (symbol?.parent?.flags || 0) & SymbolFlags.ValueModule;
 }

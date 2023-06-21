@@ -8,6 +8,7 @@ import {
     BreakOrContinueStatement,
     CancellationToken,
     canHaveDecorators,
+    canSymbolBeImportedViaESImportStatement,
     canUsePropertyAccess,
     CaseBlock,
     cast,
@@ -36,6 +37,7 @@ import {
     ConstructorDeclaration,
     ContextFlags,
     countWhere,
+    createIdentifierTextFromAnyString,
     createModuleSpecifierResolutionHost,
     createPackageJsonImportFilter,
     createPrinter,
@@ -207,6 +209,7 @@ import {
     isNamedImportsOrExports,
     isNamespaceImport,
     isNodeDescendantOf,
+    isNonContextualKeyword,
     isObjectBindingPattern,
     isObjectLiteralExpression,
     isObjectTypeDeclaration,
@@ -285,6 +288,7 @@ import {
     ModifierSyntaxKind,
     modifierToFlag,
     ModuleDeclaration,
+    moduleExportNameTextEscaped,
     ModuleReference,
     moduleResolutionSupportsPackageJsonExportsAndImports,
     NamedImportBindings,
@@ -1745,7 +1749,29 @@ function createCompletionEntry(
 
     if (originIsExport(origin) || originIsResolvedExport(origin)) {
         data = originToCompletionEntryData(origin);
+        if (!isIdentifierText(name, ScriptTarget.Latest)) {
+            insertText = createIdentifierTextFromAnyString(name);
+            filterText = name;
+        }
         hasAction = !importStatementCompletion;
+    }
+    const parentNamedImportOrExport = findAncestor(location, isNamedImportsOrExports);
+    if (parentNamedImportOrExport) {
+        if (parentNamedImportOrExport.kind === SyntaxKind.NamedImports) {
+            const possibleToken = stringToToken(name);
+            // import { break as break_ }
+            if (parentNamedImportOrExport && possibleToken && (possibleToken === SyntaxKind.AwaitKeyword || isNonContextualKeyword(possibleToken))) {
+                insertText = `${name} as ${name}_`;
+            }
+            else if (!isIdentifierText(name, ScriptTarget.Latest)) {
+                // import { "some thing" as some_thing }
+                insertText = `${quotePropertyName(sourceFile, preferences, name)} as ${createIdentifierTextFromAnyString(name)}`;
+            }
+        }
+        else if (!isIdentifierText(name, ScriptTarget.Latest)) {
+            // export { "some thing" }
+            insertText = quotePropertyName(sourceFile, preferences, name);
+        }
     }
 
     // TODO(drosen): Right now we just permit *all* semantic meanings when calling
@@ -3838,8 +3864,11 @@ function getCompletionData(
                 exportInfo.search(
                     sourceFile.path,
                     /*preferCapitalized*/ isRightOfOpenTag,
-                    (symbolName, targetFlags) => {
-                        if (!isIdentifierText(symbolName, getEmitScriptTarget(host.getCompilationSettings()))) return false;
+                    (symbolName, targetFlags, symbol) => {
+                        if (
+                            !canSymbolBeImportedViaESImportStatement(symbol) &&
+                            !isIdentifierText(symbolName, getEmitScriptTarget(host.getCompilationSettings()))
+                        ) return false;
                         if (!detailsEntryId && isStringANonContextualKeyword(symbolName)) return false;
                         if (!isTypeOnlyLocation && !importStatementCompletion && !(targetFlags & SymbolFlags.Value)) return false;
                         if (isTypeOnlyLocation && !(targetFlags & (SymbolFlags.Module | SymbolFlags.Type))) return false;
@@ -3954,7 +3983,8 @@ function getCompletionData(
                 getEmitScriptTarget(compilerOptions),
                 /*origin*/ undefined,
                 CompletionKind.ObjectPropertyDeclaration,
-                /*jsxIdentifierExpected*/ false);
+                /*jsxIdentifierExpected*/ false,
+            );
             if (!displayName) {
                 return;
             }
@@ -4282,7 +4312,7 @@ function getCompletionData(
         completionKind = CompletionKind.MemberLike;
         isNewIdentifierLocation = false;
         const exports = typeChecker.getExportsAndPropertiesOfModule(moduleSpecifierSymbol);
-        const existing = new Set((namedImportsOrExports.elements as NodeArray<ImportOrExportSpecifier>).filter(n => !isCurrentlyEditingNode(n)).map(n => (n.propertyName || n.name).escapedText));
+        const existing = new Set((namedImportsOrExports.elements as NodeArray<ImportOrExportSpecifier>).filter(n => !isCurrentlyEditingNode(n)).map(n => moduleExportNameTextEscaped(n.propertyName || n.name)));
         const uniques = exports.filter(e => e.escapedName !== InternalSymbolName.Default && !existing.has(e.escapedName));
         symbols = concatenate(symbols, uniques);
         if (!uniques.length) {
@@ -4793,7 +4823,8 @@ function getCompletionData(
                 target,
                 origin,
                 CompletionKind.ObjectPropertyDeclaration,
-                /*jsxIdentifierExpected*/ false);
+                /*jsxIdentifierExpected*/ false,
+            );
             if (displayName) {
                 const originalSortText = symbolToSortTextMap[symbolId] ?? SortText.LocationPriority;
                 const { name } = displayName;
@@ -4943,7 +4974,7 @@ function getCompletionEntryDisplayNameForSymbol(
     target: ScriptTarget,
     origin: SymbolOriginInfo | undefined,
     kind: CompletionKind,
-    jsxIdentifierExpected: boolean,
+    jsxIdentifierExpected: boolean
 ): CompletionEntryDisplayNameForSymbol | undefined {
     if (originIsIgnore(origin)) {
         return undefined;
@@ -4959,6 +4990,9 @@ function getCompletionEntryDisplayNameForSymbol(
     }
 
     const validNameResult: CompletionEntryDisplayNameForSymbol = { name, needsConvertPropertyAccess: false };
+    if (canSymbolBeImportedViaESImportStatement(symbol)) {
+        return { name, needsConvertPropertyAccess: !isIdentifierText(name, ScriptTarget.Latest) };
+    }
     if (isIdentifierText(name, target, jsxIdentifierExpected ? LanguageVariant.JSX : LanguageVariant.Standard) || symbol.valueDeclaration && isPrivateIdentifierClassElementDeclaration(symbol.valueDeclaration)) {
         return validNameResult;
     }

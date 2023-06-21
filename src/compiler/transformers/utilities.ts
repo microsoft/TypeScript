@@ -66,6 +66,9 @@ import {
     map,
     MethodDeclaration,
     ModifierFlags,
+    ModuleExportName,
+    moduleExportNameText,
+    moduleExportNameTextEscaped,
     NamedImportBindings,
     NamespaceExport,
     Node,
@@ -99,7 +102,7 @@ export interface ExternalModuleInfo {
     externalHelpersImportDeclaration: ImportDeclaration | undefined; // import of external helpers
     exportSpecifiers: Map<string, ExportSpecifier[]>; // file-local export specifiers by name (no reexports)
     exportedBindings: Identifier[][]; // exported names of local declarations
-    exportedNames: Identifier[] | undefined; // all exported names in the module, both local and reexported
+    exportedNames: ModuleExportName[] | undefined; // all exported names in the module, both local and reexported
     exportEquals: ExportAssignment | undefined; // an export= declaration if one was present
     hasExportStarsToExportValues: boolean; // whether this module contains export*
 }
@@ -111,7 +114,7 @@ function containsDefaultReference(node: NamedImportBindings | undefined) {
 }
 
 function isNamedDefaultReference(e: ImportSpecifier): boolean {
-    return e.propertyName !== undefined && e.propertyName.escapedText === InternalSymbolName.Default;
+    return e.propertyName !== undefined && moduleExportNameTextEscaped(e.propertyName) === InternalSymbolName.Default;
 }
 
 /** @internal */
@@ -164,7 +167,7 @@ export function collectExternalModuleInfo(context: TransformationContext, source
     const exportSpecifiers = createMultiMap<string, ExportSpecifier>();
     const exportedBindings: Identifier[][] = [];
     const uniqueExports = new Map<string, boolean>();
-    let exportedNames: Identifier[] | undefined;
+    let exportedNames: ModuleExportName[] | undefined;
     let hasExportDefault = false;
     let exportEquals: ExportAssignment | undefined;
     let hasExportStarsToExportValues = false;
@@ -211,9 +214,10 @@ export function collectExternalModuleInfo(context: TransformationContext, source
                         }
                         else {
                             const name = ((node as ExportDeclaration).exportClause as NamespaceExport).name;
-                            if (!uniqueExports.get(idText(name))) {
+                            const nameText = moduleExportNameText(name);
+                            if (!uniqueExports.get(nameText)) {
                                 multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), name);
-                                uniqueExports.set(idText(name), true);
+                                uniqueExports.set(nameText, true);
                                 exportedNames = append(exportedNames, name);
                             }
                             // we use the same helpers for `export * as ns` as we do for `import * as ns`
@@ -295,27 +299,30 @@ export function collectExternalModuleInfo(context: TransformationContext, source
 
     function addExportedNamesForExportDeclaration(node: ExportDeclaration) {
         for (const specifier of cast(node.exportClause, isNamedExports).elements) {
-            if (!uniqueExports.get(idText(specifier.name))) {
+            if (!uniqueExports.get(moduleExportNameText(specifier.name))) {
                 const name = specifier.propertyName || specifier.name;
-                if (!node.moduleSpecifier) {
+                if (!node.moduleSpecifier && name.kind === SyntaxKind.Identifier) {
                     exportSpecifiers.add(idText(name), specifier);
                 }
 
-                const decl = resolver.getReferencedImportDeclaration(name)
-                    || resolver.getReferencedValueDeclaration(name);
+                // export { "x" as ... } cannot be resolved locally.
+                if (name.kind === SyntaxKind.Identifier) {
+                    const decl = resolver.getReferencedImportDeclaration(name)
+                        || resolver.getReferencedValueDeclaration(name);
 
-                if (decl) {
-                    multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(decl), specifier.name);
+                    if (decl) {
+                        multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(decl), specifier.name);
+                    }
                 }
 
-                uniqueExports.set(idText(specifier.name), true);
+                uniqueExports.set(moduleExportNameText(specifier.name), true);
                 exportedNames = append(exportedNames, specifier.name);
             }
         }
     }
 }
 
-function collectExportedVariableInfo(decl: VariableDeclaration | BindingElement, uniqueExports: Map<string, boolean>, exportedNames: Identifier[] | undefined, exportedBindings: Identifier[][]) {
+function collectExportedVariableInfo(decl: VariableDeclaration | BindingElement, uniqueExports: Map<string, boolean>, exportedNames: ModuleExportName[] | undefined, exportedBindings: Identifier[][]) {
     if (isBindingPattern(decl.name)) {
         for (const element of decl.name.elements) {
             if (!isOmittedExpression(element)) {

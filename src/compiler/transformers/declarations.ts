@@ -59,6 +59,7 @@ import {
     getDirectoryPath,
     getEffectiveBaseTypeNode,
     getEffectiveModifierFlags,
+    getEmitScriptTarget,
     getExternalModuleImportEqualsDeclarationExpression,
     getExternalModuleNameFromDeclaration,
     getFirstConstructorWithBody,
@@ -1520,7 +1521,7 @@ export function transformDeclarations(context: TransformationContext) {
                             /*modifiers*/ undefined,
                             /*isTypeOnly*/ false,
                             factory.createNamedExports(map(exportMappings, ([gen, exp]) => {
-                                return factory.createExportSpecifier(/*isTypeOnly*/ false, gen, exp);
+                                return factory.createExportSpecifier(/*isTypeOnly*/ false, gen, factory.createModuleExportName(exp, getEmitScriptTarget(context.getCompilerOptions())));
                             }))
                         ));
                     }

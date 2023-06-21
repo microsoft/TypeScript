@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/es2022stringExportBasic.ts] ////
+
+=== lib.d.ts ===
+declare const item: string;
+>item : string
+
+export { item as "non-ident" };
+>item : string
+>"non-ident" : string
+
+=== app.ts ===
+import { "non-ident" as str } from "./lib"
+>str : string
+
+str
+>str : string
+

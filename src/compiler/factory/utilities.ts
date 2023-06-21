@@ -792,7 +792,9 @@ export function getOrCreateExternalHelpersModuleNameIfNeeded(factory: NodeFactor
 }
 
 /**
- * Get the name of that target module from an import or export declaration
+ * Get the name of that target module from an import or export declaration.
+ *
+ * This is only used in AMD and SystemJS emit.
  *
  * @internal
  */
@@ -800,7 +802,9 @@ export function getLocalNameForExternalImport(factory: NodeFactory, node: Import
     const namespaceDeclaration = getNamespaceDeclarationNode(node);
     if (namespaceDeclaration && !isDefaultImport(node) && !isExportNamespaceAsDefaultDeclaration(node)) {
         const name = namespaceDeclaration.name;
-        return isGeneratedIdentifier(name) ? name : factory.createIdentifier(getSourceTextOfNodeFromSourceFile(sourceFile, name) || idText(name));
+        if (isGeneratedIdentifier(name)) return name;
+        if (name.kind === SyntaxKind.StringLiteral) return factory.getGeneratedNameForNode(name);
+        return factory.createIdentifier(getSourceTextOfNodeFromSourceFile(sourceFile, name) || idText(name));
     }
     if (node.kind === SyntaxKind.ImportDeclaration && node.importClause) {
         return factory.getGeneratedNameForNode(node);

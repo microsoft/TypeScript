@@ -12,6 +12,7 @@ import {
     chainBundle,
     ClassDeclaration,
     collectExternalModuleInfo,
+    createElementAccessOrPropertyAccessExpression,
     Debug,
     Declaration,
     DefaultClause,
@@ -89,6 +90,8 @@ import {
     map,
     MetaProperty,
     ModifierFlags,
+    moduleExportNameText,
+    moduleExportNameTextEscaped,
     moveEmitHelpers,
     Node,
     NodeFlags,
@@ -452,7 +455,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
         const exportedNames: ObjectLiteralElementLike[] = [];
         if (moduleInfo.exportedNames) {
             for (const exportedLocalName of moduleInfo.exportedNames) {
-                if (exportedLocalName.escapedText === "default") {
+                if (moduleExportNameTextEscaped(exportedLocalName) === "default") {
                     continue;
                 }
 
@@ -626,10 +629,10 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                                 for (const e of entry.exportClause.elements) {
                                     properties.push(
                                         factory.createPropertyAssignment(
-                                            factory.createStringLiteral(idText(e.name)),
+                                            factory.createStringLiteral(moduleExportNameText(e.name)),
                                             factory.createElementAccessExpression(
                                                 parameterName,
-                                                factory.createStringLiteral(idText(e.propertyName || e.name))
+                                                factory.createStringLiteral(moduleExportNameText(e.propertyName || e.name))
                                             )
                                         )
                                     );
@@ -652,7 +655,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                                             exportFunction,
                                             /*typeArguments*/ undefined,
                                             [
-                                                factory.createStringLiteral(idText(entry.exportClause.name)),
+                                                factory.createStringLiteral(moduleExportNameText(entry.exportClause.name)),
                                                 parameterName
                                             ]
                                         )
@@ -1117,7 +1120,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
         const exportSpecifiers = moduleInfo.exportSpecifiers.get(idText(name));
         if (exportSpecifiers) {
             for (const exportSpecifier of exportSpecifiers) {
-                if (exportSpecifier.name.escapedText !== excludeName) {
+                if (moduleExportNameTextEscaped(exportSpecifier.name) !== excludeName) {
                     statements = appendExportStatement(statements, exportSpecifier.name, name);
                 }
             }
@@ -1806,7 +1809,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                     return setTextRange(
                         factory.createPropertyAssignment(
                             factory.cloneNode(name),
-                            factory.createPropertyAccessExpression(
+                            createElementAccessOrPropertyAccessExpression(
                                 factory.getGeneratedNameForNode(importDeclaration.parent?.parent?.parent || importDeclaration),
                                 factory.cloneNode(importDeclaration.propertyName || importDeclaration.name)
                             ),
@@ -1872,7 +1875,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                 }
                 else if (isImportSpecifier(importDeclaration)) {
                     return setTextRange(
-                        factory.createPropertyAccessExpression(
+                        createElementAccessOrPropertyAccessExpression(
                             factory.getGeneratedNameForNode(importDeclaration.parent?.parent?.parent || importDeclaration),
                             factory.cloneNode(importDeclaration.propertyName || importDeclaration.name)
                         ),

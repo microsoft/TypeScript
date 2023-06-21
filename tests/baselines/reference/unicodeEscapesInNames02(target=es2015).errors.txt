@@ -1,4 +1,5 @@
 astralAsSurrogatePair.ts(1,17): error TS1127: Invalid character.
+astralAsSurrogatePair.ts(1,18): error TS1005: ',' expected.
 astralAsSurrogatePair.ts(1,18): error TS2305: Module '"./extendedEscapesForAstralsInVarsAndClasses.js"' has no exported member 'uD800'.
 astralAsSurrogatePair.ts(1,23): error TS1127: Invalid character.
 astralAsSurrogatePair.ts(1,24): error TS2305: Module '"./extendedEscapesForAstralsInVarsAndClasses.js"' has no exported member 'uDEA7'.
@@ -33,10 +34,12 @@ astralAsSurrogatePair.ts(1,24): error TS2305: Module '"./extendedEscapesForAstra
     
     _\u{102A7} += "!";
     
-==== astralAsSurrogatePair.ts (4 errors) ====
+==== astralAsSurrogatePair.ts (5 errors) ====
     import { _𐊧 as \uD800\uDEA7 } from "./extendedEscapesForAstralsInVarsAndClasses.js";
                     
 !!! error TS1127: Invalid character.
+                     ~~~~~
+!!! error TS1005: ',' expected.
                      ~~~~~
 !!! error TS2305: Module '"./extendedEscapesForAstralsInVarsAndClasses.js"' has no exported member 'uD800'.
                           

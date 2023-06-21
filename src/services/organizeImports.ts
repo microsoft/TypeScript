@@ -48,6 +48,7 @@ import {
     map,
     MemoizeCache,
     memoizeCached,
+    moduleExportNameTextEscaped,
     NamedImportBindings,
     NamedImports,
     NamespaceImport,
@@ -763,7 +764,7 @@ function getImportKindOrder(s1: AnyImportOrRequireStatement) {
 function getNewImportSpecifiers(namedImports: ImportDeclaration[]) {
     return flatMap(namedImports, namedImport =>
         map(tryGetNamedBindingElements(namedImport), importSpecifier =>
-            importSpecifier.name && importSpecifier.propertyName && importSpecifier.name.escapedText === importSpecifier.propertyName.escapedText
+            importSpecifier.name && importSpecifier.propertyName && importSpecifier.name.escapedText === moduleExportNameTextEscaped(importSpecifier.propertyName)
                 ? factory.updateImportSpecifier(importSpecifier, importSpecifier.isTypeOnly, /*propertyName*/ undefined, importSpecifier.name)
                 : importSpecifier
         )

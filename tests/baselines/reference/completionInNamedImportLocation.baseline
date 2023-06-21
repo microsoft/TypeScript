@@ -1,0 +1,723 @@
+=== /tests/cases/fourslash/a.ts ===
+// import {  } from "./file";
+//          ^
+// | ----------------------------------------------------------------------
+// | (alias) var await: number
+// | export await
+// | (alias) var "hello world": number
+// | export "hello world"
+// | var x: number
+// | var y: number
+// | type
+// | ----------------------------------------------------------------------
+// import { x,  } from "./file";
+//             ^
+// | ----------------------------------------------------------------------
+// | (alias) var await: number
+// | export await
+// | (alias) var "hello world": number
+// | export "hello world"
+// | var y: number
+// | type
+// | ----------------------------------------------------------------------
+// import { x, y,  } from "./file";
+//                ^
+// | ----------------------------------------------------------------------
+// | (alias) var await: number
+// | export await
+// | (alias) var "hello world": number
+// | export "hello world"
+// | type
+// | ----------------------------------------------------------------------
+// import { x, y, "hello world" as d,   } from "./file";
+//                                     ^
+// | ----------------------------------------------------------------------
+// | (alias) var await: number
+// | export await
+// | type
+// | ----------------------------------------------------------------------
+// import { x, y, "hello world" as d, await as await_,  } from "./file";
+//                                                     ^
+// | ----------------------------------------------------------------------
+// | No completions at /*5*/.
+// | ----------------------------------------------------------------------
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/a.ts",
+      "position": 9,
+      "name": "1"
+    },
+    "item": {
+      "flags": 0,
+      "isGlobalCompletion": false,
+      "isMemberCompletion": true,
+      "isNewIdentifierLocation": false,
+      "entries": [
+        {
+          "name": "await",
+          "kind": "alias",
+          "kindModifiers": "export",
+          "sortText": "11",
+          "insertText": "await as await_",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "alias",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "await",
+              "kind": "aliasName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "export",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "await",
+              "kind": "aliasName"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "hello world",
+          "kind": "alias",
+          "kindModifiers": "export",
+          "sortText": "11",
+          "insertText": "\"hello world\" as hello_world",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "alias",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "\"hello world\"",
+              "kind": "aliasName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "export",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "\"hello world\"",
+              "kind": "aliasName"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "x",
+          "kind": "var",
+          "kindModifiers": "export",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "x",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "y",
+          "kind": "var",
+          "kindModifiers": "export",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "y",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
+              "kind": "keyword"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/a.ts",
+      "position": 39,
+      "name": "2"
+    },
+    "item": {
+      "flags": 0,
+      "isGlobalCompletion": false,
+      "isMemberCompletion": true,
+      "isNewIdentifierLocation": false,
+      "entries": [
+        {
+          "name": "await",
+          "kind": "alias",
+          "kindModifiers": "export",
+          "sortText": "11",
+          "insertText": "await as await_",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "alias",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "await",
+              "kind": "aliasName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "export",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "await",
+              "kind": "aliasName"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "hello world",
+          "kind": "alias",
+          "kindModifiers": "export",
+          "sortText": "11",
+          "insertText": "\"hello world\" as hello_world",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "alias",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "\"hello world\"",
+              "kind": "aliasName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "export",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "\"hello world\"",
+              "kind": "aliasName"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "y",
+          "kind": "var",
+          "kindModifiers": "export",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "y",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
+              "kind": "keyword"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/a.ts",
+      "position": 72,
+      "name": "3"
+    },
+    "item": {
+      "flags": 0,
+      "isGlobalCompletion": false,
+      "isMemberCompletion": true,
+      "isNewIdentifierLocation": false,
+      "entries": [
+        {
+          "name": "await",
+          "kind": "alias",
+          "kindModifiers": "export",
+          "sortText": "11",
+          "insertText": "await as await_",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "alias",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "await",
+              "kind": "aliasName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "export",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "await",
+              "kind": "aliasName"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "hello world",
+          "kind": "alias",
+          "kindModifiers": "export",
+          "sortText": "11",
+          "insertText": "\"hello world\" as hello_world",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "alias",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "\"hello world\"",
+              "kind": "aliasName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "export",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "\"hello world\"",
+              "kind": "aliasName"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
+              "kind": "keyword"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/a.ts",
+      "position": 126,
+      "name": "4"
+    },
+    "item": {
+      "flags": 0,
+      "isGlobalCompletion": false,
+      "isMemberCompletion": true,
+      "isNewIdentifierLocation": false,
+      "entries": [
+        {
+          "name": "await",
+          "kind": "alias",
+          "kindModifiers": "export",
+          "sortText": "11",
+          "insertText": "await as await_",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "alias",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "await",
+              "kind": "aliasName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "export",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "await",
+              "kind": "aliasName"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
+              "kind": "keyword"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/a.ts",
+      "position": 196,
+      "name": "5"
+    },
+    "item": {}
+  }
+]

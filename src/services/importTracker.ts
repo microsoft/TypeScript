@@ -60,6 +60,8 @@ import {
     ModifierFlags,
     ModuleBlock,
     ModuleDeclaration,
+    ModuleExportName,
+    moduleExportNameTextEscaped,
     NamedImportsOrExports,
     NamespaceImport,
     Node,
@@ -88,9 +90,9 @@ import {
 /** @internal */
 export interface ImportsResult {
     /** For every import of the symbol, the location and local symbol for the import. */
-    importSearches: readonly [Identifier, Symbol][];
+    importSearches: readonly [ModuleExportName, Symbol][];
     /** For rename imports/exports `{ foo as bar }`, `foo` is not a local, so it may be added as a reference immediately without further searching. */
-    singleReferences: readonly (Identifier | StringLiteral)[];
+    singleReferences: readonly ModuleExportName[];
     /** List of source files that may (or may not) use the symbol via a namespace. (For UMD modules this is every file.) */
     indirectUsers: readonly SourceFile[];
 }
@@ -307,9 +309,9 @@ function getImportersForExport(
  * But re-exports will be placed in 'singleReferences' since they cannot be locally referenced.
  */
 function getSearchesFromDirectImports(directImports: Importer[], exportSymbol: Symbol, exportKind: ExportKind, checker: TypeChecker, isForRename: boolean): Pick<ImportsResult, "importSearches" | "singleReferences"> {
-    const importSearches: [Identifier, Symbol][] = [];
-    const singleReferences: (Identifier | StringLiteral)[] = [];
-    function addSearch(location: Identifier, symbol: Symbol): void {
+    const importSearches: [ModuleExportName, Symbol][] = [];
+    const singleReferences: ModuleExportName[] = [];
+    function addSearch(location: ModuleExportName, symbol: Symbol): void {
         importSearches.push([location, symbol]);
     }
 
@@ -405,7 +407,7 @@ function getSearchesFromDirectImports(directImports: Importer[], exportSymbol: S
 
         for (const element of namedBindings.elements) {
             const { name, propertyName } = element;
-            if (!isNameMatch((propertyName || name).escapedText)) {
+            if (!isNameMatch(moduleExportNameTextEscaped(propertyName || name))) {
                 continue;
             }
 
@@ -414,7 +416,7 @@ function getSearchesFromDirectImports(directImports: Importer[], exportSymbol: S
                 singleReferences.push(propertyName);
                 // If renaming `{ foo as bar }`, don't touch `bar`, just `foo`.
                 // But do rename `foo` in ` { default as foo }` if that's the original export name.
-                if (!isForRename || name.escapedText === exportSymbol.escapedName) {
+                if (!isForRename || moduleExportNameTextEscaped(name) === exportSymbol.escapedName) {
                     // Search locally for `bar`.
                     addSearch(name, checker.getSymbolAtLocation(name)!);
                 }
