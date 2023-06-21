@@ -2,7 +2,7 @@ error TS5110: Option 'module' must be set to 'NodeNext' when option 'moduleResol
 
 
 !!! error TS5110: Option 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
-==== tests/cases/compiler/package.json (0 errors) ====
+==== package.json (0 errors) ====
     {
         "name": "test",
         "version": "1.0.0",
@@ -11,7 +11,7 @@ error TS5110: Option 'module' must be set to 'NodeNext' when option 'moduleResol
         "module": "index.mjs"
     }
     
-==== tests/cases/compiler/index.mts (0 errors) ====
+==== index.mts (0 errors) ====
     import * as exportAny from "./exportAny.cjs";
     import * as exportUnknown from "./exportUnknown.cjs";
     import * as exportSymbol from "./exportSymbol.cjs";
@@ -20,17 +20,17 @@ error TS5110: Option 'module' must be set to 'NodeNext' when option 'moduleResol
     import type * as exportUnknownType from "./exportUnknown.cjs";
     import type * as exportSymbolType from "./exportSymbol.cjs";
     
-==== tests/cases/compiler/exportAny.d.cts (0 errors) ====
+==== exportAny.d.cts (0 errors) ====
     declare const __: any;
     export = __;
     
     
-==== tests/cases/compiler/exportUnknown.d.cts (0 errors) ====
+==== exportUnknown.d.cts (0 errors) ====
     declare const __: unknown;
     export = __;
     
     
-==== tests/cases/compiler/exportSymbol.d.cts (0 errors) ====
+==== exportSymbol.d.cts (0 errors) ====
     declare const __: symbol;
     export = __;
     

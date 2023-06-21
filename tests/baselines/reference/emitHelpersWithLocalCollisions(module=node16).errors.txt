@@ -2,7 +2,7 @@ error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspeci
 
 
 !!! error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node16'.
-==== tests/cases/compiler/a.ts (0 errors) ====
+==== a.ts (0 errors) ====
     declare var dec: any, __decorate: any;
     @dec export class A {
     }
