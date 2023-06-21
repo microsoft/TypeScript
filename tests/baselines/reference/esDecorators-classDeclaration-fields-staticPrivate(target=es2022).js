@@ -24,10 +24,10 @@ let C = (() => {
     let _static_private_field1_initializers = [];
     return class C {
         static {
-            const metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : undefined;
+            const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
             _static_private_field1_decorators = [dec];
-            __esDecorate(null, null, _static_private_field1_decorators, { kind: "field", name: "#field1", static: true, private: true, access: { has: obj => #field1 in obj, get: obj => obj.#field1, set: (obj, value) => { obj.#field1 = value; } }, metadata: metadata }, _static_private_field1_initializers, _staticExtraInitializers);
-            if (metadata) Object.defineProperty(this, Symbol.metadata, { configurable: true, writable: true, enumerable: true, value: metadata });
+            __esDecorate(null, null, _static_private_field1_decorators, { kind: "field", name: "#field1", static: true, private: true, access: { has: obj => #field1 in obj, get: obj => obj.#field1, set: (obj, value) => { obj.#field1 = value; } }, metadata: _metadata }, _static_private_field1_initializers, _staticExtraInitializers);
+            if (_metadata) Object.defineProperty(this, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
             __runInitializers(this, _staticExtraInitializers);
         }
         static #field1 = __runInitializers(this, _static_private_field1_initializers, 0);
@@ -42,10 +42,10 @@ let D = (() => {
     var D = class {
         static { __setFunctionName(this, "D"); }
         static {
-            const metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : undefined;
-            __esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name, metadata: metadata }, null, _classExtraInitializers);
+            const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
+            __esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name, metadata: _metadata }, null, _classExtraInitializers);
             D = _classThis = _classDescriptor.value;
-            if (metadata) Object.defineProperty(_classThis, Symbol.metadata, { configurable: true, writable: true, enumerable: true, value: metadata });
+            if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
         }
         static {
             _field1 = { value: 0 };

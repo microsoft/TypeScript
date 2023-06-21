@@ -17,6 +17,9 @@ type DecoratorContext =
     | ClassMemberDecoratorContext
     ;
 
+type DecoratorMetadata =
+    typeof globalThis extends { Symbol: { readonly metadata: symbol } } ? object : object | undefined;
+
 /**
  * Context provided to a class decorator.
  * @template Class The type of the decorated class associated with this context.
@@ -48,6 +51,8 @@ interface ClassDecoratorContext<
      * ```
      */
     addInitializer(initializer: (this: Class) => void): void;
+
+    readonly metadata: DecoratorMetadata;
 }
 
 /**
@@ -112,6 +117,8 @@ interface ClassMethodDecoratorContext<
      * ```
      */
     addInitializer(initializer: (this: This) => void): void;
+
+    readonly metadata: DecoratorMetadata;
 }
 
 /**

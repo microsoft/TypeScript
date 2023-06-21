@@ -1,10 +1,7 @@
 // @target: es2022,es2015
 // @noTypesAndSymbols: true
+// @lib: esnext
 // @filename: /foo.ts
-
-interface SymbolConstructor {
-    readonly metadata: string;
-}
 
 function appendMeta(key: string, value: string) {
     return (_, context) => {
@@ -14,10 +11,12 @@ function appendMeta(key: string, value: string) {
 }
 
 @appendMeta('a', 'x')
-class C { }
+class C {
+}
 
 @appendMeta('a', 'z')
-class D extends C { }
+class D extends C {
+}
 
 C[Symbol.metadata].a; // ['x']
 D[Symbol.metadata].a; // ['x', 'z']

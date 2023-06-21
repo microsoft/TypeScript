@@ -1,10 +1,6 @@
 //// [tests/cases/conformance/esDecorators/metadata/esDecoratorsMetadata3.ts] ////
 
 //// [foo.ts]
-interface SymbolConstructor {
-    readonly metadata: string;
-}
-
 function appendMeta(key: string, value: string) {
     return (_, context) => {
         const existing = context.metadata[key] ?? [];
@@ -13,10 +9,12 @@ function appendMeta(key: string, value: string) {
 }
 
 @appendMeta('a', 'x')
-class C { }
+class C {
+}
 
 @appendMeta('a', 'z')
-class D extends C { }
+class D extends C {
+}
 
 C[Symbol.metadata].a; // ['x']
 D[Symbol.metadata].a; // ['x', 'z']
@@ -70,10 +68,10 @@ let C = (() => {
     let _classThis;
     var C = class {
         static {
-            const metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : undefined;
-            __esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name, metadata: metadata }, null, _classExtraInitializers);
+            const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
+            __esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name, metadata: _metadata }, null, _classExtraInitializers);
             C = _classThis = _classDescriptor.value;
-            if (metadata) Object.defineProperty(_classThis, Symbol.metadata, { configurable: true, writable: true, enumerable: true, value: metadata });
+            if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
             __runInitializers(_classThis, _classExtraInitializers);
         }
     };
@@ -86,10 +84,10 @@ let D = (() => {
     let _classThis_1;
     var D = class extends C {
         static {
-            const metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(this[Symbol.metadata]) : undefined;
-            __esDecorate(null, _classDescriptor_1 = { value: this }, _classDecorators_1, { kind: "class", name: this.name, metadata: metadata }, null, _classExtraInitializers_1);
+            const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(super[Symbol.metadata]) : void 0;
+            __esDecorate(null, _classDescriptor_1 = { value: this }, _classDecorators_1, { kind: "class", name: this.name, metadata: _metadata }, null, _classExtraInitializers_1);
             D = _classThis_1 = _classDescriptor_1.value;
-            if (metadata) Object.defineProperty(_classThis_1, Symbol.metadata, { configurable: true, writable: true, enumerable: true, value: metadata });
+            if (_metadata) Object.defineProperty(_classThis_1, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
             __runInitializers(_classThis_1, _classExtraInitializers_1);
         }
     };

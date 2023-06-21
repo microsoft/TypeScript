@@ -28,12 +28,12 @@ let C = (() => {
     let _static_private_set_method1_descriptor;
     return class C {
         static {
-            const metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : undefined;
+            const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
             _static_private_get_method1_decorators = [dec(1)];
             _static_private_set_method1_decorators = [dec(2)];
-            __esDecorate(this, _static_private_get_method1_descriptor = { get: __setFunctionName(function () { return 0; }, "#method1", "get") }, _static_private_get_method1_decorators, { kind: "getter", name: "#method1", static: true, private: true, access: { has: obj => #method1 in obj, get: obj => obj.#method1 }, metadata: metadata }, null, _staticExtraInitializers);
-            __esDecorate(this, _static_private_set_method1_descriptor = { set: __setFunctionName(function (value) { }, "#method1", "set") }, _static_private_set_method1_decorators, { kind: "setter", name: "#method1", static: true, private: true, access: { has: obj => #method1 in obj, set: (obj, value) => { obj.#method1 = value; } }, metadata: metadata }, null, _staticExtraInitializers);
-            if (metadata) Object.defineProperty(this, Symbol.metadata, { configurable: true, writable: true, enumerable: true, value: metadata });
+            __esDecorate(this, _static_private_get_method1_descriptor = { get: __setFunctionName(function () { return 0; }, "#method1", "get") }, _static_private_get_method1_decorators, { kind: "getter", name: "#method1", static: true, private: true, access: { has: obj => #method1 in obj, get: obj => obj.#method1 }, metadata: _metadata }, null, _staticExtraInitializers);
+            __esDecorate(this, _static_private_set_method1_descriptor = { set: __setFunctionName(function (value) { }, "#method1", "set") }, _static_private_set_method1_decorators, { kind: "setter", name: "#method1", static: true, private: true, access: { has: obj => #method1 in obj, set: (obj, value) => { obj.#method1 = value; } }, metadata: _metadata }, null, _staticExtraInitializers);
+            if (_metadata) Object.defineProperty(this, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
             __runInitializers(this, _staticExtraInitializers);
         }
         static get #method1() { return _static_private_get_method1_descriptor.get.call(this); }
@@ -50,10 +50,10 @@ let D = (() => {
         static { __setFunctionName(this, "D"); }
         static { _method1_get = function _method1_get() { return 0; }, _method1_set = function _method1_set(value) { }; }
         static {
-            const metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : undefined;
-            __esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name, metadata: metadata }, null, _classExtraInitializers);
+            const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
+            __esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name, metadata: _metadata }, null, _classExtraInitializers);
             D = _classThis = _classDescriptor.value;
-            if (metadata) Object.defineProperty(_classThis, Symbol.metadata, { configurable: true, writable: true, enumerable: true, value: metadata });
+            if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
         }
         static {
             __classPrivateFieldGet(_classThis, _classThis, "a", _method1_get);

@@ -55,12 +55,12 @@ let A = (() => {
     };
     __setFunctionName(_classThis, "A");
     (() => {
-        const metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : undefined;
+        const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
         _b_decorators = [dec(_outerThis)];
-        __esDecorate(null, null, _b_decorators, { kind: "field", name: "b", static: false, private: false, access: { has: obj => "b" in obj, get: obj => obj.b, set: (obj, value) => { obj.b = value; } }, metadata: metadata }, _b_initializers, _instanceExtraInitializers);
-        __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: metadata }, null, _classExtraInitializers);
+        __esDecorate(null, null, _b_decorators, { kind: "field", name: "b", static: false, private: false, access: { has: obj => "b" in obj, get: obj => obj.b, set: (obj, value) => { obj.b = value; } }, metadata: _metadata }, _b_initializers, _instanceExtraInitializers);
+        __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
         A = _classThis = _classDescriptor.value;
-        if (metadata) Object.defineProperty(_classThis, Symbol.metadata, { configurable: true, writable: true, enumerable: true, value: metadata });
+        if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
         __runInitializers(_classThis, _classExtraInitializers);
     })();
     return A = _classThis;
@@ -89,11 +89,11 @@ let B = (() => {
     _b = (_b_decorators = [dec(this)], f(this));
     __setFunctionName(_classThis_1, "B");
     (() => {
-        const metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : undefined;
-        __esDecorate(null, null, _b_decorators, { kind: "field", name: "b", static: false, private: false, access: { has: obj => "b" in obj, get: obj => obj.b, set: (obj, value) => { obj.b = value; } }, metadata: metadata }, _b_initializers, _instanceExtraInitializers_1);
-        __esDecorate(null, _classDescriptor_1 = { value: _classThis_1 }, _classDecorators_1, { kind: "class", name: _classThis_1.name, metadata: metadata }, null, _classExtraInitializers_1);
+        const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
+        __esDecorate(null, null, _b_decorators, { kind: "field", name: "b", static: false, private: false, access: { has: obj => "b" in obj, get: obj => obj.b, set: (obj, value) => { obj.b = value; } }, metadata: _metadata }, _b_initializers, _instanceExtraInitializers_1);
+        __esDecorate(null, _classDescriptor_1 = { value: _classThis_1 }, _classDecorators_1, { kind: "class", name: _classThis_1.name, metadata: _metadata }, null, _classExtraInitializers_1);
         B = _classThis_1 = _classDescriptor_1.value;
-        if (metadata) Object.defineProperty(_classThis_1, Symbol.metadata, { configurable: true, writable: true, enumerable: true, value: metadata });
+        if (_metadata) Object.defineProperty(_classThis_1, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
         __runInitializers(_classThis_1, _classExtraInitializers_1);
     })();
     return B = _classThis_1;
@@ -119,12 +119,12 @@ let C = (() => {
     _a = new WeakMap();
     __setFunctionName(_classThis_2, "C");
     (() => {
-        const metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : undefined;
+        const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
         _b_decorators = [dec(_outerThis_1, (x) => __classPrivateFieldGet(x, _a, "f"))];
-        __esDecorate(null, null, _b_decorators, { kind: "field", name: "b", static: false, private: false, access: { has: obj => "b" in obj, get: obj => obj.b, set: (obj, value) => { obj.b = value; } }, metadata: metadata }, _b_initializers, _instanceExtraInitializers_2);
-        __esDecorate(null, _classDescriptor_2 = { value: _classThis_2 }, _classDecorators_2, { kind: "class", name: _classThis_2.name, metadata: metadata }, null, _classExtraInitializers_2);
+        __esDecorate(null, null, _b_decorators, { kind: "field", name: "b", static: false, private: false, access: { has: obj => "b" in obj, get: obj => obj.b, set: (obj, value) => { obj.b = value; } }, metadata: _metadata }, _b_initializers, _instanceExtraInitializers_2);
+        __esDecorate(null, _classDescriptor_2 = { value: _classThis_2 }, _classDecorators_2, { kind: "class", name: _classThis_2.name, metadata: _metadata }, null, _classExtraInitializers_2);
         C = _classThis_2 = _classDescriptor_2.value;
-        if (metadata) Object.defineProperty(_classThis_2, Symbol.metadata, { configurable: true, writable: true, enumerable: true, value: metadata });
+        if (_metadata) Object.defineProperty(_classThis_2, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
         __runInitializers(_classThis_2, _classExtraInitializers_2);
     })();
     return C = _classThis_2;

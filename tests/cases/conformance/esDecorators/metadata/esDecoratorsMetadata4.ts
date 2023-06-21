@@ -1,10 +1,7 @@
 // @target: es2022,es2015
 // @noTypesAndSymbols: true
+// @lib: esnext
 // @filename: /foo.ts
-
-interface SymbolConstructor {
-    readonly metadata: string;
-}
 
 const PRIVATE_METADATA = new WeakMap();
 

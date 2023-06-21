@@ -220,7 +220,7 @@ interface ClassInfo {
     classExtraInitializersName?: Identifier; // used in step 13
     classThis?: Identifier; // `_classThis`, if needed.
     classSuper?: Identifier; // `_classSuper`, if needed.
-    metadataReference?: Identifier;
+    metadataReference: Identifier;
 
     memberInfos?: Map<ClassElement, MemberInfo>; // used in step 4.a, 12, and construction
 
@@ -572,6 +572,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
     }
 
     function createClassInfo(node: ClassLikeDeclaration): ClassInfo {
+        const metadataReference = factory.createUniqueName("_metadata", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel);
         let instanceExtraInitializersName: Identifier | undefined;
         let staticExtraInitializersName: Identifier | undefined;
         let hasStaticInitializers = false;
@@ -618,6 +619,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
 
         return {
             class: node,
+            metadataReference,
             instanceExtraInitializersName,
             staticExtraInitializersName,
             hasStaticInitializers,
@@ -729,7 +731,6 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         // NOTE: If there are no constructors, but there are instance initializers, a synthetic constructor is added.
         enterClass(classInfo);
 
-        classInfo.metadataReference = factory.createIdentifier("metadata");
         leadingBlockStatements = append(leadingBlockStatements, createMetadata(classInfo.metadataReference, !!heritageClauses));
 
         let members = visitNodes(node.members, classElementVisitor, isClassElement);
@@ -2347,42 +2348,29 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
             /*exclamationToken*/ undefined,
             /*type*/ undefined,
             factory.createConditionalExpression(
-                factory.createBinaryExpression(
-                    factory.createBinaryExpression(factory.createTypeOfExpression(factory.createIdentifier("Symbol")), factory.createToken(SyntaxKind.EqualsEqualsEqualsToken), factory.createStringLiteral("function")),
-                    factory.createToken(SyntaxKind.AmpersandAmpersandToken),
-                    factory.createPropertyAccessExpression(factory.createIdentifier("Symbol"), factory.createIdentifier("metadata")),
+                factory.createLogicalAnd(
+                    factory.createTypeCheck(factory.createIdentifier("Symbol"), "function"),
+                    factory.createPropertyAccessExpression(factory.createIdentifier("Symbol"), "metadata"),
                 ),
                 factory.createToken(SyntaxKind.QuestionToken),
                 factory.createCallExpression(
-                    factory.createPropertyAccessExpression(factory.createIdentifier("Object"), factory.createIdentifier("create")),
+                    factory.createPropertyAccessExpression(factory.createIdentifier("Object"), "create"),
                     /*typeArguments*/ undefined,
                     [hasProto ? createSymbolMetadataReference() : factory.createNull()]
                 ),
                 factory.createToken(SyntaxKind.ColonToken),
-                factory.createIdentifier("undefined"),
+                factory.createVoidZero(),
             ),
         );
         return factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([varDecl], NodeFlags.Const));
     }
 
     function createSymbolMetadata(target: Identifier | ThisExpression, value: Identifier) {
-        const properties = [
-            factory.createPropertyAssignment("configurable", factory.createTrue()),
-            factory.createPropertyAssignment("writable", factory.createTrue()),
-            factory.createPropertyAssignment("enumerable", factory.createTrue()),
-            factory.createPropertyAssignment("value", value),
-        ];
-
-        const defineProperty = factory.createCallExpression(
-            factory.createPropertyAccessExpression(factory.createIdentifier("Object"), "defineProperty"),
-            /*typeArguments*/ undefined,
-            [
-                target,
-                factory.createPropertyAccessExpression(factory.createIdentifier("Symbol"), factory.createIdentifier("metadata")),
-                factory.createObjectLiteralExpression(properties, /*multiLine*/ false),
-            ]
+        const defineProperty = factory.createObjectDefinePropertyCall(
+            target,
+            factory.createPropertyAccessExpression(factory.createIdentifier("Symbol"), "metadata"),
+            factory.createPropertyDescriptor({ configurable: true, writable: true, enumerable: true, value }, /*singleLine*/ true)
         );
-
         return setEmitFlags(
             factory.createIfStatement(value, factory.createExpressionStatement(defineProperty)),
             EmitFlags.SingleLine,
@@ -2391,8 +2379,8 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
 
     function createSymbolMetadataReference() {
         return factory.createElementAccessExpression(
-            factory.createThis(),
-            factory.createPropertyAccessExpression(factory.createIdentifier("Symbol"), factory.createIdentifier("metadata")),
+            factory.createSuper(),
+            factory.createPropertyAccessExpression(factory.createIdentifier("Symbol"), "metadata"),
         );
     }
 }

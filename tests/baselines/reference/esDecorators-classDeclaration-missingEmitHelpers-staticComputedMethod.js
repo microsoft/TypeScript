@@ -26,9 +26,9 @@ let C = (() => {
     let _static_member_decorators;
     return class C {
         static {
-            const metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : undefined;
-            tslib_1.__esDecorate(this, null, _static_member_decorators, { kind: "method", name: _a, static: true, private: false, access: { has: obj => _a in obj, get: obj => obj[_a] }, metadata: metadata }, null, _staticExtraInitializers);
-            if (metadata) Object.defineProperty(this, Symbol.metadata, { configurable: true, writable: true, enumerable: true, value: metadata });
+            const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
+            tslib_1.__esDecorate(this, null, _static_member_decorators, { kind: "method", name: _a, static: true, private: false, access: { has: obj => _a in obj, get: obj => obj[_a] }, metadata: _metadata }, null, _staticExtraInitializers);
+            if (_metadata) Object.defineProperty(this, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
             tslib_1.__runInitializers(this, _staticExtraInitializers);
         }
         static [(_static_member_decorators = [dec], _a = tslib_1.__propKey(x))]() { }

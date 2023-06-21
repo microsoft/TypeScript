@@ -60,7 +60,7 @@ export interface ESDecorateClassContext {
      */
     name: Expression;
 
-    metadata?: Expression;
+    metadata: Expression;
 }
 
 /**
@@ -77,7 +77,7 @@ export interface ESDecorateClassElementContext {
     static: boolean;
     private: boolean;
     access: ESDecorateClassElementAccess;
-    metadata?: Expression;
+    metadata: Expression;
 }
 
 /** @internal */
@@ -251,9 +251,9 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         const properties = [
             factory.createPropertyAssignment(factory.createIdentifier("kind"), factory.createStringLiteral("class")),
             factory.createPropertyAssignment(factory.createIdentifier("name"), contextIn.name),
+            factory.createPropertyAssignment(factory.createIdentifier("metadata"), contextIn.metadata),
         ];
 
-        if (contextIn.metadata) properties.push(factory.createPropertyAssignment(factory.createIdentifier("metadata"), contextIn.metadata));
         return factory.createObjectLiteralExpression(properties);
     }
 
@@ -355,9 +355,8 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
             factory.createPropertyAssignment(factory.createIdentifier("static"), contextIn.static ? factory.createTrue() : factory.createFalse()),
             factory.createPropertyAssignment(factory.createIdentifier("private"), contextIn.private ? factory.createTrue() : factory.createFalse()),
             factory.createPropertyAssignment(factory.createIdentifier("access"), createESDecorateClassElementAccessObject(contextIn.name, contextIn.access)),
+            factory.createPropertyAssignment(factory.createIdentifier("metadata"), contextIn.metadata),
         ];
-
-        if (contextIn.metadata) properties.push(factory.createPropertyAssignment(factory.createIdentifier("metadata"), contextIn.metadata));
         return factory.createObjectLiteralExpression(properties);
     }
 

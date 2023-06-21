@@ -28,10 +28,10 @@ var C;
         var class_1 = class {
             static {
                 tslib_1.__setFunctionName(this, "C");
-                const metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : undefined;
-                tslib_1.__esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name, metadata: metadata }, null, _classExtraInitializers);
+                const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
+                tslib_1.__esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name, metadata: _metadata }, null, _classExtraInitializers);
                 class_1 = _classThis = _classDescriptor.value;
-                if (metadata) Object.defineProperty(_classThis, Symbol.metadata, { configurable: true, writable: true, enumerable: true, value: metadata });
+                if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
                 tslib_1.__runInitializers(_classThis, _classExtraInitializers);
             }
         };

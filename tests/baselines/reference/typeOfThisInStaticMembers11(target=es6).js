@@ -57,7 +57,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var _a, _b, _c;
+var _a, _b, _c, _d, _e;
 let C = class C {
 };
 Object.defineProperty(C, "a", {
@@ -75,7 +75,7 @@ Object.defineProperty(C, "b", {
 C = __decorate([
     foo
 ], C);
-let D = class D extends C {
+let D = _a = class D extends (_b = C) {
     static foo() {
         return this.c + 1;
     }
@@ -102,7 +102,7 @@ Object.defineProperty(D, "e", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: (void 0).a + (void 0).c + 1
+    value: Reflect.get(_b, "a", _a) + (void 0).c + 1
 });
 Object.defineProperty(D, "f", {
     enumerable: true,
@@ -121,7 +121,7 @@ D = __decorate([
 ], D);
 class CC {
 }
-_a = CC;
+_c = CC;
 Object.defineProperty(CC, "a", {
     enumerable: true,
     configurable: true,
@@ -132,9 +132,9 @@ Object.defineProperty(CC, "b", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: _a.a + 1
+    value: _c.a + 1
 });
-class DD extends (_c = CC) {
+class DD extends (_e = CC) {
     static foo() {
         return this.c + 1;
     }
@@ -145,7 +145,7 @@ class DD extends (_c = CC) {
         this.c = v + 1;
     }
 }
-_b = DD;
+_d = DD;
 Object.defineProperty(DD, "c", {
     enumerable: true,
     configurable: true,
@@ -156,19 +156,19 @@ Object.defineProperty(DD, "d", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: _b.c + 1
+    value: _d.c + 1
 });
 Object.defineProperty(DD, "e", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: Reflect.get(_c, "a", _b) + _b.c + 1
+    value: Reflect.get(_e, "a", _d) + _d.c + 1
 });
 Object.defineProperty(DD, "f", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: () => _b.c + 1
+    value: () => _d.c + 1
 });
 Object.defineProperty(DD, "ff", {
     enumerable: true,
