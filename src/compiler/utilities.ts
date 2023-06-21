@@ -2338,7 +2338,7 @@ export function isVarAwaitUsing(node: VariableDeclaration | VariableDeclarationL
 }
 
 /**
- * Gets whether a bound `VariableDeclaration` or `VariableDeclarationList` is part of an `using` declaration.
+ * Gets whether a bound `VariableDeclaration` or `VariableDeclarationList` is part of a `using` declaration.
  * @internal
  */
 export function isVarUsing(node: VariableDeclaration | VariableDeclarationList): boolean {
@@ -2346,7 +2346,7 @@ export function isVarUsing(node: VariableDeclaration | VariableDeclarationList):
 }
 
 /**
- * Gets whether a bound `VariableDeclaration` or `VariableDeclarationList` is part of an `const` declaration.
+ * Gets whether a bound `VariableDeclaration` or `VariableDeclarationList` is part of a `const` declaration.
  * @internal
  */
 export function isVarConst(node: VariableDeclaration | VariableDeclarationList): boolean {
@@ -2354,7 +2354,7 @@ export function isVarConst(node: VariableDeclaration | VariableDeclarationList):
 }
 
 /**
- * Gets whether a bound `VariableDeclaration` or `VariableDeclarationList` is part of an `let` declaration.
+ * Gets whether a bound `VariableDeclaration` or `VariableDeclarationList` is part of a `let` declaration.
  * @internal
  */
 export function isLet(node: Node): boolean {

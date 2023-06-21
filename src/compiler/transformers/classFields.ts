@@ -2277,7 +2277,6 @@ export function transformClassFields(context: TransformationContext): (x: Source
         resumeLexicalEnvironment();
 
         const needsSyntheticConstructor = !constructor && isDerivedClass;
-        // let indexOfFirstStatementAfterSuperAndPrologue = 0;
         let statementOffset = 0;
         let statements: Statement[] = [];
 

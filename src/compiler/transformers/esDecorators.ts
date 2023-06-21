@@ -890,34 +890,31 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         }
 
         // prepare a leading `static {}` block, if necessary
-        let leadingStaticBlock: ClassStaticBlockDeclaration | undefined;
-        if (leadingBlockStatements) {
-            // produces:
-            //  class C {
-            //      static { ... }
-            //      ...
-            //  }
-            const leadingStaticBlockBody = factory.createBlock(leadingBlockStatements, /*multiLine*/ true);
-            leadingStaticBlock = factory.createClassStaticBlockDeclaration(leadingStaticBlockBody);
-            if (shouldTransformPrivateStaticElementsInClass) {
-                // We use `InternalEmitFlags.TransformPrivateStaticElements` as a marker on a class static block
-                // to inform the classFields transform that it shouldn't rename `this` to `_classThis` in the
-                // transformed class static block.
-                setInternalEmitFlags(leadingStaticBlock, InternalEmitFlags.TransformPrivateStaticElements);
-            }
+        //
+        // produces:
+        //  class C {
+        //      static { ... }
+        //      ...
+        //  }
+        const leadingStaticBlock = leadingBlockStatements &&
+            factory.createClassStaticBlockDeclaration(factory.createBlock(leadingBlockStatements, /*multiLine*/ true));
+
+        if (leadingStaticBlock && shouldTransformPrivateStaticElementsInClass) {
+            // We use `InternalEmitFlags.TransformPrivateStaticElements` as a marker on a class static block
+            // to inform the classFields transform that it shouldn't rename `this` to `_classThis` in the
+            // transformed class static block.
+            setInternalEmitFlags(leadingStaticBlock, InternalEmitFlags.TransformPrivateStaticElements);
         }
 
         // prepare a trailing `static {}` block, if necessary
-        let trailingStaticBlock: ClassStaticBlockDeclaration | undefined;
-        if (trailingBlockStatements) {
-            // produces:
-            //  class C {
-            //      ...
-            //      static { ... }
-            //  }
-            const trailingStaticBlockBody = factory.createBlock(trailingBlockStatements, /*multiLine*/ true);
-            trailingStaticBlock = factory.createClassStaticBlockDeclaration(trailingStaticBlockBody);
-        }
+        //
+        // produces:
+        //  class C {
+        //      ...
+        //      static { ... }
+        //  }
+        const trailingStaticBlock = trailingBlockStatements &&
+            factory.createClassStaticBlockDeclaration(factory.createBlock(trailingBlockStatements, /*multiLine*/ true));
 
         if (leadingStaticBlock || syntheticConstructor || trailingStaticBlock) {
             const newMembers: ClassElement[] = [];

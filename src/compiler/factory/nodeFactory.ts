@@ -7629,7 +7629,7 @@ function mergeEmitNode(sourceEmitNode: EmitNode, destEmitNode: EmitNode | undefi
     } = sourceEmitNode;
     if (!destEmitNode) destEmitNode = {} as EmitNode;
 
-    // NOTE: We should have one or more lines her for each property in EmitNode, even if the line
+    // NOTE: We should have one or more lines here for each property in EmitNode, even if the line
     // consists only of a comment indicating the property does not merge
 
     // `flags` overwrites the destination
