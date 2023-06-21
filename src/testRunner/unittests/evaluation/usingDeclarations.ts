@@ -422,7 +422,7 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
 
         export function main() {
             output.push("before block");
-            for (let i = 0; i < 1; i++) {
+            for (let i = 0; i < 2; i++) {
                 output.push("enter block");
                 using _ = disposable;
                 body();
@@ -436,6 +436,9 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
 
         assert.deepEqual(output, [
             "before block",
+            "enter block",
+            "body",
+            "disposed",
             "enter block",
             "body",
             "disposed",
@@ -460,7 +463,7 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
         export function main() {
             output.push("before loop");
             let i = 0;
-            for (using _ = disposable; i < 1; i++) {
+            for (using _ = disposable; i < 2; i++) {
                 output.push("enter loop");
                 body();
                 output.push("exit loop");
@@ -473,6 +476,9 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
 
         assert.deepEqual(output, [
             "before loop",
+            "enter loop",
+            "body",
+            "exit loop",
             "enter loop",
             "body",
             "exit loop",
@@ -500,7 +506,7 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             output.push("before loop");
             let i = 0;
             try {
-                for (using _ = disposable; i < 1; i++) {
+                for (using _ = disposable; i < 2; i++) {
                     output.push("enter loop");
                     body();
                     output.push("exit loop");
@@ -543,7 +549,7 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             output.push("before loop");
             let i = 0;
             try {
-                for (using _ = disposable; i < 1; i++) {
+                for (using _ = disposable; i < 2; i++) {
                     output.push("enter loop");
                     body();
                     output.push("exit loop");
@@ -559,6 +565,9 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
 
         assert.deepEqual(output, [
             "before loop",
+            "enter loop",
+            "body",
+            "exit loop",
             "enter loop",
             "body",
             "exit loop",
@@ -588,7 +597,7 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             output.push("before loop");
             let i = 0;
             try {
-                for (using _ = disposable; i < 1; i++) {
+                for (using _ = disposable; i < 2; i++) {
                     output.push("enter loop");
                     body();
                     output.push("exit loop");
@@ -632,7 +641,7 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
         export function main() {
             output.push("before loop");
             let i = 0;
-            for (using _ = disposable; i < 1; i++) {
+            for (using _ = disposable; i < 2; i++) {
                 output.push("enter loop");
                 body();
                 return;
@@ -668,7 +677,7 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
         export function main() {
             output.push("before loop");
             let i = 0;
-            for (using _ = disposable; i < 1; i++) {
+            for (using _ = disposable; i < 2; i++) {
                 output.push("enter loop");
                 body();
                 break;
@@ -705,7 +714,7 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
         export function main() {
             output.push("before loop");
             let i = 0;
-            for (using _ = disposable; i < 1; i++) {
+            for (using _ = disposable; i < 2; i++) {
                 output.push("enter loop");
                 body();
                 continue;
@@ -718,6 +727,8 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
 
         assert.deepEqual(output, [
             "before loop",
+            "enter loop",
+            "body",
             "enter loop",
             "body",
             "disposed",
