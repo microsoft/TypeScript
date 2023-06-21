@@ -40595,7 +40595,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                     }
                     else if (isVariableDeclaration(declaration)) {
-                        addToGroup(unusedVariables, declaration.parent, declaration, getNodeId);
+                        const blockScopeKind = getCombinedNodeFlagsCached(declaration) & NodeFlags.BlockScoped;
+                        const name = getNameOfDeclaration(declaration);
+                        if (blockScopeKind !== NodeFlags.Using && blockScopeKind !== NodeFlags.AwaitUsing || !name || !isIdentifierThatStartsWithUnderscore(name)) {
+                            addToGroup(unusedVariables, declaration.parent, declaration, getNodeId);
+                        }
                     }
                     else {
                         const parameter = local.valueDeclaration && tryGetRootParameterDeclaration(local.valueDeclaration);
