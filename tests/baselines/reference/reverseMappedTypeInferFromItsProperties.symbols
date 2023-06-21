@@ -1,0 +1,198 @@
+//// [tests/cases/compiler/reverseMappedTypeInferFromItsProperties.ts] ////
+
+=== reverseMappedTypeInferFromItsProperties.ts ===
+// repro from #29479
+
+type Selector<S, R> = (state: S) => R;
+>Selector : Symbol(Selector, Decl(reverseMappedTypeInferFromItsProperties.ts, 0, 0))
+>S : Symbol(S, Decl(reverseMappedTypeInferFromItsProperties.ts, 2, 14))
+>R : Symbol(R, Decl(reverseMappedTypeInferFromItsProperties.ts, 2, 16))
+>state : Symbol(state, Decl(reverseMappedTypeInferFromItsProperties.ts, 2, 23))
+>S : Symbol(S, Decl(reverseMappedTypeInferFromItsProperties.ts, 2, 14))
+>R : Symbol(R, Decl(reverseMappedTypeInferFromItsProperties.ts, 2, 16))
+
+declare function createStructuredSelector<S, T>(selectors: {
+>createStructuredSelector : Symbol(createStructuredSelector, Decl(reverseMappedTypeInferFromItsProperties.ts, 2, 38))
+>S : Symbol(S, Decl(reverseMappedTypeInferFromItsProperties.ts, 4, 42))
+>T : Symbol(T, Decl(reverseMappedTypeInferFromItsProperties.ts, 4, 44))
+>selectors : Symbol(selectors, Decl(reverseMappedTypeInferFromItsProperties.ts, 4, 48))
+
+  [K in keyof T]: Selector<S, T[K]>;
+>K : Symbol(K, Decl(reverseMappedTypeInferFromItsProperties.ts, 5, 3))
+>T : Symbol(T, Decl(reverseMappedTypeInferFromItsProperties.ts, 4, 44))
+>Selector : Symbol(Selector, Decl(reverseMappedTypeInferFromItsProperties.ts, 0, 0))
+>S : Symbol(S, Decl(reverseMappedTypeInferFromItsProperties.ts, 4, 42))
+>T : Symbol(T, Decl(reverseMappedTypeInferFromItsProperties.ts, 4, 44))
+>K : Symbol(K, Decl(reverseMappedTypeInferFromItsProperties.ts, 5, 3))
+
+}): Selector<S, T>;
+>Selector : Symbol(Selector, Decl(reverseMappedTypeInferFromItsProperties.ts, 0, 0))
+>S : Symbol(S, Decl(reverseMappedTypeInferFromItsProperties.ts, 4, 42))
+>T : Symbol(T, Decl(reverseMappedTypeInferFromItsProperties.ts, 4, 44))
+
+type State = { foo: number };
+>State : Symbol(State, Decl(reverseMappedTypeInferFromItsProperties.ts, 6, 19))
+>foo : Symbol(foo, Decl(reverseMappedTypeInferFromItsProperties.ts, 8, 14))
+
+declare const mySelector: Selector<State, boolean>;
+>mySelector : Symbol(mySelector, Decl(reverseMappedTypeInferFromItsProperties.ts, 10, 13))
+>Selector : Symbol(Selector, Decl(reverseMappedTypeInferFromItsProperties.ts, 0, 0))
+>State : Symbol(State, Decl(reverseMappedTypeInferFromItsProperties.ts, 6, 19))
+
+export const result = createStructuredSelector({ mySelector });
+>result : Symbol(result, Decl(reverseMappedTypeInferFromItsProperties.ts, 12, 12))
+>createStructuredSelector : Symbol(createStructuredSelector, Decl(reverseMappedTypeInferFromItsProperties.ts, 2, 38))
+>mySelector : Symbol(mySelector, Decl(reverseMappedTypeInferFromItsProperties.ts, 12, 48))
+
+// 52737#discussion_r1127035242
+declare const otherSelectors: { [x: string]: Selector<State, boolean> };
+>otherSelectors : Symbol(otherSelectors, Decl(reverseMappedTypeInferFromItsProperties.ts, 15, 13))
+>x : Symbol(x, Decl(reverseMappedTypeInferFromItsProperties.ts, 15, 33))
+>Selector : Symbol(Selector, Decl(reverseMappedTypeInferFromItsProperties.ts, 0, 0))
+>State : Symbol(State, Decl(reverseMappedTypeInferFromItsProperties.ts, 6, 19))
+
+export const otherResult = createStructuredSelector(otherSelectors);
+>otherResult : Symbol(otherResult, Decl(reverseMappedTypeInferFromItsProperties.ts, 16, 12))
+>createStructuredSelector : Symbol(createStructuredSelector, Decl(reverseMappedTypeInferFromItsProperties.ts, 2, 38))
+>otherSelectors : Symbol(otherSelectors, Decl(reverseMappedTypeInferFromItsProperties.ts, 15, 13))
+
+declare function inferFromValue<T, S extends string>(obj: { [K in keyof T]: S }): [T, S];
+>inferFromValue : Symbol(inferFromValue, Decl(reverseMappedTypeInferFromItsProperties.ts, 16, 68))
+>T : Symbol(T, Decl(reverseMappedTypeInferFromItsProperties.ts, 18, 32))
+>S : Symbol(S, Decl(reverseMappedTypeInferFromItsProperties.ts, 18, 34))
+>obj : Symbol(obj, Decl(reverseMappedTypeInferFromItsProperties.ts, 18, 53))
+>K : Symbol(K, Decl(reverseMappedTypeInferFromItsProperties.ts, 18, 61))
+>T : Symbol(T, Decl(reverseMappedTypeInferFromItsProperties.ts, 18, 32))
+>S : Symbol(S, Decl(reverseMappedTypeInferFromItsProperties.ts, 18, 34))
+>T : Symbol(T, Decl(reverseMappedTypeInferFromItsProperties.ts, 18, 32))
+>S : Symbol(S, Decl(reverseMappedTypeInferFromItsProperties.ts, 18, 34))
+
+const fromValue1 = inferFromValue({ a: "foo", b: "bar" });
+>fromValue1 : Symbol(fromValue1, Decl(reverseMappedTypeInferFromItsProperties.ts, 19, 5))
+>inferFromValue : Symbol(inferFromValue, Decl(reverseMappedTypeInferFromItsProperties.ts, 16, 68))
+>a : Symbol(a, Decl(reverseMappedTypeInferFromItsProperties.ts, 19, 35))
+>b : Symbol(b, Decl(reverseMappedTypeInferFromItsProperties.ts, 19, 45))
+
+// 52737#issuecomment-1457046429
+interface Righto<RT extends any[], ET = any> extends CPSFunction<[], RT, ET> {
+>Righto : Symbol(Righto, Decl(reverseMappedTypeInferFromItsProperties.ts, 19, 58))
+>RT : Symbol(RT, Decl(reverseMappedTypeInferFromItsProperties.ts, 22, 17))
+>ET : Symbol(ET, Decl(reverseMappedTypeInferFromItsProperties.ts, 22, 34))
+>CPSFunction : Symbol(CPSFunction, Decl(reverseMappedTypeInferFromItsProperties.ts, 29, 10))
+>RT : Symbol(RT, Decl(reverseMappedTypeInferFromItsProperties.ts, 22, 17))
+>ET : Symbol(ET, Decl(reverseMappedTypeInferFromItsProperties.ts, 22, 34))
+
+  (): Righto<RT, ET>;
+>Righto : Symbol(Righto, Decl(reverseMappedTypeInferFromItsProperties.ts, 19, 58))
+>RT : Symbol(RT, Decl(reverseMappedTypeInferFromItsProperties.ts, 22, 17))
+>ET : Symbol(ET, Decl(reverseMappedTypeInferFromItsProperties.ts, 22, 34))
+
+  _trace(): void;
+>_trace : Symbol(Righto._trace, Decl(reverseMappedTypeInferFromItsProperties.ts, 23, 21))
+}
+type ErrBack<RT extends any[] = [], ET = any> = (
+>ErrBack : Symbol(ErrBack, Decl(reverseMappedTypeInferFromItsProperties.ts, 25, 1))
+>RT : Symbol(RT, Decl(reverseMappedTypeInferFromItsProperties.ts, 26, 13))
+>ET : Symbol(ET, Decl(reverseMappedTypeInferFromItsProperties.ts, 26, 35))
+
+  err?: ET,
+>err : Symbol(err, Decl(reverseMappedTypeInferFromItsProperties.ts, 26, 49))
+>ET : Symbol(ET, Decl(reverseMappedTypeInferFromItsProperties.ts, 26, 35))
+
+  ...results: { [P in keyof RT]?: RT[P] }
+>results : Symbol(results, Decl(reverseMappedTypeInferFromItsProperties.ts, 27, 11))
+>P : Symbol(P, Decl(reverseMappedTypeInferFromItsProperties.ts, 28, 17))
+>RT : Symbol(RT, Decl(reverseMappedTypeInferFromItsProperties.ts, 26, 13))
+>RT : Symbol(RT, Decl(reverseMappedTypeInferFromItsProperties.ts, 26, 13))
+>P : Symbol(P, Decl(reverseMappedTypeInferFromItsProperties.ts, 28, 17))
+
+) => void;
+type CPSFunction<AT extends any[], RT extends any[], ET> = (
+>CPSFunction : Symbol(CPSFunction, Decl(reverseMappedTypeInferFromItsProperties.ts, 29, 10))
+>AT : Symbol(AT, Decl(reverseMappedTypeInferFromItsProperties.ts, 30, 17))
+>RT : Symbol(RT, Decl(reverseMappedTypeInferFromItsProperties.ts, 30, 34))
+>ET : Symbol(ET, Decl(reverseMappedTypeInferFromItsProperties.ts, 30, 52))
+
+  ...args: [...AT, ErrBack<RT, ET>]
+>args : Symbol(args, Decl(reverseMappedTypeInferFromItsProperties.ts, 30, 60))
+>AT : Symbol(AT, Decl(reverseMappedTypeInferFromItsProperties.ts, 30, 17))
+>ErrBack : Symbol(ErrBack, Decl(reverseMappedTypeInferFromItsProperties.ts, 25, 1))
+>RT : Symbol(RT, Decl(reverseMappedTypeInferFromItsProperties.ts, 30, 34))
+>ET : Symbol(ET, Decl(reverseMappedTypeInferFromItsProperties.ts, 30, 52))
+
+) => void;
+type Flexible<T, ET = any> =
+>Flexible : Symbol(Flexible, Decl(reverseMappedTypeInferFromItsProperties.ts, 32, 10))
+>T : Symbol(T, Decl(reverseMappedTypeInferFromItsProperties.ts, 33, 14))
+>ET : Symbol(ET, Decl(reverseMappedTypeInferFromItsProperties.ts, 33, 16))
+
+  | T
+>T : Symbol(T, Decl(reverseMappedTypeInferFromItsProperties.ts, 33, 14))
+
+  | Promise<T>
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(reverseMappedTypeInferFromItsProperties.ts, 33, 14))
+
+  | Righto<[T | undefined, ...any[]], ET>;
+>Righto : Symbol(Righto, Decl(reverseMappedTypeInferFromItsProperties.ts, 19, 58))
+>T : Symbol(T, Decl(reverseMappedTypeInferFromItsProperties.ts, 33, 14))
+>ET : Symbol(ET, Decl(reverseMappedTypeInferFromItsProperties.ts, 33, 16))
+
+type ArgsAsFlexible<AT extends any[], ET> = {
+>ArgsAsFlexible : Symbol(ArgsAsFlexible, Decl(reverseMappedTypeInferFromItsProperties.ts, 36, 42))
+>AT : Symbol(AT, Decl(reverseMappedTypeInferFromItsProperties.ts, 37, 20))
+>ET : Symbol(ET, Decl(reverseMappedTypeInferFromItsProperties.ts, 37, 37))
+
+  [T in keyof AT]: Flexible<AT[T], ET>;
+>T : Symbol(T, Decl(reverseMappedTypeInferFromItsProperties.ts, 38, 3))
+>AT : Symbol(AT, Decl(reverseMappedTypeInferFromItsProperties.ts, 37, 20))
+>Flexible : Symbol(Flexible, Decl(reverseMappedTypeInferFromItsProperties.ts, 32, 10))
+>AT : Symbol(AT, Decl(reverseMappedTypeInferFromItsProperties.ts, 37, 20))
+>T : Symbol(T, Decl(reverseMappedTypeInferFromItsProperties.ts, 38, 3))
+>ET : Symbol(ET, Decl(reverseMappedTypeInferFromItsProperties.ts, 37, 37))
+
+};
+declare function divideNumbersCPS(
+>divideNumbersCPS : Symbol(divideNumbersCPS, Decl(reverseMappedTypeInferFromItsProperties.ts, 39, 2))
+
+  a: number,
+>a : Symbol(a, Decl(reverseMappedTypeInferFromItsProperties.ts, 40, 34))
+
+  b: number,
+>b : Symbol(b, Decl(reverseMappedTypeInferFromItsProperties.ts, 41, 12))
+
+  callback: ErrBack<[number], Error>
+>callback : Symbol(callback, Decl(reverseMappedTypeInferFromItsProperties.ts, 42, 12))
+>ErrBack : Symbol(ErrBack, Decl(reverseMappedTypeInferFromItsProperties.ts, 25, 1))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+): void;
+declare function righto<AT extends any[], RT extends any[], ET = any>(
+>righto : Symbol(righto, Decl(reverseMappedTypeInferFromItsProperties.ts, 44, 8))
+>AT : Symbol(AT, Decl(reverseMappedTypeInferFromItsProperties.ts, 45, 24))
+>RT : Symbol(RT, Decl(reverseMappedTypeInferFromItsProperties.ts, 45, 41))
+>ET : Symbol(ET, Decl(reverseMappedTypeInferFromItsProperties.ts, 45, 59))
+
+  fn: CPSFunction<AT, RT, ET>,
+>fn : Symbol(fn, Decl(reverseMappedTypeInferFromItsProperties.ts, 45, 70))
+>CPSFunction : Symbol(CPSFunction, Decl(reverseMappedTypeInferFromItsProperties.ts, 29, 10))
+>AT : Symbol(AT, Decl(reverseMappedTypeInferFromItsProperties.ts, 45, 24))
+>RT : Symbol(RT, Decl(reverseMappedTypeInferFromItsProperties.ts, 45, 41))
+>ET : Symbol(ET, Decl(reverseMappedTypeInferFromItsProperties.ts, 45, 59))
+
+  ...args: ArgsAsFlexible<AT, ET>
+>args : Symbol(args, Decl(reverseMappedTypeInferFromItsProperties.ts, 46, 30))
+>ArgsAsFlexible : Symbol(ArgsAsFlexible, Decl(reverseMappedTypeInferFromItsProperties.ts, 36, 42))
+>AT : Symbol(AT, Decl(reverseMappedTypeInferFromItsProperties.ts, 45, 24))
+>ET : Symbol(ET, Decl(reverseMappedTypeInferFromItsProperties.ts, 45, 59))
+
+): Righto<RT, ET>;
+>Righto : Symbol(Righto, Decl(reverseMappedTypeInferFromItsProperties.ts, 19, 58))
+>RT : Symbol(RT, Decl(reverseMappedTypeInferFromItsProperties.ts, 45, 41))
+>ET : Symbol(ET, Decl(reverseMappedTypeInferFromItsProperties.ts, 45, 59))
+
+const rightoRes1 = righto(divideNumbersCPS, 1, 1);
+>rightoRes1 : Symbol(rightoRes1, Decl(reverseMappedTypeInferFromItsProperties.ts, 49, 5))
+>righto : Symbol(righto, Decl(reverseMappedTypeInferFromItsProperties.ts, 44, 8))
+>divideNumbersCPS : Symbol(divideNumbersCPS, Decl(reverseMappedTypeInferFromItsProperties.ts, 39, 2))
+

@@ -20,12 +20,12 @@ const editable = () => ({});
 >{} : {}
 
 const mapStateToProps = createStructuredSelector({
->mapStateToProps : Selector<unknown, { editable: {}; }>
->createStructuredSelector({  editable: (state: any, props: any) => editable(), // expect "Type '(state: any, props: any) => {}' is not assignable to type 'Selector<unknown, {}>'", _not_ a circularity error}) : Selector<unknown, { editable: {}; }>
+>mapStateToProps : Selector<any, { editable: {}; }>
+>createStructuredSelector({  editable: (state: any, props: any) => editable(), // expect "Type '(state: any, props: any) => {}' is not assignable to type 'Selector<any, {}>'", _not_ a circularity error}) : Selector<any, { editable: {}; }>
 >createStructuredSelector : <S, T>(selectors: { [K in keyof T]: Selector<S, T[K]>; }) => Selector<S, T>
->{  editable: (state: any, props: any) => editable(), // expect "Type '(state: any, props: any) => {}' is not assignable to type 'Selector<unknown, {}>'", _not_ a circularity error} : { editable: (state: any, props: any) => {}; }
+>{  editable: (state: any, props: any) => editable(), // expect "Type '(state: any, props: any) => {}' is not assignable to type 'Selector<any, {}>'", _not_ a circularity error} : { editable: (state: any, props: any) => {}; }
 
-  editable: (state: any, props: any) => editable(), // expect "Type '(state: any, props: any) => {}' is not assignable to type 'Selector<unknown, {}>'", _not_ a circularity error
+  editable: (state: any, props: any) => editable(), // expect "Type '(state: any, props: any) => {}' is not assignable to type 'Selector<any, {}>'", _not_ a circularity error
 >editable : (state: any, props: any) => {}
 >(state: any, props: any) => editable() : (state: any, props: any) => {}
 >state : any
@@ -34,3 +34,4 @@ const mapStateToProps = createStructuredSelector({
 >editable : () => {}
 
 });
+

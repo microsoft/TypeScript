@@ -35,10 +35,11 @@ const mapStateToProps = createStructuredSelector({
 >mapStateToProps : Symbol(mapStateToProps, Decl(reverseMappedTypeContextualTypeNotCircular.ts, 8, 5))
 >createStructuredSelector : Symbol(createStructuredSelector, Decl(reverseMappedTypeContextualTypeNotCircular.ts, 0, 38))
 
-  editable: (state: any, props: any) => editable(), // expect "Type '(state: any, props: any) => {}' is not assignable to type 'Selector<unknown, {}>'", _not_ a circularity error
+  editable: (state: any, props: any) => editable(), // expect "Type '(state: any, props: any) => {}' is not assignable to type 'Selector<any, {}>'", _not_ a circularity error
 >editable : Symbol(editable, Decl(reverseMappedTypeContextualTypeNotCircular.ts, 8, 50))
 >state : Symbol(state, Decl(reverseMappedTypeContextualTypeNotCircular.ts, 9, 13))
 >props : Symbol(props, Decl(reverseMappedTypeContextualTypeNotCircular.ts, 9, 24))
 >editable : Symbol(editable, Decl(reverseMappedTypeContextualTypeNotCircular.ts, 6, 5))
 
 });
+
