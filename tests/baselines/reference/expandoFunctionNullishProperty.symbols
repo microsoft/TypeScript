@@ -1,0 +1,54 @@
+//// [tests/cases/compiler/expandoFunctionNullishProperty.ts] ////
+
+=== expandoFunctionNullishProperty.ts ===
+// mentioned in https://github.com/microsoft/TypeScript/issues/54220
+
+interface TestNull {
+>TestNull : Symbol(TestNull, Decl(expandoFunctionNullishProperty.ts, 0, 0))
+
+  (): void;
+  readonly prop: null;
+>prop : Symbol(TestNull.prop, Decl(expandoFunctionNullishProperty.ts, 3, 11))
+}
+
+export function testNull(): TestNull {
+>testNull : Symbol(testNull, Decl(expandoFunctionNullishProperty.ts, 5, 1))
+>TestNull : Symbol(TestNull, Decl(expandoFunctionNullishProperty.ts, 0, 0))
+
+  function inner() {}
+>inner : Symbol(inner, Decl(expandoFunctionNullishProperty.ts, 7, 38))
+
+  inner.prop = null;
+>inner.prop : Symbol(inner.prop, Decl(expandoFunctionNullishProperty.ts, 8, 21))
+>inner : Symbol(inner, Decl(expandoFunctionNullishProperty.ts, 7, 38))
+>prop : Symbol(inner.prop, Decl(expandoFunctionNullishProperty.ts, 8, 21))
+
+  return inner;
+>inner : Symbol(inner, Decl(expandoFunctionNullishProperty.ts, 7, 38))
+}
+
+interface TestUndefined {
+>TestUndefined : Symbol(TestUndefined, Decl(expandoFunctionNullishProperty.ts, 11, 1))
+
+  (): void;
+  readonly prop: undefined;
+>prop : Symbol(TestUndefined.prop, Decl(expandoFunctionNullishProperty.ts, 14, 11))
+}
+
+export function testUndefined(): TestUndefined {
+>testUndefined : Symbol(testUndefined, Decl(expandoFunctionNullishProperty.ts, 16, 1))
+>TestUndefined : Symbol(TestUndefined, Decl(expandoFunctionNullishProperty.ts, 11, 1))
+
+  function inner() {}
+>inner : Symbol(inner, Decl(expandoFunctionNullishProperty.ts, 18, 48))
+
+  inner.prop = undefined;
+>inner.prop : Symbol(inner.prop, Decl(expandoFunctionNullishProperty.ts, 19, 21))
+>inner : Symbol(inner, Decl(expandoFunctionNullishProperty.ts, 18, 48))
+>prop : Symbol(inner.prop, Decl(expandoFunctionNullishProperty.ts, 19, 21))
+>undefined : Symbol(undefined)
+
+  return inner;
+>inner : Symbol(inner, Decl(expandoFunctionNullishProperty.ts, 18, 48))
+}
+
