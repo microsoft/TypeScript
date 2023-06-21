@@ -5446,7 +5446,6 @@ declare namespace ts {
     type JsxAttributeValue = StringLiteral | JsxExpression | JsxElement | JsxSelfClosingElement | JsxFragment;
     interface JsxSpreadAttribute extends ObjectLiteralElement {
         readonly kind: SyntaxKind.JsxSpreadAttribute;
-        readonly name: PropertyName;
         readonly parent: JsxAttributes;
         readonly expression: Expression;
     }
