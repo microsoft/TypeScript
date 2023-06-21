@@ -15,7 +15,7 @@
 >new URL("../hamsters.jpg", import.meta.url).toString() : string
 >new URL("../hamsters.jpg", import.meta.url).toString : () => string
 >new URL("../hamsters.jpg", import.meta.url) : URL
->URL : { new (url: string | URL, base?: string | URL): URL; prototype: URL; createObjectURL(obj: Blob | MediaSource): string; revokeObjectURL(url: string): void; }
+>URL : { new (url: string | URL, base?: string | URL): URL; prototype: URL; canParse(url: string | URL, base?: string): boolean; createObjectURL(obj: Blob | MediaSource): string; revokeObjectURL(url: string): void; }
 >"../hamsters.jpg" : "../hamsters.jpg"
 >import.meta.url : string
 >import.meta : ImportMeta
@@ -56,7 +56,7 @@
 >src : string
 >URL.createObjectURL(blob) : string
 >URL.createObjectURL : (obj: Blob | MediaSource) => string
->URL : { new (url: string | URL, base?: string | URL): URL; prototype: URL; createObjectURL(obj: Blob | MediaSource): string; revokeObjectURL(url: string): void; }
+>URL : { new (url: string | URL, base?: string | URL): URL; prototype: URL; canParse(url: string | URL, base?: string): boolean; createObjectURL(obj: Blob | MediaSource): string; revokeObjectURL(url: string): void; }
 >createObjectURL : (obj: Blob | MediaSource) => string
 >blob : Blob
 
