@@ -4405,6 +4405,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
 
         if (
+            ModuleKind[moduleKind] &&
             (ModuleKind.Node16 <= moduleKind && moduleKind <= ModuleKind.NodeNext) &&
             !(ModuleResolutionKind.Node16 <= moduleResolution && moduleResolution <= ModuleResolutionKind.NodeNext)
         ) {
@@ -4412,6 +4413,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             createOptionValueDiagnostic("moduleResolution", Diagnostics.Option_moduleResolution_must_be_set_to_0_or_left_unspecified_when_option_module_is_set_to_1, moduleKindName, moduleKindName);
         }
         else if (
+            ModuleResolutionKind[moduleResolution] &&
             (ModuleResolutionKind.Node16 <= moduleResolution && moduleResolution <= ModuleResolutionKind.NodeNext) &&
             !(ModuleKind.Node16 <= moduleKind && moduleKind <= ModuleKind.NodeNext)
         ) {
