@@ -3541,6 +3541,8 @@ export interface UserPreferences {
     readonly includeInlayPropertyDeclarationTypeHints?: boolean;
     readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
     readonly includeInlayEnumMemberValueHints?: boolean;
+    readonly interactiveInlayHints?: boolean;
+
     readonly autoImportFileExcludePatterns?: string[];
 
     /**

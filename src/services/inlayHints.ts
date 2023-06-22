@@ -86,6 +86,10 @@ function shouldShowLiteralParameterNameHintsOnly(preferences: UserPreferences) {
     return preferences.includeInlayParameterNameHints === "literals";
 }
 
+function shouldUseInteractiveInlayHints(preferences: UserPreferences) {
+    return preferences.interactiveInlayHints === true;
+}
+
 /** @internal */
 export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
     const { file, program, span, cancellationToken, preferences } = context;
@@ -151,9 +155,13 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
     }
 
     function addParameterHints(text: string, parameter: Identifier, position: number, isFirstVariadicArgument: boolean) {
-        const displayPart = getInlayHintDisplayPart(`${isFirstVariadicArgument ? "..." : ""}${text}:`, parameter);
+        let hintText: string | InlayHintDisplayPart[] = `${isFirstVariadicArgument ? "..." : ""}${text}:`;
+        if (shouldUseInteractiveInlayHints(preferences)) {
+            hintText = [getInlayHintDisplayPart(text, parameter)];
+        }
+
         result.push({
-            text: [displayPart],
+            text: hintText,
             position,
             kind: InlayHintKind.Parameter,
             whitespaceAfter: true,
