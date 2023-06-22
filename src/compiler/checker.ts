@@ -1828,14 +1828,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     };
 
     function runWithoutResolvedSignatureCaching<T>(node: Node | undefined, fn: () => T): T {
-        const containingCall = findAncestor(node, isCallLikeExpression);
-        const containingCallResolvedSignature = containingCall && getNodeLinks(containingCall).resolvedSignature;
-        if (containingCall) {
-            getNodeLinks(containingCall).resolvedSignature = undefined;
+        const cachedSignatures = [];
+        while (node) {
+            if (isCallLikeExpression(node)) {
+                const nodeLinks = getNodeLinks(node);
+                const resolvedSignature = nodeLinks.resolvedSignature;
+                cachedSignatures.push([nodeLinks, resolvedSignature] as const);
+                nodeLinks.resolvedSignature = undefined;
+            }
+            node = node.parent;
         }
         const result = fn();
-        if (containingCall) {
-            getNodeLinks(containingCall).resolvedSignature = containingCallResolvedSignature;
+        for (const [nodeLinks, resolvedSignature] of cachedSignatures) {
+            nodeLinks.resolvedSignature = resolvedSignature;
         }
         return result;
     }
@@ -10165,11 +10170,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return prop ? getTypeOfSymbol(prop) : undefined;
     }
 
-    function getTypeOfPropertyOrIndexSignature(type: Type, name: __String, addOptionalityToIndex: boolean): Type {
+    function getTypeOfPropertyOrIndexSignature(type: Type, name: __String): Type {
+        return getTypeOfPropertyOfType(type, name) || getApplicableIndexInfoForName(type, name)?.type || unknownType;
+    }
+
+    /**
+     * Similar to `getTypeOfPropertyOrIndexSignature`,
+     * but returns `undefined` if there is no matching property or index signature,
+     * and adds optionality to index signature types.
+     */
+    function getTypeOfPropertyOrIndexSignatureOfType(type: Type, name: __String): Type | undefined {
         let propType;
         return getTypeOfPropertyOfType(type, name) ||
-            (propType = getApplicableIndexInfoForName(type, name)?.type) && addOptionality(propType, /*isProperty*/ true, addOptionalityToIndex) ||
-            unknownType;
+            (propType = getApplicableIndexInfoForName(type, name)?.type) &&
+            addOptionality(propType, /*isProperty*/ true, /*isOptional*/ true);
     }
 
     function isTypeAny(type: Type | undefined) {
@@ -22703,7 +22717,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let matched = false;
             for (let i = 0; i < types.length; i++) {
                 if (include[i]) {
-                    const targetType = getTypeOfPropertyOrIndexSignature(types[i], propertyName, /*addOptionalityToIndex*/ true);
+                    const targetType = getTypeOfPropertyOrIndexSignatureOfType(types[i], propertyName);
                     if (targetType && related(getDiscriminatingType(), targetType)) {
                         matched = true;
                     }
@@ -27016,7 +27030,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             propType = removeNullable && optionalChain ? getOptionalType(propType) : propType;
             const narrowedPropType = narrowType(propType);
             return filterType(type, t => {
-                const discriminantType = getTypeOfPropertyOrIndexSignature(t, propName, /*addOptionalityToIndex*/ false);
+                const discriminantType = getTypeOfPropertyOrIndexSignature(t, propName);
                 return !(discriminantType.flags & TypeFlags.Never) && !(narrowedPropType.flags & TypeFlags.Never) && areTypesComparable(narrowedPropType, discriminantType);
             });
         }

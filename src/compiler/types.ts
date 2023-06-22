@@ -3259,7 +3259,6 @@ export type JsxAttributeValue =
 
 export interface JsxSpreadAttribute extends ObjectLiteralElement {
     readonly kind: SyntaxKind.JsxSpreadAttribute;
-    readonly name: PropertyName;
     readonly parent: JsxAttributes;
     readonly expression: Expression;
 }
