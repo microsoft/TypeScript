@@ -38,9 +38,13 @@ jsxElementType.tsx(110,6): error TS2322: Type '{ b: string; }' is not assignable
   Property 'b' does not exist on type '{ a: string; }'.
 jsxElementType.tsx(111,19): error TS2322: Type '{ a: string; b: string; }' is not assignable to type '{ a: string; }'.
   Property 'b' does not exist on type '{ a: string; }'.
+jsxElementType.tsx(125,22): error TS2786: 'A' cannot be used as a JSX component.
+  Its return type 'Error' is not a valid JSX element.
+    Type 'Error' is missing the following properties from type 'ReactElement<any>': type, props, key
+jsxElementType.tsx(125,32): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
-==== jsxElementType.tsx (20 errors) ====
+==== jsxElementType.tsx (22 errors) ====
     /// <reference path="/.lib/react16.d.ts" />
     import * as React from "react";
     
@@ -219,4 +223,25 @@ jsxElementType.tsx(111,19): error TS2322: Type '{ a: string; b: string; }' is no
                       ~
 !!! error TS2322: Type '{ a: string; b: string; }' is not assignable to type '{ a: string; }'.
 !!! error TS2322:   Property 'b' does not exist on type '{ a: string; }'.
+    
+    // GH#54702
+    const A = <T extends unknown>({ a }: { a: T }) => (typeof a === "string" ? null : new Error("a must be a string")) as T extends string ? null : Error;
+    
+    // should ok
+    const jsxGeneric1 = <A<string> a="a" />;
+    
+    const B = A<string>;
+    
+    // should ok
+    const jsxGeneric2 = <B a="a" />;
+    
+    // should error
+    const jsxGeneric3 = <A<number> a="a" />;
+                         ~
+!!! error TS2786: 'A' cannot be used as a JSX component.
+!!! error TS2786:   Its return type 'Error' is not a valid JSX element.
+!!! error TS2786:     Type 'Error' is missing the following properties from type 'ReactElement<any>': type, props, key
+                                   ~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+!!! related TS6500 jsxElementType.tsx:114:40: The expected type comes from property 'a' which is declared here on type 'IntrinsicAttributes & { a: number; }'
     

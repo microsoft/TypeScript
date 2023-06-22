@@ -301,3 +301,37 @@ declare global {
 >a : Symbol(a, Decl(jsxElementType.tsx, 110, 4))
 >b : Symbol(b, Decl(jsxElementType.tsx, 110, 17))
 
+// GH#54702
+const A = <T extends unknown>({ a }: { a: T }) => (typeof a === "string" ? null : new Error("a must be a string")) as T extends string ? null : Error;
+>A : Symbol(A, Decl(jsxElementType.tsx, 113, 5))
+>T : Symbol(T, Decl(jsxElementType.tsx, 113, 11))
+>a : Symbol(a, Decl(jsxElementType.tsx, 113, 31))
+>a : Symbol(a, Decl(jsxElementType.tsx, 113, 38))
+>T : Symbol(T, Decl(jsxElementType.tsx, 113, 11))
+>a : Symbol(a, Decl(jsxElementType.tsx, 113, 31))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(jsxElementType.tsx, 113, 11))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+// should ok
+const jsxGeneric1 = <A<string> a="a" />;
+>jsxGeneric1 : Symbol(jsxGeneric1, Decl(jsxElementType.tsx, 116, 5))
+>A : Symbol(A, Decl(jsxElementType.tsx, 113, 5))
+>a : Symbol(a, Decl(jsxElementType.tsx, 116, 30))
+
+const B = A<string>;
+>B : Symbol(B, Decl(jsxElementType.tsx, 118, 5))
+>A : Symbol(A, Decl(jsxElementType.tsx, 113, 5))
+
+// should ok
+const jsxGeneric2 = <B a="a" />;
+>jsxGeneric2 : Symbol(jsxGeneric2, Decl(jsxElementType.tsx, 121, 5))
+>B : Symbol(B, Decl(jsxElementType.tsx, 118, 5))
+>a : Symbol(a, Decl(jsxElementType.tsx, 121, 22))
+
+// should error
+const jsxGeneric3 = <A<number> a="a" />;
+>jsxGeneric3 : Symbol(jsxGeneric3, Decl(jsxElementType.tsx, 124, 5))
+>A : Symbol(A, Decl(jsxElementType.tsx, 113, 5))
+>a : Symbol(a, Decl(jsxElementType.tsx, 124, 30))
+

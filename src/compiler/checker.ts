@@ -30912,12 +30912,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function getJsxElementTypeTypeAt(location: Node): Type | undefined {
+    function getJsxElementTypeTypeAt(location: JsxOpeningLikeElement): Type | undefined {
         const ns = getJsxNamespaceAt(location);
         if (!ns) return undefined;
         const sym = getJsxElementTypeSymbol(ns);
         if (!sym) return undefined;
-        const type = instantiateAliasOrInterfaceWithDefaults(sym, isInJSFile(location));
+        const type = instantiateAliasOrInterfaceWithDefaults(
+            sym,
+            isInJSFile(location),
+            ...(location.typeArguments || emptyArray).map(getTypeFromTypeNode)
+        );
         if (!type || isErrorType(type)) return undefined;
         return type;
     }

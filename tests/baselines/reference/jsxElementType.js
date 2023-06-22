@@ -113,6 +113,20 @@ declare global {
 <a:b b="rejected" />;
 <a:b a="accepted" b="rejected" />;
 
+// GH#54702
+const A = <T extends unknown>({ a }: { a: T }) => (typeof a === "string" ? null : new Error("a must be a string")) as T extends string ? null : Error;
+
+// should ok
+const jsxGeneric1 = <A<string> a="a" />;
+
+const B = A<string>;
+
+// should ok
+const jsxGeneric2 = <B a="a" />;
+
+// should error
+const jsxGeneric3 = <A<number> a="a" />;
+
 
 //// [jsxElementType.js]
 "use strict";
@@ -248,3 +262,15 @@ React.createElement(Unresolved, { foo: "abc" });
 React.createElement("a:b", { a: "accepted" });
 React.createElement("a:b", { b: "rejected" });
 React.createElement("a:b", { a: "accepted", b: "rejected" });
+// GH#54702
+var A = function (_a) {
+    var a = _a.a;
+    return (typeof a === "string" ? null : new Error("a must be a string"));
+};
+// should ok
+var jsxGeneric1 = React.createElement(A, { a: "a" });
+var B = (A);
+// should ok
+var jsxGeneric2 = React.createElement(B, { a: "a" });
+// should error
+var jsxGeneric3 = React.createElement(A, { a: "a" });
