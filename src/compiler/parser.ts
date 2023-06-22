@@ -4844,6 +4844,25 @@ namespace Parser {
         return finishNode(factory.createTypePredicateNode(assertsModifier, parameterName, type), pos);
     }
 
+    function isEndOfTypeArgument(): boolean {
+        nextToken();
+        switch (token()) {
+            case SyntaxKind.CommaToken:
+            case SyntaxKind.GreaterThanToken:
+                return true;
+        }
+        return false;
+    }
+
+    function parsePlaceholderOrType(): TypeNode {
+        if (token() === SyntaxKind.Identifier && scanner.getTokenText() === "_" && lookAhead(isEndOfTypeArgument)) {
+            const pos = getNodePos();
+            nextToken();
+            return finishNode(factory.createPlaceholderTypeNode(), pos);
+        }
+        return parseType();
+    }
+
     function parseType(): TypeNode {
         if (contextFlags & NodeFlags.TypeExcludesFlags) {
             return doOutsideOfContext(NodeFlags.TypeExcludesFlags, parseType);
@@ -6086,7 +6105,7 @@ namespace Parser {
             return finishNode(factory.createJsxOpeningFragment(), pos);
         }
         const tagName = parseJsxElementName();
-        const typeArguments = (contextFlags & NodeFlags.JavaScriptFile) === 0 ? tryParseTypeArguments() : undefined;
+        const typeArguments = (contextFlags & NodeFlags.JavaScriptFile) === 0 ? tryParseTypeArguments(/*inferencePosition*/ true) : undefined;
         const attributes = parseJsxAttributes();
 
         let node: JsxOpeningLikeElement;
@@ -6452,7 +6471,7 @@ namespace Parser {
         }
         nextToken();
 
-        const typeArguments = parseDelimitedList(ParsingContext.TypeArguments, parseType);
+        const typeArguments = parseDelimitedList(ParsingContext.TypeArguments, parsePlaceholderOrType);
         if (reScanGreaterToken() !== SyntaxKind.GreaterThanToken) {
             // If it doesn't have the closing `>` then it's definitely not an type argument list.
             return undefined;
@@ -8004,9 +8023,9 @@ namespace Parser {
         return finishNode(factory.createExpressionWithTypeArguments(expression, typeArguments), pos);
     }
 
-    function tryParseTypeArguments(): NodeArray<TypeNode> | undefined {
+    function tryParseTypeArguments(inferencePosition?: boolean): NodeArray<TypeNode> | undefined {
         return token() === SyntaxKind.LessThanToken ?
-            parseBracketedList(ParsingContext.TypeArguments, parseType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken) : undefined;
+            parseBracketedList(ParsingContext.TypeArguments, inferencePosition ? parsePlaceholderOrType : parseType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken) : undefined;
     }
 
     function isHeritageClause(): boolean {

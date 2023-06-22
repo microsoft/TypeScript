@@ -354,6 +354,7 @@ import {
     parseNodeFactory,
     PartiallyEmittedExpression,
     Path,
+    PlaceholderTypeNode,
     PlusToken,
     PostfixUnaryExpression,
     PostfixUnaryOperator,
@@ -616,6 +617,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         updateConditionalTypeNode,
         createInferTypeNode,
         updateInferTypeNode,
+        createPlaceholderTypeNode,
         createImportTypeNode,
         updateImportTypeNode,
         createParenthesizedType,
@@ -2455,6 +2457,13 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             || node.falseType !== falseType
             ? update(createConditionalTypeNode(checkType, extendsType, trueType, falseType), node)
             : node;
+    }
+
+    // @api
+    function createPlaceholderTypeNode() {
+        const node = createBaseNode<PlaceholderTypeNode>(SyntaxKind.PlaceholderType);
+        node.transformFlags = TransformFlags.ContainsTypeScript;
+        return node;
     }
 
     // @api

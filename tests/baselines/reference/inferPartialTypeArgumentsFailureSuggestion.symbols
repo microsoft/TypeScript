@@ -1,0 +1,17 @@
+=== tests/cases/conformance/types/typeParameters/typeArgumentLists/inferPartialTypeArgumentsFailureSuggestion.ts ===
+type _ = number;
+>_ : Symbol(_, Decl(inferPartialTypeArgumentsFailureSuggestion.ts, 0, 0))
+
+function f<T>(x: T extends number ? number : never) {}
+>f : Symbol(f, Decl(inferPartialTypeArgumentsFailureSuggestion.ts, 0, 16))
+>T : Symbol(T, Decl(inferPartialTypeArgumentsFailureSuggestion.ts, 2, 11))
+>x : Symbol(x, Decl(inferPartialTypeArgumentsFailureSuggestion.ts, 2, 14))
+>T : Symbol(T, Decl(inferPartialTypeArgumentsFailureSuggestion.ts, 2, 11))
+
+f<_>(42);
+>f : Symbol(f, Decl(inferPartialTypeArgumentsFailureSuggestion.ts, 0, 16))
+
+f<[_][0]>(42);
+>f : Symbol(f, Decl(inferPartialTypeArgumentsFailureSuggestion.ts, 0, 16))
+>_ : Symbol(_, Decl(inferPartialTypeArgumentsFailureSuggestion.ts, 0, 0))
+

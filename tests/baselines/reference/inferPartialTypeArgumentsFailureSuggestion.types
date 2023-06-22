@@ -1,0 +1,18 @@
+=== tests/cases/conformance/types/typeParameters/typeArgumentLists/inferPartialTypeArgumentsFailureSuggestion.ts ===
+type _ = number;
+>_ : number
+
+function f<T>(x: T extends number ? number : never) {}
+>f : <T>(x: T extends number ? number : never) => void
+>x : T extends number ? number : never
+
+f<_>(42);
+>f<_>(42) : void
+>f : <T>(x: T extends number ? number : never) => void
+>42 : 42
+
+f<[_][0]>(42);
+>f<[_][0]>(42) : void
+>f : <T>(x: T extends number ? number : never) => void
+>42 : 42
+
