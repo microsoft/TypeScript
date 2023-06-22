@@ -2360,17 +2360,13 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
     }
 
     function createSymbolMetadataReference(classSuper: Identifier) {
-        const classSuperSymbolMetadata = factory.createElementAccessExpression(
-            classSuper,
-            factory.createPropertyAccessExpression(factory.createIdentifier("Symbol"), "metadata"),
-        );
-        return factory.createConditionalExpression(
-            factory.createLogicalOr(
-                factory.createTypeCheck(classSuperSymbolMetadata, "object"),
-                factory.createTypeCheck(classSuperSymbolMetadata, "function"),
+        return factory.createBinaryExpression(
+            factory.createElementAccessExpression(
+                classSuper,
+                factory.createPropertyAccessExpression(factory.createIdentifier("Symbol"), "metadata"),
             ),
-            factory.createToken(SyntaxKind.QuestionToken), classSuperSymbolMetadata,
-            factory.createToken(SyntaxKind.ColonToken), factory.createNull(),
+            SyntaxKind.QuestionQuestionToken,
+            factory.createNull()
         );
     }
 }
