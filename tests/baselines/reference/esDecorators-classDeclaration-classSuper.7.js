@@ -51,7 +51,7 @@ let B = (() => {
     let _m_decorators;
     return class B extends _classSuper {
         static {
-            const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(typeof _classSuper[Symbol.metadata] === "object" || typeof _classSuper[Symbol.metadata] === "function" ? _classSuper[Symbol.metadata] : null) : void 0;
+            const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
             _m_decorators = [foo];
             __esDecorate(this, null, _m_decorators, { kind: "method", name: "m", static: false, private: false, access: { has: obj => "m" in obj, get: obj => obj.m }, metadata: _metadata }, null, _instanceExtraInitializers);
             if (_metadata) Object.defineProperty(this, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
@@ -74,36 +74,36 @@ function foo(method, _context) {
 new B();
 // https://github.com/microsoft/TypeScript/issues/53448
 let C = (() => {
-    let _instanceExtraInitializers_1 = [];
+    let _instanceExtraInitializers = [];
     let _get_val_decorators;
     return class C {
         static {
             const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
             _get_val_decorators = [foo];
-            __esDecorate(this, null, _get_val_decorators, { kind: "getter", name: "val", static: false, private: false, access: { has: obj => "val" in obj, get: obj => obj.val }, metadata: _metadata }, null, _instanceExtraInitializers_1);
+            __esDecorate(this, null, _get_val_decorators, { kind: "getter", name: "val", static: false, private: false, access: { has: obj => "val" in obj, get: obj => obj.val }, metadata: _metadata }, null, _instanceExtraInitializers);
             if (_metadata) Object.defineProperty(this, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
         }
         constructor() {
-            __runInitializers(this, _instanceExtraInitializers_1);
+            __runInitializers(this, _instanceExtraInitializers);
             this.val;
         }
         get val() { return 3; }
     };
 })();
 let D = (() => {
-    let _classSuper_1 = A;
-    let _instanceExtraInitializers_2 = [];
+    let _classSuper = A;
+    let _instanceExtraInitializers = [];
     let _get_val_decorators;
-    return class D extends _classSuper_1 {
+    return class D extends _classSuper {
         static {
-            const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(typeof _classSuper_1[Symbol.metadata] === "object" || typeof _classSuper_1[Symbol.metadata] === "function" ? _classSuper_1[Symbol.metadata] : null) : void 0;
+            const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
             _get_val_decorators = [foo];
-            __esDecorate(this, null, _get_val_decorators, { kind: "getter", name: "val", static: false, private: false, access: { has: obj => "val" in obj, get: obj => obj.val }, metadata: _metadata }, null, _instanceExtraInitializers_2);
+            __esDecorate(this, null, _get_val_decorators, { kind: "getter", name: "val", static: false, private: false, access: { has: obj => "val" in obj, get: obj => obj.val }, metadata: _metadata }, null, _instanceExtraInitializers);
             if (_metadata) Object.defineProperty(this, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
         }
         constructor() {
             super();
-            __runInitializers(this, _instanceExtraInitializers_2);
+            __runInitializers(this, _instanceExtraInitializers);
             this.val;
         }
         get val() { return 3; }

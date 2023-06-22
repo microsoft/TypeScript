@@ -99,19 +99,20 @@ C[Symbol.metadata].b; // 'y'
 let D = (() => {
     var _a;
     let _classSuper = C;
-    let _instanceExtraInitializers_1 = [];
+    let _instanceExtraInitializers = [];
     let _m_decorators;
     return _a = class D extends _classSuper {
             m() { }
             constructor() {
                 super(...arguments);
-                __runInitializers(this, _instanceExtraInitializers_1);
+                __runInitializers(this, _instanceExtraInitializers);
             }
         },
         (() => {
-            const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(typeof _classSuper[Symbol.metadata] === "object" || typeof _classSuper[Symbol.metadata] === "function" ? _classSuper[Symbol.metadata] : null) : void 0;
+            var _a;
+            const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create((_a = _classSuper[Symbol.metadata]) !== null && _a !== void 0 ? _a : null) : void 0;
             _m_decorators = [meta('b', 'z')];
-            __esDecorate(_a, null, _m_decorators, { kind: "method", name: "m", static: false, private: false, access: { has: obj => "m" in obj, get: obj => obj.m }, metadata: _metadata }, null, _instanceExtraInitializers_1);
+            __esDecorate(_a, null, _m_decorators, { kind: "method", name: "m", static: false, private: false, access: { has: obj => "m" in obj, get: obj => obj.m }, metadata: _metadata }, null, _instanceExtraInitializers);
             if (_metadata) Object.defineProperty(_a, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
         })(),
         _a;

@@ -15,14 +15,14 @@ class C {
 
 //// [esDecorators-classDeclaration-classThisReference.js]
 let C = (() => {
-    var _a_accessor_storage;
+    var _C_a_accessor_storage;
     let _classDecorators = [dec];
     let _classDescriptor;
     let _classExtraInitializers = [];
     let _classThis;
     var C = _classThis = class {
-        static get a() { return __classPrivateFieldGet(this, _classThis, "f", _a_accessor_storage); }
-        static set a(value) { __classPrivateFieldSet(this, _classThis, value, "f", _a_accessor_storage); }
+        static get a() { return __classPrivateFieldGet(this, _classThis, "f", _C_a_accessor_storage); }
+        static set a(value) { __classPrivateFieldSet(this, _classThis, value, "f", _C_a_accessor_storage); }
         static m() { this; }
         static get g() { return this; }
     };
@@ -37,7 +37,7 @@ let C = (() => {
         _classThis;
     })();
     _classThis.x = _classThis;
-    _a_accessor_storage = { value: _classThis };
+    _C_a_accessor_storage = { value: _classThis };
     (() => {
         __runInitializers(_classThis, _classExtraInitializers);
     })();

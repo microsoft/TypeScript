@@ -52,24 +52,25 @@ let C = (() => {
     };
 })();
 let D = (() => {
-    var _field1_accessor_storage;
+    var _D_field1_accessor_storage;
     let _classDecorators = [dec];
     let _classDescriptor;
     let _classExtraInitializers = [];
     let _classThis;
     var D = class {
+        static { _classThis = this; }
         static { __setFunctionName(this, "D"); }
         static {
             const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
-            __esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name, metadata: _metadata }, null, _classExtraInitializers);
+            __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
             D = _classThis = _classDescriptor.value;
             if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
         }
         static {
-            _field1_accessor_storage = { value: 1 };
+            _D_field1_accessor_storage = { value: 1 };
         }
-        static get field1() { return __classPrivateFieldGet(this, _classThis, "f", _field1_accessor_storage); }
-        static set field1(value) { __classPrivateFieldSet(this, _classThis, value, "f", _field1_accessor_storage); }
+        static get field1() { return __classPrivateFieldGet(this, _classThis, "f", _D_field1_accessor_storage); }
+        static set field1(value) { __classPrivateFieldSet(this, _classThis, value, "f", _D_field1_accessor_storage); }
         static {
             _classThis.field1;
             _classThis.field1 = 1;

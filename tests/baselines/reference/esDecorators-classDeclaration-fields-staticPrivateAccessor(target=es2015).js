@@ -35,19 +35,19 @@ let C = (() => {
             if (_metadata) Object.defineProperty(_a, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
             __runInitializers(_a, _staticExtraInitializers);
         })(),
-        _C_field1_accessor_storage = { value: __runInitializers(this, _static_private_field1_initializers, 0) },
+        _C_field1_accessor_storage = { value: __runInitializers(_a, _static_private_field1_initializers, 0) },
         _a;
 })();
 let D = (() => {
-    var _field1_get, _field1_set, _field1_accessor_storage;
+    var _D_field1_get, _D_field1_set, _D_field1_accessor_storage;
     let _classDecorators = [dec];
     let _classDescriptor;
     let _classExtraInitializers = [];
     let _classThis;
     var D = _classThis = class {
     };
-    _field1_get = function _field1_get() { return __classPrivateFieldGet(this, _classThis, "f", _field1_accessor_storage); };
-    _field1_set = function _field1_set(value) { __classPrivateFieldSet(this, _classThis, value, "f", _field1_accessor_storage); };
+    _D_field1_get = function _D_field1_get() { return __classPrivateFieldGet(this, _classThis, "f", _D_field1_accessor_storage); };
+    _D_field1_set = function _D_field1_set(value) { __classPrivateFieldSet(this, _classThis, value, "f", _D_field1_accessor_storage); };
     __setFunctionName(_classThis, "D");
     (() => {
         const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
@@ -55,10 +55,10 @@ let D = (() => {
         D = _classThis = _classDescriptor.value;
         if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
     })();
-    _field1_accessor_storage = { value: 0 };
+    _D_field1_accessor_storage = { value: 0 };
     (() => {
-        __classPrivateFieldGet(_classThis, _classThis, "a", _field1_get);
-        __classPrivateFieldSet(_classThis, _classThis, 1, "a", _field1_set);
+        __classPrivateFieldGet(_classThis, _classThis, "a", _D_field1_get);
+        __classPrivateFieldSet(_classThis, _classThis, 1, "a", _D_field1_set);
     })();
     (() => {
         __runInitializers(_classThis, _classExtraInitializers);

@@ -36,7 +36,7 @@ let C = (() => {
         _a;
 })();
 let D = (() => {
-    var _field1;
+    var _D_field1;
     let _classDecorators = [dec];
     let _classDescriptor;
     let _classExtraInitializers = [];
@@ -50,10 +50,10 @@ let D = (() => {
         D = _classThis = _classDescriptor.value;
         if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
     })();
-    _field1 = { value: 0 };
+    _D_field1 = { value: 0 };
     (() => {
-        __classPrivateFieldGet(_classThis, _classThis, "f", _field1);
-        __classPrivateFieldSet(_classThis, _classThis, 1, "f", _field1);
+        __classPrivateFieldGet(_classThis, _classThis, "f", _D_field1);
+        __classPrivateFieldSet(_classThis, _classThis, 1, "f", _D_field1);
     })();
     (() => {
         __runInitializers(_classThis, _classExtraInitializers);

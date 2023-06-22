@@ -84,22 +84,23 @@ let C = (() => {
     return C = _classThis;
 })();
 let D = (() => {
-    let _classDecorators_1 = [appendMeta('a', 'z')];
-    let _classDescriptor_1;
-    let _classExtraInitializers_1 = [];
-    let _classThis_1;
+    let _classDecorators = [appendMeta('a', 'z')];
+    let _classDescriptor;
+    let _classExtraInitializers = [];
+    let _classThis;
     let _classSuper = C;
-    var D = _classThis_1 = class extends _classSuper {
+    var D = _classThis = class extends _classSuper {
     };
-    __setFunctionName(_classThis_1, "D");
+    __setFunctionName(_classThis, "D");
     (() => {
-        const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(typeof _classSuper[Symbol.metadata] === "object" || typeof _classSuper[Symbol.metadata] === "function" ? _classSuper[Symbol.metadata] : null) : void 0;
-        __esDecorate(null, _classDescriptor_1 = { value: _classThis_1 }, _classDecorators_1, { kind: "class", name: _classThis_1.name, metadata: _metadata }, null, _classExtraInitializers_1);
-        D = _classThis_1 = _classDescriptor_1.value;
-        if (_metadata) Object.defineProperty(_classThis_1, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
-        __runInitializers(_classThis_1, _classExtraInitializers_1);
+        var _a;
+        const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create((_a = _classSuper[Symbol.metadata]) !== null && _a !== void 0 ? _a : null) : void 0;
+        __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
+        D = _classThis = _classDescriptor.value;
+        if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
+        __runInitializers(_classThis, _classExtraInitializers);
     })();
-    return D = _classThis_1;
+    return D = _classThis;
 })();
 C[Symbol.metadata].a; // ['x']
 D[Symbol.metadata].a; // ['x', 'z']

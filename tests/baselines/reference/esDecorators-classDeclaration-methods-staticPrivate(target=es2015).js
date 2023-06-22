@@ -32,14 +32,14 @@ let C = (() => {
         _a;
 })();
 let D = (() => {
-    var _method1;
+    var _D_method1;
     let _classDecorators = [dec];
     let _classDescriptor;
     let _classExtraInitializers = [];
     let _classThis;
     var D = _classThis = class {
     };
-    _method1 = function _method1() { };
+    _D_method1 = function _D_method1() { };
     __setFunctionName(_classThis, "D");
     (() => {
         const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;

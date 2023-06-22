@@ -43,15 +43,15 @@ let C = (() => {
         _a;
 })();
 let D = (() => {
-    var _method1_get, _method1_set;
+    var _D_method1_get, _D_method1_set;
     let _classDecorators = [dec];
     let _classDescriptor;
     let _classExtraInitializers = [];
     let _classThis;
     var D = _classThis = class {
     };
-    _method1_get = function _method1_get() { return 0; };
-    _method1_set = function _method1_set(value) { };
+    _D_method1_get = function _D_method1_get() { return 0; };
+    _D_method1_set = function _D_method1_set(value) { };
     __setFunctionName(_classThis, "D");
     (() => {
         const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
@@ -60,8 +60,8 @@ let D = (() => {
         if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
     })();
     (() => {
-        __classPrivateFieldGet(_classThis, _classThis, "a", _method1_get);
-        __classPrivateFieldSet(_classThis, _classThis, 1, "a", _method1_set);
+        __classPrivateFieldGet(_classThis, _classThis, "a", _D_method1_get);
+        __classPrivateFieldSet(_classThis, _classThis, 1, "a", _D_method1_set);
     })();
     (() => {
         __runInitializers(_classThis, _classExtraInitializers);

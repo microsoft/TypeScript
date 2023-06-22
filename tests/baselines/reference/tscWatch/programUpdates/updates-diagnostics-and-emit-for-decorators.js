@@ -118,7 +118,7 @@ var __setFunctionName = (this && this.__setFunctionName) || function (f, name, p
     return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
 };
 import './b';
-export let A = (() => {
+let A = (() => {
     let _classDecorators = [((_) => { })];
     let _classDescriptor;
     let _classExtraInitializers = [];
@@ -136,6 +136,7 @@ export let A = (() => {
     })();
     return A = _classThis;
 })();
+export { A };
 
 
 
@@ -186,12 +187,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 import './b';
-export let A = class A {
+let A = class A {
     constructor(p) { }
 };
 A = __decorate([
     ((_) => { })
 ], A);
+export { A };
 
 
 
@@ -245,12 +247,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import { B } from './b';
-export let A = class A {
+let A = class A {
     constructor(p) { }
 };
 A = __decorate([
     ((_) => { }),
     __metadata("design:paramtypes", [B])
 ], A);
+export { A };
 
 

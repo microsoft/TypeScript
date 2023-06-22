@@ -13,7 +13,6 @@ class C {
 
 
 //// [esDecorators-classDeclaration-fields-nonStatic.js]
-var _this = this;
 var field3 = "field3";
 var C = function () {
     var _a;

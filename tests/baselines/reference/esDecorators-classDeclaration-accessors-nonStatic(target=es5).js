@@ -16,7 +16,6 @@ class C {
 
 
 //// [esDecorators-classDeclaration-accessors-nonStatic.js]
-var _this = this;
 var method3 = "method3";
 var C = function () {
     var _a;
