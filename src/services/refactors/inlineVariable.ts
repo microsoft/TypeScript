@@ -20,6 +20,9 @@ import {
     isFunctionLike,
     isIdentifier,
     isInitializedVariable,
+    isLiteralTypeLikeExpression,
+    isObjectLiteralExpression,
+    isPropertyAccessExpression,
     isTypeQueryNode,
     isVariableDeclarationInVariableStatement,
     isVariableStatement,
@@ -229,6 +232,12 @@ function getReplacementExpression(reference: Node, replacement: Expression): Exp
     // Functions also need to be parenthesized.
     // E.g.: const f = () => {}; f(); -> (() => {})();
     if (isFunctionLike(replacement) && isCallLikeExpression(parent)) {
+        return factory.createParenthesizedExpression(replacement);
+    }
+
+    // Property access of literals need parentheses.
+    // E.g.: const x = 1; x.toString(); -> (1).toString();
+    if (isPropertyAccessExpression(parent) && (isLiteralTypeLikeExpression(replacement) || isObjectLiteralExpression(replacement))) {
         return factory.createParenthesizedExpression(replacement);
     }
 
