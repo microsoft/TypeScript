@@ -231,7 +231,7 @@ function getReplacementExpression(reference: Node, replacement: Expression): Exp
 
     // Functions also need to be parenthesized.
     // E.g.: const f = () => {}; f(); -> (() => {})();
-    if (isFunctionLike(replacement) && isCallLikeExpression(parent)) {
+    if (isFunctionLike(replacement) && (isCallLikeExpression(parent) || isPropertyAccessExpression(parent))) {
         return factory.createParenthesizedExpression(replacement);
     }
 
