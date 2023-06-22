@@ -4404,6 +4404,24 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             createOptionValueDiagnostic("moduleResolution", Diagnostics.Option_0_can_only_be_used_when_module_is_set_to_es2015_or_later, "bundler");
         }
 
+        if (
+            ModuleKind[moduleKind] &&
+            (ModuleKind.Node16 <= moduleKind && moduleKind <= ModuleKind.NodeNext) &&
+            !(ModuleResolutionKind.Node16 <= moduleResolution && moduleResolution <= ModuleResolutionKind.NodeNext)
+        ) {
+            const moduleKindName = ModuleKind[moduleKind];
+            createOptionValueDiagnostic("moduleResolution", Diagnostics.Option_moduleResolution_must_be_set_to_0_or_left_unspecified_when_option_module_is_set_to_1, moduleKindName, moduleKindName);
+        }
+        else if (
+            ModuleResolutionKind[moduleResolution] &&
+            (ModuleResolutionKind.Node16 <= moduleResolution && moduleResolution <= ModuleResolutionKind.NodeNext) &&
+            !(ModuleKind.Node16 <= moduleKind && moduleKind <= ModuleKind.NodeNext)
+        ) {
+            const moduleResolutionName = ModuleResolutionKind[moduleResolution];
+            createOptionValueDiagnostic("module", Diagnostics.Option_module_must_be_set_to_0_when_option_moduleResolution_is_set_to_1, moduleResolutionName, moduleResolutionName);
+        }
+
+
         // If the emit is enabled make sure that every output file is unique and not overwriting any of the input files
         if (!options.noEmit && !options.suppressOutputPathCheck) {
             const emitHost = getEmitHost();
