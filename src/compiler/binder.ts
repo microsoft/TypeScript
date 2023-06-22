@@ -87,6 +87,7 @@ import {
     getElementOrPropertyAccessName,
     getEmitScriptTarget,
     getEnclosingBlockScopeContainer,
+    getEnclosingContainer,
     getErrorSpanForNode,
     getEscapedTextOfIdentifierOrLiteral,
     getEscapedTextOfJsxNamespacedName,
@@ -455,7 +456,8 @@ function getModuleInstanceStateForAliasTarget(specifier: ExportSpecifier, visite
     return ModuleInstanceState.Instantiated; // Couldn't locate, assume could refer to a value
 }
 
-const enum ContainerFlags {
+/** @internal */
+export const enum ContainerFlags {
     // The current node is not a container, and no container manipulation should happen before
     // recursing into it.
     None = 0,
@@ -2356,7 +2358,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         const saveCurrentFlow = currentFlow;
         for (const typeAlias of delayedTypeAliases) {
             const host = typeAlias.parent.parent;
-            container = (findAncestor(host.parent, n => !!(getContainerFlags(n) & ContainerFlags.IsContainer)) as IsContainer | undefined) || file;
+            container = (getEnclosingContainer(host) as IsContainer | undefined) || file;
             blockScopeContainer = (getEnclosingBlockScopeContainer(host) as IsBlockScopedContainer | undefined) || file;
             currentFlow = initFlowNode({ flags: FlowFlags.Start });
             parent = typeAlias;
@@ -3768,7 +3770,8 @@ export function isExportsOrModuleExportsOrAlias(sourceFile: SourceFile, node: Ex
     return false;
 }
 
-function getContainerFlags(node: Node): ContainerFlags {
+/** @internal */
+export function getContainerFlags(node: Node): ContainerFlags {
     switch (node.kind) {
         case SyntaxKind.ClassExpression:
         case SyntaxKind.ClassDeclaration:

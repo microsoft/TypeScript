@@ -73,6 +73,7 @@ import {
     ConditionalExpression,
     ConstructorDeclaration,
     ConstructSignatureDeclaration,
+    ContainerFlags,
     contains,
     containsPath,
     createGetCanonicalFileName,
@@ -162,6 +163,7 @@ import {
     GetCanonicalFileName,
     getCombinedModifierFlags,
     getCombinedNodeFlags,
+    getContainerFlags,
     getDirectoryPath,
     getJSDocAugmentsTag,
     getJSDocDeprecatedTagNoCache,
@@ -2020,6 +2022,11 @@ export function hasPossibleExternalModuleReference(node: Node): node is AnyImpor
 /** @internal */
 export function isAnyImportOrReExport(node: Node): node is AnyImportOrReExport {
     return isAnyImportSyntax(node) || isExportDeclaration(node);
+}
+
+/** @internal */
+export function getEnclosingContainer(node: Node): Node | undefined {
+    return findAncestor(node.parent, n => !!(getContainerFlags(n) & ContainerFlags.IsContainer));
 }
 
 // Gets the nearest enclosing block scope container that has the provided node
