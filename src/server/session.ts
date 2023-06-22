@@ -1844,7 +1844,7 @@ export class Session<TMessage = string> implements EventSender {
         const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
         const hints = project.getLanguageService().provideInlayHints(file, args, this.getPreferences(file));
 
-        return hints.map((hint) => {
+        return hints.map(hint => {
             const { text, position } = hint;
             const hintText = typeof text === "string" ? text : text.map(({ text, span, file }) => ({
                 text,
@@ -1855,11 +1855,11 @@ export class Session<TMessage = string> implements EventSender {
                 }
             }));
 
-            return ({
+            return {
                 ...hint,
                 position: scriptInfo.positionToLineOffset(position),
                 text: hintText
-            });
+            };
         });
     }
 
