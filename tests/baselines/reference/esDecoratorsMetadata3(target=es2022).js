@@ -82,9 +82,10 @@ let D = (() => {
     let _classDescriptor_1;
     let _classExtraInitializers_1 = [];
     let _classThis_1;
-    var D = class extends C {
+    let _classSuper = C;
+    var D = class extends _classSuper {
         static {
-            const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(super[Symbol.metadata]) : void 0;
+            const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(typeof _classSuper[Symbol.metadata] === "object" || typeof _classSuper[Symbol.metadata] === "function" ? _classSuper[Symbol.metadata] : null) : void 0;
             __esDecorate(null, _classDescriptor_1 = { value: this }, _classDecorators_1, { kind: "class", name: this.name, metadata: _metadata }, null, _classExtraInitializers_1);
             D = _classThis_1 = _classDescriptor_1.value;
             if (_metadata) Object.defineProperty(_classThis_1, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });

@@ -16,8 +16,18 @@ for (const key of Object.getOwnPropertyNames(Symbol)) {
     Object.defineProperty(FakeSymbol, key, Object.getOwnPropertyDescriptor(Symbol, key)!);
 }
 
-// Add "asyncIterator" if missing
-if (!ts.hasProperty(FakeSymbol, "asyncIterator")) Object.defineProperty(FakeSymbol, "asyncIterator", { value: Symbol.for("Symbol.asyncIterator"), configurable: true });
+const symbolNames = [
+    "asyncIterator",
+    "metadata",
+];
+for (const symbolName of symbolNames) {
+    if (!ts.hasProperty(FakeSymbol, symbolName)) {
+        Object.defineProperty(FakeSymbol, symbolName, {
+            value: Symbol.for(`Symbol.${symbolName}`),
+            configurable: true,
+        });
+    }
+}
 
 export function evaluateTypeScript(source: string | { files: vfs.FileSet, rootFiles: string[], main: string }, options?: ts.CompilerOptions, globals?: Record<string, any>) {
     if (typeof source === "string") source = { files: { [sourceFile]: source }, rootFiles: [sourceFile], main: sourceFile };

@@ -84,16 +84,16 @@ let C = (() => {
     return C = _classThis;
 })();
 let D = (() => {
-    var _a;
     let _classDecorators_1 = [appendMeta('a', 'z')];
     let _classDescriptor_1;
     let _classExtraInitializers_1 = [];
     let _classThis_1;
-    var D = _classThis_1 = class extends (_a = C) {
+    let _classSuper = C;
+    var D = _classThis_1 = class extends _classSuper {
     };
     __setFunctionName(_classThis_1, "D");
     (() => {
-        const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(Reflect.get(_a, Symbol.metadata, _classThis_1)) : void 0;
+        const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(typeof _classSuper[Symbol.metadata] === "object" || typeof _classSuper[Symbol.metadata] === "function" ? _classSuper[Symbol.metadata] : null) : void 0;
         __esDecorate(null, _classDescriptor_1 = { value: _classThis_1 }, _classDecorators_1, { kind: "class", name: _classThis_1.name, metadata: _metadata }, null, _classExtraInitializers_1);
         D = _classThis_1 = _classDescriptor_1.value;
         if (_metadata) Object.defineProperty(_classThis_1, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });

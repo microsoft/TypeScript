@@ -34,9 +34,10 @@ class C extends Base {
     let _classDescriptor;
     let _classExtraInitializers = [];
     let _classThis;
-    var C = class extends Base {
+    let _classSuper = Base;
+    var C = class extends _classSuper {
         static {
-            const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(super[Symbol.metadata]) : void 0;
+            const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(typeof _classSuper[Symbol.metadata] === "object" || typeof _classSuper[Symbol.metadata] === "function" ? _classSuper[Symbol.metadata] : null) : void 0;
             __esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name, metadata: _metadata }, null, _classExtraInitializers);
             C = _classThis = _classDescriptor.value;
             if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });

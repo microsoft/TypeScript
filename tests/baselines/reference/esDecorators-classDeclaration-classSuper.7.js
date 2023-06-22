@@ -46,11 +46,12 @@ class D extends A {
 class A {
 }
 let B = (() => {
+    let _classSuper = A;
     let _instanceExtraInitializers = [];
     let _m_decorators;
-    return class B extends A {
+    return class B extends _classSuper {
         static {
-            const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(super[Symbol.metadata]) : void 0;
+            const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(typeof _classSuper[Symbol.metadata] === "object" || typeof _classSuper[Symbol.metadata] === "function" ? _classSuper[Symbol.metadata] : null) : void 0;
             _m_decorators = [foo];
             __esDecorate(this, null, _m_decorators, { kind: "method", name: "m", static: false, private: false, access: { has: obj => "m" in obj, get: obj => obj.m }, metadata: _metadata }, null, _instanceExtraInitializers);
             if (_metadata) Object.defineProperty(this, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
@@ -90,11 +91,12 @@ let C = (() => {
     };
 })();
 let D = (() => {
+    let _classSuper_1 = A;
     let _instanceExtraInitializers_2 = [];
     let _get_val_decorators;
-    return class D extends A {
+    return class D extends _classSuper_1 {
         static {
-            const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(super[Symbol.metadata]) : void 0;
+            const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(typeof _classSuper_1[Symbol.metadata] === "object" || typeof _classSuper_1[Symbol.metadata] === "function" ? _classSuper_1[Symbol.metadata] : null) : void 0;
             _get_val_decorators = [foo];
             __esDecorate(this, null, _get_val_decorators, { kind: "getter", name: "val", static: false, private: false, access: { has: obj => "val" in obj, get: obj => obj.val }, metadata: _metadata }, null, _instanceExtraInitializers_2);
             if (_metadata) Object.defineProperty(this, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });

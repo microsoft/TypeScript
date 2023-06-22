@@ -1194,7 +1194,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
             isStaticPropertyDeclarationOrClassStaticBlock(currentClassElement) &&
             lexicalEnvironment?.data) {
             const { classConstructor, superClassReference, facts } = lexicalEnvironment.data;
-            if (facts & ClassFacts.ClassWasDecorated && superClassReference === undefined && classConstructor === undefined) {
+            if (facts & ClassFacts.ClassWasDecorated) {
                 return visitInvalidSuperProperty(node);
             }
             if (classConstructor && superClassReference) {
@@ -1219,9 +1219,10 @@ export function transformClassFields(context: TransformationContext): (x: Source
             isStaticPropertyDeclarationOrClassStaticBlock(currentClassElement) &&
             lexicalEnvironment?.data) {
             const { classConstructor, superClassReference, facts } = lexicalEnvironment.data;
-            if (facts & ClassFacts.ClassWasDecorated && superClassReference === undefined && classConstructor === undefined) {
+            if (facts & ClassFacts.ClassWasDecorated) {
                 return visitInvalidSuperProperty(node);
             }
+
             if (classConstructor && superClassReference) {
                 // converts `super[x]` into `Reflect.get(_baseTemp, x, _classTemp)`
                 const superProperty = factory.createReflectGetCall(
@@ -1745,7 +1746,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
 
     function getClassFacts(node: ClassLikeDeclaration) {
         let facts = ClassFacts.None;
-        const original = getOriginalNode(node) as ClassLikeDeclaration;
+        const original = getOriginalNode(node);
         if (isClassDeclaration(original) && classOrConstructorParameterIsDecorated(legacyDecorators, original)) {
             facts |= ClassFacts.ClassWasDecorated;
         }
@@ -1768,7 +1769,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
                         }
                     }
                     if (shouldTransformSuperInStaticInitializers && member.transformFlags & TransformFlags.ContainsLexicalSuper) {
-                        if (!(facts & ClassFacts.ClassWasDecorated) || original.heritageClauses) {
+                        if (!(facts & ClassFacts.ClassWasDecorated)) {
                             facts |= ClassFacts.NeedsClassConstructorReference | ClassFacts.NeedsClassSuperReference;
                         }
                     }

@@ -164,6 +164,8 @@ interface ClassGetterDecoratorContext<
      * decorating a non-`static` element).
      */
     addInitializer(initializer: (this: This) => void): void;
+
+    readonly metadata: DecoratorMetadata;
 }
 
 /**
@@ -209,6 +211,8 @@ interface ClassSetterDecoratorContext<
      * decorating a non-`static` element).
      */
     addInitializer(initializer: (this: This) => void): void;
+
+    readonly metadata: DecoratorMetadata;
 }
 
 /**
@@ -263,6 +267,8 @@ interface ClassAccessorDecoratorContext<
      * decorating a non-`static` element).
      */
     addInitializer(initializer: (this: This) => void): void;
+
+    readonly metadata: DecoratorMetadata;
 }
 
 /**
@@ -358,4 +364,6 @@ interface ClassFieldDecoratorContext<
      * decorating a non-`static` element).
      */
     addInitializer(initializer: (this: This) => void): void;
+
+    readonly metadata: DecoratorMetadata;
 }

@@ -39,7 +39,7 @@ let C1 = (() => {
     });
     var C1 = class extends _classSuper {
         static {
-            const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(super[Symbol.metadata]) : void 0;
+            const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(typeof _classSuper[Symbol.metadata] === "object" || typeof _classSuper[Symbol.metadata] === "function" ? _classSuper[Symbol.metadata] : null) : void 0;
             __esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name, metadata: _metadata }, null, _classExtraInitializers);
             C1 = _classThis = _classDescriptor.value;
             if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
@@ -62,7 +62,7 @@ let C2 = (() => {
     let _classSuper_1 = (0, function () { });
     var C2 = class extends _classSuper_1 {
         static {
-            const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(super[Symbol.metadata]) : void 0;
+            const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(typeof _classSuper_1[Symbol.metadata] === "object" || typeof _classSuper_1[Symbol.metadata] === "function" ? _classSuper_1[Symbol.metadata] : null) : void 0;
             __esDecorate(null, _classDescriptor_1 = { value: this }, _classDecorators_1, { kind: "class", name: this.name, metadata: _metadata }, null, _classExtraInitializers_1);
             C2 = _classThis_1 = _classDescriptor_1.value;
             if (_metadata) Object.defineProperty(_classThis_1, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
@@ -85,7 +85,7 @@ let C3 = (() => {
     let _classSuper_2 = (0, (() => { }));
     var C3 = class extends _classSuper_2 {
         static {
-            const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(super[Symbol.metadata]) : void 0;
+            const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(typeof _classSuper_2[Symbol.metadata] === "object" || typeof _classSuper_2[Symbol.metadata] === "function" ? _classSuper_2[Symbol.metadata] : null) : void 0;
             __esDecorate(null, _classDescriptor_2 = { value: this }, _classDecorators_2, { kind: "class", name: this.name, metadata: _metadata }, null, _classExtraInitializers_2);
             C3 = _classThis_2 = _classDescriptor_2.value;
             if (_metadata) Object.defineProperty(_classThis_2, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
