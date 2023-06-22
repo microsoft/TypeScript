@@ -9,7 +9,6 @@ class C {
 
 
 //// [esDecorators-classDeclaration-simpleTransformation.js]
-var _this = this;
 var C = function () {
     var _classDecorators = [dec];
     var _classDescriptor;

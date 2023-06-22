@@ -52,6 +52,7 @@ import {
     ClassDeclaration,
     ClassElement,
     ClassExpression,
+    classHasDeclaredOrExplicitlyAssignedName,
     ClassLikeDeclaration,
     ClassStaticBlockDeclaration,
     combinePaths,
@@ -2335,14 +2336,36 @@ export function isDeclarationReadonly(declaration: Declaration): boolean {
     return !!(getCombinedModifierFlags(declaration) & ModifierFlags.Readonly && !isParameterPropertyDeclaration(declaration, declaration.parent));
 }
 
-/** @internal */
-export function isVarConst(node: VariableDeclaration | VariableDeclarationList): boolean {
-    return !!(getCombinedNodeFlags(node) & NodeFlags.Const);
+/**
+ * Gets whether a bound `VariableDeclaration` or `VariableDeclarationList` is part of an `await using` declaration.
+ * @internal
+ */
+export function isVarAwaitUsing(node: VariableDeclaration | VariableDeclarationList): boolean {
+    return (getCombinedNodeFlags(node) & NodeFlags.BlockScoped) === NodeFlags.AwaitUsing;
 }
 
-/** @internal */
+/**
+ * Gets whether a bound `VariableDeclaration` or `VariableDeclarationList` is part of a `using` declaration.
+ * @internal
+ */
+export function isVarUsing(node: VariableDeclaration | VariableDeclarationList): boolean {
+    return (getCombinedNodeFlags(node) & NodeFlags.BlockScoped) === NodeFlags.Using;
+}
+
+/**
+ * Gets whether a bound `VariableDeclaration` or `VariableDeclarationList` is part of a `const` declaration.
+ * @internal
+ */
+export function isVarConst(node: VariableDeclaration | VariableDeclarationList): boolean {
+    return (getCombinedNodeFlags(node) & NodeFlags.BlockScoped) === NodeFlags.Const;
+}
+
+/**
+ * Gets whether a bound `VariableDeclaration` or `VariableDeclarationList` is part of a `let` declaration.
+ * @internal
+ */
 export function isLet(node: Node): boolean {
-    return !!(getCombinedNodeFlags(node) & NodeFlags.Let);
+    return (getCombinedNodeFlags(node) & NodeFlags.BlockScoped) === NodeFlags.Let;
 }
 
 /** @internal */
@@ -5104,8 +5127,12 @@ export function isAnonymousFunctionDefinition(node: Expression, cb?: (node: Anon
     node = skipOuterExpressions(node);
     switch (node.kind) {
         case SyntaxKind.ClassExpression:
+            if (classHasDeclaredOrExplicitlyAssignedName(node as ClassExpression)) {
+                return false;
+            }
+            break;
         case SyntaxKind.FunctionExpression:
-            if ((node as ClassExpression | FunctionExpression).name) {
+            if ((node as FunctionExpression).name) {
                 return false;
             }
             break;
@@ -5171,7 +5198,8 @@ export type NamedEvaluation =
     | ParameterDeclaration & { readonly name: Identifier, readonly dotDotDotToken: undefined, readonly initializer: WrappedExpression<AnonymousFunctionDefinition> }
     | BindingElement & { readonly name: Identifier, readonly dotDotDotToken: undefined, readonly initializer: WrappedExpression<AnonymousFunctionDefinition> }
     | PropertyDeclaration & { readonly initializer: WrappedExpression<AnonymousFunctionDefinition> }
-    | AssignmentExpression<EqualsToken | AmpersandAmpersandEqualsToken | BarBarEqualsToken | QuestionQuestionEqualsToken> & { readonly left: Identifier, readonly right: WrappedExpression<AnonymousFunctionDefinition> }
+    | AssignmentExpression<EqualsToken> & { readonly left: Identifier, readonly right: WrappedExpression<AnonymousFunctionDefinition> }
+    | AssignmentExpression<AmpersandAmpersandEqualsToken | BarBarEqualsToken | QuestionQuestionEqualsToken> & { readonly left: Identifier, readonly right: WrappedExpression<AnonymousFunctionDefinition> }
     | ExportAssignment & { readonly expression: WrappedExpression<AnonymousFunctionDefinition> }
     ;
 

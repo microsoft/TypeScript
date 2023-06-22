@@ -45,6 +45,8 @@ import "./unittests/evaluation/objectRest";
 import "./unittests/evaluation/superInStaticInitializer";
 import "./unittests/evaluation/templateLiteral";
 import "./unittests/evaluation/updateExpressionInModule";
+import "./unittests/evaluation/usingDeclarations";
+import "./unittests/evaluation/awaitUsingDeclarations";
 import "./unittests/services/cancellableLanguageServiceOperations";
 import "./unittests/services/colorization";
 import "./unittests/services/convertToAsyncFunction";
