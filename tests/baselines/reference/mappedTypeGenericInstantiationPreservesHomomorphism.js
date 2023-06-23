@@ -35,4 +35,4 @@ type PrivateMapped<Obj> = {
 };
 export {};
 //// [api.d.ts]
-export declare const mappedUnionWithPrivateType: <T extends unknown[]>(...args: T) => T[any] extends infer T_1 ? { [K in keyof T_1]: T[any][K]; } : never;
+export declare const mappedUnionWithPrivateType: <T extends unknown[]>(...args: T) => T[any] extends infer T_1 ? { [K in keyof T_1]: T_1[K]; } : never;

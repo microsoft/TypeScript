@@ -1,0 +1,77 @@
+//// [tests/cases/compiler/declarationEmitMappedTypePreservesTypeParameterConstraint.ts] ////
+
+=== declarationEmitMappedTypePreservesTypeParameterConstraint.ts ===
+// repro from https://github.com/microsoft/TypeScript/issues/54560
+
+declare type requiredKeys<T extends object> = {
+>requiredKeys : requiredKeys<T>
+
+  [k in keyof T]: undefined extends T[k] ? never : k;
+}[keyof T];
+
+declare type addQuestionMarks<
+>addQuestionMarks : addQuestionMarks<T, R>
+
+  T extends object,
+  R extends keyof T = requiredKeys<T>
+> = Pick<Required<T>, R> & Partial<T>;
+
+declare type identity<T> = T;
+>identity : T
+
+declare type flatten<T> = identity<{
+>flatten : { [k in keyof T]: T[k]; }
+
+  [k in keyof T]: T[k];
+}>;
+
+export declare abstract class ZodType<Output = any> {
+>ZodType : ZodType<Output>
+
+  readonly _output: Output;
+>_output : Output
+}
+
+export declare class ZodLiteral<T> extends ZodType<T> {}
+>ZodLiteral : ZodLiteral<T>
+>ZodType : ZodType<T>
+
+export declare type ZodTypeAny = ZodType<any>;
+>ZodTypeAny : ZodType<any>
+
+export declare type baseObjectOutputType<Shape extends ZodRawShape> = {
+>baseObjectOutputType : baseObjectOutputType<Shape>
+
+  [k in keyof Shape]: Shape[k]["_output"];
+};
+
+export declare type objectOutputType<Shape extends ZodRawShape> = flatten<
+>objectOutputType : { [k in keyof addQuestionMarks<baseObjectOutputType<Shape>, requiredKeys<baseObjectOutputType<Shape>>>]: addQuestionMarks<baseObjectOutputType<Shape>, requiredKeys<baseObjectOutputType<Shape>>>[k]; }
+
+  addQuestionMarks<baseObjectOutputType<Shape>>
+>;
+
+export declare type ZodRawShape = {
+>ZodRawShape : { [k: string]: ZodTypeAny; }
+
+  [k: string]: ZodTypeAny;
+>k : string
+
+};
+
+export const buildSchema = <V extends string>(
+>buildSchema : <V extends string>(version: V) => { [k in keyof addQuestionMarks<baseObjectOutputType<{ version: ZodLiteral<V>; }>, undefined extends V ? never : "version">]: addQuestionMarks<baseObjectOutputType<{ version: ZodLiteral<V>; }>, undefined extends V ? never : "version">[k]; }
+><V extends string>(  version: V): objectOutputType<{  version: ZodLiteral<V>;}> => ({} as any) : <V extends string>(version: V) => { [k in keyof addQuestionMarks<baseObjectOutputType<{ version: ZodLiteral<V>; }>, undefined extends V ? never : "version">]: addQuestionMarks<baseObjectOutputType<{ version: ZodLiteral<V>; }>, undefined extends V ? never : "version">[k]; }
+
+  version: V
+>version : V
+
+): objectOutputType<{
+  version: ZodLiteral<V>;
+>version : ZodLiteral<V>
+
+}> => ({} as any);
+>({} as any) : any
+>{} as any : any
+>{} : {}
+
