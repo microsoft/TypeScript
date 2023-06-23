@@ -942,9 +942,6 @@ export function transformTypeScript(context: TransformationContext) {
             setCommentRange(varStatement, node);
             setSourceMapRange(varStatement, moveRangePastDecorators(node));
             startOnNewLine(varStatement);
-
-            setSyntheticLeadingComments(node, undefined);
-
             statement = varStatement;
         }
         else {
