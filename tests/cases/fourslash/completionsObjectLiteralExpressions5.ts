@@ -1,17 +1,16 @@
 /// <reference path="fourslash.ts" />
-////interface T {
-////     aaa: number;
-////     bbb?: number;
-//// }
-//// const obj: T = {
-////     aaa: 1 * (2 + 3)
-////     /**/
-//// }
+
+//// type E = {}
+//// type F = string
+//// interface I { e: E, f?: F }
+//// const i: I = { e: {}
+////    /**/
+//// };
 
 verify.completions({
     marker: "",
     includes: [{
-      name: "bbb",
+      name: "f",
       sortText: completion.SortText.OptionalMember,
       hasAction: true,
       source: completion.CompletionSource.ObjectLiteralMemberWithComma,
@@ -23,18 +22,16 @@ verify.completions({
 });
   
 verify.applyCodeActionFromCompletion("", {
-    name: "bbb",
-    description: `Add missing comma for object member completion 'bbb'.`,
+    name: "f",
+    description: `Add missing comma for object member completion 'f'.`,
     source: completion.CompletionSource.ObjectLiteralMemberWithComma,
     newFileContent:
-    `interface T {
-     aaa: number;
-     bbb?: number;
- }
- const obj: T = {
-     aaa: 1 * (2 + 3),
-     
- }`,
+    `type E = {}
+type F = string
+interface I { e: E, f?: F }
+const i: I = { e: {},
+   
+};`,
     preferences: {
       allowIncompleteCompletions: true,
       includeInsertTextCompletions: true,

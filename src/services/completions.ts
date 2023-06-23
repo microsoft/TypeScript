@@ -65,7 +65,6 @@ import {
     find,
     findAncestor,
     findChildOfKind,
-    findNextToken,
     findPrecedingToken,
     first,
     firstDefined,
@@ -1683,14 +1682,15 @@ function createCompletionEntry(
         }
     }
 
-    if ((origin?.kind === SymbolOriginInfoKind.TypeOnlyAlias)) {
+    if (origin?.kind === SymbolOriginInfoKind.TypeOnlyAlias) {
         hasAction = true;
     }
 
     if (completionKind === CompletionKind.ObjectPropertyDeclaration && contextToken &&
         findPrecedingToken(contextToken.pos, sourceFile, contextToken)?.kind !== SyntaxKind.CommaToken &&
-        findNextToken(contextToken, contextToken.parent, sourceFile)?.kind !== SyntaxKind.CommaToken &&
-        (findAncestor(contextToken.parent, (node: Node) => isPropertyAssignment(node))?.getLastToken() === contextToken || isMethodDeclaration(contextToken.parent.parent))) {
+        (isMethodDeclaration(contextToken.parent.parent) || isSpreadAssignment(contextToken.parent) || findAncestor(contextToken.parent, (node: Node) => isPropertyAssignment(node))?.getLastToken() === contextToken ||
+        isShorthandPropertyAssignment(contextToken.parent) && getLineAndCharacterOfPosition(contextToken.getSourceFile(), contextToken.getEnd()).line !== getLineAndCharacterOfPosition(contextToken.getSourceFile(), position).line)) {
+
         source = CompletionSource.ObjectLiteralMemberWithComma;
         hasAction = true;
     }
@@ -2882,7 +2882,7 @@ function getCompletionEntryCodeActionsAndSourceDisplay(
                 sourceDisplay: undefined,
                 codeActions: [{
                     changes,
-                    description: diagnosticToString([Diagnostics.Add_missing_comma_for_an_object_member_completion_0, name]),
+                    description: diagnosticToString([Diagnostics.Add_missing_comma_for_object_member_completion_0, name]),
                 }],
             };
         }
@@ -4184,7 +4184,7 @@ function getCompletionData(
      */
     function tryGetObjectLikeCompletionSymbols(): GlobalsSearch | undefined {
         const symbolsStartIndex = symbols.length;
-        const objectLikeContainer = tryGetObjectLikeCompletionContainer(contextToken);
+        const objectLikeContainer = tryGetObjectLikeCompletionContainer(contextToken, position);
         if (!objectLikeContainer) return GlobalsSearch.Continue;
 
         // We're looking up possible property names from contextual/inferred/declared type.
@@ -4912,7 +4912,7 @@ function getCompletionData(
  * Returns the immediate owning object literal or binding pattern of a context token,
  * on the condition that one exists and that the context implies completion should be given.
  */
-function tryGetObjectLikeCompletionContainer(contextToken: Node | undefined): ObjectLiteralExpression | ObjectBindingPattern | undefined {
+function tryGetObjectLikeCompletionContainer(contextToken: Node | undefined, position: number): ObjectLiteralExpression | ObjectBindingPattern | undefined {
     if (contextToken) {
         const { parent } = contextToken;
         switch (contextToken.kind) {
@@ -4922,19 +4922,30 @@ function tryGetObjectLikeCompletionContainer(contextToken: Node | undefined): Ob
                     return parent;
                 }
                 break;
-            case SyntaxKind.CloseBraceToken: // const x = { } |
-                if (parent.parent && parent.parent.parent && isMethodDeclaration(parent.parent) && isObjectLiteralExpression(parent.parent.parent)) {
-                    return parent.parent.parent;
-                }
-                break;
             case SyntaxKind.AsteriskToken:
                 return isMethodDeclaration(parent) ? tryCast(parent.parent, isObjectLiteralExpression) : undefined;
             case SyntaxKind.AsyncKeyword:
                 return tryCast(parent.parent, isObjectLiteralExpression);
             case SyntaxKind.Identifier:
-                return (contextToken as Identifier).text === "async" && isShorthandPropertyAssignment(contextToken.parent)
-                    ? contextToken.parent.parent : undefined;
+                if ((contextToken as Identifier).text === "async" && isShorthandPropertyAssignment(contextToken.parent)) {
+                    return contextToken.parent.parent;
+                }
+                else {
+                    if (isObjectLiteralExpression(contextToken.parent.parent) &&
+                        (isSpreadAssignment(contextToken.parent) || isShorthandPropertyAssignment(contextToken.parent) &&
+                        (getLineAndCharacterOfPosition(contextToken.getSourceFile(), contextToken.getEnd()).line !== getLineAndCharacterOfPosition(contextToken.getSourceFile(), position).line))) {
+                        return contextToken.parent.parent;
+                    }
+                    const ancestorNode = findAncestor(parent, (node: Node) => isPropertyAssignment(node));
+                    if (ancestorNode && ancestorNode.getLastToken() === contextToken && isObjectLiteralExpression(ancestorNode.parent)) {
+                        return ancestorNode.parent;
+                    }
+                }
+                break;
             default:
+                if (parent.parent && parent.parent.parent && isMethodDeclaration(parent.parent) && isObjectLiteralExpression(parent.parent.parent)) {
+                    return parent.parent.parent;
+                }
                 const ancestorNode = findAncestor(parent, (node: Node) => isPropertyAssignment(node));
                 if (contextToken.kind !== SyntaxKind.ColonToken && ancestorNode && ancestorNode.getLastToken() === contextToken &&
                     isObjectLiteralExpression(ancestorNode.parent)) {

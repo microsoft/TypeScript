@@ -10,8 +10,6 @@
 ////     /**/
 //// }
 
-
-
 verify.completions({
     marker: "",
     includes: [{
@@ -24,11 +22,11 @@ verify.completions({
       allowIncompleteCompletions: true,
       includeInsertTextCompletions: true,
     },
-  });
+});
   
-  verify.applyCodeActionFromCompletion("", {
+verify.applyCodeActionFromCompletion("", {
     name: "aaa",
-    description: `Add missing comma for an object member completion 'aaa'.`,
+    description: `Add missing comma for object member completion 'aaa'.`,
     source: completion.CompletionSource.ObjectLiteralMemberWithComma,
     newFileContent:
     `interface T {

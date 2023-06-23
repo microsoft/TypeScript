@@ -1,18 +1,27 @@
+
+
 /// <reference path="fourslash.ts" />
-////interface T {
-////     aaa: number;
-////     bbb?: number;
+
+//// interface pp {
+////     aaa: string;
+////     bbb: number;
 //// }
-//// const obj: T = {
-////     aaa: 1 * (2 + 3)
+////
+//// const abc: pp = {
+////     aaa: "",
+////     bbb: 1,
+//// }
+////
+//// const cab: pp = {
+////     ...abc
 ////     /**/
 //// }
 
 verify.completions({
     marker: "",
     includes: [{
-      name: "bbb",
-      sortText: completion.SortText.OptionalMember,
+      name: "aaa",
+      sortText: completion.SortText.MemberDeclaredBySpreadAssignment,
       hasAction: true,
       source: completion.CompletionSource.ObjectLiteralMemberWithComma,
     }],
@@ -23,18 +32,24 @@ verify.completions({
 });
   
 verify.applyCodeActionFromCompletion("", {
-    name: "bbb",
-    description: `Add missing comma for object member completion 'bbb'.`,
+    name: "aaa",
+    description: `Add missing comma for object member completion 'aaa'.`,
     source: completion.CompletionSource.ObjectLiteralMemberWithComma,
     newFileContent:
-    `interface T {
-     aaa: number;
-     bbb?: number;
- }
- const obj: T = {
-     aaa: 1 * (2 + 3),
-     
- }`,
+    `interface pp {
+    aaa: string;
+    bbb: number;
+}
+
+const abc: pp = {
+    aaa: "",
+    bbb: 1,
+}
+
+const cab: pp = {
+    ...abc,
+    
+}`,
     preferences: {
       allowIncompleteCompletions: true,
       includeInsertTextCompletions: true,
