@@ -129,17 +129,72 @@
 //     }
 // }
 
-function conditionalProducingIf<LeftIn, RightIn, LeftOut, RightOut, Arg extends LeftIn | RightIn>(
-    arg: Arg,
-    cond: (arg: LeftIn | RightIn) => arg is LeftIn,
-    produceLeftOut: (arg: LeftIn) => LeftOut,
-    produceRightOut: (arg: RightIn) => RightOut):
-    Arg extends LeftIn ? LeftOut : RightOut
-{
-    type OK = Arg extends LeftIn ? LeftOut : RightOut;
-    if (cond(arg)) {
-        return produceLeftOut(arg);
-    } else {
-        return produceRightOut(arg as RightIn) as OK;
-    }
+// function conditionalProducingIf<LeftIn, RightIn, LeftOut, RightOut, Arg extends LeftIn | RightIn>(
+//     arg: Arg,
+//     cond: (arg: LeftIn | RightIn) => arg is LeftIn,
+//     produceLeftOut: (arg: LeftIn) => LeftOut,
+//     produceRightOut: (arg: RightIn) => RightOut):
+//     Arg extends LeftIn ? LeftOut : RightOut
+// {
+//     type OK = Arg extends LeftIn ? LeftOut : RightOut;
+//     if (cond(arg)) {
+//         return produceLeftOut(arg);
+//     } else {
+//         return produceRightOut(arg as RightIn) as OK;
+//     }
+// }
+
+// class Unnamed {
+//     root!: { name: string };
+//     name<T extends string>(name?: T): T extends string ? this : string {
+//         if (typeof name === 'undefined') {
+//             return this.root.name;
+//             // return this; // Error; as it should
+//         }
+//         this.root.name = name;
+//         name; // type `T < string` here
+//         return this; // What's going on here??
+//     }
+// }
+
+// interface A {
+//     data: number,
+// }
+
+// interface B {
+//     other: string,
+// }
+
+// declare function abf(): A | B;
+// declare const eitherab: A | B;
+
+// function wrong<T extends boolean>(arg?: T): T extends true ? void : ReturnType<typeof abf> {
+//     if (arg) {
+//         return undefined;
+//     }
+//     return eitherab;
+// }
+
+
+// interface A {
+//     1: number;
+//     2: string;
+//     3: string;
+// }
+
+// function trivial<T extends 1 | 2 | 3>(x: T): A[T] {
+//     if (x !== 1) {
+//         return x === 2 ? "" : `${x}`;
+//     }
+//     else {
+//         return 0;
+//     }
+// }
+
+function conditional<T extends boolean>(x: T): T extends true ? 1 : 2 {
+    return x ? 1 : 2;
+}
+
+function contextualConditional<T extends "a" | "b">(x: T): T extends "a" ? "a" : number {
+    return x === "a" ? x : parseInt(x);
 }

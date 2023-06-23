@@ -127,45 +127,60 @@
 //     }
 // }
 
-function conditionalProducingIf<LeftIn, RightIn, LeftOut, RightOut, Arg extends LeftIn | RightIn>(
->conditionalProducingIf : <LeftIn, RightIn, LeftOut, RightOut, Arg extends LeftIn | RightIn>(arg: Arg, cond: (arg: LeftIn | RightIn) => arg is LeftIn, produceLeftOut: (arg: LeftIn) => LeftOut, produceRightOut: (arg: RightIn) => RightOut) => Arg extends LeftIn ? LeftOut : RightOut
+// function conditionalProducingIf<LeftIn, RightIn, LeftOut, RightOut, Arg extends LeftIn | RightIn>(
+//     arg: Arg,
+//     cond: (arg: LeftIn | RightIn) => arg is LeftIn,
+//     produceLeftOut: (arg: LeftIn) => LeftOut,
+//     produceRightOut: (arg: RightIn) => RightOut):
+//     Arg extends LeftIn ? LeftOut : RightOut
+// {
+//     type OK = Arg extends LeftIn ? LeftOut : RightOut;
+//     if (cond(arg)) {
+//         return produceLeftOut(arg);
+//     } else {
+//         return produceRightOut(arg as RightIn) as OK;
+//     }
+// }
 
-    arg: Arg,
->arg : Arg
+class Unnamed {
+>Unnamed : Unnamed
 
-    cond: (arg: LeftIn | RightIn) => arg is LeftIn,
->cond : (arg: LeftIn | RightIn) => arg is LeftIn
->arg : LeftIn | RightIn
+    root!: { name: string };
+>root : { name: string; }
+>name : string
 
-    produceLeftOut: (arg: LeftIn) => LeftOut,
->produceLeftOut : (arg: LeftIn) => LeftOut
->arg : LeftIn
+    name<T extends string>(name?: T): T extends string ? this : string {
+>name : <T extends string>(name?: T) => T extends string ? this : string
+>name : T | undefined
 
-    produceRightOut: (arg: RightIn) => RightOut):
->produceRightOut : (arg: RightIn) => RightOut
->arg : RightIn
+        if (typeof name === 'undefined') {
+>typeof name === 'undefined' : boolean
+>typeof name : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>name : T | undefined
+>'undefined' : "undefined"
 
-    Arg extends LeftIn ? LeftOut : RightOut
-{
-    type OK = Arg extends LeftIn ? LeftOut : RightOut;
->OK : Arg extends LeftIn ? LeftOut : RightOut
+            return this.root.name;
+>this.root.name : string
+>this.root : { name: string; }
+>this : this
+>root : { name: string; }
+>name : string
 
-    if (cond(arg)) {
->cond(arg) : boolean
->cond : (arg: LeftIn | RightIn) => arg is LeftIn
->arg : Arg
+            // return this; // Error; as it should
+        }
+        this.root.name = name;
+>this.root.name = name : T
+>this.root.name : string
+>this.root : { name: string; }
+>this : this
+>root : { name: string; }
+>name : string
+>name : T
 
-        return produceLeftOut(arg);
->produceLeftOut(arg) : LeftOut
->produceLeftOut : (arg: LeftIn) => LeftOut
->arg : Arg & LeftIn
+        name; // type `T < string` here
+>name : T
 
-    } else {
-        return produceRightOut(arg as RightIn) as OK;
->produceRightOut(arg as RightIn) as OK : Arg extends LeftIn ? LeftOut : RightOut
->produceRightOut(arg as RightIn) : RightOut
->produceRightOut : (arg: RightIn) => RightOut
->arg as RightIn : RightIn
->arg : Arg
+        return this; // What's going on here??
+>this : this
     }
 }

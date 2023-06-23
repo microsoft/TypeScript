@@ -65,6 +65,7 @@ import {
     Expression,
     ExpressionStatement,
     findAncestor,
+    FlowContainer,
     FlowFlags,
     FlowLabel,
     FlowNode,
@@ -137,6 +138,7 @@ import {
     IsBlockScopedContainer,
     isCallExpression,
     isClassStaticBlockDeclaration,
+    isConditionalExpression,
     isConditionalTypeNode,
     IsContainer,
     isDeclaration,
@@ -206,6 +208,7 @@ import {
     isPrototypeAccess,
     isPushOrUnshiftIdentifier,
     isRequireCall,
+    isReturnStatement,
     isShorthandPropertyAssignment,
     isSignedNumericLiteral,
     isSourceFile,
@@ -1946,6 +1949,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     }
 
     function bindConditionalExpressionFlow(node: ConditionalExpression) {
+        const isInReturnStatement = isConditionalExpressionInReturnStatement(node);
         const trueLabel = createBranchLabel();
         const falseLabel = createBranchLabel();
         const postExpressionLabel = createBranchLabel();
@@ -1953,12 +1957,33 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         currentFlow = finishFlowLabel(trueLabel);
         bind(node.questionToken);
         bind(node.whenTrue);
+        if (isInReturnStatement) {
+            (node.whenTrue as Node as FlowContainer).flowNode = currentFlow;
+        }
         addAntecedent(postExpressionLabel, currentFlow);
         currentFlow = finishFlowLabel(falseLabel);
         bind(node.colonToken);
         bind(node.whenFalse);
+        if (isInReturnStatement) {
+            (node.whenFalse as Node as FlowContainer).flowNode = currentFlow;
+        }
         addAntecedent(postExpressionLabel, currentFlow);
         currentFlow = finishFlowLabel(postExpressionLabel);
+    }
+
+    function isConditionalExpressionInReturnStatement(node: ConditionalExpression) {
+        const returnStmt = findAncestor(node.parent, isReturnStatement);
+        if (!returnStmt) {
+            return false;
+        }
+        let n: Node = node;
+        while (n !== returnStmt) {
+            if (!isConditionalExpression(n)) {
+                return false;
+            }
+            n = skipParentheses(n.parent);
+        }
+        return true;
     }
 
     function bindInitializedVariableFlow(node: VariableDeclaration | ArrayBindingElement) {

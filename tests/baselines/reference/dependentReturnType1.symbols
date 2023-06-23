@@ -127,66 +127,59 @@
 //     }
 // }
 
-function conditionalProducingIf<LeftIn, RightIn, LeftOut, RightOut, Arg extends LeftIn | RightIn>(
->conditionalProducingIf : Symbol(conditionalProducingIf, Decl(dependentReturnType1.ts, 0, 0))
->LeftIn : Symbol(LeftIn, Decl(dependentReturnType1.ts, 128, 32))
->RightIn : Symbol(RightIn, Decl(dependentReturnType1.ts, 128, 39))
->LeftOut : Symbol(LeftOut, Decl(dependentReturnType1.ts, 128, 48))
->RightOut : Symbol(RightOut, Decl(dependentReturnType1.ts, 128, 57))
->Arg : Symbol(Arg, Decl(dependentReturnType1.ts, 128, 67))
->LeftIn : Symbol(LeftIn, Decl(dependentReturnType1.ts, 128, 32))
->RightIn : Symbol(RightIn, Decl(dependentReturnType1.ts, 128, 39))
+// function conditionalProducingIf<LeftIn, RightIn, LeftOut, RightOut, Arg extends LeftIn | RightIn>(
+//     arg: Arg,
+//     cond: (arg: LeftIn | RightIn) => arg is LeftIn,
+//     produceLeftOut: (arg: LeftIn) => LeftOut,
+//     produceRightOut: (arg: RightIn) => RightOut):
+//     Arg extends LeftIn ? LeftOut : RightOut
+// {
+//     type OK = Arg extends LeftIn ? LeftOut : RightOut;
+//     if (cond(arg)) {
+//         return produceLeftOut(arg);
+//     } else {
+//         return produceRightOut(arg as RightIn) as OK;
+//     }
+// }
 
-    arg: Arg,
->arg : Symbol(arg, Decl(dependentReturnType1.ts, 128, 98))
->Arg : Symbol(Arg, Decl(dependentReturnType1.ts, 128, 67))
+class Unnamed {
+>Unnamed : Symbol(Unnamed, Decl(dependentReturnType1.ts, 0, 0))
 
-    cond: (arg: LeftIn | RightIn) => arg is LeftIn,
->cond : Symbol(cond, Decl(dependentReturnType1.ts, 129, 13))
->arg : Symbol(arg, Decl(dependentReturnType1.ts, 130, 11))
->LeftIn : Symbol(LeftIn, Decl(dependentReturnType1.ts, 128, 32))
->RightIn : Symbol(RightIn, Decl(dependentReturnType1.ts, 128, 39))
->arg : Symbol(arg, Decl(dependentReturnType1.ts, 130, 11))
->LeftIn : Symbol(LeftIn, Decl(dependentReturnType1.ts, 128, 32))
+    root!: { name: string };
+>root : Symbol(Unnamed.root, Decl(dependentReturnType1.ts, 143, 15))
+>name : Symbol(name, Decl(dependentReturnType1.ts, 144, 12))
 
-    produceLeftOut: (arg: LeftIn) => LeftOut,
->produceLeftOut : Symbol(produceLeftOut, Decl(dependentReturnType1.ts, 130, 51))
->arg : Symbol(arg, Decl(dependentReturnType1.ts, 131, 21))
->LeftIn : Symbol(LeftIn, Decl(dependentReturnType1.ts, 128, 32))
->LeftOut : Symbol(LeftOut, Decl(dependentReturnType1.ts, 128, 48))
+    name<T extends string>(name?: T): T extends string ? this : string {
+>name : Symbol(Unnamed.name, Decl(dependentReturnType1.ts, 144, 28))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 145, 9))
+>name : Symbol(name, Decl(dependentReturnType1.ts, 145, 27))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 145, 9))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 145, 9))
 
-    produceRightOut: (arg: RightIn) => RightOut):
->produceRightOut : Symbol(produceRightOut, Decl(dependentReturnType1.ts, 131, 45))
->arg : Symbol(arg, Decl(dependentReturnType1.ts, 132, 22))
->RightIn : Symbol(RightIn, Decl(dependentReturnType1.ts, 128, 39))
->RightOut : Symbol(RightOut, Decl(dependentReturnType1.ts, 128, 57))
+        if (typeof name === 'undefined') {
+>name : Symbol(name, Decl(dependentReturnType1.ts, 145, 27))
 
-    Arg extends LeftIn ? LeftOut : RightOut
->Arg : Symbol(Arg, Decl(dependentReturnType1.ts, 128, 67))
->LeftIn : Symbol(LeftIn, Decl(dependentReturnType1.ts, 128, 32))
->LeftOut : Symbol(LeftOut, Decl(dependentReturnType1.ts, 128, 48))
->RightOut : Symbol(RightOut, Decl(dependentReturnType1.ts, 128, 57))
-{
-    type OK = Arg extends LeftIn ? LeftOut : RightOut;
->OK : Symbol(OK, Decl(dependentReturnType1.ts, 134, 1))
->Arg : Symbol(Arg, Decl(dependentReturnType1.ts, 128, 67))
->LeftIn : Symbol(LeftIn, Decl(dependentReturnType1.ts, 128, 32))
->LeftOut : Symbol(LeftOut, Decl(dependentReturnType1.ts, 128, 48))
->RightOut : Symbol(RightOut, Decl(dependentReturnType1.ts, 128, 57))
+            return this.root.name;
+>this.root.name : Symbol(name, Decl(dependentReturnType1.ts, 144, 12))
+>this.root : Symbol(Unnamed.root, Decl(dependentReturnType1.ts, 143, 15))
+>this : Symbol(Unnamed, Decl(dependentReturnType1.ts, 0, 0))
+>root : Symbol(Unnamed.root, Decl(dependentReturnType1.ts, 143, 15))
+>name : Symbol(name, Decl(dependentReturnType1.ts, 144, 12))
 
-    if (cond(arg)) {
->cond : Symbol(cond, Decl(dependentReturnType1.ts, 129, 13))
->arg : Symbol(arg, Decl(dependentReturnType1.ts, 128, 98))
+            // return this; // Error; as it should
+        }
+        this.root.name = name;
+>this.root.name : Symbol(name, Decl(dependentReturnType1.ts, 144, 12))
+>this.root : Symbol(Unnamed.root, Decl(dependentReturnType1.ts, 143, 15))
+>this : Symbol(Unnamed, Decl(dependentReturnType1.ts, 0, 0))
+>root : Symbol(Unnamed.root, Decl(dependentReturnType1.ts, 143, 15))
+>name : Symbol(name, Decl(dependentReturnType1.ts, 144, 12))
+>name : Symbol(name, Decl(dependentReturnType1.ts, 145, 27))
 
-        return produceLeftOut(arg);
->produceLeftOut : Symbol(produceLeftOut, Decl(dependentReturnType1.ts, 130, 51))
->arg : Symbol(arg, Decl(dependentReturnType1.ts, 128, 98))
+        name; // type `T < string` here
+>name : Symbol(name, Decl(dependentReturnType1.ts, 145, 27))
 
-    } else {
-        return produceRightOut(arg as RightIn) as OK;
->produceRightOut : Symbol(produceRightOut, Decl(dependentReturnType1.ts, 131, 45))
->arg : Symbol(arg, Decl(dependentReturnType1.ts, 128, 98))
->RightIn : Symbol(RightIn, Decl(dependentReturnType1.ts, 128, 39))
->OK : Symbol(OK, Decl(dependentReturnType1.ts, 134, 1))
+        return this; // What's going on here??
+>this : Symbol(Unnamed, Decl(dependentReturnType1.ts, 0, 0))
     }
 }
