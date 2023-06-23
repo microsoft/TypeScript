@@ -22,7 +22,7 @@ describe("unittests:: evaluation:: esDecoratorsMetadata", () => {
             // see https://github.com/tc39/proposal-decorator-metadata
             it(`@meta (${targetName})`, () => {
                 const { output } = exec`
-                    export const output: string[] = [];
+                    export const output: unknown[] = [];
 
                     function meta(key: string, value: string) {
                         return (_, context) => {
@@ -45,7 +45,7 @@ describe("unittests:: evaluation:: esDecoratorsMetadata", () => {
             // see https://github.com/tc39/proposal-decorator-metadata#inheritance
             it(`inheritance (${targetName})`, () => {
                 const { output } = exec`
-                    export const output: string[] = [];
+                    export const output: unknown[] = [];
 
                     function meta(key: string, value: string) {
                         return (_, context) => {
@@ -81,7 +81,7 @@ describe("unittests:: evaluation:: esDecoratorsMetadata", () => {
             // see https://github.com/tc39/proposal-decorator-metadata#inheritance
             it(`inheritance append(${targetName})`, () => {
                 const { output } = exec`
-                    export const output: string[] = [];
+                    export const output: unknown[] = [];
 
                     function appendMeta(key: string, value: string) {
                         return (_, context) => {
@@ -108,7 +108,7 @@ describe("unittests:: evaluation:: esDecoratorsMetadata", () => {
             // see https://github.com/tc39/proposal-decorator-metadata#private-metadata
             it(`private metadata (${targetName})`, () => {
                 const { output } = exec`
-                    export const output: string[] = [];
+                    export const output: unknown[] = [];
 
                     const PRIVATE_METADATA = new WeakMap();
                     function meta(key: string, value: string) {
