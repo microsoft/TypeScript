@@ -2839,6 +2839,12 @@ export function getContainingFunctionOrClassStaticBlock(node: Node): SignatureDe
 }
 
 /** @internal */
+export function getContainingClassExcludingClassDecorators(node: Node): ClassLikeDeclaration | undefined {
+    const decorator = findAncestor(node.parent, n => isClassLike(n) ? "quit" : isDecorator(n));
+    return decorator && isClassLike(decorator.parent) ? getContainingClass(decorator.parent) : getContainingClass(decorator ?? node);
+}
+
+/** @internal */
 export type ThisContainer =
     | FunctionDeclaration
     | FunctionExpression

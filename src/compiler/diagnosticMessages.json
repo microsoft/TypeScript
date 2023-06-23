@@ -315,6 +315,10 @@
         "category": "Error",
         "code": 1110
     },
+    "Private field '{0}' must be declared in an enclosing class.": {
+        "category": "Error",
+        "code": 1111
+    },
     "A 'default' clause cannot appear more than once in a 'switch' statement.": {
         "category": "Error",
         "code": 1113
