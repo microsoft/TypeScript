@@ -32,23 +32,24 @@ let C = (() => {
     };
 })();
 let D = (() => {
-    var _field1;
+    var _D_field1;
     let _classDecorators = [dec];
     let _classDescriptor;
     let _classExtraInitializers = [];
     let _classThis;
     var D = class {
+        static { _classThis = this; }
         static { __setFunctionName(this, "D"); }
         static {
-            __esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name }, null, _classExtraInitializers);
+            __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name }, null, _classExtraInitializers);
             D = _classThis = _classDescriptor.value;
         }
         static {
-            _field1 = { value: 0 };
+            _D_field1 = { value: 0 };
         }
         static {
-            __classPrivateFieldGet(_classThis, _classThis, "f", _field1);
-            __classPrivateFieldSet(_classThis, _classThis, 1, "f", _field1);
+            __classPrivateFieldGet(_classThis, _classThis, "f", _D_field1);
+            __classPrivateFieldSet(_classThis, _classThis, 1, "f", _D_field1);
         }
         static {
             __runInitializers(_classThis, _classExtraInitializers);

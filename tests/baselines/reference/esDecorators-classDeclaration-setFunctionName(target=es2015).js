@@ -41,7 +41,7 @@ let C = (() => {
 })();
 export {};
 //// [b.js]
-export let C = (() => {
+let C = (() => {
     let _classDecorators = [dec];
     let _classDescriptor;
     let _classExtraInitializers = [];
@@ -56,6 +56,7 @@ export let C = (() => {
     })();
     return C = _classThis;
 })();
+export { C };
 //// [c.js]
 export default (() => {
     let _classDecorators = [dec];
@@ -64,8 +65,8 @@ export default (() => {
     let _classThis;
     var default_1 = _classThis = class {
     };
+    __setFunctionName(_classThis, "default");
     (() => {
-        __setFunctionName(_classThis, "default");
         __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name }, null, _classExtraInitializers);
         default_1 = _classThis = _classDescriptor.value;
         __runInitializers(_classThis, _classExtraInitializers);

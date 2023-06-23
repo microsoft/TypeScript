@@ -22,8 +22,9 @@ exports.C = (() => {
     let _classExtraInitializers = [];
     let _classThis;
     var C = class {
+        static { _classThis = this; }
         static {
-            tslib_1.__esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name }, null, _classExtraInitializers);
+            tslib_1.__esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name }, null, _classExtraInitializers);
             C = _classThis = _classDescriptor.value;
             tslib_1.__runInitializers(_classThis, _classExtraInitializers);
         }

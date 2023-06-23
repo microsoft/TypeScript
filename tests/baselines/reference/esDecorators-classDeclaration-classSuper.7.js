@@ -71,31 +71,31 @@ function foo(method, _context) {
 new B();
 // https://github.com/microsoft/TypeScript/issues/53448
 let C = (() => {
-    let _instanceExtraInitializers_1 = [];
+    let _instanceExtraInitializers = [];
     let _get_val_decorators;
     return class C {
         static {
             _get_val_decorators = [foo];
-            __esDecorate(this, null, _get_val_decorators, { kind: "getter", name: "val", static: false, private: false, access: { has: obj => "val" in obj, get: obj => obj.val } }, null, _instanceExtraInitializers_1);
+            __esDecorate(this, null, _get_val_decorators, { kind: "getter", name: "val", static: false, private: false, access: { has: obj => "val" in obj, get: obj => obj.val } }, null, _instanceExtraInitializers);
         }
         constructor() {
-            __runInitializers(this, _instanceExtraInitializers_1);
+            __runInitializers(this, _instanceExtraInitializers);
             this.val;
         }
         get val() { return 3; }
     };
 })();
 let D = (() => {
-    let _instanceExtraInitializers_2 = [];
+    let _instanceExtraInitializers = [];
     let _get_val_decorators;
     return class D extends A {
         static {
             _get_val_decorators = [foo];
-            __esDecorate(this, null, _get_val_decorators, { kind: "getter", name: "val", static: false, private: false, access: { has: obj => "val" in obj, get: obj => obj.val } }, null, _instanceExtraInitializers_2);
+            __esDecorate(this, null, _get_val_decorators, { kind: "getter", name: "val", static: false, private: false, access: { has: obj => "val" in obj, get: obj => obj.val } }, null, _instanceExtraInitializers);
         }
         constructor() {
             super();
-            __runInitializers(this, _instanceExtraInitializers_2);
+            __runInitializers(this, _instanceExtraInitializers);
             this.val;
         }
         get val() { return 3; }

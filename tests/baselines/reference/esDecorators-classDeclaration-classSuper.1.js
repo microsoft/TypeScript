@@ -32,8 +32,9 @@ let C = (() => {
     let _classThis;
     let _classSuper = Base;
     var C = class extends _classSuper {
+        static { _classThis = this; }
         static {
-            __esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name }, null, _classExtraInitializers);
+            __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name }, null, _classExtraInitializers);
             C = _classThis = _classDescriptor.value;
         }
         static {
