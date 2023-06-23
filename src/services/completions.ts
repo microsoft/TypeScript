@@ -5523,10 +5523,12 @@ function getVariableOrParameterDeclaration(contextToken: Node | undefined, locat
         isFunctionBlock(node) || isArrowFunctionBody(node) || isBindingPattern(node)
             ? "quit"
             : ((isParameter(node) || isTypeParameterDeclaration(node)) && !isIndexSignatureDeclaration(node.parent)));
-    const possiblyVariableDeclaration = findAncestor(location, (node) => {
-        return isFunctionBlock(node) || isArrowFunctionBody(node) || isBindingPattern(node) ?
-            "quit" : isVariableDeclaration(node);
-    });
+
+    const possiblyVariableDeclaration = findAncestor(location, node =>
+        isFunctionBlock(node) || isArrowFunctionBody(node) || isBindingPattern(node)
+            ? "quit"
+            : isVariableDeclaration(node));
+
     return (possiblyParameterDeclaration || possiblyVariableDeclaration) as ParameterDeclaration | TypeParameterDeclaration | VariableDeclaration | undefined;
 }
 
