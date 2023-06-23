@@ -22,10 +22,6 @@ type DecoratorMetadataObject = Record<PropertyKey, unknown> & object;
 type DecoratorMetadata =
     typeof globalThis extends { Symbol: { readonly metadata: symbol } } ? DecoratorMetadataObject : DecoratorMetadataObject | undefined;
 
-interface Function {
-    [Symbol.metadata]: DecoratorMetadata | null;
-}
-
 /**
  * Context provided to a class decorator.
  * @template Class The type of the decorated class associated with this context.
