@@ -31379,15 +31379,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     // Lookup the private identifier lexically.
-    function lookupSymbolForPrivateIdentifierDeclaration(propName: __String, location: Node, containingClass = getContainingClassExcludingClassDecorators(location)): Symbol | undefined {
-        while (containingClass) {
+    function lookupSymbolForPrivateIdentifierDeclaration(propName: __String, location: Node): Symbol | undefined {
+        for (let containingClass = getContainingClassExcludingClassDecorators(location); !!containingClass; containingClass = getContainingClass(containingClass)) {
             const { symbol } = containingClass;
             const name = getSymbolNameForPrivateIdentifier(symbol, propName);
             const prop = (symbol.members && symbol.members.get(name)) || (symbol.exports && symbol.exports.get(name));
             if (prop) {
                 return prop;
             }
-            containingClass = getContainingClass(containingClass);
         }
     }
 
@@ -31517,8 +31516,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
 
-            const containingClass = getContainingClassExcludingClassDecorators(right);
-            const lexicallyScopedSymbol = containingClass && lookupSymbolForPrivateIdentifierDeclaration(right.escapedText, right, containingClass);
+            const lexicallyScopedSymbol = lookupSymbolForPrivateIdentifierDeclaration(right.escapedText, right);
             if (assignmentKind && lexicallyScopedSymbol && lexicallyScopedSymbol.valueDeclaration && isMethodDeclaration(lexicallyScopedSymbol.valueDeclaration)) {
                 grammarErrorOnNode(right, Diagnostics.Cannot_assign_to_private_method_0_Private_methods_are_not_writable, idText(right));
             }
@@ -31526,7 +31524,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (lexicallyScopedSymbol) {
                     return isErrorType(apparentType) ? errorType : apparentType;
                 }
-                if (containingClass === undefined) {
+                if (getContainingClassExcludingClassDecorators(right) === undefined) {
                     grammarErrorOnNode(right, Diagnostics.Private_identifiers_are_not_allowed_outside_class_bodies);
                     return anyType;
                 }
@@ -31538,6 +31536,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (checkPrivateIdentifierPropertyAccess(leftType, right, lexicallyScopedSymbol)) {
                     return errorType;
                 }
+                const containingClass = getContainingClassExcludingClassDecorators(right);
                 if (containingClass && isPlainJsFile(getSourceFileOfNode(containingClass), compilerOptions.checkJs)) {
                     grammarErrorOnNode(right, Diagnostics.Private_field_0_must_be_declared_in_an_enclosing_class, idText(right));
                 }
