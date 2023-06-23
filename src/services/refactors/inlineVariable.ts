@@ -20,7 +20,7 @@ import {
     isFunctionLike,
     isIdentifier,
     isInitializedVariable,
-    isLiteralTypeLikeExpression,
+    isNumericLiteral,
     isObjectLiteralExpression,
     isPropertyAccessExpression,
     isTypeQueryNode,
@@ -235,9 +235,9 @@ function getReplacementExpression(reference: Node, replacement: Expression): Exp
         return factory.createParenthesizedExpression(replacement);
     }
 
-    // Property access of literals need parentheses.
+    // Property access of numeric literals and objects need parentheses.
     // E.g.: const x = 1; x.toString(); -> (1).toString();
-    if (isPropertyAccessExpression(parent) && (isLiteralTypeLikeExpression(replacement) || isObjectLiteralExpression(replacement))) {
+    if (isPropertyAccessExpression(parent) && (isNumericLiteral(replacement) || isObjectLiteralExpression(replacement))) {
         return factory.createParenthesizedExpression(replacement);
     }
 
