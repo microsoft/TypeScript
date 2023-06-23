@@ -22351,8 +22351,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // from the target union, across all members
             const properties = getPropertiesOfType(target);
             const numericNamesOnly = isTupleType(source) && isTupleType(target);
-            for (const targetProp of excludeProperties(properties, excludedProperties)) {
+            for (let targetProp of excludeProperties(properties, excludedProperties)) {
                 const name = targetProp.escapedName;
+                if (target.flags & TypeFlags.Intersection) {
+                    targetProp = getPropertyOfUnionOrIntersectionType(target as IntersectionType, name, /*skipObjectFunctionPropertyAugment*/ true) || targetProp;
+                }
                 if (!(targetProp.flags & SymbolFlags.Prototype) && (!numericNamesOnly || isNumericLiteralName(name) || name === "length") && (!optionalsOnly || targetProp.flags & SymbolFlags.Optional)) {
                     const sourceProp = getPropertyOfType(source, name);
                     if (sourceProp && sourceProp !== targetProp) {
