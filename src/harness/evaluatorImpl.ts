@@ -20,14 +20,15 @@ for (const key of Object.getOwnPropertyNames(Symbol)) {
 const symbolNames = [
     "asyncIterator",
     "dispose",
-    "asyncDispose"
+    "asyncDispose",
+    "metadata",
 ];
 
 for (const symbolName of symbolNames) {
     if (!ts.hasProperty(FakeSymbol, symbolName)) {
         Object.defineProperty(FakeSymbol, symbolName, {
             value: Symbol.for(`Symbol.${symbolName}`),
-            configurable: true
+            configurable: true,
         });
     }
 }

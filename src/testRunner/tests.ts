@@ -37,6 +37,7 @@ import "./unittests/evaluation/awaiter";
 import "./unittests/evaluation/destructuring";
 import "./unittests/evaluation/externalModules";
 import "./unittests/evaluation/esDecorators";
+import "./unittests/evaluation/esDecoratorsMetadata";
 import "./unittests/evaluation/forAwaitOf";
 import "./unittests/evaluation/forOf";
 import "./unittests/evaluation/generator";

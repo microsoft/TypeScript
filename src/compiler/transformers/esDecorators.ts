@@ -228,6 +228,7 @@ interface ClassInfo {
     classExtraInitializersName?: Identifier; // used in step 13
     classThis?: Identifier; // `_classThis`, if needed.
     classSuper?: Identifier; // `_classSuper`, if needed.
+    metadataReference: Identifier;
 
     memberInfos?: Map<ClassElement, MemberInfo>; // used in step 4.a, 12, and construction
 
@@ -563,6 +564,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
     }
 
     function createClassInfo(node: ClassLikeDeclaration): ClassInfo {
+        const metadataReference = factory.createUniqueName("_metadata", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel);
         let instanceExtraInitializersName: Identifier | undefined;
         let staticExtraInitializersName: Identifier | undefined;
         let hasStaticInitializers = false;
@@ -611,24 +613,13 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
 
         return {
             class: node,
+            metadataReference,
             instanceExtraInitializersName,
             staticExtraInitializersName,
             hasStaticInitializers,
             hasNonAmbientInstanceFields,
             hasStaticPrivateClassElements,
         };
-    }
-
-    function containsLexicalSuperInStaticInitializer(node: ClassLikeDeclaration) {
-        for (const member of node.members) {
-            if (isClassStaticBlockDeclaration(member) ||
-                isPropertyDeclaration(member) && hasStaticModifier(member)) {
-                if (member.transformFlags & TransformFlags.ContainsLexicalSuper) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     function transformClassLike(node: ClassLikeDeclaration) {
@@ -681,31 +672,25 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         }
 
         // Rewrite `super` in static initializers so that we can use the correct `this`.
-        if (classDecorators && containsLexicalSuperInStaticInitializer(node)) {
-            const extendsClause = getHeritageClause(node.heritageClauses, SyntaxKind.ExtendsKeyword);
-            const extendsElement = extendsClause && firstOrUndefined(extendsClause.types);
-            const extendsExpression = extendsElement && visitNode(extendsElement.expression, visitor, isExpression);
-            if (extendsExpression) {
-                classInfo.classSuper = factory.createUniqueName("_classSuper", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel);
+        const extendsClause = getHeritageClause(node.heritageClauses, SyntaxKind.ExtendsKeyword);
+        const extendsElement = extendsClause && firstOrUndefined(extendsClause.types);
+        const extendsExpression = extendsElement && visitNode(extendsElement.expression, visitor, isExpression);
+        if (extendsExpression) {
+            classInfo.classSuper = factory.createUniqueName("_classSuper", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel);
 
                 // Ensure we do not give the class or function an assigned name due to the variable by prefixing it
                 // with `0, `.
-                const unwrapped = skipOuterExpressions(extendsExpression);
-                const safeExtendsExpression =
-                    isClassExpression(unwrapped) && !unwrapped.name ||
-                    isFunctionExpression(unwrapped) && !unwrapped.name ||
-                    isArrowFunction(unwrapped) ?
-                        factory.createComma(factory.createNumericLiteral(0), extendsExpression) :
-                        extendsExpression;
-                classDefinitionStatements.push(createLet(classInfo.classSuper, safeExtendsExpression));
-                const updatedExtendsElement = factory.updateExpressionWithTypeArguments(extendsElement, classInfo.classSuper, /*typeArguments*/ undefined);
-                const updatedExtendsClause = factory.updateHeritageClause(extendsClause, [updatedExtendsElement]);
-                heritageClauses = factory.createNodeArray([updatedExtendsClause]);
-            }
-        }
-        else {
-            // 2. ClassHeritage clause is evaluated outside of the private name scope of the class.
-            heritageClauses = visitNodes(node.heritageClauses, visitor, isHeritageClause);
+            const unwrapped = skipOuterExpressions(extendsExpression);
+            const safeExtendsExpression =
+                isClassExpression(unwrapped) && !unwrapped.name ||
+                isFunctionExpression(unwrapped) && !unwrapped.name ||
+                isArrowFunction(unwrapped) ?
+                    factory.createComma(factory.createNumericLiteral(0), extendsExpression) :
+                    extendsExpression;
+            classDefinitionStatements.push(createLet(classInfo.classSuper, safeExtendsExpression));
+            const updatedExtendsElement = factory.updateExpressionWithTypeArguments(extendsElement, classInfo.classSuper, /*typeArguments*/ undefined);
+            const updatedExtendsClause = factory.updateHeritageClause(extendsClause, [updatedExtendsElement]);
+            heritageClauses = factory.createNodeArray([updatedExtendsClause]);
         }
 
         const renamedClassThis = classInfo.classThis ?? factory.createThis();
@@ -724,8 +709,10 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         // - The second pass visits the constructor to add instance initializers.
         //
         // NOTE: If there are no constructors, but there are instance initializers, a synthetic constructor is added.
-
         enterClass(classInfo);
+
+        leadingBlockStatements = append(leadingBlockStatements, createMetadata(classInfo.metadataReference, classInfo.classSuper));
+
         let members = visitNodes(node.members, classElementVisitor, isClassElement);
         if (pendingExpressions) {
             let outerThis: Identifier | undefined;
@@ -840,7 +827,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
             leadingBlockStatements ??= [];
 
             // produces:
-            //  __esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name }, _classExtraInitializers);
+            //  __esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name, metadata }, _classExtraInitializers);
             const valueProperty = factory.createPropertyAssignment("value", renamedClassThis);
             const classDescriptor = factory.createObjectLiteralExpression([valueProperty]);
             const classDescriptorAssignment = factory.createAssignment(classInfo.classDescriptorName, classDescriptor);
@@ -849,7 +836,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
                 factory.createNull(),
                 classDescriptorAssignment,
                 classInfo.classDecoratorsName,
-                { kind: "class", name: classNameReference },
+                { kind: "class", name: classNameReference, metadata: classInfo.metadataReference },
                 factory.createNull(),
                 classInfo.classExtraInitializersName
             );
@@ -864,6 +851,9 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
             const classReferenceAssignment = factory.createAssignment(classReference, classThisAssignment);
             leadingBlockStatements.push(factory.createExpressionStatement(classReferenceAssignment));
         }
+
+        // if (metadata) Object.defineProperty(C, Symbol.metadata, { configurable: true, writable: true, value: metadata });
+        leadingBlockStatements.push(createSymbolMetadata(renamedClassThis, classInfo.metadataReference));
 
         // 11. Static extra initializers are evaluated
         if (classInfo.staticExtraInitializersName) {
@@ -1283,6 +1273,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
                     // 3. If _kind_ is ~field~, ~accessor~, or ~setter~, then ...
                     set: isPropertyDeclaration(member) || isSetAccessorDeclaration(member)
                 },
+                metadata: classInfo.metadataReference,
             };
 
             const extraInitializers = isStatic(member) ?
@@ -2369,6 +2360,51 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
                     )
                 )
             ])
+        );
+    }
+    function createMetadata(name: Identifier, classSuper: Identifier | undefined) {
+        const varDecl = factory.createVariableDeclaration(
+            name,
+            /*exclamationToken*/ undefined,
+            /*type*/ undefined,
+            factory.createConditionalExpression(
+                factory.createLogicalAnd(
+                    factory.createTypeCheck(factory.createIdentifier("Symbol"), "function"),
+                    factory.createPropertyAccessExpression(factory.createIdentifier("Symbol"), "metadata"),
+                ),
+                factory.createToken(SyntaxKind.QuestionToken),
+                factory.createCallExpression(
+                    factory.createPropertyAccessExpression(factory.createIdentifier("Object"), "create"),
+                    /*typeArguments*/ undefined,
+                    [classSuper ? createSymbolMetadataReference(classSuper) : factory.createNull()]
+                ),
+                factory.createToken(SyntaxKind.ColonToken),
+                factory.createVoidZero(),
+            ),
+        );
+        return factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([varDecl], NodeFlags.Const));
+    }
+
+    function createSymbolMetadata(target: Identifier | ThisExpression, value: Identifier) {
+        const defineProperty = factory.createObjectDefinePropertyCall(
+            target,
+            factory.createPropertyAccessExpression(factory.createIdentifier("Symbol"), "metadata"),
+            factory.createPropertyDescriptor({ configurable: true, writable: true, enumerable: true, value }, /*singleLine*/ true)
+        );
+        return setEmitFlags(
+            factory.createIfStatement(value, factory.createExpressionStatement(defineProperty)),
+            EmitFlags.SingleLine,
+        );
+    }
+
+    function createSymbolMetadataReference(classSuper: Identifier) {
+        return factory.createBinaryExpression(
+            factory.createElementAccessExpression(
+                classSuper,
+                factory.createPropertyAccessExpression(factory.createIdentifier("Symbol"), "metadata"),
+            ),
+            SyntaxKind.QuestionQuestionToken,
+            factory.createNull()
         );
     }
 }
