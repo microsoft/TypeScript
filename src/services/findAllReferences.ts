@@ -621,7 +621,7 @@ function definitionToReferencedSymbolDefinitionInfo(def: Definition, checker: Ty
                 const { node } = def;
                 const symbol = checker.getSymbolAtLocation(node);
                 const displayParts = symbol && SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(
-                    checker, symbol, node.getSourceFile(), getContainerNode(node), node, /*type*/ undefined).displayParts || [textPart("this")];
+                    checker, symbol, node.getSourceFile(), getContainerNode(node), node).displayParts || [textPart("this")];
                 return { ...getFileAndTextSpanFromNode(node), name: "this", kind: ScriptElementKind.variableElement, displayParts };
             }
             case DefinitionKind.String: {
@@ -672,7 +672,7 @@ function getDefinitionKindAndDisplayParts(symbol: Symbol, checker: TypeChecker, 
     const meaning = Core.getIntersectingMeaningFromDeclarations(node, symbol);
     const enclosingDeclaration = symbol.declarations && firstOrUndefined(symbol.declarations) || node;
     const { displayParts, symbolKind } =
-        SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(checker, symbol, enclosingDeclaration.getSourceFile(), enclosingDeclaration, enclosingDeclaration, /*type*/ undefined, meaning);
+        SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(checker, symbol, enclosingDeclaration.getSourceFile(), enclosingDeclaration, enclosingDeclaration, meaning);
     return { displayParts, kind: symbolKind };
 }
 
