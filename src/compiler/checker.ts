@@ -15938,7 +15938,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return getTupleTargetType(elementFlags, readonly, map((node as TupleTypeNode).elements, memberIfLabeledElementDeclaration));
     }
 
-    function memberIfLabeledElementDeclaration(member: Node): NamedTupleMember | ParameterDeclaration | undefined{
+    function memberIfLabeledElementDeclaration(member: Node): NamedTupleMember | ParameterDeclaration | undefined {
         return isNamedTupleMember(member) || isParameter(member) ? member : undefined;
     }
 
