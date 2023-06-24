@@ -2775,7 +2775,7 @@ function createSimpleDetails(name: string, kind: ScriptElementKind, kind2: Symbo
 export function createCompletionDetailsForSymbol(symbol: Symbol, name: string, checker: TypeChecker, sourceFile: SourceFile, location: Node, cancellationToken: CancellationToken, codeActions?: CodeAction[], sourceDisplay?: SymbolDisplayPart[]): CompletionEntryDetails {
     const { displayParts, documentation, symbolKind, tags } =
         checker.runWithCancellationToken(cancellationToken, checker =>
-            SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(checker, symbol, sourceFile, location, location, SemanticMeaning.All)
+            SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(checker, symbol, sourceFile, location, location, /*type*/ undefined, SemanticMeaning.All)
         );
     return createCompletionDetails(name, SymbolDisplay.getSymbolModifiers(checker, symbol), symbolKind, displayParts, documentation, tags, codeActions, sourceDisplay);
 }

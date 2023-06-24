@@ -249,7 +249,7 @@ export interface SymbolDisplayPartsDocumentationAndSymbolKind {
 // TODO(drosen): Currently completion entry details passes the SemanticMeaning.All instead of using semanticMeaning of location
 /** @internal */
 export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: TypeChecker, symbol: Symbol, sourceFile: SourceFile, enclosingDeclaration: Node | undefined,
-    location: Node, semanticMeaning = getMeaningFromLocation(location), alias?: Symbol): SymbolDisplayPartsDocumentationAndSymbolKind {
+    location: Node, type: Type | undefined, semanticMeaning = getMeaningFromLocation(location), alias?: Symbol): SymbolDisplayPartsDocumentationAndSymbolKind {
     const displayParts: SymbolDisplayPart[] = [];
     let documentation: SymbolDisplayPart[] = [];
     let tags: JSDocTagInfo[] = [];
@@ -257,7 +257,6 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
     let symbolKind = semanticMeaning & SemanticMeaning.Value ? getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker, symbol, location) : ScriptElementKind.unknown;
     let hasAddedSymbolInfo = false;
     const isThisExpression = location.kind === SyntaxKind.ThisKeyword && isInExpressionContext(location) || isThisInTypeQuery(location);
-    let type: Type | undefined;
     let documentationFromAlias: SymbolDisplayPart[] | undefined;
     let tagsFromAlias: JSDocTagInfo[] | undefined;
     let hasMultipleSignatures = false;
@@ -292,7 +291,7 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
         }
 
         let signature: Signature | undefined;
-        type = isThisExpression ? typeChecker.getTypeAtLocation(location) : typeChecker.getTypeOfSymbolAtLocation(symbol, location);
+        type ??= isThisExpression ? typeChecker.getTypeAtLocation(location) : typeChecker.getTypeOfSymbolAtLocation(symbol, location);
 
         if (location.parent && location.parent.kind === SyntaxKind.PropertyAccessExpression) {
             const right = (location.parent as PropertyAccessExpression).name;
@@ -551,6 +550,7 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
                         getSourceFileOfNode(resolvedNode),
                         resolvedNode,
                         declarationName,
+                        type,
                         semanticMeaning,
                         shouldUseAliasName ? symbol : resolvedSymbol);
                     displayParts.push(...resolvedInfo.displayParts);
