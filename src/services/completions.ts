@@ -164,6 +164,7 @@ import {
     isFunctionLikeDeclaration,
     isFunctionLikeKind,
     isFunctionTypeNode,
+    isGetAccessorDeclaration,
     isIdentifier,
     isIdentifierText,
     isImportableFile,
@@ -221,6 +222,7 @@ import {
     isPropertyDeclaration,
     isPropertyNameLiteral,
     isRegularExpressionLiteral,
+    isSetAccessorDeclaration,
     isShorthandPropertyAssignment,
     isSingleOrDoubleQuote,
     isSourceFile,
@@ -1686,13 +1688,28 @@ function createCompletionEntry(
         hasAction = true;
     }
 
-    if (completionKind === CompletionKind.ObjectPropertyDeclaration && contextToken &&
-        findPrecedingToken(contextToken.pos, sourceFile, contextToken)?.kind !== SyntaxKind.CommaToken &&
-        (isMethodDeclaration(contextToken.parent.parent) || isSpreadAssignment(contextToken.parent) || findAncestor(contextToken.parent, (node: Node) => isPropertyAssignment(node))?.getLastToken() === contextToken ||
-        isShorthandPropertyAssignment(contextToken.parent) && getLineAndCharacterOfPosition(contextToken.getSourceFile(), contextToken.getEnd()).line !== getLineAndCharacterOfPosition(contextToken.getSourceFile(), position).line)) {
+    // Provide object member completions when missing commas, and insert missing commas.
+    // For example:
+    //
+    //    interface I {
+    //        a: string;
+    //        b: number
+    //     }
+    //
+    //     const cc: I = { a: "red" | }
+    //
+    // Completion should add a comma after "red" and provide completions for b
+    if (completionKind === CompletionKind.ObjectPropertyDeclaration && contextToken && findPrecedingToken(contextToken.pos, sourceFile, contextToken)?.kind !== SyntaxKind.CommaToken) {
+        if (isMethodDeclaration(contextToken.parent.parent) ||
+            isGetAccessorDeclaration(contextToken.parent.parent) ||
+            isSetAccessorDeclaration(contextToken.parent.parent) ||
+            isSpreadAssignment(contextToken.parent) ||
+            findAncestor(contextToken.parent, isPropertyAssignment)?.getLastToken() === contextToken ||
+            isShorthandPropertyAssignment(contextToken.parent) && getLineAndCharacterOfPosition(sourceFile, contextToken.getEnd()).line !== getLineAndCharacterOfPosition(sourceFile, position).line) {
 
-        source = CompletionSource.ObjectLiteralMemberWithComma;
-        hasAction = true;
+            source = CompletionSource.ObjectLiteralMemberWithComma;
+            hasAction = true;
+        }
     }
 
     if (preferences.includeCompletionsWithClassMemberSnippets &&
@@ -2876,7 +2893,7 @@ function getCompletionEntryCodeActionsAndSourceDisplay(
     if (source === CompletionSource.ObjectLiteralMemberWithComma && contextToken) {
         const changes = textChanges.ChangeTracker.with(
             { host, formatContext, preferences },
-            tracker => tracker.insertText(sourceFile, contextToken.end,","));
+            tracker => tracker.insertText(sourceFile, contextToken.end, ","));
         if (changes) {
             return {
                 sourceDisplay: undefined,
@@ -4184,7 +4201,7 @@ function getCompletionData(
      */
     function tryGetObjectLikeCompletionSymbols(): GlobalsSearch | undefined {
         const symbolsStartIndex = symbols.length;
-        const objectLikeContainer = tryGetObjectLikeCompletionContainer(contextToken, position);
+        const objectLikeContainer = tryGetObjectLikeCompletionContainer(contextToken, position, sourceFile);
         if (!objectLikeContainer) return GlobalsSearch.Continue;
 
         // We're looking up possible property names from contextual/inferred/declared type.
@@ -4912,7 +4929,7 @@ function getCompletionData(
  * Returns the immediate owning object literal or binding pattern of a context token,
  * on the condition that one exists and that the context implies completion should be given.
  */
-function tryGetObjectLikeCompletionContainer(contextToken: Node | undefined, position: number): ObjectLiteralExpression | ObjectBindingPattern | undefined {
+function tryGetObjectLikeCompletionContainer(contextToken: Node | undefined, position: number, sourceFile: SourceFile): ObjectLiteralExpression | ObjectBindingPattern | undefined {
     if (contextToken) {
         const { parent } = contextToken;
         switch (contextToken.kind) {
@@ -4933,21 +4950,21 @@ function tryGetObjectLikeCompletionContainer(contextToken: Node | undefined, pos
                 else {
                     if (isObjectLiteralExpression(contextToken.parent.parent) &&
                         (isSpreadAssignment(contextToken.parent) || isShorthandPropertyAssignment(contextToken.parent) &&
-                        (getLineAndCharacterOfPosition(contextToken.getSourceFile(), contextToken.getEnd()).line !== getLineAndCharacterOfPosition(contextToken.getSourceFile(), position).line))) {
+                        (getLineAndCharacterOfPosition(sourceFile, contextToken.getEnd()).line !== getLineAndCharacterOfPosition(sourceFile, position).line))) {
                         return contextToken.parent.parent;
                     }
-                    const ancestorNode = findAncestor(parent, (node: Node) => isPropertyAssignment(node));
-                    if (ancestorNode && ancestorNode.getLastToken() === contextToken && isObjectLiteralExpression(ancestorNode.parent)) {
+                    const ancestorNode = findAncestor(parent, isPropertyAssignment);
+                    if (ancestorNode?.getLastToken() === contextToken && isObjectLiteralExpression(ancestorNode.parent)) {
                         return ancestorNode.parent;
                     }
                 }
                 break;
             default:
-                if (parent.parent && parent.parent.parent && isMethodDeclaration(parent.parent) && isObjectLiteralExpression(parent.parent.parent)) {
+                if (parent.parent?.parent && (isMethodDeclaration(parent.parent) || isGetAccessorDeclaration(parent.parent) || isSetAccessorDeclaration(parent.parent)) && isObjectLiteralExpression(parent.parent.parent)) {
                     return parent.parent.parent;
                 }
-                const ancestorNode = findAncestor(parent, (node: Node) => isPropertyAssignment(node));
-                if (contextToken.kind !== SyntaxKind.ColonToken && ancestorNode && ancestorNode.getLastToken() === contextToken &&
+                const ancestorNode = findAncestor(parent, isPropertyAssignment);
+                if (contextToken.kind !== SyntaxKind.ColonToken && ancestorNode?.getLastToken() === contextToken &&
                     isObjectLiteralExpression(ancestorNode.parent)) {
                     return ancestorNode.parent;
                 }
