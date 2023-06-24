@@ -1,0 +1,18 @@
+typeAliasDeclareKeywordNewlines.ts(4,1): error TS1142: Line break not permitted here.
+
+
+==== typeAliasDeclareKeywordNewlines.ts (1 errors) ====
+    var declare, type, T;
+    
+    declare type /*unexpected newline*/
+    T1 = null;
+    ~~
+!!! error TS1142: Line break not permitted here.
+    
+    declare /*ASI*/
+    type /*ASI*/
+    T = null;
+    
+    declare /*ASI*/
+    type T2 = null;
+    
