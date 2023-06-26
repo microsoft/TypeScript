@@ -93,8 +93,8 @@ jobs:
               "src/lib/webworker.iterable.generated.d.ts"; then
             MESSAGE="It looks like you've sent a pull request to update some generated declaration files related to the DOM."
             MESSAGE+=" These files aren't meant to be edited by hand, as they are synchronized with files in"
-            MESSAGE+=" [the TypeScript-DOM-lib-generator repository](https://github.com/microsoft/TypeScript-DOM-lib-generator).
-            MESSAGE+=" You can [read more here](https://github.com/microsoft/TypeScript/blob/main/CONTRIBUTING.md#contributing-libdts-fixes).
+            MESSAGE+=" [the TypeScript-DOM-lib-generator repository](https://github.com/microsoft/TypeScript-DOM-lib-generator)."
+            MESSAGE+=" You can [read more here](https://github.com/microsoft/TypeScript/blob/main/CONTRIBUTING.md#contributing-libdts-fixes)."
             MESSAGE+=" For house-keeping purposes, this pull request will be closed."
 
             gh pr close $issue --repo ${{ github.repository }} --comment "$MESSAGE"
