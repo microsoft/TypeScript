@@ -1704,7 +1704,7 @@ function createCompletionEntry(
             isGetAccessorDeclaration(contextToken.parent.parent) ||
             isSetAccessorDeclaration(contextToken.parent.parent) ||
             isSpreadAssignment(contextToken.parent) ||
-            findAncestor(contextToken.parent, isPropertyAssignment)?.getLastToken() === contextToken ||
+            findAncestor(contextToken.parent, isPropertyAssignment)?.getLastToken(sourceFile) === contextToken ||
             isShorthandPropertyAssignment(contextToken.parent) && getLineAndCharacterOfPosition(sourceFile, contextToken.getEnd()).line !== getLineAndCharacterOfPosition(sourceFile, position).line) {
 
             source = CompletionSource.ObjectLiteralMemberWithComma;
@@ -2893,7 +2893,9 @@ function getCompletionEntryCodeActionsAndSourceDisplay(
     if (source === CompletionSource.ObjectLiteralMemberWithComma && contextToken) {
         const changes = textChanges.ChangeTracker.with(
             { host, formatContext, preferences },
-            tracker => tracker.insertText(sourceFile, contextToken.end, ","));
+            tracker => tracker.insertText(sourceFile, contextToken.end, ",")
+        );
+
         if (changes) {
             return {
                 sourceDisplay: undefined,
@@ -4954,7 +4956,7 @@ function tryGetObjectLikeCompletionContainer(contextToken: Node | undefined, pos
                         return contextToken.parent.parent;
                     }
                     const ancestorNode = findAncestor(parent, isPropertyAssignment);
-                    if (ancestorNode?.getLastToken() === contextToken && isObjectLiteralExpression(ancestorNode.parent)) {
+                    if (ancestorNode?.getLastToken(sourceFile) === contextToken && isObjectLiteralExpression(ancestorNode.parent)) {
                         return ancestorNode.parent;
                     }
                 }
@@ -4964,7 +4966,7 @@ function tryGetObjectLikeCompletionContainer(contextToken: Node | undefined, pos
                     return parent.parent.parent;
                 }
                 const ancestorNode = findAncestor(parent, isPropertyAssignment);
-                if (contextToken.kind !== SyntaxKind.ColonToken && ancestorNode?.getLastToken() === contextToken &&
+                if (contextToken.kind !== SyntaxKind.ColonToken && ancestorNode?.getLastToken(sourceFile) === contextToken &&
                     isObjectLiteralExpression(ancestorNode.parent)) {
                     return ancestorNode.parent;
                 }
