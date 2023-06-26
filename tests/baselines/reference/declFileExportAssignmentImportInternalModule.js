@@ -33,8 +33,8 @@ module.exports = m;
 
 
 //// [declFileExportAssignmentImportInternalModule.d.ts]
-declare module m3 {
-    module m2 {
+declare namespace m3 {
+    namespace m2 {
         interface connectModule {
             (res: any, req: any, next: any): void;
         }

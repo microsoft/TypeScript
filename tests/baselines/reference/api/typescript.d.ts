@@ -2898,7 +2898,7 @@ declare namespace ts {
         hasRestElement: boolean;
         combinedFlags: ElementFlags;
         readonly: boolean;
-        labeledElementDeclarations?: readonly (NamedTupleMember | ParameterDeclaration)[];
+        labeledElementDeclarations?: readonly (NamedTupleMember | ParameterDeclaration | undefined)[];
     }
     interface TupleTypeReference extends TypeReference {
         target: TupleType;

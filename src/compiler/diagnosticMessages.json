@@ -1860,10 +1860,6 @@
         "category": "Error",
         "code": 2345
     },
-    "Call target does not contain any signatures.": {
-        "category": "Error",
-        "code": 2346
-    },
     "Untyped function calls may not accept type arguments.": {
         "category": "Error",
         "code": 2347
@@ -4276,10 +4272,6 @@
     "Cannot read file '{0}'.": {
         "category": "Error",
         "code": 5083
-    },
-    "Tuple members must all have names or all not have names.": {
-        "category": "Error",
-        "code": 5084
     },
     "A tuple member cannot be both optional and rest.": {
         "category": "Error",

@@ -36,11 +36,11 @@ declare class c {
 }
 interface i {
 }
-declare module m {
+declare namespace m {
     var x: number;
 }
 declare var x: number;
-declare module uninstantiated {
+declare namespace uninstantiated {
 }
 export { c };
 export { c as c2 };
