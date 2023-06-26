@@ -6888,21 +6888,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         const arity = getTypeReferenceArity(type);
                         const tupleConstituentNodes = mapToTypeNodes(typeArguments.slice(0, arity), context);
                         if (tupleConstituentNodes) {
-                            if ((type.target as TupleType).labeledElementDeclarations) {
-                                for (let i = 0; i < tupleConstituentNodes.length; i++) {
-                                    const flags = (type.target as TupleType).elementFlags[i];
+                            const { labeledElementDeclarations } = type.target as TupleType;
+                            for (let i = 0; i < tupleConstituentNodes.length; i++) {
+                                const flags = (type.target as TupleType).elementFlags[i];
+                                const labeledElementDeclaration = labeledElementDeclarations?.[i];
+
+                                if (labeledElementDeclaration) {
                                     tupleConstituentNodes[i] = factory.createNamedTupleMember(
                                         flags & ElementFlags.Variable ? factory.createToken(SyntaxKind.DotDotDotToken) : undefined,
-                                        factory.createIdentifier(unescapeLeadingUnderscores(getTupleElementLabel((type.target as TupleType).labeledElementDeclarations![i]))),
+                                        factory.createIdentifier(unescapeLeadingUnderscores(getTupleElementLabel(labeledElementDeclaration))),
                                         flags & ElementFlags.Optional ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
                                         flags & ElementFlags.Rest ? factory.createArrayTypeNode(tupleConstituentNodes[i]) :
                                         tupleConstituentNodes[i]
                                     );
                                 }
-                            }
-                            else {
-                                for (let i = 0; i < Math.min(arity, tupleConstituentNodes.length); i++) {
-                                    const flags = (type.target as TupleType).elementFlags[i];
+                                else {
                                     tupleConstituentNodes[i] =
                                         flags & ElementFlags.Variable ? factory.createRestTypeNode(flags & ElementFlags.Rest ? factory.createArrayTypeNode(tupleConstituentNodes[i]) : tupleConstituentNodes[i]) :
                                         flags & ElementFlags.Optional ? factory.createOptionalTypeNode(tupleConstituentNodes[i]) :
@@ -12657,19 +12657,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getExpandedParameters(sig: Signature, skipUnionExpanding?: boolean): readonly (readonly Symbol[])[] {
         if (signatureHasRestParameter(sig)) {
             const restIndex = sig.parameters.length - 1;
+            const restName = sig.parameters[restIndex].escapedName;
             const restType = getTypeOfSymbol(sig.parameters[restIndex]);
             if (isTupleType(restType)) {
-                return [expandSignatureParametersWithTupleMembers(restType, restIndex)];
+                return [expandSignatureParametersWithTupleMembers(restType, restIndex, restName)];
             }
             else if (!skipUnionExpanding && restType.flags & TypeFlags.Union && every((restType as UnionType).types, isTupleType)) {
-                return map((restType as UnionType).types, t => expandSignatureParametersWithTupleMembers(t as TupleTypeReference, restIndex));
+                return map((restType as UnionType).types, t => expandSignatureParametersWithTupleMembers(t as TupleTypeReference, restIndex, restName));
             }
         }
         return [sig.parameters];
 
-        function expandSignatureParametersWithTupleMembers(restType: TupleTypeReference, restIndex: number) {
-            const elementTypes = getElementTypes(restType);
-            const associatedNames = getUniqAssociatedNamesFromTupleType(restType);
+        function expandSignatureParametersWithTupleMembers(restType: TupleTypeReference, restIndex: number, restName: __String) {
+            const elementTypes = getTypeArguments(restType);
+            const associatedNames = getUniqAssociatedNamesFromTupleType(restType, restName);
             const restParams = map(elementTypes, (t, i) => {
                 // Lookup the label from the individual tuple passed in before falling back to the signature `rest` parameter name
                 const name = associatedNames && associatedNames[i] ? associatedNames[i] :
@@ -12684,10 +12685,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return concatenate(sig.parameters.slice(0, restIndex), restParams);
         }
 
-        function getUniqAssociatedNamesFromTupleType(type: TupleTypeReference) {
+        function getUniqAssociatedNamesFromTupleType(type: TupleTypeReference, restName: __String) {
             const associatedNamesMap = new Map<__String, number>();
-            return map(type.target.labeledElementDeclarations, labeledElement => {
-                const name = getTupleElementLabel(labeledElement);
+            return map(type.target.labeledElementDeclarations, (labeledElement, i) => {
+                const name = getTupleElementLabel(labeledElement, i, restName);
                 const prevCounter = associatedNamesMap.get(name);
                 if (prevCounter === undefined) {
                     associatedNamesMap.set(name, 1);
@@ -15963,8 +15964,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return readonly ? globalReadonlyArrayType : globalArrayType;
         }
         const elementFlags = map((node as TupleTypeNode).elements, getTupleElementFlags);
-        const missingName = some((node as TupleTypeNode).elements, e => e.kind !== SyntaxKind.NamedTupleMember);
-        return getTupleTargetType(elementFlags, readonly, /*associatedNames*/ missingName ? undefined : (node as TupleTypeNode).elements as readonly NamedTupleMember[]);
+        return getTupleTargetType(elementFlags, readonly, map((node as TupleTypeNode).elements, memberIfLabeledElementDeclaration));
+    }
+
+    function memberIfLabeledElementDeclaration(member: Node): NamedTupleMember | ParameterDeclaration | undefined {
+        return isNamedTupleMember(member) || isParameter(member) ? member : undefined;
     }
 
     // Return true if the given type reference node is directly aliased or if it needs to be deferred
@@ -16054,21 +16058,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return isTypeOperatorNode(node) && node.operator === SyntaxKind.ReadonlyKeyword;
     }
 
-    function createTupleType(elementTypes: readonly Type[], elementFlags?: readonly ElementFlags[], readonly = false, namedMemberDeclarations?: readonly (NamedTupleMember | ParameterDeclaration)[]) {
+    function createTupleType(elementTypes: readonly Type[], elementFlags?: readonly ElementFlags[], readonly = false, namedMemberDeclarations: readonly (NamedTupleMember | ParameterDeclaration | undefined)[] = []) {
         const tupleTarget = getTupleTargetType(elementFlags || map(elementTypes, _ => ElementFlags.Required), readonly, namedMemberDeclarations);
         return tupleTarget === emptyGenericType ? emptyObjectType :
             elementTypes.length ? createNormalizedTypeReference(tupleTarget, elementTypes) :
             tupleTarget;
     }
 
-    function getTupleTargetType(elementFlags: readonly ElementFlags[], readonly: boolean, namedMemberDeclarations?: readonly (NamedTupleMember | ParameterDeclaration)[]): GenericType {
+    function getTupleTargetType(elementFlags: readonly ElementFlags[], readonly: boolean, namedMemberDeclarations: readonly (NamedTupleMember | ParameterDeclaration | undefined)[]): GenericType {
         if (elementFlags.length === 1 && elementFlags[0] & ElementFlags.Rest) {
             // [...X[]] is equivalent to just X[]
             return readonly ? globalReadonlyArrayType : globalArrayType;
         }
+        const memberIds = mapDefined(namedMemberDeclarations, node => node ? getNodeId(node) : undefined);
         const key = map(elementFlags, f => f & ElementFlags.Required ? "#" : f & ElementFlags.Optional ? "?" : f & ElementFlags.Rest ? "." : "*").join() +
             (readonly ? "R" : "") +
-            (namedMemberDeclarations && namedMemberDeclarations.length ? "," + map(namedMemberDeclarations, getNodeId).join(",") : "");
+            (memberIds.length ? "," + memberIds.join(",") : "");
         let type = tupleTypes.get(key);
         if (!type) {
             tupleTypes.set(key, type = createTupleTargetType(elementFlags, readonly, namedMemberDeclarations));
@@ -16083,7 +16088,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     //
     // Note that the generic type created by this function has no symbol associated with it. The same
     // is true for each of the synthesized type parameters.
-    function createTupleTargetType(elementFlags: readonly ElementFlags[], readonly: boolean, namedMemberDeclarations: readonly (NamedTupleMember | ParameterDeclaration)[] | undefined): TupleType {
+    function createTupleTargetType(elementFlags: readonly ElementFlags[], readonly: boolean, namedMemberDeclarations: readonly (NamedTupleMember | ParameterDeclaration | undefined)[]): TupleType {
         const arity = elementFlags.length;
         const minLength = countWhere(elementFlags, f => !!(f & (ElementFlags.Required | ElementFlags.Variadic)));
         let typeParameters: TypeParameter[] | undefined;
@@ -16165,7 +16170,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // In either layout, zero or more generic variadic elements may be present at any location.
         const expandedTypes: Type[] = [];
         const expandedFlags: ElementFlags[] = [];
-        let expandedDeclarations: (NamedTupleMember | ParameterDeclaration)[] | undefined = [];
+        const expandedDeclarations: (NamedTupleMember | ParameterDeclaration | undefined)[] = [];
         let lastRequiredIndex = -1;
         let firstRestIndex = -1;
         let lastOptionalOrRestIndex = -1;
@@ -16208,7 +16213,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 (t, i) => expandedFlags[firstRestIndex + i] & ElementFlags.Variadic ? getIndexedAccessType(t, numberType) : t));
             expandedTypes.splice(firstRestIndex + 1, lastOptionalOrRestIndex - firstRestIndex);
             expandedFlags.splice(firstRestIndex + 1, lastOptionalOrRestIndex - firstRestIndex);
-            expandedDeclarations?.splice(firstRestIndex + 1, lastOptionalOrRestIndex - firstRestIndex);
+            expandedDeclarations.splice(firstRestIndex + 1, lastOptionalOrRestIndex - firstRestIndex);
         }
         const tupleTarget = getTupleTargetType(expandedFlags, target.readonly, expandedDeclarations);
         return tupleTarget === emptyGenericType ? emptyObjectType :
@@ -16227,12 +16232,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             expandedTypes.push(flags & ElementFlags.Optional ? addOptionality(type, /*isProperty*/ true) : type);
             expandedFlags.push(flags);
-            if (expandedDeclarations && declaration) {
-                expandedDeclarations.push(declaration);
-            }
-            else {
-                expandedDeclarations = undefined;
-            }
+            expandedDeclarations.push(declaration);
         }
     }
 
@@ -34828,7 +34828,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return type;
     }
 
-    function getTupleElementLabel(d: ParameterDeclaration | NamedTupleMember) {
+    function getTupleElementLabel(d: ParameterDeclaration | NamedTupleMember): __String;
+    function getTupleElementLabel(d: ParameterDeclaration | NamedTupleMember | undefined, index: number, restParameterName?: __String): __String;
+    function getTupleElementLabel(d: ParameterDeclaration | NamedTupleMember | undefined, index?: number, restParameterName = "arg" as __String) {
+        if (!d) {
+            return `${restParameterName}_${index}` as __String;
+        }
         Debug.assert(isIdentifier(d.name)); // Parameter declarations could be binding patterns, but we only allow identifier names
         return d.name.escapedText;
     }
@@ -34843,7 +34848,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (isTupleType(restType)) {
             const associatedNames = ((restType as TypeReference).target as TupleType).labeledElementDeclarations;
             const index = pos - paramCount;
-            return associatedNames && getTupleElementLabel(associatedNames[index]) || restParameter.escapedName + "_" + index as __String;
+            return getTupleElementLabel(associatedNames?.[index], index, restParameter.escapedName);
         }
         return restParameter.escapedName;
     }
@@ -38870,12 +38875,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const elementTypes = node.elements;
         let seenOptionalElement = false;
         let seenRestElement = false;
-        const hasNamedElement = some(elementTypes, isNamedTupleMember);
         for (const e of elementTypes) {
-            if (e.kind !== SyntaxKind.NamedTupleMember && hasNamedElement) {
-                grammarErrorOnNode(e, Diagnostics.Tuple_members_must_all_have_names_or_all_not_have_names);
-                break;
-            }
             const flags = getTupleElementFlags(e);
             if (flags & ElementFlags.Variadic) {
                 const type = getTypeFromTypeNode((e as RestTypeNode | NamedTupleMember).type);
