@@ -1422,6 +1422,31 @@ export function transformDeclarations(context: TransformationContext) {
         return factory.updateModifiers(statement, modifiers);
     }
 
+    function updateModuleDeclarationAndKeyword(
+        node: ModuleDeclaration,
+        modifiers: readonly ModifierLike[] | undefined,
+        name: ModuleName,
+        body: ModuleBody | undefined
+    ) {
+        const updated = factory.updateModuleDeclaration(node, modifiers, name, body);
+
+        if (isAmbientModule(updated) || updated.flags & NodeFlags.Namespace) {
+            return updated;
+        }
+
+        const fixed = factory.createModuleDeclaration(
+            updated.modifiers,
+            updated.name,
+            updated.body,
+            updated.flags | NodeFlags.Namespace
+        );
+
+        setOriginalNode(fixed, updated);
+        setTextRange(fixed, updated);
+
+        return fixed;
+    }
+
     function transformTopLevelDeclaration(input: LateVisibilityPaintedStatement) {
         if (lateMarkedStatements) {
             while (orderedRemoveItem(lateMarkedStatements, input));
@@ -1571,32 +1596,6 @@ export function transformDeclarations(context: TransformationContext) {
             case SyntaxKind.ModuleDeclaration: {
                 needsDeclare = false;
                 const inner = input.body;
-
-                function updateModuleDeclarationAndKeyword(
-                    node: ModuleDeclaration,
-                    modifiers: readonly ModifierLike[] | undefined,
-                    name: ModuleName,
-                    body: ModuleBody | undefined
-                ) {
-                    const updated = factory.updateModuleDeclaration(node, modifiers, name, body);
-
-                    if (isAmbientModule(updated) || updated.flags & NodeFlags.Namespace) {
-                        return updated;
-                    }
-
-                    const fixed = factory.createModuleDeclaration(
-                        updated.modifiers,
-                        updated.name,
-                        updated.body,
-                        updated.flags | NodeFlags.Namespace
-                    );
-
-                    setOriginalNode(fixed, updated);
-                    setTextRange(fixed, updated);
-
-                    return fixed;
-                }
-
                 if (inner && inner.kind === SyntaxKind.ModuleBlock) {
                     const oldNeedsScopeFix = needsScopeFixMarker;
                     const oldHasScopeFix = resultHasScopeMarker;
