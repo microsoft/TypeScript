@@ -11484,7 +11484,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     getWriteTypeOfSymbolWithDeferredType(symbol) || getTypeOfSymbolWithDeferredType(symbol) :
                     // NOTE: cast to TransientSymbol should be safe because only TransientSymbols can have CheckFlags.SyntheticProperty
                     (symbol as TransientSymbol).links.writeType || (symbol as TransientSymbol).links.type! :
-                getTypeOfSymbol(symbol);
+                removeMissingType(getTypeOfSymbol(symbol), !!(symbol.flags & SymbolFlags.Optional));
         }
         if (symbol.flags & SymbolFlags.Accessor) {
             return checkFlags & CheckFlags.Instantiated ?
@@ -27645,7 +27645,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 location = location.parent;
             }
             if (isExpressionNode(location) && (!isAssignmentTarget(location) || isWriteAccess(location))) {
-                const type = removeOptionalTypeMarker(getTypeOfExpression(location as Expression));
+                const type = removeOptionalTypeMarker(
+                    isWriteAccess(location) && location.kind === SyntaxKind.PropertyAccessExpression ?
+                        checkPropertyAccessExpression(location as PropertyAccessExpression, /*checkMode*/ undefined, /*writeOnly*/ true) :
+                        getTypeOfExpression(location as Expression)
+                );
                 if (getExportSymbolOfValueSymbolIfExported(getNodeLinks(location).resolvedSymbol) === symbol) {
                     return type;
                 }
