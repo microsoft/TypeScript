@@ -32,7 +32,7 @@ module.exports = A;
 declare class A {
     foo(): A.B;
 }
-declare module A {
+declare namespace A {
     interface B {
     }
 }

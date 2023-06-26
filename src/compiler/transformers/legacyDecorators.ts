@@ -55,7 +55,6 @@ import {
     isStatic,
     map,
     MethodDeclaration,
-    Modifier,
     ModifierFlags,
     moveRangePastModifiers,
     Node,
@@ -373,39 +372,29 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
 
         //  let ${name} = ${classExpression} where name is either declaredName if the class doesn't contain self-reference
         //                                         or decoratedClassAlias if the class contain self-reference.
-        const varDecl = factory.createVariableDeclaration(
-            declName,
-            /*exclamationToken*/ undefined,
-            /*type*/ undefined,
-            classAlias && !assignClassAliasInStaticBlock ? factory.createAssignment(classAlias, classExpression) : classExpression
-        );
+        const varInitializer = classAlias && !assignClassAliasInStaticBlock ? factory.createAssignment(classAlias, classExpression) : classExpression;
+        const varDecl = factory.createVariableDeclaration(declName, /*exclamationToken*/ undefined, /*type*/ undefined, varInitializer);
         setOriginalNode(varDecl, node);
 
-        let varModifiers: Modifier[] | undefined;
-        if (isExport && !isDefault) {
-            varModifiers = factory.createModifiersFromModifierFlags(ModifierFlags.Export);
-        }
+        const varDeclList = factory.createVariableDeclarationList([varDecl], NodeFlags.Let);
+        const varStatement = factory.createVariableStatement(/*modifiers*/ undefined, varDeclList);
+        setOriginalNode(varStatement, node);
+        setTextRange(varStatement, location);
+        setCommentRange(varStatement, node);
 
-        const statement = factory.createVariableStatement(
-            varModifiers,
-            factory.createVariableDeclarationList([
-                varDecl
-            ], NodeFlags.Let)
-        );
-        setOriginalNode(statement, node);
-        setTextRange(statement, location);
-        setCommentRange(statement, node);
-
-        const statements: Statement[] = [statement];
+        const statements: Statement[] = [varStatement];
         addRange(statements, decorationStatements);
         addConstructorDecorationStatement(statements, node);
 
-        if (isExport && isDefault) {
-            statements.push(factory.createExportAssignment(
-                /*modifiers*/ undefined,
-                /*isExportEquals*/ false,
-                declName
-            ));
+        if (isExport) {
+            if (isDefault) {
+                const exportStatement = factory.createExportDefault(declName);
+                statements.push(exportStatement);
+            }
+            else {
+                const exportStatement = factory.createExternalModuleExport(factory.getDeclarationName(node));
+                statements.push(exportStatement);
+            }
         }
 
         return statements;

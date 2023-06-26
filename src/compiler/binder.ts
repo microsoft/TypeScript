@@ -87,6 +87,7 @@ import {
     getElementOrPropertyAccessName,
     getEmitScriptTarget,
     getEnclosingBlockScopeContainer,
+    getEnclosingContainer,
     getErrorSpanForNode,
     getEscapedTextOfIdentifierOrLiteral,
     getEscapedTextOfJsxNamespacedName,
@@ -455,7 +456,8 @@ function getModuleInstanceStateForAliasTarget(specifier: ExportSpecifier, visite
     return ModuleInstanceState.Instantiated; // Couldn't locate, assume could refer to a value
 }
 
-const enum ContainerFlags {
+/** @internal */
+export const enum ContainerFlags {
     // The current node is not a container, and no container manipulation should happen before
     // recursing into it.
     None = 0,
@@ -2356,7 +2358,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         const saveCurrentFlow = currentFlow;
         for (const typeAlias of delayedTypeAliases) {
             const host = typeAlias.parent.parent;
-            container = (findAncestor(host.parent, n => !!(getContainerFlags(n) & ContainerFlags.IsContainer)) as IsContainer | undefined) || file;
+            container = (getEnclosingContainer(host) as IsContainer | undefined) || file;
             blockScopeContainer = (getEnclosingBlockScopeContainer(host) as IsBlockScopedContainer | undefined) || file;
             currentFlow = initFlowNode({ flags: FlowFlags.Start });
             parent = typeAlias;
@@ -3725,7 +3727,7 @@ function isExecutableStatement(s: Statement): boolean {
     // Don't remove statements that can validly be used before they appear.
     return !isFunctionDeclaration(s) && !isPurelyTypeDeclaration(s) && !isEnumDeclaration(s) &&
         // `var x;` may declare a variable used above
-        !(isVariableStatement(s) && !(getCombinedNodeFlags(s) & (NodeFlags.Let | NodeFlags.Const)) && s.declarationList.declarations.some(d => !d.initializer));
+        !(isVariableStatement(s) && !(getCombinedNodeFlags(s) & (NodeFlags.BlockScoped)) && s.declarationList.declarations.some(d => !d.initializer));
 }
 
 function isPurelyTypeDeclaration(s: Statement): boolean {
@@ -3768,7 +3770,8 @@ export function isExportsOrModuleExportsOrAlias(sourceFile: SourceFile, node: Ex
     return false;
 }
 
-function getContainerFlags(node: Node): ContainerFlags {
+/** @internal */
+export function getContainerFlags(node: Node): ContainerFlags {
     switch (node.kind) {
         case SyntaxKind.ClassExpression:
         case SyntaxKind.ClassDeclaration:

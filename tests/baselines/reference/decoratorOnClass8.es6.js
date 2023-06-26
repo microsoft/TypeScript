@@ -19,9 +19,10 @@ var __setFunctionName = (this && this.__setFunctionName) || function (f, name, p
     if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
     return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
 };
-let default_1 = class {
+var _a;
+let default_1 = _a = class {
 };
-__setFunctionName(default_1, "default");
+__setFunctionName(_a, "default");
 default_1.y = 1;
 default_1 = __decorate([
     dec

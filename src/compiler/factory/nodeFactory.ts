@@ -134,6 +134,8 @@ import {
     Identifier,
     idText,
     IfStatement,
+    ImmediatelyInvokedArrowFunction,
+    ImmediatelyInvokedFunctionExpression,
     ImportClause,
     ImportDeclaration,
     ImportEqualsDeclaration,
@@ -991,6 +993,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         createExportDefault,
         createExternalModuleExport,
         createTypeCheck,
+        createIsNotTypeCheck,
         createMethodCall,
         createGlobalMethodCall,
         createFunctionBindCall,
@@ -1320,6 +1323,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
                 transformFlags =
                     TransformFlags.ContainsES2017 |
                     TransformFlags.ContainsES2018;
+                break;
+
+            case SyntaxKind.UsingKeyword:
+                transformFlags = TransformFlags.ContainsESNext;
                 break;
 
             case SyntaxKind.PublicKeyword:
@@ -4178,6 +4185,9 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
                 TransformFlags.ContainsES2015 |
                 TransformFlags.ContainsBlockScopedBinding;
         }
+        if (flags & NodeFlags.Using) {
+            node.transformFlags |= TransformFlags.ContainsESNext;
+        }
         return node;
     }
 
@@ -6314,8 +6324,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // compound nodes
-    function createImmediatelyInvokedFunctionExpression(statements: readonly Statement[]): CallExpression;
-    function createImmediatelyInvokedFunctionExpression(statements: readonly Statement[], param: ParameterDeclaration, paramValue: Expression): CallExpression;
+    function createImmediatelyInvokedFunctionExpression(statements: readonly Statement[]): ImmediatelyInvokedFunctionExpression;
+    function createImmediatelyInvokedFunctionExpression(statements: readonly Statement[], param: ParameterDeclaration, paramValue: Expression): ImmediatelyInvokedFunctionExpression;
     function createImmediatelyInvokedFunctionExpression(statements: readonly Statement[], param?: ParameterDeclaration, paramValue?: Expression) {
         return createCallExpression(
             createFunctionExpression(
@@ -6332,8 +6342,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         );
     }
 
-    function createImmediatelyInvokedArrowFunction(statements: readonly Statement[]): CallExpression;
-    function createImmediatelyInvokedArrowFunction(statements: readonly Statement[], param: ParameterDeclaration, paramValue: Expression): CallExpression;
+    function createImmediatelyInvokedArrowFunction(statements: readonly Statement[]): ImmediatelyInvokedArrowFunction;
+    function createImmediatelyInvokedArrowFunction(statements: readonly Statement[], param: ParameterDeclaration, paramValue: Expression): ImmediatelyInvokedArrowFunction;
     function createImmediatelyInvokedArrowFunction(statements: readonly Statement[], param?: ParameterDeclaration, paramValue?: Expression) {
         return createCallExpression(
             createArrowFunction(
@@ -6375,9 +6385,15 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     //
 
     function createTypeCheck(value: Expression, tag: TypeOfTag) {
-        return tag === "undefined"
-            ? factory.createStrictEquality(value, createVoidZero())
-            : factory.createStrictEquality(createTypeOfExpression(value), createStringLiteral(tag));
+        return tag === "null" ? factory.createStrictEquality(value, createNull()) :
+            tag === "undefined" ? factory.createStrictEquality(value, createVoidZero()) :
+            factory.createStrictEquality(createTypeOfExpression(value), createStringLiteral(tag));
+    }
+
+    function createIsNotTypeCheck(value: Expression, tag: TypeOfTag) {
+        return tag === "null" ? factory.createStrictInequality(value, createNull()) :
+            tag === "undefined" ? factory.createStrictInequality(value, createVoidZero()) :
+            factory.createStrictInequality(createTypeOfExpression(value), createStringLiteral(tag));
     }
 
     function createMethodCall(object: Expression, methodName: string | Identifier, argumentsList: readonly Expression[]) {
@@ -7585,10 +7601,12 @@ export function createSourceMapSource(fileName: string, text: string, skipTrivia
 // Utilities
 
 export function setOriginalNode<T extends Node>(node: T, original: Node | undefined): T {
-    node.original = original;
-    if (original) {
-        const emitNode = original.emitNode;
-        if (emitNode) node.emitNode = mergeEmitNode(emitNode, node.emitNode);
+    if (node.original !== original) {
+        node.original = original;
+        if (original) {
+            const emitNode = original.emitNode;
+            if (emitNode) node.emitNode = mergeEmitNode(emitNode, node.emitNode);
+        }
     }
     return node;
 }
@@ -7596,7 +7614,7 @@ export function setOriginalNode<T extends Node>(node: T, original: Node | undefi
 function mergeEmitNode(sourceEmitNode: EmitNode, destEmitNode: EmitNode | undefined) {
     const {
         flags,
-            internalFlags,
+        internalFlags,
         leadingComments,
         trailingComments,
         commentRange,
@@ -7606,24 +7624,95 @@ function mergeEmitNode(sourceEmitNode: EmitNode, destEmitNode: EmitNode | undefi
         helpers,
         startsOnNewLine,
         snippetElement,
+        classThis,
+        assignedName,
     } = sourceEmitNode;
     if (!destEmitNode) destEmitNode = {} as EmitNode;
-    // We are using `.slice()` here in case `destEmitNode.leadingComments` is pushed to later.
-    if (leadingComments) destEmitNode.leadingComments = addRange(leadingComments.slice(), destEmitNode.leadingComments);
-    if (trailingComments) destEmitNode.trailingComments = addRange(trailingComments.slice(), destEmitNode.trailingComments);
-    if (flags) destEmitNode.flags = flags;
-    if (internalFlags) destEmitNode.internalFlags = internalFlags & ~InternalEmitFlags.Immutable;
-    if (commentRange) destEmitNode.commentRange = commentRange;
-    if (sourceMapRange) destEmitNode.sourceMapRange = sourceMapRange;
-    if (tokenSourceMapRanges) destEmitNode.tokenSourceMapRanges = mergeTokenSourceMapRanges(tokenSourceMapRanges, destEmitNode.tokenSourceMapRanges!);
-    if (constantValue !== undefined) destEmitNode.constantValue = constantValue;
+
+    // NOTE: We should have one or more lines here for each property in EmitNode, even if the line
+    // consists only of a comment indicating the property does not merge
+
+    // `flags` overwrites the destination
+    if (flags) {
+        destEmitNode.flags = flags;
+    }
+
+    // `internalFlags` overwrites the destination. We do not copy over the immutability of the source.
+    if (internalFlags) {
+        destEmitNode.internalFlags = internalFlags & ~InternalEmitFlags.Immutable;
+    }
+
+    // `annotatedNodes` are not merged as they should only present on the parse tree node of a `SourceFile`.
+
+    // `leadingComments` are concatenated with any existing leading comments on the destination
+    if (leadingComments) {
+        // We use `.slice()` in case `destEmitNode.leadingComments` is pushed to later
+        destEmitNode.leadingComments = addRange(leadingComments.slice(), destEmitNode.leadingComments);
+    }
+
+    // `trailingComments` are concatenated with any existing trailing comments on the destination
+    if (trailingComments) {
+        // We use `.slice()` in case `destEmitNode.trailingComments` is pushed to later
+        destEmitNode.trailingComments = addRange(trailingComments.slice(), destEmitNode.trailingComments);
+    }
+
+    // `commentRange` overwrites the destination
+    if (commentRange) {
+        destEmitNode.commentRange = commentRange;
+    }
+
+    // `sourceMapRange` overwrites the destination
+    if (sourceMapRange) {
+        destEmitNode.sourceMapRange = sourceMapRange;
+    }
+
+    // `tokenSourceMapRanges` are merged with the destination
+    if (tokenSourceMapRanges) {
+        destEmitNode.tokenSourceMapRanges = mergeTokenSourceMapRanges(tokenSourceMapRanges, destEmitNode.tokenSourceMapRanges!);
+    }
+
+    // `constantValue` overwrites the destination
+    if (constantValue !== undefined) {
+        destEmitNode.constantValue = constantValue;
+    }
+
+    // `externalHelpersModuleName` is not merged
+    // `externalHelpers` is not merged
+
+    // `helpers` are merged into the destination
     if (helpers) {
         for (const helper of helpers) {
             destEmitNode.helpers = appendIfUnique(destEmitNode.helpers, helper);
         }
     }
-    if (startsOnNewLine !== undefined) destEmitNode.startsOnNewLine = startsOnNewLine;
-    if (snippetElement !== undefined) destEmitNode.snippetElement = snippetElement;
+
+    // `startsOnNewLine` overwrites the destination
+    if (startsOnNewLine !== undefined) {
+        destEmitNode.startsOnNewLine = startsOnNewLine;
+    }
+
+    // `snippetElement` overwrites the destination
+    if (snippetElement !== undefined) {
+        destEmitNode.snippetElement = snippetElement;
+    }
+
+    // `typeNode` is not merged as it only applies to comment emit for a variable declaration.
+    // TODO: `typeNode` should overwrite the destination
+
+    // `classThis` overwrites the destination
+    if (classThis) {
+        destEmitNode.classThis = classThis;
+    }
+
+    // `assignedName` overwrites the destination
+    if (assignedName) {
+        destEmitNode.assignedName = assignedName;
+    }
+
+    // `identifierTypeArguments` are not merged as they only apply to an Identifier in quick info
+    // `autoGenerate` is not merged as it only applies to a specific generated Identifier/PrivateIdentifier
+    // `generatedImportReference` is not merged as it only applies to an Identifier
+
     return destEmitNode;
 }
 
