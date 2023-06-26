@@ -1,7 +1,7 @@
-tests/cases/conformance/es6/computedProperties/computedPropertyNames34_ES6.ts(5,18): error TS2302: Static members cannot reference class type parameters.
+computedPropertyNames34_ES6.ts(5,18): error TS2302: Static members cannot reference class type parameters.
 
 
-==== tests/cases/conformance/es6/computedProperties/computedPropertyNames34_ES6.ts (1 errors) ====
+==== computedPropertyNames34_ES6.ts (1 errors) ====
     function foo<T>() { return '' }
     class C<T> {
         static bar() {

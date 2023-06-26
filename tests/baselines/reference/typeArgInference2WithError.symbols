@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeArgInference2WithError.ts ===
+//// [tests/cases/compiler/typeArgInference2WithError.ts] ////
+
+=== typeArgInference2WithError.ts ===
 interface Item {
 >Item : Symbol(Item, Decl(typeArgInference2WithError.ts, 0, 0))
 

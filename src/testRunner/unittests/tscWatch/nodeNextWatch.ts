@@ -1,10 +1,10 @@
 import * as Utils from "../../_namespaces/Utils";
+import { verifyTscWatch } from "../helpers/tscWatch";
 import {
     createWatchedSystem,
     File,
     libFile,
-} from "../virtualFileSystemWithWatch";
-import { verifyTscWatch } from "./helpers";
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsc-watch:: nodeNextWatch:: emit when module emit is specified as nodenext", () => {
     verifyTscWatch({

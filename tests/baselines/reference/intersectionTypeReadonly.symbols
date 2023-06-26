@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/intersection/intersectionTypeReadonly.ts ===
+//// [tests/cases/conformance/types/intersection/intersectionTypeReadonly.ts] ////
+
+=== intersectionTypeReadonly.ts ===
 interface Base {
 >Base : Symbol(Base, Decl(intersectionTypeReadonly.ts, 0, 0))
 

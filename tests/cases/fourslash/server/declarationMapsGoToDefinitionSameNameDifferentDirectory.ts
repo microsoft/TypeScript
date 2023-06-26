@@ -54,5 +54,4 @@
 ////    }
 ////}
 
-verify.goToDefinition("1", "2");
-verify.goToDefinition("3", "4");
+verify.baselineGoToDefinition("1", "3");

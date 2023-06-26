@@ -1,33 +1,33 @@
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignaturesWithRestParameters.ts(13,5): error TS2322: Type '(...args: string[]) => number' is not assignable to type '(...args: number[]) => number'.
+assignmentCompatWithCallSignaturesWithRestParameters.ts(13,5): error TS2322: Type '(...args: string[]) => number' is not assignable to type '(...args: number[]) => number'.
   Types of parameters 'args' and 'args' are incompatible.
     Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignaturesWithRestParameters.ts(17,5): error TS2322: Type '(x?: string) => number' is not assignable to type '(...args: number[]) => number'.
+assignmentCompatWithCallSignaturesWithRestParameters.ts(17,5): error TS2322: Type '(x?: string) => number' is not assignable to type '(...args: number[]) => number'.
   Types of parameters 'x' and 'args' are incompatible.
     Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignaturesWithRestParameters.ts(26,5): error TS2322: Type '(x: number, ...args: string[]) => number' is not assignable to type '(x: number, ...z: number[]) => number'.
+assignmentCompatWithCallSignaturesWithRestParameters.ts(26,5): error TS2322: Type '(x: number, ...args: string[]) => number' is not assignable to type '(x: number, ...z: number[]) => number'.
   Types of parameters 'args' and 'z' are incompatible.
     Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignaturesWithRestParameters.ts(35,5): error TS2322: Type '(x: number, y?: number, z?: number) => number' is not assignable to type '(x: number, y?: string, ...z: number[]) => number'.
+assignmentCompatWithCallSignaturesWithRestParameters.ts(35,5): error TS2322: Type '(x: number, y?: number, z?: number) => number' is not assignable to type '(x: number, y?: string, ...z: number[]) => number'.
   Types of parameters 'y' and 'y' are incompatible.
     Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignaturesWithRestParameters.ts(36,5): error TS2322: Type '(x: number, ...z: number[]) => number' is not assignable to type '(x: number, y?: string, ...z: number[]) => number'.
+assignmentCompatWithCallSignaturesWithRestParameters.ts(36,5): error TS2322: Type '(x: number, ...z: number[]) => number' is not assignable to type '(x: number, y?: string, ...z: number[]) => number'.
   Types of parameters 'z' and 'y' are incompatible.
     Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignaturesWithRestParameters.ts(37,5): error TS2322: Type '(x: string, y?: string, z?: string) => number' is not assignable to type '(x: number, y?: string, ...z: number[]) => number'.
+assignmentCompatWithCallSignaturesWithRestParameters.ts(37,5): error TS2322: Type '(x: string, y?: string, z?: string) => number' is not assignable to type '(x: number, y?: string, ...z: number[]) => number'.
   Types of parameters 'x' and 'x' are incompatible.
     Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignaturesWithRestParameters.ts(41,5): error TS2322: Type '(x?: number, y?: number) => number' is not assignable to type '(x?: number, y?: string, ...z: number[]) => number'.
+assignmentCompatWithCallSignaturesWithRestParameters.ts(41,5): error TS2322: Type '(x?: number, y?: number) => number' is not assignable to type '(x?: number, y?: string, ...z: number[]) => number'.
   Types of parameters 'y' and 'y' are incompatible.
     Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignaturesWithRestParameters.ts(43,5): error TS2322: Type '(x: number, y?: number) => number' is not assignable to type '(x?: number, y?: string, ...z: number[]) => number'.
+assignmentCompatWithCallSignaturesWithRestParameters.ts(43,5): error TS2322: Type '(x: number, y?: number) => number' is not assignable to type '(x?: number, y?: string, ...z: number[]) => number'.
   Types of parameters 'y' and 'y' are incompatible.
     Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignaturesWithRestParameters.ts(45,5): error TS2322: Type '(x: number, ...args: string[]) => number' is not assignable to type '(x?: number, y?: string, ...z: number[]) => number'.
+assignmentCompatWithCallSignaturesWithRestParameters.ts(45,5): error TS2322: Type '(x: number, ...args: string[]) => number' is not assignable to type '(x?: number, y?: string, ...z: number[]) => number'.
   Types of parameters 'args' and 'z' are incompatible.
     Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignaturesWithRestParameters.ts (9 errors) ====
+==== assignmentCompatWithCallSignaturesWithRestParameters.ts (9 errors) ====
     // call signatures in derived types must have the same or fewer optional parameters as the target for assignment
     
     interface Base { 

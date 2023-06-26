@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty2.ts] ////
+
 //// [typeGuardNarrowsIndexedAccessOfKnownProperty2.ts]
 const foo: { key?: number } = {};
 const key = 'key' as const;

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/typedefOnStatements.ts] ////
+
 //// [typedefOnStatements.js]
 /** @typedef {{a: string}} A */
 ;

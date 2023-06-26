@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es6ModuleFunctionDeclaration.ts] ////
+
 //// [es6ModuleFunctionDeclaration.ts]
 export function foo() {
 }

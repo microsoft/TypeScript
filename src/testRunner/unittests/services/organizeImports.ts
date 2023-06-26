@@ -1,10 +1,10 @@
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
-import { createProjectService } from "../tsserver/helpers";
+import { createProjectService } from "../helpers/tsserver";
 import {
     createServerHost,
     File,
-} from "../virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch";
 import { newLineCharacter } from "./extract/helpers";
 
 describe("unittests:: services:: organizeImports", () => {
@@ -1036,7 +1036,7 @@ export * from "lib";
 
         function makeLanguageService(...files: File[]) {
             const host = createServerHost(files);
-            const projectService = createProjectService(host, { useSingleInferredProject: true });
+            const projectService = createProjectService(host, { useSingleInferredProject: true, allowNonBaseliningLogger: true });
             projectService.setCompilerOptionsForInferredProjects({ jsx: files.some(f => f.path.endsWith("x")) ? ts.JsxEmit.React : ts.JsxEmit.None });
             files.forEach(f => projectService.openClientFile(f.path));
             return projectService.inferredProjects[0].getLanguageService();

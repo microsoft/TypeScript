@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/keyofInferenceLowerPriorityThanReturn.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/keyofInferenceLowerPriorityThanReturn.ts] ////
+
+=== keyofInferenceLowerPriorityThanReturn.ts ===
 // #22736
 declare class Write {
 >Write : Symbol(Write, Decl(keyofInferenceLowerPriorityThanReturn.ts, 0, 0))

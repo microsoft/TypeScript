@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unspecializedConstraints.ts] ////
+
 //// [unspecializedConstraints.ts]
 module ts {
     interface Map<T> {

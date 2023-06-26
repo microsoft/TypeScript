@@ -1,4 +1,3 @@
-import * as ts from "./_namespaces/ts";
 import {
     AffectedFileResult,
     arrayToMap,
@@ -33,6 +32,7 @@ import {
     CustomTransformers,
     Debug,
     Diagnostic,
+    DiagnosticArguments,
     DiagnosticCollection,
     DiagnosticMessage,
     DiagnosticReporter,
@@ -52,6 +52,7 @@ import {
     ForegroundColorEscapeSequences,
     formatColorAndReset,
     getAllProjectOutputs,
+    getBuildInfo as ts_getBuildInfo,
     getBuildInfoFileVersionMap,
     getConfigFileParsingDiagnostics,
     getDirectoryPath,
@@ -60,6 +61,7 @@ import {
     getFilesInErrorForSummary,
     getFirstProjectOutput,
     getLocaleTimeString,
+    getModifiedTime as ts_getModifiedTime,
     getNormalizedAbsolutePath,
     getParsedCommandLineOfConfigFile,
     getPendingEmitKind,
@@ -97,6 +99,7 @@ import {
     ReadBuildProgramHost,
     resolveConfigFileProjectName,
     ResolvedConfigFileName,
+    resolveLibrary,
     resolvePath,
     resolveProjectReferencePath,
     returnUndefined,
@@ -108,6 +111,7 @@ import {
     Status,
     sys,
     System,
+    toPath as ts_toPath,
     TypeReferenceDirectiveResolutionCache,
     unorderedRemoveItem,
     updateErrorForNoInputFiles,
@@ -391,6 +395,7 @@ interface SolutionBuilderState<T extends BuilderProgram> extends WatchFactory<Wa
     readonly compilerHost: CompilerHost & ReadBuildProgramHost;
     readonly moduleResolutionCache: ModuleResolutionCache | undefined;
     readonly typeReferenceDirectiveResolutionCache: TypeReferenceDirectiveResolutionCache | undefined;
+    readonly libraryResolutionCache: ModuleResolutionCache | undefined;
 
     // Mutable state
     buildOrder: AnyBuildOrder | undefined;
@@ -429,6 +434,7 @@ function createSolutionBuilderState<T extends BuilderProgram>(watch: boolean, ho
     compilerHost.getParsedCommandLine = fileName => parseConfigFile(state, fileName as ResolvedConfigFileName, toResolvedConfigFilePath(state, fileName as ResolvedConfigFileName));
     compilerHost.resolveModuleNameLiterals = maybeBind(host, host.resolveModuleNameLiterals);
     compilerHost.resolveTypeReferenceDirectiveReferences = maybeBind(host, host.resolveTypeReferenceDirectiveReferences);
+    compilerHost.resolveLibrary = maybeBind(host, host.resolveLibrary);
     compilerHost.resolveModuleNames = maybeBind(host, host.resolveModuleNames);
     compilerHost.resolveTypeReferenceDirectives = maybeBind(host, host.resolveTypeReferenceDirectives);
     compilerHost.getModuleResolutionCache = maybeBind(host, host.getModuleResolutionCache);
@@ -462,6 +468,17 @@ function createSolutionBuilderState<T extends BuilderProgram>(watch: boolean, ho
                 createTypeReferenceResolutionLoader,
             );
     }
+    let libraryResolutionCache: ModuleResolutionCache | undefined;
+    if (!compilerHost.resolveLibrary) {
+        libraryResolutionCache = createModuleResolutionCache(compilerHost.getCurrentDirectory(), compilerHost.getCanonicalFileName, /*options*/ undefined, moduleResolutionCache?.getPackageJsonInfoCache());
+        compilerHost.resolveLibrary = (libraryName, resolveFrom, options) => resolveLibrary(
+            libraryName,
+            resolveFrom,
+            options,
+            host,
+            libraryResolutionCache,
+        );
+    }
     compilerHost.getBuildInfo = (fileName, configFilePath) => getBuildInfo(state, fileName, toResolvedConfigFilePath(state, configFilePath as ResolvedConfigFileName), /*modifiedTime*/ undefined);
 
     const { watchFile, watchDirectory, writeLog } = createWatchFactory<ResolvedConfigFileName>(hostWithWatch, options);
@@ -493,6 +510,7 @@ function createSolutionBuilderState<T extends BuilderProgram>(watch: boolean, ho
         compilerHost,
         moduleResolutionCache,
         typeReferenceDirectiveResolutionCache,
+        libraryResolutionCache,
 
         // Mutable state
         buildOrder: undefined,
@@ -525,7 +543,7 @@ function createSolutionBuilderState<T extends BuilderProgram>(watch: boolean, ho
 }
 
 function toPath<T extends BuilderProgram>(state: SolutionBuilderState<T>, fileName: string) {
-    return ts.toPath(fileName, state.compilerHost.getCurrentDirectory(), state.compilerHost.getCanonicalFileName);
+    return ts_toPath(fileName, state.compilerHost.getCurrentDirectory(), state.compilerHost.getCanonicalFileName);
 }
 
 function toResolvedConfigFilePath<T extends BuilderProgram>(state: SolutionBuilderState<T>, fileName: ResolvedConfigFileName): ResolvedConfigFilePath {
@@ -744,7 +762,7 @@ function enableCache<T extends BuilderProgram>(state: SolutionBuilderState<T>) {
 function disableCache<T extends BuilderProgram>(state: SolutionBuilderState<T>) {
     if (!state.cache) return;
 
-    const { cache, host, compilerHost, extendedConfigCache, moduleResolutionCache, typeReferenceDirectiveResolutionCache } = state;
+    const { cache, host, compilerHost, extendedConfigCache, moduleResolutionCache, typeReferenceDirectiveResolutionCache, libraryResolutionCache } = state;
 
     host.readFile = cache.originalReadFile;
     host.fileExists = cache.originalFileExists;
@@ -756,6 +774,7 @@ function disableCache<T extends BuilderProgram>(state: SolutionBuilderState<T>) 
     extendedConfigCache.clear();
     moduleResolutionCache?.clear();
     typeReferenceDirectiveResolutionCache?.clear();
+    libraryResolutionCache?.clear();
     state.cache = undefined;
 }
 
@@ -1116,7 +1135,7 @@ function createBuildOrUpdateInvalidedProject<T extends BuilderProgram>(
             /*reportSummary*/ undefined,
             (name, text, writeByteOrderMark, _onError, _sourceFiles, data) => outputFiles.push({ name, text, writeByteOrderMark, data }),
             cancellationToken,
-            /*emitOnlyDts*/ false,
+            /*emitOnlyDtsFiles*/ false,
             customTransformers || state.host.getCustomTransformers?.(project)
         );
         // Don't emit .d.ts if there are decl file errors
@@ -1150,7 +1169,7 @@ function createBuildOrUpdateInvalidedProject<T extends BuilderProgram>(
             const path = toPath(state, name);
             emittedOutputs.set(toPath(state, name), name);
             if (data?.buildInfo) setBuildInfo(state, data.buildInfo, projectPath, options, resultFlags);
-            const modifiedTime = data?.differsOnlyInMap ? ts.getModifiedTime(state.host, name) : undefined;
+            const modifiedTime = data?.differsOnlyInMap ? ts_getModifiedTime(state.host, name) : undefined;
             writeFile(writeFileCallback ? { writeFile: writeFileCallback } : compilerHost, emitterDiagnostics, name, text, writeByteOrderMark);
             // Revert the timestamp for the d.ts that is same
             if (data?.differsOnlyInMap) state.host.setModifiedTime(name, modifiedTime!);
@@ -1565,7 +1584,7 @@ function getModifiedTime<T extends BuilderProgram>(state: SolutionBuilderState<T
     // In watch mode we store the modified times in the cache
     // This is either Date | FileWatcherWithModifiedTime because we query modified times first and
     // then after complete compilation of the project, watch the files so we dont want to loose these modified times.
-    const result = ts.getModifiedTime(state.host, fileName);
+    const result = ts_getModifiedTime(state.host, fileName);
     if (state.watch) {
         if (existing) (existing as FileWatcherWithModifiedTime).modifiedTime = result;
         else state.filesWatched.set(path, result);
@@ -1657,7 +1676,7 @@ function getBuildInfo<T extends BuilderProgram>(state: SolutionBuilderState<T>, 
         return existing.buildInfo || undefined;
     }
     const value = state.readFileWithCache(buildInfoPath);
-    const buildInfo = value ? ts.getBuildInfo(buildInfoPath, value) : undefined;
+    const buildInfo = value ? ts_getBuildInfo(buildInfoPath, value) : undefined;
     state.buildInfoCache.set(resolvedConfigPath, { path, buildInfo: buildInfo || false, modifiedTime: modifiedTime || missingFileModifiedTime });
     return buildInfo;
 }
@@ -1732,7 +1751,7 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
     let buildInfoVersionMap: ReturnType<typeof getBuildInfoFileVersionMap> | undefined;
     if (buildInfoPath) {
         const buildInfoCacheEntry = getBuildInfoCacheEntry(state, buildInfoPath, resolvedPath);
-        buildInfoTime = buildInfoCacheEntry?.modifiedTime || ts.getModifiedTime(host, buildInfoPath);
+        buildInfoTime = buildInfoCacheEntry?.modifiedTime || ts_getModifiedTime(host, buildInfoPath);
         if (buildInfoTime === missingFileModifiedTime) {
             if (!buildInfoCacheEntry) {
                 state.buildInfoCache.set(resolvedPath, {
@@ -1864,7 +1883,7 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
             // Output is missing; can stop checking
             let outputTime = outputTimeStampMap?.get(path);
             if (!outputTime) {
-                outputTime = ts.getModifiedTime(state.host, output);
+                outputTime = ts_getModifiedTime(state.host, output);
                 outputTimeStampMap?.set(path, outputTime);
             }
 
@@ -2255,10 +2274,10 @@ function scheduleBuildInvalidatedProject<T extends BuilderProgram>(state: Soluti
     if (state.timerToBuildInvalidatedProject) {
         hostWithWatch.clearTimeout(state.timerToBuildInvalidatedProject);
     }
-    state.timerToBuildInvalidatedProject = hostWithWatch.setTimeout(buildNextInvalidatedProject, time, state, changeDetected);
+    state.timerToBuildInvalidatedProject = hostWithWatch.setTimeout(buildNextInvalidatedProject, time, "timerToBuildInvalidatedProject", state, changeDetected);
 }
 
-function buildNextInvalidatedProject<T extends BuilderProgram>(state: SolutionBuilderState<T>, changeDetected: boolean) {
+function buildNextInvalidatedProject<T extends BuilderProgram>(_timeoutType: string, state: SolutionBuilderState<T>, changeDetected: boolean) {
     performance.mark("SolutionBuilder::beforeBuild");
     const buildOrder = buildNextInvalidatedProjectWorker(state, changeDetected);
     performance.mark("SolutionBuilder::afterBuild");
@@ -2466,11 +2485,11 @@ function relName<T extends BuilderProgram>(state: SolutionBuilderState<T>, path:
     return convertToRelativePath(path, state.compilerHost.getCurrentDirectory(), state.compilerHost.getCanonicalFileName);
 }
 
-function reportStatus<T extends BuilderProgram>(state: SolutionBuilderState<T>, message: DiagnosticMessage, ...args: string[]) {
+function reportStatus<T extends BuilderProgram>(state: SolutionBuilderState<T>, message: DiagnosticMessage, ...args: DiagnosticArguments) {
     state.host.reportSolutionBuilderStatus(createCompilerDiagnostic(message, ...args));
 }
 
-function reportWatchStatus<T extends BuilderProgram>(state: SolutionBuilderState<T>, message: DiagnosticMessage, ...args: (string | number | undefined)[]) {
+function reportWatchStatus<T extends BuilderProgram>(state: SolutionBuilderState<T>, message: DiagnosticMessage, ...args: DiagnosticArguments) {
     state.hostWithWatch.onWatchStatusChange?.(createCompilerDiagnostic(message, ...args), state.host.getNewLine(), state.baseCompilerOptions);
 }
 

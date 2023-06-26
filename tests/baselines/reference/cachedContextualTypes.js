@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/cachedContextualTypes.ts] ////
+
 //// [cachedContextualTypes.ts]
 // Repro from #52198
 

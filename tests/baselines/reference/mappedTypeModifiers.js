@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/mapped/mappedTypeModifiers.ts] ////
+
 //// [mappedTypeModifiers.ts]
 type T = { a: number, b: string };
 type TP = { a?: number, b?: string };

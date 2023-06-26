@@ -1,4 +1,6 @@
-=== tests/cases/compiler/eventEmitterPatternWithRecordOfFunction.ts ===
+//// [tests/cases/compiler/eventEmitterPatternWithRecordOfFunction.ts] ////
+
+=== eventEmitterPatternWithRecordOfFunction.ts ===
 interface A {
     emit(event: string, ...args: any[]): boolean;
 >emit : (event: string, ...args: any[]) => boolean

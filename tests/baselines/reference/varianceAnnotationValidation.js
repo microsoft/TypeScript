@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/varianceAnnotationValidation.ts] ////
+
 //// [varianceAnnotationValidation.ts]
 // Repro from #49607
 

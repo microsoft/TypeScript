@@ -79,7 +79,6 @@ import {
     EmitNode,
     emptyArray,
     EmptyStatement,
-    EndOfDeclarationMarker,
     EndOfFileToken,
     EntityName,
     EnumDeclaration,
@@ -121,10 +120,12 @@ import {
     getLineAndCharacterOfPosition,
     getNameOfDeclaration,
     getNodeId,
+    getNonAssignedNameOfDeclaration,
     getSourceMapRange,
     getSyntheticLeadingComments,
     getSyntheticTrailingComments,
     getTextOfIdentifierOrLiteral,
+    HasDecorators,
     hasInvalidEscape,
     HasModifiers,
     hasProperty,
@@ -133,6 +134,8 @@ import {
     Identifier,
     idText,
     IfStatement,
+    ImmediatelyInvokedArrowFunction,
+    ImmediatelyInvokedFunctionExpression,
     ImportClause,
     ImportDeclaration,
     ImportEqualsDeclaration,
@@ -267,6 +270,7 @@ import {
     JSDocVariadicType,
     JsxAttribute,
     JsxAttributeLike,
+    JsxAttributeName,
     JsxAttributes,
     JsxAttributeValue,
     JsxChild,
@@ -275,6 +279,7 @@ import {
     JsxElement,
     JsxExpression,
     JsxFragment,
+    JsxNamespacedName,
     JsxOpeningElement,
     JsxOpeningFragment,
     JsxSelfClosingElement,
@@ -296,7 +301,6 @@ import {
     MemberName,
     memoize,
     memoizeOne,
-    MergeDeclarationMarker,
     MetaProperty,
     MethodDeclaration,
     MethodSignature,
@@ -908,6 +912,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         updateJsxSpreadAttribute,
         createJsxExpression,
         updateJsxExpression,
+        createJsxNamespacedName,
+        updateJsxNamespacedName,
         createCaseClause,
         updateCaseClause,
         createDefaultClause,
@@ -942,8 +948,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         updatePartiallyEmittedExpression,
         createCommaListExpression,
         updateCommaListExpression,
-        createEndOfDeclarationMarker,
-        createMergeDeclarationMarker,
         createSyntheticReferenceExpression,
         updateSyntheticReferenceExpression,
         cloneNode,
@@ -989,6 +993,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         createExportDefault,
         createExternalModuleExport,
         createTypeCheck,
+        createIsNotTypeCheck,
         createMethodCall,
         createGlobalMethodCall,
         createFunctionBindCall,
@@ -1022,6 +1027,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         liftToBlock,
         mergeLexicalEnvironment,
         updateModifiers,
+        updateModifierLike,
     };
 
     forEach(nodeFactoryPatchers, fn => fn(factory));
@@ -1105,7 +1111,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     function createBigIntLiteral(value: string | PseudoBigInt): BigIntLiteral {
         const node = createBaseToken<BigIntLiteral>(SyntaxKind.BigIntLiteral);
         node.text = typeof value === "string" ? value : pseudoBigIntToString(value) + "n";
-        node.transformFlags |= TransformFlags.ContainsESNext;
+        node.transformFlags |= TransformFlags.ContainsES2020;
         return node;
     }
 
@@ -1317,6 +1323,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
                 transformFlags =
                     TransformFlags.ContainsES2017 |
                     TransformFlags.ContainsES2018;
+                break;
+
+            case SyntaxKind.UsingKeyword:
+                transformFlags = TransformFlags.ContainsESNext;
                 break;
 
             case SyntaxKind.PublicKeyword:
@@ -3675,7 +3685,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
                 node.transformFlags |= TransformFlags.ContainsES2015;
                 break;
             case SyntaxKind.ImportKeyword:
-                node.transformFlags |= TransformFlags.ContainsESNext;
+                node.transformFlags |= TransformFlags.ContainsES2020;
                 break;
             default:
                 return Debug.assertNever(keywordToken);
@@ -4174,6 +4184,9 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             node.transformFlags |=
                 TransformFlags.ContainsES2015 |
                 TransformFlags.ContainsBlockScopedBinding;
+        }
+        if (flags & NodeFlags.Using) {
+            node.transformFlags |= TransformFlags.ContainsESNext;
         }
         return node;
     }
@@ -4715,7 +4728,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         node.name = name;
         node.transformFlags |=
             propagateChildFlags(node.name) |
-            TransformFlags.ContainsESNext;
+            TransformFlags.ContainsES2020;
         node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
         return node;
     }
@@ -5582,7 +5595,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function createJsxAttribute(name: Identifier, initializer: JsxAttributeValue | undefined) {
+    function createJsxAttribute(name: JsxAttributeName, initializer: JsxAttributeValue | undefined) {
         const node = createBaseDeclaration<JsxAttribute>(SyntaxKind.JsxAttribute);
         node.name = name;
         node.initializer = initializer;
@@ -5594,7 +5607,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function updateJsxAttribute(node: JsxAttribute, name: Identifier, initializer: JsxAttributeValue | undefined) {
+    function updateJsxAttribute(node: JsxAttribute, name: JsxAttributeName, initializer: JsxAttributeValue | undefined) {
         return node.name !== name
             || node.initializer !== initializer
             ? update(createJsxAttribute(name, initializer), node)
@@ -5651,6 +5664,26 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     function updateJsxExpression(node: JsxExpression, expression: Expression | undefined) {
         return node.expression !== expression
             ? update(createJsxExpression(node.dotDotDotToken, expression), node)
+            : node;
+    }
+
+    // @api
+    function createJsxNamespacedName(namespace: Identifier, name: Identifier) {
+        const node = createBaseNode<JsxNamespacedName>(SyntaxKind.JsxNamespacedName);
+        node.namespace = namespace;
+        node.name = name;
+        node.transformFlags |=
+            propagateChildFlags(node.namespace) |
+            propagateChildFlags(node.name) |
+            TransformFlags.ContainsJsx;
+        return node;
+    }
+
+    // @api
+    function updateJsxNamespacedName(node: JsxNamespacedName, namespace: Identifier, name: Identifier) {
+        return node.namespace !== namespace
+            || node.name !== name
+            ? update(createJsxNamespacedName(namespace, name), node)
             : node;
     }
 
@@ -6186,30 +6219,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             : node;
     }
 
-    /**
-     * Creates a synthetic element to act as a placeholder for the end of an emitted declaration in
-     * order to properly emit exports.
-     */
-    // @api
-    function createEndOfDeclarationMarker(original: Node) {
-        const node = createBaseNode<EndOfDeclarationMarker>(SyntaxKind.EndOfDeclarationMarker);
-        node.emitNode = {} as EmitNode;
-        node.original = original;
-        return node;
-    }
-
-    /**
-     * Creates a synthetic element to act as a placeholder for the beginning of a merged declaration in
-     * order to properly emit exports.
-     */
-    // @api
-    function createMergeDeclarationMarker(original: Node) {
-        const node = createBaseNode<MergeDeclarationMarker>(SyntaxKind.MergeDeclarationMarker);
-        node.emitNode = {} as EmitNode;
-        node.original = original;
-        return node;
-    }
-
     // @api
     function createSyntheticReferenceExpression(expression: Expression, thisArg: Expression) {
         const node = createBaseNode<SyntheticReferenceExpression>(SyntaxKind.SyntheticReferenceExpression);
@@ -6315,8 +6324,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // compound nodes
-    function createImmediatelyInvokedFunctionExpression(statements: readonly Statement[]): CallExpression;
-    function createImmediatelyInvokedFunctionExpression(statements: readonly Statement[], param: ParameterDeclaration, paramValue: Expression): CallExpression;
+    function createImmediatelyInvokedFunctionExpression(statements: readonly Statement[]): ImmediatelyInvokedFunctionExpression;
+    function createImmediatelyInvokedFunctionExpression(statements: readonly Statement[], param: ParameterDeclaration, paramValue: Expression): ImmediatelyInvokedFunctionExpression;
     function createImmediatelyInvokedFunctionExpression(statements: readonly Statement[], param?: ParameterDeclaration, paramValue?: Expression) {
         return createCallExpression(
             createFunctionExpression(
@@ -6333,8 +6342,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         );
     }
 
-    function createImmediatelyInvokedArrowFunction(statements: readonly Statement[]): CallExpression;
-    function createImmediatelyInvokedArrowFunction(statements: readonly Statement[], param: ParameterDeclaration, paramValue: Expression): CallExpression;
+    function createImmediatelyInvokedArrowFunction(statements: readonly Statement[]): ImmediatelyInvokedArrowFunction;
+    function createImmediatelyInvokedArrowFunction(statements: readonly Statement[], param: ParameterDeclaration, paramValue: Expression): ImmediatelyInvokedArrowFunction;
     function createImmediatelyInvokedArrowFunction(statements: readonly Statement[], param?: ParameterDeclaration, paramValue?: Expression) {
         return createCallExpression(
             createArrowFunction(
@@ -6376,9 +6385,15 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     //
 
     function createTypeCheck(value: Expression, tag: TypeOfTag) {
-        return tag === "undefined"
-            ? factory.createStrictEquality(value, createVoidZero())
-            : factory.createStrictEquality(createTypeOfExpression(value), createStringLiteral(tag));
+        return tag === "null" ? factory.createStrictEquality(value, createNull()) :
+            tag === "undefined" ? factory.createStrictEquality(value, createVoidZero()) :
+            factory.createStrictEquality(createTypeOfExpression(value), createStringLiteral(tag));
+    }
+
+    function createIsNotTypeCheck(value: Expression, tag: TypeOfTag) {
+        return tag === "null" ? factory.createStrictInequality(value, createNull()) :
+            tag === "undefined" ? factory.createStrictInequality(value, createVoidZero()) :
+            factory.createStrictInequality(createTypeOfExpression(value), createStringLiteral(tag));
     }
 
     function createMethodCall(object: Expression, methodName: string | Identifier, argumentsList: readonly Expression[]) {
@@ -6648,8 +6663,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             : reduceLeft(expressions, factory.createComma)!;
     }
 
-    function getName(node: Declaration | undefined, allowComments?: boolean, allowSourceMaps?: boolean, emitFlags: EmitFlags = 0) {
-        const nodeName = getNameOfDeclaration(node);
+    function getName(node: Declaration | undefined, allowComments?: boolean, allowSourceMaps?: boolean, emitFlags: EmitFlags = 0, ignoreAssignedName?: boolean) {
+        const nodeName = ignoreAssignedName ? node && getNonAssignedNameOfDeclaration(node) : getNameOfDeclaration(node);
         if (nodeName && isIdentifier(nodeName) && !isGeneratedIdentifier(nodeName)) {
             // TODO(rbuckton): Does this need to be parented?
             const name = setParent(setTextRange(cloneNode(nodeName), nodeName), nodeName.parent);
@@ -6686,9 +6701,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
      * @param node The declaration.
      * @param allowComments A value indicating whether comments may be emitted for the name.
      * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
+     * @param ignoreAssignedName Indicates that the assigned name of a declaration shouldn't be considered.
      */
-    function getLocalName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean) {
-        return getName(node, allowComments, allowSourceMaps, EmitFlags.LocalName);
+    function getLocalName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean, ignoreAssignedName?: boolean) {
+        return getName(node, allowComments, allowSourceMaps, EmitFlags.LocalName, ignoreAssignedName);
     }
 
     /**
@@ -6988,6 +7004,18 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             isImportDeclaration(node) ? updateImportDeclaration(node, modifierArray, node.importClause, node.moduleSpecifier, node.assertClause) :
             isExportAssignment(node) ? updateExportAssignment(node, modifierArray, node.expression) :
             isExportDeclaration(node) ? updateExportDeclaration(node, modifierArray, node.isTypeOnly, node.exportClause, node.moduleSpecifier, node.assertClause) :
+            Debug.assertNever(node);
+    }
+
+    function updateModifierLike<T extends HasModifiers & HasDecorators>(node: T, modifiers: readonly ModifierLike[]): T;
+    function updateModifierLike(node: HasModifiers & HasDecorators, modifierArray: readonly ModifierLike[]) {
+        return isParameter(node) ? updateParameterDeclaration(node, modifierArray, node.dotDotDotToken, node.name, node.questionToken, node.type, node.initializer) :
+            isPropertyDeclaration(node) ? updatePropertyDeclaration(node, modifierArray, node.name, node.questionToken ?? node.exclamationToken, node.type, node.initializer) :
+            isMethodDeclaration(node) ? updateMethodDeclaration(node, modifierArray, node.asteriskToken, node.name, node.questionToken, node.typeParameters, node.parameters, node.type, node.body) :
+            isGetAccessorDeclaration(node) ? updateGetAccessorDeclaration(node, modifierArray, node.name, node.parameters, node.type, node.body) :
+            isSetAccessorDeclaration(node) ? updateSetAccessorDeclaration(node, modifierArray, node.name, node.parameters, node.body) :
+            isClassExpression(node) ? updateClassExpression(node, modifierArray, node.name, node.typeParameters, node.heritageClauses, node.members) :
+            isClassDeclaration(node) ? updateClassDeclaration(node, modifierArray, node.name, node.typeParameters, node.heritageClauses, node.members) :
             Debug.assertNever(node);
     }
 
@@ -7573,10 +7601,12 @@ export function createSourceMapSource(fileName: string, text: string, skipTrivia
 // Utilities
 
 export function setOriginalNode<T extends Node>(node: T, original: Node | undefined): T {
-    node.original = original;
-    if (original) {
-        const emitNode = original.emitNode;
-        if (emitNode) node.emitNode = mergeEmitNode(emitNode, node.emitNode);
+    if (node.original !== original) {
+        node.original = original;
+        if (original) {
+            const emitNode = original.emitNode;
+            if (emitNode) node.emitNode = mergeEmitNode(emitNode, node.emitNode);
+        }
     }
     return node;
 }
@@ -7584,7 +7614,7 @@ export function setOriginalNode<T extends Node>(node: T, original: Node | undefi
 function mergeEmitNode(sourceEmitNode: EmitNode, destEmitNode: EmitNode | undefined) {
     const {
         flags,
-            internalFlags,
+        internalFlags,
         leadingComments,
         trailingComments,
         commentRange,
@@ -7594,24 +7624,95 @@ function mergeEmitNode(sourceEmitNode: EmitNode, destEmitNode: EmitNode | undefi
         helpers,
         startsOnNewLine,
         snippetElement,
+        classThis,
+        assignedName,
     } = sourceEmitNode;
     if (!destEmitNode) destEmitNode = {} as EmitNode;
-    // We are using `.slice()` here in case `destEmitNode.leadingComments` is pushed to later.
-    if (leadingComments) destEmitNode.leadingComments = addRange(leadingComments.slice(), destEmitNode.leadingComments);
-    if (trailingComments) destEmitNode.trailingComments = addRange(trailingComments.slice(), destEmitNode.trailingComments);
-    if (flags) destEmitNode.flags = flags;
-    if (internalFlags) destEmitNode.internalFlags = internalFlags & ~InternalEmitFlags.Immutable;
-    if (commentRange) destEmitNode.commentRange = commentRange;
-    if (sourceMapRange) destEmitNode.sourceMapRange = sourceMapRange;
-    if (tokenSourceMapRanges) destEmitNode.tokenSourceMapRanges = mergeTokenSourceMapRanges(tokenSourceMapRanges, destEmitNode.tokenSourceMapRanges!);
-    if (constantValue !== undefined) destEmitNode.constantValue = constantValue;
+
+    // NOTE: We should have one or more lines here for each property in EmitNode, even if the line
+    // consists only of a comment indicating the property does not merge
+
+    // `flags` overwrites the destination
+    if (flags) {
+        destEmitNode.flags = flags;
+    }
+
+    // `internalFlags` overwrites the destination. We do not copy over the immutability of the source.
+    if (internalFlags) {
+        destEmitNode.internalFlags = internalFlags & ~InternalEmitFlags.Immutable;
+    }
+
+    // `annotatedNodes` are not merged as they should only present on the parse tree node of a `SourceFile`.
+
+    // `leadingComments` are concatenated with any existing leading comments on the destination
+    if (leadingComments) {
+        // We use `.slice()` in case `destEmitNode.leadingComments` is pushed to later
+        destEmitNode.leadingComments = addRange(leadingComments.slice(), destEmitNode.leadingComments);
+    }
+
+    // `trailingComments` are concatenated with any existing trailing comments on the destination
+    if (trailingComments) {
+        // We use `.slice()` in case `destEmitNode.trailingComments` is pushed to later
+        destEmitNode.trailingComments = addRange(trailingComments.slice(), destEmitNode.trailingComments);
+    }
+
+    // `commentRange` overwrites the destination
+    if (commentRange) {
+        destEmitNode.commentRange = commentRange;
+    }
+
+    // `sourceMapRange` overwrites the destination
+    if (sourceMapRange) {
+        destEmitNode.sourceMapRange = sourceMapRange;
+    }
+
+    // `tokenSourceMapRanges` are merged with the destination
+    if (tokenSourceMapRanges) {
+        destEmitNode.tokenSourceMapRanges = mergeTokenSourceMapRanges(tokenSourceMapRanges, destEmitNode.tokenSourceMapRanges!);
+    }
+
+    // `constantValue` overwrites the destination
+    if (constantValue !== undefined) {
+        destEmitNode.constantValue = constantValue;
+    }
+
+    // `externalHelpersModuleName` is not merged
+    // `externalHelpers` is not merged
+
+    // `helpers` are merged into the destination
     if (helpers) {
         for (const helper of helpers) {
             destEmitNode.helpers = appendIfUnique(destEmitNode.helpers, helper);
         }
     }
-    if (startsOnNewLine !== undefined) destEmitNode.startsOnNewLine = startsOnNewLine;
-    if (snippetElement !== undefined) destEmitNode.snippetElement = snippetElement;
+
+    // `startsOnNewLine` overwrites the destination
+    if (startsOnNewLine !== undefined) {
+        destEmitNode.startsOnNewLine = startsOnNewLine;
+    }
+
+    // `snippetElement` overwrites the destination
+    if (snippetElement !== undefined) {
+        destEmitNode.snippetElement = snippetElement;
+    }
+
+    // `typeNode` is not merged as it only applies to comment emit for a variable declaration.
+    // TODO: `typeNode` should overwrite the destination
+
+    // `classThis` overwrites the destination
+    if (classThis) {
+        destEmitNode.classThis = classThis;
+    }
+
+    // `assignedName` overwrites the destination
+    if (assignedName) {
+        destEmitNode.assignedName = assignedName;
+    }
+
+    // `identifierTypeArguments` are not merged as they only apply to an Identifier in quick info
+    // `autoGenerate` is not merged as it only applies to a specific generated Identifier/PrivateIdentifier
+    // `generatedImportReference` is not merged as it only applies to an Identifier
+
     return destEmitNode;
 }
 

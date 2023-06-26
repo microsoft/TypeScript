@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/for-ofStatements/for-of17.ts] ////
+
 //// [for-of17.ts]
 class NumberIterator {
     next() {

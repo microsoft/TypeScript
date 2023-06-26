@@ -91,6 +91,7 @@ import {
     ImportTypeNode,
     IndexSignatureDeclaration,
     InterfaceDeclaration,
+    isAmbientModule,
     isAnyImportSyntax,
     isArray,
     isArrayBindingElement,
@@ -150,7 +151,9 @@ import {
     isTypeParameterDeclaration,
     isTypeQueryNode,
     isUnparsedSource,
+    isVarAwaitUsing,
     isVariableDeclaration,
+    isVarUsing,
     last,
     LateBoundDeclaration,
     LateVisibilityPaintedStatement,
@@ -161,8 +164,10 @@ import {
     MethodSignature,
     Modifier,
     ModifierFlags,
+    ModifierLike,
     ModuleBody,
     ModuleDeclaration,
+    ModuleName,
     NamedDeclaration,
     NamespaceDeclaration,
     needsScopeMarker,
@@ -217,6 +222,7 @@ import {
     unescapeLeadingUnderscores,
     UnparsedSource,
     VariableDeclaration,
+    VariableDeclarationList,
     VariableStatement,
     visitArray,
     visitEachChild,
@@ -250,10 +256,10 @@ export function isInternalDeclaration(node: Node, currentSourceFile: SourceFile)
                 // to handle
                 // ... parameters, /** @internal */
                 // public param: string
-                getTrailingCommentRanges(text, skipTrivia(text, previousSibling.end + 1, /* stopAfterLineBreak */ false, /* stopAtComments */ true)),
+                getTrailingCommentRanges(text, skipTrivia(text, previousSibling.end + 1, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true)),
                 getLeadingCommentRanges(text, node.pos)
             )
-            : getTrailingCommentRanges(text, skipTrivia(text, node.pos, /* stopAfterLineBreak */ false, /* stopAtComments */ true));
+            : getTrailingCommentRanges(text, skipTrivia(text, node.pos, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true));
         return commentRanges && commentRanges.length && hasInternalAnnotation(last(commentRanges), currentSourceFile);
     }
     const leadingCommentRanges = parseTreeNode && getLeadingCommentRangesOfNode(parseTreeNode, currentSourceFile);
@@ -368,14 +374,14 @@ export function transformDeclarations(context: TransformationContext) {
                     context.addDiagnostic(createDiagnosticForNode(symbolAccessibilityResult.errorNode || errorInfo.errorNode,
                         errorInfo.diagnosticMessage,
                         getTextOfNode(errorInfo.typeName),
-                        symbolAccessibilityResult.errorSymbolName,
-                        symbolAccessibilityResult.errorModuleName));
+                        symbolAccessibilityResult.errorSymbolName!,
+                        symbolAccessibilityResult.errorModuleName!));
                 }
                 else {
                     context.addDiagnostic(createDiagnosticForNode(symbolAccessibilityResult.errorNode || errorInfo.errorNode,
                         errorInfo.diagnosticMessage,
-                        symbolAccessibilityResult.errorSymbolName,
-                        symbolAccessibilityResult.errorModuleName));
+                        symbolAccessibilityResult.errorSymbolName!,
+                        symbolAccessibilityResult.errorModuleName!));
                 }
                 return true;
             }
@@ -391,7 +397,7 @@ export function transformDeclarations(context: TransformationContext) {
 
     function trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) {
         if (symbol.flags & SymbolFlags.TypeParameter) return false;
-        const issuedDiagnostic = handleSymbolAccessibilityError(resolver.isSymbolAccessible(symbol, enclosingDeclaration, meaning, /*shouldComputeAliasesToMakeVisible*/ true));
+        const issuedDiagnostic = handleSymbolAccessibilityError(resolver.isSymbolAccessible(symbol, enclosingDeclaration, meaning, /*shouldComputeAliasToMarkVisible*/ true));
         recordTypeReferenceDirectivesIfNecessary(resolver.getTypeReferenceDirectivesForSymbol(symbol, meaning));
         return issuedDiagnostic;
     }
@@ -706,7 +712,7 @@ export function transformDeclarations(context: TransformationContext) {
                 return factory.updateBindingElement(
                     elem,
                     elem.dotDotDotToken,
-                    /* propertyName */ undefined,
+                    /*propertyName*/ undefined,
                     elem.propertyName,
                     shouldPrintWithInitializer(elem) ? elem.initializer : undefined
                 );
@@ -1130,7 +1136,7 @@ export function transformDeclarations(context: TransformationContext) {
         if (isMethodDeclaration(input) || isMethodSignature(input)) {
             if (hasEffectiveModifier(input, ModifierFlags.Private)) {
                 if (input.symbol && input.symbol.declarations && input.symbol.declarations[0] !== input) return; // Elide all but the first overload
-                return cleanup(factory.createPropertyDeclaration(ensureModifiers(input), input.name, /*questionToken*/ undefined, /*type*/ undefined, /*initializer*/ undefined));
+                return cleanup(factory.createPropertyDeclaration(ensureModifiers(input), input.name, /*questionOrExclamationToken*/ undefined, /*type*/ undefined, /*initializer*/ undefined));
             }
         }
 
@@ -1419,6 +1425,31 @@ export function transformDeclarations(context: TransformationContext) {
         return factory.updateModifiers(statement, modifiers);
     }
 
+    function updateModuleDeclarationAndKeyword(
+        node: ModuleDeclaration,
+        modifiers: readonly ModifierLike[] | undefined,
+        name: ModuleName,
+        body: ModuleBody | undefined
+    ) {
+        const updated = factory.updateModuleDeclaration(node, modifiers, name, body);
+
+        if (isAmbientModule(updated) || updated.flags & NodeFlags.Namespace) {
+            return updated;
+        }
+
+        const fixed = factory.createModuleDeclaration(
+            updated.modifiers,
+            updated.name,
+            updated.body,
+            updated.flags | NodeFlags.Namespace
+        );
+
+        setOriginalNode(fixed, updated);
+        setTextRange(fixed, updated);
+
+        return fixed;
+    }
+
     function transformTopLevelDeclaration(input: LateVisibilityPaintedStatement) {
         if (lateMarkedStatements) {
             while (orderedRemoveItem(lateMarkedStatements, input));
@@ -1595,7 +1626,8 @@ export function transformDeclarations(context: TransformationContext) {
                     needsScopeFixMarker = oldNeedsScopeFix;
                     resultHasScopeMarker = oldHasScopeFix;
                     const mods = ensureModifiers(input);
-                    return cleanup(factory.updateModuleDeclaration(
+
+                    return cleanup(updateModuleDeclarationAndKeyword(
                         input,
                         mods,
                         isExternalModuleAugmentation(input) ? rewriteModuleSpecifier(input, input.name) : input.name,
@@ -1611,7 +1643,7 @@ export function transformDeclarations(context: TransformationContext) {
                     const id = getOriginalNodeId(inner!); // TODO: GH#18217
                     const body = lateStatementReplacementMap.get(id);
                     lateStatementReplacementMap.delete(id);
-                    return cleanup(factory.updateModuleDeclaration(
+                    return cleanup(updateModuleDeclarationAndKeyword(
                         input,
                         mods,
                         input.name,
@@ -1655,7 +1687,7 @@ export function transformDeclarations(context: TransformationContext) {
                                 elems.push(factory.createPropertyDeclaration(
                                     ensureModifiers(param),
                                     elem.name as Identifier,
-                                    /*questionToken*/ undefined,
+                                    /*questionOrExclamationToken*/ undefined,
                                     ensureType(elem, /*type*/ undefined),
                                     /*initializer*/ undefined
                                 ));
@@ -1673,7 +1705,7 @@ export function transformDeclarations(context: TransformationContext) {
                     factory.createPropertyDeclaration(
                         /*modifiers*/ undefined,
                         factory.createPrivateIdentifier("#private"),
-                        /*questionToken*/ undefined,
+                        /*questionOrExclamationToken*/ undefined,
                         /*type*/ undefined,
                         /*initializer*/ undefined
                     )
@@ -1763,7 +1795,19 @@ export function transformDeclarations(context: TransformationContext) {
         if (!forEach(input.declarationList.declarations, getBindingNameVisible)) return;
         const nodes = visitNodes(input.declarationList.declarations, visitDeclarationSubtree, isVariableDeclaration);
         if (!length(nodes)) return;
-        return factory.updateVariableStatement(input, factory.createNodeArray(ensureModifiers(input)), factory.updateVariableDeclarationList(input.declarationList, nodes));
+
+        const modifiers = factory.createNodeArray(ensureModifiers(input));
+        let declList: VariableDeclarationList;
+        if (isVarUsing(input.declarationList) || isVarAwaitUsing(input.declarationList)) {
+            declList = factory.createVariableDeclarationList(nodes, NodeFlags.Const);
+            setOriginalNode(declList, input.declarationList);
+            setTextRange(declList, input.declarationList);
+            setCommentRange(declList, input.declarationList);
+        }
+        else {
+            declList = factory.updateVariableDeclarationList(input.declarationList, nodes);
+        }
+        return factory.updateVariableStatement(input, modifiers, declList);
     }
 
     function recreateBindingPattern(d: BindingPattern): VariableDeclaration[] {

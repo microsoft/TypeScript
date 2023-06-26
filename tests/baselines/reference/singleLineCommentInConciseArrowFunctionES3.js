@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/singleLineCommentInConciseArrowFunctionES3.ts] ////
+
 //// [singleLineCommentInConciseArrowFunctionES3.ts]
 function test() {
     return () =>

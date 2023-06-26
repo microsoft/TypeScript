@@ -5,7 +5,7 @@ sourceRoot:
 sources: classStaticBlock25.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/conformance/classes/classStaticBlock/classStaticBlock25.js
+emittedFile:classStaticBlock25.js
 sourceFile:classStaticBlock25.ts
 -------------------------------------------------------------------
 >>>const a = 1;
@@ -206,7 +206,7 @@ sourceRoot:
 sources: classStaticBlock25.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/conformance/classes/classStaticBlock/classStaticBlock25.d.ts
+emittedFile:classStaticBlock25.d.ts
 sourceFile:classStaticBlock25.ts
 -------------------------------------------------------------------
 >>>declare const a = 1;

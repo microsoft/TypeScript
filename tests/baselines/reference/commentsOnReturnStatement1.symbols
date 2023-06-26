@@ -1,4 +1,6 @@
-=== tests/cases/compiler/commentsOnReturnStatement1.ts ===
+//// [tests/cases/compiler/commentsOnReturnStatement1.ts] ////
+
+=== commentsOnReturnStatement1.ts ===
 class DebugClass {
 >DebugClass : Symbol(DebugClass, Decl(commentsOnReturnStatement1.ts, 0, 0))
 

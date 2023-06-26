@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/templates/templateStringWithEmbeddedInOperatorES6.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringWithEmbeddedInOperatorES6.ts] ////
+
+=== templateStringWithEmbeddedInOperatorES6.ts ===
 var x = `abc${ "hi" in { hi: 10, hello: 20} }def`;
 >x : Symbol(x, Decl(templateStringWithEmbeddedInOperatorES6.ts, 0, 3))
 >hi : Symbol(hi, Decl(templateStringWithEmbeddedInOperatorES6.ts, 0, 24))

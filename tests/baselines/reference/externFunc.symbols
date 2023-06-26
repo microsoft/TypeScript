@@ -1,4 +1,6 @@
-=== tests/cases/compiler/externFunc.ts ===
+//// [tests/cases/compiler/externFunc.ts] ////
+
+=== externFunc.ts ===
 declare function parseInt(s:string):number;
 >parseInt : Symbol(parseInt, Decl(lib.es5.d.ts, --, --), Decl(externFunc.ts, 0, 0))
 >s : Symbol(s, Decl(externFunc.ts, 0, 26))

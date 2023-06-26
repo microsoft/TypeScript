@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typedArraysSubarray.ts] ////
+
 //// [typedArraysSubarray.ts]
 function int8ArraySubarray() {
     var arr = new Int8Array(10);

@@ -1,15 +1,15 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    createServerHost,
-    File,
-    libFile,
-} from "../virtualFileSystemWithWatch";
-import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,
     createSession,
     openFilesForSession,
-} from "./helpers";
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+    File,
+    libFile,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: syntax operations", () => {
     it("works when file is removed and added with different content", () => {
@@ -51,13 +51,13 @@ describe("Test Suite 1", () => {
             arguments: { file: unitTest1.path }
         });
         host.deleteFile(unitTest1.path);
-        host.checkTimeoutQueueLengthAndRun(0);
+        host.runQueuedTimeoutCallbacks();
 
         session.executeCommandSeq<ts.server.protocol.CloseRequest>({
             command: ts.server.protocol.CommandTypes.Close,
             arguments: { file: unitTest1.path }
         });
-        host.checkTimeoutQueueLengthAndRun(2);
+        host.runQueuedTimeoutCallbacks();
 
         const unitTest1WithChangedContent: File = {
             path: unitTest1.path,

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/modulePrologueCommonjs.ts] ////
+
 //// [modulePrologueCommonjs.ts]
 "use strict";
 

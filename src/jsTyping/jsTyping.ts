@@ -31,7 +31,6 @@ import {
     versionMajorMinor,
 } from "./_namespaces/ts";
 
-/** @internal */
 export interface TypingResolutionHost {
     directoryExists(path: string): boolean;
     fileExists(fileName: string): boolean;
@@ -467,6 +466,6 @@ function renderPackageNameValidationFailureWorker(typing: string, result: NameVa
         case NameValidationResult.Ok:
             return Debug.fail(); // Shouldn't have called this.
         default:
-            throw Debug.assertNever(result);
+            Debug.assertNever(result);
     }
 }

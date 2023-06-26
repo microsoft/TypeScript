@@ -1,4 +1,6 @@
-=== tests/cases/compiler/emptyArrayDestructuringExpressionVisitedByTransformer.ts ===
+//// [tests/cases/compiler/emptyArrayDestructuringExpressionVisitedByTransformer.ts] ////
+
+=== emptyArrayDestructuringExpressionVisitedByTransformer.ts ===
 var a = [] = [1].map(_ => _);
 >a : Symbol(a, Decl(emptyArrayDestructuringExpressionVisitedByTransformer.ts, 0, 3))
 >[1].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))

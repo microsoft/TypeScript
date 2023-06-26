@@ -1,4 +1,6 @@
-=== tests/cases/compiler/implementClausePrecedingExtends.ts ===
+//// [tests/cases/compiler/implementClausePrecedingExtends.ts] ////
+
+=== implementClausePrecedingExtends.ts ===
 class C { foo: number }
 >C : Symbol(C, Decl(implementClausePrecedingExtends.ts, 0, 0))
 >foo : Symbol(C.foo, Decl(implementClausePrecedingExtends.ts, 0, 9))

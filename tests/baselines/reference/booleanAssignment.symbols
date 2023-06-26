@@ -1,4 +1,6 @@
-=== tests/cases/compiler/booleanAssignment.ts ===
+//// [tests/cases/compiler/booleanAssignment.ts] ////
+
+=== booleanAssignment.ts ===
 var b = new Boolean();
 >b : Symbol(b, Decl(booleanAssignment.ts, 0, 3))
 >Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

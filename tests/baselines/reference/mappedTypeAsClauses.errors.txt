@@ -1,7 +1,7 @@
-tests/cases/conformance/types/mapped/mappedTypeAsClauses.ts(130,3): error TS2345: Argument of type '"a"' is not assignable to parameter of type '"b"'.
+mappedTypeAsClauses.ts(130,3): error TS2345: Argument of type '"a"' is not assignable to parameter of type '"b"'.
 
 
-==== tests/cases/conformance/types/mapped/mappedTypeAsClauses.ts (1 errors) ====
+==== mappedTypeAsClauses.ts (1 errors) ====
     // Mapped type 'as N' clauses
     
     type Getters<T> = { [P in keyof T & string as `get${Capitalize<P>}`]: () => T[P] };

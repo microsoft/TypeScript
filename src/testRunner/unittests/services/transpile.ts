@@ -130,7 +130,7 @@ var x = 0;`, {
         testVerbatimModuleSyntax: true
     });
 
-    transpilesCorrectly("Generates module output", `var x = 0;`, {
+    transpilesCorrectly("Generates module output", `var x = 0; export {};`, {
         options: { compilerOptions: { module: ts.ModuleKind.AMD } }
     });
 
@@ -139,7 +139,7 @@ var x = 0;`, {
         testVerbatimModuleSyntax: true
     });
 
-    transpilesCorrectly("Sets module name", "var x = 1;", {
+    transpilesCorrectly("Sets module name", "var x = 1; export {};", {
         options: { compilerOptions: { module: ts.ModuleKind.System, newLine: ts.NewLineKind.LineFeed }, moduleName: "NamedModule" }
     });
 
@@ -604,6 +604,20 @@ export * as alias from './file';`, {
         `export { type IFoo };`, {
             options: { compilerOptions: { module: ts.ModuleKind.CommonJS } },
             testVerbatimModuleSyntax: "only"
+        }
+    );
+
+    transpilesCorrectly("Can transpile .ts extensions without error",
+        `import { foo } from "./foo.ts";`, {
+            options: { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ESNext } },
+            testVerbatimModuleSyntax: true
+        }
+    );
+
+    transpilesCorrectly("Ignores `allowImportingTsExtensions` without `noEmit` error",
+        `import { foo } from "./foo.ts";`, {
+            options: { compilerOptions: { module: ts.ModuleKind.ESNext, allowImportingTsExtensions: true, target: ts.ScriptTarget.ESNext } },
+            testVerbatimModuleSyntax: true
         }
     );
 });

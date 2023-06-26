@@ -904,7 +904,7 @@ function isSemicolonDeletionContext(context: FormattingContext): boolean {
     if (context.contextNode.kind === SyntaxKind.InterfaceDeclaration ||
         context.contextNode.kind === SyntaxKind.TypeAliasDeclaration
     ) {
-        // Can’t remove semicolon after `foo`; it would parse as a method declaration:
+        // Can't remove semicolon after `foo`; it would parse as a method declaration:
         //
         // interface I {
         //   foo;

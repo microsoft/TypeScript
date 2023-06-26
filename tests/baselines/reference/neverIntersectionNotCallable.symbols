@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/never/neverIntersectionNotCallable.ts ===
+//// [tests/cases/conformance/types/never/neverIntersectionNotCallable.ts] ////
+
+=== neverIntersectionNotCallable.ts ===
 declare const f: { (x: string): number, a: "" } & { a: number }
 >f : Symbol(f, Decl(neverIntersectionNotCallable.ts, 0, 13))
 >x : Symbol(x, Decl(neverIntersectionNotCallable.ts, 0, 20))
