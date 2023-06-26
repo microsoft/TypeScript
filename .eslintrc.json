@@ -56,7 +56,7 @@
             "named": "never"
         }],
 
-        // Todo: do we want these?
+        // Todo: enable these soon ✨
         "prefer-rest-params": "off",
         "prefer-spread": "off",
         "@typescript-eslint/ban-types": "off",
