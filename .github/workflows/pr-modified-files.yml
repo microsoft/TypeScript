@@ -7,7 +7,7 @@ on:
   # https://securitylab.github.com/research/github-actions-preventing-pwn-requests/
   pull_request_target:
     branches:
-      - 'main'
+      - main
 
 # We only ever need one of these running on a single PR.
 # Just let the newest one complete if there are multiple running.
