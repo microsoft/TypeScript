@@ -11056,7 +11056,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             // always widen a 'unique symbol' type if the type was created for a different declaration and if it isn't accessible
-            if (type.flags & TypeFlags.UniqueESSymbol && (isBindingElement(declaration) || !declaration.type) && type.symbol !== getSymbolOfDeclaration(declaration) && !isValueSymbolAccessible(type.symbol, declaration)) {
+            if (type.flags & TypeFlags.UniqueESSymbol && (isBindingElement(declaration) || !declaration.type) && type.symbol !== getSymbolOfDeclaration(declaration) && !isValueSymbolAccessible(type.symbol, type.symbol.valueDeclaration)) {
                 type = esSymbolType;
             }
 
