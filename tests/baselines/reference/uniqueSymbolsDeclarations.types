@@ -342,13 +342,13 @@ declare const l: L;
 >l : L
 
 const constInitToLReadonlyType = l.readonlyType;
->constInitToLReadonlyType : unique symbol
+>constInitToLReadonlyType : symbol
 >l.readonlyType : unique symbol
 >l : L
 >readonlyType : unique symbol
 
 const constInitToLReadonlyNestedType = l.nested.readonlyNestedType;
->constInitToLReadonlyNestedType : unique symbol
+>constInitToLReadonlyNestedType : symbol
 >l.nested.readonlyNestedType : unique symbol
 >l.nested : { readonly readonlyNestedType: unique symbol; }
 >l : L
