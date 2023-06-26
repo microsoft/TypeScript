@@ -26,7 +26,7 @@ jobs:
   manage-prs:
     runs-on: ubuntu-latest
     if: github.repository == 'microsoft/TypeScript'
-    
+
     # No need to set explicit permissions; we are using typescript-bot's token, not github-actions' token.
 
     env:
