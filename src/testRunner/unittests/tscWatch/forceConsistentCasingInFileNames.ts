@@ -295,14 +295,13 @@ a;b;
             }),
             "/Users/name/projects/web/tsconfig.json": JSON.stringify({
                 compilerOptions: {
-                    target: "es5",
                     module: "nodenext",
                     moduleResolution: "nodenext",
                     forceConsistentCasingInFileNames: true,
                     traceResolution: true,
                 }
             }),
-            [libFile.path]: libFile.content,
+            [libFile.path.replace("lib.d.ts", "lib.esnext.full.d.ts")]: libFile.content,
         }, { currentDirectory: "/Users/name/projects/web" }),
     });
 

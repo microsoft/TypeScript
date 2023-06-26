@@ -89,7 +89,6 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 path: `/user/username/projects/myproject/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
-                        target: "es5",
                         module: "nodenext",
                         moduleResolution: "nodenext",
                         outDir: "./dist",
@@ -125,7 +124,10 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                         export function thing(): void {}
                     `
             },
-            libFile
+            {
+                ...libFile,
+                path: libFile.path.replace("lib.d.ts", "lib.esnext.full.d.ts")
+            }
         ], { currentDirectory: "/user/username/projects/myproject" }),
         commandLineArgs: ["-w", "--traceResolution"],
         edits: [{
@@ -354,7 +356,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             {
                 path: `/user/username/projects/myproject/tsconfig.json`,
                 content: JSON.stringify({
-                    compilerOptions: { target: "es5", module: "node16", moduleResolution: "node16" },
+                    compilerOptions: { module: "node16", moduleResolution: "node16" },
                 })
             },
             {
@@ -424,7 +426,10 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 path: `/user/username/projects/myproject/node_modules/@types/pkg2/index.d.ts`,
                 content: `export const x = 10;`
             },
-            libFile
+            {
+                ...libFile,
+                path: libFile.path.replace("lib.d.ts", "lib.es2022.full.d.ts"),
+            }
         ], { currentDirectory: "/user/username/projects/myproject" }),
         commandLineArgs: ["-w", "--traceResolution"],
         edits: [

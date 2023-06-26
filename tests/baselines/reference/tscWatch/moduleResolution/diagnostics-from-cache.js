@@ -1,7 +1,7 @@
 currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"target":"es5","module":"nodenext","moduleResolution":"nodenext","outDir":"./dist","declaration":true,"declarationDir":"./types"}}
+{"compilerOptions":{"module":"nodenext","moduleResolution":"nodenext","outDir":"./dist","declaration":true,"declarationDir":"./types"}}
 
 //// [/user/username/projects/myproject/package.json]
 {"name":"@this/package","type":"module","exports":{".":{"default":"./dist/index.js","types":"./types/index.d.ts"}}}
@@ -16,7 +16,7 @@ export function thing(): void {}
 export function thing(): void {}
 
 
-//// [/a/lib/lib.d.ts]
+//// [/a/lib/lib.esnext.full.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -59,17 +59,17 @@ File '/package.json' does not exist.
 
 
 Program root files: ["/user/username/projects/myproject/index.ts","/user/username/projects/myproject/index2.ts"]
-Program options: {"target":1,"module":199,"moduleResolution":99,"outDir":"/user/username/projects/myproject/dist","declaration":true,"declarationDir":"/user/username/projects/myproject/types","watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"module":199,"moduleResolution":99,"outDir":"/user/username/projects/myproject/dist","declaration":true,"declarationDir":"/user/username/projects/myproject/types","watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/a/lib/lib.esnext.full.d.ts
 /user/username/projects/myproject/index.ts
 /user/username/projects/myproject/index2.ts
 
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/a/lib/lib.esnext.full.d.ts (used version)
 /user/username/projects/myproject/index.ts (computed .d.ts during emit)
 /user/username/projects/myproject/index2.ts (computed .d.ts during emit)
 
@@ -80,7 +80,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
+/a/lib/lib.esnext.full.d.ts: *new*
   {}
 /user/username/projects/myproject/index.ts: *new*
   {}
@@ -156,10 +156,10 @@ File '/package.json' does not exist according to earlier cached lookups.
 
 
 Program root files: ["/user/username/projects/myproject/index.ts","/user/username/projects/myproject/index2.ts"]
-Program options: {"target":1,"module":199,"moduleResolution":99,"outDir":"/user/username/projects/myproject/dist","declaration":true,"declarationDir":"/user/username/projects/myproject/types","watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"module":199,"moduleResolution":99,"outDir":"/user/username/projects/myproject/dist","declaration":true,"declarationDir":"/user/username/projects/myproject/types","watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: SafeModules
 Program files::
-/a/lib/lib.d.ts
+/a/lib/lib.esnext.full.d.ts
 /user/username/projects/myproject/index.ts
 /user/username/projects/myproject/index2.ts
 

@@ -13,9 +13,9 @@ export function foo(): void;
 {"name":"yargs","version":"17.0.12","exports":{".":{"types":{"import":"./index.d.mts","default":"./index.d.ts"}}}}
 
 //// [/Users/name/projects/web/tsconfig.json]
-{"compilerOptions":{"target":"es5","module":"nodenext","moduleResolution":"nodenext","forceConsistentCasingInFileNames":true,"traceResolution":true}}
+{"compilerOptions":{"module":"nodenext","moduleResolution":"nodenext","forceConsistentCasingInFileNames":true,"traceResolution":true}}
 
-//// [/a/lib/lib.d.ts]
+//// [/a/lib/lib.esnext.full.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -83,8 +83,8 @@ Resolving real path for '/Users/name/projects/web/node_modules/@types/yargs/inde
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
-../../../../a/lib/lib.d.ts
-  Default library for target 'es5'
+../../../../a/lib/lib.esnext.full.d.ts
+  Default library for target 'esnext'
 node_modules/@types/yargs/index.d.ts
   Imported via "yargs" from file 'src/bin.ts' with packageId 'yargs/index.d.ts@17.0.12'
   Entry point for implicit type library 'yargs' with packageId 'yargs/index.d.ts@17.0.12'
@@ -97,20 +97,20 @@ src/bin.ts
 
 
 Program root files: ["/Users/name/projects/web/src/bin.ts"]
-Program options: {"target":1,"module":199,"moduleResolution":99,"forceConsistentCasingInFileNames":true,"traceResolution":true,"watch":true,"explainFiles":true,"configFilePath":"/Users/name/projects/web/tsconfig.json"}
+Program options: {"module":199,"moduleResolution":99,"forceConsistentCasingInFileNames":true,"traceResolution":true,"watch":true,"explainFiles":true,"configFilePath":"/Users/name/projects/web/tsconfig.json"}
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/a/lib/lib.esnext.full.d.ts
 /Users/name/projects/web/node_modules/@types/yargs/index.d.ts
 /Users/name/projects/web/src/bin.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/a/lib/lib.esnext.full.d.ts
 /Users/name/projects/web/node_modules/@types/yargs/index.d.ts
 /Users/name/projects/web/src/bin.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/a/lib/lib.esnext.full.d.ts (used version)
 /users/name/projects/web/node_modules/@types/yargs/index.d.ts (used version)
 /users/name/projects/web/src/bin.ts (used version)
 
@@ -125,7 +125,7 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
+/a/lib/lib.esnext.full.d.ts: *new*
   {}
 /users/name/projects: *new*
   {}
