@@ -11055,8 +11055,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 reportErrorsFromWidening(declaration, type);
             }
 
-            // always widen a 'unique symbol' type if the type was created for a different declaration.
-            if (type.flags & TypeFlags.UniqueESSymbol && (isBindingElement(declaration) || !declaration.type) && type.symbol !== getSymbolOfDeclaration(declaration)) {
+            // always widen a 'unique symbol' type if the type was created for a different declaration and if it's assigned to something mutable
+            if (type.flags & TypeFlags.UniqueESSymbol &&
+                (isBindingElement(declaration) || !declaration.type) &&
+                !isDeclarationReadonly(declaration) && !(isVariableDeclaration(declaration) && isVarConstLike(declaration)) && !isConstContext(declaration) &&
+                type.symbol !== getSymbolOfDeclaration(declaration)
+            ) {
                 type = esSymbolType;
             }
 

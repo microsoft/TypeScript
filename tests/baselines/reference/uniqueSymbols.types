@@ -29,7 +29,7 @@ const constTypeAndCall: unique symbol = Symbol();
 
 // declaration from initializer
 const constInitToConstCall = constCall;
->constInitToConstCall : symbol
+>constInitToConstCall : unique symbol
 >constCall : unique symbol
 
 const constInitToLetCall = letCall;
@@ -41,7 +41,7 @@ const constInitToVarCall = varCall;
 >varCall : symbol
 
 const constInitToConstDeclAmbient = constType;
->constInitToConstDeclAmbient : symbol
+>constInitToConstDeclAmbient : unique symbol
 >constType : unique symbol
 
 let letInitToConstCall = constCall;
@@ -201,19 +201,19 @@ declare const c: C;
 >c : C
 
 const constInitToCReadonlyStaticCall = C.readonlyStaticCall;
->constInitToCReadonlyStaticCall : symbol
+>constInitToCReadonlyStaticCall : unique symbol
 >C.readonlyStaticCall : unique symbol
 >C : typeof C
 >readonlyStaticCall : unique symbol
 
 const constInitToCReadonlyStaticType = C.readonlyStaticType;
->constInitToCReadonlyStaticType : symbol
+>constInitToCReadonlyStaticType : unique symbol
 >C.readonlyStaticType : unique symbol
 >C : typeof C
 >readonlyStaticType : unique symbol
 
 const constInitToCReadonlyStaticTypeAndCall = C.readonlyStaticTypeAndCall;
->constInitToCReadonlyStaticTypeAndCall : symbol
+>constInitToCReadonlyStaticTypeAndCall : unique symbol
 >C.readonlyStaticTypeAndCall : unique symbol
 >C : typeof C
 >readonlyStaticTypeAndCall : unique symbol
@@ -311,7 +311,7 @@ declare const i: I;
 >i : I
 
 const constInitToIReadonlyType = i.readonlyType;
->constInitToIReadonlyType : symbol
+>constInitToIReadonlyType : unique symbol
 >i.readonlyType : unique symbol
 >i : I
 >readonlyType : unique symbol
@@ -349,13 +349,13 @@ declare const l: L;
 >l : L
 
 const constInitToLReadonlyType = l.readonlyType;
->constInitToLReadonlyType : symbol
+>constInitToLReadonlyType : unique symbol
 >l.readonlyType : unique symbol
 >l : L
 >readonlyType : unique symbol
 
 const constInitToLReadonlyNestedType = l.nested.readonlyNestedType;
->constInitToLReadonlyNestedType : symbol
+>constInitToLReadonlyNestedType : unique symbol
 >l.nested.readonlyNestedType : unique symbol
 >l.nested : { readonly readonlyNestedType: unique symbol; }
 >l : L
@@ -536,17 +536,17 @@ class C0 {
 >C0 : C0
 
     static readonly a = s;
->a : symbol
+>a : unique symbol
 >s : unique symbol
 
     static readonly b = N.s;
->b : symbol
+>b : unique symbol
 >N.s : unique symbol
 >N : typeof N
 >s : unique symbol
 
     static readonly c = N["s"];
->c : symbol
+>c : unique symbol
 >N["s"] : unique symbol
 >N : typeof N
 >"s" : "s"
@@ -568,17 +568,17 @@ class C0 {
 >"s" : "s"
 
     readonly a = s;
->a : symbol
+>a : unique symbol
 >s : unique symbol
 
     readonly b = N.s;
->b : symbol
+>b : unique symbol
 >N.s : unique symbol
 >N : typeof N
 >s : unique symbol
 
     readonly c = N["s"];
->c : symbol
+>c : unique symbol
 >N["s"] : unique symbol
 >N : typeof N
 >"s" : "s"
