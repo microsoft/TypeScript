@@ -70,9 +70,9 @@ export function getFsContentsForNode10Result(): FsContents {
             import { foo2 } from "foo2";
             import { bar2 } from "bar2";
         `,
+        "/a/lib/lib.es2022.full.d.ts": libFile.content,
         "/home/src/projects/project/tsconfig.json": JSON.stringify({
             compilerOptions: {
-                target: "es5",
                 module: "node16",
                 moduleResolution: "node16",
                 traceResolution: true,
