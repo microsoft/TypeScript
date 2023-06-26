@@ -1,7 +1,7 @@
 currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"module":"node16","moduleResolution":"node16"}}
+{"compilerOptions":{"target":"es5","module":"node16","moduleResolution":"node16"}}
 
 //// [/user/username/projects/myproject/index.ts]
 import type { ImportInterface } from "pkg" assert { "resolution-mode": "import" };
@@ -131,48 +131,37 @@ File '/user/username/projects/myproject/node_modules/pkg/package.json' exists ac
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
-[91merror[0m[90m TS2318: [0mCannot find global type 'Array'.
+[96mindex.ts[0m:[93m2[0m:[93m39[0m - [91merror[0m[90m TS2307: [0mCannot find module 'pkg1' or its corresponding type declarations.
 
-[91merror[0m[90m TS2318: [0mCannot find global type 'Boolean'.
+[7m2[0m import type { RequireInterface } from "pkg1" assert { "resolution-mode": "require" };
+[7m [0m [91m                                      ~~~~~~[0m
 
-[91merror[0m[90m TS2318: [0mCannot find global type 'Function'.
-
-[91merror[0m[90m TS2318: [0mCannot find global type 'IArguments'.
-
-[91merror[0m[90m TS2318: [0mCannot find global type 'Number'.
-
-[91merror[0m[90m TS2318: [0mCannot find global type 'Object'.
-
-[91merror[0m[90m TS2318: [0mCannot find global type 'RegExp'.
-
-[91merror[0m[90m TS2318: [0mCannot find global type 'String'.
-
-[91merror[0m[90m TS6053: [0mFile '/a/lib/lib.es2022.full.d.ts' not found.
-  The file is in the program because:
-    Default library for target 'es2022'
-
-[[90m12:00:44 AM[0m] Found 9 errors. Watching for file changes.
+[[90m12:00:44 AM[0m] Found 1 error. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/index.ts"]
-Program options: {"module":100,"moduleResolution":3,"watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"target":1,"module":100,"moduleResolution":3,"watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Not
 Program files::
+/a/lib/lib.d.ts
 /user/username/projects/myproject/a.ts
 /user/username/projects/myproject/node_modules/pkg/import.d.ts
 /user/username/projects/myproject/index.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/a.ts
+/user/username/projects/myproject/node_modules/pkg/import.d.ts
+/user/username/projects/myproject/index.ts
 
 Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
 /user/username/projects/myproject/a.ts (used version)
-/user/username/projects/myproject/index.ts (used version)
 /user/username/projects/myproject/node_modules/pkg/import.d.ts (used version)
+/user/username/projects/myproject/index.ts (used version)
 
 PolledWatches::
-/a/lib/lib.es2022.full.d.ts: *new*
-  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/package.json: *new*
@@ -185,6 +174,8 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
 /user/username/projects: *new*
   {}
 /user/username/projects/myproject: *new*
@@ -238,6 +229,9 @@ Output::
 >> Screen clear
 [[90m12:00:47 AM[0m] File change detected. Starting incremental compilation...
 
+File '/a/lib/package.json' does not exist according to earlier cached lookups.
+File '/a/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
 File '/user/username/package.json' does not exist according to earlier cached lookups.
@@ -288,39 +282,27 @@ Reusing resolution of module 'pkg1' from '/user/username/projects/myproject/inde
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[91merror[0m[90m TS2318: [0mCannot find global type 'Array'.
+[96mindex.ts[0m:[93m2[0m:[93m39[0m - [91merror[0m[90m TS2307: [0mCannot find module 'pkg1' or its corresponding type declarations.
 
-[91merror[0m[90m TS2318: [0mCannot find global type 'Boolean'.
+[7m2[0m import type { RequireInterface } from "pkg1" assert { "resolution-mode": "require" };
+[7m [0m [91m                                      ~~~~~~[0m
 
-[91merror[0m[90m TS2318: [0mCannot find global type 'Function'.
-
-[91merror[0m[90m TS2318: [0mCannot find global type 'IArguments'.
-
-[91merror[0m[90m TS2318: [0mCannot find global type 'Number'.
-
-[91merror[0m[90m TS2318: [0mCannot find global type 'Object'.
-
-[91merror[0m[90m TS2318: [0mCannot find global type 'RegExp'.
-
-[91merror[0m[90m TS2318: [0mCannot find global type 'String'.
-
-[91merror[0m[90m TS6053: [0mFile '/a/lib/lib.es2022.full.d.ts' not found.
-  The file is in the program because:
-    Default library for target 'es2022'
-
-[[90m12:00:54 AM[0m] Found 9 errors. Watching for file changes.
+[[90m12:00:54 AM[0m] Found 1 error. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/index.ts"]
-Program options: {"module":100,"moduleResolution":3,"watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"target":1,"module":100,"moduleResolution":3,"watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: SafeModules
 Program files::
+/a/lib/lib.d.ts
 /user/username/projects/myproject/node_modules/pkg/import.d.ts
 /user/username/projects/myproject/a.ts
 /user/username/projects/myproject/index.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/myproject/a.ts
+/user/username/projects/myproject/index.ts
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.ts (computed .d.ts)

@@ -284,7 +284,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             {
                 path: `/user/username/projects/myproject/tsconfig.json`,
                 content: JSON.stringify({
-                    compilerOptions: { module: "node16", moduleResolution: "node16" },
+                    compilerOptions: { target: "es5", module: "node16", moduleResolution: "node16" },
                 })
             },
             {
@@ -354,7 +354,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             {
                 path: `/user/username/projects/myproject/tsconfig.json`,
                 content: JSON.stringify({
-                    compilerOptions: { module: "node16", moduleResolution: "node16" },
+                    compilerOptions: { target: "es5", module: "node16", moduleResolution: "node16" },
                 })
             },
             {
