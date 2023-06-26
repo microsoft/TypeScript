@@ -1,0 +1,24 @@
+//// [tests/cases/compiler/indirectUniqueSymbolDeclarationEmit2.ts] ////
+
+=== indirectUniqueSymbolDeclarationEmit2.ts ===
+// repro from https://github.com/microsoft/TypeScript/issues/53276
+
+export const a = Symbol.toStringTag;
+>a : Symbol(a, Decl(indirectUniqueSymbolDeclarationEmit2.ts, 2, 12))
+>Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+export class F {
+>F : Symbol(F, Decl(indirectUniqueSymbolDeclarationEmit2.ts, 2, 36))
+
+    [a](){ return "" }
+>[a] : Symbol(F[a], Decl(indirectUniqueSymbolDeclarationEmit2.ts, 4, 16))
+>a : Symbol(a, Decl(indirectUniqueSymbolDeclarationEmit2.ts, 2, 12))
+}
+
+export const b = (new F())[a];
+>b : Symbol(b, Decl(indirectUniqueSymbolDeclarationEmit2.ts, 8, 12))
+>F : Symbol(F, Decl(indirectUniqueSymbolDeclarationEmit2.ts, 2, 36))
+>a : Symbol(a, Decl(indirectUniqueSymbolDeclarationEmit2.ts, 2, 12))
+

@@ -1,0 +1,28 @@
+//// [tests/cases/compiler/indirectUniqueSymbolDeclarationEmit2.ts] ////
+
+=== indirectUniqueSymbolDeclarationEmit2.ts ===
+// repro from https://github.com/microsoft/TypeScript/issues/53276
+
+export const a = Symbol.toStringTag;
+>a : unique symbol
+>Symbol.toStringTag : unique symbol
+>Symbol : SymbolConstructor
+>toStringTag : unique symbol
+
+export class F {
+>F : F
+
+    [a](){ return "" }
+>[a] : () => string
+>a : unique symbol
+>"" : ""
+}
+
+export const b = (new F())[a];
+>b : () => string
+>(new F())[a] : () => string
+>(new F()) : F
+>new F() : F
+>F : typeof F
+>a : unique symbol
+
