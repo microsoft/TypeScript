@@ -7,6 +7,7 @@ import {
     CaseClause,
     changeExtension,
     CharacterCodes,
+    CheckMode,
     combinePaths,
     comparePaths,
     comparePatternKeys,
@@ -388,7 +389,7 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
                 // Get string literal completions from specialized signatures of the target
                 // i.e. declare function f(a: 'A');
                 // f("/*completion position*/")
-                return argumentInfo && getStringLiteralCompletionsFromSignature(argumentInfo.invocation, node, argumentInfo, typeChecker) || fromContextualType(ContextFlags.None);
+                return argumentInfo && (getStringLiteralCompletionsFromSignature(argumentInfo.invocation, node, argumentInfo, typeChecker) || getStringLiteralCompletionsFromSignature(argumentInfo.invocation, node, argumentInfo, typeChecker, CheckMode.Normal)) || fromContextualType(ContextFlags.None);
             }
             // falls through (is `require("")` or `require(""` or `import("")`)
 
@@ -479,12 +480,12 @@ function getAlreadyUsedTypesInStringLiteralUnion(union: UnionTypeNode, current: 
         type !== current && isLiteralTypeNode(type) && isStringLiteral(type.literal) ? type.literal.text : undefined);
 }
 
-function getStringLiteralCompletionsFromSignature(call: CallLikeExpression, arg: StringLiteralLike, argumentInfo: SignatureHelp.ArgumentInfoForCompletions, checker: TypeChecker): StringLiteralCompletionsFromTypes | undefined {
+function getStringLiteralCompletionsFromSignature(call: CallLikeExpression, arg: StringLiteralLike, argumentInfo: SignatureHelp.ArgumentInfoForCompletions, checker: TypeChecker, checkMode = CheckMode.IsForStringLiteralArgumentCompletions): StringLiteralCompletionsFromTypes | undefined {
     let isNewIdentifier = false;
     const uniques = new Map<string, true>();
     const candidates: Signature[] = [];
     const editingArgument = isJsxOpeningLikeElement(call) ? Debug.checkDefined(findAncestor(arg.parent, isJsxAttribute)) : arg;
-    checker.getResolvedSignatureForStringLiteralCompletions(call, editingArgument, candidates);
+    checker.getResolvedSignatureForStringLiteralCompletions(call, editingArgument, candidates, checkMode);
     const types = flatMap(candidates, candidate => {
         if (!signatureHasRestParameter(candidate) && argumentInfo.argumentCount > candidate.parameters.length) return;
         let type = candidate.getTypeParameterAtPosition(argumentInfo.argumentIndex);

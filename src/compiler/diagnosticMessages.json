@@ -315,6 +315,10 @@
         "category": "Error",
         "code": 1110
     },
+    "Private field '{0}' must be declared in an enclosing class.": {
+        "category": "Error",
+        "code": 1111
+    },
     "A 'default' clause cannot appear more than once in a 'switch' statement.": {
         "category": "Error",
         "code": 1113
@@ -451,17 +455,13 @@
         "category": "Error",
         "code": 1149
     },
-    "'const' declarations must be initialized.": {
+    "'{0}' declarations must be initialized.": {
         "category": "Error",
         "code": 1155
     },
-    "'const' declarations can only be declared inside a block.": {
+    "'{0}' declarations can only be declared inside a block.": {
         "category": "Error",
         "code": 1156
-    },
-    "'let' declarations can only be declared inside a block.": {
-        "category": "Error",
-        "code": 1157
     },
     "Unterminated template literal.": {
         "category": "Error",
@@ -1600,6 +1600,26 @@
     "File appears to be binary.": {
         "category": "Error",
         "code": 1490
+    },
+    "'{0}' modifier cannot appear on a 'using' declaration.": {
+        "category": "Error",
+        "code": 1491
+    },
+    "'{0}' declarations may not have binding patterns.": {
+        "category": "Error",
+        "code": 1492
+    },
+    "The left-hand side of a 'for...in' statement cannot be a 'using' declaration.": {
+        "category": "Error",
+        "code": 1493
+    },
+    "The left-hand side of a 'for...in' statement cannot be an 'await using' declaration.": {
+        "category": "Error",
+        "code": 1494
+    },
+    "'{0}' modifier cannot appear on an 'await using' declaration.": {
+        "category": "Error",
+        "code": 1495
     },
 
     "The types of '{0}' are incompatible between these types.": {
@@ -3623,6 +3643,26 @@
         "category": "Error",
         "code": 2849
     },
+    "The initializer of a 'using' declaration must be either an object with a '[Symbol.dispose]()' method, or be 'null' or 'undefined'.": {
+        "category": "Error",
+        "code": 2850
+    },
+    "The initializer of an 'await using' declaration must be either an object with a '[Symbol.asyncDispose]()' or '[Symbol.dispose]()' method, or be 'null' or 'undefined'.": {
+        "category": "Error",
+        "code": 2851
+    },
+    "'await using' statements are only allowed within async functions and at the top levels of modules.": {
+        "category": "Error",
+        "code": 2852
+    },
+    "'await using' statements are only allowed at the top level of a file when that file is a module, but this file has no imports or exports. Consider adding an empty 'export {}' to make this file a module.": {
+        "category": "Error",
+        "code": 2853
+    },
+    "Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', or 'nodenext', and the 'target' option is set to 'es2017' or higher.": {
+        "category": "Error",
+        "code": 2854
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -4328,6 +4368,14 @@
     "Option '{0}={1}' has been removed. Please remove it from your configuration.": {
         "category": "Error",
         "code": 5108
+    },
+    "Option 'moduleResolution' must be set to '{0}' (or left unspecified) when option 'module' is set to '{1}'.": {
+        "category": "Error",
+        "code": 5109
+    },
+    "Option 'module' must be set to '{0}' when option 'moduleResolution' is set to '{1}'.": {
+        "category": "Error",
+        "code": 5110
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
@@ -7749,11 +7797,11 @@
         "category": "Error",
         "code": 18036
     },
-    "Await expression cannot be used inside a class static block.": {
+    "'await' expression cannot be used inside a class static block.": {
         "category": "Error",
         "code": 18037
     },
-    "'For await' loops cannot be used inside a class static block.": {
+    "'for await' loops cannot be used inside a class static block.": {
         "category": "Error",
         "code": 18038
     },
@@ -7812,5 +7860,9 @@
     "Its type '{0}' is not a valid JSX element type.": {
         "category": "Error",
         "code": 18053
+    },
+    "'await using' statements cannot be used inside a class static block.": {
+        "category": "Error",
+        "code": 18054
     }
 }

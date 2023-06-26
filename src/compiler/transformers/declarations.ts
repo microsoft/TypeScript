@@ -150,7 +150,9 @@ import {
     isTypeParameterDeclaration,
     isTypeQueryNode,
     isUnparsedSource,
+    isVarAwaitUsing,
     isVariableDeclaration,
+    isVarUsing,
     last,
     LateBoundDeclaration,
     LateVisibilityPaintedStatement,
@@ -217,6 +219,7 @@ import {
     unescapeLeadingUnderscores,
     UnparsedSource,
     VariableDeclaration,
+    VariableDeclarationList,
     VariableStatement,
     visitArray,
     visitEachChild,
@@ -1763,7 +1766,19 @@ export function transformDeclarations(context: TransformationContext) {
         if (!forEach(input.declarationList.declarations, getBindingNameVisible)) return;
         const nodes = visitNodes(input.declarationList.declarations, visitDeclarationSubtree, isVariableDeclaration);
         if (!length(nodes)) return;
-        return factory.updateVariableStatement(input, factory.createNodeArray(ensureModifiers(input)), factory.updateVariableDeclarationList(input.declarationList, nodes));
+
+        const modifiers = factory.createNodeArray(ensureModifiers(input));
+        let declList: VariableDeclarationList;
+        if (isVarUsing(input.declarationList) || isVarAwaitUsing(input.declarationList)) {
+            declList = factory.createVariableDeclarationList(nodes, NodeFlags.Const);
+            setOriginalNode(declList, input.declarationList);
+            setTextRange(declList, input.declarationList);
+            setCommentRange(declList, input.declarationList);
+        }
+        else {
+            declList = factory.updateVariableDeclarationList(input.declarationList, nodes);
+        }
+        return factory.updateVariableStatement(input, modifiers, declList);
     }
 
     function recreateBindingPattern(d: BindingPattern): VariableDeclaration[] {
