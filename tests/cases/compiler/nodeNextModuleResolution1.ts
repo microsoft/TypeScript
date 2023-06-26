@@ -1,3 +1,4 @@
+// @module: nodenext
 // @moduleResolution: nodenext
 // @traceResolution: true
 

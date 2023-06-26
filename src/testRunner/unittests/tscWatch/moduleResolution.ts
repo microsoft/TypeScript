@@ -89,6 +89,8 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 path: `/user/username/projects/myproject/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
+                        target: "es5",
+                        module: "nodenext",
                         moduleResolution: "nodenext",
                         outDir: "./dist",
                         declaration: true,
@@ -282,7 +284,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             {
                 path: `/user/username/projects/myproject/tsconfig.json`,
                 content: JSON.stringify({
-                    compilerOptions: { moduleResolution: "node16" },
+                    compilerOptions: { module: "node16", moduleResolution: "node16" },
                 })
             },
             {
@@ -352,7 +354,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             {
                 path: `/user/username/projects/myproject/tsconfig.json`,
                 content: JSON.stringify({
-                    compilerOptions: { moduleResolution: "node16" },
+                    compilerOptions: { module: "node16", moduleResolution: "node16" },
                 })
             },
             {

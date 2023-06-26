@@ -1,4 +1,5 @@
 error TS5095: Option 'bundler' can only be used when 'module' is set to 'es2015' or later.
+error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node16'.
 error TS6504: File '/node_modules/bar/index.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
   The file is in the program because:
     Root file specified for compilation
@@ -18,6 +19,7 @@ error TS6504: File '/node_modules/foo/index.mjs' is a JavaScript file. Did you m
 
 
 !!! error TS5095: Option 'bundler' can only be used when 'module' is set to 'es2015' or later.
+!!! error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node16'.
 !!! error TS6504: File '/node_modules/bar/index.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
 !!! error TS6504:   The file is in the program because:
 !!! error TS6504:     Root file specified for compilation

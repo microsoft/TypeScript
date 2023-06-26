@@ -295,6 +295,8 @@ a;b;
             }),
             "/Users/name/projects/web/tsconfig.json": JSON.stringify({
                 compilerOptions: {
+                    target: "es5",
+                    module: "nodenext",
                     moduleResolution: "nodenext",
                     forceConsistentCasingInFileNames: true,
                     traceResolution: true,

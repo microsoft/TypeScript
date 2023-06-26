@@ -72,6 +72,8 @@ export function getFsContentsForNode10Result(): FsContents {
         `,
         "/home/src/projects/project/tsconfig.json": JSON.stringify({
             compilerOptions: {
+                target: "es5",
+                module: "node16",
                 moduleResolution: "node16",
                 traceResolution: true,
                 incremental: true,

@@ -9191,7 +9191,7 @@ declare namespace ts {
         /**
          * Controls the format the file is detected as - this can be derived from only the path
          * and files on disk, but needs to be done with a module resolution cache in scope to be performant.
-         * This is usually `undefined` for compilations that do not have `moduleResolution` values of `node16` or `nodenext`.
+         * This is usually `undefined` for compilations that do not have `module` values of `node16` or `nodenext`.
          */
         impliedNodeFormat?: ResolutionMode;
         /**
@@ -9504,7 +9504,7 @@ declare namespace ts {
      * Calculates the final resolution mode for a given module reference node. This is generally the explicitly provided resolution mode, if
      * one exists, or the mode of the containing source file. (Excepting import=require, which is always commonjs, and dynamic import, which is always esm).
      * Notably, this function always returns `undefined` if the containing file has an `undefined` `impliedNodeFormat` - this field is only set when
-     * `moduleResolution` is `node16`+.
+     * `module` is `node16`+.
      * @param file The file the import or import-like reference is contained within
      * @param usage The module reference string
      * @returns The final resolution mode of the import

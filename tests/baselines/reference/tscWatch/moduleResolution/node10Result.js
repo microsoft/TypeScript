@@ -124,7 +124,7 @@ import { bar2 } from "bar2";
 
 
 //// [/home/src/projects/project/tsconfig.json]
-{"compilerOptions":{"moduleResolution":"node16","traceResolution":true,"incremental":true,"strict":true,"types":[]},"files":["index.mts"]}
+{"compilerOptions":{"target":"es5","module":"node16","moduleResolution":"node16","traceResolution":true,"incremental":true,"strict":true,"types":[]},"files":["index.mts"]}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -149,7 +149,7 @@ FileWatcher:: Added:: WatchInfo: /home/src/projects/project/tsconfig.json 2000 u
 Synchronizing program
 CreatingProgramWith::
   roots: ["/home/src/projects/project/index.mts"]
-  options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+  options: {"target":1,"module":100,"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
 FileWatcher:: Added:: WatchInfo: /home/src/projects/project/index.mts 250 undefined Source file
 ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
@@ -343,9 +343,19 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/index
 DirectoryWatcher:: Triggered with /home/src/projects/project/tsconfig.tsbuildinfo :: WatchInfo: /home/src/projects/project 0 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup, Cancelled earlier one
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/tsconfig.tsbuildinfo :: WatchInfo: /home/src/projects/project 0 undefined Failed Lookup Locations
-[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mindex.mts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module 'foo'. '/home/src/projects/project/node_modules/foo/index.mjs' implicitly has an 'any' type.
+  There are types at '/home/src/projects/project/node_modules/foo/index.d.ts', but this result could not be resolved when respecting package.json "exports". The 'foo' library may need to update its package.json or typings.
 
-[[90m12:01:18 AM[0m] Found 1 error. Watching for file changes.
+[7m1[0m import { foo } from "foo";
+[7m [0m [91m                    ~~~~~[0m
+
+[96mindex.mts[0m:[93m2[0m:[93m21[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module 'bar'. '/home/src/projects/project/node_modules/bar/index.mjs' implicitly has an 'any' type.
+  There are types at '/home/src/projects/project/node_modules/@types/bar/index.d.ts', but this result could not be resolved when respecting package.json "exports". The '@types/bar' library may need to update its package.json or typings.
+
+[7m2[0m import { bar } from "bar";
+[7m [0m [91m                    ~~~~~[0m
+
+[[90m12:01:18 AM[0m] Found 2 errors. Watching for file changes.
 
 DirectoryWatcher:: Triggered with /home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt :: WatchInfo: /home/src/projects/project 0 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup, Cancelled earlier one
@@ -353,7 +363,7 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/tscon
 
 
 Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+Program options: {"target":1,"module":100,"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -361,7 +371,11 @@ Program files::
 /home/src/projects/project/node_modules/@types/bar2/index.d.ts
 /home/src/projects/project/index.mts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/home/src/projects/project/node_modules/foo2/index.d.ts
+/home/src/projects/project/node_modules/@types/bar2/index.d.ts
+/home/src/projects/project/index.mts
 
 Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
@@ -408,12 +422,11 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 //// [/home/src/projects/project/index.mjs]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-7439170493-export declare const bar2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","impliedFormat":99}],"root":[4],"options":{"strict":true},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"exportedModulesMap":[[4,1]]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-7439170493-export declare const bar2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","impliedFormat":99}],"root":[4],"options":{"module":100,"strict":true,"target":1},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"exportedModulesMap":[[4,1]],"semanticDiagnosticsPerFile":[1,[4,[{"file":"./index.mts","start":20,"length":5,"code":7016,"category":1,"messageText":{"messageText":"Could not find a declaration file for module 'foo'. '/home/src/projects/project/node_modules/foo/index.mjs' implicitly has an 'any' type.","category":1,"code":7016,"next":[{"info":{"moduleReference":"foo","mode":99}}]}},{"file":"./index.mts","start":47,"length":5,"code":7016,"category":1,"messageText":{"messageText":"Could not find a declaration file for module 'bar'. '/home/src/projects/project/node_modules/bar/index.mjs' implicitly has an 'any' type.","category":1,"code":7016,"next":[{"info":{"moduleReference":"bar","mode":99}}]}}]],3,2]},"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -477,7 +490,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
       ]
     ],
     "options": {
-      "strict": true
+      "module": 100,
+      "strict": true,
+      "target": 1
     },
     "referencedMap": {
       "./index.mts": [
@@ -490,10 +505,60 @@ Object.defineProperty(exports, "__esModule", { value: true });
         "./node_modules/foo2/index.d.ts",
         "./node_modules/@types/bar2/index.d.ts"
       ]
-    }
+    },
+    "semanticDiagnosticsPerFile": [
+      "../../../../a/lib/lib.d.ts",
+      [
+        "./index.mts",
+        [
+          {
+            "file": "./index.mts",
+            "start": 20,
+            "length": 5,
+            "code": 7016,
+            "category": 1,
+            "messageText": {
+              "messageText": "Could not find a declaration file for module 'foo'. '/home/src/projects/project/node_modules/foo/index.mjs' implicitly has an 'any' type.",
+              "category": 1,
+              "code": 7016,
+              "next": [
+                {
+                  "info": {
+                    "moduleReference": "foo",
+                    "mode": 99
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "file": "./index.mts",
+            "start": 47,
+            "length": 5,
+            "code": 7016,
+            "category": 1,
+            "messageText": {
+              "messageText": "Could not find a declaration file for module 'bar'. '/home/src/projects/project/node_modules/bar/index.mjs' implicitly has an 'any' type.",
+              "category": 1,
+              "code": 7016,
+              "next": [
+                {
+                  "info": {
+                    "moduleReference": "bar",
+                    "mode": 99
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      ],
+      "./node_modules/@types/bar2/index.d.ts",
+      "./node_modules/foo2/index.d.ts"
+    ]
   },
   "version": "FakeTSVersion",
-  "size": 1040
+  "size": 1745
 }
 
 
@@ -519,7 +584,7 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/home/src/projects/project/index.mts"]
-  options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+  options: {"target":1,"module":100,"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
@@ -613,14 +678,24 @@ File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists a
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mindex.mts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module 'foo'. '/home/src/projects/project/node_modules/foo/index.mjs' implicitly has an 'any' type.
+  There are types at '/home/src/projects/project/node_modules/foo/index.d.ts', but this result could not be resolved when respecting package.json "exports". The 'foo' library may need to update its package.json or typings.
 
-[[90m12:01:23 AM[0m] Found 1 error. Watching for file changes.
+[7m1[0m import { foo } from "foo";
+[7m [0m [91m                    ~~~~~[0m
+
+[96mindex.mts[0m:[93m2[0m:[93m21[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module 'bar'. '/home/src/projects/project/node_modules/bar/index.mjs' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/bar` if it exists or add a new declaration (.d.ts) file containing `declare module 'bar';`
+
+[7m2[0m import { bar } from "bar";
+[7m [0m [91m                    ~~~~~[0m
+
+[[90m12:01:23 AM[0m] Found 2 errors. Watching for file changes.
 
 
 
 Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+Program options: {"target":1,"module":100,"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -628,7 +703,7 @@ Program files::
 /home/src/projects/project/node_modules/@types/bar2/index.d.ts
 /home/src/projects/project/index.mts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
@@ -657,7 +732,7 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/home/src/projects/project/index.mts"]
-  options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+  options: {"target":1,"module":100,"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
@@ -732,14 +807,24 @@ File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists a
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mindex.mts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module 'foo'. '/home/src/projects/project/node_modules/foo/index.mjs' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/foo` if it exists or add a new declaration (.d.ts) file containing `declare module 'foo';`
 
-[[90m12:01:27 AM[0m] Found 1 error. Watching for file changes.
+[7m1[0m import { foo } from "foo";
+[7m [0m [91m                    ~~~~~[0m
+
+[96mindex.mts[0m:[93m2[0m:[93m21[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module 'bar'. '/home/src/projects/project/node_modules/bar/index.mjs' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/bar` if it exists or add a new declaration (.d.ts) file containing `declare module 'bar';`
+
+[7m2[0m import { bar } from "bar";
+[7m [0m [91m                    ~~~~~[0m
+
+[[90m12:01:27 AM[0m] Found 2 errors. Watching for file changes.
 
 
 
 Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+Program options: {"target":1,"module":100,"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -747,7 +832,7 @@ Program files::
 /home/src/projects/project/node_modules/@types/bar2/index.d.ts
 /home/src/projects/project/index.mts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
@@ -778,7 +863,7 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/home/src/projects/project/index.mts"]
-  options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+  options: {"target":1,"module":100,"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
@@ -859,14 +944,24 @@ File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists a
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mindex.mts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module 'foo'. '/home/src/projects/project/node_modules/foo/index.mjs' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/foo` if it exists or add a new declaration (.d.ts) file containing `declare module 'foo';`
 
-[[90m12:01:31 AM[0m] Found 1 error. Watching for file changes.
+[7m1[0m import { foo } from "foo";
+[7m [0m [91m                    ~~~~~[0m
+
+[96mindex.mts[0m:[93m2[0m:[93m21[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module 'bar'. '/home/src/projects/project/node_modules/bar/index.mjs' implicitly has an 'any' type.
+  There are types at '/home/src/projects/project/node_modules/@types/bar/index.d.ts', but this result could not be resolved when respecting package.json "exports". The '@types/bar' library may need to update its package.json or typings.
+
+[7m2[0m import { bar } from "bar";
+[7m [0m [91m                    ~~~~~[0m
+
+[[90m12:01:31 AM[0m] Found 2 errors. Watching for file changes.
 
 
 
 Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+Program options: {"target":1,"module":100,"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -874,7 +969,7 @@ Program files::
 /home/src/projects/project/node_modules/@types/bar2/index.d.ts
 /home/src/projects/project/index.mts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
@@ -905,7 +1000,7 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/home/src/projects/project/index.mts"]
-  options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+  options: {"target":1,"module":100,"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
@@ -967,14 +1062,24 @@ File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists a
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mindex.mts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module 'foo'. '/home/src/projects/project/node_modules/foo/index.mjs' implicitly has an 'any' type.
+  There are types at '/home/src/projects/project/node_modules/foo/index.d.ts', but this result could not be resolved when respecting package.json "exports". The 'foo' library may need to update its package.json or typings.
 
-[[90m12:01:36 AM[0m] Found 1 error. Watching for file changes.
+[7m1[0m import { foo } from "foo";
+[7m [0m [91m                    ~~~~~[0m
+
+[96mindex.mts[0m:[93m2[0m:[93m21[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module 'bar'. '/home/src/projects/project/node_modules/bar/index.mjs' implicitly has an 'any' type.
+  There are types at '/home/src/projects/project/node_modules/@types/bar/index.d.ts', but this result could not be resolved when respecting package.json "exports". The '@types/bar' library may need to update its package.json or typings.
+
+[7m2[0m import { bar } from "bar";
+[7m [0m [91m                    ~~~~~[0m
+
+[[90m12:01:36 AM[0m] Found 2 errors. Watching for file changes.
 
 
 
 Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+Program options: {"target":1,"module":100,"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -982,7 +1087,7 @@ Program files::
 /home/src/projects/project/node_modules/@types/bar2/index.d.ts
 /home/src/projects/project/index.mts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
@@ -1023,7 +1128,7 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/home/src/projects/project/index.mts"]
-  options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+  options: {"target":1,"module":100,"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
@@ -1068,14 +1173,18 @@ File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists a
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mindex.mts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module 'foo'. '/home/src/projects/project/node_modules/foo/index.mjs' implicitly has an 'any' type.
+  There are types at '/home/src/projects/project/node_modules/foo/index.d.ts', but this result could not be resolved when respecting package.json "exports". The 'foo' library may need to update its package.json or typings.
+
+[7m1[0m import { foo } from "foo";
+[7m [0m [91m                    ~~~~~[0m
 
 [[90m12:01:47 AM[0m] Found 1 error. Watching for file changes.
 
 
 
 Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+Program options: {"target":1,"module":100,"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -1084,7 +1193,9 @@ Program files::
 /home/src/projects/project/node_modules/@types/bar2/index.d.ts
 /home/src/projects/project/index.mts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/home/src/projects/project/node_modules/@types/bar/index.d.ts
+/home/src/projects/project/index.mts
 
 Shape signatures in builder refreshed for::
 /home/src/projects/project/node_modules/@types/bar/index.d.ts (used version)
@@ -1132,7 +1243,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/home/src/projects/project/index.mjs] file written with same contents
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-7439170493-export declare const bar2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[5],"options":{"strict":true},"fileIdsList":[[2,3,4]],"referencedMap":[[5,1]],"exportedModulesMap":[]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-7439170493-export declare const bar2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[5],"options":{"module":100,"strict":true,"target":1},"fileIdsList":[[2,3,4]],"referencedMap":[[5,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,[5,[{"file":"./index.mts","start":20,"length":5,"code":7016,"category":1,"messageText":{"messageText":"Could not find a declaration file for module 'foo'. '/home/src/projects/project/node_modules/foo/index.mjs' implicitly has an 'any' type.","category":1,"code":7016,"next":[{"info":{"moduleReference":"foo","mode":99}}]}}]],2,4,3]},"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1208,7 +1319,9 @@ exitCode:: ExitStatus.undefined
       ]
     ],
     "options": {
-      "strict": true
+      "module": 100,
+      "strict": true,
+      "target": 1
     },
     "referencedMap": {
       "./index.mts": [
@@ -1217,10 +1330,41 @@ exitCode:: ExitStatus.undefined
         "./node_modules/@types/bar2/index.d.ts"
       ]
     },
-    "exportedModulesMap": {}
+    "exportedModulesMap": {},
+    "semanticDiagnosticsPerFile": [
+      "../../../../a/lib/lib.d.ts",
+      [
+        "./index.mts",
+        [
+          {
+            "file": "./index.mts",
+            "start": 20,
+            "length": 5,
+            "code": 7016,
+            "category": 1,
+            "messageText": {
+              "messageText": "Could not find a declaration file for module 'foo'. '/home/src/projects/project/node_modules/foo/index.mjs' implicitly has an 'any' type.",
+              "category": 1,
+              "code": 7016,
+              "next": [
+                {
+                  "info": {
+                    "moduleReference": "foo",
+                    "mode": 99
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      ],
+      "./node_modules/@types/bar/index.d.ts",
+      "./node_modules/@types/bar2/index.d.ts",
+      "./node_modules/foo2/index.d.ts"
+    ]
   },
   "version": "FakeTSVersion",
-  "size": 1193
+  "size": 1581
 }
 
 
@@ -1260,7 +1404,7 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/home/src/projects/project/index.mts"]
-  options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+  options: {"target":1,"module":100,"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
@@ -1299,14 +1443,12 @@ File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
-[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
-
-[[90m12:02:02 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:02:02 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+Program options: {"target":1,"module":100,"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -1316,7 +1458,9 @@ Program files::
 /home/src/projects/project/node_modules/@types/bar2/index.d.ts
 /home/src/projects/project/index.mts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/home/src/projects/project/node_modules/foo/index.d.ts
+/home/src/projects/project/index.mts
 
 Shape signatures in builder refreshed for::
 /home/src/projects/project/node_modules/foo/index.d.ts (used version)
@@ -1366,7 +1510,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/home/src/projects/project/index.mjs] file written with same contents
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-7439170493-export declare const bar2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[6],"options":{"strict":true},"fileIdsList":[[2,3,4,5]],"referencedMap":[[6,1]],"exportedModulesMap":[]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-7439170493-export declare const bar2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[6],"options":{"module":100,"strict":true,"target":1},"fileIdsList":[[2,3,4,5]],"referencedMap":[[6,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,6,3,5,2,4]},"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1453,7 +1597,9 @@ exitCode:: ExitStatus.undefined
       ]
     ],
     "options": {
-      "strict": true
+      "module": 100,
+      "strict": true,
+      "target": 1
     },
     "referencedMap": {
       "./index.mts": [
@@ -1463,10 +1609,18 @@ exitCode:: ExitStatus.undefined
         "./node_modules/@types/bar2/index.d.ts"
       ]
     },
-    "exportedModulesMap": {}
+    "exportedModulesMap": {},
+    "semanticDiagnosticsPerFile": [
+      "../../../../a/lib/lib.d.ts",
+      "./index.mts",
+      "./node_modules/@types/bar/index.d.ts",
+      "./node_modules/@types/bar2/index.d.ts",
+      "./node_modules/foo/index.d.ts",
+      "./node_modules/foo2/index.d.ts"
+    ]
   },
   "version": "FakeTSVersion",
-  "size": 1305
+  "size": 1372
 }
 
 
@@ -1503,7 +1657,7 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/home/src/projects/project/index.mts"]
-  options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+  options: {"target":1,"module":100,"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
@@ -1591,14 +1745,18 @@ File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/@types/bar2/index.d.ts 250 undefined Source file
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
-[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mindex.mts[0m:[93m4[0m:[93m22[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module 'bar2'. '/home/src/projects/project/node_modules/bar2/index.mjs' implicitly has an 'any' type.
+  There are types at '/home/src/projects/project/node_modules/@types/bar2/index.d.ts', but this result could not be resolved when respecting package.json "exports". The '@types/bar2' library may need to update its package.json or typings.
+
+[7m4[0m import { bar2 } from "bar2";
+[7m [0m [91m                     ~~~~~~[0m
 
 [[90m12:02:16 AM[0m] Found 1 error. Watching for file changes.
 
 
 
 Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+Program options: {"target":1,"module":100,"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -1607,7 +1765,8 @@ Program files::
 /home/src/projects/project/node_modules/foo2/index.d.ts
 /home/src/projects/project/index.mts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/home/src/projects/project/index.mts
 
 Shape signatures in builder refreshed for::
 /home/src/projects/project/index.mts (computed .d.ts)
@@ -1658,7 +1817,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/home/src/projects/project/index.mjs] file written with same contents
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./index.mts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[5],"options":{"strict":true},"fileIdsList":[[2,3,4]],"referencedMap":[[5,1]],"exportedModulesMap":[]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./index.mts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[5],"options":{"module":100,"strict":true,"target":1},"fileIdsList":[[2,3,4]],"referencedMap":[[5,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,[5,[{"file":"./index.mts","start":104,"length":6,"code":7016,"category":1,"messageText":{"messageText":"Could not find a declaration file for module 'bar2'. '/home/src/projects/project/node_modules/bar2/index.mjs' implicitly has an 'any' type.","category":1,"code":7016,"next":[{"info":{"moduleReference":"bar2","mode":99}}]}}]],3,2,4]},"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1734,7 +1893,9 @@ exitCode:: ExitStatus.undefined
       ]
     ],
     "options": {
-      "strict": true
+      "module": 100,
+      "strict": true,
+      "target": 1
     },
     "referencedMap": {
       "./index.mts": [
@@ -1743,10 +1904,41 @@ exitCode:: ExitStatus.undefined
         "./node_modules/foo2/index.d.ts"
       ]
     },
-    "exportedModulesMap": {}
+    "exportedModulesMap": {},
+    "semanticDiagnosticsPerFile": [
+      "../../../../a/lib/lib.d.ts",
+      [
+        "./index.mts",
+        [
+          {
+            "file": "./index.mts",
+            "start": 104,
+            "length": 6,
+            "code": 7016,
+            "category": 1,
+            "messageText": {
+              "messageText": "Could not find a declaration file for module 'bar2'. '/home/src/projects/project/node_modules/bar2/index.mjs' implicitly has an 'any' type.",
+              "category": 1,
+              "code": 7016,
+              "next": [
+                {
+                  "info": {
+                    "moduleReference": "bar2",
+                    "mode": 99
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      ],
+      "./node_modules/@types/bar/index.d.ts",
+      "./node_modules/foo/index.d.ts",
+      "./node_modules/foo2/index.d.ts"
+    ]
   },
   "version": "FakeTSVersion",
-  "size": 1184
+  "size": 1576
 }
 
 
@@ -1785,7 +1977,7 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/home/src/projects/project/index.mts"]
-  options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+  options: {"target":1,"module":100,"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
@@ -1849,14 +2041,24 @@ File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/foo2/index.d.ts 250 undefined Source file
-[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mindex.mts[0m:[93m3[0m:[93m22[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module 'foo2'. '/home/src/projects/project/node_modules/foo2/index.mjs' implicitly has an 'any' type.
+  There are types at '/home/src/projects/project/node_modules/foo2/index.d.ts', but this result could not be resolved when respecting package.json "exports". The 'foo2' library may need to update its package.json or typings.
 
-[[90m12:02:31 AM[0m] Found 1 error. Watching for file changes.
+[7m3[0m import { foo2 } from "foo2";
+[7m [0m [91m                     ~~~~~~[0m
+
+[96mindex.mts[0m:[93m4[0m:[93m22[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module 'bar2'. '/home/src/projects/project/node_modules/bar2/index.mjs' implicitly has an 'any' type.
+  There are types at '/home/src/projects/project/node_modules/@types/bar2/index.d.ts', but this result could not be resolved when respecting package.json "exports". The '@types/bar2' library may need to update its package.json or typings.
+
+[7m4[0m import { bar2 } from "bar2";
+[7m [0m [91m                     ~~~~~~[0m
+
+[[90m12:02:31 AM[0m] Found 2 errors. Watching for file changes.
 
 
 
 Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+Program options: {"target":1,"module":100,"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -1864,7 +2066,8 @@ Program files::
 /home/src/projects/project/node_modules/@types/bar/index.d.ts
 /home/src/projects/project/index.mts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/home/src/projects/project/index.mts
 
 Shape signatures in builder refreshed for::
 /home/src/projects/project/index.mts (computed .d.ts)
@@ -1913,7 +2116,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/home/src/projects/project/index.mjs] file written with same contents
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./index.mts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[4],"options":{"strict":true},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"exportedModulesMap":[]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./index.mts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[4],"options":{"module":100,"strict":true,"target":1},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,[4,[{"file":"./index.mts","start":75,"length":6,"code":7016,"category":1,"messageText":{"messageText":"Could not find a declaration file for module 'foo2'. '/home/src/projects/project/node_modules/foo2/index.mjs' implicitly has an 'any' type.","category":1,"code":7016,"next":[{"info":{"moduleReference":"foo2","mode":99}}]}},{"file":"./index.mts","start":104,"length":6,"code":7016,"category":1,"messageText":{"messageText":"Could not find a declaration file for module 'bar2'. '/home/src/projects/project/node_modules/bar2/index.mjs' implicitly has an 'any' type.","category":1,"code":7016,"next":[{"info":{"moduleReference":"bar2","mode":99}}]}}]],3,2]},"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1978,7 +2181,9 @@ exitCode:: ExitStatus.undefined
       ]
     ],
     "options": {
-      "strict": true
+      "module": 100,
+      "strict": true,
+      "target": 1
     },
     "referencedMap": {
       "./index.mts": [
@@ -1986,10 +2191,60 @@ exitCode:: ExitStatus.undefined
         "./node_modules/@types/bar/index.d.ts"
       ]
     },
-    "exportedModulesMap": {}
+    "exportedModulesMap": {},
+    "semanticDiagnosticsPerFile": [
+      "../../../../a/lib/lib.d.ts",
+      [
+        "./index.mts",
+        [
+          {
+            "file": "./index.mts",
+            "start": 75,
+            "length": 6,
+            "code": 7016,
+            "category": 1,
+            "messageText": {
+              "messageText": "Could not find a declaration file for module 'foo2'. '/home/src/projects/project/node_modules/foo2/index.mjs' implicitly has an 'any' type.",
+              "category": 1,
+              "code": 7016,
+              "next": [
+                {
+                  "info": {
+                    "moduleReference": "foo2",
+                    "mode": 99
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "file": "./index.mts",
+            "start": 104,
+            "length": 6,
+            "code": 7016,
+            "category": 1,
+            "messageText": {
+              "messageText": "Could not find a declaration file for module 'bar2'. '/home/src/projects/project/node_modules/bar2/index.mjs' implicitly has an 'any' type.",
+              "category": 1,
+              "code": 7016,
+              "next": [
+                {
+                  "info": {
+                    "moduleReference": "bar2",
+                    "mode": 99
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      ],
+      "./node_modules/@types/bar/index.d.ts",
+      "./node_modules/foo/index.d.ts"
+    ]
   },
   "version": "FakeTSVersion",
-  "size": 1070
+  "size": 1782
 }
 
 
@@ -2015,7 +2270,7 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/home/src/projects/project/index.mts"]
-  options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+  options: {"target":1,"module":100,"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
@@ -2109,14 +2364,24 @@ File '/home/src/projects/project/node_modules/@types/bar/package.json' exists ac
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mindex.mts[0m:[93m3[0m:[93m22[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module 'foo2'. '/home/src/projects/project/node_modules/foo2/index.mjs' implicitly has an 'any' type.
+  There are types at '/home/src/projects/project/node_modules/foo2/index.d.ts', but this result could not be resolved when respecting package.json "exports". The 'foo2' library may need to update its package.json or typings.
 
-[[90m12:02:37 AM[0m] Found 1 error. Watching for file changes.
+[7m3[0m import { foo2 } from "foo2";
+[7m [0m [91m                     ~~~~~~[0m
+
+[96mindex.mts[0m:[93m4[0m:[93m22[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module 'bar2'. '/home/src/projects/project/node_modules/bar2/index.mjs' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/bar2` if it exists or add a new declaration (.d.ts) file containing `declare module 'bar2';`
+
+[7m4[0m import { bar2 } from "bar2";
+[7m [0m [91m                     ~~~~~~[0m
+
+[[90m12:02:37 AM[0m] Found 2 errors. Watching for file changes.
 
 
 
 Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+Program options: {"target":1,"module":100,"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -2124,7 +2389,7 @@ Program files::
 /home/src/projects/project/node_modules/@types/bar/index.d.ts
 /home/src/projects/project/index.mts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
@@ -2153,7 +2418,7 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/home/src/projects/project/index.mts"]
-  options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+  options: {"target":1,"module":100,"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
@@ -2228,14 +2493,24 @@ File '/home/src/projects/project/node_modules/@types/bar/package.json' exists ac
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mindex.mts[0m:[93m3[0m:[93m22[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module 'foo2'. '/home/src/projects/project/node_modules/foo2/index.mjs' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/foo2` if it exists or add a new declaration (.d.ts) file containing `declare module 'foo2';`
 
-[[90m12:02:41 AM[0m] Found 1 error. Watching for file changes.
+[7m3[0m import { foo2 } from "foo2";
+[7m [0m [91m                     ~~~~~~[0m
+
+[96mindex.mts[0m:[93m4[0m:[93m22[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module 'bar2'. '/home/src/projects/project/node_modules/bar2/index.mjs' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/bar2` if it exists or add a new declaration (.d.ts) file containing `declare module 'bar2';`
+
+[7m4[0m import { bar2 } from "bar2";
+[7m [0m [91m                     ~~~~~~[0m
+
+[[90m12:02:41 AM[0m] Found 2 errors. Watching for file changes.
 
 
 
 Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+Program options: {"target":1,"module":100,"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -2243,7 +2518,7 @@ Program files::
 /home/src/projects/project/node_modules/@types/bar/index.d.ts
 /home/src/projects/project/index.mts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
@@ -2274,7 +2549,7 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/home/src/projects/project/index.mts"]
-  options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+  options: {"target":1,"module":100,"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
@@ -2355,14 +2630,24 @@ File '/home/src/projects/project/node_modules/@types/bar/package.json' exists ac
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mindex.mts[0m:[93m3[0m:[93m22[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module 'foo2'. '/home/src/projects/project/node_modules/foo2/index.mjs' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/foo2` if it exists or add a new declaration (.d.ts) file containing `declare module 'foo2';`
 
-[[90m12:02:45 AM[0m] Found 1 error. Watching for file changes.
+[7m3[0m import { foo2 } from "foo2";
+[7m [0m [91m                     ~~~~~~[0m
+
+[96mindex.mts[0m:[93m4[0m:[93m22[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module 'bar2'. '/home/src/projects/project/node_modules/bar2/index.mjs' implicitly has an 'any' type.
+  There are types at '/home/src/projects/project/node_modules/@types/bar2/index.d.ts', but this result could not be resolved when respecting package.json "exports". The '@types/bar2' library may need to update its package.json or typings.
+
+[7m4[0m import { bar2 } from "bar2";
+[7m [0m [91m                     ~~~~~~[0m
+
+[[90m12:02:45 AM[0m] Found 2 errors. Watching for file changes.
 
 
 
 Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+Program options: {"target":1,"module":100,"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -2370,7 +2655,7 @@ Program files::
 /home/src/projects/project/node_modules/@types/bar/index.d.ts
 /home/src/projects/project/index.mts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
@@ -2401,7 +2686,7 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/home/src/projects/project/index.mts"]
-  options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+  options: {"target":1,"module":100,"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
@@ -2463,14 +2748,24 @@ File '/home/src/projects/project/node_modules/@types/bar/package.json' exists ac
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mindex.mts[0m:[93m3[0m:[93m22[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module 'foo2'. '/home/src/projects/project/node_modules/foo2/index.mjs' implicitly has an 'any' type.
+  There are types at '/home/src/projects/project/node_modules/foo2/index.d.ts', but this result could not be resolved when respecting package.json "exports". The 'foo2' library may need to update its package.json or typings.
 
-[[90m12:02:50 AM[0m] Found 1 error. Watching for file changes.
+[7m3[0m import { foo2 } from "foo2";
+[7m [0m [91m                     ~~~~~~[0m
+
+[96mindex.mts[0m:[93m4[0m:[93m22[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module 'bar2'. '/home/src/projects/project/node_modules/bar2/index.mjs' implicitly has an 'any' type.
+  There are types at '/home/src/projects/project/node_modules/@types/bar2/index.d.ts', but this result could not be resolved when respecting package.json "exports". The '@types/bar2' library may need to update its package.json or typings.
+
+[7m4[0m import { bar2 } from "bar2";
+[7m [0m [91m                     ~~~~~~[0m
+
+[[90m12:02:50 AM[0m] Found 2 errors. Watching for file changes.
 
 
 
 Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+Program options: {"target":1,"module":100,"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -2478,7 +2773,7 @@ Program files::
 /home/src/projects/project/node_modules/@types/bar/index.d.ts
 /home/src/projects/project/index.mts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 

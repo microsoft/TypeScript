@@ -1,7 +1,7 @@
 currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"moduleResolution":"nodenext","outDir":"./dist","declaration":true,"declarationDir":"./types"}}
+{"compilerOptions":{"target":"es5","module":"nodenext","moduleResolution":"nodenext","outDir":"./dist","declaration":true,"declarationDir":"./types"}}
 
 //// [/user/username/projects/myproject/package.json]
 {"name":"@this/package","type":"module","exports":{".":{"default":"./dist/index.js","types":"./types/index.d.ts"}}}
@@ -54,14 +54,12 @@ File '/a/package.json' does not exist.
 File '/package.json' does not exist.
 [91merror[0m[90m TS2209: [0mThe project root is ambiguous, but is required to resolve export map entry '.' in file '/user/username/projects/myproject/package.json'. Supply the `rootDir` compiler option to disambiguate.
 
-[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
-
-[[90m12:00:40 AM[0m] Found 2 errors. Watching for file changes.
+[[90m12:00:40 AM[0m] Found 1 error. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/myproject/index.ts","/user/username/projects/myproject/index2.ts"]
-Program options: {"moduleResolution":99,"outDir":"/user/username/projects/myproject/dist","declaration":true,"declarationDir":"/user/username/projects/myproject/types","watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"target":1,"module":199,"moduleResolution":99,"outDir":"/user/username/projects/myproject/dist","declaration":true,"declarationDir":"/user/username/projects/myproject/types","watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -100,13 +98,9 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/dist/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.thing = void 0;
-var me = require("@this/package");
+import * as me from "@this/package";
 me.thing();
-function thing() { }
-exports.thing = thing;
+export function thing() { }
 
 
 //// [/user/username/projects/myproject/types/index.d.ts]
@@ -114,11 +108,7 @@ export declare function thing(): void;
 
 
 //// [/user/username/projects/myproject/dist/index2.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.thing = void 0;
-function thing() { }
-exports.thing = thing;
+export function thing() { }
 
 
 //// [/user/username/projects/myproject/types/index2.d.ts]
@@ -161,14 +151,12 @@ File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 [91merror[0m[90m TS2209: [0mThe project root is ambiguous, but is required to resolve export map entry '.' in file '/user/username/projects/myproject/package.json'. Supply the `rootDir` compiler option to disambiguate.
 
-[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
-
-[[90m12:00:50 AM[0m] Found 2 errors. Watching for file changes.
+[[90m12:00:50 AM[0m] Found 1 error. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/myproject/index.ts","/user/username/projects/myproject/index2.ts"]
-Program options: {"moduleResolution":99,"outDir":"/user/username/projects/myproject/dist","declaration":true,"declarationDir":"/user/username/projects/myproject/types","watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"target":1,"module":199,"moduleResolution":99,"outDir":"/user/username/projects/myproject/dist","declaration":true,"declarationDir":"/user/username/projects/myproject/types","watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts

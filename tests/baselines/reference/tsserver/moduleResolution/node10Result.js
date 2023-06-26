@@ -125,7 +125,7 @@ import { bar2 } from "bar2";
 
 
 //// [/home/src/projects/project/tsconfig.json]
-{"compilerOptions":{"moduleResolution":"node16","traceResolution":true,"incremental":true,"strict":true,"types":[]},"files":["index.mts"]}
+{"compilerOptions":{"target":"es5","module":"node16","moduleResolution":"node16","traceResolution":true,"incremental":true,"strict":true,"types":[]},"files":["index.mts"]}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -169,6 +169,8 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/projects/project/tsconfig.json : {
   "/home/src/projects/project/index.mts"
  ],
  "options": {
+  "target": 1,
+  "module": 100,
   "moduleResolution": 3,
   "traceResolution": true,
   "incremental": true,
@@ -418,6 +420,8 @@ Info seq  [hh:mm:ss:mss] event:
         "deferredSize": 0
        },
        "compilerOptions": {
+        "target": "es5",
+        "module": "node16",
         "moduleResolution": "node16",
         "traceResolution": true,
         "incremental": true,
@@ -449,13 +453,7 @@ Info seq  [hh:mm:ss:mss] event:
      "body": {
       "triggerFile": "/home/src/projects/project/index.mts",
       "configFile": "/home/src/projects/project/tsconfig.json",
-      "diagnostics": [
-       {
-        "text": "Option 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.",
-        "code": 5110,
-        "category": "error"
-       }
-      ]
+      "diagnostics": []
      }
     }
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
