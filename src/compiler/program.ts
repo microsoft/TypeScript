@@ -1392,7 +1392,7 @@ export const plainJSErrors: Set<number> = new Set([
     Diagnostics.Did_you_mean_to_use_a_Colon_An_can_only_follow_a_property_name_when_the_containing_object_literal_is_part_of_a_destructuring_pattern.code,
     Diagnostics.Duplicate_label_0.code,
     Diagnostics.Dynamic_imports_can_only_accept_a_module_specifier_and_an_optional_assertion_as_arguments.code,
-    Diagnostics.For_await_loops_cannot_be_used_inside_a_class_static_block.code,
+    Diagnostics.for_await_loops_cannot_be_used_inside_a_class_static_block.code,
     Diagnostics.JSX_attributes_must_only_be_assigned_a_non_empty_expression.code,
     Diagnostics.JSX_elements_cannot_have_multiple_attributes_with_the_same_name.code,
     Diagnostics.JSX_expressions_may_not_use_the_comma_operator_Did_you_mean_to_write_an_array.code,
@@ -1422,14 +1422,15 @@ export const plainJSErrors: Set<number> = new Set([
     Diagnostics._0_modifier_cannot_appear_on_class_elements_of_this_kind.code,
     Diagnostics._0_modifier_cannot_be_used_here.code,
     Diagnostics._0_modifier_must_precede_1_modifier.code,
-    Diagnostics.const_declarations_can_only_be_declared_inside_a_block.code,
-    Diagnostics.const_declarations_must_be_initialized.code,
+    Diagnostics._0_declarations_can_only_be_declared_inside_a_block.code,
+    Diagnostics._0_declarations_must_be_initialized.code,
     Diagnostics.extends_clause_already_seen.code,
-    Diagnostics.let_declarations_can_only_be_declared_inside_a_block.code,
     Diagnostics.let_is_not_allowed_to_be_used_as_a_name_in_let_or_const_declarations.code,
     Diagnostics.Class_constructor_may_not_be_a_generator.code,
     Diagnostics.Class_constructor_may_not_be_an_accessor.code,
     Diagnostics.await_expressions_are_only_allowed_within_async_functions_and_at_the_top_levels_of_modules.code,
+    Diagnostics.await_using_statements_are_only_allowed_within_async_functions_and_at_the_top_levels_of_modules.code,
+    Diagnostics.Private_field_0_must_be_declared_in_an_enclosing_class.code,
     // Type errors
     Diagnostics.This_condition_will_always_return_0_since_JavaScript_compares_objects_by_reference_not_value.code,
 ]);
@@ -4403,6 +4404,24 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         if (moduleResolution === ModuleResolutionKind.Bundler && !emitModuleKindIsNonNodeESM(moduleKind)) {
             createOptionValueDiagnostic("moduleResolution", Diagnostics.Option_0_can_only_be_used_when_module_is_set_to_es2015_or_later, "bundler");
         }
+
+        if (
+            ModuleKind[moduleKind] &&
+            (ModuleKind.Node16 <= moduleKind && moduleKind <= ModuleKind.NodeNext) &&
+            !(ModuleResolutionKind.Node16 <= moduleResolution && moduleResolution <= ModuleResolutionKind.NodeNext)
+        ) {
+            const moduleKindName = ModuleKind[moduleKind];
+            createOptionValueDiagnostic("moduleResolution", Diagnostics.Option_moduleResolution_must_be_set_to_0_or_left_unspecified_when_option_module_is_set_to_1, moduleKindName, moduleKindName);
+        }
+        else if (
+            ModuleResolutionKind[moduleResolution] &&
+            (ModuleResolutionKind.Node16 <= moduleResolution && moduleResolution <= ModuleResolutionKind.NodeNext) &&
+            !(ModuleKind.Node16 <= moduleKind && moduleKind <= ModuleKind.NodeNext)
+        ) {
+            const moduleResolutionName = ModuleResolutionKind[moduleResolution];
+            createOptionValueDiagnostic("module", Diagnostics.Option_module_must_be_set_to_0_when_option_moduleResolution_is_set_to_1, moduleResolutionName, moduleResolutionName);
+        }
+
 
         // If the emit is enabled make sure that every output file is unique and not overwriting any of the input files
         if (!options.noEmit && !options.suppressOutputPathCheck) {

@@ -1,9 +1,9 @@
 /// <reference path="fourslash.ts" />
 
-////const /*a1*/x/*b1*/ = 1 + 2;
-////const y = x * 3;
-////const /*a2*/f/*b2*/ = () => { };
-////f();
+////const /*a1*/foo/*b1*/ = () => { };
+////foo();
+////const /*a2*/bar/*b2*/ = function() { };
+////bar.call(null);
 
 goTo.select("a1", "b1");
 verify.refactorAvailable("Inline variable");
@@ -11,9 +11,9 @@ edit.applyRefactor({
     refactorName: "Inline variable",
     actionName: "Inline variable",
     actionDescription: "Inline variable",
-    newContent: `const y = (1 + 2) * 3;
-const f = () => { };
-f();`
+    newContent: `(() => { })();
+const bar = function() { };
+bar.call(null);`
 });
 
 goTo.select("a2", "b2");
@@ -22,6 +22,6 @@ edit.applyRefactor({
     refactorName: "Inline variable",
     actionName: "Inline variable",
     actionDescription: "Inline variable",
-    newContent: `const y = (1 + 2) * 3;
-(() => { })();`
+    newContent: `(() => { })();
+(function() { }).call(null);`
 });

@@ -1168,6 +1168,8 @@ export namespace Completion {
         typeEntry("ParameterDecorator"),
         typeEntry("ClassMemberDecoratorContext"),
         typeEntry("DecoratorContext"),
+        typeEntry("DecoratorMetadata"),
+        typeEntry("DecoratorMetadataObject"),
         interfaceEntry("ClassDecoratorContext"),
         interfaceEntry("ClassMethodDecoratorContext"),
         interfaceEntry("ClassGetterDecoratorContext"),

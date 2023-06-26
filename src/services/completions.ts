@@ -2468,7 +2468,7 @@ export function getCompletionEntriesFromSymbols(
     includeSymbol = false
 ): UniqueNameSet {
     const start = timestamp();
-    const variableOrParameterDeclaration = getVariableOrParameterDeclaration(contextToken);
+    const variableOrParameterDeclaration = getVariableOrParameterDeclaration(contextToken, location);
     const useSemicolons = probablyUsesSemicolons(sourceFile);
     const typeChecker = program.getTypeChecker();
     // Tracks unique names.
@@ -5583,14 +5583,20 @@ function isModuleSpecifierMissingOrEmpty(specifier: ModuleReference | Expression
     return !tryCast(isExternalModuleReference(specifier) ? specifier.expression : specifier, isStringLiteralLike)?.text;
 }
 
-function getVariableOrParameterDeclaration(contextToken: Node | undefined) {
+function getVariableOrParameterDeclaration(contextToken: Node | undefined, location: Node) {
     if (!contextToken) return;
 
-    const declaration = findAncestor(contextToken, node =>
+    const possiblyParameterDeclaration = findAncestor(contextToken, node =>
         isFunctionBlock(node) || isArrowFunctionBody(node) || isBindingPattern(node)
             ? "quit"
-            : isVariableDeclaration(node) || ((isParameter(node) || isTypeParameterDeclaration(node)) && !isIndexSignatureDeclaration(node.parent)));
-    return declaration as ParameterDeclaration | TypeParameterDeclaration | VariableDeclaration | undefined;
+            : ((isParameter(node) || isTypeParameterDeclaration(node)) && !isIndexSignatureDeclaration(node.parent)));
+
+    const possiblyVariableDeclaration = findAncestor(location, node =>
+        isFunctionBlock(node) || isArrowFunctionBody(node) || isBindingPattern(node)
+            ? "quit"
+            : isVariableDeclaration(node));
+
+    return (possiblyParameterDeclaration || possiblyVariableDeclaration) as ParameterDeclaration | TypeParameterDeclaration | VariableDeclaration | undefined;
 }
 
 function isArrowFunctionBody(node: Node) {
