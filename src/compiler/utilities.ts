@@ -152,8 +152,6 @@ import {
     forEachChild,
     forEachChildRecursively,
     ForInOrOfStatement,
-    ForInStatement,
-    ForOfStatement,
     ForStatement,
     FunctionBody,
     FunctionDeclaration,
@@ -3417,9 +3415,9 @@ export function isInExpressionContext(node: Node): boolean {
                 forStatement.incrementor === node;
         case SyntaxKind.ForInStatement:
         case SyntaxKind.ForOfStatement:
-            const forInStatement = parent as ForInStatement | ForOfStatement;
-            return (forInStatement.initializer === node && forInStatement.initializer.kind !== SyntaxKind.VariableDeclarationList) ||
-                forInStatement.expression === node;
+            const forInOrOfStatement = parent as ForInOrOfStatement;
+            return (forInOrOfStatement.initializer === node && forInOrOfStatement.initializer.kind !== SyntaxKind.VariableDeclarationList) ||
+                forInOrOfStatement.expression === node;
         case SyntaxKind.TypeAssertionExpression:
         case SyntaxKind.AsExpression:
             return node === (parent as AssertionExpression).expression;
@@ -4464,27 +4462,32 @@ export function hasTypeArguments(node: Node): node is HasTypeArguments {
 
 /** @internal */
 export const enum AssignmentKind {
-    None, Definite, Compound, CompoundLike
+    None, Definite, Compound
 }
 
-/** @internal */
-export function getAssignmentTargetKind(node: Node): AssignmentKind {
+type AssignmentTarget =
+    | BinaryExpression
+    | PrefixUnaryExpression
+    | PostfixUnaryExpression
+    | ForInOrOfStatement;
+
+function getAssignmentTarget(node: Node): AssignmentTarget | undefined {
     let parent = node.parent;
     while (true) {
         switch (parent.kind) {
             case SyntaxKind.BinaryExpression:
-                const binaryOperator = (parent as BinaryExpression).operatorToken.kind;
-                return isAssignmentOperator(binaryOperator) && (parent as BinaryExpression).left === node ?
-                    binaryOperator === SyntaxKind.EqualsToken ? (isCompoundLikeAssignment(parent as BinaryExpression) ? AssignmentKind.CompoundLike : AssignmentKind.Definite) :
-                    isLogicalOrCoalescingAssignmentOperator(binaryOperator) ? AssignmentKind.Definite : AssignmentKind.Compound :
-                    AssignmentKind.None;
+                const binaryExpression = parent as BinaryExpression;
+                const binaryOperator = binaryExpression.operatorToken.kind;
+                return isAssignmentOperator(binaryOperator) && binaryExpression.left === node ? binaryExpression : undefined;
             case SyntaxKind.PrefixUnaryExpression:
             case SyntaxKind.PostfixUnaryExpression:
-                const unaryOperator = (parent as PrefixUnaryExpression | PostfixUnaryExpression).operator;
-                return unaryOperator === SyntaxKind.PlusPlusToken || unaryOperator === SyntaxKind.MinusMinusToken ? AssignmentKind.Compound : AssignmentKind.None;
+                const unaryExpression = (parent as PrefixUnaryExpression | PostfixUnaryExpression);
+                const unaryOperator = unaryExpression.operator;
+                return unaryOperator === SyntaxKind.PlusPlusToken || unaryOperator === SyntaxKind.MinusMinusToken ? unaryExpression : undefined;
             case SyntaxKind.ForInStatement:
             case SyntaxKind.ForOfStatement:
-                return (parent as ForInOrOfStatement).initializer === node ? AssignmentKind.Definite : AssignmentKind.None;
+                const forInOrOfStatement = parent as ForInOrOfStatement;
+                return forInOrOfStatement.initializer === node ? forInOrOfStatement : undefined;
             case SyntaxKind.ParenthesizedExpression:
             case SyntaxKind.ArrayLiteralExpression:
             case SyntaxKind.SpreadElement:
@@ -4496,20 +4499,41 @@ export function getAssignmentTargetKind(node: Node): AssignmentKind {
                 break;
             case SyntaxKind.ShorthandPropertyAssignment:
                 if ((parent as ShorthandPropertyAssignment).name !== node) {
-                    return AssignmentKind.None;
+                    return undefined;
                 }
                 node = parent.parent;
                 break;
             case SyntaxKind.PropertyAssignment:
-                if ((parent as ShorthandPropertyAssignment).name === node) {
-                    return AssignmentKind.None;
+                if ((parent as PropertyAssignment).name === node) {
+                    return undefined;
                 }
                 node = parent.parent;
                 break;
             default:
-                return AssignmentKind.None;
+                return undefined;
         }
         parent = node.parent;
+    }
+}
+
+/** @internal */
+export function getAssignmentTargetKind(node: Node): AssignmentKind {
+    const target = getAssignmentTarget(node);
+    if (!target) {
+        return AssignmentKind.None;
+    }
+    switch (target.kind) {
+        case SyntaxKind.BinaryExpression:
+            const binaryOperator = target.operatorToken.kind;
+            return binaryOperator === SyntaxKind.EqualsToken || isLogicalOrCoalescingAssignmentOperator(binaryOperator) ?
+                AssignmentKind.Definite :
+                AssignmentKind.Compound;
+        case SyntaxKind.PrefixUnaryExpression:
+        case SyntaxKind.PostfixUnaryExpression:
+            return AssignmentKind.Compound;
+        case SyntaxKind.ForInStatement:
+        case SyntaxKind.ForOfStatement:
+            return AssignmentKind.Definite;
     }
 }
 
@@ -4519,12 +4543,18 @@ export function getAssignmentTargetKind(node: Node): AssignmentKind {
 // (Note that `p` is not a target in the above examples, only `a`.)
 /** @internal */
 export function isAssignmentTarget(node: Node): boolean {
-    return getAssignmentTargetKind(node) !== AssignmentKind.None;
+    return !!getAssignmentTarget(node);
 }
 
-function isCompoundLikeAssignment(assignment: BinaryExpression): boolean {
+function isCompoundLikeAssignment(assignment: AssignmentExpression<EqualsToken>): boolean {
     const right = skipParentheses(assignment.right);
     return right.kind === SyntaxKind.BinaryExpression && isAdditiveOperatorOrHigher((right as BinaryExpression).operatorToken.kind);
+}
+
+/** @internal */
+export function isInCompoundLikeAssignment(node: Node): boolean {
+    const target = getAssignmentTarget(node);
+    return !!target && isAssignmentExpression(target, /*excludeCompoundAssignment*/ true) && isCompoundLikeAssignment(target);
 }
 
 /** @internal */
@@ -4539,8 +4569,7 @@ export type NodeWithPossibleHoistedDeclaration =
     | DefaultClause
     | LabeledStatement
     | ForStatement
-    | ForInStatement
-    | ForOfStatement
+    | ForInOrOfStatement
     | DoStatement
     | WhileStatement
     | TryStatement

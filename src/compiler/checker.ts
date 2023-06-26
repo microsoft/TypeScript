@@ -552,6 +552,7 @@ import {
     isImportOrExportSpecifier,
     isImportSpecifier,
     isImportTypeNode,
+    isInCompoundLikeAssignment,
     isIndexedAccessTypeNode,
     isInExpressionContext,
     isInfinityOrNaNString,
@@ -26662,8 +26663,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!isReachableFlowNode(flow)) {
                     return unreachableNeverType;
                 }
-                const assignmentKind = getAssignmentTargetKind(node);
-                if (assignmentKind === AssignmentKind.Compound) {
+                if (getAssignmentTargetKind(node) === AssignmentKind.Compound) {
                     const flowType = getTypeAtFlowNode(flow.antecedent);
                     return createFlowType(getBaseTypeOfLiteralType(getTypeFromFlowType(flowType)), isIncomplete(flowType));
                 }
@@ -26674,7 +26674,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const assignedType = getWidenedLiteralType(getInitialOrAssignedType(flow));
                     return isTypeAssignableTo(assignedType, declaredType) ? assignedType : anyArrayType;
                 }
-                const t = assignmentKind === AssignmentKind.CompoundLike ? getBaseTypeOfLiteralType(declaredType) : declaredType;
+                const t = isInCompoundLikeAssignment(node) ? getBaseTypeOfLiteralType(declaredType) : declaredType;
                 if (t.flags & TypeFlags.Union) {
                     return getAssignmentReducedType(t as UnionType, getInitialOrAssignedType(flow));
                 }
@@ -28037,10 +28037,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // entities we simply return the declared type.
         if (localOrExportSymbol.flags & SymbolFlags.Variable) {
             if (assignmentKind === AssignmentKind.Definite) {
-                return type;
-            }
-            if (assignmentKind === AssignmentKind.CompoundLike) {
-                return getBaseTypeOfLiteralType(type);
+                return isInCompoundLikeAssignment(node) ? getBaseTypeOfLiteralType(type) : type;
             }
         }
         else if (isAlias) {
@@ -31576,7 +31573,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             else {
                 const isSetonlyAccessor = prop.flags & SymbolFlags.SetAccessor && !(prop.flags & SymbolFlags.GetAccessor);
-                if (isSetonlyAccessor && assignmentKind !== AssignmentKind.Definite && assignmentKind !== AssignmentKind.CompoundLike) {
+                if (isSetonlyAccessor && assignmentKind !== AssignmentKind.Definite) {
                     error(node, Diagnostics.Private_accessor_was_defined_without_a_getter);
                 }
             }
@@ -31685,7 +31682,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // assignment target, and the referenced property was declared as a variable, property,
         // accessor, or optional method.
         const assignmentKind = getAssignmentTargetKind(node);
-        if (assignmentKind === AssignmentKind.Definite || assignmentKind === AssignmentKind.CompoundLike) {
+        if (assignmentKind === AssignmentKind.Definite) {
             return removeMissingType(propType, !!(prop && prop.flags & SymbolFlags.Optional));
         }
         if (prop &&
