@@ -34,8 +34,19 @@ let t6 = numLiteral;
 t6 = t6 % 42
 t6 // number
 
+let t7 = numLiteral;
+t7 = t7 >> 0
+t7 // number
+
+let t8 = numLiteral;
+t8 = t8 >>> 0
+t8 // number
+
+let t9 = numLiteral;
+t9 = t9 << 0
+t9 // number
 
 declare const literalUnion: "a" | 0;
-let t7 = literalUnion;
-t7 = t7 + 'b'
-t7 // string
+let t10 = literalUnion;
+t10 = t10 + 'b'
+t10 // string

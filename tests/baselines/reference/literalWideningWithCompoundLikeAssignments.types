@@ -108,21 +108,62 @@ t6 = t6 % 42
 t6 // number
 >t6 : number
 
+let t7 = numLiteral;
+>t7 : 0
+>numLiteral : 0
+
+t7 = t7 >> 0
+>t7 = t7 >> 0 : number
+>t7 : number
+>t7 >> 0 : number
+>t7 : 0
+>0 : 0
+
+t7 // number
+>t7 : number
+
+let t8 = numLiteral;
+>t8 : 0
+>numLiteral : 0
+
+t8 = t8 >>> 0
+>t8 = t8 >>> 0 : number
+>t8 : number
+>t8 >>> 0 : number
+>t8 : 0
+>0 : 0
+
+t8 // number
+>t8 : number
+
+let t9 = numLiteral;
+>t9 : 0
+>numLiteral : 0
+
+t9 = t9 << 0
+>t9 = t9 << 0 : number
+>t9 : number
+>t9 << 0 : number
+>t9 : 0
+>0 : 0
+
+t9 // number
+>t9 : number
 
 declare const literalUnion: "a" | 0;
 >literalUnion : 0 | "a"
 
-let t7 = literalUnion;
->t7 : 0 | "a"
+let t10 = literalUnion;
+>t10 : 0 | "a"
 >literalUnion : 0 | "a"
 
-t7 = t7 + 'b'
->t7 = t7 + 'b' : string
->t7 : string | number
->t7 + 'b' : string
->t7 : 0 | "a"
+t10 = t10 + 'b'
+>t10 = t10 + 'b' : string
+>t10 : string | number
+>t10 + 'b' : string
+>t10 : 0 | "a"
 >'b' : "b"
 
-t7 // string
->t7 : string
+t10 // string
+>t10 : string
 

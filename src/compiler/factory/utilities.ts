@@ -1211,8 +1211,7 @@ function isAdditiveOperator(kind: SyntaxKind): kind is AdditiveOperator {
         || kind === SyntaxKind.MinusToken;
 }
 
-/** @internal */
-export function isAdditiveOperatorOrHigher(kind: SyntaxKind): kind is AdditiveOperatorOrHigher {
+function isAdditiveOperatorOrHigher(kind: SyntaxKind): kind is AdditiveOperatorOrHigher {
     return isAdditiveOperator(kind)
         || isMultiplicativeOperatorOrHigher(kind);
 }
@@ -1223,7 +1222,8 @@ function isShiftOperator(kind: SyntaxKind): kind is ShiftOperator {
         || kind === SyntaxKind.GreaterThanGreaterThanGreaterThanToken;
 }
 
-function isShiftOperatorOrHigher(kind: SyntaxKind): kind is ShiftOperatorOrHigher {
+/** @internal */
+export function isShiftOperatorOrHigher(kind: SyntaxKind): kind is ShiftOperatorOrHigher {
     return isShiftOperator(kind)
         || isAdditiveOperatorOrHigher(kind);
 }

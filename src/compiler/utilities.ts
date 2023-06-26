@@ -232,7 +232,6 @@ import {
     InterfaceDeclaration,
     InternalEmitFlags,
     isAccessor,
-    isAdditiveOperatorOrHigher,
     isAnyDirectorySeparator,
     isArray,
     isArrayLiteralExpression,
@@ -330,6 +329,7 @@ import {
     isQualifiedName,
     isRootedDiskPath,
     isSetAccessorDeclaration,
+    isShiftOperatorOrHigher,
     isShorthandPropertyAssignment,
     isSourceFile,
     isString,
@@ -4548,7 +4548,7 @@ export function isAssignmentTarget(node: Node): boolean {
 
 function isCompoundLikeAssignment(assignment: AssignmentExpression<EqualsToken>): boolean {
     const right = skipParentheses(assignment.right);
-    return right.kind === SyntaxKind.BinaryExpression && isAdditiveOperatorOrHigher((right as BinaryExpression).operatorToken.kind);
+    return right.kind === SyntaxKind.BinaryExpression && isShiftOperatorOrHigher((right as BinaryExpression).operatorToken.kind);
 }
 
 /** @internal */
