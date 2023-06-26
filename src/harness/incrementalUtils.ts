@@ -385,7 +385,7 @@ function verifyResolutionCache(
     ) {
         ts.Debug.assert(expected?.resolutions === actual?.resolutions, `${projectName}:: ${caption}:: resolutions`);
         ts.Debug.assert(expected?.files === actual?.files, `${projectName}:: ${caption}:: files`);
-        verifySet(expected?.paths, actual?.paths, `${projectName}:: ${caption}:: paths`);
+        verifySet(expected?.symlinks, actual?.symlinks, `${projectName}:: ${caption}:: symlinks`);
     }
 }
 
