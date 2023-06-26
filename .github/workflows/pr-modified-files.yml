@@ -66,7 +66,7 @@ jobs:
         run: |
           cat > changed.sh <<'EOF'
             for file in "$@"; do
-              grep -Fxq -m1 "$file" pr_owners.txt && exit 0
+              grep -Fxq -m1 "$file" changed_files.txt && exit 0
             done
             exit 1
           EOF
