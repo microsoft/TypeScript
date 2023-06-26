@@ -91,7 +91,6 @@ jobs:
               "src/lib/dom.iterable.generated.d.ts" \
               "src/lib/webworker.generated.d.ts" \
               "src/lib/webworker.iterable.generated.d.ts"; then
-
             MESSAGE="It looks like you've sent a pull request to update some generated declaration files related to the DOM."
             MESSAGE+=" These files aren't meant to be edited by hand, as they are synchronized with files in"
             MESSAGE+=" [the TypeScript-DOM-lib-generator repository](https://github.com/microsoft/TypeScript-DOM-lib-generator).
