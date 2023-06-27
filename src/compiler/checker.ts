@@ -4457,32 +4457,37 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * @returns SymbolFlags.All if `symbol` is an alias that ultimately resolves to `unknown`;
      * combined flags of all alias targets otherwise.
      */
-    function getAllSymbolFlags(symbol: Symbol): SymbolFlags {
-      let flags = symbol.flags;
-      let seenSymbols;
-      while (symbol.flags & SymbolFlags.Alias) {
-          const target = resolveAlias(symbol);
-          if (target === unknownSymbol) {
-              return SymbolFlags.All;
-          }
+    function getAllSymbolFlags(symbol: Symbol, excludeTypeOnlyMeanings?: boolean): SymbolFlags {
+        const typeOnlyDeclaration = excludeTypeOnlyMeanings && getTypeOnlyAliasDeclaration(symbol);
+        const typeOnlyResolution = typeOnlyDeclaration && resolveAlias(typeOnlyDeclaration.symbol);
+        let flags = symbol.flags;
+        let seenSymbols;
+        while (symbol.flags & SymbolFlags.Alias) {
+            const target = resolveAlias(symbol);
+            if (target === typeOnlyResolution) {
+                break;
+            }
+            if (target === unknownSymbol) {
+                return SymbolFlags.All;
+            }
 
-          // Optimizations - try to avoid creating or adding to
-          // `seenSymbols` if possible
-          if (target === symbol || seenSymbols?.has(target)) {
-              break;
-          }
-          if (target.flags & SymbolFlags.Alias) {
-              if (seenSymbols) {
-                  seenSymbols.add(target);
-              }
-              else {
-                  seenSymbols = new Set([symbol, target]);
-              }
-          }
-          flags |= target.flags;
-          symbol = target;
-      }
-      return flags;
+            // Optimizations - try to avoid creating or adding to
+            // `seenSymbols` if possible
+            if (target === symbol || seenSymbols?.has(target)) {
+                break;
+            }
+            if (target.flags & SymbolFlags.Alias) {
+                if (seenSymbols) {
+                    seenSymbols.add(target);
+                }
+                else {
+                    seenSymbols = new Set([symbol, target]);
+                }
+            }
+            flags |= target.flags;
+            symbol = target;
+        }
+        return flags;
     }
 
     /**
@@ -4572,7 +4577,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const target = resolveAlias(symbol);
         if (target) {
             const markAlias = target === unknownSymbol ||
-                ((getAllSymbolFlags(target) & SymbolFlags.Value) && !isConstEnumOrConstEnumOnlyModule(target) && !getTypeOnlyAliasDeclaration(symbol, SymbolFlags.Value));
+                ((getAllSymbolFlags(target, /*excludeTypeOnlyMeanings*/ true) & SymbolFlags.Value) && !isConstEnumOrConstEnumOnlyModule(target));
 
             if (markAlias) {
                 markAliasSymbolAsReferenced(symbol);
@@ -5567,7 +5572,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function symbolIsValue(symbol: Symbol, includeTypeOnlyMembers?: boolean): boolean {
         return !!(
             symbol.flags & SymbolFlags.Value ||
-            symbol.flags & SymbolFlags.Alias && getAllSymbolFlags(symbol) & SymbolFlags.Value && (includeTypeOnlyMembers || !getTypeOnlyAliasDeclaration(symbol)));
+            symbol.flags & SymbolFlags.Alias && getAllSymbolFlags(symbol, !includeTypeOnlyMembers) & SymbolFlags.Value);
     }
 
     function findConstructorDeclaration(node: ClassLikeDeclaration): ConstructorDeclaration | undefined {
@@ -27808,9 +27813,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!canCollectSymbolAliasAccessabilityData) {
             return;
         }
-        if (isNonLocalAlias(symbol, /*excludes*/ SymbolFlags.Value) && !isInTypeQuery(location) && !getTypeOnlyAliasDeclaration(symbol, SymbolFlags.Value)) {
+        if (isNonLocalAlias(symbol, /*excludes*/ SymbolFlags.Value) && !isInTypeQuery(location)) {
             const target = resolveAlias(symbol);
-            if (getAllSymbolFlags(target) & (SymbolFlags.Value | SymbolFlags.ExportValue)) {
+            if (getAllSymbolFlags(target, /*excludeTypeOnlyMeanings*/ true) & (SymbolFlags.Value | SymbolFlags.ExportValue)) {
                 // An alias resolving to a const enum cannot be elided if (1) 'isolatedModules' is enabled
                 // (because the const enum value will not be inlined), or if (2) the alias is an export
                 // of a const enum declaration that will be preserved.
@@ -46312,7 +46317,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.ImportSpecifier:
             case SyntaxKind.ExportSpecifier:
                 const symbol = getSymbolOfDeclaration(node as ImportClause | NamespaceImport | ImportSpecifier | ExportSpecifier);
-                return !!symbol && isAliasResolvedToValue(symbol) && !getTypeOnlyAliasDeclaration(symbol, SymbolFlags.Value);
+                return !!symbol && isAliasResolvedToValue(symbol, /*excludeTypeOnlyValues*/ true);
             case SyntaxKind.ExportDeclaration:
                 const exportClause = (node as ExportDeclaration).exportClause;
                 return !!exportClause && (
@@ -46338,7 +46343,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return isValue && node.moduleReference && !nodeIsMissing(node.moduleReference);
     }
 
-    function isAliasResolvedToValue(symbol: Symbol | undefined): boolean {
+    function isAliasResolvedToValue(symbol: Symbol | undefined, excludeTypeOnlyValues?: boolean): boolean {
         if (!symbol) {
             return false;
         }
@@ -46348,7 +46353,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         // const enums and modules that contain only const enums are not considered values from the emit perspective
         // unless 'preserveConstEnums' option is set to true
-        return !!((getAllSymbolFlags(target) ?? -1) & SymbolFlags.Value) &&
+        return !!((getAllSymbolFlags(target, excludeTypeOnlyValues) ?? -1) & SymbolFlags.Value) &&
             (shouldPreserveConstEnums(compilerOptions) || !isConstEnumOrConstEnumOnlyModule(target));
     }
 
