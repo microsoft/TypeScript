@@ -4,7 +4,7 @@ export const versionMajorMinor = "5.2";
 // The following is baselined as a literal template type without intervention
 /** The version of the TypeScript compiler release */
 // eslint-disable-next-line @typescript-eslint/no-inferrable-types
-export const version: string = `${versionMajorMinor}.0-dev`;
+export const version: string = "5.2.0-beta";
 
 /**
  * Type of objects whose values are all of the same type.
