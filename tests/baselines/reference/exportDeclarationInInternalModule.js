@@ -71,11 +71,11 @@ declare class Bbb {
 }
 declare class Aaa extends Bbb {
 }
-declare module Aaa {
+declare namespace Aaa {
     class SomeType {
     }
 }
-declare module Bbb {
+declare namespace Bbb {
     export class SomeType {
     }
     export * from Aaa;

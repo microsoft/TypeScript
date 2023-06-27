@@ -1,6 +1,8 @@
+error TS5110: Option 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
 /a/b/c/d/e/app.ts(1,17): error TS2307: Cannot find module 'foo' or its corresponding type declarations.
 
 
+!!! error TS5110: Option 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
 ==== /a/node_modules/foo.d.ts (0 errors) ====
     export declare let x: number
     

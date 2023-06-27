@@ -67,7 +67,9 @@
         "es2022.regexp",
         "es2023.array",
         "es2023.collection",
+        "esnext.decorators",
         "esnext.intl",
+        "esnext.disposable",
         "decorators",
         "decorators.legacy",
         // Default libraries
