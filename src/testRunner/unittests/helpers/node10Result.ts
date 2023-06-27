@@ -82,6 +82,6 @@ export function getFsContentsForNode10Result(): FsContents {
             },
             files: ["index.mts"]
         }),
-        [libFile.path.replace("lib.d.ts", "lib.esnext.full.d.ts")]: libFile.content,
+        [libFile.path.replace("lib.d.ts", "lib.es2022.full.d.ts")]: libFile.content,
     };
 }
