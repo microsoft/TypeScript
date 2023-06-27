@@ -1860,10 +1860,6 @@
         "category": "Error",
         "code": 2345
     },
-    "Call target does not contain any signatures.": {
-        "category": "Error",
-        "code": 2346
-    },
     "Untyped function calls may not accept type arguments.": {
         "category": "Error",
         "code": 2347
@@ -7687,6 +7683,10 @@
     "Variables with multiple declarations cannot be inlined.": {
         "category": "Message",
         "code": 95186
+    },
+    "Add missing comma for object member completion '{0}'.": {
+        "category": "Message",
+        "code": 95187
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

@@ -21538,11 +21538,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // Relate components directly before falling back to constraint relationships
                     // A type S[K] is related to a type T[J] if S is related to T and K is related to J.
                     if (result = isRelatedTo((source as IndexedAccessType).objectType, (target as IndexedAccessType).objectType, RecursionFlags.Both, reportErrors)) {
-                        // This does _not_ generalize - specific instantiations of `S[K]` and `T[J]` may be related, even if the indexed accesses generally are not.
-                        // For example, `S = {x: string, a: string}`, `T = {x: string, b: string}`, `K = J = "x"`. `S` and `T` are unrelated, but the result of executing
-                        // `S["x"]` and `T["x"]` _are_. Given that, we have to flag the object type comparison here as "unreliable", since while the generic result can reliably
-                        // be used in the affirmative case, it failing is not an indicator that the structural result will not succeed.
-                        instantiateType((source as IndexedAccessType).objectType, reportUnreliableMapper);
                         result &= isRelatedTo((source as IndexedAccessType).indexType, (target as IndexedAccessType).indexType, RecursionFlags.Both, reportErrors);
                     }
                     if (result) {
@@ -28478,19 +28473,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function getTypeForThisExpressionFromJSDoc(node: Node) {
-        const jsdocType = getJSDocType(node);
-        if (jsdocType && jsdocType.kind === SyntaxKind.JSDocFunctionType) {
-            const jsDocFunctionType = jsdocType as JSDocFunctionType;
-            if (jsDocFunctionType.parameters.length > 0 &&
-                jsDocFunctionType.parameters[0].name &&
-                (jsDocFunctionType.parameters[0].name as Identifier).escapedText === InternalSymbolName.This) {
-                return getTypeFromTypeNode(jsDocFunctionType.parameters[0].type!);
-            }
-        }
+    function getTypeForThisExpressionFromJSDoc(node: SignatureDeclaration) {
         const thisTag = getJSDocThisTag(node);
         if (thisTag && thisTag.typeExpression) {
             return getTypeFromTypeNode(thisTag.typeExpression);
+        }
+        const signature = getSignatureOfTypeTag(node);
+        if (signature) {
+            return getThisTypeOfSignature(signature);
         }
     }
 
@@ -33171,12 +33161,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const candidates = candidatesOutArray || [];
         // reorderCandidates fills up the candidates array directly
         reorderCandidates(signatures, candidates, callChainFlags);
-        if (!candidates.length) {
-            if (reportErrors) {
-                diagnostics.add(getDiagnosticForCallNode(node, Diagnostics.Call_target_does_not_contain_any_signatures));
-            }
-            return resolveErrorCall(node);
-        }
+        Debug.assert(candidates.length, "Revert #54442 and add a testcase with whatever triggered this");
 
         const args = getEffectiveCallArguments(node);
 
