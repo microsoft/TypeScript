@@ -222,6 +222,7 @@ export interface ProgramHost<T extends BuilderProgram> {
         options: CompilerOptions,
         containingSourceFile: SourceFile,
         reusedNames: readonly StringLiteralLike[] | undefined,
+        ambientModuleNames: readonly StringLiteralLike[] | undefined,
     ): readonly ResolvedModuleWithFailedLookupLocations[];
     resolveTypeReferenceDirectiveReferences?<T extends FileReference | string>(
         typeDirectiveReferences: readonly T[],
@@ -514,11 +515,13 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
     compilerHost.resolveModuleNames = maybeBind(host, host.resolveModuleNames);
     if (!compilerHost.resolveModuleNameLiterals && !compilerHost.resolveModuleNames) {
         compilerHost.resolveModuleNameLiterals = resolutionCache.resolveModuleNameLiterals.bind(resolutionCache);
+        compilerHost.reusedModuleResolutions = resolutionCache.reusedModuleResolutions.bind(resolutionCache);
     }
     compilerHost.resolveTypeReferenceDirectiveReferences = maybeBind(host, host.resolveTypeReferenceDirectiveReferences);
     compilerHost.resolveTypeReferenceDirectives = maybeBind(host, host.resolveTypeReferenceDirectives);
     if (!compilerHost.resolveTypeReferenceDirectiveReferences && !compilerHost.resolveTypeReferenceDirectives) {
-       compilerHost.resolveTypeReferenceDirectiveReferences = resolutionCache.resolveTypeReferenceDirectiveReferences.bind(resolutionCache);
+        compilerHost.resolveTypeReferenceDirectiveReferences = resolutionCache.resolveTypeReferenceDirectiveReferences.bind(resolutionCache);
+        compilerHost.reusedTypeReferenceDirectiveResolutions = resolutionCache.reusedTypeReferenceDirectiveResolutions.bind(resolutionCache);
     }
     compilerHost.resolveLibrary = !host.resolveLibrary ?
         resolutionCache.resolveLibrary.bind(resolutionCache) :

@@ -711,8 +711,13 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     /** @internal */
-    resolveModuleNameLiterals(moduleLiterals: readonly StringLiteralLike[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile: SourceFile, reusedNames: readonly StringLiteralLike[] | undefined): readonly ResolvedModuleWithFailedLookupLocations[] {
-        return this.resolutionCache.resolveModuleNameLiterals(moduleLiterals, containingFile, redirectedReference, options, containingSourceFile, reusedNames);
+    resolveModuleNameLiterals(moduleLiterals: readonly StringLiteralLike[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile: SourceFile, reusedNames: readonly StringLiteralLike[] | undefined, ambientModuleNames: readonly StringLiteralLike[] | undefined): readonly ResolvedModuleWithFailedLookupLocations[] {
+        return this.resolutionCache.resolveModuleNameLiterals(moduleLiterals, containingFile, redirectedReference, options, containingSourceFile, reusedNames, ambientModuleNames);
+    }
+
+    /** @internal */
+    reusedModuleResolutions(reusedNames: readonly StringLiteralLike[] | undefined, containingSourceFile: SourceFile, ambientModuleNames: readonly StringLiteralLike[] | undefined) {
+        return this.resolutionCache.reusedModuleResolutions(reusedNames, containingSourceFile, ambientModuleNames);
     }
 
     getModuleResolutionCache(): ModuleResolutionCache | undefined {
@@ -729,6 +734,11 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             containingSourceFile,
             reusedNames,
         );
+    }
+
+    /** @internal */
+    reusedTypeReferenceDirectiveResolutions?<T extends FileReference | string>(reusedNames: readonly T[] | undefined, containingSourceFile: SourceFile | undefined) {
+        return this.resolutionCache.reusedTypeReferenceDirectiveResolutions(reusedNames, containingSourceFile);
     }
 
     /** @internal */

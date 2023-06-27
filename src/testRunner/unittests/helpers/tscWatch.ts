@@ -38,6 +38,7 @@ export interface TscWatchCompileChange<T extends ts.BuilderProgram = ts.EmitAndS
         programs: readonly CommandLineProgram[],
         watchOrSolution: WatchOrSolution<T>
     ) => void;
+    userResolvedModuleNames?: true;
     // TODO:: sheetal: Needing these fields are technically issues that need to be fixed later
     symlinksNotReflected?: readonly string[];
 }
@@ -238,7 +239,7 @@ export function runWatchBaseline<T extends ts.BuilderProgram = ts.EmitAndSemanti
     });
 
     if (edits) {
-        for (const { caption, edit, timeouts, symlinksNotReflected } of edits) {
+        for (const { caption, edit, timeouts, userResolvedModuleNames, symlinksNotReflected } of edits) {
             oldSnap = applyEdit(sys, baseline, edit, caption);
             timeouts(sys, programs, watchOrSolution);
             programs = watchBaseline({
@@ -253,6 +254,7 @@ export function runWatchBaseline<T extends ts.BuilderProgram = ts.EmitAndSemanti
                 resolutionCache: (watchOrSolution as ts.WatchOfConfigFile<T> | undefined)?.getResolutionCache?.(),
                 useSourceOfProjectReferenceRedirect,
                 symlinksNotReflected,
+                userResolvedModuleNames,
             });
         }
     }
@@ -273,6 +275,7 @@ export interface WatchBaseline extends BaselineBase, TscWatchCheckOptions {
     caption?: string;
     resolutionCache?: ts.ResolutionCache;
     useSourceOfProjectReferenceRedirect?: () => boolean;
+    userResolvedModuleNames?: true;
     symlinksNotReflected?: readonly string[]
 }
 export function watchBaseline({
@@ -286,6 +289,7 @@ export function watchBaseline({
     caption,
     resolutionCache,
     useSourceOfProjectReferenceRedirect,
+    userResolvedModuleNames,
     symlinksNotReflected,
 }: WatchBaseline) {
     if (baselineSourceMap) generateSourceMapBaselineFiles(sys);
@@ -301,7 +305,15 @@ export function watchBaseline({
     // Verify program structure and resolution cache when incremental edit with tsc --watch (without build mode)
     if (resolutionCache && programs.length) {
         ts.Debug.assert(programs.length === 1);
-        verifyProgramStructureAndResolutionCache(caption!, sys, programs[0][0], resolutionCache, useSourceOfProjectReferenceRedirect, symlinksNotReflected);
+        verifyProgramStructureAndResolutionCache(
+            caption!,
+            sys,
+            programs[0][0],
+            resolutionCache,
+            useSourceOfProjectReferenceRedirect,
+            userResolvedModuleNames,
+            symlinksNotReflected,
+        );
     }
     sys.writtenFiles.clear();
     return programs;
@@ -312,6 +324,7 @@ function verifyProgramStructureAndResolutionCache(
     program: ts.Program,
     resolutionCache: ts.ResolutionCache,
     useSourceOfProjectReferenceRedirect?: () => boolean,
+    userResolvedModuleNames?: true,
     symlinksNotReflected?: readonly string[],
 ) {
     const options = program.getCompilerOptions();
@@ -352,7 +365,7 @@ function verifyProgramStructureAndResolutionCache(
         scheduleInvalidateResolutionsOfFailedLookupLocations: ts.noop,
         getCachedDirectoryStructureHost: ts.returnUndefined,
         writeLog: ts.noop,
-    }, caption);
+    }, caption, userResolvedModuleNames);
 }
 export interface VerifyTscWatch extends TscWatchCompile {
     baselineIncremental?: boolean;

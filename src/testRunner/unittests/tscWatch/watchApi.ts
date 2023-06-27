@@ -103,11 +103,13 @@ describe("unittests:: tsc-watch:: watchAPI:: tsc-watch with custom module resolu
                             caption: "write other with same contents",
                             edit: sys => sys.appendFile(`/user/username/projects/myproject/other.d.ts`, ""),
                             timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                            userResolvedModuleNames: true,
                         },
                         {
                             caption: "change other file",
                             edit: sys => sys.appendFile(`/user/username/projects/myproject/other.d.ts`, "export function bar(): void;"),
                             timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                            userResolvedModuleNames: true,
                         },
                         {
                             caption: "write other with same contents but write ts file",
@@ -116,6 +118,7 @@ describe("unittests:: tsc-watch:: watchAPI:: tsc-watch with custom module resolu
                                 sys.writeFile(`/user/username/projects/myproject/other.ts`, "export function foo() {}");
                             },
                             timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                            userResolvedModuleNames: true,
                         },
                     ],
                     watchOrSolution: watch

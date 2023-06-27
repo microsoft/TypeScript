@@ -7800,6 +7800,7 @@ export interface CompilerHost extends ModuleResolutionHost {
         options: CompilerOptions,
         containingSourceFile: SourceFile,
         reusedNames: readonly StringLiteralLike[] | undefined,
+        ambientModuleNames: readonly StringLiteralLike[] | undefined,
     ): readonly ResolvedModuleWithFailedLookupLocations[];
     resolveTypeReferenceDirectiveReferences?<T extends FileReference | string>(
         typeDirectiveReferences: readonly T[],
@@ -7838,6 +7839,22 @@ export interface CompilerHost extends ModuleResolutionHost {
     // For testing:
     /** @internal */ storeFilesChangingSignatureDuringEmit?: boolean;
     /** @internal */ getBuildInfo?(fileName: string, configFilePath: string | undefined): BuildInfo | undefined;
+}
+
+/** @internal */
+export interface CompilerHostSupportingResolutionCache {
+    reusedModuleResolutions?(
+        reusedNames: readonly StringLiteralLike[] | undefined,
+        containingSourceFile: SourceFile,
+        ambientModuleNames: readonly StringLiteralLike[] | undefined,
+    ): void;
+    reusedTypeReferenceDirectiveResolutions?<T extends FileReference | string>(
+        reusedNames: readonly T[] | undefined,
+        containingSourceFile: SourceFile | undefined,
+    ): void;
+}
+/** @internal */
+export interface CompilerHost extends CompilerHostSupportingResolutionCache {
 }
 
 /** true if --out otherwise source file name *

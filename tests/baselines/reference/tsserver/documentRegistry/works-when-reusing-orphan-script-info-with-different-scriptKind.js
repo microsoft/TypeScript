@@ -173,6 +173,12 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] Search path: ^/inmemory/model
 Info seq  [hh:mm:ss:mss] For info: ^/inmemory/model/4 :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /users/user/projects/san/^ 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /users/user/projects/san/^ 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /users/user/projects/san/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /users/user/projects/san/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /users/user/projects/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /users/user/projects/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 3 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -201,3 +207,19 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/users/user/projects/node_modules/@types:
+  {"pollingInterval":500}
+/users/user/projects/san/node_modules/@types:
+  {"pollingInterval":500}
+
+PolledWatches *deleted*::
+/users/user/projects/node_modules:
+  {"pollingInterval":500}
+/users/user/projects/san/^:
+  {"pollingInterval":500}
+/users/user/projects/san/node_modules:
+  {"pollingInterval":500}

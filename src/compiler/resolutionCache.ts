@@ -4,6 +4,7 @@ import {
     clearMap,
     closeFileWatcher,
     closeFileWatcherOf,
+    CompilerHostSupportingResolutionCache,
     CompilerOptions,
     createModeAwareCache,
     createModuleResolutionCache,
@@ -22,6 +23,7 @@ import {
     FileWatcher,
     FileWatcherCallback,
     firstDefinedIterator,
+    getAutomaticTypeDirectiveContainingFile,
     GetCanonicalFileName,
     getDirectoryPath,
     getEffectiveTypeRoots,
@@ -63,6 +65,7 @@ import {
     resolutionExtensionIsTSOrJson,
     ResolutionLoader,
     ResolutionMode,
+    ResolutionNameAndModeGetter,
     ResolvedModuleWithFailedLookupLocations,
     ResolvedProjectReference,
     ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
@@ -75,6 +78,7 @@ import {
     stringContains,
     StringLiteralLike,
     trace,
+    typeReferenceResolutionNameAndModeGetter,
     updateResolutionField,
     WatchDirectoryFlags,
 } from "./_namespaces/ts";
@@ -89,7 +93,7 @@ export interface HasInvalidatedFromResolutionCache {
  *
  * @internal
  */
-export interface ResolutionCache {
+export interface ResolutionCache extends Required<CompilerHostSupportingResolutionCache> {
     rootDirForResolution: string;
     resolvedModuleNames: Map<Path, ModeAwareCache<CachedResolvedModuleWithFailedLookupLocations>>;
     resolvedTypeReferenceDirectives: Map<Path, ModeAwareCache<CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations>>;
@@ -117,6 +121,7 @@ export interface ResolutionCache {
         options: CompilerOptions,
         containingSourceFile: SourceFile,
         reusedNames: readonly StringLiteralLike[] | undefined,
+        ambientModuleNames: readonly StringLiteralLike[] | undefined,
     ): readonly ResolvedModuleWithFailedLookupLocations[];
     resolveTypeReferenceDirectiveReferences<T extends FileReference | string>(
         typeDirectiveReferences: readonly T[],
@@ -574,6 +579,8 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         resolveSingleModuleNameWithoutWatching,
         removeResolutionsFromProjectReferenceRedirects,
         removeResolutionsOfFile,
+        reusedModuleResolutions,
+        reusedTypeReferenceDirectiveResolutions,
         hasChangedAutomaticTypeDirectiveNames: () => hasChangedAutomaticTypeDirectiveNames,
         invalidateResolutionOfFile,
         invalidateResolutionsOfFailedLookupLocations,
@@ -741,7 +748,8 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         containingSourceFile: SourceFile;
         redirectedReference: ResolvedProjectReference | undefined;
         options: CompilerOptions;
-        reusedNames?: readonly Entry[];
+        reusedNames: readonly Entry[] | undefined;
+        ambientModuleNames?: readonly Entry[] | undefined,
         perFileCache: Map<Path, ModeAwareCache<T>>;
         loader: ResolutionLoader<Entry, T, SourceFile>;
         getResolutionWithResolvedFileName: GetResolutionWithResolvedFileName<T, R>;
@@ -751,7 +759,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
     }
     function resolveNamesWithLocalCache<Entry, SourceFile, T extends ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName>({
         entries, containingFile, containingSourceFile, redirectedReference, options,
-        perFileCache, reusedNames,
+        perFileCache, reusedNames, ambientModuleNames,
         loader, getResolutionWithResolvedFileName, deferWatchingNonRelativeResolution,
         shouldRetryResolution, logChanges,
     }: ResolveNamesWithLocalCacheInput<Entry, SourceFile, T, R>): readonly T[] {
@@ -824,20 +832,16 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
             seenNamesInFile.set(name, mode, true);
             resolvedModules.push(resolution);
         }
-        reusedNames?.forEach(entry => seenNamesInFile.set(
-            loader.nameAndMode.getName(entry),
-            loader.nameAndMode.getMode(entry, containingSourceFile),
-            true,
-        ));
-        if (resolutionsInFile.size() !== seenNamesInFile.size()) {
-            // Stop watching and remove the unused name
-            resolutionsInFile.forEach((resolution, name, mode) => {
-                if (!seenNamesInFile.has(name, mode)) {
-                    stopWatchFailedLookupLocationOfResolution(resolution, path, getResolutionWithResolvedFileName);
-                    resolutionsInFile.delete(name, mode);
-                }
-            });
-        }
+        reuseResolutionsWorker(
+            reusedNames,
+            containingSourceFile,
+            path,
+            resolutionsInFile,
+            seenNamesInFile,
+            loader.nameAndMode,
+            getResolutionWithResolvedFileName,
+            ambientModuleNames,
+        );
         return resolvedModules;
 
         function resolutionIsEqualTo(oldResolution: T | undefined, newResolution: T | undefined): boolean {
@@ -895,6 +899,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         options: CompilerOptions,
         containingSourceFile: SourceFile,
         reusedNames: readonly StringLiteralLike[] | undefined,
+        ambientModuleNames: readonly StringLiteralLike[] | undefined,
     ): readonly ResolvedModuleWithFailedLookupLocations[] {
         return resolveNamesWithLocalCache({
             entries: moduleLiterals,
@@ -903,6 +908,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
             redirectedReference,
             options,
             reusedNames,
+            ambientModuleNames,
             perFileCache: resolvedModuleNames,
             loader: createModuleResolutionLoaderUsingGlobalCache(
                 containingFile,
@@ -954,6 +960,99 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
             }
         }
         return resolution;
+    }
+
+    function reuseResolutionsWorker<Entry, SourceFile, T extends ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName>(
+        reusedNames: readonly Entry[] | undefined,
+        containingSourceFile: SourceFile,
+        path: Path,
+        resolutionsInFile: ModeAwareCache<T>,
+        seenNamesInFile: ModeAwareCache<true>,
+        nameAndModeGetter: ResolutionNameAndModeGetter<Entry, SourceFile>,
+        getResolutionWithResolvedFileName: GetResolutionWithResolvedFileName<T, R>,
+        ambientModuleNames: readonly Entry[] | undefined,
+    ) {
+        reusedNames?.forEach(entry => seenNamesInFile.set(
+            nameAndModeGetter.getName(entry),
+            nameAndModeGetter.getMode(entry, containingSourceFile),
+            true,
+        ));
+        // For ambient module names, if its not invalidated keep it
+        ambientModuleNames?.forEach(entry => {
+            const name = nameAndModeGetter.getName(entry);
+            const mode = nameAndModeGetter.getMode(entry, containingSourceFile);
+            if (!seenNamesInFile.has(name, mode)) {
+                const resolution = resolutionsInFile.get(name, mode);
+                // Keep this resolution from old time for ambient module names
+                if (resolution && !resolution.isInvalidated) {
+                    seenNamesInFile.set(name, mode, true);
+                }
+            }
+        });
+        if (resolutionsInFile.size() !== seenNamesInFile.size()) {
+            // Stop watching and remove the unused name
+            resolutionsInFile.forEach((resolution, name, mode) => {
+                if (!seenNamesInFile.has(name, mode)) {
+                    stopWatchFailedLookupLocationOfResolution(resolution, path, getResolutionWithResolvedFileName);
+                    resolutionsInFile.delete(name, mode);
+                }
+            });
+        }
+    }
+
+    function reuseResolutions<Entry, SourceFile, T extends ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName>(
+        reusedNames: readonly Entry[] | undefined,
+        containingSourceFile: SourceFile,
+        path: Path,
+        perFileCache: Map<Path, ModeAwareCache<T>>,
+        nameAndModeGetter: ResolutionNameAndModeGetter<Entry, SourceFile>,
+        getResolutionWithResolvedFileName: GetResolutionWithResolvedFileName<T, R>,
+        ambientModuleNames?: readonly Entry[] | undefined,
+    ) {
+        const resolutionsInFile = perFileCache.get(path);
+        if (!resolutionsInFile) return;
+        const seenNamesInFile = createModeAwareCache<true>();
+        reuseResolutionsWorker(
+            reusedNames,
+            containingSourceFile,
+            path, resolutionsInFile,
+            seenNamesInFile,
+            nameAndModeGetter,
+            getResolutionWithResolvedFileName,
+            ambientModuleNames,
+        );
+    }
+
+    function reusedModuleResolutions(
+        reusedNames: readonly StringLiteralLike[] | undefined,
+        containingSourceFile: SourceFile,
+        ambientModuleNames: readonly StringLiteralLike[] | undefined,
+    ) {
+        reuseResolutions(
+            reusedNames,
+            containingSourceFile,
+            containingSourceFile.path,
+            resolvedModuleNames,
+            moduleResolutionNameAndModeGetter,
+            getResolvedModule,
+            ambientModuleNames,
+        );
+    }
+
+    function reusedTypeReferenceDirectiveResolutions<T extends FileReference | string>(
+        reusedNames: readonly T[] | undefined,
+        containingSourceFile: SourceFile | undefined,
+    ) {
+        reuseResolutions(
+            reusedNames,
+            containingSourceFile,
+            containingSourceFile ?
+                containingSourceFile.path :
+                resolutionHost.toPath(getAutomaticTypeDirectiveContainingFile(resolutionHost.getCompilationSettings(), getCurrentDirectory())),
+            resolvedTypeReferenceDirectives,
+            typeReferenceResolutionNameAndModeGetter,
+            getResolvedTypeReferenceDirective,
+        );
     }
 
     function resolveSingleModuleNameWithoutWatching(moduleName: string, containingFile: string) {

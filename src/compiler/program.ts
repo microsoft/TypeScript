@@ -936,7 +936,8 @@ export function getResolutionModeOverrideForClause(clause: AssertClause | undefi
     return elem.value.text === "import" ? ModuleKind.ESNext : ModuleKind.CommonJS;
 }
 
-const emptyResolution: ResolvedModuleWithFailedLookupLocations & ResolvedTypeReferenceDirectiveWithFailedLookupLocations = {
+/** @internal */
+export const emptyResolution: ResolvedModuleWithFailedLookupLocations & ResolvedTypeReferenceDirectiveWithFailedLookupLocations = {
     resolvedModule: undefined,
     resolvedTypeReferenceDirective: undefined,
 };
@@ -1100,6 +1101,13 @@ function forEachProjectReference<T>(
 
 /** @internal */
 export const inferredTypesContainingFile = "__inferred type names__.ts";
+
+/** @internal */
+export function getAutomaticTypeDirectiveContainingFile(options: CompilerOptions, currentDirectory: string) {
+    // This containingFilename needs to match with the one used in managed-side
+    const containingDirectory = options.configFilePath ? getDirectoryPath(options.configFilePath) : currentDirectory;
+    return combinePaths(containingDirectory, inferredTypesContainingFile);
+}
 
 /** @internal */
 export function getInferredLibraryNameResolveFrom(options: CompilerOptions, currentDirectory: string, libFileName: string) {
@@ -1497,7 +1505,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     let commonSourceDirectory: string;
     let typeChecker: TypeChecker;
     let classifiableNames: Set<__String>;
-    const ambientModuleNameToUnmodifiedFileName = new Map<string, string>();
+    let ambientModuleNameToUnmodifiedFileName: Map<string, string> | undefined;
     let fileReasons = createMultiMap<Path, FileIncludeReason>();
     const cachedBindAndCheckDiagnosticsForFile: DiagnosticCache<Diagnostic> = {};
     const cachedDeclarationDiagnosticsForFile: DiagnosticCache<DiagnosticWithLocation> = {};
@@ -1561,6 +1569,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         options: CompilerOptions,
         containingSourceFile: SourceFile,
         reusedNames: readonly StringLiteralLike[] | undefined,
+        ambientModuleNames: readonly StringLiteralLike[] | undefined,
     ) => readonly ResolvedModuleWithFailedLookupLocations[];
     const hasInvalidatedResolutions = host.hasInvalidatedResolutions || returnFalse;
     if (host.resolveModuleNameLiterals) {
@@ -1742,10 +1751,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         automaticTypeDirectiveResolutions = createModeAwareCache();
         if (automaticTypeDirectiveNames.length) {
             tracing?.push(tracing.Phase.Program, "processTypeReferences", { count: automaticTypeDirectiveNames.length });
-            // This containingFilename needs to match with the one used in managed-side
-            const containingDirectory = options.configFilePath ? getDirectoryPath(options.configFilePath) : currentDirectory;
-            const containingFilename = combinePaths(containingDirectory, inferredTypesContainingFile);
-            const resolutions = resolveTypeReferenceDirectiveNamesReusingOldState(automaticTypeDirectiveNames, containingFilename);
+            const resolutions = resolveTypeReferenceDirectiveNamesReusingOldState(automaticTypeDirectiveNames, getAutomaticTypeDirectiveContainingFile(options, currentDirectory));
             for (let i = 0; i < automaticTypeDirectiveNames.length; i++) {
                 // under node16/nodenext module resolution, load `types`/ata include names as cjs resolution results by passing an `undefined` mode
                 automaticTypeDirectiveResolutions.set(automaticTypeDirectiveNames[i], /*mode*/ undefined, resolutions[i]);
@@ -1761,6 +1767,9 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 );
             }
             tracing?.pop();
+        }
+        else {
+            host.reusedTypeReferenceDirectiveResolutions?.(/*reusedNames*/ undefined, /*containingSourceFile*/ undefined);
         }
 
         // Do not process the default library if:
@@ -1967,13 +1976,13 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         if (fromCache) addResolutionDiagnostics(fromCache);
     }
 
-    function resolveModuleNamesWorker(moduleNames: readonly StringLiteralLike[], containingFile: SourceFile, reusedNames: readonly StringLiteralLike[] | undefined): readonly ResolvedModuleWithFailedLookupLocations[] {
+    function resolveModuleNamesWorker(moduleNames: readonly StringLiteralLike[], containingFile: SourceFile, reusedNames: readonly StringLiteralLike[] | undefined, ambientModuleNames: readonly StringLiteralLike[] | undefined): readonly ResolvedModuleWithFailedLookupLocations[] {
         if (!moduleNames.length) return emptyArray;
         const containingFileName = getNormalizedAbsolutePath(containingFile.originalFileName, currentDirectory);
         const redirectedReference = getRedirectReferenceForResolution(containingFile);
         tracing?.push(tracing.Phase.Program, "resolveModuleNamesWorker", { containingFileName });
         performance.mark("beforeResolveModule");
-        const result = actualResolveModuleNamesWorker(moduleNames, containingFileName, redirectedReference, options, containingFile, reusedNames);
+        const result = actualResolveModuleNamesWorker(moduleNames, containingFileName, redirectedReference, options, containingFile, reusedNames, ambientModuleNames);
         performance.mark("afterResolveModule");
         performance.measure("ResolveModule", "beforeResolveModule", "afterResolveModule");
         tracing?.pop();
@@ -2072,13 +2081,17 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
 
     function resolveModuleNamesReusingOldState(moduleNames: readonly StringLiteralLike[], file: SourceFile): readonly ResolvedModuleWithFailedLookupLocations[] {
+        if (!moduleNames.length) {
+            host.reusedModuleResolutions?.(moduleNames, file, /*ambientModuleNames*/ undefined);
+            return emptyArray;
+        }
         if (structureIsReused === StructureIsReused.Not && !file.ambientModuleNames.length) {
             // If the old program state does not permit reusing resolutions and `file` does not contain locally defined ambient modules,
             // the best we can do is fallback to the default logic.
-            return resolveModuleNamesWorker(moduleNames, file, /*reusedNames*/ undefined);
+            return resolveModuleNamesWorker(moduleNames, file, /*reusedNames*/ undefined, /*ambientModuleNames*/ undefined);
         }
 
-        const oldSourceFile = oldProgram && oldProgram.getSourceFile(file.fileName);
+        const oldSourceFile = oldProgram?.getSourceFileByPath(file.path);
         if (oldSourceFile !== file && file.resolvedModules) {
             // `file` was created for the new program.
             //
@@ -2102,6 +2115,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
         /** An ordered list of module names for which we cannot recover the resolution. */
         let unknownModuleNames: StringLiteralLike[] | undefined;
+        let unknownModuleNamesIndices: number[] | undefined;
         /**
          * The indexing of elements in this list matches that of `moduleNames`.
          *
@@ -2113,11 +2127,10 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
          */
         let result: ResolvedModuleWithFailedLookupLocations[] | undefined;
         let reusedNames: StringLiteralLike[] | undefined;
-        /** A transient placeholder used to mark predicted resolution in the result list. */
-        const predictedToResolveToAmbientModuleMarker: ResolvedModuleWithFailedLookupLocations = emptyResolution;
+        let ambientModuleNames: StringLiteralLike[] | undefined;
 
-        for (let i = 0; i < moduleNames.length; i++) {
-            const moduleName = moduleNames[i];
+        for (let index = 0; index < moduleNames.length; index++) {
+            const moduleName = moduleNames[index];
             // If the source file is unchanged and doesnt have invalidated resolution, reuse the module resolutions
             if (file === oldSourceFile && !hasInvalidatedResolutions(oldSourceFile.path)) {
                 const mode = getModeForUsageLocation(file, moduleName);
@@ -2134,7 +2147,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                             oldResolution.resolvedModule.packageId && packageIdToString(oldResolution.resolvedModule.packageId)
                         );
                     }
-                    (result ??= new Array(moduleNames.length))[i] = oldResolution;
+                    (result ??= new Array(moduleNames.length))[index] = oldResolution;
                     (reusedNames ??= []).push(moduleName);
                     continue;
                 }
@@ -2155,34 +2168,28 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             }
 
             if (resolvesToAmbientModuleInNonModifiedFile) {
-                (result || (result = new Array(moduleNames.length)))[i] = predictedToResolveToAmbientModuleMarker;
+                // No need to resolve resolutions that are predicted to resolve to ambient modules.
+                (result || (result = new Array(moduleNames.length)))[index] = emptyResolution;
+                (ambientModuleNames ??= []).push(moduleName);
             }
             else {
                 // Resolution failed in the old program, or resolved to an ambient module for which we can't reuse the result.
                 (unknownModuleNames ??= []).push(moduleName);
+                (unknownModuleNamesIndices ??= []).push(index);
             }
         }
 
-        const resolutions = unknownModuleNames && unknownModuleNames.length
-            ? resolveModuleNamesWorker(unknownModuleNames, file, reusedNames)
-            : emptyArray;
-
-        // Combine results of resolutions and predicted results
-        if (!result) {
-            // There were no unresolved/ambient resolutions.
-            Debug.assert(resolutions.length === moduleNames.length);
-            return resolutions;
+        if (!unknownModuleNames) {
+            host.reusedModuleResolutions?.(reusedNames, file, ambientModuleNames);
+            return result!;
         }
 
-        let j = 0;
-        for (let i = 0; i < result.length; i++) {
-            if (!result[i]) {
-                result[i] = resolutions[j];
-                j++;
-            }
-        }
-        Debug.assert(j === resolutions.length);
+        const resolutions = resolveModuleNamesWorker(unknownModuleNames, file, reusedNames, ambientModuleNames);
+        if (!result) return resolutions;
 
+        resolutions.forEach((resolution, index) => {
+            result![unknownModuleNamesIndices![index]] = resolution;
+        });
         return result;
 
         // If we change our policy of rechecking failed lookups on each program create,
@@ -2190,7 +2197,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         function moduleNameResolvesToAmbientModuleInNonModifiedFile(moduleName: StringLiteralLike): boolean {
             const resolutionToFile = getResolvedModule(oldSourceFile, moduleName.text, getModeForUsageLocation(file, moduleName));
             const resolvedFile = resolutionToFile && oldProgram!.getSourceFile(resolutionToFile.resolvedFileName);
-            if (resolutionToFile && resolvedFile) {
+            if (resolvedFile) {
                 // In the old program, we resolved to an ambient module that was in the same
                 //   place as we expected to find an actual module file.
                 // We actually need to return 'false' here even though this seems like a 'true' case
@@ -2199,7 +2206,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             }
 
             // at least one of declarations should come from non-modified source file
-            const unmodifiedFile = ambientModuleNameToUnmodifiedFileName.get(moduleName.text);
+            const unmodifiedFile = ambientModuleNameToUnmodifiedFileName?.get(moduleName.text);
 
             if (!unmodifiedFile) {
                 return false;
@@ -2215,6 +2222,11 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     function resolveTypeReferenceDirectiveNamesReusingOldState(typeDirectiveNames: readonly FileReference[], containingFile: SourceFile): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[];
     function resolveTypeReferenceDirectiveNamesReusingOldState(typeDirectiveNames: string[], containingFile: string): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[];
     function resolveTypeReferenceDirectiveNamesReusingOldState<T extends string | FileReference>(typeDirectiveNames: readonly T[], containingFile: string | SourceFile): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[] {
+        const containingSourceFile = !isString(containingFile) ? containingFile : undefined;
+        if (!typeDirectiveNames.length) {
+            host.reusedTypeReferenceDirectiveResolutions?.(typeDirectiveNames, containingSourceFile);
+            return emptyArray;
+        }
         if (structureIsReused === StructureIsReused.Not) {
             // If the old program state does not permit reusing resolutions and `file` does not contain locally defined ambient modules,
             // the best we can do is fallback to the default logic.
@@ -2244,14 +2256,14 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
         /** An ordered list of module names for which we cannot recover the resolution. */
         let unknownTypeReferenceDirectiveNames: T[] | undefined;
+        let unknownTypeReferenceDirectiveNamesIndices: number[] | undefined;
         let result: ResolvedTypeReferenceDirectiveWithFailedLookupLocations[] | undefined;
         let reusedNames: T[] | undefined;
-        const containingSourceFile = !isString(containingFile) ? containingFile : undefined;
         const canReuseResolutions = !isString(containingFile) ?
             containingFile === oldSourceFile && !hasInvalidatedResolutions(oldSourceFile.path) :
             !hasInvalidatedResolutions(toPath(containingFile));
-        for (let i = 0; i < typeDirectiveNames.length; i++) {
-            const entry = typeDirectiveNames[i];
+        for (let index = 0; index < typeDirectiveNames.length; index++) {
+            const entry = typeDirectiveNames[index];
             if (canReuseResolutions) {
                 const typeDirectiveName = getTypeReferenceResolutionName(entry);
                 const mode = getModeForFileReference(entry, containingSourceFile?.impliedNodeFormat);
@@ -2268,37 +2280,30 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                             oldResolution.resolvedTypeReferenceDirective.packageId && packageIdToString(oldResolution.resolvedTypeReferenceDirective.packageId)
                         );
                     }
-                    (result ??= new Array(typeDirectiveNames.length))[i] = oldResolution;
+                    (result ??= new Array(typeDirectiveNames.length))[index] = oldResolution;
                     (reusedNames ??= []).push(entry);
                     continue;
                 }
             }
             // Resolution failed in the old program, or resolved to an ambient module for which we can't reuse the result.
             (unknownTypeReferenceDirectiveNames ??= []).push(entry);
+            (unknownTypeReferenceDirectiveNamesIndices ??= []).push(index);
         }
 
-        if (!unknownTypeReferenceDirectiveNames) return result || emptyArray;
+        if (!unknownTypeReferenceDirectiveNames) {
+            host.reusedTypeReferenceDirectiveResolutions?.(reusedNames, containingSourceFile);
+            return result!;
+        }
         const resolutions = resolveTypeReferenceDirectiveNamesWorker(
             unknownTypeReferenceDirectiveNames,
             containingFile,
             reusedNames,
         );
+        if (!result) return resolutions;
 
-        // Combine results of resolutions
-        if (!result) {
-            // There were no unresolved resolutions.
-            Debug.assert(resolutions.length === typeDirectiveNames.length);
-            return resolutions;
-        }
-
-        let j = 0;
-        for (let i = 0; i < result.length; i++) {
-            if (!result[i]) {
-                result[i] = resolutions[j];
-                j++;
-            }
-        }
-        Debug.assert(j === resolutions.length);
+        resolutions.forEach((resolution, index) => {
+            result![unknownTypeReferenceDirectiveNamesIndices![index]] = resolution;
+        });
         return result;
     }
 
@@ -2356,7 +2361,9 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
         // check if program source files has changed in the way that can affect structure of the program
         const newSourceFiles: SourceFile[] = [];
-        const modifiedSourceFiles: { oldFile: SourceFile, newFile: SourceFile }[] = [];
+        const filesToReResolveResolutions = new Set<SourceFile>();
+        // Temparaory cache of ambient module names to file name and set to use only if we can reuse program structure safely for modules
+        const ambientModuleNameToUnmodifiedFileNameProcessing = new Map<string, string>();
         structureIsReused = StructureIsReused.Completely;
 
         // If the missing file paths are now present, it can change the progam structure,
@@ -2465,34 +2472,33 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 }
 
                 // tentatively approve the file
-                modifiedSourceFiles.push({ oldFile: oldSourceFile, newFile: newSourceFile });
+                filesToReResolveResolutions.add(newSourceFile);
             }
-            else if (hasInvalidatedResolutions(oldSourceFile.path)) {
-                // 'module/types' references could have changed
-                structureIsReused = StructureIsReused.SafeModules;
+            else {
+                for (const moduleName of oldSourceFile.ambientModuleNames) {
+                    ambientModuleNameToUnmodifiedFileNameProcessing.set(moduleName, oldSourceFile.fileName);
+                }
+                if (hasInvalidatedResolutions(oldSourceFile.path)) {
+                    // 'module/types' references could have changed
+                    structureIsReused = StructureIsReused.SafeModules;
 
-                // add file to the modified list so that we will resolve it later
-                modifiedSourceFiles.push({ oldFile: oldSourceFile, newFile: newSourceFile });
+                    // add file to the modified list so that we will resolve it later
+                    filesToReResolveResolutions.add(newSourceFile);
+                }
             }
 
             // if file has passed all checks it should be safe to reuse it
             newSourceFiles.push(newSourceFile);
         }
 
+        ambientModuleNameToUnmodifiedFileName = ambientModuleNameToUnmodifiedFileNameProcessing;
         if (structureIsReused !== StructureIsReused.Completely) {
             return structureIsReused;
         }
 
-        const modifiedFiles = modifiedSourceFiles.map(f => f.oldFile);
-        for (const oldFile of oldSourceFiles) {
-            if (!contains(modifiedFiles, oldFile)) {
-                for (const moduleName of oldFile.ambientModuleNames) {
-                    ambientModuleNameToUnmodifiedFileName.set(moduleName, oldFile.fileName);
-                }
-            }
-        }
         // try to verify results of module resolution
-        for (const { oldFile: oldSourceFile, newFile: newSourceFile } of modifiedSourceFiles) {
+        for (const newSourceFile of filesToReResolveResolutions) {
+            const oldSourceFile = oldProgram.getSourceFileByPath(newSourceFile.path)!;
             const moduleNames = getModuleNames(newSourceFile);
             const resolutions = resolveModuleNamesReusingOldState(moduleNames, newSourceFile);
             // ensure that module resolution results are still correct
@@ -3814,6 +3820,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         const typeDirectives = file.typeReferenceDirectives;
         if (!typeDirectives.length) {
             file.resolvedTypeReferenceDirectiveNames = undefined;
+            host.reusedTypeReferenceDirectiveResolutions?.(/*reusedNames*/ undefined, file);
             return;
         }
 
@@ -4050,6 +4057,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         else {
             // no imports - drop cached module resolutions
             file.resolvedModules = undefined;
+            host.reusedModuleResolutions?.(/*reusedNames*/ undefined, file, /*ambientModuleNames*/ undefined);
         }
     }
 
