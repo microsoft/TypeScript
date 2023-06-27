@@ -4965,6 +4965,9 @@ function tryGetObjectLikeCompletionContainer(contextToken: Node | undefined, pos
                 if (parent.parent?.parent && (isMethodDeclaration(parent.parent) || isGetAccessorDeclaration(parent.parent) || isSetAccessorDeclaration(parent.parent)) && isObjectLiteralExpression(parent.parent.parent)) {
                     return parent.parent.parent;
                 }
+                if (isSpreadAssignment(parent) && isObjectLiteralExpression(parent.parent)) {
+                    return parent.parent;
+                }
                 const ancestorNode = findAncestor(parent, isPropertyAssignment);
                 if (contextToken.kind !== SyntaxKind.ColonToken && ancestorNode?.getLastToken(sourceFile) === contextToken &&
                     isObjectLiteralExpression(ancestorNode.parent)) {
