@@ -296,6 +296,10 @@ declare module "fs" {
 }
 `),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                // This is currently issue with ambient modules in same file not leading to resolution watching
+                // In this case initially resolution is watched and will continued to be watched but
+                // incremental check will determine that the resolution should not be watched as thats what would have happened if we had started tsc --watch at this state.
+                skipStructureCheck: true,
             }
         ]
     });

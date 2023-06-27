@@ -211,6 +211,7 @@ a;b;
                     edit: sys => sys.prependFile(diskPath, `// some comment
                         `),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                    symlinksNotReflected: [`/user/username/projects/myproject/link.ts`]
                 }
             ],
         });
@@ -262,6 +263,7 @@ a;b;
                     edit: sys => sys.prependFile(`${diskPath}/a.ts`, `// some comment
                         `),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                    symlinksNotReflected: [`/user/username/projects/myproject/link/a.ts`]
                 }
             ],
         });
