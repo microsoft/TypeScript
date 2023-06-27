@@ -3814,8 +3814,8 @@ export type TypeOnlyImportDeclaration =
 
 export type TypeOnlyExportDeclaration =
     | ExportSpecifier & ({ readonly isTypeOnly: true } | { readonly parent: NamedExports & { readonly parent: ExportDeclaration & { readonly isTypeOnly: true } } })
-    | ExportDeclaration & { readonly isTypeOnly: true } // export * from "mod"
-    | NamespaceExport & { readonly parent: ExportDeclaration & { readonly isTypeOnly: true } } // export * as ns from "mod"
+    | ExportDeclaration & { readonly isTypeOnly: true, readonly moduleSpecifier: Expression } // export * from "mod"
+    | NamespaceExport & { readonly parent: ExportDeclaration & { readonly isTypeOnly: true, readonly moduleSpecifier: Expression } } // export * as ns from "mod"
     ;
 
 export type TypeOnlyAliasDeclaration = TypeOnlyImportDeclaration | TypeOnlyExportDeclaration;
@@ -5878,7 +5878,7 @@ export interface SymbolLinks {
     deferralParent?: Type;                      // Source union/intersection of a deferred type
     cjsExportMerged?: Symbol;                   // Version of the symbol with all non export= exports merged with the export= target
     typeOnlyDeclaration?: TypeOnlyAliasDeclaration | false; // First resolved alias declaration that makes the symbol only usable in type constructs
-    typeOnlyExportStarMap?: Map<__String, ExportDeclaration & { readonly isTypeOnly: true }>; // Set on a module symbol when some of its exports were resolved through a 'export type * from "mod"' declaration
+    typeOnlyExportStarMap?: Map<__String, ExportDeclaration & { readonly isTypeOnly: true, readonly moduleSpecifier: Expression }>; // Set on a module symbol when some of its exports were resolved through a 'export type * from "mod"' declaration
     typeOnlyExportStarName?: __String;          // Set to the name of the symbol re-exported by an 'export type *' declaration, when different from the symbol name
     isConstructorDeclaredProperty?: boolean;    // Property declared through 'this.x = ...' assignment in constructor
     tupleLabelDeclaration?: NamedTupleMember | ParameterDeclaration; // Declaration associated with the tuple's label

@@ -17,8 +17,9 @@ let t: typeof types = {
 //// [a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.B = void 0;
+exports.B = exports.A = void 0;
 var A = 0;
+exports.A = A;
 var B = /** @class */ (function () {
     function B() {
     }
