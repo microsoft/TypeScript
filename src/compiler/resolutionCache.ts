@@ -90,6 +90,7 @@ export interface HasInvalidatedFromResolutionCache {
  * @internal
  */
 export interface ResolutionCache {
+    rootDirForResolution: string;
     resolvedModuleNames: Map<Path, ModeAwareCache<CachedResolvedModuleWithFailedLookupLocations>>;
     resolvedTypeReferenceDirectives: Map<Path, ModeAwareCache<CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations>>;
     resolvedLibraries: Map<string, CachedResolvedModuleWithFailedLookupLocations>;
@@ -567,6 +568,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
     const typeRootsWatches = new Map<string, FileWatcher>();
 
     return {
+        rootDirForResolution,
         resolvedModuleNames,
         resolvedTypeReferenceDirectives,
         resolvedLibraries,

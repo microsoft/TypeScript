@@ -184,20 +184,20 @@ function getProgramStructure(program: ts.Program | undefined) {
     return baseline.join("\n");
 }
 
-function verifyProgramStructure(expectedProgram: ts.Program, actualProgram: ts.Program, projectName: string) {
+export function verifyProgramStructure(expectedProgram: ts.Program, actualProgram: ts.Program, projectName: string) {
     const actual = getProgramStructure(actualProgram);
     const expected = getProgramStructure(expectedProgram);
     ts.Debug.assert(actual === expected, `Program verification:: ${projectName}`);
 }
 
-function verifyResolutionCache(
+export function verifyResolutionCache(
     actual: ts.ResolutionCache,
     actualProgram: ts.Program,
     resolutionHostCacheHost: ts.ResolutionCacheHost,
     projectName: string,
 ) {
     const currentDirectory = resolutionHostCacheHost.getCurrentDirectory!();
-    const expected = ts.createResolutionCache(resolutionHostCacheHost, currentDirectory, /*logChangesWhenResolvingModule*/ false);
+    const expected = ts.createResolutionCache(resolutionHostCacheHost, actual.rootDirForResolution, /*logChangesWhenResolvingModule*/ false);
     expected.startCachingPerDirectoryResolution();
 
     type ExpectedResolution = ts.CachedResolvedModuleWithFailedLookupLocations & ts.CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations;
