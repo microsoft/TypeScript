@@ -152,10 +152,11 @@ export function testTscCompile(input: TestTscCompile) {
 
     function additionalBaseline(sys: TscCompileSystem) {
         const { baselineSourceMap, baselineReadFileCalls, baselinePrograms: shouldBaselinePrograms, baselineDependencies } = input;
-        if (input.computeDtsSignatures) storeDtsSignatures(sys, getPrograms!());
+        const programs = getPrograms!();
+        if (input.computeDtsSignatures) storeDtsSignatures(sys, programs);
         if (shouldBaselinePrograms) {
             const baseline: string[] = [];
-            baselinePrograms(baseline, getPrograms!, ts.emptyArray, baselineDependencies);
+            baselinePrograms(baseline, programs, ts.emptyArray, baselineDependencies);
             sys.write(baseline.join("\n"));
         }
         if (baselineReadFileCalls) {

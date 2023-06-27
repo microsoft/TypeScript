@@ -583,7 +583,8 @@ describe("unittests:: tsc-watch:: watchAPI:: when getParsedCommandLine is implem
                     timeouts: sys => sys.logTimeoutQueueLength(),
                 },
             ],
-            watchOrSolution: watch
+            watchOrSolution: watch,
+            useSourceOfProjectReferenceRedirect: ts.returnTrue,
         });
     });
 

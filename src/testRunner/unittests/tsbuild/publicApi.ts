@@ -74,7 +74,7 @@ export function f22() { } // trailing`,
         sys.exit(exitStatus);
         sys.write(`exitCode:: ExitStatus.${ts.ExitStatus[sys.exitCode as ts.ExitStatus]}\n`);
         const baseline: string[] = [];
-        baselinePrograms(baseline, getPrograms, ts.emptyArray, /*baselineDependencies*/ false);
+        baselinePrograms(baseline, getPrograms(), ts.emptyArray, /*baselineDependencies*/ false);
         sys.write(baseline.join("\n"));
         fs.makeReadonly();
         sys.baseLine = () => {
