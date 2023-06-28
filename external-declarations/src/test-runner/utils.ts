@@ -82,6 +82,10 @@ export function isRelevantTestFile(f: TestCaseParser.TestUnitData) {
 export function runIsolated(caseData: TestCaseParser.TestCaseContent, libFiles: string[], settings: ts.CompilerOptions): FileContent[] {
     const toSrc = (n: string) => vpath.combine('/src', n);
     const projectFiles = [...caseData.testUnitData.map(o => toSrc(o.name)), ...libFiles];
+    settings = {
+        ...settings,
+        isolatedDeclarations: true,
+    }
 
     const packageJson = caseData.testUnitData.find(f => f.name === "/package.json");
     let packageResolution: ts.ResolutionMode = ts.ModuleKind.CommonJS

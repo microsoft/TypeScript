@@ -47,6 +47,9 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
             const name = getNameOfDeclaration(node);
             return !hasDynamicName(node) || isIdentifierComputedName(name)
         },
+        getPropertiesOfContainerFunction(node: Declaration) {
+            return [];
+        },
         isImplementationOfOverload(node) {
             function getSignaturesOfSymbol(symbol: BasicSymbol | undefined): Node[] {
                 if(!symbol) return emptyArray;

@@ -1,11 +1,11 @@
-import { Symbol, SourceFile, DiagnosticWithLocation, factory, CommentRange, Node, getParseTreeNode, SyntaxKind, SignatureDeclaration, ParameterDeclaration, getTrailingCommentRanges, getLeadingCommentRanges, NodeBuilderFlags, VisitResult, ExportAssignment, DeclarationName, Declaration, ModuleDeclaration, SymbolFlags, getNameOfDeclaration, isExportAssignment, Bundle, visitNodes, setTextRange, createUnparsedSourceFile, FileReference, NodeArray, Statement, isExternalModule, isImportEqualsDeclaration, isExternalModuleReference, isStringLiteralLike, isImportDeclaration, isStringLiteral, UnparsedSource, isUnparsedSource, BindingName, ArrayBindingElement, isIdentifier, ModifierFlags, TypeNode, FunctionDeclaration, MethodDeclaration, GetAccessorDeclaration, SetAccessorDeclaration, BindingElement, ConstructSignatureDeclaration, VariableDeclaration, MethodSignature, CallSignatureDeclaration, PropertyDeclaration, PropertySignature, visitNode, isPropertySignature, NamedDeclaration, isFunctionDeclaration, OmittedExpression, isOmittedExpression, AccessorDeclaration, isSetAccessorDeclaration, TypeParameterDeclaration, isSourceFile, isTypeAliasDeclaration, isModuleDeclaration, isClassDeclaration, isInterfaceDeclaration, isFunctionLike, isIndexSignatureDeclaration, isMappedTypeNode, EntityNameOrEntityNameExpression, setCommentRange, getCommentRange, ImportEqualsDeclaration, ImportDeclaration, ExportDeclaration, ImportTypeNode, StringLiteral, AssertClause, isSemicolonClassElement, isMethodDeclaration, isMethodSignature, isTypeQueryNode, isEntityName, visitEachChild, isPrivateIdentifier, isTypeNode, isTupleTypeNode, getLineAndCharacterOfPosition, setEmitFlags, EmitFlags, setOriginalNode, GeneratedIdentifierFlags, NodeFlags, canHaveModifiers, isTypeParameterDeclaration, NamespaceDeclaration, Identifier, VariableStatement, isPropertyAccessExpression, unescapeLeadingUnderscores, ModuleBody, BindingPattern, isExportDeclaration, HasModifiers, Modifier, isModifier, HeritageClause, InterfaceDeclaration, ClassDeclaration, TypeAliasDeclaration, EnumDeclaration, ConstructorDeclaration, IndexSignatureDeclaration, ExpressionWithTypeArguments, TypeReferenceNode, ConditionalTypeNode, FunctionTypeNode, ConstructorTypeNode, isStatement, isArrayBindingElement, isBindingElement, isClassElement, isExpressionWithTypeArguments, isLiteralExpression, isTypeElement, isVariableDeclaration, NodeFactory, isTypeAssertionExpression, isNumericLiteral, isTemplateLiteral, BooleanLiteral, TypeAssertion, LiteralExpression, AsExpression, isTypeReferenceNode, ObjectLiteralExpression, TypeElement, isPropertyAssignment, ArrayLiteralExpression, isSpreadElement, FunctionExpression, ArrowFunction, isParameter, isPropertyName, NewExpression, KeywordTypeSyntaxKind, isPropertyDeclaration, isReturnStatement, isClassLike, ReturnStatement, forEachChild, TypeLiteralNode, __String, isTypeLiteralNode, isLiteralTypeNode, TemplateExpression, TemplateLiteralTypeSpan, TemplateHead, isNoSubstitutionTemplateLiteral, isTypeOfExpression, PrefixUnaryOperator, isYieldExpression, YieldExpression, isBlock, EntityName, isQualifiedName, isGetAccessorDeclaration, CallExpression, isComputedPropertyName, isShorthandPropertyAssignment, isSpreadAssignment, ConditionalExpression, NodeWithTypeArguments, isArrayTypeNode, isFunctionTypeNode, isConstructorTypeNode, PropertyName, isExpressionStatement, isBinaryExpression, Visitor, isVariableStatement, SatisfiesExpression, ObjectLiteralElementLike, QualifiedName, forEachChildRecursively, getTokenPosOfNode, HasInferredType } from "typescript";
+import { Symbol, SourceFile, DiagnosticWithLocation, factory, CommentRange, Node, getParseTreeNode, SyntaxKind, SignatureDeclaration, ParameterDeclaration, getTrailingCommentRanges, getLeadingCommentRanges, NodeBuilderFlags, VisitResult, ExportAssignment, DeclarationName, Declaration, ModuleDeclaration, SymbolFlags, getNameOfDeclaration, isExportAssignment, Bundle, visitNodes, setTextRange, createUnparsedSourceFile, FileReference, NodeArray, Statement, isExternalModule, isImportEqualsDeclaration, isExternalModuleReference, isStringLiteralLike, isImportDeclaration, isStringLiteral, UnparsedSource, isUnparsedSource, BindingName, ArrayBindingElement, isIdentifier, ModifierFlags, TypeNode, FunctionDeclaration, MethodDeclaration, GetAccessorDeclaration, SetAccessorDeclaration, BindingElement, ConstructSignatureDeclaration, VariableDeclaration, MethodSignature, CallSignatureDeclaration, PropertyDeclaration, PropertySignature, visitNode, isPropertySignature, NamedDeclaration, isFunctionDeclaration, OmittedExpression, isOmittedExpression, AccessorDeclaration, isSetAccessorDeclaration, TypeParameterDeclaration, isSourceFile, isTypeAliasDeclaration, isModuleDeclaration, isClassDeclaration, isInterfaceDeclaration, isFunctionLike, isIndexSignatureDeclaration, isMappedTypeNode, EntityNameOrEntityNameExpression, setCommentRange, getCommentRange, ImportEqualsDeclaration, ImportDeclaration, ExportDeclaration, ImportTypeNode, StringLiteral, AssertClause, isSemicolonClassElement, isMethodDeclaration, isMethodSignature, isTypeQueryNode, isEntityName, visitEachChild, isPrivateIdentifier, isTypeNode, isTupleTypeNode, getLineAndCharacterOfPosition, setEmitFlags, EmitFlags, setOriginalNode, GeneratedIdentifierFlags, NodeFlags, canHaveModifiers, isTypeParameterDeclaration, NamespaceDeclaration, Identifier, VariableStatement, isPropertyAccessExpression, unescapeLeadingUnderscores, ModuleBody, BindingPattern, isExportDeclaration, HasModifiers, Modifier, isModifier, HeritageClause, InterfaceDeclaration, ClassDeclaration, TypeAliasDeclaration, EnumDeclaration, ConstructorDeclaration, IndexSignatureDeclaration, ExpressionWithTypeArguments, TypeReferenceNode, ConditionalTypeNode, FunctionTypeNode, ConstructorTypeNode, isStatement, isArrayBindingElement, isBindingElement, isClassElement, isExpressionWithTypeArguments, isLiteralExpression, isTypeElement, isVariableDeclaration, NodeFactory, isTypeAssertionExpression, isNumericLiteral, isTemplateLiteral, BooleanLiteral, TypeAssertion, LiteralExpression, AsExpression, isTypeReferenceNode, ObjectLiteralExpression, TypeElement, isPropertyAssignment, ArrayLiteralExpression, isSpreadElement, FunctionExpression, ArrowFunction, isParameter, isPropertyName, NewExpression, KeywordTypeSyntaxKind, isPropertyDeclaration, isReturnStatement, isClassLike, ReturnStatement, forEachChild, TypeLiteralNode, __String, isTypeLiteralNode, isLiteralTypeNode, TemplateExpression, TemplateLiteralTypeSpan, TemplateHead, isNoSubstitutionTemplateLiteral, isTypeOfExpression, PrefixUnaryOperator, isYieldExpression, YieldExpression, isBlock, EntityName, isQualifiedName, isGetAccessorDeclaration, CallExpression, isComputedPropertyName, isShorthandPropertyAssignment, isSpreadAssignment, ConditionalExpression, NodeWithTypeArguments, isArrayTypeNode, isFunctionTypeNode, isConstructorTypeNode, PropertyName, isExpressionStatement, isBinaryExpression, Visitor, isVariableStatement, SatisfiesExpression, ObjectLiteralElementLike, QualifiedName, forEachChildRecursively, getTokenPosOfNode, HasInferredType, isElementAccessExpression, ScriptTarget, isStringANonContextualKeyword } from "typescript";
 import { Debug } from "./debug";
 import { Diagnostics } from "./diagnosticInformationMap.generated";
 import { filter, stringContains, concatenate, last, forEach, length, pushIfUnique, map, mapDefined, arrayFrom, contains, startsWith, some, append, emptyArray, isArray, compact, flatMap, flatten, orderedRemoveItem, tryCast, findIndex } from "./lang-utils";
 import { getDirectoryPath, normalizeSlashes, toFileNameLowerCase } from "./path-utils";
 import { transformNodes } from "./transformer";
 import { EmitHost, EmitResolver, GetSymbolAccessibilityDiagnostic, LateBoundDeclaration, NodeId, ResolutionMode, SymbolAccessibility, SymbolAccessibilityResult, SymbolTracker, TransformationContext, nullTransformationContext } from "./types";
-import { getEffectiveModifierFlags, skipTrivia, getLeadingCommentRangesOfNode, LateVisibilityPaintedStatement, AnyImportSyntax, getSourceFileOfNode, createDiagnosticForNode, getTextOfNode, declarationNameToString, canProduceDiagnostics, getThisParameter, isDeclaration, DeclarationDiagnosticProducing, setParent, getFirstConstructorWithBody, hasSyntacticModifier, visitArray, AllAccessorDeclarations, isNightly, createGetSymbolAccessibilityDiagnosticForNode, getOriginalNodeId, addRelatedInfo, isExternalOrCommonJsModule, isJsonSourceFile, isSourceFileJS, getResolvedExternalModuleName, isSourceFileNotJson, isAnyImportSyntax, createEmptyExports, isExternalModuleAugmentation, isGlobalScopeAugmentation, isLateVisibilityPaintedStatement, hasDynamicName, hasEffectiveModifier, isBindingPattern, isLiteralImportTypeNode, removeAllComments, needsScopeMarker, hasJSDocNodes, isExternalModuleIndicator, getOutputPathsFor, getSetAccessorValueParameter, getExternalModuleNameFromDeclaration, getExternalModuleImportEqualsDeclarationExpression, getResolutionModeOverrideForClause, isEntityNameExpression, getEffectiveBaseTypeNode, createGetSymbolAccessibilityDiagnosticForNodeName, pathContainsNodeModules, hasIdentifierComputedName, isIdentifierANonContextualKeyword } from "./utils";
+import { getEffectiveModifierFlags, skipTrivia, getLeadingCommentRangesOfNode, LateVisibilityPaintedStatement, AnyImportSyntax, getSourceFileOfNode, createDiagnosticForNode, getTextOfNode, declarationNameToString, canProduceDiagnostics, getThisParameter, isDeclaration, DeclarationDiagnosticProducing, setParent, getFirstConstructorWithBody, hasSyntacticModifier, visitArray, AllAccessorDeclarations, isNightly, createGetSymbolAccessibilityDiagnosticForNode, getOriginalNodeId, addRelatedInfo, isExternalOrCommonJsModule, isJsonSourceFile, isSourceFileJS, getResolvedExternalModuleName, isSourceFileNotJson, isAnyImportSyntax, createEmptyExports, isExternalModuleAugmentation, isGlobalScopeAugmentation, isLateVisibilityPaintedStatement, hasDynamicName, hasEffectiveModifier, isBindingPattern, isLiteralImportTypeNode, removeAllComments, needsScopeMarker, hasJSDocNodes, isExternalModuleIndicator, getOutputPathsFor, getSetAccessorValueParameter, getExternalModuleNameFromDeclaration, getExternalModuleImportEqualsDeclarationExpression, getResolutionModeOverrideForClause, isEntityNameExpression, getEffectiveBaseTypeNode, createGetSymbolAccessibilityDiagnosticForNodeName, pathContainsNodeModules, hasIdentifierComputedName, isIdentifierANonContextualKeyword, isIdentifierText } from "./utils";
 import { createLocalInferenceResolver } from "./localInferenceResolver";
 
 /** @internal */
@@ -78,6 +78,7 @@ export function transformDeclarations(context: TransformationContext) {
     let localInferenceTargetNode: Node | undefined = undefined;
 
     const { factory } = context;
+    const parseNodeFactory = factory
     const host = context.getEmitHost();
     const symbolTracker: SymbolTracker = {
         trackSymbol,
@@ -122,7 +123,7 @@ export function transformDeclarations(context: TransformationContext) {
     })
     const options = context.getCompilerOptions();
     const { noResolve, stripInternal } = options;
-    const isolatedDeclarations = true;
+    const isolatedDeclarations = options.isolatedDeclarations;
     return transformRoot;
 
     function reportIsolatedDeclarationError(node: Node) {
@@ -1280,7 +1281,86 @@ export function transformDeclarations(context: TransformationContext) {
                         reportIsolatedDeclarationError(input);
                         return clean;
                     }
-                    return clean;
+                    const props = resolver.getPropertiesOfContainerFunction(input);
+                    // Use parseNodeFactory so it is usable as an enclosing declaration
+                    const fakespace = parseNodeFactory.createModuleDeclaration(/*modifiers*/ undefined, clean.name || factory.createIdentifier("_default"), factory.createModuleBlock([]), NodeFlags.Namespace);
+                    setParent(fakespace, enclosingDeclaration as SourceFile | NamespaceDeclaration);
+                    // fakespace.locals = createSymbolTable(props);
+                    fakespace.symbol = props[0].parent!;
+                    const exportMappings: [Identifier, string][] = [];
+                    let declarations: (VariableStatement | ExportDeclaration)[] = mapDefined(props, p => {
+                        if (!p.valueDeclaration || !(isPropertyAccessExpression(p.valueDeclaration) || isElementAccessExpression(p.valueDeclaration) || isBinaryExpression(p.valueDeclaration))) {
+                            return undefined;
+                        }
+                        const nameStr = unescapeLeadingUnderscores(p.escapedName);
+                        if (!isIdentifierText(nameStr, ScriptTarget.ESNext)) {
+                            return undefined; // unique symbol or non-identifier name - omit, since there's no syntax that can preserve it
+                        }
+                        getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(p.valueDeclaration);
+                        let type = resolver.createTypeOfDeclaration(p.valueDeclaration, fakespace, declarationEmitNodeBuilderFlags, symbolTracker);
+                        getSymbolAccessibilityDiagnostic = oldDiag;
+
+                        if(isolatedDeclarations) {
+                            reportIsolatedDeclarationError(p.valueDeclaration);
+                            type = factory.createTypeReferenceNode("invalid");
+                        }
+
+                        const isNonContextualKeywordName = isStringANonContextualKeyword(nameStr);
+                        const name = isNonContextualKeywordName ? factory.getGeneratedNameForNode(p.valueDeclaration) : factory.createIdentifier(nameStr);
+                        if (isNonContextualKeywordName) {
+                            exportMappings.push([name, nameStr]);
+                        }
+                        const varDecl = factory.createVariableDeclaration(name, /*exclamationToken*/ undefined, type, /*initializer*/ undefined);
+                        return factory.createVariableStatement(isNonContextualKeywordName ? undefined : [factory.createToken(SyntaxKind.ExportKeyword)], factory.createVariableDeclarationList([varDecl]));
+                    });
+                    if (!exportMappings.length) {
+                        declarations = mapDefined(declarations, declaration => factory.updateModifiers(declaration, ModifierFlags.None));
+                    }
+                    else {
+                        declarations.push(factory.createExportDeclaration(
+                            /*modifiers*/ undefined,
+                            /*isTypeOnly*/ false,
+                            factory.createNamedExports(map(exportMappings, ([gen, exp]) => {
+                                return factory.createExportSpecifier(/*isTypeOnly*/ false, gen, exp);
+                            }))
+                        ));
+                    }
+                    const namespaceDecl = factory.createModuleDeclaration(ensureModifiers(input), input.name!, factory.createModuleBlock(declarations), NodeFlags.Namespace);
+                    if (!hasEffectiveModifier(clean, ModifierFlags.Default)) {
+                        return [clean, namespaceDecl];
+                    }
+
+                    const modifiers = factory.createModifiersFromModifierFlags((getEffectiveModifierFlags(clean) & ~ModifierFlags.ExportDefault) | ModifierFlags.Ambient);
+                    const cleanDeclaration = factory.updateFunctionDeclaration(
+                        clean,
+                        modifiers,
+                        /*asteriskToken*/ undefined,
+                        clean.name,
+                        clean.typeParameters,
+                        clean.parameters,
+                        clean.type,
+                        /*body*/ undefined
+                    );
+
+                    const namespaceDeclaration = factory.updateModuleDeclaration(
+                        namespaceDecl,
+                        modifiers,
+                        namespaceDecl.name,
+                        namespaceDecl.body
+                    );
+
+                    const exportDefaultDeclaration = factory.createExportAssignment(
+                        /*modifiers*/ undefined,
+                        /*isExportEquals*/ false,
+                        namespaceDecl.name
+                    );
+
+                    if (isSourceFile(input.parent)) {
+                        resultHasExternalModuleIndicator = true;
+                    }
+                    resultHasScopeMarker = true;
+
+                    return [cleanDeclaration, namespaceDeclaration, exportDefaultDeclaration];
                 }
                 else {
                     return clean;
