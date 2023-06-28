@@ -1,0 +1,16 @@
+//// [tests/cases/conformance/statements/for-inStatements/for-inStatementsDestructuring8.ts] ////
+
+=== for-inStatementsDestructuring8.ts ===
+declare let obj: { [s: string]: string };
+>obj : { [s: string]: string; }
+>s : string
+
+for (let { length: length1 } in obj) {
+>length : any
+>length1 : number
+>obj : { [s: string]: string; }
+
+    length1
+>length1 : number
+}
+

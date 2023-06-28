@@ -1,0 +1,18 @@
+//// [tests/cases/conformance/statements/for-inStatements/for-inStatementsDestructuring6.ts] ////
+
+=== for-inStatementsDestructuring6.ts ===
+let b: number;
+>b : Symbol(b, Decl(for-inStatementsDestructuring6.ts, 0, 3))
+
+let c: string[];
+>c : Symbol(c, Decl(for-inStatementsDestructuring6.ts, 1, 3))
+
+declare let obj: { [s: string]: string };
+>obj : Symbol(obj, Decl(for-inStatementsDestructuring6.ts, 2, 11))
+>s : Symbol(s, Decl(for-inStatementsDestructuring6.ts, 2, 20))
+
+for ([b, ...c] in obj) {}
+>b : Symbol(b, Decl(for-inStatementsDestructuring6.ts, 0, 3))
+>c : Symbol(c, Decl(for-inStatementsDestructuring6.ts, 1, 3))
+>obj : Symbol(obj, Decl(for-inStatementsDestructuring6.ts, 2, 11))
+

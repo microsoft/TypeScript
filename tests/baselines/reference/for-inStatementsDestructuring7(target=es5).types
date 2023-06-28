@@ -1,0 +1,19 @@
+//// [tests/cases/conformance/statements/for-inStatements/for-inStatementsDestructuring7.ts] ////
+
+=== for-inStatementsDestructuring7.ts ===
+declare let obj: { [s: string]: string };
+>obj : { [s: string]: string; }
+>s : string
+
+for (let [b, ...c] in obj) {
+>b : any
+>c : any[]
+>obj : { [s: string]: string; }
+
+    b;
+>b : any
+
+    c;
+>c : any[]
+}
+

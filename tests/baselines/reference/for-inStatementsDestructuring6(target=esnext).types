@@ -1,0 +1,20 @@
+//// [tests/cases/conformance/statements/for-inStatements/for-inStatementsDestructuring6.ts] ////
+
+=== for-inStatementsDestructuring6.ts ===
+let b: number;
+>b : number
+
+let c: string[];
+>c : string[]
+
+declare let obj: { [s: string]: string };
+>obj : { [s: string]: string; }
+>s : string
+
+for ([b, ...c] in obj) {}
+>[b, ...c] : [number, ...string[]]
+>b : number
+>...c : string
+>c : string[]
+>obj : { [s: string]: string; }
+

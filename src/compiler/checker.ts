@@ -41531,10 +41531,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         //   VarDecl must be a variable declaration without a type annotation that declares a variable of type Any,
         //   and Expr must be an expression of type Any, an object type, or a type parameter type.
         if (node.initializer.kind === SyntaxKind.VariableDeclarationList) {
-            const variable = (node.initializer as VariableDeclarationList).declarations[0];
-            if (variable && isBindingPattern(variable.name)) {
-                error(variable.name, Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_be_a_destructuring_pattern);
-            }
             checkVariableDeclarationList(node.initializer as VariableDeclarationList);
         }
         else {
@@ -41544,8 +41540,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             //   and Expr must be an expression of type Any, an object type, or a type parameter type.
             const varExpr = node.initializer;
             const leftType = checkExpression(varExpr);
-            if (varExpr.kind === SyntaxKind.ArrayLiteralExpression || varExpr.kind === SyntaxKind.ObjectLiteralExpression) {
-                error(varExpr, Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_be_a_destructuring_pattern);
+            if (isAssignmentPattern(varExpr)) {
+                checkDestructuringAssignment(varExpr, getIndexTypeOrString(rightType));
             }
             else if (!isTypeAssignableTo(getIndexTypeOrString(rightType), leftType)) {
                 error(varExpr, Diagnostics.The_left_hand_side_of_a_for_in_statement_must_be_of_type_string_or_any);

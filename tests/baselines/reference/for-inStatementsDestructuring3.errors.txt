@@ -1,8 +1,8 @@
-for-inStatementsDestructuring3.ts(2,6): error TS2491: The left-hand side of a 'for...in' statement cannot be a destructuring pattern.
+for-inStatementsDestructuring3.ts(2,6): error TS2461: Type '"length" | "toString" | "toLocaleString" | "pop" | "push" | "concat" | "join" | "reverse" | "shift" | "slice" | "sort" | "splice" | "unshift" | "indexOf" | "lastIndexOf" | "every" | "some" | "forEach" | "map" | "filter" | "reduce" | "reduceRight"' is not an array type.
 
 
 ==== for-inStatementsDestructuring3.ts (1 errors) ====
     var a, b;
     for ([a, b] in []) { }
          ~~~~~~
-!!! error TS2491: The left-hand side of a 'for...in' statement cannot be a destructuring pattern.
+!!! error TS2461: Type '"length" | "toString" | "toLocaleString" | "pop" | "push" | "concat" | "join" | "reverse" | "shift" | "slice" | "sort" | "splice" | "unshift" | "indexOf" | "lastIndexOf" | "every" | "some" | "forEach" | "map" | "filter" | "reduce" | "reduceRight"' is not an array type.

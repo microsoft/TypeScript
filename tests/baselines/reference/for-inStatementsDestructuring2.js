@@ -4,4 +4,6 @@
 for (var {a, b} in []) {}
 
 //// [for-inStatementsDestructuring2.js]
-for (var _a = void 0, a = _a.a, b = _a.b in []) { }
+for (var key_1 in []) {
+    var a = key_1.a, b = key_1.b;
+}

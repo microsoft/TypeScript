@@ -2372,10 +2372,6 @@
         "category": "Error",
         "code": 2490
     },
-    "The left-hand side of a 'for...in' statement cannot be a destructuring pattern.": {
-        "category": "Error",
-        "code": 2491
-    },
     "Cannot redeclare identifier '{0}' in catch clause.": {
         "category": "Error",
         "code": 2492

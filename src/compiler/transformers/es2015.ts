@@ -43,6 +43,7 @@ import {
     Expression,
     ExpressionStatement,
     ExpressionWithTypeArguments,
+    ForInOrOfStatement,
     filter,
     findSuperStatementIndexPath,
     first,
@@ -85,6 +86,7 @@ import {
     isArrayLiteralExpression,
     isArrowFunction,
     isAssignmentExpression,
+    isAssignmentPattern,
     isBinaryExpression,
     isBindingPattern,
     isBlock,
@@ -2684,11 +2686,16 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
     }
 
     function visitForInStatement(node: ForInStatement, outermostLabeledStatement: LabeledStatement | undefined) {
+        const needsConversionForDestructuring = node.initializer.kind === SyntaxKind.VariableDeclarationList ?
+            isBindingPattern((node.initializer as VariableDeclarationList).declarations[0].name) :
+            isAssignmentPattern(node.initializer);
         return visitIterationStatementWithFacts(
             HierarchyFacts.ForInOrForOfStatementExcludes,
             HierarchyFacts.ForInOrForOfStatementIncludes,
             node,
-            outermostLabeledStatement);
+            outermostLabeledStatement,
+            needsConversionForDestructuring ? convertForInStatementForDestructuring : undefined
+        );
     }
 
     function visitForOfStatement(node: ForOfStatement, outermostLabeledStatement: LabeledStatement | undefined): VisitResult<Statement> {
@@ -2700,7 +2707,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             compilerOptions.downlevelIteration ? convertForOfStatementForIterable : convertForOfStatementForArray);
     }
 
-    function convertForOfStatementHead(node: ForOfStatement, boundValue: Expression, convertedLoopBodyStatements: Statement[] | undefined) {
+    function convertForInOrOfStatementHead(node: ForInOrOfStatement, boundValue: Expression, convertedLoopBodyStatements: Statement[] | undefined) {
         const statements: Statement[] = [];
         const initializer = node.initializer;
         if (isVariableDeclarationList(initializer)) {
@@ -2800,6 +2807,36 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         );
     }
 
+    function convertForInStatementForDestructuring(node: ForInStatement, outermostLabeledStatement: LabeledStatement | undefined, convertedLoopBodyStatements: Statement[] | undefined): Statement {
+        const lhsReference = factory.createUniqueName("key");
+
+        const forInStatement = setEmitFlags(
+            setTextRange(
+                factory.createForInStatement(
+                    /*initializer*/ setEmitFlags(
+                        setTextRange(
+                            factory.createVariableDeclarationList([
+                                setTextRange(factory.createVariableDeclaration(lhsReference, /*exclamationToken*/ undefined, /*type*/ undefined, /*initializer*/ undefined), node.initializer),
+                            ]),
+                            node.expression
+                        ),
+                        EmitFlags.NoHoisting
+                    ),
+                    /*expression*/ node.expression,
+                    /*statement*/ convertForInOrOfStatementHead(
+                        node,
+                        lhsReference,
+                        convertedLoopBodyStatements
+                    )
+                ),
+                /*location*/ node
+            ),
+            EmitFlags.NoTokenTrailingSourceMaps
+        );
+
+        return factory.restoreEnclosingLabel(forInStatement, outermostLabeledStatement, convertedLoopState && resetLabel);
+    }
+
     function convertForOfStatementForArray(node: ForOfStatement, outermostLabeledStatement: LabeledStatement | undefined, convertedLoopBodyStatements: Statement[] | undefined): Statement {
         // The following ES6 code:
         //
@@ -2856,7 +2893,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                     node.expression
                 ),
                 /*incrementor*/ setTextRange(factory.createPostfixIncrement(counter), node.expression),
-                /*statement*/ convertForOfStatementHead(
+                /*statement*/ convertForInOrOfStatementHead(
                     node,
                     factory.createElementAccessExpression(rhsReference, counter),
                     convertedLoopBodyStatements
@@ -2867,7 +2904,6 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
 
         // Disable trailing source maps for the OpenParenToken to align source map emit with the old emitter.
         setEmitFlags(forStatement, EmitFlags.NoTokenTrailingSourceMaps);
-        setTextRange(forStatement, node);
         return factory.restoreEnclosingLabel(forStatement, outermostLabeledStatement, convertedLoopState && resetLabel);
     }
 
@@ -2905,7 +2941,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                     ),
                     /*condition*/ factory.createLogicalNot(factory.createPropertyAccessExpression(result, "done")),
                     /*incrementor*/ factory.createAssignment(result, next),
-                    /*statement*/ convertForOfStatementHead(
+                    /*statement*/ convertForInOrOfStatementHead(
                         node,
                         factory.createPropertyAccessExpression(result, "value"),
                         convertedLoopBodyStatements

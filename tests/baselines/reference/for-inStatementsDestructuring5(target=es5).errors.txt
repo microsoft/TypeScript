@@ -1,0 +1,11 @@
+for-inStatementsDestructuring5.ts(4,6): error TS2461: Type 'string' is not an array type.
+
+
+==== for-inStatementsDestructuring5.ts (1 errors) ====
+    let a: string;
+    declare let obj: { [s: string]: string };
+    
+    for ([a] in obj) {}
+         ~~~
+!!! error TS2461: Type 'string' is not an array type.
+    
