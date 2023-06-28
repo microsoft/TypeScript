@@ -1,36 +1,46 @@
 //// [tests/cases/compiler/inferenceGenericNestedCallReturningConstructor.ts] ////
 
 === inferenceGenericNestedCallReturningConstructor.ts ===
-interface AssignObject<TContext> {
+interface Action<TContext> {
   new (ctx: TContext): void;
 >ctx : TContext
 }
 
+declare class AssignAction<TContext> {
+>AssignAction : AssignAction<TContext>
+
+  constructor(ctx: TContext);
+>ctx : TContext
+}
+
 declare function assign<TContext>(
->assign : <TContext>(assigner: (ctx: TContext) => void) => AssignObject<TContext>
+>assign : <TContext>(assigner: (ctx: TContext) => void) => new (ctx: TContext) => AssignAction<TContext>
 
   assigner: (ctx: TContext) => void
 >assigner : (ctx: TContext) => void
 >ctx : TContext
 
-): AssignObject<TContext>;
+): {
+  new (ctx: TContext): AssignAction<TContext>;
+>ctx : TContext
+}
 
 declare function createMachine<TContext>(config: {
->createMachine : <TContext>(config: {    context: TContext;    entry: AssignObject<TContext>;}) => void
->config : { context: TContext; entry: AssignObject<TContext>; }
+>createMachine : <TContext>(config: {    context: TContext;    entry: Action<TContext>;}) => void
+>config : { context: TContext; entry: Action<TContext>; }
 
   context: TContext;
 >context : TContext
 
-  entry: AssignObject<TContext>;
->entry : AssignObject<TContext>
+  entry: Action<TContext>;
+>entry : Action<TContext>
 
 }): void;
 
 createMachine({
 >createMachine({  context: { count: 0 },  entry: assign((ctx) => {    ctx // { count: number }  }),}) : void
->createMachine : <TContext>(config: { context: TContext; entry: AssignObject<TContext>; }) => void
->{  context: { count: 0 },  entry: assign((ctx) => {    ctx // { count: number }  }),} : { context: { count: number; }; entry: AssignObject<{ count: number; }>; }
+>createMachine : <TContext>(config: { context: TContext; entry: Action<TContext>; }) => void
+>{  context: { count: 0 },  entry: assign((ctx) => {    ctx // { count: number }  }),} : { context: { count: number; }; entry: new (ctx: { count: number; }) => AssignAction<{ count: number; }>; }
 
   context: { count: 0 },
 >context : { count: number; }
@@ -39,9 +49,9 @@ createMachine({
 >0 : 0
 
   entry: assign((ctx) => {
->entry : AssignObject<{ count: number; }>
->assign((ctx) => {    ctx // { count: number }  }) : AssignObject<{ count: number; }>
->assign : <TContext>(assigner: (ctx: TContext) => void) => AssignObject<TContext>
+>entry : new (ctx: { count: number; }) => AssignAction<{ count: number; }>
+>assign((ctx) => {    ctx // { count: number }  }) : new (ctx: { count: number; }) => AssignAction<{ count: number; }>
+>assign : <TContext>(assigner: (ctx: TContext) => void) => new (ctx: TContext) => AssignAction<TContext>
 >(ctx) => {    ctx // { count: number }  } : (ctx: { count: number; }) => void
 >ctx : { count: number; }
 

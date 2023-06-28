@@ -1,17 +1,23 @@
 // @strict: true
 // @noEmit: true
 
-interface AssignObject<TContext> {
+interface Action<TContext> {
   new (ctx: TContext): void;
+}
+
+declare class AssignAction<TContext> {
+  constructor(ctx: TContext);
 }
 
 declare function assign<TContext>(
   assigner: (ctx: TContext) => void
-): AssignObject<TContext>;
+): {
+  new (ctx: TContext): AssignAction<TContext>;
+}
 
 declare function createMachine<TContext>(config: {
   context: TContext;
-  entry: AssignObject<TContext>;
+  entry: Action<TContext>;
 }): void;
 
 createMachine({
