@@ -2424,7 +2424,7 @@ function loadModuleFromSelfNameReference(extensions: Extensions, moduleName: str
     // implementation packages. See the selfNameModuleAugmentation.ts test for why this
     // matters.
     //
-    // However, there's an exception. If the user has `allowJs` and `declaration, we need
+    // However, there's an exception. If the user has `allowJs` and `declaration`, we need
     // to ensure that self-name imports of their own package can resolve back to their
     // input JS files via `tryLoadInputFileForPath` at a higher priority than their output
     // declaration files, so we need to do a single pass with all extensions for that case.
