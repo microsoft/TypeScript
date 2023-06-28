@@ -19,37 +19,70 @@ type B = {
 
 };
 
-const ShouldAndDoesFail: AC = {
->ShouldAndDoesFail : Symbol(ShouldAndDoesFail, Decl(unionTypeExcessPropertyCheck.ts, 8, 5))
+// Fails correctly as `b` is not in `AC`
+const ac_b: AC = {
+>ac_b : Symbol(ac_b, Decl(unionTypeExcessPropertyCheck.ts, 9, 5))
 >AC : Symbol(AC, Decl(unionTypeExcessPropertyCheck.ts, 0, 0))
 
-        b: 'value for b',
->b : Symbol(b, Decl(unionTypeExcessPropertyCheck.ts, 8, 31))
+        b: '',
+>b : Symbol(b, Decl(unionTypeExcessPropertyCheck.ts, 9, 18))
 
-        c: 'value for c'
->c : Symbol(c, Decl(unionTypeExcessPropertyCheck.ts, 9, 25))
+        c: ''
+>c : Symbol(c, Decl(unionTypeExcessPropertyCheck.ts, 10, 14))
 
 };
-const ShouldAndDoesFailToo: B = {
->ShouldAndDoesFailToo : Symbol(ShouldAndDoesFailToo, Decl(unionTypeExcessPropertyCheck.ts, 12, 5))
+// Fails correctly as `c` is not in `B`
+const b_c: B = {
+>b_c : Symbol(b_c, Decl(unionTypeExcessPropertyCheck.ts, 14, 5))
 >B : Symbol(B, Decl(unionTypeExcessPropertyCheck.ts, 3, 2))
 
-        b: 'value for b',
->b : Symbol(b, Decl(unionTypeExcessPropertyCheck.ts, 12, 33))
+        b: '',
+>b : Symbol(b, Decl(unionTypeExcessPropertyCheck.ts, 14, 16))
 
-        c: 'value for c'
->c : Symbol(c, Decl(unionTypeExcessPropertyCheck.ts, 13, 25))
+        c: ''
+>c : Symbol(c, Decl(unionTypeExcessPropertyCheck.ts, 15, 14))
 
 };
-const ShouldFailButWorks: AC|B = {
->ShouldFailButWorks : Symbol(ShouldFailButWorks, Decl(unionTypeExcessPropertyCheck.ts, 16, 5))
+// Should fail because `c` is not in `B` while `b` is not in `AB`, but works instead
+const acb_bc: AC|B = {
+>acb_bc : Symbol(acb_bc, Decl(unionTypeExcessPropertyCheck.ts, 19, 5))
 >AC : Symbol(AC, Decl(unionTypeExcessPropertyCheck.ts, 0, 0))
 >B : Symbol(B, Decl(unionTypeExcessPropertyCheck.ts, 3, 2))
 
-        b: 'value for b',
->b : Symbol(b, Decl(unionTypeExcessPropertyCheck.ts, 16, 34))
+        b: '',
+>b : Symbol(b, Decl(unionTypeExcessPropertyCheck.ts, 19, 22))
 
-        c: 'value for c'
->c : Symbol(c, Decl(unionTypeExcessPropertyCheck.ts, 17, 25))
+        c: ''
+>c : Symbol(c, Decl(unionTypeExcessPropertyCheck.ts, 20, 14))
 
 };
+// Fails correctly as `x` in in neither `AC` nor `B`
+const acb_bx: AC|B = {
+>acb_bx : Symbol(acb_bx, Decl(unionTypeExcessPropertyCheck.ts, 24, 5))
+>AC : Symbol(AC, Decl(unionTypeExcessPropertyCheck.ts, 0, 0))
+>B : Symbol(B, Decl(unionTypeExcessPropertyCheck.ts, 3, 2))
+
+    b: '',
+>b : Symbol(b, Decl(unionTypeExcessPropertyCheck.ts, 24, 22))
+
+    x: ''
+>x : Symbol(x, Decl(unionTypeExcessPropertyCheck.ts, 25, 10))
+
+};
+// Fails correctly as `x` in in neither `AC` nor `B`
+const acb_acx: AC|B = {
+>acb_acx : Symbol(acb_acx, Decl(unionTypeExcessPropertyCheck.ts, 29, 5))
+>AC : Symbol(AC, Decl(unionTypeExcessPropertyCheck.ts, 0, 0))
+>B : Symbol(B, Decl(unionTypeExcessPropertyCheck.ts, 3, 2))
+
+    a: '',
+>a : Symbol(a, Decl(unionTypeExcessPropertyCheck.ts, 29, 23))
+
+    c: '',
+>c : Symbol(c, Decl(unionTypeExcessPropertyCheck.ts, 30, 10))
+
+    x: ''
+>x : Symbol(x, Decl(unionTypeExcessPropertyCheck.ts, 31, 10))
+
+};
+
