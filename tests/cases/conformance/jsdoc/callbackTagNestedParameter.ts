@@ -6,8 +6,8 @@
 /**
  * @callback WorksWithPeopleCallback
  * @param {Object} person
- * @param {String} person.name
- * @param {Number} [person.age]
+ * @param {string} person.name
+ * @param {number} [person.age]
  * @returns {void}
  */
 
