@@ -24412,7 +24412,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let bivariant = false;
         let propagationType: Type;
         let inferencePriority: number = InferencePriority.MaxValue;
-        let allowComplexConstraintInference = true;
         let visited: Map<string, number>;
         let sourceStack: Type[];
         let targetStack: Type[];
@@ -24618,15 +24617,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // getApparentType can return _any_ type, since an indexed access or conditional may simplify to any other type.
                     // If that occurs and it doesn't simplify to an object or intersection, we'll need to restart `inferFromTypes`
                     // with the simplified source.
-                    if (apparentSource !== source && allowComplexConstraintInference && !(apparentSource.flags & (TypeFlags.Object | TypeFlags.Intersection))) {
-                        // TODO: The `allowComplexConstraintInference` flag is a hack! This forbids inference from complex constraints within constraints!
-                        // This isn't required algorithmically, but rather is used to lower the memory burden caused by performing inference
-                        // that is _too good_ in projects with complicated constraints (eg, fp-ts). In such cases, if we did not limit ourselves
-                        // here, we might produce more valid inferences for types, causing us to do more checks and perform more instantiations
-                        // (in addition to the extra stack depth here) which, in turn, can push the already close process over its limit.
-                        // TL;DR: If we ever become generally more memory efficient (or our resource budget ever increases), we should just
-                        // remove this `allowComplexConstraintInference` flag.
-                        allowComplexConstraintInference = false;
+                    if (apparentSource !== source && !(apparentSource.flags & (TypeFlags.Object | TypeFlags.Intersection))) {
                         return inferFromTypes(apparentSource, target);
                     }
                     source = apparentSource;
