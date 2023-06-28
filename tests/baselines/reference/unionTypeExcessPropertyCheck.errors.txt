@@ -1,0 +1,33 @@
+unionTypeExcessPropertyCheck.ts(10,9): error TS2322: Type '{ b: string; c: string; }' is not assignable to type 'AC'.
+  Object literal may only specify known properties, and 'b' does not exist in type 'AC'.
+unionTypeExcessPropertyCheck.ts(15,9): error TS2322: Type '{ b: string; c: string; }' is not assignable to type 'B'.
+  Object literal may only specify known properties, and 'c' does not exist in type 'B'.
+
+
+==== unionTypeExcessPropertyCheck.ts (2 errors) ====
+    type AC = {
+        a: string, 
+        c: string
+    };
+    type B = {
+        b: string
+    };
+    
+    const ShouldAndDoesFail: AC = {
+            b: 'value for b',
+            ~
+!!! error TS2322: Type '{ b: string; c: string; }' is not assignable to type 'AC'.
+!!! error TS2322:   Object literal may only specify known properties, and 'b' does not exist in type 'AC'.
+            c: 'value for c'
+    };
+    const ShouldAndDoesFailToo: B = {
+            b: 'value for b',
+            c: 'value for c'
+            ~
+!!! error TS2322: Type '{ b: string; c: string; }' is not assignable to type 'B'.
+!!! error TS2322:   Object literal may only specify known properties, and 'c' does not exist in type 'B'.
+    };
+    const ShouldFailButWorks: AC|B = {
+            b: 'value for b',
+            c: 'value for c'
+    };

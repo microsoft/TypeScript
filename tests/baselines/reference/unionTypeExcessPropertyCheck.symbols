@@ -1,0 +1,55 @@
+//// [tests/cases/conformance/types/union/unionTypeExcessPropertyCheck.ts] ////
+
+=== unionTypeExcessPropertyCheck.ts ===
+type AC = {
+>AC : Symbol(AC, Decl(unionTypeExcessPropertyCheck.ts, 0, 0))
+
+    a: string, 
+>a : Symbol(a, Decl(unionTypeExcessPropertyCheck.ts, 0, 11))
+
+    c: string
+>c : Symbol(c, Decl(unionTypeExcessPropertyCheck.ts, 1, 14))
+
+};
+type B = {
+>B : Symbol(B, Decl(unionTypeExcessPropertyCheck.ts, 3, 2))
+
+    b: string
+>b : Symbol(b, Decl(unionTypeExcessPropertyCheck.ts, 4, 10))
+
+};
+
+const ShouldAndDoesFail: AC = {
+>ShouldAndDoesFail : Symbol(ShouldAndDoesFail, Decl(unionTypeExcessPropertyCheck.ts, 8, 5))
+>AC : Symbol(AC, Decl(unionTypeExcessPropertyCheck.ts, 0, 0))
+
+        b: 'value for b',
+>b : Symbol(b, Decl(unionTypeExcessPropertyCheck.ts, 8, 31))
+
+        c: 'value for c'
+>c : Symbol(c, Decl(unionTypeExcessPropertyCheck.ts, 9, 25))
+
+};
+const ShouldAndDoesFailToo: B = {
+>ShouldAndDoesFailToo : Symbol(ShouldAndDoesFailToo, Decl(unionTypeExcessPropertyCheck.ts, 12, 5))
+>B : Symbol(B, Decl(unionTypeExcessPropertyCheck.ts, 3, 2))
+
+        b: 'value for b',
+>b : Symbol(b, Decl(unionTypeExcessPropertyCheck.ts, 12, 33))
+
+        c: 'value for c'
+>c : Symbol(c, Decl(unionTypeExcessPropertyCheck.ts, 13, 25))
+
+};
+const ShouldFailButWorks: AC|B = {
+>ShouldFailButWorks : Symbol(ShouldFailButWorks, Decl(unionTypeExcessPropertyCheck.ts, 16, 5))
+>AC : Symbol(AC, Decl(unionTypeExcessPropertyCheck.ts, 0, 0))
+>B : Symbol(B, Decl(unionTypeExcessPropertyCheck.ts, 3, 2))
+
+        b: 'value for b',
+>b : Symbol(b, Decl(unionTypeExcessPropertyCheck.ts, 16, 34))
+
+        c: 'value for c'
+>c : Symbol(c, Decl(unionTypeExcessPropertyCheck.ts, 17, 25))
+
+};

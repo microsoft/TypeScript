@@ -1,0 +1,60 @@
+//// [tests/cases/conformance/types/union/unionTypeExcessPropertyCheck.ts] ////
+
+=== unionTypeExcessPropertyCheck.ts ===
+type AC = {
+>AC : { a: string; c: string; }
+
+    a: string, 
+>a : string
+
+    c: string
+>c : string
+
+};
+type B = {
+>B : { b: string; }
+
+    b: string
+>b : string
+
+};
+
+const ShouldAndDoesFail: AC = {
+>ShouldAndDoesFail : AC
+>{        b: 'value for b',        c: 'value for c'} : { b: string; c: string; }
+
+        b: 'value for b',
+>b : string
+>'value for b' : "value for b"
+
+        c: 'value for c'
+>c : string
+>'value for c' : "value for c"
+
+};
+const ShouldAndDoesFailToo: B = {
+>ShouldAndDoesFailToo : B
+>{        b: 'value for b',        c: 'value for c'} : { b: string; c: string; }
+
+        b: 'value for b',
+>b : string
+>'value for b' : "value for b"
+
+        c: 'value for c'
+>c : string
+>'value for c' : "value for c"
+
+};
+const ShouldFailButWorks: AC|B = {
+>ShouldFailButWorks : AC | B
+>{        b: 'value for b',        c: 'value for c'} : { b: string; c: string; }
+
+        b: 'value for b',
+>b : string
+>'value for b' : "value for b"
+
+        c: 'value for c'
+>c : string
+>'value for c' : "value for c"
+
+};
