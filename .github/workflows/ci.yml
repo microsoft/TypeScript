@@ -65,6 +65,30 @@ jobs:
       - name: Linter
         run: npm run lint
 
+  format:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '*'
+          check-latest: true
+      - run: npm ci
+
+      # TODO: The cache fails when copied between GHA runners. See:
+      # https://github.com/dprint/dprint/issues/734
+      # https://github.com/dprint/dprint/issues/735
+      # - uses: actions/cache@v3
+      #   with:
+      #     path: ~/.cache/dprint
+      #     key: ${{ runner.os }}-dprint-${{ hashFiles('package-lock.json', '.dprint.jsonc') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-dprint-
+
+      - name: Check formatting
+        run: npx dprint check
+
   browser-integration:
     runs-on: ubuntu-latest
 
