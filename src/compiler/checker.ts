@@ -20902,10 +20902,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         return false;
                     }
                 }
-                if (reportErrors) {
-                    const undecidedProperties = [...excessProperties].filter((p: any) => assignableProperties.has(p)).join(", ").toString();
-                    reportError(Diagnostics.Excess_properties_detected_in_Object_literal_0_combination_of_properties_1_make_type_2_undeducible, typeToString(source), undecidedProperties, typeToString(excessPropertyTarget));
-                }
             }
             for (const prop of getPropertiesOfType(source)) {
                 if (assignableProperties.has(prop)) {
@@ -20971,6 +20967,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         return true;
                     }
                 }
+            }
+            const undecidedProperties = [...excessProperties].filter((p: any) => assignableProperties.has(p));
+            if (undecidedProperties.length) {
+                if (reportErrors) {
+                    reportError(Diagnostics.Properties_1_can_t_be_assigned_to_any_type_in_union_2_and_make_0_unassignable, typeToString(source), undecidedProperties.join(", "), typeToString(excessPropertyTarget));
+                }
+                return true;
             }
             return false;
         }

@@ -3659,7 +3659,7 @@
         "category": "Error",
         "code": 2854
     },
-    "Excess properties detected in Object literal '{0}' combination of properties '{1}' make type '{2}' undeducible": {
+    "Properties '{1}' can't be assigned to any type in union '{2}' and make '{0}' unassignable": {
         "category": "Error",
         "code": 2855
     },
