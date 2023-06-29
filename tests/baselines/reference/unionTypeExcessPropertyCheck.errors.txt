@@ -4,8 +4,10 @@ unionTypeExcessPropertyCheck.ts(17,9): error TS2322: Type '{ b: string; c: strin
   Object literal may only specify known properties, and 'c' does not exist in type 'B'.
 unionTypeExcessPropertyCheck.ts(27,5): error TS2322: Type '{ b: string; x: string; }' is not assignable to type 'AC | B'.
   Object literal may only specify known properties, and 'x' does not exist in type 'AC | B'.
+    Excess properties detected in Object literal '{ b: string; x: string; }' combination of properties '[object Object]' make type 'AC | B' undeducible
 unionTypeExcessPropertyCheck.ts(33,5): error TS2322: Type '{ a: string; c: string; x: string; }' is not assignable to type 'AC | B'.
   Object literal may only specify known properties, and 'x' does not exist in type 'AC | B'.
+    Excess properties detected in Object literal '{ a: string; c: string; x: string; }' combination of properties '[object Object], [object Object]' make type 'AC | B' undeducible
 
 
 ==== unionTypeExcessPropertyCheck.ts (4 errors) ====
@@ -45,6 +47,7 @@ unionTypeExcessPropertyCheck.ts(33,5): error TS2322: Type '{ a: string; c: strin
         ~
 !!! error TS2322: Type '{ b: string; x: string; }' is not assignable to type 'AC | B'.
 !!! error TS2322:   Object literal may only specify known properties, and 'x' does not exist in type 'AC | B'.
+!!! error TS2322:     Excess properties detected in Object literal '{ b: string; x: string; }' combination of properties '[object Object]' make type 'AC | B' undeducible
     };
     // Fails correctly as `x` in in neither `AC` nor `B`
     const acb_acx: AC|B = {
@@ -54,5 +57,6 @@ unionTypeExcessPropertyCheck.ts(33,5): error TS2322: Type '{ a: string; c: strin
         ~
 !!! error TS2322: Type '{ a: string; c: string; x: string; }' is not assignable to type 'AC | B'.
 !!! error TS2322:   Object literal may only specify known properties, and 'x' does not exist in type 'AC | B'.
+!!! error TS2322:     Excess properties detected in Object literal '{ a: string; c: string; x: string; }' combination of properties '[object Object], [object Object]' make type 'AC | B' undeducible
     };
     

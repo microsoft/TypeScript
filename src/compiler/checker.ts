@@ -20876,17 +20876,45 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             let reducedTarget = target;
             let checkTypes: Type[] | undefined;
+            const excessProperties: Set<any> = new Set();
+            const assignableProperties: Set<any> = new Set();
             if (target.flags & TypeFlags.Union) {
                 reducedTarget = findMatchingDiscriminantType(source, target as UnionType, isRelatedTo) || filterPrimitivesIfContainsNonPrimitive(target as UnionType);
                 checkTypes = reducedTarget.flags & TypeFlags.Union ? (reducedTarget as UnionType).types : [reducedTarget];
             }
+            // Report error in terms of object types in the target as those are the only ones
+            // we check in isKnownProperty.
+            const excessPropertyTarget = filterType(reducedTarget, isExcessPropertyCheckTarget) as UnionOrIntersectionType;
+            if (target.flags & TypeFlags.Union) {
+                for (const t of excessPropertyTarget.types) {
+                    let typeCovered = true;
+                    for (const prop of getPropertiesOfType(source)) {
+                        if (!isKnownProperty(t, prop.escapedName, isComparingJsxAttributes)) {
+                            typeCovered = false;
+                            excessProperties.add(prop);
+                        }
+                        else {
+                            assignableProperties.add(prop);
+                        }
+                    }
+                    if (typeCovered) {
+                        // Whichever type in the union covers all assigned properties will also
+                        return false;
+                    }
+                }
+                if (reportErrors) {
+                    const undecidedProperties = [...excessProperties].filter((p: any) => assignableProperties.has(p)).join(", ").toString();
+                    reportError(Diagnostics.Excess_properties_detected_in_Object_literal_0_combination_of_properties_1_make_type_2_undeducible, typeToString(source), undecidedProperties, typeToString(excessPropertyTarget));
+                }
+            }
             for (const prop of getPropertiesOfType(source)) {
+                if (assignableProperties.has(prop)) {
+                    continue;
+                }
                 if (shouldCheckAsExcessProperty(prop, source.symbol) && !isIgnoredJsxProperty(source, prop)) {
                     if (!isKnownProperty(reducedTarget, prop.escapedName, isComparingJsxAttributes)) {
                         if (reportErrors) {
-                            // Report error in terms of object types in the target as those are the only ones
-                            // we check in isKnownProperty.
-                            const errorTarget = filterType(reducedTarget, isExcessPropertyCheckTarget);
+
                             // We know *exactly* where things went wrong when comparing the types.
                             // Use this property as the error node as this will be more helpful in
                             // reasoning about what went wrong.
@@ -20900,13 +20928,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                     errorNode = prop.valueDeclaration.name;
                                 }
                                 const propName = symbolToString(prop);
-                                const suggestionSymbol = getSuggestedSymbolForNonexistentJSXAttribute(propName, errorTarget);
+                                const suggestionSymbol = getSuggestedSymbolForNonexistentJSXAttribute(propName, excessPropertyTarget);
                                 const suggestion = suggestionSymbol ? symbolToString(suggestionSymbol) : undefined;
                                 if (suggestion) {
-                                    reportError(Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2, propName, typeToString(errorTarget), suggestion);
+                                    reportError(Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2, propName, typeToString(excessPropertyTarget), suggestion);
                                 }
                                 else {
-                                    reportError(Diagnostics.Property_0_does_not_exist_on_type_1, propName, typeToString(errorTarget));
+                                    reportError(Diagnostics.Property_0_does_not_exist_on_type_1, propName, typeToString(excessPropertyTarget));
                                 }
                             }
                             else {
@@ -20921,16 +20949,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                     errorNode = name;
 
                                     if (isIdentifier(name)) {
-                                        suggestion = getSuggestionForNonexistentProperty(name, errorTarget);
+                                        suggestion = getSuggestionForNonexistentProperty(name, excessPropertyTarget);
                                     }
                                 }
                                 if (suggestion !== undefined) {
                                     reportError(Diagnostics.Object_literal_may_only_specify_known_properties_but_0_does_not_exist_in_type_1_Did_you_mean_to_write_2,
-                                        symbolToString(prop), typeToString(errorTarget), suggestion);
+                                        symbolToString(prop), typeToString(excessPropertyTarget), suggestion);
                                 }
                                 else {
                                     reportError(Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1,
-                                        symbolToString(prop), typeToString(errorTarget));
+                                        symbolToString(prop), typeToString(excessPropertyTarget));
                                 }
                             }
                         }

@@ -3659,6 +3659,10 @@
         "category": "Error",
         "code": 2854
     },
+    "Excess properties detected in Object literal '{0}' combination of properties '{1}' make type '{2}' undeducible": {
+        "category": "Error",
+        "code": 2855
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
