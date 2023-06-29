@@ -7093,7 +7093,7 @@ namespace Parser {
                 case SyntaxKind.PrivateKeyword:
                 case SyntaxKind.ProtectedKeyword:
                 case SyntaxKind.PublicKeyword:
-                case SyntaxKind.ReadonlyKeyword: {
+                case SyntaxKind.ReadonlyKeyword:
                     const previousToken = token();
                     nextToken();
                     // ASI takes effect for this modifier.
@@ -7106,7 +7106,6 @@ namespace Parser {
                         return true;
                     }
                     continue;
-                }
 
                 case SyntaxKind.GlobalKeyword:
                     nextToken();
