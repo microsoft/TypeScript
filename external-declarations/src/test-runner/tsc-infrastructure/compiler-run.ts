@@ -1,18 +1,19 @@
 import { CompilerOptions, Diagnostic } from "typescript";
 import * as ts from "typescript";
-import { startsWith, map, compareStringsCaseSensitive, hasProperty } from "../../compiler/lang-utils";
+
+import { compareStringsCaseSensitive, hasProperty,map, startsWith } from "../../compiler/lang-utils";
+import { fileExtensionIs, getNormalizedAbsolutePath, normalizeSlashes, toPath } from "../../compiler/path-utils";
+import { createGetCanonicalFileName } from "../../compiler/path-utils";
+import { cloneCompilerOptions, getEmitScriptTarget } from "../../compiler/utils";
+import * as compiler from "./compiler";
+import * as fakes from "./fakesHosts";
+import { IO } from "./io";
 import * as opts from "./options";
+import { parseCustomTypeOption, parseListTypeOption } from "./options";
+import * as documents from "./test-document";
 import * as TestCaseParser from "./test-file-parser";
 import * as vfs from "./vfs";
 import * as vpath from "./vpath";
-import { parseCustomTypeOption, parseListTypeOption } from "./options";
-import { fileExtensionIs, getNormalizedAbsolutePath, normalizeSlashes, toPath } from "../../compiler/path-utils";
-import { cloneCompilerOptions, getEmitScriptTarget } from "../../compiler/utils";
-import * as documents from './test-document';
-import { createGetCanonicalFileName } from "../../compiler/path-utils";
-import * as compiler from './compiler';
-import * as fakes from './fakesHosts';
-import { IO } from "./io";
 
 interface HarnessOptions {
     useCaseSensitiveFileNames?: boolean;
@@ -199,7 +200,7 @@ export namespace Utils {
         const length = getByteOrderMarkLength(text);
         return length ? text.slice(length) : text;
     }
-    
+
     export function getByteOrderMarkLength(text: string): number {
         if (text.length >= 1) {
             const ch0 = text.charCodeAt(0);
@@ -210,7 +211,7 @@ export namespace Utils {
         }
         return 0;
     }
-    
+
     export function addUTF8ByteOrderMark(text: string) {
         return getByteOrderMarkLength(text) === 0 ? "\u00EF\u00BB\u00BF" + text : text;
     }

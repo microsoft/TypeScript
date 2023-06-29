@@ -1,4 +1,4 @@
-export let tracer: {
+export const tracer: {
     current: undefined | {
         times: Record<string, number>;
         increment(name: string): void;
@@ -21,9 +21,9 @@ export function installTracer() {
             times[name] = (times[name] ?? 0) + 1;
         },
         end(name: string) {
-            times[name] =  (times[name] ?? 0) + 
+            times[name] =  (times[name] ?? 0) +
                 (Date.now() - (startTimes[name] ?? Date.now()));
             startTimes[name] = undefined;
         },
-    }
-};
+    };
+}

@@ -1,27 +1,28 @@
-import { Node, VariableDeclaration, PropertyDeclaration, PropertySignature, ParameterDeclaration, Declaration, getCombinedModifierFlags, isParameterPropertyDeclaration, isVariableDeclaration, ModifierFlags, getCombinedNodeFlags, NodeFlags, VariableDeclarationList, isLiteralExpression, isIdentifier, BindingPattern, isSourceFile, SyntaxKind, findAncestor, SourceFile, EntityNameOrEntityNameExpression, isBindingElement, isVariableStatement, SymbolFlags, __String, ImportClause, ImportEqualsDeclaration, ImportSpecifier, NamespaceImport, isFunctionLike, getNameOfDeclaration, DeclarationName, isElementAccessExpression, isPropertyAccessExpression, FunctionLikeDeclaration, CompilerOptions, isGetAccessor, isSetAccessor, ResolutionMode } from "typescript";
+import { __String, BindingPattern, CompilerOptions, Declaration, DeclarationName, EntityNameOrEntityNameExpression, findAncestor, FunctionLikeDeclaration, getCombinedModifierFlags, getCombinedNodeFlags, getNameOfDeclaration, ImportClause, ImportEqualsDeclaration, ImportSpecifier, isBindingElement, isElementAccessExpression, isFunctionLike, isGetAccessor, isIdentifier, isLiteralExpression, isParameterPropertyDeclaration, isPropertyAccessExpression, isSetAccessor, isSourceFile, isVariableDeclaration, isVariableStatement, ModifierFlags, NamespaceImport, Node, NodeFlags, ParameterDeclaration, PropertyDeclaration, PropertySignature, ResolutionMode,SourceFile, SymbolFlags, SyntaxKind, VariableDeclaration, VariableDeclarationList } from "typescript";
+
 import { Debug } from "./debug";
 import { BasicSymbol, bindSourceFile } from "./emit-binder";
 import { appendIfUnique, emptyArray, every, filter } from "./lang-utils";
-import { IsolatedEmitResolver, LateBoundDeclaration, LateVisibilityPaintedStatement, SymbolAccessibility, SymbolVisibilityResult, _Symbol } from "./types";
-import { isBindingPattern, isExternalModuleAugmentation, hasEffectiveModifier, hasSyntacticModifier, isInJSFile, isLateVisibilityPaintedStatement, isThisIdentifier, getFirstIdentifier, isPartOfTypeNode, AnyImportSyntax, hasDynamicName, skipParentheses, nodeIsPresent, isAmbientDeclaration } from "./utils";
+import { _Symbol,IsolatedEmitResolver, LateBoundDeclaration, LateVisibilityPaintedStatement, SymbolAccessibility, SymbolVisibilityResult } from "./types";
+import { AnyImportSyntax, getFirstIdentifier, hasDynamicName, hasEffectiveModifier, hasSyntacticModifier, isAmbientDeclaration,isBindingPattern, isExternalModuleAugmentation, isInJSFile, isLateVisibilityPaintedStatement, isPartOfTypeNode, isThisIdentifier, nodeIsPresent, skipParentheses } from "./utils";
 
 
 export function createEmitResolver(file: SourceFile, options: CompilerOptions, packageModuleType: ResolutionMode): IsolatedEmitResolver {
 
     const { getNodeLinks, resolveName } = bindSourceFile(file, options, packageModuleType);
 
-    
+
     function isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean {
         if (isDeclarationReadonly(node) || isVariableDeclaration(node) && isVarConst(node)) {
             // TODO: Make sure this is a valid approximation for literal types
-            return !node.type && 'initializer' in node && !!node.initializer && isLiteralExpression(node.initializer);
-            // Original TS version 
+            return !node.type && "initializer" in node && !!node.initializer && isLiteralExpression(node.initializer);
+            // Original TS version
             // return isFreshLiteralType(getTypeOfSymbol(getSymbolOfNode(node)));
         }
         return false;
     }
 
-    
+
     function isIdentifierComputedName(name: DeclarationName | undefined): boolean {
         if (!name) return false;
         if (!(name.kind === SyntaxKind.ComputedPropertyName || name.kind === SyntaxKind.ElementAccessExpression)) {
@@ -33,22 +34,22 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
         }
         return isIdentifier(expr);
     }
-    
+
     return {
         isSyntheticTypeEquivalent(actualTypeNode, typeNode, message) {
-            return true
+            return true;
         },
         isDeclarationVisible,
         isLiteralConstDeclaration,
         createLiteralConstValue(node) {
-            if('initializer' in node && node.initializer) {
+            if("initializer" in node && node.initializer) {
                 return node.initializer;
             }
             Debug.fail();
-        }, 
+        },
         isLateBound(node): node is LateBoundDeclaration {
             const name = getNameOfDeclaration(node);
-            return !hasDynamicName(node) || isIdentifierComputedName(name)
+            return !hasDynamicName(node) || isIdentifierComputedName(name);
         },
         getPropertiesOfContainerFunction(node: Declaration) {
             return [];
@@ -69,7 +70,7 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
                         //     return emptyArray;
                         // }
                         continue;
-                    };
+                    }
                     // Don't include signature if node is the implementation of an overloaded function. A node is considered
                     // an implementation node if it has a body and the previous node is of the same kind and immediately
                     // precedes the implementation node (i.e. has the same parent and ends where the implementation starts).
@@ -86,7 +87,7 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
                 return result;
             }
 
-            
+
             if (nodeIsPresent((node as FunctionLikeDeclaration).body)) {
                 if (isGetAccessor(node) || isSetAccessor(node)) return false; // Get or set accessors can never be overload implementations, but can have up to 2 signatures
                 const symbol = node.symbol;
@@ -136,7 +137,7 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
         isImportRequiredByAugmentation() {
             return false;
         },
-    }
+    };
 
 
     function isDeclarationReadonly(declaration: Declaration): boolean {
@@ -345,7 +346,7 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
         if (symbol && symbol.flags & SymbolFlags.TypeParameter && meaning & SymbolFlags.Type) {
             return { accessibility: SymbolAccessibility.Accessible };
         }
-        if (!symbol && isThisIdentifier(firstIdentifier) 
+        if (!symbol && isThisIdentifier(firstIdentifier)
             // TODO: isolatedDeclarations: Just assume this is accessible
             // && isSymbolAccessible(getSymbolOfNode(getThisContainer(firstIdentifier, /*includeArrowFunctions*/ false)), firstIdentifier, meaning, /*computeAliases*/ false).accessibility === SymbolAccessibility.Accessible
         ) {
@@ -356,10 +357,10 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
 
         // Verify if the symbol is accessible
         return (symbol && hasVisibleDeclarations(symbol, /*shouldComputeAliasToMakeVisible*/ true)) || {
-            // TODO: isolatedDeclarations: In TS this would be an inaccessible symbol, but TS will give errors we just transform 
+            // TODO: isolatedDeclarations: In TS this would be an inaccessible symbol, but TS will give errors we just transform
             // We don't actually keep enough information for full accessibility,
             // We just do this to mark accessible imports
-            accessibility: SymbolAccessibility.Accessible, 
+            accessibility: SymbolAccessibility.Accessible,
             errorSymbolName: firstIdentifier.text,
             errorNode: firstIdentifier
         };

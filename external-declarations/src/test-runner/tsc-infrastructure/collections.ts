@@ -1,4 +1,4 @@
-import * as ts from '../../compiler/lang-utils'
+import * as ts from "../../compiler/lang-utils";
 
 export interface SortOptions<T> {
     comparer: (a: T, b: T) => number;

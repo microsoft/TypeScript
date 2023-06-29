@@ -1,10 +1,11 @@
-import * as ts from 'typescript';
+import * as ts from "typescript";
+
+import { getNewLineCharacter } from "../../compiler/utils";
+import * as collections from "./collections";
+import { Utils } from "./compiler-run";
+import * as documents from "./test-document";
 import * as vfs from "./vfs";
 import * as vpath from "./vpath";
-import * as collections from './collections'
-import * as documents from './test-document'
-import { Utils } from './compiler-run';
-import { getNewLineCharacter } from '../../compiler/utils';
 
 
 /**
@@ -18,7 +19,7 @@ import { getNewLineCharacter } from '../../compiler/utils';
      newLine?: "\r\n" | "\n";
      env?: Record<string, string>;
  }
- 
+
  /**
   * A fake `ts.System` that leverages a virtual file system.
   */
@@ -29,10 +30,10 @@ import { getNewLineCharacter } from '../../compiler/utils';
      public readonly newLine: string;
      public readonly useCaseSensitiveFileNames: boolean;
      public exitCode: number | undefined;
- 
+
      private readonly _executingFilePath: string | undefined;
      private readonly _env: Record<string, string> | undefined;
- 
+
      constructor(vfs: vfs.FileSystem, { executingFilePath, newLine = "\r\n", env }: SystemOptions = {}) {
          this.vfs = vfs.isReadonly ? vfs.shadow() : vfs;
          this.useCaseSensitiveFileNames = !this.vfs.ignoreCase;
@@ -40,20 +41,20 @@ import { getNewLineCharacter } from '../../compiler/utils';
          this._executingFilePath = executingFilePath;
          this._env = env;
      }
- 
+
      private testTerminalWidth = Number.parseInt(this.getEnvironmentVariable("TS_TEST_TERMINAL_WIDTH"));
      getWidthOfTerminal = Number.isNaN(this.testTerminalWidth) ? undefined : () => this.testTerminalWidth;
- 
+
      // Pretty output
      writeOutputIsTTY() {
          return true;
      }
- 
+
      public write(message: string) {
          console.log(message);
          this.output.push(message);
      }
- 
+
      public readFile(path: string) {
          try {
              const content = this.vfs.readFileSync(path, "utf8");
@@ -63,34 +64,34 @@ import { getNewLineCharacter } from '../../compiler/utils';
              return undefined;
          }
      }
- 
+
      public writeFile(path: string, data: string, writeByteOrderMark?: boolean): void {
          this.vfs.mkdirpSync(vpath.dirname(path));
          this.vfs.writeFileSync(path, writeByteOrderMark ? Utils.addUTF8ByteOrderMark(data) : data);
      }
- 
+
      public deleteFile(path: string) {
          this.vfs.unlinkSync(path);
      }
- 
+
      public fileExists(path: string) {
          const stats = this._getStats(path);
          return stats ? stats.isFile() : false;
      }
- 
+
      public directoryExists(path: string) {
          const stats = this._getStats(path);
          return stats ? stats.isDirectory() : false;
      }
- 
+
      public createDirectory(path: string): void {
          this.vfs.mkdirpSync(path);
      }
- 
+
      public getCurrentDirectory() {
          return this.vfs.cwd();
      }
- 
+
      public getDirectories(path: string) {
          const result: string[] = [];
          try {
@@ -103,12 +104,12 @@ import { getNewLineCharacter } from '../../compiler/utils';
          catch { /*ignore*/ }
          return result;
      }
- 
+
      public readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[] {
         throw new Error("Not implemented");
         //  return matchFiles(path, extensions, exclude, include, this.useCaseSensitiveFileNames, this.getCurrentDirectory(), depth, path => this.getAccessibleFileSystemEntries(path), path => this.realpath(path));
      }
- 
+
      public getAccessibleFileSystemEntries(path: string): vfs.FileSystemEntries {
          const files: string[] = [];
          const directories: string[] = [];
@@ -129,39 +130,39 @@ import { getNewLineCharacter } from '../../compiler/utils';
          catch { /*ignored*/ }
          return { files, directories };
      }
- 
+
      public exit(exitCode?: number) {
          this.exitCode = exitCode;
          throw processExitSentinel;
      }
- 
+
      public getFileSize(path: string) {
          const stats = this._getStats(path);
          return stats && stats.isFile() ? stats.size : 0;
      }
- 
+
      public resolvePath(path: string) {
          return vpath.resolve(this.vfs.cwd(), path);
      }
- 
+
      public getExecutingFilePath() {
          if (this._executingFilePath === undefined) throw new Error("ts.notImplemented");
          return this._executingFilePath;
      }
- 
+
      public getModifiedTime(path: string) {
          const stats = this._getStats(path);
          return stats ? stats.mtime : undefined!; // TODO: GH#18217
      }
- 
+
      public setModifiedTime(path: string, time: Date) {
          this.vfs.utimesSync(path, time, time);
      }
- 
+
      public createHash(data: string): string {
          return `${generateDjb2Hash(data)}-${data}`;
      }
- 
+
      public realpath(path: string) {
          try {
              return this.vfs.realpathSync(path);
@@ -170,11 +171,11 @@ import { getNewLineCharacter } from '../../compiler/utils';
              return path;
          }
      }
- 
+
      public getEnvironmentVariable(name: string): string {
          return (this._env && this._env[name])!; // TODO: GH#18217
      }
- 
+
      private _getStats(path: string) {
          try {
              return this.vfs.existsSync(path) ? this.vfs.statSync(path) : undefined;
@@ -183,43 +184,43 @@ import { getNewLineCharacter } from '../../compiler/utils';
              return undefined;
          }
      }
- 
+
      now() {
          return new Date(this.vfs.time());
      }
  }
- 
+
  /**
   * A fake `ts.ParseConfigHost` that leverages a virtual file system.
   */
  export class ParseConfigHost implements ts.ParseConfigHost {
      public readonly sys: System;
- 
+
      constructor(sys: System | vfs.FileSystem) {
          if (sys instanceof vfs.FileSystem) sys = new System(sys);
          this.sys = sys;
      }
- 
+
      public get vfs() {
          return this.sys.vfs;
      }
- 
+
      public get useCaseSensitiveFileNames() {
          return this.sys.useCaseSensitiveFileNames;
      }
- 
+
      public fileExists(fileName: string): boolean {
          return this.sys.fileExists(fileName);
      }
- 
+
      public directoryExists(directoryName: string): boolean {
          return this.sys.directoryExists(directoryName);
      }
- 
+
      public readFile(path: string): string | undefined {
          return this.sys.readFile(path);
      }
- 
+
      public readDirectory(path: string, extensions: string[], excludes: string[], includes: string[], depth: number): string[] {
          return this.sys.readDirectory(path, extensions, excludes, includes, depth);
      }
@@ -362,7 +363,7 @@ import { getNewLineCharacter } from '../../compiler/utils';
         }
 
         const parsed = ts.createSourceFile(fileName, content, languageVersion, this._setParentNodes || this.shouldAssertInvariants);
-        
+
         this._sourceFiles.set(canonicalFileName, parsed);
 
         if (cacheKey) {

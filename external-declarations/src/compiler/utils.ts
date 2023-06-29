@@ -1,4 +1,5 @@
-import { SourceFile, SyntaxKind, Node, DeclarationName, isExpressionWithTypeArguments, isParameter, QualifiedName, ExpressionWithTypeArguments, FunctionDeclaration, ImportEqualsDeclaration, PropertyAccessExpression, TypeAliasDeclaration, TypeParameterDeclaration, NamedDeclaration, NodeFlags, ClassLikeDeclaration, ModifierFlags, ClassDeclaration, EnumDeclaration, InterfaceDeclaration, ModuleDeclaration, VariableStatement, ImportDeclaration, SignatureDeclaration, Identifier, isModuleDeclaration, isSourceFile, Declaration, getNameOfDeclaration, isElementAccessExpression, BindingPattern, ImportTypeNode, OuterExpressionKinds, Expression, isStringLiteralLike, isNumericLiteral, NumericLiteral, StringLiteralLike, getJSDocTypeTag, isParenthesizedExpression, CompilerOptions, Extension, ModuleKind, isIdentifier, ModuleResolutionKind, JsxEmit, isPrefixUnaryExpression, PrefixUnaryExpression, canHaveModifiers, ModifierLike, getJSDocPublicTag, getJSDocPrivateTag, getJSDocProtectedTag, getJSDocOverrideTagNoCache, getJSDocReadonlyTag, getJSDocDeprecatedTag, ScriptTarget, EntityNameOrEntityNameExpression, isHeritageClause, CallExpression, FunctionLikeDeclaration, HasType, JSDocTemplateTag, TypeAssertion, TsConfigSourceFile, PrinterOptions, NewLineKind, sys, isVariableStatement } from "typescript";
+import { BindingPattern, CallExpression, canHaveModifiers, ClassDeclaration, ClassLikeDeclaration, CompilerOptions, Declaration, DeclarationName, EntityNameOrEntityNameExpression, EnumDeclaration, Expression, ExpressionWithTypeArguments, Extension, FunctionDeclaration, FunctionLikeDeclaration, getJSDocDeprecatedTag, getJSDocOverrideTagNoCache, getJSDocPrivateTag, getJSDocProtectedTag, getJSDocPublicTag, getJSDocReadonlyTag, getJSDocTypeTag, getNameOfDeclaration, HasType, Identifier, ImportDeclaration, ImportEqualsDeclaration, ImportTypeNode, InterfaceDeclaration, isElementAccessExpression, isExpressionWithTypeArguments, isHeritageClause, isIdentifier, isModuleDeclaration, isNumericLiteral, isParameter, isParenthesizedExpression, isPrefixUnaryExpression, isSourceFile, isStringLiteralLike, isVariableStatement,JSDocTemplateTag, JsxEmit, ModifierFlags, ModifierLike, ModuleDeclaration, ModuleKind, ModuleResolutionKind, NamedDeclaration, NewLineKind, Node, NodeFlags, NumericLiteral, OuterExpressionKinds, PrefixUnaryExpression, PrinterOptions, PropertyAccessExpression, QualifiedName, ScriptTarget, SignatureDeclaration, SourceFile, StringLiteralLike, SyntaxKind, sys, TsConfigSourceFile, TypeAliasDeclaration, TypeAssertion, TypeParameterDeclaration, VariableStatement } from "typescript";
+
 import { Debug } from "./debug";
 import { clone, contains, flatten, some } from "./lang-utils";
 import { fileExtensionIs, fileExtensionIsOneOf } from "./path-utils";
@@ -8,7 +9,7 @@ import { AmbientModuleDeclaration, DynamicNamedBinaryExpression, DynamicNamedDec
 export function isInJSFile(node: Node | undefined): boolean {
     return !!node && !!(node.flags & NodeFlags.JavaScriptFile);
 }
- 
+
 
 // Returns true if this node is missing from the actual source code. A 'missing' node is different
 // from 'undefined/defined'. When a node is undefined (which can happen for optional nodes
@@ -181,7 +182,7 @@ function identifierIsThisKeyword(id: Identifier): boolean {
 
 let nextNodeId = 0;
 /** @internal */
-export function getNodeId(node: Node): number
+export function getNodeId(node: Node): number;
 export function getNodeId(node: any): number {
     if (!node.id) {
         nextNodeId++;
@@ -612,7 +613,7 @@ export function getNewLineCharacter(options: CompilerOptions | PrinterOptions, g
 
 export function isAmbientDeclaration(node: Node) {
     // @ts-expect-error NodeFlags.Ambient is not exposed
-    return node.flags & NodeFlags.Ambient
+    return node.flags & NodeFlags.Ambient;
 }
 
 export function isEnumConst(node: EnumDeclaration): boolean {

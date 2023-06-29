@@ -1,10 +1,11 @@
-import * as fs from 'fs'
-import * as fsp from 'fs/promises'
-import { flatten, stableSort, compareStringsCaseSensitive } from '../compiler/lang-utils';
-import { normalizePath, createGetCanonicalFileName, combinePaths } from '../compiler/path-utils';
-import { FileSystemEntries } from '../test-runner/tsc-infrastructure/vfs';
+import * as fs from "fs";
+import * as fsp from "fs/promises";
 
-const cache: Record<string, true> = {}
+import { compareStringsCaseSensitive,flatten, stableSort } from "../compiler/lang-utils";
+import { combinePaths,createGetCanonicalFileName, normalizePath } from "../compiler/path-utils";
+import { FileSystemEntries } from "../test-runner/tsc-infrastructure/vfs";
+
+const cache: Record<string, true> = {};
 export async function ensureDir(dirName: string) {
 
     const exists = cache[dirName] ??

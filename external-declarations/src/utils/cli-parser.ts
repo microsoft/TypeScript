@@ -1,13 +1,13 @@
 
 
-type ArgTypeParser<T> = (name: string, value: string | undefined, existingValue: T | undefined) => T
+type ArgTypeParser<T> = (name: string, value: string | undefined, existingValue: T | undefined) => T;
 function mustNotExist<T>(fn: ArgTypeParser<T>): ArgTypeParser<T> {
     return (name, value, existingValue) => {
         if (existingValue) {
             throw new Error(`Parameter ${name} was specified multiple times. Values ${existingValue}, ${value}`);
         }
         return fn(name, value, existingValue);
-    }
+    };
 }
 export const ArgType = {
     String: () => mustNotExist<string>((name, value) => {
@@ -43,19 +43,19 @@ export const ArgType = {
     StringArray: () => (name, value, existingValue: string[] | undefined) => {
         existingValue ??= [];
         if (value) {
-            existingValue.push(value)
+            existingValue.push(value);
             return existingValue;
         }
         throw new Error(`String value was not specified for ${name}`);
     },
-} satisfies Record<string, (...a: any[]) => ArgTypeParser<any>>
+} satisfies Record<string, (...a: any[]) => ArgTypeParser<any>>;
 
 
 type ParserConfiguration<V> = Record<string, ArgTypeParser<any> | {
     type: ArgTypeParser<any>,
     required?: V,
     description: string,
-}>
+}>;
 type ParsedValue<T extends ParserConfiguration<boolean>> = {
     [P in keyof T]:
         T[P] extends ArgTypeParser<infer A> ? A | undefined :
@@ -63,9 +63,9 @@ type ParsedValue<T extends ParserConfiguration<boolean>> = {
             type: ArgTypeParser<infer A>,
             required?: infer R
         } ? R extends true ? A : A | undefined : never
-}
+};
 
-export function parserConfiguration<V extends boolean, T extends ParserConfiguration<V>>(config:T) {
+export function parserConfiguration<V extends boolean, T extends ParserConfiguration<V>>(config: T) {
     return config;
 }
 export function parseArgs<V extends boolean, T extends ParserConfiguration<V>>(args: string[], types: T): {
@@ -74,20 +74,21 @@ export function parseArgs<V extends boolean, T extends ParserConfiguration<V>>(a
     usage: () => string
     printUsageOnErrors: () => void;
 } {
-    const config: Record<string, any> = {}
-    const diagnostics: string[] = []
+    const config: Record<string, any> = {};
+    const diagnostics: string[] = [];
     function parseArgument(name: string, value: string | undefined) {
-        const existingValue = config[name]
+        const existingValue = config[name];
         const parser = types[name];
         if(!parser) {
-            diagnostics.push(`Parameter ${name} was unexpected`)
+            diagnostics.push(`Parameter ${name} was unexpected`);
             return;
         }
         const parserFn = typeof parser === "function" ? parser: parser.type;
         try {
             const newValue = parserFn(name, value, existingValue);
             config[name] = newValue;
-        } catch(e) {
+        }
+        catch(e) {
             if(e instanceof Error) {
                 diagnostics.push(e.message);
             }
@@ -97,21 +98,22 @@ export function parseArgs<V extends boolean, T extends ParserConfiguration<V>>(a
     for (const arg of args) {
         const named = /--(?<name>.*)=(?<value>.*)/.exec(arg);
         if (named) {
-            parseArgument(named.groups?.name!,  named.groups?.value);
+            parseArgument(named.groups?.name!, named.groups?.value);
         }
         else {
             const flagParam =/--(?<name>.*)/.exec(arg);
             if (flagParam) {
                 parseArgument(flagParam.groups?.name!, undefined);
-            } else {
-                parseArgument('default', arg);
+            }
+            else {
+                parseArgument("default", arg);
             }
         }
     }
 
     for(const key of Object.keys(types)) {
         const cfg = types[key];
-        if(!(key in config) && 'required' in cfg && cfg.required) {
+        if(!(key in config) && "required" in cfg && cfg.required) {
             diagnostics.push(`Parameters ${key} is required`);
         }
     }
@@ -136,5 +138,5 @@ export function parseArgs<V extends boolean, T extends ParserConfiguration<V>>(a
                 process.exit();
             }
         },
-    }
+    };
 }

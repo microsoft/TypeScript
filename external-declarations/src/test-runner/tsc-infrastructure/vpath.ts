@@ -1,8 +1,9 @@
 import { Path } from "typescript";
+
 import { changeAnyExtension, comparePaths, comparePathsCaseInsensitive, comparePathsCaseSensitive, getAnyExtensionFromPath, getBaseFileName, getDirectoryPath, getPathComponents, getPathFromPathComponents, getRelativePathFromDirectory, isDiskPathRoot, isRootedDiskPath, reducePathComponents, resolvePath } from "../../compiler/path-utils";
 import { CharacterCodes } from "../../compiler/types";
 import { hasJSFileExtension, hasTSFileExtension, isDeclarationFileName } from "../../compiler/utils";
-import * as vfs from './vfs'
+import * as vfs from "./vfs";
 
 /**
  * Internally, we represent paths as strings with '/' as the directory separator.
@@ -216,15 +217,15 @@ function getFileUrlVolumeSeparatorEnd(url: string, start: number) {
 
 export const dirname = getDirectoryPath;
 /**
-* Removes a trailing directory separator from a path, if it does not already have one.
-*
-* ```ts
-* removeTrailingDirectorySeparator("/path/to/file.ext") === "/path/to/file.ext"
-* removeTrailingDirectorySeparator("/path/to/file.ext/") === "/path/to/file.ext"
-* ```
-*
-* @internal
-*/
+ * Removes a trailing directory separator from a path, if it does not already have one.
+ *
+ * ```ts
+ * removeTrailingDirectorySeparator("/path/to/file.ext") === "/path/to/file.ext"
+ * removeTrailingDirectorySeparator("/path/to/file.ext/") === "/path/to/file.ext"
+ * ```
+ *
+ * @internal
+ */
 export function removeTrailingDirectorySeparator(path: Path): Path;
 /** @internal */
 export function removeTrailingDirectorySeparator(path: string): string;

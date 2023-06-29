@@ -1,10 +1,11 @@
-import * as ts from 'typescript'
-import * as fs from 'fs'
-import * as path from 'path'
-import { ArgType, parseArgs } from './utils/cli-parser';
-import { normalizePath } from './compiler/path-utils';
-import { CancellationToken, transformProject } from './compiler/transform-project';
-import { installTracer, tracer } from './compiler/perf-tracer';
+import * as fs from "fs";
+import * as path from "path";
+import * as ts from "typescript";
+
+import { normalizePath } from "./compiler/path-utils";
+import { installTracer, tracer } from "./compiler/perf-tracer";
+import { CancellationToken, transformProject } from "./compiler/transform-project";
+import { ArgType, parseArgs } from "./utils/cli-parser";
 
 
 (ts as any).Debug.enableDebugInfo();
@@ -30,21 +31,22 @@ printUsageOnErrors();
 
 let projectConfig =  normalizePath(path.resolve(parsedArgs.project));
 if (path.extname(projectConfig) !== ".json") {
-    projectConfig = normalizePath(path.join(projectConfig, "tsconfig.json"))
+    projectConfig = normalizePath(path.join(projectConfig, "tsconfig.json"));
 }
 
 
-let watched: Array<{
+let watched: {
     watcher: fs.FSWatcher,
     path: string,
-}> = [];
+}[] = [];
 
 function watch(rootDir: string) {
     if (parsedArgs.watch) {
-        let newWatched: Array<string>;
+        let newWatched: string[];
         if (parsedArgs.default) {
             newWatched = parsedArgs.default;
-        } else {
+        }
+        else {
             newWatched = [rootDir];
         }
         if(watched.length != newWatched.length || !watched.every((v, index) => v.path === newWatched[index])) {
@@ -52,17 +54,17 @@ function watch(rootDir: string) {
             watched = newWatched.map(f => ({
                 path: f,
                 watcher: fs.watch(f, { persistent: true, recursive: true }, cancelAndRestart),
-            }))
+            }));
         }
-        
+
     }
 }
-let lastRunCancellation:CancellationToken = { isCancelled: false }
-async function delay(ms:number) {
+let lastRunCancellation: CancellationToken = { isCancelled: false };
+async function delay(ms: number) {
     return new Promise(r => setTimeout(r, ms));
 }
 function cancelAndRestart(event: fs.WatchEventType, filename: string) {
-    console.log(event, filename)
+    console.log(event, filename);
     lastRunCancellation.isCancelled = true;
     lastRunCancellation = { isCancelled: false };
     main(lastRunCancellation, 50);
@@ -71,9 +73,9 @@ async function main(cancellationToken: CancellationToken, msDelay: number) {
     await delay(msDelay);
     if(cancellationToken.isCancelled) return;
 
-    console.log("Detected changes rebuilding")
+    console.log("Detected changes rebuilding");
 
-    installTracer()
+    installTracer();
     const tsconfig = ts.readConfigFile(projectConfig, ts.sys.readFile);
     const parsed = ts.parseJsonConfigFileContent(tsconfig.config, ts.sys, "./");
     const options = parsed.options;
@@ -81,7 +83,7 @@ async function main(cancellationToken: CancellationToken, msDelay: number) {
         options.declarationDir = parsedArgs.declarationDir;
     }
     const host = ts.createCompilerHost(options, true);
-    const rootDir = await transformProject(path.dirname(projectConfig), undefined, options, host, cancellationToken)
+    const rootDir = await transformProject(path.dirname(projectConfig), undefined, options, host, cancellationToken);
     console.log(tracer.current?.times);
     watch(rootDir);
     if(cancellationToken.isCancelled) return;

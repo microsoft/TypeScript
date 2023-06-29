@@ -1,12 +1,13 @@
 import * as ts from "typescript";
+
 import * as lang from "../../compiler/lang-utils";
-import * as vpath from "./vpath";
+import { fileExtensionIs } from "../../compiler/path-utils";
+import { getDeclarationEmitExtensionForPath, getOutputExtension } from "../../compiler/utils";
+import * as collections from "./collections";
+import * as fakes from  "./fakesHosts";
 import * as documents from "./test-document";
 import * as vfs from "./vfs";
-import * as collections from "./collections";
-import * as fakes from  './fakesHosts';
-import { getDeclarationEmitExtensionForPath, getOutputExtension } from "../../compiler/utils";
-import { fileExtensionIs } from "../../compiler/path-utils";
+import * as vpath from "./vpath";
 
 /**
  * Test harness compiler functionality.
@@ -260,7 +261,7 @@ export function compileFiles(host: fakes.CompilerHost, rootFiles: string[] | und
         }
         if(host.outputs.some(d => d.file === fileName)) return;
         host.writeFile(fileName, text, writeByteOrderMark);
-    // @ts-expect-error We use forceDts emit documented flag 
+    // @ts-expect-error We use forceDts emit documented flag
     }, undefined, undefined,undefined, true);
     const postErrors = ts.getPreEmitDiagnostics(program);
     const longerErrors = lang.length(preErrors) > postErrors.length ? preErrors : postErrors;

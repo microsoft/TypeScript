@@ -1,6 +1,7 @@
 import { Extension, Path } from "typescript";
+
 import { Debug } from "./debug";
-import { stringContains, identity, startsWith, equateStringsCaseSensitive, some, Comparison, compareValues, endsWith, lastOrUndefined, equateStringsCaseInsensitive, compareStringsCaseInsensitive, compareStringsCaseSensitive, getStringComparer, toLowerCase } from "./lang-utils";
+import { compareStringsCaseInsensitive, compareStringsCaseSensitive, compareValues, Comparison, endsWith, equateStringsCaseInsensitive, equateStringsCaseSensitive, getStringComparer, identity, lastOrUndefined, some, startsWith, stringContains, toLowerCase } from "./lang-utils";
 import { CharacterCodes, GetCanonicalFileName } from "./types";
 
 /**
@@ -862,7 +863,7 @@ export function isDeclarationFile(f: string) {
         || /\.d\.[A-z]{1,5}\.ts$/.exec(f);
 }
 export function isJavaScriptFile(f: string) {
-    return f.endsWith(Extension.Js) 
+    return f.endsWith(Extension.Js)
         || f.endsWith(Extension.Jsx)
         || f.endsWith(Extension.Cjs)
         || f.endsWith(Extension.Mjs);
@@ -874,5 +875,5 @@ export function getDeclarationExtension(path: string) {
         path.endsWith(Extension.Mjs) || path.endsWith(Extension.Mts) ? Extension.Dmts:
         path.endsWith(Extension.Cjs) || path.endsWith(Extension.Cts) ? Extension.Dcts:
         Extension.Dts
-    )
+    );
 }

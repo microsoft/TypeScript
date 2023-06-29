@@ -112,10 +112,10 @@ export function stringContains(str: string, substring: string): boolean {
  }
 
  /**
- * @return Whether the value was added.
- *
- * @internal
- */
+  * @return Whether the value was added.
+  *
+  * @internal
+  */
 export function pushIfUnique<T>(array: T[], toAdd: T, equalityComparer?: EqualityComparer<T>): boolean {
     if (contains(array, toAdd, equalityComparer)) {
         return false;
@@ -154,7 +154,7 @@ export function length(array: readonly any[] | undefined): number {
     return array ? array.length : 0;
 }
 
-    
+
 /**
  * Flattens an array containing a mix of array or non-array elements.
  *
@@ -219,7 +219,7 @@ export function length(array: readonly any[] | undefined): number {
      }
      return to;
  }
- 
+
 /**
  * Gets the actual offset into an array for a relative offset. Negative offsets indicate a
  * position offset from the end of the array.
@@ -245,7 +245,7 @@ export function map<T, U>(array: readonly T[] | undefined, f: (x: T, i: number) 
     return result;
 }
 
- 
+
 
 /**
  * Compacts an array, removing any falsey elements.
@@ -278,7 +278,7 @@ export function map<T, U>(array: readonly T[] | undefined, f: (x: T, i: number) 
      }
      return result || array;
  }
- 
+
 
 /** @internal */
 export const emptyArray: never[] = [] as never[];
@@ -311,7 +311,7 @@ export const emptyArray: never[] = [] as never[];
      to.push(value);
      return to;
  }
- 
+
 /** Array that is only intended to be pushed to, never read. */
 export interface Push<T> {
     push(...values: T[]): void;
@@ -357,7 +357,7 @@ function stableSortIndices<T>(array: readonly T[], indices: number[], comparer: 
      }
      return undefined;
  }
- 
+
 
 /**
  * Returns the last element of an array if non-empty, `undefined` otherwise.
@@ -535,7 +535,7 @@ export function mapDefined<T, U>(array: readonly T[] | undefined, mapFn: (x: T, 
      }
      return result;
  }
- 
+
  /** @internal */
 export function startsWith(str: string, prefix: string): boolean {
     return str.lastIndexOf(prefix, 0) === 0;

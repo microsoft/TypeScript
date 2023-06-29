@@ -1,8 +1,8 @@
-import * as collections from "./collections";
-import * as vpath from "./vpath";
-import * as documents from "./test-document";
-import * as Harness from "./compiler-run";
 import { arrayFrom } from "../../compiler/lang-utils";
+import * as collections from "./collections";
+import * as Harness from "./compiler-run";
+import * as documents from "./test-document";
+import * as vpath from "./vpath";
 
 /**
  * Posix-style path to the TypeScript compiler build outputs (including tsc.js, lib.d.ts, etc.)

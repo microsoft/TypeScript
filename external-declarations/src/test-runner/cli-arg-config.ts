@@ -1,4 +1,4 @@
-import { parserConfiguration, ArgType } from "../utils/cli-parser";
+import { ArgType,parserConfiguration } from "../utils/cli-parser";
 
 export const testRunnerCLIConfiguration = parserConfiguration({
     default: {
@@ -14,4 +14,4 @@ export const testRunnerCLIConfiguration = parserConfiguration({
     histFolder: ArgType.String(),
     libPath: ArgType.String(),
     rootPaths: ArgType.StringArray(),
-}) 
+});

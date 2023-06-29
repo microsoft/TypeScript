@@ -1,47 +1,45 @@
 
-import * as ts from 'typescript'
+import * as ts from "typescript";
+import { SourceFile } from "typescript";
 
-import { createEmitHost } from './emit-host';
-import { createEmitResolver } from './emit-resolver';
-import { TransformationContext } from './types';
-import { tracer } from './perf-tracer';
-import { SourceFile } from 'typescript';
+import { createEmitHost } from "./emit-host";
+import { createEmitResolver } from "./emit-resolver";
+import { tracer } from "./perf-tracer";
+import { TransformationContext } from "./types";
 
-const transformDeclarations:  (context: TransformationContext) => {
-    (node: SourceFile): SourceFile;
-} = (ts as any).transformDeclarations
+const transformDeclarations:  (context: TransformationContext) => (node: SourceFile) => SourceFile = (ts as any).transformDeclarations;
 
 export function transformFile(sourceFile: ts.SourceFile, allProjectFiles: string[], tsLibFiles: string[], options: ts.CompilerOptions, moduleType: ts.ResolutionMode) {
-    
+
     const getCompilerOptions = () => options;
-    tracer.current?.start("bind")
+    tracer.current?.start("bind");
     const emitResolver = createEmitResolver(sourceFile, options, moduleType);
     const emitHost =  createEmitHost(allProjectFiles, tsLibFiles, options);
-    tracer.current?.end("bind")
-    const diagnostics: ts.Diagnostic[] = []
+    tracer.current?.end("bind");
+    const diagnostics: ts.Diagnostic[] = [];
     const x =  transformDeclarations({
         getEmitHost() {
             return emitHost;
-        }, 
+        },
         getEmitResolver() {
             return emitResolver;
-        }, 
+        },
         getCompilerOptions,
         factory: ts.factory,
         addDiagnostic(diag) {
-            diagnostics.push(diag)
+            diagnostics.push(diag);
         },
-    } as Partial<TransformationContext> as TransformationContext)
-    tracer.current?.start("transform")
-    let result = x(sourceFile);
+    } as Partial<TransformationContext> as TransformationContext);
+    tracer.current?.start("transform");
+    const result = x(sourceFile);
     tracer.current?.end("transform");
 
-    tracer.current?.start("print")
+    tracer.current?.start("print");
     const printer = ts.createPrinter({
         onlyPrintJsDocStyle: true,
         newLine: options.newLine ?? ts.NewLineKind.CarriageReturnLineFeed,
         target: options.target,
-    } as ts.PrinterOptions)
+    } as ts.PrinterOptions);
 
     try {
         return {
@@ -50,6 +48,6 @@ export function transformFile(sourceFile: ts.SourceFile, allProjectFiles: string
         };
     }
     finally {
-        tracer.current?.end("print")
+        tracer.current?.end("print");
     }
 }

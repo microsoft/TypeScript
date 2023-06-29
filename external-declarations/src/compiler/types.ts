@@ -1,4 +1,5 @@
-import { Symbol, ClassDeclaration, CompilerOptions, DiagnosticWithLocation, EnumDeclaration, FunctionDeclaration, InterfaceDeclaration, ModuleDeclaration, Node, SourceFile, SymbolFlags, TransformationContext as _TransformationContext, TypeAliasDeclaration, VariableStatement, Declaration, ElementAccessExpression, EntityNameOrEntityNameExpression, Expression, ImportDeclaration, ParameterDeclaration, PropertyDeclaration, PropertySignature, SignatureDeclaration, StringLiteralLike, TypeNode, VariableDeclaration, ModuleBlock, BinaryExpression, ComputedPropertyName, NamedDeclaration, ParenthesizedExpression, AsExpression, NonNullExpression, PartiallyEmittedExpression, SatisfiesExpression, TypeAssertion, EntityNameExpression, ModifierFlags, UnparsedSource, FileReference, DiagnosticMessage, Diagnostic, ResolutionMode } from "typescript";
+import { AsExpression, BinaryExpression, ClassDeclaration, CompilerOptions, ComputedPropertyName, Declaration, Diagnostic, DiagnosticMessage, DiagnosticWithLocation, ElementAccessExpression, EntityNameExpression, EntityNameOrEntityNameExpression, EnumDeclaration, Expression, FileReference, FunctionDeclaration, ImportDeclaration, InterfaceDeclaration, ModifierFlags, ModuleBlock, ModuleDeclaration, NamedDeclaration, Node, NonNullExpression, ParameterDeclaration, ParenthesizedExpression, PartiallyEmittedExpression, PropertyDeclaration, PropertySignature, ResolutionMode,SatisfiesExpression, SignatureDeclaration, SourceFile, StringLiteralLike, Symbol, SymbolFlags, TransformationContext as _TransformationContext, TypeAliasDeclaration, TypeAssertion, TypeNode, UnparsedSource, VariableDeclaration, VariableStatement } from "typescript";
+
 import { AnyImportSyntax } from "./utils";
 
 
@@ -17,7 +18,7 @@ export interface TransformationContext extends _TransformationContext {
 }
 
 export interface IsolatedEmitHost extends ModuleSpecifierResolutionHost, ResolveModuleNameResolutionHost {
-    getCommonSourceDirectory(): string 
+    getCommonSourceDirectory(): string
     getCompilerOptions(): CompilerOptions
     getSourceFiles(): SourceFile[]
     /** @internal */ getSourceFileFromReference(referencingFile: SourceFile | UnparsedSource, ref: FileReference): SourceFile | undefined;
@@ -65,7 +66,7 @@ export interface SymbolTracker {
 
 /** @internal */
 interface ModuleSpecifierResolutionHost {
-    
+
 }
 
 /** @internal */
@@ -270,9 +271,9 @@ interface LateBoundName extends ComputedPropertyName {
 }
 
 
-export type _Symbol = Symbol
-type _ModifierFlags = ModifierFlags
-declare module 'typescript' {
+export type _Symbol = Symbol;
+type _ModifierFlags = ModifierFlags;
+declare module "typescript" {
     interface Node {
         symbol: _Symbol;
         original: this;
@@ -282,6 +283,6 @@ declare module 'typescript' {
         isReferenced: boolean;
         parent: _Symbol;
     }
-    
+
 }
 

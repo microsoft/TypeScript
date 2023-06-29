@@ -1,4 +1,5 @@
 import { isLineBreak } from "typescript";
+
 import { CharacterCodes } from "../../compiler/types";
 import { TestFile } from "./compiler-run";
 

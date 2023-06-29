@@ -1,7 +1,8 @@
 import { sys } from "typescript";
+
+import { compareStringsCaseInsensitive,compareStringsCaseSensitive } from "../../compiler/lang-utils";
 import { FileSystemEntries } from "./vfs";
-import * as vpath from './vpath';
-import { compareStringsCaseSensitive, compareStringsCaseInsensitive } from "../../compiler/lang-utils";
+import * as vpath from "./vpath";
 
 export interface IO {
     newLine(): string;
@@ -152,7 +153,7 @@ function createNodeIO(): IO {
         exit: exitCode => sys.exit(exitCode),
         readDirectory: (path, extension, exclude, include, depth) => sys.readDirectory(path, extension, exclude, include, depth),
         getAccessibleFileSystemEntries,
-        tryEnableSourceMapsForHost: () => { throw new Error("Not supported")},
+        tryEnableSourceMapsForHost: () => { throw new Error("Not supported");},
         getMemoryUsage: () => sys.getMemoryUsage && sys.getMemoryUsage(),
         getEnvironmentVariable(name: string) {
             return process.env[name] || "";
