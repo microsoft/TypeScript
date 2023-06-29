@@ -7,7 +7,10 @@
 ////     "exports": {
 ////         "./*": "./a/*.js",
 ////         "./b/*.js": "./b/*.js",
-////         "./c/*": "./c/*"
+////         "./c/*": "./c/*",
+////         "./d/*": {
+////             "import": "./d/*.mjs"
+////         }
 ////     }
 //// }
 
@@ -25,6 +28,9 @@
 
 // @Filename: /node_modules/pkg/c/subfolder/c2.d.mts
 //// export const c2: number;
+
+// @Filename: /node_modules/pkg/d/d1.d.mts
+//// export const d1: number;
 
 // @Filename: /package.json
 //// {
@@ -72,6 +78,13 @@ verify.completions({
       name: "c2",
       source: "pkg/c/subfolder/c2.mjs",
       sourceDisplay: "pkg/c/subfolder/c2.mjs",
+      hasAction: true,
+      sortText: completion.SortText.AutoImportSuggestions
+    },
+    {
+      name: "d1",
+      source: "pkg/d/d1",
+      sourceDisplay: "pkg/d/d1",
       hasAction: true,
       sortText: completion.SortText.AutoImportSuggestions
     }
