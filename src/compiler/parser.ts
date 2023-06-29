@@ -9225,7 +9225,7 @@ namespace Parser {
 
                 const comment = parseTrailingTagComments(start, getNodePos(), indent, indentText);
 
-                const nestedTypeLiteral = target !== PropertyLikeParse.CallbackParameter && parseNestedTypeLiteral(typeExpression, name, target, indent);
+                const nestedTypeLiteral = parseNestedTypeLiteral(typeExpression, name, target, indent);
                 if (nestedTypeLiteral) {
                     typeExpression = nestedTypeLiteral;
                     isNameFirst = true;
@@ -9540,7 +9540,6 @@ namespace Parser {
                             if (canParseTag) {
                                 const child = tryParseChildTag(target, indent);
                                 if (child && (child.kind === SyntaxKind.JSDocParameterTag || child.kind === SyntaxKind.JSDocPropertyTag) &&
-                                    target !== PropertyLikeParse.CallbackParameter &&
                                     name && (isIdentifierNode(child.name) || !escapedTextsEqual(name, child.name.left))) {
                                     return false;
                                 }
