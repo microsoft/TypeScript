@@ -1,0 +1,53 @@
+//// [tests/cases/compiler/newlinesOnLongMessagesWithPretty.ts] ////
+
+=== newlinesOnLongMessagesWithPretty.ts ===
+// a is 31 chars long
+let a = { b: { c: { e: { f: 123 } } } };
+>a : { b: { c: { e: { f: number; }; }; }; }
+>{ b: { c: { e: { f: 123 } } } } : { b: { c: { e: { f: number; }; }; }; }
+>b : { c: { e: { f: number; }; }; }
+>{ c: { e: { f: 123 } } } : { c: { e: { f: number; }; }; }
+>c : { e: { f: number; }; }
+>{ e: { f: 123 } } : { e: { f: number; }; }
+>e : { f: number; }
+>{ f: 123 } : { f: number; }
+>f : number
+>123 : 123
+
+let b = "hello"
+>b : string
+>"hello" : "hello"
+
+// 'a' here is long enough to count in the source as a newline
+a = b
+>a = b : string
+>a : { b: { c: { e: { f: number; }; }; }; }
+>b : string
+
+// 'a' here is long enough to count in the target as a newline
+b = a
+>b = a : { b: { c: { e: { f: number; }; }; }; }
+>b : string
+>a : { b: { c: { e: { f: number; }; }; }; }
+
+// This won't trigger it because we only show the relation instead
+a = { b: { c: { e: { f: {} } } } }
+>a = { b: { c: { e: { f: {} } } } } : { b: { c: { e: { f: {}; }; }; }; }
+>a : { b: { c: { e: { f: number; }; }; }; }
+>{ b: { c: { e: { f: {} } } } } : { b: { c: { e: { f: {}; }; }; }; }
+>b : { c: { e: { f: {}; }; }; }
+>{ c: { e: { f: {} } } } : { c: { e: { f: {}; }; }; }
+>c : { e: { f: {}; }; }
+>{ e: { f: {} } } : { e: { f: {}; }; }
+>e : { f: {}; }
+>{ f: {} } : { f: {}; }
+>f : {}
+>{} : {}
+
+// No newlines here because they're both short
+b = 123123
+>b = 123123 : 123123
+>b : string
+>123123 : 123123
+
+

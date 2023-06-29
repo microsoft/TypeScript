@@ -20597,7 +20597,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             return;
                         }
                     }
-                    message = Diagnostics.Type_0_is_not_assignable_to_type_1;
+                    if (compilerOptions.pretty && useMultilineReportingForTypes(sourceType, targetType)) {
+                        message = Diagnostics.Type_Colon_n_0_n_nis_not_assignable_to_type_Colon_n_1;
+                    }
+                    else {
+                        message = Diagnostics.Type_0_is_not_assignable_to_type_1;
+                    }
                 }
             }
             else if (message === Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1
@@ -20607,6 +20612,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             reportError(message, generalizedSourceType, targetType);
+        }
+
+        function useMultilineReportingForTypes(source: string, target: string) {
+            return source.length > 30 || target.length > 30;
         }
 
         function tryElaborateErrorsForPrimitivesAndObjects(source: Type, target: Type) {
