@@ -22,6 +22,7 @@ export const testRunnerCLIConfiguration = parserConfiguration({
     rootPaths: ArgType.StringArray(),
     shard: ArgType.Number(),
     shardCount: ArgType.Number(),
+    update: ArgType.Boolean(),
 });
 
 const excludeFilter =/\/fourslash\//;
@@ -40,7 +41,7 @@ const allTests = rootCasePaths
 
 
 
-async function writeTestCase(testData: TestCaseContent & { BOM: string }, path: string) {
+async function compareTestCase(testData: TestCaseContent & { BOM: string }, path: string, update: boolean) {
     const lines = splitContentByNewlines(testData.code);
     const result: string[] = [];
     let copyFrom = 0;
@@ -61,7 +62,15 @@ async function writeTestCase(testData: TestCaseContent & { BOM: string }, path: 
     pushFrom(result, lines, copyFrom, lines.length);
     await ensureDir(fsPath.dirname(path));
     const content = testData.BOM + result.join(lines.delimiter);
-    await fs.writeFile(path, content);
+    const original = await fs.readFile(path, "utf-8");
+    if (content !== original) {
+        if (!update) {
+            throw new Error(`Expected \n${original}\n for file ${path} but seen \n${content}`);
+        }
+        else {
+            fs.writeFile(path, content);
+        }
+    }
 }
 
 async function main() {
@@ -73,7 +82,6 @@ async function main() {
 
     for (let count = start; count < end; count++) {
         const testFile = normalizePath(allTests[count].file);
-        const rootPath = normalizePath(allTests[count].root);
         const caseData = await loadTestCase(testFile);
 
         const settings: ts.CompilerOptions = {};
@@ -87,8 +95,7 @@ async function main() {
             return createHarnessTestFile(unit);
         });
 
-        await writeTestCase(caseData, testFile.replace(rootPath, "./tsc-tests/original-tests"));
-        const updatedTestFileName = testFile.replace(rootPath, "./tsc-tests/updated-tests");
+        const updatedTestFileName = testFile.replace("fixer-test/source", "fixer-test/expected");
         const result = (() => {
             try {
                 return compileFiles(toBeCompiled, [], {
@@ -156,7 +163,7 @@ ${e.stack}
                 debugger;
             }
         }
-        await writeTestCase(caseData, updatedTestFileName);
+        await compareTestCase(caseData, updatedTestFileName, parsedArgs.update === true);
         console.log(`Ran: ${count}`);
     }
 }

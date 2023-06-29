@@ -1,13 +1,12 @@
 // Import TypeScript module
 import * as ts from "typescript";
+
 import { isDeclarationFileName } from "../compiler/utils";
 import { addTypeAnnotationTransformer } from "./code-transform";
 
 (ts as any).Debug .enableDebugInfo();
-
 // Read tsconfig.json file from disk
 const tsconfig = ts.readConfigFile("tsconfig.json", ts.sys.readFile);
-
 // Parse JSON content to get compiler options and file names
 const parsed = ts.parseJsonConfigFileContent(tsconfig.config, ts.sys, "./");
 const options = parsed.options;
@@ -20,7 +19,7 @@ for (const file of files) {
     if (isDeclarationFileName(file.fileName)) continue;
 
     const transformedFile = ts.transform(file, [
-        addTypeAnnotationTransformer(program),
+        addTypeAnnotationTransformer(file, program),
     ]);
 
     const printer = ts.createPrinter({
