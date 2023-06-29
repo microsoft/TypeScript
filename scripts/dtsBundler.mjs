@@ -6,6 +6,7 @@
  */
 
 import assert, { fail } from "assert";
+import cp from "child_process";
 import fs from "fs";
 import minimist from "minimist";
 import path from "path";
@@ -409,5 +410,24 @@ if (publicContents.includes("@internal")) {
     console.error("Output includes untrimmed @internal nodes!");
 }
 
-fs.writeFileSync(output, publicContents);
-fs.writeFileSync(internalOutput, internalContents);
+const dprintPath = path.resolve(__dirname, "..", "node_modules", "dprint", "bin.js");
+
+/**
+ * @param {string} contents
+ * @returns {string}
+ */
+function dprint(contents) {
+    return cp.execFileSync(
+        process.execPath,
+        [dprintPath, "fmt", "--stdin", "ts"],
+        {
+            stdio: ["pipe", "pipe", "inherit"],
+            encoding: "utf-8",
+            input: contents,
+            maxBuffer: 100 * 1024 * 1024, // 100 MB "ought to be enough for anyone"; https://github.com/nodejs/node/issues/9829
+        },
+    );
+}
+
+fs.writeFileSync(output, dprint(publicContents));
+fs.writeFileSync(internalOutput, dprint(internalContents));
