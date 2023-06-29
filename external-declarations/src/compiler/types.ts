@@ -271,17 +271,17 @@ interface LateBoundName extends ComputedPropertyName {
 }
 
 
-export type _Symbol = Symbol;
-type _ModifierFlags = ModifierFlags;
+export type InternalSymbol = Symbol;
+type InternalModifierFlags = ModifierFlags;
 declare module "typescript" {
     interface Node {
-        symbol: _Symbol;
+        symbol: InternalSymbol;
         original: this;
-        modifierFlagsCache: _ModifierFlags
+        modifierFlagsCache: InternalModifierFlags
     }
     interface Symbol {
         isReferenced: boolean;
-        parent: _Symbol;
+        parent: InternalSymbol;
     }
 
 }

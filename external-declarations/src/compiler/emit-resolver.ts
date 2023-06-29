@@ -2,8 +2,8 @@ import { __String, BindingPattern, CompilerOptions, Declaration, DeclarationName
 
 import { Debug } from "./debug";
 import { BasicSymbol, bindSourceFile } from "./emit-binder";
-import { appendIfUnique, emptyArray, every, filter } from "./lang-utils";
-import { _Symbol,IsolatedEmitResolver, LateBoundDeclaration, LateVisibilityPaintedStatement, SymbolAccessibility, SymbolVisibilityResult } from "./types";
+import { appendIfUnique, emptyArray, every, filter, hasProperty } from "./lang-utils";
+import { IsolatedEmitResolver, LateBoundDeclaration, LateVisibilityPaintedStatement, SymbolAccessibility, SymbolVisibilityResult } from "./types";
 import { AnyImportSyntax, getFirstIdentifier, hasDynamicName, hasEffectiveModifier, hasSyntacticModifier, isAmbientDeclaration,isBindingPattern, isExternalModuleAugmentation, isInJSFile, isLateVisibilityPaintedStatement, isPartOfTypeNode, isThisIdentifier, nodeIsPresent, skipParentheses } from "./utils";
 
 
@@ -15,7 +15,7 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
     function isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean {
         if (isDeclarationReadonly(node) || isVariableDeclaration(node) && isVarConst(node)) {
             // TODO: Make sure this is a valid approximation for literal types
-            return !node.type && "initializer" in node && !!node.initializer && isLiteralExpression(node.initializer);
+            return !node.type && hasProperty(node, "initializer") && !!node.initializer && isLiteralExpression(node.initializer);
             // Original TS version
             // return isFreshLiteralType(getTypeOfSymbol(getSymbolOfNode(node)));
         }
@@ -42,7 +42,7 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
         isDeclarationVisible,
         isLiteralConstDeclaration,
         createLiteralConstValue(node) {
-            if("initializer" in node && node.initializer) {
+            if(hasProperty(node, "initializer") && node.initializer) {
                 return node.initializer;
             }
             Debug.fail();
@@ -111,7 +111,7 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
         isOptionalParameter(parameter) {
             const signature = parameter.parent;
             const paramIndex = signature.parameters.indexOf(parameter);
-            Debug.assert(paramIndex != -1);
+            Debug.assert(paramIndex !== -1);
             if(parameter.questionToken) return true;
             if(parameter.dotDotDotToken) return !!parameter.initializer;
 

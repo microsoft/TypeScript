@@ -1,3 +1,4 @@
+import { hasProperty } from "../compiler/lang-utils";
 
 
 type ArgTypeParser<T> = (name: string, value: string | undefined, existingValue: T | undefined) => T;
@@ -103,7 +104,7 @@ export function parseArgs<V extends boolean, T extends ParserConfiguration<V>>(a
         else {
             const flagParam =/--(?<name>.*)/.exec(arg);
             if (flagParam) {
-                parseArgument(flagParam.groups?.name!, undefined);
+                parseArgument(flagParam.groups?.name!, /*value*/ undefined);
             }
             else {
                 parseArgument("default", arg);
@@ -113,7 +114,7 @@ export function parseArgs<V extends boolean, T extends ParserConfiguration<V>>(a
 
     for(const key of Object.keys(types)) {
         const cfg = types[key];
-        if(!(key in config) && "required" in cfg && cfg.required) {
+        if(!(hasProperty(config, key)) && typeof cfg !== "function" && cfg.required) {
             diagnostics.push(`Parameters ${key} is required`);
         }
     }

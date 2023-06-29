@@ -42,7 +42,7 @@ export function runTypeScript(caseData: TestCaseParser.TestCaseContent, settings
         declaration: "true",
         // declarationMap: "true",
         removeComments: "false",
-    }, settings, undefined);
+    }, settings);
 
     return caseData.testUnitData
         .filter(isRelevantTestFile)
@@ -86,7 +86,11 @@ export function runIsolated(caseData: TestCaseParser.TestCaseContent, libFiles: 
     const results = caseData.testUnitData
         .filter(isRelevantTestFile)
         .map(file => {
-            const sourceFile = ts.createSourceFile(toSrc(file.name), Utils.removeByteOrderMark(file.content), settings.target ?? ts.ScriptTarget.ES2015, true,
+            const sourceFile = ts.createSourceFile(
+                toSrc(file.name),
+                Utils.removeByteOrderMark(file.content),
+                settings.target ?? ts.ScriptTarget.ES2015,
+                /*setParentNodes*/ true,
                 file.name.endsWith(".tsx") ? ts.ScriptKind.TSX : ts.ScriptKind.TS);
             const declaration = transformFile(sourceFile, projectFiles, libs, settings, packageResolution);
             return {

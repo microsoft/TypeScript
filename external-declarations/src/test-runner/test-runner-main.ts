@@ -53,16 +53,18 @@ const allTests = rootCasePaths
 const date = new Date();
 const historical = (parsedArgs.histFolder && `/${parsedArgs.histFolder}/`) ?? `/${date.toISOString().replace(/:/g, "-")}-${parsedArgs.type}/`;
 
-function pad(num: number, size: number) { return ("000000000" + num).substr(-size); }
+function pad(num: number, size: number) {
+    return ("000000000" + num).substr(-size);
+}
 
 async function main() {
 
     const libFiles = (await fs.readdir(libFolder)).map(n => normalizePath(path.join("/.lib", n)));
 
     const testsPerShared = shardCount && Math.round(allTests.length / shardCount);
-    const [start, end] = shard == undefined || shardCount == undefined || testsPerShared == undefined ?
+    const [start, end] = shard === undefined || shardCount === undefined || testsPerShared === undefined ?
         [0, allTests.length] :
-        [shard * testsPerShared, (shard == shardCount - 1) ? allTests.length : (shard + 1) * testsPerShared];
+        [shard * testsPerShared, (shard === shardCount - 1) ? allTests.length : (shard + 1) * testsPerShared];
 
     for (let count = start; count < end; count++) {
         const testFile = normalizePath(allTests[count]);

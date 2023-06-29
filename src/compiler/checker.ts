@@ -46669,7 +46669,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             });
         }
         function isSyntheticTypeEquivalent(
-            actualNode: Node, 
+            actualNode: Node,
             syntheticNode: TypeNode,
             headMessage: DiagnosticMessage,
         ): true | Diagnostic[] {
@@ -46678,16 +46678,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let syntheticTypeNodeContainer: Node = syntheticNode;
 
             if(isActualNodeFunctionLike) {
-                const fakeParameter = factory.createParameterDeclaration( undefined, undefined, "__p", undefined, syntheticNode);
-                fakeParameter.symbol = createSymbol(SymbolFlags.Variable, "__p" as __String)
+                const fakeParameter = factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "__p", /*questionToken*/ undefined, syntheticNode);
+                fakeParameter.symbol = createSymbol(SymbolFlags.Variable, "__p" as __String);
                 syntheticTypeNodeContainer = fakeParameter;
             }
 
-                
             setParent(syntheticNode, actualNode);
             bindSyntheticTypeNode(syntheticNode, actualNode, compilerOptions);
 
-            
             setParent(syntheticNode, syntheticTypeNodeContainer);
             setParent(syntheticTypeNodeContainer, actualNode);
             checkSourceElement(syntheticNode);
@@ -46695,31 +46693,32 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const prevDeferredDiagnosticsCallbacksLength = deferredDiagnosticsCallbacks.length;
             const syntheticType = getTypeOfNode(syntheticNode);
             const actualNodeType = getTypeOfNode(actualNode);
-            
+
             let actualType;
             if(isActualNodeFunctionLike) {
                 const signatures = getSignaturesOfType(actualNodeType, SignatureKind.Call);
                 actualType = signatures.length === 0? actualNodeType: getReturnTypeOfSignature(signatures[0]);
             }
             else {
-                actualType = actualNodeType
+                actualType = actualNodeType;
             }
-            const errors: Diagnostic[] = []
+            const errors: Diagnostic[] = [];
 
             try {
-                const resultOneWay = checkTypeRelatedTo(actualType, syntheticType, strictSubtypeRelation, actualNode, headMessage, undefined, { errors });
-                
+                const resultOneWay = checkTypeRelatedTo(actualType, syntheticType, strictSubtypeRelation, actualNode, headMessage, /*containingMessageChain*/ undefined, { errors });
+
                 if(!resultOneWay) {
                     return errors;
                 }
-                const resultReveresed = checkTypeRelatedTo(syntheticType, actualType, strictSubtypeRelation, actualNode, headMessage, undefined, { errors });
-                
+                const resultReveresed = checkTypeRelatedTo(syntheticType, actualType, strictSubtypeRelation, actualNode, headMessage, /*containingMessageChain*/ undefined, { errors });
+
                 if(!resultReveresed) {
                     return errors;
                 }
 
                 return true;
-            } finally {
+            }
+            finally {
                 deferredDiagnosticsCallbacks.length = prevDeferredDiagnosticsCallbacksLength;
             }
         }

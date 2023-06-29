@@ -43,7 +43,7 @@ export function readAllFiles(path: string, regex: RegExp): string[] {
     // If there are no "includes", then just put everything in results[0].
     const results: string[] = [];
     const visited = new Map<string, true>();
-    const toCanonical = createGetCanonicalFileName(false);
+    const toCanonical = createGetCanonicalFileName(/*useCaseSensitiveFileNames*/ false);
 
     visitDirectory(path, path);
 

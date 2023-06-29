@@ -29,7 +29,7 @@ const { value: parsedArgs, printUsageOnErrors } = parseArgs(process.argv.slice(2
 });
 printUsageOnErrors();
 
-let projectConfig =  normalizePath(path.resolve(parsedArgs.project));
+let projectConfig = normalizePath(path.resolve(parsedArgs.project));
 if (path.extname(projectConfig) !== ".json") {
     projectConfig = normalizePath(path.join(projectConfig, "tsconfig.json"));
 }
@@ -49,7 +49,7 @@ function watch(rootDir: string) {
         else {
             newWatched = [rootDir];
         }
-        if(watched.length != newWatched.length || !watched.every((v, index) => v.path === newWatched[index])) {
+        if(watched.length !== newWatched.length || !watched.every((v, index) => v.path === newWatched[index])) {
             watched.forEach(f => f.watcher.close());
             watched = newWatched.map(f => ({
                 path: f,
@@ -61,6 +61,7 @@ function watch(rootDir: string) {
 }
 let lastRunCancellation: CancellationToken = { isCancelled: false };
 async function delay(ms: number) {
+    // eslint-disable-next-line no-restricted-globals
     return new Promise(r => setTimeout(r, ms));
 }
 function cancelAndRestart(event: fs.WatchEventType, filename: string) {
@@ -82,8 +83,8 @@ async function main(cancellationToken: CancellationToken, msDelay: number) {
     if(parsedArgs.declarationDir) {
         options.declarationDir = parsedArgs.declarationDir;
     }
-    const host = ts.createCompilerHost(options, true);
-    const rootDir = await transformProject(path.dirname(projectConfig), undefined, options, host, cancellationToken);
+    const host = ts.createCompilerHost(options, /*setParentNodes*/ true);
+    const rootDir = await transformProject(path.dirname(projectConfig), /*files*/ undefined, options, host, cancellationToken);
     console.log(tracer.current?.times);
     watch(rootDir);
     if(cancellationToken.isCancelled) return;

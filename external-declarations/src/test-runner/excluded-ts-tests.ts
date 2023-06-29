@@ -1,4 +1,4 @@
-export const  excludedTsTests = new Set([
+export const excludedTsTests = new Set([
     // These two tests contain a declaration error
     // A variable that is not of a literal type is used as a computed property name
     // TS will error on this and will not merge the overloads to a singe symbol

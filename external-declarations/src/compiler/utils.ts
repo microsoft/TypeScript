@@ -621,7 +621,9 @@ export function isEnumConst(node: EnumDeclaration): boolean {
 }
 
 
-function idText(id: Identifier) { return id.escapedText; }
+function idText(id: Identifier) {
+    return id.escapedText;
+}
 /** @internal */
 export function nodeHasName(statement: Node, name: Identifier) {
     if (isNamedDeclaration(statement) && isIdentifier(statement.name) && idText(statement.name as Identifier) === idText(name)) {

@@ -3,7 +3,7 @@ import { Path } from "typescript";
 
 import { find, forEach, orderedRemoveItemAt } from "../../compiler/lang-utils";
 import { getBaseFileName, getDirectoryPath, getNormalizedAbsolutePath, normalizePath } from "../../compiler/path-utils";
-import * as vfs from  "./vfs";
+import * as vfs from "./vfs";
 
 /** all the necessary information to set the right compiler settings */
 export interface CompilerSettings {

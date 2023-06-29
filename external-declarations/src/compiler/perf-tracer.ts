@@ -21,7 +21,7 @@ export function installTracer() {
             times[name] = (times[name] ?? 0) + 1;
         },
         end(name: string) {
-            times[name] =  (times[name] ?? 0) +
+            times[name] = (times[name] ?? 0) +
                 (Date.now() - (startTimes[name] ?? Date.now()));
             startTimes[name] = undefined;
         },

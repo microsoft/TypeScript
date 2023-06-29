@@ -1,6 +1,7 @@
 import * as ts from "typescript";
 import { NodeBuilderFlags } from "typescript";
 
+import { hasProperty } from "../compiler/lang-utils";
 import { SymbolTracker } from "../compiler/types";
 
 const declarationEmitNodeBuilderFlags =
@@ -39,7 +40,7 @@ function isDeclarationReadonly(declaration: ts.Declaration): boolean {
 function isLiteralConstDeclaration(node: ts.VariableDeclaration | ts.PropertyDeclaration | ts.PropertySignature | ts.ParameterDeclaration): boolean {
     if (isDeclarationReadonly(node) || ts.isVariableDeclaration(node) && isVarConst(node)) {
         // TODO: Make sure this is a valid approximation for literal types
-        return !node.type && "initializer" in node && !!node.initializer && ts.isLiteralExpression(node.initializer);
+        return !node.type && hasProperty(node, "initializer") && !!node.initializer && ts.isLiteralExpression(node.initializer);
         // Original TS version
         // return isFreshLiteralType(getTypeOfSymbol(getSymbolOfNode(node)));
     }

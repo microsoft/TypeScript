@@ -6,13 +6,13 @@ import { getDeclarationExtension, getDirectoryPath, getRelativePathFromDirectory
 import { IsolatedEmitHost } from "./types";
 import { getNodeId } from "./utils";
 
-export function createEmitHost(allProjectFiles: string[], tsLibFiles: string[],  options: ts.CompilerOptions) {
+export function createEmitHost(allProjectFiles: string[], tsLibFiles: string[], options: ts.CompilerOptions) {
     const getCompilerOptions = () => options;
     const getCurrentDirectory = () => ".";
     const getCommonSourceDirectory = () => ".";
     const getCanonicalFileName = (f: string) => `./${f}`;
     const projectFileMap = new Map(allProjectFiles
-        .map((f) => ({ kind: ts.SyntaxKind.SourceFile, fileName: f  } as ts.SourceFile))
+        .map((f) => ({ kind: ts.SyntaxKind.SourceFile, fileName: f } as ts.SourceFile))
         .map(f => [f.fileName, getNodeId(f)])
     );
     const tsLibFileSet = new Set(tsLibFiles);
@@ -45,11 +45,11 @@ export function createEmitHost(allProjectFiles: string[], tsLibFiles: string[], 
             }
             let resolvedFile: string | undefined = resolvePath(getDirectoryPath(referencingFile.fileName), ref.fileName);
             let resolvedFileId = projectFileMap.get(resolvedFile);
-            if(!hasExtension(resolvedFile) && resolvedFileId == undefined) {
+            if(!hasExtension(resolvedFile) && resolvedFileId === undefined) {
                 [resolvedFile, resolvedFileId] = Object.values(ts.Extension)
                     .map(e => resolvedFile + e)
                     .map(f => [f, projectFileMap.get(f)] as const)
-                    .find(([_, id]) => id != undefined) ?? [];
+                    .find(([_, id]) => id !== undefined) ?? [];
 
                 if(!resolvedFile) return undefined;
             }
@@ -60,7 +60,11 @@ export function createEmitHost(allProjectFiles: string[], tsLibFiles: string[], 
                 isDeclarationFile(resolvedFile) ? resolvedFile :
                 changeExtension(resolvedFile, getDeclarationExtension(resolvedFile));
             return {
-                fileName: getRelativePathFromDirectory(getDirectoryPath(referencingFile.fileName), resolvedDeclarationFile, false),
+                fileName: getRelativePathFromDirectory(
+                    getDirectoryPath(referencingFile.fileName),
+                    resolvedDeclarationFile,
+                    /*ignoreCase*/ false
+                ),
                 id: resolvedFileId,
             };
         },

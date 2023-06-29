@@ -1248,7 +1248,7 @@ export function createResolver(host: FileSystemResolverHost): FileSystemResolver
         }
     };
 }
-namespace  sys {
+namespace sys {
     const Buffer: {
         new (input: string, encoding?: string): any;
         from?(input: string, encoding?: string): any;

@@ -2,7 +2,6 @@ import { __String, ArrayBindingElement, BindingPattern, ClassDeclaration, ClassE
 
 import { Debug } from "./debug";
 import { forEach } from "./lang-utils";
-import { _Symbol } from "./types";
 import { getEmitModuleKind, getEmitModuleResolutionKind, getNodeId, hasSyntacticModifier, isBindingPattern, isEnumConst, nodeHasName } from "./utils";
 
 
@@ -29,15 +28,15 @@ function assertNever(o: never): never {
     throw new Error("Should never happen");
 }
 
-type _Node = Node;
-type _NodeArray<T extends Node>  = NodeArray<T>;
-type _SourceFile = SourceFile;
+type InternalNode = Node;
+type InternalNodeArray<T extends Node>  = NodeArray<T>;
+type InternalSourceFile = SourceFile;
 declare module "typescript" {
     interface SourceFile {
-        externalModuleIndicator?: _Node | true;
+        externalModuleIndicator?: InternalNode | true;
     }
-    export function forEachChildRecursively<T>(rootNode: _Node, cbNode: (node: _Node, parent: _Node) => T | "skip" | undefined, cbNodes?: (nodes: _NodeArray<_Node>, parent: _Node) => T | "skip" | undefined): T | undefined;
-    export function getTokenPosOfNode(node: _Node, sourceFile?: _SourceFile, includeJsDoc?: boolean): number;
+    export function forEachChildRecursively<T>(rootNode: InternalNode, cbNode: (node: InternalNode, parent: InternalNode) => T | "skip" | undefined, cbNodes?: (nodes: InternalNodeArray<InternalNode>, parent: InternalNode) => T | "skip" | undefined): T | undefined;
+    export function getTokenPosOfNode(node: InternalNode, sourceFile?: InternalSourceFile, includeJsDoc?: boolean): number;
 }
 function getEmitModuleDetectionKind(options: CompilerOptions) {
     return options.moduleDetection ||
@@ -64,8 +63,8 @@ const syntaxKindToSymbolMap = {
     [SyntaxKind.Constructor]: [SymbolFlags.Constructor, SymbolFlags.None],
     [SyntaxKind.GetAccessor]: [SymbolFlags.GetAccessor, SymbolFlags.GetAccessorExcludes],
     [SyntaxKind.SetAccessor]: [SymbolFlags.SetAccessor, SymbolFlags.SetAccessorExcludes],
-    [SyntaxKind.ClassExpression]:  [SymbolFlags.Class, SymbolFlags.ClassExcludes],
-    [SyntaxKind.ClassDeclaration]:  [SymbolFlags.Class, SymbolFlags.ClassExcludes],
+    [SyntaxKind.ClassExpression]: [SymbolFlags.Class, SymbolFlags.ClassExcludes],
+    [SyntaxKind.ClassDeclaration]: [SymbolFlags.Class, SymbolFlags.ClassExcludes],
     [SyntaxKind.InterfaceDeclaration]: [SymbolFlags.Interface, SymbolFlags.InterfaceExcludes],
     [SyntaxKind.TypeAliasDeclaration]: [SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes],
     [SyntaxKind.EnumDeclaration]: {
@@ -156,7 +155,7 @@ export function bindSourceFile(file: SourceFile, options: CompilerOptions, packa
         let currentScope: Node = undefined!;
         let currentSymbol: BasicSymbol = undefined!;
         let currentLocalSymbolTable: SymbolTable = undefined!;
-        let currentExportsSymbolTable: SymbolTable | null = null;
+        let currentExportsSymbolTable: SymbolTable | undefined;
         const postBindingAction: (() => void)[] = [];
 
         const fileLinks = getNodeLinks(file).symbol = newSymbol();
@@ -202,7 +201,7 @@ export function bindSourceFile(file: SourceFile, options: CompilerOptions, packa
         }
 
         function addDeclaration(table: SymbolTable, name: __String | undefined, node: Node, [flags, forbiddenFlags]: SymbolRegistrationFlags) {
-            let symbol = name != null ? getSymbol(table, name) : newSymbol();
+            let symbol = name !== undefined ? getSymbol(table, name) : newSymbol();
             // Symbols don't merge, create new one
             if(forbiddenFlags & symbol.flags) {
                 symbol = newSymbol();
@@ -213,7 +212,7 @@ export function bindSourceFile(file: SourceFile, options: CompilerOptions, packa
             node.symbol = symbol as unknown as Symbol;
             return symbol;
         }
-        function withScope(scope: Node, exports: SymbolTable | null, fn: () => void) {
+        function withScope(scope: Node, exports: SymbolTable | undefined, fn: () => void) {
             const old = [currentScope, currentLocalSymbolTable, currentExportsSymbolTable] as const;
             currentScope = scope;
             const links = getNodeLinks(scope);
@@ -287,23 +286,24 @@ export function bindSourceFile(file: SourceFile, options: CompilerOptions, packa
                 if(!node) return;
                 if(isMappedTypeNode(node)) {
                     const mappedType = node;
-                    withScope(node, null, () => {
+                    withScope(node, /*exports*/ undefined, () => {
                         bindTypeParameters([mappedType.typeParameter]);
                         bindWorker(mappedType.nameType);
                         bindWorker(mappedType.type);
                     });
                 }
                 else if(isConditionalTypeNode(node)) {
-                    withScope(node.checkType, null, () => {
+                    withScope(node.checkType, /*exports*/ undefined, () => {
                         bindWorker(node.extendsType);
                     });
                     getNodeLinks(node.trueType).locals = getNodeLinks(node.checkType).locals;
-                } if(isInferTypeNode(node)) {
+                }
+                else if(isInferTypeNode(node)) {
                     const conditionalTypeOwner = findAncestor(node, isConditionalTypeNode);
                     // Probably an error, infer not in a conditional type context
                     // Try to bind the rest of it
                     if(conditionalTypeOwner) {
-                        withScope(conditionalTypeOwner, null, () => {
+                        withScope(conditionalTypeOwner, /*exports*/ undefined, () => {
                             bindTypeParameters([node.typeParameter]);
                         });
                     }
@@ -390,7 +390,7 @@ export function bindSourceFile(file: SourceFile, options: CompilerOptions, packa
                 if(isFunctionDeclaration(statement)) {
                     bindTypeParameters(statement.typeParameters);
                     bindTypeExpressions(statement.type);
-                    withScope(statement, null, () => {
+                    withScope(statement, /*exports*/ undefined, () => {
                         bindTypeExpressions(statement);
                         statement.parameters.forEach(bindVariable);
                     });
@@ -399,7 +399,7 @@ export function bindSourceFile(file: SourceFile, options: CompilerOptions, packa
                 }
                 if(isTypeAliasDeclaration(statement)) {
                     addLocalAndExportDeclaration(statement.name.escapedText, statement, getSymbolFlagsForNode(statement), isExported);
-                    withScope(statement, null, () => {
+                    withScope(statement, /*exports*/ undefined, () => {
                         bindTypeParameters(statement.typeParameters);
                     });
                     bindTypeExpressions(statement.type);
@@ -421,8 +421,8 @@ export function bindSourceFile(file: SourceFile, options: CompilerOptions, packa
                     if(statement.exportClause && isNamedExports(statement.exportClause)) {
                         const elements = statement.exportClause.elements;
                         if (statement.moduleSpecifier) {
-                            // TODO is  currentExportsSymbolTable ok here?
-                            withScope(statement, null, () => {
+                            // TODO is currentExportsSymbolTable ok here?
+                            withScope(statement, /*exports*/ undefined, () => {
                                 elements.forEach(e => {
                                     const [flags, forbiddenFlags] = getSymbolFlagsForNode(e);
                                     addLocalOnlyDeclaration((e.propertyName ?? e.name).escapedText, e, [flags | SymbolFlags.ExportValue , forbiddenFlags]);
@@ -473,7 +473,7 @@ export function bindSourceFile(file: SourceFile, options: CompilerOptions, packa
                 if(isInterfaceDeclaration(statement)) {
                     const interfaceDeclaration = statement;
                     const interfaceSymbol = addLocalAndExportDeclaration(interfaceDeclaration.name.escapedText, interfaceDeclaration, getSymbolFlagsForNode(interfaceDeclaration), isExported);
-                    withScope(interfaceDeclaration, null, () =>{
+                    withScope(interfaceDeclaration, /*exports*/ undefined, () =>{
                         bindTypeParameters(interfaceDeclaration.typeParameters);
                     });
                     withMembers(interfaceSymbol, () => {
@@ -487,7 +487,7 @@ export function bindSourceFile(file: SourceFile, options: CompilerOptions, packa
                 if(isClassDeclaration(statement)) {
                     const classDeclaration = statement;
                     const classSymbol = addLocalAndExportDeclaration(classDeclaration.name?.escapedText, classDeclaration, getSymbolFlagsForNode(classDeclaration), isExported);
-                    withScope(classDeclaration, null, () =>{
+                    withScope(classDeclaration, /*exports*/ undefined, () =>{
                         bindTypeParameters(classDeclaration.typeParameters);
                     });
                     withMembers(classSymbol, () => {

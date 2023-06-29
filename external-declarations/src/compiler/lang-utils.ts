@@ -631,6 +631,8 @@ const hasOwnProperty = Object.prototype.hasOwnProperty;
  *
  * @internal
  */
+export function hasProperty<T extends object, K extends T extends T ? keyof T: never>(map: T, key: K): map is Extract<T, Partial<Record<K, any>>>;
+export function hasProperty(map: MapLike<any>, key: string): boolean;
 export function hasProperty(map: MapLike<any>, key: string): boolean {
     return hasOwnProperty.call(map, key);
 }

@@ -7,17 +7,17 @@ import { createEmitResolver } from "./emit-resolver";
 import { tracer } from "./perf-tracer";
 import { TransformationContext } from "./types";
 
-const transformDeclarations:  (context: TransformationContext) => (node: SourceFile) => SourceFile = (ts as any).transformDeclarations;
+const transformDeclarations: (context: TransformationContext) => (node: SourceFile) => SourceFile = (ts as any).transformDeclarations;
 
 export function transformFile(sourceFile: ts.SourceFile, allProjectFiles: string[], tsLibFiles: string[], options: ts.CompilerOptions, moduleType: ts.ResolutionMode) {
 
     const getCompilerOptions = () => options;
     tracer.current?.start("bind");
     const emitResolver = createEmitResolver(sourceFile, options, moduleType);
-    const emitHost =  createEmitHost(allProjectFiles, tsLibFiles, options);
+    const emitHost = createEmitHost(allProjectFiles, tsLibFiles, options);
     tracer.current?.end("bind");
     const diagnostics: ts.Diagnostic[] = [];
-    const x =  transformDeclarations({
+    const x = transformDeclarations({
         getEmitHost() {
             return emitHost;
         },

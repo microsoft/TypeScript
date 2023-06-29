@@ -298,7 +298,7 @@ export function transformDeclarations(context: TransformationContext) {
     let lateStatementReplacementMap: Map<NodeId, VisitResult<LateVisibilityPaintedStatement | ExportAssignment | undefined>>;
     let suppressNewDiagnosticContexts: boolean;
     let exportedModulesFromDeclarationEmit: Symbol[] | undefined;
-    let localInferenceTargetNode: Node | undefined = undefined;
+    let localInferenceTargetNode: Node | undefined;
 
     const { factory } = context;
     const host = context.getEmitHost();
@@ -340,9 +340,9 @@ export function transformDeclarations(context: TransformationContext) {
             return oldNode;
         },
         checkEntityNameVisibility(name, container) {
-            return checkEntityNameVisibility(name, container ?? enclosingDeclaration)
+            return checkEntityNameVisibility(name, container ?? enclosingDeclaration);
         },
-    })
+    });
     const options = context.getCompilerOptions();
     const { noResolve, stripInternal } = options;
     const isolatedDeclarations = options.isolatedDeclarations;
@@ -807,7 +807,7 @@ export function transformDeclarations(context: TransformationContext) {
         }
         if (isolatedDeclarations) {
             if (type === undefined && localInferenceResolver) {
-                return localInferenceResolver.fromInitializer(node, currentSourceFile)
+                return localInferenceResolver.fromInitializer(node, currentSourceFile);
             }
             return visitNode(type, visitDeclarationSubtree, isTypeNode);
         }

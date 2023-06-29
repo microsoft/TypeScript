@@ -3,14 +3,14 @@ import { findIndex } from "../../core";
 import { Debug } from "../../debug";
 import { Diagnostics } from "../../diagnosticInformationMap.generated";
 import { setCommentRange } from "../../factory/emitNode";
-import { isIdentifier, isPropertyAccessExpression, isQualifiedName, isGetAccessorDeclaration, isSetAccessorDeclaration, isTypeParameterDeclaration, isTypeReferenceNode, isLiteralTypeNode, isNoSubstitutionTemplateLiteral, isStringLiteral, isSpreadElement, isOmittedExpression, isComputedPropertyName, isMethodDeclaration, isPropertyAssignment, isShorthandPropertyAssignment, isSpreadAssignment, isNumericLiteral, isMethodSignature, isPropertySignature, isArrayTypeNode, isTypeLiteralNode, isFunctionTypeNode, isConstructorTypeNode, isTypeQueryNode, isBlock, isReturnStatement, isYieldExpression, isExpressionStatement, isBinaryExpression, isExportAssignment, isParameter, isVariableDeclaration, isVariableStatement, isSourceFile, isPropertyDeclaration, isFunctionDeclaration, isElementAccessExpression } from "../../factory/nodeTests";
+import { isArrayTypeNode, isBinaryExpression, isBlock, isComputedPropertyName, isConstructorTypeNode, isElementAccessExpression,isExportAssignment, isExpressionStatement, isFunctionDeclaration, isFunctionTypeNode, isGetAccessorDeclaration, isIdentifier, isLiteralTypeNode, isMethodDeclaration, isMethodSignature, isNoSubstitutionTemplateLiteral, isNumericLiteral, isOmittedExpression, isParameter, isPropertyAccessExpression, isPropertyAssignment, isPropertyDeclaration, isPropertySignature, isQualifiedName, isReturnStatement, isSetAccessorDeclaration, isShorthandPropertyAssignment, isSourceFile, isSpreadAssignment, isSpreadElement, isStringLiteral, isTypeLiteralNode, isTypeParameterDeclaration, isTypeQueryNode, isTypeReferenceNode, isVariableDeclaration, isVariableStatement, isYieldExpression } from "../../factory/nodeTests";
 import { setTextRange } from "../../factory/utilitiesPublic";
-import { forEachChildRecursively, forEachChild } from "../../parser";
+import { forEachChild,forEachChildRecursively } from "../../parser";
 import { nullTransformationContext } from "../../transformer";
-import { TypeNode, Node, EntityName, EntityNameOrEntityNameExpression, NodeFlags, NodeArray, ObjectLiteralElementLike, SetAccessorDeclaration, GetAccessorDeclaration, SyntaxKind, ParenthesizedExpression, QualifiedName, Identifier, CallExpression, NewExpression, FunctionExpression, ArrowFunction, SatisfiesExpression, AsExpression, TypeAssertion, PrefixUnaryExpression, TemplateExpression, TemplateLiteralTypeSpan, ArrayLiteralExpression, ObjectLiteralExpression, TypeElement, Modifier, ConditionalExpression, LiteralExpression, KeywordTypeSyntaxKind, TypeReferenceNode, MethodSignature, PropertySignature, LiteralTypeNode, TypeLiteralNode, SignatureDeclaration, ParameterDeclaration, NodeWithTypeArguments, PropertyName, ModifierFlags, FunctionLikeDeclaration, ReturnStatement, YieldExpression, Statement, Visitor, ExportAssignment, DiagnosticWithLocation, VisitResult, SourceFile, HasInferredType, TransformationContext } from "../../types";
-import { setParent, isEntityNameExpression, getTokenPosOfNode, getSyntacticModifierFlags, getEffectiveModifierFlags, createDiagnosticForNode } from "../../utilities";
-import { isTypeNode, isPropertyName, isClassLike, isFunctionLike, isExpression } from "../../utilitiesPublic";
-import { visitNode, visitNodes, visitEachChild } from "../../visitorPublic";
+import { ArrayLiteralExpression, ArrowFunction, AsExpression, CallExpression, ConditionalExpression, DiagnosticWithLocation, EntityName, EntityNameOrEntityNameExpression, ExportAssignment, FunctionExpression, FunctionLikeDeclaration, GetAccessorDeclaration, HasInferredType, Identifier, KeywordTypeSyntaxKind, LiteralExpression, LiteralTypeNode, MethodSignature, Modifier, ModifierFlags, NewExpression, Node, NodeArray, NodeFlags, NodeWithTypeArguments, ObjectLiteralElementLike, ObjectLiteralExpression, ParameterDeclaration, ParenthesizedExpression, PrefixUnaryExpression, PropertyName, PropertySignature, QualifiedName, ReturnStatement, SatisfiesExpression, SetAccessorDeclaration, SignatureDeclaration, SourceFile, Statement, SyntaxKind, TemplateExpression, TemplateLiteralTypeSpan, TransformationContext,TypeAssertion, TypeElement, TypeLiteralNode, TypeNode, TypeReferenceNode, Visitor, VisitResult, YieldExpression } from "../../types";
+import { createDiagnosticForNode,getEffectiveModifierFlags, getSyntacticModifierFlags, getTokenPosOfNode, isEntityNameExpression, setParent } from "../../utilities";
+import { isClassLike, isExpression,isFunctionLike, isPropertyName, isTypeNode } from "../../utilitiesPublic";
+import { visitEachChild,visitNode, visitNodes } from "../../visitorPublic";
 
 const NO_LOCAL_INFERENCE = !!process.env.NO_LOCAL_INFERENCE;
 enum NarrowBehavior {
@@ -69,7 +69,8 @@ export function createLocalInferenceResolver({
                 }
                 reportIsolatedDeclarationError(node);
                 return makeInvalidType();
-            } finally {
+            }
+            finally {
                 currentSourceFile = oldSourceFile;
             }
         },
@@ -124,7 +125,7 @@ export function createLocalInferenceResolver({
         if (typeNode && typeNode.parent !== parent) {
             setParent(typeNode, parent);
             // Ensure no non synthetic nodes make it in here
-            Debug.assert(typeNode.flags & NodeFlags.Synthesized)
+            Debug.assert(typeNode.flags & NodeFlags.Synthesized);
             forEachChildRecursively(typeNode, (child, parent) => {
                 Debug.assert(typeNode.flags & NodeFlags.Synthesized);
                 if (child.parent === parent) {
@@ -138,10 +139,11 @@ export function createLocalInferenceResolver({
     function visitSyntheticType(typeNode: TypeNode, node: Node) {
         const previousLocalInferenceTargetNode = setLocalInferenceTargetNode(node);
         try {
-            let visitedNode = visitNode(finalizeSyntheticTypeNode(typeNode, node), visitDeclarationSubtree, isSyntheticTypeNode);
+            const visitedNode = visitNode(finalizeSyntheticTypeNode(typeNode, node), visitDeclarationSubtree, isSyntheticTypeNode);
             Debug.assert(visitedNode);
             return visitedNode;
-        } finally {
+        }
+        finally {
             setLocalInferenceTargetNode(previousLocalInferenceTargetNode);
         }
     }
@@ -170,27 +172,27 @@ export function createLocalInferenceResolver({
             otherAccessor,
             getAccessor,
             setAccessor,
-        }
+        };
     }
     function inferAccessorType(getAccessor?: GetAccessorDeclaration, setAccessor?: SetAccessorDeclaration): LocalTypeInfo {
 
         if(getAccessor?.type){
             return regular(
-                deepClone(visitType(getAccessor.type, getAccessor)), 
+                deepClone(visitType(getAccessor.type, getAccessor)),
                 getAccessor
             );
-        };
+        }
 
         if (setAccessor && setAccessor.parameters[0]?.type) {
             const parameterType = setAccessor.parameters[0].type;
             return regular(
-                deepClone(visitType(parameterType, setAccessor)), 
+                deepClone(visitType(parameterType, setAccessor)),
                 setAccessor
             );
         }
 
         if (getAccessor) {
-            const localPropType = inferReturnType(getAccessor)
+            const localPropType = inferReturnType(getAccessor);
             return localPropType;
         }
 
@@ -210,7 +212,7 @@ export function createLocalInferenceResolver({
                     typeNode,
                     node,
                     LocalTypeInfoFlags.Optimistic
-                )
+                );
             case SyntaxKind.PropertyAccessExpression:
                 if (isEntityNameExpression(node)) {
                     const typeNode = visitSyntheticType(factory.createTypeQueryNode(
@@ -220,7 +222,7 @@ export function createLocalInferenceResolver({
                         typeNode,
                         node,
                         LocalTypeInfoFlags.Optimistic
-                    )
+                    );
                 }
                 break;
             case SyntaxKind.Identifier: {
@@ -229,9 +231,9 @@ export function createLocalInferenceResolver({
                 }
                 const typeNode = visitSyntheticType(factory.createTypeQueryNode(
                     deepClone(node as Identifier)
-                ), node)
+                ), node);
 
-                return regular(typeNode, node, LocalTypeInfoFlags.Optimistic)
+                return regular(typeNode, node, LocalTypeInfoFlags.Optimistic);
             }
             case SyntaxKind.NullKeyword:
                 if (strictNullChecks) {
@@ -250,20 +252,22 @@ export function createLocalInferenceResolver({
                                 factory.createKeywordTypeNode(SyntaxKind.SymbolKeyword)
                             ),
                             node
-                        )
-                    } else {
+                        );
+                    }
+                    else {
                         return regular(
                             factory.createKeywordTypeNode(SyntaxKind.SymbolKeyword),
                             node
-                        )
+                        );
                     }
                 }
+                break;
             case SyntaxKind.NewExpression:
                 const newExpr = node as NewExpression;
                 if (isEntityNameExpression(newExpr.expression)) {
                     const typeNode = visitSyntheticType(factory.createTypeReferenceNode(
                         entityNameExpressionToQualifiedName(newExpr.expression),
-                        visitNodes(newExpr.typeArguments, deepClone, isTypeNode)!
+                        visitNodes(newExpr.typeArguments, deepClone, isTypeNode)
                     ), node);
                     // Optimistic since the constructor might not have the same name as the type
                     return regular(typeNode, node, LocalTypeInfoFlags.Optimistic);
@@ -281,7 +285,7 @@ export function createLocalInferenceResolver({
                         returnType.typeNode,
                     );
                     // If the return type is optimistic, teh whole function type is optimistic
-                    const flags = mergeFlags(LocalTypeInfoFlags.None, returnType.flags)
+                    const flags = mergeFlags(LocalTypeInfoFlags.None, returnType.flags);
                     return regular(fnTypeNode, node, flags);
                 }
                 finally {
@@ -289,7 +293,7 @@ export function createLocalInferenceResolver({
                 }
             case SyntaxKind.SatisfiesExpression: {
                 const typeNode = localInference((node as SatisfiesExpression).expression);
-                return { ...typeNode, flags: typeNode.flags | LocalTypeInfoFlags.Optimistic }
+                return { ...typeNode, flags: typeNode.flags | LocalTypeInfoFlags.Optimistic };
             }
             case SyntaxKind.TypeAssertionExpression:
             case SyntaxKind.AsExpression:
@@ -320,22 +324,23 @@ export function createLocalInferenceResolver({
                                     case SyntaxKind.MinusToken:
                                         return fresh(factory.createLiteralTypeNode(deepClone(prefixOp)), node);
                                     case SyntaxKind.PlusToken:
-                                        return fresh(factory.createLiteralTypeNode(deepClone(prefixOp)), node);;
+                                        return fresh(factory.createLiteralTypeNode(deepClone(prefixOp)), node);
                                 }
+                                break;
                             case SyntaxKind.BigIntLiteral:
                                 if (prefixOp.operator === SyntaxKind.MinusToken) {
-                                    return fresh(factory.createLiteralTypeNode(deepClone(prefixOp)), node);;
+                                    return fresh(factory.createLiteralTypeNode(deepClone(prefixOp)), node);
                                 }
                         }
                     }
-                    
+
                     if(prefixOp.operator === SyntaxKind.PlusToken) {
-                        return fresh(factory.createKeywordTypeNode(SyntaxKind.NumberKeyword), node)
+                        return fresh(factory.createKeywordTypeNode(SyntaxKind.NumberKeyword), node);
                     }
                     else if(prefixOp.operator === SyntaxKind.MinusToken) {
                         return prefixOp.operand.kind === SyntaxKind.BigIntLiteral?
                             fresh(factory.createKeywordTypeNode(SyntaxKind.BigIntKeyword), node):
-                            fresh(factory.createKeywordTypeNode(SyntaxKind.NumberKeyword), node)
+                            fresh(factory.createKeywordTypeNode(SyntaxKind.NumberKeyword), node);
                     }
                 }
                 break;
@@ -354,7 +359,7 @@ export function createLocalInferenceResolver({
                         typeNode,
                         span.literal
                     );
-                    flags = mergeFlags(flags, typeFlags)
+                    flags = mergeFlags(flags, typeFlags);
                     templateSpans.push(literalSpan);
                 }
                 return regular(
@@ -383,7 +388,7 @@ export function createLocalInferenceResolver({
                 let inheritedArrayTypeFlags = LocalTypeInfoFlags.None;
                 for (const element of arrayLiteral.elements) {
                     if (isSpreadElement(element)) {
-                        const spreadType = localInference(element.expression, nextInferenceFlags)
+                        const spreadType = localInference(element.expression, nextInferenceFlags);
                         const elementTypeNode = inferenceFlags & NarrowBehavior.AsConst ?
                             factory.createRestTypeNode(spreadType.typeNode) :
                             factory.createIndexedAccessTypeNode(spreadType.typeNode, factory.createKeywordTypeNode(SyntaxKind.NumberKeyword));
@@ -396,8 +401,9 @@ export function createLocalInferenceResolver({
                         elementTypesInfo.push(
                             createUndefinedTypeNode(element)
                         );
-                    } else {
-                        const elementType = localInference(element, nextInferenceFlags)
+                    }
+                    else {
+                        const elementType = localInference(element, nextInferenceFlags);
                         inheritedArrayTypeFlags = mergeFlags(inheritedArrayTypeFlags, elementType.flags);
                         elementTypesInfo.push(elementType);
                     }
@@ -426,7 +432,7 @@ export function createLocalInferenceResolver({
                 let addedIntersections: TypeNode[] | undefined;
 
                 for (let propIndex = 0, length = objectLiteral.properties.length; propIndex < length; propIndex++) {
-                    const prop = objectLiteral.properties[propIndex]
+                    const prop = objectLiteral.properties[propIndex];
                     if (prop.name && isComputedPropertyName(prop.name) && isEntityNameExpression(prop.name.expression)) {
                         checkEntityNameVisibility(prop.name.expression, prop);
                     }
@@ -463,7 +469,8 @@ export function createLocalInferenceResolver({
                                     returnType.typeNode,
                                 );
                             }
-                        } finally {
+                        }
+                        finally {
                             setEnclosingDeclarations(oldEnclosingDeclaration);
                         }
                     }
@@ -499,7 +506,7 @@ export function createLocalInferenceResolver({
                         const { typeNode, flags: spreadTypeFlags } = localInference(prop.expression, nextInferenceFlags);
                         // Spread types are always optimistic
                         inheritedObjectTypeFlags = mergeFlags(inheritedObjectTypeFlags, spreadTypeFlags) | LocalTypeInfoFlags.Optimistic;
-                        addedIntersections.push(typeNode)
+                        addedIntersections.push(typeNode);
                     }
                     else {
                         if (isGetAccessorDeclaration(prop) || isSetAccessorDeclaration(prop)) {
@@ -508,9 +515,9 @@ export function createLocalInferenceResolver({
                                 const { getAccessor, setAccessor, otherAccessorIndex } = getAccessorInfo(objectLiteral.properties, prop);
                                 if (otherAccessorIndex === -1 || otherAccessorIndex > propIndex) {
                                     const accessorType = inferAccessorType(getAccessor, setAccessor);
-                                    const modifiers: Modifier[] = []
+                                    const modifiers: Modifier[] = [];
                                     if (!setAccessor) {
-                                        modifiers.push(factory.createModifier(SyntaxKind.ReadonlyKeyword))
+                                        modifiers.push(factory.createModifier(SyntaxKind.ReadonlyKeyword));
                                     }
                                     inheritedObjectTypeFlags = mergeFlags(inheritedObjectTypeFlags, accessorType.flags);
                                     newProp = factory.createPropertySignature(
@@ -520,10 +527,12 @@ export function createLocalInferenceResolver({
                                         accessorType.typeNode,
                                     );
                                 }
-                            } else {
+                            }
+                            else {
                                 return invalid(prop);
                             }
-                        } else {
+                        }
+                        else {
                             return invalid(prop);
                         }
                     }
@@ -539,13 +548,13 @@ export function createLocalInferenceResolver({
                         setTextRange(newProp, {
                             pos: prevPos,
                             end: newProp.name.end,
-                        })
+                        });
                         setCommentRange(newProp, {
                             pos: prevPos,
                             end: newProp.name.pos
-                        })
+                        });
 
-                        properties.push(newProp)
+                        properties.push(newProp);
                     }
                 }
 
@@ -563,7 +572,7 @@ export function createLocalInferenceResolver({
                 const types = [
                     localInference(conditionalExpression.whenTrue, inferenceFlags & ~NarrowBehavior.AsConst),
                     localInference(conditionalExpression.whenFalse, inferenceFlags & ~NarrowBehavior.AsConst),
-                ]
+                ];
                 return makeUnionFromTypes(node, types, /*widenSingle*/ false);
         }
 
@@ -611,7 +620,7 @@ export function createLocalInferenceResolver({
         else {
             return fresh(
                 typeof baseType === "number" ? factory.createKeywordTypeNode(baseType) : factory.createTypeReferenceNode(baseType),
-                node, 
+                node,
                 flags
             );
         }
@@ -621,7 +630,7 @@ export function createLocalInferenceResolver({
     }
     function makeInvalidTypeAndReport(node: Node) {
         reportIsolatedDeclarationError(node);
-        return makeInvalidType() as TypeReferenceNode;
+        return makeInvalidType() ;
     }
     function visitType(type: TypeNode | undefined, owner: Node) {
         const visitedType = visitNode(type, visitDeclarationSubtree, isTypeNode);
@@ -633,10 +642,10 @@ export function createLocalInferenceResolver({
             return "I:" + name.escapedText;
         }
         if (isStringLiteral(name)) {
-            return "S:" + name.text
+            return "S:" + name.text;
         }
         if (isNumericLiteral(name)) {
-            return "N:" + (+name.text)
+            return "N:" + (+name.text);
         }
         if (isComputedPropertyName(name)) {
             let fullId = "C:";
@@ -661,7 +670,7 @@ export function createLocalInferenceResolver({
         return undefined;
     }
     function getMemberKey(member: MethodSignature | PropertySignature | GetAccessorDeclaration | SetAccessorDeclaration) {
-        return getMemberNameKey(member.name)
+        return getMemberNameKey(member.name);
     }
 
     function getWidenedType(localTypeInfo: LocalTypeInfo) {
@@ -680,10 +689,10 @@ export function createLocalInferenceResolver({
         return localTypeInfo.typeNode;
     }
     function makeUnionFromTypes(sourceNode: Node, types: LocalTypeInfo[], widenSingle: boolean) {
-        let [unionConstituents, flags] = deduplicateUnion(types);
+        const [unionConstituents, flags] = deduplicateUnion(types);
         if (unionConstituents.length === 1) {
             const localType = unionConstituents[0];
-           
+
             return widenSingle ? { ...localType, typeNode: getWidenedType(localType) } : localType;
         }
         const unionConstituentsTypes = collapseLiteralTypesIntoBaseTypes(unionConstituents);
@@ -850,7 +859,7 @@ export function createLocalInferenceResolver({
             let implicitAnyNode: LocalTypeInfo | undefined;
             let mergedUnionFlags = LocalTypeInfoFlags.None;
             for (const node of nodes) {
-                mergedUnionFlags = mergeFlags(mergedUnionFlags, node.flags)
+                mergedUnionFlags = mergeFlags(mergedUnionFlags, node.flags);
                 // Do not add implicit any unless it's the only type in the array
                 if (!strictNullChecks && node.flags & LocalTypeInfoFlags.ImplicitAny) {
                     implicitAnyNode = node;
@@ -921,7 +930,7 @@ export function createLocalInferenceResolver({
 
                 return a.parameters.every((aParam, index) => isParameterEqual(aParam, b.parameters[index]));
 
-                // Isolated declarations finish equality 
+                // Isolated declarations finish equality
                 function isParameterEqual(a: ParameterDeclaration, b: ParameterDeclaration) {
                     if (!!a.questionToken !== !!b.questionToken) {
                         return false;
@@ -937,7 +946,7 @@ export function createLocalInferenceResolver({
                     return false;
                 }
 
-                return !!a.typeArguments?.every((aArg, index) => typesEqual(aArg, aErrorTarget, b.typeArguments?.[index], bErrorTarget))
+                return !!a.typeArguments?.every((aArg, index) => typesEqual(aArg, aErrorTarget, b.typeArguments?.[index], bErrorTarget));
             }
             function typesEqual(a: TypeNode | undefined, aErrorTarget: Node | undefined, b: TypeNode | undefined, bErrorTarget: Node | undefined): boolean {
                 if (a === undefined || b === undefined) return a === b;
@@ -1017,7 +1026,7 @@ export function createLocalInferenceResolver({
                                 }
                             }
                             else if (bIsMethod && isMethodSignature(aMember)) {
-                                return signatureEqual(aMember, aErrorTarget, bMember, bErrorTarget)
+                                return signatureEqual(aMember, aErrorTarget, bMember, bErrorTarget);
                             }
                         }
                         else {
@@ -1089,7 +1098,7 @@ export function createLocalInferenceResolver({
                             allProps.set(memberKey, propInfo);
                         }
                         propInfo.types[i] = type;
-                        propInfo.isReadonly ||= !!(getSyntacticModifierFlags(member) & ModifierFlags.Readonly)
+                        propInfo.isReadonly ||= !!(getSyntacticModifierFlags(member) & ModifierFlags.Readonly);
                         typeLookup.set(memberKey, type);
                     }
                     else {
@@ -1163,7 +1172,7 @@ export function createLocalInferenceResolver({
         if (!isBlock(node.body)) {
             returnType = makeUnionFromTypes(node, [
                 localInference(node.body, NarrowBehavior.KeepLiterals)
-            ], true);
+            ], /*widenSingle*/ true);
         }
         else {
             collectReturnAndYield(node.body, returnStatements, yieldExpressions);
@@ -1191,19 +1200,21 @@ export function createLocalInferenceResolver({
         function inferFromOutputs(node: Node, statements: (YieldExpression | ReturnStatement)[], emptyType: KeywordTypeSyntaxKind) {
             const returnStatementInference: LocalTypeInfo[] = [];
             let hasOnlyEmpty = true;
-            for (let r of statements) {
+            for (const r of statements) {
                 if (r.expression) {
                     returnStatementInference.push(localInference(r.expression, NarrowBehavior.KeepLiterals));
                     hasOnlyEmpty = false;
-                } else {
+                }
+                else {
                     returnStatementInference.push(
                         createUndefinedTypeNode(r, LocalTypeInfoFlags.Fresh)
                     );
                 }
-            };
+            }
             if (hasOnlyEmpty) {
                 return fresh(factory.createKeywordTypeNode(emptyType), node);
-            } else {
+            }
+            else {
                 return makeUnionFromTypes(node, returnStatementInference, /*widenSingle*/ true);
             }
         }
@@ -1251,27 +1262,27 @@ export function createLocalInferenceResolver({
     function inferFunctionMembers(scope: { statements: NodeArray<Statement> }, functionName: Identifier, localType: LocalTypeInfo): LocalTypeInfo {
         if (!isFunctionTypeNode(localType.typeNode)) return localType;
         let mergedFlags = LocalTypeInfoFlags.None;
-        let members = new Map<string, {
+        const members = new Map<string, {
             name: PropertyName,
             type: LocalTypeInfo[]
         }>();
-        for (let i = 0; i < scope.statements.length; i++) {
-            const statement = scope.statements[i];
+        for (const statement of scope.statements) {
             // Looking for name functionName.member = init;
             if (!isExpressionStatement(statement)) continue;
             if(!isBinaryExpression(statement.expression)) continue;
             const assignment = statement.expression;
             if(assignment.operatorToken.kind !== SyntaxKind.EqualsToken) continue;
-            
+
             const isPropertyAccess = isPropertyAccessExpression(assignment.left);
             if(isPropertyAccess || isElementAccessExpression(assignment.left)
                 && isIdentifier(assignment.left.expression)
                 && assignment.left.expression.escapedText === functionName.escapedText) {
-                
+
                 let name;
                 if(isPropertyAccess) {
                     name = deepClone(assignment.left.name);
-                } else {
+                }
+                else {
                     const argumentExpression = visitNode(assignment.left.argumentExpression, visitDeclarationSubtree, isExpression)!;
                     name = factory.createComputedPropertyName(deepClone(argumentExpression));
                 }
@@ -1286,7 +1297,7 @@ export function createLocalInferenceResolver({
                     members.set(key, memberInfo = {
                         name,
                         type: []
-                    })
+                    });
                 }
                 memberInfo.type.push(propType);
             }
@@ -1300,15 +1311,15 @@ export function createLocalInferenceResolver({
                 )
             ];
             for(const member of members.values()) {
-                const propType = makeUnionFromTypes(member.name, member.type, false);
+                const propType = makeUnionFromTypes(member.name, member.type, /*widenSingle*/ false);
                 mergedFlags = mergeFlags(mergedFlags, propType.flags);
-                
+
                 factory.createPropertySignature(
                     [],
                     member.name,
-                    undefined,
+                    /*questionToken*/ undefined,
                     propType.typeNode
-                )
+                );
             }
             return {
                 sourceNode: localType.sourceNode,
@@ -1316,7 +1327,7 @@ export function createLocalInferenceResolver({
                 typeNode: factory.createTypeLiteralNode(
                     inferredMembers
                 ),
-            }
+            };
         }
         return localType;
     }
@@ -1326,7 +1337,7 @@ export function createLocalInferenceResolver({
         const clonedNode = visitEachChild(node, deepClone, nullTransformationContext, deepCloneNodes);
         // If node has children visitEachChild will already return a new node
         if (clonedNode !== node) {
-            return clonedNode!;
+            return clonedNode;
         }
         return setTextRange(factory.cloneNode(node), node);
 

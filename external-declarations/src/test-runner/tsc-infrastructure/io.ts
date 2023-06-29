@@ -32,8 +32,6 @@ export interface IO {
     joinPath(...components: string[]): string
 }
 
-export let IO: IO;
-
 // harness always uses one kind of new line
 // But note that `parseTestData` in `fourslash.ts` uses "\n"
 const harnessNewLine = "\r\n";
@@ -163,4 +161,4 @@ function createNodeIO(): IO {
 }
 
 
-IO = createNodeIO();
+export const IO = createNodeIO();

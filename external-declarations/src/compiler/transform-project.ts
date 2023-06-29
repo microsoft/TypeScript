@@ -55,7 +55,7 @@ export function transformProjectFiles(rootDir: string, files: string[], host: ts
             const dirPath = path.dirname(output);
             ensureDirRecursive(dirPath, host);
             tracer.current?.start("write");
-            host.writeFile(output, actualDeclaration.code, false);
+            host.writeFile(output, actualDeclaration.code, /*writeByteOrderMark*/ false);
             tracer.current?.end("write");
         }
         catch (e) {

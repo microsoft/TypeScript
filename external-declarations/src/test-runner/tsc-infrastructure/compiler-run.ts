@@ -2,8 +2,7 @@ import { CompilerOptions, Diagnostic } from "typescript";
 import * as ts from "typescript";
 
 import { compareStringsCaseSensitive, hasProperty,map, startsWith } from "../../compiler/lang-utils";
-import { fileExtensionIs, getNormalizedAbsolutePath, normalizeSlashes, toPath } from "../../compiler/path-utils";
-import { createGetCanonicalFileName } from "../../compiler/path-utils";
+import { createGetCanonicalFileName, fileExtensionIs, getNormalizedAbsolutePath, normalizeSlashes, toPath } from "../../compiler/path-utils";
 import { cloneCompilerOptions, getEmitScriptTarget } from "../../compiler/utils";
 import * as compiler from "./compiler";
 import * as fakes from "./fakesHosts";
@@ -104,9 +103,9 @@ export function compileFiles(
     inputFiles: TestFile[],
     otherFiles: TestFile[],
     harnessSettings: TestCaseParser.CompilerSettings | undefined,
-    compilerOptions: ts.CompilerOptions | undefined,
+    compilerOptions?: ts.CompilerOptions | undefined,
     // Current directory is needed for rwcRunner to be able to use currentDirectory defined in json file
-    currentDirectory: string | undefined,
+    currentDirectory?: string | undefined,
     symlinks?: vfs.FileSet
 ): compiler.CompilationResult {
     const options: ts.CompilerOptions & HarnessOptions = compilerOptions ? cloneCompilerOptions(compilerOptions) : { noResolve: false };
