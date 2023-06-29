@@ -3659,7 +3659,7 @@
         "category": "Error",
         "code": 2854
     },
-    "Type:\\n{0}\\n\\nis not assignable to type:\\n.{1}": {
+    "Type:\\n{0}\\n\\nis not assignable to type:\\n{1}": {
         "category": "Error",
         "code": 2855
     },

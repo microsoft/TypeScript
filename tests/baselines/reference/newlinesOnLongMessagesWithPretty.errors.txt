@@ -1,8 +1,8 @@
-[96mnewlinesOnLongMessagesWithPretty.ts[0m:[93m6[0m:[93m1[0m - [91merror[0m[90m TS2855: [0mType:\nstring\n\nis not assignable to type:\n.{ b: { c: { e: { f: number; }; }; }; }
+[96mnewlinesOnLongMessagesWithPretty.ts[0m:[93m6[0m:[93m1[0m - [91merror[0m[90m TS2855: [0mType:\nstring\n\nis not assignable to type:\n{ b: { c: { e: { f: number; }; }; }; }
 
 [7m6[0m a = b
 [7m [0m [91m~[0m
-[96mnewlinesOnLongMessagesWithPretty.ts[0m:[93m8[0m:[93m1[0m - [91merror[0m[90m TS2855: [0mType:\n{ b: { c: { e: { f: number; }; }; }; }\n\nis not assignable to type:\n.string
+[96mnewlinesOnLongMessagesWithPretty.ts[0m:[93m8[0m:[93m1[0m - [91merror[0m[90m TS2855: [0mType:\n{ b: { c: { e: { f: number; }; }; }; }\n\nis not assignable to type:\nstring
 
 [7m8[0m b = a
 [7m [0m [91m~[0m
@@ -29,11 +29,11 @@
     // 'a' here is long enough to count in the source as a newline
     a = b
     ~
-!!! error TS2855: Type:\nstring\n\nis not assignable to type:\n.{ b: { c: { e: { f: number; }; }; }; }
+!!! error TS2855: Type:\nstring\n\nis not assignable to type:\n{ b: { c: { e: { f: number; }; }; }; }
     // 'a' here is long enough to count in the target as a newline
     b = a
     ~
-!!! error TS2855: Type:\n{ b: { c: { e: { f: number; }; }; }; }\n\nis not assignable to type:\n.string
+!!! error TS2855: Type:\n{ b: { c: { e: { f: number; }; }; }; }\n\nis not assignable to type:\nstring
     
     // This won't trigger it because we only show the relation instead
     a = { b: { c: { e: { f: {} } } } }
