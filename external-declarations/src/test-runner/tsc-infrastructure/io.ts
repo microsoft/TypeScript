@@ -2,7 +2,6 @@ import { sys } from "typescript";
 import { FileSystemEntries } from "./vfs";
 import * as vpath from './vpath';
 import { compareStringsCaseSensitive, compareStringsCaseInsensitive } from "../../compiler/lang-utils";
-type RunnerBase = unknown;
 
 export interface IO {
     newLine(): string;
@@ -33,16 +32,10 @@ export interface IO {
 }
 
 export let IO: IO;
-export function setHarnessIO(io: IO) {
-    IO = io;
-}
 
 // harness always uses one kind of new line
 // But note that `parseTestData` in `fourslash.ts` uses "\n"
-export const harnessNewLine = "\r\n";
-
-// Root for file paths that are stored in a virtual file system
-export const virtualFileSystemRoot = "/";
+const harnessNewLine = "\r\n";
 
 function createNodeIO(): IO {
     let workspaceRoot = "./node_modules/typescript/";
@@ -71,11 +64,6 @@ function createNodeIO(): IO {
 
     function joinPath(...components: string[]) {
         return pathModule.join(...components);
-    }
-
-    function enumerateTestFiles(runner: RunnerBase):any[] {
-        throw new Error("Not implemented");
-        // return runner.getTestFiles();
     }
 
     function listFiles(path: string, spec: RegExp, options: { recursive?: boolean } = {}) {

@@ -1,11 +1,11 @@
-import { Symbol, Node, VariableDeclaration, ParameterDeclaration, ModifierFlags, isLiteralExpression, ClassElement, isIdentifier, BindingPattern, SyntaxKind, findAncestor, SourceFile, isVariableStatement, SymbolFlags, isImportDeclaration, __String, isFunctionDeclaration, isClassDeclaration, isTypeAliasDeclaration, isExportDeclaration, isExportAssignment, isModuleDeclaration, NodeArray, isConstructSignatureDeclaration, isConstructorDeclaration, isImportEqualsDeclaration, isEnumDeclaration, isInterfaceDeclaration, isNamedExports, isModuleBlock, ModuleDeclaration, ArrayBindingElement, isExternalModuleReference, forEachChild, isMetaProperty, isComputedPropertyName, isPropertyAccessExpression, isPrivateIdentifier, Extension, isConditionalTypeNode, TypeElement, CompilerOptions, ModuleKind, ModuleDetectionKind, isMappedTypeNode, TypeParameterDeclaration, isInferTypeNode, isBlock, InterfaceDeclaration, ClassDeclaration, FunctionDeclaration, JsxEmit, isJsxFragment, isJsxOpeningLikeElement, ModuleResolutionKind, ResolutionMode, isEnumMember, getNameOfDeclaration, ExportDeclaration, Identifier, isSourceFile, ExportSpecifier, EnumDeclaration, isVariableDeclaration } from "typescript";
+import { Symbol, Node, VariableDeclaration, ParameterDeclaration, ModifierFlags, isLiteralExpression, ClassElement, isIdentifier, BindingPattern, SyntaxKind, findAncestor, SourceFile, isVariableStatement, SymbolFlags, isImportDeclaration, __String, isFunctionDeclaration, isClassDeclaration, isTypeAliasDeclaration, isExportDeclaration, isExportAssignment, isModuleDeclaration, NodeArray, isConstructSignatureDeclaration, isConstructorDeclaration, isImportEqualsDeclaration, isEnumDeclaration, isInterfaceDeclaration, isNamedExports, isModuleBlock, ModuleDeclaration, ArrayBindingElement, isExternalModuleReference, forEachChild, isMetaProperty, isComputedPropertyName, isPropertyAccessExpression, isPrivateIdentifier, Extension, isConditionalTypeNode, TypeElement, CompilerOptions, ModuleKind, ModuleDetectionKind, isMappedTypeNode, TypeParameterDeclaration, isInferTypeNode, isBlock, InterfaceDeclaration, ClassDeclaration, FunctionDeclaration, JsxEmit, isJsxFragment, isJsxOpeningLikeElement, ModuleResolutionKind, ResolutionMode, ExportDeclaration, Identifier, isSourceFile, ExportSpecifier, EnumDeclaration, isVariableDeclaration } from "typescript";
 import { Debug } from "./debug";
 import { forEach } from "./lang-utils";
 import { _Symbol } from "./types";
 import { isBindingPattern, getNodeId, hasSyntacticModifier, getEmitModuleKind, getEmitModuleResolutionKind, isEnumConst, nodeHasName } from "./utils";
 
 
-export interface NodeLinks {
+interface NodeLinks {
     isVisible?: boolean;
     symbol?: BasicSymbol;
     localSymbol?: BasicSymbol;
@@ -38,7 +38,7 @@ declare module 'typescript' {
     export function forEachChildRecursively<T>(rootNode: _Node, cbNode: (node: _Node, parent: _Node) => T | "skip" | undefined, cbNodes?: (nodes: _NodeArray<_Node>, parent: _Node) => T | "skip" | undefined): T | undefined
     export function getTokenPosOfNode(node: _Node, sourceFile?: _SourceFile, includeJsDoc?: boolean): number;
 }
-export function getEmitModuleDetectionKind(options: CompilerOptions) {
+function getEmitModuleDetectionKind(options: CompilerOptions) {
     return options.moduleDetection ||
         (getEmitModuleKind(options) === ModuleKind.Node16 || getEmitModuleKind(options) === ModuleKind.NodeNext ? ModuleDetectionKind.Force : ModuleDetectionKind.Auto);
 }
@@ -81,7 +81,7 @@ const syntaxKindToSymbolMap = {
     [SyntaxKind.ExportSpecifier]: [SymbolFlags.Alias | SymbolFlags.ExportValue, SymbolFlags.AliasExcludes],
     [SyntaxKind.NamespaceExportDeclaration]: [SymbolFlags.Alias, SymbolFlags.AliasExcludes],
     [SyntaxKind.ImportClause]: [SymbolFlags.Alias, SymbolFlags.AliasExcludes],
-} as const; //satisfies Partial<Record<SyntaxKind, SymbolRegistrationFlags | Record<string, SymbolRegistrationFlags>>>;
+} as const satisfies Partial<Record<SyntaxKind, SymbolRegistrationFlags | Record<string, SymbolRegistrationFlags>>>;
 
 export function bindSourceFile(file: SourceFile, options: CompilerOptions, packageModuleType: ResolutionMode) {
     const nodeLinks: NodeLinks[] = []
@@ -535,7 +535,7 @@ function isImportMeta(node: Node): boolean {
 
 
 /** @internal */
-export function getSetExternalModuleIndicator(options: CompilerOptions): [(node: SourceFile) => true | undefined, (node: Node) => boolean] {
+function getSetExternalModuleIndicator(options: CompilerOptions): [(node: SourceFile) => true | undefined, (node: Node) => boolean] {
     
     function isFileForcedToBeModuleByFormat(file: SourceFile): true | undefined {
         // Excludes declaration files - they still require an explicit `export {}` or the like
@@ -578,13 +578,13 @@ function getImpliedNodeFormat(fileName: string, options: CompilerOptions, packag
     }
 }
 
-export const enum ModuleInstanceState {
+const enum ModuleInstanceState {
     NonInstantiated = 0,
     Instantiated = 1,
     ConstEnumOnly = 2
 }
 
-export function getModuleInstanceState(node: ModuleDeclaration, visited?: Map<number, ModuleInstanceState | undefined>): ModuleInstanceState {
+function getModuleInstanceState(node: ModuleDeclaration, visited?: Map<number, ModuleInstanceState | undefined>): ModuleInstanceState {
     return node.body ? getModuleInstanceStateCached(node.body, visited) : ModuleInstanceState.Instantiated;
 }
 

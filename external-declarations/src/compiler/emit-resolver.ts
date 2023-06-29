@@ -2,11 +2,11 @@ import { Node, VariableDeclaration, PropertyDeclaration, PropertySignature, Para
 import { Debug } from "./debug";
 import { BasicSymbol, bindSourceFile } from "./emit-binder";
 import { appendIfUnique, emptyArray, every, filter } from "./lang-utils";
-import { EmitResolver, LateBoundDeclaration, LateVisibilityPaintedStatement, SymbolAccessibility, SymbolVisibilityResult, _Symbol } from "./types";
-import { isBindingPattern, isExternalModuleAugmentation, hasEffectiveModifier, getTextOfNode, hasSyntacticModifier, isInJSFile, isLateVisibilityPaintedStatement, isThisIdentifier, getFirstIdentifier, isPartOfTypeNode, AnyImportSyntax, hasDynamicName, skipParentheses, nodeIsPresent, isAmbientDeclaration } from "./utils";
+import { IsolatedEmitResolver, LateBoundDeclaration, LateVisibilityPaintedStatement, SymbolAccessibility, SymbolVisibilityResult, _Symbol } from "./types";
+import { isBindingPattern, isExternalModuleAugmentation, hasEffectiveModifier, hasSyntacticModifier, isInJSFile, isLateVisibilityPaintedStatement, isThisIdentifier, getFirstIdentifier, isPartOfTypeNode, AnyImportSyntax, hasDynamicName, skipParentheses, nodeIsPresent, isAmbientDeclaration } from "./utils";
 
 
-export function createEmitResolver(file: SourceFile, options: CompilerOptions, packageModuleType: ResolutionMode) {
+export function createEmitResolver(file: SourceFile, options: CompilerOptions, packageModuleType: ResolutionMode): IsolatedEmitResolver {
 
     const { getNodeLinks, resolveName } = bindSourceFile(file, options, packageModuleType);
 
@@ -41,7 +41,10 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
         isDeclarationVisible,
         isLiteralConstDeclaration,
         createLiteralConstValue(node) {
-            return 'initializer' in node && node.initializer;
+            if('initializer' in node && node.initializer) {
+                return node.initializer;
+            }
+            Debug.fail();
         }, 
         isLateBound(node): node is LateBoundDeclaration {
             const name = getNameOfDeclaration(node);
@@ -133,7 +136,7 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
         isImportRequiredByAugmentation() {
             return false;
         },
-    } as Partial<EmitResolver> as EmitResolver
+    }
 
 
     function isDeclarationReadonly(declaration: Declaration): boolean {
@@ -357,14 +360,14 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
             // We don't actually keep enough information for full accessibility,
             // We just do this to mark accessible imports
             accessibility: SymbolAccessibility.Accessible, 
-            errorSymbolName: getTextOfNode(firstIdentifier),
+            errorSymbolName: firstIdentifier.text,
             errorNode: firstIdentifier
         };
     }
 }
 
-/** @internal */
-export function getRootDeclaration(node: Node): Node {
+
+function getRootDeclaration(node: Node): Node {
     while (node.kind === SyntaxKind.BindingElement) {
         node = node.parent.parent;
     }
@@ -391,7 +394,7 @@ function getDeclarationContainer(node: Node): Node {
 function isGlobalSourceFile(node: Node) {
     return isSourceFile(node) && !isExternalModule(node);
 }
-export function isExternalModule(file: SourceFile): boolean {
+function isExternalModule(file: SourceFile): boolean {
     return file.externalModuleIndicator !== undefined;
 }
 

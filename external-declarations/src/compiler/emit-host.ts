@@ -2,7 +2,7 @@
 import * as ts from 'typescript'
 import { changeExtension } from '../test-runner/tsc-infrastructure/vpath';
 import { getDeclarationExtension, getDirectoryPath, getRelativePathFromDirectory, hasExtension, isDeclarationFile, isJavaScriptFile, resolvePath } from './path-utils';
-import { EmitHost } from './types';
+import { IsolatedEmitHost } from './types';
 import { getNodeId } from './utils';
 
 
@@ -64,5 +64,5 @@ export function createEmitHost(allProjectFiles: string[], tsLibFiles: string[], 
                 id: resolvedFileId,
             };
         },
-    } as Partial<EmitHost> as EmitHost
+    } as Partial<IsolatedEmitHost> as IsolatedEmitHost
 }

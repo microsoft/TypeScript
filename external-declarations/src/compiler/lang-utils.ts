@@ -280,32 +280,6 @@ export function map<T, U>(array: readonly T[] | undefined, f: (x: T, i: number) 
  }
  
 
-/**
- * Maps an array. If the mapped value is an array, it is spread into the result.
- *
- * @param array The array to map.
- * @param mapfn The callback used to map the result into one or more values.
- *
- * @internal
- */
- export function flatMap<T, U>(array: readonly T[] | undefined, mapfn: (x: T, i: number) => U | readonly U[] | undefined): readonly U[] {
-    let result: U[] | undefined;
-    if (array) {
-        for (let i = 0; i < array.length; i++) {
-            const v = mapfn(array[i], i);
-            if (v) {
-                if (isArray(v)) {
-                    result = addRange(result, v);
-                }
-                else {
-                    result = append(result, v);
-                }
-            }
-        }
-    }
-    return result || emptyArray;
-}
-
 /** @internal */
 export const emptyArray: never[] = [] as never[];
 
@@ -650,6 +624,19 @@ const _entries = Object.entries || (<T>(obj: MapLike<T>) => {
 const hasOwnProperty = Object.prototype.hasOwnProperty;
 
 /**
+ * Indicates whether a map-like contains an own property with the specified key.
+ *
+ * @param map A map-like.
+ * @param key A property key.
+ *
+ * @internal
+ */
+export function hasProperty(map: MapLike<any>, key: string): boolean {
+    return hasOwnProperty.call(map, key);
+}
+
+
+/**
  * Gets the owned, enumerable property keys of a map-like.
  *
  * @internal
@@ -943,3 +930,5 @@ export function clone<T>(object: T): T {
     }
     return result;
 }
+
+

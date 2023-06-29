@@ -1,25 +1,14 @@
 
-import * as path from 'path'
 import * as ts from 'typescript'
 import { compileFiles, TestFile, Utils } from "./tsc-infrastructure/compiler-run";
 import * as TestCaseParser from "./tsc-infrastructure/test-file-parser";
 import * as fsp from 'fs/promises'
-import { getDeclarationExtension, isDeclarationFile, isJavaScriptFile, isJSONFile, isSourceMapFile, isTypeScriptFile } from '../compiler/path-utils';
+import { getDeclarationExtension, isDeclarationFile, isTypeScriptFile } from '../compiler/path-utils';
 import { changeExtension } from './tsc-infrastructure/vpath';
 import * as vpath from "./tsc-infrastructure/vpath";
 import { libs } from './tsc-infrastructure/options';
 import { ModuleKind } from 'typescript';
 import { transformFile } from '../compiler/transform-file';
-
-export function swapLocation(file: string, changed: string, extension: string | undefined = ".d.ts") {
-    const parentDir = path.dirname(path.dirname(file));
-    let baseFile = path.basename(file)
-    if (extension) {
-        const existingExtension = path.extname(file);
-        baseFile = baseFile.substring(0, baseFile.length - existingExtension.length) + extension;
-    }
-    return path.join(parentDir, changed, baseFile);
-}
 
 export interface FileContent {
     content: string,
@@ -58,11 +47,11 @@ export function runTypeScript(caseData: TestCaseParser.TestCaseContent, settings
         .filter(isRelevantTestFile)
         .flatMap(file => {
             const declarationFile = changeExtension(file.name, getDeclarationExtension(file.name));
-            const declarationMapFile = declarationFile + ".map";
+            // const declarationMapFile = declarationFile + ".map";
             const resolvedDeclarationFile = vpath.resolve(result.vfs.cwd(), declarationFile);
-            const resolvedDeclarationMapFile = vpath.resolve(result.vfs.cwd(), declarationMapFile);
+            // const resolvedDeclarationMapFile = vpath.resolve(result.vfs.cwd(), declarationMapFile);
             const declaration = result.dts.get(resolvedDeclarationFile)
-            const declarationMap = result.maps.get(resolvedDeclarationMapFile)
+            // const declarationMap = result.maps.get(resolvedDeclarationMapFile)
             return [{
                 content: declaration?.text ?? "",
                 fileName: declarationFile,

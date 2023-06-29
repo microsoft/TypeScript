@@ -1,5 +1,5 @@
-import path = require("path");
-import ts = require("typescript");
+import * as path from "path";
+import * as ts from "typescript";
 import { normalizePath, changeAnyExtension } from "./path-utils";
 import { transformFile } from "./transform-file";
 import { tracer } from "./perf-tracer";

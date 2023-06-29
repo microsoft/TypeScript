@@ -3,7 +3,7 @@
 
 import { WatchFileKind, WatchDirectoryKind, PollingWatchKind, ScriptTarget, ModuleKind, ImportsNotUsedAsValues, ModuleResolutionKind, NewLineKind, ModuleDetectionKind, JsxEmit, DiagnosticMessage, CompilerOptionsValue, Diagnostic } from "typescript";
 import { isNullOrUndefined } from "../../compiler/lang-utils";
-import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { Diagnostics } from "./diagnosticInformationMap.generated";
 import { getEntries, mapDefined, startsWith, trimString } from "../../compiler/lang-utils";
 
 const jsxOptionMap = new Map(getEntries({

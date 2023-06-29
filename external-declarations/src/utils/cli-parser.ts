@@ -1,6 +1,6 @@
 
 
-export type ArgTypeParser<T> = (name: string, value: string | undefined, existingValue: T | undefined) => T
+type ArgTypeParser<T> = (name: string, value: string | undefined, existingValue: T | undefined) => T
 function mustNotExist<T>(fn: ArgTypeParser<T>): ArgTypeParser<T> {
     return (name, value, existingValue) => {
         if (existingValue) {

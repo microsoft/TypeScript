@@ -1,10 +1,15 @@
 
 import * as ts from 'typescript'
-import { transformDeclarations } from './declaration-emit';
+
 import { createEmitHost } from './emit-host';
 import { createEmitResolver } from './emit-resolver';
 import { TransformationContext } from './types';
 import { tracer } from './perf-tracer';
+import { SourceFile } from 'typescript';
+
+const transformDeclarations:  (context: TransformationContext) => {
+    (node: SourceFile): SourceFile;
+} = (ts as any).transformDeclarations
 
 export function transformFile(sourceFile: ts.SourceFile, allProjectFiles: string[], tsLibFiles: string[], options: ts.CompilerOptions, moduleType: ts.ResolutionMode) {
     

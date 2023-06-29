@@ -1,7 +1,6 @@
 import { CompilerOptions, Diagnostic } from "typescript";
-import ts = require("typescript");
-import { hasProperty } from "../../compiler/debug";
-import { trimString, startsWith, mapDefined, map, compareStringsCaseSensitive } from "../../compiler/lang-utils";
+import * as ts from "typescript";
+import { startsWith, map, compareStringsCaseSensitive, hasProperty } from "../../compiler/lang-utils";
 import * as opts from "./options";
 import * as TestCaseParser from "./test-file-parser";
 import * as vfs from "./vfs";
@@ -212,19 +211,6 @@ export namespace Utils {
         return 0;
     }
     
-    function checkDuplicatedFileName(resultName: string, dupeCase: Map<string, number>): string {
-        resultName = sanitizeTestFilePath(resultName);
-        if (dupeCase.has(resultName)) {
-            // A different baseline filename should be manufactured if the names differ only in case, for windows compat
-            const count = 1 + dupeCase.get(resultName)!;
-            dupeCase.set(resultName, count);
-            resultName = `${resultName}.dupe${count}`;
-        }
-        else {
-            dupeCase.set(resultName, 0);
-        }
-        return resultName;
-    }
     export function addUTF8ByteOrderMark(text: string) {
         return getByteOrderMarkLength(text) === 0 ? "\u00EF\u00BB\u00BF" + text : text;
     }

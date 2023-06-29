@@ -1,5 +1,5 @@
 import { Path } from "typescript";
-import { changeAnyExtension, comparePaths, comparePathsCaseInsensitive, comparePathsCaseSensitive, getAnyExtensionFromPath, getBaseFileName, getDirectoryPath, getPathComponents, getPathComponentsRelativeTo, getPathFromPathComponents, getRelativePathFromDirectory, isDiskPathRoot, isRootedDiskPath, reducePathComponents, resolvePath } from "../../compiler/path-utils";
+import { changeAnyExtension, comparePaths, comparePathsCaseInsensitive, comparePathsCaseSensitive, getAnyExtensionFromPath, getBaseFileName, getDirectoryPath, getPathComponents, getPathFromPathComponents, getRelativePathFromDirectory, isDiskPathRoot, isRootedDiskPath, reducePathComponents, resolvePath } from "../../compiler/path-utils";
 import { CharacterCodes } from "../../compiler/types";
 import { hasJSFileExtension, hasTSFileExtension, isDeclarationFileName } from "../../compiler/utils";
 import * as vfs from './vfs'

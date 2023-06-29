@@ -1,11 +1,8 @@
 import * as ts from 'typescript'
-import * as fsp from 'fs/promises'
 import * as fs from 'fs'
 import * as path from 'path'
-import { transformFile } from './compiler/transform-file';
 import { ArgType, parseArgs } from './utils/cli-parser';
-import { ensureDir, readAllFiles } from './utils/fs-utils';
-import { changeAnyExtension, normalizePath } from './compiler/path-utils';
+import { normalizePath } from './compiler/path-utils';
 import { CancellationToken, transformProject } from './compiler/transform-project';
 import { installTracer, tracer } from './compiler/perf-tracer';
 
@@ -32,11 +29,8 @@ const { value: parsedArgs, printUsageOnErrors } = parseArgs(process.argv.slice(2
 printUsageOnErrors();
 
 let projectConfig =  normalizePath(path.resolve(parsedArgs.project));
-let projectPath = projectConfig;
 if (path.extname(projectConfig) !== ".json") {
     projectConfig = normalizePath(path.join(projectConfig, "tsconfig.json"))
-} else {
-    projectPath = normalizePath(path.dirname(projectConfig));
 }
 
 
