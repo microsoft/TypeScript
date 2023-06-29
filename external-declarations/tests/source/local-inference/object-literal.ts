@@ -2,6 +2,7 @@ let value: string = "0";
 export let o = {
     n: 1,
     s: "s",
+    value,
     nested: {
         nn: 2
     },
@@ -13,6 +14,7 @@ export let o = {
 export let oRo = {
     n: 1,
     s: "s",
+    value,
     nested: {
         nn: 2
     },
@@ -74,3 +76,9 @@ export let a4 = {
     set x(v: string) {
     }
 }
+
+
+export const satisfied = {
+    save: () => {},
+    close: () => {},
+} as const satisfies Record<string, () => void>

@@ -9,7 +9,13 @@ export const hexNeg = -0x1;
 export const hexNegParan = -(((0x1)));
 
 export const s = "X";
+export const sPoz = +"X";
+export const sNeg = -"X";
+
 export const b = true;
+export const bPoz = +true;
+export const bNeg = -true;
+
 export const bn = 10n;
 
 export const t0 = `A`;

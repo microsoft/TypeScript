@@ -43,3 +43,10 @@ export const getMetricStatusFromResponse = (sessionResponse: boolean) =>
     sessionResponse
         ? 'SUCCESS'
         : 'FAILURE';
+
+
+export const getMetricStatusFromResponse2 = (sessionResponse: boolean) => {
+    return sessionResponse
+        ? 'SUCCESS'
+        : 'FAILURE';
+}

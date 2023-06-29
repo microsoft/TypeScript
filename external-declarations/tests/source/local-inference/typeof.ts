@@ -47,6 +47,7 @@ export const UnhappyLogLevel = {
     WARN: 'WARN',
 } as const;
 export const LogLevel = {
+    UNDEFINED: "UNDEFINED",
     ...HappyLogLevel,
     ...UnhappyLogLevel,
 } as const;

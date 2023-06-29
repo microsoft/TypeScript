@@ -30,6 +30,9 @@ export let numbers = [1, 2, 3];
 export let numbersNeg = [1, 2, 3, -1, -2, -3, -1, -2];
 export let strings = ["1", "2", "3"];
 
+let value = 1;
+export let values = [value, "A", 1]
+
 export let arrNestedObjects = [
     { bar: { baz: 1} },
     { bar: { bat: 1} },

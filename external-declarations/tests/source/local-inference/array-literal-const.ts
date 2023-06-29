@@ -10,6 +10,9 @@ export let arrObjects = [
     { bar: { baz: 1} },
 ] as const;
 
+let value = 1;
+export let values = [value, "A", 1] as const;
+
 
 let tuple = [1, 2, 3] as const
 export const composedTuple = [0, ...tuple] as const
