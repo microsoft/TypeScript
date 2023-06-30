@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/varArgsOnConstructorTypes.ts] ////
+
 //// [varArgsOnConstructorTypes.ts]
 export class A {
     constructor(ctor) { }
@@ -42,7 +44,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.B = exports.A = void 0;
     var A = /** @class */ (function () {
         function A(ctor) {

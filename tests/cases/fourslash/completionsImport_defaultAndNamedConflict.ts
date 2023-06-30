@@ -42,7 +42,7 @@ verify.applyCodeActionFromCompletion("", {
   name: "someModule",
   source: "/someModule",
   data: { exportName: "default", fileName: "/someModule.ts" },
-  description: `Import default 'someModule' from module "./someModule"`,
+  description: `Add import from "./someModule"`,
   newFileContent: `import someModule from "./someModule";
 
 someMo`

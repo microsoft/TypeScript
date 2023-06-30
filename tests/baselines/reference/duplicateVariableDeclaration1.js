@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicateVariableDeclaration1.ts] ////
+
 //// [duplicateVariableDeclaration1.ts]
 var v
 var v

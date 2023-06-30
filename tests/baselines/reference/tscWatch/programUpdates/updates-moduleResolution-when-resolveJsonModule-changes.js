@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/a.ts]
 import * as data from './data.json'
@@ -28,10 +29,11 @@ Output::
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
 [91m● [0m[96ma.ts[0m:[93m1[0m:[93m23[0m  [91mError[0m TS2732
-| import * as data from './data.json'
-  [91m                      ▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+  [91m[7m [0m [91m                      ▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 Cannot find module './data.json'. Consider using '--resolveJsonModule' to import module with '.json' extension.
 
+
+  [91m[7m [0m [91m                      ▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 [[90m12:00:26 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -51,31 +53,33 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /user/username/projects/myproject/a.ts (used version)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/a.ts:
-  {"fileName":"/user/username/projects/myproject/a.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
+/user/username/projects/myproject/data.json: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject: *new*
+  {}
+/user/username/projects/myproject/a.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/data.json:
-  {"directoryName":"/user/username/projects/myproject/data.json","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 
@@ -86,6 +90,9 @@ Input::
 {"compilerOptions":{"moduleResolution":"node","resolveJsonModule":true}}
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:30 AM[0m] File change detected. Starting incremental compilation...
@@ -110,27 +117,29 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/data.json (computed .d.ts)
 /user/username/projects/myproject/a.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/a.ts:
-  {"fileName":"/user/username/projects/myproject/a.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 /user/username/projects/myproject/data.json:
-  {"fileName":"/user/username/projects/myproject/data.json","pollingInterval":250}
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
+/a/lib/lib.d.ts:
+  {}
 /user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
+/user/username/projects/myproject/a.ts:
+  {}
+/user/username/projects/myproject/data.json: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/data.json:
-  {"directoryName":"/user/username/projects/myproject/data.json","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 
 exitCode:: ExitStatus.undefined
 

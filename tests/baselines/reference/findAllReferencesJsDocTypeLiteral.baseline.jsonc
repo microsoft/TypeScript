@@ -1,0 +1,137 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/foo.js ===
+// /**
+//  * @param {object} o - very important!
+//  * @param {string} o.x - a thing, its ok
+//  * @param {number} o.y - another thing
+//  * @param {Object} o.nested - very nested
+//  * @param {boolean} o.nested./*FIND ALL REFS*/[|{| isDefinition: true |}great|] - much greatness
+//  * @param {number} o.nested.times - twice? probably!??
+//  */
+//  function f(o) { return o.nested.[|great|]; }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/foo.js ===
+  // /**
+  //  * @param {object} o - very important!
+  //  * @param {string} o.x - a thing, its ok
+  //  * @param {number} o.y - another thing
+  //  * @param {Object} o.nested - very nested
+  //  * <|@param {boolean} o.nested./*FIND ALL REFS*/[|great|] - much greatness
+  //  * |>@param {number} o.nested.times - twice? probably!??
+  //  */
+  //  function f(o) { return o.nested.great; }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) great: boolean",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "great",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "boolean",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/foo.js ===
+// /**
+//  * @param {object} o - very important!
+//  * @param {string} o.x - a thing, its ok
+//  * @param {number} o.y - another thing
+//  * @param {Object} o.nested - very nested
+//  * @param {boolean} o.nested.[|great|] - much greatness
+//  * @param {number} o.nested.times - twice? probably!??
+//  */
+//  function f(o) { return o.nested./*FIND ALL REFS*/[|great|]; }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/foo.js ===
+  // /**
+  //  * @param {object} o - very important!
+  //  * @param {string} o.x - a thing, its ok
+  //  * @param {number} o.y - another thing
+  //  * @param {Object} o.nested - very nested
+  //  * <|@param {boolean} o.nested.[|great|] - much greatness
+  //  * |>@param {number} o.nested.times - twice? probably!??
+  //  */
+  //  function f(o) { return o.nested./*FIND ALL REFS*/great; }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) great: boolean",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "great",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "boolean",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]

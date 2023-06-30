@@ -1,4 +1,6 @@
-=== tests/cases/compiler/augmentedTypesEnum.ts ===
+//// [tests/cases/compiler/augmentedTypesEnum.ts] ////
+
+=== augmentedTypesEnum.ts ===
 // enum then var
 enum e1111 { One } // error
 >e1111 : Symbol(e1111, Decl(augmentedTypesEnum.ts, 0, 0))

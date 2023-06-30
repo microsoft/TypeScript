@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/a.ts]
 interface Document {
@@ -35,20 +36,23 @@ Output::
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
 [91m● [0m[96m../../../../a/lib/lib.d.ts[0m:[93m13[0m:[93m14[0m  [91mError[0m TS2687
-| readonly fullscreen: boolean;
-  [91m         ▔▔▔▔▔▔▔▔▔▔[0m
+  [91m[7m [0m [91m         ▔▔▔▔▔▔▔▔▔▔[0m
 All declarations of 'fullscreen' must have identical modifiers.
 
+
+  [91m[7m [0m [91m         ▔▔▔▔▔▔▔▔▔▔[0m
 [91m● [0m[96ma.ts[0m:[93m2[0m:[93m5[0m  [91mError[0m TS2687
-| fullscreen: boolean;
-  [91m▔▔▔▔▔▔▔▔▔▔[0m
+  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔▔[0m
 All declarations of 'fullscreen' must have identical modifiers.
 
+
+  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔▔[0m
 [91m● [0m[96mb.d.ts[0m:[93m2[0m:[93m5[0m  [91mError[0m TS2687
-| fullscreen: boolean;
-  [91m▔▔▔▔▔▔▔▔▔▔[0m
+  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔▔[0m
 All declarations of 'fullscreen' must have identical modifiers.
 
+
+  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔▔[0m
 [[90m12:00:26 AM[0m] Found 3 errors. Watching for file changes.
 
 
@@ -71,23 +75,25 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.ts (used version)
 /user/username/projects/myproject/b.d.ts (used version)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/a.ts:
-  {"fileName":"/user/username/projects/myproject/a.ts","pollingInterval":250}
-/user/username/projects/myproject/b.d.ts:
-  {"fileName":"/user/username/projects/myproject/b.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/a.ts: *new*
+  {}
+/user/username/projects/myproject/b.d.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -102,15 +108,19 @@ Input::
 {"compilerOptions":{"skipLibCheck":true}}
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:30 AM[0m] File change detected. Starting incremental compilation...
 
 [91m● [0m[96ma.ts[0m:[93m2[0m:[93m5[0m  [91mError[0m TS2687
-| fullscreen: boolean;
-  [91m▔▔▔▔▔▔▔▔▔▔[0m
+  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔▔[0m
 All declarations of 'fullscreen' must have identical modifiers.
 
+
+  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔▔[0m
 [[90m12:00:31 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -129,24 +139,6 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/a.ts:
-  {"fileName":"/user/username/projects/myproject/a.ts","pollingInterval":250}
-/user/username/projects/myproject/b.d.ts:
-  {"fileName":"/user/username/projects/myproject/b.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
 exitCode:: ExitStatus.undefined
 
 
@@ -157,20 +149,25 @@ Input::
 {"compilerOptions":{"skipDefaultLibCheck":true}}
 
 
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:35 AM[0m] File change detected. Starting incremental compilation...
 
 [91m● [0m[96ma.ts[0m:[93m2[0m:[93m5[0m  [91mError[0m TS2687
-| fullscreen: boolean;
-  [91m▔▔▔▔▔▔▔▔▔▔[0m
+  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔▔[0m
 All declarations of 'fullscreen' must have identical modifiers.
 
+
+  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔▔[0m
 [91m● [0m[96mb.d.ts[0m:[93m2[0m:[93m5[0m  [91mError[0m TS2687
-| fullscreen: boolean;
-  [91m▔▔▔▔▔▔▔▔▔▔[0m
+  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔▔[0m
 All declarations of 'fullscreen' must have identical modifiers.
 
+
+  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔▔[0m
 [[90m12:00:36 AM[0m] Found 2 errors. Watching for file changes.
 
 
@@ -189,24 +186,6 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/a.ts:
-  {"fileName":"/user/username/projects/myproject/a.ts","pollingInterval":250}
-/user/username/projects/myproject/b.d.ts:
-  {"fileName":"/user/username/projects/myproject/b.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
 exitCode:: ExitStatus.undefined
 
 
@@ -217,25 +196,31 @@ Input::
 {"compilerOptions":{}}
 
 
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:40 AM[0m] File change detected. Starting incremental compilation...
 
 [91m● [0m[96m../../../../a/lib/lib.d.ts[0m:[93m13[0m:[93m14[0m  [91mError[0m TS2687
-| readonly fullscreen: boolean;
-  [91m         ▔▔▔▔▔▔▔▔▔▔[0m
+  [91m[7m [0m [91m         ▔▔▔▔▔▔▔▔▔▔[0m
 All declarations of 'fullscreen' must have identical modifiers.
 
+
+  [91m[7m [0m [91m         ▔▔▔▔▔▔▔▔▔▔[0m
 [91m● [0m[96ma.ts[0m:[93m2[0m:[93m5[0m  [91mError[0m TS2687
-| fullscreen: boolean;
-  [91m▔▔▔▔▔▔▔▔▔▔[0m
+  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔▔[0m
 All declarations of 'fullscreen' must have identical modifiers.
 
+
+  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔▔[0m
 [91m● [0m[96mb.d.ts[0m:[93m2[0m:[93m5[0m  [91mError[0m TS2687
-| fullscreen: boolean;
-  [91m▔▔▔▔▔▔▔▔▔▔[0m
+  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔▔[0m
 All declarations of 'fullscreen' must have identical modifiers.
 
+
+  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔▔[0m
 [[90m12:00:41 AM[0m] Found 3 errors. Watching for file changes.
 
 
@@ -253,24 +238,6 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/a.ts:
-  {"fileName":"/user/username/projects/myproject/a.ts","pollingInterval":250}
-/user/username/projects/myproject/b.d.ts:
-  {"fileName":"/user/username/projects/myproject/b.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
 exitCode:: ExitStatus.undefined
 
 
@@ -281,21 +248,26 @@ Input::
 {"compilerOptions":{"skipDefaultLibCheck":true}}
 
 
+Before running Timeout callback:: count: 1
+4: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:45 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:46 AM[0m] File change detected. Starting incremental compilation...
 
 [91m● [0m[96ma.ts[0m:[93m2[0m:[93m5[0m  [91mError[0m TS2687
-| fullscreen: boolean;
-  [91m▔▔▔▔▔▔▔▔▔▔[0m
+  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔▔[0m
 All declarations of 'fullscreen' must have identical modifiers.
 
+
+  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔▔[0m
 [91m● [0m[96mb.d.ts[0m:[93m2[0m:[93m5[0m  [91mError[0m TS2687
-| fullscreen: boolean;
-  [91m▔▔▔▔▔▔▔▔▔▔[0m
+  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔▔[0m
 All declarations of 'fullscreen' must have identical modifiers.
 
-[[90m12:00:46 AM[0m] Found 2 errors. Watching for file changes.
+
+  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔▔[0m
+[[90m12:00:47 AM[0m] Found 2 errors. Watching for file changes.
 
 
 
@@ -312,24 +284,6 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/a.ts:
-  {"fileName":"/user/username/projects/myproject/a.ts","pollingInterval":250}
-/user/username/projects/myproject/b.d.ts:
-  {"fileName":"/user/username/projects/myproject/b.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
 exitCode:: ExitStatus.undefined
 
 
@@ -340,16 +294,20 @@ Input::
 {"compilerOptions":{"skipLibCheck":true}}
 
 
+Before running Timeout callback:: count: 1
+5: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:50 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:51 AM[0m] File change detected. Starting incremental compilation...
 
 [91m● [0m[96ma.ts[0m:[93m2[0m:[93m5[0m  [91mError[0m TS2687
-| fullscreen: boolean;
-  [91m▔▔▔▔▔▔▔▔▔▔[0m
+  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔▔[0m
 All declarations of 'fullscreen' must have identical modifiers.
 
-[[90m12:00:51 AM[0m] Found 1 error. Watching for file changes.
+
+  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔▔[0m
+[[90m12:00:52 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -367,24 +325,6 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/a.ts:
-  {"fileName":"/user/username/projects/myproject/a.ts","pollingInterval":250}
-/user/username/projects/myproject/b.d.ts:
-  {"fileName":"/user/username/projects/myproject/b.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
 exitCode:: ExitStatus.undefined
 
 
@@ -395,26 +335,32 @@ Input::
 {"compilerOptions":{}}
 
 
+Before running Timeout callback:: count: 1
+6: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:55 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:56 AM[0m] File change detected. Starting incremental compilation...
 
 [91m● [0m[96m../../../../a/lib/lib.d.ts[0m:[93m13[0m:[93m14[0m  [91mError[0m TS2687
-| readonly fullscreen: boolean;
-  [91m         ▔▔▔▔▔▔▔▔▔▔[0m
+  [91m[7m [0m [91m         ▔▔▔▔▔▔▔▔▔▔[0m
 All declarations of 'fullscreen' must have identical modifiers.
 
+
+  [91m[7m [0m [91m         ▔▔▔▔▔▔▔▔▔▔[0m
 [91m● [0m[96ma.ts[0m:[93m2[0m:[93m5[0m  [91mError[0m TS2687
-| fullscreen: boolean;
-  [91m▔▔▔▔▔▔▔▔▔▔[0m
+  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔▔[0m
 All declarations of 'fullscreen' must have identical modifiers.
 
+
+  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔▔[0m
 [91m● [0m[96mb.d.ts[0m:[93m2[0m:[93m5[0m  [91mError[0m TS2687
-| fullscreen: boolean;
-  [91m▔▔▔▔▔▔▔▔▔▔[0m
+  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔▔[0m
 All declarations of 'fullscreen' must have identical modifiers.
 
-[[90m12:00:56 AM[0m] Found 3 errors. Watching for file changes.
+
+  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔▔[0m
+[[90m12:00:57 AM[0m] Found 3 errors. Watching for file changes.
 
 
 
@@ -431,24 +377,6 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/b.d.ts
 
 No shapes updated in the builder::
-
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/a.ts:
-  {"fileName":"/user/username/projects/myproject/a.ts","pollingInterval":250}
-/user/username/projects/myproject/b.d.ts:
-  {"fileName":"/user/username/projects/myproject/b.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 

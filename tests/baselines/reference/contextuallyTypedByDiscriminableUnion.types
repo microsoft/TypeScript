@@ -1,6 +1,8 @@
-=== tests/cases/compiler/contextuallyTypedByDiscriminableUnion.ts ===
+//// [tests/cases/compiler/contextuallyTypedByDiscriminableUnion.ts] ////
+
+=== contextuallyTypedByDiscriminableUnion.ts ===
 type ADT = {
->ADT : ADT
+>ADT : { kind: "a"; method(x: string): number; } | { kind: "b"; method(x: number): string; }
 
     kind: "a",
 >kind : "a"

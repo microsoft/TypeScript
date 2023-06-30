@@ -1,4 +1,6 @@
-=== tests/cases/compiler/indexedAccessNormalization.ts ===
+//// [tests/cases/compiler/indexedAccessNormalization.ts] ////
+
+=== indexedAccessNormalization.ts ===
 // Repro from from #43152
 
 type MyMap<M extends object> = {
@@ -11,7 +13,7 @@ type MyMap<M extends object> = {
 }
 
 declare function g<T>(value?: T): void;
->g : <T>(value?: T | undefined) => void
+>g : <T>(value?: T) => void
 >value : T | undefined
 
 function f1<M extends object>(mymap: MyMap<M>, k: keyof M) {

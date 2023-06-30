@@ -35,7 +35,7 @@ verify.completions({
 verify.applyCodeActionFromCompletion("", {
     name: "publicSym",
     source: "/a",
-    description: `Add 'publicSym' to existing import declaration from "./a"`,
+    description: `Update import from "./a"`,
     newFileContent:
 `import { i, publicSym } from "./a";
 i.;`

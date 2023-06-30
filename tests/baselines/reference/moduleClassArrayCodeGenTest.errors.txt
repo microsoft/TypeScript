@@ -1,7 +1,7 @@
-tests/cases/compiler/moduleClassArrayCodeGenTest.ts(10,11): error TS2694: Namespace 'M' has no exported member 'B'.
+moduleClassArrayCodeGenTest.ts(10,11): error TS2694: Namespace 'M' has no exported member 'B'.
 
 
-==== tests/cases/compiler/moduleClassArrayCodeGenTest.ts (1 errors) ====
+==== moduleClassArrayCodeGenTest.ts (1 errors) ====
     // Invalid code gen for Array of Module class
     
     module M

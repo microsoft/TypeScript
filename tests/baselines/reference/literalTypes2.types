@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/literal/literalTypes2.ts ===
+//// [tests/cases/conformance/types/literal/literalTypes2.ts] ////
+
+=== literalTypes2.ts ===
 enum E {
 >E : E
 
@@ -246,7 +248,6 @@ function f3() {
 >cond ? "abc" : null : "abc"
 >cond : boolean
 >"abc" : "abc"
->null : null
 
     const c5 = cond ? 456 : undefined;
 >c5 : 456
@@ -756,7 +757,7 @@ function append<T>(a: T[], x: T): T[] {
 }
 
 type Bit = 0 | 1;
->Bit : Bit
+>Bit : 0 | 1
 
 let aa = makeArray<Bit>(0);
 >aa : Bit[]

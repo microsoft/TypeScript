@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualTypeShouldBeLiteral.ts ===
+//// [tests/cases/compiler/contextualTypeShouldBeLiteral.ts] ////
+
+=== contextualTypeShouldBeLiteral.ts ===
 interface X {
     type: 'x';
 >type : "x"
@@ -243,7 +245,7 @@ interface TestString {
 }
 
 type TestGeneric = (TestString | TestObject) & { [k: string]: any; };
->TestGeneric : TestGeneric
+>TestGeneric : (TestObject | TestString) & { [k: string]: any; }
 >k : string
 
 const test: TestGeneric = {

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/controlFlow/controlFlowBinaryOrExpression.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowBinaryOrExpression.ts] ////
+
+=== controlFlowBinaryOrExpression.ts ===
 let x: string | number | boolean;
 >x : string | number | boolean
 
@@ -54,7 +56,7 @@ declare function isHTMLCollection(sourceObj: any): sourceObj is HTMLCollection;
 >sourceObj : any
 
 type EventTargetLike = {a: string} | HTMLCollection | NodeList;
->EventTargetLike : EventTargetLike
+>EventTargetLike : NodeList | HTMLCollection | { a: string; }
 >a : string
 
 var sourceObj: EventTargetLike = <any>undefined;

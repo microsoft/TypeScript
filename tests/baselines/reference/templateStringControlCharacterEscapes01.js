@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/templates/templateStringControlCharacterEscapes01.ts] ////
+
 //// [templateStringControlCharacterEscapes01.ts]
 var x = `\0\x00\u0000 0 00 0000`;
 

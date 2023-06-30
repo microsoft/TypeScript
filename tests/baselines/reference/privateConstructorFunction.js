@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/privateConstructorFunction.ts] ////
+
 //// [privateConstructorFunction.js]
 {
     // make sure not to crash when parent's a block rather than a source file or some other

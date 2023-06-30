@@ -1,0 +1,53 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/Foo.js ===
+// /** @type {function (/*FIND ALL REFS*/<|[|{| isWriteAccess: true, isDefinition: true |}new|]: string|>, string): string} */
+// var f;
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/Foo.js ===
+  // /** @type {function (/*FIND ALL REFS*/<|[|new|]: string|>, string): string} */
+  // var f;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "parameter",
+    "name": "(parameter) new: string",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "parameter",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "new",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]

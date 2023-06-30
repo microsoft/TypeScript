@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constEnumOnlyModuleMerging.ts] ////
+
 //// [constEnumOnlyModuleMerging.ts]
 module Outer {
     export var x = 1;
@@ -21,6 +23,6 @@ var Outer;
 var B;
 (function (B) {
     var O = Outer;
-    var x = 0 /* X */;
+    var x = 0 /* O.A.X */;
     var y = O.x;
 })(B || (B = {}));

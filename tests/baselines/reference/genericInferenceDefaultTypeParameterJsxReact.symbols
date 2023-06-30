@@ -1,0 +1,42 @@
+//// [tests/cases/compiler/genericInferenceDefaultTypeParameterJsxReact.tsx] ////
+
+=== genericInferenceDefaultTypeParameterJsxReact.tsx ===
+/// <reference path="react16.d.ts" />
+
+// Repro from #50858
+
+import React, { ComponentPropsWithRef, ElementType, ReactNode } from 'react';
+>React : Symbol(React, Decl(genericInferenceDefaultTypeParameterJsxReact.tsx, 4, 6))
+>ComponentPropsWithRef : Symbol(ComponentPropsWithRef, Decl(genericInferenceDefaultTypeParameterJsxReact.tsx, 4, 15))
+>ElementType : Symbol(ElementType, Decl(genericInferenceDefaultTypeParameterJsxReact.tsx, 4, 38))
+>ReactNode : Symbol(ReactNode, Decl(genericInferenceDefaultTypeParameterJsxReact.tsx, 4, 51))
+
+type ButtonBaseProps<T extends ElementType> = ComponentPropsWithRef<T> & { children?: ReactNode };
+>ButtonBaseProps : Symbol(ButtonBaseProps, Decl(genericInferenceDefaultTypeParameterJsxReact.tsx, 4, 77))
+>T : Symbol(T, Decl(genericInferenceDefaultTypeParameterJsxReact.tsx, 6, 21))
+>ElementType : Symbol(ElementType, Decl(genericInferenceDefaultTypeParameterJsxReact.tsx, 4, 38))
+>ComponentPropsWithRef : Symbol(ComponentPropsWithRef, Decl(genericInferenceDefaultTypeParameterJsxReact.tsx, 4, 15))
+>T : Symbol(T, Decl(genericInferenceDefaultTypeParameterJsxReact.tsx, 6, 21))
+>children : Symbol(children, Decl(genericInferenceDefaultTypeParameterJsxReact.tsx, 6, 74))
+>ReactNode : Symbol(ReactNode, Decl(genericInferenceDefaultTypeParameterJsxReact.tsx, 4, 51))
+
+function Component<T extends ElementType = 'span'>(props: ButtonBaseProps<T>) {
+>Component : Symbol(Component, Decl(genericInferenceDefaultTypeParameterJsxReact.tsx, 6, 98))
+>T : Symbol(T, Decl(genericInferenceDefaultTypeParameterJsxReact.tsx, 8, 19))
+>ElementType : Symbol(ElementType, Decl(genericInferenceDefaultTypeParameterJsxReact.tsx, 4, 38))
+>props : Symbol(props, Decl(genericInferenceDefaultTypeParameterJsxReact.tsx, 8, 51))
+>ButtonBaseProps : Symbol(ButtonBaseProps, Decl(genericInferenceDefaultTypeParameterJsxReact.tsx, 4, 77))
+>T : Symbol(T, Decl(genericInferenceDefaultTypeParameterJsxReact.tsx, 8, 19))
+
+    return <></>;
+}
+
+const v1 = <Component onClick={e => e.preventDefault()} />;
+>v1 : Symbol(v1, Decl(genericInferenceDefaultTypeParameterJsxReact.tsx, 12, 5))
+>Component : Symbol(Component, Decl(genericInferenceDefaultTypeParameterJsxReact.tsx, 6, 98))
+>onClick : Symbol(onClick, Decl(genericInferenceDefaultTypeParameterJsxReact.tsx, 12, 21))
+>e : Symbol(e, Decl(genericInferenceDefaultTypeParameterJsxReact.tsx, 12, 31))
+>e.preventDefault : Symbol(React.SyntheticEvent.preventDefault, Decl(react16.d.ts, 642, 31))
+>e : Symbol(e, Decl(genericInferenceDefaultTypeParameterJsxReact.tsx, 12, 31))
+>preventDefault : Symbol(React.SyntheticEvent.preventDefault, Decl(react16.d.ts, 642, 31))
+

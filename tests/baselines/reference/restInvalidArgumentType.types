@@ -1,4 +1,6 @@
-=== tests/cases/compiler/restInvalidArgumentType.ts ===
+//// [tests/cases/compiler/restInvalidArgumentType.ts] ////
+
+=== restInvalidArgumentType.ts ===
 enum E { v1, v2 };
 >E : E
 >v1 : E.v1
@@ -61,7 +63,6 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 
     var n: null;
 >n : null
->null : null
 
     var a: any;
 >a : any
@@ -84,7 +85,7 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 
     var {...r5} = k;   // Error, index
 >r5 : any
->k : keyof T
+>k : string | number | symbol
 
     var {...r6} = mapped_generic; // Error, generic mapped object type
 >r6 : { [P in keyof T]: T[P]; }

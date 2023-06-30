@@ -26,7 +26,7 @@ verify.completions({
 verify.applyCodeActionFromCompletion("b", {
     name: "foo",
     source: "/a",
-    description: `Import 'foo' from module "./a"`,
+    description: `Add import from "./a"`,
     newFileContent:
 `import * as s from "something";
 import { foo } from "./a";

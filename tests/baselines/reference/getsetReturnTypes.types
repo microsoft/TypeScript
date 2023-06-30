@@ -1,4 +1,6 @@
-=== tests/cases/compiler/getsetReturnTypes.ts ===
+//// [tests/cases/compiler/getsetReturnTypes.ts] ////
+
+=== getsetReturnTypes.ts ===
 function makePoint(x: number) { 
 >makePoint : (x: number) => { readonly x: number; }
 >x : number

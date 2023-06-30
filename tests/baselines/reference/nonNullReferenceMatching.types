@@ -1,18 +1,19 @@
-=== tests/cases/compiler/nonNullReferenceMatching.ts ===
+//// [tests/cases/compiler/nonNullReferenceMatching.ts] ////
+
+=== nonNullReferenceMatching.ts ===
 type ElementRef = (element: HTMLElement | null) => void;
->ElementRef : ElementRef
+>ElementRef : (element: HTMLElement | null) => void
 >element : HTMLElement | null
->null : null
 
 type ThumbProps = {
->ThumbProps : ThumbProps
+>ThumbProps : { elementRef?: ElementRef | undefined; }
 
     elementRef?: ElementRef;
 >elementRef : ElementRef | undefined
 }
 
 type ComponentProps = {
->ComponentProps : ComponentProps
+>ComponentProps : { thumbYProps?: ThumbProps | undefined; thumbXProps: ThumbProps; }
 
     thumbYProps?: ThumbProps;
 >thumbYProps : ThumbProps | undefined
@@ -31,7 +32,6 @@ class Component {
 >thumbYElementRef : (ref: HTMLElement | null) => void
 >(ref: HTMLElement | null) => {        typeof this.props.thumbYProps!.elementRef === 'function' && this.props.thumbYProps!.elementRef(ref);        typeof (this.props.thumbYProps!.elementRef) === 'function' && this.props.thumbYProps!.elementRef(ref);        typeof ((this.props).thumbYProps!.elementRef)! === 'function' && this.props.thumbYProps!.elementRef(ref);        typeof this.props.thumbXProps.elementRef === 'function' && this.props.thumbXProps.elementRef(ref);        typeof this.props.thumbXProps.elementRef === 'function' && (this.props).thumbXProps.elementRef(ref);        typeof this.props.thumbXProps.elementRef === 'function' && (this.props.thumbXProps).elementRef(ref);        typeof this.props.thumbXProps.elementRef === 'function' && ((this.props)!.thumbXProps)!.elementRef(ref);        typeof (this.props.thumbXProps).elementRef === 'function' && ((this.props)!.thumbXProps)!.elementRef(ref);        typeof this.props!.thumbXProps!.elementRef === 'function' && ((this.props)!.thumbXProps)!.elementRef(ref);    } : (ref: HTMLElement | null) => void
 >ref : HTMLElement | null
->null : null
 
         typeof this.props.thumbYProps!.elementRef === 'function' && this.props.thumbYProps!.elementRef(ref);
 >typeof this.props.thumbYProps!.elementRef === 'function' && this.props.thumbYProps!.elementRef(ref) : false | void

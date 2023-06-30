@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/members/indexSignatures1.ts ===
+//// [tests/cases/conformance/types/members/indexSignatures1.ts] ////
+
+=== indexSignatures1.ts ===
 // Symbol index signature checking
 
 const sym = Symbol();
@@ -133,7 +135,9 @@ const y1 = dom['data123'];
 
 const y2 = dom.data123;
 >y2 : Symbol(y2, Decl(indexSignatures1.ts, 47, 5))
+>dom.data123 : Symbol(__index, Decl(indexSignatures1.ts, 45, 18))
 >dom : Symbol(dom, Decl(indexSignatures1.ts, 45, 11))
+>data123 : Symbol(__index, Decl(indexSignatures1.ts, 45, 18))
 
 // Excess property checking for template pattern index signature
 

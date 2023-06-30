@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumUsedBeforeDeclaration.ts] ////
+
 //// [enumUsedBeforeDeclaration.ts]
 const v: Color = Color.Green;
 const v2: ConstColor = ConstColor.Green;
@@ -8,7 +10,7 @@ const enum ConstColor { Red, Green, Blue }
 
 //// [enumUsedBeforeDeclaration.js]
 var v = Color.Green;
-var v2 = 1 /* Green */;
+var v2 = 1 /* ConstColor.Green */;
 var Color;
 (function (Color) {
     Color[Color["Red"] = 0] = "Red";

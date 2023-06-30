@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsDeclarationsErrors.ts ===
+//// [tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsDeclarationsErrors.ts] ////
+
+=== uniqueSymbolsDeclarationsErrors.ts ===
 declare const s: unique symbol;
 >s : unique symbol
 
@@ -76,7 +78,7 @@ export interface InterfaceWithPrivateNamedMethods {
 }
 
 export type TypeLiteralWithPrivateNamedProperties = {
->TypeLiteralWithPrivateNamedProperties : TypeLiteralWithPrivateNamedProperties
+>TypeLiteralWithPrivateNamedProperties : { [s]: any; }
 
     [s]: any;
 >[s] : any
@@ -84,7 +86,7 @@ export type TypeLiteralWithPrivateNamedProperties = {
 }
 
 export type TypeLiteralWithPrivateNamedMethods = {
->TypeLiteralWithPrivateNamedMethods : TypeLiteralWithPrivateNamedMethods
+>TypeLiteralWithPrivateNamedMethods : { [s](): any; }
 
     [s](): any;
 >[s] : () => any

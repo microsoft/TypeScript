@@ -8,7 +8,7 @@ interface Array<T> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    find<S extends T>(predicate: (this: void, value: T, index: number, obj: T[]) => value is S, thisArg?: any): S | undefined;
+    find<S extends T>(predicate: (value: T, index: number, obj: T[]) => value is S, thisArg?: any): S | undefined;
     find(predicate: (value: T, index: number, obj: T[]) => unknown, thisArg?: any): T | undefined;
 
     /**
@@ -38,10 +38,10 @@ interface Array<T> {
      * @param target If target is negative, it is treated as length+target where length is the
      * length of the array.
      * @param start If start is negative, it is treated as length+start. If end is negative, it
-     * is treated as length+end.
+     * is treated as length+end. If start is omitted, `0` is used.
      * @param end If not specified, length of the this object is used as its default value.
      */
-    copyWithin(target: number, start: number, end?: number): this;
+    copyWithin(target: number, start?: number, end?: number): this;
 }
 
 interface ArrayConstructor {
@@ -263,7 +263,7 @@ interface ObjectConstructor {
      * @param target The target object to copy to.
      * @param source The source object from which to copy properties.
      */
-    assign<T, U>(target: T, source: U): T & U;
+    assign<T extends {}, U>(target: T, source: U): T & U;
 
     /**
      * Copy the values of all of the enumerable own properties from one or more source objects to a
@@ -272,7 +272,7 @@ interface ObjectConstructor {
      * @param source1 The first source object from which to copy properties.
      * @param source2 The second source object from which to copy properties.
      */
-    assign<T, U, V>(target: T, source1: U, source2: V): T & U & V;
+    assign<T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V;
 
     /**
      * Copy the values of all of the enumerable own properties from one or more source objects to a
@@ -282,7 +282,7 @@ interface ObjectConstructor {
      * @param source2 The second source object from which to copy properties.
      * @param source3 The third source object from which to copy properties.
      */
-    assign<T, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W;
+    assign<T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W;
 
     /**
      * Copy the values of all of the enumerable own properties from one or more source objects to a
@@ -329,7 +329,7 @@ interface ReadonlyArray<T> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    find<S extends T>(predicate: (this: void, value: T, index: number, obj: readonly T[]) => value is S, thisArg?: any): S | undefined;
+    find<S extends T>(predicate: (value: T, index: number, obj: readonly T[]) => value is S, thisArg?: any): S | undefined;
     find(predicate: (value: T, index: number, obj: readonly T[]) => unknown, thisArg?: any): T | undefined;
 
     /**

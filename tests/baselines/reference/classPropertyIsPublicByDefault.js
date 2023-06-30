@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/accessibility/classPropertyIsPublicByDefault.ts] ////
+
 //// [classPropertyIsPublicByDefault.ts]
 class C {
     x: string;

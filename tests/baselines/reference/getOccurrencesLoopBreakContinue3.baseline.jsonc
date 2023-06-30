@@ -1,0 +1,200 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesLoopBreakContinue3.ts ===
+// --- (line: 14) skipped ---
+//         continue label2;
+// 
+//         function foo() {
+//             label3: /*HIGHLIGHTS*/[|{| kind: "none" |}while|] (true) {
+//                 [|{| kind: "none" |}break|];
+//                 [|{| kind: "none" |}continue|];
+//                 [|{| kind: "none" |}break|] label3;
+//                 [|{| kind: "none" |}continue|] label3;
+// 
+//                 // these cross function boundaries
+//                 break label1;
+// --- (line: 26) skipped ---
+
+// --- (line: 32) skipped ---
+//                     break label4;
+//                     continue label4;
+// 
+//                     [|{| kind: "none" |}break|] label3;
+//                     [|{| kind: "none" |}continue|] label3;
+// 
+//                     switch (10) {
+//                         case 1:
+// --- (line: 41) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesLoopBreakContinue3.ts ===
+// --- (line: 14) skipped ---
+//         continue label2;
+// 
+//         function foo() {
+//             label3: [|{| kind: "none" |}while|] (true) {
+//                 /*HIGHLIGHTS*/[|{| kind: "none" |}break|];
+//                 [|{| kind: "none" |}continue|];
+//                 [|{| kind: "none" |}break|] label3;
+//                 [|{| kind: "none" |}continue|] label3;
+// 
+//                 // these cross function boundaries
+//                 break label1;
+// --- (line: 26) skipped ---
+
+// --- (line: 32) skipped ---
+//                     break label4;
+//                     continue label4;
+// 
+//                     [|{| kind: "none" |}break|] label3;
+//                     [|{| kind: "none" |}continue|] label3;
+// 
+//                     switch (10) {
+//                         case 1:
+// --- (line: 41) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesLoopBreakContinue3.ts ===
+// --- (line: 14) skipped ---
+//         continue label2;
+// 
+//         function foo() {
+//             label3: [|{| kind: "none" |}while|] (true) {
+//                 [|{| kind: "none" |}break|];
+//                 /*HIGHLIGHTS*/[|{| kind: "none" |}continue|];
+//                 [|{| kind: "none" |}break|] label3;
+//                 [|{| kind: "none" |}continue|] label3;
+// 
+//                 // these cross function boundaries
+//                 break label1;
+// --- (line: 26) skipped ---
+
+// --- (line: 32) skipped ---
+//                     break label4;
+//                     continue label4;
+// 
+//                     [|{| kind: "none" |}break|] label3;
+//                     [|{| kind: "none" |}continue|] label3;
+// 
+//                     switch (10) {
+//                         case 1:
+// --- (line: 41) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesLoopBreakContinue3.ts ===
+// --- (line: 14) skipped ---
+//         continue label2;
+// 
+//         function foo() {
+//             label3: [|{| kind: "none" |}while|] (true) {
+//                 [|{| kind: "none" |}break|];
+//                 [|{| kind: "none" |}continue|];
+//                 /*HIGHLIGHTS*/[|{| kind: "none" |}break|] label3;
+//                 [|{| kind: "none" |}continue|] label3;
+// 
+//                 // these cross function boundaries
+//                 break label1;
+// --- (line: 26) skipped ---
+
+// --- (line: 32) skipped ---
+//                     break label4;
+//                     continue label4;
+// 
+//                     [|{| kind: "none" |}break|] label3;
+//                     [|{| kind: "none" |}continue|] label3;
+// 
+//                     switch (10) {
+//                         case 1:
+// --- (line: 41) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesLoopBreakContinue3.ts ===
+// --- (line: 14) skipped ---
+//         continue label2;
+// 
+//         function foo() {
+//             label3: [|{| kind: "none" |}while|] (true) {
+//                 [|{| kind: "none" |}break|];
+//                 [|{| kind: "none" |}continue|];
+//                 [|{| kind: "none" |}break|] label3;
+//                 /*HIGHLIGHTS*/[|{| kind: "none" |}continue|] label3;
+// 
+//                 // these cross function boundaries
+//                 break label1;
+// --- (line: 26) skipped ---
+
+// --- (line: 32) skipped ---
+//                     break label4;
+//                     continue label4;
+// 
+//                     [|{| kind: "none" |}break|] label3;
+//                     [|{| kind: "none" |}continue|] label3;
+// 
+//                     switch (10) {
+//                         case 1:
+// --- (line: 41) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesLoopBreakContinue3.ts ===
+// --- (line: 14) skipped ---
+//         continue label2;
+// 
+//         function foo() {
+//             label3: [|{| kind: "none" |}while|] (true) {
+//                 [|{| kind: "none" |}break|];
+//                 [|{| kind: "none" |}continue|];
+//                 [|{| kind: "none" |}break|] label3;
+//                 [|{| kind: "none" |}continue|] label3;
+// 
+//                 // these cross function boundaries
+//                 break label1;
+// --- (line: 26) skipped ---
+
+// --- (line: 32) skipped ---
+//                     break label4;
+//                     continue label4;
+// 
+//                     /*HIGHLIGHTS*/[|{| kind: "none" |}break|] label3;
+//                     [|{| kind: "none" |}continue|] label3;
+// 
+//                     switch (10) {
+//                         case 1:
+// --- (line: 41) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesLoopBreakContinue3.ts ===
+// --- (line: 14) skipped ---
+//         continue label2;
+// 
+//         function foo() {
+//             label3: [|{| kind: "none" |}while|] (true) {
+//                 [|{| kind: "none" |}break|];
+//                 [|{| kind: "none" |}continue|];
+//                 [|{| kind: "none" |}break|] label3;
+//                 [|{| kind: "none" |}continue|] label3;
+// 
+//                 // these cross function boundaries
+//                 break label1;
+// --- (line: 26) skipped ---
+
+// --- (line: 32) skipped ---
+//                     break label4;
+//                     continue label4;
+// 
+//                     [|{| kind: "none" |}break|] label3;
+//                     /*HIGHLIGHTS*/[|{| kind: "none" |}continue|] label3;
+// 
+//                     switch (10) {
+//                         case 1:
+// --- (line: 41) skipped ---

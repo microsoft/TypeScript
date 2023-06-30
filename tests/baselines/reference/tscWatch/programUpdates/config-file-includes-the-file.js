@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/f1.ts]
 export let x = 5
@@ -55,41 +56,35 @@ Shape signatures in builder refreshed for::
 /a/c/f2.ts (used version)
 /a/c/f3.ts (used version)
 
-WatchedFiles::
-/a/c/tsconfig.json:
-  {"fileName":"/a/c/tsconfig.json","pollingInterval":250}
-/a/c/f2.ts:
-  {"fileName":"/a/c/f2.ts","pollingInterval":250}
-/a/b/f1.ts:
-  {"fileName":"/a/b/f1.ts","pollingInterval":250}
-/a/c/f3.ts:
-  {"fileName":"/a/c/f3.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
 FsWatches::
-
-FsWatchesRecursive::
-/a/c/node_modules/@types:
-  {"directoryName":"/a/c/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/a/b/f1.ts: *new*
+  {}
+/a/c/f2.ts: *new*
+  {}
+/a/c/f3.ts: *new*
+  {}
+/a/c/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/f1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 5;
 
 
 //// [/a/c/f2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/a/c/f3.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = void 0;
 exports.y = 1;
 

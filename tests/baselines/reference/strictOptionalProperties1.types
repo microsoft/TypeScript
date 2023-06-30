@@ -1,4 +1,6 @@
-=== tests/cases/compiler/strictOptionalProperties1.ts ===
+//// [tests/cases/compiler/strictOptionalProperties1.ts] ////
+
+=== strictOptionalProperties1.ts ===
 function f1(obj: { a?: string, b?: string | undefined }) {
 >f1 : (obj: { a?: string; b?: string | undefined; }) => void
 >obj : { a?: string; b?: string | undefined; }
@@ -414,7 +416,7 @@ function f6() {
 // Example from #13195
 
 type Props = {
->Props : Props
+>Props : { foo: string; bar: string; }
 
     foo: string;
 >foo : string
@@ -424,7 +426,7 @@ type Props = {
 }
 
 type InputProps = {
->InputProps : InputProps
+>InputProps : { foo?: string; bar: string; }
 
     foo?: string;
 >foo : string | undefined
@@ -653,7 +655,7 @@ function expectNotUndefined<T>(value: Undefinable<T>): T {
 >'value is undefined' : "value is undefined"
     }
     return value;
->value : T
+>value : T & ({} | null)
 }
 
 interface Bar {
@@ -793,7 +795,7 @@ interface PropsFromMaterialUI {
 }
 
 type TheTypeFromMaterialUI = PropsFromReact & PropsFromMaterialUI;
->TheTypeFromMaterialUI : TheTypeFromMaterialUI
+>TheTypeFromMaterialUI : PropsFromReact & PropsFromMaterialUI
 
 interface NavBottomListItem extends TheTypeFromMaterialUI {
     value: string;

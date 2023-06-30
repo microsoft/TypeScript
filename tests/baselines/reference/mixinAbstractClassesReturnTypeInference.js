@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/mixinAbstractClassesReturnTypeInference.ts] ////
+
 //// [mixinAbstractClassesReturnTypeInference.ts]
 interface Mixin1 {
     mixinMethod(): void;

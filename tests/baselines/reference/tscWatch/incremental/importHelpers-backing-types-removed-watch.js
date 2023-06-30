@@ -1,3 +1,4 @@
+currentDirectory:: /users/username/projects/project useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -54,33 +55,35 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/node_modules/tslib/index.d.ts (used version)
 /users/username/projects/project/index.tsx (used version)
 
-WatchedFiles::
-/users/username/projects/project/tsconfig.json:
-  {"fileName":"/users/username/projects/project/tsconfig.json","pollingInterval":250}
-/users/username/projects/project/index.tsx:
-  {"fileName":"/users/username/projects/project/index.tsx","pollingInterval":250}
-/users/username/projects/project/node_modules/tslib/index.d.ts:
-  {"fileName":"/users/username/projects/project/node_modules/tslib/index.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/users/username/projects/project/node_modules/tslib/package.json:
-  {"fileName":"/users/username/projects/project/node_modules/tslib/package.json","pollingInterval":250}
+PolledWatches::
+/users/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/users/username/projects/project/index.tsx: *new*
+  {}
+/users/username/projects/project/node_modules/tslib/index.d.ts: *new*
+  {}
+/users/username/projects/project/node_modules/tslib/package.json: *new*
+  {}
+/users/username/projects/project/tsconfig.json: *new*
+  {}
 
 FsWatchesRecursive::
-/users/username/projects/project/node_modules:
-  {"directoryName":"/users/username/projects/project/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/users/username/projects/project/node_modules/@types:
-  {"directoryName":"/users/username/projects/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/users/username/projects/project:
-  {"directoryName":"/users/username/projects/project","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/users/username/projects/project: *new*
+  {}
+/users/username/projects/project/node_modules: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/users/username/projects/project/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 var tslib_1 = require("tslib");
 exports.x = tslib_1.__assign({});
@@ -93,15 +96,40 @@ Input::
 //// [/users/username/projects/project/node_modules/tslib/index.d.ts] deleted
 //// [/users/username/projects/project/node_modules/tslib/package.json] deleted
 
+PolledWatches *deleted*::
+/users/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches *deleted*::
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/project/index.tsx:
+  {}
+/users/username/projects/project/node_modules/tslib/index.d.ts:
+  {}
+/users/username/projects/project/node_modules/tslib/package.json:
+  {}
+/users/username/projects/project/tsconfig.json:
+  {}
+
+FsWatchesRecursive *deleted*::
+/users/username/projects/project:
+  {}
+/users/username/projects/project/node_modules:
+  {}
+
 Output::
 >> Screen clear
 [[90m12:00:35 AM[0m] Starting compilation in watch mode...
 
 [91m● [0m[96mindex.tsx[0m:[93m1[0m:[93m19[0m  [91mError[0m TS2354
-| export const x = {...{}};
-  [91m                  ▔▔▔▔▔[0m
+  [91m[7m [0m [91m                  ▔▔▔▔▔[0m
 This syntax requires an imported helper but module 'tslib' cannot be found.
 
+
+  [91m[7m [0m [91m                  ▔▔▔▔▔[0m
 [[90m12:00:39 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -121,25 +149,27 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /users/username/projects/project/index.tsx (used version)
 
-WatchedFiles::
-/users/username/projects/project/tsconfig.json:
-  {"fileName":"/users/username/projects/project/tsconfig.json","pollingInterval":250}
-/users/username/projects/project/index.tsx:
-  {"fileName":"/users/username/projects/project/index.tsx","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/users/username/projects/project/node_modules/tslib/package.json:
-  {"fileName":"/users/username/projects/project/node_modules/tslib/package.json","pollingInterval":250}
+PolledWatches::
+/users/username/projects/node_modules: *new*
+  {"pollingInterval":500}
+/users/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/users/username/projects/project/index.tsx: *new*
+  {}
+/users/username/projects/project/tsconfig.json: *new*
+  {}
 
 FsWatchesRecursive::
-/users/username/projects/project/node_modules:
-  {"directoryName":"/users/username/projects/project/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/users/username/projects/project/node_modules/@types:
-  {"directoryName":"/users/username/projects/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/users/username/projects/project:
-  {"directoryName":"/users/username/projects/project","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/users/username/projects/project: *new*
+  {}
+/users/username/projects/project/node_modules: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 

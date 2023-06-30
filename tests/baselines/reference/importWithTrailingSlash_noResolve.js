@@ -1,7 +1,9 @@
+//// [tests/cases/compiler/importWithTrailingSlash_noResolve.ts] ////
+
 //// [a.ts]
 import foo from "./foo/";
 
 
 //// [a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });

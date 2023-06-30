@@ -16,13 +16,13 @@ goTo.file('/b.js')
 const markers = test.markers();
 verify.getInlayHints([
     {
-        text: ': number',
+        text: ': 1',
         position: markers[0].position,
         kind: ts.InlayHintKind.Type,
         whitespaceBefore: true
     },
     {
-        text: ': number',
+        text: ': 1',
         position: markers[1].position,
         kind: ts.InlayHintKind.Type,
         whitespaceBefore: true

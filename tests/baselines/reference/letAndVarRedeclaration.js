@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/letAndVarRedeclaration.ts] ////
+
 //// [letAndVarRedeclaration.ts]
 let e0
 var e0;

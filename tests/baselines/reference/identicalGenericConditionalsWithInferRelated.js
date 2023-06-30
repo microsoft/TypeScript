@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/identicalGenericConditionalsWithInferRelated.ts] ////
+
 //// [identicalGenericConditionalsWithInferRelated.ts]
 function f<X>(arg: X) {
     type Cond1 = X extends [infer A] ? A : never;
@@ -31,7 +33,7 @@ class Y implements X {
 
 //// [identicalGenericConditionalsWithInferRelated.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 function f(arg) {
     var x = null;
     var y = null;

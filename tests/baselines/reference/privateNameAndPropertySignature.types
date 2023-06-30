@@ -1,6 +1,8 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameAndPropertySignature.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameAndPropertySignature.ts] ////
+
+=== privateNameAndPropertySignature.ts ===
 type A = {
->A : A
+>A : {}
 
     #foo: string;
 >#foo : string

@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -29,10 +30,11 @@ Output::
 [[90m12:00:17 AM[0m] Starting compilation in watch mode...
 
 [91m● [0m[96ma/b/referenceFile1.ts[0m:[93m2[0m:[93m16[0m  [91mError[0m TS2304
-| export var x = Foo();
-  [91m               ▔▔▔[0m
+  [91m[7m [0m [91m               ▔▔▔[0m
 Cannot find name 'Foo'.
 
+
+  [91m[7m [0m [91m               ▔▔▔[0m
 [[90m12:00:22 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -55,29 +57,25 @@ Shape signatures in builder refreshed for::
 /a/b/modulefile1.ts (used version)
 /a/b/referencefile1.ts (used version)
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/modulefile1.ts:
-  {"fileName":"/a/b/moduleFile1.ts","pollingInterval":250}
-/a/b/referencefile1.ts:
-  {"fileName":"/a/b/referenceFile1.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
 FsWatches::
+/a/b/modulefile1.ts: *new*
+  {}
+/a/b/referencefile1.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/a/b: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/moduleFile1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
 function Foo() { }
 exports.Foo = Foo;
@@ -86,7 +84,7 @@ exports.Foo = Foo;
 
 //// [/a/b/referenceFile1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 /// <reference path="./moduleFile1.ts" />
 exports.x = Foo();
@@ -98,20 +96,25 @@ Change:: delete moduleFile1
 Input::
 //// [/a/b/moduleFile1.ts] deleted
 
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:24 AM[0m] File change detected. Starting incremental compilation...
 
 [91m● [0m[96ma/b/referenceFile1.ts[0m:[93m1[0m:[93m22[0m  [91mError[0m TS6053
-| /// <reference path="./moduleFile1.ts" />
-  [91m                     ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+  [91m[7m [0m [91m                     ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 File '/a/b/moduleFile1.ts' not found.
 
+
+  [91m[7m [0m [91m                     ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 [91m● [0m[96ma/b/referenceFile1.ts[0m:[93m2[0m:[93m16[0m  [91mError[0m TS2304
-| export var x = Foo();
-  [91m               ▔▔▔[0m
+  [91m[7m [0m [91m               ▔▔▔[0m
 Cannot find name 'Foo'.
 
+
+  [91m[7m [0m [91m               ▔▔▔[0m
 [[90m12:00:28 AM[0m] Found 2 errors. Watching for file changes.
 
 
@@ -129,23 +132,25 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a/b/referencefile1.ts (computed .d.ts)
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/referencefile1.ts:
-  {"fileName":"/a/b/referenceFile1.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/a/b/modulefile1.ts:
-  {"fileName":"/a/b/modulefile1.ts","pollingInterval":250}
+PolledWatches::
+/a/b/modulefile1.ts: *new*
+  {"pollingInterval":500}
 
 FsWatches::
+/a/b/referencefile1.ts:
+  {}
+/a/b/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatches *deleted*::
+/a/b/modulefile1.ts:
+  {}
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 
 exitCode:: ExitStatus.undefined
 

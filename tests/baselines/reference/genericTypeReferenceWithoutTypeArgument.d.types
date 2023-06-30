@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument.d.ts ===
+//// [tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument.d.ts] ////
+
+=== genericTypeReferenceWithoutTypeArgument.d.ts ===
 // it is an error to use a generic type without type arguments
 // all of these are errors 
 

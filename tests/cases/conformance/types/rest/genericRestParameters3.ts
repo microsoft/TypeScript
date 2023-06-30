@@ -22,10 +22,10 @@ f1("foo");  // Error
 
 f2 = f1;
 f3 = f1;
-f4 = f1;  // Error, misaligned complex rest types
+f4 = f1;
 f1 = f2;  // Error
 f1 = f3;  // Error
-f1 = f4;  // Error, misaligned complex rest types
+f1 = f4;
 
 // Repro from #26110
 
@@ -66,3 +66,22 @@ hmm("what"); // no error?  A = [] | [number, string] ?
 declare function foo2(...args: string[] | number[]): void;
 let x2: ReadonlyArray<string> = ["hello"];
 foo2(...x2);
+
+// Repros from #47754
+
+type RestParams = [y: string] | [y: number];
+
+type Signature = (x: string, ...rest: RestParams) => void;
+
+type MergedParams = Parameters<Signature>;  // [x: string, y: string] | [x: string, y: number]
+
+declare let ff1: (...rest: [string, string] | [string, number]) => void;
+declare let ff2: (x: string, ...rest: [string] | [number]) => void;
+
+ff1 = ff2;
+ff2 = ff1;
+
+function ff3<A extends unknown[]>(s1: (...args: [x: string, ...rest: A | [number]]) => void, s2: (x: string, ...rest: A | [number]) => void) {
+    s1 = s2;
+    s2 = s1;
+}

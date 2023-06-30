@@ -1,0 +1,363 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForGlobals_1.ts ===
+// /*FIND ALL REFS*/<|var [|{| isWriteAccess: true, isDefinition: true |}global|] = 2;|>
+// 
+// class foo {
+//     constructor (public global) { }
+//     public f(global) { }
+//     public f2(global) { }
+// }
+// 
+// class bar {
+//     constructor () {
+//         var n = [|global|];
+// 
+//         var f = new foo('');
+//         f.global = '';
+//     }
+// }
+// 
+// var k = [|global|];
+
+// === /tests/cases/fourslash/referencesForGlobals_2.ts ===
+// var m = [|global|];
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForGlobals_1.ts ===
+  // /*FIND ALL REFS*/<|var [|global|] = 2;|>
+  // 
+  // class foo {
+  //     constructor (public global) { }
+  // --- (line: 5) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var global: number",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "global",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForGlobals_1.ts ===
+// <|var /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}global|] = 2;|>
+// 
+// class foo {
+//     constructor (public global) { }
+//     public f(global) { }
+//     public f2(global) { }
+// }
+// 
+// class bar {
+//     constructor () {
+//         var n = [|global|];
+// 
+//         var f = new foo('');
+//         f.global = '';
+//     }
+// }
+// 
+// var k = [|global|];
+
+// === /tests/cases/fourslash/referencesForGlobals_2.ts ===
+// var m = [|global|];
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForGlobals_1.ts ===
+  // <|var /*FIND ALL REFS*/[|global|] = 2;|>
+  // 
+  // class foo {
+  //     constructor (public global) { }
+  // --- (line: 5) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var global: number",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "global",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForGlobals_1.ts ===
+// <|var [|{| isWriteAccess: true |}global|] = 2;|>
+// 
+// class foo {
+//     constructor (public global) { }
+//     public f(global) { }
+//     public f2(global) { }
+// }
+// 
+// class bar {
+//     constructor () {
+//         var n = /*FIND ALL REFS*/[|global|];
+// 
+//         var f = new foo('');
+//         f.global = '';
+//     }
+// }
+// 
+// var k = [|global|];
+
+// === /tests/cases/fourslash/referencesForGlobals_2.ts ===
+// var m = [|global|];
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForGlobals_1.ts ===
+  // <|var [|global|] = 2;|>
+  // 
+  // class foo {
+  //     constructor (public global) { }
+  //     public f(global) { }
+  //     public f2(global) { }
+  // }
+  // 
+  // class bar {
+  //     constructor () {
+  //         var n = /*FIND ALL REFS*/global;
+  // 
+  //         var f = new foo('');
+  //         f.global = '';
+  // --- (line: 15) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var global: number",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "global",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForGlobals_1.ts ===
+// <|var [|{| isWriteAccess: true |}global|] = 2;|>
+// 
+// class foo {
+//     constructor (public global) { }
+//     public f(global) { }
+//     public f2(global) { }
+// }
+// 
+// class bar {
+//     constructor () {
+//         var n = [|global|];
+// 
+//         var f = new foo('');
+//         f.global = '';
+//     }
+// }
+// 
+// var k = /*FIND ALL REFS*/[|global|];
+
+// === /tests/cases/fourslash/referencesForGlobals_2.ts ===
+// var m = [|global|];
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForGlobals_1.ts ===
+  // <|var [|global|] = 2;|>
+  // 
+  // class foo {
+  //     constructor (public global) { }
+  // --- (line: 5) skipped ---
+
+  // --- (line: 14) skipped ---
+  //     }
+  // }
+  // 
+  // var k = /*FIND ALL REFS*/global;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var global: number",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "global",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForGlobals_1.ts ===
+// <|var [|{| isWriteAccess: true |}global|] = 2;|>
+// 
+// class foo {
+//     constructor (public global) { }
+//     public f(global) { }
+//     public f2(global) { }
+// }
+// 
+// class bar {
+//     constructor () {
+//         var n = [|global|];
+// 
+//         var f = new foo('');
+//         f.global = '';
+//     }
+// }
+// 
+// var k = [|global|];
+
+// === /tests/cases/fourslash/referencesForGlobals_2.ts ===
+// var m = /*FIND ALL REFS*/[|global|];
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForGlobals_1.ts ===
+  // <|var [|global|] = 2;|>
+  // 
+  // class foo {
+  //     constructor (public global) { }
+  // --- (line: 5) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var global: number",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "global",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]

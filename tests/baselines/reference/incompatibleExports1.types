@@ -1,4 +1,6 @@
-=== tests/cases/compiler/incompatibleExports1.ts ===
+//// [tests/cases/compiler/incompatibleExports1.ts] ////
+
+=== incompatibleExports1.ts ===
 declare module "foo" { 
 >"foo" : typeof import("foo")
 
@@ -23,7 +25,7 @@ declare module "baz" {
     }
  
     module c {
->c : typeof c
+>c : typeof import("baz")
 
         export var c: string;
 >c : string

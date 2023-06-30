@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/compiler/lib.es5.d.ts]
 /// <reference no-default-lib="true"/>
@@ -29,10 +30,11 @@ Output::
 [[90m12:00:15 AM[0m] Starting compilation in watch mode...
 
 [91m● [0m[96msrc/app.ts[0m:[93m1[0m:[93m8[0m  [91mError[0m TS2583
-| var x: Promise<string>;
-  [91m       ▔▔▔▔▔▔▔[0m
+  [91m[7m [0m [91m       ▔▔▔▔▔▔▔[0m
 Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
 
+
+  [91m[7m [0m [91m       ▔▔▔▔▔▔▔[0m
 [[90m12:00:18 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -52,21 +54,17 @@ Shape signatures in builder refreshed for::
 /compiler/lib.es5.d.ts (used version)
 /src/app.ts (used version)
 
-WatchedFiles::
-/src/tsconfig.json:
-  {"fileName":"/src/tsconfig.json","pollingInterval":250}
-/src/app.ts:
-  {"fileName":"/src/app.ts","pollingInterval":250}
-/compiler/lib.es5.d.ts:
-  {"fileName":"/compiler/lib.es5.d.ts","pollingInterval":250}
-
 FsWatches::
+/compiler/lib.es5.d.ts: *new*
+  {}
+/src/app.ts: *new*
+  {}
+/src/tsconfig.json: *new*
+  {}
 
 FsWatchesRecursive::
-/src/node_modules/@types:
-  {"directoryName":"/src/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/src:
-  {"directoryName":"/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/src: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -82,6 +80,9 @@ Input::
 {"compilerOptions":{"module":"commonjs","target":"es5","noImplicitAny":true,"sourceMap":false,"lib":["es5","es2015.promise"]}}
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:22 AM[0m] File change detected. Starting incremental compilation...
@@ -107,23 +108,19 @@ Shape signatures in builder refreshed for::
 /compiler/lib.es2015.promise.d.ts (used version)
 /src/app.ts (computed .d.ts)
 
-WatchedFiles::
-/src/tsconfig.json:
-  {"fileName":"/src/tsconfig.json","pollingInterval":250}
-/src/app.ts:
-  {"fileName":"/src/app.ts","pollingInterval":250}
-/compiler/lib.es5.d.ts:
-  {"fileName":"/compiler/lib.es5.d.ts","pollingInterval":250}
-/compiler/lib.es2015.promise.d.ts:
-  {"fileName":"/compiler/lib.es2015.promise.d.ts","pollingInterval":250}
-
 FsWatches::
+/compiler/lib.es2015.promise.d.ts: *new*
+  {}
+/compiler/lib.es5.d.ts:
+  {}
+/src/app.ts:
+  {}
+/src/tsconfig.json:
+  {}
 
 FsWatchesRecursive::
-/src/node_modules/@types:
-  {"directoryName":"/src/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /src:
-  {"directoryName":"/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 
 exitCode:: ExitStatus.undefined
 

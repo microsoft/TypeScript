@@ -5,40 +5,43 @@ on:
     branches:
       - release-*
 
+permissions:
+  contents: read
+
+# Ensure scripts are run with pipefail. See:
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#exit-codes-and-error-action-preference
+defaults:
+  run:
+    shell: bash
+
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Use node version 12
-      uses: actions/setup-node@v1
-      with:
-        node-version: 12
-    - name: Remove existing TypeScript
-      run: |
-        npm uninstall typescript --no-save
-        npm uninstall tslint --no-save
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+    - run: |
+        npm --version
+        # corepack enable npm
+        npm install -g $(jq -r '.packageManager' < package.json)
+        npm --version
     - name: npm install and test
       run: |
         npm ci
         npm test
-      env:
-        CI: true
     - name: Adding playwright
-      run: npm install --no-save --no-package-lock playwright    
+      run: npm install --no-save --no-package-lock playwright
     - name: Validate the browser can import TypeScript
-      run: gulp test-browser-integration
+      run: npx hereby test-browser-integration
     - name: LKG, clean, and pack
       run: |
-        gulp LKG
-        gulp clean
+        npx hereby LKG
+        npx hereby clean
         npm pack ./
         mv typescript-*.tgz typescript.tgz
-      env:
-        CI: true
     - name: Upload built tarfile
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v3
       with:
         name: tgz
         path: typescript.tgz

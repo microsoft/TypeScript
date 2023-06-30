@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx ===
+//// [tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx] ////
+
+=== jsxEsprimaFbTestSuite.tsx ===
 declare var React: any;
 >React : any
 
@@ -29,13 +31,18 @@ declare var value;
 
 <n:a n:v />;
 ><n:a n:v /> : any
->n:a : any
+>n : any
+>a : any
 >n:v : true
+>n : any
+>v : any
 
 <a n:foo="bar"> {value} <b><c /></b></a>;
 ><a n:foo="bar"> {value} <b><c /></b></a> : any
 >a : any
 >n:foo : string
+>n : any
+>foo : any
 >value : any
 ><b><c /></b> : any
 >b : any
@@ -118,21 +125,15 @@ baz
 >div : any
 
 <LeftRight left=<a /> right=<b>monkeys /> gorillas</b> />;
-><LeftRight left=<a /> : any
-><LeftRight left= : any
+><LeftRight left=<a /> right=<b>monkeys /> gorillas</b> /> : any
 >LeftRight : any
->left : true
+>left : any
 ><a /> : any
 >a : any
->right=<b>monkeys /> gorillas</b> /> : boolean
 >right : any
-><b>monkeys /> gorillas</b> /> : boolean
-><b>monkeys /> gorillas</b> / : number
 ><b>monkeys /> gorillas</b> : any
 >b : any
 >b : any
-> : any
-> : any
 
 <a.b></a.b>;
 ><a.b></a.b> : any

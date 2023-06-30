@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameStaticFieldInitializer.ts] ////
+
 //// [privateNameStaticFieldInitializer.ts]
 class A {
     static #field = 10;
@@ -7,7 +9,6 @@ class A {
 
 //// [privateNameStaticFieldInitializer.js]
 class A {
-    static #field;
+    static #field = 10;
     static #uninitialized;
 }
-A.#field = 10;

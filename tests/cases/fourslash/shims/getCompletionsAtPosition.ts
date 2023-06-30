@@ -1,4 +1,4 @@
-/// <reference path='fourslash.ts'/>
+/// <reference path='../fourslash.ts'/>
 
 ////function foo(strOrNum: string | number) {
 ////    /*1*/

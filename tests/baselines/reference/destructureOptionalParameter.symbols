@@ -1,4 +1,6 @@
-=== tests/cases/compiler/destructureOptionalParameter.ts ===
+//// [tests/cases/compiler/destructureOptionalParameter.ts] ////
+
+=== destructureOptionalParameter.ts ===
 declare function f1({ a, b }?: { a: number, b: string }): void;
 >f1 : Symbol(f1, Decl(destructureOptionalParameter.ts, 0, 0))
 >a : Symbol(a, Decl(destructureOptionalParameter.ts, 0, 21))
@@ -48,7 +50,7 @@ interface QueryMetadataFactory {
 >read : Symbol(read, Decl(destructureOptionalParameter.ts, 14, 30))
 
     }): ParameterDecorator;
->ParameterDecorator : Symbol(ParameterDecorator, Decl(lib.es5.d.ts, --, --))
+>ParameterDecorator : Symbol(ParameterDecorator, Decl(lib.decorators.legacy.d.ts, --, --))
 
     new (selector: Type | string, {descendants, read}?: {
 >selector : Symbol(selector, Decl(destructureOptionalParameter.ts, 17, 9))

@@ -176,10 +176,128 @@ function f2<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) {
 }
 
 function f3<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) {
-    const func: Func<K> = funcs[key];  // Error, Funcs[K] not assignable to Func<K>
+    const func: Func<K> = funcs[key];
     func(arg);
 }
 
 function f4<K extends keyof ArgMap>(x: Funcs[keyof ArgMap], y: Funcs[K]) {
     x = y;
+}
+
+// Repro from #47890
+
+interface MyObj {
+    someKey: {
+      name: string;
+    }
+    someOtherKey: {
+      name: number;
+    }
+}
+
+const ref: MyObj = {
+    someKey: { name: "" },
+    someOtherKey: { name: 42 }
+};
+
+function func<K extends keyof MyObj>(k: K): MyObj[K]['name'] | undefined {
+    const myObj: Partial<MyObj>[K] = ref[k];
+    if (myObj) {
+      return myObj.name;
+    }
+    const myObj2: Partial<MyObj>[keyof MyObj] = ref[k];
+    if (myObj2) {
+      return myObj2.name;
+    }
+    return undefined;
+}
+
+// Repro from #48157
+
+interface Foo {
+    bar?: string
+}
+
+function foo<T extends keyof Foo>(prop: T, f: Required<Foo>) {
+    bar(f[prop]);
+}
+
+declare function bar(t: string): void;
+
+// Repro from #48246
+
+declare function makeCompleteLookupMapping<T extends ReadonlyArray<any>, Attr extends keyof T[number]>(
+    ops: T, attr: Attr): { [Item in T[number]as Item[Attr]]: Item };
+
+const ALL_BARS = [{ name: 'a'}, {name: 'b'}] as const;
+
+const BAR_LOOKUP = makeCompleteLookupMapping(ALL_BARS, 'name');
+
+type BarLookup = typeof BAR_LOOKUP;
+
+type Baz = { [K in keyof BarLookup]: BarLookup[K]['name'] };
+
+// repro from #43982
+
+interface Original {
+  prop1: {
+    subProp1: string;
+    subProp2: string;
+  };
+  prop2: {
+    subProp3: string;
+    subProp4: string;
+  };
+}
+type KeyOfOriginal = keyof Original;
+type NestedKeyOfOriginalFor<T extends KeyOfOriginal> = keyof Original[T];
+
+type SameKeys<T> = {
+  [K in keyof T]: {
+    [K2 in keyof T[K]]: number;
+  };
+};
+
+type MappedFromOriginal = SameKeys<Original>;
+
+const getStringAndNumberFromOriginalAndMapped = <
+  K extends KeyOfOriginal,
+  N extends NestedKeyOfOriginalFor<K>
+>(
+  original: Original,
+  mappedFromOriginal: MappedFromOriginal,
+  key: K,
+  nestedKey: N
+): [Original[K][N], MappedFromOriginal[K][N]] => {
+  return [original[key][nestedKey], mappedFromOriginal[key][nestedKey]];
+};
+
+// repro from #31675
+interface Config {
+  string: string;
+  number: number;
+}
+
+function getConfigOrDefault<T extends keyof Config>(
+  userConfig: Partial<Config>,
+  key: T,
+  defaultValue: Config[T]
+): Config[T] {
+  const userValue = userConfig[key]; 
+  const assertedCheck = userValue ? userValue! : defaultValue;
+  return assertedCheck;
+}
+
+// repro from #47523
+
+type Foo1 = {
+  x: number;
+  y: string;
+};
+
+function getValueConcrete<K extends keyof Foo1>(
+  o: Partial<Foo1>,
+  k: K
+): Foo1[K] | undefined {
+  return o[k];
 }

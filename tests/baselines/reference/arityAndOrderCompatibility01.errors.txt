@@ -1,35 +1,35 @@
-tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(15,12): error TS2493: Tuple type '[string, number]' of length '2' has no element at index '2'.
-tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(17,5): error TS2461: Type '{ 0: string; 1: number; length: 2; }' is not an array type.
-tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(18,5): error TS2322: Type '[string, number]' is not assignable to type '[number, number, number]'.
+arityAndOrderCompatibility01.ts(15,12): error TS2493: Tuple type '[string, number]' of length '2' has no element at index '2'.
+arityAndOrderCompatibility01.ts(17,5): error TS2461: Type '{ 0: string; 1: number; length: 2; }' is not an array type.
+arityAndOrderCompatibility01.ts(18,5): error TS2322: Type '[string, number]' is not assignable to type '[number, number, number]'.
   Source has 2 element(s) but target requires 3.
-tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(19,5): error TS2741: Property '2' is missing in type 'StrNum' but required in type '[number, number, number]'.
-tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(20,5): error TS2322: Type '{ 0: string; 1: number; length: 2; }' is not assignable to type '[number, number, number]'.
-tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(21,5): error TS2322: Type '[string, number]' is not assignable to type '[string, number, number]'.
+arityAndOrderCompatibility01.ts(19,5): error TS2741: Property '2' is missing in type 'StrNum' but required in type '[number, number, number]'.
+arityAndOrderCompatibility01.ts(20,5): error TS2322: Type '{ 0: string; 1: number; length: 2; }' is not assignable to type '[number, number, number]'.
+arityAndOrderCompatibility01.ts(21,5): error TS2322: Type '[string, number]' is not assignable to type '[string, number, number]'.
   Source has 2 element(s) but target requires 3.
-tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(22,5): error TS2741: Property '2' is missing in type 'StrNum' but required in type '[string, number, number]'.
-tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(23,5): error TS2322: Type '{ 0: string; 1: number; length: 2; }' is not assignable to type '[string, number, number]'.
-tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(24,5): error TS2322: Type '[string, number]' is not assignable to type '[number]'.
+arityAndOrderCompatibility01.ts(22,5): error TS2741: Property '2' is missing in type 'StrNum' but required in type '[string, number, number]'.
+arityAndOrderCompatibility01.ts(23,5): error TS2322: Type '{ 0: string; 1: number; length: 2; }' is not assignable to type '[string, number, number]'.
+arityAndOrderCompatibility01.ts(24,5): error TS2322: Type '[string, number]' is not assignable to type '[number]'.
   Source has 2 element(s) but target allows only 1.
-tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(25,5): error TS2322: Type 'StrNum' is not assignable to type '[number]'.
+arityAndOrderCompatibility01.ts(25,5): error TS2322: Type 'StrNum' is not assignable to type '[number]'.
   Types of property '0' are incompatible.
     Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(26,5): error TS2322: Type '{ 0: string; 1: number; length: 2; }' is not assignable to type '[number]'.
-tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(27,5): error TS2322: Type '[string, number]' is not assignable to type '[string]'.
+arityAndOrderCompatibility01.ts(26,5): error TS2322: Type '{ 0: string; 1: number; length: 2; }' is not assignable to type '[number]'.
+arityAndOrderCompatibility01.ts(27,5): error TS2322: Type '[string, number]' is not assignable to type '[string]'.
   Source has 2 element(s) but target allows only 1.
-tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(28,5): error TS2322: Type 'StrNum' is not assignable to type '[string]'.
+arityAndOrderCompatibility01.ts(28,5): error TS2322: Type 'StrNum' is not assignable to type '[string]'.
   Types of property 'length' are incompatible.
     Type '2' is not assignable to type '1'.
-tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(29,5): error TS2322: Type '{ 0: string; 1: number; length: 2; }' is not assignable to type '[string]'.
-tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(30,5): error TS2322: Type '[string, number]' is not assignable to type '[number, string]'.
+arityAndOrderCompatibility01.ts(29,5): error TS2322: Type '{ 0: string; 1: number; length: 2; }' is not assignable to type '[string]'.
+arityAndOrderCompatibility01.ts(30,5): error TS2322: Type '[string, number]' is not assignable to type '[number, string]'.
   Type at position 0 in source is not compatible with type at position 0 in target.
     Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(31,5): error TS2322: Type 'StrNum' is not assignable to type '[number, string]'.
+arityAndOrderCompatibility01.ts(31,5): error TS2322: Type 'StrNum' is not assignable to type '[number, string]'.
   Types of property '0' are incompatible.
     Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(32,5): error TS2322: Type '{ 0: string; 1: number; length: 2; }' is not assignable to type '[number, string]'.
+arityAndOrderCompatibility01.ts(32,5): error TS2322: Type '{ 0: string; 1: number; length: 2; }' is not assignable to type '[number, string]'.
 
 
-==== tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts (17 errors) ====
+==== arityAndOrderCompatibility01.ts (17 errors) ====
     interface StrNum extends Array<string|number> {
         0: string;
         1: number;

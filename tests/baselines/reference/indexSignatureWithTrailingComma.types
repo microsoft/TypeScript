@@ -1,6 +1,8 @@
-=== tests/cases/compiler/indexSignatureWithTrailingComma.ts ===
+//// [tests/cases/compiler/indexSignatureWithTrailingComma.ts] ////
+
+=== indexSignatureWithTrailingComma.ts ===
 type A = {
->A : A
+>A : { [key: string]: string; }
 
     [key: string,]: string;
 >key : string
@@ -17,6 +19,5 @@ class C {
 
     [key: string,]: null;
 >key : string
->null : null
 }
 

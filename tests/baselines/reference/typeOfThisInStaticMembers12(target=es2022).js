@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers12.ts] ////
+
 //// [typeOfThisInStaticMembers12.ts]
 class C {
     static readonly c: "foo" = "foo"
@@ -9,17 +11,15 @@ class C {
 
 
 //// [typeOfThisInStaticMembers12.js]
-var _a, _b, _c, _d;
+var _a, _b, _c;
 class C {
+    static { this.c = "foo"; }
+    static { this.bar = (_c = () => { _a = this.c, _b = this.c; },
+        class Inner {
+                constructor() {
+                    this[_b] = 123;
+                }
+                static { _c(); }
+                static { this[_a] = 123; }
+            }); }
 }
-_a = C;
-C.c = "foo";
-C.bar = (_b = class Inner {
-        constructor() {
-            this[_d] = 123;
-        }
-    },
-    _c = _a.c,
-    _d = _a.c,
-    _b[_c] = 123,
-    _b);

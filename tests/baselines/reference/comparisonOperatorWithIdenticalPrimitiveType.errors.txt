@@ -1,22 +1,22 @@
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithIdenticalPrimitiveType.ts(15,11): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithIdenticalPrimitiveType.ts(15,18): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithIdenticalPrimitiveType.ts(16,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithIdenticalPrimitiveType.ts(16,23): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithIdenticalPrimitiveType.ts(24,11): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithIdenticalPrimitiveType.ts(24,18): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithIdenticalPrimitiveType.ts(25,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithIdenticalPrimitiveType.ts(25,23): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithIdenticalPrimitiveType.ts(33,11): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithIdenticalPrimitiveType.ts(33,19): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithIdenticalPrimitiveType.ts(34,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithIdenticalPrimitiveType.ts(34,24): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithIdenticalPrimitiveType.ts(42,11): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithIdenticalPrimitiveType.ts(42,19): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithIdenticalPrimitiveType.ts(43,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithIdenticalPrimitiveType.ts(43,24): error TS2532: Object is possibly 'undefined'.
+comparisonOperatorWithIdenticalPrimitiveType.ts(15,11): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithIdenticalPrimitiveType.ts(15,18): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithIdenticalPrimitiveType.ts(16,11): error TS18050: The value 'undefined' cannot be used here.
+comparisonOperatorWithIdenticalPrimitiveType.ts(16,23): error TS18050: The value 'undefined' cannot be used here.
+comparisonOperatorWithIdenticalPrimitiveType.ts(24,11): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithIdenticalPrimitiveType.ts(24,18): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithIdenticalPrimitiveType.ts(25,11): error TS18050: The value 'undefined' cannot be used here.
+comparisonOperatorWithIdenticalPrimitiveType.ts(25,23): error TS18050: The value 'undefined' cannot be used here.
+comparisonOperatorWithIdenticalPrimitiveType.ts(33,11): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithIdenticalPrimitiveType.ts(33,19): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithIdenticalPrimitiveType.ts(34,11): error TS18050: The value 'undefined' cannot be used here.
+comparisonOperatorWithIdenticalPrimitiveType.ts(34,24): error TS18050: The value 'undefined' cannot be used here.
+comparisonOperatorWithIdenticalPrimitiveType.ts(42,11): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithIdenticalPrimitiveType.ts(42,19): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithIdenticalPrimitiveType.ts(43,11): error TS18050: The value 'undefined' cannot be used here.
+comparisonOperatorWithIdenticalPrimitiveType.ts(43,24): error TS18050: The value 'undefined' cannot be used here.
 
 
-==== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithIdenticalPrimitiveType.ts (16 errors) ====
+==== comparisonOperatorWithIdenticalPrimitiveType.ts (16 errors) ====
     enum E { a, b, c }
     
     var a: number;
@@ -33,14 +33,14 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
     var ra5 = e < e;
     var ra6 = null < null;
               ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
                      ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var ra7 = undefined < undefined;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
                           ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     
     // operator >
     var rb1 = a > a;
@@ -50,14 +50,14 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
     var rb5 = e > e;
     var rb6 = null > null;
               ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
                      ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var rb7 = undefined > undefined;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
                           ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     
     // operator <=
     var rc1 = a <= a;
@@ -67,14 +67,14 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
     var rc5 = e <= e;
     var rc6 = null <= null;
               ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
                       ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var rc7 = undefined <= undefined;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
                            ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     
     // operator >=
     var rd1 = a >= a;
@@ -84,14 +84,14 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
     var rd5 = e >= e;
     var rd6 = null >= null;
               ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
                       ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var rd7 = undefined >= undefined;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
                            ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     
     // operator ==
     var re1 = a == a;

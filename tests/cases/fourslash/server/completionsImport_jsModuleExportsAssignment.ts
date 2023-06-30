@@ -46,7 +46,7 @@ verify.completions({
 verify.applyCodeActionFromCompletion("", {
   name: "defaults",
   source: "/third_party/marked/src/defaults",
-  description: `Import 'defaults' from module "./third_party/marked/src/defaults"`,
+  description: `Add import from "./third_party/marked/src/defaults"`,
   data: {
     exportName: "defaults",
     fileName: "/third_party/marked/src/defaults.js",

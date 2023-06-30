@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeUsedAsValueError.ts] ////
+
 //// [typeUsedAsValueError.ts]
 interface Interface {
 

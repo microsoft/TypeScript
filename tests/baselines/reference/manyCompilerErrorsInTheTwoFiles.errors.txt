@@ -1,108 +1,115 @@
-[91m● [0m[96mtests/cases/compiler/a.ts[0m:[93m1[0m:[93m11[0m  [91mError[0m TS1109
-| const a =!@#!@$
-  [91m          ▔[0m
-Expression expected.
-[91m● [0m[96mtests/cases/compiler/a.ts[0m:[93m1[0m:[93m12[0m   [91mError[0m TS18026
-| const a =!@#!@$
-  [91m           [0m
+[91m● [0m[96ma.ts[0m:[93m1[0m:[93m12[0m   [91mError[0m TS18026
+  [91m[7m [0m [91m           [0m
 '#!' can only be used at the start of a file.
-[91m● [0m[96mtests/cases/compiler/a.ts[0m:[93m1[0m:[93m14[0m  [91mError[0m TS1109
-| const a =!@#!@$
-  [91m             ▔[0m
+
+
+  [91m[7m [0m [91m           [0m[91m● [0m[96ma.ts[0m:[93m1[0m:[93m13[0m  [91mError[0m TS1134
+  [91m[7m [0m [91m            ▔[0m
+Variable declaration expected.
+
+
+  [91m[7m [0m [91m            ▔[0m[91m● [0m[96ma.ts[0m:[93m1[0m:[93m16[0m  [91mError[0m TS1109
+  [91m[7m [0m [91m               [0m
 Expression expected.
-[91m● [0m[96mtests/cases/compiler/a.ts[0m:[93m2[0m:[93m12[0m  [91mError[0m TS1109
-| const b = !@#!@#!@#!
-  [91m           ▔[0m
-Expression expected.
-[91m● [0m[96mtests/cases/compiler/a.ts[0m:[93m2[0m:[93m13[0m   [91mError[0m TS18026
-| const b = !@#!@#!@#!
-  [91m            [0m
+
+
+  [91m[7m [0m [91m               [0m[91m● [0m[96ma.ts[0m:[93m2[0m:[93m13[0m   [91mError[0m TS18026
+  [91m[7m [0m [91m            [0m
 '#!' can only be used at the start of a file.
-[91m● [0m[96mtests/cases/compiler/a.ts[0m:[93m2[0m:[93m15[0m  [91mError[0m TS1109
-| const b = !@#!@#!@#!
-  [91m              ▔[0m
-Expression expected.
-[91m● [0m[96mtests/cases/compiler/a.ts[0m:[93m2[0m:[93m16[0m   [91mError[0m TS18026
-| const b = !@#!@#!@#!
-  [91m               [0m
+
+
+  [91m[7m [0m [91m            [0m[91m● [0m[96ma.ts[0m:[93m2[0m:[93m14[0m  [91mError[0m TS1134
+  [91m[7m [0m [91m             ▔[0m
+Variable declaration expected.
+
+
+  [91m[7m [0m [91m             ▔[0m[91m● [0m[96ma.ts[0m:[93m2[0m:[93m16[0m   [91mError[0m TS18026
+  [91m[7m [0m [91m               [0m
 '#!' can only be used at the start of a file.
-[91m● [0m[96mtests/cases/compiler/a.ts[0m:[93m2[0m:[93m18[0m  [91mError[0m TS1109
-| const b = !@#!@#!@#!
-  [91m                 ▔[0m
-Expression expected.
-[91m● [0m[96mtests/cases/compiler/a.ts[0m:[93m2[0m:[93m19[0m   [91mError[0m TS18026
-| const b = !@#!@#!@#!
-  [91m                  [0m
+
+
+  [91m[7m [0m [91m               [0m[91m● [0m[96ma.ts[0m:[93m2[0m:[93m19[0m   [91mError[0m TS18026
+  [91m[7m [0m [91m                  [0m
 '#!' can only be used at the start of a file.
-[91m● [0m[96mtests/cases/compiler/a.ts[0m:[93m3[0m:[93m1[0m  [91mError[0m TS2304
-| OK!
-  [91m▔▔[0m
+
+
+  [91m[7m [0m [91m                  [0m[91m● [0m[96ma.ts[0m:[93m3[0m:[93m1[0m  [91mError[0m TS2304
+  [91m[7m [0m [91m▔▔[0m
 Cannot find name 'OK'.
-[91m● [0m[96mtests/cases/compiler/a.ts[0m:[93m4[0m:[93m1[0m  [91mError[0m TS1434
-| HERE's A shouty thing
-  [91m▔▔▔▔[0m
+
+
+  [91m[7m [0m [91m▔▔[0m[91m● [0m[96ma.ts[0m:[93m4[0m:[93m1[0m  [91mError[0m TS1434
+  [91m[7m [0m [91m▔▔▔▔[0m
 Unexpected keyword or identifier.
-[91m● [0m[96mtests/cases/compiler/a.ts[0m:[93m4[0m:[93m1[0m  [91mError[0m TS2304
-| HERE's A shouty thing
-  [91m▔▔▔▔[0m
+
+
+  [91m[7m [0m [91m▔▔▔▔[0m[91m● [0m[96ma.ts[0m:[93m4[0m:[93m1[0m  [91mError[0m TS2304
+  [91m[7m [0m [91m▔▔▔▔[0m
 Cannot find name 'HERE'.
-[91m● [0m[96mtests/cases/compiler/a.ts[0m:[93m4[0m:[93m22[0m  [91mError[0m TS1002
-| HERE's A shouty thing
-  [91m                     [0m
+
+
+  [91m[7m [0m [91m▔▔▔▔[0m[91m● [0m[96ma.ts[0m:[93m4[0m:[93m22[0m  [91mError[0m TS1002
+  [91m[7m [0m [91m                     [0m
 Unterminated string literal.
-[91m● [0m[96mtests/cases/compiler/a.ts[0m:[93m5[0m:[93m1[0m  [91mError[0m TS1434
-| GOTTA GO FAST
-  [91m▔▔▔▔▔[0m
+
+
+  [91m[7m [0m [91m                     [0m[91m● [0m[96ma.ts[0m:[93m5[0m:[93m1[0m  [91mError[0m TS1434
+  [91m[7m [0m [91m▔▔▔▔▔[0m
 Unexpected keyword or identifier.
-[91m● [0m[96mtests/cases/compiler/a.ts[0m:[93m5[0m:[93m1[0m  [91mError[0m TS2304
-| GOTTA GO FAST
-  [91m▔▔▔▔▔[0m
+
+
+  [91m[7m [0m [91m▔▔▔▔▔[0m[91m● [0m[96ma.ts[0m:[93m5[0m:[93m1[0m  [91mError[0m TS2304
+  [91m[7m [0m [91m▔▔▔▔▔[0m
 Cannot find name 'GOTTA'.
-[91m● [0m[96mtests/cases/compiler/a.ts[0m:[93m5[0m:[93m7[0m  [91mError[0m TS1434
-| GOTTA GO FAST
-  [91m      ▔▔[0m
+
+
+  [91m[7m [0m [91m▔▔▔▔▔[0m[91m● [0m[96ma.ts[0m:[93m5[0m:[93m7[0m  [91mError[0m TS1434
+  [91m[7m [0m [91m      ▔▔[0m
 Unexpected keyword or identifier.
-[91m● [0m[96mtests/cases/compiler/a.ts[0m:[93m5[0m:[93m7[0m  [91mError[0m TS2304
-| GOTTA GO FAST
-  [91m      ▔▔[0m
+
+
+  [91m[7m [0m [91m      ▔▔[0m[91m● [0m[96ma.ts[0m:[93m5[0m:[93m7[0m  [91mError[0m TS2304
+  [91m[7m [0m [91m      ▔▔[0m
 Cannot find name 'GO'.
-[91m● [0m[96mtests/cases/compiler/a.ts[0m:[93m5[0m:[93m10[0m  [91mError[0m TS2304
-| GOTTA GO FAST
-  [91m         ▔▔▔▔[0m
+
+
+  [91m[7m [0m [91m      ▔▔[0m[91m● [0m[96ma.ts[0m:[93m5[0m:[93m10[0m  [91mError[0m TS2304
+  [91m[7m [0m [91m         ▔▔▔▔[0m
 Cannot find name 'FAST'.
-[91m● [0m[96mtests/cases/compiler/b.ts[0m:[93m1[0m:[93m1[0m  [91mError[0m TS2304
-| fhqwhgads
-  [91m▔▔▔▔▔▔▔▔▔[0m
+
+
+  [91m[7m [0m [91m         ▔▔▔▔[0m[91m● [0m[96mb.ts[0m:[93m1[0m:[93m1[0m  [91mError[0m TS2304
+  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔[0m
 Cannot find name 'fhqwhgads'.
-[91m● [0m[96mtests/cases/compiler/b.ts[0m:[93m2[0m:[93m1[0m  [91mError[0m TS2304
-| to
-  [91m▔▔[0m
+
+
+  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔[0m[91m● [0m[96mb.ts[0m:[93m2[0m:[93m1[0m  [91mError[0m TS2304
+  [91m[7m [0m [91m▔▔[0m
 Cannot find name 'to'.
-[91m● [0m[96mtests/cases/compiler/b.ts[0m:[93m3[0m:[93m1[0m  [91mError[0m TS2304
-| limit
-  [91m▔▔▔▔▔[0m
+
+
+  [91m[7m [0m [91m▔▔[0m[91m● [0m[96mb.ts[0m:[93m3[0m:[93m1[0m  [91mError[0m TS2304
+  [91m[7m [0m [91m▔▔▔▔▔[0m
 Cannot find name 'limit'.
 
 
-==== tests/cases/compiler/a.ts (18 errors) ====
+  [91m[7m [0m [91m▔▔▔▔▔[0m
+
+==== a.ts (16 errors) ====
     const a =!@#!@$
-              ~
-!!! error TS1109: Expression expected.
                
 !!! error TS18026: '#!' can only be used at the start of a file.
-                 ~
+                ~
+!!! error TS1134: Variable declaration expected.
+                   
 !!! error TS1109: Expression expected.
     const b = !@#!@#!@#!
-               ~
-!!! error TS1109: Expression expected.
                 
 !!! error TS18026: '#!' can only be used at the start of a file.
-                  ~
-!!! error TS1109: Expression expected.
+                 ~
+!!! error TS1134: Variable declaration expected.
                    
 !!! error TS18026: '#!' can only be used at the start of a file.
-                     ~
-!!! error TS1109: Expression expected.
                       
 !!! error TS18026: '#!' can only be used at the start of a file.
     OK!
@@ -127,7 +134,7 @@ Cannot find name 'limit'.
              ~~~~
 !!! error TS2304: Cannot find name 'FAST'.
     
-==== tests/cases/compiler/b.ts (3 errors) ====
+==== b.ts (3 errors) ====
     fhqwhgads
     ~~~~~~~~~
 !!! error TS2304: Cannot find name 'fhqwhgads'.
@@ -137,8 +144,8 @@ Cannot find name 'limit'.
     limit
     ~~~~~
 !!! error TS2304: Cannot find name 'limit'.
-Found 21 errors in 2 files.
+Found 19 errors in 2 files.
 
 Errors  Files
-    18  tests/cases/compiler/a.ts[90m:1[0m
-     3  tests/cases/compiler/b.ts[90m:1[0m
+    16  a.ts[90m:1[0m
+     3  b.ts[90m:1[0m

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/constructorDeclarations/classWithTwoConstructorDefinitions.ts ===
+//// [tests/cases/conformance/classes/constructorDeclarations/classWithTwoConstructorDefinitions.ts] ////
+
+=== classWithTwoConstructorDefinitions.ts ===
 class C {
 >C : Symbol(C, Decl(classWithTwoConstructorDefinitions.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/literal/enumLiteralTypes3.ts ===
+//// [tests/cases/conformance/types/literal/enumLiteralTypes3.ts] ////
+
+=== enumLiteralTypes3.ts ===
 const enum Choice { Unknown, Yes, No };
 >Choice : Choice
 >Unknown : Choice.Unknown
@@ -10,17 +12,17 @@ type Yes = Choice.Yes;
 >Choice : any
 
 type YesNo = Choice.Yes | Choice.No;
->YesNo : YesNo
+>YesNo : Choice.Yes | Choice.No
 >Choice : any
 >Choice : any
 
 type NoYes = Choice.No | Choice.Yes;
->NoYes : NoYes
+>NoYes : Choice.Yes | Choice.No
 >Choice : any
 >Choice : any
 
 type UnknownYesNo = Choice.Unknown | Choice.Yes | Choice.No;
->UnknownYesNo : UnknownYesNo
+>UnknownYesNo : Choice
 >Choice : any
 >Choice : any
 >Choice : any

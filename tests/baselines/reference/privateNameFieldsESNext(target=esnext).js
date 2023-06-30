@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameFieldsESNext.ts] ////
+
 //// [privateNameFieldsESNext.ts]
 class C {
     a = 123;
@@ -35,7 +37,7 @@ class C {
         this.#a = "hello";
         console.log(this.#b);
     }
-    static #m;
+    static #m = "test";
     static #x;
     static test() {
         console.log(this.#m);
@@ -43,4 +45,3 @@ class C {
     }
     #something;
 }
-C.#m = "test";

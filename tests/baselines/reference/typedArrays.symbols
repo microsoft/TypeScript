@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typedArrays.ts ===
+//// [tests/cases/compiler/typedArrays.ts] ////
+
+=== typedArrays.ts ===
 function CreateTypedArrayTypes() {
 >CreateTypedArrayTypes : Symbol(CreateTypedArrayTypes, Decl(typedArrays.ts, 0, 0))
 

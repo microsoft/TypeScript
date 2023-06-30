@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a.ts]
 export class C {}
@@ -6,7 +7,7 @@ export class C {}
 import {C} from './a'; import * as A from './A';
 
 //// [/tsconfig.json]
-{"compilerOptions":{}}
+{"compilerOptions":{"forceConsistentCasingInFileNames":false}}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -32,7 +33,7 @@ Output::
 
 
 Program root files: ["/a.ts","/b.ts","/a/lib/lib.d.ts"]
-Program options: {"watch":true,"configFilePath":"/tsconfig.json"}
+Program options: {"forceConsistentCasingInFileNames":false,"watch":true,"configFilePath":"/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a.ts
@@ -49,27 +50,25 @@ Shape signatures in builder refreshed for::
 /b.ts (used version)
 /a/lib/lib.d.ts (used version)
 
-WatchedFiles::
-/tsconfig.json:
-  {"fileName":"/tsconfig.json","pollingInterval":250}
-/a.ts:
-  {"fileName":"/a.ts","pollingInterval":250}
-/b.ts:
-  {"fileName":"/b.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
 FsWatches::
+/a.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+/b.ts: *new*
+  {}
+/tsconfig.json: *new*
+  {}
 
 FsWatchesRecursive::
-/:
-  {"directoryName":"","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
 var C = /** @class */ (function () {
     function C() {
@@ -81,7 +80,7 @@ exports.C = C;
 
 //// [/b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 
@@ -92,23 +91,26 @@ Input::
 {"compilerOptions":{"forceConsistentCasingInFileNames":true}}
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:24 AM[0m] File change detected. Starting incremental compilation...
 
 [91m● [0m[96mb.ts[0m:[93m1[0m:[93m43[0m  [91mError[0m TS1149
-| import {C} from './a'; import * as A from './A';
-  [91m                                          ▔▔▔▔▔[0m
+  [91m[7m [0m [91m                                          ▔▔▔▔▔[0m
 File name '/A.ts' differs from already included file name '/a.ts' only in casing.
   The file is in the program because:
-    Matched by include pattern '**/*' in '/tsconfig.json'
+    Matched by default include pattern '**/*'
     Imported via './a' from file '/b.ts'
     Imported via './A' from file '/b.ts'
 
+
+  [91m[7m [0m [91m                                          ▔▔▔▔▔[0m
 File is included via import here: [96mb.ts[0m:[93m1[0m:[93m17[0m
 
-  | import {C} from './a'; import * as A from './A';
-    [96m                ▔▔▔▔▔[0m
+    [96m  [7m [0m [96m                ▔▔▔▔▔[0m
 [[90m12:00:25 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -124,22 +126,6 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
-
-WatchedFiles::
-/tsconfig.json:
-  {"fileName":"/tsconfig.json","pollingInterval":250}
-/a.ts:
-  {"fileName":"/a.ts","pollingInterval":250}
-/b.ts:
-  {"fileName":"/b.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/:
-  {"directoryName":"","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 

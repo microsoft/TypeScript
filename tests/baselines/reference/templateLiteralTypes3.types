@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/literal/templateLiteralTypes3.ts ===
+//// [tests/cases/conformance/types/literal/templateLiteralTypes3.ts] ////
+
+=== templateLiteralTypes3.ts ===
 // Inference from template literal type to template literal type
 
 type Foo1<T> = T extends `*${infer U}*` ? U : never;
@@ -32,10 +34,10 @@ type T09 = Foo1<`**${string}**${string}**`>;
 >T09 : `*${string}**${string}*`
 
 type T10 = Foo1<`**${'a' | 'b' | 'c'}**`>;
->T10 : T10
+>T10 : "*a*" | "*b*" | "*c*"
 
 type T11 = Foo1<`**${boolean}**${boolean}**`>;
->T11 : T11
+>T11 : "*false**false*" | "*false**true*" | "*true**false*" | "*true**true*"
 
 declare function foo1<V extends string>(arg: `*${V}*`): V;
 >foo1 : <V extends string>(arg: `*${V}*`) => V
@@ -366,10 +368,10 @@ const templated2: Templated = `${value2} abc` as const;
 // Repro from #43620
 
 type Prefixes = "foo" | "bar";
->Prefixes : Prefixes
+>Prefixes : "foo" | "bar"
 
 type AllPrefixData = "foo:baz" | "bar:baz";
->AllPrefixData : AllPrefixData
+>AllPrefixData : "foo:baz" | "bar:baz"
 
 type PrefixData<P extends Prefixes> = `${P}:baz`;
 >PrefixData : `${P}:baz`
@@ -382,7 +384,7 @@ interface ITest<P extends Prefixes, E extends AllPrefixData = PrefixData<P>> {
 // Repro from #45906
 
 type Schema = { a: { b: { c: number } } };
->Schema : Schema
+>Schema : { a: {    b: {        c: number;    };}; }
 >a : { b: {    c: number;}; }
 >b : { c: number; }
 >c : number
@@ -481,7 +483,7 @@ function ff4(x: string, y: `foo-${string}`) {
 // Repro from #46045
 
 type Action =
->Action : Action
+>Action : { type: `${string}_REQUEST`; } | { type: `${string}_SUCCESS`; response: string; }
 
     | { type: `${string}_REQUEST` }
 >type : `${string}_REQUEST`
@@ -568,8 +570,8 @@ function ft1<T extends string>(t: T, u: Uppercase<T>, u1: Uppercase<`1.${T}.3`>,
 >ft1 : <T extends string>(t: T, u: Uppercase<T>, u1: Uppercase<`1.${T}.3`>, u2: Uppercase<`1.${T}.4`>) => void
 >t : T
 >u : Uppercase<T>
->u1 : Uppercase<`1.${T}.3`>
->u2 : Uppercase<`1.${T}.4`>
+>u1 : `1.${Uppercase<T>}.3`
+>u2 : `1.${Uppercase<T>}.4`
 
     spread(`1.${t}.3`, `1.${t}.4`);
 >spread(`1.${t}.3`, `1.${t}.4`) : `1.${T}.3` | `1.${T}.4`
@@ -588,9 +590,14 @@ function ft1<T extends string>(t: T, u: Uppercase<T>, u1: Uppercase<`1.${T}.3`>,
 >u : Uppercase<T>
 
     spread(u1, u2);
->spread(u1, u2) : Uppercase<`1.${T}.3`> | Uppercase<`1.${T}.4`>
+>spread(u1, u2) : `1.${Uppercase<T>}.3` | `1.${Uppercase<T>}.4`
 >spread : <P extends `${string}.${string}.${string}`>(...args: P[]) => P
->u1 : Uppercase<`1.${T}.3`>
->u2 : Uppercase<`1.${T}.4`>
+>u1 : `1.${Uppercase<T>}.3`
+>u2 : `1.${Uppercase<T>}.4`
 }
+
+// Repro from #52685
+
+type Boom = 'abc' | 'def' | `a${string}` | Lowercase<string>;
+>Boom : `a${string}` | Lowercase<string> | "def"
 

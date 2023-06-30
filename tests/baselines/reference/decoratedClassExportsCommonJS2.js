@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/decorators/class/decoratedClassExportsCommonJS2.ts] ////
+
 //// [a.ts]
 declare function forwardRef(x: any): any;
 declare var Something: any;
@@ -17,7 +19,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Testing123 = void 0;
 let Testing123 = Testing123_1 = class Testing123 {
 };
-Testing123 = Testing123_1 = __decorate([
+exports.Testing123 = Testing123;
+exports.Testing123 = Testing123 = Testing123_1 = __decorate([
     Something({ v: () => Testing123_1 })
 ], Testing123);
-exports.Testing123 = Testing123;

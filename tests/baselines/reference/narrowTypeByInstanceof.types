@@ -1,4 +1,6 @@
-=== tests/cases/compiler/narrowTypeByInstanceof.ts ===
+//// [tests/cases/compiler/narrowTypeByInstanceof.ts] ////
+
+=== narrowTypeByInstanceof.ts ===
     class Match {
 >Match : Match
 
@@ -22,7 +24,7 @@
     }
 
 type FileMatchOrMatch = FileMatch | Match;
->FileMatchOrMatch : FileMatchOrMatch
+>FileMatchOrMatch : Match | FileMatch
 
 
 let elementA: FileMatchOrMatch, elementB: FileMatchOrMatch;

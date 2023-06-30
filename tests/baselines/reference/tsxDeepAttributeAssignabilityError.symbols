@@ -1,4 +1,6 @@
-=== tests/cases/compiler/my-component.tsx ===
+//// [tests/cases/compiler/tsxDeepAttributeAssignabilityError.tsx] ////
+
+=== my-component.tsx ===
 import * as React from 'react'
 >React : Symbol(React, Decl(my-component.tsx, 0, 6))
 
@@ -30,7 +32,7 @@ export function MyComponent(_props: MyProps) {
 >span : Symbol(JSX.IntrinsicElements.span, Decl(react.d.ts, 2461, 51))
 }
 
-=== tests/cases/compiler/file1.tsx ===
+=== file1.tsx ===
 import * as React from 'react'
 >React : Symbol(React, Decl(file1.tsx, 0, 6))
 

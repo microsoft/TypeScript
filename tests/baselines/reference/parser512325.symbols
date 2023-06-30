@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser512325.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/RegressionTests/parser512325.ts] ////
+
+=== parser512325.ts ===
 var tt = (a, (b, c)) => a+b+c;
 >tt : Symbol(tt, Decl(parser512325.ts, 0, 3))
 

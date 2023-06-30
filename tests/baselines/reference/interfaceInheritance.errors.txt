@@ -1,15 +1,15 @@
-tests/cases/compiler/interfaceInheritance.ts(22,7): error TS2420: Class 'C1' incorrectly implements interface 'I2'.
+interfaceInheritance.ts(22,7): error TS2420: Class 'C1' incorrectly implements interface 'I2'.
   Type 'C1' is missing the following properties from type 'I2': i1P1, i1P2
-tests/cases/compiler/interfaceInheritance.ts(30,1): error TS2739: Type 'I3' is missing the following properties from type 'I2': i1P1, i1P2
-tests/cases/compiler/interfaceInheritance.ts(37,1): error TS2322: Type 'I5' is not assignable to type 'I4'.
+interfaceInheritance.ts(30,1): error TS2739: Type 'I3' is missing the following properties from type 'I2': i1P1, i1P2
+interfaceInheritance.ts(37,1): error TS2322: Type 'I5' is not assignable to type 'I4'.
   Types of property 'one' are incompatible.
     Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/interfaceInheritance.ts(38,1): error TS2322: Type 'I4' is not assignable to type 'I5'.
+interfaceInheritance.ts(38,1): error TS2322: Type 'I4' is not assignable to type 'I5'.
   Types of property 'one' are incompatible.
     Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/compiler/interfaceInheritance.ts (4 errors) ====
+==== interfaceInheritance.ts (4 errors) ====
     interface I1 {
         i1P1: number;
         i1P2(): void;

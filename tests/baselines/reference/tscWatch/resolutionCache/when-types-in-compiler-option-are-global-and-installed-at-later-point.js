@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/lib/app.ts]
 myapp.component("hello");
@@ -30,8 +31,7 @@ Output::
 
 File is entry point of type library specified here: [96muser/username/projects/myproject/tsconfig.json[0m:[93m1[0m:[93m46[0m
 
-  | {"compilerOptions":{"module":"none","types":["@myapp/ts-types"]}}
-    [96m                                             ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+    [96m  [7m [0m [96m                                             ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 [[90m12:00:26 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -49,21 +49,23 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /user/username/projects/myproject/lib/app.ts (used version)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/lib/app.ts:
-  {"fileName":"/user/username/projects/myproject/lib/app.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
+/user/username/projects/myproject/node_modules: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules: *new*
+  {"pollingInterval":500}
 
 FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/lib/app.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules:
-  {"directoryName":"/user/username/projects/myproject/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -85,7 +87,39 @@ declare namespace myapp {
 }
 
 
+PolledWatches::
+/user/username/projects/node_modules:
+  {"pollingInterval":500}
+
+PolledWatches *deleted*::
+/user/username/projects/myproject/node_modules:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/lib/app.ts:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject:
+  {}
+/user/username/projects/myproject/node_modules: *new*
+  {}
+
+Before running Timeout callback:: count: 2
+11: timerToInvalidateFailedLookupResolutions
+12: timerToUpdateProgram
+After running Timeout callback:: count: 1
+13: timerToUpdateProgram
+Before running Timeout callback:: count: 1
+13: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
+sysLog:: /user/username/projects/myproject/node_modules:: Changing watcher to PresentFileSystemEntryWatcher
+
 >> Screen clear
 [[90m12:00:39 AM[0m] File change detected. Starting incremental compilation...
 
@@ -110,25 +144,27 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/node_modules/@myapp/ts-types/types/somefile.define.d.ts (used version)
 /user/username/projects/myproject/lib/app.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/lib/app.ts:
-  {"fileName":"/user/username/projects/myproject/lib/app.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/myproject/node_modules/@myapp/ts-types/types/somefile.define.d.ts:
-  {"fileName":"/user/username/projects/myproject/node_modules/@myapp/ts-types/types/somefile.define.d.ts","pollingInterval":250}
-/user/username/projects/myproject/node_modules/@myapp/ts-types/package.json:
-  {"fileName":"/user/username/projects/myproject/node_modules/@myapp/ts-types/package.json","pollingInterval":250}
+PolledWatches::
+/user/username/projects/node_modules:
+  {"pollingInterval":500}
 
 FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/lib/app.ts:
+  {}
+/user/username/projects/myproject/node_modules/@myapp/ts-types/package.json: *new*
+  {}
+/user/username/projects/myproject/node_modules/@myapp/ts-types/types/somefile.define.d.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules:
-  {"directoryName":"/user/username/projects/myproject/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
+/user/username/projects/myproject/node_modules:
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -138,27 +174,9 @@ Change:: No change, just check program
 
 Input::
 
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 Output::
-
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/lib/app.ts:
-  {"fileName":"/user/username/projects/myproject/lib/app.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/myproject/node_modules/@myapp/ts-types/types/somefile.define.d.ts:
-  {"fileName":"/user/username/projects/myproject/node_modules/@myapp/ts-types/types/somefile.define.d.ts","pollingInterval":250}
-/user/username/projects/myproject/node_modules/@myapp/ts-types/package.json:
-  {"fileName":"/user/username/projects/myproject/node_modules/@myapp/ts-types/package.json","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject/node_modules:
-  {"directoryName":"/user/username/projects/myproject/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 

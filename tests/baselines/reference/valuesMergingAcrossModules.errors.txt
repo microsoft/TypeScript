@@ -1,0 +1,28 @@
+c.ts(1,10): error TS2440: Import declaration conflicts with local declaration of 'A'.
+c.ts(6,1): error TS2349: This expression is not callable.
+  Type 'typeof A' has no call signatures.
+
+
+==== a.ts (0 errors) ====
+    function A() {}
+    export { A };
+    
+==== b.ts (0 errors) ====
+    import { A } from "./a";
+    type A = 0;
+    export { A };
+    
+==== c.ts (2 errors) ====
+    import { A } from "./b";
+             ~
+!!! error TS2440: Import declaration conflicts with local declaration of 'A'.
+    namespace A {
+      export const displayName = "A";
+    }
+    
+    A();
+    ~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type 'typeof A' has no call signatures.
+    A.displayName;
+    

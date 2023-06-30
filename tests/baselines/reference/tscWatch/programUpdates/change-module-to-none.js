@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/f1.ts]
 export {}
@@ -44,27 +45,23 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/b/f1.ts (used version)
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/f1.ts:
-  {"fileName":"/a/b/f1.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
 FsWatches::
+/a/b/f1.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/a/b: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/f1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 
@@ -75,15 +72,19 @@ Input::
 {"compilerOptions":{"module":"none"}}
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:22 AM[0m] File change detected. Starting incremental compilation...
 
 [91m● [0m[96ma/b/f1.ts[0m:[93m1[0m:[93m1[0m  [91mError[0m TS1148
-| export {}
-  [91m▔▔▔▔▔▔▔▔▔[0m
+  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔[0m
 Cannot use imports, exports, or module augmentations when '--module' is 'none'.
 
+
+  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔[0m
 [[90m12:00:26 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -102,22 +103,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/b/f1.ts (used version)
-
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/f1.ts:
-  {"fileName":"/a/b/f1.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 

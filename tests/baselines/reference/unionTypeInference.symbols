@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/unionTypeInference.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/unionTypeInference.ts] ////
+
+=== unionTypeInference.ts ===
 declare const b: boolean;
 >b : Symbol(b, Decl(unionTypeInference.ts, 0, 13))
 
@@ -230,7 +232,7 @@ async function fun<T>(deepPromised: DeepPromised<T>) {
     for (const value of Object.values(deepPromisedWithIndexer)) {
 >value : Symbol(value, Decl(unionTypeInference.ts, 62, 14))
 >Object.values : Symbol(ObjectConstructor.values, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >values : Symbol(ObjectConstructor.values, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
 >deepPromisedWithIndexer : Symbol(deepPromisedWithIndexer, Decl(unionTypeInference.ts, 61, 9))
 

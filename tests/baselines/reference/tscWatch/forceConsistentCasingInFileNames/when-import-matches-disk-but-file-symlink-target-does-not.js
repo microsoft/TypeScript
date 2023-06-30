@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/XY.ts]
 
@@ -37,23 +38,24 @@ Output::
 [[90m12:00:25 AM[0m] Starting compilation in watch mode...
 
 [91m● [0m[96mb.ts[0m:[93m2[0m:[93m19[0m  [91mError[0m TS1149
-| import { a } from "./Xy";
-  [91m                  ▔▔▔▔▔▔[0m
+  [91m[7m [0m [91m                  ▔▔▔▔▔▔[0m
 File name '/user/username/projects/myproject/Xy.ts' differs from already included file name '/user/username/projects/myproject/XY.ts' only in casing.
   The file is in the program because:
-    Matched by include pattern '**/*' in 'tsconfig.json'
+    Matched by default include pattern '**/*'
     Imported via "./Xy" from file '/user/username/projects/myproject/b.ts'
 
+
+  [91m[7m [0m [91m                  ▔▔▔▔▔▔[0m
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 XY.ts
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
   Imported via "./Xy" from file 'b.ts'
 link.ts
   Imported via "./link" from file 'b.ts'
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
 b.ts
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
 [[90m12:00:32 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -79,31 +81,33 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/link.ts (used version)
 /user/username/projects/myproject/b.ts (used version)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/xy.ts:
-  {"fileName":"/user/username/projects/myproject/XY.ts","pollingInterval":250}
-/user/username/projects/myproject/b.ts:
-  {"fileName":"/user/username/projects/myproject/b.ts","pollingInterval":250}
-/user/username/projects/myproject/link.ts:
-  {"fileName":"/user/username/projects/myproject/link.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/b.ts: *new*
+  {}
+/user/username/projects/myproject/link.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/xy.ts: *new*
+  {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/XY.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = exports.a = void 0;
 exports.a = 1;
 exports.b = 2;
@@ -111,7 +115,7 @@ exports.b = 2;
 
 //// [/user/username/projects/myproject/link.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = exports.a = void 0;
 exports.a = 1;
 exports.b = 2;
@@ -119,7 +123,7 @@ exports.b = 2;
 
 //// [/user/username/projects/myproject/b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var Xy_1 = require("./Xy");
 var link_1 = require("./link");
 Xy_1.a;
@@ -138,28 +142,32 @@ export const b = 2;
 
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:35 AM[0m] File change detected. Starting incremental compilation...
 
 [91m● [0m[96mb.ts[0m:[93m2[0m:[93m19[0m  [91mError[0m TS1149
-| import { a } from "./Xy";
-  [91m                  ▔▔▔▔▔▔[0m
+  [91m[7m [0m [91m                  ▔▔▔▔▔▔[0m
 File name '/user/username/projects/myproject/Xy.ts' differs from already included file name '/user/username/projects/myproject/XY.ts' only in casing.
   The file is in the program because:
-    Matched by include pattern '**/*' in 'tsconfig.json'
+    Matched by default include pattern '**/*'
     Imported via "./Xy" from file '/user/username/projects/myproject/b.ts'
 
+
+  [91m[7m [0m [91m                  ▔▔▔▔▔▔[0m
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 XY.ts
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
   Imported via "./Xy" from file 'b.ts'
 link.ts
   Imported via "./link" from file 'b.ts'
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
 b.ts
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
 [[90m12:00:42 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -181,32 +189,12 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/xy.ts (computed .d.ts)
 /user/username/projects/myproject/b.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/xy.ts:
-  {"fileName":"/user/username/projects/myproject/XY.ts","pollingInterval":250}
-/user/username/projects/myproject/b.ts:
-  {"fileName":"/user/username/projects/myproject/b.ts","pollingInterval":250}
-/user/username/projects/myproject/link.ts:
-  {"fileName":"/user/username/projects/myproject/link.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/XY.js]
 "use strict";
 // some comment
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = exports.a = void 0;
 exports.a = 1;
 exports.b = 2;

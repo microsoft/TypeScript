@@ -32,7 +32,7 @@ verify.completions({
 verify.applyCodeActionFromCompletion("", {
     name: "M",
     source: "m",
-    description: `Import default 'M' from module "m"`,
+    description: `Add import from "m"`,
     newFileContent: `import M from "m";
 
 `,

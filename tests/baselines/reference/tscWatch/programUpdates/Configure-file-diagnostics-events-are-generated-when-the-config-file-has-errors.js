@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/app.ts]
 let x = 10
@@ -30,15 +31,17 @@ Output::
 [[90m12:00:15 AM[0m] Starting compilation in watch mode...
 
 [91m● [0m[96ma/b/tsconfig.json[0m:[93m3[0m:[93m29[0m  [91mError[0m TS5023
-| "foo": "bar",
-  [91m▔▔▔▔▔[0m
+  [91m[7m [0m [91m▔▔▔▔▔[0m
 Unknown compiler option 'foo'.
 
+
+  [91m[7m [0m [91m▔▔▔▔▔[0m
 [91m● [0m[96ma/b/tsconfig.json[0m:[93m4[0m:[93m29[0m  [91mError[0m TS5025
-| "allowJS": true
-  [91m▔▔▔▔▔▔▔▔▔[0m
+  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔[0m
 Unknown compiler option 'allowJS'. Did you mean 'allowJs'?
 
+
+  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔[0m
 [[90m12:00:18 AM[0m] Found 2 errors. Watching for file changes.
 
 
@@ -58,21 +61,17 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/b/app.ts (used version)
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/app.ts:
-  {"fileName":"/a/b/app.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
 FsWatches::
+/a/b/app.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/a/b: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 

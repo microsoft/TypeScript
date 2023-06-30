@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/members/objectTypeWithStringAndNumberIndexSignatureToAny.ts ===
+//// [tests/cases/conformance/types/members/objectTypeWithStringAndNumberIndexSignatureToAny.ts] ////
+
+=== objectTypeWithStringAndNumberIndexSignatureToAny.ts ===
 // When checking compatibility between two types,
 // TypeScript should not require an index signature if
 // the target side index signature maps to `any` *and*
@@ -176,7 +178,7 @@ function f2(sToAny: StringTo<any>, nToAny: NumberTo<any>, bothToAny: StringTo<an
 }
 
 type NumberToNumber = NumberTo<number>;
->NumberToNumber : NumberToNumber
+>NumberToNumber : NumberTo<number>
 
 interface StringToAnyNumberToNumber extends StringTo<any>, NumberToNumber {
 }

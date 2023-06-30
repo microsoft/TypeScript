@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/optionalChaining/privateIdentifierChain/privateIdentifierChain.1.ts ===
+//// [tests/cases/conformance/expressions/optionalChaining/privateIdentifierChain/privateIdentifierChain.1.ts] ////
+
+=== privateIdentifierChain.1.ts ===
 class A {
 >A : A
 
@@ -28,10 +30,10 @@ class A {
 
         this?.getA().#b;    // Error
 >this?.getA().#b : A | undefined
->this?.getA() : A | undefined
->this?.getA : (() => A) | undefined
+>this?.getA() : A
+>this?.getA : () => A
 >this : this
->getA : (() => A) | undefined
+>getA : () => A
     }
 }
 

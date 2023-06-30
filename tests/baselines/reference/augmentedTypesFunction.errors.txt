@@ -1,18 +1,18 @@
-tests/cases/compiler/augmentedTypesFunction.ts(2,10): error TS2300: Duplicate identifier 'y1'.
-tests/cases/compiler/augmentedTypesFunction.ts(3,5): error TS2300: Duplicate identifier 'y1'.
-tests/cases/compiler/augmentedTypesFunction.ts(6,10): error TS2393: Duplicate function implementation.
-tests/cases/compiler/augmentedTypesFunction.ts(7,10): error TS2393: Duplicate function implementation.
-tests/cases/compiler/augmentedTypesFunction.ts(9,10): error TS2300: Duplicate identifier 'y2a'.
-tests/cases/compiler/augmentedTypesFunction.ts(10,5): error TS2300: Duplicate identifier 'y2a'.
-tests/cases/compiler/augmentedTypesFunction.ts(13,10): error TS2814: Function with bodies can only merge with classes that are ambient.
-tests/cases/compiler/augmentedTypesFunction.ts(14,7): error TS2813: Class declaration cannot implement overload list for 'y3'.
-tests/cases/compiler/augmentedTypesFunction.ts(16,10): error TS2814: Function with bodies can only merge with classes that are ambient.
-tests/cases/compiler/augmentedTypesFunction.ts(17,7): error TS2813: Class declaration cannot implement overload list for 'y3a'.
-tests/cases/compiler/augmentedTypesFunction.ts(20,10): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-tests/cases/compiler/augmentedTypesFunction.ts(21,6): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+augmentedTypesFunction.ts(2,10): error TS2300: Duplicate identifier 'y1'.
+augmentedTypesFunction.ts(3,5): error TS2300: Duplicate identifier 'y1'.
+augmentedTypesFunction.ts(6,10): error TS2393: Duplicate function implementation.
+augmentedTypesFunction.ts(7,10): error TS2393: Duplicate function implementation.
+augmentedTypesFunction.ts(9,10): error TS2300: Duplicate identifier 'y2a'.
+augmentedTypesFunction.ts(10,5): error TS2300: Duplicate identifier 'y2a'.
+augmentedTypesFunction.ts(13,10): error TS2814: Function with bodies can only merge with classes that are ambient.
+augmentedTypesFunction.ts(14,7): error TS2813: Class declaration cannot implement overload list for 'y3'.
+augmentedTypesFunction.ts(16,10): error TS2814: Function with bodies can only merge with classes that are ambient.
+augmentedTypesFunction.ts(17,7): error TS2813: Class declaration cannot implement overload list for 'y3a'.
+augmentedTypesFunction.ts(20,10): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+augmentedTypesFunction.ts(21,6): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
 
 
-==== tests/cases/compiler/augmentedTypesFunction.ts (12 errors) ====
+==== augmentedTypesFunction.ts (12 errors) ====
     // function then var
     function y1() { } // error
              ~~
@@ -40,20 +40,20 @@ tests/cases/compiler/augmentedTypesFunction.ts(21,6): error TS2567: Enum declara
     function y3() { } // error
              ~~
 !!! error TS2814: Function with bodies can only merge with classes that are ambient.
-!!! related TS6506 tests/cases/compiler/augmentedTypesFunction.ts:14:7: Consider adding a 'declare' modifier to this class.
+!!! related TS6506 augmentedTypesFunction.ts:14:7: Consider adding a 'declare' modifier to this class.
     class y3 { } // error
           ~~
 !!! error TS2813: Class declaration cannot implement overload list for 'y3'.
-!!! related TS6506 tests/cases/compiler/augmentedTypesFunction.ts:14:7: Consider adding a 'declare' modifier to this class.
+!!! related TS6506 augmentedTypesFunction.ts:14:7: Consider adding a 'declare' modifier to this class.
     
     function y3a() { } // error
              ~~~
 !!! error TS2814: Function with bodies can only merge with classes that are ambient.
-!!! related TS6506 tests/cases/compiler/augmentedTypesFunction.ts:17:7: Consider adding a 'declare' modifier to this class.
+!!! related TS6506 augmentedTypesFunction.ts:17:7: Consider adding a 'declare' modifier to this class.
     class y3a { public foo() { } } // error
           ~~~
 !!! error TS2813: Class declaration cannot implement overload list for 'y3a'.
-!!! related TS6506 tests/cases/compiler/augmentedTypesFunction.ts:17:7: Consider adding a 'declare' modifier to this class.
+!!! related TS6506 augmentedTypesFunction.ts:17:7: Consider adding a 'declare' modifier to this class.
     
     // function then enum
     function y4() { } // error

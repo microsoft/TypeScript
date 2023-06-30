@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts] ////
+
 //// [doYouNeedToChangeYourTargetLibraryES2015.ts]
 // es2015
 const noOp = () => {};
@@ -158,7 +160,7 @@ var testPromiseAll = Promise.all([]);
 var testPromiseRace = Promise.race([]);
 var testPromiseResolve = Promise.resolve();
 var testPromiseReject = Promise.reject();
-var testSymbolFor = Symbol["for"]('a');
+var testSymbolFor = Symbol.for('a');
 var testSymbolKeyFor = Symbol.keyFor(testSymbolFor);
 var testWeakMap = null;
 var testWeakSet = null;

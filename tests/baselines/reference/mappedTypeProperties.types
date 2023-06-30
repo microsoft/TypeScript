@@ -1,9 +1,11 @@
-=== tests/cases/conformance/types/mapped/mappedTypeProperties.ts ===
+//// [tests/cases/conformance/types/mapped/mappedTypeProperties.ts] ////
+
+=== mappedTypeProperties.ts ===
 export type PlaceType = 'openSky' | 'roofed' | 'garage'
->PlaceType : PlaceType
+>PlaceType : "openSky" | "roofed" | "garage"
 
 type Before = {
->Before : Before
+>Before : { model: 'hour' | 'day'; }
 
     model: 'hour' | 'day';
 >model : "hour" | "day"
@@ -16,7 +18,7 @@ type Before = {
 }
 
 type After = {
->After : After
+>After : { openSky: void; roofed: void; garage: void; }
 
     [placeType in PlaceType]: void;
     model: 'hour' | 'day'
@@ -24,14 +26,14 @@ type After = {
 }
 
 type AfterQuestion = {
->AfterQuestion : AfterQuestion
+>AfterQuestion : { openSky?: void; roofed?: void; garage?: void; }
 
     [placeType in PlaceType]?: void;
     model: 'hour' | 'day';
 >model : "hour" | "day"
 }
 type AfterMethod = {
->AfterMethod : AfterMethod
+>AfterMethod : { openSky?: void; roofed?: void; garage?: void; }
 
     [placeType in PlaceType]?: void;
     model(duration: number): 'hour' | 'day';
@@ -40,14 +42,14 @@ type AfterMethod = {
 }
 
 type AfterImplicit = {
->AfterImplicit : AfterImplicit
+>AfterImplicit : { openSky: any; roofed: any; garage: any; }
 
     [placeType in PlaceType]
     model: 'hour' | 'day';
 >model : "hour" | "day"
 }
 type AfterImplicitQ = {
->AfterImplicitQ : AfterImplicitQ
+>AfterImplicitQ : { openSky?: any; roofed?: any; garage?: any; }
 
     [placeType in PlaceType]?
     model: 'hour' | 'day'

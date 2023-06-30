@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/plainJSGrammarErrors.js ===
+//// [tests/cases/conformance/salsa/plainJSGrammarErrors.ts] ////
+
+=== plainJSGrammarErrors.js ===
 class C {
 >C : C
 
@@ -42,7 +44,6 @@ class C {
 >x : number
         }
         return null
->null : null
     }
     // modifier mistakes
     static constructor() { }
@@ -621,8 +622,8 @@ const trinaryDynamicImport = import('1', '2', '3')
 const spreadDynamicImport = import(...[])
 >spreadDynamicImport : Promise<any>
 >import(...[]) : Promise<any>
->...[] : undefined
->[] : undefined[]
+>...[] : never
+>[] : []
 
 return
 

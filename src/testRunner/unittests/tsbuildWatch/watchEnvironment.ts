@@ -1,124 +1,122 @@
-namespace ts.tscWatch {
-    describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: with different watch environments", () => {
-        describe("when watchFile can create multiple watchers per file", () => {
-            verifyWatchFileOnMultipleProjects(/*singleWatchPerFile*/ false);
-        });
+import * as ts from "../../_namespaces/ts";
+import {
+    createBaseline,
+    createSolutionBuilderWithWatchHostForBaseline,
+    runWatchBaseline,
+} from "../helpers/tscWatch";
+import {
+    createWatchedSystem,
+    File,
+    libFile,
+    TestServerHost,
+} from "../helpers/virtualFileSystemWithWatch";
 
-        describe("when watchFile is single watcher per file", () => {
-            verifyWatchFileOnMultipleProjects(
-                /*singleWatchPerFile*/ true,
-                arrayToMap(["TSC_WATCHFILE"], identity, () => TestFSWithWatch.Tsc_WatchFile.SingleFileWatcherPerName)
-            );
-        });
+describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: with different watch environments", () => {
+    it("watchFile on same file multiple times because file is part of multiple projects", () => {
+        const project = `/user/username/projects/myproject`;
+        let maxPkgs = 4;
+        const configPath = `${project}/tsconfig.json`;
+        const typing: File = {
+            path: `${project}/typings/xterm.d.ts`,
+            content: "export const typing = 10;"
+        };
 
-        function verifyWatchFileOnMultipleProjects(singleWatchPerFile: boolean, environmentVariables?: ESMap<string, string>) {
-            it("watchFile on same file multiple times because file is part of multiple projects", () => {
-                const project = `${TestFSWithWatch.tsbuildProjectsLocation}/myproject`;
-                let maxPkgs = 4;
-                const configPath = `${project}/tsconfig.json`;
-                const typing: File = {
-                    path: `${project}/typings/xterm.d.ts`,
-                    content: "export const typing = 10;"
-                };
-
-                const allPkgFiles = pkgs(pkgFiles);
-                const system = createWatchedSystem([libFile, typing, ...flatArray(allPkgFiles)], { currentDirectory: project, environmentVariables });
-                writePkgReferences();
-                const host = createSolutionBuilderWithWatchHost(system);
-                const solutionBuilder = createSolutionBuilderWithWatch(host, ["tsconfig.json"], { watch: true, verbose: true });
-                solutionBuilder.build();
-                checkOutputErrorsInitial(system, emptyArray, /*disableConsoleClears*/ undefined, [
-                    `Projects in this build: \r\n${
-                        concatenate(
-                            pkgs(index => `    * pkg${index}/tsconfig.json`),
-                            ["    * tsconfig.json"]
-                        ).join("\r\n")}\n\n`,
-                    ...flatArray(pkgs(index => [
-                        `Project 'pkg${index}/tsconfig.json' is out of date because output file 'pkg${index}/index.js' does not exist\n\n`,
-                        `Building project '${project}/pkg${index}/tsconfig.json'...\n\n`
-                    ]))
-                ]);
-
-                const watchFilesDetailed = arrayToMap(flatArray(allPkgFiles), f => f.path, () => 1);
-                watchFilesDetailed.set(configPath, 1);
-                watchFilesDetailed.set(typing.path, singleWatchPerFile ? 1 : maxPkgs);
-                checkWatchedFilesDetailed(system, watchFilesDetailed);
-                system.writeFile(typing.path, `${typing.content}export const typing1 = 10;`);
-                verifyInvoke();
-
-                // Make change
-                maxPkgs--;
-                writePkgReferences();
-                system.checkTimeoutQueueLengthAndRun(1);
-                checkOutputErrorsIncremental(system, emptyArray);
-                const lastFiles = last(allPkgFiles);
-                lastFiles.forEach(f => watchFilesDetailed.delete(f.path));
-                watchFilesDetailed.set(typing.path, singleWatchPerFile ? 1 : maxPkgs);
-                checkWatchedFilesDetailed(system, watchFilesDetailed);
-                system.writeFile(typing.path, typing.content);
-                verifyInvoke();
-
-                // Make change to remove all the watches
-                maxPkgs = 0;
-                writePkgReferences();
-                system.checkTimeoutQueueLengthAndRun(1);
-                checkOutputErrorsIncremental(system, [
-                    `tsconfig.json(1,10): error TS18002: The 'files' list in config file '${configPath}' is empty.\n`
-                ]);
-                checkWatchedFilesDetailed(system, [configPath], 1);
-
-                system.writeFile(typing.path, `${typing.content}export const typing1 = 10;`);
-                system.checkTimeoutQueueLength(0);
-
-                function flatArray<T>(arr: T[][]): readonly T[] {
-                    return flatMap(arr, identity);
-                }
-                function pkgs<T>(cb: (index: number) => T): T[] {
-                    const result: T[] = [];
-                    for (let index = 0; index < maxPkgs; index++) {
-                        result.push(cb(index));
+        const allPkgFiles = pkgs(pkgFiles);
+        const system = createWatchedSystem([libFile, typing, ...flatArray(allPkgFiles)], { currentDirectory: project });
+        writePkgReferences(system);
+        const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(system);
+        const host = createSolutionBuilderWithWatchHostForBaseline(sys, cb);
+        const solutionBuilder = ts.createSolutionBuilderWithWatch(host, ["tsconfig.json"], { watch: true, verbose: true });
+        solutionBuilder.build();
+        runWatchBaseline({
+            scenario: "watchEnvironment",
+            subScenario: `same file in multiple projects with single watcher per file`,
+            commandLineArgs: ["--b", "--w"],
+            sys,
+            baseline,
+            oldSnap,
+            getPrograms,
+            edits: [
+                {
+                    caption: "modify typing file",
+                    edit: sys => sys.writeFile(typing.path, `${typing.content}export const typing1 = 10;`),
+                    timeouts: sys => {
+                        sys.runQueuedTimeoutCallbacks();
+                        sys.runQueuedTimeoutCallbacks();
                     }
-                    return result;
+                },
+                {
+                    // Make change
+                    caption: "change pkg references",
+                    edit: sys => {
+                        maxPkgs--;
+                        writePkgReferences(sys);
+                    },
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                },
+                {
+                    caption: "modify typing file",
+                    edit: sys => sys.writeFile(typing.path, typing.content),
+                    timeouts: sys => {
+                        sys.runQueuedTimeoutCallbacks();
+                        sys.runQueuedTimeoutCallbacks();
+                    }
+                },
+                {
+                    // Make change to remove all watches
+                    caption: "change pkg references to remove all watches",
+                    edit: sys => {
+                        maxPkgs = 0;
+                        writePkgReferences(sys);
+                    },
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                },
+                {
+                    caption: "modify typing file",
+                    edit: sys => sys.writeFile(typing.path, `${typing.content}export const typing1 = 10;`),
+                    timeouts: sys => sys.logTimeoutQueueLength(),
+                },
+            ],
+            watchOrSolution: solutionBuilder
+        });
+
+        function flatArray<T>(arr: T[][]): readonly T[] {
+            return ts.flatMap(arr, ts.identity);
+        }
+        function pkgs<T>(cb: (index: number) => T): T[] {
+            const result: T[] = [];
+            for (let index = 0; index < maxPkgs; index++) {
+                result.push(cb(index));
+            }
+            return result;
+        }
+        function createPkgReference(index: number) {
+            return { path: `./pkg${index}` };
+        }
+        function pkgFiles(index: number): File[] {
+            return [
+                {
+                    path: `${project}/pkg${index}/index.ts`,
+                    content: `export const pkg${index} = ${index};`
+                },
+                {
+                    path: `${project}/pkg${index}/tsconfig.json`,
+                    content: JSON.stringify({
+                        complerOptions: { composite: true },
+                        include: [
+                            "**/*.ts",
+                            "../typings/xterm.d.ts"
+                        ]
+                    })
                 }
-                function createPkgReference(index: number) {
-                    return { path: `./pkg${index}` };
-                }
-                function pkgFiles(index: number): File[] {
-                    return [
-                        {
-                            path: `${project}/pkg${index}/index.ts`,
-                            content: `export const pkg${index} = ${index};`
-                        },
-                        {
-                            path: `${project}/pkg${index}/tsconfig.json`,
-                            content: JSON.stringify({
-                                complerOptions: { composite: true },
-                                include: [
-                                    "**/*.ts",
-                                    "../typings/xterm.d.ts"
-                                ]
-                            })
-                        }
-                    ];
-                }
-                function writePkgReferences() {
-                    system.writeFile(configPath, JSON.stringify({
-                        files: [],
-                        include: [],
-                        references: pkgs(createPkgReference)
-                    }));
-                }
-                function verifyInvoke() {
-                    pkgs(() => system.checkTimeoutQueueLengthAndRun(1));
-                    checkOutputErrorsIncremental(system, emptyArray, /*disableConsoleClears*/ undefined, /*logsBeforeWatchDiagnostics*/ undefined, [
-                        ...flatArray(pkgs(index => [
-                            `Project 'pkg${index}/tsconfig.json' is out of date because oldest output 'pkg${index}/index.js' is older than newest input 'typings/xterm.d.ts'\n\n`,
-                            `Building project '${project}/pkg${index}/tsconfig.json'...\n\n`,
-                            `Updating unchanged output timestamps of project '${project}/pkg${index}/tsconfig.json'...\n\n`
-                        ]))
-                    ]);
-                }
-            });
+            ];
+        }
+        function writePkgReferences(system: TestServerHost) {
+            system.writeFile(configPath, JSON.stringify({
+                files: [],
+                include: [],
+                references: pkgs(createPkgReference)
+            }));
         }
     });
-}
+});

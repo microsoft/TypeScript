@@ -14,7 +14,7 @@ goTo.file('/b.ts');
 verify.applyCodeActionFromCompletion('', {
   name: 'B',
   source: '/a',
-  description: `Add 'B' to existing import declaration from "./a"`,
+  description: `Update import from "./a"`,
   preferences: {
     includeCompletionsForModuleExports: true,
     includeInsertTextCompletions: true

@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/c/app.ts]
 
@@ -28,15 +29,17 @@ Output::
 [[90m12:00:17 AM[0m] Starting compilation in watch mode...
 
 [91m● [0m[96ma/b/c/app.ts[0m:[93m2[0m:[93m25[0m  [91mError[0m TS2305
-| import {f} from "./module"
-  [91m        ▔[0m
+  [91m[7m [0m [91m        ▔[0m
 Module '"./module"' has no exported member 'f'.
 
+
+  [91m[7m [0m [91m        ▔[0m
 [91m● [0m[96ma/b/c/app.ts[0m:[93m3[0m:[93m17[0m  [91mError[0m TS2584
-| console.log(f)
-  [91m▔▔▔▔▔▔▔[0m
+  [91m[7m [0m [91m▔▔▔▔▔▔▔[0m
 Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
 
+
+  [91m[7m [0m [91m▔▔▔▔▔▔▔[0m
 [[90m12:00:20 AM[0m] Found 2 errors. Watching for file changes.
 
 
@@ -59,25 +62,23 @@ Shape signatures in builder refreshed for::
 /a/b/c/module.d.ts (used version)
 /a/b/c/app.ts (used version)
 
-WatchedFiles::
-/a/b/c/app.ts:
-  {"fileName":"/a/b/c/app.ts","pollingInterval":250}
-/a/b/c/module.d.ts:
-  {"fileName":"/a/b/c/module.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
 FsWatches::
+/a/b/c/app.ts: *new*
+  {}
+/a/b/c/module.d.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
 
 FsWatchesRecursive::
-/a:
-  {"directoryName":"/a","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/a/b/c: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/c/app.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var module_1 = require("./module");
 console.log(module_1.f);
 

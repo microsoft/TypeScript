@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/tsNoCheckForTypescript.ts] ////
+
 //// [file.ts]
 // @ts-nocheck
 
@@ -15,7 +17,7 @@ export class Bet implements Aleph {
 //// [file.js]
 "use strict";
 // @ts-nocheck
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Bet = exports.a = void 0;
 exports.a = 1 + {}; // This is an error, ofc, `Operator '+' cannot be applied to types '1' and '{}'`, which will be suppressed by the `nocheck` comment
 var Bet = /** @class */ (function () {
@@ -40,11 +42,11 @@ export declare class Bet implements Aleph {
 //// [DtsFileErrors]
 
 
-tests/cases/conformance/jsdoc/file.d.ts(6,5): error TS2416: Property 'q' in type 'Bet' is not assignable to the same property in base type 'Aleph'.
+file.d.ts(6,5): error TS2416: Property 'q' in type 'Bet' is not assignable to the same property in base type 'Aleph'.
   Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/jsdoc/file.d.ts (1 errors) ====
+==== file.d.ts (1 errors) ====
     export declare const a: any;
     export interface Aleph {
         q: number;

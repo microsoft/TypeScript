@@ -1,7 +1,8 @@
 /// <reference path='fourslash.ts'/>
 
 // @Filename: a.ts
-////const enum TestEnum {   
+// @newLine: lf
+////const enum TestEnum {
 ////    Foo, Bar
 ////}
 ////var testFirstFile = TestEnum.Bar;
@@ -13,6 +14,6 @@
 
 goTo.marker("1");
 verify.verifyGetEmitOutputForCurrentFile(
-"/// <reference path=\"a.ts\" />\r\n\
-var testInOtherFile = 1 /* Bar */;\r\n"
+"/// <reference path=\"a.ts\" />\n\
+var testInOtherFile = 1 /* TestEnum.Bar */;\n"
     )

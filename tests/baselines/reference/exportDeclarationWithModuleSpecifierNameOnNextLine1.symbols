@@ -1,25 +1,28 @@
-=== tests/cases/compiler/t1.ts ===
+//// [tests/cases/compiler/exportDeclarationWithModuleSpecifierNameOnNextLine1.ts] ////
+
+=== t1.ts ===
 export var x = "x";
 >x : Symbol(x, Decl(t1.ts, 0, 10))
 
-=== tests/cases/compiler/t2.ts ===
+=== t2.ts ===
 export { x } from
 >x : Symbol(x, Decl(t2.ts, 0, 8))
 
     "./t1";
 
-=== tests/cases/compiler/t3.ts ===
+=== t3.ts ===
+
 export { } from
-No type information for this code.    "./t1";
-No type information for this code.
-No type information for this code.=== tests/cases/compiler/t4.ts ===
+    "./t1";
+
+=== t4.ts ===
 export { x as a } from
 >x : Symbol(x, Decl(t1.ts, 0, 10))
 >a : Symbol(a, Decl(t4.ts, 0, 8))
 
     "./t1";
 
-=== tests/cases/compiler/t5.ts ===
+=== t5.ts ===
 export { x as a, } from
 >x : Symbol(x, Decl(t1.ts, 0, 10))
 >a : Symbol(a, Decl(t5.ts, 0, 8))

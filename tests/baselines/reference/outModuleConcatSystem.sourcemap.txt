@@ -2,11 +2,11 @@
 JsFile: all.js
 mapUrl: all.js.map
 sourceRoot: 
-sources: tests/cases/compiler/ref/a.ts,tests/cases/compiler/b.ts
+sources: ref/a.ts,b.ts
 ===================================================================
 -------------------------------------------------------------------
 emittedFile:all.js
-sourceFile:tests/cases/compiler/ref/a.ts
+sourceFile:ref/a.ts
 -------------------------------------------------------------------
 >>>var __extends = (this && this.__extends) || (function () {
 >>>    var extendStatics = function (d, b) {
@@ -86,7 +86,7 @@ sourceFile:tests/cases/compiler/ref/a.ts
 ---
 -------------------------------------------------------------------
 emittedFile:all.js
-sourceFile:tests/cases/compiler/b.ts
+sourceFile:b.ts
 -------------------------------------------------------------------
 >>>    };
 >>>});

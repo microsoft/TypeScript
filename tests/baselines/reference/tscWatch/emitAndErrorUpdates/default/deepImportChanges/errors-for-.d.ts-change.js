@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/a.ts]
 import {B} from './b';
@@ -65,33 +66,35 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/b.d.ts (used version)
 /user/username/projects/myproject/a.ts (used version)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/a.ts:
-  {"fileName":"/user/username/projects/myproject/a.ts","pollingInterval":250}
-/user/username/projects/myproject/b.d.ts:
-  {"fileName":"/user/username/projects/myproject/b.d.ts","pollingInterval":250}
-/user/username/projects/myproject/c.d.ts:
-  {"fileName":"/user/username/projects/myproject/c.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject: *new*
+  {}
+/user/username/projects/myproject/a.ts: *new*
+  {}
+/user/username/projects/myproject/b.d.ts: *new*
+  {}
+/user/username/projects/myproject/c.d.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var b_1 = require("./b");
 var b = new b_1.B();
 console.log(b.c.d);
@@ -108,15 +111,19 @@ export class C
 }
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:32 AM[0m] File change detected. Starting incremental compilation...
 
 [91m● [0m[96ma.ts[0m:[93m4[0m:[93m17[0m  [91mError[0m TS2339
-| console.log(b.c.d);
-  [91m                ▔[0m
+  [91m[7m [0m [91m                ▔[0m
 Property 'd' does not exist on type 'C'.
 
+
+  [91m[7m [0m [91m                ▔[0m
 [[90m12:00:33 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -140,28 +147,6 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/b.d.ts (used version)
 /user/username/projects/myproject/a.ts (used version)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/a.ts:
-  {"fileName":"/user/username/projects/myproject/a.ts","pollingInterval":250}
-/user/username/projects/myproject/b.d.ts:
-  {"fileName":"/user/username/projects/myproject/b.d.ts","pollingInterval":250}
-/user/username/projects/myproject/c.d.ts:
-  {"fileName":"/user/username/projects/myproject/c.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
 exitCode:: ExitStatus.undefined
 
 
@@ -175,6 +160,9 @@ export class C
 }
 
 
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:37 AM[0m] File change detected. Starting incremental compilation...
@@ -202,28 +190,6 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/b.d.ts (used version)
 /user/username/projects/myproject/a.ts (used version)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/a.ts:
-  {"fileName":"/user/username/projects/myproject/a.ts","pollingInterval":250}
-/user/username/projects/myproject/b.d.ts:
-  {"fileName":"/user/username/projects/myproject/b.d.ts","pollingInterval":250}
-/user/username/projects/myproject/c.d.ts:
-  {"fileName":"/user/username/projects/myproject/c.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
 exitCode:: ExitStatus.undefined
 
 
@@ -237,15 +203,19 @@ export class C
 }
 
 
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:42 AM[0m] File change detected. Starting incremental compilation...
 
 [91m● [0m[96ma.ts[0m:[93m4[0m:[93m17[0m  [91mError[0m TS2339
-| console.log(b.c.d);
-  [91m                ▔[0m
+  [91m[7m [0m [91m                ▔[0m
 Property 'd' does not exist on type 'C'.
 
+
+  [91m[7m [0m [91m                ▔[0m
 [[90m12:00:43 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -268,28 +238,6 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/c.d.ts (used version)
 /user/username/projects/myproject/b.d.ts (used version)
 /user/username/projects/myproject/a.ts (used version)
-
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/a.ts:
-  {"fileName":"/user/username/projects/myproject/a.ts","pollingInterval":250}
-/user/username/projects/myproject/b.d.ts:
-  {"fileName":"/user/username/projects/myproject/b.d.ts","pollingInterval":250}
-/user/username/projects/myproject/c.d.ts:
-  {"fileName":"/user/username/projects/myproject/c.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 

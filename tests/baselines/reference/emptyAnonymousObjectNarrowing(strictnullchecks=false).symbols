@@ -1,0 +1,141 @@
+//// [tests/cases/compiler/emptyAnonymousObjectNarrowing.ts] ////
+
+=== emptyAnonymousObjectNarrowing.ts ===
+declare let nonNull: {};
+>nonNull : Symbol(nonNull, Decl(emptyAnonymousObjectNarrowing.ts, 0, 11))
+
+if (nonNull === "foo") {
+>nonNull : Symbol(nonNull, Decl(emptyAnonymousObjectNarrowing.ts, 0, 11))
+
+  nonNull;
+>nonNull : Symbol(nonNull, Decl(emptyAnonymousObjectNarrowing.ts, 0, 11))
+}
+else {
+  nonNull;
+>nonNull : Symbol(nonNull, Decl(emptyAnonymousObjectNarrowing.ts, 0, 11))
+}
+
+declare let obj: { a: string };
+>obj : Symbol(obj, Decl(emptyAnonymousObjectNarrowing.ts, 8, 11))
+>a : Symbol(a, Decl(emptyAnonymousObjectNarrowing.ts, 8, 18))
+
+if (nonNull === obj) {
+>nonNull : Symbol(nonNull, Decl(emptyAnonymousObjectNarrowing.ts, 0, 11))
+>obj : Symbol(obj, Decl(emptyAnonymousObjectNarrowing.ts, 8, 11))
+
+  nonNull;
+>nonNull : Symbol(nonNull, Decl(emptyAnonymousObjectNarrowing.ts, 0, 11))
+}
+else {
+  nonNull;
+>nonNull : Symbol(nonNull, Decl(emptyAnonymousObjectNarrowing.ts, 0, 11))
+}
+
+function f1<T>(x: T) {
+>f1 : Symbol(f1, Decl(emptyAnonymousObjectNarrowing.ts, 14, 1))
+>T : Symbol(T, Decl(emptyAnonymousObjectNarrowing.ts, 16, 12))
+>x : Symbol(x, Decl(emptyAnonymousObjectNarrowing.ts, 16, 15))
+>T : Symbol(T, Decl(emptyAnonymousObjectNarrowing.ts, 16, 12))
+
+  if (nonNull === x) {
+>nonNull : Symbol(nonNull, Decl(emptyAnonymousObjectNarrowing.ts, 0, 11))
+>x : Symbol(x, Decl(emptyAnonymousObjectNarrowing.ts, 16, 15))
+
+    nonNull;
+>nonNull : Symbol(nonNull, Decl(emptyAnonymousObjectNarrowing.ts, 0, 11))
+  }
+  else {
+    nonNull;
+>nonNull : Symbol(nonNull, Decl(emptyAnonymousObjectNarrowing.ts, 0, 11))
+  }
+}
+
+function f2<T extends object>(x: T) {
+>f2 : Symbol(f2, Decl(emptyAnonymousObjectNarrowing.ts, 23, 1))
+>T : Symbol(T, Decl(emptyAnonymousObjectNarrowing.ts, 25, 12))
+>x : Symbol(x, Decl(emptyAnonymousObjectNarrowing.ts, 25, 30))
+>T : Symbol(T, Decl(emptyAnonymousObjectNarrowing.ts, 25, 12))
+
+  if (nonNull === x) {
+>nonNull : Symbol(nonNull, Decl(emptyAnonymousObjectNarrowing.ts, 0, 11))
+>x : Symbol(x, Decl(emptyAnonymousObjectNarrowing.ts, 25, 30))
+
+    nonNull;
+>nonNull : Symbol(nonNull, Decl(emptyAnonymousObjectNarrowing.ts, 0, 11))
+  }
+  else {
+    nonNull;
+>nonNull : Symbol(nonNull, Decl(emptyAnonymousObjectNarrowing.ts, 0, 11))
+  }
+}
+
+declare let union: "xyz" | { a: string } | undefined;
+>union : Symbol(union, Decl(emptyAnonymousObjectNarrowing.ts, 34, 11))
+>a : Symbol(a, Decl(emptyAnonymousObjectNarrowing.ts, 34, 28))
+
+if (nonNull === union) {
+>nonNull : Symbol(nonNull, Decl(emptyAnonymousObjectNarrowing.ts, 0, 11))
+>union : Symbol(union, Decl(emptyAnonymousObjectNarrowing.ts, 34, 11))
+
+  nonNull;
+>nonNull : Symbol(nonNull, Decl(emptyAnonymousObjectNarrowing.ts, 0, 11))
+}
+else {
+  nonNull;
+>nonNull : Symbol(nonNull, Decl(emptyAnonymousObjectNarrowing.ts, 0, 11))
+}
+
+if (nonNull === undefined) {
+>nonNull : Symbol(nonNull, Decl(emptyAnonymousObjectNarrowing.ts, 0, 11))
+>undefined : Symbol(undefined)
+
+  nonNull;
+>nonNull : Symbol(nonNull, Decl(emptyAnonymousObjectNarrowing.ts, 0, 11))
+}
+else {
+  nonNull;
+>nonNull : Symbol(nonNull, Decl(emptyAnonymousObjectNarrowing.ts, 0, 11))
+}
+
+if (nonNull === null) {
+>nonNull : Symbol(nonNull, Decl(emptyAnonymousObjectNarrowing.ts, 0, 11))
+
+  nonNull;
+>nonNull : Symbol(nonNull, Decl(emptyAnonymousObjectNarrowing.ts, 0, 11))
+}
+else {
+  nonNull;
+>nonNull : Symbol(nonNull, Decl(emptyAnonymousObjectNarrowing.ts, 0, 11))
+}
+
+if (nonNull == undefined) {
+>nonNull : Symbol(nonNull, Decl(emptyAnonymousObjectNarrowing.ts, 0, 11))
+>undefined : Symbol(undefined)
+
+  nonNull;
+>nonNull : Symbol(nonNull, Decl(emptyAnonymousObjectNarrowing.ts, 0, 11))
+}
+else {
+  nonNull;
+>nonNull : Symbol(nonNull, Decl(emptyAnonymousObjectNarrowing.ts, 0, 11))
+}
+
+// Repro from #50567
+const foo = (value: unknown): string => {
+>foo : Symbol(foo, Decl(emptyAnonymousObjectNarrowing.ts, 64, 5))
+>value : Symbol(value, Decl(emptyAnonymousObjectNarrowing.ts, 64, 13))
+
+  if (!value) {
+>value : Symbol(value, Decl(emptyAnonymousObjectNarrowing.ts, 64, 13))
+
+      return 'foo';
+  }
+  if (value === 'xyz') {
+>value : Symbol(value, Decl(emptyAnonymousObjectNarrowing.ts, 64, 13))
+
+      return value; // Type '{}' is not assignable to type 'string'.
+>value : Symbol(value, Decl(emptyAnonymousObjectNarrowing.ts, 64, 13))
+  }
+  return '';
+};
+

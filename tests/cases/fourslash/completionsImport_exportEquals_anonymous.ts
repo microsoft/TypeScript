@@ -37,7 +37,7 @@ verify.completions(
 verify.applyCodeActionFromCompletion("0", {
     name: "fooBar",
     source: "/src/foo-bar",
-    description: `Import 'fooBar' from module "./foo-bar"`,
+    description: `Add import from "./foo-bar"`,
     newFileContent: `import fooBar = require("./foo-bar")
 
 exp

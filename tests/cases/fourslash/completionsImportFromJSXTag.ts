@@ -22,7 +22,7 @@
 verify.applyCodeActionFromCompletion("", {
   name: "Box",
   source: "/Box",
-  description: `Import 'Box' from module "./Box"`,
+  description: `Add import from "./Box"`,
   newFileContent: `import { Box } from "./Box";
 
 export function App() {

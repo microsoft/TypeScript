@@ -11,17 +11,27 @@ on:
         - cron: '0 0 1 * *'
     workflow_dispatch: {}
 
+permissions:
+  contents: read
+
+# Ensure scripts are run with pipefail. See:
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#exit-codes-and-error-action-preference
+defaults:
+  run:
+    shell: bash
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: github.repository == 'microsoft/TypeScript'
 
     steps:
-    - name: Configure git and update package-lock.json
+    - name: Configure git
       run: |
         git config --global user.email "typescriptbot@microsoft.com"
         git config --global user.name "TypeScript Bot"
 
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with: 
         repository: 'microsoft/TypeScript-Website'
         path: 'ts-site'
@@ -30,9 +40,10 @@ jobs:
       run:  |
         cd ts-site
         git commit --allow-empty -m "Monthly Bump"
+        git config --unset-all http.https://github.com/.extraheader
         git push https://${{ secrets.TS_BOT_GITHUB_TOKEN }}@github.com/microsoft/TypeScript-Website.git
 
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with: 
         repository: 'microsoft/TypeScript-Make-Monaco-Builds'
         path: 'monaco-builds'
@@ -41,4 +52,5 @@ jobs:
       run:  |
         cd monaco-builds
         git commit --allow-empty -m "Monthly Bump"
+        git config --unset-all http.https://github.com/.extraheader
         git push https://${{ secrets.TS_BOT_GITHUB_TOKEN }}@github.com/microsoft/TypeScript-Make-Monaco-Builds.git

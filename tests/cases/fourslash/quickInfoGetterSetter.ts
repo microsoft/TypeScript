@@ -15,6 +15,6 @@
 //// instance./*setterUse*/myValue = instance./*getterUse*/myValue;
 
 verify.quickInfoAt("getterUse", "(property) C.myValue: Promise<string>");
-verify.quickInfoAt("getterDef", "(property) C.myValue: Promise<string>");
+verify.quickInfoAt("getterDef", "(getter) C.myValue: Promise<string>");
 verify.quickInfoAt("setterUse", "(property) C.myValue: string | Promise<string>");
-verify.quickInfoAt("setterDef", "(property) C.myValue: string | Promise<string>");
+verify.quickInfoAt("setterDef", "(setter) C.myValue: string | Promise<string>");

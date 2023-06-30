@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedPrivateStaticMembers.ts] ////
+
 //// [unusedPrivateStaticMembers.ts]
 class Test1 {
     private static m1() {}
@@ -51,15 +53,15 @@ class Test1 {
     }
 }
 class Test2 {
+    static { this.p1 = 0; }
     static test() {
         Test2.p1;
     }
 }
-Test2.p1 = 0;
 class Test3 {
+    static { this.p1 = 0; }
     static m1() { }
 }
-Test3.p1 = 0;
 class Test4 {
     static m1(n) {
         return (n === 0) ? 1 : (n * Test4.m1(n - 1));
@@ -75,8 +77,8 @@ class Test5 {
     }
 }
 class Test6 {
+    static { this.p1 = 0; }
     static test() {
         Test6["p1"];
     }
 }
-Test6.p1 = 0;

@@ -1,0 +1,23 @@
+//// [tests/cases/conformance/moduleResolution/selfNameModuleAugmentation.ts] ////
+
+=== /node_modules/acorn-walk/dist/walk.d.ts ===
+export {};
+declare module 'acorn-walk' {
+>'acorn-walk' : Symbol("/node_modules/acorn-walk/dist/walk", Decl(walk.d.ts, 0, 0), Decl(walk.d.ts, 0, 10))
+
+  export function simple(node: any, visitors: any, base?: any, state?: any): any;
+>simple : Symbol(simple, Decl(walk.d.ts, 1, 29))
+>node : Symbol(node, Decl(walk.d.ts, 2, 25))
+>visitors : Symbol(visitors, Decl(walk.d.ts, 2, 35))
+>base : Symbol(base, Decl(walk.d.ts, 2, 50))
+>state : Symbol(state, Decl(walk.d.ts, 2, 62))
+}
+
+=== /node_modules/acorn-walk/dist/walk.mjs ===
+
+export {};
+
+=== /index.ts ===
+import { simple } from 'acorn-walk';
+>simple : Symbol(simple, Decl(index.ts, 0, 8))
+

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/importDeclarations/importAliasIdentifiers.ts] ////
+
 //// [importAliasIdentifiers.ts]
 module moduleA {
     export class Point {

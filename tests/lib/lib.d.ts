@@ -1387,7 +1387,7 @@ interface DataView {
 }
 
 interface DataViewConstructor {
-    new (buffer: ArrayBuffer, byteOffset?: number, byteLength?: number): DataView;
+    new (buffer: ArrayBuffer & { BYTES_PER_ELEMENT?: never }, byteOffset?: number, byteLength?: number): DataView;
 }
 declare var DataView: DataViewConstructor;
 
@@ -3956,7 +3956,7 @@ declare module Intl {
         hour?: "numeric" | "2-digit";
         minute?: "numeric" | "2-digit";
         second?: "numeric" | "2-digit";
-        fractionalSecondDigits?: 0 | 1 | 2 | 3;
+        fractionalSecondDigits?: 1 | 2 | 3;
         timeZoneName?: "long" | "short";
     }
 

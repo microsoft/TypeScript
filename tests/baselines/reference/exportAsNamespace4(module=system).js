@@ -79,10 +79,10 @@ System.register(["./1", "./11"], function (exports_1, context_1) {
             }
         ],
         execute: function () {
-            _1_1["default"].a;
-            _11_1["default"].a;
-            _1_1["default"].b;
-            _11_1["default"].b;
+            _1_1.default.a;
+            _11_1.default.a;
+            _1_1.default.b;
+            _11_1.default.b;
         }
     };
 });

@@ -20,39 +20,39 @@
 //// [|import f/*4*/ =|]
 
 // @Filename: /index5.ts
-//// import f/*5*/ from "";
+//// [|import f/*5*/ from "";|]
 
-// ([[0, true], [1, true], [2, false], [3, true], [4, true], [5, true]] as const).forEach(([marker, typeKeywordValid]) => {
-//   verify.completions({
-//     isNewIdentifierLocation: true,
-//     marker: "" + marker,
-//     exact: [{
-//       name: "foo",
-//       source: "./mod",
-//       insertText: `import { foo$1 } from "./mod";`,
-//       isSnippet: true,
-//       replacementSpan: test.ranges()[marker],
-//       sourceDisplay: "./mod",
-//     },
-//     {
-//       name: "Foo",
-//       source: "./mod",
-//       insertText: `import { Foo$1 } from "./mod";`,
-//       isSnippet: true,
-//       replacementSpan: test.ranges()[marker],
-//       sourceDisplay: "./mod",
-//     },
-//     ...typeKeywordValid ? [{
-//       name: "type",
-//       sortText: completion.SortText.GlobalsOrKeywords,
-//     }] : []],
-//     preferences: {
-//       includeCompletionsForImportStatements: true,
-//       includeInsertTextCompletions: true,
-//       includeCompletionsWithSnippetText: true,
-//     }
-//   });
-// });
+([[0, true], [1, true], [2, false], [3, true], [4, true], [5, true]] as const).forEach(([marker, typeKeywordValid]) => {
+  verify.completions({
+    isNewIdentifierLocation: true,
+    marker: "" + marker,
+    exact: [{
+      name: "foo",
+      source: "./mod",
+      insertText: `import { foo$1 } from "./mod";`,
+      isSnippet: true,
+      replacementSpan: test.ranges()[marker],
+      sourceDisplay: "./mod",
+    },
+    {
+      name: "Foo",
+      source: "./mod",
+      insertText: `import { Foo$1 } from "./mod";`,
+      isSnippet: true,
+      replacementSpan: test.ranges()[marker],
+      sourceDisplay: "./mod",
+    },
+    ...typeKeywordValid ? [{
+      name: "type",
+      sortText: completion.SortText.GlobalsOrKeywords,
+    }] : []],
+    preferences: {
+      includeCompletionsForImportStatements: true,
+      includeInsertTextCompletions: true,
+      includeCompletionsWithSnippetText: true,
+    }
+  });
+});
 
 // @Filename: /index6.ts
 //// import f/*6*/ from "nope";

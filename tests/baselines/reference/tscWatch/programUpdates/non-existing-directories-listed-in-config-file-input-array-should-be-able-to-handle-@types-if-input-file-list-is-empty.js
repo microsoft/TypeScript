@@ -1,3 +1,4 @@
+currentDirectory:: /a useCaseSensitiveFileNames: false
 Input::
 //// [/a/app.ts]
 let x = 1
@@ -31,10 +32,11 @@ Output::
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
 [91m● [0m[96mtsconfig.json[0m:[93m1[0m:[93m24[0m   [91mError[0m TS18002
-| {"compiler":{},"files":[]}
-  [91m                       ▔▔[0m
+  [91m[7m [0m [91m                       ▔▔[0m
 The 'files' list in config file '/a/tsconfig.json' is empty.
 
+
+  [91m[7m [0m [91m                       ▔▔[0m
 [[90m12:00:24 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -48,15 +50,9 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/a/tsconfig.json:
-  {"fileName":"/a/tsconfig.json","pollingInterval":250}
-
 FsWatches::
-
-FsWatchesRecursive::
-/a/node_modules/@types:
-  {"directoryName":"/a/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/a/tsconfig.json: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 

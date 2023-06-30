@@ -1,0 +1,54 @@
+//// [tests/cases/compiler/narrowingTypeofUndefined1.ts] ////
+
+=== narrowingTypeofUndefined1.ts ===
+declare const a: { error: { prop: string }, result: undefined } | { error: undefined, result: { prop: number } }
+>a : Symbol(a, Decl(narrowingTypeofUndefined1.ts, 0, 13))
+>error : Symbol(error, Decl(narrowingTypeofUndefined1.ts, 0, 18))
+>prop : Symbol(prop, Decl(narrowingTypeofUndefined1.ts, 0, 27))
+>result : Symbol(result, Decl(narrowingTypeofUndefined1.ts, 0, 43))
+>error : Symbol(error, Decl(narrowingTypeofUndefined1.ts, 0, 67))
+>result : Symbol(result, Decl(narrowingTypeofUndefined1.ts, 0, 85))
+>prop : Symbol(prop, Decl(narrowingTypeofUndefined1.ts, 0, 95))
+
+if (typeof a.error === 'undefined') {
+>a.error : Symbol(error, Decl(narrowingTypeofUndefined1.ts, 0, 18), Decl(narrowingTypeofUndefined1.ts, 0, 67))
+>a : Symbol(a, Decl(narrowingTypeofUndefined1.ts, 0, 13))
+>error : Symbol(error, Decl(narrowingTypeofUndefined1.ts, 0, 18), Decl(narrowingTypeofUndefined1.ts, 0, 67))
+
+    a.result.prop; // number
+>a.result.prop : Symbol(prop, Decl(narrowingTypeofUndefined1.ts, 0, 95))
+>a.result : Symbol(result, Decl(narrowingTypeofUndefined1.ts, 0, 43), Decl(narrowingTypeofUndefined1.ts, 0, 85))
+>a : Symbol(a, Decl(narrowingTypeofUndefined1.ts, 0, 13))
+>result : Symbol(result, Decl(narrowingTypeofUndefined1.ts, 0, 43), Decl(narrowingTypeofUndefined1.ts, 0, 85))
+>prop : Symbol(prop, Decl(narrowingTypeofUndefined1.ts, 0, 95))
+}
+else {
+    a.error.prop; // string
+>a.error.prop : Symbol(prop, Decl(narrowingTypeofUndefined1.ts, 0, 27))
+>a.error : Symbol(error, Decl(narrowingTypeofUndefined1.ts, 0, 18), Decl(narrowingTypeofUndefined1.ts, 0, 67))
+>a : Symbol(a, Decl(narrowingTypeofUndefined1.ts, 0, 13))
+>error : Symbol(error, Decl(narrowingTypeofUndefined1.ts, 0, 18), Decl(narrowingTypeofUndefined1.ts, 0, 67))
+>prop : Symbol(prop, Decl(narrowingTypeofUndefined1.ts, 0, 27))
+}
+
+if (typeof a.error !== 'undefined') {
+>a.error : Symbol(error, Decl(narrowingTypeofUndefined1.ts, 0, 18), Decl(narrowingTypeofUndefined1.ts, 0, 67))
+>a : Symbol(a, Decl(narrowingTypeofUndefined1.ts, 0, 13))
+>error : Symbol(error, Decl(narrowingTypeofUndefined1.ts, 0, 18), Decl(narrowingTypeofUndefined1.ts, 0, 67))
+
+    a.error.prop; // string
+>a.error.prop : Symbol(prop, Decl(narrowingTypeofUndefined1.ts, 0, 27))
+>a.error : Symbol(error, Decl(narrowingTypeofUndefined1.ts, 0, 18), Decl(narrowingTypeofUndefined1.ts, 0, 67))
+>a : Symbol(a, Decl(narrowingTypeofUndefined1.ts, 0, 13))
+>error : Symbol(error, Decl(narrowingTypeofUndefined1.ts, 0, 18), Decl(narrowingTypeofUndefined1.ts, 0, 67))
+>prop : Symbol(prop, Decl(narrowingTypeofUndefined1.ts, 0, 27))
+}
+else {
+    a.result.prop; // number
+>a.result.prop : Symbol(prop, Decl(narrowingTypeofUndefined1.ts, 0, 95))
+>a.result : Symbol(result, Decl(narrowingTypeofUndefined1.ts, 0, 43), Decl(narrowingTypeofUndefined1.ts, 0, 85))
+>a : Symbol(a, Decl(narrowingTypeofUndefined1.ts, 0, 13))
+>result : Symbol(result, Decl(narrowingTypeofUndefined1.ts, 0, 43), Decl(narrowingTypeofUndefined1.ts, 0, 85))
+>prop : Symbol(prop, Decl(narrowingTypeofUndefined1.ts, 0, 95))
+}
+

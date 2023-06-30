@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/never/neverTypeErrors2.ts ===
+//// [tests/cases/conformance/types/never/neverTypeErrors2.ts] ////
+
+=== neverTypeErrors2.ts ===
 function f1() {
 >f1 : () => void
 
@@ -28,7 +30,6 @@ function f1() {
     x = null;
 >x = null : null
 >x : never
->null : null
 
     x = {};
 >x = {} : {}
@@ -66,4 +67,41 @@ for (const n in f4()) {}
 >n : string
 >f4() : never
 >f4 : () => never
+
+function f5() {
+>f5 : () => void
+
+    let x: never[] = [];  // Ok
+>x : never[]
+>[] : never[]
+}
+
+// Repro from #46032
+
+interface A {
+    foo: "a";
+>foo : "a"
+}
+
+interface B {
+    foo: "b";
+>foo : "b"
+}
+
+type Union = A & B;
+>Union : never
+
+function func(): { value: Union[] } {
+>func : () => {    value: Union[];}
+>value : never[]
+
+    return {
+>{        value: [],    } : { value: never[]; }
+
+        value: [],
+>value : never[]
+>[] : never[]
+
+    };
+}
 

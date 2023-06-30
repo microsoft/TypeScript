@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardsInExternalModule.ts] ////
+
 //// [typeGuardsInExternalModule.ts]
 // Note that type guards affect types of variables and parameters only and 
 // have no effect on members of objects such as properties. 
@@ -27,7 +29,7 @@ else {
 "use strict";
 // Note that type guards affect types of variables and parameters only and 
 // have no effect on members of objects such as properties. 
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.var2 = void 0;
 // local variable in external module
 var num;

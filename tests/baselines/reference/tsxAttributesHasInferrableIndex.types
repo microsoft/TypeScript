@@ -1,6 +1,8 @@
-=== tests/cases/compiler/tsxAttributesHasInferrableIndex.tsx ===
+//// [tests/cases/compiler/tsxAttributesHasInferrableIndex.tsx] ////
+
+=== tsxAttributesHasInferrableIndex.tsx ===
 type AttributeValue = number | string | Date | boolean;
->AttributeValue : AttributeValue
+>AttributeValue : string | number | boolean | Date
 
 interface Attributes {
     [key: string]: AttributeValue;

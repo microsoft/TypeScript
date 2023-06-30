@@ -1,4 +1,6 @@
-=== tests/cases/compiler/styledComponentsInstantiaionLimitNotReached.ts ===
+//// [tests/cases/compiler/styledComponentsInstantiaionLimitNotReached.ts] ////
+
+=== styledComponentsInstantiaionLimitNotReached.ts ===
 /// <reference path="react16.d.ts" />
 import * as React from "react";
 >React : typeof React
@@ -156,7 +158,7 @@ type NonReactStatics<
     };
 
 export type AnyStyledComponent = StyledComponent<any, any, any, any> | StyledComponent<any, any, any>;
->AnyStyledComponent : AnyStyledComponent
+>AnyStyledComponent : StyledComponent<any, any, any, any> | StyledComponent<any, any, any, never>
 
 export type StyledComponent<
 >StyledComponent : StyledComponent<C, T, O, A>

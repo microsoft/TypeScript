@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/excessivelyLargeTupleSpread.ts] ////
+
 //// [excessivelyLargeTupleSpread.ts]
 // #41771
 

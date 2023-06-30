@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/literal/literalTypes1.ts ===
+//// [tests/cases/conformance/types/literal/literalTypes1.ts] ////
+
+=== literalTypes1.ts ===
 let zero: 0 = 0;
 >zero : 0
 >0 : 0
@@ -78,9 +80,8 @@ function f2(x: 0 | 1 | 2) {
 }
 
 type Falsy = false | 0 | "" | null | undefined;
->Falsy : Falsy
+>Falsy : false | "" | 0 | null | undefined
 >false : false
->null : null
 
 function f3(x: Falsy) {
 >f3 : (x: Falsy) => void
@@ -131,8 +132,6 @@ function f4(x: 0 | 1 | true | string) {
 
             break;
         case null:
->null : null
-
             x;
 >x : never
 

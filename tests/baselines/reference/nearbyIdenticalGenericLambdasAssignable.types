@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nearbyIdenticalGenericLambdasAssignable.ts ===
+//// [tests/cases/compiler/nearbyIdenticalGenericLambdasAssignable.ts] ////
+
+=== nearbyIdenticalGenericLambdasAssignable.ts ===
 declare const fA: <T>() => { v: T };
 >fA : <T>() => { v: T; }
 >v : T
@@ -41,7 +43,7 @@ type TC = typeof fC;
 >fC : <T>() => { v: T; }
 
 type TL = <T>() => { v: T }; 
->TL : TL
+>TL : <T>() => { v: T; }
 >v : T
 
 declare function accA(x: TA): void;

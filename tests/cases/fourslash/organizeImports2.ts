@@ -10,7 +10,10 @@
 //// console.log(Foo, Bar);
 
 verify.organizeImports(
-`import { Bar, Foo } from "foo";
+`import {
+    Bar,
+    Foo
+} from "foo";
 
 console.log(Foo, Bar);`
 ); 

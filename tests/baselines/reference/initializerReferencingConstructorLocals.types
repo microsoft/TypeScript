@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorLocals.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorLocals.ts] ////
+
+=== initializerReferencingConstructorLocals.ts ===
 // Initializer expressions for instance member variables are evaluated in the scope of the class constructor body but are not permitted to reference parameters or local variables of the constructor. 
 
 class C {
@@ -21,7 +23,7 @@ class C {
     d: typeof this.z; // error
 >d : any
 >this.z : any
->this : any
+>this : this
 >z : any
 
     constructor(x) {
@@ -54,7 +56,7 @@ class D<T> {
     d: typeof this.z; // error
 >d : any
 >this.z : any
->this : any
+>this : this
 >z : any
 
     constructor(x: T) {

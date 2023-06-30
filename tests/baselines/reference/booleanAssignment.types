@@ -1,4 +1,6 @@
-=== tests/cases/compiler/booleanAssignment.ts ===
+//// [tests/cases/compiler/booleanAssignment.ts] ////
+
+=== booleanAssignment.ts ===
 var b = new Boolean();
 >b : Boolean
 >new Boolean() : Boolean

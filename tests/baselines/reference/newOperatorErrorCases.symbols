@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/newOperator/newOperatorErrorCases.ts ===
+//// [tests/cases/conformance/expressions/newOperator/newOperatorErrorCases.ts] ////
+
+=== newOperatorErrorCases.ts ===
 class C0 {
 >C0 : Symbol(C0, Decl(newOperatorErrorCases.ts, 0, 0))
 
@@ -58,7 +60,7 @@ var c1: T<{}>;
 >c1 : Symbol(c1, Decl(newOperatorErrorCases.ts, 28, 3), Decl(newOperatorErrorCases.ts, 29, 3))
 >T : Symbol(T, Decl(newOperatorErrorCases.ts, 5, 1))
 
-var c2 = new T<string>; // Parse error
+var c2 = new T<string>;  // Ok
 >c2 : Symbol(c2, Decl(newOperatorErrorCases.ts, 30, 3))
 >T : Symbol(T, Decl(newOperatorErrorCases.ts, 5, 1))
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/destructuring/destructuringControlFlow.ts ===
+//// [tests/cases/conformance/es6/destructuring/destructuringControlFlow.ts] ////
+
+=== destructuringControlFlow.ts ===
 function f1(obj: { a?: string }) {
 >f1 : (obj: {    a?: string;}) => void
 >obj : { a?: string | undefined; }
@@ -31,7 +33,6 @@ function f1(obj: { a?: string }) {
 function f2(obj: [number, string] | null[]) {
 >f2 : (obj: [number, string] | null[]) => void
 >obj : [number, string] | null[]
->null : null
 
     let a0 = obj[0];  // number | null
 >a0 : number | null
@@ -161,7 +162,7 @@ function f4() {
 // Repro from #31770
 
 type KeyValue = [string, string?];
->KeyValue : KeyValue
+>KeyValue : [string, (string | undefined)?]
 
 let [key, value]: KeyValue = ["foo"];
 >key : string

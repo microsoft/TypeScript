@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myProject/pkg1/dist/index.d.ts]
 export * from './types';
@@ -58,10 +59,11 @@ interface Array<T> { length: number; [n: number]: T; }
 /a/lib/tsc.js -p pkg3 --explainFiles
 Output::
 [91m● [0m[96mpkg3/src/keys.ts[0m:[93m2[0m:[93m14[0m  [91mError[0m TS2742
-| export const ADMIN = MetadataAccessor.create<boolean>('1');
-  [91m             ▔▔▔▔▔[0m
+  [91m[7m [0m [91m             ▔▔▔▔▔[0m
 The inferred type of 'ADMIN' cannot be named without a reference to '../../pkg2/node_modules/@raymondfeng/pkg1/dist'. This is likely not portable. A type annotation is necessary.
 
+
+  [91m[7m [0m [91m             ▔▔▔▔▔[0m
 ../../../../a/lib/lib.d.ts
   Default library for target 'es5'
 pkg1/dist/types.d.ts
@@ -74,9 +76,9 @@ pkg2/dist/index.d.ts
   Imported via "@raymondfeng/pkg2" from file 'pkg3/src/keys.ts' with packageId '@raymondfeng/pkg2/dist/index.d.ts@1.0.0'
 pkg3/src/keys.ts
   Imported via './keys' from file 'pkg3/src/index.ts'
-  Matched by include pattern '**/*' in 'pkg3/tsconfig.json'
+  Matched by default include pattern '**/*'
 pkg3/src/index.ts
-  Matched by include pattern '**/*' in 'pkg3/tsconfig.json'
+  Matched by default include pattern '**/*'
 
 Found 1 error in pkg3/src/keys.ts[90m:2[0m
 
@@ -93,12 +95,6 @@ Program files::
 /user/username/projects/myproject/pkg2/dist/index.d.ts
 /user/username/projects/myproject/pkg3/src/keys.ts
 /user/username/projects/myproject/pkg3/src/index.ts
-
-WatchedFiles::
-
-FsWatches::
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 

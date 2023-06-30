@@ -1,6 +1,8 @@
-=== tests/cases/compiler/taggedPrimitiveNarrowing.ts ===
+//// [tests/cases/compiler/taggedPrimitiveNarrowing.ts] ////
+
+=== taggedPrimitiveNarrowing.ts ===
 type Hash = string & { __hash: true };
->Hash : Hash
+>Hash : string & { __hash: true; }
 >__hash : true
 >true : true
 

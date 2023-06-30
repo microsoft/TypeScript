@@ -25,16 +25,16 @@ export type Merge<T, U> = T & U;
 
 //// [types.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [type-a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [type-b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Broken = void 0;
 var Broken = /** @class */ (function () {
     function Broken() {
@@ -48,15 +48,15 @@ exports.Broken = Broken;
 
 
 //// [types.d.ts]
-export declare type Merge<T, U> = T & U;
+export type Merge<T, U> = T & U;
 //// [type-a.d.ts]
-export declare type TypeA = {
+export type TypeA = {
     a: string;
 };
 //// [type-b.d.ts]
 import { Merge } from './types';
 import { TypeA } from './type-a';
-export declare type TypeB = Merge<TypeA, {
+export type TypeB = Merge<TypeA, {
     b: string;
 }>;
 //// [index.d.ts]

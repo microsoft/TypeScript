@@ -6,5 +6,5 @@
 verify.codeFixAll({
 	fixId: "fixJSDocTypes_plain",
 	fixAllDescription: "Change all jsdoc-style types to TypeScript",
-	newFileContent: "function f(a: number | null, b: string) {}",
+	newFileContent: "function f(a: number | null | undefined, b: string) {}",
 })

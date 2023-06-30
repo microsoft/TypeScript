@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/intersection/intersectionAsWeakTypeSource.ts ===
+//// [tests/cases/conformance/types/intersection/intersectionAsWeakTypeSource.ts] ////
+
+=== intersectionAsWeakTypeSource.ts ===
 interface X { x: string }
 >x : string
 
@@ -9,7 +11,7 @@ interface Z { z?: boolean }
 >z : boolean
 
 type XY = X & Y;
->XY : XY
+>XY : X & Y
 
 const xy: XY = {x: 'x', y: 10};
 >xy : XY

@@ -1,11 +1,12 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/a/b/moduleFile.ts]
+//// [/users/username/projects/project/moduleFile.ts]
 export function bar() { };
 
-//// [/a/b/file1.ts]
+//// [/users/username/projects/project/file1.ts]
 import * as T from "./moduleFile"; T.bar();
 
-//// [/a/b/tsconfig.json]
+//// [/users/username/projects/project/tsconfig.json]
 {}
 
 //// [/a/lib/lib.d.ts]
@@ -22,65 +23,67 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-/a/lib/tsc.js -w -p /a/b/tsconfig.json
+/a/lib/tsc.js -w -p /users/username/projects/project/tsconfig.json
 Output::
 >> Screen clear
-[[90m12:00:17 AM[0m] Starting compilation in watch mode...
+[[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:22 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:28 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
-Program root files: ["/a/b/file1.ts","/a/b/moduleFile.ts"]
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program root files: ["/users/username/projects/project/file1.ts","/users/username/projects/project/moduleFile.ts"]
+Program options: {"watch":true,"project":"/users/username/projects/project/tsconfig.json","configFilePath":"/users/username/projects/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
-/a/b/moduleFile.ts
-/a/b/file1.ts
+/users/username/projects/project/moduleFile.ts
+/users/username/projects/project/file1.ts
 
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
-/a/b/moduleFile.ts
-/a/b/file1.ts
+/users/username/projects/project/moduleFile.ts
+/users/username/projects/project/file1.ts
 
 Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
-/a/b/modulefile.ts (used version)
-/a/b/file1.ts (used version)
+/users/username/projects/project/modulefile.ts (used version)
+/users/username/projects/project/file1.ts (used version)
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/file1.ts:
-  {"fileName":"/a/b/file1.ts","pollingInterval":250}
-/a/b/modulefile.ts:
-  {"fileName":"/a/b/moduleFile.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
+/users/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/users/username/projects/project/file1.ts: *new*
+  {}
+/users/username/projects/project/modulefile.ts: *new*
+  {}
+/users/username/projects/project/tsconfig.json: *new*
+  {}
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/users/username/projects/project: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
-//// [/a/b/moduleFile.js]
+//// [/users/username/projects/project/moduleFile.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.bar = void 0;
 function bar() { }
 exports.bar = bar;
 ;
 
 
-//// [/a/b/file1.js]
+//// [/users/username/projects/project/file1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var T = require("./moduleFile");
 T.bar();
 
@@ -89,69 +92,81 @@ T.bar();
 Change:: Rename moduleFile to moduleFile1
 
 Input::
-//// [/a/b/moduleFile1.ts]
+//// [/users/username/projects/project/moduleFile1.ts]
 export function bar() { };
 
-//// [/a/b/moduleFile.ts] deleted
-//// [/a/b/moduleFile.js] deleted
+//// [/users/username/projects/project/moduleFile.ts] deleted
+//// [/users/username/projects/project/moduleFile.js] deleted
 
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
+After running Timeout callback:: count: 0
+Before running Timeout callback:: count: 0
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:27 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...
 
-[91m● [0m[96ma/b/file1.ts[0m:[93m1[0m:[93m20[0m  [91mError[0m TS2307
-| import * as T from "./moduleFile"; T.bar();
-  [91m                   ▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+[91m● [0m[96musers/username/projects/project/file1.ts[0m:[93m1[0m:[93m20[0m  [91mError[0m TS2307
+  [91m[7m [0m [91m                   ▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 Cannot find module './moduleFile' or its corresponding type declarations.
 
-[[90m12:00:33 AM[0m] Found 1 error. Watching for file changes.
+
+  [91m[7m [0m [91m                   ▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+[[90m12:00:39 AM[0m] Found 1 error. Watching for file changes.
 
 
 
-Program root files: ["/a/b/file1.ts","/a/b/moduleFile1.ts"]
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program root files: ["/users/username/projects/project/file1.ts","/users/username/projects/project/moduleFile1.ts"]
+Program options: {"watch":true,"project":"/users/username/projects/project/tsconfig.json","configFilePath":"/users/username/projects/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
-/a/b/file1.ts
-/a/b/moduleFile1.ts
+/users/username/projects/project/file1.ts
+/users/username/projects/project/moduleFile1.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/b/file1.ts
-/a/b/moduleFile1.ts
+/users/username/projects/project/file1.ts
+/users/username/projects/project/moduleFile1.ts
 
 Shape signatures in builder refreshed for::
-/a/b/file1.ts (computed .d.ts)
-/a/b/modulefile1.ts (computed .d.ts)
+/users/username/projects/project/file1.ts (computed .d.ts)
+/users/username/projects/project/modulefile1.ts (computed .d.ts)
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/file1.ts:
-  {"fileName":"/a/b/file1.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/a/b/modulefile1.ts:
-  {"fileName":"/a/b/moduleFile1.ts","pollingInterval":250}
+PolledWatches::
+/users/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/project/modulefile: *new*
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
-/a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/project: *new*
+  {}
+/users/username/projects/project/file1.ts:
+  {}
+/users/username/projects/project/modulefile1.ts: *new*
+  {}
+/users/username/projects/project/tsconfig.json:
+  {}
+
+FsWatches *deleted*::
+/users/username/projects/project/modulefile.ts:
+  {}
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/a/b/modulefile:
-  {"directoryName":"/a/b/moduleFile","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/users/username/projects/project:
+  {}
 
 exitCode:: ExitStatus.undefined
 
-//// [/a/b/file1.js] file written with same contents
-//// [/a/b/moduleFile1.js]
+//// [/users/username/projects/project/file1.js] file written with same contents
+//// [/users/username/projects/project/moduleFile1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.bar = void 0;
 function bar() { }
 exports.bar = bar;
@@ -162,59 +177,79 @@ exports.bar = bar;
 Change:: Rename moduleFile1 back to moduleFile
 
 Input::
-//// [/a/b/moduleFile.ts]
+//// [/users/username/projects/project/moduleFile.ts]
 export function bar() { };
 
-//// [/a/b/moduleFile1.ts] deleted
+//// [/users/username/projects/project/moduleFile1.ts] deleted
 
+Before running Timeout callback:: count: 2
+7: timerToInvalidateFailedLookupResolutions
+8: timerToUpdateProgram
+After running Timeout callback:: count: 1
+9: timerToUpdateProgram
+Before running Timeout callback:: count: 1
+9: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:37 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:43 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:43 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:49 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
-Program root files: ["/a/b/file1.ts","/a/b/moduleFile.ts"]
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program root files: ["/users/username/projects/project/file1.ts","/users/username/projects/project/moduleFile.ts"]
+Program options: {"watch":true,"project":"/users/username/projects/project/tsconfig.json","configFilePath":"/users/username/projects/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
-/a/b/moduleFile.ts
-/a/b/file1.ts
+/users/username/projects/project/moduleFile.ts
+/users/username/projects/project/file1.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/b/moduleFile.ts
-/a/b/file1.ts
+/users/username/projects/project/moduleFile.ts
+/users/username/projects/project/file1.ts
 
 Shape signatures in builder refreshed for::
-/a/b/modulefile.ts (computed .d.ts)
-/a/b/file1.ts (computed .d.ts)
+/users/username/projects/project/modulefile.ts (computed .d.ts)
+/users/username/projects/project/file1.ts (computed .d.ts)
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/file1.ts:
-  {"fileName":"/a/b/file1.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/a/b/modulefile.ts:
-  {"fileName":"/a/b/moduleFile.ts","pollingInterval":250}
+PolledWatches::
+/users/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+
+PolledWatches *deleted*::
+/users/username/projects/project/modulefile:
+  {"pollingInterval":500}
 
 FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/project/file1.ts:
+  {}
+/users/username/projects/project/modulefile.ts: *new*
+  {}
+/users/username/projects/project/tsconfig.json:
+  {}
+
+FsWatches *deleted*::
+/users/username/projects/project:
+  {}
+/users/username/projects/project/modulefile1.ts:
+  {}
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/users/username/projects/project:
+  {}
 
 exitCode:: ExitStatus.undefined
 
-//// [/a/b/file1.js] file written with same contents
-//// [/a/b/moduleFile.js]
+//// [/users/username/projects/project/file1.js] file written with same contents
+//// [/users/username/projects/project/moduleFile.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.bar = void 0;
 function bar() { }
 exports.bar = bar;

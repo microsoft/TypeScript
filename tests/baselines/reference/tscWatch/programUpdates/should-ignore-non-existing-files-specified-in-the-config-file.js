@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/commonFile1.ts]
 let x = 1
@@ -39,8 +40,7 @@ Output::
 
 File is matched by 'files' list specified here: [96ma/b/tsconfig.json[0m:[93m5[0m:[93m25[0m
 
-  | "commonFile3.ts"
-    [96m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+    [96m  [7m [0m [96m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 [[90m12:00:20 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -58,21 +58,17 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/b/commonfile1.ts (used version)
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/commonfile1.ts:
-  {"fileName":"/a/b/commonFile1.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/a/b/commonfile3.ts:
-  {"fileName":"/a/b/commonfile3.ts","pollingInterval":250}
+PolledWatches::
+/a/b/commonfile3.ts: *new*
+  {"pollingInterval":500}
 
 FsWatches::
-
-FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/a/b/commonfile1.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 

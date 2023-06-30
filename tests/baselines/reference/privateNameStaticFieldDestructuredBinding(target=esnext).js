@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameStaticFieldDestructuredBinding.ts] ////
+
 //// [privateNameStaticFieldDestructuredBinding.ts]
 class A {
     static #field = 1;
@@ -26,6 +28,13 @@ class A {
 
 //// [privateNameStaticFieldDestructuredBinding.js]
 class A {
+    static #field = 1;
+    testObject() {
+        return { x: 10, y: 6 };
+    }
+    testArray() {
+        return [10, 11];
+    }
     constructor() {
         this.otherClass = A;
         let y;
@@ -37,15 +46,7 @@ class A {
         [A.#field = 2] = [];
         [this.otherClass.#field = 2] = [];
     }
-    static #field;
-    testObject() {
-        return { x: 10, y: 6 };
-    }
-    testArray() {
-        return [10, 11];
-    }
     static test(_a) {
         [_a.#field] = [2];
     }
 }
-A.#field = 1;

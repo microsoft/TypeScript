@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a.ts]
 class C { get prop() { return 1; } }
@@ -26,10 +27,11 @@ Output::
 [[90m12:00:13 AM[0m] Starting compilation in watch mode...
 
 [91m● [0m[96ma.ts[0m:[93m2[0m:[93m21[0m  [91mError[0m TS2610
-| class D extends C { prop = 1; }
-  [91m                    ▔▔▔▔[0m
+  [91m[7m [0m [91m                    ▔▔▔▔[0m
 'prop' is defined as an accessor in class 'C', but is overridden here in 'D' as an instance property.
 
+
+  [91m[7m [0m [91m                    ▔▔▔▔[0m
 [[90m12:00:16 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -49,19 +51,17 @@ Shape signatures in builder refreshed for::
 /a.ts (used version)
 /a/lib/lib.d.ts (used version)
 
-WatchedFiles::
-/tsconfig.json:
-  {"fileName":"/tsconfig.json","pollingInterval":250}
-/a.ts:
-  {"fileName":"/a.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
 FsWatches::
+/a.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+/tsconfig.json: *new*
+  {}
 
 FsWatchesRecursive::
-/:
-  {"directoryName":"","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -85,15 +85,19 @@ Input::
 {"compilerOptions":{"target":"es6","useDefineForClassFields":true}}
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:20 AM[0m] File change detected. Starting incremental compilation...
 
 [91m● [0m[96ma.ts[0m:[93m2[0m:[93m21[0m  [91mError[0m TS2610
-| class D extends C { prop = 1; }
-  [91m                    ▔▔▔▔[0m
+  [91m[7m [0m [91m                    ▔▔▔▔[0m
 'prop' is defined as an accessor in class 'C', but is overridden here in 'D' as an instance property.
 
+
+  [91m[7m [0m [91m                    ▔▔▔▔[0m
 [[90m12:00:24 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -110,20 +114,6 @@ Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 
 No shapes updated in the builder::
-
-WatchedFiles::
-/tsconfig.json:
-  {"fileName":"/tsconfig.json","pollingInterval":250}
-/a.ts:
-  {"fileName":"/a.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/:
-  {"directoryName":"","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 

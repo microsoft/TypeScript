@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/projects/project1/tsconfig.json]
 {"compilerOptions":{"module":"none","composite":true},"exclude":["temp"]}
@@ -30,8 +31,7 @@ interface Array<T> { length: number; [n: number]: T; }
 
 /a/lib/tsc.js --w -p /user/username/projects/myproject/projects/project2/tsconfig.json --extendedDiagnostics
 Output::
-
-12:00:33 AM - Starting compilation in watch mode...
+[[90m12:00:33 AM[0m] Starting compilation in watch mode...
 
 Current directory: / CaseSensitiveFileNames: false
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project2/tsconfig.json 2000 undefined Config file
@@ -53,8 +53,10 @@ DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
+[[90m12:00:40 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:40 AM - Found 0 errors. Watching for file changes.
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project2 1 undefined Wild card directory
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project2 1 undefined Wild card directory
 
@@ -75,33 +77,35 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /user/username/projects/myproject/projects/project1/class1.d.ts (used version)
-/user/username/projects/myproject/projects/project2/class2.ts (used version)
+/user/username/projects/myproject/projects/project2/class2.ts (computed .d.ts during emit)
 
-WatchedFiles::
-/user/username/projects/myproject/projects/project2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/projects/project2/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/projects/project1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/projects/project1/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/projects/project1/class1.d.ts:
-  {"fileName":"/user/username/projects/myproject/projects/project1/class1.d.ts","pollingInterval":250}
-/user/username/projects/myproject/projects/project2/class2.ts:
-  {"fileName":"/user/username/projects/myproject/projects/project2/class2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/projects/project2/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/projects/project1/class1.d.ts: *new*
+  {}
+/user/username/projects/myproject/projects/project1/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/projects/project2/class2.ts: *new*
+  {}
+/user/username/projects/myproject/projects/project2/tsconfig.json: *new*
+  {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/projects/project1:
-  {"directoryName":"/user/username/projects/myproject/projects/project1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/projects/project2/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/projects/project2/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/projects/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/projects/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/projects/project2:
-  {"directoryName":"/user/username/projects/myproject/projects/project2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/projects/project1: *new*
+  {}
+/user/username/projects/myproject/projects/project2: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -119,7 +123,66 @@ declare class class2 {
 
 
 //// [/user/username/projects/myproject/projects/project2/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../project1/class1.d.ts","./class2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-3469237238-declare class class1 {}","affectsGlobalScope":true},{"version":"777969115-class class2 {}","affectsGlobalScope":true}],"options":{"composite":true,"module":0},"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../project1/class1.d.ts","./class2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-3469237238-declare class class1 {}","affectsGlobalScope":true},{"version":"777969115-class class2 {}","signature":"-2684084705-declare class class2 {\n}\n","affectsGlobalScope":true}],"root":[3],"options":{"composite":true,"module":0},"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./class2.d.ts"},"version":"FakeTSVersion"}
+
+//// [/user/username/projects/myproject/projects/project2/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "program": {
+    "fileNames": [
+      "../../../../../../a/lib/lib.d.ts",
+      "../project1/class1.d.ts",
+      "./class2.ts"
+    ],
+    "fileInfos": {
+      "../../../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "affectsGlobalScope": true
+        },
+        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "affectsGlobalScope": true
+      },
+      "../project1/class1.d.ts": {
+        "original": {
+          "version": "-3469237238-declare class class1 {}",
+          "affectsGlobalScope": true
+        },
+        "version": "-3469237238-declare class class1 {}",
+        "signature": "-3469237238-declare class class1 {}",
+        "affectsGlobalScope": true
+      },
+      "./class2.ts": {
+        "original": {
+          "version": "777969115-class class2 {}",
+          "signature": "-2684084705-declare class class2 {\n}\n",
+          "affectsGlobalScope": true
+        },
+        "version": "777969115-class class2 {}",
+        "signature": "-2684084705-declare class class2 {\n}\n",
+        "affectsGlobalScope": true
+      }
+    },
+    "root": [
+      [
+        3,
+        "./class2.ts"
+      ]
+    ],
+    "options": {
+      "composite": true,
+      "module": 0
+    },
+    "semanticDiagnosticsPerFile": [
+      "../../../../../../a/lib/lib.d.ts",
+      "../project1/class1.d.ts",
+      "./class2.ts"
+    ],
+    "latestChangedDtsFile": "./class2.d.ts"
+  },
+  "version": "FakeTSVersion",
+  "size": 864
+}
 
 
 Change:: Add class3 to project1
@@ -129,25 +192,31 @@ Input::
 class class3 {}
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
 Scheduling update
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
 Synchronizing program
 Loading config file: /user/username/projects/myproject/projects/project1/tsconfig.json
-
-12:00:43 AM - File change detected. Starting incremental compilation...
+[[90m12:00:45 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/projects/project2/class2.ts"]
   options: {"module":0,"composite":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
   projectReferences: [{"path":"/user/username/projects/myproject/projects/project1","originalPath":"../project1"}]
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Missing file
-error TS6053: File '/user/username/projects/myproject/projects/project1/class3.d.ts' not found.
+[91m● [0m [91mError[0m TS6053File '/user/username/projects/myproject/projects/project1/class3.d.ts' not found.
   The file is in the program because:
     Output from referenced project '/user/username/projects/myproject/projects/project1/tsconfig.json' included because '--module' is specified as 'none'
 
-12:00:44 AM - Found 1 error. Watching for file changes.
+File is output from referenced project specified here: [96muser/username/projects/myproject/projects/project2/tsconfig.json[0m:[93m1[0m:[93m69[0m
+
+    [96m  [7m [0m [96m                                                                    ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+[[90m12:00:46 AM[0m] Found 1 error. Watching for file changes.
+
 
 
 Program root files: ["/user/username/projects/myproject/projects/project2/class2.ts"]
@@ -162,33 +231,35 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/user/username/projects/myproject/projects/project2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/projects/project2/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/projects/project1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/projects/project1/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/projects/project1/class1.d.ts:
-  {"fileName":"/user/username/projects/myproject/projects/project1/class1.d.ts","pollingInterval":250}
-/user/username/projects/myproject/projects/project2/class2.ts:
-  {"fileName":"/user/username/projects/myproject/projects/project2/class2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/myproject/projects/project1/class3.d.ts:
-  {"fileName":"/user/username/projects/myproject/projects/project1/class3.d.ts","pollingInterval":250}
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/projects/project1/class3.d.ts: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/projects/project2/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/projects/project1/class1.d.ts:
+  {}
+/user/username/projects/myproject/projects/project1/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project2/class2.ts:
+  {}
+/user/username/projects/myproject/projects/project2/tsconfig.json:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/projects/project1:
-  {"directoryName":"/user/username/projects/myproject/projects/project1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/projects/project2/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/projects/project2/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/projects/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/projects/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 /user/username/projects/myproject/projects/project2:
-  {"directoryName":"/user/username/projects/myproject/projects/project2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -200,6 +271,41 @@ Input::
 declare class class3 {}
 
 
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/projects/project2/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+
+PolledWatches *deleted*::
+/user/username/projects/myproject/projects/project1/class3.d.ts:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/projects/project1/class1.d.ts:
+  {}
+/user/username/projects/myproject/projects/project1/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project2/class2.ts:
+  {}
+/user/username/projects/myproject/projects/project2/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/projects/project1:
+  {}
+/user/username/projects/myproject/projects/project2:
+  {}
+
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts 0:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Missing file
 FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Missing file
@@ -209,16 +315,15 @@ DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/pro
 Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detected output file: /user/username/projects/myproject/projects/project1/class3.d.ts
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
 Synchronizing program
-
-12:00:47 AM - File change detected. Starting incremental compilation...
+[[90m12:00:49 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/projects/project2/class2.ts"]
   options: {"module":0,"composite":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
   projectReferences: [{"path":"/user/username/projects/myproject/projects/project1","originalPath":"../project1"}]
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 250 undefined Source file
+[[90m12:00:56 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:57 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/myproject/projects/project2/class2.ts"]
@@ -241,40 +346,111 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/projects/project1/class1.d.ts (used version)
 /user/username/projects/myproject/projects/project2/class2.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/myproject/projects/project2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/projects/project2/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/projects/project1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/projects/project1/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/projects/project1/class1.d.ts:
-  {"fileName":"/user/username/projects/myproject/projects/project1/class1.d.ts","pollingInterval":250}
-/user/username/projects/myproject/projects/project2/class2.ts:
-  {"fileName":"/user/username/projects/myproject/projects/project2/class2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/myproject/projects/project1/class3.d.ts:
-  {"fileName":"/user/username/projects/myproject/projects/project1/class3.d.ts","pollingInterval":250}
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/projects/project2/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/projects/project1/class1.d.ts:
+  {}
+/user/username/projects/myproject/projects/project1/class3.d.ts: *new*
+  {}
+/user/username/projects/myproject/projects/project1/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project2/class2.ts:
+  {}
+/user/username/projects/myproject/projects/project2/tsconfig.json:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/projects/project1:
-  {"directoryName":"/user/username/projects/myproject/projects/project1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/projects/project2/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/projects/project2/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/projects/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/projects/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 /user/username/projects/myproject/projects/project2:
-  {"directoryName":"/user/username/projects/myproject/projects/project2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/projects/project2/class2.js] file written with same contents
-//// [/user/username/projects/myproject/projects/project2/class2.d.ts] file written with same contents
 //// [/user/username/projects/myproject/projects/project2/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../project1/class1.d.ts","../project1/class3.d.ts","./class2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-3469237238-declare class class1 {}","affectsGlobalScope":true},{"version":"-3469165364-declare class class3 {}","affectsGlobalScope":true},{"version":"777969115-class class2 {}","signature":"-2684084705-declare class class2 {\n}\n","affectsGlobalScope":true}],"options":{"composite":true,"module":0},"semanticDiagnosticsPerFile":[1,2,3,4]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../project1/class1.d.ts","../project1/class3.d.ts","./class2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-3469237238-declare class class1 {}","affectsGlobalScope":true},{"version":"-3469165364-declare class class3 {}","affectsGlobalScope":true},{"version":"777969115-class class2 {}","signature":"-2684084705-declare class class2 {\n}\n","affectsGlobalScope":true}],"root":[4],"options":{"composite":true,"module":0},"semanticDiagnosticsPerFile":[1,2,3,4],"latestChangedDtsFile":"./class2.d.ts"},"version":"FakeTSVersion"}
+
+//// [/user/username/projects/myproject/projects/project2/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "program": {
+    "fileNames": [
+      "../../../../../../a/lib/lib.d.ts",
+      "../project1/class1.d.ts",
+      "../project1/class3.d.ts",
+      "./class2.ts"
+    ],
+    "fileInfos": {
+      "../../../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "affectsGlobalScope": true
+        },
+        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "affectsGlobalScope": true
+      },
+      "../project1/class1.d.ts": {
+        "original": {
+          "version": "-3469237238-declare class class1 {}",
+          "affectsGlobalScope": true
+        },
+        "version": "-3469237238-declare class class1 {}",
+        "signature": "-3469237238-declare class class1 {}",
+        "affectsGlobalScope": true
+      },
+      "../project1/class3.d.ts": {
+        "original": {
+          "version": "-3469165364-declare class class3 {}",
+          "affectsGlobalScope": true
+        },
+        "version": "-3469165364-declare class class3 {}",
+        "signature": "-3469165364-declare class class3 {}",
+        "affectsGlobalScope": true
+      },
+      "./class2.ts": {
+        "original": {
+          "version": "777969115-class class2 {}",
+          "signature": "-2684084705-declare class class2 {\n}\n",
+          "affectsGlobalScope": true
+        },
+        "version": "777969115-class class2 {}",
+        "signature": "-2684084705-declare class class2 {\n}\n",
+        "affectsGlobalScope": true
+      }
+    },
+    "root": [
+      [
+        4,
+        "./class2.ts"
+      ]
+    ],
+    "options": {
+      "composite": true,
+      "module": 0
+    },
+    "semanticDiagnosticsPerFile": [
+      "../../../../../../a/lib/lib.d.ts",
+      "../project1/class1.d.ts",
+      "../project1/class3.d.ts",
+      "./class2.ts"
+    ],
+    "latestChangedDtsFile": "./class2.d.ts"
+  },
+  "version": "FakeTSVersion",
+  "size": 968
+}
 
 
 Change:: Add excluded file to project1
@@ -284,6 +460,8 @@ Input::
 declare class file {}
 
 
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 Output::
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/temp :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
 Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detected excluded file: /user/username/projects/myproject/projects/project1/temp
@@ -293,38 +471,6 @@ Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detec
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/temp/file.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
 
 
-Program: Same as old program
-
-BuilderProgram: Same as old builder program
-
-WatchedFiles::
-/user/username/projects/myproject/projects/project2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/projects/project2/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/projects/project1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/projects/project1/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/projects/project1/class1.d.ts:
-  {"fileName":"/user/username/projects/myproject/projects/project1/class1.d.ts","pollingInterval":250}
-/user/username/projects/myproject/projects/project2/class2.ts:
-  {"fileName":"/user/username/projects/myproject/projects/project2/class2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/myproject/projects/project1/class3.d.ts:
-  {"fileName":"/user/username/projects/myproject/projects/project1/class3.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject/projects/project1:
-  {"directoryName":"/user/username/projects/myproject/projects/project1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/projects/project2/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/projects/project2/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/projects/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/projects/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/projects/project2:
-  {"directoryName":"/user/username/projects/myproject/projects/project2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
 exitCode:: ExitStatus.undefined
 
 
@@ -333,6 +479,9 @@ Change:: Delete output of class3
 Input::
 //// [/user/username/projects/myproject/projects/project1/class3.d.ts] deleted
 
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts 2:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 250 undefined Source file
 Scheduling update
@@ -341,8 +490,7 @@ DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/pro
 Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detected output file: /user/username/projects/myproject/projects/project1/class3.d.ts
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
 Synchronizing program
-
-12:01:03 AM - File change detected. Starting incremental compilation...
+[[90m12:01:05 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/projects/project2/class2.ts"]
@@ -350,11 +498,15 @@ CreatingProgramWith::
   projectReferences: [{"path":"/user/username/projects/myproject/projects/project1","originalPath":"../project1"}]
 FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Missing file
-error TS6053: File '/user/username/projects/myproject/projects/project1/class3.d.ts' not found.
+[91m● [0m [91mError[0m TS6053File '/user/username/projects/myproject/projects/project1/class3.d.ts' not found.
   The file is in the program because:
     Output from referenced project '/user/username/projects/myproject/projects/project1/tsconfig.json' included because '--module' is specified as 'none'
 
-12:01:13 AM - Found 1 error. Watching for file changes.
+File is output from referenced project specified here: [96muser/username/projects/myproject/projects/project2/tsconfig.json[0m:[93m1[0m:[93m69[0m
+
+    [96m  [7m [0m [96m                                                                    ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+[[90m12:01:12 AM[0m] Found 1 error. Watching for file changes.
+
 
 
 Program root files: ["/user/username/projects/myproject/projects/project2/class2.ts"]
@@ -373,40 +525,102 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/projects/project1/class1.d.ts (used version)
 /user/username/projects/myproject/projects/project2/class2.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/myproject/projects/project2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/projects/project2/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/projects/project1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/projects/project1/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/projects/project1/class1.d.ts:
-  {"fileName":"/user/username/projects/myproject/projects/project1/class1.d.ts","pollingInterval":250}
-/user/username/projects/myproject/projects/project2/class2.ts:
-  {"fileName":"/user/username/projects/myproject/projects/project2/class2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/myproject/projects/project1/class3.d.ts:
-  {"fileName":"/user/username/projects/myproject/projects/project1/class3.d.ts","pollingInterval":250}
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/projects/project1/class3.d.ts: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/projects/project2/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/projects/project1/class1.d.ts:
+  {}
+/user/username/projects/myproject/projects/project1/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project2/class2.ts:
+  {}
+/user/username/projects/myproject/projects/project2/tsconfig.json:
+  {}
+
+FsWatches *deleted*::
+/user/username/projects/myproject/projects/project1/class3.d.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/projects/project1:
-  {"directoryName":"/user/username/projects/myproject/projects/project1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/projects/project2/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/projects/project2/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/projects/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/projects/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 /user/username/projects/myproject/projects/project2:
-  {"directoryName":"/user/username/projects/myproject/projects/project2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/projects/project2/class2.js] file written with same contents
-//// [/user/username/projects/myproject/projects/project2/class2.d.ts] file written with same contents
 //// [/user/username/projects/myproject/projects/project2/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../project1/class1.d.ts","./class2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-3469237238-declare class class1 {}","affectsGlobalScope":true},{"version":"777969115-class class2 {}","signature":"-2684084705-declare class class2 {\n}\n","affectsGlobalScope":true}],"options":{"composite":true,"module":0},"semanticDiagnosticsPerFile":[1]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../project1/class1.d.ts","./class2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-3469237238-declare class class1 {}","affectsGlobalScope":true},{"version":"777969115-class class2 {}","signature":"-2684084705-declare class class2 {\n}\n","affectsGlobalScope":true}],"root":[3],"options":{"composite":true,"module":0},"semanticDiagnosticsPerFile":[1],"latestChangedDtsFile":"./class2.d.ts"},"version":"FakeTSVersion"}
+
+//// [/user/username/projects/myproject/projects/project2/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "program": {
+    "fileNames": [
+      "../../../../../../a/lib/lib.d.ts",
+      "../project1/class1.d.ts",
+      "./class2.ts"
+    ],
+    "fileInfos": {
+      "../../../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "affectsGlobalScope": true
+        },
+        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "affectsGlobalScope": true
+      },
+      "../project1/class1.d.ts": {
+        "original": {
+          "version": "-3469237238-declare class class1 {}",
+          "affectsGlobalScope": true
+        },
+        "version": "-3469237238-declare class class1 {}",
+        "signature": "-3469237238-declare class class1 {}",
+        "affectsGlobalScope": true
+      },
+      "./class2.ts": {
+        "original": {
+          "version": "777969115-class class2 {}",
+          "signature": "-2684084705-declare class class2 {\n}\n",
+          "affectsGlobalScope": true
+        },
+        "version": "777969115-class class2 {}",
+        "signature": "-2684084705-declare class class2 {\n}\n",
+        "affectsGlobalScope": true
+      }
+    },
+    "root": [
+      [
+        3,
+        "./class2.ts"
+      ]
+    ],
+    "options": {
+      "composite": true,
+      "module": 0
+    },
+    "semanticDiagnosticsPerFile": [
+      "../../../../../../a/lib/lib.d.ts"
+    ],
+    "latestChangedDtsFile": "./class2.d.ts"
+  },
+  "version": "FakeTSVersion",
+  "size": 860
+}
 
 
 Change:: Add output of class3
@@ -416,6 +630,41 @@ Input::
 declare class class3 {}
 
 
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/projects/project2/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+
+PolledWatches *deleted*::
+/user/username/projects/myproject/projects/project1/class3.d.ts:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/projects/project1/class1.d.ts:
+  {}
+/user/username/projects/myproject/projects/project1/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project2/class2.ts:
+  {}
+/user/username/projects/myproject/projects/project2/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/projects/project1:
+  {}
+/user/username/projects/myproject/projects/project2:
+  {}
+
+Before running Timeout callback:: count: 1
+4: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts 0:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Missing file
 FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Missing file
@@ -425,16 +674,15 @@ DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/pro
 Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detected output file: /user/username/projects/myproject/projects/project1/class3.d.ts
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
 Synchronizing program
-
-12:01:16 AM - File change detected. Starting incremental compilation...
+[[90m12:01:19 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/projects/project2/class2.ts"]
   options: {"module":0,"composite":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
   projectReferences: [{"path":"/user/username/projects/myproject/projects/project1","originalPath":"../project1"}]
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 250 undefined Source file
+[[90m12:01:26 AM[0m] Found 0 errors. Watching for file changes.
 
-12:01:26 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/myproject/projects/project2/class2.ts"]
@@ -457,38 +705,109 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/projects/project1/class1.d.ts (used version)
 /user/username/projects/myproject/projects/project2/class2.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/myproject/projects/project2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/projects/project2/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/projects/project1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/projects/project1/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/projects/project1/class1.d.ts:
-  {"fileName":"/user/username/projects/myproject/projects/project1/class1.d.ts","pollingInterval":250}
-/user/username/projects/myproject/projects/project2/class2.ts:
-  {"fileName":"/user/username/projects/myproject/projects/project2/class2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/myproject/projects/project1/class3.d.ts:
-  {"fileName":"/user/username/projects/myproject/projects/project1/class3.d.ts","pollingInterval":250}
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/projects/project2/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/projects/project1/class1.d.ts:
+  {}
+/user/username/projects/myproject/projects/project1/class3.d.ts: *new*
+  {}
+/user/username/projects/myproject/projects/project1/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project2/class2.ts:
+  {}
+/user/username/projects/myproject/projects/project2/tsconfig.json:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/projects/project1:
-  {"directoryName":"/user/username/projects/myproject/projects/project1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/projects/project2/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/projects/project2/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/projects/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/projects/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 /user/username/projects/myproject/projects/project2:
-  {"directoryName":"/user/username/projects/myproject/projects/project2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/projects/project2/class2.js] file written with same contents
-//// [/user/username/projects/myproject/projects/project2/class2.d.ts] file written with same contents
 //// [/user/username/projects/myproject/projects/project2/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../project1/class1.d.ts","../project1/class3.d.ts","./class2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-3469237238-declare class class1 {}","affectsGlobalScope":true},{"version":"-3469165364-declare class class3 {}","affectsGlobalScope":true},{"version":"777969115-class class2 {}","signature":"-2684084705-declare class class2 {\n}\n","affectsGlobalScope":true}],"options":{"composite":true,"module":0},"semanticDiagnosticsPerFile":[1,2,3,4]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../project1/class1.d.ts","../project1/class3.d.ts","./class2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-3469237238-declare class class1 {}","affectsGlobalScope":true},{"version":"-3469165364-declare class class3 {}","affectsGlobalScope":true},{"version":"777969115-class class2 {}","signature":"-2684084705-declare class class2 {\n}\n","affectsGlobalScope":true}],"root":[4],"options":{"composite":true,"module":0},"semanticDiagnosticsPerFile":[1,2,3,4],"latestChangedDtsFile":"./class2.d.ts"},"version":"FakeTSVersion"}
+
+//// [/user/username/projects/myproject/projects/project2/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "program": {
+    "fileNames": [
+      "../../../../../../a/lib/lib.d.ts",
+      "../project1/class1.d.ts",
+      "../project1/class3.d.ts",
+      "./class2.ts"
+    ],
+    "fileInfos": {
+      "../../../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "affectsGlobalScope": true
+        },
+        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "affectsGlobalScope": true
+      },
+      "../project1/class1.d.ts": {
+        "original": {
+          "version": "-3469237238-declare class class1 {}",
+          "affectsGlobalScope": true
+        },
+        "version": "-3469237238-declare class class1 {}",
+        "signature": "-3469237238-declare class class1 {}",
+        "affectsGlobalScope": true
+      },
+      "../project1/class3.d.ts": {
+        "original": {
+          "version": "-3469165364-declare class class3 {}",
+          "affectsGlobalScope": true
+        },
+        "version": "-3469165364-declare class class3 {}",
+        "signature": "-3469165364-declare class class3 {}",
+        "affectsGlobalScope": true
+      },
+      "./class2.ts": {
+        "original": {
+          "version": "777969115-class class2 {}",
+          "signature": "-2684084705-declare class class2 {\n}\n",
+          "affectsGlobalScope": true
+        },
+        "version": "777969115-class class2 {}",
+        "signature": "-2684084705-declare class class2 {\n}\n",
+        "affectsGlobalScope": true
+      }
+    },
+    "root": [
+      [
+        4,
+        "./class2.ts"
+      ]
+    ],
+    "options": {
+      "composite": true,
+      "module": 0
+    },
+    "semanticDiagnosticsPerFile": [
+      "../../../../../../a/lib/lib.d.ts",
+      "../project1/class1.d.ts",
+      "../project1/class3.d.ts",
+      "./class2.ts"
+    ],
+    "latestChangedDtsFile": "./class2.d.ts"
+  },
+  "version": "FakeTSVersion",
+  "size": 968
+}
 

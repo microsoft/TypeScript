@@ -43,7 +43,7 @@ fooLength + 1;
 
 //// [a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var A;
 (function (A) {
     var B = /** @class */ (function () {
@@ -56,21 +56,21 @@ var A;
         B.b = 0;
     })(B = A.B || (A.B = {}));
 })(A || (A = {}));
-exports["default"] = A.B;
+exports.default = A.B;
 //// [b.js]
 "use strict";
-exports.__esModule = true;
-exports["default"] = "foo".length;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = "foo".length;
 //// [index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="declarations.d.ts" />
 var foobar_1 = require("foobar");
-var X = foobar_1["default"].X;
+var X = foobar_1.default.X;
 var foobarx_1 = require("foobarx");
 var x = X;
-var x2 = foobarx_1["default"];
+var x2 = foobarx_1.default;
 var a_1 = require("./a");
-var b = new a_1["default"](a_1["default"].b);
+var b = new a_1.default(a_1.default.b);
 var b_1 = require("./b");
-b_1["default"] + 1;
+b_1.default + 1;

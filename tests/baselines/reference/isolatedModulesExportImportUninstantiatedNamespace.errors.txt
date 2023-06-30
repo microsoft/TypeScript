@@ -1,0 +1,25 @@
+factory.ts(3,1): error TS1269: Cannot use 'export import' on a type or type-only namespace when 'isolatedModules' is enabled.
+
+
+==== jsx.ts (0 errors) ====
+    export namespace JSXInternal {
+      export type HTMLAttributes = string
+      export type ComponentChildren = string
+    }
+    
+==== factory.ts (1 errors) ====
+    import { JSXInternal } from "./jsx"
+    
+    export import JSX = JSXInternal;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1269: Cannot use 'export import' on a type or type-only namespace when 'isolatedModules' is enabled.
+    
+    export function createElement<ElementType extends HTMLElement>(
+      tagName: string,
+      attributes: JSX.HTMLAttributes,
+      ...children: JSX.ComponentChildren[]
+    ): any {
+      //...
+    }
+    
+    

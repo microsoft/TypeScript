@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens13.ts(1,10): error TS1127: Invalid character.
+parserSkippedTokens13.ts(1,10): error TS1127: Invalid character.
 
 
-==== tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens13.ts (1 errors) ====
+==== parserSkippedTokens13.ts (1 errors) ====
     /regexp/ \ ;
              
 !!! error TS1127: Invalid character.

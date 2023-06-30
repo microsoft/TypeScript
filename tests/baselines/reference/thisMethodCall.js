@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/optionalChaining/callChain/thisMethodCall.ts] ////
+
 //// [thisMethodCall.ts]
 class C {
     method?() {}

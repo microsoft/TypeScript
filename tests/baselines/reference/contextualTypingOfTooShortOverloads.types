@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualTypingOfTooShortOverloads.ts ===
+//// [tests/cases/compiler/contextualTypingOfTooShortOverloads.ts] ////
+
+=== contextualTypingOfTooShortOverloads.ts ===
 // small repro from #11875
 var use: Overload;
 >use : Overload
@@ -60,10 +62,10 @@ interface IRouterMatcher<T> {
 }
 
 type PathParams = string | RegExp | (string | RegExp)[];
->PathParams : PathParams
+>PathParams : string | RegExp | (string | RegExp)[]
 
 type RequestHandlerParams = RequestHandler | ErrorRequestHandler | (RequestHandler | ErrorRequestHandler)[];
->RequestHandlerParams : RequestHandlerParams
+>RequestHandlerParams : RequestHandler | ErrorRequestHandler | (RequestHandler | ErrorRequestHandler)[]
 
 interface RequestHandler {
     (req: Request, res: Response, next: NextFunction): any;

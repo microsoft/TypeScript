@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameStaticAndStaticInitializer.ts] ////
+
 //// [privateNameStaticAndStaticInitializer.ts]
 class A {
   static #foo = 1;
@@ -8,8 +10,6 @@ class A {
 
 //// [privateNameStaticAndStaticInitializer.js]
 class A {
-    static #foo;
-    static #prop;
+    static #foo = 1;
+    static #prop = 2;
 }
-A.#foo = 1;
-A.#prop = 2;

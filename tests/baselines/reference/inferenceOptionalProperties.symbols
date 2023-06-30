@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inferenceOptionalProperties.ts ===
+//// [tests/cases/compiler/inferenceOptionalProperties.ts] ////
+
+=== inferenceOptionalProperties.ts ===
 declare function test<T>(x: { [key: string]: T }): T;
 >test : Symbol(test, Decl(inferenceOptionalProperties.ts, 0, 0))
 >T : Symbol(T, Decl(inferenceOptionalProperties.ts, 0, 22))

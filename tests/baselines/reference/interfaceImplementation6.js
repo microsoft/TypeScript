@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/interfaceImplementation6.ts] ////
+
 //// [interfaceImplementation6.ts]
 interface I1 {
     item:number;
@@ -27,7 +29,7 @@ export class Test {
 //// [interfaceImplementation6.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.Test = void 0;
     var C1 = /** @class */ (function () {
         function C1() {

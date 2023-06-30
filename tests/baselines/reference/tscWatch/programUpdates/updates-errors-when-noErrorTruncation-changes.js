@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/a.ts]
 declare var v: {
@@ -34,10 +35,11 @@ Output::
 [[90m12:00:21 AM[0m] Starting compilation in watch mode...
 
 [91m● [0m[96ma.ts[0m:[93m10[0m:[93m1[0m  [91mError[0m TS2367
-| v === 'foo';
-  [91m▔▔▔▔▔▔▔▔▔▔▔[0m
-This condition will always return 'false' since the types '{ reallyLongPropertyName1: string | number | bigint | boolean | symbol | object; reallyLongPropertyName2: string | number | bigint | boolean | symbol | object; reallyLongPropertyName3: string | ... 4 more ... | object; reallyLongPropertyName4: string | ... 4 more ... | object; reallyLongPropertyName5: string | ... 4...' and 'string' have no overlap.
+  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔▔▔[0m
+This comparison appears to be unintentional because the types '{ reallyLongPropertyName1: string | number | bigint | boolean | symbol | object; reallyLongPropertyName2: string | number | bigint | boolean | symbol | object; reallyLongPropertyName3: string | ... 4 more ... | object; reallyLongPropertyName4: string | ... 4 more ... | object; reallyLongPropertyName5: string | ... 4...' and 'string' have no overlap.
 
+
+  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔▔▔[0m
 [[90m12:00:24 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -57,21 +59,23 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /user/username/projects/myproject/a.ts (used version)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/a.ts:
-  {"fileName":"/user/username/projects/myproject/a.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/a.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -87,15 +91,19 @@ Input::
 {"compilerOptions":{"noErrorTruncation":true}}
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:28 AM[0m] File change detected. Starting incremental compilation...
 
 [91m● [0m[96ma.ts[0m:[93m10[0m:[93m1[0m  [91mError[0m TS2367
-| v === 'foo';
-  [91m▔▔▔▔▔▔▔▔▔▔▔[0m
-This condition will always return 'false' since the types '{ reallyLongPropertyName1: string | number | bigint | boolean | symbol | object; reallyLongPropertyName2: string | number | bigint | boolean | symbol | object; reallyLongPropertyName3: string | number | bigint | boolean | symbol | object; reallyLongPropertyName4: string | number | bigint | boolean | symbol | object; reallyLongPropertyName5: string | number | bigint | boolean | symbol | object; reallyLongPropertyName6: string | number | bigint | boolean | symbol | object; reallyLongPropertyName7: string | number | bigint | boolean | symbol | object; }' and 'string' have no overlap.
+  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔▔▔[0m
+This comparison appears to be unintentional because the types '{ reallyLongPropertyName1: string | number | bigint | boolean | symbol | object; reallyLongPropertyName2: string | number | bigint | boolean | symbol | object; reallyLongPropertyName3: string | number | bigint | boolean | symbol | object; reallyLongPropertyName4: string | number | bigint | boolean | symbol | object; reallyLongPropertyName5: string | number | bigint | boolean | symbol | object; reallyLongPropertyName6: string | number | bigint | boolean | symbol | object; reallyLongPropertyName7: string | number | bigint | boolean | symbol | object; }' and 'string' have no overlap.
 
+
+  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔▔▔[0m
 [[90m12:00:29 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -112,22 +120,6 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/a.ts
 
 No shapes updated in the builder::
-
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/a.ts:
-  {"fileName":"/user/username/projects/myproject/a.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 

@@ -1,13 +1,13 @@
 /// <reference path='fourslash.ts'/>
 
 ////module M {
-////    [|export var [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}variable|] = 0;|]
+////    /*1*/export var /*2*/variable = 0;
 ////
 ////    // local use
-////    var x = [|variable|];
+////    var x = /*3*/variable;
 ////}
 ////
 ////// external use
-////M.[|variable|]
+////M./*4*/variable
 
-verify.singleReferenceGroup("var M.variable: number", "variable");
+verify.baselineFindAllReferences('1', '2', '3', '4');

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/silentNeverPropagation.ts ===
+//// [tests/cases/compiler/silentNeverPropagation.ts] ////
+
+=== silentNeverPropagation.ts ===
 // Repro from #45041
 
 type ModuleWithState<TState> = {
@@ -10,7 +12,7 @@ type ModuleWithState<TState> = {
 };
 
 type State = {
->State : State
+>State : { a: number; }
 
     a: number;
 >a : number
@@ -18,7 +20,7 @@ type State = {
 };
 
 type MoreState = {
->MoreState : MoreState
+>MoreState : { z: string; }
 
     z: string;
 >z : string

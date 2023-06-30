@@ -1,0 +1,495 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/a.ts ===
+// /*FIND ALL REFS*/<|function [|{| isWriteAccess: true, isDefinition: true |}decorator|](target) {
+//     return target;
+// }|>
+// [|decorator|]();
+
+// === /tests/cases/fourslash/b.ts ===
+// @[|decorator|] @[|decorator|]("again")
+// class C {
+//     @[|decorator|]
+//     method() {}
+// }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/a.ts ===
+  // /*FIND ALL REFS*/<|function [|decorator|](target) {
+  //     return target;
+  // }|>
+  // decorator();
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "function decorator(target: any): any",
+    "displayParts": [
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "decorator",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "target",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/a.ts ===
+// <|function /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}decorator|](target) {
+//     return target;
+// }|>
+// [|decorator|]();
+
+// === /tests/cases/fourslash/b.ts ===
+// @[|decorator|] @[|decorator|]("again")
+// class C {
+//     @[|decorator|]
+//     method() {}
+// }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/a.ts ===
+  // <|function /*FIND ALL REFS*/[|decorator|](target) {
+  //     return target;
+  // }|>
+  // decorator();
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "function decorator(target: any): any",
+    "displayParts": [
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "decorator",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "target",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/a.ts ===
+// <|function [|{| isWriteAccess: true |}decorator|](target) {
+//     return target;
+// }|>
+// /*FIND ALL REFS*/[|decorator|]();
+
+// === /tests/cases/fourslash/b.ts ===
+// @[|decorator|] @[|decorator|]("again")
+// class C {
+//     @[|decorator|]
+//     method() {}
+// }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/a.ts ===
+  // <|function [|decorator|](target) {
+  //     return target;
+  // }|>
+  // /*FIND ALL REFS*/decorator();
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "function decorator(target: any): any",
+    "displayParts": [
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "decorator",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "target",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/a.ts ===
+// <|function [|{| isWriteAccess: true |}decorator|](target) {
+//     return target;
+// }|>
+// [|decorator|]();
+
+// === /tests/cases/fourslash/b.ts ===
+// @/*FIND ALL REFS*/[|decorator|] @[|decorator|]("again")
+// class C {
+//     @[|decorator|]
+//     method() {}
+// }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/a.ts ===
+  // <|function [|decorator|](target) {
+  //     return target;
+  // }|>
+  // decorator();
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "function decorator(target: any): any",
+    "displayParts": [
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "decorator",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "target",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/a.ts ===
+// <|function [|{| isWriteAccess: true |}decorator|](target) {
+//     return target;
+// }|>
+// [|decorator|]();
+
+// === /tests/cases/fourslash/b.ts ===
+// @[|decorator|] @/*FIND ALL REFS*/[|decorator|]("again")
+// class C {
+//     @[|decorator|]
+//     method() {}
+// }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/a.ts ===
+  // <|function [|decorator|](target) {
+  //     return target;
+  // }|>
+  // decorator();
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "function decorator(target: any): any",
+    "displayParts": [
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "decorator",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "target",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/a.ts ===
+// <|function [|{| isWriteAccess: true |}decorator|](target) {
+//     return target;
+// }|>
+// [|decorator|]();
+
+// === /tests/cases/fourslash/b.ts ===
+// @[|decorator|] @[|decorator|]("again")
+// class C {
+//     @/*FIND ALL REFS*/[|decorator|]
+//     method() {}
+// }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/a.ts ===
+  // <|function [|decorator|](target) {
+  //     return target;
+  // }|>
+  // decorator();
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "function decorator(target: any): any",
+    "displayParts": [
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "decorator",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "target",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]

@@ -1,5 +1,5 @@
 /// <reference path='fourslash.ts' />
-////[|var [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}f|] = x => x + 1;|]
-////[|f|](12);
+/////*1*/var /*2*/f = x => x + 1;
+/////*3*/f(12);
 
-verify.singleReferenceGroup("var f: (x: any) => any", "f");
+verify.baselineFindAllReferences('1', '2', '3');

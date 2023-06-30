@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/unknown/unknownType2.ts ===
+//// [tests/cases/conformance/types/unknown/unknownType2.ts] ////
+
+=== unknownType2.ts ===
 type isUnknown<T> = unknown extends T ? true : false;
 >isUnknown : isUnknown<T>
 >true : true
@@ -9,7 +11,7 @@ type isTrue<T extends true> = T;
 >true : true
 
 type SomeResponse = 'yes' | 'no' | 'idk';
->SomeResponse : SomeResponse
+>SomeResponse : "yes" | "no" | "idk"
 
 let validate: (x: unknown) => SomeResponse = x => (x === 'yes' || x === 'no') ? x : 'idk'; // No error
 >validate : (x: unknown) => SomeResponse
@@ -79,11 +81,9 @@ if (u === undefined) {
 if (u === null) {
 >u === null : boolean
 >u : unknown
->null : null
 
     const someNull: null = u;
 >someNull : null
->null : null
 >u : null
 }
 
@@ -491,11 +491,8 @@ function switchTestLiterals(x: unknown) {
 
             break;
         case null:
->null : null
-
             const llun: null = x;
 >llun : null
->null : null
 >x : null
 
             break;
@@ -640,7 +637,7 @@ function f2(x: unknown): string | undefined {
 >undefined : undefined
 >typeof x !== 'string' : boolean
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->x : unknown
+>x : {} | null
 >'string' : "string"
 
     throw new Error();
@@ -679,7 +676,7 @@ function notNotEquals(u: unknown)  {
 >NumberEnum : any
 >u : NumberEnum.A
     }
-    
+
 
     if (u !== NumberEnum.A && u !== NumberEnum.B && u !== StringEnum.A) { }
 >u !== NumberEnum.A && u !== NumberEnum.B && u !== StringEnum.A : boolean
