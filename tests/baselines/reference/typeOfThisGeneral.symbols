@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/thisKeyword/typeOfThisGeneral.ts ===
+//// [tests/cases/conformance/expressions/thisKeyword/typeOfThisGeneral.ts] ////
+
+=== typeOfThisGeneral.ts ===
 class MyTestClass {
 >MyTestClass : Symbol(MyTestClass, Decl(typeOfThisGeneral.ts, 0, 0))
 

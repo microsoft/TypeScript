@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/union/unionTypeCallSignatures6.ts ===
+//// [tests/cases/conformance/types/union/unionTypeCallSignatures6.ts] ////
+
+=== unionTypeCallSignatures6.ts ===
 type A = { a: string };
 >A : Symbol(A, Decl(unionTypeCallSignatures6.ts, 0, 0))
 >a : Symbol(a, Decl(unionTypeCallSignatures6.ts, 0, 10))

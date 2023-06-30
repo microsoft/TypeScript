@@ -1,4 +1,6 @@
-=== tests/cases/compiler/compositeGenericFunction.ts ===
+//// [tests/cases/compiler/compositeGenericFunction.ts] ////
+
+=== compositeGenericFunction.ts ===
 function f<T>(value: T) { return value; };
 >f : <T>(value: T) => T
 >value : T

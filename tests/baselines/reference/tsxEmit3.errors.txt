@@ -1,10 +1,10 @@
-tests/cases/conformance/jsx/file.tsx(18,2): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/conformance/jsx/file.tsx(22,3): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/conformance/jsx/file.tsx(25,3): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/conformance/jsx/file.tsx(38,2): error TS2695: Left side of comma operator is unused and has no side effects.
+file.tsx(18,2): error TS2695: Left side of comma operator is unused and has no side effects.
+file.tsx(22,3): error TS2695: Left side of comma operator is unused and has no side effects.
+file.tsx(25,3): error TS2695: Left side of comma operator is unused and has no side effects.
+file.tsx(38,2): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
-==== tests/cases/conformance/jsx/file.tsx (4 errors) ====
+==== file.tsx (4 errors) ====
     declare module JSX {
     	interface Element { }
     	interface IntrinsicElements { }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedLocalsAndParameters.ts] ////
+
 //// [unusedLocalsAndParameters.ts]
 export { };
 

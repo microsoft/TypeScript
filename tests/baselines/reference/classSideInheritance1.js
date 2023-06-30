@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classSideInheritance1.ts] ////
+
 //// [classSideInheritance1.ts]
 class A {
   static bar(): string {

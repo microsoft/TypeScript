@@ -1,4 +1,6 @@
-=== tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList.ts ===
+//// [tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList.ts] ////
+
+=== functionWithUseStrictAndSimpleParameterList.ts ===
 function a(a = 10) {
 >a : Symbol(a, Decl(functionWithUseStrictAndSimpleParameterList.ts, 0, 0))
 >a : Symbol(a, Decl(functionWithUseStrictAndSimpleParameterList.ts, 0, 11))

@@ -1,9 +1,9 @@
-tests/cases/compiler/instantiateTypeParameter.ts(2,5): error TS1131: Property or signature expected.
-tests/cases/compiler/instantiateTypeParameter.ts(2,12): error TS2304: Cannot find name 'T'.
-tests/cases/compiler/instantiateTypeParameter.ts(3,1): error TS1128: Declaration or statement expected.
+instantiateTypeParameter.ts(2,5): error TS1131: Property or signature expected.
+instantiateTypeParameter.ts(2,12): error TS2304: Cannot find name 'T'.
+instantiateTypeParameter.ts(3,1): error TS1128: Declaration or statement expected.
 
 
-==== tests/cases/compiler/instantiateTypeParameter.ts (3 errors) ====
+==== instantiateTypeParameter.ts (3 errors) ====
     interface Foo<T> {
         var x: T<>;
         ~~~

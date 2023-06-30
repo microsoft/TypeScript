@@ -1,9 +1,11 @@
-=== tests/cases/conformance/jsdoc/decls.d.ts ===
+//// [tests/cases/conformance/jsdoc/paramTagOnCallExpression.ts] ////
+
+=== decls.d.ts ===
 declare function factory(type: string): {};
 >factory : Symbol(factory, Decl(decls.d.ts, 0, 0))
 >type : Symbol(type, Decl(decls.d.ts, 0, 25))
 
-=== tests/cases/conformance/jsdoc/a.js ===
+=== a.js ===
 // from util
 /** @param {function} ctor - A big long explanation follows */
 exports.inherits = factory('inherits')

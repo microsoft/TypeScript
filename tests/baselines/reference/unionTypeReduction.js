@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/union/unionTypeReduction.ts] ////
+
 //// [unionTypeReduction.ts]
 interface I2 {
     (): number;

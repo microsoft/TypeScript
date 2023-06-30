@@ -49,6 +49,7 @@ FileWatcher:: Added:: WatchInfo: /users/username/projects/project/fileWithImport
 ======== Resolving module 'pkg0' from '/users/username/projects/project/fileWithImports.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/users/username/projects/project/node_modules/pkg0/package.json' does not exist.
 File '/users/username/projects/project/node_modules/pkg0.ts' does not exist.
 File '/users/username/projects/project/node_modules/pkg0.tsx' does not exist.
@@ -61,6 +62,7 @@ Resolving real path for '/users/username/projects/project/node_modules/pkg0/inde
 ======== Resolving module 'pkg1' from '/users/username/projects/project/fileWithImports.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/users/username/projects/project/node_modules/pkg1.ts' does not exist.
 File '/users/username/projects/project/node_modules/pkg1.tsx' does not exist.
 File '/users/username/projects/project/node_modules/pkg1.d.ts' does not exist.
@@ -70,6 +72,7 @@ Directory '/users/username/node_modules' does not exist, skipping all lookups in
 Directory '/users/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 Loading module 'pkg1' from 'node_modules' folder, target file types: JavaScript.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/users/username/projects/project/node_modules/pkg1.js' does not exist.
 File '/users/username/projects/project/node_modules/pkg1.jsx' does not exist.
 Directory '/users/username/projects/node_modules' does not exist, skipping all lookups in it.
@@ -87,6 +90,7 @@ Directory '/users/username/node_modules/@types' does not exist, skipping all loo
 Directory '/users/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 Looking up in 'node_modules' folder, initial location '/users/username/projects/project'.
+Searching all ancestor node_modules directories for preferred extensions: Declaration.
 File '/users/username/projects/project/node_modules/pkg2/package.json' does not exist.
 File '/users/username/projects/project/node_modules/pkg2.d.ts' does not exist.
 File '/users/username/projects/project/node_modules/pkg2/index.d.ts' exists - use it as a name resolution result.
@@ -104,6 +108,7 @@ Directory '/users/username/node_modules/@types' does not exist, skipping all loo
 Directory '/users/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 Looking up in 'node_modules' folder, initial location '/users/username/projects/project'.
+Searching all ancestor node_modules directories for preferred extensions: Declaration.
 File '/users/username/projects/project/node_modules/pkg3.d.ts' does not exist.
 Directory '/users/username/projects/project/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/users/username/projects/node_modules' does not exist, skipping all lookups in it.
@@ -384,6 +389,7 @@ Reusing resolution of module 'pkg0' from '/users/username/projects/project/fileW
 ======== Resolving module 'pkg1' from '/users/username/projects/project/fileWithImports.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/users/username/projects/project/node_modules/pkg1/package.json' does not exist.
 File '/users/username/projects/project/node_modules/pkg1.ts' does not exist.
 File '/users/username/projects/project/node_modules/pkg1.tsx' does not exist.
@@ -639,6 +645,7 @@ Directory '/users/username/node_modules/@types' does not exist, skipping all loo
 Directory '/users/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 Looking up in 'node_modules' folder, initial location '/users/username/projects/project'.
+Searching all ancestor node_modules directories for preferred extensions: Declaration.
 File '/users/username/projects/project/node_modules/pkg3/package.json' does not exist.
 File '/users/username/projects/project/node_modules/pkg3.d.ts' does not exist.
 File '/users/username/projects/project/node_modules/pkg3/index.d.ts' exists - use it as a name resolution result.

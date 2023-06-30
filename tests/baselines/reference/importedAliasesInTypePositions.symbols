@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file2.ts ===
+//// [tests/cases/compiler/importedAliasesInTypePositions.ts] ////
+
+=== file2.ts ===
 import RT_ALIAS = require("file1");
 >RT_ALIAS : Symbol(RT_ALIAS, Decl(file2.ts, 0, 0))
 
@@ -22,7 +24,7 @@ export module ImportingModule {
 >ReferredTo : Symbol(ReferredTo, Decl(file2.ts, 0, 35))
     }
 }
-=== tests/cases/compiler/file1.ts ===
+=== file1.ts ===
 export module elaborate.nested.mod.name {
 >elaborate : Symbol(elaborate, Decl(file1.ts, 0, 0))
 >nested : Symbol(nested, Decl(file1.ts, 0, 24))

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/sourceMapValidationDestructuringForArrayBindingPatternDefaultValues2.ts ===
+//// [tests/cases/compiler/sourceMapValidationDestructuringForArrayBindingPatternDefaultValues2.ts] ////
+
+=== sourceMapValidationDestructuringForArrayBindingPatternDefaultValues2.ts ===
 declare var console: {
 >console : Symbol(console, Decl(sourceMapValidationDestructuringForArrayBindingPatternDefaultValues2.ts, 0, 11))
 

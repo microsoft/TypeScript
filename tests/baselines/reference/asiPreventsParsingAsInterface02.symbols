@@ -1,4 +1,6 @@
-=== tests/cases/conformance/interfaces/interfaceDeclarations/asiPreventsParsingAsInterface02.ts ===
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/asiPreventsParsingAsInterface02.ts] ////
+
+=== asiPreventsParsingAsInterface02.ts ===
 function f(interface: number, I: string) {
 >f : Symbol(f, Decl(asiPreventsParsingAsInterface02.ts, 0, 0))
 >interface : Symbol(interface, Decl(asiPreventsParsingAsInterface02.ts, 0, 11))

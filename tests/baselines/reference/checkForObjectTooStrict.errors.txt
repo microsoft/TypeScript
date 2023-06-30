@@ -1,7 +1,7 @@
-tests/cases/compiler/checkForObjectTooStrict.ts(3,18): error TS2725: Class name cannot be 'Object' when targeting ES5 with module CommonJS.
+checkForObjectTooStrict.ts(3,18): error TS2725: Class name cannot be 'Object' when targeting ES5 with module CommonJS.
 
 
-==== tests/cases/compiler/checkForObjectTooStrict.ts (1 errors) ====
+==== checkForObjectTooStrict.ts (1 errors) ====
     module Foo {
     
         export class Object {

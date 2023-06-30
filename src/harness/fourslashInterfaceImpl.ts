@@ -181,6 +181,10 @@ export class VerifyNegatable {
         this.state.verifyLinkedEditingRange(map);
     }
 
+    public baselineLinkedEditing(): void {
+        this.state.baselineLinkedEditing();
+    }
+
     public isInCommentAtPosition(onlyMultiLineDiverges?: boolean) {
         this.state.verifySpanOfEnclosingComment(this.negative, onlyMultiLineDiverges);
     }
@@ -1164,6 +1168,8 @@ export namespace Completion {
         typeEntry("ParameterDecorator"),
         typeEntry("ClassMemberDecoratorContext"),
         typeEntry("DecoratorContext"),
+        typeEntry("DecoratorMetadata"),
+        typeEntry("DecoratorMetadataObject"),
         interfaceEntry("ClassDecoratorContext"),
         interfaceEntry("ClassMethodDecoratorContext"),
         interfaceEntry("ClassGetterDecoratorContext"),
@@ -1221,6 +1227,8 @@ export namespace Completion {
         varEntry("Float64Array"),
         interfaceEntry("Float64ArrayConstructor"),
         moduleEntry("Intl"),
+        typeEntry("WeakKey"),
+        interfaceEntry("WeakKeyTypes"),
     ];
 
     export const globalThisEntry: ExpectedCompletionEntry = {

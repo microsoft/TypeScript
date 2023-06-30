@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/superInObjectLiterals_ES5.ts] ////
+
 //// [superInObjectLiterals_ES5.ts]
 var obj = {
     __proto__: {

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nonContextuallyTypedLogicalOr.ts ===
+//// [tests/cases/compiler/nonContextuallyTypedLogicalOr.ts] ////
+
+=== nonContextuallyTypedLogicalOr.ts ===
 interface Contextual {
 >Contextual : Symbol(Contextual, Decl(nonContextuallyTypedLogicalOr.ts, 0, 0))
 

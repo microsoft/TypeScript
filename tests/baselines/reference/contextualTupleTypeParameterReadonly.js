@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextualTupleTypeParameterReadonly.ts] ////
+
 //// [contextualTupleTypeParameterReadonly.ts]
 declare function each<T extends ReadonlyArray<any>>(cases: ReadonlyArray<T>): (fn: (...args: T) => any) => void;
 

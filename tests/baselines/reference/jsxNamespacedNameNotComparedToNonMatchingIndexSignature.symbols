@@ -1,4 +1,6 @@
-=== tests/cases/compiler/jsxNamespacedNameNotComparedToNonMatchingIndexSignature.tsx ===
+//// [tests/cases/compiler/jsxNamespacedNameNotComparedToNonMatchingIndexSignature.tsx] ////
+
+=== jsxNamespacedNameNotComparedToNonMatchingIndexSignature.tsx ===
 /// <reference path="react16.d.ts" />
 
 declare module "react" {
@@ -9,7 +11,7 @@ declare module "react" {
 
         [key: `do-${string}`]: Function;
 >key : Symbol(key, Decl(jsxNamespacedNameNotComparedToNonMatchingIndexSignature.tsx, 4, 9))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.decorators.d.ts, --, --))
 
         "ns:thing"?: string;
 >"ns:thing" : Symbol(Attributes["ns:thing"], Decl(jsxNamespacedNameNotComparedToNonMatchingIndexSignature.tsx, 4, 40))

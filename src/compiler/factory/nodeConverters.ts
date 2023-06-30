@@ -6,6 +6,7 @@ import {
     BindingOrAssignmentPattern,
     Block,
     cast,
+    ClassDeclaration,
     ConciseBody,
     Debug,
     Expression,
@@ -17,6 +18,8 @@ import {
     isBindingElement,
     isBindingPattern,
     isBlock,
+    isDefaultModifier,
+    isExportModifier,
     isExpression,
     isIdentifier,
     isObjectBindingPattern,
@@ -39,6 +42,7 @@ export function createNodeConverters(factory: NodeFactory): NodeConverters {
     return {
         convertToFunctionBlock,
         convertToFunctionExpression,
+        convertToClassExpression,
         convertToArrayAssignmentElement,
         convertToObjectAssignmentElement,
         convertToAssignmentPattern,
@@ -59,13 +63,29 @@ export function createNodeConverters(factory: NodeFactory): NodeConverters {
     function convertToFunctionExpression(node: FunctionDeclaration) {
         if (!node.body) return Debug.fail(`Cannot convert a FunctionDeclaration without a body`);
         const updated = factory.createFunctionExpression(
-            getModifiers(node),
+            getModifiers(node)?.filter(modifier => !isExportModifier(modifier) && !isDefaultModifier(modifier)),
             node.asteriskToken,
             node.name,
             node.typeParameters,
             node.parameters,
             node.type,
             node.body
+        );
+        setOriginalNode(updated, node);
+        setTextRange(updated, node);
+        if (getStartsOnNewLine(node)) {
+            setStartsOnNewLine(updated, /*newLine*/ true);
+        }
+        return updated;
+    }
+
+    function convertToClassExpression(node: ClassDeclaration) {
+        const updated = factory.createClassExpression(
+            node.modifiers?.filter(modifier => !isExportModifier(modifier) && !isDefaultModifier(modifier)),
+            node.name,
+            node.typeParameters,
+            node.heritageClauses,
+            node.members
         );
         setOriginalNode(updated, node);
         setTextRange(updated, node);
@@ -163,6 +183,7 @@ export function createNodeConverters(factory: NodeFactory): NodeConverters {
 export const nullNodeConverters: NodeConverters = {
     convertToFunctionBlock: notImplemented,
     convertToFunctionExpression: notImplemented,
+    convertToClassExpression: notImplemented,
     convertToArrayAssignmentElement: notImplemented,
     convertToObjectAssignmentElement: notImplemented,
     convertToAssignmentPattern: notImplemented,

@@ -1,47 +1,47 @@
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(3,12): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticName'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(8,12): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticNameFn'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(14,12): error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLength'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(19,12): error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLengthFn'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(25,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototype'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(30,12): error TS2300: Duplicate identifier 'prototype'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(30,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototypeFn'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(36,12): error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCaller'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(41,12): error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCallerFn'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(47,12): error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArguments'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(52,12): error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArgumentsFn'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(62,12): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticName_Anonymous'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(67,12): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticNameFn_Anonymous'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(73,12): error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLength_Anonymous'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(78,12): error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLengthFn_Anonymous'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(84,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototype_Anonymous'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(89,12): error TS2300: Duplicate identifier 'prototype'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(89,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototypeFn_Anonymous'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(95,12): error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCaller_Anonymous'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(100,12): error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCallerFn_Anonymous'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(106,12): error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArguments_Anonymous'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(111,12): error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArgumentsFn_Anonymous'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(121,16): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticName'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(128,16): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticNameFn'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(135,12): error TS1319: A default export can only be used in an ECMAScript-style module.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(136,16): error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLength'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(142,12): error TS1319: A default export can only be used in an ECMAScript-style module.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(143,16): error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLengthFn'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(150,12): error TS1319: A default export can only be used in an ECMAScript-style module.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(151,16): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototype'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(157,12): error TS1319: A default export can only be used in an ECMAScript-style module.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(158,16): error TS2300: Duplicate identifier 'prototype'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(158,16): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototypeFn'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(165,12): error TS1319: A default export can only be used in an ECMAScript-style module.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(166,16): error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCaller'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(172,12): error TS1319: A default export can only be used in an ECMAScript-style module.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(173,16): error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCallerFn'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(180,12): error TS1319: A default export can only be used in an ECMAScript-style module.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(181,16): error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArguments'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(187,12): error TS1319: A default export can only be used in an ECMAScript-style module.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(188,16): error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArgumentsFn'.
+staticPropertyNameConflicts.ts(3,12): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticName'.
+staticPropertyNameConflicts.ts(8,12): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticNameFn'.
+staticPropertyNameConflicts.ts(14,12): error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLength'.
+staticPropertyNameConflicts.ts(19,12): error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLengthFn'.
+staticPropertyNameConflicts.ts(25,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototype'.
+staticPropertyNameConflicts.ts(30,12): error TS2300: Duplicate identifier 'prototype'.
+staticPropertyNameConflicts.ts(30,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototypeFn'.
+staticPropertyNameConflicts.ts(36,12): error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCaller'.
+staticPropertyNameConflicts.ts(41,12): error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCallerFn'.
+staticPropertyNameConflicts.ts(47,12): error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArguments'.
+staticPropertyNameConflicts.ts(52,12): error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArgumentsFn'.
+staticPropertyNameConflicts.ts(62,12): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticName_Anonymous'.
+staticPropertyNameConflicts.ts(67,12): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticNameFn_Anonymous'.
+staticPropertyNameConflicts.ts(73,12): error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLength_Anonymous'.
+staticPropertyNameConflicts.ts(78,12): error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLengthFn_Anonymous'.
+staticPropertyNameConflicts.ts(84,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototype_Anonymous'.
+staticPropertyNameConflicts.ts(89,12): error TS2300: Duplicate identifier 'prototype'.
+staticPropertyNameConflicts.ts(89,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototypeFn_Anonymous'.
+staticPropertyNameConflicts.ts(95,12): error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCaller_Anonymous'.
+staticPropertyNameConflicts.ts(100,12): error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCallerFn_Anonymous'.
+staticPropertyNameConflicts.ts(106,12): error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArguments_Anonymous'.
+staticPropertyNameConflicts.ts(111,12): error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArgumentsFn_Anonymous'.
+staticPropertyNameConflicts.ts(121,16): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticName'.
+staticPropertyNameConflicts.ts(128,16): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticNameFn'.
+staticPropertyNameConflicts.ts(135,12): error TS1319: A default export can only be used in an ECMAScript-style module.
+staticPropertyNameConflicts.ts(136,16): error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLength'.
+staticPropertyNameConflicts.ts(142,12): error TS1319: A default export can only be used in an ECMAScript-style module.
+staticPropertyNameConflicts.ts(143,16): error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLengthFn'.
+staticPropertyNameConflicts.ts(150,12): error TS1319: A default export can only be used in an ECMAScript-style module.
+staticPropertyNameConflicts.ts(151,16): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototype'.
+staticPropertyNameConflicts.ts(157,12): error TS1319: A default export can only be used in an ECMAScript-style module.
+staticPropertyNameConflicts.ts(158,16): error TS2300: Duplicate identifier 'prototype'.
+staticPropertyNameConflicts.ts(158,16): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototypeFn'.
+staticPropertyNameConflicts.ts(165,12): error TS1319: A default export can only be used in an ECMAScript-style module.
+staticPropertyNameConflicts.ts(166,16): error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCaller'.
+staticPropertyNameConflicts.ts(172,12): error TS1319: A default export can only be used in an ECMAScript-style module.
+staticPropertyNameConflicts.ts(173,16): error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCallerFn'.
+staticPropertyNameConflicts.ts(180,12): error TS1319: A default export can only be used in an ECMAScript-style module.
+staticPropertyNameConflicts.ts(181,16): error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArguments'.
+staticPropertyNameConflicts.ts(187,12): error TS1319: A default export can only be used in an ECMAScript-style module.
+staticPropertyNameConflicts.ts(188,16): error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArgumentsFn'.
 
 
-==== tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts (41 errors) ====
+==== staticPropertyNameConflicts.ts (41 errors) ====
     // name
     class StaticName {
         static name: number; // error without useDefineForClassFields

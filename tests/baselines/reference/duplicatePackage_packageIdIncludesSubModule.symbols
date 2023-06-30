@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicatePackage_packageIdIncludesSubModule.ts] ////
+
 === /index.ts ===
 import Foo from "foo/Foo";
 >Foo : Symbol(Foo, Decl(index.ts, 0, 6))

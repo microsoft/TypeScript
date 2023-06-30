@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/comparable/weakTypesAndLiterals01.ts ===
+//// [tests/cases/conformance/types/typeRelationships/comparable/weakTypesAndLiterals01.ts] ////
+
+=== weakTypesAndLiterals01.ts ===
 type WeakTypes =
 >WeakTypes : { optional?: true | undefined; } | { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number | undefined; }
 

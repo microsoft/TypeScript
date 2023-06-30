@@ -1,7 +1,7 @@
-tests/cases/compiler/genericCallSpecializedToTypeArg.ts(6,5): error TS2339: Property 'getDist' does not exist on type 'U'.
+genericCallSpecializedToTypeArg.ts(6,5): error TS2339: Property 'getDist' does not exist on type 'U'.
 
 
-==== tests/cases/compiler/genericCallSpecializedToTypeArg.ts (1 errors) ====
+==== genericCallSpecializedToTypeArg.ts (1 errors) ====
     function dupe<T>(x: T): T {
       return x;
     }

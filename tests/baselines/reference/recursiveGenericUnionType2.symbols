@@ -1,4 +1,6 @@
-=== tests/cases/compiler/recursiveGenericUnionType2.ts ===
+//// [tests/cases/compiler/recursiveGenericUnionType2.ts] ////
+
+=== recursiveGenericUnionType2.ts ===
 declare module Test1 {
 >Test1 : Symbol(Test1, Decl(recursiveGenericUnionType2.ts, 0, 0))
 

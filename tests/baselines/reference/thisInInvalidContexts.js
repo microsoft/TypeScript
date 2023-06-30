@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts] ////
+
 //// [thisInInvalidContexts.ts]
 class BaseErrClass {
     constructor(t: any) { }
