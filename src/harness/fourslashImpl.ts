@@ -829,21 +829,18 @@ export class TestState {
         };
 
         const baselineFile = this.getBaselineFileNameForContainingTestFile();
-        const hints = this.languageService.provideInlayHints(this.activeFile.fileName, span, preferences);
+        const fileName = this.activeFile.fileName;
+        const hints = this.languageService.provideInlayHints(fileName, span, preferences);
         const annotations = ts.map(hints.sort(sortHints), hint => {
-            let annotation = "{\n\t";
-            annotation += [
-                `text: "${hint.text}"`,
-                `position: ${hint.position}`,
-                `kind: ${hint.kind}`,
-            ].join(",\n\t");
-            annotation += hint.whitespaceBefore !== undefined ? `,\n\twhitespaceBefore: ${hint.whitespaceBefore}` : "";
-            annotation += hint.whitespaceAfter !== undefined ? `,\n\twhitespaceAfter: ${hint.whitespaceAfter}` : "";
-            annotation += ",\n}\n";
+            const span = { start: hint.position, length: hint.text.length };
+            const startLc = this.languageServiceAdapterHost.positionToLineAndCharacter(fileName, span.start);
+            const underline = " ".repeat(startLc.character) + "^".repeat(span.length);
+            let annotation = this.getFileContent(fileName).split(/\r?\n/)[startLc.line];
+            annotation += "\n" + underline + "\n" + JSON.stringify(hint, undefined, "  ");
             return annotation;
         });
 
-        Harness.Baseline.runBaseline(baselineFile, annotations.join(""));
+        Harness.Baseline.runBaseline(baselineFile, annotations.join("\n\n"));
     }
 
     public verifyInlayHints(expected: readonly FourSlashInterface.VerifyInlayHintsOptions[], span: ts.TextSpan = { start: 0, length: this.activeFile.content.length }, preference?: ts.UserPreferences) {
