@@ -261,10 +261,6 @@ export class Verify extends VerifyNegatable {
         };
     }
 
-    public getInlayHints(expected: readonly VerifyInlayHintsOptions[], span: ts.TextSpan, preference?: ts.UserPreferences) {
-        this.state.verifyInlayHints(expected, span, preference);
-    }
-
     public baselineInlayHints(span: ts.TextSpan, preference?: ts.UserPreferences) {
         this.state.baselineInlayHints(span, preference);
     }

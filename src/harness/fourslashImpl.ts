@@ -847,23 +847,6 @@ export class TestState {
         Harness.Baseline.runBaseline(baselineFile, annotations.join("\n\n"));
     }
 
-    public verifyInlayHints(expected: readonly FourSlashInterface.VerifyInlayHintsOptions[], span: ts.TextSpan = { start: 0, length: this.activeFile.content.length }, preference?: ts.UserPreferences) {
-        const hints = this.languageService.provideInlayHints(this.activeFile.fileName, span, preference);
-        assert.equal(hints.length, expected.length, "Number of hints");
-
-        interface HasPosition { position: number; }
-        const sortHints = (a: HasPosition, b: HasPosition) => {
-            return a.position - b.position;
-        };
-        ts.zipWith(hints.sort(sortHints), [...expected].sort(sortHints), (actual, expected) => {
-            assert.equal(actual.text, expected.text, "Text");
-            assert.equal(actual.position, expected.position, "Position");
-            assert.equal(actual.kind, expected.kind, "Kind");
-            assert.equal(actual.whitespaceBefore, expected.whitespaceBefore, "whitespaceBefore");
-            assert.equal(actual.whitespaceAfter, expected.whitespaceAfter, "whitespaceAfter");
-        });
-    }
-
     public verifyCompletions(options: FourSlashInterface.VerifyCompletionsOptions) {
         if (options.marker === undefined) {
             return this.verifyCompletionsWorker(options);
