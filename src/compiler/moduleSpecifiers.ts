@@ -172,6 +172,7 @@ function getPreferences(
 
     function getPreferredEnding(): ModuleSpecifierEnding {
         if (oldImportSpecifier !== undefined) {
+            if (hasTSFileExtension(oldImportSpecifier)) return ModuleSpecifierEnding.TsExtension;
             if (hasJSFileExtension(oldImportSpecifier)) return ModuleSpecifierEnding.JsExtension;
             if (endsWith(oldImportSpecifier, "/index")) return ModuleSpecifierEnding.Index;
         }
