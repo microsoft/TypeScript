@@ -208,6 +208,7 @@ import {
     isNamedImportsOrExports,
     isNamespaceImport,
     isNodeDescendantOf,
+    isNonContextualKeyword,
     isObjectBindingPattern,
     isObjectLiteralExpression,
     isObjectTypeDeclaration,
@@ -1775,6 +1776,14 @@ function createCompletionEntry(
     if (originIsExport(origin) || originIsResolvedExport(origin)) {
         data = originToCompletionEntryData(origin);
         hasAction = !importStatementCompletion;
+    }
+
+    const parentNamedImportOrExport = findAncestor(location, isNamedImportsOrExports);
+    if (parentNamedImportOrExport?.kind === SyntaxKind.NamedImports) {
+        const possibleToken = stringToToken(name);
+        if (parentNamedImportOrExport && possibleToken && (possibleToken === SyntaxKind.AwaitKeyword || isNonContextualKeyword(possibleToken))) {
+            insertText = `${name} as ${name}_`;
+        }
     }
 
     // TODO(drosen): Right now we just permit *all* semantic meanings when calling
