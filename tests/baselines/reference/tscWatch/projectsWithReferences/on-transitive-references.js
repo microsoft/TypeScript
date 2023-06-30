@@ -999,11 +999,10 @@ File '/user/username/projects/transitiveReferences/refs/a.tsx' does not exist.
 File '/user/username/projects/transitiveReferences/refs/a.d.ts' exists - use it as a name resolution result.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'. ========
 [91m● [0m[96mtsconfig.c.json[0m:[93m1[0m:[93m100[0m  [91mError[0m TS6053
-  [91m[7m [0m [91m                                                                                                   ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+| {"files":["c.ts"],"compilerOptions":{"baseUrl":"./","paths":{"@ref/*":["./refs/*"]}},"references":[{"path":"tsconfig.b.json"}]}
+  [91m                                                                                                   ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 File '/user/username/projects/transitiveReferences/tsconfig.b.json' not found.
 
-
-  [91m[7m [0m [91m                                                                                                   ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 ../../../../a/lib/lib.d.ts
   Default library for target 'es5'
 refs/a.d.ts
@@ -1224,11 +1223,10 @@ Reusing resolution of module './b' from '/user/username/projects/transitiveRefer
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/c.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'.
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/b.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/a.ts'.
 [91m● [0m[96mtsconfig.b.json[0m:[93m10[0m:[93m21[0m  [91mError[0m TS6053
-  [91m[7m [0m [91m                ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+| "references": [ { "path": "tsconfig.a.json" } ]
+  [91m                ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 File '/user/username/projects/transitiveReferences/tsconfig.a.json' not found.
 
-
-  [91m[7m [0m [91m                ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 ../../../../a/lib/lib.d.ts
   Default library for target 'es5'
 a.ts

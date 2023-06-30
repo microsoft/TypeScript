@@ -196,11 +196,10 @@ FileNames::
 c:/dev/main.ts,c:/dev/supplemental.ts,c:/dev/tests/utils.ts,c:/dev/tests/baselines/first/output.ts,c:/dev/tests/unit/spec.ts
 Errors::
 [91m● [0m[96mmissing.json[0m:[93m1[0m:[93m12[0m  [91mError[0m TS6053
-  [91m[7m [0m [91m           ▔▔▔▔▔▔▔▔▔▔▔▔[0m
+| {"extends":"./missing2","compilerOptions":{"types":[]}}
+  [91m           ▔▔▔▔▔▔▔▔▔▔▔▔[0m
 File './missing2' not found.
 
-
-  [91m[7m [0m [91m           ▔▔▔▔▔▔▔▔▔▔▔▔[0m
 
 can report errors in extended configs
 configFileName:: failure.json
@@ -213,11 +212,10 @@ FileNames::
 c:/dev/main.ts,c:/dev/supplemental.ts,c:/dev/tests/utils.ts,c:/dev/tests/baselines/first/output.ts,c:/dev/tests/unit/spec.ts
 Errors::
 [91m● [0m[96mfailure2.json[0m:[93m1[0m:[93m2[0m  [91mError[0m TS6114
-  [91m[7m [0m [91m ▔▔▔▔▔▔▔▔▔▔[0m
+| {"excludes":["*.js"]}
+  [91m ▔▔▔▔▔▔▔▔▔▔[0m
 Unknown option 'excludes'. Did you mean 'exclude'?
 
-
-  [91m[7m [0m [91m ▔▔▔▔▔▔▔▔▔▔[0m
 
 can error when 'extends' is not a string or Array
 configFileName:: extends.json
@@ -229,11 +227,10 @@ FileNames::
 c:/dev/main.ts,c:/dev/supplemental.ts,c:/dev/tests/utils.ts,c:/dev/tests/baselines/first/output.ts,c:/dev/tests/unit/spec.ts
 Errors::
 [91m● [0m[96mextends.json[0m:[93m1[0m:[93m12[0m  [91mError[0m TS5024
-  [91m[7m [0m [91m           ▔▔[0m
+| {"extends":42}
+  [91m           ▔▔[0m
 Compiler option 'extends' requires a value of type string or Array.
 
-
-  [91m[7m [0m [91m           ▔▔[0m
 
 can error when 'extends' is given an empty string
 configFileName:: extends3.json
@@ -245,11 +242,10 @@ FileNames::
 c:/dev/main.ts,c:/dev/supplemental.ts,c:/dev/tests/utils.ts,c:/dev/tests/baselines/first/output.ts,c:/dev/tests/unit/spec.ts
 Errors::
 [91m● [0m[96mextends3.json[0m:[93m1[0m:[93m12[0m   [91mError[0m TS18051
-  [91m[7m [0m [91m           ▔▔[0m
+| {"extends":""}
+  [91m           ▔▔[0m
 Compiler option 'extends' cannot be given an empty string.
 
-
-  [91m[7m [0m [91m           ▔▔[0m
 
 can error when 'extends' is given an empty string in an array
 configFileName:: extends4.json
@@ -261,11 +257,10 @@ FileNames::
 c:/dev/main.ts,c:/dev/supplemental.ts,c:/dev/tests/utils.ts,c:/dev/tests/baselines/first/output.ts,c:/dev/tests/unit/spec.ts
 Errors::
 [91m● [0m[96mextends4.json[0m:[93m1[0m:[93m13[0m   [91mError[0m TS18051
-  [91m[7m [0m [91m            ▔▔[0m
+| {"extends":[""]}
+  [91m            ▔▔[0m
 Compiler option 'extends' cannot be given an empty string.
 
-
-  [91m[7m [0m [91m            ▔▔[0m
 
 can overwrite compiler options using extended 'null'
 configFileName:: configs/third.json
@@ -445,11 +440,10 @@ FileNames::
 c:/dev/main.ts,c:/dev/supplemental.ts,c:/dev/tests/utils.ts,c:/dev/tests/baselines/first/output.ts,c:/dev/tests/unit/spec.ts
 Errors::
 [91m● [0m[96mextendsArrayFails.json[0m:[93m1[0m:[93m13[0m  [91mError[0m TS6053
-  [91m[7m [0m [91m            ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+| {"extends":["./missingFile"],"compilerOptions":{"types":[]}}
+  [91m            ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 File './missingFile' not found.
 
-
-  [91m[7m [0m [91m            ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 
 can error when 'extends' is not a string or Array2
 configFileName:: extendsArrayFails2.json
@@ -461,8 +455,7 @@ FileNames::
 c:/dev/main.ts,c:/dev/supplemental.ts,c:/dev/tests/utils.ts,c:/dev/tests/baselines/first/output.ts,c:/dev/tests/unit/spec.ts
 Errors::
 [91m● [0m[96mextendsArrayFails2.json[0m:[93m1[0m:[93m13[0m  [91mError[0m TS5024
-  [91m[7m [0m [91m            ▔▔[0m
+| {"extends":[42]}
+  [91m            ▔▔[0m
 Compiler option 'extends' requires a value of type string.
 
-
-  [91m[7m [0m [91m            ▔▔[0m

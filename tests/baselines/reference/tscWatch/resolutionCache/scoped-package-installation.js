@@ -74,11 +74,10 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/lib/app.js :: WatchInfo: /user/username/projects/myproject/lib 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/lib/app.js :: WatchInfo: /user/username/projects/myproject/lib 1 undefined Failed Lookup Locations
 [91m● [0m[96mlib/app.ts[0m:[93m1[0m:[93m23[0m  [91mError[0m TS2307
-  [91m[7m [0m [91m                      ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+| import { myapp } from "@myapp/ts-types";
+  [91m                      ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 Cannot find module '@myapp/ts-types' or its corresponding type declarations.
 
-
-  [91m[7m [0m [91m                      ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 [[90m12:00:26 AM[0m] Found 1 error. Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
@@ -233,11 +232,10 @@ Directory '/user/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@myapp/ts-types' was not resolved. ========
 [91m● [0m[96mlib/app.ts[0m:[93m1[0m:[93m23[0m  [91mError[0m TS2307
-  [91m[7m [0m [91m                      ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+| import { myapp } from "@myapp/ts-types";
+  [91m                      ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 Cannot find module '@myapp/ts-types' or its corresponding type declarations.
 
-
-  [91m[7m [0m [91m                      ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 [[90m12:00:34 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -328,11 +326,10 @@ Directory '/user/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@myapp/ts-types' was not resolved. ========
 [91m● [0m[96mlib/app.ts[0m:[93m1[0m:[93m23[0m  [91mError[0m TS2307
-  [91m[7m [0m [91m                      ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+| import { myapp } from "@myapp/ts-types";
+  [91m                      ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 Cannot find module '@myapp/ts-types' or its corresponding type declarations.
 
-
-  [91m[7m [0m [91m                      ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 [[90m12:00:43 AM[0m] Found 1 error. Watching for file changes.
 
 

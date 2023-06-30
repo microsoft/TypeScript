@@ -32,11 +32,10 @@ Output::
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
 [91m● [0m[96mtsconfig.json[0m:[93m1[0m:[93m24[0m   [91mError[0m TS18002
-  [91m[7m [0m [91m                       ▔▔[0m
+| {"compiler":{},"files":[]}
+  [91m                       ▔▔[0m
 The 'files' list in config file '/a/tsconfig.json' is empty.
 
-
-  [91m[7m [0m [91m                       ▔▔[0m
 [[90m12:00:24 AM[0m] Found 1 error. Watching for file changes.
 
 

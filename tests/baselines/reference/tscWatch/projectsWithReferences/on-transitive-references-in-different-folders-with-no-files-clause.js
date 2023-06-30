@@ -1038,11 +1038,10 @@ File '/user/username/projects/transitiveReferences/refs/a.tsx' does not exist.
 File '/user/username/projects/transitiveReferences/refs/a.d.ts' exists - use it as a name resolution result.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'. ========
 [91m● [0m[96mc/tsconfig.json[0m:[93m1[0m:[93m84[0m  [91mError[0m TS6053
-  [91m[7m [0m [91m                                                                                   ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+| {"compilerOptions":{"baseUrl":"./","paths":{"@ref/*":["../refs/*"]}},"references":[{"path":"../b"}]}
+  [91m                                                                                   ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 File '/user/username/projects/transitiveReferences/b' not found.
 
-
-  [91m[7m [0m [91m                                                                                   ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 ../../../../a/lib/lib.d.ts
   Default library for target 'es5'
 refs/a.d.ts
@@ -1276,11 +1275,10 @@ Reusing resolution of module '../b' from '/user/username/projects/transitiveRefe
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/c/index.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'.
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/b/index.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/a/index.ts'.
 [91m● [0m[96mb/tsconfig.json[0m:[93m1[0m:[93m96[0m  [91mError[0m TS6053
-  [91m[7m [0m [91m                                                                                               ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+| {"compilerOptions":{"composite":true,"baseUrl":"./","paths":{"@ref/*":["../*"]}},"references":[{"path":"../a"}]}
+  [91m                                                                                               ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 File '/user/username/projects/transitiveReferences/a' not found.
 
-
-  [91m[7m [0m [91m                                                                                               ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 ../../../../a/lib/lib.d.ts
   Default library for target 'es5'
 a/index.ts

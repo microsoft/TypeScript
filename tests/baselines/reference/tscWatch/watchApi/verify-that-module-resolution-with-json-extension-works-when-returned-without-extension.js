@@ -29,14 +29,14 @@ Output::
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
 [91m● [0m[96mindex.ts[0m:[93m1[0m:[93m8[0m  [91mError[0m TS1259
-  [91m[7m [0m [91m       ▔▔▔▔▔▔▔▔[0m
+| import settings from './settings.json';
+  [91m       ▔▔▔▔▔▔▔▔[0m
 Module '"/user/username/projects/myproject/settings"' can only be default-imported using the 'esModuleInterop' flag
 
-
-  [91m[7m [0m [91m       ▔▔▔▔▔▔▔▔[0m
 This module is declared with 'export =', and can only be used with a default import when using the 'esModuleInterop' flag. [96msettings.json[0m:[93m1[0m:[93m1[0m
 
-    [96m  [7m [0m [96m▔[0m
+  | {"content":"Print this"}
+    [96m▔[0m
 [[90m12:00:26 AM[0m] Found 1 error. Watching for file changes.
 
 

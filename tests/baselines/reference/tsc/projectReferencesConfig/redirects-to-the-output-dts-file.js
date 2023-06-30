@@ -51,11 +51,10 @@ declare const console: { log(msg: any): void; };
 Output::
 /lib/tsc --p /beta/tsconfig.json --explainFiles
 [91m● [0m[96mbeta/b.ts[0m:[93m1[0m:[93m10[0m  [91mError[0m TS2305
-  [91m[7m [0m [91m         ▔[0m
+| import { m } from '../alpha/a'
+  [91m         ▔[0m
 Module '"../alpha/a"' has no exported member 'm'.
 
-
-  [91m[7m [0m [91m         ▔[0m
 lib/lib.d.ts
   Default library for target 'es5'
 alpha/bin/a.d.ts

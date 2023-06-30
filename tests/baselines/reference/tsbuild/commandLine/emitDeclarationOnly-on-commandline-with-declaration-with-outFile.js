@@ -59,11 +59,10 @@ Output::
 [[90m12:00:24 AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
 [91m● [0m[96msrc/project2/src/tsconfig.json[0m:[93m1[0m:[93m96[0m  [91mError[0m TS6306
-  [91m[7m [0m [91m                                                                                               ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+| {"compilerOptions":{"declaration":true,"outFile":"../outFile.js","module":"amd"},"references":[{"path":"../../project1/src"}]}
+  [91m                                                                                               ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 Referenced project '/src/project1/src' must have setting "composite": true.
 
-
-  [91m[7m [0m [91m                                                                                               ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 
 Found 1 error.
 
@@ -131,11 +130,10 @@ Output::
 [[90m12:00:28 AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
 [91m● [0m[96msrc/project2/src/tsconfig.json[0m:[93m1[0m:[93m96[0m  [91mError[0m TS6306
-  [91m[7m [0m [91m                                                                                               ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+| {"compilerOptions":{"declaration":true,"outFile":"../outFile.js","module":"amd"},"references":[{"path":"../../project1/src"}]}
+  [91m                                                                                               ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 Referenced project '/src/project1/src' must have setting "composite": true.
 
-
-  [91m[7m [0m [91m                                                                                               ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 
 Found 1 error.
 
@@ -179,11 +177,10 @@ Output::
 [[90m12:00:35 AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
 [91m● [0m[96msrc/project2/src/tsconfig.json[0m:[93m1[0m:[93m96[0m  [91mError[0m TS6306
-  [91m[7m [0m [91m                                                                                               ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+| {"compilerOptions":{"declaration":true,"outFile":"../outFile.js","module":"amd"},"references":[{"path":"../../project1/src"}]}
+  [91m                                                                                               ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 Referenced project '/src/project1/src' must have setting "composite": true.
 
-
-  [91m[7m [0m [91m                                                                                               ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 
 Found 1 error.
 
@@ -242,11 +239,10 @@ Output::
 [[90m12:00:42 AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
 [91m● [0m[96msrc/project2/src/tsconfig.json[0m:[93m1[0m:[93m96[0m  [91mError[0m TS6306
-  [91m[7m [0m [91m                                                                                               ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+| {"compilerOptions":{"declaration":true,"outFile":"../outFile.js","module":"amd"},"references":[{"path":"../../project1/src"}]}
+  [91m                                                                                               ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 Referenced project '/src/project1/src' must have setting "composite": true.
 
-
-  [91m[7m [0m [91m                                                                                               ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 
 Found 1 error.
 
@@ -317,11 +313,10 @@ Output::
 [[90m12:00:49 AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
 [91m● [0m[96msrc/project2/src/tsconfig.json[0m:[93m1[0m:[93m96[0m  [91mError[0m TS6306
-  [91m[7m [0m [91m                                                                                               ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+| {"compilerOptions":{"declaration":true,"outFile":"../outFile.js","module":"amd"},"references":[{"path":"../../project1/src"}]}
+  [91m                                                                                               ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 Referenced project '/src/project1/src' must have setting "composite": true.
 
-
-  [91m[7m [0m [91m                                                                                               ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 
 Found 1 error.
 
@@ -406,11 +401,10 @@ Output::
 [[90m12:00:53 AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
 [91m● [0m[96msrc/project2/src/tsconfig.json[0m:[93m1[0m:[93m96[0m  [91mError[0m TS6306
-  [91m[7m [0m [91m                                                                                               ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+| {"compilerOptions":{"declaration":true,"outFile":"../outFile.js","module":"amd"},"references":[{"path":"../../project1/src"}]}
+  [91m                                                                                               ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 Referenced project '/src/project1/src' must have setting "composite": true.
 
-
-  [91m[7m [0m [91m                                                                                               ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 
 Found 1 error.
 
@@ -454,11 +448,10 @@ Output::
 [[90m12:01:01 AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
 [91m● [0m[96msrc/project2/src/tsconfig.json[0m:[93m1[0m:[93m96[0m  [91mError[0m TS6306
-  [91m[7m [0m [91m                                                                                               ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+| {"compilerOptions":{"declaration":true,"outFile":"../outFile.js","module":"amd"},"references":[{"path":"../../project1/src"}]}
+  [91m                                                                                               ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 Referenced project '/src/project1/src' must have setting "composite": true.
 
-
-  [91m[7m [0m [91m                                                                                               ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 
 Found 1 error.
 
@@ -549,11 +542,10 @@ Output::
 [[90m12:01:08 AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
 [91m● [0m[96msrc/project2/src/tsconfig.json[0m:[93m1[0m:[93m96[0m  [91mError[0m TS6306
-  [91m[7m [0m [91m                                                                                               ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+| {"compilerOptions":{"declaration":true,"outFile":"../outFile.js","module":"amd"},"references":[{"path":"../../project1/src"}]}
+  [91m                                                                                               ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 Referenced project '/src/project1/src' must have setting "composite": true.
 
-
-  [91m[7m [0m [91m                                                                                               ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 
 Found 1 error.
 
@@ -612,11 +604,10 @@ Output::
 [[90m12:01:15 AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
 [91m● [0m[96msrc/project2/src/tsconfig.json[0m:[93m1[0m:[93m96[0m  [91mError[0m TS6306
-  [91m[7m [0m [91m                                                                                               ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+| {"compilerOptions":{"declaration":true,"outFile":"../outFile.js","module":"amd"},"references":[{"path":"../../project1/src"}]}
+  [91m                                                                                               ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 Referenced project '/src/project1/src' must have setting "composite": true.
 
-
-  [91m[7m [0m [91m                                                                                               ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 
 Found 1 error.
 
@@ -691,11 +682,10 @@ Output::
 [[90m12:01:23 AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
 [91m● [0m[96msrc/project2/src/tsconfig.json[0m:[93m1[0m:[93m96[0m  [91mError[0m TS6306
-  [91m[7m [0m [91m                                                                                               ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+| {"compilerOptions":{"declaration":true,"outFile":"../outFile.js","module":"amd"},"references":[{"path":"../../project1/src"}]}
+  [91m                                                                                               ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 Referenced project '/src/project1/src' must have setting "composite": true.
 
-
-  [91m[7m [0m [91m                                                                                               ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 
 Found 1 error.
 

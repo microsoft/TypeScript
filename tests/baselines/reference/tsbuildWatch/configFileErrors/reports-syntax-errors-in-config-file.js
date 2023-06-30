@@ -37,11 +37,10 @@ Output::
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
 [91m● [0m[96mtsconfig.json[0m:[93m7[0m:[93m9[0m  [91mError[0m TS1005
-  [91m[7m [0m [91m▔▔▔▔▔▔[0m
+| "b.ts"
+  [91m▔▔▔▔▔▔[0m
 ',' expected.
 
-
-  [91m[7m [0m [91m▔▔▔▔▔▔[0m
 [[90m12:00:29 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -154,11 +153,10 @@ Output::
 [[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...
 
 [91m● [0m[96mtsconfig.json[0m:[93m8[0m:[93m9[0m  [91mError[0m TS1005
-  [91m[7m [0m [91m▔▔▔▔▔▔[0m
+| "b.ts"
+  [91m▔▔▔▔▔▔[0m
 ',' expected.
 
-
-  [91m[7m [0m [91m▔▔▔▔▔▔[0m
 [[90m12:00:34 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -193,11 +191,10 @@ Output::
 [[90m12:00:38 AM[0m] File change detected. Starting incremental compilation...
 
 [91m● [0m[96mtsconfig.json[0m:[93m8[0m:[93m9[0m  [91mError[0m TS1005
-  [91m[7m [0m [91m▔▔▔▔▔▔[0m
+| "b.ts"
+  [91m▔▔▔▔▔▔[0m
 ',' expected.
 
-
-  [91m[7m [0m [91m▔▔▔▔▔▔[0m
 [[90m12:00:46 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -292,11 +289,10 @@ Output::
 [[90m12:00:50 AM[0m] File change detected. Starting incremental compilation...
 
 [91m● [0m[96mtsconfig.json[0m:[93m8[0m:[93m9[0m  [91mError[0m TS1005
-  [91m[7m [0m [91m▔▔▔▔▔▔[0m
+| "b.ts"
+  [91m▔▔▔▔▔▔[0m
 ',' expected.
 
-
-  [91m[7m [0m [91m▔▔▔▔▔▔[0m
 [[90m12:00:51 AM[0m] Found 1 error. Watching for file changes.
 
 

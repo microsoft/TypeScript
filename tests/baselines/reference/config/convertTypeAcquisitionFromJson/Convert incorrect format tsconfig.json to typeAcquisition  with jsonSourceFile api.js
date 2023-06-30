@@ -22,8 +22,7 @@ TypeAcquisition::
 }
 Errors::
 [91m● [0m[96mtsconfig.json[0m:[93m3[0m:[93m3[0m   [91mError[0m TS17010
-  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+| "enableAutoDiscovy": true
+  [91m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 Unknown type acquisition option 'enableAutoDiscovy'.
 
-
-  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m

@@ -218,11 +218,10 @@ Output::
 [[90m12:00:44 AM[0m] Starting compilation in watch mode...
 
 [91m● [0m[96msrc/index.ts[0m:[93m1[0m:[93m51[0m  [91mError[0m TS2339
-  [91m[7m [0m [91m                                                  ▔▔▔[0m
+| import classNames from "classnames"; classNames().foo;
+  [91m                                                  ▔▔▔[0m
 Property 'foo' does not exist on type 'Result'.
 
-
-  [91m[7m [0m [91m                                                  ▔▔▔[0m
 [[90m12:00:51 AM[0m] Found 1 error. Watching for file changes.
 
 

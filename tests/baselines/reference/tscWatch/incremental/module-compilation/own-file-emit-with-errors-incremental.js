@@ -26,11 +26,10 @@ export const y: string = 20;
 /a/lib/tsc.js -i
 Output::
 [91m● [0m[96mfile2.ts[0m:[93m1[0m:[93m14[0m  [91mError[0m TS2322
-  [91m[7m [0m [91m             ▔[0m
+| export const y: string = 20;
+  [91m             ▔[0m
 Type 'number' is not assignable to type 'string'.
 
-
-  [91m[7m [0m [91m             ▔[0m
 
 Found 1 error in file2.ts[90m:1[0m
 
@@ -151,11 +150,10 @@ export const z = 10;
 
 Output::
 [91m● [0m[96mfile2.ts[0m:[93m1[0m:[93m14[0m  [91mError[0m TS2322
-  [91m[7m [0m [91m             ▔[0m
+| export const y: string = 20;
+  [91m             ▔[0m
 Type 'number' is not assignable to type 'string'.
 
-
-  [91m[7m [0m [91m             ▔[0m
 
 Found 1 error in file2.ts[90m:1[0m
 

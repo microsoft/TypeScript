@@ -57,21 +57,20 @@ Output::
 [[90m12:00:29 AM[0m] Starting compilation in watch mode...
 
 [91m● [0m[96mc.ts[0m:[93m6[0m:[93m13[0m  [91mError[0m TS2322
-  [91m[7m [0m [91m▔[0m
+| x: 1,
+  [91m▔[0m
 Type '{ x: number; y: number; }' is not assignable to type 'Coords'.
   Object literal may only specify known properties, and 'x' does not exist in type 'Coords'.
 
-
-  [91m[7m [0m [91m▔[0m
 The expected type comes from property 'c' which is declared here on type 'PointWrapper' [96ma.ts[0m:[93m3[0m:[93m5[0m
 
-    [96m  [7m [0m [96m▔[0m
+  | c: Coords;
+    [96m▔[0m
 [91m● [0m[96md.ts[0m:[93m2[0m:[93m14[0m  [91mError[0m TS2339
-  [91m[7m [0m [91m             ▔[0m
+| getPoint().c.x;
+  [91m             ▔[0m
 Property 'x' does not exist on type 'Coords'.
 
-
-  [91m[7m [0m [91m             ▔[0m
 [[90m12:00:52 AM[0m] Found 2 errors. Watching for file changes.
 
 
@@ -606,21 +605,20 @@ Output::
 [[90m12:01:27 AM[0m] File change detected. Starting incremental compilation...
 
 [91m● [0m[96mc.ts[0m:[93m6[0m:[93m13[0m  [91mError[0m TS2322
-  [91m[7m [0m [91m▔[0m
+| x: 1,
+  [91m▔[0m
 Type '{ x: number; y: number; }' is not assignable to type 'Coords'.
   Object literal may only specify known properties, and 'x' does not exist in type 'Coords'.
 
-
-  [91m[7m [0m [91m▔[0m
 The expected type comes from property 'c' which is declared here on type 'PointWrapper' [96ma.ts[0m:[93m3[0m:[93m5[0m
 
-    [96m  [7m [0m [96m▔[0m
+  | c: Coords;
+    [96m▔[0m
 [91m● [0m[96md.ts[0m:[93m2[0m:[93m14[0m  [91mError[0m TS2339
-  [91m[7m [0m [91m             ▔[0m
+| getPoint().c.x;
+  [91m             ▔[0m
 Property 'x' does not exist on type 'Coords'.
 
-
-  [91m[7m [0m [91m             ▔[0m
 [[90m12:01:49 AM[0m] Found 2 errors. Watching for file changes.
 
 

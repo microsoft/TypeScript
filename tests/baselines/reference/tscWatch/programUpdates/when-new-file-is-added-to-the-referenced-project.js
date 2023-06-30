@@ -214,7 +214,8 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/proj
 
 File is output from referenced project specified here: [96muser/username/projects/myproject/projects/project2/tsconfig.json[0m:[93m1[0m:[93m69[0m
 
-    [96m  [7m [0m [96m                                                                    ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+  | {"compilerOptions":{"module":"none","composite":true},"references":[{"path":"../project1"}]}
+    [96m                                                                    ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 [[90m12:00:46 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -504,7 +505,8 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/proj
 
 File is output from referenced project specified here: [96muser/username/projects/myproject/projects/project2/tsconfig.json[0m:[93m1[0m:[93m69[0m
 
-    [96m  [7m [0m [96m                                                                    ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+  | {"compilerOptions":{"module":"none","composite":true},"references":[{"path":"../project1"}]}
+    [96m                                                                    ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 [[90m12:01:12 AM[0m] Found 1 error. Watching for file changes.
 
 

@@ -23,11 +23,10 @@ Output::
 [[90m12:00:19 AM[0m] Starting compilation in watch mode...
 
 [91m● [0m[96mfoo.ts[0m:[93m1[0m:[93m21[0m  [91mError[0m TS2307
-  [91m[7m [0m [91m                    ▔▔▔▔[0m
+| import * as fs from "fs";
+  [91m                    ▔▔▔▔[0m
 Cannot find module 'fs' or its corresponding type declarations.
 
-
-  [91m[7m [0m [91m                    ▔▔▔▔[0m
 [[90m12:00:22 AM[0m] Found 1 error. Watching for file changes.
 
 

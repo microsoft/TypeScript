@@ -36,11 +36,10 @@ export const x = 10;
 Output::
 /lib/tsc --composite false --p src/project
 [91m● [0m[96msrc/project/tsconfig.json[0m:[93m6[0m:[93m9[0m  [91mError[0m TS5069
-  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+| "tsBuildInfoFile": "tsconfig.json.tsbuildinfo"
+  [91m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 Option 'tsBuildInfoFile' cannot be specified without specifying option 'incremental' or option 'composite'.
 
-
-  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 
 Found 1 error in src/project/tsconfig.json[90m:6[0m
 

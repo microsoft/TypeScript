@@ -480,11 +480,10 @@ Output::
 [[90m12:01:57 AM[0m] File change detected. Starting incremental compilation...
 
 [91m● [0m[96mtsconfig.json[0m:[93m1[0m:[93m10[0m   [91mError[0m TS18002
-  [91m[7m [0m [91m         ▔▔[0m
+| {"files":[],"include":[],"references":[]}
+  [91m         ▔▔[0m
 The 'files' list in config file '/user/username/projects/myproject/tsconfig.json' is empty.
 
-
-  [91m[7m [0m [91m         ▔▔[0m
 [[90m12:01:58 AM[0m] Found 1 error. Watching for file changes.
 
 

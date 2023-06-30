@@ -110,8 +110,7 @@ Result
 }
 Errors::
 [91m● [0m[96mtsconfig.json[0m:[93m6[0m:[93m3[0m  [91mError[0m TS5065
-  [91m[7m [0m [91m▔▔▔▔▔▔▔[0m
+| "**/.."
+  [91m▔▔▔▔▔▔▔[0m
 File specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '**/..'.
 
-
-  [91m[7m [0m [91m▔▔▔▔▔▔▔[0m

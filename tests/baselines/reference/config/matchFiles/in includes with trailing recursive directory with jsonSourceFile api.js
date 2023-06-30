@@ -97,9 +97,8 @@ Result
 }
 Errors::
 [91m● [0m[96mtsconfig.json[0m:[93m3[0m:[93m3[0m  [91mError[0m TS5010
-  [91m[7m [0m [91m▔▔▔▔[0m
+| "**"
+  [91m▔▔▔▔[0m
 File specification cannot end in a recursive directory wildcard ('**'): '**'.
-
-
-  [91m[7m [0m [91m▔▔▔▔[0m[91m● [0m [91mError[0m TS18003No inputs were found in config file 'c:/dev/tsconfig.json'. Specified 'include' paths were '["**"]' and 'exclude' paths were '[]'.
+[91m● [0m [91mError[0m TS18003No inputs were found in config file 'c:/dev/tsconfig.json'. Specified 'include' paths were '["**"]' and 'exclude' paths were '[]'.
 

@@ -26,11 +26,10 @@ export const x = 10;
 Output::
 /lib/tsc --p src/project
 [91m● [0m[96msrc/project/tsconfig.json[0m:[93m1[0m:[93m73[0m  [91mError[0m TS6053
-  [91m[7m [0m [91m                                                                        ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+| {"compilerOptions":{"module":"amd","outFile":"theApp.js"},"references":[{"path":"../Util/Dates"}]}
+  [91m                                                                        ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 File '/src/Util/Dates' not found.
 
-
-  [91m[7m [0m [91m                                                                        ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 
 Found 1 error in src/project/tsconfig.json[90m:1[0m
 

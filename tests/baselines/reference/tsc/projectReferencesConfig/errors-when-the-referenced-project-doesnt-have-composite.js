@@ -51,15 +51,14 @@ import * as mod_0 from "../primary/a"
 Output::
 /lib/tsc --p /reference/tsconfig.json
 [91m● [0m[96mreference/tsconfig.json[0m:[93m7[0m:[93m3[0m  [91mError[0m TS6306
-  [91m[7m [0m [91m▔[0m
-  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
-  [91m[7m [0m [91m▔[0m
+| {
+  [91m▔[0m
+|  "path": "../primary"
+  [91m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+| }
+  [91m▔[0m
 Referenced project '/primary' must have setting "composite": true.
 
-
-  [91m[7m [0m [91m▔[0m
-  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
-  [91m[7m [0m [91m▔[0m
 
 Found 1 error in reference/tsconfig.json[90m:7[0m
 

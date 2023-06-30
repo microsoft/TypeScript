@@ -40,7 +40,8 @@ Output::
 
 File is matched by 'files' list specified here: [96ma/b/tsconfig.json[0m:[93m5[0m:[93m25[0m
 
-    [96m  [7m [0m [96m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+  | "commonFile3.ts"
+    [96m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 [[90m12:00:20 AM[0m] Found 1 error. Watching for file changes.
 
 

@@ -1,10 +1,9 @@
 [91m● [0m[96mmultiLineContextDiagnosticWithPretty.ts[0m:[93m2[0m:[93m5[0m  [91mError[0m TS2322
-  [91m[7m [0m [91m▔[0m
+| a: {
+  [91m▔[0m
 Type '{ a: { b: string; }; }' is not assignable to type '{ c: string; }'.
   Object literal may only specify known properties, and 'a' does not exist in type '{ c: string; }'.
 
-
-  [91m[7m [0m [91m▔[0m
 
 ==== multiLineContextDiagnosticWithPretty.ts (1 errors) ====
     const x: {c: string} = {

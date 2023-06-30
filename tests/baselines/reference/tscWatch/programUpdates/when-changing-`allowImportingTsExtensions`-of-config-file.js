@@ -41,11 +41,10 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/mypr
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
 [91m● [0m[96mb.ts[0m:[93m1[0m:[93m8[0m  [91mError[0m TS5097
-  [91m[7m [0m [91m       ▔▔▔▔▔▔▔▔[0m
+| import "./a.ts";
+  [91m       ▔▔▔▔▔▔▔▔[0m
 An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
 
-
-  [91m[7m [0m [91m       ▔▔▔▔▔▔▔▔[0m
 [[90m12:00:24 AM[0m] Found 1 error. Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory

@@ -29,11 +29,10 @@ Output::
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
 [91m● [0m[96ma.ts[0m:[93m1[0m:[93m19[0m  [91mError[0m TS6059
-  [91m[7m [0m [91m                  ▔▔▔▔▔▔[0m
+| import { x } from "../b";
+  [91m                  ▔▔▔▔▔▔[0m
 File '/user/username/projects/b.ts' is not under 'rootDir' '/user/username/projects/myproject'. 'rootDir' is expected to contain all source files.
 
-
-  [91m[7m [0m [91m                  ▔▔▔▔▔▔[0m
 [[90m12:00:31 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -108,11 +107,10 @@ Output::
 [[90m12:00:35 AM[0m] File change detected. Starting incremental compilation...
 
 [91m● [0m[96ma.ts[0m:[93m3[0m:[93m19[0m  [91mError[0m TS6059
-  [91m[7m [0m [91m                  ▔▔▔▔▔▔[0m
+| import { x } from "../b";
+  [91m                  ▔▔▔▔▔▔[0m
 File '/user/username/projects/b.ts' is not under 'rootDir' '/user/username/projects/myproject'. 'rootDir' is expected to contain all source files.
 
-
-  [91m[7m [0m [91m                  ▔▔▔▔▔▔[0m
 [[90m12:00:39 AM[0m] Found 1 error. Watching for file changes.
 
 

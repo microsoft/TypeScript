@@ -43,11 +43,10 @@ export const App = () => <div propA={true}></div>;
 Output::
 /lib/tsc --p src/project --strict
 [91m● [0m[96msrc/project/src/index.tsx[0m:[93m1[0m:[93m26[0m  [91mError[0m TS7016
-  [91m[7m [0m [91m                         ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+| export const App = () => <div propA={true}></div>;
+  [91m                         ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 Could not find a declaration file for module 'react/jsx-runtime'. '/src/project/node_modules/react/jsx-runtime.js' implicitly has an 'any' type.
 
-
-  [91m[7m [0m [91m                         ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 
 Found 1 error in src/project/src/index.tsx[90m:1[0m
 

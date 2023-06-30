@@ -31,7 +31,8 @@ Output::
 
 File is entry point of type library specified here: [96muser/username/projects/myproject/tsconfig.json[0m:[93m1[0m:[93m46[0m
 
-    [96m  [7m [0m [96m                                             ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+  | {"compilerOptions":{"module":"none","types":["@myapp/ts-types"]}}
+    [96m                                             ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 [[90m12:00:26 AM[0m] Found 1 error. Watching for file changes.
 
 

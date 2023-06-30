@@ -21,8 +21,7 @@ FileNames::
 /apath/foge.ts,/apath/test.ts
 Errors::
 [91m● [0m[96mtsconfig.json[0m:[93m5[0m:[93m21[0m  [91mError[0m TS6114
-  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔▔[0m
+| "excludes": [
+  [91m▔▔▔▔▔▔▔▔▔▔[0m
 Unknown option 'excludes'. Did you mean 'exclude'?
 
-
-  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔▔[0m

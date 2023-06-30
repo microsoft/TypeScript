@@ -85,11 +85,10 @@ Output::
 [[90m12:00:28 AM[0m] File change detected. Starting incremental compilation...
 
 [91m● [0m[96ma.ts[0m:[93m2[0m:[93m1[0m  [91mError[0m TS2531
-  [91m[7m [0m [91m▔▔▔▔▔[0m
+| foo().hello
+  [91m▔▔▔▔▔[0m
 Object is possibly 'null'.
 
-
-  [91m[7m [0m [91m▔▔▔▔▔[0m
 [[90m12:00:29 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -125,11 +124,10 @@ Output::
 [[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...
 
 [91m● [0m[96ma.ts[0m:[93m2[0m:[93m1[0m  [91mError[0m TS2531
-  [91m[7m [0m [91m▔▔▔▔▔[0m
+| foo().hello
+  [91m▔▔▔▔▔[0m
 Object is possibly 'null'.
 
-
-  [91m[7m [0m [91m▔▔▔▔▔[0m
 [[90m12:00:34 AM[0m] Found 1 error. Watching for file changes.
 
 

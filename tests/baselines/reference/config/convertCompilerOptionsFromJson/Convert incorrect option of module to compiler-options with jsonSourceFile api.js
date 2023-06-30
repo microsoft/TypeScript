@@ -26,8 +26,7 @@ CompilerOptions::
 }
 Errors::
 [91m● [0m[96mtsconfig.json[0m:[93m3[0m:[93m13[0m  [91mError[0m TS6046
-  [91m[7m [0m [91m          ▔▔[0m
+| "module": "",
+  [91m          ▔▔[0m
 Argument for '--module' option must be: 'none', 'commonjs', 'amd', 'system', 'umd', 'es6', 'es2015', 'es2020', 'es2022', 'esnext', 'node16', 'nodenext'.
 
-
-  [91m[7m [0m [91m          ▔▔[0m

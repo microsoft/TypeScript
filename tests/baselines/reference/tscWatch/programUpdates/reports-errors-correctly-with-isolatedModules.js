@@ -103,11 +103,10 @@ Output::
 [[90m12:00:32 AM[0m] File change detected. Starting incremental compilation...
 
 [91m● [0m[96mb.ts[0m:[93m2[0m:[93m7[0m  [91mError[0m TS2322
-  [91m[7m [0m [91m      ▔[0m
+| const b: string = a;
+  [91m      ▔[0m
 Type 'number' is not assignable to type 'string'.
 
-
-  [91m[7m [0m [91m      ▔[0m
 [[90m12:00:36 AM[0m] Found 1 error. Watching for file changes.
 
 

@@ -33,11 +33,10 @@ export { };
 Output::
 /lib/tsc --p /primary/tsconfig.json
 [91m● [0m[96mprimary/tsconfig.json[0m:[93m5[0m:[93m3[0m  [91mError[0m TS6304
-  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+| "declaration": false
+  [91m▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 Composite projects may not disable declaration emit.
 
-
-  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 
 Found 1 error in primary/tsconfig.json[90m:5[0m
 

@@ -49,7 +49,8 @@ Output::
 
 File is matched by 'files' list specified here: [96mtsconfig.json[0m:[93m1[0m:[93m115[0m
 
-    [96m  [7m [0m [96m                                                                                                                  ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+  | {"compilerOptions":{"jsx":"react-jsx","jsxImportSource":"react","forceConsistentCasingInFileNames":true},"files":["node_modules/react/Jsx-Runtime/index.d.ts","index.tsx"]}
+    [96m                                                                                                                  ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 ../../../../a/lib/lib.d.ts
   Default library for target 'es5'
 node_modules/react/Jsx-Runtime/index.d.ts

@@ -31,17 +31,15 @@ Output::
 [[90m12:00:15 AM[0m] Starting compilation in watch mode...
 
 [91m● [0m[96ma/b/tsconfig.json[0m:[93m3[0m:[93m29[0m  [91mError[0m TS5023
-  [91m[7m [0m [91m▔▔▔▔▔[0m
+| "foo": "bar",
+  [91m▔▔▔▔▔[0m
 Unknown compiler option 'foo'.
 
-
-  [91m[7m [0m [91m▔▔▔▔▔[0m
 [91m● [0m[96ma/b/tsconfig.json[0m:[93m4[0m:[93m29[0m  [91mError[0m TS5025
-  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔[0m
+| "allowJS": true
+  [91m▔▔▔▔▔▔▔▔▔[0m
 Unknown compiler option 'allowJS'. Did you mean 'allowJs'?
 
-
-  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔[0m
 [[90m12:00:18 AM[0m] Found 2 errors. Watching for file changes.
 
 

@@ -29,12 +29,11 @@ Output::
 [[90m12:00:15 AM[0m] Starting compilation in watch mode...
 
 [91m● [0m[96ma/tsconfig.json[0m:[93m1[0m:[93m21[0m  [91mError[0m TS5101
-  [91m[7m [0m [91m                    ▔▔▔▔▔[0m
+| {"compilerOptions":{"out":"/a/out.js"}}
+  [91m                    ▔▔▔▔▔[0m
 Option 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
   Use 'outFile' instead.
 
-
-  [91m[7m [0m [91m                    ▔▔▔▔▔[0m
 [[90m12:00:18 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -88,12 +87,11 @@ Output::
 [[90m12:00:22 AM[0m] File change detected. Starting incremental compilation...
 
 [91m● [0m[96ma/tsconfig.json[0m:[93m1[0m:[93m21[0m  [91mError[0m TS5101
-  [91m[7m [0m [91m                    ▔▔▔▔▔[0m
+| {"compilerOptions":{"out":"/a/out.js"}}
+  [91m                    ▔▔▔▔▔[0m
 Option 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
   Use 'outFile' instead.
 
-
-  [91m[7m [0m [91m                    ▔▔▔▔▔[0m
 [[90m12:00:26 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -133,12 +131,11 @@ Output::
 [[90m12:00:30 AM[0m] File change detected. Starting incremental compilation...
 
 [91m● [0m[96ma/tsconfig.json[0m:[93m1[0m:[93m21[0m  [91mError[0m TS5101
-  [91m[7m [0m [91m                    ▔▔▔▔▔[0m
+| {"compilerOptions":{"out":"/a/out.js"}}
+  [91m                    ▔▔▔▔▔[0m
 Option 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
   Use 'outFile' instead.
 
-
-  [91m[7m [0m [91m                    ▔▔▔▔▔[0m
 [[90m12:00:34 AM[0m] Found 1 error. Watching for file changes.
 
 

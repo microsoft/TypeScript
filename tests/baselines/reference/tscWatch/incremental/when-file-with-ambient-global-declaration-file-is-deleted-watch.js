@@ -171,11 +171,10 @@ Output::
 [[90m12:00:32 AM[0m] Starting compilation in watch mode...
 
 [91m● [0m[96mindex.ts[0m:[93m1[0m:[93m13[0m  [91mError[0m TS2304
-  [91m[7m [0m [91m            ▔▔▔▔▔▔[0m
+| console.log(Config.value);
+  [91m            ▔▔▔▔▔▔[0m
 Cannot find name 'Config'.
 
-
-  [91m[7m [0m [91m            ▔▔▔▔▔▔[0m
 [[90m12:00:39 AM[0m] Found 1 error. Watching for file changes.
 
 

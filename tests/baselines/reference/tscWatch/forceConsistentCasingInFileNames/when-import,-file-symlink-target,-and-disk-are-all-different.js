@@ -38,11 +38,10 @@ Output::
 [[90m12:00:25 AM[0m] Starting compilation in watch mode...
 
 [91m● [0m[96mb.ts[0m:[93m2[0m:[93m19[0m  [91mError[0m TS2307
-  [91m[7m [0m [91m                  ▔▔▔▔▔▔[0m
+| import { a } from "./yX";
+  [91m                  ▔▔▔▔▔▔[0m
 Cannot find module './yX' or its corresponding type declarations.
 
-
-  [91m[7m [0m [91m                  ▔▔▔▔▔▔[0m
 ../../../../a/lib/lib.d.ts
   Default library for target 'es5'
 XY.ts
@@ -150,11 +149,10 @@ Output::
 [[90m12:00:35 AM[0m] File change detected. Starting incremental compilation...
 
 [91m● [0m[96mb.ts[0m:[93m2[0m:[93m19[0m  [91mError[0m TS2307
-  [91m[7m [0m [91m                  ▔▔▔▔▔▔[0m
+| import { a } from "./yX";
+  [91m                  ▔▔▔▔▔▔[0m
 Cannot find module './yX' or its corresponding type declarations.
 
-
-  [91m[7m [0m [91m                  ▔▔▔▔▔▔[0m
 ../../../../a/lib/lib.d.ts
   Default library for target 'es5'
 XY.ts

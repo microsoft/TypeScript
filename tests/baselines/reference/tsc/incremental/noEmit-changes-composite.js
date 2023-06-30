@@ -50,11 +50,10 @@ function someFunc(arguments: boolean, ...rest: any[]) {
 Output::
 /lib/tsc --p src/project
 [91m● [0m[96msrc/project/src/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m  [91mError[0m TS2396
-  [91m[7m [0m [91m                  ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+| function someFunc(arguments: boolean, ...rest: any[]) {
+  [91m                  ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
 
-
-  [91m[7m [0m [91m                  ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 
 Found 1 error in src/project/src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
 
@@ -332,23 +331,23 @@ export class classC {
 Output::
 /lib/tsc --p src/project --noEmit
 [91m● [0m[96msrc/project/src/directUse.ts[0m:[93m2[0m:[93m28[0m  [91mError[0m TS2551
-  [91m[7m [0m [91m                           ▔▔▔▔[0m
+| new indirectClass().classC.prop;
+  [91m                           ▔▔▔▔[0m
 Property 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
 
-
-  [91m[7m [0m [91m                           ▔▔▔▔[0m
 'prop1' is declared here: [96msrc/project/src/class.ts[0m:[93m2[0m:[93m5[0m
 
-    [96m  [7m [0m [96m▔▔▔▔▔[0m
+  | prop1 = 1;
+    [96m▔▔▔▔▔[0m
 [91m● [0m[96msrc/project/src/indirectUse.ts[0m:[93m2[0m:[93m28[0m  [91mError[0m TS2551
-  [91m[7m [0m [91m                           ▔▔▔▔[0m
+| new indirectClass().classC.prop;
+  [91m                           ▔▔▔▔[0m
 Property 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
 
-
-  [91m[7m [0m [91m                           ▔▔▔▔[0m
 'prop1' is declared here: [96msrc/project/src/class.ts[0m:[93m2[0m:[93m5[0m
 
-    [96m  [7m [0m [96m▔▔▔▔▔[0m
+  | prop1 = 1;
+    [96m▔▔▔▔▔[0m
 
 Found 2 errors in 2 files.
 
@@ -597,11 +596,10 @@ export class classC {
 Output::
 /lib/tsc --p src/project
 [91m● [0m[96msrc/project/src/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m  [91mError[0m TS2396
-  [91m[7m [0m [91m                  ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+| function someFunc(arguments: boolean, ...rest: any[]) {
+  [91m                  ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
 
-
-  [91m[7m [0m [91m                  ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 
 Found 1 error in src/project/src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
 
@@ -766,11 +764,10 @@ Input::
 Output::
 /lib/tsc --p src/project
 [91m● [0m[96msrc/project/src/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m  [91mError[0m TS2396
-  [91m[7m [0m [91m                  ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+| function someFunc(arguments: boolean, ...rest: any[]) {
+  [91m                  ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
 
-
-  [91m[7m [0m [91m                  ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 
 Found 1 error in src/project/src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
 
@@ -808,11 +805,10 @@ Input::
 Output::
 /lib/tsc --p src/project
 [91m● [0m[96msrc/project/src/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m  [91mError[0m TS2396
-  [91m[7m [0m [91m                  ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+| function someFunc(arguments: boolean, ...rest: any[]) {
+  [91m                  ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
 
-
-  [91m[7m [0m [91m                  ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 
 Found 1 error in src/project/src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
 
@@ -833,29 +829,28 @@ export class classC {
 Output::
 /lib/tsc --p src/project
 [91m● [0m[96msrc/project/src/directUse.ts[0m:[93m2[0m:[93m28[0m  [91mError[0m TS2551
-  [91m[7m [0m [91m                           ▔▔▔▔[0m
+| new indirectClass().classC.prop;
+  [91m                           ▔▔▔▔[0m
 Property 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
 
-
-  [91m[7m [0m [91m                           ▔▔▔▔[0m
 'prop1' is declared here: [96msrc/project/src/class.ts[0m:[93m2[0m:[93m5[0m
 
-    [96m  [7m [0m [96m▔▔▔▔▔[0m
+  | prop1 = 1;
+    [96m▔▔▔▔▔[0m
 [91m● [0m[96msrc/project/src/indirectUse.ts[0m:[93m2[0m:[93m28[0m  [91mError[0m TS2551
-  [91m[7m [0m [91m                           ▔▔▔▔[0m
+| new indirectClass().classC.prop;
+  [91m                           ▔▔▔▔[0m
 Property 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
 
-
-  [91m[7m [0m [91m                           ▔▔▔▔[0m
 'prop1' is declared here: [96msrc/project/src/class.ts[0m:[93m2[0m:[93m5[0m
 
-    [96m  [7m [0m [96m▔▔▔▔▔[0m
+  | prop1 = 1;
+    [96m▔▔▔▔▔[0m
 [91m● [0m[96msrc/project/src/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m  [91mError[0m TS2396
-  [91m[7m [0m [91m                  ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+| function someFunc(arguments: boolean, ...rest: any[]) {
+  [91m                  ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
 
-
-  [91m[7m [0m [91m                  ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 
 Found 3 errors in 3 files.
 
@@ -1086,29 +1081,28 @@ Input::
 Output::
 /lib/tsc --p src/project
 [91m● [0m[96msrc/project/src/directUse.ts[0m:[93m2[0m:[93m28[0m  [91mError[0m TS2551
-  [91m[7m [0m [91m                           ▔▔▔▔[0m
+| new indirectClass().classC.prop;
+  [91m                           ▔▔▔▔[0m
 Property 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
 
-
-  [91m[7m [0m [91m                           ▔▔▔▔[0m
 'prop1' is declared here: [96msrc/project/src/class.ts[0m:[93m2[0m:[93m5[0m
 
-    [96m  [7m [0m [96m▔▔▔▔▔[0m
+  | prop1 = 1;
+    [96m▔▔▔▔▔[0m
 [91m● [0m[96msrc/project/src/indirectUse.ts[0m:[93m2[0m:[93m28[0m  [91mError[0m TS2551
-  [91m[7m [0m [91m                           ▔▔▔▔[0m
+| new indirectClass().classC.prop;
+  [91m                           ▔▔▔▔[0m
 Property 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
 
-
-  [91m[7m [0m [91m                           ▔▔▔▔[0m
 'prop1' is declared here: [96msrc/project/src/class.ts[0m:[93m2[0m:[93m5[0m
 
-    [96m  [7m [0m [96m▔▔▔▔▔[0m
+  | prop1 = 1;
+    [96m▔▔▔▔▔[0m
 [91m● [0m[96msrc/project/src/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m  [91mError[0m TS2396
-  [91m[7m [0m [91m                  ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+| function someFunc(arguments: boolean, ...rest: any[]) {
+  [91m                  ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
 
-
-  [91m[7m [0m [91m                  ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 
 Found 3 errors in 3 files.
 
@@ -1128,23 +1122,23 @@ Input::
 Output::
 /lib/tsc --p src/project --noEmit
 [91m● [0m[96msrc/project/src/directUse.ts[0m:[93m2[0m:[93m28[0m  [91mError[0m TS2551
-  [91m[7m [0m [91m                           ▔▔▔▔[0m
+| new indirectClass().classC.prop;
+  [91m                           ▔▔▔▔[0m
 Property 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
 
-
-  [91m[7m [0m [91m                           ▔▔▔▔[0m
 'prop1' is declared here: [96msrc/project/src/class.ts[0m:[93m2[0m:[93m5[0m
 
-    [96m  [7m [0m [96m▔▔▔▔▔[0m
+  | prop1 = 1;
+    [96m▔▔▔▔▔[0m
 [91m● [0m[96msrc/project/src/indirectUse.ts[0m:[93m2[0m:[93m28[0m  [91mError[0m TS2551
-  [91m[7m [0m [91m                           ▔▔▔▔[0m
+| new indirectClass().classC.prop;
+  [91m                           ▔▔▔▔[0m
 Property 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
 
-
-  [91m[7m [0m [91m                           ▔▔▔▔[0m
 'prop1' is declared here: [96msrc/project/src/class.ts[0m:[93m2[0m:[93m5[0m
 
-    [96m  [7m [0m [96m▔▔▔▔▔[0m
+  | prop1 = 1;
+    [96m▔▔▔▔▔[0m
 
 Found 2 errors in 2 files.
 
@@ -1163,23 +1157,23 @@ Input::
 Output::
 /lib/tsc --p src/project --noEmit
 [91m● [0m[96msrc/project/src/directUse.ts[0m:[93m2[0m:[93m28[0m  [91mError[0m TS2551
-  [91m[7m [0m [91m                           ▔▔▔▔[0m
+| new indirectClass().classC.prop;
+  [91m                           ▔▔▔▔[0m
 Property 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
 
-
-  [91m[7m [0m [91m                           ▔▔▔▔[0m
 'prop1' is declared here: [96msrc/project/src/class.ts[0m:[93m2[0m:[93m5[0m
 
-    [96m  [7m [0m [96m▔▔▔▔▔[0m
+  | prop1 = 1;
+    [96m▔▔▔▔▔[0m
 [91m● [0m[96msrc/project/src/indirectUse.ts[0m:[93m2[0m:[93m28[0m  [91mError[0m TS2551
-  [91m[7m [0m [91m                           ▔▔▔▔[0m
+| new indirectClass().classC.prop;
+  [91m                           ▔▔▔▔[0m
 Property 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
 
-
-  [91m[7m [0m [91m                           ▔▔▔▔[0m
 'prop1' is declared here: [96msrc/project/src/class.ts[0m:[93m2[0m:[93m5[0m
 
-    [96m  [7m [0m [96m▔▔▔▔▔[0m
+  | prop1 = 1;
+    [96m▔▔▔▔▔[0m
 
 Found 2 errors in 2 files.
 
@@ -1198,29 +1192,28 @@ Input::
 Output::
 /lib/tsc --p src/project
 [91m● [0m[96msrc/project/src/directUse.ts[0m:[93m2[0m:[93m28[0m  [91mError[0m TS2551
-  [91m[7m [0m [91m                           ▔▔▔▔[0m
+| new indirectClass().classC.prop;
+  [91m                           ▔▔▔▔[0m
 Property 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
 
-
-  [91m[7m [0m [91m                           ▔▔▔▔[0m
 'prop1' is declared here: [96msrc/project/src/class.ts[0m:[93m2[0m:[93m5[0m
 
-    [96m  [7m [0m [96m▔▔▔▔▔[0m
+  | prop1 = 1;
+    [96m▔▔▔▔▔[0m
 [91m● [0m[96msrc/project/src/indirectUse.ts[0m:[93m2[0m:[93m28[0m  [91mError[0m TS2551
-  [91m[7m [0m [91m                           ▔▔▔▔[0m
+| new indirectClass().classC.prop;
+  [91m                           ▔▔▔▔[0m
 Property 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
 
-
-  [91m[7m [0m [91m                           ▔▔▔▔[0m
 'prop1' is declared here: [96msrc/project/src/class.ts[0m:[93m2[0m:[93m5[0m
 
-    [96m  [7m [0m [96m▔▔▔▔▔[0m
+  | prop1 = 1;
+    [96m▔▔▔▔▔[0m
 [91m● [0m[96msrc/project/src/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m  [91mError[0m TS2396
-  [91m[7m [0m [91m                  ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+| function someFunc(arguments: boolean, ...rest: any[]) {
+  [91m                  ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
 
-
-  [91m[7m [0m [91m                  ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 
 Found 3 errors in 3 files.
 
@@ -1437,11 +1430,10 @@ Input::
 Output::
 /lib/tsc --p src/project
 [91m● [0m[96msrc/project/src/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m  [91mError[0m TS2396
-  [91m[7m [0m [91m                  ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+| function someFunc(arguments: boolean, ...rest: any[]) {
+  [91m                  ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
 
-
-  [91m[7m [0m [91m                  ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 
 Found 1 error in src/project/src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
 
@@ -1646,11 +1638,10 @@ Input::
 Output::
 /lib/tsc --p src/project
 [91m● [0m[96msrc/project/src/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m  [91mError[0m TS2396
-  [91m[7m [0m [91m                  ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+| function someFunc(arguments: boolean, ...rest: any[]) {
+  [91m                  ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
 
-
-  [91m[7m [0m [91m                  ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 
 Found 1 error in src/project/src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
 

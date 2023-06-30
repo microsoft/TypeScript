@@ -21,8 +21,7 @@ CompilerOptions::
 }
 Errors::
 [91m● [0m[96mtsconfig.json[0m:[93m1[0m:[93m1[0m  [91mError[0m TS1136
-  [91m[7m [0m [91m▔▔▔▔[0m
+| blah {
+  [91m▔▔▔▔[0m
 Property assignment expected.
 
-
-  [91m[7m [0m [91m▔▔▔▔[0m

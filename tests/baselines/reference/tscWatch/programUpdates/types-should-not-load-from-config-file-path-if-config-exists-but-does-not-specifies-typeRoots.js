@@ -34,7 +34,8 @@ Output::
 
 File is entry point of type library specified here: [96m../b/tsconfig.json[0m:[93m1[0m:[93m30[0m
 
-    [96m  [7m [0m [96m                             ▔▔▔▔▔▔[0m
+  | {"compilerOptions":{"types":["node"],"typeRoots":[]}}
+    [96m                             ▔▔▔▔▔▔[0m
 [[90m12:00:28 AM[0m] Found 1 error. Watching for file changes.
 
 

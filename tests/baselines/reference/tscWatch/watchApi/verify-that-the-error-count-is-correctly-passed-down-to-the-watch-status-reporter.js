@@ -26,20 +26,19 @@ Output::
 [[90m12:00:21 AM[0m] Starting compilation in watch mode...
 
 [91m● [0m[96mindex.ts[0m:[93m1[0m:[93m20[0m  [91mError[0m TS2552
-  [91m[7m [0m [91m                   ▔▔▔▔▔▔▔▔[0m
+| let compiler = new Compiler(); for (let i = 0; j < 5; i++) {}
+  [91m                   ▔▔▔▔▔▔▔▔[0m
 Cannot find name 'Compiler'. Did you mean 'compiler'?
 
-
-  [91m[7m [0m [91m                   ▔▔▔▔▔▔▔▔[0m
 'compiler' is declared here: [96mindex.ts[0m:[93m1[0m:[93m5[0m
 
-    [96m  [7m [0m [96m    ▔▔▔▔▔▔▔▔[0m
+  | let compiler = new Compiler(); for (let i = 0; j < 5; i++) {}
+    [96m    ▔▔▔▔▔▔▔▔[0m
 [91m● [0m[96mindex.ts[0m:[93m1[0m:[93m48[0m  [91mError[0m TS2304
-  [91m[7m [0m [91m                                               ▔[0m
+| let compiler = new Compiler(); for (let i = 0; j < 5; i++) {}
+  [91m                                               ▔[0m
 Cannot find name 'j'.
 
-
-  [91m[7m [0m [91m                                               ▔[0m
 [[90m12:00:24 AM[0m] Found 2 errors. Watching for file changes.
 
 

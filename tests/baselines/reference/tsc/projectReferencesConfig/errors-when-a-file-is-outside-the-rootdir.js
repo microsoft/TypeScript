@@ -35,17 +35,15 @@ declare const console: { log(msg: any): void; };
 Output::
 /lib/tsc --p /alpha/tsconfig.json
 [91m● [0m[96malpha/src/a.ts[0m:[93m1[0m:[93m20[0m  [91mError[0m TS6059
-  [91m[7m [0m [91m                   ▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+| import * as b from '../../beta/b'
+  [91m                   ▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 File '/beta/b.ts' is not under 'rootDir' '/alpha'. 'rootDir' is expected to contain all source files.
 
-
-  [91m[7m [0m [91m                   ▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 [91m● [0m[96malpha/src/a.ts[0m:[93m1[0m:[93m20[0m  [91mError[0m TS6307
-  [91m[7m [0m [91m                   ▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+| import * as b from '../../beta/b'
+  [91m                   ▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 File '/beta/b.ts' is not listed within the file list of project '/alpha/tsconfig.json'. Projects must list all files or use an 'include' pattern.
 
-
-  [91m[7m [0m [91m                   ▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 
 Found 2 errors in the same file, starting at: alpha/src/a.ts[90m:1[0m
 

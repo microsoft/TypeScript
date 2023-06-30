@@ -97,9 +97,8 @@ Result
 }
 Errors::
 [91m● [0m[96mtsconfig.json[0m:[93m3[0m:[93m3[0m  [91mError[0m TS5065
-  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔▔▔[0m
+| "**/y/../*"
+  [91m▔▔▔▔▔▔▔▔▔▔▔[0m
 File specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '**/y/../*'.
-
-
-  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔▔▔[0m[91m● [0m [91mError[0m TS18003No inputs were found in config file 'c:/dev/tsconfig.json'. Specified 'include' paths were '["**/y/../*"]' and 'exclude' paths were '[]'.
+[91m● [0m [91mError[0m TS18003No inputs were found in config file 'c:/dev/tsconfig.json'. Specified 'include' paths were '["**/y/../*"]' and 'exclude' paths were '[]'.
 

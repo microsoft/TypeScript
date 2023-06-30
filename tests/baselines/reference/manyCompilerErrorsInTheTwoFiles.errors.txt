@@ -1,99 +1,80 @@
 [91m● [0m[96ma.ts[0m:[93m1[0m:[93m12[0m   [91mError[0m TS18026
-  [91m[7m [0m [91m           [0m
+| const a =!@#!@$
+  [91m           [0m
 '#!' can only be used at the start of a file.
-
-
-  [91m[7m [0m [91m           [0m[91m● [0m[96ma.ts[0m:[93m1[0m:[93m13[0m  [91mError[0m TS1134
-  [91m[7m [0m [91m            ▔[0m
+[91m● [0m[96ma.ts[0m:[93m1[0m:[93m13[0m  [91mError[0m TS1134
+| const a =!@#!@$
+  [91m            ▔[0m
 Variable declaration expected.
-
-
-  [91m[7m [0m [91m            ▔[0m[91m● [0m[96ma.ts[0m:[93m1[0m:[93m16[0m  [91mError[0m TS1109
-  [91m[7m [0m [91m               [0m
+[91m● [0m[96ma.ts[0m:[93m1[0m:[93m16[0m  [91mError[0m TS1109
+| const a =!@#!@$
+  [91m               [0m
 Expression expected.
-
-
-  [91m[7m [0m [91m               [0m[91m● [0m[96ma.ts[0m:[93m2[0m:[93m13[0m   [91mError[0m TS18026
-  [91m[7m [0m [91m            [0m
+[91m● [0m[96ma.ts[0m:[93m2[0m:[93m13[0m   [91mError[0m TS18026
+| const b = !@#!@#!@#!
+  [91m            [0m
 '#!' can only be used at the start of a file.
-
-
-  [91m[7m [0m [91m            [0m[91m● [0m[96ma.ts[0m:[93m2[0m:[93m14[0m  [91mError[0m TS1134
-  [91m[7m [0m [91m             ▔[0m
+[91m● [0m[96ma.ts[0m:[93m2[0m:[93m14[0m  [91mError[0m TS1134
+| const b = !@#!@#!@#!
+  [91m             ▔[0m
 Variable declaration expected.
-
-
-  [91m[7m [0m [91m             ▔[0m[91m● [0m[96ma.ts[0m:[93m2[0m:[93m16[0m   [91mError[0m TS18026
-  [91m[7m [0m [91m               [0m
+[91m● [0m[96ma.ts[0m:[93m2[0m:[93m16[0m   [91mError[0m TS18026
+| const b = !@#!@#!@#!
+  [91m               [0m
 '#!' can only be used at the start of a file.
-
-
-  [91m[7m [0m [91m               [0m[91m● [0m[96ma.ts[0m:[93m2[0m:[93m19[0m   [91mError[0m TS18026
-  [91m[7m [0m [91m                  [0m
+[91m● [0m[96ma.ts[0m:[93m2[0m:[93m19[0m   [91mError[0m TS18026
+| const b = !@#!@#!@#!
+  [91m                  [0m
 '#!' can only be used at the start of a file.
-
-
-  [91m[7m [0m [91m                  [0m[91m● [0m[96ma.ts[0m:[93m3[0m:[93m1[0m  [91mError[0m TS2304
-  [91m[7m [0m [91m▔▔[0m
+[91m● [0m[96ma.ts[0m:[93m3[0m:[93m1[0m  [91mError[0m TS2304
+| OK!
+  [91m▔▔[0m
 Cannot find name 'OK'.
-
-
-  [91m[7m [0m [91m▔▔[0m[91m● [0m[96ma.ts[0m:[93m4[0m:[93m1[0m  [91mError[0m TS1434
-  [91m[7m [0m [91m▔▔▔▔[0m
+[91m● [0m[96ma.ts[0m:[93m4[0m:[93m1[0m  [91mError[0m TS1434
+| HERE's A shouty thing
+  [91m▔▔▔▔[0m
 Unexpected keyword or identifier.
-
-
-  [91m[7m [0m [91m▔▔▔▔[0m[91m● [0m[96ma.ts[0m:[93m4[0m:[93m1[0m  [91mError[0m TS2304
-  [91m[7m [0m [91m▔▔▔▔[0m
+[91m● [0m[96ma.ts[0m:[93m4[0m:[93m1[0m  [91mError[0m TS2304
+| HERE's A shouty thing
+  [91m▔▔▔▔[0m
 Cannot find name 'HERE'.
-
-
-  [91m[7m [0m [91m▔▔▔▔[0m[91m● [0m[96ma.ts[0m:[93m4[0m:[93m22[0m  [91mError[0m TS1002
-  [91m[7m [0m [91m                     [0m
+[91m● [0m[96ma.ts[0m:[93m4[0m:[93m22[0m  [91mError[0m TS1002
+| HERE's A shouty thing
+  [91m                     [0m
 Unterminated string literal.
-
-
-  [91m[7m [0m [91m                     [0m[91m● [0m[96ma.ts[0m:[93m5[0m:[93m1[0m  [91mError[0m TS1434
-  [91m[7m [0m [91m▔▔▔▔▔[0m
+[91m● [0m[96ma.ts[0m:[93m5[0m:[93m1[0m  [91mError[0m TS1434
+| GOTTA GO FAST
+  [91m▔▔▔▔▔[0m
 Unexpected keyword or identifier.
-
-
-  [91m[7m [0m [91m▔▔▔▔▔[0m[91m● [0m[96ma.ts[0m:[93m5[0m:[93m1[0m  [91mError[0m TS2304
-  [91m[7m [0m [91m▔▔▔▔▔[0m
+[91m● [0m[96ma.ts[0m:[93m5[0m:[93m1[0m  [91mError[0m TS2304
+| GOTTA GO FAST
+  [91m▔▔▔▔▔[0m
 Cannot find name 'GOTTA'.
-
-
-  [91m[7m [0m [91m▔▔▔▔▔[0m[91m● [0m[96ma.ts[0m:[93m5[0m:[93m7[0m  [91mError[0m TS1434
-  [91m[7m [0m [91m      ▔▔[0m
+[91m● [0m[96ma.ts[0m:[93m5[0m:[93m7[0m  [91mError[0m TS1434
+| GOTTA GO FAST
+  [91m      ▔▔[0m
 Unexpected keyword or identifier.
-
-
-  [91m[7m [0m [91m      ▔▔[0m[91m● [0m[96ma.ts[0m:[93m5[0m:[93m7[0m  [91mError[0m TS2304
-  [91m[7m [0m [91m      ▔▔[0m
+[91m● [0m[96ma.ts[0m:[93m5[0m:[93m7[0m  [91mError[0m TS2304
+| GOTTA GO FAST
+  [91m      ▔▔[0m
 Cannot find name 'GO'.
-
-
-  [91m[7m [0m [91m      ▔▔[0m[91m● [0m[96ma.ts[0m:[93m5[0m:[93m10[0m  [91mError[0m TS2304
-  [91m[7m [0m [91m         ▔▔▔▔[0m
+[91m● [0m[96ma.ts[0m:[93m5[0m:[93m10[0m  [91mError[0m TS2304
+| GOTTA GO FAST
+  [91m         ▔▔▔▔[0m
 Cannot find name 'FAST'.
-
-
-  [91m[7m [0m [91m         ▔▔▔▔[0m[91m● [0m[96mb.ts[0m:[93m1[0m:[93m1[0m  [91mError[0m TS2304
-  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔[0m
+[91m● [0m[96mb.ts[0m:[93m1[0m:[93m1[0m  [91mError[0m TS2304
+| fhqwhgads
+  [91m▔▔▔▔▔▔▔▔▔[0m
 Cannot find name 'fhqwhgads'.
-
-
-  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔[0m[91m● [0m[96mb.ts[0m:[93m2[0m:[93m1[0m  [91mError[0m TS2304
-  [91m[7m [0m [91m▔▔[0m
+[91m● [0m[96mb.ts[0m:[93m2[0m:[93m1[0m  [91mError[0m TS2304
+| to
+  [91m▔▔[0m
 Cannot find name 'to'.
-
-
-  [91m[7m [0m [91m▔▔[0m[91m● [0m[96mb.ts[0m:[93m3[0m:[93m1[0m  [91mError[0m TS2304
-  [91m[7m [0m [91m▔▔▔▔▔[0m
+[91m● [0m[96mb.ts[0m:[93m3[0m:[93m1[0m  [91mError[0m TS2304
+| limit
+  [91m▔▔▔▔▔[0m
 Cannot find name 'limit'.
 
-
-  [91m[7m [0m [91m▔▔▔▔▔[0m
 
 ==== a.ts (16 errors) ====
     const a =!@#!@$

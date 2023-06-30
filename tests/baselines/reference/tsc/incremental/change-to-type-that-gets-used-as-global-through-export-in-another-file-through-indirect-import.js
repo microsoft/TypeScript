@@ -195,11 +195,10 @@ export default 2;
 Output::
 /lib/tsc -p src/project
 [91m● [0m[96msrc/project/class1.ts[0m:[93m1[0m:[93m7[0m  [91mError[0m TS2322
-  [91m[7m [0m [91m      ▔[0m
+| const a: MagicNumber = 1;
+  [91m      ▔[0m
 Type '1' is not assignable to type '2'.
 
-
-  [91m[7m [0m [91m      ▔[0m
 
 Found 1 error in src/project/class1.ts[90m:1[0m
 

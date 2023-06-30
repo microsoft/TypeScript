@@ -41,11 +41,10 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/mypr
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
 [91m● [0m[96mb.ts[0m:[93m1[0m:[93m14[0m  [91mError[0m TS2322
-  [91m[7m [0m [91m             ▔[0m
+| export const y: 10 = 20;
+  [91m             ▔[0m
 Type '20' is not assignable to type '10'.
 
-
-  [91m[7m [0m [91m             ▔[0m
 [[90m12:00:26 AM[0m] Found 1 error. Watching for file changes.
 
 

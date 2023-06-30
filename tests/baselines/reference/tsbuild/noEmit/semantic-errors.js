@@ -33,11 +33,10 @@ Output::
 [[90m12:00:10 AM[0m] Building project '/src/tsconfig.json'...
 
 [91m● [0m[96msrc/a.ts[0m:[93m1[0m:[93m7[0m  [91mError[0m TS2322
-  [91m[7m [0m [91m      ▔[0m
+| const a: number = "hello"
+  [91m      ▔[0m
 Type 'string' is not assignable to type 'number'.
 
-
-  [91m[7m [0m [91m      ▔[0m
 
 Found 1 error.
 
@@ -74,11 +73,10 @@ Output::
 [[90m12:00:13 AM[0m] Building project '/src/tsconfig.json'...
 
 [91m● [0m[96msrc/a.ts[0m:[93m1[0m:[93m7[0m  [91mError[0m TS2322
-  [91m[7m [0m [91m      ▔[0m
+| const a: number = "hello"
+  [91m      ▔[0m
 Type 'string' is not assignable to type 'number'.
 
-
-  [91m[7m [0m [91m      ▔[0m
 
 Found 1 error.
 

@@ -89,7 +89,8 @@ Output::
 
 File is matched by 'files' list specified here: [96ma/b/tsconfig.json[0m:[93m1[0m:[93m40[0m
 
-    [96m  [7m [0m [96m                                       ▔▔▔▔▔▔▔[0m
+  | {"compilerOptions":{},"files":["f1.ts","f2.ts"]}
+    [96m                                       ▔▔▔▔▔▔▔[0m
 [[90m12:00:28 AM[0m] Found 1 error. Watching for file changes.
 
 

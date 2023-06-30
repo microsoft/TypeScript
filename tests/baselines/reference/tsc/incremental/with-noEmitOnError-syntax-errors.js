@@ -44,11 +44,10 @@ export { }
 Output::
 /lib/tsc --incremental -p src
 [91m● [0m[96msrc/src/main.ts[0m:[93m4[0m:[93m1[0m  [91mError[0m TS1005
-  [91m[7m [0m [91m▔[0m
+| ;
+  [91m▔[0m
 ',' expected.
 
-
-  [91m[7m [0m [91m▔[0m
 
 Found 1 error in src/src/main.ts[90m:4[0m
 
@@ -176,11 +175,10 @@ Input::
 Output::
 /lib/tsc --incremental -p src
 [91m● [0m[96msrc/src/main.ts[0m:[93m4[0m:[93m1[0m  [91mError[0m TS1005
-  [91m[7m [0m [91m▔[0m
+| ;
+  [91m▔[0m
 ',' expected.
 
-
-  [91m[7m [0m [91m▔[0m
 
 Found 1 error in src/src/main.ts[90m:4[0m
 

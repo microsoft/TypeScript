@@ -184,11 +184,10 @@ File '/user/username/projects/myproject/node_modules/pkg2/build/other.d.ts' exis
 Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/build/other.d.ts', result '/user/username/projects/myproject/packages/pkg2/build/other.d.ts'.
 ======== Module name 'pkg2' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/other.d.ts' with Package ID 'pkg2/build/other.d.ts@1.0.0'. ========
 [91m● [0m[96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m15[0m  [91mError[0m TS2305
-  [91m[7m [0m [91m              ▔▔▔▔▔▔[0m
+| import type { TheNum } from 'pkg2'
+  [91m              ▔▔▔▔▔▔[0m
 Module '"pkg2"' has no exported member 'TheNum'.
 
-
-  [91m[7m [0m [91m              ▔▔▔▔▔▔[0m
 [[90m12:00:57 AM[0m] Found 1 error. Watching for file changes.
 
 

@@ -29,11 +29,10 @@ Output::
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
 [91m● [0m[96muser/username/projects/myproject/main.ts[0m:[93m1[0m:[93m14[0m  [91mError[0m TS2322
-  [91m[7m [0m [91m             ▔[0m
+| export const x: string = 10;
+  [91m             ▔[0m
 Type 'number' is not assignable to type 'string'.
 
-
-  [91m[7m [0m [91m             ▔[0m
 [[90m12:00:26 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -202,11 +201,10 @@ Output::
 [[90m12:00:31 AM[0m] Starting compilation in watch mode...
 
 [91m● [0m[96muser/username/projects/myproject/main.ts[0m:[93m1[0m:[93m14[0m  [91mError[0m TS2322
-  [91m[7m [0m [91m             ▔[0m
+| export const x: string = 10;
+  [91m             ▔[0m
 Type 'number' is not assignable to type 'string'.
 
-
-  [91m[7m [0m [91m             ▔[0m
 [[90m12:00:35 AM[0m] Found 1 error. Watching for file changes.
 
 

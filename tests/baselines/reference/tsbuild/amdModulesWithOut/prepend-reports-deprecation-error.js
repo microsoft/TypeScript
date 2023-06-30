@@ -84,11 +84,10 @@ Output::
 [[90m12:00:19 AM[0m] Building project '/src/app/tsconfig.json'...
 
 [91m● [0m[96msrc/app/tsconfig.json[0m:[93m14[0m:[93m9[0m  [91mError[0m TS5101
-  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+| { "path": "../lib", "prepend": true }
+  [91m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 Option 'prepend' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
 
-
-  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 
 Found 1 error.
 
@@ -503,11 +502,10 @@ Output::
 [[90m12:00:34 AM[0m] Building project '/src/app/tsconfig.json'...
 
 [91m● [0m[96msrc/app/tsconfig.json[0m:[93m14[0m:[93m9[0m  [91mError[0m TS5101
-  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+| { "path": "../lib", "prepend": true }
+  [91m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 Option 'prepend' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
 
-
-  [91m[7m [0m [91m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 
 Found 1 error.
 

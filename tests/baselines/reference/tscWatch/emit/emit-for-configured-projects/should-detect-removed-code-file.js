@@ -30,11 +30,10 @@ Output::
 [[90m12:00:17 AM[0m] Starting compilation in watch mode...
 
 [91m● [0m[96ma/b/referenceFile1.ts[0m:[93m2[0m:[93m16[0m  [91mError[0m TS2304
-  [91m[7m [0m [91m               ▔▔▔[0m
+| export var x = Foo();
+  [91m               ▔▔▔[0m
 Cannot find name 'Foo'.
 
-
-  [91m[7m [0m [91m               ▔▔▔[0m
 [[90m12:00:22 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -104,17 +103,15 @@ Output::
 [[90m12:00:24 AM[0m] File change detected. Starting incremental compilation...
 
 [91m● [0m[96ma/b/referenceFile1.ts[0m:[93m1[0m:[93m22[0m  [91mError[0m TS6053
-  [91m[7m [0m [91m                     ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+| /// <reference path="./moduleFile1.ts" />
+  [91m                     ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 File '/a/b/moduleFile1.ts' not found.
 
-
-  [91m[7m [0m [91m                     ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 [91m● [0m[96ma/b/referenceFile1.ts[0m:[93m2[0m:[93m16[0m  [91mError[0m TS2304
-  [91m[7m [0m [91m               ▔▔▔[0m
+| export var x = Foo();
+  [91m               ▔▔▔[0m
 Cannot find name 'Foo'.
 
-
-  [91m[7m [0m [91m               ▔▔▔[0m
 [[90m12:00:28 AM[0m] Found 2 errors. Watching for file changes.
 
 

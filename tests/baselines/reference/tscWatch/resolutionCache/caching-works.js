@@ -26,17 +26,15 @@ Output::
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
 [91m● [0m[96musers/username/projects/project/d/f0.ts[0m:[93m1[0m:[93m17[0m  [91mError[0m TS2306
-  [91m[7m [0m [91m                ▔▔▔▔[0m
+| import {x} from "f1"
+  [91m                ▔▔▔▔[0m
 File '/users/username/projects/project/f1.ts' is not a module.
 
-
-  [91m[7m [0m [91m                ▔▔▔▔[0m
 [91m● [0m[96musers/username/projects/project/f1.ts[0m:[93m1[0m:[93m1[0m  [91mError[0m TS2304
-  [91m[7m [0m [91m▔▔▔[0m
+| foo()
+  [91m▔▔▔[0m
 Cannot find name 'foo'.
 
-
-  [91m[7m [0m [91m▔▔▔[0m
 [[90m12:00:28 AM[0m] Found 2 errors. Watching for file changes.
 
 
@@ -101,23 +99,20 @@ Output::
 [[90m12:00:32 AM[0m] File change detected. Starting incremental compilation...
 
 [91m● [0m[96musers/username/projects/project/d/f0.ts[0m:[93m1[0m:[93m17[0m  [91mError[0m TS2306
-  [91m[7m [0m [91m                ▔▔▔▔[0m
+| import {x} from "f1"
+  [91m                ▔▔▔▔[0m
 File '/users/username/projects/project/f1.ts' is not a module.
 
-
-  [91m[7m [0m [91m                ▔▔▔▔[0m
 [91m● [0m[96musers/username/projects/project/d/f0.ts[0m:[93m2[0m:[93m33[0m  [91mError[0m TS2322
-  [91m[7m [0m [91m    ▔[0m
+| var x: string = 1;
+  [91m    ▔[0m
 Type 'number' is not assignable to type 'string'.
 
-
-  [91m[7m [0m [91m    ▔[0m
 [91m● [0m[96musers/username/projects/project/f1.ts[0m:[93m1[0m:[93m1[0m  [91mError[0m TS2304
-  [91m[7m [0m [91m▔▔▔[0m
+| foo()
+  [91m▔▔▔[0m
 Cannot find name 'foo'.
 
-
-  [91m[7m [0m [91m▔▔▔[0m
 [[90m12:00:36 AM[0m] Found 3 errors. Watching for file changes.
 
 
@@ -162,11 +157,10 @@ Output::
 [[90m12:00:40 AM[0m] File change detected. Starting incremental compilation...
 
 [91m● [0m[96musers/username/projects/project/d/f0.ts[0m:[93m1[0m:[93m17[0m  [91mError[0m TS2792
-  [91m[7m [0m [91m                ▔▔▔▔[0m
+| import {x} from "f2"
+  [91m                ▔▔▔▔[0m
 Cannot find module 'f2'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 
-
-  [91m[7m [0m [91m                ▔▔▔▔[0m
 [[90m12:00:44 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -223,17 +217,15 @@ Output::
 [[90m12:00:48 AM[0m] File change detected. Starting incremental compilation...
 
 [91m● [0m[96musers/username/projects/project/d/f0.ts[0m:[93m1[0m:[93m17[0m  [91mError[0m TS2306
-  [91m[7m [0m [91m                ▔▔▔▔[0m
+| import {x} from "f1"
+  [91m                ▔▔▔▔[0m
 File '/users/username/projects/project/f1.ts' is not a module.
 
-
-  [91m[7m [0m [91m                ▔▔▔▔[0m
 [91m● [0m[96musers/username/projects/project/f1.ts[0m:[93m1[0m:[93m1[0m  [91mError[0m TS2304
-  [91m[7m [0m [91m▔▔▔[0m
+| foo()
+  [91m▔▔▔[0m
 Cannot find name 'foo'.
 
-
-  [91m[7m [0m [91m▔▔▔[0m
 [[90m12:00:55 AM[0m] Found 2 errors. Watching for file changes.
 
 

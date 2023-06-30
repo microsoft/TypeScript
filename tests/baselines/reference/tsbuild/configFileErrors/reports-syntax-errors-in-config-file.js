@@ -37,11 +37,10 @@ export function bar() { }
 Output::
 /lib/tsc --b /src/tsconfig.json
 [91m● [0m[96msrc/tsconfig.json[0m:[93m7[0m:[93m9[0m  [91mError[0m TS1005
-  [91m[7m [0m [91m▔▔▔▔▔▔[0m
+| "b.ts"
+  [91m▔▔▔▔▔▔[0m
 ',' expected.
 
-
-  [91m[7m [0m [91m▔▔▔▔▔▔[0m
 
 Found 1 error.
 
@@ -130,11 +129,10 @@ Input::
 Output::
 /lib/tsc --b /src/tsconfig.json
 [91m● [0m[96msrc/tsconfig.json[0m:[93m8[0m:[93m9[0m  [91mError[0m TS1005
-  [91m[7m [0m [91m▔▔▔▔▔▔[0m
+| "b.ts"
+  [91m▔▔▔▔▔▔[0m
 ',' expected.
 
-
-  [91m[7m [0m [91m▔▔▔▔▔▔[0m
 
 Found 1 error.
 
@@ -153,11 +151,10 @@ export function foo() { }export function fooBar() { }
 Output::
 /lib/tsc --b /src/tsconfig.json
 [91m● [0m[96msrc/tsconfig.json[0m:[93m8[0m:[93m9[0m  [91mError[0m TS1005
-  [91m[7m [0m [91m▔▔▔▔▔▔[0m
+| "b.ts"
+  [91m▔▔▔▔▔▔[0m
 ',' expected.
 
-
-  [91m[7m [0m [91m▔▔▔▔▔▔[0m
 
 Found 1 error.
 
@@ -235,11 +232,10 @@ Input::
 Output::
 /lib/tsc --b /src/tsconfig.json
 [91m● [0m[96msrc/tsconfig.json[0m:[93m8[0m:[93m9[0m  [91mError[0m TS1005
-  [91m[7m [0m [91m▔▔▔▔▔▔[0m
+| "b.ts"
+  [91m▔▔▔▔▔▔[0m
 ',' expected.
 
-
-  [91m[7m [0m [91m▔▔▔▔▔▔[0m
 
 Found 1 error.
 

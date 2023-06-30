@@ -129,7 +129,8 @@ Output::
 
 File is output from referenced project specified here: [96msrc/projects/project2/tsconfig.json[0m:[93m1[0m:[93m69[0m
 
-    [96m  [7m [0m [96m                                                                    ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+  | {"compilerOptions":{"module":"none","composite":true},"references":[{"path":"../project1"}]}
+    [96m                                                                    ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 
 Found 1 error.
 
@@ -253,7 +254,8 @@ Output::
 
 File is output from referenced project specified here: [96msrc/projects/project2/tsconfig.json[0m:[93m1[0m:[93m69[0m
 
-    [96m  [7m [0m [96m                                                                    ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+  | {"compilerOptions":{"module":"none","composite":true},"references":[{"path":"../project1"}]}
+    [96m                                                                    ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 
 Found 1 error.
 

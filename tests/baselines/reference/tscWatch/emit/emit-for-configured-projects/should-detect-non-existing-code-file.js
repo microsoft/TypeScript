@@ -27,17 +27,15 @@ Output::
 [[90m12:00:15 AM[0m] Starting compilation in watch mode...
 
 [91m● [0m[96ma/b/referenceFile1.ts[0m:[93m1[0m:[93m22[0m  [91mError[0m TS6053
-  [91m[7m [0m [91m                     ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+| /// <reference path="./moduleFile2.ts" />
+  [91m                     ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 File '/a/b/moduleFile2.ts' not found.
 
-
-  [91m[7m [0m [91m                     ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 [91m● [0m[96ma/b/referenceFile1.ts[0m:[93m2[0m:[93m16[0m  [91mError[0m TS2304
-  [91m[7m [0m [91m               ▔▔▔[0m
+| export var x = Foo();
+  [91m               ▔▔▔[0m
 Cannot find name 'Foo'.
 
-
-  [91m[7m [0m [91m               ▔▔▔[0m
 [[90m12:00:18 AM[0m] Found 2 errors. Watching for file changes.
 
 
@@ -100,23 +98,20 @@ Output::
 [[90m12:00:21 AM[0m] File change detected. Starting incremental compilation...
 
 [91m● [0m[96ma/b/referenceFile1.ts[0m:[93m1[0m:[93m22[0m  [91mError[0m TS6053
-  [91m[7m [0m [91m                     ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+| /// <reference path="./moduleFile2.ts" />
+  [91m                     ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 File '/a/b/moduleFile2.ts' not found.
 
-
-  [91m[7m [0m [91m                     ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 [91m● [0m[96ma/b/referenceFile1.ts[0m:[93m2[0m:[93m16[0m  [91mError[0m TS2304
-  [91m[7m [0m [91m               ▔▔▔[0m
+| export var x = Foo();export var yy = Foo();
+  [91m               ▔▔▔[0m
 Cannot find name 'Foo'.
 
-
-  [91m[7m [0m [91m               ▔▔▔[0m
 [91m● [0m[96ma/b/referenceFile1.ts[0m:[93m2[0m:[93m38[0m  [91mError[0m TS2304
-  [91m[7m [0m [91m                                     ▔▔▔[0m
+| export var x = Foo();export var yy = Foo();
+  [91m                                     ▔▔▔[0m
 Cannot find name 'Foo'.
 
-
-  [91m[7m [0m [91m                                     ▔▔▔[0m
 [[90m12:00:25 AM[0m] Found 3 errors. Watching for file changes.
 
 
@@ -177,17 +172,15 @@ Output::
 [[90m12:00:28 AM[0m] File change detected. Starting incremental compilation...
 
 [91m● [0m[96ma/b/referenceFile1.ts[0m:[93m2[0m:[93m16[0m  [91mError[0m TS2304
-  [91m[7m [0m [91m               ▔▔▔[0m
+| export var x = Foo();export var yy = Foo();
+  [91m               ▔▔▔[0m
 Cannot find name 'Foo'.
 
-
-  [91m[7m [0m [91m               ▔▔▔[0m
 [91m● [0m[96ma/b/referenceFile1.ts[0m:[93m2[0m:[93m38[0m  [91mError[0m TS2304
-  [91m[7m [0m [91m                                     ▔▔▔[0m
+| export var x = Foo();export var yy = Foo();
+  [91m                                     ▔▔▔[0m
 Cannot find name 'Foo'.
 
-
-  [91m[7m [0m [91m                                     ▔▔▔[0m
 [[90m12:00:34 AM[0m] Found 2 errors. Watching for file changes.
 
 

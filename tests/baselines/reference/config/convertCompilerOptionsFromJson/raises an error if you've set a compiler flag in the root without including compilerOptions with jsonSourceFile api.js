@@ -18,8 +18,7 @@ CompilerOptions::
 }
 Errors::
 [91m● [0m[96mtsconfig.json[0m:[93m2[0m:[93m13[0m  [91mError[0m TS6258
-  [91m[7m [0m [91m▔▔▔▔▔▔▔▔[0m
+| "module": "esnext",
+  [91m▔▔▔▔▔▔▔▔[0m
 'module' should be set inside the 'compilerOptions' object of the config json file
 
-
-  [91m[7m [0m [91m▔▔▔▔▔▔▔▔[0m

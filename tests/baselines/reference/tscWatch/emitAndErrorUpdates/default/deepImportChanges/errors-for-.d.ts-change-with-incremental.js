@@ -203,11 +203,10 @@ Output::
 [[90m12:00:36 AM[0m] File change detected. Starting incremental compilation...
 
 [91m● [0m[96ma.ts[0m:[93m4[0m:[93m17[0m  [91mError[0m TS2339
-  [91m[7m [0m [91m                ▔[0m
+| console.log(b.c.d);
+  [91m                ▔[0m
 Property 'd' does not exist on type 'C'.
 
-
-  [91m[7m [0m [91m                ▔[0m
 [[90m12:00:40 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -473,11 +472,10 @@ Output::
 [[90m12:00:58 AM[0m] File change detected. Starting incremental compilation...
 
 [91m● [0m[96ma.ts[0m:[93m4[0m:[93m17[0m  [91mError[0m TS2339
-  [91m[7m [0m [91m                ▔[0m
+| console.log(b.c.d);
+  [91m                ▔[0m
 Property 'd' does not exist on type 'C'.
 
-
-  [91m[7m [0m [91m                ▔[0m
 [[90m12:01:02 AM[0m] Found 1 error. Watching for file changes.
 
 

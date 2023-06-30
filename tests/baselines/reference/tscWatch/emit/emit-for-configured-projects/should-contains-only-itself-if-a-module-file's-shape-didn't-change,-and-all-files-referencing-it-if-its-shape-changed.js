@@ -191,11 +191,10 @@ Output::
 [[90m12:00:52 AM[0m] File change detected. Starting incremental compilation...
 
 [91m● [0m[96ma/b/moduleFile1.ts[0m:[93m1[0m:[93m46[0m  [91mError[0m TS2584
-  [91m[7m [0m [91m                                             ▔▔▔▔▔▔▔[0m
+| export var T: number;export function Foo() { console.log('hi'); };
+  [91m                                             ▔▔▔▔▔▔▔[0m
 Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
 
-
-  [91m[7m [0m [91m                                             ▔▔▔▔▔▔▔[0m
 [[90m12:00:56 AM[0m] Found 1 error. Watching for file changes.
 
 

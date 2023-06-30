@@ -321,6 +321,7 @@ import {
     trace,
     tracing,
     trimStringEnd,
+    trimStringStart,
     TsConfigSourceFile,
     TypeChecker,
     typeDirectiveIsEqualTo,
@@ -335,7 +336,6 @@ import {
     WriteFileCallbackData,
     writeFileEnsuringDirectories,
     zipToModeAwareCache,
-    trimStringStart,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
 
@@ -738,16 +738,17 @@ function formatCodeSpan(file: SourceFile, start: number, length: number, indent:
         const lineStart = getPositionOfLineAndCharacter(file, i, 0);
         const lineEnd = i < lastLineInFile ? getPositionOfLineAndCharacter(file, i + 1, 0) : file.text.length;
         let lineContent = file.text.slice(lineStart, lineEnd);
-        lineContent = lineContent.slice(whitespaceToTrim); // remove preceding whitespaces
+        lineContent = lineContent.slice(whitespaceToTrim); // remove preceding whitespace
         lineContent = trimStringEnd(lineContent);  // trim from end
         lineContent = lineContent.replace(/\t/g, " ");   // convert tabs to single spaces
 
-        // Output the gutter and the error span for the line using underlines.
-        context += indent + padLeft("", gutterWidth) + gutterSeparator;
-        context += underlineColor;
+        // Output the gutter and the actual contents of the line.
+        const gutterLine = "|";
+        context += indent + padLeft(gutterLine, gutterWidth) + gutterSeparator;
+        context += lineContent + host.getNewLine();
 
-        // Output the gutter and the error span for the line using tildes.
-        context += indent + formatColorAndReset(padLeft("", gutterWidth), gutterStyleSequence) + gutterSeparator;
+        // Output the error span for the line using an underline.
+        context += indent + padLeft("", gutterWidth) + gutterSeparator;
         context += underlineColor;
         if (i === firstLine) {
             // If we're on the last line, then limit it to the last character of the last line.
@@ -791,10 +792,10 @@ export function formatDiagnosticsWithColorAndContext(diagnostics: readonly Diagn
     let output = "";
     for (const diagnostic of diagnostics) {
         const diagnosticCode = "TS" + diagnostic.code;
-        const diagnosticCatName = diagnosticCategoryName(diagnostic, /* lowerCase */ false);
+        const diagnosticCatName = diagnosticCategoryName(diagnostic, /*lowerCase*/ false);
         const diagnosticCatNameColored = formatColorAndReset(diagnosticCatName, getCategoryFormat(diagnostic.category));
 
-        if (diagnostic.file) {
+        if (diagnostic.file && diagnostic.code !== Diagnostics.File_appears_to_be_binary.code) {
             const { file, start } = diagnostic;
             const location = formatLocation(file, start!, host); // TODO: GH#18217
             // Get the location string display length without color & escape sequences.
@@ -822,10 +823,6 @@ export function formatDiagnosticsWithColorAndContext(diagnostics: readonly Diagn
         output += diagnosticText;
         output += host.getNewLine();
 
-        if (diagnostic.file && diagnostic.code !== Diagnostics.File_appears_to_be_binary.code) {
-            output += host.getNewLine();
-            output += formatCodeSpan(diagnostic.file, diagnostic.start!, diagnostic.length!, "", getCategoryFormat(diagnostic.category), host); // TODO: GH#18217
-        }
         if (diagnostic.relatedInformation) {
             output += host.getNewLine();
             for (const { file, start, length, messageText } of diagnostic.relatedInformation) {

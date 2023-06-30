@@ -29,11 +29,10 @@ export class D { }
 Output::
 /lib/tsc --p /src/project -i
 [91m● [0m[96msrc/project/file1.ts[0m:[93m1[0m:[93m14[0m  [91mError[0m TS2322
-  [91m[7m [0m [91m             ▔[0m
+| export const x: 30 = "hello";
+  [91m             ▔[0m
 Type '"hello"' is not assignable to type '30'.
 
-
-  [91m[7m [0m [91m             ▔[0m
 
 Found 1 error in src/project/file1.ts[90m:1[0m
 
@@ -145,11 +144,10 @@ Input::
 Output::
 /lib/tsc --p /src/project -i
 [91m● [0m[96msrc/project/file1.ts[0m:[93m1[0m:[93m14[0m  [91mError[0m TS2322
-  [91m[7m [0m [91m             ▔[0m
+| export const x: 30 = "hello";
+  [91m             ▔[0m
 Type '"hello"' is not assignable to type '30'.
 
-
-  [91m[7m [0m [91m             ▔[0m
 
 Found 1 error in src/project/file1.ts[90m:1[0m
 

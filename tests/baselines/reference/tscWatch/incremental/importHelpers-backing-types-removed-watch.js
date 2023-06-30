@@ -125,11 +125,10 @@ Output::
 [[90m12:00:35 AM[0m] Starting compilation in watch mode...
 
 [91m● [0m[96mindex.tsx[0m:[93m1[0m:[93m19[0m  [91mError[0m TS2354
-  [91m[7m [0m [91m                  ▔▔▔▔▔[0m
+| export const x = {...{}};
+  [91m                  ▔▔▔▔▔[0m
 This syntax requires an imported helper but module 'tslib' cannot be found.
 
-
-  [91m[7m [0m [91m                  ▔▔▔▔▔[0m
 [[90m12:00:39 AM[0m] Found 1 error. Watching for file changes.
 
 

@@ -78,11 +78,10 @@ Output::
 [[90m12:00:19 AM[0m] File change detected. Starting incremental compilation...
 
 [91m● [0m[96ma.ts[0m:[93m1[0m:[93m1[0m  [91mError[0m TS7028
-  [91m[7m [0m [91m▔▔▔▔▔[0m
+| label: while (1) {}
+  [91m▔▔▔▔▔[0m
 Unused label.
 
-
-  [91m[7m [0m [91m▔▔▔▔▔[0m
 [[90m12:00:20 AM[0m] Found 1 error. Watching for file changes.
 
 

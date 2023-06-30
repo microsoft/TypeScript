@@ -406,12 +406,11 @@ Output::
 [[90m12:01:10 AM[0m] File change detected. Starting incremental compilation...
 
 [91m● [0m[96mlib2/data.ts[0m:[93m5[0m:[93m13[0m  [91mError[0m TS2322
-  [91m[7m [0m [91m▔▔▔▔▔[0m
+| title: "title"
+  [91m▔▔▔▔▔[0m
 Type '{ title: string; }' is not assignable to type 'ITest'.
   Object literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?
 
-
-  [91m[7m [0m [91m▔▔▔▔▔[0m
 [[90m12:01:38 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -854,12 +853,11 @@ Output::
 [[90m12:02:20 AM[0m] File change detected. Starting incremental compilation...
 
 [91m● [0m[96mlib2/data.ts[0m:[93m5[0m:[93m13[0m  [91mError[0m TS2322
-  [91m[7m [0m [91m▔▔▔▔▔[0m
+| title: "title"
+  [91m▔▔▔▔▔[0m
 Type '{ title: string; }' is not assignable to type 'ITest'.
   Object literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?
 
-
-  [91m[7m [0m [91m▔▔▔▔▔[0m
 [[90m12:02:48 AM[0m] Found 1 error. Watching for file changes.
 
 

@@ -1,56 +1,58 @@
 [91m● [0m[96mfile1.ts[0m:[93m1[0m:[93m7[0m  [91mError[0m TS2300
-  [91m[7m [0m [91m      ▔▔▔[0m
+| class Foo { }
+  [91m      ▔▔▔[0m
 Duplicate identifier 'Foo'.
 
-
-  [91m[7m [0m [91m      ▔▔▔[0m
 'Foo' was also declared here: [96mfile2.ts[0m:[93m1[0m:[93m6[0m
 
-    [96m  [7m [0m [96m     ▔▔▔[0mand here: [96mfile3.ts[0m:[93m1[0m:[93m6[0m
+  | type Foo = number;
+    [96m     ▔▔▔[0mand here: [96mfile3.ts[0m:[93m1[0m:[93m6[0m
 
-    [96m  [7m [0m [96m     ▔▔▔[0m[91m● [0m[96mfile1.ts[0m:[93m2[0m:[93m7[0m  [91mError[0m TS2451
-  [91m[7m [0m [91m      ▔▔▔[0m
+  | type Foo = 54;
+    [96m     ▔▔▔[0m[91m● [0m[96mfile1.ts[0m:[93m2[0m:[93m7[0m  [91mError[0m TS2451
+| const Bar = 3;
+  [91m      ▔▔▔[0m
 Cannot redeclare block-scoped variable 'Bar'.
 
-
-  [91m[7m [0m [91m      ▔▔▔[0m
 'Bar' was also declared here: [96mfile2.ts[0m:[93m2[0m:[93m7[0m
 
-    [96m  [7m [0m [96m      ▔▔▔[0mand here: [96mfile3.ts[0m:[93m2[0m:[93m5[0m
+  | class Bar {}
+    [96m      ▔▔▔[0mand here: [96mfile3.ts[0m:[93m2[0m:[93m5[0m
 
-    [96m  [7m [0m [96m    ▔▔▔[0m[91m● [0m[96mfile2.ts[0m:[93m1[0m:[93m6[0m  [91mError[0m TS2300
-  [91m[7m [0m [91m     ▔▔▔[0m
+  | let Bar = 42
+    [96m    ▔▔▔[0m[91m● [0m[96mfile2.ts[0m:[93m1[0m:[93m6[0m  [91mError[0m TS2300
+| type Foo = number;
+  [91m     ▔▔▔[0m
 Duplicate identifier 'Foo'.
 
-
-  [91m[7m [0m [91m     ▔▔▔[0m
 'Foo' was also declared here: [96mfile1.ts[0m:[93m1[0m:[93m7[0m
 
-    [96m  [7m [0m [96m      ▔▔▔[0m[91m● [0m[96mfile2.ts[0m:[93m2[0m:[93m7[0m  [91mError[0m TS2451
-  [91m[7m [0m [91m      ▔▔▔[0m
+  | class Foo { }
+    [96m      ▔▔▔[0m[91m● [0m[96mfile2.ts[0m:[93m2[0m:[93m7[0m  [91mError[0m TS2451
+| class Bar {}
+  [91m      ▔▔▔[0m
 Cannot redeclare block-scoped variable 'Bar'.
 
-
-  [91m[7m [0m [91m      ▔▔▔[0m
 'Bar' was also declared here: [96mfile1.ts[0m:[93m2[0m:[93m7[0m
 
-    [96m  [7m [0m [96m      ▔▔▔[0m[91m● [0m[96mfile3.ts[0m:[93m1[0m:[93m6[0m  [91mError[0m TS2300
-  [91m[7m [0m [91m     ▔▔▔[0m
+  | const Bar = 3;
+    [96m      ▔▔▔[0m[91m● [0m[96mfile3.ts[0m:[93m1[0m:[93m6[0m  [91mError[0m TS2300
+| type Foo = 54;
+  [91m     ▔▔▔[0m
 Duplicate identifier 'Foo'.
 
-
-  [91m[7m [0m [91m     ▔▔▔[0m
 'Foo' was also declared here: [96mfile1.ts[0m:[93m1[0m:[93m7[0m
 
-    [96m  [7m [0m [96m      ▔▔▔[0m[91m● [0m[96mfile3.ts[0m:[93m2[0m:[93m5[0m  [91mError[0m TS2451
-  [91m[7m [0m [91m    ▔▔▔[0m
+  | class Foo { }
+    [96m      ▔▔▔[0m[91m● [0m[96mfile3.ts[0m:[93m2[0m:[93m5[0m  [91mError[0m TS2451
+| let Bar = 42
+  [91m    ▔▔▔[0m
 Cannot redeclare block-scoped variable 'Bar'.
 
-
-  [91m[7m [0m [91m    ▔▔▔[0m
 'Bar' was also declared here: [96mfile1.ts[0m:[93m2[0m:[93m7[0m
 
-    [96m  [7m [0m [96m      ▔▔▔[0m
+  | const Bar = 3;
+    [96m      ▔▔▔[0m
 
 ==== file1.ts (2 errors) ====
     class Foo { }

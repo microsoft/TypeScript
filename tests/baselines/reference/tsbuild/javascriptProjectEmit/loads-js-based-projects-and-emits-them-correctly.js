@@ -117,11 +117,10 @@ export function getVar() {
 Output::
 /lib/tsc -b /src
 [91m● [0m[96msrc/sub-project/index.js[0m:[93m1[0m:[93m10[0m   [91mError[0m TS18042
-  [91m[7m [0m [91m         ▔▔▔▔▔▔▔[0m
+| import { Nominal } from '../common/nominal';
+  [91m         ▔▔▔▔▔▔▔[0m
 'Nominal' is a type and cannot be imported in JavaScript files. Use 'import("../common/nominal").Nominal' in a JSDoc type annotation.
 
-
-  [91m[7m [0m [91m         ▔▔▔▔▔▔▔[0m
 
 Found 1 error.
 

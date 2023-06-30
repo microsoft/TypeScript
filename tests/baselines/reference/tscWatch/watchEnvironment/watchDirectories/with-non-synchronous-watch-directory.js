@@ -137,11 +137,10 @@ Output::
 [[90m12:00:36 AM[0m] File change detected. Starting incremental compilation...
 
 [91m● [0m[96muser/username/projects/myproject/src/file1.ts[0m:[93m1[0m:[93m19[0m  [91mError[0m TS2307
-  [91m[7m [0m [91m                  ▔▔▔▔▔▔▔[0m
+| import { x } from "file2";
+  [91m                  ▔▔▔▔▔▔▔[0m
 Cannot find module 'file2' or its corresponding type declarations.
 
-
-  [91m[7m [0m [91m                  ▔▔▔▔▔▔▔[0m
 [[90m12:00:40 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -211,11 +210,10 @@ Output::
 [[90m12:00:41 AM[0m] File change detected. Starting incremental compilation...
 
 [91m● [0m[96muser/username/projects/myproject/src/file1.ts[0m:[93m1[0m:[93m19[0m  [91mError[0m TS2307
-  [91m[7m [0m [91m                  ▔▔▔▔▔▔▔[0m
+| import { x } from "file2";
+  [91m                  ▔▔▔▔▔▔▔[0m
 Cannot find module 'file2' or its corresponding type declarations.
 
-
-  [91m[7m [0m [91m                  ▔▔▔▔▔▔▔[0m
 [[90m12:00:42 AM[0m] Found 1 error. Watching for file changes.
 
 

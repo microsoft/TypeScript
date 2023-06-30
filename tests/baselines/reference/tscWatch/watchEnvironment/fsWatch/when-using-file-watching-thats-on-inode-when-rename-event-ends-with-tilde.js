@@ -165,14 +165,14 @@ CreatingProgramWith::
   roots: ["/user/username/projects/myproject/foo.d.ts","/user/username/projects/myproject/main.ts"]
   options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 [91m● [0m[96mmain.ts[0m:[93m1[0m:[93m10[0m  [91mError[0m TS2724
-  [91m[7m [0m [91m         ▔▔▔[0m
+| import { foo } from "./foo"; foo();
+  [91m         ▔▔▔[0m
 '"./foo"' has no exported member named 'foo'. Did you mean 'foo2'?
 
-
-  [91m[7m [0m [91m         ▔▔▔[0m
 'foo2' is declared here: [96mfoo.d.ts[0m:[93m1[0m:[93m17[0m
 
-    [96m  [7m [0m [96m                ▔▔▔▔[0m
+  | export function foo2(): string;
+    [96m                ▔▔▔▔[0m
 [[90m12:00:34 AM[0m] Found 1 error. Watching for file changes.
 
 

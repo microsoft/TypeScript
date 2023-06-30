@@ -147,11 +147,10 @@ Input::
 
 Output::
 [91m● [0m[96mindex.tsx[0m:[93m1[0m:[93m26[0m  [91mError[0m TS2307
-  [91m[7m [0m [91m                         ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+| export const App = () => <div propA={true}></div>;
+  [91m                         ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 Cannot find module 'react/jsx-runtime' or its corresponding type declarations.
 
-
-  [91m[7m [0m [91m                         ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 
 Found 1 error in index.tsx[90m:1[0m
 

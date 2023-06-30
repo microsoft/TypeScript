@@ -171,12 +171,11 @@ Input::
 
 Output::
 [91m● [0m[96mindex.tsx[0m:[93m1[0m:[93m31[0m  [91mError[0m TS2322
-  [91m[7m [0m [91m                              ▔▔▔▔▔[0m
+| export const App = () => <div propA={true}></div>;
+  [91m                              ▔▔▔▔▔[0m
 Type '{ propA: boolean; }' is not assignable to type '{ propB?: boolean; }'.
   Property 'propA' does not exist on type '{ propB?: boolean; }'. Did you mean 'propB'?
 
-
-  [91m[7m [0m [91m                              ▔▔▔▔▔[0m
 ../../../../a/lib/lib.d.ts
   Default library for target 'es5'
 node_modules/preact/jsx-runtime/index.d.ts

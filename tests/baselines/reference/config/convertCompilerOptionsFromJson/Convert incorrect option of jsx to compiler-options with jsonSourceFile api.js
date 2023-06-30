@@ -28,8 +28,7 @@ CompilerOptions::
 }
 Errors::
 [91m● [0m[96mtsconfig.json[0m:[93m7[0m:[93m10[0m  [91mError[0m TS6046
-  [91m[7m [0m [91m       ▔▔[0m
+| "jsx": ""
+  [91m       ▔▔[0m
 Argument for '--jsx' option must be: 'preserve', 'react-native', 'react', 'react-jsx', 'react-jsxdev'.
 
-
-  [91m[7m [0m [91m       ▔▔[0m

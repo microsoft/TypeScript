@@ -33,11 +33,10 @@ Output::
 [[90m12:00:10 AM[0m] Building project '/src/tsconfig.json'...
 
 [91m● [0m[96msrc/a.ts[0m:[93m1[0m:[93m17[0m  [91mError[0m TS1002
-  [91m[7m [0m [91m                [0m
+| const a = "hello
+  [91m                [0m
 Unterminated string literal.
 
-
-  [91m[7m [0m [91m                [0m
 
 Found 1 error.
 
@@ -70,11 +69,10 @@ Output::
 [[90m12:00:13 AM[0m] Building project '/src/tsconfig.json'...
 
 [91m● [0m[96msrc/a.ts[0m:[93m1[0m:[93m17[0m  [91mError[0m TS1002
-  [91m[7m [0m [91m                [0m
+| const a = "hello
+  [91m                [0m
 Unterminated string literal.
 
-
-  [91m[7m [0m [91m                [0m
 
 Found 1 error.
 

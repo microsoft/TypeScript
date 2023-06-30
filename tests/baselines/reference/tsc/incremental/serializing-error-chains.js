@@ -39,25 +39,22 @@ declare function Component(props: { children?: number }): any;
 Output::
 /lib/tsc -p src/project
 [91m● [0m[96msrc/project/index.tsx[0m:[93m10[0m:[93m3[0m  [91mError[0m TS2746
-  [91m[7m [0m [91m  ▔▔▔▔▔▔▔▔▔[0m
+| (<Component>
+  [91m  ▔▔▔▔▔▔▔▔▔[0m
 This JSX tag's 'children' prop expects a single child of type 'never', but multiple children were provided.
 
-
-  [91m[7m [0m [91m  ▔▔▔▔▔▔▔▔▔[0m
 [91m● [0m[96msrc/project/index.tsx[0m:[93m10[0m:[93m3[0m  [91mError[0m TS2746
-  [91m[7m [0m [91m  ▔▔▔▔▔▔▔▔▔[0m
+| (<Component>
+  [91m  ▔▔▔▔▔▔▔▔▔[0m
 This JSX tag's 'children' prop expects a single child of type 'number | undefined', but multiple children were provided.
 
-
-  [91m[7m [0m [91m  ▔▔▔▔▔▔▔▔▔[0m
 [91m● [0m[96msrc/project/index.tsx[0m:[93m10[0m:[93m3[0m  [91mError[0m TS2769
-  [91m[7m [0m [91m  ▔▔▔▔▔▔▔▔▔[0m
+| (<Component>
+  [91m  ▔▔▔▔▔▔▔▔▔[0m
 No overload matches this call.
   This JSX tag's 'children' prop expects a single child of type 'never', but multiple children were provided.
   This JSX tag's 'children' prop expects a single child of type 'number | undefined', but multiple children were provided.
 
-
-  [91m[7m [0m [91m  ▔▔▔▔▔▔▔▔▔[0m
 
 
 Found 3 errors in the same file, starting at: src/project/index.tsx[90m:10[0m
@@ -178,25 +175,22 @@ Input::
 Output::
 /lib/tsc -p src/project
 [91m● [0m[96msrc/project/index.tsx[0m:[93m10[0m:[93m3[0m  [91mError[0m TS2746
-  [91m[7m [0m [91m  ▔▔▔▔▔▔▔▔▔[0m
+| (<Component>
+  [91m  ▔▔▔▔▔▔▔▔▔[0m
 This JSX tag's 'children' prop expects a single child of type 'never', but multiple children were provided.
 
-
-  [91m[7m [0m [91m  ▔▔▔▔▔▔▔▔▔[0m
 [91m● [0m[96msrc/project/index.tsx[0m:[93m10[0m:[93m3[0m  [91mError[0m TS2746
-  [91m[7m [0m [91m  ▔▔▔▔▔▔▔▔▔[0m
+| (<Component>
+  [91m  ▔▔▔▔▔▔▔▔▔[0m
 This JSX tag's 'children' prop expects a single child of type 'number | undefined', but multiple children were provided.
 
-
-  [91m[7m [0m [91m  ▔▔▔▔▔▔▔▔▔[0m
 [91m● [0m[96msrc/project/index.tsx[0m:[93m10[0m:[93m3[0m  [91mError[0m TS2769
-  [91m[7m [0m [91m  ▔▔▔▔▔▔▔▔▔[0m
+| (<Component>
+  [91m  ▔▔▔▔▔▔▔▔▔[0m
 No overload matches this call.
   This JSX tag's 'children' prop expects a single child of type 'never', but multiple children were provided.
   This JSX tag's 'children' prop expects a single child of type 'number | undefined', but multiple children were provided.
 
-
-  [91m[7m [0m [91m  ▔▔▔▔▔▔▔▔▔[0m
 
 
 Found 3 errors in the same file, starting at: src/project/index.tsx[90m:10[0m

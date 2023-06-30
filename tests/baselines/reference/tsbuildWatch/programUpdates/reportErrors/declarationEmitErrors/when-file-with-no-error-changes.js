@@ -32,11 +32,10 @@ Output::
 [[90m12:00:25 AM[0m] Starting compilation in watch mode...
 
 [91m● [0m[96mapp/fileWithError.ts[0m:[93m1[0m:[93m12[0m  [91mError[0m TS4094
-  [91m[7m [0m [91m           ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+| export var myClassWithError = class {
+  [91m           ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 Property 'p' of exported class expression may not be private or protected.
 
-
-  [91m[7m [0m [91m           ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 [[90m12:00:26 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -89,11 +88,10 @@ Output::
 [[90m12:00:30 AM[0m] File change detected. Starting incremental compilation...
 
 [91m● [0m[96mapp/fileWithError.ts[0m:[93m1[0m:[93m12[0m  [91mError[0m TS4094
-  [91m[7m [0m [91m           ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+| export var myClassWithError = class {
+  [91m           ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 Property 'p' of exported class expression may not be private or protected.
 
-
-  [91m[7m [0m [91m           ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 [[90m12:00:31 AM[0m] Found 1 error. Watching for file changes.
 
 

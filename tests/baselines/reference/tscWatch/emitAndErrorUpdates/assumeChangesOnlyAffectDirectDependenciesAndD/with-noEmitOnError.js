@@ -46,11 +46,10 @@ Output::
 [[90m12:00:31 AM[0m] Starting compilation in watch mode...
 
 [91m● [0m[96msrc/main.ts[0m:[93m4[0m:[93m1[0m  [91mError[0m TS1005
-  [91m[7m [0m [91m▔[0m
+| ;
+  [91m▔[0m
 ',' expected.
 
-
-  [91m[7m [0m [91m▔[0m
 [[90m12:00:32 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -202,11 +201,10 @@ Output::
 [[90m12:01:06 AM[0m] File change detected. Starting incremental compilation...
 
 [91m● [0m[96msrc/main.ts[0m:[93m2[0m:[93m7[0m  [91mError[0m TS2322
-  [91m[7m [0m [91m      ▔[0m
+| const a: string = 10;
+  [91m      ▔[0m
 Type 'number' is not assignable to type 'string'.
 
-
-  [91m[7m [0m [91m      ▔[0m
 [[90m12:01:07 AM[0m] Found 1 error. Watching for file changes.
 
 

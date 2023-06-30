@@ -209,11 +209,10 @@ FileNames::
 c:/dev/main.ts,c:/dev/supplemental.ts,c:/dev/tests/utils.ts,c:/dev/tests/baselines/first/output.ts,c:/dev/tests/unit/spec.ts
 Errors::
 [91m● [0m[96mfailure2.json[0m:[93m1[0m:[93m2[0m  [91mError[0m TS6114
-  [91m[7m [0m [91m ▔▔▔▔▔▔▔▔▔▔[0m
+| {"excludes":["*.js"]}
+  [91m ▔▔▔▔▔▔▔▔▔▔[0m
 Unknown option 'excludes'. Did you mean 'exclude'?
 
-
-  [91m[7m [0m [91m ▔▔▔▔▔▔▔▔▔▔[0m
 
 can error when 'extends' is not a string or Array
 configFileName:: extends.json
