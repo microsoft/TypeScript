@@ -834,7 +834,7 @@ export class TestState {
         const annotations = ts.map(hints.sort(sortHints), hint => {
             const span = { start: hint.position, length: hint.text.length };
             const startLc = this.languageServiceAdapterHost.positionToLineAndCharacter(fileName, span.start);
-            const underline = " ".repeat(startLc.character) + "^".repeat(span.length);
+            const underline = " ".repeat(startLc.character) + "^";
             let annotation = this.getFileContent(fileName).split(/\r?\n/)[startLc.line];
             annotation += "\n" + underline + "\n" + JSON.stringify(hint, undefined, "  ");
             return annotation;
