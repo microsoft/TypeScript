@@ -2847,7 +2847,7 @@ function getCompletionEntryCodeActionsAndSourceDisplay(
     cancellationToken: CancellationToken,
 ): CodeActionsAndSourceDisplay {
     if (data?.moduleSpecifier) {
-        if (previousToken && getImportStatementCompletionInfo(contextToken || previousToken).replacementSpan) {
+        if (previousToken && getImportStatementCompletionInfo(contextToken || previousToken, sourceFile).replacementSpan) {
             // Import statement completion: 'import c|'
             return { codeActions: undefined, sourceDisplay: [textPart(data.moduleSpecifier)] };
         }
@@ -3176,7 +3176,7 @@ function getCompletionData(
     let flags = CompletionInfoFlags.None;
 
     if (contextToken) {
-        const importStatementCompletionInfo = getImportStatementCompletionInfo(contextToken);
+        const importStatementCompletionInfo = getImportStatementCompletionInfo(contextToken, sourceFile);
         if (importStatementCompletionInfo.keywordCompletion) {
             if (importStatementCompletionInfo.isKeywordOnlyCompletion) {
                 return {
@@ -5469,7 +5469,7 @@ export interface ImportStatementCompletionInfo {
     replacementSpan: TextSpan | undefined;
 }
 
-function getImportStatementCompletionInfo(contextToken: Node): ImportStatementCompletionInfo {
+function getImportStatementCompletionInfo(contextToken: Node, sourceFile: SourceFile): ImportStatementCompletionInfo {
     let keywordCompletion: TokenSyntaxKind | undefined;
     let isKeywordOnlyCompletion = false;
     const candidate = getCandidate();
@@ -5485,6 +5485,15 @@ function getImportStatementCompletionInfo(contextToken: Node): ImportStatementCo
     function getCandidate() {
         const parent = contextToken.parent;
         if (isImportEqualsDeclaration(parent)) {
+            // import Foo |
+            // import Foo f|
+            const lastToken = parent.getLastToken(sourceFile);
+            if (isIdentifier(contextToken) && lastToken !== contextToken) {
+                keywordCompletion = SyntaxKind.FromKeyword;
+                isKeywordOnlyCompletion = true;
+                return undefined;
+            }
+
             keywordCompletion = contextToken.kind === SyntaxKind.TypeKeyword ? undefined : SyntaxKind.TypeKeyword;
             return isModuleSpecifierMissingOrEmpty(parent.moduleReference) ? parent : undefined;
         }
