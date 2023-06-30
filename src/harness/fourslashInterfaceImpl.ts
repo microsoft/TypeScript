@@ -265,6 +265,10 @@ export class Verify extends VerifyNegatable {
         this.state.verifyInlayHints(expected, span, preference);
     }
 
+    public baselineInlayHints(span: ts.TextSpan, preference?: ts.UserPreferences) {
+        this.state.baselineInlayHints(span, preference);
+    }
+
     public quickInfoIs(expectedText: string, expectedDocumentation?: string, expectedTags?: { name: string; text: string; }[]) {
         this.state.verifyQuickInfoString(expectedText, expectedDocumentation, expectedTags);
     }

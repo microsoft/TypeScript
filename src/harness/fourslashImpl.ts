@@ -822,6 +822,30 @@ export class TestState {
         });
     }
 
+    public baselineInlayHints(span: ts.TextSpan = { start: 0, length: this.activeFile.content.length }, preferences?: ts.UserPreferences): void{
+        interface HasPosition { position: number; }
+        const sortHints = (a: HasPosition, b: HasPosition) => {
+            return a.position - b.position;
+        };
+
+        const baselineFile = this.getBaselineFileNameForContainingTestFile();
+        const hints = this.languageService.provideInlayHints(this.activeFile.fileName, span, preferences);
+        const annotations = ts.map(hints.sort(sortHints), hint => {
+            let annotation = "{\n\t";
+            annotation += [
+                `text: "${hint.text}"`,
+                `position: ${hint.position}`,
+                `kind: ${hint.kind}`,
+                `whitespaceBefore: ${hint.whitespaceBefore}`,
+                `whitespaceAfter: ${hint.whitespaceAfter}`,
+            ].join(",\n\t");
+            annotation += ",\n}\n";
+            return annotation;
+        });
+
+        Harness.Baseline.runBaseline(baselineFile, annotations.join(""));
+    }
+
     public verifyInlayHints(expected: readonly FourSlashInterface.VerifyInlayHintsOptions[], span: ts.TextSpan = { start: 0, length: this.activeFile.content.length }, preference?: ts.UserPreferences) {
         const hints = this.languageService.provideInlayHints(this.activeFile.fileName, span, preference);
         assert.equal(hints.length, expected.length, "Number of hints");
