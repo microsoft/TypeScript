@@ -2,13 +2,11 @@
 	text: "a:",
 	position: 43,
 	kind: Parameter,
-	whitespaceBefore: undefined,
 	whitespaceAfter: true,
 }
 {
 	text: "b:",
 	position: 46,
 	kind: Parameter,
-	whitespaceBefore: undefined,
 	whitespaceAfter: true,
 }

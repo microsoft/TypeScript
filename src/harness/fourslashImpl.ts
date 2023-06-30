@@ -836,9 +836,9 @@ export class TestState {
                 `text: "${hint.text}"`,
                 `position: ${hint.position}`,
                 `kind: ${hint.kind}`,
-                `whitespaceBefore: ${hint.whitespaceBefore}`,
-                `whitespaceAfter: ${hint.whitespaceAfter}`,
             ].join(",\n\t");
+            annotation += hint.whitespaceBefore !== undefined ? `,\n\twhitespaceBefore: ${hint.whitespaceBefore}` : "";
+            annotation += hint.whitespaceAfter !== undefined ? `,\n\twhitespaceAfter: ${hint.whitespaceAfter}` : "";
             annotation += ",\n}\n";
             return annotation;
         });
