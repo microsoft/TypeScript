@@ -333,3 +333,44 @@ function handle_54680_2<M extends Message_54680>(callbacks: {
     callbacks[msg.type as keyof typeof callbacks](msg.value);
   });
 }
+
+// repro from https://github.com/microsoft/TypeScript/issues/54834
+
+type NumericLiteral_54834 = {
+  value: number;
+  type: "NumericLiteral";
+};
+type StringLiteral_54834 = {
+  value: string;
+  type: "StringLiteral";
+};
+type Identifier_54834 = {
+  name: string;
+  type: "Identifier";
+};
+type CallExpression_54834 = {
+  name: string;
+  arguments: DropbearNode_54834[];
+  type: "CallExpression";
+};
+
+type DropbearNode_54834 =
+  | NumericLiteral_54834
+  | StringLiteral_54834
+  | Identifier_54834
+  | CallExpression_54834;
+
+type TypeMap_54834 = {
+  [K in DropbearNode_54834["type"]]: Extract<DropbearNode_54834, { type: K }>;
+};
+
+type Visitor_54834 = {
+  [K in keyof TypeMap_54834]: (node: Readonly<TypeMap_54834[K]>) => void;
+};
+
+function visitNode_54834<K extends keyof TypeMap_54834>(
+  node: Readonly<TypeMap_54834[K]>,
+  v: Visitor_54834
+) {
+  v[node.type](node);
+}

@@ -1128,3 +1128,115 @@ function handle_54680_2<M extends Message_54680>(callbacks: {
   });
 }
 
+// repro from https://github.com/microsoft/TypeScript/issues/54834
+
+type NumericLiteral_54834 = {
+>NumericLiteral_54834 : Symbol(NumericLiteral_54834, Decl(correlatedUnions.ts, 331, 1))
+
+  value: number;
+>value : Symbol(value, Decl(correlatedUnions.ts, 335, 29))
+
+  type: "NumericLiteral";
+>type : Symbol(type, Decl(correlatedUnions.ts, 336, 16))
+
+};
+type StringLiteral_54834 = {
+>StringLiteral_54834 : Symbol(StringLiteral_54834, Decl(correlatedUnions.ts, 338, 2))
+
+  value: string;
+>value : Symbol(value, Decl(correlatedUnions.ts, 339, 28))
+
+  type: "StringLiteral";
+>type : Symbol(type, Decl(correlatedUnions.ts, 340, 16))
+
+};
+type Identifier_54834 = {
+>Identifier_54834 : Symbol(Identifier_54834, Decl(correlatedUnions.ts, 342, 2))
+
+  name: string;
+>name : Symbol(name, Decl(correlatedUnions.ts, 343, 25))
+
+  type: "Identifier";
+>type : Symbol(type, Decl(correlatedUnions.ts, 344, 15))
+
+};
+type CallExpression_54834 = {
+>CallExpression_54834 : Symbol(CallExpression_54834, Decl(correlatedUnions.ts, 346, 2))
+
+  name: string;
+>name : Symbol(name, Decl(correlatedUnions.ts, 347, 29))
+
+  arguments: DropbearNode_54834[];
+>arguments : Symbol(arguments, Decl(correlatedUnions.ts, 348, 15))
+>DropbearNode_54834 : Symbol(DropbearNode_54834, Decl(correlatedUnions.ts, 351, 2))
+
+  type: "CallExpression";
+>type : Symbol(type, Decl(correlatedUnions.ts, 349, 34))
+
+};
+
+type DropbearNode_54834 =
+>DropbearNode_54834 : Symbol(DropbearNode_54834, Decl(correlatedUnions.ts, 351, 2))
+
+  | NumericLiteral_54834
+>NumericLiteral_54834 : Symbol(NumericLiteral_54834, Decl(correlatedUnions.ts, 331, 1))
+
+  | StringLiteral_54834
+>StringLiteral_54834 : Symbol(StringLiteral_54834, Decl(correlatedUnions.ts, 338, 2))
+
+  | Identifier_54834
+>Identifier_54834 : Symbol(Identifier_54834, Decl(correlatedUnions.ts, 342, 2))
+
+  | CallExpression_54834;
+>CallExpression_54834 : Symbol(CallExpression_54834, Decl(correlatedUnions.ts, 346, 2))
+
+type TypeMap_54834 = {
+>TypeMap_54834 : Symbol(TypeMap_54834, Decl(correlatedUnions.ts, 357, 25))
+
+  [K in DropbearNode_54834["type"]]: Extract<DropbearNode_54834, { type: K }>;
+>K : Symbol(K, Decl(correlatedUnions.ts, 360, 3))
+>DropbearNode_54834 : Symbol(DropbearNode_54834, Decl(correlatedUnions.ts, 351, 2))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>DropbearNode_54834 : Symbol(DropbearNode_54834, Decl(correlatedUnions.ts, 351, 2))
+>type : Symbol(type, Decl(correlatedUnions.ts, 360, 66))
+>K : Symbol(K, Decl(correlatedUnions.ts, 360, 3))
+
+};
+
+type Visitor_54834 = {
+>Visitor_54834 : Symbol(Visitor_54834, Decl(correlatedUnions.ts, 361, 2))
+
+  [K in keyof TypeMap_54834]: (node: Readonly<TypeMap_54834[K]>) => void;
+>K : Symbol(K, Decl(correlatedUnions.ts, 364, 3))
+>TypeMap_54834 : Symbol(TypeMap_54834, Decl(correlatedUnions.ts, 357, 25))
+>node : Symbol(node, Decl(correlatedUnions.ts, 364, 31))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>TypeMap_54834 : Symbol(TypeMap_54834, Decl(correlatedUnions.ts, 357, 25))
+>K : Symbol(K, Decl(correlatedUnions.ts, 364, 3))
+
+};
+
+function visitNode_54834<K extends keyof TypeMap_54834>(
+>visitNode_54834 : Symbol(visitNode_54834, Decl(correlatedUnions.ts, 365, 2))
+>K : Symbol(K, Decl(correlatedUnions.ts, 367, 25))
+>TypeMap_54834 : Symbol(TypeMap_54834, Decl(correlatedUnions.ts, 357, 25))
+
+  node: Readonly<TypeMap_54834[K]>,
+>node : Symbol(node, Decl(correlatedUnions.ts, 367, 56))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>TypeMap_54834 : Symbol(TypeMap_54834, Decl(correlatedUnions.ts, 357, 25))
+>K : Symbol(K, Decl(correlatedUnions.ts, 367, 25))
+
+  v: Visitor_54834
+>v : Symbol(v, Decl(correlatedUnions.ts, 368, 35))
+>Visitor_54834 : Symbol(Visitor_54834, Decl(correlatedUnions.ts, 361, 2))
+
+) {
+  v[node.type](node);
+>v : Symbol(v, Decl(correlatedUnions.ts, 368, 35))
+>node.type : Symbol(type, Decl(correlatedUnions.ts, 360, 66), Decl(correlatedUnions.ts, 336, 16), Decl(correlatedUnions.ts, 360, 66), Decl(correlatedUnions.ts, 340, 16), Decl(correlatedUnions.ts, 360, 66) ... and 3 more)
+>node : Symbol(node, Decl(correlatedUnions.ts, 367, 56))
+>type : Symbol(type, Decl(correlatedUnions.ts, 360, 66), Decl(correlatedUnions.ts, 336, 16), Decl(correlatedUnions.ts, 360, 66), Decl(correlatedUnions.ts, 340, 16), Decl(correlatedUnions.ts, 360, 66) ... and 3 more)
+>node : Symbol(node, Decl(correlatedUnions.ts, 367, 56))
+}
+

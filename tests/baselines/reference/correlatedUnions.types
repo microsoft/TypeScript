@@ -1009,3 +1009,93 @@ function handle_54680_2<M extends Message_54680>(callbacks: {
   });
 }
 
+// repro from https://github.com/microsoft/TypeScript/issues/54834
+
+type NumericLiteral_54834 = {
+>NumericLiteral_54834 : { value: number; type: "NumericLiteral"; }
+
+  value: number;
+>value : number
+
+  type: "NumericLiteral";
+>type : "NumericLiteral"
+
+};
+type StringLiteral_54834 = {
+>StringLiteral_54834 : { value: string; type: "StringLiteral"; }
+
+  value: string;
+>value : string
+
+  type: "StringLiteral";
+>type : "StringLiteral"
+
+};
+type Identifier_54834 = {
+>Identifier_54834 : { name: string; type: "Identifier"; }
+
+  name: string;
+>name : string
+
+  type: "Identifier";
+>type : "Identifier"
+
+};
+type CallExpression_54834 = {
+>CallExpression_54834 : { name: string; arguments: DropbearNode_54834[]; type: "CallExpression"; }
+
+  name: string;
+>name : string
+
+  arguments: DropbearNode_54834[];
+>arguments : DropbearNode_54834[]
+
+  type: "CallExpression";
+>type : "CallExpression"
+
+};
+
+type DropbearNode_54834 =
+>DropbearNode_54834 : NumericLiteral_54834 | StringLiteral_54834 | Identifier_54834 | CallExpression_54834
+
+  | NumericLiteral_54834
+  | StringLiteral_54834
+  | Identifier_54834
+  | CallExpression_54834;
+
+type TypeMap_54834 = {
+>TypeMap_54834 : { NumericLiteral: NumericLiteral_54834; StringLiteral: StringLiteral_54834; Identifier: Identifier_54834; CallExpression: CallExpression_54834; }
+
+  [K in DropbearNode_54834["type"]]: Extract<DropbearNode_54834, { type: K }>;
+>type : K
+
+};
+
+type Visitor_54834 = {
+>Visitor_54834 : { NumericLiteral: (node: Readonly<NumericLiteral_54834>) => void; StringLiteral: (node: Readonly<StringLiteral_54834>) => void; Identifier: (node: Readonly<Identifier_54834>) => void; CallExpression: (node: Readonly<CallExpression_54834>) => void; }
+
+  [K in keyof TypeMap_54834]: (node: Readonly<TypeMap_54834[K]>) => void;
+>node : Readonly<TypeMap_54834[K]>
+
+};
+
+function visitNode_54834<K extends keyof TypeMap_54834>(
+>visitNode_54834 : <K extends "NumericLiteral" | "StringLiteral" | "Identifier" | "CallExpression">(node: Readonly<TypeMap_54834[K]>, v: Visitor_54834) => void
+
+  node: Readonly<TypeMap_54834[K]>,
+>node : Readonly<TypeMap_54834[K]>
+
+  v: Visitor_54834
+>v : Visitor_54834
+
+) {
+  v[node.type](node);
+>v[node.type](node) : void
+>v[node.type] : Visitor_54834[TypeMap_54834[K]["type"]]
+>v : Visitor_54834
+>node.type : TypeMap_54834[K]["type"]
+>node : Readonly<TypeMap_54834[K]>
+>type : TypeMap_54834[K]["type"]
+>node : Readonly<TypeMap_54834[K]>
+}
+
