@@ -184,7 +184,7 @@ const x62 = f6(...[1, 'b']);
 >f6(...[1, 'b']) : readonly [number, string]
 >f6 : <const T extends readonly unknown[]>(...args: T) => T
 >...[1, 'b'] : string | number
->[1, 'b'] : readonly [number, string]
+>[1, 'b'] : [number, string]
 >1 : 1
 >'b' : "b"
 
@@ -194,7 +194,28 @@ const x63 = f6(true, ...[1, 'b']);
 >f6 : <const T extends readonly unknown[]>(...args: T) => T
 >true : true
 >...[1, 'b'] : string | number
->[1, 'b'] : readonly [number, string]
+>[1, 'b'] : [number, string]
+>1 : 1
+>'b' : "b"
+
+const x64 = f6(...([1, 'b']));
+>x64 : readonly [number, string]
+>f6(...([1, 'b'])) : readonly [number, string]
+>f6 : <const T extends readonly unknown[]>(...args: T) => T
+>...([1, 'b']) : string | number
+>([1, 'b']) : [number, string]
+>[1, 'b'] : [number, string]
+>1 : 1
+>'b' : "b"
+
+const x65 = f6(true, ...([1, 'b']));
+>x65 : readonly [true, number, string]
+>f6(true, ...([1, 'b'])) : readonly [true, number, string]
+>f6 : <const T extends readonly unknown[]>(...args: T) => T
+>true : true
+>...([1, 'b']) : string | number
+>([1, 'b']) : [number, string]
+>[1, 'b'] : [number, string]
 >1 : 1
 >'b' : "b"
 
