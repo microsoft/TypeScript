@@ -833,12 +833,16 @@ export class TestState {
         const hints = this.languageService.provideInlayHints(fileName, span, preferences);
         const annotations = ts.map(hints.sort(sortHints), hint => {
             const span = { start: hint.position, length: hint.text.length };
-            const startLc = this.languageServiceAdapterHost.positionToLineAndCharacter(fileName, span.start);
-            const underline = " ".repeat(startLc.character) + "^";
-            let annotation = this.getFileContent(fileName).split(/\r?\n/)[startLc.line];
+            const { character, line } = this.languageServiceAdapterHost.positionToLineAndCharacter(fileName, span.start);
+            const underline = " ".repeat(character) + "^";
+            let annotation = this.getFileContent(fileName).split(/\r?\n/)[line];
             annotation += "\n" + underline + "\n" + JSON.stringify(hint, undefined, "  ");
             return annotation;
         });
+
+        if (annotations.length === 0) {
+            annotations.push("=== No inlay hints ===");
+        }
 
         Harness.Baseline.runBaseline(baselineFile, annotations.join("\n\n"));
     }

@@ -1,0 +1,17 @@
+trace(`${1}`);
+      ^
+{
+  "text": "message:",
+  "position": 41,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+trace(``);
+      ^
+{
+  "text": "message:",
+  "position": 56,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
