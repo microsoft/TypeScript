@@ -17115,11 +17115,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return extractTypeAlias ? getTypeAliasInstantiation(extractTypeAlias, [type, stringType]) : stringType;
     }
 
-    function getIndexTypeOrString(type: Type): Type {
-        const indexType = getExtractStringType(getIndexType(type));
-        return indexType.flags & TypeFlags.Never ? stringType : indexType;
-    }
-
     function getTypeFromTypeOperatorNode(node: TypeOperatorNode): Type {
         const links = getNodeLinks(node);
         if (!links.resolvedType) {
@@ -41554,7 +41549,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (varExpr.kind === SyntaxKind.ArrayLiteralExpression || varExpr.kind === SyntaxKind.ObjectLiteralExpression) {
                 error(varExpr, Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_be_a_destructuring_pattern);
             }
-            else if (!isTypeAssignableTo(getIndexTypeOrString(rightType), leftType)) {
+            else if (!isTypeAssignableTo(stringType, leftType)) {
                 error(varExpr, Diagnostics.The_left_hand_side_of_a_for_in_statement_must_be_of_type_string_or_any);
             }
             else {

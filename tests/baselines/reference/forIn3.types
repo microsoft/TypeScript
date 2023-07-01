@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/forIn3.ts] ////
+
+=== forIn3.ts ===
+function test(obj: { a: 1; b: 2 }) {
+>test : (obj: {    a: 1;    b: 2;}) => void
+>obj : { a: 1; b: 2; }
+>a : 1
+>b : 2
+
+  let key: "a" | "b";
+>key : "a" | "b"
+
+  for (key in obj) {} // error
+>key : "a" | "b"
+>obj : { a: 1; b: 2; }
+}
+
