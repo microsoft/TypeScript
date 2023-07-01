@@ -623,7 +623,7 @@ const spreadDynamicImport = import(...[])
 >spreadDynamicImport : Promise<any>
 >import(...[]) : Promise<any>
 >...[] : never
->[] : readonly []
+>[] : []
 
 return
 
