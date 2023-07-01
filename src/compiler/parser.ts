@@ -1778,7 +1778,8 @@ namespace Parser {
 
         const statements = parseList(ParsingContext.SourceElements, parseStatement);
         Debug.assert(token() === SyntaxKind.EndOfFileToken);
-        const endOfFileToken = addJSDocComment(parseTokenNode<EndOfFileToken>());
+        const endHasJSDoc = hasPrecedingJSDocComment();
+        const endOfFileToken = withJSDoc(parseTokenNode<EndOfFileToken>(), endHasJSDoc);
 
         const sourceFile = createSourceFile(fileName, languageVersion, scriptKind, isDeclarationFile, statements, endOfFileToken, sourceFlags, setExternalModuleIndicator);
 
@@ -1806,12 +1807,12 @@ namespace Parser {
         }
     }
 
-    function withJSDoc<T extends HasJSDoc>(node: T, hasJSDoc: boolean): T {
-        return hasJSDoc ? addJSDocComment(node) : node;
-    }
-
     let hasDeprecatedTag = false;
-    function addJSDocComment<T extends HasJSDoc>(node: T): T {
+    function withJSDoc<T extends HasJSDoc>(node: T, hasJSDoc: boolean): T {
+        if (!hasJSDoc) {
+            return node;
+        }
+
         Debug.assert(!node.jsDoc); // Should only be called once per node
         const jsDoc = mapDefined(getJSDocCommentRanges(node, sourceText), comment => JSDocParser.parseJSDocComment(node, comment.pos, comment.end - comment.pos));
         if (jsDoc.length) node.jsDoc = jsDoc;
@@ -5025,13 +5026,14 @@ namespace Parser {
         // binary expression here, so we pass in the 'lowest' precedence here so that it matches
         // and consumes anything.
         const pos = getNodePos();
+        const hasJSDoc = hasPrecedingJSDocComment();
         const expr = parseBinaryExpressionOrHigher(OperatorPrecedence.Lowest);
 
         // To avoid a look-ahead, we did not handle the case of an arrow function with a single un-parenthesized
         // parameter ('x => ...') above. We handle it here by checking if the parsed expression was a single
         // identifier and the current token is an arrow.
         if (expr.kind === SyntaxKind.Identifier && token() === SyntaxKind.EqualsGreaterThanToken) {
-            return parseSimpleArrowFunctionExpression(pos, expr as Identifier, allowReturnTypeInArrowFunction, /*asyncModifier*/ undefined);
+            return parseSimpleArrowFunctionExpression(pos, expr as Identifier, allowReturnTypeInArrowFunction, hasJSDoc, /*asyncModifier*/ undefined);
         }
 
         // Now see if we might be in cases '2' or '3'.
@@ -5107,7 +5109,7 @@ namespace Parser {
         }
     }
 
-    function parseSimpleArrowFunctionExpression(pos: number, identifier: Identifier, allowReturnTypeInArrowFunction: boolean, asyncModifier?: NodeArray<Modifier> | undefined): ArrowFunction {
+    function parseSimpleArrowFunctionExpression(pos: number, identifier: Identifier, allowReturnTypeInArrowFunction: boolean, hasJSDoc: boolean, asyncModifier?: NodeArray<Modifier> | undefined): ArrowFunction {
         Debug.assert(token() === SyntaxKind.EqualsGreaterThanToken, "parseSimpleArrowFunctionExpression should only have been called if we had a =>");
         const parameter = factory.createParameterDeclaration(
             /*modifiers*/ undefined,
@@ -5123,7 +5125,7 @@ namespace Parser {
         const equalsGreaterThanToken = parseExpectedToken(SyntaxKind.EqualsGreaterThanToken);
         const body = parseArrowFunctionExpressionBody(/*isAsync*/ !!asyncModifier, allowReturnTypeInArrowFunction);
         const node = factory.createArrowFunction(asyncModifier, /*typeParameters*/ undefined, parameters, /*type*/ undefined, equalsGreaterThanToken, body);
-        return addJSDocComment(finishNode(node, pos));
+        return withJSDoc(finishNode(node, pos), hasJSDoc);
     }
 
     function tryParseParenthesizedArrowFunctionExpression(allowReturnTypeInArrowFunction: boolean): Expression | undefined {
@@ -5310,9 +5312,10 @@ namespace Parser {
         if (token() === SyntaxKind.AsyncKeyword) {
             if (lookAhead(isUnParenthesizedAsyncArrowFunctionWorker) === Tristate.True) {
                 const pos = getNodePos();
+                const hasJSDoc = hasPrecedingJSDocComment();
                 const asyncModifier = parseModifiersForArrowFunction();
                 const expr = parseBinaryExpressionOrHigher(OperatorPrecedence.Lowest);
-                return parseSimpleArrowFunctionExpression(pos, expr as Identifier, allowReturnTypeInArrowFunction, asyncModifier);
+                return parseSimpleArrowFunctionExpression(pos, expr as Identifier, allowReturnTypeInArrowFunction, hasJSDoc, asyncModifier);
             }
         }
         return undefined;
