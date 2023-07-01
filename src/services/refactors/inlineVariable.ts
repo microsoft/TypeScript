@@ -263,6 +263,6 @@ function replaceTemplateStringVariableWithLiteral(tracker: textChanges.ChangeTra
             pos: prevNode.getEnd() - 2,
             end: reference.literal.getStart() + 1
         },
-        replacement.text.replace(/`/g, "`")
+        replacement.text.replace(/`/g, "\\`"),
     );
 }
