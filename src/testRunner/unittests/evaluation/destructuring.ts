@@ -65,4 +65,36 @@ describe("unittests:: evaluation:: destructuring", () => {
             assert.deepEqual(result.output, { a: 1, b: { y: 2 } });
         });
     });
+    describe("correct evaluation in for-in with array pattern", () => {
+        it("ES5", () => {
+            const result = evaluator.evaluateTypeScript(`
+                export let output: string;
+                for (const [first] in { test: 1 }) { output = first; }
+            `, { target: ts.ScriptTarget.ES5, downlevelIteration: true });
+            assert.deepEqual(result.output, "t");
+        });
+        it("ESNext", () => {
+            const result = evaluator.evaluateTypeScript(`
+                export let output: string;
+                for (const [first] in { test: 1 }) { output = first; }
+            `, { target: ts.ScriptTarget.ESNext });
+            assert.deepEqual(result.output, "t");
+        });
+    });
+    describe("correct evaluation in for-in with object pattern", () => {
+        it("ES5", () => {
+            const result = evaluator.evaluateTypeScript(`
+                export let output: number;
+                for (const { length } in { test: 1 }) { output = length; }
+            `, { target: ts.ScriptTarget.ES5, downlevelIteration: true });
+            assert.deepEqual(result.output, 4);
+        });
+        it("ESNext", () => {
+            const result = evaluator.evaluateTypeScript(`
+                export let output: number;
+                for (const { length } in { test: 1 }) { output = length; }
+            `, { target: ts.ScriptTarget.ESNext });
+            assert.deepEqual(result.output, 4);
+        });
+    });
 });
