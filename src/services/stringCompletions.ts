@@ -47,6 +47,7 @@ import {
     getBaseFileName,
     getConditions,
     getContextualTypeFromParent,
+    getDeclarationEmitExtensionForPath,
     getDirectoryPath,
     getEffectiveTypeRoots,
     getEmitModuleResolutionKind,
@@ -1023,6 +1024,8 @@ function getModulesForPathsPattern(
     const expandedPrefixDirectory = fragmentHasPath ? combinePaths(normalizedPrefixDirectory, normalizedPrefixBase + fragmentDirectory) : normalizedPrefixDirectory;
 
     const normalizedSuffix = normalizePath(parsed.suffix);
+    const declarationExtension = normalizedSuffix && getDeclarationEmitExtensionForPath("_" + normalizedSuffix);
+    const matchingSuffixes = declarationExtension ? [changeExtension(normalizedSuffix, declarationExtension), normalizedSuffix] : [normalizedSuffix];
     // Need to normalize after combining: If we combinePaths("a", "../b"), we want "b" and not "a/../b".
     const baseDirectory = normalizePath(combinePaths(packageDirectory, expandedPrefixDirectory));
     const completePrefix = fragmentHasPath ? baseDirectory : ensureTrailingDirectorySeparator(baseDirectory) + normalizedPrefixBase;
@@ -1035,9 +1038,11 @@ function getModulesForPathsPattern(
     // interpreted as "any character" can only return *too many* results as compared to the literal
     // interpretation, so we can filter those superfluous results out via `trimPrefixAndSuffix` as we've always
     // done.
-    const includeGlob = normalizedSuffix ? "**/*" + normalizedSuffix : "./*";
+    const includeGlobs = normalizedSuffix
+        ? matchingSuffixes.map(suffix => "**/*" + suffix)
+        : ["./*"];
 
-    const matches = mapDefined(tryReadDirectory(host, baseDirectory, extensionOptions.extensionsToSearch, /*exclude*/ undefined, [includeGlob]), match => {
+    const matches = mapDefined(tryReadDirectory(host, baseDirectory, extensionOptions.extensionsToSearch, /*exclude*/ undefined, includeGlobs), match => {
         const trimmedWithPattern = trimPrefixAndSuffix(match);
         if (trimmedWithPattern) {
             if (containsSlash(trimmedWithPattern)) {
@@ -1057,8 +1062,10 @@ function getModulesForPathsPattern(
     return [...matches, ...directories];
 
     function trimPrefixAndSuffix(path: string): string | undefined {
-        const inner = withoutStartAndEnd(normalizePath(path), completePrefix, normalizedSuffix);
-        return inner === undefined ? undefined : removeLeadingDirectorySeparator(inner);
+        return firstDefined(matchingSuffixes, suffix => {
+            const inner = withoutStartAndEnd(normalizePath(path), completePrefix, suffix);
+            return inner === undefined ? undefined : removeLeadingDirectorySeparator(inner);
+        });
     }
 }
 
