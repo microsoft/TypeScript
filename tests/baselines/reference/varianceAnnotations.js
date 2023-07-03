@@ -176,6 +176,11 @@ let OuterC = class C<out T> {
     }
 }
 
+// https://github.com/microsoft/TypeScript/issues/53210#issuecomment-1468551245
+type F1_53210<out A> = <X>(v: X & A) => unknown;
+type F2_53210<out A> = <X>(v1: X, v2: A) => unknown;
+type F3_53210<out A> = <X>(v2: A) => X;
+type F4_53210<out A> = <X>(v: X | A) => unknown;
 
 //// [varianceAnnotations.js]
 "use strict";
@@ -336,3 +341,7 @@ declare let OuterC: {
         foo(): any;
     };
 };
+type F1_53210<out A> = <X>(v: X & A) => unknown;
+type F2_53210<out A> = <X>(v1: X, v2: A) => unknown;
+type F3_53210<out A> = <X>(v2: A) => X;
+type F4_53210<out A> = <X>(v: X | A) => unknown;
