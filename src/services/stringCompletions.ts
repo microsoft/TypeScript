@@ -1025,7 +1025,7 @@ function getModulesForPathsPattern(
 
     const normalizedSuffix = normalizePath(parsed.suffix);
     const declarationExtension = normalizedSuffix && getDeclarationEmitExtensionForPath("_" + normalizedSuffix);
-    const matchingSuffixes = declarationExtension ? [normalizedSuffix, changeExtension(normalizedSuffix, declarationExtension)] : [normalizedSuffix];
+    const matchingSuffixes = declarationExtension ? [changeExtension(normalizedSuffix, declarationExtension), normalizedSuffix] : [normalizedSuffix];
     // Need to normalize after combining: If we combinePaths("a", "../b"), we want "b" and not "a/../b".
     const baseDirectory = normalizePath(combinePaths(packageDirectory, expandedPrefixDirectory));
     const completePrefix = fragmentHasPath ? baseDirectory : ensureTrailingDirectorySeparator(baseDirectory) + normalizedPrefixBase;
