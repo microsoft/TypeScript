@@ -39,11 +39,12 @@ import {
     elementAt,
     EmitFlags,
     EmitHint,
-    emptyArray,
+    every,
     Expression,
     ExpressionStatement,
     ExpressionWithTypeArguments,
     filter,
+    findSuperStatementIndexPath,
     first,
     firstOrUndefined,
     flatten,
@@ -112,11 +113,13 @@ import {
     isIterationStatement,
     isLabeledStatement,
     isModifier,
+    isNumericLiteral,
     isObjectLiteralElementLike,
+    isObjectLiteralExpression,
     isOmittedExpression,
     isPackedArrayLiteral,
     isPrivateIdentifier,
-    isPrologueDirective,
+    isPropertyAssignment,
     isPropertyDeclaration,
     isPropertyName,
     isReturnStatement,
@@ -129,6 +132,7 @@ import {
     isVariableDeclaration,
     isVariableDeclarationList,
     isVariableStatement,
+    isVoidExpression,
     isWithStatement,
     IterationStatement,
     LabeledStatement,
@@ -186,7 +190,6 @@ import {
     SwitchStatement,
     SyntaxKind,
     TaggedTemplateExpression,
-    takeWhile,
     TemplateExpression,
     TextRange,
     TokenFlags,
@@ -205,7 +208,7 @@ import {
     VisitResult,
     VoidExpression,
     WhileStatement,
-    YieldExpression,
+    YieldExpression
 } from "../_namespaces/ts";
 
 const enum ES2015SubstitutionFlags {
@@ -1188,6 +1191,190 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         return block;
     }
 
+    function transformConstructorBodyWorker(
+        prologueOut: Statement[],
+        statementsOut: Statement[],
+        statementsIn: NodeArray<Statement>,
+        statementOffset: number,
+        superPath: readonly number[],
+        superPathDepth: number,
+        constructor: ConstructorDeclaration & { body: FunctionBody },
+        isDerivedClass: boolean,
+        hasSynthesizedSuper: boolean,
+        isFirstStatement: boolean,
+    ): boolean {
+        let mayReplaceThis = false;
+
+        const superStatementIndex = superPathDepth < superPath.length ? superPath[superPathDepth] : -1;
+        const leadingStatementsEnd = superStatementIndex >= 0 ? superStatementIndex : statementsIn.length;
+
+        // find the index of the first statement material to evaluation
+        if (isFirstStatement && superStatementIndex >= 0) {
+            let firstMaterialIndex = statementOffset;
+            while (isFirstStatement && firstMaterialIndex < superStatementIndex) {
+                const statement = constructor.body.statements[firstMaterialIndex];
+                if (!isUninitializedVariableStatement(statement) && !isUsingDeclarationStateVariableStatement(statement)) break;
+                firstMaterialIndex++;
+            }
+
+            isFirstStatement = superStatementIndex === firstMaterialIndex;
+        }
+
+        // visit everything prior to the statement containing `super()`.
+        addRange(statementsOut, visitNodes(statementsIn, visitor, isStatement, statementOffset, leadingStatementsEnd - statementOffset));
+
+        const superStatement = superStatementIndex >= 0 ? statementsIn[superStatementIndex] : undefined;
+        if (superStatement && isTryStatement(superStatement)) {
+            const tryBlockStatements: Statement[] = [];
+
+            mayReplaceThis = transformConstructorBodyWorker(
+                prologueOut,
+                tryBlockStatements,
+                superStatement.tryBlock.statements,
+                /*statementOffset*/ 0,
+                superPath,
+                superPathDepth + 1,
+                constructor,
+                isDerivedClass,
+                hasSynthesizedSuper,
+                isFirstStatement);
+
+            const tryBlockStatementsArray = factory.createNodeArray(tryBlockStatements);
+            setTextRange(tryBlockStatementsArray, superStatement.tryBlock.statements);
+
+            statementsOut.push(factory.updateTryStatement(
+                superStatement,
+                factory.updateBlock(superStatement.tryBlock, tryBlockStatements),
+                visitNode(superStatement.catchClause, visitor, isCatchClause),
+                visitNode(superStatement.finallyBlock, visitor, isBlock)));
+        }
+        else {
+            const superCall = superStatement && getSuperCallFromStatement(superStatement);
+            let superCallExpression: Expression | undefined;
+            if (hasSynthesizedSuper) {
+                superCallExpression = createDefaultSuperCallOrThis();
+                hierarchyFacts |= HierarchyFacts.ConstructorWithCapturedSuper;
+            }
+            else if (superCall) {
+                superCallExpression = visitSuperCallInBody(superCall);
+                hierarchyFacts |= HierarchyFacts.ConstructorWithCapturedSuper;
+            }
+
+            if (isDerivedClass || superCallExpression) {
+                if (superCallExpression &&
+                    superStatementIndex === statementsIn.length - 1 &&
+                    !(constructor.body.transformFlags & TransformFlags.ContainsLexicalThis)) {
+                    // If the subclass constructor does *not* contain `this` and *ends* with a `super()` call, we will use the
+                    // following representation:
+                    //
+                    // ```
+                    // // es2015 (source)
+                    // class C extends Base {
+                    //     constructor() {
+                    //         super("foo");
+                    //     }
+                    // }
+                    //
+                    // // es5 (transformed)
+                    // var C = (function (_super) {
+                    //     function C() {
+                    //         return _super.call(this, "foo") || this;
+                    //     }
+                    //     return C;
+                    // })(Base);
+                    // ```
+
+                    const superCall = cast(cast(superCallExpression, isBinaryExpression).left, isCallExpression);
+                    const returnStatement = factory.createReturnStatement(superCallExpression);
+                    setCommentRange(returnStatement, getCommentRange(superCall));
+                    setEmitFlags(superCall, EmitFlags.NoComments);
+                    statementsOut.push(returnStatement);
+                    return false;
+                }
+                else {
+                    // Otherwise, we will use the following transformed representation for calls to `super()` in a constructor:
+                    //
+                    // ```
+                    // // es2015 (source)
+                    // class C extends Base {
+                    //     constructor() {
+                    //         super("foo");
+                    //         this.x = 1;
+                    //     }
+                    // }
+                    //
+                    // // es5 (transformed)
+                    // var C = (function (_super) {
+                    //     function C() {
+                    //         var _this = _super.call(this, "foo") || this;
+                    //         _this.x = 1;
+                    //         return _this;
+                    //     }
+                    //     return C;
+                    // })(Base);
+                    // ```
+
+                    // If the super() call is the first statement, we can directly create and assign its result to `_this`
+                    if (isFirstStatement) {
+                        insertCaptureThisForNode(statementsOut, constructor, superCallExpression || createActualThis());
+                    }
+                    // Since the `super()` call isn't the first statement, it's split across 1-2 statements:
+                    // * A prologue `var _this = this;`, in case the constructor accesses this before super()
+                    // * If it exists, a reassignment to that `_this` of the super() call
+                    else {
+                        insertCaptureThisForNode(prologueOut, constructor, createActualThis());
+                        if (superCallExpression) {
+                            addSuperThisCaptureThisForNode(statementsOut, superCallExpression);
+                        }
+                    }
+
+                    mayReplaceThis = true;
+                }
+            }
+            else {
+                // If a class is not derived from a base class or does not have a call to `super()`, `this` is only
+                // captured when necessitated by an arrow function capturing the lexical `this`:
+                //
+                // ```
+                // // es2015
+                // class C {}
+                //
+                // // es5
+                // var C = (function () {
+                //     function C() {
+                //     }
+                //     return C;
+                // })();
+                // ```
+                insertCaptureThisForNodeIfNeeded(prologueOut, constructor);
+            }
+        }
+
+        // visit everything following the statement containing `super()`.
+        if (superStatementIndex >= 0) {
+            addRange(statementsOut, visitNodes(statementsIn, visitor, isStatement, superStatementIndex + 1));
+        }
+
+        return mayReplaceThis;
+    }
+
+    function isUninitializedVariableStatement(node: Statement) {
+        return isVariableStatement(node) && every(node.declarationList.declarations, decl => isIdentifier(decl.name) && !decl.initializer);
+    }
+
+    function isUsingDeclarationStateVariableStatement(node: Statement) {
+        if (!isVariableStatement(node) || node.declarationList.declarations.length !== 1) return false;
+        const varDecl = node.declarationList.declarations[0];
+        if (!isIdentifier(varDecl.name) || !varDecl.initializer) return false;
+        const initializer = varDecl.initializer;
+        if (!isObjectLiteralExpression(initializer) || initializer.properties.length !== 3) return false;
+        const [stackProp, errorProp, hasErrorProp] = initializer.properties;
+        if (!isPropertyAssignment(stackProp) || !isIdentifier(stackProp.name) || idText(stackProp.name) !== "stack" || !isArrayLiteralExpression(stackProp.initializer)) return false;
+        if (!isPropertyAssignment(errorProp) || !isIdentifier(errorProp.name) || idText(errorProp.name) !== "error" || !isVoidExpression(errorProp.initializer) || !isNumericLiteral(errorProp.initializer.expression)) return false;
+        if (!isPropertyAssignment(hasErrorProp) || !isIdentifier(hasErrorProp.name) || idText(hasErrorProp.name) !== "hasError" || hasErrorProp.initializer.kind !== SyntaxKind.FalseKeyword) return false;
+        return true;
+    }
+
     /**
      * Transforms the body of a constructor declaration of a class.
      *
@@ -1226,134 +1413,40 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
 
         // In derived classes, there may be code before the necessary super() call
         // We'll remove pre-super statements to be tacked on after the rest of the body
-        const existingPrologue = takeWhile(constructor.body.statements, isPrologueDirective);
-        const { superCall, superStatementIndex } = findSuperCallAndStatementIndex(constructor.body.statements, existingPrologue);
-        const postSuperStatementsStart = superStatementIndex === -1 ? existingPrologue.length : superStatementIndex + 1;
-
-        // If a super call has already been synthesized,
-        // we're going to assume that we should just transform everything after that.
-        // The assumption is that no prior step in the pipeline has added any prologue directives.
-        let statementOffset = postSuperStatementsStart;
-        if (!hasSynthesizedSuper) statementOffset = factory.copyStandardPrologue(constructor.body.statements, prologue, statementOffset, /*ensureUseStrict*/ false);
-        if (!hasSynthesizedSuper) statementOffset = factory.copyCustomPrologue(constructor.body.statements, statements, statementOffset, visitor, /*filter*/ undefined);
-
-        // If there already exists a call to `super()`, visit the statement directly
-        let superCallExpression: Expression | undefined;
-        if (hasSynthesizedSuper) {
-            superCallExpression = createDefaultSuperCallOrThis();
-        }
-        else if (superCall) {
-            superCallExpression = visitSuperCallInBody(superCall);
-        }
-
-        if (superCallExpression) {
+        const standardPrologueEnd = factory.copyStandardPrologue(constructor.body.statements, prologue, /*statementOffset*/ 0);
+        const superStatementIndices = findSuperStatementIndexPath(constructor.body.statements, standardPrologueEnd);
+        if (hasSynthesizedSuper || superStatementIndices.length > 0) {
             hierarchyFacts |= HierarchyFacts.ConstructorWithCapturedSuper;
         }
+
+        const mayReplaceThis = transformConstructorBodyWorker(
+            prologue,
+            statements,
+            constructor.body.statements,
+            standardPrologueEnd,
+            superStatementIndices,
+            /*superPathDepth*/ 0,
+            constructor,
+            isDerivedClass,
+            hasSynthesizedSuper,
+            /*isFirstStatement*/ true // NOTE: this will be recalculated inside of transformConstructorBodyWorker
+        );
 
         // Add parameter defaults at the beginning of the output, with prologue statements
         addDefaultValueAssignmentsIfNeeded(prologue, constructor);
         addRestParameterIfNeeded(prologue, constructor, hasSynthesizedSuper);
-
-        // visit the remaining statements
-        addRange(statements, visitNodes(constructor.body.statements, visitor, isStatement, /*start*/ statementOffset));
-
+        insertCaptureNewTargetIfNeeded(prologue, constructor);
         factory.mergeLexicalEnvironment(prologue, endLexicalEnvironment());
-        insertCaptureNewTargetIfNeeded(prologue, constructor, /*copyOnWrite*/ false);
 
-        if (isDerivedClass || superCallExpression) {
-            if (superCallExpression && postSuperStatementsStart === constructor.body.statements.length && !(constructor.body.transformFlags & TransformFlags.ContainsLexicalThis)) {
-                // If the subclass constructor does *not* contain `this` and *ends* with a `super()` call, we will use the
-                // following representation:
-                //
-                // ```
-                // // es2015 (source)
-                // class C extends Base {
-                //     constructor() {
-                //         super("foo");
-                //     }
-                // }
-                //
-                // // es5 (transformed)
-                // var C = (function (_super) {
-                //     function C() {
-                //         return _super.call(this, "foo") || this;
-                //     }
-                //     return C;
-                // })(Base);
-                // ```
-                const superCall = cast(cast(superCallExpression, isBinaryExpression).left, isCallExpression);
-                const returnStatement = factory.createReturnStatement(superCallExpression);
-                setCommentRange(returnStatement, getCommentRange(superCall));
-                setEmitFlags(superCall, EmitFlags.NoComments);
-                statements.push(returnStatement);
-            }
-            else {
-                // Otherwise, we will use the following transformed representation for calls to `super()` in a constructor:
-                //
-                // ```
-                // // es2015 (source)
-                // class C extends Base {
-                //     constructor() {
-                //         super("foo");
-                //         this.x = 1;
-                //     }
-                // }
-                //
-                // // es5 (transformed)
-                // var C = (function (_super) {
-                //     function C() {
-                //         var _this = _super.call(this, "foo") || this;
-                //         _this.x = 1;
-                //         return _this;
-                //     }
-                //     return C;
-                // })(Base);
-                // ```
-
-                // If the super() call is the first statement, we can directly create and assign its result to `_this`
-                if (superStatementIndex <= existingPrologue.length) {
-                    insertCaptureThisForNode(statements, constructor, superCallExpression || createActualThis());
-                }
-                // Since the `super()` call isn't the first statement, it's split across 1-2 statements:
-                // * A prologue `var _this = this;`, in case the constructor accesses this before super()
-                // * If it exists, a reassignment to that `_this` of the super() call
-                else {
-                    insertCaptureThisForNode(prologue, constructor, createActualThis());
-                    if (superCallExpression) {
-                        insertSuperThisCaptureThisForNode(statements, superCallExpression);
-                    }
-                }
-
-                if (!isSufficientlyCoveredByReturnStatements(constructor.body)) {
-                    statements.push(factory.createReturnStatement(factory.createUniqueName("_this", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel)));
-                }
-            }
-        }
-        else {
-            // If a class is not derived from a base class or does not have a call to `super()`, `this` is only
-            // captured when necessitated by an arrow function capturing the lexical `this`:
-            //
-            // ```
-            // // es2015
-            // class C {}
-            //
-            // // es5
-            // var C = (function () {
-            //     function C() {
-            //     }
-            //     return C;
-            // })();
-            // ```
-            insertCaptureThisForNodeIfNeeded(prologue, constructor);
+        if (mayReplaceThis && !isSufficientlyCoveredByReturnStatements(constructor.body)) {
+            statements.push(factory.createReturnStatement(factory.createUniqueName("_this", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel)));
         }
 
         const body = factory.createBlock(
             setTextRange(
                 factory.createNodeArray(
                     [
-                        ...existingPrologue,
                         ...prologue,
-                        ...(superStatementIndex <= existingPrologue.length ? emptyArray : visitNodes(constructor.body.statements, visitor, isStatement, existingPrologue.length, superStatementIndex - existingPrologue.length)),
                         ...statements
                     ]
                 ),
@@ -1364,24 +1457,6 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
 
         setTextRange(body, constructor.body);
         return body;
-    }
-
-    function findSuperCallAndStatementIndex(originalBodyStatements: NodeArray<Statement>, existingPrologue: Statement[]) {
-        for (let i = existingPrologue.length; i < originalBodyStatements.length; i += 1) {
-            const superCall = getSuperCallFromStatement(originalBodyStatements[i]);
-            if (superCall) {
-                // With a super() call, split the statements into pre-super() and 'body' (post-super())
-                return {
-                    superCall,
-                    superStatementIndex: i,
-                };
-            }
-        }
-
-        // Since there was no super() call found, consider all statements to be in the main 'body' (post-super())
-        return {
-            superStatementIndex: -1,
-        };
     }
 
     /**
@@ -1758,7 +1833,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
      * @param statements Statements in the constructor body.
      * @param superExpression Existing `super()` call for the constructor.
      */
-    function insertSuperThisCaptureThisForNode(statements: Statement[], superExpression: Expression): void {
+    function addSuperThisCaptureThisForNode(statements: Statement[], superExpression: Expression): void {
         enableSubstitutionsForCapturedThis();
         const assignSuperExpression = factory.createExpressionStatement(
             factory.createBinaryExpression(
@@ -1767,7 +1842,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                 superExpression
             )
         );
-        insertStatementAfterCustomPrologue(statements, assignSuperExpression);
+        statements.push(assignSuperExpression);
         setCommentRange(assignSuperExpression, getOriginalNode(superExpression).parent);
     }
 
@@ -1789,7 +1864,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         insertStatementAfterCustomPrologue(statements, captureThisStatement);
     }
 
-    function insertCaptureNewTargetIfNeeded(statements: Statement[], node: FunctionLikeDeclaration, copyOnWrite: boolean): Statement[] {
+    function insertCaptureNewTargetIfNeeded(statements: Statement[], node: FunctionLikeDeclaration): Statement[] {
         if (hierarchyFacts & HierarchyFacts.NewTarget) {
             let newTarget: Expression;
             switch (node.kind) {
@@ -1853,11 +1928,6 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             );
 
             setEmitFlags(captureNewTargetStatement, EmitFlags.NoComments | EmitFlags.CustomPrologue);
-
-            if (copyOnWrite) {
-                statements = statements.slice();
-            }
-
             insertStatementAfterCustomPrologue(statements, captureNewTargetStatement);
         }
 
@@ -2232,7 +2302,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         }
 
         factory.mergeLexicalEnvironment(prologue, endLexicalEnvironment());
-        insertCaptureNewTargetIfNeeded(prologue, node, /*copyOnWrite*/ false);
+        insertCaptureNewTargetIfNeeded(prologue, node);
         insertCaptureThisForNodeIfNeeded(prologue, node);
 
         // If we added any final generated statements, this must be a multi-line block

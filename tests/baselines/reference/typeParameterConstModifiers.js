@@ -33,6 +33,8 @@ declare function f6<const T extends readonly unknown[]>(...args: T): T;
 const x61 = f6(1, 'b', { a: 1, b: 'x' });
 const x62 = f6(...[1, 'b']);
 const x63 = f6(true, ...[1, 'b']);
+const x64 = f6(...([1, 'b']));
+const x65 = f6(true, ...([1, 'b']));
 
 class C1<const T> {
     constructor(x: T) {}
@@ -127,6 +129,8 @@ var x52 = f5({ x: { a: 1, b: 'x' }, y: { a: 2, b: 'y' } });
 var x61 = f6(1, 'b', { a: 1, b: 'x' });
 var x62 = f6.apply(void 0, [1, 'b']);
 var x63 = f6.apply(void 0, __spreadArray([true], [1, 'b'], false));
+var x64 = f6.apply(void 0, ([1, 'b']));
+var x65 = f6.apply(void 0, __spreadArray([true], ([1, 'b']), false));
 var C1 = /** @class */ (function () {
     function C1(x) {
     }

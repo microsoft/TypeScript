@@ -64,6 +64,7 @@ import {
     isExpression,
     isExternalModule,
     isExternalModuleImportEqualsDeclaration,
+    isFileLevelReservedGeneratedIdentifier,
     isForInitializer,
     isGeneratedIdentifier,
     isHeritageClause,
@@ -84,7 +85,9 @@ import {
     isSpreadElement,
     isStatement,
     isStringLiteral,
+    isVarAwaitUsing,
     isVariableDeclarationList,
+    isVarUsing,
     LabeledStatement,
     map,
     MetaProperty,
@@ -198,7 +201,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
         // see comment to 'substitutePostfixUnaryExpression' for more details
 
         // Collect information about the external module and dependency groups.
-        moduleInfo = moduleInfoMap[id] = collectExternalModuleInfo(context, node, resolver, compilerOptions);
+        moduleInfo = moduleInfoMap[id] = collectExternalModuleInfo(context, node);
 
         // Make sure that the name of the 'exports' function does not conflict with
         // existing identifiers.
@@ -845,20 +848,44 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
             return visitNode(node, visitor, isStatement);
         }
 
-        let expressions: Expression[] | undefined;
-        const isExportedDeclaration = hasSyntacticModifier(node, ModifierFlags.Export);
-        for (const variable of node.declarationList.declarations) {
-            if (variable.initializer) {
-                expressions = append(expressions, transformInitializedVariable(variable, isExportedDeclaration));
-            }
-            else {
-                hoistBindingElement(variable);
-            }
-        }
-
         let statements: Statement[] | undefined;
-        if (expressions) {
-            statements = append(statements, setTextRange(factory.createExpressionStatement(factory.inlineExpressions(expressions)), node));
+        // `using` and `await using` declarations cannot be hoisted directly, so we will hoist the variable name
+        // as a normal variable, and declare it as a temp variable that remains as a `using` to ensure the correct
+        // lifetime.
+        if (isVarUsing(node.declarationList) || isVarAwaitUsing(node.declarationList)) {
+            const modifiers = visitNodes(node.modifiers, modifierVisitor, isModifierLike);
+            const declarations: VariableDeclaration[] = [];
+            for (const variable of node.declarationList.declarations) {
+                declarations.push(factory.updateVariableDeclaration(
+                    variable,
+                    factory.getGeneratedNameForNode(variable.name),
+                    /*exclamationToken*/ undefined,
+                    /*type*/ undefined,
+                    transformInitializedVariable(variable, /*isExportedDeclaration*/ false)
+                ));
+            }
+
+            const declarationList = factory.updateVariableDeclarationList(
+                node.declarationList,
+                declarations
+            );
+            statements = append(statements, factory.updateVariableStatement(node, modifiers, declarationList));
+        }
+        else {
+            let expressions: Expression[] | undefined;
+            const isExportedDeclaration = hasSyntacticModifier(node, ModifierFlags.Export);
+            for (const variable of node.declarationList.declarations) {
+                if (variable.initializer) {
+                    expressions = append(expressions, transformInitializedVariable(variable, isExportedDeclaration));
+                }
+                else {
+                    hoistBindingElement(variable);
+                }
+            }
+
+            if (expressions) {
+                statements = append(statements, setTextRange(factory.createExpressionStatement(factory.inlineExpressions(expressions)), node));
+            }
         }
 
         statements = appendExportsOfVariableStatement(statements, node, /*exportSelf*/ false);
@@ -1114,7 +1141,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
         }
 
         const name = factory.getDeclarationName(decl);
-        const exportSpecifiers = moduleInfo.exportSpecifiers.get(idText(name));
+        const exportSpecifiers = moduleInfo.exportSpecifiers.get(name);
         if (exportSpecifiers) {
             for (const exportSpecifier of exportSpecifiers) {
                 if (exportSpecifier.name.escapedText !== excludeName) {
@@ -1894,12 +1921,12 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
         // When we see an assignment expression whose left-hand side is an exported symbol,
         // we should ensure all exports of that symbol are updated with the correct value.
         //
-        // - We do not substitute generated identifiers for any reason.
+        // - We do not substitute generated identifiers unless they are file-level reserved names.
         // - We do not substitute identifiers tagged with the LocalName flag.
         // - We only substitute identifiers that are exported at the top level.
         if (isAssignmentOperator(node.operatorToken.kind)
             && isIdentifier(node.left)
-            && !isGeneratedIdentifier(node.left)
+            && (!isGeneratedIdentifier(node.left) || isFileLevelReservedGeneratedIdentifier(node.left))
             && !isLocalName(node.left)) {
             const exportedNames = getExports(node.left);
             if (exportedNames) {
@@ -1938,6 +1965,16 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
             }
 
             exportedNames = addRange(exportedNames, moduleInfo?.exportedBindings[getOriginalNodeId(valueDeclaration)]);
+        }
+        else if (isGeneratedIdentifier(name) && isFileLevelReservedGeneratedIdentifier(name)) {
+            const exportSpecifiers = moduleInfo?.exportSpecifiers.get(name);
+            if (exportSpecifiers) {
+                const exportedNames: Identifier[] = [];
+                for (const exportSpecifier of exportSpecifiers) {
+                    exportedNames.push(exportSpecifier.name);
+                }
+                return exportedNames;
+            }
         }
         return exportedNames;
     }
