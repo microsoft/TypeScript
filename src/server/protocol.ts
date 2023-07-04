@@ -2684,7 +2684,7 @@ export interface InlayHintItem {
 
 export interface InlayHintItemDisplayPart {
     text: string;
-    span: FileSpan;
+    span?: FileSpan;
 }
 
 export interface InlayHintsResponse extends Response {

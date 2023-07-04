@@ -763,11 +763,11 @@ export class SessionClient implements LanguageService {
             const { text, position } = item;
             const hint = typeof text === "string" ? text : text.map(({ text, span }) => ({
                 text,
-                span: {
+                span: span && {
                     start: this.lineOffsetToPosition(span.file, span.start),
                     length: this.lineOffsetToPosition(span.file, span.end) - this.lineOffsetToPosition(span.file, span.start),
                 },
-                file: span.file
+                file: span && span.file
             }));
 
             return ({

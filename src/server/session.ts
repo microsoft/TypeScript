@@ -1848,10 +1848,10 @@ export class Session<TMessage = string> implements EventSender {
             const { text, position } = hint;
             const hintText = typeof text === "string" ? text : text.map(({ text, span, file }) => ({
                 text,
-                span: {
+                span: span && {
                     start: scriptInfo.positionToLineOffset(span.start),
                     end: scriptInfo.positionToLineOffset(span.start + span.length),
-                    file
+                    file: file!
                 }
             }));
 

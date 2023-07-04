@@ -875,8 +875,8 @@ export interface InlayHint {
 
 export interface InlayHintDisplayPart {
     text: string;
-    span: TextSpan;
-    file: string;
+    span?: TextSpan;
+    file?: string;
 }
 
 export interface TodoCommentDescriptor {
